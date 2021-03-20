@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Fela Winkelmolen <fela.kde@gmail.com>
+   SPDX-FileCopyrightText: 2008 Fela Winkelmolen <fela.kde@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -12,9 +12,9 @@
 
 class KComboBox;
 class QCheckBox;
-class QSpinBox;
 class QDoubleSpinBox;
 class QToolButton;
+class KisAngleSelector;
 
 class KarbonCalligraphyOptionWidget : public QWidget
 {
@@ -57,6 +57,8 @@ private Q_SLOTS:
     void removeProfile();
 
     void setUsePathEnabled(bool enabled);
+
+    void on_m_angleBox_angleChanged(qreal angle);
 
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>
@@ -114,7 +116,7 @@ private:
     QCheckBox *m_useAngle;
     QDoubleSpinBox  *m_widthBox;
     QDoubleSpinBox  *m_thinningBox;
-    QSpinBox        *m_angleBox;
+    KisAngleSelector *m_angleBox;
     QDoubleSpinBox  *m_capsBox;
     QDoubleSpinBox  *m_fixationBox;
     QDoubleSpinBox  *m_massBox;

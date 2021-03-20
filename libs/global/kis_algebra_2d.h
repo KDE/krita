@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,6 +16,7 @@
 #include <kis_global.h>
 #include <kritaglobal_export.h>
 #include <functional>
+#include <boost/optional.hpp>
 
 class QPainterPath;
 class QTransform;
@@ -682,6 +683,83 @@ std::pair<QPointF, QTransform> KRITAGLOBAL_EXPORT transformEllipse(const QPointF
 
 QPointF KRITAGLOBAL_EXPORT alignForZoom(const QPointF &pt, qreal zoom);
 
+
+/**
+ * Linearly reshape function \p x so that in range [x0, x1]
+ * it would cross points (x0, y0) and (x1, y1).
+ */
+template <typename T>
+inline T linearReshapeFunc(T x, T x0, T x1, T y0, T y1)
+{
+    return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+}
+
+
+/**
+ * Find intersection of a bounded line \p boundedLine with unbounded
+ * line \p unboundedLine (if an intersection exists)
+ */
+KRITAGLOBAL_EXPORT
+boost::optional<QPointF> intersectLines(const QLineF &boundedLine, const QLineF &unboundedLine);
+
+
+/**
+ * Find intersection of a bounded line \p p1, \p p2 with unbounded
+ * line \p q1, \p q2 (if an intersection exists)
+ */
+KRITAGLOBAL_EXPORT
+boost::optional<QPointF> intersectLines(const QPointF &p1, const QPointF &p2,
+                                        const QPointF &q1, const QPointF &q2);
+
+/**
+ * Find possible positions for point p3, such that points \p1, \p2 and p3 form
+ * a triangle, such that the distance between p1 ad p3 is \p a and the distance
+ * between p2 and p3 is b. There might be 0, 1 or 2 such positions.
+ */
+QVector<QPointF> KRITAGLOBAL_EXPORT findTrianglePoint(const QPointF &p1, const QPointF &p2, qreal a, qreal b);
+
+/**
+ * Find a point p3 that forms a triangle with \p1 and \p2 and is the nearest
+ * possible point to \p nearest
+ *
+ * \see findTrianglePoint
+ */
+boost::optional<QPointF> KRITAGLOBAL_EXPORT findTrianglePointNearest(const QPointF &p1, const QPointF &p2, qreal a, qreal b, const QPointF &nearest);
+
+/**
+ * @brief moveElasticPoint moves point \p pt based on the model of elasticity
+ * @param pt point in question, tied to points \p base, \p wingA and \p wingB
+ *           using springs
+ * @param base initial position of the dragged point
+ * @param newBase final position of tht dragged point
+ * @param wingA first anchor point
+ * @param wingB second anchor point
+ * @return the new position of \p pt
+ *
+ * The function requires (\p newBase - \p base) be much smaller than any
+ * of the distances between other points. If larger distances are necessary,
+ * then use integration.
+ */
+QPointF KRITAGLOBAL_EXPORT moveElasticPoint(const QPointF &pt,
+                                            const QPointF &base, const QPointF &newBase,
+                                            const QPointF &wingA, const QPointF &wingB);
+
+/**
+ * @brief moveElasticPoint moves point \p pt based on the model of elasticity
+ * @param pt point in question, tied to points \p base, \p anchorPoints
+ *           using springs
+ * @param base initial position of the dragged point
+ * @param newBase final position of tht dragged point
+ * @param anchorPoints anchor points
+ * @return the new position of \p pt
+ *
+ * The function expects (\p newBase - \p base) be much smaller than any
+ * of the distances between other points. If larger distances are necessary,
+ * then use integration.
+ */
+QPointF KRITAGLOBAL_EXPORT moveElasticPoint(const QPointF &pt,
+                                            const QPointF &base, const QPointF &newBase,
+                                            const QVector<QPointF> &anchorPoints);
 
 }
 

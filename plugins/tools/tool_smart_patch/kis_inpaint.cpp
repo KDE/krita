@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Eugene Ingerman
+ *  SPDX-FileCopyrightText: 2017 Eugene Ingerman
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -489,7 +489,7 @@ template <typename T> float distance_impl(const MaskedImage& my, int x, int y, c
         float v = ((float)(*(v1 + chan)) - (float)(*(v2 + chan)));
         dsq += v * v;
     }
-    return dsq / (KoColorSpaceMathsTraits<float>::unitValue * KoColorSpaceMathsTraits<float>::unitValue / MAX_DIST );
+    return dsq / ((float)KoColorSpaceMathsTraits<T>::unitValue * KoColorSpaceMathsTraits<T>::unitValue / MAX_DIST );
 }
 
 

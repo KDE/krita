@@ -1,6 +1,6 @@
 /*
    This file is part of the KDE libraries
-   Copyright (c) 2008 Jakub Stachowski <qbast@go2.pl>
+   SPDX-FileCopyrightText: 2008 Jakub Stachowski <qbast@go2.pl>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

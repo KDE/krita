@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2005 Adrian Page <adrian@pagenet.plus.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #include "TestKoIntegerMaths.h"
 #include "KoIntegerMaths.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestKoIntegerMaths::UINT8Tests()
 {

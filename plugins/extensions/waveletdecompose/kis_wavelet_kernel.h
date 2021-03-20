@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Miroslav Talasek <miroslav.talasek@seznam.cz>
+ *  SPDX-FileCopyrightText: 2016 Miroslav Talasek <miroslav.talasek@seznam.cz>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

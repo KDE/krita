@@ -1,12 +1,12 @@
 /*
  *    This file is part of the KDE project
- *    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
- *    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
- *    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
- *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
- *    Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ *    SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *    SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+ *    SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+ *    SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
+ *    SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  *    SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -50,7 +50,7 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
     buttonLayout->setSpacing(0);
 
     d->tagToolButton = new QToolButton(this);
-    d->tagToolButton->setIcon(koIcon("bookmarks"));
+    loadIcon();
     d->tagToolButton->setText(i18n("Tag"));
     d->tagToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->tagToolButton->setToolTip(i18nc("@info:tooltip", "<qt>Show the tag box options.</qt>"));
@@ -129,8 +129,14 @@ void KisTagToolButton::setCurrentTag(const KisTagSP tag)
     d->deleteTagAction->setProperty("currentTag", QVariant::fromValue<KisTagSP>(tag));
 }
 
+void KisTagToolButton::loadIcon()
+{
+    d->tagToolButton->setIcon(koIcon("bookmarks"));
+}
+
 void KisTagToolButton::onTagUndeleteClicked()
 {
     emit undeletionOfTagRequested(d->undeleteCandidate);
 }
+
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2007
+ * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -43,6 +43,7 @@ public:
 
     void loadPalettes(KoStore *store, KisDocument *doc);
     void loadStoryboards(KoStore *store, KisDocument *doc);
+    void loadAnimationMetadata(KoStore *store, KisImageSP image);
 
     vKisNodeSP selectedNodes() const;
 
@@ -70,7 +71,7 @@ private:
     // this needs to be private, for neatness sake
     void loadAssistants(KoStore* store, const QString & uri, bool external);
 
-    void loadAnimationMetadata(const KoXmlElement& element, KisImageSP image);
+    void loadAnimationMetadataFromXML(const KoXmlElement& element, KisImageSP image);
 
     KisNodeSP loadNodes(const KoXmlElement& element, KisImageSP image, KisNodeSP parent);
 

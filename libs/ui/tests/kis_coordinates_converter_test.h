@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_COORDINATES_CONVERTER_TEST_H
 #define KIS_COORDINATES_CONVERTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCoordinatesConverterTest : public QObject
 {

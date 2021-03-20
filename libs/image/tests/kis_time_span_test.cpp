@@ -75,4 +75,4 @@ void KisTimeSpanTest::testTimeSpanOperators()
     }
 }
 
-QTEST_MAIN(KisTimeSpanTest)
+SIMPLE_TEST_MAIN(KisTimeSpanTest)

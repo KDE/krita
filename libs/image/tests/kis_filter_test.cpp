@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_filter_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
@@ -236,4 +236,4 @@ void KisFilterTest::testBlurFilterApplicationRect()
 }
 
 
-QTEST_MAIN(KisFilterTest)
+SIMPLE_TEST_MAIN(KisFilterTest)

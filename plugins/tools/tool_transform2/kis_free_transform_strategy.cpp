@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -89,7 +89,7 @@ struct KisFreeTransformStrategy::Private
 
     /// custom members ///
 
-    StrokeFunction function;
+    StrokeFunction function {MOVE};
 
     struct HandlePoints {
         QPointF topLeft;
@@ -111,11 +111,11 @@ struct KisFreeTransformStrategy::Private
     QCursor scaleCursors[8]; // cursors for the 8 directions
     QPixmap shearCursorPixmap;
 
-    bool imageTooBig;
+    bool imageTooBig {false};
 
     ToolTransformArgs clickArgs;
     QPointF clickPos;
-    bool isTransforming;
+    bool isTransforming {false};
 
     QCursor getScaleCursor(const QPointF &handlePt);
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
@@ -727,4 +727,5 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
     recalculateTransformedHandles();
 
     emit q->requestShowImageTooBig(imageTooBig);
+    emit q->requestImageRecalculation();
 }

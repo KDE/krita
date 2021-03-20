@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_jpeg_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include "kisexiv2/kis_exiv2.h"

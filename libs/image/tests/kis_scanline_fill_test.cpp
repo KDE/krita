@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 
 #include <testutil.h>
 
-#include <QTest>
+#include <simpletest.h>
 #include <floodfill/kis_scanline_fill.h>
 #include <floodfill/kis_fill_interval.h>
 #include <floodfill/kis_fill_interval_map.h>
@@ -283,4 +283,4 @@ void KisScanlineFillTest::testExternalFill()
     QCOMPARE(c, QColor(Qt::blue));
 }
 
-QTEST_MAIN(KisScanlineFillTest)
+SIMPLE_TEST_MAIN(KisScanlineFillTest)

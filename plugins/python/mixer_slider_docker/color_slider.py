@@ -1,5 +1,5 @@
 '''
-    Copyright (C) 2019 Tusooa Zhu <tusooa@vista.aero>
+    SPDX-FileCopyrightText: 2019 Tusooa Zhu <tusooa@vista.aero>
 
     This file is part of Krita-docker-color-slider.
 

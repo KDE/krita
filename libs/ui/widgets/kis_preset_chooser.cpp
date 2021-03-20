@@ -1,9 +1,9 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
- *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -130,8 +130,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     if (m_useDirtyPresets && dirty) {
-        const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));
-        QPixmap pixmap = icon.pixmap(QSize(15,15));
+        const QIcon icon = KisIconUtils::loadIcon("dirty-preset");
+        QPixmap pixmap = icon.pixmap(QSize(16,16));
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
@@ -301,10 +301,12 @@ KisResourceItemChooser *KisPresetChooser::itemChooser()
 
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
-   QMap<QString, QVariant> metaDataFilter;
-   metaDataFilter["paintopid"] = paintOpId;
-   m_chooser->tagFilterModel()->setMetaDataFilter(metaDataFilter);
-   updateViewSettings();
+    QMap<QString, QVariant> metaDataFilter;
+    if (!paintOpId.isEmpty()) { // empty means "all"
+        metaDataFilter["paintopid"] = paintOpId;
+    }
+    m_chooser->tagFilterModel()->setMetaDataFilter(metaDataFilter);
+    updateViewSettings();
 }
 
 void KisPresetChooser::setIconSize(int newSize)

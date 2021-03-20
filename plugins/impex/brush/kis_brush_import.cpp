@@ -1,17 +1,7 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
  */
 
 #include "kis_brush_import.h"
@@ -76,7 +66,7 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
     }
 
     const KoColorSpace *colorSpace = 0;
-    if (brush->hasColor()) {
+    if (brush->isImageType()) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     }
     else {
@@ -92,7 +82,7 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
         for(int i = brushes.size(); i > 0; i--) {
             KisGbrBrushSP subbrush = brushes.at(i - 1);
             const KoColorSpace *subColorSpace = 0;
-            if (brush->hasColor()) {
+            if (brush->isImageType()) {
                 subColorSpace = KoColorSpaceRegistry::instance()->rgb8();
             }
             else {

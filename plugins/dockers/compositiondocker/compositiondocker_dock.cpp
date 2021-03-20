@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -83,10 +83,10 @@ CompositionDockerDock::CompositionDockerDock( )
     connect( moveUpButton, SIGNAL(clicked(bool)), this, SLOT(moveCompositionUp()));
     connect( moveDownButton, SIGNAL(clicked(bool)), this, SLOT(moveCompositionDown()));
 
-    QAction* imageAction = new QAction(KisIconUtils::loadIcon("document-export"), i18n("Export Images"), this);
+    QAction* imageAction = new QAction(KisIconUtils::loadIcon("document-export-16"), i18n("Export Images"), this);
     connect(imageAction, SIGNAL(triggered(bool)), this, SLOT(exportImageClicked()));
 
-    QAction* animationAction = new QAction(KisIconUtils::loadIcon("addblankframe"), i18n("Export Animations"), this);
+    QAction* animationAction = new QAction(KisIconUtils::loadIcon("addblankframe-16"), i18n("Export Animations"), this);
     connect(animationAction, SIGNAL(triggered(bool)), this, SLOT(exportAnimationClicked()));
 
     exportCompositions->setDefaultAction(imageAction);
@@ -197,7 +197,7 @@ void CompositionDockerDock::saveClicked()
     saveNameEdit->clear();
     updateModel();
     compositionView->setCurrentIndex(m_model->index(image->compositions().count()-1, 0));
-    image->setModified();
+    image->setModifiedWithoutUndo();
 }
 
 void CompositionDockerDock::moveCompositionUp()
@@ -282,7 +282,7 @@ void CompositionDockerDock::exportImageClicked()
 
             d->setFileBatchMode(true);
 
-            d->exportDocumentSync(QUrl::fromLocalFile(path + composition->name() + ".png"), "image/png");
+            d->exportDocumentSync(path + composition->name() + ".png", "image/png");
             d->deleteLater();
         }
 
@@ -402,7 +402,7 @@ void CompositionDockerDock::updateComposition()
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image() && index.isValid()) {
         KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
         composition->store();
-        m_canvas->image()->setModified();
+        m_canvas->image()->setModifiedWithoutUndo();
     }
 }
 
@@ -418,7 +418,7 @@ void CompositionDockerDock::renameComposition()
                                              composition->name(), &ok);
         if (ok && !name.isEmpty()) {
             composition->setName(name);
-            m_canvas->image()->setModified();
+            m_canvas->image()->setModifiedWithoutUndo();
         }
     }
 }

@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "StoryboardModelTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QWidget>
 #include <StoryboardModel.h>
 #include <CommentModel.h>
@@ -18,7 +18,9 @@ void StoryboardModelTest::init()
     m_storyboardModel->setCommentModel(m_commentModel);
 
     m_commentModel->insertRows(m_commentModel->rowCount(),1);
-    m_storyboardModel->insertRows(m_storyboardModel->rowCount(),1);
+    int pos = m_storyboardModel->rowCount();
+    m_storyboardModel->insertRows(pos,1);
+    m_storyboardModel->insertChildRows(pos);
     QCOMPARE(m_commentModel->rowCount(), 1);
 }
 
@@ -97,7 +99,9 @@ void StoryboardModelTest::testFrameAdded()
     int rows = m_storyboardModel->rowCount();
     auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
     Q_UNUSED(tester);
-    m_storyboardModel->insertRows(m_storyboardModel->rowCount(),1);
+    int pos = m_storyboardModel->rowCount();
+    m_storyboardModel->insertRows(pos, 1);
+    m_storyboardModel->insertChildRows(pos);
 
     QCOMPARE(rows + 1, m_storyboardModel->rowCount());
 }
@@ -162,4 +166,4 @@ void StoryboardModelTest::testCommentChanged()
     QCOMPARE(m_storyboardModel->data(commentIndex).toString(), "newComment");
 }
 
-QTEST_MAIN(StoryboardModelTest)
+SIMPLE_TEST_MAIN(StoryboardModelTest)

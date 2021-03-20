@@ -97,7 +97,11 @@ public Q_SLOTS:
     int playBackEndTime();
     int currentTime();
     void setCurrentTime(int time);
-    
+    QStringList annotationTypes() const;
+    QString annotationDescription(const QString &type) const;
+    QByteArray annotation(const QString &type);
+    void setAnnotation(const QString &type, const QString &description, const QByteArray &annotation);
+    void removeAnnotation(const QString &type);
 private:
 
 };

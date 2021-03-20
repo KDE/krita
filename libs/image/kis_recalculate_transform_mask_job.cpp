@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -37,6 +37,7 @@ void KisRecalculateTransformMaskJob::run()
     if (!m_mask->parent()) return;
     if (!m_mask->visible()) return;
 
+    const QRect oldMaskExtent = m_mask->extent();
     m_mask->recaclulateStaticImage();
 
     KisLayerSP layer = qobject_cast<KisLayer*>(m_mask->parent().data());
@@ -57,7 +58,7 @@ void KisRecalculateTransformMaskJob::run()
      * KisRecalculateTransformMaskJob.
      */
     if (m_mask->transformParams()->isHidden()) {
-        QRect updateRect = m_mask->extent();
+        QRect updateRect = m_mask->extent() | oldMaskExtent;
 
         if (layer->original()) {
             updateRect |= layer->original()->defaultBounds()->bounds();
@@ -68,16 +69,17 @@ void KisRecalculateTransformMaskJob::run()
         } else {
             m_mask->setDirtyDontResetAnimationCache(updateRect);
         }
-    } else {
+    } else if (!m_mask->isAnimated()) {
         /**
          * When we call requestProjectionUpdateNoFilthy() on a layer,
          * its masks' change rect is not counted, because it is considered
          * to be N_ABOVE_FILTHY. Therefore, we should expand the dirty
          * rect manually to get the correct update
          */
+        QRect updateRect = oldMaskExtent |
+            layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
 
-        QRect updateRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
-        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(),layer->isAnimated());
+        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
     }
 }
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Sven Langkamp <sven.langkamp@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -26,6 +26,7 @@
 #include <KisResourceServerProvider.h>
 #include <KoDockWidgetTitleBar.h>
 #include <KisMainWindow.h>
+#include <KisTagFilterResourceProxyModel.h>
 
 #include "kis_workspace_resource.h"
 #include "KisViewManager.h"
@@ -133,30 +134,53 @@ void KisWorkspaceChooser::slotSaveWorkspace()
         return;
     }
 
-    KisWorkspaceResourceSP workspace(new KisWorkspaceResource(QString()));
-    workspace->setDockerState(m_view->qtMainWindow()->saveState());
-    workspace->setImage(m_view->mainWindow()->layoutThumbnail());
-    m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
-    workspace->setValid(true);
-
+    KisWorkspaceResourceSP workspace;
     QString name = m_workspaceWidgets.nameEdit->text();
 
-    workspace->setName(name);
-    workspace->setFilename(name.split(" ").join("_")+workspace->defaultFileExtension());
+    KisTagFilterResourceProxyModel *model = m_workspaceWidgets.itemChooser->tagFilterModel();
 
-    KisResourceModel(ResourceType::Workspaces).addResource(workspace);
+    for (int i = 0; i < model->rowCount(); ++ i) {
+        if (model->data(model->index(i, 0), Qt::UserRole + KisTagFilterResourceProxyModel::Name).toString() == name.replace(" ", "_")) {
+            KoResourceSP res = model->resourceForIndex(model->index(i, 0));
+            workspace = res.dynamicCast<KisWorkspaceResource>();
+            break;
+        }
+    }
+
+    if (workspace.isNull()) {
+        workspace.reset(new KisWorkspaceResource(name));
+        workspace->setName(name);
+        workspace->setDockerState(m_view->qtMainWindow()->saveState());
+        workspace->setImage(m_view->mainWindow()->layoutThumbnail());
+        workspace->setValid(true);
+        workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
+        KisResourceModel(ResourceType::Workspaces).addResource(workspace);
+    }
+
+    m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
 }
 
 void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
 {
-    if (QFileInfo(m_workspaceSaveLocation + m_workspaceWidgets.nameEdit->text().split(" ").join("_") + ".kws").exists()) {
+    QString name = m_workspaceWidgets.nameEdit->text();
+
+    KisTagFilterResourceProxyModel *model = m_workspaceWidgets.itemChooser->tagFilterModel();
+    bool exists = false;
+    for (int i = 0; i < model->rowCount(); ++ i) {
+        if (model->data(model->index(i, 0), Qt::UserRole + KisTagFilterResourceProxyModel::Name).toString() == name.replace(" ", "_")) {
+            exists = true;
+            break;
+        }
+    }
+
+    if (exists) {
         m_workspaceWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
         m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original Workspace."));
-        //m_workspaceWidgets.saveButton->setText(i18n("Overwrite"));
+        m_workspaceWidgets.saveButton->setText(i18n("Overwrite"));
     } else {
         m_workspaceWidgets.saveButton->setIcon(QIcon());
         m_workspaceWidgets.saveButton->setToolTip(i18n("Save current workspace."));
-        //m_workspaceWidgets.saveButton->setText(i18n("Save"));
+        m_workspaceWidgets.saveButton->setText(i18n("Save"));
     }
 }
 

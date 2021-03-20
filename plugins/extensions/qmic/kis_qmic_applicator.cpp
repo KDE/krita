@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -41,7 +41,7 @@ void KisQmicApplicator::apply()
     cancel();
 
     KisImageSignalVector emitSignals;
-    emitSignals << ComplexSizeChangedSignal() << ModifiedSignal;
+    emitSignals << ComplexSizeChangedSignal();
 
     m_applicator.reset(
         new KisProcessingApplicator(m_image, m_node,
@@ -61,14 +61,17 @@ void KisQmicApplicator::apply()
         layerSize = QRect(0, 0, m_image->width(), m_image->height());
     }
 
-   if (!selection) {
-        // synchronize Krita image size with biggest gmic layer size
+    // This is a three-stage process.
+
+    if (!selection) {
+        // 1. synchronize Krita image size with biggest gmic layer size
         m_applicator->applyCommand(new KisQmicSynchronizeImageSizeCommand(m_images, m_image));
     }
 
-    // synchronize layer count
+    // 2. synchronize layer count and convert excess GMic nodes to paint layers
     m_applicator->applyCommand(new KisQmicSynchronizeLayersCommand(m_kritaNodes, m_images, m_image, layerSize, selection), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
+    // 3. visit the existing nodes and reuse them to apply the remaining changes from GMic
     KisProcessingVisitorSP  importVisitor = new KisImportQmicProcessingVisitor(m_kritaNodes, m_images, layerSize, selection);
     m_applicator->applyVisitor(importVisitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
     m_applicator->explicitlyEmitFinalSignals();

@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
- * Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "TestAbrStorage.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImageReader>
 
 #include <KoConfig.h>
@@ -43,6 +43,18 @@ void TestAbrStorage::testResourceIterator()
         count++;
     }
     QVERIFY(count > 0);
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter2(storage.resources(ResourceType::LayerStyles));
+    QVERIFY(!iter2->hasNext());
+    count = 0;
+    while (iter2->hasNext()) {
+        iter2->next();
+        KoResourceSP res(iter2->resource());
+        QVERIFY(res);
+        count++;
+    }
+    QVERIFY(count == 0);
+
 }
 
 void TestAbrStorage::testTagIterator()
@@ -82,5 +94,5 @@ void TestAbrStorage::testResource()
 }
 
 
-QTEST_MAIN(TestAbrStorage)
+SIMPLE_TEST_MAIN(TestAbrStorage)
 

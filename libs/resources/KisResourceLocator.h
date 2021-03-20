@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -89,7 +89,7 @@ public:
 
     /**
      * @brief removeStorage removes the temporary storage from the database
-     * @param document the unique name of the document
+     * @param storageLocation the unique name of the storage
      * @return true is successful.
      */
     bool removeStorage(const QString &storageLocation);
@@ -126,6 +126,12 @@ private:
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;
+
+    /// add the thumbnail associated with resouceId to cache
+    void cacheThumbnail(QString storageLocation, const QString &resourceType, const QString &filename, const QImage &img);
+
+    /// @return a valid image if the thumbnail is present in the cache, an invalid image otherwise
+    QImage thumbnailCached(QString storageLocation, const QString &resourceType, const QString &filename);
 
     /**
      * @brief resource finds a physical resource in one of the storages
@@ -182,6 +188,15 @@ private:
      * @return
      */
     bool updateResource(const QString &resourceType, const KoResourceSP resource);
+
+    /**
+     * @brief Reloads the resource from its persistent storage
+     * @param resourceType the type of the resource
+     * @param resource the actual resource object
+     * @return true if reloading was successful. When returned false,
+     *         \p resource is kept unchanged
+     */
+    bool reloadResource(const QString &resourceType, const KoResourceSP resource);
 
     /**
      * @brief metaDataForResource

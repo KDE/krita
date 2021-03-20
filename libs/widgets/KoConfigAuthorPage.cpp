@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (c) 2000 Simon Hausmann <hausmann@kde.org>
-                 2006 Martin Pfeiffer <hubipete@gmx.net>
-                 2012 C. Boemann <cbo@boemann.dk>
-                 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+   SPDX-FileCopyrightText: 2000 Simon Hausmann <hausmann@kde.org>
+   SPDX-FileCopyrightText: 2006 Martin Pfeiffer <hubipete@gmx.net>
+   SPDX-FileCopyrightText: 2012 C. Boemann <cbo@boemann.dk>
+   SPDX-FileCopyrightText: 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -65,7 +65,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     newUser->setToolTip(i18n("Add new author profile (starts out as a copy of current)"));
     layout->addWidget(newUser, 0, 1);
     d->bnDeleteUser = new QToolButton();
-    d->bnDeleteUser->setIcon(koIcon("trash-empty"));
+    d->bnDeleteUser->setIcon(koIcon("edit-delete"));
     d->bnDeleteUser->setToolTip(i18n("Delete the author profile"));
     layout->addWidget(d->bnDeleteUser, 0, 2);
     QFrame *f = new QFrame();

@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_colorize_mask_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 #include "lazybrush/kis_colorize_mask.h"

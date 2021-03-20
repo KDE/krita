@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -32,6 +32,7 @@ private Q_SLOTS:
     void testResourceForMD5();
     void testRenameResource();
     void cleanupTestCase();
+
 private:
 
     QString m_srcLocation;

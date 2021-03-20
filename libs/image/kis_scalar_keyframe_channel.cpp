@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -164,13 +164,6 @@ public:
     QSharedPointer<ScalarKeyframeLimits> limits;
 };
 
-
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node)
-    : KisScalarKeyframeChannel(id, new KisDefaultBoundsNodeWrapper(node))
-{
-    setNode(node);
-}
-
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
     : KisKeyframeChannel(id, bounds)
     , m_d(new Private)
@@ -185,14 +178,22 @@ KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBou
     });
 }
 
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent)
-    : KisKeyframeChannel(rhs, newParent)
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs)
+    : KisKeyframeChannel(rhs)
 {
     m_d.reset(new Private(*rhs.m_d));
 
     Q_FOREACH (int time, rhs.constKeys().keys()) {
         KisKeyframeChannel::copyKeyframe(&rhs, time, this, time);
     }
+
+    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, [](const KisKeyframeChannel *channel, int time) {
+        const KisScalarKeyframeChannel* chan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
+        chan->sigChannelUpdated(
+                    chan->affectedFrames(time),
+                    chan->affectedRect(time)
+                    );
+    });
 }
 
 KisScalarKeyframeChannel::~KisScalarKeyframeChannel()
@@ -200,8 +201,12 @@ KisScalarKeyframeChannel::~KisScalarKeyframeChannel()
 }
 
 void KisScalarKeyframeChannel::addScalarKeyframe(int time, qreal value, KUndo2Command *parentUndoCmd) {
-    addKeyframe(time, parentUndoCmd);
     KisScalarKeyframeSP scalarKey = keyframeAt<KisScalarKeyframe>(time);
+    if (!scalarKey) {
+        addKeyframe(time, parentUndoCmd);
+        scalarKey = keyframeAt<KisScalarKeyframe>(time);
+    }
+
     if (scalarKey) {
         scalarKey->setValue(value, parentUndoCmd);
     }
@@ -287,6 +292,10 @@ qreal KisScalarKeyframeChannel::valueAt(int time) const
     } else {
         return result;
     }
+}
+
+bool KisScalarKeyframeChannel::isCurrentTimeAffectedBy(int keyTime) {
+    return affectedFrames(activeKeyframeTime(keyTime)).contains(currentTime());
 }
 
 void KisScalarKeyframeChannel::setDefaultValue(qreal value)

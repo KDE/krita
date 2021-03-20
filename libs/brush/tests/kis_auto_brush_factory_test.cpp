@@ -4,7 +4,7 @@
 
 #include "kis_auto_brush_factory_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include "kis_auto_brush.h"
 #include "kis_auto_brush_factory.h"
@@ -52,4 +52,4 @@ void KisAutoBrushFactoryTest::testXMLClone()
     QCOMPARE(res1, res2);
 }
 
-QTEST_MAIN(KisAutoBrushFactoryTest)
+SIMPLE_TEST_MAIN(KisAutoBrushFactoryTest)

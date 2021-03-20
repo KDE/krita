@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_query_path_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_node_query_path.h"
 #include <kis_node.h>
@@ -85,4 +85,4 @@ void KisNodeQueryPathTest::testPathCompression()
     QCOMPARE(path2.toString(), QString("/"));
 }
 
-QTEST_MAIN(KisNodeQueryPathTest)
+SIMPLE_TEST_MAIN(KisNodeQueryPathTest)

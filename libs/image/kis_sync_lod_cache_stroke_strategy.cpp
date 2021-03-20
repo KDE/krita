@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,52 +10,16 @@
 #include <kundo2magicstring.h>
 #include "krita_utils.h"
 #include "kis_layer_utils.h"
-
+#include "kis_pointer_utils.h"
+#include "KisRunnableStrokeJobUtils.h"
 
 struct KisSyncLodCacheStrokeStrategy::Private
 {
     KisImageWSP image;
-    QHash<KisPaintDeviceSP, KisPaintDevice::LodDataStruct*> dataObjects;
-
-    ~Private() {
-        qDeleteAll(dataObjects);
-        dataObjects.clear();
-    }
-
-    class InitData : public KisStrokeJobData {
-    public:
-        InitData(KisPaintDeviceSP _device)
-            : KisStrokeJobData(SEQUENTIAL),
-              device(_device)
-            {}
-
-        KisPaintDeviceSP device;
-    };
-
-    class ProcessData : public KisStrokeJobData {
-    public:
-        ProcessData(KisPaintDeviceSP _device, const QRect &_rect)
-            : KisStrokeJobData(CONCURRENT),
-              device(_device), rect(_rect)
-            {}
-
-        KisPaintDeviceSP device;
-        QRect rect;
-    };
-
-    class AdditionalProcessNode : public KisStrokeJobData {
-    public:
-        AdditionalProcessNode(KisNodeSP _node)
-            : KisStrokeJobData(SEQUENTIAL),
-              node(_node)
-            {}
-
-        KisNodeSP node;
-    };
 };
 
 KisSyncLodCacheStrokeStrategy::KisSyncLodCacheStrokeStrategy(KisImageWSP image, bool forgettable)
-    : KisSimpleStrokeStrategy(QLatin1String("SyncLodCacheStroke"), kundo2_i18n("Instant Preview")),
+    : KisRunnableBasedStrokeStrategy(QLatin1String("SyncLodCacheStroke"), kundo2_i18n("Instant Preview")),
       m_d(new Private)
 {
     m_d->image = image;
@@ -66,8 +30,6 @@ KisSyncLodCacheStrokeStrategy::KisSyncLodCacheStrokeStrategy(KisImageWSP image, 
      */
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
-    enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
-    enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
     setRequestsOtherStrokesToEnd(false);
     setClearsRedoOnStart(false);
@@ -78,82 +40,78 @@ KisSyncLodCacheStrokeStrategy::~KisSyncLodCacheStrokeStrategy()
 {
 }
 
-void KisSyncLodCacheStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
+void KisSyncLodCacheStrokeStrategy::initStrokeCallback()
 {
-    Private::InitData *initData = dynamic_cast<Private::InitData*>(data);
-    Private::ProcessData *processData = dynamic_cast<Private::ProcessData*>(data);
-    Private::AdditionalProcessNode *additionalProcessNode = dynamic_cast<Private::AdditionalProcessNode*>(data);
-
-    if (initData) {
-        KisPaintDeviceSP dev = initData->device;
-        const int lod = dev->defaultBounds()->currentLevelOfDetail();
-        m_d->dataObjects.insert(dev, dev->createLodDataStruct(lod));
-    } else if (processData) {
-        KisPaintDeviceSP dev = processData->device;
-        KIS_ASSERT(m_d->dataObjects.contains(dev));
-
-        KisPaintDevice::LodDataStruct *data = m_d->dataObjects.value(dev);
-        dev->updateLodDataStruct(data, processData->rect);
-    } else if (additionalProcessNode) {
-        additionalProcessNode->node->syncLodCache();
-    }
-}
-
-void KisSyncLodCacheStrokeStrategy::finishStrokeCallback()
-{
-    auto it = m_d->dataObjects.begin();
-    auto end = m_d->dataObjects.end();
-
-    for (; it != end; ++it) {
-        KisPaintDeviceSP dev = it.key();
-        dev->uploadLodDataStruct(it.value());
-    }
-
-    qDeleteAll(m_d->dataObjects);
-    m_d->dataObjects.clear();
-}
-
-void KisSyncLodCacheStrokeStrategy::cancelStrokeCallback()
-{
-    qDeleteAll(m_d->dataObjects);
-    m_d->dataObjects.clear();
+    QVector<KisStrokeJobData *> jobs;
+    createJobsData(jobs, m_d->image->root(), m_d->image->currentLevelOfDetail());
+    addMutatedJobs(jobs);
 }
 
 QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP _image)
+{
+    // all the jobs are populates in the init job
+    return {};
+}
+
+void KisSyncLodCacheStrokeStrategy::createJobsData(QVector<KisStrokeJobData *> &jobs, KisNodeSP imageRoot, int levelOfDetail, KisPaintDeviceList extraDevices)
 {
     using KisLayerUtils::recursiveApplyNodes;
     using KritaUtils::splitRegionIntoPatches;
     using KritaUtils::optimalPatchSize;
 
-    KisImageSP image = _image;
+    using SharedData = QHash<KisPaintDeviceSP, QSharedPointer<KisPaintDevice::LodDataStruct>>;
+    using SharedDataSP = QSharedPointer<SharedData>;
 
-    KisPaintDeviceList deviceList;
-    QList<KisStrokeJobData*> jobsData;
+    SharedDataSP sharedData(new SharedData());
 
-    recursiveApplyNodes(image->root(),
-                        [&deviceList](KisNodeSP node) {
-                            deviceList << node->getLodCapableDevices();
-                        });
+    KisPaintDeviceList deviceList = extraDevices;
+
+    recursiveApplyNodes(imageRoot,
+        [&deviceList](KisNodeSP node) {
+             deviceList << node->getLodCapableDevices();
+        });
 
     KritaUtils::makeContainerUnique(deviceList);
 
-    Q_FOREACH (KisPaintDeviceSP device, deviceList) {
-        jobsData << new Private::InitData(device);
-    }
+
+    KritaUtils::addJobBarrier(jobs, [sharedData, deviceList, levelOfDetail] () mutable {
+        Q_FOREACH (KisPaintDeviceSP device, deviceList) {
+            sharedData->insert(device, toQShared(device->createLodDataStruct(levelOfDetail)));
+        }
+    });
+
+    KritaUtils::addJobSequential(jobs, [](){});
 
     Q_FOREACH (KisPaintDeviceSP device, deviceList) {
         KisRegion region = device->regionForLodSyncing();
         QVector<QRect> rects = splitRegionIntoPatches(region, optimalPatchSize());
 
         Q_FOREACH (const QRect &rc, rects) {
-            jobsData << new Private::ProcessData(device, rc);
+            KritaUtils::addJobConcurrent(jobs, [sharedData, device, rc] () mutable {
+                KIS_ASSERT(sharedData->contains(device));
+
+                KisPaintDevice::LodDataStruct *data = sharedData->value(device).data();
+                device->updateLodDataStruct(data, rc);
+            });
         }
     }
 
-    recursiveApplyNodes(image->root(),
-                        [&jobsData](KisNodeSP node) {
-                            jobsData << new Private::AdditionalProcessNode(node);
-                        });
+    KritaUtils::addJobSequential(jobs, [](){});
 
-    return jobsData;
+    recursiveApplyNodes(imageRoot,
+        [&jobs](KisNodeSP node) {
+             KritaUtils::addJobConcurrent(jobs, [node] () mutable {
+                 node->syncLodCache();
+             });
+        });
+
+    KritaUtils::addJobSequential(jobs, [sharedData] () mutable {
+        auto it = sharedData->begin();
+        auto end = sharedData->end();
+
+        for (; it != end; ++it) {
+            KisPaintDeviceSP dev = it.key();
+            dev->uploadLodDataStruct(it.value().data());
+        }
+    });
 }

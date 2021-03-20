@@ -1,7 +1,7 @@
 
 /* This file is part of the KDE project
- *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
- *    Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ *    SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
+ *    SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  *    SPDX-License-Identifier: LGPL-2.0-or-later
  * */
@@ -47,10 +47,12 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     QMenu *assignableTagsMenu;
 
     m_tagModel = new KisTagModel(resource->resourceType().first);
+    m_tagModel->sort(KisAllTagsModel::Name);
     KisResourceModel resourceModel(resource->resourceType().first);
     KisTagResourceModel tagResourceModel(resource->resourceType().first);
 
     tagResourceModel.setResourcesFilter(QVector<KoResourceSP>() << resource);
+    tagResourceModel.sort(KisAllTagResourceModel::TagName);
     QList<KisTagSP> removables;
     for (int i = 0; i < tagResourceModel.rowCount(); ++i) {
         removables << tagResourceModel.data(tagResourceModel.index(i, 0), Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
@@ -159,7 +161,10 @@ KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()
 
 void KisResourceItemChooserContextMenu::removeResourceExistingTag(const KisTagSP tag, KoResourceSP resource)
 {
+    if (m_tagChooserWidget->currentlySelectedTag()->url() == tag->url()) {
+        m_tagChooserWidget->setCurrentItem(KisAllTagsModel::urlAll());
+    }
     KisTagResourceModel tagResourceModel(resource->resourceType().first);
-    tagResourceModel.untagResource(tag, resource);
+    tagResourceModel.untagResource(tag, resource->resourceId());
 }
 

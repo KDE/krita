@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,7 +22,7 @@
 #include <resources/KoColorSet.h>
 #include <KoChannelInfo.h>
 #include <KoMixColorsOp.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 
 
 

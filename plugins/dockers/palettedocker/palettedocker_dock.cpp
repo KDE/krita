@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -63,8 +63,8 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_paletteEditor(new KisPaletteEditor)
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add a color")))
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
-    , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
-    , m_actEditPalette(new QAction(KisIconUtils::loadIcon("groupLayer"), i18n("Edit this palette")))
+    , m_actModify(new QAction(KisIconUtils::loadIcon("document-edit"), i18n("Modify this spot")))
+    , m_actEditPalette(new QAction(KisIconUtils::loadIcon("palette-edit"), i18n("Edit this palette")))
     , m_colorSelfUpdate(false)
 {
     QWidget *mainWidget = new QWidget(this);
@@ -113,7 +113,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_paletteChooser, SIGNAL(sigRemovePalette(KoColorSetSP)), SLOT(slotRemovePalette(KoColorSetSP)));
     connect(m_paletteChooser, SIGNAL(sigExportPalette(KoColorSetSP)), SLOT(slotExportPalette(KoColorSetSP)));
 
-    m_ui->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
+    m_ui->bnColorSets->setIcon(KisIconUtils::loadIcon("palette-library"));
     m_ui->bnColorSets->setToolTip(i18n("Choose palette"));
     m_ui->bnColorSets->setPopupWidget(m_paletteChooser);
 
@@ -269,7 +269,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
     if (colorSet) {
         KisConfig cfg(true);
         cfg.setDefaultPalette(colorSet->name());
-        m_ui->lblPaletteName->setTextElideMode(Qt::ElideLeft);
+        m_ui->lblPaletteName->setTextElideMode(Qt::ElideMiddle);
         m_ui->lblPaletteName->setText(colorSet->name());
     } else {
         m_ui->lblPaletteName->setText("");

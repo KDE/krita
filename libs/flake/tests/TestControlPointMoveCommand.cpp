@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   SPDX-FileCopyrightText: 2007 Thorsten Zachmann <zachmann@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -9,7 +9,7 @@
 #include "KoPathShape.h"
 #include "KoPathControlPointMoveCommand.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestControlPointMoveCommand::redoUndoControlPoint1()
 {
@@ -243,4 +243,4 @@ void TestControlPointMoveCommand::redoUndoControlPoint2Symmetric()
     QVERIFY(ppathOrg == path.outline());
 }
 
-QTEST_MAIN(TestControlPointMoveCommand)
+SIMPLE_TEST_MAIN(TestControlPointMoveCommand)

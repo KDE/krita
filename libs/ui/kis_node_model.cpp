@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -642,6 +642,8 @@ QStringList KisNodeModel::mimeTypes() const
     QStringList types;
     types << QLatin1String("application/x-krita-node");
     types << QLatin1String("application/x-qt-image");
+    types << QLatin1String("application/x-color");
+    types << QLatin1String("krita/x-colorsetentry");
     return types;
 }
 

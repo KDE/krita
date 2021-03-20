@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_selection_decoration_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <stroke_testing_utils.h>
 #include "kis_processing_applicator.h"
 #include "commands/kis_selection_commands.h"
@@ -21,7 +21,7 @@ void KisSelectionDecorationTest::testConcurrentSelectionFetches()
         KisProcessingApplicator applicator(image,
                                            0 /* we need no automatic updates */,
                                            KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            kundo2_noi18n("test stroke"));
 
 
@@ -38,4 +38,4 @@ void KisSelectionDecorationTest::testConcurrentSelectionFetches()
     image->waitForDone();
 }
 
-QTEST_MAIN(KisSelectionDecorationTest)
+SIMPLE_TEST_MAIN(KisSelectionDecorationTest)

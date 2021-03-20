@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_fill_interval_map_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <floodfill/kis_fill_interval_map.h>
 #include <floodfill/kis_fill_interval_map_p.h>
@@ -45,4 +45,4 @@ void KisFillIntervalMapTest::test()
     QCOMPARE(range.beginIt->end, 30);
 }
 
-QTEST_MAIN(KisFillIntervalMapTest)
+SIMPLE_TEST_MAIN(KisFillIntervalMapTest)

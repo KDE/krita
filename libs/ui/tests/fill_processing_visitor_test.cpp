@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "fill_processing_visitor_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
@@ -135,4 +135,4 @@ void FillProcessingVisitorTest::testFillPatternHaveSelectionSelectionOnly()
     tester.test("fill_pattern_have_selection_selection_only", true, true, true);
 }
 
-QTEST_MAIN(FillProcessingVisitorTest)
+SIMPLE_TEST_MAIN(FillProcessingVisitorTest)

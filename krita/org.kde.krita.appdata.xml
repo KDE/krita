@@ -101,7 +101,7 @@
   <summary xml:lang="tr">Sayısal Boyama, Yaratıcı Özgürlük</summary>
   <summary xml:lang="uk">Цифрове малювання, творча свобода</summary>
   <summary xml:lang="x-test">xxDigital Painting, Creative Freedomxx</summary>
-  <summary xml:lang="zh-CN">自由挥洒数字绘画的无限创意</summary>
+  <summary xml:lang="zh-CN">自由开源的数字绘画软件</summary>
   <summary xml:lang="zh-TW">數位繪畫，創作自由</summary>
   <description>
     <p>Krita is the full-featured digital art studio.</p>
@@ -125,7 +125,7 @@
     <p xml:lang="ko">Krita는 디지털 예술 스튜디오입니다.</p>
     <p xml:lang="nl">Krita is de digitale kunststudio vol mogelijkheden.</p>
     <p xml:lang="nn">Krita er ei funksjonsrik digital teiknestove.</p>
-    <p xml:lang="pl">Krita jest pełnowymiarowym, cyfrowym studiem artystycznym</p>
+    <p xml:lang="pl">Krita jest pełnowartościowym, cyfrowym studiem artystycznym.</p>
     <p xml:lang="pt">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="pt-BR">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="ru">Krita — полнофункциональный инструмент для создания цифровой графики.</p>
@@ -254,10 +254,12 @@
       <caption xml:lang="fr">Krita est un studio d'art numérique complet.</caption>
       <caption xml:lang="hi">क्रिता एक विशेषताओं से परिपूर्ण डिजिटल कला स्टूडियो है।</caption>
       <caption xml:lang="ia">Krita es un studio de pictura digital complete</caption>
+      <caption xml:lang="id">Krita adalah sebuah aplikasi studio pelukisan digital yang berfitur lengkap</caption>
       <caption xml:lang="it">Krita è uno studio d'arte digitale completo</caption>
       <caption xml:lang="ko">Krita는 다기능 디지털 예술 스튜디오입니다</caption>
       <caption xml:lang="nl">Krita is een digitale schilderstudio vol mogelijkheden</caption>
-      <caption xml:lang="nn">Krita er ei funksjonsrik digital teiknestove.</caption>
+      <caption xml:lang="nn">Krita er ei funksjonsrik digital teiknestove</caption>
+      <caption xml:lang="pl">Krita jest pełnowartościowym, cyfrowym studiem artystycznym</caption>
       <caption xml:lang="pt">O Krita é um estúdio de arte digital completo</caption>
       <caption xml:lang="pt-BR">O Krita é um estúdio de pintura digital completo</caption>
       <caption xml:lang="sk">Krita je plnohodnotné digitálne maliarske štúdio</caption>
@@ -269,7 +271,7 @@
       <caption xml:lang="zh-TW">Krita 是全功能的數位繪圖工作室</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>
     </screenshot>
-    <screenshot type="default">
+    <screenshot>
       <caption>The startup window now also gives you the latest news about Krita</caption>
       <caption xml:lang="ca">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
       <caption xml:lang="ca-valencia">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
@@ -279,10 +281,12 @@
       <caption xml:lang="eu">Abioko leihoak orain Krita-ri buruzko albiste berrienak ematen dizkizu</caption>
       <caption xml:lang="fr">Maintenant, la fenêtre de démarrage vous donne aussi les dernières informations concernant Krita</caption>
       <caption xml:lang="hi">स्टार्टअप विंडो अब आपको क्रिता के बारे में ताज़ा समाचार भी देती है।</caption>
+      <caption xml:lang="id">Window pemulaian kini juga memberikan kamu kabar terkini tentang Krita</caption>
       <caption xml:lang="it">La finestra di avvio ora fornisce anche le ultime novità su Krita</caption>
       <caption xml:lang="ko">시작 창에서 Krita의 최신 소식을 볼 수 있습니다</caption>
       <caption xml:lang="nl">Het opstartvenster geeft u nu ook you het laatste nieuws over Krita</caption>
-      <caption xml:lang="nn">Oppstartsvindauget viser no siste nytt om Krita.</caption>
+      <caption xml:lang="nn">Oppstartsvindauget viser no siste nytt om Krita</caption>
+      <caption xml:lang="pl">Okno początkowe pokazuje teraz najnowsze wieści o Kricie</caption>
       <caption xml:lang="pt">A janela inicial agora também lhe dá as últimas notícias sobre o Krita</caption>
       <caption xml:lang="pt-BR">A janela de inicialização agora também mostra as últimas notícias sobre o Krita</caption>
       <caption xml:lang="sk">V úvodnom okne sa tiež nachádzajú najnovšie správy o Krita</caption>
@@ -290,7 +294,7 @@
       <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita</caption>
       <caption xml:lang="uk">У початковому вікні програми ви можете бачити найсвіжіші новини щодо Krita</caption>
       <caption xml:lang="x-test">xxThe startup window now also gives you the latest news about Kritaxx</caption>
-      <caption xml:lang="zh-CN">它的启动画面可以向你展示 Krita 的最新官方新闻。</caption>
+      <caption xml:lang="zh-CN">它的启动画面可以为您展示 Krita 的最新官方新闻。</caption>
       <caption xml:lang="zh-TW">開始視窗也提供給您關於 Krita 的最新消息</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_002.png</image>
     </screenshot>
@@ -304,10 +308,12 @@
       <caption xml:lang="eu">Hamarretik gora isipu motor ikaragarri ahaltsu daude</caption>
       <caption xml:lang="fr">Il y a plus de 10 moteurs de brosse, tous extrêmement puissants</caption>
       <caption xml:lang="hi">इसमें दस से अधिक शक्तिशाली ब्रश इंजन हैं</caption>
+      <caption xml:lang="id">Ada lebih dari sepuluh perkakas kuas yang sangat hebat</caption>
       <caption xml:lang="it">Ci sono oltre dieci motori di pennelli incredibilmente potenti</caption>
       <caption xml:lang="ko">10가지 종류의 강력한 브러시 엔진을 사용할 수 있습니다</caption>
       <caption xml:lang="nl">Er zijn meer dan tien immens krachtige penseelengines</caption>
-      <caption xml:lang="nn">Det finst meir enn ti enormt kraftige penselmotorar.</caption>
+      <caption xml:lang="nn">Det finst meir enn ti enormt kraftige penselmotorar</caption>
+      <caption xml:lang="pl">Istnieje ponad dziesięć zaawansowanych silników pędzli</caption>
       <caption xml:lang="pt">Existem mais de dez motores de pincéis extremamente poderosos</caption>
       <caption xml:lang="pt-BR">Mais de dez engines de pincéis incrivelmente poderosos disponíveis</caption>
       <caption xml:lang="sk">Existuje viac ako desať nesmierne výkonných štetcových enginov</caption>
@@ -318,7 +324,7 @@
       <caption xml:lang="zh-CN">它内建了超过十种功能强大的笔刷引擎。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
-    <screenshot type="default">
+    <screenshot>
       <caption>Create and use gamut masks to give your images a coherent feel</caption>
       <caption xml:lang="ca">Creeu i useu màscares de gamma per a donar a les imatges una aparença coherent</caption>
       <caption xml:lang="ca-valencia">Creeu i useu màscares de gamma per a donar a les imatges una aparença coherent</caption>
@@ -326,12 +332,14 @@
       <caption xml:lang="es">Cree y use gamas para proporcionar a sus imágenes un aspecto coherente</caption>
       <caption xml:lang="et">Värviulatuse maskide loomine ja kasutamine piltidele kooskõlalise välimuse andmiseks</caption>
       <caption xml:lang="eu">Sortu eta erabili gama-maskarak zure irudiei izaera koherentea emateko</caption>
-      <caption xml:lang="fr">Créer et utiiser les masques de Gamut pour donner à vos images une apparence cohérente</caption>
+      <caption xml:lang="fr">Créer et utiliser les masques de Gamut pour donner à vos images une apparence cohérente</caption>
       <caption xml:lang="hi">अपने चित्रों को एक सुसंगत रूप देने के लिए गेमट मास्क बनाएं और उपयोग करें</caption>
+      <caption xml:lang="id">Ciptakan dan gunakan masker gamut untuk memberikan citramu sebuah suasana yang koheren</caption>
       <caption xml:lang="it">Crea e utilizza maschere gamut per dare alle tue immagini un aspetto coerente</caption>
       <caption xml:lang="ko">색역 마스크를 만들고 사용할 수 있습니다</caption>
       <caption xml:lang="nl">Maak en gebruik gamut-maskers om uw afbeeldingen een coherent gevoel te geven</caption>
-      <caption xml:lang="nn">Bruk fargeområde-masker for å gje bileta eit heilsleg uttrykk.</caption>
+      <caption xml:lang="nn">Bruk fargeområde-masker for å gje bileta eit heilsleg uttrykk</caption>
+      <caption xml:lang="pl">Twórz i używaj masek gamut, aby nadać swoim obrazom spójny wygląd</caption>
       <caption xml:lang="pt">Crie e use máscaras de gamute para dar às suas imagens uma aparência coerente</caption>
       <caption xml:lang="pt-BR">Crie e use máscaras de gama para dar um senso de coerência às suas imagens</caption>
       <caption xml:lang="sk">Vytvorte a používajte gamutové masky, aby vašim obrázkom poskytli ucelený pocit</caption>
@@ -352,10 +360,12 @@
       <caption xml:lang="eu">Animaziorako? Krita-k ohiko eskuz-marraztutako animazioetarako behar duzun guztia dakar</caption>
       <caption xml:lang="fr">Vous réalisez des animations ? Krita vous fournit tout ce dont vous avez besoin pour l'animation traditionnelle et dessinée à la main</caption>
       <caption xml:lang="hi">आपको एनीमेशन में आसक्ती है? क्रिता आपको पारंपरिक, हाथ से तैयार एनीमेशन बनाने के लिए आवश्यक सब कुछ प्रदान करता है</caption>
+      <caption xml:lang="id">Soal animasi? Krita menyediakan apa pun yang kamu perlukan untuk animasi gambar-tangan, tradisional</caption>
       <caption xml:lang="it">Per le animazioni? Krita fornisce tutto ciò che ti server per l'animazione tradizionale, disegnata a mano</caption>
       <caption xml:lang="ko">애니메이션을 만들 계획이 있으신가요? Krita를 통해서 수작업 애니메이션을 작업할 수 있습니다</caption>
       <caption xml:lang="nl">Naar animatie? Krita biedt alles wat u nodig hebt voor traditionele, met de hand getekende animatie</caption>
-      <caption xml:lang="nn">Interessert i animasjon? Krita har alt du treng for tradisjonelle, handteikna animasjonar.</caption>
+      <caption xml:lang="nn">Interessert i animasjon? Krita har alt du treng for tradisjonelle, handteikna animasjonar</caption>
+      <caption xml:lang="pl">Zajmujesz się animacjami? Krita zapewnia wszystko czego potrzebujesz do tworzenia tradycyjnych, ręcznie rysowanych animacji</caption>
       <caption xml:lang="pt">Gosta de animação? O Krita oferece tudo o que precisa para o desenho animado tradicional e desenhado à mão</caption>
       <caption xml:lang="pt-BR">Curte animação? O Krita fornece tudo necessário para você poder trabalhar com animação tradicional ou feita à mão</caption>
       <caption xml:lang="sk">Ste do animácie? Krita poskytuje všetko, čo potrebujete pre tradičné ručne kreslené animácie</caption>
@@ -367,7 +377,7 @@
       <caption xml:lang="zh-TW">想做動畫？Krita 提供您在傳統、手繪動畫所需的任何東西</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_005.png</image>
     </screenshot>
-    <screenshot type="default">
+    <screenshot>
       <caption>If you're new to digital painting, there's an extensive, up-to-date manual</caption>
       <caption xml:lang="ca">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
       <caption xml:lang="ca-valencia">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
@@ -377,10 +387,12 @@
       <caption xml:lang="eu">Pintura digitalean berria bazara, gaurkotutako eskuliburu zabal bat dago</caption>
       <caption xml:lang="fr">Si vous êtes nouveau en art graphique, il y a un manuel à jour et très fourni</caption>
       <caption xml:lang="hi">यदि आप डिजिटल पेंटिंग में नए हैं, तो एक व्यापक, अद्यतन पु्स्तिका है</caption>
+      <caption xml:lang="id">Jika kamu baru dalam pelukisan digital, di situ ada buku manual panjang-lebar yang ter-update</caption>
       <caption xml:lang="it">Se sei nuovo del disegno digitale è disponibile un manuale completo e aggiornato</caption>
       <caption xml:lang="ko">디지털 페인팅을 처음 시작하시거나, Krita의 기능을 더 알아 보려면 사용 설명서를 참조하십시오</caption>
       <caption xml:lang="nl">Als u nieuw bent in digitaal schilderen, dan is er een uitgebreide, bijgewerkte handleiding.</caption>
-      <caption xml:lang="nn">Viss du er nybegynnar innan digital teikning, finst det ei omfattande og oppdatert brukarhandbok.</caption>
+      <caption xml:lang="nn">Viss du er nybegynnar innan digital teikning, finst det ei omfattande og oppdatert brukarhandbok</caption>
+      <caption xml:lang="pl">Jeśli malowanie cyfrowe to dla ciebie nowość, to dostępny jest podręcznik</caption>
       <caption xml:lang="pt">Se é novo na pintura digital, ou deseja saber mais sobre as possibilidades do Krita, existe um manual extenso e actualizado</caption>
       <caption xml:lang="pt-BR">Se você for iniciante em pintura digital, há um extenso e atualizado manual</caption>
       <caption xml:lang="sk">Ak ste v oblasti digitálnej maľby nováčikom alebo sa chcete dozvedieť viac o možnostiach programu Krita, existuje o tom rozsiahla a aktuálna príručka</caption>
@@ -388,7 +400,7 @@
       <caption xml:lang="sv">Om digital målning är nytt för dig, finns en omfattande, aktuell handbok</caption>
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні, скористайтеся нашим докладним і актуальним підручником</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, there's an extensive, up-to-date manualxx</caption>
-      <caption xml:lang="zh-CN">如果你是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册。</caption>
+      <caption xml:lang="zh-CN">如果您是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>

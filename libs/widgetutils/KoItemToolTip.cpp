@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
+  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
 
   SPDX-License-Identifier: LGPL-2.0-or-later
 */

@@ -53,7 +53,8 @@ cd $BUILD_PREFIX
 
 # Step 0: place the translations where ki18n and Qt look for them
 if [ -d $APPDIR/usr/share/locale ] ; then
-    mv $APPDIR/usr/share/locale $APPDIR/usr/share/krita
+    rsync -prul $APPDIR/usr/share/locale/ $APPDIR/usr/share/krita/
+    rm -rf $APPDIR/usr/share/locale
 fi
 
 # Step 1: Copy over all the resources provided by dependencies that we need
@@ -66,7 +67,7 @@ cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
 
 # Step 2: Relocate binaries from the architecture specific directory as required for Appimages
 if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
-  mv $APPDIR/usr/lib/$TRIPLET/*  $APPDIR/usr/lib
+  rsync -prul $APPDIR/usr/lib/$TRIPLET/ $APPDIR/usr/lib/
   rm -rf $APPDIR/usr/lib/$TRIPLET/
 fi
 
@@ -202,9 +203,9 @@ export GSTREAMER_TARGET=$APPDIR/usr/lib/gstreamer-1.0
 # First, lets get the GSTREAMER plugins installed.
 # For now, I'm just going to install all plugins. Once it's working, I'll start picking individual libs that Krita actually needs.
 mkdir -p $GSTREAMER_TARGET
-install -Dm 755 /usr/lib/x86_64-linux-gnu/gstreamer-1.0/*.so $GSTREAMER_TARGET/
-install -Dm 755 /usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner $GSTREAMER_TARGET/gst-plugin-scanner
-install -Dm 755 /usr/lib/x86_64-linux-gnu/libgstreamer-1.0.so $APPDIR/usr/lib/
+install -Dm 755 /usr/lib/$TRIPLET/gstreamer-1.0/*.so $GSTREAMER_TARGET/
+install -Dm 755 /usr/lib/$TRIPLET/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner $GSTREAMER_TARGET/gst-plugin-scanner
+install -Dm 755 /usr/lib/$TRIPLET/libgstreamer-1.0.so $APPDIR/usr/lib/
 
 GSTREAMER_BINARIES="-executable=${GSTREAMER_TARGET}/gst-plugin-scanner -executable=${APPDIR}/usr/lib/libgstreamer-1.0.so"
 for plugin in alsa app audioconvert audioparsers audioresample autodetect \
@@ -236,8 +237,11 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
 # Currently, we're skipping linuxdeployqt's automatic image building because it's choosing to ignore the inclusion of QtMultimedia.
 # I have an issue pending on linuxdeployqt's github page, but for the time being, manually bundling with appimagetool after linuxdeployqt
 # seems to work without any regressions.
-appimagetool -u "${ZSYNC_URL}" $APPDIR $BUILD_PREFIX/Krita-$VERSION-$ARCH.AppImage
-
+if [ -z "$ZSYNC_URL"]; then
+    appimagetool $APPDIR $BUILD_PREFIX/Krita-$VERSION-$ARCH.AppImage
+else
+    appimagetool -u "${ZSYNC_URL}" $APPDIR $BUILD_PREFIX/Krita-$VERSION-$ARCH.AppImage
+fi
 
 # Generate a new name for the Appimage file and rename it accordingly
 

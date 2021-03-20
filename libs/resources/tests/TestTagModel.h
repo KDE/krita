@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -23,6 +23,7 @@ private Q_SLOTS:
     void testData();
     void testIndexForTag();
     void testTagForIndex();
+    void testTagForUrl();
     void testAddEmptyTag();
     void testAddTag();
     void testSetTagActiveInactive();

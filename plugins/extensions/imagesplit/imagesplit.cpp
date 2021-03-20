@@ -1,8 +1,8 @@
 /*
  * imagesplit.cc -- Part of Krita
  *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ * SPDX-FileCopyrightText: 2004 Boudewijn Rempt (boud@valdyas.org)
+ * SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -69,7 +69,7 @@ bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
       dst->refreshGraph();
     }
     document->setFileBatchMode(true);
-    if (!document->exportDocumentSync(QUrl::fromLocalFile(url), mimeType.toLatin1())) {
+    if (!document->exportDocumentSync(url, mimeType.toLatin1())) {
         if (document->errorMessage().isEmpty()) {
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save\n%1", document->localFilePath()));
         } else {

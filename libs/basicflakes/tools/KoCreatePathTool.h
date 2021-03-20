@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2008-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -49,8 +49,6 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented
     void mouseReleaseEvent(KoPointerEvent *event) override;
-    /// reimplemented
-    void keyPressEvent(QKeyEvent *event) override;
 
     /**
     * Returns true if path has been started
@@ -63,7 +61,7 @@ public:
 
 public Q_SLOTS:
     /// reimplemented
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     /// reimplemented
     void deactivate() override;
     /// reimplemented
@@ -99,7 +97,7 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoCreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
-    Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(int))
+    Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(qreal))
     Q_PRIVATE_SLOT(d_func(), void autoSmoothCurvesChanged(bool))
 };
 #endif

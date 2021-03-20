@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -331,6 +331,8 @@ public:
     void clearBrushPyramid();
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
+
+    virtual bool supportsCaching() const;
 
 protected:
 

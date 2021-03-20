@@ -1,7 +1,7 @@
 /*
  *  kis_vec.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

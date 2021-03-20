@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_boundary_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_boundary.h"
 #include "kis_types.h"
 #include "kis_fixed_paint_device.h"
@@ -21,4 +21,4 @@ void KisBoundaryTest::testCreation()
 }
 
 
-QTEST_MAIN(KisBoundaryTest)
+SIMPLE_TEST_MAIN(KisBoundaryTest)

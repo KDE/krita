@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -28,8 +28,8 @@ public:
 private Q_SLOTS:
 
     void linkSpacingToggled(bool);
-    void spinBoxHalfWidthChanged(int);
-    void spinBoxHalfHeightChanged(int);
+    void sldHalfWidthChanged(int);
+    void sldHalfHeightChanged(int);
 
 private:
 

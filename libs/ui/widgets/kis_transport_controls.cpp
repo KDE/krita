@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -23,21 +23,29 @@ KisTransportControls::KisTransportControls(QWidget* parent)
 
     buttonBack = new QPushButton(KisIconUtils::loadIcon("prevframe"), "", this);
     buttonBack->setToolTip(i18n("Back"));
+    buttonBack->setIconSize(QSize(22, 22));
+    buttonBack->setFlat(true);
     layout->addWidget(buttonBack);
     connect(buttonBack, SIGNAL(released()), this, SIGNAL(back()));
 
     buttonStop = new QPushButton(KisIconUtils::loadIcon("animation_stop"), "", this);
     buttonStop->setToolTip(i18n("Stop"));
+    buttonStop->setIconSize(QSize(22, 22));
+    buttonStop->setFlat(true);
     layout->addWidget(buttonStop);
     connect(buttonStop, SIGNAL(released()), this, SIGNAL(stop()));
 
     buttonPlayPause = new QPushButton(KisIconUtils::loadIcon("animation_play"), "", this);
     buttonPlayPause->setToolTip(i18n("Play/Pause"));
+    buttonPlayPause->setIconSize(QSize(22, 22));
+    buttonPlayPause->setFlat(true);
     layout->addWidget(buttonPlayPause);
     connect(buttonPlayPause, SIGNAL(released()), this, SIGNAL(playPause()));
 
     buttonForward = new QPushButton(KisIconUtils::loadIcon("nextframe"), "", this);
     buttonForward->setToolTip(i18n("Forward"));
+    buttonForward->setIconSize(QSize(22, 22));
+    buttonForward->setFlat(true);
     layout->addWidget(buttonForward);
     connect(buttonForward, SIGNAL(released()), this, SIGNAL(forward()));
 }

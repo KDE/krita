@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -13,7 +13,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImage>
 
 #include <kis_qmic_simple_convertor.h>
@@ -187,5 +187,5 @@ void KisQmicTests::testConvertToGmic()
 }
 
 
-QTEST_MAIN(KisQmicTests)
+SIMPLE_TEST_MAIN(KisQmicTests)
 

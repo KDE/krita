@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project
- * Copyright (C) 2005 Thomas Zander <zander@kde.org>
- * Copyright (C) 2005 C. Boemann <cbo@boemann.dk>
+ * SPDX-FileCopyrightText: 2005 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -69,6 +69,7 @@ private Q_SLOTS:
     void createImage();
     void switchPortraitLandscape();
     void changeDocumentInfoLabel();
+    void resolutionUnitChanged();
 
 protected:
     

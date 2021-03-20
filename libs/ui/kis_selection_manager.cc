@@ -1,7 +1,7 @@
 
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  The outline algorithm uses the limn algorithm of fontutils by
  *  Karl Berry <karl@cs.umb.edu> and Kathryn Hargreaves <letters@cs.umb.edu>
@@ -109,6 +109,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
 
     m_pasteAt = actionManager->createAction("paste_at");
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
+
+    m_pasteInto = actionManager->createAction("paste_into");
+    connect(m_pasteInto, SIGNAL(triggered()), this, SLOT(pasteInto()));
 
     m_pasteAsReference = actionManager->createAction("paste_as_reference");
     connect(m_pasteAsReference, SIGNAL(triggered()), this, SLOT(pasteAsReference()));
@@ -368,6 +371,12 @@ void KisSelectionManager::pasteAt()
 {
     KisPasteActionFactory factory;
     factory.run(true, m_view);
+}
+
+void KisSelectionManager::pasteInto()
+{
+    KisPasteIntoActionFactory factory;
+    factory.run(m_view);
 }
 
 void KisSelectionManager::pasteAsReference()

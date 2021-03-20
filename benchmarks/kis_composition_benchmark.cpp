@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Thorsten Zachmann <zachmann@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -26,7 +26,7 @@
 #endif
 
 #include "kis_composition_benchmark.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QElapsedTimer>
 
 #include <KoColorSpace.h>
@@ -580,35 +580,35 @@ void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10_08()
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_03()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.3, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.3, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_05()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.5, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.5, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_07()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.7, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.7, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 1.0, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10_08()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 1.0, 0.8, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, 0.8, 16);
 #endif
 }
 
@@ -622,7 +622,7 @@ void KisCompositionBenchmark::checkRoundingOver()
 void KisCompositionBenchmark::checkRoundingOverRgbaF32()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.3, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.3, -1, 16);
 #endif
 }
 
@@ -934,5 +934,5 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
 #endif
 }
 
-QTEST_MAIN(KisCompositionBenchmark)
+SIMPLE_TEST_MAIN(KisCompositionBenchmark)
 

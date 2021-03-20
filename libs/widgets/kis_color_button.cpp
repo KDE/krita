@@ -1,6 +1,6 @@
 /*  This file is part of the KDE libraries
-    Copyright (C) 1997 Martin Jones (mjones@kde.org)
-    Copyright (C) 1999 Cristian Tibirna (ctibirna@kde.org)
+    SPDX-FileCopyrightText: 1997 Martin Jones (mjones@kde.org)
+    SPDX-FileCopyrightText: 1999 Cristian Tibirna (ctibirna@kde.org)
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */

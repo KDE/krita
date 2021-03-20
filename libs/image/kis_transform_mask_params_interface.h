@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -39,6 +39,8 @@ public:
 
     virtual void clearChangedFlag() = 0;
     virtual bool hasChanged() const = 0;
+
+    virtual KisTransformMaskParamsInterfaceSP clone() const = 0;
 };
 
 class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
@@ -46,7 +48,10 @@ class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
 public:
     virtual ~KisAnimatedTransformParamsInterface();
 
-    virtual KisKeyframeChannel *getKeyframeChannel(const QString &id, KisNodeSP parent) = 0;
+    virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id, KisNodeWSP parent) = 0;
+    virtual KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const = 0;
+    virtual void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) = 0;
+    virtual QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface* other) = 0;
 };
 
 class QDomElement;
@@ -82,6 +87,8 @@ public:
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
     void clearChangedFlag() override;
     bool hasChanged() const override;
+
+    KisTransformMaskParamsInterfaceSP clone() const override;
 
 private:
     struct Private;

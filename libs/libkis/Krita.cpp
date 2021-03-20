@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -37,6 +37,9 @@
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
+#include <KisBrushServerProvider.h>
+#include <KoResourceServerProvider.h>
+#include <KisResourceServerProvider.h>
 #include <KisBrushServerProvider.h>
 #include <kis_action_registry.h>
 #include <kis_icon_utils.h>
@@ -256,19 +259,45 @@ QList<Window*>  Krita::windows() const
     return ret;
 }
 
-QMap<QString, Resource*> Krita::resources(const QString &type) const
+QMap<QString, Resource*> Krita::resources(QString &type) const
 {
     QMap<QString, Resource*> resources;
-    KisResourceModel resourceModel(type);
-    for (int i = 0; i < resourceModel.rowCount(); ++i) {
+    KisResourceModel *resourceModel = 0;
+    if (type == "pattern") {
+        resourceModel = KisResourceServerProvider::instance()->paintOpPresetServer()->resourceModel();
+        type = ResourceType::Patterns;
+    }
+    else if (type == "gradient") {
+        type = ResourceType::Gradients;
+        resourceModel = KoResourceServerProvider::instance()->gradientServer()->resourceModel();
+    }
+    else if (type == "brush") {
+        resourceModel = KisBrushServerProvider::instance()->brushServer()->resourceModel();
+        type = ResourceType::Brushes;
+    }
+    else if (type == "palette") {
+        resourceModel = KoResourceServerProvider::instance()->paletteServer()->resourceModel();
+        type = ResourceType::Palettes;
+    }
+    else if (type == "workspace") {
+        resourceModel = KisResourceServerProvider::instance()->workspaceServer()->resourceModel();
+        type = ResourceType::Workspaces;
+    }
+    else if (type == "preset") {
+        resourceModel = KisResourceServerProvider::instance()->paintOpPresetServer()->resourceModel();
+    }
 
-        QModelIndex idx = resourceModel.index(i, 0);
-        int id = resourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
-        QString name  = resourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-        QString filename  = resourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
-        QImage image = resourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    if (resourceModel) {
+        for (int i = 0; i < resourceModel->rowCount(); ++i) {
 
-        resources[name] = new Resource(id, type, name, filename, image, 0);
+            QModelIndex idx = resourceModel->index(i, 0);
+            int id = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+            QString name  = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+            QString filename  = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+            QImage image = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+
+            resources[name] = new Resource(id, type, name, filename, image, 0);
+        }
     }
 
     return resources;
@@ -322,7 +351,7 @@ Document* Krita::openDocument(const QString &filename)
     KisDocument *document = KisPart::instance()->createDocument();
     document->setFileBatchMode(this->batchmode());
     KisPart::instance()->addDocument(document);
-    document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
+    document->openPath(filename, KisDocument::DontAddToRecent);
     document->setFileBatchMode(false);
     return new Document(document, true);
 }

@@ -1,7 +1,7 @@
-# Copyright (c) 2010, Cyrille Berger, <cberger@cberger.net>
-# Copyright (c) 2006-2009 Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2006, 2007, Laurent Montel, <montel@kde.org>
-# Copyright (c) 2007 Matthias Kretz <kretz@kde.org>
+# SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
+# SPDX-FileCopyrightText: 2006-2009 Alexander Neundorf <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006, 2007 Laurent Montel <montel@kde.org>
+# SPDX-FileCopyrightText: 2007 Matthias Kretz <kretz@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
@@ -50,7 +50,7 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
       set(_executable "${loc}.bat")
     else()
       if (Q_OS_MACOS AND NOT _nogui)
-        set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
+        set(_executable ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
       else ()
         # .shell because of rpath handling
         set(_executable "${loc}.shell")
@@ -66,7 +66,7 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
     endif ()
 
     add_dependencies(benchmark ${_targetName} )
-#    add_test( ${_targetName} ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME} -xml -o ${_test_NAME}.tml )
+#    add_test( ${_targetName} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${_test_NAME} -xml -o ${_test_NAME}.tml )
 
     if (NOT MSVC_IDE)   #not needed for the ide
         # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests

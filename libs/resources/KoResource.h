@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project
-    Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
-    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+    SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -26,6 +26,10 @@ typedef QSharedPointer<KoResource> KoResourceSP;
 
 class KisResourcesInterface;
 typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
+
+namespace ResourceTestHelper {
+void overrideResourceVesion(KoResourceSP resource, int version);
+}
 
 /**
  * The KoResource class provides a representation of resources.  This
@@ -93,6 +97,15 @@ public:
      * be square. By default it's the same as image(), but that is not guaranteed.
      */
     virtual QImage thumbnail() const;
+
+    /**
+     * @brief thumbnailPath returns the path to a separate thumbnail image, outside
+     *        the actual resource file itself. If the path is relative, it is supposed
+     *        start in the same location as the resource itself. If it's absolute,
+     *        that is, it starts with "/", it is from the root of the storage.
+     * @return an empty string if the thumbnail is part of the resource
+     */
+    virtual QString thumbnailPath() const;
 
     /// @return the md5sum calculated over the contents of the resource.
     QByteArray md5() const;
@@ -183,10 +196,13 @@ private:
     friend class TestResourceModel;
     friend class TestResourceLocator;
     friend class TestFolderStorage;
+    friend class TestBundleStorage;
     friend class KisFolderStorage;
     friend class KisBundleStorage;
     friend class KisStorageVersioningHelper;
     friend class KisMemoryStorage;
+
+    friend void ResourceTestHelper::overrideResourceVesion(KoResourceSP resource, int version);
 
     void setVersion(int version);
     void setResourceId(int id);

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -38,10 +38,10 @@ public:
         return m_localTool.data();
     }
 
-    void activate(typename BaseClass::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override
+    void activate(const QSet<KoShape*> &shapes) override
     {
-        BaseClass::activate(toolActivation, shapes);
-        m_localTool->activate(toolActivation, shapes);
+        BaseClass::activate(shapes);
+        m_localTool->activate(shapes);
         ActivationPolicy::onActivate(BaseClass::canvas());
 
         KisInputManager *inputManager = (static_cast<KisCanvas2*>(BaseClass::canvas()))->globalInputManager();

@@ -1,10 +1,12 @@
 /*
- *  Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2019 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef KISRESOURCETYPES_H
 #define KISRESOURCETYPES_H
+
+#include <klocalizedstring.h>
 
 /**
  * These namespaces define the type keys and sub-type keys for resource types.
@@ -40,5 +42,21 @@ namespace ResourceSubType {
     static const QString MyPaintPaintOpPresets {"mypaint_paintop_presets"};
 }
 
+namespace ResourceName {
+    static const KLocalizedString PaintOpPresets = ki18nc("resource type", "paintoppresets");
+    static const KLocalizedString Brushes = ki18nc("resource type", "brushes");
+    static const KLocalizedString Gradients = ki18nc("resource type", "gradients");
+    static const KLocalizedString Palettes = ki18nc("resource type", "palettes");
+    static const KLocalizedString Patterns = ki18nc("resource type", "patterns");
+    static const KLocalizedString Workspaces = ki18nc("resource type", "workspaces");
+    static const KLocalizedString Symbols = ki18nc("resource type", "symbols");
+    static const KLocalizedString WindowLayouts = ki18nc("resource type", "windowlayouts");
+    static const KLocalizedString Sessions = ki18nc("resource type", "sessions");
+    static const KLocalizedString GamutMasks = ki18nc("resource type", "gamutmasks");
+    static const KLocalizedString SeExprScripts = ki18nc("resource type", "seexpr_scripts");
+    static const KLocalizedString FilterEffects = ki18nc("resource type", "ko_effects");
+    static const KLocalizedString TaskSets = ki18nc("resource type", "tasksets");
+    static const KLocalizedString LayerStyles = ki18nc("resource type", "layerstyles");
+}
 
 #endif // KISRESOURCETYPES_H

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -99,4 +99,12 @@ QString __methodName(const char *_prettyFunction)
     size_t end = prettyFunction.rfind("(") - begin;
 
     return QString(std::string(prettyFunction.substr(begin,end) + "()").c_str());
+}
+
+void printBacktrace()
+{
+    QString bt = kisBacktrace();
+    Q_FOREACH(const QString &line, bt.split('\n')) {
+        qDebug() << line;
+    }
 }

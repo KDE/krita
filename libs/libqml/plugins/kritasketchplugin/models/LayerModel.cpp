@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
+ * SPDX-FileCopyrightText: 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "LayerModel.h"
@@ -959,7 +959,7 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
     }
     d->newConfig = 0;
     d->activeNode->setDirty(d->activeNode->extent());
-    d->image->setModified();
+    d->image->setModifiedWithoutUndo();
     QTimer::singleShot(100, this, SIGNAL(activeFilterConfigChanged()));
 }
 

@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tile_compressors_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles3/swap/kis_legacy_tile_compressor.h"
@@ -168,5 +168,5 @@ void KisTileCompressorsTest::testLowLevelRoundTripIncompressible2()
 }
 
 
-QTEST_MAIN(KisTileCompressorsTest)
+SIMPLE_TEST_MAIN(KisTileCompressorsTest)
 

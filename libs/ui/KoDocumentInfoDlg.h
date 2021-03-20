@@ -1,8 +1,10 @@
-/* This file is part of the KDE project
-   Copyright (c) 2000 Simon Hausmann <hausmann@kde.org>
-                 2006 Martin Pfeiffer <hubipete@gmx.net>
+/*
+    This file is part of the KDE project
 
-   SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-FileCopyrightText: 2000 Simon Hausmann <hausmann@kde.org>
+    SPDX-FileCopyrightText: 2006 Martin Pfeiffer <hubipete@gmx.net>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef __koDocumentInfoDlg_h__

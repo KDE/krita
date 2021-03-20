@@ -1,8 +1,9 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "RgbF16ColorSpace.h"
 
@@ -15,6 +16,7 @@
 #include "compositeops/RgbCompositeOpIn.h"
 #include "compositeops/RgbCompositeOpOut.h"
 #include "compositeops/RgbCompositeOpBumpmap.h"
+#include "dithering/KisRgbDitherOpFactory.h"
 #include <kis_dom_utils.h>
 #include <KoColorSpacePreserveLightnessUtils.h>
 
@@ -29,6 +31,7 @@ RgbF16ColorSpace::RgbF16ColorSpace(const QString &name, KoColorProfile *p) :
     init();
 
     addStandardCompositeOps<KoRgbF16Traits>(this);
+    addStandardDitherOps<KoRgbF16Traits>(this);
 
     addCompositeOp(new RgbCompositeOpIn<KoRgbF16Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoRgbF16Traits>(this));

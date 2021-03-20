@@ -17,5 +17,9 @@ Texture_512x512.predefinedimage
 US_Legal__300_ppi_.predefinedimage
 US_Letter__300_ppi_.predefinedimage
 US_Tabloid__300_ppi_.predefinedimage
+Pixel_240x256.predefinedimage
+Film_16_9_4K.predefinedimage
+Film_64_27_4K_Wide.predefinedimage
+Film_4_3_4K.predefinedimage
     DESTINATION ${DATA_INSTALL_DIR}/krita/predefined_image_sizes)
 

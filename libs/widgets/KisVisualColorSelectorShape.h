@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -172,7 +172,7 @@ protected:
      * @param data points to zero-initialized memory of size width()*height()*pixelSize
      * @param pixelSize the data size to transfer from KoColor::data() to data per pixel
      * in the current color space
-     * @param channelValues the normalized channel values of the currently picked color
+     * @param channelValues the normalized channel values of the currently selected color
      */
     virtual QImage renderBackground(const QVector4D &channelValues, quint32 pixelSize) const;
     /**

@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "compression_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <compression.h>
@@ -85,5 +85,5 @@ void CompressionTest::testCompressionUncompressed()
 
 }
 
-QTEST_MAIN(CompressionTest)
+SIMPLE_TEST_MAIN(CompressionTest)
 

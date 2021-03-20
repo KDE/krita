@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_shared_ptr_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 
 #include "kis_shared_ptr.h"
@@ -295,6 +295,6 @@ void KisSharedPtrTest::testRestrictedPointerNoBackward()
 }
 
 
-QTEST_MAIN(KisSharedPtrTest)
+SIMPLE_TEST_MAIN(KisSharedPtrTest)
 
 

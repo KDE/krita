@@ -1,5 +1,5 @@
-/*
- *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
+﻿/*
+ *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -33,29 +33,29 @@ public:
         QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const override;
         void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
 
-
     private:
         KisStorageFilterProxyModel* m_bundleManagerProxyModel;
 
     };
 
-
-
     explicit DlgBundleManager(QWidget *parent = 0);
+
+public Q_SLOTS:
+    void done(int res) override;
 
 private Q_SLOTS:
 
     void addBundle();
     void createBundle();
-    void deleteBundle();
+    void toggleBundle();
 
     void slotModelAboutToBeReset();
     void slotModelReset();
     void currentCellSelectedChanged(QModelIndex current, QModelIndex previous);
 
-
 private:
 
+    void updateToggleButton(bool active);
     void updateBundleInformation(QModelIndex current);
     void addBundleToActiveResources(QString filename);
 

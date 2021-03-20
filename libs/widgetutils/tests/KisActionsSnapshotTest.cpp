@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisActionsSnapshotTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KisActionsSnapshot.h>
 
 void KisActionsSnapshotTest::testCreation()

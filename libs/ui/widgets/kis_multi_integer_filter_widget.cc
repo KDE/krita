@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,7 +16,7 @@
 #include <KisGlobalResourcesInterface.h>
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
-    : KisIntParseSpinBox(parent)
+    : KisSliderSpinBox(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);

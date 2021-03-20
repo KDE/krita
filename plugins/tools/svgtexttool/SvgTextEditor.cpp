@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -52,7 +52,7 @@
 #include <KoColorPopupAction.h>
 #include <svg/SvgUtil.h>
 
-#include <KisScreenColorPicker.h>
+#include <KisScreenColorSampler.h>
 #include <kis_icon.h>
 #include <kis_config.h>
 #include <kis_file_name_requester.h>
@@ -1401,15 +1401,15 @@ void SvgTextEditor::createActions()
     actionRegistry->propertizeAction("svg_background_color", bgColor);
     m_richTextActions << bgColor;
 
-    QWidgetAction *colorPickerAction = new QWidgetAction(this);
-    colorPickerAction->setToolTip(i18n("Pick a Color"));
-    KisScreenColorPicker *colorPicker = new KisScreenColorPicker(false);
-    connect(colorPicker, SIGNAL(sigNewColorPicked(KoColor)), fgColor, SLOT(setCurrentColor(KoColor)));
-    connect(colorPicker, SIGNAL(sigNewColorPicked(KoColor)), SLOT(setFontColor(KoColor)));
-    colorPickerAction->setDefaultWidget(colorPicker);
-    actionCollection()->addAction("svg_pick_color", colorPickerAction);
-    m_richTextActions << colorPickerAction;
-    actionRegistry->propertizeAction("svg_pick_color", colorPickerAction);
+    QWidgetAction *colorSamplerAction = new QWidgetAction(this);
+    colorSamplerAction->setToolTip(i18n("Sample a Color"));
+    KisScreenColorSampler *colorSampler = new KisScreenColorSampler(false);
+    connect(colorSampler, SIGNAL(sigNewColorSampled(KoColor)), fgColor, SLOT(setCurrentColor(KoColor)));
+    connect(colorSampler, SIGNAL(sigNewColorSampled(KoColor)), SLOT(setFontColor(KoColor)));
+    colorSamplerAction->setDefaultWidget(colorSampler);
+    actionCollection()->addAction("svg_sample_color", colorSamplerAction);
+    m_richTextActions << colorSamplerAction;
+    actionRegistry->propertizeAction("svg_sample_color", colorSamplerAction);
 
     QWidgetAction *lineHeight = new QWidgetAction(this);
     QDoubleSpinBox *spnLineHeight = new QDoubleSpinBox();

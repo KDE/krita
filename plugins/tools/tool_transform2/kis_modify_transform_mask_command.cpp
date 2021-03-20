@@ -10,13 +10,13 @@
 #include "kis_transform_mask_params_interface.h"
 #include "tool_transform_args.h"
 #include "kis_scalar_keyframe_channel.h"
-#include "kis_transform_args_keyframe_channel.h"
 #include "kis_animated_transform_parameters.h"
 
-KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params)
+KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, bool skipUpdate)
 : m_mask(mask),
   m_params(params),
-  m_oldParams(m_mask->transformParams())
+  m_oldParams(m_mask->transformParams()),
+  m_skipUpdate(skipUpdate)
 {
     m_wasHidden = m_oldParams->isHidden();
 
@@ -40,7 +40,9 @@ void KisModifyTransformMaskCommand::redo() {
     }
 
     m_mask->setTransformParams(params);
-    m_mask->threadSafeForceStaticImageUpdate();
+    if (!m_skipUpdate) {
+        m_mask->threadSafeForceStaticImageUpdate();
+    }
 }
 
 void KisModifyTransformMaskCommand::undo() {
@@ -52,5 +54,7 @@ void KisModifyTransformMaskCommand::undo() {
     }
 
     m_mask->setTransformParams(m_oldParams);
-    m_mask->threadSafeForceStaticImageUpdate();
+    if (!m_skipUpdate) {
+        m_mask->threadSafeForceStaticImageUpdate();
+    }
 }

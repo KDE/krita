@@ -1,13 +1,13 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
+ *  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_paint_information_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <brushengine/kis_paint_information.h>
 #include "kis_debug.h"
 
@@ -64,4 +64,4 @@ void KisPaintInformationTest::benchmarkTausRandomGeneration()
 }
 
 
-QTEST_MAIN(KisPaintInformationTest)
+SIMPLE_TEST_MAIN(KisPaintInformationTest)

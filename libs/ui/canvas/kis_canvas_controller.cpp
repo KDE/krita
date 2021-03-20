@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -260,7 +260,7 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kritaCanvas);
 
-    kritaCanvas->setLodAllowedInCanvas(value);
+    kritaCanvas->setLodPreferredInCanvas(value);
 
     bool result = levelOfDetailMode();
 
@@ -296,7 +296,7 @@ bool KisCanvasController::levelOfDetailMode() const
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kritaCanvas);
 
-    return kritaCanvas->lodAllowedInCanvas();
+    return kritaCanvas->lodPreferredInCanvas();
 }
 
 void KisCanvasController::saveCanvasState(KisPropertiesConfiguration &config) const
@@ -325,7 +325,7 @@ void KisCanvasController::restoreCanvasState(const KisPropertiesConfiguration &c
     setPreferredCenter(QPointF(panX, panY));
 
     slotToggleWrapAroundMode(config.getBool("wrapAround", false));
-    kritaCanvas->setLodAllowedInCanvas(config.getBool("enableInstantPreview", false));
+    kritaCanvas->setLodPreferredInCanvas(config.getBool("enableInstantPreview", false));
 }
 
 void KisCanvasController::resetScrollBars()

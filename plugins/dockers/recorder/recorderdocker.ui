@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -109,9 +109,10 @@
               </property>
               <property name="icon">
                <iconset theme="folder">
-                <normaloff>.</normaloff>
-                .
-               </iconset>
+                <normaloff>.</normaloff>.</iconset>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -136,9 +137,7 @@
               </property>
               <property name="icon">
                <iconset theme="folder">
-                <normaloff>.</normaloff>
-                .
-               </iconset>
+                <normaloff>.</normaloff>.</iconset>
               </property>
              </widget>
             </item>
@@ -153,7 +152,7 @@
           </item>
           <item>
            <layout class="QFormLayout" name="formLayout">
-            <item column="0" row="0">
+            <item row="0" column="0">
              <widget class="QLabel" name="labelCaptureRate">
               <property name="text">
                <string>Capture interval:</string>
@@ -163,7 +162,7 @@
               </property>
              </widget>
             </item>
-            <item column="1" row="0">
+            <item row="0" column="1">
              <widget class="QSpinBox" name="spinCaptureInterval">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -191,7 +190,7 @@
               </property>
              </widget>
             </item>
-            <item column="0" row="1">
+            <item row="1" column="0">
              <widget class="QLabel" name="labelQuality">
               <property name="text">
                <string comment="Compression quality">Quality:</string>
@@ -201,7 +200,7 @@
               </property>
              </widget>
             </item>
-            <item column="1" row="1">
+            <item row="1" column="1">
              <widget class="KisSliderSpinBox" name="spinQuality" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -217,7 +216,7 @@
               </property>
              </widget>
             </item>
-            <item column="0" row="2">
+            <item row="2" column="0">
              <widget class="QLabel" name="labelResolution">
               <property name="text">
                <string comment="Resolution for recorded frames">Resolution:</string>
@@ -227,7 +226,7 @@
               </property>
              </widget>
             </item>
-            <item column="1" row="2">
+            <item row="2" column="1">
              <widget class="QComboBox" name="comboResolution">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">

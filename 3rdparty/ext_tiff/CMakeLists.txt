@@ -1,8 +1,10 @@
 SET(EXTPREFIX_tiff "${EXTPREFIX}" )
 ExternalProject_Add( ext_tiff
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/tiff-4.0.9.tar.gz
-	URL_MD5 54bad211279cc93eb4fca31ba9bfdc79
+	URL https://download.osgeo.org/libtiff/tiff-4.2.0.tar.gz
+	URL_HASH SHA256=eb0484e568ead8fa23b513e9b0041df7e327f4ee2d22db5a533929dfc19633cb
+
+    PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/CVE-2018-12900.patch
 
     INSTALL_DIR ${EXTPREFIX_tiff}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_tiff} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}

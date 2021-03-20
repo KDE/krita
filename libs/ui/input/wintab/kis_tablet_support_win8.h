@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Alvin Wong <alvinhochun@gmail.com>
+ * SPDX-FileCopyrightText: 2017 Alvin Wong <alvinhochun@gmail.com>
  *
  * SPDX-License-Identifier: BSD-2-Clause.
  */

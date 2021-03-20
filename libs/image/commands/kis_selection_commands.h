@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@kde.org>
+ *  SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

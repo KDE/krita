@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #include "KisTgaTest.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include "filestest.h"

@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2012 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2006-2012 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2006, 2007 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2007, 2010 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -43,6 +43,7 @@
 #include <KoShapeStrokeModel.h>
 #include "kis_command_utils.h"
 #include "kis_pointer_utils.h"
+#include "KoToolManager.h"
 
 #include <KoIcon.h>
 
@@ -95,7 +96,6 @@ struct KoPathTool::PathSegment {
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_pointSelection(this)
-    , m_activatedTemporarily(false)
 {
     m_points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive(true);
@@ -832,14 +832,8 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         }
         updateActions();
         event->accept();
-    } else if (!m_activeHandle && !m_activeSegment && m_activatedTemporarily) {
-        emit done();
-        event->accept();
     } else if (!m_activeHandle && !m_activeSegment) {
-        KoShapeManager *shapeManager = canvas()->shapeManager();
-        KoSelection *selection = shapeManager->selection();
-
-        selection->deselectAll();
+        explicitUserStrokeEndRequest();
         event->accept();
     }
 }
@@ -891,13 +885,11 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
     return segment.take();
 }
 
-void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KoPathTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     Q_D(KoToolBase);
-
-    m_activatedTemporarily = activation == TemporaryActivation;
 
     d->canvas->snapGuide()->reset();
 
@@ -966,9 +958,6 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
             selectedShapes.append(pathShape);
         }
     }
-
-    const QRectF oldBoundingRect =
-            KoShape::boundingRect(implicitCastList<KoShape*>(m_pointSelection.selectedShapes()));
 
     if (selectedShapes != m_pointSelection.selectedShapes()) {
         clearActivePointSelectionReferences();
@@ -1127,7 +1116,7 @@ void KoPathTool::deactivate()
     KoToolBase::deactivate();
 }
 
-void KoPathTool::documentResourceChanged(int key, const QVariant & res)
+void KoPathTool::documentResourceChanged(int key, const QVariant & /*res*/)
 {
     if (key == KoDocumentResourceManager::HandleRadius) {
         repaintDecorations();
@@ -1244,7 +1233,5 @@ void KoPathTool::requestStrokeEnd()
 
 void KoPathTool::explicitUserStrokeEndRequest()
 {
-    if (m_activatedTemporarily) {
-        emit done();
-    }
+    KoToolManager::instance()->switchToolRequested("InteractionTool");
 }

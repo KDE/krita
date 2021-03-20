@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 Celarek Adam <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Celarek Adam <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

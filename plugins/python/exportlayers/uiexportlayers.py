@@ -139,7 +139,7 @@ class UIExportLayers(object):
             self.msgBox.setText(i18n("Select the initial directory."))
         else:
             self.export(selectedDocuments[0])
-            self.msgBox.setText(i18n("All layers has been exported."))
+            self.msgBox.setText(i18n("All layers have been exported."))
         self.msgBox.exec_()
 
     def mkdir(self, directory):

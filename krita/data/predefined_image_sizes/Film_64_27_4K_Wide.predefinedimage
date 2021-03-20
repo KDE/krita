@@ -1,0 +1,9 @@
+<!DOCTYPE params>
+<params>
+ <param type="internal" name="height">2160</param>
+ <param type="string" name="name"><![CDATA[Film 64:27 4K Wide]]></param>
+ <param type="internal" name="resolution">80</param>
+ <param type="internal" name="width">5120</param>
+ <param type="internal" name="x-unit">7</param>
+ <param type="internal" name="y-unit">7</param>
+</params>

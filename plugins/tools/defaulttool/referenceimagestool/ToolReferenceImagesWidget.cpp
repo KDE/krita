@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Eugene Ingerman
+ *  SPDX-FileCopyrightText: 2017 Eugene Ingerman
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -58,22 +58,25 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     );
 
     d->ui->bnAddReferenceImage->setToolTip(i18n("Add Reference Image"));
-    d->ui->bnAddReferenceImage->setIcon(KisIconUtils::loadIcon("addlayer"));
+    d->ui->bnAddReferenceImage->setIcon(KisIconUtils::loadIcon("list-add"));
+    d->ui->bnAddReferenceImage->setIconSize(QSize(16, 16));
 
 
     d->ui->bnDelete->setToolTip(i18n("Delete all Reference Images"));
-    d->ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-clear"));
+    d->ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    d->ui->bnDelete->setIconSize(QSize(16, 16));
 
     d->ui->bnLoad->setToolTip(i18n("Load Reference Images Set"));
-    d->ui->bnLoad->setIcon(KisIconUtils::loadIcon("document-open"));
-
+    d->ui->bnLoad->setIcon(KisIconUtils::loadIcon("folder"));
+    d->ui->bnLoad->setIconSize(QSize(16, 16));
 
     d->ui->bnSave->setToolTip(i18n("Export Reference Images Set"));
-    d->ui->bnSave->setIcon(KisIconUtils::loadIcon("document-save"));
+    d->ui->bnSave->setIcon(KisIconUtils::loadIcon("document-save-16"));
+    d->ui->bnSave->setIconSize(QSize(16, 16));
 
     d->ui->bnPasteReferenceImage->setToolTip(i18n("Paste Reference Image From System Clipboard"));
-    d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste"));
-
+    d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste-16"));
+    d->ui->bnPasteReferenceImage->setIconSize(QSize(16, 16));
 
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
     connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));

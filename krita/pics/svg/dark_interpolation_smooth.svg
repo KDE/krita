@@ -661,7 +661,7 @@
          offset="0"
          id="stop8668" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670" />
     </linearGradient>
@@ -672,7 +672,7 @@
          offset="0"
          id="stop8668-6" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670-2" />
     </linearGradient>
@@ -1298,7 +1298,7 @@
      transform="translate(0,-1)">
     <path
        sodipodi:type="arc"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#373737;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="path3282"
        sodipodi:cx="3.5"
        sodipodi:cy="19.454914"
@@ -1307,7 +1307,7 @@
        d="m 6,19.454914 a 2.5,1.545085 0 1 1 -5,0 2.5,1.545085 0 1 1 5,0 z"
        transform="matrix(0.8,0,0,1.2944275,8.2,-16.182977)" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;stroke:#373737;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 2,18 C 2,15 4,8 11,8 c 7,0 9,7 9,10"
        id="path3629"
        inkscape:connector-curvature="0"

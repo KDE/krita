@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include "KoColorSpacesBenchmark.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
@@ -134,4 +134,4 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha2IndividualCall()
     END_BENCHMARK
 }
 
-QTEST_MAIN(KoColorSpacesBenchmark)
+SIMPLE_TEST_MAIN(KoColorSpacesBenchmark)

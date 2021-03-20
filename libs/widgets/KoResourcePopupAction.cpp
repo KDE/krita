@@ -1,7 +1,7 @@
 /*
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
- * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
- * Copyright (C) 2019 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

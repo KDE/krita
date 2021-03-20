@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -25,8 +25,8 @@ public:
     KisCursorCache();
 
     QCursor selectCursor;
-    QCursor pickerPlusCursor;
-    QCursor pickerMinusCursor;
+    QCursor samplerPlusCursor;
+    QCursor samplerMinusCursor;
     QCursor penCursor;
     QCursor brushCursor;
     QCursor airbrushCursor;

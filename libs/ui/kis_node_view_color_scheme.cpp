@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,7 +9,7 @@
 #include <QTreeView>
 #include <QStyle>
 
-#include "krita_utils.h"
+#include <kis_painting_tweaks.h>
 #include <QApplication>
 
 #include <QGlobalStatic>
@@ -32,7 +32,7 @@ struct KisNodeViewColorScheme::Private
 
             const QColor noLabelSetColor = qApp->palette().color(QPalette::Highlight);
             for (auto it = colorLabels.begin(); it != colorLabels.end(); ++it) {
-                KritaUtils::dragColor(&(*it), noLabelSetColor, 0.35);
+                KisPaintingTweaks::dragColor(&(*it), noLabelSetColor, 0.35);
             }
         }
     }
@@ -166,7 +166,7 @@ QRect KisNodeViewColorScheme::relExpandButtonRect() const
     return rc;
 }
 
-QColor KisNodeViewColorScheme::colorLabel(int index) const
+QColor KisNodeViewColorScheme::colorFromLabelIndex(int index) const
 {
     /**
      * We should ensure that the index of the overflowing range

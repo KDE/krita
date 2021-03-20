@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
+ * SPDX-FileCopyrightText: 2008 Peter Simonsson <peter.simonsson@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -178,8 +178,9 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     // thumbnail icon changer
     QMenu* configureMenu = new QMenu(this);
     configureMenu->setStyleSheet("margin: 6px");
-    m_wdgSvgCollection->vectorPresetsConfigureButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_wdgSvgCollection->vectorPresetsConfigureButton->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_wdgSvgCollection->vectorPresetsConfigureButton->setPopupMode(QToolButton::InstantPopup);
+    m_wdgSvgCollection->vectorPresetsConfigureButton->setAutoRaise(true);
 
 
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -68,11 +68,11 @@ struct KisPerspectiveTransformStrategy::Private
 
     /// custom members ///
 
-    StrokeFunction function;
+    StrokeFunction function {NONE};
 
     struct HandlePoints {
-        bool xVanishingExists;
-        bool yVanishingExists;
+        bool xVanishingExists {false};
+        bool yVanishingExists {false};
 
         QPointF xVanishing;
         QPointF yVanishing;
@@ -83,13 +83,13 @@ struct KisPerspectiveTransformStrategy::Private
 
     QVector<QPointF> srcCornerPoints;
     QVector<QPointF> dstCornerPoints;
-    int currentDraggingCornerPoint;
+    int currentDraggingCornerPoint {0};
 
-    bool imageTooBig;
+    bool imageTooBig {false};
 
     QPointF clickPos;
     ToolTransformArgs clickArgs;
-    bool isTransforming;
+    bool isTransforming {false};
 
     QCursor getScaleCursor(const QPointF &handlePt);
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
@@ -680,4 +680,5 @@ void KisPerspectiveTransformStrategy::Private::recalculateTransformations()
     recalculateTransformedHandles();
 
     emit q->requestShowImageTooBig(imageTooBig);
+    emit q->requestImageRecalculation();
 }

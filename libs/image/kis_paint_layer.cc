@@ -1,8 +1,8 @@
 /*
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2006 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2006 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -8,12 +8,13 @@
 #include <QtSql>
 #include <KisResourceLocator.h>
 #include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
 #include <KisResourceQueryMapper.h>
 
 struct KisAllTagResourceModel::Private {
     QString resourceType;
     QSqlQuery query;
-    int columnCount {ResourceName};
+    int columnCount { TagName + 1 };
     int cachedRowCount {-1};
 };
 
@@ -72,12 +73,18 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
     if (!pos) {return v;}
 
-    if (role < Qt::UserRole + TagId) {
 
+
+    if (role < Qt::UserRole + TagId && index.column() < TagId) {
         int id = d-> query.value("resource_id").toInt();
         v = KisResourceQueryMapper::variantFromResourceQueryById(id, index.column(), role);
     }
 
+    if (index.column() >= TagId) {
+        // trick to get the correct value without writing everything again
+        // this is used for example in case of sorting
+        role = Qt::UserRole + index.column();
+    }
     // These are not shown, but needed for the filter
     switch(role) {
     case Qt::UserRole + TagId:
@@ -98,6 +105,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
         tag->setComment(d->query.value("tag_comment").toString());
         tag->setId(d->query.value("tag_id").toInt());
         tag->setActive(d->query.value("tag_active").toBool());
+        tag->setResourceType(d->resourceType);
         tag->setValid(true);
 
         v = QVariant::fromValue(tag);
@@ -125,7 +133,12 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + ResourceName:
     {
-        v = d->query.value("resource_name").toInt();
+        v = d->query.value("resource_name").toString();
+        break;
+    }
+    case Qt::UserRole + TagName:
+    {
+        v = d->query.value("tag_name").toString();
         break;
     }
 
@@ -135,10 +148,12 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     return v;
 }
 
-bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
 {
-    if (!resource || !resource->valid()) return false;
+    if (resourceId < 0) return false;
     if (!tag || !tag->valid()) return false;
+
+    if (isResourceTagged(tag, resourceId)) return true;
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
@@ -150,7 +165,7 @@ bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP 
         return false;
     }
 
-    q.bindValue(":resource_id", resource->resourceId());
+    q.bindValue(":resource_id", resourceId);
     q.bindValue(":tag_id", tag->id());
 
     if (!q.exec()) {
@@ -165,24 +180,32 @@ bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP 
     return true;
 }
 
-bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const int resourceId)
 {
-    if (!resource || !resource->valid()) return false;
+    if (resourceId < 0) return false;
     if (!tag || !tag->valid()) return false;
     if (!d->query.isSelect()) return false;
     if (rowCount() < 1) return false;
 
+    if (!isResourceTagged(tag, resourceId)) return true; // we check it later but this is qith sql, so probably faster
+
     d->query.seek(0);
+    bool found = false;
     do {
         int tagId = d->query.value("tag_id").toInt();
-        int resourceId = d->query.value("resource_id").toInt();
-        if (tagId == tag->id() && resourceId == resource->resourceId()) {
+        int existingResourceId = d->query.value("resource_id").toInt();
+        if (tagId == tag->id() && existingResourceId == resourceId) {
+            found = true;
             break;
         }
 
     } while (d->query.next());
 
-    beginRemoveRows(QModelIndex(), d->query.at(), d->query.at() + 1);
+    if (!found) {
+        return true;
+    }
+
+    beginRemoveRows(QModelIndex(), d->query.at(), d->query.at());
 
     {
         QSqlQuery q;
@@ -196,7 +219,7 @@ bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const KoResourceS
         }
 
         q.bindValue(":tag_id", tag->id());
-        q.bindValue(":resource_id", resource->resourceId());
+        q.bindValue(":resource_id", resourceId);
 
         if (!q.exec()) {
             qWarning() << "Could not execute untagResource query" << q.lastError() << q.boundValues();
@@ -209,6 +232,37 @@ bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const KoResourceS
     endRemoveRows();
 
     return true;
+}
+
+bool KisAllTagResourceModel::isResourceTagged(const KisTagSP tag, const int resourceId)
+{
+    QSqlQuery query;
+    bool r = query.prepare("SELECT COUNT(*)\n"
+                           "FROM   resource_tags\n"
+                           "WHERE  resource_tags.resource_id = :resource_id\n"
+                           "AND    resource_tags.tag_id = :tag_id\n");
+
+    if (!r) {
+        qWarning() << "Could not prepare bool KisAllTagResourceModel::isResourceTagged query" << query.lastError();
+        return false;
+    }
+
+    query.bindValue(":resource_id", resourceId);
+    query.bindValue(":tag_id", tag->id());
+
+    if (!query.exec()) {
+        qWarning() << "Could not execute is resource tagged with a specific tag query" << query.boundValues() << query.lastError();
+        return false;
+    }
+
+    r = query.first();
+    if (!r) {
+        qWarning() << "Could not call query.first() on SELECT COUNT query in isResourceTagged";
+        return false;
+    }
+
+    return query.value(0) > 0;
+
 }
 
 bool KisAllTagResourceModel::resetQuery()
@@ -231,6 +285,7 @@ bool KisAllTagResourceModel::resetQuery()
                               ",      tags\n"
                               ",      resource_tags\n"
                               "WHERE  tags.id                    = resource_tags.tag_id\n"
+                              "AND    tags.resource_type_id      = resource_types.id\n"
                               "AND    resources.id               = resource_tags.resource_id\n"
                               "AND    resources.resource_type_id = resource_types.id\n"
                               "AND    resources.storage_id       = storages.id\n"
@@ -271,7 +326,7 @@ KisTagResourceModel::KisTagResourceModel(const QString &resourceType, QObject *p
     , d(new Private())
 {
     d->resourceType = resourceType;
-    d->sourceModel = new KisAllTagResourceModel(resourceType, parent);
+    d->sourceModel = KisResourceModelProvider::tagResourceModel(resourceType);
     setSourceModel(d->sourceModel);
 }
 
@@ -298,15 +353,20 @@ void KisTagResourceModel::setStorageFilter(KisTagResourceModel::StorageFilter fi
     invalidateFilter();
 }
 
-bool KisTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
 {
-    bool r = d->sourceModel->tagResource(tag, resource);
+    bool r = d->sourceModel->tagResource(tag, resourceId);
     return r;
 }
 
-bool KisTagResourceModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisTagResourceModel::untagResource(const KisTagSP tag, const int resourceId)
 {
-    return d->sourceModel->untagResource(tag, resource);
+    return d->sourceModel->untagResource(tag, resourceId);
+}
+
+bool KisTagResourceModel::isResourceTagged(const KisTagSP tag, const int resourceId)
+{
+    return d->sourceModel->isResourceTagged(tag, resourceId);
 }
 
 void KisTagResourceModel::setTagsFilter(const QVector<int> tagIds)
@@ -355,7 +415,8 @@ bool KisTagResourceModel::filterAcceptsRow(int source_row, const QModelIndex &so
     bool resourceStorageActive = idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceStorageActive).toBool();
 
     if (d->tagFilter == ShowAllTags && d->resourceFilter == ShowAllResources && d->storageFilter == ShowAllStorages) {
-        return (d->tagIds.contains(tagId) && d->resourceIds.contains(resourceId));
+        return ((d->tagIds.contains(tagId) || d->tagIds.isEmpty()) &&
+                (d->resourceIds.contains(resourceId) || d->resourceIds.isEmpty()));
     }
 
     if ((d->tagFilter == ShowActiveTags && !tagActive)
@@ -381,7 +442,7 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
-    return nameLeft < nameRight;
+    return nameLeft.toLower() < nameRight.toLower();
 }
 
 KoResourceSP KisTagResourceModel::resourceForIndex(QModelIndex index) const
@@ -395,9 +456,22 @@ QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const
     if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
 
     for (int i = 0; i < rowCount(); ++i)  {
-        QModelIndex idx = createIndex(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
+        QModelIndex idx = index(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
         Q_ASSERT(idx.isValid());
         if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resource->resourceId()) {
+            return idx;
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex KisTagResourceModel::indexForResourceId(int resourceId) const
+{
+    if (resourceId < 0) return QModelIndex();
+    for (int i = 0; i < rowCount(); ++i)  {
+        QModelIndex idx = index(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
+        Q_ASSERT(idx.isValid());
+        if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resourceId) {
             return idx;
         }
     }
@@ -431,6 +505,19 @@ bool KisTagResourceModel::updateResource(KoResourceSP resource)
 {
     KisResourceModel resourceModel(d->resourceType);
     bool r = resourceModel.updateResource(resource);
+    if (r) {
+        QModelIndex index = indexForResource(resource);
+        if (index.isValid()) {
+            emit dataChanged(index, index, {Qt::EditRole});
+        }
+    }
+    return r;
+}
+
+bool KisTagResourceModel::reloadResource(KoResourceSP resource)
+{
+    KisResourceModel resourceModel(d->resourceType);
+    bool r = resourceModel.reloadResource(resource);
     if (r) {
         QModelIndex index = indexForResource(resource);
         if (index.isValid()) {

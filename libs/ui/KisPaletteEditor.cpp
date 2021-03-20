@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Michael Zhou <simeirxh@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -138,9 +138,7 @@ void KisPaletteEditor::importPalette()
         storageLocation = m_d->view->document()->uniqueID();
     }
 
-    KoColorSetSP colorSet(new KoColorSet(filename));
-    colorSet->load(KisGlobalResourcesInterface::instance());
-    m_d->rServer->resourceModel()->addResource(colorSet, storageLocation);
+    m_d->rServer->resourceModel()->importResourceFile(filename);
 }
 
 void KisPaletteEditor::removePalette(KoColorSetSP cs)
@@ -314,7 +312,8 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 
 void KisPaletteEditor::slotSetDocumentModified()
 {
-    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), m_d->model->colorSet()->storageLocation());
+    // XXX: I'm not sure if we need to update the resource here // tiar
+    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
     m_d->view->document()->setModified(true);
 }
 
@@ -470,7 +469,7 @@ void KisPaletteEditor::updatePalette()
         m_d->model->addGroup(modified.groups[newGroupName]);
     }
     m_d->newGroupNames.clear();
-    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), resourceLocation);
+    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
 }
 
 void KisPaletteEditor::slotPaletteChanged()

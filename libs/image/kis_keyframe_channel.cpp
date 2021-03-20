@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,22 +16,23 @@
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_commands.h"
 #include "kis_scalar_keyframe_channel.h"
+#include "kis_mask.h"
+#include "kis_image.h"
 
 #include <QMap>
 
 
 const KoID KisKeyframeChannel::Raster = KoID("content", ki18n("Content"));
 const KoID KisKeyframeChannel::Opacity = KoID("opacity", ki18n("Opacity"));
-const KoID KisKeyframeChannel::TransformArguments = KoID("transform_arguments", ki18n("Transform"));
-const KoID KisKeyframeChannel::TransformPositionX = KoID("transform_pos_x", ki18n("Position (X)"));
-const KoID KisKeyframeChannel::TransformPositionY = KoID("transform_pos_y", ki18n("Position (Y)"));
-const KoID KisKeyframeChannel::TransformScaleX = KoID("transform_scale_x", ki18n("Scale (X)"));
-const KoID KisKeyframeChannel::TransformScaleY = KoID("transform_scale_y", ki18n("Scale (Y)"));
-const KoID KisKeyframeChannel::TransformShearX = KoID("transform_shear_x", ki18n("Shear (X)"));
-const KoID KisKeyframeChannel::TransformShearY = KoID("transform_shear_y", ki18n("Shear (Y)"));
-const KoID KisKeyframeChannel::TransformRotationX = KoID("transform_rotation_x", ki18n("Rotation (X)"));
-const KoID KisKeyframeChannel::TransformRotationY = KoID("transform_rotation_y", ki18n("Rotation (Y)"));
-const KoID KisKeyframeChannel::TransformRotationZ = KoID("transform_rotation_z", ki18n("Rotation (Z)"));
+const KoID KisKeyframeChannel::PositionX = KoID("transform_pos_x", ki18n("Position (X)"));
+const KoID KisKeyframeChannel::PositionY = KoID("transform_pos_y", ki18n("Position (Y)"));
+const KoID KisKeyframeChannel::ScaleX = KoID("transform_scale_x", ki18n("Scale (X)"));
+const KoID KisKeyframeChannel::ScaleY = KoID("transform_scale_y", ki18n("Scale (Y)"));
+const KoID KisKeyframeChannel::ShearX = KoID("transform_shear_x", ki18n("Shear (X)"));
+const KoID KisKeyframeChannel::ShearY = KoID("transform_shear_y", ki18n("Shear (Y)"));
+const KoID KisKeyframeChannel::RotationX = KoID("transform_rotation_x", ki18n("Rotation (X)"));
+const KoID KisKeyframeChannel::RotationY = KoID("transform_rotation_y", ki18n("Rotation (Y)"));
+const KoID KisKeyframeChannel::RotationZ = KoID("transform_rotation_z", ki18n("Rotation (Z)"));
 
 
 struct KisKeyframeChannel::Private
@@ -39,7 +40,6 @@ struct KisKeyframeChannel::Private
     Private(const KoID &temp_id, KisDefaultBoundsBaseSP bounds) {
         bounds = bounds;
         id = temp_id;
-        parentNode = nullptr;
     }
 
     Private(const Private &rhs) {
@@ -55,12 +55,6 @@ struct KisKeyframeChannel::Private
     bool haveBrokenFrameTimeBug = false;
 };
 
-
-KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP parent)
-    : KisKeyframeChannel(id, KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper(parent)))
-{
-    setNode(parent);
-}
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private(id, bounds))
@@ -82,11 +76,10 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bo
     });
 }
 
-KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent)
-    : KisKeyframeChannel(rhs.m_d->id, KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper(newParent)))
+KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs)
+    : KisKeyframeChannel(rhs.m_d->id, new KisDefaultBounds(nullptr))
 {
     m_d.reset(new Private(*rhs.m_d));
-    setNode(newParent);
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()
@@ -292,6 +285,10 @@ void KisKeyframeChannel::setNode(KisNodeWSP node)
 KisNodeWSP KisKeyframeChannel::node() const
 {
     return m_d->parentNode;
+}
+
+void KisKeyframeChannel::setDefaultBounds(KisDefaultBoundsBaseSP bounds) {
+    m_d->bounds = bounds;
 }
 
 int KisKeyframeChannel::channelHash() const

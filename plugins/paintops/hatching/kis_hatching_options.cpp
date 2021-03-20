@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
- *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -20,21 +20,22 @@ public:
         QString degree = QChar(Qt::Key_degree);
         QString px = i18n(" px");
 
-        //setRange(minimum, maximum, decimals)
+        angleKisAngleSelector           ->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
 
-        angleKisDoubleSliderSpinBox     -> setRange(-90.0, 90.0, 1);
+        //setRange(minimum, maximum, decimals)
+        angleKisAngleSelector           -> setRange(-90.0, 90.0);
+        angleKisAngleSelector           -> setDecimals(1);
         separationKisDoubleSliderSpinBox-> setRange(1.0, 30.0, 1);
         thicknessKisDoubleSliderSpinBox -> setRange(1.0, 30.0, 1);
         originXKisDoubleSliderSpinBox   -> setRange(-300, 300, 0);
         originYKisDoubleSliderSpinBox   -> setRange(-300, 300, 0);
 
-        angleKisDoubleSliderSpinBox     -> setValue(-60);
+        angleKisAngleSelector           -> setAngle(-60);
         separationKisDoubleSliderSpinBox-> setValue(6);
         thicknessKisDoubleSliderSpinBox -> setValue(1);
         originXKisDoubleSliderSpinBox   -> setValue(50);
         originYKisDoubleSliderSpinBox   -> setValue(50);
 
-        angleKisDoubleSliderSpinBox     -> setSuffix(degree);
         separationKisDoubleSliderSpinBox-> setSuffix(px);
         thicknessKisDoubleSliderSpinBox -> setSuffix(px);
         originXKisDoubleSliderSpinBox   -> setSuffix(px);
@@ -50,7 +51,7 @@ KisHatchingOptions::KisHatchingOptions()
     m_checkable = false;
     m_options = new KisHatchingOptionsWidget();
 
-    connect(m_options->angleKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->angleKisAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->separationKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->thicknessKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->originXKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -75,7 +76,7 @@ void KisHatchingOptions::writeOptionSetting(KisPropertiesConfigurationSP setting
 {
     HatchingOption op;
 
-    op.angle = m_options->angleKisDoubleSliderSpinBox->value();
+    op.angle = m_options->angleKisAngleSelector->angle();
     op.separation = m_options->separationKisDoubleSliderSpinBox->value();
     op.thickness = m_options->thicknessKisDoubleSliderSpinBox->value();
     op.origin_x = m_options->originXKisDoubleSliderSpinBox->value();
@@ -97,7 +98,7 @@ void KisHatchingOptions::readOptionSetting(const KisPropertiesConfigurationSP se
     HatchingOption op;
     op.readOptionSetting(setting);
 
-    m_options->angleKisDoubleSliderSpinBox->setValue(op.angle);
+    m_options->angleKisAngleSelector->setAngle(op.angle);
     m_options->separationKisDoubleSliderSpinBox->setValue(op.separation);
     m_options->thicknessKisDoubleSliderSpinBox->setValue(op.thickness);
     m_options->originXKisDoubleSliderSpinBox->setValue(op.origin_x);

@@ -1,4 +1,4 @@
-From 0282c8e0a3fb90a67b15ca9f2004d5ae819d9611 Mon Sep 17 00:00:00 2001
+From b7760e50b1afde76677ceceeb1d8f0e88a91af0e Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Wed, 4 Nov 2020 22:32:29 +0000
 Subject: [PATCH 3/3] poppler-qt5 also needs poppler_LIBS on MinGW
@@ -9,13 +9,13 @@ This fixes freetype linking privately against PNG and zlib.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/qt5/src/CMakeLists.txt b/qt5/src/CMakeLists.txt
-index 80f40fca..808c7249 100644
+index afacd2c..dd24ce7 100644
 --- a/qt5/src/CMakeLists.txt
 +++ b/qt5/src/CMakeLists.txt
-@@ -46,7 +46,7 @@ if(MINGW AND BUILD_SHARED_LIBS)
+@@ -43,7 +43,7 @@ if(MINGW AND BUILD_SHARED_LIBS)
      set_target_properties(poppler-qt5 PROPERTIES SUFFIX "-${POPPLER_QT5_SOVERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
  endif()
- target_link_libraries(poppler-qt5 poppler ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Xml_LIBRARIES} ${FREETYPE_LIBRARIES})
+ target_link_libraries(poppler-qt5 poppler Qt5::Core Qt5::Gui Qt5::Xml ${FREETYPE_LIBRARIES})
 -if(MSVC)
 +if(MSVC OR MINGW)
  target_link_libraries(poppler-qt5 poppler ${poppler_LIBS})
@@ -23,4 +23,5 @@ index 80f40fca..808c7249 100644
  if (ENABLE_NSS3)
 -- 
 2.29.2.windows.1
+
 

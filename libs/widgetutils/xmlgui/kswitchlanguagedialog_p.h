@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE Libraries
- * Copyright (C) 2007 Krzysztof Lichota (lichota@mimuw.edu.pl)
+ * SPDX-FileCopyrightText: 2007 Krzysztof Lichota (lichota@mimuw.edu.pl)
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  *

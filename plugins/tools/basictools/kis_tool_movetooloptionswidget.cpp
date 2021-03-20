@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2012  Dan Leinir Turthra Jensen <admin@leinir.dk>
+    SPDX-FileCopyrightText: 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

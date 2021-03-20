@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
-   Copyright 2017 Boudewijn Rempt <boud@valdyas.org>
+   SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -39,7 +39,7 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
 
     /// reimplemented from KoToolBase
-    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void activate(const QSet<KoShape *> &shapes) override;
     /// reimplemented from KoToolBase
     void deactivate() override;
 

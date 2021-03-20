@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2013 - 2014 Yue Liu <yue.liu@mail.com>
+   SPDX-FileCopyrightText: 2013-2014 Yue Liu <yue.liu@mail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -7,9 +7,11 @@
 #include "KoFileDialog.h"
 #include <QDebug>
 #include <QFileDialog>
+#include <KisPreviewFileDialog.h>
 #include <QApplication>
 #include <QImageReader>
 #include <QClipboard>
+#include <QInputDialog>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -50,7 +52,7 @@ public:
     QUrl defaultUri;
     QStringList filterList;
     QString defaultFilter;
-    QScopedPointer<QFileDialog> fileDialog;
+    QScopedPointer<KisPreviewFileDialog> fileDialog;
     QString mimeType;
     bool swapExtensionOrder;
 };
@@ -139,7 +141,7 @@ QString KoFileDialog::selectedMimeType() const
 
 void KoFileDialog::createFileDialog()
 {
-    d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
+    d->fileDialog.reset(new KisPreviewFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
     if (!d->defaultUri.isEmpty()) {
         d->fileDialog->setDirectoryUrl(d->defaultUri);
     }
@@ -176,11 +178,6 @@ void KoFileDialog::createFileDialog()
     if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
         d->fileDialog->setFileMode(QFileDialog::AnyFile);
-
-#ifdef Q_OS_ANDROID
-        // HACK: discovered by looking into the code
-        d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled.kra" : d->proposedFileName);
-#endif
     }
     else { // open / import
 
@@ -234,12 +231,42 @@ void KoFileDialog::createFileDialog()
             d->fileDialog->setWindowModality(Qt::WindowModal);
         }
     }
+    d->fileDialog->resetIconProvider();
 }
 
 QString KoFileDialog::filename()
 {
     QString url;
     createFileDialog();
+
+#ifdef Q_OS_ANDROID
+    if (d->type == SaveFile) {
+        QString extension = ".kra";
+        QInputDialog mimeSelector;
+        mimeSelector.setLabelText(i18n("Save As:"));
+        mimeSelector.setComboBoxItems(d->filterList);
+        // combobox as they stand, are very hard to scroll on a touch device
+        mimeSelector.setOption(QInputDialog::UseListViewForComboBoxItems);
+
+        if (mimeSelector.exec() == QDialog::Accepted) {
+            const QString selectedFilter = mimeSelector.textValue();
+            int start = selectedFilter.indexOf("*.") + 1;
+            int end = selectedFilter.indexOf(" ", start);
+            int n = end - start;
+            extension = selectedFilter.mid(start, n);
+            if (!extension.contains(".")) {
+                extension = "." + extension;
+            }
+            d->fileDialog->selectNameFilter(selectedFilter);
+
+            // HACK: discovered by looking into the code
+            d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled" + extension : d->proposedFileName);
+        } else {
+            return url;
+        }
+    }
+#endif
+
     if (d->fileDialog->exec() == QDialog::Accepted) {
         url = d->fileDialog->selectedFiles().first();
     }

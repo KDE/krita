@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -43,7 +43,7 @@ bool KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
     }
     retval = store.write(m_streamingBuffer.data(), bytesWritten);
     if (!retval) {
-        warnFile << "Failed to write the tile datak";
+        warnFile << "Failed to write the tile data";
     }
     return retval;
 }

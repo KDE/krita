@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@kde.org>
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@kde.org>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 #ifndef KIS_ITERATOR_NG_TEST_H
 #define KIS_ITERATOR_NG_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KoColorSpace;
 

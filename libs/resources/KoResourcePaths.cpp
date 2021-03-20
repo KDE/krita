@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -301,7 +301,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = QStandardPaths::locate(d->mapTypeToQStandardPaths(type), alias + '/' + fileName, QStandardPaths::LocateFile);
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -310,7 +310,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/" + alias + '/' + fileName;
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -319,7 +319,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/krita/" + alias + '/' + fileName;
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -332,7 +332,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
                     resource = extraResourceDir + '/' + fileName;
                     dbgResources<< "\t4" << resource;
                     if (QFile::exists(resource)) {
-                        continue;
+                        break;
                     }
                 }
                 else {
@@ -340,7 +340,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
                         resource = extraResourceDir + '/' + alias + '/' + fileName;
                         dbgResources<< "\t4" << resource;
                         if (QFile::exists(resource)) {
-                            continue;
+                            break;
                         }
                     }
                 }
@@ -535,9 +535,15 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
     }
     else {
         path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type));
+
+#ifndef Q_OS_ANDROID
+        // on Android almost all config locations we save to are app specific,
+        // and don't end with "krita".
         if (!path.endsWith("krita")) {
             path += "/krita";
         }
+#endif
+
         if (!suffix.isEmpty()) {
             path += "/" + suffix;
         }

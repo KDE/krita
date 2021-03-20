@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,7 +9,7 @@
 #ifndef KIS_SEEXPR_GENERATOR_TEST_H
 #define KIS_SEEXPR_GENERATOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisSeExprGeneratorTest : public QObject
 {

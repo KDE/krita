@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -173,4 +173,9 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
     }
     d->widgetLayout->addWidget(d->centralWidget, 0 , 0);
     d->uiWdgGenerators.centralWidgetHolder->setMinimumSize(d->centralWidget->minimumSize());
+}
+
+void KisWdgGenerator::showFilterGallery(bool visible)
+{
+    d->uiWdgGenerators.lstGenerators->setVisible(visible);
 }

@@ -3,7 +3,7 @@
 # Syntax: DETECT_JPEG()
 # JPEG_LIB_VERSION is set to version ID depending of libjpeg version detected.
 #
-# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# SPDX-FileCopyrightText: 2010-2014 Gilles Caulier <caulier dot gilles at gmail dot com>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

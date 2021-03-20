@@ -1,5 +1,5 @@
 /* This file is part of the KDE libraries
-   Copyright (C) 1999,2000 Kurt Granroth <granroth@kde.org>
+   SPDX-FileCopyrightText: 1999, 2000 Kurt Granroth <granroth@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-only
 */

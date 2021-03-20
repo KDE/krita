@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -11,7 +11,7 @@
 
 #include <testutil.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 static const int maxTileSize = 256;
 
@@ -207,4 +207,4 @@ void KisFrameSerializerTest::testFrameArithmetics()
     }
 }
 
-QTEST_MAIN(KisFrameSerializerTest)
+SIMPLE_TEST_MAIN(KisFrameSerializerTest)

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
+ *  SPDX-FileCopyrightText: 2009 Edward Apap <schumifer@hotmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -52,14 +52,20 @@ void KCanvasPreview::mouseMoveEvent(QMouseEvent *event)
     if (m_dragging) {
         // calculate new image offset
         double scale = scalingFactor();
-
-        int newXOffset = ((event->pos().x() - m_prevDragPoint.x()) / scale) + m_xOffset;
-        int newYOffset = ((event->pos().y() - m_prevDragPoint.y()) / scale) + m_yOffset;
-
+        int newXOffset , newYOffset;
+        if(!xOffsetLocked()) {
+          newXOffset = ((event->pos().x() - m_prevDragPoint.x()) / scale) + m_xOffset;
+        }
+        if(!yOffsetLocked()) {
+          newYOffset = ((event->pos().y() - m_prevDragPoint.y()) / scale) + m_yOffset;
+        }
         m_prevDragPoint = event->pos();
-
-        emit sigModifiedXOffset(newXOffset);
-        emit sigModifiedYOffset(newYOffset);
+        if(!xOffsetLocked()) {
+          emit sigModifiedXOffset(newXOffset);
+        }
+        if(!yOffsetLocked()) {
+          emit sigModifiedYOffset(newYOffset);
+        }
     } else {
         QCursor cursor;
 
@@ -119,4 +125,20 @@ void KCanvasPreview::setImageOffset(qint32 x, qint32 y)
     m_yOffset = y;
 
     update();
+}
+bool KCanvasPreview::xOffsetLocked() const
+{
+    return m_xOffsetLocked;
+}
+void KCanvasPreview::setxOffsetLock(bool value)
+{
+    m_xOffsetLocked = value;
+}
+bool KCanvasPreview::yOffsetLocked() const
+{
+    return m_yOffsetLocked;
+}
+void KCanvasPreview::setyOffsetLock(bool value)
+{
+    m_yOffsetLocked = value;
 }

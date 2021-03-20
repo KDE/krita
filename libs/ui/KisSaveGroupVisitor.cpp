@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -106,10 +106,9 @@ bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
         }
 
         QString path = m_path + "/" + m_baseName + "_" + layer->name().replace(' ', '_') + '.' + m_extension;
-        QUrl url = QUrl::fromLocalFile(path);
 
         exportDocument->setFileBatchMode(true);
-        exportDocument->exportDocumentSync(url, m_mimeFilter.toLatin1());
+        exportDocument->exportDocumentSync(path, m_mimeFilter.toLatin1());
 
         if (!m_saveTopLevelOnly) {
             KisGroupLayerSP child = dynamic_cast<KisGroupLayer*>(layer->firstChild().data());

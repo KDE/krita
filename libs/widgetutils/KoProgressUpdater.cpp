@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2006-2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -160,6 +160,7 @@ void KoProgressUpdater::cancel()
         updater->setInterrupted(true);
     }
     d->canceled = true;
+    d->updateGuiTimer.stop();
     updateUi();
 }
 
@@ -300,7 +301,6 @@ void KoProgressUpdater::Private::clearState()
 
     progressProxy()->setRange(0, taskMax);
     progressProxy()->setValue(progressProxy()->maximum());
-
     canceled = false;
 }
 
@@ -326,7 +326,6 @@ int KoProgressUpdater::updateInterval() const
 void KoProgressUpdater::setAutoNestNames(bool value)
 {
     d->autoNestNames = value;
-    update();
 }
 
 bool KoProgressUpdater::autoNestNames() const

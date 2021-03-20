@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -159,6 +159,7 @@ KisAction *KisActionManager::actionByName(const QString &name) const
 KisAction *KisActionManager::createAction(const QString &name)
 {
     KisAction *a = actionByName(name); // Check if the action already exists
+
     if (a) {
         dbgAction << name << "already exists";
         return a;
@@ -169,6 +170,7 @@ KisAction *KisActionManager::createAction(const QString &name)
     // will add them to the KisActionRegistry for the time being so we can get
     // properly categorized shortcuts.
     a = new KisAction();
+
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
 
     // Add extra properties
@@ -180,7 +182,6 @@ KisAction *KisActionManager::createAction(const QString &name)
     a->setActivationConditions((KisAction::ActivationConditions) activationConditions);
 
     addAction(name, a);
-
     return a;
 }
 

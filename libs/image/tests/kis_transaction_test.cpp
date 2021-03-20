@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_transaction_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -274,6 +274,6 @@ void KisTransactionTest::testUndoWithUnswitchedFrames()
     QCOMPARE(dev->exactBounds(), QRect(10,10,20,20));
 }
 
-QTEST_MAIN(KisTransactionTest)
+SIMPLE_TEST_MAIN(KisTransactionTest)
 
 

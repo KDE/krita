@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- * Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 1998, 1999 Torben Weis <weis@kde.org>
+ * SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -61,6 +61,8 @@ public:
      * have to process your command line parameters by yourself.
      */
     virtual bool start(const KisApplicationArguments &args);
+
+    bool event(QEvent *event) override;
 
     /**
      * Checks if user is holding ctrl+alt+shift keys and asks if the settings file should be cleared.

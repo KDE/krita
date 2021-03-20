@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -134,6 +134,8 @@ public:
      */
     static KoStopGradient fromXML(const QDomElement& elt);
 
+    QString saveSvgGradient() const;
+
 protected:
 
     QList<KoGradientStop> m_stops;
@@ -145,8 +147,7 @@ protected:
 private:
 
     void loadSvgGradient(QIODevice *file);
-    void parseSvgGradient(const QDomElement& element);
-    void parseSvgColor(QColor &color, const QString &s);
+    void parseSvgGradient(const QDomElement& element, QHash<QString, const KoColorProfile*> profiles);
 };
 
 typedef QSharedPointer<KoStopGradient> KoStopGradientSP;

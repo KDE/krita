@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2018 Emmet & Eoin O'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2018 Emmet & Eoin O'Neill <emmetoneill.pdx@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,8 +16,8 @@ class KoColor;
 
 namespace KisToolUtils {
 
-struct KRITAUI_EXPORT ColorPickerConfig {
-    ColorPickerConfig();
+struct KRITAUI_EXPORT ColorSamplerConfig {
+    ColorSamplerConfig();
 
     bool toForegroundColor;
     bool updateColor;
@@ -27,28 +27,28 @@ struct KRITAUI_EXPORT ColorPickerConfig {
     int radius;
     int blend;
 
-    void save(bool defaultActivation = true) const;
-    void load(bool defaultActivation = true);
+    void save() const;
+    void load();
 private:
     static const QString CONFIG_GROUP_NAME;
 };
 
 /**
- * Pick a color based on the given position on the given paint device.
+ * Sample a color based on the given position on the given paint device.
  *
- * out_color   - Output parameter returning newly picked color.
- * dev         - Paint device to pick from.
- * pos         - Position to pick from.
+ * out_color   - Output parameter returning newly sampled color.
+ * dev         - Paint device to sample from.
+ * pos         - Position to sample from.
  * blendColor  - Optional color to be blended with.
- * radius      - Picking area radius in pixels.
- * blend       - Blend percentage. 100% all picked, 0% all blendColor.
- * pure        - Whether to bypass radius, blending, and active layer settings for pure picking.
+ * radius      - Sampling area radius in pixels.
+ * blend       - Blend percentage. 100% all sampled, 0% all blendColor.
+ * pure        - Whether to bypass radius, blending, and active layer settings for pure sampling.
  *
- * RETURN      - Returns TRUE whenever a valid color is picked.
+ * RETURN      - Returns TRUE whenever a valid color is sampled.
  */
-bool KRITAUI_EXPORT pickColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
-                              KoColor const *const blendColor = nullptr, int radius = 1,
-                              int blend = 100, bool pure = false);
+bool KRITAUI_EXPORT sampleColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
+                                KoColor const *const blendColor = nullptr, int radius = 1,
+                                int blend = 100, bool pure = false);
 
 /**
  * Recursively search a node with a non-transparent pixel

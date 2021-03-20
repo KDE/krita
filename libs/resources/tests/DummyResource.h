@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -24,6 +24,9 @@ public:
             quint64 v = qrg.generate64();
             ba[i] = v;
         }
+
+        m_something = QString::fromUtf8(ba);
+
         QByteArray hash = KoMD5Generator::generateHash(ba);
         setMD5(hash);
 

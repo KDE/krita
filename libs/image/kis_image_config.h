@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -152,7 +152,14 @@ public:
         return m_config.readEntry(name, defaultValue);
     }
 
-
+    /* Per-File Export Configurations
+     * Export configurations can optionally be saved into the file. If no configuration exists,
+     * the user should try loading a configuration from the global system instead.
+     */
+    QString exportConfigurationXML(const QString &exportConfigId, bool defaultValue = false) const;
+    bool hasExportConfiguration(const QString& exportConfigID);
+    KisPropertiesConfigurationSP exportConfiguration(const QString &exportConfigId, bool defaultValue = false) const;
+    void setExportConfiguration(const QString &exportConfigId, KisPropertiesConfigurationSP properties);
 
     static void resetConfig();
 private:

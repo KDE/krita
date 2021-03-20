@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef __STORYBOARD_MODEL_TEST_H
 #define __STORYBOARD_MODEL_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class StoryboardCommentModel;
 class StoryboardModel;

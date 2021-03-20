@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "TestTag.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QBuffer>
 
 #include <KisTag.h>
@@ -78,10 +78,11 @@ void TestTag::testSaveTag()
     tag2.load(buf);
     QVERIFY(tag2.url() == tag1.url());
     QVERIFY(tag2.name() == tag1.name());
+    QVERIFY(tag2.resourceType() == tag1.resourceType());
     QVERIFY(tag2.comment() == tag1.comment());
     QVERIFY(tag2.defaultResources() == tag1.defaultResources());
 
 }
 
-QTEST_MAIN(TestTag)
+SIMPLE_TEST_MAIN(TestTag)
 

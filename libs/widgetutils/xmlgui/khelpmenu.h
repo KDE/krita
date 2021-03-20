@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE Libraries
- * Copyright (C) 1999-2000 Espen Sand (espen@kde.org)
+ * SPDX-FileCopyrightText: 1999-2000 Espen Sand (espen@kde.org)
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  *

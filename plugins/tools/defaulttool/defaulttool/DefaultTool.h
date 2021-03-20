@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+   SPDX-FileCopyrightText: 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   SPDX-FileCopyrightText: 2006-2008 Thomas Zander <zander@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -82,7 +82,7 @@ public:
 
 
 public Q_SLOTS:
-    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void activate(const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
 Q_SIGNALS:

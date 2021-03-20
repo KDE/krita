@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -48,6 +48,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
     bool alphaDisabled = false;
 
     KisLayer *layer = dynamic_cast<KisLayer*>(node);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
 
     KisPaintLayer *paintLayer = 0;
 

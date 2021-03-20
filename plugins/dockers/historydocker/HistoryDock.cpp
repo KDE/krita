@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Matus Talcik <matus.talcik@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Matus Talcik <matus.talcik@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -28,7 +28,8 @@ HistoryDock::HistoryDock()
     QHBoxLayout *hl = new QHBoxLayout();
     hl->addSpacerItem(new QSpacerItem(10, 1,  QSizePolicy::Expanding, QSizePolicy::Fixed));
     m_bnConfigure = new QToolButton(page);
-    m_bnConfigure->setIcon(KisIconUtils::loadIcon("configure"));
+    m_bnConfigure->setIcon(KisIconUtils::loadIcon("configure-thicker"));
+    m_bnConfigure->setAutoRaise(true);
     connect(m_bnConfigure, SIGNAL(clicked(bool)), SLOT(configure()));
     hl->addWidget(m_bnConfigure);
     vl->addLayout(hl);

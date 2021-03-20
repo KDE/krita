@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -529,7 +529,11 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         break;
     case KisShortcutConfiguration::PanGesture:
         shortcut->setMinimumTouchPoints(3);
-        shortcut->setMaximumTouchPoints(10);
+        shortcut->setMaximumTouchPoints(3);
+        break;
+    case KisShortcutConfiguration::ToggleCanvasOnlyGesture:
+        shortcut->setMinimumTouchPoints(4);
+        shortcut->setMaximumTouchPoints(4);
         break;
     default:
         break;

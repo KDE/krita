@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -93,6 +93,13 @@ public:
      * Return version
      */
     virtual float version() const = 0;
+
+    /**
+     * @return a string for a color model id.
+     */
+    virtual QString colorModelID() const {
+        return QString();
+    };
     /**
      * @return true if you can use this profile can be used to convert color from a different
      * profile to this one

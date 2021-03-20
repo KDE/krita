@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
-   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+   SPDX-FileCopyrightText: 1998, 1999 Torben Weis <weis@kde.org>
+   SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+   SPDX-FileCopyrightText: 2010 Benjamin Port <port.benjamin@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

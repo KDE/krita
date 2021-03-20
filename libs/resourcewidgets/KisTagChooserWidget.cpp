@@ -1,12 +1,12 @@
 /*
  *    This file is part of the KDE project
- *    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
- *    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
- *    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
- *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
- *    Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ *    SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *    SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+ *    SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+ *    SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
+ *    SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  *    SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -56,6 +56,7 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
     comboLayout->addWidget(d->comboBox, 0, 0);
 
     d->tagToolButton = new KisTagToolButton(this);
+    d->tagToolButton->setToolTip(i18n("Tag options"));
     comboLayout->addWidget(d->tagToolButton, 0, 1);
 
     comboLayout->setSpacing(0);
@@ -149,7 +150,7 @@ void KisTagChooserWidget::setCurrentItem(const QString &tag)
 {
     for (int i = 0; i < d->model->rowCount(); i++) {
         QModelIndex index = d->model->index(i, 0);
-        QString currentRowTag = d->model->data(index, Qt::UserRole + KisAllTagsModel::Name).toString();
+        QString currentRowTag = d->model->data(index, Qt::UserRole + KisAllTagsModel::Url).toString();
         if (currentRowTag == tag) {
             setCurrentIndex(i);
         }
@@ -165,14 +166,12 @@ void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
 {
     d->model->addTag(tagName, {resource});
     d->model->sort(KisAllTagsModel::Name);
-    setCurrentItem(tagName);
 }
 
 void KisTagChooserWidget::addTag(KisTagSP tag, KoResourceSP resource)
 {
     d->model->addTag(tag, {resource});
     d->model->sort(KisAllTagsModel::Name);
-    setCurrentItem(tag->name());
 }
 
 KisTagSP KisTagChooserWidget::currentlySelectedTag()
@@ -185,6 +184,11 @@ KisTagSP KisTagChooserWidget::currentlySelectedTag()
     QModelIndex index = d->model->index(row, 0);
     KisTagSP tag =  d->model->tagForIndex(index);
     return tag;
+}
+
+void KisTagChooserWidget::updateIcons()
+{
+    d->tagToolButton->loadIcon();
 }
 
 void KisTagChooserWidget::tagToolContextMenuAboutToShow()

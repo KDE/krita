@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -135,11 +135,11 @@ private:
      * (before any transformations)
      */
     QRectF m_originalRect;
-    ToolTransformArgs *m_currentConfig;
+    ToolTransformArgs *m_currentConfig {0};
     KisNodeSP m_rootNode;
     KisNodeList m_transformedNodes;
-    bool m_shouldAvoidPerspectiveTransform;
-    bool m_hasInvisibleNodes;
+    bool m_shouldAvoidPerspectiveTransform {false};
+    bool m_hasInvisibleNodes {false};
 };
 
 #endif /* __TRANSFORM_TRANSACTION_PROPERTIES_H */

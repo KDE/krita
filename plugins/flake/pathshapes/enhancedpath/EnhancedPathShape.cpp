@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007,2010,2011 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2009-2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
- * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ * SPDX-FileCopyrightText: 2007, 2010, 2011 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2009-2010 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2010 Carlos Licea <carlos@kdab.com>
+ * SPDX-FileCopyrightText: 2010 Nokia Corporation and /or its subsidiary(-ies).
  *   Contact: Suresh Chande suresh.chande@nokia.com
- * Copyright (C) 2009-2010 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2009-2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

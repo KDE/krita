@@ -1,0 +1,10 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
+<RCC>
+  <qresource prefix="/gamutmasks/">
+      <file>empty_mask_preview.png</file>
+      <file>GamutMaskTemplate.kra</file>
+  </qresource>
+</RCC>

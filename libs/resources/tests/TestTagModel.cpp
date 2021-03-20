@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "TestTagModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -135,6 +135,23 @@ void TestTagModel::testTagForIndex()
 
     idx = tagModel.index(2, 0);
     tag = tagModel.tagForIndex(idx);
+    QCOMPARE(tag->url(), m_tag->url());
+}
+
+void TestTagModel::testTagForUrl()
+{
+    KisTagModel tagModel(resourceType);
+
+    KisTagSP tag = tagModel.tagForUrl("All");
+    QVERIFY(tag);
+    QCOMPARE(tag->url(), "All");
+
+    tag = tagModel.tagForUrl("All Untagged");
+    QVERIFY(tag);
+    QCOMPARE(tag->url(), "All Untagged");
+
+    tag = tagModel.tagForUrl(m_tag->url());
+    QVERIFY(tag);
     QCOMPARE(tag->url(), m_tag->url());
 }
 
@@ -292,6 +309,7 @@ void TestTagModel::testAddTagWithResources()
     tag->setComment("A tag for testing");
     tag->setValid(true);
     tag->setActive(true);
+    tag->setResourceType("paintoppresets");
 
     tagModel.addTag(tag, {resource});
     QVERIFY(tag->id() >= 0);
@@ -310,5 +328,5 @@ void TestTagModel::cleanupTestCase()
 
 
 
-QTEST_MAIN(TestTagModel)
+SIMPLE_TEST_MAIN(TestTagModel)
 

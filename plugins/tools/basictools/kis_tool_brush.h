@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -72,7 +72,7 @@ protected Q_SLOTS:
     void resetCursorStyle() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
@@ -141,6 +141,11 @@ public:
         setShortcut(QKeySequence(Qt::Key_B));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
+    }
+
+    KisToolBrushFactory(const QString &id)
+        : KisToolPaintFactoryBase(id)
+    {
     }
 
     ~KisToolBrushFactory() override {}

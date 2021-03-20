@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -124,10 +124,10 @@ public:
         Primary,
         AlternateChangeSize,
         AlternateChangeSizeSnap,
-        AlternatePickFgNode,
-        AlternatePickBgNode,
-        AlternatePickFgImage,
-        AlternatePickBgImage,
+        AlternateSampleFgNode,
+        AlternateSampleBgNode,
+        AlternateSampleFgImage,
+        AlternateSampleBgImage,
         AlternateSecondary,
         AlternateThird,
         AlternateFourth,
@@ -140,10 +140,10 @@ public:
     enum AlternateAction {
         ChangeSize = AlternateChangeSize, // Default: Shift+Left click
         ChangeSizeSnap = AlternateChangeSizeSnap, // Default: Shift+Z+Left click
-        PickFgNode = AlternatePickFgNode, // Default: Ctrl+Alt+Left click
-        PickBgNode = AlternatePickBgNode, // Default: Ctrl+Alt+Right click
-        PickFgImage = AlternatePickFgImage, // Default: Ctrl+Left click
-        PickBgImage = AlternatePickBgImage, // Default: Ctrl+Right click
+        SampleFgNode = AlternateSampleFgNode, // Default: Ctrl+Alt+Left click
+        SampleBgNode = AlternateSampleBgNode, // Default: Ctrl+Alt+Right click
+        SampleFgImage = AlternateSampleFgImage, // Default: Ctrl+Left click
+        SampleBgImage = AlternateSampleBgImage, // Default: Ctrl+Right click
         Secondary = AlternateSecondary,
         Third = AlternateThird,
         Fourth = AlternateFourth,
@@ -181,8 +181,18 @@ public:
 
     KisTool::NodePaintAbility nodePaintAbility();
 
+    /**
+     * @brief newActivationWithExternalSource
+     * Makes sure that the tool is active and starts a new stroke, which will
+     * be able to access the pixels from the specified external source.
+     *
+     * This is currently implemented by the Transform tool to paste an image
+     * into the current layer and transform it.
+     */
+    virtual void newActivationWithExternalSource(KisPaintDeviceSP externalSource);
+
 public Q_SLOTS:
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void canvasResourceChanged(int key, const QVariant & res) override;
     // Implement this slot in case there are any widgets or properties which need
@@ -260,9 +270,6 @@ protected:
 protected:
     KisImageWSP image() const;
     QCursor cursor() const;
-
-    /// Call this to set the document modified
-    void notifyModified() const;
 
     KisImageWSP currentImage();
     KoPatternSP currentPattern();

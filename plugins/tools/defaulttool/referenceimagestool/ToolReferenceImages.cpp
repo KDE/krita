@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -42,9 +42,9 @@ ToolReferenceImages::~ToolReferenceImages()
 {
 }
 
-void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void ToolReferenceImages::activate(const QSet<KoShape*> &shapes)
 {
-    DefaultTool::activate(toolActivation, shapes);
+    DefaultTool::activate(shapes);
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));

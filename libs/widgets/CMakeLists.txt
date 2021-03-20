@@ -65,7 +65,7 @@ set(kritawidgets_LIB_SRCS
     KisVisualEllipticalSelectorShape.cpp
     KisVisualRectangleSelectorShape.cpp
     KisVisualTriangleSelectorShape.cpp
-    KisScreenColorPickerBase.cpp
+    KisScreenColorSamplerBase.cpp
     KisDlgInternalColorSelector.cpp
 
     KisPaletteModel.cpp
@@ -75,6 +75,11 @@ set(kritawidgets_LIB_SRCS
     KisPaletteComboBox.cpp
 
     kis_color_button.cpp
+    
+    KisAngleGauge.cpp
+    KisAngleSelector.cpp
+
+    KisTagSelectionWidget.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

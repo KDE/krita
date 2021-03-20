@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -54,6 +54,9 @@
         <property name="text">
          <string/>
         </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -64,6 +67,9 @@
         <property name="text">
          <string/>
         </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -73,6 +79,9 @@
         </property>
         <property name="text">
          <string/>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -97,6 +106,9 @@
         <property name="text">
          <string/>
         </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
      </layout>
@@ -119,28 +131,28 @@
         <property name="verticalSpacing">
          <number>6</number>
         </property>
-        <item column="0" row="0">
+        <item row="0" column="0">
          <widget class="QLabel" name="maskTitleLabel">
           <property name="text">
            <string>Title</string>
           </property>
          </widget>
         </item>
-        <item column="1" row="0">
+        <item row="0" column="1">
          <widget class="QLineEdit" name="maskTitleEdit">
           <property name="maxLength">
            <number>30</number>
           </property>
          </widget>
         </item>
-        <item column="0" row="1">
+        <item row="1" column="0">
          <widget class="QLabel" name="maskDescriptionLabel">
           <property name="text">
            <string>Description</string>
           </property>
          </widget>
         </item>
-        <item column="1" row="1">
+        <item row="1" column="1">
          <widget class="QPlainTextEdit" name="maskDescriptionEdit">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -180,6 +192,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -206,6 +221,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -215,6 +233,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

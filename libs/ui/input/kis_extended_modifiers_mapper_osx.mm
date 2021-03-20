@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Ivan SantaMaría <ghevan@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Ivan SantaMaría <ghevan@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Eugene Ingerman <geneing at gmail dot com>
+ *  SPDX-FileCopyrightText: 2016 Eugene Ingerman <geneing at gmail dot com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -55,6 +55,7 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
     if (m_canvas) {
 
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());
+        connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &HistogramDockerDock::updateHistogram, Qt::UniqueConnection);
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(startUpdateCanvasProjection()), Qt::UniqueConnection);
         connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SLOT(sigColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);

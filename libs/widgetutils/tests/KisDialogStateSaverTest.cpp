@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2019 Boudewijn Rempt <boud@kde.org>
+ *  SPDX-FileCopyrightText: 2019 Boudewijn Rempt <boud@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisDialogStateSaverTest.h"
-#include <QTest>
+#include <simpletest.h>
 #include <KisDialogStateSaver.h>
 #include <QWidget>
 #include <ksharedconfig.h>
@@ -52,4 +52,4 @@ void KisDialogStateSaverTest::testRestore()
 }
 
 
-QTEST_MAIN(KisDialogStateSaverTest)
+SIMPLE_TEST_MAIN(KisDialogStateSaverTest)

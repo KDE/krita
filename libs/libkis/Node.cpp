@@ -1,10 +1,11 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include <QUrl>
 #include <QScopedPointer>
+#include <QUuid>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -595,7 +596,7 @@ bool Node::save(const QString &filename, double xRes, double yRes, const InfoObj
     dst->cropImage(bounds);
     dst->initialRefreshGraph();
 
-    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1(), exportConfiguration.configuration());
+    bool r = doc->exportDocumentSync(filename, mimeType.toLatin1(), exportConfiguration.configuration());
     if (!r) {
         qWarning() << doc->errorMessage();
     }
@@ -668,6 +669,12 @@ QImage Node::thumbnail(int w, int h)
 {
     if (!d->node) return QImage();
     return d->node->createThumbnail(w, h);
+}
+
+QUuid Node::uniqueId() const
+{
+    if (!d->node) return QUuid();
+    return d->node->uuid();
 }
 
 KisPaintDeviceSP Node::paintDevice() const

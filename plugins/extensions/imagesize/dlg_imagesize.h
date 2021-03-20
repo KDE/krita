@@ -1,8 +1,8 @@
 /*
  *  dlg_imagesize.h -- part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -46,11 +46,14 @@ public:
     DlgImageSize(QWidget * parent, int width, int height, double resolution);
     ~DlgImageSize() override;
 
-    qint32 width();
-    qint32 height();
-    double resolution();
+    qint32 desiredWidth();
+    qint32 desiredHeight();
+    double desiredResolution();
 
     KisFilterStrategy *filterType();
+
+Q_SIGNALS:
+    void sigDesiredSizeChanged(qint32 width, qint32 height, double resolution);
 
 private Q_SLOTS:
     void slotSyncPrintToPixelSize();
@@ -70,6 +73,8 @@ private:
     void updatePrintSizeMaximum();
 
     WdgImageSize *m_page;
+
+    QSize m_originalSize;
 
     KisAspectRatioLocker *m_pixelSizeLocker;
     KisAspectRatioLocker *m_printSizeLocker;

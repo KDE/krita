@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_animation_frame_cache_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 
 #include "kis_animation_frame_cache.h"

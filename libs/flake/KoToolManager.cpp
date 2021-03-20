@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2005-2010 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2006-2008 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -91,21 +91,28 @@ public:
 
         QMap<QKeySequence, QStringList> shortcutMap;
 
-        //qDebug() << "................... activating tool" << activeToolId;
+//        qDebug() << "................... activating tool" << activeToolId;
 
         Q_FOREACH(QAction *action, windowActionCollection->actions()) {
 
-            //qDebug() << "Action" << action->objectName() << "shortcuts" << action->shortcuts();
             if (action->property("tool_action").isValid()) {
                 QStringList tools = action->property("tool_action").toStringList();
-                //qDebug() << "\tassociated with" << tools;
-                if (tools.contains(activeToolId)) {
-                    //qDebug() << "\t\tenabling";
+
+                if (KoToolRegistry::instance()->keys().contains(action->objectName())) {
+                    //qDebug() << "This action needs to be enabled!";
                     action->setEnabled(true);
                     toolActions << action->objectName();
                 }
                 else {
-                    action->setDisabled(true);
+                    if (tools.contains(activeToolId) || action->property("always_enabled").toBool()) {
+                        //qDebug() << "\t\tenabling";
+                        action->setEnabled(true);
+                        toolActions << action->objectName();
+                    }
+                    else {
+                        //qDebug() << "\t\tDISabling";
+                        action->setDisabled(true);
+                    }
                 }
             }
             else {
@@ -236,14 +243,14 @@ void KoToolManager::registerToolActions(KActionCollection *ac, KoCanvasControlle
         return;
     }
 
-    // Actions used to switch tools via shortcuts
-    Q_FOREACH (ToolHelper * th, d->tools) {
-        if (ac->action(th->id())) {
-            continue;
-        }
-        ShortcutToolAction* action = th->createShortcutToolAction(ac);
-        ac->addCategorizedAction(th->id(), action, "tool-shortcuts");
-    }
+//    // Actions used to switch tools via shortcuts
+//    Q_FOREACH (ToolHelper * th, d->tools) {
+//        if (ac->action(th->id())) {
+//            continue;
+//        }
+//        //ShortcutToolAction* action = th->createShortcutToolAction(ac);
+//        ac->addCategorizedAction(th->id(), action, "tool-shortcuts");
+//    }
 }
 
 void KoToolManager::addController(KoCanvasController *controller)
@@ -281,7 +288,7 @@ void KoToolManager::switchToolRequested(const QString & id)
 
     while (!d->canvasData->stack.isEmpty()) // switching means to flush the stack
         d->canvasData->stack.pop();
-    d->switchTool(id, false);
+    d->switchTool(id);
 }
 
 void KoToolManager::switchInputDeviceRequested(const KoInputDevice &id)
@@ -292,7 +299,13 @@ void KoToolManager::switchInputDeviceRequested(const KoInputDevice &id)
 
 void KoToolManager::switchToolTemporaryRequested(const QString &id)
 {
-    d->switchTool(id, true);
+    if (!d->canvasData) return;
+
+    if (d->canvasData->activeTool) {
+        d->canvasData->stack.push(d->canvasData->activeToolId);
+    }
+
+    d->switchTool(id);
 }
 
 void KoToolManager::switchBackRequested()
@@ -301,10 +314,10 @@ void KoToolManager::switchBackRequested()
 
     if (d->canvasData->stack.isEmpty()) {
         // default to changing to the interactionTool
-        d->switchTool(KoInteractionTool_ID, false);
+        d->switchTool(KoInteractionTool_ID);
         return;
     }
-    d->switchTool(d->canvasData->stack.pop(), false);
+    d->switchTool(d->canvasData->stack.pop());
 }
 
 KoToolBase *KoToolManager::toolById(KoCanvasBase *canvas, const QString &id) const
@@ -392,7 +405,7 @@ void KoToolManager::initializeCurrentToolForCanvas()
     // make a full reconnect cycle for the currently active tool
     d->disconnectActiveTool();
     d->connectActiveTool();
-    d->postSwitchTool(false);
+    d->postSwitchTool();
 }
 
 KoToolManager* KoToolManager::instance()
@@ -470,9 +483,6 @@ void KoToolManager::Private::connectActiveTool()
                 q, SLOT(updateCursor(QCursor)));
         connect(canvasData->activeTool, SIGNAL(activateTool(QString)),
                 q, SLOT(switchToolRequested(QString)));
-        connect(canvasData->activeTool, SIGNAL(activateTemporary(QString)),
-                q, SLOT(switchToolTemporaryRequested(QString)));
-        connect(canvasData->activeTool, SIGNAL(done()), q, SLOT(switchBackRequested()));
         connect(canvasData->activeTool, SIGNAL(statusTextChanged(QString)),
                 q, SIGNAL(changedStatusText(QString)));
     }
@@ -495,9 +505,6 @@ void KoToolManager::Private::disconnectActiveTool()
                    q, SLOT(updateCursor(QCursor)));
         disconnect(canvasData->activeTool, SIGNAL(activateTool(QString)),
                    q, SLOT(switchToolRequested(QString)));
-        disconnect(canvasData->activeTool, SIGNAL(activateTemporary(QString)),
-                   q, SLOT(switchToolTemporaryRequested(QString)));
-        disconnect(canvasData->activeTool, SIGNAL(done()), q, SLOT(switchBackRequested()));
         disconnect(canvasData->activeTool, SIGNAL(statusTextChanged(QString)),
                    q, SIGNAL(changedStatusText(QString)));
     }
@@ -507,7 +514,7 @@ void KoToolManager::Private::disconnectActiveTool()
 }
 
 
-void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
+void KoToolManager::Private::switchTool(KoToolBase *tool)
 {
 
     Q_ASSERT(tool);
@@ -520,18 +527,16 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
     disconnectActiveTool();
     canvasData->activeTool = tool;
     connectActiveTool();
-    postSwitchTool(temporary);
+    postSwitchTool();
 }
 
 
 
-void KoToolManager::Private::switchTool(const QString &id, bool temporary)
+void KoToolManager::Private::switchTool(const QString &id)
 {
     Q_ASSERT(canvasData);
     if (!canvasData) return;
 
-    if (canvasData->activeTool && temporary)
-        canvasData->stack.push(canvasData->activeToolId);
     canvasData->activeToolId = id;
     KoToolBase *tool = canvasData->allTools.value(id);
     if (! tool) {
@@ -545,10 +550,10 @@ void KoToolManager::Private::switchTool(const QString &id, bool temporary)
         }
     }
 
-    switchTool(tool, temporary);
+    switchTool(tool);
 }
 
-void KoToolManager::Private::postSwitchTool(bool temporary)
+void KoToolManager::Private::postSwitchTool()
 {
 #ifndef NDEBUG
     int canvasCount = 1;
@@ -566,11 +571,6 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     Q_ASSERT(canvasData);
     if (!canvasData) return;
 
-    KoToolBase::ToolActivation toolActivation;
-    if (temporary)
-        toolActivation = KoToolBase::TemporaryActivation;
-    else
-        toolActivation = KoToolBase::DefaultActivation;
     QSet<KoShape*> shapesToOperateOn;
     if (canvasData->activeTool
             && canvasData->activeTool->canvas()
@@ -591,11 +591,11 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     if (canvasData->canvas->canvas()) {
         // Caller of postSwitchTool expect this to be called to update the selected tool
         updateToolForProxy();
-        canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
+        canvasData->activeTool->activate(shapesToOperateOn);
         KoCanvasBase *canvas = canvasData->canvas->canvas();
         canvas->updateInputMethodInfo();
     } else {
-        canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
+        canvasData->activeTool->activate(shapesToOperateOn);
     }
 
     QList<QPointer<QWidget> > optionWidgetList = canvasData->activeTool->optionWidgets();
@@ -657,7 +657,7 @@ void KoToolManager::Private::switchCanvasData(CanvasData *cd)
 
     if (canvasData->activeTool) {
         connectActiveTool();
-        postSwitchTool(false);
+        postSwitchTool();
     }
 
     if (oldInputDevice != canvasData->inputDevice) {
@@ -682,7 +682,7 @@ void KoToolManager::Private::toolActivated(ToolHelper *tool)
     canvasData->activeToolId = tool->id();
     canvasData->activationShapeId = tool->activationShapeId();
 
-    switchTool(t, false);
+    switchTool(t);
 }
 
 void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
@@ -869,7 +869,7 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape*> &shapes)
             }
         }
         if (!currentToolWorks) {
-            switchTool(KoInteractionTool_ID, false);
+            switchTool(KoInteractionTool_ID);
         }
     }
 
@@ -916,7 +916,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
             switchCanvasData(cd);
 
             if (!canvasData->activeTool) {
-                switchTool(KoInteractionTool_ID, false);
+                switchTool(KoInteractionTool_ID);
             }
 
             return;

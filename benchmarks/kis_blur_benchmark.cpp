@@ -1,10 +1,10 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý lukast.dev@gmail.com
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý lukast.dev @gmail.com
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_blur_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -78,4 +78,4 @@ void KisBlurBenchmark::benchmarkFilter()
 
 
 
-QTEST_MAIN(KisBlurBenchmark)
+SIMPLE_TEST_MAIN(KisBlurBenchmark)

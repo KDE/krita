@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -38,10 +38,12 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
+    bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
@@ -59,6 +61,9 @@ public:
      */
     void setTagFilter(const KisTagSP tag);
 
+
+    void setStorageFilter(bool useFilter, int storageId);
+
     /**
      * @brief setResourceFilter sets the resource to filter with
      * @param resource a valid resource with a valid id, or 0 to clear the filter
@@ -69,14 +74,23 @@ public:
 
     void setFilterInCurrentTag(bool filterInCurrentTag);
 
-    bool tagResource(KisTagSP tag, KoResourceSP resource);
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource);
+    bool tagResource(const KisTagSP tag, const int resourceId);
+    bool untagResource(const KisTagSP tag, const int resourceId);
+    bool isResourceTagged(const KisTagSP tag, const int resourceId);
+
+Q_SIGNALS:
+
+    void beforeFilterChanges();
+    void afterFilterChanged();
 
 protected:
 
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+
+private:
+    void updateTagFilter();
 
 private:
     struct Private;

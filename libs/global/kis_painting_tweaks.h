@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -79,6 +79,22 @@ namespace KisPaintingTweaks {
         QPen m_pen;
         QBrush m_brush;
     };
+
+    QColor KRITAGLOBAL_EXPORT blendColors(const QColor &c1, const QColor &c2, qreal r1);
+
+    /**
+     * \return an approximate difference between \p c1 and \p c2
+     *         in a (nonlinear) range [0, 3]
+     *
+     * The colors are compared using the formula:
+     *     difference = sqrt(2 * diff_R^2 + 4 * diff_G^2 + 3 * diff_B^2)
+     */
+    qreal KRITAGLOBAL_EXPORT colorDifference(const QColor &c1, const QColor &c2);
+
+    /**
+     * Make the color \p color differ from \p baseColor for at least \p threshold value
+     */
+    void KRITAGLOBAL_EXPORT dragColor(QColor *color, const QColor &baseColor, qreal threshold);
 }
 
 #endif /* __KIS_PAINTING_TWEAKS_H */

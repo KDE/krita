@@ -1,7 +1,7 @@
 /*
-  Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
-  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
-  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
+  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
+  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
 
   SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -31,6 +31,7 @@
 #include "kis_layer_properties_icons.h"
 #include "krita_utils.h"
 #include "kis_config_notifier.h"
+#include <kis_painting_tweaks.h>
 
 typedef KisBaseNode::Property* OptionalProperty;
 
@@ -162,7 +163,7 @@ void NodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, c
     QColor bgColor = option.state & QStyle::State_Selected ?
         qApp->palette().color(QPalette::Base) :
         qApp->palette().color(QPalette::Text);
-    color = KritaUtils::blendColors(color, bgColor, 0.9);
+    color = KisPaintingTweaks::blendColors(color, bgColor, 0.9);
 
     // TODO: if we are a mask type, use dotted lines for the branch style
     // p->setPen(QPen(p->pen().color(), 2, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
@@ -178,7 +179,7 @@ void NodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, c
      QPoint parentBase2 = p3 + QPoint(rtlNum*scm.indentation(), 0);
 
      // indent lines needs to be very subtle to avoid making the docker busy looking
-     color = KritaUtils::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
+     color = KisPaintingTweaks::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
      p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
      if (tmp.isValid()) {
@@ -201,14 +202,14 @@ void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &optio
 {
     KisNodeViewColorScheme scm;
     const int label = index.data(KisNodeModel::ColorLabelIndexRole).toInt();
-    QColor color = scm.colorLabel(label);
+    QColor color = scm.colorFromLabelIndex(label);
     if (color.alpha() <= 0) return;
 
     QColor bgColor = qApp->palette().color(QPalette::Base);
     if ((option.state & QStyle::State_MouseOver) && !(option.state & QStyle::State_Selected)) {
-        color = KritaUtils::blendColors(color, bgColor, 0.6);
+        color = KisPaintingTweaks::blendColors(color, bgColor, 0.6);
     } else {
-        color = KritaUtils::blendColors(color, bgColor, 0.3);
+        color = KisPaintingTweaks::blendColors(color, bgColor, 0.3);
     }
 
     QRect optionRect = option.rect.adjusted(0, 0, scm.indentation(), 0);

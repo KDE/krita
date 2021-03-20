@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef _KIS_ORA_TEST_H_
 #define _KIS_ORA_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisOraTest : public QObject
 {

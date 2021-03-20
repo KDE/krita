@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_processing_applicator_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
@@ -195,4 +195,4 @@ void KisProcessingApplicatorTest::testNoUIUpdates()
     QCOMPARE(uiSignalsCounter.size(), 0);
 }
 
-QTEST_MAIN(KisProcessingApplicatorTest)
+SIMPLE_TEST_MAIN(KisProcessingApplicatorTest)

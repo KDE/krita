@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_grid_config_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include <QDomDocument>
@@ -72,4 +72,4 @@ void KisGridConfigTest::testGuidesConfig()
     QVERIFY(config2.hasGuides());
 }
 
-QTEST_MAIN(KisGridConfigTest)
+SIMPLE_TEST_MAIN(KisGridConfigTest)

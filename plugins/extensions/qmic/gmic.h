@@ -1,11 +1,14 @@
 /*
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef GMIC_H
 #define GMIC_H
+
+#include <QString>
 
 /**
  * A sham header to make it easier to handle gmic types without
@@ -20,16 +23,17 @@ enum OutputMode {   IN_PLACE = 0,
 
 
 // this enum is also index in LAYER_MODE_STRINGS list
-enum InputLayerMode {   NONE = 0,
-                        ACTIVE_LAYER,
-                        ALL_LAYERS,
-                        ACTIVE_LAYER_BELOW_LAYER,
-                        ACTIVE_LAYER_ABOVE_LAYER,
-                        ALL_VISIBLE_LAYERS,
-                        ALL_INVISIBLE_LAYERS,
-                        ALL_VISIBLE_LAYERS_DECR,
-                        ALL_INVISIBLE_DECR,
-                        ALL_DECR
+enum InputLayerMode {
+    NONE = 0,
+    ACTIVE_LAYER,
+    ALL_LAYERS,
+    ACTIVE_LAYER_BELOW_LAYER,
+    ACTIVE_LAYER_ABOVE_LAYER,
+    ALL_VISIBLE_LAYERS,
+    ALL_INVISIBLE_LAYERS,
+    ALL_VISIBLE_LAYERS_DECR_UNUSED, /* Removed since 2.8.2 */
+    ALL_INVISIBLE_DECR_UNUSED,      /* Removed since 2.8.2 */
+    ALL_DECR_UNUSED,                /* Removed since 2.8.2 */
 };
 
 

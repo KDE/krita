@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_dummies_facade_base_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_node_dummies_graph.h"
 #include "kis_dummies_facade.h"

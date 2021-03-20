@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laszlo Fazekas <mneko@freemail.hu>
+ *  SPDX-FileCopyrightText: 2016 Laszlo Fazekas <mneko@freemail.hu>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #include "kis_csv_test.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include "filestest.h"
@@ -42,5 +42,5 @@ void KisCsvTest::testImportIncorrectFormat()
     TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), CsvMimetype);
 }
 
-QTEST_MAIN(KisCsvTest)
+SIMPLE_TEST_MAIN(KisCsvTest)
 

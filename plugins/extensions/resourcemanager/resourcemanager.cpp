@@ -1,7 +1,7 @@
 /*
  * resourcemanager.cc -- Part of Krita
  *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ * SPDX-FileCopyrightText: 2004 Boudewijn Rempt (boud@valdyas.org)
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -36,11 +36,12 @@
 #include <kis_paintop_settings.h>
 #include <KisPaintopSettingsIds.h>
 #include <krita_container_utils.h>
-
+#include <KisPart.h>
 #include "config-seexpr.h"
 
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
+#include "DlgResourceManager.h"
 
 class ResourceManager::Private {
 
@@ -110,10 +111,13 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     addAction("create_bundle", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCreateBundle()));
 
-    action = new KisAction(i18n("Manage Resources..."), this);
+    action = new KisAction(i18n("Manage Resources Libraries..."), this);
     addAction("manage_bundles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
 
+    action = new KisAction(i18n("Manage Resources..."), this);
+    addAction("manage_resources", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotManageResources()));
 }
 
 ResourceManager::~ResourceManager()
@@ -233,8 +237,14 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
 void ResourceManager::slotManageBundles()
 {
-    QPointer<DlgBundleManager> dlg = new DlgBundleManager();
+    QPointer<DlgBundleManager> dlg = new DlgBundleManager(KisPart::instance()->currentMainwindow());
     dlg->exec();
+}
+
+void ResourceManager::slotManageResources()
+{
+    DlgResourceManager dlg(viewManager()->actionManager());
+    dlg.exec();
 }
 
 QStringList ResourceManager::importResources(const QString &title, const QStringList &mimes) const

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -396,16 +396,6 @@ namespace KritaUtils
         return dstImage;
     }
 
-    QColor blendColors(const QColor &c1, const QColor &c2, qreal r1)
-    {
-        const qreal r2 = 1.0 - r1;
-
-        return QColor::fromRgbF(
-            c1.redF() * r1 + c2.redF() * r2,
-            c1.greenF() * r1 + c2.greenF() * r2,
-            c1.blueF() * r1 + c2.blueF() * r2);
-    }
-
     void applyToAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<void(quint8)> func) {
         KisSequentialConstIterator dstIt(dev, rc);
         while (dstIt.nextPixel()) {
@@ -491,35 +481,6 @@ namespace KritaUtils
             pt->rx() = -(pt->x() - qreal(center.x())) + center.x();
         } else /* if (dir == Qt::Vertical) */ {
             pt->ry() = -(pt->y() - qreal(center.y())) + center.y();
-        }
-    }
-
-    qreal colorDifference(const QColor &c1, const QColor &c2)
-    {
-        const qreal dr = c1.redF() - c2.redF();
-        const qreal dg = c1.greenF() - c2.greenF();
-        const qreal db = c1.blueF() - c2.blueF();
-
-        return std::sqrt(2 * pow2(dr) + 4 * pow2(dg) + 3 * pow2(db));
-    }
-
-    void dragColor(QColor *color, const QColor &baseColor, qreal threshold)
-    {
-        while (colorDifference(*color, baseColor) < threshold) {
-
-            QColor newColor = *color;
-
-            if (newColor.lightnessF() > baseColor.lightnessF()) {
-                newColor = newColor.lighter(120);
-            } else {
-                newColor = newColor.darker(120);
-            }
-
-            if (newColor == *color) {
-                break;
-            }
-
-            *color = newColor;
         }
     }
 

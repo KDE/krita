@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 #include "kis_iterator_benchmark.h"
 #include <QApplication>
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -233,4 +233,4 @@ void KisIteratorBenchmark::runBenchmark()
     randomAccessor(cs);
 }
 
-QTEST_MAIN(KisIteratorBenchmark)
+SIMPLE_TEST_MAIN(KisIteratorBenchmark)

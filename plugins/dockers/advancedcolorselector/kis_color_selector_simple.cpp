@@ -1,15 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
  */
 
 #include "kis_color_selector_simple.h"
@@ -46,6 +38,9 @@ KoColor KisColorSelectorSimple::selectColor(int x, int y)
 
     switch (m_parameter) {
     case KisColorSelectorConfiguration::H:
+        emit paramChanged(relPos, -1, -1, -1, -1, -1, -1, -1, -1);
+        break;
+    case KisColorSelectorConfiguration::Hluma:
         emit paramChanged(relPos, -1, -1, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsvS:
@@ -121,7 +116,7 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     qreal hslH, hslS, hslL;
     qreal hsiH, hsiS, hsiI;
     qreal hsyH, hsyS, hsyY;
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("advancedColorSelector");
     R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
@@ -131,10 +126,6 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     //here we add our converter options
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
     m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
-
-    //workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
-    hsiH=hslH;
-    hsyH=hslH;
 
     switch (m_parameter) {
     case KisColorSelectorConfiguration::SL:
@@ -247,6 +238,10 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
         m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
         emit paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, -1);
         break;
+    case KisColorSelectorConfiguration::Hluma:
+        m_lastClickPos.setX(qBound<qreal>(0., hsyH, 1.));
+        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, -1);
+        break;
     default:
         Q_ASSERT(false);
         break;
@@ -281,6 +276,7 @@ void KisColorSelectorSimple::paint(QPainter* painter)
     if(m_lastClickPos!=QPointF(-1,-1) && m_parent->displayBlip()) {
         switch (m_parameter) {
         case KisColorSelectorConfiguration::H:
+        case KisColorSelectorConfiguration::Hluma:
         case KisColorSelectorConfiguration::hsvS:
         case KisColorSelectorConfiguration::hslS:
         case KisColorSelectorConfiguration::hsiS:
@@ -379,6 +375,9 @@ KoColor KisColorSelectorSimple::colorAt(float x, float y)
         break;
     case KisColorSelectorConfiguration::H:
         color = m_parent->converter()->fromHsvF(relPos, 1, 1);
+        break;
+    case KisColorSelectorConfiguration::Hluma:
+        color = m_parent->converter()->fromHsyF(relPos, 1, m_luma, R, G, B, Gamma);
         break;
     case KisColorSelectorConfiguration::hsvS:
         color = m_parent->converter()->fromHsvF(m_hue, relPos, m_value);

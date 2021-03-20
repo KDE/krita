@@ -1,8 +1,8 @@
 /*
- *  Copyright (c) 2014 Nicholas Guttenberg <ngutten@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Nicholas Guttenberg <ngutten@gmail.com>
  * 
  *  Based on KoCompositeOpBehind.h,
- *  Copyright (c) 2012 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 José Luis Vergara <pentalis@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  *

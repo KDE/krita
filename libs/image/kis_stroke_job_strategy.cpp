@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,14 +13,16 @@ KisStrokeJobData::KisStrokeJobData(Sequentiality sequentiality,
                                    Exclusivity exclusivity)
     : m_sequentiality(sequentiality),
       m_exclusivity(exclusivity),
-      m_isCancellable(true)
+      m_isCancellable(true),
+      m_levelOfDetailOverride(-1)
 {
 }
 
 KisStrokeJobData::KisStrokeJobData(const KisStrokeJobData &rhs)
     : m_sequentiality(rhs.m_sequentiality),
       m_exclusivity(rhs.m_exclusivity),
-      m_isCancellable(rhs.m_isCancellable)
+      m_isCancellable(rhs.m_isCancellable),
+      m_levelOfDetailOverride(rhs.m_levelOfDetailOverride)
 {
 }
 
@@ -57,6 +59,16 @@ bool KisStrokeJobData::isCancellable() const
 void KisStrokeJobData::setCancellable(bool value)
 {
     m_isCancellable = value;
+}
+
+int KisStrokeJobData::levelOfDetailOverride() const
+{
+    return m_levelOfDetailOverride;
+}
+
+void KisStrokeJobData::setLevelOfDetailOverride(int value)
+{
+    m_levelOfDetailOverride = value;
 }
 
 KisStrokeJobStrategy::KisStrokeJobStrategy()

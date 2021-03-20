@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,12 +12,12 @@
 #include <QByteArray>
 #include <QBuffer>
 
-#include <QTest>
+#include <simpletest.h>
 
 void KisPSDLayerStyleTest::testRoundTrip()
 {
     KisPSDLayerStyle layerStyle;
 }
 
-QTEST_MAIN(KisPSDLayerStyleTest)
+SIMPLE_TEST_MAIN(KisPSDLayerStyleTest)
 

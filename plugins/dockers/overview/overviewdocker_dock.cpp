@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 Deif Lou <ginoba@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -12,9 +13,9 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QStatusBar>
-#include <kis_slider_spin_box.h>
-#include <klocalizedstring.h>
 
+#include <KisAngleSelector.h>
+#include <klocalizedstring.h>
 #include "kis_canvas2.h"
 #include <KisViewManager.h>
 #include <kactioncollection.h>
@@ -26,26 +27,53 @@
 #include "kis_canvas_controller.h"
 #include "kis_icon_utils.h"
 #include "kis_signals_blocker.h"
+#include <KoZoomWidget.h>
+#include <kis_icon_utils.h>
 
-OverviewDockerDock::OverviewDockerDock( )
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+
+OverviewDockerDock::OverviewDockerDock()
     : QDockWidget(i18n("Overview"))
     , m_zoomSlider(nullptr)
-    , m_rotateSlider(nullptr)
+    , m_rotateAngleSelector(nullptr)
     , m_mirrorCanvas(nullptr)
+    , m_pinControlsButton(nullptr)
     , m_canvas(nullptr)
+    , m_cursorIsHover(false)
 {
-    QWidget *page = new QWidget(this);
-    m_layout = new QVBoxLayout(page);
-    m_horizontalLayout = new QHBoxLayout();
+    m_page = new QWidget(this);
 
-    m_overviewWidget = new OverviewWidget(this);
+    m_overviewWidget = new OverviewWidget(m_page);
     m_overviewWidget->setMinimumHeight(50);
-    m_overviewWidget->setBackgroundRole(QPalette::AlternateBase);
-    m_overviewWidget->setAutoFillBackground(true); // paints background role before paint()
+    m_overviewWidget->setBackgroundRole(QPalette::Base);
+    // paints background role before paint()
+    m_overviewWidget->setAutoFillBackground(true);
 
-    m_layout->addWidget(m_overviewWidget, 1);
+    m_controlsContainer = new QWidget(m_page);
 
-    setWidget(page);
+    m_controlsLayout = new QVBoxLayout;
+    m_controlsLayout->setContentsMargins(2, 2, 2, 2);
+    m_controlsLayout->setSpacing(2);
+    m_controlsContainer->setLayout(m_controlsLayout);
+
+    m_controlsSecondRowLayout = new QHBoxLayout();
+
+    setWidget(m_page);
+
+    m_showControlsAnimation.setEasingCurve(QEasingCurve(QEasingCurve::InOutCubic));
+    connect(&m_showControlsAnimation, &QVariantAnimation::valueChanged, this, &OverviewDockerDock::layoutMainWidgets);
+
+    KConfigGroup config = KSharedConfig::openConfig()->group("OverviewDocker");
+    m_pinControls = config.readEntry("pinControls", true);
+
+    setEnabled(false);
+}
+
+OverviewDockerDock::~OverviewDockerDock()
+{
+    KConfigGroup config = KSharedConfig::openConfig()->group("OverviewDocker");
+    config.writeEntry("pinControls", m_pinControls);
 }
 
 void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -61,38 +89,50 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     }
 
     if (m_zoomSlider) {
-        m_layout->removeWidget(m_zoomSlider);
+        m_controlsSecondRowLayout->removeWidget(m_zoomSlider);
         delete m_zoomSlider;
         m_zoomSlider = nullptr;
     }
 
-    if (m_rotateSlider) {
-        m_horizontalLayout->removeWidget(m_rotateSlider);
-        delete m_rotateSlider;
-        m_rotateSlider = nullptr;
+    if (m_rotateAngleSelector) {
+        m_controlsSecondRowLayout->removeWidget(m_rotateAngleSelector);
+        delete m_rotateAngleSelector;
+        m_rotateAngleSelector = nullptr;
     }
 
     if (m_mirrorCanvas) {
-        m_horizontalLayout->removeWidget(m_mirrorCanvas);
+        m_controlsSecondRowLayout->removeWidget(m_mirrorCanvas);
         delete m_mirrorCanvas;
         m_mirrorCanvas = nullptr;
     }
 
-    m_layout->removeItem(m_horizontalLayout);
+    if (m_pinControlsButton) {
+        m_controlsSecondRowLayout->removeWidget(m_pinControlsButton);
+        delete m_pinControlsButton;
+        m_pinControlsButton = nullptr;
+    }
+
+    // Delete the stretch
+    while (m_controlsSecondRowLayout->count() && m_controlsSecondRowLayout->itemAt(0)->spacerItem()) {
+        delete m_controlsSecondRowLayout->takeAt(0);
+    }
+
+    m_controlsLayout->removeItem(m_controlsSecondRowLayout);
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
     m_overviewWidget->setCanvas(canvas);
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
         m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
-        m_layout->addWidget(m_zoomSlider);
+        static_cast<KoZoomWidget*>(m_zoomSlider)->setZoomInputFlat(false);
+        m_controlsLayout->addWidget(m_zoomSlider);
 
-        m_rotateSlider = new KisDoubleSliderSpinBox();
-        m_rotateSlider->setRange(-180, 180, 2);
-        m_rotateSlider->setValue(m_canvas->rotationAngle());
-        m_rotateSlider->setPrefix(i18n("Rotation: "));
-        m_rotateSlider->setSuffix("°");
-        connect(m_rotateSlider, SIGNAL(valueChanged(qreal)), this, SLOT(rotateCanvasView(qreal)), Qt::UniqueConnection);
+        m_rotateAngleSelector = new KisAngleSelector();
+        m_rotateAngleSelector->setRange(-179.99, 180.0);
+        m_rotateAngleSelector->setAngle(m_canvas->rotationAngle());
+        m_rotateAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+        m_rotateAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
+        connect(m_rotateAngleSelector, SIGNAL(angleChanged(qreal)), this, SLOT(rotateCanvasView(qreal)), Qt::UniqueConnection);
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(updateSlider()));
 
         m_mirrorCanvas = new QToolButton();
@@ -102,9 +142,47 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
                 m_mirrorCanvas->setDefaultAction(action);
             }
         }
-        m_horizontalLayout->addWidget(m_mirrorCanvas);
-        m_horizontalLayout->addWidget(m_rotateSlider);
-        m_layout->addLayout(m_horizontalLayout);
+        m_mirrorCanvas->setIcon(KisIconUtils::loadIcon("mirror-view-16"));
+        connect(m_mirrorCanvas, SIGNAL(toggled(bool)), this, SLOT(mirrorUpdateIcon()));
+
+        m_pinControlsButton = new QToolButton;
+        m_pinControlsButton->setCheckable(true);
+        m_pinControlsButton->setChecked(m_pinControls);
+        m_pinControlsButton->setToolTip(
+            i18nc("Make the controls in the overview docker auto-hide or always visible", "Pin navigation controls")
+        );
+        m_pinControlsButton->setIcon(KisIconUtils::loadIcon("krita_tool_reference_images"));
+        connect(m_pinControlsButton, SIGNAL(toggled(bool)), SLOT(setPinControls(bool)));
+
+        m_controlsSecondRowLayout->addWidget(m_rotateAngleSelector);
+        m_controlsSecondRowLayout->addStretch();
+        m_controlsSecondRowLayout->addWidget(m_mirrorCanvas);
+        m_controlsSecondRowLayout->addStretch();
+        m_controlsSecondRowLayout->addWidget(m_pinControlsButton);
+        m_controlsLayout->addLayout(m_controlsSecondRowLayout);
+
+        m_zoomSlider->setVisible(true);
+        m_rotateAngleSelector->setVisible(true);
+
+        if (m_pinControls) {
+            m_showControlsAnimation.stop();
+            m_showControlsAnimation.setStartValue(1.0);
+            m_showControlsAnimation.setEndValue(0.0);
+        } else {
+            if (m_showControlsAnimation.state() != QVariantAnimation::Running) {
+                m_showControlsAnimation.stop();
+                if (m_cursorIsHover) {
+                    m_showControlsAnimation.setStartValue(1.0);
+                    m_showControlsAnimation.setEndValue(0.0);
+                } else {
+                    m_showControlsAnimation.setStartValue(0.0);
+                    m_showControlsAnimation.setEndValue(1.0);
+                }
+            }
+        }
+        m_showControlsAnimation.setCurrentTime(0);
+
+        layoutMainWidgets();
     }
 }
 
@@ -113,6 +191,12 @@ void OverviewDockerDock::unsetCanvas()
     setEnabled(false);
     m_canvas = nullptr;
     m_overviewWidget->unsetCanvas();
+}
+
+void OverviewDockerDock::mirrorUpdateIcon()
+{
+    if(!m_mirrorCanvas) return;
+    m_mirrorCanvas->setIcon(KisIconUtils::loadIcon("mirror-view-16"));
 }
 
 void OverviewDockerDock::rotateCanvasView(qreal rotation)
@@ -128,7 +212,7 @@ void OverviewDockerDock::rotateCanvasView(qreal rotation)
 void OverviewDockerDock::updateSlider()
 {
     if (!m_canvas) return;
-    KisSignalsBlocker l(m_rotateSlider);
+    KisSignalsBlocker l(m_rotateAngleSelector);
 
     qreal rotation = m_canvas->rotationAngle();
     if (rotation > 180) {
@@ -136,9 +220,88 @@ void OverviewDockerDock::updateSlider()
     } else if (rotation < -180) {
         rotation = rotation + 360;
     }
-    if (m_rotateSlider->value() != rotation) {
-        m_rotateSlider->setValue(rotation);
+    m_rotateAngleSelector->setAngle(rotation);
+}
+
+void OverviewDockerDock::setPinControls(bool pin)
+{
+    m_pinControls = pin;
+    layoutMainWidgets();
+}
+
+void OverviewDockerDock::resizeEvent(QResizeEvent*)
+{
+    layoutMainWidgets();
+}
+
+void OverviewDockerDock::leaveEvent(QEvent*)
+{
+    m_cursorIsHover = false;
+    if (isEnabled() && !m_pinControls) {
+        hideControls();
     }
 }
 
+void OverviewDockerDock::enterEvent(QEvent*)
+{
+    m_cursorIsHover = true;
+    if (isEnabled() && !m_pinControls) {
+        showControls();
+    }
+}
 
+bool OverviewDockerDock::event(QEvent *e)
+{
+    if (e->type() == QEvent::PaletteChange) {
+        if (m_pinControlsButton) {
+            KisIconUtils::updateIcon(m_pinControlsButton);
+        }
+    } else if (e->type() == QEvent::StyleChange || e->type() == QEvent::FontChange) {
+        resizeEvent(nullptr);
+    }
+    return QDockWidget::event(e);
+}
+
+void OverviewDockerDock::layoutMainWidgets()
+{
+    m_page->setMinimumHeight(m_overviewWidget->minimumHeight() +
+                             m_controlsContainer->minimumSizeHint().height());
+
+    if (!m_pinControls) {
+        const qreal pageHeight = static_cast<qreal>(m_page->height());
+        const qreal controlsContainerHeight = static_cast<qreal>(m_controlsContainer->sizeHint().height());
+        const qreal animationProgress = m_showControlsAnimation.currentValue().toReal();
+        const int widgetLimitPosition = static_cast<int>(std::round(pageHeight - animationProgress * controlsContainerHeight));
+        m_overviewWidget->setGeometry(0, 0, m_page->width(), widgetLimitPosition);
+        m_controlsContainer->setGeometry(0, widgetLimitPosition, m_page->width(), static_cast<int>(controlsContainerHeight));
+    } else {
+        const int controlsContainerHeight = m_controlsContainer->sizeHint().height();
+        const int widgetLimitPosition = m_page->height() - controlsContainerHeight;
+        m_overviewWidget->setGeometry(0, 0, m_page->width(), widgetLimitPosition);
+        m_controlsContainer->setGeometry(0, widgetLimitPosition, m_page->width(), controlsContainerHeight);
+    }
+}
+
+void OverviewDockerDock::showControls() const
+{
+    m_showControlsAnimation.stop();
+    // scale the animation duration in case the animation is in the middle
+    const int animationDuration =
+        static_cast<int>(std::round((1.0 - m_showControlsAnimation.currentValue().toReal()) * showControlsAnimationDuration));
+    m_showControlsAnimation.setStartValue(m_showControlsAnimation.currentValue());
+    m_showControlsAnimation.setEndValue(1.0);
+    m_showControlsAnimation.setDuration(animationDuration);
+    m_showControlsAnimation.start();
+}
+
+void OverviewDockerDock::hideControls() const
+{
+    m_showControlsAnimation.stop();
+    // scale the animation duration in case the animation is in the middle
+    const int animationDuration =
+        static_cast<int>(std::round(m_showControlsAnimation.currentValue().toReal() * showControlsAnimationDuration));
+    m_showControlsAnimation.setStartValue(m_showControlsAnimation.currentValue());
+    m_showControlsAnimation.setEndValue(0.0);
+    m_showControlsAnimation.setDuration(animationDuration);
+    m_showControlsAnimation.start();
+}

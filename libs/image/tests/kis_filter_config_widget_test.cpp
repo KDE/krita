@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_filter_config_widget_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 
 #include "filter/kis_filter_configuration.h"
@@ -33,4 +33,4 @@ void KisConfigWidgetTest::testCreation()
 }
 
 
-QTEST_MAIN(KisConfigWidgetTest)
+SIMPLE_TEST_MAIN(KisConfigWidgetTest)

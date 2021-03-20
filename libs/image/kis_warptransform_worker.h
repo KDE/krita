@@ -1,7 +1,7 @@
 /*
  *  kis_warptransform_worker.h - part of Krita
  *
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -50,10 +50,10 @@ public:
                                   QPointF *newOffset);
 
     // Prepare the transformation on dev
-    KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
+    KisWarpTransformWorker(WarpType warpType, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
     ~KisWarpTransformWorker() override;
     // Perform the prepared transformation
-    void run();
+    void run(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev);
 
     QRect approxChangeRect(const QRect &rc);
     QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);
@@ -64,12 +64,11 @@ private:
 
 private:
     WarpMathFunction m_warpMathFunction;
-    WarpCalculation m_warpCalc;
+    WarpCalculation m_warpCalc {GRID};
     QVector<QPointF> m_origPoint;
     QVector<QPointF> m_transfPoint;
-    qreal m_alpha;
-    KisPaintDeviceSP m_dev;
-    KoUpdater *m_progress;
+    qreal m_alpha {1.0};
+    KoUpdater *m_progress {0};
 };
 
 #endif

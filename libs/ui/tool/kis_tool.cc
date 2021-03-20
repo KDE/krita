@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -89,9 +89,9 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     resetCursorStyle();
 
@@ -343,13 +343,6 @@ QCursor KisTool::cursor() const
     return d->cursor;
 }
 
-void KisTool::notifyModified() const
-{
-    if (image()) {
-        image()->setModified();
-    }
-}
-
 KoPatternSP KisTool::currentPattern()
 {
     return d->currentPattern;
@@ -362,7 +355,13 @@ KoAbstractGradientSP KisTool::currentGradient()
 
 KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 {
-    return canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    QVariant v = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset);
+    if (v.isNull()) {
+        return 0;
+    }
+    else {
+        return v.value<KisPaintOpPresetSP>();
+    }
 }
 
 KisNodeSP KisTool::currentNode() const
@@ -527,6 +526,10 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
 
+    if (canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).isNull()) {
+        return NodePaintAbility::UNPAINTABLE;
+    }
+
     if (!node) {
         return NodePaintAbility::UNPAINTABLE;
     }
@@ -551,6 +554,11 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
     }
 
     return NodePaintAbility::UNPAINTABLE;
+}
+
+void KisTool::newActivationWithExternalSource(KisPaintDeviceSP externalSource)
+{
+    Q_UNUSED(externalSource);
 }
 
 QWidget* KisTool::createOptionWidget()
@@ -623,6 +631,10 @@ bool KisTool::nodeEditable()
 {
     KisNodeSP node = currentNode();
     if (!node) {
+        return false;
+    }
+
+    if (!currentPaintOpPreset()) {
         return false;
     }
 

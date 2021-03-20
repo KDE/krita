@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "TestStorageModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -142,5 +142,5 @@ void TestStorageModel::testMetaData()
 
 
 
-QTEST_MAIN(TestStorageModel)
+SIMPLE_TEST_MAIN(TestStorageModel)
 

@@ -1,14 +1,14 @@
 /*
  *  This file is part of Calligra tests
  *
- *  Copyright (C) 2011 Hanna Skott <hannaetscott@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Hanna Skott <hannaetscott@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "TestInputDevice.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "KoInputDevice.h"
 
 //Tests so the KoInputDevice created is of tablet type
@@ -106,4 +106,4 @@ void TestInputDevice::testEraser()
 }
 
 
-QTEST_MAIN(TestInputDevice)
+SIMPLE_TEST_MAIN(TestInputDevice)

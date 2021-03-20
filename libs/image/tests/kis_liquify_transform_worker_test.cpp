@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_liquify_transform_worker_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 #include <KoProgressUpdater.h>
@@ -28,6 +28,8 @@ void KisLiquifyTransformWorkerTest::testPoints()
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
+
+    KisPaintDeviceSP srcDev = new KisPaintDevice(*dev);
 
     const int pixelPrecision = 8;
 
@@ -62,7 +64,7 @@ void KisLiquifyTransformWorkerTest::testPoints()
                             50, false, 0.2);
     }
 
-    worker.run(dev);
+    worker.run(srcDev, dev);
 
     QImage result = dev->convertToQImage(0);
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "unity");
@@ -80,6 +82,8 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
+    KisPaintDeviceSP srcDev = new KisPaintDevice(*dev);
+
     const int pixelPrecision = 8;
 
     KisLiquifyTransformWorker worker(dev->exactBounds(),
@@ -94,7 +98,7 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
     QRect rc = dev->exactBounds();
     dev->setX(50);
     dev->setY(50);
-    worker.run(dev);
+    worker.run(srcDev, dev);
     rc |= dev->exactBounds();
 
     QImage resultDev = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
@@ -130,16 +134,18 @@ void KisLiquifyTransformWorkerTest::testIdentityTransform()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(rc, KoColor(Qt::blue, cs));
 
+    KisPaintDeviceSP srcDev = new KisPaintDevice(*dev);
+
     const int pixelPrecision = 8;
 
     KisLiquifyTransformWorker worker(dev->exactBounds(),
                                      updater,
                                      pixelPrecision);
 
-    worker.run(dev);
+    worker.run(srcDev, dev);
 
     QImage result = dev->convertToQImage(0, rc);
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "identity");
 }
 
-QTEST_MAIN(KisLiquifyTransformWorkerTest)
+SIMPLE_TEST_MAIN(KisLiquifyTransformWorkerTest)

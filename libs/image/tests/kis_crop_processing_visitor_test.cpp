@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_crop_processing_visitor_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpaceRegistry.h>
 #include "processing/kis_crop_processing_visitor.h"
 #include "commands_new/kis_processing_command.h"
@@ -116,4 +116,4 @@ void KisCropProcessingVisitorTest::testWrappedInCommand()
     QCOMPARE(image1, image5);
 }
 
-QTEST_MAIN(KisCropProcessingVisitorTest)
+SIMPLE_TEST_MAIN(KisCropProcessingVisitorTest)

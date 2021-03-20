@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_DATAMANAGER_TEST_H
 #define KIS_DATAMANAGER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisDataManagerTest : public QObject
 {

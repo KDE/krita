@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 eoinoneill1991@gmail.com <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 eoinoneill 1991@gmail.com <eoinoneill1991@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

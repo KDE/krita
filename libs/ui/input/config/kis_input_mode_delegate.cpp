@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE project
- * Copyright (C) 2013 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2013 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */

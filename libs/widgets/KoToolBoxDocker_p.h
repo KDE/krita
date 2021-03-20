@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (c) 2005-2008 Thomas Zander <zander@kde.org>
- * Copyright (c) 2009 Peter Simonsson <peter.simonsson@gmail.com>
- * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2005-2008 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2009 Peter Simonsson <peter.simonsson@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

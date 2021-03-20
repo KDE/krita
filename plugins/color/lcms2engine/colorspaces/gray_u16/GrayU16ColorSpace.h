@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004-2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -11,9 +11,7 @@
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
 
-typedef KoColorSpaceTrait<quint16, 2, 1> GrayAU16Traits;
-
-class GrayAU16ColorSpace : public LcmsColorSpace<GrayAU16Traits>
+class GrayAU16ColorSpace : public LcmsColorSpace<KoGrayU16Traits>
 {
 public:
     GrayAU16ColorSpace(const QString &name, KoColorProfile *p);

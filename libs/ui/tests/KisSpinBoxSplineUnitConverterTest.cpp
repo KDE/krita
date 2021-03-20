@@ -1,10 +1,10 @@
 /*
- *  Copyright (c) 2019 Agata Cacko <cacko.azg@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azg@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include <testui.h>
 

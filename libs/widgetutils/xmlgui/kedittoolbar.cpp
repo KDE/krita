@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
-   Copyright (C) 2000 Kurt Granroth <granroth@kde.org>
-   Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
-   Copyright     2007 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 2000 Kurt Granroth <granroth@kde.org>
+   SPDX-FileCopyrightText: 2006 Hamish Rodda <rodda@kde.org>
+   SPDX-FileCopyrightText: 2007 David Faure <faure@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-only
 */

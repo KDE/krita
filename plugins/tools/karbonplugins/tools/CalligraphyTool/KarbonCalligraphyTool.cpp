@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Fela Winkelmolen <fela.kde@gmail.com>
+ * SPDX-FileCopyrightText: 2008 Fela Winkelmolen <fela.kde@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -329,9 +329,9 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPoin
     return angle;
 }
 
-void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KarbonCalligraphyTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     if (!m_widget) {
         createOptionWidgets();

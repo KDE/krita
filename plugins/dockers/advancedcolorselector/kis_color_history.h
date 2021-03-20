@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -26,6 +26,7 @@ protected:
 public Q_SLOTS:
     void addColorToHistory(const KoColor& color);
 
+    void clearColorHistory();
 private:
     QList<KoColor> m_colorHistory;
     KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...

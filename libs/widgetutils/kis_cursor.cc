@@ -1,9 +1,9 @@
 /*
  *  kis_cursor.cc - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2013 David Revoy <info@davidrevoy.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2013 David Revoy <info@davidrevoy.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -107,19 +107,19 @@ QCursor KisCursor::pointingHandCursor()
 }
 
 
-QCursor KisCursor::pickerCursor()
+QCursor KisCursor::samplerCursor()
 {
-    return pickerLayerForegroundCursor();
+    return samplerLayerForegroundCursor();
 }
 
-QCursor KisCursor::pickerPlusCursor()
+QCursor KisCursor::samplerPlusCursor()
 {
-    return KisCursorCache::instance()->pickerPlusCursor;
+    return KisCursorCache::instance()->samplerPlusCursor;
 }
 
-QCursor KisCursor::pickerMinusCursor()
+QCursor KisCursor::samplerMinusCursor()
 {
-    return KisCursorCache::instance()->pickerMinusCursor;
+    return KisCursorCache::instance()->samplerMinusCursor;
 }
 
 QCursor KisCursor::pickLayerCursor()
@@ -177,24 +177,24 @@ QCursor KisCursor::rotateCanvasDiscreteCursor()
     return load("rotate_discrete.xpm");
 }
 
-QCursor KisCursor::pickerImageForegroundCursor()
+QCursor KisCursor::samplerImageForegroundCursor()
 {
-    return load("color-picker_image_foreground.xpm", 8, 23);
+    return load("color-sampler_image_foreground.xpm", 8, 23);
 }
 
-QCursor KisCursor::pickerImageBackgroundCursor()
+QCursor KisCursor::samplerImageBackgroundCursor()
 {
-    return load("color-picker_image_background.xpm", 8, 23);
+    return load("color-sampler_image_background.xpm", 8, 23);
 }
 
-QCursor KisCursor::pickerLayerForegroundCursor()
+QCursor KisCursor::samplerLayerForegroundCursor()
 {
-    return load("color-picker_layer_foreground.xpm", 8, 23);
+    return load("color-sampler_layer_foreground.xpm", 8, 23);
 }
 
-QCursor KisCursor::pickerLayerBackgroundCursor()
+QCursor KisCursor::samplerLayerBackgroundCursor()
 {
-    return load("color-picker_layer_background.xpm", 8, 23);
+    return load("color-sampler_layer_background.xpm", 8, 23);
 }
 
 QCursor KisCursor::changeExposureCursor()

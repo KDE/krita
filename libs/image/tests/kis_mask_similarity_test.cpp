@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2018 Iván Santa María <ghevan@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Iván Santa María <ghevan@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_mask_similarity_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QPointF>
 
 #include <KoColor.h>
@@ -247,4 +247,4 @@ void KisMaskSimilarityTest::testSoftRectMask()
     KisMaskSimilarityTester::runMaskGenTest(generator,RECT_SOFT);
 }
 
-QTEST_MAIN(KisMaskSimilarityTest)
+SIMPLE_TEST_MAIN(KisMaskSimilarityTest)

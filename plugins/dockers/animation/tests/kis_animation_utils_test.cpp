@@ -12,7 +12,7 @@
 #include "kis_paint_layer.h"
 #include "kis_keyframe_channel.h"
 #include <testutil.h>
-#include "kis_animation_utils.h"
+#include "KisAnimUtils.h"
 
 #include <tuple>
 
@@ -118,7 +118,7 @@ void KisAnimationUtilsTest::test()
 
     QVERIFY(verifyFrames(p, nodes, initialReferenceRects));
 
-    using namespace KisAnimationUtils;
+    using namespace KisAnimUtils;
 
     FrameMovePairList frameMoves;
 
@@ -228,4 +228,4 @@ void KisAnimationUtilsTest::test()
 
 }
 
-QTEST_MAIN(KisAnimationUtilsTest)
+SIMPLE_TEST_MAIN(KisAnimationUtilsTest)

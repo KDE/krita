@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2008-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 #include <KoPathSegment.h>
 #include <KoPathPoint.h>
 #include <QPainterPath>
-#include <QTest>
+#include <simpletest.h>
 
 void TestPathSegment::segmentAssign()
 {
@@ -355,4 +355,4 @@ void TestPathSegment::paramAtLength()
     }
 }
 
-QTEST_MAIN(TestPathSegment)
+SIMPLE_TEST_MAIN(TestPathSegment)

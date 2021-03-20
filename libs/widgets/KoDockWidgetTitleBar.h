@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
+   SPDX-FileCopyrightText: 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -12,7 +12,7 @@
 /**
  * @short A custom title bar for dock widgets.
  *
- * Allow customization such as collapsible, or hidden text.
+ * Allow customization such as hidden text.
  * 
  * @see KoDockWidgetTitleBarButton
  */
@@ -34,16 +34,13 @@ public:
     void updateIcons();
 
 public Q_SLOTS:
-    void setCollapsed(bool collapsed);
     void setLocked(bool locked);
-    void setCollapsable(bool collapsable);
 
 protected:
     void paintEvent(QPaintEvent* event) override; ///< reimplemented from QWidget
     void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
-    Q_PRIVATE_SLOT(d, void toggleCollapsed())
     Q_PRIVATE_SLOT(d, void topLevelChanged(bool topLevel))
     Q_PRIVATE_SLOT(d, void featuresChanged(QDockWidget::DockWidgetFeatures))
 

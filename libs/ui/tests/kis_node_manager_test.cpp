@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_manager_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <kis_filter_configuration.h>
 
 #include <sdk/tests/testutil.h>

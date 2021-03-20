@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -13,6 +13,7 @@
 #include <kis_filter_configuration.h>
 #include <kis_filter_manager.h>
 #include <kis_filter_registry.h>
+#include <KisDocument.h>
 #include <KisPart.h>
 #include <KisView.h>
 

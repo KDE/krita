@@ -2,12 +2,12 @@ project(krita)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
-set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD 14 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 
@@ -61,6 +61,9 @@ if (APPLE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
     add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
+    if (CMAKE_OSX_ARCHITECTURES)
+        message(STATUS "CMake OSX architectures: ${CMAKE_OSX_ARCHITECTURES}")
+    endif()
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
@@ -410,6 +413,14 @@ set_package_properties(Qt5Quick PROPERTIES
         PURPOSE "Optionally used for the touch gui for Krita")
 
 macro_bool_to_01(Qt5Quick_FOUND HAVE_QT_QUICK)
+if (Qt5Quick_FOUND)
+    get_target_property(Qt5Quick_LIBRARY Qt5::Quick "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5Quick_LIBRARY})
+
+    get_target_property(Qt5Qml_LIBRARY Qt5::Qml "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5Qml_LIBRARY})
+endif()
+
 
 find_package(Qt5QuickWidgets ${MIN_QT_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
@@ -417,6 +428,11 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
+endif()
+
+if (Qt5QuickWidgets_FOUND)
+    get_target_property(Qt5QuickWidgets_LIBRARY Qt5::QuickWidgets "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5QuickWidgets_LIBRARY})
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
@@ -525,7 +541,11 @@ kde_enable_exceptions()
 set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)
 macro(macro_add_unittest_definitions)
   add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
-  add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+  if(WIN32)
+    add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+  else()
+    add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+  endif()
   add_definitions(-DFILES_DEFAULT_DATA_DIR="${KRITA_DEFAULT_TEST_DATA_DIR}")
   add_definitions(-DSYSTEM_RESOURCES_DATA_DIR="${CMAKE_SOURCE_DIR}/krita/data/")
 endmacro()
@@ -545,7 +565,7 @@ endif()
 if (ANDROID)
     # use default ABI
     if (NOT ANDROID_ABI)
-        set (ANDROID_ABI armeabi-v7a)
+        set (ANDROID_ABI arm64-v8a)
     endif()
     set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
@@ -568,7 +588,7 @@ if (ANDROID)
     set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib)
 endif()
 
-find_package(PNG REQUIRED)
+find_package(PNG REQUIRED "1.2.6")
 list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY})
 
 if (APPLE)
@@ -786,11 +806,21 @@ set_package_properties(LCMS2 PROPERTIES
     TYPE REQUIRED
     PURPOSE "Will be used for color management and is necessary for Krita")
 if(LCMS2_FOUND)
-    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+    if(NOT ${LCMS2_VERSION} VERSION_LESS 2.4 )
         set(HAVE_LCMS24 TRUE)
     endif()
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
+
+    include(CheckIncludeFileCXX)
+
+    set(CMAKE_REQUIRED_INCLUDES ${LCMS2_INCLUDE_DIRS})
+    set(CMAKE_REQUIRED_LIBRARIES ${LCMS2_LIBRARIES})
+
+    if(LCMS2_FAST_FLOAT_INCLUDE_DIR)
+        message(STATUS "Found LittleCMS's fast float plugin")
+        set(HAVE_LCMS_FAST_FLOAT_PLUGIN 1)
+    endif()
 endif()
 list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 
@@ -841,8 +871,6 @@ if(HAVE_VC)
     endmacro()
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
-
-add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 ##
 ## Test endianness

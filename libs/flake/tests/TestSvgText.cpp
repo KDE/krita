@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "TestSvgText.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "SvgParserTestingUtils.h"
 #include <text/KoSvgText.h>
@@ -1314,4 +1314,4 @@ void TestSvgText::testTextOutline()
 
 
 
-QTEST_MAIN(TestSvgText)
+SIMPLE_TEST_MAIN(TestSvgText)

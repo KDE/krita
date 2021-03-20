@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -150,9 +150,6 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_flattenLayer = actionManager->createAction("flatten_layer");
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
-    m_rasterizeLayer = actionManager->createAction("rasterize_layer");
-    connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
-
     m_groupLayersSave = actionManager->createAction("save_groups_as_images");
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
@@ -289,7 +286,7 @@ void KisLayerManager::layerProperties()
 
     }
     else if (fileLayer && !multipleLayersSelected){
-        QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
+        QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString fileNameOld = fileLayer->fileName();
         KisFileLayer::ScalingMethod scalingMethodOld = fileLayer->scalingMethod();
         KisDlgFileLayer dlg(basePath, fileLayer->name(), m_view->mainWindow());
@@ -328,7 +325,7 @@ void KisLayerManager::layerProperties()
         Qt::WindowFlags flags = dialog->windowFlags();
         dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
         dialog->show();
-
+        dialog->activateWindow();
     }
 }
 
@@ -361,6 +358,7 @@ void KisLayerManager::changeCloneSource()
     Qt::WindowFlags flags = dialog->windowFlags();
     dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
     dialog->show();
+    dialog->activateWindow();
 }
 
 void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
@@ -377,75 +375,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         return;
     }
 
-    KisPaintDeviceSP srcDevice =
-            source->paintDevice() ? source->projection() : source->original();
-
-    bool putBehind = false;
-
-    QString newCompositeOp =
-        source->projectionLeaf()->isLayer() ?
-            source->compositeOpId() : COMPOSITE_OVER;
-
-    KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(source.data());
-    if (colorizeMask) {
-        srcDevice = colorizeMask->coloringProjection();
-        putBehind = colorizeMask->compositeOpId() == COMPOSITE_BEHIND;
-        if (putBehind) {
-            newCompositeOp = COMPOSITE_OVER;
-        }
-    }
-
-    if (!srcDevice) return;
-
-    KisPaintDeviceSP clone;
-
-    if (*srcDevice->colorSpace() !=
-            *srcDevice->compositionSourceColorSpace()) {
-
-        clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
-        clone->setDefaultPixel(
-            srcDevice->defaultPixel().convertedTo(
-                srcDevice->compositionSourceColorSpace()));
-
-        QRect rc(srcDevice->extent());
-        KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);
-    } else {
-        clone = new KisPaintDevice(*srcDevice);
-    }
-
-    KisLayerSP layer = new KisPaintLayer(image,
-                                         source->name(),
-                                         source->opacity(),
-                                         clone);
-
-    if (srcDevice->framesInterface()) {
-        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-        layer->enableAnimation();
-        KisKeyframeChannel *sourceKeyChannel = srcDevice->keyframeChannel();
-
-        foreach (const int &index, sourceKeyChannel->allKeyframeTimes()) {
-            KisKeyframeChannel::copyKeyframe(sourceKeyChannel, index, cloneKeyChannel, index);
-        }
-    }
-
-    layer->setCompositeOpId(newCompositeOp);
-
-    KisNodeSP parent = source->parent();
-    KisNodeSP above = source->prevSibling();
-
-    while (parent && !parent->allowAsChild(layer)) {
-        above = above ? above->parent() : source->parent();
-        parent = above ? above->parent() : 0;
-    }
-
-    if (putBehind && above == source->parent()) {
-        above = above->prevSibling();
-    }
-
-    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
-    m_commandsAdapter->removeNode(source);
-    m_commandsAdapter->addNode(layer, parent, above);
-    m_commandsAdapter->endMacro();
+    KisLayerUtils::convertToPaintLayer(image, source);
 }
 
 void KisLayerManager::convertGroupToAnimated()
@@ -497,9 +427,9 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
     urlRequester->setMode(KoFileDialog::SaveFile);
     urlRequester->setMimeTypeFilters(listMimeFilter);
-    urlRequester->setFileName(m_view->document()->url().toLocalFile());
-    if (m_view->document()->url().isLocalFile()) {
-        QFileInfo location = QFileInfo(m_view->document()->url().toLocalFile()).completeBaseName();
+    urlRequester->setFileName(m_view->document()->path());
+    if (!m_view->document()->path().isEmpty()) {
+        QFileInfo location = QFileInfo(m_view->document()->path()).completeBaseName();
         location.setFile(location.dir(), location.completeBaseName() + "_" + source->name() + ".png");
         urlRequester->setFileName(location.absoluteFilePath());
     }
@@ -542,12 +472,12 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     dst->cropImage(bounds);
     dst->waitForDone();
 
-    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(path), mimeType.toLatin1());
+    bool r = doc->exportDocumentSync(path, mimeType.toLatin1());
     if (!r) {
 
         qWarning() << "Converting layer to file layer. path:"<< path << "gave errors" << doc->errorMessage();
     } else {
-        QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
+        QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString relativePath = QDir(basePath).relativeFilePath(path);
         KisFileLayer *fileLayer = new KisFileLayer(image, basePath, relativePath, KisFileLayer::None, source->name(), OPACITY_OPAQUE_U8);
         fileLayer->setX(bounds.x());
@@ -559,7 +489,7 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
         m_commandsAdapter->addNode(fileLayer, dstParent, dstAboveThis);
         m_commandsAdapter->endMacro();
     }
-    doc->closeUrl(false);
+    doc->closePath(false);
 }
 
 void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above)
@@ -663,7 +593,7 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
     KisSelectionSP selection = m_view->selection();
 
     KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Add Layer"));
 
 
@@ -716,7 +646,7 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     KisSelectionSP selection = m_view->selection();
     QColor currentForeground = m_view->canvasResourceProvider()->fgColor().toQColor();
 
-    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal, kundo2_i18n("Add Layer"));
+    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, KisImageSignalVector(), kundo2_i18n("Add Layer"));
 
     KisGeneratorLayerSP node = addGeneratorLayer(activeNode, QString(), nullptr, selection, &applicator);
 
@@ -826,7 +756,7 @@ void KisLayerManager::mergeLayer()
     if (!hasEditableLayer) {
         m_view->showFloatingMessage(
                     i18ncp("floating message in layer manager",
-                          "Layer is locked ", "Layers are locked", selectedNodes.size()),
+                          "Layer is locked", "Layers are locked", selectedNodes.size()),
                     QIcon(), 2000, KisFloatingMessage::Low);
         return;
     }
@@ -846,8 +776,8 @@ void KisLayerManager::mergeLayer()
         if (!prevLayer) return;
         if (prevLayer->userLocked()) {
             m_view->showFloatingMessage(
-                        i18nc("floating message in layer manager",
-                              "Layer is locked "),
+                        i18nc("floating message in layer manager when previous layer is locked",
+                              "Layer is locked"),
                         QIcon(), 2000, KisFloatingMessage::Low);
         }
 
@@ -879,35 +809,6 @@ void KisLayerManager::flattenLayer()
     m_view->updateGUI();
 }
 
-void KisLayerManager::rasterizeLayer()
-{
-    KisImageSP image = m_view->image();
-    if (!image) return;
-
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    if (!m_view->blockUntilOperationsFinished(image)) return;
-    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
-
-    KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
-    KisPainter gc(paintLayer->paintDevice());
-    QRect rc = layer->projection()->exactBounds();
-    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
-
-    m_commandsAdapter->beginMacro(kundo2_i18n("Rasterize Layer"));
-    m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
-
-    int childCount = layer->childCount();
-    for (int i = 0; i < childCount; i++) {
-        m_commandsAdapter->moveNode(layer->firstChild(), paintLayer, paintLayer->lastChild());
-    }
-    m_commandsAdapter->removeNode(layer);
-    m_commandsAdapter->endMacro();
-    updateGUI();
-}
-
-
 void KisLayerManager::layersUpdated()
 {
     KisLayerSP layer = activeLayer();
@@ -927,11 +828,9 @@ void KisLayerManager::saveGroupLayers()
 
     KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
     urlRequester->setMode(KoFileDialog::SaveFile);
-    if (m_view->document()->url().isLocalFile()) {
-        urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
-    }
+    urlRequester->setStartDir(QFileInfo(m_view->document()->path()).absolutePath());
     urlRequester->setMimeTypeFilters(listMimeFilter);
-    urlRequester->setFileName(m_view->document()->url().toLocalFile());
+    urlRequester->setFileName(m_view->document()->path());
     layout->addWidget(urlRequester);
 
     QCheckBox *chkInvisible = new QCheckBox(i18n("Convert Invisible Groups"), page);
@@ -972,10 +871,8 @@ bool KisLayerManager::activeLayerHasSelection()
 KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
 {
     QString basePath;
-    QUrl url = m_view->document()->url();
-    if (url.isLocalFile()) {
-        basePath = QFileInfo(url.toLocalFile()).absolutePath();
-    }
+    QString path = m_view->document()->path();
+    basePath = QFileInfo(path).absolutePath();
     KisImageWSP image = m_view->image();
 
     KisDlgFileLayer dlg(basePath, image->nextLayerName(i18n("File Layer")), m_view->mainWindow());

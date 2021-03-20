@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -235,6 +235,8 @@ public:
     void addNewStyle(KisPSDLayerStyleSP style);
     void loadCollection(const QString &fileName);
 
+    void refillCollections();
+
 private Q_SLOTS:
 
     void slotResourceModelReset();
@@ -244,8 +246,6 @@ private Q_SLOTS:
 Q_SIGNALS:
     void styleSelected(KisPSDLayerStyleSP style);
 
-private:
-    void refillCollections();
 
 
 

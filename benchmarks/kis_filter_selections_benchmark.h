@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Dmitry  Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_FILTER_SELECTIONS_BENCHMARK_H
 #define KIS_FILTER_SELECTIONS_BENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 #include "kis_selection.h"
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"

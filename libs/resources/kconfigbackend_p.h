@@ -1,7 +1,7 @@
 /*
    This file is part of the KDE libraries
-   Copyright (c) 2006, 2007 Thomas Braxton <kde.braxton@gmail.com>
-   Copyright (c) 1999 Preston Brown <pbrown@kde.org>
+   SPDX-FileCopyrightText: 2006, 2007 Thomas Braxton <kde.braxton@gmail.com>
+   SPDX-FileCopyrightText: 1999 Preston Brown <pbrown@kde.org>
    Portions copyright (c) 1997 Matthias Kalle Dalheimer <kalle@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later

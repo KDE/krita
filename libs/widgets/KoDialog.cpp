@@ -1,8 +1,8 @@
 /*  This file is part of the KDE Libraries
- *  Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
- *  Additions 1999-2000 by Espen Sand (espen@kde.org)
- *                      by Holger Freyther <freyther@kde.org>
- *            2005-2009 by Olivier Goffart (ogoffart at kde.org)
+ *  SPDX-FileCopyrightText: 1998 Thomas Tanghus (tanghus@earthling.net)
+ *  SPDX-FileCopyrightText: 1999-2000 Espen Sand (espen@kde.org)
+ *  SPDX-FileCopyrightText: 1999-2000 Holger Freyther <freyther@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2009 Olivier Goffart (ogoffart at kde.org)
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -202,7 +202,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
 
     KisProcessingApplicator applicator(view->image(), node,
                                        KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
@@ -573,7 +573,6 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, const StrokeSele
         KUndo2Command *cmd = view->canvasBase()->shapeController()->addShapeDirect(shape, 0);
         KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
     }
-    image->setModified();
 }
 
 void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, const StrokeSelectionOptions& params)
@@ -611,6 +610,5 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, const Strok
         helper.setFGColorOverride(color);
         helper.setSelectionOverride(0);
         helper.paintPainterPath(outline);
-        image->setModified();
     }
 }

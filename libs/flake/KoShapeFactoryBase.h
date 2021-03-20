@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2006 Boudewijn Rempt (boud@valdyas.org)
+ * SPDX-FileCopyrightText: 2006-2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -78,8 +78,7 @@ public:
 
     /**
      * Create the new factory
-     * @param id a string that will be used internally for referencing the shape, for
-     *   example for use by the KoToolBase::activateTemporary.
+     * @param id a string that will be used internally for referencing the shape
      * @param name the user visible name of the shape this factory creates.
      */
     KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString());

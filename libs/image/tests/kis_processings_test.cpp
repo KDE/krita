@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_processings_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"

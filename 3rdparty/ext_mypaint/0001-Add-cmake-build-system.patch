@@ -78,7 +78,7 @@ index 0000000..d93309d
 +
 +
 +add_library(mypaint SHARED ${mypaint_SOURCES} ${mypaint_HEADERS})
-+target_link_libraries(mypaint ${JSONC_LIBRARIES})
++target_link_libraries(mypaint PRIVATE ${JSONC_LIBRARIES})
 +set_property(TARGET mypaint PROPERTY C_STANDARD 11)
 +install(TARGETS mypaint RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib) 
 +install(FILES ${mypaint_HEADERS} DESTINATION include)

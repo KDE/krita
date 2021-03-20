@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -45,13 +45,13 @@ bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        if (mouseEvent->button() == Qt::RightButton) {
+        if (mouseEvent->button() == Qt::RightButton && hasUserInteractionRunning()) {
             localTool()->removeLastPoint();
             return true;
         }
     } else if (event->type() == QEvent::TabletPress) {
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
-        if (tabletEvent->button() == Qt::RightButton) {
+        if (tabletEvent->button() == Qt::RightButton && hasUserInteractionRunning()) {
             localTool()->removeLastPoint();
             return true;
         }
@@ -98,6 +98,13 @@ void KisDelegatedSelectPathWrapper::mousePressEvent(KoPointerEvent *event)
 void KisDelegatedSelectPathWrapper::mouseMoveEvent(KoPointerEvent *event)
 {
     DelegatedSelectPathTool::mouseMoveEvent(event);
+
+    // WARNING: the code is duplicated from KisToolPaint::requestUpdateOutline
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();
+    if (decoration && decoration->visible() && decoration->hasPaintableAssistants()) {
+        kiscanvas->updateCanvas();
+    }
 }
 
 void KisDelegatedSelectPathWrapper::mouseReleaseEvent(KoPointerEvent *event)

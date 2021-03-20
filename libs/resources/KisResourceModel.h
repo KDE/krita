@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -67,6 +67,13 @@ public:
     virtual QModelIndex indexForResource(KoResourceSP resource) const = 0;
 
     /**
+     * @brief indexFromResource
+     * @param resourceId resource id for which we want to get an index
+     * @return
+     */
+    virtual QModelIndex indexForResourceId(int resourceId) const = 0;
+
+    /**
      * @brief setResourceInactive deactivates the specified resource
      * @param index
      * @return
@@ -96,6 +103,13 @@ public:
      * @return
      */
     virtual bool updateResource(KoResourceSP resource) = 0;
+
+    /**
+     * @brief reloadResource
+     * @param resource
+     * @return
+     */
+    virtual bool reloadResource(KoResourceSP resource) = 0;
 
     /**
      * @brief renameResource name the given resource. The resource will have its
@@ -130,6 +144,7 @@ class KRITARESOURCES_EXPORT KisAllResourcesModel : public QAbstractTableModel, p
 private:
     friend class KisResourceModelProvider;
     friend class KisResourceModel;
+    friend class KisResourceQueryMapper;
     KisAllResourcesModel(const QString &resourceType, QObject *parent = 0);
 
 public:
@@ -149,10 +164,12 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
+    bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
@@ -230,10 +247,12 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
+    bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2015 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -84,7 +84,7 @@ public:
             widget->show();
             if (widget != currentWidgetList.last()) {
                 housekeeperLayout->addWidget(s = new QFrame(), cnt++, 0);
-                s->setFrameShape(QFrame::HLine);
+                s->setFrameStyle(QFrame::HLine | QFrame::Sunken);
                 currentAuxWidgets.insert(s);
             }
         }

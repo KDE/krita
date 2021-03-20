@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -17,7 +17,7 @@ KisColorfulBrush::KisColorfulBrush(const QString &filename)
 QImage KisColorfulBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
-    if (hasColor() && brushApplication() != IMAGESTAMP) {
+    if (isImageType() && brushApplication() != IMAGESTAMP) {
         if (m_adjustmentMidPoint != 127 ||
             !qFuzzyIsNull(m_brightnessAdjustment) ||
             !qFuzzyIsNull(m_contrastAdjustment)) {
@@ -99,7 +99,7 @@ void KisColorfulBrush::setContrastAdjustment(qreal value)
     }
 }
 
-bool KisColorfulBrush::hasColor() const
+bool KisColorfulBrush::isImageType() const
 {
     return brushType() == IMAGE || brushType() == PIPE_IMAGE;
 }
@@ -130,4 +130,14 @@ void KisColorfulBrush::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("BrightnessAdjustment", QString::number(m_brightnessAdjustment));
     e.setAttribute("ContrastAdjustment", QString::number(m_contrastAdjustment));
     KisBrush::toXML(d, e);
+}
+
+void KisColorfulBrush::setHasColorAndTransparency(bool value)
+{
+    m_hasColorAndTransparency = value;
+}
+
+bool KisColorfulBrush::hasColorAndTransparency() const
+{
+    return m_hasColorAndTransparency;
 }

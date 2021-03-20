@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 #include <kundo2command.h>
 
 #include "kis_benchmark_values.h"
@@ -76,4 +76,4 @@ void KisGradientBenchmark::cleanupTestCase()
 
 }
 
-QTEST_MAIN(KisGradientBenchmark)
+SIMPLE_TEST_MAIN(KisGradientBenchmark)

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

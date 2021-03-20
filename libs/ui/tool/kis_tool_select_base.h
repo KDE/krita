@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2015 Michael Abrahams <miabraha@gmail.com>
+ * SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -111,9 +111,9 @@ public:
         }
     }
 
-    void activate(KoToolBase::ToolActivation activation, const QSet<KoShape*> &shapes)
+    void activate(const QSet<KoShape*> &shapes)
     {
-        BaseClass::activate(activation, shapes);
+        BaseClass::activate(shapes);
 
         m_modeConnections.addUniqueConnection(
             this->action("selection_tool_mode_replace"), SIGNAL(triggered()),

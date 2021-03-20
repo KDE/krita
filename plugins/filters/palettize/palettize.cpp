@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2019 Carl Olsson <carl.olsson@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Carl Olsson <carl.olsson@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -109,7 +109,7 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     offsetScaleSpinBox->setPrefix(QString("%1  ").arg(i18n("Offset Scale:")));
     offsetScaleSpinBox->setRange(0.0, 1.0, 3);
     offsetScaleSpinBox->setSingleStep(0.125);
-    QObject::connect(offsetScaleSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(offsetScaleSpinBox, QOverload<qreal>::of(&KisDoubleSliderSpinBox::valueChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
 
     QObject::connect(alphaGroupBox, &QGroupBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
 
@@ -118,11 +118,11 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     alphaClipSpinBox->setPrefix(QString("%1  ").arg(i18n("Clip:")));
     alphaClipSpinBox->setRange(0.0, 1.0, 3);
     alphaClipSpinBox->setSingleStep(0.125);
-    QObject::connect(alphaClipSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(alphaClipSpinBox, QOverload<qreal>::of(&KisDoubleSliderSpinBox::valueChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
 
     alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18nc("Index as in Index Color", "Index:")));
     alphaIndexSpinBox->setRange(0, 255);
-    QObject::connect(alphaIndexSpinBox, &KisSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(alphaIndexSpinBox, QOverload<int>::of(&KisSliderSpinBox::valueChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
     QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, [this](){
         const KoColorSetSP palette = m_paletteWidget->currentResource().staticCast<KoColorSet>();
         alphaIndexSpinBox->setMaximum(palette ? int(palette->colorCount() - 1) : 0);

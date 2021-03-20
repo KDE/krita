@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_CHUNK_ALLOCATOR_TEST_H
 #define KIS_CHUNK_ALLOCATOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 
 class KisChunkAllocatorTest : public QObject

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -56,6 +56,9 @@ public:
     QString comment() const;
     void setComment(const QString &comment);
 
+    QString resourceType() const;
+    void setResourceType(const QString &resourceType);
+
     QStringList defaultResources() const;
     void setDefaultResources(const QStringList &defaultResources);
 
@@ -80,6 +83,7 @@ private:
     static const QByteArray s_type;
     static const QByteArray s_tag;
     static const QByteArray s_name;
+    static const QByteArray s_resourceType;
     static const QByteArray s_url;
     static const QByteArray s_comment;
     static const QByteArray s_defaultResources;

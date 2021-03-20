@@ -1,9 +1,9 @@
 /*
  *  kis_tool_transform.h - part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -40,6 +40,8 @@
 #include "kis_tool_transform_config_widget.h"
 #include "transform_transaction_properties.h"
 #include "kis_signal_auto_connection.h"
+
+#include "strokes/inplace_transform_stroke_strategy.h"
 
 class QTouchEvent;
 class KisTransformStrategyBase;
@@ -156,6 +158,8 @@ public:
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
+    void newActivationWithExternalSource(KisPaintDeviceSP externalSource) override;
+
     TransformToolMode transformMode() const;
 
     double translateX() const;
@@ -176,10 +180,12 @@ public:
     int warpPointDensity() const;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();
+
+    void requestImageRecalculation();
 
     void setTransformMode( KisToolTransform::TransformToolMode newMode );
 
@@ -202,6 +208,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
+    void slotGlobalConfigChanged();
 
 Q_SIGNALS:
     void transformModeChanged();
@@ -247,17 +254,24 @@ private:
 private:
     ToolTransformArgs m_currentArgs;
 
-    bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
+    // Set by newActivationWithExternalSource before starting a new stroke.
+    // The source pixels for the next transform will be read from this device.
+    KisPaintDeviceSP m_externalSourceForNextActivation;
+
+    bool m_actuallyMoveWhileSelected {false}; // true <=> selection has been moved while clicked
 
     KisPaintDeviceSP m_selectedPortionCache;
     KisStrokeId m_strokeId;
-    void *m_strokeStrategyCookie = 0;
+    void *m_strokeStrategyCookie {0};
+    bool m_currentlyUsingOverlayPreviewStyle {false};
+    bool m_preferOverlayPreviewStyle {false};
+    bool m_forceLodMode {false};
 
-    bool m_workRecursively;
+    bool m_workRecursively {false};
 
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
 
-    KisToolTransformConfigWidget *m_optionsWidget;
+    KisToolTransformConfigWidget *m_optionsWidget {0};
     QPointer<KisCanvas2> m_canvas;
 
     TransformTransactionProperties m_transaction;
@@ -266,20 +280,20 @@ private:
 
 
     /// actions for the context click menu
-    KisAction* warpAction;
-    KisAction* meshAction;
-    KisAction* liquifyAction;
-    KisAction* cageAction;
-    KisAction* freeTransformAction;
-    KisAction* perspectiveAction;
-    KisAction* applyTransformation;
-    KisAction* resetTransformation;
+    KisAction* warpAction {0};
+    KisAction* meshAction {0};
+    KisAction* liquifyAction {0};
+    KisAction* cageAction {0};
+    KisAction* freeTransformAction {0};
+    KisAction* perspectiveAction {0};
+    KisAction* applyTransformation {0};
+    KisAction* resetTransformation {0};
 
     // a few extra context click options if free transform is active
-    KisAction* mirrorHorizontalAction;
-    KisAction* mirrorVericalAction;
-    KisAction* rotateNinteyCWAction;
-    KisAction* rotateNinteyCCWAction;
+    KisAction* mirrorHorizontalAction {0};
+    KisAction* mirrorVericalAction {0};
+    KisAction* rotateNinteyCWAction {0};
+    KisAction* rotateNinteyCCWAction {0};
 
 
 
@@ -300,6 +314,8 @@ private:
     KisTransformStrategyBase* currentStrategy() const;
 
     QPainterPath m_cursorOutline;
+
+    KisAsyncronousStrokeUpdateHelper m_asyncUpdateHelper;
 
 private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);

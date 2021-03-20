@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -80,11 +80,24 @@ public:
         return m_name;
     }
 
+    virtual KoResourceSP create(const QString &name) = 0;
+
+    bool load(KoResourceSP resource, QIODevice &dev, KisResourcesInterfaceSP resourcesInterface)
+    {
+        Q_ASSERT(dev.isOpen() && dev.isReadable());
+        return resource->loadFromDevice(&dev, resourcesInterface);
+    }
+
     /**
      * Load this resource.
      * @return a resource if loading the resource succeeded, 0 otherwise
      */
-    virtual KoResourceSP load(const QString &name, QIODevice &dev, KisResourcesInterfaceSP resourcesInterface) { Q_UNUSED(name); Q_UNUSED(dev); Q_UNUSED(resourcesInterface); return 0; }
+    KoResourceSP load(const QString &name, QIODevice &dev, KisResourcesInterfaceSP resourcesInterface)
+    {
+        KoResourceSP resource = create(name);
+        return load(resource, dev, resourcesInterface) ? resource : 0;
+    }
+
 
 private:
     QString m_resourceSubType;
@@ -102,14 +115,10 @@ public:
     {
     }
 
-    KoResourceSP load(const QString &name, QIODevice &dev, KisResourcesInterfaceSP resourcesInterface) override
+    virtual KoResourceSP create(const QString &name) override
     {
         QSharedPointer<T> resource = QSharedPointer<T>::create(name);
-        Q_ASSERT(dev.isOpen() && dev.isReadable());
-        if (resource->loadFromDevice(&dev, resourcesInterface)) {
-            return resource;
-        }
-        return 0;
+        return resource;
     }
 };
 

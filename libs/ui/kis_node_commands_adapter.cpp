@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -35,7 +35,7 @@ void KisNodeCommandsAdapter::applyOneCommandAsync(KUndo2Command *cmd, KisProcess
     } else {
         QScopedPointer<KisProcessingApplicator> localApplicator(
             new KisProcessingApplicator(m_view->image(), 0, KisProcessingApplicator::NONE,
-                                        KisImageSignalVector() << ModifiedSignal,
+                                        KisImageSignalVector(),
                                         cmd->text(),
                                         0, cmd->id()));
         localApplicator->applyCommand(cmd);

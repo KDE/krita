@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_stroke_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_stroke.h"
 #include "scheduler_utils.h"
@@ -178,4 +178,4 @@ void KisStrokeTest::testCancelStrokeCase6()
     stroke.clearQueueOnCancel();
 }
 
-QTEST_MAIN(KisStrokeTest)
+SIMPLE_TEST_MAIN(KisStrokeTest)

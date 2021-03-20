@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2012 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2006-2012 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2006, 2007 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -48,7 +48,7 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void deleteSelection() override;
     KoToolSelection* selection() override;
@@ -133,7 +133,6 @@ private:
     QAction *m_actionMergePoints;
     QAction *m_actionConvertToPath;
     QCursor m_moveCursor;
-    bool m_activatedTemporarily;
     QScopedPointer<QMenu> m_contextMenu;
     KisSignalAutoConnectionsStore m_canvasConnections;
     KoShapeFillResourceConnector m_shapeFillResourceConnector;

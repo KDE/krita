@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -425,11 +425,12 @@ QWidget* KisToolMultihand::createOptionWidget()
     slotSetTransformMode(customUI->multihandTypeCombobox->currentIndex());
 
 
-    customUI->axisRotationSpinbox->setSuffix(QChar(Qt::Key_degree));   // origin rotation
-    customUI->axisRotationSpinbox->setSingleStep(1.0);
-    customUI->axisRotationSpinbox->setRange(0.0, 90.0, 1);
-    customUI->axisRotationSpinbox->setValue(m_configGroup.readEntry("axesAngle", 0.0));
-    connect( customUI->axisRotationSpinbox, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
+    customUI->axisRotationAngleSelector->setRange(0.0, 90.0);
+    customUI->axisRotationAngleSelector->setDecimals(1);
+    customUI->axisRotationAngleSelector->setWrapping(false);
+    customUI->axisRotationAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
+    customUI->axisRotationAngleSelector->setAngle(m_configGroup.readEntry("axesAngle", 0.0));
+    connect( customUI->axisRotationAngleSelector, SIGNAL(angleChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
 
 
     // symmetry mode options

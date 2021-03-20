@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2004,2007,2009 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004, 2007, 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -29,6 +29,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
 #include "kis_aspect_ratio_locker.h"
+#include <KisAngleSelector.h>
 
 
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
@@ -83,11 +84,8 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputRandomness->setBlockUpdateSignalOnDrag(true);
     connect(inputRandomness, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
-    inputAngle->setRange(0, 360);
-    inputAngle->setSuffix(QChar(Qt::Key_degree));
-    inputAngle->setValue(0);
-    inputAngle->setBlockUpdateSignalOnDrag(true);
-    connect(inputAngle, SIGNAL(valueChanged(int)), m_updateCompressor.data(), SLOT(start()));
+    inputAngle->setDecimals(0);
+    connect(inputAngle, SIGNAL(angleChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), m_updateCompressor.data(), SLOT(start()));
 
@@ -176,7 +174,7 @@ void KisAutoBrushWidget::paramChanged()
     }
     Q_CHECK_PTR(kas);
 
-    m_autoBrush = KisBrushSP(new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0));
+    m_autoBrush = KisBrushSP(new KisAutoBrush(kas, inputAngle->angle() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0));
     m_autoBrush->setSpacing(spacingWidget->spacing());
     m_autoBrush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush = m_autoBrush->image();
@@ -249,7 +247,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
     inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
-    inputAngle->setValue(aBrush->angle() * 180 / M_PI);
+    inputAngle->setAngle(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
     spacingWidget->setSpacing(aBrush->autoSpacingActive(),
                               aBrush->autoSpacingActive() ?

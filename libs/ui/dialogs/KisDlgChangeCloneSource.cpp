@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Tusooa Zhu <tusooa@vista.aero>
+ *  SPDX-FileCopyrightText: 2019 Tusooa Zhu <tusooa@vista.aero>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -24,7 +24,7 @@ struct KisDlgChangeCloneSource::Private
         , image(view->image())
         , applicator(new KisProcessingApplicator(image, 0,
                                                  KisProcessingApplicator::NONE,
-                                                 /* emitSignals = */ KisImageSignalVector() << ModifiedSignal,
+                                                 /* emitSignals = */ KisImageSignalVector(),
                                                  kundo2_i18n("Change Clone Layers")))
         , modified(false) {}
 

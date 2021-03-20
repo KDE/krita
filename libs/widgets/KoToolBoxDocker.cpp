@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2005-2009 Thomas Zander <zander@kde.org>
- * Copyright (c) 2009 Peter Simonsson <peter.simonsson@gmail.com>
- * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2005-2009 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2009 Peter Simonsson <peter.simonsson@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -21,25 +21,17 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     , m_toolBox(toolBox)
     , m_scrollArea(new KoToolBoxScrollArea(toolBox, this))
 {
-    setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     setWidget(m_scrollArea);
 
-    QLabel *w = new QLabel(" ", this);
-    w->setFrameShape(QFrame::StyledPanel);
-    w->setFrameShadow(QFrame::Raised);
-    w->setFrameStyle(QFrame::Panel | QFrame::Raised);
-    w->setMinimumWidth(16);
-    w->setFixedHeight(QFontMetrics(KoDockRegistry::dockFont()).height());
-    setTitleBarWidget(w);
+    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
+    titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
+    titleBar->setToolTip(i18n("Tools"));
+    setTitleBarWidget(titleBar);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
     connect(this, SIGNAL(topLevelChanged(bool)),
             this, SLOT(updateFloating(bool)));
-    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
-    titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
-    titleBar->setToolTip(i18n("Tools"));
-    setTitleBarWidget(titleBar);
 }
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)

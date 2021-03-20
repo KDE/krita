@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -250,6 +250,15 @@ public Q_SLOTS:
     void selectLockedNodes();
     void selectInvisibleNodes();
     void selectUnlockedNodes();
+
+private Q_SLOTS:
+
+    friend class KisNodeActivationActionCreatorVisitor;
+    /**
+     * @brief slotUiActivateNode inspects the sender to see which node needs to be activated.
+     */
+    void slotUiActivateNode();
+
 
 public:
     void removeSingleNode(KisNodeSP node);

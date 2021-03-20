@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2012  Dan Leinir Turthra Jensen <admin@leinir.dk>
+    SPDX-FileCopyrightText: 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,27 +29,28 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     boolGrow->setChecked(m_cropTool->allowGrow());
     boolCenter->setChecked(m_cropTool->growCenter());
 
-    lockRatioButton->setChecked(m_cropTool->forceRatio());
-    lockRatioButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+    lockRatioButton->setChecked(m_cropTool->lockRatio());
+    lockHeightButton->setChecked(m_cropTool->lockHeight());
+    lockWidthButton->setChecked(m_cropTool->lockWidth());
 
-    lockHeightButton->setChecked(m_cropTool->forceHeight());
-    lockHeightButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
-    lockWidthButton->setChecked(m_cropTool->forceWidth());
-    lockWidthButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
-
+    QIcon lockedIcon = KisIconUtils::loadIcon("locked");
+    QIcon unlockedIcon = KisIconUtils::loadIcon("unlocked");
+    lockWidthButton->setIcon(lockWidthButton->isChecked() ? lockedIcon : unlockedIcon);
+    lockHeightButton->setIcon(lockHeightButton->isChecked() ? lockedIcon : unlockedIcon);
+    lockRatioButton->setIcon(lockRatioButton->isChecked() ? lockedIcon : unlockedIcon);
 
     KisAcyclicSignalConnector *connector;
     connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(lockRatioButton, SIGNAL(toggled(bool)), this, SIGNAL(forceRatioChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceRatioChanged(bool)), lockRatioButton, SLOT(setChecked(bool)));
+    connector->connectForwardBool(lockRatioButton, SIGNAL(toggled(bool)), this, SIGNAL(lockRatioChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(lockRatioChanged(bool)), lockRatioButton, SLOT(setChecked(bool)));
 
     connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(lockHeightButton, SIGNAL(toggled(bool)), this, SIGNAL(forceHeightChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceHeightChanged(bool)), lockHeightButton, SLOT(setChecked(bool)));
+    connector->connectForwardBool(lockHeightButton, SIGNAL(toggled(bool)), this, SIGNAL(lockHeightChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(lockHeightChanged(bool)), lockHeightButton, SLOT(setChecked(bool)));
 
     connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(lockWidthButton, SIGNAL(toggled(bool)), this, SIGNAL(forceWidthChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceWidthChanged(bool)), lockWidthButton, SLOT(setChecked(bool)));
+    connector->connectForwardBool(lockWidthButton, SIGNAL(toggled(bool)), this, SIGNAL(lockWidthChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(lockWidthChanged(bool)), lockWidthButton, SLOT(setChecked(bool)));
 
     connector = new KisAcyclicSignalConnector(this);
     connector->connectForwardDouble(doubleRatio, SIGNAL(valueChanged(double)), this, SIGNAL(ratioChanged(double)));
@@ -90,9 +91,29 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     connector = new KisAcyclicSignalConnector(this);
     //connector->connectForwardDouble();
     connector->connectBackwardVoid(cropTool, SIGNAL(cropTypeSelectableChanged()), this, SLOT(cropTypeSelectableChanged()));
+
+    connect(lockWidthButton, SIGNAL(toggled(bool)), this, SLOT(updateLockWidthIcon()));
+    connect(lockHeightButton, SIGNAL(toggled(bool)), this, SLOT(updateLockHeightIcon()));
+    connect(lockRatioButton, SIGNAL(toggled(bool)), this, SLOT(updateLockRatioIcon()));
+
 }
 
 void KisToolCropConfigWidget::cropTypeSelectableChanged()
 {
     cmbType->setEnabled(m_cropTool->cropTypeSelectable());
+}
+
+void KisToolCropConfigWidget::updateLockRatioIcon()
+{
+    lockRatioButton->setIcon(lockRatioButton->isChecked() ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
+}
+
+void KisToolCropConfigWidget::updateLockWidthIcon()
+{
+    lockWidthButton->setIcon(lockWidthButton->isChecked() ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
+}
+
+void KisToolCropConfigWidget::updateLockHeightIcon()
+{
+    lockHeightButton->setIcon(lockHeightButton->isChecked() ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
 }

@@ -1,11 +1,11 @@
 SET(PREFIX_ext_python "${EXTPREFIX}" )
 if (UNIX)
     if (APPLE)
-        set(PYTHON_VERSION "3.8")
+        set(PYTHON_VERSION "3.9")
         ExternalProject_Add( ext_python
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz
-            URL_MD5 b3fb85fd479c0bf950c626ef80cacb57
+            URL https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tar.xz
+            URL_MD5 61981498e75ac8f00adcb908281fadb6
             
             PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/osx_fixappinstall.diff
 

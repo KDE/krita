@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  SPDX-FileCopyrightText: 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -11,7 +11,7 @@
 #include "kis_int_parse_spin_box.h"
 
 #include <QString>
-#include <QtTest>
+#include <simpletest.h>
 
 const QStringList KisParseSpinBoxesTest::doubleExprs = {"1",
                                                         "-12",
@@ -350,4 +350,4 @@ void KisParseSpinBoxesTest::testIntParseWithPrefix()
 
 }
 
-QTEST_MAIN(KisParseSpinBoxesTest)
+SIMPLE_TEST_MAIN(KisParseSpinBoxesTest)

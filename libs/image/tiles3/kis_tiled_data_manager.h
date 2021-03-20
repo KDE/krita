@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *            (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -194,7 +194,7 @@ public:
 
 protected:
     /**
-     * Reads and writes the tiles 
+     * Reads and writes the tiles
      */
     bool write(KisPaintDeviceWriter &store);
     bool read(QIODevice *stream);

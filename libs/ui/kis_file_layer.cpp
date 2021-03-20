@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2013 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -68,7 +68,6 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 {
     m_basePath = rhs.m_basePath;
     m_filename = rhs.m_filename;
-    KIS_SAFE_ASSERT_RECOVER_NOOP(QFile::exists(path()));
 
     m_scalingMethod = rhs.m_scalingMethod;
 
@@ -157,12 +156,12 @@ void KisFileLayer::openFile() const
 {
     bool fileAlreadyOpen = false;
     Q_FOREACH (KisDocument *doc, KisPart::instance()->documents()) {
-        if (doc->url().toLocalFile()==path()){
+        if (doc->path()==path()){
             fileAlreadyOpen = true;
         }
     }
     if (!fileAlreadyOpen) {
-        KisPart::instance()->openExistingFile(QUrl::fromLocalFile(QFileInfo(path()).absoluteFilePath()));
+        KisPart::instance()->openExistingFile(QFileInfo(path()).absoluteFilePath());
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -87,16 +87,10 @@ public:
 
     ~TransformStrokeStrategy() override;
 
-    static bool shouldRestartStrokeOnModeChange(ToolTransformArgs::TransformMode oldMode,
-                                                ToolTransformArgs::TransformMode newMode,
-                                                KisNodeList processedNodes);
-
     void initStrokeCallback() override;
     void finishStrokeCallback() override;
     void cancelStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;
-
-    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes);
 
 Q_SIGNALS:
     void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
@@ -108,16 +102,7 @@ protected:
 private:
     KoUpdaterPtr fetchUpdater(KisNodeSP node);
 
-    void transformAndMergeDevice(const ToolTransformArgs &config,
-                                 KisPaintDeviceSP src,
-                                 KisPaintDeviceSP dst,
-                                 KisProcessingVisitor::ProgressHelper *helper);
-    void transformDevice(const ToolTransformArgs &config,
-                         KisPaintDeviceSP device,
-                         KisProcessingVisitor::ProgressHelper *helper);
-
     void clearSelection(KisPaintDeviceSP device);
-    //void transformDevice(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisProcessingVisitor::ProgressHelper *helper);
 
     bool checkBelongsToSelection(KisPaintDeviceSP device) const;
 
@@ -126,16 +111,6 @@ private:
     bool haveDeviceInCache(KisPaintDeviceSP src);
     void putDeviceCache(KisPaintDeviceSP src, KisPaintDeviceSP cache);
     KisPaintDeviceSP getDeviceCache(KisPaintDeviceSP src);
-
-    QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
-    ToolTransformArgs resetArgsForMode(ToolTransformArgs::TransformMode mode,
-                                       const QString &filterId,
-                                       const TransformTransactionProperties &transaction);
-    bool tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args);
-    bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args,
-                                        ToolTransformArgs::TransformMode mode,
-                                        KisNodeSP currentNode,
-                                        KisNodeList selectedNodes, QVector<KisStrokeJobData *> *undoJobs);
 
     void finishStrokeImpl(bool applyTransform,
                           const ToolTransformArgs &args);

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
+ * SPDX-FileCopyrightText: 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 
 #include <KoXmlVector.h>
 
-#include <QTest>
+#include <simpletest.h>
 #include <QDebug>
 
 

@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_algebra_2d_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_algebra_2d.h"
 #include "kis_debug.h"
@@ -315,4 +315,102 @@ void KisAlgebra2DTest::testNullRectProcessing()
     QCOMPARE(QPolygonF(lineRect).boundingRect(), lineRect);
 }
 
-QTEST_MAIN(KisAlgebra2DTest)
+void KisAlgebra2DTest::testLineIntersections()
+{
+    using KisAlgebra2D::intersectLines;
+
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(50,50), QPointF(100,50)),
+                               QLineF(QPointF(75,0), QPointF(75,1)));
+        QVERIFY(p);
+        QCOMPARE(*p, QPointF(75, 50));
+    }
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(50,50), QPointF(100,50)),
+                               QLineF(QPointF(75,0), QPointF(76,1)));
+        QVERIFY(!p);
+    }
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(50,50), QPointF(100,50)),
+                               QLineF(QPointF(50,51), QPointF(100,51)));
+        QVERIFY(!p);
+    }
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(51,50), QPointF(51,100)),
+                               QLineF(QPointF(50,50), QPointF(50,100)));
+        QVERIFY(!p);
+    }
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(50,50), QPointF(51,51)),
+                               QLineF(QPointF(51,50), QPointF(52,51)));
+        QVERIFY(!p);
+    }
+}
+
+void KisAlgebra2DTest::testFindTrianglePoint()
+{
+    using KisAlgebra2D::findTrianglePoint;
+    using KisAlgebra2D::findTrianglePointNearest;
+
+    findTrianglePoint(QPointF(100, 900), QPointF(900, 100), 810, 800);
+
+    findTrianglePoint(QPointF(), QPointF(10, 0), 5, 5);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 4, 6);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 4, 4);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 4, 6 + 1e-3);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 4, 6 - 1e-3);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 6, 6);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 7, 6);
+
+    findTrianglePoint(QPointF(), QPointF(0, 10), 5, 5);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 4, 6);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 4, 4);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 4, 6 + 1e-3);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 4, 6 - 1e-3);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 6, 6);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 7, 6);
+}
+
+void KisAlgebra2DTest::testTriangularMotion()
+{
+    using KisAlgebra2D::moveElasticPoint;
+
+    moveElasticPoint(QPointF(0,10),
+                     QPointF(0,0), QPointF(0, 0.1),
+                     QPointF(-5, 10), QPointF(5, 11));
+}
+
+void KisAlgebra2DTest::testElasticMotion()
+{
+    using KisAlgebra2D::norm;
+    using KisAlgebra2D::dotProduct;
+    using KisAlgebra2D::crossProduct;
+
+    const QPointF oldBasePos(70,70);
+    QPointF oldResultPoint(100,100);
+    const QPointF offset(-2,4);
+
+    QVector<QPointF> anchorPoints;
+    anchorPoints << QPointF(0,0);
+    anchorPoints << QPointF(100,0);
+    anchorPoints << QPointF(0,100);
+    anchorPoints << QPointF(50,0);
+    anchorPoints << QPointF(0,50);
+
+    const QPointF newBasePos = oldBasePos + offset;
+    QPointF newResultPoint = KisAlgebra2D::moveElasticPoint(oldResultPoint, oldBasePos, newBasePos, anchorPoints);
+
+    ENTER_FUNCTION() << ppVar(newResultPoint);
+}
+
+SIMPLE_TEST_MAIN(KisAlgebra2DTest)

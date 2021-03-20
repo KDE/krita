@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
-   Copyright (C) 2007 Aurélien Gâteau <agateau@kde.org>
-   Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
-   Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
+   SPDX-FileCopyrightText: 2007 Aurélien Gâteau <agateau@kde.org>
+   SPDX-FileCopyrightText: 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+   SPDX-FileCopyrightText: 2012 Jarosław Staniek <staniek@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-only
 */
@@ -118,7 +118,7 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     painter.setOpacity(1.0);
 
     // Separator
-    //! @todo make specific fixes for styles such as Plastique, Cleanlooks if there's practical no alternative
+    //! @todo make specific fixes for styles such as Cleanlooks if there's practical no alternative
     const int y1 = opt.rect.top() + 1;
     const int y2 = opt.rect.bottom() - 1;
     painter.setOpacity(0.4);

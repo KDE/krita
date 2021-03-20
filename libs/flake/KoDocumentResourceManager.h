@@ -1,7 +1,7 @@
 /*
-   Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
-   Copyright (C) 2007, 2009, 2010 Thomas Zander <zander@kde.org>
-   Copyright (c) 2008 Carlos Licea <carlos.licea@kdemail.net>
+   SPDX-FileCopyrightText: 2006 Boudewijn Rempt (boud@valdyas.org)
+   SPDX-FileCopyrightText: 2007, 2009, 2010 Thomas Zander <zander@kde.org>
+   SPDX-FileCopyrightText: 2008 Carlos Licea <carlos.licea@kdemail.net>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
  */

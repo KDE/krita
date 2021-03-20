@@ -21,6 +21,7 @@
         <file>dark_sketchbrush.svg</file>
         <file>dark_spraybrush.svg</file>
         <file>dark_tangentnormal.svg</file>
+        <file>dark_mypaintbrush.svg</file>
         <file alias="light_hairybrush.svg">light_bristlebrush.svg</file>
         <file alias="light_duplicate.svg">light_clonebrush.svg</file>
         <file>light_colorsmudge.svg</file>
@@ -37,6 +38,6 @@
         <file>light_sketchbrush.svg</file>
         <file>light_spraybrush.svg</file>
         <file>light_tangentnormal.svg</file>
-        <file>mypaintbrush.png</file>
+        <file>light_mypaintbrush.svg</file>
     </qresource>
 </RCC>

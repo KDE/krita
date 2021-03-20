@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -28,7 +28,7 @@ public:
     void resetCursorStyle() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void slotSetFuzziness(int);
 
 protected:

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -11,7 +11,7 @@
 #include "KoPathPointData.h"
 #include "KoPathSegment.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestPathShape::close()
 {
@@ -769,4 +769,4 @@ void TestPathShape::closeMerge()
     QVERIFY(path.outline() == ppath);
 }
 
-QTEST_MAIN(TestPathShape)
+SIMPLE_TEST_MAIN(TestPathShape)

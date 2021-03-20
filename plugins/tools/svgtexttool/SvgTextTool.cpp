@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright 2017 Boudewijn Rempt <boud@valdyas.org>
+   SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -63,9 +63,9 @@ SvgTextTool::~SvgTextTool()
     }
 }
 
-void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
+void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
     useCursor(Qt::ArrowCursor);
 
     if (shapes.size() == 1) {

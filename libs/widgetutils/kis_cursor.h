@@ -1,8 +1,8 @@
 /*
  *  kis_cursor.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -44,10 +44,10 @@ public:
     static QCursor zoomDiscreteCursor();
     static QCursor rotateCanvasSmoothCursor();
     static QCursor rotateCanvasDiscreteCursor();
-    static QCursor pickerImageForegroundCursor();
-    static QCursor pickerImageBackgroundCursor();
-    static QCursor pickerLayerForegroundCursor();
-    static QCursor pickerLayerBackgroundCursor();
+    static QCursor samplerImageForegroundCursor();
+    static QCursor samplerImageBackgroundCursor();
+    static QCursor samplerLayerForegroundCursor();
+    static QCursor samplerLayerBackgroundCursor();
     static QCursor changeExposureCursor();
     static QCursor changeGammaCursor();
     static QCursor triangleLeftHandedCursor();
@@ -61,9 +61,9 @@ public:
     static QCursor airbrushCursor();      // airbrush tool cursor
     static QCursor eraserCursor();        // eraser tool cursor
     static QCursor fillerCursor();        // filler tool cursor
-    static QCursor pickerCursor();        // color picker cursor
-    static QCursor pickerPlusCursor();    // color picker cursor
-    static QCursor pickerMinusCursor();   // color picker cursor
+    static QCursor samplerCursor();        // color sampler cursor
+    static QCursor samplerPlusCursor();    // color sampler cursor
+    static QCursor samplerMinusCursor();   // color sampler cursor
     static QCursor pickLayerCursor();     // pick layer cursor
     static QCursor colorChangerCursor();  // color changer tool cursor
     static QCursor selectCursor();        // select cursor

@@ -1,8 +1,8 @@
 /*  
-    Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
-    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-    Copyright (C) 2006-2007 C. Boemann <cbo@boemann.dk>
-    Copyright (C) 2014 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2004 Ariya Hidayat <ariya@kde.org>
+    SPDX-FileCopyrightText: 2006 Peter Simonsson <peter.simonsson@gmail.com>
+    SPDX-FileCopyrightText: 2006-2007 C. Boemann <cbo@boemann.dk>
+    SPDX-FileCopyrightText: 2014 Sven Langkamp <sven.langkamp@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.0-only
 */
@@ -13,14 +13,18 @@
 #include <QWidget>
 #include "KoZoomAction.h"
 #include <QScopedPointer>
+#include <kritawidgets_export.h>
 
-class KoZoomWidget : public QWidget
+class KRITAWIDGETS_EXPORT KoZoomWidget : public QWidget
 {
     Q_OBJECT
 
 public:
     KoZoomWidget(QWidget* parent, int maxZoom);
     ~KoZoomWidget() override;
+
+    bool isZoomInputFlat() const;
+    void setZoomInputFlat(bool flat);
 
 Q_SIGNALS:
    /**

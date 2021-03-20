@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (c) 2007, 2012 C. Boemann <cbo@boemann.dk>
-   Copyright (c) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
+   SPDX-FileCopyrightText: 2007, 2012 C. Boemann <cbo@boemann.dk>
+   SPDX-FileCopyrightText: 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -90,7 +90,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->paletteChooser = new KisPaletteChooser(this);
     d->paletteChooserButton = new KisPopupButton(this);
     d->paletteChooserButton->setPopupWidget(d->paletteChooser);
-    d->paletteChooserButton->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
+    d->paletteChooserButton->setIcon(KisIconUtils::loadIcon("palette-library"));
     d->paletteChooserButton->setToolTip(i18n("Choose palette"));
 
     d->colorNameCmb = new KisPaletteComboBox(this);

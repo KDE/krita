@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-* Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+* SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
 *
 * SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -11,7 +11,7 @@
 #include "KoShapeStrokeCommand.h"
 #include <KoInsets.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapeStrokeCommand::refCounting()
 {
@@ -52,4 +52,4 @@ void TestShapeStrokeCommand::refCounting()
     delete shape1;
 }
 
-QTEST_MAIN(TestShapeStrokeCommand)
+SIMPLE_TEST_MAIN(TestShapeStrokeCommand)

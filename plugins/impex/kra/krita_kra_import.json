@@ -3,11 +3,11 @@
     "Id": "Krita Native Import Filter",
     "NoDisplay": "true",
     "Type": "Service",
-    "X-KDE-Import": "application/x-krita",
+    "X-KDE-Import": "application/x-krita,application/x-krita-archive",
     "X-KDE-Library": "kritakraimport",
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"
     ],
     "X-KDE-Weight": "1",
-    "X-KDE-Extensions" : "kra"
+    "X-KDE-Extensions" : "kra, krz"
 }

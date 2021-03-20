@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -148,7 +148,7 @@ void KisBrushHud::updateIcons()
             w->slotThemeChanged(qApp->palette());
         }
     }
-    m_d->btnReloadPreset->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    m_d->btnReloadPreset->setIcon(KisIconUtils::loadIcon("reload-preset-16"));
     m_d->btnConfigure->setIcon(KisIconUtils::loadIcon("applications-system"));
 }
 

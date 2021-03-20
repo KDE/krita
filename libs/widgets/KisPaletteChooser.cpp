@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Michael Zhou <simeirxh@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -34,11 +34,11 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
 
     m_d->actAdd.reset(new QAction(KisIconUtils::loadIcon("list-add"),
                                   i18n("Add a new palette")));
-    m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("list-remove"),
+    m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("edit-delete"),
                                      i18n("Remove current palette")));
-    m_d->actImport.reset(new QAction(KisIconUtils::loadIcon("document-import"),
+    m_d->actImport.reset(new QAction(KisIconUtils::loadIcon("document-import-16"),
                                      i18n("Import a new palette from file")));
-    m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export"),
+    m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export-16"),
                                      i18n("Export current palette to file")));
     m_ui->setupUi(this);
     m_ui->bnAdd->setDefaultAction(m_d->actAdd.data());
@@ -47,9 +47,13 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     m_ui->bnExport->setDefaultAction(m_d->actExport.data());
 
     m_ui->bnAdd->setEnabled(false);
+    m_ui->bnAdd->setAutoRaise(true);
     m_ui->bnRemove->setEnabled(false);
+    m_ui->bnRemove->setAutoRaise(true);
     m_ui->bnImport->setEnabled(false);
+    m_ui->bnImport->setAutoRaise(true);
     m_ui->bnExport->setEnabled(false);
+    m_ui->bnExport->setAutoRaise(true);
 
     connect(m_d->actAdd.data(), SIGNAL(triggered()), SLOT(slotAdd()));
     connect(m_d->actRemove.data(), SIGNAL(triggered()), SLOT(slotRemove()));

@@ -7,9 +7,9 @@
 #  OCIO_FOUND, If false, do not try to use OCIO.
 
 
-# Copyright (c) 2008, Adrian Page, <adrian@pagenet.plus.com>
-# Copyright (c) 2009, Cyrille Berger, <cberger@cberger.net>
-# Copyright (c) 2012, Boudewijn Rempt, <boud@valdyas.org>
+# SPDX-FileCopyrightText: 2008 Adrian Page <adrian@pagenet.plus.com>
+# SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
+# SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

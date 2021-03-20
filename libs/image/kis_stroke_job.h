@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -52,7 +52,8 @@ public:
     }
 
     int levelOfDetail() const {
-        return m_levelOfDetail;
+        return m_dabData && m_dabData->levelOfDetailOverride() >= 0 ?
+            m_dabData->levelOfDetailOverride() : m_levelOfDetail;
     }
 
     bool isCancellable() const {

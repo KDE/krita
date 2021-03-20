@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Dmitry  Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 
 #include "kis_painter.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include "kis_transaction.h"
 #include <KoCompositeOpRegistry.h>
@@ -278,4 +278,4 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
         dbgKrita << "bitBlt with sel:\t\t\t" << avTime;
 }
 
-QTEST_MAIN(KisFilterSelectionsBenchmark)
+SIMPLE_TEST_MAIN(KisFilterSelectionsBenchmark)

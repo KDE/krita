@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Peter Schatz <voronwe13@gmail.com>, (C) 2020
+ * SPDX-FileCopyrightText: 2020 Peter Schatz <voronwe13@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

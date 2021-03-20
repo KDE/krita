@@ -1,8 +1,8 @@
 /*
  *  preferencesdlg.h - part of KImageShop^WKrita
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *  Copyright (c) 2003-2011 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -83,6 +83,7 @@ public:
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
     bool autopinLayersToTimeline();
+    bool adaptivePlaybackRange();
 
 private Q_SLOTS:
     void getBackgroundImage();
@@ -157,6 +158,7 @@ private Q_SLOTS:
     void refillMonitorProfiles(const KoID & s);
     void installProfile();
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
+    void toggleUseDefaultColorSpace(bool useDefColorSpace);
 
 public:
     void setDefault();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Dmitry Ivanov
+ * SPDX-FileCopyrightText: 2015 Dmitry Ivanov
  *
  * SPDX-License-Identifier: MIT
  */

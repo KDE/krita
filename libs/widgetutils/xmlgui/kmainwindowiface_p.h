@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Ian Reinhart Geiser <geiseri@yahoo.com>
-   Copyright (C) 2006 Thiago Macieira <thiago@kde.org>
+   SPDX-FileCopyrightText: 2001 Ian Reinhart Geiser <geiseri@yahoo.com>
+   SPDX-FileCopyrightText: 2006 Thiago Macieira <thiago@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

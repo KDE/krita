@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

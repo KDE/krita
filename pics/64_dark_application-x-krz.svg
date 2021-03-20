@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   height="64"
+   width="64"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 64 64">
+  <metadata
+     id="metadata84">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4">
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="3"
+       x2="32"
+       y1="61"
+       x1="32"
+       id="linearGradient4306"
+       xlink:href="#linearGradient4300-8" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="17"
+       x2="40"
+       y1="31"
+       x1="54"
+       id="linearGradient4427"
+       xlink:href="#linearGradient4410"
+       gradientTransform="matrix(1,0,0,-1,-14,78)" />
+    <linearGradient
+       id="linearGradient4410">
+      <stop
+         id="stop4412"
+         offset="0"
+         style="stop-color:#383e51;stop-opacity:1" />
+      <stop
+         id="stop4414"
+         offset="1"
+         style="stop-color:#655c6f;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="47"
+       x2="47"
+       y1="61"
+       x1="47"
+       id="linearGradient4357"
+       xlink:href="#linearGradient4351-6" />
+    <linearGradient
+       id="linearGradient4351-6">
+      <stop
+         id="stop4353-7"
+         offset="0"
+         style="stop-color:#ffd6af;stop-opacity:1" />
+      <stop
+         id="stop4355-5"
+         offset="1"
+         style="stop-color:#fffcf9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4300-8">
+      <stop
+         id="stop4302-2"
+         offset="0"
+         style="stop-color:#f62459;stop-opacity:1" />
+      <stop
+         id="stop4304-9"
+         offset="1"
+         style="stop-color:#f73768;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <path
+     id="rect3500"
+     d="M 10 3 L 10 61 L 40 61 L 54 47 L 54 17 L 54 3 L 40 3 L 10 3 z "
+     style="fill:url(#linearGradient4306);fill-opacity:1.0;stroke:none" />
+  <rect
+     y="60"
+     x="10"
+     height="1"
+     width="30"
+     id="rect4169"
+     style="opacity:1;fill:#2e3132;fill-opacity:0.29411765;stroke:none" />
+  <rect
+     y="3"
+     x="10"
+     height="1"
+     width="44"
+     id="rect4236"
+     style="opacity:1;fill:#ffffff;fill-opacity:0.40983605;stroke:none" />
+  <path
+     id="path4314"
+     d="M 54,47 40,61 40,47 Z"
+     style="fill:url(#linearGradient4357);fill-opacity:1.0;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     style="opacity:0.2;fill:url(#linearGradient4427);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 26,61 40,47 40,61 Z"
+     id="path4320" />
+  <path
+     style="fill:#fffcf9;fill-opacity:1"
+     id="path88"
+     d="m 42.330745,14.010268 a 2.7502436,12.3761 44.989453 0 0 -10.236495,7.011056 2.7502436,12.3761 44.989453 0 0 -4.871212,5.657209 c 1.479458,0.471276 2.632592,1.624712 3.103746,3.104558 a 2.7502436,12.3761 44.989453 0 0 5.655325,-4.872818 2.7502436,12.3761 44.989453 0 0 6.804647,-10.696605 2.7502436,12.3761 44.989453 0 0 -0.456524,-0.204134 M 26.499845,28.664955 C 21,30.139299 25.124884,33.621612 21,36 c 5.499845,0 8.249767,-2.752476 8.249767,-4.588071 0,-0.915047 0.0935,-2.59844 -2.749922,-2.750642" />
+  <path
+     style="opacity:1;vector-effect:none;fill:#fffcf9;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1"
+     d="M 14,8 V 42 H 50 V 8 Z m 2,2 H 48 V 40 H 16 Z"
+     id="rect854" />
+</svg>

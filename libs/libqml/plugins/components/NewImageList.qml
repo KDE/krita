@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 import QtQuick 2.3
@@ -142,7 +142,7 @@ ListView {
 //     model: ListModel {
 //         ListElement { bnrole: "custom"; name: "Custom Image"; image: "filenew-black" }
 //         ListElement { bnrole: "clip";   name: "From Clipboard"; image: "fileclip-black" }
-// 
+//
 //         ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "A4portrait-black" }
 //         ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "A4landscape-black" }
 //         ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "filenew-black" }

@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_juggler_compressed_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_node_juggler_compressed.h"
 
 #include <KoColor.h>
@@ -174,4 +174,4 @@ void KisNodeJugglerCompressedTest::testMoveLayers()
     testDuplicateImpl(true, true);
 }
 
-QTEST_MAIN(KisNodeJugglerCompressedTest)
+SIMPLE_TEST_MAIN(KisNodeJugglerCompressedTest)

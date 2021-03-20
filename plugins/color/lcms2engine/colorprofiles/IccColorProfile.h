@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -81,6 +81,7 @@ public:
     QByteArray rawData() const override;
     bool valid() const override;
     float version() const override;
+    QString colorModelID() const override;
     bool isSuitableForOutput() const override;
     bool isSuitableForPrinting() const override;
     bool isSuitableForDisplay() const override;

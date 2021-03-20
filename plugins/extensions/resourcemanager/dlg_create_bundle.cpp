@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
- *  Copyright (c) 2020 Agata Cacko cacko.azh@gmail.com
+ *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
+ *  SPDX-FileCopyrightText: 2020 Agata Cacko cacko.azh @gmail.com
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -30,6 +30,8 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <dlg_embed_tags.h>
 #include <KisGlobalResourcesInterface.h>
+
+#include <wdgtagselection.h>
 
 #include <kis_config.h>
 

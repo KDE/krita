@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
-   Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
-   Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
-   Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
-   Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
-   Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
+   SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+   SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+   SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+   SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+   SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+   SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -33,6 +33,7 @@
 #include <KoFileDialog.h>
 #include <KisKineticScroller.h>
 #include <KisMimeDatabase.h>
+#include "KisPopupButton.h"
 
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
@@ -65,7 +66,7 @@ public:
     KisResourceTaggingManager *tagManager {0};
     KisResourceItemListView *view {0};
     QButtonGroup *buttonGroup {0};
-    QToolButton *viewModeButton {0};
+    KisPopupButton *viewModeButton {0};
     KisStorageChooserWidget *storagePopupButton {0};
 
     QScrollArea *previewScroller {0};
@@ -73,8 +74,8 @@ public:
     QSplitter *splitter {0};
     QGridLayout *buttonLayout {0};
 
-    QPushButton *importButton {0};
-    QPushButton *deleteButton {0};
+    QToolButton *importButton {0};
+    QToolButton *deleteButton {0};
 
     bool usePreview {false};
     bool tiledPreview {false};
@@ -86,6 +87,7 @@ public:
 
     QList<QAbstractButton*> customButtons;
 
+    KoResourceSP currentResource;
 };
 
 KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
@@ -108,6 +110,10 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
     d->view->setModel(d->tagFilterProxyModel);
+    d->tagFilterProxyModel->sort(Qt::DisplayRole);
+
+    connect(d->tagFilterProxyModel, SIGNAL(beforeFilterChanges()), this, SLOT(beforeFilterChanges()));
+    connect(d->tagFilterProxyModel, SIGNAL(afterFilterChanged()), this, SLOT(afterFilterChanged()));
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
@@ -148,16 +154,17 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->buttonLayout = new QGridLayout();
 
-    d->importButton = new QPushButton(this);
-
+    d->importButton = new QToolButton(this);
     d->importButton->setToolTip(i18nc("@info:tooltip", "Import resource"));
+    d->importButton->setAutoRaise(true);
     d->importButton->setEnabled(true);
     d->buttonGroup->addButton(d->importButton, Button_Import);
     d->buttonLayout->addWidget(d->importButton, 0, 0);
 
-    d->deleteButton = new QPushButton(this);
+    d->deleteButton = new QToolButton(this);
     d->deleteButton->setToolTip(i18nc("@info:tooltip", "Delete resource"));
     d->deleteButton->setEnabled(false);
+    d->deleteButton->setAutoRaise(true);
     d->buttonGroup->addButton(d->deleteButton, Button_Remove);
     d->buttonLayout->addWidget(d->deleteButton, 0, 1);
 
@@ -169,12 +176,15 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->buttonLayout->setSpacing(0);
     d->buttonLayout->setMargin(0);
 
-    d->viewModeButton = new QToolButton(this);
-    d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
+    d->viewModeButton = new KisPopupButton(this);
     d->viewModeButton->setVisible(false);
+    d->viewModeButton->setArrowVisible(false);
     d->tagManager = new KisResourceTaggingManager(resourceType, d->tagFilterProxyModel, this);
 
     d->storagePopupButton = new KisStorageChooserWidget(this);
+    d->storagePopupButton->setToolTip(i18n("Storage Resources"));
+    d->storagePopupButton->setFlat(true);
+    d->storagePopupButton->setArrowVisible(false);
 
     layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
     layout->addWidget(d->viewModeButton, 0, 1);
@@ -432,7 +442,9 @@ KisResourceItemListView *KisResourceItemChooser::itemView() const
 
 void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
 {
+    KoResourceSP current = currentResource();
     d->tagManager->contextMenuRequested(currentResource(), pos);
+    this->setCurrentResource(current);
 }
 
 void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)
@@ -445,7 +457,7 @@ void KisResourceItemChooser::setViewModeButtonVisible(bool visible)
     d->viewModeButton->setVisible(visible);
 }
 
-QToolButton *KisResourceItemChooser::viewModeButton() const
+KisPopupButton *KisResourceItemChooser::viewModeButton() const
 {
     return d->viewModeButton;
 }
@@ -469,6 +481,19 @@ void KisResourceItemChooser::baseLengthChanged(int length)
 {
     if (d->synced) {
         d->view->setItemSize(QSize(length, length));
+    }
+}
+
+void KisResourceItemChooser::beforeFilterChanges()
+{
+    d->currentResource = d->tagFilterProxyModel->resourceForIndex(d->view->currentIndex());
+}
+
+void KisResourceItemChooser::afterFilterChanged()
+{
+    QModelIndex idx = d->tagFilterProxyModel->indexForResource(d->currentResource);
+    if (idx.isValid()) {
+        d->view->setCurrentIndex(idx);
     }
 }
 
@@ -509,8 +534,9 @@ void KisResourceItemChooser::updateView()
     }
 
     /// helps to set icons here in case the theme is changed
-    d->viewModeButton->setIcon(koIcon("view-choose"));
-    d->importButton->setIcon(koIcon("document-open"));
-    d->deleteButton->setIcon(koIcon("trash-empty"));
+    d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+    d->importButton->setIcon(koIcon("document-import-16"));
+    d->deleteButton->setIcon(koIcon("edit-delete"));
     d->storagePopupButton->setIcon(koIcon("bundle_archive"));
+    d->tagManager->tagChooserWidget()->updateIcons();
 }

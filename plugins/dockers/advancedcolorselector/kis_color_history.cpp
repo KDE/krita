@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -65,5 +65,10 @@ void KisColorHistory::addColorToHistory(const KoColor& color)
         m_colorHistory.removeLast();
     }
 
+    setColors(m_colorHistory);
+}
+
+void KisColorHistory::clearColorHistory() {
+    m_colorHistory.clear();
     setColors(m_colorHistory);
 }

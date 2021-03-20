@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -59,10 +59,7 @@ QVariant KisResourceTypeModel::data(const QModelIndex &index, int role) const
     if (pos) {
         QString id = d->query.value("id").toString();
         QString resourceType = d->query.value("name").toString();
-        QString name = resourceType;
-        QVector<KisResourceLoaderBase *> loaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceType);
-        Q_ASSERT(loaders.size() > 0);
-        name = loaders.first()->name();
+        QString name = i18n(resourceType.toLatin1().data());
 
         switch(role) {
         case Qt::DisplayRole:

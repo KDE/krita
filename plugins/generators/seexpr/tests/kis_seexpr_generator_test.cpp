@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -11,7 +11,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-#include <QTest>
+#include <simpletest.h>
 #include <generator/kis_generator_registry.h>
 #include <kis_fill_painter.h>
 #include <kis_filter_configuration.h>

@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (c) Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ * SPDX-FileCopyrightText: Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -25,6 +25,10 @@ public:
     static inline KoID id() {
         return KoID("oilpaint", i18n("Oilpaint"));
     }
+
+
+    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
+    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
 
     KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 public:

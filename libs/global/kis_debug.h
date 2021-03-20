@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -140,6 +140,8 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41017();
  * Show a nicely formatted backtrace.
  */
 KRITAGLOBAL_EXPORT QString kisBacktrace();
+
+KRITAGLOBAL_EXPORT void printBacktrace();
 
 /**
  * Please pretty print my variable

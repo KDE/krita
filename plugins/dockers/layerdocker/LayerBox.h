@@ -1,10 +1,10 @@
 /*
  *  LayerBox.h - part of Krita aka Krayon aka KimageShop
  *
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2007-2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -83,10 +83,10 @@ private Q_SLOTS:
     // From the node manager to the layerbox
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);
+    void slotUpdateOpacitySlider(quint8 value);
     void updateUI();
     void setCurrentNode(KisNodeSP node);
     void slotModelReset();
-
 
     // from the layerbox to the node manager
     void slotRmClicked();
@@ -123,9 +123,6 @@ private Q_SLOTS:
 
     void slotUpdateThumbnailIconSize();
 
-
-    // Opacity keyframing
-    void slotKeyframeChannelAdded(KisKeyframeChannel *channel);
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
 
@@ -135,7 +132,6 @@ Q_SIGNALS:
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
-    void watchOpacityChannel(KisKeyframeChannel *newChannel);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:
@@ -167,7 +163,6 @@ private:
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
-    QPointer<KisKeyframeChannel> m_opacityChannel;
     bool m_blockOpacityUpdate {false};
     KisSignalAutoConnectionsStore m_activeNodeConnections;
 };

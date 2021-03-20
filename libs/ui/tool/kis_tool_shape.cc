@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2005 Adrian Page <adrian@pagenet.plus.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -56,9 +56,9 @@ KisToolShape::~KisToolShape()
     }
 }
 
-void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolShape::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(toolActivation, shapes);
+    KisToolPaint::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -75,9 +75,8 @@ QWidget * KisToolShape::createOptionWidget()
 
     m_shapeOptionsWidget->cmbOutline->setCurrentIndex(KisPainter::StrokeStyleBrush);
 
-    m_shapeOptionsWidget->sldRotation->setSuffix(QChar(Qt::Key_degree));
-    m_shapeOptionsWidget->sldRotation->setRange(0.0, 360.0, 2);
-    m_shapeOptionsWidget->sldRotation->setSingleStep(1.0);
+    m_shapeOptionsWidget->angleSelectorRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    m_shapeOptionsWidget->angleSelectorRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
     m_shapeOptionsWidget->sldScale->setSuffix("%");
     m_shapeOptionsWidget->sldScale->setRange(0.0, 500.0, 2);
@@ -86,13 +85,13 @@ QWidget * KisToolShape::createOptionWidget()
     //connect two combo box event. Inherited classes can call the slots to make appropriate changes
     connect(m_shapeOptionsWidget->cmbOutline, SIGNAL(currentIndexChanged(int)), this, SLOT(outlineSettingChanged(int)));
     connect(m_shapeOptionsWidget->cmbFill, SIGNAL(currentIndexChanged(int)), this, SLOT(fillSettingChanged(int)));
-    connect(m_shapeOptionsWidget->sldRotation, SIGNAL(valueChanged(qreal)), this, SLOT(patternRotationSettingChanged(qreal)));
+    connect(m_shapeOptionsWidget->angleSelectorRotation, SIGNAL(angleChanged(qreal)), this, SLOT(patternRotationSettingChanged(qreal)));
     connect(m_shapeOptionsWidget->sldScale, SIGNAL(valueChanged(qreal)), this, SLOT(patternScaleSettingChanged(qreal)));
 
     m_shapeOptionsWidget->cmbOutline->setCurrentIndex(m_configGroup.readEntry("outlineType", 0));
     m_shapeOptionsWidget->cmbFill->setCurrentIndex(m_configGroup.readEntry("fillType", 0));
     m_shapeOptionsWidget->sldScale->setValue(m_configGroup.readEntry("patternTransformScale", 100));
-    m_shapeOptionsWidget->sldRotation->setValue(m_configGroup.readEntry("patternTransformRotation", 0));
+    m_shapeOptionsWidget->angleSelectorRotation->setAngle(m_configGroup.readEntry("patternTransformRotation", 0));
 
     //if both settings are empty, force the outline to brush so the tool will work when first activated
     if (  m_shapeOptionsWidget->cmbFill->currentIndex() == 0 &&
@@ -152,7 +151,7 @@ QTransform KisToolShape::fillTransform()
     QTransform transform;
 
     if (m_shapeOptionsWidget) {
-        transform.rotate(m_shapeOptionsWidget->sldRotation->value());
+        transform.rotate(m_shapeOptionsWidget->angleSelectorRotation->angle());
         qreal scale = m_shapeOptionsWidget->sldScale->value()*0.01;
         transform.scale(scale, scale);
     }

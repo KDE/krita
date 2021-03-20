@@ -153,7 +153,7 @@
       </widget>
      </item>
      <item column="0" row="0">
-      <widget class="QLabel" name="pickerLabel">
+      <widget class="QLabel" name="samplerLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -161,7 +161,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Color Picker:</string>
+        <string>Color Sampler:</string>
        </property>
       </widget>
      </item>

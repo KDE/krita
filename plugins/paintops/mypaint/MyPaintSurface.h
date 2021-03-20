@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,6 +16,7 @@
 #include <KoColor.h>
 #include <kis_marker_painter.h>
 #include <kis_sequential_iterator.h>
+#include <KisPrecisePaintDeviceWrapper.h>
 
 #include <libmypaint/mypaint-brush.h>
 #include <libmypaint/mypaint-surface.h>
@@ -79,6 +80,11 @@ private:
     KisPaintDeviceSP m_imageDevice;
     MyPaintSurfaceInternal *m_surface;
     KisImageSP m_image;
+    KisPrecisePaintDeviceWrapper m_precisePainterWrapper;
+    KisPaintDeviceSP m_dab;
+    QScopedPointer<KisPainter> m_tempPainter;
+    QScopedPointer<KisPainter> m_backgroundPainter;
+
 };
 
 #endif // KIS_MYPAINT_SURFACE_H

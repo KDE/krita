@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright 2017 Boudewijn Rempt <boud@valdyas.org>
+   SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -21,7 +21,6 @@ SvgTextToolFactory::SvgTextToolFactory()
     setSection(mainToolType());
     setPriority(1);
     setActivationShapeId(QString("flake/always,%1").arg(KoSvgTextShape_SHAPEID));
-    setShortcut(QKeySequence("CTRL+T"));
 }
 
 SvgTextToolFactory::~SvgTextToolFactory()

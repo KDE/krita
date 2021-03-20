@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2017 Boudewijn Rempt
+   SPDX-FileCopyrightText: 2017 Boudewijn Rempt
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -17,6 +17,7 @@ private Q_SLOTS:
     void testPixelData();
     void testThumbnail();
     void testCreateFillLayer();
+    void testAnnotations();
 };
 
 #endif

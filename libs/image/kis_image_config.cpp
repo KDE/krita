@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,6 +12,7 @@
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionTransformation.h>
+#include <kis_properties_configuration.h>
 
 #include "kis_debug.h"
 
@@ -85,7 +86,9 @@ qreal KisImageConfig::transformMaskOffBoundsReadArea() const
 
 int KisImageConfig::updatePatchHeight() const
 {
-    return m_config.readEntry("updatePatchHeight", 512);
+    int patchHeight = m_config.readEntry("updatePatchHeight", 512);
+    if (patchHeight <= 0) return 512;
+    return patchHeight;
 }
 
 void KisImageConfig::setUpdatePatchHeight(int value)
@@ -95,7 +98,9 @@ void KisImageConfig::setUpdatePatchHeight(int value)
 
 int KisImageConfig::updatePatchWidth() const
 {
-    return m_config.readEntry("updatePatchWidth", 512);
+    int patchWidth = m_config.readEntry("updatePatchWidth", 512);
+    if (patchWidth <= 0) return 512;
+    return patchWidth;
 }
 
 void KisImageConfig::setUpdatePatchWidth(int value)
@@ -630,6 +635,31 @@ QColor KisImageConfig::selectionOverlayMaskColor(bool defaultValue) const
 void KisImageConfig::setSelectionOverlayMaskColor(const QColor &color)
 {
     m_config.writeEntry("selectionOverlayMaskColor", color);
+}
+
+QString KisImageConfig::exportConfigurationXML(const QString &exportConfigId, bool defaultValue) const
+{
+    return (defaultValue ? QString() : m_config.readEntry("ExportConfiguration-" + exportConfigId, QString()));
+}
+
+bool KisImageConfig::hasExportConfiguration(const QString &exportConfigID)
+{
+    return m_config.hasKey("ExportConfiguration-" + exportConfigID);
+}
+
+KisPropertiesConfigurationSP KisImageConfig::exportConfiguration(const QString &exportConfigId, bool defaultValue) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    const QString xmlData = exportConfigurationXML(exportConfigId, defaultValue);
+    cfg->fromXML(xmlData);
+    return cfg;
+}
+
+void KisImageConfig::setExportConfiguration(const QString &exportConfigId, KisPropertiesConfigurationSP properties)
+{
+    const QString exportConfig = properties->toXML();
+    QString configId = "ExportConfiguration-" + exportConfigId;
+    m_config.writeEntry(configId, exportConfig);
 }
 
 void KisImageConfig::resetConfig()

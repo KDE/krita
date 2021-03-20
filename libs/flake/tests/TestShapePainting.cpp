@@ -1,7 +1,7 @@
 /*
  *  This file is part of Calligra tests
  *
- *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2010 Thomas Zander <zander@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,7 +15,7 @@
 #include <sdk/tests/testflake.h>
 #include <MockShapes.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapePainting::testPaintShape()
 {

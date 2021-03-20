@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2013 by Daniel Nicoletti <dantti12@gmail.com>           *
+ *   SPDX-FileCopyrightText: 2013 Daniel Nicoletti <dantti12@gmail.com>           *
  *                                                                         *
  *   SPDX-License-Identifier: GPL-2.0-or-later
  *                                                                         *

@@ -1,5 +1,5 @@
 """
-Copyright (c) 2018 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+SPDX-FileCopyrightText: 2018 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
 This file is part of the Comics Project Management Tools(CPMT).
 

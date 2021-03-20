@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #include "kis_png_test.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include "filestest.h"
@@ -67,7 +67,7 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
         exportConfiguration->setProperty("saveAsHDR", true);
         exportConfiguration->setProperty("saveSRGBProfile", false);
         exportConfiguration->setProperty("forceSRGB", false);
-        doc->exportDocumentSync(QUrl::fromLocalFile("test.png"), "image/png", exportConfiguration);
+        doc->exportDocumentSync("test.png", "image/png", exportConfiguration);
     }
 
     {

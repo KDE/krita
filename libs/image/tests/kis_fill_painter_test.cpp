@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 
 #include <testutil.h>
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_fill_painter.h"
 
 #include <floodfill/kis_scanline_fill.h>
@@ -193,4 +193,4 @@ void KisFillPainterTest::testPatternFill()
 }
 
 
-QTEST_MAIN(KisFillPainterTest)
+SIMPLE_TEST_MAIN(KisFillPainterTest)

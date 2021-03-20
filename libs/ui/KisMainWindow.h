@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000-2004 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 1998, 1999 Torben Weis <weis@kde.org>
+   SPDX-FileCopyrightText: 2000-2004 David Faure <faure@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -69,6 +69,9 @@ public:
      */
     ~KisMainWindow() override;
 
+    QMenu *createPopupMenu() override;
+
+
     QUuid id() const;
 
     /**
@@ -109,7 +112,7 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const QUrl &url, OpenFlags flags);
+    bool openDocument(const QString &path, OpenFlags flags);
 
     /**
      * Activate a view containing the document in this window, creating one if needed.
@@ -309,17 +312,16 @@ public Q_SLOTS:
     void setCanvasDetached(bool detached);
 
     /**
-     * @brief Called when a file is picked using Android's Storage Access Framework
-     * @param url
-     */
-    void slotFileSelected(QUrl url);
-
-    void slotEmptyFilePath();
-
-    /**
      * Toggle full screen on/off.
      */
     void viewFullscreen(bool fullScreen);
+
+    /**
+     * @brief checkActiveStorages checks whether there is at least one bundle available and
+     * at least one paintop preset.
+     */
+    bool checkActiveBundlesAvailable();
+    bool checkPaintOpAvailable();
 
 
 private Q_SLOTS:
@@ -447,6 +449,11 @@ private Q_SLOTS:
     void orientationChanged();
 
     void restoreWorkspace();
+
+    void openCommandBar();
+
+    void slotStoragesWarning(const QString &location = QString());
+
 protected:
 
     void closeEvent(QCloseEvent * e) override;
@@ -480,7 +487,7 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags f = KisMainWindow::OpenFlags());
+    bool openDocumentInternal(const QString &path, KisMainWindow::OpenFlags f = KisMainWindow::OpenFlags());
 
     void saveWindowSettings();
 

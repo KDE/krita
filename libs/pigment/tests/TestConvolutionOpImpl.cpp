@@ -1,12 +1,12 @@
 /*
- *  Copyright (C) 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #include "TestConvolutionOpImpl.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "../KoColorSpaceAbstract.h"
 #include "../KoColorSpaceTraits.h"

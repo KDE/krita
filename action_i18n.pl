@@ -1,6 +1,6 @@
 #! /usr/bin/env perl
 #
-# Copyright (c) 2004 Richard Evans <rich@ridas.com>
+# SPDX-FileCopyrightText: 2004 Richard Evans <rich@ridas.com>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #

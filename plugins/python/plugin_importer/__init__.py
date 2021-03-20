@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2019 Rebecca Breu <rebecca@rbreu.de>
+# SPDX-FileCopyrightText: 2019 Rebecca Breu <rebecca@rbreu.de>
 #
 # This file is part of Krita.
 #

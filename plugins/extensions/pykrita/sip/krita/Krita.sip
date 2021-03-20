@@ -30,7 +30,7 @@ public Q_SLOTS:
     QList<View *> views() const /Factory/;
     Window * activeWindow() const /Factory/;
     QList<Window *> windows() const /Factory/;
-    QMap<QString, Resource *> resources(const QString &type) const /Factory/;
+    QMap<QString, Resource *> resources(QString &type) const /Factory/;
     QStringList recentDocuments() const;
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile, double resolution)  /Factory/;
     QList<Extension*> extensions() /Factory/;

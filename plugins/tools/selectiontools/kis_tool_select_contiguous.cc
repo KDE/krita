@@ -1,11 +1,11 @@
 /*
  *  kis_tool_select_contiguous - part of Krayon^WKrita
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2012 José Luis Vergara <pentalis@gmail.com>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2012 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -62,9 +62,9 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
-void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolSelectContiguous::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolSelect::activate(toolActivation, shapes);
+    KisToolSelect::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -91,7 +91,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     KisProcessingApplicator applicator(currentImage(), currentNode(),
                                        KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Select Contiguous Area"));
 
     QPoint pos = convertToImagePixelCoordFloored(event);

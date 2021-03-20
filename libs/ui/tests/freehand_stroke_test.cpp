@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "freehand_stroke_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 #include "stroke_testing_utils.h"
@@ -46,7 +46,7 @@ protected:
         Q_UNUSED(activeNode);
 
         if (m_useLod) {
-            image->setDesiredLevelOfDetail(1);
+            image->setLodPreferences(KisLodPreferences(1));
         }
     }
 

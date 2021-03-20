@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 import QtQuick 2.3
@@ -36,7 +36,7 @@ Item {
             base.message = message;
         }
         base.opacity = 0;
-        base.currentButton = base.defaultButton; 
+        base.currentButton = base.defaultButton;
     }
 
     anchors.fill: parent;

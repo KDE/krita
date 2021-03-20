@@ -1,7 +1,7 @@
 /*
  * KDE. Krita Project.
  *
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,6 +21,7 @@
 KisHalftoneConfigWidget::KisHalftoneConfigWidget(QWidget *parent,  const KisPaintDeviceSP dev)
     : KisConfigWidget(parent)
     , m_paintDevice(dev)
+    , m_intensityWidget(nullptr)
 {
     Q_ASSERT(m_paintDevice);
 

@@ -1,7 +1,7 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 2000 Matthias Elter <elter@kde.org>
-    Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -228,7 +228,10 @@ bool KoPattern::init(QByteArray& bytes)
     }
 
     // size -1 so we don't add the end 0 to the QString...
-    setName(QString::fromLatin1(name, size -1));
+    QString newName = QString::fromLatin1(name, size -1);
+    if (!newName.isEmpty()) { // if it's empty, it's better to leave the name that was there before (based on filename)
+        setName(newName);
+    }
     delete[] name;
 
     if (bh.width == 0 || bh.height == 0) {

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,7 +9,8 @@
 
 #include <KoConfig.h>
 #include <QApplication>
-#include <QTest>
+#include <simpletest.h>
+#include <QStandardPaths>
 #include <QLoggingCategory>
 #include <QtTest/qtestsystem.h>
 #include <set>
@@ -211,7 +212,7 @@ void registerResources()
 
     reg->add(new KisResourceLoader<KoPattern>(ResourceType::Patterns, ResourceType::Patterns, i18n("Patterns"), allImageMimes));
     reg->add(new KisResourceLoader<KoSegmentGradient>(ResourceSubType::SegmentedGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-gimp-gradient"));
-    reg->add(new KisResourceLoader<KoStopGradient>(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KoStopGradient>(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "image/svg+xml"));
 
     reg->add(new KisResourceLoader<KoColorSet>(ResourceType::Palettes, ResourceType::Palettes, i18n("Palettes"),
                                      QStringList() << KisMimeDatabase::mimeTypeForSuffix("kpl")
@@ -271,6 +272,7 @@ void registerResources()
 int main(int argc, char *argv[]) \
 { \
     qputenv("QT_LOGGING_RULES", ""); \
+    QStandardPaths::setTestModeEnabled(true); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
@@ -288,6 +290,7 @@ int main(int argc, char *argv[]) \
 { \
     qputenv("QT_LOGGING_RULES", ""); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
+    QStandardPaths::setTestModeEnabled(true); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
     QTEST_DISABLE_KEYPAD_NAVIGATION \

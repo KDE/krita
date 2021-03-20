@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Nikita Smirnov <pakrentos@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Nikita Smirnov <pakrentos@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

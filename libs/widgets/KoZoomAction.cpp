@@ -1,7 +1,7 @@
 /*  This file is part of the KDE libraries
-    Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
-    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-    Copyright (C) 2006-2007 C. Boemann <cbo@boemann.dk>
+    SPDX-FileCopyrightText: 2004 Ariya Hidayat <ariya@kde.org>
+    SPDX-FileCopyrightText: 2006 Peter Simonsson <peter.simonsson@gmail.com>
+    SPDX-FileCopyrightText: 2006-2007 C. Boemann <cbo@boemann.dk>
 
     SPDX-License-Identifier: LGPL-2.0-only
 */
@@ -200,8 +200,7 @@ void KoZoomAction::regenerateItems(const qreal zoom)
 
     {
         const qreal zoomInPercent = zoom * 100;
-        // TODO: why zoomInPercent and not zoom here? different from above
-        const int precision = (zoomInPercent > 10.0) ? 0 : 1;
+        const int precision = (zoom > 10.0) ? 0 : 1;
 
         const QString valueString = i18n("%1%", QLocale().toString(zoomInPercent, 'f', precision));
 

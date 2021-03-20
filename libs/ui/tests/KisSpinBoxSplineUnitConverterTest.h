@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_ANIMATION_EXPORTER_TEST_H
 #define KIS_ANIMATION_EXPORTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 #include <KisSpinBoxSplineUnitConverter.h>
 
 /**

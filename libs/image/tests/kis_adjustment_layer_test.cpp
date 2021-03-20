@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_adjustment_layer_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 
 #include <KoColorSpace.h>
@@ -103,4 +103,4 @@ void KisAdjustmentLayerTest::testSelectionParent()
     }
 }
 
-QTEST_MAIN(KisAdjustmentLayerTest)
+SIMPLE_TEST_MAIN(KisAdjustmentLayerTest)

@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_visitor_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_node_visitor.h"
 
 class TestNodeVisitor : public KisNodeVisitor
@@ -77,4 +77,4 @@ void KisNodeVisitorTest::testFullImage()
 }
 
 
-QTEST_MAIN(KisNodeVisitorTest)
+SIMPLE_TEST_MAIN(KisNodeVisitorTest)

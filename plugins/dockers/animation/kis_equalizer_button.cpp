@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,7 +13,7 @@
 #include <QApplication>
 
 
-#include "timeline_color_scheme.h"
+#include "KisAnimTimelineColors.h"
 #include "kis_global.h"
 #include "kis_debug.h"
 
@@ -86,8 +86,8 @@ void KisEqualizerButton::paintEvent(QPaintEvent *event)
     }
 
     {
-        QColor fillColor = TimelineColorScheme::instance()->onionSkinsButtonColor();
-        QColor frameColor = TimelineColorScheme::instance()-> onionSkinsSliderEnabledColor();
+        QColor fillColor = KisAnimTimelineColors::instance()->onionSkinsButtonColor();
+        QColor frameColor = KisAnimTimelineColors::instance()-> onionSkinsSliderEnabledColor();
 
         if (isChecked() || hasFocus() || m_d->isHovering) {
             p.setPen(hasFocus() || m_d->isHovering ? frameColor : Qt::transparent);

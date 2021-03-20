@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #include "kis_datamanager_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <kis_datamanager.h>
 
 // RGBA
@@ -187,4 +187,4 @@ void KisDatamanagerBenchmark::benchmarkMemCpy()
 }
 
 
-QTEST_MAIN(KisDatamanagerBenchmark)
+SIMPLE_TEST_MAIN(KisDatamanagerBenchmark)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,6 +22,7 @@ private Q_SLOTS:
     void testData();
     void testTagResource();
     void testUntagResource();
+    void testIsResourceTagged();
 
     void testFilterTagResource();
 

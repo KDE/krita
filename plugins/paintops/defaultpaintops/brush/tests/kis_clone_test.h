@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Eugene Ingerman
+ *  SPDX-FileCopyrightText: 2016 Eugene Ingerman
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef __KIS_CLONEOP_TEST_H
 #define __KIS_CLONEOP_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCloneOpTest : public QObject
 {

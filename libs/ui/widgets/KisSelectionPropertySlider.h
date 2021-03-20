@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Jouni Pentikäinen <joupent@gmail.com>
+ * SPDX-FileCopyrightText: 2018 Jouni Pentikäinen <joupent@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -25,7 +25,7 @@ public:
     void setPrefixes(const QString &normalPrefix, const QString &mixedPrefix);
 
 protected:
-    void setInternalValue(int value, bool blockUpdateSignal) override;
+    void setInternalValue(qreal value, bool blockUpdateSignal) override;
 
     void setSelectionValue(qreal commonValue, bool mixed);
 

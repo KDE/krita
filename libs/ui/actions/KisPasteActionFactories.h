@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -19,6 +19,11 @@ struct KRITAUI_EXPORT KisPasteActionFactory : public KisOperation {
     }
 
     void run(bool pasteAtCursorPosition, KisViewManager *view);
+};
+
+struct KRITAUI_EXPORT KisPasteIntoActionFactory : public KisNoParameterActionFactory {
+    KisPasteIntoActionFactory() : KisNoParameterActionFactory("paste-into-ui-action") {}
+    void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFactory {

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,7 +10,7 @@
 
 #include <kis_group_layer.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 
 void StoryboardTimelineSyncTest::initTestCase()
@@ -66,6 +66,7 @@ void StoryboardTimelineSyncTest::cleanup()
 void StoryboardTimelineSyncTest::testAddKeyframeExtendsDuration()
 {
     m_storyboardModel->insertRow(0);
+    m_storyboardModel->insertChildRows(0);
     QModelIndex item1Index = m_storyboardModel->index(0, 0);
 
     QVERIFY(item1Index.isValid());
@@ -192,6 +193,7 @@ void StoryboardTimelineSyncTest::testDurationChange()
     const int fps = m_image->animationInterface()->framerate();
 
     m_storyboardModel->insertRow(0);
+    m_storyboardModel->insertChildRows(0);
     m_channel1->addKeyframe(3);
     m_storyboardModel->slotSetActiveNode(m_layer1);
     m_storyboardModel->insertItem(m_storyboardModel->index(0,0), true);
@@ -280,6 +282,7 @@ void StoryboardTimelineSyncTest::testFpsChanged()
     const int originalFPS = m_image->animationInterface()->framerate();
 
     m_storyboardModel->insertRow(0);
+    m_storyboardModel->insertChildRows(0);
     m_storyboardModel->slotSetActiveNode(m_layer1);
     m_storyboardModel->insertItem(m_storyboardModel->index(0,0), true);
     QCOMPARE(m_channel1->keyframeCount(), 2);
@@ -321,4 +324,4 @@ void StoryboardTimelineSyncTest::testFpsChanged()
     }
 }
 
-QTEST_MAIN(StoryboardTimelineSyncTest)
+SIMPLE_TEST_MAIN(StoryboardTimelineSyncTest)

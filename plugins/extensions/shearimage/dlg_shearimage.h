@@ -1,7 +1,7 @@
 /*
  *  dlg_shearimage.h -- part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

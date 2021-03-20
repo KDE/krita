@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
+ *  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

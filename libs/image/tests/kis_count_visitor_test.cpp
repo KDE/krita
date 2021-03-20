@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_count_visitor_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QStringList>
 #include <KoProperties.h>
 
@@ -130,6 +130,6 @@ void KisCountVisitorTest::testCounting()
     }
 }
 
-QTEST_MAIN(KisCountVisitorTest)
+SIMPLE_TEST_MAIN(KisCountVisitorTest)
 
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -17,6 +17,7 @@ class SvgStyleParser;
 class KoDocumentResourceManager;
 class KoImageCollection;
 class KoShape;
+class KoColorProfile;
 
 /// Contains data used for loading svg
 class KRITAFLAKE_EXPORT SvgLoadingContext
@@ -77,6 +78,9 @@ public:
 
     /// parses 'color-profile' tag and saves it in the context
     void parseProfile(const KoXmlElement &element);
+
+    /// Return the profiles in the context.
+    QHash<QString, const KoColorProfile*> profiles();
 
     bool isRootContext() const;
 

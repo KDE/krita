@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -24,7 +24,7 @@ public:
     KisResourceSearchBoxFilter();
     ~KisResourceSearchBoxFilter();
     void setFilter(const QString& filter);
-    bool matchesResource(const QString& resourceName);
+    bool matchesResource(const QString& resourceName, const QStringList &tagList);
     bool isEmpty();
 
 private:
@@ -33,7 +33,7 @@ private:
     void clearFilterData();
 
     class Private;
-    QScopedPointer<Private> d;
+    QScopedPointer<Private> m_d;
 
 };
 

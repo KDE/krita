@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
+ * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KISPRESCALED_PROJECTION_TEST_H
 #define KISPRESCALED_PROJECTION_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 
 class KisPrescaledProjection;

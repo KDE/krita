@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2009 Sven Langkamp   <sven.langkamp@gmail.com>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
- * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -56,18 +56,26 @@ KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
 void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     checkRanges();
+    KisDynamicSensorSP dynamicSensor = m_curveOptionWidget->sensorSelector->currentHighlighted();
     KisMyPaintBrushOption* currentSensor = dynamic_cast<KisMyPaintBrushOption*>(m_curveOptionWidget->sensorSelector->currentHighlighted().data());
-    setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "XMIN", m_curveOptionWidget->xMinBox->value());
-    setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "XMAX", m_curveOptionWidget->xMaxBox->value());
-    setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "YMIN", m_curveOptionWidget->yMinBox->value());
-    setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "YMAX", m_curveOptionWidget->yMaxBox->value());
+    KIS_SAFE_ASSERT_RECOVER(dynamicSensor && currentSensor) { }
+    if (dynamicSensor) {
+        setting->setProperty(m_curveOption->name() + dynamicSensor->identifier() + "XMIN", m_curveOptionWidget->xMinBox->value());
+        setting->setProperty(m_curveOption->name() + dynamicSensor->identifier() + "XMAX", m_curveOptionWidget->xMaxBox->value());
+        setting->setProperty(m_curveOption->name() + dynamicSensor->identifier() + "YMIN", m_curveOptionWidget->yMinBox->value());
+        setting->setProperty(m_curveOption->name() + dynamicSensor->identifier() + "YMAX", m_curveOptionWidget->yMaxBox->value());
+    }
+    if (currentSensor) {
 
-    currentSensor->setXRangeMin(m_curveOptionWidget->xMinBox->value());
-    currentSensor->setXRangeMax(m_curveOptionWidget->xMaxBox->value());
-    currentSensor->setYRangeMin(m_curveOptionWidget->yMinBox->value());
-    currentSensor->setYRangeMax(m_curveOptionWidget->yMaxBox->value());
-
-    updateSensorCurveLabels(currentSensor);
+        currentSensor->setXRangeMin(m_curveOptionWidget->xMinBox->value());
+        currentSensor->setXRangeMax(m_curveOptionWidget->xMaxBox->value());
+        currentSensor->setYRangeMin(m_curveOptionWidget->yMinBox->value());
+        currentSensor->setYRangeMax(m_curveOptionWidget->yMaxBox->value());
+    }
+    if (dynamicSensor) {
+        // don't use currentSensor here, because it would get converted to shared pointer
+        updateSensorCurveLabels(dynamicSensor);
+    }
     setBaseValue(setting, m_curveOptionWidget->strengthSlider->value());
     m_curveOption->writeOptionSetting(setting);
 }

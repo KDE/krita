@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- * Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 1998, 1999 Torben Weis <weis@kde.org>
+ * SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -98,7 +98,7 @@
 #include <KisSessionResource.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
 
-#include "widgets/KisScreenColorPicker.h"
+#include "widgets/KisScreenColorSampler.h"
 #include "KisDlgInternalColorSelector.h"
 
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
@@ -124,6 +124,7 @@ public:
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
     bool batchRun {false};
     QVector<QByteArray> earlyRemoteArguments;
+    QVector<QString> earlyFileOpenEvents;
 };
 
 class KisApplication::ResetStarting
@@ -170,7 +171,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-        QStringList styles = QStringList() << "breeze" << "fusion" << "plastique";
+        QStringList styles = QStringList() << "breeze" << "fusion";
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {
                 if (!setStyle(style)) {
@@ -195,7 +196,8 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
 
-
+    // store the style name
+    qApp->setProperty(currentUnderlyingStyleNameProperty, style()->objectName());
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -242,7 +244,6 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
     KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
-    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
     KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");
@@ -267,6 +268,21 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
 }
 
+
+bool KisApplication::event(QEvent *event)
+{
+
+    #ifdef Q_OS_MACOS
+    if (event->type() == QEvent::FileOpen) {
+        QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
+        emit fileOpenRequest(openEvent->file());
+        return true;
+    }
+    #endif
+    return QApplication::event(event);
+}
+
+
 bool KisApplication::registerResources()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
@@ -280,7 +296,7 @@ bool KisApplication::registerResources()
     reg->add(new KisResourceLoader<KisPngBrush>(ResourceSubType::PngBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/png"));
 
     reg->add(new KisResourceLoader<KoSegmentGradient>(ResourceSubType::SegmentedGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-gimp-gradient"));
-    reg->add(new KisResourceLoader<KoStopGradient>(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KoStopGradient>(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "image/svg+xml"));
 
     reg->add(new KisResourceLoader<KoColorSet>(ResourceType::Palettes, ResourceType::Palettes, i18n("Palettes"),
                                      QStringList() << KisMimeDatabase::mimeTypeForSuffix("kpl")
@@ -314,7 +330,7 @@ bool KisApplication::registerResources()
 
     reg->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
                                                      ResourceType::LayerStyles,
-                                                     ResourceType::LayerStyles,
+                                                     i18nc("Resource type name", "Layer styles"),
                                                      QStringList() << "application/x-photoshop-style"));
 
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
@@ -537,7 +553,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
                     KisDocument *doc = kisPart->createDocument();
                     doc->setFileBatchMode(d->batchRun);
-                    bool result = doc->openUrl(QUrl::fromLocalFile(fileName));
+                    bool result = doc->openPath(fileName);
 
                     if (!result) {
                         errKrita << "Could not load " << fileName << ":" << doc->errorMessage();
@@ -554,7 +570,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     qApp->processEvents(); // For vector layers to be updated
 
                     doc->setFileBatchMode(true);
-                    if (!doc->exportDocumentSync(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {
+                    if (!doc->exportDocumentSync(exportFileName, outputMimetype.toLatin1())) {
                         errKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
@@ -563,7 +579,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 else if (exportSequence) {
                     KisDocument *doc = kisPart->createDocument();
                     doc->setFileBatchMode(d->batchRun);
-                    doc->openUrl(QUrl::fromLocalFile(fileName));
+                    doc->openPath(fileName);
                     qApp->processEvents(); // For vector layers to be updated
                     
                     if (!doc->image()->animationInterface()->hasAnimation()) {
@@ -597,7 +613,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     else {
                         KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
 
-                        if (d->mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
+                        if (d->mainWindow->openDocument(fileName, flags)) {
                             // Normal case, success
                             numberOfOpenDocuments++;
                         }
@@ -650,6 +666,13 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     KisUsageLogger::writeSysInfo(KisUsageLogger::screenInformation());
 
+    // process File open event files
+    if (!d->earlyFileOpenEvents.isEmpty()) {
+        hideSplashScreen();
+        Q_FOREACH(QString fileName, d->earlyFileOpenEvents) {
+            d->mainWindow->openDocument(fileName, 0);
+        }
+    }
 
     // not calling this before since the program will quit there.
     return true;
@@ -723,7 +746,7 @@ void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *m
             }
             else if (QFile(filename).exists()) {
                 KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                documentCreated |= mainWindow->openDocument(QUrl::fromLocalFile(filename), flags);
+                documentCreated |= mainWindow->openDocument(filename, flags);
             }
         }
     }
@@ -778,11 +801,13 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
 
 void KisApplication::fileOpenRequested(const QString &url)
 {
-    KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
-    if (mainWindow) {
-        KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-        mainWindow->openDocument(QUrl::fromLocalFile(url), flags);
+    if (!d->mainWindow) {
+        d->earlyFileOpenEvents.append(url);
+        return;
     }
+
+    KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+    d->mainWindow->openDocument(url, flags);
 }
 
 
@@ -832,15 +857,15 @@ void KisApplication::checkAutosaveFiles()
         }
 
         if (autosaveFiles.size() > 0) {
-            QList<QUrl> autosaveUrls;
+            QList<QString> autosavePaths;
             Q_FOREACH (const QString &autoSaveFile, autosaveFiles) {
-                const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
-                autosaveUrls << url;
+                const QString path = dir.absolutePath() + QLatin1Char('/') + autoSaveFile;
+                autosavePaths << path;
             }
             if (d->mainWindow) {
-                Q_FOREACH (const QUrl &url, autosaveUrls) {
+                Q_FOREACH (const QString &path, autosavePaths) {
                     KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                    d->mainWindow->openDocument(url, flags | KisMainWindow::RecoveryFile);
+                    d->mainWindow->openDocument(path, flags | KisMainWindow::RecoveryFile);
                 }
             }
         }
@@ -854,9 +879,8 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
 {
     QString templatePath;
 
-    const QUrl templateUrl = QUrl::fromLocalFile(fileName);
     if (QFile::exists(fileName)) {
-        templatePath = templateUrl.toLocalFile();
+        templatePath = fileName;
         dbgUI << "using full path...";
     }
     else {
@@ -880,25 +904,16 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
     }
 
     if (!templatePath.isEmpty()) {
-        QUrl templateBase;
-        templateBase.setPath(templatePath);
         KDesktopFile templateInfo(templatePath);
 
-        QString templateName = templateInfo.readUrl();
-        QUrl templateURL;
-        templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
-        if (templateURL.scheme().isEmpty()) {
-            templateURL.setScheme("file");
-        }
-
         KisMainWindow::OpenFlags batchFlags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-        if (mainWindow->openDocument(templateURL, KisMainWindow::Import | batchFlags)) {
+        if (mainWindow->openDocument(templatePath, KisMainWindow::Import | batchFlags)) {
             dbgUI << "Template loaded...";
             return true;
         }
         else {
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"),
-                                  i18n("Template %1 failed to load.", templateURL.toDisplayString()));
+                                  i18n("Template %1 failed to load.", fileName));
         }
     }
 

@@ -1,12 +1,12 @@
 /*
  *  This file is part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2012 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Christian Muehlhaeuser <chris@chris.de>
- *  Copyright (c) 2004-2006 Seb Ruiz <ruiz@kde.org>
- *  Copyright (c) 2004,2005 Max Howell <max.howell@methylblue.com>
- *  Copyright (c) 2005 Gabor Lehel <illissius@gmail.com>
- *  Copyright (c) 2008,2009 Mark Kretschmann <kretschmann@kde.org>
+ *  SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Christian Muehlhaeuser <chris@chris.de>
+ *  SPDX-FileCopyrightText: 2004-2006 Seb Ruiz <ruiz@kde.org>
+ *  SPDX-FileCopyrightText: 2004, 2005 Max Howell <max.howell@methylblue.com>
+ *  SPDX-FileCopyrightText: 2005 Gabor Lehel <illissius@gmail.com>
+ *  SPDX-FileCopyrightText: 2008, 2009 Mark Kretschmann <kretschmann@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

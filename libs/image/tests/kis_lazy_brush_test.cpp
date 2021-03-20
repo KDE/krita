@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_lazy_brush_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_debug.h"
 
 #include "kis_fill_painter.h"
@@ -1401,4 +1401,4 @@ void KisLazyBrushTest::multiwayCutBenchmark()
 
 
 
-QTEST_MAIN(KisLazyBrushTest)
+SIMPLE_TEST_MAIN(KisLazyBrushTest)

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,13 +16,13 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerObserver.h>
 #include <resources/KoGamutMask.h>
-#include <KisDocument.h>
 #include <KisView.h>
 #include <kis_types.h>
 #include <KisResourceItemChooser.h>
 
 #include <kis_mainwindow_observer.h>
 
+class KisDocument;
 class KisCanvasResourceProvider;
 class QButtonGroup;
 class QMenu;

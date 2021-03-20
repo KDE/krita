@@ -1,15 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
  */
 
 #ifndef KIS_COLOR_SELECTOR_CONTAINER_H
@@ -51,20 +43,20 @@ protected:
     void resizeEvent(QResizeEvent *) override;
 
 private:
-    KisColorSelector* m_colorSelector;
-    KisMyPaintShadeSelector* m_myPaintShadeSelector;
-    KisMinimalShadeSelector* m_minimalShadeSelector;
-    QWidget* m_shadeSelector;
-    KisGamutMaskToolbar* m_gamutMaskToolbar;
+    KisColorSelector* m_colorSelector {0};
+    KisMyPaintShadeSelector* m_myPaintShadeSelector {0};
+    KisMinimalShadeSelector* m_minimalShadeSelector {0};
+    QWidget* m_shadeSelector {0};
+    KisGamutMaskToolbar* m_gamutMaskToolbar {0};
 
-    int m_onDockerResizeSetting;
-    bool m_showColorSelector;
+    int m_onDockerResizeSetting {0};
+    bool m_showColorSelector {true};
 
-    QBoxLayout* m_widgetLayout;
+    QBoxLayout* m_widgetLayout {0};
 
-    QAction * m_colorSelAction;
-    QAction * m_mypaintAction;
-    QAction * m_minimalAction;
+    QAction * m_colorSelAction {0};
+    QAction * m_mypaintAction {0};
+    QAction * m_minimalAction {0};
 
     QPointer<KisCanvas2> m_canvas;
 };

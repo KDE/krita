@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -162,7 +162,9 @@ const KoColorProfile* IccColorSpaceEngine::addProfile(const QString &filename)
     // quite often, and we can initialize it
     if (!profile->valid()) {
         cmsHPROFILE cmsp = cmsOpenProfileFromFile(filename.toLatin1(), "r");
-        profile = LcmsColorProfileContainer::createFromLcmsProfile(cmsp);
+        if (cmsp) {
+            profile = LcmsColorProfileContainer::createFromLcmsProfile(cmsp);
+        }
     }
 
     if (profile->valid()) {

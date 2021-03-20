@@ -1,6 +1,6 @@
 # Ported from KoDockWidgetTitleBar.cpp which is part of KOffice
-# Copyright (c) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
-# Copyright (C) 2007 Thomas Zander <zander@kde.org>
+# SPDX-FileCopyrightText: 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+# SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
 # SPDX-License-Identifier: GPL-2.0-or-later
 import os
 

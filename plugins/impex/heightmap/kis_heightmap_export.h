@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2017 Victor Wåhlström <victor.wahlstrom@initiali.se>
+ *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2017 Victor Wåhlström <victor.wahlstrom@initiali.se>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

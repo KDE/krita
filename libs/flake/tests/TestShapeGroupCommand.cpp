@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -19,7 +19,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_debug.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
         : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)
@@ -644,4 +644,4 @@ void TestShapeGroupCommand::testUngrouping()
 
 }
 
-QTEST_MAIN(TestShapeGroupCommand)
+SIMPLE_TEST_MAIN(TestShapeGroupCommand)

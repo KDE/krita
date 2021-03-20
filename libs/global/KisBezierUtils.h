@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -301,6 +301,37 @@ std::pair<QPointF, QPointF> removeBezierNode(const QPointF &p0,
                                              const QPointF &q1,
                                              const QPointF &q2,
                                              const QPointF &q3);
+
+/**
+ * Find intersection points (their parameter values) between a cubic
+ * Bezier curve and a line.
+ *
+ * Curve: \p p0, \p p1, \p p2, \p p3
+ * Line: \p line
+ *
+ * For cubic Bezier curves there can be at most three intersection points.
+ */
+KRITAGLOBAL_EXPORT
+QVector<qreal> intersectWithLine(const QPointF &p0,
+                                 const QPointF &p1,
+                                 const QPointF &p2,
+                                 const QPointF &p3,
+                                 const QLineF &line,
+                                 qreal eps);
+
+/**
+ * Find new nearest intersection point between a cubic Bezier curve and a line.
+ * The resulting point will be the nearest to \p nearestAnchor.
+ */
+KRITAGLOBAL_EXPORT
+boost::optional<qreal> intersectWithLineNearest(const QPointF &p0,
+                                                const QPointF &p1,
+                                                const QPointF &p2,
+                                                const QPointF &p3,
+                                                const QLineF &line,
+                                                const QPointF &nearestAnchor,
+                                                qreal eps);
+
 }
 
 #endif // KISBEZIERUTILS_H

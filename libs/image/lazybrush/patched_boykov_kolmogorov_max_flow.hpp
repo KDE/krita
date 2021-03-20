@@ -1,4 +1,4 @@
-//  Copyright (c) 2006, Stephan Diederich
+//  SPDX-FileCopyrightText: 2006 Stephan Diederich
 //
 //  This code may be used under either of the following two licences:
 //

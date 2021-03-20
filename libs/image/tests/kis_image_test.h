@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2007 Boudewijn Rempt <boud@kde.org>
+ *  SPDX-FileCopyrightText: 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 #ifndef KIS_IMAGE_TESTER_H
 #define KIS_IMAGE_TESTER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisImageTest : public QObject
 {

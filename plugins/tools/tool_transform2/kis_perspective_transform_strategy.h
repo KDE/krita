@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -46,6 +46,7 @@ public:
 Q_SIGNALS:
     void requestCanvasUpdate();
     void requestShowImageTooBig(bool value);
+    void requestImageRecalculation();
 
 private:
     struct Private;

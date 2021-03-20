@@ -1,6 +1,6 @@
 """
-Copyright (c) 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
-Copyright (c) 2018 Ragnar Brynúlfsson <me@ragnarb.com>
+SPDX-FileCopyrightText: 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+SPDX-FileCopyrightText: 2018 Ragnar Brynúlfsson <me@ragnarb.com>
 
 This file is part of the Comics Project Management Tools(CPMT).
 

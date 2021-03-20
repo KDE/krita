@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -252,6 +252,7 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
     di->dstDabRect = position.rect;
     di->subPixel = position.subPixel;
 
+    const bool supportsCaching = resources->brush->supportsCaching();
     di->solidColorFill = !resources->colorSource || resources->colorSource->isUniformColor();
     di->paintColor = resources->colorSource && resources->colorSource->isUniformColor() ?
                 resources->colorSource->uniformColor() : request.color;
@@ -271,7 +272,7 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
         const int effectiveDabSize = qMin(newParams.width, newParams.height);
         precisionLevel = m_d->precisionOption->effectivePrecisionLevel(effectiveDabSize) - 1;
     }
-    *shouldUseCache = hasDabInCache && di->solidColorFill &&
+    *shouldUseCache = hasDabInCache && supportsCaching && di->solidColorFill &&
             newParams.compare(m_d->lastSavedDabParameters, precisionLevel);
 
     if (!*shouldUseCache) {

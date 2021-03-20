@@ -1,6 +1,7 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2020-2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -29,6 +30,10 @@ public:
                                    const KisSelectionSP selection
                                   );
 
+    static void applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
+                                   KisNode *node,
+                                   KisPaintDeviceSP dst
+                                   );
 
     static void gmicImageToPaintDevice(gmic_image<float>& srcGmicImage,
                                        KisPaintDeviceSP dstPaintDevice,

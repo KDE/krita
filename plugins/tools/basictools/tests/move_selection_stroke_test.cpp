@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "move_selection_stroke_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 
@@ -38,7 +38,7 @@ void MoveSelectionStrokeTest::test()
     QScopedPointer<KoCanvasResourceProvider> manager(
         utils::createResourceManager(image));
 
-    image->setDesiredLevelOfDetail(2);
+    image->setLodPreferences(KisLodPreferences(2));
     image->waitForDone();
 
     KisResourcesSnapshotSP resources =

@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_memory_window_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_debug.h"
 #include <QTemporaryDir>
@@ -90,5 +90,5 @@ void KisMemoryWindowTest::testTopReports()
     }
 }
 
-QTEST_MAIN(KisMemoryWindowTest)
+SIMPLE_TEST_MAIN(KisMemoryWindowTest)
 

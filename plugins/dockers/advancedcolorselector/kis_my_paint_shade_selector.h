@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
- *  Copyright (c) 2008 Martin Renold <martinxyz@gmx.ch>
- *  Copyright (c) 2009 Ilya Portnov <nomail>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2008 Martin Renold <martinxyz@gmx.ch>
+ *  SPDX-FileCopyrightText: 2009 Ilya Portnov <nomail>
  *
  *  This class is based on "lib/colorchanger.hpp" from MyPaint (mypaint.intilinux.com)
  *

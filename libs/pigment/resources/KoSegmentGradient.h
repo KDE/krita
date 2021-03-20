@@ -1,9 +1,9 @@
 /*
-   Copyright (c) 2000 Matthias Elter  <elter@kde.org>
-                 2004 Boudewijn Rempt <boud@valdyas.org>
-                 2004 Adrian Page <adrian@pagenet.plus.com>
-                 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
-                 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+    SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+    SPDX-FileCopyrightText: 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -54,7 +54,7 @@ struct KoGradientSegmentEndpoint {
     qreal offset;
     KoColor color;
     KoGradientSegmentEndpointType type;
-    
+
 
 };
 
@@ -349,8 +349,8 @@ public:
      * @param rightType
      * @return void
      */
-    void createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, 
-                       const QColor & leftColor, const QColor & rightColor, 
+    void createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset,
+                       const QColor & leftColor, const QColor & rightColor,
                        KoGradientSegmentEndpointType leftType = COLOR_ENDPOINT, KoGradientSegmentEndpointType rightType = COLOR_ENDPOINT);
 
     /**
@@ -452,6 +452,7 @@ public:
     bool removeSegmentPossible() const;
 
     const QList<KoGradientSegment *>& segments() const;
+    void setSegments(const QList<KoGradientSegment*> &segments);
 
 protected:
 

@@ -1,11 +1,9 @@
-add_definitions(-DFILES_DEST_DIR="${CMAKE_CURRENT_BINARY_DIR}/data/")
-
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 include(ECMAddTests)
 include(KritaAddBrokenUnitTest)
-
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 macro_add_unittest_definitions()
+
+add_definitions(-DFILES_DEST_DIR="${CMAKE_CURRENT_BINARY_DIR}/data/")
 
 ecm_add_tests(
     TestResourceCacheDb
@@ -25,4 +23,4 @@ ecm_add_tests(
     TestStorageFilterProxyModel
     TestTagResourceModel
     NAME_PREFIX "libs-kritaresources-"
-    LINK_LIBRARIES kritaglobal kritaplugin kritaresources kritaversion KF5::ConfigCore Qt5::Sql Qt5::Test)
+    LINK_LIBRARIES kritaglobal kritapigment kritaplugin kritaresources kritawidgets kritaversion KF5::ConfigCore Qt5::Sql Qt5::Test)

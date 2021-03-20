@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006 C. Boemann (cbo@boemann.dk)
+ * SPDX-FileCopyrightText: 2006 C. Boemann (cbo@boemann.dk)
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
 */

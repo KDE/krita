@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -41,6 +41,8 @@
 #include <kis_coordinates_converter.h>
 #include <kis_time_span.h>
 #include <KisImportExportErrorCode.h>
+#include <kis_types.h>
+#include <kis_annotation.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -156,6 +158,14 @@ Node *Document::nodeByName(const QString &name) const
     return Node::createNode(d->document->image(), node);
 }
 
+Node *Document::nodeByUniqueID(const QUuid &id) const
+{
+    if (!d->document) return 0;
+    KisNodeSP node = d->document->image()->rootLayer()->findChildByUniqueID(id);
+    if (node.isNull()) return 0;
+    return Node::createNode(d->document->image(), node);
+}
+
 
 QString Document::colorDepth() const
 {
@@ -218,7 +228,7 @@ bool Document::setBackgroundColor(const QColor &color)
     KoColor background = KoColor(color, d->document->image()->colorSpace());
     d->document->image()->setDefaultProjectionColor(background);
 
-    d->document->image()->setModified();
+    d->document->image()->setModifiedWithoutUndo();
     d->document->image()->initialRefreshGraph();
 
     return true;
@@ -245,7 +255,7 @@ void Document::setDocumentInfo(const QString &document)
 QString Document::fileName() const
 {
     if (!d->document) return QString();
-    return d->document->url().toLocalFile();
+    return d->document->path();
 }
 
 void Document::setFileName(QString value)
@@ -253,7 +263,7 @@ void Document::setFileName(QString value)
     if (!d->document) return;
     QString mimeType = KisMimeDatabase::mimeTypeForFile(value, false);
     d->document->setMimeType(mimeType.toLatin1());
-    d->document->setUrl(QUrl::fromLocalFile(value));
+    d->document->setPath(value);
 }
 
 int Document::height() const
@@ -455,7 +465,7 @@ QByteArray Document::pixelData(int x, int y, int w, int h) const
 
 bool Document::close()
 {
-    bool retval = d->document->closeUrl(false);
+    bool retval = d->document->closePath(false);
 
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         if (view->document() == d->document) {
@@ -466,7 +476,9 @@ bool Document::close()
     }
 
     KisPart::instance()->removeDocument(d->document, !d->ownsDocument);
+
     if (d->ownsDocument) {
+
         delete d->document;
     }
 
@@ -491,7 +503,7 @@ bool Document::exportImage(const QString &filename, const InfoObject &exportConf
     const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
 
-    return d->document->exportDocumentSync(QUrl::fromLocalFile(filename), outputFormat, exportConfiguration.configuration());
+    return d->document->exportDocumentSync(filename, outputFormat, exportConfiguration.configuration());
 }
 
 void Document::flatten()
@@ -554,7 +566,7 @@ void Document::shearImage(double angleX, double angleY)
 bool Document::save()
 {
     if (!d->document) return false;
-    if (d->document->url().isEmpty()) return false;
+    if (d->document->path().isEmpty()) return false;
 
     bool retval = d->document->save(true, 0);
     d->document->waitForSavingToComplete();
@@ -568,11 +580,11 @@ bool Document::saveAs(const QString &filename)
 
     const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
-    QUrl oldUrl = d->document->url();
-    d->document->setUrl(QUrl::fromLocalFile(filename));
-    bool retval = d->document->saveAs(QUrl::fromLocalFile(filename), outputFormat, true);
+    QString oldPath = d->document->path();
+    d->document->setPath(filename);
+    bool retval = d->document->saveAs(filename, outputFormat, true);
     d->document->waitForSavingToComplete();
-    d->document->setUrl(oldUrl);
+    d->document->setPath(oldPath);
 
     return retval;
 }
@@ -1010,4 +1022,64 @@ void Document::setCurrentTime(int time)
     if (!d->document->image()) return;
 
     return d->document->image()->animationInterface()->requestTimeSwitchWithUndo(time);
+}
+
+QStringList Document::annotationTypes() const
+{
+    if (!d->document) return QStringList();
+
+    QStringList types;
+
+    KisImageSP image = d->document->image().toStrongRef();
+
+    if (!image) return QStringList();
+
+    vKisAnnotationSP_it beginIt = image->beginAnnotations();
+    vKisAnnotationSP_it endIt = image->endAnnotations();
+
+    vKisAnnotationSP_it it = beginIt;
+    while (it != endIt) {
+        if (!(*it) || (*it)->type().isEmpty()) {
+            qWarning() << "Warning: empty annotation";
+            it++;
+            continue;
+        }
+        types << (*it)->type();
+
+        it++;
+    }
+    return types;
+}
+
+QString Document::annotationDescription(const QString &type) const
+{
+    KisImageSP image = d->document->image().toStrongRef();
+    KisAnnotationSP annotation = image->annotation(type);
+    return annotation->description();
+}
+
+QByteArray Document::annotation(const QString &type)
+{
+    KisImageSP image = d->document->image().toStrongRef();
+    KisAnnotationSP annotation = image->annotation(type);
+    if (annotation) {
+        return annotation->annotation();
+    }
+    else {
+        return QByteArray();
+    }
+}
+
+void Document::setAnnotation(const QString &key, const QString &description, const QByteArray &annotation)
+{
+    KisAnnotation *a = new KisAnnotation(key, description, annotation);
+    KisImageSP image = d->document->image().toStrongRef();
+    image->addAnnotation(a);
+
+}
+
+void Document::removeAnnotation(const QString &type)
+{
+    KisImageSP image = d->document->image().toStrongRef();
+    image->removeAnnotation(type);
 }

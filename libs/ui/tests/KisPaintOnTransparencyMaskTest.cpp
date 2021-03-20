@@ -4,7 +4,7 @@
 
 #include "KisPaintOnTransparencyMaskTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 #include "stroke_testing_utils.h"
@@ -136,4 +136,4 @@ void KisPaintOnTransparencyMaskTest::test()
     }
 }
 
-QTEST_MAIN(KisPaintOnTransparencyMaskTest)
+SIMPLE_TEST_MAIN(KisPaintOnTransparencyMaskTest)

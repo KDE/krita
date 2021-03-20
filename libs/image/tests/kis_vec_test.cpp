@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_vec_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_vec.h"
 
 void KisVecTest::testCreation()
@@ -17,4 +17,4 @@ void KisVecTest::testCreation()
 }
 
 
-QTEST_MAIN(KisVecTest)
+SIMPLE_TEST_MAIN(KisVecTest)

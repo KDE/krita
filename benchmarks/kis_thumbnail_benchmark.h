@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Eugene Ingerman geneing at gmail dot com
+ *  SPDX-FileCopyrightText: 2016 Eugene Ingerman geneing at gmail dot com
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_THUMBNAIL_BENCHMARK_H
 #define KIS_THUMBNAIL_BENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 #include "kis_paint_device.h"
 
 class KoColor;

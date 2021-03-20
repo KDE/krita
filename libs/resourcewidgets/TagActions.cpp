@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2018 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -91,6 +91,8 @@ bool LineEditAction::closeParentOnTrigger()
 
 void LineEditAction::slotActionTriggered()
 {
+    setData(userText());
+    QAction::trigger();
     onTriggered();
     if (!m_editBox->text().isEmpty()) {
         if (m_closeParentOnTrigger) {

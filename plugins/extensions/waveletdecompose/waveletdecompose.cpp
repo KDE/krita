@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Miroslav Talasek <miroslav.talasek@seznam.cz>
+ * SPDX-FileCopyrightText: 2016 Miroslav Talasek <miroslav.talasek@seznam.cz>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -136,7 +136,6 @@ void WaveletDecompose::slotWaveletDecompose()
         undo->endMacro();
         updater->setProgress(100);
         image->unlock();
-        image->setModified();
     }
         
     QApplication::restoreOverrideCursor();

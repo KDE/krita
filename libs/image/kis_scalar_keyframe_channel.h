@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -120,9 +120,8 @@ class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
 {
     Q_OBJECT
 public:
-    KisScalarKeyframeChannel(const KoID& id, KisNodeWSP node);
     KisScalarKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds);
-    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent);
+    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs);
     ~KisScalarKeyframeChannel() override;
 
     /** Utility for adding keyframe with non-default value. */
@@ -137,6 +136,8 @@ public:
     /** @brief Quickly get the interpolated value at the given time. */
     qreal valueAt(int time) const;
     qreal currentValue() { return valueAt(currentTime()); }
+
+    bool isCurrentTimeAffectedBy(int keyTime);
 
     void setDefaultValue(qreal value);
     void setDefaultInterpolationMode(KisScalarKeyframe::InterpolationMode mode);

@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
- *  Copyright (c) 2008 Martin Renold <martinxyz@gmx.ch>
- *  Copyright (c) 2009 Ilya Portnov <nomail>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2008 Martin Renold <martinxyz@gmx.ch>
+ *  SPDX-FileCopyrightText: 2009 Ilya Portnov <nomail>
  *
  *  This class is based on "lib/colorchanger.hpp" from MyPaint (mypaint.intilinux.com)
  *
@@ -233,7 +233,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 
     if (!e->isAccepted()) {
         if(rect().contains(e->pos())) {
-            KoColor color(Acs::pickColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
+            KoColor color(Acs::sampleColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
             this->updateColorPreview(color);
             updatePreviousColorPreview();
         }
@@ -243,7 +243,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 void KisMyPaintShadeSelector::mouseMoveEvent(QMouseEvent *e)
 {
     if(rect().contains(e->pos())) {
-        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
+        KoColor color(Acs::sampleColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
         this->updateColorPreview(color);
     }
     KisColorSelectorBase::mouseMoveEvent(e);
@@ -255,7 +255,7 @@ void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
     KisColorSelectorBase::mouseReleaseEvent(e);
 
     if(!e->isAccepted()) {
-        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
+        KoColor color(Acs::sampleColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
 
         Acs::ColorRole role = Acs::buttonToRole(e->button());
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -27,6 +27,13 @@ private Q_SLOTS:
     void testDrawEllipse();
 
     void testNullRectProcessing();
+
+    void testLineIntersections();
+
+    void testFindTrianglePoint();
+    void testTriangularMotion();
+
+    void testElasticMotion();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

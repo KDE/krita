@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -59,6 +59,13 @@ public:
 
     void recaclulateStaticImage();
     KisPaintDeviceSP buildPreviewDevice();
+    KisPaintDeviceSP buildSourcePreviewDevice();
+
+    /**
+     * Transform Tool may override mask's device for the sake of
+     * in-stack preview
+     */
+    void overrideStaticCacheDevice(KisPaintDeviceSP device);
 
     qint32 x() const override;
     qint32 y() const override;
@@ -72,6 +79,8 @@ public:
     void threadSafeForceStaticImageUpdate();
 
     void syncLodCache() override;
+
+    KisPaintDeviceList getLodCapableDevices() const override;
 
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;

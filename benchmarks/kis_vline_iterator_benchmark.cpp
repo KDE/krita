@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý lukast.dev@gmail.com
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý lukast.dev @gmail.com
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,7 +13,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <kis_iterator_ng.h>
-#include <QTest>
+#include <simpletest.h>
 
 
 void KisVLineIteratorBenchmark::initTestCase()
@@ -154,4 +154,4 @@ void KisVLineIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy()
 }
 
 
-QTEST_MAIN(KisVLineIteratorBenchmark)
+SIMPLE_TEST_MAIN(KisVLineIteratorBenchmark)

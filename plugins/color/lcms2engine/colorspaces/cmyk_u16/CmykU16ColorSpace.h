@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -12,11 +12,9 @@
 
 #include "KoColorModelStandardIds.h"
 
-typedef KoCmykTraits<quint16> CmykU16Traits;
-
 #define TYPE_CMYKA_16           (COLORSPACE_SH(PT_CMYK)|EXTRA_SH(1)|CHANNELS_SH(4)|BYTES_SH(2))
 
-class CmykU16ColorSpace : public LcmsColorSpace<CmykU16Traits>
+class CmykU16ColorSpace : public LcmsColorSpace<KoCmykU16Traits>
 {
 public:
     CmykU16ColorSpace(const QString &name, KoColorProfile *p);

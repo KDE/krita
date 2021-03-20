@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,6 +14,7 @@
 #include "KoGenericRegistry.h"
 #include "KoID.h"
 #include "kritaimage_export.h"
+#include <QSize>
 
 class KRITAIMAGE_EXPORT KisFilterStrategy
 {
@@ -187,6 +188,11 @@ public:
      * (with a non empty description) stored in the registry.
      */
     QString formattedDescriptions() const;
+
+    /**
+     * Try to select an appropriate image filtering strategy based on original and desired parameters.
+     */
+    KisFilterStrategy* autoFilterStrategy(QSize originalSize, QSize desiredSize) const;
 
 private:
 

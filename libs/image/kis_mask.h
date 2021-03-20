@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
- *            (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *
  *  SPDX-License-Identifier: GPL-2.0-or-laterb

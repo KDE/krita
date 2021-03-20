@@ -1,14 +1,17 @@
 /*
-    Copyright (C) 2005 Tim Beaulen <tbscope@gmail.org>
-    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
-    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2005 Tim Beaulen <tbscope@gmail.org>
+    SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+    SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include <resources/KoStopGradient.h>
 
+#include <array>
 #include <cfloat>
+#include <cmath>
 
 #include <QColor>
 #include <QFile>
@@ -20,11 +23,12 @@
 #include <DebugPigment.h>
 
 #include "KoColorSpaceRegistry.h"
+#include <KoColorSpaceEngine.h>
+#include <KoColorProfile.h>
 #include "KoMixColorsOp.h"
 
 #include "kis_dom_utils.h"
 
-#include <math.h>
 #include <KoColorModelStandardIds.h>
 #include <KoXmlNS.h>
 
@@ -152,48 +156,31 @@ bool KoStopGradient::stopsAt(KoGradientStop& leftStop, KoGradientStop& rightStop
 
 void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 {
-    KoColor buffer;
-
     KoGradientStop leftStop, rightStop;
     if (!stopsAt(leftStop, rightStop, t)) return;
 
-    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+    const KoColorSpace *mixSpace = dst.colorSpace();
 
-    KoColor startDummy, endDummy;
-    if (mixSpace) {
-        startDummy = KoColor(leftStop.color, mixSpace);
-        endDummy = KoColor(rightStop.color, mixSpace);
-    } else {
-        startDummy = leftStop.color;
-        endDummy = rightStop.color;
-    }
-    const quint8* colors[2];
-    colors[0] = startDummy.data();
-    colors[1] = endDummy.data();
+    KoColor buffer(mixSpace);
+    KoColor startDummy(leftStop.color, mixSpace);
+    KoColor endDummy(rightStop.color, mixSpace);
 
-    qreal localT;
+    const std::array<quint8 *, 2> colors = {{startDummy.data(), endDummy.data()}};
+
+    qreal localT = NAN;
     qreal stopDistance = rightStop.position - leftStop.position;
     if (stopDistance < DBL_EPSILON) {
         localT = 0.5;
     } else {
         localT = (t - leftStop.position) / stopDistance;
     }
-    qint16 colorWeights[2];
-    colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
-    colorWeights[1] = 255 - colorWeights[0];
+    std::array<qint16, 2> colorWeights {};
+    colorWeights[0] = std::lround((1.0 - localT) * qint16_MAX);
+    colorWeights[1] = qint16_MAX - colorWeights[0];
 
-    //check if our mixspace exists, it doesn't at startup.
-    if (mixSpace) {
-        if (*buffer.colorSpace() != *mixSpace) {
-            buffer = KoColor(mixSpace);
-        }
-        mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    } else {
-        buffer = KoColor(colorSpace());
-        colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    }
+    mixSpace->mixColorsOp()->mixColors(colors.data(), colorWeights.data(), 2, buffer.data(), qint16_MAX);
 
-    dst.fromKoColor(buffer);
+    dst = buffer;
 }
 
 QSharedPointer<KoStopGradient> KoStopGradient::fromQGradient(const QGradient *gradient)
@@ -250,7 +237,6 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
     KoColor color;
     Q_FOREACH(const KoGradientStop & stop, stops) {
         color = stop.color;
-        color.convertTo(colorSpace());
         m_stops.append(KoGradientStop(stop.position, color, stop.type));
         if (stop.type != COLORSTOP) {
             m_hasVariableStops = true;
@@ -281,8 +267,8 @@ QList<int> KoStopGradient::requiredCanvasResources() const
 
 void KoStopGradient::bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
-    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace());
-    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace());
+    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
 
     for (auto it = m_stops.begin(); it != m_stops.end(); ++it) {
         if (it->type == FOREGROUNDSTOP) {
@@ -297,8 +283,8 @@ void KoStopGradient::bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResou
 
 void KoStopGradient::updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
-    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace());
-    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace());
+    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
 
     for (auto it = m_stops.begin(); it != m_stops.end(); ++it) {
         if (it->type == FOREGROUNDSTOP) {
@@ -316,24 +302,54 @@ void KoStopGradient::loadSvgGradient(QIODevice* file)
     if (!(doc.setContent(file))) {
         file->close();
     } else {
+        QHash<QString, const KoColorProfile*> profiles;
+        for (QDomElement e = doc.documentElement().firstChildElement("defs"); !e.isNull(); e = e.nextSiblingElement("defs")) {
+            for (QDomElement profileEl = e.firstChildElement("color-profile"); !profileEl.isNull(); profileEl = profileEl.nextSiblingElement("color-profile")) {
+                const QString href = profileEl.attribute("xlink:href");
+                const QByteArray uniqueId = QByteArray::fromHex(profileEl.attribute("local").toLatin1());
+                const QString name = profileEl.attribute("name");
+
+                const KoColorProfile *profile =
+                        KoColorSpaceRegistry::instance()->profileByUniqueId(uniqueId);
+                if (!profile) {
+                    QFile file(href);
+                    if (file.exists()) {
+                        KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
+                        KIS_ASSERT(engine);
+                        file.open(QIODevice::ReadOnly);
+                        const QByteArray profileData = file.readAll();
+                        if (!profileData.isEmpty()) {
+                            profile = engine->addProfile(href);
+                        }
+                    }
+                }
+
+
+                if (profile && !profiles.contains(name)) {
+                    profiles.insert(name, profile);
+                }
+            }
+        }
         for (QDomNode n = doc.documentElement().firstChild(); !n.isNull(); n = n.nextSibling()) {
             QDomElement e = n.toElement();
 
             if (e.isNull()) continue;
 
             if (e.tagName() == "linearGradient" || e.tagName() == "radialGradient") {
-                parseSvgGradient(e);
+                parseSvgGradient(e, profiles);
                 return;
             }
             // Inkscape gradients are in another defs
             if (e.tagName() == "defs") {
+
+
                 for (QDomNode defnode = e.firstChild(); !defnode.isNull(); defnode = defnode.nextSibling()) {
                     QDomElement defelement = defnode.toElement();
 
                     if (defelement.isNull()) continue;
 
                     if (defelement.tagName() == "linearGradient" || defelement.tagName() == "radialGradient") {
-                        parseSvgGradient(defelement);
+                        parseSvgGradient(defelement, profiles);
                         return;
                     }
                 }
@@ -343,7 +359,7 @@ void KoStopGradient::loadSvgGradient(QIODevice* file)
 }
 
 
-void KoStopGradient::parseSvgGradient(const QDomElement& element)
+void KoStopGradient::parseSvgGradient(const QDomElement& element, QHash<QString, const KoColorProfile *> profiles)
 {
     m_stops.clear();
     m_hasVariableStops = false;
@@ -354,8 +370,6 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
     {
     }*/
     setName(element.attribute("id", i18n("SVG Gradient")));
-
-    const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     bool bbox = element.attribute("gradientUnits") != "userSpaceOnUse";
 
@@ -478,7 +492,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
         QDomElement colorstop = n.toElement();
         if (colorstop.tagName() == "stop") {
             qreal opacity = 0.0;
-            QColor c;
+            KoColor color;
             float off;
             QString temp = colorstop.attribute("offset");
             if (temp.contains('%')) {
@@ -489,7 +503,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
                 off = temp.toFloat();
 
             if (!colorstop.attribute("stop-color").isEmpty())
-                parseSvgColor(c, colorstop.attribute("stop-color"));
+                color = KoColor::fromSVG11(colorstop.attribute("stop-color"), profiles);
             else {
                 // try style attr
                 QString style = colorstop.attribute("style").simplified();
@@ -499,7 +513,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
                     QString command = substyle[0].trimmed();
                     QString params = substyle[1].trimmed();
                     if (command == "stop-color")
-                        parseSvgColor(c, params);
+                        color = KoColor::fromSVG11(params, profiles);
                     if (command == "stop-opacity")
                         opacity = params.toDouble();
                 }
@@ -508,9 +522,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
             if (!colorstop.attribute("stop-opacity").isEmpty())
                 opacity = colorstop.attribute("stop-opacity").toDouble();
 
-            KoColor color(rgbColorSpace);
-            color.fromQColor(c);
-            color.setOpacity(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
+            color.setOpacity(static_cast<quint8>(std::lround(opacity * OPACITY_OPAQUE_U8)));
             QString stopTypeStr = colorstop.attribute("krita:stop-type", "color-stop");
             KoGradientStopType stopType = KoGradientStop::typeFromString(stopTypeStr);
             if (stopType != COLORSTOP) {
@@ -523,44 +535,6 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
             }
             m_stops.append(KoGradientStop(off, color, stopType));
         }
-    }
-}
-
-void KoStopGradient::parseSvgColor(QColor& color, const QString& s)
-{
-    if (s.startsWith("rgb(")) {
-        QString parse = s.trimmed();
-        QStringList colors = parse.split(',');
-        QString r = colors[0].right((colors[0].length() - 4));
-        QString g = colors[1];
-        QString b = colors[2].left((colors[2].length() - 1));
-
-        if (r.contains('%')) {
-            r = r.left(r.length() - 1);
-            r = QString::number(int((qreal(255 * r.toDouble()) / 100.0)));
-        }
-
-        if (g.contains('%')) {
-            g = g.left(g.length() - 1);
-            g = QString::number(int((qreal(255 * g.toDouble()) / 100.0)));
-        }
-
-        if (b.contains('%')) {
-            b = b.left(b.length() - 1);
-            b = QString::number(int((qreal(255 * b.toDouble()) / 100.0)));
-        }
-
-        color = QColor(r.toInt(), g.toInt(), b.toInt());
-    }
-    else {
-        QString rgbColor = s.trimmed();
-        QColor c;
-        if (rgbColor.startsWith('#'))
-            c.setNamedColor(rgbColor);
-        else {
-            c = QColor(rgbColor);
-        }
-        color = c;
     }
 }
 
@@ -602,46 +576,58 @@ KoStopGradient KoStopGradient::fromXML(const QDomElement& elt)
     return gradient;
 }
 
+QString KoStopGradient::saveSvgGradient() const
+{
+    QDomDocument doc;
+
+    doc.setContent(QString("<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:krita=\"%1\" > </svg>").arg(KoXmlNS::krita));
+
+    const QString spreadMethod[3] = {
+        QString("pad"),
+        QString("reflect"),
+        QString("repeat")
+    };
+
+    QDomElement gradient = doc.createElement("linearGradient");
+    gradient.setAttribute("id", name());
+    gradient.setAttribute("gradientUnits", "objectBoundingBox");
+    gradient.setAttribute("spreadMethod", spreadMethod[spread()]);
+
+    QHash<QString, const KoColorProfile*> profiles;
+    for(const KoGradientStop & stop: m_stops) {
+        QDomElement stopEl = doc.createElement("stop");
+        stopEl.setAttribute("stop-color", stop.color.toSVG11(&profiles));
+        stopEl.setAttribute("offset", QString().setNum(stop.position));
+        stopEl.setAttribute("stop-opacity", stop.color.opacityF());
+        stopEl.setAttribute("krita:stop-type", stop.typeString());
+        gradient.appendChild(stopEl);
+    }
+
+    if (profiles.size()>0) {
+        QDomElement defs = doc.createElement("defs");
+        for (QString key: profiles.keys()) {
+            const KoColorProfile * profile = profiles.value(key);
+
+            QDomElement profileEl = doc.createElement("color-profile");
+            profileEl.setAttribute("name", key);
+            QString val = profile->uniqueId().toHex();
+            profileEl.setAttribute("local", val);
+            profileEl.setAttribute("xlink:href", profile->fileName());
+            defs.appendChild(profileEl);
+        }
+        doc.documentElement().appendChild(defs);
+    }
+
+    doc.documentElement().appendChild(gradient);
+
+    return doc.toString();
+}
+
 bool KoStopGradient::saveToDevice(QIODevice* dev) const
 {
     QTextStream stream(dev);
 
-    const QString spreadMethod[3] = {
-        QString("spreadMethod=\"pad\" "),
-        QString("spreadMethod=\"reflect\" "),
-        QString("spreadMethod=\"repeat\" ")
-    };
-
-    const QString indent = "    ";
-
-    stream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
-    stream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
-    stream << ">" << endl;
-
-
-    stream << indent;
-    stream << "<linearGradient id=\"" << name() << "\" ";
-    stream << "gradientUnits=\"objectBoundingBox\" ";
-    stream << spreadMethod[spread()];
-    stream << ">" << endl;
-
-    QColor color;
-
-    // color stops
-    Q_FOREACH(const KoGradientStop & stop, m_stops) {
-        stop.color.toQColor(&color);
-        stream << indent << indent;
-        stream << "<stop stop-color=\"";
-        stream << color.name();
-        stream << "\" offset=\"" << QString().setNum(stop.position);
-        stream << "\" stop-opacity=\"" << static_cast<float>(color.alpha()) / 255.0f;
-        stream << "\" krita:stop-type=\"" << stop.typeString() << "\"";
-            
-        stream << " />" << endl;
-    }
-    stream << indent;
-    stream << "</linearGradient>" << endl;
-    stream << "</svg>" << endl;
+    stream << saveSvgGradient();
 
     KoResource::saveToDevice(dev);
 

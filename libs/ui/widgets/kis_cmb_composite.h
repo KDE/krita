@@ -1,8 +1,8 @@
 /*
  *  widgets/kis_cmb_composite.h - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
- *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

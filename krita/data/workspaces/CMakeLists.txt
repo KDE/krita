@@ -6,6 +6,7 @@ install( FILES
     Big_Vector.kws
     Default.kws
     Small_Vector.kws
+    Storyboarding.kws
     VFX_Paint.kws
     Minimal.kws
     DESTINATION ${DATA_INSTALL_DIR}/krita/workspaces)

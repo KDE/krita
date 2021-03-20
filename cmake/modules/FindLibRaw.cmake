@@ -8,8 +8,8 @@
 #  LibRaw_DEFINITIONS, the definitions needed to use LibRaw (non-thread-safe)
 #  LibRaw_r_DEFINITIONS, the definitions needed to use LibRaw (thread-safe)
 #
-# Copyright (c) 2013, Pino Toscano <pino at kde dot org>
-# Copyright (c) 2013, Gilles Caulier <caulier dot gilles at gmail dot com>
+# SPDX-FileCopyrightText: 2013 Pino Toscano <pino at kde dot org>
+# SPDX-FileCopyrightText: 2013 Gilles Caulier <caulier dot gilles at gmail dot com>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

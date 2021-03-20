@@ -1,9 +1,9 @@
 /*
  *  dlg_layersize.h -- part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -45,10 +45,13 @@ public:
                  int width, int height, double resolution);
     ~DlgLayerSize() override;
 
-    qint32 width();
-    qint32 height();
+    qint32 desiredWidth();
+    qint32 desiredHeight();
 
     KisFilterStrategy *filterType();
+
+Q_SIGNALS:
+    void sigDesiredSizeChanged(qint32 width, qint32 height, double resolution);
 
 private Q_SLOTS:
     void slotWidthChanged(double w);

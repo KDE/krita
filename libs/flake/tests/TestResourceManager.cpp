@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+   SPDX-FileCopyrightText: 2008 Thorsten Zachmann <zachmann@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -11,7 +11,7 @@
 #include "KoPathShape.h"
 #include "KoUnit.h"
 #include <QSignalSpy>
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_debug.h"
 
@@ -414,4 +414,4 @@ void TestResourceManager::testNeverChangingConverters()
 }
 
 
-QTEST_MAIN(TestResourceManager)
+SIMPLE_TEST_MAIN(TestResourceManager)

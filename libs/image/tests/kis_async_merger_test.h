@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_ASYNC_MERGER_TEST_H
 #define KIS_ASYNC_MERGER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAsyncMergerTest : public QObject
 {

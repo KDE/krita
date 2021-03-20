@@ -1,6 +1,7 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -18,10 +19,10 @@
 #include "KoID.h"
 #include "KoIntegerMaths.h"
 #include "compositeops/KoCompositeOps.h"
+#include "dithering/KisRgbDitherOpFactory.h"
 
 #include "KoColorConversions.h"
 #include <KoColorSpacePreserveLightnessUtils.h>
-
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 
@@ -38,7 +39,7 @@ KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<KoBgrU8Traits>(this);
-
+    addStandardDitherOps<KoBgrU8Traits>(this);
 }
 
 KoRgbU8ColorSpace::~KoRgbU8ColorSpace()

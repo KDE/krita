@@ -5,7 +5,7 @@
 #include "TestColorConversion.h"
 #include "KoColorConversions.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestColorConversion::testRGBHSV()
 {

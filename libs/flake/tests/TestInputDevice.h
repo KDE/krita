@@ -1,7 +1,7 @@
 /*
  *  This file is part of Calligra tests
  *
- *  Copyright (C) 2011 Hanna Skott <hannaetscott@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Hanna Skott <hannaetscott@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

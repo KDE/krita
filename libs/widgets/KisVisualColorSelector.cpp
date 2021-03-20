@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -93,7 +93,7 @@ void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
     if (!m_d->currentCS || *m_d->currentCS != *cs) {
         const KoColorSpace *csNew = cs;
 
-        // PQ color space is not very suitable for color picking, substitute with linear one
+        // PQ color space is not very suitable for selecting colors, substitute with linear one
         if (cs->colorModelId() == RGBAColorModelID &&
             cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
 
@@ -388,6 +388,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
         switch(m_d->acs_config.subTypeParameter)
         {
         case KisColorSelectorConfiguration::H:
+        case KisColorSelectorConfiguration::Hluma:
             channel1 = 0;
             break;
         case KisColorSelectorConfiguration::hsyS:

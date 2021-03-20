@@ -1,7 +1,7 @@
 /*
  *  tool_transform_args.h - part of Krita
  *
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,6 +16,7 @@
 
 #include "kis_liquify_transform_worker.h"
 #include "kis_dom_utils.h"
+#include <QMatrix4x4>
 
 
 ToolTransformArgs::ToolTransformArgs()
@@ -26,6 +27,8 @@ ToolTransformArgs::ToolTransformArgs()
     setFilterId(savedFilterId);
     m_transformAroundRotationCenter = configGroup.readEntry("transformAroundRotationCenter", "0").toInt();
     m_meshShowHandles = configGroup.readEntry("meshShowHandles", true);
+    m_meshSymmetricalHandles = configGroup.readEntry("meshSymmetricalHandles", true);
+    m_meshScaleHandles = configGroup.readEntry("meshScaleHandles", false);
 }
 
 void ToolTransformArgs::setFilterId(const QString &id) {
@@ -71,6 +74,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_editTransformPoints = args.m_editTransformPoints;
     m_pixelPrecision = args.pixelPrecision();
     m_previewPixelPrecision = args.previewPixelPrecision();
+    m_externalSource = args.externalSource();
 
     if (args.m_liquifyWorker) {
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
@@ -78,8 +82,23 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
 
     m_meshTransform = args.m_meshTransform;
     m_meshShowHandles = args.m_meshShowHandles;
+    m_meshSymmetricalHandles = args.m_meshSymmetricalHandles;
+    m_meshScaleHandles = args.m_meshScaleHandles;
 
     m_continuedTransformation.reset(args.m_continuedTransformation ? new ToolTransformArgs(*args.m_continuedTransformation) : 0);
+}
+
+bool ToolTransformArgs::meshScaleHandles() const
+{
+    return m_meshScaleHandles;
+}
+
+void ToolTransformArgs::setMeshScaleHandles(bool meshScaleHandles)
+{
+    m_meshScaleHandles = meshScaleHandles;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshScaleHandles", meshScaleHandles);
 }
 
 void ToolTransformArgs::clear()
@@ -141,6 +160,8 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
         m_meshTransform == other.m_meshTransform &&
 
         // pointer types
+
+        m_externalSource == other.m_externalSource &&
 
         ((m_filter && other.m_filter &&
           m_filter->id() == other.m_filter->id())
@@ -214,7 +235,8 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      double alpha,
                                      bool defaultPoints,
                                      const QString &filterId,
-                                     int pixelPrecision, int previewPixelPrecision)
+                                     int pixelPrecision, int previewPixelPrecision,
+                                     KisPaintDeviceSP externalSource)
     : m_mode(mode)
     , m_defaultPoints(defaultPoints)
     , m_origPoints {QVector<QPointF>()}
@@ -235,6 +257,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     , m_liquifyProperties(new KisLiquifyProperties())
     , m_pixelPrecision(pixelPrecision)
     , m_previewPixelPrecision(previewPixelPrecision)
+    , m_externalSource(externalSource)
 {
     setFilterId(filterId);
 }
@@ -249,7 +272,6 @@ void ToolTransformArgs::translate(const QPointF &offset)
 {
     if (m_mode == FREE_TRANSFORM || m_mode == PERSPECTIVE_4POINT) {
         m_originalCenter += offset;
-        m_rotationCenterOffset += offset;
         m_transformedCenter += offset;
     } else if(m_mode == WARP || m_mode == CAGE) {
         for (auto &pt : m_origPoints) {
@@ -293,6 +315,11 @@ bool ToolTransformArgs::isIdentity() const
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
         return true;
     }
+}
+
+bool ToolTransformArgs::isUnchanging() const
+{
+    return !m_externalSource && isIdentity();
 }
 
 void ToolTransformArgs::initLiquifyTransformMode(const QRect &srcRect)
@@ -526,4 +553,53 @@ void ToolTransformArgs::setMeshShowHandles(bool value)
 
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     configGroup.writeEntry("meshShowHandles", value);
+}
+
+bool ToolTransformArgs::meshSymmetricalHandles() const
+{
+    return m_meshSymmetricalHandles;
+}
+
+void ToolTransformArgs::setMeshSymmetricalHandles(bool value)
+{
+    m_meshSymmetricalHandles = value;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshSymmetricalHandles", value);
+}
+
+void ToolTransformArgs::scaleSrcAndDst(qreal scale)
+{
+    const QTransform t = QTransform::fromScale(scale, scale);
+
+    if (m_mode == FREE_TRANSFORM) {
+        m_transformedCenter = t.map(m_transformedCenter);
+        m_originalCenter = t.map(m_originalCenter);
+
+        QMatrix4x4 m;
+        m.scale(scale);
+        m_cameraPos = m * m_cameraPos;
+
+    } else if (m_mode == PERSPECTIVE_4POINT) {
+        m_transformedCenter = t.map(m_transformedCenter);
+        m_originalCenter = t.map(m_originalCenter);
+
+        m_flattenedPerspectiveTransform = t.inverted() * m_flattenedPerspectiveTransform * t;
+
+
+    } else if(m_mode == WARP || m_mode == CAGE) {
+        for (auto it = m_origPoints.begin(); it != m_origPoints.end(); ++it) {
+            *it = t.map(*it);
+        }
+
+        for (auto it = m_transfPoints.begin(); it != m_transfPoints.end(); ++it) {
+            *it = t.map(*it);
+        }
+    } else if (m_mode == LIQUIFY) {
+        m_liquifyWorker->transformSrcAndDst(t);
+    } else if (m_mode == MESH) {
+        m_meshTransform.transformSrcAndDst(t);
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
+    }
 }

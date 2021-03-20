@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- *  Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2005-2006 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2006, 2008 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -19,7 +19,6 @@ class KoShapeControllerBase;
 class KoToolFactoryBase;
 class KoCanvasBase;
 class KoToolBase;
-class KoCreateShapesTool;
 class KActionCollection;
 class KoShape;
 class KoInputDeviceHandlerEvent;

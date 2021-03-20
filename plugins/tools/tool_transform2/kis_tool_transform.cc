@@ -1,10 +1,10 @@
 /*
  *  kis_tool_transform.cc -- part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -76,8 +76,10 @@
 #include "krita_container_utils.h"
 #include "kis_layer_utils.h"
 #include <KisDelayedUpdateNodeInterface.h>
+#include "kis_config_notifier.h"
 
 #include "strokes/transform_stroke_strategy.h"
+#include "strokes/inplace_transform_stroke_strategy.h"
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::rotateCursor())
@@ -116,12 +118,12 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     useCursor(KisCursor::selectCursor());
     m_optionsWidget = 0;
 
-    warpAction = new KisAction(i18n("Warp"));
-    liquifyAction = new KisAction(i18n("Liquify"));
-    meshAction = new KisAction(i18n("Mesh"));
-    cageAction = new KisAction(i18n("Cage"));
-    freeTransformAction = new KisAction(i18n("Free"));
-    perspectiveAction = new KisAction(i18n("Perspective"));
+    warpAction = new KisAction(i18nc("Warp Transform Tab Label", "Warp"));
+    liquifyAction = new KisAction(i18nc("Liquify Transform Tab Label", "Liquify"));
+    meshAction = new KisAction(i18nc("Mesh Transform Tab Label", "Mesh"));
+    cageAction = new KisAction(i18nc("Cage Transform Tab Label", "Cage"));
+    freeTransformAction = new KisAction(i18nc("Free Transform Tab Label", "Free"));
+    perspectiveAction = new KisAction(i18nc("Perspective Transform Tab Label", "Perspective"));
 
     // extra actions for free transform that are in the tool options
     mirrorHorizontalAction = new KisAction(i18n("Mirror Horizontal"));
@@ -135,19 +137,28 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_contextMenu.reset(new QMenu());
 
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    connect(m_warpStrategy.data(), SIGNAL(requestImageRecalculation()), SLOT(requestImageRecalculation()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    connect(m_cageStrategy.data(), SIGNAL(requestImageRecalculation()), SLOT(requestImageRecalculation()));
     connect(m_liquifyStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_liquifyStrategy.data(), SIGNAL(requestCursorOutlineUpdate(QPointF)), SLOT(cursorOutlineUpdateRequested(QPointF)));
     connect(m_liquifyStrategy.data(), SIGNAL(requestUpdateOptionWidget()), SLOT(updateOptionWidget()));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestImageRecalculation()), SLOT(requestImageRecalculation()));
     connect(m_freeStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
+    connect(m_freeStrategy.data(), SIGNAL(requestImageRecalculation()), SLOT(requestImageRecalculation()));
     connect(m_perspectiveStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_perspectiveStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
+    connect(m_perspectiveStrategy.data(), SIGNAL(requestImageRecalculation()), SLOT(requestImageRecalculation()));
     connect(m_meshStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    connect(m_meshStrategy.data(), SIGNAL(requestImageRecalculation()), SLOT(requestImageRecalculation()));
 
     connect(&m_changesTracker, SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
             this, SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotGlobalConfigChanged()));
+    slotGlobalConfigChanged();
 }
 
 KisToolTransform::~KisToolTransform()
@@ -169,6 +180,13 @@ void KisToolTransform::canvasUpdateRequested()
 void KisToolTransform::resetCursorStyle()
 {
     setFunctionalCursor();
+}
+
+void KisToolTransform::slotGlobalConfigChanged()
+{
+    KConfigGroup group = KSharedConfig::openConfig()->group(toolId());
+    m_preferOverlayPreviewStyle = group.readEntry("useOverlayPreviewStyle", false);
+    m_forceLodMode = group.readEntry("forceLodMode", true);
 }
 
 void KisToolTransform::resetRotationCenterButtonsRequested()
@@ -211,7 +229,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         m_refRect = newRefRect;
         currentStrategy()->externalConfigChanged();
     }
-
     currentStrategy()->paint(gc);
 
 
@@ -272,7 +289,7 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
     }
 
     if (!m_strokeId) {
-        startStroke(m_currentArgs.mode(), false);
+        startStroke(m_currentArgs.mode(), action == KisTool::ChangeSize);
     } else if (m_transaction.rootNode()) {
         bool result = false;
 
@@ -343,7 +360,6 @@ QMenu*  KisToolTransform::popupActionsMenu()
         m_contextMenu->clear();
 
         m_contextMenu->addSection(i18n("Transform Tool Actions"));
-        m_contextMenu->addSeparator();
         // add a quick switch to different transform types
         m_contextMenu->addAction(freeTransformAction);
         m_contextMenu->addAction(perspectiveAction);
@@ -699,9 +715,21 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     m_meshStrategy->setThumbnailImage(origImg, thumbToImageTransform);
 }
 
-void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolTransform::newActivationWithExternalSource(KisPaintDeviceSP externalSource)
 {
-    KisTool::activate(toolActivation, shapes);
+    m_externalSourceForNextActivation = externalSource;
+    if (isActive()) {
+        QSet<KoShape*> dummy;
+        deactivate();
+        activate(dummy);
+    } else {
+        KoToolManager::instance()->switchToolRequested("KisToolTransform");
+    }
+}
+
+void KisToolTransform::activate(const QSet<KoShape*> &shapes)
+{
+    KisTool::activate(shapes);
     m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteUp()));
     m_actionConnections.addConnection(action("movetool-move-up-more"), SIGNAL(triggered(bool)),
@@ -759,9 +787,19 @@ void KisToolTransform::requestStrokeCancellation()
     }
 }
 
+void KisToolTransform::requestImageRecalculation()
+{
+    if (!m_currentlyUsingOverlayPreviewStyle && m_strokeId && m_transaction.rootNode()) {
+        image()->addJob(m_strokeId, new InplaceTransformStrokeStrategy::UpdateTransformData(m_currentArgs));
+    }
+}
+
 void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)
 {
     Q_ASSERT(!m_strokeId);
+
+    KisPaintDeviceSP externalSource = m_externalSourceForNextActivation;
+    m_externalSourceForNextActivation.clear();
 
     // set up and null checks before we do anything
     KisResourcesSnapshotSP resources =
@@ -818,16 +856,37 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         selection = 0;
     }
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
-    connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
-    connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
+    // Overlay preview is never used when transforming an externally provided image
+    m_currentlyUsingOverlayPreviewStyle = m_preferOverlayPreviewStyle && !externalSource;
 
-    // save unique identifier of the stroke so we could
-    // recognize it when sigTransactionGenerated() is
-    // received (theoretically, the user can start two
-    // strokes at the same time, if he is quick enough)
-    m_strokeStrategyCookie = strategy;
+    KisStrokeStrategy *strategy = 0;
+
+    if (m_currentlyUsingOverlayPreviewStyle) {
+        TransformStrokeStrategy *transformStrategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
+        connect(transformStrategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
+        connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
+        strategy = transformStrategy;
+
+        // save unique identifier of the stroke so we could
+        // recognize it when sigTransactionGenerated() is
+        // received (theoretically, the user can start two
+        // strokes at the same time, if he is quick enough)
+        m_strokeStrategyCookie = transformStrategy;
+
+    } else {
+        InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, externalSource, image().data(), image().data(), image()->root(), m_forceLodMode);
+        connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
+        strategy = transformStrategy;
+
+        // save unique identifier of the stroke so we could
+        // recognize it when sigTransactionGenerated() is
+        // received (theoretically, the user can start two
+        // strokes at the same time, if he is quick enough)
+        m_strokeStrategyCookie = transformStrategy;
+    }
+
     m_strokeId = image()->startStroke(strategy);
+
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
 
@@ -838,10 +897,18 @@ void KisToolTransform::endStroke()
 {
     if (!m_strokeId) return;
 
-    if (m_transaction.rootNode() && !m_currentArgs.isIdentity()) {
+    if (m_currentlyUsingOverlayPreviewStyle &&
+        m_transaction.rootNode() &&
+        !m_currentArgs.isUnchanging()) {
+
         image()->addJob(m_strokeId,
                         new TransformStrokeStrategy::TransformAllData(m_currentArgs));
     }
+
+    if (m_asyncUpdateHelper.isActive()) {
+        m_asyncUpdateHelper.endUpdateStream();
+    }
+
     image()->endStroke(m_strokeId);
 
     m_strokeStrategyCookie = 0;
@@ -873,6 +940,10 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
     m_transaction = transaction;
     m_currentArgs = args;
     m_transaction.setCurrentConfigLocation(&m_currentArgs);
+
+    if (!m_currentlyUsingOverlayPreviewStyle) {
+        m_asyncUpdateHelper.startUpdateStream(image().data(), m_strokeId);
+    }
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
     commitChanges();
@@ -909,6 +980,10 @@ void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device)
 void KisToolTransform::cancelStroke()
 {
     if (!m_strokeId) return;
+
+    if (m_asyncUpdateHelper.isActive()) {
+        m_asyncUpdateHelper.cancelUpdateStream();
+    }
 
     image()->cancelStroke(m_strokeId);
     m_strokeStrategyCookie = 0;
@@ -1098,9 +1173,9 @@ void KisToolTransform::slotResetTransform(ToolTransformArgs::TransformMode mode)
             KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
         }
     } else {
-        if (!TransformStrokeStrategy::shouldRestartStrokeOnModeChange(previousMode,
-                                                                      m_currentArgs.mode(),
-                                                                      m_transaction.transformedNodes())) {
+        if (!KisTransformUtils::shouldRestartStrokeOnModeChange(previousMode,
+                                                                m_currentArgs.mode(),
+                                                                m_transaction.transformedNodes())) {
             initTransformMode(m_currentArgs.mode());
             slotEditingFinished();
 

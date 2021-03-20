@@ -1,9 +1,9 @@
 /*
  * This file is part of Krita
  *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2009 Edward Apap <schumifer@hotmail.com>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -152,7 +152,7 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
     KIS_SAFE_ASSERT_RECOVER_RETURN(srcDev->pixelSize() == dstDev->pixelSize());
     KIS_SAFE_ASSERT_RECOVER_NOOP(*srcDev->colorSpace() == *dstDev->colorSpace());
 
-    QRectF srcClipRect = srcDev->defaultBounds()->imageBorderRect();
+    QRectF srcClipRect = srcDev->exactBounds() | srcDev->defaultBounds()->imageBorderRect();
     if (srcClipRect.isEmpty()) return;
 
     if (m_isIdentity || m_isTranslating) {

@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_updater_context_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kistest.h"
 

@@ -1,8 +1,8 @@
 /*
  *  This file is part of Calligra tests
  *
- *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2010 Adam Celarek <kdedev@xibo.at>
+ *  SPDX-FileCopyrightText: 2006-2010 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev@xibo.at>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,7 +16,7 @@
 #include <KoShapeGroup.h>
 #include <KoSelection.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 
 void TestShapeContainer::testModel()
@@ -210,4 +210,4 @@ void TestShapeContainer::testScaling2()
     QCOMPARE(selection->boundingRect(), group->boundingRect());
 }
 
-QTEST_MAIN(TestShapeContainer)
+SIMPLE_TEST_MAIN(TestShapeContainer)

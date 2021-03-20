@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_fill_interval_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <floodfill/kis_fill_interval.h>
 
@@ -22,4 +22,4 @@ void KisFillIntervalTest::testIsValid()
     QVERIFY(!i2.isValid());
 }
 
-QTEST_MAIN(KisFillIntervalTest)
+SIMPLE_TEST_MAIN(KisFillIntervalTest)

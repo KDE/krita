@@ -1,7 +1,7 @@
 /* License:
  * 
  * Code for making well-behaved ICC profiles
- * Copyright © 2013, 2014, 2015 Elle Stone 
+ * SPDX-FileCopyrightText: 2013, 2014, 2015 Elle Stone
  * 
  * SPDX-License-Identifier: GPL-2.0-or-later
  * 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -67,6 +67,10 @@
 #include "kis_layer_utils.h"
 #include "krita_utils.h"
 #include "kis_shape_layer.h"
+#include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_paint_device_frames_interface.h"
+#include "kis_layer_utils.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
@@ -763,10 +767,8 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
     if (node) {
         QStringList vectorTools = QStringList()
                 << "InteractionTool"
-                << "KarbonPatternTool"
                 << "KarbonGradientTool"
                 << "KarbonCalligraphyTool"
-                << "CreateShapesTool"
                 << "PathTool";
 
         QStringList pixelTools = QStringList()
@@ -1148,7 +1150,6 @@ void KisNodeManager::mirrorNode(KisNodeSP node,
     if (!canModifyLayer(node)) return;
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(m_d->view->image(), node,
                                        KisProcessingApplicator::RECURSIVE,
@@ -1188,9 +1189,8 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (filename.isEmpty()) return;
 
-    QUrl url = QUrl::fromLocalFile(filename);
 
-    if (url.isEmpty()) return;
+    if (filename.isEmpty()) return;
 
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename, false);
 
@@ -1209,7 +1209,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     dst->initialRefreshGraph();
 
-    if (!doc->exportDocumentSync(url, mimefilter.toLatin1())) {
+    if (!doc->exportDocumentSync(filename, mimefilter.toLatin1())) {
         QMessageBox::warning(qApp->activeWindow(),
                              i18nc("@title:window", "Krita"),
                              i18n("Could not save the layer. %1", doc->errorMessage().toUtf8().data()),
@@ -1280,39 +1280,14 @@ void KisNodeManager::saveVectorLayerAsImage()
 
 void KisNodeManager::slotSplitAlphaIntoMask()
 {
+
     KisNodeSP node = activeNode();
     if (!canModifyLayer(node)) return;
 
     // guaranteed by KisActionManager
     KIS_ASSERT_RECOVER_RETURN(node->hasEditablePaintDevice());
 
-    KisPaintDeviceSP srcDevice = node->paintDevice();
-    const KoColorSpace *srcCS = srcDevice->colorSpace();
-    const QRect processRect =
-            srcDevice->exactBounds() |
-            srcDevice->defaultBounds()->bounds();
-
-    KisPaintDeviceSP selectionDevice =
-            new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-
-    m_d->commandsAdapter.beginMacro(kundo2_i18n("Split Alpha into a Mask"));
-    KisTransaction transaction(kundo2_noi18n("__split_alpha_channel__"), srcDevice);
-
-    KisSequentialIterator srcIt(srcDevice, processRect);
-    KisSequentialIterator dstIt(selectionDevice, processRect);
-
-    while (srcIt.nextPixel() && dstIt.nextPixel()) {
-        quint8 *srcPtr = srcIt.rawData();
-        quint8 *alpha8Ptr = dstIt.rawData();
-
-        *alpha8Ptr = srcCS->opacityU8(srcPtr);
-        srcCS->setOpacity(srcPtr, OPACITY_OPAQUE_U8, 1);
-    }
-
-    m_d->commandsAdapter.addExtraCommand(transaction.endAndTake());
-
-    createNode("KisTransparencyMask", false, selectionDevice);
-    m_d->commandsAdapter.endMacro();
+    KisLayerUtils::splitAlphaToMask(node->image(), node, m_d->maskManager.createMaskNameCommon(node, "KisTransparencyMask",  i18n("Transparency Mask")));
 }
 
 void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
@@ -1406,7 +1381,7 @@ void KisNodeManager::toggleLock()
     bool isLocked = active->userLocked();
 
     for (auto &node : nodes) {
-        node->setUserLocked(!isLocked);
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::locked, !isLocked, m_d->view->image());
     }
 }
 
@@ -1419,8 +1394,7 @@ void KisNodeManager::toggleVisibility()
     bool isVisible = active->visible();
 
     for (auto &node : nodes) {
-        node->setVisible(!isVisible);
-        node->setDirty();
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::visible, !isVisible, m_d->view->image());
     }
 }
 
@@ -1439,7 +1413,7 @@ void KisNodeManager::toggleAlphaLock()
     for (auto &node : nodes) {
         auto layer = qobject_cast<KisPaintLayer*>(node.data());
         if (layer) {
-            layer->setAlphaLocked(!isAlphaLocked);
+            KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::alphaLocked, !isAlphaLocked, m_d->view->image());
         }
     }
 }
@@ -1459,8 +1433,7 @@ void KisNodeManager::toggleInheritAlpha()
     for (auto &node : nodes) {
         auto layer = qobject_cast<KisLayer*>(node.data());
         if (layer) {
-            layer->disableAlphaChannel(!isAlphaDisabled);
-            node->setDirty();
+            KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::inheritAlpha, !isAlphaDisabled, m_d->view->image());
         }
     }
 }
@@ -1677,4 +1650,15 @@ void KisNodeManager::selectUnlockedNodes()
     invertedProps.setProperty("locked", true);
 
     selectLayersImpl(props, invertedProps);
+}
+
+void KisNodeManager::slotUiActivateNode()
+{
+    if (!sender()->property("node").isNull()) {
+        QString name = sender()->property("node").toString();
+        KisNodeSP node = m_d->imageView->image()->rootLayer()->findChildByName(name);
+        if (node) {
+            slotUiActivatedNode(node);
+        }
+    }
 }

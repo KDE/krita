@@ -1,6 +1,6 @@
 /* This file is part of the KDE libraries
-   Copyright (C) 1999,2000 Kurt Granroth <granroth@kde.org>
-   Copyright (C) 2001,2002 Ellis Whitehead <ellis@kde.org>
+   SPDX-FileCopyrightText: 1999, 2000 Kurt Granroth <granroth@kde.org>
+   SPDX-FileCopyrightText: 2001, 2002 Ellis Whitehead <ellis@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-only
 */

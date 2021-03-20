@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisKeyframeAnimationInterfaceSignalTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <qsignalspy.h>
 
 
@@ -86,4 +86,4 @@ void KisKeyframeAnimationInterfaceSignalTest::testSignalOnImageReset()
     QCOMPARE(m_channel->keyframeCount(), 1);
 }
 
-QTEST_MAIN(KisKeyframeAnimationInterfaceSignalTest)
+SIMPLE_TEST_MAIN(KisKeyframeAnimationInterfaceSignalTest)

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -17,7 +17,7 @@
 #include <KisGlobalResourcesInterface.h>
 
 KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)
-    : KisDoubleParseSpinBox(parent)
+    : KisDoubleSliderSpinBox(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);

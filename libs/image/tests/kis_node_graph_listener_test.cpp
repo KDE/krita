@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_graph_listener_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include <testutil.h>
@@ -96,4 +96,4 @@ void KisNodeGraphListenerTest::testSequenceNumber()
     QVERIFY(seqno != listener.graphSequenceNumber());
 }
 
-QTEST_MAIN(KisNodeGraphListenerTest)
+SIMPLE_TEST_MAIN(KisNodeGraphListenerTest)

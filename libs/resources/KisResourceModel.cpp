@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -16,7 +16,10 @@
 #include <KisResourceCacheDb.h>
 
 #include <KisResourceModelProvider.h>
+#include <KisStorageModel.h>
 #include <KisTagModel.h>
+
+#include <kis_debug.h>
 
 #include "KisResourceQueryMapper.h"
 
@@ -34,6 +37,8 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
 
     connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
     connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
 
     d->resourceType = resourceType;
     
@@ -45,7 +50,6 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
                                        ",      resources.thumbnail\n"
                                        ",      resources.status\n"
                                        ",      storages.location\n"
-                                       ",      resources.version\n"
                                        ",      resource_types.name as resource_type\n"
                                        ",      resources.status as resource_active\n"
                                        ",      storages.active as storage_active\n"
@@ -88,6 +92,7 @@ QVariant KisAllResourcesModel::data(const QModelIndex &index, int role) const
     if (pos) {
         v = KisResourceQueryMapper::variantFromResourceQuery(d->resourcesQuery, index.column(), role);
     }
+
     return v;
 }
 
@@ -268,13 +273,18 @@ QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const
     if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
 
     // For now a linear seek to find the first resource with the right id
+    return indexForResourceId(resource->resourceId());
+}
+
+QModelIndex KisAllResourcesModel::indexForResourceId(int resourceId) const
+{
     d->resourcesQuery.first();
     do {
-        if (d->resourcesQuery.value("id").toInt() == resource->resourceId()) {
-            return createIndex(d->resourcesQuery.at(), 0);
+        if (d->resourcesQuery.value("id").toInt() == resourceId) {
+            return index(d->resourcesQuery.at(), 0);
         }
     } while (d->resourcesQuery.next());
-    
+
     return QModelIndex();
 }
 
@@ -343,6 +353,23 @@ bool KisAllResourcesModel::updateResource(KoResourceSP resource)
     return r;
 }
 
+bool KisAllResourcesModel::reloadResource(KoResourceSP resource)
+{
+    if (!resource || !resource->valid()) {
+        qWarning() << "Cannot reload resource. Resource is null or not valid";
+        return false;
+    }
+
+    if (!KisResourceLocator::instance()->reloadResource(d->resourceType, resource)) {
+        qWarning() << "Failed to reload resource" << resource;
+        return false;
+    }
+    bool r = resetQuery();
+    QModelIndex index = indexForResource(resource);
+    emit dataChanged(index, index, {Qt::EditRole});
+    return r;
+}
+
 bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &name)
 {
     if (!resource || !resource->valid() || name.isEmpty()) {
@@ -386,14 +413,17 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
     QSqlQuery q;
 
     r = q.prepare("SELECT tags.id\n"
-              ",      tags.url\n"
-              ",      tags.name\n"
-              ",      tags.comment\n"
-              "FROM   tags\n"
-              ",      resource_tags\n"
-              "WHERE  tags.active > 0\n"                               // make sure the tag is active
-              "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-              "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+                  ",      tags.url\n"
+                  ",      tags.name\n"
+                  ",      tags.comment\n"
+                  ",      resource_types.name as resource_type\n"
+                  "FROM   tags\n"
+                  ",      resource_tags\n"
+                  ",      resource_types\n"
+                  "WHERE  tags.active > 0\n"                               // make sure the tag is active
+                  "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                  "AND    resource_tags.resource_id = :resource_id\n"
+                  "AND    resource_types.id = tags.resource_type_id\n");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << q.lastError();
     }
@@ -411,6 +441,7 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
         tag->setUrl(q.value("url").toString());
         tag->setName(q.value("name").toString());
         tag->setComment(q.value("comment").toString());
+        tag->setResourceType(q.value("resource_type").toString());
         tag->setValid(true);
         tag->setActive(true);
         tags << tag;
@@ -439,16 +470,19 @@ int KisAllResourcesModel::rowCount(const QModelIndex &) const
 }
 
 
-void KisAllResourcesModel::addStorage(const QString &/*location*/)
+void KisAllResourcesModel::addStorage(const QString &location)
 {
+    Q_UNUSED(location)
     beginResetModel();
     resetQuery();
     endResetModel();
 }
 
 
-void KisAllResourcesModel::removeStorage(const QString &/*location*/)
+
+void KisAllResourcesModel::removeStorage(const QString &location)
 {
+    Q_UNUSED(location)
     beginResetModel();
     resetQuery();
     endResetModel();
@@ -514,6 +548,15 @@ QModelIndex KisResourceModel::indexForResource(KoResourceSP resource) const
     return QModelIndex();
 }
 
+QModelIndex KisResourceModel::indexForResourceId(int resourceId) const
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return mapFromSource(source->indexForResourceId(resourceId));
+    }
+    return QModelIndex();
+}
+
 bool KisResourceModel::setResourceInactive(const QModelIndex &index)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
@@ -550,6 +593,15 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
     return false;
 }
 
+bool KisResourceModel::reloadResource(KoResourceSP resource)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->reloadResource(resource);
+    }
+    return false;
+}
+
 bool KisResourceModel::renameResource(KoResourceSP resource, const QString &name)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
@@ -577,7 +629,7 @@ bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
 {
     QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
     if (idx.isValid()) {
-        int id = idx.data(Qt::DisplayRole + KisAbstractResourceModel::Id).toInt();
+        int id = idx.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 
         if (d->showOnlyUntaggedResources) {
 
@@ -644,7 +696,8 @@ bool KisResourceModel::lessThan(const QModelIndex &source_left, const QModelInde
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    return nameLeft < nameRight;
+
+    return nameLeft.toLower() < nameRight.toLower();
 }
 
 

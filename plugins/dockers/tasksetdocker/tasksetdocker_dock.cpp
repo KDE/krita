@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -71,7 +71,10 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, name);
 }
 
-TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canvas(0), m_blocked(false)
+TasksetDockerDock::TasksetDockerDock( )
+    : QDockWidget(i18n("Task Sets"))
+    , m_canvas(0)
+    , m_blocked(false)
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
@@ -80,14 +83,19 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
     recordButton->setIcon(KisIconUtils::loadIcon("media-record"));
     recordButton->setCheckable(true);
-    clearButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    saveButton->setIcon(KisIconUtils::loadIcon("document-save"));
-    saveButton->setEnabled(false);
+    recordButton->setFlat(true);
 
-    chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
+    clearButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    clearButton->setFlat(true);
+
+    saveButton->setIcon(KisIconUtils::loadIcon("document-save-16"));
+    saveButton->setEnabled(false);
+    saveButton->setFlat(true);
+
+    chooserButton->setIcon(KisIconUtils::loadIcon("folder"));
+    chooserButton->setFlat(true);
 
     m_rserver = new KoResourceServer<TasksetResource>(ResourceType::TaskSets);
-    KisResourceLoaderRegistry::instance()->registerLoader(new KisResourceLoader<TasksetResource>(ResourceType::TaskSets, ResourceType::TaskSets, i18n("Task sets"), QStringList() << "application/x-krita-taskset"));
     KisResourceItemChooser *itemChooser = new KisResourceItemChooser(ResourceType::TaskSets, false, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
@@ -227,3 +235,9 @@ void TasksetDockerDock::resourceSelected(KoResourceSP resource)
     }
 }
 
+static void addResourceLoader()
+{
+    KisResourceLoaderRegistry::instance()->registerLoader(new KisResourceLoader<TasksetResource>(ResourceType::TaskSets, ResourceType::TaskSets, i18n("Task sets"), QStringList() << "application/x-krita-taskset"));
+}
+
+Q_COREAPP_STARTUP_FUNCTION(addResourceLoader)

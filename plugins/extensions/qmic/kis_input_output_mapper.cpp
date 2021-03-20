@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -50,12 +51,17 @@ KisNodeListSP KisInputOutputMapper::inputNodes(InputLayerMode inputMode)
             break;
         }
         case NONE:
-        case ALL_VISIBLE_LAYERS:
-        case ALL_INVISIBLE_LAYERS:
-        case ALL_VISIBLE_LAYERS_DECR:
-        case ALL_INVISIBLE_DECR:
         {
-            qWarning() << "Inputmode" << inputMode << "not implemented";
+            break;
+        }
+        case ALL_VISIBLE_LAYERS:
+        {
+            allLayers(result, true);
+            break;
+        }
+        case ALL_INVISIBLE_LAYERS:
+        {
+            allLayers(result, false);
             break;
         }
         case ALL_LAYERS:
@@ -63,9 +69,11 @@ KisNodeListSP KisInputOutputMapper::inputNodes(InputLayerMode inputMode)
             allLayers(result);
             break;
         }
-        case ALL_DECR:
+        case ALL_VISIBLE_LAYERS_DECR_UNUSED:
+        case ALL_INVISIBLE_DECR_UNUSED:
+        case ALL_DECR_UNUSED:
         {
-            allInverseOrderedLayers(result);
+            qWarning() << "Inputmode" << inputMode << "is not supported by GMic anymore";
             break;
         }
         default:
@@ -94,9 +102,18 @@ void KisInputOutputMapper::allLayers(KisNodeListSP result)
     }
 }
 
-
-void KisInputOutputMapper::allInverseOrderedLayers(KisNodeListSP result)
+void KisInputOutputMapper::allLayers(KisNodeListSP result, bool visible)
 {
-    qWarning() << "allInverseOrderedLayers not implemented";
-    Q_UNUSED(result);
+    //TODO: hack ignores hierarchy introduced by group layers
+    KisNodeSP root = m_image->rootLayer();
+    KisNodeSP item = root->lastChild();
+    while (item)
+    {
+        auto * paintLayer = dynamic_cast<KisPaintLayer*>(item.data());
+        if (paintLayer && paintLayer->visible(true) == visible)
+        {
+            result->append(item);
+        }
+        item = item->prevSibling();
+    }
 }

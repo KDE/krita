@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_paintop_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_paintop.h"
 #include "kis_painter.h"
 #include "kis_paint_device.h"
@@ -40,4 +40,4 @@ void KisPaintopTest::testCreation()
 }
 
 
-QTEST_MAIN(KisPaintopTest)
+SIMPLE_TEST_MAIN(KisPaintopTest)

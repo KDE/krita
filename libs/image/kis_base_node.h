@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -25,8 +25,6 @@ class KisUndoAdapter;
 class KisKeyframeChannel;
 
 #include "kritaimage_export.h"
-
-
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -146,11 +144,11 @@ public:
     virtual KisPaintDeviceSP projection() const = 0;
 
     /**
-     * @return a special device from where the color picker tool should pick
+     * @return a special device from where the color sampler tool should sample
      * color when in layer-only mode. For most of the nodes just shortcuts
      * to projection() device. TODO: can it be null?
      */
-    virtual KisPaintDeviceSP colorPickSourceDevice() const;
+    virtual KisPaintDeviceSP colorSampleSourceDevice() const;
 
     virtual const KoColorSpace *colorSpace() const = 0;
 
@@ -598,6 +596,7 @@ public:
 
 Q_SIGNALS:
     void keyframeChannelAdded(KisKeyframeChannel *channel);
+    void opacityChanged(quint8 value);
 
 private:
 

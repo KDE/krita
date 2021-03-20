@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -41,6 +41,7 @@
 #include "kis_lod_availability_widget.h"
 
 #include "kis_signal_auto_connection.h"
+#include <kis_paintop_settings.h>
 #include <kis_paintop_settings_update_proxy.h>
 
 // ones from brush engine selector
@@ -72,7 +73,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
                                                KisFavoriteResourceManager* favoriteResourceManager,
                                                KisPresetSaveWidget* savePresetWidget,
                                                QWidget * parent)
-    : QWidget(parent)
+    : QWidget(parent, Qt::Dialog)
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
@@ -159,8 +160,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // configure the button and assign menu
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
-
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setPopupMode(QToolButton::InstantPopup);
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setAutoRaise(true);
 
 
     // loading preset from scratch option
@@ -358,41 +359,42 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     // if you are renaming a brush, that is different than updating the settings
     // make sure we are in a clean state before renaming. This logic might change,
     // but that is what we are going with for now
-    emit reloadPresetClicked();
+    KisPaintOpSettingsSP prevSettings = m_d->resourceProvider->currentPreset()->settings()->clone();
+    bool isDirty = m_d->resourceProvider->currentPreset()->isDirty();
+
+     // this returns the UI to its original state after saving
+    toggleBrushRenameUIActive(false);
+    slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 
     // get a reference to the existing (and new) file name and path that we are working with
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
+    // in case the preset is dirty, we need an id to get the actual non-dirty preset to save just the name change
+    // into the database
+    int currentPresetResourceId = curPreset->resourceId();
 
-    if (!curPreset)
-        return;
-
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-
-    QString originalPresetName = curPreset->name();
     QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
-    QString renamedPresetPathAndFile = renamedPresetName + curPreset->defaultFileExtension();
 
-
-    // create a new brush preset with the name specified and add to resource provider
-    KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
-    newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
-    newPreset->setName(renamedPresetName);
-    newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)
-    newPreset->setDirty(false);
-    newPreset->setValid(true);
-    rServer->addResource(newPreset);
-
-    resourceSelected(newPreset); // refresh and select our freshly renamed resource
-
-
-    // Now blacklist the original file
-    if (rServer->resourceByName(originalPresetName)) {
-        rServer->removeResourceFromServer(curPreset);
+    // If the id < 0, this is a new preset that hasn't been added to the storage and the database yet.
+    if (!curPreset || currentPresetResourceId < 0) {
+        curPreset->setName(renamedPresetName);
+        slotUpdatePresetSettings(); // update visibility of dirty preset and icon
+        return;
     }
 
-    m_d->favoriteResManager->updateFavoritePresets();
 
-    toggleBrushRenameUIActive(false); // this returns the UI to its original state after saving
+    emit reloadPresetClicked();
+
+    // create a new brush preset with the name specified and add to resource provider
+    KisResourceModel model(ResourceType::PaintOpPresets);
+    KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
+    model.renameResource(properCleanResource, renamedPresetName);
+
+    resourceSelected(curPreset); // refresh and select our freshly renamed resource
+    if (isDirty) {
+        m_d->resourceProvider->currentPreset()->setSettings(prevSettings);
+        m_d->resourceProvider->currentPreset()->setDirty(isDirty);
+    }
+    m_d->favoriteResManager->updateFavoritePresets();
 
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }
@@ -773,15 +775,15 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
 
-    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
-    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize")); // refresh icon
-    m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("dirty-preset")); // edit icon
+    m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("reload-preset-16"));
+    m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("document-edit"));
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setIcon(KisIconUtils::loadIcon("warning"));
 
-    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
 
     // if we cannot see the "Preset label", we know it is not visible
     // maybe this can also be stored in the config like the scratchpad?

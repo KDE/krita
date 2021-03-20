@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
+ *  SPDX-FileCopyrightText: 2015 Thorsten Zachmann <zachmann@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

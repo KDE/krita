@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -269,6 +269,12 @@ KisStrokeJobData::Sequentiality KisStroke::nextJobSequentiality() const
 {
     return !m_jobsQueue.isEmpty() ?
         m_jobsQueue.head()->sequentiality() : KisStrokeJobData::SEQUENTIAL;
+}
+
+int KisStroke::nextJobLevelOfDetail() const
+{
+    return !m_jobsQueue.isEmpty() ?
+                m_jobsQueue.head()->levelOfDetail() : worksOnLevelOfDetail();
 }
 
 void KisStroke::enqueue(KisStrokeJobStrategy *strategy,

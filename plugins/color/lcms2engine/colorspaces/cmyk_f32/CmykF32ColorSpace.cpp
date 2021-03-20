@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2020-2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -12,6 +12,7 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "dithering/KisCmykDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
@@ -38,6 +39,7 @@ CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
     dbgPlugins << "K: " << uiRanges[3].minVal << uiRanges[3].maxVal;
 
     addStandardCompositeOps<KoCmykF32Traits>(this);
+    addStandardDitherOps<KoCmykF32Traits>(this);
 }
 
 bool CmykF32ColorSpace::willDegrade(ColorSpaceIndependence independence) const
@@ -61,10 +63,10 @@ void CmykF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 
     // XML expects 0-1, we need 0-100
     // Get the bounds from the channels and adjust the calculations
-    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[0]->getUIUnitValue() * (p->cyan - this->channels()[0]->getUIMin()))));
-    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[1]->getUIUnitValue() * (p->magenta - this->channels()[1]->getUIMin()))));
-    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[2]->getUIUnitValue() * (p->yellow - this->channels()[2]->getUIMin()))));
-    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[3]->getUIUnitValue() * (p->black - this->channels()[3]->getUIMin()))));
+    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA((1.f / this->channels()[0]->getUIUnitValue()) * (p->cyan - this->channels()[0]->getUIMin()))));
+    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA((1.f / this->channels()[1]->getUIUnitValue()) * (p->magenta - this->channels()[1]->getUIMin()))));
+    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA((1.f / this->channels()[2]->getUIUnitValue()) * (p->yellow - this->channels()[2]->getUIMin()))));
+    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA((1.f / this->channels()[3]->getUIUnitValue()) * (p->black - this->channels()[3]->getUIMin()))));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }

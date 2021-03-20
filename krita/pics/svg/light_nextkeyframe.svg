@@ -685,7 +685,7 @@
          offset="0"
          id="stop8668" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670" />
     </linearGradient>
@@ -696,7 +696,7 @@
          offset="0"
          id="stop8668-6" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670-2" />
     </linearGradient>
@@ -1339,7 +1339,7 @@
        inkscape:collect="always" />
   </defs>
   <path
-     style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#cacaca;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+     style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#d2d2d2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
      d="M 4,3 4,19 6,19 6,3 Z m 3,0 0,16 8,-7.9883 z"
      id="path3308"
      inkscape:connector-curvature="0"
@@ -1348,7 +1348,7 @@
      inkscape:export-ydpi="90"
      sodipodi:nodetypes="ccccccccc" />
   <path
-     style="fill:#cacaca;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+     style="fill:#d2d2d2;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
      d="m 16,5 2,0 0,12 -2,0 z"
      id="path4452"
      inkscape:connector-curvature="0" />

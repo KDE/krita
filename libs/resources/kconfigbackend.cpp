@@ -1,8 +1,8 @@
 /*
    This file is part of the KDE libraries
-   Copyright (c) 2006 Thomas Braxton <brax108@cox.net>
-   Copyright (c) 1999 Preston Brown <pbrown@kde.org>
-   Copyright (c) 1997-1999 Matthias Kalle Dalheimer <kalle@kde.org>
+   SPDX-FileCopyrightText: 2006 Thomas Braxton <brax108@cox.net>
+   SPDX-FileCopyrightText: 1999 Preston Brown <pbrown@kde.org>
+   SPDX-FileCopyrightText: 1997-1999 Matthias Kalle Dalheimer <kalle@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

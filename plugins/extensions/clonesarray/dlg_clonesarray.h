@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -62,7 +62,7 @@ private:
     QPointer<KisViewManager> m_viewManager;
     KisProcessingApplicator *m_applicator;
     KisLayerSP m_baseLayer;
-    bool m_isDirty;
+    bool m_isDirty {false};
 };
 
 #endif // DLG_CLONESARRAY

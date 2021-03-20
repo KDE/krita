@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Aaron Boxer <boxerab@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Aaron Boxer <boxerab@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-only
  */

@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Id": "Krita Archival Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita-archive",
+    "X-KDE-Library": "kritakrzexport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "krz"
+}

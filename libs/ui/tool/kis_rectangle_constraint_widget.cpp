@@ -15,20 +15,23 @@ KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisT
     : QWidget(parent)
 {
     m_tool = tool;
-    
+
     setupUi(this);
-    
-    lockWidthButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
-    lockHeightButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
-    lockRatioButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+
     connect(lockWidthButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged()));
     connect(lockHeightButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged()));
     connect(lockRatioButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged()));
 
+    QIcon lockedIcon = KisIconUtils::loadIcon("locked");
+    QIcon unlockedIcon = KisIconUtils::loadIcon("unlocked");
+    lockWidthButton->setIcon(lockWidthButton->isChecked() ? lockedIcon : unlockedIcon);
+    lockHeightButton->setIcon(lockHeightButton->isChecked() ? lockedIcon : unlockedIcon);
+    lockRatioButton->setIcon(lockRatioButton->isChecked() ? lockedIcon : unlockedIcon);
+
     connect(intWidth,  SIGNAL(valueChanged(int)), this, SLOT(inputsChanged()));
     connect(intHeight, SIGNAL(valueChanged(int)), this, SLOT(inputsChanged()));
     connect(doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(inputsChanged()));
-  
+
     connect(this, SIGNAL(constraintsChanged(bool,bool,bool,float,float,float)), m_tool, SLOT(constraintsChanged(bool,bool,bool,float,float,float)));
     connect(m_tool, SIGNAL(rectangleChanged(QRectF)), this, SLOT(rectangleChanged(QRectF)));
 
@@ -50,16 +53,21 @@ KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisT
     }
 }
 
-void KisRectangleConstraintWidget::inputsChanged() 
+void KisRectangleConstraintWidget::inputsChanged()
 {
     emit constraintsChanged(
         lockRatioButton->isChecked(),
         lockWidthButton->isChecked(),
         lockHeightButton->isChecked(),
-        doubleRatio->value(), 
-        intWidth->value(), 
+        doubleRatio->value(),
+        intWidth->value(),
         intHeight->value()
                 );
+    QIcon lockedIcon = KisIconUtils::loadIcon("locked");
+    QIcon unlockedIcon = KisIconUtils::loadIcon("unlocked");
+    lockWidthButton->setIcon(lockWidthButton->isChecked() ? lockedIcon : unlockedIcon);
+    lockHeightButton->setIcon(lockHeightButton->isChecked() ? lockedIcon : unlockedIcon);
+    lockRatioButton->setIcon(lockRatioButton->isChecked() ? lockedIcon : unlockedIcon);
 }
 
 void KisRectangleConstraintWidget::slotRoundCornersChanged()
@@ -97,14 +105,14 @@ void KisRectangleConstraintWidget::rectangleChanged(const QRectF &rect)
     intWidth->blockSignals(true);
     intHeight->blockSignals(true);
     doubleRatio->blockSignals(true);
-    
+
     if (!lockWidthButton->isChecked()) intWidth->setValue(rect.width());
     if (!lockHeightButton->isChecked()) intHeight->setValue(rect.height());
 
     if (!lockRatioButton->isChecked() && !(rect.width() == 0 && rect.height() == 0)) {
         doubleRatio->setValue(fabs(rect.width()) / fabs(rect.height()));
     }
-  
+
     intWidth->blockSignals(false);
     intHeight->blockSignals(false);
     doubleRatio->blockSignals(false);

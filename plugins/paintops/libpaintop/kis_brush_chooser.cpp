@@ -1,9 +1,9 @@
 /*
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -110,10 +110,8 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     QObject::connect(brushSizeSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
-    brushRotationSpinBox->setRange(0, 360, 0);
-    brushRotationSpinBox->setValue(0);
-    brushRotationSpinBox->setSuffix(QChar(Qt::Key_degree));
-    QObject::connect(brushRotationSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
+    brushRotationAngleSelector->setDecimals(0);
+    QObject::connect(brushRotationAngleSelector, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
@@ -132,7 +130,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
-    deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("trash-empty"));
+    deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
 
 
 
@@ -380,7 +378,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
         // this will set the brush's model data to keep what it currently has for size, spacing, etc.
         if (preserveBrushPresetSettings->isChecked() && !isChangingBrushPresets) {
             m_brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
-            m_brush->setAngle(brushRotationSpinBox->value() * M_PI / 180);
+            m_brush->setAngle(brushRotationAngleSelector->angle() * M_PI / 180);
             m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
             m_brush->setUserEffectiveSize(brushSizeSpinBox->value());
         }
@@ -389,7 +387,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
                                 m_brush->autoSpacingActive() ?
                                 m_brush->autoSpacingCoeff() : m_brush->spacing());
 
-        brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
+        brushRotationAngleSelector->setAngle(m_brush->angle() * 180 / M_PI);
         brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
 
         emit sigBrushChanged();
@@ -404,7 +402,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 {
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     const bool modeSwitchEnabled =
-        m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->hasColor();
+        m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->isImageType();
 
     if (modeSwitchEnabled) {
         cmbBrushMode->setCurrentIndex(int(colorfulBrush->brushApplication()));

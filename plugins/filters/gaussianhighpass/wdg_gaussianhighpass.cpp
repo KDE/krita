@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2019 Miguel Lopez <reptillia39@live.com>
+ * SPDX-FileCopyrightText: 2019 Miguel Lopez <reptillia39@live.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,7 +21,8 @@ KisWdgGaussianHighPass::KisWdgGaussianHighPass(QWidget * parent) : KisConfigWidg
 {
     m_widget = new Ui_WdgGaussianHighPass();
     m_widget->setupUi(this);
-
+    widget()->doubleblurAmount->setRange(0.0, 250.0, 2);
+    widget()->doubleblurAmount->setSingleStep(1.00);
     connect(widget()->doubleblurAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
 }
 

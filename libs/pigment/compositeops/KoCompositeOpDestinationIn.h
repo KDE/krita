@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2016 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
- *  Copyright (c) 2012 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 José Luis Vergara <pentalis@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */

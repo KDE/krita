@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 #include <QApplication>
 
 #include <kis_debug.h>
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -92,4 +92,4 @@ void KisImageViewConverterTest::testZoom()
     QVERIFY(zoomY < 5.388889 && zoomY > 5.3888887);
 }
 
-QTEST_MAIN(KisImageViewConverterTest)
+SIMPLE_TEST_MAIN(KisImageViewConverterTest)

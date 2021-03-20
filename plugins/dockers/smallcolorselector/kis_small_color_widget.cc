@@ -1,9 +1,8 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
-
 #include "kis_small_color_widget.h"
 #include <QTimer>
 #include "kis_slider_spin_box.h"
@@ -67,13 +66,13 @@ struct KisSmallColorWidget::Private {
 
         if (!result || result->colorModelId() != RGBAColorModelID) {
             result = outputColorSpace();
-        } else if (result->colorDepthId() != Float32BitsColorDepthID) {
+        } else if (result && result->colorDepthId() != Float32BitsColorDepthID) {
             result = KoColorSpaceRegistry::instance()->
                 colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), result->profile());
         }
 
         // PQ color space we deliniearize into linear one
-        if (result->colorModelId() == RGBAColorModelID &&
+        if (result && result->colorModelId() == RGBAColorModelID &&
             result->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
 
             result = KoColorSpaceRegistry::instance()->

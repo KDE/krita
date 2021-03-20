@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
- *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KIS_ITEM_CHOOSER_H_
-#define KIS_ITEM_CHOOSER_H_
+#ifndef KIS_PRESET_CHOOSER_H_
+#define KIS_PRESET_CHOOSER_H_
 
 #include <QWidget>
 #include <QScroller>
@@ -91,5 +91,5 @@ private:
     KisSignalAutoConnectionsStore m_currentPresetConnections;
 };
 
-#endif // KIS_ITEM_CHOOSER_H_
+#endif
 

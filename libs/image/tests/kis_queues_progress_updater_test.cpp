@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_queues_progress_updater_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_queues_progress_updater.h"
 #include <testutil.h>
@@ -109,4 +109,4 @@ void KisQueuesProgressUpdaterTest::testFastProgress()
     QCOMPARE(progressProxy.format(), QString());
 }
 
-QTEST_MAIN(KisQueuesProgressUpdaterTest)
+SIMPLE_TEST_MAIN(KisQueuesProgressUpdaterTest)

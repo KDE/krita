@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,6 +16,7 @@
 #include <QDebug>
 
 #include <KoIcon.h>
+#include "kis_debug.h"
 
 namespace KisIconUtils
 {
@@ -167,6 +168,8 @@ void clearIconCache() {
 
 void updateIcon(QAbstractButton *button)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
     QIcon icon = button->icon();
 
     if (adjustIcon(&icon)) {

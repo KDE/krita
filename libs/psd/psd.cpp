@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2010 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -196,4 +196,39 @@ QPoint psd_layer_effects_shadow_base::calculateOffset(const psd_layer_effects_co
     qint32 distanceY =  qRound(this->m_distance * sin(kisDegreesToRadians(qreal(angle))));
 
     return QPoint(distanceX, distanceY);
+}
+
+// key functions
+psd_layer_effects_shadow_base::~psd_layer_effects_shadow_base()
+{
+}
+
+void psd_layer_effects_shadow_base::scaleLinearSizes(qreal scale)
+{
+    m_distance *= scale;
+    m_size *= scale;
+}
+
+psd_layer_effects_shadow_common::~psd_layer_effects_shadow_common()
+{
+}
+
+psd_layer_effects_drop_shadow::~psd_layer_effects_drop_shadow()
+{
+}
+
+psd_layer_effects_glow_common::~psd_layer_effects_glow_common()
+{
+}
+
+psd_layer_effects_inner_glow::~psd_layer_effects_inner_glow()
+{
+}
+
+psd_layer_effects_outer_glow::~psd_layer_effects_outer_glow()
+{
+}
+
+psd_layer_effects_inner_shadow::~psd_layer_effects_inner_shadow()
+{
 }

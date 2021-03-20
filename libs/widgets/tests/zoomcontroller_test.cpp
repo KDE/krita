@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007-2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007-2010 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "zoomcontroller_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include <kactioncollection.h>
@@ -24,4 +24,4 @@ void zoomcontroller_test::testApi()
 
 }
 
-QTEST_MAIN(zoomcontroller_test)
+SIMPLE_TEST_MAIN(zoomcontroller_test)

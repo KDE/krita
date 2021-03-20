@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -69,6 +69,8 @@ public:
     qreal density() const;
 
     void lodLimitations(KisPaintopLodLimitations *l) const override;
+
+    bool supportsCaching() const override;
 
 private:
 

@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_low_memory_tests.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QThreadPool>
 
@@ -206,4 +206,4 @@ void KisLowMemoryTests::hangingTilesTest()
     dstTile = 0;
 }
 
-QTEST_MAIN(KisLowMemoryTests)
+SIMPLE_TEST_MAIN(KisLowMemoryTests)

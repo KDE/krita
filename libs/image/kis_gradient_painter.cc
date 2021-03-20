@@ -1,12 +1,14 @@
 /*
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2019 Miguel Lopez <reptillia39@live.com>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2019 Miguel Lopez <reptillia39@live.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_gradient_painter.h"
 
+#include <algorithm>
 #include <cfloat>
 
 #include <KoColorSpace.h>
@@ -14,6 +16,8 @@
 #include <KoUpdater.h>
 #include <KoEphemeralResource.h>
 
+#include <KoColorModelStandardIds.h>
+#include <KoColorSpaceRegistry.h>
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include <resources/KoPattern.h>
@@ -27,6 +31,7 @@
 #include "kis_cached_gradient_shape_strategy.h"
 #include "krita_utils.h"
 #include "KoMixColorsOp.h"
+#include <KisDitherOp.h>
 #include <KoCachedGradient.h>
 
 namespace
@@ -675,10 +680,10 @@ const quint8 *RepeatForwardsPaintPolicy::colorAt(qreal x, qreal y) const
         }
 
         qint16 colorWeights[2];
-        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
-        colorWeights[1] = 255 - colorWeights[0];
+        colorWeights[0] = std::lround((1.0 - s) * qint16_MAX);
+        colorWeights[1] = qint16_MAX - colorWeights[0];
 
-        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data());
+        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data(), qint16_MAX);
         
         return m_resultColor.data();
     }
@@ -779,12 +784,12 @@ const quint8 *ConicalGradientPaintPolicy::colorAt(qreal x, qreal y) const
         } else {
             s = (t - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
         }
-        
-        qint16 colorWeights[2];
-        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
-        colorWeights[1] = 255 - colorWeights[0];
 
-        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data());
+        qint16 colorWeights[2];
+        colorWeights[0] = std::lround((1.0 - s) * qint16_MAX);
+        colorWeights[1] = qint16_MAX - colorWeights[0];
+
+        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data(), qint16_MAX);
 
         return m_resultColor.data();
     }
@@ -921,12 +926,12 @@ const quint8 *SpyralGradientRepeatNonePaintPolicy::colorAt(qreal x, qreal y) con
         } else {
             m_extremeColors[1] = (m_cachedGradient->cachedAt(distanceInPixels / m_distanceInPixels));
         }
-        
-        qint16 colorWeights[2];
-        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
-        colorWeights[1] = 255 - colorWeights[0];
 
-        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data());
+        qint16 colorWeights[2];
+        colorWeights[0] = std::lround((1.0 - s) * qint16_MAX);
+        colorWeights[1] = qint16_MAX - colorWeights[0];
+
+        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data(), qint16_MAX);
 
         return m_resultColor.data();
     }
@@ -1090,14 +1095,16 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        qint32 startx,
                                        qint32 starty,
                                        qint32 width,
-                                       qint32 height)
+                                       qint32 height,
+                                       bool useDithering)
 {
     return paintGradient(gradientVectorStart,
                          gradientVectorEnd,
                          repeat,
                          antiAliasThreshold,
                          reverseGradient,
-                         QRect(startx, starty, width, height));
+                         QRect(startx, starty, width, height),
+                         useDithering);
 }
 
 bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
@@ -1105,7 +1112,8 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        enumGradientRepeat repeat,
                                        double antiAliasThreshold,
                                        bool reverseGradient,
-                                       const QRect &applyRect)
+                                       const QRect &applyRect,
+                                       bool useDithering)
 {
     // The following combinations of options have aliasing artifacts
     // where the first color meets the last color of the gradient.
@@ -1123,6 +1131,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                  repeat,
                                  antiAliasThreshold,
                                  reverseGradient,
+                                 useDithering,
                                  applyRect,
                                  paintPolicy);
 
@@ -1133,6 +1142,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                  repeat,
                                  antiAliasThreshold,
                                  reverseGradient,
+                                 useDithering,
                                  applyRect,
                                  paintPolicy);
 
@@ -1144,6 +1154,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                  repeat,
                                  antiAliasThreshold,
                                  reverseGradient,
+                                 useDithering,
                                  applyRect,
                                  paintPolicy);
         }
@@ -1156,6 +1167,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                          repeat,
                          antiAliasThreshold,
                          reverseGradient,
+                         useDithering,
                          applyRect,
                          paintPolicy);
 }
@@ -1166,6 +1178,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        enumGradientRepeat repeat,
                                        double antiAliasThreshold,
                                        bool reverseGradient,
+                                       bool useDithering,
                                        const QRect &applyRect,
                                        T & paintPolicy)
 {
@@ -1262,16 +1275,31 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     KisPaintDeviceSP dev = device()->createCompositionSourceDevice();
 
-    const KoColorSpace * colorSpace = dev->colorSpace();
-    const qint32 pixelSize = colorSpace->pixelSize();
+    KoID depthId;
+    const KoColorSpace *destCs = dev->colorSpace();
+
+    if (destCs->colorDepthId() == Integer8BitsColorDepthID) {
+        depthId = Integer16BitsColorDepthID;
+    } else {
+        depthId = destCs->colorDepthId();
+    }
+
+    const KoColorSpace *mixCs = KoColorSpaceRegistry::instance()->colorSpace(destCs->colorModelId().id(), depthId.id(), destCs->profile());
+    const quint32 mixPixelSize = mixCs->pixelSize();
+
+    KisPaintDeviceSP tmp(new KisPaintDevice(mixCs));
+    tmp->setDefaultBounds(dev->defaultBounds());
+    tmp->clear();
+
+    const KisDitherOp* op = mixCs->ditherOp(destCs->colorDepthId().id(), useDithering ? DITHER_BEST : DITHER_NONE);
 
     Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
         QRect processRect = r.processRect;
         QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
 
-        KoCachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
+        KoCachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), mixCs);
 
-        KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
+        KisSequentialIteratorProgress it(tmp, processRect, progressUpdater());
 
         paintPolicy.setup(gradientVectorStart,
                           gradientVectorEnd,
@@ -1282,11 +1310,36 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                           &cachedGradient);
 
         while (it.nextPixel()) {
-            memcpy(it.rawData(), paintPolicy.colorAt(it.x(), it.y()), pixelSize);
+            const quint8 *const pixel {paintPolicy.colorAt(it.x(), it.y())};
+            memcpy(it.rawData(), pixel, mixPixelSize);
         }
 
-        bitBlt(processRect.topLeft(), dev, processRect);
+        KisRandomAccessorSP dstIt = dev->createRandomAccessorNG();
+        KisRandomConstAccessorSP srcIt = tmp->createRandomConstAccessorNG();
+
+        int rows = 1;
+        int columns = 1;
+
+        for (int y = processRect.y(); y <= processRect.bottom(); y += rows) {
+            rows = qMin(srcIt->numContiguousRows(y), qMin(dstIt->numContiguousRows(y), processRect.bottom() - y + 1));
+
+            for (int x = processRect.x(); x <= processRect.right(); x += columns) {
+                columns = qMin(srcIt->numContiguousColumns(x), qMin(dstIt->numContiguousColumns(x), processRect.right() - x + 1));
+
+                srcIt->moveTo(x, y);
+                dstIt->moveTo(x, y);
+
+                const qint32 srcRowStride = srcIt->rowStride(x, y);
+                const qint32 dstRowStride = dstIt->rowStride(x, y);
+                const quint8 *srcPtr = srcIt->rawDataConst();
+                quint8 *dstPtr = dstIt->rawData();
+
+                op->dither(srcPtr, srcRowStride, dstPtr, dstRowStride, x, y, columns, rows);
+            }
+        }
     }
+
+    bitBlt(requestedRect.topLeft(), dev, requestedRect);
 
     return true;
 }

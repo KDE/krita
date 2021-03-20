@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -51,6 +51,11 @@ public:
     KisResourceStorageSP storageForIndex(const QModelIndex &index) const;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+Q_SIGNALS:
+
+    void storageEnabled(const QString &storage);
+    void storageDisabled(const QString &storage);
 
 private Q_SLOTS:
 

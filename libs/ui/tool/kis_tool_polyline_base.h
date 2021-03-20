@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -30,7 +30,7 @@ public:
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void listenToModifiers(bool listen) override;
     bool listeningToModifiers() override;

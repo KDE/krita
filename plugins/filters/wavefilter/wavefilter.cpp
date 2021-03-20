@@ -1,9 +1,9 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2005 Cyrille Berger <cberger@cberger.net>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "wavefilter.h"
@@ -48,12 +48,17 @@ class KisSinusoidalWaveCurve : public KisWaveCurve
 {
 public:
 
-    KisSinusoidalWaveCurve(int amplitude, int wavelength, int shift) : m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift) {
+    KisSinusoidalWaveCurve(int amplitude, int wavelength, int shift)
+        : m_amplitude(amplitude)
+        , m_shift(shift)
+    {
+        m_wavelength = wavelength == 0 ? 1 : wavelength;
     }
 
     ~KisSinusoidalWaveCurve() override {}
 
     double valueAt(int x, int y) override {
+        KIS_ASSERT(m_wavelength != 0);
         return y + m_amplitude * cos((double)(m_shift + x) / m_wavelength);
     }
 private:
@@ -64,12 +69,17 @@ class KisTriangleWaveCurve : public KisWaveCurve
 {
 public:
 
-    KisTriangleWaveCurve(int amplitude, int wavelength, int shift) :  m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift) {
+    KisTriangleWaveCurve(int amplitude, int wavelength, int shift)
+        :  m_amplitude(amplitude)
+        , m_shift(shift)
+    {
+        m_wavelength = wavelength == 0 ? 1 : wavelength;
     }
 
     ~KisTriangleWaveCurve() override {}
 
     double valueAt(int x, int y) override {
+        KIS_ASSERT(m_wavelength != 0);
         return y +  m_amplitude * pow(-1.0, (m_shift + x) / m_wavelength)  *(0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
     }
 private:
@@ -89,7 +99,6 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), FiltersCategoryOtherId, i18n("&
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(false);
     setSupportsAdjustmentLayers(false);
-
 }
 
 KisFilterConfigurationSP KisFilterWave::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
@@ -129,30 +138,33 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
 
-    KisWaveCurve* verticalcurve;
+    KisWaveCurve* verticalWave;
     if (verticalshape == 1)
-        verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
+        verticalWave = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
     else
-        verticalcurve = new KisSinusoidalWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
-    KisWaveCurve* horizontalcurve;
+        verticalWave = new KisSinusoidalWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
+
+    KisWaveCurve* horizontalWave;
     if (horizontalshape == 1)
-        horizontalcurve = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
+        horizontalWave = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     else
-        horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
+        horizontalWave = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     
-    KisSequentialIteratorProgress dstIt(device, applyRect, progressUpdater);
-    KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
-    while (dstIt.nextPixel()) {
-        double xv = horizontalcurve->valueAt(dstIt.y(), dstIt.x());
-        double yv = verticalcurve->valueAt(dstIt.x(), dstIt.y());
-        srcRSA->moveTo(QPointF(xv, yv));
-        srcRSA->sampledOldRawData(dstIt.rawData());
+    KisSequentialIteratorProgress destination(device, applyRect, progressUpdater);
+    KisRandomSubAccessorSP source = device->createRandomSubAccessor();
+
+    while (destination.nextPixel()) {
+        double xv = horizontalWave->valueAt(destination.y(), destination.x());
+        double yv = verticalWave->valueAt(destination.x(), destination.y());
+        source->moveTo(QPointF(xv, yv));
+        source->sampledOldRawData(destination.rawData());
     }
-    delete horizontalcurve;
-    delete verticalcurve;
+
+    delete verticalWave;
+    delete horizontalWave;
 }
 
-QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod) const
+QRect KisFilterWave::changedRect(const QRect &rect, const KisFilterConfigurationSP config, int lod) const
 {
     Q_UNUSED(lod);
 

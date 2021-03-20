@@ -1,6 +1,6 @@
 # Find PyQt5
 # ~~~~~~~~~~
-# Copyright (c) 2014, Simon Edwards <simon@simonzone.com>
+# SPDX-FileCopyrightText: 2014 Simon Edwards <simon@simonzone.com>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

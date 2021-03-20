@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
- * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -15,7 +15,7 @@
 #include <brushengine/kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
 #include <kis_action.h>
-#include <widgets/kis_paintop_presets_save.h>
+#include "widgets/kis_paintop_presets_save.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include "kis_favorite_resource_manager.h"
 

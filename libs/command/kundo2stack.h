@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -103,6 +103,8 @@ public:
     virtual void setTimedID(int timedID);
     virtual bool mergeWith(const KUndo2Command *other);
     virtual bool timedMergeWith(KUndo2Command *other);
+
+    virtual bool annihilateWith(const KUndo2Command *other);
 
     int childCount() const;
     const KUndo2Command *child(int index) const;

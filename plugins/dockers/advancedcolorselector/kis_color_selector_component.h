@@ -1,15 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
  */
 
 #ifndef KIS_COLOR_SELECTOR_COMPONENT_H
@@ -98,30 +90,30 @@ protected:
     // Workaround for Bug 287001
     void setLastMousePosition(int x, int y);
 
-    qreal m_hue;
-    qreal m_hsvSaturation;
-    qreal m_value;
-    qreal m_hslSaturation;
-    qreal m_lightness;
-    qreal m_hsiSaturation;
-    qreal m_intensity;
-    qreal m_hsySaturation;
-    qreal m_luma;
+    qreal m_hue {0.0};
+    qreal m_hsvSaturation {0.0};
+    qreal m_value {0.0};
+    qreal m_hslSaturation {0.0};
+    qreal m_lightness {0.0};
+    qreal m_hsiSaturation {0.0};
+    qreal m_intensity {0.0};
+    qreal m_hsySaturation {0.0};
+    qreal m_luma {0.0};
     Parameter m_parameter;
     Type m_type;
-    KisColorSelector* m_parent;
-    bool m_gamutMaskOn;
+    KisColorSelector* m_parent {0};
+    bool m_gamutMaskOn {false};
     KoGamutMaskSP m_currentGamutMask;
-    bool m_maskPreviewActive;
-    qreal m_lastX;
-    qreal m_lastY;
-    int m_x;
-    int m_y;
+    bool m_maskPreviewActive {false};
+    qreal m_lastX {0.0};
+    qreal m_lastY {0.0};
+    int m_x {0};
+    int m_y {0};
 private:
-    int m_width;
-    int m_height;
-    bool m_dirty;
-    const KoColorSpace* m_lastColorSpace;
+    int m_width {0};
+    int m_height {0};
+    bool m_dirty {false};
+    const KoColorSpace* m_lastColorSpace {0};
     KoColor m_lastSelectedColor;
 };
 

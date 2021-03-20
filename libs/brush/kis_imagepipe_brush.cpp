@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -324,7 +324,8 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
         setHeight(d->brushesPipe.firstBrush()->height());
         setBrushTipImage(d->brushesPipe.firstBrush()->brushTipImage());
         setBrushApplication(d->brushesPipe.firstBrush()->brushApplication());
-        setBrushType(d->brushesPipe.hasColor() ? PIPE_IMAGE : PIPE_MASK);
+        setBrushType(d->brushesPipe.isImageType() ? PIPE_IMAGE : PIPE_MASK);
+        setHasColorAndTransparency(d->brushesPipe.hasColorAndTransparency());
     }
 
     return true;

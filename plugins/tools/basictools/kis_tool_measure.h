@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -41,9 +41,10 @@ private:
     void updateDistance();
 
     double m_resolution;
-    QLabel* m_distanceLabel;
     QLabel* m_angleLabel;
     double m_distance;
+public:
+    QLabel* m_distanceLabel;
     KoUnit m_unit;
 };
 
@@ -59,6 +60,7 @@ public:
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
+    void showDistanceAngleOnCanvas();
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 

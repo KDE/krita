@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Emanuele Tamponi <emanuele@valinor.it>
+ *  SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2008 Emanuele Tamponi <emanuele@valinor.it>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

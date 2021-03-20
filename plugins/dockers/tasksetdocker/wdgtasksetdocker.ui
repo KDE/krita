@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -15,10 +15,10 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item colspan="5" column="0" row="0">
+   <item row="0" column="0" colspan="5">
     <widget class="QListView" name="tasksetView"/>
    </item>
-   <item column="1" row="1">
+   <item row="1" column="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -31,29 +31,38 @@
      </property>
     </spacer>
    </item>
-   <item column="2" row="1">
+   <item row="1" column="2">
     <widget class="QPushButton" name="recordButton">
+     <property name="toolTip">
+      <string>Start Recording</string>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item column="4" row="1">
+   <item row="1" column="4">
     <widget class="QPushButton" name="clearButton">
+     <property name="toolTip">
+      <string>Delete the taskset</string>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item column="3" row="1">
+   <item row="1" column="3">
     <widget class="QPushButton" name="saveButton">
+     <property name="toolTip">
+      <string>Save the taskset</string>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item column="0" row="1">
-    <widget class="KisPopupButton" name="chooserButton"/>
+   <item row="1" column="0">
+    <widget class="KisPopupButton" name="chooserButton" native="true"/>
    </item>
   </layout>
  </widget>

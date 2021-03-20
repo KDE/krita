@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý lukast.dev@gmail.com
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý lukast.dev @gmail.com
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,7 +13,7 @@ inline double drand48()
 }
 #endif
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QImage>
 #include <kis_debug.h>
@@ -450,4 +450,4 @@ void KisPainterBenchmark::benchmarkMassiveBltFixed()
 
 
 
-QTEST_MAIN(KisPainterBenchmark)
+SIMPLE_TEST_MAIN(KisPainterBenchmark)

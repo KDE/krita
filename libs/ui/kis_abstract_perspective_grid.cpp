@@ -2,7 +2,7 @@
 /*
  * This file is part of Krita
  *
- *  Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Geoffry Song <goffrie@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

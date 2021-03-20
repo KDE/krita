@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -76,9 +76,9 @@ public:
                                                     QAbstractItemView::DoubleClicked  );
 
         m_menuUI->btnAddField->setIcon(KisIconUtils::loadIcon("list-add"));
-        m_menuUI->btnDeleteField->setIcon(KisIconUtils::loadIcon("trash-empty"));
-        m_menuUI->btnAddField->setIconSize(QSize(22, 22));
-        m_menuUI->btnDeleteField->setIconSize(QSize(22, 22));
+        m_menuUI->btnDeleteField->setIcon(KisIconUtils::loadIcon("edit-delete"));
+        m_menuUI->btnAddField->setIconSize(QSize(16, 16));
+        m_menuUI->btnDeleteField->setIconSize(QSize(16, 16));
         connect(m_menuUI->btnAddField, SIGNAL(clicked()), this, SLOT(slotaddItem()));
         connect(m_menuUI->btnDeleteField, SIGNAL(clicked()), this, SLOT(slotdeleteItem()));
 
@@ -176,13 +176,14 @@ StoryboardDockerDock::StoryboardDockerDock( )
                                 i18nc("Freeze keyframe positions and ignore storyboard adjustments", "Freeze Keyframe Data"), m_ui->btnLock);
     m_lockAction->setCheckable(true);
     m_ui->btnLock->setDefaultAction(m_lockAction);
-    m_ui->btnLock->setIconSize(QSize(22, 22));
+    m_ui->btnLock->setIconSize(QSize(16, 16));
     connect(m_lockAction, SIGNAL(toggled(bool)), this, SLOT(slotLockClicked(bool)));
 
     m_ui->btnArrange->setMenu(m_arrangeMenu);
     m_ui->btnArrange->setPopupMode(QToolButton::InstantPopup);
     m_ui->btnArrange->setIcon(KisIconUtils::loadIcon("view-choose"));
-    m_ui->btnArrange->setIconSize(QSize(22, 22));
+    m_ui->btnArrange->setAutoRaise(true);
+    m_ui->btnArrange->setIconSize(QSize(16, 16));
 
     m_modeGroup = m_arrangeMenu->getModeGroup();
     m_viewGroup = m_arrangeMenu->getViewGroup();
@@ -357,7 +358,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
         int firstItemRow = firstIndex.row();
         int lastItemRow = lastIndex.row();
-        qDebug() << "first" <<firstItemRow <<" last "<<lastItemRow;
 
         int numItems = lastItemRow - firstItemRow + 1;
         if (numItems <= 0) {
@@ -374,17 +374,16 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
         else {
             QPainter p;
-            QSvgGenerator *generator;
+            QSvgGenerator generator;
 
             if (dlg.format() == ExportFormat::SVG) {
-                generator = new QSvgGenerator();
-                generator->setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + "0.svg");
+                generator.setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + "0.svg");
                 QSize sz = printer.pageRect().size();
-                generator->setSize(sz);
-                generator->setViewBox(QRect(0, 0, sz.width(), sz.height()));
-                generator->setResolution(printer.resolution());
+                generator.setSize(sz);
+                generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
+                generator.setResolution(printer.resolution());
 
-                p.begin(generator);
+                p.begin(&generator);
             }
             else {
                 printer.setOutputFileName(dlg.saveFileName());
@@ -403,15 +402,12 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     if (dlg.format() == ExportFormat::SVG) {
                         p.end();
                         p.eraseRect(printer.pageRect());
-                        delete generator;
-
-                        generator = new QSvgGenerator();
-                        generator->setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + QString::number(i / layoutCellRects.size()) + ".svg");
+                        generator.setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + QString::number(i / layoutCellRects.size()) + ".svg");
                         QSize sz = printer.pageRect().size();
-                        generator->setSize(sz);
-                        generator->setViewBox(QRect(0, 0, sz.width(), sz.height()));
-                        generator->setResolution(printer.resolution());
-                        p.begin(generator);
+                        generator.setSize(sz);
+                        generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
+                        generator.setResolution(printer.resolution());
+                        p.begin(&generator);
                     }
                     else {
                         printer.newPage();

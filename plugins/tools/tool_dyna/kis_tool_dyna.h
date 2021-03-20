@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2009-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,7 +21,7 @@
 class KisDoubleSliderSpinBox;
 class QCheckBox;
 class QGridLayout;
-
+class KisAngleSelector;
 
 class KoCanvasBase;
 
@@ -63,7 +63,7 @@ public:
     ~KisToolDyna() override;
 
     QWidget * createOptionWidget() override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
 
@@ -89,7 +89,7 @@ private:
     QCheckBox * m_chkFixedAngle;
     KisDoubleSliderSpinBox * m_massSPBox;
     KisDoubleSliderSpinBox * m_dragSPBox;
-    KisDoubleSliderSpinBox * m_angleDSSBox;
+    KisAngleSelector * m_angleSelector;
 
     // dyna algorithm
     QVector<QPointF> m_prevPosition;

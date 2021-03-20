@@ -242,15 +242,15 @@
       <isCheckable>false</isCheckable>
       <text>Settings...</text>
     </Action>
-    <Action name="svg_pick_color">
-      <iconText>Colorpicker</iconText>
+    <Action name="svg_sample_color">
+      <iconText>Colorsampler</iconText>
       <shortcut></shortcut>
-      <toolTip>Pick a color from the screen</toolTip>
+      <toolTip>Sample a color from the screen</toolTip>
       <icon></icon>
       <whatsThis/>
       <statusTip/>
       <isCheckable>false</isCheckable>
-      <text>Color Picker</text>
+      <text>Color Sampler</text>
     </Action>
     <Action name="svg_font_kerning">
       <iconText>Kerning</iconText>

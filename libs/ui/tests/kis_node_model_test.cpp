@@ -1,13 +1,13 @@
 
 /*
- * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
+ * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_model_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <kis_debug.h>
 
 #include "KisDocument.h"

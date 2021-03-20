@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -11,7 +11,7 @@
 #include "kis_types.h"
 #include "kundo2magicstring.h"
 #include "kritaimage_export.h"
-
+#include "KisLodPreferences.h"
 
 class KisStrokeJobStrategy;
 class KisStrokeJobData;
@@ -92,6 +92,7 @@ public:
 
     bool needsExplicitCancel() const;
 
+
     /**
      * \see setBalancingRatioOverride() for details
      */
@@ -100,7 +101,15 @@ public:
     QString id() const;
     KUndo2MagicString name() const;
 
+    /**
+     * Returns current lod preferences of the strokes queue
+     */
+    KisLodPreferences currentLodPreferences() const;
+
     void setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface, KisStrokeId strokeId);
+
+    bool forceLodModeIfPossible() const;
+    void setForceLodModeIfPossible(bool forceLodModeIfPossible);
 
 protected:
     // testing surrogate class
@@ -170,6 +179,7 @@ private:
     bool m_requestsOtherStrokesToEnd;
     bool m_canForgetAboutMe;
     bool m_needsExplicitCancel;
+    bool m_forceLodModeIfPossible;
     qreal m_balancingRatioOverride;
 
     QLatin1String m_id;

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Sahil Nagpal <nagpal.sahil01@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Sahil Nagpal <nagpal.sahil01@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
 */

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "TestResourceLoaderRegistry.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QtSql>
 #include <QStandardPaths>
 #include <QDir>
@@ -34,5 +34,5 @@ void TestResourceLoaderRegistry::testRegistry()
     QVERIFY(dynamic_cast<DummyResource*>(res.data()));
 }
 
-QTEST_MAIN(TestResourceLoaderRegistry)
+SIMPLE_TEST_MAIN(TestResourceLoaderRegistry)
 

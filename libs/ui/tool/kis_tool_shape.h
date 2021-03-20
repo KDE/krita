@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2005 Adrian Page <adrian@pagenet.plus.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -49,7 +49,7 @@ public:
     WdgGeometryOptions *m_shapeOptionsWidget;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     virtual void outlineSettingChanged(int value);
     virtual void fillSettingChanged(int value);
     virtual void patternRotationSettingChanged(qreal value);

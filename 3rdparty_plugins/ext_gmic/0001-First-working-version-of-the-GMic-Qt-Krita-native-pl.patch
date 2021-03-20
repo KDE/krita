@@ -1,0 +1,529 @@
+From 83c8de29d911807d025a7f657b511e04ebed9fab Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 8 Nov 2020 15:39:36 +0000
+Subject: [PATCH 1/5] First working version of the GMic-Qt Krita native plugin
+
+---
+ CMakeLists.txt                            |  33 +++
+ src/Host/KritaPlugin/gmicqttoolplugin.cpp | 134 +++++++++++
+ src/Host/KritaPlugin/gmicqttoolplugin.h   |  50 ++++
+ src/Host/KritaPlugin/host.cpp             | 265 ++++++++++++++++++++++
+ 4 files changed, 482 insertions(+)
+ create mode 100644 src/Host/KritaPlugin/gmicqttoolplugin.cpp
+ create mode 100644 src/Host/KritaPlugin/gmicqttoolplugin.h
+ create mode 100644 src/Host/KritaPlugin/host.cpp
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b61d54..ce0ccff 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -545,6 +545,39 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+       )
+     install(TARGETS gmic_krita_qt RUNTIME DESTINATION bin)
+ 
++elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
++    message(STATUS "Looking for Krita QMic libraries in: ${CMAKE_PREFIX_PATH}")
++
++    find_library(KIS_IMAGE_INTERFACE_LIBRARY
++      NAMES kisimageinterface
++      REQUIRED)
++
++    find_path(KIS_IMAGE_INTERFACE_DIR
++      NAMES KritaGmicPluginInterface.h
++      REQUIRED)
++
++    set_package_properties(kisimageinterface PROPERTIES
++                           URL "http://www.krita.org"
++                           DESCRIPTION "Krita GMic core library"
++    )
++
++    set (gmic_qt_SRCS ${gmic_qt_SRCS} src/Host/KritaPlugin/host.cpp src/Host/KritaPlugin/gmicqttoolplugin.cpp)
++    set (gmic_qt_SRCS ${gmic_qt_SRCS} )
++    add_definitions(-DGMIC_HOST=krita-plugin)
++    add_library(gmic_krita_qt MODULE ${gmic_qt_SRCS} ${gmic_qt_QRC} ${qmic_qt_QM})
++    target_include_directories(
++      gmic_krita_qt
++      PUBLIC
++      ${KIS_IMAGE_INTERFACE_DIR}
++    )
++    target_link_libraries(
++      gmic_krita_qt
++      PRIVATE
++      ${gmic_qt_LIBRARIES}
++      ${KIS_IMAGE_INTERFACE_LIBRARY}
++      )
++    install(TARGETS gmic_krita_qt LIBRARY DESTINATION bin) # plugin
++
+ elseif (${GMIC_QT_HOST} STREQUAL "none")
+ 
+     set (gmic_qt_SRCS ${gmic_qt_SRCS} src/Host/None/host_none.cpp src/Host/None/ImageDialog.h src/Host/None/ImageDialog.cpp)
+diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.cpp b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
+new file mode 100644
+index 0000000..1402f82
+--- /dev/null
++++ b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
+@@ -0,0 +1,134 @@
++/*
++ *  This file is part of G'MIC-Qt, a generic plug-in for raster graphics
++ *  editors, offering hundreds of filters thanks to the underlying G'MIC
++ *  image processing framework.
++ *
++ *  Copyright (C) 2020 L. E. Segovia <amy@amyspark.me>
++ *
++ *  Description: Krita painting suite plugin for G'Mic-Qt.
++ *
++ *  G'MIC-Qt is free software: you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation, either version 3 of the License, or
++ *  (at your option) any later version.
++ *
++ *  G'MIC-Qt is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ */
++
++#include <QApplication>
++#include <QEventLoop>
++#include <QPointer>
++#include <QSettings>
++#include <QTranslator>
++
++#include "HeadlessProcessor.h"
++#include "Logger.h"
++#include "Widgets/ProgressInfoWindow.h"
++#include "gmicqttoolplugin.h"
++#include "DialogSettings.h"
++#include "MainWindow.h"
++#include "Widgets/LanguageSelectionWidget.h"
++#include "gmic_qt.h"
++
++int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
++                            bool headless) {
++  disableInputMode(GmicQt::NoInput);
++  // disableInputMode(GmicQt::Active);
++  // disableInputMode(GmicQt::All);
++  // disableInputMode(GmicQt::ActiveAndBelow);
++  // disableInputMode(GmicQt::ActiveAndAbove);
++  disableInputMode(GmicQt::AllVisible);
++  disableInputMode(GmicQt::AllInvisible);
++
++  // disableOutputMode(GmicQt::InPlace);
++  disableOutputMode(GmicQt::NewImage);
++  disableOutputMode(GmicQt::NewLayers);
++  disableOutputMode(GmicQt::NewActiveLayers);
++
++  int r = 0;
++  iface = i;
++  if (headless) {
++    DialogSettings::loadSettings(GmicQt::GuiApplication);
++    Logger::setMode(DialogSettings::outputMessageMode());
++    // Translate according to current locale or configured language
++    QString lang = LanguageSelectionWidget::configuredTranslator();
++    if (!lang.isEmpty() && (lang != "en")) {
++      auto translator = new QTranslator(qApp);
++      translator->load(QString(":/translations/%1.qm").arg(lang));
++      QCoreApplication::installTranslator(translator);
++    }
++
++    HeadlessProcessor processor;
++    QPointer<ProgressInfoWindow> progressWindow = new ProgressInfoWindow(&processor);
++    if (processor.command().isEmpty()) {
++      return r;
++    }
++
++    processor.startProcessing();
++
++    QEventLoop loop;
++    connect(progressWindow, SIGNAL(destroyed()), &loop, SLOT(quit()));
++    r = loop.exec();
++
++  } else {
++    DialogSettings::loadSettings(GmicQt::GuiApplication);
++
++    // Translate according to current locale or configured language
++    QString lang = LanguageSelectionWidget::configuredTranslator();
++
++    if (!lang.isEmpty() && (lang != "en")) {
++      auto translator = new QTranslator(qApp);
++      translator->load(QString(":/translations/%1.qm").arg(lang));
++      QApplication::installTranslator(translator);
++    }
++
++    disableInputMode(GmicQt::NoInput);
++    // disableInputMode(GmicQt::Active);
++    disableInputMode(GmicQt::All);
++    disableInputMode(GmicQt::ActiveAndBelow);
++    disableInputMode(GmicQt::ActiveAndAbove);
++    disableInputMode(GmicQt::AllVisible);
++    disableInputMode(GmicQt::AllInvisible);
++
++    // disableOutputMode(GmicQt::InPlace);
++    disableOutputMode(GmicQt::NewImage);
++    disableOutputMode(GmicQt::NewLayers);
++    disableOutputMode(GmicQt::NewActiveLayers);
++
++    QPointer<MainWindow> mainWindow = new MainWindow(0);
++    // We want a non modal dialog here.
++    mainWindow->setWindowFlags(Qt::Tool | Qt::Dialog);
++    mainWindow->setWindowModality(Qt::ApplicationModal);
++    mainWindow->setAttribute(Qt::WA_DeleteOnClose); // execution loop never finishes otherwise?
++
++    if (QSettings().value("Config/MainWindowMaximized", false).toBool()) {
++      mainWindow->showMaximized();
++    }
++    else {
++      mainWindow->show();
++    }
++
++    // Wait than main widget is closed.
++    QEventLoop loop;
++    connect(mainWindow, SIGNAL(destroyed()), &loop, SLOT(quit()));
++    r = loop.exec();
++  }
++
++  Q_FOREACH (QSharedMemory *sharedMemory, sharedMemorySegments) {
++    if (sharedMemory->isAttached()) {
++      sharedMemory->detach();
++    }
++  }
++
++  qDeleteAll(sharedMemorySegments);
++  sharedMemorySegments.clear();
++
++  return r;
++}
+diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.h b/src/Host/KritaPlugin/gmicqttoolplugin.h
+new file mode 100644
+index 0000000..a5d5f3f
+--- /dev/null
++++ b/src/Host/KritaPlugin/gmicqttoolplugin.h
+@@ -0,0 +1,50 @@
++/*
++ *  This file is part of G'MIC-Qt, a generic plug-in for raster graphics
++ *  editors, offering hundreds of filters thanks to the underlying G'MIC
++ *  image processing framework.
++ *
++ *  Copyright (C) 2020 L. E. Segovia <amy@amyspark.me>
++ *
++ *  Description: Krita painting suite plugin for G'Mic-Qt.
++ *
++ *  G'MIC-Qt is free software: you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation, either version 3 of the License, or
++ *  (at your option) any later version.
++ *
++ *  G'MIC-Qt is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ */
++
++#ifndef GMICQT_TOOL_PLUGIN_H
++#define GMICQT_TOOL_PLUGIN_H
++
++#include <QObject>
++#include <QSharedMemory>
++#include <QtPlugin>
++#include <QVector>
++#include <memory>
++
++#include "kis_image_interface.h"
++#include "KritaGmicPluginInterface.h"
++
++extern QVector<QSharedMemory *> sharedMemorySegments;
++extern std::shared_ptr<KisImageInterface> iface;
++
++class KritaGmicPlugin : public QObject, public KritaGmicPluginInterface {
++  Q_OBJECT
++
++  Q_PLUGIN_METADATA(IID "org.kde.krita.KritaGmicPluginInterface")
++  Q_INTERFACES(KritaGmicPluginInterface)
++
++public:
++  int launch(std::shared_ptr<KisImageInterface> iface, bool headless = false) override;
++};
++
++#endif
+diff --git a/src/Host/KritaPlugin/host.cpp b/src/Host/KritaPlugin/host.cpp
+new file mode 100644
+index 0000000..e814385
+--- /dev/null
++++ b/src/Host/KritaPlugin/host.cpp
+@@ -0,0 +1,265 @@
++/*
++ * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
++ * Copyright (C) 2020 L. E. Segovia <amy@amyspark.me>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Library General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Library General Public License for more details.
++ *
++ * You should have received a copy of the GNU Library General Public License
++ * along with this library; see the file COPYING.LIB.  If not, write to
++ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
++ */
++
++#include <ImageConverter.h>
++#include <QByteArray>
++#include <QDebug>
++#include <QDesktopWidget>
++#include <QFileDialog>
++#include <QFileInfo>
++#include <QSharedMemory>
++#include <QStandardPaths>
++#include <QUuid>
++#include <algorithm>
++#include <memory>
++
++#include "Host/host.h"
++#include "gmic.h"
++#include "gmic_qt.h"
++#include "kis_image_interface.h"
++
++/*
++ * Messages to Krita are built like this:
++ *
++ * command
++ * mode=int
++ * layer=key,imagename
++ * croprect=x,y,w,h
++ *
++ * Messages from Krita are built like this:
++ *
++ * key,imagename
++ *
++ * After a message has been received, "ack" is sent
++ *
++ */
++
++namespace GmicQt {
++const QString HostApplicationName = QString("Krita");
++const char *HostApplicationShortname = GMIC_QT_XSTRINGIFY(GMIC_HOST);
++const bool DarkThemeIsDefault = true;
++} // namespace GmicQt
++
++QVector<QSharedMemory *> sharedMemorySegments;
++std::shared_ptr<KisImageInterface> iface;
++
++void gmic_qt_get_layers_extent(int *width, int *height,
++                               GmicQt::InputMode mode) {
++  auto size = iface->gmic_qt_get_image_size();
++  *width = size.width();
++  *height = size.height();
++
++  // qDebug() << "gmic-qt: layers extent:" << *width << *height;
++}
++
++void gmic_qt_get_cropped_images(gmic_list<float> &images,
++                                gmic_list<char> &imageNames, double x, double y,
++                                double width, double height,
++                                GmicQt::InputMode mode) {
++
++  // qDebug() << "gmic-qt: get_cropped_images:" << x << y << width << height;
++
++  const bool entireImage = x < 0 && y < 0 && width < 0 && height < 0;
++  if (entireImage) {
++    x = 0.0;
++    y = 0.0;
++    width = 1.0;
++    height = 1.0;
++  }
++
++  // Create a message for Krita
++  QRectF cropRect = {x, y, width, height};
++  QString answer = iface->gmic_qt_get_cropped_images(mode, cropRect);
++
++  if (answer.isEmpty()) {
++    qWarning() << "\tgmic-qt: empty answer!";
++    return;
++  }
++
++  // qDebug() << "\tgmic-qt: " << answer;
++
++  QStringList imagesList = answer.split("\n", QString::SkipEmptyParts);
++
++  images.assign(imagesList.size());
++  imageNames.assign(imagesList.size());
++
++  // qDebug() << "\tgmic-qt: imagelist size" << imagesList.size();
++
++  // Parse the answer -- there should be no new lines in layernames
++  QStringList memoryKeys;
++  QList<QSize> sizes;
++  // Get the keys for the shared memory areas and the imageNames as prepared by
++  // Krita in G'Mic format
++  for (int i = 0; i < imagesList.length(); ++i) {
++    const QString &layer = imagesList[i];
++    QStringList parts = layer.split(',', QString::SkipEmptyParts);
++    if (parts.size() != 4) {
++      qWarning() << "\tgmic-qt: Got the wrong answer!";
++    }
++    memoryKeys << parts[0];
++    QByteArray ba = parts[1].toLatin1();
++    ba = QByteArray::fromHex(ba);
++    gmic_image<char>::string(ba.constData()).move_to(imageNames[i]);
++    sizes << QSize(parts[2].toInt(), parts[3].toInt());
++  }
++
++  // qDebug() << "\tgmic-qt: keys" << memoryKeys;
++
++  // Fill images from the shared memory areas
++  for (int i = 0; i < memoryKeys.length(); ++i) {
++    const QString &key = memoryKeys[i];
++    QSharedMemory m(key);
++
++    if (!m.attach(QSharedMemory::ReadOnly)) {
++      qWarning() << "\tgmic-qt: Could not attach to shared memory area."
++                 << m.error() << m.errorString();
++    }
++    if (m.isAttached()) {
++      if (!m.lock()) {
++        qWarning() << "\tgmic-qt: Could not lock memory segment" << m.error()
++                   << m.errorString();
++      }
++      // qDebug() << "Memory segment" << key << m.size() << m.constData() <<
++      // m.data();
++
++      // convert the data to the list of float
++      gmic_image<float> gimg;
++      gimg.assign(sizes[i].width(), sizes[i].height(), 1, 4);
++      memcpy(gimg._data, m.constData(),
++             sizes[i].width() * sizes[i].height() * 4 * sizeof(float));
++      gimg.move_to(images[i]);
++
++      if (!m.unlock()) {
++        qWarning() << "\tgmic-qt: Could not unlock memory segment" << m.error()
++                   << m.errorString();
++      }
++      if (!m.detach()) {
++        qWarning() << "\tgmic-qt: Could not detach from memory segment"
++                   << m.error() << m.errorString();
++      }
++    } else {
++      qWarning() << "gmic-qt: Could not attach to shared memory area."
++                 << m.error() << m.errorString();
++    }
++  }
++
++  iface->gmic_qt_detach();
++
++  // qDebug() << "\tgmic-qt:  Images size" << images.size() << ", names size" <<
++  // imageNames.size();
++}
++
++void gmic_qt_output_images(gmic_list<float> &images,
++                           const gmic_list<char> &imageNames,
++                           GmicQt::OutputMode mode,
++                           const char * /*verboseLayersLabel*/) {
++
++  // qDebug() << "qmic-qt-output-images";
++
++  Q_FOREACH (QSharedMemory *sharedMemory, sharedMemorySegments) {
++    if (sharedMemory->isAttached()) {
++      sharedMemory->detach();
++    }
++  }
++  qDeleteAll(sharedMemorySegments);
++  sharedMemorySegments.clear();
++
++  // qDebug() << "\tqmic-qt: shared memory" << sharedMemorySegments.count();
++
++  // Create qsharedmemory segments for each image
++  // Create a message for Krita based on mode, the keys of the qsharedmemory
++  // segments and the imageNames
++  QStringList layers;
++
++  for (uint i = 0; i < images.size(); ++i) {
++
++    // qDebug() << "\tgmic-qt: image number" << i;
++
++    gmic_image<float> gimg = images.at(i);
++
++    QSharedMemory *m = new QSharedMemory(
++        QString("key_%1").arg(QUuid::createUuid().toString()));
++    sharedMemorySegments.append(m);
++
++    if (!m->create(gimg._width * gimg._height * gimg._spectrum *
++                   sizeof(float))) {
++      qWarning() << "Could not create shared memory" << m->error()
++                 << m->errorString();
++      return;
++    }
++
++    m->lock();
++    memcpy(m->data(), gimg._data,
++           gimg._width * gimg._height * gimg._spectrum * sizeof(float));
++    m->unlock();
++
++    QString layerName((const char *)imageNames[i]);
++
++    layers << m->key() + "," + layerName.toUtf8().toHex() + "," +
++               QString("%1,%2,%3")
++                   .arg(gimg._spectrum)
++                   .arg(gimg._width)
++                   .arg(gimg._height);
++  }
++
++  iface->gmic_qt_output_images(mode, layers);
++}
++
++void gmic_qt_show_message(const char *) {
++  // May be left empty for Krita.
++  // Only used by launchPluginHeadless(), called in the non-interactive
++  // script mode of GIMP.
++}
++
++void gmic_qt_apply_color_profile(cimg_library::CImg<gmic_pixel_type> &) {}
++#if defined Q_OS_WIN
++#if defined DRMINGW
++namespace {
++void tryInitDrMingw() {
++  wchar_t path[MAX_PATH];
++  QString pathStr =
++      QCoreApplication::applicationDirPath().replace(L'/', L'\\') +
++      QStringLiteral("\\exchndl.dll");
++  if (pathStr.size() > MAX_PATH - 1) {
++    return;
++  }
++  int pathLen = pathStr.toWCharArray(path);
++  path[pathLen] = L'\0'; // toWCharArray doesn't add NULL terminator
++  HMODULE hMod = LoadLibraryW(path);
++  if (!hMod) {
++    return;
++  }
++  // No need to call ExcHndlInit since the crash handler is installed on DllMain
++  auto myExcHndlSetLogFileNameA =
++      reinterpret_cast<BOOL(APIENTRY *)(const char *)>(
++          GetProcAddress(hMod, "ExcHndlSetLogFileNameA"));
++  if (!myExcHndlSetLogFileNameA) {
++    return;
++  }
++  // Set the log file path to %LocalAppData%\kritacrash.log
++  QString logFile =
++      QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)
++          .replace(L'/', L'\\') +
++      QStringLiteral("\\gmic_krita_qt_crash.log");
++  myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
++}
++} // namespace
++#endif // DRMINGW
++#endif // Q_OS_WIN
+-- 
+2.30.0
+

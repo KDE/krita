@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -38,6 +38,7 @@
 #include "KisVideoSaver.h"
 #include "KisAnimationRenderingOptions.h"
 #include "VideoExportOptionsDialog.h"
+#include "kis_image_config.h"
 
 
 KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *parent)
@@ -94,12 +95,20 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
         }
         m_page->cmbRenderType->addItem(description, mime);
     }
-
+    
+    
+    m_page->cmbScaleFilter->addItem("bicubic", "bicubic");
+    m_page->cmbScaleFilter->addItem("bilinear", "bilinear");
+    m_page->cmbScaleFilter->addItem("lanczos3", "lanczos");
+    m_page->cmbScaleFilter->addItem("neighbor", "neighbor");
+    m_page->cmbScaleFilter->addItem("spline", "spline");
+    
     m_page->videoFilename->setMode(KoFileDialog::SaveFile);
 
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
 
     m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/render_type", 0));
+    m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/scale_mode", 0));
 
     connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeOptionsClicked()));
     connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderOptions()));
@@ -120,10 +129,9 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     constrainsConnector->createCoordinatedConnector()->connectForwardInt(m_page->intHeight, SIGNAL(valueChanged(int)), this, SLOT(slotLockAspectRatioDimensionsHeight(int)));
 
     {
-        KisPropertiesConfigurationSP settings = cfg.exportConfiguration("ANIMATION_EXPORT");
+        KisPropertiesConfigurationSP settings = loadLastConfiguration("ANIMATION_EXPORT");
         KisAnimationRenderingOptions options;
         options.fromProperties(settings);
-
         initializeRenderSettings(*doc, options);
     }
 
@@ -169,6 +177,8 @@ QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
     QStringList supportedMimeTypes = QStringList();
     supportedMimeTypes << "video/x-matroska";
     supportedMimeTypes << "image/gif";
+    supportedMimeTypes << "image/apng";    
+    supportedMimeTypes << "image/webp";       
     supportedMimeTypes << "video/ogg";
     supportedMimeTypes << "video/mp4";
     supportedMimeTypes << "video/webm";
@@ -179,6 +189,17 @@ QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
 bool KisDlgAnimationRenderer::imageMimeSupportsHDR(QString &mime)
 {
     return (mime == "image/png");
+}
+
+KisPropertiesConfigurationSP KisDlgAnimationRenderer::loadLastConfiguration(QString configurationID) {
+    KisConfig globalConfig(true);
+    return globalConfig.exportConfiguration(configurationID);
+}
+
+void KisDlgAnimationRenderer::saveLastUsedConfiguration(QString configurationID, KisPropertiesConfigurationSP config)
+{
+    KisConfig globalConfig(false);
+    globalConfig.setExportConfiguration(configurationID, config);
 }
 
 void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions)
@@ -226,6 +247,13 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         }
     }
 
+    for (int i = 0; i < m_page->cmbScaleFilter->count(); ++i) {
+        if (m_page->cmbScaleFilter->itemData(i).toString() == lastUsedOptions.scaleFilter) {
+            m_page->cmbScaleFilter->setCurrentIndex(i);
+            break;
+        }
+    }    
+    
     m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
 
     if (lastUsedOptions.shouldDeleteSequence) {
@@ -240,8 +268,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
 
     {
-        KisConfig cfg(true);
-        KisPropertiesConfigurationSP settings = cfg.exportConfiguration("VIDEO_ENCODER");
+        KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
 
         getDefaultVideoEncoderOptions(lastUsedOptions.videoMimeType, settings,
                                       &m_customFFMpegOptionsString,
@@ -249,9 +276,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     }
 
     {
-        KisConfig cfg(true);
-        KisPropertiesConfigurationSP settings = cfg.exportConfiguration("img_sequence/" + lastUsedOptions.frameMimeType);
-
+        KisPropertiesConfigurationSP settings = loadLastConfiguration("img_sequence/" + lastUsedOptions.frameMimeType);
         m_wantsRenderWithHDR = settings->getPropertyLazy("saveAsHDR", m_wantsRenderWithHDR);
     }
 
@@ -262,6 +287,20 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     m_page->intStart->setValue(doc.image()->animationInterface()->playbackRange().start());
     m_page->intEnd->setValue(doc.image()->animationInterface()->playbackRange().end());
     m_page->intFramesPerSecond->setValue(doc.image()->animationInterface()->framerate());
+
+    if (!doc.image()->animationInterface()->exportSequenceFilePath().isEmpty()
+        && QDir(doc.image()->animationInterface()->exportSequenceFilePath()).exists() ) {
+        m_page->dirRequester->setStartDir(doc.image()->animationInterface()->exportSequenceFilePath());
+        m_page->dirRequester->setFileName(doc.image()->animationInterface()->exportSequenceFilePath());
+    }
+
+    if (!doc.image()->animationInterface()->exportSequenceBaseName().isEmpty()) {
+        m_page->txtBasename->setText(doc.image()->animationInterface()->exportSequenceBaseName());
+    }
+
+    if (doc.image()->animationInterface()->exportInitialFrameNumber() != -1) {
+        m_page->sequenceStart->setValue(doc.image()->animationInterface()->exportInitialFrameNumber());
+    }
 
     m_page->chkIncludeAudio->setChecked(!doc.image()->animationInterface()->isAudioMuted());
 }
@@ -274,14 +313,14 @@ QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QS
     return
         QString("%1.%2")
             .arg(QFileInfo(docFileName).completeBaseName())
-            .arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
+            .arg(KisMimeDatabase::suffixesForMimeType( mimeType == "image/apng" ? "image/png":mimeType ).first());
 }
 
 void KisDlgAnimationRenderer::selectRenderType(int index)
 {
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
 
-    m_page->bnRenderOptions->setEnabled(mimeType != "image/gif");
+    // m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png" );
     m_page->lblGifWarning->setVisible((mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50));
 
     QString videoFileName = defaultVideoFileName(m_doc, mimeType);
@@ -292,7 +331,7 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         const QString path = info.path();
 
         videoFileName =
-            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
+            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType( mimeType == "image/apng" ? "image/png":mimeType ).first());
 
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimeType, mimeType);
@@ -304,9 +343,7 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         // If this is removed from the configuration, ogg vorbis can fail to render on first attempt. BUG:421658
         // This should be revisited at some point, too much configuration juggling in this class makes it error-prone...
 
-        KisConfig cfg(true);
-        KisPropertiesConfigurationSP settings = cfg.exportConfiguration("VIDEO_ENCODER");
-
+        KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
         getDefaultVideoEncoderOptions(mimeType, settings,
                                       &m_customFFMpegOptionsString,
                                       &m_wantsRenderWithHDR);
@@ -328,8 +365,7 @@ void KisDlgAnimationRenderer::selectRenderOptions()
     encoderConfigWidget->setSupportsHDR(true);
 
     {
-        KisConfig cfg(true);
-        KisPropertiesConfigurationSP settings = cfg.exportConfiguration("VIDEO_ENCODER");
+        KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
         encoderConfigWidget->setConfiguration(settings);
         encoderConfigWidget->setHDRConfiguration(m_wantsRenderWithHDR);
     }
@@ -338,8 +374,7 @@ void KisDlgAnimationRenderer::selectRenderOptions()
     dlg.setMainWidget(encoderConfigWidget);
     dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
     if (dlg.exec() == QDialog::Accepted) {
-        KisConfig cfg(false);
-        cfg.setExportConfiguration("VIDEO_ENCODER", encoderConfigWidget->configuration());
+        saveLastUsedConfiguration("VIDEO_ENCODER", encoderConfigWidget->configuration());
         m_customFFMpegOptionsString = encoderConfigWidget->customUserOptionsString();
         m_wantsRenderWithHDR = encoderConfigWidget->videoConfiguredForHDR();
     }
@@ -360,9 +395,8 @@ void KisDlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
         frameExportConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
 
         if (frameExportConfigWidget) {
-            KisConfig cfg(true);
 
-            KisPropertiesConfigurationSP exportConfig = cfg.exportConfiguration("img_sequence/" + mimetype);
+            KisPropertiesConfigurationSP exportConfig = loadLastConfiguration("img_sequence/" + mimetype);
             if (exportConfig) {
                 KisImportExportManager::fillStaticExportConfigurationProperties(exportConfig, m_image);
             }
@@ -380,9 +414,8 @@ void KisDlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
             dlg.setMainWidget(frameExportConfigWidget);
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (dlg.exec() == QDialog::Accepted) {
-                KisConfig cfg(false);
                 m_wantsRenderWithHDR = frameExportConfigWidget->configuration()->getPropertyLazy("saveAsHDR", false);
-                cfg.setExportConfiguration("img_sequence/" + mimetype, frameExportConfigWidget->configuration());
+                saveLastUsedConfiguration("img_sequence/" + mimetype, frameExportConfigWidget->configuration());
             }
 
             frameExportConfigWidget->hide();
@@ -405,6 +438,7 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     options.lastDocuemntPath = m_doc->localFilePath();
     options.videoMimeType = m_page->cmbRenderType->currentData().toString();
     options.frameMimeType = m_page->cmbMimetype->currentData().toString();
+    options.scaleFilter = m_page->cmbScaleFilter->currentData().toString();
 
     options.basename = m_page->txtBasename->text();
     options.directory = m_page->dirRequester->fileName();
@@ -431,9 +465,7 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     options.customFFMpegOptions = m_customFFMpegOptionsString;
 
     {
-        KisConfig config(true);
-
-        KisPropertiesConfigurationSP cfg = config.exportConfiguration("img_sequence/" + options.frameMimeType);
+        KisPropertiesConfigurationSP cfg = loadLastConfiguration("img_sequence/" + options.frameMimeType);
         if (cfg) {
             KisImportExportManager::fillStaticExportConfigurationProperties(cfg, m_image);
         }
@@ -502,7 +534,11 @@ void KisDlgAnimationRenderer::slotDialogAccepted()
 {
     KisConfig cfg(false);
     KisAnimationRenderingOptions options = getEncoderOptions();
-    cfg.setExportConfiguration("ANIMATION_EXPORT", options.toProperties());
+    saveLastUsedConfiguration("ANIMATION_EXPORT", options.toProperties());
+
+    m_image->animationInterface()->setExportSequenceBaseName(options.basename);
+    m_image->animationInterface()->setExportSequenceFilePath(options.directory);
+    m_image->animationInterface()->setExportInitialFrameNumber(options.sequenceStart);
 }
 
 QString KisDlgAnimationRenderer::findFFMpeg(const QString &customLocation)
@@ -584,6 +620,8 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
     m_page->intHeight->setVisible(willEncodeVideo);
     m_page->intFramesPerSecond->setVisible(willEncodeVideo);
     m_page->fpsLabel->setVisible(willEncodeVideo);
+    m_page->cmbScaleFilter->setVisible(willEncodeVideo);
+    m_page->scaleFilterLabel->setVisible(willEncodeVideo);
     m_page->lblWidth->setVisible(willEncodeVideo);
     m_page->lblHeight->setVisible(willEncodeVideo);
 

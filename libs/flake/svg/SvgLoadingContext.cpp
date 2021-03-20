@@ -1,5 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
+﻿/* This file is part of the KDE project
+ * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -164,10 +164,15 @@ QString SvgLoadingContext::relativeFilePath(const QString &href)
 
     QString result = href;
 
+    QFileInfo info(href);
+    if (info.isRelative())
+        return href;
+
+
     if (!gc->xmlBaseDir.isEmpty()) {
-        result = gc->xmlBaseDir + '/' + href;
+        result = QDir(gc->xmlBaseDir).relativeFilePath(href);
     } else if (!d->initialXmlBaseDir.isEmpty()) {
-        result = d->initialXmlBaseDir + '/' + href;
+        result = QDir(d->initialXmlBaseDir).relativeFilePath(href);
     }
 
     return QDir::cleanPath(result);
@@ -271,6 +276,11 @@ void SvgLoadingContext::parseProfile(const KoXmlElement &element)
     } else {
         debugFlake << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
     }
+}
+
+QHash<QString, const KoColorProfile *> SvgLoadingContext::profiles()
+{
+    return d->profiles;
 }
 
 bool SvgLoadingContext::isRootContext() const

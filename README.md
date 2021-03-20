@@ -2,7 +2,7 @@
 
 | Jenkins CI Name | Master | Stable |
 | --------------- | ------ | ------ |
-| OpenSuse Qt 5.14 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.14/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.14//) |[![Build Status](https://build.kde.org/buildStatus/icon?https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.14/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.14/)|
+| OpenSuse Qt 5.15 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.15/) |[![Build Status](https://build.kde.org/buildStatus/icon?https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.15/)|
 | FreeBSD Qt 5.15 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.15/) |[![Build Status](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.15/)|
 
 
@@ -71,4 +71,3 @@ https://www.krita.org
 ### License
 
 Krita as a whole is licensed under the GNU Public License, Version 3. Individual files may have a different, but compatible license.
-

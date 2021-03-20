@@ -1,13 +1,13 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_keyframing_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <qsignalspy.h>
 #include <QRandomGenerator>
 
@@ -1005,4 +1005,4 @@ void KisKeyframingTest::testChangeOfScalarLimits()
     QCOMPARE(key30->value(), channel->valueAt(30));
 }
 
-QTEST_MAIN(KisKeyframingTest)
+SIMPLE_TEST_MAIN(KisKeyframingTest)

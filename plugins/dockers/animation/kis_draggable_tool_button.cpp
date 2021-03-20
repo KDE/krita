@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,14 +21,10 @@ KisDraggableToolButton::~KisDraggableToolButton()
 {
 }
 
-int KisDraggableToolButton::unitRadius()
-{
-    return 200;
-}
-
 void KisDraggableToolButton::beginDrag(const QPoint &pos)
 {
     m_startPoint = pos;
+    m_lastPosition = m_startPoint;
 }
 
 int KisDraggableToolButton::continueDrag(const QPoint &pos)
@@ -53,16 +49,26 @@ int KisDraggableToolButton::continueDrag(const QPoint &pos)
     return value;
 }
 
+int KisDraggableToolButton::movementDelta(const QPoint &pos)
+{
+    QPoint diff = pos - m_lastPosition;
+    m_lastPosition = pos;
+    return diff.x() - diff.y();
+
+}
+
 void KisDraggableToolButton::mousePressEvent(QMouseEvent *e)
 {
-    m_startPoint = e->pos();
+    beginDrag(e->pos());
     QToolButton::mousePressEvent(e);
 }
 
 void KisDraggableToolButton::mouseMoveEvent(QMouseEvent *e)
 {
-    int value = continueDrag(e->pos());
-    emit valueChanged(value);
+    int distance = continueDrag(e->pos());
+    emit offsetChanged(distance);
+    int delta = movementDelta(e->pos());
+    emit valueChanged(delta);
 
     QToolButton::mouseMoveEvent(e);
 }

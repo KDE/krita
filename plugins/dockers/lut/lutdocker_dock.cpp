@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -218,7 +218,7 @@ void LutDockerDock::unsetCanvas()
 void LutDockerDock::slotUpdateIcons()
 {
     m_btnConvertCurrentColor->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
-    m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("properties"));
+    m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("settings-button"));
 }
 
 void LutDockerDock::slotShowBWConfiguration()

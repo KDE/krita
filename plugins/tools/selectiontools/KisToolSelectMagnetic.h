@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Kuntal Majumder <hellozee@disroot.org>
+ *  SPDX-FileCopyrightText: 2019 Kuntal Majumder <hellozee@disroot.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -45,7 +45,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void deactivate() override;
-    void activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void activate(const QSet<KoShape *> &shapes) override;
     void undoPoints();
     void slotSetFilterRadius(qreal);
     void slotSetThreshold(int);

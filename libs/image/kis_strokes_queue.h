@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,7 +16,7 @@
 #include "kis_strokes_queue_undo_result.h"
 #include "KisStrokesQueueMutatedJobInterface.h"
 #include "KisUpdaterContextSnapshotEx.h"
-
+#include "KisLodPreferences.h"
 
 class KisUpdaterContext;
 class KisStroke;
@@ -53,7 +53,8 @@ public:
     bool wrapAroundModeSupported() const;
     qreal balancingRatioOverride() const;
 
-    void setDesiredLevelOfDetail(int lod);
+    KisLodPreferences lodPreferences() const override;
+    void setLodPreferences(const KisLodPreferences &value);
     void explicitRegenerateLevelOfDetail();
     void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
     void setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory);

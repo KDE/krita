@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,7 +16,7 @@
 #include <QScopedPointer>
 #include <QDialog>
 
-#include "KisScreenColorPickerBase.h"
+#include "KisScreenColorSamplerBase.h"
 
 class Ui_WdgDlgInternalColorSelector;
 class KoColorPatch;
@@ -30,12 +30,12 @@ class KRITAWIDGETS_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
 
-    static std::function<KisScreenColorPickerBase *(QWidget *)> s_screenColorPickerFactory;
+    static std::function<KisScreenColorSamplerBase *(QWidget *)> s_screenColorSamplerFactory;
 
 public:
 
-    static void setScreenColorPickerFactory(std::function<KisScreenColorPickerBase *(QWidget *)> f) {
-        s_screenColorPickerFactory = f;
+    static void setScreenColorSamplerFactory(std::function<KisScreenColorSamplerBase *(QWidget *)> f) {
+        s_screenColorSamplerFactory = f;
     }
 
     struct Config
@@ -48,14 +48,14 @@ public:
 #endif
             visualColorSelector(true),
             paletteBox(true),
-            screenColorPicker(true),
+            screenColorSampler(true),
             prevNextButtons(true),
             hexInput(true),
             useAlpha(false){}
         bool modal;
         bool visualColorSelector;
         bool paletteBox;
-        bool screenColorPicker;
+        bool screenColorSampler;
         bool prevNextButtons;
         bool hexInput;
         bool useAlpha;
@@ -106,7 +106,7 @@ public:
 Q_SIGNALS:
     /**
      * @brief signalForegroundColorChosen
-     * The most important signal. This will sent out when a color has been picked from the selector.
+     * The most important signal. This will sent out when a color has been chosen from the selector.
      * There will be a small delay to make sure that the selector causes too many updates.
      *
      * Do not connect this to slotColorUpdated.

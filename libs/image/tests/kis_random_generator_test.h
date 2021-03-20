@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007,2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007, 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_RANDOM_GENERATOR_TEST_H
 #define KIS_RANDOM_GENERATOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisRandomGeneratorTest : public QObject
 {

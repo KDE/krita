@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2008 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2008 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_shape_selection_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <kis_debug.h>
 #include <QRect>

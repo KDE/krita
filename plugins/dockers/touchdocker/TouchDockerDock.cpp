@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -173,7 +173,7 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
         showFileOpenDialog();
     }
     else if (id == "fileSaveButton" && m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
-        if(m_canvas->viewManager()->document()->url().isEmpty()) {
+        if(m_canvas->viewManager()->document()->path().isEmpty()) {
             showFileSaveAsDialog();
         } else {
             bool batchMode = m_canvas->viewManager()->document()->fileBatchMode();
@@ -229,7 +229,7 @@ void TouchDockerDock::slotOpenImage(QString path)
     if (d->openDialog) {
         d->openDialog->accept();
     }
-    KisPart::instance()->currentMainwindow()->openDocument(QUrl::fromLocalFile(path), KisMainWindow::None);
+    KisPart::instance()->currentMainwindow()->openDocument(path, KisMainWindow::None);
 }
 
 void TouchDockerDock::slotSaveAs(QString path, QString mime)
@@ -237,7 +237,7 @@ void TouchDockerDock::slotSaveAs(QString path, QString mime)
     if (d->saveAsDialog) {
         d->saveAsDialog->accept();
     }
-    m_canvas->viewManager()->document()->saveAs(QUrl::fromLocalFile(path), mime.toLatin1(), true);
+    m_canvas->viewManager()->document()->saveAs(path, mime.toLatin1(), true);
     m_canvas->viewManager()->document()->waitForSavingToComplete();
 }
 

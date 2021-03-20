@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2020 Sharaf Zaman <sharafzaz121@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Sharaf Zaman <sharafzaz121@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -42,11 +42,12 @@ public:
             return SvgMeshPosition {row, col, segmentType};
         }
 
-        Type type;
+        Type type {None};
         QPointF pos;
-        int row, col;
-        SvgMeshPatch::Type segmentType;
-        Index index; // first or the second bezier handle
+        int row {0};
+        int col {0};
+        SvgMeshPatch::Type segmentType {SvgMeshPatch::Top};
+        Index index { First }; // first or the second bezier handle
     };
 
 public:
@@ -81,8 +82,8 @@ private:
     QTransform abosoluteTransformation(KoFlake::CoordinateSystem system) const;
 
 private:
-    KoFlake::FillVariant m_fillVariant;
-    KoShape *m_shape;
+    KoFlake::FillVariant m_fillVariant {KoFlake::Fill};
+    KoShape *m_shape {0};
 };
 
 #endif // __KOSHAPEMESHGRADIENTHANDLES_H_

@@ -1,4 +1,4 @@
-/* Copyright (C) 2008 Michael Jansen <kde@michael-jansen.biz>
+/* SPDX-FileCopyrightText: 2008 Michael Jansen <kde@michael-jansen.biz>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

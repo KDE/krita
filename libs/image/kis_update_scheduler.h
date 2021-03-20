@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,6 +14,7 @@
 #include "kis_image_interfaces.h"
 #include "kis_stroke_strategy_factory.h"
 #include "kis_strokes_queue_undo_result.h"
+#include "KisLodPreferences.h"
 
 class QRect;
 class KoProgressProxy;
@@ -125,6 +126,7 @@ public:
 
     void updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect);
     void updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect);
+    void updateProjectionNoFilthy(KisNodeSP node, const QVector<QRect>& rects, const QRect &cropRect);
     void updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefreshAsync(KisNodeSP root, const QVector<QRect>& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
@@ -138,13 +140,17 @@ public:
     bool cancelStroke(KisStrokeId id) override;
 
     /**
-     * Sets the desired level of detail on which the strokes should
-     * work.  Please note that this configuration will be applied
-     * starting from the next stroke. Please also note that this value
-     * is not guaranteed to coincide with the one returned by
-     * currentLevelOfDetail()
+     * Sets the desired level of detail preferences on which the strokes should
+     * work. Please note that this configuration will be applied starting from
+     * the next stroke. Please also note that this value is not guaranteed to
+     * coincide with the one returned by currentLevelOfDetail()
      */
-    void setDesiredLevelOfDetail(int lod);
+    void setLodPreferences(const KisLodPreferences &value);
+
+    /**
+     * Return current lod preferences loaded in the strokes queue
+     */
+    KisLodPreferences lodPreferences() const;
 
     /**
      * Explicitly start regeneration of LoD planes of all the devices

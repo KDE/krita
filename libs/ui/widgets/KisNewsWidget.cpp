@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -82,7 +82,7 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     listNews->installEventFilter(this);
 
     m_rssModel = new MultiFeedRssModel(this);
-    connect(m_rssModel, SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()));
+    connect(m_rssModel, SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()), Qt::UniqueConnection);
 
     setCursor(Qt::PointingHandCursor);
 

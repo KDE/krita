@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -31,7 +31,7 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     KisColorPatches("commonColors", parent)
 {
     m_reloadButton = new QPushButton();
-    m_reloadButton->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    m_reloadButton->setIcon(KisIconUtils::loadIcon("reload-preset-16")); //small reload icon
     m_reloadButton->setToolTip(i18n("Create a list of colors from the image"));
     connect(m_reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
 
@@ -109,7 +109,7 @@ void KisCommonColors::recalculate()
     if (!m_canvas) {
         return;
     }
-    if(m_reloadButton->isEnabled()==false) {
+    if(!m_reloadButton->isEnabled()) {
         // on old computation is still running
         // try later to recalculate
         m_recalculationTimer.start();

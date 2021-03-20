@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2003 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -79,7 +79,7 @@ protected:
     bool isOutlineEnabled() const;
     void setOutlineEnabled(bool enabled);
 
-    bool pickColor(const QPointF &documentPixel, AlternateAction action);
+    bool sampleColor(const QPointF &documentPixel, AlternateAction action);
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -102,7 +102,7 @@ protected:
     const KoCompositeOp* compositeOp();
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 private Q_SLOTS:
@@ -112,9 +112,9 @@ private Q_SLOTS:
     void increaseBrushSize();
     void decreaseBrushSize();
 
-    void activatePickColorDelayed();
+    void activateSampleColorDelayed();
 
-    void slotColorPickingFinished(KoColor color);
+    void slotColorSamplingFinished(KoColor color);
 
 protected:
     quint8 m_opacity;
@@ -135,18 +135,18 @@ private:
     QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
     void setOpacity(qreal opacity);
 
-    void activatePickColor(AlternateAction action);
-    void deactivatePickColor(AlternateAction action);
-    void pickColorWasOverridden();
+    void activateSampleColor(AlternateAction action);
+    void deactivateSampleColor(AlternateAction action);
+    void sampleColorWasOverridden();
 
     int colorPreviewResourceId(AlternateAction action);
     std::pair<QRectF, QRectF> colorPreviewDocRect(const QPointF &outlineDocPoint);
 
-    bool isPickingAction(AlternateAction action);
+    bool isSamplingAction(AlternateAction action);
 
-    struct PickingJob {
-        PickingJob() {}
-        PickingJob(QPointF _documentPixel,
+    struct SamplingJob {
+        SamplingJob() {}
+        SamplingJob(QPointF _documentPixel,
                    AlternateAction _action)
             : documentPixel(_documentPixel),
               action(_action) {}
@@ -154,7 +154,7 @@ private:
         QPointF documentPixel;
         AlternateAction action;
     };
-    void addPickerJob(const PickingJob &pickingJob);
+    void addSamplerJob(const SamplingJob &samplingJob);
 
 private:
 
@@ -164,20 +164,20 @@ private:
     bool m_supportOutline;
 
     /**
-     * Used as a switch for pickColor
+     * Used as a switch for sampleColor
      */
 
     // used to skip some of the tablet events and don't update the colour that often
-    QTimer m_colorPickerDelayTimer;
+    QTimer m_colorSamplerDelayTimer;
     AlternateAction delayedAction {AlternateAction::NONE};
 
     bool m_isOutlineEnabled;
     std::vector<int> m_standardBrushSizes;
 
-    KisStrokeId m_pickerStrokeId;
-    int m_pickingResource {0};
-    typedef KisSignalCompressorWithParam<PickingJob> PickingCompressor;
-    QScopedPointer<PickingCompressor> m_colorPickingCompressor;
+    KisStrokeId m_samplerStrokeId;
+    int m_samplingResource {0};
+    typedef KisSignalCompressorWithParam<SamplingJob> SamplingCompressor;
+    QScopedPointer<SamplingCompressor> m_colorSamplingCompressor;
 
     qreal m_localOpacity {1.0};
     qreal m_oldOpacity {1.0};

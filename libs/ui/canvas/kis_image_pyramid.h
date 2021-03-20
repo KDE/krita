@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -106,26 +106,26 @@ private:
     QVector<KisPaintDeviceSP> m_pyramid;
     KisImageWSP  m_originalImage;
 
-    const KoColorProfile* m_monitorProfile;
-    const KoColorSpace* m_monitorColorSpace;
+    const KoColorProfile* m_monitorProfile {0};
+    const KoColorSpace* m_monitorColorSpace {0};
 
     QSharedPointer<KisDisplayFilter> m_displayFilter;
 
-    KoColorConversionTransformation::Intent m_renderingIntent;
-    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+    KoColorConversionTransformation::Intent m_renderingIntent { KoColorConversionTransformation::IntentPerceptual };
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags { KoColorConversionTransformation::Empty };
 
 
     /**
      * Number of planes inside pyramid
      */
-    qint32 m_pyramidHeight;
+    qint32 m_pyramidHeight {0};
 
-    bool m_useOcio;
+    bool m_useOcio {false};
 
     QBitArray m_channelFlags;
-    bool m_allChannelsSelected;
-    bool m_onlyOneChannelSelected;
-    int m_selectedChannelIndex;
+    bool m_allChannelsSelected {false};
+    bool m_onlyOneChannelSelected {false};
+    int m_selectedChannelIndex {-1};
 
 };
 

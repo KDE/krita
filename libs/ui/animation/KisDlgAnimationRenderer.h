@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -85,6 +85,10 @@ private:
     static void filterSequenceMimeTypes(QStringList &mimeTypes);
     static QStringList makeVideoMimeTypesList();
     static bool imageMimeSupportsHDR(QString &hdr);
+
+    static KisPropertiesConfigurationSP loadLastConfiguration(QString configurationID);
+    static void saveLastUsedConfiguration(QString configurationID, KisPropertiesConfigurationSP config);
+
 private:
 
     static QString findFFMpeg(const QString &customLocation);

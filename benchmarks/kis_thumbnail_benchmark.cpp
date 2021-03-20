@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Eugene Ingerman geneing at gmail dot com
+ *  SPDX-FileCopyrightText: 2016 Eugene Ingerman geneing at gmail dot com
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #include "kis_thumbnail_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImage>
 #include "kis_iterator_ng.h"
 
@@ -146,4 +146,4 @@ void KisThumbnailBenchmark::benchmarkCreateThumbnailHiQcreateThumbOversample4x()
 }
 
 
-QTEST_MAIN(KisThumbnailBenchmark)
+SIMPLE_TEST_MAIN(KisThumbnailBenchmark)

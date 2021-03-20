@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project
-   Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (c) 2016 L. E. Segovia <amy@amyspark.me>
+   SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+   SPDX-FileCopyrightText: 2016 L. E. Segovia <amy@amyspark.me>
 
 
     SPDX-License-Identifier: LGPL-2.1-or-later
@@ -942,6 +942,7 @@ bool KoColorSet::Private::loadKpl()
         QDomElement e = doc.documentElement();
         colorSet->setName(e.attribute(KPL_PALETTE_NAME_ATTR));
         colorSet->setIsEditable(e.attribute(KPL_PALETTE_READONLY_ATTR) != "true");
+        QString version = e.attribute(KPL_VERSION_ATTR);
         comment = e.attribute(KPL_PALETTE_COMMENT_ATTR);
 
         desiredColumnCount = e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt();
@@ -953,13 +954,13 @@ bool KoColorSet::Private::loadKpl()
             colorSet->setColumnCount(desiredColumnCount);
         }
 
-        loadKplGroup(doc, e, colorSet->getGlobalGroup());
+        loadKplGroup(doc, e, colorSet->getGlobalGroup(), version);
 
         QDomElement g = e.firstChildElement(KPL_GROUP_TAG);
         while (!g.isNull()) {
             QString groupName = g.attribute(KPL_GROUP_NAME_ATTR);
             colorSet->addGroup(groupName);
-            loadKplGroup(doc, g, colorSet->getGroup(groupName));
+            loadKplGroup(doc, g, colorSet->getGroup(groupName), version);
             g = g.nextSiblingElement(KPL_GROUP_TAG);
         }
     }
@@ -1494,7 +1495,7 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
     {
         QDomDocument doc;
         QDomElement root = doc.createElement(KPL_PALETTE_TAG);
-        root.setAttribute(KPL_VERSION_ATTR, "1.0");
+        root.setAttribute(KPL_VERSION_ATTR, "2.0");
         root.setAttribute(KPL_PALETTE_NAME_ATTR, colorSet->name());
         root.setAttribute(KPL_PALETTE_COMMENT_ATTR, comment);
         root.setAttribute(KPL_PALETTE_READONLY_ATTR,
@@ -1579,7 +1580,7 @@ void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
     }
 }
 
-void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElement &parentEle, KisSwatchGroup *group)
+void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElement &parentEle, KisSwatchGroup *group, QString version)
 {
     Q_UNUSED(doc);
     if (!parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull()) {
@@ -1593,7 +1594,31 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
         QString colorDepthId = swatchEle.attribute(KPL_SWATCH_BITDEPTH_ATTR, Integer8BitsColorDepthID.id());
         KisSwatch entry;
 
-        entry.setColor(KoColor::fromXML(swatchEle.firstChildElement(), colorDepthId));
+        if (version == "1.0" && swatchEle.firstChildElement().tagName() == "Lab") {
+            // previous version of krita had the values wrong, and scaled everything between 0 to 1,
+            // but lab requires L = 0-100 and AB = -128-127.
+            QDomElement el = swatchEle.firstChildElement();
+            double L = swatchEle.attribute("L").toDouble();
+            el.setAttribute("L", L*100.0);
+            double ab = swatchEle.attribute("a").toDouble();
+            if (ab< .5) {
+                ab = (ab - 1.0) * 1280.0;
+            } else {
+                ab = (ab - 1.0) * 1270.0;
+            }
+            el.setAttribute("a", ab);
+
+            ab = swatchEle.attribute("b").toDouble();
+            if (ab< .5) {
+                ab = (ab - 1.0) * 1280.0;
+            } else {
+                ab = (ab - 1.0) * 1270.0;
+            }
+            el.setAttribute("b", ab);
+            entry.setColor(KoColor::fromXML(el, colorDepthId));
+        } else {
+            entry.setColor(KoColor::fromXML(swatchEle.firstChildElement(), colorDepthId));
+        }
         entry.setName(swatchEle.attribute(KPL_SWATCH_NAME_ATTR));
         entry.setId(swatchEle.attribute(KPL_SWATCH_ID_ATTR));
         entry.setSpotColor(swatchEle.attribute(KPL_SWATCH_SPOT_ATTR, "false") == "true" ? true : false);

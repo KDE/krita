@@ -1,7 +1,7 @@
 /*
  *  kis_tool_fill.h - part of Krayon^Krita
  *
- *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2004 Bart Coppens <kde@bartcoppens.be>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -28,6 +28,7 @@ class KisDoubleSliderSpinBox;
 class KoCanvasBase;
 class KisColorFilterCombo;
 class KisDummiesFacadeBase;
+class KisAngleSelector;
 
 class KisToolFill : public KisToolPaint
 {
@@ -45,7 +46,7 @@ public:
     QWidget * createOptionWidget() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);
@@ -102,7 +103,7 @@ private:
     KisSliderSpinBox *m_slThreshold;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;
-    KisDoubleSliderSpinBox *m_sldPatternRotate;
+    KisAngleSelector *m_angleSelectorPatternRotate;
     KisDoubleSliderSpinBox *m_sldPatternScale;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkFillSelection;

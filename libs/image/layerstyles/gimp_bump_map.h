@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  gimp_bump_map contains code taken from gimp-bumpmap.c, original copyright:
  *
- *   Copyright (C) 1997 Federico Mena Quintero <federico@nuclecu.unam.mx>
- *   Copyright (C) 1997-2000 Jens Lautenbacher <jtl@gimp.org>
- *   Copyright (C) 2000 Sven Neumann <sven@gimp.org>
+ *  SPDX-FileCopyrightText: 1997 Federico Mena Quintero <federico@nuclecu.unam.mx>
+ *  SPDX-FileCopyrightText: 1997-2000 Jens Lautenbacher <jtl@gimp.org>
+ *  SPDX-FileCopyrightText: 2000 Sven Neumann <sven@gimp.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

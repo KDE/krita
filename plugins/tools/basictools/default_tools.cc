@@ -1,7 +1,7 @@
 /*
  * default_tools.cc -- Part of Krita
  *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ * SPDX-FileCopyrightText: 2004 Boudewijn Rempt (boud@valdyas.org)
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,7 +22,7 @@
 #include "kis_tool_freehand.h"
 #include "kis_tool_gradient.h"
 #include "kis_tool_rectangle.h"
-#include "kis_tool_colorpicker.h"
+#include "kis_tool_colorsampler.h"
 #include "kis_tool_line.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_measure.h"
@@ -40,7 +40,7 @@ DefaultTools::DefaultTools(QObject *parent, const QVariantList &)
     KoToolRegistry::instance()->add(new KisToolFillFactory());
     KoToolRegistry::instance()->add(new KisToolGradientFactory());
     KoToolRegistry::instance()->add(new KisToolBrushFactory());
-    KoToolRegistry::instance()->add(new KisToolColorPickerFactory());
+    KoToolRegistry::instance()->add(new KisToolColorSamplerFactory());
     KoToolRegistry::instance()->add(new KisToolLineFactory());
     KoToolRegistry::instance()->add(new KisToolEllipseFactory());
     KoToolRegistry::instance()->add(new KisToolRectangleFactory());

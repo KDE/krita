@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2008-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_meta_data_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_meta_data_entry.h"
 #include "kis_meta_data_filter_registry.h"
 #include "kis_meta_data_value.h"

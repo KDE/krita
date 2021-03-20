@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -36,7 +36,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotGamutMaskToggle(bool state);
-    void slotGamutMaskRotate(int angle);
+    void slotGamutMaskRotate(qreal angle);
 
 private:
     QScopedPointer<Ui_wdgGamutMaskToolbar> m_ui;

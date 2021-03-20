@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -35,9 +35,9 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
 }
 
 
-void KisToolPolylineBase::activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes)
+void KisToolPolylineBase::activate(const QSet<KoShape *> &shapes)
 {
-    KisToolShape::activate(activation, shapes);
+    KisToolShape::activate(shapes);
     connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelection()), Qt::UniqueConnection);
 }
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -53,7 +53,8 @@ void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
             this, SLOT(canvasResourceChanged(int,QVariant)));
 
 
-    connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_presetChooser, SLOT(slotThemeChanged()));
+    connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_presetChooser, SLOT(slotThemeChanged()), Qt::UniqueConnection);
+    m_presetChooser->slotThemeChanged();
 
     canvasResourceChanged();
 }

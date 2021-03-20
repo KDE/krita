@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -73,7 +73,7 @@ struct KisReferenceImage::Private : public QSharedData
 
         if (image.isNull()) {
             KisDocument * doc = KisPart::instance()->createTemporaryDocument();
-            if (doc->openUrl(QUrl::fromLocalFile(externalFilename), KisDocument::DontAddToRecent)) {
+            if (doc->openPath(externalFilename, KisDocument::DontAddToRecent)) {
                 image = doc->image()->convertToQImage(doc->image()->bounds(), 0);
             }
             KisPart::instance()->removeDocument(doc);

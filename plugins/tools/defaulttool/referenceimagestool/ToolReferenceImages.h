@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -50,7 +50,7 @@ protected:
     void updateDistinctiveActions(const QList<KoShape*> &editableShapes) override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
     void addReferenceImage();

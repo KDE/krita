@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Tusooa Zhu <tusooa@vista.aero>
+ *  SPDX-FileCopyrightText: 2019 Tusooa Zhu <tusooa@vista.aero>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_SIGNAL_AUTO_CONNECTION_TEST_H_
 #define KIS_SIGNAL_AUTO_CONNECTION_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisSignalAutoConnectionTest : public QObject
 {

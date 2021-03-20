@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -24,17 +24,16 @@ KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
     m_textMaskDisabled = i18n("Mask is disabled");
 
     m_ui->bnToggleMask->setChecked(false);
-    m_ui->bnToggleMask->setIcon(m_iconMaskOff);
+    m_ui->bnToggleMask->setIcon(m_iconMaskOn);
+    m_ui->bnToggleMask->setEnabled(false);
 
-    m_ui->rotationSlider->setRange(0, 360);
-    m_ui->rotationSlider->setPrefix(i18n("Rotation: "));
-    m_ui->rotationSlider->setSuffix("°");
-    m_ui->rotationSlider->setFastSliderStep(30); // TODO: test for usability
-    m_ui->rotationSlider->hide();
+    m_ui->rotationAngleSelector->setDecimals(0);
+    m_ui->rotationAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    m_ui->rotationAngleSelector->hide();
 
     // gamut mask connections
     connect(m_ui->bnToggleMask, SIGNAL(toggled(bool)), SLOT(slotGamutMaskToggle(bool)));
-    connect(m_ui->rotationSlider, SIGNAL(valueChanged(int)), SLOT(slotGamutMaskRotate(int)));
+    connect(m_ui->rotationAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(slotGamutMaskRotate(qreal)));
 }
 
 void KisGamutMaskToolbar::connectMaskSignals(KisCanvasResourceProvider* resourceProvider)
@@ -77,9 +76,11 @@ void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMaskSP mask)
 
 void KisGamutMaskToolbar::slotGamutMaskUnset()
 {
-    m_ui->rotationSlider->hide();
+    m_ui->rotationAngleSelector->hide();
     m_ui->labelMaskName->show();
     m_ui->labelMaskName->setText(m_textNoMask);
+    m_ui->bnToggleMask->setIcon(m_iconMaskOn);
+    m_ui->bnToggleMask->setEnabled(false);
 }
 
 void KisGamutMaskToolbar::slotGamutMaskDeactivate()
@@ -98,13 +99,14 @@ void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
     m_ui->bnToggleMask->setChecked(b);
 
     if (b == true) {
+        m_ui->bnToggleMask->setEnabled(true);
         m_ui->bnToggleMask->setIcon(m_iconMaskOn);
         m_ui->labelMaskName->hide();
-        m_ui->rotationSlider->show();
+        m_ui->rotationAngleSelector->show();
 
-        m_ui->rotationSlider->blockSignals(true);
-        m_ui->rotationSlider->setValue(m_selectedMask->rotation());
-        m_ui->rotationSlider->blockSignals(false);
+        m_ui->rotationAngleSelector->blockSignals(true);
+        m_ui->rotationAngleSelector->setAngle(static_cast<qreal>(m_selectedMask->rotation()));
+        m_ui->rotationAngleSelector->blockSignals(false);
 
         m_selfUpdate = true;
         emit sigGamutMaskChanged(m_selectedMask);
@@ -112,7 +114,7 @@ void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
 
     } else {
         m_ui->bnToggleMask->setIcon(m_iconMaskOff);
-        m_ui->rotationSlider->hide();
+        m_ui->rotationAngleSelector->hide();
         m_ui->labelMaskName->show();
         m_ui->labelMaskName->setText(m_textMaskDisabled);
 
@@ -122,12 +124,12 @@ void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
     }
 }
 
-void KisGamutMaskToolbar::slotGamutMaskRotate(int angle)
+void KisGamutMaskToolbar::slotGamutMaskRotate(qreal angle)
 {
     if (!m_selectedMask) {
         return;
     }
 
-    m_selectedMask->setRotation(angle);
+    m_selectedMask->setRotation(static_cast<int>(angle));
     emit sigGamutMaskChanged(m_selectedMask);
 }

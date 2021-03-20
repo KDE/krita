@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -23,6 +23,7 @@ private Q_SLOTS:
     void testFilterByResource();
     void testFilterByTag();
     void testFilterByString();
+    void testFilterByStorage();
     void testDataWhenSwitchingBetweenTagAllAllUntagged();
 
     void testResourceForIndex();

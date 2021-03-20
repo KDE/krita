@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -150,12 +150,24 @@ void KisConstrainedRect::moveHandle(HandleType handle, const QPoint &offset, con
         QSize tempSize = baseSizeCoeff * oldSize + sizeDiff;
         bool widthPreferrable = qAbs(tempSize.width()) > qAbs(tempSize.height() * m_ratio);
 
-        if (ratioLocked() && ((widthPreferrable && xSizeCoeff != 0) || ySizeCoeff == 0)) {
-            newSize.setWidth(tempSize.width());
-            newSize.setHeight(heightFromWidthUnsignedRatio(newSize.width(), m_ratio, tempSize.height()));
-        } else if (ratioLocked() && ((!widthPreferrable && ySizeCoeff != 0) || xSizeCoeff == 0)) {
-            newSize.setHeight(tempSize.height());
-            newSize.setWidth(widthFromHeightUnsignedRatio(newSize.height(), m_ratio, tempSize.width()));
+        if (ratioLocked()) {
+            if ((widthPreferrable && xSizeCoeff != 0) || ySizeCoeff == 0) {
+                newSize.setWidth(tempSize.width());
+                newSize.setHeight(heightFromWidthUnsignedRatio(newSize.width(), m_ratio, tempSize.height()));
+            } else if ((!widthPreferrable && ySizeCoeff != 0) || xSizeCoeff == 0) {
+                newSize.setHeight(tempSize.height());
+                newSize.setWidth(widthFromHeightUnsignedRatio(newSize.height(), m_ratio, tempSize.width()));
+            }
+
+            // see https://bugs.kde.org/show_bug.cgi?id=432036
+            if (!m_canGrow && qAbs(newSize.width()) > m_cropRect.width()) {
+                newSize.setWidth(m_cropRect.width());
+                newSize.setHeight(heightFromWidthUnsignedRatio(newSize.width(), m_ratio, newSize.height()));
+            }
+            if (!m_canGrow && qAbs(newSize.height()) > m_cropRect.height()) {
+                newSize.setHeight(m_cropRect.height());
+                newSize.setWidth(widthFromHeightUnsignedRatio(newSize.height(), m_ratio, newSize.width()));
+            }
         } else if (widthLocked() && heightLocked()) {
             newSize.setWidth(KisAlgebra2D::copysign(newSize.width(), tempSize.width()));
             newSize.setHeight(KisAlgebra2D::copysign(newSize.height(), tempSize.height()));
@@ -207,6 +219,16 @@ void KisConstrainedRect::moveHandle(HandleType handle, const QPoint &offset, con
 
     if (!m_canGrow) {
         m_rect &= m_cropRect;
+
+        if (ratioLocked() && m_rect.height()) {
+            qreal newRatio = m_rect.width() / (qreal)(m_rect.height());
+
+            if (newRatio > m_ratio) {
+                m_rect.setWidth(widthFromHeightUnsignedRatio(m_rect.height(), m_ratio, m_rect.width()));
+            } else {
+                m_rect.setHeight(heightFromWidthUnsignedRatio(m_rect.width(), m_ratio, m_rect.height()));
+            }
+        }
     }
 
     emit sigValuesChanged();

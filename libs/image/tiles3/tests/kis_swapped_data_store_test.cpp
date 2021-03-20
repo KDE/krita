@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_swapped_data_store_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_debug.h"
 
@@ -119,5 +119,5 @@ void KisSwappedDataStoreTest::testRandomAccess()
         delete tileDataList[i];
 }
 
-QTEST_MAIN(KisSwappedDataStoreTest)
+SIMPLE_TEST_MAIN(KisSwappedDataStoreTest)
 

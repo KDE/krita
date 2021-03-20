@@ -1,15 +1,12 @@
 /*
- *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include "KisLayerStyleAngleSelector.h"
-
-#include <QWidget>
-#include <QDial>
-
 #include <kis_signals_blocker.h>
+
+#include "KisLayerStyleAngleSelector.h"
 
 KisLayerStyleAngleSelector::KisLayerStyleAngleSelector(QWidget *parent)
     : QWidget(parent)
@@ -18,24 +15,25 @@ KisLayerStyleAngleSelector::KisLayerStyleAngleSelector(QWidget *parent)
     ui = new Ui_WdgKisLayerStyleAngleSelector();
     ui->setupUi(this);
 
+    ui->angleSelector->setRange(-179.0, 180.0);
+    ui->angleSelector->setDecimals(0);
+    ui->angleSelector->setResetAngle(120.0);
+
     ui->chkUseGlobalLight->hide();
 
-    connect(ui->dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
-    connect(ui->intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
+    connect(ui->angleSelector, SIGNAL(angleChanged(qreal)), SLOT(slotAngleSelectorAngleChanged(qreal)));
 }
 
 int KisLayerStyleAngleSelector::value()
 {
-    return ui->intAngle->value();
+    return static_cast<int>(ui->angleSelector->angle());
 }
 
 void KisLayerStyleAngleSelector::setValue(int value)
 {
-    KisSignalsBlocker intB(ui->intAngle);
-    KisSignalsBlocker dialB(ui->dialAngle);
+    KisSignalsBlocker angleSelectorBlocker(ui->angleSelector);
 
-    ui->intAngle->setValue(value);
-    ui->dialAngle->setValue(value + m_dialValueShift);
+    ui->angleSelector->setAngle(static_cast<qreal>(value));
 }
 
 void KisLayerStyleAngleSelector::enableGlobalLight(bool enable)
@@ -61,33 +59,14 @@ void KisLayerStyleAngleSelector::setUseGlobalLight(bool state)
     ui->chkUseGlobalLight->setChecked(state);
 }
 
-void KisLayerStyleAngleSelector::slotDialAngleChanged(int value)
+KisAngleSelector* KisLayerStyleAngleSelector::angleSelector()
 {
-    KisSignalsBlocker b(ui->intAngle);
-
-    int normalizedValue = 0;
-    if (value >= 270 && value <= 360) {
-        // Due to the mismatch between the domain of the dial (0°,360°)
-        // and the spinbox (-179°,180°), the shift in the third quadrant
-        // of the dial is different
-        normalizedValue = value - 360 - m_dialValueShift;
-    } else {
-        normalizedValue = value - m_dialValueShift;
-    }
-
-    ui->intAngle->setValue(normalizedValue);
-    emit valueChanged(normalizedValue);
-    emitChangeSignals();
+    return ui->angleSelector;
 }
 
-void KisLayerStyleAngleSelector::slotIntAngleChanged(int value)
+void KisLayerStyleAngleSelector::slotAngleSelectorAngleChanged(qreal value)
 {
-    KisSignalsBlocker b(ui->dialAngle);
-
-    int angleDialValue = value + m_dialValueShift;
-    ui->dialAngle->setValue(angleDialValue);
-
-    emit valueChanged(value);
+    emit valueChanged(static_cast<int>(value));
     emitChangeSignals();
 }
 

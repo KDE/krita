@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -50,7 +50,7 @@ public:
     KisPaintDeviceSP paintDevice() const override;
     KisPaintDeviceSP coloringProjection() const;
 
-    KisPaintDeviceSP colorPickSourceDevice() const override;
+    KisPaintDeviceSP colorSampleSourceDevice() const override;
 
     KisNodeSP clone() const override {
         return KisNodeSP(new KisColorizeMask(*this));

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -11,9 +11,7 @@
 #include <KoCmykColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
 
-typedef KoCmykTraits<quint8> CmykU8Traits;
-
-class CmykU8ColorSpace : public LcmsColorSpace<CmykU8Traits>
+class CmykU8ColorSpace : public LcmsColorSpace<KoCmykU8Traits>
 {
 public:
     CmykU8ColorSpace(const QString &name, KoColorProfile *p);

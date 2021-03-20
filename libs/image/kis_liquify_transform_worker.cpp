@@ -1,11 +1,12 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_liquify_transform_worker.h"
 
+#include <KoColorSpace.h>
 #include "kis_grid_interpolation_tools.h"
 #include "kis_dom_utils.h"
 #include "krita_utils.h"
@@ -22,7 +23,7 @@ struct Q_DECL_HIDDEN KisLiquifyTransformWorker::Private
     {
     }
 
-    const QRect srcBounds;
+    QRect srcBounds;
 
     QVector<QPointF> originalPoints;
     QVector<QPointF> transformedPoints;
@@ -378,14 +379,15 @@ void KisLiquifyTransformWorker::rotatePoints(const QPointF &base,
     m_d->processTransformedPixels(op, base, sigma, useWashMode, flow);
 }
 
-void KisLiquifyTransformWorker::run(KisPaintDeviceSP device)
+void KisLiquifyTransformWorker::run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice)
 {
-    KisPaintDeviceSP srcDev = new KisPaintDevice(*device.data());
-    device->clear();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(*srcDevice->colorSpace() == *dstDevice->colorSpace());
+
+    dstDevice->clear();
 
     using namespace GridIterationTools;
 
-    PaintDevicePolygonOp polygonOp(srcDev, device);
+    PaintDevicePolygonOp polygonOp(srcDevice, dstDevice);
     RegularGridIndexesOp indexesOp(m_d->gridSize);
     iterateThroughGrid<AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                     m_d->gridSize,
@@ -418,6 +420,20 @@ QRect KisLiquifyTransformWorker::approxNeedRect(const QRect &rc, const QRect &fu
 {
     Q_UNUSED(rc);
     return fullBounds;
+}
+
+void KisLiquifyTransformWorker::transformSrcAndDst(const QTransform &t)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(t.type() <= QTransform::TxScale);
+
+    m_d->srcBounds = t.mapRect(m_d->srcBounds);
+
+    for (auto it = m_d->originalPoints.begin(); it != m_d->originalPoints.end(); ++it) {
+        *it = t.map(*it);
+    }
+    for (auto it = m_d->transformedPoints.begin(); it != m_d->transformedPoints.end(); ++it) {
+        *it = t.map(*it);
+    }
 }
 
 #include <functional>

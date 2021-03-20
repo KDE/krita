@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
+  SPDX-FileCopyrightText: 2020 Saurabh Kumar <saurabhk660@gmail.com>
 
   SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -12,6 +12,8 @@
 
 #include "StoryboardView.h"
 #include "StoryboardModel.h"
+#include "StoryboardDelegate.h"
+#include "KisAddRemoveStoryboardCommand.h"
 
 class StoryboardStyle : public QProxyStyle
 {
@@ -80,6 +82,9 @@ StoryboardView::StoryboardView(QWidget *parent)
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
                 this, SLOT(slotContextMenuRequested(const QPoint &)));
+
+    connect(this, &StoryboardView::clicked,
+            this, &StoryboardView::slotItemClicked);
 }
 
 StoryboardView::~StoryboardView()
@@ -277,9 +282,23 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
         if (index.row() > 0) {
             contextMenu.addAction(i18nc("Add scene before active scene", "Add Scene Before"), [this, index, Model] {Model->insertItem(index, false); });
         }
-        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [this, index] {model()->removeRows(index.row(), 1); });
+        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [this, index, Model] {
+            int row = index.row();
+            KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, Model->getData().at(row), Model);
+            Model->removeItem(index, command);
+            Model->pushUndoCommand(command);
+        });
     }
     contextMenu.exec(viewport()->mapToGlobal(point));
+}
+
+void StoryboardView::slotItemClicked(const QModelIndex &clicked)
+{
+    StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model());
+
+    if(sbModel) {
+        sbModel->visualizeScene(clicked.parent().isValid() ? clicked.parent() : clicked);
+    }
 }
 
 void StoryboardView::setCurrentItem(int frame)
@@ -291,4 +310,20 @@ void StoryboardView::setCurrentItem(int frame)
         selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
         scrollTo(index);
     }
+}
+
+void StoryboardView::mouseReleaseEvent(QMouseEvent *event) {
+    QModelIndex index = indexAt(event->pos());
+
+    // To prevent selection changes from occuring when hitting the "plus" button,
+    // we want to filter out these inputs before passing it up to QListView / QAbstractItemView
+    if (index.isValid() && index.parent().isValid() && index.row() == StoryboardItem::FrameNumber) {
+        StoryboardDelegate* sbDelegate = dynamic_cast<StoryboardDelegate*>(itemDelegate(index));
+        QRect itemRect = visualRect(index);
+        if (sbDelegate && sbDelegate->isOverlappingActionIcons(itemRect, event)) {
+            return;
+        }
+    }
+
+    QListView::mouseReleaseEvent(event);
 }

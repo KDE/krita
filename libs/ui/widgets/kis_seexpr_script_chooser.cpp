@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -30,7 +30,8 @@ KisSeExprScriptChooser::KisSeExprScriptChooser(QWidget *parent)
     : QFrame(parent)
 {
     m_lblName = new KSqueezedTextLabel(this);
-    m_lblName->setTextElideMode(Qt::ElideLeft);
+    m_lblName->setTextElideMode(Qt::ElideMiddle);
+    m_lblName->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     m_itemChooser = new KisResourceItemChooser(ResourceType::SeExprScripts, true, this);
     m_itemChooser->setPreviewTiled(true);
@@ -87,7 +88,6 @@ void KisSeExprScriptChooser::setPreviewOrientation(Qt::Orientation orientation)
 
 void KisSeExprScriptChooser::update(KoResourceSP resource)
 {
-    m_lblName->setFixedWidth(m_itemChooser->width());
     KisSeExprScriptSP pattern = resource.staticCast<KisSeExprScript>();
     m_lblName->setText(QString("%1").arg(i18n(pattern->name().toUtf8().replace("_", " "))));
 }

@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_COMPRESSION_TESTS_H
 #define KIS_COMPRESSION_TESTS_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAbstractCompression;
 

@@ -1,8 +1,10 @@
-/* This file is part of the Calligra libraries
-   Copyright (C) 2001 Werner Trobin <trobin@kde.org>
-                 2002 Werner Trobin <trobin@kde.org>
+/*
+    This file is part of the Calligra libraries
 
-SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-FileCopyrightText: 2001 Werner Trobin <trobin@kde.org>
+    SPDX-FileCopyrightText: 2002 Werner Trobin <trobin@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef KIS_IMPORT_EXPORT_FILTER_H

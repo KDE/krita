@@ -1,18 +1,8 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
  */
 
 #include "KisPopupButton.h"
@@ -35,6 +25,7 @@ struct KisPopupButton::Private {
     QScopedPointer<QFrame> frame;
     QPointer<QWidget> popupWidget;
     QPointer<QHBoxLayout> frameLayout;
+    bool arrowVisible = true;
 };
 
 KisPopupButton::KisPopupButton(QWidget* parent)
@@ -110,7 +101,9 @@ void KisPopupButton::hidePopupWidget()
 void KisPopupButton::paintEvent ( QPaintEvent * event  )
 {
     QPushButton::paintEvent(event);
-    paintPopupArrow();
+    if (m_d->arrowVisible) {
+        paintPopupArrow();
+    }
 }
 
 void KisPopupButton::paintPopupArrow()
@@ -139,3 +132,11 @@ void KisPopupButton::adjustPosition()
     m_d->frame->setGeometry(popupRect);
 }
 
+void KisPopupButton::setArrowVisible (bool v)
+{
+    if (v) {
+        m_d->arrowVisible = true;
+    } else {
+        m_d->arrowVisible = false;
+    }
+}

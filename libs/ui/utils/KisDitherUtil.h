@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (c) 2019 Carl Olsson <carl.olsson@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Carl Olsson <carl.olsson@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

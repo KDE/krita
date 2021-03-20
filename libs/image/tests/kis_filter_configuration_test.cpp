@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_filter_configuration_test.h"
 #include <QApplication>
-#include <QTest>
+#include <simpletest.h>
 #include <kis_debug.h>
 #include <KoID.h>
 #include <kis_paint_device.h>
@@ -55,4 +55,4 @@ void KisFilterConfigurationTest::testSetGetProperty()
 }
 
 
-QTEST_MAIN(KisFilterConfigurationTest)
+SIMPLE_TEST_MAIN(KisFilterConfigurationTest)

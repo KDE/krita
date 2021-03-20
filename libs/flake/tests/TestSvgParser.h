@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef TESTSVGPARSER_H
 #define TESTSVGPARSER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class TestSvgParser : public QObject
 {

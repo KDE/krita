@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "psd_colormode_block_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <psd.h>
@@ -63,5 +63,5 @@ void PSDColorModeBlockTest::testLoadingIndexed()
 }
 
 
-QTEST_MAIN(PSDColorModeBlockTest)
+SIMPLE_TEST_MAIN(PSDColorModeBlockTest)
 

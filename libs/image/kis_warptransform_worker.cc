@@ -1,7 +1,7 @@
 /*
  *  kis_warptransform_worker.cc -- part of Krita
  *
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -170,8 +170,8 @@ QPointF KisWarpTransformWorker::rigidTransformMath(QPointF v, QVector<QPointF> p
     return res;
 }
 
-KisWarpTransformWorker::KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress)
-        : m_dev(dev), m_progress(progress)
+KisWarpTransformWorker::KisWarpTransformWorker(WarpType warpType, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress)
+        : m_progress(progress)
 {
     m_origPoint = origPoint;
     m_transfPoint = transfPoint;
@@ -220,8 +220,9 @@ struct KisWarpTransformWorker::FunctionTransformOp
     qreal m_alpha;
 };
 
-void KisWarpTransformWorker::run()
+void KisWarpTransformWorker::run(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(*srcDev->colorSpace() == *dstDev->colorSpace());
 
     if (!m_warpMathFunction ||
         m_origPoint.isEmpty() ||
@@ -230,22 +231,21 @@ void KisWarpTransformWorker::run()
         return;
     }
 
-    KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
-
     if (m_origPoint.size() == 1) {
-        QPointF translate(QPointF(m_dev->x(), m_dev->y()) + m_transfPoint[0] - m_origPoint[0]);
-        m_dev->moveTo(translate.toPoint());
+        dstDev->makeCloneFromRough(srcDev, srcDev->extent());
+        QPointF translate(QPointF(srcDev->x(), srcDev->y()) + m_transfPoint[0] - m_origPoint[0]);
+        dstDev->moveTo(translate.toPoint());
         return;
     }
 
-    const QRect srcBounds = srcdev->region().boundingRect();
+    const QRect srcBounds = srcDev->region().boundingRect();
 
-    m_dev->clear();
+    dstDev->clear();
 
     const int pixelPrecision = 8;
 
     FunctionTransformOp functionOp(m_warpMathFunction, m_origPoint, m_transfPoint, m_alpha);
-    GridIterationTools::PaintDevicePolygonOp polygonOp(srcdev, m_dev);
+    GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, dstDev);
     GridIterationTools::processGrid(polygonOp, functionOp,
                                     srcBounds, pixelPrecision);
 }

@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2014 Mohit Goyal    <mohit.bits2011@gmail.com>
+ *  SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -41,7 +41,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
+    addChooser(i18nc("Autobrush Label", "Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 
     m_predefinedBrushWidget = new KisPredefinedBrushChooser(this);
     connect(m_predefinedBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));

@@ -1,7 +1,7 @@
 /*
- *    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
- *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+ *    SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
  *
  *    SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -45,13 +45,7 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
 {
     QString searchTooltipMaintext = i18nc(
             "@info:tooltip",
-            "<p>Enter search terms here to add resources to, or remove them from, the current tag view.</p>"
-            "<p>To filter based on the partial, case insensitive name of a resource:<br/>"
-            "<tt>partialname</tt> or <tt>!partialname</tt></p>"
-            "<p>To include or exclude other tag sets:<br/>"
-            "<tt>[Tagname]</tt> or <tt>![Tagname]</tt></p>"
-            "<p>For case sensitive and full name matching in-/exclusion:<br/>"
-            "<tt>\"ExactMatch\"</tt> or <tt>!\"ExactMatch\"</tt></p>");
+            "<p>Enter search terms to filter by name</p>");
 
     d->tagSearchBarTooltip_saving_disabled = searchTooltipMaintext + i18nc(
             "@info:tooltip",

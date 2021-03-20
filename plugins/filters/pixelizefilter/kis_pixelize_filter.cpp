@@ -1,9 +1,9 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ * SPDX-FileCopyrightText: 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- * ported from Gimp, Copyright (C) 1997 Eiichi Takamori <taka@ma1.seikyou.ne.jp>
+ * ported from Gimp, SPDX-FileCopyrightText: 1997 Eiichi Takamori <taka@ma1.seikyou.ne.jp>
  * original pixelize.c for GIMP 0.54 by Tracy Scott
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later

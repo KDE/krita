@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef __KIS_NODE_DUMMIES_GRAPH_TEST_H
 #define __KIS_NODE_DUMMIES_GRAPH_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisNodeDummy;
 class KisNodeDummiesGraph;

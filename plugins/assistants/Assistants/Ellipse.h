@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Geoffry Song <goffrie@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

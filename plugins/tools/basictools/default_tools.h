@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
+ *  SPDX-FileCopyrightText: 2003 Boudewijn Rempt (boud@valdyas.org)
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

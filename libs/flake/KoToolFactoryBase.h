@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -12,6 +12,7 @@
 
 #include <QString>
 #include <QList>
+#include <QObject>
 
 class KoCanvasBase;
 class KoToolBase;
@@ -42,13 +43,15 @@ class QAction;
 </pre>
 
  */
-class KRITAFLAKE_EXPORT KoToolFactoryBase
+class KRITAFLAKE_EXPORT KoToolFactoryBase : public QObject
 {
+
+    Q_OBJECT
+
 public:
     /**
      * Create the new factory
-     * @param id a string that will be used internally for referencing the tool, for
-     *   example for use by the KoToolBase::activateTemporary.
+     * @param id a string that will be used internally for referencing the tool
      */
     explicit KoToolFactoryBase(const QString &id);
     virtual ~KoToolFactoryBase();
@@ -191,7 +194,6 @@ public:
 
 protected:
 
-
     /**
      * Set the default shortcut for activation of this tool.
      */
@@ -241,6 +243,9 @@ protected:
      */
     virtual QList<QAction *> createActionsImpl();
 
+private Q_SLOTS:
+
+    void activateTool();
 
 private:
     class Private;

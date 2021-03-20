@@ -1,13 +1,13 @@
 /* This file is part of the KDE libraries
-    Copyright
-    (C) 2000 Reginald Stadlbauer (reggie@kde.org)
-    (C) 1997, 1998 Stephan Kulow (coolo@kde.org)
-    (C) 1997, 1998 Mark Donohoe (donohoe@kde.org)
-    (C) 1997, 1998 Sven Radej (radej@kde.org)
-    (C) 1997, 1998 Matthias Ettrich (ettrich@kde.org)
-    (C) 1999 Chris Schlaeger (cs@kde.org)
-    (C) 1999 Kurt Granroth (granroth@kde.org)
-    (C) 2005-2006 Hamish Rodda (rodda@kde.org)
+
+    SPDX-FileCopyrightText: 2000 Reginald Stadlbauer (reggie@kde.org)
+    SPDX-FileCopyrightText: 1997, 1998 Stephan Kulow (coolo@kde.org)
+    SPDX-FileCopyrightText: 1997, 1998 Mark Donohoe (donohoe@kde.org)
+    SPDX-FileCopyrightText: 1997, 1998 Sven Radej (radej@kde.org)
+    SPDX-FileCopyrightText: 1997, 1998 Matthias Ettrich (ettrich@kde.org)
+    SPDX-FileCopyrightText: 1999 Chris Schlaeger (cs@kde.org)
+    SPDX-FileCopyrightText: 1999 Kurt Granroth (granroth@kde.org)
+    SPDX-FileCopyrightText: 2005-2006 Hamish Rodda (rodda@kde.org)
 
     SPDX-License-Identifier: LGPL-2.0-only
 */
@@ -1241,6 +1241,11 @@ bool KToolBar::eventFilter(QObject *watched, QEvent *event)
                         }
                     }
                 }
+                // Set highlight color on checked buttons, same as in KisHighlightedButton
+                QPalette p = tb->palette();
+                QColor color = p.color(tb->isChecked() ? QPalette::Highlight : QPalette::Button);
+                p.setColor(QPalette::Button, color);
+                tb->setPalette(p);
             }
 
             // CJK languages use more verbose accelerator marker: they add a Latin
@@ -1325,6 +1330,10 @@ void KToolBar::actionEvent(QActionEvent *event)
                 if (index != -1) {
                     layout()->itemAt(index)->setAlignment(Qt::AlignJustify);
                 }
+            }
+            // NOTE: set a fixed button size, same size as the buttonsize used in kis_paintop_box
+            if (widget->inherits("QToolButton") && event->action()->icon().isNull() == false) {
+                widget->setFixedSize(32, 32);
             }
         }
     }

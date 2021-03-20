@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+*  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
 *
 * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -124,6 +124,37 @@ float IccColorProfile::version() const
         return d->shared->lcmsProfile->version();
     }
     return 0.0;
+}
+
+QString IccColorProfile::colorModelID() const
+{
+    QString model;
+
+    switch (d->shared->lcmsProfile->colorSpaceSignature()) {
+    case cmsSigRgbData:
+        model = "RGBA";
+        break;
+    case cmsSigLabData:
+        model = "LABA";
+        break;
+    case cmsSigCmykData:
+        model = "CMYKA";
+        break;
+    case cmsSigGrayData:
+        model = "GRAYA";
+        break;
+    case cmsSigXYZData:
+        model = "XYZA";
+        break;
+    case cmsSigYCbCrData:
+        model = "YCrCbA";
+        break;
+    default:
+        // In theory we should be able to interpret the colorspace signature as a 4 char array...
+        model = QString();
+    }
+
+    return model;
 }
 bool IccColorProfile::isSuitableForOutput() const
 {

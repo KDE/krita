@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -81,12 +81,12 @@ private:
 };
 
 
-class KisToolMultiBrushFactory : public KisToolPaintFactoryBase
+class KisToolMultiBrushFactory : public KisToolBrushFactory
 {
 
 public:
     KisToolMultiBrushFactory()
-        : KisToolPaintFactoryBase("KritaShape/KisToolMultiBrush") {
+        : KisToolBrushFactory("KritaShape/KisToolMultiBrush") {
 
         setToolTip(i18n("Multibrush Tool"));
 

@@ -1,6 +1,6 @@
  /*
   * This file is part of the KDE project
-  * Copyright (C) 2019 Sharaf Zaman <sharafzaz121@gmail.com>
+  * SPDX-FileCopyrightText: 2019 Sharaf Zaman <sharafzaz121@gmail.com>
   *
   * SPDX-License-Identifier: GPL-2.0-or-later
   */

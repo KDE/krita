@@ -1,8 +1,11 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
+#include <map>
 
 #include <kis_qmic_simple_convertor.h>
 
@@ -13,6 +16,7 @@
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceTraits.h>
+#include <KoCompositeOpRegistry.h>
 
 #define SCALE_TO_FLOAT( v ) KoColorSpaceMaths< _channel_type_, float>::scaleToA( v )
 #define SCALE_FROM_FLOAT( v  ) KoColorSpaceMaths< float, _channel_type_>::scaleToA( v )
@@ -155,7 +159,62 @@ private:
     float m_gmicUnitValue;
 };
 
-
+const std::map<QString, QString> blendingModeMap = {{"add", COMPOSITE_ADD},
+                                                    //   {"alpha", ""}, // XXX
+                                                      {"and", COMPOSITE_AND},
+                                                    //   {"average", ""}, // XXX
+                                                      {"blue", COMPOSITE_COPY_BLUE},
+                                                      {"burn", COMPOSITE_BURN},
+                                                      {"darken", COMPOSITE_DARKEN},
+                                                      {"difference", COMPOSITE_DIFF},
+                                                      {"divide", COMPOSITE_DIVIDE},
+                                                      {"dodge", COMPOSITE_DODGE},
+                                                    //   {"edges", ""}, // XXX
+                                                      {"exclusion", COMPOSITE_EXCLUSION},
+                                                      {"freeze", COMPOSITE_FREEZE},
+                                                      {"grainextract", COMPOSITE_GRAIN_EXTRACT},
+                                                      {"grainmerge", COMPOSITE_GRAIN_MERGE},
+                                                      {"green", COMPOSITE_COPY_GREEN},
+                                                      {"hardlight", COMPOSITE_HARD_LIGHT},
+                                                      {"hardmix", COMPOSITE_HARD_MIX},
+                                                      {"hue", COMPOSITE_HUE},
+                                                      {"interpolation", COMPOSITE_INTERPOLATION},
+                                                      {"lighten", COMPOSITE_LIGHTEN},
+                                                      {"lightness", COMPOSITE_LIGHTNESS},
+                                                      {"linearburn", COMPOSITE_LINEAR_BURN},
+                                                      {"linearlight", COMPOSITE_LINEAR_LIGHT},
+                                                      {"luminance", COMPOSITE_LUMINIZE},
+                                                      {"multiply", COMPOSITE_MULT},
+                                                      {"negation", COMPOSITE_NEGATION},
+                                                      {"or", COMPOSITE_OR},
+                                                      {"overlay", COMPOSITE_OVERLAY},
+                                                      {"pinlight", COMPOSITE_PIN_LIGHT},
+                                                      {"red", COMPOSITE_COPY_RED},
+                                                      {"reflect", COMPOSITE_REFLECT},
+                                                      {"saturation", COMPOSITE_SATURATION},
+                                                    //   {"seamless", ""},       // XXX
+                                                    //   {"seamless_mixed", ""}, // XXX
+                                                      {"screen", COMPOSITE_SCREEN},
+                                                    //   {"shapeareamax", ""},                    // XXX
+                                                    //   {"shapeareamax0", ""},                   // XXX
+                                                    //   {"shapeareamin", ""},                    // XXX
+                                                    //   {"shapeareamin0", ""},                   // XXX
+                                                    //   {"shapeaverage", ""},                    // XXX
+                                                    //   {"shapeaverage0", ""},                   // XXX
+                                                    //   {"shapemedian", ""},                     // XXX
+                                                    //   {"shapemedian0", ""},                    // XXX
+                                                    //   {"shapemin", ""},                        // XXX
+                                                    //   {"shapemin0", ""},                       // XXX
+                                                    //   {"shapemax", ""},                        // XXX
+                                                    //   {"shapemax0", ""},                       // XXX
+                                                    //   {"softburn", ""},                        // XXX
+                                                    //   {"softdodge", ""},                       // XXX
+                                                      {"softlight", COMPOSITE_SOFT_LIGHT_SVG}, // XXX Is this correct?
+                                                    //   {"stamp", ""}, // XXX
+                                                      {"subtract", COMPOSITE_SUBTRACT},
+                                                      {"value", COMPOSITE_VALUE},
+                                                      {"vividlight", COMPOSITE_VIVID_LIGHT},
+                                                      {"xor", COMPOSITE_XOR}};
 
 static KoColorTransformation* createTransformationFromGmic(const KoColorSpace* colorSpace, quint32 gmicSpectrum,float gmicUnitValue)
 {
@@ -861,3 +920,26 @@ void KisQmicSimpleConvertor::convertFromQImage(const QImage &image, gmic_image<f
     }
 }
 
+std::map<QString, QString> reverseMap()
+{
+    std::map<QString, QString> result {};
+    for (auto &pair : blendingModeMap) {
+        result.emplace(pair.second, pair.first);
+    }
+    return result;
+}
+
+QString KisQmicSimpleConvertor::blendingModeToString(QString blendMode)
+{
+    static auto reverseModeMap = reverseMap();
+    if (reverseModeMap.find(blendMode) != reverseModeMap.end())
+        return reverseModeMap.at(blendMode);
+    return "alpha";
+}
+
+QString KisQmicSimpleConvertor::stringToBlendingMode(QString blendMode)
+{
+    if (blendingModeMap.find(blendMode) != blendingModeMap.end())
+        return blendingModeMap.at(blendMode);
+    return COMPOSITE_OVER;
+}

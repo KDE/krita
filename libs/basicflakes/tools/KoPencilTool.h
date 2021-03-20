@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2007, 2009 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -31,7 +31,7 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 protected:

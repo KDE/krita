@@ -1,8 +1,8 @@
 /*
  * This file is part of Krita
  *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2008 Benoit Jacob <jacob.benoit.1@gmail.com>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2008 Benoit Jacob <jacob.benoit.1@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

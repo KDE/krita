@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007,2009,2011 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2007, 2009, 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -165,9 +165,9 @@ void KoPencilTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KoPencilTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KoPencilTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     m_points.clear();
     m_close = false;

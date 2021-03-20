@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-* Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+* SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
 *
 * SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -10,7 +10,7 @@
 #include "KoShapeShadowCommand.h"
 #include "KoInsets.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapeShadowCommand::refCounting()
 {
@@ -52,4 +52,4 @@ void TestShapeShadowCommand::refCounting()
     delete shape1;
 }
 
-QTEST_MAIN(TestShapeShadowCommand)
+SIMPLE_TEST_MAIN(TestShapeShadowCommand)

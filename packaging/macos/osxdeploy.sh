@@ -515,8 +515,9 @@ krita_deploy () {
     echo "Copying Spotlight plugin..."
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
     rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaspotlight.mdimporter ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
-    echo "Copying QuickLook Thumbnailing extension..."
-    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG}/krita.app/Contents/PlugIns
+    # TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
+    # echo "Copying QuickLook Thumbnailing extension..."
+    # rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG}/krita.app/Contents/PlugIns
 
     cd ${KRITA_DMG}/krita.app/Contents
     ln -shF Resources share
@@ -579,12 +580,17 @@ krita_deploy () {
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
     # Fix permissions
-    find "${KRITA_DMG}/krita.app/Contents" -type f -name "*.dylib" -or -name "*.so" | xargs -P4 -I FILE chmod a+x FILE
+    find "${KRITA_DMG}/krita.app/Contents" -type f -name "*.dylib" -or -name "*.so" -or -path "*/Contents/MacOS/*" | xargs -P4 -I FILE chmod a+x FILE
     find "${KRITA_DMG}/krita.app/Contents/Resources/applications" -name "*.desktop" | xargs -P4 -I FILE chmod a-x FILE
 
     # repair krita for plugins
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
+
+    # Fix rpath for plugins
+    # Uncomment if the Finder plugins (kritaquicklook, kritaspotlight) lack the rpath below
+    # printf "Repairing rpath for Finder plugins\n"
+    # find "${KRITA_DMG}/krita.app/Contents/Library" -type f -path "*/Contents/MacOS/*" -perm 755 | xargs -I FILE install_name_tool -add_rpath @loader_path/../../../../../Frameworks FILE
 
     printf "removing absolute or broken linksys, if any\n"
     find "${KRITA_DMG}/krita.app/Contents" -type l \( -lname "/*" -or -not -exec test -e {} \; \) -print | xargs rm
@@ -610,7 +616,9 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
     # remove debug version as both versions can't be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
-    find . -type f -perm 755 -or -name "*.dylib" -or -name "*.so" | batch_codesign
+    # Do not sign binaries inside frameworks except for Python's
+    find . -type d -path "*.framework" -prune -false -o -perm +111 -not -type d | batch_codesign
+    find Python.framework -type f -name "*.o" -or -name "*.so" -or -perm +111 -not -type d -not -type l | batch_codesign
     find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
 
     # Sign all other files in Framework (needed)
@@ -628,13 +636,30 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
     printf "kritaspotlight.mdimporter" | batch_codesign
 
-    # It is recommended to sign every Resource file
+    # It is necessary to sign every binary Resource file
     cd ${KRITA_DMG}/krita.app/Contents/Resources
-    find . -type f | batch_codesign
+    find . -perm +111 -type f | batch_codesign
 
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign
     printf "${KRITA_DMG}/krita.app" | batch_codesign
+}
+
+sign_hasError() {
+    local CODESIGN_STATUS=0
+    for f in $(find "${KRITA_DMG}" -type f); do
+        if [[ -z $(file ${f} | grep "Mach-O") ]]; then
+            continue
+        fi
+
+        CODESIGN_RESULT=$(codesign -vvv --strict ${f} 2>&1 | grep "not signed")
+
+        if [[ -n "${CODESIGN_RESULT}" ]]; then
+            CODESIGN_STATUS=1
+            printf "${f} not signed\n" >&2
+        fi
+    done
+    echo ${CODESIGN_STATUS}
 }
 
 # Notarize build on macOS servers
@@ -665,7 +690,7 @@ notarize_build() {
         local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $NF }')"
         echo "RequestUUID = ${uuid}" # Display identifier string
 
-        waiting_fixed "Waiting to retrieve notarize status" 60
+        waiting_fixed "Waiting to retrieve notarize status" 120
 
         while true ; do
             fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 2>&1)  # get the status
@@ -677,7 +702,7 @@ notarize_build() {
                 print_msg "Notarization success!"
                 break
             elif [[ "${notarize_status}" = "in" ]]; then
-                waiting_fixed "Notarization still in progress, sleeping for 60 seconds and trying again" 60
+                waiting_fixed "Notarization still in progress, wait before checking again" 60
             else
                 echo "Notarization failed! full status below"
                 echo "${fullstatus}"
@@ -690,7 +715,7 @@ notarize_build() {
 createDMG () {
     printf "Creating of dmg with contents of %s...\n" "${KRITA_DMG}"
     cd ${BUILDROOT}
-    DMG_size=700
+    DMG_size=1500
 
     if [[ -z "${DMG_NAME}" ]]; then
         # Add git version number
@@ -704,8 +729,8 @@ createDMG () {
 
     # create dmg on local system
     # usage of -fsargs minimze gaps at front of filesystem (reduce size)
-    hdiutil create -srcfolder "${KRITA_DMG}" -volname "${DMG_title}" -fs HFS+ \
-        -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${DMG_size}m krita.temp.dmg
+    hdiutil create -srcfolder "${KRITA_DMG}" -volname "${DMG_title}" -fs APFS \
+        -format UDIF -verbose -size ${DMG_size}m krita.temp.dmg
 
     # Next line is only useful if we have a dmg as a template!
     # previous hdiutil must be uncommented
@@ -765,7 +790,16 @@ if [[ -n "${CODE_SIGNATURE}" ]]; then
     signBundle
 fi
 
-# notarize app
+# Manually check every single Mach-O file for signature status
+print_msg "Checking if all files are signed before sending for notarization..."
+if [[ $(sign_hasError) -eq 1 ]]; then
+    print_error "CodeSign errors cannot send to notarize!"
+    echo "krita.app not sent to notarization, stopping...."
+    exit
+fi
+print_msg "Done! all files appear to be correct."
+
+# notarize apple
 notarize_build "${KRITA_DMG}" krita.app
 
 # Create DMG from files inside ${KRITA_DMG} folder

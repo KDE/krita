@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

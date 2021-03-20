@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_gradient_painter_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_gradient_painter.h"
 
 #include "kis_paint_device.h"
@@ -318,4 +318,4 @@ void KisGradientPainterTest::testCachedStrategy()
     QVERIFY(maxError < 2 * maxRelError);
 }
 
-QTEST_MAIN(KisGradientPainterTest)
+SIMPLE_TEST_MAIN(KisGradientPainterTest)

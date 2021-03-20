@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -126,7 +126,13 @@ KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::fromXML(const QDom
 
 void KisDumbTransformMaskParams::translate(const QPointF &offset)
 {
-    m_d->transform *= QTransform::fromTranslate(offset.x(), offset.y());
+    Q_UNUSED(offset);
+
+    /**
+     * Normal translation doesn't change affine transformations
+     * in full-featured KisTransformMaskAdapter, so we should resemble
+     * this behavior in the dumb one
+     */
 }
 
 QRect KisDumbTransformMaskParams::nonAffineChangeRect(const QRect &rc)
@@ -156,6 +162,11 @@ void KisDumbTransformMaskParams::clearChangedFlag()
 bool KisDumbTransformMaskParams::hasChanged() const
 {
     return false;
+}
+
+KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::clone() const
+{
+    return toQShared(new KisDumbTransformMaskParams(m_d->transform));
 }
 
 QTransform KisDumbTransformMaskParams::testingGetTransform() const

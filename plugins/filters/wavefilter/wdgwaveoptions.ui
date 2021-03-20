@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -30,7 +30,7 @@
    <property name="verticalSpacing">
     <number>6</number>
    </property>
-   <item column="0" row="2">
+   <item row="2" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -46,12 +46,12 @@
      </property>
     </spacer>
    </item>
-   <item column="0" row="0">
+   <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox1">
      <property name="title">
       <string>Horizontal Wave</string>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QFormLayout" name="formLayout_2">
       <property name="leftMargin">
        <number>9</number>
       </property>
@@ -64,39 +64,7 @@
       <property name="bottomMargin">
        <number>9</number>
       </property>
-      <item column="3" row="2">
-       <widget class="KisIntParseSpinBox" name="intHAmplitude"/>
-      </item>
-      <item column="3" row="1">
-       <widget class="KisIntParseSpinBox" name="intHShift"/>
-      </item>
-      <item column="1" row="3">
-       <widget class="QLabel" name="textLabel1_2">
-        <property name="text">
-         <string>Shape:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item colspan="2" column="1" row="2">
-       <widget class="QLabel" name="textLabel2_2">
-        <property name="text">
-         <string>Amplitude:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item colspan="2" column="1" row="0">
+      <item row="0" column="0">
        <widget class="QLabel" name="textLabel1">
         <property name="text">
          <string>Wavelength:</string>
@@ -109,33 +77,17 @@
         </property>
        </widget>
       </item>
-      <item colspan="2" column="2" row="3">
-       <widget class="KComboBox" name="cbHShape">
+      <item row="0" column="1">
+       <widget class="KisSliderSpinBox" name="intHWavelength" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>0</height>
-         </size>
-        </property>
-        <item>
-         <property name="text">
-          <string>Sinusoidale</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Triangle</string>
-         </property>
-        </item>
        </widget>
       </item>
-      <item colspan="2" column="1" row="1">
+      <item row="1" column="0">
        <widget class="QLabel" name="textLabel2">
         <property name="text">
          <string>Shift:</string>
@@ -148,47 +100,20 @@
         </property>
        </widget>
       </item>
-      <item column="3" row="0">
-       <widget class="KisIntParseSpinBox" name="intHWavelength"/>
-      </item>
-      <item column="0" row="3">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+      <item row="1" column="1">
+       <widget class="KisSliderSpinBox" name="intHShift" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
-     </layout>
-    </widget>
-   </item>
-   <item column="0" row="1">
-    <widget class="QGroupBox" name="Vertical_wave">
-     <property name="title">
-      <string>Vertical Wave</string>
-     </property>
-     <layout class="QGridLayout">
-      <property name="leftMargin">
-       <number>9</number>
-      </property>
-      <property name="topMargin">
-       <number>9</number>
-      </property>
-      <property name="rightMargin">
-       <number>9</number>
-      </property>
-      <property name="bottomMargin">
-       <number>9</number>
-      </property>
-      <item colspan="2" column="1" row="0">
-       <widget class="QLabel" name="textLabel1_3">
+      <item row="2" column="0">
+       <widget class="QLabel" name="textLabel2_2">
         <property name="text">
-         <string>Wavelength:</string>
+         <string>Amplitude:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -198,10 +123,23 @@
         </property>
        </widget>
       </item>
-      <item colspan="2" column="2" row="3">
-       <widget class="KComboBox" name="cbVShape">
+      <item row="3" column="0">
+       <widget class="QLabel" name="textLabel1_2">
+        <property name="text">
+         <string>Shape:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="KComboBox" name="cbHShape">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -214,7 +152,7 @@
         </property>
         <item>
          <property name="text">
-          <string>Sinusoidale</string>
+          <string>Sinusoidal</string>
          </property>
         </item>
         <item>
@@ -224,7 +162,51 @@
         </item>
        </widget>
       </item>
-      <item colspan="2" column="1" row="1">
+      <item row="2" column="1">
+       <widget class="KisSliderSpinBox" name="intHAmplitude" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="Vertical_wave">
+     <property name="title">
+      <string>Vertical Wave</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="textLabel1_3">
+        <property name="text">
+         <string>Wavelength:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
        <widget class="QLabel" name="textLabel2_3">
         <property name="text">
          <string>Shift:</string>
@@ -237,10 +219,7 @@
         </property>
        </widget>
       </item>
-      <item column="3" row="1">
-       <widget class="KisIntParseSpinBox" name="intVShift"/>
-      </item>
-      <item colspan="2" column="1" row="2">
+      <item row="2" column="0">
        <widget class="QLabel" name="textLabel2_2_2">
         <property name="text">
          <string>Amplitude:</string>
@@ -253,7 +232,7 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="3">
+      <item row="3" column="0">
        <widget class="QLabel" name="textLabel1_2_2">
         <property name="text">
          <string>Shape:</string>
@@ -266,24 +245,61 @@
         </property>
        </widget>
       </item>
-      <item column="3" row="0">
-       <widget class="KisIntParseSpinBox" name="intVWavelength"/>
-      </item>
-      <item column="3" row="2">
-       <widget class="KisIntParseSpinBox" name="intVAmplitude"/>
-      </item>
-      <item column="0" row="3">
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+      <item row="3" column="1">
+       <widget class="KComboBox" name="cbVShape">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="sizeHint" stdset="0">
+        <property name="minimumSize">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>130</width>
+          <height>0</height>
          </size>
         </property>
-       </spacer>
+        <item>
+         <property name="text">
+          <string>Sinusoidal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Triangle</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KisSliderSpinBox" name="intVWavelength" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KisSliderSpinBox" name="intVShift" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="KisSliderSpinBox" name="intVAmplitude" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -292,24 +308,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
   </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>intHWavelength</tabstop>
-  <tabstop>intHShift</tabstop>
-  <tabstop>intHAmplitude</tabstop>
   <tabstop>cbHShape</tabstop>
-  <tabstop>intVWavelength</tabstop>
-  <tabstop>intVShift</tabstop>
-  <tabstop>intVAmplitude</tabstop>
   <tabstop>cbVShape</tabstop>
  </tabstops>
  <resources/>

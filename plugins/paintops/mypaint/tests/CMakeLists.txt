@@ -1,5 +1,4 @@
 ########### next target ###############
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${CMAKE_SOURCE_DIR}/..    ${CMAKE_SOURCE_DIR}/sdk/tests )
 include_directories(${LIBMYPAINT_INCLUDE_DIR})
 link_directories(${LIBMYPAINT_LIBRARIES})

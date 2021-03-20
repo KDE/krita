@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Jouni Pentikäinen <joupent@gmail.com>
+ * SPDX-FileCopyrightText: 2018 Jouni Pentikäinen <joupent@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -36,7 +36,7 @@ void KisSelectionPropertySliderBase::setPrefixes(const QString &normalPrefix, co
     setPrefix(normalPrefix);
 }
 
-void KisSelectionPropertySliderBase::setInternalValue(int _value, bool blockUpdateSignal)
+void KisSelectionPropertySliderBase::setInternalValue(qreal _value, bool blockUpdateSignal)
 {
     static const qreal eps = 1e-3;
 

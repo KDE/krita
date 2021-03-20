@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 David Faure <faure@kde.org>
-   Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
+   SPDX-FileCopyrightText: 1998, 1999 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 2010 C. Boemann <cbo@boemann.dk>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

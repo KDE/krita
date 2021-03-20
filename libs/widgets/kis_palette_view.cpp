@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -31,6 +31,7 @@
 #include "kis_color_button.h"
 #include <KisSwatch.h>
 #include <KisResourceModel.h>
+#include <kis_debug.h>
 
 int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 
@@ -48,9 +49,9 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 
     setShowGrid(true);
     setDropIndicatorShown(true);
-    setDragDropMode(QAbstractItemView::InternalMove);
+    setDragDropMode(QAbstractItemView::DragDrop);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setDragEnabled(false);
+    setDragEnabled(true);
     setAcceptDrops(false);
 
     /*
@@ -228,7 +229,6 @@ KisPaletteModel* KisPaletteView::paletteModel() const
 void KisPaletteView::setAllowModification(bool allow)
 {
     m_d->allowPaletteModification = allow;
-    setDragEnabled(allow);
     setAcceptDrops(allow);
 }
 

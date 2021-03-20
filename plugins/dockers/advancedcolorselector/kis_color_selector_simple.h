@@ -1,15 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
  */
 
 #ifndef KIS_COLOR_SELECTOR_SIMPLE_H
@@ -46,10 +38,10 @@ private:
 private:
     QPointF m_lastClickPos;
     QImage m_pixelCache;
-    qreal R;
-    qreal G;
-    qreal B;
-    qreal Gamma;
+    qreal R {0.0};
+    qreal G {0.0};
+    qreal B {0.0};
+    qreal Gamma {0.0};
 };
 
 #endif

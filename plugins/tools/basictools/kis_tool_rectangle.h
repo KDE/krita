@@ -1,10 +1,10 @@
 /*
  *  kis_tool_rectangle.h - part of KImageShop^WKrayon^WKrita
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Clarence Dang <dang@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

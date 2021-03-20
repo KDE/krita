@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
- * Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
+ * SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
+ * SPDX-FileCopyrightText: 2014 Jarosław Staniek <staniek@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

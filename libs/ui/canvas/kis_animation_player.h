@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,6 +15,12 @@
 
 class KisCanvas2;
 
+/**
+ * @brief The KisAnimationPlayer class is Krita's high-level
+ * animation playback and navigation interface.
+ * Its main clients are Krita's Timeline and Curves dockers.
+ * It makes heavy use of KisImageAnimationInterface.
+ */
 class KRITAUI_EXPORT KisAnimationPlayer : public QObject
 {
     Q_OBJECT
@@ -23,9 +29,6 @@ public:
     KisAnimationPlayer(KisCanvas2 *canvas);
     ~KisAnimationPlayer() override;
 
-    void play();
-    void pause();
-    void stop();
     void goToPlaybackOrigin();
     void goToStartFrame();
     void displayFrame(int time);
@@ -50,13 +53,31 @@ Q_SIGNALS:
     void sigPlaybackStateChanged(bool value);
     void sigPlaybackStatisticsUpdated();
     void sigFullClipRangeChanged();
+    void sigPlaybackSpeedChanged(double normalizedSpeed);
 
 public Q_SLOTS:
+    void play();
+    void pause();
+    void playPause();
+    void halt();
+    void stop();
+
+    void seek(int frameIndex);
+    void previousFrame();
+    void nextFrame();
+    void previousKeyframe();
+    void nextKeyframe();
+    void previousMatchingKeyframe();
+    void nextMatchingKeyframe();
+
     void slotUpdate();
     void slotCancelPlayback();
     void slotCancelPlaybackSafe();
-    void slotUpdatePlaybackSpeed(double value);
+
+    void setPlaybackSpeedPercent(int value);
+    void setPlaybackSpeedNormalized(double value);
     void slotUpdatePlaybackTimer();
+
     void slotUpdateDropFramesMode();
 
 private Q_SLOTS:

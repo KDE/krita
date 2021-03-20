@@ -3,7 +3,7 @@
  */
 
 #include "TestKisSwatchGroup.h"
-#include <QtTest>
+#include <simpletest.h>
 
 void TestKisSwatchGroup::testAddingOneEntry()
 {

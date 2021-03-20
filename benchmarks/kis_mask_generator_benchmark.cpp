@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -19,7 +19,7 @@
 #endif
 #endif
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_mask_generator_benchmark.h"
 
@@ -96,4 +96,4 @@ void KisMaskGeneratorBenchmark::benchmarkSquare()
     }
 }
 
-QTEST_MAIN(KisMaskGeneratorBenchmark)
+SIMPLE_TEST_MAIN(KisMaskGeneratorBenchmark)

@@ -22,7 +22,7 @@ else()
 include(LibFindMacros)
 libfind_pkg_check_modules(MYPAINT_PKGCONF libmypaint)
 
-find_path(LibMyPaint_INCLUDE_DIR
+find_path(LibMyPaint_INCLUDE_DIRS
     NAMES libmypaint/mypaint-config.h
     HINTS ${MYPAINT_PKGCONF_INCLUDE_DIRS} ${MYPAINT_PKGCONF_INCLUDEDIR}
     PATH_SUFFIXES libmypaint
@@ -35,14 +35,14 @@ find_library(LibMyPaint_LIBRARY
 )
 
 set(LibMyPaint_PROCESS_LIBS LibMyPaint_LIBRARY)
-set(LibMyPaint_PROCESS_LIBS LibMyPaint_INCLUDE_DIR)
+set(LibMyPaint_PROCESS_INCLUDES LibMyPaint_INCLUDE_DIRS)
 set(LibMyPaint_VERSION ${MYPAINT_PKGCONF_VERSION})
 libfind_process(LibMyPaint)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LibMyPaint
     REQUIRED_VARS
-        LibMyPaint_INCLUDE_DIR
+        LibMyPaint_INCLUDE_DIRS
         LibMyPaint_LIBRARY
     VERSION_VAR
         LibMyPaint_VERSION

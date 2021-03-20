@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -82,10 +82,10 @@ private:
 
     QScopedPointer<Ui_WdgSvgCollection> m_wdgSvgCollection;
     QMap<int, SvgCollectionModel*> m_collectionsModelsCache;
-    QSlider* m_iconSizeSlider;
+    QSlider* m_iconSizeSlider {0};
 
-    KisResourceModel* m_resourceModel;
-    int m_rememberedSvgCollectionId;
+    KisResourceModel* m_resourceModel {0};
+    int m_rememberedSvgCollectionId {-1};
 };
 
 #endif

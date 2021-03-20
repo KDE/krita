@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -464,7 +464,7 @@ KisPaintDeviceSP KisColorizeMask::coloringProjection() const
     return m_d->coloringProjection;
 }
 
-KisPaintDeviceSP KisColorizeMask::colorPickSourceDevice() const
+KisPaintDeviceSP KisColorizeMask::colorSampleSourceDevice() const
 {
     return
         m_d->shouldShowColoring() && !m_d->coloringProjection->extent().isEmpty() ?

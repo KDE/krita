@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
  *                2016 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
@@ -185,13 +185,13 @@ void KisStopGradientEditor::stopTypeChanged() {
     if (foregroundRadioButton->isChecked()) {
         type = FOREGROUNDSTOP;
         if (m_canvasResourcesInterface) {
-            color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(color.colorSpace());
+            color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
         }
         opacitySlider->setEnabled(false);
     } else if (backgroundRadioButton->isChecked()) {
         type = BACKGROUNDSTOP;
         if (m_canvasResourcesInterface) {
-            color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(color.colorSpace());
+            color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
         }
         opacitySlider->setEnabled(false);
     }
@@ -216,7 +216,7 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     int currentStop = gradientSlider->selectedStop();
     double t = stops[currentStop].position;
     
-    KoColor c(color, stops[currentStop].color.colorSpace());
+    KoColor c(color);
     c.setOpacity(stops[currentStop].color.opacityU8());
 
     KoGradientStopType type = stops[currentStop].type;

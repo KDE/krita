@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_brush_hud_properties_config_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "brushhud/kis_brush_hud_properties_config.h"
 #include <QDomDocument>
 
@@ -69,4 +69,4 @@ void KisBrushHudPropertiesConfigTest::test()
     }
 }
 
-QTEST_MAIN(KisBrushHudPropertiesConfigTest)
+SIMPLE_TEST_MAIN(KisBrushHudPropertiesConfigTest)

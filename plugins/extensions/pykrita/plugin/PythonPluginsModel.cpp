@@ -1,9 +1,9 @@
 /*
  * This file is part of PyKrita, Krita' Python scripting plugin.
  *
- * Copyright (C) 2013 Alex Turbov <i.zaufi@gmail.com>
- * Copyright (C) 2014-2016 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2017 Jouni Pentikäinen (joupent@gmail.com)
+ * SPDX-FileCopyrightText: 2013 Alex Turbov <i.zaufi@gmail.com>
+ * SPDX-FileCopyrightText: 2014-2016 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Jouni Pentikäinen (joupent@gmail.com)
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

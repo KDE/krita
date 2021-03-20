@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -74,9 +74,9 @@ void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
     KisToolPaint::paint(gc, converter);
 }
 
-void KisToolRectangleBase::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void KisToolRectangleBase::activate(const QSet<KoShape *> &shapes)
 {
-    KisToolShape::activate(toolActivation, shapes);
+    KisToolShape::activate(shapes);
 
     emit sigRequestReloadConfig();
 }

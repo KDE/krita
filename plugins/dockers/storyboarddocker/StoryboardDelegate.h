@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -74,6 +74,8 @@ public:
      */
     QRect scrollUpButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
     void setImageSize(QSize imageSize);
+
+    bool isOverlappingActionIcons(const QRect& rect, const QMouseEvent *event);
 
 private Q_SLOTS:
 

@@ -1,11 +1,11 @@
 /*
  *  kis_tool_line.cc - part of Krayon
  *
- *  Copyright (c) 2000 John Califf <jwcaliff@compuzone.net>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2000 John Califf <jwcaliff@compuzone.net>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2007, 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -72,9 +72,9 @@ void KisToolLine::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolLine::activate(const QSet<KoShape*> &shapes)
 {
-   KisToolPaint::activate(activation, shapes);
+   KisToolPaint::activate(shapes);
    configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 

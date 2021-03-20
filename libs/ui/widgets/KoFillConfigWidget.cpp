@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
- * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * SPDX-FileCopyrightText: 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -268,11 +268,11 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     d->ui->btnChooseSolidColor->setDefaultAction(d->colorAction);
     d->ui->btnChooseSolidColor->setPopupMode(QToolButton::InstantPopup);
-    d->ui->btnSolidColorPick->setIcon(KisIconUtils::loadIcon("krita_tool_color_picker"));
+    d->ui->btnSolidColorSample->setIcon(KisIconUtils::loadIcon("krita_tool_color_sampler"));
 
-    // TODO: for now the color picking button is disabled!
-    d->ui->btnSolidColorPick->setEnabled(false);
-    d->ui->btnSolidColorPick->setVisible(false);
+    // TODO: for now the color sampling button is disabled!
+    d->ui->btnSolidColorSample->setEnabled(false);
+    d->ui->btnSolidColorSample->setVisible(false);
 
     connect(d->colorAction, SIGNAL(colorChanged(KoColor)), &d->colorChangedCompressor, SLOT(start()));
     connect(&d->colorChangedCompressor, SIGNAL(timeout()), SLOT(colorChanged()));
@@ -1037,7 +1037,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
     d->ui->repeatLabel->setVisible(false);
     d->ui->cmbGradientRepeat->setVisible(false);
     d->ui->cmbGradientType->setVisible(false);
-    d->ui->btnSolidColorPick->setVisible(false);
+    d->ui->btnSolidColorSample->setVisible(false);
     d->ui->btnSaveGradient->setVisible(false);
     d->ui->gradientTypeLine->setVisible(false);
     d->ui->soldStrokeColorLabel->setVisible(false);
@@ -1062,7 +1062,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
             break;
         case KoFillConfigWidget::Solid:
             d->ui->btnChooseSolidColor->setVisible(true);
-            d->ui->btnSolidColorPick->setVisible(false);
+            d->ui->btnSolidColorSample->setVisible(false);
             d->ui->soldStrokeColorLabel->setVisible(true);
             break;
         case KoFillConfigWidget::Gradient:

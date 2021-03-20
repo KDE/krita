@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,7 +12,8 @@
 
 KisScratchPadEventFilter::KisScratchPadEventFilter(QWidget *parent)
     : QObject(parent),
-      m_tabletPressed(false)
+      m_tabletPressed(false),
+      m_pressedButton(Qt::NoButton)
 {
     parent->installEventFilter(this);
     m_scratchPad = qobject_cast<KisScratchPad *>(parent);
@@ -48,52 +49,72 @@ KoPointerEvent* KisScratchPadEventFilter::createTabletEvent(QEvent *event)
 bool KisScratchPadEventFilter::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
-    bool result = true;
+    bool result = false;
 
-    KoPointerEvent *ev = 0;
+    QScopedPointer<KoPointerEvent> ev;
 
 
     switch(event->type()) {
     case QEvent::MouseButtonPress:
-        if(m_tabletPressed) break;
-        ev = createMouseEvent(event);
-        m_scratchPad->pointerPress(ev);
+        if (m_pressedButton != Qt::NoButton) break;
+
+        ev.reset(createMouseEvent(event));
+        m_pressedButton = ev->button();
+        m_scratchPad->pointerPress(ev.data());
+        result = true;
         break;
     case QEvent::MouseButtonRelease:
-        if(m_tabletPressed) break;
-        ev = createMouseEvent(event);
-        m_scratchPad->pointerRelease(ev);
+        ev.reset(createMouseEvent(event));
+        if (ev->button() != m_pressedButton) break;
+
+        m_pressedButton = Qt::NoButton;
+        m_scratchPad->pointerRelease(ev.data());
+        result = true;
         break;
     case QEvent::MouseMove:
         if(m_tabletPressed) break;
-        ev = createMouseEvent(event);
-        m_scratchPad->pointerMove(ev);
+        ev.reset(createMouseEvent(event));
+        m_scratchPad->pointerMove(ev.data());
+        result = true;
         break;
     case QEvent::TabletPress:
-        // if(m_tabletPressed) break;
+        if (m_pressedButton != Qt::NoButton) break;
+
         m_tabletPressed = true;
-        ev = createTabletEvent(event);
-        m_scratchPad->pointerPress(ev);
+        ev.reset(createTabletEvent(event));
+        m_pressedButton = ev->button();
+        m_scratchPad->pointerPress(ev.data());
+        result = true;
         break;
     case QEvent::TabletRelease:
-        // if(!m_tabletPressed) break;
+        ev.reset(createTabletEvent(event));
+        if (ev->button() != m_pressedButton) break;
+
+        m_pressedButton = Qt::NoButton;
+        m_scratchPad->pointerRelease(ev.data());
         m_tabletPressed = false;
-        ev = createTabletEvent(event);
-        m_scratchPad->pointerRelease(ev);
+        result = true;
         break;
     case QEvent::TabletMove:
-        // if(!m_tabletPressed) break;
-        ev = createTabletEvent(event);
-        m_scratchPad->pointerMove(ev);
+        ev.reset(createTabletEvent(event));
+        m_scratchPad->pointerMove(ev.data());
+        result = true;
+        break;
+    case QEvent::FocusIn:
+    case QEvent::FocusOut:
+    case QEvent::Show:
+    case QEvent::Hide:
+        m_scratchPad->resetState();
+        m_tabletPressed = false;
+        m_pressedButton = Qt::NoButton;
         break;
     default:
         result = false;
     }
 
-    if(ev) {
+    if (ev) {
         result = ev->isAccepted();
         event->setAccepted(result);
-        delete ev;
     }
 
     return result;

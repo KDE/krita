@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
- * Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
+ * SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -85,7 +85,7 @@ private:
     bool snap(KoPointerEvent *event);
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 
@@ -133,20 +133,20 @@ protected:
     QPointF m_cursorStart;
     QPointF m_currentAdjustment;
     Ui::AssistantsToolOptions m_options;
-    QWidget* m_optionsWidget;
+    QWidget* m_optionsWidget {0};
     QPointF m_dragStart;
     QLineF m_radius;
-    bool m_snapIsRadial;
+    bool m_snapIsRadial {false};
     QPointF m_dragEnd;
-    int m_handleSize; // how large the editor handles will appear
+    int m_handleSize {17}; // how large the editor handles will appear
 
 
 private:
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc);
 
-    PerspectiveAssistantEditionMode m_internalMode;
+    PerspectiveAssistantEditionMode m_internalMode { MODE_CREATION };
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
-    int m_assistantHelperYOffset; // used by the assistant editor icons for placement on the canvas.
+    int m_assistantHelperYOffset {10}; // used by the assistant editor icons for placement on the canvas.
     QList<KisPaintingAssistantSP> m_origAssistantList;
 };
 

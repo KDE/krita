@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,8 +15,8 @@
 struct KisFilterStrokeStrategy::Private {
     Private()
         : updatesFacade(0),
-          cancelSilently(false),
           secondaryTransaction(0),
+          cancelSilentlyHandle(new QAtomicInt()),
           levelOfDetail(0)
     {
     }
@@ -26,11 +26,11 @@ struct KisFilterStrokeStrategy::Private {
           filterConfig(rhs.filterConfig),
           node(rhs.node),
           updatesFacade(rhs.updatesFacade),
-          cancelSilently(rhs.cancelSilently),
           filterDevice(),
           filterDeviceBounds(),
           secondaryTransaction(0),
           progressHelper(),
+          cancelSilentlyHandle(rhs.cancelSilentlyHandle),
           levelOfDetail(0)
     {
         KIS_ASSERT_RECOVER_RETURN(!rhs.filterDevice);
@@ -45,11 +45,11 @@ struct KisFilterStrokeStrategy::Private {
     KisNodeSP node;
     KisUpdatesFacade *updatesFacade;
 
-    bool cancelSilently;
     KisPaintDeviceSP filterDevice;
     QRect filterDeviceBounds;
     KisTransaction *secondaryTransaction;
     QScopedPointer<KisProcessingVisitor::ProgressHelper> progressHelper;
+    QSharedPointer<QAtomicInt> cancelSilentlyHandle;
 
     int levelOfDetail;
 };
@@ -68,7 +68,6 @@ KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
     m_d->filterConfig = filterConfig;
     m_d->node = resources->currentNode();
     m_d->updatesFacade = resources->image().data();
-    m_d->cancelSilently = false;
     m_d->secondaryTransaction = 0;
     m_d->levelOfDetail = 0;
 
@@ -121,8 +120,7 @@ void KisFilterStrokeStrategy::initStrokeCallback()
 void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
-    CancelSilentlyMarker *cancelJob =
-        dynamic_cast<CancelSilentlyMarker*>(data);
+    ExtraCleanUpUpdates *cleanup = dynamic_cast<ExtraCleanUpUpdates*>(data);
 
     if (d) {
         const QRect rc = d->processRect;
@@ -145,8 +143,10 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
 
         m_d->node->setDirty(rc);
-    } else if (cancelJob) {
-        m_d->cancelSilently = true;
+    } else if (cleanup) {
+        m_d->node->setDirty(cleanup->rects);
+    } else if (dynamic_cast<IdleBarrierData*>(data)) {
+        /* noop, just delete that */
     } else {
         qFatal("KisFilterStrokeStrategy: job type is not known");
     }
@@ -157,13 +157,15 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
     delete m_d->secondaryTransaction;
     m_d->filterDevice = 0;
 
-    if (m_d->cancelSilently) {
+    const bool shouldCancelSilently = *m_d->cancelSilentlyHandle;
+
+    if (shouldCancelSilently) {
         m_d->updatesFacade->disableDirtyRequests();
     }
 
     KisPainterBasedStrokeStrategy::cancelStrokeCallback();
 
-    if (m_d->cancelSilently) {
+    if (shouldCancelSilently) {
         m_d->updatesFacade->enableDirtyRequests();
     }
 }
@@ -183,4 +185,9 @@ KisStrokeStrategy* KisFilterStrokeStrategy::createLodClone(int levelOfDetail)
 
     KisFilterStrokeStrategy *clone = new KisFilterStrokeStrategy(*this, levelOfDetail);
     return clone;
+}
+
+QSharedPointer<QAtomicInt> KisFilterStrokeStrategy::cancelSilentlyHandle() const
+{
+    return m_d->cancelSilentlyHandle;
 }

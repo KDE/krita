@@ -1,9 +1,9 @@
 /*
- *  Copyright (c) 2013 Digia Plc and/or its subsidiary(-ies).
- *  Copyright (c) 2013 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
- *  Copyright (c) 2015 The Qt Company Ltd.
+ *  SPDX-FileCopyrightText: 2013 Digia Plc and /or its subsidiary(-ies).
+ *  SPDX-FileCopyrightText: 2013 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 The Qt Company Ltd.
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

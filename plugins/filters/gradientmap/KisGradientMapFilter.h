@@ -1,8 +1,8 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2016 Spencer Brown <sbrown655@gmail.com>
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2016 Spencer Brown <sbrown655@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
  * 
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
@@ -16,27 +16,11 @@
 #include <filter/kis_filter.h>
 #include <kis_filter_configuration.h>
 
-#include "KisGradientMapFilterConfiguration.h"
-
 class KisConfigWidget;
-
-class KritaGradientMap : public QObject
-{
-    Q_OBJECT
-public:
-    KritaGradientMap(QObject *parent, const QVariantList &);
-    ~KritaGradientMap() override;
-};
 
 class KisGradientMapFilter : public KisFilter
 {
 public:
-    enum ColorMode {
-        Blend,
-        Nearest,
-        Dither,
-    };
-
     KisGradientMapFilter();
 
     static inline KoID id() {

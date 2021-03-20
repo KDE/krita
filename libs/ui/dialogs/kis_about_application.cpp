@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -238,10 +238,10 @@ QWidget *KisAboutApplication::createTranslatorsWidget(const QList<KAboutPerson> 
     }
 
     translatorHtml.append("<ul></p>");
-    translatorHtml.append("<p>KDE is translated into many languages thanks to the work of the "
+    translatorHtml.append(i18n("<p>KDE is translated into many languages thanks to the work of the "
                           "translation teams all over the world.</p><p>For more information on KDE "
                           "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n."
-                          "kde.org</a></p>");
+                          "kde.org</a></p>"));
     translatorHtml.append("</body></html>");
 
     lblTranslators->setText(translatorHtml);

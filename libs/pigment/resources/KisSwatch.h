@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
- * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (c) 2016 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2016 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -10,8 +10,9 @@
 #define KISSWATCH_H
 
 #include "kritapigment_export.h"
-#include <QString>
 #include "KoColor.h"
+#include "KoColorModelStandardIds.h"
+#include <QString>
 
 class KRITAPIGMENT_EXPORT KisSwatch
 {
@@ -33,6 +34,11 @@ public:
     void setSpotColor(bool spotColor);
 
     bool isValid() const { return m_valid; }
+
+
+    void writeToStream(QDataStream& stream, const QString& groupName, int originalRow , int originalColumn);
+    static KisSwatch fromByteArray(QByteArray& data, QString &groupName, int &originalRow, int &originalColumn);
+    static KisSwatch fromByteArray(QByteArray &data);
 
 public:
     bool operator==(const KisSwatch& rhs) const {

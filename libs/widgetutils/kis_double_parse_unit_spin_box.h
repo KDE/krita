@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  SPDX-FileCopyrightText: 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  SPDX-FileCopyrightText: 2021 Deif Lou <ginoba@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -71,9 +72,6 @@ public:
 
     /// Set minimum, maximum value and the step size (all in points)
     void setMinMaxStep( double min, double max, double step );
-
-    /// reimplemented from superclass, will forward to KoUnitDoubleValidator
-    QValidator::State validate(QString &input, int &pos) const override;
 
     /**
      * Transform the double in a nice text, using locale symbols

@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
- * Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "TestAslStorage.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImageReader>
 
 #include <KoConfig.h>
@@ -51,7 +51,7 @@ void TestAslStorage::testResourceIterator()
 
     QSharedPointer<KisResourceStorage::ResourceIterator> iter(storage.resources(ResourceType::Patterns));
 
-    QVERIFY(iter->hasNext());
+    QVERIFY(iter->hasNext() || patternsCount == 0);
     int count = 0;
 
     while (iter->hasNext()) {
@@ -60,7 +60,33 @@ void TestAslStorage::testResourceIterator()
         QVERIFY(res);
         count++;
     }
-    QCOMPARE(count, patternsCount + stylesCount);
+    QCOMPARE(count, patternsCount);
+
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter2(storage.resources(ResourceType::LayerStyles));
+
+    QVERIFY(iter2->hasNext());
+    count = 0;
+
+    while (iter2->hasNext()) {
+        iter2->next();
+        KoResourceSP res(iter2->resource());
+        QVERIFY(res);
+        count++;
+    }
+    QCOMPARE(count, stylesCount);
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter3(storage.resources(ResourceType::Brushes));
+
+    count = 0;
+
+    while (iter3->hasNext()) {
+        iter3->next();
+        KoResourceSP res(iter3->resource());
+        QVERIFY(res);
+        count++;
+    }
+    QCOMPARE(count, 0);
 
 }
 
@@ -161,5 +187,5 @@ void TestAslStorage::testResource()
 }
 
 
-QTEST_MAIN(TestAslStorage)
+SIMPLE_TEST_MAIN(TestAslStorage)
 

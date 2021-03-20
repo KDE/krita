@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -120,20 +120,14 @@ struct KisRasterKeyframeChannel::Private
     bool onionSkinsEnabled;
 };
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisNodeWSP parent)
-    : KisKeyframeChannel(id, parent),
-      m_d(new Private(paintDevice, QString()))
-{
-}
-
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, const KisDefaultBoundsBaseSP bounds)
     : KisKeyframeChannel(id, bounds),
       m_d(new Private(paintDevice, QString()))
 {
 }
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNodeWSP newParent, const KisPaintDeviceWSP newPaintDevice)
-    : KisKeyframeChannel(rhs, newParent),
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, const KisPaintDeviceWSP newPaintDevice)
+    : KisKeyframeChannel(rhs),
       m_d(new Private(newPaintDevice, rhs.m_d->filenameSuffix))
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);

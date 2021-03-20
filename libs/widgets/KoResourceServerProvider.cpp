@@ -1,9 +1,9 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 1999 Matthias Elter <elter@kde.org>
-    Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
-    Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
-    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+    SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+    SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -38,16 +38,13 @@ public:
 
     void insertSpecialGradients()
     {
-        qDebug() << "insertSpecialGradients broken because we don't have a list we can insert in front of anymore";
-
-
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         QList<KoGradientStop> stops;
 
         KoStopGradientSP gradient(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName(i18n("Foreground to Transparent"));
-        gradient->setFilename("Foreground to Transparent");
+        gradient->setName(i18n("1. Foreground to Transparent"));
+        gradient->setFilename("Foreground to Transparent.svg");
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs), FOREGROUNDSTOP);
         stops << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs), COLORSTOP);
 
@@ -59,8 +56,8 @@ public:
 
         gradient.reset(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName(i18n("Foreground to Background"));
-        gradient->setFilename("Foreground to Background");
+        gradient->setName(i18n("0. Foreground to Background"));
+        gradient->setFilename("Foreground to Background.svg");
 
         stops.clear();
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs), FOREGROUNDSTOP);
@@ -70,6 +67,7 @@ public:
         gradient->setValid(true);
         gradient->setPermanent(true);
         addResource(gradient, false);
+
         m_foregroundToBackground = gradient;
     }
 
@@ -87,7 +85,7 @@ private:
 
         KoAbstractGradientSP grad;
 
-        if(fileExtension == ".svg" || fileExtension == ".kgr") {
+        if(fileExtension == ".svg") {
             grad.reset(new KoStopGradient(filename));
         }
         else if(fileExtension == ".ggr" ) {
@@ -146,44 +144,34 @@ KoResourceServerProvider *KoResourceServerProvider::instance()
     return s_instance;
 }
 
-QStringList KoResourceServerProvider::blacklistFileNames(QStringList fileNames, const QStringList &blacklistedFileNames)
-{
-    if (!blacklistedFileNames.isEmpty()) {
-        foreach (const QString &s, blacklistedFileNames) {
-            fileNames.removeAll(s);
-        }
-    }
-    return fileNames;
-}
-
 KoResourceServer<KoPattern> *KoResourceServerProvider::patternServer()
 {
-    return d->patternServer;
+    return KoResourceServerProvider::instance()->d->patternServer;
 }
 
 KoResourceServer<KoAbstractGradient> *KoResourceServerProvider::gradientServer()
 {
-    return d->gradientServer;
+    return KoResourceServerProvider::instance()->d->gradientServer;
 }
 
 KoResourceServer<KoColorSet> *KoResourceServerProvider::paletteServer()
 {
-    return d->paletteServer;
+    return KoResourceServerProvider::instance()->d->paletteServer;
 }
 
 KoResourceServer<KoSvgSymbolCollectionResource> *KoResourceServerProvider::svgSymbolCollectionServer()
 {
-    return d->svgSymbolCollectionServer;
+    return KoResourceServerProvider::instance()->d->svgSymbolCollectionServer;
 }
 
 KoResourceServer<KoGamutMask> *KoResourceServerProvider::gamutMaskServer()
 {
-    return d->gamutMaskServer;
+    return KoResourceServerProvider::instance()->d->gamutMaskServer;
 }
 
 #if defined HAVE_SEEXPR
 KoResourceServer<KisSeExprScript> *KoResourceServerProvider::seExprScriptServer()
 {
-    return d->seExprScriptServer;
+    return KoResourceServerProvider::instance()->d->seExprScriptServer;
 }
 #endif

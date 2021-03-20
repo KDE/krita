@@ -1,8 +1,8 @@
 /*
  * KDE. Krita Project.
  *
- * Copyright (c) 2019 Eoin O'Neill <eoinoneill1991@gmail.com>
- * Copyright (c) 2019 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Eoin O 'Neill <eoinoneill1991@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

@@ -1,8 +1,8 @@
 /*
  *  kis_double_widget.cc - part of Krita
  *
- *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 1999 Carsten Pfeiffer <pfeiffer@kde.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2016 Eugene Ingerman geneing at gmail dot com
- *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Eugene Ingerman geneing at gmail dot com
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -109,7 +109,7 @@ void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
     qreal xscale = m_thumbnailSize.width() / (qreal)m_thumbnailOversampledSize.width();
     qreal yscale = m_thumbnailSize.height() / (qreal)m_thumbnailOversampledSize.height();
     QString algorithm = m_isPixelArt ? "Box" : "Bilinear";
-    KisTransformWorker worker(m_thumbnailDevice, yscale, xscale, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    KisTransformWorker worker(m_thumbnailDevice, xscale, yscale, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                               &updater, KisFilterStrategyRegistry::instance()->value(algorithm));
     worker.run();
 

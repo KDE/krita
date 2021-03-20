@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2009 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #include "TestSegmentTypeCommand.h"
 #include "KoPathSegmentTypeCommand.h"
 #include <KoPathSegment.h>
-#include <QTest>
+#include <simpletest.h>
 
 void TestSegmentTypeCommand::changeToCurve()
 {
@@ -67,4 +67,4 @@ void TestSegmentTypeCommand::changeToLine()
     QVERIFY(s.second()->activeControlPoint1());
 }
 
-QTEST_MAIN(TestSegmentTypeCommand)
+SIMPLE_TEST_MAIN(TestSegmentTypeCommand)

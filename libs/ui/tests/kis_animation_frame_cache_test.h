@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef KIS_ANIMATION_FRAME_CACHE_TEST_H
 #define KIS_ANIMATION_FRAME_CACHE_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAnimationFrameCache;
 

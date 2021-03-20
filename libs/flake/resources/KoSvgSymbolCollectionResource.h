@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
 
@@ -42,7 +42,7 @@ struct KRITAFLAKE_EXPORT KoSvgSymbol {
 
     QString id;
     QString title;
-    KoShape *shape;
+    KoShape *shape {0};
     QImage icon();
 
     bool operator==(const KoSvgSymbol& rhs) const {

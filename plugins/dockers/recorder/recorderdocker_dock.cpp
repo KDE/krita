@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2019 Shi Yan <billconan@gmail.net>
- *  Copyright (c) 2020 Dmitrii Utkin <loentar@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Shi Yan <billconan@gmail.net>
+ *  SPDX-FileCopyrightText: 2020 Dmitrii Utkin <loentar@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-only
  */
@@ -166,10 +166,10 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->setupUi(page);
     d->ui->labelUnsupportedColorSpace->setVisible(false);
 
-    d->ui->buttonManageRecordings->setIcon(KisIconUtils::loadIcon("configure"));
+    d->ui->buttonManageRecordings->setIcon(KisIconUtils::loadIcon("configure-thicker"));
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
-    d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export"));
+    d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export-16"));
     d->ui->spinQuality->setMinimum(1);
     d->ui->spinQuality->setMaximum(100);
     d->ui->spinQuality->setSuffix("%");

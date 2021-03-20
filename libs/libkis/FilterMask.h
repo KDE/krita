@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

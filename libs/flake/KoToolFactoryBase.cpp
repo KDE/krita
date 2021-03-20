@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -10,6 +10,7 @@
 #include <kactioncollection.h>
 
 #include <kis_action_registry.h>
+#include <KoToolManager.h>
 
 #include <QKeySequence>
 #include <QAction>
@@ -45,16 +46,23 @@ KoToolFactoryBase::~KoToolFactoryBase()
 
 QList<QAction *> KoToolFactoryBase::createActions(KActionCollection *actionCollection)
 {
-//    qDebug() << "creating actions for" << id();
     QList<QAction *> toolActions;
-    Q_FOREACH(QAction *action, createActionsImpl()) {
+
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    QList<QAction*> actions = createActionsImpl();
+    QAction *action = actionRegistry->makeQAction(id());
+    actionCollection->addAction(id(), action);
+    connect(action, SIGNAL(triggered()), SLOT(activateTool()));
+    //qDebug() << action << action->shortcut();
+
+
+    Q_FOREACH(QAction *action, actions) {
         if (action->objectName().isEmpty()) {
             qWarning() << "Tool" << id() << "tries to add an action without a name";
             continue;
         }
         QAction *existingAction = actionCollection->action(action->objectName());
         if (existingAction) {
-//            qDebug() << "\tFound existing action" << action->objectName() << existingAction->property("tool_action");
             delete action;
             action = existingAction;
         }
@@ -66,7 +74,6 @@ QList<QAction *> KoToolFactoryBase::createActions(KActionCollection *actionColle
         tools << id();
         action->setProperty("tool_action", tools);
         if (!existingAction) {
-//            qDebug() << "\tAdding new action" << action->objectName() << "Associated with" << tools;
             actionCollection->addAction(action->objectName(), action);
         }
         toolActions << action;
@@ -196,5 +203,10 @@ void KoToolFactoryBase::setShortcut(const QKeySequence &shortcut)
 QList<QAction *> KoToolFactoryBase::createActionsImpl()
 {
     return QList<QAction *>();
+}
+
+void KoToolFactoryBase::activateTool()
+{
+    KoToolManager::instance()->switchToolRequested(sender()->objectName());
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2016 Thorsten Zachmann <zachmann@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -12,7 +12,8 @@
 #include "KoStreamedMath.h"
 #include "KoAlphaDarkenParamsWrapper.h"
 
-template<typename channels_type, typename pixel_type, typename _ParamsWrapper>
+
+template<typename channels_type, typename _ParamsWrapper>
 struct AlphaDarkenCompositor128 {
     using ParamsWrapper = _ParamsWrapper;
 
@@ -154,8 +155,8 @@ struct AlphaDarkenCompositor128 {
             dst[1] = lerp(dst[1], src[1], srcAlphaNorm);
             dst[2] = lerp(dst[2], src[2], srcAlphaNorm);
         } else {
-            const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
-            pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+            const Pixel *s = reinterpret_cast<const Pixel*>(src);
+            Pixel *d = reinterpret_cast<Pixel*>(dst);
             *d = *s;
         }
 
@@ -196,9 +197,9 @@ public:
     virtual void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
-            KoStreamedMath<_impl>::template genericComposite128<true, true, AlphaDarkenCompositor128<float, quint32, ParamsWrapper> >(params);
+            KoStreamedMath<_impl>::template genericComposite128<true, true, AlphaDarkenCompositor128<float, ParamsWrapper> >(params);
         } else {
-            KoStreamedMath<_impl>::template genericComposite128<false, true, AlphaDarkenCompositor128<float, quint32, ParamsWrapper> >(params);
+            KoStreamedMath<_impl>::template genericComposite128<false, true, AlphaDarkenCompositor128<float, ParamsWrapper> >(params);
         }
     }
 };

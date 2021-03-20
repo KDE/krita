@@ -1,7 +1,7 @@
 /*
  * curvepaintop_plugin.cc -- Part of Krita
  *
- * Copyright (c) 2008 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * SPDX-FileCopyrightText: 2008 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

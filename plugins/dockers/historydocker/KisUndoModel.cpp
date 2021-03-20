@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Matus Talcik <matus.talcik@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Matus Talcik <matus.talcik@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -242,9 +242,11 @@ void KisUndoModel::addImage(int idx)
     if (m_stack->count() == idx && !m_imageMap.contains(currentCommand)) {
         KisImageWSP historyImage = m_canvas->image();
         KisPaintDeviceSP paintDevice = historyImage->projection();
-        QImage image = paintDevice->createThumbnail(32, 32, 1,
+        QSize size = QSize(32, 32)*m_devicePixelRatioF;
+        QImage image = paintDevice->createThumbnail(size.width(), size.height(), 1,
                                                     KoColorConversionTransformation::internalRenderingIntent(),
                                                     KoColorConversionTransformation::internalConversionFlags());
+        image.setDevicePixelRatio(m_devicePixelRatioF);
         m_imageMap[currentCommand] = image;
     }
 
@@ -267,4 +269,9 @@ bool KisUndoModel::checkMergedCommand(int index)
 {
     Q_UNUSED(index);
     return false;
+}
+
+void KisUndoModel::setDevicePixelRatio(qreal devicePixelRatio)
+{
+    m_devicePixelRatioF = devicePixelRatio;
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   SPDX-FileCopyrightText: 2007 Thorsten Zachmann <zachmann@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -9,7 +9,7 @@
 #include "KoPathShape.h"
 #include "KoPathPointTypeCommand.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestPointTypeCommand::redoUndoSymmetric()
 {
@@ -144,4 +144,4 @@ void TestPointTypeCommand::redoUndoCorner()
     QVERIFY(ppath2Org == path2.outline());
 }
 
-QTEST_MAIN(TestPointTypeCommand)
+SIMPLE_TEST_MAIN(TestPointTypeCommand)

@@ -1,7 +1,7 @@
 /*
-* Copyright (c) 1999 Matthias Elter <me@kde.org>
-* Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
-* Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+* SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+* SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+* SPDX-FileCopyrightText: 2015 Boudewijn Rempt <boud@valdyas.org>
 *
 *  SPDX-License-Identifier: GPL-2.0-or-later
 *
@@ -155,15 +155,22 @@ Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
     kritarc.setValue("canvasState", "OPENGL_SUCCESS");
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT jboolean JNICALL
 Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
                                                   jobject /*obj*/,
                                                   jint    /*n*/)
 {
-    if (!KisPart::exists()) return;
+    if (!KisPart::exists()) {
+        return false;
+    }
 
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-    mainWindow->viewFullscreen(false);
+    if (mainWindow) {
+        mainWindow->viewFullscreen(false);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -455,6 +462,12 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+    if (app.platformName() == "wayland") {
+        QMessageBox::critical(0, i18nc("@title:window", "Fatal Error"), i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
+        return -1;
+    }
+
     KisUsageLogger::writeHeader();
     KisOpenGL::initialize();
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -31,10 +31,6 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     m_model = new KisResourceModel(ResourceType::Sessions, this);
     lstSessions->setModel(m_model);
     lstSessions->setModelColumn(KisAbstractResourceModel::Name);
-
-
-    connect(m_model, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), this, SLOT(slotModelAboutToBeReset(QModelIndex)));
-    connect(m_model, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotModelReset()));
 
     connect(lstSessions, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotSessionDoubleClicked(QModelIndex)));
     

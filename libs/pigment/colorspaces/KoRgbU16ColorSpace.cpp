@@ -1,6 +1,7 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -20,6 +21,7 @@
 #include "KoIntegerMaths.h"
 
 #include "KoColorConversions.h"
+#include "dithering/KisRgbDitherOpFactory.h"
 #include <KoColorSpacePreserveLightnessUtils.h>
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace() :
@@ -28,6 +30,7 @@ KoRgbU16ColorSpace::KoRgbU16ColorSpace() :
                                            RGBAColorModelID,
                                            Integer16BitsColorDepthID)
 {
+    addStandardDitherOps<KoBgrU16Traits>(this);
 }
 
 KoRgbU16ColorSpace::~KoRgbU16ColorSpace()

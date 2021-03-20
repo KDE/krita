@@ -1,37 +1,20 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2010-2011 C. Boemann <cbo@boemann.dk>
- * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (c) 2006 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2010-2011 C. Boemann <cbo@boemann.dk>
+ * SPDX-FileCopyrightText: 2005-2006 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KoToolDocker.h"
 
-#include <KoDockWidgetTitleBarButton.h>
-#include <KoDockWidgetTitleBar.h>
-#include <KoIcon.h>
-
 #include <klocalizedstring.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
 
-#include <QIcon>
 #include <QApplication>
-#include <QPointer>
 #include <QGridLayout>
 #include <QScrollArea>
-#include <QScrollBar>
 #include <QScroller>
 #include <QLabel>
-#include <QSet>
-#include <QAction>
-#include <QStyleOptionFrame>
-#include <QToolButton>
-#include <KisKineticScroller.h>
-
-#include <WidgetsDebug.h>
-#include <kis_debug.h>
 
 class Q_DECL_HIDDEN KoToolDocker::Private
 {
@@ -125,7 +108,7 @@ public:
                     widget->show();
                     if (widget != currentWidgetList.last()) {
                         housekeeperLayout->addWidget(s = new QFrame(), cnt++, 0);
-                        s->setFrameShape(QFrame::HLine);
+                        s->setFrameStyle(QFrame::HLine | QFrame::Sunken);
                         currentAuxWidgets.insert(s);
                     }
                 }
@@ -154,9 +137,6 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
       d(new Private(this))
 {
-    setFeatures(DockWidgetMovable|DockWidgetFloatable);
-    setTitleBarWidget(new KoDockWidgetTitleBar(this));
-
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
     d->housekeeperWidget = new QWidget();

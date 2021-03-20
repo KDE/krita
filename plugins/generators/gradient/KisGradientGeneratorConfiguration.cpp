@@ -1,7 +1,8 @@
 /*
  * KDE. Krita Project.
  *
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -49,6 +50,11 @@ qreal KisGradientGeneratorConfiguration::antiAliasThreshold() const
 bool KisGradientGeneratorConfiguration::reverse() const
 {
     return getBool("reverse", defaultReverse());
+}
+
+bool KisGradientGeneratorConfiguration::dither() const
+{
+    return getBool("dither", defaultDither());
 }
 
 qreal KisGradientGeneratorConfiguration::startPositionX() const
@@ -182,6 +188,11 @@ void KisGradientGeneratorConfiguration::setRepeat(KisGradientPainter::enumGradie
 void KisGradientGeneratorConfiguration::setAntiAliasThreshold(qreal newAntiAliasThreshold)
 {
     setProperty("antialias_threshold", newAntiAliasThreshold);
+}
+
+void KisGradientGeneratorConfiguration::setDither(bool newDither)
+{
+    setProperty("dither", newDither);
 }
 
 void KisGradientGeneratorConfiguration::setReverse(bool newReverse)

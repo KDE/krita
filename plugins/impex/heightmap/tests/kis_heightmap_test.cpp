@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2017 Victor Wåhlström <victor.wahlstrom@initiali.se>
+ *  SPDX-FileCopyrightText: 2017 Victor Wåhlström <victor.wahlstrom@initiali.se>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_heightmap_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include  <sdk/tests/testui.h>

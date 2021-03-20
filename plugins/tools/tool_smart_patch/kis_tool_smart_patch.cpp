@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Eugene Ingerman
+ *  SPDX-FileCopyrightText: 2017 Eugene Ingerman
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -83,9 +83,9 @@ KisToolSmartPatch::~KisToolSmartPatch()
     m_d->maskDevPainter.end();
 }
 
-void KisToolSmartPatch::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolSmartPatch::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(activation, shapes);
+    KisToolPaint::activate(shapes);
 }
 
 void KisToolSmartPatch::deactivate()
@@ -168,7 +168,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
-    KisProcessingApplicator applicator( image(), currentNode(), KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal,
+    KisProcessingApplicator applicator( image(), currentNode(), KisProcessingApplicator::NONE, KisImageSignalVector(),
                                         kundo2_i18n("Smart Patch"));
 
     //actual inpaint operation. filling in areas masked by user

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Dmitrii Utkin <loentar@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Dmitrii Utkin <loentar@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-only
  */
@@ -62,7 +62,7 @@ public:
                     recordIndex = index;
             }
         }
-        qDebug() << "findLastPartNumber for" << directory << ": " << timer.elapsed() << "ms";
+        dbgTools << "findLastPartNumber for" << directory << ": " << timer.elapsed() << "ms";
 
         return recordIndex;
     }

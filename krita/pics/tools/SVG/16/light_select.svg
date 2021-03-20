@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32.000001"
    id="svg2"
-   viewBox="0 0 20.375 31.777001"
-   height="31.777"
-   width="20.375">
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -23,11 +23,12 @@
         <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andrei Rudenko</dc:title>
+            <dc:title>Timothée Giet</dc:title>
           </cc:Agent>
         </dc:creator>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:date>2020</dc:date>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -47,15 +48,15 @@
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(-6.125,-0.1249999)"
+     transform="translate(-0.375,0.036056)"
      id="layer4">
     <path
-       id="rect4502"
-       d="M 12.459,9.300438 8.0125,10.862938 17.825,31.902 22.518359,29.62308 Z"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:0.50196078" />
+       style="fill:#d2d2d2;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 6.375,27.963944 v -28 l 19,20 h -11 z"
+       id="path4148" />
     <path
-       id="path4148"
-       d="M 6.125,28.1875 6.25,0.1249999 26.5,19.625 14.125,19.875 Z"
-       style="fill:#c8c8c8;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       id="path817"
+       d="m 21.375,29.963944 -5,2 -6,-15 5,-2"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

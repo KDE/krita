@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -15,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item column="0" row="0">
+   <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Gradient Overlay</string>
@@ -27,7 +27,7 @@
          <string>Gradient</string>
         </property>
         <layout class="QFormLayout" name="formLayout">
-         <item column="0" row="0">
+         <item row="0" column="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Ble&amp;nd Mode:</string>
@@ -37,7 +37,7 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="0">
+         <item row="0" column="1">
           <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -50,7 +50,7 @@
            </property>
           </widget>
          </item>
-         <item column="0" row="1">
+         <item row="1" column="0">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>Opac&amp;ity:</string>
@@ -60,7 +60,7 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="1">
+         <item row="1" column="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -82,7 +82,7 @@
            </property>
           </widget>
          </item>
-         <item column="0" row="2">
+         <item row="2" column="0">
           <widget class="QLabel" name="label_7">
            <property name="text">
             <string>&amp;Gradient:</string>
@@ -92,7 +92,7 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="2">
+         <item row="2" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="KisCmbGradient" name="cmbGradient">
@@ -113,7 +113,7 @@
            </item>
           </layout>
          </item>
-         <item column="0" row="3">
+         <item row="3" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>St&amp;yle:</string>
@@ -123,7 +123,7 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="3">
+         <item row="3" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
             <widget class="QComboBox" name="cmbStyle">
@@ -169,7 +169,7 @@
            </item>
           </layout>
          </item>
-         <item column="0" row="4">
+         <item row="4" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
             <string>&amp;Angle:</string>
@@ -179,7 +179,7 @@
            </property>
           </widget>
          </item>
-         <item column="0" row="6">
+         <item row="6" column="0">
           <widget class="QLabel" name="label_8">
            <property name="text">
             <string>S&amp;cale:</string>
@@ -189,7 +189,7 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="6">
+         <item row="6" column="1">
           <widget class="KisSliderSpinBox" name="intScale" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -202,7 +202,7 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="4">
+         <item row="4" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="KisLayerStyleAngleSelector" name="angleSelector" native="true">
@@ -229,6 +229,23 @@
            </item>
           </layout>
          </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="lblDither">
+           <property name="text">
+            <string>&amp;Dither:</string>
+           </property>
+           <property name="buddy">
+            <cstring>chkDither</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QCheckBox" name="chkDither">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
         </layout>
         <zorder>label_6</zorder>
         <zorder>intScale</zorder>
@@ -239,6 +256,8 @@
         <zorder>intOpacity</zorder>
         <zorder>label_13</zorder>
         <zorder>label_14</zorder>
+        <zorder>lblDither</zorder>
+        <zorder>chkDither</zorder>
        </widget>
       </item>
       <item>

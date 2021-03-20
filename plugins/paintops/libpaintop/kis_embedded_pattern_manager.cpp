@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -81,7 +81,7 @@ KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfig
     if (pattern) return pattern;
 
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");
-    pattern = resourceSourceAdapter.resourceForFilename(fileName);
+    pattern = resourceSourceAdapter.resourceForFilename(QFileInfo(fileName).fileName());
 
     return pattern;
 }
@@ -92,10 +92,7 @@ KoPatternSP KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesCo
     if (pattern) return pattern;
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
-    if (pattern) {
-        // TODO: implement addition of the embedded resources in KisResourceLocator::resource()
-        //KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
-    }
+    // this resource will be added to the memory storage by KisResourceLocator
 
     return pattern;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -96,7 +96,6 @@ void OffsetImage::slotOffsetLayer()
 void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node, const QPoint& offsetPoint)
 {
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(viewManager()->image(), node,
                                        KisProcessingApplicator::RECURSIVE,

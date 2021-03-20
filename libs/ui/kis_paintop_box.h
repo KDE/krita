@@ -1,8 +1,8 @@
 /*
  *  kis_paintop_box.h - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 2004-2008 Boudewijn Rempt (boud@valdyas.org)
- *  Copyright (C) 2011      Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2004-2008 Boudewijn Rempt (boud@valdyas.org)
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -171,46 +171,46 @@ private Q_SLOTS:
     void slotUpdateOptionsWidgetPopup();
 
 private:
-    KisCanvasResourceProvider*          m_resourceProvider;
-    QHBoxLayout*                        m_layout;
-    QWidget*                            m_paintopWidget;
-    KisPaintOpConfigWidget*             m_optionWidget;
-    KisPopupButton*                     m_toolOptionsPopupButton;
+    KisCanvasResourceProvider*          m_resourceProvider {0};
+    QHBoxLayout*                        m_layout {0};
+    QWidget*                            m_paintopWidget {0};
+    KisPaintOpConfigWidget*             m_optionWidget {0};
+    KisPopupButton*                     m_toolOptionsPopupButton {0};
 
-    KisPresetSaveWidget*                m_savePresetWidget;
-    KisIconWidget*                     m_brushEditorPopupButton;
-    KisPopupButton*                     m_presetSelectorPopupButton;
-    KisCompositeOpComboBox*             m_cmbCompositeOp;
-    QToolButton*                        m_eraseModeButton;
-    QToolButton*                        m_alphaLockButton;
-    QToolButton*                        m_hMirrorButton;
-    QToolButton*                        m_vMirrorButton;
-    QToolButton*                        m_wrapAroundButton;
-    KisToolOptionsPopup*                m_toolOptionsPopup;
-    KisPaintOpPresetsPopup*             m_presetsPopup;
-    KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup;
-    KisViewManager*                     m_viewManager;
-    KisPopupButton*                     m_workspaceWidget;
+    KisPresetSaveWidget*                m_savePresetWidget {0};
+    KisIconWidget*                      m_brushEditorPopupButton {0};
+    KisPopupButton*                     m_presetSelectorPopupButton {0};
+    KisCompositeOpComboBox*             m_cmbCompositeOp {0};
+    QToolButton*                        m_eraseModeButton {0};
+    QToolButton*                        m_alphaLockButton {0};
+    QToolButton*                        m_hMirrorButton {0};
+    QToolButton*                        m_vMirrorButton {0};
+    QToolButton*                        m_wrapAroundButton {0};
+    KisToolOptionsPopup*                m_toolOptionsPopup {0};
+    KisPaintOpPresetsPopup*             m_presetsPopup {0};
+    KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup {0};
+    KisViewManager*                     m_viewManager {0};
+    KisPopupButton*                     m_workspaceWidget {0};
     KisWidgetChooser*                   m_sliderChooser[4];
     QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;
-    KisFavoriteResourceManager*         m_favoriteResourceManager;
-    QToolButton*                        m_reloadButton;
-    KisAction*                          m_eraseAction;
-    KisAction*                          m_reloadAction;
-    KisAction*                          m_disablePressureAction;
+    KisFavoriteResourceManager*         m_favoriteResourceManager {0};
+    QToolButton*                        m_reloadButton {0};
+    KisAction*                          m_eraseAction {0};
+    KisAction*                          m_reloadAction {0};
+    KisAction*                          m_disablePressureAction {0};
 
-    QString             m_currCompositeOpID;
-    KisNodeWSP          m_previousNode;
+    QString    m_currCompositeOpID;
+    KisNodeWSP m_previousNode;
 
-    KisAction* m_hMirrorAction;
-    KisAction* m_vMirrorAction;
+    KisAction* m_hMirrorAction {0};
+    KisAction* m_vMirrorAction {0};
 
-    KisAction* hideCanvasDecorationsX;
-    KisAction* lockActionX;
-    KisAction* moveToCenterActionX;
-    KisAction* hideCanvasDecorationsY;
-    KisAction* lockActionY;
-    KisAction* moveToCenterActionY;
+    KisAction* hideCanvasDecorationsX {0};
+    KisAction* lockActionX {0};
+    KisAction* moveToCenterActionX {0};
+    KisAction* hideCanvasDecorationsY {0};
+    KisAction* lockActionY {0};
+    KisAction* moveToCenterActionY {0};
 
 
     struct TabletToolID {
@@ -220,6 +220,7 @@ private:
             if (dev.pointer() == QTabletEvent::Eraser) {
                 pointer = QTabletEvent::Eraser;
             }
+            uniqueTabletId = dev.uniqueTabletId();
         }
 
         bool operator == (const TabletToolID& id) const {
@@ -231,6 +232,7 @@ private:
         }
 
         QTabletEvent::PointerType  pointer;
+        qint64 uniqueTabletId;
     };
 
     struct TabletToolData {
@@ -243,12 +245,12 @@ private:
 
     TabletToolMap    m_tabletToolMap;
     PaintOpPresetMap m_paintOpPresetMap;
-    TabletToolID     m_currTabletToolID;
-    bool             m_presetsEnabled;
-    bool             m_blockUpdate;
-    bool             m_dirtyPresetsEnabled;
-    bool             m_eraserBrushSizeEnabled;
-    bool             m_eraserBrushOpacityEnabled;
+    TabletToolID     m_currTabletToolID {KoInputDevice::invalid()};
+    bool             m_presetsEnabled {true};
+    bool             m_blockUpdate {false};
+    bool             m_dirtyPresetsEnabled {false};
+    bool             m_eraserBrushSizeEnabled {false};
+    bool             m_eraserBrushOpacityEnabled {false};
 
     KisSignalAutoConnectionsStore m_presetConnections;
 

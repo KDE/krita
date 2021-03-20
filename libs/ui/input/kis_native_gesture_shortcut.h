@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2017 Bernhard Liebl <poke1024@gmx.de>
+ *  SPDX-FileCopyrightText: 2017 Bernhard Liebl <poke1024@gmx.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  *

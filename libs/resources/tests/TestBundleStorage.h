@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,6 +7,8 @@
 #define TESTBUNDLESTORAGE_H
 
 #include <QObject>
+
+class KisResourceLocator;
 
 class TestBundleStorage : public QObject
 {
@@ -18,6 +20,8 @@ private Q_SLOTS:
     void testTagIterator();
     void testResourceItem();
     void testResource();
+    void testAddResource();
+    void cleanupTestCase();
 };
 
 #endif // TESTBUNDLESTORAGE_H

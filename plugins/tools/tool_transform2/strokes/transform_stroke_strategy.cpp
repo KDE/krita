@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -27,6 +27,7 @@
 #include "kis_projection_leaf.h"
 #include "kis_modify_transform_mask_command.h"
 
+#include "kis_image_animation_interface.h"
 #include "kis_sequential_iterator.h"
 #include "kis_selection_mask.h"
 #include "kis_image_config.h"
@@ -66,27 +67,6 @@ TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMod
 
 TransformStrokeStrategy::~TransformStrokeStrategy()
 {
-}
-
-bool TransformStrokeStrategy::shouldRestartStrokeOnModeChange(ToolTransformArgs::TransformMode oldMode, ToolTransformArgs::TransformMode newMode, KisNodeList processedNodes)
-{
-    bool hasExternalLayers = false;
-    Q_FOREACH (KisNodeSP node, processedNodes) {
-        if (node->inherits("KisShapeLayer")) {
-            hasExternalLayers = true;
-            break;
-        }
-    }
-
-    bool result = false;
-
-    if (hasExternalLayers) {
-        result =
-            (oldMode == ToolTransformArgs::FREE_TRANSFORM) !=
-            (newMode == ToolTransformArgs::FREE_TRANSFORM);
-    }
-
-    return result;
 }
 
 KisPaintDeviceSP TransformStrokeStrategy::createDeviceCache(KisPaintDeviceSP dev)
@@ -167,12 +147,18 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             } else if (KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(rootNode.data())) {
                 const QRect bounds = group->image()->bounds();
+                const int desiredAnimTime = group->image()->animationInterface()->currentTime();
 
                 KisImageSP clonedImage = new KisImage(0,
                                                       bounds.width(),
                                                       bounds.height(),
                                                       group->colorSpace(),
                                                       "transformed_image");
+
+                // BUG: 413968
+                // Workaround: Group layers wouldn't properly render the right frame
+                // since `clonedImage` would always have a time value of 0.
+                clonedImage->animationInterface()->explicitlySetCurrentTime(desiredAnimTime);
 
                 KisGroupLayerSP clonedGroup = dynamic_cast<KisGroupLayer*>(group->clone().data());
 
@@ -271,8 +257,8 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 KisTransaction transaction(device);
 
                 KisProcessingVisitor::ProgressHelper helper(td->node);
-                transformAndMergeDevice(td->config, cachedPortion,
-                                        device, &helper);
+                KisTransformUtils::transformAndMergeDevice(td->config, cachedPortion,
+                                                           device, &helper);
 
                 runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                                   KisStrokeJobData::CONCURRENT,
@@ -376,152 +362,17 @@ void TransformStrokeStrategy::clearSelection(KisPaintDeviceSP device)
                       KisStrokeJobData::NORMAL);
 }
 
-void TransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &config,
-                                                      KisPaintDeviceSP src,
-                                                      KisPaintDeviceSP dst,
-                                                      KisProcessingVisitor::ProgressHelper *helper)
-{
-    KoUpdaterPtr mergeUpdater = src != dst ? helper->updater() : 0;
-
-    KisTransformUtils::transformDevice(config, src, helper);
-    if (src != dst) {
-        QRect mergeRect = src->extent();
-        KisPainter painter(dst);
-        painter.setProgress(mergeUpdater);
-        painter.bitBlt(mergeRect.topLeft(), src, mergeRect);
-        painter.end();
-    }
-}
-
-struct TransformExtraData : public KUndo2CommandExtraData
-{
-    ToolTransformArgs savedTransformArgs;
-    KisNodeSP rootNode;
-    KisNodeList transformedNodes;
-
-    KUndo2CommandExtraData* clone() const override {
-        return new TransformExtraData(*this);
-    }
-};
-
 void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_savedTransformArgs);
 
-    TransformExtraData *data = new TransformExtraData();
-    data->savedTransformArgs = *m_savedTransformArgs;
-    data->rootNode = m_rootNode;
-    data->transformedNodes = m_processedNodes;
-
-    command->setExtraData(data);
-
-    KisSavedMacroCommand *macroCommand = dynamic_cast<KisSavedMacroCommand*>(command);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(macroCommand);
-
-    if (m_overriddenCommand && macroCommand) {
-        macroCommand->setOverrideInfo(m_overriddenCommand, m_skippedWhileMergeCommands);
-    }
+    KisTransformUtils::postProcessToplevelCommand(command,
+                                                  *m_savedTransformArgs,
+                                                  m_rootNode,
+                                                  m_processedNodes,
+                                                  m_overriddenCommand);
 
     KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
-}
-
-bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes)
-{
-    const TransformExtraData *data = dynamic_cast<const TransformExtraData*>(command->extraData());
-
-    if (data) {
-        *args = data->savedTransformArgs;
-        *rootNode = data->rootNode;
-        *transformedNodes = data->transformedNodes;
-    }
-
-    return bool(data);
-}
-
-QList<KisNodeSP> TransformStrokeStrategy::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive)
-{
-    QList<KisNodeSP> result;
-
-    auto fetchFunc =
-        [&result, mode, root] (KisNodeSP node) {
-        if (node->isEditable(node == root) &&
-                (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
-                !node->inherits("KisFileLayer") &&
-                (!node->inherits("KisTransformMask") || node == root)) {
-
-                result << node;
-            }
-    };
-
-    if (recursive) {
-        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
-    } else {
-        fetchFunc(root);
-    }
-
-    return result;
-}
-
-bool TransformStrokeStrategy::tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args)
-{
-    bool result = false;
-
-    if (KisTransformMaskSP mask =
-        dynamic_cast<KisTransformMask*>(node.data())) {
-
-        KisTransformMaskParamsInterfaceSP savedParams =
-            mask->transformParams();
-
-        KisTransformMaskAdapter *adapter =
-            dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
-
-        if (adapter) {
-            *args = adapter->transformArgs();
-            result = true;
-        }
-    }
-
-    return result;
-}
-
-bool TransformStrokeStrategy::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs,
-                                                             ToolTransformArgs::TransformMode mode,
-                                                             KisNodeSP currentNode,
-                                                             KisNodeList selectedNodes,
-                                                             QVector<KisStrokeJobData *> *undoJobs)
-{
-    bool result = false;
-
-    const KUndo2Command *lastCommand = undoFacade()->lastExecutedCommand();
-    KisNodeSP oldRootNode;
-    KisNodeList oldTransformedNodes;
-
-    ToolTransformArgs args;
-
-    if (lastCommand &&
-        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, &args, &oldRootNode, &oldTransformedNodes) &&
-        args.mode() == mode &&
-        oldRootNode == currentNode) {
-
-        if (KritaUtils::compareListsUnordered(oldTransformedNodes, selectedNodes)) {
-            args.saveContinuedState();
-
-            *outArgs = args;
-
-            const KisSavedMacroCommand *command = dynamic_cast<const KisSavedMacroCommand*>(lastCommand);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(command, false);
-
-            // the jobs are fetched as !shouldGoToHistory,
-            // so there is no need to put them into
-            // m_skippedWhileMergeCommands
-            command->getCommandExecutionJobs(undoJobs, true, false);
-            m_overriddenCommand = command;
-
-            result = true;
-        }
-    }
-
-    return result;
 }
 
 void TransformStrokeStrategy::initStrokeCallback()
@@ -541,18 +392,20 @@ void TransformStrokeStrategy::initStrokeCallback()
     }
 
     ToolTransformArgs initialTransformArgs;
-    m_processedNodes = fetchNodesList(m_mode, m_rootNode, m_workRecursively);
+    m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, m_workRecursively);
 
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;
 
-    if (!m_forceReset && tryFetchArgsFromCommandAndUndo(&initialTransformArgs,
-                                                        m_mode,
-                                                        m_rootNode,
-                                                        m_processedNodes,
-                                                        &lastCommandUndoJobs)) {
+    if (!m_forceReset && KisTransformUtils::tryFetchArgsFromCommandAndUndo(&initialTransformArgs,
+                                                                           m_mode,
+                                                                           m_rootNode,
+                                                                           m_processedNodes,
+                                                                           undoFacade(),
+                                                                           &lastCommandUndoJobs,
+                                                                           &m_overriddenCommand)) {
         argsAreInitialized = true;
-    } else if (!m_forceReset && tryInitArgsFromNode(m_rootNode, &initialTransformArgs)) {
+    } else if (!m_forceReset && KisTransformUtils::tryInitArgsFromNode(m_rootNode, &initialTransformArgs)) {
         argsAreInitialized = true;
     }
 
@@ -711,7 +564,7 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
 void TransformStrokeStrategy::finishStrokeCallback()
 {
-    if (!m_savedTransformArgs || m_savedTransformArgs->isIdentity()) {
+    if (!m_savedTransformArgs || m_savedTransformArgs->isUnchanging()) {
         cancelStrokeCallback();
         return;
     }
@@ -721,5 +574,5 @@ void TransformStrokeStrategy::finishStrokeCallback()
 
 void TransformStrokeStrategy::cancelStrokeCallback()
 {
-    finishStrokeImpl(!m_initialTransformArgs.isIdentity(), m_initialTransformArgs);
+    finishStrokeImpl(!m_initialTransformArgs.isUnchanging(), m_initialTransformArgs);
 }

@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "TestResourceLocator.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QVersionNumber>
 #include <QDirIterator>
 #include <QSqlError>
@@ -27,6 +27,9 @@
 
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
+
+#include <kis_debug.h>
+#include <KisResourceModelProvider.h>
 
 
 #ifndef FILES_DATA_DIR
@@ -133,7 +136,6 @@ void TestResourceLocator::testResourceForId()
     QCOMPARE(res, res2);
 }
 
-
 void TestResourceLocator::testDocumentStorage()
 {
     const QString &documentName("document");
@@ -142,7 +144,7 @@ void TestResourceLocator::testDocumentStorage()
     int rowcount = model.rowCount();
 
     KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
-    KoResourceSP resource(new DummyResource("test"));
+    KoResourceSP resource(new DummyResource("test.kpp", ResourceType::PaintOpPresets));
     documentStorage->addResource(resource);
 
     m_locator->addStorage(documentName, documentStorage);
@@ -156,13 +158,163 @@ void TestResourceLocator::testDocumentStorage()
     QVERIFY(model.rowCount() == rowcount);
 }
 
+void TestResourceLocator::testSyncVersions()
+{
+    int resourceId = -1;
+    QString storageLocation;
 
+    {
+        KisResourceModel model(ResourceType::PaintOpPresets);
+
+        KoResourceSP res = m_locator->resource("", ResourceType::PaintOpPresets, "test0.kpp");
+        resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", "test0.kpp", ResourceType::PaintOpPresets, "");
+        storageLocation = res->storageLocation();
+
+        // ENTER_FUNCTION() << ppVar(model.rowCount());
+        // for (int i = 0; i < model.rowCount(); i++) {
+        //     qDebug() << ppVar(model.data(model.index(i, KisResourceModel::Filename))) << model.data(model.index(i, KisResourceModel::Id));
+        // }
+
+        {
+            bool result = m_locator->updateResource(res->resourceType().first, res);
+            QVERIFY(result);
+            QCOMPARE(res->version(), 1);
+        }
+
+        {
+            bool result = m_locator->updateResource(res->resourceType().first, res);
+            QVERIFY(result);
+            QCOMPARE(res->version(), 2);
+        }
+
+        // ENTER_FUNCTION() << ppVar(model.rowCount());
+        // for (int i = 0; i < model.rowCount(); i++) {
+        //     qDebug() << ppVar(model.data(model.index(i, KisResourceModel::Filename))) << model.data(model.index(i, KisResourceModel::Id));
+        // }
+
+        QCOMPARE(model.rowCount(), 3);
+
+        {
+            KoResourceSP res1 = model.resourceForIndex(model.index(0, 0));
+            QVERIFY(res1);
+            QCOMPARE(res1->resourceId(), resourceId);
+            QCOMPARE(res1->version(), 2);
+        }
+
+    }
+
+    // test removing one version of the resource
+    {
+        bool result = QFile::remove(storageLocation + "/paintoppresets/test0.0002.kpp");
+        QVERIFY(result);
+
+        m_locator->synchronizeDb();
+        KisResourceModelProvider::testingResetAllModels();
+
+        KisResourceModel model(ResourceType::PaintOpPresets);
+
+        // ENTER_FUNCTION() << ppVar(model.rowCount());
+        // for (int i = 0; i < model.rowCount(); i++) {
+        //     qDebug() << ppVar(model.data(model.index(i, KisResourceModel::Filename))) << model.data(model.index(i, KisResourceModel::Id));
+        // }
+
+        QCOMPARE(model.rowCount(), 3);
+
+        KoResourceSP res1 = model.resourceForIndex(model.index(0, 0));
+        QVERIFY(res1);
+        QCOMPARE(res1->resourceId(), resourceId);
+        QCOMPARE(res1->version(), 1);
+
+    }
+
+    // test adding one more version of the resource
+    {
+        bool result = QFile::copy(storageLocation + "/paintoppresets/test0.0001.kpp",
+                                  storageLocation + "/paintoppresets/test0.0006.kpp");
+        QVERIFY(result);
+
+        m_locator->synchronizeDb();
+        KisResourceModelProvider::testingResetAllModels();
+
+        KisResourceModel model(ResourceType::PaintOpPresets);
+
+        // ENTER_FUNCTION() << ppVar(model.rowCount());
+        // for (int i = 0; i < model.rowCount(); i++) {
+        //     qDebug() << ppVar(model.data(model.index(i, KisResourceModel::Filename))) << model.data(model.index(i, KisResourceModel::Id));
+        // }
+
+        QCOMPARE(model.rowCount(), 3);
+
+        KoResourceSP res1 = model.resourceForIndex(model.index(0, 0));
+        QVERIFY(res1);
+        QVERIFY(res1->filename().startsWith("test0"));
+        QCOMPARE(res1->resourceId(), resourceId);
+        QCOMPARE(res1->version(), 6);
+    }
+
+    // test adding a completely new resource
+    {
+        bool result = QFile::copy(storageLocation + "/paintoppresets/test0.0001.kpp",
+                                  storageLocation + "/paintoppresets/test5.0004.kpp");
+        QVERIFY(result);
+
+        result = QFile::copy(storageLocation + "/paintoppresets/test0.0001.kpp",
+                             storageLocation + "/paintoppresets/test6.0003.kpp");
+        QVERIFY(result);
+
+        m_locator->synchronizeDb();
+        KisResourceModelProvider::testingResetAllModels();
+
+        KisResourceModel model(ResourceType::PaintOpPresets);
+
+        // ENTER_FUNCTION() << ppVar(model.rowCount());
+        // for (int i = 0; i < model.rowCount(); i++) {
+        //     qDebug() << ppVar(model.data(model.index(i, KisResourceModel::Filename))) << model.data(model.index(i, KisResourceModel::Id));
+        // }
+
+        QCOMPARE(model.rowCount(), 5);
+
+        {
+            KoResourceSP res1 = model.resourceForIndex(model.index(3, 0));
+            QVERIFY(res1->filename().startsWith("test5"));
+            QCOMPARE(res1->version(), 4);
+        }
+
+        {
+            KoResourceSP res1 = model.resourceForIndex(model.index(4, 0));
+            QVERIFY(res1->filename().startsWith("test6"));
+            QCOMPARE(res1->version(), 3);
+        }
+    }
+
+    // test complete removal of all version of the resource
+    {
+        bool result = QFile::remove(storageLocation + "/paintoppresets/test5.0004.kpp");
+        QVERIFY(result);
+
+        m_locator->synchronizeDb();
+        KisResourceModelProvider::testingResetAllModels();
+
+        KisResourceModel model(ResourceType::PaintOpPresets);
+
+        // ENTER_FUNCTION() << ppVar(model.rowCount());
+        // for (int i = 0; i < model.rowCount(); i++) {
+        //     qDebug() << ppVar(model.data(model.index(i, KisResourceModel::Filename))) << model.data(model.index(i, KisResourceModel::Id));
+        // }
+
+        QCOMPARE(model.rowCount(), 4);
+
+        KoResourceSP res1 = model.resourceForIndex(model.index(3, 0));
+        QVERIFY(res1->filename().startsWith("test6"));
+        QCOMPARE(res1->version(), 3);
+    }
+}
 
 void TestResourceLocator::cleanupTestCase()
 {
-    //ResourceTestHelper::rmTestDb();
+    ResourceTestHelper::rmTestDb();
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-QTEST_MAIN(TestResourceLocator)
+SIMPLE_TEST_MAIN(TestResourceLocator)
 

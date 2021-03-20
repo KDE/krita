@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KISBEZIERMESH_H
 #define KISBEZIERMESH_H
 
@@ -618,6 +624,15 @@ private:
             return m_mesh->find(ControlPointIndex(secondNodeIndex(), Mesh::ControlType::Node));
         }
 
+        QPointF pointAtParam(qreal t) const {
+            return KisBezierUtils::bezierCurve(p0(), p1(), p2(), p3(), t);
+        }
+
+        qreal length() const {
+            const qreal eps = 1e-3;
+            return KisBezierUtils::curveLength(p0(), p1(), p2(), p3(), eps);
+        }
+
         int degree() const {
             return KisBezierUtils::bezierDegree(p0(), p1(), p2(), p3());
         }
@@ -985,6 +1000,10 @@ public:
     control_point_const_iterator find(const ControlPointIndex &index) const { return find(*this, index); }
     control_point_const_iterator constFind(const ControlPointIndex &index) const { return find(*this, index); }
 
+    control_point_iterator find(const NodeIndex &index) { return find(*this, index); }
+    control_point_const_iterator find(const NodeIndex &index) const { return find(*this, index); }
+    control_point_const_iterator constFind(const NodeIndex &index) const { return find(*this, index); }
+
     segment_iterator find(const SegmentIndex &index) { return find(*this, index); }
     segment_const_iterator find(const SegmentIndex &index) const { return find(*this, index); }
     segment_const_iterator constFind(const SegmentIndex &index) const { return find(*this, index); }
@@ -1190,6 +1209,14 @@ private:
     static
     IteratorType find(MeshType &mesh, const ControlPointIndex &index) {
         IteratorType it(&mesh, index.nodeIndex.x(), index.nodeIndex.y(), index.controlType);
+        return it.isValid() ? it : mesh.endControlPoints();
+    }
+
+    template <class MeshType,
+              class IteratorType = control_point_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType find(MeshType &mesh, const NodeIndex &index) {
+        IteratorType it(&mesh, index.x(), index.y(), Mesh::ControlType::Node);
         return it.isValid() ? it : mesh.endControlPoints();
     }
 
@@ -1413,16 +1440,54 @@ template<typename NodeArg, typename PatchArg>
 void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
                       typename Mesh<NodeArg, PatchArg>::ControlPointIndex index,
                       const QPointF &move,
-                      SmartMoveMeshControlMode mode)
+                      SmartMoveMeshControlMode mode,
+                      bool scaleNodeMoves)
 {
     using ControlType = typename Mesh<NodeArg, PatchArg>::ControlType;
     using ControlPointIndex = typename Mesh<NodeArg, PatchArg>::ControlPointIndex;
+    using ControlPointIterator = typename Mesh<NodeArg, PatchArg>::control_point_iterator;
+    using SegmentIterator = typename Mesh<NodeArg, PatchArg>::segment_iterator;
 
     auto it = mesh.find(index);
     KIS_SAFE_ASSERT_RECOVER_RETURN(it != mesh.endControlPoints());
 
     if (it.isNode()) {
+        auto preAdjustSegment = [] (Mesh<NodeArg, PatchArg> &mesh,
+                                    SegmentIterator it,
+                                    const QPointF &normalizedOffset) {
+
+            if (it == mesh.endSegments()) return;
+
+            const QPointF base1 = it.p3() - it.p0();
+            const QPointF base2 = it.p3() - it.p0() - normalizedOffset;
+
+            {
+                const QPointF control = it.p1() - it.p0();
+                const qreal dist0 = KisAlgebra2D::norm(base1);
+                const qreal dist1 = KisAlgebra2D::dotProduct(base2, base1) / dist0;
+                const qreal coeff = dist1 / dist0;
+
+                it.p1() = it.p0() + coeff * (control);
+            }
+            {
+                const QPointF control = it.p2() - it.p3();
+                const qreal dist0 = KisAlgebra2D::norm(base1);
+                const qreal dist1 = KisAlgebra2D::dotProduct(base2, base1) / dist0;
+                const qreal coeff = dist1 / dist0;
+
+                it.p2() = it.p3() + coeff * (control);
+            }
+        };
+
+        if (scaleNodeMoves) {
+            preAdjustSegment(mesh, it.topSegment(), -move);
+            preAdjustSegment(mesh, it.leftSegment(), -move);
+            preAdjustSegment(mesh, it.bottomSegment(), move);
+            preAdjustSegment(mesh, it.rightSegment(), move);
+        }
+
         it.node().translate(move);
+
     } else {
         const QPointF newPos = *it + move;
 

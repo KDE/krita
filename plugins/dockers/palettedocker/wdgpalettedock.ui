@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -55,7 +55,7 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item column="7" row="2">
+     <item row="2" column="7">
       <widget class="QToolButton" name="bnRemove">
        <property name="toolTip">
         <string>Delete color</string>
@@ -65,9 +65,7 @@
        </property>
        <property name="icon">
         <iconset theme="list-remove">
-         <normaloff>.</normaloff>
-         .
-        </iconset>
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -76,11 +74,11 @@
         </size>
        </property>
        <property name="autoRaise">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item column="2" row="2">
+     <item row="2" column="2">
       <spacer name="hBottomSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -93,27 +91,31 @@
        </property>
       </spacer>
      </item>
-     <item column="5" row="2">
+     <item row="2" column="5">
       <widget class="QToolButton" name="bnRename">
        <property name="text">
         <string/>
        </property>
        <property name="icon">
         <iconset theme="edit-rename">
-         <normaloff>.</normaloff>
-         .
-        </iconset>
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item column="0" row="2">
+     <item row="2" column="0">
       <widget class="KisPopupButton" name="bnColorSets">
        <property name="text">
         <string/>
        </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
-     <item column="4" row="2">
+     <item row="2" column="4">
       <widget class="QToolButton" name="bnAdd">
        <property name="toolTip">
         <string>Add foreground color</string>
@@ -123,9 +125,7 @@
        </property>
        <property name="icon">
         <iconset theme="list-add">
-         <normaloff>.</normaloff>
-         .
-        </iconset>
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -134,27 +134,28 @@
         </size>
        </property>
        <property name="autoRaise">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item column="6" row="2">
+     <item row="2" column="6">
       <widget class="QToolButton" name="bnEditPalette">
        <property name="text">
         <string>...</string>
        </property>
        <property name="icon">
         <iconset theme="document-layer">
-         <normaloff>.</normaloff>
-         .
-        </iconset>
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item column="1" row="2">
+     <item row="2" column="1">
       <widget class="KSqueezedTextLabel" name="lblPaletteName">
        <property name="text">
-        <string>TextLabel</string>
+        <string>KSqueezedTextLabel</string>
        </property>
       </widget>
      </item>
@@ -163,6 +164,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KSqueezedTextLabel</class>
+   <extends>QLabel</extends>
+   <header>ksqueezedtextlabel.h</header>
+  </customwidget>
   <customwidget>
    <class>KisPopupButton</class>
    <extends>QPushButton</extends>
@@ -177,11 +183,6 @@
    <class>KisPaletteComboBox</class>
    <extends>QComboBox</extends>
    <header>KisPaletteComboBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KSqueezedTextLabel</class>
-   <extends>QLabel</extends>
-   <header location="global">ksqueezedtextlabel.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

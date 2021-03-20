@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,7 +15,7 @@
 #include "kis_global.h"
 #include "kis_debug.h"
 
-#include "timeline_color_scheme.h"
+#include "KisAnimTimelineColors.h"
 
 
 struct KisEqualizerSlider::Private
@@ -169,8 +169,8 @@ void KisEqualizerSlider::paintEvent(QPaintEvent *event)
         p.setPen(Qt::transparent);
 
         QColor color = m_d->toggleState ?
-                    TimelineColorScheme::instance()->onionSkinsSliderEnabledColor() :
-                    TimelineColorScheme::instance()->onionSkinsSliderDisabledColor();
+                    KisAnimTimelineColors::instance()->onionSkinsSliderEnabledColor() :
+                    KisAnimTimelineColors::instance()->onionSkinsSliderDisabledColor();
         p.setBrush(color);
 
         p.drawRect(sliderRect);

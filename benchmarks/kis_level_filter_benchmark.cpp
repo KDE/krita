@@ -1,10 +1,10 @@
 /*
- *  Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
+ *  SPDX-FileCopyrightText: 2015 Thorsten Zachmann <zachmann@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_level_filter_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -92,4 +92,4 @@ void KisLevelFilterBenchmark::benchmarkFilter()
 
 
 
-QTEST_MAIN(KisLevelFilterBenchmark)
+SIMPLE_TEST_MAIN(KisLevelFilterBenchmark)

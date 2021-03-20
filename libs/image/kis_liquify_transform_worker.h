@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -63,7 +63,7 @@ public:
     const QVector<QPointF>& originalPoints() const;
     QVector<QPointF>& transformedPoints();
 
-    void run(KisPaintDeviceSP device);
+    void run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice);
     QImage runOnQImage(const QImage &srcImage,
                        const QPointF &srcImageOffset,
                        const QTransform &imageToThumbTransform,
@@ -76,6 +76,8 @@ public:
 
     QRect approxChangeRect(const QRect &rc);
     QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);
+
+    void transformSrcAndDst(const QTransform &t);
 
 private:
     struct Private;

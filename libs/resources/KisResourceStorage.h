@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -62,7 +62,7 @@ public:
         QDateTime lastModified;
     };
 
-    class TagIterator
+    class KRITARESOURCES_EXPORT TagIterator
     {
     public:
         virtual ~TagIterator() {}
@@ -76,12 +76,15 @@ public:
         virtual QString name() const = 0;
         /// An extra, optional comment for the tag
         virtual QString comment() const = 0;
+        /// The resource type as defined in the tag file
+        virtual QString resourceType() const = 0;
+
 
         /// A tag object on which we can set properties and which we can save
         virtual KisTagSP tag() const = 0;
     };
 
-    class ResourceIterator
+    class KRITARESOURCES_EXPORT ResourceIterator
     {
     public:
 
@@ -94,8 +97,18 @@ public:
         virtual QString url() const = 0;
         virtual QString type() const = 0;
         virtual QDateTime lastModified() const = 0;
+        virtual int guessedVersion() const { return 0; }
+        virtual QSharedPointer<KisResourceStorage::ResourceIterator> versions() const;
+
+        KoResourceSP resource() const;
+
+    protected:
         /// This only loads the resource when called
-        virtual KoResourceSP resource() const = 0;
+        virtual KoResourceSP resourceImpl() const = 0;
+
+    private:
+        mutable KoResourceSP m_cachedResource;
+        mutable QString m_cachedResourceUrl;
     };
 
     enum class StorageType : int {
@@ -184,6 +197,9 @@ public:
     /// The loaded resource for an entry in the storage
     KoResourceSP resource(const QString &url);
 
+    /// The MD5 checksum of the resource in the storage
+    QByteArray resourceMd5(const QString &url);
+
     /// An iterator over all the resources in the storage
     QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;
 
@@ -197,6 +213,13 @@ public:
     /// Adds the given resource to the storage.
     bool addResource(KoResourceSP resource);
 
+    /// Returns true if the storage supports versioning of the resources.
+    /// It enables loadVersionedResource() call.
+    bool supportsVersioning() const;
+
+    /// Reloads the given resource from the persistent storage
+    bool loadVersionedResource(KoResourceSP resource);
+
     static const QString s_meta_generator;
     static const QString s_meta_author;
     static const QString s_meta_title;
@@ -209,6 +232,8 @@ public:
     static const QString s_meta_name;
     static const QString s_meta_value;
     static const QString s_meta_version;
+    static const QString s_meta_license;
+    static const QString s_meta_email;
 
     void setMetaData(const QString &key, const QVariant &value);
     QStringList metaDataKeys() const;
@@ -255,10 +280,72 @@ private:
 
 };
 
-class KisStorageVersioningHelper {
-public:
-    static bool addVersionedResource(const QString &filename, const QString &saveLocation, KoResourceSP resource);
+struct VersionedResourceEntry
+{
+    QString resourceType;
+    QString filename;
+    QList<QString> tagList;
+    QDateTime lastModified;
+    int guessedVersion = -1;
+    QString guessedKey;
 
+    struct KeyVersionLess {
+        bool operator()(const VersionedResourceEntry &lhs, const VersionedResourceEntry &rhs) const {
+            return lhs.guessedKey < rhs.guessedKey ||
+                (lhs.guessedKey == rhs.guessedKey && lhs.guessedVersion < rhs.guessedVersion);
+        }
+    };
+
+    struct KeyLess {
+        bool operator()(const VersionedResourceEntry &lhs, const VersionedResourceEntry &rhs) const {
+            return lhs.guessedKey < rhs.guessedKey;
+        }
+    };
+};
+
+class KRITARESOURCES_EXPORT KisStorageVersioningHelper {
+public:
+
+    static bool addVersionedResource(const QString &saveLocation, KoResourceSP resource, int minVersion);
+    static QString chooseUniqueName(KoResourceSP resource,
+                                    int minVersion,
+                                    std::function<bool(QString)> checkExists);
+
+    static void detectFileVersions(QVector<VersionedResourceEntry> &allFiles);
+
+
+};
+
+class KisVersionedStorageIterator : public KisResourceStorage::ResourceIterator
+{
+public:
+    KisVersionedStorageIterator(const QVector<VersionedResourceEntry> &entries,
+                                KisStoragePlugin *_q);
+
+    bool hasNext() const override;
+    void next() override;
+    QString url() const override;
+    QString type() const override;
+    QDateTime lastModified() const override;
+    KoResourceSP resourceImpl() const override;
+
+    int guessedVersion() const override;
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> versions() const override;
+
+protected:
+    KisVersionedStorageIterator(const QVector<VersionedResourceEntry> &entries,
+                                QVector<VersionedResourceEntry>::const_iterator begin,
+                                QVector<VersionedResourceEntry>::const_iterator end,
+                                KisStoragePlugin *_q);
+protected:
+    KisStoragePlugin *q = 0;
+    const QVector<VersionedResourceEntry> m_entries;
+    QVector<VersionedResourceEntry>::const_iterator m_it;
+    QVector<VersionedResourceEntry>::const_iterator m_chunkStart;
+    QVector<VersionedResourceEntry>::const_iterator m_begin;
+    QVector<VersionedResourceEntry>::const_iterator m_end;
+    bool m_isStarted = false;
 };
 
 

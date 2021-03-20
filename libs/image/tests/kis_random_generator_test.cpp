@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007,2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007, 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_random_generator_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_random_generator.h"
 
 #include <math.h>
@@ -107,4 +107,4 @@ void KisRandomGeneratorTest::testEvolution()
     QVERIFY(counter == 0);
 }
 
-QTEST_MAIN(KisRandomGeneratorTest)
+SIMPLE_TEST_MAIN(KisRandomGeneratorTest)

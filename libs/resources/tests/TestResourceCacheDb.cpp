@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "TestResourceCacheDb.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QtSql>
 #include <QStandardPaths>
 #include <QDir>
@@ -105,5 +105,5 @@ void TestResourceCacheDb::cleanupTestCase()
     Q_ASSERT(res);
 }
 
-QTEST_MAIN(TestResourceCacheDb)
+SIMPLE_TEST_MAIN(TestResourceCacheDb)
 

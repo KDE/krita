@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
+ *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_auto_brush_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include "../kis_auto_brush.h"
 #include "kis_mask_generator.h"
@@ -181,4 +181,4 @@ void KisAutoBrushTest::testClone()
     QCOMPARE(res1, res2);
 }
 
-QTEST_MAIN(KisAutoBrushTest)
+SIMPLE_TEST_MAIN(KisAutoBrushTest)

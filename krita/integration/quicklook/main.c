@@ -1,9 +1,9 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2015 Algorithmus <angelus.tenebrae@gmail.com>
- * Copyright (c) 2015 beelzy <alvina.lee@innoactive.de>
- * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2015 Algorithmus <angelus.tenebrae@gmail.com>
+ * SPDX-FileCopyrightText: 2015 beelzy <alvina.lee@innoactive.de>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *

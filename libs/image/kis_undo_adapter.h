@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

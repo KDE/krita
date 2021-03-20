@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -40,7 +40,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeControllerBase *controller, Ko
     d->shapes.append(shape);
     d->oldParents.append(shape->parent());
 
-    setText(kundo2_i18n("Delete shape"));
+    setText(kundo2_i18nc("Delete one shape", "Delete shape"));
 }
 
 KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes,

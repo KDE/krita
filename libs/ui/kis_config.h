@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -82,6 +82,8 @@ public:
     int preferredVectorImportResolutionPPI(bool defaultValue = false) const;
     void setPreferredVectorImportResolutionPPI(int value) const;
 
+    bool useDefaultColorSpace(bool defaultvalue = false) const;
+    void setUseDefaultColorSpace(bool value) const;
     /**
      * @return the id of the default color model used for creating new images.
      */
@@ -556,6 +558,9 @@ public:
 
     bool autoPinLayersToTimeline(bool defaultValue = false) const;
     void setAutoPinLayersToTimeline(bool value);
+
+    bool adaptivePlaybackRange(bool defaultValue = false) const;
+    void setAdaptivePlaybackRange(bool value);
 
     qreal timelineZoom(bool defaultValue = false) const;
     void setTimelineZoom(qreal value);

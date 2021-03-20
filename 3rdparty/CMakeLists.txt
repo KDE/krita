@@ -9,7 +9,16 @@ project (krita-and-all-its-deps)
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
 
-cmake_minimum_required(VERSION 2.8.6)
+iF(APPLE)
+	exec_program("sysctl -n hw.optional.arm64" OUTPUT_VARIABLE APPLE_ON_ARM)
+	if(${APPLE_ON_ARM} EQUAL 1)
+		cmake_minimum_required(VERSION 3.19.3)
+	else()
+        cmake_minimum_required(VERSION 3.7.2)
+	endif()
+else(APPLE)
+	cmake_minimum_required(VERSION 2.8.6)
+endif()
 
 if(NOT SUBMAKE_JOBS)
 	set(SUBMAKE_JOBS 1)

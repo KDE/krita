@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_crash_filter_test.h"
 #include <KoColorProfile.h>
-#include <QTest>
+#include <simpletest.h>
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
@@ -48,6 +48,7 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     dbgKrita << f->id() << ", " << cs->id() << ", " << cs->profile()->name();// << kfc->toXML() << "\n";
 
     {
+        kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
         KisTransaction t(kundo2_noi18n(f->name()), dev);
         f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
     }

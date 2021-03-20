@@ -1,7 +1,7 @@
 /*
  * tool_dyna.cpp -- Part of Krita
  *
- * Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

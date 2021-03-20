@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

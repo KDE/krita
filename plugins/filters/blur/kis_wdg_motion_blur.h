@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2010 Edward Apap <schumifer@hotmail.com>
+ * SPDX-FileCopyrightText: 2010 Edward Apap <schumifer@hotmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -24,9 +24,7 @@ public:
     }
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
-public Q_SLOTS:
-    void angleSliderChanged(int);
-    void angleDialChanged(int);
+    
 private:
     Ui_WdgMotionBlur* m_widget;
 };

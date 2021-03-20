@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_selection_mask_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -64,4 +64,4 @@ void KisSelectionMaskTest::testActivation()
 }
 
 
-QTEST_MAIN(KisSelectionMaskTest)
+SIMPLE_TEST_MAIN(KisSelectionMaskTest)

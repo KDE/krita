@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef __FREEHAND_STROKE_TEST_H
 #define __FREEHAND_STROKE_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 
 class FreehandStrokeTest : public QObject

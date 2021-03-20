@@ -1,12 +1,12 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 1999 Matthias Elter <elter@kde.org>
-    Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
-    Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
-    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
-    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
-    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
-    Copyright (c) 2003-2019 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+    SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+    SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
+    SPDX-FileCopyrightText: 2003-2019 Boudewijn Rempt <boud@valdyas.org>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -30,6 +30,7 @@
 #include "KoResourcePaths.h"
 #include "ksharedconfig.h"
 
+#include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisTagModel.h>
 #include <kis_assert.h>
@@ -127,7 +128,7 @@ public:
             return false;
         }
 
-        if (m_resourceModel->addResource(resource, save ? resource->storageLocation() : "memory")) {
+        if (m_resourceModel->addResource(resource, save ? QString() : "memory")) {
             notifyResourceAdded(resource);
             return true;
         }
@@ -154,7 +155,7 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     QString saveLocation() {
-        return KoResourcePaths::saveLocation(m_type.toLatin1());
+        return KisResourceLocator::instance()->resourceLocationBase() + '/' + m_type;
     }
 
     /**
@@ -268,7 +269,7 @@ public:
     }
 
     /**
-     * Call after changing the content of a resource;
+     * Call after changing the content of a resource and saving it;
      * Notifies the connected views.
      */
     void updateResource(QSharedPointer<T> resource)
@@ -283,6 +284,23 @@ public:
         }
         m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
+    }
+
+    /**
+     * Reloads the resource from the persistent storage
+     */
+    bool reloadResource(QSharedPointer<T> resource)
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+        bool result = m_resourceModel->reloadResource(resource);
+        notifyResourceChanged(resource);
+
+        return result;
     }
 
     QVector<KisTagSP> assignedTagsList(KoResourceSP resource) const

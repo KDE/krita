@@ -3,7 +3,7 @@
  * Date  : 2005-01-01
  * Description :
  *
- * Copyright 2005 by Tom Albers <tomalbers@kde.nl>
+ * SPDX-FileCopyrightText: 2005 Tom Albers <tomalbers@kde.nl>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *

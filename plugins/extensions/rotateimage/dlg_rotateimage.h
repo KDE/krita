@@ -1,7 +1,7 @@
 /*
  *  dlg_rotateimage.h -- part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -51,6 +51,8 @@ private Q_SLOTS:
     void okClicked();
     void resetPreview();
     void slotAngleValueChanged(double);
+    void slotRadioCCWToggled(bool toggled);
+    void slotRadioCWToggled(bool toggled);
 
 private:
 

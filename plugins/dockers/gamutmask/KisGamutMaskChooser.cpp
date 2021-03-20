@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,6 +21,7 @@
 #include <KisResourceModel.h>
 #include <kis_icon_utils.h>
 #include <kis_config.h>
+#include "KisPopupButton.h"
 
 /// The resource item delegate for rendering the resource preview
 class KisGamutMaskDelegate: public QAbstractItemDelegate
@@ -173,8 +174,8 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
     // setting the view mode
     setViewMode(m_mode);
     m_itemChooser->setViewModeButtonVisible(true);
-    QToolButton* viewModeButton = m_itemChooser->viewModeButton();
-    viewModeButton->setMenu(menu);
+    KisPopupButton* viewModeButton = m_itemChooser->viewModeButton();
+    viewModeButton->setPopupWidget(menu);
 
     layout->addWidget(m_itemChooser);
 

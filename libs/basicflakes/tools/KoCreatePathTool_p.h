@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008-2010 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2008-2010 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -401,8 +401,8 @@ public:
         activePoint = 0;
     }
 
-    void angleDeltaChanged(int value) {
-        angleSnappingDelta = value;
+    void angleDeltaChanged(qreal value) {
+        angleSnappingDelta = static_cast<int>(value);
         if (angleSnapStrategy)
             angleSnapStrategy->setAngleStep(angleSnappingDelta);
     }

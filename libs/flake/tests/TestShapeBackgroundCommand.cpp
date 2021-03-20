@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-* Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+* SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
 *
 * SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -11,7 +11,7 @@
 #include "KoShapePaintingContext.h"
 
 #include <QPainterPath>
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapeBackgroundCommand::refCounting()
 {
@@ -55,4 +55,4 @@ void TestShapeBackgroundCommand::refCounting()
     delete shape1;
 }
 
-QTEST_MAIN(TestShapeBackgroundCommand)
+SIMPLE_TEST_MAIN(TestShapeBackgroundCommand)

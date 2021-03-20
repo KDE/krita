@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,6 +15,7 @@
 
 #include "kis_debug.h"
 #include <QtMath>
+#include <QSize>
 
 Q_GLOBAL_STATIC(KisFilterStrategyRegistry, s_instance)
 
@@ -245,4 +246,25 @@ QString KisFilterStrategyRegistry::formattedDescriptions() const
     formatedDescription.append("</body></html>");
 
     return formatedDescription;
+}
+
+KisFilterStrategy *KisFilterStrategyRegistry::autoFilterStrategy(QSize originalSize, QSize desiredSize) const
+{
+    // Default to nearest neighbor scaling for tiny source images. (i.e: icons or small sprite sheets.)
+    const int pixelArtThreshold = 256;
+    if (originalSize.width() <= pixelArtThreshold ||
+        originalSize.height() <= pixelArtThreshold) {
+        return KisFilterStrategyRegistry::instance()->value("NearestNeighbor");
+    }
+
+    const float xScaleFactor = (float)desiredSize.width() / originalSize.width();
+    const float yScaleFactor = (float)desiredSize.height() / originalSize.height();
+
+    if (xScaleFactor > 1.f || yScaleFactor > 1.f) { // Enlargement.
+        return KisFilterStrategyRegistry::instance()->value("Bicubic");
+    } else if (xScaleFactor < 1.f || yScaleFactor < 1.f) { // Reduction.
+        return KisFilterStrategyRegistry::instance()->value("Bicubic");
+    }
+
+    return KisFilterStrategyRegistry::instance()->value("NearestNeighbor");
 }

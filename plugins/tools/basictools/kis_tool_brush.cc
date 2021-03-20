@@ -1,8 +1,8 @@
 /*
  *  kis_tool_brush.cc - part of Krita
  *
- *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
+ *  SPDX-FileCopyrightText: 2003-2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -66,9 +66,9 @@ KisToolBrush::~KisToolBrush()
 {
 }
 
-void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolBrush::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolFreehand::activate(activation, shapes);
+    KisToolFreehand::activate(shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
     QAction *toggleaction = action("toggle_assistant");
@@ -426,7 +426,7 @@ QWidget * KisToolBrush::createOptionWidget()
     // add a line spacer so we know that the next set of options are for different settings
     QFrame* line = new QFrame(optionsWidget);
     line->setObjectName(QString::fromUtf8("line"));
-    line->setFrameShape(QFrame::HLine);
+    line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     addOptionWidgetOption(line);
 
     // Drawing assistant configuration

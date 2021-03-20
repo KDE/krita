@@ -1,5 +1,5 @@
 /*ls
- *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef _KIS_QMIC_TESTS_H_
 #define _KIS_QMIC_TESTS_H_
 
-#include <QtTest>
+#include <simpletest.h>
 #include <QImage>
 
 #include "../gmic.h"

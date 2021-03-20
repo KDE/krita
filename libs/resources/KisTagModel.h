@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
- * Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -24,6 +24,9 @@ public:
 
     virtual QModelIndex indexForTag(KisTagSP tag) const = 0;
     virtual KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const = 0;
+
+    /// Retrieve a tag by url
+    virtual KisTagSP tagForUrl(const QString& url) const = 0;
 
     /// Add a new tag with a possibly empty list of resources to tag
     virtual KisTagSP addTag(const QString &tagName, QVector<KoResourceSP> taggedResouces)  = 0;
@@ -56,7 +59,7 @@ public:
         KisTagRole,
     };
 
-    enum Ids {
+    enum Ids { // to get actual id, you need to add s_fakeRowsCount
         All = -2, // so it gets on top in the combobox
         AllUntagged = -1,
     };
@@ -74,6 +77,8 @@ public:
     QModelIndex indexForTag(KisTagSP tag) const override;
     KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const override;
 
+    KisTagSP tagForUrl(const QString& tagUrl) const override;
+
     // TODO: replace ALL occurrences of KoResourceSP here with the resource id's.
     KisTagSP addTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
@@ -82,6 +87,11 @@ public:
 
     bool renameTag(const KisTagSP tag) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
+
+    // TODO: they can be static const variables, too, if it's better than functions
+    static QString urlAll() { return "All"; }
+    static QString urlAllUntagged() { return "All Untagged"; }
+
 
 private:
 
@@ -93,8 +103,6 @@ private:
 
     bool tagResourceByUrl(const QString& tagUrl, const int resourceId);
     bool tagResourceById(const int tagId, const int resource);
-
-    KisTagSP tagByUrl(const QString& tagUrl) const;
 
     bool resetQuery();
 
@@ -136,6 +144,7 @@ public:
     QModelIndex indexForTag(KisTagSP tag) const override;
     KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const override;
     KisTagSP addTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
+    KisTagSP tagForUrl(const QString& url) const override;
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
     bool setTagInactive(const KisTagSP tag) override;
     bool setTagActive(const KisTagSP tag) override;

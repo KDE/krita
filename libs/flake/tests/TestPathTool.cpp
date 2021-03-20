@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   SPDX-FileCopyrightText: 2007 Thorsten Zachmann <zachmann@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -11,7 +11,7 @@
 #include "../tools/KoPathToolSelection.h"
 #include "../KoPathPointData.h"
 #include <MockShapes.h>
-#include <QTest>
+#include <simpletest.h>
 
 void TestPathTool::koPathPointSelection_selectedSegmentsData()
 {
@@ -75,4 +75,4 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
 }
 
 
-QTEST_MAIN(TestPathTool)
+SIMPLE_TEST_MAIN(TestPathTool)

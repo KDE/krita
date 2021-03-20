@@ -14,7 +14,7 @@
 
 [General]
 name=Photoshop Compatible
-version=4
+version=5
 
 [Pan Canvas]
 0={0;4;[];0;0;2}
@@ -63,3 +63,6 @@ version=4
 7={5;1;[1000021,30];0;0;0}
 8={0;4;[];0;0;1}
 9={0;2;[1000021,20];1;0;0}
+
+[Toggle Canvas Only]
+0={0;4;[];0;0;6}

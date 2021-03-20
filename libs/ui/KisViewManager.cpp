@@ -1,14 +1,14 @@
 /*
  *  This file is part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *                1999 Michael Koch    <koch@kde.org>
- *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
- *                2002 Patrick Julien <freak@codepimps.org>
- *                2003-2011 Boudewijn Rempt <boud@valdyas.org>
- *                2004 Clarence Dang <dang@kde.org>
- *                2011 José Luis Vergara <pentalis@gmail.com>
- *                2017 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Carsten Pfeiffer <pfeiffer@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003-2011 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Clarence Dang <dang@kde.org>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -365,9 +365,8 @@ void KisViewManager::slotViewAdded(KisView *view)
 {
     // WARNING: this slot is called even when a view from another main windows is added!
     //          Don't expect \p view be a child of this view manager!
-    Q_UNUSED(view);
 
-    if (viewCount() == 0) {
+    if (view->viewManager() == this && viewCount() == 0) {
         d->statusBar.showAllStatusBarItems();
     }
 }
@@ -376,9 +375,8 @@ void KisViewManager::slotViewRemoved(KisView *view)
 {
     // WARNING: this slot is called even when a view from another main windows is removed!
     //          Don't expect \p view be a child of this view manager!
-    Q_UNUSED(view);
 
-    if (viewCount() == 0) {
+    if (view->viewManager() == this && viewCount() == 0) {
         d->statusBar.hideAllStatusBarItems();
     }
 
@@ -860,7 +858,7 @@ void KisViewManager::slotCreateCopy()
 
     QString name = srcDoc->documentInfo()->aboutInfo("name");
     if (name.isEmpty()) {
-        name = document()->url().toLocalFile();
+        name = document()->path();
     }
     name = i18n("%1 (Copy)", name);
     doc->documentInfo()->setAboutInfo("title", name);
@@ -899,7 +897,7 @@ void KisViewManager::slotSaveIncremental()
 {
     if (!document()) return;
 
-    if (document()->url().isEmpty()) {
+    if (document()->path().isEmpty()) {
         KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->mainWindow);
         mw->saveDocument(document(), true, false);
         return;
@@ -988,11 +986,12 @@ void KisViewManager::slotSaveIncremental()
         QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental version"), i18n("Alternative names exhausted, try manually saving with a higher number"));
         return;
     }
-    QUrl newUrl = QUrl::fromUserInput(path + '/' + fileName);
+    QString newFilePath = path + '/' + fileName;
     document()->setFileBatchMode(true);
-    document()->saveAs(newUrl, document()->mimeType(), true);
+    document()->saveAs(newFilePath, document()->mimeType(), true);
     document()->setFileBatchMode(false);
-    KisPart::instance()->addRecentURLToAllMainWindows(newUrl, document()->url());
+    KisPart::instance()->addRecentURLToAllMainWindows(QUrl::fromLocalFile(newFilePath),
+                                                      QUrl::fromLocalFile(document()->path()));
 
     if (mainWindow()) {
         mainWindow()->updateCaption();
@@ -1004,7 +1003,7 @@ void KisViewManager::slotSaveIncrementalBackup()
 {
     if (!document()) return;
 
-    if (document()->url().isEmpty()) {
+    if (document()->path().isEmpty()) {
         KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->mainWindow);
         mw->saveDocument(document(), true, false);
         return;
@@ -1052,7 +1051,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             if (!letter.isNull()) newVersion.append(letter);
             newVersion.append(".");
             backupFileName.replace(regex, newVersion);
-            fileAlreadyExists = QFile(backupFileName).exists();
+            fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
                 if (!letter.isNull()) {
                     char letterCh = letter.at(0).toLatin1();
@@ -1069,7 +1068,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             return;
         }
         QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
-        document()->saveAs(QUrl::fromUserInput(path + '/' + fileName), document()->mimeType(), true);
+        document()->saveAs(path + '/' + fileName, document()->mimeType(), true);
 
         if (mainWindow()) mainWindow()->updateCaption();
     }
@@ -1092,7 +1091,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             newVersion.prepend("~");
             newVersion.append(".");
             backupFileName.replace(regex, newVersion);
-            fileAlreadyExists = QFile(backupFileName).exists();
+            fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1
                 int intVersion = baseNewVersion.toInt(0);
@@ -1107,7 +1106,7 @@ void KisViewManager::slotSaveIncrementalBackup()
         // Save both as backup and on current file for interapplication workflow
         document()->setFileBatchMode(true);
         QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
-        document()->saveAs(QUrl::fromUserInput(path + '/' + fileName), document()->mimeType(), true);
+        document()->saveAs(path + '/' + fileName, document()->mimeType(), true);
         document()->setFileBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();
@@ -1420,7 +1419,7 @@ void KisViewManager::slotActivateTransformTool()
         QSet<KoShape*> dummy;
         // Start a new stroke
         tool->deactivate();
-        tool->activate(KoToolBase::DefaultActivation, dummy);
+        tool->activate(dummy);
     }
 
     KoToolManager::instance()->switchToolRequested("KisToolTransform");

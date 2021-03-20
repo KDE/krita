@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -342,6 +342,13 @@ public: // Graph methods
      * @return the first child with the given name
      */
     KisNodeSP findChildByName(const QString &name);
+
+    /**
+     * @brief nodeByUniqueID searches the node tree for a node with the given name and returns it.
+     * @param uuid the unique id of the node
+     * @return the node with the given unique id, or 0 if no node is found.
+     */
+    KisNodeSP findChildByUniqueID(const QUuid &uuid);
 
 Q_SIGNALS:
     /**

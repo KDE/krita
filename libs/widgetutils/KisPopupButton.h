@@ -1,17 +1,7 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
  */
 
 #ifndef _KIS_POPUP_BUTTON_H_
@@ -61,6 +51,12 @@ public:
      */
     void adjustPosition();
 
+    /**
+     * This function allows to show or hide the arrow.
+     * @param v set to true to draw the arrow, else set to false
+     */
+    void setArrowVisible(bool v);
+
 public Q_SLOTS:
 
     void showPopupWidget();
@@ -69,7 +65,7 @@ public Q_SLOTS:
 
 protected:
     void paintEvent(QPaintEvent* event) override;
-    
+
     void paintPopupArrow();
 private:
     struct Private;

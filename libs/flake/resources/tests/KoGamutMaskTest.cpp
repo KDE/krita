@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2019 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <resources/KoGamutMask.h>
 
 #include <testutil.h>
@@ -119,4 +119,4 @@ void KoGamutMaskTest::testLoad_data()
             << 2;
 }
 
-QTEST_MAIN(KoGamutMaskTest);
+SIMPLE_TEST_MAIN(KoGamutMaskTest);

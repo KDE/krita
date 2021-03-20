@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-   Copyright (C) 2007 C. Boemann <cbo@boemann.dk>
-   Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   SPDX-FileCopyrightText: 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   SPDX-FileCopyrightText: 2006 Peter Simonsson <peter.simonsson@gmail.com>
+   SPDX-FileCopyrightText: 2007 C. Boemann <cbo@boemann.dk>
+   SPDX-FileCopyrightText: 2007-2008 Jan Hambrecht <jaham@gmx.net>
+   SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -119,6 +119,7 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
 {
     lengthInPixel = d->viewConverter->documentToViewX(d->rulerLength);
     QRectF rectangle;
+
     rectangle.setX(qMax(0, d->offset));
     rectangle.setY(0);
     rectangle.setWidth(qMin(qreal(d->ruler->width() - 1.0 - rectangle.x()),
@@ -133,7 +134,6 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     activeRangeRectangle.setHeight(rectangle.height() - 2);
 
     painter.setPen(QPen(d->ruler->palette().color(QPalette::Mid), 0));
-
 
     painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase)); // make background slightly different so it is easier to see
     painter.drawRect(rectangle);
@@ -899,18 +899,26 @@ void KoRuler::setRulerLength(qreal length)
 void KoRuler::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
+
     painter.setClipRegion(event->region());
+
     painter.save();
+    // Add subtle shade to entire widget to separate from neighbors..
+    painter.fillRect(rect(), QColor(0, 0, 0, 24));
+
     QRectF rectangle = d->paintingStrategy->drawBackground(d, painter);
     painter.restore();
+
     painter.save();
     d->paintingStrategy->drawMeasurements(d, painter, rectangle);
     painter.restore();
+
     if (d->showIndents) {
         painter.save();
         d->paintingStrategy->drawIndents(d, painter);
         painter.restore();
     }
+
     d->paintingStrategy->drawTabs(d, painter);
 }
 

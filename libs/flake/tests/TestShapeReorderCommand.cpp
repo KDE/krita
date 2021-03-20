@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2007, 2009 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -9,7 +9,7 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeManager.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 TestShapeReorderCommand::TestShapeReorderCommand()
 {
@@ -590,4 +590,4 @@ void TestShapeReorderCommand::testMergeInShapeDistant()
     testMergeInShapeImpl(indexesProfile, newShapeIndex, expectedIndexes);
 }
 
-QTEST_MAIN(TestShapeReorderCommand)
+SIMPLE_TEST_MAIN(TestShapeReorderCommand)

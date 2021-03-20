@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com
+ * SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

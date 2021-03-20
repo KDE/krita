@@ -1,7 +1,8 @@
 /*
  * KDE. Krita Project.
  *
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -62,9 +63,6 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     m_ui.comboBoxEndPositionYUnits->addItems(spatialUnitsNames);
     m_ui.comboBoxEndPositionXPositioning->addItems(positioningNames);
     m_ui.comboBoxEndPositionYPositioning->addItems(positioningNames);
-    m_ui.sliderEndPositionAngle->setPrefix(i18nc("Angle for the gradient", "Angle: "));
-    m_ui.sliderEndPositionAngle->setSuffix(i18nc("Degrees symbol", "˚"));
-    m_ui.sliderEndPositionAngle->setRange(0, 360, 3);
     m_ui.comboBoxEndPositionDistanceUnits->addItems(spatialUnitsNames);
 
     m_ui.widgetGradientEditor->setContentsMargins(10, 10, 10, 10);
@@ -73,6 +71,7 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxRepeat, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderAntiAliasThreshold, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.checkBoxDither, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.checkBoxReverse, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
 
     connect(m_ui.spinBoxStartPositionX, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
@@ -98,7 +97,7 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     connect(m_ui.comboBoxEndPositionYUnits, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxEndPositionXPositioning, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxEndPositionYPositioning, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_ui.sliderEndPositionAngle, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.angleSelectorEndPositionAngle, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.spinBoxEndPositionDistance, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxEndPositionDistanceUnits, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
 
@@ -121,6 +120,7 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.comboBoxShape->setCurrentIndex(generatorConfig->shape());
         m_ui.comboBoxRepeat->setCurrentIndex(generatorConfig->repeat());
         m_ui.sliderAntiAliasThreshold->setValue(generatorConfig->antiAliasThreshold());
+        m_ui.checkBoxDither->setChecked(generatorConfig->dither());
         m_ui.checkBoxReverse->setChecked(generatorConfig->reverse());
 
         m_ui.spinBoxStartPositionX->setValue(generatorConfig->startPositionX());
@@ -138,7 +138,7 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.comboBoxEndPositionYUnits->setCurrentIndex(generatorConfig->endPositionYUnits());
         m_ui.comboBoxEndPositionXPositioning->setCurrentIndex(generatorConfig->endPositionXPositioning());
         m_ui.comboBoxEndPositionYPositioning->setCurrentIndex(generatorConfig->endPositionYPositioning());
-        m_ui.sliderEndPositionAngle->setValue(generatorConfig->endPositionAngle());
+        m_ui.angleSelectorEndPositionAngle->setAngle(generatorConfig->endPositionAngle());
         m_ui.spinBoxEndPositionDistance->setValue(generatorConfig->endPositionDistance());
         m_ui.comboBoxEndPositionDistanceUnits->setCurrentIndex(generatorConfig->endPositionDistanceUnits());
 
@@ -155,6 +155,7 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
     config->setShape(static_cast<KisGradientPainter::enumGradientShape>(m_ui.comboBoxShape->currentIndex()));
     config->setRepeat(static_cast<KisGradientPainter::enumGradientRepeat>(m_ui.comboBoxRepeat->currentIndex()));
     config->setAntiAliasThreshold(m_ui.sliderAntiAliasThreshold->value());
+    config->setDither(m_ui.checkBoxDither->isChecked());
     config->setReverse(m_ui.checkBoxReverse->isChecked());
 
     config->setStartPositionX(m_ui.spinBoxStartPositionX->value());
@@ -172,7 +173,7 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
     config->setEndPositionYUnits(static_cast<KisGradientGeneratorConfiguration::SpatialUnits>(m_ui.comboBoxEndPositionYUnits->currentIndex()));
     config->setEndPositionXPositioning(static_cast<KisGradientGeneratorConfiguration::Positioning>(m_ui.comboBoxEndPositionXPositioning->currentIndex()));
     config->setEndPositionYPositioning(static_cast<KisGradientGeneratorConfiguration::Positioning>(m_ui.comboBoxEndPositionYPositioning->currentIndex()));
-    config->setEndPositionAngle(m_ui.sliderEndPositionAngle->value());
+    config->setEndPositionAngle(m_ui.angleSelectorEndPositionAngle->angle());
     config->setEndPositionDistance(m_ui.spinBoxEndPositionDistance->value());
     config->setEndPositionDistanceUnits(static_cast<KisGradientGeneratorConfiguration::SpatialUnits>(m_ui.comboBoxEndPositionDistanceUnits->currentIndex()));
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,7 +10,7 @@
 #include "kis_refresh_subtree_walker.h"
 #include "kis_full_refresh_walker.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include "kis_paint_layer.h"

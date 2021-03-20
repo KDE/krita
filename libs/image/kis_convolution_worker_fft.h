@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2010 Edward Apap <schumifer@hotmail.com>
- *  Copyright (c) 2011 José Luis Vergara Toloza <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Edward Apap <schumifer@hotmail.com>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara Toloza <pentalis@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

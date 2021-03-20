@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -68,6 +68,10 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color);
 
     KRITAIMAGE_EXPORT bool canChangeImageProfileInvisibly(KisImageSP image);
+
+    KRITAIMAGE_EXPORT void splitAlphaToMask(KisImageSP image, KisNodeSP node, const QString& maskName);
+
+    KRITAIMAGE_EXPORT void convertToPaintLayer(KisImageSP image, KisNodeSP src);
 
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
@@ -156,7 +160,6 @@ namespace KisLayerUtils
         KisNodeList m_selectedNodes;
         KisNodeSP m_activeNode;
     };
-
 
     class KRITAIMAGE_EXPORT KisSimpleUpdateCommand : public KisCommandUtils::FlipFlopCommand
     {

@@ -766,7 +766,7 @@
               <number>2</number>
              </property>
              <property name="text">
-              <string>Drag Image in window to open</string>
+              <string>Drag an image into the window to open</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -1200,7 +1200,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string>Clear</string>
+                <string comment="Welcome Screen Recent Document List's Clear link Label">Clear</string>
                </property>
                <property name="checkable">
                 <bool>false</bool>
@@ -1272,8 +1272,8 @@
             <item>
              <widget class="QLabel" name="labelNoRecentDocs">
               <property name="text">
-               <string>You don't seem to have
- any opened document</string>
+               <string>You don't seem to have any
+ recently opened documents</string>
               </property>
               <property name="textFormat">
                <enum>Qt::PlainText</enum>
@@ -1698,17 +1698,25 @@
               </property>
              </widget>
             </item>
-            <item column="0" row="0">
+            <item row="0" column="0">
              <widget class="QLabel" name="labelNoFeed">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>268</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
-               <string>Enable news to get the latest 
-feeds from Krita team here.
-This needs internet to retrieve
-information from the
-krita.org website.</string>
+               <string>You can &lt;a href=&quot;ignored&quot; style=&quot;color: COLOR_PLACEHOLDER; text-decoration: underline;&quot;&gt;enable news&lt;/a&gt; from krita.org in various languages with the menu above</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::RichText</enum>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1716,8 +1724,17 @@ krita.org website.</string>
               <property name="wordWrap">
                <bool>true</bool>
               </property>
+              <property name="margin">
+               <number>0</number>
+              </property>
+              <property name="indent">
+               <number>-1</number>
+              </property>
+              <property name="openExternalLinks">
+               <bool>false</bool>
+              </property>
               <property name="textInteractionFlags">
-               <set>Qt::NoTextInteraction</set>
+               <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
               </property>
              </widget>
             </item>

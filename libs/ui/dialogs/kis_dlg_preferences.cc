@@ -1,8 +1,8 @@
 /*
  *  preferencesdlg.cc - part of KImageShop
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *  Copyright (c) 2003-2011 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -42,6 +42,7 @@
 #include <KisDocument.h>
 #include <kis_icon.h>
 #include <KisPart.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceEngine.h>
 #include <KoConfigAuthorPage.h>
@@ -295,6 +296,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline());
+    m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange());
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     bool dontUseNative = true;
@@ -389,6 +391,7 @@ void GeneralTab::setDefault()
     cursorColorBtutton->setColor(cursorColor);
 
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline(true));
+    m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange(false));
 
     m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
     m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
@@ -505,6 +508,11 @@ bool GeneralTab::autopinLayersToTimeline()
     return m_chkAutoPin->isChecked();
 }
 
+bool GeneralTab::adaptivePlaybackRange()
+{
+    return m_chkAdaptivePlaybackRange->isChecked();
+}
+
 void GeneralTab::getBackgroundImage()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BackgroundImages");
@@ -602,8 +610,19 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
-    m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
+    m_page->useDefColorSpace->setChecked(cfg.useDefaultColorSpace());
+    connect(m_page->useDefColorSpace, SIGNAL(toggled(bool)), this, SLOT(toggleUseDefaultColorSpace(bool)));
+    QList<KoID> colorSpaces = KoColorSpaceRegistry::instance()->listKeys();
+    for (QList<KoID>::iterator id = colorSpaces.begin(); id != colorSpaces.end(); /* nop */) {
+        if (KoColorSpaceRegistry::instance()->colorSpaceColorModelId(id->id()) == AlphaColorModelID) {
+            id = colorSpaces.erase(id);
+        } else {
+            ++id;
+        }
+    }
+    m_page->cmbWorkingColorSpace->setIDList(colorSpaces);
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
+    m_page->cmbWorkingColorSpace->setEnabled(cfg.useDefaultColorSpace());
 
     m_page->bnAddColorProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
@@ -739,6 +758,11 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
             }
         }
     }
+}
+
+void ColorSettingsTab::toggleUseDefaultColorSpace(bool useDefColorSpace)
+{
+    m_page->cmbWorkingColorSpace->setEnabled(useDefColorSpace);
 }
 
 void ColorSettingsTab::setDefault()
@@ -1013,6 +1037,8 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     connect(chkCachedFramesSizeLimit, SIGNAL(toggled(bool)), intCachedFramesSizeLimit, SLOT(setEnabled(bool)));
     connect(chkUseRegionOfInterest, SIGNAL(toggled(bool)), intRegionOfInterestMargin, SLOT(setEnabled(bool)));
 
+    connect(chkTransformToolUseInStackPreview, SIGNAL(toggled(bool)), chkTransformToolForceLodMode, SLOT(setEnabled(bool)));
+
 #ifndef Q_OS_WIN
     // AVX workaround is needed on Windows+GCC only
     chkDisableAVXOptimizations->setVisible(false);
@@ -1072,6 +1098,23 @@ void PerformanceTab::load(bool requestDefault)
     chkUseRegionOfInterest->setChecked(cfg.useAnimationCacheRegionOfInterest(requestDefault));
     intRegionOfInterestMargin->setValue(cfg.animationCacheRegionOfInterestMargin(requestDefault) * 100.0);
     intRegionOfInterestMargin->setEnabled(chkUseRegionOfInterest->isChecked());
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group("KisToolTransform");
+        chkTransformToolUseInStackPreview->setChecked(!group.readEntry("useOverlayPreviewStyle", false));
+        chkTransformToolForceLodMode->setChecked(group.readEntry("forceLodMode", true));
+        chkTransformToolForceLodMode->setEnabled(chkTransformToolUseInStackPreview->isChecked());
+    }
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group("KritaTransform/KisToolMove");
+        chkMoveToolForceLodMode->setChecked(group.readEntry("forceLodMode", true));
+    }
+
+    {
+        KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
+        chkFiltersForceLodMode->setChecked(group.readEntry("forceLodMode", true));
+    }
 }
 
 void PerformanceTab::save()
@@ -1111,6 +1154,22 @@ void PerformanceTab::save()
 
     cfg.setUseAnimationCacheRegionOfInterest(chkUseRegionOfInterest->isChecked());
     cfg.setAnimationCacheRegionOfInterestMargin(intRegionOfInterestMargin->value() / 100.0);
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group("KisToolTransform");
+        group.writeEntry("useOverlayPreviewStyle", !chkTransformToolUseInStackPreview->isChecked());
+        group.writeEntry("forceLodMode", chkTransformToolForceLodMode->isChecked());
+    }
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group("KritaTransform/KisToolMove");
+        group.writeEntry("forceLodMode", chkMoveToolForceLodMode->isChecked());
+    }
+
+    {
+        KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
+        group.writeEntry("forceLodMode", chkFiltersForceLodMode->isChecked());
+    }
 
 }
 
@@ -1778,6 +1837,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setFavoritePresets(m_general->favoritePresets());
 
         cfg.setAutoPinLayersToTimeline(m_general->autopinLayersToTimeline());
+        cfg.setAdaptivePlaybackRange(m_general->adaptivePlaybackRange());
 
         cfg.writeEntry(KisResourceCacheDb::dbLocationKey, m_general->m_urlCacheDbLocation->fileName());
         cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_general->m_urlResourceFolder->fileName());
@@ -1796,7 +1856,14 @@ bool KisDlgPreferences::editPreferences()
                                       m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
             }
         }
-        cfg.setWorkingColorSpace(m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
+        cfg.setUseDefaultColorSpace(m_colorSettings->m_page->useDefColorSpace->isChecked());
+        if (cfg.useDefaultColorSpace())
+        {
+            KoID currentWorkingColorSpace = m_colorSettings->m_page->cmbWorkingColorSpace->currentItem();
+            cfg.setWorkingColorSpace(currentWorkingColorSpace.id());
+            cfg.defColorModel(KoColorSpaceRegistry::instance()->colorSpaceColorModelId(currentWorkingColorSpace.id()).id());
+            cfg.setDefaultColorDepth(KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(currentWorkingColorSpace.id()).id());
+        }
 
         KisImageConfig cfgImage(false);
         cfgImage.setDefaultProofingConfig(m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),

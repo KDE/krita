@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2006 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2006 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

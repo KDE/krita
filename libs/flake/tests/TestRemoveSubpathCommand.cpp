@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   SPDX-FileCopyrightText: 2007 Thorsten Zachmann <zachmann@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -8,7 +8,7 @@
 #include <QPainterPath>
 #include "KoPathShape.h"
 #include "KoSubpathRemoveCommand.h"
-#include <QTest>
+#include <simpletest.h>
 
 void TestRemoveSubpathCommand::redoUndo()
 {
@@ -88,4 +88,4 @@ void TestRemoveSubpathCommand::redoUndo()
     delete cmd1;
 }
 
-QTEST_MAIN(TestRemoveSubpathCommand)
+SIMPLE_TEST_MAIN(TestRemoveSubpathCommand)

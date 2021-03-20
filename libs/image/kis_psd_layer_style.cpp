@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,9 +12,12 @@
 #include <psd_utils.h>
 
 #include <klocalizedstring.h>
+#include <KoMD5Generator.h>
 
 #include "kis_global.h"
 
+#include "kis_asl_layer_style_serializer.h"
+#include <QBuffer>
 
 struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
 {
@@ -144,6 +147,19 @@ void KisPSDLayerStyle::setName(const QString &value)
 {
     d->name = value;
     dynamic_cast<KoResource*>(this)->setName(value);
+}
+
+QByteArray KisPSDLayerStyle::generateMD5() const
+{
+    KisAslLayerStyleSerializer serializer;
+    serializer.setStyles(QVector<KisPSDLayerStyleSP>() << this->clone().dynamicCast<KisPSDLayerStyle>());
+    QByteArray styleBytes;
+    QBuffer dev(&styleBytes);
+    bool opened = dev.open(QIODevice::ReadWrite);
+    KIS_ASSERT(opened);
+    serializer.saveToDevice(&dev);
+    dev.close();
+    return KoMD5Generator::generateHash(styleBytes);
 }
 
 QUuid KisPSDLayerStyle::uuid() const

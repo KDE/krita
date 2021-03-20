@@ -7,7 +7,7 @@ include_directories(SYSTEM
     ${OCIO_INCLUDE_DIR}
 )
 
-if (ANDROID)
+if (ANDROID OR (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)" AND NOT APPLE))
     add_definitions(-DQT_OPENGL_ES_3)
     add_definitions(-DHAS_ONLY_OPENGL_ES)
     include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
@@ -208,7 +208,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisStrokeEfficiencyMeasurer.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
-    tool/strokes/kis_color_picker_stroke_strategy.cpp
+    tool/strokes/kis_color_sampler_stroke_strategy.cpp
     tool/strokes/KisFreehandStrokeInfo.cpp
     tool/strokes/KisMaskedFreehandStrokePainter.cpp
     tool/strokes/KisMaskingBrushRenderer.cpp
@@ -272,7 +272,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_elided_label.cpp
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_preset_live_preview_view.cpp
-    widgets/KisScreenColorPicker.cpp
+    widgets/KisScreenColorSampler.cpp
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
@@ -315,6 +315,7 @@ set(kritaui_LIB_SRCS
     input/KisQtWidgetsTweaker.cpp
     input/KisInputActionGroup.cpp
     input/kis_zoom_and_rotate_action.cpp
+    input/KisCanvasOnlyAction.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
@@ -417,6 +418,8 @@ set(kritaui_LIB_SRCS
     KoDocumentInfo.cpp
 
     StoryboardItem.cpp
+
+    KisNodeActivationActionCreatorVisitor.cpp
 )
 
 if (KSeExpr_FOUND)

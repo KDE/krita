@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest package="org.krita" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="4.3.0-beta" android:installLocation="auto">
+<manifest package="org.krita" xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto">
     <application android:hardwareAccelerated="true"
                  android:name="org.qtproject.qt5.android.bindings.QtApplication"
                  android:label="Krita"
@@ -59,6 +59,7 @@
 
                 <data android:mimeType="text/csv" />
                 <data android:mimeType="application/x-krita" />
+                <data android:mimeType="application/x-krita-archive" />
                 <data android:mimeType="application/x-extension-exr" />
                 <data android:mimeType="application/x-krita-paintoppreset" />
                 <data android:mimeType="application/pdf" />
@@ -68,15 +69,29 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="content" />
                 <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
 
-                <data android:mimeType="*/*"
-                      android:pathPattern=".*\\.kra.*" />
+                <!-- NOTE: if host and scheme aren't provided path attributes are ignored  -->
+                <data android:host="*" android:pathPattern=".*\\.kra.*"/>
+                <data android:host="*" android:pathPattern=".*\\.krz.*"/>
+            </intent-filter>
 
+            <!-- without mimeType -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+
+                <!-- NOTE: if host and scheme aren't provided path attributes are ignored  -->
+                <data android:host="*" android:pathPattern=".*\\.kra.*"/>
+                <data android:host="*" android:pathPattern=".*\\.krz.*"/>
             </intent-filter>
 
             <meta-data

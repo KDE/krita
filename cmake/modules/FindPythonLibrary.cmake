@@ -18,8 +18,8 @@
 #
 # PYTHON_LIBRARY, PYTHON_LIBRARIES- Location of the Python library.
 
-# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
-# Copyright (c) 2012, Luca Beltrame <lbeltrame@kde.org>
+# SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
+# SPDX-FileCopyrightText: 2012 Luca Beltrame <lbeltrame@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

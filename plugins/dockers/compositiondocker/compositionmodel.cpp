@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 import QtQuick 2.3
@@ -71,16 +71,17 @@ Item {
 
         Image {
             id: icon;
-            anchors.fill: parent;
-            anchors.margins: 8;
+            anchors.centerIn: parent
+            width: parent.width > parent.height ? parent.height * 0.9 : parent.width * 0.9;
+            height: width
             fillMode: Image.PreserveAspectFit;
             smooth: true;
             asynchronous: true;
             opacity: base.enabled ? 1 : 0.7;
             Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
 
-            sourceSize.width: width > height ? height : width;
-            sourceSize.height: width > height ? height : width;
+            sourceSize.width: width;
+            sourceSize.height: width;
         }
 
         Label {

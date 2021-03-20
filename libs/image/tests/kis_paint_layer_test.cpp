@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_paint_layer_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QImage>
 #include <QCoreApplication>
 
@@ -177,4 +177,4 @@ void KisPaintLayerTest::testLayerStyles()
 }
 
 
-QTEST_MAIN(KisPaintLayerTest)
+SIMPLE_TEST_MAIN(KisPaintLayerTest)

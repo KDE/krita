@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,6 +21,7 @@
 #include "kis_node_facade.h"
 #include "kis_image_interfaces.h"
 #include "kis_strokes_queue_undo_result.h"
+#include "KisLodPreferences.h"
 
 #include <kritaimage_export.h>
 
@@ -442,10 +443,16 @@ public:
     KisUndoStore* undoStore();
 
     /**
-     * Tell the image it's modified; this emits the sigImageModified
-     * signal. This happens when the image needs to be saved
+     * Tell the image it's modified without creation of an undo command.
+     * It may happen when e.g. layer visibility has changed.
+     *
+     * This function emits both, sigImageModified() and
+     * sigImageModifiedWithoutUndo()
+     *
+     * For normal modifications with undo information the signal
+     * emission is triggered by the undo stack
      */
-    void setModified();
+    void setModifiedWithoutUndo();
 
     /**
      * The default colorspace of this image: new layers will have this
@@ -697,13 +704,6 @@ public:
     int currentLevelOfDetail() const;
 
     /**
-     * Notify KisImage which level of detail should be used in the
-     * lod-mode. Setting the mode does not guarantee the LOD to be
-     * used. It will be activated only when the stokes supports it.
-     */
-    void setDesiredLevelOfDetail(int lod);
-
-    /**
      * Relative position of the mirror axis center
      *     0,0 - topleft corner of the image
      *     1,1 - bottomright corner of the image
@@ -740,15 +740,19 @@ public Q_SLOTS:
 public:
 
     /**
-     * Blocks usage of level of detail functionality. After this method
-     * has been called, no new strokes will use LoD.
+     * Set preferences for the level-of-detail functionality.
+     * Due to multithreading considerations they may be aplied
+     * not immediately, but some time later.
      */
-    void setLevelOfDetailBlocked(bool value);
+    void setLodPreferences(const KisLodPreferences &value);
 
     /**
-     * \see setLevelOfDetailBlocked()
+     * Return current lod-preferences used by the strokes queue. They
+     * may differ from the preferences that has been assigned before
+     * due to multi-stage application process (due to multithreading
+     * considerations)
      */
-    bool levelOfDetailBlocked() const;
+    KisLodPreferences lodPreferences() const;
 
     KisImageAnimationInterface *animationInterface() const;
 
@@ -786,6 +790,12 @@ Q_SIGNALS:
        doesn't match with the version saved on disk.
      */
     void sigImageModified();
+
+    /**
+       Emitted whenever the image has been modified without creation
+       of an undo command
+     */
+    void sigImageModifiedWithoutUndo();
 
     /**
      * The signal is emitted when the size of the image is changed.
@@ -1118,6 +1128,8 @@ public Q_SLOTS:
     void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect);
 
     void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool notifyFrameChange );
+
+    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache);
 
     /**
      * Adds a spontaneous job to the updates queue.

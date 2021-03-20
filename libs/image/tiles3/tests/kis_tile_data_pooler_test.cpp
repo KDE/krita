@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tile_data_pooler_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "tiles3/kis_tiled_data_manager.h"
 
@@ -99,4 +99,4 @@ void KisTileDataPoolerTest::testCycles()
     KisTileDataStore::instance()->debugClear();
 }
 
-QTEST_MAIN(KisTileDataPoolerTest)
+SIMPLE_TEST_MAIN(KisTileDataPoolerTest)

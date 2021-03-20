@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_onion_skin_compositor_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_onion_skin_compositor.h"
 #include "kis_paint_device.h"
@@ -146,4 +146,4 @@ void KisOnionSkinCompositorTest::testSettings()
     QVERIFY(chk.checkDevice(compositeDevice, p.image, "02_single_skin_tinted"));
 }
 
-QTEST_MAIN(KisOnionSkinCompositorTest)
+SIMPLE_TEST_MAIN(KisOnionSkinCompositorTest)

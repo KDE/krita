@@ -7,7 +7,7 @@
 #    _patch is the patch version number of the project to be installed
 #
 
-# Copyright (c) 2008, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2008 Alexander Neundorf <neundorf@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

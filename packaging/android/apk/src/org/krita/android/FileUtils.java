@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2008 OpenIntents.org
+ * SPDX-FileCopyrightText: 2007-2008 OpenIntents.org
  *
  * SPDX-License-Identifier: Apache-2.0
  *

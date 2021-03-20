@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Matus Talcik <matus.talcik@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Matus Talcik <matus.talcik@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -105,6 +105,7 @@ void KisUndoViewPrivate::init(KisUndoView* view)
 {
     q = view;
     model = new KisUndoModel(q);
+    model->setDevicePixelRatio(view->devicePixelRatioF());
     q->setModel(model);
     q->setSelectionModel(model->selectionModel());
 }

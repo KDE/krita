@@ -1,6 +1,6 @@
  /*
   * This file is part of the KDE project
-  * Copyright (C) 2019 Sharaf Zaman <sharafzaz121@gmail.com>
+  * SPDX-FileCopyrightText: 2019 Sharaf Zaman <sharafzaz121@gmail.com>
   *
   * SPDX-License-Identifier: GPL-2.0-or-later
   */
@@ -60,10 +60,8 @@ public class MainActivity extends QtActivity {
         if (intent != null) {
             Uri fileUri = intent.getData();
             if (fileUri != null) {
-                int modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
-                if ((intent.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0) {
-                    modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
-                }
+                int modeFlags = (intent.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                modeFlags    |= (intent.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 QtNative.addToKnownUri(fileUri, modeFlags);
                 return fileUri.toString();
             }
@@ -116,8 +114,14 @@ public class MainActivity extends QtActivity {
 	public boolean onKeyUp(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && getActionBar() != null &&
 		    !getActionBar().isShowing()) {
-			JNIWrappers.exitFullScreen();
-			return true;
+            if (JNIWrappers.exitFullScreen()) {
+                return true;
+            } else {
+                // back button was pressed during splash screen, letting this
+                // propagate leaves native side in an undefined state. So, it's
+                // best we finish the activity here.
+                finish();
+            }
 		}
 
 		return super.onKeyUp(keyCode, event);

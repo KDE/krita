@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -183,13 +183,6 @@ KisNode::KisNode(const KisNode & rhs)
     m_d->parent = 0;
     m_d->graphListener = 0;
     moveToThread(qApp->thread());
-
-    // HACK ALERT: we create opacity channel in KisBaseNode, but we cannot
-    //             initialize its node from there! So workaround it here!
-    QMap<QString, KisKeyframeChannel*> channels = keyframeChannels();
-    for (auto it = channels.begin(); it != channels.end(); ++it) {
-        it.value()->setNode(this);
-    }
 
     // NOTE: the nodes are not supposed to be added/removed while
     // creation of another node, so we do *no* locking here!
@@ -485,6 +478,24 @@ KisNodeSP KisNode::findChildByName(const QString &name)
         }
         if (child->childCount() > 0) {
             KisNodeSP grandChild = child->findChildByName(name);
+            if (grandChild) {
+                return grandChild;
+            }
+        }
+        child = child->nextSibling();
+    }
+    return 0;
+}
+
+KisNodeSP KisNode::findChildByUniqueID(const QUuid &uuid)
+{
+    KisNodeSP child = firstChild();
+    while (child) {
+        if (child->uuid() == uuid) {
+            return child;
+        }
+        if (child->childCount() > 0) {
+            KisNodeSP grandChild = child->findChildByUniqueID(uuid);
             if (grandChild) {
                 return grandChild;
             }

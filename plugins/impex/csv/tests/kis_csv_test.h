@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laszlo Fazekas <mneko@freemail.hu>
+ *  SPDX-FileCopyrightText: 2016 Laszlo Fazekas <mneko@freemail.hu>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef _KIS_CSV_TEST_H_
 #define _KIS_CSV_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCsvTest : public QObject
 {

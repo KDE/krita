@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -39,9 +39,9 @@ public:
 
     void connectActiveTool();
     void disconnectActiveTool();
-    void switchTool(KoToolBase *tool, bool temporary);
-    void switchTool(const QString &id, bool temporary);
-    void postSwitchTool(bool temporary);
+    void switchTool(KoToolBase *tool);
+    void switchTool(const QString &id);
+    void postSwitchTool();
     void switchCanvasData(CanvasData *cd);
 
     bool eventFilter(QObject *object, QEvent *event);
@@ -88,8 +88,6 @@ public:
     bool layerExplicitlyDisabled;
 };
 
-class ShortcutToolAction;
-
 /// \internal
 class ToolHelper : public QObject
 {
@@ -114,7 +112,6 @@ public:
     /// wrapper around KoToolFactoryBase::priority();
     int priority() const;
     KoToolBase *createTool(KoCanvasBase *canvas) const;
-    ShortcutToolAction *createShortcutToolAction(QObject *parent);
     /// unique id, >= 0
     int uniqueId() const {
         return m_uniqueId;
@@ -128,9 +125,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     /// Emitted when the tool should be activated, e.g. by pressing the tool's assigned button in the toolbox
     void toolActivated(ToolHelper *tool);
-
-private Q_SLOTS:
-    void shortcutToolActionUpdated();
 
 private:
     KoToolFactoryBase * const m_toolFactory;
@@ -156,22 +150,6 @@ Q_SIGNALS:
 
 private:
     KoShapeManager *m_shapeManager;
-};
-
-/// \internal
-/// Helper class to provide a action for tool shortcuts
-class ShortcutToolAction : public QAction
-{
-    Q_OBJECT
-public:
-    ShortcutToolAction(const QString &id, const QString &name, QObject *parent);
-    ~ShortcutToolAction() override;
-
-private Q_SLOTS:
-    void actionTriggered();
-
-private:
-    QString m_toolID;
 };
 
 #endif

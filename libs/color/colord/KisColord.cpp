@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2012 by Daniel Nicoletti <dantti12@gmail.com>
- *  Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2012 Daniel Nicoletti <dantti12@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

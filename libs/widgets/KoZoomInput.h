@@ -1,4 +1,4 @@
-/* Copyright 2008  Peter Simonsson <peter.simonsson@gmail.com>
+/* SPDX-FileCopyrightText: 2008 Peter Simonsson <peter.simonsson@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -14,6 +14,9 @@ class KoZoomInput : public QStackedWidget
     public:
         explicit KoZoomInput(QWidget* parent = 0);
         ~KoZoomInput() override;
+
+        bool isFlat() const;
+        void setFlat(bool flat);
 
         void setZoomLevels(const QStringList& levels);
         void setCurrentZoomLevel(const QString& level);

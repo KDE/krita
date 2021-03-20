@@ -1,15 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
  */
 
 #ifndef KIS_COLOR_SELECTOR_RING_H
@@ -39,11 +31,16 @@ private:
     int outerRadius() const;
 
     QImage m_pixelCache;
-    const KoColorSpace* m_cachedColorSpace;
-    int m_cachedSize;
-    qreal m_lastHue;
+    const KoColorSpace* m_cachedColorSpace {0};
+    int m_cachedSize {0};
+    qreal m_lastHue {0.0};
     QList<QRgb> m_cachedColors;
-    qreal m_innerRingRadiusFraction;
+    qreal m_innerRingRadiusFraction {0.85};
+
+    qreal R {0.0};
+    qreal G {0.0};
+    qreal B {0.0};
+    qreal Gamma {1.0};
 };
 
 #endif // KIS_COLOR_SELECTOR_RING_H

@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_cs_conversion_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <QTime>
 

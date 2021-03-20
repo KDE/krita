@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,7 +7,7 @@
 #ifndef _KIS_CUBIC_CURVE_TEST_H_
 #define _KIS_CUBIC_CURVE_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include <QPointF>
 

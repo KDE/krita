@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2014, Victor Lafon <metabolic.ewilan@hotmail.fr>
+   SPDX-FileCopyrightText: 2014 Victor Lafon <metabolic.ewilan@hotmail.fr>
 
    SPDX-License-Identifier: LGPL-2.1-or-later
 */

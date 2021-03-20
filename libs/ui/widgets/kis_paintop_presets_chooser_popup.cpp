@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
- * Copyright 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -22,13 +22,14 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_icon.h>
 #include <brushengine/kis_paintop_settings.h>
+#include "KisPopupButton.h"
 
 struct KisPaintOpPresetsChooserPopup::Private
 {
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
     bool firstShown;
-    QToolButton *viewModeButton;
+    KisPopupButton *viewModeButton;
 };
 
 KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
@@ -79,8 +80,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
     m_d->viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
-    m_d->viewModeButton->setMenu(menu);
-    m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_d->viewModeButton->setPopupWidget(menu);
 
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResourceSP )),
@@ -143,7 +143,8 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  pr
 
 void KisPaintOpPresetsChooserPopup::slotThemeChanged()
 {
-    m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
+   m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+   m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->updateView(); // updates other icons
 }
 
 void KisPaintOpPresetsChooserPopup::updateViewSettings()

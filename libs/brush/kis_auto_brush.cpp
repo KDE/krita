@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2004, 2007-2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -382,4 +382,9 @@ void KisAutoBrush::lodLimitations(KisPaintopLodLimitations *l) const
     if (!qFuzzyCompare(randomness(), 0.0)) {
         l->limitations << KoID("auto-brush-randomness", i18nc("PaintOp instant preview limitation", "Brush Randomness recommended value 0.0"));
     }
+}
+
+bool KisAutoBrush::supportsCaching() const
+{
+    return qFuzzyCompare(density(), 1.0) && qFuzzyCompare(randomness(), 0.0);
 }

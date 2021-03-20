@@ -1,7 +1,7 @@
 /*  This file is part of the KDE project
-    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
-    Copyright (c) 2016 L. E. Segovia <amy@amyspark.me>
-    Copyright (c) 2018 Michael Zhou <simerixh@gmail.com>
+    SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2016 L. E. Segovia <amy@amyspark.me>
+    SPDX-FileCopyrightText: 2018 Michael Zhou <simerixh@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
 

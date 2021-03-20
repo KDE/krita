@@ -1,15 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
  */
 
 #include "kis_color_selector_ring.h"
@@ -25,11 +17,7 @@
 
 
 KisColorSelectorRing::KisColorSelectorRing(KisColorSelector *parent) :
-    KisColorSelectorComponent(parent),
-    m_cachedColorSpace(0),
-    m_cachedSize(0),
-    m_lastHue(0),
-    m_innerRingRadiusFraction(0.85)
+    KisColorSelectorComponent(parent)
 {
 }
 
@@ -115,13 +103,27 @@ KoColor KisColorSelectorRing::selectColor(int x, int y)
     m_lastHue=hue;
     emit update();
 
+    if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+        return m_parent->converter()->fromHsyF(hue, 1.0, 0.55, R, G, B, Gamma);
+    }
     return m_parent->converter()->fromHsvF(hue, 1.0, 1.0);
 }
 
 void KisColorSelectorRing::setColor(const KoColor &color)
 {
     qreal h, s, v;
-    m_parent->converter()->getHsvF(color, &h, &s, &v);
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("advancedColorSelector");
+    R = cfg.readEntry("lumaR", 0.2126);
+    G = cfg.readEntry("lumaG", 0.7152);
+    B = cfg.readEntry("lumaB", 0.0722);
+    Gamma = cfg.readEntry("gamma", 2.2);
+
+    if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+        m_parent->converter()->getHsyF(color, &h, &s, &v, R, G, B, Gamma);
+    }
+    else {
+        m_parent->converter()->getHsvF(color, &h, &s, &v);
+    }
 
     emit paramChanged(h, -1, -1, -1, -1, -1, -1, -1, -1);
 
@@ -203,7 +205,11 @@ void KisColorSelectorRing::colorCache()
     KoColor koColor;
     QColor qColor;
     for(int i=0; i<360; i++) {
-        koColor = m_parent->converter()->fromHsvF(1.0 * i / 360.0, 1.0, 1.0);
+        if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+            koColor = m_parent->converter()->fromHsyF(1.0 * i / 360.0, 1.0, 0.55, R, G, B, Gamma);
+        } else {
+            koColor = m_parent->converter()->fromHsvF(1.0 * i / 360.0, 1.0, 1.0);
+        }
         qColor = m_parent->converter()->toQColor(koColor);
         m_cachedColors.append(qColor.rgb());
     }

@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

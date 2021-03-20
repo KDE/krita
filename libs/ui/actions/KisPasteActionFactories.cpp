@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -223,7 +223,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
 
         KisImportCatcher::adaptClipToImageColorSpace(clip, image);
         KisPaintLayerSP newLayer = new KisPaintLayer(image.data(),
-                                                     image->nextLayerName() + i18n("(pasted)"),
+                                                     image->nextLayerName() + " " + i18n("(pasted)"),
                                                      OPACITY_OPAQUE_U8);
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
@@ -259,6 +259,22 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         // XXX: "Add saving of XML data for Paste of shapes"
         view->canvasBase()->toolProxy()->paste();
     }
+}
+
+void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
+{
+    if (!viewManager->activeDevice()) return;
+
+    KisImageSP image = viewManager->image();
+    if (!image) return;
+
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
+    if (!clip) return;
+
+    KisImportCatcher::adaptClipToImageColorSpace(clip, image);
+
+    KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(viewManager->canvasBase(), "KisToolTransform"));
+    tool->newActivationWithExternalSource(clip);
 }
 
 void KisPasteNewActionFactory::run(KisViewManager *viewManager)

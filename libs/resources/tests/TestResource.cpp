@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "TestResource.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "DummyResource.h"
 
@@ -19,4 +19,4 @@ void TestResource::testCopyResource()
     QVERIFY(r2.filename() == "other");
 }
 
-QTEST_MAIN(TestResource)
+SIMPLE_TEST_MAIN(TestResource)

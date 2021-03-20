@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 #define KISRSSREADERTEST_H
 
 #include <QObject>
-#include <QtTest>
+#include <simpletest.h>
 
 class KisRssReaderTest : public QObject
 {

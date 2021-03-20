@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Eugene Ingerman
+ *  SPDX-FileCopyrightText: 2017 Eugene Ingerman
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -50,7 +50,7 @@ protected Q_SLOTS:
     void resetCursorStyle() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 private:

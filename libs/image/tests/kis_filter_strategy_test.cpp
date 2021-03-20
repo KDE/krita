@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt boud @valdyas.org
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_filter_strategy_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_filter_strategy.h"
 
 void KisFilterStrategyTest::testCreation()
@@ -22,4 +22,4 @@ void KisFilterStrategyTest::testCreation()
     KisMitchellFilterStrategy  mitchell;
 }
 
-QTEST_MAIN(KisFilterStrategyTest)
+SIMPLE_TEST_MAIN(KisFilterStrategyTest)

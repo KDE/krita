@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2006-2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -20,7 +20,7 @@
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
         : KoInteractionTool(canvas),
-        m_temporary(false), m_zoomInMode(true)
+        m_zoomInMode(true)
 {
     QPixmap inPixmap, outPixmap;
     inPixmap.load(":/zoom_in_cursor.png");
@@ -32,9 +32,6 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
 void KoZoomTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
-    if (m_temporary) {
-        emit KoToolBase::done();
-    }
 }
 
 void KoZoomTool::mouseMoveEvent(KoPointerEvent *event)
@@ -60,9 +57,8 @@ void KoZoomTool::keyReleaseEvent(QKeyEvent *event)
     KoInteractionTool::keyReleaseEvent(event);
 }
 
-void KoZoomTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
+void KoZoomTool::activate(const QSet<KoShape*> &)
 {
-    m_temporary = toolActivation == TemporaryActivation;
     updateCursor(false);
 }
 

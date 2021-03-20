@@ -1,8 +1,9 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger (cberger@cberger.net)
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger (cberger@cberger.net)
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "XyzU8ColorSpace.h"
 #include <QDomElement>
@@ -11,6 +12,7 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "dithering/KisXyzDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
@@ -25,6 +27,7 @@ XyzU8ColorSpace::XyzU8ColorSpace(const QString &name, KoColorProfile *p)
     init();
 
     addStandardCompositeOps<KoXyzU8Traits>(this);
+    addStandardDitherOps<KoXyzU8Traits>(this);
 }
 
 bool XyzU8ColorSpace::willDegrade(ColorSpaceIndependence /*independence*/) const

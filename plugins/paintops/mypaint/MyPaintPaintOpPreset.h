@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -36,6 +36,8 @@ public:
         return QPair<QString, QString>(ResourceType::PaintOpPresets, ResourceSubType::MyPaintPaintOpPresets);
     }
 
+    void updateThumbnail() override;
+    QString thumbnailPath() const override;
 
     QByteArray getJsonData();
     float getSize();

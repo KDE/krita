@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,7 +8,7 @@
 
 #include "dialogs/KisAsyncAnimationFramesSaveDialog.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include "KisPart.h"
 #include "kis_image.h"

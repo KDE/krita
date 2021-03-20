@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -20,6 +20,7 @@
 #include "kis_layer_utils.h"
 #include "kis_node_manager.h"
 #include "kis_layer.h"
+#include "kis_generator_layer.h"
 #include "kis_selection_mask.h"
 
 
@@ -543,6 +544,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                                                        newParent,
                                                        currentAbove,
                                                        false, false));
+
                 currentAbove = newNode;
             } else if (m_mode == MOVE) {
                 KisNodeSP newNode = node;
@@ -684,7 +686,6 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
 {
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     m_d->applicator.reset(
         new KisProcessingApplicator(m_d->image, 0,

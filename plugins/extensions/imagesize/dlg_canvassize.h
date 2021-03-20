@@ -1,7 +1,7 @@
 /*
  *
- *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Edward Apap <schumifer@hotmail.com>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -63,6 +63,9 @@ private Q_SLOTS:
 
     void slotCanvasPreviewXOffsetChanged(int v);
     void slotCanvasPreviewYOffsetChanged(int v);
+
+    void updatexOffsetIcon(bool v);
+    void updateyOffsetIcon(bool v);
 
 private:
 

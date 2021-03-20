@@ -1,6 +1,6 @@
 /*
-*   Copyright (C) 2010 by Artur Duque de Souza <asouzakde.org>
-*   Copyright (C) 2011 by Daker Fernandes Pinheiro <dakerfp@gmail.com>
+*   SPDX-FileCopyrightText: 2010 Artur Duque de Souza <asouzakde.org>
+*   SPDX-FileCopyrightText: 2011 Daker Fernandes Pinheiro <dakerfp@gmail.com>
 *
 *   SPDX-License-Identifier: LGPL-2.0-or-later
 */

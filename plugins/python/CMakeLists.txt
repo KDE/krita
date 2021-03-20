@@ -104,7 +104,6 @@ install_pykrita_plugin(channels2layers)
 # endif()
 
 install( FILES
-    hello/hello.action
     tenbrushes/tenbrushes.action
     tenscripts/tenscripts.action
     plugin_importer/plugin_importer.action

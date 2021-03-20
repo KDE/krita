@@ -65,7 +65,7 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     m_ui->storageLocation->setModelColumn(KisStorageModel::DisplayName);
 
     // TODO: We have no concept of moving storages whatsoever, so for now, let's disable this combobox.
-    m_ui->storageLocation->setDisabled(true);
+    m_ui->storageLocation->setEnabled(false);
     connect(m_ui->storageLocation, SIGNAL(currentIndexChanged(int)), SLOT(slotSetGlobal()));
 
     connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
@@ -111,7 +111,6 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_ui->lineEditName->setEnabled(canWrite);
     m_ui->spinBoxCol->setEnabled(canWrite);
     m_ui->spinBoxRow->setEnabled(canWrite);
-    m_ui->storageLocation->setEnabled(canWrite);
     m_ui->bnAddGroup->setEnabled(canWrite);
 }
 

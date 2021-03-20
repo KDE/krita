@@ -14,6 +14,7 @@
 
 struct KisAngleGauge::Private
 {
+    static constexpr qreal minimumSnapDistance{40.0};
     qreal angle;
     qreal snapAngle;
     qreal resetAngle;
@@ -233,8 +234,9 @@ void KisAngleGauge::mouseMoveEvent(QMouseEvent *e)
             m_d->increasingDirection == IncreasingDirection_CounterClockwise ? -delta.y() : delta.y(),
             delta.x()
         );
-    
-    if ((e->modifiers() & Qt::ControlModifier) || distanceSquared < radiusSquared * 4) {
+
+    const qreal snapDistance = qMax(m_d->minimumSnapDistance * m_d->minimumSnapDistance, radiusSquared * 4.0);
+    if ((e->modifiers() & Qt::ControlModifier) || distanceSquared < snapDistance) {
         const qreal sa = m_d->snapAngle * M_PI / 180.0;
         angle = std::round(angle / sa) * sa;
     }

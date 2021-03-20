@@ -152,7 +152,7 @@ void KisAngleGauge::paintEvent(QPaintEvent *e)
     if (this->hasFocus()) {
         painter.setPen(QPen(palette().color(QPalette::Highlight), 2.0));
     } else {
-        if (m_d->isMouseHover) {
+        if (m_d->isMouseHover && isEnabled()) {
             painter.setPen(QPen(palette().color(QPalette::Highlight), 1.0));
         } else {
             painter.setPen(QPen(circleColor, 1.0));

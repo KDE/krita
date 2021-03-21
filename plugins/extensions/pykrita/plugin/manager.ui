@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,14 +11,27 @@
     <x>0</x>
     <y>0</y>
     <width>361</width>
-    <height>228</height>
+    <height>240</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item column="0" row="3">
+   <item row="3" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; you need to restart Krita to enable or disable plugins.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
     <widget class="QTextBrowser" name="textBrowser"/>
    </item>
-   <item colspan="2" column="0" row="0">
+   <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="errorLabel">
      <property name="font">
       <font>
@@ -31,7 +44,7 @@
      </property>
     </widget>
    </item>
-   <item column="0" row="1">
+   <item row="2" column="0">
     <widget class="QTreeView" name="pluginsList">
      <property name="selectionMode">
       <enum>QAbstractItemView::SingleSelection</enum>
@@ -56,16 +69,19 @@
      </attribute>
     </widget>
    </item>
-   <item column="0" row="2">
-    <widget class="QLabel" name="label">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; you need to restart Krita to enable or disable plugins.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::RichText</enum>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want to learn how to write Krita scripts, check out the &lt;a href=&quot;https://scripting.krita.org/lessons/introduction&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;Krita Scripting School&lt;/span&gt;&lt;/a&gt;!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+     <property name="textInteractionFlags">
+      <set>Qt::TextBrowserInteraction</set>
      </property>
     </widget>
    </item>

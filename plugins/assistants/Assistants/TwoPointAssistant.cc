@@ -393,7 +393,7 @@ QLineF TwoPointAssistant::horizon()
 void TwoPointAssistant::setCov(const QPointF a, const QPointF b, const QPointF c)
 {
     if (qFuzzyCompare(a.x(), b.x()) && qFuzzyCompare(a.y(), b.y())) {
-        m_sp = a;
+        m_cov = a;
     } else {
         float px = 0;
         float py = 0;

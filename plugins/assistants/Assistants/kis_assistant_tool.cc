@@ -553,40 +553,75 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
               assis->setSp(*hndl[0], *hndl[1], *hndl[2]);
 
           } else if (vp_is_dragged) {
-              m_handleDrag == hndl[0] ? vp_opp = hndl[1]	: vp_opp = hndl[0];
-
+              vp_opp = m_handleDrag == hndl[0] ? hndl[1] : hndl[0];
               QPointF new_dragged_vp;
               QPointF new_opp_vp;
               QLineF dragged_arm;
               QLineF opp_arm;
-              dragged_arm = QLineF(assis->sp(),*m_handleDrag);
-              dragged_arm.intersect(assis->horizon(), &new_dragged_vp);
-              opp_arm = dragged_arm.normalVector();
-              opp_arm.translate(assis->sp() - opp_arm.p1());
-              opp_arm.intersect(assis->horizon(), &new_opp_vp);
 
-              if (new_dragged_vp == new_opp_vp) {
-                  new_opp_vp = *vp_opp;
-              }
+              const bool unconstrain_from_horizon = event->modifiers() & Qt::AltModifier ? true : false;
+              const bool unconstrain_fov = event->modifiers() & Qt::ControlModifier ? true : false;
 
-              // Several contingencies to deal with edge-cases
-              if (new_dragged_vp == assis->cov()) {
-                  opp_arm = QLineF(assis->sp(),*vp_opp);
-                  opp_arm.intersect(assis->horizon(), &new_opp_vp);
-                  dragged_arm = opp_arm.normalVector();
-                  dragged_arm.translate(assis->sp() - dragged_arm.p1());
+              if (unconstrain_from_horizon) {
+                  assis->setHorizon(*m_handleDrag, *vp_opp);
+                  assis->setCov(*m_handleDrag, *vp_opp, *hndl[2]);
+                  assis->setSp(*m_handleDrag, *vp_opp, *hndl[2]);
+              } else if (unconstrain_fov) {
+                  // TODO: Check for QLineF::NoIntersection when finding intersect() of parallel QLineF
+                  QPointF old_drag_vp;
+                  opp_arm = QLineF(assis->sp(), *vp_opp);
+                  opp_arm.normalVector().intersect(assis->horizon(), &old_drag_vp);
+
+                  dragged_arm = QLineF(assis->sp(), old_drag_vp);
+                  dragged_arm.translate(*m_handleDrag - dragged_arm.p1());
+
+                  QLineF vertical = assis->horizon().normalVector();
+                  vertical.translate(assis->sp() - vertical.p1());
+
+                  QPointF new_sp;
+                  dragged_arm.intersect(vertical,&new_sp);
+                  assis->horizon().intersect(dragged_arm, &new_dragged_vp);
+
+                  opp_arm.translate(new_sp - opp_arm.p1());
+                  assis->horizon().intersect(opp_arm, &new_opp_vp);
+
+                  *m_handleDrag = new_dragged_vp;
+                  *vp_opp = new_opp_vp;
+
+                  assis->setHorizon(*m_handleDrag, *vp_opp);
+                  assis->setSp(*m_handleDrag, *vp_opp, *hndl[2]);
+              } else {
+                  // TODO: Check for QLineF::NoIntersection when finding intersect() of parallel QLineF
+                  dragged_arm = QLineF(assis->sp(),*m_handleDrag);
                   dragged_arm.intersect(assis->horizon(), &new_dragged_vp);
-                  if (new_dragged_vp == assis->cov()) {
-                      QLineF dst = QLineF(assis->cov(),*m_handleDrag);
-                      QLineF hor = QLineF(*vp_opp,assis->cov());
-                      hor.setLength(dst.length());
-                      hor.translate(assis->cov()-hor.p1());
-                      new_dragged_vp = hor.p2();
+                  opp_arm = dragged_arm.normalVector();
+                  opp_arm.translate(assis->sp() - opp_arm.p1());
+                  opp_arm.intersect(assis->horizon(), &new_opp_vp);
+
+                  if (new_dragged_vp == new_opp_vp) {
+                      new_opp_vp = *vp_opp;
                   }
-              }
-              *m_handleDrag = new_dragged_vp;
-              *vp_opp = new_opp_vp;
-              assis->setHorizon(*m_handleDrag, *vp_opp);
+
+                  // Several contingencies to deal with edge-cases
+                  if (new_dragged_vp == assis->cov()) {
+                      opp_arm = QLineF(assis->sp(),*vp_opp);
+                      opp_arm.intersect(assis->horizon(), &new_opp_vp);
+                      dragged_arm = opp_arm.normalVector();
+                      dragged_arm.translate(assis->sp() - dragged_arm.p1());
+                      dragged_arm.intersect(assis->horizon(), &new_dragged_vp);
+                      if (new_dragged_vp == assis->cov()) {
+                          QLineF dst = QLineF(assis->cov(),*m_handleDrag);
+                          QLineF hor = QLineF(*vp_opp,assis->cov());
+                          hor.setLength(dst.length());
+                          hor.translate(assis->cov()-hor.p1());
+                          new_dragged_vp = hor.p2();
+                      }
+                  }
+                  *m_handleDrag = new_dragged_vp;
+                  *vp_opp = new_opp_vp;
+                  assis->setHorizon(*m_handleDrag, *vp_opp);
+
+            }
           }
 
           // translate side handles

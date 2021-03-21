@@ -182,12 +182,12 @@ public:
     void fixupSelection()
     {
         // If theres no selection just do nothing
-        if (m_lineEdit->selectedText.isEmpty()) {
+        if (m_lineEdit->selectedText().isEmpty()) {
             return;
         }
         const int suffixStart = m_q->text().length() - m_q->suffix().length();
         const int newStart = qBound(m_q->prefix().length(), m_lineEdit->selectionStart(), suffixStart);
-        const int newEnd = qBound(m_q->prefix().length(), m_lineEdit->m_lineEdit->selectedText.length(), suffixStart);
+        const int newEnd = qBound(m_q->prefix().length(), m_lineEdit->selectedText().length(), suffixStart);
         if (m_lineEdit->cursorPosition() == m_lineEdit->selectionStart()) {
             m_lineEdit->setSelection(newEnd, -(newEnd - newStart));
         } else {

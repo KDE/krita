@@ -43,11 +43,11 @@ inline qreal distsqr(const QPointF& pt, const QLineF& line)
 // returns how far angle is from 180 or 0, depending on quadrant
 inline qreal acuteAngle(qreal angle) {
     if (angle > 90 && angle < 270) {
-	return abs(angle - 180);
+        return abs(angle - 180);
     } else if (angle < 360 && angle > 270) {
-	return 360 - angle;
+        return 360 - angle;
     } else {
-	return angle;
+        return angle;
     }
 }
 
@@ -62,35 +62,35 @@ QPointF TwoPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin
 
     // nicked wholesale from PerspectiveAssistant.cc
     if (m_snapLine.isNull()) {
-	const qreal dx = pt.x() - strokeBegin.x();
-	const qreal dy = pt.y() - strokeBegin.y();
+        const qreal dx = pt.x() - strokeBegin.x();
+        const qreal dy = pt.y() - strokeBegin.y();
 
-	if (dx * dx + dy * dy < 4.0) {
-	    return strokeBegin; // allow some movement before snapping
-	}
+        if (dx * dx + dy * dy < 4.0) {
+            return strokeBegin; // allow some movement before snapping
+        }
 
-	// figure out which direction to go
-	const QLineF vp_snap_a = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[0]).unitVector().p2());
-	const QLineF vp_snap_b = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[1]).unitVector().p2());
-	QLineF vertical_snap = QLineF(m_cov, m_sp); // nickde from ParallelRulerAssistant.cc
-	QPointF translation = (m_cov-strokeBegin)*-1.0;
-	vertical_snap = vertical_snap.translated(translation);
+        // figure out which direction to go
+        const QLineF vp_snap_a = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[0]).unitVector().p2());
+        const QLineF vp_snap_b = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[1]).unitVector().p2());
+        QLineF vertical_snap = QLineF(m_cov, m_sp); // nickde from ParallelRulerAssistant.cc
+        QPointF translation = (m_cov-strokeBegin)*-1.0;
+        vertical_snap = vertical_snap.translated(translation);
 
-	// determine whether the horizontal or vertical line is closer to the point
-	m_snapLine = distsqr(pt, vp_snap_a) < distsqr(pt, vp_snap_b) ? vp_snap_a : vp_snap_b;
-	m_snapLine = distsqr(pt, m_snapLine) < distsqr(pt, vertical_snap) ? m_snapLine : vertical_snap;
+        // determine whether the horizontal or vertical line is closer to the point
+        m_snapLine = distsqr(pt, vp_snap_a) < distsqr(pt, vp_snap_b) ? vp_snap_a : vp_snap_b;
+        m_snapLine = distsqr(pt, m_snapLine) < distsqr(pt, vertical_snap) ? m_snapLine : vertical_snap;
     }
 
     // snap to line
     const qreal
-	dx = m_snapLine.dx(),
-	dy = m_snapLine.dy(),
-	dx2 = dx * dx,
-	dy2 = dy * dy,
-	invsqrlen = 1.0 / (dx2 + dy2);
+        dx = m_snapLine.dx(),
+        dy = m_snapLine.dy(),
+        dx2 = dx * dx,
+        dy2 = dy * dy,
+        invsqrlen = 1.0 / (dx2 + dy2);
 
     QPointF r(dx2 * pt.x() + dy2 * m_snapLine.x1() + dx * dy * (pt.y() - m_snapLine.y1()),
-	      dx2 * m_snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - m_snapLine.x1()));
+              dx2 * m_snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - m_snapLine.x1()));
 
     r *= invsqrlen;
     return r;
@@ -132,13 +132,13 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
     bool isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
 
     if (canvas){
-	//simplest, cheapest way to get the mouse-position//
-	mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-	m_canvas = canvas;
+        //simplest, cheapest way to get the mouse-position//
+        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+        m_canvas = canvas;
     }
     else {
-	mousePos = QCursor::pos();//this'll give an offset//
-	dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
+        mousePos = QCursor::pos();//this'll give an offset//
+        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
 
     if (m_followBrushPosition && m_adjustedPositionValid) {
@@ -146,14 +146,14 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
     }
 
     if (isEditing){
-	Q_FOREACH (const QPointF* handle, handles()) {
-	    QPointF h = initialTransform.map(*handle);
-	    QRectF ellipse = QRectF(QPointF(h.x() -15, h.y() -15), QSizeF(30, 30));
+        Q_FOREACH (const QPointF* handle, handles()) {
+            QPointF h = initialTransform.map(*handle);
+            QRectF ellipse = QRectF(QPointF(h.x() -15, h.y() -15), QSizeF(30, 30));
 
-	    QPainterPath pathCenter;
-	    pathCenter.addEllipse(ellipse);
-	    drawPath(gc, pathCenter, isSnappingActive());
-	}}
+            QPainterPath pathCenter;
+            pathCenter.addEllipse(ellipse);
+            drawPath(gc, pathCenter, isSnappingActive());
+        }}
 
     if (handles().size() >= 2) {
 	const QPointF p1 = *handles()[0];
@@ -471,7 +471,7 @@ void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
 bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
 {
     if (xml && xml->name() == "gridDensity") {
-	this->setGridDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
+        this->setGridDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
     }
 
     if (xml && xml->name() == "horizon") {
@@ -480,7 +480,7 @@ bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
         QPointF p2 = QPointF((float)KisDomUtils::toDouble(xml->attributes().value("x2").toString()),
                              (float)KisDomUtils::toDouble(xml->attributes().value("y2").toString()));
 
-	this->m_horizon = QLineF(p1,p2);
+        this->m_horizon = QLineF(p1,p2);
     }
 
     if (xml && xml->name() == "cov") {

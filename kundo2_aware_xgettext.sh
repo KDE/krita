@@ -38,7 +38,7 @@ function add_ctxt_qtundo() {
     mv "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}"
     cat "${POT_PART_QUNDOFORMAT2}" | awk '
         /^msgid "/ {
-            if (lastLine !~ /^\"/ && lastLine !~ /^msgctxt/ && lastLine != "#, fuzzy") {
+            if (lastLine !~ /^"/ && lastLine !~ /^msgctxt/ && lastLine != "#, fuzzy") {
                 print "msgctxt \"(qtundo-format)\""
             }
         }

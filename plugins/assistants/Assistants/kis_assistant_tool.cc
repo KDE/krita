@@ -507,18 +507,23 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
           QList<KisPaintingAssistantHandleSP> side_hndl = assistant->sideHandles();
           KisPaintingAssistantHandleSP vp_opp;
 
-          bool vp_is_dragged =		m_handleDrag == hndl[0] || m_handleDrag == hndl[1];
-          bool near_handle_is_dragged = m_handleDrag == side_hndl[0] || m_handleDrag == side_hndl[2] ||
-                                        m_handleDrag == side_hndl[4] || m_handleDrag == side_hndl[6] ;
-          bool far_handle_is_dragged =	m_handleDrag == side_hndl[1] || m_handleDrag == side_hndl[3] ||
-                                        m_handleDrag == side_hndl[5] || m_handleDrag == side_hndl[7] ;
-          bool cov_is_dragged =		m_handleDrag == hndl[2];
+          const bool vp_is_dragged = m_handleDrag == hndl[0] || m_handleDrag == hndl[1];
+
+          const bool near_handle_is_dragged =
+              m_handleDrag == side_hndl[0] || m_handleDrag == side_hndl[2] ||
+              m_handleDrag == side_hndl[4] || m_handleDrag == side_hndl[6];
+
+          const bool far_handle_is_dragged =
+              m_handleDrag == side_hndl[1] || m_handleDrag == side_hndl[3] ||
+              m_handleDrag == side_hndl[5] || m_handleDrag == side_hndl[7];
+
+          const bool cov_is_dragged = m_handleDrag == hndl[2];
 
           if (cov_is_dragged) {
               assis->setCov(*hndl[0], *hndl[1], event->point);
               assis->setSp(*hndl[0], *hndl[1], assis->cov());
 
-              bool cov_is_invalid = (QLineF(*hndl[0], *hndl[1]).length() < QLineF(*hndl[0], *hndl[2]).length()) ||
+              const bool cov_is_invalid = (QLineF(*hndl[0], *hndl[1]).length() < QLineF(*hndl[0], *hndl[2]).length()) ||
               (QLineF(*hndl[0], *hndl[1]).length() < QLineF(*hndl[1], *hndl[2]).length());
 
               if (cov_is_invalid) {
@@ -662,8 +667,23 @@ void KisAssistantTool::addAssistant()
       QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
       QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_newAssistant);
 
-      assis->setCov(*handles[0], *handles[1], *handles[2]);
+      // detect silly situation
+      const bool overlapping_points =
+          qFuzzyCompare(handles[0]->x(), handles[1]->x()) && qFuzzyCompare(handles[0]->y(), handles[1]->y());
+      const bool overlapping_cov =
+          (qFuzzyCompare(handles[0]->x(), handles[2]->x()) && qFuzzyCompare(handles[0]->y(), handles[2]->y())) ||
+          (qFuzzyCompare(handles[1]->x(), handles[2]->x()) && qFuzzyCompare(handles[1]->y(), handles[2]->y()));
+
+      // hack to avoid silly situation
+      if (overlapping_points || overlapping_cov) {
+          handles[0]->setX(handles[2]->x() - 140);
+          handles[0]->setY(handles[2]->y());
+          handles[1]->setX(handles[2]->x() + 140);
+          handles[1]->setY(handles[2]->y());
+      }
+
       assis->setHorizon(*handles[0], *handles[1]);
+      assis->setCov(*handles[0], *handles[1], *handles[2]);
       assis->setSp(*handles[0], *handles[1], *handles[2]);
 
       const QPointF translation = (assis->cov() - assis->sp()) / 2.0;
@@ -695,7 +715,7 @@ void KisAssistantTool::addAssistant()
       m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
 
       // also make sure 3rd point (cov) is between the 2 vanishing points
-      bool cov_is_invalid = (QLineF(*handles[0], *handles[1]).length() < QLineF(*handles[0], *handles[2]).length()) ||
+      const bool cov_is_invalid = (QLineF(*handles[0], *handles[1]).length() < QLineF(*handles[0], *handles[2]).length()) ||
           (QLineF(*handles[0], *handles[1]).length() < QLineF(*handles[1], *handles[2]).length());
 
       if (cov_is_invalid) {

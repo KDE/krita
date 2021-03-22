@@ -27,7 +27,7 @@ public:
     bool operator <(const QListWidgetItem &other) const override
     {
         if (collator->numericMode()) {
-            const QRegExp rx(QLatin1Literal("[^0-9]+"));
+            const QRegExp rx(QLatin1String("[^0-9]+"));
             QStringList ours = text().split(rx, QString::SkipEmptyParts);
             QStringList theirs = other.text().split(rx, QString::SkipEmptyParts);
 
@@ -73,11 +73,12 @@ KisDlgImportImageSequence::KisDlgImportImageSequence(KisMainWindow *mainWindow, 
     connect(m_ui.spinStep, SIGNAL(valueChanged(int)), this, SLOT(slotSkipChanged(int)));
     connect(m_ui.cmbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
     connect(m_ui.cmbSortMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
-
+    connect(m_ui.autoAddHoldframesBox, &QCheckBox::stateChanged, this, &KisDlgImportImageSequence::autoAddHoldframes);
     // cold initialization of the controls
     slotSkipChanged(m_ui.spinStep->value());
     slotOrderOptionsChanged(m_ui.cmbOrder->currentIndex());
     slotOrderOptionsChanged(m_ui.cmbSortMode->currentIndex());
+    m_ui.beginFromZeroIndexBox->hide();
 }
 
 QStringList KisDlgImportImageSequence::files()
@@ -99,6 +100,18 @@ int KisDlgImportImageSequence::firstFrame()
 int KisDlgImportImageSequence::step()
 {
     return m_ui.spinStep->value();
+}
+
+bool KisDlgImportImageSequence::autoAddHoldframes(){
+
+    bool isChecked = m_ui.autoAddHoldframesBox->isChecked();
+    if(isChecked && m_ui.cmbOrder->currentIndex() == 0){
+        m_ui.beginFromZeroIndexBox->show();
+    }
+    else {
+        m_ui.beginFromZeroIndexBox->hide();
+    }
+    return isChecked;
 }
 
 void KisDlgImportImageSequence::slotAddFiles()
@@ -149,7 +162,29 @@ void KisDlgImportImageSequence::slotSkipChanged(int)
 
 void KisDlgImportImageSequence::slotOrderOptionsChanged(int)
 {
+
+    if(m_ui.cmbSortMode->currentIndex() == 0){ // we shouldn't add hold frames automatically if they are sorted alphabetically
+        m_ui.autoAddHoldframesBox->setChecked(false);
+        m_ui.autoAddHoldframesBox->setEnabled(false);
+    }
+    else {
+        m_ui.autoAddHoldframesBox->setEnabled(true);
+    }
+
+    if(m_ui.cmbOrder->currentIndex() == 1){
+        m_ui.beginFromZeroIndexBox->setChecked(false);   //redundant
+        m_ui.beginFromZeroIndexBox->hide();
+    }
+    this->sortOrder = m_ui.cmbOrder->currentIndex();
     sortFileList();
+}
+
+bool KisDlgImportImageSequence::startFrom1(){
+    return m_ui.beginFromZeroIndexBox->isChecked();
+}
+
+int KisDlgImportImageSequence::isAscending(){
+    return this->sortOrder;
 }
 
 void KisDlgImportImageSequence::sortFileList()

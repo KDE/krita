@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -67,19 +67,39 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="autoAddHoldframesBox">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adds the imported frames in their respective slots as per the sequence numbers in the file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Add hold frames automatically</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="beginFromZeroIndexBox">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The first imported frame will be placed in #0 instead instead of #1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Begin frames from index 0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Timing</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
-          <item column="0" row="1">
+          <item row="1" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Start at</string>
             </property>
            </widget>
           </item>
-          <item column="1" row="1">
+          <item row="1" column="1">
            <widget class="KisIntParseSpinBox" name="spinFirstFrame">
             <property name="toolTip">
              <string>The frame number for the first image</string>
@@ -89,14 +109,14 @@
             </property>
            </widget>
           </item>
-          <item column="0" row="2">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Step</string>
             </property>
            </widget>
           </item>
-          <item column="1" row="2">
+          <item row="2" column="1">
            <widget class="KisIntParseSpinBox" name="spinStep">
             <property name="toolTip">
              <string>Number of frames between images</string>
@@ -109,7 +129,7 @@
             </property>
            </widget>
           </item>
-          <item colspan="2" column="0" row="3">
+          <item row="3" column="0" colspan="2">
            <widget class="QLabel" name="lblFramerate">
             <property name="text">
              <string>Source FPS:</string>

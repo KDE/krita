@@ -1981,11 +1981,15 @@ void KisMainWindow::importAnimation()
         QStringList files = dlg.files();
         int firstFrame = dlg.firstFrame();
         int step = dlg.step();
+        bool startFrom1 = dlg.startFrom1();
+        bool autoAddHoldframes = dlg.autoAddHoldframes();
+
 
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        KisImportExportErrorCode status = importer.import(files, firstFrame, step);
+        int isAscending = dlg.isAscending();
+        KisImportExportErrorCode status = importer.import(files, firstFrame, step, autoAddHoldframes, startFrom1, isAscending);  // modify here, add a flag
 
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();

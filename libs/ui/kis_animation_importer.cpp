@@ -19,6 +19,7 @@
 #include "kis_group_layer.h"
 #include "kis_raster_keyframe_channel.h"
 #include "commands/kis_image_layer_add_command.h"
+#include <QRegExp>
 
 struct KisAnimationImporter::Private
 {
@@ -48,7 +49,7 @@ KisAnimationImporter::KisAnimationImporter(KisDocument* document)
 KisAnimationImporter::~KisAnimationImporter()
 {}
 
-KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int firstFrame, int step)
+KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int firstFrame, int step, bool autoAddHoldframes, bool startfrom0, int isAscending)
 {
     Q_ASSERT(step > 0);
 
@@ -67,12 +68,39 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
     }
 
     KisRasterKeyframeChannel *contentChannel = 0;
+
+    const QRegExp rx(QLatin1String("(\\d+)"));    //regex for extracting numbers
+    QStringList fileNumberRxList;
+
+    int pos = 0;
+
+    while ((pos = rx.indexIn(files.at(0), pos)) != -1) {
+        fileNumberRxList << rx.cap(1);
+        pos += rx.matchedLength();
+    }
+
+    bool ok;
+    int autoframe;
+
+    int firstFrameNumber = fileNumberRxList.last().toInt(&ok);    // selects the last number of file name of the first frame (useful for descending order)
+    if(firstFrameNumber == 0){
+        startfrom0 = false;     // if enabled, the zeroth frame will be places in -1 slot, leading to an error
+    }
+    fileNumberRxList.clear();
+
+
+
+
+    int offset = (startfrom0 ? 1 : 0);    //offset added to consider file numbering starts from 1 instead of 0
+
     Q_FOREACH(QString file, files) {
         bool successfullyLoaded = importDoc->openPath(file, KisDocument::DontAddToRecent);
         if (!successfullyLoaded) {
             status = ImportExportCodes::InternalError;
             break;
         }
+
+
 
         if (frame == firstFrame) {
             const KoColorSpace *cs = importDoc->image()->colorSpace();
@@ -100,7 +128,33 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
             break;
         }
 
-        contentChannel->importFrame(frame, importDoc->image()->projection(), NULL);
+        if (!autoAddHoldframes) {
+            contentChannel->importFrame(frame, importDoc->image()->projection(), NULL);    // as first frame added will go to second slot i.e #1 instead of #0
+        } else {
+            pos = 0;
+
+            while ((pos = rx.indexIn(file, pos)) != -1) {
+                fileNumberRxList << rx.cap(1);
+                pos += rx.matchedLength();
+            }
+
+            int filenum = fileNumberRxList.last().toInt(&ok);
+
+            if (isAscending == 0) {
+                autoframe = firstFrame + filenum - offset;
+            } else {
+                autoframe = firstFrame + (firstFrameNumber - filenum); //places the first frame #0 (or #1) slot, and later frames are added as per the difference
+            }
+
+            if (ok) {
+                contentChannel->importFrame(autoframe , importDoc->image()->projection(), NULL);
+            } else {
+                // if it fails to extract a number, the next frame will simply be added to next slot
+                contentChannel->importFrame(autoframe + 1, importDoc->image()->projection(), NULL);
+            }
+            fileNumberRxList.clear();
+        }
+
         frame += step;
         filesProcessed++;
     }

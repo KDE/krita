@@ -106,32 +106,10 @@ void KisFilterStrokeStrategy::initStrokeCallback()
 {
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();
 
-    KisPaintDeviceSP dev = m_d->targetDevice;
-
-    if (m_d->activeSelection ||
-        (dev->colorSpace() != dev->compositionSourceColorSpace() &&
-         *dev->colorSpace() != *dev->compositionSourceColorSpace())) {
-
-        m_d->filterDevice = dev->createCompositionSourceDevice(dev);
-
-        if (m_d->activeSelection) {
-            m_d->filterDeviceBounds &= m_d->activeSelection->selectedRect();
-        }
-    } else {
-        m_d->filterDevice = dev;
-    }
-
     m_d->progressHelper.reset(new KisProcessingVisitor::ProgressHelper(m_d->node));
 }
 
-/*
- *
- * TEMP NOTE DELETE LATER:
- * "KisFilterStrokeStrategy::Data should only have a "frameId" paramenter. No `concurrent` or `_processRect`.
- * The latter two variables should be calculated internally in doStrokeCallback,
- * and after that a set of "mutated jobs" should be generated" - Dmitry
- *
- */
+
 void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     FilterJobData *filterFrameData = dynamic_cast<FilterJobData*>(data);
@@ -150,6 +128,9 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         KisLayerUtils::SwitchFrameCommand::SharedStorageSP storage( new KisLayerUtils::SwitchFrameCommand::SharedStorage() );
 
+        //Otherwise, a simple snapshot should suffice..
+        m_d->filterDevice = new KisPaintDevice(*m_d->targetDevice);
+
         addJobSequential(jobs, [this, shouldSwitchTime, frameTime, storage](){
             // Switch time if necessary..
             if (shouldSwitchTime) {
@@ -159,6 +140,17 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             // Copy snapshot of targetDevice for filter processing..
             m_d->filterDevice = new KisPaintDevice(*m_d->targetDevice);
+
+            //If we're dealing with some kind of transparency mask, we will create a compositionSourceDevice instead.
+            //  Carry over from commit ca810f85 ...
+            if (m_d->activeSelection ||
+                    (m_d->targetDevice->colorSpace() != m_d->targetDevice->compositionSourceColorSpace() &&
+                    *m_d->targetDevice->colorSpace() != *m_d->targetDevice->compositionSourceColorSpace())) {
+                m_d->filterDevice = m_d->targetDevice->createCompositionSourceDevice(m_d->targetDevice);
+                if (m_d->activeSelection) {
+                    m_d->filterDeviceBounds &= m_d->activeSelection->selectedRect();
+                }
+            }
 
             //Update all necessary rect data based on contents of frame..
             m_d->filterDeviceBounds = m_d->filterDevice->extent();

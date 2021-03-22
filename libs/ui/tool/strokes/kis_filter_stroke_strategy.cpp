@@ -54,8 +54,6 @@ struct KisFilterStrokeStrategy::Private {
     KisImageSP image;
     KisUpdatesFacade *updatesFacade;
 
-    KisTransaction* workingTransaction;
-
     KisPaintDeviceSP filterDevice;
     QRect filterDeviceBounds;
 
@@ -128,9 +126,6 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         KisLayerUtils::SwitchFrameCommand::SharedStorageSP storage( new KisLayerUtils::SwitchFrameCommand::SharedStorage() );
 
-        //Otherwise, a simple snapshot should suffice..
-        m_d->filterDevice = new KisPaintDevice(*m_d->targetDevice);
-
         addJobSequential(jobs, [this, shouldSwitchTime, frameTime, storage](){
             // Switch time if necessary..
             if (shouldSwitchTime) {
@@ -141,6 +136,13 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             // Copy snapshot of targetDevice for filter processing..
             m_d->filterDevice = new KisPaintDevice(*m_d->targetDevice);
 
+            //Update all necessary rect data based on contents of frame..
+            m_d->filterDeviceBounds = m_d->filterDevice->extent();
+
+            if (m_d->filter->needsTransparentPixels(m_d->filterConfig.data(), m_d->targetDevice->colorSpace())) {
+                m_d->filterDeviceBounds |= m_d->targetDevice->defaultBounds()->bounds();
+            }
+
             //If we're dealing with some kind of transparency mask, we will create a compositionSourceDevice instead.
             //  Carry over from commit ca810f85 ...
             if (m_d->activeSelection ||
@@ -150,13 +152,6 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 if (m_d->activeSelection) {
                     m_d->filterDeviceBounds &= m_d->activeSelection->selectedRect();
                 }
-            }
-
-            //Update all necessary rect data based on contents of frame..
-            m_d->filterDeviceBounds = m_d->filterDevice->extent();
-
-            if (m_d->filter->needsTransparentPixels(m_d->filterConfig.data(), m_d->targetDevice->colorSpace())) {
-                m_d->filterDeviceBounds |= m_d->targetDevice->defaultBounds()->bounds();
             }
         });
 
@@ -193,11 +188,9 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             // Make a transaction, change the target device, and "end" transaction.
             // Should be useful for undoing later.
-            m_d->workingTransaction = new KisTransaction(m_d->targetDevice);
+            QScopedPointer<KisTransaction> workingTransaction( new KisTransaction(m_d->targetDevice) );
             KisPainter::copyAreaOptimized(applyRect.topLeft(), m_d->filterDevice, m_d->targetDevice, applyRect, m_d->activeSelection);
-            runAndSaveCommand( toQShared(m_d->workingTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL );
-            delete m_d->workingTransaction;
-            m_d->workingTransaction = nullptr;
+            runAndSaveCommand( toQShared(workingTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL );
 
             //If we're talking about the "current" / visible frame, mark rect as dirty.
             if (!shouldSwitchTime) {

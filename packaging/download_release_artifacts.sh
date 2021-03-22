@@ -3,7 +3,7 @@
 # exit when any command fails
 set -e
 
-KRITA_VERSION=4.4.3-beta2
+KRITA_VERSION=4.4.3
 
 WIN64_ARTIFACTS_URL=https://binary-factory.kde.org/job/Krita_Release_Windows64_Build/lastSuccessfulBuild/artifact
 WIN32_ARTIFACTS_URL=https://binary-factory.kde.org/job/Krita_Release_Windows32_Build/lastSuccessfulBuild/artifact

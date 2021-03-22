@@ -258,8 +258,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             m_snapIsRadial = false;
         } else if (m_handleDrag && assistant->handles().size()>2 && (assistant->id() == "ellipse" ||
                                                                      assistant->id() == "concentric ellipse" ||
-                                                                     assistant->id() == "fisheye-point" ||
-                                                                     assistant->id() == "two point")){
+                                                                     assistant->id() == "fisheye-point")){
             m_snapIsRadial = false;
             if (m_handleDrag == assistant->handles()[0]) {
                 m_dragStart = *assistant->handles()[1];
@@ -272,7 +271,9 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_radius = QLineF(m_dragStart, *assistant->handles()[0]);
                 m_snapIsRadial = true;
             }
-
+        } else if (m_handleDrag && assistant->handles().size()>2 && assistant->id() == "two point") {
+            m_dragStart = *m_handleDrag;
+            m_snapIsRadial = false;
         } else {
             m_dragStart = assistant->getEditorPosition();
             m_snapIsRadial = false;

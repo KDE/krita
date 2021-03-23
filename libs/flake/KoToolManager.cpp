@@ -325,38 +325,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
     return toolType;
 }
 
-
-KoToolBase *KoToolManager::createTool(KoCanvasController *controller, KoToolAction *tool)
-{
-    // XXX: maybe this method should go into the private class?
-
-    QHash<QString, KoToolBase*> origHash;
-
-    if (d->canvasses.contains(controller)) {
-        origHash = d->canvasses.value(controller).first()->allTools;
-    }
-
-    if (origHash.contains(tool->id())) {
-        return origHash.value(tool->id());
-    }
-
-    debugFlake << "Creating tool" << tool->id() << ". Activated on:" << tool->visibilityCode() << ", prio:" << tool->priority();
-
-    KoToolBase *tl = tool->toolFactory()->createTool(controller->canvas());
-    if (tl) {
-        tl->setFactory(tool->toolFactory());
-        tl->setObjectName(tool->id());
-    }
-
-    KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);
-    if (zoomTool) {
-        zoomTool->setCanvasController(controller);
-    }
-
-    return tl;
-}
-
-
 void KoToolManager::initializeCurrentToolForCanvas()
 {
     KIS_ASSERT_RECOVER_RETURN(d->canvasData);
@@ -404,7 +372,7 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
 {
     QHash<QString, KoToolBase*> toolsHash;
     Q_FOREACH (KoToolAction *toolAction, toolActionList) {
-        KoToolBase* tool = q->createTool(controller, toolAction);
+        KoToolBase* tool = createTool(controller, toolAction);
         if (tool) { // only if a real tool was created
             toolsHash.insert(tool->toolId(), tool);
         }
@@ -413,6 +381,34 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
     CanvasData *cd = new CanvasData(controller, device);
     cd->allTools = toolsHash;
     return cd;
+}
+
+KoToolBase *KoToolManager::Private::createTool(KoCanvasController *controller, KoToolAction *toolAction)
+{
+    QHash<QString, KoToolBase*> origHash;
+
+    if (canvasses.contains(controller)) {
+        origHash = canvasses.value(controller).first()->allTools;
+    }
+
+    if (origHash.contains(toolAction->id())) {
+        return origHash.value(toolAction->id());
+    }
+
+    debugFlake << "Creating tool" << toolAction->id() << ". Activated on:" << toolAction->visibilityCode() << ", prio:" << toolAction->priority();
+
+    KoToolBase *tool = toolAction->toolFactory()->createTool(controller->canvas());
+    if (tool) {
+        tool->setFactory(toolAction->toolFactory());
+        tool->setObjectName(toolAction->id());
+    }
+
+    KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tool);
+    if (zoomTool) {
+        zoomTool->setCanvasController(controller);
+    }
+
+    return tool;
 }
 
 void KoToolManager::Private::setup()

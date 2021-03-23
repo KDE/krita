@@ -54,6 +54,7 @@ public:
     void updateToolForProxy();
     void switchToolTemporaryRequested(const QString &id);
     CanvasData *createCanvasData(KoCanvasController *controller, const KoInputDevice &device);
+    KoToolBase* createTool(KoCanvasController *controller, KoToolAction *toolAction);
 
     /**
      * Request a switch from to the param input device.

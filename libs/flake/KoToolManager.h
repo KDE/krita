@@ -290,8 +290,6 @@ private:
     Q_PRIVATE_SLOT(d, void selectionChanged(const QList<KoShape*> &shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
 
-    KoToolBase* createTool(KoCanvasController *controller, KoToolAction *toolAction);
-
     Private *const d;
 };
 

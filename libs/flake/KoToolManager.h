@@ -23,7 +23,6 @@ class KActionCollection;
 class KoShape;
 class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
-class ToolHelper;
 class QKeySequence;
 
 class QCursor;
@@ -34,15 +33,14 @@ class QCursor;
  * It allows to implement a custom UI to control the activation of tools.
  * See KoToolBox & KoModeBox in the kowidgets library.
  *
- * KoToolAction objects are indirectly owned by the KoToolManager singleton
+ * KoToolAction objects are owned by the KoToolManager singleton
  * and live until the end of its lifetime.
  */
 class KRITAFLAKE_EXPORT KoToolAction : public QObject
 {
     Q_OBJECT
 public:
-    // toolHelper takes over ownership, and those live till the end of KoToolManager.
-    explicit KoToolAction(ToolHelper *toolHelper);
+    explicit KoToolAction(KoToolFactoryBase *toolFactory);
     ~KoToolAction() override;
 
 public:
@@ -57,6 +55,8 @@ public:
     int buttonGroupId() const;      ///< A unique ID for this tool as passed by changedTool(), >= 0
     QString visibilityCode() const; ///< This tool should become visible when we emit this string in toolCodesSelected()
 
+    KoToolFactoryBase *toolFactory() const; ///< Factory to create new tool object instances
+
 public Q_SLOTS:
     void trigger();                 ///< Request the activation of the tool
 
@@ -64,7 +64,6 @@ Q_SIGNALS:
     void changed();                 ///< Emitted when a property changes (shortcut ATM)
 
 private:
-    friend class ToolHelper;
     class Private;
     Private *const d;
 };
@@ -284,7 +283,6 @@ private:
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);
 
-    Q_PRIVATE_SLOT(d, void toolActivated(ToolHelper *tool))
     Q_PRIVATE_SLOT(d, void detachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
@@ -292,7 +290,7 @@ private:
     Q_PRIVATE_SLOT(d, void selectionChanged(const QList<KoShape*> &shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
 
-    QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);
+    KoToolBase* createTool(KoCanvasController *controller, KoToolAction *toolAction);
 
     Private *const d;
 };

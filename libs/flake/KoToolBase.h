@@ -482,7 +482,7 @@ protected:
 
 private:
 
-    friend class ToolHelper;
+    friend class KoToolManager;
 
     /**
      * Set the KoToolFactoryBase that created this tool.

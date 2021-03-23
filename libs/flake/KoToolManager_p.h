@@ -25,7 +25,6 @@ class KoShape;
 class KoToolManager;
 class KoCanvasController;
 class KoShapeLayer;
-class ToolHelper;
 class CanvasData;
 class KoToolProxy;
 
@@ -44,7 +43,6 @@ public:
     void switchCanvasData(CanvasData *cd);
 
     bool eventFilter(QObject *object, QEvent *event);
-    void toolActivated(ToolHelper *tool);
 
     void detachCanvas(KoCanvasController *controller);
     void attachCanvas(KoCanvasController *controller);
@@ -74,7 +72,7 @@ public:
 
     KoToolManager *q;
 
-    QList<ToolHelper*> tools; // list of all available tools via their factories.
+    QList<KoToolAction*> toolActionList; // list of all available tools via their actions.
 
     QHash<KoCanvasController*, QList<CanvasData*> > canvasses;
     QHash<KoCanvasBase*, KoToolProxy*> proxies;
@@ -84,52 +82,6 @@ public:
     KoInputDevice inputDevice;
 
     bool layerExplicitlyDisabled;
-};
-
-/// \internal
-class ToolHelper : public QObject
-{
-    Q_OBJECT
-public:
-    explicit ToolHelper(KoToolFactoryBase *tool);
-    KoToolAction *toolAction();
-    /// wrapper around KoToolFactoryBase::id();
-    QString id() const;
-    /// wrapper around KoToolFactoryBase::iconName();
-    QString iconName() const;
-    /// descriptive text, as ;
-    QString text() const;
-    /// descriptive icon text, e.g. use on a button next to an icon or without one;
-    QString iconText() const;
-    /// tooltip of the tool, e.g. for tooltip of a button;
-    QString toolTip() const;
-    /// wrapper around KoToolFactoryBase::section();
-    QString section() const;
-    /// wrapper around KoToolFactoryBase::activationShapeId();
-    QString activationShapeId() const;
-    /// wrapper around KoToolFactoryBase::priority();
-    int priority() const;
-    KoToolBase *createTool(KoCanvasBase *canvas) const;
-    /// unique id, >= 0
-    int uniqueId() const {
-        return m_uniqueId;
-    }
-    /// QAction->shortcut() if it exists, otherwise KoToolFactoryBase::shortcut()
-    QKeySequence shortcut() const;
-
-public Q_SLOTS:
-    void activate();
-
-Q_SIGNALS:
-    /// Emitted when the tool should be activated, e.g. by pressing the tool's assigned button in the toolbox
-    void toolActivated(ToolHelper *tool);
-
-private:
-    KoToolFactoryBase * const m_toolFactory;
-    const int m_uniqueId;
-    QKeySequence m_customShortcut;
-    bool m_hasCustomShortcut;
-    KoToolAction *m_toolAction;
 };
 
 /// \internal

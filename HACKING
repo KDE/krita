@@ -17,17 +17,41 @@ Qt vs STD vs Boost:
 
 C++11 and C++14
 
-    Yes, but. Avoid lambdas (except when replacing the use of
-    QSignalMapper. Sigh.).  Avoid the new sig/slot connection syntax
-    _unless_ you are porting all of Krita to the new syntax. Sure, it
-    has some advantages, but having two different ways of doing the same
-    thing is begging for trouble and comprehension problems. For now,
-    keep using Q_FOREACH, we're using it all over the place. auto is fine,
-    when using in for loops. Don't go use it in other places.
+    Yes, but.
 
-    Before using other new features, discuss on #krita so we can expand this list.
+    * Prefer normal functions over lambdas, unless really needed (e.g. when replacing
+      the use of QSignalMapper)
 
-    Our minimum gcc version is 4.5, shipped with Ubuntu 12.04
+    * Try to avoid auto as a shortcut for the type name, except when used
+      in range-based for-loops and iterators. Using auto as a replacement
+      for a templated code (or inside templated code) is perfectly fine.
+
+    * Generic lambdas. Use generic lambdas only when you want to solve a
+      problem that would otherwise require templates, not just as a shortcut for
+      the argument typenames.
+
+    * auto as a deduced return type of functions that would otherwise require
+      templates is perfectly fine
+
+    * In some cases it might be okay to use auto as a shortcut for the typename,
+      e.g. when using very long types returned by boost. But better discuss that
+      on #krita.
+
+    * Avoid the new sig/slot connection syntax _unless_ you are porting all of
+      Krita to the new syntax. Sure, it has some advantages, but having two different
+      ways of doing the same thing is begging for trouble and comprehension problems.
+
+    * For now, keep using Q_FOREACH, we're using it all over the place, and it has
+      different constness semantics over the standard range-based for-loop.
+
+    * Use nullptr in new code. When changing existing code, make sure that 1) the whole
+      .cpp/.h files pair uses the same style, 2) the change of the style outweigh the
+      loss of the git-blame history (that is, your changes do already change the file
+      significantly)
+
+    * Before using other new features, discuss on #krita so we can expand this list.
+
+    * Our minimum gcc version is 5.5.0, shipped with Ubuntu 16.04
 
 
 Indentation
@@ -53,9 +77,33 @@ Initializers
 
     Note the location of the colon and comma.
 
-    It is also okay to use initializers like, and maybe even preferred where it works.
+    It is also preferred to use {}-initialization for class members and
+    glabal namespace scope variables, e.g.
 
-    int m_something {0};
+    class Foo
+    {
+        int m_value {0};
+    };
+
+    namespace Bar
+    {
+        int SomeGlobalValue {0};
+    };
+
+    Since Krita has a long history of usage =-initizalization everywhere, it is **not**
+    recommended to use {}-initialization in function bodies, especially, when it results
+    in a mix of styles in the same file. You can still use that as an exception to solve
+    some specific problems like the most vexing parse.
+
+    If you write new code and you think that it can benefit from the usage of {}-
+    initialization in function bodies, you can do that given given the following rules
+    are satisfied:
+
+        * the entire .cpp/.h files pair uses the same initialization style
+        * when converting existing file, the convention is done in a separate commit
+        * when converting existing file, the benefit of rewriting style outweigh the
+          loss of git-blame history (that is, your changes do already change the file
+          significantly).
 
 Scope prefixes
 

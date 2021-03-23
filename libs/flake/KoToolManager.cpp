@@ -358,7 +358,6 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
     KoToolBase *tl = tool->createTool(controller->canvas());
     if (tl) {
-        d->uniqueToolIds.insert(tl, tool->uniqueId());
         tl->setObjectName(tool->id());
     }
 
@@ -590,7 +589,7 @@ void KoToolManager::Private::postSwitchTool()
     // Activate the actions for the currently active tool
     canvasData->activateToolActions();
 
-    emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
+    emit q->changedTool(canvasData->canvas);
 
     emit q->toolOptionWidgetsChanged(canvasData->canvas, optionWidgetList);
 }
@@ -678,7 +677,6 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         delete canvasData;
     }
     Q_FOREACH (KoToolBase *tool, tools) {
-        uniqueToolIds.remove(tool);
         delete tool;
     }
     canvasses.remove(controller);

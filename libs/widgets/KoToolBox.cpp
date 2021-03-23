@@ -59,6 +59,7 @@ public:
     void addSection(Section *section, const QString &name);
 
     QList<QToolButton*> buttons;
+    QHash<QString, KoToolBoxButton*> buttonsByToolId;
     QMap<QString, Section*> sections;
     KoToolBoxLayout *layout {0};
     QButtonGroup *buttonGroup {0};
@@ -93,8 +94,8 @@ KoToolBox::KoToolBox()
     // Update visibility of buttons
     setButtonsVisible(QList<QString>());
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            this, SLOT(setActiveTool(KoCanvasController*,int)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)),
+            this, SLOT(setActiveTool(KoCanvasController*)));
     connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
             this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(setButtonsVisible(QList<QString>)));
@@ -148,19 +149,21 @@ void KoToolBox::addButton(KoToolAction *toolAction)
     }
     sectionWidget->addButton(button, toolAction->priority());
 
-    d->buttonGroup->addButton(button, toolAction->buttonGroupId());
+    d->buttonGroup->addButton(button);
+    d->buttonsByToolId.insert(toolAction->id(), button);
 
     d->visibilityCodes.insert(button, toolAction->visibilityCode());
 }
 
-void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
+void KoToolBox::setActiveTool(KoCanvasController *canvas)
 {
     Q_UNUSED(canvas);
 
-    QAbstractButton *button = d->buttonGroup->button(id);
+    QString id = KoToolManager::instance()->activeToolId();
+    KoToolBoxButton *button = d->buttonsByToolId.value(id);
     if (button) {
         button->setChecked(true);
-        (qobject_cast<KoToolBoxButton*>(button))->setHighlightColor();
+        button->setHighlightColor();
     }
     else {
         warnWidgets << "KoToolBox::setActiveTool(" << id << "): no such button found";

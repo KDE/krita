@@ -144,7 +144,7 @@ private Q_SLOTS:
     void slotSlider2Changed();
     void slotSlider3Changed();
     void slotSlider4Changed();
-    void slotToolChanged(KoCanvasController* canvas, int toolId);
+    void slotToolChanged(KoCanvasController* canvas);
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
     void slotSwitchToPreviousPreset();

@@ -1121,10 +1121,9 @@ void KisPaintopBox::slotSlider4Changed()
     sliderChanged(3);
 }
 
-void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
+void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
 {
     Q_UNUSED(canvas);
-    Q_UNUSED(toolId);
 
     if (!m_viewManager->canvasBase()) return;
 

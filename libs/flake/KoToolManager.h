@@ -236,9 +236,8 @@ Q_SIGNALS:
     /**
      * Emitted when a new tool was selected or became active.
      * @param canvas the currently active canvas.
-     * @param uniqueToolId a random but unique code for the new tool.
      */
-    void changedTool(KoCanvasController *canvas, int uniqueToolId);
+    void changedTool(KoCanvasController *canvas);
 
     /**
      * Emitted after the selection changed to state which unique shape-types are now

@@ -111,8 +111,8 @@ CompositeOpModel::CompositeOpModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private(this))
 {
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            this, SLOT(slotToolChanged(KoCanvasController*,int)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)),
+            this, SLOT(slotToolChanged(KoCanvasController*)));
 
 }
 
@@ -191,7 +191,7 @@ void CompositeOpModel::setView(QObject* newView)
 //            connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
 //                    this, SLOT(currentNodeChanged(KisLayerSP)));
 //        }
-        slotToolChanged(0, 0);
+        slotToolChanged(0);
     }
     emit viewChanged();
 }
@@ -334,10 +334,9 @@ void CompositeOpModel::setMirrorVertically(bool newMirrorVertically)
     }
 }
 
-void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
+void CompositeOpModel::slotToolChanged(KoCanvasController* canvas)
 {
     Q_UNUSED(canvas);
-    Q_UNUSED(toolId);
 
     if (!d->view) return;
     if (!d->view->canvasBase()) return;

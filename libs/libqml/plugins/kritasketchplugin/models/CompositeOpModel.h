@@ -91,7 +91,7 @@ Q_SIGNALS:
     void currentCompositeOpIDChanged();
 
 private Q_SLOTS:
-    void slotToolChanged(KoCanvasController* canvas, int toolId);
+    void slotToolChanged(KoCanvasController* canvas);
     void resourceChanged(int key, const QVariant& v);
     void currentNodeChanged(KisLayerSP newNode);
 

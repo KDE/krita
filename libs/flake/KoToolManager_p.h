@@ -76,7 +76,6 @@ public:
 
     QList<ToolHelper*> tools; // list of all available tools via their factories.
 
-    QHash<KoToolBase*, int> uniqueToolIds; // for the changedTool signal
     QHash<KoCanvasController*, QList<CanvasData*> > canvasses;
     QHash<KoCanvasBase*, KoToolProxy*> proxies;
 

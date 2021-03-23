@@ -224,7 +224,7 @@ void KisHeifTest::testSaveHDR()
         pngExportConfiguration->setProperty("saveAsHDR", true);
         pngExportConfiguration->setProperty("saveSRGBProfile", true);
         pngExportConfiguration->setProperty("forceSRGB", false);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr.png")), "image/png", pngExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_hdr.png"), "image/png", pngExportConfiguration);
 
         qDebug() << "Saving HDR heif and avif for PQ";
         KisPropertiesConfigurationSP heifExportConfiguration = new KisPropertiesConfiguration();
@@ -232,21 +232,21 @@ void KisHeifTest::testSaveHDR()
         heifExportConfiguration->setProperty("lossless", true);
         heifExportConfiguration->setProperty("chroma", "444");
         heifExportConfiguration->setProperty("floatingPointConversionOption", "Rec2100PQ");
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_pq.heif")), "image/heic", heifExportConfiguration);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_pq.avif")), "image/avif", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_hdr_pq.heif"), "image/heic", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_hdr_pq.avif"), "image/avif", heifExportConfiguration);
 
         qDebug() << "Saving HDR heif and avif for HLG";
         heifExportConfiguration->setProperty("HLGnominalPeak", 1000.0);
         heifExportConfiguration->setProperty("HLGgamma", 1.2);
         heifExportConfiguration->setProperty("removeHGLOOTF", true);
         heifExportConfiguration->setProperty("floatingPointConversionOption", "Rec2100HLG");
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_hlg.heif")), "image/heic", heifExportConfiguration);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_hlg.avif")), "image/avif", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_hdr_hlg.heif"), "image/heic", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_hdr_hlg.avif"), "image/avif", heifExportConfiguration);
 
         qDebug() << "Saving HDR heif and avif for SMPTE 428";
         heifExportConfiguration->setProperty("floatingPointConversionOption", "ApplySMPTE428");
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_smpte428.heif")), "image/heic", heifExportConfiguration);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_smpte428.avif")), "image/avif", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_hdr_smpte428.heif"), "image/heic", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_hdr_smpte428.avif"), "image/avif", heifExportConfiguration);
     }
 }
 
@@ -396,9 +396,9 @@ void KisHeifTest::testSaveMonochrome(int bitDepth)
         KisPropertiesConfigurationSP heifExportConfiguration = new KisPropertiesConfiguration();
         heifExportConfiguration->setProperty("quality", 100);
         heifExportConfiguration->setProperty("lossless", true);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_monochrome_%1.png").arg(bitDepth)), "image/png", pngExportConfiguration);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_monochrome_%1.heif").arg(bitDepth)), "image/heic", heifExportConfiguration);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_monochrome_%1.avif").arg(bitDepth)), "image/avif", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_monochrome_%1.png").arg(bitDepth), "image/png", pngExportConfiguration);
+        doc->exportDocumentSync(QString("test_monochrome_%1.heif").arg(bitDepth), "image/heic", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_monochrome_%1.avif").arg(bitDepth), "image/avif", heifExportConfiguration);
 
     }
 }
@@ -485,14 +485,14 @@ void KisHeifTest::testSaveRGB(int bitDepth)
         pngExportConfiguration->setProperty("saveAsHDR", false);
         pngExportConfiguration->setProperty("saveSRGBProfile", true);
         pngExportConfiguration->setProperty("forceSRGB", false);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_%1.png").arg(bitDepth)), "image/png", pngExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_%1.png").arg(bitDepth), "image/png", pngExportConfiguration);
 
         KisPropertiesConfigurationSP heifExportConfiguration = new KisPropertiesConfiguration();
         heifExportConfiguration->setProperty("quality", 100);
         heifExportConfiguration->setProperty("lossless", true);
         heifExportConfiguration->setProperty("chroma", "444");
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_%1.heif").arg(bitDepth)), "image/heic", heifExportConfiguration);
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_%1.avif").arg(bitDepth)), "image/avif", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_%1.heif").arg(bitDepth), "image/heic", heifExportConfiguration);
+        doc->exportDocumentSync(QString("test_rgba_%1.avif").arg(bitDepth), "image/avif", heifExportConfiguration);
     }
 }
 

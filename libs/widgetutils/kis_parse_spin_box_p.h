@@ -333,12 +333,12 @@ public:
             // it will be treated as the new entered value. Then, prepending
             // the prefix will display the text "size: size:50".
             case Qt::Key_Backspace:
-                if (m_lineEdit->selectionLength() == 0 && m_lineEdit->cursorPosition() == m_q->prefix().length()) {
+                if (m_lineEdit->selectedText().length() == 0 && m_lineEdit->cursorPosition() == m_q->prefix().length()) {
                     return true;
                 }
                 break;
             case Qt::Key_Delete:
-                if (m_lineEdit->selectionLength() == 0 && m_lineEdit->cursorPosition() == m_q->text().length() - m_q->suffix().length()) {
+                if (m_lineEdit->selectedText().length() == 0 && m_lineEdit->cursorPosition() == m_q->text().length() - m_q->suffix().length()) {
                     return true;
                 }
                 break;

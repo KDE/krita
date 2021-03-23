@@ -38,6 +38,7 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
@@ -77,6 +78,10 @@ public:
     bool untagResource(const KisTagSP tag, const int resourceId);
     bool isResourceTagged(const KisTagSP tag, const int resourceId);
 
+Q_SIGNALS:
+
+    void beforeFilterChanges();
+    void afterFilterChanged();
 
 protected:
 

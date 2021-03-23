@@ -54,8 +54,8 @@ public:
         int radius;
         int blend;
 
-        void save(ToolActivation activation) const;
-        void load(ToolActivation activation);
+        void save() const;
+        void load();
     };
 
 public:
@@ -73,7 +73,7 @@ Q_SIGNALS:
     void toForegroundChanged();
 
 protected:
-    void activate(ToolActivation activation, const QSet<KoShape*> &) override;
+    void activate(const QSet<KoShape*> &) override;
     void deactivate() override;
 
 public Q_SLOTS:
@@ -93,7 +93,6 @@ private:
     // Configuration
     QScopedPointer<KisToolUtils::ColorSamplerConfig> m_config;
 
-    ToolActivation m_toolActivationSource {ToolActivation::DefaultActivation};
     bool m_isActivated {false};
 
     KoColor m_sampledColor;
@@ -111,7 +110,7 @@ public:
     KisToolColorSamplerFactory()
             : KoToolFactoryBase("KritaSelected/KisToolColorSampler") {
         setToolTip(i18n("Color Sampler Tool"));
-        setSection(TOOL_TYPE_FILL);
+        setSection(ToolBoxSection::Fill);
         setPriority(2);
         setIconName(koIconNameCStr("krita_tool_color_sampler"));
         setShortcut(QKeySequence(Qt::Key_P));

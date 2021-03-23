@@ -5,14 +5,50 @@
 <RCC>
     <qresource prefix="/">
         <file>broken-preset.svg</file>
+        <file>dark_activate-next-layer.svg</file>
+        <file>dark_activate-previous-layer.svg</file>
         <file>dark_addblankframe.svg</file>
-        <file>dark_addcolor.svg</file>
+        <file>dark_addblankframe-16.svg</file>
         <file>dark_addduplicateframe.svg</file>
+        <file>dark_alpha-into-mask.svg</file>
+        <file>dark_arrow-down.svg</file>
+        <file>dark_arrow-downright.svg</file>
+        <file>dark_arrow-downleft.svg</file>
+        <file>dark_arrow-topright.svg</file>
+        <file>dark_arrow-topleft.svg</file>
+        <file>dark_arrow-left.svg</file>
+        <file>dark_arrow-right.svg</file>
+        <file>dark_arrow-up.svg</file>
+        <file alias="dark_go-next.svg">dark_arrow-right.svg</file>
+        <file alias="dark_go-previous.svg">dark_arrow-left.svg</file>
+        <file alias="dark_go-up.svg">dark_arrow-up.svg</file>
         <file>dark_bookmarks.svg</file>
         <file>dark_configure-thicker.svg</file>
+        <file>dark_convert-to-fileLayer.svg</file>
+        <file>dark_convert-to-filterMask.svg</file>
+        <file>dark_convert-to-paintLayer.svg</file>
+        <file>dark_convert-to-selectionMask.svg</file>
+        <file>dark_convert-to-transparencyMask.svg</file>
+        <file>dark_chain-broken-icon.svg</file>
+        <file>dark_chain-icon.svg</file>
         <file>dark_deletekeyframe.svg</file>
+        <file>dark_dialog-cancel.svg</file>
+        <file>dark_document-edit.svg</file>
+        <file>dark_document-export.svg</file>
+        <file>dark_document-import.svg</file>
+        <file>dark_document-export-16.svg</file>
+        <file>dark_document-import-16.svg</file>
+        <file>dark_document-save-16.svg</file>
+        <file>dark_duplicateitem.svg</file>
+        <file>dark_edit-clear-16.svg</file>
+        <file>dark_edit-delete.svg</file>
+        <file>dark_edit-paste-16.svg</file>
         <file>dark_edit-redo.svg</file>
         <file>dark_edit-undo.svg</file>
+        <file>dark_import-as-filterMask.svg</file>
+        <file>dark_import-as-paintLayer.svg</file>
+        <file>dark_import-as-selectionMask.svg</file>
+        <file>dark_import-as-transparencyMask.svg</file>
         <file>dark_novisible.svg</file>
         <file>dark_visible.svg</file>
         <file>dark_layer-locked.svg</file>
@@ -20,13 +56,23 @@
         <file>dark_layer-style-disabled.svg</file>
         <file>dark_layer-style-enabled.svg</file>
         <file>dark_list-add.svg</file>
+        <file>dark_list-add-22.svg</file>
         <file>dark_local-selection-active.svg</file>
         <file>dark_local-selection-inactive.svg</file>
+        <file>dark_locked.svg</file>
+        <file alias="dark_object-locked.svg">dark_locked.svg</file>
+        <file>light_unlocked.svg</file>
+        <file alias="dark_object-unlocked.svg">dark_unlocked.svg</file>
+        <file>dark_media-playback-start.svg</file>
+        <file>dark_media-playback-stop.svg</file>
+        <file>dark_media-record.svg</file>
+        <file>dark_mirror-view-16.svg</file>
         <file>dark_nextframe.svg</file>
         <file>dark_nextkeyframe.svg</file>
         <file>dark_lastframe.svg</file>
         <file>dark_prevkeyframe.svg</file>
         <file>dark_firstframe.svg</file>
+        <file>dark_palette-edit.svg</file>
         <file>dark_palette-library.svg</file>
         <file>dark_passthrough-disabled.svg</file>
         <file>dark_passthrough-enabled.svg</file>
@@ -36,6 +82,8 @@
         <file>dark_selection-mode_ants.svg</file>
         <file>dark_selection-mode_invisible.svg</file>
         <file>dark_selection-mode_mask.svg</file>
+        <file>dark_select-all.svg</file>
+        <file>dark_select-clear.svg</file>
         <file>dark_select-pixel.svg</file>
         <file>dark_select-shape.svg</file>
         <file>dark_selection_add.svg</file>
@@ -44,20 +92,61 @@
         <file>dark_selection_replace.svg</file>
         <file>dark_selection_subtract.svg</file>
         <file>dark_sidebaricon.svg</file>
+        <file>dark_system-help.svg</file>
+        <file alias="dark_help-contents.svg">dark_system-help.svg</file>
         <file>dark_transparency-disabled.svg</file>
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
+        <file>dark_view-list-details.svg</file>
+        <file>dark_view-list-text-16.svg</file>
+        <file>dark_view-preview.svg</file>
         <file>dark_warning.svg</file>
         <file>dark_workspace-chooser.svg</file>
         <file>dark_wraparound.svg</file>
+        <file>light_activate-next-layer.svg</file>
+        <file>light_activate-previous-layer.svg</file>
         <file>light_addblankframe.svg</file>
-        <file>light_addcolor.svg</file>
+        <file>light_addblankframe-16.svg</file>
         <file>light_addduplicateframe.svg</file>
+        <file>light_alpha-into-mask.svg</file>
+        <file>light_arrow-down.svg</file>
+        <file>light_arrow-downright.svg</file>
+        <file>light_arrow-downleft.svg</file>
+        <file>light_arrow-topright.svg</file>
+        <file>light_arrow-topleft.svg</file>
+        <file>light_arrow-left.svg</file>
+        <file>light_arrow-right.svg</file>
+        <file>light_arrow-up.svg</file>
+        <file alias="light_go-next.svg">light_arrow-right.svg</file>
+        <file alias="light_go-previous.svg">light_arrow-left.svg</file>
+        <file alias="light_go-up.svg">light_arrow-up.svg</file>
         <file>light_bookmarks.svg</file>
         <file>light_configure-thicker.svg</file>
+        <file>light_convert-to-fileLayer.svg</file>
+        <file>light_convert-to-filterMask.svg</file>
+        <file>light_convert-to-paintLayer.svg</file>
+        <file>light_convert-to-selectionMask.svg</file>
+        <file>light_convert-to-transparencyMask.svg</file>
+        <file>light_chain-broken-icon.svg</file>
+        <file>light_chain-icon.svg</file>
         <file>light_deletekeyframe.svg</file>
+        <file>light_dialog-cancel.svg</file>
+        <file>light_document-edit.svg</file>
+        <file>light_document-export.svg</file>
+        <file>light_document-import.svg</file>
+        <file>light_document-export-16.svg</file>
+        <file>light_document-import-16.svg</file>
+        <file>light_document-save-16.svg</file>
+        <file>light_duplicateitem.svg</file>
+        <file>light_edit-clear-16.svg</file>
+        <file>light_edit-delete.svg</file>
+        <file>light_edit-paste-16.svg</file>
         <file>light_edit-redo.svg</file>
         <file>light_edit-undo.svg</file>
+        <file>light_import-as-filterMask.svg</file>
+        <file>light_import-as-paintLayer.svg</file>
+        <file>light_import-as-selectionMask.svg</file>
+        <file>light_import-as-transparencyMask.svg</file>
         <file>light_novisible.svg</file>
         <file>light_visible.svg</file>
         <file>light_layer-locked.svg</file>
@@ -65,9 +154,19 @@
         <file>light_layer-style-disabled.svg</file>
         <file>light_layer-style-enabled.svg</file>
         <file>light_list-add.svg</file>
+        <file>light_list-add-22.svg</file>
         <file>light_local-selection-active.svg</file>
         <file>light_local-selection-inactive.svg</file>
+        <file>light_locked.svg</file>
+        <file alias="light_object-locked.svg">light_locked.svg</file>
+        <file>light_unlocked.svg</file>
+        <file alias="light_object-unlocked.svg">light_unlocked.svg</file>
+        <file>light_media-playback-start.svg</file>
+        <file>light_media-playback-stop.svg</file>
+        <file>light_media-record.svg</file>
+        <file>light_mirror-view-16.svg</file>
         <file>light_nextframe.svg</file>
+        <file>light_palette-edit.svg</file>
         <file>light_palette-library.svg</file>
         <file>light_passthrough-disabled.svg</file>
         <file>light_passthrough-enabled.svg</file>
@@ -81,6 +180,8 @@
         <file>light_selection-mode_ants.svg</file>
         <file>light_selection-mode_invisible.svg</file>
         <file>light_selection-mode_mask.svg</file>
+        <file>light_select-all.svg</file>
+        <file>light_select-clear.svg</file>
         <file>light_select-pixel.svg</file>
         <file>light_select-shape.svg</file>
         <file>light_selection_add.svg</file>
@@ -89,15 +190,21 @@
         <file>light_selection_replace.svg</file>
         <file>light_selection_subtract.svg</file>
         <file>light_sidebaricon.svg</file>
+        <file>light_system-help.svg</file>
+        <file alias="light_help-contents.svg">light_system-help.svg</file>
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
+        <file>light_view-list-details.svg</file>
+        <file>light_view-list-text-16.svg</file>
+        <file>light_view-preview.svg</file>
         <file>light_warning.svg</file>
         <file>light_workspace-chooser.svg</file>
         <file>light_wraparound.svg</file>
         <file>paintop_presets_disabled.svgz</file>
         <file>paintop_settings_01.svgz</file>
-        <file>selection-info.svg</file>
+        <file>dark_selection-info.svg</file>
+        <file>light_selection-info.svg</file>
         <file>svg-icons.qrc</file>
         <file>transparency-locked.svg</file>
         <file>transparency-unlocked.svg</file>

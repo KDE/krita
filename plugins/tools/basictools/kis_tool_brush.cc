@@ -66,9 +66,9 @@ KisToolBrush::~KisToolBrush()
 {
 }
 
-void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolBrush::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolFreehand::activate(activation, shapes);
+    KisToolFreehand::activate(shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
     QAction *toggleaction = action("toggle_assistant");

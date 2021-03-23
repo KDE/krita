@@ -18,6 +18,8 @@
 #include <KisTag.h>
 #include <KisTagModel.h>
 
+#include <kritaresourcewidgets_export.h>
+
 
 // ########### Actions ###########
 ///
@@ -68,7 +70,7 @@ private:
 /// By default it closes its parent upon triggering and clears the content,
 ///  but it can be disabled.
 ///
-class LineEditAction : public QWidgetAction
+class KRITARESOURCEWIDGETS_EXPORT LineEditAction : public QWidgetAction
 {
     Q_OBJECT
 protected:
@@ -126,7 +128,7 @@ private:
 /// - Rename a current tag (the responsibility to know which tag is current
 ///    depends on the external widget like KisTagChooserWidget)
 ///
-class UserInputTagAction : public LineEditAction
+class KRITARESOURCEWIDGETS_EXPORT UserInputTagAction : public LineEditAction
 {
     Q_OBJECT
 

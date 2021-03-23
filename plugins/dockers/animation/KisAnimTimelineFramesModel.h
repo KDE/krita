@@ -83,6 +83,8 @@ public:
     void setFullClipRangeStart(int column);
     void setFullClipRangeEnd(int column);
 
+    void clearEntireCache();
+
     void setLastClickedIndex(const QModelIndex &index);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

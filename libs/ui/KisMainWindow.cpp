@@ -59,6 +59,7 @@
 #include "kis_selection_manager.h"
 #include "kis_icon_utils.h"
 #include <krecentfilesaction.h>
+#include "krita_utils.h"
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <kmainwindow.h>
@@ -68,6 +69,7 @@
 #include <kguiitem.h>
 #include <kwindowconfig.h>
 #include <kformat.h>
+#include <kacceleratormanager.h>
 
 #include <KoResourcePaths.h>
 #include <KoToolFactoryBase.h>
@@ -338,6 +340,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
+    KAcceleratorManager::setNoAccel(this);
+
     d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
     connect(d->workspacemodel, SIGNAL(modelReset()), this, SLOT(updateWindowMenu()));
 
@@ -606,9 +610,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // it remains fixed?
     setFixedSize(KisApplication::primaryScreen()->availableGeometry().size());
 
-    connect(d->fileManager, SIGNAL(sigFileSelected(QUrl)), this, SLOT(slotFileSelected(QUrl)));
-    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
-
     QScreen *s = QGuiApplication::primaryScreen();
     s->setOrientationUpdateMask(Qt::LandscapeOrientation|Qt::InvertedLandscapeOrientation|Qt::PortraitOrientation|Qt::InvertedPortraitOrientation);
     connect(s, SIGNAL(orientationChanged(Qt::ScreenOrientation)), this, SLOT(orientationChanged()));
@@ -809,8 +810,11 @@ void KisMainWindow::slotPreferences()
 
 void KisMainWindow::slotThemeChanged()
 {
+    KConfigGroup group(KSharedConfig::openConfig(), "theme");
+
+    if (group.readEntry("Theme", "") == d->themeManager->currentThemeName()) return;
+
     // save theme changes instantly
-    KConfigGroup group( KSharedConfig::openConfig(), "theme");
     group.writeEntry("Theme", d->themeManager->currentThemeName());
 
     // reload action icons!
@@ -831,23 +835,31 @@ void KisMainWindow::slotThemeChanged()
         }
     }
 
+
     // update MDI area theme
     // Tab close button override
     // just switch this icon out for all OSs so it is easier to see
-    QString themeName = d->themeManager->currentThemeName();
-    bool isDarkTheme = themeName.toLower().contains("dark");
-    if(isDarkTheme) {
-        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/light_close-tab.svg) }");
-    } else {
-        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/dark_close-tab.svg) }");
+    QString globalStyleSheet = R"(
+            QTabBar::close-button {
+                image: url({close-button-location});
+                padding-top: 3px;
+            }
+
+            QHeaderView::section {
+                padding: 7px;
+            }
+
+           )";
+
+    if (KisIconUtils::useDarkIcons()) {
+        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/dark_close-tab.svg");
+    }
+    else {
+        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/light_close-tab.svg");
+
     }
 
-
-    // all global styles can be set here. Build them out line by line so it is easier to read/manage
-    QString stylesBuilder;
-    QString tableHeaderSpacing = "QHeaderView::section {padding: 7px; }";
-    stylesBuilder.append(tableHeaderSpacing);
-    qApp->setStyleSheet(stylesBuilder);
+    qApp->setStyleSheet(globalStyleSheet);
 
     emit themeChanged();
 }
@@ -873,16 +885,7 @@ void KisMainWindow::setCanvasDetached(bool detach)
     } else {
         d->canvasWindow->hide();
     }
-}
-
-void KisMainWindow::slotFileSelected(QUrl url)
-{
-    openDocumentInternal(url);
-}
-
-void KisMainWindow::slotEmptyFilePath()
-{
-    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
+    d->toggleDetachCanvas->setChecked(detach);
 }
 
 QWidget * KisMainWindow::canvasWindow() const
@@ -1014,8 +1017,8 @@ void KisMainWindow::updateCaption()
 
         setWindowTitle(caption);
 
-        if (!doc->url().fileName().isEmpty()) {
-            d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));
+        if (!QFileInfo(doc->path()).fileName().isEmpty()) {
+            d->saveAction->setToolTip(i18n("Save as %1", QFileInfo(doc->path()).fileName()));
         }
         else {
             d->saveAction->setToolTip(i18n("Save"));
@@ -1032,35 +1035,28 @@ KisView *KisMainWindow::activeView() const
     return 0;
 }
 
-bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
+bool KisMainWindow::openDocument(const QString &path, OpenFlags flags)
 {
     ScopedWidgetDisabler disabler(d->welcomeScroller);
     QApplication::processEvents(); // make UI more responsive
 
-    if (!QFile(url.toLocalFile()).exists()) {
+    if (!QFile(path).exists()) {
         if (!(flags & BatchMode)) {
-            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", path));
         }
-        d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list
+        d->recentFiles->removeUrl(QUrl::fromLocalFile(path)); //remove the file from the recent-opened-file-list
         saveRecentFiles();
         return false;
     }
-    return openDocumentInternal(url, flags);
+    return openDocumentInternal(path, flags);
 }
 
-bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
+bool KisMainWindow::openDocumentInternal(const QString &path, OpenFlags flags)
 {
-#ifndef Q_OS_ANDROID
-    if (!url.isLocalFile()) {
-        qWarning() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
+    if (!QFile(path).exists()) {
+        qWarning() << "KisMainWindow::openDocumentInternal. Could not open:" << path;
         return false;
     }
-#else
-    if (!QFile(url.toString()).exists() && !url.isLocalFile()) {
-        qWarning() << "KisMainWindow::openDocumentInternal. Could not open:" << url;
-        return false;
-    }
-#endif
 
     KisDocument *newdoc = KisPart::instance()->createDocument();
 
@@ -1078,7 +1074,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
         openFlags |= KisDocument::RecoveryFile;
     }
 
-    bool openRet = !(flags & Import) ? newdoc->openUrl(url, openFlags) : newdoc->importDocument(url);
+    bool openRet = !(flags & Import) ? newdoc->openPath(path, openFlags) : newdoc->importDocument(path);
 
     if (!openRet) {
         delete newdoc;
@@ -1089,11 +1085,11 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
 
     // Try to determine whether this was an unnamed autosave
     if (flags & RecoveryFile &&
-            (   url.toLocalFile().startsWith(QDir::tempPath())
-                || url.toLocalFile().startsWith(QDir::homePath())
+            (   path.startsWith(QDir::tempPath())
+                || path.startsWith(QDir::homePath())
                 ) &&
-            (      QFileInfo(url.toLocalFile()).fileName().startsWith(".krita")
-                   || QFileInfo(url.toLocalFile()).fileName().startsWith("krita")
+            (      QFileInfo(path).fileName().startsWith(".krita")
+                   || QFileInfo(path).fileName().startsWith("krita")
                    )
             )
     {
@@ -1101,7 +1097,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
         if (!QFileInfo(path).exists()) {
             path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
         }
-        newdoc->setUrl(QUrl::fromLocalFile( path + "/" + newdoc->objectName() + ".kra"));
+        newdoc->setPath(path + "/" + newdoc->objectName() + ".kra");
     }
 
     return true;
@@ -1287,7 +1283,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         saveas = true;
     }
 
-    if (document->url().isEmpty()) {
+    if (document->path().isEmpty()) {
         saveas = true;
     }
 
@@ -1297,7 +1293,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
     QByteArray nativeFormat = document->nativeFormatMimeType();
     QByteArray oldMimeFormat = document->mimeType();
 
-    QUrl suggestedURL = document->url();
+    QUrl suggestedURL = QUrl::fromLocalFile(document->path());
 
     QStringList mimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
 
@@ -1323,7 +1319,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
     bool ret = false;
 
-    if (document->url().isEmpty() || isExporting || saveas) {
+    if (document->path().isEmpty() || isExporting || saveas) {
         // if you're just File/Save As'ing to change filter options you
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
@@ -1372,43 +1368,33 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(default_mime_type));
         }
 
-        QUrl newURL = QUrl::fromUserInput(dialog.filename());
-
-        if (newURL.isLocalFile()) {
-#ifndef Q_OS_ANDROID
-            QString fn = newURL.toLocalFile();
-            if (QFileInfo(fn).completeSuffix().isEmpty()) {
-                fn.append(KisMimeDatabase::suffixesForMimeType(nativeFormat).first());
-                newURL = QUrl::fromLocalFile(fn);
-            }
-#endif
-        }
+        QString newFilePath = dialog.filename();
 
         if (document->documentInfo()->aboutInfo("title") == i18n("Unnamed")) {
-            QString fn = newURL.toLocalFile();
+            QString fn = newFilePath;
             QFileInfo info(fn);
             document->documentInfo()->setAboutInfo("title", info.completeBaseName());
         }
 
         QByteArray outputFormat = nativeFormat;
 
-        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile(), false);
+        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newFilePath, false);
         outputFormat = outputFormatString.toLatin1();
 
 
         if (!isExporting) {
-            justChangingFilterOptions = (newURL == document->url()) && (outputFormat == document->mimeType());
+            justChangingFilterOptions = (newFilePath == document->path()) && (outputFormat == document->mimeType());
         }
         else {
             QString path = QFileInfo(d->lastExportLocation).absolutePath();
-            QString filename = QFileInfo(document->url().toLocalFile()).completeBaseName();
-            justChangingFilterOptions = (QFileInfo(newURL.toLocalFile()).absolutePath() == path)
-                    && (QFileInfo(newURL.toLocalFile()).completeBaseName() == filename)
+            QString filename = QFileInfo(document->path()).completeBaseName();
+            justChangingFilterOptions = (QFileInfo(newFilePath).absolutePath() == path)
+                    && (QFileInfo(newFilePath).completeBaseName() == filename)
                     && (outputFormat == d->lastExportedFormat);
         }
 
         bool bOk = true;
-        if (newURL.isEmpty()) {
+        if (newFilePath.isEmpty()) {
             bOk = false;
         }
 
@@ -1423,10 +1409,10 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
             if (wantToSave) {
                 if (!isExporting) {  // Save As
-                    ret = document->saveAs(newURL, outputFormat, true);
+                    ret = document->saveAs(newFilePath, outputFormat, true);
                     if (ret) {
                         dbgUI << "Successful Save As!";
-                        KisPart::instance()->addRecentURLToAllMainWindows(newURL);
+                        KisPart::instance()->addRecentURLToAllMainWindows(QUrl::fromLocalFile(newFilePath));
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
@@ -1434,10 +1420,10 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                     }
                 }
                 else { // Export
-                    ret = document->exportDocument(newURL, outputFormat);
+                    ret = document->exportDocument(newFilePath, outputFormat);
 
                     if (ret) {
-                        d->lastExportLocation = newURL.toLocalFile();
+                        d->lastExportLocation = newFilePath;
                         d->lastExportedFormat = outputFormat;
                     }
                 }
@@ -1706,7 +1692,7 @@ void KisMainWindow::slotFileOpen(bool isImporting)
 
         if (!url.isEmpty()) {
             OpenFlags flags = isImporting ? Import : None;
-            bool res = openDocument(QUrl::fromLocalFile(url), flags);
+            bool res = openDocument(url, flags);
             if (!res) {
                 warnKrita << "Loading" << url << "failed";
             }
@@ -1716,7 +1702,7 @@ void KisMainWindow::slotFileOpen(bool isImporting)
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 {
-    (void) openDocument(QUrl::fromLocalFile(url.toLocalFile()), None);
+    (void) openDocument(url.toLocalFile(), None);
 }
 
 void KisMainWindow::slotFileSave()
@@ -1836,7 +1822,7 @@ void KisMainWindow::openCommandBar()
     }
 
     if (activeKisView()) {
-        KActionCollection *layerActionCollection = new KActionCollection(0, "layeractions");
+        KActionCollection *layerActionCollection = new KActionCollection(0, "layeractions (disposable)");
         layerActionCollection->setComponentDisplayName(i18n("Layers/Masks"));
         KisNodeActivationActionCreatorVisitor v(layerActionCollection, viewManager()->nodeManager());
         activeKisView()->image()->rootLayer()->accept(v);
@@ -1995,11 +1981,15 @@ void KisMainWindow::importAnimation()
         QStringList files = dlg.files();
         int firstFrame = dlg.firstFrame();
         int step = dlg.step();
+        bool startFrom1 = dlg.startFrom1();
+        bool autoAddHoldframes = dlg.autoAddHoldframes();
+
 
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        KisImportExportErrorCode status = importer.import(files, firstFrame, step);
+        int isAscending = dlg.isAscending();
+        KisImportExportErrorCode status = importer.import(files, firstFrame, step, autoAddHoldframes, startFrom1, isAscending);  // modify here, add a flag
 
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();
@@ -2123,6 +2113,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
+        KAcceleratorManager::setNoAccel(dockWidget->titleBarWidget());
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
@@ -2222,6 +2213,7 @@ void KisMainWindow::slotUpdateWidgetStyle()
      Q_FOREACH (auto key, d->actionMap.keys()) { // find checked style to save to config
          if(d->actionMap.value(key)->isChecked()) {
             cfg.setWidgetStyle(key);
+            qApp->setProperty(currentUnderlyingStyleNameProperty, key);
             qApp->setStyle(key);
          }
      }
@@ -2381,7 +2373,7 @@ void KisMainWindow::updateWindowMenu()
 #endif
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
-            QString title = fontMetrics.elidedText(doc->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth);
+            QString title = fontMetrics.elidedText(doc->path(), Qt::ElideMiddle, fileStringWidth);
             if (title.isEmpty() && doc->image()) {
                 title = doc->image()->objectName();
             }
@@ -2480,10 +2472,10 @@ void KisMainWindow::updateWindowMenu()
         if (child && child->document()) {
             QString text;
             if (i < 9) {
-                text = i18n("&%1 %2", i + 1, fontMetrics.elidedText(child->document()->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth));
+                text = i18n("&%1 %2", i + 1, fontMetrics.elidedText(child->document()->path(), Qt::ElideMiddle, fileStringWidth));
             }
             else {
-                text = i18n("%1 %2", i + 1, fontMetrics.elidedText(child->document()->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth));
+                text = i18n("%1 %2", i + 1, fontMetrics.elidedText(child->document()->path(), Qt::ElideMiddle, fileStringWidth));
             }
 
             QAction *action  = menu->addAction(text);
@@ -2781,8 +2773,8 @@ void KisMainWindow::createActions()
 
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()), Qt::UniqueConnection);
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
     d->toggleDockers = actionManager->createAction("view_toggledockers");
 
     KisConfig(true).showDockers(true);

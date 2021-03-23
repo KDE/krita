@@ -31,6 +31,8 @@
 #include <dlg_embed_tags.h>
 #include <KisGlobalResourcesInterface.h>
 
+#include <wdgtagselection.h>
+
 #include <kis_config.h>
 
 #define ICON_SIZE 48

@@ -82,7 +82,7 @@ public:
 
 
 public Q_SLOTS:
-    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void activate(const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
 Q_SIGNALS:

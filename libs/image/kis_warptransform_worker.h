@@ -64,11 +64,11 @@ private:
 
 private:
     WarpMathFunction m_warpMathFunction;
-    WarpCalculation m_warpCalc;
+    WarpCalculation m_warpCalc {GRID};
     QVector<QPointF> m_origPoint;
     QVector<QPointF> m_transfPoint;
-    qreal m_alpha;
-    KoUpdater *m_progress;
+    qreal m_alpha {1.0};
+    KoUpdater *m_progress {0};
 };
 
 #endif

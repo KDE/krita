@@ -102,7 +102,7 @@ protected:
     const KoCompositeOp* compositeOp();
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 private Q_SLOTS:

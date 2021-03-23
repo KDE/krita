@@ -39,9 +39,8 @@ public:
 
     void connectActiveTool();
     void disconnectActiveTool();
-    void switchTool(KoToolBase *tool, bool temporary);
-    void switchTool(const QString &id, bool temporary);
-    void postSwitchTool(bool temporary);
+    void switchTool(const QString &id);
+    void postSwitchTool();
     void switchCanvasData(CanvasData *cd);
 
     bool eventFilter(QObject *object, QEvent *event);
@@ -105,7 +104,7 @@ public:
     QString iconText() const;
     /// tooltip of the tool, e.g. for tooltip of a button;
     QString toolTip() const;
-    /// wrapper around KoToolFactoryBase::toolType();
+    /// wrapper around KoToolFactoryBase::section();
     QString section() const;
     /// wrapper around KoToolFactoryBase::activationShapeId();
     QString activationShapeId() const;

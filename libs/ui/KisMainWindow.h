@@ -112,7 +112,7 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const QUrl &url, OpenFlags flags);
+    bool openDocument(const QString &path, OpenFlags flags);
 
     /**
      * Activate a view containing the document in this window, creating one if needed.
@@ -312,14 +312,6 @@ public Q_SLOTS:
     void setCanvasDetached(bool detached);
 
     /**
-     * @brief Called when a file is picked using Android's Storage Access Framework
-     * @param url
-     */
-    void slotFileSelected(QUrl url);
-
-    void slotEmptyFilePath();
-
-    /**
      * Toggle full screen on/off.
      */
     void viewFullscreen(bool fullScreen);
@@ -495,7 +487,7 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags f = KisMainWindow::OpenFlags());
+    bool openDocumentInternal(const QString &path, KisMainWindow::OpenFlags f = KisMainWindow::OpenFlags());
 
     void saveWindowSettings();
 

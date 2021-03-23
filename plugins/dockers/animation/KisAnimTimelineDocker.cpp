@@ -215,6 +215,7 @@ struct TimelineDocker::Private
         , mainWindow(nullptr)
     {
         framesView->setModel(framesModel);
+        framesView->setMinimumHeight(50);
     }
 
     KisAnimTimelineFramesModel *framesModel;

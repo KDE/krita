@@ -95,12 +95,20 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
         }
         m_page->cmbRenderType->addItem(description, mime);
     }
-
+    
+    
+    m_page->cmbScaleFilter->addItem("bicubic", "bicubic");
+    m_page->cmbScaleFilter->addItem("bilinear", "bilinear");
+    m_page->cmbScaleFilter->addItem("lanczos3", "lanczos");
+    m_page->cmbScaleFilter->addItem("neighbor", "neighbor");
+    m_page->cmbScaleFilter->addItem("spline", "spline");
+    
     m_page->videoFilename->setMode(KoFileDialog::SaveFile);
 
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
 
     m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/render_type", 0));
+    m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/scale_mode", 0));
 
     connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeOptionsClicked()));
     connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderOptions()));
@@ -169,7 +177,7 @@ QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
     QStringList supportedMimeTypes = QStringList();
     supportedMimeTypes << "video/x-matroska";
     supportedMimeTypes << "image/gif";
-    supportedMimeTypes << "image/png";    
+    supportedMimeTypes << "image/apng";    
     supportedMimeTypes << "image/webp";       
     supportedMimeTypes << "video/ogg";
     supportedMimeTypes << "video/mp4";
@@ -239,6 +247,13 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         }
     }
 
+    for (int i = 0; i < m_page->cmbScaleFilter->count(); ++i) {
+        if (m_page->cmbScaleFilter->itemData(i).toString() == lastUsedOptions.scaleFilter) {
+            m_page->cmbScaleFilter->setCurrentIndex(i);
+            break;
+        }
+    }    
+    
     m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
 
     if (lastUsedOptions.shouldDeleteSequence) {
@@ -298,14 +313,14 @@ QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QS
     return
         QString("%1.%2")
             .arg(QFileInfo(docFileName).completeBaseName())
-            .arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
+            .arg(KisMimeDatabase::suffixesForMimeType( mimeType == "image/apng" ? "image/png":mimeType ).first());
 }
 
 void KisDlgAnimationRenderer::selectRenderType(int index)
 {
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
 
-    m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png" );
+    // m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png" );
     m_page->lblGifWarning->setVisible((mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50));
 
     QString videoFileName = defaultVideoFileName(m_doc, mimeType);
@@ -316,7 +331,7 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         const QString path = info.path();
 
         videoFileName =
-            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
+            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType( mimeType == "image/apng" ? "image/png":mimeType ).first());
 
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimeType, mimeType);
@@ -423,6 +438,7 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     options.lastDocuemntPath = m_doc->localFilePath();
     options.videoMimeType = m_page->cmbRenderType->currentData().toString();
     options.frameMimeType = m_page->cmbMimetype->currentData().toString();
+    options.scaleFilter = m_page->cmbScaleFilter->currentData().toString();
 
     options.basename = m_page->txtBasename->text();
     options.directory = m_page->dirRequester->fileName();
@@ -604,6 +620,8 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
     m_page->intHeight->setVisible(willEncodeVideo);
     m_page->intFramesPerSecond->setVisible(willEncodeVideo);
     m_page->fpsLabel->setVisible(willEncodeVideo);
+    m_page->cmbScaleFilter->setVisible(willEncodeVideo);
+    m_page->scaleFilterLabel->setVisible(willEncodeVideo);
     m_page->lblWidth->setVisible(willEncodeVideo);
     m_page->lblHeight->setVisible(willEncodeVideo);
 

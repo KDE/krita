@@ -26,14 +26,21 @@ public:
     enum ContainerType {
         DEFAULT,
         OGV,
-        WEBM
+        WEBM,
+        GIF,
+        PNG,
+        WEBP
     };
 
     enum CodecPageIndex {
         CODEC_H264 = 0,
         CODEC_H265,
         CODEC_THEORA,
-        CODEC_VP9
+        CODEC_VP9,
+        CODEC_GIF,
+        CODEC_APNG,
+        CODEC_WEBP
+        
     };
 
 public:
@@ -61,6 +68,7 @@ private Q_SLOTS:
 
     void slotH265ProfileChanged(int index);
     void slotEditHDRMetadata();
+    void slotBayerFilterSelected(int index);
 
 private:
     Ui::VideoExportOptionsDialog *ui;

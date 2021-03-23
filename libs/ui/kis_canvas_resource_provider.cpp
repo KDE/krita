@@ -81,12 +81,24 @@ KoCanvasBase * KisCanvasResourceProvider::canvas() const
 
 KoColor KisCanvasResourceProvider::bgColor() const
 {
-    return m_resourceManager->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+    QVariant c = m_resourceManager->resource(KoCanvasResource::BackgroundColor);
+    if (c.isValid()) {
+        return c.value<KoColor>();
+    }
+    else {
+        return KoColor();
+    }
 }
 
 KoColor KisCanvasResourceProvider::fgColor() const
 {
-    return m_resourceManager->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    QVariant c = m_resourceManager->resource(KoCanvasResource::ForegroundColor);
+    if (c.isValid()) {
+        return c.value<KoColor>();
+    }
+    else {
+        return KoColor();
+    }
 }
 
 float KisCanvasResourceProvider::HDRExposure() const

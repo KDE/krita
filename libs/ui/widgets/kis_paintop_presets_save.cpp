@@ -61,15 +61,18 @@ void KisPresetSaveWidget::showDialog()
 
     // UI will look a bit different if we are saving a new brush
     if (m_useNewBrushDialog) {
-           setWindowTitle(i18n("Save New Brush Preset"));
-           newBrushNameTexField->setVisible(true);
-           clearBrushPresetThumbnailButton->setVisible(true);
-           loadImageIntoThumbnailButton->setVisible(true);
-           currentBrushNameLabel->setVisible(false);
+        setWindowTitle(i18n("Save New Brush Preset"));
+        newBrushNameTexField->setVisible(true);
+        clearBrushPresetThumbnailButton->setVisible(true);
+        loadImageIntoThumbnailButton->setVisible(true);
+        currentBrushNameLabel->setVisible(false);
 
-           if (preset) {
-               newBrushNameTexField->setText(preset->name().append(" ").append(i18n("Copy")));
-           }
+        // If the id is -1, this is a new preset that has never been saved, so it cannot be a copy
+        QString name = preset->name();
+        if (preset && preset->resourceId() > -1) {
+            name.append(" ").append(i18n("Copy"));
+        }
+        newBrushNameTexField->setText(name);
 
 
     } else {
@@ -83,7 +86,7 @@ void KisPresetSaveWidget::showDialog()
         currentBrushNameLabel->setVisible(true);
     }
 
-     brushPresetThumbnailWidget->paintPresetImage();
+    brushPresetThumbnailWidget->paintPresetImage();
 
     show();
 }
@@ -152,7 +155,6 @@ void KisPresetSaveWidget::savePreset()
     }
 
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QString saveLocation = rServer->saveLocation();
 
     // if we are saving a new brush, use what we type in for the input
     QString presetFileName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
@@ -179,6 +181,7 @@ void KisPresetSaveWidget::savePreset()
 
         // trying to get brush preset to load after it is created
         emit resourceSelected(newPreset);
+
     }
     else { // saving a preset that is replacing an existing one
         curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
@@ -190,11 +193,12 @@ void KisPresetSaveWidget::savePreset()
     }
 
 
-//    // HACK ALERT! the server does not notify the observers
-//    // automatically, so we need to call theupdate manually!
-//    rServer->tagCategoryMembersChanged();
+    //    // HACK ALERT! the server does not notify the observers
+    //    // automatically, so we need to call theupdate manually!
+    //    rServer->tagCategoryMembersChanged();
 
     m_favoriteResourceManager->updateFavoritePresets();
+
 
     close(); // we are done... so close the save brush dialog
 

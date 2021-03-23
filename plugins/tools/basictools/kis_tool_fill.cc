@@ -91,9 +91,9 @@ void KisToolFill::slotUpdateAvailableColorLabels()
     }
 }
 
-void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolFill::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(toolActivation, shapes);
+    KisToolPaint::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
     if (m_widgetsInitialized && m_imageConnections.isEmpty()) {
         activateConnectionsToImage();

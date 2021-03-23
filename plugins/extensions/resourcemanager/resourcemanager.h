@@ -30,6 +30,7 @@ public:
 private Q_SLOTS:
     void slotCreateBundle();
     void slotManageBundles();
+    void slotManageResources();
 
     void slotImportBrushes();
     void slotImportGradients();

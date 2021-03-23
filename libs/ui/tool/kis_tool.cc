@@ -89,9 +89,9 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     resetCursorStyle();
 
@@ -554,6 +554,11 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
     }
 
     return NodePaintAbility::UNPAINTABLE;
+}
+
+void KisTool::newActivationWithExternalSource(KisPaintDeviceSP externalSource)
+{
+    Q_UNUSED(externalSource);
 }
 
 QWidget* KisTool::createOptionWidget()

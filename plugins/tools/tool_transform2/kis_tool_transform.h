@@ -158,6 +158,8 @@ public:
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
+    void newActivationWithExternalSource(KisPaintDeviceSP externalSource) override;
+
     TransformToolMode transformMode() const;
 
     double translateX() const;
@@ -178,7 +180,7 @@ public:
     int warpPointDensity() const;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();
@@ -251,6 +253,10 @@ private:
 
 private:
     ToolTransformArgs m_currentArgs;
+
+    // Set by newActivationWithExternalSource before starting a new stroke.
+    // The source pixels for the next transform will be read from this device.
+    KisPaintDeviceSP m_externalSourceForNextActivation;
 
     bool m_actuallyMoveWhileSelected {false}; // true <=> selection has been moved while clicked
 
@@ -349,7 +355,7 @@ public:
     KisToolTransformFactory()
             : KisToolPaintFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
-        setSection(TOOL_TYPE_TRANSFORM);
+        setSection(ToolBoxSection::Transform);
         setIconName(koIconNameCStr("krita_tool_transform"));
         setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
         setPriority(2);

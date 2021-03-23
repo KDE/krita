@@ -92,6 +92,7 @@ QVariant KisAllResourcesModel::data(const QModelIndex &index, int role) const
     if (pos) {
         v = KisResourceQueryMapper::variantFromResourceQuery(d->resourcesQuery, index.column(), role);
     }
+
     return v;
 }
 
@@ -272,13 +273,18 @@ QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const
     if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
 
     // For now a linear seek to find the first resource with the right id
+    return indexForResourceId(resource->resourceId());
+}
+
+QModelIndex KisAllResourcesModel::indexForResourceId(int resourceId) const
+{
     d->resourcesQuery.first();
     do {
-        if (d->resourcesQuery.value("id").toInt() == resource->resourceId()) {
+        if (d->resourcesQuery.value("id").toInt() == resourceId) {
             return index(d->resourcesQuery.at(), 0);
         }
     } while (d->resourcesQuery.next());
-    
+
     return QModelIndex();
 }
 
@@ -542,6 +548,15 @@ QModelIndex KisResourceModel::indexForResource(KoResourceSP resource) const
     return QModelIndex();
 }
 
+QModelIndex KisResourceModel::indexForResourceId(int resourceId) const
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return mapFromSource(source->indexForResourceId(resourceId));
+    }
+    return QModelIndex();
+}
+
 bool KisResourceModel::setResourceInactive(const QModelIndex &index)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
@@ -681,7 +696,8 @@ bool KisResourceModel::lessThan(const QModelIndex &source_left, const QModelInde
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    return nameLeft < nameRight;
+
+    return nameLeft.toLower() < nameRight.toLower();
 }
 
 

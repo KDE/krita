@@ -158,6 +158,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
     connect(m_d->horizontalRuler, SIGNAL(sigRemoveHoldColumnsCustom()), SLOT(slotRemoveMultipleHoldFrameColumns()));
 
     connect(m_d->horizontalRuler, SIGNAL(sigMirrorColumns()), SLOT(slotMirrorColumns()));
+    connect(m_d->horizontalRuler, SIGNAL(sigClearCache()), SLOT(slotClearCache()));
 
     connect(m_d->horizontalRuler, SIGNAL(sigCopyColumns()), SLOT(slotCopyColumns()));
     connect(m_d->horizontalRuler, SIGNAL(sigCutColumns()), SLOT(slotCutColumns()));
@@ -190,7 +191,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
 
     m_d->addLayersButton = new QToolButton(this);
     m_d->addLayersButton->setAutoRaise(true);
-    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add-22"));
     m_d->addLayersButton->setIconSize(QSize(22, 22));
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
@@ -453,7 +454,7 @@ void KisAnimTimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
 
 void KisAnimTimelineFramesView::slotUpdateIcons()
 {
-    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add-22"));
     m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
 }
@@ -713,6 +714,10 @@ void KisAnimTimelineFramesView::slotMirrorFrames(bool entireColumn)
     if (!indexes.isEmpty()) {
         m_d->model->mirrorFrames(indexes);
     }
+}
+
+void KisAnimTimelineFramesView::slotClearCache() {
+    m_d->model->clearEntireCache();
 }
 
 void KisAnimTimelineFramesView::slotPasteFrames(bool entireColumn)

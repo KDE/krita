@@ -8,7 +8,7 @@
 #include <kis_debug.h>
 
 #include <klocalizedstring.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisImportExportManager.h>
 
@@ -32,7 +32,7 @@ struct KisImportCatcher::Private
 public:
     KisDocument* doc;
     KisViewManager* view;
-    QUrl url;
+    QString path;
     QString layerType;
 
     QString prettyLayerName() const;
@@ -42,8 +42,8 @@ public:
 
 QString KisImportCatcher::Private::prettyLayerName() const
 {
-    QString name = url.fileName();
-    return !name.isEmpty() ? name : url.toDisplayString();
+    QString name = QFileInfo(path).fileName();
+    return !name.isEmpty() ? name : path;
 }
 
 void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
@@ -68,16 +68,16 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
     adapter.addNode(newLayer, parent, currentActiveLayer);
 }
 
-KisImportCatcher::KisImportCatcher(const QUrl &url, KisViewManager *view, const QString &layerType)
+KisImportCatcher::KisImportCatcher(const QString &path, KisViewManager *view, const QString &layerType)
     : m_d(new Private)
 {
     m_d->doc = KisPart::instance()->createDocument();
     m_d->view = view;
-    m_d->url = url;
+    m_d->path = path;
     m_d->layerType = layerType;
 
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    bool result = m_d->doc->openUrl(url, KisDocument::DontAddToRecent);
+    bool result = m_d->doc->openPath(path, KisDocument::DontAddToRecent);
 
     if (!result) {
         deleteMyself();

@@ -15,6 +15,9 @@ class KoZoomInput : public QStackedWidget
         explicit KoZoomInput(QWidget* parent = 0);
         ~KoZoomInput() override;
 
+        bool isFlat() const;
+        void setFlat(bool flat);
+
         void setZoomLevels(const QStringList& levels);
         void setCurrentZoomLevel(const QString& level);
 

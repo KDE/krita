@@ -7,24 +7,12 @@
         <file>light_application-exit.svg</file>
         <file>light_application-pdf.svg</file>
         <file>light_applications-system.svg</file>
-        <file>light_arrow-down.svg</file>
-        <file>light_arrow-downright.svg</file>
-        <file>light_arrow-downleft.svg</file>
-        <file>light_arrow-topright.svg</file>
-        <file>light_arrow-topleft.svg</file>
-        <file>light_arrow-left.svg</file>
-        <file>light_arrow-right.svg</file>
-        <file>light_arrow-up.svg</file>
         <file alias="light_configure-shortcuts.svg">light_applications-system.svg</file>
         <file>light_configure.svg</file>
         <file alias="light_configure-toolbars.svg">light_configure.svg</file>
-        <file>light_dialog-cancel.svg</file>
         <file alias="light_dialog-close.svg">light_window-close.svg</file>
         <file>light_dialog-ok.svg</file>
         <file>light_dialog-warning.svg</file>
-        <file>light_document-edit.svg</file>
-        <file>light_document-export.svg</file>
-        <file>light_document-import.svg</file>
         <file>light_document-new.svg</file>
         <file>light_document-open-recent.svg</file>
         <file>light_document-open.svg</file>
@@ -38,46 +26,29 @@
         <file>light_edit-clear.svg</file>
         <file>light_edit-copy.svg</file>
         <file>light_edit-cut.svg</file>
-        <file>light_edit-delete.svg</file>
         <file>light_edit-paste.svg</file>
         <file>light_folder-documents.svg</file>
         <file>light_folder-pictures.svg</file>
         <file>light_folder.svg</file>
         <file>light_format-list-unordered.svg</file>
         <file>light_go-home.svg</file>
-        <file alias="light_go-next.svg">light_arrow-right.svg</file>
-        <file alias="light_go-previous.svg">light_arrow-left.svg</file>
-        <file alias="light_go-up.svg">light_arrow-up.svg</file>
-        <file alias="light_help-contents.svg">light_system-help.svg</file>
         <file>light_im-user.svg</file>
         <file>light_kde.svg</file>
         <file>light_layer-visible-off.svg</file>
         <file>light_link.svg</file>
-        <file>light_locked.svg</file>
-        <file>light_media-playback-start.svg</file>
-        <file>light_media-playback-stop.svg</file>
-        <file>light_media-record.svg</file>
-        <file alias="light_object-locked.svg">light_locked.svg</file>
         <file>light_object-rotate-left.svg</file>
         <file>light_object-rotate-right.svg</file>
-        <file alias="light_object-unlocked.svg">light_unlocked.svg</file>
         <file>light_preferences-desktop-color.svg</file>
         <file>light_preferences-desktop-display.svg</file>
         <file>light_preferences-desktop-locale.svg</file>
         <file>light_process-stop.svg</file>
-        <file>light_select-all.svg</file>
-        <file>light_select-clear.svg</file>
-        <file>light_system-help.svg</file>
         <file>light_tag.svg</file>
         <file>light_tools-report-bug.svg</file>
         <file>light_tools-wizard.svg</file>
-        <file>light_unlocked.svg</file>
         <file>light_view-filter.svg</file>
         <file>light_view-fullscreen.svg</file>
         <file>light_view-grid.svg</file>
-        <file>light_view-list-details.svg</file>
         <file>light_view-list-text.svg</file>
-        <file>light_view-preview.svg</file>
         <file>light_view-refresh.svg</file>
         <file>light_window-close.svg</file>
         <file>light_window-new.svg</file>

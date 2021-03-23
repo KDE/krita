@@ -82,18 +82,21 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
     // make border around active ones
     bool active = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Active).toBool();
 
-    QColor borderColor = option.state & QStyle::State_Selected ?
-                qApp->palette().color(QPalette::HighlightedText) :
-                qApp->palette().color(QPalette::Text);
-    painter->setBrush(Qt::NoBrush);
-    painter->setPen(QPen(borderColor));
-
-    QRect borderRect = kisGrowRect(paintRect, -painter->pen().widthF());
     if (active) {
+        QColor borderColor = option.state & QStyle::State_Selected ?
+                    qApp->palette().color(QPalette::HighlightedText) :
+                    qApp->palette().color(QPalette::Text);
+        painter->setBrush(Qt::NoBrush);
+        painter->setPen(QPen(borderColor));
+
+        QRect borderRect = kisGrowRect(paintRect, -painter->pen().widthF());
+
         painter->drawRect(borderRect);
+
+        painter->setBrush(oldBrush);
+        painter->setPen(oldPen);
+
     }
-    painter->setBrush(oldBrush);
-    painter->setPen(oldPen);
 
     // paint the image
     QImage thumbnail = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
@@ -265,7 +268,6 @@ void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelInd
 {
     Q_UNUSED(previous);
 
-    ENTER_FUNCTION() << "Current cell changed!";
     QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);
     if (!idx.isValid()) {

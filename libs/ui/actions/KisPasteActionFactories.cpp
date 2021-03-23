@@ -261,6 +261,22 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     }
 }
 
+void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
+{
+    if (!viewManager->activeDevice()) return;
+
+    KisImageSP image = viewManager->image();
+    if (!image) return;
+
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
+    if (!clip) return;
+
+    KisImportCatcher::adaptClipToImageColorSpace(clip, image);
+
+    KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(viewManager->canvasBase(), "KisToolTransform"));
+    tool->newActivationWithExternalSource(clip);
+}
+
 void KisPasteNewActionFactory::run(KisViewManager *viewManager)
 {
     Q_UNUSED(viewManager);

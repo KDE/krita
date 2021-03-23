@@ -75,6 +75,16 @@ KoZoomWidget::~KoZoomWidget()
 {
 }
 
+bool KoZoomWidget::isZoomInputFlat() const
+{
+    return d->input->isFlat();
+}
+
+void KoZoomWidget::setZoomInputFlat(bool flat)
+{
+    d->input->setFlat(flat);
+}
+
 void KoZoomWidget::setZoomLevels(const QStringList &values)
 {
     d->input->setZoomLevels(values);

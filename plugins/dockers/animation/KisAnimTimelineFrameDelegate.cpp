@@ -10,7 +10,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QSvgRenderer>
-#include "krita_utils.h"
+#include <kis_painting_tweaks.h>
 #include "KisAnimTimelineFramesModel.h"
 #include "KisAnimTimelineColors.h"
 
@@ -91,7 +91,7 @@ void KisAnimTimelineFrameDelegate::paintSpecialKeyframeIndicator(QPainter *paint
     }
 
     if (!isEditable) {
-        color = KritaUtils::blendColors(baseColor, color, 0.5);
+        color = KisPaintingTweaks::blendColors(baseColor, color, 0.5);
     }
 
     if (doesFrameExist && hasContent) {
@@ -137,10 +137,10 @@ void KisAnimTimelineFrameDelegate::drawBackground(QPainter *painter, const QMode
 
     // pass for filling in the active row with slightly color difference
     if (hasActiveLayerRole) {
-        color = KritaUtils::blendColors(baseColor, highlightColor, 0.8);
+        color = KisPaintingTweaks::blendColors(baseColor, highlightColor, 0.8);
         painter->fillRect(rc, color);
     } else {
-        color = KritaUtils::blendColors(baseColor, highlightColor, 0.95);
+        color = KisPaintingTweaks::blendColors(baseColor, highlightColor, 0.95);
         painter->fillRect(rc, color);
     }
 
@@ -156,7 +156,7 @@ void KisAnimTimelineFrameDelegate::drawBackground(QPainter *painter, const QMode
     // if layer is hidden, make the entire color more subtle.
     // this should be in effect for both fill color and empty outline color
     if (!isEditable) {
-        color = KritaUtils::blendColors(baseColor, color, 0.7);
+        color = KisPaintingTweaks::blendColors(baseColor, color, 0.7);
     }
 
 
@@ -188,7 +188,7 @@ void KisAnimTimelineFrameDelegate::drawBackground(QPainter *painter, const QMode
              color = noLabelSetColor;
 
              if (!isEditable) {
-                 color = KritaUtils::blendColors(baseColor, color, 0.7);
+                 color = KisPaintingTweaks::blendColors(baseColor, color, 0.7);
              }
          }
 

@@ -130,7 +130,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
-    deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("trash-empty"));
+    deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
 
 
 

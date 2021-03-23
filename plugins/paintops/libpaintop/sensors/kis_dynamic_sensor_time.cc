@@ -58,7 +58,7 @@ QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, QWidge
     stc.spinBoxDuration->setRange(0.02, 10.0, 2);
     stc.spinBoxDuration->setSuffix(i18n(" s"));
 
-    stc.spinBoxDuration->setValue(m_length / 1000);
+    stc.spinBoxDuration->setValue(m_length / 1000.0);
     connect(stc.spinBoxDuration, SIGNAL(valueChanged(qreal)), SLOT(setLength(qreal)));
     connect(stc.spinBoxDuration, SIGNAL(valueChanged(qreal)), ss, SIGNAL(parametersChanged()));
 

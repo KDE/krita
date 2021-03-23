@@ -124,7 +124,8 @@ private Q_SLOTS:
     void clicked(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
-
+    void beforeFilterChanges();
+    void afterFilterChanged();
 
 protected:
     void showEvent(QShowEvent *event) override;

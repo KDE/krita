@@ -88,11 +88,11 @@ TasksetDockerDock::TasksetDockerDock( )
     clearButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
     clearButton->setFlat(true);
 
-    saveButton->setIcon(KisIconUtils::loadIcon("document-save"));
+    saveButton->setIcon(KisIconUtils::loadIcon("document-save-16"));
     saveButton->setEnabled(false);
     saveButton->setFlat(true);
 
-    chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
+    chooserButton->setIcon(KisIconUtils::loadIcon("folder"));
     chooserButton->setFlat(true);
 
     m_rserver = new KoResourceServer<TasksetResource>(ResourceType::TaskSets);

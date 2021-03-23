@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   id="svg5453"
+   height="32"
+   width="32">
+  <defs
+     id="defs5455">
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="3"
+       x2="32"
+       y1="61"
+       x1="32"
+       id="linearGradient4306"
+       xlink:href="#linearGradient4300"
+       gradientTransform="matrix(0.49999977,0,0,0.48275841,384.57144,516.34974)" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="47"
+       x2="47"
+       y1="61"
+       x1="47"
+       id="linearGradient4357"
+       xlink:href="#linearGradient4351-3"
+       gradientTransform="matrix(0.48275841,0,0,0.48275841,385.26109,516.10836)" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="16.500048"
+       x2="39.500008"
+       y1="31"
+       x1="54"
+       id="linearGradient4427"
+       xlink:href="#linearGradient4410"
+       gradientTransform="matrix(0.48275841,0,0,-0.48275841,378.50247,553.76351)" />
+    <linearGradient
+       id="linearGradient4410">
+      <stop
+         id="stop4412"
+         offset="0"
+         style="stop-color:#383e51;stop-opacity:1" />
+      <stop
+         id="stop4414"
+         offset="1"
+         style="stop-color:#655c6f;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4300">
+      <stop
+         style="stop-color:#e00a5e;stop-opacity:1"
+         offset="0"
+         id="stop4302" />
+      <stop
+         style="stop-color:#f62870;stop-opacity:1"
+         offset="1"
+         id="stop4304" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4351-3">
+      <stop
+         style="stop-color:#f78fb9;stop-opacity:1"
+         offset="0"
+         id="stop4353-5" />
+      <stop
+         style="stop-color:#f9c1d6;stop-opacity:1"
+         offset="1"
+         id="stop4355-6" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata5458">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2021</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-384.57143,-515.798)"
+     id="layer1">
+    <path
+       id="rect3500"
+       d="M 389.57144,517.79801 V 545.798 h 14.99999 l 7.00003,-7 -3e-5,-14.24137 v -6.75862 h -7 z"
+       style="fill:url(#linearGradient4306);fill-opacity:1;stroke:none" />
+    <rect
+       y="544.79797"
+       x="389.57144"
+       height="0.99997306"
+       width="14.999983"
+       id="rect4169"
+       style="opacity:1;fill:#2e3132;fill-opacity:0.29411765;stroke:none" />
+    <rect
+       y="517.79797"
+       x="389.57144"
+       height="1.0000261"
+       width="21.999994"
+       id="rect4236"
+       style="opacity:1;fill:#ffffff;fill-opacity:0.41176471;stroke:none" />
+    <path
+       id="path4314"
+       d="m 411.57144,538.798 -7.00001,7 v -7 z"
+       style="fill:url(#linearGradient4357);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       style="opacity:0.2;fill:url(#linearGradient4427);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 397.57143,545.79797 7,-6.99997 v 7 z"
+       id="path4320" />
+    <rect
+       y="526.79797"
+       x="375.89221"
+       height="10.999983"
+       width="0"
+       id="rect4035"
+       style="fill:#ffffff;fill-opacity:1;stroke:none" />
+    <rect
+       y="525.79797"
+       x="375.57144"
+       height="10.999983"
+       width="0"
+       id="rect4035-4"
+       style="fill:#ffffff;fill-opacity:1;stroke:none" />
+    <rect
+       y="525.68414"
+       x="374.03558"
+       height="11.113901"
+       width="0"
+       id="rect4035-3"
+       style="fill:#fbd2bf;fill-opacity:1;stroke:none" />
+    <rect
+       y="525.79797"
+       x="375.57144"
+       height="10.999983"
+       width="0"
+       id="rect4035-1"
+       style="fill:#fbd2bf;fill-opacity:1;stroke:none" />
+    <rect
+       y="525.79797"
+       x="375.57144"
+       height="10.999983"
+       width="0"
+       id="rect4035-5"
+       style="fill:#fbfbfb;fill-opacity:1;stroke:none" />
+    <g
+       style="fill:#f9c1d6;fill-opacity:1"
+       id="layer1-9"
+       transform="translate(392.57143,-515.5642)">
+      <rect
+         style="fill:#f9c1d6;fill-opacity:1;stroke:none"
+         id="rect4035-2"
+         width="0"
+         height="10.999983"
+         x="-17"
+         y="1039.3622" />
+      <path
+         d="m 13.634953,1038.3678 a 1.500133,6.7506007 44.989453 0 0 -5.5835433,3.8242 1.500133,6.7506007 44.989453 0 0 -2.657025,3.0857 c 0.8069772,0.2571 1.4359595,0.8862 1.6929526,1.6935 a 1.500133,6.7506007 44.989453 0 0 3.0847227,-2.6579 1.500133,6.7506007 44.989453 0 0 3.711626,-5.8345 1.500133,6.7506007 44.989453 0 0 -0.249013,-0.1114 m -8.6347572,7.9939 C 2,1047.1655 4.249937,1049.0649 2,1050.3622 c 2.9999158,0 4.4998734,-1.5014 4.4998734,-2.5026 0,-0.4991 0.051,-1.4173 -1.4999576,-1.5003"
+         id="path88"
+         style="fill:#f9c1d6;fill-opacity:1" />
+    </g>
+    <path
+       id="rect854"
+       transform="translate(384.57143,515.798)"
+       d="M 7,5 V 22 H 25 V 5 Z M 8,6 H 24 V 21 H 8 Z"
+       style="opacity:1;vector-effect:none;fill:#f9c1d6;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+  </g>
+</svg>

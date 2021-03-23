@@ -17,11 +17,7 @@
 
 
 KisColorSelectorRing::KisColorSelectorRing(KisColorSelector *parent) :
-    KisColorSelectorComponent(parent),
-    m_cachedColorSpace(0),
-    m_cachedSize(0),
-    m_lastHue(0),
-    m_innerRingRadiusFraction(0.85)
+    KisColorSelectorComponent(parent)
 {
 }
 

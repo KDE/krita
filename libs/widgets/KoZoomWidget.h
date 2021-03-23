@@ -13,14 +13,18 @@
 #include <QWidget>
 #include "KoZoomAction.h"
 #include <QScopedPointer>
+#include <kritawidgets_export.h>
 
-class KoZoomWidget : public QWidget
+class KRITAWIDGETS_EXPORT KoZoomWidget : public QWidget
 {
     Q_OBJECT
 
 public:
     KoZoomWidget(QWidget* parent, int maxZoom);
     ~KoZoomWidget() override;
+
+    bool isZoomInputFlat() const;
+    void setZoomInputFlat(bool flat);
 
 Q_SIGNALS:
    /**

@@ -27,6 +27,14 @@ public:
     void setImageSize(qint32 w, qint32 h);
     void setCanvasSize(qint32 w, qint32 h);
     void setImageOffset(qint32 x, qint32 y);
+
+    bool xOffsetLocked() const;
+    bool yOffsetLocked() const;
+
+public Q_SLOTS:
+    void setxOffsetLock(bool);
+    void setyOffsetLock(bool);
+
 Q_SIGNALS:
     void sigModifiedXOffset(int);
     void sigModifiedYOffset(int);
@@ -45,6 +53,9 @@ protected:
 
     QImage m_image;
     QPoint m_prevDragPoint;
+
+    bool m_xOffsetLocked {false};
+    bool m_yOffsetLocked {false};
 };
 
 

@@ -82,7 +82,7 @@ private:
     bool snap(KoPointerEvent *event);
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 
@@ -153,7 +153,7 @@ public:
     KisAssistantToolFactory()
             : KoToolFactoryBase("KisAssistantTool") {
         setToolTip(i18n("Assistant Tool"));
-        setSection(TOOL_TYPE_VIEW);
+        setSection(ToolBoxSection::View);
         setIconName(koIconNameCStr("krita_tool_assistant"));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

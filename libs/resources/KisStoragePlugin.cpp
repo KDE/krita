@@ -55,7 +55,12 @@ QByteArray KisStoragePlugin::resourceMd5(const QString &url)
 {
     // a fallback implementation for the storages with
     // ephemeral resources
-    return resource(url)->md5();
+    KoResourceSP res = resource(url);
+    if (res) {
+        return res->md5();
+    } else {
+        return QByteArray();
+    }
 }
 
 bool KisStoragePlugin::supportsVersioning() const

@@ -55,7 +55,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectRectangular")
     {
         setToolTip(i18n("Rectangular Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setSection(ToolBoxSection::Select);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_rect_selection"));
         setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));

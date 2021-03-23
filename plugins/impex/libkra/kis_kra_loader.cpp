@@ -378,9 +378,9 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
     for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
         QDomElement e = child.toElement();
         if (e.tagName() == ANNOTATIONS) {
-            for (QDomElement annotationElement = e.lastChildElement();
+            for (QDomElement annotationElement = e.firstChildElement();
                  !annotationElement.isNull();
-                 annotationElement = annotationElement.previousSiblingElement())
+                 annotationElement = annotationElement.nextSiblingElement())
             {
                 QString type = annotationElement.attribute("type");
                 QString description = annotationElement.attribute("description");
@@ -518,7 +518,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
     // Annotations
     Q_FOREACH(KisAnnotationSP annotation, m_d->annotations) {
-
         QByteArray ba;
         location = external ? QString() : uri;
         location += m_d->imageName + ANNOTATIONS_PATH + annotation->type();
@@ -528,6 +527,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
             device.open(QIODevice::ReadOnly);
             ba = device.readAll();
             device.close();
+            store->close();
             annotation->setAnnotation(ba);
             m_d->document->image()->addAnnotation(annotation);
         }
@@ -948,7 +948,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
 
     QString documentPath;
     if (m_d->document) {
-        documentPath = m_d->document->url().toLocalFile();
+        documentPath = m_d->document->path();
     }
     QFileInfo info(documentPath);
     QString basePath = info.absolutePath();

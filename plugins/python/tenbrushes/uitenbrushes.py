@@ -45,7 +45,11 @@ class UITenBrushes(object):
         self.vbox.addLayout(self.hbox)
         self.vbox.addWidget(
             QLabel(i18n("Select the brush preset, then click on the button "
-                        "you want to use to select the preset")))
+                        "you want to use to select the preset.")))
+        self.vbox.addWidget(
+            QLabel(i18n("Shortcuts are configurable through the <i>Keyboard Shortcuts</i> "
+                        "interface in Krita's settings.")))
+
         self.vbox.addWidget(self.presetChooser)
 
         self.checkBoxActivatePrev.setChecked(self.tenbrushes.activatePrev)

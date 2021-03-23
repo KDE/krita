@@ -380,15 +380,6 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
     repaintDecorations();
 }
 
-void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Escape) {
-        emit done();
-    } else {
-        event->ignore();
-    }
-}
-
 void KoCreatePathTool::endPath()
 {
     Q_D(KoCreatePathTool);
@@ -439,9 +430,9 @@ void KoCreatePathTool::removeLastPoint()
     }
 }
 
-void KoCreatePathTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KoCreatePathTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     Q_D(KoCreatePathTool);
     useCursor(Qt::ArrowCursor);

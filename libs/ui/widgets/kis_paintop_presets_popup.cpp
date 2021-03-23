@@ -41,6 +41,7 @@
 #include "kis_lod_availability_widget.h"
 
 #include "kis_signal_auto_connection.h"
+#include <kis_paintop_settings.h>
 #include <kis_paintop_settings_update_proxy.h>
 
 // ones from brush engine selector
@@ -72,7 +73,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
                                                KisFavoriteResourceManager* favoriteResourceManager,
                                                KisPresetSaveWidget* savePresetWidget,
                                                QWidget * parent)
-    : QWidget(parent)
+    : QWidget(parent, Qt::Dialog)
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
@@ -358,38 +359,42 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     // if you are renaming a brush, that is different than updating the settings
     // make sure we are in a clean state before renaming. This logic might change,
     // but that is what we are going with for now
-    emit reloadPresetClicked();
+    KisPaintOpSettingsSP prevSettings = m_d->resourceProvider->currentPreset()->settings()->clone();
+    bool isDirty = m_d->resourceProvider->currentPreset()->isDirty();
+
+     // this returns the UI to its original state after saving
+    toggleBrushRenameUIActive(false);
+    slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 
     // get a reference to the existing (and new) file name and path that we are working with
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
-
-    if (!curPreset)
-        return;
-
     // in case the preset is dirty, we need an id to get the actual non-dirty preset to save just the name change
     // into the database
     int currentPresetResourceId = curPreset->resourceId();
 
-
-    QString originalPresetName = curPreset->name();
     QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
 
+    // If the id < 0, this is a new preset that hasn't been added to the storage and the database yet.
+    if (!curPreset || currentPresetResourceId < 0) {
+        curPreset->setName(renamedPresetName);
+        slotUpdatePresetSettings(); // update visibility of dirty preset and icon
+        return;
+    }
+
+
+    emit reloadPresetClicked();
 
     // create a new brush preset with the name specified and add to resource provider
     KisResourceModel model(ResourceType::PaintOpPresets);
     KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
     model.renameResource(properCleanResource, renamedPresetName);
 
-
-
     resourceSelected(curPreset); // refresh and select our freshly renamed resource
-
-
-    // Now blacklist the original file
-
+    if (isDirty) {
+        m_d->resourceProvider->currentPreset()->setSettings(prevSettings);
+        m_d->resourceProvider->currentPreset()->setDirty(isDirty);
+    }
     m_d->favoriteResManager->updateFavoritePresets();
-
-    toggleBrushRenameUIActive(false); // this returns the UI to its original state after saving
 
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }

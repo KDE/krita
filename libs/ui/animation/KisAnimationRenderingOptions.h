@@ -36,6 +36,7 @@ public:
     int frameRate = 25;
     int width = 0;
     int height = 0;
+    QString scaleFilter;
     QString videoFileName;
 
     QString customFFMpegOptions;

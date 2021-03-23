@@ -18,6 +18,7 @@
 #include "ui_kis_input_configuration_page_item.h"
 
 #include <QAction>
+#include <QMessageBox>
 
 KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
@@ -77,5 +78,10 @@ void KisInputConfigurationPageItem::deleteShortcut()
 
     if (m_shortcutsModel->canRemoveRow(row)) {
         m_shortcutsModel->removeRow(row, QModelIndex());
+    } else {
+        QMessageBox shortcutMessage;
+        shortcutMessage.setText(i18n("Deleting last shortcut for this action!"));
+        shortcutMessage.setInformativeText(i18n("It is not allowed to erase some default shortcuts. Modify it instead."));
+        shortcutMessage.exec();
     }
 }

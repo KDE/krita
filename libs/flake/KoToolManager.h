@@ -222,18 +222,7 @@ public Q_SLOTS:
     void switchInputDeviceRequested(const KoInputDevice &id);
 
     /**
-     * Request for temporary switching the tools.
-     * This switch can be later reverted with switchBackRequested().
-     * @param id the id of the tool
-     *
-     * @see switchBackRequested()
-     */
-    void switchToolTemporaryRequested(const QString &id);
-
-    /**
-     * Switches back to the original tool after the temporary switch
-     * has been done. It the user changed the tool manually on the way,
-     * then it switches to the interaction tool
+     * Switches to the last tool used just before the current one, if any.
      */
     void switchBackRequested();
 

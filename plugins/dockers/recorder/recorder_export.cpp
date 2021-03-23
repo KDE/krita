@@ -197,7 +197,7 @@ public:
 
     void updateVideoDuration()
     {
-        long ms = framesCount * 1000L / inputFps;
+        long ms = framesCount * 1000L / (inputFps ? inputFps : 30);
         ui->labelVideoDuration->setText(formatDuration(ms));
     }
 
@@ -235,10 +235,10 @@ RecorderExport::RecorderExport(QWidget *parent)
     d->ui->buttonBrowseFfmpeg->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonEditProfile->setIcon(KisIconUtils::loadIcon("document-edit"));
     d->ui->buttonBrowseExport->setIcon(KisIconUtils::loadIcon("folder"));
-    d->ui->buttonLockRatio->setIcon(KisIconUtils::loadIcon("locked"));
+    d->ui->buttonLockRatio->setIcon(d->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     d->ui->buttonWatchIt->setIcon(KisIconUtils::loadIcon("media-playback-start"));
     d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
-    d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("trash-empty"));
+    d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("edit-delete"));
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
 
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));
@@ -308,6 +308,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     d->ui->spinScaleWidth->setValue(d->size.width());
     d->ui->spinScaleHeight->setValue(d->size.height());
     d->ui->buttonLockRatio->setChecked(d->lockRatio);
+    d->ui->buttonLockRatio->setIcon(d->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     d->ui->editFfmpegPath->setText(d->ffmpegPath);
     d->fillComboProfiles();
     d->checkFfmpeg();
@@ -376,6 +377,7 @@ void RecorderExport::onButtonLockRatioToggled(bool checked)
         d->updateRatio(true);
         config.setSize(d->size);
     }
+    d->ui->buttonLockRatio->setIcon(d->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
 }
 
 void RecorderExport::onButtonBrowseFfmpegClicked()

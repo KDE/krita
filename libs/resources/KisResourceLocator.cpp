@@ -300,6 +300,9 @@ bool KisResourceLocator::importResourceFromFile(const QString &resourceType, con
         qWarning() << "Could not import" << fileName << ": resource doesn't load.";
         return false;
     }
+
+    resource->setVersion(0);
+
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
     Q_ASSERT(storage);
     if (!storage->addResource(resource)) {
@@ -346,9 +349,11 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
 bool KisResourceLocator::updateResource(const QString &resourceType, const KoResourceSP resource)
 {
-    QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
+    if (resource->resourceId() < 0) {
+        return addResource(resourceType, resource, "");
+    }
 
-    //debugResource << ">>>>>>>>>>>>>>>> storageLocation"<< storageLocation << "resource storage location" << resource->storageLocation();
+    QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
 
     Q_ASSERT(d->storages.contains(storageLocation));
     Q_ASSERT(resource->resourceId() > -1);
@@ -387,10 +392,11 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
 bool KisResourceLocator::reloadResource(const QString &resourceType, const KoResourceSP resource)
 {
-    QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
+    // This resource isn't in the database yet, so we cannot reload it
+    if (resource->resourceId() < 0) return false;
 
+    QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
     Q_ASSERT(d->storages.contains(storageLocation));
-    Q_ASSERT(resource->resourceId() > -1);
 
     KisResourceStorageSP storage = d->storages[storageLocation];
 

@@ -273,8 +273,9 @@ void KisDlgLayerStyle::slotNewStyle()
     KisPSDLayerStyleSP clone = style->clone().dynamicCast<KisPSDLayerStyle>();
     style->setName(styleName);
     clone->setName(styleName);
-    clone->setFilename(styleName);
     clone->setUuid(QUuid::createUuid());
+    clone->setFilename(clone->uuid().toString());
+    clone->setValid(true);
     m_stylesSelector->addNewStyle(clone);
     const QString customStylesStorageLocation = "asl/CustomStyles.asl";
     KisConfig cfg(true);
@@ -292,7 +293,7 @@ void KisDlgLayerStyle::slotNewStyle()
         serializer.setStyles(QVector<KisPSDLayerStyleSP>() << clone);
         serializer.saveToFile(storagePath);
         QSharedPointer<KisResourceStorage> storage = QSharedPointer<KisResourceStorage>(new KisResourceStorage(storagePath));
-        KisResourceLocator::instance()->addStorage(customStylesStorageLocation, storage);
+        KisResourceLocator::instance()->addStorage(storagePath, storage);
     }
 
 }
@@ -553,7 +554,6 @@ StylesSelector::StylesSelector(QWidget *parent)
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
-    connect(m_resourceModel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotResourceModelReset()));
 
     refillCollections();
 

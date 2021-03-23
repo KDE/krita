@@ -50,7 +50,10 @@
 #include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>
+#include "kis_signals_blocker.h"
 
+static const QString pixelsInchStr(i18n("Pixels/Inch"));
+static const QString pixelsCentimeterStr(i18n("Pixels/Centimeter"));
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : WdgNewImage(parent)
@@ -74,8 +77,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     cmbHeightUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
     cmbHeightUnit->setCurrentIndex(m_heightUnit.indexInListForUi(KoUnit::ListAll));
 
+    cmbResolutionUnit->addItem(pixelsInchStr);
+    cmbResolutionUnit->addItem(pixelsCentimeterStr);
+
     doubleResolution->setValue(72.0 * resolution);
-    doubleResolution->setDecimals(0);
+    doubleResolution->setDecimals(2);
 
     imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     grpClipboard->hide();
@@ -95,6 +101,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
             this, SLOT(heightUnitChanged(int)));
     connect(doubleHeight, SIGNAL(valueChanged(double)),
             this, SLOT(heightChanged(double)));
+    connect(cmbResolutionUnit, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(resolutionUnitChanged()));
 
 
     // Create image
@@ -174,7 +182,7 @@ KisCustomImageWidget::~KisCustomImageWidget()
 }
 
 void KisCustomImageWidget::resolutionChanged(double res)
-{
+{  
     if (m_widthUnit.type() == KoUnit::Pixel) {
         m_widthUnit.setFactor(res / 72.0);
         m_width = m_widthUnit.fromUserValue(doubleWidth->value());
@@ -187,6 +195,21 @@ void KisCustomImageWidget::resolutionChanged(double res)
     changeDocumentInfoLabel();
 }
 
+void KisCustomImageWidget::resolutionUnitChanged()
+{
+    qreal resolution = doubleResolution->value();
+
+    if (cmbResolutionUnit->currentText() == pixelsInchStr) {
+        resolution = KoUnit::convertFromUnitToUnit(resolution, KoUnit(KoUnit::Inch), KoUnit(KoUnit::Centimeter));
+    } else {
+        resolution = KoUnit::convertFromUnitToUnit(resolution, KoUnit(KoUnit::Centimeter), KoUnit(KoUnit::Inch));
+    }
+
+    {
+        KisSignalsBlocker b(doubleResolution);
+        doubleResolution->setValue(resolution);
+    }
+}
 
 void KisCustomImageWidget::widthUnitChanged(int index)
 {
@@ -282,9 +305,15 @@ KisDocument* KisCustomImageWidget::createNewImage()
     KisDocument *doc = static_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     qint32 width, height;
-    double resolution;
-    resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
-
+    double resolution ;
+    KIS_SAFE_ASSERT_RECOVER(cmbResolutionUnit->currentText() == pixelsInchStr || cmbResolutionUnit->currentText() == pixelsCentimeterStr) { resolution = 1.0; }
+    if (cmbResolutionUnit->currentText() == pixelsInchStr) {
+        resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
+    } else if (cmbResolutionUnit->currentText() == pixelsCentimeterStr) {
+        resolution = doubleResolution->value() / 28.34;
+    } else {
+        resolution = 1.0;
+    }
     width = static_cast<qint32>(0.5  + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_width));
     height = static_cast<qint32>(0.5 + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_height));
 
@@ -376,7 +405,11 @@ void KisCustomImageWidget::predefinedClicked(int index)
 
     KisPropertiesConfigurationSP predefined = m_predefined[index - 1];
     txtPredefinedName->setText(predefined->getString("name"));
-    doubleResolution->setValue(predefined->getDouble("resolution"));
+    if (cmbResolutionUnit->currentText() == pixelsInchStr) {
+        doubleResolution->setValue(predefined->getDouble("resolution"));
+    } else {
+        doubleResolution->setValue(KoUnit::convertFromUnitToUnit(predefined->getDouble("resolution"), KoUnit(KoUnit::Centimeter), KoUnit(KoUnit::Inch)));
+    }
     cmbWidthUnit->setCurrentIndex(predefined->getInt("x-unit"));
     cmbHeightUnit->setCurrentIndex(predefined->getInt("y-unit"));
 

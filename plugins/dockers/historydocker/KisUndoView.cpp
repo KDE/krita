@@ -105,6 +105,7 @@ void KisUndoViewPrivate::init(KisUndoView* view)
 {
     q = view;
     model = new KisUndoModel(q);
+    model->setDevicePixelRatio(view->devicePixelRatioF());
     q->setModel(model);
     q->setSelectionModel(model->selectionModel());
 }

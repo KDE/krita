@@ -14,7 +14,7 @@
 struct KisAllTagResourceModel::Private {
     QString resourceType;
     QSqlQuery query;
-    int columnCount {ResourceName};
+    int columnCount { TagName + 1 };
     int cachedRowCount {-1};
 };
 
@@ -73,12 +73,18 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
     if (!pos) {return v;}
 
-    if (role < Qt::UserRole + TagId) {
 
+
+    if (role < Qt::UserRole + TagId && index.column() < TagId) {
         int id = d-> query.value("resource_id").toInt();
         v = KisResourceQueryMapper::variantFromResourceQueryById(id, index.column(), role);
     }
 
+    if (index.column() >= TagId) {
+        // trick to get the correct value without writing everything again
+        // this is used for example in case of sorting
+        role = Qt::UserRole + index.column();
+    }
     // These are not shown, but needed for the filter
     switch(role) {
     case Qt::UserRole + TagId:
@@ -127,7 +133,12 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + ResourceName:
     {
-        v = d->query.value("resource_name").toInt();
+        v = d->query.value("resource_name").toString();
+        break;
+    }
+    case Qt::UserRole + TagName:
+    {
+        v = d->query.value("tag_name").toString();
         break;
     }
 
@@ -431,7 +442,7 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
-    return nameLeft < nameRight;
+    return nameLeft.toLower() < nameRight.toLower();
 }
 
 KoResourceSP KisTagResourceModel::resourceForIndex(QModelIndex index) const
@@ -448,6 +459,19 @@ QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const
         QModelIndex idx = index(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
         Q_ASSERT(idx.isValid());
         if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resource->resourceId()) {
+            return idx;
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex KisTagResourceModel::indexForResourceId(int resourceId) const
+{
+    if (resourceId < 0) return QModelIndex();
+    for (int i = 0; i < rowCount(); ++i)  {
+        QModelIndex idx = index(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
+        Q_ASSERT(idx.isValid());
+        if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resourceId) {
             return idx;
         }
     }

@@ -56,9 +56,9 @@ KisToolShape::~KisToolShape()
     }
 }
 
-void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolShape::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(toolActivation, shapes);
+    KisToolPaint::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 

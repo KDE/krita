@@ -21,6 +21,8 @@
 
 #include <kis_icon.h>
 #include <kis_image_animation_interface.h>
+#include <commands_new/kis_switch_current_time_command.h>
+#include "KisAddRemoveStoryboardCommand.h"
 
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -105,7 +107,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     addIcon.paint(p, buttonsRect);
 
                     buttonsRect.moveBottomRight(option.rect.bottomRight());
-                    QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
+                    QIcon deleteIcon = KisIconUtils::loadIcon("edit-delete");
                     p->fillRect(buttonsRect, option.palette.window());
                     deleteIcon.paint(p, buttonsRect);
                 }
@@ -332,13 +334,25 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && upButtonClicked) {
-                sbModel->setData(index, index.data().toInt() + 1);
-                //                return sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
+                KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
+                                                                                    index.data().toInt() + 1,
+                                                                                    index.parent().row(),
+                                                                                    index.row(),
+                                                                                    sbModel);
+                if (sbModel->setData(index, index.data().toInt() + 1)) {
+                    sbModel->pushUndoCommand(cmd);
+                }
                 return true;
             }
             else if (leftButton && downButtonClicked) {
-                sbModel->setData(index, index.data().toInt() - 1);
-                //                return sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
+                KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
+                                                                                    index.data().toInt() - 1,
+                                                                                    index.parent().row(),
+                                                                                    index.row(),
+                                                                                    sbModel);
+                if (sbModel->setData(index, index.data().toInt() - 1)) {
+                    sbModel->pushUndoCommand(cmd);
+                }
                 return true;
             }
         }
@@ -376,14 +390,17 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             bool addItemButtonClicked = addItemButton.isValid() && addItemButton.contains(mouseEvent->pos());
             bool deleteItemButtonClicked = deleteItemButton.isValid() && deleteItemButton.contains(mouseEvent->pos());
 
-
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && addItemButtonClicked) {
                 sbModel->insertItem(index.parent(), true);
                 return true;
             }
             else if (leftButton && deleteItemButtonClicked) {
-                model->removeRows(index.parent().row(), 1);
+                int row = index.parent().row();
+                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, sbModel->getData().at(row), sbModel);
+
+                sbModel->removeItem(index.parent(), command);
+                sbModel->pushUndoCommand(command);
                 return true;
             }
         }
@@ -413,6 +430,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             m_lastDragPos = mouseEvent->pos();
         }
     }
+
     return false;
 }
 
@@ -478,14 +496,32 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
             int value = spinbox->value();
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
-            sbModel->setData(index, value);
+            KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
+                                                                                    value,
+                                                                                    index.parent().row(),
+                                                                                    index.row(),
+                                                                                    sbModel);
+            if (sbModel->setData(index, value)) {
+                sbModel->pushUndoCommand(cmd);
+            }
             return;
         }
         default:             // for comments
         {
             QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
             QString value = textEdit->toPlainText();
-            model->setData(index, value, Qt::EditRole);
+
+            StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
+            KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
+                                                                                   value,
+                                                                                   index.parent().row(),
+                                                                                   index.row(),
+                                                                                   sbModel);
+
+            if (sbModel->setData(index, value)) {
+                sbModel->pushUndoCommand(cmd);
+            }
+
             return;
         }
         }
@@ -584,4 +620,18 @@ QRect StoryboardDelegate::scrollUpButton(const QStyleOptionViewItem &option, QSt
 void StoryboardDelegate::setImageSize(QSize imageSize)
 {
     m_imageSize = imageSize;
+}
+
+bool StoryboardDelegate::isOverlappingActionIcons(const QRect &rect, const QMouseEvent *event)
+{
+    QRect addItemButton(QPoint(0, 0), QSize(22, 22));
+    addItemButton.moveBottomLeft(rect.bottomLeft());
+
+    QRect deleteItemButton(QPoint(0, 0), QSize(22, 22));
+    deleteItemButton.moveBottomRight(rect.bottomRight());
+
+    bool addItemButtonHover = addItemButton.isValid() && addItemButton.contains(event->pos());
+    bool deleteItemButtonHover = deleteItemButton.isValid() && deleteItemButton.contains(event->pos());
+
+    return addItemButtonHover || deleteItemButtonHover;
 }

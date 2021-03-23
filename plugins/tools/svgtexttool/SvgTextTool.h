@@ -39,7 +39,7 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
 
     /// reimplemented from KoToolBase
-    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void activate(const QSet<KoShape *> &shapes) override;
     /// reimplemented from KoToolBase
     void deactivate() override;
 

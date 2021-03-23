@@ -118,7 +118,6 @@ private:
     KisColorButtonPrivate *const d;
 
     Q_PRIVATE_SLOT(d, void _k_chooseColor())
-    Q_PRIVATE_SLOT(d, void _k_colorChosen())
 };
 
 #endif

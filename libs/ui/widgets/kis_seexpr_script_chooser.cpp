@@ -30,7 +30,7 @@ KisSeExprScriptChooser::KisSeExprScriptChooser(QWidget *parent)
     : QFrame(parent)
 {
     m_lblName = new KSqueezedTextLabel(this);
-    m_lblName->setTextElideMode(Qt::ElideLeft);
+    m_lblName->setTextElideMode(Qt::ElideMiddle);
     m_lblName->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     m_itemChooser = new KisResourceItemChooser(ResourceType::SeExprScripts, true, this);

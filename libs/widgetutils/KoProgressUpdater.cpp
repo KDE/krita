@@ -160,6 +160,7 @@ void KoProgressUpdater::cancel()
         updater->setInterrupted(true);
     }
     d->canceled = true;
+    d->updateGuiTimer.stop();
     updateUi();
 }
 
@@ -300,7 +301,6 @@ void KoProgressUpdater::Private::clearState()
 
     progressProxy()->setRange(0, taskMax);
     progressProxy()->setValue(progressProxy()->maximum());
-
     canceled = false;
 }
 
@@ -326,7 +326,6 @@ int KoProgressUpdater::updateInterval() const
 void KoProgressUpdater::setAutoNestNames(bool value)
 {
     d->autoNestNames = value;
-    update();
 }
 
 bool KoProgressUpdater::autoNestNames() const

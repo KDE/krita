@@ -282,7 +282,7 @@ void KisSafeDocumentLoader::delayedLoadStart()
             }
         }
         else {
-            successfullyLoaded = m_d->doc->openUrl(QUrl::fromLocalFile(m_d->temporaryPath),
+            successfullyLoaded = m_d->doc->openPath(m_d->temporaryPath,
                                                    KisDocument::DontAddToRecent);
         }
     } else {

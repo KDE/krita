@@ -13,6 +13,7 @@
 #include <kis_filter_configuration.h>
 #include <kis_filter_manager.h>
 #include <kis_filter_registry.h>
+#include <KisDocument.h>
 #include <KisPart.h>
 #include <KisView.h>
 

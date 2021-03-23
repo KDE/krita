@@ -7,24 +7,12 @@
         <file>dark_application-exit.svg</file>
         <file>dark_application-pdf.svg</file>
         <file>dark_applications-system.svg</file>
-        <file>dark_arrow-down.svg</file>
-        <file>dark_arrow-downright.svg</file>
-        <file>dark_arrow-downleft.svg</file>
-        <file>dark_arrow-topright.svg</file>
-        <file>dark_arrow-topleft.svg</file>
-        <file>dark_arrow-left.svg</file>
-        <file>dark_arrow-right.svg</file>
-        <file>dark_arrow-up.svg</file>
         <file alias="dark_configure-shortcuts.svg">dark_applications-system.svg</file>
         <file>dark_configure.svg</file>
         <file alias="dark_configure-toolbars.svg">dark_configure.svg</file>
-        <file>dark_dialog-cancel.svg</file>
         <file alias="dark_dialog-close.svg">dark_window-close.svg</file>
         <file>dark_dialog-ok.svg</file>
         <file>dark_dialog-warning.svg</file>
-        <file>dark_document-edit.svg</file>
-        <file>dark_document-export.svg</file>
-        <file>dark_document-import.svg</file>
         <file>dark_document-new.svg</file>
         <file>dark_document-open-recent.svg</file>
         <file>dark_document-open.svg</file>
@@ -37,46 +25,29 @@
         <file>dark_edit-clear.svg</file>
         <file>dark_edit-copy.svg</file>
         <file>dark_edit-cut.svg</file>
-        <file>dark_edit-delete.svg</file>
         <file>dark_edit-paste.svg</file>
         <file>dark_folder-documents.svg</file>
         <file>dark_folder-pictures.svg</file>
         <file>dark_folder.svg</file>
         <file>dark_format-list-unordered.svg</file>
         <file>dark_go-home.svg</file>
-        <file alias="dark_go-next.svg">dark_arrow-right.svg</file>
-        <file alias="dark_go-previous.svg">dark_arrow-left.svg</file>
-        <file alias="dark_go-up.svg">dark_arrow-up.svg</file>
-        <file alias="dark_help-contents.svg">dark_system-help.svg</file>
         <file>dark_im-user.svg</file>
         <file>dark_kde.svg</file>
         <file>dark_layer-visible-off.svg</file>
         <file>dark_link.svg</file>
-        <file>dark_locked.svg</file>
-        <file>dark_media-playback-start.svg</file>
-        <file>dark_media-playback-stop.svg</file>
-        <file>dark_media-record.svg</file>
-        <file alias="dark_object-locked.svg">dark_locked.svg</file>
         <file>dark_object-rotate-left.svg</file>
         <file>dark_object-rotate-right.svg</file>
-        <file alias="dark_object-unlocked.svg">dark_unlocked.svg</file>
         <file>dark_preferences-desktop-color.svg</file>
         <file>dark_preferences-desktop-display.svg</file>
         <file>dark_preferences-desktop-locale.svg</file>
         <file>dark_process-stop.svg</file>
-        <file>dark_select-all.svg</file>
-        <file>dark_select-clear.svg</file>
-        <file>dark_system-help.svg</file>
         <file>dark_tag.svg</file>
         <file>dark_tools-report-bug.svg</file>
         <file>dark_tools-wizard.svg</file>
-        <file>dark_unlocked.svg</file>
         <file>dark_view-filter.svg</file>
         <file>dark_view-fullscreen.svg</file>
         <file>dark_view-grid.svg</file>
-        <file>dark_view-list-details.svg</file>
         <file>dark_view-list-text.svg</file>
-        <file>dark_view-preview.svg</file>
         <file>dark_view-refresh.svg</file>
         <file>dark_window-close.svg</file>
         <file>dark_window-new.svg</file>

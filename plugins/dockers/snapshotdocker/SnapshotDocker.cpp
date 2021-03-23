@@ -71,7 +71,7 @@ SnapshotDocker::SnapshotDocker()
     connect(m_d->bnSwitchTo, &QToolButton::clicked, this, &SnapshotDocker::slotBnSwitchToClicked);
 
     buttonsLayout->addWidget(m_d->bnSwitchTo);
-    m_d->bnRemove->setIcon(KisIconUtils::loadIcon("deletelayer"));
+    m_d->bnRemove->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->bnRemove->setToolTip(i18nc("@info:tooltip", "Remove selected snapshot"));
     m_d->bnRemove->setAutoRaise(true);
     connect(m_d->bnRemove, &QToolButton::clicked, this, &SnapshotDocker::slotBnRemoveClicked);

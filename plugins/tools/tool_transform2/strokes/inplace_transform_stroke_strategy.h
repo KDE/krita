@@ -86,6 +86,7 @@ public:
                                    bool forceReset,
                                    KisNodeSP rootNode,
                                    KisSelectionSP selection,
+                                   KisPaintDeviceSP externalSource,
                                    KisStrokeUndoFacade *undoFacade,
                                    KisUpdatesFacade *updatesFacade, KisNodeSP imageRoot, bool forceLodMode);
 
@@ -121,7 +122,7 @@ private:
     void postAllUpdates(int levelOfDetail);
 
     void transformNode(KisNodeSP node, const ToolTransformArgs &config, int levelOfDetail);
-    void clearNode(KisNodeSP node);
+    void createCacheAndClearNode(KisNodeSP node);
     void reapplyTransform(ToolTransformArgs args, QVector<KisStrokeJobData *> &mutatedJobs, int levelOfDetail);
     void finalizeStrokeImpl(QVector<KisStrokeJobData *> &mutatedJobs, bool saveCommands);
 

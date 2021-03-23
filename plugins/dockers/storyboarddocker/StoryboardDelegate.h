@@ -75,6 +75,8 @@ public:
     QRect scrollUpButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
     void setImageSize(QSize imageSize);
 
+    bool isOverlappingActionIcons(const QRect& rect, const QMouseEvent *event);
+
 private Q_SLOTS:
 
     /**

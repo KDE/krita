@@ -286,7 +286,7 @@ void KisLayerManager::layerProperties()
 
     }
     else if (fileLayer && !multipleLayersSelected){
-        QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
+        QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString fileNameOld = fileLayer->fileName();
         KisFileLayer::ScalingMethod scalingMethodOld = fileLayer->scalingMethod();
         KisDlgFileLayer dlg(basePath, fileLayer->name(), m_view->mainWindow());
@@ -427,9 +427,9 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
     urlRequester->setMode(KoFileDialog::SaveFile);
     urlRequester->setMimeTypeFilters(listMimeFilter);
-    urlRequester->setFileName(m_view->document()->url().toLocalFile());
-    if (m_view->document()->url().isLocalFile()) {
-        QFileInfo location = QFileInfo(m_view->document()->url().toLocalFile()).completeBaseName();
+    urlRequester->setFileName(m_view->document()->path());
+    if (!m_view->document()->path().isEmpty()) {
+        QFileInfo location = QFileInfo(m_view->document()->path()).completeBaseName();
         location.setFile(location.dir(), location.completeBaseName() + "_" + source->name() + ".png");
         urlRequester->setFileName(location.absoluteFilePath());
     }
@@ -472,12 +472,12 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     dst->cropImage(bounds);
     dst->waitForDone();
 
-    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(path), mimeType.toLatin1());
+    bool r = doc->exportDocumentSync(path, mimeType.toLatin1());
     if (!r) {
 
         qWarning() << "Converting layer to file layer. path:"<< path << "gave errors" << doc->errorMessage();
     } else {
-        QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
+        QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString relativePath = QDir(basePath).relativeFilePath(path);
         KisFileLayer *fileLayer = new KisFileLayer(image, basePath, relativePath, KisFileLayer::None, source->name(), OPACITY_OPAQUE_U8);
         fileLayer->setX(bounds.x());
@@ -489,7 +489,7 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
         m_commandsAdapter->addNode(fileLayer, dstParent, dstAboveThis);
         m_commandsAdapter->endMacro();
     }
-    doc->closeUrl(false);
+    doc->closePath(false);
 }
 
 void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above)
@@ -828,11 +828,9 @@ void KisLayerManager::saveGroupLayers()
 
     KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
     urlRequester->setMode(KoFileDialog::SaveFile);
-    if (m_view->document()->url().isLocalFile()) {
-        urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
-    }
+    urlRequester->setStartDir(QFileInfo(m_view->document()->path()).absolutePath());
     urlRequester->setMimeTypeFilters(listMimeFilter);
-    urlRequester->setFileName(m_view->document()->url().toLocalFile());
+    urlRequester->setFileName(m_view->document()->path());
     layout->addWidget(urlRequester);
 
     QCheckBox *chkInvisible = new QCheckBox(i18n("Convert Invisible Groups"), page);
@@ -873,10 +871,8 @@ bool KisLayerManager::activeLayerHasSelection()
 KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
 {
     QString basePath;
-    QUrl url = m_view->document()->url();
-    if (url.isLocalFile()) {
-        basePath = QFileInfo(url.toLocalFile()).absolutePath();
-    }
+    QString path = m_view->document()->path();
+    basePath = QFileInfo(path).absolutePath();
     KisImageWSP image = m_view->image();
 
     KisDlgFileLayer dlg(basePath, image->nextLayerName(i18n("File Layer")), m_view->mainWindow());

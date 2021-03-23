@@ -97,6 +97,7 @@ public Q_SLOTS:
 
     void slotMirrorFrames(bool entireColumn = false);
     void slotMirrorColumns() {slotMirrorFrames(true);}
+    void slotClearCache();
 
     // Copy, paste & clone.
     void slotCopyFrames() {cutCopyImpl(false, true);}

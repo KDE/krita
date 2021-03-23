@@ -427,6 +427,7 @@ bool KoResourceBundle::loadResource(KoResourceSP resource)
         return false;
     }
     const QString fileName = QString("%1/%2").arg(resourceType).arg(resource->filename());
+
     if (!resourceStore->open(fileName)) {
         qWarning() << "Could not open file in bundle" << fileName;
         return false;
@@ -437,7 +438,19 @@ bool KoResourceBundle::loadResource(KoResourceSP resource)
         qWarning() << "Could not reload the resource from the bundle" << resourceType << fileName << m_filename;
         return false;
     }
-    resourceStore->close();
+
+    if ((resource->image().isNull() || resource->thumbnail().isNull()) && !resource->thumbnailPath().isNull()) {
+
+        if (!resourceStore->open(resourceType + '/' + resource->thumbnailPath())) {
+            qWarning() << "Could not open thumbnail in bundle" << resource->thumbnailPath();
+            return false;
+        }
+
+        QImage img;
+        img.load(resourceStore->device(), QFileInfo(resource->thumbnailPath()).completeSuffix().toLatin1());
+        resource->setImage(img);
+        resource->updateThumbnail();
+    }
 
     return true;
 }

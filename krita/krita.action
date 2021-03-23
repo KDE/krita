@@ -584,20 +584,20 @@
     </Action>
     <Action name="reset_fg_bg">
       <icon/>
-      <text>Reset Foreground and Background Color</text>
+      <text>Set Foreground and Background Colors to Black and White</text>
       <whatsThis/>
-      <toolTip>Reset Foreground and Background Color</toolTip>
-      <iconText>Reset Foreground and Background Color</iconText>
+      <toolTip>Set foreground and background colors to black and white</toolTip>
+      <iconText>Set Foreground and Background Colors to Black and White</iconText>
       <shortcut>D</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
     <Action name="toggle_fg_bg">
       <icon/>
-      <text>Swap Foreground and Background Color</text>
+      <text>Swap Foreground and Background Colors</text>
       <whatsThis/>
-      <toolTip>Swap Foreground and Background Color</toolTip>
-      <iconText>Swap Foreground and Background Color</iconText>
+      <toolTip>Swap foreground and background colors</toolTip>
+      <iconText>Swap Foreground and Background Colors</iconText>
       <shortcut>X</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2304,6 +2304,18 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="clear_animation_cache">
+        <icon/>
+        <text>Clear Cache</text>
+        <whatsThis/>
+        <toolTip>Clear entire animation cache. Useful for debugging.</toolTip>
+        <iconText/>
+        <activationFlags>100000</activationFlags>
+        <activationConditions>0</activationConditions>
+        <shortcut/>
+        <isCheckable>false</isCheckable>
+        <statusTip/>
+    </Action>
     <Action name="copy_frames">
       <icon/>
       <text>Copy Keyframes</text>
@@ -2364,7 +2376,7 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="copy_columns">
+    <Action name="copy_columns_to_clipboard">
       <icon/>
       <text>Copy Columns</text>
       <whatsThis/>
@@ -2376,7 +2388,7 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="cut_columns">
+    <Action name="cut_columns_to_clipboard">
       <icon/>
       <text>Cut Columns</text>
       <whatsThis/>
@@ -2440,7 +2452,7 @@ Enable to preserve playback timing.</text>
   <Actions category="Layers">
     <text>Layers</text>
     <Action name="activateNextLayer">
-      <icon/>
+      <icon>activate-next-layer</icon>
       <text>Activate next layer</text>
       <whatsThis/>
       <toolTip>Activate next layer</toolTip>
@@ -2464,7 +2476,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="activatePreviousLayer">
-      <icon/>
+      <icon>activate-previous-layer</icon>
       <text>Activate previous layer</text>
       <whatsThis/>
       <toolTip>Activate previous layer</toolTip>
@@ -2968,7 +2980,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="convert_to_file_layer">
-      <icon>fileLayer</icon>
+      <icon>convert-to-fileLayer</icon>
       <text>to &amp;File Layer...</text>
       <whatsThis/>
       <toolTip>Saves out the layers into a new image and then references that image.</toolTip>
@@ -2992,7 +3004,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="import_layer_as_paint_layer">
-      <icon>paintLayer</icon>
+      <icon>import-as-paintLayer</icon>
       <text>&amp;as Paint Layer...</text>
       <whatsThis/>
       <toolTip>as Paint Layer</toolTip>
@@ -3004,7 +3016,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="import_layer_as_transparency_mask">
-      <icon>transparencyMask</icon>
+      <icon>import-as-transparencyMask</icon>
       <text>as &amp;Transparency Mask...</text>
       <whatsThis/>
       <toolTip>as Transparency Mask</toolTip>
@@ -3016,7 +3028,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="import_layer_as_filter_mask">
-      <icon>filterMask</icon>
+      <icon>import-as-filterMask</icon>
       <text>as &amp;Filter Mask...</text>
       <whatsThis/>
       <toolTip>as Filter Mask</toolTip>
@@ -3028,7 +3040,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="import_layer_as_selection_mask">
-      <icon>selectionMask</icon>
+      <icon>import-as-selectionMask</icon>
       <text>as &amp;Selection Mask...</text>
       <whatsThis/>
       <toolTip>as Selection Mask</toolTip>
@@ -3040,7 +3052,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="convert_to_paint_layer">
-      <icon>paintLayer</icon>
+      <icon>convert-to-paintLayer</icon>
       <text>to &amp;Paint Layer</text>
       <whatsThis/>
       <toolTip>to Paint Layer</toolTip>
@@ -3052,7 +3064,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="convert_to_transparency_mask">
-      <icon>transparencyMask</icon>
+      <icon>convert-to-transparencyMask</icon>
       <text>to &amp;Transparency Mask</text>
       <whatsThis/>
       <toolTip>to Transparency Mask</toolTip>
@@ -3064,7 +3076,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="convert_to_filter_mask">
-      <icon>filterMask</icon>
+      <icon>convert-to-filterMask</icon>
       <text>to &amp;Filter Mask...</text>
       <whatsThis/>
       <toolTip>to Filter Mask</toolTip>
@@ -3076,7 +3088,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="convert_to_selection_mask">
-      <icon>selectionMask</icon>
+      <icon>convert-to-selectionMask</icon>
       <text>to &amp;Selection Mask</text>
       <whatsThis/>
       <toolTip>to Selection Mask</toolTip>
@@ -3088,7 +3100,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="split_alpha_into_mask">
-      <icon>transparencyMask</icon>
+      <icon>alpha-into-mask</icon>
       <text>&amp;Alpha into Mask</text>
       <whatsThis/>
       <toolTip>Alpha into Mask</toolTip>

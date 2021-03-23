@@ -18,6 +18,7 @@
 #include "kis_global.h"
 #include "KisToolChangesTrackerData.h"
 #include "KisBezierTransformMesh.h"
+#include "kis_paint_device.h"
 
 #include <QScopedPointer>
 class KisLiquifyTransformWorker;
@@ -69,7 +70,8 @@ public:
                       double alpha,
                       bool defaultPoints,
                       const QString &filterId,
-                      int pixelPrecision, int previewPixelPrecision);
+                      int pixelPrecision, int previewPixelPrecision,
+                      KisPaintDeviceSP externalSource);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 
@@ -97,6 +99,14 @@ public:
 
     inline void setPreviewPixelPrecision(int precision) {
         m_previewPixelPrecision = precision;
+    }
+
+    inline KisPaintDeviceSP externalSource() const {
+        return m_externalSource;
+    }
+
+    inline void setExternalSource(KisPaintDeviceSP externalSource) {
+        m_externalSource = externalSource;
     }
 
     //warp-related
@@ -256,7 +266,14 @@ public:
         return m_filter;
     }
 
+    // True if the transformation does not differ from the initial one. The
+    // target device may still need changing if we are placing an external source.
     bool isIdentity() const;
+
+    // True if the target device does not need changing as a result of this
+    // transformation, because the tranformation does not differ from the initial
+    // one and the source image is not external.
+    bool isUnchanging() const;
 
     inline QTransform flattenedPerspectiveTransform() const {
         return m_flattenedPerspectiveTransform;
@@ -370,6 +387,12 @@ private:
     //PixelPrecision should always be in powers of 2
     int m_pixelPrecision {8};
     int m_previewPixelPrecision {16};
+
+    /**
+     * Optional external image, for example from the clipboard, that
+     * can be transformed directly over an existing paint layer or mask.
+     */
+    KisPaintDeviceSP m_externalSource;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

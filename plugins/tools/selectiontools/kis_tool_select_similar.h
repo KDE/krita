@@ -28,7 +28,7 @@ public:
     void resetCursorStyle() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void slotSetFuzziness(int);
 
 protected:
@@ -49,7 +49,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectSimilar")
     {
         setToolTip(i18n("Similar Color Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setSection(ToolBoxSection::Select);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_similar_selection"));
         setPriority(5);

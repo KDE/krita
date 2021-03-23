@@ -64,6 +64,9 @@ private Q_SLOTS:
     void slotCanvasPreviewXOffsetChanged(int v);
     void slotCanvasPreviewYOffsetChanged(int v);
 
+    void updatexOffsetIcon(bool v);
+    void updateyOffsetIcon(bool v);
+
 private:
 
     void loadAnchorIcons();

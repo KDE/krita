@@ -69,7 +69,7 @@ void KisToolLazyBrush::tryDisableKeyStrokesOnMask()
 }
 
 
-void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolLazyBrush::activate(const QSet<KoShape*> &shapes)
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     m_d->toolConnections.addUniqueConnection(
@@ -82,7 +82,7 @@ void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> 
         mask->regeneratePrefilteredDeviceIfNeeded();
     }
 
-    KisToolFreehand::activate(activation, shapes);
+    KisToolFreehand::activate(shapes);
 }
 
 void KisToolLazyBrush::deactivate()

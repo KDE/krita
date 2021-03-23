@@ -67,6 +67,13 @@ public:
     virtual QModelIndex indexForResource(KoResourceSP resource) const = 0;
 
     /**
+     * @brief indexFromResource
+     * @param resourceId resource id for which we want to get an index
+     * @return
+     */
+    virtual QModelIndex indexForResourceId(int resourceId) const = 0;
+
+    /**
      * @brief setResourceInactive deactivates the specified resource
      * @param index
      * @return
@@ -157,6 +164,7 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
@@ -239,6 +247,7 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;

@@ -59,6 +59,7 @@ struct InplaceTransformStrokeStrategy::Private
     bool forceReset;
     KisNodeSP rootNode;
     KisSelectionSP selection;
+    KisPaintDeviceSP externalSource;
     KisNodeSP imageRoot;
     int previewLevelOfDetail = -1;
     bool forceLodMode = true;
@@ -115,6 +116,7 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
                                                                bool forceReset,
                                                                KisNodeSP rootNode,
                                                                KisSelectionSP selection,
+                                                               KisPaintDeviceSP externalSource,
                                                                KisStrokeUndoFacade *undoFacade,
                                                                KisUpdatesFacade *updatesFacade,
                                                                KisNodeSP imageRoot,
@@ -129,6 +131,7 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
     m_d->forceReset = forceReset;
     m_d->rootNode = rootNode;
     m_d->selection = selection;
+    m_d->externalSource = externalSource;
     m_d->updatesFacade = updatesFacade;
     m_d->undoFacade = undoFacade;
     m_d->imageRoot = imageRoot;
@@ -258,21 +261,30 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
 
     m_d->rootNode = KisTransformUtils::tryOverrideRootToTransformMask(m_d->rootNode);
-    m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->workRecursively);
+
+    // When placing an external source image, we never work recursively on any layer masks
+    m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->workRecursively && !m_d->externalSource);
 
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;
 
-    if (!m_d->forceReset && KisTransformUtils::tryFetchArgsFromCommandAndUndo(&m_d->initialTransformArgs,
-                                                                              m_d->mode,
-                                                                              m_d->rootNode,
-                                                                              m_d->processedNodes,
-                                                                              m_d->undoFacade,
-                                                                              &lastCommandUndoJobs,
-                                                                              &m_d->overriddenCommand)) {
-        argsAreInitialized = true;
-    } else if (!m_d->forceReset && KisTransformUtils::tryInitArgsFromNode(m_d->rootNode, &m_d->initialTransformArgs)) {
-        argsAreInitialized = true;
+    // When externalSource is set, it means that we are initializing a new
+    // stroke following a newActivationWithExternalSource, thus we never try
+    // to reuse an existing transformation from the undo queue. However, when
+    // externalSource is not set, tryFetchArgsFromCommandAndUndo may still
+    // recover a previous stroke that referenced an external source.
+    if (!m_d->forceReset && !m_d->externalSource) {
+        if (KisTransformUtils::tryFetchArgsFromCommandAndUndo(&m_d->initialTransformArgs,
+                                                              m_d->mode,
+                                                              m_d->rootNode,
+                                                              m_d->processedNodes,
+                                                              m_d->undoFacade,
+                                                              &lastCommandUndoJobs,
+                                                              &m_d->overriddenCommand)) {
+            argsAreInitialized = true;
+        } else if (KisTransformUtils::tryInitArgsFromNode(m_d->rootNode, &m_d->initialTransformArgs)) {
+            argsAreInitialized = true;
+        }
     }
 
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
@@ -319,7 +331,10 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                               argsAreInitialized]() mutable {
         QRect srcRect;
 
-        if (m_d->selection) {
+        if (m_d->externalSource) {
+            // Start the transformation around the visible pixels of the external image
+            srcRect = m_d->externalSource->exactBounds();
+        } else if (m_d->selection) {
             srcRect = m_d->selection->selectedExactRect();
         } else {
             srcRect = QRect();
@@ -343,7 +358,9 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         TransformTransactionProperties transaction(srcRect, &m_d->initialTransformArgs, m_d->rootNode, m_d->processedNodes);
         if (!argsAreInitialized) {
             m_d->initialTransformArgs = KisTransformUtils::resetArgsForMode(m_d->mode, m_d->filterId, transaction);
+            m_d->initialTransformArgs.setExternalSource(m_d->externalSource);
         }
+        m_d->externalSource.clear();
 
         m_d->previewLevelOfDetail = calculatePreferredLevelOfDetail(srcRect);
 
@@ -367,7 +384,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
     Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
         KritaUtils::addJobSequential(extraInitJobs, [this, node]() mutable {
-            clearNode(node);
+            createCacheAndClearNode(node);
         });
     }
 
@@ -618,7 +635,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
     }
 }
 
-void InplaceTransformStrokeStrategy::clearNode(KisNodeSP node)
+void InplaceTransformStrokeStrategy::createCacheAndClearNode(KisNodeSP node)
 {
     KisPaintDeviceSP device;
     CommandGroup commandGroup = Clear;
@@ -659,7 +676,11 @@ void InplaceTransformStrokeStrategy::clearNode(KisNodeSP node)
             if (!m_d->devicesCacheHash.contains(device.data())) {
                 KisPaintDeviceSP cache;
 
-                if (m_d->selection) {
+                // The image that will be transformed is linked to the original
+                // layer. We copy existing pixels or use an external source.
+                if (m_d->initialTransformArgs.externalSource()) {
+                    cache = device->createCompositionSourceDevice(m_d->initialTransformArgs.externalSource());
+                } else if (m_d->selection) {
                     QRect srcRect = m_d->selection->selectedExactRect();
 
                     cache = device->createCompositionSourceDevice();
@@ -673,6 +694,9 @@ void InplaceTransformStrokeStrategy::clearNode(KisNodeSP node)
                 m_d->devicesCacheHash.insert(device.data(), cache);
             }
         }
+
+        // Don't clear the selection or layer when the source is external
+        if (m_d->initialTransformArgs.externalSource()) return;
 
         KisTransaction transaction(device);
         if (m_d->selection) {
@@ -746,7 +770,7 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
      * * Transform masks may switch mode and become identity, that
      *   shouldn't be cancelled.
      */
-    if (m_d->currentTransformArgs.isIdentity() &&
+    if (m_d->currentTransformArgs.isUnchanging() &&
         m_d->transformMaskCacheHash.isEmpty() &&
         !m_d->overriddenCommand) {
 

@@ -12,7 +12,6 @@
 #include <kis_types.h>
 
 class KisViewManager;
-class QUrl;
 
 /**
  * This small helper class takes an url and an image; tries to import
@@ -30,7 +29,7 @@ class KisImportCatcher : QObject
 
 public:
 
-    KisImportCatcher(const QUrl &url, KisViewManager* view, const QString &layerType);
+    KisImportCatcher(const QString &url, KisViewManager* view, const QString &layerType);
     ~KisImportCatcher() override;
 
     static void adaptClipToImageColorSpace(KisPaintDeviceSP dev, KisImageSP image);

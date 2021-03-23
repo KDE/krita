@@ -17,7 +17,7 @@
 #include <KisPreviewFileDialog.h>
 #include <QFileInfo>
 
-#include <krita_utils.h>
+#include <kis_painting_tweaks.h>
 #include <kis_debug.h>
 
 namespace
@@ -45,7 +45,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize, bool dontUpsize = 
     QSize iconSizeSquare = QSize(maxIconSize, maxIconSize);
 
     QSize scaled = source.size().scaled(iconSize, Qt::KeepAspectRatio);
-    qreal scale = scaled.width()/source.width();
+    qreal scale = scaled.width()/(qreal)(source.width());
 
     if (scale >= 2) {
         // it can be treated like pixel art
@@ -65,7 +65,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize, bool dontUpsize = 
     QPainter painter(&result);
     QColor textColor = qApp->palette().color(QPalette::Text);
     QColor backgroundColor = qApp->palette().color(QPalette::Background);
-    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.2);
+    QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
     painter.setPen(blendedColor);
     painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
 
@@ -118,7 +118,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
             QScopedPointer<KisDocument> doc;
             doc.reset(KisPart::instance()->createTemporaryDocument());
             doc->setFileBatchMode(true);
-            bool r = doc->openUrl(QUrl::fromLocalFile(path), KisDocument::DontAddToRecent);
+            bool r = doc->openPath(path, KisDocument::DontAddToRecent);
             if (r) {
                 KisPaintDeviceSP projection = doc->image()->projection();
                 const QRect bounds = projection->exactBounds();

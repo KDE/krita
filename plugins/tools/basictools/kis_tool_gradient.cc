@@ -77,9 +77,9 @@ void KisToolGradient::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolGradient::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolGradient::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(toolActivation, shapes);
+    KisToolPaint::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 

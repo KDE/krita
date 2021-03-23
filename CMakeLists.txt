@@ -61,6 +61,9 @@ if (APPLE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
     add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
+    if (CMAKE_OSX_ARCHITECTURES)
+        message(STATUS "CMake OSX architectures: ${CMAKE_OSX_ARCHITECTURES}")
+    endif()
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
@@ -562,7 +565,7 @@ endif()
 if (ANDROID)
     # use default ABI
     if (NOT ANDROID_ABI)
-        set (ANDROID_ABI armeabi-v7a)
+        set (ANDROID_ABI arm64-v8a)
     endif()
     set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
@@ -868,8 +871,6 @@ if(HAVE_VC)
     endmacro()
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
-
-add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 ##
 ## Test endianness

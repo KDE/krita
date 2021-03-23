@@ -50,7 +50,7 @@ protected:
     void updateDistinctiveActions(const QList<KoShape*> &editableShapes) override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
     void addReferenceImage();
@@ -78,7 +78,7 @@ public:
     ToolReferenceImagesFactory()
     : DefaultToolFactory("ToolReferenceImages") {
         setToolTip(i18n("Reference Images Tool"));
-        setSection(TOOL_TYPE_VIEW);
+        setSection(ToolBoxSection::View);
         setIconName(koIconNameCStr("krita_tool_reference_images"));
         setPriority(2);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

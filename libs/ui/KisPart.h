@@ -162,9 +162,9 @@ public Q_SLOTS:
 
     /**
      * This slot loads an existing file.
-     * @param url the file to load
+     * @param path the file to load
      */
-    void openExistingFile(const QUrl &url);
+    void openExistingFile(const QString &path);
 
     /**
      * This slot loads a template and deletes the sender.

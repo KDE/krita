@@ -25,7 +25,7 @@ public:
     void setPrefixes(const QString &normalPrefix, const QString &mixedPrefix);
 
 protected:
-    void setInternalValue(int value, bool blockUpdateSignal) override;
+    void setInternalValue(qreal value, bool blockUpdateSignal) override;
 
     void setSelectionValue(qreal commonValue, bool mixed);
 

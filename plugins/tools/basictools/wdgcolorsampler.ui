@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -18,7 +18,7 @@
    <string>Color Sampler</string>
   </property>
   <layout class="QGridLayout">
-   <item column="0" row="6">
+   <item row="6" column="0">
     <layout class="QHBoxLayout" name="blendLayout">
      <property name="spacing">
       <number>1</number>
@@ -51,7 +51,7 @@
      </item>
     </layout>
    </item>
-   <item column="0" row="0">
+   <item row="0" column="0">
     <widget class="QComboBox" name="cmbSources">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -89,7 +89,7 @@
      </item>
     </widget>
    </item>
-   <item column="0" row="8">
+   <item row="8" column="0">
     <widget class="QCheckBox" name="cbNormaliseValues">
      <property name="toolTip">
       <string>Displays per-channel color information below as percentages instead of bytes.</string>
@@ -99,7 +99,7 @@
      </property>
     </widget>
    </item>
-   <item column="0" row="9">
+   <item row="9" column="0">
     <widget class="QTreeWidget" name="listViewChannels">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -128,10 +128,10 @@
      </column>
     </widget>
    </item>
-   <item column="0" row="7">
+   <item row="7" column="0">
     <widget class="Line" name="line2">
      <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+      <enum>QFrame::Sunken</enum>
      </property>
      <property name="lineWidth">
       <number>1</number>
@@ -141,7 +141,7 @@
      </property>
     </widget>
    </item>
-   <item column="0" row="5">
+   <item row="5" column="0">
     <layout class="QHBoxLayout" name="radiusLayout">
      <property name="spacing">
       <number>1</number>
@@ -195,7 +195,7 @@
      </item>
     </layout>
    </item>
-   <item column="0" row="3">
+   <item row="3" column="0">
     <layout class="QHBoxLayout" name="paletteLayout">
      <property name="spacing">
       <number>1</number>
@@ -227,7 +227,7 @@
      </item>
     </layout>
    </item>
-   <item column="0" row="2">
+   <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QCheckBox" name="cbUpdateCurrentColor">
@@ -241,10 +241,10 @@
      </item>
     </layout>
    </item>
-   <item column="0" row="4">
+   <item row="4" column="0">
     <widget class="Line" name="line1">
      <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+      <enum>QFrame::Sunken</enum>
      </property>
      <property name="lineWidth">
       <number>1</number>

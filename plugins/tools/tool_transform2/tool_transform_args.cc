@@ -74,6 +74,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_editTransformPoints = args.m_editTransformPoints;
     m_pixelPrecision = args.pixelPrecision();
     m_previewPixelPrecision = args.previewPixelPrecision();
+    m_externalSource = args.externalSource();
 
     if (args.m_liquifyWorker) {
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
@@ -160,6 +161,8 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
 
         // pointer types
 
+        m_externalSource == other.m_externalSource &&
+
         ((m_filter && other.m_filter &&
           m_filter->id() == other.m_filter->id())
          || m_filter == other.m_filter) &&
@@ -232,7 +235,8 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      double alpha,
                                      bool defaultPoints,
                                      const QString &filterId,
-                                     int pixelPrecision, int previewPixelPrecision)
+                                     int pixelPrecision, int previewPixelPrecision,
+                                     KisPaintDeviceSP externalSource)
     : m_mode(mode)
     , m_defaultPoints(defaultPoints)
     , m_origPoints {QVector<QPointF>()}
@@ -253,6 +257,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     , m_liquifyProperties(new KisLiquifyProperties())
     , m_pixelPrecision(pixelPrecision)
     , m_previewPixelPrecision(previewPixelPrecision)
+    , m_externalSource(externalSource)
 {
     setFilterId(filterId);
 }
@@ -310,6 +315,11 @@ bool ToolTransformArgs::isIdentity() const
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
         return true;
     }
+}
+
+bool ToolTransformArgs::isUnchanging() const
+{
+    return !m_externalSource && isIdentity();
 }
 
 void ToolTransformArgs::initLiquifyTransformMode(const QRect &srcRect)

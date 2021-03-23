@@ -26,6 +26,7 @@ protected:
 public Q_SLOTS:
     void addColorToHistory(const KoColor& color);
 
+    void clearColorHistory();
 private:
     QList<KoColor> m_colorHistory;
     KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...

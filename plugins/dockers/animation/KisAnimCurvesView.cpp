@@ -20,7 +20,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_zoom_button.h"
 #include "kis_custom_modifiers_catcher.h"
-#include "krita_utils.h"
+#include <kis_painting_tweaks.h>
 #include "kis_zoom_scrollbar.h"
 
 struct KisAnimCurvesView::Private
@@ -214,7 +214,7 @@ void KisAnimCurvesView::paintGrid(QPainter &painter)
 {
     const QColor backgroundColor = qApp->palette().window().color();
     const QColor textColor = qApp->palette().text().color();
-    const QColor lineColor = KritaUtils::blendColors(textColor, backgroundColor, 0.1);
+    const QColor lineColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.1);
     const QColor zeroLineColor = qApp->palette().highlight().color();
     const QColor activeFrameColor = KisAnimTimelineColors::instance()->headerActive().color();
 

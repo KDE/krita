@@ -91,8 +91,6 @@ void RecorderFFMpegWrapper::start(const RecorderFFMpegWrapperSettings &settings)
     connect(process, SIGNAL(started()), SLOT(onStarted()));
     connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(onFinished(int)));
 
-    qDebug() << "starting ffmpeg: " << qUtf8Printable(settings.ffmpeg) << qUtf8Printable(settings.arguments);
-
     QStringList args = splitCommand(settings.arguments);
 
     args.prepend("-y");
@@ -132,7 +130,6 @@ void RecorderFFMpegWrapper::onReadyRead()
             }
         }
 
-        qDebug() << "ffmpeg:" << line;
         // frame=  314 fps=156 q=29.0 size=       0kB time=00:00:08.70 bitrate=   0.0kbits/s dup=52 drop=0 speed=4.32x
         const QRegularExpressionMatch &match = frameRegexp.match(line);
         if (match.hasMatch()) {
@@ -155,7 +152,6 @@ void RecorderFFMpegWrapper::onStarted()
 
 void RecorderFFMpegWrapper::onFinished(int exitCode)
 {
-    qDebug() << "FFMpeg finished with code" << exitCode;
     if (exitCode != 0) {
         errorMessage.remove(junkRegex);
         if (process->exitStatus() == QProcess::CrashExit) {

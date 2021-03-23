@@ -39,6 +39,7 @@ set(kritawidgetutils_LIB_SRCS
     kis_zoom_scrollbar.cpp
     kis_spin_box_unit_manager.cpp
     kis_font_family_combo_box.cpp
+    KisWrappableHBoxLayout.cpp
 
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp

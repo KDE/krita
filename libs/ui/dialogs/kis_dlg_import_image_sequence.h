@@ -26,12 +26,17 @@ public:
     QStringList files();
     int firstFrame();
     int step();
+    bool autoAddHoldframes();
+    bool startFrom1();
+    int isAscending();
+    int sortOrder;
 
 protected Q_SLOTS:
     void slotAddFiles();
     void slotRemoveFiles();
     void slotSkipChanged(int);
     void slotOrderOptionsChanged(int);
+
 
 private:
     void sortFileList();

@@ -14,11 +14,13 @@
 
 struct KisAngleGauge::Private
 {
+    static constexpr qreal minimumSnapDistance{40.0};
     qreal angle;
     qreal snapAngle;
     qreal resetAngle;
     IncreasingDirection increasingDirection;
     bool isPressed;
+    bool isMouseHover;
 };
 
 KisAngleGauge::KisAngleGauge(QWidget* parent)
@@ -30,6 +32,7 @@ KisAngleGauge::KisAngleGauge(QWidget* parent)
     m_d->resetAngle = 0.0;
     m_d->increasingDirection = IncreasingDirection_CounterClockwise;
     m_d->isPressed = false;
+    m_d->isMouseHover = false;
     
     setFocusPolicy(Qt::WheelFocus);
 }
@@ -149,7 +152,11 @@ void KisAngleGauge::paintEvent(QPaintEvent *e)
     if (this->hasFocus()) {
         painter.setPen(QPen(palette().color(QPalette::Highlight), 2.0));
     } else {
-        painter.setPen(QPen(circleColor, 1.0));
+        if (m_d->isMouseHover && isEnabled()) {
+            painter.setPen(QPen(palette().color(QPalette::Highlight), 1.0));
+        } else {
+            painter.setPen(QPen(circleColor, 1.0));
+        }
     }
     painter.setBrush(Qt::transparent);
     painter.drawEllipse(center, radius, radius);
@@ -233,8 +240,9 @@ void KisAngleGauge::mouseMoveEvent(QMouseEvent *e)
             m_d->increasingDirection == IncreasingDirection_CounterClockwise ? -delta.y() : delta.y(),
             delta.x()
         );
-    
-    if ((e->modifiers() & Qt::ControlModifier) || distanceSquared < radiusSquared * 4) {
+
+    const qreal snapDistance = qMax(m_d->minimumSnapDistance * m_d->minimumSnapDistance, radiusSquared * 4.0);
+    if ((e->modifiers() & Qt::ControlModifier) || distanceSquared < snapDistance) {
         const qreal sa = m_d->snapAngle * M_PI / 180.0;
         angle = std::round(angle / sa) * sa;
     }
@@ -291,4 +299,18 @@ void KisAngleGauge::keyPressEvent(QKeyEvent *e)
     } else {
         e->ignore();
     }
+}
+
+void KisAngleGauge::enterEvent(QEvent *e)
+{
+    m_d->isMouseHover = true;
+    update();
+    QWidget::enterEvent(e);
+}
+
+void KisAngleGauge::leaveEvent(QEvent *e)
+{
+    m_d->isMouseHover = false;
+    update();
+    QWidget::leaveEvent(e);
 }

@@ -91,7 +91,7 @@ public:
         setToolTip(i18n("Multibrush Tool"));
 
         // Temporarily
-        setSection(TOOL_TYPE_SHAPE);
+        setSection(ToolBoxSection::Shape);
         setIconName(koIconNameCStr("krita_tool_multihand"));
         setShortcut(QKeySequence(Qt::Key_Q));
         setPriority(11);

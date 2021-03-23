@@ -87,6 +87,7 @@ public:
 
     QList<QAbstractButton*> customButtons;
 
+    KoResourceSP currentResource;
 };
 
 KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
@@ -109,6 +110,10 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
     d->view->setModel(d->tagFilterProxyModel);
+    d->tagFilterProxyModel->sort(Qt::DisplayRole);
+
+    connect(d->tagFilterProxyModel, SIGNAL(beforeFilterChanges()), this, SLOT(beforeFilterChanges()));
+    connect(d->tagFilterProxyModel, SIGNAL(afterFilterChanged()), this, SLOT(afterFilterChanged()));
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
@@ -437,7 +442,9 @@ KisResourceItemListView *KisResourceItemChooser::itemView() const
 
 void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
 {
+    KoResourceSP current = currentResource();
     d->tagManager->contextMenuRequested(currentResource(), pos);
+    this->setCurrentResource(current);
 }
 
 void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)
@@ -474,6 +481,19 @@ void KisResourceItemChooser::baseLengthChanged(int length)
 {
     if (d->synced) {
         d->view->setItemSize(QSize(length, length));
+    }
+}
+
+void KisResourceItemChooser::beforeFilterChanges()
+{
+    d->currentResource = d->tagFilterProxyModel->resourceForIndex(d->view->currentIndex());
+}
+
+void KisResourceItemChooser::afterFilterChanged()
+{
+    QModelIndex idx = d->tagFilterProxyModel->indexForResource(d->currentResource);
+    if (idx.isValid()) {
+        d->view->setCurrentIndex(idx);
     }
 }
 
@@ -515,8 +535,8 @@ void KisResourceItemChooser::updateView()
 
     /// helps to set icons here in case the theme is changed
     d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
-    d->importButton->setIcon(koIcon("document-open"));
-    d->deleteButton->setIcon(koIcon("trash-empty"));
+    d->importButton->setIcon(koIcon("document-import-16"));
+    d->deleteButton->setIcon(koIcon("edit-delete"));
     d->storagePopupButton->setIcon(koIcon("bundle_archive"));
     d->tagManager->tagChooserWidget()->updateIcons();
 }

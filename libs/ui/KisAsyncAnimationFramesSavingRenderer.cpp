@@ -100,7 +100,7 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     QString frameNumber = QString("%1").arg(frame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
     QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
 
-    if (!m_d->savingDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, m_d->exportConfiguration)) {
+    if (!m_d->savingDoc->exportDocumentSync(filename, m_d->outputMimeType, m_d->exportConfiguration)) {
         status = ImportExportCodes::InternalError;
     }
 

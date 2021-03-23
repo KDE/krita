@@ -71,7 +71,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
             QRect rect;
             QRect cropRect;
-            bool resetAnimationCache;
+            bool resetAnimationCache { false };
         };
 
         typedef QHash<KisNodeSP, QVector<Request> > UpdatesHash;

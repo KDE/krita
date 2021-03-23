@@ -82,7 +82,7 @@ KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
 {
     KoToolBase *tool = m_toolFactory->createTool(canvas);
     if (tool) {
-        tool->setToolId(id());
+        tool->setFactory(m_toolFactory);
     }
     return tool;
 }

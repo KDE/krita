@@ -19,6 +19,7 @@ class KoShape;
 class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;
+class KoToolFactoryBase;
 class KoToolSelection;
 class KoToolBasePrivate;
 class KoShapeControllerBase;
@@ -58,6 +59,19 @@ public:
      */
     explicit KoToolBase(KoCanvasBase *canvas);
     ~KoToolBase() override;
+
+    /**
+     * The factory holds properties common to all instances of the same
+     * tool type, such as the string identifying the class or the icon name.
+     *
+     * Not all tool instances have a factory reference, for example the
+     * "delegated" inner implementations to which events are forwarded
+     * don't have one, as well as instances created by regression tests.
+     *
+     * Every instance used by the tool manager has a factory reference and
+     * a tool identifier, but they're not available during construction.
+     */
+    KoToolFactoryBase* factory() const;
 
     virtual QRectF decorationsRect() const;
 
@@ -471,11 +485,11 @@ private:
     friend class ToolHelper;
 
     /**
-     * Set the identifier code from the KoToolFactoryBase that created this tool.
-     * @param id the identifier code
-     * @see KoToolFactoryBase::id()
+     * Set the KoToolFactoryBase that created this tool.
+     * @param factory the KoToolFactoryBase
+     * @see KoToolFactoryBase
      */
-    void setToolId(const QString &id);
+    void setFactory(KoToolFactoryBase *factory);
 
     KoToolBase();
     KoToolBase(const KoToolBase&);

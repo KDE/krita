@@ -20,6 +20,7 @@
 
 class QAction;
 class KoToolBase;
+class KoToolFactoryBase;
 
 class KoToolBasePrivate
 {
@@ -65,8 +66,8 @@ public:
     QList<QPointer<QWidget> > optionWidgets; ///< the optionwidgets associated with this tool
     bool optionWidgetsCreated {false};
     QCursor currentCursor;
-    QString toolId;
     KoToolBase *q;
+    KoToolFactoryBase *factory {0};
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
     bool isInTextMode;
     bool maskSyntheticEvents{false}; ///< Whether this tool masks synthetic events

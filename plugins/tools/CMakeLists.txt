@@ -10,3 +10,7 @@ add_subdirectory( karbonplugins )
 add_subdirectory( tool_lazybrush )
 add_subdirectory( tool_smart_patch )
 add_subdirectory( svgtexttool )
+
+install( FILES
+    tools.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

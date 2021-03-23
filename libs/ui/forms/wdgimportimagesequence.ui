@@ -79,7 +79,7 @@
        <item>
         <widget class="QCheckBox" name="beginFromZeroIndexBox">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The first imported frame will be placed in #0 instead instead of #1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The first imported frame will be placed in #0 instead of #1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>Begin frames from index 0</string>

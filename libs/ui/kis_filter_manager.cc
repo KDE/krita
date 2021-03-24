@@ -361,6 +361,7 @@ void KisFilterManager::finish()
 
         uniqueFrameTimes.remove(currentActiveFrame); // Current frame was already filtered during filter preview in `KisFilterManager::apply`.
 
+        ENTER_FUNCTION();
         Q_FOREACH(const int& frameTime, uniqueFrameTimes) {
             if (selectedTimes.contains(frameTime)) {
                 image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData(frameTime));
@@ -380,7 +381,6 @@ void KisFilterManager::finish()
     d->reapplyAction->setEnabled(true);
     d->reapplyAction->setText(i18n("Apply Filter Again: %1", filter->name()));
 
-    d->currentStrokeId.clear();
     d->cancelSilentlyHandle.clear();
     d->idleBarrierCookie.clear();
     d->currentlyAppliedConfiguration.clear();

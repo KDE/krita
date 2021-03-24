@@ -150,10 +150,11 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
         d->active =
             d->runningToolProxy->forwardEvent(
                 KisToolProxy::BEGIN, KisTool::Primary, event, event);
-    } else if (shortcut == ConfirmShortcut) {
-        QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
+    }
+    else if (shortcut == ConfirmShortcut) {
+        QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, QFlags<Qt::KeyboardModifier>());
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
-        QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, 0);
+        QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, QFlags<Qt::KeyboardModifier>());
         inputManager()->toolProxy()->keyReleaseEvent(&releaseEvent);
 
         /**

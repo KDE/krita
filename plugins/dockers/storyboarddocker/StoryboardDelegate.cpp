@@ -48,7 +48,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
         }
         if (!index.parent().isValid()) {
             QRect parentRect = option.rect;
-            p->setPen(QPen(option.palette.background(), 2));
+            p->setPen(QPen(option.palette.window(), 2));
             p->drawRect(parentRect);
 
             parentRect.setTopLeft(parentRect.topLeft() + QPoint(4, 4));

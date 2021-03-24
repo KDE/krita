@@ -113,7 +113,15 @@ QSize KoDockWidgetTitleBar::sizeHint() const
     }
 
     if (d->textVisibilityMode == FullTextAlwaysVisible) {
-        const int titleWidth = q->fontMetrics().width(q->windowTitle()) + 2*mw;
+        int titleWidth = 0;
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        titleWidth = q->fontMetrics().horizontalAdvance(q->windowTitle()) + 2 * mw;
+#else
+        titleWidth = q->fontMetrics().width(q->windowTitle()) + 2 * mw;
+#endif
+
+
+
         return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
     } else if (q->widget()) {
         return QSize(qMin(q->widget()->minimumSizeHint().width(), buttonWidth), height);

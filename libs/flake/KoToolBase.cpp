@@ -132,7 +132,7 @@ QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewCo
 void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
 {
     if (! event->commitString().isEmpty()) {
-        QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
+        QKeyEvent ke(QEvent::KeyPress, -1, QFlags<Qt::KeyboardModifier>(), event->commitString());
         keyPressEvent(&ke);
     }
     event->accept();

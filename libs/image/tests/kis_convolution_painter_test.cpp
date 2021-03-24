@@ -505,7 +505,7 @@ void KisConvolutionPainterTest::testNormalMap(KisPaintDeviceSP dev, bool useFftw
 
    for(int i = 0; i < 3 ; i++, horizontalRadius+=0.5, verticalRadius+=0.5)
    {
-       QTime timer;
+       QElapsedTimer timer;
        timer.start();
 
        gc.beginTransaction();

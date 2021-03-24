@@ -261,7 +261,7 @@ bool KisAllTagResourceModel::isResourceTagged(const KisTagSP tag, const int reso
         return false;
     }
 
-    return query.value(0) > 0;
+    return query.value(0).toInt() > 0;
 
 }
 

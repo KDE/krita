@@ -325,7 +325,7 @@ void KisFloatingMessage::paintEvent( QPaintEvent *e )
 void KisFloatingMessage::startFade()
 {
     m_fadeTimeLine.setDuration(250);
-    m_fadeTimeLine.setCurveShape(QTimeLine::EaseInCurve);
+    m_fadeTimeLine.setEasingCurve(QEasingCurve::InCurve);
     m_fadeTimeLine.setLoopCount(1);
     m_fadeTimeLine.setFrameRange(0, 0);
     m_fadeTimeLine.setFrameRange(0, 10);

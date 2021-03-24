@@ -25,7 +25,7 @@
      <property name="childrenCollapsible">
       <bool>false</bool>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget_1">
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="rightMargin">
         <number>5</number>
@@ -58,7 +58,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget_2">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
         <number>5</number>

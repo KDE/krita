@@ -910,7 +910,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
         if (event->button() == Qt::RightButton) {
             // TODO: try calculate index under mouse cursor even when
             //       it is outside any visible row
-            qreal staticPoint = index.isValid() ? index.column() : currentIndex().column();
+//            qreal staticPoint = index.isValid() ? index.column() : currentIndex().column();
 //            m_d->zoomDragButton->beginZoom(event->pos(), staticPoint);
         } else if (event->button() == Qt::LeftButton) {
             m_d->initialDragPanPos = event->pos();

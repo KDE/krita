@@ -13,12 +13,12 @@
 #include <klocalizedstring.h>
 
 QList<KisMimeDatabase::KisMimeType> KisMimeDatabase::s_mimeDatabase;
-
+#ifdef Q_OS_ANDROID
 static QString sanitizeSuffix(const QString &suffix)
 {
     return suffix.split(QLatin1Char(' ')).first();
 }
-
+#endif
 QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExistingFiles)
 {
     fillMimeData();

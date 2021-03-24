@@ -95,7 +95,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
 
     KTitleWidget *title = new KTitleWidget(this);
     title->setText(i18n("Submit Bug Report"));
-    title->setPixmap(KisIconUtils::loadIcon(QStringLiteral("tools-report-bug")).pixmap(32));
+    title->setIcon(KisIconUtils::loadIcon(QStringLiteral("tools-report-bug")));
     lay->addWidget(title);
 
     QGridLayout *glay = new QGridLayout();

@@ -40,8 +40,8 @@
 WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected, QWidget *parent)
     : QWidget(parent)
     , m_editble(editable)
-    , m_tag(tag)
     , m_semiSelected(semiSelected)
+    , m_tag(tag)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(1);

@@ -47,7 +47,7 @@ void KisSyncLodCacheStrokeStrategy::initStrokeCallback()
     addMutatedJobs(jobs);
 }
 
-QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP _image)
+QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP /*_image*/)
 {
     // all the jobs are populates in the init job
     return {};

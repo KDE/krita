@@ -1028,15 +1028,20 @@ namespace KisLayerUtils {
                 }
             }
         }
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        nodesToRemove += KisNodeList(extraNodesToRemove.begin(), extraNodesToRemove.end());
+#else
         nodesToRemove += extraNodesToRemove.toList();
-
+#endif
         KritaUtils::filterContainer<KisNodeList>(nodesToRemove,
                                                  [nodesToHide](KisNodeSP node) {
                                                      return !nodesToHide.contains(node);
                                                  });
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        _nodesToHide = KisNodeList(nodesToHide.begin(), nodesToHide.end());
+#else
         _nodesToHide = nodesToHide.toList();
+#endif
     }
 
     struct CleanUpNodes : private RemoveNodeHelper, public KisCommandUtils::AggregateCommand {

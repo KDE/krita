@@ -40,10 +40,6 @@ QSize KisWrappableHBoxLayout::minimumSize() const
 {
     const QMargins margins = contentsMargins();
     const QSize marginsSize = QSize(margins.left() + margins.right(), margins.top() + margins.bottom());
-    if (!geometry().isEmpty()) {
-        QSize optimal = QSize(geometry().width(), heightForWidth(geometry().width()))
-                + QSize(margins.left() + margins.right(), margins.top() + margins.bottom());
-    }
 
     QSize size;
     for (const QLayoutItem *item : qAsConst(m_items))

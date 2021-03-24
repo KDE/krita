@@ -429,7 +429,7 @@ QStyleOptionSpinBox RAbstractSliderSpinBox::spinBoxOptions() const
     }
     else
     {
-        opts.activeSubControls = 0;
+        opts.activeSubControls = QFlags<QStyle::SubControl>();
     }
 
     return opts;

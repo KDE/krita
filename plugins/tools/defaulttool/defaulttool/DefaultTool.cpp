@@ -138,7 +138,7 @@ public:
         tool()->canvas()->updateCanvas(selectedRectangle() | tool()->decorationsRect());
     }
 
-    void finishInteraction(Qt::KeyboardModifiers modifiers = 0) override
+    void finishInteraction(Qt::KeyboardModifiers modifiers = QFlags<Qt::KeyboardModifier>()) override
     {
         Q_UNUSED(modifiers);
         DefaultTool *defaultTool = dynamic_cast<DefaultTool*>(tool());

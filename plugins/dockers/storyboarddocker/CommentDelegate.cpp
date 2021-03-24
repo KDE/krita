@@ -59,8 +59,8 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem &option,
 }
 
 QWidget *CommentDelegate::createEditor(QWidget *parent,
-    const QStyleOptionViewItem &option ,
-    const QModelIndex &index) const
+                                       const QStyleOptionViewItem &/*option*/ ,
+                                       const QModelIndex &/*index*/) const
 {
     QLineEdit *editor = new QLineEdit(parent);
     return editor;
@@ -71,13 +71,13 @@ bool CommentDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
     QStyleOptionViewItem newOption = option;
 
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
-        && (index.flags() & Qt::ItemIsEnabled)) {
+            && (index.flags() & Qt::ItemIsEnabled)) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         QRect visibilityRect = option.rect;
         visibilityRect.setSize(QSize(22, 22));
         const bool visibilityClicked = visibilityRect.isValid() &&
-            visibilityRect.contains(mouseEvent->pos());
+                visibilityRect.contains(mouseEvent->pos());
 
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
@@ -110,7 +110,7 @@ void CommentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 }
 
 void CommentDelegate::updateEditorGeometry(QWidget *editor,
-    const QStyleOptionViewItem &option, const QModelIndex &index) const
+                                           const QStyleOptionViewItem &option, const QModelIndex &/*index*/) const
 {
     editor->setGeometry(option.rect);
 }

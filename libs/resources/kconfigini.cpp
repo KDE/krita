@@ -163,7 +163,7 @@ KConfigBackend::ParseInfo KConfigIniBackend::parseConfigIO(QIODevice &file, cons
             } while ((start = end + 2) <= line.length() && line.at(end + 1) == '[');
             currentGroup = newGroup;
 
-            groupSkip = entryMap.getEntryOption(currentGroup, nullptr, nullptr, KEntryMap::EntryImmutable);
+            groupSkip = entryMap.getEntryOption(currentGroup, nullptr, QFlags<KEntryMap::SearchFlag>(), KEntryMap::EntryImmutable);
 
             if (groupSkip && !bDefault) {
                 continue;
@@ -197,7 +197,7 @@ KConfigBackend::ParseInfo KConfigIniBackend::parseConfigIO(QIODevice &file, cons
                 continue;
             }
 
-            KEntryMap::EntryOptions entryOptions = nullptr;
+            KEntryMap::EntryOptions entryOptions;
             if (groupOptionImmutable) {
                 entryOptions |= KEntryMap::EntryImmutable;
             }

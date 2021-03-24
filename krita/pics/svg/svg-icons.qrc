@@ -159,7 +159,6 @@
         <file>light_local-selection-inactive.svg</file>
         <file>light_locked.svg</file>
         <file alias="light_object-locked.svg">light_locked.svg</file>
-        <file>light_unlocked.svg</file>
         <file alias="light_object-unlocked.svg">light_unlocked.svg</file>
         <file>light_media-playback-start.svg</file>
         <file>light_media-playback-stop.svg</file>

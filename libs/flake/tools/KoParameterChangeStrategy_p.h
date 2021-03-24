@@ -15,9 +15,10 @@ class KoParameterChangeStrategyPrivate : public KoInteractionStrategyPrivate
 {
 public:
     KoParameterChangeStrategyPrivate(KoToolBase *owner, KoParameterShape *paramShape, int handle)
-        : KoInteractionStrategyPrivate(owner), parameterShape(paramShape), handleId(handle)
+        : KoInteractionStrategyPrivate(owner)
+        , parameterShape(paramShape)
+        , handleId(handle)
         , startPoint(paramShape->shapeToDocument(paramShape->handlePosition(handle)))
-        , lastModifierUsed(0)
     {
         // initialize release point with start point position to prevent
         // change when just clicking a handle without moving the mouse

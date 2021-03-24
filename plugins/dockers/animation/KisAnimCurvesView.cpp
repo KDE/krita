@@ -148,7 +148,7 @@ void KisAnimCurvesView::setModel(QAbstractItemModel *model)
             this, &KisAnimCurvesView::slotHeaderDataChanged);
 
     connect(selectionModel(), &QItemSelectionModel::selectionChanged,
-        [this](const QItemSelection& newSelection, const QItemSelection& oldSelection) {
+        [this](const QItemSelection& newSelection, const QItemSelection& /*oldSelection*/) {
             if (newSelection.count() == 0) {
                 activeDataChanged(QModelIndex());
             } else {

@@ -25,23 +25,24 @@
 
 
 KisTextureMaskInfo::KisTextureMaskInfo(int levelOfDetail, bool preserveAlpha)
-    : m_levelOfDetail(levelOfDetail),
-      m_preserveAlpha(preserveAlpha)
+    : m_levelOfDetail(levelOfDetail)
+    , m_preserveAlpha(preserveAlpha)
 {
 }
 
 KisTextureMaskInfo::KisTextureMaskInfo(const KisTextureMaskInfo &rhs)
-    : m_levelOfDetail(rhs.m_levelOfDetail),
-      m_pattern(rhs.m_pattern),
-      m_scale(rhs.m_scale),
-      m_brightness(rhs.m_brightness),
-      m_contrast(rhs.m_contrast),
-      m_neutralPoint(rhs.m_neutralPoint),
-      m_invert(rhs.m_invert),
-      m_cutoffLeft(rhs.m_cutoffLeft),
-      m_cutoffRight(rhs.m_cutoffRight),
-      m_cutoffPolicy(rhs.m_cutoffPolicy),
-      m_preserveAlpha(rhs.m_preserveAlpha)
+    : m_levelOfDetail(rhs.m_levelOfDetail)
+    , m_preserveAlpha(rhs.m_preserveAlpha)
+    , m_pattern(rhs.m_pattern)
+    , m_scale(rhs.m_scale)
+    , m_brightness(rhs.m_brightness)
+    , m_contrast(rhs.m_contrast)
+    , m_neutralPoint(rhs.m_neutralPoint)
+    , m_invert(rhs.m_invert)
+    , m_cutoffLeft(rhs.m_cutoffLeft)
+    , m_cutoffRight(rhs.m_cutoffRight)
+    , m_cutoffPolicy(rhs.m_cutoffPolicy)
+
 {
 }
 

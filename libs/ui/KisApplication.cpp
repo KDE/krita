@@ -670,7 +670,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (!d->earlyFileOpenEvents.isEmpty()) {
         hideSplashScreen();
         Q_FOREACH(QString fileName, d->earlyFileOpenEvents) {
-            d->mainWindow->openDocument(fileName, 0);
+            d->mainWindow->openDocument(fileName, QFlags<KisMainWindow::OpenFlag>());
         }
     }
 

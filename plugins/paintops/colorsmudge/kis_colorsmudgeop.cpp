@@ -49,7 +49,8 @@ struct ColorSmudgeInterstrokeData : public KisInterstrokeData
     KisOverlayPaintDeviceWrapper overlayDeviceWrapper;
 
     ColorSmudgeInterstrokeData(KisPaintDeviceSP source)
-        : overlayDeviceWrapper(source, 2, true)
+        : KisInterstrokeData(source)
+        , overlayDeviceWrapper(source, 2, KisOverlayPaintDeviceWrapper::PreciseMode)
     {
         projectionDevice = overlayDeviceWrapper.overlay(0);
         colorBlendDevice = overlayDeviceWrapper.overlay(1);
@@ -486,7 +487,7 @@ struct ColorSmudgeStrategyMask : public ColorSmudgeStrategyColorBased
                             bool useDullingMode)
         : ColorSmudgeStrategyColorBased(paintColor,
                                         useDullingMode)
-        , m_overlayDevice(new KisOverlayPaintDeviceWrapper(painter->device(), 1, true))
+        , m_overlayDevice(new KisOverlayPaintDeviceWrapper(painter->device(), 1, KisOverlayPaintDeviceWrapper::LazyPreciseMode))
         , m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
     {
         initializePainting(m_overlayDevice->overlayColorSpace(),

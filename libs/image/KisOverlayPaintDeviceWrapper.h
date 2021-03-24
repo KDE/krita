@@ -16,7 +16,14 @@ class KoColorSpace;
 class KRITAIMAGE_EXPORT KisOverlayPaintDeviceWrapper
 {
 public:
-    KisOverlayPaintDeviceWrapper(KisPaintDeviceSP source, int numOverlays = 1, bool usePreciseOverlay = false);
+    enum OverlayMode {
+        NormalMode = 0,
+        PreciseMode,
+        LazyPreciseMode
+    };
+
+public:
+    KisOverlayPaintDeviceWrapper(KisPaintDeviceSP source, int numOverlays = 1, OverlayMode mode = NormalMode);
 
     ~KisOverlayPaintDeviceWrapper();
 

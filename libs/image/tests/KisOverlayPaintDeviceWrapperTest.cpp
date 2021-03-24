@@ -24,7 +24,7 @@ void KisOverlayPaintDeviceWrapperTest::test()
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 
-    KisOverlayPaintDeviceWrapper wrapper(dev, 2, true);
+    KisOverlayPaintDeviceWrapper wrapper(dev, 2, KisOverlayPaintDeviceWrapper::PreciseMode);
 
     KoColor colorR(Qt::red, dev->colorSpace());
     KoColor colorG(Qt::green, dev->colorSpace());

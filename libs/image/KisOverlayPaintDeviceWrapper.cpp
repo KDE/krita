@@ -25,14 +25,16 @@ struct KisOverlayPaintDeviceWrapper::Private
 };
 
 
-KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP source, int numOverlays, bool usePreciseOverlay)
+KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP source, int numOverlays, OverlayMode mode)
     : m_d(new Private())
 {
     m_d->source = source;
 
     const KoColorSpace *overlayColorSpace = source->colorSpace();
 
-    if (usePreciseOverlay &&
+    const bool usePreciseMode = mode == PreciseMode || mode == LazyPreciseMode;
+
+    if (usePreciseMode &&
         overlayColorSpace->colorDepthId() == Integer8BitsColorDepthID) {
 
         overlayColorSpace =
@@ -43,6 +45,8 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
 
         m_d->usePreciseOverlay = true;
     }
+
+    if (!m_d->usePreciseOverlay && mode == LazyPreciseMode) return;
 
     for (int i = 0; i < numOverlays; i++) {
         KisPaintDeviceSP overlay = new KisPaintDevice(overlayColorSpace);

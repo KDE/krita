@@ -108,7 +108,10 @@ KUndo2Command *KisInterstrokeDataTransactionWrapperFactory::createBeginTransacti
 {
     KisInterstrokeDataSP data = device->interstrokeData();
     if (m_d->factory) {
-        if (!m_d->factory->isCompatible(data.data())) {
+        if (!data ||
+            !data->isStillCompatible() ||
+            !m_d->factory->isCompatible(data.data())) {
+
             data = toQShared(m_d->factory->create(device));
         }
     } else {

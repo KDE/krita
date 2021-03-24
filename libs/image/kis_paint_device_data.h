@@ -64,6 +64,7 @@ public:
           m_cacheInvalidator(this)
         {
             m_cache.setupCache();
+            // WARNING: interstroke data is **not** copied while cloning
         }
 
     void init(const KoColorSpace *cs, KisDataManagerSP dataManager) {

@@ -6,6 +6,25 @@
 
 #include "KisInterstrokeData.h"
 
+#include <KoColorSpace.h>
+#include <kis_paint_device.h>
+
+KisInterstrokeData::KisInterstrokeData(KisPaintDeviceSP device)
+    : m_linkedDeviceOffset(device->offset())
+    , m_linkedColorSpace(device->colorSpace())
+    , m_linkedPaintDevice(device)
+{
+
+}
+
 KisInterstrokeData::~KisInterstrokeData()
 {
+}
+
+bool KisInterstrokeData::isStillCompatible() const
+{
+    KIS_ASSERT_RECOVER_RETURN_VALUE(m_linkedPaintDevice, false);
+
+    return m_linkedDeviceOffset == m_linkedPaintDevice->offset() &&
+        *m_linkedColorSpace == *m_linkedPaintDevice->colorSpace();
 }

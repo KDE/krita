@@ -368,8 +368,10 @@ void KisTransactionTest::testTransactionWrapperFactory()
 
 struct TestInterstrokeData : public KisInterstrokeData
 {
-    TestInterstrokeData(int _typeId, int _value)
-        : typeId(_typeId), value(_value)
+    TestInterstrokeData(KisPaintDeviceSP device,
+                        int _typeId, int _value)
+        : KisInterstrokeData(device),
+          typeId(_typeId), value(_value)
     {
     }
 
@@ -433,7 +435,7 @@ struct TestInterstrokeDataFactory : public KisInterstrokeDataFactory
 
     KisInterstrokeData * create(KisPaintDeviceSP device) override {
         Q_UNUSED(device);
-        return new TestInterstrokeData(m_typeId, 0);
+        return new TestInterstrokeData(device, m_typeId, 0);
     }
 
     int m_typeId {0};

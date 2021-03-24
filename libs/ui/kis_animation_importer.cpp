@@ -79,19 +79,22 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
         pos += rx.matchedLength();
     }
 
+    int firstFrameNumber = 0;
     bool ok;
-    int autoframe;
 
-    int firstFrameNumber = fileNumberRxList.last().toInt(&ok);    // selects the last number of file name of the first frame (useful for descending order)
-    if(firstFrameNumber == 0){
+    if (!fileNumberRxList.isEmpty()) {
+        fileNumberRxList.last().toInt(&ok);    // selects the last number of file name of the first frame (useful for descending order)
+    }
+
+    if (firstFrameNumber == 0){
         startfrom0 = false;     // if enabled, the zeroth frame will be places in -1 slot, leading to an error
     }
+
     fileNumberRxList.clear();
 
-
-
-
     int offset = (startfrom0 ? 1 : 0);    //offset added to consider file numbering starts from 1 instead of 0
+
+    int autoframe = 0;
 
     Q_FOREACH(QString file, files) {
         bool successfullyLoaded = importDoc->openPath(file, KisDocument::DontAddToRecent);

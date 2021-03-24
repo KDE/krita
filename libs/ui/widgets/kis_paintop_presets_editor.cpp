@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include "widgets/kis_paintop_presets_popup.h"
+#include "widgets/kis_paintop_presets_editor.h"
 
 #include <QList>
 #include <QComboBox>

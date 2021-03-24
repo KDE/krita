@@ -16,7 +16,6 @@
 #include "../kis_paint_ops_model.h"
 #include <kis_action.h>
 #include "dialogs/KisDlgSavePreset.h"
-#include "widgets/kis_paintop_presets_popup.h"
 #include "kis_favorite_resource_manager.h"
 #include "KoDialog.h"
 

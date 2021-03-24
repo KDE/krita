@@ -497,12 +497,8 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
         store->close();
 
         if (serializer.isValid()) {
-            QString resourceLocation = m_d->document->uniqueID();
-            KisResourceModel model(ResourceType::LayerStyles);
-            Q_FOREACH(KisPSDLayerStyleSP layerStyle, serializer.styles()) {
-                model.addResource(layerStyle, resourceLocation);
-            }
-            serializer.assignAllLayerStylesToLayers(image->root());
+            const QString resourceLocation = m_d->document->uniqueID();
+            serializer.assignAllLayerStylesToLayers(image->root(), resourceLocation);
 
         } else {
             warnKrita << "WARNING: Couldn't load layer styles library from .kra!";

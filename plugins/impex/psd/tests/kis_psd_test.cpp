@@ -150,8 +150,13 @@ void KisPSDTest::testOpenLayerStylesWithPattern()
     QVERIFY(layer->layerStyle());
     QVERIFY(layer->layerStyle()->patternOverlay());
     QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+
+    KoPatternSP pattern =
+        layer->layerStyle()->patternOverlay()->pattern(
+                layer->layerStyle()->resourcesInterface());
+
+    QVERIFY(pattern);
+    QVERIFY(pattern->valid());
 }
 
 void KisPSDTest::testOpenLayerStylesWithPatternMulti()
@@ -168,13 +173,25 @@ void KisPSDTest::testOpenLayerStylesWithPatternMulti()
 
     QVERIFY(layer->layerStyle()->patternOverlay());
     QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+    {
+        KoPatternSP pattern =
+            layer->layerStyle()->patternOverlay()->pattern(
+                    layer->layerStyle()->resourcesInterface());
+
+        QVERIFY(pattern);
+        QVERIFY(pattern->valid());
+    }
 
     QVERIFY(layer->layerStyle()->stroke());
     QVERIFY(layer->layerStyle()->stroke()->effectEnabled());
-    QVERIFY(layer->layerStyle()->stroke()->pattern());
-    QVERIFY(layer->layerStyle()->stroke()->pattern()->valid());
+    {
+        KoPatternSP pattern =
+            layer->layerStyle()->stroke()->pattern(
+                layer->layerStyle()->resourcesInterface());
+
+        QVERIFY(pattern);
+        QVERIFY(pattern->valid());
+    }
 }
 
 void KisPSDTest::testSaveLayerStylesWithPatternMulti()
@@ -191,13 +208,25 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
 
     QVERIFY(layer->layerStyle()->patternOverlay());
     QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+    {
+        KoPatternSP pattern =
+            layer->layerStyle()->patternOverlay()->pattern(
+                    layer->layerStyle()->resourcesInterface());
+
+        QVERIFY(pattern);
+        QVERIFY(pattern->valid());
+    }
 
     QVERIFY(layer->layerStyle()->stroke());
     QVERIFY(layer->layerStyle()->stroke()->effectEnabled());
-    QVERIFY(layer->layerStyle()->stroke()->pattern());
-    QVERIFY(layer->layerStyle()->stroke()->pattern()->valid());
+    {
+        KoPatternSP pattern =
+            layer->layerStyle()->stroke()->pattern(
+                    layer->layerStyle()->resourcesInterface());
+
+        QVERIFY(pattern);
+        QVERIFY(pattern->valid());
+    }
 
     doc->setFileBatchMode(true);
     const QByteArray mimeType("image/vnd.adobe.photoshop");
@@ -217,13 +246,25 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
 
         QVERIFY(layer->layerStyle()->patternOverlay());
         QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
-        QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
-        QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+        {
+            KoPatternSP pattern =
+                layer->layerStyle()->patternOverlay()->pattern(
+                        layer->layerStyle()->resourcesInterface());
+
+            QVERIFY(pattern);
+            QVERIFY(pattern->valid());
+        }
 
         QVERIFY(layer->layerStyle()->stroke());
         QVERIFY(layer->layerStyle()->stroke()->effectEnabled());
-        QVERIFY(layer->layerStyle()->stroke()->pattern());
-        QVERIFY(layer->layerStyle()->stroke()->pattern()->valid());
+        {
+            KoPatternSP pattern =
+                layer->layerStyle()->stroke()->pattern(
+                        layer->layerStyle()->resourcesInterface());
+
+            QVERIFY(pattern);
+            QVERIFY(pattern->valid());
+        }
     }
 
 }

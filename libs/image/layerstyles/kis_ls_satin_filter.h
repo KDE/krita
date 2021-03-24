@@ -39,7 +39,7 @@ private:
                     KisMultipleProjection *dst,
                     const QRect &applyRect,
                     const psd_layer_effects_context *context,
-                    const psd_layer_effects_satin *config,
+                    const psd_layer_effects_satin *config, KisResourcesInterfaceSP resourcesInterface,
                     KisLayerStyleFilterEnvironment *env) const;
 };
 

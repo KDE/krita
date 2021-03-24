@@ -47,7 +47,7 @@ private:
     void applyOverlay(KisPaintDeviceSP srcDevice,
                       KisMultipleProjection *dst,
                       const QRect &applyRect,
-                      const psd_layer_effects_overlay_base *config,
+                      const psd_layer_effects_overlay_base *config, KisResourcesInterfaceSP resourcesInterface,
                       KisLayerStyleFilterEnvironment *env) const;
 
 private:

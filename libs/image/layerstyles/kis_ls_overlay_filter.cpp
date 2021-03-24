@@ -55,6 +55,7 @@ void KisLsOverlayFilter::applyOverlay(KisPaintDeviceSP srcDevice,
                                       KisMultipleProjection *dst,
                                       const QRect &applyRect,
                                       const psd_layer_effects_overlay_base *config,
+                                      KisResourcesInterfaceSP resourcesInterface,
                                       KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
@@ -68,7 +69,7 @@ void KisLsOverlayFilter::applyOverlay(KisPaintDeviceSP srcDevice,
                                                     QBitArray(),
                                                     srcDevice);
 
-    KisLsUtils::fillOverlayDevice(dstDevice, applyRect, config, env);
+    KisLsUtils::fillOverlayDevice(dstDevice, applyRect, config, resourcesInterface, env);
 }
 
 const psd_layer_effects_overlay_base*
@@ -101,7 +102,7 @@ void KisLsOverlayFilter::processDirectly(KisPaintDeviceSP src,
     const psd_layer_effects_overlay_base *config = getOverlayStruct(style);
     if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
-    applyOverlay(src, dst, applyRect, config, env);
+    applyOverlay(src, dst, applyRect, config, style->resourcesInterface(), env);
 }
 
 QRect KisLsOverlayFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const

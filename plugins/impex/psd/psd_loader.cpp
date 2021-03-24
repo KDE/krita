@@ -16,6 +16,7 @@
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
 #include <KoUnit.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -299,15 +300,26 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     const QVector<QDomDocument> &embeddedPatterns =
         layerSection.globalInfoSection.embeddedPatterns;
 
+    const QString storageLocation = m_doc->uniqueID();
+    KisResourceModel stylesModel(ResourceType::LayerStyles);
+    KisResourceModel patternsModel(ResourceType::Patterns);
+    KisResourceModel gradientsModel(ResourceType::Gradients);
+
     KisAslLayerStyleSerializer serializer;
 
     if (!embeddedPatterns.isEmpty()) {
         Q_FOREACH (const QDomDocument &doc, embeddedPatterns) {
             serializer.registerPSDPattern(doc);
         }
-    }
 
-    QVector<KisPSDLayerStyleSP> allStylesForServer;
+        Q_FOREACH(KoPatternSP pattern, serializer.patterns().values()) {
+            patternsModel.addResource(pattern, storageLocation);
+        }
+
+        Q_FOREACH(KoAbstractGradientSP gradient, serializer.gradients()) {
+            gradientsModel.addResource(gradient, storageLocation);
+        }
+    }
 
     if (!allStylesXml.isEmpty()) {
         Q_FOREACH (const LayerStyleMapping &mapping, allStylesXml) {
@@ -318,37 +330,16 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
                 KisLayerSP layer = mapping.second;
 
                 layerStyle->setName(layer->name());
+                layerStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
 
-                allStylesForServer << layerStyle;
-                layer->setLayerStyle(layerStyle->clone().dynamicCast<KisPSDLayerStyle>());
+                stylesModel.addResource(layerStyle, storageLocation);
+
+                layer->setLayerStyle(layerStyle->cloneWithResourcesSnapshot());
             } else {
                 warnKrita << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
             }
 
         }
-    }
-
-    if (!allStylesForServer.isEmpty()) {
-
-        warnKrita << "WARNING: Asl Layer Styles cannot be read (part of resource rewrite).";
-        // TODO: RESOURCES: needs implementing of creation of the storage and linking it to the database etc.
-        // Note: it would be possible to just read them and add to the server, but it would be better to do it through the storage
-
-
-        /*
-
-        KisPSDLayerStyleCollectionResourceSP collection(new KisPSDLayerStyleCollectionResource("Embedded PSD Styles.asl"));
-
-        collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_image->objectName()));
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!collection->valid());
-
-        collection->setLayerStyles(allStylesForServer);
-        KIS_SAFE_ASSERT_RECOVER_NOOP(collection->valid());
-
-        KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
-        server->addResource(collection, false);
-        */
-
     }
 
     return ImportExportCodes::OK;

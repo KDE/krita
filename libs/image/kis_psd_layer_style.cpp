@@ -21,10 +21,15 @@
 
 struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
 {
-    Private()
+    Private(KisResourcesInterfaceSP _resourcesInterface)
         : version(-1)
         , effectEnabled(true)
-    {}
+        , resourcesInterface(_resourcesInterface)
+    {
+        if (!resourcesInterface) {
+            resourcesInterface.reset(new KisLocalStrokeResources({}));
+        }
+    }
 
     Private(const Private &rhs)
         : name(rhs.name),
@@ -41,7 +46,8 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
           color_overlay(rhs.color_overlay),
           gradient_overlay(rhs.gradient_overlay),
           pattern_overlay(rhs.pattern_overlay),
-          stroke(rhs.stroke)
+          stroke(rhs.stroke),
+          resourcesInterface(rhs.resourcesInterface)
     {}
 
     Private operator=(const Private &rhs)
@@ -62,6 +68,7 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
             gradient_overlay = rhs.gradient_overlay;
             pattern_overlay = rhs.pattern_overlay;
             stroke = rhs.stroke;
+            resourcesInterface = rhs.resourcesInterface;
         }
 
         return *this;
@@ -82,11 +89,13 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
     psd_layer_effects_gradient_overlay gradient_overlay;
     psd_layer_effects_pattern_overlay pattern_overlay;
     psd_layer_effects_stroke stroke;
+
+    KisResourcesInterfaceSP resourcesInterface;
 };
 
-KisPSDLayerStyle::KisPSDLayerStyle(const QString &name)
-    : KoEphemeralResource<KoResource>(name)
-    , d(new Private())
+KisPSDLayerStyle::KisPSDLayerStyle(const QString &filename, KisResourcesInterfaceSP resourcesInterface)
+    : KoEphemeralResource<KoResource>(filename)
+    , d(new Private(resourcesInterface))
 {
     d->name = i18n("Unnamed");
     d->version = 7;
@@ -121,7 +130,7 @@ KoResourceSP KisPSDLayerStyle::clone() const
 
 void KisPSDLayerStyle::clear()
 {
-    *d = Private();
+    *d = Private(d->resourcesInterface);
 }
 
 bool KisPSDLayerStyle::isEmpty() const
@@ -294,4 +303,55 @@ psd_layer_effects_stroke* KisPSDLayerStyle::stroke()
 psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelAndEmboss()
 {
     return &d->bevel_emboss;
+}
+
+KisResourcesInterfaceSP KisPSDLayerStyle::resourcesInterface() const
+{
+    return d->resourcesInterface;
+}
+
+void KisPSDLayerStyle::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    d->resourcesInterface = resourcesInterface;
+}
+
+#include <KisRequiredResourcesOperators.h>
+
+namespace KisRequiredResourcesOperators
+{
+template <>
+struct ResourceTraits<KisPSDLayerStyle>
+{
+    template <typename T>
+    using SharedPointerType = QSharedPointer<T>;
+
+    template <typename D, typename S>
+    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
+        return src.template dynamicCast<D>();
+    }
+};
+}
+
+void KisPSDLayerStyle::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
+{
+    KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
+}
+
+bool KisPSDLayerStyle::hasLocalResourcesSnapshot() const
+{
+    return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);
+}
+
+KisPSDLayerStyleSP KisPSDLayerStyle::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+}
+
+QList<KoResourceSP> KisPSDLayerStyle::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    QList<KoResourceSP> resources;
+
+    resources = QList<KoResourceSP>::fromVector(KisAslLayerStyleSerializer::fetchEmbeddedResources(this));
+
+    return resources;
 }

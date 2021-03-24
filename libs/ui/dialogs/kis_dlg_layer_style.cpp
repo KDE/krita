@@ -32,6 +32,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
 #include "kis_canvas_resource_provider.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include <KoFileDialog.h>
 #include <QMessageBox>
@@ -684,7 +685,7 @@ void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
     KisPSDLayerStyleSP style;
 
     if (!resource) {
-        collection = KisPSDLayerStyleSP(new KisPSDLayerStyle(""));
+        collection = KisPSDLayerStyleSP(new KisPSDLayerStyle());
         collection->setName(customName);
         collection->setFilename(fullFilename);
 
@@ -822,7 +823,7 @@ void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bev
     m_contour->ui.chkAntiAliased->setChecked(bevelAndEmboss->antiAliased());
     m_contour->ui.intRange->setValue(bevelAndEmboss->contourRange());
 
-    m_texture->ui.patternChooser->setCurrentPattern(bevelAndEmboss->texturePattern());
+    m_texture->ui.patternChooser->setCurrentPattern(bevelAndEmboss->texturePattern(KisGlobalResourcesInterface::instance()));
     m_texture->ui.intScale->setValue(bevelAndEmboss->textureScale());
     m_texture->ui.intDepth->setValue(bevelAndEmboss->textureDepth());
     m_texture->ui.chkInvert->setChecked(bevelAndEmboss->textureInvert());
@@ -1115,7 +1116,7 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.cmbCompositeOp->selectCompositeOp(KoID(config->blendMode()));
     ui.intOpacity->setValue(config->opacity());
 
-    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient(KisGlobalResourcesInterface::instance())), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1214,7 +1215,7 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.bnColor->setColor(color);
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
 
-    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient(KisGlobalResourcesInterface::instance())), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1303,7 +1304,8 @@ void PatternOverlay::setPatternOverlay(const psd_layer_effects_pattern_overlay *
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(pattern->blendMode()));
     ui.intOpacity->setValue(pattern->opacity());
-    ui.patternChooser->setCurrentPattern(pattern->pattern());
+    KoPatternSP patternResource = pattern->pattern(KisGlobalResourcesInterface::instance());
+    ui.patternChooser->setCurrentPattern(patternResource);
     ui.chkLinkWithLayer->setChecked(pattern->alignWithLayer());
     ui.intScale->setValue(pattern->scale());
 }
@@ -1453,7 +1455,7 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     color.fromQColor(stroke->color());
     ui.bnColor->setColor(color);
 
-    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient(KisGlobalResourcesInterface::instance())), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1465,7 +1467,7 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     ui.angleSelector->setValue(stroke->angle());
     ui.intScale->setValue(stroke->scale());
 
-    ui.patternChooser->setCurrentPattern(stroke->pattern());
+    ui.patternChooser->setCurrentPattern(stroke->pattern(KisGlobalResourcesInterface::instance()));
     ui.chkLinkWithLayer->setChecked(stroke->alignWithLayer());
     ui.intScale_2->setValue(stroke->scale());
 }

@@ -92,6 +92,7 @@
 #include "lazybrush/kis_colorize_mask.h"
 #include "kis_processing_applicator.h"
 #include "kis_projection_leaf.h"
+#include "KisGlobalResourcesInterface.h"
 
 #include "KisSaveGroupVisitor.h"
 
@@ -897,7 +898,7 @@ KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
 void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg)
 {
-    KisSetLayerStyleCommand::updateLayerStyle(layer, dlg->style()->clone().dynamicCast<KisPSDLayerStyle>());
+    KisSetLayerStyleCommand::updateLayerStyle(layer, dlg->style()->cloneWithResourcesSnapshot());
 }
 
 void KisLayerManager::layerStyle()
@@ -914,19 +915,22 @@ void KisLayerManager::layerStyle()
     KisPSDLayerStyleSP oldStyle;
     if (layer->layerStyle()) {
         oldStyle = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
-    }
-    else {
-        oldStyle = toQShared(new KisPSDLayerStyle());
+
+    } else {
+        oldStyle = toQShared(new KisPSDLayerStyle("", KisGlobalResourcesInterface::instance()));
     }
 
-    KisDlgLayerStyle dlg(oldStyle->clone().dynamicCast<KisPSDLayerStyle>(), m_view->canvasResourceProvider());
+    KisPSDLayerStyleSP newStyle = oldStyle->clone().dynamicCast<KisPSDLayerStyle>();
+    newStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
+
+    KisDlgLayerStyle dlg(newStyle, m_view->canvasResourceProvider());
 
     std::function<void ()> updateCall(std::bind(updateLayerStyles, layer, &dlg));
     SignalToFunctionProxy proxy(updateCall);
     connect(&dlg, SIGNAL(configChanged()), &proxy, SLOT(start()));
 
     if (dlg.exec() == QDialog::Accepted) {
-        KisPSDLayerStyleSP newStyle = dlg.style();
+        KisPSDLayerStyleSP newStyle = dlg.style()->cloneWithResourcesSnapshot();
 
         KUndo2CommandSP command = toQShared(
                     new KisSetLayerStyleCommand(layer, oldStyle, newStyle));

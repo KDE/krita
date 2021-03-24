@@ -73,6 +73,7 @@ namespace KisLsUtils
     void fillOverlayDevice(KisPaintDeviceSP fillDevice,
                            const QRect &applyRect,
                            const psd_layer_effects_overlay_base *config,
+                           KisResourcesInterfaceSP resourcesInterface,
                            KisLayerStyleFilterEnvironment *env);
 
     void applyFinalSelection(const QString &projectionId,
@@ -82,7 +83,7 @@ namespace KisLsUtils
                              const QRect &srcRect,
                              const QRect &dstRect,
                              const psd_layer_effects_context *context,
-                             const psd_layer_effects_shadow_base *config,
+                             const psd_layer_effects_shadow_base *config, KisResourcesInterfaceSP resourcesInterface,
                              const KisLayerStyleFilterEnvironment *env);
 
     bool checkEffectEnabled(const psd_layer_effects_shadow_base *config, KisMultipleProjection *dst);

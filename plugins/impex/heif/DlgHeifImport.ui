@@ -41,7 +41,7 @@
    <item row="2" column="1">
     <widget class="QDoubleSpinBox" name="spnGamma">
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display gamma. By default this is 1.2 for converting from  to display linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display gamma. By default this is 1.2 for converting from scene to display linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="maximum">
       <double>3.000000000000000</double>

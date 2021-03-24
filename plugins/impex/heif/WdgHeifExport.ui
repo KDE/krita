@@ -126,7 +126,7 @@
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="chkHLGOOTF">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hybrid Log Gamma needs an extra conversion step in between, as Krita can currently not send HLG data directly to the display. Therefore we apply the HLG opto-optical curve to convert from display to scene linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hybrid Log Gamma needs an extra conversion step in between, as Krita currently cannot send HLG data directly to the display. Therefore we apply the HLG opto-optical curve to convert from display to scene linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Apply reverse Hybrid Log Gamma OOTF</string>

@@ -25,12 +25,12 @@ private Q_SLOTS:
     void testImportResourceFile();
     void testAddResource();
     void testAddTemporaryResource();
-    void testUpdateResource();
     void testResourceForId();
     void testResourceForName();
     void testResourceForFileName();
     void testResourceForMD5();
     void testRenameResource();
+    void testUpdateResource();
     void cleanupTestCase();
 
 private:

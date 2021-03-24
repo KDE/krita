@@ -188,9 +188,7 @@ KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename) const
                        "WHERE  resources.resource_type_id = resource_types.id\n"
                        "AND    resources.storage_id = storages.id\n"
                        "AND    resources.filename = :resource_filename\n"
-                       "AND    resource_types.name = :resource_type\n"
-                       "AND    resources.status = 1\n"
-                       "AND    storages.active = 1");
+                       "AND    resource_types.name = :resource_type\n");
     if (!r) {
         qWarning() << "Could not prepare KisAllResourcesModel query for resource name" << q.lastError();
     }
@@ -221,12 +219,11 @@ KoResourceSP KisAllResourcesModel::resourceForName(QString name) const
                        "WHERE  resources.resource_type_id = resource_types.id\n"
                        "AND    resources.storage_id = storages.id\n"
                        "AND    resources.name = :resource_name\n"
-                       "AND    resource_types.name = :resource_type\n"
-                       "AND    resources.status = 1\n"
-                       "AND    storages.active = 1");
+                       "AND    resource_types.name = :resource_type\n");
     if (!r) {
         qWarning() << "Could not prepare KisAllResourcesModel query for resource name" << q.lastError();
     }
+
     q.bindValue(":resource_type", d->resourceType);
     q.bindValue(":resource_name", name);
 

@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.7" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.8" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -701,6 +701,33 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         return true;
     }
 
+    // Check whether another resource with this MD5 already exists: then we set the resource status to hidden
+    int active = 1;
+    {
+        QSqlQuery q;
+        if (!q.prepare("SELECT count(*)\n"
+                       "FROM   versioned_resources\n"
+                       ",      resources\n"
+                       "WHERE  versioned_resources.md5sum = :md5sum\n"
+                       "AND    resources.id = versioned_resources.resource_id\n"
+                       "AND    resources.status = 1")) {
+            qWarning() << "Could not prepare select count from versioned_resources query" << q.lastError();
+            return false;
+        }
+        q.bindValue(":md5sum", resource->md5().toHex());
+        if (!q.exec()) {
+            qWarning() << "Could not execute select from resource_types query" << q.lastError();
+            return false;
+        }
+        q.first();
+        int rowCount = q.value(0).toInt();
+
+        if (rowCount > 0) {
+            active = 0;
+        }
+
+    }
+
     QSqlQuery q;
     r = q.prepare("INSERT INTO resources \n"
                   "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary) \n"
@@ -736,7 +763,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     buf.close();
     q.bindValue(":thumbnail", ba);
 
-    q.bindValue(":status", 1);
+    q.bindValue(":status", active);
     q.bindValue(":temporary", (temporary ? 1 : 0));
 
     r = q.exec();

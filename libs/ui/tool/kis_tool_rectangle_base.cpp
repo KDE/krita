@@ -270,6 +270,11 @@ void KisToolRectangleBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
         path.addRect(viewRect);
     }
     paintToolOutline(&gc, path);
+    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1 px\nHeight: %2 px"
+                                                       , createRect(m_dragStart, m_dragEnd).width()
+                                                       , createRect(m_dragStart, m_dragEnd).height()), QIcon(), 1000
+                                                       , KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisToolRectangleBase::updateArea() {
@@ -279,4 +284,3 @@ void KisToolRectangleBase::updateArea() {
 
     emit rectangleChanged(bound);
 }
-

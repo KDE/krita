@@ -117,6 +117,8 @@ public Q_SLOTS:
 
     void crop();
 
+    void showSizeOnCanvas();
+
     void setCropTypeLegacy(int cropType);
     void setCropType(CropToolType cropType);
     void setCropTypeSelectable(bool selectable);

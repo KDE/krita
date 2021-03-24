@@ -155,6 +155,7 @@ public:
     }
 
     QList<QAction *> createActionsImpl() override;
+    void showFloatingMessage();
 
 };
 

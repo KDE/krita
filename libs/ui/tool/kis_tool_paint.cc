@@ -143,6 +143,9 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
     if (flags() & KisTool::FLAG_USES_CUSTOM_SIZE) {
         connect(action("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
         connect(action("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
+        connect(action("increase_brush_size"), SIGNAL(triggered()), this, SLOT(showBrushSize()));
+        connect(action("decrease_brush_size"), SIGNAL(triggered()), this, SLOT(showBrushSize()));
+
     }
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
@@ -638,6 +641,13 @@ void KisToolPaint::decreaseBrushSize()
 
     currentPaintOpPreset()->settings()->setPaintOpSize(newValue);
     requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolPaint::showBrushSize()
+{
+     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+     kisCanvas->viewManager()->showFloatingMessage(i18n("%1 %2 px", QString("Brush Size:"), currentPaintOpPreset()->settings()->paintOpSize())
+                                                                   , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 std::pair<QRectF,QRectF> KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)

@@ -65,7 +65,7 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
         } else {
             path.addRect(rect);
         }
-
+        path.addPath(drawX(m_dragStart));
         helper.paintPainterPath(path);
     } else {
         const QRectF r = convertToPt(rect);

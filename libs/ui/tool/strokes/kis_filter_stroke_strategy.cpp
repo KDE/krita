@@ -71,7 +71,9 @@ struct SubTaskSharedData {
         applyRect = m_image->bounds();
         processRect = m_filter->changedRect(applyRect, config, 0); //originally m_levelOfDetail was not used... ???
         m_frameTime = filterFrameData->frameTime;
-        m_shouldSwitchTime = filterFrameData->frameTime != -1 && filterFrameData->frameTime != KisLayerUtils::fetchLayerActiveRasterFrameTime(m_node);
+        m_shouldSwitchTime = filterFrameData->frameTime != -1;
+
+        m_shouldRedraw = !m_shouldSwitchTime || filterFrameData->frameTime == KisLayerUtils::fetchLayerActiveRasterFrameTime(m_node);
     }
 
     ~SubTaskSharedData(){}
@@ -95,6 +97,8 @@ struct SubTaskSharedData {
 
     bool shouldSwitchTime() { return m_shouldSwitchTime; }
 
+    bool shouldRedraw() { return m_shouldRedraw; }
+
     KisLayerUtils::SwitchFrameCommand::SharedStorageSP storage() { return m_storage; }
 
 public:
@@ -113,6 +117,7 @@ private:
     KisFilterSP m_filter;
     KisFilterConfigurationSP m_filterConfig;
     bool m_shouldSwitchTime;
+    bool m_shouldRedraw;
     int m_frameTime;
     KisLayerUtils::SwitchFrameCommand::SharedStorageSP m_storage;
 };
@@ -250,7 +255,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             KisPainter::copyAreaOptimized(shared->applyRect.topLeft(), shared->filterDevice, shared->targetDevice(), shared->applyRect, shared->selection());
             runAndSaveCommand( toQShared(workingTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE );
 
-            if (!shared->shouldSwitchTime()) {
+            if (shared->shouldRedraw()) {
                 shared->node()->setDirty(shared->applyRect);
             }
         });

@@ -27,6 +27,7 @@
 #include <kis_image_animation_interface.h>
 #include <kis_raster_keyframe_channel.h>
 #include <kis_time_span.h>
+#include <kis_image_config.h>
 
 // krita/ui
 #include "KisViewManager.h"
@@ -325,7 +326,9 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
 
 
     // Apply filter preview to active, visible frame only.
-    image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData());
+    KisImageConfig imgConf(true);
+    const int activeFrame = imgConf.autoKeyEnabled() && !imgConf.autoKeyModeDuplicate() ? KisLayerUtils::fetchLayerActiveRasterFrameTime(d->view->activeNode()) : -1;
+    image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData(activeFrame));
 
     {
         KisFilterStrokeStrategy::IdleBarrierData *data =

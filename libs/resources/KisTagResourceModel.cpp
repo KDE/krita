@@ -447,8 +447,10 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
 
 KoResourceSP KisTagResourceModel::resourceForIndex(QModelIndex index) const
 {
-    return KisResourceLocator::instance()->resourceForId(
-                data(index, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt());
+    int id = data(index, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt();
+    if (id < 1)  return nullptr;
+    KoResourceSP res = KisResourceLocator::instance()->resourceForId(id);
+    return res;
 }
 
 QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const

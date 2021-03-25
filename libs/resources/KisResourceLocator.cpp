@@ -310,7 +310,11 @@ bool KisResourceLocator::importResourceFromFile(const QString &resourceType, con
         return false;
     }
 
-    return KisResourceCacheDb::addResource(folderStorage(), folderStorage()->timeStampForResource(resource->resourceType().first, resource->filename()), resource, resourceType);
+    bool r = KisResourceCacheDb::addResource(folderStorage(), folderStorage()->timeStampForResource(resource->resourceType().first, resource->filename()), resource, resourceType);
+
+    Q_ASSERT(resource->resourceId() >= 0);
+
+    return r;
 }
 
 bool KisResourceLocator::addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation)

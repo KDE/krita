@@ -10,6 +10,7 @@
 #include <QClipboard>
 #include <QMimeData>
 #include <QImage>
+#include <QUrl>
 #include <QList>
 #include <QSet>
 #include <QPair>
@@ -29,7 +30,8 @@ QImage getImageFromClipboard()
             {{"image/png"}, "PNG"},
             {{"image/tiff"}, "TIFF"},
             {{"image/bmp", "image/x-bmp", "image/x-MS-bmp", "image/x-win-bitmap"}, "BMP"},
-            {{"image/jpeg"}, "JPG"}
+            {{"image/jpeg"}, "JPG"},
+            {{"text/uri-list"}, "File List"}
     };
 
     QClipboard *clipboard = QApplication::clipboard();
@@ -45,6 +47,11 @@ QImage getImageFromClipboard()
         const QSet<QString> &intersection = item.mimeTypes & clipboardMimeTypes;
         if (intersection.isEmpty()) {
             continue;
+        }
+
+        if (intersection.contains("text/uri-list")) {
+           image = QImage(clipboard->mimeData()->urls().at(0).path());
+           break;
         }
 
         const QString &format = *intersection.constBegin();

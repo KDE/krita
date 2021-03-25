@@ -40,17 +40,13 @@ struct AlphaDarkenCompositor128 {
     template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
-        const Pixel *sp = reinterpret_cast<const Pixel*>(src);
-        Pixel *dp = reinterpret_cast<Pixel*>(dst);
-
         Vc::float_v src_c1;
         Vc::float_v src_c2;
         Vc::float_v src_c3;
         Vc::float_v src_alpha;
 
-        const Vc::float_v::IndexType indexes(Vc::IndexesFromZero);
-        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel*>(sp));
-        tie(src_c1, src_c2, src_c3, src_alpha) = data[indexes];
+        PixelWrapper<channels_type, _impl> dataWrapper;
+        dataWrapper.read(const_cast<quint8*>(src), src_c1, src_c2, src_c3, src_alpha);
 
         Vc::float_v msk_norm_alpha;
         if (haveMask) {
@@ -78,8 +74,7 @@ struct AlphaDarkenCompositor128 {
         Vc::float_v dst_c3;
         Vc::float_v dst_alpha;
 
-        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> dataDest(dp);
-        tie(dst_c1, dst_c2, dst_c3, dst_alpha) = dataDest[indexes];
+        dataWrapper.read(dst, dst_c1, dst_c2, dst_c3, dst_alpha);
 
         Vc::float_m empty_dst_pixels_mask = dst_alpha == zeroValue;
 
@@ -125,7 +120,8 @@ struct AlphaDarkenCompositor128 {
             Vc::float_v flow_norm_vec(oparams.flow);
             dst_alpha = (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
         }
-        dataDest[indexes] = tie(dst_c1, dst_c2, dst_c3, dst_alpha);
+
+        dataWrapper.write(dst, dst_c1, dst_c2, dst_c3, dst_alpha);
     }
 
     /**
@@ -141,9 +137,11 @@ struct AlphaDarkenCompositor128 {
         channels_type *dst = reinterpret_cast<channels_type*>(d);
 
         float dstAlphaNorm = dst[alpha_pos];
+        PixelWrapper<channels_type, _impl>::normalizeAlpha(dstAlphaNorm);
 
         const float uint8Rec1 = 1.0 / 255.0;
         float mskAlphaNorm = haveMask ? float(*mask) * uint8Rec1 * src[alpha_pos] : src[alpha_pos];
+        PixelWrapper<channels_type, _impl>::normalizeAlpha(mskAlphaNorm);
 
         Q_UNUSED(opacity);
         opacity = oparams.opacity;
@@ -151,9 +149,9 @@ struct AlphaDarkenCompositor128 {
         float srcAlphaNorm = mskAlphaNorm * opacity;
 
         if (dstAlphaNorm != 0) {
-            dst[0] = lerp(dst[0], src[0], srcAlphaNorm);
-            dst[1] = lerp(dst[1], src[1], srcAlphaNorm);
-            dst[2] = lerp(dst[2], src[2], srcAlphaNorm);
+            dst[0] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(dst[0], src[0], srcAlphaNorm);
+            dst[1] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(dst[1], src[1], srcAlphaNorm);
+            dst[2] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(dst[2], src[2], srcAlphaNorm);
         } else {
             const Pixel *s = reinterpret_cast<const Pixel*>(src);
             Pixel *d = reinterpret_cast<Pixel*>(dst);
@@ -172,11 +170,14 @@ struct AlphaDarkenCompositor128 {
         }
 
         if (flow == 1.0) {
-            dst[alpha_pos] = fullFlowAlpha;
+            dstAlphaNorm = fullFlowAlpha;
         } else {
             float zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(srcAlphaNorm, dstAlphaNorm);
-            dst[alpha_pos] = lerp(zeroFlowAlpha, fullFlowAlpha, flow);
+            dstAlphaNorm = lerp(zeroFlowAlpha, fullFlowAlpha, flow);
         }
+
+        PixelWrapper<channels_type, _impl>::denormalizeAlpha(dstAlphaNorm);
+        dst[alpha_pos] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dstAlphaNorm);
     }
 };
 
@@ -221,5 +222,43 @@ public:
     KoOptimizedCompositeOpAlphaDarkenCreamy128(const KoColorSpace* cs)
         : KoOptimizedCompositeOpAlphaDarken128Impl<_impl, KoAlphaDarkenParamsWrapperCreamy>(cs) {}
 };
+
+template<Vc::Implementation _impl, typename ParamsWrapper>
+class KoOptimizedCompositeOpAlphaDarkenU64Impl : public KoCompositeOp
+{
+public:
+    KoOptimizedCompositeOpAlphaDarkenU64Impl(const KoColorSpace* cs)
+        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) {}
+
+    using KoCompositeOp::composite;
+
+    virtual void composite(const KoCompositeOp::ParameterInfo& params) const override
+    {
+        if(params.maskRowStart) {
+            KoStreamedMath<_impl>::template genericComposite64<true, true, AlphaDarkenCompositor128<quint16, ParamsWrapper> >(params);
+        } else {
+            KoStreamedMath<_impl>::template genericComposite64<false, true, AlphaDarkenCompositor128<quint16, ParamsWrapper> >(params);
+        }
+    }
+};
+
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpAlphaDarkenHardU64
+    : public KoOptimizedCompositeOpAlphaDarkenU64Impl<_impl, KoAlphaDarkenParamsWrapperHard>
+{
+public:
+    KoOptimizedCompositeOpAlphaDarkenHardU64(const KoColorSpace* cs)
+        : KoOptimizedCompositeOpAlphaDarkenU64Impl<_impl, KoAlphaDarkenParamsWrapperHard>(cs) {}
+};
+
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpAlphaDarkenCreamyU64
+    : public KoOptimizedCompositeOpAlphaDarkenU64Impl<_impl, KoAlphaDarkenParamsWrapperCreamy>
+{
+public:
+    KoOptimizedCompositeOpAlphaDarkenCreamyU64(const KoColorSpace* cs)
+        : KoOptimizedCompositeOpAlphaDarkenU64Impl<_impl, KoAlphaDarkenParamsWrapperCreamy>(cs) {}
+};
+
 
 #endif // KOOPTIMIZEDCOMPOSITEOPALPHADARKEN128_H

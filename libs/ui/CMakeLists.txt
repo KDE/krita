@@ -50,6 +50,7 @@ set(kritaui_LIB_SRCS
     canvas/KisSnapPointStrategy.cpp
     canvas/KisSnapPixelStrategy.cpp
     canvas/KisMirrorAxisConfig.cpp
+
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -70,6 +71,8 @@ set(kritaui_LIB_SRCS
     dialogs/KisNewWindowLayoutDialog.cpp
     dialogs/KisDlgChangeCloneSource.cpp
     dialogs/KisRecoverNamedAutosaveDialog.cpp
+    dialogs/KisDlgSavePreset.cpp
+
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -245,7 +248,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_paintop_presets_popup.cpp
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
-    widgets/kis_paintop_presets_save.cpp
     widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
 

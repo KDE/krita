@@ -52,7 +52,7 @@ ExternalProject_Add( ext_gettext
     PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Fix-libgettextpo-linking-on-macOS.patch
 
     INSTALL_DIR ${PREFIX_ext_gettext}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java 
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java --disable-maintainer-mode
    BUILD_COMMAND make
    INSTALL_COMMAND make install
 

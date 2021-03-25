@@ -1692,10 +1692,10 @@
     </Action>
     <Action name="reset_configurations">
       <icon></icon>
-      <text>Reset Krita Configurations</text>
+      <text>Reset All Settings</text>
       <whatsThis></whatsThis>
-      <toolTip>Reset Krita Configurations</toolTip>
-      <iconText>Reset Krita Configurations</iconText>
+      <toolTip>Reset All Settings to Default</toolTip>
+      <iconText>Reset Settings</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

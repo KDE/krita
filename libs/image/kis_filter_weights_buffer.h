@@ -154,7 +154,7 @@ public:
         KisFixedPoint supportSrc;
         KisFixedPoint supportDst;
 
-        if (realScale < 1.0) {
+        if (realScale < 1.0 && realScale > (1.0 / (1 << 8))) {
             m_weightsPositionScale = KisFixedPoint(realScale);
             supportSrc.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()) / realScale);
             supportDst.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()));

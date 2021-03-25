@@ -86,6 +86,7 @@ public:
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);
     void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
+    void invalidateFrame(const int time, KisNodeSP target);
 
     /**
      * Changes the default color of the "external frame" projection of

@@ -2151,38 +2151,26 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
-    QSet<int> fetchLayerFramesMatchingID(KisNodeSP node, const int frameID) {
-        KIS_ASSERT(node);
-        KisRasterKeyframeChannel* rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), false));
+    //===========================================================
 
-        if (!rasterChannel) {
-            return QSet<int>();
-        }
-
-        return rasterChannel->timesForFrameID(frameID);
-    }
-
-    QSet<int> fetchLayerUniqueFrameTimes(KisNodeSP node)
+    int fetchLayerActiveRasterFrameID(KisNodeSP node)
     {
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  QSet<int>());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  -1);
         KisPaintDeviceSP paintDevice = node->paintDevice();
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, QSet<int>());
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice->framesInterface(), QSet<int>());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, -1);
 
-        QSet<int> uniqueTimes;
-
-        QList<int> ids = paintDevice->framesInterface()->frames();
-        Q_FOREACH( const int& id, ids ) {
-            QSet<int> times = fetchLayerFramesMatchingID(node, id);
-            if (times.count() > 0) {
-                uniqueTimes.insert(*times.begin());
-            }
+        if (!paintDevice->keyframeChannel()) {
+            return -1;
         }
 
-        return uniqueTimes;
+        const int activeTime = paintDevice->keyframeChannel()->activeKeyframeTime();
+        KisRasterKeyframeSP keyframe = paintDevice->keyframeChannel()->activeKeyframeAt<KisRasterKeyframe>(activeTime);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(keyframe, -1);
+
+        return keyframe->frameID();
     }
 
-    int fetchLayerActiveFrameTime(KisNodeSP node)
+    int fetchLayerActiveRasterFrameTime(KisNodeSP node)
     {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  -1);
         KisPaintDeviceSP paintDevice = node->paintDevice();
@@ -2193,6 +2181,91 @@ namespace KisLayerUtils {
         }
 
         return paintDevice->keyframeChannel()->activeKeyframeTime();
+    }
+
+    KisTimeSpan fetchLayerActiveRasterFrameSpan(KisNodeSP node, const int time)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  KisTimeSpan::infinite(0));
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, KisTimeSpan::infinite(0));
+        if (!paintDevice->keyframeChannel()) {
+            return KisTimeSpan::infinite(0);
+        }
+
+        return paintDevice->keyframeChannel()->affectedFrames(time);
+    }
+
+    QSet<int> fetchLayerIdenticalRasterFrameTimes(KisNodeSP node, const int &frameTime)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  QSet<int>());
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, QSet<int>());
+        if (!paintDevice->keyframeChannel()) {
+            return QSet<int>();
+        }
+
+        return paintDevice->keyframeChannel()->clonesOf(node.data(), frameTime);
+    }
+
+    QSet<int> fetchLayerRasterFrameTimesMatchingID(KisNodeSP node, const int frameID) {
+        KIS_ASSERT(node);
+        KisRasterKeyframeChannel* rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), false));
+
+        if (!rasterChannel) {
+            return QSet<int>();
+        }
+
+        return rasterChannel->timesForFrameID(frameID);
+    }
+
+    QSet<int> fetchLayerRasterIDsAtTimes(KisNodeSP node, const QSet<int> &times)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  QSet<int>());
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, QSet<int>());
+        if (!paintDevice->keyframeChannel()) {
+            return QSet<int>();
+        }
+
+        QSet<int> frameIDs;
+
+        Q_FOREACH( const int& frame, times ) {
+            KisRasterKeyframeSP raster = paintDevice->keyframeChannel()->activeKeyframeAt<KisRasterKeyframe>(frame);
+            frameIDs << raster->frameID();
+        }
+
+        return frameIDs;
+    }
+
+    QSet<int> filterTimesForOnlyRasterKeyedTimes(KisNodeSP node, const QSet<int> &times)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  times);
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, times);
+        if (!paintDevice->keyframeChannel()) {
+            return times;
+        }
+
+        return paintDevice->keyframeChannel()->allKeyframeTimes().intersect(times);
+    }
+
+    QSet<int> fetchLayerUniqueRasterTimesMatchingIDs(KisNodeSP node, QSet<int>& frameIDs)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  QSet<int>());
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, QSet<int>());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice->framesInterface(), QSet<int>());
+
+        QSet<int> uniqueTimes;
+
+        Q_FOREACH( const int& id, frameIDs) {
+            QSet<int> times = fetchLayerRasterFrameTimesMatchingID(node, id);
+            if (times.count() > 0) {
+                uniqueTimes.insert(*times.begin());
+            }
+        }
+
+        return uniqueTimes;
     }
 
 }

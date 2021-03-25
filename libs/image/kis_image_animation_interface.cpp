@@ -444,6 +444,18 @@ void KisImageAnimationInterface::invalidateFrames(const KisTimeSpan &range, cons
     emit sigFramesChanged(range, rect);
 }
 
+void KisImageAnimationInterface::invalidateFrame(const int time, KisNodeSP target)
+{
+    m_d->cachedLastFrameValue = -1;
+
+    emit sigFramesChanged(KisLayerUtils::fetchLayerActiveRasterFrameSpan(target, time), m_d->image->bounds());
+
+    QSet<int> identicalFrames = KisLayerUtils::fetchLayerIdenticalRasterFrameTimes(target, time);
+    Q_FOREACH(const int& identicalTime, identicalFrames) {
+        emit sigFramesChanged(KisLayerUtils::fetchLayerActiveRasterFrameSpan(target, identicalTime), m_d->image->bounds());
+    }
+}
+
 void KisImageAnimationInterface::blockFrameInvalidation(bool value)
 {
     m_d->frameInvalidationBlocked = value;

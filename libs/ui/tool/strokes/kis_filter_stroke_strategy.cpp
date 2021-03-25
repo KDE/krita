@@ -16,6 +16,7 @@
 #include <KisRunnableStrokeJobUtils.h>
 #include <KisRunnableStrokeJobsInterface.h>
 #include <KoCompositeOpRegistry.h>
+#include "kis_image_animation_interface.h"
 #include "kis_painter.h"
 
 struct KisFilterStrokeStrategy::Private {
@@ -70,7 +71,7 @@ struct SubTaskSharedData {
         applyRect = m_image->bounds();
         processRect = m_filter->changedRect(applyRect, config, 0); //originally m_levelOfDetail was not used... ???
         m_frameTime = filterFrameData->frameTime;
-        m_shouldSwitchTime = filterFrameData->frameTime != -1 && filterFrameData->frameTime != KisLayerUtils::fetchLayerActiveFrameTime(m_node);
+        m_shouldSwitchTime = filterFrameData->frameTime != -1 && filterFrameData->frameTime != KisLayerUtils::fetchLayerActiveRasterFrameTime(m_node);
     }
 
     ~SubTaskSharedData(){}
@@ -183,13 +184,14 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             // Copy snapshot of targetDevice for filter processing..
             shared->filterDevice = new KisPaintDevice(*shared->targetDevice());
 
-            //Update all necessary rect data based on contents of frame..
+            // Update all necessary rect data based on contents of frame..
             shared->filterDeviceBounds = shared->filterDevice->extent();
 
             if (shared->filter()->needsTransparentPixels(shared->filterConfig().data(), shared->targetDevice()->colorSpace())) {
                 shared->filterDeviceBounds |= shared->targetDevice()->defaultBounds()->bounds();
             }
 
+            // Account for any size-differential caused by the filter in question.
             shared->filterDeviceBounds |= shared->filter()->changedRect(shared->filterDeviceBounds, shared->filterConfig().data(), 0);
 
             //If we're dealing with some kind of transparency mask, we will create a compositionSourceDevice instead.
@@ -197,12 +199,15 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             if (shared->selection() ||
                     (shared->targetDevice()->colorSpace() != shared->targetDevice()->compositionSourceColorSpace() &&
                     *shared->targetDevice()->colorSpace() != *shared->targetDevice()->compositionSourceColorSpace())) {
+
                 shared->filterDevice = shared->targetDevice()->createCompositionSourceDevice(shared->targetDevice());
+
                 if (shared->selection()) {
                     shared->filterDeviceBounds &= shared->selection()->selectedRect();
                 }
             }
 
+            // Filter device needs a transaction to prevent grid-patch artifcacts from multithreaded read/write.
             shared->filterDeviceTransaction.reset(new KisTransaction(shared->filterDevice));
 
         });
@@ -213,7 +218,6 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             QVector<QRect> patches = KritaUtils::splitRectIntoPatches(shared->processRect, size);
 
             Q_FOREACH (const QRect &patch, patches) {
-                // Filter subrect concurently
                 addJobConcurrent(jobs, [patch, shared, progress](){
                     if (shared->filterDeviceBounds.contains(patch) || shared->filterDeviceBounds.intersects(patch)) {
                         shared->filter()->processImpl(shared->filterDevice, patch,
@@ -223,8 +227,6 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 });
             }
         } else {
-
-            //Filter whole paint device.
             addJobSequential(jobs, [shared, progress](){
                 shared->filter()->processImpl(shared->filterDevice, shared->processRect,
                                          shared->filterConfig().data(),
@@ -233,7 +235,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
 
         addJobSequential(jobs, [this, shared](){
-
+            // We will first apply the transaction to the temporary filterDevice
             runAndSaveCommand(toQShared(shared->filterDeviceTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
             shared->filterDeviceTransaction.reset();
 
@@ -254,6 +256,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         });
 
         addJobSequential(jobs, [this, shared](){
+            shared->image()->animationInterface()->invalidateFrame(shared->frameTime(), shared->node());
             if (shared->shouldSwitchTime()) {
                 runAndSaveCommand( toQShared( new KisLayerUtils::SwitchFrameCommand(shared->image(), shared->frameTime(), true, shared->storage()) )
                                    , KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);

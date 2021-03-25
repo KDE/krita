@@ -18,6 +18,7 @@
 
 #include <KisResourceModelProvider.h>
 #include <KisTagResourceModel.h>
+#include <KisStorageModel.h>
 #include <QVector>
 
 #include <kis_assert.h>
@@ -41,6 +42,12 @@ KisAllTagsModel::KisAllTagsModel(const QString &resourceType, QObject *parent)
     if (!d->resourceType.isEmpty()) {
         resetQuery();
     }
+
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
+
 }
 
 KisAllTagsModel::~KisAllTagsModel()
@@ -412,6 +419,8 @@ bool KisAllTagsModel::changeTagActive(const KisTagSP tag, bool active)
 
 }
 
+
+
 KisTagSP KisAllTagsModel::tagForUrl(const QString& tagUrl) const
 {
     if (tagUrl.isEmpty()) {
@@ -500,6 +509,24 @@ bool KisAllTagsModel::resetQuery()
 
     d->cachedRowCount = -1;
     return r;
+}
+
+void KisAllTagsModel::addStorage(const QString &location)
+{
+    Q_UNUSED(location)
+    beginResetModel();
+    resetQuery();
+    endResetModel();
+}
+
+
+
+void KisAllTagsModel::removeStorage(const QString &location)
+{
+    Q_UNUSED(location)
+    beginResetModel();
+    resetQuery();
+    endResetModel();
 }
 
 

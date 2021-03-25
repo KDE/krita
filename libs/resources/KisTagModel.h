@@ -92,6 +92,10 @@ public:
     static QString urlAll() { return "All"; }
     static QString urlAllUntagged() { return "All Untagged"; }
 
+private Q_SLOTS:
+
+    void addStorage(const QString &location);
+    void removeStorage(const QString &location);
 
 private:
 

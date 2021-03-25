@@ -467,7 +467,6 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
     Q_ASSERT(!d->storages.contains(storageLocation));
 
     d->storages[storageLocation] = storage;
-
     if (!KisResourceCacheDb::addStorage(storage, false)) {
         d->errorMessages.append(i18n("Could not add %1 to the database", storage->location()));
         return false;

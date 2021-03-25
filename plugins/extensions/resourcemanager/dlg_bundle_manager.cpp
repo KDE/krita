@@ -198,7 +198,39 @@ void DlgBundleManager::addBundle()
     dlg.setCaption(i18n("Select the bundle"));
     QString filename = dlg.filename();
     if (!filename.isEmpty()) {
-        addBundleToActiveResources(filename);
+        // 1. Copy the bundle to the resource folder
+        QFileInfo oldFileInfo(filename);
+
+        KisConfig cfg(true);
+        QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                                QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+        QString newName = oldFileInfo.fileName();
+        QString newLocation = newDir + '/' + newName;
+
+        QFileInfo newFileInfo(newLocation);
+        if (newFileInfo.exists()) {
+            bool done = false;
+            int i = 0;
+            do {
+                // ask for new filename
+                bool ok;
+                newName = QInputDialog::getText(this, i18n("New name for the bundle"), i18n("The old filename %1 is taken.\nNew name:", newName),
+                                                QLineEdit::Normal, newName, &ok);
+                newLocation = newDir + '/' + newName;
+                newFileInfo.setFile(newLocation);
+                done = !newFileInfo.exists();
+                i++;
+            } while (!done);
+        }
+
+        QFile::copy(filename, newLocation);
+
+        // 2. Add the bundle as a storage/update database
+        KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+        KIS_ASSERT(!storage.isNull());
+        if (!KisResourceLocator::instance()->addStorage(newLocation, storage)) {
+            qWarning() << "Could not add bundle to the storages" << newLocation;
+        }
     }
 }
 
@@ -292,11 +324,9 @@ void DlgBundleManager::updateToggleButton(bool active)
     }
 }
 
-void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
+void DlgBundleManager::updateBundleInformation(QModelIndex idx)
 {
-    QModelIndex idx = m_proxyModel->mapToSource(currentInProxy);
-
-    KisResourceStorageSP storage = KisStorageModel::instance()->storageForIndex(idx);
+    KisResourceStorageSP storage = m_proxyModel->storageForIndex(idx);
     KIS_SAFE_ASSERT_RECOVER_RETURN(storage);
 
     m_ui->lblAuthor->setText(storage->metaData(KisResourceStorage::s_meta_author).toString());
@@ -313,46 +343,5 @@ void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(thumbnail));
 
 }
-
-QString createNewBundlePath(QString resourceFolder, QString filename)
-{
-    return resourceFolder + '/' + filename;
-}
-
-void DlgBundleManager::addBundleToActiveResources(QString filename)
-{
-    // 1. Copy the bundle to the resource folder
-    QFileInfo oldFileInfo(filename);
-
-    KisConfig cfg(true);
-    QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
-                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    QString newName = oldFileInfo.fileName();
-    QString newLocation = createNewBundlePath(newDir, newName);
-
-    QFileInfo newFileInfo(newLocation);
-    if (newFileInfo.exists()) {
-        bool done = false;
-        int i = 0;
-        do {
-            // ask for new filename
-            bool ok;
-            newName = QInputDialog::getText(this, i18n("New name for the bundle"), i18n("The old filename %1 is taken.\nNew name:", newName),
-                                            QLineEdit::Normal, newName, &ok);
-            newLocation = createNewBundlePath(newDir, newName);
-            newFileInfo.setFile(newLocation);
-            done = !newFileInfo.exists();
-            i++;
-        } while (!done);
-    }
-
-    QFile::copy(filename, newLocation);
-
-    // 2. Add the bundle as a storage/update database
-    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
-    KIS_ASSERT(!storage.isNull());
-    KisResourceLocator::instance()->addStorage(QFileInfo(newLocation).fileName(), storage);
-}
-
 
 

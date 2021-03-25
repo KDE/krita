@@ -56,8 +56,7 @@ private Q_SLOTS:
 private:
 
     void updateToggleButton(bool active);
-    void updateBundleInformation(QModelIndex current);
-    void addBundleToActiveResources(QString filename);
+    void updateBundleInformation(QModelIndex idx);
 
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;

@@ -50,9 +50,6 @@ struct OverCompositor128 {
 #endif
         Q_UNUSED(oparams);
 
-        const Pixel *sp = reinterpret_cast<const Pixel*>(src);
-        Pixel *dp = reinterpret_cast<Pixel*>(dst);
-
         Vc::float_v src_alpha;
         Vc::float_v dst_alpha;
 
@@ -60,9 +57,8 @@ struct OverCompositor128 {
         Vc::float_v src_c2;
         Vc::float_v src_c3;
 
-        const Vc::float_v::IndexType indexes(Vc::IndexesFromZero);
-        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel*>(sp));
-        tie(src_c1, src_c2, src_c3, src_alpha) = data[indexes];
+        PixelWrapper<channels_type, _impl> dataWrapper;
+        dataWrapper.read(const_cast<quint8*>(src), src_c1, src_c2, src_c3, src_alpha);
 
         //bool haveOpacity = opacity != 1.0;
         const Vc::float_v opacity_norm_vec(opacity);
@@ -88,13 +84,12 @@ struct OverCompositor128 {
         Vc::float_v dst_c2;
         Vc::float_v dst_c3;
 
-        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> dataDest(dp);
-        tie(dst_c1, dst_c2, dst_c3, dst_alpha) = dataDest[indexes];
+        dataWrapper.read(dst, dst_c1, dst_c2, dst_c3, dst_alpha);
 
         Vc::float_v src_blend;
         Vc::float_v new_alpha;
 
-        const Vc::float_v oneValue(NATIVE_OPACITY_OPAQUE);
+        const Vc::float_v oneValue(1.0f);
         if ((dst_alpha == oneValue).isFull()) {
             new_alpha = dst_alpha;
             src_blend = src_alpha;
@@ -121,12 +116,12 @@ struct OverCompositor128 {
             dst_c2 = src_blend * (src_c2 - dst_c2) + dst_c2;
             dst_c3 = src_blend * (src_c3 - dst_c3) + dst_c3;
 
-            dataDest[indexes] = tie(dst_c1, dst_c2, dst_c3, new_alpha);
+            dataWrapper.write(dst, dst_c1, dst_c2, dst_c3, new_alpha);
         } else {
 #if INFO_DEBUG
                 ++countTwo;
 #endif
-                dataDest[indexes] = tie(src_c1, src_c2, src_c3, new_alpha);
+            dataWrapper.write(dst, src_c1, src_c2, src_c3, new_alpha);
         }
     }
 
@@ -140,6 +135,7 @@ struct OverCompositor128 {
         channels_type *d = reinterpret_cast<channels_type*>(dst);
 
         float srcAlpha = s[alpha_pos];
+        PixelWrapper<channels_type, _impl>::normalizeAlpha(srcAlpha);
         srcAlpha *= opacity;
 
         if (haveMask) {
@@ -155,22 +151,23 @@ struct OverCompositor128 {
         }
 #endif
 
-        if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
+        if (srcAlpha != 0.0f) {
 
             float dstAlpha = d[alpha_pos];
+            PixelWrapper<channels_type, _impl>::normalizeAlpha(dstAlpha);
             float srcBlendNorm;
 
-            if (alphaLocked || dstAlpha == NATIVE_OPACITY_OPAQUE) {
+            if (alphaLocked || dstAlpha == 1.0f) {
                 srcBlendNorm = srcAlpha;
-            } else if (dstAlpha == NATIVE_OPACITY_TRANSPARENT) {
+            } else if (dstAlpha == 0.0f) {
                 dstAlpha = srcAlpha;
-                srcBlendNorm = NATIVE_OPACITY_OPAQUE;
+                srcBlendNorm = 1.0f;
 
                 if (!allChannelsFlag) {
-                    KoStreamedMathFunctions::clearPixel<16>(dst);
+                    KoStreamedMathFunctions::clearPixel<sizeof(Pixel)>(dst);
                 }
             } else {
-                dstAlpha += (NATIVE_OPACITY_OPAQUE - dstAlpha) * srcAlpha;
+                dstAlpha += (1.0f - dstAlpha) * srcAlpha;
                 srcBlendNorm = srcAlpha / dstAlpha;
             }
 
@@ -180,9 +177,9 @@ struct OverCompositor128 {
             }
 #endif
             if(allChannelsFlag) {
-                if (srcBlendNorm == NATIVE_OPACITY_OPAQUE) {
+                if (srcBlendNorm == 1.0f) {
                     if (!alphaLocked) {
-                        KoStreamedMathFunctions::copyPixel<16>(src, dst);
+                        KoStreamedMathFunctions::copyPixel<sizeof(Pixel)>(src, dst);
                     } else {
                         d[0] = s[0];
                         d[1] = s[1];
@@ -201,7 +198,7 @@ struct OverCompositor128 {
             } else {
                 const QBitArray &channelFlags = oparams.channelFlags;
 
-                if (srcBlendNorm == NATIVE_OPACITY_OPAQUE) {
+                if (srcBlendNorm == 1.0f) {
                     if(channelFlags.at(0)) d[0] = s[0];
                     if(channelFlags.at(1)) d[1] = s[1];
                     if(channelFlags.at(2)) d[2] = s[2];
@@ -213,6 +210,7 @@ struct OverCompositor128 {
             }
 
             if (!alphaLocked) {
+                PixelWrapper<channels_type, _impl>::denormalizeAlpha(dstAlpha);
                 d[alpha_pos] = dstAlpha;
             }
 #if INFO_DEBUG
@@ -269,6 +267,50 @@ public:
                 KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, false, false> >(params);
             } else /*if (!allChannelsFlag && alphaLocked) */{
                 KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, true, false> >(params);
+            }
+        }
+    }
+};
+
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpOverU64 : public KoCompositeOp
+{
+public:
+    KoOptimizedCompositeOpOverU64(const KoColorSpace* cs)
+        : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+
+    using KoCompositeOp::composite;
+
+    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    {
+        if(params.maskRowStart) {
+            composite<true>(params);
+        } else {
+            composite<false>(params);
+        }
+    }
+
+    template <bool haveMask>
+    inline void composite(const KoCompositeOp::ParameterInfo& params) const {
+        if (params.channelFlags.isEmpty() ||
+            params.channelFlags == QBitArray(4, true)) {
+
+            KoStreamedMath<_impl>::template genericComposite64<haveMask, false, OverCompositor128<quint16, false, true> >(params);
+        } else {
+            const bool allChannelsFlag =
+                params.channelFlags.at(0) &&
+                params.channelFlags.at(1) &&
+                params.channelFlags.at(2);
+
+            const bool alphaLocked =
+                !params.channelFlags.at(3);
+
+            if (allChannelsFlag && alphaLocked) {
+                KoStreamedMath<_impl>::template genericComposite64_novector<haveMask, false, OverCompositor128<quint16, true, true> >(params);
+            } else if (!allChannelsFlag && !alphaLocked) {
+                KoStreamedMath<_impl>::template genericComposite64_novector<haveMask, false, OverCompositor128<quint16, false, false> >(params);
+            } else /*if (!allChannelsFlag && alphaLocked) */{
+                KoStreamedMath<_impl>::template genericComposite64_novector<haveMask, false, OverCompositor128<quint16, true, false> >(params);
             }
         }
     }

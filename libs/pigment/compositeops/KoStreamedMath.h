@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -23,6 +24,7 @@
 #include <KoAlwaysInline.h>
 #include <iostream>
 #include <KoCompositeOp.h>
+#include <KoColorSpaceMaths.h>
 
 #define BLOCKDEBUG 0
 
@@ -30,11 +32,36 @@
 #pragma GCC diagnostic ignored "-Wcast-align"
 #endif
 
+
+template<Vc::Implementation _impl>
+struct OptiRound {
+    ALWAYS_INLINE
+    static float roundScalar(const float& value) {
+#ifdef __SSE4_1__
+        // SSE/AVX instructions use round-to-even rounding rule so we
+        // should reuse it when possible
+
+        float result;
+
+        __m128 x = _mm_set_ss(value);
+        __m128 y{};
+        y = _mm_round_ss(y, x, 0x00);
+        _mm_store_ss(&result, y);
+
+        return result;
+#else
+        return value + 0.5;
+#endif
+
+    }
+};
+
 template<Vc::Implementation _impl>
 struct KoStreamedMath {
 
 using int_v = Vc::SimdArray<int, Vc::float_v::size()>;
 using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+
 
 /**
  * Composes src into dst without using vector instructions
@@ -90,12 +117,18 @@ template<bool useMask, bool useFlow, class Compositor>
     genericComposite_novector<useMask, useFlow, Compositor, 16>(params);
 }
 
-static inline quint8 round_float_to_uint(float value) {
-    return quint8(value + float(0.5));
+template<bool useMask, bool useFlow, class Compositor>
+    static void genericComposite64_novector(const KoCompositeOp::ParameterInfo& params)
+{
+    genericComposite_novector<useMask, useFlow, Compositor, 8>(params);
+}
+
+static inline quint8 round_float_to_u8(float x) {
+    return OptiRound<_impl>::roundScalar(x);
 }
 
 static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
-    return round_float_to_uint(qint16(b - a) * alpha + a);
+    return round_float_to_u8(qint16(b - a) * alpha + a);
 }
 
 /**
@@ -194,6 +227,31 @@ static inline void write_channels_32(quint8 *data,
     v1 = v1 | v2;
     v3 = v3 | v4;
     (v1 | v3).store((quint32*)data, Vc::Aligned);
+}
+
+static inline void write_channels_32_unaligned(quint8 *data,
+                                               Vc::float_v::AsArg alpha,
+                                               Vc::float_v::AsArg c1,
+                                               Vc::float_v::AsArg c2,
+                                               Vc::float_v::AsArg c3) {
+    /**
+     * FIXME: make conversion float->int
+     * use mathematical rounding
+     */
+
+    const quint32 lowByteMask = 0xFF;
+
+    // FIXME: Use single-instruction rounding + conversion
+    //        The achieve that we need to implement Vc::iRound()
+
+    uint_v mask(lowByteMask);
+    uint_v v1 = uint_v(int_v(Vc::round(alpha))) << 24;
+    uint_v v2 = (uint_v(int_v(Vc::round(c1))) & mask) << 16;
+    uint_v v3 = (uint_v(int_v(Vc::round(c2))) & mask) <<  8;
+    uint_v v4 = uint_v(int_v(Vc::round(c3))) & mask;
+    v1 = v1 | v2;
+    v3 = v3 | v4;
+    (v1 | v3).store((quint32*)data, Vc::Unaligned);
 }
 
 /**
@@ -369,6 +427,237 @@ template<bool useMask, bool useFlow, class Compositor>
     genericComposite<useMask, useFlow, Compositor, 16>(params);
 }
 
+template<bool useMask, bool useFlow, class Compositor>
+    static void genericComposite64(const KoCompositeOp::ParameterInfo& params)
+{
+    genericComposite<useMask, useFlow, Compositor, 8>(params);
+}
+
+};
+
+template<typename channels_type, Vc::Implementation _impl>
+struct PixelWrapper
+{
+};
+
+template<Vc::Implementation _impl>
+struct PixelWrapper<quint16, _impl>
+{
+    using int_v = Vc::SimdArray<int, Vc::float_v::size()>;
+    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+
+    ALWAYS_INLINE
+    static quint16 lerpMixedUintFloat(quint16 a, quint16 b, float alpha) {
+        return OptiRound<_impl>::roundScalar(qint32(b - a) * alpha + a);
+    }
+
+    ALWAYS_INLINE
+    static quint16 roundFloatToUint(float x) {
+        return OptiRound<_impl>::roundScalar(x);
+    }
+
+    ALWAYS_INLINE
+    static void normalizeAlpha(float &alpha) {
+        const float uint16Rec1 = 1.0f / 65535.0f;
+        alpha *= uint16Rec1;
+    }
+
+    ALWAYS_INLINE
+    static void denormalizeAlpha(float &alpha) {
+        const float uint16Max = 65535.0f;
+        alpha *= uint16Max;
+    }
+
+    PixelWrapper()
+        : mask(quint32(0xFFFF)),
+          uint16Max(65535.0f),
+          uint16Rec1(1.0f / 65535.0f)
+    {
+    }
+
+    ALWAYS_INLINE
+    void read(quint8 *dataDst, Vc::float_v &dst_c1, Vc::float_v &dst_c2, Vc::float_v &dst_c3, Vc::float_v &dst_alpha)
+    {
+        struct PackedPixel {
+            float rrgg;
+            float bbaa;
+        };
+
+        Vc::InterleavedMemoryWrapper<PackedPixel, Vc::float_v> dataWrapper((PackedPixel*)(dataDst));
+        Vc::float_v v1, v2;
+        Vc::tie(v1, v2) = dataWrapper[size_t(0)];
+        uint_v pixelsC1C2 = uint_v(Vc::reinterpret_components_cast<int_v>(v1));
+        uint_v pixelsC3Alpha = uint_v(Vc::reinterpret_components_cast<int_v>(v2));
+
+        dst_c1 = Vc::simd_cast<Vc::float_v>(pixelsC1C2 & mask);
+        dst_c2 = Vc::simd_cast<Vc::float_v>((pixelsC1C2 >> 16) & mask);
+        dst_c3 = Vc::simd_cast<Vc::float_v>(pixelsC3Alpha & mask);
+        dst_alpha = Vc::simd_cast<Vc::float_v>((pixelsC3Alpha >> 16) & mask);
+
+        dst_alpha *= uint16Rec1;
+    }
+
+    ALWAYS_INLINE
+    void write(quint8 *dataDst, Vc::float_v::AsArg c1, Vc::float_v::AsArg c2, Vc::float_v::AsArg c3, Vc::float_v &alpha)
+    {
+        alpha *= uint16Max;
+
+        uint_v v1 = uint_v(int_v(Vc::round(c1)));
+        uint_v v2 = uint_v(int_v(Vc::round(c2)));
+        uint_v v3 = uint_v(int_v(Vc::round(c3)));
+        uint_v v4 = uint_v(int_v(Vc::round(alpha)));
+        uint_v c1c2 = ((v2 & mask) << 16) | (v1 & mask);
+        uint_v c3ca = ((v4 & mask) << 16) | (v3 & mask);
+        std::pair<int_v, int_v> out = Vc::interleave(c1c2, c3ca);
+        out.first.store(reinterpret_cast<Vc::uint32_t*>(dataDst), Vc::Aligned);
+        out.second.store(reinterpret_cast<Vc::uint32_t*>(dataDst) + out.first.size(), Vc::Aligned);
+    }
+
+    ALWAYS_INLINE
+    void clearPixels(quint8 *dataDst) {
+        memset(dataDst, 0, Vc::float_v::size() * sizeof(quint16) * 4);
+    }
+
+    ALWAYS_INLINE
+    void copyPixels(const quint8 *dataSrc, quint8 *dataDst) {
+        memcpy(dataDst, dataSrc, Vc::float_v::size() * sizeof(quint16) * 4);
+    }
+
+
+    const uint_v mask;
+    const Vc::float_v uint16Max;
+    const Vc::float_v uint16Rec1;
+};
+
+template<Vc::Implementation _impl>
+struct PixelWrapper<quint8, _impl>
+{
+    using int_v = Vc::SimdArray<int, Vc::float_v::size()>;
+    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+
+    ALWAYS_INLINE
+    static quint8 lerpMixedUintFloat(quint8 a, quint8 b, float alpha) {
+        return KoStreamedMath<_impl>::lerp_mixed_u8_float(a, b, alpha);
+    }
+
+    ALWAYS_INLINE
+    static quint8 roundFloatToUint(float x) {
+        return KoStreamedMath<_impl>::round_float_to_u8(x);
+    }
+
+    ALWAYS_INLINE
+    static void normalizeAlpha(float &alpha) {
+        const float uint8Rec1 = 1.0f / 255.0f;
+        alpha *= uint8Rec1;
+    }
+
+    ALWAYS_INLINE
+    static void denormalizeAlpha(float &alpha) {
+        const float uint8Max = 255.0f;
+        alpha *= uint8Max;
+    }
+
+    PixelWrapper()
+        : mask(quint32(0xFF)),
+          uint8Max(255.0f),
+          uint8Rec1(1.0f / 255.0f)
+    {
+    }
+
+    ALWAYS_INLINE
+    void read(quint8 *dataDst, Vc::float_v &dst_c1, Vc::float_v &dst_c2, Vc::float_v &dst_c3, Vc::float_v &dst_alpha)
+    {
+        dst_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<false>(dataDst);
+        KoStreamedMath<_impl>::template fetch_colors_32<false>(dataDst, dst_c1, dst_c2, dst_c3);
+
+        dst_alpha *= uint8Rec1;
+    }
+
+    ALWAYS_INLINE
+    void write(quint8 *dataDst, Vc::float_v::AsArg c1, Vc::float_v::AsArg c2, Vc::float_v::AsArg c3, Vc::float_v &alpha)
+    {
+        alpha *= uint8Max;
+
+        KoStreamedMath<_impl>::write_channels_32_unaligned(dataDst, alpha, c1, c2, c3);
+    }
+
+    ALWAYS_INLINE
+    void clearPixels(quint8 *dataDst) {
+        memset(dataDst, 0, Vc::float_v::size() * sizeof(quint8) * 4);
+    }
+
+    ALWAYS_INLINE
+    void copyPixels(const quint8 *dataSrc, quint8 *dataDst) {
+        memcpy(dataDst, dataSrc, Vc::float_v::size() * sizeof(quint8) * 4);
+    }
+
+
+    const uint_v mask;
+    const Vc::float_v uint8Max;
+    const Vc::float_v uint8Rec1;
+};
+
+template<Vc::Implementation _impl>
+struct PixelWrapper<float, _impl>
+{
+    struct Pixel {
+        float red;
+        float green;
+        float blue;
+        float alpha;
+    };
+
+    ALWAYS_INLINE
+    static float lerpMixedUintFloat(float a, float b, float alpha) {
+        return Arithmetic::lerp(a,b,alpha);
+    }
+
+    ALWAYS_INLINE
+    static float roundFloatToUint(float x) {
+        return x;
+    }
+
+    ALWAYS_INLINE
+    static void normalizeAlpha(float &alpha) {
+        Q_UNUSED(alpha);
+    }
+
+    ALWAYS_INLINE
+    static void denormalizeAlpha(float &alpha) {
+        Q_UNUSED(alpha);
+    }
+
+    PixelWrapper()
+        : indexes(Vc::IndexesFromZero)
+    {
+    }
+
+    ALWAYS_INLINE
+    void read(quint8 *dstPtr, Vc::float_v &dst_c1, Vc::float_v &dst_c2, Vc::float_v &dst_c3, Vc::float_v &dst_alpha)
+    {
+        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> dataDst(reinterpret_cast<Pixel*>(dstPtr));
+        tie(dst_c1, dst_c2, dst_c3, dst_alpha) = dataDst[indexes];
+
+    }
+
+    ALWAYS_INLINE
+    void write(quint8 *dstPtr, Vc::float_v &dst_c1, Vc::float_v &dst_c2, Vc::float_v &dst_c3, Vc::float_v &dst_alpha)
+    {
+        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> dataDst(reinterpret_cast<Pixel*>(dstPtr));
+        dataDst[indexes] = tie(dst_c1, dst_c2, dst_c3, dst_alpha);
+    }
+
+    ALWAYS_INLINE
+    void clearPixels(quint8 *dataDst) {
+        memset(dataDst, 0, Vc::float_v::size() * sizeof(float) * 4);
+    }
+
+    ALWAYS_INLINE
+    void copyPixels(const quint8 *dataSrc, quint8 *dataDst) {
+        memcpy(dataDst, dataSrc, Vc::float_v::size() * sizeof(float) * 4);
+    }
+
+    const Vc::float_v::IndexType indexes;
 };
 
 namespace KoStreamedMathFunctions {
@@ -381,6 +670,13 @@ ALWAYS_INLINE void clearPixel<4>(quint8* dst)
 {
     quint32 *d = reinterpret_cast<quint32*>(dst);
     *d = 0;
+}
+
+template<>
+ALWAYS_INLINE void clearPixel<8>(quint8* dst)
+{
+    quint64 *d = reinterpret_cast<quint64*>(dst);
+    d[0] = 0;
 }
 
 template<>
@@ -400,6 +696,14 @@ ALWAYS_INLINE void copyPixel<4>(const quint8 *src, quint8* dst)
     const quint32 *s = reinterpret_cast<const quint32*>(src);
     quint32 *d = reinterpret_cast<quint32*>(dst);
     *d = *s;
+}
+
+template<>
+ALWAYS_INLINE void copyPixel<8>(const quint8 *src, quint8* dst)
+{
+    const quint64 *s = reinterpret_cast<const quint64*>(src);
+    quint64 *d = reinterpret_cast<quint64*>(dst);
+    d[0] = s[0];
 }
 
 template<>

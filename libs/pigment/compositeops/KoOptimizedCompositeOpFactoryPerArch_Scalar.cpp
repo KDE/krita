@@ -10,6 +10,7 @@
 #include "KoCompositeOpAlphaDarken.h"
 #include "KoAlphaDarkenParamsWrapper.h"
 #include "KoCompositeOpOver.h"
+#include "KoCompositeOpCopy2.h"
 
 template<>
 template<>
@@ -59,3 +60,52 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<Vc::
 {
     return new KoCompositeOpOver<KoRgbF32Traits>(param);
 }
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOverU64>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOverU64>::create<Vc::ScalarImpl>(ParamType param)
+{
+    return new KoCompositeOpOver<KoBgrU16Traits>(param);
+}
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpCopy128>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpCopy128>::create<Vc::ScalarImpl>(ParamType param)
+{
+    return new KoCompositeOpCopy2<KoRgbF32Traits>(param);
+}
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpCopyU64>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpCopyU64>::create<Vc::ScalarImpl>(ParamType param)
+{
+    return new KoCompositeOpCopy2<KoBgrU16Traits>(param);
+}
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpCopy32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpCopy32>::create<Vc::ScalarImpl>(ParamType param)
+{
+    return new KoCompositeOpCopy2<KoBgrU8Traits>(param);
+}
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenHardU64>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenHardU64>::create<Vc::ScalarImpl>(ParamType param)
+{
+    return new KoCompositeOpAlphaDarken<KoBgrU16Traits, KoAlphaDarkenParamsWrapperHard>(param);
+}
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenCreamyU64>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenCreamyU64>::create<Vc::ScalarImpl>(ParamType param)
+{
+    return new KoCompositeOpAlphaDarken<KoBgrU16Traits, KoAlphaDarkenParamsWrapperCreamy>(param);
+}
+

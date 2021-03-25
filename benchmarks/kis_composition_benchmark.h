@@ -25,14 +25,25 @@ private Q_SLOTS:
     void checkRoundingAlphaDarkenF32_05_10_08();
 
     void checkRoundingOver();
+    void checkRoundingOverRgbaU16();
     void checkRoundingOverRgbaF32();
+
+    void checkRoundingCopyRgbaU16();
+    void checkRoundingCopyRgbaF32();
 
     void compareAlphaDarkenOps();
     void compareAlphaDarkenOpsNoMask();
+    void compareRgbU16AlphaDarkenOps();
     void compareRgbF32AlphaDarkenOps();
+
     void compareOverOps();
     void compareOverOpsNoMask();
+    void compareRgbU16OverOps();
     void compareRgbF32OverOps();
+
+    void compareRgbU8CopyOps();
+    void compareRgbU16CopyOps();
+    void compareRgbF32CopyOps();
 
     void testRgb8CompositeAlphaDarkenLegacy();
     void testRgb8CompositeAlphaDarkenOptimized();
@@ -40,16 +51,29 @@ private Q_SLOTS:
     void testRgb8CompositeOverLegacy();
     void testRgb8CompositeOverOptimized();
 
+    void testRgb16CompositeAlphaDarkenLegacy();
+    void testRgb16CompositeAlphaDarkenOptimized();
+
+    void testRgb16CompositeOverLegacy();
+    void testRgb16CompositeOverOptimized();
+
+    void testRgb16CompositeCopyLegacy();
+    void testRgb16CompositeCopyOptimized();
+
     void testRgbF32CompositeAlphaDarkenLegacy();
     void testRgbF32CompositeAlphaDarkenOptimized();
 
     void testRgbF32CompositeOverLegacy();
     void testRgbF32CompositeOverOptimized();
 
+    void testRgbF32CompositeCopyLegacy();
+    void testRgbF32CompositeCopyOptimized();
+
     void testRgb8CompositeAlphaDarkenReal_Aligned();
     void testRgb8CompositeOverReal_Aligned();
 
     void testRgb8CompositeCopyLegacy();
+    void testRgb8CompositeCopyOptimized();
 
     void benchmarkMemcpy();
 

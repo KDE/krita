@@ -96,6 +96,19 @@ void benchmarkBrush(const QString &presetName)
     }
 }
 
+void benchmarkBrushUnthreaded(const QString &presetName)
+{
+    FreehandStrokeBenchmarkTester tester(presetName);
+
+
+    Q_FOREACH(int i, QVector<int>({/*1,*/ QThread::idealThreadCount()})) {
+        tester.setCpuCoresLimit(i);
+        tester.benchmark();
+
+        qDebug() << qPrintable(QString("Cores: %1 Time: %2 (ms)").arg(i).arg(tester.lastStrokeTime()));
+    }
+}
+
 #include <KoResourcePaths.h>
 
 void FreehandStrokeBenchmark::initTestCase()
@@ -138,14 +151,45 @@ void FreehandStrokeBenchmark::testStampTip()
     benchmarkBrush("testing_1000px_stamp_450_rotated.kpp");
 }
 
-void FreehandStrokeBenchmark::testColorsmudgeDefaultTip()
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_old_sa()
 {
-    benchmarkBrush("testing_200px_colorsmudge_default.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_default_dulling_old_sa.kpp");
 }
 
-void FreehandStrokeBenchmark::testColorsmudgeDefaultTipNew()
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_old_nsa()
 {
-    benchmarkBrush("testing_200px_colorsmudge_default_new.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_old_nsa.kpp");
 }
+
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_sa()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_new_sa.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_nsa()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_new_nsa.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_old_sa()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_old_sa.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_old_nsa()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_old_nsa.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_new_sa()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_new_sa.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_new_nsa()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_new_nsa.kpp");
+}
+
 
 KISTEST_MAIN(FreehandStrokeBenchmark)

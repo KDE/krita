@@ -1,3 +1,3 @@
 #! /bin/sh
 
-find -name *tag -print
+find -name *tag -print0

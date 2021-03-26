@@ -67,7 +67,7 @@ protected:
     qreal getRotationAngle();
     QPainterPath drawX(const QPointF &pt);
     void applyConstraints(QSizeF& area, bool overrideRatio);
-    void getRotatedAt(QPainterPath &path, const QPointF center, const qreal angle);
+    void getRotatedAt(QPainterPath &path, const QPointF &center, const qreal &angle);
     QPointF getRotatedAt(const QPointF pt, const QPointF center, const qreal angle);
 
     void updateArea();

@@ -58,6 +58,11 @@ if [ -z "${BRANDING}" ]; then
     fi
 fi
 
+if [[ -d .git ]]; then
+    python build-tools/copy_po.py
+fi
+
+
 BUILD_TYPE="Release"
 
 # Make sure our build directory exists

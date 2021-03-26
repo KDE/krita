@@ -419,6 +419,11 @@ build_krita () {
         fi
     fi
 
+    cd ${KIS_SRC_DIR}
+    if [[ -d .git ]]; then
+        python build-tools/copy_po.py
+    fi
+
     export DYLD_FRAMEWORK_PATH=${FRAMEWORK_PATH}
     echo ${KIS_BUILD_DIR}
     echo ${KIS_INSTALL_DIR}

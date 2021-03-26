@@ -185,7 +185,8 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
         QPointF angleVector;
         if (!m_rotateActive) {
             m_rotateActive = true;
-            angleVector = pos - m_dragStart;
+            angleVector = (fixedSize)? m_dragEnd: pos;
+            angleVector -= m_dragStart;
             m_referenceAngle = atan2(angleVector.y(), angleVector.x());
         }
         angleVector = pos - m_dragStart;
@@ -196,6 +197,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
         m_angle += m_angleBuffer;
         m_angleBuffer = 0;
     }
+
     if (fixedSize && !rotateMode) {
       m_dragStart = pos;
     } else if (translateMode && !rotateMode) {
@@ -208,11 +210,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
     QTransform t1, t2;
     t1.rotateRadians(-getRotationAngle());
     QPointF baseDiag = t1.map(diag);
-    //QPointF baseDiag = getRotatedAt(diag, QPointF(0, 0), -getRotationAngle());
-    qDebug() << "\ndiag: " << diag.x() << ' ' << diag.y();
-    qDebug() << "baseDiag: " << baseDiag.x() << ' ' << baseDiag.y();
     QSizeF area = QSizeF(fabs(baseDiag.x()), fabs(baseDiag.y()));
-    qDebug() << "area: " << area.width() << ' ' << area.height();
 
     bool overrideRatio = constraintToggle && !(m_isHeightForced || m_isWidthForced || m_isRatioForced);
     if (!constraintToggle || overrideRatio) {
@@ -226,11 +224,6 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 
     t2.rotateRadians(getRotationAngle());
     diag = t2.map(baseDiag);
-    //diag = getRotatedAt(baseDiag, QPointF(0, 0), getRotationAngle());
-    qDebug() << "area: " << area.width() << ' ' << area.height();
-    qDebug() << "baseDiag: " << baseDiag.x() << ' ' << baseDiag.y();
-    qDebug() << "diag: " << diag.x() << ' ' << diag.y();
-
 
     // resize around center point?
     if (expandFromCenter && !fixedSize && !rotateMode) {
@@ -239,7 +232,6 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
     } else {
       m_dragEnd = m_dragStart + diag;
     }
-
 
     updateArea();
     m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
@@ -267,14 +259,10 @@ QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end
      * "ceil"/"floor" (depending on the direction of the drag) and the
      * end-drag point should follow usual "round" semantics.
      */
-    QPointF diag = end - start;
     QTransform t;
     t.rotateRadians(-getRotationAngle());
-    diag = t.map(diag);
+    QPointF end1 = t.map(end-start) + start;
 
-    QRectF result = QRectF(start, QSize(fabs(diag.x()), fabs(diag.y())));
-    //QRectF result = QRectF(start, QSize(fabs(qRound(diag.x())), fabs(qRound(diag.y()))));
-/*
     qreal x0 = start.x();
     qreal y0 = start.y();
     qreal x1 = end1.x();
@@ -286,10 +274,8 @@ QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end
     int newX1 = qRound(x1);
     int newY1 = qRound(y1);
 
-    //QRectF result;
-    result.setCoords(newX0, newY0, newX1, newY1);*/
-    //QPoint center = QPoint(qRound(m_dragCenter.x()), qRound(m_dragCenter.y()));
-    //result.moveCenter(center);
+    QRectF result;
+    result.setCoords(newX0, newY0, newX1, newY1);
     result.moveCenter(m_dragCenter);
     return result.normalized();
 }
@@ -320,19 +306,9 @@ void KisToolRectangleBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
         path.addRect(viewRect);
     }
 
-    const QPointF center = viewRect.center();
-
-    QTransform t1, t2, t3;
-    t1.translate(-center.x(), -center.y());
-    t2.rotateRadians(getRotationAngle());
-    t3.translate(center.x(), center.y());
-    path = t1.map(path);    path = t2.map(path);    path = t3.map(path);
-    //path.addPath(drawX(viewRect.center()));
-    //getRotatedAt(path, viewToPixel(center), getRotationAngle());
-    //path.addPath(drawX(viewRect.center()));
+    getRotatedPath(path, viewRect.center(), getRotationAngle());
     path.addPath(drawX(pixelToView(m_dragStart)));
     path.addPath(drawX(pixelToView(m_dragCenter)));
-    path.addPath(drawX(pixelToView(m_dragEnd)));
     paintToolOutline(&gc, path);
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
     kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1 px\nHeight: %2 px"
@@ -362,24 +338,12 @@ QPainterPath KisToolRectangleBase::drawX(const QPointF &pt) {
     return path;
 }
 
-void KisToolRectangleBase::getRotatedAt(QPainterPath &path, const QPointF &center, const qreal &angle) {
-    QTransform t1, t2, t3;
-    t1.translate(-center.x(), -center.y());
-    t1.rotateRadians(angle);
-    t1.translate(center.x(), center.y());
+void KisToolRectangleBase::getRotatedPath(QPainterPath &path, const QPointF &center, const qreal &angle) {
+    QTransform t;
+    t.translate(center.x(), center.y());
+    t.rotateRadians(angle);
+    t.translate(-center.x(), -center.y());
 
-    path = t1.map(path);    path = t2.map(path);    path = t3.map(path);
-}
-
-QPointF KisToolRectangleBase::getRotatedAt(const QPointF pt, const QPointF center, const qreal angle) {
-    QTransform t1, t2, t3;
-    t1.translate(-center.x(), -center.y());
-    t1.rotateRadians(angle);
-    t1.translate(center.x(), center.y());
-
-    QPointF resultPt = t1.map(pt);
-    resultPt = t2.map(resultPt);
-    resultPt = t3.map(resultPt);
-    return resultPt;
+    path = t.map(path);
 }
 >>>>>>> Rotation ability to rectangle and ellipse tools

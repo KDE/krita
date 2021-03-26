@@ -65,15 +65,7 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
         } else {
             path.addRect(rect);
         }
-        const QPointF center = rect.center();
-
-        QTransform t1, t2, t3;
-        t1.translate(-center.x(), -center.y());
-        t2.rotateRadians(getRotationAngle());
-        t3.translate(center.x(), center.y());
-        path = t1.map(path);    path = t2.map(path);    path = t3.map(path);
-        //getRotatedAt(path, rect.center(), getRotationAngle());
-        path.addPath(drawX(m_dragStart));
+        getRotatedPath(path, rect.center(), getRotationAngle());
         helper.paintPainterPath(path);
     } else {
         const QRectF r = convertToPt(rect);

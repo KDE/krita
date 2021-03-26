@@ -27,6 +27,9 @@ void KisToolEllipseBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
 
     QPainterPath path;
     path.addEllipse(viewRect);
+    getRotatedPath(path, viewRect.center(), getRotationAngle());
+    path.addPath(drawX(pixelToView(m_dragStart)));
+    path.addPath(drawX(pixelToView(m_dragCenter)));
     paintToolOutline(&gc, path);
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
     kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1 px\nHeight: %2 px", createRect(m_dragStart, m_dragEnd).width()

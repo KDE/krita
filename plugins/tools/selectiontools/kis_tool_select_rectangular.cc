@@ -69,7 +69,7 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
             } else {
                 cache.addRect(rc);
             }
-
+            getRotatedPath(cache, rc.center(), getRotationAngle());
             {
                 KisPainter painter(tmpSel);
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
@@ -90,10 +90,11 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
         const qreal docRoundCornersX = convertToPt(roundCornersX);
         const qreal docRoundCornersY = convertToPt(roundCornersY);
 
-        helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect,
-                                                                          docRoundCornersX,
-                                                                          docRoundCornersY),
-                                 selectionAction());
+        KoShape* shape = KisShapeToolHelper::createRectangleShape(documentRect,
+                                                                  docRoundCornersX,
+                                                                  docRoundCornersY);
+        shape->rotate(qRadiansToDegrees(getRotationAngle()));
+        helper.addSelectionShape(shape, selectionAction());
     }
 }
 

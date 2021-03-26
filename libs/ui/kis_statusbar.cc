@@ -152,7 +152,7 @@ void KisStatusBar::setup()
             SLOT(imageSizeChanged()));
 
     m_canvasAngleSelector = new KisAngleSelector;
-    m_canvasAngleSelector->setRange(-179.99, 180.0);
+    m_canvasAngleSelector->setRange(-360.00, 360.0);
     m_canvasAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
     m_canvasAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_canvasAngleSelector->useFlatSpinBox(true);

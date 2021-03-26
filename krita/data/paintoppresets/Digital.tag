@@ -1,6 +1,25 @@
 [Desktop Entry]
 Type=Tag
 Name=Digital
+Name[bs]=Digitalni
+Name[da]=Digital
+Name[de]=Digital
+Name[el]=Ψηφιακό
+Name[en_GB]=Digital
+Name[es]=Digital
+Name[et]=Digitaal
+Name[eu]=Digitala
+Name[fr]=Numérique
+Name[gl]=Dixital
+Name[it]=Digitale
+Name[kk]=Цифрлық
+Name[nl]=Digitaal
+Name[pl]=Cyfrowy
+Name[ru]=Цифровой
+Name[sk]=Digitálne
+Name[sv]=Digitalt
+Name[tr]=Sayısal
+Name[ug]=رەقەملىك
 ResourceType=paintoppreset
 Comment=Brush presets with a digital look and feel.
 URL=Digital

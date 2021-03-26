@@ -128,7 +128,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_controlsLayout->addWidget(m_zoomSlider);
 
         m_rotateAngleSelector = new KisAngleSelector();
-        m_rotateAngleSelector->setRange(-179.99, 180.0);
+        m_rotateAngleSelector->setRange(-360.00, 360.0);
         m_rotateAngleSelector->setAngle(m_canvas->rotationAngle());
         m_rotateAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
         m_rotateAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
@@ -214,13 +214,7 @@ void OverviewDockerDock::updateSlider()
     if (!m_canvas) return;
     KisSignalsBlocker l(m_rotateAngleSelector);
 
-    qreal rotation = m_canvas->rotationAngle();
-    if (rotation > 180) {
-        rotation = rotation - 360;
-    } else if (rotation < -180) {
-        rotation = rotation + 360;
-    }
-    m_rotateAngleSelector->setAngle(rotation);
+    m_rotateAngleSelector->setAngle(m_canvas->rotationAngle());
 }
 
 void OverviewDockerDock::setPinControls(bool pin)

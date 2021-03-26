@@ -1986,6 +1986,9 @@ KoShape * SvgParser::createPath(const KoXmlElement &element)
             path->setSize(newSize);
             path->setPosition(newPosition);
 
+            if (element.hasAttribute("sodipodi:nodetypes")) {
+                path->loadNodeTypes(element.attribute("sodipodi:nodetypes"));
+            }
             obj = path;
         }
     }

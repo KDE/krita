@@ -464,11 +464,17 @@ void KisResourceLocator::purge()
 
 bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceStorageSP storage)
 {
-    Q_ASSERT(!d->storages.contains(storageLocation));
+    if (d->storages.contains(storageLocation)) {
+        if (!removeStorage(storageLocation)) {
+            qWarning() << "could not remove" << storageLocation;
+            return false;
+        }
+    }
 
     d->storages[storageLocation] = storage;
     if (!KisResourceCacheDb::addStorage(storage, false)) {
         d->errorMessages.append(i18n("Could not add %1 to the database", storage->location()));
+        qWarning() << d->errorMessages;
         return false;
     }
     emit storageAdded(makeStorageLocationRelative(storage->location()));
@@ -478,13 +484,18 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
 bool KisResourceLocator::removeStorage(const QString &storageLocation)
 {
     // Cloned documents have a document storage, but that isn't in the locator.
-    if (!d->storages.contains(storageLocation)) return true;
+    if (!d->storages.contains(storageLocation)) {
+        qDebug() << storageLocation << "does not exist";
+        return true;
+    }
 
     purge();
 
-    KisResourceStorageSP storage = d->storages. take(storageLocation);
+    KisResourceStorageSP storage = d->storages.take(storageLocation);
+
     if (!KisResourceCacheDb::deleteStorage(storage)) {
         d->errorMessages.append(i18n("Could not remove storage %1 from the database", storage->location()));
+        qWarning() << d->errorMessages;
         return false;
     }
     emit storageRemoved(storage->location());

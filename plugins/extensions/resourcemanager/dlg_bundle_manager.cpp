@@ -209,20 +209,13 @@ void DlgBundleManager::addBundle()
 
         QFileInfo newFileInfo(newLocation);
         if (newFileInfo.exists()) {
-            bool done = false;
-            int i = 0;
-            do {
-                // ask for new filename
-                bool ok;
-                newName = QInputDialog::getText(this, i18n("New name for the bundle"), i18n("The old filename %1 is taken.\nNew name:", newName),
-                                                QLineEdit::Normal, newName, &ok);
-                newLocation = newDir + '/' + newName;
-                newFileInfo.setFile(newLocation);
-                done = !newFileInfo.exists();
-                i++;
-            } while (!done);
+            if (QMessageBox::warning(this, i18nc("@ttile:window", "Warning"), i18n("There is already a bundle with this name installed. Do you want to overwrite it?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) {
+                return;
+            }
+            else {
+                QFile::remove(newLocation);
+            }
         }
-
         QFile::copy(filename, newLocation);
 
         // 2. Add the bundle as a storage/update database

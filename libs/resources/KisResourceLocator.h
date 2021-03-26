@@ -80,7 +80,8 @@ public:
 
     /**
      * @brief addStorage Adds a new resource storage to the database. The storage is
-     * will be marked as not pre-installed.
+     * will be marked as not pre-installed. If there is already a storage with the
+     * given location, it will first be removed.
      * @param storageLocation a unique name for the given storage
      * @param storage a storage object
      * @return true if the storage has been added successfully

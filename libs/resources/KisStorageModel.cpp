@@ -9,6 +9,7 @@
 #include <QElapsedTimer>
 #include <KisResourceLocator.h>
 #include <KisResourceModelProvider.h>
+#include <QFileInfo>
 
 Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
@@ -334,7 +335,7 @@ void KisStorageModel::addStorage(const QString &location)
 
 void KisStorageModel::removeStorage(const QString &location)
 {
-    int row = d->storages.indexOf(location);
+    int row = d->storages.indexOf(QFileInfo(location).fileName());
     beginRemoveRows(QModelIndex(), row, row);
     d->storages.removeAt(row);
     endRemoveRows();

@@ -315,7 +315,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     }
 
     if (!filter) {
-        return KisImportExportErrorCode(ImportExportCodes::FileFormatIncorrect);
+        return KisImportExportErrorCode(ImportExportCodes::FileFormatNotSupported);
     }
 
     filter->setFilename(location);

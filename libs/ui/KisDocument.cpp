@@ -739,8 +739,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
 
     //KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!job.mimeType.isEmpty(), false);
     if (job.mimeType.isEmpty()) {
-
-        KisImportExportErrorCode error = ImportExportCodes::FileFormatIncorrect;
+        KisImportExportErrorCode error = ImportExportCodes::FileFormatNotSupported;
         slotCompleteSavingDocument(job, error, error.errorMessage());
         return false;
 

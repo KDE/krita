@@ -1171,9 +1171,12 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 
 void KisMainWindow::slotSaveCanceled(const QString &errMsg)
 {
-    KisUsageLogger::log(QString("Saving canceled. Error:").arg(errMsg));
-    if (!errMsg.isEmpty()) {   // empty when canceled by user
+    if (!errMsg.isEmpty()) {   // empty when cancelled by user
+        KisUsageLogger::log(QString("Saving cancelled. Error:").arg(errMsg));
         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
+    }
+    else {
+        KisUsageLogger::log(QString("Saving cancelled by the user."));
     }
     slotSaveCompleted();
 }

@@ -1,27 +1,23 @@
 #!/usr/bin/python3
+import subprocess
 
 stable_url = "svn://anonsvn.kde.org/home/kde/branches/stable/l10n-kf5/"
 unstable_url = "svn://anonsvn.kde.org/home/kde/trunk/l10n-kf5/"
 krita_location = "messages/krita"
 
 # determine whether we're in the master branch or not
-from git import Repo
-repo = Repo(".")
-print("Current git branch", repo.active_branch)
-
-if repo.active_branch.name == "master":
-    print("Getting unstable translations")
+res = subprocess.run(["git", "status"], stdout=subprocess.PIPE)
+if "master" in res.stdout.decode('utf-8'):
     url = unstable_url
 else:
-    print("Getting stable translations")
     url = stable_url
-
+        
 print (url);
 
 # construct the url and get the subdirs file
 svn_command = url + "subdirs"
 
-import subprocess
+
 subdirs = subprocess.run(["svn", "cat", svn_command], stdout=subprocess.PIPE)
 for subdir in subdirs.stdout.decode('utf-8').split('\n'):
     po_url = url + '/' + subdir + '/' + krita_location + "/krita.po"

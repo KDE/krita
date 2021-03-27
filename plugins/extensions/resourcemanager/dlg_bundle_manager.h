@@ -6,19 +6,28 @@
 #ifndef DLG_BUNDLE_MANAGER_H
 #define DLG_BUNDLE_MANAGER_H
 
-#include <QWidget>
 #include <KoDialog.h>
 #include <QModelIndex>
 #include <QPersistentModelIndex>
 #include <QStyledItemDelegate>
+#include <QWidget>
+
+#include "ui_wdgdlgbundlemanager.h"
 
 class KisStorageModel;
 class KisStorageFilterProxyModel;
 
-namespace Ui
+class WdgDlgBundleManager : public QWidget, public Ui::WdgDlgBundleManager
 {
-class WdgDlgBundleManager;
-}
+    Q_OBJECT
+
+public:
+    WdgDlgBundleManager(QWidget *parent)
+        : QWidget(parent)
+    {
+        setupUi(this);
+    }
+};
 
 class DlgBundleManager : public KoDialog
 {
@@ -58,8 +67,7 @@ private:
     void updateToggleButton(bool active);
     void updateBundleInformation(QModelIndex idx);
 
-    QWidget *m_page;
-    Ui::WdgDlgBundleManager *m_ui;
+    WdgDlgBundleManager *m_ui;
     QPersistentModelIndex lastIndex;
     KisStorageFilterProxyModel* m_proxyModel;
 

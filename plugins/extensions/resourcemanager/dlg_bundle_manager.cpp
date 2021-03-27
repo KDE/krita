@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "dlg_bundle_manager.h"
-#include "ui_wdgdlgbundlemanager.h"
 
 #include "resourcemanager.h"
 #include "dlg_create_bundle.h"
@@ -126,13 +125,12 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
 
 DlgBundleManager::DlgBundleManager(QWidget *parent)
     : KoDialog(parent)
-    , m_page(new QWidget())
-    , m_ui(new Ui::WdgDlgBundleManager)
 {
     setCaption(i18n("Manage Resource Libraries"));
-    m_ui->setupUi(m_page);
-    setMainWidget(m_page);
-    resize(m_page->sizeHint());
+
+    m_ui = new WdgDlgBundleManager(this);
+    Q_CHECK_PTR(m_ui);
+    setMainWidget(m_ui);
 
     m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     m_ui->bnAdd->setText(i18nc("In bundle manager; press button to import a bundle", "Import"));
@@ -327,7 +325,7 @@ void DlgBundleManager::updateBundleInformation(QModelIndex idx)
     date = QDateTime::fromSecsSinceEpoch(date.toInt()).toString();
     m_ui->lblCreated->setText(date);
     m_ui->lblDescription->setPlainText(storage->metaData(KisResourceStorage::s_meta_description).toString());
-    m_ui->lblName->setText(storage->name());
+    m_ui->BundleSelectedGroupBox->setTitle(storage->name());
     m_ui->lblType->setText(KisResourceStorage::storageTypeToString(storage->type()));
     m_ui->lblEmail->setText(storage->metaData(KisResourceStorage::s_meta_email).toString());
     m_ui->lblLicense->setText(storage->metaData(KisResourceStorage::s_meta_license).toString());

@@ -17,6 +17,9 @@ print (url);
 # construct the url and get the subdirs file
 svn_command = url + "subdirs"
 
+import os
+import shutil
+import subprocess
 
 subdirs = subprocess.run(["svn", "cat", svn_command], stdout=subprocess.PIPE)
 for subdir in subdirs.stdout.decode('utf-8').split('\n'):
@@ -29,26 +32,23 @@ for subdir in subdirs.stdout.decode('utf-8').split('\n'):
         print ("empty pofile for", subdir, " -- continuing.")
         continue
 
-    import os
-    import shutil
-    try:
-        shutil.rmtree("po/" + subdir)
-    except:
-        print("Could not remove", "po/" + subdir)
-        pass
-    
-    try:
-        os.makedirs("po/" + subdir, exist_ok=True)
-    except:
-        print("Could not create", "po/" + subdir)
-        pass
-    
-    pofile = "po/" + subdir + "/krita.po"
-    
-    print("writing", len(po_contents), "bytes to", pofile)
-        
-    f = open(pofile, 'w')
-    f.write(po_contents)
-    f.close()
-    
+    po_subdir = "po/{}".format(subdir)
 
+    try:
+        if os.path.isdir(po_subdir):
+            shutil.rmtree(po_subdir)
+    except:
+        print("Could not remove {}".format(po_subdir))
+        pass
+    
+    try:
+        os.makedirs(po_subdir, exist_ok=True)
+    except:
+        print("Could not create {}".format(po_subdir))
+        pass
+
+    pofile = "{}/krita.po".format(po_subdir)
+
+    with open(pofile, "w", encoding="utf-8") as f:
+        print("writing {} bytes to {}".format(len(po_contents), pofile))
+        f.write(po_contents)

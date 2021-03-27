@@ -324,8 +324,6 @@ void KisToolRectangleBase::updateArea() {
 
     emit rectangleChanged(bound);
 }
-<<<<<<< HEAD
-=======
 
 qreal KisToolRectangleBase::getRotationAngle() {
     return m_angle + m_angleBuffer;
@@ -346,4 +344,3 @@ void KisToolRectangleBase::getRotatedPath(QPainterPath &path, const QPointF &cen
 
     path = t.map(path);
 }
->>>>>>> Rotation ability to rectangle and ellipse tools

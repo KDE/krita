@@ -1,8 +1,9 @@
 SET(PREFIX_ext_vc "${EXTPREFIX}" )
 
 if(APPLE)
-    exec_program("sysctl -n hw.optional.arm64" OUTPUT_VARIABLE x86_on_arm)
-    if(${x86_on_arm} STREQUAL "1")
+    exec_program("sysctl -n machdep.cpu.model" OUTPUT_VARIABLE apple_has_cpu_model)
+    string(COMPARE EQUAL ${apple_has_cpu_model} "" x86_on_arm)
+    if(${x86_on_arm})
         set(EXTRA_X86_ON_ARM_PATCHES ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macos_VcOnARM.patch)
     endif()
 

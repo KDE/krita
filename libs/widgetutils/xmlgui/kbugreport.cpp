@@ -99,7 +99,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
 
 #if KWIDGETSADDONS_VERSION_MAJOR > 5 || (KWIDGETSADDONS_VERSION_MAJOR == 5 && KWIDGETSADDONS_VERSION_MINOR >= 72)
     title->setIcon(KisIconUtils::loadIcon(QStringLiteral("tools-report-bug")));
-else
+#else
     title->setPixmap(KisIconUtils::loadIcon(QStringLiteral("tools-report-bug")).pixmap(32));
 #endif
 

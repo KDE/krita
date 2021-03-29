@@ -179,9 +179,9 @@ index 00000000..16f64440
 +set_target_properties(intl PROPERTIES DEFINE_SYMBOL "libintl_EXPORTS")
 +target_link_libraries(intl PUBLIC iconv)
 +
-+if(WIN32)
++if(MSVC)
 +set_target_properties(intl PROPERTIES OUTPUT_NAME "libintl")
-+endif(WIN32)
++endif(MSVC)
 +
 +target_include_directories(intl PUBLIC
 +    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/config>

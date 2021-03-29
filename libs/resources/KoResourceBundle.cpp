@@ -359,9 +359,16 @@ void KoResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)
     writeMeta(KisResourceStorage::s_meta_creator, &metaWriter);
     writeMeta(KisResourceStorage::s_meta_creation_date, &metaWriter);
     writeMeta(KisResourceStorage::s_meta_dc_date, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_email, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_license, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_website, &metaWriter);
+
+    // For compatibility
     writeUserDefinedMeta("email", &metaWriter);
     writeUserDefinedMeta("license", &metaWriter);
     writeUserDefinedMeta("website", &metaWriter);
+
+
     Q_FOREACH (const QString &tag, m_bundletags) {
         metaWriter.startElement(KisResourceStorage::s_meta_user_defined.toUtf8());
         metaWriter.addAttribute(KisResourceStorage::s_meta_name.toUtf8(), "tag");

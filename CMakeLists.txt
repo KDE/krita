@@ -965,7 +965,30 @@ endforeach()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+# Source translations
+find_package(Python3 COMPONENTS Interpreter)
+find_package(Subversion 1.4)
+find_package(Git)
+
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+    if (Python3_FOUND AND SUBVERSION_FOUND AND Git_FOUND)
+        message(STATUS "Python 3 and SVN found, attempting to retrieve translations")
+        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
+        execute_process(
+            COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            RESULT_VARIABLE KF5_TRANSLATIONS_ERROR
+        )
+
+        if (${KF5_TRANSLATIONS_ERROR})
+            message(FATAL_ERROR "Unable to retrieve the translations.")
+        endif()
+    endif()
+else()
+    message(STATUS "Translations found.")
+endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po)
   find_package(KF5I18n CONFIG REQUIRED)
   ki18n_install(po)
 endif()

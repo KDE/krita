@@ -6,6 +6,7 @@ Name[ca]=Efectes especials
 Name[ca@valencia]=Efectes especials
 Name[es]=FX
 Name[nl]=FX
+Name[nn]=FX
 Name[pt]=FX
 Name[sv]=Effekter
 Name[uk]=Ефекти

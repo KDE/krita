@@ -6,6 +6,7 @@ Name[ca]=Textures
 Name[ca@valencia]=Textures
 Name[es]=Texturas
 Name[nl]=Texturen
+Name[nn]=Teksturar
 Name[pt]=Texturas
 Name[sv]=Strukturer
 Name[uk]=Текстури

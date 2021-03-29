@@ -6,6 +6,7 @@ Name[ca]=Tinta
 Name[ca@valencia]=Tinta
 Name[es]=Tinta
 Name[nl]=Inkt
+Name[nn]=Blekk
 Name[pt]=Tinta
 Name[sv]=Bläck
 Name[uk]=Чорнило

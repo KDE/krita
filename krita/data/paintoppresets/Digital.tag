@@ -17,6 +17,7 @@ Name[gl]=Dixital
 Name[it]=Digitale
 Name[kk]=Цифрлық
 Name[nl]=Digitaal
+Name[nn]=Digital
 Name[pl]=Cyfrowy
 Name[pt]=Digital
 Name[ru]=Цифровой

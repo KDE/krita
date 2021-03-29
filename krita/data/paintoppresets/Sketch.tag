@@ -7,6 +7,7 @@ Name[ca@valencia]=Esbossos
 Name[cs]=Sketch
 Name[es]=Esbozo
 Name[nl]=Schets
+Name[nn]=Skisse
 Name[pt]=Desenhos
 Name[sv]=Skissa
 Name[uk]=Ескіз

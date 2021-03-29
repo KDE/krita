@@ -6,6 +6,7 @@ Name[ca]=Esborradors
 Name[ca@valencia]=Esborradors
 Name[es]=Borradores
 Name[nl]=Gummen
+Name[nn]=Viskelêr
 Name[pt]=Apagadores
 Name[sv]=Radering
 Name[uk]=Гумки

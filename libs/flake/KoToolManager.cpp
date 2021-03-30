@@ -465,7 +465,6 @@ void KoToolManager::Private::disconnectActiveTool()
 
 void KoToolManager::Private::switchTool(const QString &id)
 {
-    Q_ASSERT(canvasData);
     if (!canvasData) return;
 
     canvasData->activeToolId = id;

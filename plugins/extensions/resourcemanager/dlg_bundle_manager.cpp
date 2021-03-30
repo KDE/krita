@@ -136,14 +136,15 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_ui->bnAdd->setText(i18nc("In bundle manager; press button to import a resource library", "Import"));
     connect(m_ui->bnAdd, SIGNAL(clicked(bool)), SLOT(addBundle()));
 
-    m_ui->bnNew->setIcon(KisIconUtils::loadIcon("document-new"));
-    m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create Bundle"));
-    connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
-
     m_ui->bnToggle->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_ui->bnToggle->setText(i18nc("In bundle manager; press button to deactivate the resource library"
                                   "(remove resources from the resource library from the available resources)", "Deactivate"));
     connect(m_ui->bnToggle, SIGNAL(clicked(bool)), SLOT(toggleBundle()));
+
+    m_ui->bnNew->setIcon(KisIconUtils::loadIcon("document-new"));
+    m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create Bundle"));
+    connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
+
 
     setButtons(Close);
 
@@ -160,7 +161,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
     QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
-    connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
+    //connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
     connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);
@@ -192,9 +193,12 @@ void DlgBundleManager::done(int res)
 
 void DlgBundleManager::addBundle()
 {
-    KoFileDialog dlg(this, KoFileDialog::OpenFile, i18n("Choose the bundle to import"));
+    KoFileDialog dlg(this, KoFileDialog::OpenFile, i18n("Choose the resource library to import"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
-    dlg.setMimeTypeFilters(QStringList() << "application/x-krita-bundle", "application/x-krita-bundle");
+    dlg.setMimeTypeFilters(QStringList() << "application/x-krita-bundle"
+                                         << "application/x-krita-bundle"
+                                         << "image/x-adobe-brushlibrary"
+                                         << "application/x-photoshop-style-library");
     dlg.setCaption(i18n("Select the bundle"));
     QString filename = dlg.filename();
     if (!filename.isEmpty()) {
@@ -322,19 +326,29 @@ void DlgBundleManager::updateBundleInformation(QModelIndex idx)
     KisResourceStorageSP storage = m_proxyModel->storageForIndex(idx);
     KIS_SAFE_ASSERT_RECOVER_RETURN(storage);
 
-    m_ui->lblAuthor->setText(storage->metaData(KisResourceStorage::s_meta_author).toString());
-    QString date = storage->metaData(KisResourceStorage::s_meta_creation_date).toString();
-    date = QDateTime::fromSecsSinceEpoch(date.toInt()).toString();
-    m_ui->lblCreated->setText(date);
-    m_ui->lblDescription->setPlainText(storage->metaData(KisResourceStorage::s_meta_description).toString());
+    m_ui->detailsPanel->hide();
+    m_ui->lblDescription->hide();
+
     m_ui->BundleSelectedGroupBox->setTitle(storage->name());
-    m_ui->lblType->setText(KisResourceStorage::storageTypeToString(storage->type()));
-    m_ui->lblEmail->setText(storage->metaData(KisResourceStorage::s_meta_email).toString());
-    m_ui->lblLicense->setText(storage->metaData(KisResourceStorage::s_meta_license).toString());
+
+    if (storage->type() == KisResourceStorage::StorageType::Bundle) {
+
+        m_ui->detailsPanel->show();
+        m_ui->lblDescription->show();
+
+        m_ui->lblAuthor->setText(storage->metaData(KisResourceStorage::s_meta_author).toString());
+        QString date = storage->metaData(KisResourceStorage::s_meta_creation_date).toString();
+        date = QDateTime::fromSecsSinceEpoch(date.toInt()).toString();
+        m_ui->lblCreated->setText(date);
+        m_ui->lblDescription->setPlainText(storage->metaData(KisResourceStorage::s_meta_description).toString());
+        m_ui->lblEmail->setText(storage->metaData(KisResourceStorage::s_meta_email).toString());
+        m_ui->lblLicense->setText(storage->metaData(KisResourceStorage::s_meta_license).toString());
+
+    }
 
     QImage thumbnail = KisStorageModel::instance()->data(idx, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(thumbnail));
-
+    m_ui->lblType->setText(KisResourceStorage::storageTypeToString(storage->type()));
 }
 
 

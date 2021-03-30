@@ -925,44 +925,41 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
 option(FETCH_TRANSLATIONS "Retrieve translations before building Krita" ON)
 add_feature_info("Retrieve translations before building" FETCH_TRANSLATIONS "Retrieve the translations from KDE before building Krita")
 
-if(FETCH_TRANSLATIONS)
-    find_package(Python3 COMPONENTS Interpreter)
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)
+    find_package(Python3 COMPONENTS Interpreter REQUIRED)
     set_package_properties(Python3 PROPERTIES
         DESCRIPTION "Python is an interpreted, high-level and general-purpose programming language."
         URL "https://python.org/"
         TYPE OPTIONAL
         PURPOSE "Required to manually parse and fetch available translations.")
-    find_package(Subversion 1.4)
+    find_package(Subversion 1.4 REQUIRED)
     set_package_properties(Subversion PROPERTIES
         DESCRIPTION "Subversion is an open source version control system"
         URL "https://subversion.apache.org/"
         TYPE OPTIONAL
         PURPOSE "Required to access the KDE i18n repository.")
 
-    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND Python3_FOUND AND SUBVERSION_FOUND)
-        set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
-            if (KRITA_STABLE)
-                set(tr_EXTRA_FLAGS "")
-            else()
-                set(tr_EXTRA_FLAGS "--unstable")
-            endif()
+    set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
 
-            get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
-            string(MD5 pathmd5 ${absolute_podir})
+    if (KRITA_STABLE)
+        set(tr_EXTRA_FLAGS "")
+    else()
+        set(tr_EXTRA_FLAGS "--unstable")
+    endif()
 
-            find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
-            if(NOT TARGET fetch-${pathmd5})
-                file(MAKE_DIRECTORY ${TRANSLATIONS})
+    get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
+    string(MD5 pathmd5 ${absolute_podir})
 
-                add_custom_target(fetch-${pathmd5}
-                    COMMENT "Retrieving translations..."
-                    COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT} ${tr_EXTRA_FLAGS}
-                    BYPRODUCTS ${TRANSLATIONS}
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                )
-            endif()
+    find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
+    if(NOT TARGET fetch-${pathmd5})
+        file(MAKE_DIRECTORY ${TRANSLATIONS})
 
-            ki18n_install(po)
+        add_custom_target(fetch-${pathmd5}
+            COMMENT "Retrieving translations..."
+            COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT} ${tr_EXTRA_FLAGS}
+            BYPRODUCTS ${TRANSLATIONS}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        )
     endif()
 endif()
 

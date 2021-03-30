@@ -124,25 +124,6 @@ public:
     void addTextNode(const char* cstr);
 
     /**
-     * @brief Adds a processing instruction
-     *
-     * This writes a processing instruction, like <?foo bar blah?>, where foo
-     * is the target, and the rest is the data.
-     *
-     * Processing instructions are used in XML to keep processor-specific
-     * information in the text of the document.
-     */
-    void addProcessingInstruction(const char* cstr);
-
-    /**
-     * This is quite a special-purpose method, not for everyday use.
-     * It adds a complete element (with its attributes and child elements)
-     * as a child of the current element. The string is supposed to be escaped
-     * for XML already, so it will usually come from another KoXmlWriter.
-     */
-    void addCompleteElement(const char* cstr);
-
-    /**
      * This is quite a special-purpose method, not for everyday use.
      * It adds a complete element (with its attributes and child elements)
      * as a child of the current element. The iodevice is supposed to be escaped
@@ -161,66 +142,14 @@ public:
      */
     void addManifestEntry(const QString& fullPath, const QString& mediaType);
 
-    /**
-     * Special helper for writing config item into settings.xml
-     * @note OASIS-specific
-     */
-    void addConfigItem(const QString & configName, const QString& value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, bool value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, int value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, double value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, float value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, long value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, short value);
-
-    // TODO addConfigItem for datetime and base64Binary
-
-    /**
-     * @brief Adds a text span as nodes of the current element.
-     *
-     * Unlike KoXmlWriter::addTextNode it handles tabulations, linebreaks,
-     * and multiple spaces by using the appropriate OASIS tags.
-     *
-     * @param text the text to write
-     *
-     * @note OASIS-specific
-     */
-    void addTextSpan(const QString& text);
-    /**
-     * Overloaded version of addTextSpan which takes an additional tabCache map.
-     * @param text the text to write
-     * @param tabCache optional map allowing to find a tab for a given character index
-     * @note OASIS-specific
-     */
-    void addTextSpan(const QString& text, const QMap<int, int>& tabCache);
-
-    /**
-     * @return the current indentation level.
-     * Useful when creating a sub-KoXmlWriter (see addCompleteElement)
-     */
-    int indentLevel() const;
-
-    /**
-     * Return all the open tags at this time, root element first.
-     */
-    QList<const char*> tagHierarchy() const;
-
-    /**
-     * Return the so far written XML as string for debugging purposes.
-     */
-    QString toString() const;
-
 private:
     struct Tag {
         Tag(const char* t = 0, bool ind = true)
-                : tagName(t), hasChildren(false), lastChildIsText(false),
-                openingTagClosed(false), indentInside(ind) {}
+                : tagName(t)
+                , hasChildren(false)
+                , lastChildIsText(false)
+                , openingTagClosed(false)
+                , indentInside(ind) {}
         Tag(const Tag &original)
         {
             tagName = original.tagName;
@@ -239,17 +168,11 @@ private:
     /// Write out \n followed by the number of spaces required.
     void writeIndent();
 
-    // writeCString is much faster than writeString.
-    // Try to use it as much as possible, especially with constants.
-    void writeString(const QString& str);
+    void writeCString(const char* cstr);
 
-    // TODO check return value!!!
-    inline void writeCString(const char* cstr) {
-        device()->write(cstr, qstrlen(cstr));
-    }
-    inline void writeChar(char c) {
-        device()->putChar(c);
-    }
+    void writeChar(char c);
+
+
     inline void closeStartElement(Tag& tag) {
         if (!tag.openingTagClosed) {
             tag.openingTagClosed = true;
@@ -259,7 +182,6 @@ private:
     char* escapeForXML(const char* source, int length) const;
     bool prepareForChild(bool indentInside = true);
     void prepareForTextNode();
-    void init();
 
     class Private;
     Private * const d;

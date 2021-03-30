@@ -915,6 +915,58 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${KF5_LIBRARIES}/libKF5ConfigCore.so)
 
 
+
+# Source translations
+option(FETCH_TRANSLATIONS "Retrieve translations before building Krita" ON)
+add_feature_info("Retrieve translations before building" FETCH_TRANSLATIONS "Retrieve the translations from KDE before building Krita")
+
+if(FETCH_TRANSLATIONS)
+    find_package(Python3 COMPONENTS Interpreter)
+    set_package_properties(Python3 PROPERTIES
+        DESCRIPTION "Python is an interpreted, high-level and general-purpose programming language."
+        URL "https://python.org/"
+        TYPE OPTIONAL
+        PURPOSE "Required to manually parse and fetch available translations.")
+    find_package(Subversion 1.4)
+    set_package_properties(Subversion PROPERTIES
+        DESCRIPTION "Subversion is an open source version control system"
+        URL "https://subversion.apache.org/"
+        TYPE OPTIONAL
+        PURPOSE "Required to access the KDE i18n repository.")
+    find_package(Git)
+    set_package_properties(Git PROPERTIES
+        DESCRIPTION "Free and open source distributed version control system"
+        URL "https://git-scm.com/"
+        TYPE OPTIONAL
+        PURPOSE "Required to parse the branch you are building.")
+    find_package(KF5I18n CONFIG REQUIRED)
+
+    set(TRANSLATIONS ${CMAKE_CURRENT_SOURCE_DIR}/po)
+    if (NOT EXISTS ${TRANSLATIONS})
+        set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
+        file(MAKE_DIRECTORY ${TRANSLATIONS})
+    endif()
+
+    get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
+    string(MD5 pathmd5 ${absolute_podir})
+
+    ki18n_install(po)
+
+    if (Python3_FOUND AND SUBVERSION_FOUND AND Git_FOUND)
+        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
+        if(NOT TARGET fetch-${pathmd5})
+            add_custom_target(fetch-${pathmd5} ALL
+                COMMENT "Retrieving translations..."
+                COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            )
+        endif()
+
+        add_dependencies(pofiles-${pathmd5} fetch-${pathmd5})
+        add_dependencies(tsfiles-${pathmd5} fetch-${pathmd5})
+    endif()
+endif()
+
 ##
 ## Test for Atomics
 ##
@@ -964,34 +1016,6 @@ foreach(tst ${KRITA_BROKEN_TESTS})
 endforeach()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-# Source translations
-find_package(Python3 COMPONENTS Interpreter)
-find_package(Subversion 1.4)
-find_package(Git)
-
-if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
-    if (Python3_FOUND AND SUBVERSION_FOUND AND Git_FOUND)
-        message(STATUS "Python 3 and SVN found, attempting to retrieve translations")
-        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
-        execute_process(
-            COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE KF5_TRANSLATIONS_ERROR
-        )
-
-        if (${KF5_TRANSLATIONS_ERROR})
-            message(FATAL_ERROR "Unable to retrieve the translations.")
-        endif()
-    endif()
-else()
-    message(STATUS "Translations found.")
-endif()
-
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po)
-  find_package(KF5I18n CONFIG REQUIRED)
-  ki18n_install(po)
-endif()
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..

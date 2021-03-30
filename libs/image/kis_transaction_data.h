@@ -12,6 +12,12 @@
 #include <kritaimage_export.h>
 
 
+enum AutoKeyMode {
+    AUTOKEY_DISABLED = 0,
+    AUTOKEY_DUPLICATE,
+    AUTOKEY_BLANK
+};
+
 /**
  * A tile based undo command.
  *
@@ -24,7 +30,7 @@
 class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
 {
 public:
-    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent);
+    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, AutoKeyMode autoKeyMode, KUndo2Command* parent);
     ~KisTransactionData() override;
 
 public:

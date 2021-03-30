@@ -327,8 +327,8 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
 
     // Apply filter preview to active, visible frame only.
     KisImageConfig imgConf(true);
-    const int activeFrame = imgConf.autoKeyEnabled() && !imgConf.autoKeyModeDuplicate() ? KisLayerUtils::fetchLayerActiveRasterFrameTime(d->view->activeNode()) : -1;
-    image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData(activeFrame));
+    const int activeFrame = (imgConf.autoKeyEnabled() && !imgConf.autoKeyModeDuplicate()) ? KisLayerUtils::fetchLayerActiveRasterFrameTime(d->view->activeNode()) : -1;
+    image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData());
 
     {
         KisFilterStrokeStrategy::IdleBarrierData *data =

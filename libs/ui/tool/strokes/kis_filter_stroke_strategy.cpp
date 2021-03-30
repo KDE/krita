@@ -121,6 +121,7 @@ private:
     bool m_shouldRedraw;
     int m_frameTime;
     KisLayerUtils::SwitchFrameCommand::SharedStorageSP m_storage;
+
 };
 
 
@@ -163,16 +164,6 @@ KisFilterStrokeStrategy::~KisFilterStrokeStrategy()
 void KisFilterStrokeStrategy::initStrokeCallback()
 {
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();
-
-
-    KisImageConfig imgCfg(true);
-    /* Remove artifacts caused by duplicate frame autokey
-     * where key is removed instantaneously during preview.
-     */
-    if(imgCfg.autoKeyEnabled() && imgCfg.autoKeyModeDuplicate()) {
-        QScopedPointer<KisTransaction> initialTransaction( new KisTransaction(m_d->targetDevice) );
-        runAndSaveCommand(toQShared(initialTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
-    }
 }
 
 
@@ -262,7 +253,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             // Make a transaction, change the target device, and "end" transaction.
             // Should be useful for undoing later.
-            QScopedPointer<KisTransaction> workingTransaction( new KisTransaction(shared->targetDevice()) );
+            QScopedPointer<KisTransaction> workingTransaction( new KisTransaction(shared->targetDevice(), AUTOKEY_DISABLED) );
             KisPainter::copyAreaOptimized(shared->applyRect.topLeft(), shared->filterDevice, shared->targetDevice(), shared->applyRect, shared->selection());
             runAndSaveCommand( toQShared(workingTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE );
 

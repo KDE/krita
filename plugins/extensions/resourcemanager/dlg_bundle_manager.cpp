@@ -133,16 +133,16 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     setMainWidget(m_ui);
 
     m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
-    m_ui->bnAdd->setText(i18nc("In bundle manager; press button to import a bundle", "Import"));
+    m_ui->bnAdd->setText(i18nc("In bundle manager; press button to import a resource library", "Import"));
     connect(m_ui->bnAdd, SIGNAL(clicked(bool)), SLOT(addBundle()));
 
     m_ui->bnNew->setIcon(KisIconUtils::loadIcon("document-new"));
-    m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create"));
+    m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create Bundle"));
     connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
     m_ui->bnToggle->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    m_ui->bnToggle->setText(i18nc("In bundle manager; press button to deactivate the bundle "
-                                  "(remove resources from the bundle from the available resources)", "Deactivate"));
+    m_ui->bnToggle->setText(i18nc("In bundle manager; press button to deactivate the resource library"
+                                  "(remove resources from the resource library from the available resources)", "Deactivate"));
     connect(m_ui->bnToggle, SIGNAL(clicked(bool)), SLOT(toggleBundle()));
 
     setButtons(Close);
@@ -151,14 +151,16 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_proxyModel->setSourceModel(KisStorageModel::instance());
     m_proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
                             QStringList()
-                            << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
+                            << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle)
+                            << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::AdobeBrushLibrary)
+                            << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::AdobeStyleLibrary));
 
     m_ui->listView->setModel(m_proxyModel);
     m_ui->listView->setItemDelegate(new ItemDelegate(this, m_proxyModel));
 
     QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
-    //connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
+    connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
     connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);

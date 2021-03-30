@@ -282,6 +282,11 @@ include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
 
 include(KDEInstallDirs)
+
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
+    # Block KDE's translation infrastructure, we'll use our own
+    add_custom_target(fetch-translations)
+endif()
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
@@ -933,35 +938,38 @@ if(FETCH_TRANSLATIONS)
         URL "https://subversion.apache.org/"
         TYPE OPTIONAL
         PURPOSE "Required to access the KDE i18n repository.")
-    find_package(Git)
-    set_package_properties(Git PROPERTIES
-        DESCRIPTION "Free and open source distributed version control system"
-        URL "https://git-scm.com/"
-        TYPE OPTIONAL
-        PURPOSE "Required to parse the branch you are building.")
-    find_package(KF5I18n CONFIG REQUIRED)
 
-    set(TRANSLATIONS ${CMAKE_CURRENT_SOURCE_DIR}/po)
-    if (NOT EXISTS ${TRANSLATIONS})
+    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND Python3_FOUND AND SUBVERSION_FOUND)
         set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
-        file(MAKE_DIRECTORY ${TRANSLATIONS})
+            if (KRITA_STABLE)
+                set(tr_EXTRA_FLAGS "")
+            else()
+                set(tr_EXTRA_FLAGS "--unstable")
+            endif()
+
+            get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
+            string(MD5 pathmd5 ${absolute_podir})
+
+            find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
+            if(NOT TARGET fetch-${pathmd5})
+                file(MAKE_DIRECTORY ${TRANSLATIONS})
+
+                add_custom_target(fetch-${pathmd5}
+                    COMMENT "Retrieving translations..."
+                    COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT} ${tr_EXTRA_FLAGS}
+                    BYPRODUCTS ${TRANSLATIONS}
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                )
+            endif()
+
+            ki18n_install(po)
     endif()
+endif()
 
-    get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
-    string(MD5 pathmd5 ${absolute_podir})
-
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+    find_package(KF5I18n CONFIG REQUIRED)
     ki18n_install(po)
-
-    if (Python3_FOUND AND SUBVERSION_FOUND AND Git_FOUND)
-        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
-        if(NOT TARGET fetch-${pathmd5})
-            add_custom_target(fetch-${pathmd5} ALL
-                COMMENT "Retrieving translations..."
-                COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT}
-                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            )
-        endif()
-
+    if (TRANSLATIONS)
         add_dependencies(pofiles-${pathmd5} fetch-${pathmd5})
         add_dependencies(tsfiles-${pathmd5} fetch-${pathmd5})
     endif()

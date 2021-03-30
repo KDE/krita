@@ -9,8 +9,10 @@
 #ifndef XMLWRITER_H
 #define XMLWRITER_H
 
+#include <QDebug>
 #include <QMap>
 #include <QIODevice>
+
 #include "kritastore_export.h"
 
 /**
@@ -30,11 +32,10 @@ public:
     /// Destructor
     ~KoXmlWriter();
 
-    QIODevice *device() const;
-
     /**
      * Start the XML document.
      * This writes out the \<?xml?\> tag with utf8 encoding, and the DOCTYPE.
+     *
      * @param rootElemName the name of the root element, used in the DOCTYPE tag.
      * @param publicId the public identifier, e.g. "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"
      * @param systemId the system identifier, e.g. "office.dtd" or a full URL to it.
@@ -46,9 +47,8 @@ public:
 
     /**
      * Start a new element, as a child of the current element.
-     * @param tagName the name of the tag. Warning: this string must
-     * remain alive until endElement, no copy is internally made.
-     * Usually tagName is a string constant so this is no problem anyway.
+     *
+     * @param tagName the name of the tag.
      * @param indentInside if set to false, there will be no indentation inside
      * this tag. This is useful for elements where whitespace matters.
      */
@@ -86,6 +86,7 @@ public:
      * (unlike QString::number and setNum, which default to 6 digits)
      */
     void addAttribute(const char* attrName, double value);
+
     /**
      * Add an attribute whose value is a floating point number
      * The number is written out with the highest possible precision
@@ -100,11 +101,13 @@ public:
      * Add an attribute to the current element.
      */
     void addAttribute(const char* attrName, const char* value);
+
     /**
      * Terminate the current element. After this you should start a new one (sibling),
      * add a sibling text node, or close another one (end of siblings).
      */
     void endElement();
+
     /**
      * Overloaded version of addTextNode( const char* ),
      * which is a bit slower because it needs to convert @p str to utf8 first.
@@ -112,8 +115,10 @@ public:
     inline void addTextNode(const QString& str) {
         addTextNode(str.toUtf8());
     }
+
     /// Overloaded version of the one taking a const char* argument
     void addTextNode(const QByteArray& cstr);
+
     /**
      * @brief Adds a text node as a child of the current element.
      *
@@ -144,21 +149,32 @@ public:
 
 private:
     struct Tag {
-        Tag(const char* t = 0, bool ind = true)
-                : tagName(t)
-                , hasChildren(false)
-                , lastChildIsText(false)
-                , openingTagClosed(false)
-                , indentInside(ind) {}
+        Tag(const char *t = 0, bool ind = true)
+            : hasChildren(false)
+            , lastChildIsText(false)
+            , openingTagClosed(false)
+            , indentInside(ind)
+        {
+            tagName = new char[qstrlen(t) + 1];
+            qstrcpy(tagName, t);
+        }
+
+        ~Tag() {
+            delete[] tagName;
+        }
+
         Tag(const Tag &original)
         {
-            tagName = original.tagName;
+            tagName = new char[qstrlen(original.tagName) + 1];
+            qstrcpy(tagName, original.tagName);
+
             hasChildren = original.hasChildren;
             lastChildIsText = original.lastChildIsText;
             openingTagClosed = original.openingTagClosed;
             indentInside = original.indentInside;
         }
-        const char* tagName;
+
+        char *tagName {0};
         bool hasChildren : 1; ///< element or text children
         bool lastChildIsText : 1; ///< last child is a text node
         bool openingTagClosed : 1; ///< true once the '\>' in \<tag a="b"\> is written out
@@ -179,7 +195,7 @@ private:
             writeChar('>');
         }
     }
-    char* escapeForXML(const char* source, int length) const;
+    char *escapeForXML(const char* source, int length) const;
     bool prepareForChild(bool indentInside = true);
     void prepareForTextNode();
 

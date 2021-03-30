@@ -296,14 +296,12 @@ void DlgBundleManager::slotModelReset()
 void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelIndex previous)
 {
     Q_UNUSED(previous);
-
-    QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);
-    if (!idx.isValid()) {
+    if (!current.isValid()) {
         ENTER_FUNCTION() << "Index is invalid\n";
         return;
     }
-    bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+    bool active = m_proxyModel->data(current, Qt::UserRole + KisStorageModel::Active).toBool();
     updateToggleButton(active);
     updateBundleInformation(current);
 }

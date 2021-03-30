@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
+    <width>557</width>
     <height>72</height>
    </rect>
   </property>
@@ -71,7 +71,7 @@
      <item>
       <widget class="QCheckBox" name="chkFilterSelectedFrames">
        <property name="text">
-        <string>Selected Frames</string>
+        <string>Multiframe</string>
        </property>
       </widget>
      </item>

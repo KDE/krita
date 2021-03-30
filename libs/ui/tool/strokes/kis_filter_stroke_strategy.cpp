@@ -16,6 +16,7 @@
 #include <KisRunnableStrokeJobUtils.h>
 #include <KisRunnableStrokeJobsInterface.h>
 #include <KoCompositeOpRegistry.h>
+#include "kis_image_config.h"
 #include "kis_image_animation_interface.h"
 #include "kis_painter.h"
 
@@ -162,6 +163,16 @@ KisFilterStrokeStrategy::~KisFilterStrokeStrategy()
 void KisFilterStrokeStrategy::initStrokeCallback()
 {
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+
+    KisImageConfig imgCfg(true);
+    /* Remove artifacts caused by duplicate frame autokey
+     * where key is removed instantaneously during preview.
+     */
+    if(imgCfg.autoKeyEnabled() && imgCfg.autoKeyModeDuplicate()) {
+        QScopedPointer<KisTransaction> initialTransaction( new KisTransaction(m_d->targetDevice) );
+        runAndSaveCommand(toQShared(initialTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+    }
 }
 
 
@@ -256,7 +267,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             runAndSaveCommand( toQShared(workingTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE );
 
             if (shared->shouldRedraw()) {
-                shared->node()->setDirty(shared->applyRect);
+                shared->node()->setDirty(shared->filterDeviceBounds);
             }
         });
 
@@ -278,7 +289,6 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         jobData->run();
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
-//        qFatal("KisFilterStrokeStrategy: job type is not known");
     }
 }
 

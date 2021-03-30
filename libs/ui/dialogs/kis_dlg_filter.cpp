@@ -100,6 +100,13 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
 
     d->uiFilterDialog.chkFilterSelectedFrames->setChecked(d->filterManager->filterAllSelectedFrames());
 
+    //Handle create mask toggle based on state of chkFilterSelectedFrames
+    connect(d->uiFilterDialog.chkFilterSelectedFrames, &QCheckBox::toggled, [this](const bool state){
+        if (d->currentFilter) {
+            d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(!state && d->currentFilter->supportsAdjustmentLayers());
+        }
+    });
+
     restoreGeometry(KisConfig(true).readEntry("filterdialog/geometry", QByteArray()));
     connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(updatePreview()));
 
@@ -116,7 +123,8 @@ void KisDlgFilter::setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDef
     Q_ASSERT(f);
     setDialogTitle(f);
     d->uiFilterDialog.filterSelection->setFilter(f, overrideDefaultConfig);
-    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers());
+    const bool multiframeEnabled = !d->uiFilterDialog.chkFilterSelectedFrames->isChecked();
+    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers() && !multiframeEnabled);
     d->currentFilter = f;
     d->updateCompressor.start();
 }

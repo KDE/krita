@@ -41,7 +41,7 @@ KoShape *ImageShapeFactory::createDefaultShape(KoDocumentResourceManager */*docu
     return shape;
 }
 
-bool ImageShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
+bool ImageShapeFactory::supports(const QDomElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     return e.localName() == "image" &&

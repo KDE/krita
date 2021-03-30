@@ -130,7 +130,7 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentRes
     return star;
 }
 
-bool StarShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
+bool StarShapeFactory::supports(const QDomElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     if (e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw) {

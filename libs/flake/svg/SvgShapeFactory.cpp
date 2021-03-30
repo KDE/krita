@@ -15,6 +15,7 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <klocalizedstring.h>
+#include <KoXmlReader.h>
 
 #define SVGSHAPEFACTORYID "SvgShapeFactory"
 
@@ -33,7 +34,7 @@ SvgShapeFactory::~SvgShapeFactory()
 
 }
 
-bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContext &context) const
+bool SvgShapeFactory::supports(const QDomElement &element, KoShapeLoadingContext &context) const
 {
     if (element.localName() == "image" && element.namespaceURI() == KoXmlNS::draw) {
         QString href = element.attribute("href");
@@ -52,9 +53,9 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
     return false;
 }
 
-KoShape *SvgShapeFactory::createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context)
+KoShape *SvgShapeFactory::createShapeFromXML(const QDomElement &element, KoShapeLoadingContext &context)
 {
-    const KoXmlElement & imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
+    const QDomElement & imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
     if (imageElement.isNull()) {
         errorFlake << "svg image element not found";
         return 0;
@@ -79,7 +80,7 @@ KoShape *SvgShapeFactory::createShapeFromXML(const KoXmlElement &element, KoShap
             return 0;
 
         KoStoreDevice dev(context.store());
-        KoXmlDocument xmlDoc;
+        QDomDocument xmlDoc;
 
         int line, col;
         QString errormessage;
@@ -116,7 +117,7 @@ KoShape *SvgShapeFactory::createShapeFromXML(const KoXmlElement &element, KoShap
     return 0;
 }
 
-int SvgShapeFactory::calculateZIndex(const KoXmlElement &element, KoShapeLoadingContext &context)
+int SvgShapeFactory::calculateZIndex(const QDomElement &element, KoShapeLoadingContext &context)
 {
     int zIndex = 0;
 
@@ -129,7 +130,7 @@ int SvgShapeFactory::calculateZIndex(const KoXmlElement &element, KoShapeLoading
     return zIndex;
 }
 
-KoShape *SvgShapeFactory::createShapeFromSvgDirect(const KoXmlElement &root,
+KoShape *SvgShapeFactory::createShapeFromSvgDirect(const QDomElement &root,
                                                    const QRectF &boundsInPixels,
                                                    const qreal pixelsPerInch,
                                                    const qreal forcedFontSizeResolution,

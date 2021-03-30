@@ -74,7 +74,7 @@ public:
 
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
     /// Reimplemented
-    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+    bool supports(const QDomElement &e, KoShapeLoadingContext &context) const override;
 };
 
 

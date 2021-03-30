@@ -548,7 +548,7 @@ void EnhancedPathShapeFactory::addGearhead()
     addTemplate(t);
 }
 
-bool EnhancedPathShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
+bool EnhancedPathShapeFactory::supports(const QDomElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw);

@@ -58,7 +58,7 @@ KoDocumentInfo::~KoDocumentInfo()
 {
 }
 
-bool KoDocumentInfo::load(const KoXmlDocument &doc)
+bool KoDocumentInfo::load(const QDomDocument &doc)
 {
     m_authorInfo.clear();
 
@@ -162,18 +162,18 @@ bool KoDocumentInfo::saveOasisAuthorInfo(KoXmlWriter &xmlWriter)
     return true;
 }
 
-bool KoDocumentInfo::loadOasisAuthorInfo(const KoXmlNode &metaDoc)
+bool KoDocumentInfo::loadOasisAuthorInfo(const QDomNode &metaDoc)
 {
-    KoXmlElement e = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, "creator");
+    QDomElement e = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, "creator");
     if (!e.isNull() && !e.text().isEmpty())
         setActiveAuthorInfo("creator", e.text());
 
-    KoXmlNode n = metaDoc.firstChild();
+    QDomNode n = metaDoc.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (!n.isElement())
             continue;
 
-        KoXmlElement e = n.toElement();
+        QDomElement e = n.toElement();
         if (!(e.namespaceURI() == KoXmlNS::meta &&
                 e.localName() == "user-defined" && !e.text().isEmpty()))
             continue;
@@ -185,12 +185,12 @@ bool KoDocumentInfo::loadOasisAuthorInfo(const KoXmlNode &metaDoc)
     return true;
 }
 
-bool KoDocumentInfo::loadAuthorInfo(const KoXmlElement &e)
+bool KoDocumentInfo::loadAuthorInfo(const QDomElement &e)
 {
     m_contact.clear();
-    KoXmlNode n = e.namedItem("author").firstChild();
+    QDomNode n = e.namedItem("author").firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
-        KoXmlElement e = n.toElement();
+        QDomElement e = n.toElement();
         if (e.isNull())
             continue;
 
@@ -259,10 +259,10 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
     return true;
 }
 
-bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
+bool KoDocumentInfo::loadOasisAboutInfo(const QDomNode &metaDoc)
 {
     QStringList keywords;
-    KoXmlElement e;
+    QDomElement e;
     forEachElement(e, metaDoc) {
         QString tag(e.localName());
         if (! m_aboutTags.contains(tag) && tag != "generator") {
@@ -275,23 +275,23 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
                 keywords << e.text().trimmed();
         } else if (tag == "description") {
             //this is the odf way but add meta:comment if is already loaded
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
+            QDomElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
         } else if (tag == "abstract") {
             //this was the old way so add it to dc:description
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
+            QDomElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
         } else if (tag == "title"|| tag == "subject"
                    || tag == "date" || tag == "language") {
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
+            QDomElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo(tag, e.text().trimmed());
         } else if (tag == "generator") {
             setOriginalGenerator(e.text().trimmed());
         } else {
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
+            QDomElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo(tag, e.text().trimmed());
         }
@@ -304,10 +304,10 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
     return true;
 }
 
-bool KoDocumentInfo::loadAboutInfo(const KoXmlElement &e)
+bool KoDocumentInfo::loadAboutInfo(const QDomElement &e)
 {
-    KoXmlNode n = e.namedItem("about").firstChild();
-    KoXmlElement tmp;
+    QDomNode n = e.namedItem("about").firstChild();
+    QDomElement tmp;
     for (; !n.isNull(); n = n.nextSibling()) {
         tmp = n.toElement();
         if (tmp.isNull())

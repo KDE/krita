@@ -67,12 +67,12 @@ QSizeF SvgFilterHelper::size(const QRectF & objectBound) const
     }
 }
 
-void SvgFilterHelper::setContent(const KoXmlElement &content)
+void SvgFilterHelper::setContent(const QDomElement &content)
 {
     m_filterContent = content;
 }
 
-KoXmlElement SvgFilterHelper::content() const
+QDomElement SvgFilterHelper::content() const
 {
     return m_filterContent;
 }

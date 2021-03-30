@@ -58,7 +58,7 @@ public:
     bool saveSvg(SvgSavingContext &context) override;
 
     /// reimplemented from SvgShape
-    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
+    bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
 
 protected:
     RectangleShape(const RectangleShape &rhs);

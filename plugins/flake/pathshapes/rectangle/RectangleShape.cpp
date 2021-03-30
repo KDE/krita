@@ -293,7 +293,7 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
     return true;
 }
 
-bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+bool RectangleShape::loadSvg(const QDomElement &element, SvgLoadingContext &context)
 {
     const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
     const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));

@@ -293,13 +293,13 @@ void KoResourceBundle::writeUserDefinedMeta(const QString &metaTag, KoXmlWriter 
 bool KoResourceBundle::readMetaData(KoStore *resourceStore)
 {
     if (resourceStore->open("meta.xml")) {
-        KoXmlDocument doc;
+        QDomDocument doc;
         if (!doc.setContent(resourceStore->device())) {
             qWarning() << "Could not parse meta.xml for" << m_filename;
             return false;
         }
         // First find the manifest:manifest node.
-        KoXmlNode n = doc.firstChild();
+        QDomNode n = doc.firstChild();
         for (; !n.isNull(); n = n.nextSibling()) {
             if (!n.isElement()) {
                 continue;
@@ -314,10 +314,10 @@ bool KoResourceBundle::readMetaData(KoStore *resourceStore)
             return false;
         }
 
-        const KoXmlElement  metaElement = n.toElement();
+        const QDomElement  metaElement = n.toElement();
         for (n = metaElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
             if (n.isElement()) {
-                KoXmlElement e = n.toElement();
+                QDomElement e = n.toElement();
                 if (e.tagName() == "meta:meta-userdefined") {
                     if (e.attribute("meta:name") == "tag") {
                         m_bundletags << e.attribute("meta:value");

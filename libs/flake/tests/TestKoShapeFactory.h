@@ -15,7 +15,7 @@ private Q_SLOTS:
 
     // tests
     void testCreateFactory();
-    void testSupportsKoXmlElement();
+    void testSupportsQDomElement();
     void testPriority();
     void testCreateDefaultShape();
     void testCreateShape();

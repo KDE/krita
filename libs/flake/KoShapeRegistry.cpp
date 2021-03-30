@@ -39,7 +39,7 @@ public:
     void insertFactory(KoShapeFactoryBase *factory);
     void init(KoShapeRegistry *q);
 
-    KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
+    KoShape *createShapeInternal(const QDomElement &fullElement, KoShapeLoadingContext &context, const QDomElement &element) const;
 
     // Map namespace,tagname to priority:factory
     QHash<QPair<QString, QString>, QMultiMap<int, KoShapeFactoryBase*> > factoryMap;
@@ -138,16 +138,16 @@ void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
 #include <KoShapeGroupCommand.h>
 
 
-KoShape * KoShapeRegistry::createShapeFromXML(const KoXmlElement & e, KoShapeLoadingContext & context) const
+KoShape * KoShapeRegistry::createShapeFromXML(const QDomElement & e, KoShapeLoadingContext & context) const
 {
     Q_UNUSED(e);
     Q_UNUSED(context);
     return 0;
 }
 
-KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullElement,
+KoShape *KoShapeRegistry::Private::createShapeInternal(const QDomElement &fullElement,
                                                        KoShapeLoadingContext &context,
-                                                       const KoXmlElement &element) const
+                                                       const QDomElement &element) const
 {
     // Pair of namespace, tagname
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());

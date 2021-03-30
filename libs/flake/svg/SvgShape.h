@@ -11,7 +11,7 @@
 
 class SvgSavingContext;
 class SvgLoadingContext;
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 /// An interface providing svg loading and saving routines
 class KRITAFLAKE_EXPORT SvgShape
@@ -23,7 +23,7 @@ public:
     virtual bool saveSvg(SvgSavingContext &context);
 
     /// Loads data from specified svg element
-    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
+    virtual bool loadSvg(const QDomElement &element, SvgLoadingContext &context);
 };
 
 #endif // SVGSHAPE_H

@@ -22,7 +22,7 @@ void TestKoShapeFactory::testCreateFactory()
     delete factory;
 }
 
-void TestKoShapeFactory::testSupportsKoXmlElement()
+void TestKoShapeFactory::testSupportsQDomElement()
 {
 }
 

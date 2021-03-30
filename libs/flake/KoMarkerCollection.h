@@ -15,7 +15,7 @@
 #include <QMetaType>
 
 class KoMarker;
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 class KoShapeLoadingContext;
 
 class KRITAFLAKE_EXPORT KoMarkerCollection : public QObject

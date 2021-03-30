@@ -13,7 +13,7 @@
 #include <QMap>
 #include <QGradient>
 
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 typedef QMap<QString, QString> SvgStyles;
 
@@ -38,19 +38,19 @@ public:
     /// Parses a color attribute
     bool parseColor(QColor &, const QString &);
 
-    QPair<qreal, QColor> parseColorStop(const KoXmlElement&, SvgGraphicsContext* context, qreal& previousOffset);
+    QPair<qreal, QColor> parseColorStop(const QDomElement&, SvgGraphicsContext* context, qreal& previousOffset);
 
     /// Parses gradient color stops
-    void parseColorStops(QGradient *, const KoXmlElement &, SvgGraphicsContext *context, const QGradientStops &defaultStops);
+    void parseColorStops(QGradient *, const QDomElement &, SvgGraphicsContext *context, const QGradientStops &defaultStops);
 
     /// Creates style map from given xml element
-    SvgStyles collectStyles(const KoXmlElement &);
+    SvgStyles collectStyles(const QDomElement &);
 
     /// Merges two style elements, returning the merged style
     SvgStyles mergeStyles(const SvgStyles &, const SvgStyles &);
 
     /// Merges two style elements, returning the merged style
-    SvgStyles mergeStyles(const KoXmlElement &, const KoXmlElement &);
+    SvgStyles mergeStyles(const QDomElement &, const QDomElement &);
 
     SvgStyles parseOneCssStyle(const QString &style, const QStringList &interestingAttributes);
 private:
@@ -59,7 +59,7 @@ private:
     void parsePA(SvgGraphicsContext *, const QString &, const QString &);
 
     /// Returns inherited attribute value for specified element
-    QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
+    QString inheritedAttribute(const QString &attributeName, const QDomElement &e);
 
     class Private;
     Private * const d;

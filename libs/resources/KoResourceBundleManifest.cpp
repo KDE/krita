@@ -60,7 +60,7 @@ bool KoResourceBundleManifest::load(QIODevice *device)
         }
     }
 
-    KoXmlDocument manifestDocument;
+    QDomDocument manifestDocument;
     QString errorMessage;
     int errorLine;
     int errorColumn;
@@ -74,7 +74,7 @@ bool KoResourceBundleManifest::load(QIODevice *device)
     }
 
     // First find the manifest:manifest node.
-    KoXmlNode n = manifestDocument.firstChild();
+    QDomNode n = manifestDocument.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (!n.isElement()) {
             continue;
@@ -91,13 +91,13 @@ bool KoResourceBundleManifest::load(QIODevice *device)
 
     // Now loop through the children of the manifest:manifest and
     // store all the manifest:file-entry elements.
-    const KoXmlElement  manifestElement = n.toElement();
+    const QDomElement  manifestElement = n.toElement();
     for (n = manifestElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
 
         if (!n.isElement())
             continue;
 
-        KoXmlElement el = n.toElement();
+        QDomElement el = n.toElement();
         if (!(el.localName() == "file-entry" && el.namespaceURI() == KoXmlNS::manifest))
             continue;
 
@@ -107,7 +107,7 @@ bool KoResourceBundleManifest::load(QIODevice *device)
         QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
 
         QStringList tagList;
-        KoXmlNode tagNode = n.firstChildElement().firstChildElement();
+        QDomNode tagNode = n.firstChildElement().firstChildElement();
         while (!tagNode.isNull()) {
             if (tagNode.firstChild().isText()) {
                 tagList.append(tagNode.firstChild().toText().data());

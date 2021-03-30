@@ -12,7 +12,7 @@
 #include "KoShapeUserData.h"
 
 class KoTextShapeDataBasePrivate;
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 struct KoInsets;

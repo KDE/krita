@@ -15,76 +15,44 @@
 //
 // ==================================================================
 
-KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const QString& nsURI,
+QDomElement KoXml::namedItemNS(const QDomNode& node, const QString& nsURI,
                                 const QString& localName)
 {
     // David's solution for namedItemNS, only for QDom stuff
-    KoXmlNode n = node.firstChild();
+    QDomNode n = node.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (n.isElement() && n.localName() == localName &&
                 n.namespaceURI() == nsURI)
             return n.toElement();
     }
-    return KoXmlElement();
+    return QDomElement();
 }
 
-KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const QString& nsURI,
+QDomElement KoXml::namedItemNS(const QDomNode& node, const QString& nsURI,
                                 const QString& localName, KoXmlNamedItemType type)
 {
     Q_UNUSED(type);
     return namedItemNS(node, nsURI, localName);
 }
 
-void KoXml::load(KoXmlNode& node, int depth)
-{
-    // do nothing, QDom has no on-demand loading
-    Q_UNUSED(node);
-    Q_UNUSED(depth);
-}
-
-
-void KoXml::unload(KoXmlNode& node)
-{
-    // do nothing, QDom has no on-demand unloading
-    Q_UNUSED(node);
-}
-
-int KoXml::childNodesCount(const KoXmlNode& node)
+int KoXml::childNodesCount(const QDomNode& node)
 {
     return node.childNodes().count();
 }
 
-QStringList KoXml::attributeNames(const KoXmlNode& node)
-{
-    QStringList result;
-
-    QDomNamedNodeMap attrMap = node.attributes();
-    for (int i = 0; i < attrMap.count(); ++i)
-        result += attrMap.item(i).toAttr().name();
-
-    return result;
-}
-
-void KoXml::asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node)
+void KoXml::asQDomNode(QDomDocument& ownerDoc, const QDomNode& node)
 {
     Q_ASSERT(!node.isDocument());
     ownerDoc.appendChild(ownerDoc.importNode(node, true));
 }
 
-void KoXml::asQDomElement(QDomDocument &ownerDoc, const KoXmlElement& element)
+void KoXml::asQDomElement(QDomDocument &ownerDoc, const QDomElement& element)
 {
     KoXml::asQDomNode(ownerDoc, element);
 }
 
-QDomDocument KoXml::asQDomDocument(const KoXmlDocument& document)
+QDomDocument KoXml::asQDomDocument(const QDomDocument& document)
 {
     return document;
 }
 
-bool KoXml::setDocument(KoXmlDocument& doc, QIODevice *device,
-                        bool namespaceProcessing,
-                        QString *errorMsg, int *errorLine, int *errorColumn)
-{
-    bool result = doc.setContent(device, namespaceProcessing, errorMsg, errorLine, errorColumn);
-    return result;
-}

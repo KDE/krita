@@ -10,7 +10,7 @@
 #include "kritaflake_export.h"
 
 class KoShapeLoadingContext;
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 class QString;
 
 /**
@@ -55,7 +55,7 @@ public:
     *
     * @return false if loading failed
     */
-    virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual bool loadOdfFrame(const QDomElement &element, KoShapeLoadingContext &context);
 
 protected:
 
@@ -64,7 +64,7 @@ protected:
     * e.g. the draw:image element.
     * @return false if loading failed
     */
-    virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
+    virtual bool loadOdfFrameElement(const QDomElement &element, KoShapeLoadingContext &context) = 0;
 
 private:
     class Private;

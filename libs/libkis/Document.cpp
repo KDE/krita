@@ -244,7 +244,7 @@ QString Document::documentInfo() const
 
 void Document::setDocumentInfo(const QString &document)
 {
-    KoXmlDocument doc;
+    QDomDocument doc;
     QString errorMsg;
     int errorLine, errorColumn;
     doc.setContent(document, &errorMsg, &errorLine, &errorColumn);

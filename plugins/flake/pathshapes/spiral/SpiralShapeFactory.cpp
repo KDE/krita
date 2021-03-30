@@ -34,7 +34,7 @@ KoShape *SpiralShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
     return spiral;
 }
 
-bool SpiralShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
+bool SpiralShapeFactory::supports(const QDomElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(e);
     Q_UNUSED(context);

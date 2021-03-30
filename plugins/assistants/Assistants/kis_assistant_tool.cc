@@ -85,7 +85,7 @@ void KisAssistantTool::deactivate()
     KisTool::deactivate();
 }
 
-void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
+void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
     m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
@@ -96,7 +96,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 
     if (m_newAssistant) {
         m_internalMode = MODE_CREATION;
-        *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
+
+        if (!snap(event)) {
+            *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
+        }
 
         // give two point assistant side handles once it is completed
 
@@ -369,7 +372,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     m_canvas->updateCanvas();
 }
 
-void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
+void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
 {
     KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
 
@@ -517,6 +520,9 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 
           const bool vp_is_dragged = m_handleDrag == hndl[0] || m_handleDrag == hndl[1];
           const bool cov_is_dragged = m_handleDrag == hndl[2];
+            const bool far_handle_is_dragged =
+                m_handleDrag == side_hndl[1] || m_handleDrag == side_hndl[3] ||
+                m_handleDrag == side_hndl[5] || m_handleDrag == side_hndl[7];
 
           if (cov_is_dragged) {
                 if (!snap(event)) {
@@ -537,7 +543,51 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
               assis->setSp(*m_handleDrag, *vp_opp, *hndl[2]);
           }
 
-          alignSideHandles(assistant);
+            if (far_handle_is_dragged) {
+                QLineF perspective_line_a, perspective_line_b;
+                QPointF vp_new_pos(0,0);
+                KisPaintingAssistantHandleSP vp_moved;
+                if (m_handleDrag == side_hndl[1] || m_handleDrag == side_hndl[5]) {
+                    vp_moved = hndl[0];
+                    perspective_line_a = QLineF(*side_hndl[0],*side_hndl[1]);
+                    perspective_line_b = QLineF(*side_hndl[4],*side_hndl[5]);
+                } else {
+                    vp_moved = hndl[1];
+                    perspective_line_a = QLineF(*side_hndl[3],*side_hndl[2]);
+                    perspective_line_b = QLineF(*side_hndl[6],*side_hndl[7]);
+                }
+                if (perspective_line_a.intersect(perspective_line_b, &vp_new_pos) != QLineF::NoIntersection) {
+                    *vp_moved = vp_new_pos;
+                }
+                assis->setHorizon(*hndl[0],*hndl[1]);
+                assis->setCov(*hndl[0], *hndl[1], *hndl[2]);
+                assis->setSp(*hndl[0], *hndl[1], *hndl[2]);
+            } else {
+                QLineF perspective_line_a1;
+                QLineF perspective_line_b1;
+                QLineF perspective_line_a2;
+                QLineF perspective_line_b2;
+
+                perspective_line_a1 = QLineF(*hndl[0], *side_hndl[0]);
+                perspective_line_a1.setLength(QLineF(*side_hndl[0],*side_hndl[1]).length());
+                perspective_line_a1.translate(*side_hndl[0] - perspective_line_a1.p1());
+                *side_hndl[1] = perspective_line_a1.p2();
+
+                perspective_line_b1 = QLineF(*hndl[0], *side_hndl[4]);
+                perspective_line_b1.setLength(QLineF(*side_hndl[4],*side_hndl[5]).length());
+                perspective_line_b1.translate(*side_hndl[4] - perspective_line_b1.p1());
+                *side_hndl[5] = perspective_line_b1.p2();
+
+                perspective_line_a2 = QLineF(*hndl[1], *side_hndl[2]);
+                perspective_line_a2.setLength(QLineF(*side_hndl[2],*side_hndl[3]).length());
+                perspective_line_a2.translate(*side_hndl[2] - perspective_line_a2.p1());
+                *side_hndl[3] = perspective_line_a2.p2();
+
+                perspective_line_b2 = QLineF(*hndl[1], *side_hndl[6]);
+                perspective_line_b2.setLength(QLineF(*side_hndl[6],*side_hndl[7]).length());
+                perspective_line_b2.translate(*side_hndl[6] - perspective_line_b2.p1());
+                *side_hndl[7] = perspective_line_b2.p2();
+            }
         }
     }
     if (wasHiglightedNode && !m_higlightedNode) {
@@ -545,7 +595,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
     }
 }
 
-void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
+void KisAssistantTool::endActionImpl(KoPointerEvent *event)
 {
     setMode(KisTool::HOVER_MODE);
 
@@ -1283,197 +1333,37 @@ void KisAssistantTool::slotCustomOpacityChanged()
     m_canvas->canvasWidget()->update();
 }
 
-void KisAssistantTool::alignSideHandles(KisPaintingAssistantSP assistant) {
-    Q_UNUSED(assistant);
-    if (m_handleDrag) {
-        KisPaintingAssistantSP assistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
-        if (assistant->id() == "two point") {
-          QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(assistant);
-          QList<KisPaintingAssistantHandleSP> hndl = assistant->handles();
-          QList<KisPaintingAssistantHandleSP> side_hndl = assistant->sideHandles();
-
-          const bool far_handle_is_dragged =
-              m_handleDrag == side_hndl[1] || m_handleDrag == side_hndl[3] ||
-              m_handleDrag == side_hndl[5] || m_handleDrag == side_hndl[7];
-
-          // const bool near_handle_is_dragged =
-          //     m_handleDrag == side_hndl[0] || m_handleDrag == side_hndl[2] ||
-          //     m_handleDrag == side_hndl[4] || m_handleDrag == side_hndl[6];
-
-          if (far_handle_is_dragged) {
-              QLineF perspective_line_a, perspective_line_b;
-              QPointF vp_new_pos(0,0);
-              KisPaintingAssistantHandleSP vp_moved;
-              if (m_handleDrag == side_hndl[1] || m_handleDrag == side_hndl[5]) {
-                vp_moved = hndl[0];
-                perspective_line_a = QLineF(*side_hndl[0],*side_hndl[1]);
-                perspective_line_b = QLineF(*side_hndl[4],*side_hndl[5]);
-              } else {
-                vp_moved = hndl[1];
-                perspective_line_a = QLineF(*side_hndl[3],*side_hndl[2]);
-                perspective_line_b = QLineF(*side_hndl[6],*side_hndl[7]);
-              }
-              if (perspective_line_a.intersect(perspective_line_b, &vp_new_pos) != QLineF::NoIntersection) {
-                  *vp_moved = vp_new_pos;
-              }
-              assis->setHorizon(*hndl[0],*hndl[1]);
-              assis->setCov(*hndl[0], *hndl[1], *hndl[2]);
-              assis->setSp(*hndl[0], *hndl[1], *hndl[2]);
-          } else {
-              QLineF perspective_line_a1;
-              QLineF perspective_line_b1;
-              QLineF perspective_line_a2;
-              QLineF perspective_line_b2;
-
-              perspective_line_a1 = QLineF(*hndl[0], *side_hndl[0]);
-              perspective_line_a1.setLength(QLineF(*side_hndl[0],*side_hndl[1]).length());
-              perspective_line_a1.translate(*side_hndl[0] - perspective_line_a1.p1());
-              *side_hndl[1] = perspective_line_a1.p2();
-
-              perspective_line_b1 = QLineF(*hndl[0], *side_hndl[4]);
-              perspective_line_b1.setLength(QLineF(*side_hndl[4],*side_hndl[5]).length());
-              perspective_line_b1.translate(*side_hndl[4] - perspective_line_b1.p1());
-              *side_hndl[5] = perspective_line_b1.p2();
-
-              perspective_line_a2 = QLineF(*hndl[1], *side_hndl[2]);
-              perspective_line_a2.setLength(QLineF(*side_hndl[2],*side_hndl[3]).length());
-              perspective_line_a2.translate(*side_hndl[2] - perspective_line_a2.p1());
-              *side_hndl[3] = perspective_line_a2.p2();
-
-              perspective_line_b2 = QLineF(*hndl[1], *side_hndl[6]);
-              perspective_line_b2.setLength(QLineF(*side_hndl[6],*side_hndl[7]).length());
-              perspective_line_b2.translate(*side_hndl[6] - perspective_line_b2.p1());
-              *side_hndl[7] = perspective_line_b2.p2();
-          }
-        }
-    }
-}
-
 void KisAssistantTool::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     Q_UNUSED(action);
-    setMode(KisTool::PAINT_MODE);
-    m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
-
-    KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
-
-    if (m_newAssistant && m_internalMode == MODE_CREATION) {
-
-        *m_newAssistant->handles().back() = event->point;
-
-        if (!snap(event)) {
-            *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
-        }
-
-        if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
-            addAssistant();
-        } else {
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
-        }
-        m_canvas->updateCanvas();
-        return;
-    }
-
-    m_currentAdjustment = QPointF();
-
-    // This alternate action (ie Shift-hold) code is based on the primary
-    // action code but specifically only look at the two point assistant
-    // TODO: Implement alternate actions for the other assistants
-    m_handleDrag = 0;
-    double minDist = 81.0;
-    QPointF mousePos = m_canvas->viewConverter()->documentToView(canvasDecoration->snapToGuide(event, QPointF(), false));
-    Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
-
-        if (assistant->id() == "two point") {
-            QList<KisPaintingAssistantHandleSP> allHandles;
-            allHandles.append(assistant->handles());
-            allHandles.append(assistant->sideHandles());
-
-            Q_FOREACH (const KisPaintingAssistantHandleSP handle, allHandles) {
-
-                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
-                if (dist < minDist) {
-                    minDist = dist;
-                    m_handleDrag = handle;
-                    if (m_handleDrag == assistant->handles()[0]) {
-                        m_dragStart = *assistant->handles()[1];
-                    } else if (m_handleDrag == assistant->handles()[1]) {
-                        m_dragStart = *assistant->handles()[0];
-                    } else {
-                        m_dragStart = *m_handleDrag;
-                    }
-                    m_snapIsRadial = false;
-                    assistantSelected(assistant);
-                    m_canvas->updateCanvas();
-                }
-            }
-        }
-    }
+    beginActionImpl(event);
 }
 
 void KisAssistantTool::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     Q_UNUSED(action);
-
-    if (m_handleDrag) {
-        *m_handleDrag = event->point;
-        KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
-        KisPaintingAssistantSP selectedAssistant = canvasDecoration->selectedAssistant();
-        if (selectedAssistant->id() == "two point") {
-
-            const bool snapped = snap(event);
-            if (!snapped) {*m_handleDrag = canvasDecoration->snapToGuide(event, QPointF(), false);}
-
-            m_handleDrag->uncache();
-
-            QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(selectedAssistant);
-            QList<KisPaintingAssistantHandleSP> hndl = selectedAssistant->handles();
-            QList<KisPaintingAssistantHandleSP> side_hndl = selectedAssistant->sideHandles();
-            KisPaintingAssistantHandleSP vp_opp;
-
-            const bool vp_is_dragged = m_handleDrag == hndl[0] || m_handleDrag == hndl[1];
-            const bool cov_is_dragged = m_handleDrag == hndl[2];
-
-            if (cov_is_dragged) {
-                if (!snap(event)) {
-                    QPointF newAdjustment = event->point - m_dragStart;
-                    *hndl[0] += + newAdjustment - m_currentAdjustment;
-                    *hndl[1] += + newAdjustment - m_currentAdjustment;
-                    m_currentAdjustment = newAdjustment;
-                }
-
-                assis->setHorizon(*hndl[0],*hndl[1]);
-                assis->setCov(*hndl[0], *hndl[1], event->point);
-                assis->setSp(*hndl[0], *hndl[1], assis->cov());
-            } else if (vp_is_dragged) {
-                vp_opp = m_handleDrag == hndl[0] ? hndl[1] : hndl[0];
-
-                assis->setHorizon(*m_handleDrag, *vp_opp);
-                assis->setCov(*m_handleDrag, *vp_opp, *hndl[2]);
-                assis->setSp(*m_handleDrag, *vp_opp, *hndl[2]);
-            }
-
-            alignSideHandles(selectedAssistant);
-        }
-    } else {
-        event->ignore();
-    }
+    continueActionImpl(event);
 }
 
 void KisAssistantTool::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     Q_UNUSED(action);
-    setMode(KisTool::HOVER_MODE);
+    endActionImpl(event);
+}
 
-    if (m_handleDrag) {
-        dbgUI << "creating undo command...";
-        KUndo2Command *command = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
-        m_canvas->viewManager()->undoAdapter()->addCommand(command);
-        dbgUI << "done";
-    } else {
-        event->ignore();
-    }
-    m_canvas->updateCanvas();
+void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
+{
+    beginActionImpl(event);
+}
+
+void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
+{
+    continueActionImpl(event);
+}
+
+void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
+{
+    endActionImpl(event);
 }
 
 bool KisAssistantTool::snap(KoPointerEvent *event)

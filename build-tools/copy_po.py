@@ -36,7 +36,7 @@ subdirs = subprocess.run(["svn", "cat", svn_command], stdout=subprocess.PIPE)
 for subdir in subdirs.stdout.decode('utf-8').strip().split('\n'):
     po_url = "{}/{}/{}/krita.po".format(url, subdir, krita_location)
 
-    status = subprocess.run(["svn", "info", po_url],
+    status = subprocess.run(["svn", "info", po_url], env={'LC_ALL': 'en_US.UTF-8'},
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     status_metadata = status.stdout.decode('latin-1')

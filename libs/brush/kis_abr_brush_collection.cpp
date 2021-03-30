@@ -612,6 +612,9 @@ bool KisAbrBrushCollection::isLoaded() const
 
 QImage KisAbrBrushCollection::image() const
 {
+    if (m_abrBrushes->size() > 0) {
+        return m_abrBrushes->values().first()->image();
+    }
     return QImage();
 }
 

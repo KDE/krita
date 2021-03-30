@@ -158,3 +158,8 @@ QSharedPointer<KisResourceStorage::TagIterator> KisAbrStorage::tags(const QStrin
 {
     return QSharedPointer<KisResourceStorage::TagIterator>(new AbrTagIterator(location(), resourceType));
 }
+
+QImage KisAbrStorage::thumbnail() const
+{
+    return m_brushCollection->image();
+}

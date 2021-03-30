@@ -145,65 +145,6 @@ KisPaintOpSettingsSP KisPaintOpPreset::settings() const
     return d->settings;
 }
 
-bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
-{
-    setValid(false);
-
-    if (filename().isEmpty()) {
-        return false;
-    }
-
-    QIODevice *dev = 0;
-    QByteArray ba;
-
-    if (filename().startsWith("bundle://")) {
-        QString bn = filename().mid(9);
-        int pos = bn.lastIndexOf(":");
-        QString fn = bn.right(bn.size() - pos - 1);
-        bn = bn.left(pos);
-
-        QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
-        if (!resourceStore || resourceStore->bad()) {
-            warnKrita << "Could not open store on bundle" << bn;
-            return false;
-        }
-
-        if (resourceStore->isOpen()) resourceStore->close();
-
-        if (!resourceStore->open(fn)) {
-            warnKrita << "Could not open preset" << fn << "in bundle" << bn;
-            return false;
-        }
-
-        ba = resourceStore->device()->readAll();
-        dev = new QBuffer(&ba);
-
-        resourceStore->close();
-    }
-    else {
-
-        dev = new QFile(filename());
-        if (dev->size() == 0)
-        {
-            delete dev;
-            return false;
-        }
-
-        if (!dev->open(QIODevice::ReadOnly)) {
-            warnKrita << "Can't open file " << filename();
-            delete dev;
-            return false;
-        }
-    }
-
-    bool res = loadFromDevice(dev, resourcesInterface);
-    delete dev;
-
-    setValid(res);
-    return res;
-
-}
-
 bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
     QImageReader reader(dev, "PNG");
@@ -242,15 +183,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     setImage(img);
 
     return true;
-}
-
-bool KisPaintOpPreset::save()
-{
-    const QString paintopid = d->settings->getString("paintop", QString());
-    if (paintopid.isEmpty())
-        return false;
-
-    return KoResource::save();
 }
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const

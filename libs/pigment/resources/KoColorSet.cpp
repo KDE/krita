@@ -126,13 +126,6 @@ KoResourceSP KoColorSet::clone() const
     return KoResourceSP(new KoColorSet(*this));
 }
 
-bool KoColorSet::load(KisResourcesInterfaceSP resourcesInterface)
-{
-    const bool result = KoResource::load(resourcesInterface);
-    setIsEditable(result && QFileInfo(filename()).isWritable());
-    return result;
-}
-
 bool KoColorSet::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
     Q_UNUSED(resourcesInterface);

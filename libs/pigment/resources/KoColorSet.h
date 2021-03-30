@@ -80,7 +80,6 @@ public:
 
     KoResourceSP clone() const override;
 
-    bool load(KisResourcesInterfaceSP resourcesInterface) override;
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;

@@ -272,7 +272,13 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_snapIsRadial = true;
             }
         } else if (m_handleDrag && assistant->handles().size()>2 && assistant->id() == "two point") {
-            m_dragStart = *m_handleDrag;
+            if (m_handleDrag == assistant->handles()[0]) {
+                m_dragStart = *assistant->handles()[1];
+            } else if (m_handleDrag == assistant->handles()[1]) {
+                m_dragStart = *assistant->handles()[0];
+            } else {
+                m_dragStart = *m_handleDrag;
+            }
             m_snapIsRadial = false;
         } else {
             m_dragStart = assistant->getEditorPosition();

@@ -79,6 +79,8 @@ private:
 
     void assistantSelected(KisPaintingAssistantSP assistant);
 
+    void alignSideHandles(KisPaintingAssistantSP assistant);
+
     // Handles both shift+mouse-drag or shift+mouse-move snapping
     // Returns true if snapping is successful
     // This uses m_handleDrag or m_newAssistant to figure out what handle to snap and where

@@ -23,10 +23,13 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
 {
     setWidget(m_scrollArea);
 
-    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
-    titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
-    titleBar->setToolTip(i18n("Tools"));
-    setTitleBarWidget(titleBar);
+    QLabel *w = new QLabel(" ", this);
+    w->setFrameShape(QFrame::StyledPanel);
+    w->setFrameShadow(QFrame::Raised);
+    w->setFrameStyle(QFrame::Panel | QFrame::Raised);
+    w->setMinimumWidth(16);
+    w->setFixedHeight(QFontMetrics(KoDockRegistry::dockFont()).height());
+    setTitleBarWidget(w);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));

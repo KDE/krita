@@ -932,7 +932,7 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)
         URL "https://python.org/"
         TYPE OPTIONAL
         PURPOSE "Required to manually parse and fetch available translations.")
-    find_package(Subversion 1.4 REQUIRED)
+    find_package(Subversion 1.4)
     set_package_properties(Subversion PROPERTIES
         DESCRIPTION "Subversion is an open source version control system"
         URL "https://subversion.apache.org/"

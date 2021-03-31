@@ -565,7 +565,7 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
             KisSelectionMaskSP newMask = m_image->m_d->targetOverlaySelectionMask;
             if (oldMask == newMask) return;
 
-            KIS_SAFE_ASSERT_RECOVER_RETURN(!newMask || newMask->graphListener() == m_image);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!newMask || reinterpret_cast<KisImage*>(newMask->graphListener()) == m_image);
 
             m_image->m_d->overlaySelectionMask = newMask;
 

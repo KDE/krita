@@ -29,6 +29,7 @@ struct GradientMeshPatch : public KisBezierPatch {
 
 struct GradientMeshNode : public KisBezierMeshDetails::BaseMeshNode, public boost::equality_comparable<GradientMeshNode>
 {
+    using BaseMeshNode::BaseMeshNode;
     QColor color;
 
     bool operator==(const GradientMeshNode &rhs) const {

@@ -52,6 +52,7 @@
 #include "kis_time_span.h"
 #include "kis_keyframe_channel.h"
 #include "kis_node_manager.h"
+#include <kis_selection_mask.h>
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>

@@ -10,6 +10,7 @@
 #include "kis_keyframe.h"
 #include "kis_keyframe_channel.h"
 #include "kis_types.h"
+#include "kis_image.h"
 
 #include <QPointer>
 

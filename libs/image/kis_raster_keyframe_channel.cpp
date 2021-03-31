@@ -16,6 +16,7 @@
 #include "kundo2command.h"
 #include "kis_onion_skin_compositor.h"
 #include "kis_layer_utils.h"
+#include "kis_image.h"
 
 KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice)
     : KisKeyframe()

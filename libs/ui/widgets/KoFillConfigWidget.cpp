@@ -595,6 +595,14 @@ void KoFillConfigWidget::colorChanged()
 
 void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
 {
+    // NOTE: Even though this is guarded by KisAcyclicSignalConnector we need a
+    // KisSignalsBlocker as well. Reason being there are two instances of
+    // KoFillConfigWidget (KoFlake::Fill and KoFlake::StrokeFill). Both are
+    // connected to resourceManager(). Whenever this method is hit, it is hit
+    // only from one instance making the other instance respond to resource
+    // change.
+    KisSignalsBlocker b(d->canvas->resourceManager());
+
     const int checkedId = d->group->checkedId();
 
     bool hasColor = false;

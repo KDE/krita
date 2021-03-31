@@ -19,6 +19,7 @@ private Q_SLOTS:
     void testMixColors();
     void testMixColorsAverage();
     void testCompositeOpsWithChannelFlags();
+    void testCompositeCopyDivisionByZero();
 };
 
 #endif

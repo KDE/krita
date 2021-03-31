@@ -91,6 +91,15 @@ struct CopyCompositor128 {
                 dst_c3 += opacity_norm_vec * (src_c3 - dst_c3);
 
                 if (!(newAlpha == oneValue).isFull()) {
+                    /// This division by newAlpha may be unsafe in case
+                    /// **some** elements of newAlpha are null. We don't
+                    /// care, because:
+                    ///
+                    /// 1) the value will be clamped by Vc::min a bit later;
+                    ///
+                    /// 2) even if it doesn't, the new alpha will be null,
+                    ///    so the state of the color channels is undefined
+
                     dst_c1 /= newAlpha;
                     dst_c2 /= newAlpha;
                     dst_c3 /= newAlpha;
@@ -124,7 +133,6 @@ struct CopyCompositor128 {
             opacity *= float(*mask) * uint8Rec1;
         }
 
-
         if (opacity == 0.0f) {
             // noop
         } else if (opacity == 1.0f) {
@@ -135,11 +143,24 @@ struct CopyCompositor128 {
                     KoStreamedMathFunctions::copyPixel<sizeof(Pixel)>(src, dst);
                 }
             } else {
-                const QBitArray &channelFlags = oparams.channelFlags;
-                if (channelFlags.at(0)) d[0] = s[0];
-                if (channelFlags.at(1)) d[1] = s[1];
-                if (channelFlags.at(2)) d[2] = s[2];
-                if (!alphaLocked) d[3] = s[3];
+                if (d[alpha_pos] != KoColorSpaceMathsTraits<channels_type>::zeroValue ||
+                    alphaLocked) {
+
+                    const QBitArray &channelFlags = oparams.channelFlags;
+                    if (channelFlags.at(0)) d[0] = s[0];
+                    if (channelFlags.at(1)) d[1] = s[1];
+                    if (channelFlags.at(2)) d[2] = s[2];
+                    if (!alphaLocked) d[3] = s[3];
+
+                } else {
+                    // Precondition: d[alpha_pos] == 0 && !alphaLocked
+
+                    const QBitArray &channelFlags = oparams.channelFlags;
+                    d[0] = channelFlags.at(0) ? s[0] : KoColorSpaceMathsTraits<channels_type>::zeroValue;
+                    d[1] = channelFlags.at(1) ? s[1] : KoColorSpaceMathsTraits<channels_type>::zeroValue;
+                    d[2] = channelFlags.at(2) ? s[2] : KoColorSpaceMathsTraits<channels_type>::zeroValue;
+                    d[3] = s[3];
+                }
             }
         } else {
             float dstAlpha = d[alpha_pos];
@@ -148,7 +169,7 @@ struct CopyCompositor128 {
             float newAlpha = dstAlpha + opacity * (srcAlpha - dstAlpha);
 
             if (newAlpha == 0.0f) {
-                if (allChannelsFlag) {
+                if (allChannelsFlag || dstAlpha == 0.0f) {
                     KoStreamedMathFunctions::clearPixel<sizeof(Pixel)>(dst);
                 } else {
                     const QBitArray &channelFlags = oparams.channelFlags;
@@ -199,10 +220,18 @@ struct CopyCompositor128 {
                     d[1] = dst_c2;
                     d[2] = dst_c3;
                 } else {
-                    const QBitArray &channelFlags = oparams.channelFlags;
-                    if (channelFlags.at(0)) d[0] = dst_c1;
-                    if (channelFlags.at(1)) d[1] = dst_c2;
-                    if (channelFlags.at(2)) d[2] = dst_c3;
+                    if (dstAlpha != 0.0f || alphaLocked) {
+                        const QBitArray &channelFlags = oparams.channelFlags;
+                        if (channelFlags.at(0)) d[0] = dst_c1;
+                        if (channelFlags.at(1)) d[1] = dst_c2;
+                        if (channelFlags.at(2)) d[2] = dst_c3;
+                    } else {
+                        // Precondition: dstAlpha == 0 && !alphaLocked
+                        const QBitArray &channelFlags = oparams.channelFlags;
+                        d[0] = channelFlags.at(0) ? dst_c1 : KoColorSpaceMathsTraits<channels_type>::zeroValue;
+                        d[1] = channelFlags.at(1) ? dst_c2 : KoColorSpaceMathsTraits<channels_type>::zeroValue;
+                        d[2] = channelFlags.at(2) ? dst_c3 : KoColorSpaceMathsTraits<channels_type>::zeroValue;
+                    }
                 }
 
                 if (!alphaLocked) {

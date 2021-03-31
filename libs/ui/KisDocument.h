@@ -136,9 +136,9 @@ public:
      * KisDocument (Path, modified flag etc.). Call this instead of
      * KisParts::ReadWritePart::saveAs() to implement KisMainWindow's
      * File --> Export feature.
+     * Make sure to provide two seprate bool parameters otherwise it will mix them
      */
-    bool exportDocument(const QString &path, const QByteArray &mimeType, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
-
+    bool exportDocument(const QString &path, const QByteArray &mimeType,bool isAdvancedExporting = false, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
     /**
      * Exports he document is a synchronous way. The caller must ensure that the
      * image is not accessed by any other actors, because the exporting happens
@@ -147,7 +147,7 @@ public:
     bool exportDocumentSync(const QString &path, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 private:
-    bool exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration);
+    bool exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting= false);
 
 public:
     /**
@@ -515,18 +515,18 @@ private:
                                     const QObject *receiverObject, const char *receiverMethod,
                                     const KritaUtils::ExportFileJob &job,
                                     KisPropertiesConfigurationSP exportConfiguration,
-                                    std::unique_ptr<KisDocument> &&optionalClonedDocument);
+                                    std::unique_ptr<KisDocument> &&optionalClonedDocument, bool isAdvancedExporting = false);
 
     bool initiateSavingInBackground(const QString actionName,
                                     const QObject *receiverObject, const char *receiverMethod,
                                     const KritaUtils::ExportFileJob &job,
-                                    KisPropertiesConfigurationSP exportConfiguration);
+                                    KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting =false );
 
     bool startExportInBackground(const QString &actionName, const QString &location,
                                  const QString &realLocation,
                                  const QByteArray &mimeType,
                                  bool showWarnings,
-                                 KisPropertiesConfigurationSP exportConfiguration);
+                                 KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting= false);
 
     /**
      * Activate/deactivate/configure the autosave feature.

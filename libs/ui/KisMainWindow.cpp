@@ -234,6 +234,7 @@ public:
     KisAction *closeAll {0};
     KisAction *importFile {0};
     KisAction *exportFile {0};
+    KisAction *exportFileAdvance {0};
     KisAction *undo {0};
     KisAction *redo {0};
     KisAction *newWindow {0};
@@ -1245,7 +1246,7 @@ QImage KisMainWindow::layoutThumbnail()
     return layoutThumbnail;
 }
 
-bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExporting)
+bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExporting, bool isAdvancedExporting )
 {
     if (!document) {
         return true;
@@ -1423,8 +1424,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                     }
                 }
                 else { // Export
-                    ret = document->exportDocument(newFilePath, outputFormat);
-
+                    ret = document->exportDocument(newFilePath, outputFormat, isAdvancedExporting);
                     if (ret) {
                         d->lastExportLocation = newFilePath;
                         d->lastExportedFormat = outputFormat;
@@ -1710,21 +1710,27 @@ void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 
 void KisMainWindow::slotFileSave()
 {
-    if (saveDocument(d->activeView->document(), false, false)) {
+    if (saveDocument(d->activeView->document(), false, false,false)) {
         emit documentSaved();
     }
 }
 
 void KisMainWindow::slotFileSaveAs()
 {
-    if (saveDocument(d->activeView->document(), true, false)) {
+    if (saveDocument(d->activeView->document(), true, false,false)) {
         emit documentSaved();
     }
 }
 
 void KisMainWindow::slotExportFile()
 {
-    if (saveDocument(d->activeView->document(), true, true)) {
+    if (saveDocument(d->activeView->document(), true, true,false)) {
+        emit documentSaved();
+    }
+}
+void KisMainWindow::slotExportAdvance()
+{
+    if (saveDocument(d->activeView->document(), true, true,true)) {
         emit documentSaved();
     }
 }
@@ -2768,6 +2774,9 @@ void KisMainWindow::createActions()
 
     d->exportFile  = actionManager->createAction("file_export_file");
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
+
+    d->exportFileAdvance  = actionManager->createAction("file_export_advanced");
+    connect(d->exportFileAdvance, SIGNAL(triggered(bool)), this, SLOT(slotExportAdvance()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */

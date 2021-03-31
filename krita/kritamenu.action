@@ -99,6 +99,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="file_export_advanced">
+      <icon>document-export</icon>
+      <text>E&amp;xport Advanced...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Advanced Export</toolTip>
+      <iconText>Export</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="file_import_animation">
       <icon></icon>
       <text>Import animation frames...</text>

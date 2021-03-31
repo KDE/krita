@@ -51,6 +51,7 @@
 #include <kis_iterator_ng.h>
 #include "kis_async_action_feedback.h"
 #include "KisReferenceImagesLayer.h"
+#include "imagesize/dlg_imagesize.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -127,18 +128,18 @@ KisImportExportErrorCode KisImportExportManager::importDocument(const QString& l
     return result.status();
 }
 
-KisImportExportErrorCode KisImportExportManager::exportDocument(const QString& location, const QString& realLocation, const QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportErrorCode KisImportExportManager::exportDocument(const QString& location, const QString& realLocation, const QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting)
 {
-    ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, false);
+    ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, false, isAdvancedExporting);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!result.isAsync(), ImportExportCodes::InternalError);
 
     return result.status();
 }
 
 QFuture<KisImportExportErrorCode> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType,
-                                                                            KisImportExportErrorCode &status, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+                                                                            KisImportExportErrorCode &status, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting)
 {
-    ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, true);
+    ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, true, isAdvancedExporting);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(result.isAsync() ||
                                          !result.status().isOk(), QFuture<KisImportExportErrorCode>());
 
@@ -283,7 +284,7 @@ QString KisImportExportManager::getUriForAdditionalFile(const QString &defaultUr
     return dialog.filename();
 }
 
-KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAsync)
+KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAsync, bool isAdvancedExporting)
 {
     // export configuration is supported for export only
     KIS_SAFE_ASSERT_RECOVER_NOOP(direction == Export || !bool(exportConfiguration));
@@ -406,7 +407,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         bool askUser = askUserAboutExportConfiguration(filter, exportConfiguration,
                                                        from, to,
                                                        batchMode(), showWarnings,
-                                                       &alsoAsKra);
+                                                       &alsoAsKra, isAdvancedExporting);
 
 
         if (!batchMode() && !askUser) {
@@ -485,7 +486,8 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         const QByteArray &to,
         const bool batchMode,
         const bool showWarnings,
-        bool *alsoAsKra)
+        bool *alsoAsKra,
+        bool isAdvancedExporting)
 {
 
     // prevents the animation renderer from running this code
@@ -545,7 +547,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         return false;
     }
 
-    if (!batchMode && (wdg || !warnings.isEmpty())) {
+    if (!batchMode && (wdg || !warnings.isEmpty() || isAdvancedExporting)) {
 
         KoDialog dlg;
 
@@ -594,13 +596,20 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             browser->setHtml(warning);
         }
 
+        QTabWidget *box = new QTabWidget;
         if (wdg) {
-            QGroupBox *box = new QGroupBox(i18n("Options"));
-            QVBoxLayout *boxLayout = new QVBoxLayout(box);
             wdg->setConfiguration(exportConfiguration);
-            boxLayout->addWidget(wdg);
-            layout->addWidget(box);
+            box->addTab(wdg,i18n("Options"));
         }
+
+        auto dlgImageSize = new DlgImageSize(box, m_document->image()->width(), m_document->image()->height(), m_document->image()->yRes());
+        dlgImageSize->setButtons(KoDialog::None);
+
+        if(isAdvancedExporting)
+        {
+            box->addTab(dlgImageSize,i18n("Resize"));
+        }
+        layout->addWidget(box);
 
         QCheckBox *chkAlsoAsKra = 0;
         if (showWarnings && !warnings.isEmpty()) {
@@ -612,7 +621,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         dlg.setMainWidget(page);
         dlg.resize(dlg.minimumSize());
 
-        if (showWarnings || wdg) {
+        if (showWarnings || wdg || isAdvancedExporting) {
             if (!dlg.exec()) {
                 return false;
             }
@@ -622,6 +631,14 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         if (chkAlsoAsKra) {
             KisConfig(false).writeEntry<bool>("AlsoSaveAsKra", chkAlsoAsKra->isChecked());
             *alsoAsKra = chkAlsoAsKra->isChecked();
+        }
+
+        if(isAdvancedExporting)
+        {
+            const QSize desiredSize(dlgImageSize->desiredWidth(), dlgImageSize->desiredHeight());
+            double res = dlgImageSize->desiredResolution();
+            m_document->savingImage()->scaleImage(desiredSize,res,res,dlgImageSize->filterType());
+            m_document->savingImage()->waitForDone();
         }
 
         if (wdg) {

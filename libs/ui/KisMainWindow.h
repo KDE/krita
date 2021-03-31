@@ -140,7 +140,7 @@ public:
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(KisDocument *document, bool saveas, bool isExporting);
+    bool saveDocument(KisDocument *document, bool saveas, bool isExporting, bool isAdvancedExporting = false);
 
     void setReadWrite(bool readwrite);
 
@@ -413,6 +413,8 @@ private Q_SLOTS:
      * This will call slotFileSaveAs().
      */
     void slotExportFile();
+
+    void slotExportAdvance();
 
     /**
      * Hide the dockers

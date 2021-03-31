@@ -358,6 +358,12 @@ set(kritaui_LIB_SRCS
     processing/fill_processing_visitor.cpp
     canvas/kis_mirror_axis.cpp
 
+    imagesize/imagesize.cc
+    imagesize/dlg_canvassize.cc
+    imagesize/dlg_imagesize.cc
+    imagesize/dlg_layersize.cc
+
+    kcanvaspreview.cc
     kis_abstract_perspective_grid.cpp
 
     KisApplication.cpp
@@ -602,6 +608,10 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     animation/wdg_animationrenderer.ui
     animation/video_export_options_dialog.ui
     animation/VideoHDRMetadataOptionsDialog.ui
+
+    imagesize/wdg_imagesize.ui
+    imagesize/wdg_layersize.ui
+    imagesize/wdg_canvassize.ui
 )
 
 if(WIN32)

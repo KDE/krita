@@ -678,7 +678,7 @@ KisDocument *KisDocument::clone()
     return new KisDocument(*this);
 }
 
-bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration)
+bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting)
 {
     QFileInfo filePathInfo(job.filePath);
 
@@ -753,7 +753,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     bool started =
         initiateSavingInBackground(actionName,
                                    this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
-                                   job, exportConfiguration);
+                                   job, exportConfiguration, isAdvancedExporting);
     if (!started) {
         emit canceled(QString());
     }
@@ -761,7 +761,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     return started;
 }
 
-bool KisDocument::exportDocument(const QString &path, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+bool KisDocument::exportDocument(const QString &path, const QByteArray &mimeType, bool isAdvancedExporting, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     using namespace KritaUtils;
 
@@ -784,7 +784,7 @@ bool KisDocument::exportDocument(const QString &path, const QByteArray &mimeType
     return exportDocumentImpl(KritaUtils::ExportFileJob(path,
                                                         mimeType,
                                                         flags),
-                              exportConfiguration);
+                              exportConfiguration, isAdvancedExporting);
 }
 
 bool KisDocument::saveAs(const QString &_path, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
@@ -1061,17 +1061,17 @@ bool KisDocument::exportDocumentSync(const QString &path, const QByteArray &mime
 bool KisDocument::initiateSavingInBackground(const QString actionName,
                                              const QObject *receiverObject, const char *receiverMethod,
                                              const KritaUtils::ExportFileJob &job,
-                                             KisPropertiesConfigurationSP exportConfiguration)
+                                             KisPropertiesConfigurationSP exportConfiguration,bool isAdvancedExporting)
 {
     return initiateSavingInBackground(actionName, receiverObject, receiverMethod,
-                                      job, exportConfiguration, std::unique_ptr<KisDocument>());
+                                      job, exportConfiguration, std::unique_ptr<KisDocument>(), isAdvancedExporting);
 }
 
 bool KisDocument::initiateSavingInBackground(const QString actionName,
                                              const QObject *receiverObject, const char *receiverMethod,
                                              const KritaUtils::ExportFileJob &job,
                                              KisPropertiesConfigurationSP exportConfiguration,
-                                             std::unique_ptr<KisDocument> &&optionalClonedDocument)
+                                             std::unique_ptr<KisDocument> &&optionalClonedDocument,bool isAdvancedExporting)
 {
     KIS_ASSERT_RECOVER_RETURN_VALUE(job.isValid(), false);
 
@@ -1146,7 +1146,7 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
                                                                job.filePath,
                                                                job.mimeType,
                                                                job.flags & KritaUtils::SaveShowWarnings,
-                                                               exportConfiguration);
+                                                               exportConfiguration, isAdvancedExporting);
 
     if (!started) {
         // the state should have been deinitialized in slotChildCompletedSavingInBackground()
@@ -1294,7 +1294,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
                                           const QString &realLocation,
                                           const QByteArray &mimeType,
                                           bool showWarnings,
-                                          KisPropertiesConfigurationSP exportConfiguration)
+                                          KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting)
 {
     d->savingImage = d->image;
 
@@ -1313,7 +1313,8 @@ bool KisDocument::startExportInBackground(const QString &actionName,
                                                        mimeType,
                                                        initializationStatus,
                                                        showWarnings,
-                                                       exportConfiguration);
+                                                       exportConfiguration,
+                                                       isAdvancedExporting);
 
     if (!initializationStatus.isOk()) {
         if (d->savingUpdater) {

@@ -362,18 +362,9 @@ void KisFilterManager::finish()
 
         // Filter selected times to only those with keyframes...
         selectedTimes = KisLayerUtils::filterTimesForOnlyRasterKeyedTimes(node, selectedTimes);
-        // Convert a set of selected keyframe times into set of selected "frameIDs"...
-        QSet<int> selectedFrameIDs = KisLayerUtils::fetchLayerRasterIDsAtTimes(node, selectedTimes);
+        QSet<int> uniqueFrames = KisLayerUtils::fetchUniqueFrameTimes(node, selectedTimes);
 
-        // Current frame was already filtered during filter preview in `KisFilterManager::apply`...
-        // So let's remove it...
-        const int currentActiveFrameID = KisLayerUtils::fetchLayerActiveRasterFrameID(d->view->activeNode());
-        selectedFrameIDs.remove(currentActiveFrameID);
-
-        // Convert frameIDs to any arbitrary frame time associated with the frameID...
-        QSet<int> uniqueFrameTimes = paintDevice->framesInterface() ? KisLayerUtils::fetchLayerUniqueRasterTimesMatchingIDs(d->view->activeNode(), selectedFrameIDs) : QSet<int>();
-
-        Q_FOREACH(const int& frameTime, uniqueFrameTimes) {
+        Q_FOREACH(const int& frameTime, uniqueFrames) {
             image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData(frameTime));
         }
     }

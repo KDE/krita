@@ -15,14 +15,6 @@
 class KRITAUI_EXPORT KisFilterStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
-    /*
-     *
-     * TEMP NOTE DELETE LATER:
-     * "KisFilterStrokeStrategy::Data should only have a "frameId" paramenter. No `concurrent` or `_processRect`.
-     * The latter two variables should be calculated internally in doStrokeCallback,
-     * and after that a set of "mutated jobs" should be generated" - Dmitry
-     *
-     */
     class FilterJobData : public KisStrokeJobData {
     public:
         FilterJobData(int frameTime = -1)

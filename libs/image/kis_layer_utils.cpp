@@ -2207,6 +2207,7 @@ namespace KisLayerUtils {
         return paintDevice->keyframeChannel()->clonesOf(node.data(), frameTime);
     }
 
+    /* Finds all frames matching a specific frame ID. useful to filter out duplicate frames. */
     QSet<int> fetchLayerRasterFrameTimesMatchingID(KisNodeSP node, const int frameID) {
         KIS_ASSERT(node);
         KisRasterKeyframeChannel* rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), false));
@@ -2266,6 +2267,22 @@ namespace KisLayerUtils {
         }
 
         return uniqueTimes;
+    }
+
+    QSet<int> fetchUniqueFrameTimes(KisNodeSP node, QSet<int> selectedTimes)
+    {
+        // Convert a set of selected keyframe times into set of selected "frameIDs"...
+        QSet<int> selectedFrameIDs = KisLayerUtils::fetchLayerRasterIDsAtTimes(node, selectedTimes);
+
+        // Current frame was already filtered during filter preview in `KisFilterManager::apply`...
+        // So let's remove it...
+        const int currentActiveFrameID = KisLayerUtils::fetchLayerActiveRasterFrameID(node);
+        selectedFrameIDs.remove(currentActiveFrameID);
+
+        // Convert frameIDs to any arbitrary frame time associated with the frameID...
+        QSet<int> uniqueFrameTimes = node->paintDevice()->framesInterface() ? KisLayerUtils::fetchLayerUniqueRasterTimesMatchingIDs(node, selectedFrameIDs) : QSet<int>();
+
+        return uniqueFrameTimes;
     }
 
 }

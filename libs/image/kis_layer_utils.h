@@ -232,18 +232,14 @@ namespace KisLayerUtils
 
     // Methods used by filter manager, filter stroke strategy to get times associated with frameIDs.
     // Important for avoiding instanced frame data being processed twice!
-    KRITAIMAGE_EXPORT int fetchLayerActiveRasterFrameID(KisNodeSP node);
     KRITAIMAGE_EXPORT int fetchLayerActiveRasterFrameTime(KisNodeSP node);
     KRITAIMAGE_EXPORT KisTimeSpan fetchLayerActiveRasterFrameSpan(KisNodeSP node, const int time);
     KRITAIMAGE_EXPORT QSet<int> fetchLayerIdenticalRasterFrameTimes(KisNodeSP node, const int& frameTime);
 
-    /* Finds all frames matching a specific frame ID. useful to filter out duplicate frames. */
-    KRITAIMAGE_EXPORT QSet<int> fetchLayerRasterFrameTimesMatchingID(KisNodeSP node, const int frameID);
-    KRITAIMAGE_EXPORT QSet<int> fetchLayerRasterIDsAtTimes(KisNodeSP node, const QSet<int>& times);
-
     KRITAIMAGE_EXPORT QSet<int> filterTimesForOnlyRasterKeyedTimes(KisNodeSP node, const QSet<int> &times);
-    /* Returns a set of times associated with every potential unique frame. */
-    KRITAIMAGE_EXPORT QSet<int> fetchLayerUniqueRasterTimesMatchingIDs(KisNodeSP node, QSet<int> &frameIDs);
+
+    /* Returns a set of times associated with every unique frame from a selection. */
+    KRITAIMAGE_EXPORT QSet<int> fetchUniqueFrameTimes(KisNodeSP node, QSet<int> selectedTimes);
 }
 
 #endif /* __KIS_LAYER_UTILS_H */

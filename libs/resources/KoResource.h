@@ -50,6 +50,7 @@ public:
      *
      * @param filename the file name to save and load from.
      */
+    KoResource();
     explicit KoResource(const QString &filename);
     virtual ~KoResource();
     KoResource(const KoResource &rhs);
@@ -57,7 +58,7 @@ public:
 
     virtual KoResourceSP clone() const = 0;
 
-    bool operator==(const KoResource &other) const;
+
 
 public:
     /**

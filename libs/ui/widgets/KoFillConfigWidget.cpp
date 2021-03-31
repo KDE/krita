@@ -467,8 +467,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
     // update tool option fields with first selected object
     if (shapes.isEmpty() == false) {
         KoShape *firstShape = shapes.first();
-        updateFillIndexFromShape(firstShape);
-        updateFillColorFromShape(firstShape);
+        updateUiFromFillType(firstShape);
     }
 
     updateWidgetComponentVisbility();
@@ -681,7 +680,7 @@ void KoFillConfigWidget::gradientResourceChanged()
         qSharedPointerDynamicCast<KoGradientBackground>(
             d->gradientAction->currentBackground());
 
-    uploadNewGradientBackground(bg->gradient());
+    updateGradientUi(bg->gradient());
 
     setNewGradientBackgroundToShape();
     updateGradientSaveButtonAvailability();
@@ -706,7 +705,7 @@ void KoFillConfigWidget::slotGradientRepeatChanged()
     activeGradientChanged();
 }
 
-void KoFillConfigWidget::uploadNewGradientBackground(const QGradient *gradient)
+void KoFillConfigWidget::updateGradientUi(const QGradient *gradient)
 {
     KisSignalsBlocker b1(d->ui->wdgGradientEditor,
                          d->ui->cmbGradientType,
@@ -953,8 +952,7 @@ void KoFillConfigWidget::shapeChanged()
 
         // update active index of shape
         KoShape *shape = shapes.first();
-        updateFillIndexFromShape(shape);
-        updateFillColorFromShape(shape); // updates tool options fields
+        updateUiFromFillType(shape); // updates tool options fields
 
         shouldUploadColorToResourceManager = true;
     }
@@ -972,7 +970,7 @@ void KoFillConfigWidget::shapeChanged()
     }
 }
 
-void KoFillConfigWidget::updateFillIndexFromShape(KoShape *shape)
+void KoFillConfigWidget::updateUiFromFillType(KoShape *shape)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
     KoShapeFillWrapper wrapper(shape, d->fillVariant);
@@ -981,30 +979,8 @@ void KoFillConfigWidget::updateFillIndexFromShape(KoShape *shape)
         case KoFlake::None:
              d->selectedFillIndex = KoFillConfigWidget::None;
             break;
-        case KoFlake::Solid:
-            d->selectedFillIndex = KoFillConfigWidget::Solid;
-            break;
-        case KoFlake::Gradient:
-            d->selectedFillIndex = KoFillConfigWidget::Gradient;
-            break;
-        case KoFlake::Pattern:
-            d->selectedFillIndex = KoFillConfigWidget::Pattern;
-            break;
-        case KoFlake::MeshGradient:
-            d->selectedFillIndex = KoFillConfigWidget::MeshGradient;
-            break;
-    }
-}
-
-void KoFillConfigWidget::updateFillColorFromShape(KoShape *shape)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
-    KoShapeFillWrapper wrapper(shape, d->fillVariant);
-
-    switch (wrapper.type()) {
-        case KoFlake::None:
-            break;
         case KoFlake::Solid: {
+            d->selectedFillIndex = KoFillConfigWidget::Solid;
             QColor color = wrapper.color();
             if (color.alpha() > 0) {
                 d->colorAction->setCurrentColor(wrapper.color());
@@ -1012,12 +988,15 @@ void KoFillConfigWidget::updateFillColorFromShape(KoShape *shape)
             break;
         }
         case KoFlake::Gradient:
-            uploadNewGradientBackground(wrapper.gradient());
+            d->selectedFillIndex = KoFillConfigWidget::Gradient;
+            updateGradientUi(wrapper.gradient());
             updateGradientSaveButtonAvailability();
             break;
         case KoFlake::Pattern:
+            d->selectedFillIndex = KoFillConfigWidget::Pattern;
             break;
         case KoFlake::MeshGradient:
+            d->selectedFillIndex = KoFillConfigWidget::MeshGradient;
             createNewMeshGradientBackground();
             break;
     }

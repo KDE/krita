@@ -23,6 +23,7 @@ private Q_SLOTS:
     void testScaler();
 
     void testIterativeMixing();
+    void testCompositeCopyDivisionByZero();
 };
 
 #endif

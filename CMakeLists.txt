@@ -922,7 +922,7 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
 
 
 # Source translations
-option(FETCH_TRANSLATIONS "Retrieve translations before building Krita" ON)
+option(FETCH_TRANSLATIONS "Retrieve translations before building Krita" OFF)
 add_feature_info("Retrieve translations before building" FETCH_TRANSLATIONS "Retrieve the translations from KDE before building Krita")
 
 if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)

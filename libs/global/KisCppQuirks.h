@@ -12,7 +12,7 @@ namespace std {
 
 // from C++14
 
-#if __cplusplus < 201402L
+#if __cplusplus < 201402L && (!defined(_MSC_VER))
 
 template <typename Cont>
 inline auto rbegin(Cont &cont) -> decltype(declval<Cont>().rbegin()) {
@@ -44,7 +44,7 @@ using add_const_t    = typename add_const<T>::type;
 
 // from C++17
 
-#if __cplusplus < 201703L
+#if (__cplusplus < 201703L) && (!defined(_MSC_VER))
 
 template<typename...>
 using void_t = void;

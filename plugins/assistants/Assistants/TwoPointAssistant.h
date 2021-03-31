@@ -24,12 +24,6 @@ public:
     void saveCustomXml(QXmlStreamWriter* xml) override;
     bool loadCustomXml(QXmlStreamReader* xml) override;
 
-    QLineF horizon();
-    void setHorizon(const QPointF a, const QPointF b);
-    QPointF cov();
-    void setCov(const QPointF a, const QPointF b, const QPointF c);
-    QPointF sp();
-    void setSp(const QPointF a, const QPointF b, const QPointF c);
     double gridDensity();
     void setGridDensity(double density);
 
@@ -44,9 +38,6 @@ private:
     KisCanvas2 *m_canvas;
 
     QLineF m_snapLine;
-    QLineF m_horizon;
-    QPointF m_cov;
-    QPointF m_sp;
     double m_gridDensity = 1.0;
 
     // Needed to make sure that when we are in the middle of a brush stroke, the

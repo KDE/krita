@@ -99,11 +99,9 @@ qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
         return 0;
     }
 
-    d->size += _len;
-    if (dd->buffer.write(_data, _len)) {    // writeData returns a bool!
-        return _len;
-    }
-    return 0;
+    qint64 nwritten = dd->buffer.write(_data, _len);
+    d->size += nwritten;
+    return nwritten;
 }
 
 QStringList KoQuaZipStore::directoryList() const

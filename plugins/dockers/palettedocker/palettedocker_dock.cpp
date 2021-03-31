@@ -221,6 +221,8 @@ void PaletteDockerDock::slotImportPalette()
 
 void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
 {
+    qDebug() << palette;
+
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
     dialog.setDefaultDir(palette->filename());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset");

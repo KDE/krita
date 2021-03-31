@@ -68,6 +68,8 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     QHBoxLayout *paletteLayout = new QHBoxLayout(m_ui->viewPalette);
     paletteLayout->addWidget(m_d->itemChooser.data());
 
+    m_d->itemChooser->setCurrentItem(0);
+
     connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotPaletteResourceSelected(KoResourceSP )));
 }
 
@@ -112,8 +114,11 @@ void KisPaletteChooser::slotImport()
 
 void KisPaletteChooser::slotExport()
 {
-    if (!m_d->allowModification) { return; }
-    emit sigExportPalette(m_d->itemChooser->currentResource().staticCast<KoColorSet>());
+    if (!m_d->itemChooser->currentResource()) {
+        m_d->itemChooser->setCurrentItem(0);
+    }
+    KoColorSetSP palette = m_d->itemChooser->currentResource().dynamicCast<KoColorSet>();
+    emit sigExportPalette(palette);
 }
 
 void KisPaletteChooser::setAllowModification(bool allowModification)

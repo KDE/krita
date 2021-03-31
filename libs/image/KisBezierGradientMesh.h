@@ -72,8 +72,8 @@ public:
     void renderMesh(const QPoint &dstQImageOffset,
                     QImage *dstImage) const;
 
-    friend void saveValue(QDomElement *parent, const QString &tag, const KisBezierGradientMesh &mesh);
-    friend bool loadValue(const QDomElement &parent, const QString &tag, KisBezierGradientMesh *mesh);
+    friend KRITAIMAGE_EXPORT void saveValue(QDomElement *parent, const QString &tag, const KisBezierGradientMesh &mesh);
+    friend KRITAIMAGE_EXPORT bool loadValue(const QDomElement &parent, const QString &tag, KisBezierGradientMesh *mesh);
 };
 
 KRITAIMAGE_EXPORT

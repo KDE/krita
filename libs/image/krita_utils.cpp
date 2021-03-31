@@ -101,7 +101,7 @@ namespace KritaUtils
     }
 
 
-    KisRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
+    KisRegion splitTriangles(const QPointF &center,
                                                const QVector<QPointF> &points)
     {
 
@@ -150,7 +150,7 @@ namespace KritaUtils
         return KisRegion(std::move(dirtyRects));
     }
 
-    KisRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path)
+    KisRegion splitPath(const QPainterPath &path)
     {
         QVector<QRect> dirtyRects;
         QRect totalRect = path.boundingRect().toAlignedRect();

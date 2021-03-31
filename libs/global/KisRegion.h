@@ -67,7 +67,7 @@ public:
     KisRegion(QVector<QRect> &&rects);
 
     KisRegion& operator=(const KisRegion &rhs);
-    friend bool operator==(const KisRegion &lhs, const KisRegion &rhs);
+    friend KRITAGLOBAL_EXPORT bool operator==(const KisRegion &lhs, const KisRegion &rhs);
 
     KisRegion& operator&=(const QRect &rect);
 

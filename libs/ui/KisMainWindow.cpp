@@ -2059,7 +2059,7 @@ void KisMainWindow::slotConfigureToolbars()
 void KisMainWindow::slotResetConfigurations()
 {
     KisApplication *kisApp = static_cast<KisApplication*>(qApp);
-    kisApp->askresetConfig();
+    kisApp->askResetConfig();
 }
 
 void KisMainWindow::slotNewToolbarConfig()

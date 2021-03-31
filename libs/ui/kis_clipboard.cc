@@ -12,10 +12,13 @@
 #include <QMimeData>
 #include <QObject>
 #include <QImage>
+#include <QMenu>
+#include <QUrl>
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QBuffer>
 #include <QGlobalStatic>
+#include <QFileInfo>
 
 #include <klocalizedstring.h>
 
@@ -26,6 +29,15 @@
 
 #include <KisMimeDatabase.h>
 
+#include <KisPart.h>
+#include <KisMainWindow.h>
+#include <kis_canvas2.h>
+#include <KisViewManager.h>
+#include <kis_image_manager.h>
+#include "kis_node_commands_adapter.h"
+#include "kis_file_layer.h"
+#include "KisReferenceImage.h"
+#include "kis_coordinates_converter.h"
 // kritaimage
 #include <kis_types.h>
 #include <kis_paint_device.h>
@@ -265,69 +277,135 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
 
     if (!clip) {
 
-        QImage qimage = KisClipboardUtil::getImageFromClipboard();
+        QClipboard *cb = QApplication::clipboard();
+        if (cb->mimeData()->hasUrls()) {
+            QList<QUrl> urls = cb->mimeData()->urls();
 
-        if (qimage.isNull()) {
-            return KisPaintDeviceSP(0);
-        }
+            QMenu popup;
+            popup.setObjectName("drop_popup");
 
-        KisConfig cfg(true);
-        quint32 behaviour = cfg.pasteBehaviour();
-        bool saveColorSetting = false;
+            QAction *pasteAsNewLayer = new QAction(i18n("Paste as New Layer"), &popup);
+            QAction *pasteManyLayers = new QAction(i18n("Paste Many Layers"), &popup);
 
+            QAction *pasteAsNewFileLayer = new QAction(i18n("Paste as New File Layer"), &popup);
+            QAction *pasteManyFileLayers = new QAction(i18n("Paste Many File Layers"), &popup);
 
-        if (behaviour == PASTE_ASK && showPopup) {
-            // Ask user each time.
-            QMessageBox mb(qApp->activeWindow());
-            QCheckBox dontPrompt(i18n("Remember"), &mb);
+            QAction *pasteAsReferenceImage = new QAction(i18n("Paste as Reference Image"), &popup);
+            QAction *pasteAsReferenceImages = new QAction(i18n("Paste as Reference Images"), &popup);
 
-            dontPrompt.blockSignals(true);
+            QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
-            mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
-            mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
+            popup.addAction(pasteAsNewLayer);
+            popup.addAction(pasteAsNewFileLayer);
+            popup.addAction(pasteAsReferenceImage);
 
-            // the order of how you add these buttons matters as it determines the index.
-            mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
-            mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
-            mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
-            mb.addButton(&dontPrompt, QMessageBox::ActionRole);
+            popup.addAction(pasteManyLayers);
+            popup.addAction(pasteManyFileLayers);
+            popup.addAction(pasteAsReferenceImages);
 
-            behaviour = mb.exec();
+            pasteAsNewLayer->setEnabled(urls.count() == 1);
+            pasteAsNewFileLayer->setEnabled(urls.count() == 1);
+            pasteAsReferenceImage->setEnabled(urls.count() == 1);
 
-            if (behaviour > 1) {
-                return 0;
+            pasteManyLayers->setEnabled(urls.count() > 1);
+            pasteManyFileLayers->setEnabled(urls.count() > 1);
+            pasteAsReferenceImages->setEnabled(urls.count() > 1);
+
+            popup.addSeparator();
+            popup.addAction(cancel);
+
+            QAction *action = popup.exec(QCursor::pos());
+            if (action != 0 && action != cancel) {
+                KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
+                for (QUrl url : urls) {
+                    if (action == pasteAsNewLayer || action == pasteManyLayers) {
+                        mainWin->viewManager()->imageManager()->importImage(url);
+                    }
+                    else if (action == pasteAsNewFileLayer || action == pasteManyFileLayers) {
+                        KisNodeCommandsAdapter adapter(mainWin->viewManager());
+                        QFileInfo fileInfo(url.toLocalFile());
+                        KisFileLayer *fileLayer = new KisFileLayer(mainWin->activeView()->image(), "", url.toLocalFile(),
+                                                                   KisFileLayer::None, fileInfo.fileName(), OPACITY_OPAQUE_U8);
+                        adapter.addNode(fileLayer, mainWin->viewManager()->activeNode()->parent(), mainWin->viewManager()->activeNode());
+                    }
+                    else if (action == pasteAsReferenceImage || action == pasteAsReferenceImages) {
+                        auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), *mainWin->activeView()->viewConverter(), mainWin->activeView());
+
+                        if (reference) {
+                            reference->setPosition((*mainWin->activeView()->viewConverter()).imageToDocument(QPoint(0,0)));
+                            mainWin->activeView()->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
+
+                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                        }
+                    }
+
+                }
             }
 
-            saveColorSetting = dontPrompt.isChecked(); // should we save this option to the config for next time?
+        } else {
+            QImage qimage = KisClipboardUtil::getImageFromClipboard();
+
+            if (qimage.isNull()) {
+                return KisPaintDeviceSP(0);
+            }
+
+            KisConfig cfg(true);
+            quint32 behaviour = cfg.pasteBehaviour();
+            bool saveColorSetting = false;
 
 
+            if (behaviour == PASTE_ASK && showPopup) {
+                // Ask user each time.
+                QMessageBox mb(qApp->activeWindow());
+                QCheckBox dontPrompt(i18n("Remember"), &mb);
+
+                dontPrompt.blockSignals(true);
+
+                mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
+                mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
+
+                // the order of how you add these buttons matters as it determines the index.
+                mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
+                mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
+                mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
+                mb.addButton(&dontPrompt, QMessageBox::ActionRole);
+
+                behaviour = mb.exec();
+
+                if (behaviour > 1) {
+                    return 0;
+                }
+
+                saveColorSetting = dontPrompt.isChecked(); // should we save this option to the config for next time?
+
+
+            }
+
+            const KoColorSpace * cs;
+            const KoColorProfile *profile = 0;
+            if (behaviour == PASTE_ASSUME_MONITOR)
+                profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
+
+            cs = KoColorSpaceRegistry::instance()->rgb8(profile);
+            if (!cs) {
+                cs = KoColorSpaceRegistry::instance()->rgb8();
+                profile = cs->profile();
+            }
+
+            clip = new KisPaintDevice(cs);
+            Q_CHECK_PTR(clip);
+            clip->convertFromQImage(qimage, profile);
+
+            QRect clipBounds = clip->exactBounds();
+            QPoint diff = imageBounds.center() - clipBounds.center();
+            clip->setX(diff.x());
+            clip->setY(diff.y());
+
+            // save the persion's selection to the configuration if the option is checked
+            if (saveColorSetting) {
+                cfg.setPasteBehaviour(behaviour);
+            }
         }
-
-        const KoColorSpace * cs;
-        const KoColorProfile *profile = 0;
-        if (behaviour == PASTE_ASSUME_MONITOR)
-            profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
-
-        cs = KoColorSpaceRegistry::instance()->rgb8(profile);
-        if (!cs) {
-            cs = KoColorSpaceRegistry::instance()->rgb8();
-            profile = cs->profile();
-        }
-
-        clip = new KisPaintDevice(cs);
-        Q_CHECK_PTR(clip);
-        clip->convertFromQImage(qimage, profile);
-
-        QRect clipBounds = clip->exactBounds();
-        QPoint diff = imageBounds.center() - clipBounds.center();
-        clip->setX(diff.x());
-        clip->setY(diff.y());
-
-        // save the persion's selection to the configuration if the option is checked
-        if (saveColorSetting) {
-            cfg.setPasteBehaviour(behaviour);
-        }
-
     }
 
     return clip;

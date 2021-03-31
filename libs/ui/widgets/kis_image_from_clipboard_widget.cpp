@@ -105,7 +105,7 @@ void KisImageFromClipboard::createClipboardPreview()
     QClipboard *cb = QApplication::clipboard();
     const QMimeData *cbData = cb->mimeData();
     if (cbData->hasUrls()) {
-        qimage = KisClipboardUtil::getImageFromClipboard();
+        qimage = QImage(cb->mimeData()->urls().at(0).path());
     } else if (cbData->hasImage()) {
         qimage = cb->image();
     }

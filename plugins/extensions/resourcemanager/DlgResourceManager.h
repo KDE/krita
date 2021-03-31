@@ -12,6 +12,7 @@
 #include <QSortFilterProxyModel>
 #include <QSharedPointer>
 #include <QItemSelection>
+#include <KisResourceThumbnailPainter.h>
 
 class KisActionManager;
 class KisResourceTypeModel;
@@ -72,6 +73,8 @@ private:
     QMap<QString, KisTagFilterResourceProxyModel*> m_resourceProxyModelsForResourceType;
 
     QScopedPointer<KisWdgTagSelectionControllerOneResource> m_tagsController;
+
+    KisResourceThumbnailPainter m_thumbnailPainter;
 
     bool m_undeleteMode {false};
 };

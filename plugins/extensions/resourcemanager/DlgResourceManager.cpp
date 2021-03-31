@@ -152,11 +152,13 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lblLocation->setText(model->data(idx, Qt::UserRole + KisAllResourcesModel::Location).toString());
         m_ui->lblId->setText(model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toString());
 
-        QImage thumb = model->data(idx, Qt::UserRole + KisAllResourcesModel::Thumbnail).value<QImage>();
-        thumb.setDevicePixelRatio(this->devicePixelRatioF());
-        qCritical() << thumb.size() << "and should be " << m_ui->lblThumbnail->size();
-        QPixmap pix = QPixmap::fromImage(thumb);
-        pix = pix.scaled(m_ui->lblThumbnail->size()*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QSize thumbSize = m_ui->lblThumbnail->size();
+
+        QImage thumbLabel = m_thumbnailPainter.getReadyThumbnail(idx, thumbSize*devicePixelRatioF(), palette());
+        thumbLabel.setDevicePixelRatio(devicePixelRatioF());
+
+        QPixmap pix = QPixmap::fromImage(thumbLabel);
+        m_ui->lblThumbnail->setScaledContents(true);
         m_ui->lblThumbnail->setPixmap(pix);
 
         QMap<QString, QVariant> metadata = model->data(idx, Qt::UserRole + KisAllResourcesModel::MetaData).toMap();

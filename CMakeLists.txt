@@ -939,27 +939,29 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)
         TYPE OPTIONAL
         PURPOSE "Required to access the KDE i18n repository.")
 
-    set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
+    if (Subversion_FOUND AND Python3_FOUND) 
+       set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
 
-    if (KRITA_STABLE)
-        set(tr_EXTRA_FLAGS "")
-    else()
-        set(tr_EXTRA_FLAGS "--unstable")
-    endif()
+        if (KRITA_STABLE)
+            set(tr_EXTRA_FLAGS "")
+        else()
+            set(tr_EXTRA_FLAGS "--unstable")
+        endif()
 
-    get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
-    string(MD5 pathmd5 ${absolute_podir})
+        get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
+        string(MD5 pathmd5 ${absolute_podir})
 
-    find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
-    if(NOT TARGET fetch-${pathmd5})
-        file(MAKE_DIRECTORY ${TRANSLATIONS})
+        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
+        if (NOT TARGET fetch-${pathmd5})
+            file(MAKE_DIRECTORY ${TRANSLATIONS})
 
-        add_custom_target(fetch-${pathmd5}
-            COMMENT "Retrieving translations..."
-            COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT} ${tr_EXTRA_FLAGS}
-            BYPRODUCTS ${TRANSLATIONS}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        )
+            add_custom_target(fetch-${pathmd5}
+                COMMENT "Retrieving translations..."
+                COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT} ${tr_EXTRA_FLAGS}
+                BYPRODUCTS ${TRANSLATIONS}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            )
+        endif()
     endif()
 endif()
 

@@ -127,7 +127,7 @@ void TestAslStorage::testResourceItem_data()
 
     //QTest::newRow("asl/test_all_with_pattern.asl") << TestUtil::fetchDataFileLazy("asl/test_all_with_pattern.asl") << 1 << 1;
 
-    QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "8122fc0c-58b9-11d4-b895-a898787104c1_pattern";
+    QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "8122fc0c-58b9-11d4-b895-a898787104c1.pat";
     QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "81a5a778-bd9f-11d5-b8ba-b73f8571793d_style";
     QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "81a5a779-bd9f-11d5-b8ba-b73f8571793d_style";
     QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "81a5a77a-bd9f-11d5-b8ba-b73f8571793d_style";
@@ -135,7 +135,7 @@ void TestAslStorage::testResourceItem_data()
 
 
     QTest::newRow("asl/freebie_with_pattern.asl") << TestUtil::fetchDataFileLazy("asl/testset/freebie_with_pattern.asl")  << "47c8b792-b27f-11e1-a082-d6e8ee17595d_style";
-    QTest::newRow("asl/freebie_with_pattern.asl") << TestUtil::fetchDataFileLazy("asl/testset/freebie_with_pattern.asl")  << "47c8b78c-b27f-11e1-a082-d6e8ee17595d_pattern";
+    QTest::newRow("asl/freebie_with_pattern.asl") << TestUtil::fetchDataFileLazy("asl/testset/freebie_with_pattern.asl")  << "47c8b78c-b27f-11e1-a082-d6e8ee17595d.pat";
 
 
 }
@@ -161,7 +161,7 @@ void TestAslStorage::testResource_data()
 
     //QTest::newRow("asl/test_all_with_pattern.asl") << TestUtil::fetchDataFileLazy("asl/test_all_with_pattern.asl") << 1 << 1;
 
-    QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "8122fc0c-58b9-11d4-b895-a898787104c1_pattern";
+    QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "8122fc0c-58b9-11d4-b895-a898787104c1.pat";
     QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "81a5a778-bd9f-11d5-b8ba-b73f8571793d_style";
     QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "81a5a779-bd9f-11d5-b8ba-b73f8571793d_style";
     QTest::newRow("asl/multiple_styles.asl") << TestUtil::fetchDataFileLazy("asl/multiple_styles.asl") << "81a5a77a-bd9f-11d5-b8ba-b73f8571793d_style";
@@ -169,7 +169,7 @@ void TestAslStorage::testResource_data()
 
 
     QTest::newRow("asl/freebie_with_pattern.asl") << TestUtil::fetchDataFileLazy("asl/testset/freebie_with_pattern.asl")  << "47c8b792-b27f-11e1-a082-d6e8ee17595d_style";
-    QTest::newRow("asl/freebie_with_pattern.asl") << TestUtil::fetchDataFileLazy("asl/testset/freebie_with_pattern.asl")  << "47c8b78c-b27f-11e1-a082-d6e8ee17595d_pattern";
+    QTest::newRow("asl/freebie_with_pattern.asl") << TestUtil::fetchDataFileLazy("asl/testset/freebie_with_pattern.asl")  << "47c8b78c-b27f-11e1-a082-d6e8ee17595d.pat";
 
 
 }

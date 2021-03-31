@@ -12,13 +12,10 @@
 #include <QMimeData>
 #include <QObject>
 #include <QImage>
-#include <QMenu>
-#include <QUrl>
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QBuffer>
 #include <QGlobalStatic>
-#include <QFileInfo>
 
 #include <klocalizedstring.h>
 
@@ -30,14 +27,6 @@
 #include <KisMimeDatabase.h>
 
 #include <KisPart.h>
-#include <KisMainWindow.h>
-#include <kis_canvas2.h>
-#include <KisViewManager.h>
-#include <kis_image_manager.h>
-#include "kis_node_commands_adapter.h"
-#include "kis_file_layer.h"
-#include "KisReferenceImage.h"
-#include "kis_coordinates_converter.h"
 // kritaimage
 #include <kis_types.h>
 #include <kis_paint_device.h>
@@ -277,72 +266,15 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
 
     if (!clip) {
 
-        QClipboard *cb = QApplication::clipboard();
-        if (cb->mimeData()->hasUrls()) {
-            QList<QUrl> urls = cb->mimeData()->urls();
+        KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
 
-            QMenu popup;
-            popup.setObjectName("drop_popup");
+        if (KisClipboardUtil::clipboardHasUrls()) {
 
-            QAction *pasteAsNewLayer = new QAction(i18n("Paste as New Layer"), &popup);
-            QAction *pasteManyLayers = new QAction(i18n("Paste Many Layers"), &popup);
+            KisClipboardUtil::clipboardHasUrlsAction(mainWin->activeView(), QApplication::clipboard()->mimeData());
 
-            QAction *pasteAsNewFileLayer = new QAction(i18n("Paste as New File Layer"), &popup);
-            QAction *pasteManyFileLayers = new QAction(i18n("Paste Many File Layers"), &popup);
+        }
+        else {
 
-            QAction *pasteAsReferenceImage = new QAction(i18n("Paste as Reference Image"), &popup);
-            QAction *pasteAsReferenceImages = new QAction(i18n("Paste as Reference Images"), &popup);
-
-            QAction *cancel = new QAction(i18n("Cancel"), &popup);
-
-            popup.addAction(pasteAsNewLayer);
-            popup.addAction(pasteAsNewFileLayer);
-            popup.addAction(pasteAsReferenceImage);
-
-            popup.addAction(pasteManyLayers);
-            popup.addAction(pasteManyFileLayers);
-            popup.addAction(pasteAsReferenceImages);
-
-            pasteAsNewLayer->setEnabled(urls.count() == 1);
-            pasteAsNewFileLayer->setEnabled(urls.count() == 1);
-            pasteAsReferenceImage->setEnabled(urls.count() == 1);
-
-            pasteManyLayers->setEnabled(urls.count() > 1);
-            pasteManyFileLayers->setEnabled(urls.count() > 1);
-            pasteAsReferenceImages->setEnabled(urls.count() > 1);
-
-            popup.addSeparator();
-            popup.addAction(cancel);
-
-            QAction *action = popup.exec(QCursor::pos());
-            if (action != 0 && action != cancel) {
-                KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
-                for (QUrl url : urls) {
-                    if (action == pasteAsNewLayer || action == pasteManyLayers) {
-                        mainWin->viewManager()->imageManager()->importImage(url);
-                    }
-                    else if (action == pasteAsNewFileLayer || action == pasteManyFileLayers) {
-                        KisNodeCommandsAdapter adapter(mainWin->viewManager());
-                        QFileInfo fileInfo(url.toLocalFile());
-                        KisFileLayer *fileLayer = new KisFileLayer(mainWin->activeView()->image(), "", url.toLocalFile(),
-                                                                   KisFileLayer::None, fileInfo.fileName(), OPACITY_OPAQUE_U8);
-                        adapter.addNode(fileLayer, mainWin->viewManager()->activeNode()->parent(), mainWin->viewManager()->activeNode());
-                    }
-                    else if (action == pasteAsReferenceImage || action == pasteAsReferenceImages) {
-                        auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), *mainWin->activeView()->viewConverter(), mainWin->activeView());
-
-                        if (reference) {
-                            reference->setPosition((*mainWin->activeView()->viewConverter()).imageToDocument(QPoint(0,0)));
-                            mainWin->activeView()->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
-
-                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
-                        }
-                    }
-
-                }
-            }
-
-        } else {
             QImage qimage = KisClipboardUtil::getImageFromClipboard();
 
             if (qimage.isNull()) {

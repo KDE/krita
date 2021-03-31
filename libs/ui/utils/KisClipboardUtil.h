@@ -10,6 +10,9 @@
 #include <kritaui_export.h>
 
 class QImage;
+class QMimeData;
+
+class KisView;
 
 namespace KisClipboardUtil {
 
@@ -18,6 +21,15 @@ namespace KisClipboardUtil {
      * @return image
      */
     KRITAUI_EXPORT QImage getImageFromClipboard();
+
+    bool clipboardHasUrls();
+
+    /**
+     * Show popup on Kismage when clipboard contents are urls
+     * False if clipboard contents are not urls
+     * @return void
+     */
+    KRITAUI_EXPORT void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data);
 
 }
 

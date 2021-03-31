@@ -106,7 +106,6 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
             d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(!state && d->currentFilter->supportsAdjustmentLayers());
         }
     });
-
     restoreGeometry(KisConfig(true).readEntry("filterdialog/geometry", QByteArray()));
     connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(updatePreview()));
 
@@ -123,7 +122,7 @@ void KisDlgFilter::setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDef
     Q_ASSERT(f);
     setDialogTitle(f);
     d->uiFilterDialog.filterSelection->setFilter(f, overrideDefaultConfig);
-    const bool multiframeEnabled = !d->uiFilterDialog.chkFilterSelectedFrames->isChecked();
+    const bool multiframeEnabled = d->uiFilterDialog.chkFilterSelectedFrames->isChecked();
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers() && !multiframeEnabled);
     d->currentFilter = f;
     d->updateCompressor.start();
@@ -151,7 +150,8 @@ void KisDlgFilter::updatePreview()
     if (!config) return;
 
     bool maskCreationAllowed = !d->currentFilter || d->currentFilter->configurationAllowedForMask(config);
-    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(maskCreationAllowed);
+    const bool multiframeEnabled = d->uiFilterDialog.chkFilterSelectedFrames->isChecked();
+    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(maskCreationAllowed && !multiframeEnabled);
 
     if (d->uiFilterDialog.checkBoxPreview->isChecked()) {
         KisFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
@@ -234,7 +234,8 @@ void KisDlgFilter::filterSelectionChanged()
     KisFilterSP filter = d->uiFilterDialog.filterSelection->currentFilter();
     setDialogTitle(filter);
     d->currentFilter = filter;
-    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(filter.isNull() ? false : filter->supportsAdjustmentLayers());
+    const bool multiframeEnabled = d->uiFilterDialog.chkFilterSelectedFrames->isChecked();
+    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(filter.isNull() ? false : (filter->supportsAdjustmentLayers() && !multiframeEnabled));
     d->updateCompressor.start();
 }
 

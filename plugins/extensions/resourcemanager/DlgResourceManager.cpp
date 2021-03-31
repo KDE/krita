@@ -8,6 +8,9 @@
 
 #include "ui_WdgDlgResourceManager.h"
 
+#include <QItemSelection>
+#include <QPainter>
+
 #include <kis_action.h>
 #include <kis_action_manager.h>
 #include <KisResourceTypeModel.h>
@@ -17,10 +20,10 @@
 #include <KisTagFilterResourceProxyModel.h>
 #include <kis_assert.h>
 #include <KisResourceItemDelegate.h>
-#include <QItemSelection>
 #include <wdgtagselection.h>
 #include <kis_paintop_factory.h>
 #include <kis_paintop_registry.h>
+#include <dlg_create_bundle.h>
 
 DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *parent)
     : KoDialog(parent)
@@ -75,7 +78,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     connect(m_ui->resourceItemView, SIGNAL(currentResourceChanged(QModelIndex)), SLOT(slotResourcesSelectionChanged(QModelIndex)));
 
     connect(m_ui->btnDeleteResource, SIGNAL(clicked(bool)), SLOT(slotDeleteResources()));
-    connect(m_ui->btnImportBundle, SIGNAL(clicked(bool)), SLOT(slotImportBundle()));
+    connect(m_ui->btnCreateBundle, SIGNAL(clicked(bool)), SLOT(slotCreateBundle()));
     connect(m_ui->btnOpenResourceFolder, SIGNAL(clicked(bool)), SLOT(slotOpenResourceFolder()));
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
     connect(m_ui->btnDeleteBackupFiles, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
@@ -281,9 +284,10 @@ void DlgResourceManager::slotOpenResourceFolder()
     }
 }
 
-void DlgResourceManager::slotImportBundle()
+void DlgResourceManager::slotCreateBundle()
 {
-
+    DlgCreateBundle* dlg = new DlgCreateBundle(0, this);
+    dlg->exec();
 }
 
 void DlgResourceManager::slotDeleteBackupFiles()

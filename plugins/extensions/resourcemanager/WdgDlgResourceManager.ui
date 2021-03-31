@@ -242,9 +242,9 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QPushButton" name="btnImportBundle">
+          <widget class="QPushButton" name="btnCreateBundle">
            <property name="text">
-            <string>Import a Bundle</string>
+            <string>Create a Bundle</string>
            </property>
           </widget>
          </item>
@@ -291,7 +291,7 @@
   <tabstop>btnDeleteResource</tabstop>
   <tabstop>btnImportResources</tabstop>
   <tabstop>btnOpenResourceFolder</tabstop>
-  <tabstop>btnImportBundle</tabstop>
+  <tabstop>btnCreateBundle</tabstop>
   <tabstop>btnDeleteBackupFiles</tabstop>
  </tabstops>
  <resources/>

@@ -50,7 +50,7 @@ private Q_SLOTS:
     void slotDeleteResources();
     void slotImportResources();
     void slotOpenResourceFolder();
-    void slotImportBundle();
+    void slotCreateBundle();
     void slotDeleteBackupFiles();
 private:
     QString getCurrentResourceType();

@@ -155,21 +155,6 @@ void KisFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resou
     d->resourcesInterface = resourcesInterface;
 }
 
-namespace KisRequiredResourcesOperators
-{
-template <>
-struct ResourceTraits<KisFilterConfiguration>
-{
-    template <typename T>
-    using SharedPointerType = KisPinnedSharedPtr<T>;
-
-    template <typename D, typename S>
-    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
-        return SharedPointerType<D>(dynamic_cast<D*>(src.data()));
-    }
-};
-}
-
 void KisFilterConfiguration::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
     KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
@@ -182,7 +167,7 @@ bool KisFilterConfiguration::hasLocalResourcesSnapshot() const
 
 KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisFilterConfigurationSP>(this, globalResourcesInterface);
 }
 
 QList<KoResourceSP> KisFilterConfiguration::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const

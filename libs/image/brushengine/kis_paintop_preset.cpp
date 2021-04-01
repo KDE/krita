@@ -335,21 +335,6 @@ void KisPaintOpPreset::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP 
     d->settings->setCanvasResourcesInterface(canvasResourcesInterface);
 }
 
-namespace KisRequiredResourcesOperators
-{
-template <>
-struct ResourceTraits<KisPaintOpPreset>
-{
-    template <typename T>
-    using SharedPointerType = QSharedPointer<T>;
-
-    template <typename D, typename S>
-    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
-        return src.template dynamicCast<D>();
-    }
-};
-}
-
 void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
@@ -372,7 +357,7 @@ bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
 KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
 {
     KisPaintOpPresetSP result =
-        KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+        KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisPaintOpPresetSP>(this, globalResourcesInterface);
 
     const QList<int> canvasResources = result->requiredCanvasResources();
     if (!canvasResources.isEmpty()) {

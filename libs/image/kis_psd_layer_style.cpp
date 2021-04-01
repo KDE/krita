@@ -17,7 +17,9 @@
 #include "kis_global.h"
 
 #include "kis_asl_layer_style_serializer.h"
+#include <KisRequiredResourcesOperators.h>
 #include <QBuffer>
+
 
 struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
 {
@@ -315,22 +317,7 @@ void KisPSDLayerStyle::setResourcesInterface(KisResourcesInterfaceSP resourcesIn
     d->resourcesInterface = resourcesInterface;
 }
 
-#include <KisRequiredResourcesOperators.h>
 
-namespace KisRequiredResourcesOperators
-{
-template <>
-struct ResourceTraits<KisPSDLayerStyle>
-{
-    template <typename T>
-    using SharedPointerType = QSharedPointer<T>;
-
-    template <typename D, typename S>
-    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
-        return src.template dynamicCast<D>();
-    }
-};
-}
 
 void KisPSDLayerStyle::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
@@ -344,7 +331,7 @@ bool KisPSDLayerStyle::hasLocalResourcesSnapshot() const
 
 KisPSDLayerStyleSP KisPSDLayerStyle::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisPSDLayerStyleSP>(this, globalResourcesInterface);
 }
 
 QList<KoResourceSP> KisPSDLayerStyle::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const

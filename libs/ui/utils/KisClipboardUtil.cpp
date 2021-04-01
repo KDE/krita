@@ -91,15 +91,14 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data)
 
             QAction *action = popup.exec(QCursor::pos());
             if (action != 0 && action != cancel) {
-                QTemporaryFile *tmp = 0;
                 for (QUrl url : urls) {
 
                     if (!url.isLocalFile()) {
                         // download the file and substitute the url
                         KisRemoteFileFetcher fetcher;
-                        tmp = new QTemporaryFile();
+                        QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
                         tmp->setAutoRemove(true);
-                        if (!fetcher.fetchFile(url, tmp)) {
+                        if (!fetcher.fetchFile(url, tmp.data())) {
                             qWarning() << "Fetching" << url << "failed";
                             continue;
                         }
@@ -134,8 +133,6 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data)
                         }
 
                     }
-                    delete tmp;
-                    tmp = 0;
                 }
             }
         }

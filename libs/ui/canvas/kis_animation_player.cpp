@@ -567,7 +567,6 @@ void KisAnimationPlayer::previousKeyframe()
 void KisAnimationPlayer::nextKeyframe()
 {
     if (!m_d->canvas) return;
-
     KisNodeSP node = m_d->canvas->viewManager()->activeNode();
     if (!node) return;
 
@@ -584,7 +583,17 @@ void KisAnimationPlayer::nextKeyframe()
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
+        // Jump to next key...
         animation->requestTimeSwitchWithUndo(destinationTime);
+    } else {
+        // Jump ahead by estimated timing...
+        const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
+        const int previousKeyTime = keyframes->previousKeyframeTime(activeKeyTime);
+
+        if (previousKeyTime != -1) {
+            const int timing = activeKeyTime - previousKeyTime;
+            animation->requestTimeSwitchWithUndo(currentTime + timing);
+        }
     }
 }
 

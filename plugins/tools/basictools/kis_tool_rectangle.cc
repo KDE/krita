@@ -72,6 +72,7 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
         const qreal docRoundCornersX = convertToPt(roundCornersX);
         const qreal docRoundCornersY = convertToPt(roundCornersY);
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r, docRoundCornersX, docRoundCornersY);
+        shape->rotate(qRadiansToDegrees(getRotationAngle()));
 
         KoShapeStrokeSP border;
         if (strokeStyle() != KisToolShapeUtils::StrokeStyleNone) {

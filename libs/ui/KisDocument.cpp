@@ -237,6 +237,8 @@ private:
 
     void redoImpl() {
         KisImageWSP image = this->image();
+        image->requestRedoDuringStroke();
+
         if(image->tryBarrierLock()) {
             KUndo2Stack::redo();
             image->unlock();

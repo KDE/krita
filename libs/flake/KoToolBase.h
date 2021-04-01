@@ -328,6 +328,13 @@ public Q_SLOTS:
     virtual void requestUndoDuringStroke();
 
     /**
+     * Called when the user requested redo while the stroke is active. If your
+     * tool supports redo and maintains an intermediate state which can
+     * interfere with redo override this method to handle the state.
+     */
+    virtual void requestRedoDuringStroke();
+
+    /**
      * Called when the user requested the cancellation of the current
      * stroke. If you tool supports cancelling, override this method
      * and do the needed work there

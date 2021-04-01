@@ -152,6 +152,9 @@ protected Q_SLOTS:
     void requestUndoDuringStroke();
 
     /// Forwarded to the current KoToolBase
+    void requestRedoDuringStroke();
+
+    /// Forwarded to the current KoToolBase
     void requestStrokeCancellation();
 
     /// Forwarded to the current KoToolBase

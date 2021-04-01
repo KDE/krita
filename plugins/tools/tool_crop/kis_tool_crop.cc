@@ -189,10 +189,15 @@ void KisToolCrop::deactivate()
 
 void KisToolCrop::requestStrokeEnd()
 {
-    cancelStroke();
+    if (m_haveCropSelection) crop();
 }
 
 void KisToolCrop::requestStrokeCancellation()
+{
+    cancelStroke();
+}
+
+void KisToolCrop::requestRedoDuringStroke()
 {
     cancelStroke();
 }

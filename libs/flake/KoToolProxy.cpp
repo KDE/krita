@@ -473,6 +473,13 @@ void KoToolProxy::requestUndoDuringStroke()
     }
 }
 
+void KoToolProxy::requestRedoDuringStroke()
+{
+    if (d->activeTool) {
+        d->activeTool->requestRedoDuringStroke();
+    }
+}
+
 void KoToolProxy::requestStrokeCancellation()
 {
     if (d->activeTool) {

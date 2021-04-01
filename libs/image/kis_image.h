@@ -888,6 +888,15 @@ Q_SIGNALS:
     void sigUndoDuringStrokeRequested();
 
     /**
+     * Emitted when the UI has requested the redo of the last undo
+     * operation.
+     *
+     * If your tool supports undoing/redoing part of its work, just listen
+     * to this signal and undo when it comes
+     */
+    void sigRedoDuringStrokeRequested();
+
+    /**
      * Emitted when the UI has requested the cancellation of
      * the stroke. The point is, we cannot cancel the stroke
      * without its creator knowing about it (which most probably
@@ -1169,6 +1178,18 @@ public Q_SLOTS:
      * its last action.
      */
     void requestUndoDuringStroke();
+
+    /**
+     * This method is called by the UI (*not* by the creator of the
+     * stroke) when it thinks the current stroke should redo its last
+     * undo, for example, when the user presses Ctrl+Shift+Z while some
+     * stroke is active.
+     *
+     * If the creator of the stroke supports undoing/redoing of an
+     * intermediate actions, it will be notified about this request and
+     * can undo its last action.
+     */
+    void requestRedoDuringStroke();
 
     /**
      * This method is called by the UI (*not* by the creator of the

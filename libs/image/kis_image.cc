@@ -1951,6 +1951,11 @@ void KisImage::requestUndoDuringStroke()
     emit sigUndoDuringStrokeRequested();
 }
 
+void KisImage::requestRedoDuringStroke()
+{
+    emit sigRedoDuringStrokeRequested();
+}
+
 void KisImage::requestStrokeCancellation()
 {
     if (!m_d->tryCancelCurrentStrokeAsync()) {

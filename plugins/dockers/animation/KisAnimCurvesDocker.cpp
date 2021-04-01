@@ -409,10 +409,13 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
                                                       activeIndex.data(KisAnimCurvesModel::ScalarValueRole).toReal() : 0.0f);
         }
 
+        connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));
         connect(m_d->titlebar->transport, SIGNAL(playPause()), m_d->canvas->animationPlayer(), SLOT(playPause()));
         connect(m_d->titlebar->transport, SIGNAL(forward()), m_d->canvas->animationPlayer(), SLOT(nextFrame()));
+        connect(m_d->titlebar->transport, SIGNAL(skipForward()), m_d->canvas->animationPlayer(), SLOT(nextKeyframe()));
+
         connect(m_d->titlebar->sbFrameRegister, SIGNAL(valueChanged(int)), m_d->canvas->animationPlayer(), SLOT(seek(int)));
         connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), m_d->canvas->animationPlayer(), SLOT(setPlaybackSpeedPercent(int)));
 

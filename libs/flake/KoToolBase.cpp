@@ -375,6 +375,11 @@ void KoToolBase::requestUndoDuringStroke()
     requestStrokeCancellation();
 }
 
+
+void KoToolBase::requestRedoDuringStroke()
+{
+}
+
 void KoToolBase::requestStrokeCancellation()
 {
 }

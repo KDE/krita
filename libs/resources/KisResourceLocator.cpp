@@ -340,12 +340,13 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     // And the database
     QSqlDatabase::database().transaction();
-    return KisResourceCacheDb::addResource(storage,
+    const bool result = KisResourceCacheDb::addResource(storage,
                                            storage->timeStampForResource(resourceType, resource->filename()),
                                            resource,
                                            resourceType);
     QSqlDatabase::database().commit();
 
+    return result;
 }
 
 bool KisResourceLocator::updateResource(const QString &resourceType, const KoResourceSP resource)

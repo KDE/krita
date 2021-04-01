@@ -73,6 +73,8 @@ public:
     static KisReferenceImage * fromXml(const QDomElement &elem);
     bool loadImage(KoStore *store);
 
+    QImage getImage();
+
 private:
     struct Private;
     QSharedDataPointer<Private> d;

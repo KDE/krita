@@ -395,6 +395,11 @@ bool KisReferenceImage::loadImage(KoStore *store)
     return store->close();
 }
 
+QImage KisReferenceImage::getImage()
+{
+    return d->image;
+}
+
 KoShape *KisReferenceImage::cloneShape() const
 {
     return new KisReferenceImage(*this);

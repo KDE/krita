@@ -39,6 +39,8 @@ public:
 
     void deleteSelection() override;
 
+    QMenu* popupActionsMenu() override;
+
 protected:
     QList<QPointer<QWidget>> createOptionWidgets() override;
     QWidget *createOptionWidget() override;
@@ -61,6 +63,11 @@ public Q_SLOTS:
 
     void slotNodeAdded(KisNodeSP node);
     void slotSelectionChanged();
+
+    void cut() override;
+    void copy() const override;
+    bool paste() override;
+
 
 private:
     friend class ToolReferenceImagesWidget;

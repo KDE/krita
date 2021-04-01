@@ -28,6 +28,8 @@
 #include <KisDocument.h>
 #include <KisReferenceImagesLayer.h>
 #include <kis_image.h>
+#include "QClipboard"
+#include "kis_action.h"
 
 #include "ToolReferenceImagesWidget.h"
 #include "KisReferenceImageCollection.h"
@@ -283,6 +285,72 @@ void ToolReferenceImages::deleteSelection()
     }
 }
 
+QMenu* ToolReferenceImages::popupActionsMenu()
+{
+    if (m_contextMenu) {
+        m_contextMenu->clear();
+        m_contextMenu->addSection(i18n("Reference Image Actions"));
+        m_contextMenu->addSeparator();
+
+        QMenu *transform = m_contextMenu->addMenu(i18n("Transform"));
+
+        transform->addAction(action("object_transform_rotate_90_cw"));
+        transform->addAction(action("object_transform_rotate_90_ccw"));
+        transform->addAction(action("object_transform_rotate_180"));
+        transform->addSeparator();
+        transform->addAction(action("object_transform_mirror_horizontally"));
+        transform->addAction(action("object_transform_mirror_vertically"));
+        transform->addSeparator();
+        transform->addAction(action("object_transform_reset"));
+
+        m_contextMenu->addSeparator();
+
+        KisAction* cut = new KisAction(i18n("Cut"));
+        cut->setIcon(KisIconUtils::loadIcon("edit-cut"));
+        KisAction* copy = new KisAction(i18n("Copy"));
+        copy->setIcon(KisIconUtils::loadIcon("edit-copy"));
+        KisAction* paste = new KisAction(i18n("Paste"));
+        paste->setIcon(KisIconUtils::loadIcon("edit-paste"));
+
+        connect(cut,SIGNAL(triggered()),this,SLOT(cut()));
+        connect(copy,SIGNAL(triggered()),this,SLOT(copy()));
+        connect(paste,SIGNAL(triggered()),this,SLOT(paste()));
+
+        m_contextMenu->addAction(cut);
+        m_contextMenu->addAction(copy);
+        m_contextMenu->addAction(paste);
+
+        m_contextMenu->addSeparator();
+
+        m_contextMenu->addAction(action("object_order_front"));
+        m_contextMenu->addAction(action("object_order_raise"));
+        m_contextMenu->addAction(action("object_order_lower"));
+        m_contextMenu->addAction(action("object_order_back"));
+    }
+
+    return m_contextMenu.data();
+}
+
+void ToolReferenceImages::cut()
+{
+    copy();
+    deleteSelection();
+}
+
+void ToolReferenceImages::copy() const
+{
+    QList<KoShape *> shapes = koSelection()->selectedShapes();
+    KoShape* shape = shapes.at(0);
+    KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+    QClipboard *cb = QApplication::clipboard();
+    cb->setImage(reference->getImage());
+}
+
+bool ToolReferenceImages::paste()
+{
+    pasteReferenceImage();
+    return true;
+}
 KisDocument *ToolReferenceImages::document() const
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

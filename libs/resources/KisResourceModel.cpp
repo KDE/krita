@@ -472,8 +472,6 @@ void KisAllResourcesModel::addStorage(const QString &location)
     endResetModel();
 }
 
-
-
 void KisAllResourcesModel::removeStorage(const QString &location)
 {
     Q_UNUSED(location)
@@ -494,7 +492,6 @@ KisResourceModel::KisResourceModel(const QString &type, QObject *parent)
     , d(new Private)
 {
     setSourceModel(KisResourceModelProvider::resourceModel(type));
-    setDynamicSortFilter(true);
 }
 
 KisResourceModel::~KisResourceModel()
@@ -557,6 +554,9 @@ bool KisResourceModel::setResourceInactive(const QModelIndex &index)
     if (source) {
         return source->setResourceInactive(mapToSource(index));
     }
+    if (d->resourceFilter != KisResourceModel::ResourceFilter::ShowAllResources) {
+        invalidate();
+    }
     return false;
 }
 
@@ -567,6 +567,7 @@ KoResourceSP KisResourceModel::importResourceFile(const QString &filename, const
     if (source) {
         res = source->importResourceFile(filename, storageId);
     }
+    invalidate();
     return res;
 }
 
@@ -576,6 +577,7 @@ bool KisResourceModel::addResource(KoResourceSP resource, const QString &storage
     if (source) {
         return source->addResource(resource, storageId);
     }
+    invalidate();
     return false;
 }
 
@@ -623,6 +625,7 @@ bool KisResourceModel::filterAcceptsColumn(int /*source_column*/, const QModelIn
 bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
+
     if (idx.isValid()) {
         int id = idx.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 

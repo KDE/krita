@@ -362,7 +362,8 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         }
         m_d->externalSource.clear();
 
-        m_d->previewLevelOfDetail = calculatePreferredLevelOfDetail(srcRect);
+        const QRect imageBoundsRect = m_d->imageRoot->projection()->defaultBounds()->bounds();
+        m_d->previewLevelOfDetail = calculatePreferredLevelOfDetail(srcRect & imageBoundsRect);
 
         if (m_d->previewLevelOfDetail > 0) {
             for (auto it = m_d->prevDirtyRects.begin(); it != m_d->prevDirtyRects.end(); ++it) {

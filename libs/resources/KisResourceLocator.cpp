@@ -218,6 +218,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         if (!q.prepare("SELECT resources.id\n"
                        ",      versioned_resources.version\n"
                        ",      versioned_resources.md5sum\n"
+                       ",      resources.name\n"
                        "FROM   resources\n"
                        ",      storages\n"
                        ",      resource_types\n"
@@ -253,6 +254,9 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
 
         resource->setMD5(QByteArray::fromHex(q.value(2).toByteArray()));
         Q_ASSERT(!resource->md5().isEmpty());
+
+        // To override resources that use the filename for the name, which is versioned, and we don't want the version number in the name
+        resource->setName(q.value(3).toString());;
     }
 
     if (!resource) {
@@ -265,9 +269,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
 
 KoResourceSP KisResourceLocator::resourceForId(int resourceId)
 {
-
     ResourceStorage rs = getResourceStorage(resourceId);
-
     KoResourceSP r = resource(rs.storageLocation, rs.resourceType, rs.resourceFileName);
     return r;
 }
@@ -296,6 +298,7 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
     }
 
     KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f, KisGlobalResourcesInterface::instance());
+
     if (!resource) {
         qWarning() << "Could not import" << fileName << ": resource doesn't load.";
         return nullptr;

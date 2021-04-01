@@ -81,7 +81,7 @@ namespace KisLayerUtils
     void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode);
 
     struct KRITAIMAGE_EXPORT SwitchFrameCommand : public KisCommandUtils::FlipFlopCommand {
-        struct SharedStorage {
+        struct KRITAIMAGE_EXPORT SharedStorage {
             /**
              * For some reason the absence of a destructor in the SharedStorage
              * makes Krita crash on exit. Seems like some compiler weirdness... (DK)

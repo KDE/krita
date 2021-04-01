@@ -217,6 +217,9 @@ void KisToolProxy::setActiveTool(KoToolBase *tool)
 
 void KisToolProxy::activateToolAction(KisTool::ToolAction action)
 {
+    if (!action) {
+        return;
+    }
     KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
 
     if (activeTool) {

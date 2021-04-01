@@ -159,6 +159,7 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
 {
     if (m_patternChooserPopup) delete m_patternChooserPopup;
     m_patternChooserPopup = new QWidget(m_patternWidget);
+    m_patternChooserPopup->setMinimumSize(450, 400);
     m_patternChooserPopup->setObjectName("pattern_chooser_popup");
     QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup);
     l2->setObjectName("patternpopuplayout");
@@ -171,6 +172,7 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
 
     m_patternChooser = new KisPatternChooser(m_patternChooserPopup);
     m_patternChooser->setFont(m_font);
+    m_patternChooser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QWidget *patternChooserPage = new QWidget(m_patternChooserPopup);
     QHBoxLayout *patternChooserPageLayout  = new QHBoxLayout(patternChooserPage);
     patternChooserPageLayout->addWidget(m_patternChooser);

@@ -31,13 +31,7 @@ public:
     }
 
     KoResourceSP resourceForName(const QString& name) const override {
-
-        qDebug() << "GlobalResourceSource::resourceForName" << name;
-
         KoResourceSP res = m_model->resourceForName(name);
-
-        qDebug() << "\t" << res;
-
         return res;
     }
 

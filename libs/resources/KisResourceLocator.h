@@ -169,9 +169,9 @@ private:
      * @param resourceType
      * @param fileName
      * @param storageLocation: optional, the storage where the resource will be stored. Empty means in the default Folder storage.
-     * @return
+     * @return the imported resource, which has been added to the database and the cache
      */
-    bool importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation = QString());
+    KoResourceSP importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation = QString());
 
     /**
      * @brief addResource adds the given resource to the database and potentially a storage

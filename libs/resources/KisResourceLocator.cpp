@@ -286,35 +286,25 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
     return KisResourceCacheDb::setResourceActive(resourceId, active);
 }
 
-bool KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation)
+KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation)
 {
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fileName));
     QFile f(fileName);
     if (!f.open(QFile::ReadOnly)) {
         qWarning() << "Could not open" << fileName << "for loading";
-        return false;
+        return nullptr;
     }
 
     KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f, KisGlobalResourcesInterface::instance());
     if (!resource) {
         qWarning() << "Could not import" << fileName << ": resource doesn't load.";
-        return false;
+        return nullptr;
     }
 
-    resource->setVersion(0);
-
-    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
-    Q_ASSERT(storage);
-    if (!storage->addResource(resource)) {
-        qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
-        return false;
+    if (addResource(resourceType, resource, storageLocation)) {
+        return resource;
     }
-
-    bool r = KisResourceCacheDb::addResource(folderStorage(), folderStorage()->timeStampForResource(resource->resourceType().first, resource->filename()), resource, resourceType);
-
-    Q_ASSERT(resource->resourceId() >= 0);
-
-    return r;
+    return nullptr;
 }
 
 bool KisResourceLocator::addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation)
@@ -343,11 +333,15 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
+    d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
+
     // And the database
+    QSqlDatabase::database().transaction();
     return KisResourceCacheDb::addResource(storage,
                                            storage->timeStampForResource(resourceType, resource->filename()),
                                            resource,
                                            resourceType);
+    QSqlDatabase::database().commit();
 
 }
 

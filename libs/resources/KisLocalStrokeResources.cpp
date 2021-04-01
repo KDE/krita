@@ -30,6 +30,7 @@ public:
         return it != m_cachedResources.end() ? *it : KoResourceSP();
     }
     KoResourceSP resourceForName(const QString& name) const override {
+        qDebug() << "LocalResourceSource::resourceForName" << name;
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),
                                [this, name] (KoResourceSP res) {

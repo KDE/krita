@@ -7,6 +7,7 @@
 
 #include <QGlobalStatic>
 #include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
 
 #include <kis_debug.h>
 
@@ -17,31 +18,39 @@ namespace {
 class GlobalResourcesSource : public KisResourcesInterface::ResourceSourceAdapter
 {
 public:
-    GlobalResourcesSource(KisResourceModel *model)
+    GlobalResourcesSource(KisAllResourcesModel *model)
         : m_model(model)
     {}
 
     ~GlobalResourcesSource() override
     {
-        delete m_model;
     }
-
 
     KoResourceSP resourceForFilename(const QString& filename) const override {
         return m_model->resourceForFilename(filename);
     }
+
     KoResourceSP resourceForName(const QString& name) const override {
-        return m_model->resourceForName(name);
+
+        qDebug() << "GlobalResourceSource::resourceForName" << name;
+
+        KoResourceSP res = m_model->resourceForName(name);
+
+        qDebug() << "\t" << res;
+
+        return res;
     }
+
     KoResourceSP resourceForMD5(const QByteArray& md5) const override {
         return m_model->resourceForMD5(md5);
     }
+
     KoResourceSP fallbackResource() const override {
         return m_model->rowCount() > 0 ? m_model->resourceForIndex(m_model->index(0, 0)) : KoResourceSP();
     }
 
 private:
-    KisResourceModel *m_model;
+    KisAllResourcesModel *m_model;
 };
 }
 
@@ -73,7 +82,7 @@ KisResourcesInterfaceSP KisGlobalResourcesInterface::instance()
 KisResourcesInterface::ResourceSourceAdapter *KisGlobalResourcesInterface::createSourceImpl(const QString &type) const
 {
     KisResourcesInterface::ResourceSourceAdapter *source =
-        new GlobalResourcesSource(new KisResourceModel(type));
+        new GlobalResourcesSource(KisResourceModelProvider::resourceModel(type));
 
     KIS_ASSERT(source);
     return source;

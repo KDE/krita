@@ -32,11 +32,18 @@ svn_command = "{}/subdirs".format(url)
 # construct the revision regex
 rev = re.compile(r'Last Changed Rev: ([0-9]+)')
 
+# construct the system-dependent neutral locale
+env = os.environ
+if os.name == 'nt':
+    env["LANG"] = "English"
+else:
+    env["LANG"] = "en_US.UTF-8"
+
 subdirs = subprocess.run(["svn", "cat", svn_command], stdout=subprocess.PIPE)
 for subdir in subdirs.stdout.decode('utf-8').strip().split('\n'):
     po_url = "{}/{}/{}/krita.po".format(url, subdir, krita_location)
 
-    status = subprocess.run(["svn", "info", po_url], env={'LC_ALL': 'en_US.UTF-8'},
+    status = subprocess.run(["svn", "info", po_url], env=env,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     status_metadata = status.stdout.decode('latin-1')

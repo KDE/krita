@@ -53,7 +53,7 @@ struct Q_DECL_HIDDEN KisFilterConfiguration::Private {
 };
 
 KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
-        : d(new Private(name, version, resourcesInterface))
+    : d(new Private(name, version, resourcesInterface))
 {
 }
 
@@ -63,8 +63,8 @@ KisFilterConfigurationSP KisFilterConfiguration::clone() const
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
-        : KisPropertiesConfiguration(rhs)
-        , d(new Private(*rhs.d))
+    : KisPropertiesConfiguration(rhs)
+    , d(new Private(*rhs.d))
 {
 }
 
@@ -202,12 +202,12 @@ bool KisFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) co
     const KisFilterConfiguration *otherConfig = dynamic_cast<const KisFilterConfiguration *>(rhs);
 
     return otherConfig
-        && KisPropertiesConfiguration::compareTo(rhs)
-        && name() == otherConfig->name()
-        && version() == otherConfig->version()
-        && channelFlags() == otherConfig->channelFlags()
-        && curve() == otherConfig->curve()
-        && curves() == otherConfig->curves();
+            && KisPropertiesConfiguration::compareTo(rhs)
+            && name() == otherConfig->name()
+            && version() == otherConfig->version()
+            && channelFlags() == otherConfig->channelFlags()
+            && curve() == otherConfig->curve()
+            && curves() == otherConfig->curves();
 }
 
 QBitArray KisFilterConfiguration::channelFlags() const

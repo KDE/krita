@@ -14,14 +14,14 @@
 #include "KisFastDeviceProcessingUtils.h"
 #include "KisRegion.h"
 #include "kis_wrapped_rect.h"
-
+#include <KoOptimizedRgbPixelDataScalerU8ToU16Factory.h>
 
 struct KisOverlayPaintDeviceWrapper::Private
 {
     KisPaintDeviceSP source;
     QVector<KisPaintDeviceSP> overlays;
     KisRectsGrid grid;
-    bool usePreciseOverlay = false;
+    QScopedPointer<KoOptimizedRgbPixelDataScalerU8ToU16Base> scaler;
 };
 
 
@@ -43,10 +43,13 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
                     Integer16BitsColorDepthID.id(),
                     overlayColorSpace->profile());
 
-        m_d->usePreciseOverlay = true;
-    }
+        if (overlayColorSpace->colorModelId() == RGBAColorModelID) {
+            m_d->scaler.reset(KoOptimizedRgbPixelDataScalerU8ToU16Factory::create());
+        }
 
-    if (!m_d->usePreciseOverlay && mode == LazyPreciseMode) return;
+    } else if (mode == LazyPreciseMode && numOverlays == 1) {
+        return;
+    }
 
     for (int i = 0; i < numOverlays; i++) {
         KisPaintDeviceSP overlay = new KisPaintDevice(overlayColorSpace);
@@ -70,42 +73,6 @@ KisPaintDeviceSP KisOverlayPaintDeviceWrapper::source() const
 KisPaintDeviceSP KisOverlayPaintDeviceWrapper::overlay(int index) const
 {
     return !m_d->overlays.isEmpty() ? m_d->overlays[index] : m_d->source;
-}
-
-namespace {
-
-struct WriteProcessor {
-    WriteProcessor(int _channelCount) : channelCount(_channelCount) {}
-
-    ALWAYS_INLINE
-    void operator()(const quint8 *srcPtr, quint8 *dstPtr) {
-        const quint16 *srcChannel = reinterpret_cast<const quint16*>(srcPtr);
-        quint8 *dstChannel = reinterpret_cast<quint8*>(dstPtr);
-
-        for (int k = 0; k < channelCount; k++) {
-            *(dstChannel + k) = KoColorSpaceMaths<quint16, quint8>::scaleToA(*(srcChannel + k));
-        }
-    }
-
-    const int channelCount;
-};
-
-struct ReadProcessor {
-    ReadProcessor(int _channelCount) : m_channelCount(_channelCount) {}
-
-    ALWAYS_INLINE
-    void operator()(const quint8 *srcPtr, quint8 *dstPtr) {
-        const quint8 *srcChannel = reinterpret_cast<const quint8*>(srcPtr);
-        quint16 *dstChannel = reinterpret_cast<quint16*>(dstPtr);
-
-        for (int k = 0; k < m_channelCount; k++) {
-            *(dstChannel + k) = KoColorSpaceMaths<quint8, quint16>::scaleToA(*(srcChannel + k));
-        }
-    }
-
-    const int m_channelCount;
-};
-
 }
 
 void KisOverlayPaintDeviceWrapper::readRect(const QRect &rc)
@@ -143,7 +110,7 @@ void KisOverlayPaintDeviceWrapper::readRects(const QVector<QRect> &rects)
 
     //TODO: implement synchronization of the offset between the grid and devices
 
-    if (!m_d->usePreciseOverlay) {
+    if (!m_d->scaler) {
         Q_FOREACH (KisPaintDeviceSP overlay, m_d->overlays) {
             Q_FOREACH (const QRect &rect, rectsToRead) {
                 const QRect croppedRect = rect & cropRect;
@@ -155,7 +122,6 @@ void KisOverlayPaintDeviceWrapper::readRects(const QVector<QRect> &rects)
     } else {
         KisPaintDeviceSP overlay = m_d->overlays.first();
 
-        const int channelCount = overlay->colorSpace()->channelCount();
         KisRandomConstAccessorSP srcIt = m_d->source->createRandomConstAccessorNG();
         KisRandomAccessorSP dstIt = overlay->createRandomAccessorNG();
 
@@ -165,11 +131,16 @@ void KisOverlayPaintDeviceWrapper::readRects(const QVector<QRect> &rects)
 
             if (!croppedRect.isEmpty()) {
 
-                KritaUtils::processTwoDevices(croppedRect,
-                                              srcIt, dstIt,
-                                              m_d->source->pixelSize(),
-                                              overlay->pixelSize(),
-                                              ReadProcessor(channelCount));
+                KritaUtils::processTwoDevicesWithStrides(croppedRect,
+                                                         srcIt, dstIt,
+                    [this] (const quint8 *src, int srcRowStride,
+                            quint8 *dst, int dstRowStride,
+                            int numRows, int numColumns) {
+
+                    m_d->scaler->convertU8ToU16(src, srcRowStride,
+                                                dst, dstRowStride,
+                                                numRows, numColumns);
+                });
 
                 for (auto it = std::next(m_d->overlays.begin()); it != m_d->overlays.end(); ++it) {
                     KisPaintDeviceSP otherOverlay = *it;
@@ -187,24 +158,29 @@ void KisOverlayPaintDeviceWrapper::writeRects(const QVector<QRect> &rects, int i
     if (rects.isEmpty()) return;
     if (m_d->overlays.isEmpty()) return;
 
-    if (!m_d->usePreciseOverlay) {
+    if (!m_d->scaler) {
         Q_FOREACH (const QRect &rc, rects) {
             KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->grid.contains(rc));
             KisPainter::copyAreaOptimized(rc.topLeft(), m_d->overlays[index], m_d->source, rc);
         }
     } else {
         KisPaintDeviceSP overlay = m_d->overlays[index];
-        const int channelCount = overlay->channelCount();
+
 
         KisRandomConstAccessorSP srcIt = overlay->createRandomConstAccessorNG();
         KisRandomAccessorSP dstIt = m_d->source->createRandomAccessorNG();
 
         Q_FOREACH (const QRect &rc, rects) {
-            KritaUtils::processTwoDevices(rc,
-                                          srcIt, dstIt,
-                                          overlay->pixelSize(),
-                                          m_d->source->pixelSize(),
-                                          WriteProcessor(channelCount));
+            KritaUtils::processTwoDevicesWithStrides(rc,
+                                                     srcIt, dstIt,
+                [this] (const quint8 *src, int srcRowStride,
+                        quint8 *dst, int dstRowStride,
+                        int numRows, int numColumns) {
+
+                m_d->scaler->convertU16ToU8(src, srcRowStride,
+                                            dst, dstRowStride,
+                                            numRows, numColumns);
+            });
         }
     }
 }

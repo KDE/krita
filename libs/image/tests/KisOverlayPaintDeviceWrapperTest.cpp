@@ -70,4 +70,26 @@ void KisOverlayPaintDeviceWrapperTest::test()
 
 }
 
+void KisOverlayPaintDeviceWrapperTest::benchmark()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    KisOverlayPaintDeviceWrapper wrapper(dev, 1, KisOverlayPaintDeviceWrapper::PreciseMode);
+
+    KoColor colorR(Qt::red, dev->colorSpace());
+    KoColor colorG(Qt::green, dev->colorSpace());
+    KoColor colorB(Qt::blue, dev->colorSpace());
+
+    dev->fill(QRect(0,0,10000,10000), colorR);
+    dev->fill(QRect(0,0,100,100), colorG);
+    dev->fill(QRect(9900,9900,100,100), colorB);
+
+    QElapsedTimer t;
+    t.start();
+    wrapper.readRect(QRect(0,0,10000, 10000));
+    qDebug() << "Read time (ms):" << t.restart();
+    wrapper.writeRect(QRect(0,0,10000, 10000));
+    qDebug() << "Write time (ms):" << t.restart();
+}
+
 KISTEST_MAIN(KisOverlayPaintDeviceWrapperTest)

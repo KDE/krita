@@ -16,6 +16,7 @@ class KisOverlayPaintDeviceWrapperTest : public QObject
 
 private Q_SLOTS:
     void test();
+    void benchmark();
 };
 
 #endif // KISOVERLAYPAINTDEVICEWRAPPERTEST_H

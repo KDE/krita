@@ -293,4 +293,59 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
     }
 }
 
+#include <QScopedPointer>
+#include <KoOptimizedRgbPixelDataScalerU8ToU16Factory.h>
+#include <QByteArray>
+
+void KoRgbU8ColorSpaceTester::testScaler()
+{
+    QScopedPointer<KoOptimizedRgbPixelDataScalerU8ToU16Base> scaler(KoOptimizedRgbPixelDataScalerU8ToU16Factory::create());
+
+    const int numPixels = 31;
+    QByteArray srcBytes(1 + numPixels * 4 * sizeof(quint8), 0);
+    QByteArray dstBytes(1 + numPixels * 4 * sizeof(quint16), 0);
+
+    const quint8 pattern[] = {0, 128, 192, 255};
+    const quint16 expectedDstPattern[] = {0, 32896, 49344, 65535};
+
+    quint8 *unalignedSrcPtr = reinterpret_cast<quint8*>(srcBytes.data() + 1);
+    quint8 *unalignedDstPtr = reinterpret_cast<quint8*>(dstBytes.data() + 1);
+
+
+    for (int i = 0; i < numPixels * 4; i++) {
+        unalignedSrcPtr[i] = pattern[i % 4];
+    }
+
+    scaler->convertU8ToU16(unalignedSrcPtr, 1, unalignedDstPtr, 1, 1, numPixels);
+
+    const quint8 *srcPtr = reinterpret_cast<const quint8*>(unalignedSrcPtr);
+    const quint16 *dstPtr = reinterpret_cast<const quint16*>(unalignedDstPtr);
+
+    for (int i = 0; i < numPixels; i++) {
+//        qDebug() << i
+//                 << "S" << srcPtr[i * 4 + 0] << srcPtr[i * 4 + 1] << srcPtr[i * 4 + 2] << srcPtr[i * 4 + 3]
+//                 << "D" << dstPtr[i * 4 + 0] << dstPtr[i * 4 + 1] << dstPtr[i * 4 + 2] << dstPtr[i * 4 + 3];
+
+        QCOMPARE(dstPtr[i * 4 + 0], expectedDstPattern[0]);
+        QCOMPARE(dstPtr[i * 4 + 1], expectedDstPattern[1]);
+        QCOMPARE(dstPtr[i * 4 + 2], expectedDstPattern[2]);
+        QCOMPARE(dstPtr[i * 4 + 3], expectedDstPattern[3]);
+    }
+
+    scaler->convertU16ToU8(unalignedDstPtr, 1, unalignedSrcPtr, 1, 1, numPixels);
+
+    for (int i = 0; i < numPixels; i++) {
+//        qDebug() << i
+//                 << "S" << srcPtr[i * 4 + 0] << srcPtr[i * 4 + 1] << srcPtr[i * 4 + 2] << srcPtr[i * 4 + 3]
+//                 << "D" << dstPtr[i * 4 + 0] << dstPtr[i * 4 + 1] << dstPtr[i * 4 + 2] << dstPtr[i * 4 + 3];
+
+        QCOMPARE(srcPtr[i * 4 + 0], pattern[0]);
+        QCOMPARE(srcPtr[i * 4 + 1], pattern[1]);
+        QCOMPARE(srcPtr[i * 4 + 2], pattern[2]);
+        QCOMPARE(srcPtr[i * 4 + 3], pattern[3]);
+    }
+
+
+}
+
 QTEST_GUILESS_MAIN(KoRgbU8ColorSpaceTester)

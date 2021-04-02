@@ -128,7 +128,7 @@ typedef enum ORIENTATION_PREFERENCE {
             ORIENTATION_PREFERENCE orientation
             );
 #else
-    typedef BOOL (*pSetDisplayAutoRotationPreferences_t)(
+    typedef BOOL (WINAPI *pSetDisplayAutoRotationPreferences_t)(
         ORIENTATION_PREFERENCE orientation
         );
 #endif()

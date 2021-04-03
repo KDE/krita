@@ -552,6 +552,8 @@ if(WIN32)
     if(MSVC)
         # C4522: 'class' : multiple assignment operators specified
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4522")
+        # libs\ui\dialogs\kis_about_application.cpp : fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
     endif()
 endif()
 

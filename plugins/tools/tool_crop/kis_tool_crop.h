@@ -114,6 +114,7 @@ public Q_SLOTS:
 
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
+    void requestUndoDuringStroke() override;
     void requestRedoDuringStroke() override;
 
     void crop();

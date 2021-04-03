@@ -21,6 +21,7 @@ struct KisOverlayPaintDeviceWrapper::Private
     KisPaintDeviceSP source;
     QVector<KisPaintDeviceSP> overlays;
     KisRectsGrid grid;
+    bool usePreciseMode = false;
     QScopedPointer<KoOptimizedRgbPixelDataScalerU8ToU16Base> scaler;
 };
 
@@ -47,7 +48,10 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
             m_d->scaler.reset(KoOptimizedRgbPixelDataScalerU8ToU16Factory::create());
         }
 
-    } else if (mode == LazyPreciseMode && numOverlays == 1) {
+        m_d->usePreciseMode = true;
+    }
+
+    if (!m_d->usePreciseMode && mode == LazyPreciseMode && numOverlays == 1) {
         return;
     }
 
@@ -188,4 +192,28 @@ void KisOverlayPaintDeviceWrapper::writeRects(const QVector<QRect> &rects, int i
 const KoColorSpace *KisOverlayPaintDeviceWrapper::overlayColorSpace() const
 {
     return !m_d->overlays.isEmpty() ? m_d->overlays.first()->colorSpace() : m_d->source->colorSpace();
+}
+
+KisPaintDeviceSP KisOverlayPaintDeviceWrapper::createPreciseCompositionSourceDevice()
+{
+    KisPaintDeviceSP result;
+
+    if (!m_d->usePreciseMode) {
+        result = source()->createCompositionSourceDevice();
+    } else {
+        const KoColorSpace *compositionColorSpace =
+            m_d->source->compositionSourceColorSpace();
+
+        const KoColorSpace *preciseCompositionColorSpace =
+                KoColorSpaceRegistry::instance()->colorSpace(
+                    compositionColorSpace->colorModelId().id(),
+                    Integer16BitsColorDepthID.id(),
+                    compositionColorSpace->profile());
+
+        KisPaintDeviceSP device = new KisPaintDevice(preciseCompositionColorSpace);
+        device->setDefaultBounds(m_d->source->defaultBounds());
+        result = device;
+    }
+
+    return result;
 }

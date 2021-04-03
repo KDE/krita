@@ -30,7 +30,7 @@
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
 #include "kis_smudge_radius_option.h"
-#include "KisPrecisePaintDeviceWrapper.h"
+#include "KisOverlayPaintDeviceWrapper.h"
 
 class QPointF;
 
@@ -59,8 +59,8 @@ private:
     // Sets the m_maskDab _and m_maskDabRect
     void updateMask(const KisPaintInformation& info, const KisDabShape &shape, const QPointF &cursorPoint);
     KoColor getOverlayDullingFillColor(QPoint canvasLocalSamplePoint);
-    KoColor getDullingFillColor(const KisPaintInformation& info, KisPrecisePaintDeviceWrapper& activeWrapper, QPoint canvasLocalSamplePoint);
-    void mixSmudgePaintAt(const KisPaintInformation& info, KisPrecisePaintDeviceWrapper& activeWrapper, QRect srcDabRect, QPoint canvasLocalSamplePoint, bool useDullingMode);
+    KoColor getDullingFillColor(const KisPaintInformation& info, KisOverlayPaintDeviceWrapper& activeWrapper, QPoint canvasLocalSamplePoint);
+    void mixSmudgePaintAt(const KisPaintInformation& info, KisOverlayPaintDeviceWrapper& activeWrapper, QRect srcDabRect, QPoint canvasLocalSamplePoint, bool useDullingMode);
 
     inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
@@ -69,10 +69,10 @@ private:
     bool                      m_useNewEngine;
 
     KisImageWSP               m_image;
-    KisPrecisePaintDeviceWrapper m_precisePainterWrapper;
+    KisOverlayPaintDeviceWrapper m_precisePainterWrapper;
     KoColor                   m_paintColor;
     KisPaintDeviceSP          m_tempDev;
-    QScopedPointer<KisPrecisePaintDeviceWrapper> m_preciseImageDeviceWrapper;
+    QScopedPointer<KisOverlayPaintDeviceWrapper> m_preciseImageDeviceWrapper;
     QScopedPointer<KisPainter> m_backgroundPainter;
     QScopedPointer<KisPainter> m_smudgePainter;
     QScopedPointer<KisPainter> m_overlayPainter;

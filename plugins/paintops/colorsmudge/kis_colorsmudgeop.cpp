@@ -203,17 +203,14 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
         m_blendDevice->setRect(dstRect);
         m_blendDevice->lazyGrowBufferWithoutInitialization();
 
-
-
-
         if (colorRateOpacity > 0 &&
             m_useDullingMode &&
+            supportsFusedDullingBlending() &&
             m_smearOp->id() == COMPOSITE_OVER &&
             m_colorRateOp->id() == COMPOSITE_OVER) {
 
             blendInFusedBackgroundAndColorRateWithDulling(m_blendDevice,
                                                           src,
-                                                          m_paintColor,
                                                           srcRect, dstRect, canvasLocalSamplePoint, opacity, smudgeRateValue, colorRateValue);
 
         } else {
@@ -226,11 +223,7 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
             }
 
             if (colorRateOpacity > 0) {
-                m_colorRateOp->composite(m_blendDevice->data(), dstRect.width() * m_blendDevice->pixelSize(),
-                                         m_paintColor.data(), 0,
-                                         0, 0,
-                                         dstRect.height(), dstRect.width(),
-                                         colorRateOpacity);
+                blendInColorRate(colorRateOpacity, m_blendDevice, dstRect);
             }
         }
         dstPainter->bltFixedWithFixedSelection(dstRect.x(), dstRect.y(),
@@ -242,6 +235,20 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
 
     }
 
+    virtual bool supportsFusedDullingBlending() const {
+        return true;
+    }
+
+    virtual void blendInColorRate(quint8 colorRateOpacity,
+                                  KisFixedPaintDeviceSP dstDevice,
+                                  const QRect dstRect)
+    {
+        m_colorRateOp->composite(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
+                                 m_paintColor.data(), 0,
+                                 0, 0,
+                                 dstRect.height(), dstRect.width(),
+                                 colorRateOpacity);
+    }
 
     void blendInBackgroundWithSmearing(KisFixedPaintDeviceSP dst,
                                        KisPaintDeviceSP src,
@@ -303,7 +310,6 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
 
     void blendInFusedBackgroundAndColorRateWithDulling(KisFixedPaintDeviceSP dst,
                                                        KisPaintDeviceSP src,
-                                                       const KoColor &paintColor,
                                                        const QRect &srcRect, const QRect &dstRect,
                                                        const QPoint &canvasLocalSamplePoint,
                                                        qreal opacity,
@@ -319,7 +325,7 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
         KisCrossDeviceColorSamplerInt colorPicker(src, dullingFillColor);
         colorPicker.sampleColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
 
-        m_colorRateOp->composite(dullingFillColor.data(), 1, paintColor.data(), 1, 0, 0, 1, 1, colorRateOpacity);
+        m_colorRateOp->composite(dullingFillColor.data(), 1, m_paintColor.data(), 1, 0, 0, 1, 1, colorRateOpacity);
 
         src->readBytes(dst->data(), dstRect);
         m_smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
@@ -329,12 +335,12 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
                              smudgeRateOpacity);
     }
 
-
+protected:
+    const KoCompositeOp * m_colorRateOp;
 private:
     KoColor m_paintColor;
     KisFixedPaintDeviceSP m_blendDevice;
     const KoCompositeOp * m_smearOp;
-    const KoCompositeOp * m_colorRateOp;
     bool m_useDullingMode = true;
     KoColor m_preparedDullingColor;
 };
@@ -557,6 +563,130 @@ struct ColorSmudgeStrategyMask : public ColorSmudgeStrategyColorBased
     bool m_shouldPreserveOriginalDab = true;
 };
 
+struct ColorSmudgeStrategyStamp : public ColorSmudgeStrategyColorBased
+{
+    ColorSmudgeStrategyStamp(KisPainter *painter,
+                             bool smearAlpha,
+                             bool useDullingMode)
+        : ColorSmudgeStrategyColorBased(KoColor(Qt::black, painter->device()->colorSpace()),
+                                        useDullingMode)
+        , m_overlayDevice(new KisOverlayPaintDeviceWrapper(painter->device(), 1, KisOverlayPaintDeviceWrapper::LazyPreciseMode))
+        , m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
+        , m_origDab(new KisFixedPaintDevice(m_overlayDevice->overlayColorSpace())) // TODO: check compositionSourceColorSpace!
+    {
+        initializePainting(m_overlayDevice->overlayColorSpace(),
+                           smearAlpha,
+                           painter->compositeOp()->id());
+
+        m_projectionDevice = m_overlayDevice->overlay();
+
+        m_finalPainter.begin(m_projectionDevice);
+        m_finalPainter.setCompositeOp(COMPOSITE_COPY);
+        m_finalPainter.setSelection(painter->selection());
+        m_finalPainter.setChannelFlags(painter->channelFlags());
+        m_finalPainter.copyMirrorInformationFrom(painter);
+
+    }
+
+    void updateMask(KisDabCache *dabCache,
+                    const KisPaintInformation& info,
+                    const KisDabShape &shape,
+                    const QPointF &cursorPoint,
+                    QRect *dstDabRect) override
+
+    {
+
+        static KoColor color(Qt::black, m_origDab->colorSpace());
+
+        m_origDab = dabCache->fetchDab(m_origDab->colorSpace(),
+                                       color,
+                                       cursorPoint,
+                                       shape,
+                                       info,
+                                       1.0,
+                                       dstDabRect);
+
+        const int numPixels = m_origDab->bounds().width() * m_origDab->bounds().height();
+
+        m_maskDab->setRect(m_origDab->bounds());
+        m_maskDab->lazyGrowBufferWithoutInitialization();
+        m_origDab->colorSpace()->copyOpacityU8(m_origDab->data(), m_maskDab->data(), numPixels);
+
+        m_shouldPreserveOriginalDab = !dabCache->needSeparateOriginal();
+    }
+
+    QVector<QRect> paintDab(const QRect &srcRect, const QRect &dstRect,
+                            const QPoint &canvasLocalSamplePoint,
+                            qreal opacity,
+                            qreal colorRateValue,
+                            qreal smudgeRateValue,
+                            qreal lightnessStrengthValue) override
+    {
+        const QVector<QRect> mirroredRects = m_finalPainter.calculateAllMirroredRects(dstRect);
+
+        QVector<QRect> readRects;
+        readRects << mirroredRects;
+        readRects << srcRect;
+        m_overlayDevice->readRects(readRects);
+
+        blendBrush(&m_finalPainter,
+                   m_projectionDevice,
+                   m_maskDab,
+                   srcRect, dstRect,
+                   canvasLocalSamplePoint,
+                   opacity, smudgeRateValue, colorRateValue);
+
+        m_overlayDevice->writeRects(mirroredRects);
+
+        return mirroredRects;
+    }
+
+    void blendInColorRate(quint8 colorRateOpacity,
+                          KisFixedPaintDeviceSP dstDevice,
+                          const QRect dstRect) override
+    {
+        // TODO: check correctness for composition source device (transparency masks)
+        KIS_ASSERT_RECOVER_RETURN(*dstDevice->colorSpace() == *m_origDab->colorSpace());
+
+        m_colorRateOp->composite(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
+                                 m_origDab->data(), dstRect.width() * m_origDab->pixelSize(),
+                                 0, 0,
+                                 dstRect.height(), dstRect.width(),
+                                 colorRateOpacity);
+    }
+
+    bool supportsFusedDullingBlending() const override {
+        return false;
+    }
+
+    void blendInFusedBackgroundAndColorRateWithDulling(KisFixedPaintDeviceSP dst,
+                                                       KisPaintDeviceSP src,
+                                                       const QRect &srcRect, const QRect &dstRect,
+                                                       const QPoint &canvasLocalSamplePoint,
+                                                       qreal opacity,
+                                                       qreal smudgeRateValue,
+                                                       qreal colorRateValue)
+    {
+        Q_UNUSED(dst);
+        Q_UNUSED(src);
+        Q_UNUSED(srcRect);
+        Q_UNUSED(dstRect);
+        Q_UNUSED(canvasLocalSamplePoint);
+        Q_UNUSED(opacity);
+        Q_UNUSED(smudgeRateValue);
+        Q_UNUSED(colorRateValue);
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 &&"Not supported");
+    }
+
+    QScopedPointer<KisOverlayPaintDeviceWrapper> m_overlayDevice;
+    KisFixedPaintDeviceSP m_maskDab;
+    KisFixedPaintDeviceSP m_origDab;
+    KisPaintDeviceSP m_projectionDevice;
+    KisPainter m_finalPainter;
+    bool m_shouldPreserveOriginalDab = true;
+};
+
 KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_firstRun(true)
@@ -650,20 +780,22 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
         m_preciseImageDeviceWrapper.reset(new KisOverlayPaintDeviceWrapper(m_image->projection(), 1, KisOverlayPaintDeviceWrapper::LazyPreciseMode));
     }
 
-    if (m_useNewEngine && m_brush->brushApplication() == LIGHTNESSMAP) {
-        const bool useDullingMode = m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE;
+    const bool useDullingMode = m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE;
 
+    if (m_useNewEngine && m_brush->brushApplication() == LIGHTNESSMAP) {
         m_strategy.reset(new ColorSmudgeStrategyLightness(painter,
                                                           m_paintColor,
                                                           m_smudgeRateOption.getSmearAlpha(),
                                                           useDullingMode));
     } else if (m_useNewEngine && m_brush->brushApplication() == ALPHAMASK) {
-        const bool useDullingMode = m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE;
-
         m_strategy.reset(new ColorSmudgeStrategyMask(painter,
                                                      m_paintColor,
                                                      m_smudgeRateOption.getSmearAlpha(),
                                                      useDullingMode));
+    } else if (m_useNewEngine) {
+        m_strategy.reset(new ColorSmudgeStrategyStamp(painter,
+                                                      m_smudgeRateOption.getSmearAlpha(),
+                                                      useDullingMode));
     }
 }
 

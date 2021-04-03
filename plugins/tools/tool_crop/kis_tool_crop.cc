@@ -197,6 +197,11 @@ void KisToolCrop::requestStrokeCancellation()
     cancelStroke();
 }
 
+void KisToolCrop::requestUndoDuringStroke()
+{
+    cancelStroke();
+}
+
 void KisToolCrop::requestRedoDuringStroke()
 {
     cancelStroke();

@@ -226,19 +226,20 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
         if (handles().size() >= 3 && isSnappingActive()) {
             path = QPainterPath(); // clear
+            const QPointF p3 = *handles()[2];
 
             // Create transform for conversion into easier local coordinate system
             // - Rotated so horizon is perfectly horizonal
             // - Translated so 3rd handle is the origin
             QTransform t = QTransform();
-            t.rotate(QLineF(*handles()[0],*handles()[1]).angle());
-            t.translate(-handles()[2]->x(),-handles()[2]->y());
+            t.rotate(QLineF(p1,p2).angle());
+            t.translate(-p3.x(),-p3.y());
 
             const QTransform inv = t.inverted();
 
-            const QPointF vp_a = t.map(*handles()[0]);
-            const QPointF vp_b = t.map(*handles()[1]);
-            const QPointF center = t.map(*handles()[2]);
+            const QPointF vp_a = t.map(p1);
+            const QPointF vp_b = t.map(p2);
+            const QPointF center = t.map(p3);
 
             const QLineF horizon = QLineF(vp_a,vp_b);
             QLineF vertical = horizon.normalVector();

@@ -596,20 +596,42 @@ void KisAssistantTool::addAssistant()
     if (m_newAssistant->id() == "two point"){
         QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
 
-        const QPointF p1 = *m_newAssistant->handles()[0];
-        const QPointF p2 = *m_newAssistant->handles()[1];
-        const QPointF p3 = *m_newAssistant->handles()[2];
+        if (*handles[0] == *handles[1] || *handles[1] == *handles[2]) {
+            // Place handles in sensible default position if any of
+            // them are overlapping (maybe because user
+            // double-clicked)
+            const QTransform transform = m_canvas->coordinatesConverter()->documentToWidgetTransform();
+            const QTransform inverted = transform.inverted();
+            const int size = inverted.map(QPointF(m_canvas->canvasWidget()->width(),0)).x();
+            *handles[0] = *handles[2] - QPointF(-size/3,0);
+            *handles[1] = *handles[2] - QPointF(size/3,0);
+        }
+
+        const QPointF p1 = *handles[0];
+        const QPointF p2 = *handles[1];
+        const QPointF p3 = *handles[2];
 
         QTransform t = QTransform();
         t.rotate(QLineF(p1,p2).angle());
         t.translate(-p3.x(),-p3.y());
-        const QTransform inv = t.inverted();
+        QTransform inv = t.inverted();
+
+        if (t.map(p1).x() * t.map(p2).x() > 0) {
+            // Put third handle between first and second if user
+            // placed it outside of them, then re-define the transform
+            const QLineF horizon = QLineF(t.map(p1),t.map(p2));
+            const QPointF origin = QPointF(horizon.center().x(),0);
+            *handles[2] = inv.map(origin);
+            t = QTransform();
+            t.rotate(QLineF(p1,p2).angle());
+            t.translate(-inv.map(origin).x(),-inv.map(origin).y());
+            inv = t.inverted();
+        }
 
         const QLineF horizon = QLineF(t.map(p1),t.map(p2));
         QLineF vertical = horizon.normalVector();
-        vertical.translate(t.map(p3) - vertical.p1());
+        vertical.translate(-vertical.p1());
         QPointF cov = horizon.center();
-        horizon.intersect(vertical,&cov);
         const qreal gap = QLineF(horizon.center(),cov).length();
 
         const qreal length = sqrt(pow(horizon.length()/2.0,2) - pow(gap,2));

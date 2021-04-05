@@ -349,6 +349,8 @@ private Q_SLOTS:
     void slotFileSaveAs();
 
     void importAnimation();
+    
+    void importVideoAnimation();
 
     void renderAnimation();
 

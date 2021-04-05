@@ -73,6 +73,7 @@ file_export_animation=none
 file_export_file=none
 file_export_pdf=none
 file_import_animation=none
+file_import_video_animation=none
 file_import_file=none
 file_new=Ctrl+N
 file_open=Ctrl+O

@@ -124,6 +124,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="file_import_video_animation">
+      <icon></icon>
+      <text>Import video animation...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Import video animation</toolTip>
+      <iconText>Import video animation</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="render_animation">
       <icon></icon>
       <text>&amp;Render Animation...</text>

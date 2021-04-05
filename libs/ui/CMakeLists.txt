@@ -328,6 +328,7 @@ set(kritaui_LIB_SRCS
     actions/kis_selection_action_factories.cpp
     actions/KisPasteActionFactories.cpp
     actions/KisTransformToolActivationCommand.cpp
+    animation/KisFFMpegWrapper.cpp
     animation/KisVideoSaver.cpp
     animation/KisAnimationRenderingOptions.cpp
     animation/KisAnimationRender.cpp
@@ -335,6 +336,7 @@ set(kritaui_LIB_SRCS
     animation/VideoExportOptionsDialog.cpp
     animation/VideoHDRMetadataOptionsDialog.cpp
     animation/KisHDRMetadataOptions.cpp
+    animation/KisDlgImportVideoAnimation.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_gui_context_command.cpp
@@ -608,6 +610,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     animation/wdg_animationrenderer.ui
     animation/video_export_options_dialog.ui
     animation/VideoHDRMetadataOptionsDialog.ui
+    animation/VideoImportDialog.ui
 
     imagesize/wdg_imagesize.ui
     imagesize/wdg_layersize.ui

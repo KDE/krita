@@ -24,6 +24,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="file_export_pdf"/>
       <Separator/>
       <Action name="file_import_animation"/>
+      <Action name="file_import_video_animation"/>
       <Action name="render_animation"/>
       <Separator/>
       <Action name="save_incremental_version"/>

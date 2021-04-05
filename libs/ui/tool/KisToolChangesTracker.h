@@ -21,10 +21,11 @@ public:
 
     void commitConfig(KisToolChangesTrackerDataSP state);
     void requestUndo();
+    void requestRedo();
     KisToolChangesTrackerDataSP lastState() const;
     void reset();
 
-    bool isEmpty() const;
+    bool isEmpty(bool undo) const;
 
 Q_SIGNALS:
     void sigConfigChanged(KisToolChangesTrackerDataSP state);

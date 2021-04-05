@@ -81,6 +81,9 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     qreal cellWidth = m_properties.gridWidth * m_properties.scale * additionalScale;
     qreal cellHeight = m_properties.gridHeight * m_properties.scale * additionalScale;
 
+    qreal horizontalOffset = m_properties.horizontalOffset;
+    qreal verticalOffset = m_properties.verticalOffset;
+
     int divide;
     if (m_properties.pressureDivision) {
         divide = m_properties.divisionLevel * info.pressure();
@@ -96,8 +99,8 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     qreal posY = info.pos().y() - (gridHeight/2) + cellHeight/2;
 
     //Lock the grid alignment
-    posX = posX - std::fmod(posX, cellWidth);
-    posY = posY - std::fmod(posY, cellHeight);
+    posX = posX - std::fmod(posX, cellWidth) + horizontalOffset;
+    posY = posY - std::fmod(posY, cellHeight) + verticalOffset;
     const QRectF dabRect(posX , posY , cellWidth, cellHeight);
     const QRect dabRectAligned = dabRect.toAlignedRect();
 
@@ -255,6 +258,8 @@ void KisGridProperties::readOptionSetting(const KisPropertiesConfigurationSP set
     else {
         diameter = qMax(1, setting->getInt(DIAMETER));
     }
+    horizontalOffset = setting->getDouble(HORIZONTAL_OFFSET);
+    verticalOffset = setting->getDouble(VERTICAL_OFFSET);
     divisionLevel = qMax(1, setting->getInt(GRID_DIVISION_LEVEL));
     pressureDivision =  setting->getBool(GRID_PRESSURE_DIVISION);
     randomBorder = setting->getBool(GRID_RANDOM_BORDER);

@@ -12,6 +12,8 @@
 const QString DIAMETER = "Grid/diameter";
 const QString GRID_WIDTH = "Grid/gridWidth";
 const QString GRID_HEIGHT = "Grid/gridHeight";
+const QString HORIZONTAL_OFFSET = "Grid/horizontalOffset";
+const QString VERTICAL_OFFSET = "Grid/verticalOffset";
 const QString GRID_DIVISION_LEVEL = "Grid/divisionLevel";
 const QString GRID_PRESSURE_DIVISION = "Grid/pressureDivision";
 const QString GRID_SCALE = "Grid/scale";
@@ -37,6 +39,12 @@ public:
     int gridHeight() const;
     void setHeight(int height) const;
 
+    qreal horizontalOffset() const;
+    void setHorizontalOffset(qreal horizontalOffset) const;
+
+    qreal verticalOffset() const;
+    void setVerticalOffset(qreal verticalOffset) const;
+
 
     int divisionLevel() const;
     bool pressureDivision() const;
@@ -59,6 +67,8 @@ struct KisGridOpProperties : public KisPaintopPropertiesBase
     int diameter;
     int grid_width;
     int grid_height;
+    qreal horizontal_offset;
+    qreal vertical_offset;
     int grid_division_level;
     bool grid_pressure_division;
     qreal grid_scale;
@@ -79,6 +89,8 @@ struct KisGridOpProperties : public KisPaintopPropertiesBase
         else {
             diameter = qMax(1, diameter);
         }
+        horizontal_offset = setting->getDouble(HORIZONTAL_OFFSET);
+        vertical_offset = setting->getDouble(VERTICAL_OFFSET);
         grid_division_level = setting->getInt(GRID_DIVISION_LEVEL);
         grid_pressure_division = setting->getBool(GRID_PRESSURE_DIVISION);
         grid_scale = setting->getDouble(GRID_SCALE);
@@ -91,6 +103,8 @@ struct KisGridOpProperties : public KisPaintopPropertiesBase
         setting->setProperty(DIAMETER, qMax(1,diameter));
         setting->setProperty(GRID_WIDTH, qMax(1, grid_width));
         setting->setProperty(GRID_HEIGHT, qMax(1, grid_height));
+        setting->setProperty(HORIZONTAL_OFFSET, horizontal_offset);
+        setting->setProperty(VERTICAL_OFFSET, vertical_offset);
         setting->setProperty(GRID_DIVISION_LEVEL, grid_division_level);
         setting->setProperty(GRID_PRESSURE_DIVISION, grid_pressure_division);
         setting->setProperty(GRID_SCALE, grid_scale);

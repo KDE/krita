@@ -5,6 +5,7 @@
  */
 #include "kis_gridop_option.h"
 #include <klocalizedstring.h>
+#include <QtMath>
 
 #include "ui_wdggridoptions.h"
 
@@ -44,6 +45,16 @@ KisGridOpOption::KisGridOpOption()
     m_options->gridHeightSPBox->setExponentRatio(3.0);
 
 
+    m_options->horizontalOffsetSPBox->setRange(-250, 250, 0);
+    m_options->horizontalOffsetSPBox->setValue(0);
+    m_options->horizontalOffsetSPBox->setSuffix(i18n(" px"));
+
+
+    m_options->verticalOffsetSPBox->setRange(-250, 250, 0);
+    m_options->verticalOffsetSPBox->setValue(0);
+    m_options->verticalOffsetSPBox->setSuffix(i18n(" px"));
+
+
     m_options->divisionLevelSPBox->setRange(0, 25, 0);
     m_options->divisionLevelSPBox->setValue(2);
 
@@ -62,6 +73,8 @@ KisGridOpOption::KisGridOpOption()
     connect(m_options->diameterSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->gridWidthSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->gridHeightSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->horizontalOffsetSPBox,SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->verticalOffsetSPBox,SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->divisionLevelSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->divisionPressureCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->scaleDSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -125,6 +138,36 @@ void KisGridOpOption::setHeight(int height) const
 }
 
 
+qreal KisGridOpOption::horizontalOffset() const
+{
+    //Since this is a grid, get the smallest value that achieves an equivalent horizontal offset
+    qreal shortHorizontalOffset = fmod(m_options->horizontalOffsetSPBox->value(), m_options->gridHeightSPBox->value());
+    qreal inverseShortHorizontalOffset = m_options->gridHeightSPBox->value() - qFabs(shortHorizontalOffset);
+    return qMin(shortHorizontalOffset, inverseShortHorizontalOffset);
+}
+
+
+void KisGridOpOption::setHorizontalOffset(qreal horizontalOffset) const
+{
+    m_options->horizontalOffsetSPBox->setValue(horizontalOffset);
+}
+
+
+qreal KisGridOpOption::verticalOffset() const
+{
+    //Since this is a grid, get the smallest value that achieves an equivalent vertical offset
+    qreal shortVerticalOffset = fmod(m_options->verticalOffsetSPBox->value(), m_options->gridHeightSPBox->value());
+    qreal inverseShortVerticalOffset = m_options->gridHeightSPBox->value() - qFabs(shortVerticalOffset);
+    return qMin(shortVerticalOffset, inverseShortVerticalOffset);
+}
+
+
+void KisGridOpOption::setVerticalOffset(qreal verticalOffset) const
+{
+    m_options->verticalOffsetSPBox->setValue(verticalOffset);
+}
+
+
 bool KisGridOpOption::pressureDivision() const
 {
     return m_options->divisionPressureCHBox->isChecked();
@@ -162,6 +205,8 @@ void KisGridOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) c
     op.diameter = diameter();
     op.grid_width = gridWidth();
     op.grid_height = gridHeight();
+    op.horizontal_offset = horizontalOffset();
+    op.vertical_offset = verticalOffset();
     op.grid_division_level = divisionLevel();
     op.grid_pressure_division = pressureDivision();
     op.grid_scale = scale();
@@ -180,6 +225,8 @@ void KisGridOpOption::readOptionSetting(const KisPropertiesConfigurationSP setti
     m_options->diameterSPBox->setValue(op.diameter);
     m_options->gridWidthSPBox->setValue(op.grid_width);
     m_options->gridHeightSPBox->setValue(op.grid_height);
+    m_options->horizontalOffsetSPBox->setValue(op.horizontal_offset);
+    m_options->verticalOffsetSPBox->setValue(op.vertical_offset);
     m_options->divisionLevelSPBox->setValue(op.grid_division_level);
     m_options->divisionPressureCHBox->setChecked(op.grid_pressure_division);
     m_options->scaleDSPBox->setValue(op.grid_scale);

@@ -273,13 +273,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 m_snapIsRadial = true;
             }
         } else if (m_handleDrag && assistant->handles().size()>2 && assistant->id() == "two point") {
-            if (m_handleDrag == assistant->handles()[0]) {
-                m_dragStart = *assistant->handles()[1];
-            } else if (m_handleDrag == assistant->handles()[1]) {
-                m_dragStart = *assistant->handles()[0];
-            } else {
-                m_dragStart = *m_handleDrag;
-            }
+            m_dragStart = *m_handleDrag;
             m_snapIsRadial = false;
         } else {
             m_dragStart = assistant->getEditorPosition();
@@ -1300,6 +1294,59 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
     if (m_handleDrag) {
         KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
         KisPaintingAssistantSP selectedAssistant = canvasDecoration->selectedAssistant();
+        QList<KisPaintingAssistantHandleSP> handles = selectedAssistant->handles();
+
+        if (selectedAssistant->id() == "two point" && m_handleDrag != handles[2]) {
+
+            KisPaintingAssistantHandleSP handleOpp = m_handleDrag == handles[0] ? handles[1] : handles[0];
+            const QPointF prevPoint = m_currentAdjustment.isNull() ? m_dragStart : m_currentAdjustment;
+
+            QTransform t = QTransform();
+            t.rotate(QLineF(prevPoint, *handleOpp).angle());
+            t.translate(-handles[2]->x(),-handles[2]->y());
+            const QTransform inv = t.inverted();
+
+            // Exact alignment matters here, so fudge horizon line
+            // to be perfectly horizontal instead of trusting the
+            // QTransform calculation to do it
+            const QLineF horizon = QLineF(t.map(prevPoint), QPointF(t.map(*handleOpp).x(),t.map(prevPoint).y()));
+            const qreal size = sqrt(pow(horizon.length()/2.0,2) - pow(abs(horizon.center().x()),2));
+            const QPointF sp = QPointF(0,horizon.p1().y()+size);
+
+            if (event->modifiers() & Qt::ControlModifier) {
+                QPointF snap_point;
+                QPointF opp_snap_point;
+                const QLineF sp_to_vp = QLineF(sp, t.map(*m_handleDrag));
+                const QLineF normal = sp_to_vp.normalVector();
+                sp_to_vp.intersect(horizon,&snap_point);
+
+                // test battery for invalid position of new points
+                const bool origin_is_between =
+                    (snap_point.x() < 0 && opp_snap_point.x() > 0) ||
+                    (snap_point.x() > 0 && opp_snap_point.x() < 0);
+                // try to generate opp_snap_point and collect its success value
+                const bool no_intersection = normal.intersect(horizon, &opp_snap_point) == QLineF::NoIntersection;
+                const bool null_opp_point = qFuzzyIsNull(opp_snap_point.x()) || qFuzzyIsNull(opp_snap_point.y());
+                const bool overlapping_snap_points = qFuzzyCompare(opp_snap_point.x(),snap_point.x());
+
+                if (!origin_is_between || no_intersection || null_opp_point || overlapping_snap_points) {
+                    // Revert to original state if new points are invalid
+                    *m_handleDrag = m_dragStart;
+                    const QLineF normal = QLineF(sp, t.map(m_dragStart)).normalVector();
+                    QPointF new_opp;
+                    normal.intersect(horizon, &new_opp);
+                    *handleOpp = inv.map(new_opp);
+                    m_currentAdjustment = QPointF(0,0); // clear
+                } else {
+                    // otherwise use the new configuration
+                    *m_handleDrag = inv.map(snap_point);
+                    *handleOpp = inv.map(opp_snap_point);
+                    m_currentAdjustment = *m_handleDrag;
+                }
+
+                return true;
+            }
+        }
 
         if (m_snapIsRadial == true) {
             QLineF dragRadius = QLineF(m_dragStart, event->point);

@@ -9,6 +9,7 @@
 
 #include <kis_paintop_option.h>
 
+const QString DIAMETER = "Grid/diameter";
 const QString GRID_WIDTH = "Grid/gridWidth";
 const QString GRID_HEIGHT = "Grid/gridHeight";
 const QString GRID_DIVISION_LEVEL = "Grid/divisionLevel";
@@ -27,16 +28,19 @@ public:
     KisGridOpOption();
     ~KisGridOpOption() override;
 
+    int diameter() const;
+    void setDiameter(int diameter) const;
+
     int gridWidth() const;
     void setWidth(int width) const;
 
     int gridHeight() const;
     void setHeight(int height) const;
 
+
     int divisionLevel() const;
     bool pressureDivision() const;
     qreal scale() const;
-
 
     qreal vertBorder() const;
     qreal horizBorder() const;
@@ -52,6 +56,7 @@ private:
 
 struct KisGridOpProperties : public KisPaintopPropertiesBase
 {
+    int diameter;
     int grid_width;
     int grid_height;
     int grid_division_level;
@@ -63,8 +68,17 @@ struct KisGridOpProperties : public KisPaintopPropertiesBase
 
 
     void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override {
+
         grid_width = qMax(1, setting->getInt(GRID_WIDTH));
         grid_height = qMax(1, setting->getInt(GRID_HEIGHT));
+        diameter = setting->getInt(DIAMETER);
+        // If loading an old brush without a diameter set, set to grid_width as was the old logic
+        if (!diameter) {
+            diameter = grid_width;
+        }
+        else {
+            diameter = qMax(1, diameter);
+        }
         grid_division_level = setting->getInt(GRID_DIVISION_LEVEL);
         grid_pressure_division = setting->getBool(GRID_PRESSURE_DIVISION);
         grid_scale = setting->getDouble(GRID_SCALE);
@@ -74,6 +88,7 @@ struct KisGridOpProperties : public KisPaintopPropertiesBase
     }
 
     void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override {
+        setting->setProperty(DIAMETER, qMax(1,diameter));
         setting->setProperty(GRID_WIDTH, qMax(1, grid_width));
         setting->setProperty(GRID_HEIGHT, qMax(1, grid_height));
         setting->setProperty(GRID_DIVISION_LEVEL, grid_division_level);

@@ -75,8 +75,11 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
     m_dab->clear();
 
-    qreal gridWidth = m_properties.gridWidth * m_properties.scale * additionalScale;
-    qreal gridHeight = m_properties.gridHeight * m_properties.scale * additionalScale;
+    qreal gridWidth = m_properties.diameter * m_properties.scale * additionalScale;
+    qreal gridHeight = m_properties.diameter * m_properties.scale * additionalScale;
+
+    qreal cellWidth = m_properties.gridWidth * m_properties.scale * additionalScale;
+    qreal cellHeight = m_properties.gridHeight * m_properties.scale * additionalScale;
 
     int divide;
     if (m_properties.pressureDivision) {
@@ -85,19 +88,22 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     else {
         divide = m_properties.divisionLevel;
     }
+
     divide = qRound(m_properties.scale * divide);
 
-    qreal posX = info.pos().x();
-    qreal posY = info.pos().y();
-    posX = posX - std::fmod(posX, gridWidth);
-    posY = posY - std::fmod(posY, gridHeight);
+    //Adjust the start position of the drawn grid to the top left of the brush instead of in the center
+    qreal posX = info.pos().x() - (gridWidth/2) + cellWidth/2;
+    qreal posY = info.pos().y() - (gridHeight/2) + cellHeight/2;
 
-    const QRectF dabRect(posX, posY, gridWidth, gridHeight);
+    //Lock the grid alignment
+    posX = posX - std::fmod(posX, cellWidth);
+    posY = posY - std::fmod(posY, cellHeight);
+    const QRectF dabRect(posX , posY , cellWidth, cellHeight);
     const QRect dabRectAligned = dabRect.toAlignedRect();
 
     divide = qMax(1, divide);
-    const qreal yStep = gridHeight / (qreal)divide;
-    const qreal xStep = gridWidth / (qreal)divide;
+    const qreal yStep = cellHeight / (qreal)divide;
+    const qreal xStep = cellWidth / (qreal)divide;
 
     QRectF tile;
     KoColor color(painter()->paintColor());
@@ -124,9 +130,8 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     if (m_colorProperties.fillBackground) {
         m_dab->fill(dabRectAligned, painter()->backgroundColor());
     }
-
-    for (int y = 0; y < divide; y++) {
-        for (int x = 0; x < divide; x++) {
+    for (int y = 0; y < (gridHeight)/yStep; y++) {
+        for (int x = 0; x < (gridWidth)/xStep; x++) {
             // determine the tile size
             tile = QRectF(dabRect.x() + x * xStep, dabRect.y() + y * yStep, xStep, yStep);
             tile.adjust(vertBorder, horzBorder, -vertBorder, -horzBorder);
@@ -242,6 +247,14 @@ void KisGridProperties::readOptionSetting(const KisPropertiesConfigurationSP set
 {
     gridWidth = qMax(1, setting->getInt(GRID_WIDTH));
     gridHeight = qMax(1, setting->getInt(GRID_HEIGHT));
+    diameter = setting->getInt(DIAMETER);
+    // If loading an old brush without a diameter set, set to grid_width as was the old logic
+    if (!diameter) {
+        diameter = gridWidth;
+    }
+    else {
+        diameter = qMax(1, setting->getInt(DIAMETER));
+    }
     divisionLevel = qMax(1, setting->getInt(GRID_DIVISION_LEVEL));
     pressureDivision =  setting->getBool(GRID_PRESSURE_DIVISION);
     randomBorder = setting->getBool(GRID_RANDOM_BORDER);

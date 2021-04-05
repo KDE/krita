@@ -26,6 +26,12 @@ KisGridOpOption::KisGridOpOption()
     m_options = new KisGridOpOptionsWidget();
 
     // initialize slider values
+    m_options->diameterSPBox->setRange(1,999,0);
+    m_options->diameterSPBox->setValue(25);
+    m_options->diameterSPBox->setSuffix(i18n(" px"));
+    m_options->diameterSPBox->setExponentRatio(3.0);
+
+
     m_options->gridWidthSPBox->setRange(1, 999, 0);
     m_options->gridWidthSPBox->setValue(25);
     m_options->gridWidthSPBox->setSuffix(i18n(" px"));
@@ -36,6 +42,7 @@ KisGridOpOption::KisGridOpOption()
     m_options->gridHeightSPBox->setValue(25);
     m_options->gridHeightSPBox->setSuffix(i18n(" px"));
     m_options->gridHeightSPBox->setExponentRatio(3.0);
+
 
     m_options->divisionLevelSPBox->setRange(0, 25, 0);
     m_options->divisionLevelSPBox->setValue(2);
@@ -52,6 +59,7 @@ KisGridOpOption::KisGridOpOption()
     m_options->vertBorderDSPBox->setValue(0.0);
 
 
+    connect(m_options->diameterSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->gridWidthSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->gridHeightSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->divisionLevelSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -73,6 +81,23 @@ KisGridOpOption::~KisGridOpOption()
 int KisGridOpOption::divisionLevel() const
 {
     return m_options->divisionLevelSPBox->value();
+}
+
+
+int KisGridOpOption::diameter() const
+{
+    if (!m_options->diameterSPBox->value()) {
+        return m_options->gridWidthSPBox->value();
+    }
+    else {
+        return m_options->diameterSPBox->value();
+    }
+}
+
+
+void KisGridOpOption::setDiameter(int diameter) const
+{
+    m_options->gridWidthSPBox->setValue(diameter);
 }
 
 
@@ -106,7 +131,6 @@ bool KisGridOpOption::pressureDivision() const
 }
 
 
-
 qreal KisGridOpOption::horizBorder() const
 {
     return m_options->vertBorderDSPBox->value();
@@ -135,6 +159,7 @@ void KisGridOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) c
 {
     KisGridOpProperties op;
 
+    op.diameter = diameter();
     op.grid_width = gridWidth();
     op.grid_height = gridHeight();
     op.grid_division_level = divisionLevel();
@@ -152,6 +177,7 @@ void KisGridOpOption::readOptionSetting(const KisPropertiesConfigurationSP setti
     KisGridOpProperties op;
     op.readOptionSetting(setting);
 
+    m_options->diameterSPBox->setValue(op.diameter);
     m_options->gridWidthSPBox->setValue(op.grid_width);
     m_options->gridHeightSPBox->setValue(op.grid_height);
     m_options->divisionLevelSPBox->setValue(op.grid_division_level);

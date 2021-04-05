@@ -29,6 +29,17 @@ public:
 
     bool isAssistantComplete() const override;
 
+    /* Generate a transform for converting handles into easier local
+       coordinate system that has the following properties:
+       - Rotated so horizon is perfectly horizonal
+       - Translated so 3rd handle is the origin
+       Paremeters are the first VP, second VP, a 3rd point which
+       defines the center of vision, and lastly a reference to a size
+       variable which is the radius of the 90 degree cone of vision
+       (useful for computing snapping behaviour and drawing grid
+       lines) */
+    QTransform localTransform(QPointF vp_a, QPointF vp_b, QPointF pt_c, qreal* size);
+
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;

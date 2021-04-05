@@ -595,6 +595,7 @@ void KisAssistantTool::addAssistant()
     // generate the side handles for the Two Point assistant
     if (m_newAssistant->id() == "two point"){
         QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
+        QSharedPointer<TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_newAssistant);
 
         if (*handles[0] == *handles[1] || *handles[1] == *handles[2]) {
             // Place handles in sensible default position if any of
@@ -611,9 +612,8 @@ void KisAssistantTool::addAssistant()
         const QPointF p2 = *handles[1];
         const QPointF p3 = *handles[2];
 
-        QTransform t = QTransform();
-        t.rotate(QLineF(p1,p2).angle());
-        t.translate(-p3.x(),-p3.y());
+        qreal size = 0;
+        QTransform t = assis->localTransform(p1,p2,p3,&size);
         QTransform inv = t.inverted();
 
         if (t.map(p1).x() * t.map(p2).x() > 0) {
@@ -622,21 +622,12 @@ void KisAssistantTool::addAssistant()
             const QLineF horizon = QLineF(t.map(p1),t.map(p2));
             const QPointF origin = QPointF(horizon.center().x(),0);
             *handles[2] = inv.map(origin);
-            t = QTransform();
-            t.rotate(QLineF(p1,p2).angle());
-            t.translate(-inv.map(origin).x(),-inv.map(origin).y());
+            t = assis->localTransform(p1,p2,p3,&size);
             inv = t.inverted();
         }
 
-        const QLineF horizon = QLineF(t.map(p1),t.map(p2));
-        QLineF vertical = horizon.normalVector();
-        vertical.translate(-vertical.p1());
-        QPointF cov = horizon.center();
-        const qreal gap = QLineF(horizon.center(),cov).length();
-
-        const qreal length = sqrt(pow(horizon.length()/2.0,2) - pow(gap,2));
-        const QPointF above = inv.map(cov+QPointF(0,length));
-        const QPointF below = inv.map(cov-QPointF(0,length));
+        const QPointF above = inv.map(QPointF(0,size));
+        const QPointF below = inv.map(QPointF(0,size));
 
         Q_FOREACH (QPointF side, QList<QPointF>({above,below})) {
             Q_FOREACH (QPointF vp, QList<QPointF>({p1, p2})) {
@@ -1324,19 +1315,18 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             // Skip this code block when only Shift is pressed, as
             // Shift means we only need closest-axis snapping.
 
+            QSharedPointer<TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(selectedAssistant);
             KisPaintingAssistantHandleSP handleOpp = m_handleDrag == handles[0] ? handles[1] : handles[0];
             const QPointF prevPoint = m_currentAdjustment.isNull() ? m_dragStart : m_currentAdjustment;
 
-            QTransform t = QTransform();
-            t.rotate(QLineF(prevPoint, *handleOpp).angle());
-            t.translate(-handles[2]->x(),-handles[2]->y());
+            qreal size = 0;
+            const QTransform t = assis->localTransform(prevPoint,*handleOpp,*handles[2],&size);
             const QTransform inv = t.inverted();
 
             // Exact alignment matters here, so fudge horizon line
             // to be perfectly horizontal instead of trusting the
             // QTransform calculation to do it
             const QLineF horizon = QLineF(t.map(prevPoint), QPointF(t.map(*handleOpp).x(),t.map(prevPoint).y()));
-            const qreal size = sqrt(pow(horizon.length()/2.0,2) - pow(abs(horizon.center().x()),2));
             const QPointF sp = QPointF(0,horizon.p1().y()+size);
 
             const bool preserve_distortion_snap = event->modifiers() == Qt::ControlModifier;

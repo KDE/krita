@@ -228,50 +228,32 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             path = QPainterPath(); // clear
             const QPointF p3 = *handles()[2];
 
-            // Create transform for conversion into easier local coordinate system
-            // - Rotated so horizon is perfectly horizonal
-            // - Translated so 3rd handle is the origin
-            QTransform t = QTransform();
-            t.rotate(QLineF(p1,p2).angle());
-            t.translate(-p3.x(),-p3.y());
-
+            qreal size = 0;
+            const QTransform t = localTransform(p1,p2,p3,&size);
             const QTransform inv = t.inverted();
-
             const QPointF vp_a = t.map(p1);
             const QPointF vp_b = t.map(p2);
-            const QPointF center = t.map(p3);
 
-            const QLineF horizon = QLineF(vp_a,vp_b);
-            QLineF vertical = horizon.normalVector();
-            vertical.translate(center - vertical.p1());
-            QPointF cov = horizon.center();
-            horizon.intersect(vertical,&cov);
-
-            if ((vp_a.x() < center.x() && vp_b.x() > center.x()) ||
-                (vp_a.x() > center.x() && vp_b.x() < center.x())) {
-
+            if ((vp_a.x() < 0 && vp_b.x() > 0) ||
+                (vp_a.x() > 0 && vp_b.x() < 0)) {
                 // Draw vertical line, but only if the center is between both VPs
-                QLineF drawn_vertical = initialTransform.map(inv.map(vertical));
-                if (!isEditing) drawn_vertical.translate(mousePos - drawn_vertical.p1());
-                KisAlgebra2D::intersectLineRect(drawn_vertical,viewport);
-                path.moveTo(drawn_vertical.p1());
-                path.lineTo(drawn_vertical.p2());
+                QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
+                if (!isEditing) vertical.translate(mousePos - vertical.p1());
+                KisAlgebra2D::intersectLineRect(vertical,viewport);
+                path.moveTo(vertical.p1());
+                path.lineTo(vertical.p2());
 
                 if (assistantVisible) {
                     // Display a notch to represent the center of vision
-                    path.moveTo(initialTransform.map(inv.map(cov+QPointF(0,-10))));
-                    path.lineTo(initialTransform.map(inv.map(cov+QPointF(0,10))));
+                    path.moveTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()-10))));
+                    path.lineTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()+10))));
                 }
                 drawPreview(gc,path);
                 path = QPainterPath(); // clear
             }
 
-            const qreal gap = QLineF(horizon.center(),cov).length();
-            // size is the radius of the perspective's 90 degree cone of vision
-            // Also represents unit size of grid square
-            const qreal size = sqrt(pow(horizon.length()/2.0,2) - pow(gap,2));
-            const QPointF upper = cov+QPointF(0,size);
-            const QPointF lower = cov-QPointF(0,size);
+            const QPointF upper = QPointF(0,vp_a.y() + size);
+            const QPointF lower = QPointF(0,vp_a.y() - size);
 
             // Set up the fading effect for the grid lines
             // Needed so the grid density doesn't look distracting
@@ -358,6 +340,17 @@ void TwoPointAssistant::setGridDensity(double density)
 double TwoPointAssistant::gridDensity()
 {
     return m_gridDensity;
+}
+
+QTransform TwoPointAssistant::localTransform(QPointF vp_a, QPointF vp_b, QPointF pt_c, qreal* size)
+{
+    QTransform t = QTransform();
+    t.rotate(QLineF(vp_a, vp_b).angle());
+    t.translate(-pt_c.x(),-pt_c.y());
+    const QLineF horizon = QLineF(t.map(vp_a), QPointF(t.map(vp_b).x(),t.map(vp_a).y()));
+    *size = sqrt(pow(horizon.length()/2.0,2) - pow(abs(horizon.center().x()),2));
+
+    return t;
 }
 
 bool TwoPointAssistant::isAssistantComplete() const

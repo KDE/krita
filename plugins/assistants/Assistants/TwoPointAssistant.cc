@@ -170,7 +170,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                 const QLineF horizon = QLineF(*handles()[0],*handles()[1]);
                 QLineF normal = horizon.normalVector();
                 normal.translate(*handles()[2]-normal.p1());
-                QPointF cov = QPointF();
+                QPointF cov = horizon.center();
                 normal.intersect(horizon,&cov);
                 const QPointF center = initialTransform.map(cov);
                 QRectF center_ellipse = QRectF(QPointF(center.x() -15, center.y() -15), QSizeF(30, 30));

@@ -1296,7 +1296,11 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
         KisPaintingAssistantSP selectedAssistant = canvasDecoration->selectedAssistant();
         QList<KisPaintingAssistantHandleSP> handles = selectedAssistant->handles();
 
-        if (selectedAssistant->id() == "two point" && m_handleDrag != handles[2]) {
+        if (selectedAssistant->id() == "two point" && m_handleDrag != handles[2] &&
+            event->modifiers() != Qt::ShiftModifier) {
+            // Snapping interactions that are specific to the two point assistant.
+            // Skip this code block when only Shift is pressed, as
+            // Shift means we only need closest-axis snapping.
 
             KisPaintingAssistantHandleSP handleOpp = m_handleDrag == handles[0] ? handles[1] : handles[0];
             const QPointF prevPoint = m_currentAdjustment.isNull() ? m_dragStart : m_currentAdjustment;
@@ -1313,42 +1317,74 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             const qreal size = sqrt(pow(horizon.length()/2.0,2) - pow(abs(horizon.center().x()),2));
             const QPointF sp = QPointF(0,horizon.p1().y()+size);
 
-            if (event->modifiers() & Qt::ControlModifier) {
-                QPointF snap_point;
-                QPointF opp_snap_point;
+            const bool preserve_distortion_snap = event->modifiers() == Qt::ControlModifier;
+            const bool preserve_left_right_ratio_snap = event->modifiers() == (Qt::ControlModifier|Qt::ShiftModifier);
+            const bool preserve_horizon_snap = event->modifiers() == Qt::AltModifier;
+
+            QPointF snap_point;
+            QPointF opp_snap_point;
+            QLineF sp_to_opp_vp;
+
+            if (preserve_distortion_snap) {
                 const QLineF sp_to_vp = QLineF(sp, t.map(*m_handleDrag));
-                const QLineF normal = sp_to_vp.normalVector();
+                sp_to_opp_vp = sp_to_vp.normalVector();
                 sp_to_vp.intersect(horizon,&snap_point);
-
-                // test battery for invalid position of new points
-                const bool origin_is_between =
-                    (snap_point.x() < 0 && opp_snap_point.x() > 0) ||
-                    (snap_point.x() > 0 && opp_snap_point.x() < 0);
-                // try to generate opp_snap_point and collect its success value
-                const bool no_intersection = normal.intersect(horizon, &opp_snap_point) == QLineF::NoIntersection;
-                const bool null_opp_point = qFuzzyIsNull(opp_snap_point.x()) || qFuzzyIsNull(opp_snap_point.y());
-                const bool overlapping_snap_points = qFuzzyCompare(opp_snap_point.x(),snap_point.x());
-
-                if (!origin_is_between || no_intersection || null_opp_point || overlapping_snap_points) {
-                    // Revert to original state if new points are invalid
-                    *m_handleDrag = m_dragStart;
-                    const QLineF normal = QLineF(sp, t.map(m_dragStart)).normalVector();
-                    QPointF new_opp;
-                    normal.intersect(horizon, &new_opp);
-                    *handleOpp = inv.map(new_opp);
-                    m_currentAdjustment = QPointF(0,0); // clear
-                } else {
-                    // otherwise use the new configuration
-                    *m_handleDrag = inv.map(snap_point);
-                    *handleOpp = inv.map(opp_snap_point);
-                    m_currentAdjustment = *m_handleDrag;
-                }
-
-                return true;
+            } else if (preserve_left_right_ratio_snap) {
+                const QLineF prev_sp_to_vp = QLineF(sp, horizon.p1());
+                QLineF new_sp_to_vp = prev_sp_to_vp.translated(t.map(*m_handleDrag)-sp);
+                QPointF new_sp;
+                new_sp_to_vp.intersect(QLineF(QPoint(0,0),QPointF(0,1)),&new_sp);
+                sp_to_opp_vp = new_sp_to_vp.normalVector().translated(new_sp-new_sp_to_vp.p1());
+                new_sp_to_vp.intersect(horizon,&snap_point);
+            } else if (preserve_horizon_snap) {
+                snap_point = QPointF(t.map(*m_handleDrag).x(),horizon.p1().y());
+                sp_to_opp_vp = QLineF(sp,QPointF(t.map(prevPoint).x(),horizon.p1().y())).normalVector();
             }
-        }
 
-        if (m_snapIsRadial == true) {
+            // The snapping modes must be robust against falling into
+            // invalid configurations, so test if the new snap points
+            // actually do make sense
+            const bool no_intersection =
+                // NB: opp_snap_point is initialized here
+                sp_to_opp_vp.intersect(horizon, &opp_snap_point) == QLineF::NoIntersection;
+            const bool origin_is_between =
+                (snap_point.x() < 0 && opp_snap_point.x() > 0) ||
+                (snap_point.x() > 0 && opp_snap_point.x() < 0);
+            const bool null_opp_point =
+                qFuzzyIsNull(opp_snap_point.x()) ||
+                qFuzzyIsNull(opp_snap_point.y());
+            const bool overlapping_snap_points =
+                qFuzzyCompare(opp_snap_point.x(),snap_point.x());
+
+            // Revert to original state if new points are invalid
+            if (!origin_is_between || no_intersection || null_opp_point || overlapping_snap_points) {
+                *m_handleDrag = m_dragStart;
+                QPointF oppStart;
+                // Use different recovery method for different
+                // snapping modes
+                if (preserve_distortion_snap) {
+                    sp_to_opp_vp = QLineF(sp, t.map(m_dragStart)).normalVector();
+                    sp_to_opp_vp.intersect(horizon, &oppStart);
+                } else {
+                    const QPointF p1 = t.map(m_dragStart);
+                    const qreal p2x = preserve_horizon_snap ? t.map(*handleOpp).x() : -p1.x();
+                    const QPointF p2 = QPointF(p2x,p1.y());
+                    const QLineF new_horizon = QLineF(p1,p2);
+                    const qreal new_size = sqrt(pow(new_horizon.length()/2.0,2) -
+                                                pow(abs(new_horizon.center().x()),2));
+                    const QPointF new_sp = QPointF(0,horizon.p1().y()+new_size);
+                    sp_to_opp_vp = QLineF(new_sp, t.map(m_dragStart)).normalVector();
+                }
+                sp_to_opp_vp.intersect(horizon, &oppStart);
+                *handleOpp=inv.map(oppStart);
+                m_currentAdjustment = QPointF(0,0); // clear
+            } else {
+                // otherwise use the new configuration if it's valid
+                *m_handleDrag = inv.map(snap_point);
+                *handleOpp = inv.map(opp_snap_point);
+                m_currentAdjustment = *m_handleDrag;
+            }
+        } else if (m_snapIsRadial == true) {
             QLineF dragRadius = QLineF(m_dragStart, event->point);
             dragRadius.setLength(m_radius.length());
             *m_handleDrag = dragRadius.p2();

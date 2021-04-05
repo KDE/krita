@@ -54,39 +54,57 @@ KisPaintingAssistantSP TwoPointAssistant::clone(QMap<KisPaintingAssistantHandleS
     return KisPaintingAssistantSP(new TwoPointAssistant(*this, handleMap));
 }
 
-QPointF TwoPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBegin)
 {
     Q_ASSERT(isAssistantComplete());
 
-    // nicked wholesale from PerspectiveAssistant.cc
-    if (m_snapLine.isNull()) {
-        const qreal dx = pt.x() - strokeBegin.x();
-        const qreal dy = pt.y() - strokeBegin.y();
+    QPointF best_pt = point;
+    double best_dist = DBL_MAX;
+    Q_FOREACH (QPointF vp, QList<QPointF>({*handles()[0],*handles()[1],*handles()[2]})) {
+        double dist = 0;
+        QPointF pt = QPointF();
+        QLineF snapLine = QLineF();
+
+        // TODO: Would be a good idea to generalize this whole routine
+        // in KisAlgebra2d, as it's all lifted from the vanishing
+        // point assistant and parallel ruler assistant, and by
+        // extension the perspective assistant...
+        qreal dx = point.x() - strokeBegin.x();
+        qreal dy = point.y() - strokeBegin.y();
 
         if (dx * dx + dy * dy < 4.0) {
-            return strokeBegin; // allow some movement before snapping
+            return strokeBegin;
         }
 
-        // figure out which direction to go
-        const QLineF vp_snap_a = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[0]).unitVector().p2());
-        const QLineF vp_snap_b = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[1]).unitVector().p2());
+        if (vp != *handles()[2]) {
+            snapLine = QLineF(vp, strokeBegin);
+        } else {
+            QLineF vertical = QLineF(*handles()[0],*handles()[1]).normalVector();
+            snapLine = QLineF(vertical.p1(), vertical.p2());
+            QPointF translation = (vertical.p1()-strokeBegin)*-1.0;
+            snapLine = snapLine.translated(translation);
+        }
 
-        m_snapLine = distsqr(pt, vp_snap_a) < distsqr(pt, vp_snap_b) ? vp_snap_a : vp_snap_b;
+        dx = snapLine.dx();
+        dy = snapLine.dy();
+
+        const qreal dx2 = dx * dx;
+        const qreal dy2 = dy * dy;
+        const qreal invsqrlen = 1.0 / (dx2 + dy2);
+
+        pt = QPointF(dx2 * point.x() + dy2 * snapLine.x1() + dx * dy * (point.y() - snapLine.y1()),
+                     dx2 * snapLine.y1() + dy2 * point.y() + dx * dy * (point.x() - snapLine.x1()));
+
+        pt *= invsqrlen;
+        dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
+
+        if (dist < best_dist) {
+            best_pt = pt;
+            best_dist = dist;
+        }
     }
 
-    // snap to line
-    const qreal
-        dx = m_snapLine.dx(),
-        dy = m_snapLine.dy(),
-        dx2 = dx * dx,
-        dy2 = dy * dy,
-        invsqrlen = 1.0 / (dx2 + dy2);
-
-    QPointF r(dx2 * pt.x() + dy2 * m_snapLine.x1() + dx * dy * (pt.y() - m_snapLine.y1()),
-              dx2 * m_snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - m_snapLine.x1()));
-
-    r *= invsqrlen;
-    return r;
+    return best_pt;
 }
 
 void TwoPointAssistant::setAdjustedBrushPosition(const QPointF position)

@@ -195,6 +195,102 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
         if (handles().size() >= 3 && isSnappingActive()) {
             path = QPainterPath(); // clear
+
+            // Create transform for conversion into easier local coordinate system
+            // - Rotated so horizon is perfectly horizonal
+            // - Translated so 3rd handle is the origin
+            QTransform t = QTransform();
+            t.rotate(QLineF(*handles()[0],*handles()[1]).angle());
+            t.translate(-handles()[2]->x(),-handles()[2]->y());
+
+            const QTransform inv = t.inverted();
+
+            const QPointF vp_a = t.map(*handles()[0]);
+            const QPointF vp_b = t.map(*handles()[1]);
+            const QPointF center = t.map(*handles()[2]);
+
+            const QLineF horizon = QLineF(vp_a,vp_b);
+            QLineF vertical = horizon.normalVector();
+            vertical.translate(center - vertical.p1());
+            QPointF cov = horizon.center();
+            horizon.intersect(vertical,&cov);
+
+            if ((vp_a.x() < center.x() && vp_b.x() > center.x()) ||
+                (vp_a.x() > center.x() && vp_b.x() < center.x())) {
+                if (isEditing) {
+                    // Draw vertical line, but only if the center is between both VPs
+                    QLineF drawn_vertical = initialTransform.map(inv.map(vertical));
+                    KisAlgebra2D::intersectLineRect(drawn_vertical,viewport);
+                    path.moveTo(drawn_vertical.p1());
+                    path.lineTo(drawn_vertical.p2());
+                }
+                if (assistantVisible) {
+                    // Display a notch to represent the center of vision
+                    path.moveTo(initialTransform.map(inv.map(cov+QPointF(0,-10))));
+                    path.lineTo(initialTransform.map(inv.map(cov+QPointF(0,10))));
+                }
+                drawPreview(gc,path);
+                path = QPainterPath(); // clear
+            }
+
+            const qreal gap = QLineF(horizon.center(),cov).length();
+            // size is the radius of the perspective's 90 degree cone of vision
+            // Also represents unit size of grid square
+            const qreal size = sqrt(pow(horizon.length()/2.0,2) - pow(gap,2));
+            const QPointF upper = cov+QPointF(0,size);
+            const QPointF lower = cov-QPointF(0,size);
+
+            // Set up the fading effect for the grid lines
+            // Needed so the grid density doesn't look distracting
+            QColor color = effectiveAssistantColor();
+            QGradient fade = QLinearGradient(initialTransform.map(inv.map(upper)),
+                                             initialTransform.map(inv.map(lower)));
+            color.setAlphaF(0);
+            fade.setColorAt(0.2, effectiveAssistantColor());
+            fade.setColorAt(0.5, color);
+            fade.setColorAt(0.8, effectiveAssistantColor());
+            const QPen pen = gc.pen();
+            const QBrush new_brush = QBrush(fade);
+            const QPen new_pen = QPen(new_brush, pen.width(), pen.style());
+            gc.setPen(new_pen);
+
+            const QList<QPointF> station_points = {upper, lower};
+            const QList<QPointF> vanishing_points = {vp_a, vp_b};
+
+            // Draw grid lines above and below the horizon
+            Q_FOREACH (const QPointF sp, station_points) {
+
+                // Draw grid lines towards each vanishing point
+                Q_FOREACH (const QPointF vp, vanishing_points) {
+
+                    // Interval between each grid line, uses grid density specified by user
+                    const qreal initial_angle = QLineF(sp, vp).angle();
+                    const qreal interval = size*m_gridDensity / cos((initial_angle - 90) * M_PI/180);
+                    const QPointF translation = QPointF(interval, 0);
+
+                    // Draw grid lines originating from both the left and right of the central vertical line
+                    Q_FOREACH (const int dir, QList<int>({-1, 1})) {
+
+                        // Limit at 300 grid lines per direction, reasonable even for m_gridDensity=0.1;
+                        for (int i = 0; i <= 300; i++) {
+                            const QLineF gridline = QLineF(sp + translation * i * dir, vp);
+
+                            // Don't bother drawing lines that are nearly parallel to horizon
+                            const qreal angle = gridline.angle();
+                            if (angle < 0.25 || angle > 359.75 || (angle < 180.25 && angle > 179.75)) {
+                                break;
+                            }
+
+                            QLineF drawn_gridline = initialTransform.map(inv.map(gridline));
+                            KisAlgebra2D::intersectLineRect(drawn_gridline, viewport);
+                            path.moveTo(initialTransform.map(inv.map(vp)));
+                            path.lineTo(drawn_gridline.p2());
+                        }
+                    }
+                }
+            }
+
+            gc.drawPath(path);
         }
     }
 
@@ -204,6 +300,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
 void TwoPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
+    Q_UNUSED(gc);
     Q_UNUSED(converter);
     Q_UNUSED(assistantVisible);
     if (!m_canvas || !isAssistantComplete()) {

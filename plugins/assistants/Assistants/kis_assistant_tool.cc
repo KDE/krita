@@ -626,8 +626,8 @@ void KisAssistantTool::addAssistant()
             inv = t.inverted();
         }
 
-        const QPointF above = inv.map(QPointF(0,size));
-        const QPointF below = inv.map(QPointF(0,size));
+        const QPointF above = inv.map(QPointF(0,t.map(p1).y()+size));
+        const QPointF below = inv.map(QPointF(0,t.map(p1).y()-size));
 
         Q_FOREACH (QPointF side, QList<QPointF>({above,below})) {
             Q_FOREACH (QPointF vp, QList<QPointF>({p1, p2})) {

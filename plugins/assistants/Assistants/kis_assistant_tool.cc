@@ -101,8 +101,6 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
             *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
         }
 
-        // give two point assistant side handles once it is completed
-
         if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
             addAssistant();
         } else {

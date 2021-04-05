@@ -174,7 +174,6 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             KisAlgebra2D::intersectLineRect(horizonLine, viewport);
             path.moveTo(horizonLine.p1());
             path.lineTo(horizonLine.p2());
-            drawPath(gc, path, isSnappingActive());
         }
 
         // draw the VP-->mousePos lines

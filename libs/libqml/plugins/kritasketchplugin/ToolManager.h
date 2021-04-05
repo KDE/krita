@@ -28,7 +28,7 @@ public:
     Q_INVOKABLE void requestToolChange(QString toolID);
 
 public Q_SLOTS:
-    void slotToolChanged(KoCanvasController* canvas, int toolId);
+    void slotToolChanged(KoCanvasController* canvas);
 
 Q_SIGNALS:
     void viewChanged();

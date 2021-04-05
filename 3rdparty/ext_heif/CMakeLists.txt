@@ -18,8 +18,8 @@ if (WIN32)
         ExternalProject_Add(
             ext_nasm
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/win64/nasm-2.14.03rc2-win64.zip
-            URL_MD5 f12d14ca46cf397a1d27ac0edde548fb
+            URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win64/nasm-2.15.05-win64.zip
+            URL_HASH SHA256=f5c93c146f52b4f1664fa3ce6579f961a910e869ab0dae431bd871bdd2584ef2
 
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
             CONFIGURE_COMMAND ""
@@ -33,10 +33,10 @@ if (WIN32)
         ExternalProject_Add(
             ext_nasm
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/win32/nasm-2.14.03rc2-win32.zip
-            URL_MD5 9ec22ac06a6b9d993ef503ea2fe074ab
+            URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win32/nasm-2.15.05-win32.zip
+            URL_HASH SHA256=258c7d1076e435511cf2fdf94e2281eadbdb9e3003fd57f356f446e2bce3119e
 
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 32-bit dependencies
             CONFIGURE_COMMAND ""
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/rdoff ${EXTPREFIX_heif}/bin/rdoff
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/nasm.exe ${EXTPREFIX_heif}/bin/nasm.exe
@@ -49,8 +49,8 @@ else (WIN32)
 ExternalProject_Add(
     ext_nasm
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/nasm-2.14.03rc2.tar.gz
-    URL_MD5 4cd1fe6788cd15d08c1a8f18b6d2428e
+    URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
+    URL_HASH SHA256=9182a118244b058651c576baa9d0366ee05983c4d4ae1d9ddd3236a9f2304997
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXTPREFIX_heif} ${GLOBAL_AUTOMAKE_PROFILE}
     BUILD_COMMAND make
@@ -60,76 +60,143 @@ ExternalProject_Add(
 )
 endif(WIN32)
 
-IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
-    ExternalProject_Add(ext_libx265_10bit
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
-        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
 
-        SOURCE_SUBDIR source/
+set(EXTRA_AVIF_DEPS "")
 
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DHIGH_BIT_DEPTH=TRUE -DEXPORT_C_API=FALSE -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main10.a
-    )
-    ExternalProject_Add(ext_libx265_12bit
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
-        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+find_program(MESON_BINARY_PATH meson)
+find_program(NINJA_BINARY_PATH ninja)
+find_program(RUSTC_BINARY_PATH rustc)
 
-        SOURCE_SUBDIR source/
+if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
+    message(STATUS "Enabling AVIF support.")
 
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} 
-        -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main12.a
-    )
     ExternalProject_Add(
-        ext_libx265
+        ext_dav1d
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
-        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+        URL https://downloads.videolan.org/pub/videolan/dav1d/0.8.2/dav1d-0.8.2.tar.xz
+        URL_HASH SHA256=3dd91d96b44e9d8ba7e82ad9e730d6c579ab5e19edca0db857a60f5ae6a0eb13
 
-        SOURCE_SUBDIR source/
+        CONFIGURE_COMMAND meson <SOURCE_DIR> --prefix=${EXTPREFIX_heif}
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-skip-pdb-in-mingw.diff
+        BUILD_COMMAND meson compile -j${SUBMAKE_JOBS}
 
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE  -DENABLE_HDR10_PLUS=TRUE -DEXTRA_LIB:String=x265_main10.a$<SEMICOLON>x265_main12.a -DEXTRA_LINK_FLAGS:String=-L${EXTPREFIX_heif}/lib -DLINKED_10BIT=TRUE -DLINKED_12BIT=TRUE
-
-        UPDATE_COMMAND ""
-
-        DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
-    )
-else ()
-    # x265 in 32-bit platforms cannot support 10-bit and 12-bit images
-    # because they either crash on malloc or require SSE4.1+ extensions
-    # Same for aarch64, support for 10-bit and 12-bit requires NEON extensions
-    # and these are broken as of 3.4
-    ExternalProject_Add(
-        ext_libx265
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
-        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
-
-        SOURCE_SUBDIR source/
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-skip-pdb-in-mingw.diff
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-arm-asm-primitives.patch
-
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE -DENABLE_CLI=FALSE
-
-        UPDATE_COMMAND ""
+        INSTALL_COMMAND meson install
 
         DEPENDS ext_nasm
     )
-endif ()
+
+    ExternalProject_Add(
+        ext_rav1e
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
+        URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
+
+        CONFIGURE_COMMAND ""
+
+        BUILD_COMMAND cargo cbuild --release --prefix=${EXTPREFIX_heif} --library-type=cdylib -j${SUBMAKE_JOBS}
+
+        INSTALL_COMMAND cargo cinstall --release --library-type=cdylib --prefix=${EXTPREFIX_heif}
+
+        BUILD_IN_SOURCE 1
+
+        DEPENDS ext_nasm
+    )
+
+    # External projects do not accept single commands.
+    ExternalProject_Add_Step(
+        ext_rav1e ext_cargo_c
+
+        COMMENT "Installing cargo-c 0.7.2 to ${EXTPREFIX_heif}"
+
+        COMMAND cargo install cargo-c --version 0.7.2 --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
+
+        DEPENDEES configure
+        DEPENDERS build
+    )
+
+    set(EXTRA_AVIF_DEPS ext_rav1e ext_dav1d)
+else()
+    if (NOT MESON_BINARY_PATH)
+        message(WARNING "Meson Build system was not found, see https://mesonbuild.com")
+    endif()
+    if (NOT NINJA_BINARY_PATH)
+        message(WARNING "Ninja Build system was not found, see https://ninja-build.org/")
+    endif()
+    if (NOT RUSTC_BINARY_PATH)
+        message(WARNING "Rust compiler was not found, see https://www.rust-lang.org/")
+    endif()
+    message(WARNING "Disabling AVIF support.")
+endif()
+
+# Incorporate Handbrake's extensions for building x265
+# Multicoreware added detection of SSE2/3/4.1, so we can freely enable them now
+# Also ship their patch for Apple silicon
+ExternalProject_Add(ext_libx265_10bit
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20210203-12666.tar.gz
+    URL_HASH SHA256=a4a712c9fbe724c263f4506e19aeca74e0259b33126d2e60c813352483f5110c
+
+    SOURCE_SUBDIR source/
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A00-darwin-Revert-Add-aarch64-support-Part-2.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-darwin-neon-support-for-arm64.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-rc-versioning.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DHIGH_BIT_DEPTH=TRUE -DEXPORT_C_API=FALSE -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main10.a
+)
+ExternalProject_Add(ext_libx265_12bit
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20210203-12666.tar.gz
+    URL_HASH SHA256=a4a712c9fbe724c263f4506e19aeca74e0259b33126d2e60c813352483f5110c
+
+    SOURCE_SUBDIR source/
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A00-darwin-Revert-Add-aarch64-support-Part-2.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-darwin-neon-support-for-arm64.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-rc-versioning.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} 
+    -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main12.a
+)
+ExternalProject_Add(
+    ext_libx265
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20210203-12666.tar.gz
+    URL_HASH SHA256=a4a712c9fbe724c263f4506e19aeca74e0259b33126d2e60c813352483f5110c
+
+    SOURCE_SUBDIR source/
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A00-darwin-Revert-Add-aarch64-support-Part-2.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-darwin-neon-support-for-arm64.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-rc-versioning.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE  -DENABLE_HDR10_PLUS=TRUE -DEXTRA_LIB:String=x265_main10.a$<SEMICOLON>x265_main12.a -DEXTRA_LINK_FLAGS:String=-L${EXTPREFIX_heif}/lib -DLINKED_10BIT=TRUE -DLINKED_12BIT=TRUE
+
+    UPDATE_COMMAND ""
+
+    DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
+)
 
 ExternalProject_Add(
     ext_libheif
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/strukturag/libheif/releases/download/v1.11.0/libheif-1.11.0.tar.gz
-    URL_HASH SHA1=def98b8c83861b6e4f3cdf6d3b57c9aaf3408923
+
+    GIT_REPOSITORY https://github.com/strukturag/libheif.git
+    GIT_TAG f5a3d8e090674be349f5c1e24083b3e553c516bd
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_libde265 ext_libx265 ext_jpeg ext_png
+    DEPENDS ${EXTRA_AVIF_DEPS} ext_libde265 ext_libx265 ext_jpeg ext_png
 )

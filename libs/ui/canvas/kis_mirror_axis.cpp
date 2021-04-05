@@ -35,6 +35,7 @@
 #include <KisMirrorAxisConfig.h>
 #include <kis_signals_blocker.h>
 #include <kactioncollection.h>
+#include "kis_floating_message.h"
 
 class KisMirrorAxis::Private
 {
@@ -264,6 +265,8 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             emit sigConfigChanged();
 
             event->accept();
+            view()->showFloatingMessage(i18n("X: %1 px",QString::number(d->config.axisPosition().x(), 'f', 1))
+                                        , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
             return true;
         }
         if(d->yActive) {
@@ -274,6 +277,8 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             emit sigConfigChanged();
 
             event->accept();
+            view()->showFloatingMessage(i18n("Y: %1 px",QString::number(d->config.axisPosition().y(), 'f', 1))
+                                        , QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
             return true;
         }
         if(d->config.mirrorHorizontal() && !d->config.hideHorizontalDecoration()) {

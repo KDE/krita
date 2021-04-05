@@ -19,7 +19,7 @@ DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
 
 install( FILES
     "Favorites.tag"
-    "Pixel Art.tag"
+    "Pixel_Art.tag"
     Digital.tag        
     Erasers.tag
     FX.tag   

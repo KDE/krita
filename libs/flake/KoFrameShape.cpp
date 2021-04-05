@@ -39,9 +39,9 @@ KoFrameShape::~KoFrameShape()
     delete d;
 }
 
-bool KoFrameShape::loadOdfFrame(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KoFrameShape::loadOdfFrame(const QDomElement & element, KoShapeLoadingContext &context)
 {
-    const KoXmlElement & frameElement(KoXml::namedItemNS(element, d->ns, d->tag));
+    const QDomElement & frameElement(KoXml::namedItemNS(element, d->ns, d->tag));
     if (frameElement.isNull()) {
         errorFlake << "frame element" << d->tag << "not found";
         return false;

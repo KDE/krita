@@ -37,6 +37,7 @@ const QString KisResourceStorage::s_meta_value("meta:value");
 const QString KisResourceStorage::s_meta_version("meta:bundle-version");
 const QString KisResourceStorage::s_meta_email("meta:email");
 const QString KisResourceStorage::s_meta_license("meta:license");
+const QString KisResourceStorage::s_meta_website("meta:website");
 
 Q_GLOBAL_STATIC(KisStoragePluginRegistry, s_instance);
 

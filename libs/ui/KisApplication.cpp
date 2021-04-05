@@ -168,8 +168,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationVersion(version);
     setWindowIcon(KisIconUtils::loadIcon("krita"));
 
-
-
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
         QStringList styles = QStringList() << "breeze" << "fusion";
         if (!styles.contains(style()->objectName().toLower())) {
@@ -670,7 +668,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (!d->earlyFileOpenEvents.isEmpty()) {
         hideSplashScreen();
         Q_FOREACH(QString fileName, d->earlyFileOpenEvents) {
-            d->mainWindow->openDocument(fileName, 0);
+            d->mainWindow->openDocument(fileName, QFlags<KisMainWindow::OpenFlag>());
         }
     }
 
@@ -983,7 +981,7 @@ void KisApplication::resetConfig()
     }
 }
 
-void KisApplication::askresetConfig()
+void KisApplication::askResetConfig()
 {
     bool ok = QMessageBox::question(qApp->activeWindow(),
                                     i18nc("@title:window", "Krita"),

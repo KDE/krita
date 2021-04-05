@@ -70,7 +70,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectContiguous")
     {
         setToolTip(i18n("Contiguous Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setSection(ToolBoxSection::Select);
         setIconName(koIconNameCStr("tool_contiguous_selection"));
         setPriority(4);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

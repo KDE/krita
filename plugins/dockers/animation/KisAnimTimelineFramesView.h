@@ -125,6 +125,8 @@ public Q_SLOTS:
     void slotRealignScrollBars();
     void slotEnsureRowVisible(int row);
 
+    void calculateActiveLayerSelectedTimes(const QModelIndexList &selection);
+
 protected:
     bool viewportEvent(QEvent *event) override;
 

@@ -18,10 +18,7 @@
 #include "sensors/kis_dynamic_sensor_fuzzy.h"
 
 KisDynamicSensor::KisDynamicSensor(DynamicSensorType type)
-    : m_length(-1)
-    , m_type(type)
-    , m_customCurve(false)
-    , m_active(false)
+    : m_type(type)
     , m_id(KisDynamicSensor::id(type))
 {
 }

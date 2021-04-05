@@ -9,6 +9,7 @@
 #include "kis_image.h"
 
 KisAsyncStoryboardThumbnailRenderer::KisAsyncStoryboardThumbnailRenderer(QObject *parent)
+    : KisAsyncAnimationRendererBase(parent)
 {
     connect(this, SIGNAL(sigNotifyFrameCompleted(int)), SLOT(notifyFrameCompleted(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(sigNotifyFrameCancelled(int)), SLOT(notifyFrameCancelled(int)), Qt::QueuedConnection);
@@ -18,7 +19,7 @@ KisAsyncStoryboardThumbnailRenderer::~KisAsyncStoryboardThumbnailRenderer()
 {
 }
 
-void KisAsyncStoryboardThumbnailRenderer::frameCompletedCallback(int frameTime, const KisRegion &requestedRegion)
+void KisAsyncStoryboardThumbnailRenderer::frameCompletedCallback(int frameTime, const KisRegion &/*requestedRegion*/)
 {
     KisImageSP image = requestedImage();
     KisPaintDeviceSP requestedFrame = image ? new KisPaintDevice(*image->projection(), KritaUtils::CopySnapshot) : nullptr;

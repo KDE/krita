@@ -11,6 +11,7 @@
 #include <QAbstractItemDelegate>
 
 #include "KoCheckerBoardPainter.h"
+#include "KisResourceThumbnailPainter.h"
 
 #include "kritaresourcewidgets_export.h"
 
@@ -28,6 +29,7 @@ public:
 
 private:
     KoCheckerBoardPainter m_checkerPainter;
+    KisResourceThumbnailPainter m_thumbnailPainter;
 };
 
 #endif

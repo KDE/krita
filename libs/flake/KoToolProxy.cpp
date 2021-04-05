@@ -64,7 +64,7 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
     widgetScrollPoint += moved;
 
     QPointF documentPoint = parent->widgetToDocument(widgetScrollPoint);
-    QMouseEvent event(QEvent::MouseMove, widgetScrollPoint, Qt::LeftButton, Qt::LeftButton, 0);
+    QMouseEvent event(QEvent::MouseMove, widgetScrollPoint, Qt::LeftButton, Qt::LeftButton, QFlags<Qt::KeyboardModifier>());
     KoPointerEvent ev(&event, documentPoint);
     activeTool->mouseMoveEvent(&ev);
 }
@@ -456,6 +456,13 @@ void KoToolProxy::requestUndoDuringStroke()
 {
     if (d->activeTool) {
         d->activeTool->requestUndoDuringStroke();
+    }
+}
+
+void KoToolProxy::requestRedoDuringStroke()
+{
+    if (d->activeTool) {
+        d->activeTool->requestRedoDuringStroke();
     }
 }
 

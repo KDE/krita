@@ -15,7 +15,7 @@ class QTransform;
 class QStringList;
 class KoXmlWriter;
 
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 class SvgGraphicsContext;
 
@@ -80,7 +80,7 @@ public:
     static void writeTransformAttributeLazy(const QString &name, const QTransform &transform, KoXmlWriter &shapeWriter);
 
     /// Parses a viewbox attribute into an rectangle
-    static bool parseViewBox(const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
+    static bool parseViewBox(const QDomElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
 
     struct PreserveAspectRatioParser;
     static void parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF &elementBounds, const QRectF &viewRect, QTransform *_viewTransform);
@@ -105,7 +105,7 @@ public:
 
     static qreal parseNumber(const QString &string);
 
-    static QString mapExtendedShapeTag(const QString &tagName, const KoXmlElement &element);
+    static QString mapExtendedShapeTag(const QString &tagName, const QDomElement &element);
 
     static QStringList simplifyList(const QString &str);
 

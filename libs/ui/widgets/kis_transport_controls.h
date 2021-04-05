@@ -8,9 +8,10 @@
 #ifndef KISTRANSPORTCONTROLS_H
 #define KISTRANSPORTCONTROLS_H
 
-#include <QWidget>
-
 #include "kritaui_export.h"
+
+#include <QWidget>
+class QPushButton;
 
 class KRITAUI_EXPORT KisTransportControls : public QWidget
 {
@@ -24,18 +25,24 @@ public:
 
 public Q_SLOTS:
     void setPlaying(bool playing);
+    void showSeekButtons(bool show);
+    void showSkipButtons(bool show);
 
 Q_SIGNALS:
-    void playPause();
-    void stop();
-    void forward();
+    void skipBack();
     void back();
+    void stop();
+    void playPause();
+    void forward();
+    void skipForward();
 
 private:
-    class QPushButton* buttonBack;
-    class QPushButton* buttonStop;
-    class QPushButton* buttonPlayPause;
-    class QPushButton* buttonForward;
+    QPushButton* buttonSkipBack;
+    QPushButton* buttonBack;
+    QPushButton* buttonStop;
+    QPushButton* buttonPlayPause;
+    QPushButton* buttonForward;
+    QPushButton* buttonSkipForward;
 };
 
 #endif // KISTRANSPORTCONTROLS_H

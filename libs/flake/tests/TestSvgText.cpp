@@ -190,9 +190,9 @@ void TestSvgText::testParseFontStyles()
             "    Hello, out there"
             "</text>";
 
-    KoXmlDocument doc;
+    QDomDocument doc;
     QVERIFY(doc.setContent(data.toLatin1()));
-    KoXmlElement root = doc.documentElement();
+    QDomElement root = doc.documentElement();
 
     KoDocumentResourceManager resourceManager;
     SvgLoadingContext context(&resourceManager);
@@ -288,9 +288,9 @@ void TestSvgText::testParseTextStyles()
             "    Hello, out there"
             "</text>";
 
-    KoXmlDocument doc;
+    QDomDocument doc;
     QVERIFY(doc.setContent(data.toLatin1()));
-    KoXmlElement root = doc.documentElement();
+    QDomElement root = doc.documentElement();
 
     KoDocumentResourceManager resourceManager;
     SvgLoadingContext context(&resourceManager);

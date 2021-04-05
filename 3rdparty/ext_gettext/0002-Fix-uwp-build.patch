@@ -1,0 +1,95 @@
+From 769ef6c47efaf552e3c6ff35e12733cdb1d80f17 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 20 Feb 2021 20:04:21 +0000
+Subject: [PATCH 2/5] Fix uwp build
+
+---
+ gettext-runtime/intl/langprefs.c    | 10 ++++++++--
+ gettext-runtime/intl/localcharset.c | 14 ++++++++++++--
+ gettext-runtime/intl/localename.c   | 10 ++++++++--
+ 3 files changed, 28 insertions(+), 6 deletions(-)
+
+diff --git a/gettext-runtime/intl/langprefs.c b/gettext-runtime/intl/langprefs.c
+index f774ba2b..498933a7 100644
+--- a/gettext-runtime/intl/langprefs.c
++++ b/gettext-runtime/intl/langprefs.c
+@@ -36,8 +36,14 @@
+ extern void _nl_locale_name_canonicalize (char *name);
+ #endif
+ 
+-#if defined _WIN32
+-# define WIN32_NATIVE
++#if defined _WIN32 || defined __WIN32__
++# if !defined(WINAPI_FAMILY)
++#	define WIN32_NATIVE
++# else
++#	if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP | WINAPI_PARTITION_SYSTEM)
++#		define WIN32_NATIVE
++#   endif
++# endif
+ #endif
+ 
+ #ifdef WIN32_NATIVE
+diff --git a/gettext-runtime/intl/localcharset.c b/gettext-runtime/intl/localcharset.c
+index ec754276..3028bc28 100644
+--- a/gettext-runtime/intl/localcharset.c
++++ b/gettext-runtime/intl/localcharset.c
+@@ -36,6 +36,16 @@
+ # include <locale.h>
+ #endif
+ 
++#if defined _WIN32 || defined __WIN32__
++# if !defined(WINAPI_FAMILY)
++#	define HAVE_ACP
++# else
++#	if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP | WINAPI_PARTITION_SYSTEM)
++#		define HAVE_ACP
++#   endif
++# endif
++#endif
++
+ #if defined __EMX__
+ /* Assume EMX program runs on OS/2, even if compiled under DOS.  */
+ # ifndef OS2
+@@ -830,7 +840,7 @@ STATIC
+ const char *
+ locale_charset (void)
+ {
+-  const char *codeset;
++  const char *codeset = NULL;
+ 
+   /* This function must be multithread-safe.  To achieve this without using
+      thread-local storage, we use a simple strcpy or memcpy to fill this static
+@@ -912,7 +922,7 @@ locale_charset (void)
+     /* The canonical name cannot be determined.  */
+     codeset = "";
+ 
+-# elif defined WINDOWS_NATIVE
++# elif defined WINDOWS_NATIVE && defined HAVE_ACP
+ 
+   char buf[2 + 10 + 1];
+   static char resultbuf[2 + 10 + 1];
+diff --git a/gettext-runtime/intl/localename.c b/gettext-runtime/intl/localename.c
+index 6458f757..a3845a4f 100644
+--- a/gettext-runtime/intl/localename.c
++++ b/gettext-runtime/intl/localename.c
+@@ -72,8 +72,14 @@ extern char * getlocalename_l(int, locale_t);
+ # include <CoreFoundation/CFPreferences.h>
+ #endif
+ 
+-#if defined _WIN32 && !defined __CYGWIN__
+-# define WINDOWS_NATIVE
++#if (defined _WIN32 || defined __WIN32__) && !defined __CYGWIN__
++# if !defined(WINAPI_FAMILY)
++#	define WINDOWS_NATIVE
++# else
++#	if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP | WINAPI_PARTITION_SYSTEM)
++#		define WINDOWS_NATIVE
++#   endif
++# endif
+ # if !defined IN_LIBINTL
+ #  include "glthread/lock.h"
+ # endif
+-- 
+2.30.0
+

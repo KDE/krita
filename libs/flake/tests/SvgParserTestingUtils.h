@@ -85,8 +85,8 @@ struct SvgTester
 
     KoDocumentResourceManager resourceManager;
     SvgParser parser;
-    KoXmlDocument doc;
-    KoXmlElement root;
+    QDomDocument doc;
+    QDomElement root;
     QSizeF fragmentSize;
     QList<KoShape*> shapes;
     QString savedData;

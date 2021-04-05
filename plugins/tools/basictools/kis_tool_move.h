@@ -180,7 +180,7 @@ public:
     KisToolMoveFactory()
             : KisToolPaintFactoryBase("KritaTransform/KisToolMove") {
         setToolTip(i18n("Move Tool"));
-        setSection(TOOL_TYPE_TRANSFORM);
+        setSection(ToolBoxSection::Transform);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(3);
         setIconName(koIconNameCStr("krita_tool_move"));

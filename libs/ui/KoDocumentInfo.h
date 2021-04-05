@@ -15,7 +15,7 @@
 #include <QStringList>
 
 #include "kritaui_export.h"
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 class QDomDocument;
 class QDomElement;
@@ -53,7 +53,7 @@ public:
      * @param doc the QDomDocument to load from
      * @return true if success
      */
-    bool load(const KoXmlDocument& doc);
+    bool load(const QDomDocument& doc);
 
     /**
      * Save the KoDocumentInfo to an Calligra-1.3 DomDocument
@@ -136,7 +136,7 @@ private:
      * @param metaDoc a reference to the information node
      * @return true if success
      */
-    bool loadOasisAboutInfo(const KoXmlNode& metaDoc);
+    bool loadOasisAboutInfo(const QDomNode& metaDoc);
 
     /**
      * Save the information about the document to an OASIS file
@@ -150,7 +150,7 @@ private:
      * @param e the element to load from
      * @return true if success
      */
-    bool loadAboutInfo(const KoXmlElement& e);
+    bool loadAboutInfo(const QDomElement& e);
 
     /**
      * Save the information about the document to a Calligra-1.3 file
@@ -164,14 +164,14 @@ private:
      * @param metaDoc a reference to the information node
      * @return true if success
      */
-    bool loadOasisAuthorInfo(const KoXmlNode& metaDoc);
+    bool loadOasisAuthorInfo(const QDomNode& metaDoc);
 
     /**
      * Load the information about the document from a Calligra-1.3 file
      * @param e the element to load from
      * @return true if success
      */
-    bool loadAuthorInfo(const KoXmlElement& e);
+    bool loadAuthorInfo(const QDomElement& e);
 
     /**
      * Save the information about the author to a Calligra-1.3 file

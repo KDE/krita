@@ -164,7 +164,7 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    bool importResourceFile(const QString &filename)
+    KoResourceSP importResourceFile(const QString &filename)
     {
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());

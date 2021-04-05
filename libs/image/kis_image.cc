@@ -1580,6 +1580,15 @@ QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProf
     double scaleX = qreal(scaledImageSize.width()) / width();
     double scaleY = qreal(scaledImageSize.height()) / height();
 
+
+    if (scaleX < 1.0/256 || scaleY < 1.0/256) {
+        // quick checking if we're not trying to scale too much
+        // convertToQImage uses KisFixedPoint values, which means that the scale cannot be smaller than 1/2^8
+        // BUG:432182
+        // FIXME: would be best to extend KisFixedPoint instead
+        return convertToQImage(size(), profile).scaled(scaledImageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+
     QPointer<KoUpdater> updater = new KoDummyUpdater();
 
     KisTransformWorker worker(dev, scaleX, scaleY, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
@@ -1698,7 +1707,7 @@ void KisImage::addAnnotation(KisAnnotationSP annotation)
         ++it;
     }
     m_d->annotations.push_back(annotation);
-    emit sigImageModified();
+    setModifiedWithoutUndo();
 }
 
 KisAnnotationSP KisImage::annotation(const QString& type)
@@ -1719,6 +1728,7 @@ void KisImage::removeAnnotation(const QString& type)
     while (it != m_d->annotations.end()) {
         if ((*it)->type() == type) {
             m_d->annotations.erase(it);
+            setModifiedWithoutUndo();
             return;
         }
         ++it;
@@ -1976,6 +1986,11 @@ bool KisImage::KisImagePrivate::tryCancelCurrentStrokeAsync()
 void KisImage::requestUndoDuringStroke()
 {
     emit sigUndoDuringStrokeRequested();
+}
+
+void KisImage::requestRedoDuringStroke()
+{
+    emit sigRedoDuringStrokeRequested();
 }
 
 void KisImage::requestStrokeCancellation()

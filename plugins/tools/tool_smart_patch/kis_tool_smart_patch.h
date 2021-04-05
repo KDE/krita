@@ -78,7 +78,7 @@ public:
 
         setToolTip(i18n("Smart Patch Tool"));
 
-        setSection(TOOL_TYPE_FILL);
+        setSection(ToolBoxSection::Fill);
         setIconName(koIconNameCStr("krita_tool_smart_patch"));
         setPriority(4);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

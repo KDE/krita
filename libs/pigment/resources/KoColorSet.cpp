@@ -126,13 +126,6 @@ KoResourceSP KoColorSet::clone() const
     return KoResourceSP(new KoColorSet(*this));
 }
 
-bool KoColorSet::load(KisResourcesInterfaceSP resourcesInterface)
-{
-    const bool result = KoResource::load(resourcesInterface);
-    setIsEditable(result && QFileInfo(filename()).isWritable());
-    return result;
-}
-
 bool KoColorSet::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
     Q_UNUSED(resourcesInterface);
@@ -444,6 +437,33 @@ KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool
     return res;
 }
 
+void KoColorSet::updateThumbnail()
+{
+    int rows = 0;
+    for (QString groupName : d->groupNames) {
+        int lastRowGroup = 0;
+        for (const KisSwatchGroup::SwatchInfo &info : d->groups[groupName].infoList()) {
+            lastRowGroup = qMax(lastRowGroup, info.row);
+        }
+        rows += (lastRowGroup + 1);
+    }
+
+    QImage img(d->global().columnCount() * 4, rows*4, QImage::Format_ARGB32);
+    QPainter gc(&img);
+    int lastRow = 0;
+    gc.fillRect(img.rect(), Qt::darkGray);
+    for (QString groupName : d->groupNames) {
+        int lastRowGroup = 0;
+        for (const KisSwatchGroup::SwatchInfo &info : d->groups[groupName].infoList()) {
+            QColor c = info.swatch.color().toQColor();
+            gc.fillRect(info.column * 4, (lastRow + info.row) * 4, 4, 4, c);
+            lastRowGroup = qMax(lastRowGroup, info.row);
+        }
+        lastRow += (lastRowGroup + 1);
+    }
+    setImage(img);
+}
+
 /********************************KoColorSet::Private**************************/
 
 KoColorSet::Private::Private(KoColorSet *a_colorSet)
@@ -670,31 +690,7 @@ bool KoColorSet::Private::init()
         res = false;
     }
     colorSet->setValid(res);
-
-    int rows = 0;
-    for (QString groupName : groupNames) {
-        int lastRowGroup = 0;
-        for (const KisSwatchGroup::SwatchInfo &info : groups[groupName].infoList()) {
-            lastRowGroup = qMax(lastRowGroup, info.row);
-        }
-        rows += (lastRowGroup + 1);
-    }
-
-    QImage img(global().columnCount() * 4, rows*4, QImage::Format_ARGB32);
-    QPainter gc(&img);
-    int lastRow = 0;
-    gc.fillRect(img.rect(), Qt::darkGray);
-    for (QString groupName : groupNames) {
-        int lastRowGroup = 0;
-        for (const KisSwatchGroup::SwatchInfo &info : groups[groupName].infoList()) {
-            QColor c = info.swatch.color().toQColor();
-            gc.fillRect(info.column * 4, (lastRow + info.row) * 4, 4, 4, c);
-            lastRowGroup = qMax(lastRowGroup, info.row);
-        }
-        lastRow += (lastRowGroup + 1);
-    }
-    colorSet->setImage(img);
-    colorSet->setValid(res);
+    colorSet->updateThumbnail();
 
     data.clear();
     return res;
@@ -1525,10 +1521,10 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 
     for (const KoColorSpace *colorSpace : colorSpaces) {
         QString fn = QFileInfo(colorSpace->profile()->fileName()).fileName();
-        if (!store->open(fn)) { return false; }
+        if (!store->open(fn)) { qWarning() << "Could not open the store for profiles directory"; return false; }
         QByteArray profileRawData = colorSpace->profile()->rawData();
-        if (!store->write(profileRawData)) { return false; }
-        if (!store->close()) { return false; }
+        if (!store->write(profileRawData)) { qWarning() << "Could not write the profiles data into the store"; return false; }
+        if (!store->close()) { qWarning() << "Could not close the store for profiles directory"; return false; }
         QDomElement el = doc.createElement(KPL_PALETTE_PROFILE_TAG);
         el.setAttribute(KPL_PALETTE_FILENAME_ATTR, fn);
         el.setAttribute(KPL_PALETTE_NAME_ATTR, colorSpace->profile()->name());
@@ -1548,6 +1544,7 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
     if (!store->close()) { qWarning() << "Could not close the store"; return false; }
 
     bool r = store->finalize();
+    if (!r) { qWarning() << "Could not finalize the store"; }
     return r;
 }
 
@@ -1562,7 +1559,16 @@ void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
         const KoColorProfile *profile = info.swatch.color().colorSpace()->profile();
         // Only save non-builtin profiles.=
         if (!profile->fileName().isEmpty()) {
-            colorSetSet.insert(info.swatch.color().colorSpace());
+            bool alreadyIncluded = false;
+            Q_FOREACH(const KoColorSpace* colorSpace, colorSetSet) {
+                if (colorSpace->profile()->fileName() == profile->fileName()) {
+                    alreadyIncluded = true;
+                    break;
+                }
+            }
+            if(!alreadyIncluded) {
+                colorSetSet.insert(info.swatch.color().colorSpace());
+            }
         }
         QDomElement swatchEle = doc.createElement(KPL_SWATCH_TAG);
         swatchEle.setAttribute(KPL_SWATCH_NAME_ATTR, info.swatch.name());

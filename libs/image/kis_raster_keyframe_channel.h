@@ -105,6 +105,7 @@ public:
     void cloneKeyframe(int source, int destination, KUndo2Command *parentUndoCmd = nullptr);
     bool areClones(int timeA, int timeB);
     QSet<int> clonesOf(int time);
+    QSet<int> timesForFrameID(int frameID) const;
     static QSet<int> clonesOf(const KisNode *node, int time);
 
     void makeUnique(int time, KUndo2Command *parentUndoCmd = nullptr);

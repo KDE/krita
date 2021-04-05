@@ -15,9 +15,9 @@
 #include <brushengine/kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
 #include <kis_action.h>
-#include "widgets/kis_paintop_presets_save.h"
-#include "widgets/kis_paintop_presets_popup.h"
+#include "dialogs/KisDlgSavePreset.h"
 #include "kis_favorite_resource_manager.h"
+#include "KoDialog.h"
 
 class QString;
 class KisCanvasResourceProvider;
@@ -27,18 +27,18 @@ class KoResource;
  * Popup widget for presets with built-in functionality
  * for adding and removing presets.
  */
-class KisPaintOpPresetsPopup : public QWidget
+class KisPaintOpPresetsEditor : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider,
+    KisPaintOpPresetsEditor(KisCanvasResourceProvider * resourceProvider,
                            KisFavoriteResourceManager* favoriteResourceManager,
                            KisPresetSaveWidget* savePresetWidget,
                            QWidget * parent = 0);
 
-    ~KisPaintOpPresetsPopup() override;
+    ~KisPaintOpPresetsEditor() override;
 
     void setPaintOpSettingsWidget(QWidget * widget);
 
@@ -130,5 +130,26 @@ private:
 
     void toggleBrushRenameUIActive(bool isRenaming);
 };
+
+class KisPaintOpPresetsEditorDialog : public KoDialog
+{
+    Q_OBJECT
+
+public:
+    KisPaintOpPresetsEditorDialog(KisCanvasResourceProvider * resourceProvider,
+                           KisFavoriteResourceManager* favoriteResourceManager,
+                           KisPresetSaveWidget* savePresetWidget,
+                           QWidget * parent = 0);
+
+
+
+    KisPaintOpPresetsEditor*  m_popupWidget {0};
+    ~KisPaintOpPresetsEditorDialog() override;
+
+    KisPaintOpPresetsEditor* editorWidget() { return m_popupWidget; }
+
+};
+
+
 
 #endif

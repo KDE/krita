@@ -65,7 +65,7 @@ void KisInputButton::setType(KisInputButton::ButtonType newType)
 void KisInputButton::clear()
 {
     d->keys.clear();
-    d->buttons = 0;
+    d->buttons = QFlags<Qt::MouseButton>();
     d->wheel = KisShortcutConfiguration::NoMovement;
     d->updateLabel();
 }

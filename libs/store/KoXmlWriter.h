@@ -9,8 +9,10 @@
 #ifndef XMLWRITER_H
 #define XMLWRITER_H
 
+#include <QDebug>
 #include <QMap>
 #include <QIODevice>
+
 #include "kritastore_export.h"
 
 /**
@@ -30,11 +32,10 @@ public:
     /// Destructor
     ~KoXmlWriter();
 
-    QIODevice *device() const;
-
     /**
      * Start the XML document.
      * This writes out the \<?xml?\> tag with utf8 encoding, and the DOCTYPE.
+     *
      * @param rootElemName the name of the root element, used in the DOCTYPE tag.
      * @param publicId the public identifier, e.g. "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"
      * @param systemId the system identifier, e.g. "office.dtd" or a full URL to it.
@@ -46,9 +47,8 @@ public:
 
     /**
      * Start a new element, as a child of the current element.
-     * @param tagName the name of the tag. Warning: this string must
-     * remain alive until endElement, no copy is internally made.
-     * Usually tagName is a string constant so this is no problem anyway.
+     *
+     * @param tagName the name of the tag.
      * @param indentInside if set to false, there will be no indentation inside
      * this tag. This is useful for elements where whitespace matters.
      */
@@ -86,6 +86,7 @@ public:
      * (unlike QString::number and setNum, which default to 6 digits)
      */
     void addAttribute(const char* attrName, double value);
+
     /**
      * Add an attribute whose value is a floating point number
      * The number is written out with the highest possible precision
@@ -100,11 +101,13 @@ public:
      * Add an attribute to the current element.
      */
     void addAttribute(const char* attrName, const char* value);
+
     /**
      * Terminate the current element. After this you should start a new one (sibling),
      * add a sibling text node, or close another one (end of siblings).
      */
     void endElement();
+
     /**
      * Overloaded version of addTextNode( const char* ),
      * which is a bit slower because it needs to convert @p str to utf8 first.
@@ -112,8 +115,10 @@ public:
     inline void addTextNode(const QString& str) {
         addTextNode(str.toUtf8());
     }
+
     /// Overloaded version of the one taking a const char* argument
     void addTextNode(const QByteArray& cstr);
+
     /**
      * @brief Adds a text node as a child of the current element.
      *
@@ -122,25 +127,6 @@ public:
      * and startElement( "b" ); endElement( "b" ); addTextNode( "foo" ) gives \<p\>\<b/\>foo\</p\>
      */
     void addTextNode(const char* cstr);
-
-    /**
-     * @brief Adds a processing instruction
-     *
-     * This writes a processing instruction, like <?foo bar blah?>, where foo
-     * is the target, and the rest is the data.
-     *
-     * Processing instructions are used in XML to keep processor-specific
-     * information in the text of the document.
-     */
-    void addProcessingInstruction(const char* cstr);
-
-    /**
-     * This is quite a special-purpose method, not for everyday use.
-     * It adds a complete element (with its attributes and child elements)
-     * as a child of the current element. The string is supposed to be escaped
-     * for XML already, so it will usually come from another KoXmlWriter.
-     */
-    void addCompleteElement(const char* cstr);
 
     /**
      * This is quite a special-purpose method, not for everyday use.
@@ -161,75 +147,34 @@ public:
      */
     void addManifestEntry(const QString& fullPath, const QString& mediaType);
 
-    /**
-     * Special helper for writing config item into settings.xml
-     * @note OASIS-specific
-     */
-    void addConfigItem(const QString & configName, const QString& value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, bool value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, int value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, double value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, float value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, long value);
-    /// @note OASIS-specific
-    void addConfigItem(const QString & configName, short value);
-
-    // TODO addConfigItem for datetime and base64Binary
-
-    /**
-     * @brief Adds a text span as nodes of the current element.
-     *
-     * Unlike KoXmlWriter::addTextNode it handles tabulations, linebreaks,
-     * and multiple spaces by using the appropriate OASIS tags.
-     *
-     * @param text the text to write
-     *
-     * @note OASIS-specific
-     */
-    void addTextSpan(const QString& text);
-    /**
-     * Overloaded version of addTextSpan which takes an additional tabCache map.
-     * @param text the text to write
-     * @param tabCache optional map allowing to find a tab for a given character index
-     * @note OASIS-specific
-     */
-    void addTextSpan(const QString& text, const QMap<int, int>& tabCache);
-
-    /**
-     * @return the current indentation level.
-     * Useful when creating a sub-KoXmlWriter (see addCompleteElement)
-     */
-    int indentLevel() const;
-
-    /**
-     * Return all the open tags at this time, root element first.
-     */
-    QList<const char*> tagHierarchy() const;
-
-    /**
-     * Return the so far written XML as string for debugging purposes.
-     */
-    QString toString() const;
-
 private:
     struct Tag {
-        Tag(const char* t = 0, bool ind = true)
-                : tagName(t), hasChildren(false), lastChildIsText(false),
-                openingTagClosed(false), indentInside(ind) {}
+        Tag(const char *t = 0, bool ind = true)
+            : hasChildren(false)
+            , lastChildIsText(false)
+            , openingTagClosed(false)
+            , indentInside(ind)
+        {
+            tagName = new char[qstrlen(t) + 1];
+            qstrcpy(tagName, t);
+        }
+
+        ~Tag() {
+            delete[] tagName;
+        }
+
         Tag(const Tag &original)
         {
-            tagName = original.tagName;
+            tagName = new char[qstrlen(original.tagName) + 1];
+            qstrcpy(tagName, original.tagName);
+
             hasChildren = original.hasChildren;
             lastChildIsText = original.lastChildIsText;
             openingTagClosed = original.openingTagClosed;
             indentInside = original.indentInside;
         }
-        const char* tagName;
+
+        char *tagName {0};
         bool hasChildren : 1; ///< element or text children
         bool lastChildIsText : 1; ///< last child is a text node
         bool openingTagClosed : 1; ///< true once the '\>' in \<tag a="b"\> is written out
@@ -239,27 +184,20 @@ private:
     /// Write out \n followed by the number of spaces required.
     void writeIndent();
 
-    // writeCString is much faster than writeString.
-    // Try to use it as much as possible, especially with constants.
-    void writeString(const QString& str);
+    void writeCString(const char* cstr);
 
-    // TODO check return value!!!
-    inline void writeCString(const char* cstr) {
-        device()->write(cstr, qstrlen(cstr));
-    }
-    inline void writeChar(char c) {
-        device()->putChar(c);
-    }
+    void writeChar(char c);
+
+
     inline void closeStartElement(Tag& tag) {
         if (!tag.openingTagClosed) {
             tag.openingTagClosed = true;
             writeChar('>');
         }
     }
-    char* escapeForXML(const char* source, int length) const;
+    char *escapeForXML(const char* source, int length) const;
     bool prepareForChild(bool indentInside = true);
     void prepareForTextNode();
-    void init();
 
     class Private;
     Private * const d;

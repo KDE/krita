@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Tag
+ResourceType=paintoppreset
+Name=Pixel Art
+Name[ca]=Art de píxels
+Name[ca@valencia]=Art de píxels
+Name[en_GB]=Pixel Art
+Name[es]=Arte de píxel
+Name[fr]=Art en pixels
+Name[nl]=Pixel Art
+Name[pt]=Arte com Pixels
+Name[sv]=Bildpunktskonst
+Name[uk]=Піксельна графіка
+Name[x-test]=xxPixel Artxx
+Comment=Presets for working with individual pixels
+Comment[ca]=Predefinits per a treballar amb píxels individuals
+Comment[ca@valencia]=Predefinits per a treballar amb píxels individuals
+Comment[en_GB]=Presets for working with individual pixels
+Comment[es]=Valores predefinidos para trabajar con píxeles individuales
+Comment[fr]=Préréglages pour travailler avec des pixels individuels
+Comment[nl]=Voorinstellingen voor werken met individuele pixels
+Comment[pt]=Predefinições para lidar com pixels individuais
+Comment[sv]=Förinställningar för att arbeta med individuella bildpunkter
+Comment[uk]=Набори для роботи з окремими пікселями
+Comment[x-test]=xxPresets for working with individual pixelsxx
+URL=Pixel Art

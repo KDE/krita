@@ -62,7 +62,7 @@ KisInputManager::KisInputManager(QObject *parent)
     d->setupActions();
 
     connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)), SLOT(slotAboutToChangeTool()));
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)), SLOT(slotToolChanged()));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)), SLOT(slotToolChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
 
 

@@ -83,6 +83,7 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
                                     KisLayerStyleKnockoutBlower *blower,
                                     const QRect &applyRect,
                                     const psd_layer_effects_stroke *config,
+                                    KisResourcesInterfaceSP resourcesInterface,
                                     KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
@@ -127,7 +128,7 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
                                                     opacityU8,
                                                     QBitArray(),
                                                     srcDevice);
-    KisLsUtils::fillOverlayDevice(dstDevice, applyRect, config, env);
+    KisLsUtils::fillOverlayDevice(dstDevice, applyRect, config, resourcesInterface, env);
 }
 
 void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
@@ -144,7 +145,7 @@ void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
     if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
     KisLsUtils::LodWrapper<psd_layer_effects_stroke> w(env->currentLevelOfDetail(), config);
-    applyStroke(src, dst, blower, applyRect, w.config, env);
+    applyStroke(src, dst, blower, applyRect, w.config, style->resourcesInterface(), env);
 }
 
 QRect KisLsStrokeFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const

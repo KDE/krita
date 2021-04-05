@@ -10,7 +10,7 @@
 
 #include <KoGenericRegistry.h>
 #include <KoShapeFactoryBase.h>
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 #include "kritaflake_export.h"
 
@@ -52,7 +52,7 @@ public:
      *    set a layer which was previously created and stored in the context.
      * @see KoShapeLoadingContext::layer()
      */
-    KoShape *createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShape *createShapeFromXML(const QDomElement &element, KoShapeLoadingContext &context) const;
 
     /**
      * Returns a list of shape factories supporting the specified xml element.

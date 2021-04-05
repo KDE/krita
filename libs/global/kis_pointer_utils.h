@@ -126,5 +126,50 @@ T* removeSharedPointer(QSharedPointer<T> value)
     return value.data();
 }
 
+
+template <typename T>
+struct KisSharedPointerTraits
+{
+};
+
+template <typename T>
+struct KisSharedPointerTraits<QSharedPointer<T>>
+{
+    template <typename U>
+    using SharedPointerType = QSharedPointer<U>;
+    using ValueType = T;
+
+    template <typename D, typename S>
+    static inline QSharedPointer<D> dynamicCastSP(QSharedPointer<S> src) {
+        return src.template dynamicCast<D>();
+    }
+};
+
+template <typename T>
+struct KisSharedPointerTraits<KisSharedPtr<T>>
+{
+    template <typename U>
+    using SharedPointerType = KisSharedPtr<U>;
+    using ValueType = T;
+
+    template <typename D, typename S>
+    static inline KisSharedPtr<D> dynamicCastSP(KisSharedPtr<S> src) {
+        return KisSharedPtr<D>(dynamic_cast<D*>(src.data()));
+    }
+};
+
+template <typename T>
+struct KisSharedPointerTraits<KisPinnedSharedPtr<T>>
+{
+    template <typename U>
+    using SharedPointerType = KisPinnedSharedPtr<U>;
+    using ValueType = T;
+
+    template <typename D, typename S>
+    static inline KisPinnedSharedPtr<D> dynamicCastSP(KisPinnedSharedPtr<S> src) {
+        return KisPinnedSharedPtr<D>(dynamic_cast<D*>(src.data()));
+    }
+};
+
 #endif // KIS_POINTER_UTILS_H
 

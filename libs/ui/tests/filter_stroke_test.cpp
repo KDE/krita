@@ -54,16 +54,13 @@ protected:
         Q_UNUSED(resources);
 
         image->addJob(strokeId(),
-                      new KisFilterStrokeStrategy::
-                      Data(QRect(100,100,100,100), true));
+                      new KisFilterStrokeStrategy::FilterJobData());
 
         image->addJob(strokeId(),
-                      new KisFilterStrokeStrategy::
-                      Data(QRect(200,100,100,100), true));
+                      new KisFilterStrokeStrategy::FilterJobData());
 
         image->addJob(strokeId(),
-                      new KisFilterStrokeStrategy::
-                      Data(QRect(100,200,100,100), true));
+                      new KisFilterStrokeStrategy::FilterJobData());
     }
 
 private:

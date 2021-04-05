@@ -157,6 +157,7 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
     void dragEnterEvent( QDragEnterEvent *event ) override;
     void dropEvent( QDropEvent *event ) override;
     void changeEvent(QEvent *event) override;
+    bool event(QEvent *event) override;
 
   private:
     class Private;

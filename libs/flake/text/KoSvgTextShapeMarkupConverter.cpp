@@ -104,7 +104,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromSvg(const QString &svgText, const
 
     const QString fullText = QString("<svg>\n%1\n%2\n</svg>\n").arg(stylesText).arg(svgText);
 
-    KoXmlDocument doc = SvgParser::createDocumentFromSvg(fullText, &errorMessage, &errorLine, &errorColumn);
+    QDomDocument doc = SvgParser::createDocumentFromSvg(fullText, &errorMessage, &errorLine, &errorColumn);
     if (doc.isNull()) {
         d->errors << QString("line %1, col %2: %3").arg(errorLine).arg(errorColumn).arg(errorMessage);
         return false;
@@ -116,13 +116,13 @@ bool KoSvgTextShapeMarkupConverter::convertFromSvg(const QString &svgText, const
     SvgParser parser(&resourceManager);
     parser.setResolution(boundsInPixels, pixelsPerInch);
 
-    KoXmlElement root = doc.documentElement();
-    KoXmlNode node = root.firstChild();
+    QDomElement root = doc.documentElement();
+    QDomNode node = root.firstChild();
 
     bool textNodeFound = false;
 
     for (; !node.isNull(); node = node.nextSibling()) {
-        KoXmlElement el = node.toElement();
+        QDomElement el = node.toElement();
         if (el.isNull()) continue;
 
         if (el.tagName() == "defs") {

@@ -43,13 +43,13 @@ public:
     explicit SvgParser(KoDocumentResourceManager *documentResourceManager);
     virtual ~SvgParser();
 
-    static KoXmlDocument createDocumentFromSvg(QIODevice *device, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    static KoXmlDocument createDocumentFromSvg(const QByteArray &data, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    static KoXmlDocument createDocumentFromSvg(const QString &data, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    static KoXmlDocument createDocumentFromSvg(QXmlInputSource *source, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static QDomDocument createDocumentFromSvg(QIODevice *device, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static QDomDocument createDocumentFromSvg(const QByteArray &data, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static QDomDocument createDocumentFromSvg(const QString &data, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static QDomDocument createDocumentFromSvg(QXmlInputSource *source, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
 
     /// Parses a svg fragment, returning the list of top level child shapes
-    QList<KoShape*> parseSvg(const KoXmlElement &e, QSizeF * fragmentSize = 0);
+    QList<KoShape*> parseSvg(const QDomElement &e, QSizeF * fragmentSize = 0);
 
     /// Sets the initial xml base directory (the directory form where the file is read)
     void setXmlBaseDir(const QString &baseDir);
@@ -76,50 +76,50 @@ public:
 
     QList<QExplicitlySharedDataPointer<KoMarker>> knownMarkers() const;
 
-    void parseDefsElement(const KoXmlElement &e);
-    KoShape* parseTextElement(const KoXmlElement &e, KoSvgTextShape *mergeIntoShape = 0);
+    void parseDefsElement(const QDomElement &e);
+    KoShape* parseTextElement(const QDomElement &e, KoSvgTextShape *mergeIntoShape = 0);
 
 protected:
 
     /// Parses a group-like element element, saving all its topmost properties
-    KoShape* parseGroup(const KoXmlElement &e, const KoXmlElement &overrideChildrenFrom = KoXmlElement(), bool createContext = true);
+    KoShape* parseGroup(const QDomElement &e, const QDomElement &overrideChildrenFrom = QDomElement(), bool createContext = true);
 
     // XXX
-    KoShape* parseTextNode(const KoXmlText &e);
+    KoShape* parseTextNode(const QDomText &e);
     
     /// Parses a container element, returning a list of child shapes
-    QList<KoShape*> parseContainer(const KoXmlElement &, bool parseTextNodes = false);
+    QList<KoShape*> parseContainer(const QDomElement &, bool parseTextNodes = false);
 
     /// XXX
-    QList<KoShape*> parseSingleElement(const KoXmlElement &b, DeferredUseStore* deferredUseStore = 0);
+    QList<KoShape*> parseSingleElement(const QDomElement &b, DeferredUseStore* deferredUseStore = 0);
 
     /// Parses a use element, returning a list of child shapes
-    KoShape* parseUse(const KoXmlElement &, DeferredUseStore* deferredUseStore);
+    KoShape* parseUse(const QDomElement &, DeferredUseStore* deferredUseStore);
 
-    KoShape* resolveUse(const KoXmlElement &e, const QString& key);
+    KoShape* resolveUse(const QDomElement &e, const QString& key);
 
     /// Parses a gradient element
-    SvgGradientHelper *parseGradient(const KoXmlElement &);
+    SvgGradientHelper *parseGradient(const QDomElement &);
 
     /// Parses mesh gradient element
-    SvgGradientHelper* parseMeshGradient(const KoXmlElement&);
+    SvgGradientHelper* parseMeshGradient(const QDomElement&);
     
     /// Parses a single meshpatch and returns the pointer
-    QList<QPair<QString, QColor>> parseMeshPatch(const KoXmlNode& meshpatch);
+    QList<QPair<QString, QColor>> parseMeshPatch(const QDomNode& meshpatch);
 
     /// Parses a pattern element
-    QSharedPointer<KoVectorPatternBackground> parsePattern(const KoXmlElement &e, const KoShape *__shape);
+    QSharedPointer<KoVectorPatternBackground> parsePattern(const QDomElement &e, const KoShape *__shape);
 
     /// Parses a filter element
-    bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
+    bool parseFilter(const QDomElement &, const QDomElement &referencedBy = QDomElement());
 
     /// Parses a clip path element
-    bool parseClipPath(const KoXmlElement &);
-    bool parseClipMask(const KoXmlElement &e);
+    bool parseClipPath(const QDomElement &);
+    bool parseClipMask(const QDomElement &e);
 
-    bool parseMarker(const KoXmlElement &e);
+    bool parseMarker(const QDomElement &e);
 
-    bool parseSymbol(const KoXmlElement &e);
+    bool parseSymbol(const QDomElement &e);
 
     /// parses a length attribute
     qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
@@ -136,13 +136,13 @@ protected:
     /// parses a angular attribute values, result in radians
     qreal parseAngular(const QString &unit);
 
-    KoShape *createObjectDirect(const KoXmlElement &b);
+    KoShape *createObjectDirect(const QDomElement &b);
 
     /// Creates an object from the given xml element
-    KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
+    KoShape * createObject(const QDomElement &, const SvgStyles &style = SvgStyles());
 
     /// Create path object from the given xml element
-    KoShape * createPath(const KoXmlElement &);
+    KoShape * createPath(const QDomElement &);
 
     /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient(const QString &id);
@@ -163,17 +163,17 @@ protected:
     KoShape * createShape(const QString &shapeID);
 
     /// Creates shape from specified svg element
-    KoShape * createShapeFromElement(const KoXmlElement &element, SvgLoadingContext &context);
+    KoShape * createShapeFromElement(const QDomElement &element, SvgLoadingContext &context);
 
     /// Builds the document from the given shapes list
     void buildDocument(QList<KoShape*> shapes);
 
-    void uploadStyleToContext(const KoXmlElement &e);
+    void uploadStyleToContext(const QDomElement &e);
     void applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
     void applyCurrentBasicStyle(KoShape *shape);
 
     /// Applies styles to the given shape
-    void applyStyle(KoShape *, const KoXmlElement &, const QPointF &shapeToOriginalUserCoordinates);
+    void applyStyle(KoShape *, const QDomElement &, const QPointF &shapeToOriginalUserCoordinates);
 
     /// Applies styles to the given shape
     void applyStyle(KoShape *, const SvgStyles &, const QPointF &shapeToOriginalUserCoordinates);
@@ -197,7 +197,7 @@ protected:
 
     /// Applies viewBox transformation to the current graphical context
     /// NOTE: after applying the function currentBoundingBox can become null!
-    void applyViewBoxTransform(const KoXmlElement &element);
+    void applyViewBoxTransform(const QDomElement &element);
 
 private:
     QSizeF m_documentSize;

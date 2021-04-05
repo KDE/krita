@@ -10,6 +10,7 @@
 #include <QObject>
 
 #include <kis_paint_device.h>
+#include <kis_fixed_paint_device.h>
 #include <kis_painter.h>
 #include <kis_paint_information.h>
 #include <kis_lod_transform.h>
@@ -84,6 +85,7 @@ private:
     KisPaintDeviceSP m_dab;
     QScopedPointer<KisPainter> m_tempPainter;
     QScopedPointer<KisPainter> m_backgroundPainter;
+    KisFixedPaintDeviceSP m_blendDevice;
 
 };
 

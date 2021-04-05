@@ -139,7 +139,7 @@ KoResourceSP KisAbrStorage::resource(const QString &url)
     return m_brushCollection->brushByName(QFileInfo(url).fileName());
 }
 
-bool KisAbrStorage::loadVersionedResource(KoResourceSP resource)
+bool KisAbrStorage::loadVersionedResource(KoResourceSP /*resource*/)
 {
     return false;
 }
@@ -157,4 +157,9 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisAbrStorage::resources(co
 QSharedPointer<KisResourceStorage::TagIterator> KisAbrStorage::tags(const QString &resourceType)
 {
     return QSharedPointer<KisResourceStorage::TagIterator>(new AbrTagIterator(location(), resourceType));
+}
+
+QImage KisAbrStorage::thumbnail() const
+{
+    return m_brushCollection->image();
 }

@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include "widgets/kis_paintop_presets_save.h"
+#include "dialogs/KisDlgSavePreset.h"
+
 #include <QDebug>
 #include <QDate>
 #include <QTime>
@@ -217,5 +218,3 @@ void KisPresetSaveWidget::useNewBrushDialog(bool show)
     m_useNewBrushDialog = show;
 }
 
-
-#include "moc_kis_paintop_presets_save.cpp"

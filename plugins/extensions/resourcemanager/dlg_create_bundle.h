@@ -50,8 +50,8 @@ private Q_SLOTS:
 
 private:
 
-    void putResourcesInTheBundle() const;
-
+    void putResourcesInTheBundle(KoResourceBundleSP bundle) const;
+    void putMetaDataInTheBundle(KoResourceBundleSP bundle) const;
     QWidget *m_page;
     Ui::WdgDlgCreateBundle *m_ui;
 

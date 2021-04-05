@@ -111,6 +111,7 @@ private Q_SLOTS:
 
     void increaseBrushSize();
     void decreaseBrushSize();
+    void showBrushSize();
 
     void activateSampleColorDelayed();
 

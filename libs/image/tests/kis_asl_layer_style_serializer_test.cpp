@@ -126,7 +126,7 @@ void KisAslLayerStyleSerializerTest::testReading()
     CMP(gradientOverlay, gradientXOffset, 0);
     CMP(gradientOverlay, gradientYOffset, 0);
     //CMP(gradientOverlay, dither, );
-    CMP(gradientOverlay, gradient()->name, QString("Two Color"));
+    CMP(gradientOverlay, gradient(style->resourcesInterface())->name, QString("Two Color"));
 
     CMP(stroke, effectEnabled, true);
     CMP(stroke, blendMode, COMPOSITE_OVER);
@@ -176,8 +176,8 @@ void KisAslLayerStyleSerializerTest::testReading()
     CMP(patternOverlay, horizontalPhase, 201);
     CMP(patternOverlay, verticalPhase, 162);
 
-    CMP(patternOverlay, pattern()->name, QString("$$$/Presets/Patterns/Patterns_pat/Bubbles=Bubbles"));
-    CMP(patternOverlay, pattern()->filename, QString("b7334da0-122f-11d4-8bb5-e27e45023b5f_pattern"));
+    CMP(patternOverlay, pattern(style->resourcesInterface())->name, QString("$$$/Presets/Patterns/Patterns_pat/Bubbles=Bubbles"));
+    CMP(patternOverlay, pattern(style->resourcesInterface())->filename, QString("b7334da0-122f-11d4-8bb5-e27e45023b5f.pat"));
 
 }
 
@@ -254,6 +254,9 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
     dumbImage.fill(Qt::red);
     KoPatternSP pattern(new KoPattern(dumbImage, "test_pattern", ""));
 
+    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources({}));
+    resourcesInterface->addResource(pattern);
+    style->setResourcesInterface(resourcesInterface);
 
     dbgKrita << ppVar(pattern->name());
     dbgKrita << ppVar(pattern->filename());

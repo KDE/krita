@@ -10,7 +10,8 @@
 #include "kis_paint_device.h"
 
 KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler(QObject *parent)
-    : m_renderer(new KisAsyncStoryboardThumbnailRenderer(this))
+    : QObject(parent)
+    , m_renderer(new KisAsyncStoryboardThumbnailRenderer(this))
 {
     //connect signals to the renderer.
     connect(m_renderer, SIGNAL(sigNotifyFrameCompleted(int,KisPaintDeviceSP)), this, SLOT(slotFrameRegenerationCompleted(int, KisPaintDeviceSP)));

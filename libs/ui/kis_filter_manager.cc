@@ -23,6 +23,11 @@
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
+#include <kis_paint_device_frames_interface.h>
+#include <kis_image_animation_interface.h>
+#include <kis_raster_keyframe_channel.h>
+#include <kis_time_span.h>
+#include <kis_image_config.h>
 
 // krita/ui
 #include "KisViewManager.h"
@@ -36,6 +41,7 @@
 #include "strokes/kis_filter_stroke_strategy.h"
 #include "krita_utils.h"
 #include "kis_icon_utils.h"
+#include "kis_layer_utils.h"
 #include <KisGlobalResourcesInterface.h>
 
 
@@ -64,6 +70,8 @@ struct KisFilterManager::Private {
     QRect initialApplyRect;
     QRect lastProcessRect;
     QRect lastExtendedUpdateRect;
+
+    bool filterAllSelectedFrames = false;
 
     KisSignalMapper actionsMapper;
 
@@ -316,21 +324,11 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     d->currentStrokeId =
         image->startStroke(strategy);
 
-    QRect processRect = filter->changedRect(applyRect, filterConfig.data(), 0);
-    processRect &= image->bounds();
 
-    if (filter->supportsThreading()) {
-        QSize size = KritaUtils::optimalPatchSize();
-        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(processRect, size);
-
-        Q_FOREACH (const QRect &rc, rects) {
-            image->addJob(d->currentStrokeId,
-                          new KisFilterStrokeStrategy::Data(rc, true));
-        }
-    } else {
-        image->addJob(d->currentStrokeId,
-                      new KisFilterStrokeStrategy::Data(processRect, false));
-    }
+    // Apply filter preview to active, visible frame only.
+    KisImageConfig imgConf(true);
+    const int activeFrame = (imgConf.autoKeyEnabled() && !imgConf.autoKeyModeDuplicate()) ? KisLayerUtils::fetchLayerActiveRasterFrameTime(d->view->activeNode()) : -1;
+    image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData());
 
     {
         KisFilterStrokeStrategy::IdleBarrierData *data =
@@ -340,7 +338,6 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     }
 
     QRegion extraUpdateRegion(d->lastExtendedUpdateRect);
-    extraUpdateRegion -= processRect;
 
     if (!extraUpdateRegion.isEmpty()) {
         QVector<QRect> rects;
@@ -351,13 +348,26 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     }
 
     d->currentlyAppliedConfiguration = filterConfig;
-    d->lastExtendedUpdateRect |= processRect;
-    d->lastProcessRect = processRect;
 }
 
 void KisFilterManager::finish()
 {
     Q_ASSERT(d->currentStrokeId);
+
+    if (d->filterAllSelectedFrames) {   // Apply filter to the other selected frames...
+        KisImageSP image = d->view->image();
+        QSet<int> selectedTimes = image->animationInterface()->activeLayerSelectedTimes();
+        KisPaintDeviceSP paintDevice = d->view->activeNode()->paintDevice();
+        KisNodeSP node = d->view->activeNode();
+
+        // Filter selected times to only those with keyframes...
+        selectedTimes = KisLayerUtils::filterTimesForOnlyRasterKeyedTimes(node, selectedTimes);
+        QSet<int> uniqueFrames = KisLayerUtils::fetchUniqueFrameTimes(node, selectedTimes);
+
+        Q_FOREACH(const int& frameTime, uniqueFrames) {
+            image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData(frameTime));
+        }
+    }
 
     d->view->image()->endStroke(d->currentStrokeId);
 
@@ -371,7 +381,6 @@ void KisFilterManager::finish()
     d->reapplyAction->setEnabled(true);
     d->reapplyAction->setText(i18n("Apply Filter Again: %1", filter->name()));
 
-    d->currentStrokeId.clear();
     d->cancelSilentlyHandle.clear();
     d->idleBarrierCookie.clear();
     d->currentlyAppliedConfiguration.clear();
@@ -401,6 +410,16 @@ bool KisFilterManager::isStrokeRunning() const
 bool KisFilterManager::isIdle() const
 {
     return !d->idleBarrierCookie;
+}
+
+void KisFilterManager::setFilterAllSelectedFrames(bool filterAllSelectedFrames)
+{
+    d->filterAllSelectedFrames = filterAllSelectedFrames;
+}
+
+bool KisFilterManager::filterAllSelectedFrames()
+{
+    return d->filterAllSelectedFrames;
 }
 
 void KisFilterManager::slotStrokeEndRequested()

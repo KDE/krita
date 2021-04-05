@@ -41,6 +41,9 @@ public:
 
     bool isIdle() const;
 
+    void setFilterAllSelectedFrames(bool filterAllSelectedFrames);
+    bool filterAllSelectedFrames();
+
 private Q_SLOTS:
 
     void insertFilter(const QString &name);

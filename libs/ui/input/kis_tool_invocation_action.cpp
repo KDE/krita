@@ -23,34 +23,8 @@
 class KisToolInvocationAction::Private
 {
 public:
-    Private()
-        : active(false),
-          lineToolActivated(false),
-          ellipseToolActivated(false),
-          rectToolActivated(false),
-          moveToolActivated(false),
-          fillToolActivated(false),
-          gradientToolActivated(false),
-          measureToolActivated(false),
-          ellipseSelToolActivated(false),
-          rectSelToolActivated(false),
-          contigSelToolActivated(false),
-          freehandSelToolActivated(false)
-    {
-    }
-
-    bool active;
-    bool lineToolActivated;
-    bool ellipseToolActivated;
-    bool rectToolActivated;
-    bool moveToolActivated;
-    bool fillToolActivated;
-    bool gradientToolActivated;
-    bool measureToolActivated;
-    bool ellipseSelToolActivated;
-    bool rectSelToolActivated;
-    bool contigSelToolActivated;
-    bool freehandSelToolActivated;
+    bool active {false};
+    bool deactivating {false};
 
     QPointer<KisToolProxy> activatedToolProxy;
     QPointer<KisToolProxy> runningToolProxy;
@@ -92,51 +66,45 @@ void KisToolInvocationAction::activate(int shortcut)
     Q_UNUSED(shortcut);
     if (!inputManager()) return;
 
+    QString temporaryToolId;
     switch(shortcut) {
         case LineToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolLine");
-            d->lineToolActivated = true;
+            temporaryToolId = "KritaShape/KisToolLine";
             break;
         case EllipseToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolEllipse");
-            d->ellipseToolActivated = true;
+            temporaryToolId = "KritaShape/KisToolEllipse";
             break;
         case RectToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolRectangle");
-            d->rectToolActivated = true;
+            temporaryToolId = "KritaShape/KisToolRectangle";
             break;
         case MoveToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KritaTransform/KisToolMove");
-            d->moveToolActivated = true;
+            temporaryToolId = "KritaTransform/KisToolMove";
             break;
         case FillToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KritaFill/KisToolFill");
-            d->fillToolActivated = true;
+            temporaryToolId = "KritaFill/KisToolFill";
             break;
         case GradientToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KritaFill/KisToolGradient");
-            d->gradientToolActivated = true;
+            temporaryToolId = "KritaFill/KisToolGradient";
             break;
         case MeasureToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolMeasure");
-            d->measureToolActivated = true;
+            temporaryToolId = "KritaShape/KisToolMeasure";
             break;
         case EllipseSelToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectElliptical");
-            d->ellipseSelToolActivated = true;
+            temporaryToolId = "KisToolSelectElliptical";
             break;
         case RectSelToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectRectangular");
-            d->rectSelToolActivated = true;
+            temporaryToolId = "KisToolSelectRectangular";
             break;
         case ContigSelToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectContiguous");
-            d->contigSelToolActivated = true;
+            temporaryToolId = "KisToolSelectContiguous";
             break;
         case FreehandSelToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectOutline");
-            d->freehandSelToolActivated = true;
+            temporaryToolId = "KisToolSelectOutline";
             break;
+    }
+
+    if (!temporaryToolId.isEmpty()) {
+        KoToolManager::instance()->switchToolRequested(temporaryToolId);
     }
 
     d->activatedToolProxy = inputManager()->toolProxy();
@@ -157,39 +125,11 @@ void KisToolInvocationAction::deactivate(int shortcut)
         d->activatedToolProxy.clear();
     }
 
-    if (shortcut == LineToolShortcut && d->lineToolActivated) {
-        d->lineToolActivated = false;
+    if (shortcut != ActivateShortcut && shortcut != ConfirmShortcut && shortcut != CancelShortcut && !d->deactivating) {
+        // Switching tool will force deactivation and will re-enter
+        d->deactivating = true;
         KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == EllipseToolShortcut && d->ellipseToolActivated) {
-        d->ellipseToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == RectToolShortcut && d->rectToolActivated) {
-        d->rectToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == MoveToolShortcut && d->moveToolActivated) {
-        d->moveToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == FillToolShortcut && d->fillToolActivated) {
-        d->fillToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == GradientToolShortcut && d->gradientToolActivated) {
-        d->gradientToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == MeasureToolShortcut && d->measureToolActivated) {
-        d->measureToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == EllipseSelToolShortcut && d->ellipseSelToolActivated) {
-        d->ellipseSelToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == RectSelToolShortcut && d->rectSelToolActivated) {
-        d->rectSelToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == ContigSelToolShortcut && d->contigSelToolActivated) {
-        d->contigSelToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == FreehandSelToolShortcut && d->freehandSelToolActivated) {
-        d->freehandSelToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
+        d->deactivating = false;
     }
 }
 
@@ -210,10 +150,11 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
         d->active =
             d->runningToolProxy->forwardEvent(
                 KisToolProxy::BEGIN, KisTool::Primary, event, event);
-    } else if (shortcut == ConfirmShortcut) {
-        QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
+    }
+    else if (shortcut == ConfirmShortcut) {
+        QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, QFlags<Qt::KeyboardModifier>());
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
-        QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, 0);
+        QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, QFlags<Qt::KeyboardModifier>());
         inputManager()->toolProxy()->keyReleaseEvent(&releaseEvent);
 
         /**

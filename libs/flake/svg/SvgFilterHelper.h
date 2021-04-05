@@ -42,9 +42,9 @@ public:
     QSizeF size(const QRectF & objectBound) const;
 
     /// Sets the dom element containing the filter
-    void setContent(const KoXmlElement &content);
+    void setContent(const QDomElement &content);
     /// Return the filer element
-    KoXmlElement content() const;
+    QDomElement content() const;
 
     static QPointF toUserSpace(const QPointF &position, const QRectF &objectBound);
     static QSizeF toUserSpace(const QSizeF &size, const QRectF &objectBound);
@@ -53,7 +53,7 @@ private:
     KoFlake::CoordinateSystem m_primitiveUnits;
     QPointF m_position;
     QSizeF m_size;
-    KoXmlElement m_filterContent;
+    QDomElement m_filterContent;
 };
 
 #endif // SVGFILTERHELPER_H

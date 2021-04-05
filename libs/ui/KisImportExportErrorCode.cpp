@@ -148,7 +148,8 @@ QString KisImportExportErrorCode::errorMessage() const
                 return i18n("There is not enough disk space left to save the file.");
             case ImportExportCodes::ErrorWhileWriting:
                 return i18n("Error occurred while writing to the file.");
-
+            case ImportExportCodes::FileFormatNotSupported:
+                return i18n("Krita does not support this file format.");
 
             // Both
             case ImportExportCodes::Cancelled:

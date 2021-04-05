@@ -50,6 +50,7 @@ set(kritaui_LIB_SRCS
     canvas/KisSnapPointStrategy.cpp
     canvas/KisSnapPixelStrategy.cpp
     canvas/KisMirrorAxisConfig.cpp
+
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -70,6 +71,8 @@ set(kritaui_LIB_SRCS
     dialogs/KisNewWindowLayoutDialog.cpp
     dialogs/KisDlgChangeCloneSource.cpp
     dialogs/KisRecoverNamedAutosaveDialog.cpp
+    dialogs/KisDlgSavePreset.cpp
+
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -242,10 +245,9 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_double_filter_widget.cc
     widgets/kis_multi_integer_filter_widget.cc
     widgets/kis_multipliers_double_slider_spinbox.cpp
-    widgets/kis_paintop_presets_popup.cpp
+    widgets/kis_paintop_presets_editor.cpp
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
-    widgets/kis_paintop_presets_save.cpp
     widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
 
@@ -326,6 +328,7 @@ set(kritaui_LIB_SRCS
     actions/kis_selection_action_factories.cpp
     actions/KisPasteActionFactories.cpp
     actions/KisTransformToolActivationCommand.cpp
+    animation/KisFFMpegWrapper.cpp
     animation/KisVideoSaver.cpp
     animation/KisAnimationRenderingOptions.cpp
     animation/KisAnimationRender.cpp
@@ -333,6 +336,7 @@ set(kritaui_LIB_SRCS
     animation/VideoExportOptionsDialog.cpp
     animation/VideoHDRMetadataOptionsDialog.cpp
     animation/KisHDRMetadataOptions.cpp
+    animation/KisDlgImportVideoAnimation.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_gui_context_command.cpp
@@ -356,6 +360,12 @@ set(kritaui_LIB_SRCS
     processing/fill_processing_visitor.cpp
     canvas/kis_mirror_axis.cpp
 
+    imagesize/imagesize.cc
+    imagesize/dlg_canvassize.cc
+    imagesize/dlg_imagesize.cc
+    imagesize/dlg_layersize.cc
+
+    kcanvaspreview.cc
     kis_abstract_perspective_grid.cpp
 
     KisApplication.cpp
@@ -600,6 +610,11 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     animation/wdg_animationrenderer.ui
     animation/video_export_options_dialog.ui
     animation/VideoHDRMetadataOptionsDialog.ui
+    animation/VideoImportDialog.ui
+
+    imagesize/wdg_imagesize.ui
+    imagesize/wdg_layersize.ui
+    imagesize/wdg_canvassize.ui
 )
 
 if(WIN32)

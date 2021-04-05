@@ -18,6 +18,7 @@
 
 #include <klocalizedstring.h>
 #include <ktitlewidget.h>
+#include <kwidgetsaddons_version.h>
 
 #include <kis_icon_utils.h>
 
@@ -32,7 +33,12 @@ KAboutKdeDialog::KAboutKdeDialog(QWidget *parent)
 
     KTitleWidget *titleWidget = new KTitleWidget(this);
     titleWidget->setText(i18n("<html><font size=\"5\">KDE - Be Free!</font></html>"));
+#if KWIDGETSADDONS_VERSION_MAJOR > 5 || (KWIDGETSADDONS_VERSION_MAJOR == 5 && KWIDGETSADDONS_VERSION_MINOR >= 72)
+    titleWidget->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")), KTitleWidget::ImageLeft);
+#else
     titleWidget->setPixmap(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(48), KTitleWidget::ImageLeft);
+#endif
+
 
     QLabel *about = new QLabel;
     about->setMargin(10);

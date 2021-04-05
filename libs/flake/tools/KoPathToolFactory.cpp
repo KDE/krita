@@ -16,7 +16,7 @@ KoPathToolFactory::KoPathToolFactory()
         : KoToolFactoryBase("PathTool")
 {
     setToolTip(i18n("Edit Shapes Tool"));
-    setSection(mainToolType());
+    setSection(ToolBoxSection::Main);
     setIconName(koIconNameCStr("shape_handling"));
     setPriority(2);
     setActivationShapeId("flake/always,KoPathShape");

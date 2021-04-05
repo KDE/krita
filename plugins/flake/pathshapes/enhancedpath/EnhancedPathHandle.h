@@ -8,7 +8,7 @@
 #define KOENHANCEDPATHHANDLE_H
 
 #include <QPointF>
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 class EnhancedPathShape;
 class EnhancedPathParameter;

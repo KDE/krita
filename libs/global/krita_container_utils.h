@@ -88,7 +88,7 @@ struct is_appendable_container
     typedef typename std::remove_const<T>::type test_type;
 
     template<typename A, typename R = decltype(std::declval<A&>().push_back(std::declval<typename A::value_type>()))>
-        static constexpr bool test(A *pointer) {
+        static constexpr bool test(A */*pointer*/) {
             return  is_container<A>::value && std::is_same<R, void>::value;
         }
 

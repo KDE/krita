@@ -173,7 +173,7 @@ void DigitalMixerDock::gradientStartColorChanged(int id)
     gradientColorSliderChanged(id);
 }
 
-void DigitalMixerDock::gradientColorSliderChanged(int id)
+void DigitalMixerDock::gradientColorSliderChanged(int /*id*/)
 {
     m_gradientMixer.targetColor->setColor(m_gradientMixer.targetSlider->currentColor());
 }
@@ -188,7 +188,7 @@ void DigitalMixerDock::gradientEndColorChanged(int id)
     gradientColorSliderChanged(id);
 }
 
-void DigitalMixerDock::gradientTargetColorChanged(int id)
+void DigitalMixerDock::gradientTargetColorChanged(int /*id*/)
 {
     setCurrentColor(m_gradientMixer.targetColor->color());
 }

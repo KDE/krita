@@ -11,6 +11,8 @@
 #include <KisResourcesInterface.h>
 #include "kis_assert.h"
 
+#include "kis_pointer_utils.h"
+
 namespace KisRequiredResourcesOperators
 {
 
@@ -20,10 +22,6 @@ void KRITARESOURCES_EXPORT assertInGuiThread();
 KisResourcesInterfaceSP KRITARESOURCES_EXPORT createLocalResourcesStorage(const QList<KoResourceSP> &resources);
 }
 
-template <typename T>
-struct ResourceTraits
-{
-};
 
 /**
  * @return true if the configuration has all the necessary resources in
@@ -69,12 +67,12 @@ void createLocalResourcesSnapshot(T *object, KisResourcesInterfaceSP globalResou
  * If a filter configuration object already has a resources snapshot, then
  * the function just clones the object without reloading anything.
  */
-template <typename T, typename TypeSP = typename ResourceTraits<T>::template SharedPointerType<T>>
+template <typename TypeSP, typename T = typename KisSharedPointerTraits<TypeSP>::ValueType>
 TypeSP cloneWithResourcesSnapshot(const T* object,
                                   KisResourcesInterfaceSP globalResourcesInterface = nullptr)
 {
     auto clonedStorage = object->clone();
-    TypeSP cloned = ResourceTraits<T>::template dynamicCastSP<T>(clonedStorage);
+    TypeSP cloned = KisSharedPointerTraits<TypeSP>::template dynamicCastSP<T>(clonedStorage);
 
     if (!hasLocalResourcesSnapshot(cloned.data())) {
         createLocalResourcesSnapshot(cloned.data(), globalResourcesInterface);

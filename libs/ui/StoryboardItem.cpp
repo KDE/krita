@@ -16,7 +16,8 @@ StoryboardItem::StoryboardItem()
 {}
 
 StoryboardItem::StoryboardItem(const StoryboardItem& other)
-    : m_childData()
+    : QEnableSharedFromThis<StoryboardItem>()
+    , m_childData()
 {
     cloneChildrenFrom(other);
 }

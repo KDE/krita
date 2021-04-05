@@ -80,7 +80,7 @@ KisImportExportErrorCode KraConverter::buildImage(QIODevice *io)
     bool success = false;
     {
         if (m_store->hasFile("root") || m_store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
-            KoXmlDocument doc;
+            QDomDocument doc;
 
             KisImportExportErrorCode res = oldLoadAndParse(m_store, "root", doc);
             if (res.isOk())
@@ -96,7 +96,7 @@ KisImportExportErrorCode KraConverter::buildImage(QIODevice *io)
         }
 
         if (m_store->hasFile("documentinfo.xml")) {
-            KoXmlDocument doc;
+            QDomDocument doc;
             KisImportExportErrorCode resultHere = oldLoadAndParse(m_store, "documentinfo.xml", doc);
             if (resultHere.isOk()) {
                 m_doc->documentInfo()->load(doc);
@@ -144,6 +144,8 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
     setProgress(5);
     m_store = KoStore::createStore(io, KoStore::Write, m_doc->nativeFormatMimeType(), KoStore::Zip);
 
+    bool success = true;
+
     if (m_store->bad()) {
         m_doc->setErrorMessage(i18n("Could not create the file for saving"));
         return ImportExportCodes::CannotCreateFile;
@@ -164,38 +166,44 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
 
     result = m_kraSaver->saveKeyframes(m_store, m_doc->path(), true);
     if (!result) {
+        success = false;
         qWarning() << "saving key frames failed";
     }
     setProgress(60);
     result = m_kraSaver->saveBinaryData(m_store, m_image, m_doc->path(), true, addMergedImage);
     if (!result) {
+        success = false;
         qWarning() << "saving binary data failed";
     }
     setProgress(70);
     result = m_kraSaver->savePalettes(m_store, m_image, m_doc->path());
     if (!result) {
+        success = false;
         qWarning() << "saving palettes data failed";
     }
 
     result = m_kraSaver->saveStoryboard(m_store, m_image, m_doc->path());
     if (!result) {
+        success = false;
         qWarning() << "Saving storyboard data failed";
     }
 
     result = m_kraSaver->saveAnimationMetadata(m_store, m_image, m_doc->path());
     if (!result) {
+        success = false;
         qWarning() << "Saving animation metadata failed";
     }
 
     setProgress(80);
-    if (!m_store->finalize()) {
-        return ImportExportCodes::Failure;
-    }
 
-    if (!m_kraSaver->errorMessages().isEmpty()) {
+    if (!m_store->finalize()) {
+        success = false;
+    }
+    if (!success || !m_kraSaver->errorMessages().isEmpty()) {
         m_doc->setErrorMessage(m_kraSaver->errorMessages().join(".\n"));
         return ImportExportCodes::Failure;
     }
+
     setProgress(90);
     return ImportExportCodes::OK;
 }
@@ -295,7 +303,7 @@ KisImportExportErrorCode KraConverter::savePreview(KoStore *store)
 }
 
 
-KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc)
+KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QString &filename, QDomDocument &xmldoc)
 {
     //dbgUI <<"Trying to open" << filename;
 
@@ -322,12 +330,12 @@ KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QSt
     return ImportExportCodes::OK;
 }
 
-KisImportExportErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore *store)
+KisImportExportErrorCode KraConverter::loadXML(const QDomDocument &doc, KoStore *store)
 {
     Q_UNUSED(store);
 
-    KoXmlElement root;
-    KoXmlNode node;
+    QDomElement root;
+    QDomNode node;
 
     if (doc.doctype().name() != "DOC") {
        errUI << "The format is not supported or the file is corrupted";
@@ -356,7 +364,7 @@ KisImportExportErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
-                KoXmlElement elem = node.toElement();
+                QDomElement elem = node.toElement();
                 if (!(m_image = m_kraLoader->loadXML(elem))) {
 
                     if (m_kraLoader->errorMessages().isEmpty()) {

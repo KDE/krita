@@ -22,7 +22,7 @@ public:
     KoPathShapeFactory(const QStringList&);
     ~KoPathShapeFactory() override {}
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
-    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
+    bool supports(const QDomElement &element, KoShapeLoadingContext &context) const override;
     /// reimplemented
     void newDocumentResourceManager(KoDocumentResourceManager *manager) const override;
 };

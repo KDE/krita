@@ -9,7 +9,7 @@
 
 #include <QStringList>
 
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 class SvgCssHelper
 {
@@ -18,14 +18,14 @@ public:
     ~SvgCssHelper();
 
     /// Parses css style sheet in given xml element
-    void parseStylesheet(const KoXmlElement &);
+    void parseStylesheet(const QDomElement &);
 
     /**
      * Matches css styles to given xml element and returns them
      * @param element the element to match styles for
      * @return list of matching css styles sorted by priority
      */
-    QStringList matchStyles(const KoXmlElement &element) const;
+    QStringList matchStyles(const QDomElement &element) const;
 
 private:
     class Private;

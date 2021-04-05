@@ -170,6 +170,7 @@ void KisToolCrop::activate(const QSet<KoShape*> &shapes)
     else {
         setCropTypeSelectable(false);
     }
+    connect(&m_finalRect, SIGNAL(sigValuesChanged()), SLOT(showSizeOnCanvas()));
 }
 
 void KisToolCrop::cancelStroke()
@@ -190,6 +191,16 @@ void KisToolCrop::requestStrokeEnd()
 }
 
 void KisToolCrop::requestStrokeCancellation()
+{
+    cancelStroke();
+}
+
+void KisToolCrop::requestUndoDuringStroke()
+{
+    cancelStroke();
+}
+
+void KisToolCrop::requestRedoDuringStroke()
 {
     cancelStroke();
 }
@@ -686,6 +697,14 @@ void KisToolCrop::setLockRatio(bool lock)
 bool KisToolCrop::lockRatio() const
 {
     return m_finalRect.ratioLocked();
+}
+
+void KisToolCrop::showSizeOnCanvas()
+{
+    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1\nHeight: %2"
+                                                   , optionsWidget->intWidth->text(), optionsWidget->intHeight->text())
+                                                   , QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 QWidget* KisToolCrop::createOptionWidget()

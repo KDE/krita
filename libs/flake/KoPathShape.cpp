@@ -24,9 +24,6 @@
 #include "KoShapeStroke.h"
 #include "KoInsets.h"
 
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
 #include <KoUnit.h>
 #include "KisQPainterStateSaver.h"
 
@@ -1174,11 +1171,11 @@ char nodeType(const KoPathPoint * point)
     }
 }
 
-QString KoPathShape::Private::nodeTypes() const
+QString KoPathShape::nodeTypes() const
 {
     QString types;
-    KoSubpathList::const_iterator pathIt(subpaths.constBegin());
-    for (; pathIt != subpaths.constEnd(); ++pathIt) {
+    KoSubpathList::const_iterator pathIt(d->subpaths.constBegin());
+    for (; pathIt != d->subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
             if (it == (*pathIt)->constBegin()) {
@@ -1208,30 +1205,27 @@ void updateNodeType(KoPathPoint * point, const QChar & nodeType)
     }
 }
 
-void KoPathShape::Private::loadNodeTypes(const KoXmlElement &element)
+void KoPathShape::loadNodeTypes(const QString &nodeTypes)
 {
-    if (element.hasAttributeNS(KoXmlNS::calligra, "nodeTypes")) {
-        QString nodeTypes = element.attributeNS(KoXmlNS::calligra, "nodeTypes");
-        QString::const_iterator nIt(nodeTypes.constBegin());
-        KoSubpathList::const_iterator pathIt(subpaths.constBegin());
-        for (; pathIt != subpaths.constEnd(); ++pathIt) {
-            KoSubpath::const_iterator it((*pathIt)->constBegin());
-            for (; it != (*pathIt)->constEnd(); ++it, nIt++) {
-                // be sure not to crash if there are not enough nodes in nodeTypes
-                if (nIt == nodeTypes.constEnd()) {
-                    warnFlake << "not enough nodes in calligra:nodeTypes";
-                    return;
-                }
-                // the first node is always of type 'c'
-                if (it != (*pathIt)->constBegin()) {
-                    updateNodeType(*it, *nIt);
-                }
+    QString::const_iterator nIt(nodeTypes.constBegin());
+    KoSubpathList::const_iterator pathIt(d->subpaths.constBegin());
+    for (; pathIt != d->subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
+        for (; it != (*pathIt)->constEnd(); ++it, nIt++) {
+            // be sure not to crash if there are not enough nodes in nodeTypes
+            if (nIt == nodeTypes.constEnd()) {
+                warnFlake << "not enough nodes in sodipodi:nodetypes";
+                return;
+            }
+            // the first node is always of type 'c'
+            if (it != (*pathIt)->constBegin()) {
+                updateNodeType(*it, *nIt);
+            }
 
-                if ((*it)->properties() & KoPathPoint::StopSubpath
-                        && (*it)->properties() & KoPathPoint::CloseSubpath) {
-                    ++nIt;
-                    updateNodeType((*pathIt)->first(), *nIt);
-                }
+            if ((*it)->properties() & KoPathPoint::StopSubpath
+                    && (*it)->properties() & KoPathPoint::CloseSubpath) {
+                ++nIt;
+                updateNodeType((*pathIt)->first(), *nIt);
             }
         }
     }

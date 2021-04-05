@@ -12,6 +12,7 @@
 #include <QSortFilterProxyModel>
 #include <QSharedPointer>
 #include <QItemSelection>
+#include <KisResourceThumbnailPainter.h>
 
 class KisActionManager;
 class KisResourceTypeModel;
@@ -49,7 +50,7 @@ private Q_SLOTS:
     void slotDeleteResources();
     void slotImportResources();
     void slotOpenResourceFolder();
-    void slotImportBundle();
+    void slotCreateBundle();
     void slotDeleteBackupFiles();
 private:
     QString getCurrentResourceType();
@@ -72,6 +73,8 @@ private:
     QMap<QString, KisTagFilterResourceProxyModel*> m_resourceProxyModelsForResourceType;
 
     QScopedPointer<KisWdgTagSelectionControllerOneResource> m_tagsController;
+
+    KisResourceThumbnailPainter m_thumbnailPainter;
 
     bool m_undeleteMode {false};
 };

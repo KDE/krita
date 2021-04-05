@@ -38,7 +38,6 @@ SimpleExistingTagAction::~SimpleExistingTagAction()
 
 void SimpleExistingTagAction::onTriggered()
 {
-    ENTER_FUNCTION();
     if (!m_tag) return;
     emit triggered(m_tag, m_resource);
 }

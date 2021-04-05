@@ -154,8 +154,6 @@ private /* methods */:
      */
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
 
-    void saveModification();
-
 
 private /* member variables */:
     QSharedPointer<KoColorSet> m_colorSet;

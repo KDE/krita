@@ -27,5 +27,6 @@ ecm_add_tests(
     TestKoLcmsColorProfile.cpp
     TestColorSpaceRegistry.cpp
     TestLcmsRGBP2020PQColorSpace.cpp
+    TestProfileGeneration.cpp
     NAME_PREFIX "plugins-lcmsengine-"
     LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})

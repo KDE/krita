@@ -78,7 +78,7 @@ public:
     ToolReferenceImagesFactory()
     : DefaultToolFactory("ToolReferenceImages") {
         setToolTip(i18n("Reference Images Tool"));
-        setSection(TOOL_TYPE_VIEW);
+        setSection(ToolBoxSection::View);
         setIconName(koIconNameCStr("krita_tool_reference_images"));
         setPriority(2);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -99,6 +99,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="file_export_advanced">
+      <icon>document-export</icon>
+      <text>E&amp;xport Advanced...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Advanced Export</toolTip>
+      <iconText>Export</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="file_import_animation">
       <icon></icon>
       <text>Import animation frames...</text>
@@ -106,6 +119,18 @@
       <toolTip>Import animation frames</toolTip>
       <iconText>Import animation frames</iconText>
       <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="file_import_video_animation">
+      <icon></icon>
+      <text>Import video animation...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Import video animation</toolTip>
+      <iconText>Import video animation</iconText>
+      <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1692,10 +1717,10 @@
     </Action>
     <Action name="reset_configurations">
       <icon></icon>
-      <text>Reset Krita Configurations</text>
+      <text>Reset All Settings</text>
       <whatsThis></whatsThis>
-      <toolTip>Reset Krita Configurations</toolTip>
-      <iconText>Reset Krita Configurations</iconText>
+      <toolTip>Reset All Settings to Default</toolTip>
+      <iconText>Reset Settings</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

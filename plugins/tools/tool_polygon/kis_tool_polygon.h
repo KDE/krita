@@ -39,7 +39,7 @@ public:
     KisToolPolygonFactory()
             : KisToolPolyLineFactoryBase("KisToolPolygon") {
         setToolTip(i18n("Polygon Tool: Shift-mouseclick ends the polygon."));
-        setSection(TOOL_TYPE_SHAPE);
+        setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_polygon"));
         setPriority(4);

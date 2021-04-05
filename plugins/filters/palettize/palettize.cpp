@@ -109,7 +109,7 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     offsetScaleSpinBox->setPrefix(QString("%1  ").arg(i18n("Offset Scale:")));
     offsetScaleSpinBox->setRange(0.0, 1.0, 3);
     offsetScaleSpinBox->setSingleStep(0.125);
-    QObject::connect(offsetScaleSpinBox, QOverload<qreal>::of(&KisDoubleSliderSpinBox::valueChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(offsetScaleSpinBox, QOverload<double>::of(&KisDoubleSliderSpinBox::valueChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
 
     QObject::connect(alphaGroupBox, &QGroupBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
 
@@ -118,7 +118,7 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     alphaClipSpinBox->setPrefix(QString("%1  ").arg(i18n("Clip:")));
     alphaClipSpinBox->setRange(0.0, 1.0, 3);
     alphaClipSpinBox->setSingleStep(0.125);
-    QObject::connect(alphaClipSpinBox, QOverload<qreal>::of(&KisDoubleSliderSpinBox::valueChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(alphaClipSpinBox, QOverload<double>::of(&KisDoubleSliderSpinBox::valueChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
 
     alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18nc("Index as in Index Color", "Index:")));
     alphaIndexSpinBox->setRange(0, 255);

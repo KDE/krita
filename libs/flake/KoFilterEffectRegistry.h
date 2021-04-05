@@ -12,7 +12,7 @@
 
 #include "kritaflake_export.h"
 
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 class KoFilterEffectLoadingContext;
 class KoFilterEffect;
 
@@ -34,7 +34,7 @@ public:
      * @param context the loading context
      * @return the created filter effect if successful, otherwise returns 0
      */
-    KoFilterEffect *createFilterEffectFromXml(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
+    KoFilterEffect *createFilterEffectFromXml(const QDomElement &element, const KoFilterEffectLoadingContext &context);
 
 private:
 

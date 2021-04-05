@@ -272,8 +272,10 @@ void KoResourceBundle::setThumbnail(QString filename)
 void KoResourceBundle::writeMeta(const QString &metaTag, KoXmlWriter *writer)
 {
     if (m_metadata.contains(metaTag)) {
-        writer->startElement(metaTag.toUtf8());
-        writer->addTextNode(m_metadata[metaTag].toUtf8());
+        QByteArray mt = metaTag.toUtf8();
+        QByteArray tx = m_metadata[metaTag].toUtf8();
+        writer->startElement(mt);
+        writer->addTextNode(tx);
         writer->endElement();
     }
 }
@@ -291,13 +293,13 @@ void KoResourceBundle::writeUserDefinedMeta(const QString &metaTag, KoXmlWriter 
 bool KoResourceBundle::readMetaData(KoStore *resourceStore)
 {
     if (resourceStore->open("meta.xml")) {
-        KoXmlDocument doc;
+        QDomDocument doc;
         if (!doc.setContent(resourceStore->device())) {
             qWarning() << "Could not parse meta.xml for" << m_filename;
             return false;
         }
         // First find the manifest:manifest node.
-        KoXmlNode n = doc.firstChild();
+        QDomNode n = doc.firstChild();
         for (; !n.isNull(); n = n.nextSibling()) {
             if (!n.isElement()) {
                 continue;
@@ -312,10 +314,10 @@ bool KoResourceBundle::readMetaData(KoStore *resourceStore)
             return false;
         }
 
-        const KoXmlElement  metaElement = n.toElement();
+        const QDomElement  metaElement = n.toElement();
         for (n = metaElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
             if (n.isElement()) {
-                KoXmlElement e = n.toElement();
+                QDomElement e = n.toElement();
                 if (e.tagName() == "meta:meta-userdefined") {
                     if (e.attribute("meta:name") == "tag") {
                         m_bundletags << e.attribute("meta:value");
@@ -348,8 +350,10 @@ void KoResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)
 
     writeMeta(KisResourceStorage::s_meta_generator, &metaWriter);
 
-    metaWriter.startElement(KisResourceStorage::s_meta_version.toUtf8());
-    metaWriter.addTextNode(m_bundleVersion.toUtf8());
+    QByteArray ba1 = KisResourceStorage::s_meta_version.toUtf8();
+    metaWriter.startElement(ba1);
+    QByteArray ba2  = m_bundleVersion.toUtf8();
+    metaWriter.addTextNode(ba2);
     metaWriter.endElement();
 
     writeMeta(KisResourceStorage::s_meta_author, &metaWriter);
@@ -359,13 +363,23 @@ void KoResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)
     writeMeta(KisResourceStorage::s_meta_creator, &metaWriter);
     writeMeta(KisResourceStorage::s_meta_creation_date, &metaWriter);
     writeMeta(KisResourceStorage::s_meta_dc_date, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_email, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_license, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_website, &metaWriter);
+
+    // For compatibility
     writeUserDefinedMeta("email", &metaWriter);
     writeUserDefinedMeta("license", &metaWriter);
     writeUserDefinedMeta("website", &metaWriter);
+
+
     Q_FOREACH (const QString &tag, m_bundletags) {
-        metaWriter.startElement(KisResourceStorage::s_meta_user_defined.toUtf8());
-        metaWriter.addAttribute(KisResourceStorage::s_meta_name.toUtf8(), "tag");
-        metaWriter.addAttribute(KisResourceStorage::s_meta_value.toUtf8(), tag);
+        QByteArray ba1 = KisResourceStorage::s_meta_user_defined.toUtf8();
+        QByteArray ba2 = KisResourceStorage::s_meta_name.toUtf8();
+        QByteArray ba3 = KisResourceStorage::s_meta_value.toUtf8();
+        metaWriter.startElement(ba1);
+        metaWriter.addAttribute(ba2, "tag");
+        metaWriter.addAttribute(ba3, tag);
         metaWriter.endElement();
     }
 

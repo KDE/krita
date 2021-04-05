@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
  *  SPDX-FileCopyrightText: 2015 Thorsten Zachmann <zachmann@kde.org>
+ *  SPDX-FileCopyrightText: 2020 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,6 +23,7 @@
 
 #include <KoOptimizedCompositeOpOver32.h>
 #include <KoOptimizedCompositeOpOver128.h>
+#include <KoOptimizedCompositeOpCopy128.h>
 #include <KoOptimizedCompositeOpAlphaDarken32.h>
 #endif
 
@@ -36,6 +38,7 @@
 #include <KoColorSpaceTraits.h>
 #include <KoCompositeOpAlphaDarken.h>
 #include <KoCompositeOpOver.h>
+#include <KoCompositeOpCopy2.h>
 #include <KoOptimizedCompositeOpFactory.h>
 #include <KoAlphaDarkenParamsWrapper.h>
 
@@ -44,7 +47,7 @@
 
 #include <kis_debug.h>
 
-#if defined _MSC_VER
+#if defined Q_OS_WIN
 #define MEMALIGN_ALLOC(p, a, s) ((*(p)) = _aligned_malloc((s), (a)), *(p) ? 0 : errno)
 #define MEMALIGN_FREE(p) _aligned_free((p))
 #else
@@ -109,6 +112,27 @@ struct RandomGenerator<quint8>
 
     quint8 unit() {
         return KoColorSpaceMathsTraits<quint8>::unitValue;
+    }
+
+    boost::uniform_smallint<int> m_smallint;
+    boost::mt11213b m_rnd;
+};
+
+template <>
+struct RandomGenerator<quint16>
+{
+    RandomGenerator(int seed)
+        : m_smallint(0,65535),
+          m_rnd(seed)
+    {
+    }
+
+    quint16 operator() () {
+        return m_smallint(m_rnd);
+    }
+
+    quint16 unit() {
+        return KoColorSpaceMathsTraits<quint16>::unitValue;
     }
 
     boost::uniform_smallint<int> m_smallint;
@@ -243,6 +267,8 @@ QVector<Tile> generateTiles(int size,
 
         if (pixelSize == 4) {
             generateDataLine<quint8>(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
+        } else if (pixelSize == 8) {
+            generateDataLine<quint16>(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
         } else if (pixelSize == 16) {
             generateDataLine<float>(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
         } else {
@@ -341,6 +367,9 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
     bool compareResult = true;
     if (pixelSize == 4) {
         compareResult = compareTwoOpsPixels<quint8>(tiles, 10);
+    }
+    else if (pixelSize == 8) {
+        compareResult = compareTwoOpsPixels<quint16>(tiles, 90);
     }
     else if (pixelSize == 16) {
         compareResult = compareTwoOpsPixels<float>(tiles, 2e-7);
@@ -454,6 +483,21 @@ void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
 
 #ifdef HAVE_VC
 
+template <typename channels_type>
+void printError(quint8 *s, quint8 *d1, quint8 *d2, quint8 *msk1, int pos)
+{
+    const channels_type *src1 = reinterpret_cast<const channels_type*>(s);
+    const channels_type *dst1 = reinterpret_cast<const channels_type*>(d1);
+    const channels_type *dst2 = reinterpret_cast<const channels_type*>(d2);
+
+    qDebug() << "Wrong rounding in pixel:" << pos;
+    qDebug() << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
+    qDebug() << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+
+    qDebug() << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
+    qDebug() << "msk:" << msk1[0];
+}
+
 template<class Compositor>
 void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32 pixelSize = 4)
 {
@@ -509,6 +553,9 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
                     }
                 }
             }
+            else if (pixelSize == 8) {
+                compareResult = comparePixels<quint16>(reinterpret_cast<quint16*>(dst1), reinterpret_cast<quint16*>(dst2), 0);
+            }
             else if (pixelSize == 16) {
                 compareResult = comparePixels<float>(reinterpret_cast<float*>(dst1), reinterpret_cast<float*>(dst2), 0);
             }
@@ -517,12 +564,15 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
             }
 
             if(!compareResult || errorcount > 1) {
-                qDebug() << "Wrong rounding in pixel:" << 8 * i + j;
-                qDebug() << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
-                qDebug() << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
-
-                qDebug() << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
-                qDebug() << "msk:" << msk1[0];
+                if (pixelSize == 4) {
+                    printError<quint8>(src1, dst1, dst2, msk1, 8 * i + j);
+                } if (pixelSize == 8) {
+                    printError<quint16>(src1, dst1, dst2, msk1, 8 * i + j);
+                } else if (pixelSize == 16) {
+                    printError<float>(src1, dst1, dst2, msk1, 8 * i + j);
+                } else {
+                    qFatal("Pixel size %i is not implemented", pixelSize);
+                }
 
                 QFAIL("Wrong rounding");
             }
@@ -619,10 +669,31 @@ void KisCompositionBenchmark::checkRoundingOver()
 #endif
 }
 
+void KisCompositionBenchmark::checkRoundingOverRgbaU16()
+{
+#ifdef HAVE_VC
+    checkRounding<OverCompositor128<quint16, false, true> >(0.5, 1.0, -1, 8);
+#endif
+}
+
 void KisCompositionBenchmark::checkRoundingOverRgbaF32()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.3, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
+#endif
+}
+#include <cfenv>
+void KisCompositionBenchmark::checkRoundingCopyRgbaU16()
+{
+#ifdef HAVE_VC
+    checkRounding<CopyCompositor128<quint16, false, true> >(0.5, 1.0, -1, 8);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingCopyRgbaF32()
+{
+#ifdef HAVE_VC
+    checkRounding<CopyCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
 
@@ -662,6 +733,18 @@ void KisCompositionBenchmark::compareAlphaDarkenOpsNoMask()
     delete opAct;
 }
 
+void KisCompositionBenchmark::compareRgbU16AlphaDarkenOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamyU64(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoRgbU16Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
+
+    QVERIFY(compareTwoOps(true, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
 void KisCompositionBenchmark::compareOverOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -686,11 +769,59 @@ void KisCompositionBenchmark::compareOverOpsNoMask()
     delete opAct;
 }
 
+void KisCompositionBenchmark::compareRgbU16OverOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createOverOpU64(cs);
+    KoCompositeOp *opExp = new KoCompositeOpOver<KoRgbU16Traits>(cs);
+
+    QVERIFY(compareTwoOps(false, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
 void KisCompositionBenchmark::compareRgbF32OverOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
     KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createOverOp128(cs);
     KoCompositeOp *opExp = new KoCompositeOpOver<KoRgbF32Traits>(cs);
+
+    QVERIFY(compareTwoOps(false, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
+void KisCompositionBenchmark::compareRgbU8CopyOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createCopyOp32(cs);
+    KoCompositeOp *opExp = new KoCompositeOpCopy2<KoRgbU8Traits>(cs);
+
+    QVERIFY(compareTwoOps(false, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
+void KisCompositionBenchmark::compareRgbU16CopyOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createCopyOpU64(cs);
+    KoCompositeOp *opExp = new KoCompositeOpCopy2<KoRgbU16Traits>(cs);
+
+    QVERIFY(compareTwoOps(false, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
+void KisCompositionBenchmark::compareRgbF32CopyOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createCopyOp128(cs);
+    KoCompositeOp *opExp = new KoCompositeOpCopy2<KoRgbF32Traits>(cs);
 
     QVERIFY(compareTwoOps(false, opAct, opExp));
 
@@ -730,6 +861,54 @@ void KisCompositionBenchmark::testRgb8CompositeOverOptimized()
     delete op;
 }
 
+void KisCompositionBenchmark::testRgb16CompositeAlphaDarkenLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoBgrU16Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
+    benchmarkCompositeOp(op, "Legacy");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgb16CompositeAlphaDarkenOptimized()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamyU64(cs);
+    benchmarkCompositeOp(op, "Optimized");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgb16CompositeOverLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *op = new KoCompositeOpOver<KoBgrU16Traits>(cs);
+    benchmarkCompositeOp(op, "Legacy");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgb16CompositeOverOptimized()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createOverOpU64(cs);
+    benchmarkCompositeOp(op, "Optimized");
+    delete op;
+}
+
+
+void KisCompositionBenchmark::testRgb16CompositeCopyLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *op = new KoCompositeOpCopy2<KoBgrU16Traits>(cs);
+    benchmarkCompositeOp(op, "Legacy");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgb16CompositeCopyOptimized()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createCopyOpU64(cs);
+    benchmarkCompositeOp(op, "Optimized");
+    delete op;
+}
 void KisCompositionBenchmark::testRgbF32CompositeAlphaDarkenLegacy()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
@@ -762,6 +941,22 @@ void KisCompositionBenchmark::testRgbF32CompositeOverOptimized()
     delete op;
 }
 
+void KisCompositionBenchmark::testRgbF32CompositeCopyLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *op = new KoCompositeOpCopy2<KoRgbF32Traits>(cs);
+    benchmarkCompositeOp(op, "RGBF32 Legacy");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgbF32CompositeCopyOptimized()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createCopyOp128(cs);
+    benchmarkCompositeOp(op, "RGBF32 Optimized");
+    delete op;
+}
+
 void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenReal_Aligned()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -779,8 +974,17 @@ void KisCompositionBenchmark::testRgb8CompositeOverReal_Aligned()
 void KisCompositionBenchmark::testRgb8CompositeCopyLegacy()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    const KoCompositeOp *op = cs->compositeOp(COMPOSITE_COPY);
+    KoCompositeOp *op = new KoCompositeOpCopy2<KoBgrU8Traits>(cs);
     benchmarkCompositeOp(op, "Copy");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgb8CompositeCopyOptimized()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createCopyOp32(cs);
+    benchmarkCompositeOp(op, "Optimized");
+    delete op;
 }
 
 void KisCompositionBenchmark::benchmarkMemcpy()

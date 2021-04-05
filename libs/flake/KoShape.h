@@ -19,7 +19,7 @@
 #include <QMetaType>
 #include <QSharedDataPointer>
 
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 #include "kritaflake_export.h"
 

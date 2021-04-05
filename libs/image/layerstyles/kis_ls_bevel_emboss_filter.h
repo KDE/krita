@@ -39,7 +39,7 @@ private:
     void applyBevelEmboss(KisPaintDeviceSP srcDevice,
                           KisMultipleProjection *dst,
                           const QRect &applyRect,
-                          const psd_layer_effects_bevel_emboss *config,
+                          const psd_layer_effects_bevel_emboss *config, KisResourcesInterfaceSP resourcesInterface,
                           KisLayerStyleFilterEnvironment *env) const;
 };
 

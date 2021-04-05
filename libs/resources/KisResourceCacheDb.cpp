@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.7" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.8" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -701,6 +701,33 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         return true;
     }
 
+    // Check whether another resource with this MD5 already exists: then we set the resource status to hidden
+    int active = 1;
+    {
+        QSqlQuery q;
+        if (!q.prepare("SELECT count(*)\n"
+                       "FROM   versioned_resources\n"
+                       ",      resources\n"
+                       "WHERE  versioned_resources.md5sum = :md5sum\n"
+                       "AND    resources.id = versioned_resources.resource_id\n"
+                       "AND    resources.status = 1")) {
+            qWarning() << "Could not prepare select count from versioned_resources query" << q.lastError();
+            return false;
+        }
+        q.bindValue(":md5sum", resource->md5().toHex());
+        if (!q.exec()) {
+            qWarning() << "Could not execute select from resource_types query" << q.lastError();
+            return false;
+        }
+        q.first();
+        int rowCount = q.value(0).toInt();
+
+        if (rowCount > 0) {
+            active = 0;
+        }
+
+    }
+
     QSqlQuery q;
     r = q.prepare("INSERT INTO resources \n"
                   "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary) \n"
@@ -736,7 +763,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     buf.close();
     q.bindValue(":thumbnail", ba);
 
-    q.bindValue(":status", 1);
+    q.bindValue(":status", active);
     q.bindValue(":temporary", (temporary ? 1 : 0));
 
     r = q.exec();
@@ -1415,7 +1442,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             KoResourceSP res = storage->resource(itA->url);
 
             if (!res) {
-                // resource cannot be loaded, the file is probably broken
+                KisUsageLogger::log("Could not load resource" + itA->url);
                 ++itA;
                 continue;
             }
@@ -1423,18 +1450,21 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             res->setVersion(itA->version);
             res->setMD5(storage->resourceMd5(itA->url));
             if (!res->valid()) {
+                KisUsageLogger::log("Could not retrieve md5 for resource" + itA->url);
                 ++itA;
                 continue;
             }
 
             const bool retval = addResource(storage, itA->timestamp, res, resourceType);
             KIS_SAFE_ASSERT_RECOVER(retval) {
+                KisUsageLogger::log("Could not add resource" + itA->url);
                 ++itA;
                 continue;
             }
 
             const int resourceId = res->resourceId();
             KIS_SAFE_ASSERT_RECOVER(resourceId >= 0) {
+                KisUsageLogger::log("Could not get id for resource" + itA->url);
                 ++itA;
                 continue;
             }
@@ -1450,6 +1480,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
                 const bool retval = addResourceVersion(resourceId, it->timestamp, storage, res);
                 KIS_SAFE_ASSERT_RECOVER(retval) {
+                    KisUsageLogger::log("Could not add version for resource" + itA->url);
                     continue;
                 }
             }

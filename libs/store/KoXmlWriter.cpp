@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the KDE projectz
    SPDX-FileCopyrightText: 2004 David Faure <faure@kde.org>
    SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
 
@@ -19,7 +19,11 @@ static const int s_escapeBufferLen = 10000;
 class Q_DECL_HIDDEN KoXmlWriter::Private
 {
 public:
-    Private(QIODevice* dev_, int indentLevel = 0) : dev(dev_), baseIndentLevel(indentLevel) {}
+    Private(QIODevice* dev_, int indentLevel = 0)
+        : dev(dev_)
+        , baseIndentLevel(indentLevel)
+    {}
+
     ~Private() {
         delete[] indentBuffer;
         delete[] escapeBuffer;
@@ -38,11 +42,6 @@ public:
 KoXmlWriter::KoXmlWriter(QIODevice* dev, int indentLevel)
         : d(new Private(dev, indentLevel))
 {
-    init();
-}
-
-void KoXmlWriter::init()
-{
     d->indentBuffer = new char[ s_indentBufferLength ];
     memset(d->indentBuffer, ' ', s_indentBufferLength);
     *d->indentBuffer = '\n'; // write newline before indentation, in one go
@@ -50,6 +49,7 @@ void KoXmlWriter::init()
     d->escapeBuffer = new char[s_escapeBufferLen];
     if (!d->dev->isOpen())
         d->dev->open(QIODevice::WriteOnly);
+
 }
 
 KoXmlWriter::~KoXmlWriter()
@@ -125,13 +125,6 @@ void KoXmlWriter::startElement(const char* tagName, bool indentInside)
     //kDebug(s_area) << tagName;
 }
 
-void KoXmlWriter::addCompleteElement(const char* cstr)
-{
-    prepareForChild();
-    writeCString(cstr);
-}
-
-
 void KoXmlWriter::addCompleteElement(QIODevice* indev)
 {
     prepareForChild();
@@ -146,7 +139,7 @@ void KoXmlWriter::addCompleteElement(QIODevice* indev)
     }
 
     QString indentString;
-    indentString.fill((' '), indentLevel());
+    indentString.fill((' '), d->tags.size() + d->baseIndentLevel);
     QByteArray indentBuf(indentString.toUtf8());
 
     QByteArray buffer;
@@ -204,14 +197,6 @@ void KoXmlWriter::addTextNode(const char* cstr)
         delete[] escaped;
 }
 
-void KoXmlWriter::addProcessingInstruction(const char* cstr)
-{
-    prepareForTextNode();
-    writeCString("<?");
-    addTextNode(cstr);
-    writeCString("?>");
-}
-
 void KoXmlWriter::addAttribute(const char* attrName, const QByteArray& value)
 {
     // Same as the const char* one, but here we know the size
@@ -250,16 +235,10 @@ void KoXmlWriter::addAttribute(const char* attrName, float value)
 void KoXmlWriter::writeIndent()
 {
     // +1 because of the leading '\n'
-    d->dev->write(d->indentBuffer, qMin(indentLevel() + 1,
+    d->dev->write(d->indentBuffer, qMin(d->tags.size() + d->baseIndentLevel + 1,
                                         s_indentBufferLength));
 }
 
-void KoXmlWriter::writeString(const QString& str)
-{
-    // cachegrind says .utf8() is where most of the time is spent
-    const QByteArray cstr = str.toUtf8();
-    d->dev->write(cstr);
-}
 
 // In case of a reallocation (ret value != d->buffer), the caller owns the return value,
 // it must delete it (with [])
@@ -342,201 +321,12 @@ void KoXmlWriter::addManifestEntry(const QString& fullPath, const QString& media
     endElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString & configName, const QString& value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type",  "string");
-    addTextNode(value);
-    endElement();
+// TODO check return value!!!
+void KoXmlWriter::writeCString(const char* cstr) {
+    d->dev->write(cstr, qstrlen(cstr));
 }
 
-void KoXmlWriter::addConfigItem(const QString & configName, bool value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type",  "boolean");
-    addTextNode(value ? "true" : "false");
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString & configName, int value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type",  "int");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString & configName, double value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "double");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString & configName, float value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "double");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString & configName, long value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "long");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString & configName, short value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "short");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addTextSpan(const QString& text)
-{
-    QMap<int, int> tabCache;
-    addTextSpan(text, tabCache);
-}
-
-void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCache)
-{
-    int len = text.length();
-    int nrSpaces = 0; // number of consecutive spaces
-    bool leadingSpace = false;
-    QString str;
-    str.reserve(len);
-
-    // Accumulate chars either in str or in nrSpaces (for spaces).
-    // Flush str when writing a subelement (for spaces or for another reason)
-    // Flush nrSpaces when encountering two or more consecutive spaces
-    for (int i = 0; i < len ; ++i) {
-        QChar ch = text[i];
-        ushort unicode = ch.unicode();
-        if (unicode == ' ') {
-            if (i == 0)
-                leadingSpace = true;
-            ++nrSpaces;
-        } else {
-            if (nrSpaces > 0) {
-                // For the first space we use ' '.
-                // "it is good practice to use (text:s) for the second and all following SPACE
-                // characters in a sequence." (per the ODF spec)
-                // however, per the HTML spec, "authors should not rely on user agents to render
-                // white space immediately after a start tag or immediately before an end tag"
-                // (and both we and OO.o ignore leading spaces in <text:p> or <text:h> elements...)
-                if (!leadingSpace) {
-                    str += ' ';
-                    --nrSpaces;
-                }
-                if (nrSpaces > 0) {   // there are more spaces
-                    if (!str.isEmpty())
-                        addTextNode(str);
-                    str.clear();
-                    startElement("text:s");
-                    if (nrSpaces > 1)   // it's 1 by default
-                        addAttribute("text:c", nrSpaces);
-                    endElement();
-                }
-            }
-            nrSpaces = 0;
-            leadingSpace = false;
-
-            switch (unicode) {
-            case '\t':
-                if (!str.isEmpty())
-                    addTextNode(str);
-                str.clear();
-                startElement("text:tab");
-                if (tabCache.contains(i))
-                    addAttribute("text:tab-ref", tabCache[i] + 1);
-                endElement();
-                break;
-            // gracefully handle \f form feed in text input.
-            // otherwise the xml will not be valid.
-            // \f can be added e.g. in ascii import filter.
-            case '\f':
-            case '\n':
-            case QChar::LineSeparator:
-                if (!str.isEmpty())
-                    addTextNode(str);
-                str.clear();
-                startElement("text:line-break");
-                endElement();
-                break;
-            default:
-                // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
-                if (ch.unicode() >= 0x20) {
-                    str += text[i];
-                }
-                break;
-            }
-        }
-    }
-    // either we still have text in str or we have spaces in nrSpaces
-    if (!str.isEmpty()) {
-        addTextNode(str);
-    }
-    if (nrSpaces > 0) {   // there are more spaces
-        startElement("text:s");
-        if (nrSpaces > 1)   // it's 1 by default
-            addAttribute("text:c", nrSpaces);
-        endElement();
-    }
-}
-
-QIODevice *KoXmlWriter::device() const
-{
-    return d->dev;
-}
-
-int KoXmlWriter::indentLevel() const
-{
-    return d->tags.size() + d->baseIndentLevel;
-}
-
-QList<const char*> KoXmlWriter::tagHierarchy() const
-{
-    QList<const char*> answer;
-    Q_FOREACH (const Tag & tag, d->tags)
-        answer.append(tag.tagName);
-
-    return answer;
-}
-
-QString KoXmlWriter::toString() const
-{
-    Q_ASSERT(!d->dev->isSequential());
-    if (d->dev->isSequential())
-        return QString();
-    bool wasOpen = d->dev->isOpen();
-    qint64 oldPos = -1;
-    if (wasOpen) {
-        oldPos = d->dev->pos();
-        if (oldPos > 0)
-            d->dev->seek(0);
-    } else {
-        const bool openOk = d->dev->open(QIODevice::ReadOnly);
-        Q_ASSERT(openOk);
-        if (!openOk)
-            return QString();
-    }
-    QString s = QString::fromUtf8(d->dev->readAll());
-    if (wasOpen)
-        d->dev->seek(oldPos);
-    else
-        d->dev->close();
-    return s;
+// TODO check return value!!!
+void KoXmlWriter::writeChar(char c) {
+    d->dev->putChar(c);
 }

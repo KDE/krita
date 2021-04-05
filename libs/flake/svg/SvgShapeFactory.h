@@ -18,12 +18,12 @@ public:
     ~SvgShapeFactory() override;
 
     // reimplemented from KoShapeFactoryBase
-    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
+    bool supports(const QDomElement &element, KoShapeLoadingContext &context) const override;
     // reimplemented from KoShapeFactoryBase
-    KoShape *createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    KoShape *createShapeFromXML(const QDomElement &element, KoShapeLoadingContext &context) override;
 
-    static int calculateZIndex(const KoXmlElement &element, KoShapeLoadingContext &context);
-    static KoShape *createShapeFromSvgDirect(const KoXmlElement &root, const QRectF &boundsInPixels, const qreal pixelsPerInch, const qreal forcedFontSizeResolution, int zIndex, KoShapeLoadingContext &context, QSizeF *fragmentSize = 0);
+    static int calculateZIndex(const QDomElement &element, KoShapeLoadingContext &context);
+    static KoShape *createShapeFromSvgDirect(const QDomElement &root, const QRectF &boundsInPixels, const qreal pixelsPerInch, const qreal forcedFontSizeResolution, int zIndex, KoShapeLoadingContext &context, QSizeF *fragmentSize = 0);
 };
 
 #endif // SVGSHAPEFACTORY_H

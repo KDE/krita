@@ -80,7 +80,6 @@ public:
 
     KoResourceSP clone() const override;
 
-    bool load(KisResourcesInterfaceSP resourcesInterface) override;
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;
@@ -88,6 +87,8 @@ public:
     {
         return QPair<QString, QString>(ResourceType::Palettes, "");
     }
+
+    void updateThumbnail() override;
 
     void setColumnCount(int columns);
     int columnCount() const;

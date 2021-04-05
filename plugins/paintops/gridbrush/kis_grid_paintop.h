@@ -22,6 +22,7 @@ class KisPainter;
 class KisGridProperties
 {
 public:
+    quint16 diameter;
     quint16 gridWidth;
     quint16 gridHeight;
     quint16 divisionLevel;

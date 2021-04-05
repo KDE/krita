@@ -192,7 +192,7 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
     return createDefaultShape(documentResources);
 }
 
-KoShape *KoShapeFactoryBase::createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context)
+KoShape *KoShapeFactoryBase::createShapeFromXML(const QDomElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(element);
     KoShape *shape = createDefaultShape(context.documentResourceManager());

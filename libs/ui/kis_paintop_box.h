@@ -40,7 +40,8 @@ class KisCanvasResourceProvider;
 class KisPopupButton;
 class KisIconWidget;
 class KisToolOptionsPopup;
-class KisPaintOpPresetsPopup;
+class KisPaintOpPresetsEditor;
+class KisPaintOpPresetsEditorDialog;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpConfigWidget;
 class KisCompositeOpComboBox;
@@ -144,7 +145,7 @@ private Q_SLOTS:
     void slotSlider2Changed();
     void slotSlider3Changed();
     void slotSlider4Changed();
-    void slotToolChanged(KoCanvasController* canvas, int toolId);
+    void slotToolChanged(KoCanvasController* canvas);
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
     void slotSwitchToPreviousPreset();
@@ -187,7 +188,7 @@ private:
     QToolButton*                        m_vMirrorButton {0};
     QToolButton*                        m_wrapAroundButton {0};
     KisToolOptionsPopup*                m_toolOptionsPopup {0};
-    KisPaintOpPresetsPopup*             m_presetsPopup {0};
+    KisPaintOpPresetsEditorDialog*       m_presetsEditor {0};
     KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup {0};
     KisViewManager*                     m_viewManager {0};
     KisPopupButton*                     m_workspaceWidget {0};

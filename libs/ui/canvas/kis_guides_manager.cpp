@@ -27,6 +27,7 @@
 #include "kis_snap_config.h"
 #include  "kis_canvas2.h"
 #include "kis_signal_compressor.h"
+#include "kis_floating_message.h"
 
 struct KisGuidesManager::Private
 {
@@ -531,6 +532,18 @@ bool KisGuidesManager::Private::mouseMoveHandler(const QPointF &docPos, Qt::Keyb
         setGuideValue(currentGuide, newValue);
         q->setGuidesConfigImpl(guidesConfig);
 
+        if(currentGuide.first == Qt::Horizontal)
+        {
+            view->canvasBase()->viewManager()->showFloatingMessage(
+                    i18n("Y: %1 px", newValue), QIcon(), 1000
+                        , KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+        }
+        else
+        {
+            view->canvasBase()->viewManager()->showFloatingMessage(
+                    i18n("X: %1 px",  newValue), QIcon(), 1000
+                        , KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+        }
     }
 
     return updateCursor(docPos);

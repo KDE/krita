@@ -127,11 +127,6 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
     return true;
 }
 
-bool KisMyPaintPaintOpPreset::save() {
-
-    return false;
-}
-
 void KisMyPaintPaintOpPreset::updateThumbnail()
 {
     d->icon = thumbnail();

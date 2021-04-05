@@ -467,8 +467,8 @@ void KisMeshTransformWorkerTest::testIteratorConstness()
     {
         using NodeIndex = KisBezierTransformMesh::NodeIndex;
         using SegmentIndex = KisBezierTransformMesh::SegmentIndex;
-        using ControlPointIndex = KisBezierTransformMesh::ControlPointIndex;
-        using ControlType = KisBezierTransformMesh::ControlType;
+//        using ControlPointIndex = KisBezierTransformMesh::ControlPointIndex;
+//        using ControlType = KisBezierTransformMesh::ControlType;
 
         auto segmentIt = mesh.find(SegmentIndex(NodeIndex(0,0), 1));
 

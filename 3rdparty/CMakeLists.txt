@@ -10,9 +10,10 @@ project (krita-and-all-its-deps)
 
 
 iF(APPLE)
-	exec_program("sysctl -n hw.optional.arm64" OUTPUT_VARIABLE APPLE_ON_ARM)
-	if(${APPLE_ON_ARM} EQUAL 1)
-		cmake_minimum_required(VERSION 3.19.3)
+        execute_process(COMMAND sysctl -n hw.optional.arm64 OUTPUT_VARIABLE apple_has_arm64_optional)
+        if(apple_has_arm64_optional)
+                message(NOTICE "Building on macos arm")
+                cmake_minimum_required(VERSION 3.19.3)
 	else()
         cmake_minimum_required(VERSION 3.7.2)
 	endif()

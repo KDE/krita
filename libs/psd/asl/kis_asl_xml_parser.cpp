@@ -497,6 +497,7 @@ bool tryParseDescriptor(const QDomElement &el,
                                         startType, endType);
             }
             gradient->setValid(true);
+            gradient->updatePreview();
         } else {
             gradient->setValid(false);
         }

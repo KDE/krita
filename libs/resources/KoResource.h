@@ -64,14 +64,14 @@ public:
      * Load this resource.
      * @return true if loading the resource succeeded.
      */
-    virtual bool load(KisResourcesInterfaceSP resourcesInterface);
+    bool load(KisResourcesInterfaceSP resourcesInterface);
     virtual bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) = 0;
 
     /**
      * Save this resource.
      *@return true if saving the resource succeeded.
      */
-    virtual bool save();
+    bool save();
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**

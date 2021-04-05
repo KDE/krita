@@ -49,6 +49,10 @@ struct OptimizedOpsSelector
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return new KoCompositeOpOver<Traits>(cs);
     }
+
+    static KoCompositeOp* createCopyOp(const KoColorSpace *cs) {
+        return new KoCompositeOpCopy2<Traits>(cs);
+    }
 };
 
 template<>
@@ -62,6 +66,10 @@ struct OptimizedOpsSelector<KoBgrU8Traits>
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp32(cs);
     }
+
+    static KoCompositeOp* createCopyOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createCopyOp32(cs);
+    }
 };
 
 template<>
@@ -74,6 +82,9 @@ struct OptimizedOpsSelector<KoLabU8Traits>
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp32(cs);
+    }
+    static KoCompositeOp* createCopyOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createCopyOp32(cs);
     }
 };
 
@@ -89,7 +100,28 @@ struct OptimizedOpsSelector<KoRgbF32Traits>
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp128(cs);
     }
+    static KoCompositeOp* createCopyOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createCopyOp128(cs);
+    }
 };
+
+template<>
+struct OptimizedOpsSelector<KoBgrU16Traits>
+{
+    static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
+        return useCreamyAlphaDarken() ?
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamyU64(cs) :
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpHardU64(cs);
+
+    }
+    static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createOverOpU64(cs);
+    }
+    static KoCompositeOp* createCopyOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createCopyOpU64(cs);
+    }
+};
+
 
 template<class Traits>
 struct AddGeneralOps<Traits, true>
@@ -106,7 +138,7 @@ struct AddGeneralOps<Traits, true>
      static void add(KoColorSpace* cs) {
          cs->addCompositeOp(OptimizedOpsSelector<Traits>::createOverOp(cs));
          cs->addCompositeOp(OptimizedOpsSelector<Traits>::createAlphaDarkenOp(cs));
-         cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
+         cs->addCompositeOp(OptimizedOpsSelector<Traits>::createCopyOp(cs));
          cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpBehind<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpDestinationIn<Traits>(cs));

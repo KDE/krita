@@ -11,6 +11,7 @@
 
 #include "KoToolBase.h"
 #include "KoToolBase_p.h"
+#include "KoToolFactoryBase.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "KoDocumentResourceManager.h"
@@ -131,7 +132,7 @@ QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewCo
 void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
 {
     if (! event->commitString().isEmpty()) {
-        QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
+        QKeyEvent ke(QEvent::KeyPress, -1, QFlags<Qt::KeyboardModifier>(), event->commitString());
         keyPressEvent(&ke);
     }
     event->accept();
@@ -195,16 +196,22 @@ QList<QPointer<QWidget> >  KoToolBase::createOptionWidgets()
     return ow;
 }
 
-void KoToolBase::setToolId(const QString &id)
+void KoToolBase::setFactory(KoToolFactoryBase *factory)
 {
     Q_D(KoToolBase);
-    d->toolId = id;
+    d->factory = factory;
+}
+
+KoToolFactoryBase* KoToolBase::factory() const
+{
+    Q_D(const KoToolBase);
+    return d->factory;
 }
 
 QString KoToolBase::toolId() const
 {
     Q_D(const KoToolBase);
-    return d->toolId;
+    return d->factory ? d->factory->id() : 0;
 }
 
 QCursor KoToolBase::cursor() const
@@ -366,6 +373,11 @@ void KoToolBase::requestUndoDuringStroke()
      * Default implementation just cancels the stroke
      */
     requestStrokeCancellation();
+}
+
+
+void KoToolBase::requestRedoDuringStroke()
+{
 }
 
 void KoToolBase::requestStrokeCancellation()

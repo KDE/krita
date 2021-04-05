@@ -16,7 +16,7 @@ bool SvgShape::saveSvg(SvgSavingContext &/*context*/)
     return false;
 }
 
-bool SvgShape::loadSvg(const KoXmlElement &/*element*/, SvgLoadingContext &/*context*/)
+bool SvgShape::loadSvg(const QDomElement &/*element*/, SvgLoadingContext &/*context*/)
 {
     return false;
 }

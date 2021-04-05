@@ -97,7 +97,7 @@ void KisAnimCurvesValuesHeader::zoomToFitRange(qreal min, qreal max)
     setScale(rect().height() / rangePixels);
 }
 
-void KisAnimCurvesValuesHeader::paintEvent(QPaintEvent *e)
+void KisAnimCurvesValuesHeader::paintEvent(QPaintEvent */*e*/)
 {
     QPainter painter(viewport());
 
@@ -116,7 +116,7 @@ void KisAnimCurvesValuesHeader::paintEvent(QPaintEvent *e)
     const int minorNotchLength = 12;
 
     // Draw notch at each major step.
-    const qreal upperValueThreshold = firstVisibleValue + (visibleSteps + 2) * valueStep;
+    //const qreal upperValueThreshold = firstVisibleValue + (visibleSteps + 2) * valueStep;
     for (int major = 0; major <= visibleSteps + 1; major++) {
         const qreal value = firstVisibleValue + valueStep * major;
 

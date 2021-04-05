@@ -12,6 +12,8 @@
 #include "kis_datamanager.h"
 #include "kis_image.h"
 #include "KoColor.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_image_config.h"
 
 //#define DEBUG_TRANSACTIONS
 
@@ -45,6 +47,7 @@ public:
     KisDataManagerSP savedDataManager;
 
     KUndo2Command newFrameCommand;
+    AutoKeyMode autoKeyMode;
 
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
@@ -54,35 +57,32 @@ public:
 };
 
 
-KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent)
+KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, AutoKeyMode autoKeyMode,  KUndo2Command* parent)
     : KUndo2Command(name, parent)
-
     , m_d(new Private())
 {
     m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;
     setTimedID(-1);
+
+    m_d->autoKeyMode = autoKeyMode;
 
     possiblyFlattenSelection(device);
     init(device);
     saveSelectionOutlineCache();
 }
 
-#include "kis_raster_keyframe_channel.h"
-#include "kis_image_config.h"
-
 void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int time)
 {
     if (!device->framesInterface()) return;
 
-    KisImageConfig cfg(true);
-    if (!cfg.autoKeyEnabled()) return;
+    if (autoKeyMode == AUTOKEY_DISABLED) return;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
     KIS_ASSERT_RECOVER(channel) { return; }
 
     KisKeyframeSP keyframe = channel->keyframeAt(time);
     if (!keyframe) {
-        if (cfg.autoKeyModeDuplicate()) {
+        if (autoKeyMode == AUTOKEY_DUPLICATE) {
             int activeKeyTime = channel->activeKeyframeTime(time);
             channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
         } else {

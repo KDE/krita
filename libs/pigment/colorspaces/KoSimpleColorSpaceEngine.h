@@ -7,6 +7,8 @@
 #ifndef _KO_SIMPLE_COLOR_SPACE_ENGINE_H_
 #define _KO_SIMPLE_COLOR_SPACE_ENGINE_H_
 
+#include <QVector>
+
 #include <KoColorSpaceEngine.h>
 
 class KoSimpleColorSpaceEngine : public KoColorSpaceEngine
@@ -21,6 +23,13 @@ public:
     const KoColorProfile* addProfile(const QString &profile ) override { Q_UNUSED(profile); return 0; }
     const KoColorProfile* addProfile(const QByteArray &data) override { Q_UNUSED(data); return 0; }
     void removeProfile(const QString &profile ) override { Q_UNUSED(profile); }
+
+    const KoColorProfile * getProfile(const QVector<double> &colorants, ColorPrimaries colorPrimaries, TransferCharacteristics transferFunction) override {
+        Q_UNUSED(colorants);
+        Q_UNUSED(colorPrimaries);
+        Q_UNUSED(transferFunction);
+        return nullptr;
+    }
 };
 
 #endif

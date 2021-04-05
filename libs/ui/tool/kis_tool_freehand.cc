@@ -265,15 +265,17 @@ bool KisToolFreehand::trySampleByPaintOp(KoPointerEvent *event, AlternateAction 
     if (!currentPaintOpPreset()) {
         return false;
     }
-    bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->
-        mousePressEvent(KisPaintInformation(convertToPixelCoord(event->point),
-                                            m_infoBuilder->pressureToCurve(event->pressure()),
-                                            event->xTilt(), event->yTilt(),
-                                            event->rotation(),
-                                            event->tangentialPressure(),
-                                            perspective, 0, 0),
-                        event->modifiers(),
-                        currentNode());
+    KisPaintInformation info(convertToPixelCoord(event->point),
+                             m_infoBuilder->pressureToCurve(event->pressure()),
+                             event->xTilt(), event->yTilt(),
+                             event->rotation(),
+                             event->tangentialPressure(),
+                             perspective, 0, 0);
+    info.setRandomSource(new KisRandomSource());
+
+    bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->mousePressEvent(info,
+                                                                                   event->modifiers(),
+                                                                                   currentNode());
     // DuplicateOP during the sampling of new source point (origin)
     // is the only paintop that returns "false" here
     return !paintOpIgnoredEvent;

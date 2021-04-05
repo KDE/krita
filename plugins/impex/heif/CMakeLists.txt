@@ -7,6 +7,7 @@ add_definitions(${HEIF_DEFINITIONS})
 set(kritaheifimport_SOURCES
     HeifImport.cpp
     HeifError.cpp
+    DlgHeifImport.cpp
 )
 
 add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES})
@@ -22,7 +23,7 @@ set(kritaheifexport_SOURCES
     HeifError.cpp
 )
 
-ki18n_wrap_ui(kritaheifexport_SOURCES WdgHeifExport.ui )
+ki18n_wrap_ui(kritaheifexport_SOURCES WdgHeifExport.ui DlgHeifImport.ui)
 
 add_library(kritaheifexport MODULE ${kritaheifexport_SOURCES})
 

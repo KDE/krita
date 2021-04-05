@@ -47,7 +47,7 @@ public:
         QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
         if (!scroller) {
             QScroller::grabGesture(viewport(), QScroller::MiddleMouseButtonGesture);
-            QScroller *scroller = QScroller::scroller(viewport());
+            scroller = QScroller::scroller(viewport());
             QScrollerProperties sp = scroller->scrollerProperties();
 
             sp.setScrollMetric(QScrollerProperties::MaximumVelocity, 0.0);

@@ -88,8 +88,7 @@ public:
      */
     QString renameGroup(const QString &oldName);
     void changeGroupRowCount(const QString &name, int newRowCount);
-    void setGlobal(bool);
-    void setReadOnly(bool);
+    void setStorageLocation(QString location);
 
     void setEntry(const KoColor &color, const QModelIndex &index);
     void removeEntry(const QModelIndex &index);
@@ -110,6 +109,12 @@ public:
      * MUST be called to make the changes into the resource server
      */
     void updatePalette();
+
+    /**
+     * @brief savePalette
+     *
+     */
+    void saveNewPaletteVersion();
 
 private Q_SLOTS:
     void slotGroupNameChanged(const QString &newName);

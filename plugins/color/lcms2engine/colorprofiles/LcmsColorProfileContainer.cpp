@@ -561,3 +561,87 @@ QByteArray LcmsColorProfileContainer::getProfileUniqueId() const
 
     return d->uniqueId;
 }
+
+cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristics transferFunction)
+{
+    cmsToneCurve *mainCurve;
+
+    // Values courtesey of Elle Stone
+    cmsFloat64Number srgb_parameters[5] =
+    { 2.4, 1.0 / 1.055,  0.055 / 1.055, 1.0 / 12.92, 0.04045 };
+    cmsFloat64Number rec709_parameters[5] =
+    { 1.0 / 0.45, 1.0 / 1.099,  0.099 / 1.099,  1.0 / 4.5, 0.081 };
+
+    // The following is basically a precise version of rec709.
+    cmsFloat64Number rec202012bit_parameters[5] =
+    { 1.0 / 0.45, 1.0 / 1.0993,  0.0993 / 1.0993,  1.0 / 4.5, 0.0812 };
+
+    cmsFloat64Number SMPTE_240M_parameters[5] =
+    { 1.0 / 0.45, 1.0 / 1.1115,  0.1115 / 1.1115,  1.0 / 4.0, 0.0913 };
+
+    cmsFloat64Number prophoto_parameters[5] =
+    { 1.8, 1.0,  0, 1.0 / 16, (16/512) };
+
+    cmsFloat64Number log_100[5] = {1.0, 10, 2.0, -2.0, 0.0};
+    cmsFloat64Number log_100_sqrt[5] = {1.0, 10, 2.5, -2.5, 0.0};
+
+    switch (transferFunction) {
+    case TRC_IEC_61966_2_4:
+        // Not possible in ICC due to lack of a*pow(bX+c,y) construct.
+    case TRC_ITU_R_BT_1361:
+        // This is not possible in ICC due to lack of a*pow(bX+c,y) construct.
+        qWarning() << "Neither IEC 61966 2-4 nor Bt. 1361 are supported, returning a rec 709 curve.";
+    case TRC_ITU_R_BT_709_5:
+    case TRC_ITU_R_BT_601_6:
+    case TRC_ITU_R_BT_2020_2_10bit:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 4, rec709_parameters);
+        break;
+    case TRC_ITU_R_BT_2020_2_12bit:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 4, rec202012bit_parameters);
+        break;
+    case TRC_ITU_R_BT_470_6_SYSTEM_M:
+        mainCurve = cmsBuildGamma(NULL, 2.2);
+        break;
+    case TRC_ITU_R_BT_470_6_SYSTEM_B_G:
+        mainCurve = cmsBuildGamma(NULL, 2.8);
+        break;
+    case TRC_SMPTE_240M:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 4, SMPTE_240M_parameters);
+        break;
+    case TRC_IEC_61966_2_1:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 4, srgb_parameters);
+        break;
+    case TRC_LOGARITHMIC_100:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 8, log_100);
+        break;
+    case TRC_LOGARITHMIC_100_sqrt10:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 8, log_100_sqrt);
+        break;
+    case TRC_A98:
+        //gamma 256/563
+        mainCurve = cmsBuildGamma(NULL, 256/563);
+        break;
+    case TRC_PROPHOTO:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 4, prophoto_parameters);
+        break;
+    case TRC_GAMMA_1_8:
+        mainCurve = cmsBuildGamma(NULL, 1.8);
+        break;
+    case TRC_GAMMA_2_4:
+        mainCurve = cmsBuildGamma(NULL, 2.4);
+        break;
+    case TRC_SMPTE_ST_428_1:
+        // Requires an a*X^y construction, not possible.
+    case TRC_ITU_R_BT_2100_0_PQ:
+        // Perceptual Quantizer
+    case TRC_ITU_R_BT_2100_0_HLG:
+        // Hybrid log gamma.
+        qWarning() << "Cannot generate an icc profile with this transfer function, will generate a linear profile";
+    case TRC_LINEAR:
+    default:
+        mainCurve = cmsBuildGamma(NULL, 1.0);
+        break;
+    }
+
+    return mainCurve;
+}

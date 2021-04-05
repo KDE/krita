@@ -55,6 +55,9 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundC
 
     if (mode == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
+        QPainterPath cache;
+        cache.addEllipse(rect);
+        getRotatedPath(cache, rect.center(), getRotationAngle());
 
         KisPainter painter(tmpSel);
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
@@ -62,16 +65,15 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundC
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
-        painter.paintEllipse(rect);
+        painter.paintPainterPath(cache);
 
-        QPainterPath cache;
-        cache.addEllipse(rect);
         tmpSel->setOutlineCache(cache);
 
         helper.selectPixelSelection(tmpSel, selectionAction());
     } else {
         QRectF ptRect = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);
+        shape->rotate(qRadiansToDegrees(getRotationAngle()));
 
         helper.addSelectionShape(shape, selectionAction());
     }

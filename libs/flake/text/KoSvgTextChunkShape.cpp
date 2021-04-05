@@ -590,7 +590,7 @@ void KoSvgTextChunkShape::resetTextShape()
     }
 }
 
-bool KoSvgTextChunkShape::loadSvg(const KoXmlElement &e, SvgLoadingContext &context)
+bool KoSvgTextChunkShape::loadSvg(const QDomElement &e, SvgLoadingContext &context)
 {
     SvgGraphicsContext *gc = context.currentGC();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);
@@ -647,11 +647,11 @@ enum Result {
     FoundSpace
 };
 
-Result hasPreviousSibling(KoXmlNode node)
+Result hasPreviousSibling(QDomNode node)
 {
     while (!node.isNull()) {
         if (node.isElement()) {
-            KoXmlElement element = node.toElement();
+            QDomElement element = node.toElement();
             if (element.tagName() == "text") break;
         }
 
@@ -664,7 +664,7 @@ Result hasPreviousSibling(KoXmlNode node)
             }
 
             if (node.isText()) {
-                KoXmlText textNode = node.toText();
+                QDomText textNode = node.toText();
                 const QString text = cleanUpString(textNode.data());
 
                 if (!text.isEmpty()) {
@@ -686,7 +686,7 @@ Result hasPreviousSibling(KoXmlNode node)
     return FoundNothing;
 }
 
-Result hasNextSibling(KoXmlNode node)
+Result hasNextSibling(QDomNode node)
 {
     while (!node.isNull()) {
         while (!node.nextSibling().isNull()) {
@@ -697,7 +697,7 @@ Result hasNextSibling(KoXmlNode node)
             }
 
             if (node.isText()) {
-                KoXmlText textNode = node.toText();
+                QDomText textNode = node.toText();
                 const QString text = cleanUpString(textNode.data());
 
                 // if we are the trailing whitespace, we should report that
@@ -718,7 +718,7 @@ Result hasNextSibling(KoXmlNode node)
 }
 }
 
-bool KoSvgTextChunkShape::loadSvgTextNode(const KoXmlText &text, SvgLoadingContext &context)
+bool KoSvgTextChunkShape::loadSvgTextNode(const QDomText &text, SvgLoadingContext &context)
 {
     SvgGraphicsContext *gc = context.currentGC();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);

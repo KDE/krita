@@ -13,7 +13,7 @@
 #include "kritaflake_export.h"
 #include <KoFlake.h>
 
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 class KoShapeLoadingContext;
 class KoShapeSavingContext;

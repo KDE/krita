@@ -14,6 +14,7 @@
 #include "kis_transaction_data.h"
 #include "kis_paint_device.h"
 #include "kis_pixel_selection.h"
+#include "kis_image_config.h"
 
 #include "kis_undo_adapter.h"
 #include "kis_post_execution_undo_adapter.h"
@@ -21,15 +22,38 @@
 class KisTransaction
 {
 public:
-    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1) {
-        m_transactionData = new KisTransactionData(KUndo2MagicString(), device, true, parent);
+
+    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, AutoKeyMode autoKeyMode, KUndo2Command* parent = 0, int timedID = -1) {
+        m_transactionData = new KisTransactionData(name, device, true, autoKeyMode, parent);
         m_transactionData->setTimedID(timedID);
     }
 
-    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1) {
-        m_transactionData = new KisTransactionData(name, device, true, parent);
-        m_transactionData->setTimedID(timedID);
+    KisTransaction(KisPaintDeviceSP device, AutoKeyMode autoKeyMode, KUndo2Command* parent = 0, int timedID = -1)
+        : KisTransaction(KUndo2MagicString(), device, autoKeyMode, parent, timedID){
     }
+
+    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1) {
+
+        KisImageConfig cfg(true);
+        AutoKeyMode autoKeyMode = AUTOKEY_DISABLED;
+
+        if (cfg.autoKeyEnabled()) {
+            if (cfg.autoKeyModeDuplicate()) {
+                autoKeyMode = AUTOKEY_DUPLICATE;
+            } else {
+                autoKeyMode = AUTOKEY_BLANK;
+            }
+        }
+
+        m_transactionData = new KisTransactionData(name, device, true, autoKeyMode, parent);
+        m_transactionData->setTimedID(timedID);
+
+    }
+
+    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1)
+        : KisTransaction(KUndo2MagicString(), device, parent, timedID){
+    }
+
 
     virtual ~KisTransaction() {
         delete m_transactionData;
@@ -112,12 +136,12 @@ class KisSelectionTransaction : public KisTransaction
 public:
     KisSelectionTransaction(KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, parent);
+        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, AUTOKEY_DISABLED, parent);
     }
 
     KisSelectionTransaction(const KUndo2MagicString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisTransactionData(name, pixelSelection, false, parent);
+        m_transactionData = new KisTransactionData(name, pixelSelection, false, AUTOKEY_DISABLED, parent);
     }
 };
 

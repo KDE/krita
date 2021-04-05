@@ -2,6 +2,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
 )
 
 set(kritaanimation_LIB_SRCS
+    KisFFMpegWrapper.cpp
     KisVideoSaver.cpp
     KisAnimationRenderingOptions.cpp
     KisAnimationRender.cpp
@@ -9,12 +10,14 @@ set(kritaanimation_LIB_SRCS
     VideoExportOptionsDialog.cpp
     VideoHDRMetadataOptionsDialog.cpp
     KisHDRMetadataOptions.cpp
+    KisDlgImportVideoAnimation.cpp
 )
 
 ki18n_wrap_ui(kritaanimation_LIB_SRCS
     wdg_animationrenderer.ui
     video_export_options_dialog.ui
     VideoHDRMetadataOptionsDialog.ui
+    VideoImportDialog.ui
     
 )
 

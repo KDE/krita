@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ActionCollection version="2" name="KarbonCalligraphyTool">
-<Actions category="General">
-<text>General</text>
+<ActionCollection version="2" name="Tools">
+  <Actions category="tool-shortcuts">
+    <text>Tool Shortcuts</text>
  <Action name="calligraphy_increase_width">
   <icon></icon>
   <text>Calligraphy: increase width</text>

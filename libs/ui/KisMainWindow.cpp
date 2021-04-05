@@ -138,6 +138,7 @@
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
+#include "animation/KisDlgImportVideoAnimation.h"
 #include <KisImageConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
@@ -229,11 +230,13 @@ public:
     KisAction *saveAction {0};
     KisAction *saveActionAs {0};
     KisAction *importAnimation {0};
+    KisAction *importVideoAnimation {0};
     KisAction *renderAnimation {0};
     KisAction *renderAnimationAgain {0};
     KisAction *closeAll {0};
     KisAction *importFile {0};
     KisAction *exportFile {0};
+    KisAction *exportFileAdvance {0};
     KisAction *undo {0};
     KisAction *redo {0};
     KisAction *newWindow {0};
@@ -1171,9 +1174,12 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 
 void KisMainWindow::slotSaveCanceled(const QString &errMsg)
 {
-    KisUsageLogger::log(QString("Saving canceled. Error:").arg(errMsg));
-    if (!errMsg.isEmpty()) {   // empty when canceled by user
+    if (!errMsg.isEmpty()) {   // empty when cancelled by user
+        KisUsageLogger::log(QString("Saving cancelled. Error:").arg(errMsg));
         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
+    }
+    else {
+        KisUsageLogger::log(QString("Saving cancelled by the user."));
     }
     slotSaveCompleted();
 }
@@ -1242,7 +1248,7 @@ QImage KisMainWindow::layoutThumbnail()
     return layoutThumbnail;
 }
 
-bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExporting)
+bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExporting, bool isAdvancedExporting )
 {
     if (!document) {
         return true;
@@ -1420,8 +1426,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                     }
                 }
                 else { // Export
-                    ret = document->exportDocument(newFilePath, outputFormat);
-
+                    ret = document->exportDocument(newFilePath, outputFormat, isAdvancedExporting);
                     if (ret) {
                         d->lastExportLocation = newFilePath;
                         d->lastExportedFormat = outputFormat;
@@ -1707,21 +1712,27 @@ void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 
 void KisMainWindow::slotFileSave()
 {
-    if (saveDocument(d->activeView->document(), false, false)) {
+    if (saveDocument(d->activeView->document(), false, false,false)) {
         emit documentSaved();
     }
 }
 
 void KisMainWindow::slotFileSaveAs()
 {
-    if (saveDocument(d->activeView->document(), true, false)) {
+    if (saveDocument(d->activeView->document(), true, false,false)) {
         emit documentSaved();
     }
 }
 
 void KisMainWindow::slotExportFile()
 {
-    if (saveDocument(d->activeView->document(), true, true)) {
+    if (saveDocument(d->activeView->document(), true, true,false)) {
+        emit documentSaved();
+    }
+}
+void KisMainWindow::slotExportAdvance()
+{
+    if (saveDocument(d->activeView->document(), true, true,true)) {
         emit documentSaved();
     }
 }
@@ -1981,11 +1992,15 @@ void KisMainWindow::importAnimation()
         QStringList files = dlg.files();
         int firstFrame = dlg.firstFrame();
         int step = dlg.step();
+        bool startFrom1 = dlg.startFrom1();
+        bool autoAddHoldframes = dlg.autoAddHoldframes();
+
 
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        KisImportExportErrorCode status = importer.import(files, firstFrame, step);
+        int isAscending = dlg.isAscending();
+        KisImportExportErrorCode status = importer.import(files, firstFrame, step, autoAddHoldframes, startFrom1, isAscending);  // modify here, add a flag
 
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();
@@ -1993,6 +2008,88 @@ void KisMainWindow::importAnimation()
                 QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
         }
         activeView()->canvasBase()->refetchDataFromImage();
+    }
+}
+
+void KisMainWindow::importVideoAnimation()
+{
+    KisDocument *document;
+    KisDlgImportVideoAnimation dlg(this, activeView());
+
+    if (dlg.exec() == QDialog::Accepted) {
+        QStringList files = dlg.renderFrames();
+        QStringList documentInfoList = dlg.documentInfo();
+
+        if (files.isEmpty()) return;
+        
+        dbgFile << "Animation Import options:" << documentInfoList;
+
+        int firstFrame = 0;
+        const int step = documentInfoList[0].toInt();
+        const int fps = documentInfoList[1].toInt();
+        const int totalFrames = files.size() * step;
+        const QString name = documentInfoList[3];
+        const bool useCurrentDocument = documentInfoList[4].toInt();
+
+        if ( useCurrentDocument ) {
+            document = activeView()->document();
+
+            dbgFile << "Current frames:" << document->image()->animationInterface()->totalLength() << "total frames:" << totalFrames;
+            if ( document->image()->animationInterface()->totalLength() < totalFrames ) {
+                document->image()->animationInterface()->setFullClipRangeStartTime(0);
+                document->image()->animationInterface()->setFullClipRangeEndTime(totalFrames);
+            }
+
+        } else {
+            const int width = documentInfoList[5].toInt();
+            const int height = documentInfoList[6].toInt();
+            const double resolution = documentInfoList[7].toDouble();
+
+            const QString colorModel = documentInfoList[8];
+            const QString colorDepth = documentInfoList[9];
+            const QString profile = documentInfoList[10];
+
+            document = KisPart::instance()->createDocument();
+            document->setObjectName(name);
+
+            KisPart::instance()->addDocument(document, false);
+            const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, profile);
+            Q_ASSERT(cs);
+
+            QColor qc(Qt::white);
+            qc.setAlpha(0);
+            KoColor bgColor(qc, cs);
+
+            if (!document->newImage(name, width, height, cs, bgColor, KisConfig::RASTER_LAYER, 1, "", double(resolution / 72) )) {
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Failed to create new document. Animation import aborted."));
+                dlg.cleanupWorkDir();
+                return;
+            }
+
+            document->image()->animationInterface()->setFramerate(fps);
+            document->image()->animationInterface()->setFullClipRangeStartTime(0);
+            document->image()->animationInterface()->setFullClipRangeEndTime(totalFrames);
+
+
+            this->showDocument(document);
+
+        }
+
+        KoUpdaterPtr updater =
+                !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
+        KisAnimationImporter importer(document->image(), updater);
+        KisImportExportErrorCode status = importer.import(files, firstFrame, step);
+
+        dlg.cleanupWorkDir();
+
+        if (!status.isOk() && !status.isInternalError()) {
+            QString msg = status.errorMessage();
+            if (!msg.isEmpty())
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
+        }
+
+        activeView()->canvasBase()->refetchDataFromImage();
+        document->image()->refreshGraph();
     }
 }
 
@@ -2046,7 +2143,7 @@ void KisMainWindow::slotConfigureToolbars()
 void KisMainWindow::slotResetConfigurations()
 {
     KisApplication *kisApp = static_cast<KisApplication*>(qApp);
-    kisApp->askresetConfig();
+    kisApp->askResetConfig();
 }
 
 void KisMainWindow::slotNewToolbarConfig()
@@ -2745,6 +2842,9 @@ void KisMainWindow::createActions()
     d->importAnimation  = actionManager->createAction("file_import_animation");
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
 
+    d->importVideoAnimation = actionManager->createAction("file_import_video_animation");
+    connect(d->importVideoAnimation, SIGNAL(triggered()), this, SLOT(importVideoAnimation()));
+    
     d->renderAnimation = actionManager->createAction("render_animation");
     d->renderAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
     connect( d->renderAnimation, SIGNAL(triggered()), this, SLOT(renderAnimation()));
@@ -2762,6 +2862,9 @@ void KisMainWindow::createActions()
     d->exportFile  = actionManager->createAction("file_export_file");
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
+    d->exportFileAdvance  = actionManager->createAction("file_export_advanced");
+    connect(d->exportFileAdvance, SIGNAL(triggered(bool)), this, SLOT(slotExportAdvance()));
+
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
     d->showDocumentInfo  = actionManager->createAction("file_documentinfo");
@@ -2769,7 +2872,7 @@ void KisMainWindow::createActions()
 
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()), Qt::UniqueConnection);
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()), Qt::QueuedConnection);
     connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
     d->toggleDockers = actionManager->createAction("view_toggledockers");
 

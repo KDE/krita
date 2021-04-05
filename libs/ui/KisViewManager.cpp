@@ -287,8 +287,8 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
             d->controlFrame.paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            d->controlFrame.paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)),
+            d->controlFrame.paintopBox(), SLOT(slotToolChanged(KoCanvasController*)));
 
     connect(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             canvasResourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));

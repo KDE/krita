@@ -183,7 +183,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         if (depthId.id().contains("Float")) continue;
 
-        dbgPigment << depthId.id();
+        qDebug() << depthId.id();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
                                      RGBAColorModelID.id(), depthId.id(), "");
         
@@ -198,7 +198,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
         src.fromQColor(red);
         dst.fromQColor(blue);
         
-        dbgPigment << src.toQColor() << dst.toQColor();
+        qDebug() << src.toQColor() << dst.toQColor();
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
@@ -279,17 +279,177 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
          * before increasing alpha of the pixel
          */
         if (badDst[3] != 0 && badDst[2] != 0) {
-            dbgPigment << op->id()
+            qDebug() << op->id()
                      << "easy case:" << goodDst[2]
                      << "difficult case:" << badDst[2];
 
-            dbgPigment << "The composite op has failed to erase the color "
+            qDebug() << "The composite op has failed to erase the color "
                 "channel which was hidden by zero alpha.";
-            dbgPigment << "Expected Blue channel:" << 0;
-            dbgPigment << "Actual Blue channel:  " << badDst[2];
+            qDebug() << "Expected Blue channel:" << 0;
+            qDebug() << "Actual Blue channel:  " << badDst[2];
 
             QFAIL("Failed to erase color channel");
         }
+    }
+}
+
+
+// for posix_memalign()
+#include <stdlib.h>
+
+#if defined Q_OS_WIN
+#define MEMALIGN_ALLOC(p, a, s) ((*(p)) = _aligned_malloc((s), (a)), *(p) ? 0 : errno)
+#define MEMALIGN_FREE(p) _aligned_free((p))
+#else
+#define MEMALIGN_ALLOC(p, a, s) posix_memalign((p), (a), (s))
+#define MEMALIGN_FREE(p) free((p))
+#endif
+
+void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoCompositeOp *op = cs->compositeOp(COMPOSITE_COPY);
+
+    const int pixelAlignment = sizeof(float) * 16; // 512-bit alignment should be enough for everyone! (c)
+    const int numPixels = 256;
+    void *src = 0;
+    void *dst = 0;
+
+    int result = 0;
+
+    result = MEMALIGN_ALLOC(&src, pixelAlignment, cs->pixelSize() * numPixels);
+    KIS_ASSERT(!result);
+
+    result = MEMALIGN_ALLOC(&dst, pixelAlignment, cs->pixelSize() * numPixels);
+    KIS_ASSERT(!result);
+
+    // generate buffers in misaligned manner
+    int numTestablePixels = numPixels - 1;
+    quint8 * srcPtr = reinterpret_cast<quint8*>(src) + cs->pixelSize();
+    quint8 * dstPtr = reinterpret_cast<quint8*>(dst) + cs->pixelSize();
+
+    quint8 goodSrc[] = {128,128,128,129};
+    quint8 goodDst[] = {10,10,10,11};
+    quint8 badSrc[] = {128,128,128,0};
+    quint8 badDst[] = {12,12,12,0};
+
+
+    auto testBadPixel = [cs, op, srcPtr, dstPtr, numTestablePixels] (int badPixelPos,
+            const quint8 *goodSrc,
+            const quint8 *goodDst,
+            const quint8 *badSrc,
+            const quint8 *badDst,
+            quint8 opacity,
+            quint8 *expectedDst) {
+
+        quint8 *badPixelDstPtr = dstPtr + badPixelPos * cs->pixelSize();
+
+        for (int i = 0; i < numTestablePixels; i++) {
+            if (i != badPixelPos) {
+                memcpy(srcPtr + cs->pixelSize() * i, goodSrc, cs->pixelSize());
+                memcpy(dstPtr + cs->pixelSize() * i, goodDst, cs->pixelSize());
+            } else {
+                memcpy(srcPtr + cs->pixelSize() * i, badSrc, cs->pixelSize());
+                memcpy(dstPtr + cs->pixelSize() * i, badDst, cs->pixelSize());
+            }
+        }
+
+        op->composite(dstPtr, numPixels * cs->pixelSize(),
+                      srcPtr, numPixels * cs->pixelSize(),
+                      0, 0,
+                      1, numTestablePixels, opacity);
+
+        if (memcmp(badPixelDstPtr, expectedDst, cs->pixelSize()) != 0) {
+            qDebug() << "badPixelPos" << badPixelPos;
+            qDebug() << "opacity" << opacity;
+            qDebug() << "oriS" << badSrc[0] << badSrc[1] << badSrc[2] << badSrc[3];
+            qDebug() << "oriS" << badDst[0] << badDst[1] << badDst[2] << badDst[3];
+            qDebug() << "expD" << expectedDst[0] << expectedDst[1] << expectedDst[2] << expectedDst[3];
+            qDebug() << "dst1" << badPixelDstPtr[0] << badPixelDstPtr[1] << badPixelDstPtr[2] << badPixelDstPtr[3];
+            QFAIL("Failed to compose pixels");
+        }
+    };
+
+    /**
+     * This test is supposed to catch irregularities between vector and scalar versions
+     * of the composite op. In vector version we handle division be zero in a relaxed
+     * way, so it some cases the content of the color channels may be different from
+     * the one of the scalar versions of the algorithm. It is only allowed when the
+     * pixel's alpha is null. In such case Krita considers pixel state as "undefined",
+     * so any value is considered okay.
+     */
+
+    {
+        quint8 goodSrc[] = {128,128,128,129};
+        quint8 goodDst[] = {10,10,10,11};
+        quint8 badSrc[] = {128,128,128,129};
+        quint8 badDst[] = {12,12,12,0};
+        quint8 *expectedDst = badSrc;
+        testBadPixel(1, goodSrc, goodDst, badSrc, badDst, 255, expectedDst);
+    }
+
+    {
+        quint8 goodSrc[] = {128,128,128,129};
+        quint8 goodDst[] = {10,10,10,11};
+        quint8 badSrc[] = {128,128,128,129};
+        quint8 badDst[] = {12,12,12,0};
+        quint8 *expectedDst = badSrc;
+        testBadPixel(10, goodSrc, goodDst, badSrc, badDst, 255, expectedDst);
+    }
+
+
+    {
+        quint8 goodSrc[] = {128,128,128,129};
+        quint8 goodDst[] = {10,10,10,11};
+        quint8 badSrc[] = {128,128,128,129};
+        quint8 badDst[] = {12,12,12,0};
+        quint8 expectedDst[] = {128,128,128,65};
+        testBadPixel(1, goodSrc, goodDst, badSrc, badDst, 128, expectedDst);
+    }
+
+    {
+        quint8 goodSrc[] = {128,128,128,129};
+        quint8 goodDst[] = {10,10,10,11};
+        quint8 badSrc[] = {128,128,128,129};
+        quint8 badDst[] = {12,12,12,0};
+        quint8 expectedDst[] = {128,128,128,65};
+        testBadPixel(10, goodSrc, goodDst, badSrc, badDst, 128, expectedDst);
+    }
+
+    {
+        quint8 goodSrc[] = {128,128,128,129};
+        quint8 goodDst[] = {10,10,10,11};
+        quint8 badSrc[] = {128,128,128,0};
+        quint8 badDst[] = {12,12,12,0};
+        quint8 expectedDst[] = {0,0,0,0}; // NOTE: the pixel has been changed, even though visualy it hasn't (due to zero alpha)
+        testBadPixel(1, goodSrc, goodDst, badSrc, badDst, 128, expectedDst);
+    }
+
+    {
+        quint8 goodSrc[] = {128,128,128,129};
+        quint8 goodDst[] = {10,10,10,11};
+        quint8 badSrc[] = {128,128,128,0};
+        quint8 badDst[] = {12,12,12,0};
+        quint8 expectedDst[] = {255,255,255,0}; // NOTE: the result is different from the scalar version, but we don't care, since alpha is still zero
+        testBadPixel(10, goodSrc, goodDst, badSrc, badDst, 128, expectedDst);
+    }
+
+    {
+        quint8 goodSrc[] = {128,128,128,129};
+        quint8 goodDst[] = {10,10,10,11};
+        quint8 badSrc[] = {128,128,128,0};
+        quint8 badDst[] = {12,12,12,127};
+        quint8 expectedDst[] = {12,12,12,63};
+        testBadPixel(1, goodSrc, goodDst, badSrc, badDst, 128, expectedDst);
+    }
+
+    {
+        quint8 goodSrc[] = {128,128,128,129};
+        quint8 goodDst[] = {10,10,10,11};
+        quint8 badSrc[] = {128,128,128,0};
+        quint8 badDst[] = {12,12,12,127};
+        quint8 expectedDst[] = {12,12,12,63};
+        testBadPixel(10, goodSrc, goodDst, badSrc, badDst, 128, expectedDst);
     }
 }
 

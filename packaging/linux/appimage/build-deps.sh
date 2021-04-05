@@ -58,6 +58,30 @@ fi
 # Switch to our build directory as we're basically ready to start building...
 cd $BUILD_PREFIX/deps-build/
 
+
+mkdir -p extra-build-tools
+export PATH=$(pwd)/extra-build-tools:$PATH
+
+# Our docker images are rather old, so we cannot use packaged versions for Meson
+if ! meson --version > /dev/null 2>&1; then
+    echo The Meson Build system was not found installing...
+    MESON_VERSION=0.57.1
+    wget -nc https://github.com/mesonbuild/meson/releases/download/$MESON_VERSION/meson-$MESON_VERSION.tar.gz
+    tar xf meson-$MESON_VERSION.tar.gz
+    mkdir -p $HOME/.local/bin
+    ln -s $(pwd)/meson-$MESON_VERSION/meson.py $(pwd)/extra-build-tools/meson
+    rm meson-$MESON_VERSION.tar.gz
+fi
+
+if ! ninja --version > /dev/null 2>&1; then
+    echo The Ninja Build system was not found installing...
+    NINJA_VERSION=1.10.2
+    wget -nc https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-linux.zip
+    unzip -o ninja-linux.zip
+    ln -s $(pwd)/ninja $(pwd)/extra-build-tools/ninja
+    rm ninja-linux.zip
+fi
+
 # Configure the dependencies for building
 cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR
 

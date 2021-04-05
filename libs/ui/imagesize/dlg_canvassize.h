@@ -50,6 +50,7 @@ public:
     qint32 height();
     qint32 xOffset();
     qint32 yOffset();
+    WdgCanvasSize * m_page;
 
 private Q_SLOTS:
     void slotAspectChanged(bool keep);
@@ -82,7 +83,6 @@ private:
     int m_newWidth, m_newHeight;
     int m_xOffset, m_yOffset;
 
-    WdgCanvasSize * m_page;
     QIcon m_anchorIcons[9];
     QButtonGroup *m_group;
 

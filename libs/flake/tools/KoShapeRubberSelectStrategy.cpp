@@ -23,7 +23,7 @@ KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoToolBase *tool, const
     d->snapGuide->enableSnapStrategies(KoSnapGuide::GridSnapping);
     d->snapGuide->enableSnapping(useSnapToGrid);
 
-    d->selectRect = QRectF(d->snapGuide->snap(clicked, 0), QSizeF(0, 0));
+    d->selectRect = QRectF(d->snapGuide->snap(clicked, QFlags<Qt::KeyboardModifier>()), QSizeF(0, 0));
 }
 
 void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter &converter)

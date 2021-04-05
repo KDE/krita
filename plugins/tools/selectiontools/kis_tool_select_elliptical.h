@@ -60,7 +60,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectElliptical")
     {
         setToolTip(i18n("Elliptical Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setSection(ToolBoxSection::Select);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_elliptical_selection"));
         setShortcut(QKeySequence(Qt::Key_J));

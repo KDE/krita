@@ -21,7 +21,7 @@ public:
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
 
-    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+    bool supports(const QDomElement &e, KoShapeLoadingContext &context) const override;
     QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };
 

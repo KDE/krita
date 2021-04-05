@@ -26,6 +26,7 @@
 
 #include <KisMimeDatabase.h>
 
+#include <KisPart.h>
 // kritaimage
 #include <kis_types.h>
 #include <kis_paint_device.h>
@@ -265,69 +266,78 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
 
     if (!clip) {
 
-        QImage qimage = KisClipboardUtil::getImageFromClipboard();
+        KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
 
-        if (qimage.isNull()) {
-            return KisPaintDeviceSP(0);
+        if (KisClipboardUtil::clipboardHasUrls()) {
+
+            KisClipboardUtil::clipboardHasUrlsAction(mainWin->activeView(), QApplication::clipboard()->mimeData());
+
         }
+        else {
 
-        KisConfig cfg(true);
-        quint32 behaviour = cfg.pasteBehaviour();
-        bool saveColorSetting = false;
+            QImage qimage = KisClipboardUtil::getImageFromClipboard();
 
-
-        if (behaviour == PASTE_ASK && showPopup) {
-            // Ask user each time.
-            QMessageBox mb(qApp->activeWindow());
-            QCheckBox dontPrompt(i18n("Remember"), &mb);
-
-            dontPrompt.blockSignals(true);
-
-            mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
-            mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
-
-            // the order of how you add these buttons matters as it determines the index.
-            mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
-            mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
-            mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
-            mb.addButton(&dontPrompt, QMessageBox::ActionRole);
-
-            behaviour = mb.exec();
-
-            if (behaviour > 1) {
-                return 0;
+            if (qimage.isNull()) {
+                return KisPaintDeviceSP(0);
             }
 
-            saveColorSetting = dontPrompt.isChecked(); // should we save this option to the config for next time?
+            KisConfig cfg(true);
+            quint32 behaviour = cfg.pasteBehaviour();
+            bool saveColorSetting = false;
 
 
+            if (behaviour == PASTE_ASK && showPopup) {
+                // Ask user each time.
+                QMessageBox mb(qApp->activeWindow());
+                QCheckBox dontPrompt(i18n("Remember"), &mb);
+
+                dontPrompt.blockSignals(true);
+
+                mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
+                mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
+
+                // the order of how you add these buttons matters as it determines the index.
+                mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
+                mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
+                mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
+                mb.addButton(&dontPrompt, QMessageBox::ActionRole);
+
+                behaviour = mb.exec();
+
+                if (behaviour > 1) {
+                    return 0;
+                }
+
+                saveColorSetting = dontPrompt.isChecked(); // should we save this option to the config for next time?
+
+
+            }
+
+            const KoColorSpace * cs;
+            const KoColorProfile *profile = 0;
+            if (behaviour == PASTE_ASSUME_MONITOR)
+                profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
+
+            cs = KoColorSpaceRegistry::instance()->rgb8(profile);
+            if (!cs) {
+                cs = KoColorSpaceRegistry::instance()->rgb8();
+                profile = cs->profile();
+            }
+
+            clip = new KisPaintDevice(cs);
+            Q_CHECK_PTR(clip);
+            clip->convertFromQImage(qimage, profile);
+
+            QRect clipBounds = clip->exactBounds();
+            QPoint diff = imageBounds.center() - clipBounds.center();
+            clip->setX(diff.x());
+            clip->setY(diff.y());
+
+            // save the persion's selection to the configuration if the option is checked
+            if (saveColorSetting) {
+                cfg.setPasteBehaviour(behaviour);
+            }
         }
-
-        const KoColorSpace * cs;
-        const KoColorProfile *profile = 0;
-        if (behaviour == PASTE_ASSUME_MONITOR)
-            profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
-
-        cs = KoColorSpaceRegistry::instance()->rgb8(profile);
-        if (!cs) {
-            cs = KoColorSpaceRegistry::instance()->rgb8();
-            profile = cs->profile();
-        }
-
-        clip = new KisPaintDevice(cs);
-        Q_CHECK_PTR(clip);
-        clip->convertFromQImage(qimage, profile);
-
-        QRect clipBounds = clip->exactBounds();
-        QPoint diff = imageBounds.center() - clipBounds.center();
-        clip->setX(diff.x());
-        clip->setY(diff.y());
-
-        // save the persion's selection to the configuration if the option is checked
-        if (saveColorSetting) {
-            cfg.setPasteBehaviour(behaviour);
-        }
-
     }
 
     return clip;

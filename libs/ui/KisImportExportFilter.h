@@ -58,6 +58,9 @@ public:
     static const QString ColorModelIDTag;
     static const QString ColorDepthIDTag;
     static const QString sRGBTag;
+    static const QString HDRTag;
+    static const QString CICPPrimariesTag;
+    static const QString CICPTransferCharacteristicsTag;
 public:
 
     ~KisImportExportFilter() override;

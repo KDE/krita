@@ -41,9 +41,12 @@ KisImportExportErrorCode setHeifError(KisDocument* document,
     document->setErrorMessage(i18n("Could not encode or write image."));
     return ImportExportCodes::NoAccessToWrite;
 
+  case heif_error_Color_profile_does_not_exist:
+      document->setErrorMessage(i18n("Color profile was not found in the document."));
+      return ImportExportCodes::OK;
   default:
     // we only get here when we forgot to handle an error ID
-    document->setErrorMessage(i18n("Unknown error."));
+    document->setErrorMessage(QString(i18n("Unknown error: %1")).arg(QString::fromStdString(error.get_message())));
     return ImportExportCodes::Failure;
   }
 }

@@ -29,12 +29,12 @@ namespace ImportExportCodes
         FormatFeaturesUnsupported, // file format can be parsed, but some features are unsupported,
         FormatColorSpaceUnsupported, // file format can be parsed, but color space of the image is unsupported
 
-
         // Writing
         CannotCreateFile, // file cannot be created
         NoAccessToWrite, // Krita has no writing access to the file
         ErrorWhileWriting, // there was an error that occurred during writing (can be insufficient memory, too, just we don't know)
         InsufficientMemory, // there is not enough memory left
+        FileFormatNotSupported, // this file format is not supported by Krita
 
         // Both
         Cancelled, // cancelled by a user

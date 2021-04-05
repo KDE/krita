@@ -584,20 +584,20 @@
     </Action>
     <Action name="reset_fg_bg">
       <icon/>
-      <text>Reset Foreground and Background Color</text>
+      <text>Set Foreground and Background Colors to Black and White</text>
       <whatsThis/>
-      <toolTip>Reset Foreground and Background Color</toolTip>
-      <iconText>Reset Foreground and Background Color</iconText>
+      <toolTip>Set foreground and background colors to black and white</toolTip>
+      <iconText>Set Foreground and Background Colors to Black and White</iconText>
       <shortcut>D</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
     <Action name="toggle_fg_bg">
       <icon/>
-      <text>Swap Foreground and Background Color</text>
+      <text>Swap Foreground and Background Colors</text>
       <whatsThis/>
-      <toolTip>Swap Foreground and Background Color</toolTip>
-      <iconText>Swap Foreground and Background Color</iconText>
+      <toolTip>Swap foreground and background colors</toolTip>
+      <iconText>Swap Foreground and Background Colors</iconText>
       <shortcut>X</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -1326,196 +1326,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+U</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-  </Actions>
-  <Actions category="tool-shortcuts">
-    <text>Tool Shortcuts</text>
-    <Action name="KritaShape/KisToolDyna">
-      <icon>krita_tool_dyna</icon>
-      <text>Dynamic Brush Tool</text>
-      <whatsThis/>
-      <toolTip>Dynamic Brush Tool</toolTip>
-      <iconText>Dynamic Brush Tool</iconText>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaShape/KisToolRectangle">
-      <icon>krita_tool_rectangle</icon>
-      <text>Rectangle Tool</text>
-      <whatsThis/>
-      <toolTip>Rectangle Tool</toolTip>
-      <iconText>Rectangle Tool</iconText>
-      <shortcut>Shift+R</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaShape/KisToolMultiBrush">
-      <icon>krita_tool_multihand</icon>
-      <text>Multibrush Tool</text>
-      <whatsThis/>
-      <toolTip>Multibrush Tool</toolTip>
-      <iconText>Multibrush Tool</iconText>
-      <shortcut>Q</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaShape/KisToolLazyBrush">
-      <icon>krita_tool_lazybrush</icon>
-      <text>Colorize Mask Tool</text>
-      <whatsThis/>
-      <toolTip>Colorize Mask Tool</toolTip>
-      <iconText>Colorize Mask Tool</iconText>
-      <shortcut/>
-      <statusTip/>
-    </Action>
-    <Action name="KritaShape/KisToolSmartPatch">
-      <icon>krita_tool_smart_patch</icon>
-      <text>Smart Patch Tool</text>
-      <whatsThis/>
-      <toolTip>Smart Patch Tool</toolTip>
-      <iconText>Smart Patch Tool</iconText>
-      <shortcut/>
-      <statusTip/>
-    </Action>
-    <Action name="PanTool">
-      <icon>tool_pan</icon>
-      <text>Pan Tool</text>
-      <whatsThis/>
-      <toolTip>Pan Tool</toolTip>
-      <iconText>Pan Tool</iconText>
-      <shortcut/>
-      <statusTip/>
-    </Action>
-    <Action name="InteractionTool">
-      <icon>select</icon>
-      <text>Select Shapes Tool</text>
-      <whatsThis/>
-      <toolTip>Select Shapes Tool</toolTip>
-      <iconText>Select Shapes Tool</iconText>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaSelected/KisToolColorSampler">
-      <icon>krita_tool_color_sampler</icon>
-      <text>Color Sampler</text>
-      <whatsThis/>
-      <toolTip>Sample a color from the image or current layer</toolTip>
-      <iconText>Color Sampler</iconText>
-      <shortcut>P</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaFill/KisToolFill">
-      <icon>krita_tool_color_fill</icon>
-      <text>Fill Tool</text>
-      <whatsThis/>
-      <toolTip>Fill a contiguous area of color with a color, or fill a selection.</toolTip>
-      <iconText>Fill</iconText>
-      <shortcut>F</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaShape/KisToolLine">
-      <icon>krita_tool_line</icon>
-      <text>Line Tool</text>
-      <whatsThis/>
-      <toolTip>Line Tool</toolTip>
-      <iconText>Line Tool</iconText>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaShape/KisToolEllipse">
-      <icon>krita_tool_ellipse</icon>
-      <text>Ellipse Tool</text>
-      <whatsThis/>
-      <toolTip>Ellipse Tool</toolTip>
-      <iconText>Ellipse Tool</iconText>
-      <shortcut>Shift+J</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaShape/KisToolBrush">
-      <icon>krita_tool_freehand</icon>
-      <text>Freehand Brush Tool</text>
-      <whatsThis/>
-      <toolTip>Freehand Brush Tool</toolTip>
-      <iconText>Freehand Brush Tool</iconText>
-      <shortcut>B</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaFill/KisToolGradient">
-      <icon>krita_tool_gradient</icon>
-      <text>Gradient Tool</text>
-      <whatsThis/>
-      <toolTip>Draw a gradient.</toolTip>
-      <iconText>Gradient Tool</iconText>
-      <shortcut>G</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaShape/KisToolMeasure">
-      <icon>krita_tool_measure</icon>
-      <text>Measurement Tool</text>
-      <whatsThis/>
-      <toolTip>Measure the distance between two points</toolTip>
-      <iconText>Measurement Tool</iconText>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KritaTransform/KisToolMove">
-      <icon>krita_tool_move</icon>
-      <text>Move Tool</text>
-      <whatsThis/>
-      <toolTip>Move a layer</toolTip>
-      <iconText>Move Tool</iconText>
-      <shortcut>T</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="KarbonCalligraphyTool">
-      <icon>calligraphy</icon>
-      <text>Calligraphy</text>
-      <whatsThis/>
-      <toolTip>Calligraphy</toolTip>
-      <iconText>Calligraphy</iconText>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="PathTool">
-      <icon>krita_draw_path</icon>
-      <text>Edit Shapes Tool</text>
-      <whatsThis/>
-      <toolTip>Edit Shapes Tool</toolTip>
-      <iconText>Edit Shapes Tool</iconText>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="ZoomTool">
-      <icon>tool_zoom</icon>
-      <text>Zoom Tool</text>
-      <whatsThis/>
-      <toolTip>Zoom Tool</toolTip>
-      <iconText>Zoom Tool</iconText>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
-    <Action name="ToolReferenceImages">
-      <icon>krita_tool_reference_images</icon>
-      <text>Reference Images Tool</text>
-      <whatsThis/>
-      <toolTip>Reference Images Tool</toolTip>
-      <iconText>Reference Images Tool</iconText>
-      <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>

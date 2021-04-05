@@ -203,7 +203,7 @@ KisStrokeJobData *MoveSelectionStrokeStrategy::ShowSelectionData::createLodClone
     return new ShowSelectionData(*this, levelOfDetail);
 }
 
-MoveSelectionStrokeStrategy::ShowSelectionData::ShowSelectionData(const MoveSelectionStrokeStrategy::ShowSelectionData &rhs, int levelOfDetail)
+MoveSelectionStrokeStrategy::ShowSelectionData::ShowSelectionData(const MoveSelectionStrokeStrategy::ShowSelectionData &rhs, int /*levelOfDetail*/)
     : KisStrokeJobData(rhs),
       showSelection(rhs.showSelection)
 {

@@ -84,6 +84,7 @@ public:
     void setFullClipRangeEnd(int column);
 
     void clearEntireCache();
+    void setActiveLayerSelectedTimes(const QSet<int>& times);
 
     void setLastClickedIndex(const QModelIndex &index);
 

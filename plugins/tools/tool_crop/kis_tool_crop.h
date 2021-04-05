@@ -114,8 +114,12 @@ public Q_SLOTS:
 
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
+    void requestUndoDuringStroke() override;
+    void requestRedoDuringStroke() override;
 
     void crop();
+
+    void showSizeOnCanvas();
 
     void setCropTypeLegacy(int cropType);
     void setCropType(CropToolType cropType);
@@ -208,7 +212,7 @@ public:
     KisToolCropFactory()
             : KoToolFactoryBase("KisToolCrop") {
         setToolTip(i18n("Crop Tool"));
-        setSection(TOOL_TYPE_TRANSFORM);
+        setSection(ToolBoxSection::Transform);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
         setIconName(koIconNameCStr("tool_crop"));

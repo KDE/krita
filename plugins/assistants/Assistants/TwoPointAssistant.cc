@@ -248,13 +248,14 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
             if ((vp_a.x() < center.x() && vp_b.x() > center.x()) ||
                 (vp_a.x() > center.x() && vp_b.x() < center.x())) {
-                if (isEditing) {
-                    // Draw vertical line, but only if the center is between both VPs
-                    QLineF drawn_vertical = initialTransform.map(inv.map(vertical));
-                    KisAlgebra2D::intersectLineRect(drawn_vertical,viewport);
-                    path.moveTo(drawn_vertical.p1());
-                    path.lineTo(drawn_vertical.p2());
-                }
+
+                // Draw vertical line, but only if the center is between both VPs
+                QLineF drawn_vertical = initialTransform.map(inv.map(vertical));
+                if (!isEditing) drawn_vertical.translate(mousePos - drawn_vertical.p1());
+                KisAlgebra2D::intersectLineRect(drawn_vertical,viewport);
+                path.moveTo(drawn_vertical.p1());
+                path.lineTo(drawn_vertical.p2());
+
                 if (assistantVisible) {
                     // Display a notch to represent the center of vision
                     path.moveTo(initialTransform.map(inv.map(cov+QPointF(0,-10))));

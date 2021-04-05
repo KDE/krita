@@ -146,6 +146,20 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             QPainterPath pathCenter;
             pathCenter.addEllipse(ellipse);
             drawPath(gc, pathCenter, isSnappingActive());
+
+            // Draw circle to represent center of vision
+            if (handles().length() == 3 && handle == handles()[2]) {
+                const QLineF horizon = QLineF(*handles()[0],*handles()[1]);
+                QLineF normal = horizon.normalVector();
+                normal.translate(*handles()[2]-normal.p1());
+                QPointF cov = QPointF();
+                normal.intersect(horizon,&cov);
+                const QPointF center = initialTransform.map(cov);
+                QRectF center_ellipse = QRectF(QPointF(center.x() -15, center.y() -15), QSizeF(30, 30));
+                QPainterPath pathCenter;
+                pathCenter.addEllipse(center_ellipse);
+                drawPath(gc, pathCenter, isSnappingActive());
+            }
         }}
 
     if (handles().size() >= 2) {

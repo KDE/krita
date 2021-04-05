@@ -600,35 +600,35 @@ void KisAssistantTool::addAssistant()
 
     // generate the side handles for the Two Point assistant
     if (m_newAssistant->id() == "two point"){
-      QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
+        QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
 
-      const QPointF translation = QLineF(*handles[0],*handles[1]).normalVector().p2() / 2.0;
-      const qreal length = 100;
-      const QPointF handles_above = *handles[2] + translation;
-      const QPointF handles_below = *handles[2] - translation;
+        const QPointF p1 = *m_newAssistant->handles()[0];
+        const QPointF p2 = *m_newAssistant->handles()[1];
+        const QPointF p3 = *m_newAssistant->handles()[2];
 
-      QLineF bar;
-      bar= QLineF(handles_above, *handles[0]);
-      bar.setLength(length);
-      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-      bar.setLength(length * 0.5);
-      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-      bar= QLineF(handles_above, *handles[1]);
-      bar.setLength(length);
-      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-      bar.setLength(length * 0.5);
-      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+        QTransform t = QTransform();
+        t.rotate(QLineF(p1,p2).angle());
+        t.translate(-p3.x(),-p3.y());
+        const QTransform inv = t.inverted();
 
-      bar= QLineF(handles_below, *handles[0]);
-      bar.setLength(length);
-      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-      bar.setLength(length * 0.5);
-      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-      bar= QLineF(handles_below, *handles[1]);
-      bar.setLength(length);
-      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-      bar.setLength(length * 0.5);
-      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+        const QLineF horizon = QLineF(t.map(p1),t.map(p2));
+        QLineF vertical = horizon.normalVector();
+        vertical.translate(t.map(p3) - vertical.p1());
+        QPointF cov = horizon.center();
+        horizon.intersect(vertical,&cov);
+        const qreal gap = QLineF(horizon.center(),cov).length();
+
+        const qreal length = sqrt(pow(horizon.length()/2.0,2) - pow(gap,2));
+        const QPointF above = inv.map(cov+QPointF(0,length));
+        const QPointF below = inv.map(cov-QPointF(0,length));
+
+        Q_FOREACH (QPointF side, QList<QPointF>({above,below})) {
+            Q_FOREACH (QPointF vp, QList<QPointF>({p1, p2})) {
+                QLineF bar = QLineF(side, vp);
+                m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.pointAt(0.8)), HandleType::SIDE);
+                m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.pointAt(0.4)), HandleType::SIDE);
+            }
+        }
     }
 
 

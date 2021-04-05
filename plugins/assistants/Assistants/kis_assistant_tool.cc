@@ -273,8 +273,37 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 m_snapIsRadial = true;
             }
         } else if (m_handleDrag && assistant->handles().size()>2 && assistant->id() == "two point") {
-            m_dragStart = *m_handleDrag;
-            m_snapIsRadial = false;
+
+            // If the user left the assistant's handles in an invalid
+            // state (ie 3rd handle isn't between the 1st and 2nd
+            // handle), then compute a sensible value for m_dragStart
+            // that respects it
+            QList<KisPaintingAssistantHandleSP> handles = assistant->handles();
+
+            const QPointF p1 = *assistant->handles()[0];
+            const QPointF p2 = *assistant->handles()[1];
+            const QPointF p3 = *assistant->handles()[2];
+
+            qreal size = 0;
+            QTransform t = qSharedPointerCast<TwoPointAssistant>(m_newAssistant)->localTransform(p1,p2,p3,&size);
+            QTransform inv = t.inverted();
+            if (t.map(p1).x() * t.map(p2).x() > 0) {
+
+                // We only care about m_dragStart if user is dragging a VP
+                if (m_handleDrag == assistant->handles()[0]) {
+                    const QPointF safe_start = QPointF(-1.0*t.map(p1).x(),t.map(p1).y());
+                    m_dragStart = inv.map(safe_start);
+                } else if (m_handleDrag == assistant->handles()[1]) {
+                    const QPointF safe_start = QPointF(-1.0*t.map(p2).x(),t.map(p1).y());
+                    m_dragStart = inv.map(safe_start);
+                }
+
+                m_snapIsRadial = false;
+            } else {
+                m_dragStart = *m_handleDrag;
+                m_snapIsRadial = false;
+            }
+
         } else {
             m_dragStart = assistant->getEditorPosition();
             m_snapIsRadial = false;

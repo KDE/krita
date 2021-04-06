@@ -1,5 +1,5 @@
 SET(EXTPREFIX_openexr "${EXTPREFIX}" )
-if (MINGW)
+if (WIN32)
 ExternalProject_Add( ext_openexr
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://github.com/AcademySoftwareFoundation/openexr/archive/v2.5.5.tar.gz

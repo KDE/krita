@@ -1,3 +1,11 @@
+/*
+ * SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2010 Geoffry Song <goffrie@gmail.com>
+ * SPDX-FileCopyrightText: 2021 Nabil Maghfur Usman <nmaghfurusman@gmail.com>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
+ */
+
 #ifndef _TWO_POINT_ASSISTANT_H_
 #define _TWO_POINT_ASSISTANT_H_
 

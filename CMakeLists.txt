@@ -625,6 +625,9 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
+if (MSVC)
+    set(Boost_USE_STATIC_LIBS OFF)
+endif()
 find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##

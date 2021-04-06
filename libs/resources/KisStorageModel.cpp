@@ -15,6 +15,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <QList>
 
 Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
@@ -299,6 +300,67 @@ KisResourceStorageSP KisStorageModel::storageForId(const int storageId) const
     return KisResourceLocator::instance()->storageByLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(query.value("location").toString()));
 }
 
+QString findUnusedName(QString location, QString filename)
+{
+    // the Save Incremental Version incrementation in KisViewManager is way too complex for this task
+    // and in that case there is a specific file to increment, while here we need to find just
+    // an unusued filename
+    QFileInfo info = QFileInfo(location + "/" + filename);
+    if (!info.exists()) {
+        return filename;
+    }
+
+    QString extension = info.suffix();
+    QString filenameNoExtension = filename.left(filename.length() - extension.length());
+
+
+    QDir dir = QDir(location);
+    QStringList similarEntries = dir.entryList(QStringList() << filenameNoExtension + "*");
+
+    QList<int> versions;
+    int maxVersionUsed = -1;
+    for (int i = 0; i < similarEntries.count(); i++) {
+        QString entry = similarEntries[i];
+        //QFileInfo fi = QFileInfo(entry);
+        if (!entry.endsWith(extension)) {
+            continue;
+        }
+        QString versionStr = entry.right(entry.length() - filenameNoExtension.length()); // strip the common part
+        versionStr = versionStr.left(versionStr.length() - extension.length());
+        if (!versionStr.startsWith("_")) {
+            continue;
+        }
+        versionStr = versionStr.right(versionStr.length() - 1); // strip '_'
+        // now the part left should be a number
+        bool ok;
+        int version = versionStr.toInt(&ok);
+        if (!ok) {
+            continue;
+        }
+        if (version > maxVersionUsed) {
+            maxVersionUsed = version;
+        }
+    }
+
+    int versionToUse = maxVersionUsed > -1 ? maxVersionUsed + 1 : 1;
+    int versionStringLength = 3;
+    QString baseNewVersion = QString::number(versionToUse);
+    while (baseNewVersion.length() < versionStringLength) {
+        baseNewVersion.prepend("0");
+    }
+
+    QString newFilename = filenameNoExtension + "_" + QString::number(versionToUse) + extension;
+    bool success = !QFileInfo(location + "/" + newFilename).exists();
+
+    if (!success) {
+        qCritical() << "The new filename for the bundle does exist...";
+    }
+
+
+    return newFilename;
+
+}
+
 bool KisStorageModel::importStorage(QString filename, StorageImportOption importOption) const
 {
     // 1. Copy the bundle/storage to the resource folder
@@ -313,12 +375,15 @@ bool KisStorageModel::importStorage(QString filename, StorageImportOption import
     QString newLocation = newDir + '/' + newName;
 
     QFileInfo newFileInfo(newLocation);
+    qCritical() << "New path info = " << newFileInfo;
     if (newFileInfo.exists()) {
         if (importOption == Overwrite) {
-            QFile::remove(newLocation);
-        } else if (importOption == Rename) {
-            // TODO: rename
+            //QFile::remove(newLocation);
             return false;
+        } else if (importOption == Rename) {
+            newName = findUnusedName(newDir, newName);
+            newLocation = newDir + '/' + newName;
+            newFileInfo = QFileInfo(newLocation);
         } else { // importOption == None
             return false;
         }

@@ -139,6 +139,11 @@ void TestStorageModel::testMetaData()
     QVERIFY(metadata[KisResourceStorage::s_meta_name] == "My Named Memory Storage");
 }
 
+void TestStorageModel::testImportStorage()
+{
+
+}
+
 
 
 

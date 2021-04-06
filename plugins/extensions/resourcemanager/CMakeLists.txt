@@ -5,6 +5,8 @@ set(kritaresourcemanager_SOURCES
     dlg_embed_tags.cpp
     DlgResourceManager.cpp
     wdgtagselection.cpp
+    ResourceImporter.cpp
+    DlgResourceTypeForFile.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES

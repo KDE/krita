@@ -24,6 +24,7 @@
 #include <kis_paintop_factory.h>
 #include <kis_paintop_registry.h>
 #include <dlg_create_bundle.h>
+#include <ResourceImporter.h>
 
 DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *parent)
     : KoDialog(parent)
@@ -273,6 +274,10 @@ void DlgResourceManager::slotDeleteResources()
 
 void DlgResourceManager::slotImportResources()
 {
+    ResourceImporter importer(this);
+    importer.importResources();
+
+
 
 }
 

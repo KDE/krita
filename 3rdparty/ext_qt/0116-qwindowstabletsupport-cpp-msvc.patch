@@ -1,0 +1,13 @@
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+index 3091a0f..17380a0 100644
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+@@ -219,7 +219,7 @@ QWindowsTabletSupport::QWindowsTabletSupport(HWND window, HCTX context)
+         m_tiltSupport = orientation[0].axResolution && orientation[1].axResolution;
+ 
+     connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
+-            this, QWindowsTabletSupport::slotPrimaryScreenChanged);
++            this, &QWindowsTabletSupport::slotPrimaryScreenChanged);
+     slotScreenGeometryChanged();
+ }
+ 

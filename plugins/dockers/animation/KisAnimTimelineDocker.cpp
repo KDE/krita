@@ -54,6 +54,7 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
 
     // Transport Controls...
     transport = new KisTransportControls(this);
+    transport->showSkipButtons(true);
     widgetAreaLayout->addWidget(transport);
 
     widgetAreaLayout->addSpacing(SPACING_UNIT);
@@ -570,26 +571,6 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
         KisConfig config(true);
         action->setChecked(config.animationDropFrames());
     }
-}
-
-void KisAnimTimelineDocker::keyPressEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Control) {
-        m_d->titlebar->transport->showSeekButtons(false);
-        m_d->titlebar->transport->showSkipButtons(true);
-    }
-
-    QWidget::keyPressEvent(event);
-}
-
-void KisAnimTimelineDocker::keyReleaseEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Control) {
-        m_d->titlebar->transport->showSeekButtons(true);
-        m_d->titlebar->transport->showSkipButtons(false);
-    }
-
-    QWidget::keyReleaseEvent(event);
 }
 
 void KisAnimTimelineDocker::setAutoKey(bool value)

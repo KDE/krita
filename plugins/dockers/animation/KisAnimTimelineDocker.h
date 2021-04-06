@@ -93,9 +93,6 @@ public:
     void unsetCanvas() override;
     void setViewManager(KisViewManager *kisview) override;
 
-    void keyPressEvent(QKeyEvent* event) override;
-    void keyReleaseEvent(QKeyEvent* event) override;
-
 public Q_SLOTS:
     void setAutoKey(bool value);
 

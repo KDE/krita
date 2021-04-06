@@ -141,9 +141,20 @@ void KisGridOpOption::setHeight(int height) const
 qreal KisGridOpOption::horizontalOffset() const
 {
     //Since this is a grid, get the smallest value that achieves an equivalent horizontal offset
-    qreal shortHorizontalOffset = fmod(m_options->horizontalOffsetSPBox->value(), m_options->gridHeightSPBox->value());
-    qreal inverseShortHorizontalOffset = m_options->gridHeightSPBox->value() - qFabs(shortHorizontalOffset);
-    return qMin(shortHorizontalOffset, inverseShortHorizontalOffset);
+    qreal width = gridWidth();
+    qreal shortHorizontalOffset = fmod(m_options->horizontalOffsetSPBox->value(), width);
+     if (qFabs(shortHorizontalOffset) > width/2) {
+         //Shift the offset over so its more centered on the brush outline
+         if (__signbit(shortHorizontalOffset)) {
+             return shortHorizontalOffset + width;
+         }
+         else {
+             return shortHorizontalOffset - width;
+         }
+     }
+     else {
+         return shortHorizontalOffset;
+     }
 }
 
 
@@ -156,9 +167,21 @@ void KisGridOpOption::setHorizontalOffset(qreal horizontalOffset) const
 qreal KisGridOpOption::verticalOffset() const
 {
     //Since this is a grid, get the smallest value that achieves an equivalent vertical offset
-    qreal shortVerticalOffset = fmod(m_options->verticalOffsetSPBox->value(), m_options->gridHeightSPBox->value());
-    qreal inverseShortVerticalOffset = m_options->gridHeightSPBox->value() - qFabs(shortVerticalOffset);
-    return qMin(shortVerticalOffset, inverseShortVerticalOffset);
+    qreal height = gridHeight();
+    qreal shortVerticalOffset = fmod(m_options->verticalOffsetSPBox->value(), height);
+    if (qFabs(shortVerticalOffset) > height/2) {
+        //Shift the offset over so its more centered on the brush outline
+        if (__signbit(shortVerticalOffset)) {
+            return shortVerticalOffset + height;
+        }
+        else {
+            return shortVerticalOffset - height;
+        }
+    }
+    else {
+        return shortVerticalOffset;
+    }
+
 }
 
 

@@ -166,6 +166,12 @@ function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
 	endif ()
 	unset(${OUTPUT_VARNAME} CACHE)
 	CHECK_CXX_SOURCE_COMPILES("
+// https://bugs.python.org/issue22411
+#if defined(_MSC_VER)
+#  ifdef _DEBUG
+#    undef _DEBUG
+#  endif /* _DEBUG */
+#endif /* _MSC_VER */
 #include <Python.h>
 int main(int argc, char *argv[]) {
 	Py_InitializeEx(0);

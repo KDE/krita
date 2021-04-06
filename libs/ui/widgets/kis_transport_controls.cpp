@@ -65,8 +65,10 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     layout->addWidget(buttonSkipForward);
     connect(buttonSkipForward, SIGNAL(released()), this, SIGNAL(skipForward()));
 
+    showStateButtons(true);
     showSeekButtons(true);
     showSkipButtons(false);
+
     setFocusPolicy(Qt::ClickFocus);
 }
 
@@ -85,6 +87,17 @@ void KisTransportControls::setPlaying(bool playing)
         buttonPlayPause->setIcon(KisIconUtils::loadIcon("animation_pause"));
     } else {
         buttonPlayPause->setIcon(KisIconUtils::loadIcon("animation_play"));
+    }
+}
+
+void KisTransportControls::showStateButtons(bool show)
+{
+    if (show) {
+        buttonPlayPause->show();
+        buttonStop->show();
+    } else {
+        buttonPlayPause->hide();
+        buttonStop->hide();
     }
 }
 

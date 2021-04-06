@@ -25,6 +25,8 @@ public:
 
 public Q_SLOTS:
     void setPlaying(bool playing);
+
+    void showStateButtons(bool show);
     void showSeekButtons(bool show);
     void showSkipButtons(bool show);
 

@@ -32,23 +32,6 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
 {
 }
 
-inline qreal distsqr(const QPointF& pt, const QLineF& line)
-{
-    const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
-    return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
-}
-
-// returns how far angle is from 180 or 0, depending on quadrant
-inline qreal acuteAngle(qreal angle) {
-    if (angle > 90 && angle < 270) {
-        return abs(angle - 180);
-    } else if (angle < 360 && angle > 270) {
-        return 360 - angle;
-    } else {
-        return angle;
-    }
-}
-
 KisPaintingAssistantSP TwoPointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new TwoPointAssistant(*this, handleMap));

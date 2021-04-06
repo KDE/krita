@@ -39,9 +39,6 @@ public:
     void start(const KisFFMpegWrapperSettings &settings);
     void waitForFinished(int msecs = 60000);
     void kill();
-    QByteArray stdout();
-    QString stderr();
-    
 
     static QJsonObject findProcessPath(const QString &processName, const QString &customLocation, bool processInfo);
     static QJsonObject findFFMpeg(const QString &customLocation);

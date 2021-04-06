@@ -87,6 +87,10 @@ public:
         // string is returned
         DropReasonRole,
 
+        // Let's the model quickly determine whether a layer has any
+        // animated content attached to it.
+        IsAnimatedRole,
+
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = Qt::UserRole + 99,
 

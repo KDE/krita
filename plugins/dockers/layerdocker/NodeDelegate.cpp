@@ -123,6 +123,7 @@ void NodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QMode
         drawVisibilityIconHijack(p, option, index); // TODO hide when dragging
         drawDecoration(p, option, index);
         drawExpandButton(p, option, index);
+        drawAnimatedDecoration(p, option, index);
         drawBranch(p, option, index);
 
         drawProgressBar(p, option, index);
@@ -868,6 +869,7 @@ void NodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &optio
         }
 
         p->drawPixmap(rc.topLeft()-QPoint(0, 1), pixmap);
+
         p->setOpacity(oldOpacity); // restore old opacity
     }
 }
@@ -886,7 +888,6 @@ void NodeDelegate::drawExpandButton(QPainter *p, const QStyleOptionViewItem &opt
 
     if (!(option.state & QStyle::State_Children)) return;
 
-
     QString iconName = option.state & QStyle::State_Open ?
         "arrow-down" : ((option.direction == Qt::RightToLeft) ? "arrow-left" : "arrow-right");
     QIcon icon = KisIconUtils::loadIcon(iconName);
@@ -894,6 +895,37 @@ void NodeDelegate::drawExpandButton(QPainter *p, const QStyleOptionViewItem &opt
                                  (option.state & QStyle::State_Enabled) ?
                                  QIcon::Normal : QIcon::Disabled);
     p->drawPixmap(rc.bottomLeft()-QPoint(0, scm.decorationSize()-1), pixmap);
+}
+
+void NodeDelegate::drawAnimatedDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+
+    KisNodeViewColorScheme scm;
+    QRect rc = decorationClickRect(option, index);
+
+    QIcon animatedIndicatorIcon = KisIconUtils::loadIcon("addduplicateframe");
+    const bool isAnimated = index.data(KisNodeModel::IsAnimatedRole).toBool();
+
+    rc = kisGrowRect(rc, -(scm.decorationMargin()+scm.border()));
+
+    if (!isAnimated) return;
+
+    if ((option.state & QStyle::State_Children)) return;
+
+    const qreal oldOpacity = p->opacity(); // remember previous opacity
+
+    if (!(option.state & QStyle::State_Enabled)) {
+        p->setOpacity(0.35);
+    }
+
+    int decorationSize = scm.decorationSize();
+
+    QPixmap animPixmap = animatedIndicatorIcon.pixmap(decorationSize,
+                                 (option.state & QStyle::State_Enabled) ?
+                                 QIcon::Normal : QIcon::Disabled);
+
+    p->drawPixmap(rc.bottomLeft()-QPoint(0, scm.decorationSize()-1), animPixmap);
+
+    p->setOpacity(oldOpacity);
 }
 
 bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)

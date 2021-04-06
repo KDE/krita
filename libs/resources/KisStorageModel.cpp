@@ -10,6 +10,11 @@
 #include <KisResourceLocator.h>
 #include <KisResourceModelProvider.h>
 #include <QFileInfo>
+#include <kis_assert.h>
+
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
@@ -292,6 +297,43 @@ KisResourceStorageSP KisStorageModel::storageForId(const int storageId) const
     }
 
     return KisResourceLocator::instance()->storageByLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(query.value("location").toString()));
+}
+
+bool KisStorageModel::importStorage(QString filename, StorageImportOption importOption) const
+{
+    // 1. Copy the bundle/storage to the resource folder
+    QFileInfo oldFileInfo(filename);
+
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    QString newDir = cfg.readEntry(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (newDir == "") {
+        newDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    }
+    QString newName = oldFileInfo.fileName();
+    QString newLocation = newDir + '/' + newName;
+
+    QFileInfo newFileInfo(newLocation);
+    if (newFileInfo.exists()) {
+        if (importOption == Overwrite) {
+            QFile::remove(newLocation);
+        } else if (importOption == Rename) {
+            // TODO: rename
+            return false;
+        } else { // importOption == None
+            return false;
+        }
+    }
+    QFile::copy(filename, newLocation);
+
+    // 2. Add the bundle as a storage/update database
+    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+    KIS_ASSERT(!storage.isNull());
+    if (storage.isNull()) { return false; }
+    if (!KisResourceLocator::instance()->addStorage(newLocation, storage)) {
+        qWarning() << "Could not add bundle to the storages" << newLocation;
+        return false;
+    }
+    return true;
 }
 
 QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, int role) const

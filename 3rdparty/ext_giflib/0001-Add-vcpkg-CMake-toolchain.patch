@@ -1,24 +1,34 @@
+From 0305bbffa2e736c735f4482fed30c973e47456bd Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Fri, 26 Feb 2021 15:41:10 +0000
+Subject: [PATCH] Add vcpkg CMake toolchain
+
+---
+ CMakeLists.txt | 126 +++++++++++++++++++++++++++++++++++++++++++++++++
+ dgif_lib.c     |   4 +-
+ egif_lib.c     |   8 ++--
+ gif_font.c     |   6 +++
+ gif_hash.h     |   5 ++
+ gif_lib.h      | 126 ++++++++++++++++++++++++++++---------------------
+ giftool.c      |   2 +
+ 7 files changed, 216 insertions(+), 61 deletions(-)
+ create mode 100644 CMakeLists.txt
+
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..680267b
+index 0000000..b877947
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,141 @@
-+# This file is copyrighted under the BSD-license for buildsystem files of KDE
-+# copyright 2010,2013, Patrick Spendrin <ps_ml@gmx.de>
-+# copyright 2019, Ivan Yossi <ghevan@gmail.com>
+@@ -0,0 +1,126 @@
++# SPDX-FileCopyrightText: 2010,2013 Patrick Spendrin <ps_ml@gmx.de>
++# SPDX-FileCopyrightText: 2019 Ivan Yossi <ghevan@gmail.com>
++# SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
++#
++# SPDX-License-Identifier: BSD-2-Clause
 +
-+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
++cmake_minimum_required(VERSION 3.4)
 +
-+project (libgif)
-+cmake_minimum_required(VERSION 2.8)
-+
-+if(WINCE)
-+    find_package(Wcecompat REQUIRED)
-+    include_directories(${WCECOMPAT_INCLUDE_DIR})
-+    set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${WCECOMPAT_INCLUDE_DIR})
-+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
-+endif(WINCE)
++project(giflib LANGUAGES C VERSION 5.2.1)
 +
 +if (APPLE)
 +    set(APPLE_SUPPRESS_X11_WARNING TRUE)
@@ -26,7 +36,6 @@ index 0000000..680267b
 +    set(BUILD_WITH_INSTALL_RPATH 1)
 +    add_definitions(-mmacosx-version-min=10.13 -Wno-macro-redefined -Wno-deprecated-register)
 +endif()
-+
 +
 +option(BUILD_utils "build also some small helper executables to transform gif files into other formats" OFF)
 +option(BUILD_TESTS "build some unittest files" OFF)
@@ -47,27 +56,27 @@ index 0000000..680267b
 +check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
 +check_include_file("unistd.h" HAVE_UNISTD_H)
 +
-+execute_process(COMMAND ${CMAKE_SOURCE_DIR}/getversion WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}  OUTPUT_VARIABLE GIFLIB_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-+message(STATUS "Giflib version ${GIFLIB_VERSION}")
-+
-+set(PACKAGE "giflib")
-+set(PACKAGE_NAME "giflib")
-+set(PACKAGE_STRING "giflib-${GIFLIB_VERSION}")
-+set(PACKAGE_VERSION ${GIFLIB_VERSION})
++include(CheckSymbolExists)
++check_symbol_exists(strtok_r string.h HAVE_STRTOK_R)
 +
 +add_definitions(-DHAVE_CONFIG_H)
 +if(MSVC)
 +    add_definitions(-D_CRT_SECURE_NO_WARNINGS -wd4996)
 +endif(MSVC)
 +
-+set(libgif_SRCS 
++set(GIFLIB_HEADERS
++    gif_lib.h
++)
++
++set(GIFLIB_SOURCES
 +    dgif_lib.c
 +    egif_lib.c
-+    gifalloc.c
 +    gif_err.c
 +    gif_font.c
 +    gif_hash.c
++    gifalloc.c
 +    openbsd-reallocarray.c
++    quantize.c
 +)
 +
 +set(libgif_USSRCS
@@ -77,29 +86,21 @@ index 0000000..680267b
 +    getarg.c
 +    )
 +
-+if(WIN32)
-+set(libgif_USSRCS ${libgif_USSRCS}
-+    mkstemp.c
-+)
-+endif(WIN32)
-+
-+add_library(gif SHARED ${libgif_SRCS})
-+
-+
-+
-+if(WINCE)
-+    target_link_libraries(gif ${WCECOMPAT_LIBRARIES})
-+endif(WINCE)
++add_library(gif SHARED ${GIFLIB_SOURCES})
 +
 +if(ANDROID)
 +    add_definitions (-DSIZE_MAX=0xffffffff -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -DS_IEXEC=S_IXUSR)
 +endif(ANDROID)
 +
-+install(TARGETS gif RUNTIME DESTINATION bin
-+                    LIBRARY DESTINATION lib
-+                    ARCHIVE DESTINATION lib)
++if (NOT GIFLIB_SKIP_HEADERS)
++    install(FILES ${GIFLIB_HEADERS} DESTINATION include)
++endif ()
 +
-+install(FILES gif_lib.h DESTINATION include)
++install(TARGETS gif
++    RUNTIME DESTINATION bin
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib
++)
 +
 +if(BUILD_utils)
 +    add_library(util STATIC ${libgif_USSRCS})
@@ -145,72 +146,44 @@ index 0000000..680267b
 +
 +# documentation
 +#add_subdirectory(doc)
-\ No newline at end of file
-diff --git a/cmake/modules/FindWcecompat.cmake b/cmake/modules/FindWcecompat.cmake
-new file mode 100644
-index 0000000..dec9ca9
---- /dev/null
-+++ b/cmake/modules/FindWcecompat.cmake
-@@ -0,0 +1,33 @@
-+# Try to find Wcecompat functionality
-+# Once done this will define
-+#
-+#  WCECOMPAT_FOUND - system has Wcecompat
-+#  WCECOMPAT_INCLUDE_DIR - Wcecompat include directory
-+#  WCECOMPAT_LIBRARIES - Libraries needed to use Wcecompat
-+#
-+# Copyright (c) 2010, Andreas Holzammer, <andy@kdab.com>
-+#
-+# Redistribution and use is allowed according to the terms of the BSD license.
-+
-+if(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
-+  set(Wcecompat_FIND_QUIETLY TRUE)
-+endif(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
-+
-+find_path(WCECOMPAT_INCLUDE_DIR errno.h PATH_SUFFIXES wcecompat)
-+
-+set(WCECOMPAT_LIB_FOUND FALSE)
-+
-+if(WCECOMPAT_INCLUDE_DIR)
-+    find_library(WCECOMPAT_LIBRARIES NAMES wcecompat wcecompatex )
-+    if(WCECOMPAT_LIBRARIES)
-+      set(WCECOMPAT_LIB_FOUND TRUE)
-+    endif(WCECOMPAT_LIBRARIES)
-+endif(WCECOMPAT_INCLUDE_DIR)
-+
-+# I have no idea what this is about, but it seems to be used quite often, so I add this here
-+set(WCECOMPAT_CONST const)
-+
-+include(FindPackageHandleStandardArgs)
-+find_package_handle_standard_args(Wcecompat  DEFAULT_MSG  WCECOMPAT_LIBRARIES  WCECOMPAT_LIB_FOUND)
-+
-+mark_as_advanced(WCECOMPAT_INCLUDE_DIR  WCECOMPAT_LIBRARIES  WCECOMPAT_CONST  WCECOMPAT_LIB_FOUND)
-\ No newline at end of file
 diff --git a/dgif_lib.c b/dgif_lib.c
-index 82fc097..b893593 100644
+index 82fc097..b624a50 100644
 --- a/dgif_lib.c
 +++ b/dgif_lib.c
-@@ -18,6 +18,7 @@ SPDX-License-Identifier: MIT
+@@ -17,11 +17,11 @@ SPDX-License-Identifier: MIT
+ #include <stdio.h>
  #include <string.h>
  
- #ifdef _WIN32
-+#include <stdbool.h>
+-#ifdef _WIN32
++#ifdef _MSC_VER
  #include <io.h>
  #else
  #include <unistd.h>
+-#endif /* _WIN32 */
++#endif /* _MSC_VER */
+ 
+ #include "gif_lib.h"
+ #include "gif_lib_private.h"
 diff --git a/egif_lib.c b/egif_lib.c
-index 6219af0..f6d9e4b 100644
+index 6219af0..1bc1493 100644
 --- a/egif_lib.c
 +++ b/egif_lib.c
-@@ -17,6 +17,7 @@ SPDX-License-Identifier: MIT
+@@ -16,12 +16,12 @@ SPDX-License-Identifier: MIT
+ #include <string.h>
  #include <fcntl.h>
  
- #ifdef _WIN32
-+#include <stdbool.h>
+-#ifdef _WIN32
++#ifdef _MSC_VER
  #include <io.h>
  #else
  #include <unistd.h>
-@@ -37,8 +38,8 @@ static const GifPixelType CodeMask[] = {
+ #include <sys/types.h>
+-#endif /* _WIN32 */
++#endif /* _MSC_VER */
+ #include <sys/stat.h>
+ 
+ #include "gif_lib.h"
+@@ -37,8 +37,8 @@ static const GifPixelType CodeMask[] = {
  static int EGifPutWord(int Word, GifFileType * GifFile);
  static int EGifSetupCompress(GifFileType * GifFile);
  static int EGifCompressLine(GifFileType * GifFile, GifPixelType * Line,
@@ -221,8 +194,42 @@ index 6219af0..f6d9e4b 100644
  static int EGifBufferedOutput(GifFileType * GifFile, GifByteType * Buf,
                                int c);
  
+diff --git a/gif_font.c b/gif_font.c
+index d90783c..a31ad40 100644
+--- a/gif_font.c
++++ b/gif_font.c
+@@ -9,6 +9,12 @@ SPDX-License-Identifier: MIT
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef _WIN32
++#ifndef HAVE_STRTOK_R
++#define strtok_r strtok_s
++#endif
++#endif
++
+ #include "gif_lib.h"
+ 
+ /*****************************************************************************
+diff --git a/gif_hash.h b/gif_hash.h
+index 6a1b585..d11576d 100644
+--- a/gif_hash.h
++++ b/gif_hash.h
+@@ -9,7 +9,12 @@ SPDX-License-Identifier: MIT
+ #ifndef _GIF_HASH_H_
+ #define _GIF_HASH_H_
+ 
++#ifdef _MSC_VER
++#include <io.h>
++#else
++#include <sys/types.h>
+ #include <unistd.h>
++#endif /* _MSC_VER */
+ #include <stdint.h>
+ 
+ #define HT_SIZE			8192	   /* 12bits = 4096 or twice as big! */
 diff --git a/gif_lib.h b/gif_lib.h
-index ebdbd3c..c80abdd 100644
+index ebdbd3c..aa3a844 100644
 --- a/gif_lib.h
 +++ b/gif_lib.h
 @@ -11,6 +11,10 @@ SPDX-License-Identifier: MIT
@@ -468,140 +475,19 @@ index ebdbd3c..c80abdd 100644
                            const char *legend,
                            const int border, const int bg, const int fg);
 diff --git a/giftool.c b/giftool.c
-index 77c75c0..0353ea3 100644
+index 77c75c0..a96cf27 100644
 --- a/giftool.c
 +++ b/giftool.c
-@@ -10,9 +10,11 @@ SPDX-License-Identifier: MIT
- #include <stdlib.h>
- #include <string.h>
+@@ -12,7 +12,9 @@ SPDX-License-Identifier: MIT
  #include <fcntl.h>
--#include <stdbool.h>
+ #include <stdbool.h>
  
-+#ifndef WINDOWS
++#ifndef _WIN32
  #include "getopt.h"
 +#endif
-+#include <stdbool.h>
  #include "gif_lib.h"
  #include "getarg.h"
  
-diff --git a/mkstemp.c b/mkstemp.c
-new file mode 100644
-index 0000000..ace4572
---- /dev/null
-+++ b/mkstemp.c
-@@ -0,0 +1,88 @@
-+#include <stdio.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <io.h>
-+
-+int mkstemp(const char *tmpl)
-+{
-+    int fd = -1;
-+    char* fn = _strdup(tmpl);
-+    int len = strlen(tmpl) + 1;
-+    int err = 0;
-+
-+    err = _mktemp_s(fn, len);
-+    fd = _open(fn, O_RDWR|O_CREAT|O_EXCL, 0600);
-+    free(fn);
-+    return fd;
-+}
-+
-+char *optarg = NULL;    // global argument pointer
-+int   optind = 0;   // global argv index
-+int   opterr = 0;
-+
-+int getopt(int argc, char **argv, const char *optstring)
-+{
-+    static char *next = NULL;
-+    char c = '?';
-+    char *cp = NULL;
-+    if (optind == 0)
-+        next = NULL;
-+
-+    optarg = NULL;
-+
-+    if (next == NULL || *next == '\0')
-+    {
-+        if (optind == 0)
-+            optind++;
-+
-+        if (optind >= argc || argv[optind][0] != '-' || argv[optind][1] == '\0')
-+        {
-+            optarg = NULL;
-+            if (optind < argc)
-+                optarg = argv[optind];
-+            return -1;
-+        }
-+
-+        if (strcmp(argv[optind], "--") == 0)
-+        {
-+            optind++;
-+            optarg = NULL;
-+            if (optind < argc)
-+                optarg = argv[optind];
-+            return -1;
-+        }
-+
-+        next = argv[optind];
-+        next++;     // skip past -
-+        optind++;
-+    }
-+
-+    c = *next++;
-+    cp = strchr(optstring, c);
-+
-+    if (cp == NULL || c == ':')
-+        return '?';
-+
-+    cp++;
-+    if (*cp == ':')
-+    {
-+        if (*next != '\0')
-+        {
-+            optarg = next;
-+            next = NULL;
-+        }
-+        else if (optind < argc)
-+        {
-+            optarg = argv[optind];
-+            optind++;
-+        }
-+        else
-+        {
-+            return '?';
-+        }
-+    }
-+
-+    return c;
-+}
-diff --git a/stdbool.h b/stdbool.h
-new file mode 100644
-index 0000000..09408a5
---- /dev/null
-+++ b/stdbool.h
-@@ -0,0 +1,20 @@
-+#ifndef stdbool_h
-+#define stdbool_h
-+
-+#ifndef __cplusplus
-+//typedef int bool;
-+//#define false 0
-+//#define true 1
-+#endif /* !__cplusplus */
-+
-+#define snprintf sprintf_s
-+
-+int mkstemp(char* tmpl);
-+
-+extern char *optarg;    // global argument pointer
-+extern int   optind;   // global argv index
-+extern int   opterr;
-+
-+int getopt(int argc, char **argv, const char *optstring);
-+
-+#endif /* stdbool_h */
-\ No newline at end of file
+-- 
+2.31.1.windows.1
+

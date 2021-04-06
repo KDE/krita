@@ -5,7 +5,6 @@
  */
 #include "kis_gridop_option.h"
 #include <klocalizedstring.h>
-#include <QtMath>
 
 #include "ui_wdggridoptions.h"
 
@@ -45,14 +44,14 @@ KisGridOpOption::KisGridOpOption()
     m_options->gridHeightSPBox->setExponentRatio(3.0);
 
 
-    m_options->horizontalOffsetSPBox->setRange(-250, 250, 0);
+    m_options->horizontalOffsetSPBox->setRange(-50, 50, 2);
     m_options->horizontalOffsetSPBox->setValue(0);
-    m_options->horizontalOffsetSPBox->setSuffix(i18n(" px"));
+    m_options->horizontalOffsetSPBox->setSuffix(i18n("%"));
 
 
-    m_options->verticalOffsetSPBox->setRange(-250, 250, 0);
+    m_options->verticalOffsetSPBox->setRange(-50, 50, 2);
     m_options->verticalOffsetSPBox->setValue(0);
-    m_options->verticalOffsetSPBox->setSuffix(i18n(" px"));
+    m_options->verticalOffsetSPBox->setSuffix(i18n("%"));
 
 
     m_options->divisionLevelSPBox->setRange(0, 25, 0);
@@ -140,21 +139,7 @@ void KisGridOpOption::setHeight(int height) const
 
 qreal KisGridOpOption::horizontalOffset() const
 {
-    //Since this is a grid, get the smallest value that achieves an equivalent horizontal offset
-    qreal width = gridWidth();
-    qreal shortHorizontalOffset = fmod(m_options->horizontalOffsetSPBox->value(), width);
-     if (qFabs(shortHorizontalOffset) > width/2) {
-         //Shift the offset over so its more centered on the brush outline
-         if (__signbit(shortHorizontalOffset)) {
-             return shortHorizontalOffset + width;
-         }
-         else {
-             return shortHorizontalOffset - width;
-         }
-     }
-     else {
-         return shortHorizontalOffset;
-     }
+    return (m_options->horizontalOffsetSPBox->value()/100) * gridWidth();
 }
 
 
@@ -166,22 +151,7 @@ void KisGridOpOption::setHorizontalOffset(qreal horizontalOffset) const
 
 qreal KisGridOpOption::verticalOffset() const
 {
-    //Since this is a grid, get the smallest value that achieves an equivalent vertical offset
-    qreal height = gridHeight();
-    qreal shortVerticalOffset = fmod(m_options->verticalOffsetSPBox->value(), height);
-    if (qFabs(shortVerticalOffset) > height/2) {
-        //Shift the offset over so its more centered on the brush outline
-        if (__signbit(shortVerticalOffset)) {
-            return shortVerticalOffset + height;
-        }
-        else {
-            return shortVerticalOffset - height;
-        }
-    }
-    else {
-        return shortVerticalOffset;
-    }
-
+    return (m_options->verticalOffsetSPBox->value()/100) * gridHeight();
 }
 
 

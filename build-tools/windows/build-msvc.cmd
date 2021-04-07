@@ -873,6 +873,15 @@ for %%a in (%EXT_TARGETS%) do (
 )
 echo.
 
+echo Deploying debug symbols for all dependencies...
+
+python "%KRITA_SRC_DIR%\packaging\windows\deploy-deps-debug-symbols.py" ^
+    --no-interactive ^
+    --deps-install-dir="%DEPS_INSTALL_DIR%\" ^
+    --deps-build-dir="%DEPS_BUILD_DIR%\"
+
+echo.
+
 echo ******** Built deps ********
 popd
 
@@ -905,6 +914,15 @@ if errorlevel 1 (
 )
 echo.
 
+echo Deploying debug symbols for Krita...
+
+python "%KRITA_SRC_DIR%\packaging\windows\deploy-krita-debug-symbols.py" ^
+    --no-interactive ^
+    --krita-install-dir="%KRITA_INSTALL_DIR%\" ^
+    --krita-build-dir="%KRITA_BUILD_DIR%\"
+
+echo.
+
 echo ******** Built Krita ********
 popd
 
@@ -935,6 +953,13 @@ for %%a in (%EXT_TARGETS%) do (
         exit /b 105
     )
 )
+echo.
+
+echo Deploying debug symbols for plugins...
+python "%KRITA_SRC_DIR%\packaging\windows\deploy-deps-debug-symbols.py" ^
+    --no-interactive ^
+    --deps-install-dir="%KRITA_INSTALL_DIR%\" ^
+    --deps-build-dir="%PLUGINS_BUILD_DIR%\"
 echo.
 
 echo ******** Built plugins ********

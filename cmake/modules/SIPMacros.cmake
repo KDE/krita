@@ -115,11 +115,23 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
         TARGET_COMPILE_DEFINITIONS(${_logical_name} PRIVATE _hypot=hypot)
     ENDIF (MINGW)
 
+    if (MSVC)
+        SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES PDB_NAME "PyKrita.krita")
+    ENDIF (MSVC)
+
     IF (WIN32)
         SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES SUFFIX ".pyd")
     ENDIF (WIN32)
 
     INSTALL(TARGETS ${_logical_name} DESTINATION "${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}")
+    if (MSVC)
+        INSTALL(
+            FILES $<TARGET_PDB_FILE:${_logical_name}>
+            DESTINATION "${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}"
+            RENAME ${_child_module_name}.pdb
+            OPTIONAL
+        )
+    endif()
 
 ENDMACRO(ADD_SIP_PYTHON_MODULE)
 

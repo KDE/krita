@@ -217,6 +217,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void requestUndoDuringStroke() override;
+    void requestRedoDuringStroke() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
     void canvasUpdateRequested();

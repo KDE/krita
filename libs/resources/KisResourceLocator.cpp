@@ -326,6 +326,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
         resource->setVersion(0);
     }
 
+
     // Save the resource to the storage storage
     if (!storage->addResource(resource)) {
         qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
@@ -336,16 +337,14 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
+
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
 
     // And the database
-    QSqlDatabase::database().transaction();
     const bool result = KisResourceCacheDb::addResource(storage,
                                            storage->timeStampForResource(resourceType, resource->filename()),
                                            resource,
                                            resourceType);
-    QSqlDatabase::database().commit();
-
     return result;
 }
 
@@ -455,9 +454,14 @@ void KisResourceLocator::setMetaDataForStorage(const QString &storageLocation, Q
     }
 }
 
-void KisResourceLocator::purge()
+void KisResourceLocator::purge(const QString &storageLocation)
 {
-    d->resourceCache.clear();
+    Q_FOREACH(const auto key, d->resourceCache.keys()) {
+        if (key.first == storageLocation) {
+            d->resourceCache.take(key);
+            d->thumbnailCache.take(key);
+        }
+    }
 }
 
 bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceStorageSP storage)
@@ -487,7 +491,7 @@ bool KisResourceLocator::removeStorage(const QString &storageLocation)
         return true;
     }
 
-    purge();
+    purge(storageLocation);
 
     KisResourceStorageSP storage = d->storages.take(storageLocation);
 

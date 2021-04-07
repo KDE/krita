@@ -101,16 +101,6 @@ void KisFFMpegWrapper::waitForFinished(int msecs)
 
 }
 
-
-
-QByteArray KisFFMpegWrapper::stdout() {
-    return processSTDOUT;
-}
-
-QString KisFFMpegWrapper::stderr() {
-    return processSTDERR;
-}
-
 void KisFFMpegWrapper::updateProgressDialog(int progressValue) {
     
     dbgFile << "Update Progress" << progressValue << "/" << processSettings.totalFrames;
@@ -399,8 +389,8 @@ QJsonObject KisFFMpegWrapper::ffprobe(const QString &inputFile, const QString &f
     this->start(ffprobeSettings);
     this->waitForFinished();
     
-    QString ffprobeSTDOUT = this->stdout();
-    QString ffprobeSTDERR = this->stderr();
+    QString ffprobeSTDOUT = processSTDOUT;
+    QString ffprobeSTDERR = processSTDERR;
      
     QJsonDocument ffprobeJsonDoc = QJsonDocument::fromJson(ffprobeSTDOUT.toUtf8());
     QJsonObject ffprobeJsonObj;
@@ -446,7 +436,7 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
     this->waitForFinished();
 
     
-    QString ffmpegSTDOUT = this->stderr() + "\n" + this->stdout();
+    QString ffmpegSTDOUT = processSTDERR + "\n" + processSTDOUT;
     
     dbgFile << "ffmpegProbe stdout:" << ffmpegSTDOUT;
 

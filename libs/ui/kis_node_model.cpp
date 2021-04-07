@@ -503,6 +503,9 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
         return result;
     }
+    case KisNodeModel::IsAnimatedRole: {
+        return node->isAnimated();
+    }
     default:
         if (role >= int(KisNodeModel::BeginThumbnailRole) && belongsToIsolatedGroup(node)) {
 

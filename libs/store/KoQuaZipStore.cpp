@@ -118,6 +118,7 @@ void KoQuaZipStore::init(const QByteArray &appIdentification)
         enableZip64 = KSharedConfig::openConfig()->group("").readEntry<bool>("UseZip64", false);
     }
 
+    dd->archive->setDataDescriptorWritingEnabled(false);
     dd->archive->setZip64Enabled(enableZip64);
     dd->archive->setFileNameCodec("UTF-8");
     dd->usingSaveFile = dd->archive->getIoDevice() && dd->archive->getIoDevice()->inherits("QSaveFile");
@@ -134,7 +135,7 @@ void KoQuaZipStore::init(const QByteArray &appIdentification)
             QuaZipFile f(dd->archive);
             QuaZipNewInfo newInfo("mimetype");
             newInfo.setPermissions(QFileDevice::ReadOwner | QFileDevice::ReadGroup | QFileDevice::ReadOther);
-            if (!f.open(QIODevice::WriteOnly, newInfo, 0, 0, Z_DEFLATED, Z_NO_COMPRESSION)) {
+            if (!f.open(QIODevice::WriteOnly, newInfo, 0, 0, 0, Z_NO_COMPRESSION)) {
                 d->good = false;
                 return;
             }

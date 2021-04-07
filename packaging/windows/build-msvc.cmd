@@ -410,13 +410,13 @@ echo Python: %PYTHON_BIN_DIR%
 
 @REM Translation tools
 
-if "%GIT_DIR%" == "" (
-    call :find_on_path GIT_EXE_DIR git.exe
-    if NOT "!GIT_EXE_DIR!" == "" (
-        call :get_dir_path GIT_DIR "!GIT_EXE_DIR!"
-        echo Found Git on PATH: !GIT_DIR!
+if "%KRITA_GIT_DIR%" == "" (
+    call :find_on_path KRITA_GIT_EXE_DIR git.exe
+    if NOT "!KRITA_GIT_EXE_DIR!" == "" (
+        call :get_dir_path KRITA_GIT_DIR "!KRITA_GIT_EXE_DIR!"
+        echo Found Git on PATH: !KRITA_GIT_DIR!
     )
-) else echo Git found on %GIT_DIR%
+) else echo Git found on %KRITA_GIT_DIR%
 
 if "%SVN_DIR%" == "" (
     call :find_on_path SVN_EXE_DIR svn.exe
@@ -758,8 +758,8 @@ set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%KRITA_INSTALL_DIR:\=/%"
 set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 
 set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
-if NOT "%GIT_DIR%" == "" (
-    set PATH=%PATH%;%GIT_DIR%
+if NOT "%KRITA_GIT_DIR%" == "" (
+    set PATH=%PATH%;%KRITA_GIT_DIR%
 )
 if NOT "%SVN_DIR%" == "" (
     set PATH=%PATH%;%SVN_DIR%

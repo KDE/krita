@@ -761,7 +761,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     : KisBrushBasedPaintOp(settings, painter)
     , m_firstRun(true)
     , m_image(image)
-    , m_precisePainterWrapper(painter->device(), KisOverlayPaintDeviceWrapper::LazyPreciseMode)
+    , m_precisePainterWrapper(painter->device(), 1, KisOverlayPaintDeviceWrapper::LazyPreciseMode)
     , m_tempDev(m_precisePainterWrapper.createPreciseCompositionSourceDevice())
     , m_backgroundPainter(new KisPainter(m_tempDev))
     , m_smudgePainter(new KisPainter(m_tempDev))

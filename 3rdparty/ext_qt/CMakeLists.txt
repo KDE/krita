@@ -48,6 +48,12 @@ if (WIN32)
         QMAKE_LFLAGS_SHLIB+=${SECURITY_SHARED_LINKER_FLAGS}
         QMAKE_LFLAGS_SONAME+=${SECURITY_SHARED_LINKER_FLAGS}
     )
+    if (MSVC)
+      list(APPEND _QT_conf 
+        QMAKE_CFLAGS+=${SECURITY_C_FLAGS}
+        QMAKE_CXXFLAGS+=${SECURITY_CXX_FLAGS}
+      )
+    endif (MSVC)
     if (QT_ENABLE_DEBUG_INFO)
         # Set the option to build Qt with debugging info enabled
         list(APPEND _QT_conf -force-debug-info)

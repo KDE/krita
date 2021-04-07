@@ -70,7 +70,7 @@ struct OverCompositor128 {
             src_alpha *= mask_vec * uint8MaxRec1;
         }
 
-        const Vc::float_v zeroValue(NATIVE_OPACITY_TRANSPARENT);
+        const Vc::float_v zeroValue(static_cast<float>(NATIVE_OPACITY_TRANSPARENT));
         // The source cannot change the colors in the destination,
         // since its fully transparent
         if ((src_alpha == zeroValue).isFull()) {

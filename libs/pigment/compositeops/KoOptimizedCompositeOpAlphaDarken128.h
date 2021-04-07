@@ -67,7 +67,7 @@ struct AlphaDarkenCompositor128 {
 
         src_alpha = msk_norm_alpha * opacity_vec;
 
-        const Vc::float_v zeroValue(KoColorSpaceMathsTraits<channels_type>::zeroValue);
+        const Vc::float_v zeroValue(static_cast<float>(KoColorSpaceMathsTraits<channels_type>::zeroValue));
 
         Vc::float_v dst_c1;
         Vc::float_v dst_c2;

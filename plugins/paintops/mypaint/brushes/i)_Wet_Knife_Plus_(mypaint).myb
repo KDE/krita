@@ -1,26 +1,15 @@
 {
-    "comment": "MyPaint brush file", 
-    "group": "smudge", 
-    "parent_brush_name": "classic/imp_blending", 
+    "comment": "MyPaint brush file −paint_barrr_sm− from Kaerhon brush kit, Author: Guillaume Loussarévian (CC-0_1.0)", 
+    "group": "", 
+    "parent_brush_name": "krita/i)_Wet_Knife_Plus_(mypaint)", 
     "settings": {
         "anti_aliasing": {
-            "base_value": 0.64, 
+            "base_value": 3.0, 
             "inputs": {}
         }, 
         "change_color_h": {
             "base_value": 0.0, 
-            "inputs": {
-                "custom": [
-                    [
-                        -2.0, 
-                        -0.04
-                    ], 
-                    [
-                        2.0, 
-                        0.04
-                    ]
-                ]
-            }
+            "inputs": {}
         }, 
         "change_color_hsl_s": {
             "base_value": 0.0, 
@@ -32,37 +21,22 @@
         }, 
         "change_color_l": {
             "base_value": 0.0, 
-            "inputs": {
-                "stroke": [
-                    [
-                        0.0, 
-                        0.0
-                    ], 
-                    [
-                        0.87963, 
-                        0.02
-                    ], 
-                    [
-                        1.0, 
-                        0.0
-                    ]
-                ]
-            }
+            "inputs": {}
         }, 
         "change_color_v": {
             "base_value": 0.0, 
             "inputs": {}
         }, 
         "color_h": {
-            "base_value": 0.0, 
+            "base_value": 0.1006289308176101, 
             "inputs": {}
         }, 
         "color_s": {
-            "base_value": 0.0, 
+            "base_value": 0.2535885167464114, 
             "inputs": {}
         }, 
         "color_v": {
-            "base_value": 0.0, 
+            "base_value": 0.8196078431372549, 
             "inputs": {}
         }, 
         "colorize": {
@@ -71,36 +45,14 @@
         }, 
         "custom_input": {
             "base_value": 0.0, 
-            "inputs": {
-                "random": [
-                    [
-                        0.0, 
-                        -10.0
-                    ], 
-                    [
-                        1.0, 
-                        10.0
-                    ]
-                ]
-            }
+            "inputs": {}
         }, 
         "custom_input_slowness": {
             "base_value": 0.0, 
-            "inputs": {
-                "tilt_declination": [
-                    [
-                        0.0, 
-                        4.41
-                    ], 
-                    [
-                        90.0, 
-                        0.0
-                    ]
-                ]
-            }
+            "inputs": {}
         }, 
         "dabs_per_actual_radius": {
-            "base_value": 6.0, 
+            "base_value": 2.0, 
             "inputs": {}
         }, 
         "dabs_per_basic_radius": {
@@ -108,15 +60,15 @@
             "inputs": {}
         }, 
         "dabs_per_second": {
-            "base_value": 80.0, 
+            "base_value": 0.0, 
             "inputs": {}
         }, 
         "direction_filter": {
-            "base_value": 2.0, 
+            "base_value": 0.89, 
             "inputs": {}
         }, 
         "elliptical_dab_angle": {
-            "base_value": 0.0, 
+            "base_value": 90.0, 
             "inputs": {
                 "direction": [
                     [
@@ -131,46 +83,15 @@
             }
         }, 
         "elliptical_dab_ratio": {
-            "base_value": 7.1, 
-            "inputs": {
-                "speed1": [
-                    [
-                        0.0, 
-                        -0.668571
-                    ], 
-                    [
-                        4.0, 
-                        4.68
-                    ]
-                ], 
-                "stroke": [
-                    [
-                        0.0, 
-                        -0.4
-                    ], 
-                    [
-                        1.0, 
-                        0.4
-                    ]
-                ], 
-                "tilt_declination": [
-                    [
-                        0.0, 
-                        3.636875
-                    ], 
-                    [
-                        90.0, 
-                        -7.59
-                    ]
-                ]
-            }
+            "base_value": 5.0, 
+            "inputs": {}
         }, 
         "eraser": {
             "base_value": 0.0, 
             "inputs": {}
         }, 
         "hardness": {
-            "base_value": 0.8, 
+            "base_value": 0.9, 
             "inputs": {}
         }, 
         "lock_alpha": {
@@ -178,23 +99,8 @@
             "inputs": {}
         }, 
         "offset_by_random": {
-            "base_value": 0.6, 
-            "inputs": {
-                "tilt_declination": [
-                    [
-                        0.0, 
-                        0.0
-                    ], 
-                    [
-                        45.0, 
-                        0.0
-                    ], 
-                    [
-                        90.0, 
-                        0.63
-                    ]
-                ]
-            }
+            "base_value": 0.0, 
+            "inputs": {}
         }, 
         "offset_by_speed": {
             "base_value": 0.0, 
@@ -210,11 +116,15 @@
                 "pressure": [
                     [
                         0.0, 
-                        0.0
+                        -0.989583
                     ], 
                     [
-                        0.166667, 
-                        0.75
+                        0.39404, 
+                        -0.833333
+                    ], 
+                    [
+                        0.711921, 
+                        -0.427083
                     ], 
                     [
                         1.0, 
@@ -224,7 +134,7 @@
             }
         }, 
         "opaque_linearize": {
-            "base_value": 0.9, 
+            "base_value": 0.0, 
             "inputs": {}
         }, 
         "opaque_multiply": {
@@ -236,11 +146,15 @@
                         0.0
                     ], 
                     [
-                        0.067901, 
-                        0.78125
+                        0.015, 
+                        0.0
                     ], 
                     [
-                        0.185185, 
+                        0.069277, 
+                        0.9375
+                    ], 
+                    [
+                        0.25, 
                         1.0
                     ], 
                     [
@@ -249,43 +163,18 @@
                     ]
                 ]
             }
+        }, 
+        "pressure_gain_log": {
+            "base_value": 0.0, 
+            "inputs": {}
         }, 
         "radius_by_random": {
             "base_value": 0.0, 
             "inputs": {}
         }, 
         "radius_logarithmic": {
-            "base_value": 2.0, 
-            "inputs": {
-                "pressure": [
-                    [
-                        0.0, 
-                        -2.0
-                    ], 
-                    [
-                        0.401235, 
-                        0.0
-                    ], 
-                    [
-                        1.0, 
-                        0.0
-                    ]
-                ], 
-                "tilt_declination": [
-                    [
-                        0.0, 
-                        0.0
-                    ], 
-                    [
-                        45.0, 
-                        0.0
-                    ], 
-                    [
-                        90.0, 
-                        -1.6
-                    ]
-                ]
-            }
+            "base_value": 3.0, 
+            "inputs": {}
         }, 
         "restore_color": {
             "base_value": 0.0, 
@@ -300,20 +189,35 @@
             "inputs": {}
         }, 
         "smudge": {
-            "base_value": 1.0, 
-            "inputs": {}
-        }, 
-        "smudge_length": {
-            "base_value": 0.0, 
+            "base_value": 0.75, 
             "inputs": {
-                "stroke": [
+                "pressure": [
                     [
                         0.0, 
-                        1.0
+                        0.7
                     ], 
                     [
                         1.0, 
-                        -1.0
+                        -0.7
+                    ]
+                ]
+            }
+        }, 
+        "smudge_length": {
+            "base_value": 0.5, 
+            "inputs": {
+                "pressure": [
+                    [
+                        0.0, 
+                        -0.326667
+                    ], 
+                    [
+                        0.245033, 
+                        0.178646
+                    ], 
+                    [
+                        1.0, 
+                        0.49
                     ]
                 ]
             }
@@ -322,8 +226,12 @@
             "base_value": 0.0, 
             "inputs": {}
         }, 
+        "snap_to_pixel": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
         "speed1_gamma": {
-            "base_value": 4.0, 
+            "base_value": 2.87, 
             "inputs": {}
         }, 
         "speed1_slowness": {
@@ -339,11 +247,11 @@
             "inputs": {}
         }, 
         "stroke_duration_logarithmic": {
-            "base_value": 6.0, 
+            "base_value": 4.0, 
             "inputs": {}
         }, 
         "stroke_holdtime": {
-            "base_value": 10.0, 
+            "base_value": 0.0, 
             "inputs": {}
         }, 
         "stroke_threshold": {
@@ -351,7 +259,7 @@
             "inputs": {}
         }, 
         "tracking_noise": {
-            "base_value": 0.2, 
+            "base_value": 0.0, 
             "inputs": {}
         }
     }, 

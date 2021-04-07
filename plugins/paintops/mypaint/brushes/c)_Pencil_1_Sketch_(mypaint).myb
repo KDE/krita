@@ -1,7 +1,7 @@
 {
-    "comment": "MyPaint brush file", 
+    "comment": "MyPaint brush file for Krita, Made by Ramon Miranda (CC-0_1.0) Sketch 1 - Concept Design pack - Copyright: Author: Ramón Miranda <mirandagraphic@gmail.com>", 
     "group": "", 
-    "parent_brush_name": "classic/marker_small", 
+    "parent_brush_name": "krita/c)_Pencil_1_Sketch_(mypaint)", 
     "settings": {
         "anti_aliasing": {
             "base_value": 1.0, 
@@ -52,11 +52,11 @@
             "inputs": {}
         }, 
         "dabs_per_actual_radius": {
-            "base_value": 2.0, 
+            "base_value": 3.57, 
             "inputs": {}
         }, 
         "dabs_per_basic_radius": {
-            "base_value": 0.0, 
+            "base_value": 3.54, 
             "inputs": {}
         }, 
         "dabs_per_second": {
@@ -68,38 +68,12 @@
             "inputs": {}
         }, 
         "elliptical_dab_angle": {
-            "base_value": 113.08, 
-            "inputs": {
-                "tilt_ascension": [
-                    [
-                        -180.0, 
-                        -180.0
-                    ], 
-                    [
-                        180.0, 
-                        180.0
-                    ]
-                ]
-            }
+            "base_value": 90.0, 
+            "inputs": {}
         }, 
         "elliptical_dab_ratio": {
-            "base_value": 8.0, 
-            "inputs": {
-                "tilt_declination": [
-                    [
-                        0.0, 
-                        -0.0
-                    ], 
-                    [
-                        68.042169, 
-                        -9.0
-                    ], 
-                    [
-                        90.0, 
-                        -9.0
-                    ]
-                ]
-            }
+            "base_value": 1.0, 
+            "inputs": {}
         }, 
         "eraser": {
             "base_value": 0.0, 
@@ -114,15 +88,38 @@
             "inputs": {}
         }, 
         "offset_by_random": {
-            "base_value": 0.0, 
-            "inputs": {}
+            "base_value": 2.0, 
+            "inputs": {
+                "pressure": [
+                    [
+                        0.0, 
+                        2.0
+                    ], 
+                    [
+                        0.160714, 
+                        1.583333
+                    ], 
+                    [
+                        0.28869, 
+                        0.708333
+                    ], 
+                    [
+                        0.440476, 
+                        -2.0
+                    ], 
+                    [
+                        1.0, 
+                        -2.0
+                    ]
+                ]
+            }
         }, 
         "offset_by_speed": {
             "base_value": 0.0, 
             "inputs": {}
         }, 
         "offset_by_speed_slowness": {
-            "base_value": 0.0, 
+            "base_value": 1.0, 
             "inputs": {}
         }, 
         "opaque": {
@@ -130,20 +127,20 @@
             "inputs": {}
         }, 
         "opaque_linearize": {
-            "base_value": 0.9, 
+            "base_value": 0.45, 
             "inputs": {}
         }, 
         "opaque_multiply": {
-            "base_value": 0.0, 
+            "base_value": 0.34, 
             "inputs": {
                 "pressure": [
                     [
                         0.0, 
-                        0.0
+                        -0.666667
                     ], 
                     [
-                        0.060241, 
-                        1.0
+                        0.404762, 
+                        0.0
                     ], 
                     [
                         1.0, 
@@ -153,34 +150,19 @@
             }
         }, 
         "radius_by_random": {
-            "base_value": 0.0, 
+            "base_value": 0.88, 
             "inputs": {}
         }, 
         "radius_logarithmic": {
-            "base_value": 1.0, 
-            "inputs": {
-                "tilt_declination": [
-                    [
-                        20.0, 
-                        -0.0
-                    ], 
-                    [
-                        50.0, 
-                        -0.0
-                    ], 
-                    [
-                        80.0, 
-                        -0.8
-                    ]
-                ]
-            }
+            "base_value": 0.39, 
+            "inputs": {}
         }, 
         "restore_color": {
             "base_value": 0.0, 
             "inputs": {}
         }, 
         "slow_tracking": {
-            "base_value": 3.0, 
+            "base_value": 0.0, 
             "inputs": {}
         }, 
         "slow_tracking_per_dab": {
@@ -188,7 +170,7 @@
             "inputs": {}
         }, 
         "smudge": {
-            "base_value": 0.0, 
+            "base_value": 0.1, 
             "inputs": {}
         }, 
         "smudge_length": {

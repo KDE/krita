@@ -86,6 +86,23 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
     )
 
     ExternalProject_Add(
+        ext_cargo_c
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/lu-zero/cargo-c/archive/refs/tags/v0.8.1.tar.gz
+        URL_HASH SHA256=c8eeac1ac6852e551597f38411ac741aeacd6927cc8057e73ed73c7c1e63ee61
+
+        CONFIGURE_COMMAND ""
+
+        BUILD_COMMAND ""
+
+        INSTALL_COMMAND cargo install --path <SOURCE_DIR> -j ${SUBMAKE_JOBS} --root ${EXTPREFIX_heif}
+
+        UPDATE_COMMAND ""
+
+        BUILD_IN_SOURCE 1
+    )
+
+    ExternalProject_Add(
         ext_rav1e
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
@@ -99,19 +116,7 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
 
         BUILD_IN_SOURCE 1
 
-        DEPENDS ext_nasm
-    )
-
-    # External projects do not accept single commands.
-    ExternalProject_Add_Step(
-        ext_rav1e ext_cargo_c
-
-        COMMENT "Installing cargo-c 0.8.1 to ${EXTPREFIX_heif}"
-
-        COMMAND ${CMAKE_CURRENT_LIST_DIR}/cargo-install-wrapper cargo-c --version "0.8.1+cargo-0.53" --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
-
-        DEPENDEES configure
-        DEPENDERS build
+        DEPENDS ext_nasm ext_cargo_c
     )
 
     set(EXTRA_AVIF_DEPS ext_rav1e ext_dav1d)

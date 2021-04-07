@@ -277,18 +277,18 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
     QMenu contextMenu;
     QModelIndex index = indexAt(point);
     if (!index.isValid()) {
-        contextMenu.addAction(i18nc("Add new scene as the last storyboard", "Add Scene"), [this, index, Model] {Model->insertItem(index, false); });
+        contextMenu.addAction(i18nc("Add new scene as the last storyboard", "Add Scene"), [index, Model] {Model->insertItem(index, false); });
     }
     else if (index.parent().isValid()) {
         index = index.parent();
     }
 
     if (index.isValid()) {
-        contextMenu.addAction(i18nc("Add scene after active scene", "Add Scene After"), [this, index, Model] {Model->insertItem(index, true); });
+        contextMenu.addAction(i18nc("Add scene after active scene", "Add Scene After"), [index, Model] {Model->insertItem(index, true); });
         if (index.row() > 0) {
-            contextMenu.addAction(i18nc("Add scene before active scene", "Add Scene Before"), [this, index, Model] {Model->insertItem(index, false); });
+            contextMenu.addAction(i18nc("Add scene before active scene", "Add Scene Before"), [index, Model] {Model->insertItem(index, false); });
         }
-        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [this, index, Model] {
+        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [index, Model] {
             int row = index.row();
             KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, Model->getData().at(row), Model);
             Model->removeItem(index, command);

@@ -799,7 +799,7 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
          * ensure that final update of the mask happens strictly after
          * them.
          */
-        KritaUtils::addJobBarrier(mutatedJobs, [this]() {});
+        KritaUtils::addJobBarrier(mutatedJobs, [this]() { Q_UNUSED(this) });
 
         mutatedJobs << new Data(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
 

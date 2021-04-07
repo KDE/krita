@@ -271,7 +271,7 @@ if (ENABLE_PYTHON_DEPS OR NOT MINGW)
     add_subdirectory( ext_pyqt )
 endif ()
 
-if (MINGW)
+if (WIN32)
     add_subdirectory( ext_drmingw )
 #    add_subdirectory( ext_ffmpeg )
 endif ()

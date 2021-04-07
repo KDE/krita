@@ -272,7 +272,7 @@ void TestResourceModel::testUpdateResource()
 
     {
         // Check the resource itself
-        KisResourceLocator::instance()->purge();
+        KisResourceLocator::instance()->purge("");
         KoResourceSP resource = KisResourceLocator::instance()->resourceForId(resourceId);
 
         QVERIFY(resource);

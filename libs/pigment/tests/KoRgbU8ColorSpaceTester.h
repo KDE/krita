@@ -21,6 +21,8 @@ private Q_SLOTS:
     void testCompositeOpsWithChannelFlags();
 
     void testScaler();
+
+    void testIterativeMixing();
 };
 
 #endif

@@ -17,6 +17,17 @@
 class KoMixColorsOp
 {
 public:
+    class Mixer
+    {
+    public:
+        virtual ~Mixer() {}
+        virtual void accumulate(const quint8 *data, const qint16 *weights, int weightSum, int nPixels) = 0;
+        virtual void computeMixedColor(quint8 *data) = 0;
+    };
+
+    virtual Mixer* createMixer() const = 0;
+
+public:
     virtual ~KoMixColorsOp() { }
     /**
      * Mix the colors.
@@ -44,8 +55,8 @@ public:
      * mixColors(colors, weights, nColors, ptrToDestinationPixel);
      * @endcode
      */
-    virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst, int weightSum = 255) const = 0;
-    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst, int weightSum = 255) const = 0;
+    virtual void mixColors(const quint8 * const*colors, const qint16 *weights, int nColors, quint8 *dst, int weightSum = 255) const = 0;
+    virtual void mixColors(const quint8 *colors, const qint16 *weights, int nColors, quint8 *dst, int weightSum = 255) const = 0;
 
 
     /**
@@ -64,8 +75,8 @@ public:
      * mixColors(colors, nColors, ptrToDestinationPixel);
      * @endcode
      */
-    virtual void mixColors(const quint8 * const*colors, quint32 nColors, quint8 *dst) const = 0;
-    virtual void mixColors(const quint8 *colors, quint32 nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 * const*colors, int nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 *colors, int nColors, quint8 *dst) const = 0;
 
     /**
      *   Convenience function to mix two color arrays with one weight.  Mixes colorsA[x] with colorsB[x] with 
@@ -73,7 +84,7 @@ public:
      *
      *
     */
-    virtual void mixTwoColorArrays(const quint8* colorsA, const quint8* colorsB, quint32 nColors, qreal weight, quint8* dst) const = 0;
+    virtual void mixTwoColorArrays(const quint8* colorsA, const quint8* colorsB, int nColors, qreal weight, quint8* dst) const = 0;
 
     /**
      *   Convenience function to mix one color array with one color with a specific weight.  Mixes colorArray[x] with color with
@@ -81,7 +92,7 @@ public:
      *
      *
     */
-    virtual void mixArrayWithColor(const quint8* colorArray, const quint8* color, quint32 nColors, qreal weight, quint8* dst) const = 0;
+    virtual void mixArrayWithColor(const quint8* colorArray, const quint8* color, int nColors, qreal weight, quint8* dst) const = 0;
 };
 
 #endif

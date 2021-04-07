@@ -19,6 +19,7 @@
 #include "KoCompositeOp.h"
 #include "KoMixColorsOp.h"
 #include <KoCompositeOpRegistry.h>
+#include "sdk/tests/kistest.h"
 
 
 #define NUM_CHANNELS 4
@@ -344,8 +345,196 @@ void KoRgbU8ColorSpaceTester::testScaler()
         QCOMPARE(srcPtr[i * 4 + 2], pattern[2]);
         QCOMPARE(srcPtr[i * 4 + 3], pattern[3]);
     }
-
-
 }
 
-QTEST_GUILESS_MAIN(KoRgbU8ColorSpaceTester)
+#include <QByteArray>
+#include <kis_debug.h>
+
+class KoIterativeColorMixer
+{
+public:
+    KoIterativeColorMixer(int bucketSize, const KoColorSpace *cs)
+        : m_bucketSize(bucketSize),
+          m_colorSpace(cs),
+          m_buffer(bucketSize * cs->pixelSize(), 0),
+          m_weightsBuffer(bucketSize),
+          m_totalAverage(cs->pixelSize(), 0),
+          m_tempAverage(cs->pixelSize(), 0),
+          m_pixelSize(cs->pixelSize()),
+          m_mixOp(cs->mixColorsOp())
+    {
+        m_nextPixelInCurrentBucket = reinterpret_cast<quint8*>(m_buffer.data());
+    }
+
+    const quint8 *averagePixel() const {
+        return reinterpret_cast<const quint8*>(m_totalAverage.data());
+    }
+
+    bool isBucketComplete() const {
+        return !m_currentIndexInBucket;
+    }
+
+    bool accumulatePixel(quint8 *pixel, qint16 weight)
+    {
+        //qDebug() << "add" << pixel[0] << pixel[1] << pixel[2];
+
+        memcpy(m_nextPixelInCurrentBucket, pixel, m_pixelSize);
+        m_weightsBuffer[m_currentIndexInBucket] = weight;
+        m_currentBucketWeightsSum += weight;
+
+        m_nextPixelInCurrentBucket += m_pixelSize;
+        m_currentIndexInBucket++;
+
+        const bool bucketComplete = m_currentIndexInBucket == m_bucketSize;
+
+        if (bucketComplete) {
+            m_nextPixelInCurrentBucket = reinterpret_cast<quint8*>(m_buffer.data());
+
+            const bool firstBucket = m_currentBucket == 0;
+
+            quint8 *dstAverage = firstBucket ?
+                reinterpret_cast<quint8*>(m_totalAverage.data()) :
+                reinterpret_cast<quint8*>(m_tempAverage.data());
+
+            m_mixOp->mixColors(m_nextPixelInCurrentBucket,
+                               m_weightsBuffer.data(),
+                               m_bucketSize,
+                               dstAverage,
+                               m_currentBucketWeightsSum);
+
+            if (!firstBucket) {
+                // we are going to reuse the bucket buffer as a temporary
+                // storage for the mixing
+
+                memcpy(m_nextPixelInCurrentBucket, m_totalAverage, m_pixelSize);
+                const int weightSum = 16384;
+                qint16 bucketWeight =
+                    (m_currentBucketWeightsSum * weightSum + (m_currentBucketWeightsSum + m_totalWeightsSum) / 2) /
+                    (m_currentBucketWeightsSum + m_totalWeightsSum);
+                qint16 totalWeight = weightSum - bucketWeight;
+
+//                qWarning() << "iteration step";
+//                qWarning() << "    " << ppVar(bucketWeight);
+//                qWarning() << "    " << ppVar(qreal(bucketWeight) / totalWeight);
+//                qWarning() << "    " << ppVar(qreal(m_currentBucketWeightsSum) / (m_totalWeightsSum));
+
+//                qWarning() << "    " << ppVar(m_currentBucketWeightsSum);
+//                qWarning() << "    " << ppVar(m_totalWeightsSum);
+//                qWarning() << "    " << ppVar(m_currentBucket);
+//                qWarning() << "    " << ppVar(m_bucketSize);
+
+
+                if (bucketWeight > 0) {
+                    quint8* pixels[] = {reinterpret_cast<quint8*>(m_tempAverage.data()), m_nextPixelInCurrentBucket};
+                    qint16 weights[] = {bucketWeight, totalWeight};
+
+                    m_mixOp->mixColors(pixels,
+                                       weights,
+                                       2,
+                                       reinterpret_cast<quint8*>(m_totalAverage.data()),
+                                       weightSum);
+                } else {
+                    KIS_SAFE_ASSERT_RECOVER(!m_currentBucketWeightsSum) {
+                        qWarning() << "WARNING: KoIterativeColorMixer has lost precision!";
+                        qWarning() << "    " << ppVar(bucketWeight);
+                        qWarning() << "    " << ppVar(m_currentBucketWeightsSum);
+                        qWarning() << "    " << ppVar(m_totalWeightsSum);
+                        qWarning() << "    " << ppVar(m_currentBucket);
+                        qWarning() << "    " << ppVar(m_bucketSize);
+                    }
+                }
+
+
+
+            }
+
+//            quint8 *ptr = (quint8*) m_totalAverage.data();
+//            qWarning() << ppVar(ptr[0]) << ppVar(ptr[1]) << ppVar(ptr[2]);
+
+            m_totalWeightsSum += m_currentBucketWeightsSum;
+            m_currentBucket++;
+            m_currentIndexInBucket = 0;
+            m_currentBucketWeightsSum = 0;
+
+        }
+
+        return bucketComplete;
+    }
+
+private:
+    int m_bucketSize = 0;
+    const KoColorSpace *m_colorSpace = 0;
+    QByteArray m_buffer;
+    QVector<qint16> m_weightsBuffer;
+    QByteArray m_totalAverage;
+    QByteArray m_tempAverage;
+    qint64 m_totalWeightsSum = 0;
+    int m_currentBucket = 0;
+    int m_currentIndexInBucket = 0;
+    qint64 m_currentBucketWeightsSum = 0;
+    quint8 *m_nextPixelInCurrentBucket = 0;
+    const int m_pixelSize = 0;
+    KoMixColorsOp *m_mixOp = 0;
+};
+
+
+void KoRgbU8ColorSpaceTester::testIterativeMixing()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    qDebug() << ppVar(cs->profile()->name());
+
+    QScopedPointer<KoMixColorsOp::Mixer> mixer(cs->mixColorsOp()->createMixer());
+
+    for (int k = 0; k < 100; k++) {
+        for (int i = 0; i < 256; i++) {
+            KoColor color(QColor(i, 1, 255 - i), cs);
+            qint16 weight = i;
+            mixer->accumulate(color.data(), &weight, i, 1);
+        }
+
+        KoColor result(Qt::red, cs);
+        mixer->computeMixedColor(result.data());
+
+        qDebug() << "xxx" << k << result.data()[0] << result.data()[1] << result.data()[2];
+    }
+
+
+#if 0
+
+    KoIterativeColorMixer mixer(16, cs);
+
+    for (int k = 0; k < 100; k++) {
+        for (int i = 0; i < 256; i++) {
+            KoColor color(QColor(i, 1, 255 - i), cs);
+            mixer.accumulatePixel(color.data(), i);
+        }
+
+        QVERIFY(mixer.isBucketComplete());
+        qDebug() << "xxx" << mixer.averagePixel()[0] << mixer.averagePixel()[1] << mixer.averagePixel()[2];
+        QVERIFY(mixer.isBucketComplete());
+    }
+#endif
+#if 0
+    {
+        qreal errorPortion = 0.001;
+
+        qreal x = 1.0986;
+        const qreal tolerance = x * errorPortion;
+
+
+
+        qreal integral = std::floor(x);
+        qreal fractional = x - integral;
+
+        qreal reciprocal = 1.0 / fractional;
+
+
+    }
+#endif
+}
+
+
+
+
+KISTEST_MAIN(KoRgbU8ColorSpaceTester)

@@ -16,6 +16,7 @@
 #include <KoMixColorsOp.h>
 #include <KoCompositeOpRegistry.h>
 
+#include <kis_algebra_2d.h>
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <kis_paint_device.h>
@@ -39,7 +40,6 @@
 #include "kis_brush_option.h"
 #include "kis_transaction.h"
 #include "KisOverlayPaintDeviceWrapper.h"
-
 
 struct ColorSmudgeInterstrokeData : public KisInterstrokeData
 {
@@ -179,24 +179,94 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
     {
         const quint8 colorRateOpacity = this->colorRateOpacity(opacity, colorRateValue);
 
-        if (m_useDullingMode) {
-            m_blendDevice->setRect(srcRect);
+        if (m_useDullingMode && 0) {
+            const qreal smudgeRadius = 0.1;
+            const QRect minimalRect = QRect(srcRect.center(), QSize(1,1));
+
+            const QRect sampleRect =
+                KisAlgebra2D::blowRect(srcRect, 0.5 * (smudgeRadius - 1.0)) | minimalRect;
+
+            ENTER_FUNCTION() << ppVar(srcRect) << ppVar(sampleRect);
+
+            m_blendDevice->setRect(sampleRect);
             m_blendDevice->lazyGrowBufferWithoutInitialization();
 
             const KoColorSpace *cs = m_blendDevice->colorSpace();
-            const int numPixels = srcRect.width() * srcRect.height();
-            dstPainter->device()->readBytes(m_blendDevice->data(), srcRect);
+            const int pixelSize = cs->pixelSize();
+            const int numPixels = sampleRect.width() * sampleRect.height();
+            dstPainter->device()->readBytes(m_blendDevice->data(), sampleRect);
 
+            KisAlgebra2D::HaltonSequenceGenerator hGen(2);
+            KisAlgebra2D::HaltonSequenceGenerator vGen(3);
+
+            QScopedPointer<KoMixColorsOp::Mixer> mixer(cs->mixColorsOp()->createMixer());
+
+            const int minSamples =
+                qMin(numPixels, qMax(64, qRound(0.02 * numPixels)));
+
+            quint8 *maskPtr = maskDab->data();
+            const int maskStride = maskDab->bounds().width();
+
+            quint8 *samplePtr = m_blendDevice->data();
+            const int sampleStride = m_blendDevice->bounds().width() * pixelSize;
+
+            KoColor lastPickedColor(m_preparedDullingColor);
+
+
+            auto pickSample = [&] () {
+                const QPoint pt(hGen.generate(sampleRect.width()),
+                                vGen.generate(sampleRect.height()));
+
+                const QPoint maskPt(pt - srcRect.topLeft() + sampleRect.topLeft());
+
+                const qint16 opacity = *(maskPtr + maskPt.x() + maskPt.y() * maskStride);
+                const quint8 *ptr = samplePtr + pt.x() * pixelSize + pt.y() * sampleStride;
+
+                mixer->accumulate(ptr, &opacity, opacity, 1);
+            };
+
+            for (int i = 0; i < minSamples; i++) {
+                pickSample();
+            }
+
+            mixer->computeMixedColor(m_preparedDullingColor.data());
+            lastPickedColor = m_preparedDullingColor;
+
+            const int batchSize = 16;
+            int numSamplesLeft = numPixels - minSamples;
+
+            while (numSamplesLeft > 0) {
+                const int currentBatchSize = qMin(numSamplesLeft, batchSize);
+                for (int i = 0; i < currentBatchSize; i++) {
+                    pickSample();
+                }
+
+                mixer->computeMixedColor(m_preparedDullingColor.data());
+
+                const quint8 difference =
+                    cs->differenceA(m_preparedDullingColor.data(), lastPickedColor.data());
+
+                if (difference <= 2) break;
+
+                lastPickedColor = m_preparedDullingColor;
+                numSamplesLeft -= currentBatchSize;
+
+
+            }
+
+#if 0
             int weightsSum = 0;
             QVector<qint16> weights(numPixels);
             for (int i = 0; i < numPixels; i++) {
-                const int opacity = *(maskDab->data() + i);
+                // TODO: mask accessing is wrong!
+                const qint16 opacity = *(maskDab->data() + i);
                 weights[i] = opacity;
                 weightsSum += opacity;
             }
 
             //ENTER_FUNCTION() << ppVar(numPixels) << ppVar(weightsSum);
             cs->mixColorsOp()->mixColors(m_blendDevice->data(), weights.data(), numPixels, m_preparedDullingColor.data(), weightsSum);
+#endif
         }
 
 

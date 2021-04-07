@@ -305,7 +305,8 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 m_snapIsRadial = false;
             }
 
-        } else {
+        } else if (m_handleDrag && assistant->id() == "vanishing point" &&
+                   m_handleDrag == assistant->handles()[0]){
             m_dragStart = assistant->getEditorPosition();
             m_snapIsRadial = false;
         }

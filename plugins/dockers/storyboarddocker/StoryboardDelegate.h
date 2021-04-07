@@ -14,6 +14,7 @@
 
 class QListView;
 class StoryboardModel;
+class StoryboardView;
 
 class StoryboardDelegate : public QStyledItemDelegate
 {

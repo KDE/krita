@@ -15,7 +15,7 @@ class KoStore;
 class KisDocument;
 class KoColorSpace;
 class KisPaintingAssistant;
-class StoryboardComment;
+struct StoryboardComment;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"

@@ -46,7 +46,7 @@ KisMyPaintPaintOpPreset::~KisMyPaintPaintOpPreset() {
 void KisMyPaintPaintOpPreset::setColor(const KoColor color, const KoColorSpace *colorSpace) {
 
     float hue, saturation, value;
-    qreal r, g, b;
+    qreal r = 0, g = 0, b = 0;
     QColor dstColor;
 
     if (colorSpace->colorModelId() == RGBAColorModelID) {

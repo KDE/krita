@@ -306,15 +306,23 @@ void KoRgbU8ColorSpaceTester::testScaler()
     QByteArray srcBytes(1 + numPixels * 4 * sizeof(quint8), 0);
     QByteArray dstBytes(1 + numPixels * 4 * sizeof(quint16), 0);
 
-    const quint8 pattern[] = {0, 128, 192, 255};
-    const quint16 expectedDstPattern[] = {0, 32896, 49344, 65535};
+    const quint8 pattern[] = {0, 128, 192, 255, 255, 192, 128, 0};
+    const quint16 expectedDstPattern[] = {0, 32896, 49344, 65535, 65535, 49344, 32896, 0};
 
     quint8 *unalignedSrcPtr = reinterpret_cast<quint8*>(srcBytes.data() + 1);
     quint8 *unalignedDstPtr = reinterpret_cast<quint8*>(dstBytes.data() + 1);
 
+    // randomize pixels to make them all look different
+    auto patternIndex = [] (int pixelIndex, int channelIndex) {
+        return (pixelIndex / 2 + 4 * (pixelIndex % 2) + channelIndex) % 8;
+    };
 
-    for (int i = 0; i < numPixels * 4; i++) {
-        unalignedSrcPtr[i] = pattern[i % 4];
+
+    for (int i = 0; i < numPixels; i++) {
+        unalignedSrcPtr[i * 4 + 0] = pattern[patternIndex(i, 0)];
+        unalignedSrcPtr[i * 4 + 1] = pattern[patternIndex(i, 1)];
+        unalignedSrcPtr[i * 4 + 2] = pattern[patternIndex(i, 2)];
+        unalignedSrcPtr[i * 4 + 3] = pattern[patternIndex(i, 3)];
     }
 
     scaler->convertU8ToU16(unalignedSrcPtr, 1, unalignedDstPtr, 1, 1, numPixels);
@@ -327,10 +335,10 @@ void KoRgbU8ColorSpaceTester::testScaler()
 //                 << "S" << srcPtr[i * 4 + 0] << srcPtr[i * 4 + 1] << srcPtr[i * 4 + 2] << srcPtr[i * 4 + 3]
 //                 << "D" << dstPtr[i * 4 + 0] << dstPtr[i * 4 + 1] << dstPtr[i * 4 + 2] << dstPtr[i * 4 + 3];
 
-        QCOMPARE(dstPtr[i * 4 + 0], expectedDstPattern[0]);
-        QCOMPARE(dstPtr[i * 4 + 1], expectedDstPattern[1]);
-        QCOMPARE(dstPtr[i * 4 + 2], expectedDstPattern[2]);
-        QCOMPARE(dstPtr[i * 4 + 3], expectedDstPattern[3]);
+        QCOMPARE(dstPtr[i * 4 + 0], expectedDstPattern[patternIndex(i, 0)]);
+        QCOMPARE(dstPtr[i * 4 + 1], expectedDstPattern[patternIndex(i, 1)]);
+        QCOMPARE(dstPtr[i * 4 + 2], expectedDstPattern[patternIndex(i, 2)]);
+        QCOMPARE(dstPtr[i * 4 + 3], expectedDstPattern[patternIndex(i, 3)]);
     }
 
     scaler->convertU16ToU8(unalignedDstPtr, 1, unalignedSrcPtr, 1, 1, numPixels);
@@ -340,10 +348,10 @@ void KoRgbU8ColorSpaceTester::testScaler()
 //                 << "S" << srcPtr[i * 4 + 0] << srcPtr[i * 4 + 1] << srcPtr[i * 4 + 2] << srcPtr[i * 4 + 3]
 //                 << "D" << dstPtr[i * 4 + 0] << dstPtr[i * 4 + 1] << dstPtr[i * 4 + 2] << dstPtr[i * 4 + 3];
 
-        QCOMPARE(srcPtr[i * 4 + 0], pattern[0]);
-        QCOMPARE(srcPtr[i * 4 + 1], pattern[1]);
-        QCOMPARE(srcPtr[i * 4 + 2], pattern[2]);
-        QCOMPARE(srcPtr[i * 4 + 3], pattern[3]);
+        QCOMPARE(srcPtr[i * 4 + 0], pattern[patternIndex(i, 0)]);
+        QCOMPARE(srcPtr[i * 4 + 1], pattern[patternIndex(i, 1)]);
+        QCOMPARE(srcPtr[i * 4 + 2], pattern[patternIndex(i, 2)]);
+        QCOMPARE(srcPtr[i * 4 + 3], pattern[patternIndex(i, 3)]);
     }
 }
 

@@ -135,7 +135,7 @@ class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScale
             for (int i = 0; i < avx2Block; i++) {
 
                 __m256i x1 = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(srcPtr));
-                __m256i x2 = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(srcPtr + 8));
+                __m256i x2 = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(srcPtr + 16));
 
                 __m256i x1_shifted = _mm256_srli_epi16(x1, 8);
                 __m256i x2_shifted = _mm256_srli_epi16(x2, 8);
@@ -149,6 +149,11 @@ class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScale
                 x2 = _mm256_srli_epi16(x2, 8);
 
                 x1 = _mm256_packus_epi16(x1, x2);
+
+                // Packing in AVX2 does a bit different thing, not
+                // what you expect that after seeing a SSE2 version :)
+                // Therefore we need to permute the result...
+                x1 = _mm256_permute4x64_epi64(x1, 0xd8);
 
                 _mm256_storeu_si256(reinterpret_cast<__m256i*>(dstPtr), x1);
 

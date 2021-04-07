@@ -37,6 +37,7 @@ private:
 
     KoPathTool *m_tool;
     KoPathPointData m_pointData;
+    KoPathShape *m_path;
     KoPathPoint::PointType m_pointType;
 };
 

@@ -23,7 +23,7 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
     KoPathShape * pathShape = m_pointData.pathShape;
     KoPathPoint * point = pathShape->pointByIndex(m_pointData.pointIndex);
     if (point) {
-        m_offset = point->parent()->documentToShape(offset) - point->parent()->documentToShape(QPointF(0, 0));
+        m_offset = offset;
     }
 
     setText(kundo2_i18n("Move control point"));

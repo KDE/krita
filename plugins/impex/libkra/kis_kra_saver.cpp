@@ -188,7 +188,7 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     if (m_d->doc->paletteList().size() == 0) {
         return true;
     }
-    for (const KoColorSetSP palette : m_d->doc->paletteList()) {
+    Q_FOREACH (const KoColorSetSP palette, m_d->doc->paletteList()) {
         // Ensure stored palettes are KPL.
         palette->setPaletteType(KoColorSet::KPL);
 
@@ -296,7 +296,7 @@ bool KisKraSaver::saveAnimationMetadata(KoStore *store, KisImageSP image, const 
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
-    for (const KoColorSetSP palette : m_d->doc->paletteList()) {
+    Q_FOREACH (const KoColorSetSP palette, m_d->doc->paletteList()) {
         // Ensure stored palettes are KPL.
         palette->setPaletteType(KoColorSet::KPL);
         QDomElement eFile =  doc.createElement("palette");

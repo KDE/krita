@@ -37,8 +37,8 @@ const KoID KisKeyframeChannel::RotationZ = KoID("transform_rotation_z", ki18n("R
 
 struct KisKeyframeChannel::Private
 {
-    Private(const KoID &temp_id, KisDefaultBoundsBaseSP bounds) {
-        bounds = bounds;
+    Private(const KoID &temp_id, KisDefaultBoundsBaseSP tmp_bounds) {
+        bounds = tmp_bounds;
         id = temp_id;
     }
 

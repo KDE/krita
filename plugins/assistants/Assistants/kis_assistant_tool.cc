@@ -652,7 +652,7 @@ void KisAssistantTool::addAssistant()
             const QLineF horizon = QLineF(t.map(p1),t.map(p2));
             const QPointF origin = QPointF(horizon.center().x(),0);
             *handles[2] = inv.map(origin);
-            t = assis->localTransform(p1,p2,p3,&size);
+            t = assis->localTransform(p1,p2,*handles[2],&size);
             inv = t.inverted();
         }
 

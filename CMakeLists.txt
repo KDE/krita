@@ -874,15 +874,13 @@ set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
 if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
-    if(NOT MSVC)
-        find_package(Vc 1.1.0)
-        set_package_properties(Vc PROPERTIES
-            DESCRIPTION "Portable, zero-overhead SIMD library for C++"
-            URL "https://github.com/VcDevel/Vc"
-            TYPE OPTIONAL
-            PURPOSE "Required by the Krita for vectorization")
-        macro_bool_to_01(Vc_FOUND HAVE_VC)
-    endif()
+    find_package(Vc 1.1.0)
+    set_package_properties(Vc PROPERTIES
+        DESCRIPTION "Portable, zero-overhead SIMD library for C++"
+        URL "https://github.com/VcDevel/Vc"
+        TYPE OPTIONAL
+        PURPOSE "Required by the Krita for vectorization")
+    macro_bool_to_01(Vc_FOUND HAVE_VC)
 endif()
 configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 

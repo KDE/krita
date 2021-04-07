@@ -103,6 +103,30 @@ void KisSwatchGroup::setColumnCount(int columnCount)
 {
     Q_ASSERT(columnCount >= 0);
 
+
+    // Move 'removed' swatches into new row
+    QVector <KisSwatch> movedSwatches;
+
+    for (int r = 0; r < rowCount(); r++ ) {
+        for (int c = 0; c < d->colorMatrix.size(); c++ ) {
+
+            if (c >= columnCount && checkEntry(c, r)) {
+                movedSwatches.push_back(getEntry(c, r));
+            }
+        }
+    }
+    if ( !movedSwatches.isEmpty()) {
+        for (int i = 0; i< movedSwatches.size(); i++) {
+            int r = (i/columnCount) + d->rowCount;
+            int c = (i%columnCount);
+            d->colorMatrix[c][r] = movedSwatches.at(i);
+        }
+        d->rowCount += (movedSwatches.size()/columnCount);
+        if (movedSwatches.size()%columnCount > 0) {
+            d->rowCount += 1;
+        }
+    }
+
     if (columnCount < d->colorMatrix.size()) {
         int newColorCount = 0;
         for (int i = 0; i < columnCount; i++ ) {

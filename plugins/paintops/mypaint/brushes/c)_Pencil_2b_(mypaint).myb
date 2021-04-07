@@ -1,51 +1,19 @@
 {
-    "comment": "MyPaint brush file", 
+    "comment": "MyPaint brush file −Pencil 2B− from brushkit V6 by Deevad, author: David Revoy <info@davidrevoy.com>, CC-0_1.0", 
     "group": "", 
-    "parent_brush_name": "classic/short_grass", 
+    "parent_brush_name": "krita/c)_Pencil_2b_(mypaint)", 
     "settings": {
         "anti_aliasing": {
-            "base_value": 1.0, 
+            "base_value": 0.0, 
             "inputs": {}
         }, 
         "change_color_h": {
             "base_value": 0.0, 
-            "inputs": {
-                "random": [
-                    [
-                        0.0, 
-                        -0.05
-                    ], 
-                    [
-                        1.0, 
-                        0.05
-                    ]
-                ], 
-                "stroke": [
-                    [
-                        0.0, 
-                        -0.004687
-                    ], 
-                    [
-                        1.0, 
-                        0.004792
-                    ]
-                ]
-            }
+            "inputs": {}
         }, 
         "change_color_hsl_s": {
             "base_value": 0.0, 
-            "inputs": {
-                "random": [
-                    [
-                        0.0, 
-                        -0.01
-                    ], 
-                    [
-                        1.0, 
-                        0.01
-                    ]
-                ]
-            }
+            "inputs": {}
         }, 
         "change_color_hsv_s": {
             "base_value": 0.0, 
@@ -57,39 +25,14 @@
         }, 
         "change_color_v": {
             "base_value": 0.0, 
-            "inputs": {
-                "random": [
-                    [
-                        0.0, 
-                        -0.28
-                    ], 
-                    [
-                        1.0, 
-                        0.28
-                    ]
-                ], 
-                "stroke": [
-                    [
-                        0.0, 
-                        -0.23
-                    ], 
-                    [
-                        0.5, 
-                        0.23
-                    ], 
-                    [
-                        1.0, 
-                        -0.227604
-                    ]
-                ]
-            }
+            "inputs": {}
         }, 
         "color_h": {
-            "base_value": 0.0, 
+            "base_value": 0.02525252525252525, 
             "inputs": {}
         }, 
         "color_s": {
-            "base_value": 0.0, 
+            "base_value": 1.0, 
             "inputs": {}
         }, 
         "color_v": {
@@ -109,7 +52,7 @@
             "inputs": {}
         }, 
         "dabs_per_actual_radius": {
-            "base_value": 3.24, 
+            "base_value": 4.0, 
             "inputs": {}
         }, 
         "dabs_per_basic_radius": {
@@ -126,29 +69,10 @@
         }, 
         "elliptical_dab_angle": {
             "base_value": 90.0, 
-            "inputs": {
-                "random": [
-                    [
-                        0.0, 
-                        -36.46
-                    ], 
-                    [
-                        0.11039, 
-                        -4.177708
-                    ], 
-                    [
-                        0.899351, 
-                        4.5575
-                    ], 
-                    [
-                        1.0, 
-                        36.46
-                    ]
-                ]
-            }
+            "inputs": {}
         }, 
         "elliptical_dab_ratio": {
-            "base_value": 3.91, 
+            "base_value": 1.0, 
             "inputs": {}
         }, 
         "eraser": {
@@ -156,15 +80,7 @@
             "inputs": {}
         }, 
         "hardness": {
-            "base_value": 0.91, 
-            "inputs": {}
-        }, 
-        "lock_alpha": {
-            "base_value": 0.0, 
-            "inputs": {}
-        }, 
-        "offset_by_random": {
-            "base_value": 1.79, 
+            "base_value": 0.2, 
             "inputs": {
                 "pressure": [
                     [
@@ -173,7 +89,26 @@
                     ], 
                     [
                         1.0, 
-                        -1.4
+                        0.3
+                    ]
+                ]
+            }
+        }, 
+        "lock_alpha": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "offset_by_random": {
+            "base_value": 0.5, 
+            "inputs": {
+                "pressure": [
+                    [
+                        0.0, 
+                        0.0
+                    ], 
+                    [
+                        1.0, 
+                        -0.3
                     ]
                 ]
             }
@@ -187,22 +122,11 @@
             "inputs": {}
         }, 
         "opaque": {
-            "base_value": 0.78, 
-            "inputs": {
-                "pressure": [
-                    [
-                        0.0, 
-                        0.0
-                    ], 
-                    [
-                        1.0, 
-                        0.4
-                    ]
-                ]
-            }
+            "base_value": 0.15000000000027122, 
+            "inputs": {}
         }, 
         "opaque_linearize": {
-            "base_value": 0.56, 
+            "base_value": 0.0, 
             "inputs": {}
         }, 
         "opaque_multiply": {
@@ -225,19 +149,34 @@
             "inputs": {}
         }, 
         "radius_logarithmic": {
-            "base_value": 2.5, 
-            "inputs": {}
+            "base_value": 0.75, 
+            "inputs": {
+                "pressure": [
+                    [
+                        0.0, 
+                        -0.687917
+                    ], 
+                    [
+                        0.752976, 
+                        0.236471
+                    ], 
+                    [
+                        1.0, 
+                        0.286632
+                    ]
+                ]
+            }
         }, 
         "restore_color": {
             "base_value": 0.0, 
             "inputs": {}
         }, 
         "slow_tracking": {
-            "base_value": 2.0, 
+            "base_value": 1.03, 
             "inputs": {}
         }, 
         "slow_tracking_per_dab": {
-            "base_value": 0.0, 
+            "base_value": 1.5, 
             "inputs": {}
         }, 
         "smudge": {
@@ -269,7 +208,7 @@
             "inputs": {}
         }, 
         "stroke_duration_logarithmic": {
-            "base_value": 5.96, 
+            "base_value": 4.0, 
             "inputs": {}
         }, 
         "stroke_holdtime": {

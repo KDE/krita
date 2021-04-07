@@ -1,10 +1,10 @@
 {
-    "comment": "MyPaint brush file", 
+    "comment": "MyPaint brush file −Pen− from the classic kit of Libmypaint, Copyright 2005-2016 Martin Renold and the MyPaint Development Team, GPL-2+", 
     "group": "", 
-    "parent_brush_name": "classic/pencil", 
+    "parent_brush_name": "krita/d)_Ink_pen_(mypaint)", 
     "settings": {
         "anti_aliasing": {
-            "base_value": 0.0, 
+            "base_value": 1.0, 
             "inputs": {}
         }, 
         "change_color_h": {
@@ -52,7 +52,7 @@
             "inputs": {}
         }, 
         "dabs_per_actual_radius": {
-            "base_value": 4.0, 
+            "base_value": 2.2, 
             "inputs": {}
         }, 
         "dabs_per_basic_radius": {
@@ -80,7 +80,7 @@
             "inputs": {}
         }, 
         "hardness": {
-            "base_value": 0.1, 
+            "base_value": 0.9, 
             "inputs": {
                 "pressure": [
                     [
@@ -89,7 +89,17 @@
                     ], 
                     [
                         1.0, 
-                        0.3
+                        0.05
+                    ]
+                ], 
+                "speed1": [
+                    [
+                        0.0, 
+                        -0.0
+                    ], 
+                    [
+                        1.0, 
+                        -0.09
                     ]
                 ]
             }
@@ -99,19 +109,8 @@
             "inputs": {}
         }, 
         "offset_by_random": {
-            "base_value": 0.5, 
-            "inputs": {
-                "pressure": [
-                    [
-                        0.0, 
-                        0.0
-                    ], 
-                    [
-                        1.0, 
-                        -0.3
-                    ]
-                ]
-            }
+            "base_value": 0.0, 
+            "inputs": {}
         }, 
         "offset_by_speed": {
             "base_value": 0.0, 
@@ -122,7 +121,7 @@
             "inputs": {}
         }, 
         "opaque": {
-            "base_value": 0.7, 
+            "base_value": 1.0, 
             "inputs": {}
         }, 
         "opaque_linearize": {
@@ -138,6 +137,14 @@
                         0.0
                     ], 
                     [
+                        0.015, 
+                        0.0
+                    ], 
+                    [
+                        0.015, 
+                        1.0
+                    ], 
+                    [
                         1.0, 
                         1.0
                     ]
@@ -149,19 +156,40 @@
             "inputs": {}
         }, 
         "radius_logarithmic": {
-            "base_value": 0.2, 
-            "inputs": {}
+            "base_value": 0.96, 
+            "inputs": {
+                "pressure": [
+                    [
+                        0.0, 
+                        0.0
+                    ], 
+                    [
+                        1.0, 
+                        0.5
+                    ]
+                ], 
+                "speed1": [
+                    [
+                        0.0, 
+                        -0.0
+                    ], 
+                    [
+                        1.0, 
+                        -0.21
+                    ]
+                ]
+            }
         }, 
         "restore_color": {
             "base_value": 0.0, 
             "inputs": {}
         }, 
         "slow_tracking": {
-            "base_value": 1.0, 
+            "base_value": 0.65, 
             "inputs": {}
         }, 
         "slow_tracking_per_dab": {
-            "base_value": 0.0, 
+            "base_value": 0.8, 
             "inputs": {}
         }, 
         "smudge": {
@@ -177,7 +205,7 @@
             "inputs": {}
         }, 
         "speed1_gamma": {
-            "base_value": 4.0, 
+            "base_value": 2.87, 
             "inputs": {}
         }, 
         "speed1_slowness": {

@@ -1,0 +1,67 @@
+From 87715b485d8f03522df094441589312e8a33f00e Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 3 Apr 2021 13:05:54 +0000
+Subject: [PATCH 6/6] Add support for MSVC
+
+---
+ CMakeLists.txt                          | 2 +-
+ cmake/modules/FindFFTW3.cmake           | 2 +-
+ src/FilterParameters/PointParameter.cpp | 2 +-
+ src/FilterSelector/FiltersPresenter.cpp | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 30aa10d..3bc5e74 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -267,7 +267,7 @@ if (WIN32)
+     add_definitions(-D_IS_WINDOWS_)
+     set(gmic_qt_LIBRARIES
+         ${gmic_qt_LIBRARIES}
+-        pthread psapi gdi32
++        psapi gdi32
+     )
+ endif()
+ 
+diff --git a/cmake/modules/FindFFTW3.cmake b/cmake/modules/FindFFTW3.cmake
+index 919edb7..6f83b3c 100644
+--- a/cmake/modules/FindFFTW3.cmake
++++ b/cmake/modules/FindFFTW3.cmake
+@@ -62,7 +62,7 @@ else()
+ 
+     find_library(
+         FFTW3_LIBRARY
+-        NAMES libfftw3 libfftw3-3 libfftw3f-3 libfftw3l-3
++        NAMES libfftw3 libfftw3-3 libfftw3f-3 libfftw3l-3 fftw3
+         DOC "Libraries to link against for FFT Support")
+ 
+     if (FFTW3_LIBRARY)
+diff --git a/src/FilterParameters/PointParameter.cpp b/src/FilterParameters/PointParameter.cpp
+index 9dd2ba8..4d99072 100644
+--- a/src/FilterParameters/PointParameter.cpp
++++ b/src/FilterParameters/PointParameter.cpp
+@@ -189,7 +189,7 @@ void PointParameter::setVisibilityState(AbstractParameter::VisibilityState state
+ 
+ void PointParameter::updateView()
+ {
+-  if (not _spinBoxX) {
++  if (!_spinBoxX) {
+     return;
+   }
+   disconnectSpinboxes();
+diff --git a/src/FilterSelector/FiltersPresenter.cpp b/src/FilterSelector/FiltersPresenter.cpp
+index 427cd42..c3e1c43 100644
+--- a/src/FilterSelector/FiltersPresenter.cpp
++++ b/src/FilterSelector/FiltersPresenter.cpp
+@@ -395,7 +395,7 @@ bool FiltersPresenter::danglingFaveIsSelected() const
+   }
+   QString hash = _filtersView->selectedFilterHash();
+   if (_favesModel.contains(hash)) {
+-    return not _filtersModel.contains(_favesModel.getFaveFromHash(hash).originalHash());
++    return !_filtersModel.contains(_favesModel.getFaveFromHash(hash).originalHash());
+   }
+   return false;
+ }
+-- 
+2.30.1.windows.1
+

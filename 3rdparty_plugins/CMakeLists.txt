@@ -10,14 +10,24 @@ message( STATUS "Preparing Krita external plugins build...")
 #
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
-cmake_minimum_required(VERSION 2.8.6)
+iF(APPLE)
+        execute_process(COMMAND sysctl -n hw.optional.arm64 OUTPUT_VARIABLE apple_has_arm64_optional)
+        if(apple_has_arm64_optional)
+                message(NOTICE "Building on macos arm")
+                cmake_minimum_required(VERSION 3.19.3)
+    else()
+        cmake_minimum_required(VERSION 3.7.2)
+    endif()
+else(APPLE)
+    cmake_minimum_required(VERSION 2.8.6)
+endif()
 
 if(NOT SUBMAKE_JOBS)
-	set(SUBMAKE_JOBS 1)
+    set(SUBMAKE_JOBS 1)
 endif()
 
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-	message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
+    message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
 endif (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 
 # Tools must be obtained to work with:
@@ -49,34 +59,52 @@ set(SECURITY_EXE_LINKER_FLAGS "")
 set(SECURITY_SHARED_LINKER_FLAGS "")
 set(SECURITY_MODULE_LINKER_FLAGS "")
 if (MINGW)
-	option(USE_MINGW_HARDENING_LINKER "Enable DEP (NX), ASLR and high-entropy ASLR linker flags (mingw-w64)" ON)
-	if (USE_MINGW_HARDENING_LINKER)
-		set(SECURITY_EXE_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
-		set(SECURITY_SHARED_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
-		set(SECURITY_MODULE_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
-		if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-			# Enable high-entropy ASLR for 64-bit
-			# The image base has to be >4GB for HEASLR to be enabled.
-			# The values used here are kind of arbitrary.
-			set(SECURITY_EXE_LINKER_FLAGS "${SECURITY_EXE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x140000000")
-			set(SECURITY_SHARED_LINKER_FLAGS "${SECURITY_SHARED_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
-			set(SECURITY_MODULE_LINKER_FLAGS "${SECURITY_MODULE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
-			set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
-				-DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
-				-DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
-				-DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
-			)
-		endif ()
-	else ()
-		message(WARNING "Linker Security Flags not enabled!")
-	endif ()
+    option(USE_MINGW_HARDENING_LINKER "Enable DEP (NX), ASLR and high-entropy ASLR linker flags (mingw-w64)" ON)
+    if (USE_MINGW_HARDENING_LINKER)
+        set(SECURITY_EXE_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+        set(SECURITY_SHARED_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+        set(SECURITY_MODULE_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+        if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+            # Enable high-entropy ASLR for 64-bit
+            # The image base has to be >4GB for HEASLR to be enabled.
+            # The values used here are kind of arbitrary.
+            set(SECURITY_EXE_LINKER_FLAGS "${SECURITY_EXE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x140000000")
+            set(SECURITY_SHARED_LINKER_FLAGS "${SECURITY_SHARED_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+            set(SECURITY_MODULE_LINKER_FLAGS "${SECURITY_MODULE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+            set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
+                -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
+                -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
+                -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
+            )
+        endif ()
+    else ()
+        message(WARNING "Linker Security Flags not enabled!")
+    endif ()
+elseif (MSVC)
+    set(SECURITY_C_FLAGS ${CMAKE_C_FLAGS})
+    set(SECURITY_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+    # Increase the stack size to match MinGW's. Prevents crashes with GMic.
+    set(SECURITY_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:2097152")
+    set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /STACK:2097152")
+    set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /STACK:2097152")
+    option(USE_CONTROL_FLOW_GUARD "Enable Control Flow Guard hardening (MSVC)" ON)
+    if (USE_CONTROL_FLOW_GUARD)
+        set(SECURITY_C_FLAGS "${SECURITY_C_FLAGS} /guard:cf")
+        set(SECURITY_CXX_FLAGS "${SECURITY_CXX_FLAGS} /guard:cf")
+        set(SECURITY_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /GUARD:CF")
+        set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /GUARD:CF")
+        set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /GUARD:CF")
+    endif (USE_CONTROL_FLOW_GUARD)
+    set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
+        -DCMAKE_C_FLAGS=${SECURITY_C_FLAGS}
+        -DCMAKE_CXX_FLAGS=${SECURITY_CXX_FLAGS}
+        -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
+        -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
+        -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
+    )
 endif ()
 
-if (MSVC)
-    message(FATAL_ERROR "Krita cannot be built with MSVC. See the README.md file!")
-endif()
-
-if (MINGW)
+if (WIN32)
    set(PATCH_COMMAND myptch)
 endif()
 
@@ -102,7 +130,7 @@ if (ANDROID)
 endif()
 
 if (UNIX AND NOT APPLE)
-	set(LINUX true)
+    set(LINUX true)
     set(PATCH_COMMAND patch)
 endif ()
 

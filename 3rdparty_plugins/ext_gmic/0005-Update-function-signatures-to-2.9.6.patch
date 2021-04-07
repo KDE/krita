@@ -1,7 +1,7 @@
 From d7c779f29fc09445c71d006d95ee054258c3cdd6 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Tue, 16 Feb 2021 17:17:09 +0000
-Subject: [PATCH 5/5] Update function signatures to 2.9.6
+Subject: [PATCH 5/6] Update function signatures to 2.9.6
 
 ---
  src/Host/KritaPlugin/gmicqttoolplugin.cpp | 26 ++++++-----------------

@@ -1,7 +1,7 @@
 From df368419f2934aeb576a965c38b36e992f8c94c7 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 20 Dec 2020 23:01:29 +0000
-Subject: [PATCH 4/5] Enable all input modes for Krita (plugin)
+Subject: [PATCH 4/6] Enable all input modes for Krita (plugin)
 
 ---
  src/Host/KritaPlugin/gmicqttoolplugin.cpp | 6 +++---

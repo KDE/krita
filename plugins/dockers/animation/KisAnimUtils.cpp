@@ -363,6 +363,7 @@ namespace KisAnimUtils {
                 parentCommand,
                 [srcDstPairs, parentCommand]() -> KUndo2Command*
         {
+            Q_UNUSED(parentCommand);
             QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
 
             foreach (const FrameMovePair &move, srcDstPairs) {

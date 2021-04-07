@@ -402,5 +402,6 @@ QList<DynamicSensorType> KisMyPaintCurveOption::sensorsTypes()
 
 KisDynamicSensorSP KisMyPaintCurveOption::type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName)
 {
+    Q_UNUSED(parentOptionName);
     return new KisMyPaintBrushOption(sensorType);
 }

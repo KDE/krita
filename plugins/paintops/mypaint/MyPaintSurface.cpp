@@ -119,6 +119,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
                                 float aspect_ratio, float angle, float lock_alpha, float colorize) {
 
     Q_UNUSED(self);
+    Q_UNUSED(lock_alpha);
     const float one_over_radius2 = 1.0f / (radius * radius);
     const double angle_rad = kisDegreesToRadians(angle);
     const float cs = cos(angle_rad);

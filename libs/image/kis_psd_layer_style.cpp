@@ -336,6 +336,7 @@ KisPSDLayerStyleSP KisPSDLayerStyle::cloneWithResourcesSnapshot(KisResourcesInte
 
 QList<KoResourceSP> KisPSDLayerStyle::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
+    Q_UNUSED(globalResourcesInterface);
     QList<KoResourceSP> resources;
 
     resources = QList<KoResourceSP>::fromVector(KisAslLayerStyleSerializer::fetchEmbeddedResources(this));

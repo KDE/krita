@@ -428,7 +428,6 @@ void Python::ensureInitialized()
             errScript << "Could not initialize Python interpreter";
         }
 #if THREADED
-        PyEval_InitThreads();
         s_pythonThreadState = PyGILState_GetThisThreadState();
         PyEval_ReleaseThread(s_pythonThreadState);
 #endif

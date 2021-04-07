@@ -16,6 +16,7 @@
 #endif
 #include <Vc/Vc>
 #include <Vc/IO>
+#include <immintrin.h>
 #if defined _MSC_VER
 #pragma warning ( pop )
 #endif

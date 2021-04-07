@@ -140,7 +140,7 @@ public:
 
 protected:
     QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
-    KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const;
+    KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const override;
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);

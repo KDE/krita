@@ -101,7 +101,7 @@ public:
     bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex())override;
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
-                  const QModelIndex &destinationParent, int destinationChild);
+                  const QModelIndex &destinationParent, int destinationChild) override;
 
     //for drag and drop
     QStringList mimeTypes() const override;

@@ -74,7 +74,7 @@ private Q_SLOTS:
     void slotCreateNewTag(QString tagName);
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
     enum LastAction {
         AddNewTag,

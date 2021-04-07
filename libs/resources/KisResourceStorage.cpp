@@ -397,7 +397,7 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::Resourc
         {
         }
 
-        bool hasNext() const {
+        bool hasNext() const override {
             return !m_isStarted;
         }
 
@@ -425,7 +425,7 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::Resourc
             return m_parent->guessedVersion();
         }
 
-        QSharedPointer<KisResourceStorage::ResourceIterator> versions() const
+        QSharedPointer<KisResourceStorage::ResourceIterator> versions() const override
         {
             return toQShared(new DumbIterator(m_parent));
         }

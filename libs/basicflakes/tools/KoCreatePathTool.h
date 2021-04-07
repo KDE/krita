@@ -36,7 +36,7 @@ public:
     explicit KoCreatePathTool(KoCanvasBase * canvas);
     ~KoCreatePathTool() override;
 
-    QRectF decorationsRect() const;
+    QRectF decorationsRect() const override;
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter) override;

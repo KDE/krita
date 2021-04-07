@@ -40,7 +40,7 @@ public:
     ~KoPathTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    void repaintDecorations();
+    void repaintDecorations() override;
     QRectF decorationsRect() const override;
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;

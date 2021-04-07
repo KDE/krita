@@ -350,7 +350,7 @@ private:
     const QScopedPointer<Private> m_d;
 
     bool event(QEvent *e) override;
-    bool eventFilter(QObject *o, QEvent *e);
+    bool eventFilter(QObject *o, QEvent *e) override;
 };
 
 #endif

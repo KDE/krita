@@ -31,7 +31,7 @@ public:
     bool addResource(const QString &resourceType, KoResourceSP resource) override;
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
-    bool loadVersionedResource(KoResourceSP resource);
+    bool loadVersionedResource(KoResourceSP resource) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
 

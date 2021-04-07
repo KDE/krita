@@ -20,7 +20,19 @@
 #include "kis_canvas2.h"
 class QMenu;
 
-class PopupWidgetHolder : public QObject
+/**
+ * @brief The PopupWidgetInterface class
+ */
+struct PopupWidgetInterface {
+    virtual ~PopupWidgetInterface() {}
+    virtual void popup(const QPoint& position) = 0;
+};
+
+
+/**
+ * @brief The PopupWidgetHolder class
+ */
+class PopupWidgetHolder : public QObject, PopupWidgetInterface
 {
 public:
     PopupWidgetHolder(QWidget* toPopUp, KisInputManager* inputManager)
@@ -30,17 +42,16 @@ public:
         m_toPopUp->setParent(m_inputManager->canvas()->canvasWidget());
     }
 
-    ~PopupWidgetHolder(){
-    }
+    ~PopupWidgetHolder() {}
 
-    void popup(QPoint& p) {
+    void popup(const QPoint& position) override {
         m_toPopUp->setVisible(!m_toPopUp->isVisible());
         m_inputManager->registerPopupWidget(m_toPopUp);
-        adjustPopupLayout(p);
+        adjustPopupLayout(position);
     }
 
 private:
-    void adjustPopupLayout(QPoint& p) {
+    void adjustPopupLayout(const QPoint& postition) {
         if (m_toPopUp->isVisible() && m_toPopUp->parentWidget())  {
             const float widgetMargin = -20.0f;
             const QRect fitRect = kisGrowRect(m_toPopUp->parentWidget()->rect(), widgetMargin);
@@ -48,7 +59,7 @@ private:
 
             QRect paletteRect = m_toPopUp->rect();
 
-            paletteRect.moveTo(p - paletteCenterOffset);
+            paletteRect.moveTo(postition - paletteCenterOffset);
 
             paletteRect = kisEnsureInRect(paletteRect, fitRect);
             m_toPopUp->move(paletteRect.topLeft());
@@ -58,6 +69,7 @@ private:
     QWidget* m_toPopUp;
     KisInputManager* m_inputManager;
 };
+
 
 /**
  * \brief Get the current tool's popup widget and display it.

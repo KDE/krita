@@ -1,7 +1,7 @@
 From 39d42d865210cf1c61804a6494e933c3792570a0 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Tue, 17 Nov 2020 22:04:57 +0000
-Subject: [PATCH 2/3] cmake: library versioning info for pkg-config
+Subject: [PATCH 2/5] cmake: library versioning info for pkg-config
 
 ---
  CMakeLists.txt   | 14 +++++++++++++-

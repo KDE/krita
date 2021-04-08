@@ -41,7 +41,7 @@ public:
     void setView(KisViewManager *view);
 
     void addPalette();
-    void importPalette();
+    KoColorSetSP importPalette();
     void removePalette(KoColorSetSP );
 
     /**

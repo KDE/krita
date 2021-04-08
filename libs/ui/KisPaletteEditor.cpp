@@ -121,7 +121,7 @@ void KisPaletteEditor::addPalette()
     m_d->rServer->resourceModel()->addResource(colorSet, resourceLocation);
 }
 
-void KisPaletteEditor::importPalette()
+KoColorSetSP KisPaletteEditor::importPalette()
 {
     KoFileDialog dialog(nullptr, KoFileDialog::OpenFile, "Open Palette");
     dialog.setCaption(i18n("Import Palette"));
@@ -131,7 +131,7 @@ void KisPaletteEditor::importPalette()
 
     QString filename = dialog.filename();
     if (filename.isEmpty()) {
-        return;
+        return nullptr;
     }
 
     QMessageBox messageBox;
@@ -141,8 +141,8 @@ void KisPaletteEditor::importPalette()
     if (messageBox.exec() == QMessageBox::Yes) {
         storageLocation = m_d->view->document()->uniqueID();
     }
-    m_d->rServer->resourceModel()->importResourceFile(filename, storageLocation);
-
+    KoColorSetSP palette = m_d->rServer->resourceModel()->importResourceFile(filename, storageLocation).dynamicCast<KoColorSet>();
+    return palette;
 }
 
 void KisPaletteEditor::removePalette(KoColorSetSP cs)

@@ -11,7 +11,8 @@
 #include "input/kis_input_manager.h"
 
 /**
- * @brief The PopupWidgetInterface class
+ * @brief The PopupWidgetInterface abstract class defines
+ * the basic interface that will be used by all popup widgets.
  */
 struct KisPopupWidgetInterface {
     virtual ~KisPopupWidgetInterface() {}
@@ -20,7 +21,9 @@ struct KisPopupWidgetInterface {
 
 
 /**
- * @brief The PopupWidget class
+ * @brief The KisPopupWidget class is a simple wrapper that
+ * turns any QWidget into a popup widget that can be temporarily
+ * displayed over the canvas.
  */
 class KisPopupWidget : public QWidget, public KisPopupWidgetInterface
 {

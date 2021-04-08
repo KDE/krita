@@ -419,7 +419,7 @@ void PaletteDockerDock::slotStoragesChanged(const QString &/*location*/)
         slotSetColorSet(0);
     }
     if (m_currentColorSet) {
-        if (!m_rServer->resourceByFilename(m_currentColorSet->filename())) {
+        if (!m_rServer->resourceByMD5(m_currentColorSet->md5())) {
             slotSetColorSet(0);
         }
     }

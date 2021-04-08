@@ -34,7 +34,7 @@ public:
     ~KisPaletteView() override;
 
     void setPaletteModel(KisPaletteModel *model);
-    KisPaletteModel* paletteModel() const;
+    KisPaletteModel *paletteModel() const;
 
 public:
 

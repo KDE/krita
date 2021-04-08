@@ -46,9 +46,6 @@ public: // KoResourceServerObserver
     void resourceAdded(KoGamutMaskSP /*resource*/) override {}
     void removingResource(KoGamutMaskSP resource) override;
     void resourceChanged(KoGamutMaskSP resource) override;
-    void syncTaggedResourceView() override {}
-    void syncTagAddition(const QString&) override {}
-    void syncTagRemoval(const QString&) override {}
 
 Q_SIGNALS:
     void sigGamutMaskSet(KoGamutMaskSP mask);

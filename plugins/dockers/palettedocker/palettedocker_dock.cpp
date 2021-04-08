@@ -185,15 +185,6 @@ void PaletteDockerDock::resourceChanged(QSharedPointer<KoColorSet> resource)
     m_model->sigPaletteModified();
 }
 
-void PaletteDockerDock::syncTaggedResourceView()
-{}
-
-void PaletteDockerDock::syncTagAddition(const QString& tag)
-{   Q_UNUSED(tag); }
-
-void PaletteDockerDock::syncTagRemoval(const QString& tag)
-{   Q_UNUSED(tag); }
-
 void PaletteDockerDock::slotContextMenu(const QModelIndex &)
 {
     if (QApplication::mouseButtons() == Qt::RightButton) {

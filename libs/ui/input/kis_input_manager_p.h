@@ -72,7 +72,7 @@ public:
     QPointF previousPos;
     bool buttonPressed = false;
 
-    QWidget* popupWidget;
+    KisPopupWidgetInterface* popupWidget;
 
     void blockMouseEvents();
     void allowMouseEvents();

@@ -111,9 +111,9 @@ void SvgTextTool::deactivate()
     canvas()->updateCanvas(updateRect);
 }
 
-QWidget *SvgTextTool::popupWidget()
+KisPopupWidgetInterface *SvgTextTool::popupWidget()
 {
-    return m_editor;
+    return nullptr;
 }
 
 QWidget *SvgTextTool::createOptionWidget()

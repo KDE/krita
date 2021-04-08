@@ -32,7 +32,7 @@ public:
 
     QList<QPointer<QWidget>> createOptionWidgets() override;
 
-    QWidget *popupWidget() override;
+    KisPopupWidgetInterface *popupWidget() override;
 
     void activate(const QSet<KoShape *> &shapes) override;
     void deactivate() override;

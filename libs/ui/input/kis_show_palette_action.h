@@ -16,59 +16,9 @@
 
 #include "kis_global.h"
 #include "kis_debug.h"
-#include "kis_input_manager.h"
 #include "kis_canvas2.h"
+#include "KisPopupWidgetInterface.h"
 class QMenu;
-
-/**
- * @brief The PopupWidgetInterface class
- */
-struct PopupWidgetInterface {
-    virtual ~PopupWidgetInterface() {}
-    virtual void popup(const QPoint& position) = 0;
-};
-
-
-/**
- * @brief The PopupWidgetHolder class
- */
-class PopupWidgetHolder : public QObject, PopupWidgetInterface
-{
-public:
-    PopupWidgetHolder(QWidget* toPopUp, KisInputManager* inputManager)
-        : m_toPopUp(toPopUp)
-        , m_inputManager(inputManager)
-    {
-        m_toPopUp->setParent(m_inputManager->canvas()->canvasWidget());
-    }
-
-    ~PopupWidgetHolder() {}
-
-    void popup(const QPoint& position) override {
-        m_toPopUp->setVisible(!m_toPopUp->isVisible());
-        m_inputManager->registerPopupWidget(m_toPopUp);
-        adjustPopupLayout(position);
-    }
-
-private:
-    void adjustPopupLayout(const QPoint& postition) {
-        if (m_toPopUp->isVisible() && m_toPopUp->parentWidget())  {
-            const float widgetMargin = -20.0f;
-            const QRect fitRect = kisGrowRect(m_toPopUp->parentWidget()->rect(), widgetMargin);
-            const QPoint paletteCenterOffset(m_toPopUp->sizeHint().width() / 2, m_toPopUp->sizeHint().height() / 2);
-
-            QRect paletteRect = m_toPopUp->rect();
-
-            paletteRect.moveTo(postition - paletteCenterOffset);
-
-            paletteRect = kisEnsureInRect(paletteRect, fitRect);
-            m_toPopUp->move(paletteRect.topLeft());
-        }
-    }
-
-    QWidget* m_toPopUp;
-    KisInputManager* m_inputManager;
-};
 
 
 /**
@@ -87,7 +37,6 @@ public:
     void begin(int, QEvent *) override;
 
 private:
-    QScopedPointer<PopupWidgetHolder> m_activePopup;
     bool m_requestedWithStylus;
 };
 

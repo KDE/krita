@@ -23,6 +23,7 @@
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
 #include <KoViewConverter.h>
+#include <KisPopupWidgetInterface.h>
 
 #include <QAction>
 #include <QDebug>
@@ -429,10 +430,10 @@ QList<QPointer<QWidget>> KarbonCalligraphyTool::createOptionWidgets()
     return widgets;
 }
 
-QWidget *KarbonCalligraphyTool::popupWidget()
+KisPopupWidgetInterface *KarbonCalligraphyTool::popupWidget()
 {
     /**** HACK PROOF OF CONCEPT, DONT WORRY 'BOUT IT! ****/
-    return new KarbonCalligraphyOptionWidget();
+    return new KisPopupWidget(new KarbonCalligraphyOptionWidget(), canvas());
 }
 
 void KarbonCalligraphyTool::setStrokeWidth(double width)

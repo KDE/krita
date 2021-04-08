@@ -785,6 +785,23 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event) {
     event->ignore();
 }
 
+void KisPopupPalette::popup(const QPoint &position) {
+    setVisible(!isVisible());
+
+    if (isVisible() && parentWidget())  {
+        const float widgetMargin = -20.0f;
+        const QRect fitRect = kisGrowRect(parentWidget()->rect(), widgetMargin);
+        const QPoint paletteCenterOffset(sizeHint().width() / 2, sizeHint().height() / 2);
+
+        QRect paletteRect = rect();
+
+        paletteRect.moveTo(position - paletteCenterOffset);
+
+        paletteRect = kisEnsureInRect(paletteRect, fitRect);
+        move(paletteRect.topLeft());
+    }
+}
+
 void KisPopupPalette::showEvent(QShowEvent *event)
 {
     m_clicksEater->reset();

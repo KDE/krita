@@ -349,7 +349,7 @@ QMenu *KoToolProxy::popupActionsMenu()
     return d->activeTool ? d->activeTool->popupActionsMenu() : 0;
 }
 
-QWidget* KoToolProxy::popupWidget()
+KisPopupWidgetInterface* KoToolProxy::popupWidget()
 {
     return d->activeTool ? d->activeTool->popupWidget() : nullptr;
 }

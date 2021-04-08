@@ -62,6 +62,7 @@
 #include <kis_action_manager.h>
 #include <kis_action.h>
 #include "strokes/kis_color_sampler_stroke_strategy.h"
+#include "kis_popup_palette.h"
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
@@ -459,15 +460,16 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
-QWidget *KisToolPaint::popupWidget()
+KisPopupWidgetInterface *KisToolPaint::popupWidget()
 {
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
 
-    if (kisCanvas) {
-        return (QWidget*)kisCanvas->popupPalette();
-    } else {
+    if (!kisCanvas) {
         return nullptr;
     }
+
+    KisPopupWidgetInterface* popupWidget = kisCanvas->popupPalette();
+    return popupWidget;
 }
 
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)

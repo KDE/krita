@@ -44,7 +44,7 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
 
-    QWidget* popupWidget() override;
+    KisPopupWidgetInterface* popupWidget() override;
 
 protected:
 

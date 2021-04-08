@@ -50,7 +50,7 @@ KisPopupWidgetAction::~KisPopupWidgetAction()
 void KisPopupWidgetAction::begin(int, QEvent *event)
 {
     QMenu *popupMenu = inputManager()->toolProxy()->popupActionsMenu();
-    QWidget *popupWidget = inputManager()->toolProxy()->popupWidget();
+    KisPopupWidgetInterface *popupWidget = inputManager()->toolProxy()->popupWidget();
 
     if (popupMenu) { // Handle popup menus...
         m_requestedWithStylus = event && event->type() == QEvent::TabletPress;
@@ -81,8 +81,7 @@ void KisPopupWidgetAction::begin(int, QEvent *event)
             pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
         }
 
-        m_activePopup.reset(new PopupWidgetHolder(popupWidget, inputManager()));
-
-        m_activePopup->popup(pos);
+        inputManager()->registerPopupWidget(popupWidget);
+        popupWidget->popup(pos);
     }
 }

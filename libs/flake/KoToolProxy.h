@@ -32,6 +32,7 @@ class QTouchEvent;
 class QPainter;
 class QPointF;
 class QMenu;
+class KisPopupWidgetInterface;
 
 /**
  * Tool proxy object which allows an application to address the current tool.
@@ -99,7 +100,7 @@ public:
     QMenu* popupActionsMenu();
 
     /// Forwarded to the current KoToolBase
-    QWidget* popupWidget();
+    KisPopupWidgetInterface* popupWidget();
 
     /// Forwarded to the current KoToolBase
     void deleteSelection();

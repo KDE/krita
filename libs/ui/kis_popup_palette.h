@@ -16,7 +16,8 @@
 #include "kactioncollection.h"
 #include "kis_tool_button.h"
 #include "KisHighlightedToolButton.h"
-#include <KisColorSelectorInterface.h>
+#include "KisColorSelectorInterface.h"
+#include "KisPopupWidgetInterface.h"
 
 class KisFavoriteResourceManager;
 class QWidget;
@@ -30,7 +31,7 @@ class KisVisualColorSelector;
 class KisAcyclicSignalConnector;
 class KisMouseClickEater;
 
-class KisPopupPalette : public QWidget
+class KisPopupPalette : public QWidget, public KisPopupWidgetInterface
 {
     Q_OBJECT
 
@@ -55,8 +56,9 @@ public:
 
     void tabletEvent(QTabletEvent *event) override;
 
-protected:
+    void popup(const QPoint& position) override;
 
+protected:
     void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override {}
@@ -87,7 +89,6 @@ private:
 
     int numSlots();
 
-private:
     int m_hoveredPreset {0};
     int m_hoveredColor {0};
     int m_selectedColor {0};
@@ -157,7 +158,6 @@ private Q_SLOTS:
 
     void slotZoomSliderPressed();
     void slotZoomSliderReleased();
-
 };
 
 #endif // KIS_POPUP_PALETTE_H

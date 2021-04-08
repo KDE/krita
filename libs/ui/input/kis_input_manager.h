@@ -52,7 +52,7 @@ public:
     void addTrackedCanvas(KisCanvas2 *canvas);
     void removeTrackedCanvas(KisCanvas2 *canvas);
 
-    void registerPopupWidget(QWidget* popup);
+    void registerPopupWidget(KisPopupWidgetInterface *popupWidget);
 
     void toggleTabletLogger();
 

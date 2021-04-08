@@ -97,9 +97,9 @@ void KisInputManager::removeTrackedCanvas(KisCanvas2 *canvas)
     d->canvasSwitcher.removeCanvas(canvas);
 }
 
-void KisInputManager::registerPopupWidget(QWidget *popup)
+void KisInputManager::registerPopupWidget(KisPopupWidgetInterface *popupWidget)
 {
-    d->popupWidget = popup;
+    d->popupWidget = popupWidget;
 }
 
 void KisInputManager::toggleTabletLogger()
@@ -340,21 +340,30 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     // Try closing any open popup widget and
     // consume input if possible.
     if (d->popupWidget) {
-        QEvent::Type type = event->type();
-        bool wasVisible = d->popupWidget->isVisible();
 
-        if (type == QEvent::MouseButtonPress
-         || type == QEvent::MouseButtonDblClick
-         || type == QEvent::TabletPress
-         || type == QEvent::TouchBegin
-         || type == QEvent::NativeGesture) {
-            d->popupWidget->setVisible(false);
-            d->popupWidget = nullptr;
+        //TEMP WORKAROUND TEMP WORKAROUND TEMP WORKAROUND//
+        QWidget* popup = dynamic_cast<QWidget*>(d->popupWidget);
+        //TEMP WORKAROUND TEMP WORKAROUND TEMP WORKAROUND//
 
-            if (wasVisible) {
-                return true;
+        if (popup) { //TEMP
+
+            QEvent::Type type = event->type();
+            bool wasVisible = popup->isVisible();
+
+            if (type == QEvent::MouseButtonPress
+             || type == QEvent::MouseButtonDblClick
+             || type == QEvent::TabletPress
+             || type == QEvent::TouchBegin
+             || type == QEvent::NativeGesture) {
+                popup->setVisible(false);
+                d->popupWidget = nullptr;
+
+                if (wasVisible) {
+                    return true;
+                }
             }
-        }
+
+        } //TEMP
     }
 
 

@@ -43,7 +43,7 @@ public:
     /// reimplemented from KoToolBase
     void deactivate() override;
 
-    QWidget* popupWidget() override;
+    KisPopupWidgetInterface* popupWidget() override;
 
 protected:
     /// reimplemented from KoToolBase

@@ -23,6 +23,7 @@ class KoToolFactoryBase;
 class KoToolSelection;
 class KoToolBasePrivate;
 class KoShapeControllerBase;
+class KisPopupWidgetInterface;
 
 class QAction;
 class QKeyEvent;
@@ -303,7 +304,7 @@ public:
      * @return a widget with useful controls to be popped up on top of the canvas.
      *         Will not be called if `popupActionsMenu()` does not return null.
      */
-    virtual QWidget* popupWidget() {return nullptr;}
+    virtual KisPopupWidgetInterface* popupWidget() {return nullptr;}
 
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;

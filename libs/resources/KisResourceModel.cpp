@@ -677,22 +677,7 @@ bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
         }
     }
 
-    if (d->resourceFilter == ShowAllResources && d->storageFilter == ShowAllStorages) {
-        return true;
-    }
-
-    ResourceFilter resourceActive = (ResourceFilter)sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::ResourceActive).toInt();
-    StorageFilter storageActive =  (StorageFilter)sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::StorageActive).toInt();
-
-    if (d->resourceFilter == ShowAllResources) {
-        return (storageActive == d->storageFilter);
-    }
-
-    if (d->storageFilter == ShowAllStorages) {
-        return (resourceActive == d->resourceFilter);
-    }
-
-    return ((storageActive == d->storageFilter) && (resourceActive == d->resourceFilter));
+    return filterResource(idx);
 }
 
 bool KisResourceModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
@@ -703,20 +688,63 @@ bool KisResourceModel::lessThan(const QModelIndex &source_left, const QModelInde
     return nameLeft.toLower() < nameRight.toLower();
 }
 
+bool KisResourceModel::filterResource(const QModelIndex &idx) const
+{
+    if (d->resourceFilter == ShowAllResources && d->storageFilter == ShowAllStorages) {
+        return true;
+    }
+
+    ResourceFilter resourceActive = (ResourceFilter)sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::ResourceActive).toInt();
+    StorageFilter storageActive =  (StorageFilter)sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::StorageActive).toInt();
+
+    if (d->resourceFilter == ShowAllResources) {
+        if (storageActive == d->storageFilter) {
+            return true;
+        }
+    }
+
+    if (d->storageFilter == ShowAllStorages) {
+        if (resourceActive == d->resourceFilter) {
+            return true;
+        }
+    }
+
+    if ((storageActive == d->storageFilter) && (resourceActive == d->resourceFilter)) {
+        return true;
+    }
+
+    return false;
+}
+
 
 KoResourceSP KisResourceModel::resourceForId(int id) const
 {
-    return static_cast<KisAllResourcesModel*>(sourceModel())->resourceForId(id);
+    KoResourceSP res = static_cast<KisAllResourcesModel*>(sourceModel())->resourceForId(id);
+    QModelIndex idx = indexForResource(res);
+    if (filterResource(idx)) {
+        return res;
+    }
+    return 0;
 }
 
 KoResourceSP KisResourceModel::resourceForFilename(QString fileName) const
 {
-    return static_cast<KisAllResourcesModel*>(sourceModel())->resourceForFilename(fileName);
+    KoResourceSP res = static_cast<KisAllResourcesModel*>(sourceModel())->resourceForFilename(fileName);
+    QModelIndex idx = indexForResource(res);
+    if (filterResource(idx)) {
+        return res;
+    }
+    return 0;
 }
 
 KoResourceSP KisResourceModel::resourceForName(QString name) const
 {
-    return static_cast<KisAllResourcesModel*>(sourceModel())->resourceForName(name);
+    KoResourceSP res = static_cast<KisAllResourcesModel*>(sourceModel())->resourceForName(name);
+    QModelIndex idx = indexForResource(res);
+    if (filterResource(idx)) {
+        return res;
+    }
+    return 0;
 }
 
 KoResourceSP KisResourceModel::resourceForMD5(const QByteArray md5sum) const

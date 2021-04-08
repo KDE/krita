@@ -292,6 +292,8 @@ protected:
 
 private:
 
+    bool filterResource(const QModelIndex &idx) const;
+
     struct Private;
     Private *const d;
 

@@ -19,6 +19,7 @@
 
 package org.krita.android;
 
+import android.os.Build;
 import android.util.Log;
  import android.os.Bundle;
  import android.content.Intent;
@@ -34,8 +35,7 @@ import android.util.Log;
 public class MainActivity extends QtActivity {
 
     private boolean isStartup = true;
-    private Thread mDocSaverThread;
-    private String TAG = "MainActivity";
+    private final String TAG = "MainActivity";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,7 @@ public class MainActivity extends QtActivity {
         }
 
 		super.onCreate(savedInstanceState);
+        Log.d("KritaActivity", "LibsLoaded");
 		new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();
@@ -90,14 +91,13 @@ public class MainActivity extends QtActivity {
 		// isn't loaded, it crashes.
 		if (!isStartup) {
             synchronized(this) {
-                // let's not block the Android UI thread if we return to the app quickly
-                mDocSaverThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        JNIWrappers.saveState();
-                    }
-                });
-                mDocSaverThread.start();
+                Intent intent = new Intent(this, DocumentSaverService.class);
+                intent.putExtra(DocumentSaverService.START_SAVING, true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent);
+                } else {
+                    startService(intent);
+                }
             }
 		}
 		else {
@@ -107,22 +107,15 @@ public class MainActivity extends QtActivity {
 
     @Override
     public void onDestroy() {
-        synchronized (this) {
-            if (mDocSaverThread != null) {
-                try {
-                    mDocSaverThread.join();
-                } catch (InterruptedException e) {
-                    Log.e(TAG, "Interrupted :" + e.getMessage());
-                }
-            }
-        }
-        // Hack or not, I'm not sure. Beyond this, Qt will invoke libc's exit()
-        // which doesn't kill our global static properly. So, because Qt app *is*
-        // supposed to terminate now, this should perfectly safe.
-        android.os.Process.killProcess(android.os.Process.myPid());
+        Intent intent = new Intent(this, DocumentSaverService.class);
+        intent.putExtra(DocumentSaverService.KILL_PROCESS, true);
+
+        // Docs say: this method will not be called if the activity's hosting process
+        // is killed. This means, for us that the service has been stopped.
+        startService(intent);
+
         super.onDestroy();
     }
-
 
 	@Override
 	public boolean onKeyUp(final int keyCode, final KeyEvent event) {

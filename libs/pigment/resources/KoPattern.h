@@ -28,7 +28,15 @@ public:
      * @param filename the file name to save and load from.
      */
     explicit KoPattern(const QString &filename);
-    KoPattern(const QImage &image, const QString &name, const QString &folderName);
+
+    /**
+     * Create a new pattern from scratch, without loading it from a file
+     *
+     * @param image the pattern
+     * @param name the name of the pattern
+     * @param filename the filename of the pattern (note that this filename does not need to exist)
+     */
+    KoPattern(const QImage &image, const QString &name, const QString &filename);
     ~KoPattern() override;
 
     KoPattern(const KoPattern &rhs);

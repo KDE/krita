@@ -48,22 +48,12 @@ KoPattern::KoPattern(const QString& file)
 {
 }
 
-KoPattern::KoPattern(const QImage &image, const QString &name, const QString &folderName)
+KoPattern::KoPattern(const QImage &image, const QString &name, const QString &filename)
     : KoResource(QString())
 {
     setPatternImage(image);
     setName(name);
-
-    QFileInfo fileInfo(folderName + '/' + name + defaultFileExtension());
-
-    int i = 1;
-    while (fileInfo.exists()) {
-        fileInfo.setFile(folderName + '/' +
-                         name + QString::number(i) + defaultFileExtension());
-        i++;
-    }
-
-    setFilename(fileInfo.filePath());
+    setFilename(filename);
 }
 
 

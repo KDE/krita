@@ -1683,8 +1683,8 @@
       <icon>nextframe</icon>
       <text>Next Frame</text>
       <whatsThis/>
-      <toolTip>Move selection to next frame</toolTip>
-      <iconText>Move selection to next frame</iconText>
+      <toolTip>Change time to next frame</toolTip>
+      <iconText>Change time to next frame</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1695,8 +1695,8 @@
       <icon>prevkeyframe</icon>
       <text>Previous Keyframe</text>
       <whatsThis/>
-      <toolTip>Move selection to previous keyframe</toolTip>
-      <iconText>Move selection to previous keyframe</iconText>
+      <toolTip>Change time to previous keyframe</toolTip>
+      <iconText>Change time to previous keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1707,8 +1707,8 @@
       <icon>nextkeyframe</icon>
       <text>Next Keyframe</text>
       <whatsThis/>
-      <toolTip>Move selection to next keyframe</toolTip>
-      <iconText>Move selection to next keyframe</iconText>
+      <toolTip>Change time to next keyframe</toolTip>
+      <iconText>Change time to next keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1719,8 +1719,8 @@
       <icon>prevkeyframe</icon>
       <text>Previous Matching Keyframe</text>
       <whatsThis/>
-      <toolTip>Move selection to previous keyframe of the same color</toolTip>
-      <iconText>Move selection to previous matching keyframe</iconText>
+      <toolTip>Change time to previous keyframe of the same color</toolTip>
+      <iconText>Change time to previous matching keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1731,8 +1731,32 @@
       <icon>nextkeyframe</icon>
       <text>Next Matching Keyframe</text>
       <whatsThis/>
-      <toolTip>Move selection to next keyframe of the same color</toolTip>
-      <iconText>Move selection to next matching keyframe</iconText>
+      <toolTip>Change time to next keyframe of the same color</toolTip>
+      <iconText>Change time to next matching keyframe</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="previous_unfiltered_keyframe">
+      <icon>prevkeyframe</icon>
+      <text>Previous Unfiltered Keyframe</text>
+      <whatsThis/>
+      <toolTip>Change time to previous keyframe that has visible onion skin</toolTip>
+      <iconText>Change time to previous matching keyframe</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="next_unfiltered_keyframe">
+      <icon>nextkeyframe</icon>
+      <text>Next Unfiltered Keyframe</text>
+      <whatsThis/>
+      <toolTip>Change time to next keyframe that has visible onion skin</toolTip>
+      <iconText>Change time to next matching keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>

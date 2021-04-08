@@ -27,7 +27,7 @@ struct KisOnionSkinCompositor::Private
     QVector<int> backwardOpacities;
     QVector<int> forwardOpacities;
     int configSeqNo = 0;
-    QList<int> colorLabelFilter;
+    QSet<int> colorLabelFilter;
 
     int skinOpacity(int offset)
     {
@@ -119,9 +119,14 @@ int KisOnionSkinCompositor::configSeqNo() const
     return m_d->configSeqNo;
 }
 
-void KisOnionSkinCompositor::setColorLabelFilter(QList<int> colors)
+void KisOnionSkinCompositor::setColorLabelFilter(QSet<int> colors)
 {
     m_d->colorLabelFilter = colors;
+}
+
+QSet<int> KisOnionSkinCompositor::colorLabelFilter()
+{
+    return m_d->colorLabelFilter;
 }
 
 void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect& rect)

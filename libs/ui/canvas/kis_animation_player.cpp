@@ -42,6 +42,7 @@
 #include "KisPart.h"
 #include "dialogs/KisAsyncAnimationCacheRenderDialog.h"
 #include "KisRollingMeanAccumulatorWrapper.h"
+#include "kis_onion_skin_compositor.h"
 
 struct KisAnimationPlayer::Private
 {
@@ -614,15 +615,7 @@ void KisAnimationPlayer::previousMatchingKeyframe()
     KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
     int destinationTime = keyframes->activeKeyframeTime(time);
     const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : keyframes->keyframeAt(destinationTime)->colorLabel();
-    while (keyframes->keyframeAt(destinationTime) &&
-           (currentKeyframe == keyframes->keyframeAt(destinationTime) || keyframes->keyframeAt(destinationTime)->colorLabel() != desiredColor)) {
-        destinationTime = keyframes->previousKeyframeTime(destinationTime);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        animInterface->requestTimeSwitchWithUndo(destinationTime);
-    }
-
+    previousKeyframeWithColor(desiredColor);
 }
 
 void KisAnimationPlayer::nextMatchingKeyframe()
@@ -644,17 +637,17 @@ void KisAnimationPlayer::nextMatchingKeyframe()
     }
 
     int destinationTime = keyframes->activeKeyframeTime(time);
-    const int desiredColor = keyframes->keyframeAt(destinationTime)->colorLabel();
+    nextKeyframeWithColor(keyframes->keyframeAt(destinationTime)->colorLabel());
+}
 
-    while (keyframes->keyframeAt(destinationTime) &&
-                (keyframes->keyframeAt(destinationTime) == keyframes->keyframeAt(time) ||
-                 keyframes->keyframeAt(destinationTime)->colorLabel() != desiredColor)){
-        destinationTime = keyframes->nextKeyframeTime(destinationTime);
-    }
+void KisAnimationPlayer::previousUnfilteredKeyframe()
+{
+    previousKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
+}
 
-    if (keyframes->keyframeAt(destinationTime)) {
-        animation->requestTimeSwitchWithUndo(destinationTime);
-    }
+void KisAnimationPlayer::nextUnfilteredKeyframe()
+{
+    nextKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
 }
 
 void KisAnimationPlayer::goToPlaybackOrigin()
@@ -835,6 +828,76 @@ void KisAnimationPlayer::uploadFrame(int frame, bool forceSyncAudio)
 
     m_d->lastPaintedFrame = frame;
     emit sigFrameChanged();
+}
+
+void KisAnimationPlayer::nextKeyframeWithColor(int color)
+{
+    QSet<int> validColors;
+    validColors.insert(color);
+    nextKeyframeWithColor(validColors);
+}
+
+void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    int time = animation->currentUITime();
+
+    if (!keyframes->activeKeyframeAt(time)) {
+        return;
+    }
+
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    while (keyframes->keyframeAt(destinationTime) &&
+                (keyframes->keyframeAt(destinationTime) == keyframes->keyframeAt(time) ||
+                 !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
+        destinationTime = keyframes->nextKeyframeTime(destinationTime);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        animation->requestTimeSwitchWithUndo(destinationTime);
+    }
+}
+
+void KisAnimationPlayer::previousKeyframeWithColor(int color)
+{
+    QSet<int> validColors;
+    validColors.insert(color);
+    previousKeyframeWithColor(validColors);
+}
+
+void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    int time = animInterface->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    while (keyframes->keyframeAt(destinationTime) &&
+           (currentKeyframe == keyframes->keyframeAt(destinationTime) || !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
+        destinationTime = keyframes->previousKeyframeTime(destinationTime);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        animInterface->requestTimeSwitchWithUndo(destinationTime);
+    }
 }
 
 qreal KisAnimationPlayer::effectiveFps() const

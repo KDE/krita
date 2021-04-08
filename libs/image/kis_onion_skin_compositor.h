@@ -26,7 +26,8 @@ public:
 
     int configSeqNo() const;
 
-    void setColorLabelFilter(QList<int> colors);
+    void setColorLabelFilter(QSet<int> colors);
+    QSet<int> colorLabelFilter();
 
 public Q_SLOTS:
     void configChanged();

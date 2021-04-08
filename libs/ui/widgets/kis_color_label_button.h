@@ -55,7 +55,7 @@ public:
     int countViableButtons() const;
 
     void setMinimumRequiredChecked( int checkedBtns );
-    int minimumRequiredChecked();
+    int minimumRequiredChecked() const;
 
 public Q_SLOTS:
     void reset();

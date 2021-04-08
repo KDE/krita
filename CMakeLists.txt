@@ -727,7 +727,7 @@ if (FFTW3_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${FFTW3_LIBRARY})
 endif()
 
-find_package(OCIO)
+find_package(OCIO 1.1.1 EXACT)
 set_package_properties(OCIO PROPERTIES
     DESCRIPTION "The OpenColorIO Library"
     URL "https://www.opencolorio.org"

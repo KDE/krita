@@ -194,5 +194,10 @@ void KisTagChooserWidget::updateIcons()
 void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */
-    d->tagToolButton->readOnlyMode(currentlySelectedTag()->id() < 0);
+    if (currentlySelectedTag()) {
+        d->tagToolButton->readOnlyMode(currentlySelectedTag()->id() < 0);
+    }
+    else {
+        d->tagToolButton->readOnlyMode(true);
+    }
 }

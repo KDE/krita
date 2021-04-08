@@ -102,9 +102,6 @@ public:
     PaletteType paletteType() const;
     void setPaletteType(PaletteType paletteType);
 
-    bool isEditable() const;
-    void setIsEditable(bool isEditable);
-
     QByteArray toByteArray() const;
     bool fromByteArray(QByteArray &data, KisResourcesInterfaceSP resourcesInterface);
 

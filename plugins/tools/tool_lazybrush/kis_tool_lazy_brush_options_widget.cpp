@@ -104,7 +104,6 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->provider = provider;
 
-    m_d->colorSet->setIsEditable(true);
     m_d->colorModel->setPalette(m_d->colorSet);
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();

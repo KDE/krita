@@ -540,7 +540,6 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
         QByteArray data = store->read(store->size());
         if (data.size() > 0) {
             newPalette->fromByteArray(data, KisGlobalResourcesInterface::instance());
-            newPalette->setIsEditable(true);
             store->close();
             list.append(newPalette);
         } else {

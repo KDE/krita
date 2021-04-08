@@ -83,14 +83,12 @@ PaletteDockerDock::PaletteDockerDock( )
     m_ui->bnEditPalette->setDefaultAction(m_actEditPalette.data());
     m_ui->bnSavePalette->setDefaultAction(m_actSavePalette.data());
 
-
     // to make sure their icons have the same size
     m_ui->bnRemove->setIconSize(QSize(16, 16));
     m_ui->bnRename->setIconSize(QSize(16, 16));
     m_ui->bnAdd->setIconSize(QSize(16, 16));
     m_ui->bnEditPalette->setIconSize(QSize(16, 16));
     m_ui->bnSavePalette->setIconSize(QSize(16, 16));
-
 
     m_ui->paletteView->setPaletteModel(m_model);
     m_ui->paletteView->setAllowModification(true);
@@ -220,9 +218,8 @@ void PaletteDockerDock::slotImportPalette()
 
 void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
 {
-    qDebug() << palette;
-
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
+    dialog.setCaption(i18n("Export Palette"));
     dialog.setDefaultDir(palette->filename());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset");
     QString newPath;

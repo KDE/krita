@@ -10,5 +10,6 @@
 	<string name="remote_action_circleccw">Circle Counter-Clockwise</string>
 	<string name="something_wrong">Something went wrong...</string>
 	<string name="cancelled">Cancelled</string>
+    <string name="save_notification_text">Saving Document</string>
+    <string name="cancel_save_notification">Cancel</string>
 </resources>
-

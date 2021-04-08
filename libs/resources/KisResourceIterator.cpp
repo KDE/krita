@@ -55,6 +55,11 @@ QString KisResourceItem::tooltip()
     return QString();
 }
 
+QByteArray KisResourceItem::md5()
+{
+    return resource()->md5();
+}
+
 QImage KisResourceItem::thumbnail()
 {
     if (m_index.isValid()) {

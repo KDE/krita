@@ -11,7 +11,7 @@ Rectangle {
     SystemPalette {
         id: palette;
         colorGroup: SystemPalette.Active }
-    property int rowHeight: height/13;
+    property int rowHeight: height/9;
     color: palette.base;
 
     Column {
@@ -66,16 +66,19 @@ Rectangle {
             }
         }
 
-        Repeater {
+        Row{
             width: parent.width;
             height: childrenRect.height;
-            model: [1, 2, 3, 4]
+
+        Repeater {
+
+            model: [2, 3]
             Button {
                 color: palette.button
                 highlightColor: palette.highlight
                 textColor: palette.buttonText
                 radius: 8;
-                width: parent.width;
+                width: parent.width/2;
                 height: root.rowHeight
                 text: mainWindow.imageForButton("button" + modelData) === "" ? mainWindow.textForButton("button" + modelData) : ""
                 checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
@@ -86,12 +89,37 @@ Rectangle {
 
             }
         }
+        }
+        Row{
+            width: parent.width;
+            height: childrenRect.height;
 
-        Grid {
-            columns: 3
-            rows: 3
+        Repeater {
+
+            model: [1, 4]
+            Button {
+                color: palette.button
+                highlightColor: palette.highlight
+                textColor: palette.buttonText
+                radius: 8;
+                width: parent.width/2;
+                height: root.rowHeight
+                text: mainWindow.imageForButton("button" + modelData) === "" ? mainWindow.textForButton("button" + modelData) : ""
+                checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
+                onClicked: {
+                    mainWindow.slotButtonPressed("button" + modelData)
+                }
+                image: root.width != 0 ? mainWindow.imageForButton("button" + modelData) : "";
+
+            }
+        }
+        }
+
+        Row {
+            width: parent.width;
+            height: childrenRect.height;
             Repeater {
-                model: ["", "view_zoom_in", "", "rotate_canvas_left", "reset_canvas_rotation", "rotate_canvas_right", "", "view_zoom_out", ""]
+                model: ["rotate_canvas_left", "reset_canvas_rotation", "rotate_canvas_right"]
                 Item {
                     height: root.rowHeight
                     width: root.width/3
@@ -115,12 +143,96 @@ Rectangle {
             }
         }
 
+        Row{
+            width: parent.width;
+            height: childrenRect.height;
+
+        Repeater {
+
+            model: [6, "view_zoom_in"]
+            Button {
+                color: palette.button
+                highlightColor: palette.highlight
+                textColor: palette.buttonText
+                radius: 8;
+                width: parent.width/2;
+                height: root.rowHeight
+                text: (modelData !== "view_zoom_in" && mainWindow.imageForButton("button" + modelData) === "") ? mainWindow.textForButton("button" + modelData) : ""
+                checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
+                onClicked: {
+                    if(modelData === "view_zoom_in")
+                    {
+                        mainWindow.slotButtonPressed(modelData)
+                    }
+                    else
+                    {
+                    mainWindow.slotButtonPressed("button" + modelData)}
+                    }
+                image: {
+
+                    if(root.width !== 0 && modelData !== "view_zoom_in")
+                    {
+                        mainWindow.imageForButton("button" + modelData)
+                    }
+                    else if (root.width !== 0 && modelData === "view_zoom_in")
+                    {
+                        mainWindow.imageForButton(modelData)
+                    }
+
+
+                    }
+
+        }
+        }
+        }
+        Row{
+            width: parent.width;
+            height: childrenRect.height;
+
+        Repeater {
+
+            model: [5, "view_zoom_out"]
+            Button {
+                color: palette.button
+                highlightColor: palette.highlight
+                textColor: palette.buttonText
+                radius: 8;
+                width: parent.width/2;
+                height: root.rowHeight
+                text: (modelData !== "view_zoom_out" && mainWindow.imageForButton("button" + modelData) === "") ? mainWindow.textForButton("button" + modelData) : ""
+                checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
+                onClicked: {
+                    if(modelData === "view_zoom_out")
+                    {
+                        mainWindow.slotButtonPressed(modelData)
+                    }
+                    else
+                    {
+                    mainWindow.slotButtonPressed("button" + modelData)}
+                    }
+                image: {
+
+                    if(root.width !== 0 && modelData !== "view_zoom_out")
+                    {
+                        mainWindow.imageForButton("button" + modelData)
+                    }
+                    else if (root.width !== 0 && modelData === "view_zoom_out")
+                    {
+                        mainWindow.imageForButton(modelData)
+                    }
+
+
+                    }
+
+        }
+        }
+        }
 
 
         Repeater {
             width: parent.width;
             height: childrenRect.height;
-            model: [5, 6, 7, 8]
+            model: [7, 8]
             Button {
                 color: palette.button
                 highlightColor: palette.highlight

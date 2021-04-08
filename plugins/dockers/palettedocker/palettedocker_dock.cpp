@@ -204,7 +204,8 @@ void PaletteDockerDock::slotRemovePalette(KoColorSetSP cs)
 
 void PaletteDockerDock::slotImportPalette()
 {
-    m_paletteEditor->importPalette();
+    KoColorSetSP palette = m_paletteEditor->importPalette();
+    m_paletteChooser->paletteSelected(palette);
 }
 
 void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)

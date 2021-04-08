@@ -64,13 +64,13 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
 
     m_d->itemChooser->setCurrentItem(0);
 
-    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotPaletteResourceSelected(KoResourceSP )));
+    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(paletteSelected(KoResourceSP )));
 }
 
 KisPaletteChooser::~KisPaletteChooser()
 { }
 
-void KisPaletteChooser::slotPaletteResourceSelected(KoResourceSP r)
+void KisPaletteChooser::paletteSelected(KoResourceSP r)
 {
     KoColorSetSP g = r.staticCast<KoColorSet>();
     emit sigPaletteSelected(g);
@@ -95,7 +95,6 @@ void KisPaletteChooser::slotRemove()
 void KisPaletteChooser::slotImport()
 {
     emit sigImportPalette();
-    m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
 void KisPaletteChooser::slotExport()

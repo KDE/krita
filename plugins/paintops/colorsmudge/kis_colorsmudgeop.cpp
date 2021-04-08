@@ -127,7 +127,8 @@ struct ColorSmudgeStrategyBase
                                     qreal opacity,
                                     qreal colorRateValue,
                                     qreal smudgeRateValue,
-                                    qreal lightnessStrengthValue) = 0;
+                                    qreal lightnessStrengthValue,
+                                    qreal smudgeRadiusValue) = 0;
 
 protected:
         KisOptimizedByteArray::MemoryAllocatorSP m_memoryAllocator;
@@ -175,18 +176,20 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
                     const QPoint &canvasLocalSamplePoint,
                     qreal opacity,
                     qreal smudgeRateValue,
-                    qreal colorRateValue)
+                    qreal colorRateValue,
+                    qreal smudgeRadiusValue)
     {
         const quint8 colorRateOpacity = this->colorRateOpacity(opacity, colorRateValue);
 
-        if (m_useDullingMode && 0) {
-            const qreal smudgeRadius = 0.1;
+        if (m_useDullingMode) {
+            KIS_SAFE_ASSERT_RECOVER(smudgeRadiusValue <= 1.0) {
+                smudgeRadiusValue = 1.0;
+            }
+
             const QRect minimalRect = QRect(srcRect.center(), QSize(1,1));
 
             const QRect sampleRect =
-                KisAlgebra2D::blowRect(srcRect, 0.5 * (smudgeRadius - 1.0)) | minimalRect;
-
-            ENTER_FUNCTION() << ppVar(srcRect) << ppVar(sampleRect);
+                KisAlgebra2D::blowRect(srcRect, 0.5 * (smudgeRadiusValue - 1.0)) | minimalRect;
 
             m_blendDevice->setRect(sampleRect);
             m_blendDevice->lazyGrowBufferWithoutInitialization();
@@ -494,7 +497,8 @@ struct ColorSmudgeStrategyLightness : public ColorSmudgeStrategyColorBased
                   qreal opacity,
                   qreal colorRateValue,
                   qreal smudgeRateValue,
-                  qreal lightnessStrengthValue) override
+                  qreal lightnessStrengthValue,
+                  qreal smudgeRadiusValue) override
     {
         const int numPixels = dstRect.width() * dstRect.height();
 
@@ -510,7 +514,7 @@ struct ColorSmudgeStrategyLightness : public ColorSmudgeStrategyColorBased
                    m_maskDab,
                    srcRect, dstRect,
                    canvasLocalSamplePoint,
-                   opacity, smudgeRateValue, colorRateValue);
+                   opacity, smudgeRateValue, colorRateValue, smudgeRadiusValue);
 
         m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
         m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
@@ -605,7 +609,8 @@ struct ColorSmudgeStrategyMask : public ColorSmudgeStrategyColorBased
                             qreal opacity,
                             qreal colorRateValue,
                             qreal smudgeRateValue,
-                            qreal lightnessStrengthValue) override
+                            qreal lightnessStrengthValue,
+                            qreal smudgeRadiusValue) override
     {
         const QVector<QRect> mirroredRects = m_finalPainter.calculateAllMirroredRects(dstRect);
 
@@ -619,7 +624,7 @@ struct ColorSmudgeStrategyMask : public ColorSmudgeStrategyColorBased
                    m_maskDab,
                    srcRect, dstRect,
                    canvasLocalSamplePoint,
-                   opacity, smudgeRateValue, colorRateValue);
+                   opacity, smudgeRateValue, colorRateValue, smudgeRadiusValue);
 
         m_overlayDevice->writeRects(mirroredRects);
 
@@ -690,7 +695,8 @@ struct ColorSmudgeStrategyStamp : public ColorSmudgeStrategyColorBased
                             qreal opacity,
                             qreal colorRateValue,
                             qreal smudgeRateValue,
-                            qreal lightnessStrengthValue) override
+                            qreal lightnessStrengthValue,
+                            qreal smudgeRadiusValue) override
     {
         const QVector<QRect> mirroredRects = m_finalPainter.calculateAllMirroredRects(dstRect);
 
@@ -704,7 +710,7 @@ struct ColorSmudgeStrategyStamp : public ColorSmudgeStrategyColorBased
                    m_maskDab,
                    srcRect, dstRect,
                    canvasLocalSamplePoint,
-                   opacity, smudgeRateValue, colorRateValue);
+                   opacity, smudgeRateValue, colorRateValue, smudgeRadiusValue);
 
         m_overlayDevice->writeRects(mirroredRects);
 
@@ -1099,6 +1105,8 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     QPointF hotSpot = brush->hotSpot(shape, info);
 
+    const qreal smudgeRadiusPortion = m_smudgeRadiusOption.isChecked() ? m_smudgeRadiusOption.computeSizeLikeValue(info) / 100.0 : 0.0;
+
     if (m_strategy) {
         m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect);
 
@@ -1135,7 +1143,8 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
             m_strategy->paintDab(srcDabRect, m_dstDabRect,
                                  canvasLocalSamplePoint,
                                  fpOpacity, colorRate, smudgeLength,
-                                 lightnessStrength);
+                                 lightnessStrength,
+                                 smudgeRadiusPortion);
 
         painter()->addDirtyRects(dirtyRects);
 

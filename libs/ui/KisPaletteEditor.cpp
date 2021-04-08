@@ -110,7 +110,6 @@ void KisPaletteEditor::addPalette()
 
     QString name = le->text();
     colorSet->setPaletteType(KoColorSet::KPL);
-    colorSet->setIsEditable(true);
     colorSet->setValid(true);
     colorSet->setName(name);
     colorSet->setFilename(name.split(" ").join("_")+colorSet->defaultFileExtension());
@@ -147,9 +146,7 @@ void KisPaletteEditor::removePalette(KoColorSetSP cs)
 {
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
-    if (!cs || !cs->isEditable()) {
-        return;
-    }
+    if (!cs) { return; }
     m_d->rServer->removeResourceFromServer(cs);
 }
 
@@ -303,7 +300,6 @@ void KisPaletteEditor::setStorageLocation(QString location)
 void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 {
     Q_ASSERT(m_d->model);
-    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     KisSwatch c = KisSwatch(color);
@@ -325,7 +321,6 @@ void KisPaletteEditor::slotSetDocumentModified()
 void KisPaletteEditor::removeEntry(const QModelIndex &index)
 {
     Q_ASSERT(m_d->model);
-    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
@@ -338,7 +333,6 @@ void KisPaletteEditor::removeEntry(const QModelIndex &index)
 
 void KisPaletteEditor::modifyEntry(const QModelIndex &index)
 {
-    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
 
@@ -386,7 +380,6 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     Q_ASSERT(m_d->model);
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
-    if (!m_d->model->colorSet()->isEditable()) { return; }
 
     KoDialog dialog;
     dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Colorset Entry"));
@@ -440,7 +433,6 @@ void KisPaletteEditor::updatePalette()
     qDebug() << "updating the palette model inside the palette editor object";
     Q_ASSERT(m_d->model);
     Q_ASSERT(m_d->model->colorSet());
-    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     KoColorSetSP palette = m_d->model->colorSet();

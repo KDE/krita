@@ -115,7 +115,6 @@ PaletteDockerDock::PaletteDockerDock( )
     m_viewContextMenu.addAction(m_actRemove.data());
     connect(m_ui->paletteView, SIGNAL(pressed(QModelIndex)), SLOT(slotContextMenu(QModelIndex)));
 
-    m_paletteChooser->setAllowModification(true);
     connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), SLOT(slotSetColorSet(KoColorSetSP)));
     connect(m_paletteChooser, SIGNAL(sigAddPalette()), SLOT(slotAddPalette()));
     connect(m_paletteChooser, SIGNAL(sigImportPalette()), SLOT(slotImportPalette()));
@@ -270,7 +269,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
         m_paletteEditor->saveNewPaletteVersion();
     }
 
-    if (colorSet && colorSet->isEditable()) {
+    if (colorSet) {
         m_ui->bnAdd->setEnabled(true);
         m_ui->bnRename->setEnabled(true);
         m_ui->bnRemove->setEnabled(true);
@@ -436,7 +435,6 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
             setFGColorByPalette(entry);
         }
     }
-    if (!m_currentColorSet->isEditable()) { return; }
     m_ui->bnRemove->setEnabled(occupied);
     updatePaletteName();
 }
@@ -458,9 +456,7 @@ void PaletteDockerDock::slotPaletteIndexDoubleClicked(const QModelIndex &index)
 void PaletteDockerDock::setEntryByForeground(const QModelIndex &index)
 {
     m_paletteEditor->setEntry(m_resourceProvider->fgColor(), index);
-    if (m_currentColorSet->isEditable()) {
-        m_ui->bnRemove->setEnabled(true);
-    }
+    m_ui->bnRemove->setEnabled(true);
     updatePaletteName();
 }
 

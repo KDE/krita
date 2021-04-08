@@ -107,11 +107,10 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
 
     m_ui->spinBoxRow->setValue(m_paletteEditor->rowNumberOfGroup(KoColorSet::GLOBAL_GROUP_NAME));
 
-    bool canWrite = m_colorSet->isEditable();
-    m_ui->lineEditName->setEnabled(canWrite);
-    m_ui->spinBoxCol->setEnabled(canWrite);
-    m_ui->spinBoxRow->setEnabled(canWrite);
-    m_ui->bnAddGroup->setEnabled(canWrite);
+    m_ui->lineEditName->setEnabled(true);
+    m_ui->spinBoxCol->setEnabled(true);
+    m_ui->spinBoxRow->setEnabled(true);
+    m_ui->bnAddGroup->setEnabled(true);
 }
 
 void KisDlgPaletteEditor::setView(KisViewManager *view)

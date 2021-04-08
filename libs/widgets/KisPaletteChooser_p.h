@@ -28,8 +28,6 @@ struct KisPaletteChooserPrivate
     KisPaletteChooserPrivate(KisPaletteChooser *);
     virtual ~KisPaletteChooserPrivate();
 
-    bool allowModification;
-
     QPointer<KisPaletteChooser> c;
 
     QSharedPointer<KisResourceItemChooser> itemChooser;

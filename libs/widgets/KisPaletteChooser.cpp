@@ -30,8 +30,6 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     , m_ui(new Ui_WdgPaletteListWidget)
     , m_d(new KisPaletteChooserPrivate(this))
 {
-    m_d->allowModification = false;
-
     m_d->actAdd.reset(new QAction(KisIconUtils::loadIcon("list-add"),
                                   i18n("Add a new palette")));
     m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("edit-delete"),
@@ -80,24 +78,17 @@ void KisPaletteChooser::slotPaletteResourceSelected(KoResourceSP r)
 {
     KoColorSetSP g = r.staticCast<KoColorSet>();
     emit sigPaletteSelected(g);
-    if (!m_d->allowModification) { return; }
-    if (g->isEditable()) {
-        m_ui->bnRemove->setEnabled(true);
-    } else {
-        m_ui->bnRemove->setEnabled(false);
-    }
+    m_ui->bnRemove->setEnabled(true);
 }
 
 void KisPaletteChooser::slotAdd()
 {
-    if (!m_d->allowModification) { return; }
     emit sigAddPalette();
     m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
 void KisPaletteChooser::slotRemove()
 {
-    if (!m_d->allowModification) { return; }
     if (m_d->itemChooser->currentResource()) {
         KoColorSetSP cs = m_d->itemChooser->currentResource().staticCast<KoColorSet>();
         emit sigRemovePalette(cs);
@@ -107,7 +98,6 @@ void KisPaletteChooser::slotRemove()
 
 void KisPaletteChooser::slotImport()
 {
-    if (!m_d->allowModification) { return; }
     emit sigImportPalette();
     m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
@@ -119,16 +109,6 @@ void KisPaletteChooser::slotExport()
     }
     KoColorSetSP palette = m_d->itemChooser->currentResource().dynamicCast<KoColorSet>();
     emit sigExportPalette(palette);
-}
-
-void KisPaletteChooser::setAllowModification(bool allowModification)
-{
-    m_d->allowModification = allowModification;
-    m_ui->bnAdd->setEnabled(allowModification);
-    m_ui->bnImport->setEnabled(allowModification);
-    m_ui->bnExport->setEnabled(allowModification);
-    KoColorSetSP cs = m_d->itemChooser->currentResource().staticCast<KoColorSet>();
-    m_ui->bnRemove->setEnabled(allowModification && cs && cs->isEditable());
 }
 
 /************************* KisPaletteChooserPrivate **********************/

@@ -28,9 +28,6 @@ public:
     explicit KisPaletteChooser(QWidget *parent = nullptr);
     virtual ~KisPaletteChooser();
 
-public:
-    void setAllowModification(bool allowModification);
-
 Q_SIGNALS:
     void sigPaletteSelected(KoColorSetSP);
     void sigAddPalette();

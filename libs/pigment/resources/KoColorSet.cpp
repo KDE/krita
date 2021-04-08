@@ -100,7 +100,6 @@ KoColorSet::KoColorSet(const QString& filename)
 {
     if (!filename.isEmpty()) {
         QFileInfo f(filename);
-        setIsEditable(f.isWritable());
     }
 }
 
@@ -114,7 +113,6 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
     d->comment = rhs.d->comment;
     d->groupNames = rhs.d->groupNames;
     d->groups = rhs.d->groups;
-    d->isEditable = rhs.d->isEditable;
 }
 
 KoColorSet::~KoColorSet()
@@ -396,17 +394,6 @@ KisSwatchGroup *KoColorSet::getGroup(const QString &name)
 KisSwatchGroup *KoColorSet::getGlobalGroup()
 {
     return getGroup(GLOBAL_GROUP_NAME);
-}
-
-
-bool KoColorSet::isEditable() const
-{
-    return d->isEditable;
-}
-
-void KoColorSet::setIsEditable(bool isEditable)
-{
-    d->isEditable = isEditable;
 }
 
 KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool useGivenColorSpace)
@@ -937,7 +924,6 @@ bool KoColorSet::Private::loadKpl()
         doc.setContent(ba);
         QDomElement e = doc.documentElement();
         colorSet->setName(e.attribute(KPL_PALETTE_NAME_ATTR));
-        colorSet->setIsEditable(e.attribute(KPL_PALETTE_READONLY_ATTR) != "true");
         QString version = e.attribute(KPL_VERSION_ATTR);
         comment = e.attribute(KPL_PALETTE_COMMENT_ATTR);
 
@@ -1494,8 +1480,6 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute(KPL_VERSION_ATTR, "2.0");
         root.setAttribute(KPL_PALETTE_NAME_ATTR, colorSet->name());
         root.setAttribute(KPL_PALETTE_COMMENT_ATTR, comment);
-        root.setAttribute(KPL_PALETTE_READONLY_ATTR,
-                          (colorSet->isEditable()) ? "false" : "true");
         root.setAttribute(KPL_PALETTE_COLUMN_COUNT_ATTR, colorSet->columnCount());
         root.setAttribute(KPL_GROUP_ROW_COUNT_ATTR, groups[KoColorSet::GLOBAL_GROUP_NAME].rowCount());
 

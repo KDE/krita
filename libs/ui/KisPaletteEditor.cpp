@@ -123,13 +123,16 @@ void KisPaletteEditor::addPalette()
 
 void KisPaletteEditor::importPalette()
 {
-    KoFileDialog dialog(nullptr, KoFileDialog::OpenFile, i18n("Open Palette"));
+    KoFileDialog dialog(nullptr, KoFileDialog::OpenFile, "Open Palette");
+    dialog.setCaption(i18n("Import Palette"));
 
     dialog.setDefaultDir(QDir::homePath());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
 
     QString filename = dialog.filename();
-    if (filename.isEmpty()) { return; }
+    if (filename.isEmpty()) {
+        return;
+    }
 
     QMessageBox messageBox;
     messageBox.setText(i18n("Do you want to store this palette in your current image?"));
@@ -138,8 +141,8 @@ void KisPaletteEditor::importPalette()
     if (messageBox.exec() == QMessageBox::Yes) {
         storageLocation = m_d->view->document()->uniqueID();
     }
-
     m_d->rServer->resourceModel()->importResourceFile(filename, storageLocation);
+
 }
 
 void KisPaletteEditor::removePalette(KoColorSetSP cs)

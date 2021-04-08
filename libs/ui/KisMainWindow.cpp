@@ -597,7 +597,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
         KisWorkspaceResourceSP workspace = rserver->resourceByName(currentWorkspace);
         if (workspace) {
-            restoreWorkspace(workspace->resourceId());
+            restoreWorkspace(workspace);
         }
         cfg.writeEntry("CanvasOnlyActive", false);
         menuBar()->setVisible(true);
@@ -1812,8 +1812,15 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 
 void KisMainWindow::restoreWorkspace()
 {
-    int resourceId = sender()->property("resource_id").toInt();
-    restoreWorkspace(resourceId);
+    QByteArray md5 = sender()->property("md5").toByteArray();
+    KoResourceServer<KisWorkspaceResource> *rserver = KisResourceServerProvider::instance()->workspaceServer();
+    KoResourceSP resource = rserver->resourceByMD5(md5);
+    if (resource) {
+        restoreWorkspace(resource);
+    }
+    else {
+        qWarning() << "Could not retrieve resource for" << QString::fromLatin1(md5.toHex());
+    }
 }
 
 void KisMainWindow::openCommandBar()
@@ -1868,12 +1875,9 @@ void KisMainWindow::slotStoragesWarning(const QString &/*location*/)
 
 }
 
-bool KisMainWindow::restoreWorkspace(int workspaceId)
+bool KisMainWindow::restoreWorkspace(KoResourceSP res)
 {
-    KisWorkspaceResourceSP workspace =
-            KisResourceModel(ResourceType::Workspaces)
-                .resourceForId(workspaceId)
-                .dynamicCast<KisWorkspaceResource>();
+    KisWorkspaceResourceSP workspace = res.dynamicCast<KisWorkspaceResource>();
 
     bool success = restoreWorkspaceState(workspace->dockerState());
 
@@ -2487,7 +2491,7 @@ void KisMainWindow::updateWindowMenu()
     while (resourceIterator.hasNext()) {
         KisResourceItemSP resource = resourceIterator.next();
         QAction *action = workspaceMenu->addAction(resource->name());
-        action->setProperty("resource_id", QVariant::fromValue<int>(resource->id()));
+        action->setProperty("md5", QVariant::fromValue<QByteArray>(resource->md5()));
         connect(action, SIGNAL(triggered()), this, SLOT(restoreWorkspace()));
     }
     workspaceMenu->addSeparator();

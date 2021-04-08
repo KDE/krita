@@ -20,6 +20,7 @@
 #include <KoCanvasSupervisor.h>
 #include "KisView.h"
 #include <kis_workspace_resource.h>
+#include <KoResource.h>
 
 class QCloseEvent;
 class QMoveEvent;
@@ -164,7 +165,7 @@ public:
      * @param state the saved state
      * @return TRUE on success
      */
-    bool restoreWorkspace(int workspaceId);
+    bool restoreWorkspace(KoResourceSP res);
     bool restoreWorkspaceState(const QByteArray &state);
 
     static void swapWorkspaces(KisMainWindow *a, KisMainWindow *b);

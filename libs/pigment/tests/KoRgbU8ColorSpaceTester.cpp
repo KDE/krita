@@ -354,8 +354,8 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
             }
         }
 
-        op->composite(dstPtr, numPixels * cs->pixelSize(),
-                      srcPtr, numPixels * cs->pixelSize(),
+        op->composite(dstPtr, numTestablePixels * cs->pixelSize(),
+                      srcPtr, numTestablePixels * cs->pixelSize(),
                       0, 0,
                       1, numTestablePixels, opacity);
 

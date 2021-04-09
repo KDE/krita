@@ -315,6 +315,11 @@ public:
         result.accumulateColors(PointerToArray(data, _CSTrait::pixelSize), WeightsWrapper(weights, weightSum), nPixels);
     }
 
+    void accumulateAverage(const quint8 *data, int nPixels) override
+    {
+        result.accumulateColors(PointerToArray(data, _CSTrait::pixelSize), NoWeightsSurrogate(nPixels), nPixels);
+    }
+
     void computeMixedColor(quint8 *data) override
     {
         result.computeMixedColor(data);

@@ -134,6 +134,157 @@ protected:
         KisOptimizedByteArray::MemoryAllocatorSP m_memoryAllocator;
 };
 
+struct WeightedSampleWrapper
+{
+    WeightedSampleWrapper(KoMixColorsOp::Mixer *mixer,
+                          KisFixedPaintDeviceSP maskDab, const QRect &maskRect,
+                          KisFixedPaintDeviceSP sampleDab, const QRect &sampleRect)
+        : m_mixer(mixer),
+          m_maskRect(maskRect),
+          m_maskPtr(maskDab->data()),
+          m_maskStride(maskDab->bounds().width()),
+          m_samplePixelSize(sampleDab->colorSpace()->pixelSize()),
+          m_sampleRect(sampleRect),
+          m_samplePtr(sampleDab->data()),
+          m_sampleStride(sampleDab->bounds().width() * m_samplePixelSize)
+    {
+
+    }
+
+    inline void samplePixel(const QPoint &relativeSamplePoint) {
+        const QPoint maskPt(relativeSamplePoint - m_maskRect.topLeft() + m_sampleRect.topLeft());
+
+        const qint16 opacity = *(m_maskPtr + maskPt.x() + maskPt.y() * m_maskStride);
+        const quint8 *ptr = m_samplePtr + relativeSamplePoint.x() * m_samplePixelSize + relativeSamplePoint.y() * m_sampleStride;
+
+        m_mixer->accumulate(ptr, &opacity, opacity, 1);
+    }
+
+    KoMixColorsOp::Mixer *m_mixer;
+    const QRect m_maskRect;
+    quint8 *m_maskPtr;
+    const int m_maskStride;
+    int m_samplePixelSize;
+    const QRect m_sampleRect;
+    quint8 *m_samplePtr;
+    const int m_sampleStride;
+};
+
+
+struct AveragedSampleWrapper
+{
+    AveragedSampleWrapper(KoMixColorsOp::Mixer *mixer,
+                          KisFixedPaintDeviceSP maskDab, const QRect &maskRect,
+                          KisFixedPaintDeviceSP sampleDab, const QRect &sampleRect)
+        : m_mixer(mixer),
+          m_samplePixelSize(sampleDab->colorSpace()->pixelSize()),
+          m_sampleRect(sampleRect),
+          m_samplePtr(sampleDab->data()),
+          m_sampleStride(sampleDab->bounds().width() * m_samplePixelSize)
+    {
+        Q_UNUSED(maskDab);
+        Q_UNUSED(maskRect);
+    }
+
+    inline void samplePixel(const QPoint &relativeSamplePoint) {
+        const quint8 *ptr = m_samplePtr + relativeSamplePoint.x() * m_samplePixelSize + relativeSamplePoint.y() * m_sampleStride;
+        m_mixer->accumulateAverage(ptr, 1);
+    }
+
+    KoMixColorsOp::Mixer *m_mixer;
+    int m_samplePixelSize;
+    const QRect m_sampleRect;
+    quint8 *m_samplePtr;
+    const int m_sampleStride;
+};
+
+template<class WeightingModeWrapper>
+void sampleDullingColor(const QRect &srcRect,
+                        qreal sampleRadiusValue,
+                        KisPaintDeviceSP sourceDevice,
+                        KisFixedPaintDeviceSP tempFixedDevice,
+                        KisFixedPaintDeviceSP maskDab,
+                        KoColor *resultColor)
+
+{
+    KIS_SAFE_ASSERT_RECOVER(sampleRadiusValue <= 1.0) {
+        sampleRadiusValue = 1.0;
+    }
+
+    const QRect minimalRect = QRect(srcRect.center(), QSize(1,1));
+
+    const QRect sampleRect =
+        KisAlgebra2D::blowRect(srcRect, 0.5 * (sampleRadiusValue - 1.0)) | minimalRect;
+
+    tempFixedDevice->setRect(sampleRect);
+    tempFixedDevice->lazyGrowBufferWithoutInitialization();
+
+    const KoColorSpace *cs = tempFixedDevice->colorSpace();
+    const int numPixels = sampleRect.width() * sampleRect.height();
+    sourceDevice->readBytes(tempFixedDevice->data(), sampleRect);
+
+    KisAlgebra2D::HaltonSequenceGenerator hGen(2);
+    KisAlgebra2D::HaltonSequenceGenerator vGen(3);
+
+    QScopedPointer<KoMixColorsOp::Mixer> mixer(cs->mixColorsOp()->createMixer());
+
+    const int minSamples =
+        qMin(numPixels, qMax(64, qRound(0.02 * numPixels)));
+
+    WeightingModeWrapper weightingModeWrapper(mixer.data(),
+                                              maskDab, srcRect,
+                                              tempFixedDevice, sampleRect);
+
+    KoColor lastPickedColor(*resultColor);
+
+    for (int i = 0; i < minSamples; i++) {
+        const QPoint pt(hGen.generate(sampleRect.width()),
+                        vGen.generate(sampleRect.height()));
+
+        weightingModeWrapper.samplePixel(pt);
+    }
+
+    mixer->computeMixedColor(resultColor->data());
+    lastPickedColor = *resultColor;
+
+    const int batchSize = 16;
+    int numSamplesLeft = numPixels - minSamples;
+
+    while (numSamplesLeft > 0) {
+        const int currentBatchSize = qMin(numSamplesLeft, batchSize);
+        for (int i = 0; i < currentBatchSize; i++) {
+            const QPoint pt(hGen.generate(sampleRect.width()),
+                            vGen.generate(sampleRect.height()));
+
+            weightingModeWrapper.samplePixel(pt);
+        }
+
+        mixer->computeMixedColor(resultColor->data());
+
+        const quint8 difference =
+            cs->differenceA(resultColor->data(), lastPickedColor.data());
+
+        if (difference <= 2) break;
+
+        lastPickedColor = *resultColor;
+        numSamplesLeft -= currentBatchSize;
+    }
+
+#if 0
+    int weightsSum = 0;
+    QVector<qint16> weights(numPixels);
+    for (int i = 0; i < numPixels; i++) {
+        // TODO: mask accessing is wrong!
+        const qint16 opacity = *(maskDab->data() + i);
+        weights[i] = opacity;
+        weightsSum += opacity;
+    }
+
+    //ENTER_FUNCTION() << ppVar(numPixels) << ppVar(weightsSum);
+    cs->mixColorsOp()->mixColors(tempFixedDevice->data(), weights.data(), numPixels, resultColor->data(), weightsSum);
+#endif
+}
+
 struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
 {
     ColorSmudgeStrategyColorBased(KoColor paintColor,
@@ -182,96 +333,10 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
         const quint8 colorRateOpacity = this->colorRateOpacity(opacity, colorRateValue);
 
         if (m_useDullingMode) {
-            KIS_SAFE_ASSERT_RECOVER(smudgeRadiusValue <= 1.0) {
-                smudgeRadiusValue = 1.0;
-            }
-
-            const QRect minimalRect = QRect(srcRect.center(), QSize(1,1));
-
-            const QRect sampleRect =
-                KisAlgebra2D::blowRect(srcRect, 0.5 * (smudgeRadiusValue - 1.0)) | minimalRect;
-
-            m_blendDevice->setRect(sampleRect);
-            m_blendDevice->lazyGrowBufferWithoutInitialization();
-
-            const KoColorSpace *cs = m_blendDevice->colorSpace();
-            const int pixelSize = cs->pixelSize();
-            const int numPixels = sampleRect.width() * sampleRect.height();
-            dstPainter->device()->readBytes(m_blendDevice->data(), sampleRect);
-
-            KisAlgebra2D::HaltonSequenceGenerator hGen(2);
-            KisAlgebra2D::HaltonSequenceGenerator vGen(3);
-
-            QScopedPointer<KoMixColorsOp::Mixer> mixer(cs->mixColorsOp()->createMixer());
-
-            const int minSamples =
-                qMin(numPixels, qMax(64, qRound(0.02 * numPixels)));
-
-            quint8 *maskPtr = maskDab->data();
-            const int maskStride = maskDab->bounds().width();
-
-            quint8 *samplePtr = m_blendDevice->data();
-            const int sampleStride = m_blendDevice->bounds().width() * pixelSize;
-
-            KoColor lastPickedColor(m_preparedDullingColor);
-
-
-            auto pickSample = [&] () {
-                const QPoint pt(hGen.generate(sampleRect.width()),
-                                vGen.generate(sampleRect.height()));
-
-                const QPoint maskPt(pt - srcRect.topLeft() + sampleRect.topLeft());
-
-                const qint16 opacity = *(maskPtr + maskPt.x() + maskPt.y() * maskStride);
-                const quint8 *ptr = samplePtr + pt.x() * pixelSize + pt.y() * sampleStride;
-
-                mixer->accumulate(ptr, &opacity, opacity, 1);
-            };
-
-            for (int i = 0; i < minSamples; i++) {
-                pickSample();
-            }
-
-            mixer->computeMixedColor(m_preparedDullingColor.data());
-            lastPickedColor = m_preparedDullingColor;
-
-            const int batchSize = 16;
-            int numSamplesLeft = numPixels - minSamples;
-
-            while (numSamplesLeft > 0) {
-                const int currentBatchSize = qMin(numSamplesLeft, batchSize);
-                for (int i = 0; i < currentBatchSize; i++) {
-                    pickSample();
-                }
-
-                mixer->computeMixedColor(m_preparedDullingColor.data());
-
-                const quint8 difference =
-                    cs->differenceA(m_preparedDullingColor.data(), lastPickedColor.data());
-
-                if (difference <= 2) break;
-
-                lastPickedColor = m_preparedDullingColor;
-                numSamplesLeft -= currentBatchSize;
-
-
-            }
-
-#if 0
-            int weightsSum = 0;
-            QVector<qint16> weights(numPixels);
-            for (int i = 0; i < numPixels; i++) {
-                // TODO: mask accessing is wrong!
-                const qint16 opacity = *(maskDab->data() + i);
-                weights[i] = opacity;
-                weightsSum += opacity;
-            }
-
-            //ENTER_FUNCTION() << ppVar(numPixels) << ppVar(weightsSum);
-            cs->mixColorsOp()->mixColors(m_blendDevice->data(), weights.data(), numPixels, m_preparedDullingColor.data(), weightsSum);
-#endif
+            sampleDullingColor<WeightedSampleWrapper>(srcRect, smudgeRadiusValue,
+                                                      dstPainter->device(), m_blendDevice,
+                                                      maskDab, &m_preparedDullingColor);
         }
-
 
         m_blendDevice->setRect(dstRect);
         m_blendDevice->lazyGrowBufferWithoutInitialization();
@@ -363,18 +428,12 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
 
         const quint8 smudgeRateOpacity = this->dullingRateOpacity(opacity, smudgeRateValue);
 
-        KoColor dullingFillColor(dst->colorSpace());
-        KisCrossDeviceColorSamplerInt colorPicker(src, dullingFillColor);
-        colorPicker.sampleColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
-
-        dullingFillColor = m_preparedDullingColor;
-
         if (m_smearOp->id() == COMPOSITE_COPY && smudgeRateOpacity == OPACITY_OPAQUE_U8) {
-            dst->fill(dst->bounds(), dullingFillColor);
+            dst->fill(dst->bounds(), m_preparedDullingColor);
         } else {
             src->readBytes(dst->data(), dstRect);
             m_smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
-                                 dullingFillColor.data(), 0,
+                                 m_preparedDullingColor.data(), 0,
                                  0, 0,
                                  1, dstRect.width() * dstRect.height(),
                                  smudgeRateOpacity);
@@ -394,9 +453,7 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
         const quint8 smudgeRateOpacity = this->dullingRateOpacity(opacity, smudgeRateValue);
         const quint8 colorRateOpacity = this->colorRateOpacity(opacity, colorRateValue);
 
-        KoColor dullingFillColor(dst->colorSpace());
-        KisCrossDeviceColorSamplerInt colorPicker(src, dullingFillColor);
-        colorPicker.sampleColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
+        KoColor dullingFillColor(m_preparedDullingColor);
 
         m_colorRateOp->composite(dullingFillColor.data(), 1, m_paintColor.data(), 1, 0, 0, 1, 1, colorRateOpacity);
 

@@ -541,10 +541,16 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
     if (shouldSaveResource) {
         gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
         gradient->setValid(true);
-        rserver->addResource(gradient);
+        if (fileOverwriteAccepted) {
+            rserver->updateResource(gradient);
+        }
+        else {
+            rserver->addResource(gradient);
+        }
         itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
         itemChooser->setCurrentResource(gradient);
-    } else {
+    }
+    else {
         // TODO: revert the changes made to the resource
     }
 }

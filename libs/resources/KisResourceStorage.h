@@ -273,6 +273,8 @@ inline QDebug operator<<(QDebug dbg, const KisResourceStorageSP storage)
 class KRITARESOURCES_EXPORT KisStoragePluginRegistry {
 public:
     KisStoragePluginRegistry();
+    virtual ~KisStoragePluginRegistry();
+
     void addStoragePluginFactory(KisResourceStorage::StorageType storageType, KisStoragePluginFactoryBase *factory);
     static KisStoragePluginRegistry *instance();
 private:

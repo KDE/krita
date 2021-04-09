@@ -17,7 +17,7 @@
 #include <kis_icon.h>
 #include <KoColorSet.h>
 
-class KisResourceModel;
+class KisTagFilterResourceProxyModel;
 
 namespace KisToolUtils {
 struct ColorSamplerConfig;
@@ -101,7 +101,7 @@ private:
     QTimer m_colorSamplerDelayTimer;
 
     ColorSamplerOptionsWidget *m_optionsWidget {0};
-    KisResourceModel *m_resourceModel {0};
+    KisTagFilterResourceProxyModel *m_tagFilterProxyModel {0};
 };
 
 class KisToolColorSamplerFactory : public KoToolFactoryBase

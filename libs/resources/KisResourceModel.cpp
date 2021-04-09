@@ -45,8 +45,7 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
     bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
                                        ",      resources.storage_id\n"
                                        ",      resources.name\n"
-                                       ",      resources.filename as versioned_filename\n"
-                                       ",      versioned_resources.filename as filename\n"
+                                       ",      resources.filename\n"
                                        ",      resources.tooltip\n"
                                        ",      resources.thumbnail\n"
                                        ",      resources.status\n"
@@ -57,13 +56,9 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
                                        "FROM   resources\n"
                                        ",      resource_types\n"
                                        ",      storages\n"
-                                       ",      versioned_resources\n"
                                        "WHERE  resources.resource_type_id = resource_types.id\n"
                                        "AND    resources.storage_id = storages.id\n"
                                        "AND    resource_types.name = :resource_type\n"
-                                       "AND    versioned_resources.id = (SELECT MIN(id)\n"
-                                       "                                 FROM   versioned_resources\n"
-                                       "                                 WHERE  resource_id = resources.id)"
                                        "ORDER BY resources.id");
     if (!r) {
         qWarning() << "Could not prepare KisAllResourcesModel query" << d->resourcesQuery.lastError();

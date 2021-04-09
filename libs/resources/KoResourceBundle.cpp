@@ -449,7 +449,7 @@ bool KoResourceBundle::loadResource(KoResourceSP resource)
 
     if (!resource->loadFromDevice(resourceStore->device(),
                                   KisGlobalResourcesInterface::instance())) {
-        qWarning() << "Could not reload the resource from the bundle" << resourceType << fileName << m_filename;
+        qWarning() << "Could not load the resource from the bundle" << resourceType << fileName << m_filename;
         return false;
     }
 

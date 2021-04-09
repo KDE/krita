@@ -31,7 +31,7 @@ class KisRandomConstAccessorNG;
 KisSmudgeRadiusOption::KisSmudgeRadiusOption():
     KisRateOption("SmudgeRadius", KisPaintOpOption::GENERAL, true)
 {
-    setValueRange(0.0,300.0);
+    setValueRange(0.0,1.0);
 }
 
 QRect KisSmudgeRadiusOption::sampleRect(const KisPaintInformation& info,
@@ -55,8 +55,7 @@ void KisSmudgeRadiusOption::apply(KoColor *resultColor,
 
     qreal sliderValue = computeSizeLikeValue(info);
 
-    int smudgeRadius = ((sliderValue * diameter) * 0.5) / 100.0;
-
+    int smudgeRadius = ((sliderValue * diameter) * 0.5);
 
     KoColor color(Qt::transparent, dev->colorSpace());
 
@@ -150,9 +149,15 @@ void KisSmudgeRadiusOption::apply(KoColor *resultColor,
 void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
+    setting->setProperty(name() + "Version", 2);
 }
 
 void KisSmudgeRadiusOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
+
+    const int smudgeRadiusVersion = setting->getInt(name() + "Version", 1);
+    if (smudgeRadiusVersion < 2) {
+        setValue(value() / 100.0);
+    }
 }

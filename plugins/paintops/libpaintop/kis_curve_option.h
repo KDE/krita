@@ -53,6 +53,8 @@ public:
     virtual int intMaxValue()const;
     virtual QString valueSuffix()const;
 
+    void updateRange(qreal minValue, qreal maxValue);
+
     const QString& name() const;
     KisPaintOpOption::PaintopCategory category() const;
     qreal minValue() const;

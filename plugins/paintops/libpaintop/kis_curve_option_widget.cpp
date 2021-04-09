@@ -147,6 +147,15 @@ void KisCurveOptionWidget::setEnabled(bool enabled)
     m_widget->setEnabled(enabled);
 }
 
+void KisCurveOptionWidget::updateRange(qreal minValue, qreal maxValue)
+{
+    m_curveOption->updateRange(minValue, maxValue);
+
+    // strength settings is shown as 0-100%
+    m_curveOptionWidget->strengthSlider->setRange(m_curveOption->minValue()*100, m_curveOption->maxValue()*100, 0);
+    m_curveOptionWidget->strengthSlider->setValue(m_curveOption->value()*100);
+}
+
 KisCurveOption* KisCurveOptionWidget::curveOption()
 {
     return m_curveOption;

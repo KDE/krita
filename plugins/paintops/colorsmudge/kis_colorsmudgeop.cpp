@@ -792,7 +792,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_lightnessStrengthOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
-    m_smudgeRadiusOption.readOptionSetting(settings);
+
     m_overlayModeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
@@ -807,10 +807,11 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_lightnessStrengthOption.resetAllSensors();
     m_smudgeRateOption.resetAllSensors();
     m_colorRateOption.resetAllSensors();
-    m_smudgeRadiusOption.resetAllSensors();
+
     m_rotationOption.resetAllSensors();
     m_scatterOption.resetAllSensors();
     m_gradientOption.resetAllSensors();
+
 
     m_gradient = painter->gradient();
 
@@ -826,10 +827,16 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     if (m_useNewEngine){
         m_finalPainter->setCompositeOp(COMPOSITE_COPY);
         m_smudgePainter->setCompositeOp(m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER);
+        m_smudgeRadiusOption.updateRange(0.0, 1.0);
     } else {
         m_finalPainter->setCompositeOp(m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER);
         m_smudgePainter->setCompositeOp(COMPOSITE_OVER);
+        m_smudgeRadiusOption.updateRange(0.0, 3.0);
     }
+
+    // Intialize smudge radius only after the proper range is set
+    m_smudgeRadiusOption.readOptionSetting(settings);
+    m_smudgeRadiusOption.resetAllSensors();
 
     m_finalPainter->setSelection(painter->selection());
     m_finalPainter->setChannelFlags(painter->channelFlags());

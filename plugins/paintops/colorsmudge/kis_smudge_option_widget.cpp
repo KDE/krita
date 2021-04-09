@@ -106,3 +106,8 @@ void KisSmudgeOptionWidget::setUseNewEngineCheckboxEnabled(bool enabled) {
 void KisSmudgeOptionWidget::setUseNewEngine(bool useNew) {
     mChkUseNewEngine->setChecked(useNew);
 }
+
+bool KisSmudgeOptionWidget::useNewEngine() const
+{
+    return mChkUseNewEngine->isChecked();
+}

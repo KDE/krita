@@ -28,6 +28,8 @@ public:
 
     void setUseNewEngine(bool useNew);
 
+    bool useNewEngine() const;
+
 private Q_SLOTS:
     void slotCurrentIndexChanged(int index);
     void slotSmearAlphaChanged(bool value);

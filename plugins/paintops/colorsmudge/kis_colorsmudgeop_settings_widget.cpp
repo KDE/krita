@@ -51,7 +51,10 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     m_smudgeOptionWidget = new KisSmudgeOptionWidget();
 
     addPaintOpOption(m_smudgeOptionWidget, i18n("Smudge Length"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0")), i18n("Smudge Radius"));
+
+    m_radiusStrengthOptionWidget = new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0"));
+    addPaintOpOption(m_radiusStrengthOptionWidget, i18n("Smudge Radius"));
+
     addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18n("Color Rate"));
     m_lightnessStrengthOptionWidget = new KisPressureLightnessStrengthOptionWidget();
     addPaintOpOption(m_lightnessStrengthOptionWidget, i18n("Lightness Strength"));
@@ -97,6 +100,8 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
             m_smudgeOptionWidget->setUseNewEngine(true);
         }
         m_lightnessStrengthOptionWidget->setEnabled(brush->preserveLightness());
+
+        m_radiusStrengthOptionWidget->updateRange(0.0, m_smudgeOptionWidget->useNewEngine() ? 1.0 : 3.0);
     }
 }
 

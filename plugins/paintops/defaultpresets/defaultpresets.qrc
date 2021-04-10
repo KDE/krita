@@ -23,5 +23,6 @@
         <file>hatchingbrush.kpp</file>
         <file>tangentnormal.kpp</file>
         <file>roundmarker.kpp</file>
+        <file>mypaintbrush.myb</file>
     </qresource>
 </RCC>

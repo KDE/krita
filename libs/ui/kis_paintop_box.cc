@@ -73,6 +73,9 @@
 #include "kis_action_manager.h"
 #include "KisHighlightedToolButton.h"
 #include <KisGlobalResourcesInterface.h>
+#include "KisResourceLoader.h"
+#include "KisResourceLoaderRegistry.h"
+
 
 KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const char *name)
     : QWidget(parent)
@@ -705,12 +708,40 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
     QString path = ":/presets/" + paintOp.id() + ".kpp";
+
+    if (paintOp.id() == "mypaintbrush") {
+        path = ":/presets/" + paintOp.id() + ".myb";
+    }
+
     dbgResources << "Getting default presets from qrc resources" << path;
 
     KisPaintOpPresetSP preset(new KisPaintOpPreset(path));
 
     if (!preset->load(KisGlobalResourcesInterface::instance())) {
-        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, KisGlobalResourcesInterface::instance());
+        bool success = false;
+
+        QFile file(path);
+
+        if (file.open(QIODevice::ReadOnly))
+        {
+            // this is needed specifically for MyPaint brushes
+            QVector<KisResourceLoaderBase*> loaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(ResourceType::PaintOpPresets);
+            for (int i = 0; i < loaders.count(); i++) {
+                KoResourceSP resource = loaders[i]->load(paintOp.id(), file, KisGlobalResourcesInterface::instance());
+                if (resource) {
+                    preset = resource.dynamicCast<KisPaintOpPreset>();
+                    success = !preset.isNull();
+                    if (success) {
+                        break;
+                    }
+                }
+            }
+            file.close();
+        }
+
+        if (!success) {
+            preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, KisGlobalResourcesInterface::instance());
+        }
     }
 
     Q_ASSERT(preset);

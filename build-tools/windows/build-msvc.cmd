@@ -772,7 +772,7 @@ set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -G "Visual Studio 15 2017" ^
+    -G "Visual Studio 16 2019" ^
     -A "x64" ^
     -T "host=x64" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -791,7 +791,7 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DHIDE_SAFE_ASSERTS=ON ^
     -Wno-dev ^
     -DFETCH_TRANSLATIONS=ON ^
-    -G "Visual Studio 15 2017" ^
+    -G "Visual Studio 16 2019" ^
     -A "x64" ^
     -T "host=x64" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -802,7 +802,7 @@ set CMDLINE_CMAKE_PLUGINS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty_plugins" ^
     -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_PLUGINS_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_PLUGINS_INSTALL_CMAKE% ^
-    -G "Visual Studio 15 2017" ^
+    -G "Visual Studio 16 2019" ^
     -A "x64" ^
     -T "host=x64" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -907,7 +907,7 @@ echo Running CMake for Krita...
 echo.
 
 echo Building Krita...
-"%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target install --parallel %PARALLEL_JOBS%
+"%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target install
 if errorlevel 1 (
     echo ERROR: Building of Krita failed! 1>&2
     exit /b 105

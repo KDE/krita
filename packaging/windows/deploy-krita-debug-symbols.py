@@ -148,7 +148,7 @@ for src in pdb:
     if key == "PyKrita.krita":
        # This one is manually installed, continue.
        continue
-    dst = krita_binaries[key]
+    dst = krita_binaries.get(key)
     if not dst:
         continue
     if os.path.isfile(f"{dst}\\{os.path.basename(src)}"):

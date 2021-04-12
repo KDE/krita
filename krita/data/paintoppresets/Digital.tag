@@ -35,6 +35,7 @@ Comment[en_GB]=Brush presets with a digital look and feel.
 Comment[es]=Valores predefinidos de pincel con aspecto digital.
 Comment[fr]=Préréglages des brosses avec une apparence et une ergonomie numérique.
 Comment[nl]=Voorinstellingen van penselen met een digitaal uiterlijk en gedrag.
+Comment[pl]=Nastawy pędzli dające wrażenie cyfrowości.
 Comment[pt]=Predefinições de pincéis com uma aparência e comportamento digitais.
 Comment[sv]=Penselförinställningar med digitalt utseende och känsla
 Comment[uk]=Набори пензлів із цифровим виглядом і поведінкою.

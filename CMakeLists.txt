@@ -554,6 +554,31 @@ if(WIN32)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4522")
         # libs\ui\dialogs\kis_about_application.cpp : fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+
+        # Force enable a good many optimizations
+
+        # Aggresive inlining (Release)
+        string(REPLACE "Ob2" "Ob3" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+        # Aggresive inlining (RelWithDebInfo)
+        string(REPLACE "Ob1" "Ob3" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+        # Enable intrinsics
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Oi")
+        # Favor fast code
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ot")
+        # -ffast-math (fused multiply-add if the arch allows)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
+        # Whole program optimization
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
+        # Function-level linking
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Gy")
+
+        # For all objects:
+        # - strip unused functions
+        # - fold identical functions
+        # - link-time code generation
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /OPT:ICF,REF /INCREMENTAL:NO /LTCG")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /OPT:ICF,REF /INCREMENTAL:NO /LTCG")
+        set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /OPT:ICF,REF /INCREMENTAL:NO /LTCG")
     endif()
 endif()
 

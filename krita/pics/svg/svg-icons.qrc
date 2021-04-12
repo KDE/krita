@@ -31,6 +31,7 @@
         <file>dark_convert-to-transparencyMask.svg</file>
         <file>dark_chain-broken-icon.svg</file>
         <file>dark_chain-icon.svg</file>
+        <file>dark_close-tab.svg</file>
         <file>dark_deletekeyframe.svg</file>
         <file>dark_dialog-cancel.svg</file>
         <file>dark_document-edit.svg</file>
@@ -129,6 +130,7 @@
         <file>light_convert-to-transparencyMask.svg</file>
         <file>light_chain-broken-icon.svg</file>
         <file>light_chain-icon.svg</file>
+        <file>light_close-tab.svg</file>
         <file>light_deletekeyframe.svg</file>
         <file>light_dialog-cancel.svg</file>
         <file>light_document-edit.svg</file>

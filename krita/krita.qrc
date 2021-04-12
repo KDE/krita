@@ -9,8 +9,4 @@
     <qresource prefix="/kxmlgui5">
         <file alias="krita5.xmlgui">krita5.xmlgui</file>
     </qresource>
-    <qresource prefix="/">
-        <file>pics/dark_close-tab.svg</file>
-        <file>pics/light_close-tab.svg</file>
-    </qresource>
 </RCC>

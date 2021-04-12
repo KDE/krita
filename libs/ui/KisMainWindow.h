@@ -504,6 +504,8 @@ private:
 
     QByteArray borrowWorkspace(KisMainWindow *borrower);
 
+    void customizeTabBar();
+
 
 private:
 

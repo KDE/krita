@@ -838,7 +838,13 @@ void KisMainWindow::slotThemeChanged()
         }
     }
 
+    customizeTabBar();
 
+    emit themeChanged();
+}
+
+void KisMainWindow::customizeTabBar()
+{
     // update MDI area theme
     // Tab close button override
     // just switch this icon out for all OSs so it is easier to see
@@ -855,16 +861,14 @@ void KisMainWindow::slotThemeChanged()
            )";
 
     if (KisIconUtils::useDarkIcons()) {
-        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/dark_close-tab.svg");
+        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/dark_close-tab.svg");
     }
     else {
-        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/light_close-tab.svg");
+        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/light_close-tab.svg");
 
     }
 
     qApp->setStyleSheet(globalStyleSheet);
-
-    emit themeChanged();
 }
 
 bool KisMainWindow::canvasDetached() const
@@ -2879,6 +2883,9 @@ void KisMainWindow::createActions()
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()), Qt::QueuedConnection);
     connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
     d->toggleDockers = actionManager->createAction("view_toggledockers");
+
+    //load customized tab bar style
+    customizeTabBar();
 
     KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);

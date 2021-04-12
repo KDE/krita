@@ -1369,8 +1369,10 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
+
                     applicator.applyCommand(new RefreshHiddenAreas(info));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
+
                     applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
 
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage), KisStrokeJobData::BARRIER);
@@ -1764,8 +1766,10 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
+
                     applicator.applyCommand(new RefreshHiddenAreas(info));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
+
                     applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
 
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));

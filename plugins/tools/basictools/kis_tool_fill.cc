@@ -352,7 +352,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_fillOnlySelection = m_checkFillSelection->isChecked();
     m_useSelectionAsBoundary = m_checkUseSelectionAsBoundary->isChecked();
     m_patternRotation = m_angleSelectorPatternRotate->angle();
-    m_patternScale = m_sldPatternScale->value();
+    m_patternScale = m_sldPatternScale->value() * 0.01;
     m_usePattern = m_checkUsePattern->isChecked();
     // m_sampleLayersMode is set manually above
     // selectedColors are also set manually

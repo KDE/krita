@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
    id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="32"
-   width="32">
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -23,11 +23,12 @@
         <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andrei Rudenko</dc:title>
+            <dc:title>Timothée Giet</dc:title>
           </cc:Agent>
         </dc:creator>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:date>2021</dc:date>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -47,78 +48,78 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:none"
-     id="layer2">
+     transform="translate(0,-16)"
+     id="layer2"
+     style="display:none">
     <path
-       id="rect4157-3"
-       d="m 24,30 0,-2 -2,0 0,-2 2,0 0,-2 2,0 0,-2 2,0 0,2 2,0 0,2 -2,0 0,2 -2,0 0,2 -2,0 z"
-       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="m 24,30 v -2 h -2 v -2 h 2 v -2 h 2 v -2 h 2 v 2 h 2 v 2 h -2 v 2 h -2 v 2 z"
+       id="rect4157-3" />
     <path
-       id="rect4157-2-3"
-       d="m 8,30 0,-2 2,0 0,-2 -2,0 0,-2 -2,0 0,-2 -2,0 0,2 -2,0 0,2 2,0 0,2 2,0 0,2 2,0 z"
-       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="m 8,30 v -2 h 2 V 26 H 8 V 24 H 6 V 22 H 4 v 2 H 2 v 2 h 2 v 2 h 2 v 2 z"
+       id="rect4157-2-3" />
     <rect
-       ry="3.3546499e-008"
-       rx="3.3546499e-008"
-       y="28"
-       x="12"
-       height="4"
-       width="8"
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        id="rect4155-8"
-       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
-    <rect
-       transform="matrix(0,1,-1,0,0,0)"
-       ry="3.3546499e-008"
-       rx="3.3546499e-008"
-       y="-32"
-       x="12"
-       height="4"
        width="8"
+       height="4"
+       x="12"
+       y="28"
+       rx="3.3546499e-08"
+       ry="3.3546499e-08" />
+    <rect
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        id="rect4155-8-7"
-       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
-    <rect
-       transform="matrix(0,1,-1,0,0,0)"
-       ry="3.3546499e-008"
-       rx="3.3546499e-008"
-       y="-4"
-       x="12"
-       height="4"
        width="8"
+       height="4"
+       x="12"
+       y="-32"
+       rx="3.3546499e-08"
+       ry="3.3546499e-08"
+       transform="rotate(90)" />
+    <rect
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        id="rect4155-8-7-8"
-       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       width="8"
+       height="4"
+       x="12"
+       y="-4"
+       rx="3.3546499e-08"
+       ry="3.3546499e-08"
+       transform="rotate(90)" />
   </g>
   <g
-     id="layer3">
-    <ellipse
-       ry="20"
-       rx="14"
-       cy="28"
-       cx="16"
-       id="path4166"
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#373737;stroke-width:3.99999952;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+     transform="scale(0.5)"
+     style="display:inline;fill:#373737;fill-opacity:1"
+     id="g4151">
+    <path
+       id="path4153"
+       d="m 12,6e-7 v 8 h 8 v -8 z m 2,2 h 4 v 4 h -4 z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="path4155"
+       d="m 20,1.9999996 h 10 v 1e-7 3.9999999 0 H 20 v 0 z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:3.65148377;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="path4161"
+       d="M 2,2 H 12 V 2 6 6 H 2 v 0 z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:3.65148377;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <circle
+       r="4"
+       cy="4"
+       cx="4"
+       id="path826"
+       style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+    <circle
+       r="4"
+       cy="4"
+       cx="28"
+       id="path828"
+       style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
   </g>
-  <g
-     id="g4151"
-     style="display:inline">
-    <path
-       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 12,0 0,8 8,0 0,-8 z m 2,2 4,0 0,4 -4,0 z"
-       id="path4153" />
-    <path
-       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 20,1.999999 12,0 0,10e-8 0,3.9999999 0,0 -12,0 0,0 z"
-       id="path4155" />
-    <path
-       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 26,-6e-7 4,0 0,0 0,8 0,0 -4,0 0,0 z"
-       id="path4157" />
-    <path
-       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 2,-1e-6 4,0 0,1e-7 0,7.9999999 0,0 -4,0 0,0 z"
-       id="path4159" />
-    <path
-       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 0,1.9999994 12,0 0,0 0,4 0,0 -12,0 0,0 z"
-       id="path4161" />
-  </g>
+  <path
+     id="path846"
+     d="M 1,16 C 1,10 3,4 8,4 c 5,0 7,6 7,12"
+     style="fill:none;stroke:#373737;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>

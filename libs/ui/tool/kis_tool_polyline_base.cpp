@@ -228,6 +228,13 @@ void KisToolPolylineBase::endStroke()
 {
     if (!m_dragging) return;
 
+    NodePaintAbility paintability = nodePaintAbility();
+    if ((paintability != KisToolPaint::PAINT && paintability != KisToolPaint::VECTOR)
+        || !nodeEditable()) {
+        cancelStroke();
+        return;
+    }
+
     m_dragging = false;
     if(m_points.count() > 1) {
         finishPolyline(m_points);

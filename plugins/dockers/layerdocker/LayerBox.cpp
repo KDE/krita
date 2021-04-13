@@ -171,6 +171,7 @@ LayerBox::LayerBox()
 
     slotUpdateIcons();
 
+    m_wdgLayerBox->bnAdd->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));

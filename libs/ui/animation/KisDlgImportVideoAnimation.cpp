@@ -204,7 +204,7 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
     ffmpegSettings.totalFrames = qCeil(exportDuration * fps);
     ffmpegSettings.progressMessage = "Extracted [progress] frames from video...";
 
-    ffmpeg->start(ffmpegSettings);
+    ffmpeg->startNonBlocking(ffmpegSettings);
     ffmpeg->waitForFinished();
 
     frameList = videoWorkDir.entryList(QStringList() << "output_*.png",QDir::Files);

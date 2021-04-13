@@ -132,16 +132,15 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
             ffmpegSettings.args = ffmpegArgs;
             ffmpegSettings.processPath = options.ffmpegPath;
 
-
+            ffmpegSettings.progressIndeterminate = true;
+            ffmpegSettings.progressMessage = i18n("Creating palette required for gif format...");
             // ffmpegSettings.progressFile TEMP: Allow optional pointer for specifying a directory to save a temp file.
 
+            KisImportExportErrorCode result = ffmpegWrapper->start(ffmpegSettings);
 
-            ffmpegWrapper->start(ffmpegSettings); //TEMP: We might want a function that can start+wait, with a return error code?
-            ffmpegWrapper->waitForFinished();
-
-//            if (!result.isOk()) { TEMP: TODO error handling. How should this be done with KisFFMpegWrapper?
-//                return result;
-//            }
+            if (!result.isOk()) {
+                return result;
+            }
             
             if (lavfiOptionsIndex == -1) {
                 complexFilterArgs << "[0:v][1:v] paletteuse";
@@ -178,8 +177,6 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         
         args << additionalOptionsList;
 
-//        args << "-y" << resultFile;
-
         dbgFile << "savedFilesMask" << savedFilesMask 
                 << "start" << QString::number(clipRange.start()) 
                 << "duration" << clipRange.duration();
@@ -190,14 +187,10 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         ffmpegSettings.args = args;
         ffmpegSettings.outputFile = resultFile;
         ffmpegSettings.totalFrames = clipRange.duration();
-        ffmpegWrapper->start(ffmpegSettings);
-        ffmpegWrapper->waitForFinished();
+        ffmpegSettings.progressMessage = i18nc("Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, arg2: progress frame number, arg3: totalFrameCount.",
+                                               "Creating desired %1 file: %2/%3 frames.", "[suffix]", "[progress]", "[framecount]");
 
-
-//        resultOuter = ffmpegWrapper->runFFMpeg(args, i18n("Encoding frames..."),
-//                                          videoDir.filePath("log_encode_" + suffix + ".log"),
-//                                          clipRange.duration());
-
+        resultOuter = ffmpegWrapper->start(ffmpegSettings);
     }
      
 

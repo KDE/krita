@@ -10,6 +10,8 @@
 #include <QObject>
 #include <QProgressDialog>
 
+#include "KisImportExportErrorCode.h"
+
 
 class QProcess;
 
@@ -24,7 +26,9 @@ struct KisFFMpegWrapperSettings
     bool batchMode = false;
     bool binaryOutput = false;
     int totalFrames = 0;
+
     QString progressMessage = "";
+    bool progressIndeterminate = false;
 
 };
 
@@ -35,7 +39,8 @@ class KisFFMpegWrapper : public QObject
 public:
     explicit KisFFMpegWrapper(QObject *parent = nullptr);
 
-    void start(const KisFFMpegWrapperSettings &settings);
+    void startNonBlocking(const KisFFMpegWrapperSettings &settings);
+    KisImportExportErrorCode start(const KisFFMpegWrapperSettings &settings);
     void waitForFinished(int msecs = 60000);
     void kill();
 
@@ -61,7 +66,6 @@ private Q_SLOTS:
     void slotReadyReadSTDERR();
     void slotStarted();
     void slotFinished(int exitCode);
-    
 
 private:
     void updateProgressDialog(int progressValue);

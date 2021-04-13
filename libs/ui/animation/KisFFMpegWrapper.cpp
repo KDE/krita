@@ -58,7 +58,7 @@ void KisFFMpegWrapper::start(const KisFFMpegWrapperSettings &settings)
     
         progressText.replace("[progress]", "0");
     
-        progress = new QProgressDialog(progressText, "", 0, 0, KisPart::instance()->currentMainwindow());
+        progress = toQShared(new QProgressDialog(progressText, "", 0, 0, KisPart::instance()->currentMainwindow()));
 
         progress->setWindowModality(Qt::ApplicationModal);
         progress->setCancelButton(0);
@@ -105,16 +105,16 @@ void KisFFMpegWrapper::updateProgressDialog(int progressValue) {
     
     dbgFile << "Update Progress" << progressValue << "/" << processSettings.totalFrames;
     
-    if (progress == nullptr) return;
+    if (!progress) return;
 
     QString progressText = processSettings.progressMessage;
 
     progressText.replace("[progress]", QString::number(progressValue));
     progress->setLabelText(progressText);
 
-    if (processSettings.totalFrames > 0) progress->setValue(progressValue/processSettings.totalFrames);
-     QApplication::processEvents();
+    if (processSettings.totalFrames > 0) progress->setValue(100 * progressValue / processSettings.totalFrames);
 
+    QApplication::processEvents();
 }
 
 void KisFFMpegWrapper::kill()
@@ -216,7 +216,10 @@ void KisFFMpegWrapper::slotStarted()
 void KisFFMpegWrapper::slotFinished(int exitCode)
 {
     dbgFile << "FFMpeg finished with code" << exitCode;
-    if (!processSettings.batchMode && progress != nullptr) progress->setValue(100);
+    if (!processSettings.batchMode && progress){
+        progress->setValue(100);
+    }
+
     if (exitCode != 0) {
         errorMessage.remove(junkRegex);
         if (process->exitStatus() == QProcess::CrashExit) {

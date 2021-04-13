@@ -189,6 +189,7 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         ffmpegSettings.processPath = options.ffmpegPath;
         ffmpegSettings.args = args;
         ffmpegSettings.outputFile = resultFile;
+        ffmpegSettings.totalFrames = clipRange.duration();
         ffmpegWrapper->start(ffmpegSettings);
         ffmpegWrapper->waitForFinished();
 

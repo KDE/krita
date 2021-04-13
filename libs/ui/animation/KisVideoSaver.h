@@ -22,9 +22,9 @@ class KRITAUI_EXPORT KisAnimationVideoSaver : public QObject {
     Q_OBJECT
 public:
     /**
-     * @brief KisVideoSaver
+     * @brief KisAnimationVideoSaver
      * This is the object that takes an animation document and config and tells ffmpeg
-     * to render it. Log files are generated here too.
+     * to render it via KisFFMpegWrapper.
      * @param doc the document to use for rendering.
      * @param ffmpegPath the path to the ffmpeg executable.
      * @param batchMode whether Krita is in batchmde and we can thus not show gui widgets.
@@ -37,6 +37,7 @@ public:
      * @return get the image used by this exporter.
      */
     KisImageSP image();
+
     /**
      * @brief encode the main encoding function.
      * This in turn calls runFFMpeg, which is a private function inside this class.

@@ -29,7 +29,6 @@ struct KisFFMpegWrapperSettings
 };
 
 
-
 class KisFFMpegWrapper : public QObject
 {
     Q_OBJECT
@@ -70,7 +69,7 @@ private:
     
 private:
     QProcess *process = nullptr;
-    QProgressDialog *progress = nullptr;
+    QSharedPointer<QProgressDialog> progress = nullptr;
     KisFFMpegWrapperSettings processSettings;
     
     QString stdoutBuffer;
@@ -81,5 +80,6 @@ private:
     QString processSTDERR;
 
 };
+
 
 #endif // KISFFMPEGWRAPPER_H

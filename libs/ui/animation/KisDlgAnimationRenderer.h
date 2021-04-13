@@ -22,7 +22,7 @@ class KisDocument;
 class KisImportExportFilter;
 class KisConfigWidget;
 class QHBoxLayout;
-class KisVideoSaver;
+class KisAnimationVideoSaver;
 class KisAnimationRenderingOptions;
 
 class WdgAnimationRenderer : public QWidget, public Ui::WdgAnimaterionRenderer

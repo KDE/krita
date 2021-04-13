@@ -13,15 +13,12 @@
 
 #include <KisImportExportFilter.h>
 
-
-class KisFFMpegRunner;
-
 class KisDocument;
 class KisAnimationRenderingOptions;
 
 #include "kritaui_export.h"
 
-class KRITAUI_EXPORT KisVideoSaver : public QObject {
+class KRITAUI_EXPORT KisAnimationVideoSaver : public QObject {
     Q_OBJECT
 public:
     /**
@@ -32,8 +29,8 @@ public:
      * @param ffmpegPath the path to the ffmpeg executable.
      * @param batchMode whether Krita is in batchmde and we can thus not show gui widgets.
      */
-    KisVideoSaver(KisDocument* doc, bool batchMode);
-    ~KisVideoSaver() override;
+    KisAnimationVideoSaver(KisDocument* doc, bool batchMode);
+    ~KisAnimationVideoSaver() override;
 
     /**
      * @brief image

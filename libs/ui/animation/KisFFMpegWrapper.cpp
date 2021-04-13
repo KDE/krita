@@ -85,7 +85,7 @@ void KisFFMpegWrapper::start(const KisFFMpegWrapperSettings &settings)
     args << settings.args;
     
     if ( !settings.outputFile.isEmpty() ) {
-        args << settings.outputFile;
+        args << "-y" << settings.outputFile;
     }
 
     dbgFile << "starting process: " << qUtf8Printable(settings.processPath) << args;

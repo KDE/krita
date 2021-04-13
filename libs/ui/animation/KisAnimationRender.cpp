@@ -93,7 +93,7 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
                 fi.close();
             }
 
-            QScopedPointer<KisVideoSaver> encoder(new KisVideoSaver(doc, batchMode));
+            QScopedPointer<KisAnimationVideoSaver> encoder(new KisAnimationVideoSaver(doc, batchMode));
             res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
 
             if (!res.isOk()) {

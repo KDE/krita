@@ -727,6 +727,7 @@ KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
             // this is needed specifically for MyPaint brushes
             QVector<KisResourceLoaderBase*> loaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(ResourceType::PaintOpPresets);
             for (int i = 0; i < loaders.count(); i++) {
+                file.seek(0); // to ensure that one loader reading bytes won't interfere with another
                 KoResourceSP resource = loaders[i]->load(paintOp.id(), file, KisGlobalResourcesInterface::instance());
                 if (resource) {
                     preset = resource.dynamicCast<KisPaintOpPreset>();

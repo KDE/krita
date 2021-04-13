@@ -53,6 +53,7 @@ class KisToolCrop : public KisTool
 public:
     enum CropToolType {
         ImageCropType,
+        CanvasCropType,
         LayerCropType,
         FrameCropType
     };

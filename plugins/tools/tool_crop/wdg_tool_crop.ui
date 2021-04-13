@@ -402,6 +402,11 @@
        </item>
        <item>
         <property name="text">
+         <string>Canvas</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Layer</string>
         </property>
        </item>

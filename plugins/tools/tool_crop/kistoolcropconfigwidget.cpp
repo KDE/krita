@@ -9,6 +9,7 @@
 #include "kis_tool_crop.h"
 #include <kis_icon.h>
 #include <kis_acyclic_signal_connector.h>
+#include <QStandardItemModel>
 
 
 KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* cropTool)
@@ -18,9 +19,14 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     setupUi(this);
 
     // update the UI based off data from crop tool
-    intHeight->setValue(m_cropTool->cropHeight());
     cmbType->setCurrentIndex(m_cropTool->cropType());
-    cmbType->setEnabled(m_cropTool->cropTypeSelectable());
+    QStandardItemModel *cmbTypeModel = qobject_cast<QStandardItemModel *>(cmbType->model());
+    // Disable "Layer"
+    cmbTypeModel->item(2)->setEnabled(m_cropTool->cropTypeSelectable());
+    // Disable "Frame"
+    cmbTypeModel->item(3)->setEnabled(m_cropTool->cropTypeSelectable());
+
+    intHeight->setValue(m_cropTool->cropHeight());
     intWidth->setValue(m_cropTool->cropWidth());
     intX->setValue(m_cropTool->cropX());
     intY->setValue(m_cropTool->cropY());
@@ -100,7 +106,11 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
 
 void KisToolCropConfigWidget::cropTypeSelectableChanged()
 {
-    cmbType->setEnabled(m_cropTool->cropTypeSelectable());
+    QStandardItemModel *cmbTypeModel = qobject_cast<QStandardItemModel *>(cmbType->model());
+    // Disable "Layer"
+    cmbTypeModel->item(2)->setEnabled(m_cropTool->cropTypeSelectable());
+    // Disable "Frame"
+    cmbTypeModel->item(3)->setEnabled(m_cropTool->cropTypeSelectable());
 }
 
 void KisToolCropConfigWidget::updateLockRatioIcon()

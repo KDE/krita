@@ -215,7 +215,9 @@ void KisToolCrop::canvasResourceChanged(int key, const QVariant &res)
     }
     //vector layer
     else {
-        setCropType(ImageCropType);
+        if (m_cropType != ImageCropType || m_cropType != CanvasCropType) {
+            setCropType(ImageCropType);
+        }
         setCropTypeSelectable(false);
     }
 }
@@ -450,7 +452,7 @@ void KisToolCrop::crop()
     KIS_ASSERT_RECOVER_RETURN(currentImage());
     if (m_finalRect.rect().isEmpty()) return;
 
-    const bool imageCrop = m_cropType == ImageCropType;
+    const bool imageCrop = m_cropType == ImageCropType || m_cropType == CanvasCropType;
 
     if (!imageCrop) {
         //Cropping layer
@@ -466,7 +468,11 @@ void KisToolCrop::crop()
 
     // The visitor adds the undo steps to the macro
     if (imageCrop || !currentNode()->paintDevice()) {
-        currentImage()->cropImage(cropRect);
+        if (m_cropType == CanvasCropType) {
+            currentImage()->resizeImage(cropRect);
+        } else {
+            currentImage()->cropImage(cropRect);
+        }
     } else {
         currentImage()->cropNode(currentNode(), cropRect, m_cropType == FrameCropType);
     }

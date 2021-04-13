@@ -35,7 +35,7 @@
 
 
 KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
-        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), kundo2_i18n("Dynamic Brush Stroke"))
+        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.xpm", 2, 2), kundo2_i18n("Dynamic Brush Stroke"))
 {
     setObjectName("tool_dyna");
     initDyna();

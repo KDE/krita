@@ -53,7 +53,7 @@ void KisToolBrush::addSmoothingAction(int enumId, const QString &id)
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     : KisToolFreehand(canvas,
-                      KisCursor::load("tool_freehand_cursor.png", 5, 5),
+                      KisCursor::load("tool_freehand_cursor.xpm", 2, 2),
                       kundo2_i18n("Freehand Brush Stroke"))
 {
     setObjectName("tool_brush");

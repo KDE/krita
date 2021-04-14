@@ -24,7 +24,7 @@ public:
         m_prefix = prefix;
     }
 
-    void test(const QString &testName, const QString &presetFileName) {
+    void test(const QString &testName, const QString &presetFileName, bool useOverlay) {
         KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
         KisImageSP image = createTrivialImage(undoStore);
         image->initialRefreshGraph();
@@ -37,7 +37,21 @@ public:
 
         paint1->paintDevice()->fill(QRect(80, 5, 50, 190), KoColor(Qt::red, image->colorSpace()));
 
-        KisPainter gc(paint1->paintDevice());
+        KisNodeSP targetNode = paint1;
+
+        if (useOverlay) {
+            KisPaintLayerSP paint2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+            image->addNode(paint2, paint1->parent(), paint1);
+            targetNode = paint2;
+
+            KisPaintLayerSP paintBg = new KisPaintLayer(image, "paintBg", OPACITY_OPAQUE_U8);
+            image->addNode(paintBg, paint1->parent(), 0);
+            paintBg->paintDevice()->fill(QRect(0, 100, 200, 100), KoColor(Qt::white, image->colorSpace()));
+
+            image->initialRefreshGraph();
+        }
+
+        KisPainter gc(targetNode->paintDevice());
 
         QScopedPointer<KoCanvasResourceProvider> manager(
             utils::createResourceManager(image, 0, presetFileName));
@@ -47,6 +61,10 @@ public:
         KisPaintOpPresetSP preset =
             manager->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
+        if (useOverlay) {
+            preset->settings()->setProperty("MergedPaint", true);
+        }
+
         QString testPrefix =
             QString("%1_%2")
             .arg(m_prefix)
@@ -54,14 +72,14 @@ public:
 
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
-                                     paint1,
+                                     targetNode,
                                      manager.data());
 
         resources->setupPainter(&gc);
 
         doPaint(gc);
 
-        checkOneLayer(image, paint1, testPrefix);
+        checkOneLayer(image, targetNode, testPrefix);
     }
 
     void doPaint(KisPainter &gc) {
@@ -70,7 +88,6 @@ public:
 
         int yOffset = 20;
         Q_FOREACH (qreal pressure, pressureLevels) {
-
             {
                 KisDistanceInformation dist;
                 KisPaintInformation p1(QPointF(20, yOffset), pressure);
@@ -99,6 +116,7 @@ void KisColorsmudgeOpTest::test_data()
 {
     QTest::addColumn<QString>("testName");
     QTest::addColumn<QString>("preset");
+    QTest::addColumn<bool>("overlay");
 
     QStringList files = {
         "test_smudge_20px_dul_nsa_new.0001.kpp",
@@ -111,11 +129,14 @@ void KisColorsmudgeOpTest::test_data()
         "test_smudge_20px_sme_sa_old.0001.kpp"
     };
 
-    Q_FOREACH (const QString &file, files) {
-        QRegularExpression re("test_smudge_(.+).0001.kpp");
-        const QString name = re.match(file).captured(1);
-        const QByteArray nameLatin = name.toLatin1();
-        QTest::addRow("%s", nameLatin.data()) << name << file;
+    for (int i = 0; i < 2; i++) {
+        const bool useOverlay = bool(i);
+        Q_FOREACH (const QString &file, files) {
+            QRegularExpression re("test_smudge_(.+).0001.kpp");
+            const QString name = QString("%1_%2").arg(useOverlay ? "over" : "norm").arg(re.match(file).captured(1));
+            const QByteArray nameLatin = name.toLatin1();
+            QTest::addRow("%s", nameLatin.data()) << name << file << useOverlay;
+        }
     }
 }
 
@@ -123,9 +144,10 @@ void KisColorsmudgeOpTest::test()
 {
     QFETCH(QString, testName);
     QFETCH(QString, preset);
+    QFETCH(bool, overlay);
 
     TestColorsmudgeOp t;
-    t.test(testName, preset);
+    t.test(testName, preset, overlay);
 }
 
 KISTEST_MAIN(KisColorsmudgeOpTest)

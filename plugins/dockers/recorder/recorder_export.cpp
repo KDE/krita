@@ -10,6 +10,7 @@
 #include "recorder_ffmpeg_wrapper.h"
 #include "recorder_profile_settings.h"
 #include "recorder_directory_cleaner.h"
+#include "animation/KisFFMpegWrapper.h"
 
 #include <klocalizedstring.h>
 #include <kis_icon_utils.h>
@@ -24,6 +25,8 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include <QMessageBox>
+
+#include "kis_debug.h"
 
 namespace
 {
@@ -58,7 +61,7 @@ public:
     QString videoFilePath;
     int framesCount = 0;
 
-    RecorderFFMpegWrapper *ffmpeg = nullptr;
+    QScopedPointer<KisFFMpegWrapper> ffmpeg;
     RecorderDirectoryCleaner *cleaner = nullptr;
 
     Private(RecorderExport *q_ptr)
@@ -143,7 +146,7 @@ public:
 
     bool tryAbortExport()
     {
-        if (ffmpeg == nullptr)
+        if (!ffmpeg)
             return true;
 
         if (QMessageBox::question(q, q->windowTitle(), i18n("Abort encoding the timelapse video?"))
@@ -156,6 +159,46 @@ public:
         return false;
     }
 
+    QStringList splitCommand(const QString &command)
+    {
+        QStringList args;
+        QString tmp;
+        int quoteCount = 0;
+        bool inQuote = false;
+
+        // handle quoting. tokens can be surrounded by double quotes
+        // "hello world". three consecutive double quotes represent
+        // the quote character itself.
+        for (int i = 0; i < command.size(); ++i) {
+            if (command.at(i) == QLatin1Char('"')) {
+                ++quoteCount;
+                if (quoteCount == 3) {
+                    // third consecutive quote
+                    quoteCount = 0;
+                    tmp += command.at(i);
+                }
+                continue;
+            }
+            if (quoteCount) {
+                if (quoteCount == 1)
+                    inQuote = !inQuote;
+                quoteCount = 0;
+            }
+            if (!inQuote && command.at(i).isSpace()) {
+                if (!tmp.isEmpty()) {
+                    args += tmp;
+                    tmp.clear();
+                }
+            } else {
+                tmp += command.at(i);
+            }
+        }
+        if (!tmp.isEmpty())
+            args += tmp;
+
+        return args;
+    }
+
     void startExport()
     {
         Q_ASSERT(ffmpeg == nullptr);
@@ -164,12 +207,19 @@ public:
 
         const QString &arguments = applyVariables(profiles[profileIndex].arguments);
 
-        ffmpeg = new RecorderFFMpegWrapper(q);
-        QObject::connect(ffmpeg, SIGNAL(started()), q, SLOT(onFFMpegStarted()));
-        QObject::connect(ffmpeg, SIGNAL(finished()), q, SLOT(onFFMpegFinished()));
-        QObject::connect(ffmpeg, SIGNAL(finishedWithError(QString)), q, SLOT(onFFMpegFinishedWithError(QString)));
-        QObject::connect(ffmpeg, SIGNAL(progressUpdated(int)), q, SLOT(onFFMpegProgressUpdated(int)));
-        ffmpeg->start({ffmpegPath, arguments, videoFilePath});
+        ffmpeg.reset(new KisFFMpegWrapper(q));
+        QObject::connect(ffmpeg.data(), SIGNAL(sigStarted()), q, SLOT(onFFMpegStarted()));
+        QObject::connect(ffmpeg.data(), SIGNAL(sigFinished()), q, SLOT(onFFMpegFinished()));
+        QObject::connect(ffmpeg.data(), SIGNAL(sigFinishedWithError(QString)), q, SLOT(onFFMpegFinishedWithError(QString)));
+        QObject::connect(ffmpeg.data(), SIGNAL(sigProgressUpdated(int)), q, SLOT(onFFMpegProgressUpdated(int)));
+
+        KisFFMpegWrapperSettings settings;
+        settings.processPath = ffmpegPath;
+        settings.args = splitCommand(arguments);
+        settings.outputFile = videoFilePath;
+        settings.batchMode = true; //TODO: Consider renaming to 'silent' mode, meaning no window for extra window handling...
+
+        ffmpeg->startNonBlocking(settings);
         ui->labelStatus->setText(i18nc("Status for the export of the video record", "Starting FFMpeg..."));
         ui->buttonCancelExport->setEnabled(false);
         ui->progressExport->setValue(0);
@@ -177,10 +227,7 @@ public:
 
     void cleanupFFMpeg()
     {
-        if (ffmpeg != nullptr) {
-            ffmpeg->deleteLater();
-            ffmpeg = nullptr;
-        }
+        ffmpeg.reset();
     }
 
     QString applyVariables(const QString &templateArguments)

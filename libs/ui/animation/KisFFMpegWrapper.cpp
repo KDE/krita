@@ -47,7 +47,7 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
     processSTDOUT.clear();
     processSTDERR.clear();
 
-    process = new QProcess(this);
+    process.reset(new QProcess(this));
     processSettings = settings;
     
     if ( !settings.logPath.isEmpty() )
@@ -76,10 +76,10 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
         dbgFile << "Open progress dialog!";
     }
 
-    connect(process, SIGNAL(readyReadStandardOutput()), SLOT(slotReadyReadSTDOUT()));
-    connect(process, SIGNAL(readyReadStandardError()), SLOT(slotReadyReadSTDERR()));
-    connect(process, SIGNAL(started()), SLOT(slotStarted()));
-    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotFinished(int)));
+    connect(process.data(), SIGNAL(readyReadStandardOutput()), SLOT(slotReadyReadSTDOUT()));
+    connect(process.data(), SIGNAL(readyReadStandardError()), SLOT(slotReadyReadSTDERR()));
+    connect(process.data(), SIGNAL(started()), SLOT(slotStarted()));
+    connect(process.data(), SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotFinished(int)));
 
     QStringList args;
   
@@ -166,8 +166,7 @@ void KisFFMpegWrapper::kill()
 
     process->disconnect(this);
     process->kill();
-    process->deleteLater();
-    process = nullptr;
+    process.reset();
 }
 
 void KisFFMpegWrapper::slotReadyReadSTDERR()
@@ -267,13 +266,13 @@ void KisFFMpegWrapper::slotFinished(int exitCode)
         if (process->exitStatus() == QProcess::CrashExit) {
             errorMessage = i18n("FFMpeg Crashed") % "\n" % errorMessage;
         }
+
+        process.reset();
         emit sigFinishedWithError(errorMessage);
     } else {
+        process.reset();
         emit sigFinished();
     }
-
-    process->deleteLater();
-    process = nullptr;
 }
 
 QByteArray KisFFMpegWrapper::runProcessAndReturn(const QString &processPath, const QStringList &args, int msecs)

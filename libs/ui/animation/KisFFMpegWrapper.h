@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2020 Dmitrii Utkin <loentar@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-only
  */
@@ -12,10 +13,11 @@
 
 #include "KisImportExportErrorCode.h"
 
+#include <kritaimage_export.h>
 
 class QProcess;
 
-struct KisFFMpegWrapperSettings
+struct KRITAIMAGE_EXPORT KisFFMpegWrapperSettings
 {
     QString processPath;
     QStringList args;
@@ -33,7 +35,7 @@ struct KisFFMpegWrapperSettings
 };
 
 
-class KisFFMpegWrapper : public QObject
+class KRITAIMAGE_EXPORT  KisFFMpegWrapper : public QObject
 {
     Q_OBJECT
 public:
@@ -72,7 +74,7 @@ private:
 
     
 private:
-    QProcess *process = nullptr;
+    QScopedPointer<QProcess> process;
     QSharedPointer<QProgressDialog> progress = nullptr;
     KisFFMpegWrapperSettings processSettings;
     

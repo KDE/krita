@@ -432,8 +432,7 @@ QList<QPointer<QWidget>> KarbonCalligraphyTool::createOptionWidgets()
 
 KisPopupWidgetInterface *KarbonCalligraphyTool::popupWidget()
 {
-    /**** HACK PROOF OF CONCEPT, DONT WORRY 'BOUT IT! ****/
-    return new KisPopupWidget(new KarbonCalligraphyOptionWidget(), canvas());
+    return nullptr;
 }
 
 void KarbonCalligraphyTool::setStrokeWidth(double width)

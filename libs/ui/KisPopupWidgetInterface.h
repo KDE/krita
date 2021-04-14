@@ -1,3 +1,10 @@
+/*
+ *  SPDX-FileCopyrightText: 2021 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Eoin O 'Neill <eoinoneill1991@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KISPOPUPWIDGETINTERFACE_H
 #define KISPOPUPWIDGETINTERFACE_H
 

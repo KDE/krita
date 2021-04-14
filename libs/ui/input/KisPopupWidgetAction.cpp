@@ -1,10 +1,12 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2021 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ * SPDX-FileCopyrightText: 2021 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_show_palette_action.h"
+#include "KisPopupWidgetAction.h".h"
 
 #include <QCursor>
 #include <QMenu>
@@ -49,10 +51,7 @@ KisPopupWidgetAction::~KisPopupWidgetAction()
 
 void KisPopupWidgetAction::begin(int, QEvent *event)
 {
-    QMenu *popupMenu = inputManager()->toolProxy()->popupActionsMenu();
-    KisPopupWidgetInterface *popupWidget = inputManager()->toolProxy()->popupWidget();
-
-    if (popupMenu) { // Handle popup menus...
+    if (QMenu *popupMenu = inputManager()->toolProxy()->popupActionsMenu()) { // Handle popup menus...
         m_requestedWithStylus = event && event->type() == QEvent::TabletPress;
 
         /**
@@ -74,7 +73,7 @@ void KisPopupWidgetAction::begin(int, QEvent *event)
                 popupMenu->clear();
             }
         });
-    } else if (popupWidget) { // Handle other popup widgets...
+    } else if (KisPopupWidgetInterface *popupWidget = inputManager()->toolProxy()->popupWidget()) { // Handle other popup widgets...
         QPoint pos = eventPos(event);
 
         if (pos.isNull()) {

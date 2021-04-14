@@ -49,7 +49,7 @@ private Q_SLOTS:
     void setAngle(int angle);   // set theangle in degrees
     void setFixation(double fixation);
     void setCaps(double caps);
-    void setMass(double mass);     // set the mass in user friendly format
+    void setMass(double mass);  // set the mass in user friendly format
     void setDrag(double drag);
 
     void updateSelectedPath();

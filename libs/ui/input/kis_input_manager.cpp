@@ -33,7 +33,7 @@
 #include "kis_alternate_invocation_action.h"
 #include "kis_rotate_canvas_action.h"
 #include "kis_zoom_action.h"
-#include "kis_show_palette_action.h"
+#include "KisPopupWidgetAction.h"
 #include "kis_change_primary_setting_action.h"
 
 #include "kis_shortcut_matcher.h"
@@ -343,9 +343,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         //TEMP WORKAROUND TEMP WORKAROUND TEMP WORKAROUND//
         QWidget* popup = dynamic_cast<QWidget*>(d->popupWidget);
+        // KisPopupWidgetInterface will need additional features to eliminate this.
         //TEMP WORKAROUND TEMP WORKAROUND TEMP WORKAROUND//
 
-        if (popup) { //TEMP
+        if (popup) {
 
             QEvent::Type type = event->type();
             bool wasVisible = popup->isVisible();
@@ -363,7 +364,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 }
             }
 
-        } //TEMP
+        }
     }
 
 

@@ -306,7 +306,7 @@ set(kritaui_LIB_SRCS
     input/kis_zoom_action.cpp
     input/kis_change_frame_action.cpp
     input/kis_gamma_exposure_action.cpp
-    input/kis_show_palette_action.cpp
+    input/KisPopupWidgetAction.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp
     input/kis_native_gesture_shortcut.cpp

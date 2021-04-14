@@ -708,9 +708,16 @@ bool KisToolCrop::lockRatio() const
 void KisToolCrop::showSizeOnCanvas()
 {
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
-    kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1\nHeight: %2"
+    if(m_mouseOnHandleType == 9) {
+        kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1\nY: %2"
+                                                       , optionsWidget->intX->text(), optionsWidget->intY->text())
+                                                       , QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+    }
+    else {
+        kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1\nHeight: %2"
                                                    , optionsWidget->intWidth->text(), optionsWidget->intHeight->text())
                                                    , QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+    }
 }
 
 QWidget* KisToolCrop::createOptionWidget()

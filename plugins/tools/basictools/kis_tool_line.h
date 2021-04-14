@@ -65,6 +65,7 @@ private:
     void paintLine(QPainter& gc, const QRect& rc);
     QPointF straightLine(QPointF point);
     void updateGuideline();
+    void showSize();
     void updatePreviewTimer(bool showGuide);
     QWidget* createOptionWidget() override;
 

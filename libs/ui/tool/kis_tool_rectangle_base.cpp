@@ -69,6 +69,15 @@ void KisToolRectangleBase::roundCornersChanged(int rx, int ry)
     m_roundCornersY = ry;
 }
 
+void KisToolRectangleBase::showSize()
+{
+    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1 px\nHeight: %2 px"
+                                                       , createRect(m_dragStart, m_dragEnd).width()
+                                                       , createRect(m_dragStart, m_dragEnd).height()), QIcon(), 1000
+                                                       , KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+
+}
 void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
     if(mode() == KisTool::PAINT_MODE) {
@@ -136,7 +145,7 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 
     m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                            (m_dragStart.y() + m_dragEnd.y()) / 2);
-
+    showSize();
     event->accept();
 }
 
@@ -204,6 +213,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
       QPointF trans = pos - m_dragEnd;
       m_dragStart += trans;
       m_dragEnd += trans;
+
     }
 
     QPointF diag = pos - m_dragStart;
@@ -233,6 +243,16 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
       m_dragEnd = m_dragStart + diag;
     }
 
+    if(!translateMode) {
+        showSize();
+    }
+    else {
+        KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1 px\nY: %2 px"
+                                                           , QString::number(m_dragStart.x(), 'f', 1)
+                                                           , QString::number(m_dragStart.y(), 'f', 1)), QIcon(), 1000
+                                                           , KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+    }
     updateArea();
     m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                            (m_dragStart.y() + m_dragEnd.y()) / 2);
@@ -310,11 +330,6 @@ void KisToolRectangleBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
     path.addPath(drawX(pixelToView(m_dragStart)));
     path.addPath(drawX(pixelToView(m_dragCenter)));
     paintToolOutline(&gc, path);
-    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
-    kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1 px\nHeight: %2 px"
-                                                       , createRect(m_dragStart, m_dragEnd).width()
-                                                       , createRect(m_dragStart, m_dragEnd).height()), QIcon(), 1000
-                                                       , KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisToolRectangleBase::updateArea() {

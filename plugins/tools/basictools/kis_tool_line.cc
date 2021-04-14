@@ -195,6 +195,8 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
     m_lastUpdatedPoint = m_startPoint;
 
     m_strokeIsRunning = true;
+
+    showSize();
 }
 
 void KisToolLine::updateStroke()
@@ -244,6 +246,15 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
         }
     }
 
+    if(event->modifiers() == Qt::AltModifier) {
+        KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1 px\nY: %2 px", QString::number(m_startPoint.x(), 'f',1)
+                                                           , QString::number(m_startPoint.y(), 'f',1))
+                                                           , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+    }
+    else {
+        showSize();
+    }
 
     updateGuideline();
     KisToolPaint::requestUpdateOutline(event->point, event);
@@ -348,6 +359,12 @@ void KisToolLine::updateGuideline()
 }
 
 
+void KisToolLine::showSize()
+{
+    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    kisCanvas->viewManager()->showFloatingMessage(i18n("Length: %1 px", QString::number(QLineF(m_startPoint,m_endPoint).length(), 'f',1))
+                                                        , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+}
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
     QPointF viewStartPos = pixelToView(m_startPoint);
@@ -359,9 +376,6 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         path.lineTo(viewStartEnd);
         paintToolOutline(&gc, path);
     }
-    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
-    kisCanvas->viewManager()->showFloatingMessage(i18n("Length: %1 px", QString::number(QLineF(m_startPoint,m_endPoint).length(), 'f',1))
-                                                        , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 QString KisToolLine::quickHelp() const

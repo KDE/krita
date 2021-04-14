@@ -532,16 +532,15 @@ bool KisGuidesManager::Private::mouseMoveHandler(const QPointF &docPos, Qt::Keyb
         setGuideValue(currentGuide, newValue);
         q->setGuidesConfigImpl(guidesConfig);
 
-        if(currentGuide.first == Qt::Horizontal)
-        {
+        const KisCoordinatesConverter *converter = view->canvasBase()->coordinatesConverter();
+        if(currentGuide.first == Qt::Horizontal) {
             view->canvasBase()->viewManager()->showFloatingMessage(
-                    i18n("Y: %1 px", newValue), QIcon(), 1000
+                    i18n("Y: %1 px", converter->documentToImage(docPos).toPoint().y()), QIcon(), 1000
                         , KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
         }
-        else
-        {
+        else {
             view->canvasBase()->viewManager()->showFloatingMessage(
-                    i18n("X: %1 px",  newValue), QIcon(), 1000
+                    i18n("X: %1 px",  converter->documentToImage(docPos).toPoint().x()), QIcon(), 1000
                         , KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
         }
     }

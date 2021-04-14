@@ -180,7 +180,7 @@ private:
 
     KisPresetSaveWidget*                m_savePresetWidget {0};
     KisIconWidget*                      m_brushEditorPopupButton {0};
-    KisPopupButton*                     m_presetSelectorPopupButton {0};
+    KisIconWidget*                      m_presetSelectorPopupButton {0};
     KisCompositeOpComboBox*             m_cmbCompositeOp {0};
     QToolButton*                        m_eraseModeButton {0};
     QToolButton*                        m_alphaLockButton {0};

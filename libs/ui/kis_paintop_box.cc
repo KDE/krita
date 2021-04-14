@@ -114,7 +114,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_brushEditorPopupButton->setIconSize(QSize(iconsize, iconsize));
     m_brushEditorPopupButton->setFlat(true);
 
-    m_presetSelectorPopupButton = new KisPopupButton(this);
+    m_presetSelectorPopupButton = new KisIconWidget(this);
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_presetSelectorPopupButton->setToolTip(i18n("Choose brush preset"));
     m_presetSelectorPopupButton->setFixedSize(buttonsize, buttonsize);
@@ -653,8 +653,8 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotDropLockedOption(KisPropertiesConfigurationSP)));
 
 
-    // load the current brush engine icon for the brush editor toolbar button
-    m_brushEditorPopupButton->setThumbnail(preset->image());
+    // load the current preset icon to the preset selector toolbar button
+    m_presetSelectorPopupButton->setThumbnail(preset->image());
     m_presetsEditor->editorWidget()->setCurrentPaintOpId(paintop.id());
 
 

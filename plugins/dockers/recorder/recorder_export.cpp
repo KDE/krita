@@ -7,7 +7,6 @@
 #include "recorder_export.h"
 #include "ui_recorder_export.h"
 #include "recorder_export_config.h"
-#include "recorder_ffmpeg_wrapper.h"
 #include "recorder_profile_settings.h"
 #include "recorder_directory_cleaner.h"
 #include "animation/KisFFMpegWrapper.h"

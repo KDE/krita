@@ -9,7 +9,6 @@ set(KRITA_RECORDERDOCKER_SOURCES
     recorder_writer.cpp
     recorder_export.cpp
     recorder_profile_settings.cpp
-    recorder_ffmpeg_wrapper.cpp
     recorder_snapshots_manager.cpp
     recorder_snapshots_scanner.cpp
     recorder_directory_cleaner.cpp

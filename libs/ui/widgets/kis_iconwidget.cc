@@ -12,7 +12,6 @@
 #include <QStyleOption>
 #include <KoResource.h>
 
-
 KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
     : KisPopupButton(parent)
 {
@@ -105,11 +104,10 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
         }
         p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
     } else if (!icon().isNull()) {
-        int border2 = qRound((cw - 16) * 0.5);
-        QSize size = QSize(16, 16);
-        QImage image = icon().pixmap(size*devicePixelRatioF()).toImage();
-        image.setDevicePixelRatio(devicePixelRatioF());
-        p.drawImage(QRect(border2, border2, 16, 16), image);
+        QSize size = QSize(22, 22);
+        int border2 = qRound((cw - size.rwidth()) * 0.5);
+        QImage image = icon().pixmap(size).toImage();
+        p.drawImage(QRect(border2, border2, size.rwidth(), size.rheight()), image);
     }
     p.setClipping(false);
 }

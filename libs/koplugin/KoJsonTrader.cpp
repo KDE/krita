@@ -129,6 +129,8 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 #ifdef Q_OS_ANDROID
         // files starting with lib_krita are plugins, it is needed because of the loading rules in NDK
         if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("lib_krita")) {
+#elif defined(_MSC_VER)
+        if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita") && !dirIter.fileName().endsWith(".pdb") && !dirIter.fileName().endsWith(".lib")) {
 #else
         if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita") && !dirIter.fileName().endsWith(".debug")) {
 #endif

@@ -1,86 +1,74 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48"
+   id="svg3930"
    height="48"
-   id="svg4351"
-   version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="icon-fileopen-red.svg">
+   width="48"
+   version="1.1">
   <defs
-     id="defs4353" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="20.714286"
-     inkscape:cy="17.857143"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     inkscape:window-width="645"
-     inkscape:window-height="418"
-     inkscape:window-x="825"
-     inkscape:window-y="438"
-     inkscape:window-maximized="0" />
+     id="defs3932" />
   <metadata
-     id="metadata4356">
+     id="metadata3935">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
+        <dc:date>2012</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1004.3622)">
     <g
-       style="fill:#000000;fill-opacity:1;display:inline"
+       style="display:inline"
        id="g4471"
-       transform="translate(-168,300.3622)"
-       inkscape:export-filename="/home/timo/Dessins/inkscape/kritasketch/renders/icon-48px-fileopen.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       transform="translate(-168,300.3622)">
       <path
-         id="path3850-7-4"
-         d="m 192,704 c -13.25483,0 -24,10.74517 -24,24 0,13.25483 10.74517,24 24,24 13.25483,0 24,-10.74517 24,-24 0,-13.25483 -10.74517,-24 -24,-24 z m 0,4 c 11.04569,0 19.99999,8.9543 19.99999,20 0,11.04569 -8.9543,19.99999 -19.99999,19.99999 -11.0457,0 -20,-8.9543 -20,-19.99999 0,-11.0457 8.9543,-20 20,-20 z"
-         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:connector-curvature="0"
+         style="fill:#373737;fill-opacity:1;stroke:none"
          id="path4360"
-         d="m 179,721 0,5 2,0 0,-5 -2,0 z m 24,0 0,3 2,0 0,-3 -2,0 z"
-         style="fill:#000000;fill-opacity:1;stroke:none" />
+         d="m 179,721 v 5 h 2 v -5 z m 24,0 v 3 h 2 v -3 z" />
       <path
-         sodipodi:nodetypes="ccccccc"
-         inkscape:connector-curvature="0"
+         style="color:#373737;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;enable-background:accumulate"
          id="rect4354"
-         d="m 182,717 0,9 12,0 0,-2 12,0 0,-7 z"
-         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         d="m 182,717 v 9 h 12 v -2 h 12 v -7 z" />
       <path
-         sodipodi:nodetypes="ccccccc"
-         inkscape:connector-curvature="0"
+         style="display:inline;fill:#373737;fill-opacity:1;stroke:none"
          id="path4356-7"
-         d="m 176,727 c 1.06451,0 19,0 19,0 l 0,-2 13,0 -3,14 -26,0 z"
-         style="fill:#000000;fill-opacity:1;stroke:none;display:inline" />
+         d="m 176,727 c 1.06451,0 19,0 19,0 v -2 h 13 l -3,14 h -26 z" />
     </g>
   </g>
+  <path
+     id="path820"
+     d="M 24 1 A 23 23 0 0 0 1 24 A 23 23 0 0 0 24 47 A 23 23 0 0 0 47 24 A 23 23 0 0 0 24 1 z M 24 5 A 19 19 0 0 1 43 24 A 19 19 0 0 1 24 43 A 19 19 0 0 1 5 24 A 19 19 0 0 1 24 5 z "
+     style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
 </svg>

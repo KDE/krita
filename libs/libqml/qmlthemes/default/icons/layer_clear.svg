@@ -23,41 +23,41 @@
       <stop
          id="stop4216-3-1-6-7-6"
          offset="0"
-         style="stop-color:#ffffff;stop-opacity:1;" />
+         style="stop-color:#d2d2d2;stop-opacity:1;" />
       <stop
-         style="stop-color:#ffffff;stop-opacity:0.47058824;"
+         style="stop-color:#d2d2d2;stop-opacity:0.47058824;"
          offset="0.79447055"
          id="stop4218-02-2-7-8-8" />
       <stop
          id="stop4220-56-7-0-5-4"
          offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
+         style="stop-color:#d2d2d2;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient6412-1">
       <stop
          id="stop6414-0"
          offset="0"
-         style="stop-color:#ffffff;stop-opacity:0.58823532;" />
+         style="stop-color:#d2d2d2;stop-opacity:0.58823532;" />
       <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
+         style="stop-color:#d2d2d2;stop-opacity:1;"
          offset="0.39999965"
          id="stop6478-9" />
       <stop
          id="stop6416-0"
          offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
+         style="stop-color:#d2d2d2;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient6430-8">
       <stop
          id="stop6432-4"
          offset="0"
-         style="stop-color:#ffffff;stop-opacity:1;" />
+         style="stop-color:#d2d2d2;stop-opacity:1;" />
       <stop
          id="stop6434-0"
          offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
+         style="stop-color:#d2d2d2;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient4214-9-6-6-9">
@@ -188,13 +188,13 @@
          inkscape:connector-curvature="0"
          id="path7077-3-9"
          d="m 33.039659,8.2306668 0,-3.6552879 -30.5137081,0 0,40.0492421 30.5137081,0 0,-10.01231"
-         style="fill:none;stroke:#000000;stroke-width:1.90710688;stroke-opacity:1" />
+         style="fill:none;stroke:#373737;stroke-width:1.90710688;stroke-opacity:1" />
       <path
          sodipodi:nodetypes="ssscccscccccccssssc"
          inkscape:connector-curvature="0"
          id="rect4768"
          d="m 14.909256,21.030266 c -2.752654,1.589256 -2.752654,1.589256 -1.163415,4.341928 l 5.562411,9.634351 c 0.794628,1.376336 5.136538,2.539749 6.512881,1.745123 l 1.376343,-0.794626 -9.535534,-16.51603 z m 4.129013,-2.383885 9.535534,16.51603 11.010697,-6.35702 -9.535534,-16.516029 z m 12.387024,-7.15165 9.535534,16.516029 2.752671,-1.589254 c 2.75267,-1.589255 2.75267,-1.589255 1.163414,-4.341926 L 38.51989,11.068891 C 36.930634,8.3162212 36.930634,8.3162212 34.177964,9.9054785 z"
-         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#373737;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     </g>
   </g>
 </svg>

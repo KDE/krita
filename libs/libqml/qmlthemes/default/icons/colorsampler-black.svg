@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   id="svg3930"
+   height="48"
+   width="48"
+   version="1.1">
+  <defs
+     id="defs3932">
+    <linearGradient
+       xlink:href="#linearGradient6486"
+       id="linearGradient4750"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.4196767,1.4196767,-1.4196767,1.4196767,49.020403,-275.66274)"
+       x1="208"
+       y1="95"
+       x2="208"
+       y2="104" />
+    <linearGradient
+       id="linearGradient6486">
+      <stop
+         id="stop6488"
+         offset="0"
+         style="stop-color:#373737;stop-opacity:1;" />
+      <stop
+         id="stop6490"
+         offset="1"
+         style="stop-color:#373737;stop-opacity:0;" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata3935">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2012</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     transform="translate(0,-1004.3622)">
+    <g
+       style="display:inline"
+       id="g4471"
+       transform="translate(-168,300.3622)">
+      <g
+         style="display:inline"
+         transform="matrix(1.5,0,0,1.5,144,572)"
+         id="g3974">
+        <g
+           id="g4719"
+           style="display:inline"
+           transform="matrix(0.66666667,0,0,0.66666667,-106.66667,-3.3333329e-7)">
+          <circle
+             r="4.0154519"
+             cy="-48.890297"
+             cx="257.34668"
+             style="color:#373737;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.80309045;marker:none;enable-background:accumulate"
+             id="path6480"
+             transform="rotate(45)" />
+          <path
+             style="fill:#373737;fill-opacity:1;stroke:none"
+             d="m 215.12257,148.8206 c -0.36465,-0.36464 -0.90972,-0.70385 -1.55278,-1.02039 0.0849,0.63086 0.35346,1.24076 0.84295,1.73023 0.48948,0.48948 1.09937,0.758 1.73023,0.84294 -0.31653,-0.64306 -0.65576,-1.18813 -1.0204,-1.55278 z m -3.54918,-1.77459 c -1.41968,-0.35492 -2.83937,-0.35492 -3.5492,0.35492 -1.41968,1.41967 -1.41968,7.09838 -1.41968,7.09838 l 2.83936,2.83935 c 0,0 5.6787,0 7.09838,-1.41967 0.70983,-0.70984 0.70983,-2.12952 0.35493,-3.54919 -1.40585,0.10153 -2.83552,-0.35108 -3.90413,-1.41968 -1.06859,-1.06861 -1.52121,-2.49826 -1.41966,-3.90411 z"
+             id="path6482" />
+          <path
+             style="fill:url(#linearGradient4750);fill-opacity:1;stroke:#373737;stroke-width:1.00386298;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             d="m 197.45903,168.06866 2.0471,-0.79225 9.93774,-9.93775 -2.83936,-2.83935 -9.93774,9.93773 L 196,166.60962"
+             id="path6484" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <path
+     id="path820"
+     d="M 24 1 A 23 23 0 0 0 1 24 A 23 23 0 0 0 24 47 A 23 23 0 0 0 47 24 A 23 23 0 0 0 24 1 z M 24 5 A 19 19 0 0 1 43 24 A 19 19 0 0 1 24 43 A 19 19 0 0 1 5 24 A 19 19 0 0 1 24 5 z "
+     style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+</svg>

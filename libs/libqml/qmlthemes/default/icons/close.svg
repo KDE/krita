@@ -1,203 +1,82 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48px"
-   height="48px"
-   id="svg4244"
-   version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="icon-close.svg">
+   id="svg3930"
+   height="48"
+   width="48"
+   version="1.1">
   <defs
-     id="defs4246">
-    <linearGradient
-       id="linearGradient4214-9-6-6-9-1">
-      <stop
-         id="stop4216-3-1-6-7-6"
-         offset="0"
-         style="stop-color:#ffffff;stop-opacity:1;" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0.47058824;"
-         offset="0.79447055"
-         id="stop4218-02-2-7-8-8" />
-      <stop
-         id="stop4220-56-7-0-5-4"
-         offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient6412-1">
-      <stop
-         id="stop6414-0"
-         offset="0"
-         style="stop-color:#ffffff;stop-opacity:0.58823532;" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
-         offset="0.39999965"
-         id="stop6478-9" />
-      <stop
-         id="stop6416-0"
-         offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient6430-8">
-      <stop
-         id="stop6432-4"
-         offset="0"
-         style="stop-color:#ffffff;stop-opacity:1;" />
-      <stop
-         id="stop6434-0"
-         offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4214-9-6-6-9">
-      <stop
-         id="stop4216-3-1-6-7"
-         offset="0"
-         style="stop-color:#0078b4;stop-opacity:1;" />
-      <stop
-         style="stop-color:#0078b4;stop-opacity:0.47058824;"
-         offset="0.79447055"
-         id="stop4218-02-2-7-8" />
-      <stop
-         id="stop4220-56-7-0-5"
-         offset="1"
-         style="stop-color:#0078b4;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient6412">
-      <stop
-         id="stop6414"
-         offset="0"
-         style="stop-color:#0078b4;stop-opacity:0.58823532;" />
-      <stop
-         style="stop-color:#0078b4;stop-opacity:1;"
-         offset="0.39999965"
-         id="stop6478" />
-      <stop
-         id="stop6416"
-         offset="1"
-         style="stop-color:#0078b4;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient6430">
-      <stop
-         id="stop6432"
-         offset="0"
-         style="stop-color:#0078b4;stop-opacity:1;" />
-      <stop
-         id="stop6434"
-         offset="1"
-         style="stop-color:#0078b4;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4214-9-6-6-9-8">
-      <stop
-         id="stop4216-3-1-6-7-0"
-         offset="0"
-         style="stop-color:#0078b4;stop-opacity:1;" />
-      <stop
-         style="stop-color:#0078b4;stop-opacity:0.47058824;"
-         offset="0.79447055"
-         id="stop4218-02-2-7-8-2" />
-      <stop
-         id="stop4220-56-7-0-5-41"
-         offset="1"
-         style="stop-color:#0078b4;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4520-9">
-      <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
-         offset="0"
-         id="stop4522-6" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
-         offset="1"
-         id="stop4524-3" />
-    </linearGradient>
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#696969"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.4627451"
-     inkscape:pageshadow="2"
-     inkscape:zoom="4.9497475"
-     inkscape:cx="-14.890873"
-     inkscape:cy="16.96733"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:grid-bbox="true"
-     inkscape:document-units="px"
-     inkscape:window-width="956"
-     inkscape:window-height="546"
-     inkscape:window-x="960"
-     inkscape:window-y="53"
-     inkscape:window-maximized="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4252"
-       empspacing="8"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
+     id="defs3932" />
   <metadata
-     id="metadata4249">
+     id="metadata3935">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
+        <dc:date>2012</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
      id="layer1"
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer">
+     transform="translate(0,-1004.3622)">
     <g
-       transform="matrix(0.75000001,0,0,0.75,-114,-138)"
-       id="g4182-3"
-       style="fill:#ffffff;fill-opacity:1;display:inline">
-      <path
-         id="path3850-7"
-         d="m 184,184 c -17.67311,0 -32,14.32689 -32,32 0,17.67311 14.32689,32 32,32 17.67311,0 32,-14.32689 32,-32 0,-17.67311 -14.32689,-32 -32,-32 z m 0,5.33333 c 14.72759,0 26.66666,11.93907 26.66666,26.66667 0,14.72759 -11.93907,26.66666 -26.66666,26.66666 -14.7276,0 -26.66667,-11.93907 -26.66667,-26.66666 0,-14.7276 11.93907,-26.66667 26.66667,-26.66667 z"
-         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         inkscape:connector-curvature="0" />
+       style="display:inline"
+       id="g4471"
+       transform="translate(-168,300.3622)">
       <rect
-         transform="matrix(0.70710678,-0.70710679,0.70710678,0.70710679,0,0)"
-         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         ry="0"
+         rx="0"
+         y="638.53827"
+         x="-382.00925"
+         height="23.999998"
+         width="6"
          id="rect3905"
-         width="8"
-         height="31.999996"
-         x="-26.627415"
-         y="266.84271"
-         rx="0"
-         ry="0" />
+         style="color:#373737;display:inline;overflow:visible;visibility:visible;fill:#d2d2d2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.125;marker:none;enable-background:accumulate"
+         transform="rotate(-45)" />
       <rect
-         transform="matrix(0.70710678,-0.70710679,0.70710678,0.70710679,0,0)"
-         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         id="rect3907"
-         width="32"
-         height="7.9999957"
-         x="-38.627415"
-         y="278.84271"
+         ry="0"
          rx="0"
-         ry="0" />
+         y="647.53827"
+         x="-391.00925"
+         height="5.9999967"
+         width="24"
+         id="rect3907"
+         style="color:#373737;display:inline;overflow:visible;visibility:visible;fill:#d2d2d2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.125;marker:none;enable-background:accumulate"
+         transform="rotate(-45)" />
     </g>
   </g>
+  <path
+     id="path820"
+     d="M 24 1 A 23 23 0 0 0 1 24 A 23 23 0 0 0 24 47 A 23 23 0 0 0 47 24 A 23 23 0 0 0 24 1 z M 24 5 A 19 19 0 0 1 43 24 A 19 19 0 0 1 24 43 A 19 19 0 0 1 5 24 A 19 19 0 0 1 24 5 z "
+     style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
 </svg>

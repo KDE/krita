@@ -32,11 +32,11 @@
        inkscape:collect="always"
        id="linearGradient4274-1">
       <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
+         style="stop-color:#d2d2d2;stop-opacity:1;"
          offset="0"
          id="stop4276-1" />
       <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
+         style="stop-color:#d2d2d2;stop-opacity:0;"
          offset="1"
          id="stop4278-9" />
     </linearGradient>
@@ -53,7 +53,7 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#d2d2d2"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
@@ -87,7 +87,7 @@
      id="layer1"
      transform="translate(0,-1031.3622)">
     <path
-       style="color:#000000;fill:url(#linearGradient3648);fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.31372549;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#373737;fill:url(#linearGradient3648);fill-opacity:1;fill-rule:nonzero;stroke:#d2d2d2;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.31372549;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        d="m 10.500005,1032.8622 c -4.97057,0 -9.00001,4.0294 -9.00001,9 0,4.9706 4.02944,9 9.00001,9 4.97058,0 9,-4.0294 9,-9 0,-4.9706 -4.02942,-9 -9,-9 z m 0,2.25 6.00001,5.625 -12.00002,0 6.00001,-5.625 z m -6.00001,7.875 12.00002,0 -6.00001,5.625 -6.00001,-5.625 z"
        id="path3449-2"
        inkscape:connector-curvature="0" />

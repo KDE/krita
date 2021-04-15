@@ -1,77 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
    width="48"
    height="48"
-   id="svg4351"
-   version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="icon-A4landscape-green.svg">
+   id="svg3930">
   <defs
-     id="defs4353" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="95.5736"
-     inkscape:cy="19.555466"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1025"
-     inkscape:window-x="-3"
-     inkscape:window-y="32"
-     inkscape:window-maximized="1">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2985"
-       empspacing="8"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
+     id="defs3932" />
   <metadata
-     id="metadata4356">
+     id="metadata3935">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
+        <dc:date>2012</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-1004.3622)">
-    <path
-       inkscape:connector-curvature="0"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 24.000001,1004.3622 c -13.254832,0 -23.9999989,10.7452 -23.9999989,24 0,13.2548 10.7451669,24 23.9999989,24 13.254833,0 23.999999,-10.7452 23.999999,-24 0,-13.2548 -10.745166,-24 -23.999999,-24 z m 0,4 c 11.045692,0 19.999994,8.9543 19.999994,20 0,11.0457 -8.954302,20 -19.999994,20 -11.045699,0 -20.0000015,-8.9543 -20.0000015,-20 0,-11.0457 8.9543025,-20 20.0000015,-20 z"
-       id="path3850-7" />
-    <path
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="M 11.15625 14 L 11.15625 34 L 37.15625 34 L 37.15625 14 L 11.15625 14 z M 19.46875 19.4375 L 21.9375 19.4375 L 24.8125 28.5625 L 22.625 28.5625 L 22.0625 26.40625 L 19.25 26.40625 L 18.6875 28.5625 L 16.59375 28.5625 L 19.46875 19.4375 z M 28.1875 19.6875 L 30.71875 19.6875 L 30.71875 24.875 L 31.71875 24.875 L 31.71875 26.4375 L 30.71875 26.4375 L 30.71875 28.5625 L 28.78125 28.5625 L 28.78125 26.4375 L 24.9375 26.4375 L 24.9375 25.03125 L 28.1875 19.6875 z M 20.625 21 C 20.415 21.966 20.15825 23.0275 19.90625 23.9375 L 19.6875 24.78125 L 21.625 24.78125 L 21.40625 23.9375 C 21.15425 23.0275 20.90825 21.952 20.65625 21 L 20.625 21 z M 28.8125 21.4375 C 28.5885 21.9275 28.34575 22.4335 28.09375 22.9375 L 26.90625 24.875 L 28.78125 24.875 L 28.78125 23.4375 C 28.78125 22.8635 28.847 21.9975 28.875 21.4375 L 28.8125 21.4375 z "
-       transform="translate(0,1004.3622)"
-       id="rect4318" />
-    <g
-       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Source Sans Pro;-inkscape-font-specification:Source Sans Pro Bold"
-       id="text2987" />
-  </g>
+  <path
+     style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1"
+     d="M 24 1 A 23 23 0 0 0 1 24 A 23 23 0 0 0 24 47 A 23 23 0 0 0 47 24 A 23 23 0 0 0 24 1 z M 24 5 A 19 19 0 0 1 43 24 A 19 19 0 0 1 24 43 A 19 19 0 0 1 5 24 A 19 19 0 0 1 24 5 z "
+     id="path820" />
+  <path
+     id="rect4318"
+     d="m 11.15625,14 v 20 h 26 V 14 Z m 8.3125,5.4375 h 2.46875 l 2.875,9.125 H 22.625 L 22.0625,26.40625 H 19.25 l -0.5625,2.15625 h -2.09375 z m 8.71875,0.25 h 2.53125 v 5.1875 h 1 v 1.5625 h -1 v 2.125 h -1.9375 v -2.125 H 24.9375 V 25.03125 Z M 20.625,21 c -0.21,0.966 -0.46675,2.0275 -0.71875,2.9375 L 19.6875,24.78125 H 21.625 L 21.40625,23.9375 c -0.252,-0.91 -0.498,-1.9855 -0.75,-2.9375 z m 8.1875,0.4375 c -0.224,0.49 -0.46675,0.996 -0.71875,1.5 l -1.1875,1.9375 h 1.875 v -1.4375 c 0,-0.574 0.06575,-1.44 0.09375,-2 z"
+     style="color:#373737;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;enable-background:accumulate" />
 </svg>

@@ -256,8 +256,8 @@ void sampleDullingColor(const QRect &srcRect,
     KoColor lastPickedColor(*resultColor);
 
     for (int i = 0; i < minSamples; i++) {
-        const QPoint pt(hGen.generate(sampleRect.width()),
-                        vGen.generate(sampleRect.height()));
+        const QPoint pt(hGen.generate(sampleRect.width() - 1),
+                        vGen.generate(sampleRect.height() - 1));
 
         weightingModeWrapper.samplePixel(pt);
     }

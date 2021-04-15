@@ -5,23 +5,47 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="icons"
    x="0px"
    y="0px"
    viewBox="0 0 22 22"
    style="enable-background:new 0 0 22 22;"
-   xml:space="preserve"><metadata
+   xml:space="preserve"
+   sodipodi:docname="dark_addlayer.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1884"
+   inkscape:window-height="1054"
+   id="namedview10"
+   showgrid="true"
+   inkscape:zoom="30.341309"
+   inkscape:cx="11"
+   inkscape:cy="11"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="light_addlayer"><inkscape:grid
+     type="xygrid"
+     id="grid817" /></sodipodi:namedview><metadata
    id="metadata15"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title><cc:license
-         rdf:resource="http://creativecommons.org/licenses/by-nc-sa/4.0/" /><dc:date>2021</dc:date><dc:creator><cc:Agent><dc:title>Andrei Rudenko</dc:title></cc:Agent></dc:creator><dc:description></dc:description></cc:Work><cc:License
-       rdf:about="http://creativecommons.org/licenses/by-nc-sa/4.0/"><cc:permits
+         rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /><dc:date>2021</dc:date><dc:creator><cc:Agent><dc:title>Timothée Giet</dc:title></cc:Agent></dc:creator><dc:description /></cc:Work><cc:License
+       rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
          rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
          rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires
          rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires
-         rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:prohibits
-         rdf:resource="http://creativecommons.org/ns#CommercialUse" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
          rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
          rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata><defs
    id="defs13" />
@@ -34,20 +58,13 @@
    id="layerbox">
 	<g
    id="light_addlayer">
-		<line
-   class="st0"
-   x1="1"
-   y1="11"
-   x2="21"
-   y2="11"
-   id="line4" />
-		<line
-   class="st0"
-   x1="11"
-   y1="21"
-   x2="11"
-   y2="1"
-   id="line6" />
+		<path
+   style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+   d="m 10,2 v 8 H 2 v 2 h 8 v 8 h 2 v -8 h 8 V 10 H 12 V 2 Z"
+   id="line4"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="ccccccccccccc" />
+		
 	</g>
 </g>
 </svg>

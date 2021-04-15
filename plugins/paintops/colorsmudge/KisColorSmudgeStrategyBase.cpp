@@ -200,20 +200,22 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
 
     DabColoringStrategy &coloringStrategy = this->coloringStrategy();
 
+    const quint8 dullingRateOpacity = this->dullingRateOpacity(opacity, smudgeRateValue);
+
     if (colorRateOpacity > 0 &&
         m_useDullingMode &&
         coloringStrategy.supportsFusedDullingBlending() &&
-        m_smearOp->id() == COMPOSITE_OVER &&
-        m_colorRateOp->id() == COMPOSITE_OVER) {
-
-        const quint8 smudgeRateOpacity = this->dullingRateOpacity(opacity, smudgeRateValue);
+        ((m_smearOp->id() == COMPOSITE_OVER &&
+          m_colorRateOp->id() == COMPOSITE_OVER) ||
+         (m_smearOp->id() == COMPOSITE_COPY &&
+          dullingRateOpacity == OPACITY_OPAQUE_U8))) {
 
         coloringStrategy.blendInFusedBackgroundAndColorRateWithDulling(m_blendDevice,
                                                                        srcSampleDevice,
                                                                        dstRect,
                                                                        m_preparedDullingColor,
                                                                        m_smearOp,
-                                                                       smudgeRateOpacity,
+                                                                       dullingRateOpacity,
                                                                        currentPaintColor.convertedTo(
                                                                                m_preparedDullingColor.colorSpace()),
                                                                        m_colorRateOp,
@@ -225,10 +227,9 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
             blendInBackgroundWithSmearing(m_blendDevice, srcSampleDevice,
                                           srcRect, dstRect, smudgeRateOpacity);
         } else {
-            const quint8 smudgeRateOpacity = this->dullingRateOpacity(opacity, smudgeRateValue);
             blendInBackgroundWithDulling(m_blendDevice, srcSampleDevice,
                                          dstRect,
-                                         m_preparedDullingColor, smudgeRateOpacity);
+                                         m_preparedDullingColor, dullingRateOpacity);
         }
 
         if (colorRateOpacity > 0) {

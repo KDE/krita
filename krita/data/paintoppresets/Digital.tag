@@ -19,6 +19,7 @@ Name[nl]=Digitaal
 Name[nn]=Digital
 Name[pl]=Cyfrowy
 Name[pt]=Digital
+Name[pt_BR]=Digital
 Name[ru]=Цифровой
 Name[sk]=Digitálne
 Name[sv]=Digitala

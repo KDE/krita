@@ -10,6 +10,7 @@ Name[fr]=★ Mes préférés
 Name[nl]=★ Mijn favorieten
 Name[pl]=★ Moje ulubione
 Name[pt]=★ Os Meus Favoritos
+Name[pt_BR]=★ Meus favoritos
 Name[sv]=★ Mina Favoriter
 Name[uk]=★ Мої улюблені
 Name[x-test]=xx★ My Favoritesxx

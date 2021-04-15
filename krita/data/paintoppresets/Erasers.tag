@@ -11,6 +11,7 @@ Name[nl]=Gummen
 Name[nn]=Viskelêr
 Name[pl]=Gumki
 Name[pt]=Apagadores
+Name[pt_BR]=Borrachas
 Name[sv]=Radering
 Name[uk]=Гумки
 Name[x-test]=xxErasersxx

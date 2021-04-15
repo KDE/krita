@@ -73,7 +73,7 @@ KoShape *RectangleShapeFactory::createShape(const KoProperties *params, KoDocume
     return shape;
 }
 
-bool RectangleShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &/*context*/) const
+bool RectangleShapeFactory::supports(const QDomElement &e, KoShapeLoadingContext &/*context*/) const
 {
     Q_UNUSED(e);
     return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw);

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
  <g transform="matrix(.24227 0 0 .24227 -197.45 -48.979)">
-  <path d="m879.99 235.19c0.0127 17.664-14.313 31.989-31.989 31.989s-32.001-14.325-31.989-31.989c-0.0127-17.664 14.313-31.989 31.989-31.989s32.001 14.325 31.989 31.989z" color="#000000" fill="none" stroke="#cacaca" stroke-width="2.0638"/>
+  <path d="m879.99 235.19c0.0127 17.664-14.313 31.989-31.989 31.989s-32.001-14.325-31.989-31.989c-0.0127-17.664 14.313-31.989 31.989-31.989s32.001 14.325 31.989 31.989z" color="#000000" fill="none" stroke="#d2d2d2" stroke-width="2.0638"/>
   <g>
-   <g fill="none" stroke="#cacaca">
+   <g fill="none" stroke="#d2d2d2">
     <path d="m848.01 205.17v60.04" stroke-dasharray="2.06381, 4.12762" stroke-dashoffset="4.7468" stroke-width="2.0638"/>
     <path d="m818.16 235.19h60.04" stroke-dasharray="2.06381, 4.12762" stroke-dashoffset="4.7468" stroke-width="2.0638"/>
     <path d="m848.01 235.19-20.638-20.638" stroke-width="4.1276px"/>
    </g>
-   <circle cx="827.37" cy="214.55" r="6.1914" fill="#cacaca"/>
+   <circle cx="827.37" cy="214.55" r="6.1914" fill="#d2d2d2"/>
   </g>
-  <path d="m848.01 235.19 20.638-20.638" fill="none" stroke="#cacaca" stroke-width="4.1276px"/>
-  <circle cx="868.65" cy="214.55" r="6.1914" fill="#cacaca"/>
-  <circle cx="848.01" cy="235.19" r="6.1914" fill="#cacaca"/>
+  <path d="m848.01 235.19 20.638-20.638" fill="none" stroke="#d2d2d2" stroke-width="4.1276px"/>
+  <circle cx="868.65" cy="214.55" r="6.1914" fill="#d2d2d2"/>
+  <circle cx="848.01" cy="235.19" r="6.1914" fill="#d2d2d2"/>
  </g>
 </svg>

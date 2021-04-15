@@ -126,4 +126,4 @@ void TestClass::slotTest2(int arg)
     m_number = arg;
 }
 
-QTEST_MAIN(KisSignalAutoConnectionTest)
+SIMPLE_TEST_MAIN(KisSignalAutoConnectionTest)

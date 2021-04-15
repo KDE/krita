@@ -6,7 +6,7 @@
 
 #include "kis_lod_capable_layer_offset_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "testing_timed_default_bounds.h"
 #include "kis_lod_capable_layer_offset.h"
@@ -79,4 +79,4 @@ void KisLodCapableLayerOffsetTest::test()
     QVERIFY(checkOffset(copy2, 6, 8));
 }
 
-QTEST_MAIN(KisLodCapableLayerOffsetTest)
+SIMPLE_TEST_MAIN(KisLodCapableLayerOffsetTest)

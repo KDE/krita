@@ -52,6 +52,7 @@ Dan Meltzer
 Danny Allen
 David Faure
 David Gowers
+Demetry Romanowski
 Dirk Mueller
 Dirk Schönberger
 Dmitry Kazakov
@@ -135,6 +136,7 @@ Mohit Goyal
 Mojtaba Shahi Senobari
 Montel Laurent
 Moritz Molch
+Nabil Maghfur Usman
 Nick Shaforostoff
 Nicolas Goutte
 Olivier Goffart

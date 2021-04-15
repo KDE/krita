@@ -37,5 +37,5 @@ private:
     QLineEdit *m_lineEdit;
     CommandModel *m_model;
     CommandBarFilterModel *m_proxyModel;
-    KActionCollection *m_layerActions {0};
+    QVector<KActionCollection *> m_disposableActionCollections;
 };

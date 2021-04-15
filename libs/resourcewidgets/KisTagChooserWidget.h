@@ -32,9 +32,10 @@ public:
     ~KisTagChooserWidget() override;
 
 
-    /// \brief setCurrentIndex sets the current index in the combobox
-    /// \param index index is the index of the tag in the combobox
-    void setCurrentIndex(int index);
+    /// \brief setCurrentItem sets the tag from the param as the current tag in the combobox
+    /// \param tag tag url to be set as current in the combobox
+    /// \return true if successful, false if not successful
+    void setCurrentItem(const QString &tag);
 
     /// \brief currentIndex returns the current index in tags combobox
     /// \return the index of the current item in tags combobox
@@ -97,10 +98,10 @@ private Q_SLOTS:
 
 private:
 
-    /// \brief setCurrentItem sets the tag from the param as the current tag in the combobox
-    /// \param tag tag to be set as current in the combobox
-    /// \return true if successful, false if not successful
-    void setCurrentItem(const QString &tag);
+
+    /// \brief setCurrentIndex sets the current index in the combobox
+    /// \param index index is the index of the tag in the combobox
+    void setCurrentIndex(int index);
 
 private:
     class Private;

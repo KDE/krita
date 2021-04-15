@@ -9,7 +9,7 @@
 #ifndef KIS_KEYFRAMING_TEST_H
 #define KIS_KEYFRAMING_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 #include "KoColor.h"
 
 

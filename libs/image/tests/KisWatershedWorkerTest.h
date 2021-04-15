@@ -7,7 +7,7 @@
 #ifndef KISWATERSHEDWORKERTEST_H
 #define KISWATERSHEDWORKERTEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisWatershedWorkerTest : public QObject
 {

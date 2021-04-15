@@ -537,7 +537,7 @@ QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QSt
     int errorLine = 0;
     int errorColumn;
 
-    KoXmlDocument doc = SvgParser::createDocumentFromSvg(device, &errorMsg, &errorLine, &errorColumn);
+    QDomDocument doc = SvgParser::createDocumentFromSvg(device, &errorMsg, &errorLine, &errorColumn);
     if (doc.isNull()) {
         errKrita << "Parsing error in " << "contents.svg" << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl

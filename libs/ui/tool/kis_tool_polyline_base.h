@@ -30,7 +30,7 @@ public:
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void listenToModifiers(bool listen) override;
     bool listeningToModifiers() override;

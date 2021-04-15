@@ -32,7 +32,6 @@ class KisInputManager::Private
 {
 public:
     Private(KisInputManager *qq);
-    bool tryHidePopupPalette();
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
     void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
@@ -72,6 +71,8 @@ public:
 
     QPointF previousPos;
     bool buttonPressed = false;
+
+    KisPopupWidgetInterface* popupWidget;
 
     void blockMouseEvents();
     void allowMouseEvents();

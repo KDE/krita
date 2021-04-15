@@ -1,5 +1,5 @@
 macro_add_unittest_definitions()
-
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 include_directories( ../colorspaces/cmyk_u16
     ../colorspaces/cmyk_u8
     ../colorspaces/gray_u16
@@ -27,5 +27,6 @@ ecm_add_tests(
     TestKoLcmsColorProfile.cpp
     TestColorSpaceRegistry.cpp
     TestLcmsRGBP2020PQColorSpace.cpp
+    TestProfileGeneration.cpp
     NAME_PREFIX "plugins-lcmsengine-"
     LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})

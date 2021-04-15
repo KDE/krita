@@ -285,7 +285,6 @@ bool KisAnimatedTransformMaskParameters::isAnimated() const
 
 QPointF KisAnimatedTransformMaskParameters::getRotationalTranslationOffset(const ToolTransformArgs &args) const {
     KisTransformUtils::MatricesPack m(args);
-    QPointF pos = args.transformedCenter();
 
     QTransform t1 = m.TS * m.SC * m.S;
     QTransform t2 = m.projectedP;

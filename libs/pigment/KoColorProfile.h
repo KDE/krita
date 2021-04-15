@@ -12,6 +12,7 @@
 #include <QVector>
 #include <QVariant>
 
+#include "KoColorProfileConstants.h"
 #include "kritapigment_export.h"
 
 /**
@@ -184,6 +185,41 @@ public:
         return QByteArray();
     }
 
+    /**
+     * @brief getColorPrimaries
+     * @return colorprimaries, defaults to 'unspecified' if no match is possible.
+     */
+    virtual ColorPrimaries getColorPrimaries() const;
+
+    /**
+     * @brief getColorPrimariesName
+     * @param primaries
+     * @return human friendly name of the primary.
+     */
+    static QString getColorPrimariesName(ColorPrimaries primaries);
+    /**
+     * @brief colorantsForPrimaries
+     * fills a QVector<float> with the xy values of the whitepoint and red, green, blue colorants for
+     * a given predefined value. Will not change the vector when the primaries are set to 'undefined'.
+     * @param primaries predefined value.
+     * @param colorants the vector to fill.
+     */
+    static void colorantsForType(ColorPrimaries primaries, QVector<double> &colorants);
+
+    /**
+     * @brief getTransferCharacteristics
+     * This function should be subclassed at some point so we can get the value from the lcms profile.
+     * @return transferfunction number.
+     */
+    virtual TransferCharacteristics getTransferCharacteristics() const;
+
+    /**
+     * @brief getTransferCharacteristicName
+     * @param curve the number
+     * @return name of the characteristic
+     */
+    static QString getTransferCharacteristicName(TransferCharacteristics curve);
+
 protected:
     /**
      * Allows to define the name of this profile.
@@ -201,6 +237,14 @@ protected:
      * Allows to set the copyright string of that profile.
      */
     void setCopyright(const QString &copyright);
+
+    /**
+     * @brief setCharacteristics
+     * ideally, we'd read this from the icc profile curve, but that can be tricky, instead
+     * we'll set it on profile creation.
+     * @param curve
+     */
+    void setCharacteristics(ColorPrimaries primaries, TransferCharacteristics curve);
 
 private:
     struct Private;

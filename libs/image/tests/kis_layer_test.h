@@ -7,7 +7,7 @@
 #ifndef KIS_LAYER_TESTER_H
 #define KIS_LAYER_TESTER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include "kis_layer.h"
 #include "kis_types.h"

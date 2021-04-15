@@ -61,6 +61,9 @@ if (APPLE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
     add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
+    if (CMAKE_OSX_ARCHITECTURES)
+        message(STATUS "CMake OSX architectures: ${CMAKE_OSX_ARCHITECTURES}")
+    endif()
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
@@ -279,6 +282,11 @@ include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
 
 include(KDEInstallDirs)
+
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
+    # Block KDE's translation infrastructure, we'll use our own
+    add_custom_target(fetch-translations)
+endif()
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
@@ -562,7 +570,7 @@ endif()
 if (ANDROID)
     # use default ABI
     if (NOT ANDROID_ABI)
-        set (ANDROID_ABI armeabi-v7a)
+        set (ANDROID_ABI arm64-v8a)
     endif()
     set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
@@ -686,7 +694,7 @@ if (GIF_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${GIF_LIBRARY})
 endif()
 
-find_package(HEIF "1.3.0")
+find_package(HEIF "1.10.0")
 set_package_properties(HEIF PROPERTIES
     DESCRIPTION "Library for loading and saving heif files."
     URL "https://github.com/strukturag/libheif"
@@ -719,7 +727,7 @@ if (FFTW3_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${FFTW3_LIBRARY})
 endif()
 
-find_package(OCIO)
+find_package(OCIO 1.1.1 EXACT)
 set_package_properties(OCIO PROPERTIES
     DESCRIPTION "The OpenColorIO Library"
     URL "https://www.opencolorio.org"
@@ -803,7 +811,7 @@ set_package_properties(LCMS2 PROPERTIES
     TYPE REQUIRED
     PURPOSE "Will be used for color management and is necessary for Krita")
 if(LCMS2_FOUND)
-    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+    if(NOT ${LCMS2_VERSION} VERSION_LESS 2.4 )
         set(HAVE_LCMS24 TRUE)
     endif()
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
@@ -811,9 +819,13 @@ if(LCMS2_FOUND)
 
     include(CheckIncludeFileCXX)
 
-    set(CMAKE_REQUIRED_INCLUDES ${LCMS2_INCLUDE_DIR})
+    set(CMAKE_REQUIRED_INCLUDES ${LCMS2_INCLUDE_DIRS})
     set(CMAKE_REQUIRED_LIBRARIES ${LCMS2_LIBRARIES})
-    CHECK_INCLUDE_FILE_CXX("lcms2_fast_float.h" HAVE_LCMS_FAST_FLOAT_PLUGIN)
+
+    if(LCMS2_FAST_FLOAT_INCLUDE_DIR)
+        message(STATUS "Found LittleCMS's fast float plugin")
+        set(HAVE_LCMS_FAST_FLOAT_PLUGIN 1)
+    endif()
 endif()
 list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 
@@ -865,8 +877,6 @@ if(HAVE_VC)
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
-add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
-
 ##
 ## Test endianness
 ##
@@ -909,6 +919,60 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${KF5_LIBRARIES}/libKF5ConfigGui.so
                                 ${KF5_LIBRARIES}/libKF5ConfigCore.so)
 
+
+
+# Source translations
+option(FETCH_TRANSLATIONS "Retrieve translations before building Krita" OFF)
+add_feature_info("Retrieve translations before building" FETCH_TRANSLATIONS "Retrieve the translations from KDE before building Krita")
+
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)
+    find_package(Python3 COMPONENTS Interpreter REQUIRED)
+    set_package_properties(Python3 PROPERTIES
+        DESCRIPTION "Python is an interpreted, high-level and general-purpose programming language."
+        URL "https://python.org/"
+        TYPE OPTIONAL
+        PURPOSE "Required to manually parse and fetch available translations.")
+    find_package(Subversion 1.4)
+    set_package_properties(Subversion PROPERTIES
+        DESCRIPTION "Subversion is an open source version control system"
+        URL "https://subversion.apache.org/"
+        TYPE OPTIONAL
+        PURPOSE "Required to access the KDE i18n repository.")
+
+    if (Subversion_FOUND AND Python3_FOUND) 
+       set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
+
+        if (KRITA_STABLE)
+            set(tr_EXTRA_FLAGS "")
+        else()
+            set(tr_EXTRA_FLAGS "--unstable")
+        endif()
+
+        get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
+        string(MD5 pathmd5 ${absolute_podir})
+
+        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
+        if (NOT TARGET fetch-${pathmd5})
+            file(MAKE_DIRECTORY ${TRANSLATIONS})
+
+            add_custom_target(fetch-${pathmd5}
+                COMMENT "Retrieving translations..."
+                COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT} ${tr_EXTRA_FLAGS}
+                BYPRODUCTS ${TRANSLATIONS}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            )
+        endif()
+    endif()
+endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+    find_package(KF5I18n CONFIG REQUIRED)
+    ki18n_install(po)
+    if (TRANSLATIONS)
+        add_dependencies(pofiles-${pathmd5} fetch-${pathmd5})
+        add_dependencies(tsfiles-${pathmd5} fetch-${pathmd5})
+    endif()
+endif()
 
 ##
 ## Test for Atomics
@@ -959,11 +1023,6 @@ foreach(tst ${KRITA_BROKEN_TESTS})
 endforeach()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
-  find_package(KF5I18n CONFIG REQUIRED)
-  ki18n_install(po)
-endif()
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..

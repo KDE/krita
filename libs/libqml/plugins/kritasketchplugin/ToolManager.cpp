@@ -31,8 +31,8 @@ ToolManager::ToolManager(QQuickItem* parent)
     : QQuickItem(parent)
     , d(new Private)
 {
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            this, SLOT(slotToolChanged(KoCanvasController*,int)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)),
+            this, SLOT(slotToolChanged(KoCanvasController*)));
 }
 
 ToolManager::~ToolManager()
@@ -48,7 +48,7 @@ QObject* ToolManager::view() const
 void ToolManager::setView(QObject* newView)
 {
     d->view = qobject_cast<KisViewManager*>( newView );
-    slotToolChanged(0, 0);
+    slotToolChanged(0);
     emit viewChanged();
 }
 
@@ -64,10 +64,9 @@ QObject* ToolManager::currentTool() const
     return d->currentTool;
 }
 
-void ToolManager::slotToolChanged(KoCanvasController* canvas, int toolId)
+void ToolManager::slotToolChanged(KoCanvasController* canvas)
 {
     Q_UNUSED(canvas);
-    Q_UNUSED(toolId);
 
     if (!d->view) return;
     if (!d->view->canvasBase()) return;

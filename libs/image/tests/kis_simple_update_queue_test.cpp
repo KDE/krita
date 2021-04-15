@@ -5,7 +5,7 @@
  */
 
 #include "kis_simple_update_queue_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kistest.h"
 

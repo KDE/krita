@@ -54,7 +54,7 @@ private:
     mutable QTransform m_cachedTransform;
     mutable QPolygonF m_cachedPolygon;
     mutable QPointF m_cachedPoints[4];
-    mutable bool m_cacheValid;
+    mutable bool m_cacheValid {false};
     // Needed to make sure that when we are in the middle of a brush stroke, the
     // guides follow the brush position, not the cursor position.
     bool m_followBrushPosition;

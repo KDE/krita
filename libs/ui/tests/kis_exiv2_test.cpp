@@ -6,7 +6,7 @@
 
 #include "kis_exiv2_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include <QBuffer>

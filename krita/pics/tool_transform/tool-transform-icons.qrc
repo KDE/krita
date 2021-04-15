@@ -16,7 +16,7 @@
         <file>dark_transform_icons_perspective.svg</file>
         <file>dark_transform_icons_warp.svg</file>
         <file>dark_transform_icons_penPressure.svg</file>
-        <file>dark_krita_tool_transform_recursive.png</file>
+        <file>dark_krita_tool_transform_recursive.svg</file>
         <file>dark_transform_icons_mirror_x.svg</file>
         <file>dark_transform_icons_mirror_y.svg</file>
         <file>dark_transform_icons_rotate_cw.svg</file>
@@ -34,7 +34,7 @@
         <file>light_transform_icons_perspective.svg</file>
         <file>light_transform_icons_warp.svg</file>
         <file>light_transform_icons_penPressure.svg</file>
-        <file>light_krita_tool_transform_recursive.png</file>
+        <file>light_krita_tool_transform_recursive.svg</file>
         <file>light_transform_icons_mirror_x.svg</file>
         <file>light_transform_icons_mirror_y.svg</file>
         <file>light_transform_icons_rotate_cw.svg</file>

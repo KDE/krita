@@ -5,7 +5,7 @@
  */
 
 #include "kis_transaction_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -341,7 +341,7 @@ void KisTransactionTest::testTransactionWrapperFactory()
     CommandState beginState = Inexistent;
     CommandState endState = Inexistent;
 
-    KisTransaction transaction(dev, 0, -1, new Factory(beginState, endState));
+    KisTransaction transaction(dev, AUTOKEY_DISABLED, 0, -1, new Factory(beginState, endState));
 
     QCOMPARE(beginState, Redone);
     QCOMPARE(endState, Inexistent);
@@ -456,7 +456,7 @@ void KisTransactionTest::testInterstrokeData()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    KisTransaction transaction1(dev, 0, -1,
+    KisTransaction transaction1(dev, AUTOKEY_DISABLED, 0, -1,
                                 new KisInterstrokeDataTransactionWrapperFactory(
                                     new TestInterstrokeDataFactory(13)));
 
@@ -474,7 +474,7 @@ void KisTransactionTest::testInterstrokeData()
 
     KisInterstrokeDataSP firstData = dev->interstrokeData();
 
-    KisTransaction transaction2(dev, 0, -1,
+    KisTransaction transaction2(dev, AUTOKEY_DISABLED, 0, -1,
                                 new KisInterstrokeDataTransactionWrapperFactory(
                                     new TestInterstrokeDataFactory(13)));
 
@@ -492,7 +492,7 @@ void KisTransactionTest::testInterstrokeData()
     QCOMPARE(resolveType(dev->interstrokeData())->typeId, 13);
     QCOMPARE(resolveType(dev->interstrokeData())->value, 20);
 
-    KisTransaction transaction3(dev, 0, -1,
+    KisTransaction transaction3(dev, AUTOKEY_DISABLED, 0, -1,
                                 new KisInterstrokeDataTransactionWrapperFactory(
                                     new TestInterstrokeDataFactory(17)));
 
@@ -581,7 +581,7 @@ void KisTransactionTest::testInterstrokeDataWithUnswitchedFrames()
     QVERIFY(!dev->interstrokeData());
 
     {
-        KisTransaction transaction(dev, 0, -1,
+        KisTransaction transaction(dev, AUTOKEY_DISABLED, 0, -1,
                 new KisInterstrokeDataTransactionWrapperFactory(
                     new TestInterstrokeDataFactory(17)));
 
@@ -598,7 +598,7 @@ void KisTransactionTest::testInterstrokeDataWithUnswitchedFrames()
     QVERIFY(!dev->interstrokeData());
 
     {
-        KisTransaction transaction(dev, 0, -1,
+        KisTransaction transaction(dev, AUTOKEY_DISABLED, 0, -1,
                 new KisInterstrokeDataTransactionWrapperFactory(
                     new TestInterstrokeDataFactory(18)));
 
@@ -638,4 +638,4 @@ void KisTransactionTest::testInterstrokeDataWithUnswitchedFrames()
     QVERIFY(!dev->interstrokeData());
 }
 
-KISTEST_MAIN(KisTransactionTest)
+SIMPLE_TEST_MAIN(KisTransactionTest)

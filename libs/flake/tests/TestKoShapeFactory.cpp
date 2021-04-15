@@ -5,7 +5,7 @@
  */
 #include "TestKoShapeFactory.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QBuffer>
 
 #include <KoShapeLoadingContext.h>
@@ -22,7 +22,7 @@ void TestKoShapeFactory::testCreateFactory()
     delete factory;
 }
 
-void TestKoShapeFactory::testSupportsKoXmlElement()
+void TestKoShapeFactory::testSupportsQDomElement()
 {
 }
 

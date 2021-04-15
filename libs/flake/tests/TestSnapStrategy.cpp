@@ -7,7 +7,7 @@
 
 #include "TestSnapStrategy.h"
 #include <QPainterPath>
-#include <QTest>
+#include <simpletest.h>
 #include "KoSnapStrategy.h"
 #include "KoPathShape.h"
 #include "KoSnapProxy.h"

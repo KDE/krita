@@ -65,7 +65,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     newUser->setToolTip(i18n("Add new author profile (starts out as a copy of current)"));
     layout->addWidget(newUser, 0, 1);
     d->bnDeleteUser = new QToolButton();
-    d->bnDeleteUser->setIcon(koIcon("trash-empty"));
+    d->bnDeleteUser->setIcon(koIcon("edit-delete"));
     d->bnDeleteUser->setToolTip(i18n("Delete the author profile"));
     layout->addWidget(d->bnDeleteUser, 0, 2);
     QFrame *f = new QFrame();

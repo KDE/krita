@@ -32,7 +32,7 @@ class KRITAIMAGE_EXPORT KisPSDLayerStyle : public KoEphemeralResource<KoResource
 {
 
 public:
-    KisPSDLayerStyle(const QString& name = QString());
+    KisPSDLayerStyle(const QString &filename = "", KisResourcesInterfaceSP resourcesInterface = KisResourcesInterfaceSP());
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
     KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs) = delete;
@@ -88,6 +88,36 @@ public:
     psd_layer_effects_pattern_overlay* patternOverlay();
     psd_layer_effects_stroke* stroke();
     psd_layer_effects_bevel_emboss* bevelAndEmboss();
+
+
+    /**
+     * @return resource interface that is used by KisPSDLayerStyle object for
+     * loading linked resources
+     */
+    KisResourcesInterfaceSP resourcesInterface() const;
+
+    /**
+     * Set resource interface that will be used by KisPSDLayerStyle object for
+     * loading linked resources
+     */
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+
+    /**
+     * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot
+     */
+    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
+
+    /**
+     * \see KisRequiredResourcesOperators::hasLocalResourcesSnapshot
+     */
+    bool hasLocalResourcesSnapshot() const;
+
+    /**
+     * \see KisRequiredResourcesOperators::cloneWithResourcesSnapshot
+     */
+    KisPSDLayerStyleSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
+
+    QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 
 private:
     struct Private;

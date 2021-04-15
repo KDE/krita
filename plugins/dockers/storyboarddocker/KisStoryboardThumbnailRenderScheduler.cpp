@@ -10,7 +10,8 @@
 #include "kis_paint_device.h"
 
 KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler(QObject *parent)
-    : m_renderer(new KisAsyncStoryboardThumbnailRenderer(this))
+    : QObject(parent)
+    , m_renderer(new KisAsyncStoryboardThumbnailRenderer(this))
 {
     //connect signals to the renderer.
     connect(m_renderer, SIGNAL(sigNotifyFrameCompleted(int,KisPaintDeviceSP)), this, SLOT(slotFrameRegenerationCompleted(int, KisPaintDeviceSP)));
@@ -123,8 +124,10 @@ void KisStoryboardThumbnailRenderScheduler::renderNextFrame()
         return;
     }
 
-    KisImageSP image = m_image->clone(false);
+    // don't clone the image until inside the if when it's needed
     if (!m_changedFramesQueue.isEmpty()) {
+        KisImageSP image = m_image->clone(false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(image);
         int frame = m_changedFramesQueue.at(0);
         image->requestTimeSwitch(frame);
         m_renderer->startFrameRegeneration(image, frame);
@@ -132,6 +135,8 @@ void KisStoryboardThumbnailRenderScheduler::renderNextFrame()
         m_changedFramesQueue.removeFirst();
     }
     else if (!m_affectedFramesQueue.isEmpty()) {
+        KisImageSP image = m_image->clone(false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(image);
         int frame = m_affectedFramesQueue.at(0);
         image->requestTimeSwitch(frame);
         m_renderer->startFrameRegeneration(image, frame);

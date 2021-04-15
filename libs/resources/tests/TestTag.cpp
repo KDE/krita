@@ -5,7 +5,7 @@
  */
 
 #include "TestTag.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QBuffer>
 
 #include <KisTag.h>
@@ -46,7 +46,7 @@ void TestTag::testLoadTag()
 
     QVERIFY(r);
     QVERIFY(tagLoader.name() == "* Favorieten");
-    QVERIFY(tagLoader.comment() == "Jouw favoriete penseel presets");
+    QVERIFY(tagLoader.comment() == "Uw favorite voorinstellingen van penselen");
     QVERIFY(tagLoader.url() == "* Favorites");
 
 }
@@ -84,5 +84,5 @@ void TestTag::testSaveTag()
 
 }
 
-QTEST_MAIN(TestTag)
+SIMPLE_TEST_MAIN(TestTag)
 

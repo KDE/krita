@@ -283,7 +283,8 @@ namespace KisAnimUtils {
                 kundo2_i18np("Move Keyframe",
                              "Move %1 Keyframes",
                              srcDstPairs.size()) :
-                kundo2_i18np("Copy Keyframe",
+                kundo2_i18ncp("Copy one or several keyframes",
+                             "Copy Keyframe",
                              "Copy %1 Keyframes",
                              srcDstPairs.size()),
 
@@ -362,6 +363,7 @@ namespace KisAnimUtils {
                 parentCommand,
                 [srcDstPairs, parentCommand]() -> KUndo2Command*
         {
+            Q_UNUSED(parentCommand);
             QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
 
             foreach (const FrameMovePair &move, srcDstPairs) {

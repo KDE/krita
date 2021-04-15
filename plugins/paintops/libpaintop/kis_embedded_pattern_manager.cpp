@@ -25,7 +25,7 @@ struct KisEmbeddedPatternManager::Private {
         img.loadFromData(ba, "PNG");
 
         QString name = setting->getString("Texture/Pattern/Name");
-        QString filename = setting->getString("Texture/Pattern/PatternFileName");
+        QString filename = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName(); // For broken embedded patters like in "i)_Wet_Paint"
 
         if (name.isEmpty() || name != QFileInfo(name).fileName()) {
             QFileInfo info(filename);
@@ -33,7 +33,7 @@ struct KisEmbeddedPatternManager::Private {
         }
 
         if (!img.isNull()) {
-            pattern = KoPatternSP(new KoPattern(img, name, KoResourceServerProvider::instance()->patternServer()->saveLocation()));
+            pattern = KoPatternSP(new KoPattern(img, name, filename));
         }
 
         return pattern;

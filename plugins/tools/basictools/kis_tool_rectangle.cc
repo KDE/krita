@@ -65,13 +65,14 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
         } else {
             path.addRect(rect);
         }
-
+        getRotatedPath(path, rect.center(), getRotationAngle());
         helper.paintPainterPath(path);
     } else {
         const QRectF r = convertToPt(rect);
         const qreal docRoundCornersX = convertToPt(roundCornersX);
         const qreal docRoundCornersY = convertToPt(roundCornersY);
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r, docRoundCornersX, docRoundCornersY);
+        shape->rotate(qRadiansToDegrees(getRotationAngle()));
 
         KoShapeStrokeSP border;
         if (strokeStyle() != KisToolShapeUtils::StrokeStyleNone) {

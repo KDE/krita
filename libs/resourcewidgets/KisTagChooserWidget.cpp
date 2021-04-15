@@ -150,7 +150,7 @@ void KisTagChooserWidget::setCurrentItem(const QString &tag)
 {
     for (int i = 0; i < d->model->rowCount(); i++) {
         QModelIndex index = d->model->index(i, 0);
-        QString currentRowTag = d->model->data(index, Qt::UserRole + KisAllTagsModel::Name).toString();
+        QString currentRowTag = d->model->data(index, Qt::UserRole + KisAllTagsModel::Url).toString();
         if (currentRowTag == tag) {
             setCurrentIndex(i);
         }
@@ -166,14 +166,12 @@ void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
 {
     d->model->addTag(tagName, {resource});
     d->model->sort(KisAllTagsModel::Name);
-    setCurrentItem(tagName);
 }
 
 void KisTagChooserWidget::addTag(KisTagSP tag, KoResourceSP resource)
 {
     d->model->addTag(tag, {resource});
     d->model->sort(KisAllTagsModel::Name);
-    setCurrentItem(tag->name());
 }
 
 KisTagSP KisTagChooserWidget::currentlySelectedTag()
@@ -196,5 +194,10 @@ void KisTagChooserWidget::updateIcons()
 void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */
-    d->tagToolButton->readOnlyMode(currentlySelectedTag()->id() < 0);
+    if (currentlySelectedTag()) {
+        d->tagToolButton->readOnlyMode(currentlySelectedTag()->id() < 0);
+    }
+    else {
+        d->tagToolButton->readOnlyMode(true);
+    }
 }

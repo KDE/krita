@@ -86,7 +86,9 @@ qreal KisImageConfig::transformMaskOffBoundsReadArea() const
 
 int KisImageConfig::updatePatchHeight() const
 {
-    return m_config.readEntry("updatePatchHeight", 512);
+    int patchHeight = m_config.readEntry("updatePatchHeight", 512);
+    if (patchHeight <= 0) return 512;
+    return patchHeight;
 }
 
 void KisImageConfig::setUpdatePatchHeight(int value)
@@ -96,7 +98,9 @@ void KisImageConfig::setUpdatePatchHeight(int value)
 
 int KisImageConfig::updatePatchWidth() const
 {
-    return m_config.readEntry("updatePatchWidth", 512);
+    int patchWidth = m_config.readEntry("updatePatchWidth", 512);
+    if (patchWidth <= 0) return 512;
+    return patchWidth;
 }
 
 void KisImageConfig::setUpdatePatchWidth(int value)

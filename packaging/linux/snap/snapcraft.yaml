@@ -48,7 +48,7 @@ parts:
   krita:
     after:
       - libheif
-    source: https://download.kde.org/stable/krita/4.4.2/krita-4.4.2.tar.xz
+    source: https://download.kde.org/stable/krita/4.4.3/krita-4.4.3.tar.xz
     # # Use these instead to build from the git source
     # source: https://anongit.kde.org/krita.git
     # source-type: git

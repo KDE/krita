@@ -67,8 +67,8 @@ public:
     virtual void resetTextShape();
 
     bool saveSvg(SvgSavingContext &context) override;
-    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
-    bool loadSvgTextNode(const KoXmlText &text, SvgLoadingContext &context);
+    bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
+    bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
 
     /**
      * Normalize the SVG character transformations

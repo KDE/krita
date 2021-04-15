@@ -39,7 +39,7 @@
 #include "kis_time_span.h"
 
 #include "kis_node_view_color_scheme.h"
-#include "krita_utils.h"
+#include <kis_painting_tweaks.h>
 #include "KisPart.h"
 #include <QApplication>
 #include "KisDocument.h"
@@ -499,7 +499,7 @@ QVariant KisAnimTimelineFramesModel::headerData(int section, Qt::Orientation ori
                 KisNodeViewColorScheme scm;
                 QColor color = scm.colorFromLabelIndex(label);
                 QPalette pal = qApp->palette();
-                color = KritaUtils::blendColors(color, pal.color(QPalette::Button), 0.3);
+                color = KisPaintingTweaks::blendColors(color, pal.color(QPalette::Button), 0.3);
                 return QBrush(color);
             } else {
                 return QVariant();
@@ -1040,4 +1040,14 @@ void KisAnimTimelineFramesModel::setFullClipRangeStart(int column)
 void KisAnimTimelineFramesModel::setFullClipRangeEnd(int column)
 {
     m_d->image->animationInterface()->setFullClipRangeEndTime(column);
+}
+
+void KisAnimTimelineFramesModel::clearEntireCache()
+{
+    m_d->image->animationInterface()->invalidateFrames(KisTimeSpan::infinite(0), m_d->image->bounds());
+}
+
+void KisAnimTimelineFramesModel::setActiveLayerSelectedTimes(const QSet<int> &times)
+{
+    m_d->image->animationInterface()->setActiveLayerSelectedTimes(times);
 }

@@ -89,7 +89,7 @@ struct KisFreeTransformStrategy::Private
 
     /// custom members ///
 
-    StrokeFunction function;
+    StrokeFunction function {MOVE};
 
     struct HandlePoints {
         QPointF topLeft;
@@ -111,11 +111,11 @@ struct KisFreeTransformStrategy::Private
     QCursor scaleCursors[8]; // cursors for the 8 directions
     QPixmap shearCursorPixmap;
 
-    bool imageTooBig;
+    bool imageTooBig {false};
 
     ToolTransformArgs clickArgs;
     QPointF clickPos;
-    bool isTransforming;
+    bool isTransforming {false};
 
     QCursor getScaleCursor(const QPointF &handlePt);
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
@@ -651,6 +651,8 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
     case BOTTOMSHEAR: {
         KisTransformUtils::MatricesPack m(m_d->clickArgs);
 
+        QPointF oldStaticPoint = m.finalTransform().map(m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset());
+
         QTransform backwardT = (m.S * m.projectedP).inverted();
         QPointF diff = backwardT.map(mousePos - m_d->clickPos);
 
@@ -662,12 +664,19 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
 
         // calculate the new shearX factor
         m_d->currentArgs.setShearX(sign * dx / m_d->currentArgs.scaleY() / m_d->transaction.originalHalfHeight()); // calculate the new shearX factor
+
+        KisTransformUtils::MatricesPack currentM(m_d->currentArgs);
+        QTransform t = currentM.finalTransform();
+        QPointF newStaticPoint = t.map(m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset());
+        m_d->currentArgs.setTransformedCenter(m_d->currentArgs.transformedCenter() + oldStaticPoint - newStaticPoint);
         break;
     }
 
     case LEFTSHEAR:
     case RIGHTSHEAR: {
         KisTransformUtils::MatricesPack m(m_d->clickArgs);
+
+        QPointF oldStaticPoint = m.finalTransform().map(m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset());
 
         QTransform backwardT = (m.S * m.projectedP).inverted();
         QPointF diff = backwardT.map(mousePos - m_d->clickPos);
@@ -680,6 +689,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
 
         // calculate the new shearY factor
         m_d->currentArgs.setShearY(sign * dy / m_d->clickArgs.scaleX() / m_d->transaction.originalHalfWidth());
+
+        KisTransformUtils::MatricesPack currentM(m_d->currentArgs);
+        QTransform t = currentM.finalTransform();
+        QPointF newStaticPoint = t.map(m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset());
+        m_d->currentArgs.setTransformedCenter(m_d->currentArgs.transformedCenter() + oldStaticPoint - newStaticPoint);
         break;
     }
     }

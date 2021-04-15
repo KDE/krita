@@ -45,7 +45,7 @@ public:
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
@@ -103,7 +103,7 @@ public:
             : KisToolPaintFactoryBase("KritaShape/KisToolLine") {
         setToolTip(i18n("Line Tool"));
         // Temporarily
-        setSection(TOOL_TYPE_SHAPE);
+        setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(1);
         setIconName(koIconNameCStr("krita_tool_line"));

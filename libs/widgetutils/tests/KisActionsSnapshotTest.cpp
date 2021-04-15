@@ -6,7 +6,7 @@
 
 #include "KisActionsSnapshotTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KisActionsSnapshot.h>
 
 void KisActionsSnapshotTest::testCreation()

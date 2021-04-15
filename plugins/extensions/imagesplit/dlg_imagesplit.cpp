@@ -130,7 +130,7 @@ void DlgImagesplit::updatePreview()
     QImage img = QImage(200, 200, QImage::Format_RGBA8888);
     QPainter painter(&img);
 
-    img.fill(palette().background().color());
+    img.fill(palette().window().color());
     QPoint point;
     point.setX((img.width()-m_thumbnail.width())*0.5);
     point.setY((img.height()-m_thumbnail.height())*0.5);

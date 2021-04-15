@@ -6,7 +6,7 @@
 
 #include "stroke_testing_utils.h"
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include <QDir>
 #include <KoColor.h>

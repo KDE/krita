@@ -175,9 +175,9 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     qreal distance;
 
     QTransform forwardRotationMatrix;
-    forwardRotationMatrix.rotateRadians(-rotation);
+    forwardRotationMatrix.rotate(rotation);
     QTransform reverseRotationMatrix;
-    reverseRotationMatrix.rotateRadians(rotation);
+    reverseRotationMatrix.rotate(-rotation);
 
     // if can't paint, stop
     if (!setupAction(DeformModes(m_properties->deform_action - 1),
@@ -270,7 +270,7 @@ QPointF DeformBrush::hotSpot(qreal scale, qreal rotation)
 
     QTransform m;
     m.reset();
-    m.rotateRadians(rotation);
+    m.rotate(-rotation);
 
     m_maskRect = QRect(0, 0, fWidth, fHeight);
     m_maskRect.translate(-m_maskRect.center());

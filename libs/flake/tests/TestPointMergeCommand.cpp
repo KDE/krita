@@ -11,7 +11,7 @@
 #include "KoPathPointData.h"
 #include <sdk/tests/testflake.h>
 #include <QPainterPath>
-#include <QTest>
+#include <simpletest.h>
 #include <FlakeDebug.h>
 
 void TestPointMergeCommand::closeSingleLinePath()

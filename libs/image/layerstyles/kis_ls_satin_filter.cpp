@@ -125,6 +125,7 @@ void KisLsSatinFilter::applySatin(KisPaintDeviceSP srcDevice,
                                   const QRect &applyRect,
                                   const psd_layer_effects_context *context,
                                   const psd_layer_effects_satin *config,
+                                  KisResourcesInterfaceSP resourcesInterface,
                                   KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
@@ -174,6 +175,7 @@ void KisLsSatinFilter::applySatin(KisPaintDeviceSP srcDevice,
                                     d.dstRect,
                                     context,
                                     config,
+                                    resourcesInterface,
                                     env);
 }
 
@@ -191,7 +193,7 @@ void KisLsSatinFilter::processDirectly(KisPaintDeviceSP src,
     if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
     KisLsUtils::LodWrapper<psd_layer_effects_satin> w(env->currentLevelOfDetail(), config);
-    applySatin(src, dst, applyRect, style->context(), w.config, env);
+    applySatin(src, dst, applyRect, style->context(), w.config, style->resourcesInterface(), env);
 }
 
 QRect KisLsSatinFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const

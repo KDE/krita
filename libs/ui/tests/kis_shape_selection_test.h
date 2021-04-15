@@ -7,7 +7,7 @@
 #ifndef KIS_SHAPE_SELETION_TEST_H
 #define KIS_SHAPE_SELETION_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisShapeSelectionTest : public QObject
 {

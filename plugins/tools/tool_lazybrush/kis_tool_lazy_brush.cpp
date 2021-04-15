@@ -44,7 +44,7 @@ struct KisToolLazyBrush::Private
 
 KisToolLazyBrush::KisToolLazyBrush(KoCanvasBase * canvas)
     : KisToolFreehand(canvas,
-                      KisCursor::load("tool_freehand_cursor.png", 5, 5),
+                      KisCursor::load("tool_freehand_cursor.xpm", 2, 2),
                       kundo2_i18n("Colorize Mask Key Stroke")),
       m_d(new Private)
 {
@@ -69,7 +69,7 @@ void KisToolLazyBrush::tryDisableKeyStrokesOnMask()
 }
 
 
-void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolLazyBrush::activate(const QSet<KoShape*> &shapes)
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     m_d->toolConnections.addUniqueConnection(
@@ -82,7 +82,7 @@ void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> 
         mask->regeneratePrefilteredDeviceIfNeeded();
     }
 
-    KisToolFreehand::activate(activation, shapes);
+    KisToolFreehand::activate(shapes);
 }
 
 void KisToolLazyBrush::deactivate()

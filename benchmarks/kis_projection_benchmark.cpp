@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_projection_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -32,7 +32,7 @@ void KisProjectionBenchmark::benchmarkProjection()
         KisDocument *doc = KisPart::instance()->createDocument();
         doc->loadNativeFormat(QString(FILES_DATA_DIR) + '/' + "load_test.kra");
         doc->image()->refreshGraph();
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString(FILES_OUTPUT_DIR) + '/' + "save_test.kra"), doc->mimeType());
+        doc->exportDocumentSync(QString(FILES_OUTPUT_DIR) + '/' + "save_test.kra", doc->mimeType());
         delete doc;
     }
 }
@@ -47,4 +47,4 @@ void KisProjectionBenchmark::benchmarkLoading()
 }
 
 
-QTEST_MAIN(KisProjectionBenchmark)
+SIMPLE_TEST_MAIN(KisProjectionBenchmark)

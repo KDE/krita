@@ -7,7 +7,7 @@
 #ifndef __KIS_COMPOSITION_BENCHMARK_H
 #define __KIS_COMPOSITION_BENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCompositionBenchmark : public QObject
 {

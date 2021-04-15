@@ -28,6 +28,9 @@ const QString KisImportExportFilter::ImageContainsTransparencyTag = "ImageContai
 const QString KisImportExportFilter::ColorModelIDTag = "ColorModelID";
 const QString KisImportExportFilter::ColorDepthIDTag = "ColorDepthID";
 const QString KisImportExportFilter::sRGBTag = "sRGB";
+const QString KisImportExportFilter::CICPPrimariesTag = "CICPCompatiblePrimaries";
+const QString KisImportExportFilter::CICPTransferCharacteristicsTag = "CICPCompatibleTransferFunction";
+const QString KisImportExportFilter::HDRTag = "HDRSupported";
 
 class Q_DECL_HIDDEN KisImportExportFilter::Private
 {

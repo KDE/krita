@@ -13,7 +13,6 @@
 #include <QScopedPointer>
 #include <QHash>
 #include <QSet>
-#include <QButtonGroup>
 
 #include <KoColorSet.h>
 
@@ -71,7 +70,6 @@ private:
     QScopedPointer<QAction> m_actAddGroup;
     QScopedPointer<QAction> m_actDelGroup;
     QScopedPointer<QAction> m_actRenGroup;
-    QScopedPointer<QButtonGroup> m_globalButtons;
     QScopedPointer<KisPaletteEditor> m_paletteEditor;
     QSharedPointer<KoColorSet> m_colorSet;
     QString m_currentGroupOriginalName;

@@ -6,7 +6,7 @@
 
 #include "kis_selection_mask_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -64,4 +64,4 @@ void KisSelectionMaskTest::testActivation()
 }
 
 
-QTEST_MAIN(KisSelectionMaskTest)
+SIMPLE_TEST_MAIN(KisSelectionMaskTest)

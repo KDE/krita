@@ -13,6 +13,12 @@
 
 class KisTransactionWrapperFactory;
 
+enum AutoKeyMode {
+    AUTOKEY_DISABLED = 0,
+    AUTOKEY_DUPLICATE,
+    AUTOKEY_BLANK
+};
+
 /**
  * A tile based undo command.
  *
@@ -25,7 +31,7 @@ class KisTransactionWrapperFactory;
 class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
 {
 public:
-    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent);
+    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, AutoKeyMode autoKeyMode, KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent);
     ~KisTransactionData() override;
 
 public:

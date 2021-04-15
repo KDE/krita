@@ -133,7 +133,8 @@ void KisBookmarkedConfigurationsModel::deleteIndex(const QModelIndex &index)
 
 Qt::ItemFlags KisBookmarkedConfigurationsModel::flags(const QModelIndex & index) const
 {
-    if (!index.isValid()) return 0;
+    if (!index.isValid()) return QFlags<Qt::ItemFlag>();
+
     switch (index.row()) {
     case 0:
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
@@ -141,7 +142,7 @@ Qt::ItemFlags KisBookmarkedConfigurationsModel::flags(const QModelIndex & index)
         if (d->bookmarkManager->exists(KisBookmarkedConfigurationManager::ConfigLastUsed)) {
             return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
         } else {
-            return 0;
+            return QFlags<Qt::ItemFlag>();
         }
     default:
         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;

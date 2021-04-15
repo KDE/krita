@@ -25,6 +25,7 @@
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <KoResourceServer.h>
+#include <KisStorageModel.h>
 #include <KoResourceServerProvider.h>
 #include <KisPaletteModel.h>
 #include <kis_color_button.h>
@@ -36,8 +37,7 @@ struct KisPaletteEditor::PaletteInfo {
     QString name;
     QString filename;
     int columnCount;
-    bool isReadOnly;
-    bool isGlobal;
+    QString storageLocation;
     QHash<QString, KisSwatchGroup> groups;
 };
 
@@ -45,6 +45,7 @@ struct KisPaletteEditor::Private
 {
     bool isNameModified {false};
     bool isColumnCountModified {false};
+    bool isModified {false};
     QSet<QString> modifiedGroupNames; // key is original group name
     QSet<QString> newGroupNames;
     QSet<QString> keepColorGroups;
@@ -58,6 +59,7 @@ struct KisPaletteEditor::Private
 
     QPalette normalPalette;
     QPalette warnPalette;
+
 };
 
 KisPaletteEditor::KisPaletteEditor(QObject *parent)
@@ -108,7 +110,6 @@ void KisPaletteEditor::addPalette()
 
     QString name = le->text();
     colorSet->setPaletteType(KoColorSet::KPL);
-    colorSet->setIsEditable(true);
     colorSet->setValid(true);
     colorSet->setName(name);
     colorSet->setFilename(name.split(" ").join("_")+colorSet->defaultFileExtension());
@@ -120,15 +121,18 @@ void KisPaletteEditor::addPalette()
     m_d->rServer->resourceModel()->addResource(colorSet, resourceLocation);
 }
 
-void KisPaletteEditor::importPalette()
+KoColorSetSP KisPaletteEditor::importPalette()
 {
-    KoFileDialog dialog(nullptr, KoFileDialog::OpenFile, i18n("Open Palette"));
+    KoFileDialog dialog(nullptr, KoFileDialog::OpenFile, "Open Palette");
+    dialog.setCaption(i18n("Import Palette"));
 
     dialog.setDefaultDir(QDir::homePath());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
 
     QString filename = dialog.filename();
-    if (filename.isEmpty()) { return; }
+    if (filename.isEmpty()) {
+        return nullptr;
+    }
 
     QMessageBox messageBox;
     messageBox.setText(i18n("Do you want to store this palette in your current image?"));
@@ -137,17 +141,15 @@ void KisPaletteEditor::importPalette()
     if (messageBox.exec() == QMessageBox::Yes) {
         storageLocation = m_d->view->document()->uniqueID();
     }
-
-    m_d->rServer->resourceModel()->importResourceFile(filename);
+    KoColorSetSP palette = m_d->rServer->resourceModel()->importResourceFile(filename, storageLocation).dynamicCast<KoColorSet>();
+    return palette;
 }
 
 void KisPaletteEditor::removePalette(KoColorSetSP cs)
 {
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
-    if (!cs || !cs->isEditable()) {
-        return;
-    }
+    if (!cs) { return; }
     m_d->rServer->removeResourceFromServer(cs);
 }
 
@@ -293,15 +295,14 @@ void KisPaletteEditor::changeGroupRowCount(const QString &name, int newRowCount)
     m_d->modifiedGroupNames.insert(name);
 }
 
-void KisPaletteEditor::setGlobal(bool isGlobal)
+void KisPaletteEditor::setStorageLocation(QString location)
 {
-    m_d->modified.isGlobal = isGlobal;
+   m_d->modified.storageLocation = location;
 }
 
 void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 {
     Q_ASSERT(m_d->model);
-    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     KisSwatch c = KisSwatch(color);
@@ -312,15 +313,17 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 
 void KisPaletteEditor::slotSetDocumentModified()
 {
-    // XXX: I'm not sure if we need to update the resource here // tiar
-    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
-    m_d->view->document()->setModified(true);
+    if (m_d->modified.storageLocation == m_d->view->document()->uniqueID()) {
+        updatePalette();
+        m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
+        m_d->view->document()->setModified(true);
+    }
+    m_d->isModified = true;
 }
 
 void KisPaletteEditor::removeEntry(const QModelIndex &index)
 {
     Q_ASSERT(m_d->model);
-    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
@@ -333,7 +336,6 @@ void KisPaletteEditor::removeEntry(const QModelIndex &index)
 
 void KisPaletteEditor::modifyEntry(const QModelIndex &index)
 {
-    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
 
@@ -381,7 +383,6 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     Q_ASSERT(m_d->model);
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
-    if (!m_d->model->colorSet()->isEditable()) { return; }
 
     KoDialog dialog;
     dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Colorset Entry"));
@@ -421,16 +422,20 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     newEntry.setId(lnIDName->text());
     newEntry.setSpotColor(chkSpot->isChecked());
     m_d->model->addEntry(newEntry, groupName);
-    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
     m_d->modifiedGroupNames.insert(groupName);
     m_d->modified.groups[groupName].addEntry(newEntry);
 }
 
+bool KisPaletteEditor::isModified() const
+{
+    return m_d->isModified;
+}
+
 void KisPaletteEditor::updatePalette()
 {
+    qDebug() << "updating the palette model inside the palette editor object";
     Q_ASSERT(m_d->model);
     Q_ASSERT(m_d->model->colorSet());
-    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     KoColorSetSP palette = m_d->model->colorSet();
@@ -443,11 +448,10 @@ void KisPaletteEditor::updatePalette()
         m_d->rServer->resourceModel()->renameResource(palette, modified.name);
     }
     QString resourceLocation = m_d->model->colorSet()->storageLocation();
-    if (m_d->modified.isGlobal) {
-        resourceLocation = QString();
-    } else {
-        resourceLocation = m_d->view->document()->uniqueID();
+    if (resourceLocation != m_d->modified.storageLocation) {
+        // We need functionality for moving the resource to the new resource storage...
     }
+
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
         if (!modified.groups.contains(groupName)) {
             m_d->model->removeGroup(groupName, m_d->keepColorGroups.contains(groupName));
@@ -469,12 +473,34 @@ void KisPaletteEditor::updatePalette()
         m_d->model->addGroup(modified.groups[newGroupName]);
     }
     m_d->newGroupNames.clear();
-    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
+}
+
+void KisPaletteEditor::saveNewPaletteVersion()
+{
+    if (!m_d->model || !m_d->model->colorSet()) { return; }
+
+    QModelIndex index = m_d->rServer->resourceModel()->indexForResource(m_d->model->colorSet());
+    bool isGlobal = false;
+    if (index.isValid()) {
+        bool ok = false;
+        int storageId = m_d->rServer->resourceModel()->data(index, Qt::UserRole + KisAllResourcesModel::StorageId).toInt(&ok);
+        if (ok) {
+            KisStorageModel storageModel;
+            KisResourceStorageSP storage = storageModel.storageForId(storageId);
+            isGlobal = storage->type() != KisResourceStorage::StorageType::Memory;
+        }
+    }
+    if (isGlobal) {
+        m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
+    }
+
+    m_d->isModified = false;
 }
 
 void KisPaletteEditor::slotPaletteChanged()
 {
     Q_ASSERT(m_d->model);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->isModified);
     if (!m_d->model->colorSet()) { return; }
     KoColorSetSP palette = m_d->model->colorSet();
     m_d->modified.groups.clear();
@@ -483,10 +509,8 @@ void KisPaletteEditor::slotPaletteChanged()
     m_d->modifiedGroupNames.clear();
 
     m_d->modified.name = palette->name();
-    //hack alert! needs better solution.
-    m_d->modified.isGlobal = !palette->storageLocation().contains("/");
+    m_d->modified.storageLocation = palette->storageLocation();
     m_d->modified.columnCount = palette->columnCount();
-    m_d->modified.isReadOnly = !palette->isEditable();
 
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
         KisSwatchGroup *cs = palette->getGroup(groupName);

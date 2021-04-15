@@ -7,7 +7,7 @@
 #ifndef __KIS_STROKE_TEST_H
 #define __KIS_STROKE_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 
 class KisStrokeTest : public QObject

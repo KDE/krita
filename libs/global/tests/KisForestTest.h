@@ -6,8 +6,7 @@
 #ifndef KISFORESTTEST_H
 #define KISFORESTTEST_H
 
-
-#include <QtTest>
+#include <simpletest.h>
 #include <QObject>
 
 class KisForestTest : public QObject

@@ -68,6 +68,8 @@
         <file>light_snapshot-load.svg</file>
         <file>light_kerning.svg</file>
         <file>light_view-choose.svg</file>
+        <file alias="light_settings-button.svg">light_view-choose.svg</file>
+        <file>light_view-choose-22.svg</file>
         <file alias="light_object-align-horizontal-left-calligra.svg">light_ox16-action-object-align-horizontal-left-calligra.svg</file>
         <file alias="light_object-align-horizontal-right-calligra.svg">light_ox16-action-object-align-horizontal-right-calligra.svg</file>
     </qresource>

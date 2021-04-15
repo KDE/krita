@@ -18,7 +18,7 @@
 #include "KisResourceTypes.h"
 #include <DummyResource.h>
 #include <KisStoragePlugin.h>
-#include <QtTest>
+#include <simpletest.h>
 #include "kis_debug.h"
 
 #ifndef FILES_DATA_DIR

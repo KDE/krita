@@ -30,7 +30,7 @@ public:
     SvgGraphicsContext *currentGC() const;
 
     /// Pushes a new graphics context to the stack
-    SvgGraphicsContext *pushGraphicsContext(const KoXmlElement &element = KoXmlElement(), bool inherit = true);
+    SvgGraphicsContext *pushGraphicsContext(const QDomElement &element = QDomElement(), bool inherit = true);
 
     /// Pops the current graphics context from the stack
     void popGraphicsContext();
@@ -59,25 +59,25 @@ public:
     KoShape* shapeById(const QString &id);
 
     /// Adds a definition for later use
-    void addDefinition(const KoXmlElement &element);
+    void addDefinition(const QDomElement &element);
 
     /// Returns the definition with the specified id
-    KoXmlElement definition(const QString &id) const;
+    QDomElement definition(const QString &id) const;
 
     /// Checks if a definition with the specified id exists
     bool hasDefinition(const QString &id) const;
 
     /// Adds a css style sheet
-    void addStyleSheet(const KoXmlElement &styleSheet);
+    void addStyleSheet(const QDomElement &styleSheet);
 
     /// Returns list of css styles matching to the specified element
-    QStringList matchingCssStyles(const KoXmlElement &element) const;
+    QStringList matchingCssStyles(const QDomElement &element) const;
 
     /// Returns a style parser to parse styles
     SvgStyleParser &styleParser();
 
     /// parses 'color-profile' tag and saves it in the context
-    void parseProfile(const KoXmlElement &element);
+    void parseProfile(const QDomElement &element);
 
     /// Return the profiles in the context.
     QHash<QString, const KoColorProfile*> profiles();

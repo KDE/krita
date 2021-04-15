@@ -56,7 +56,9 @@ public:
      * hitbox regions specified to know if a click is doing any of those actions.
      */
     void beginPrimaryAction(KoPointerEvent *event) override;
-    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+
+    // We will need this to allow Shift-modifier to align to axes when making new assistants
+    void beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
 
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
@@ -64,6 +66,7 @@ public:
     void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+
 
     QWidget *createOptionWidget() override;
 
@@ -81,12 +84,17 @@ private:
     // This uses m_handleDrag or m_newAssistant to figure out what handle to snap and where
     bool snap(KoPointerEvent *event);
 
+    void beginActionImpl(KoPointerEvent *event);
+    void continueActionImpl(KoPointerEvent *event);
+    void endActionImpl(KoPointerEvent *event);
+
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 
     void slotChangeVanishingPointAngle(double value);
+    void slotChangeTwoPointDensity(double value);
 
 private Q_SLOTS:
     void removeAllAssistants();
@@ -129,20 +137,20 @@ protected:
     QPointF m_cursorStart;
     QPointF m_currentAdjustment;
     Ui::AssistantsToolOptions m_options;
-    QWidget* m_optionsWidget;
+    QWidget* m_optionsWidget {0};
     QPointF m_dragStart;
     QLineF m_radius;
-    bool m_snapIsRadial;
+    bool m_snapIsRadial {false};
     QPointF m_dragEnd;
-    int m_handleSize; // how large the editor handles will appear
+    int m_handleSize {17}; // how large the editor handles will appear
 
 
 private:
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc);
 
-    PerspectiveAssistantEditionMode m_internalMode;
+    PerspectiveAssistantEditionMode m_internalMode { MODE_CREATION };
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
-    int m_assistantHelperYOffset; // used by the assistant editor icons for placement on the canvas.
+    int m_assistantHelperYOffset {10}; // used by the assistant editor icons for placement on the canvas.
     QList<KisPaintingAssistantSP> m_origAssistantList;
 };
 
@@ -153,7 +161,7 @@ public:
     KisAssistantToolFactory()
             : KoToolFactoryBase("KisAssistantTool") {
         setToolTip(i18n("Assistant Tool"));
-        setSection(TOOL_TYPE_VIEW);
+        setSection(ToolBoxSection::View);
         setIconName(koIconNameCStr("krita_tool_assistant"));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -31,6 +31,7 @@
 #include "kis_layer_properties_icons.h"
 #include "krita_utils.h"
 #include "kis_config_notifier.h"
+#include <kis_painting_tweaks.h>
 
 typedef KisBaseNode::Property* OptionalProperty;
 
@@ -122,6 +123,7 @@ void NodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QMode
         drawVisibilityIconHijack(p, option, index); // TODO hide when dragging
         drawDecoration(p, option, index);
         drawExpandButton(p, option, index);
+        drawAnimatedDecoration(p, option, index);
         drawBranch(p, option, index);
 
         drawProgressBar(p, option, index);
@@ -162,7 +164,7 @@ void NodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, c
     QColor bgColor = option.state & QStyle::State_Selected ?
         qApp->palette().color(QPalette::Base) :
         qApp->palette().color(QPalette::Text);
-    color = KritaUtils::blendColors(color, bgColor, 0.9);
+    color = KisPaintingTweaks::blendColors(color, bgColor, 0.9);
 
     // TODO: if we are a mask type, use dotted lines for the branch style
     // p->setPen(QPen(p->pen().color(), 2, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
@@ -178,7 +180,7 @@ void NodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, c
      QPoint parentBase2 = p3 + QPoint(rtlNum*scm.indentation(), 0);
 
      // indent lines needs to be very subtle to avoid making the docker busy looking
-     color = KritaUtils::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
+     color = KisPaintingTweaks::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
      p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
      if (tmp.isValid()) {
@@ -206,9 +208,9 @@ void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &optio
 
     QColor bgColor = qApp->palette().color(QPalette::Base);
     if ((option.state & QStyle::State_MouseOver) && !(option.state & QStyle::State_Selected)) {
-        color = KritaUtils::blendColors(color, bgColor, 0.6);
+        color = KisPaintingTweaks::blendColors(color, bgColor, 0.6);
     } else {
-        color = KritaUtils::blendColors(color, bgColor, 0.3);
+        color = KisPaintingTweaks::blendColors(color, bgColor, 0.3);
     }
 
     QRect optionRect = option.rect.adjusted(0, 0, scm.indentation(), 0);
@@ -867,6 +869,7 @@ void NodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &optio
         }
 
         p->drawPixmap(rc.topLeft()-QPoint(0, 1), pixmap);
+
         p->setOpacity(oldOpacity); // restore old opacity
     }
 }
@@ -885,7 +888,6 @@ void NodeDelegate::drawExpandButton(QPainter *p, const QStyleOptionViewItem &opt
 
     if (!(option.state & QStyle::State_Children)) return;
 
-
     QString iconName = option.state & QStyle::State_Open ?
         "arrow-down" : ((option.direction == Qt::RightToLeft) ? "arrow-left" : "arrow-right");
     QIcon icon = KisIconUtils::loadIcon(iconName);
@@ -893,6 +895,37 @@ void NodeDelegate::drawExpandButton(QPainter *p, const QStyleOptionViewItem &opt
                                  (option.state & QStyle::State_Enabled) ?
                                  QIcon::Normal : QIcon::Disabled);
     p->drawPixmap(rc.bottomLeft()-QPoint(0, scm.decorationSize()-1), pixmap);
+}
+
+void NodeDelegate::drawAnimatedDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+
+    KisNodeViewColorScheme scm;
+    QRect rc = decorationClickRect(option, index);
+
+    QIcon animatedIndicatorIcon = KisIconUtils::loadIcon("addduplicateframe");
+    const bool isAnimated = index.data(KisNodeModel::IsAnimatedRole).toBool();
+
+    rc = kisGrowRect(rc, -(scm.decorationMargin()+scm.border()));
+
+    if (!isAnimated) return;
+
+    if ((option.state & QStyle::State_Children)) return;
+
+    const qreal oldOpacity = p->opacity(); // remember previous opacity
+
+    if (!(option.state & QStyle::State_Enabled)) {
+        p->setOpacity(0.35);
+    }
+
+    int decorationSize = scm.decorationSize();
+
+    QPixmap animPixmap = animatedIndicatorIcon.pixmap(decorationSize,
+                                 (option.state & QStyle::State_Enabled) ?
+                                 QIcon::Normal : QIcon::Disabled);
+
+    p->drawPixmap(rc.bottomLeft()-QPoint(0, scm.decorationSize()-1), animPixmap);
+
+    p->setOpacity(oldOpacity);
 }
 
 bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)

@@ -245,7 +245,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         m_asyncUpdateHelper.startUpdateStream(image.data(), m_strokeId);
     }
 
-    KIS_SAFE_ASSERT_RECOVER(m_changesTracker.isEmpty()) {
+    KIS_SAFE_ASSERT_RECOVER(m_changesTracker.isEmpty(true)) {
         m_changesTracker.reset();
     }
     commitChanges();
@@ -374,9 +374,9 @@ void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
     setMode(KisTool::HOVER_MODE);
 }
 
-void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolMove::activate(const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(toolActivation, shapes);
+    KisTool::activate(shapes);
 
     m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteUp()));
@@ -454,11 +454,18 @@ void KisToolMove::requestUndoDuringStroke()
 {
     if (!m_strokeId) return;
 
-    if (m_changesTracker.isEmpty()) {
+    if (m_changesTracker.isEmpty(true)) {
         cancelStroke();
     } else {
         m_changesTracker.requestUndo();
     }
+}
+
+void KisToolMove::requestRedoDuringStroke()
+{
+    if (!m_strokeId) return;
+
+    m_changesTracker.requestRedo();
 }
 
 void KisToolMove::beginPrimaryAction(KoPointerEvent *event)

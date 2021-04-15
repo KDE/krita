@@ -7,7 +7,7 @@
 
 #include "kis_paint_information_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <brushengine/kis_paint_information.h>
 #include "kis_debug.h"
 
@@ -64,4 +64,4 @@ void KisPaintInformationTest::benchmarkTausRandomGeneration()
 }
 
 
-QTEST_MAIN(KisPaintInformationTest)
+SIMPLE_TEST_MAIN(KisPaintInformationTest)

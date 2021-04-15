@@ -71,6 +71,8 @@ KisWdgPattern::~KisWdgPattern()
 void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     auto source = KisGlobalResourcesInterface::instance()->source<KoPattern>(ResourceType::Patterns);
+
+    qDebug() << "KisWdgPattern::setConfiguration();" << config->getString("pattern", "Grid01.pat");
     KoPatternSP pattern = source.resourceForName(config->getString("pattern", "Grid01.pat"));
     widget()->patternChooser->setCurrentPattern(pattern ? pattern : source.fallbackResource());
     m_widget->spbOffsetX->setValue(config->getInt("transform_offset_x", 0));
@@ -96,6 +98,7 @@ KisPropertiesConfigurationSP KisWdgPattern::configuration() const
     QVariant v;
     if (widget()->patternChooser->currentResource()) {
         v.setValue(widget()->patternChooser->currentResource()->name());
+        qDebug() << "KisWdgPattern::configuration()" << widget()->patternChooser->currentResource();
         config->setProperty("pattern", v);
     }
 

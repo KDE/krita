@@ -33,6 +33,7 @@
 #include <KoFileDialog.h>
 #include <KisKineticScroller.h>
 #include <KisMimeDatabase.h>
+#include "KisPopupButton.h"
 
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
@@ -65,7 +66,7 @@ public:
     KisResourceTaggingManager *tagManager {0};
     KisResourceItemListView *view {0};
     QButtonGroup *buttonGroup {0};
-    QToolButton *viewModeButton {0};
+    KisPopupButton *viewModeButton {0};
     KisStorageChooserWidget *storagePopupButton {0};
 
     QScrollArea *previewScroller {0};
@@ -86,6 +87,7 @@ public:
 
     QList<QAbstractButton*> customButtons;
 
+    KoResourceSP currentResource;
 };
 
 KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
@@ -108,6 +110,10 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
     d->view->setModel(d->tagFilterProxyModel);
+    d->tagFilterProxyModel->sort(Qt::DisplayRole);
+
+    connect(d->tagFilterProxyModel, SIGNAL(beforeFilterChanges()), this, SLOT(beforeFilterChanges()));
+    connect(d->tagFilterProxyModel, SIGNAL(afterFilterChanged()), this, SLOT(afterFilterChanged()));
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
@@ -170,14 +176,15 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->buttonLayout->setSpacing(0);
     d->buttonLayout->setMargin(0);
 
-    d->viewModeButton = new QToolButton(this);
-    d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
+    d->viewModeButton = new KisPopupButton(this);
     d->viewModeButton->setVisible(false);
+    d->viewModeButton->setArrowVisible(false);
     d->tagManager = new KisResourceTaggingManager(resourceType, d->tagFilterProxyModel, this);
 
     d->storagePopupButton = new KisStorageChooserWidget(this);
     d->storagePopupButton->setToolTip(i18n("Storage Resources"));
     d->storagePopupButton->setFlat(true);
+    d->storagePopupButton->setArrowVisible(false);
 
     layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
     layout->addWidget(d->viewModeButton, 0, 1);
@@ -215,9 +222,10 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
-                d->tagFilterProxyModel->importResourceFile(filename);
+                tagFilterModel()->importResourceFile(filename);
             }
         }
+        tagFilterModel()->sort(Qt::DisplayRole);
     }
     else if (button == Button_Remove) {
         QModelIndex index = d->view->currentIndex();
@@ -435,7 +443,9 @@ KisResourceItemListView *KisResourceItemChooser::itemView() const
 
 void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
 {
+    KoResourceSP current = currentResource();
     d->tagManager->contextMenuRequested(currentResource(), pos);
+    this->setCurrentResource(current);
 }
 
 void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)
@@ -448,7 +458,7 @@ void KisResourceItemChooser::setViewModeButtonVisible(bool visible)
     d->viewModeButton->setVisible(visible);
 }
 
-QToolButton *KisResourceItemChooser::viewModeButton() const
+KisPopupButton *KisResourceItemChooser::viewModeButton() const
 {
     return d->viewModeButton;
 }
@@ -472,6 +482,19 @@ void KisResourceItemChooser::baseLengthChanged(int length)
 {
     if (d->synced) {
         d->view->setItemSize(QSize(length, length));
+    }
+}
+
+void KisResourceItemChooser::beforeFilterChanges()
+{
+    d->currentResource = d->tagFilterProxyModel->resourceForIndex(d->view->currentIndex());
+}
+
+void KisResourceItemChooser::afterFilterChanged()
+{
+    QModelIndex idx = d->tagFilterProxyModel->indexForResource(d->currentResource);
+    if (idx.isValid()) {
+        d->view->setCurrentIndex(idx);
     }
 }
 
@@ -513,9 +536,8 @@ void KisResourceItemChooser::updateView()
 
     /// helps to set icons here in case the theme is changed
     d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
-    d->viewModeButton->setAutoRaise(true);
-    d->importButton->setIcon(koIcon("document-open"));
-    d->deleteButton->setIcon(koIcon("trash-empty"));
+    d->importButton->setIcon(koIcon("document-import-16"));
+    d->deleteButton->setIcon(koIcon("edit-delete"));
     d->storagePopupButton->setIcon(koIcon("bundle_archive"));
     d->tagManager->tagChooserWidget()->updateIcons();
 }

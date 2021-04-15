@@ -35,6 +35,17 @@ fi
 BUILDROOT="${BUILDROOT%/}"
 echo "BUILDROOT set to ${BUILDROOT}"
 
+# Check cmake in path.
+if test -z $(which cmake); then
+    echo "WARNING: no cmake in PATH... adding default /Applications location"
+    export PATH=/Applications/CMake.app/Contents/bin:${PATH}
+    if test -z $(which cmake); then
+        echo "ERROR: cmake not found, exiting!"
+        exit
+    fi
+fi
+echo "$(cmake --version | head -n 1)"
+
 # Set some global variables.
 OSXBUILD_TYPE="RelWithDebInfo"
 OSXBUILD_TESTING="OFF"
@@ -89,12 +100,6 @@ export QTEST_COLORED=1
 export OUPUT_LOG="${BUILDROOT}/osxbuild.log"
 printf "" > "${OUPUT_LOG}"
 
-# Build time variables
-if test -z $(which cmake); then
-    echo "ERROR: cmake not found, exiting!"
-    exit
-fi
-
 # configure max core for make compile
 ((MAKE_THREADS=1))
 if [[ "${OSTYPE}" == "darwin"* ]]; then
@@ -102,8 +107,8 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
 fi
 
 OSXBUILD_X86_64_BUILD=$(sysctl -n hw.optional.x86_64)
-if [[ -z ${OSXBUILD_X86_64_BUILD} ]]; then
-    OSX_ARCHITECTURES="x86_64;arm64"
+if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+    OSX_ARCHITECTURES="x86_64\;arm64"
 fi
 
 # Prints stderr and stdout to log files
@@ -420,7 +425,8 @@ build_krita () {
     log_cmd check_dir_path ${KIS_BUILD_DIR}
     cd ${KIS_BUILD_DIR}
 
-    cmake ${KIS_SRC_DIR} \
+
+    CMAKE_CMD="cmake ${KIS_SRC_DIR} \
         -DFOUNDATION_BUILD=ON \
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
@@ -428,12 +434,20 @@ build_krita () {
         -DDEFINE_NO_DEPRECATED=1 \
         -DBUILD_TESTING=${OSXBUILD_TESTING} \
         -DHIDE_SAFE_ASSERTS=ON \
+        -DFETCH_TRANSLATIONS=ON \
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
-        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}
+        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}"
+
+    # hack:: Jenkins runs in x86_64 env, force run cmake in arm64 env.
+    if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+        env /usr/bin/arch -arm64 /bin/zsh -c "${CMAKE_CMD}"
+    else
+        ${CMAKE_CMD}
+    fi
 
     # copiling phase
     make -j${MAKE_THREADS}
@@ -605,29 +619,35 @@ build_x86_64 () {
 build_arm64 () {
     log "building builddeps_arm64"
 
-    ${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps "${@:1}"
+    # force arm64 build even in x86_64 envs 
+    if [[ ${#@} > 0 ]]; then
+        for pkg in ${@:1:${#@}}; do
+            env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps --dirty ${pkg}"
+        done
+    else
+        env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps"
+    fi
 
     rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
 }
 
 consolidate_universal_binaries () {
     for f in "${@}"; do
-        # Abort if file is not a Mach-O executable file
-        if [[ -z $(file ${f} | grep "Mach-O") ]]; then
-            continue
-        fi
-        # echo "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*test-i/}"
-        LIPO_OUTPUT=$(lipo -info ${f} | grep Non-fat 2> /dev/null)
-        if [[ -n ${LIPO_OUTPUT} ]]; then
-            if [[ -f "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
-                log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
-                lipo -create "${f}" "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}"
-            else
-                log "removing... ${f}"
-                rm "${f}"
+        # Only try to consolidate Mach-O and static libs
+        if [[ -n $(file ${f} | grep "Mach-O") || "${f:(-2)}" = ".a" ]]; then
+            # echo "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*test-i/}"
+            LIPO_OUTPUT=$(lipo -info ${f} | grep Non-fat 2> /dev/null)
+            if [[ -n ${LIPO_OUTPUT} ]]; then
+                if [[ -f "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
+                    log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
+                    lipo -create "${f}" "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}"
+                else
+                    log "removing... ${f}"
+                    rm "${f}"
+                fi
             fi
-        fi
             # log "ignoring ${f}"
+        fi
     done
 
 }
@@ -654,26 +674,27 @@ universal_plugin_build() {
     # DEPBUILD_FATBIN_DIR="${BUILDROOT}/i.universal"
 
     # asume i is universal but i.universal has to exist
-    if [[ -d "${DEPBUILD_FATBIN_DIR}" ]]; then
-        rsync --rlptgoq --ignore-existing "${KIS_INSTALL_DIR}/" "${DEPBUILD_FATBIN_DIR}/"
-
-        log "building plugins_x86"
-        env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
-        rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
-
-        log "building plugins_arm64"
-        build_plugins
-        rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
-
-        # sync files to universal install dir.
-        rsync -aq "${DEPBUILD_ARM64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
-        consolidate_universal_binaries $(find "${DEPBUILD_FATBIN_DIR}" -type f)
-        postbuild_cleanup
-
-    else
-        log "no universal install found! Make sure universal build finished properly"
-        log "doing nothing, and exiting!"
+    if [[ ! -d "${DEPBUILD_FATBIN_DIR}" ]]; then
+        log "WARNING no i.universal install dir found! Make sure universal build finished properly"
+        log "If you get errors building plugins this is likely the error."
     fi
+
+    rsync -rlptgoq --ignore-existing "${KIS_INSTALL_DIR}/" "${DEPBUILD_FATBIN_DIR}/"
+
+    log "building plugins_x86"
+    env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
+
+    log "building plugins_arm64"
+    # force arm64 build even in x86_64 envs
+    env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
+
+    # sync files to universal install dir.
+    rsync -aq "${DEPBUILD_ARM64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
+    consolidate_universal_binaries $(find "${DEPBUILD_FATBIN_DIR}" -type f)
+    postbuild_cleanup
+
 }
 
 

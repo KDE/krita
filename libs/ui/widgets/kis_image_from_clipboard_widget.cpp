@@ -38,6 +38,7 @@
 
 #include "kis_import_catcher.h"
 #include "kis_clipboard.h"
+#include <utils/KisClipboardUtil.h>
 #include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>
@@ -100,11 +101,15 @@ void KisImageFromClipboard::clipboardDataChanged()
 
 void KisImageFromClipboard::createClipboardPreview()
 {
+    QImage qimage;
     QClipboard *cb = QApplication::clipboard();
     const QMimeData *cbData = cb->mimeData();
-    if (cbData->hasImage()) {
-        QImage qimage = cb->image();
-
+    if (cbData->hasUrls()) {
+        qimage = QImage(cb->mimeData()->urls().at(0).path());
+    } else if (cbData->hasImage()) {
+        qimage = cb->image();
+    }
+    if (!qimage.isNull()) {
         QByteArray mimeType("application/x-krita-selection");
 
         if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {

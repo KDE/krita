@@ -132,7 +132,10 @@ public:
         return m_currentResource.isNull() ? QString() : m_currentType;
     }
 
-    QDateTime lastModified() const override { return QDateTime(); }
+    QDateTime lastModified() const override {
+        QFileInfo fi(m_filename);
+        return fi.lastModified();
+    }
 
 
     /// This only loads the resource when called (but not in case of asl...)
@@ -170,11 +173,14 @@ KoResourceSP KisAslStorage::resource(const QString &url)
     }
     int indexOfUnderscore = url.lastIndexOf("_");
     QString realUuid = url;
-    realUuid.remove(indexOfUnderscore, url.length() - indexOfUnderscore); // remove _pattern or _style added in iterator
+    if (indexOfUnderscore >= 0) {
+        realUuid.remove(indexOfUnderscore, url.length() - indexOfUnderscore); // remove _pattern or _style added in iterator
+    }
     // TODO: RESOURCES: Since we do get a resource type at the beginning of the path now
     //  maybe we could skip adding the _[resourcetype] at the end of the path as well?
-    realUuid = QFileInfo(realUuid).fileName(); // remove patterns/ at the beginning, if there are any
-    if (url.contains("pattern")) {
+    realUuid = QFileInfo(realUuid).baseName(); // remove patterns/ at the beginning, if there are any
+
+    if (url.contains("pattern") || url.contains(".pat")) {
         QHash<QString, KoPatternSP> patterns = m_aslSerializer->patterns();
 
         if (patterns.contains(realUuid)) {
@@ -185,12 +191,28 @@ KoResourceSP KisAslStorage::resource(const QString &url)
         QHash<QString, KisPSDLayerStyleSP> styles = m_aslSerializer->stylesHash();
         if (styles.contains(realUuid)) {
             return styles[realUuid];
+        } else {
+            // can be {realUuid} or {realUuid}
+            if (realUuid.startsWith("{")) {
+                realUuid = realUuid.right(realUuid.length() - 1);
+            }
+            if (realUuid.endsWith("}")) {
+                realUuid = realUuid.left(realUuid.length() - 1);
+            }
+
+            if (styles.contains(realUuid)) {
+                return styles[realUuid];
+            } else {
+                Q_FOREACH(QString ke, styles.keys()) {
+                }
+            }
+
         }
     }
     return 0;
 }
 
-bool KisAslStorage::loadVersionedResource(KoResourceSP resource)
+bool KisAslStorage::loadVersionedResource(KoResourceSP /*resource*/)
 {
     return false;
 }
@@ -210,7 +232,7 @@ QSharedPointer<KisResourceStorage::TagIterator> KisAslStorage::tags(const QStrin
     return QSharedPointer<KisResourceStorage::TagIterator>(new AslTagIterator(location(), resourceType));
 }
 
-bool KisAslStorage::addResource(const QString &resourceType, KoResourceSP resource)
+bool KisAslStorage::addResource(const QString &/*resourceType*/, KoResourceSP resource)
 {
     if (!resource) {
         warnKrita << "Trying to add a null resource to KisAslStorage";

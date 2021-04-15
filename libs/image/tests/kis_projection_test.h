@@ -7,7 +7,7 @@
 #ifndef KIS_PROJECTION_TEST_H
 #define KIS_PROJECTION_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisProjectionTest : public QObject
 {

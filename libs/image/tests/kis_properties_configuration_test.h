@@ -7,7 +7,7 @@
 #ifndef KIS_SERIALIZABLE_CONFIGURATION_TEST_H
 #define KIS_SERIALIZABLE_CONFIGURATION_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include "kis_cubic_curve.h"
 #include "kis_properties_configuration.h"

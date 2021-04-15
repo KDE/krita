@@ -7,34 +7,34 @@
 #ifndef __KIS_FILTER_STROKE_STRATEGY_H
 #define __KIS_FILTER_STROKE_STRATEGY_H
 
+#include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
-#include "kis_painter_based_stroke_strategy.h"
 #include "kis_lod_transform.h"
+#include "kis_resources_snapshot.h"
 
-
-class KRITAUI_EXPORT KisFilterStrokeStrategy : public KisPainterBasedStrokeStrategy
+class KRITAUI_EXPORT KisFilterStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
-    class Data : public KisStrokeJobData {
+    class FilterJobData : public KisStrokeJobData {
     public:
-        Data(const QRect &_processRect, bool concurrent)
-            : KisStrokeJobData(concurrent ? CONCURRENT : SEQUENTIAL),
-              processRect(_processRect) {}
+        FilterJobData(int frameTime = -1)
+            : KisStrokeJobData(CONCURRENT),
+              frameTime(frameTime)
+        {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new Data(*this, levelOfDetail);
+            return new FilterJobData(*this, levelOfDetail);
         }
 
-        QRect processRect;
+        int frameTime;
 
     private:
-        Data(const Data &rhs, int levelOfDetail)
+        FilterJobData(const FilterJobData &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs)
+            , frameTime(rhs.frameTime)
          {
              KisLodTransform t(levelOfDetail);
-             processRect = t.map(rhs.processRect);
          }
-
     };
 
     class IdleBarrierData : public KisStrokeJobData {

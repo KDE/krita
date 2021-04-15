@@ -262,6 +262,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
                                               KisMultipleProjection *dst,
                                               const QRect &applyRect,
                                               const psd_layer_effects_bevel_emboss *config,
+                                              KisResourcesInterfaceSP resourcesInterface,
                                               KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
@@ -330,7 +331,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
         KisLsUtils::fillPattern(textureSelection, d.applyTextureRect, env,
                                 config->textureScale(),
-                                config->texturePattern(),
+                                config->texturePattern(resourcesInterface),
                                 config->textureHorizontalPhase(),
                                 config->textureVerticalPhase(),
                                 config->textureAlignWithLayer());
@@ -481,7 +482,7 @@ void KisLsBevelEmbossFilter::processDirectly(KisPaintDeviceSP src,
     if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
     KisLsUtils::LodWrapper<psd_layer_effects_bevel_emboss> w(env->currentLevelOfDetail(), config);
-    applyBevelEmboss(src, dst, applyRect, w.config, env);
+    applyBevelEmboss(src, dst, applyRect, w.config, style->resourcesInterface(), env);
 }
 
 QRect KisLsBevelEmbossFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const

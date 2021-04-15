@@ -151,7 +151,7 @@ void KisOnionSkinsDocker::slotFilteredColorsChanged()
     ui->resetFilter->setVisible(ui->colorFilterGroupbox->isChecked());
 
     // existing code
-    KisOnionSkinCompositor::instance()->setColorLabelFilter(QList<int>::fromSet(selectedFilterColors));
+    KisOnionSkinCompositor::instance()->setColorLabelFilter(selectedFilterColors);
     KisOnionSkinCompositor::instance()->configChanged();
 }
 

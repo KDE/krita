@@ -6,7 +6,7 @@
 
 #include "kis_dom_utils_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_dom_utils.h"
 #include "kis_debug.h"
@@ -162,4 +162,4 @@ void KisDomUtilsTest::testIntegralType()
     QCOMPARE(r2, r1);
 }
 
-QTEST_MAIN(KisDomUtilsTest)
+SIMPLE_TEST_MAIN(KisDomUtilsTest)

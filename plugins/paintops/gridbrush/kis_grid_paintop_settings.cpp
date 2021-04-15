@@ -29,8 +29,7 @@ void KisGridPaintOpSettings::setPaintOpSize(qreal value)
 {
     KisGridOpProperties option;
     option.readOptionSetting(this);
-    option.grid_width = value;
-    option.grid_height = value;
+    option.diameter = value;
     option.writeOptionSetting(this);
 }
 
@@ -38,8 +37,7 @@ qreal KisGridPaintOpSettings::paintOpSize() const
 {
     KisGridOpProperties option;
     option.readOptionSetting(this);
-
-    return option.grid_width;
+    return option.diameter;
 }
 
 KisGridPaintOpSettings::~KisGridPaintOpSettings()
@@ -54,9 +52,11 @@ bool KisGridPaintOpSettings::paintIncremental()
 QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
+    KisGridOpProperties option;
+    option.readOptionSetting(this);
     if (mode.isVisible) {
-        qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
-        qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
+        qreal sizex = option.diameter * option.grid_scale;
+        qreal sizey = option.diameter * option.grid_scale;
         QRectF rc(0, 0, sizex, sizey);
         rc.translate(-rc.center());
         path.addRect(rc);

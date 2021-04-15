@@ -25,6 +25,8 @@ class KRITARESOURCES_EXPORT KisLocalStrokeResources : public KisResourcesInterfa
 public:
     KisLocalStrokeResources(const QList<KoResourceSP> &localResources);
 
+    void addResource(KoResourceSP resource);
+
 protected:
     ResourceSourceAdapter* createSourceImpl(const QString &type) const override;
 

@@ -5,7 +5,7 @@
  */
 
 #include "TestResourceLoaderRegistry.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QtSql>
 #include <QStandardPaths>
 #include <QDir>
@@ -34,5 +34,5 @@ void TestResourceLoaderRegistry::testRegistry()
     QVERIFY(dynamic_cast<DummyResource*>(res.data()));
 }
 
-QTEST_MAIN(TestResourceLoaderRegistry)
+SIMPLE_TEST_MAIN(TestResourceLoaderRegistry)
 

@@ -63,6 +63,7 @@ public Q_SLOTS:
     void cropNode(int x, int y, int w, int h);
     void shearNode(double angleX, double angleY);
     QImage thumbnail(int w, int h);
+    QUuid uniqueId() const;
 Q_SIGNALS:
 private:
 };

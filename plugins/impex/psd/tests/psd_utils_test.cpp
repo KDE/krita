@@ -6,7 +6,7 @@
 
 #include "psd_utils_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <psd_utils.h>
@@ -200,5 +200,5 @@ void PSDUtilsTest::test_psdread_pascalstring()
     QVERIFY(buf.bytesAvailable() == 0);
 }
 
-QTEST_MAIN(PSDUtilsTest)
+SIMPLE_TEST_MAIN(PSDUtilsTest)
 

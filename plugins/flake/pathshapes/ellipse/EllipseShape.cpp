@@ -380,7 +380,7 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
     return true;
 }
 
-bool EllipseShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+bool EllipseShape::loadSvg(const QDomElement &element, SvgLoadingContext &context)
 {
     qreal rx = 0, ry = 0;
     qreal cx = 0;

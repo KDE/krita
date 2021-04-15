@@ -69,10 +69,13 @@ public:
         return new PatternGeneratorConfiguration(*this);
     }
 
-    KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const {
-        const QString patternName = this->getString("pattern", "Grid01.pat");
+    KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const
+    {
+        const QString patternName = getString("pattern", "Grid01.pat");
+        qDebug() << "PatternGeneratorConfiguration::pattern" << patternName;
         auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-        return source.resourceForName(patternName);
+        auto pattern = source.resourceForName(patternName);
+        return pattern;
     }
 
     KoPatternSP pattern() const {
@@ -82,24 +85,24 @@ public:
     QTransform transform() const {
         QTransform transform;
 
-        transform.shear(this->getDouble("transform_shear_x", 0.0), this->getDouble("transform_shear_y", 0.0));
+        transform.shear(getDouble("transform_shear_x", 0.0), getDouble("transform_shear_y", 0.0));
 
-        transform.scale(this->getDouble("transform_scale_x", 1.0), this->getDouble("transform_scale_y", 1.0));
-        transform.rotate(this->getDouble("transform_rotation_x", 0.0), Qt::XAxis);
-        transform.rotate(this->getDouble("transform_rotation_y", 0.0), Qt::YAxis);
-        transform.rotate(this->getDouble("transform_rotation_z", 0.0), Qt::ZAxis);
+        transform.scale(getDouble("transform_scale_x", 1.0), getDouble("transform_scale_y", 1.0));
+        transform.rotate(getDouble("transform_rotation_x", 0.0), Qt::XAxis);
+        transform.rotate(getDouble("transform_rotation_y", 0.0), Qt::YAxis);
+        transform.rotate(getDouble("transform_rotation_z", 0.0), Qt::ZAxis);
 
-        transform.translate(this->getInt("transform_offset_x", 0), this->getInt("transform_offset_y", 0));
+        transform.translate(getInt("transform_offset_x", 0), getInt("transform_offset_y", 0));
         return transform;
     }
 
     QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
-        KoPatternSP pattern = this->pattern(globalResourcesInterface);
+        KoPatternSP p = pattern(globalResourcesInterface);
 
         QList<KoResourceSP> resources;
-        if (pattern) {
-            resources << pattern;
+        if (p) {
+            resources << p;
         }
 
         return resources;

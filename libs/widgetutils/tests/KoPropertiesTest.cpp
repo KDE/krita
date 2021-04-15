@@ -6,7 +6,7 @@
 
 #include "KoPropertiesTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoProperties.h>
 
 void KoPropertiesTest::testDeserialization()

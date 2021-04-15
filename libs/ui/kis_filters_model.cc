@@ -167,7 +167,7 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KisFiltersModel::flags(const QModelIndex & index) const
 {
-    if (!index.isValid()) return 0;
+    if (!index.isValid()) return QFlags<Qt::ItemFlag>();
 
     Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
     Private::Filter* filter = dynamic_cast<Private::Filter*>(node);

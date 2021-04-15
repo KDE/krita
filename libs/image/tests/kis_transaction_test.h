@@ -7,7 +7,7 @@
 #ifndef KIS_TRANSACTION_TEST_H
 #define KIS_TRANSACTION_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisTransactionTest : public QObject
 {

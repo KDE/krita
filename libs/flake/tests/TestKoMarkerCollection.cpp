@@ -6,7 +6,7 @@
 
 #include "TestKoMarkerCollection.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QFileInfo>
 #include <QPainter>
 #include <QPainterPath>

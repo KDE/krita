@@ -3,7 +3,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "TestChannel.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QColor>
 #include <QDataStream>
 #include <QLoggingCategory>

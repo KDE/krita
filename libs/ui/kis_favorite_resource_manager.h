@@ -49,9 +49,6 @@ public:
     void removingResource(QSharedPointer<KisPaintOpPreset> resource) override;
     void resourceAdded(QSharedPointer<KisPaintOpPreset> resource) override;
     void resourceChanged(QSharedPointer<KisPaintOpPreset> resource) override;
-    void syncTaggedResourceView() override;
-    void syncTagAddition(const QString& tag) override;
-    void syncTagRemoval(const QString& tag) override;
 
     //BgColor;
     KoColor bgColor() const;

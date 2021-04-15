@@ -7,7 +7,7 @@
 #ifndef _KIS_EXR_TEST_H_
 #define _KIS_EXR_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisExrTest : public QObject
 {

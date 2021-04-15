@@ -51,13 +51,14 @@ public:
     }
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 public Q_SLOTS:
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
     void requestUndoDuringStroke() override;
+    void requestRedoDuringStroke() override;
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
@@ -180,7 +181,7 @@ public:
     KisToolMoveFactory()
             : KisToolPaintFactoryBase("KritaTransform/KisToolMove") {
         setToolTip(i18n("Move Tool"));
-        setSection(TOOL_TYPE_TRANSFORM);
+        setSection(ToolBoxSection::Transform);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(3);
         setIconName(koIconNameCStr("krita_tool_move"));

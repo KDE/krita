@@ -69,6 +69,7 @@ private Q_SLOTS:
     void createImage();
     void switchPortraitLandscape();
     void changeDocumentInfoLabel();
+    void resolutionUnitChanged();
 
 protected:
     

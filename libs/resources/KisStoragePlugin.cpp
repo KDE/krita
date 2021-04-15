@@ -33,7 +33,10 @@ KisStoragePlugin::~KisStoragePlugin()
 
 KoResourceSP KisStoragePlugin::resource(const QString &url)
 {
+    if (!url.contains('/')) return nullptr;
+
     QStringList parts = url.split('/', QString::SkipEmptyParts);
+    if (parts.isEmpty()) return nullptr;
 
     const QString resourceType = parts[0];
     parts.removeFirst();
@@ -44,18 +47,23 @@ KoResourceSP KisStoragePlugin::resource(const QString &url)
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, mime);
     if (!loader) {
         qWarning() << "Could not create loader for" << resourceType << resourceFilename << mime;
-        return 0;
+        return nullptr;
     }
 
     KoResourceSP resource = loader->create(resourceFilename);
-    return loadVersionedResource(resource) ? resource : 0;
+    return loadVersionedResource(resource) ? resource : nullptr;
 }
 
 QByteArray KisStoragePlugin::resourceMd5(const QString &url)
 {
     // a fallback implementation for the storages with
     // ephemeral resources
-    return resource(url)->md5();
+    KoResourceSP res = resource(url);
+    if (res) {
+        return res->md5();
+    } else {
+        return QByteArray();
+    }
 }
 
 bool KisStoragePlugin::supportsVersioning() const

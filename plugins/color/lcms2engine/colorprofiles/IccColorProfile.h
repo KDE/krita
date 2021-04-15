@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -67,6 +68,9 @@ public:
 
     explicit IccColorProfile(const QString &fileName = QString());
     explicit IccColorProfile(const QByteArray &rawData);
+    explicit IccColorProfile(const QVector<double> &colorants,
+                             const ColorPrimaries colorPrimariesType = PRIMARIES_UNSPECIFIED,
+                             const TransferCharacteristics transferFunction = TRC_LINEAR);
     IccColorProfile(const IccColorProfile &rhs);
     ~IccColorProfile() override;
 

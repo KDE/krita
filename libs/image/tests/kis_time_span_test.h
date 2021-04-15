@@ -5,7 +5,7 @@
 #ifndef _KIS_TIME_SPAN_TEST_H
 #define _KIS_TIME_SPAN_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisTimeSpanTest : public QObject
 {

@@ -6,7 +6,7 @@
 
 #include "kis_mesh_transform_worker_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 #include <KoProgressUpdater.h>
@@ -467,8 +467,8 @@ void KisMeshTransformWorkerTest::testIteratorConstness()
     {
         using NodeIndex = KisBezierTransformMesh::NodeIndex;
         using SegmentIndex = KisBezierTransformMesh::SegmentIndex;
-        using ControlPointIndex = KisBezierTransformMesh::ControlPointIndex;
-        using ControlType = KisBezierTransformMesh::ControlType;
+//        using ControlPointIndex = KisBezierTransformMesh::ControlPointIndex;
+//        using ControlType = KisBezierTransformMesh::ControlType;
 
         auto segmentIt = mesh.find(SegmentIndex(NodeIndex(0,0), 1));
 
@@ -506,4 +506,4 @@ void KisMeshTransformWorkerTest::testLineCurveIntersections()
     QVERIFY(KisAlgebra2D::fuzzyPointCompare(KisBezierUtils::bezierCurve(p0, p1, p2, p3, result[1]), QPointF(198.72,101), eps));
 }
 
-QTEST_MAIN(KisMeshTransformWorkerTest)
+SIMPLE_TEST_MAIN(KisMeshTransformWorkerTest)

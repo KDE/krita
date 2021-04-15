@@ -40,6 +40,7 @@ private:
                      KisLayerStyleKnockoutBlower *blower,
                      const QRect &applyRect,
                      const psd_layer_effects_stroke *config,
+                     KisResourcesInterfaceSP resourcesInterface,
                      KisLayerStyleFilterEnvironment *env) const;
 };
 

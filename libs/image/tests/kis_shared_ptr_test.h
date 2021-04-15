@@ -7,7 +7,7 @@
 #ifndef KIS_SHARED_PTR_TEST_H
 #define KIS_SHARED_PTR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisSharedPtrTest : public QObject
 {

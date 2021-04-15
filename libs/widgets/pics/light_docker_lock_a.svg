@@ -54,17 +54,17 @@
        id="path821"
        transform="matrix(4.1276156,0,0,4.1276156,814.99209,202.16666)"
        d="M 8,0 A 7.9999996,7.9999996 0 0 0 0,8 7.9999996,7.9999996 0 0 0 8,16 7.9999996,7.9999996 0 0 0 16,8 7.9999996,7.9999996 0 0 0 8,0 Z M 8,1 A 6.9999998,6.9999998 0 0 1 15,8 6.9999998,6.9999998 0 0 1 8,15 6.9999998,6.9999998 0 0 1 1,8 6.9999998,6.9999998 0 0 1 8,1 Z"
-       style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:6;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:6;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        id="path841"
        d="m 848.01301,214.54951 a 12.382847,12.382847 0 0 0 -12.38284,12.38284 h 4.12761 a 8.2552308,8.2552308 0 0 1 8.25523,-8.25523 8.2552308,8.2552308 0 0 1 8.25524,8.25523 v 16.51047 h 4.12761 v -16.51047 a 12.382847,12.382847 0 0 0 -12.38285,-12.38284 z"
-       style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:24.76569366;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:24.76569366;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <rect
        y="235.18759"
        x="831.50256"
        height="16.510462"
        width="33.020924"
        id="rect851"
-       style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:24.76569366;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:24.76569366;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
 </svg>

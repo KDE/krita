@@ -38,7 +38,7 @@ public:
     }
 
     DockPosition defaultDockPosition() const override {
-        return DockRight;
+        return DockMinimized;
     }
 };
 

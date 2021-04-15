@@ -6,7 +6,7 @@
 
 #include "freehand_stroke_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 #include "stroke_testing_utils.h"

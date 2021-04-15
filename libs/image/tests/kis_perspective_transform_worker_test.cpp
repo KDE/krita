@@ -6,7 +6,7 @@
 
 #include "kis_perspective_transform_worker_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 
@@ -60,4 +60,4 @@ void KisPerspectiveTransformWorkerTest::testSimpleTransform()
     t.checkLayer("simple_transform");
 }
 
-QTEST_MAIN(KisPerspectiveTransformWorkerTest)
+SIMPLE_TEST_MAIN(KisPerspectiveTransformWorkerTest)

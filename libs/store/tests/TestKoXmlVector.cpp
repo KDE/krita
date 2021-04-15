@@ -8,7 +8,7 @@
 
 #include <KoXmlVector.h>
 
-#include <QTest>
+#include <simpletest.h>
 #include <QDebug>
 
 

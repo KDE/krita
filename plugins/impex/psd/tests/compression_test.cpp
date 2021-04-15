@@ -6,7 +6,7 @@
 
 #include "compression_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <compression.h>
@@ -85,5 +85,5 @@ void CompressionTest::testCompressionUncompressed()
 
 }
 
-QTEST_MAIN(CompressionTest)
+SIMPLE_TEST_MAIN(CompressionTest)
 

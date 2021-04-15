@@ -5,7 +5,7 @@
  */
 
 #include "kis_memory_window_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_debug.h"
 #include <QTemporaryDir>
@@ -90,5 +90,5 @@ void KisMemoryWindowTest::testTopReports()
     }
 }
 
-QTEST_MAIN(KisMemoryWindowTest)
+SIMPLE_TEST_MAIN(KisMemoryWindowTest)
 

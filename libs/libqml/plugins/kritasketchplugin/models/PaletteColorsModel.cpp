@@ -96,7 +96,7 @@ QVariant PaletteColorsModel::headerData(int section, Qt::Orientation orientation
     return result;
 }
 
-void PaletteColorsModel::setColorSet(QObject *newColorSet)
+void PaletteColorsModel::setColorSet(QObject */*newColorSet*/)
 {
     // XXX SharedPtr We need to wrap KoColorSet
 

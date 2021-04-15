@@ -1,49 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    width="22"
    height="22"
-   id="svg6190"
-   inkscape:version="0.92.1 r15371"
-   sodipodi:docname="dark_animation_play.svg"
-   inkscape:export-filename="../light_animation_play.png"
-   inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1884"
-     inkscape:window-height="1051"
-     id="namedview4440"
-     showgrid="true"
-     inkscape:zoom="10.727273"
-     inkscape:cx="-30.310004"
-     inkscape:cy="12.815824"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg6190"
-     inkscape:snap-bbox="true"
-     inkscape:snap-bbox-edge-midpoints="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3250" />
-  </sodipodi:namedview>
+   id="svg6190">
   <metadata
      id="metadata6196">
     <rdf:RDF>
@@ -82,12 +47,7 @@
   <defs
      id="defs6194" />
   <path
-     style="color:#000000;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-     d="M 7,1 7,21 17,11.0117 z"
-     id="path3308"
-     inkscape:connector-curvature="0"
-     inkscape:export-filename="/home/tyyppi/krita/animation/calligra/krita/pics/dark_playpause.png"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90"
-     sodipodi:nodetypes="cccc" />
+     style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+     d="m 7,3 v 16 l 8,-7.9883 z"
+     id="path3308" />
 </svg>

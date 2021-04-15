@@ -97,6 +97,7 @@ public Q_SLOTS:
 
     void slotMirrorFrames(bool entireColumn = false);
     void slotMirrorColumns() {slotMirrorFrames(true);}
+    void slotClearCache();
 
     // Copy, paste & clone.
     void slotCopyFrames() {cutCopyImpl(false, true);}
@@ -123,6 +124,8 @@ public Q_SLOTS:
     void slotUpdateDragInfiniteFramesCount();
     void slotRealignScrollBars();
     void slotEnsureRowVisible(int row);
+
+    void calculateActiveLayerSelectedTimes(const QModelIndexList &selection);
 
 protected:
     bool viewportEvent(QEvent *event) override;

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg3815"
+   height="16"
+   width="16">
+  <defs
+     id="defs3817" />
+  <metadata
+     id="metadata3820">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2021</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-461.71429,-531.79075)"
+     id="layer1">
+    <path
+       id="rect4108"
+       d="m 461.71429,531.79075 v 4 h 1 v -3 h 3 v -1 z"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none" />
+    <path
+       id="rect4108-3"
+       d="m 461.71429,547.79075 v -4 h 1 v 3 h 3 v 1 z"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none" />
+    <path
+       id="rect4108-6"
+       d="m 477.71429,531.79075 v 4 h -1 v -3 h -3 v -1 z"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none" />
+    <path
+       id="rect4108-3-7"
+       d="m 477.71429,547.79075 v -4 h -1 v 3 h -3 v 1 z"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none" />
+    <path
+       id="path858"
+       d="m 470.71429,533.87669 v 1.01562 a 5,5 0 0 1 1.75391,0.73047 l 0.71679,-0.7168 a 6,6 0 0 0 -2.4707,-1.02929 z m -2,0.004 a 6,6 0 0 0 -2.47266,1.02343 l 0.71875,0.71875 a 5,5 0 0 1 1.75391,-0.72656 z m 5.88672,2.4375 -0.71875,0.71875 a 5,5 0 0 1 0.72656,1.7539 h 1.01563 a 6,6 0 0 0 -1.02344,-2.47266 z m -9.77149,0.002 a 6,6 0 0 0 -1.02929,2.4707 h 1.01562 a 5,5 0 0 1 0.73047,-1.75391 z m -1.02539,4.4707 a 6,6 0 0 0 1.02344,2.47266 l 0.71875,-0.71875 a 5,5 0 0 1 -0.72656,-1.75391 z m 10.8086,0 a 5,5 0 0 1 -0.73047,1.75391 l 0.7168,0.71679 a 6,6 0 0 0 1.02929,-2.4707 z m -7.65235,3.16797 -0.71679,0.7168 a 6,6 0 0 0 2.4707,1.02929 v -1.01562 a 5,5 0 0 1 -1.75391,-0.73047 z m 5.50782,0 a 5,5 0 0 1 -1.75391,0.72656 v 1.01563 a 6,6 0 0 0 2.47266,-1.02344 z"
+       style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
+  </g>
+</svg>

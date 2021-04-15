@@ -6,7 +6,7 @@
 
 #include "kis_clone_layer_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

@@ -91,9 +91,9 @@ void KisToolFill::slotUpdateAvailableColorLabels()
     }
 }
 
-void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolFill::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(toolActivation, shapes);
+    KisToolPaint::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
     if (m_widgetsInitialized && m_imageConnections.isEmpty()) {
         activateConnectionsToImage();
@@ -352,7 +352,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_fillOnlySelection = m_checkFillSelection->isChecked();
     m_useSelectionAsBoundary = m_checkUseSelectionAsBoundary->isChecked();
     m_patternRotation = m_angleSelectorPatternRotate->angle();
-    m_patternScale = m_sldPatternScale->value();
+    m_patternScale = m_sldPatternScale->value() * 0.01;
     m_usePattern = m_checkUsePattern->isChecked();
     // m_sampleLayersMode is set manually above
     // selectedColors are also set manually

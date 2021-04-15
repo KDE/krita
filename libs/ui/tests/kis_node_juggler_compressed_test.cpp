@@ -6,7 +6,7 @@
 
 #include "kis_node_juggler_compressed_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_node_juggler_compressed.h"
 
 #include <KoColor.h>
@@ -174,4 +174,4 @@ void KisNodeJugglerCompressedTest::testMoveLayers()
     testDuplicateImpl(true, true);
 }
 
-QTEST_MAIN(KisNodeJugglerCompressedTest)
+SIMPLE_TEST_MAIN(KisNodeJugglerCompressedTest)

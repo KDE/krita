@@ -1,0 +1,68 @@
+--- a/gettext-tools/libgettextpo/Makefile.am	2020-07-26 20:31:02.000000000 +0000
++++ b/gettext-tools/libgettextpo/Makefile.am	2020-07-26 20:31:02.000000000 +0000
+@@ -107,7 +107,25 @@
+ # How to build libgettextpo.la.
+ # Don't make it depend on libgettextsrc.la or libgettextlib.la, since they
+ # define an uncontrolled amount of symbols.
+-libgettextpo_la_LIBADD = libgnu.la $(WOE32_LIBADD) $(LTLIBUNISTRING)
++# Amyspark: Need @LTLIBTEXTSTYLE@ because in macOS the linker will complain:
++# Undefined symbols for architecture x86_64:
++#  "_file_ostream_create", referenced from:
++#      _msgdomain_list_print in write-catalog.o
++#  "_ostream_free", referenced from:
++#      _msgdomain_list_print in write-catalog.o
++#  "_ostream_write_mem", referenced from:
++#      _message_print_comment in write-po.o
++#      _wrap in write-po.o
++#  "_ostream_write_str", referenced from:
++#      _message_print_comment in write-po.o
++#      _message_print_comment_dot in write-po.o
++#      _message_print_comment_filepos in write-po.o
++#      _message_print_comment_flags in write-po.o
++#      _msgdomain_list_print_po in write-po.o
++#      _wrap in write-po.o
++# ld: symbol(s) not found for architecture x86_64
++# clang: error: linker command failed with exit code 1 (use -v to see invocation)
++libgettextpo_la_LIBADD = libgnu.la ../../libtextstyle/lib/libtextstyle.la $(WOE32_LIBADD) $(LTLIBUNISTRING)
+ libgettextpo_la_LDFLAGS = \
+   -version-info $(LTV_CURRENT):$(LTV_REVISION):$(LTV_AGE) \
+   -rpath $(libdir) \
+--- a/gettext-tools/libgettextpo/Makefile.in	2020-07-26 21:04:58.000000000 +0000
++++ b/gettext-tools/libgettextpo/Makefile.in	2020-07-26 21:04:58.000000000 +0000
+@@ -557,7 +555,8 @@
+ LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES)
+ @WOE32_TRUE@am__DEPENDENCIES_1 = libgettextpo.res.lo
+ am__DEPENDENCIES_2 =
+-libgettextpo_la_DEPENDENCIES = libgnu.la $(am__DEPENDENCIES_1) \
++libgettextpo_la_DEPENDENCIES = libgnu.la \
++	../../libtextstyle/lib/libtextstyle.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_2)
+ am__libgettextpo_la_SOURCES_DIST = gettext-po.c ../src/str-list.c \
+ 	../src/dir-list.c ../src/message.c ../src/msgl-ascii.c \
+@@ -2545,7 +2544,25 @@
+ # How to build libgettextpo.la.
+ # Don't make it depend on libgettextsrc.la or libgettextlib.la, since they
+ # define an uncontrolled amount of symbols.
+-libgettextpo_la_LIBADD = libgnu.la $(WOE32_LIBADD) $(LTLIBUNISTRING)
++# Amyspark: Need @LTLIBTEXTSTYLE@ because in macOS the linker will complain:
++# Undefined symbols for architecture x86_64:
++#  "_file_ostream_create", referenced from:
++#      _msgdomain_list_print in write-catalog.o
++#  "_ostream_free", referenced from:
++#      _msgdomain_list_print in write-catalog.o
++#  "_ostream_write_mem", referenced from:
++#      _message_print_comment in write-po.o
++#      _wrap in write-po.o
++#  "_ostream_write_str", referenced from:
++#      _message_print_comment in write-po.o
++#      _message_print_comment_dot in write-po.o
++#      _message_print_comment_filepos in write-po.o
++#      _message_print_comment_flags in write-po.o
++#      _msgdomain_list_print_po in write-po.o
++#      _wrap in write-po.o
++# ld: symbol(s) not found for architecture x86_64
++# clang: error: linker command failed with exit code 1 (use -v to see invocation)
++libgettextpo_la_LIBADD = libgnu.la ../../libtextstyle/lib/libtextstyle.la $(WOE32_LIBADD) $(LTLIBUNISTRING)
+ libgettextpo_la_LDFLAGS = -version-info \
+ 	$(LTV_CURRENT):$(LTV_REVISION):$(LTV_AGE) -rpath $(libdir) \
+ 	@LTLIBINTL@ @LTLIBICONV@ -lc -no-undefined $(am__append_2) \

@@ -12,10 +12,12 @@
 #include <QtEndian>
 
 // from gimp's psd-save.c
-static quint32 pack_pb_line (const QByteArray &src,
-                             QByteArray &dst)
+static quint32 pack_pb_line (const QByteArray &src, QByteArray &dst)
 {
     quint32 length = src.size();
+    dst.resize(length  * 2);
+    dst.fill(0, length * 2);
+
     quint32 remaining = length;
     quint8  i, j;
     quint32 dest_ptr = 0;
@@ -72,6 +74,7 @@ static quint32 pack_pb_line (const QByteArray &src,
 
         }
     }
+    dst.resize(length);
     return length;
 }
 

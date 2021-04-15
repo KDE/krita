@@ -34,12 +34,7 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, KoSelection *selectio
     m_selectedShapes = selection->selectedEditableShapes();
     m_start = clicked;
 
-    KoShape *shape = 0;
-    if (m_selectedShapes.size() > 1) {
-        shape = selection;
-    } else if (m_selectedShapes.size() == 1) {
-        shape = m_selectedShapes.first();
-    }
+    KoShape *shape = selection;
 
     if (shape) {
         const qreal w = shape->size().width();

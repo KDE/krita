@@ -69,7 +69,7 @@ public:
      *
      * Typically called during startup before reading the config.
      */
-    void askresetConfig();
+    void askResetConfig();
 
     /**
      * Tell KisApplication to show this splashscreen when you call start();

@@ -63,7 +63,7 @@ public:
     ~KisToolDyna() override;
 
     QWidget * createOptionWidget() override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
 
@@ -136,7 +136,7 @@ public:
             : KisToolPaintFactoryBase("KritaShape/KisToolDyna") {
 
         setToolTip(i18n("Dynamic Brush Tool"));
-        setSection(TOOL_TYPE_SHAPE);
+        setSection(ToolBoxSection::Shape);
         setIconName(koIconNameCStr("krita_tool_dyna"));
         //setShortcut(QKeySequence(Qt::Key_F));
         setPriority(10);

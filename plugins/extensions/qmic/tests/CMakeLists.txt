@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/sdk/tests
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_BINARY_DIR}/plugins/extensions/qmic
 )

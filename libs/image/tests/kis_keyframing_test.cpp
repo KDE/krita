@@ -7,7 +7,7 @@
  */
 
 #include "kis_keyframing_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <qsignalspy.h>
 #include <QRandomGenerator>
 
@@ -1005,4 +1005,4 @@ void KisKeyframingTest::testChangeOfScalarLimits()
     QCOMPARE(key30->value(), channel->valueAt(30));
 }
 
-QTEST_MAIN(KisKeyframingTest)
+SIMPLE_TEST_MAIN(KisKeyframingTest)

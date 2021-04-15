@@ -5,7 +5,7 @@
  */
 #include "TestResource.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "DummyResource.h"
 
@@ -19,4 +19,4 @@ void TestResource::testCopyResource()
     QVERIFY(r2.filename() == "other");
 }
 
-QTEST_MAIN(TestResource)
+SIMPLE_TEST_MAIN(TestResource)

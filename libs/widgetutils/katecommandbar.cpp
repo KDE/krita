@@ -251,7 +251,7 @@ KateCommandBar::KateCommandBar(QWidget *parent)
 
     m_treeView = new QTreeView();
     layout->addWidget(m_treeView, 1);
-    m_treeView->setTextElideMode(Qt::ElideLeft);
+    m_treeView->setTextElideMode(Qt::ElideMiddle);
     m_treeView->setUniformRowHeights(true);
 
     m_model = new CommandModel(this);
@@ -292,15 +292,15 @@ KateCommandBar::KateCommandBar(QWidget *parent)
 
 void KateCommandBar::updateBar(const QList<KActionCollection *> &actionCollections, int totalActions)
 {
-    delete m_layerActions;
+    qDeleteAll(m_disposableActionCollections);
 
     QVector<QPair<QString, QAction *>> actionList;
     actionList.reserve(totalActions);
 
     for (const auto collection : actionCollections) {
 
-        if (collection->componentName() == "layeractions") {
-            m_layerActions = collection;
+        if (collection->componentName().contains("disposable")) {
+            m_disposableActionCollections << collection;
         }
 
         const QList<QAction *> collectionActions = collection->actions();
@@ -313,6 +313,9 @@ void KateCommandBar::updateBar(const QList<KActionCollection *> &actionCollectio
             }
         }
     }
+
+
+
 
     m_model->refresh(std::move(actionList));
     reselectFirst();

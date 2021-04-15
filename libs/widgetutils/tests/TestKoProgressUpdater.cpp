@@ -7,7 +7,7 @@
 
 #include "TestKoProgressUpdater.h"
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 #include <KoProgressUpdater.h>
@@ -497,4 +497,4 @@ void TestKoProgressUpdater::testNonStandardRange()
 }
 
 
-QTEST_MAIN(TestKoProgressUpdater)
+SIMPLE_TEST_MAIN(TestKoProgressUpdater)

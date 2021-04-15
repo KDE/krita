@@ -6,7 +6,7 @@
 
 #include "kis_input_manager_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QMouseEvent>
 
@@ -379,4 +379,4 @@ void KisInputManagerTest::testIncrementalAverage()
 
 }
 
-QTEST_MAIN(KisInputManagerTest)
+SIMPLE_TEST_MAIN(KisInputManagerTest)

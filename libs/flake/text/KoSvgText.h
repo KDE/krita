@@ -19,7 +19,7 @@
 #include <KoShapeBackground.h>
 #include <KoShapeStrokeModel.h>
 
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 
 #include <kritaflake_export.h>
 

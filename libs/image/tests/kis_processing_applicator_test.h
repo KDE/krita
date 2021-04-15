@@ -7,7 +7,7 @@
 #ifndef __KIS_PROCESSING_APPLICATOR_TEST_H
 #define __KIS_PROCESSING_APPLICATOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisProcessingApplicatorTest : public QObject
 {

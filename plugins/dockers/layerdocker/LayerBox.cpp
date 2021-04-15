@@ -171,6 +171,7 @@ LayerBox::LayerBox()
 
     slotUpdateIcons();
 
+    m_wdgLayerBox->bnAdd->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
@@ -642,7 +643,7 @@ void LayerBox::slotSetOpacity(double opacity)
 }
 
 void LayerBox::slotUpdateOpacitySlider(quint8 value) {
-    double percentage = value * 100 / 255;
+    double percentage = value * 100.0 / 255.0;
 
     m_wdgLayerBox->doubleOpacity->blockSignals(true);
     m_wdgLayerBox->doubleOpacity->setValue(percentage);

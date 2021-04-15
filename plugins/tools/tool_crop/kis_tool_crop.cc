@@ -133,10 +133,10 @@ KisToolCrop::~KisToolCrop()
 {
 }
 
-void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolCrop::activate(const QSet<KoShape*> &shapes)
 {
 
-    KisTool::activate(toolActivation, shapes);
+    KisTool::activate(shapes);
     configGroup =  KSharedConfig::openConfig()->group(toolId()); // save settings to kritarc
 
     KisResourcesSnapshotSP resources =
@@ -170,6 +170,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     else {
         setCropTypeSelectable(false);
     }
+    connect(&m_finalRect, SIGNAL(sigValuesChanged()), SLOT(showSizeOnCanvas()));
 }
 
 void KisToolCrop::cancelStroke()
@@ -194,6 +195,16 @@ void KisToolCrop::requestStrokeCancellation()
     cancelStroke();
 }
 
+void KisToolCrop::requestUndoDuringStroke()
+{
+    cancelStroke();
+}
+
+void KisToolCrop::requestRedoDuringStroke()
+{
+    cancelStroke();
+}
+
 void KisToolCrop::canvasResourceChanged(int key, const QVariant &res)
 {
     KisTool::canvasResourceChanged(key, res);
@@ -204,7 +215,9 @@ void KisToolCrop::canvasResourceChanged(int key, const QVariant &res)
     }
     //vector layer
     else {
-        setCropType(ImageCropType);
+        if (m_cropType != ImageCropType || m_cropType != CanvasCropType) {
+            setCropType(ImageCropType);
+        }
         setCropTypeSelectable(false);
     }
 }
@@ -439,7 +452,7 @@ void KisToolCrop::crop()
     KIS_ASSERT_RECOVER_RETURN(currentImage());
     if (m_finalRect.rect().isEmpty()) return;
 
-    const bool imageCrop = m_cropType == ImageCropType;
+    const bool imageCrop = m_cropType == ImageCropType || m_cropType == CanvasCropType;
 
     if (!imageCrop) {
         //Cropping layer
@@ -455,7 +468,11 @@ void KisToolCrop::crop()
 
     // The visitor adds the undo steps to the macro
     if (imageCrop || !currentNode()->paintDevice()) {
-        currentImage()->cropImage(cropRect);
+        if (m_cropType == CanvasCropType) {
+            currentImage()->resizeImage(cropRect);
+        } else {
+            currentImage()->cropImage(cropRect);
+        }
     } else {
         currentImage()->cropNode(currentNode(), cropRect, m_cropType == FrameCropType);
     }
@@ -686,6 +703,14 @@ void KisToolCrop::setLockRatio(bool lock)
 bool KisToolCrop::lockRatio() const
 {
     return m_finalRect.ratioLocked();
+}
+
+void KisToolCrop::showSizeOnCanvas()
+{
+    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1\nHeight: %2"
+                                                   , optionsWidget->intWidth->text(), optionsWidget->intHeight->text())
+                                                   , QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 QWidget* KisToolCrop::createOptionWidget()

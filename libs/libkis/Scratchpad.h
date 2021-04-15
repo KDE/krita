@@ -34,29 +34,46 @@ public:
 public Q_SLOTS:
 
     /**
-     * clears out scratchpad with color specfified set during setup
+     * @brief Clears out scratchpad with color specfified set during setup
      */
     void clear();
 
+    /**
+     * @brief Fill the entire scratchpad with a color
+     * @param Color to fill the canvas with
+     */
     void setFillColor(QColor color);
 
-    /** Switches between a GUI controlling the current mode and when mouse clicks control mode
-     * Setting to true allows GUI to control the mode with explicity setting mode
+    /**
+     * @brief Switches between a GUI controlling the current mode and when mouse clicks control mode
+     * @param Setting to true allows GUI to control the mode with explicity setting mode
      */
     void setModeManually(bool value);
 
 
-    /// Manually set what mode scratchpad is in. Ignored if "setModeManually is set to false
+    /**
+     * @brief Manually set what mode scratchpad is in. Ignored if "setModeManually is set to false
+     * @param Available options are: "painting", "panning", and "colorsampling"
+     */
     void setMode(QString modeName);
 
-    /// Should the scratchpad share the zoom level with the canvas?
+    /**
+     * @brief Makes a connection between the zoom of the canvas and scratchpad area so they zoom in sync
+     * @param Should the scratchpad share the zoom level. Default is true
+     */
     void linkCanvasZoom(bool value);
 
 
-    /// load scratchpad
+    /**
+     * @brief Load image data to the scratchpad
+     * @param Image object to load
+     */
     void loadScratchpadImage(QImage image);
 
-    /// take what is on scratchpad area and grab image
+    /**
+     * @brief Take what is on the scratchpad area and grab image
+     * @return the image data from the scratchpage
+     */
     QImage copyScratchpadImageData();
 
 

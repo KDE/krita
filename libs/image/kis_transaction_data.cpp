@@ -14,7 +14,8 @@
 #include "KoColor.h"
 #include "KisTransactionWrapperFactory.h"
 #include "KisInterstrokeDataTransactionWrapperFactory.h"
-
+#include "kis_raster_keyframe_channel.h"
+#include "kis_image_config.h"
 
 //#define DEBUG_TRANSACTIONS
 
@@ -56,6 +57,7 @@ public:
 
     KUndo2Command newFrameCommand;
     QScopedPointer<OptionalInterstrokeInfo> interstrokeInfo;
+    AutoKeyMode autoKeyMode;
 
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
@@ -64,16 +66,8 @@ public:
     void tryCreateNewFrame(KisPaintDeviceSP device, int time);
 };
 
-
-
-
-KisTransactionData::KisTransactionData(const KUndo2MagicString& name,
-                                       KisPaintDeviceSP device,
-                                       bool resetSelectionOutlineCache,
-                                       KisTransactionWrapperFactory *interstrokeDataFactory,
-                                       KUndo2Command* parent)
+KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, AutoKeyMode autoKeyMode,  KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent)
     : KUndo2Command(name, parent)
-
     , m_d(new Private())
 {
     m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;
@@ -88,27 +82,25 @@ KisTransactionData::KisTransactionData(const KUndo2MagicString& name,
         m_d->interstrokeInfo->factory.reset(interstrokeDataFactory);
     }
 
+    m_d->autoKeyMode = autoKeyMode;
+
     possiblyFlattenSelection(device);
     init(device);
     saveSelectionOutlineCache();
 }
 
-#include "kis_raster_keyframe_channel.h"
-#include "kis_image_config.h"
-
 void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int time)
 {
     if (!device->framesInterface()) return;
 
-    KisImageConfig cfg(true);
-    if (!cfg.autoKeyEnabled()) return;
+    if (autoKeyMode == AUTOKEY_DISABLED) return;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
     KIS_ASSERT_RECOVER(channel) { return; }
 
     KisKeyframeSP keyframe = channel->keyframeAt(time);
     if (!keyframe) {
-        if (cfg.autoKeyModeDuplicate()) {
+        if (autoKeyMode == AUTOKEY_DUPLICATE) {
             int activeKeyTime = channel->activeKeyframeTime(time);
             channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
         } else {

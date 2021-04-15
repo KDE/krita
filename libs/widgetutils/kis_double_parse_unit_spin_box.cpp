@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  SPDX-FileCopyrightText: 2021 Deif Lou <ginoba@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -19,36 +20,32 @@ public:
           unit(KoUnit(KoUnit::Point)),
           outPutSymbol(""),
           unitManager(unitManager),
-          defaultUnitManager(unitManager),
-          isDeleting(false),
-          unitHasBeenChangedFromOutSideOnce(false),
-          letUnitBeChangedFromOutsideMoreThanOnce(true),
-          displayUnit(true),
-          allowResetDecimals(true)
+          defaultUnitManager(unitManager)
     {
     }
 
-    double lowerInPoints; ///< lowest value in points
-    double upperInPoints; ///< highest value in points
-    double stepInPoints;  ///< step in points
+    double lowerInPoints {0.0}; ///< lowest value in points
+    double upperInPoints {0.0}; ///< highest value in points
+    double stepInPoints {0.0};  ///< step in points
     KoUnit unit;
 
-    double previousValueInPoint; ///< allow to store the previous value in point, useful in some cases, even if, usually, we prefer to refer to the actual value (in selected unit) and convert it, since this is not always updated.
+    double previousValueInPoint {0.0}; ///< allow to store the previous value in point, useful in some cases, even if, usually, we prefer to refer to the actual value (in selected unit) and convert it, since this is not always updated.
     QString previousSymbol;
     QString outPutSymbol;
 
-    KisSpinBoxUnitManager* unitManager; //manage more units than permitted by KoUnit.
-    KisSpinBoxUnitManager* defaultUnitManager; //the default unit manager is the one the spinbox rely on and go back to if a connected unit manager is destroyed before the spinbox.
+    KisSpinBoxUnitManager* unitManager {0}; //manage more units than permitted by KoUnit.
+    KisSpinBoxUnitManager* defaultUnitManager {0}; //the default unit manager is the one the spinbox rely on and go back to if a connected unit manager is destroyed before the spinbox.
 
-    bool isDeleting;
+    bool isDeleting {false};
 
-    bool unitHasBeenChangedFromOutSideOnce; //in some part of the code the unit is reset. We want to prevent this overriding the unit defined by the user. We use this switch to do so.
-    bool letUnitBeChangedFromOutsideMoreThanOnce;
+    bool unitHasBeenChangedFromOutSideOnce {false}; //in some part of the code the unit is reset. We want to prevent this overriding the unit defined by the user. We use this switch to do so.
+    bool letUnitBeChangedFromOutsideMoreThanOnce {true};
 
-    bool displayUnit;
+    bool displayUnit {true};
 
-    bool allowResetDecimals;
+    bool allowResetDecimals {true};
 
+    bool mustUsePreviousText {false};
 };
 
 KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
@@ -180,10 +177,12 @@ void KisDoubleParseUnitSpinBox::setUnit( const KoUnit & unit)
     setUnit(unit.symbol());
     d->unit = unit;
 }
+
 void KisDoubleParseUnitSpinBox::setUnit(const QString &symbol)
 {
     d->unitManager->setApparentUnitFromSymbol(symbol); //via signals and slots, the correct functions should be called.
 }
+
 void KisDoubleParseUnitSpinBox::setReturnUnit(const QString & symbol)
 {
     d->outPutSymbol = symbol;
@@ -193,7 +192,6 @@ void KisDoubleParseUnitSpinBox::prepareUnitChange() {
 
     d->previousValueInPoint = d->unitManager->getReferenceValue(KisDoubleParseSpinBox::value());
     d->previousSymbol = d->unitManager->getApparentUnitSymbol();
-
 }
 
 void KisDoubleParseUnitSpinBox::internalUnitChange(const QString &symbol) {
@@ -270,7 +268,6 @@ void KisDoubleParseUnitSpinBox::setLineStepPt(double step)
     KisDoubleParseSpinBox::setSingleStep( d->unitManager->getApparentValue( step ) );
 }
 
-
 void KisDoubleParseUnitSpinBox::setMinMaxStep( double min, double max, double step )
 {
     setMinimum( min );
@@ -278,50 +275,13 @@ void KisDoubleParseUnitSpinBox::setMinMaxStep( double min, double max, double st
     setLineStepPt( step );
 }
 
-
-QValidator::State KisDoubleParseUnitSpinBox::validate(QString &input, int &pos) const
-{
-    Q_UNUSED(pos);
-
-    QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
-    const int res = input.indexOf( regexp );
-
-    /*if ( res == -1 ) {
-        // Nothing like an unit? The user is probably editing the unit
-        return QValidator::Intermediate;
-    }*/
-
-    QString expr ( (res > 0) ? input.left( res ) : input );
-    const QString unitName ( (res > 0) ? regexp.cap( 1 ).trimmed().toLower() : "" );
-
-    bool ok = true;
-    bool interm = false;
-
-    QValidator::State exprState = KisDoubleParseSpinBox::validate(expr, pos);
-
-    if (res < 0) {
-        return exprState;
-    }
-
-    if (exprState == QValidator::Invalid) {
-        return exprState;
-    } else if (exprState == QValidator::Intermediate) {
-        interm = true;
-    }
-
-    //check if we can parse the unit.
-    QStringList listOfSymbol = d->unitManager->getsUnitSymbolList();
-    ok = listOfSymbol.contains(unitName);
-
-    if (!ok || interm) {
-        return QValidator::Intermediate;
-    }
-
-    return QValidator::Acceptable;
-}
-
 QString KisDoubleParseUnitSpinBox::textFromValue( double value ) const
 {
+    // Just return the current value (for example when the user is editing)
+    if (d->mustUsePreviousText) {
+        return cleanText();
+    }
+    // Construct a new value
     QString txt = KisDoubleParseSpinBox::textFromValue(value);
     if (d->displayUnit) {
         if (!txt.endsWith(d->unitManager->getApparentUnitSymbol())) {
@@ -333,30 +293,28 @@ QString KisDoubleParseUnitSpinBox::textFromValue( double value ) const
 
 QString KisDoubleParseUnitSpinBox::veryCleanText() const
 {
-
     return makeTextClean(cleanText());
-
 }
 
 double KisDoubleParseUnitSpinBox::valueFromText( const QString& str ) const
 {
-
     QString txt = makeTextClean(str);
-
-    return KisDoubleParseSpinBox::valueFromText(txt); //this function will take care of prefix (and don't mind if suffix has been removed.
+    //this function will take care of prefix (and don't mind if suffix has been removed.
+    return KisDoubleParseSpinBox::valueFromText(txt);
 }
 
-void KisDoubleParseUnitSpinBox::setUnitChangeFromOutsideBehavior(bool toggle) {
+void KisDoubleParseUnitSpinBox::setUnitChangeFromOutsideBehavior(bool toggle)
+{
     d->letUnitBeChangedFromOutsideMoreThanOnce = toggle;
 }
 
-void KisDoubleParseUnitSpinBox::setDisplayUnit(bool toggle) {
-
+void KisDoubleParseUnitSpinBox::setDisplayUnit(bool toggle)
+{
     d->displayUnit = toggle;
-
 }
 
-void KisDoubleParseUnitSpinBox::preventDecimalsChangeFromUnitManager(bool prevent) {
+void KisDoubleParseUnitSpinBox::preventDecimalsChangeFromUnitManager(bool prevent)
+{
     d->allowResetDecimals = !prevent;
 }
 
@@ -392,7 +350,18 @@ void KisDoubleParseUnitSpinBox::detectUnitChanges()
     QString oldUnitSymb = d->unitManager->getApparentUnitSymbol();
 
     setUnit(unitSymb);
-    setValue(valueFromText(cleanText())); //change value keep the old value, but converted to new unit... which is different from the value the user entered in the new unit. So we need to set the new value.
+    // Quick hack
+    // This function is called when the user changed the text and the call to
+    // setValue will provoke a call to textFromValue which will return a new
+    // text different from the current one. Since the following setValue is
+    // called because of a user change, we use a flag to prevent the text from
+    // changing
+    d->mustUsePreviousText = true;
+    // Change value keep the old value, but converted to new unit... which is
+    // different from the value the user entered in the new unit. So we need
+    // to set the new value.
+    setValue(valueFromText(cleanText()));
+    d->mustUsePreviousText = false;
 
     if (oldUnitSymb != d->unitManager->getApparentUnitSymbol()) {
         // the user has changed the unit, so we block changes from outside.

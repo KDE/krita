@@ -113,7 +113,7 @@
      <property name="title">
       <string>Pattern Transform</string>
      </property>
-     <layout class="QFormLayout" name="formLayout">
+     <layout class="QFormLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">

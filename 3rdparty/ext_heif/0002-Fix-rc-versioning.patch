@@ -1,0 +1,22 @@
+From 524bd821aa7314c7719901bc6145be54cbc4b785 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Mon, 22 Feb 2021 13:49:27 +0000
+Subject: [PATCH 2/3] Fix rc versioning
+
+---
+ x265Version.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/x265Version.txt b/x265Version.txt
+index 1b4efb4..dff6835 100644
+--- a/x265Version.txt
++++ b/x265Version.txt
+@@ -1,4 +1,4 @@
+ #Attribute: 	     Values
+ repositorychangeset: 681c05e83
+-releasetagdistance: dev
++releasetagdistance: 20210203
+ releasetag: 3.5
+-- 
+2.30.1.windows.1
+

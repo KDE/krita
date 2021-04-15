@@ -45,7 +45,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void deactivate() override;
-    void activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void activate(const QSet<KoShape *> &shapes) override;
     void undoPoints();
     void slotSetFilterRadius(qreal);
     void slotSetThreshold(int);
@@ -95,7 +95,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectMagnetic")
     {
         setToolTip(i18n("Magnetic Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setSection(ToolBoxSection::Select);
         setIconName(koIconNameCStr("tool_magnetic_selection"));
         setPriority(8);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -63,7 +63,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectOutline")
     {
         setToolTip(i18n("Freehand Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setSection(ToolBoxSection::Select);
         setIconName(koIconNameCStr("tool_outline_selection"));
         setPriority(3);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

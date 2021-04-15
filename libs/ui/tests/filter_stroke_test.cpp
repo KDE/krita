@@ -6,7 +6,7 @@
 
 #include "filter_stroke_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "stroke_testing_utils.h"
 #include "strokes/kis_filter_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
@@ -54,16 +54,13 @@ protected:
         Q_UNUSED(resources);
 
         image->addJob(strokeId(),
-                      new KisFilterStrokeStrategy::
-                      Data(QRect(100,100,100,100), true));
+                      new KisFilterStrokeStrategy::FilterJobData());
 
         image->addJob(strokeId(),
-                      new KisFilterStrokeStrategy::
-                      Data(QRect(200,100,100,100), true));
+                      new KisFilterStrokeStrategy::FilterJobData());
 
         image->addJob(strokeId(),
-                      new KisFilterStrokeStrategy::
-                      Data(QRect(100,200,100,100), true));
+                      new KisFilterStrokeStrategy::FilterJobData());
     }
 
 private:
@@ -76,4 +73,4 @@ void FilterStrokeTest::testBlurFilter()
     tester.test();
 }
 
-QTEST_MAIN(FilterStrokeTest)
+SIMPLE_TEST_MAIN(FilterStrokeTest)

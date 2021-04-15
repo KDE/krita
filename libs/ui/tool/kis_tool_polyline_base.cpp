@@ -35,9 +35,9 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
 }
 
 
-void KisToolPolylineBase::activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes)
+void KisToolPolylineBase::activate(const QSet<KoShape *> &shapes)
 {
-    KisToolShape::activate(activation, shapes);
+    KisToolShape::activate(shapes);
     connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelection()), Qt::UniqueConnection);
 }
 
@@ -227,6 +227,13 @@ void KisToolPolylineBase::updateArea()
 void KisToolPolylineBase::endStroke()
 {
     if (!m_dragging) return;
+
+    NodePaintAbility paintability = nodePaintAbility();
+    if ((paintability != KisToolPaint::PAINT && paintability != KisToolPaint::VECTOR)
+        || !nodeEditable()) {
+        cancelStroke();
+        return;
+    }
 
     m_dragging = false;
     if(m_points.count() > 1) {

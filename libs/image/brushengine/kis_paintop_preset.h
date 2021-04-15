@@ -86,10 +86,8 @@ public:
     KisPaintOpSettingsSP settings() const;
     KisPaintOpSettingsSP originalSettings() const;
 
-    bool load(KisResourcesInterfaceSP resourcesInterface) override;
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
 
-    bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
     QPair<QString, QString> resourceType() const override

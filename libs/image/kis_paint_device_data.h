@@ -83,6 +83,7 @@ public:
               m_oldCs(oldCs),
               m_newCs(newCs)
         {
+            Q_UNUSED(m_firstRun);
         }
 
         void redo() override {

@@ -53,6 +53,7 @@ class KisToolCrop : public KisTool
 public:
     enum CropToolType {
         ImageCropType,
+        CanvasCropType,
         LayerCropType,
         FrameCropType
     };
@@ -72,7 +73,7 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    QMenu* popupActionsMenu() override;
+    QMenu *popupActionsMenu() override;
 
     CropToolType cropType() const;
     bool cropTypeSelectable() const;
@@ -109,13 +110,17 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
+    void requestUndoDuringStroke() override;
+    void requestRedoDuringStroke() override;
 
     void crop();
+
+    void showSizeOnCanvas();
 
     void setCropTypeLegacy(int cropType);
     void setCropType(CropToolType cropType);
@@ -208,7 +213,7 @@ public:
     KisToolCropFactory()
             : KoToolFactoryBase("KisToolCrop") {
         setToolTip(i18n("Crop Tool"));
-        setSection(TOOL_TYPE_TRANSFORM);
+        setSection(ToolBoxSection::Transform);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
         setIconName(koIconNameCStr("tool_crop"));

@@ -6,7 +6,7 @@
 
 #include "kis_queues_progress_updater_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_queues_progress_updater.h"
 #include <testutil.h>
@@ -109,4 +109,4 @@ void KisQueuesProgressUpdaterTest::testFastProgress()
     QCOMPARE(progressProxy.format(), QString());
 }
 
-QTEST_MAIN(KisQueuesProgressUpdaterTest)
+SIMPLE_TEST_MAIN(KisQueuesProgressUpdaterTest)

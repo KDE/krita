@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
    id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="32"
-   width="32">
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -47,19 +47,21 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:none"
-     id="layer3">
+     transform="translate(0,-16)"
+     id="layer3"
+     style="display:none">
     <path
-       id="rect4165"
-       d="M 4,0 C 1.784,0 0,1.784 0,4 l 4,0 z m 4,0 0,4 6,0 0,-4 z m 10,0 0,4 6,0 0,-4 z m 10,0 0,4 4,0 C 32,1.784 30.216,0 28,0 Z M 0,8 0,14 4,14 4,8 Z m 28,0 0,6 4,0 0,-6 z m -28,10 0,6 4,0 0,-6 z m 28,0 0,6 4,0 0,-6 z M 0,28 c 0,2.216 1.784,4 4,4 l 0,-4 z m 8,0 0,4 6,0 0,-4 z m 10,0 0,4 6,0 0,-4 z m 10,0 0,4 c 2.216,0 4,-1.784 4,-4 z"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 4,0 C 1.784,0 0,1.784 0,4 h 4 z m 4,0 v 4 h 6 V 0 Z m 10,0 v 4 h 6 V 0 Z m 10,0 v 4 h 4 C 32,1.784 30.216,0 28,0 Z M 0,8 v 6 H 4 V 8 Z m 28,0 v 6 h 4 V 8 Z M 0,18 v 6 h 4 v -6 z m 28,0 v 6 h 4 V 18 Z M 0,28 c 0,2.216 1.784,4 4,4 v -4 z m 8,0 v 4 h 6 v -4 z m 10,0 v 4 h 6 v -4 z m 10,0 v 4 c 2.216,0 4,-1.784 4,-4 z"
+       id="rect4165" />
   </g>
   <g
-     style="display:inline"
-     id="layer4">
+     transform="scale(0.5)"
+     id="layer4"
+     style="display:inline">
     <path
-       id="rect4883"
-       d="M 0,0 0,4 0,8 4,8 4,4 8,4 8,0 Z m 12,0 0,4 8,0 0,-4 z m 12,0 0,4 4,0 0,4 4,0 0,-4 0,-4 z m -24,12 0,8 4,0 0,-8 z m 28,0 0,8 4,0 0,-8 z m -28,12 0,4 0,4 8,0 0,-4 -4,0 0,-4 z m 28,0 0,4 -4,0 0,4 8,0 0,-4 0,-4 z m -16,4 0,4 8,0 0,-4 z"
-       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 0,0 V 8 H 4 V 4 H 8 V 0 Z m 12,0 v 4 h 8 V 0 Z m 12,0 v 4 h 4 v 4 h 4 V 0 Z M 0,12 v 8 h 4 v -8 z m 28,0 v 8 h 4 V 12 Z M 0,24 v 8 H 8 V 28 H 4 v -4 z m 28,0 v 4 h -4 v 4 h 8 v -8 z m -16,4 v 4 h 8 v -4 z"
+       id="rect4883" />
   </g>
 </svg>

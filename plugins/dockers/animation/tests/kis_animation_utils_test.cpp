@@ -228,4 +228,4 @@ void KisAnimationUtilsTest::test()
 
 }
 
-QTEST_MAIN(KisAnimationUtilsTest)
+SIMPLE_TEST_MAIN(KisAnimationUtilsTest)

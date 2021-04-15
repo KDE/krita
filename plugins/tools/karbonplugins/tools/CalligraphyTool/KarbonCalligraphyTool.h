@@ -30,9 +30,11 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
-    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    KisPopupWidgetInterface *popupWidget() override;
+
+    void activate(const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
 Q_SIGNALS:
@@ -47,7 +49,7 @@ private Q_SLOTS:
     void setAngle(int angle);   // set theangle in degrees
     void setFixation(double fixation);
     void setCaps(double caps);
-    void setMass(double mass);     // set the mass in user friendly format
+    void setMass(double mass);  // set the mass in user friendly format
     void setDrag(double drag);
 
     void updateSelectedPath();

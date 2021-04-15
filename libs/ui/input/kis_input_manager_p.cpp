@@ -24,6 +24,7 @@
 #include "kis_extended_modifiers_mapper.h"
 
 #include "kis_zoom_and_rotate_action.h"
+#include "kis_popup_palette.h"
 
 /**
  * This hungry class EventEater encapsulates event masking logic.
@@ -170,10 +171,10 @@ KisInputManager::Private::Private(KisInputManager *qq)
                           KisSignalCompressor::FIRST_ACTIVE,
                           KisSignalCompressor::ADDITIVE_INTERVAL)
     , priorityEventFilterSeqNo(0)
+    , popupWidget(nullptr)
     , canvasSwitcher(this, qq)
 {
     KisConfig cfg(true);
-
 
     moveEventCompressor.setDelay(cfg.tabletEventsDelay());
     testingAcceptCompressedTabletEvents = cfg.testingAcceptCompressedTabletEvents();
@@ -600,15 +601,6 @@ bool KisInputManager::Private::processUnhandledEvent(QEvent *event)
     }
 
     return retval && !forwardAllEventsToTool;
-}
-
-bool KisInputManager::Private::tryHidePopupPalette()
-{
-    if (canvas->isPopupPaletteVisible()) {
-        canvas->slotShowPopupPalette();
-        return true;
-    }
-    return false;
 }
 
 #ifdef HAVE_X11

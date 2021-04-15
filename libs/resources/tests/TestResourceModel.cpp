@@ -5,7 +5,7 @@
  */
 #include "TestResourceModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -81,12 +81,14 @@ void TestResourceModel::testRowCount()
     int rowCount = q.value(0).toInt();
     QVERIFY(rowCount == 3);
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
     QCOMPARE(resourceModel.rowCount(), rowCount);
 }
 
 void TestResourceModel::testData()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
 
     QStringList resourceNames;
 
@@ -104,6 +106,8 @@ void TestResourceModel::testData()
 void TestResourceModel::testResourceForIndex()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(resource);
     QVERIFY(resource->resourceId() > -1);
@@ -112,6 +116,8 @@ void TestResourceModel::testResourceForIndex()
 void TestResourceModel::testIndexFromResource()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
     QModelIndex idx = resourceModel.indexForResource(resource);
     QVERIFY(idx.row() == 1);
@@ -122,8 +128,8 @@ void TestResourceModel::testSetInactiveByIndex()
 {
     KisResourceModel resourceModel(m_resourceType);
     int resourceCount = resourceModel.rowCount();
-    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
-    bool r = resourceModel.setResourceInactive(resourceModel.index(1, 0));
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    bool r = resourceModel.setResourceInactive(resourceModel.index(0, 0));
     QVERIFY(r);
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
     QVERIFY(!resourceModel.indexForResource(resource).isValid());
@@ -133,6 +139,7 @@ void TestResourceModel::testSetInactiveByIndex()
 void TestResourceModel::testImportResourceFile()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
 
     QTemporaryFile f(QDir::tempPath() + "/testresourcemodel-testimportresourcefile-XXXXXX.kpp");
     f.open();
@@ -148,6 +155,8 @@ void TestResourceModel::testImportResourceFile()
 void TestResourceModel::testAddResource()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
     int resourceCount = resourceModel.rowCount();
     KoResourceSP resource(new DummyResource("dummy.kpp"));
     resource->setValid(true);
@@ -159,6 +168,8 @@ void TestResourceModel::testAddResource()
 void TestResourceModel::testAddTemporaryResource()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
     int resourceCount = resourceModel.rowCount();
     KoResourceSP resource(new DummyResource("dummy.kpp"));
     resource->setValid(true);
@@ -167,44 +178,11 @@ void TestResourceModel::testAddTemporaryResource()
     QCOMPARE(resourceCount + 1, resourceModel.rowCount());
 }
 
-void TestResourceModel::testUpdateResource()
-{
-    int resourceId;
-    {
-        KisResourceModel resourceModel(m_resourceType);
-        KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
-        QVERIFY(resource);
-        resource.dynamicCast<DummyResource>()->setSomething("It's changed");
-        resourceId = resource->resourceId();
-        bool r = resourceModel.updateResource(resource);
-        QVERIFY(r);
-    }
-
-    {
-        // Check the resource itself
-        KisResourceLocator::instance()->purge();
-        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(resourceId);
-
-        QVERIFY(resource);
-        QCOMPARE(resource.dynamicCast<DummyResource>()->something(), "It's changed");
-        QVERIFY(resource->resourceId() == resourceId);
-
-        // Check the versions in the database
-        QSqlQuery q;
-        QVERIFY(q.prepare("SELECT count(*)\n"
-                          "FROM   versioned_resources\n"
-                          "WHERE  resource_id = :resource_id\n"));
-        q.bindValue(":resource_id", resourceId);
-        QVERIFY(q.exec());
-        q.first();
-        int rowCount = q.value(0).toInt();
-        QCOMPARE(rowCount, 2);
-    }
-}
-
 void TestResourceModel::testResourceForId()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(!resource.isNull());
     KoResourceSP resource2 = resourceModel.resourceForId(resource->resourceId());
@@ -215,7 +193,9 @@ void TestResourceModel::testResourceForId()
 void TestResourceModel::testResourceForName()
 {
     KisResourceModel resourceModel(m_resourceType);
-    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(!resource.isNull());
     KoResourceSP resource2 = resourceModel.resourceForName(resource->name());
     QVERIFY(!resource2.isNull());
@@ -225,6 +205,8 @@ void TestResourceModel::testResourceForName()
 void TestResourceModel::testResourceForFileName()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(!resource.isNull());
     KoResourceSP resource2 = resourceModel.resourceForFilename(resource->filename());
@@ -235,6 +217,8 @@ void TestResourceModel::testResourceForFileName()
 void TestResourceModel::testResourceForMD5()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(!resource.isNull());
     KoResourceSP resource2 = resourceModel.resourceForMD5(resource->md5());
@@ -245,6 +229,7 @@ void TestResourceModel::testResourceForMD5()
 void TestResourceModel::testRenameResource()
 {
     KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
 
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
     QVERIFY(!resource.isNull());
@@ -270,6 +255,44 @@ void TestResourceModel::testRenameResource()
     QCOMPARE("A New Name", newName);
 }
 
+void TestResourceModel::testUpdateResource()
+{
+    int resourceId;
+    {
+        KisResourceModel resourceModel(m_resourceType);
+        resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
+        KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+        QVERIFY(resource);
+        resource.dynamicCast<DummyResource>()->setSomething("It's changed");
+        resourceId = resource->resourceId();
+        bool r = resourceModel.updateResource(resource);
+        QVERIFY(r);
+    }
+
+    {
+        // Check the resource itself
+        KisResourceLocator::instance()->purge("");
+        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(resourceId);
+
+        QVERIFY(resource);
+        QCOMPARE(resource.dynamicCast<DummyResource>()->something(), "It's changed");
+        QVERIFY(resource->resourceId() == resourceId);
+
+        // Check the versions in the database
+        QSqlQuery q;
+        QVERIFY(q.prepare("SELECT count(*)\n"
+                          "FROM   versioned_resources\n"
+                          "WHERE  resource_id = :resource_id\n"));
+        q.bindValue(":resource_id", resourceId);
+        QVERIFY(q.exec());
+        q.first();
+        int rowCount = q.value(0).toInt();
+        QCOMPARE(rowCount, 2);
+    }
+}
+
+
 void TestResourceModel::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();
@@ -277,5 +300,5 @@ void TestResourceModel::cleanupTestCase()
 }
 
 
-QTEST_MAIN(TestResourceModel)
+SIMPLE_TEST_MAIN(TestResourceModel)
 

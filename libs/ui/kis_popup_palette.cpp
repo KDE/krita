@@ -33,6 +33,7 @@
 #include <kis_paintop_preset.h>
 #include "KisMouseClickEater.h"
 
+static const int BRUSH_HUD_MARGIN = 16;
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -48,11 +49,6 @@ public:
     void tabletEvent(QTabletEvent* event) override {
         event->accept();
         QMouseEvent* mouseEvent = 0;
-
-        // this will tell the pop-up palette widget to close
-        if(event->button() == Qt::RightButton) {
-            emit requestCloseContainer();
-        }
 
         // ignore any tablet events that are done with the right click
         // Tablet move events don't return a "button", so catch that too
@@ -103,8 +99,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_acyclicConnector(new KisAcyclicSignalConnector(this))
     , m_clicksEater(new KisMouseClickEater(Qt::RightButton, 1, this))
 {
-    // some UI controls are defined and created based off these variables
-
     const int borderWidth = 3;
 
     if (KisConfig(true).readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
@@ -114,7 +108,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     }
     else {
         m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
-        connect(m_triangleColorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
     }
     m_triangleColorSelector->setDisplayRenderer(displayRenderer);
     m_triangleColorSelector->setConfig(true,false);
@@ -144,8 +137,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     QRegion maskedRegion = maskedEllipse.intersected(maskedRectange);
     m_triangleColorSelector->setMask(maskedRegion);
 
-    //setAttribute(Qt::WA_TranslucentBackground, true);
-
     connect(m_triangleColorSelector, SIGNAL(sigNewColor(KoColor)),
             m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
@@ -173,14 +164,12 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     setHoveredColor(-1);
     setSelectedColor(-1);
 
-    m_brushHud = new KisBrushHud(provider, parent);
+    m_brushHud = new KisBrushHud(provider, this);
     m_brushHud->setFixedHeight(int(m_popupPaletteSize));
-    m_brushHud->setVisible(false);
+    m_brushHud->move(int(m_popupPaletteSize + BRUSH_HUD_MARGIN), 0);
 
     const int auxButtonSize = 35;
-
     m_settingsButton = new KisRoundHudButton(this);
-
     m_settingsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
 
@@ -340,28 +329,6 @@ void KisPopupPalette::slotZoomSliderReleased()
     m_isZoomingCanvas = false;
 }
 
-void KisPopupPalette::adjustLayout(const QPoint &p)
-{
-    KIS_ASSERT_RECOVER_RETURN(m_brushHud);
-    if (isVisible() && parentWidget())  {
-
-        float hudMargin = 30.0;
-        const QRect fitRect = kisGrowRect(parentWidget()->rect(), -20.0); // -20 is widget margin
-        const QPoint paletteCenterOffset(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
-        QRect paletteRect = rect();
-        paletteRect.moveTo(p - paletteCenterOffset);
-        if (m_brushHudButton->isChecked()) {
-            m_brushHud->updateGeometry();
-            paletteRect.adjust(0, 0, m_brushHud->width() + hudMargin, 0);
-        }
-
-        paletteRect = kisEnsureInRect(paletteRect, fitRect);
-        move(paletteRect.topLeft());
-        m_brushHud->move(paletteRect.topLeft() + QPoint(m_popupPaletteSize + hudMargin, 0));
-        m_lastCenterPoint = p;
-    }
-}
-
 void KisPopupPalette::slotUpdateIcons()
 {
     this->setPalette(qApp->palette());
@@ -389,52 +356,31 @@ void KisPopupPalette::showHudWidget(bool visible)
     }
 
     m_brushHud->setVisible(reallyVisible);
-    adjustLayout(m_lastCenterPoint);
 
     KisConfig cfg(false);
     cfg.setShowBrushHud(visible);
-}
 
-void KisPopupPalette::showPopupPalette(const QPoint &p)
-{
-    showPopupPalette(!isVisible());
-    adjustLayout(p);
-}
-
-void KisPopupPalette::showPopupPalette(bool show)
-{
-    if (show) {
-        // don't set the zoom slider if we are outside of the zoom slider bounds. It will change the zoom level to within
-        // the bounds and cause the canvas to jump between the slider's min and max
-        if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
-                m_coordinatesConverter->zoomInPercent() < zoomSliderMaxValue  ){
-
-            KisSignalsBlocker b(zoomCanvasSlider);
-            zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
-        }
-    }
-    setVisible(show);
-    m_brushHud->setVisible(show && m_brushHudButton->isChecked());
-}
-
-//redefinition of setVariable function to change the scope to private
-void KisPopupPalette::setVisible(bool b)
-{
-    QWidget::setVisible(b);
+    resize(calculateSize());
 }
 
 void KisPopupPalette::setParent(QWidget *parent) {
-    m_brushHud->setParent(parent);
     QWidget::setParent(parent);
 }
 
+
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(m_popupPaletteSize, m_popupPaletteSize + 50); // last number is the space for the toolbar below
+    return QSize(m_popupPaletteSize, m_popupPaletteSize);
 }
 
-void KisPopupPalette::resizeEvent(QResizeEvent*)
+QSize KisPopupPalette::calculateSize() const
 {
+    const int toolbarSize = 50;
+    const int width = m_brushHudButton->isChecked() ?
+                m_popupPaletteSize + m_brushHud->width() + BRUSH_HUD_MARGIN :
+                m_popupPaletteSize;
+
+    return QSize(width, m_popupPaletteSize + toolbarSize);
 }
 
 void KisPopupPalette::paintEvent(QPaintEvent* e)
@@ -839,9 +785,38 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event) {
     event->ignore();
 }
 
+void KisPopupPalette::popup(const QPoint &position) {
+    setVisible(!isVisible());
+
+    if (isVisible() && parentWidget())  {
+        const float widgetMargin = -20.0f;
+        const QRect fitRect = kisGrowRect(parentWidget()->rect(), widgetMargin);
+        const QPoint paletteCenterOffset(sizeHint().width() / 2, sizeHint().height() / 2);
+
+        QRect paletteRect = rect();
+
+        paletteRect.moveTo(position - paletteCenterOffset);
+
+        paletteRect = kisEnsureInRect(paletteRect, fitRect);
+        move(paletteRect.topLeft());
+    }
+}
+
 void KisPopupPalette::showEvent(QShowEvent *event)
 {
     m_clicksEater->reset();
+
+    // don't set the zoom slider if we are outside of the zoom slider bounds. It will change the zoom level to within
+    // the bounds and cause the canvas to jump between the slider's min and max
+    if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
+            m_coordinatesConverter->zoomInPercent() < zoomSliderMaxValue){
+        KisSignalsBlocker b(zoomCanvasSlider);
+        zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
+    }
+
+    m_brushHud->setVisible(m_brushHudButton->isChecked());
+
+    resize(calculateSize());
     QWidget::showEvent(event);
 }
 
@@ -850,12 +825,12 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
-    if (event->buttons() == Qt::NoButton &&
-        event->button() == Qt::RightButton) {
+//    if (event->buttons() == Qt::NoButton &&
+//        event->button() == Qt::RightButton) {
 
-        showPopupPalette(false);
-        return;
-    }
+//        setVisible(false);
+//        return;
+//    }
 
     m_isOverCanvasRotationIndicator = false;
     m_isRotatingCanvasIndicator = false;

@@ -130,7 +130,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
-    deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("trash-empty"));
+    deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
 
 
 
@@ -222,7 +222,7 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
      */
 
     KoResourceServer<KisBrush>* server = KisBrushServerProvider::instance()->brushServer();
-    KoResourceSP resource = server->resourceByFilename(brush->filename());
+    KoResourceSP resource = server->resourceByMD5(brush->md5());
 
     if (!resource) {
         resource = server->resourceByName(brush->name());

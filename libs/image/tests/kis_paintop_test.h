@@ -7,7 +7,7 @@
 #ifndef KIS_PAINTOP_TEST_H
 #define KIS_PAINTOP_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPaintopTest : public QObject
 {

@@ -154,8 +154,8 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     KisRandomSubAccessorSP source = device->createRandomSubAccessor();
 
     while (destination.nextPixel()) {
-        double xv = verticalWave->valueAt(destination.y(), destination.x());
-        double yv = horizontalWave->valueAt(destination.x(), destination.y());
+        double xv = horizontalWave->valueAt(destination.y(), destination.x());
+        double yv = verticalWave->valueAt(destination.x(), destination.y());
         source->moveTo(QPointF(xv, yv));
         source->sampledOldRawData(destination.rawData());
     }
@@ -164,7 +164,7 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     delete horizontalWave;
 }
 
-QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod) const
+QRect KisFilterWave::changedRect(const QRect &rect, const KisFilterConfigurationSP config, int lod) const
 {
     Q_UNUSED(lod);
 

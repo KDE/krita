@@ -6,32 +6,32 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   version="1.1"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
    id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="32"
-   width="32">
+   version="1.1">
   <defs
      id="defs4">
     <linearGradient
        id="linearGradient5033">
       <stop
-         id="stop5035"
+         style="stop-color:#d2d2d2;stop-opacity:1;"
          offset="0"
-         style="stop-color:#cacaca;stop-opacity:1;" />
+         id="stop5035" />
       <stop
-         id="stop5037"
+         style="stop-color:#d2d2d2;stop-opacity:0;"
          offset="1"
-         style="stop-color:#cacaca;stop-opacity:0;" />
+         id="stop5037" />
     </linearGradient>
     <linearGradient
-       gradientUnits="userSpaceOnUse"
-       y2="16"
-       x2="6"
-       y1="16"
-       x1="26"
+       xlink:href="#linearGradient5033"
        id="linearGradient5039"
-       xlink:href="#linearGradient5033" />
+       x1="26"
+       y1="16"
+       x2="6"
+       y2="16"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <metadata
      id="metadata7">
@@ -68,25 +68,28 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:inline"
-     id="layer3">
+     transform="scale(0.5)"
+     id="layer3"
+     style="display:inline">
     <g
-       transform="matrix(0,-1,1,0,0,30)"
+       style="display:inline"
        id="g4171-7"
-       style="display:inline" />
+       transform="rotate(-90,15,15)" />
     <path
-       id="rect4157"
-       d="m 0,0 0,4 0,24 0,4 32,0 0,-4 0,-24 0,-4 z m 2,2 28,0 0,28 -28,0 z"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 0,0 V 32 H 32 V 0 Z M 2,2 H 30 V 30 H 2 Z"
+       id="rect4157" />
   </g>
   <g
-     style="display:inline"
-     id="layer6">
+     transform="scale(0.5)"
+     id="layer6"
+     style="display:inline">
     <path
-       id="rect5031"
-       d="m 4,3.9999995 24,0 0,1e-7 0,23.9999994 0,1e-6 -24,0 0,-1e-6 0,-23.9999994 z"
-       style="opacity:1;fill:url(#linearGradient5039);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:url(#linearGradient5039);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 4,3.9999995 h 24 v 1e-7 V 27.999999 28 H 4 v -1e-6 z"
+       id="rect5031" />
   </g>
   <g
+     transform="translate(0,-16)"
      id="layer1" />
 </svg>

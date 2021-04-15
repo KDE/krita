@@ -52,7 +52,7 @@ protected Q_SLOTS:
     void resetCursorStyle() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 private Q_SLOTS:
@@ -84,7 +84,7 @@ public:
         setToolTip(i18n("Colorize Mask Editing Tool"));
 
         // Temporarily
-        setSection(TOOL_TYPE_FILL);
+        setSection(ToolBoxSection::Fill);
         setIconName(koIconNameCStr("krita_tool_lazybrush"));
         //setShortcut(QKeySequence(Qt::Key_Shift + Qt::Key_B));
         setPriority(3);

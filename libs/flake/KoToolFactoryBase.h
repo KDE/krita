@@ -21,6 +21,19 @@ class KActionCollection;
 class QAction;
 
 /**
+ * Each tool has a "section" which it uses to be grouped in the toolbox.
+ */
+namespace ToolBoxSection {
+    static const QString Main {"main"};                   ///< Tools that only work on vector shapes
+    static const QString Shape {"0 Krita/Shape"};         ///< Freehand and shapes like ellipses and lines
+    static const QString Transform {"2 Krita/Transform"}; ///< Tools that transform the layer
+    static const QString Fill {"3 Krita/Fill"};           ///< Tools that fill parts of the canvas
+    static const QString View {"4 Krita/View"};           ///< Assistance tools: guides, reference, etc.
+    static const QString Select {"5 Krita/Select"};       ///< Tools that select pixels
+    static const QString Navigation {"navigation"};       ///< Tools that affect the canvas: pan, zoom, etc.
+}
+
+/**
  * A factory for KoToolBase objects.
  *
  * The baseclass for all tool plugins. Each plugin that ships a KoToolBase should also
@@ -33,7 +46,7 @@ class QAction;
  *   MyToolFactory(const QStringList&)
  *       : KoToolFactoryBase("MyTool") {
  *       setToolTip(i18n("Create object"));
- *       setToolType("dynamic");
+ *       setSection("main");
  *       setPriority(5);
  *   }
  *   ~MyToolFactory() {}
@@ -51,8 +64,7 @@ class KRITAFLAKE_EXPORT KoToolFactoryBase : public QObject
 public:
     /**
      * Create the new factory
-     * @param id a string that will be used internally for referencing the tool, for
-     *   example for use by the KoToolBase::activateTemporary.
+     * @param id a string that will be used internally for referencing the tool
      */
     explicit KoToolFactoryBase(const QString &id);
     virtual ~KoToolFactoryBase();
@@ -82,8 +94,8 @@ public:
      */
     int priority() const;
     /**
-     * returns the type of tool, used to group tools in the toolbox
-     * @return the type of tool
+     * returns the section used to group tools in the toolbox
+     * @return the section
      */
     QString section() const;
     /**
@@ -100,46 +112,6 @@ public:
     /**
      * Return the id of the shape we can process.
      * This is the shape Id the tool we create is associated with.  So a TextTool for a TextShape.
-     * In combination with the toolType the following situations can occur;
-     <table><tr><th>Type</th><th>shapeId</th><th>Result</th></tr>
-     <tr>
-        <td>'main'</td>
-        <td>Foo</td>
-        <td>Tool will always be visible, but only active when shape with shapeId 'Foo' is in the selection.</td></tr>
-     <tr>
-        <td>'main'</td>
-        <td>''</td>
-        <td>Tool will always be visible, but only active when at least one shape is selected</td></tr>
-     <tr>
-        <td>'main'</td>
-        <td>'flake/always'</td>
-        <td>Tool will always be visible and enabled.</td></tr>
-     <tr>
-        <td>'main'</td>
-        <td>'flake/edit'</td>
-        <td>Tool will be visible no matter which shape is selected (if any), but only
-            be enabled when the current layer is editable.</td></tr>
-     <tr>
-        <td>'dynamic'</td>
-        <td>Foo</td>
-        <td>Tool will only be visible when shape with shapeId 'Foo' is in the selection.</td></tr>
-     <tr>
-        <td>'dynamic'</td>
-        <td>''</td>
-        <td>Tool will always be visible. We recommend you don't use this one.</td></tr>
-     <tr>
-        <td>"comma separated list of application names"</td>
-        <td>see main type</td>
-        <td>Similar to the 'main' item if the application name matches with the current application. Otherwise it's similar to 'dynamic', but segmented in its own section. If the list includes 'dynamic' it's even added to the dynamic section, when not matching the application name</td></tr>
-     <tr>
-        <td>'other'</td>
-        <td>any</td>
-        <td>similar to the 'dynamic' items, but segmented in its own section.</td></tr>
-     <tr>
-        <td>n/a</td>
-        <td>/always</td>
-        <td>An activation shape id ending with '/always' will make the tool always visible and enabled.</td></tr>
-     </table>
      * @see KoShapeFactoryBase::shapeId()
      * @see setActivationShapeId()
      * @return the id of a shape, or an empty string for all shapes.
@@ -156,43 +128,6 @@ public:
      */
     QKeySequence shortcut() const;
 
-    /**
-     * Returns the main toolType
-     * Each tool has a toolType which it uses to be grouped in the toolbox.
-     * The predefined areas are main and dynamic. "main" tools are always
-     * shown.
-     *
-     * @see toolType()
-     * @see setToolType()
-     */
-    static QString mainToolType() {
-        return "main";
-    }
-    /**
-     * Returns the navigation toolType
-     * Each tool has a toolType which it uses to be grouped in the toolbox.
-     * The predefined areas are main and dynamic. "navigation" tools are always
-     * shown and are for tools that change the settings of the canvas, zoom, pan...
-     *
-     * @see toolType()
-     * @see setToolType()
-     */
-    static QString navigationToolType() {
-        return "navigation";
-    }
-    /**
-     * Returns the dynamic toolType
-     * Each tool has a toolType which it uses to be grouped in the toolbox.
-     * The predefined areas are main and dynamic. Dynamic tools are hidden
-     * until the shape they belong to is activated.
-     *
-     * @see toolType()
-     * @see setToolType()
-     */
-    static QString dynamicToolType() {
-        return "dynamic";
-    }
-
 protected:
 
     /**
@@ -207,8 +142,8 @@ protected:
     void setToolTip(const QString &tooltip);
 
     /**
-     * Set the toolType. used to group tools in the toolbox
-     * @param toolType the toolType
+     * Set the section used to group tools in the toolbox
+     * @param section the section
      */
     void setSection(const QString &section);
 

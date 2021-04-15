@@ -73,7 +73,7 @@ struct KisReferenceImage::Private : public QSharedData
 
         if (image.isNull()) {
             KisDocument * doc = KisPart::instance()->createTemporaryDocument();
-            if (doc->openUrl(QUrl::fromLocalFile(externalFilename), KisDocument::DontAddToRecent)) {
+            if (doc->openPath(externalFilename, KisDocument::DontAddToRecent)) {
                 image = doc->image()->convertToQImage(doc->image()->bounds(), 0);
             }
             KisPart::instance()->removeDocument(doc);

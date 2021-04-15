@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="436"
+version="437"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -19,10 +19,12 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
+      <Action name="file_export_advanced"/>
       <Separator/>
       <Action name="file_export_pdf"/>
       <Separator/>
       <Action name="file_import_animation"/>
+      <Action name="file_import_video_animation"/>
       <Action name="render_animation"/>
       <Separator/>
       <Action name="save_incremental_version"/>
@@ -52,6 +54,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="copy_merged"/>
       <Action name="edit_paste"/>
       <Action name="paste_at"/>
+      <Action name="paste_into"/>
       <Action name="paste_new"/>
       <Action name="paste_as_reference"/>
       <Action name="paste_shape_style"/>
@@ -147,6 +150,10 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="resizeimagetolayer"/>
       <Action name="resizeimagetoselection"/>
       <Separator/>
+      <Action name="imagesize" group="image_transform_merge"/>
+      <Action name="imageresolution"/>
+      <Action name="canvassize" group="canvas_resize_merge"/>
+      <Separator/>
       <Menu name="Rotate">
         <text>&amp;Rotate</text>
         <Action name="rotateimage"/>
@@ -227,6 +234,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       </Menu>
       <Menu name="LayerTransform">
          <text>&amp;Transform</text>
+         <Action name="layersize" group="layer_transform_merge"/>
          <Action name="mirrorNodeX"/>
          <Action name="mirrorNodeY"/>
          <Action name="layersize"/>
@@ -288,6 +296,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="reselect"/>
       <Action name="invert_selection"/>
       <Separator/>
+      <Action name="selectionscale"/>
       <Action name="edit_selection"/>
       <Action name="convert_to_vector_selection"/>
       <Action name="convert_to_raster_selection"/>
@@ -346,6 +355,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <text>Setti&amp;ngs</text>
       <Action name="options_configure"/>
       <Action name="manage_bundles"/>
+      <Action name="manage_resources"/>
       <Action name="dbexplorer"/>
       <Separator/>
       <Action name="options_configure_toolbars"/>

@@ -6,7 +6,7 @@
 
 #include "kis_kra_loader_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KisDocument.h>
 #include <KoDocumentInfo.h>

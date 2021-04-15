@@ -6,7 +6,7 @@
 
 #include "kis_warp_transform_worker_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 
 #include "kis_warptransform_worker.h"
@@ -337,4 +337,4 @@ void KisWarpTransformWorkerTest::testNeedChangeRects()
 }
 
 
-QTEST_MAIN(KisWarpTransformWorkerTest)
+SIMPLE_TEST_MAIN(KisWarpTransformWorkerTest)

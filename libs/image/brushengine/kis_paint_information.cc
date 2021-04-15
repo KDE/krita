@@ -494,6 +494,9 @@ KisRandomSourceSP KisPaintInformation::randomSource() const
 {
     if (!d->randomSource) {
         qWarning() << "Accessing uninitialized random source!";
+        Q_FOREACH(const QString &line, kisBacktrace().split("\n")) {
+            qDebug() << "\t" << line;
+        }
         d->randomSource = new KisRandomSource();
     }
 

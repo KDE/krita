@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -48,25 +48,14 @@
           <widget class="QSpinBox" name="spinBoxCol"/>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <item>
-            <widget class="QRadioButton" name="rb_global">
-             <property name="text">
-              <string>Resource Folder</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="rb_document">
-             <property name="text">
-              <string>Document</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Storage Location</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="storageLocation"/>
          </item>
          <item>
           <spacer name="verticalSpacer_2">

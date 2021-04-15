@@ -6,7 +6,7 @@
 
 #include "kis_node_manager_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <kis_filter_configuration.h>
 
 #include <sdk/tests/testutil.h>

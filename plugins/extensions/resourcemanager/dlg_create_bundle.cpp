@@ -31,6 +31,8 @@
 #include <dlg_embed_tags.h>
 #include <KisGlobalResourcesInterface.h>
 
+#include <wdgtagselection.h>
+
 #include <kis_config.h>
 
 #define ICON_SIZE 48
@@ -57,7 +59,6 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
 
         setCaption(i18n("Edit Resource Bundle"));
 #if 0
-        /*
         m_ui->lblSaveLocation->setText(QFileInfo(bundle->filename()).absolutePath());
         m_ui->editBundleName->setText(bundle->name());
         m_ui->editAuthor->setText(bundle->getMeta("author"));
@@ -132,7 +133,6 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
             }
 #endif
         }
-        */
 #endif
     }
     else {
@@ -243,7 +243,7 @@ QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagS
     return tagsToEmbed;
 }
 
-void DlgCreateBundle::putResourcesInTheBundle() const
+void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
 {
     KisResourceModel emptyModel("");
     QStack<int> allResourcesIds;
@@ -261,7 +261,7 @@ void DlgCreateBundle::putResourcesInTheBundle() const
         }
         KisResourceModel resModel(res->resourceType().first);
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel.tagsForResource(id));
-        m_bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
+        bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
 
         QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
         if (!linkedResources.isEmpty()) {
@@ -272,6 +272,25 @@ void DlgCreateBundle::putResourcesInTheBundle() const
             }
         }
     }
+}
+
+void DlgCreateBundle::putMetaDataInTheBundle(KoResourceBundleSP bundle) const
+{
+    bundle->setMetaData(KisResourceStorage::s_meta_author, authorName());
+    bundle->setMetaData(KisResourceStorage::s_meta_title,  bundleName());
+    bundle->setMetaData(KisResourceStorage::s_meta_description, description());
+    bundle->setMetaData(KisResourceStorage::s_meta_initial_creator,  authorName());
+    bundle->setMetaData(KisResourceStorage::s_meta_creator, authorName());
+    bundle->setMetaData(KisResourceStorage::s_meta_email, email());
+    bundle->setMetaData(KisResourceStorage::s_meta_license, license());
+    bundle->setMetaData(KisResourceStorage::s_meta_website, website());
+
+    bundle->setThumbnail(previewImage());
+
+    // For compatibility
+    bundle->setMetaData("email", email());
+    bundle->setMetaData("license", license());
+    bundle->setMetaData("website", website());
 }
 
 void DlgCreateBundle::accept()
@@ -305,7 +324,8 @@ void DlgCreateBundle::accept()
             saveToConfiguration(false);
 
             m_bundle.reset(new KoResourceBundle(filename));
-            putResourcesInTheBundle();
+            putMetaDataInTheBundle(m_bundle);
+            putResourcesInTheBundle(m_bundle);
             m_bundle->save();
 
         } else {

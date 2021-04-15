@@ -52,7 +52,7 @@ public:
     QWidget* createOptionWidget() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
 private Q_SLOTS:
     void slotSetShape(int);
     void slotSetRepeat(int);
@@ -104,7 +104,7 @@ public:
     KisToolGradientFactory()
             : KisToolPaintFactoryBase("KritaFill/KisToolGradient") {
         setToolTip(i18n("Gradient Tool"));
-        setSection(TOOL_TYPE_FILL);
+        setSection(ToolBoxSection::Fill);
         setIconName(koIconNameCStr("krita_tool_gradient"));
         setShortcut(QKeySequence(Qt::Key_G));
         setPriority(1);

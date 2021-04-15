@@ -1445,7 +1445,7 @@ void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
 {
     using ControlType = typename Mesh<NodeArg, PatchArg>::ControlType;
     using ControlPointIndex = typename Mesh<NodeArg, PatchArg>::ControlPointIndex;
-    using ControlPointIterator = typename Mesh<NodeArg, PatchArg>::control_point_iterator;
+//    using ControlPointIterator = typename Mesh<NodeArg, PatchArg>::control_point_iterator;
     using SegmentIterator = typename Mesh<NodeArg, PatchArg>::segment_iterator;
 
     auto it = mesh.find(index);

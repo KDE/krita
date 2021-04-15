@@ -5,7 +5,7 @@
  */
 
 #include "kis_painter_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <kis_debug.h>
 #include <QRect>

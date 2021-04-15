@@ -5,15 +5,14 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   height="16"
+   width="16"
    version="1.1"
-   id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="32"
-   width="32">
-  <defs
-     id="defs4" />
+   viewBox="0 0 16 16"
+   data-name="Layer 2"
+   id="Layer_2">
   <metadata
-     id="metadata7">
+     id="metadata25">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -26,6 +25,7 @@
             <dc:title>Andrei Rudenko</dc:title>
           </cc:Agent>
         </dc:creator>
+        <dc:date>2021</dc:date>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
@@ -46,16 +46,68 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     id="layer2"
-     style="display:inline">
-    <path
-       style="fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 10.724306,6.4221668 5.641035,-5.6721679 5.672168,5.6721679 H 18.256063 V 25.329394 h 3.833872 l -5.61563,5.699188 -6.200542,-5.699188 h 4.200855 V 6.4221668 Z"
-       id="path4171" />
-    <path
-       style="fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 25.529624,9.531961 5.672168,5.641035 -5.672168,5.672168 V 17.063719 H 6.6223962 V 20.89759 L 0.923209,15.281961 6.6223962,9.0814181 V 13.282274 H 25.529624 Z"
-       id="path4171-3" />
-  </g>
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1,.cls-2{fill:#cacaca;}.cls-2{fill-rule:evenodd;}</style>
+  </defs>
+  <rect
+     style="fill:#373737;stroke-width:0.5;fill-opacity:1"
+     id="rect6"
+     height="2"
+     width="6"
+     y="7"
+     x="2"
+     class="cls-1" />
+  <polygon
+     transform="scale(0.5)"
+     style="fill:#373737;fill-rule:evenodd;fill-opacity:1"
+     id="polygon8"
+     points="6,22 6,10 0,16 "
+     class="cls-2" />
+  <rect
+     style="fill:#373737;stroke-width:0.5;fill-opacity:1"
+     id="rect10"
+     transform="rotate(-90)"
+     height="2"
+     width="6"
+     y="7"
+     x="-14"
+     class="cls-1" />
+  <polygon
+     transform="scale(0.5)"
+     style="fill:#373737;fill-rule:evenodd;fill-opacity:1"
+     id="polygon12"
+     points="22,26 10,26 16,32 "
+     class="cls-2" />
+  <rect
+     style="fill:#373737;stroke-width:0.5;fill-opacity:1"
+     id="rect14"
+     transform="scale(-1)"
+     height="2"
+     width="6"
+     y="-9"
+     x="-14"
+     class="cls-1" />
+  <polygon
+     transform="scale(0.5)"
+     style="fill:#373737;fill-rule:evenodd;fill-opacity:1"
+     id="polygon16"
+     points="26,10 26,22 32,16 "
+     class="cls-2" />
+  <rect
+     style="fill:#373737;stroke-width:0.5;fill-opacity:1"
+     id="rect18"
+     transform="rotate(90)"
+     height="2"
+     width="6"
+     y="-9"
+     x="2"
+     class="cls-1" />
+  <polygon
+     transform="scale(0.5)"
+     style="fill:#373737;fill-rule:evenodd;fill-opacity:1"
+     id="polygon20"
+     points="10,6 22,6 16,0 "
+     class="cls-2" />
 </svg>

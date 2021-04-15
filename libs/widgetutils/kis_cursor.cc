@@ -199,12 +199,12 @@ QCursor KisCursor::samplerLayerBackgroundCursor()
 
 QCursor KisCursor::changeExposureCursor()
 {
-    return load("exposure-cursor-gesture.xpm", 8, 23);
+    return load("exposure-cursor-gesture.xpm");
 }
 
 QCursor KisCursor::changeGammaCursor()
 {
-    return load("gamma-cursor-gesture.xpm", 8, 23);
+    return load("gamma-cursor-gesture.xpm");
 }
 
 QCursor KisCursor::triangleLeftHandedCursor()
@@ -219,12 +219,12 @@ QCursor KisCursor::triangleRightHandedCursor()
 
 QCursor KisCursor::moveCursor()
 {
-    return load("move-tool.png");
+    return load("move-tool.xpm");
 }
 
 QCursor KisCursor::moveSelectionCursor()
 {
-    return load("move-selection.png");
+    return load("move-selection.xpm", 11, 11);
 }
 
 QCursor KisCursor::handCursor()

@@ -6,7 +6,7 @@
 
 #include "TestResourceLocator.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QVersionNumber>
 #include <QDirIterator>
 #include <QSqlError>
@@ -165,6 +165,7 @@ void TestResourceLocator::testSyncVersions()
 
     {
         KisResourceModel model(ResourceType::PaintOpPresets);
+        model.setResourceFilter(KisResourceModel::ShowAllResources);
 
         KoResourceSP res = m_locator->resource("", ResourceType::PaintOpPresets, "test0.kpp");
         resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", "test0.kpp", ResourceType::PaintOpPresets, "");
@@ -212,6 +213,7 @@ void TestResourceLocator::testSyncVersions()
         KisResourceModelProvider::testingResetAllModels();
 
         KisResourceModel model(ResourceType::PaintOpPresets);
+        model.setResourceFilter(KisResourceModel::ShowAllResources);
 
         // ENTER_FUNCTION() << ppVar(model.rowCount());
         // for (int i = 0; i < model.rowCount(); i++) {
@@ -237,6 +239,7 @@ void TestResourceLocator::testSyncVersions()
         KisResourceModelProvider::testingResetAllModels();
 
         KisResourceModel model(ResourceType::PaintOpPresets);
+        model.setResourceFilter(KisResourceModel::ShowAllResources);
 
         // ENTER_FUNCTION() << ppVar(model.rowCount());
         // for (int i = 0; i < model.rowCount(); i++) {
@@ -266,6 +269,7 @@ void TestResourceLocator::testSyncVersions()
         KisResourceModelProvider::testingResetAllModels();
 
         KisResourceModel model(ResourceType::PaintOpPresets);
+        model.setResourceFilter(KisResourceModel::ShowAllResources);
 
         // ENTER_FUNCTION() << ppVar(model.rowCount());
         // for (int i = 0; i < model.rowCount(); i++) {
@@ -296,6 +300,7 @@ void TestResourceLocator::testSyncVersions()
         KisResourceModelProvider::testingResetAllModels();
 
         KisResourceModel model(ResourceType::PaintOpPresets);
+        model.setResourceFilter(KisResourceModel::ShowAllResources);
 
         // ENTER_FUNCTION() << ppVar(model.rowCount());
         // for (int i = 0; i < model.rowCount(); i++) {
@@ -316,5 +321,5 @@ void TestResourceLocator::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-QTEST_MAIN(TestResourceLocator)
+SIMPLE_TEST_MAIN(TestResourceLocator)
 

@@ -6,7 +6,7 @@
 
 #include "TestKoZoomAction.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QDialog>
 
 #include <QVBoxLayout>
@@ -33,4 +33,4 @@ void TestKoZoomAction::test()
 }
 
 
-QTEST_MAIN(TestKoZoomAction)
+SIMPLE_TEST_MAIN(TestKoZoomAction)

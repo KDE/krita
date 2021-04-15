@@ -28,9 +28,6 @@ public:
     explicit KisPaletteChooser(QWidget *parent = nullptr);
     virtual ~KisPaletteChooser();
 
-public:
-    void setAllowModification(bool allowModification);
-
 Q_SIGNALS:
     void sigPaletteSelected(KoColorSetSP);
     void sigAddPalette();
@@ -43,8 +40,10 @@ public Q_SLOTS:
 private /* methods */:
     QString newPaletteFileName();
 
+public Q_SLOTS:
+    void paletteSelected(KoResourceSP);
+
 private Q_SLOTS:
-    void slotPaletteResourceSelected(KoResourceSP);
     void slotAdd();
     void slotRemove();
     void slotImport();

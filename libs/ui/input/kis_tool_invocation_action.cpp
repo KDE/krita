@@ -23,14 +23,9 @@
 class KisToolInvocationAction::Private
 {
 public:
-    Private()
-        : active(false),
-          lineToolActivated(false)
-    {
-    }
+    bool active {false};
+    bool deactivating {false};
 
-    bool active;
-    bool lineToolActivated;
     QPointer<KisToolProxy> activatedToolProxy;
     QPointer<KisToolProxy> runningToolProxy;
 };
@@ -47,6 +42,17 @@ KisToolInvocationAction::KisToolInvocationAction()
     indexes.insert(i18n("Confirm"), ConfirmShortcut);
     indexes.insert(i18n("Cancel"), CancelShortcut);
     indexes.insert(i18n("Activate Line Tool"), LineToolShortcut);
+    indexes.insert(i18n("Activate Ellipse Tool"), EllipseToolShortcut);
+    indexes.insert(i18n("Activate Rectangle Tool"), RectToolShortcut);
+    indexes.insert(i18n("Activate Move Tool"), MoveToolShortcut);
+    indexes.insert(i18n("Activate Fill Tool"), FillToolShortcut);
+    indexes.insert(i18n("Activate Gradient Tool"), GradientToolShortcut);
+    indexes.insert(i18n("Activate Measure Tool"), MeasureToolShortcut);
+    indexes.insert(i18n("Activate Elliptical Selection Tool"), EllipseSelToolShortcut);
+    indexes.insert(i18n("Activate Rectangular Selection Tool"), RectSelToolShortcut);
+    indexes.insert(i18n("Activate Contiguous Selection Tool"), ContigSelToolShortcut);
+    indexes.insert(i18n("Activate Freehand Selection Tool"), FreehandSelToolShortcut);
+
     setShortcutIndexes(indexes);
 }
 
@@ -60,9 +66,45 @@ void KisToolInvocationAction::activate(int shortcut)
     Q_UNUSED(shortcut);
     if (!inputManager()) return;
 
-    if (shortcut == LineToolShortcut) {
-        KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolLine");
-        d->lineToolActivated = true;
+    QString temporaryToolId;
+    switch(shortcut) {
+        case LineToolShortcut:
+            temporaryToolId = "KritaShape/KisToolLine";
+            break;
+        case EllipseToolShortcut:
+            temporaryToolId = "KritaShape/KisToolEllipse";
+            break;
+        case RectToolShortcut:
+            temporaryToolId = "KritaShape/KisToolRectangle";
+            break;
+        case MoveToolShortcut:
+            temporaryToolId = "KritaTransform/KisToolMove";
+            break;
+        case FillToolShortcut:
+            temporaryToolId = "KritaFill/KisToolFill";
+            break;
+        case GradientToolShortcut:
+            temporaryToolId = "KritaFill/KisToolGradient";
+            break;
+        case MeasureToolShortcut:
+            temporaryToolId = "KritaShape/KisToolMeasure";
+            break;
+        case EllipseSelToolShortcut:
+            temporaryToolId = "KisToolSelectElliptical";
+            break;
+        case RectSelToolShortcut:
+            temporaryToolId = "KisToolSelectRectangular";
+            break;
+        case ContigSelToolShortcut:
+            temporaryToolId = "KisToolSelectContiguous";
+            break;
+        case FreehandSelToolShortcut:
+            temporaryToolId = "KisToolSelectOutline";
+            break;
+    }
+
+    if (!temporaryToolId.isEmpty()) {
+        KoToolManager::instance()->switchToolRequested(temporaryToolId);
     }
 
     d->activatedToolProxy = inputManager()->toolProxy();
@@ -83,9 +125,11 @@ void KisToolInvocationAction::deactivate(int shortcut)
         d->activatedToolProxy.clear();
     }
 
-    if (shortcut == LineToolShortcut && d->lineToolActivated) {
-        d->lineToolActivated = false;
+    if (shortcut != ActivateShortcut && shortcut != ConfirmShortcut && shortcut != CancelShortcut && !d->deactivating) {
+        // Switching tool will force deactivation and will re-enter
+        d->deactivating = true;
         KoToolManager::instance()->switchBackRequested();
+        d->deactivating = false;
     }
 }
 
@@ -101,15 +145,16 @@ bool KisToolInvocationAction::canIgnoreModifiers() const
 
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
-    if (shortcut == ActivateShortcut || shortcut == LineToolShortcut) {
+    if (shortcut != ConfirmShortcut && shortcut != CancelShortcut ) {
         d->runningToolProxy = inputManager()->toolProxy();
         d->active =
             d->runningToolProxy->forwardEvent(
                 KisToolProxy::BEGIN, KisTool::Primary, event, event);
-    } else if (shortcut == ConfirmShortcut) {
-        QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
+    }
+    else if (shortcut == ConfirmShortcut) {
+        QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, QFlags<Qt::KeyboardModifier>());
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
-        QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, 0);
+        QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, QFlags<Qt::KeyboardModifier>());
         inputManager()->toolProxy()->keyReleaseEvent(&releaseEvent);
 
         /**
@@ -187,7 +232,7 @@ bool KisToolInvocationAction::supportsHiResInputEvents() const
 
 bool KisToolInvocationAction::isShortcutRequired(int shortcut) const
 {
-    //These really all are pretty important for basic user interaction.
-    Q_UNUSED(shortcut);
-    return true;
+    // These three shortcuts are pretty important for basic user interaction,
+    // so they should always exist.
+    return (shortcut == ActivateShortcut || shortcut == ConfirmShortcut || shortcut == CancelShortcut);
 }

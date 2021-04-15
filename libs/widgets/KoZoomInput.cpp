@@ -26,6 +26,7 @@ class KoZoomInput::Private
         QComboBox* combo;
         QLabel* label;
         bool inside;
+        bool isFlat;
 };
 
 KoZoomInput::KoZoomInput(QWidget* parent)
@@ -59,6 +60,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     d->combo->installEventFilter(this);
     addWidget(d->combo);
     d->inside = false;
+    d->isFlat = true;
 
     connect(d->combo, SIGNAL(activated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
 }
@@ -73,6 +75,10 @@ void KoZoomInput::enterEvent(QEvent* event)
     Q_UNUSED(event);
 
     d->inside = true;
+    if (!isFlat()) {
+        return;
+    }
+
     if (d->combo->view())
     {
         d->combo->view()->removeEventFilter(this);
@@ -86,6 +92,10 @@ void KoZoomInput::leaveEvent(QEvent* event)
     Q_UNUSED(event);
 
     d->inside = false;
+    if (!isFlat()) {
+        return;
+    }
+
     if(d->combo->view() && d->combo->view()->isVisible())
     {
         d->combo->view()->installEventFilter(this);
@@ -102,6 +112,38 @@ void KoZoomInput::keyPressEvent(QKeyEvent* event)
         event->key() == Qt::Key_Enter)
     {
         focusNextChild();
+    }
+}
+
+bool KoZoomInput::isFlat() const
+{
+    return d->isFlat;
+}
+
+void KoZoomInput::setFlat(bool flat)
+{
+    if (flat == d->isFlat) {
+        return;
+    }
+
+    d->isFlat = flat;
+
+    if (flat) {
+        d->combo->installEventFilter(this);
+        if (d->inside) {
+            enterEvent(nullptr);
+        } else {
+            leaveEvent(nullptr);
+        }
+        d->combo->setEditable(true);
+    } else {
+        d->combo->removeEventFilter(this);
+        if (d->combo->view()) {
+            d->combo->view()->removeEventFilter(this);
+        }
+        d->combo->setCurrentIndex(d->combo->findText(d->label->text()));
+        d->combo->setEditable(false);
+        setCurrentIndex(1);
     }
 }
 

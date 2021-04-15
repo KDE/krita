@@ -93,6 +93,8 @@ public:
     QString info() const override;
     QByteArray getProfileUniqueId() const override;
 
+    static cmsToneCurve* transferFunction(TransferCharacteristics transferFunction);
+
 protected:
     LcmsColorProfileContainer();
 

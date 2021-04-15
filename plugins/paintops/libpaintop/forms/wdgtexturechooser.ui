@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -13,9 +13,9 @@
     <width>548</width>
     <height>391</height>
    </rect>
-  </property>  
+  </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item column="0" row="0">
+   <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -24,7 +24,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="textureTab">
       <attribute name="title">
@@ -61,10 +61,10 @@
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
-           <item column="1" row="2">
+           <item row="2" column="1">
             <widget class="KisDoubleSliderSpinBox" name="brightnessSlider" native="true"/>
            </item>
-           <item column="0" row="1">
+           <item row="1" column="0">
             <widget class="QLabel" name="lblDiameter">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -80,7 +80,7 @@
              </property>
             </widget>
            </item>
-           <item column="1" row="5">
+           <item row="5" column="1">
             <widget class="QComboBox" name="cmbCutoffPolicy">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -90,7 +90,7 @@
              </property>
             </widget>
            </item>
-           <item column="0" row="3">
+           <item row="3" column="0">
             <widget class="QLabel" name="lblAngle">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -106,7 +106,7 @@
              </property>
             </widget>
            </item>
-           <item column="1" row="0">
+           <item row="0" column="1">
             <widget class="QComboBox" name="cmbTexturingMode">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -116,7 +116,7 @@
              </property>
             </widget>
            </item>
-           <item column="0" row="2">
+           <item row="2" column="0">
             <widget class="QLabel" name="lblRatio">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -132,7 +132,7 @@
              </property>
             </widget>
            </item>
-           <item column="0" row="5">
+           <item row="5" column="0">
             <widget class="QLabel" name="lblSpacing">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -148,7 +148,7 @@
              </property>
             </widget>
            </item>
-           <item column="0" row="0">
+           <item row="0" column="0">
             <widget class="QLabel" name="lblDensity">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -164,11 +164,10 @@
              </property>
             </widget>
            </item>
-           <item column="1" row="1">
-            <widget class="KisMultipliersDoubleSliderSpinBox" name="scaleSlider" native="true">
-            </widget>
+           <item row="1" column="1">
+            <widget class="KisMultipliersDoubleSliderSpinBox" name="scaleSlider" native="true"/>
            </item>
-           <item column="0" row="6">
+           <item row="6" column="0">
             <widget class="QLabel" name="lblSpacing_2">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -184,18 +183,17 @@
              </property>
             </widget>
            </item>
-           <item column="1" row="6">
+           <item row="6" column="1">
             <widget class="KisGradientSlider" name="cutoffSlider" native="true">
              <property name="text" stdset="0">
               <string>PushButton</string>
              </property>
             </widget>
            </item>
-           <item column="1" row="3">
-            <widget class="KisDoubleSliderSpinBox" name="contrastSlider" native="true">
-            </widget>
+           <item row="3" column="1">
+            <widget class="KisDoubleSliderSpinBox" name="contrastSlider" native="true"/>
            </item>
-           <item column="0" row="4">
+           <item row="4" column="0">
             <widget class="QLabel" name="lblNeutralPoint">
              <property name="text">
               <string>Neutral Point</string>
@@ -205,15 +203,14 @@
              </property>
             </widget>
            </item>
-           <item column="1" row="4">
-            <widget class="KisDoubleSliderSpinBox" name="neutralPointSlider" native="true">
-            </widget>
+           <item row="4" column="1">
+            <widget class="KisDoubleSliderSpinBox" name="neutralPointSlider" native="true"/>
            </item>
           </layout>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout">
-           <item column="0" row="0">
+           <item row="0" column="0">
             <widget class="QLabel" name="lblSpikes">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -229,10 +226,10 @@
              </property>
             </widget>
            </item>
-           <item column="1" row="1">
+           <item row="1" column="1">
             <widget class="KisSliderSpinBox" name="offsetSliderY" native="true"/>
            </item>
-           <item column="1" row="2">
+           <item row="2" column="1">
             <widget class="QCheckBox" name="chkInvert">
              <property name="toolTip">
               <string>The border of the brush will be smoothed to avoid aliasing</string>
@@ -242,17 +239,17 @@
              </property>
             </widget>
            </item>
-           <item column="1" row="0">
+           <item row="0" column="1">
             <widget class="KisSliderSpinBox" name="offsetSliderX" native="true"/>
            </item>
-           <item column="2" row="1">
+           <item row="1" column="2">
             <widget class="QCheckBox" name="randomOffsetY">
              <property name="text">
               <string>Random Offset</string>
              </property>
             </widget>
            </item>
-           <item column="0" row="1">
+           <item row="1" column="0">
             <widget class="QLabel" name="lblRandomness">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -268,7 +265,7 @@
              </property>
             </widget>
            </item>
-           <item column="2" row="0">
+           <item row="0" column="2">
             <widget class="QCheckBox" name="randomOffsetX">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -281,7 +278,7 @@
              </property>
             </widget>
            </item>
-           <item column="1" row="3">
+           <item row="3" column="1">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>

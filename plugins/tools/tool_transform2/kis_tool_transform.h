@@ -158,6 +158,8 @@ public:
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
+    void newActivationWithExternalSource(KisPaintDeviceSP externalSource) override;
+
     TransformToolMode transformMode() const;
 
     double translateX() const;
@@ -178,7 +180,7 @@ public:
     int warpPointDensity() const;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();
@@ -215,6 +217,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void requestUndoDuringStroke() override;
+    void requestRedoDuringStroke() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
     void canvasUpdateRequested();
@@ -252,20 +255,24 @@ private:
 private:
     ToolTransformArgs m_currentArgs;
 
-    bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
+    // Set by newActivationWithExternalSource before starting a new stroke.
+    // The source pixels for the next transform will be read from this device.
+    KisPaintDeviceSP m_externalSourceForNextActivation;
+
+    bool m_actuallyMoveWhileSelected {false}; // true <=> selection has been moved while clicked
 
     KisPaintDeviceSP m_selectedPortionCache;
     KisStrokeId m_strokeId;
-    void *m_strokeStrategyCookie = 0;
-    bool m_currentlyUsingOverlayPreviewStyle = false;
-    bool m_preferOverlayPreviewStyle = false;
-    bool m_forceLodMode = false;
+    void *m_strokeStrategyCookie {0};
+    bool m_currentlyUsingOverlayPreviewStyle {false};
+    bool m_preferOverlayPreviewStyle {false};
+    bool m_forceLodMode {false};
 
-    bool m_workRecursively;
+    bool m_workRecursively {false};
 
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
 
-    KisToolTransformConfigWidget *m_optionsWidget;
+    KisToolTransformConfigWidget *m_optionsWidget {0};
     QPointer<KisCanvas2> m_canvas;
 
     TransformTransactionProperties m_transaction;
@@ -274,20 +281,20 @@ private:
 
 
     /// actions for the context click menu
-    KisAction* warpAction;
-    KisAction* meshAction;
-    KisAction* liquifyAction;
-    KisAction* cageAction;
-    KisAction* freeTransformAction;
-    KisAction* perspectiveAction;
-    KisAction* applyTransformation;
-    KisAction* resetTransformation;
+    KisAction* warpAction {0};
+    KisAction* meshAction {0};
+    KisAction* liquifyAction {0};
+    KisAction* cageAction {0};
+    KisAction* freeTransformAction {0};
+    KisAction* perspectiveAction {0};
+    KisAction* applyTransformation {0};
+    KisAction* resetTransformation {0};
 
     // a few extra context click options if free transform is active
-    KisAction* mirrorHorizontalAction;
-    KisAction* mirrorVericalAction;
-    KisAction* rotateNinteyCWAction;
-    KisAction* rotateNinteyCCWAction;
+    KisAction* mirrorHorizontalAction {0};
+    KisAction* mirrorVericalAction {0};
+    KisAction* rotateNinteyCWAction {0};
+    KisAction* rotateNinteyCCWAction {0};
 
 
 
@@ -349,7 +356,7 @@ public:
     KisToolTransformFactory()
             : KisToolPaintFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
-        setSection(TOOL_TYPE_TRANSFORM);
+        setSection(ToolBoxSection::Transform);
         setIconName(koIconNameCStr("krita_tool_transform"));
         setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
         setPriority(2);

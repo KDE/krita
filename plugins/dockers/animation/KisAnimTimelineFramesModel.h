@@ -83,6 +83,9 @@ public:
     void setFullClipRangeStart(int column);
     void setFullClipRangeEnd(int column);
 
+    void clearEntireCache();
+    void setActiveLayerSelectedTimes(const QSet<int>& times);
+
     void setLastClickedIndex(const QModelIndex &index);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -137,7 +140,7 @@ public:
 
 protected:
     QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
-    KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const;
+    KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const override;
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);

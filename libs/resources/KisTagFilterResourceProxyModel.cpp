@@ -85,6 +85,16 @@ QModelIndex KisTagFilterResourceProxyModel::indexForResource(KoResourceSP resour
     return QModelIndex();
 }
 
+QModelIndex KisTagFilterResourceProxyModel::indexForResourceId(int resourceId) const
+{
+    if (resourceId < 0) return QModelIndex();
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return mapFromSource(source->indexForResourceId(resourceId));
+    }
+    return QModelIndex();
+}
+
 bool KisTagFilterResourceProxyModel::setResourceInactive(const QModelIndex &index)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
@@ -94,13 +104,14 @@ bool KisTagFilterResourceProxyModel::setResourceInactive(const QModelIndex &inde
     return false;
 }
 
-bool KisTagFilterResourceProxyModel::importResourceFile(const QString &filename)
+KoResourceSP KisTagFilterResourceProxyModel::importResourceFile(const QString &filename, const QString &storageId)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    KoResourceSP res;
     if (source) {
-        return source->importResourceFile(filename);
+        res = source->importResourceFile(filename, storageId);
     }
-    return false;
+    return res;
 }
 
 bool KisTagFilterResourceProxyModel::addResource(KoResourceSP resource, const QString &storageId)
@@ -150,27 +161,34 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
 
 void KisTagFilterResourceProxyModel::setMetaDataFilter(QMap<QString, QVariant> metaDataMap)
 {
+    emit beforeFilterChanges();
     d->metaDataMapFilter = metaDataMap;
     invalidateFilter();
+    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
+    emit beforeFilterChanges();;
     d->currentTagFilter = tag;
     updateTagFilter();
+    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setStorageFilter(bool useFilter, int storageId)
 {
+    emit beforeFilterChanges();
     d->useStorageIdFilter = useFilter;
     if (useFilter) {
         d->storageId = storageId;
     }
     invalidateFilter();
+    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::updateTagFilter()
 {
+    emit beforeFilterChanges();
     const bool ignoreTagFiltering =
         !d->filterInCurrentTag && !d->filter->isEmpty();
 
@@ -218,9 +236,12 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
 
     // TODO: when model changes the current selection in the
     //       view disappears. We should try to keep it somehow.
-    setSourceModel(desiredModel);
+    if (sourceModel() != desiredModel) {
+        setSourceModel(desiredModel);
+    }
 
     invalidateFilter();
+    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setResourceFilter(const KoResourceSP resource)
@@ -307,6 +328,6 @@ bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, co
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    return nameLeft < nameRight;
+    return nameLeft.toLower() < nameRight.toLower();
 }
 

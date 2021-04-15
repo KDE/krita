@@ -44,6 +44,8 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
 
+    KisPopupWidgetInterface* popupWidget() override;
+
 protected:
 
     void setMode(ToolMode mode) override;
@@ -102,7 +104,7 @@ protected:
     const KoCompositeOp* compositeOp();
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 private Q_SLOTS:
@@ -111,6 +113,7 @@ private Q_SLOTS:
 
     void increaseBrushSize();
     void decreaseBrushSize();
+    void showBrushSize();
 
     void activateSampleColorDelayed();
 

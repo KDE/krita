@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImageReader>
 #include <QtTest/QtTest>
 #include <qimage_based_test.h>
@@ -85,4 +85,4 @@ void KisMyPaintOpTest::testLoading() {
     QVERIFY(brush->valid());
 }
 
-QTEST_MAIN(KisMyPaintOpTest)
+SIMPLE_TEST_MAIN(KisMyPaintOpTest)

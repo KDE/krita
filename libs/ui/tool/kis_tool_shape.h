@@ -49,7 +49,7 @@ public:
     WdgGeometryOptions *m_shapeOptionsWidget;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     virtual void outlineSettingChanged(int value);
     virtual void fillSettingChanged(int value);
     virtual void patternRotationSettingChanged(qreal value);
@@ -78,8 +78,6 @@ protected:
     void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
 
     KConfigGroup m_configGroup;
-
-
 };
 
 #endif // KIS_TOOL_SHAPE_H_

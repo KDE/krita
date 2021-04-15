@@ -30,10 +30,6 @@ ki18n_wrap_ui(KRITA_COLORSELECTORNG_SOURCES
     wdg_color_selector_settings.ui
 )
 
-qt5_add_resources(KRITA_COLORSELECTORNG_SOURCES
-    advanced_color_selector.qrc
-)
-
 add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
 
 target_link_libraries(kritacolorselectorng kritaui)
@@ -43,5 +39,4 @@ install(TARGETS kritacolorselectorng  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES  kis_colselng_color_patches.png
 		kis_colselng_color_triangle.png
 		kis_colselng_my_paint_shade_selector.png
-                extended_color_selector.png
                 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)

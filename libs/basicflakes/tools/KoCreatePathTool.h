@@ -36,7 +36,7 @@ public:
     explicit KoCreatePathTool(KoCanvasBase * canvas);
     ~KoCreatePathTool() override;
 
-    QRectF decorationsRect() const;
+    QRectF decorationsRect() const override;
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter) override;
@@ -49,8 +49,6 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented
     void mouseReleaseEvent(KoPointerEvent *event) override;
-    /// reimplemented
-    void keyPressEvent(QKeyEvent *event) override;
 
     /**
     * Returns true if path has been started
@@ -63,7 +61,7 @@ public:
 
 public Q_SLOTS:
     /// reimplemented
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     /// reimplemented
     void deactivate() override;
     /// reimplemented

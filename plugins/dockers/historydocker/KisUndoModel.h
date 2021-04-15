@@ -80,6 +80,14 @@ public:
     void setCanvas(KisCanvas2* canvas);
     bool checkMergedCommand(int index);
 
+    // It's a bit weird to have "setDevicePixelRatio"
+    //  in a model class, but it's needed for
+    //  QImages inside, because there is no
+    //  ItemDelegate for the items,
+    //  so it's better to initialize QImages already
+    //  devicePixelRatio-corrected.
+    void setDevicePixelRatio(qreal devicePixelRatio);
+
 public Q_SLOTS:
     void setStack(KUndo2QStack *stack);
     void addImage(int idx);
@@ -90,12 +98,13 @@ private Q_SLOTS:
     void setStackCurrentIndex(const QModelIndex &index);
 
 private:
-    bool m_blockOutgoingHistoryChange;
-    KUndo2QStack *m_stack;
-    QItemSelectionModel *m_sel_model;
+    bool m_blockOutgoingHistoryChange {false};
+    KUndo2QStack *m_stack {0};
+    QItemSelectionModel *m_sel_model {0};
     QString m_empty_label;
     QIcon m_clean_icon;
     QPointer<KisCanvas2> m_canvas;
     QMap<const KUndo2Command*, QImage> m_imageMap;
+    qreal m_devicePixelRatioF {1.0};
 };
 #endif

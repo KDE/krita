@@ -38,7 +38,6 @@ SimpleExistingTagAction::~SimpleExistingTagAction()
 
 void SimpleExistingTagAction::onTriggered()
 {
-    ENTER_FUNCTION();
     if (!m_tag) return;
     emit triggered(m_tag, m_resource);
 }
@@ -91,6 +90,8 @@ bool LineEditAction::closeParentOnTrigger()
 
 void LineEditAction::slotActionTriggered()
 {
+    setData(userText());
+    QAction::trigger();
     onTriggered();
     if (!m_editBox->text().isEmpty()) {
         if (m_closeParentOnTrigger) {

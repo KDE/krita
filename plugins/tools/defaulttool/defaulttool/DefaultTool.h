@@ -68,7 +68,7 @@ public:
     ///reimplemented
     KoToolSelection *selection() override;
 
-    QMenu* popupActionsMenu() override;
+    QMenu *popupActionsMenu() override;
 
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
@@ -82,7 +82,7 @@ public:
 
 
 public Q_SLOTS:
-    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void activate(const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
 Q_SIGNALS:

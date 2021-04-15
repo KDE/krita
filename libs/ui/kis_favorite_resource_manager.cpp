@@ -284,15 +284,6 @@ void KisFavoriteResourceManager::resourceChanged(QSharedPointer<KisPaintOpPreset
     updateFavoritePresets();
 }
 
-void KisFavoriteResourceManager::syncTaggedResourceView()
-{
-    updateFavoritePresets();
-}
-
-void KisFavoriteResourceManager::syncTagAddition(const QString& /*tag*/) {}
-
-void KisFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/) {}
-
 int KisFavoriteResourceManager::recentColorsTotal()
 {
     return m_colorList->size();

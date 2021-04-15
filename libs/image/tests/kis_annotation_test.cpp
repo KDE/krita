@@ -6,7 +6,7 @@
 
 #include "kis_annotation_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_annotation.h"
 
 void KisAnnotationTest::testCreation()
@@ -17,4 +17,4 @@ void KisAnnotationTest::testCreation()
 }
 
 
-QTEST_MAIN(KisAnnotationTest)
+SIMPLE_TEST_MAIN(KisAnnotationTest)

@@ -5,7 +5,7 @@
  */
 
 #include "kis_all_filter_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"

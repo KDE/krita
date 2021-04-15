@@ -28,6 +28,13 @@
 #include "kundo2magicstring.h"
 
 #include <KisUsageLogger.h>
+#include "kis_types.h"
+#include "kis_tool.h"
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings.h"
+#include "kis_floating_message.h"
+#include "canvas/kis_canvas2.h"
+#include "KisViewManager.h"
 
 #define MAXIMUM_SMOOTHNESS_DISTANCE 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
@@ -46,7 +53,7 @@ void KisToolBrush::addSmoothingAction(int enumId, const QString &id)
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     : KisToolFreehand(canvas,
-                      KisCursor::load("tool_freehand_cursor.png", 5, 5),
+                      KisCursor::load("tool_freehand_cursor.xpm", 2, 2),
                       kundo2_i18n("Freehand Brush Stroke"))
 {
     setObjectName("tool_brush");
@@ -66,9 +73,9 @@ KisToolBrush::~KisToolBrush()
 {
 }
 
-void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolBrush::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolFreehand::activate(activation, shapes);
+    KisToolFreehand::activate(shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
     QAction *toggleaction = action("toggle_assistant");

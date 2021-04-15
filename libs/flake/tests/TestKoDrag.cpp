@@ -25,7 +25,7 @@ void TestKoDrag::test()
     QFile testShapes(fileName);
     testShapes.open(QIODevice::ReadOnly);
 
-    KoXmlDocument doc = SvgParser::createDocumentFromSvg(&testShapes);
+    QDomDocument doc = SvgParser::createDocumentFromSvg(&testShapes);
 
     KoDocumentResourceManager resourceManager;
     SvgParser parser(&resourceManager);
@@ -71,4 +71,4 @@ void TestKoDrag::test()
 }
 
 
-QTEST_MAIN(TestKoDrag)
+SIMPLE_TEST_MAIN(TestKoDrag)

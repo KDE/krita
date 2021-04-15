@@ -9,7 +9,7 @@
 
 #include <QProcessEnvironment>
 
-#include <QTest>
+#include <simpletest.h>
 #include <QList>
 #include <QTime>
 #include <QDir>

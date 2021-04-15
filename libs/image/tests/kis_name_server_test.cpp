@@ -6,7 +6,7 @@
 
 #include "kis_name_server_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_name_server.h"
 
 void KisNameServerTest::testCreation()
@@ -15,4 +15,4 @@ void KisNameServerTest::testCreation()
 }
 
 
-QTEST_MAIN(KisNameServerTest)
+SIMPLE_TEST_MAIN(KisNameServerTest)

@@ -111,9 +111,9 @@ public:
         }
     }
 
-    void activate(KoToolBase::ToolActivation activation, const QSet<KoShape*> &shapes)
+    void activate(const QSet<KoShape*> &shapes)
     {
-        BaseClass::activate(activation, shapes);
+        BaseClass::activate(shapes);
 
         m_modeConnections.addUniqueConnection(
             this->action("selection_tool_mode_replace"), SIGNAL(triggered()),

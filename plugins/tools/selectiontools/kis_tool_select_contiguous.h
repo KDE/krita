@@ -45,7 +45,7 @@ protected:
     bool usesColorLabels() const override { return true; }
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     virtual void slotSetFuzziness(int);
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
@@ -70,7 +70,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectContiguous")
     {
         setToolTip(i18n("Contiguous Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setSection(ToolBoxSection::Select);
         setIconName(koIconNameCStr("tool_contiguous_selection"));
         setPriority(4);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

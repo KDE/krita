@@ -43,7 +43,7 @@ public:
 
         KoStopGradientSP gradient(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName(i18n("Foreground to Transparent"));
+        gradient->setName(i18n("1. Foreground to Transparent"));
         gradient->setFilename("Foreground to Transparent.svg");
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs), FOREGROUNDSTOP);
         stops << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs), COLORSTOP);
@@ -56,7 +56,7 @@ public:
 
         gradient.reset(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName(i18n("Foreground to Background"));
+        gradient->setName(i18n("0. Foreground to Background"));
         gradient->setFilename("Foreground to Background.svg");
 
         stops.clear();

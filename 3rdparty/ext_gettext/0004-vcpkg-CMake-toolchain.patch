@@ -1,0 +1,2584 @@
+From b44fc78dae21ca8e50596bcabd6a9112b8709b44 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 21 Feb 2021 11:49:39 +0000
+Subject: [PATCH 4/5] vcpkg CMake toolchain
+
+Adapted from https://github.com/microsoft/vcpkg/tree/c84dfe7ddd6f3ba14ec9f4b1f2c577365175128b/ports/gettext
+---
+ CMakeLists.txt                          |   13 +
+ gettext-runtime/CMakeLists.txt          |  159 ++++
+ gettext-runtime/config.unix.h.in        | 1009 +++++++++++++++++++++++
+ gettext-runtime/config.win32.h          |  835 +++++++++++++++++++
+ gettext-runtime/intl/libgnuintl.win32.h |  423 ++++++++++
+ gettext-runtime/intl/libintl.rc         |   38 -
+ gettext-runtime/intl/libintl.rc.in      |   38 +
+ 7 files changed, 2477 insertions(+), 38 deletions(-)
+ create mode 100644 CMakeLists.txt
+ create mode 100644 gettext-runtime/CMakeLists.txt
+ create mode 100644 gettext-runtime/config.unix.h.in
+ create mode 100644 gettext-runtime/config.win32.h
+ create mode 100644 gettext-runtime/intl/libgnuintl.win32.h
+ delete mode 100644 gettext-runtime/intl/libintl.rc
+ create mode 100644 gettext-runtime/intl/libintl.rc.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 00000000..340296a5
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,13 @@
++cmake_minimum_required(VERSION 3.5)
++
++project(gettext)
++
++set(PACKAGE_VERSION_MAJOR 0)
++set(PACKAGE_VERSION_MINOR 19)
++set(PACKAGE_VERSION_SUBMINOR 0)
++
++set(PACKAGE_VERSION_STRING "${PACKAGE_VERSION_MAJOR}.${PACKAGE_VERSION_MINOR}")
++
++add_definitions(-DPACKAGE_VERSION_MAJOR=${PACKAGE_VERSION_MAJOR} -DPACKAGE_VERSION_MINOR=${PACKAGE_VERSION_MINOR} -DPACKAGE_VERSION_SUBMINOR=${PACKAGE_VERSION_SUBMINOR} -DPACKAGE_VERSION_STRING="${PACKAGE_VERSION_STRING}")
++
++add_subdirectory(gettext-runtime)
+diff --git a/gettext-runtime/CMakeLists.txt b/gettext-runtime/CMakeLists.txt
+new file mode 100644
+index 00000000..16f64440
+--- /dev/null
++++ b/gettext-runtime/CMakeLists.txt
+@@ -0,0 +1,159 @@
++cmake_minimum_required(VERSION 3.5)
++project(gettext-runtime C)
++
++find_package(iconv REQUIRED)
++
++set(CMAKE_STATIC_LIBRARY_PREFIX)
++set(CMAKE_SHARED_LIBRARY_PREFIX)
++
++if(WIN32)
++    set(HAVE_POSIX_PRINTF 0)
++    set(HAVE_SNPRINTF 0)
++    set(HAVE_ASPRINTF 0)
++    set(HAVE_WPRINTF 0)
++    set(HAVE_NAMELESS_LOCALES 0)
++    set(REPLACE_NEWLOCALE 0)
++    set(REPLACE_DUPLOCALE 0)
++    set(REPLACE_FREELOCALE 0)
++    set(HAVE_NEWLOCALE 0)
++    set(ICONV_CONST "")
++    include(CheckTypeSize)
++    check_type_size("long long int" HAVE_LONG_LONG_INT)
++
++    configure_file(intl/libgnuintl.win32.h config/libgnuintl.h @ONLY)
++    configure_file(config.win32.h config/config.h @ONLY)
++else()
++    set(HAVE_POSIX_PRINTF 1)
++    set(HAVE_SNPRINTF 1)
++    set(HAVE_ASPRINTF 1)
++    set(HAVE_WPRINTF 1)
++    if (CMAKE_SYSTEM_NAME STREQUAL "AIX")
++        set(HAVE_NAMELESS_LOCALES 1)
++        set(REPLACE_NEWLOCALE 1)
++        set(REPLACE_DUPLOCALE 1)
++        set(REPLACE_FREELOCALE 1)
++    else()
++        set(HAVE_NAMELESS_LOCALES 0)
++        set(REPLACE_NEWLOCALE 0)
++        set(REPLACE_DUPLOCALE 0)
++        set(REPLACE_FREELOCALE 0)
++    endif()
++    set(HAVE_NEWLOCALE 1)
++    if(NOT APPLE)
++        set(ICONV_CONST const)
++    else()
++        set(ICONV_CONST "")
++    endif()
++    add_definitions(-DHAVE_NEWLOCALE=1)
++
++    set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
++    set(THREADS_PREFER_PTHREAD_FLAG TRUE)
++    find_package(Threads REQUIRED)
++    if(NOT CMAKE_USE_PTHREADS_INIT)
++        message(FATAL_ERROR "Error: Only pthreads is currently supported.")
++    endif()
++
++    include(CheckFunctionExists)
++    include(CheckIncludeFiles)
++
++    if(APPLE)
++        set(HAVE_CFLOCALECOPYCURRENT 1)
++        set(HAVE_CFPREFERENCESCOPYAPPVALUE 1)
++    endif()
++    check_function_exists(dcgettext HAVE_DCGETTEXT)
++    check_include_files(features.h HAVE_FEATURES_H)
++    check_function_exists(gettext HAVE_GETTEXT)
++    check_include_files(mach-o/dyld.h HAVE_MACH_O_DYLD_H)
++    check_function_exists(mempcpy HAVE_MEMPCPY)
++    check_include_files(xlocale.h HAVE_XLOCALE_H)
++
++    configure_file(intl/libgnuintl.in.h config/libgnuintl.h @ONLY)
++    configure_file(config.unix.h.in config/config.h @ONLY)
++endif()
++
++if(NOT DISABLE_INSTALL_HEADERS)
++    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config/libgnuintl.h" DESTINATION include RENAME libintl.h)
++endif()
++
++file(READ "${CMAKE_CURRENT_BINARY_DIR}/config/config.h" _contents)
++if(NOT WIN32)
++    string(REPLACE "/* #undef HAVE_STPCPY */" "#define HAVE_STPCPY 1" _contents "${_contents}")
++endif()
++file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/config/config.h" "${_contents}")
++
++configure_file(intl/libintl.rc.in intl/libintl.rc @ONLY)
++
++FILE(GLOB SOURCES
++    "intl/bindtextdom.c"
++    "intl/dcgettext.c"
++    "intl/dcigettext.c"
++    "intl/dcngettext.c"
++    "intl/dgettext.c"
++    "intl/dngettext.c"
++    "intl/explodename.c"
++    "intl/finddomain.c"
++    "intl/gettext.c"
++    "intl/hash-string.c"
++    "intl/intl-compat.c"
++    "intl/l10nflist.c"
++    "intl/langprefs.c"
++    "intl/loadmsgcat.c"
++    "intl/localealias.c"
++    "intl/localename.c"
++    "intl/lock.c"
++    "intl/log.c"
++    "intl/ngettext.c"
++    "intl/osdep.c"
++    "intl/plural-exp.c"
++    "intl/plural.c"
++    "intl/printf.c"
++    "intl/relocatable.c"
++    "intl/textdomain.c"
++    "intl/version.c"
++    "${CMAKE_CURRENT_BINARY_DIR}/intl/libintl.rc"
++)
++if(NOT WIN32)
++    list(APPEND SOURCES "intl/setlocale.c")
++endif()
++
++add_definitions(-DLOCALEDIR=\"${CMAKE_INSTALL_PREFIX}\")
++add_definitions(-DLOCALE_ALIAS_PATH=\"${CMAKE_INSTALL_PREFIX}\")
++add_definitions(-DLIBDIR=\"${CMAKE_INSTALL_PREFIX}\")
++add_definitions(-DINSTALLDIR=\"${CMAKE_INSTALL_PREFIX}\")
++if(BUILD_SHARED_LIBS)
++  add_definitions(-DBUILDING_DLL)
++endif()
++add_definitions("-DBUILDING_LIBINTL -DIN_LIBINTL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY")
++
++add_definitions("-DNO_XMALLOC -Dset_relocation_prefix=libintl_set_relocation_prefix -Drelocate=libintl_relocate -DDEPENDS_ON_LIBICONV=1 -DHAVE_CONFIG_H -DHAVE_ICONV -DHAVE_ICONV_H -D_CRT_SECURE_NO_WARNINGS")
++
++add_library(intl SHARED ${SOURCES})
++set_target_properties(intl PROPERTIES DEFINE_SYMBOL "libintl_EXPORTS")
++target_link_libraries(intl PUBLIC iconv)
++
++if(MSVC)
++set_target_properties(intl PROPERTIES OUTPUT_NAME "libintl")
++endif(MSVC)
++
++target_include_directories(intl PUBLIC
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/config>
++    $<INSTALL_INTERFACE:include>
++    ${ICONV_INCLUDE_DIR}
++)
++
++if(APPLE)
++    find_library(COREFOUNDATION_LIBRARY CoreFoundation REQUIRED)
++    target_link_libraries(intl PRIVATE ${COREFOUNDATION_LIBRARY})
++endif()
++if(NOT WIN32)
++    target_link_libraries(intl PRIVATE Threads::Threads)
++endif()
++if (WIN32)
++    target_link_libraries(intl PRIVATE kernel32.lib Advapi32.lib)
++endif()
++
++install(TARGETS intl
++  RUNTIME DESTINATION bin
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib
++)
+diff --git a/gettext-runtime/config.unix.h.in b/gettext-runtime/config.unix.h.in
+new file mode 100644
+index 00000000..51e5cf67
+--- /dev/null
++++ b/gettext-runtime/config.unix.h.in
+@@ -0,0 +1,1009 @@
++/* config.h.  Generated from config.h.in by configure.  */
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to the number of bits in type 'ptrdiff_t'. */
++#define BITSIZEOF_PTRDIFF_T sizeof(ptrdiff_t)
++
++/* Define to the number of bits in type 'sig_atomic_t'. */
++#define BITSIZEOF_SIG_ATOMIC_T 32
++
++/* Define to the number of bits in type 'size_t'. */
++#define BITSIZEOF_SIZE_T sizeof(size_t)
++
++/* Define to the number of bits in type 'wchar_t'. */
++#define BITSIZEOF_WCHAR_T 32
++
++/* Define to the number of bits in type 'wint_t'. */
++#define BITSIZEOF_WINT_T 32
++
++/* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
++   systems. This function is required for `alloca.c' support on those systems.
++   */
++/* #undef CRAY_STACKSEG_END */
++
++/* Define if mono is the preferred C# implementation. */
++/* #undef CSHARP_CHOICE_MONO */
++
++/* Define if pnet is the preferred C# implementation. */
++/* #undef CSHARP_CHOICE_PNET */
++
++/* Define to 1 if using `alloca.c'. */
++/* #undef C_ALLOCA */
++
++/* Define to 1 if // is a file system root distinct from /. */
++/* #undef DOUBLE_SLASH_IS_DISTINCT_ROOT */
++
++/* Define to 1 if translation of program messages to the user's native
++   language is requested. */
++#define ENABLE_NLS 1
++
++/* Define to 1 if the package shall run at any location in the file system. */
++#define ENABLE_RELOCATABLE 1
++
++/* Define to 1 if realpath() can malloc memory, always gives an absolute path,
++   and handles trailing slash correctly. */
++/* #undef FUNC_REALPATH_WORKS */
++
++/* Define if gettimeofday clobbers the localtime buffer. */
++/* #undef GETTIMEOFDAY_CLOBBERS_LOCALTIME */
++
++/* Define this to 'void' or 'struct timezone' to match the system's
++   declaration of the second argument to gettimeofday. */
++#define GETTIMEOFDAY_TIMEZONE void
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module canonicalize-lgpl shall be considered present. */
++#define GNULIB_CANONICALIZE_LGPL 1
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module fscanf shall be considered present. */
++#define GNULIB_FSCANF 1
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module fwriteerror shall be considered present. */
++#define GNULIB_FWRITEERROR 1
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module lock shall be considered present. */
++#define GNULIB_LOCK 1
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module scanf shall be considered present. */
++#define GNULIB_SCANF 1
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module sigpipe shall be considered present. */
++#define GNULIB_SIGPIPE 1
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module strerror shall be considered present. */
++#define GNULIB_STRERROR 1
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module unistr/u8-mbtoucr shall be considered present. */
++#define GNULIB_UNISTR_U8_MBTOUCR 1
++
++/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
++   whether the gnulib module unistr/u8-uctomb shall be considered present. */
++#define GNULIB_UNISTR_U8_UCTOMB 1
++
++/* Define to 1 if you have `alloca', as a function or macro. */
++#define HAVE_ALLOCA 1
++
++/* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
++   */
++#define HAVE_ALLOCA_H 1
++
++/* Define to 1 if you have the `argz_count' function. */
++/* #undef HAVE_ARGZ_COUNT */
++
++/* Define to 1 if you have the <argz.h> header file. */
++/* #undef HAVE_ARGZ_H */
++
++/* Define to 1 if you have the `argz_next' function. */
++/* #undef HAVE_ARGZ_NEXT */
++
++/* Define to 1 if you have the `argz_stringify' function. */
++/* #undef HAVE_ARGZ_STRINGIFY */
++
++/* Define to 1 if you have the `asprintf' function. */
++#define HAVE_ASPRINTF 1
++
++/* Define to 1 if you have the `atexit' function. */
++#define HAVE_ATEXIT 1
++
++/* Define to 1 if you have the <bp-sym.h> header file. */
++/* #undef HAVE_BP_SYM_H */
++
++/* Define to 1 if the compiler understands __builtin_expect. */
++#define HAVE_BUILTIN_EXPECT 1
++
++/* Define to 1 if you have the `canonicalize_file_name' function. */
++/* #undef HAVE_CANONICALIZE_FILE_NAME */
++
++/* Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the
++   CoreFoundation framework. */
++#cmakedefine HAVE_CFLOCALECOPYCURRENT 1
++
++/* Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in
++   the CoreFoundation framework. */
++#cmakedefine HAVE_CFPREFERENCESCOPYAPPVALUE 1
++
++/* Define if the GNU dcgettext() function is already present or preinstalled.
++   */
++#cmakedefine HAVE_DCGETTEXT 1
++
++/* Define to 1 if you have the declaration of `clearerr_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_CLEARERR_UNLOCKED 1
++
++/* Define to 1 if you have the declaration of `feof_unlocked', and to 0 if you
++   don't. */
++#define HAVE_DECL_FEOF_UNLOCKED 1
++
++/* Define to 1 if you have the declaration of `ferror_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FERROR_UNLOCKED 1
++
++/* Define to 1 if you have the declaration of `fflush_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FFLUSH_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fgets_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FGETS_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fputc_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FPUTC_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fputs_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FPUTS_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fread_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FREAD_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fwrite_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FWRITE_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `getchar_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_GETCHAR_UNLOCKED 1
++
++/* Define to 1 if you have the declaration of `getc_unlocked', and to 0 if you
++   don't. */
++#define HAVE_DECL_GETC_UNLOCKED 1
++
++/* Define to 1 if you have the declaration of `getenv', and to 0 if you don't.
++   */
++#define HAVE_DECL_GETENV 1
++
++/* Define to 1 if you have the declaration of `iswblank', and to 0 if you
++   don't. */
++#define HAVE_DECL_ISWBLANK 1
++
++/* Define to 1 if you have the declaration of `mbrtowc', and to 0 if you
++   don't. */
++/* #undef HAVE_DECL_MBRTOWC */
++
++/* Define to 1 if you have the declaration of `mbsinit', and to 0 if you
++   don't. */
++/* #undef HAVE_DECL_MBSINIT */
++
++/* Define to 1 if you have the declaration of `program_invocation_name', and
++   to 0 if you don't. */
++#define HAVE_DECL_PROGRAM_INVOCATION_NAME 0
++
++/* Define to 1 if you have the declaration of `program_invocation_short_name',
++   and to 0 if you don't. */
++#define HAVE_DECL_PROGRAM_INVOCATION_SHORT_NAME 0
++
++/* Define to 1 if you have the declaration of `putchar_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_PUTCHAR_UNLOCKED 1
++
++/* Define to 1 if you have the declaration of `putc_unlocked', and to 0 if you
++   don't. */
++#define HAVE_DECL_PUTC_UNLOCKED 1
++
++/* Define to 1 if you have the declaration of `setenv', and to 0 if you don't.
++   */
++#define HAVE_DECL_SETENV 1
++
++/* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
++   don't. */
++#define HAVE_DECL_STRERROR_R 1
++
++/* Define to 1 if you have the declaration of `strnlen', and to 0 if you
++   don't. */
++#define HAVE_DECL_STRNLEN 1
++
++/* Define to 1 if you have the declaration of `towlower', and to 0 if you
++   don't. */
++/* #undef HAVE_DECL_TOWLOWER */
++
++/* Define to 1 if you have the declaration of `wcwidth', and to 0 if you
++   don't. */
++#define HAVE_DECL_WCWIDTH 1
++
++/* Define to 1 if you have the declaration of `_snprintf', and to 0 if you
++   don't. */
++#define HAVE_DECL__SNPRINTF 0
++
++/* Define to 1 if you have the declaration of `_snwprintf', and to 0 if you
++   don't. */
++#define HAVE_DECL__SNWPRINTF 0
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++
++/* Define if you have the declaration of environ. */
++/* #undef HAVE_ENVIRON_DECL */
++
++/* Define to 1 if you have the <features.h> header file. */
++#cmakedefine HAVE_FEATURES_H 1
++
++/* Define to 1 if you have the `fwprintf' function. */
++#define HAVE_FWPRINTF 1
++
++/* Define to 1 if you have the `getcwd' function. */
++#define HAVE_GETCWD 1
++
++/* Define to 1 if you have the `getegid' function. */
++#define HAVE_GETEGID 1
++
++/* Define to 1 if you have the `geteuid' function. */
++#define HAVE_GETEUID 1
++
++/* Define to 1 if you have the `getgid' function. */
++#define HAVE_GETGID 1
++
++/* Define to 1 if you have the <getopt.h> header file. */
++#define HAVE_GETOPT_H 1
++
++/* Define to 1 if you have the `getopt_long_only' function. */
++#define HAVE_GETOPT_LONG_ONLY 1
++
++/* Define to 1 if you have the `getpagesize' function. */
++#define HAVE_GETPAGESIZE 1
++
++/* Define if the GNU gettext() function is already present or preinstalled. */
++#cmakedefine HAVE_GETTEXT 1
++
++/* Define to 1 if you have the `gettimeofday' function. */
++#define HAVE_GETTIMEOFDAY 1
++
++/* Define to 1 if you have the `getuid' function. */
++#define HAVE_GETUID 1
++
++/* Define if you have the iconv() function and it works. */
++#define HAVE_ICONV 1
++
++/* Define to 1 if you have the <iconv.h> header file. */
++#define HAVE_ICONV_H 1
++
++/* Define to 1 if the compiler supports one of the keywords 'inline',
++   '__inline__', '__inline' and effectively inlines functions marked as such.
++   */
++#define HAVE_INLINE 1
++
++/* Define if you have the 'intmax_t' type in <stdint.h> or <inttypes.h>. */
++#define HAVE_INTMAX_T 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#define HAVE_INTTYPES_H 1
++
++/* Define if <inttypes.h> exists, doesn't clash with <sys/types.h>, and
++   declares uintmax_t. */
++#define HAVE_INTTYPES_H_WITH_UINTMAX 1
++
++/* Define to 1 if you have the `iswblank' function. */
++#define HAVE_ISWBLANK 1
++
++/* Define to 1 if you have the `iswcntrl' function. */
++#define HAVE_ISWCNTRL 1
++
++/* Define if you have <langinfo.h> and nl_langinfo(CODESET). */
++#define HAVE_LANGINFO_CODESET 1
++
++/* Define if your <locale.h> file defines LC_MESSAGES. */
++#define HAVE_LC_MESSAGES 1
++
++/* Define to 1 if you have the <limits.h> header file. */
++#define HAVE_LIMITS_H 1
++
++/* Define to 1 if the system has the type 'long long int'. */
++#define HAVE_LONG_LONG_INT 1
++
++/* Define to 1 if you have the `lstat' function. */
++#define HAVE_LSTAT 1
++
++/* Define to 1 if you have the <mach-o/dyld.h> header file. */
++#cmakedefine HAVE_MACH_O_DYLD_H 1
++
++/* Define to 1 if mmap()'s MAP_ANONYMOUS flag is available after including
++   config.h and <sys/mman.h>. */
++#define HAVE_MAP_ANONYMOUS 1
++
++/* Define to 1 if you have the `mbrtowc' function. */
++#define HAVE_MBRTOWC 1
++
++/* Define to 1 if you have the `mbsinit' function. */
++#define HAVE_MBSINIT 1
++
++/* Define to 1 if you have the `mbslen' function. */
++/* #undef HAVE_MBSLEN */
++
++/* Define to 1 if <wchar.h> declares mbstate_t. */
++#define HAVE_MBSTATE_T 1
++
++/* Define to 1 if you have the `memmove' function. */
++#define HAVE_MEMMOVE 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the `mempcpy' function. */
++#cmakedefine HAVE_MEMPCPY 1
++
++/* Define to 1 if you have a working `mmap' system call. */
++#define HAVE_MMAP 1
++
++/* Define to 1 if you have the `mprotect' function. */
++#define HAVE_MPROTECT 1
++
++/* Define to 1 on MSVC platforms that have the "invalid parameter handler"
++   concept. */
++/* #undef HAVE_MSVC_INVALID_PARAMETER_HANDLER */
++
++/* Define to 1 if you have the `munmap' function. */
++#define HAVE_MUNMAP 1
++
++/* Define to 1 if you have the `newlocale' function. */
++#cmakedefine HAVE_NEWLOCALE 1
++
++/* Define if your printf() function supports format strings with positions. */
++#define HAVE_POSIX_PRINTF 1
++
++/* Define if the <pthread.h> defines PTHREAD_MUTEX_RECURSIVE. */
++#define HAVE_PTHREAD_MUTEX_RECURSIVE 1
++
++/* Define if the POSIX multithreading library has read/write locks. */
++#define HAVE_PTHREAD_RWLOCK 1
++
++/* Define to 1 if you have the `putenv' function. */
++#define HAVE_PUTENV 1
++
++/* Define to 1 if you have the `raise' function. */
++#define HAVE_RAISE 1
++
++/* Define to 1 if you have the `readlink' function. */
++#define HAVE_READLINK 1
++
++/* Define to 1 if you have the `readlinkat' function. */
++#define HAVE_READLINKAT 1
++
++/* Define to 1 if you have the `realpath' function. */
++#define HAVE_REALPATH 1
++
++/* Define to 1 if you have the <search.h> header file. */
++#define HAVE_SEARCH_H 1
++
++/* Define to 1 if you have the `setenv' function. */
++#define HAVE_SETENV 1
++
++/* Define to 1 if you have the `setlocale' function. */
++#define HAVE_SETLOCALE 1
++
++/* Define to 1 if 'sig_atomic_t' is a signed integer type. */
++/* #undef HAVE_SIGNED_SIG_ATOMIC_T */
++
++/* Define to 1 if 'wchar_t' is a signed integer type. */
++/* #undef HAVE_SIGNED_WCHAR_T */
++
++/* Define to 1 if 'wint_t' is a signed integer type. */
++/* #undef HAVE_SIGNED_WINT_T */
++
++/* Define to 1 if the system has the type `sigset_t'. */
++#define HAVE_SIGSET_T 1
++
++/* Define to 1 if you have the `snprintf' function. */
++#define HAVE_SNPRINTF 1
++
++/* Define to 1 if you have the <stddef.h> header file. */
++#define HAVE_STDDEF_H 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define if <stdint.h> exists, doesn't clash with <sys/types.h>, and declares
++   uintmax_t. */
++#define HAVE_STDINT_H_WITH_UINTMAX 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the `stpcpy' function. */
++#define HAVE_STPCPY 1
++
++/* Define to 1 if you have the `strcasecmp' function. */
++#define HAVE_STRCASECMP 1
++
++/* Define to 1 if you have the `strdup' function. */
++#define HAVE_STRDUP 1
++
++/* Define to 1 if you have the `strerror_r' function. */
++#define HAVE_STRERROR_R 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the `strnlen' function. */
++#define HAVE_STRNLEN 1
++
++/* Define to 1 if you have the `strtoul' function. */
++#define HAVE_STRTOUL 1
++
++/* Define to 1 if you have the `symlink' function. */
++#define HAVE_SYMLINK 1
++
++/* Define to 1 if you have the <sys/bitypes.h> header file. */
++/* #undef HAVE_SYS_BITYPES_H */
++
++/* Define to 1 if you have the <sys/inttypes.h> header file. */
++/* #undef HAVE_SYS_INTTYPES_H */
++
++/* Define to 1 if you have the <sys/mman.h> header file. */
++#define HAVE_SYS_MMAN_H 1
++
++/* Define to 1 if you have the <sys/param.h> header file. */
++#define HAVE_SYS_PARAM_H 1
++
++/* Define to 1 if you have the <sys/socket.h> header file. */
++#define HAVE_SYS_SOCKET_H 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/timeb.h> header file. */
++/* #undef HAVE_SYS_TIMEB_H */
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#define HAVE_SYS_TIME_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the `towlower' function. */
++#define HAVE_TOWLOWER 1
++
++/* Define to 1 if you have the `tsearch' function. */
++#define HAVE_TSEARCH 1
++
++/* Define if you have the 'uintmax_t' type in <stdint.h> or <inttypes.h>. */
++#define HAVE_UINTMAX_T 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to 1 if the system has the type 'unsigned long long int'. */
++#define HAVE_UNSIGNED_LONG_LONG_INT 1
++
++/* Define to 1 if you have the `uselocale' function. */
++#define HAVE_USELOCALE 1
++
++/* Define to 1 or 0, depending whether the compiler supports simple visibility
++   declarations. */
++#define HAVE_VISIBILITY 1
++
++/* Define to 1 if you have the <wchar.h> header file. */
++#define HAVE_WCHAR_H 1
++
++/* Define if you have the 'wchar_t' type. */
++#define HAVE_WCHAR_T 1
++
++/* Define to 1 if you have the `wcrtomb' function. */
++#define HAVE_WCRTOMB 1
++
++/* Define to 1 if you have the `wcslen' function. */
++#define HAVE_WCSLEN 1
++
++/* Define to 1 if you have the `wcsnlen' function. */
++#define HAVE_WCSNLEN 1
++
++/* Define to 1 if you have the <wctype.h> header file. */
++#define HAVE_WCTYPE_H 1
++
++/* Define to 1 if you have the `wcwidth' function. */
++#define HAVE_WCWIDTH 1
++
++/* Define to 1 if you have the <winsock2.h> header file. */
++/* #undef HAVE_WINSOCK2_H */
++
++/* Define if you have the 'wint_t' type. */
++#define HAVE_WINT_T 1
++
++/* Define to 1 if O_NOATIME works. */
++#define HAVE_WORKING_O_NOATIME 0
++
++/* Define to 1 if O_NOFOLLOW works. */
++#define HAVE_WORKING_O_NOFOLLOW 1
++
++/* Define to 1 if you have the <xlocale.h> header file. */
++#cmakedefine HAVE_XLOCALE_H 1
++
++/* Define to 1 if the system has the type `_Bool'. */
++#define HAVE__BOOL 1
++
++/* Define to 1 if you have the `_ftime' function. */
++/* #undef HAVE__FTIME */
++
++/* Define to 1 if you have the `_NSGetExecutablePath' function. */
++/* #undef HAVE__NSGETEXECUTABLEPATH */
++
++/* Define to 1 if you have the `_set_invalid_parameter_handler' function. */
++/* #undef HAVE__SET_INVALID_PARAMETER_HANDLER */
++
++/* Define to 1 if you have the `__fsetlocking' function. */
++/* #undef HAVE___FSETLOCKING */
++
++/* Define as const if the declaration of iconv() needs const. */
++#define ICONV_CONST @ICONV_CONST@
++
++/* Define to a symbolic name denoting the flavor of iconv_open()
++   implementation. */
++/* #undef ICONV_FLAVOR */
++
++/* Define to the value of ${prefix}, as a string. */
++/* #define INSTALLPREFIX "/usr/local" */
++
++/* Define if integer division by zero raises signal SIGFPE. */
++#define INTDIV0_RAISES_SIGFPE 0
++
++/* Define to 1 if 'lstat' dereferences a symlink specified with a trailing
++   slash. */
++/* #undef LSTAT_FOLLOWS_SLASHED_SYMLINK */
++
++/* If malloc(0) is != NULL, define this to 1. Otherwise define this to 0. */
++#define MALLOC_0_IS_NONNULL 1
++
++/* Define to a substitute value for mmap()'s MAP_ANONYMOUS flag. */
++/* #undef MAP_ANONYMOUS */
++
++/* Define if the mbrtowc function has the NULL pwc argument bug. */
++/* #undef MBRTOWC_NULL_ARG1_BUG */
++
++/* Define if the mbrtowc function has the NULL string argument bug. */
++/* #undef MBRTOWC_NULL_ARG2_BUG */
++
++/* Define if the mbrtowc function does not return 0 for a NUL character. */
++/* #undef MBRTOWC_NUL_RETVAL_BUG */
++
++/* Define if the mbrtowc function returns a wrong return value. */
++/* #undef MBRTOWC_RETVAL_BUG */
++
++/* Name of package */
++#define PACKAGE "gettext-runtime"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT ""
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "gettext-runtime"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "gettext-runtime 0.19"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "gettext-runtime"
++
++/* Define to the home page for this package. */
++#define PACKAGE_URL ""
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "0.19"
++
++/* Define if <inttypes.h> exists and defines unusable PRI* macros. */
++/* #undef PRI_MACROS_BROKEN */
++
++/* Define if the pthread_in_use() detection is hard. */
++/* #undef PTHREAD_IN_USE_DETECTION_HARD */
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'ptrdiff_t'. */
++#define PTRDIFF_T_SUFFIX 
++
++/* Define to 1 if readlink fails to recognize a trailing slash. */
++/* #undef READLINK_TRAILING_SLASH_BUG */
++
++/* Define to 1 if stat needs help when passed a directory name with a trailing
++   slash */
++/* #undef REPLACE_FUNC_STAT_DIR */
++
++/* Define to 1 if stat needs help when passed a file name with a trailing
++ slash */
++/* #undef REPLACE_FUNC_STAT_FILE */
++
++/* Define to 1 if strerror(0) does not return a message implying success. */
++/* #undef REPLACE_STRERROR_0 */
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'sig_atomic_t'. */
++#define SIG_ATOMIC_T_SUFFIX 
++
++/* Define as the maximum value of type 'size_t', if the system doesn't define
++   it. */
++#ifndef SIZE_MAX
++/* # undef SIZE_MAX */
++#endif
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'size_t'. */
++#define SIZE_T_SUFFIX ul
++
++/* If using the C implementation of alloca, define if you know the
++   direction of stack growth for your system; otherwise it will be
++   automatically deduced at runtime.
++	STACK_DIRECTION > 0 => grows toward higher addresses
++	STACK_DIRECTION < 0 => grows toward lower addresses
++	STACK_DIRECTION = 0 => direction of growth unknown */
++/* #undef STACK_DIRECTION */
++
++/* Define to 1 if the `S_IS*' macros in <sys/stat.h> do not work properly. */
++/* #undef STAT_MACROS_BROKEN */
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Define to 1 if strerror_r returns char *. */
++/* #undef STRERROR_R_CHAR_P */
++
++/* Define to the prefix of C symbols at the assembler and linker level, either
++   an underscore or empty. */
++#define USER_LABEL_PREFIX
++
++/* Define if the POSIX multithreading library can be used. */
++#define USE_POSIX_THREADS 1
++
++/* Define if references to the POSIX multithreading library should be made
++   weak. */
++/* #undef USE_POSIX_THREADS_WEAK */
++
++/* Define if the GNU Pth multithreading library can be used. */
++/* #undef USE_PTH_THREADS */
++
++/* Define if references to the GNU Pth multithreading library should be made
++   weak. */
++/* #undef USE_PTH_THREADS_WEAK */
++
++/* Define if the old Solaris multithreading library can be used. */
++/* #undef USE_SOLARIS_THREADS */
++
++/* Define if references to the old Solaris multithreading library should be
++   made weak. */
++/* #undef USE_SOLARIS_THREADS_WEAK */
++
++/* Enable extensions on AIX 3, Interix.  */
++#ifndef _ALL_SOURCE
++# define _ALL_SOURCE 1
++#endif
++/* Enable general extensions on OS X.  */
++#ifndef _DARWIN_C_SOURCE
++# define _DARWIN_C_SOURCE 1
++#endif
++/* Enable GNU extensions on systems that have them.  */
++#ifndef _GNU_SOURCE
++# define _GNU_SOURCE 1
++#endif
++/* Enable threading extensions on Solaris.  */
++#ifndef _POSIX_PTHREAD_SEMANTICS
++# define _POSIX_PTHREAD_SEMANTICS 1
++#endif
++/* Enable extensions on HP NonStop.  */
++#ifndef _TANDEM_SOURCE
++# define _TANDEM_SOURCE 1
++#endif
++/* Enable X/Open extensions if necessary.  HP-UX 11.11 defines
++   mbstate_t only if _XOPEN_SOURCE is defined to 500, regardless of
++   whether compiling with -Ae or -D_HPUX_SOURCE=1.  */
++#ifndef _XOPEN_SOURCE
++/* # undef _XOPEN_SOURCE */
++#endif
++/* Enable general extensions on Solaris.  */
++#ifndef __EXTENSIONS__
++# define __EXTENSIONS__ 1
++#endif
++
++
++/* Define to 1 if you want getc etc. to use unlocked I/O if available.
++   Unlocked I/O can improve performance in unithreaded apps, but it is not
++   safe for multithreaded apps. */
++#define USE_UNLOCKED_IO 1
++
++/* Define if the native Windows multithreading API can be used. */
++/* #undef USE_WINDOWS_THREADS */
++
++/* Version number of package */
++#define VERSION "0.19"
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'wchar_t'. */
++#define WCHAR_T_SUFFIX 
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'wint_t'. */
++#define WINT_T_SUFFIX 
++
++/* Define when --enable-shared is used on mingw or Cygwin. */
++/* #undef WOE32DLL */
++
++/* Enable large inode numbers on Mac OS X 10.5. */
++#define _DARWIN_USE_64_BIT_INODE 1
++
++/* Number of bits in a file offset, on hosts where this is settable. */
++/* #undef _FILE_OFFSET_BITS */
++
++/* Define to 1 if Gnulib overrides 'struct stat' on Windows so that struct
++   stat.st_size becomes 64-bit. */
++/* #undef _GL_WINDOWS_64_BIT_ST_SIZE */
++
++/* Define for large files, on AIX-style hosts. */
++/* #undef _LARGE_FILES */
++
++/* Define to 1 on Solaris. */
++/* #undef _LCONV_C99 */
++
++/* Define to 1 if on MINIX. */
++/* #undef _MINIX */
++
++/* Define to 1 to make NetBSD features available. MINIX 3 needs this. */
++/* #undef _NETBSD_SOURCE */
++
++/* The _Noreturn keyword of C11.  */
++#if ! (defined _Noreturn \
++       || (defined __STDC_VERSION__ && 201112 <= __STDC_VERSION__))
++# if (3 <= __GNUC__ || (__GNUC__ == 2 && 8 <= __GNUC_MINOR__) \
++      || 0x5110 <= __SUNPRO_C)
++#  define _Noreturn __attribute__ ((__noreturn__))
++# elif defined _MSC_VER && 1200 <= _MSC_VER
++#  define _Noreturn __declspec (noreturn)
++# else
++#  define _Noreturn
++# endif
++#endif
++
++
++/* Define to 2 if the system does not provide POSIX.1 features except with
++   this defined. */
++/* #undef _POSIX_1_SOURCE */
++
++/* Define to 1 if you need to in order for 'stat' and other things to work. */
++/* #undef _POSIX_SOURCE */
++
++/* Define to rpl_ if the getopt replacement functions and variables should be
++   used. */
++#define __GETOPT_PREFIX rpl_
++
++/* Please see the Gnulib manual for how to use these macros.
++
++   Suppress extern inline with HP-UX cc, as it appears to be broken; see
++   <http://lists.gnu.org/archive/html/bug-texinfo/2013-02/msg00030.html>.
++
++   Suppress extern inline with Sun C in standards-conformance mode, as it
++   mishandles inline functions that call each other.  E.g., for 'inline void f
++   (void) { } inline void g (void) { f (); }', c99 incorrectly complains
++   'reference to static identifier "f" in extern inline function'.
++   This bug was observed with Sun C 5.12 SunOS_i386 2011/11/16.
++
++   Suppress the use of extern inline on problematic Apple configurations.
++   OS X 10.8 and earlier mishandle it; see, e.g.,
++   <http://lists.gnu.org/archive/html/bug-gnulib/2012-12/msg00023.html>.
++   OS X 10.9 has a macro __header_inline indicating the bug is fixed for C and
++   for clang but remains for g++; see <http://trac.macports.org/ticket/41033>.
++   Perhaps Apple will fix this some day.  */
++#if (defined __APPLE__ \
++     && (defined __header_inline \
++         ? (defined __cplusplus && defined __GNUC_STDC_INLINE__ \
++            && ! defined __clang__) \
++         : ((! defined _DONT_USE_CTYPE_INLINE_ \
++             && (defined __GNUC__ || defined __cplusplus)) \
++            || (defined _FORTIFY_SOURCE && 0 < _FORTIFY_SOURCE \
++                && defined __GNUC__ && ! defined __cplusplus))))
++# define _GL_EXTERN_INLINE_APPLE_BUG
++#endif
++#if ((__GNUC__ \
++      ? defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__ \
++      : (199901L <= __STDC_VERSION__ \
++         && !defined __HP_cc \
++         && !(defined __SUNPRO_C && __STDC__))) \
++     && !defined _GL_EXTERN_INLINE_APPLE_BUG)
++# define _GL_INLINE inline
++# define _GL_EXTERN_INLINE extern inline
++# define _GL_EXTERN_INLINE_IN_USE
++#elif (2 < __GNUC__ + (7 <= __GNUC_MINOR__) && !defined __STRICT_ANSI__ \
++       && !defined _GL_EXTERN_INLINE_APPLE_BUG)
++# if defined __GNUC_GNU_INLINE__ && __GNUC_GNU_INLINE__
++   /* __gnu_inline__ suppresses a GCC 4.2 diagnostic.  */
++#  define _GL_INLINE extern inline __attribute__ ((__gnu_inline__))
++# else
++#  define _GL_INLINE extern inline
++# endif
++# define _GL_EXTERN_INLINE extern
++# define _GL_EXTERN_INLINE_IN_USE
++#else
++# define _GL_INLINE static _GL_UNUSED
++# define _GL_EXTERN_INLINE static _GL_UNUSED
++#endif
++
++#if 4 < __GNUC__ + (6 <= __GNUC_MINOR__)
++# if defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__
++#  define _GL_INLINE_HEADER_CONST_PRAGMA
++# else
++#  define _GL_INLINE_HEADER_CONST_PRAGMA \
++     _Pragma ("GCC diagnostic ignored \"-Wsuggest-attribute=const\"")
++# endif
++  /* Suppress GCC's bogus "no previous prototype for 'FOO'"
++     and "no previous declaration for 'FOO'"  diagnostics,
++     when FOO is an inline function in the header; see
++     <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54113>.  */
++# define _GL_INLINE_HEADER_BEGIN \
++    _Pragma ("GCC diagnostic push") \
++    _Pragma ("GCC diagnostic ignored \"-Wmissing-prototypes\"") \
++    _Pragma ("GCC diagnostic ignored \"-Wmissing-declarations\"") \
++    _GL_INLINE_HEADER_CONST_PRAGMA
++# define _GL_INLINE_HEADER_END \
++    _Pragma ("GCC diagnostic pop")
++#else
++# define _GL_INLINE_HEADER_BEGIN
++# define _GL_INLINE_HEADER_END
++#endif
++
++/* Define to `int' if <sys/types.h> doesn't define. */
++/* #undef gid_t */
++
++/* Define to `__inline__' or `__inline' if that's what the C compiler
++   calls it, or to nothing if 'inline' is not supported under any name.  */
++#ifndef __cplusplus
++/* #undef inline */
++#endif
++
++/* Work around a bug in Apple GCC 4.0.1 build 5465: In C99 mode, it supports
++   the ISO C 99 semantics of 'extern inline' (unlike the GNU C semantics of
++   earlier versions), but does not display it by setting __GNUC_STDC_INLINE__.
++   __APPLE__ && __MACH__ test for Mac OS X.
++   __APPLE_CC__ tests for the Apple compiler and its version.
++   __STDC_VERSION__ tests for the C99 mode.  */
++#if defined __APPLE__ && defined __MACH__ && __APPLE_CC__ >= 5465 && !defined __cplusplus && __STDC_VERSION__ >= 199901L && !defined __GNUC_STDC_INLINE__
++# define __GNUC_STDC_INLINE__ 1
++#endif
++
++/* Define to a type if <wchar.h> does not define. */
++/* #undef mbstate_t */
++
++/* Define to `int' if <sys/types.h> does not define. */
++/* #undef mode_t */
++
++/* Define to the type of st_nlink in struct stat, or a supertype. */
++/* #undef nlink_t */
++
++/* Define to `int' if <sys/types.h> does not define. */
++/* #undef pid_t */
++
++/* Define as the type of the result of subtracting two pointers, if the system
++   doesn't define it. */
++/* #undef ptrdiff_t */
++
++/* Define to the equivalent of the C99 'restrict' keyword, or to
++   nothing if this is not supported.  Do not define if restrict is
++   supported directly.  */
++#define restrict __restrict
++/* Work around a bug in Sun C++: it does not support _Restrict or
++   __restrict__, even though the corresponding Sun C compiler ends up with
++   "#define restrict _Restrict" or "#define restrict __restrict__" in the
++   previous line.  Perhaps some future version of Sun C++ will work with
++   restrict; if so, hopefully it defines __RESTRICT like Sun C does.  */
++#if defined __SUNPRO_CC && !defined __RESTRICT
++# define _Restrict
++# define __restrict__
++#endif
++
++/* Define to `unsigned int' if <sys/types.h> does not define. */
++/* #undef size_t */
++
++/* Define as a signed type of the same size as size_t. */
++/* #undef ssize_t */
++
++/* Define to `int' if <sys/types.h> doesn't define. */
++/* #undef uid_t */
++
++/* Define to unsigned long or unsigned long long if <stdint.h> and
++   <inttypes.h> don't define. */
++/* #undef uintmax_t */
++
++/* Define as a marker that can be attached to declarations that might not
++    be used.  This helps to reduce warnings, such as from
++    GCC -Wunused-parameter.  */
++#if __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 7)
++# define _GL_UNUSED __attribute__ ((__unused__))
++#else
++# define _GL_UNUSED
++#endif
++/* The name _UNUSED_PARAMETER_ is an earlier spelling, although the name
++   is a misnomer outside of parameter lists.  */
++#define _UNUSED_PARAMETER_ _GL_UNUSED
++
++/* The __pure__ attribute was added in gcc 2.96.  */
++#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
++# define _GL_ATTRIBUTE_PURE __attribute__ ((__pure__))
++#else
++# define _GL_ATTRIBUTE_PURE /* empty */
++#endif
++
++/* The __const__ attribute was added in gcc 2.95.  */
++#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95)
++# define _GL_ATTRIBUTE_CONST __attribute__ ((__const__))
++#else
++# define _GL_ATTRIBUTE_CONST /* empty */
++#endif
++
++
++
++#define __libc_lock_t                   gl_lock_t
++#define __libc_lock_define              gl_lock_define
++#define __libc_lock_define_initialized  gl_lock_define_initialized
++#define __libc_lock_init                gl_lock_init
++#define __libc_lock_lock                gl_lock_lock
++#define __libc_lock_unlock              gl_lock_unlock
++#define __libc_lock_recursive_t                   gl_recursive_lock_t
++#define __libc_lock_define_recursive              gl_recursive_lock_define
++#define __libc_lock_define_initialized_recursive  gl_recursive_lock_define_initialized
++#define __libc_lock_init_recursive                gl_recursive_lock_init
++#define __libc_lock_lock_recursive                gl_recursive_lock_lock
++#define __libc_lock_unlock_recursive              gl_recursive_lock_unlock
++#define glthread_in_use  libintl_thread_in_use
++#define glthread_lock_init_func     libintl_lock_init_func
++#define glthread_lock_lock_func     libintl_lock_lock_func
++#define glthread_lock_unlock_func   libintl_lock_unlock_func
++#define glthread_lock_destroy_func  libintl_lock_destroy_func
++#define glthread_rwlock_init_multithreaded     libintl_rwlock_init_multithreaded
++#define glthread_rwlock_init_func              libintl_rwlock_init_func
++#define glthread_rwlock_rdlock_multithreaded   libintl_rwlock_rdlock_multithreaded
++#define glthread_rwlock_rdlock_func            libintl_rwlock_rdlock_func
++#define glthread_rwlock_wrlock_multithreaded   libintl_rwlock_wrlock_multithreaded
++#define glthread_rwlock_wrlock_func            libintl_rwlock_wrlock_func
++#define glthread_rwlock_unlock_multithreaded   libintl_rwlock_unlock_multithreaded
++#define glthread_rwlock_unlock_func            libintl_rwlock_unlock_func
++#define glthread_rwlock_destroy_multithreaded  libintl_rwlock_destroy_multithreaded
++#define glthread_rwlock_destroy_func           libintl_rwlock_destroy_func
++#define glthread_recursive_lock_init_multithreaded     libintl_recursive_lock_init_multithreaded
++#define glthread_recursive_lock_init_func              libintl_recursive_lock_init_func
++#define glthread_recursive_lock_lock_multithreaded     libintl_recursive_lock_lock_multithreaded
++#define glthread_recursive_lock_lock_func              libintl_recursive_lock_lock_func
++#define glthread_recursive_lock_unlock_multithreaded   libintl_recursive_lock_unlock_multithreaded
++#define glthread_recursive_lock_unlock_func            libintl_recursive_lock_unlock_func
++#define glthread_recursive_lock_destroy_multithreaded  libintl_recursive_lock_destroy_multithreaded
++#define glthread_recursive_lock_destroy_func           libintl_recursive_lock_destroy_func
++#define glthread_once_func            libintl_once_func
++#define glthread_once_singlethreaded  libintl_once_singlethreaded
++#define glthread_once_multithreaded   libintl_once_multithreaded
++
++
++
++/* On Windows, variables that may be in a DLL must be marked specially.  */
++#if (defined _MSC_VER && defined _DLL) && !defined IN_RELOCWRAPPER
++# define DLL_VARIABLE __declspec (dllimport)
++#else
++# define DLL_VARIABLE
++#endif
++
++/* Extra OS/2 (emx+gcc) defines.  */
++#ifdef __EMX__
++# include "intl/os2compat.h"
++#endif
++
+diff --git a/gettext-runtime/config.win32.h b/gettext-runtime/config.win32.h
+new file mode 100644
+index 00000000..1093a7f5
+--- /dev/null
++++ b/gettext-runtime/config.win32.h
+@@ -0,0 +1,835 @@
++/* config.h.  Generated from config.h.in by configure.  */
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++# define _GL_INLINE_HEADER_BEGIN
++# define _GL_INLINE_HEADER_END
++# define _GL_INLINE static inline
++
++/* Disable function deprecated warnings */
++#define _CRT_NONSTDC_NO_WARNINGS
++
++/* Define to the number of bits in type 'ptrdiff_t'. */
++#define BITSIZEOF_PTRDIFF_T sizeof(ptrdiff_t)
++
++/* Define to the number of bits in type 'sig_atomic_t'. */
++#define BITSIZEOF_SIG_ATOMIC_T 32
++
++/* Define to the number of bits in type 'size_t'. */
++#define BITSIZEOF_SIZE_T sizeof(size_t)
++
++/* Define to the number of bits in type 'wchar_t'. */
++#define BITSIZEOF_WCHAR_T 16
++
++/* Define to the number of bits in type 'wint_t'. */
++#define BITSIZEOF_WINT_T 16
++
++/* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
++   systems. This function is required for `alloca.c' support on those systems.
++   */
++/* #undef CRAY_STACKSEG_END */
++
++/* Define if mono is the preferred C# implementation. */
++/* #undef CSHARP_CHOICE_MONO */
++
++/* Define if pnet is the preferred C# implementation. */
++/* #undef CSHARP_CHOICE_PNET */
++
++/* Define to 1 if using `alloca.c'. */
++/* #undef C_ALLOCA */
++
++/* Define to 1 if translation of program messages to the user's native
++   language is requested. */
++#define ENABLE_NLS 1
++
++/* Define to 1 if the package shall run at any location in the filesystem. */
++#define ENABLE_RELOCATABLE 1
++
++/* Define to 1 when using the gnulib module fwriteerror. */
++#define GNULIB_FWRITEERROR 1
++
++/* Define to 1 if you have `alloca', as a function or macro. */
++#define HAVE_ALLOCA 1
++
++/* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
++   */
++/* #undef HAVE_ALLOCA_H */
++
++/* Define to 1 if you have the `argz_count' function. */
++/* #undef HAVE_ARGZ_COUNT */
++
++/* Define to 1 if you have the <argz.h> header file. */
++/* #undef HAVE_ARGZ_H */
++
++/* Define to 1 if you have the `argz_next' function. */
++/* #undef HAVE_ARGZ_NEXT */
++
++/* Define to 1 if you have the `argz_stringify' function. */
++/* #undef HAVE_ARGZ_STRINGIFY */
++
++/* Define to 1 if you have the `asprintf' function. */
++/* #undef HAVE_ASPRINTF */
++
++/* Define to 1 if you have the `atexit' function. */
++#define HAVE_ATEXIT 1
++
++/* Define to 1 if you have the <bp-sym.h> header file. */
++/* #undef HAVE_BP_SYM_H */
++
++/* Define to 1 if the compiler understands __builtin_expect. */
++/* #undef HAVE_BUILTIN_EXPECT */
++
++/* Define to 1 if you have the `canonicalize_file_name' function. */
++/* #undef HAVE_CANONICALIZE_FILE_NAME */
++
++/* Define to 1 if you have the MacOS X function CFLocaleCopyCurrent in the
++   CoreFoundation framework. */
++/* #undef HAVE_CFLOCALECOPYCURRENT */
++
++/* Define to 1 if you have the MacOS X function CFPreferencesCopyAppValue in
++   the CoreFoundation framework. */
++/* #undef HAVE_CFPREFERENCESCOPYAPPVALUE */
++
++/* Define if the GNU dcgettext() function is already present or preinstalled.
++   */
++/* #undef HAVE_DCGETTEXT */
++
++/* Define to 1 if you have the declaration of `canonicalize_file_name', and to
++   0 if you don't. */
++#define HAVE_DECL_CANONICALIZE_FILE_NAME 0
++
++/* Define to 1 if you have the declaration of `clearerr_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_CLEARERR_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `feof_unlocked', and to 0 if you
++   don't. */
++#define HAVE_DECL_FEOF_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `ferror_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FERROR_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fflush_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FFLUSH_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fgets_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FGETS_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fputc_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FPUTC_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fputs_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FPUTS_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fread_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FREAD_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `fwrite_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_FWRITE_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `getchar_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_GETCHAR_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `getc_unlocked', and to 0 if you
++   don't. */
++#define HAVE_DECL_GETC_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `getenv', and to 0 if you don't.
++   */
++#define HAVE_DECL_GETENV 1
++
++/* Define to 1 if you have the declaration of `putchar_unlocked', and to 0 if
++   you don't. */
++#define HAVE_DECL_PUTCHAR_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `putc_unlocked', and to 0 if you
++   don't. */
++#define HAVE_DECL_PUTC_UNLOCKED 0
++
++/* Define to 1 if you have the declaration of `strdup', and to 0 if you don't.
++   */
++#define HAVE_DECL_STRDUP 1
++
++/* Define to 1 if you have the declaration of `strerror', and to 0 if you
++   don't. */
++/* #undef HAVE_DECL_STRERROR */
++
++/* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
++   don't. */
++#define HAVE_DECL_STRERROR_R 0
++
++/* Define to 1 if you have the declaration of `strnlen', and to 0 if you
++   don't. */
++#define HAVE_DECL_STRNLEN 0
++
++/* Define to 1 if you have the declaration of `wcwidth', and to 0 if you
++   don't. */
++#define HAVE_DECL_WCWIDTH 0
++
++/* Define to 1 if you have the declaration of `_snprintf', and to 0 if you
++   don't. */
++#define HAVE_DECL__SNPRINTF 1
++
++/* Define to 1 if you have the declaration of `_snwprintf', and to 0 if you
++   don't. */
++#define HAVE_DECL__SNWPRINTF 1
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++/* #undef HAVE_DLFCN_H */
++
++/* Define if you have the declaration of environ. */
++#define HAVE_ENVIRON_DECL 1
++
++/* Define to 1 if you have the `fwprintf' function. */
++#define HAVE_FWPRINTF 1
++
++/* Define to 1 if you have the `getcwd' function. */
++#define HAVE_GETCWD 1
++
++/* Define to 1 if you have the `getegid' function. */
++/* #undef HAVE_GETEGID */
++
++/* Define to 1 if you have the `geteuid' function. */
++/* #undef HAVE_GETEUID */
++
++/* Define to 1 if you have the `getgid' function. */
++/* #undef HAVE_GETGID */
++
++/* Define to 1 if you have the <getopt.h> header file. */
++/* #undef HAVE_GETOPT_H */
++
++/* Define to 1 if you have the `getopt_long_only' function. */
++/* #undef HAVE_GETOPT_LONG_ONLY */
++
++/* Define to 1 if you have the `getpagesize' function. */
++/* #undef HAVE_GETPAGESIZE */
++
++/* Define if the GNU gettext() function is already present or preinstalled. */
++/* #undef HAVE_GETTEXT */
++
++/* Define to 1 if you have the `getuid' function. */
++/* #undef HAVE_GETUID */
++
++/* Define if you have the iconv() function and it works. */
++/* #undef HAVE_ICONV */
++
++/* Define to 1 if you have the <iconv.h> header file. */
++/* #undef HAVE_ICONV_H */
++
++/* Define if your compiler supports the #include_next directive. */
++/* #undef HAVE_INCLUDE_NEXT */
++
++/* Define if you have the 'intmax_t' type in <stdint.h> or <inttypes.h>. */
++#define HAVE_INTMAX_T 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++/* #undef HAVE_INTTYPES_H */
++
++/* Define if <inttypes.h> exists, doesn't clash with <sys/types.h>, and
++   declares uintmax_t. */
++/* #undef HAVE_INTTYPES_H_WITH_UINTMAX */
++
++/* Define to 1 if you have the `iswcntrl' function. */
++#define HAVE_ISWCNTRL 1
++
++/* Define if you have <langinfo.h> and nl_langinfo(CODESET). */
++/* #undef HAVE_LANGINFO_CODESET */
++
++/* Define if your <locale.h> file defines LC_MESSAGES. */
++/* #undef HAVE_LC_MESSAGES */
++
++/* Define to 1 if you have the <limits.h> header file. */
++#define HAVE_LIMITS_H 1
++
++/* Define to 1 if the system has the type `long long int'. */
++#cmakedefine HAVE_LONG_LONG_INT 1
++
++/* Define to 1 if you have the <mach-o/dyld.h> header file. */
++/* #undef HAVE_MACH_O_DYLD_H */
++
++/* Define if the 'malloc' function is POSIX compliant. */
++/* #undef HAVE_MALLOC_POSIX */
++
++/* Define to 1 if mbrtowc and mbstate_t are properly declared. */
++/* #undef HAVE_MBRTOWC */
++
++/* Define to 1 if <wchar.h> declares mbstate_t. */
++#define HAVE_MBSTATE_T 1
++
++/* Define to 1 if you have the `memchr' function. */
++#define HAVE_MEMCHR 1
++
++/* Define to 1 if you have the `memmove' function. */
++#define HAVE_MEMMOVE 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the `mempcpy' function. */
++#ifdef __GNUC__
++#define HAVE_MEMPCPY 1
++#endif
++
++/* Define to 1 if you have a working `mmap' system call. */
++/* #undef HAVE_MMAP */
++
++/* Define to 1 if you have the `munmap' function. */
++/* #undef HAVE_MUNMAP */
++
++/* Define if you have <langinfo.h> and it defines the NL_LOCALE_NAME macro if
++   _GNU_SOURCE is defined. */
++/* #undef HAVE_NL_LOCALE_NAME */
++
++/* Define if your printf() function supports format strings with positions. */
++/* #undef HAVE_POSIX_PRINTF */
++
++/* Define if the <pthread.h> defines PTHREAD_MUTEX_RECURSIVE. */
++/* #undef HAVE_PTHREAD_MUTEX_RECURSIVE */
++
++/* Define if the POSIX multithreading library has read/write locks. */
++/* #undef HAVE_PTHREAD_RWLOCK */
++
++/* Define to 1 if you have the `putenv' function. */
++#define HAVE_PUTENV 1
++
++/* Define to 1 if you have the `readlink' function. */
++/* #undef HAVE_READLINK */
++
++/* Define to 1 if you have the <search.h> header file. */
++#define HAVE_SEARCH_H 1
++
++/* Define to 1 if you have the `setenv' function. */
++/* #undef HAVE_SETENV */
++
++/* Define to 1 if you have the `setlocale' function. */
++#define HAVE_SETLOCALE 1
++
++/* Define to 1 if 'sig_atomic_t' is a signed integer type. */
++#define HAVE_SIGNED_SIG_ATOMIC_T 1
++
++/* Define to 1 if 'wchar_t' is a signed integer type. */
++/* #undef HAVE_SIGNED_WCHAR_T */
++
++/* Define to 1 if 'wint_t' is a signed integer type. */
++/* #undef HAVE_SIGNED_WINT_T */
++
++/* Define to 1 if you have the `snprintf' function. */
++/* #undef HAVE_SNPRINTF */
++
++/* Define to 1 if stdbool.h conforms to C99. */
++/* #undef HAVE_STDBOOL_H */
++
++/* Define to 1 if you have the <stddef.h> header file. */
++#define HAVE_STDDEF_H 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define if <stdint.h> exists, doesn't clash with <sys/types.h>, and declares
++   uintmax_t. */
++#define HAVE_STDINT_H_WITH_UINTMAX 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the `stpcpy' function. */
++/* #undef HAVE_STPCPY */
++
++/* Define to 1 if you have the `strcasecmp' function. */
++/* #undef HAVE_STRCASECMP */
++
++/* Define to 1 if you have the `strdup' function. */
++#define HAVE_STRDUP 1
++
++/* Define to 1 if you have the `strerror_r' function. */
++/* #undef HAVE_STRERROR_R */
++
++/* Define to 1 if you have the <strings.h> header file. */
++/* #undef HAVE_STRINGS_H */
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the `strtol' function. */
++#define HAVE_STRTOL 1
++
++/* Define to 1 if you have the `strtoul' function. */
++#define HAVE_STRTOUL 1
++
++/* Define to 1 if you have the <sys/bitypes.h> header file. */
++/* #undef HAVE_SYS_BITYPES_H */
++
++/* Define to 1 if you have the <sys/inttypes.h> header file. */
++/* #undef HAVE_SYS_INTTYPES_H */
++
++/* Define to 1 if you have the <sys/param.h> header file. */
++/* #undef HAVE_SYS_PARAM_H */
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the `tsearch' function. */
++/* #undef HAVE_TSEARCH */
++
++/* Define if you have the 'uintmax_t' type in <stdint.h> or <inttypes.h>. */
++#define HAVE_UINTMAX_T 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++/* #undef HAVE_UNISTD_H */
++
++/* Define to 1 if the system has the type `unsigned long long int'. */
++/* #undef HAVE_UNSIGNED_LONG_LONG_INT */
++
++/* Define to 1 or 0, depending whether the compiler supports simple visibility
++   declarations. */
++#define HAVE_VISIBILITY 0
++
++/* Define to 1 if you have the <wchar.h> header file. */
++#define HAVE_WCHAR_H 1
++
++/* Define if you have the 'wchar_t' type. */
++#define HAVE_WCHAR_T 1
++
++/* Define to 1 if you have the `wcslen' function. */
++#define HAVE_WCSLEN 1
++
++/* Define to 1 if you have the <wctype.h> header file. */
++#define HAVE_WCTYPE_H 1
++
++/* Define to 1 if you have the `wcwidth' function. */
++/* #undef HAVE_WCWIDTH */
++
++/* Define if you have the 'wint_t' type. */
++#define HAVE_WINT_T 1
++
++/* Define to 1 if the system has the type `_Bool'. */
++/* #undef HAVE__BOOL */
++
++/* Define to 1 if you have the `_NSGetExecutablePath' function. */
++/* #undef HAVE__NSGETEXECUTABLEPATH */
++
++/* Define to 1 if you have the `__fsetlocking' function. */
++/* #undef HAVE___FSETLOCKING */
++
++/* Define as const if the declaration of iconv() needs const. */
++#define ICONV_CONST @ICONV_CONST@
++
++/* Define to a symbolic name denoting the flavor of iconv_open()
++   implementation. */
++/* #undef ICONV_FLAVOR */
++
++/* Define to the value of ${prefix}, as a string. */
++/* #define INSTALLPREFIX "/usr/local" */
++
++/* Define if integer division by zero raises signal SIGFPE. */
++#define INTDIV0_RAISES_SIGFPE 0
++
++/* If malloc(0) is != NULL, define this to 1. Otherwise define this to 0. */
++#define MALLOC_0_IS_NONNULL 1
++
++/* Define to 1 if your C compiler doesn't accept -c and -o together. */
++#define NO_MINUS_C_MINUS_O 1
++
++/* Name of package */
++#define PACKAGE "gettext-runtime"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT ""
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME ""
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING ""
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME ""
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION ""
++
++/* Define if <inttypes.h> exists and defines unusable PRI* macros. */
++/* #undef PRI_MACROS_BROKEN */
++
++/* Define if the pthread_in_use() detection is hard. */
++/* #undef PTHREAD_IN_USE_DETECTION_HARD */
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'ptrdiff_t'. */
++#define PTRDIFF_T_SUFFIX 
++
++/* Define this to 1 if strerror is broken. */
++/* #undef REPLACE_STRERROR */
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'sig_atomic_t'. */
++#define SIG_ATOMIC_T_SUFFIX 
++
++/* Define as the maximum value of type 'size_t', if the system doesn't define
++   it. */
++#if defined(_WIN32)
++#define SIZE_MAX (((1UL << 31) - 1) * 2 + 1)
++#endif
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'size_t'. */
++#define SIZE_T_SUFFIX u
++
++/* If using the C implementation of alloca, define if you know the
++   direction of stack growth for your system; otherwise it will be
++   automatically deduced at runtime.
++	STACK_DIRECTION > 0 => grows toward higher addresses
++	STACK_DIRECTION < 0 => grows toward lower addresses
++	STACK_DIRECTION = 0 => direction of growth unknown */
++/* #undef STACK_DIRECTION */
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Define to 1 if strerror_r returns char *. */
++/* #undef STRERROR_R_CHAR_P */
++
++/* Define if the POSIX multithreading library can be used. */
++/* #undef USE_POSIX_THREADS */
++
++/* Define if references to the POSIX multithreading library should be made
++   weak. */
++/* #undef USE_POSIX_THREADS_WEAK */
++
++/* Define if the GNU Pth multithreading library can be used. */
++/* #undef USE_PTH_THREADS */
++
++/* Define if references to the GNU Pth multithreading library should be made
++   weak. */
++/* #undef USE_PTH_THREADS_WEAK */
++
++/* Define if the old Solaris multithreading library can be used. */
++/* #undef USE_SOLARIS_THREADS */
++
++/* Define if references to the old Solaris multithreading library should be
++   made weak. */
++/* #undef USE_SOLARIS_THREADS_WEAK */
++
++/* Define to 1 if you want getc etc. to use unlocked I/O if available.
++   Unlocked I/O can improve performance in unithreaded apps, but it is not
++   safe for multithreaded apps. */
++#define USE_UNLOCKED_IO 0
++
++/* Define if the Win32 multithreading API can be used. */
++#define USE_WIN32_THREADS 1
++
++/* Version number of package */
++#define VERSION "0.17"
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'wchar_t'. */
++#define WCHAR_T_SUFFIX 
++
++/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
++   'wint_t'. */
++#define WINT_T_SUFFIX 
++
++/* Enable GNU extensions on systems that have them.  */
++#ifndef _GNU_SOURCE
++# define _GNU_SOURCE 1
++#endif
++
++/* Define to 1 if on MINIX. */
++/* #undef _MINIX */
++
++/* Define to 2 if the system does not provide POSIX.1 features except with
++   this defined. */
++/* #undef _POSIX_1_SOURCE */
++
++/* Define to 1 if you need to in order for `stat' and other things to work. */
++/* #undef _POSIX_SOURCE */
++
++/* Enable extensions on AIX 3, Interix.  */
++#ifndef _ALL_SOURCE
++# define _ALL_SOURCE 1
++#endif
++/* Enable GNU extensions on systems that have them.  */
++#ifndef _GNU_SOURCE
++# define _GNU_SOURCE 1
++#endif
++/* Enable threading extensions on Solaris.  */
++#ifndef _POSIX_PTHREAD_SEMANTICS
++# define _POSIX_PTHREAD_SEMANTICS 1
++#endif
++/* Enable extensions on HP NonStop.  */
++#ifndef _TANDEM_SOURCE
++# define _TANDEM_SOURCE 1
++#endif
++/* Enable general extensions on Solaris.  */
++#ifndef __EXTENSIONS__
++# define __EXTENSIONS__ 1
++#endif
++
++/* Define to rpl_ if the getopt replacement functions and variables should be
++   used. */
++#define __GETOPT_PREFIX rpl_
++
++/* Define to `__inline__' or `__inline' if that's what the C compiler
++   calls it, or to nothing if 'inline' is not supported under any name.  */
++#ifndef __cplusplus
++#define inline __inline
++#endif
++
++/* Attributes.  */
++#ifdef __has_attribute
++# define _GL_HAS_ATTRIBUTE(attr) __has_attribute (__##attr##__)
++#else
++# define _GL_HAS_ATTRIBUTE(attr) _GL_ATTR_##attr
++#endif
++
++#if _GL_HAS_ATTRIBUTE (alloc_size)
++# define _GL_ATTRIBUTE_ALLOC_SIZE(args) __attribute__ ((__alloc_size__ args))
++#else
++# define _GL_ATTRIBUTE_ALLOC_SIZE(args)
++#endif
++
++#if _GL_HAS_ATTRIBUTE (always_inline)
++# define _GL_ATTRIBUTE_ALWAYS_INLINE __attribute__ ((__always_inline__))
++#else
++# define _GL_ATTRIBUTE_ALWAYS_INLINE
++#endif
++
++#if _GL_HAS_ATTRIBUTE (artificial)
++# define _GL_ATTRIBUTE_ARTIFICIAL __attribute__ ((__artificial__))
++#else
++# define _GL_ATTRIBUTE_ARTIFICIAL
++#endif
++
++/* Avoid __attribute__ ((cold)) on MinGW; see thread starting at
++   <https://lists.gnu.org/r/emacs-devel/2019-04/msg01152.html>. */
++#if _GL_HAS_ATTRIBUTE (cold) && !defined __MINGW32__
++# define _GL_ATTRIBUTE_COLD __attribute__ ((__cold__))
++#else
++# define _GL_ATTRIBUTE_COLD
++#endif
++
++#if _GL_HAS_ATTRIBUTE (const)
++# define _GL_ATTRIBUTE_CONST __attribute__ ((__const__))
++#else
++# define _GL_ATTRIBUTE_CONST
++#endif
++
++#if 201710L < __STDC_VERSION__
++# define _GL_ATTRIBUTE_DEPRECATED [[__deprecated__]]
++#elif _GL_HAS_ATTRIBUTE (deprecated)
++# define _GL_ATTRIBUTE_DEPRECATED __attribute__ ((__deprecated__))
++#else
++# define _GL_ATTRIBUTE_DEPRECATED
++#endif
++
++#if _GL_HAS_ATTRIBUTE (error)
++# define _GL_ATTRIBUTE_ERROR(msg) __attribute__ ((__error__ (msg)))
++# define _GL_ATTRIBUTE_WARNING(msg) __attribute__ ((__warning__ (msg)))
++#else
++# define _GL_ATTRIBUTE_ERROR(msg)
++# define _GL_ATTRIBUTE_WARNING(msg)
++#endif
++
++#if _GL_HAS_ATTRIBUTE (externally_visible)
++# define _GL_ATTRIBUTE_EXTERNALLY_VISIBLE __attribute__ ((externally_visible))
++#else
++# define _GL_ATTRIBUTE_EXTERNALLY_VISIBLE
++#endif
++
++/* FALLTHROUGH is special, because it always expands to something.  */
++#if 201710L < __STDC_VERSION__
++# define _GL_ATTRIBUTE_FALLTHROUGH [[__fallthrough__]]
++#elif _GL_HAS_ATTRIBUTE (fallthrough)
++# define _GL_ATTRIBUTE_FALLTHROUGH __attribute__ ((__fallthrough__))
++#else
++# define _GL_ATTRIBUTE_FALLTHROUGH ((void) 0)
++#endif
++
++#if _GL_HAS_ATTRIBUTE (format)
++# define _GL_ATTRIBUTE_FORMAT(spec) __attribute__ ((__format__ spec))
++#else
++# define _GL_ATTRIBUTE_FORMAT(spec)
++#endif
++
++#if _GL_HAS_ATTRIBUTE (leaf)
++# define _GL_ATTRIBUTE_LEAF __attribute__ ((__leaf__))
++#else
++# define _GL_ATTRIBUTE_LEAF
++#endif
++
++#if _GL_HAS_ATTRIBUTE (may_alias)
++# define _GL_ATTRIBUTE_MAY_ALIAS __attribute__ ((__may_alias__))
++#else
++# define _GL_ATTRIBUTE_MAY_ALIAS
++#endif
++
++#if 201710L < __STDC_VERSION__
++# define _GL_ATTRIBUTE_MAYBE_UNUSED [[__maybe_unused__]]
++#elif _GL_HAS_ATTRIBUTE (unused)
++# define _GL_ATTRIBUTE_MAYBE_UNUSED __attribute__ ((__unused__))
++#else
++# define _GL_ATTRIBUTE_MAYBE_UNUSED
++#endif
++/* Earlier spellings of this macro.  */
++#define _GL_UNUSED _GL_ATTRIBUTE_MAYBE_UNUSED
++#define _UNUSED_PARAMETER_ _GL_ATTRIBUTE_MAYBE_UNUSED
++
++#if _GL_HAS_ATTRIBUTE (malloc)
++# define _GL_ATTRIBUTE_MALLOC __attribute__ ((__malloc__))
++#else
++# define _GL_ATTRIBUTE_MALLOC
++#endif
++
++#if 201710L < __STDC_VERSION__
++# define _GL_ATTRIBUTE_NODISCARD [[__nodiscard__]]
++#elif _GL_HAS_ATTRIBUTE (warn_unused_result)
++# define _GL_ATTRIBUTE_NODISCARD __attribute__ ((__warn_unused_result__))
++#else
++# define _GL_ATTRIBUTE_NODISCARD
++#endif
++
++#if _GL_HAS_ATTRIBUTE (noinline)
++# define _GL_ATTRIBUTE_NOINLINE __attribute__ ((__noinline__))
++#else
++# define _GL_ATTRIBUTE_NOINLINE
++#endif
++
++#if _GL_HAS_ATTRIBUTE (nonnull)
++# define _GL_ATTRIBUTE_NONNULL(args) __attribute__ ((__nonnull__ args))
++#else
++# define _GL_ATTRIBUTE_NONNULL(args)
++#endif
++
++#if _GL_HAS_ATTRIBUTE (nonstring)
++# define _GL_ATTRIBUTE_NONSTRING __attribute__ ((__nonstring__))
++#else
++# define _GL_ATTRIBUTE_NONSTRING
++#endif
++
++/* There is no _GL_ATTRIBUTE_NORETURN; use _Noreturn instead.  */
++
++#if _GL_HAS_ATTRIBUTE (nothrow) && !defined __cplusplus
++# define _GL_ATTRIBUTE_NOTHROW __attribute__ ((__nothrow__))
++#else
++# define _GL_ATTRIBUTE_NOTHROW
++#endif
++
++#if _GL_HAS_ATTRIBUTE (packed)
++# define _GL_ATTRIBUTE_PACKED __attribute__ ((__packed__))
++#else
++# define _GL_ATTRIBUTE_PACKED
++#endif
++
++#if _GL_HAS_ATTRIBUTE (pure)
++# define _GL_ATTRIBUTE_PURE __attribute__ ((__pure__))
++#else
++# define _GL_ATTRIBUTE_PURE
++#endif
++
++#if _GL_HAS_ATTRIBUTE (returns_nonnull)
++# define _GL_ATTRIBUTE_RETURNS_NONNULL __attribute__ ((__returns_nonnull__))
++#else
++# define _GL_ATTRIBUTE_RETURNS_NONNULL
++#endif
++
++#if _GL_HAS_ATTRIBUTE (sentinel)
++# define _GL_ATTRIBUTE_SENTINEL(pos) __attribute__ ((__sentinel__ pos))
++#else
++# define _GL_ATTRIBUTE_SENTINEL(pos)
++#endif
++
++/* Define to a type if <wchar.h> does not define. */
++/* #undef mbstate_t */
++
++/* Define as the type of the result of subtracting two pointers, if the system
++   doesn't define it. */
++/* #undef ptrdiff_t */
++
++/* Define to a replacement function name for realpath(). */
++#define realpath rpl_realpath
++
++/* Define to the equivalent of the C99 'restrict' keyword, or to
++   nothing if this is not supported.  Do not define if restrict is
++   supported directly.  */
++#define restrict 
++/* Work around a bug in Sun C++: it does not support _Restrict, even
++   though the corresponding Sun C compiler does, which causes
++   "#define restrict _Restrict" in the previous line.  Perhaps some future
++   version of Sun C++ will work with _Restrict; if so, it'll probably
++   define __RESTRICT, just as Sun C does.  */
++#if defined __SUNPRO_CC && !defined __RESTRICT
++# define _Restrict
++#endif
++
++/* Define to `unsigned int' if <sys/types.h> does not define. */
++/* #undef size_t */
++
++/* Define as a signed type of the same size as size_t. */
++#ifdef _WIN64
++#define ssize_t __int64
++#elif _WIN32
++#define ssize_t __int32
++#endif
++
++/* Define to rpl_strnlen if the replacement function should be used. */
++#define strnlen rpl_strnlen
++
++/* Define to unsigned long or unsigned long long if <stdint.h> and
++   <inttypes.h> don't define. */
++/* #undef uintmax_t */
++
++#define __libc_lock_t                   gl_lock_t
++#define __libc_lock_define              gl_lock_define
++#define __libc_lock_define_initialized  gl_lock_define_initialized
++#define __libc_lock_init                gl_lock_init
++#define __libc_lock_lock                gl_lock_lock
++#define __libc_lock_unlock              gl_lock_unlock
++#define __libc_lock_recursive_t                   gl_recursive_lock_t
++#define __libc_lock_define_recursive              gl_recursive_lock_define
++#define __libc_lock_define_initialized_recursive  gl_recursive_lock_define_initialized
++#define __libc_lock_init_recursive                gl_recursive_lock_init
++#define __libc_lock_lock_recursive                gl_recursive_lock_lock
++#define __libc_lock_unlock_recursive              gl_recursive_lock_unlock
++#if 0
++#define glthread_in_use  libintl_thread_in_use
++#define glthread_lock_init     libintl_lock_init
++#define glthread_lock_lock     libintl_lock_lock
++#define glthread_lock_unlock   libintl_lock_unlock
++#define glthread_lock_destroy  libintl_lock_destroy
++#define glthread_rwlock_init     libintl_rwlock_init
++#define glthread_rwlock_rdlock   libintl_rwlock_rdlock
++#define glthread_rwlock_wrlock   libintl_rwlock_wrlock
++#define glthread_rwlock_unlock   libintl_rwlock_unlock
++#define glthread_rwlock_destroy  libintl_rwlock_destroy
++#define glthread_recursive_lock_init     libintl_recursive_lock_init
++#define glthread_recursive_lock_lock     libintl_recursive_lock_lock
++#define glthread_recursive_lock_unlock   libintl_recursive_lock_unlock
++#define glthread_recursive_lock_destroy  libintl_recursive_lock_destroy
++#define glthread_once                 libintl_once
++#define glthread_once_call            libintl_once_call
++#define glthread_once_singlethreaded  libintl_once_singlethreaded
++#endif
++
++
++/* On Windows, variables that may be in a DLL must be marked specially.  */
++#if (defined _MSC_VER && defined _DLL) && !defined IN_RELOCWRAPPER
++# define DLL_VARIABLE __declspec (dllimport)
++#else
++# define DLL_VARIABLE
++#endif
++
++/* Extra OS/2 (emx+gcc) defines.  */
++#ifdef __EMX__
++# include "intl/os2compat.h"
++#endif
++
+diff --git a/gettext-runtime/intl/libgnuintl.win32.h b/gettext-runtime/intl/libgnuintl.win32.h
+new file mode 100644
+index 00000000..440da4d5
+--- /dev/null
++++ b/gettext-runtime/intl/libgnuintl.win32.h
+@@ -0,0 +1,423 @@
++/* Message catalogs for internationalization.
++Copyright (C) 1995-1997, 2000-2007 Free Software Foundation, Inc.
++
++This program is free software; you can redistribute it and/or modify it
++under the terms of the GNU Library General Public License as published
++by the Free Software Foundation; either version 2, or (at your option)
++any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++Library General Public License for more details.
++
++You should have received a copy of the GNU Library General Public
++License along with this program; if not, write to the Free Software
++Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,
++USA.  */
++
++#ifndef _LIBINTL_H
++#define _LIBINTL_H	1
++
++#if defined(_WIN32) && defined(libintl_EXPORTS)
++#define LIBINTL_DLL_EXPORTED __declspec(dllexport)
++#else
++#define LIBINTL_DLL_EXPORTED
++#endif
++
++#include <locale.h>
++
++/* The LC_MESSAGES locale category is the category used by the functions
++gettext() and dgettext().  It is specified in POSIX, but not in ANSI C.
++On systems that don't define it, use an arbitrary value instead.
++On Solaris, <locale.h> defines __LOCALE_H (or _LOCALE_H in Solaris 2.5)
++then includes <libintl.h> (i.e. this file!) and then only defines
++LC_MESSAGES.  To avoid a redefinition warning, don't define LC_MESSAGES
++in this case.  */
++#if !defined LC_MESSAGES && !(defined __LOCALE_H || (defined _LOCALE_H && defined __sun))
++# define LC_MESSAGES 1729
++#endif
++
++/* We define an additional symbol to signal that we use the GNU
++implementation of gettext.  */
++#define __USE_GNU_GETTEXT 1
++
++/* Provide information about the supported file formats.  Returns the
++maximum minor revision number supported for a given major revision.  */
++#define __GNU_GETTEXT_SUPPORTED_REVISION(major) \
++  ((major) == 0 || (major) == 1 ? 1 : -1)
++
++/* Resolve a platform specific conflict on DJGPP.  GNU gettext takes
++precedence over _conio_gettext.  */
++#ifdef __DJGPP__
++# undef gettext
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++
++	/* Version number: (major<<16) + (minor<<8) + subminor */
++#define LIBINTL_VERSION 0x001100
++	extern LIBINTL_DLL_EXPORTED int libintl_version;
++
++
++	/* We redirect the functions to those prefixed with "libintl_".  This is
++	necessary, because some systems define gettext/textdomain/... in the C
++	library (namely, Solaris 2.4 and newer, and GNU libc 2.0 and newer).
++	If we used the unprefixed names, there would be cases where the
++	definition in the C library would override the one in the libintl.so
++	shared library.  Recall that on ELF systems, the symbols are looked
++	up in the following order:
++	1. in the executable,
++	2. in the shared libraries specified on the link command line, in order,
++	3. in the dependencies of the shared libraries specified on the link
++	command line,
++	4. in the dlopen()ed shared libraries, in the order in which they were
++	dlopen()ed.
++	The definition in the C library would override the one in libintl.so if
++	either
++	* -lc is given on the link command line and -lintl isn't, or
++	* -lc is given on the link command line before -lintl, or
++	* libintl.so is a dependency of a dlopen()ed shared library but not
++	linked to the executable at link time.
++	Since Solaris gettext() behaves differently than GNU gettext(), this
++	would be unacceptable.
++
++	The redirection happens by default through macros in C, so that &gettext
++	is independent of the compilation unit, but through inline functions in
++	C++, in order not to interfere with the name mangling of class fields or
++	class methods called 'gettext'.  */
++
++	/* The user can define _INTL_REDIRECT_INLINE or _INTL_REDIRECT_MACROS.
++	If he doesn't, we choose the method.  A third possible method is
++	_INTL_REDIRECT_ASM, supported only by GCC.  */
++#if !(defined _INTL_REDIRECT_INLINE || defined _INTL_REDIRECT_MACROS)
++# if __GNUC__ >= 2 && !(__APPLE_CC__ > 1) && !defined __MINGW32__ && !(__GNUC__ == 2 && defined _AIX) && (defined __STDC__ || defined __cplusplus)
++#  define _INTL_REDIRECT_ASM
++# else
++#  ifdef __cplusplus
++#   define _INTL_REDIRECT_INLINE
++#  else
++#   define _INTL_REDIRECT_MACROS
++#  endif
++# endif
++#endif
++	/* Auxiliary macros.  */
++#ifdef _INTL_REDIRECT_ASM
++# define _INTL_ASM(cname) __asm__ (_INTL_ASMNAME (__USER_LABEL_PREFIX__, #cname))
++# define _INTL_ASMNAME(prefix,cnamestring) _INTL_STRINGIFY (prefix) cnamestring
++# define _INTL_STRINGIFY(prefix) #prefix
++#else
++# define _INTL_ASM(cname)
++#endif
++
++	/* _INTL_MAY_RETURN_STRING_ARG(n) declares that the given function may return
++	its n-th argument literally.  This enables GCC to warn for example about
++	printf (gettext ("foo %y")).  */
++#if __GNUC__ >= 3 && !(__APPLE_CC__ > 1 && defined __cplusplus)
++# define _INTL_MAY_RETURN_STRING_ARG(n) __attribute__ ((__format_arg__ (n)))
++#else
++# define _INTL_MAY_RETURN_STRING_ARG(n)
++#endif
++
++	/* Look up MSGID in the current default message catalog for the current
++	LC_MESSAGES locale.  If not found, returns MSGID itself (the default
++	text).  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_gettext(const char *__msgid)
++		_INTL_MAY_RETURN_STRING_ARG(1);
++	static inline char *gettext(const char *__msgid)
++	{
++		return libintl_gettext(__msgid);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define gettext libintl_gettext
++#endif
++	extern LIBINTL_DLL_EXPORTED char *gettext(const char *__msgid)
++		_INTL_ASM(libintl_gettext)
++		_INTL_MAY_RETURN_STRING_ARG(1);
++#endif
++
++	/* Look up MSGID in the DOMAINNAME message catalog for the current
++	LC_MESSAGES locale.  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_dgettext(const char *__domainname, const char *__msgid)
++		_INTL_MAY_RETURN_STRING_ARG(2);
++	static inline char *dgettext(const char *__domainname, const char *__msgid)
++	{
++		return libintl_dgettext(__domainname, __msgid);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define dgettext libintl_dgettext
++#endif
++	extern LIBINTL_DLL_EXPORTED char *dgettext(const char *__domainname, const char *__msgid)
++		_INTL_ASM(libintl_dgettext)
++		_INTL_MAY_RETURN_STRING_ARG(2);
++#endif
++
++	/* Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
++	locale.  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_dcgettext(const char *__domainname, const char *__msgid,
++		int __category)
++		_INTL_MAY_RETURN_STRING_ARG(2);
++	static inline char *dcgettext(const char *__domainname, const char *__msgid,
++		int __category)
++	{
++		return libintl_dcgettext(__domainname, __msgid, __category);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define dcgettext libintl_dcgettext
++#endif
++	extern LIBINTL_DLL_EXPORTED char *dcgettext(const char *__domainname, const char *__msgid,
++		int __category)
++		_INTL_ASM(libintl_dcgettext)
++		_INTL_MAY_RETURN_STRING_ARG(2);
++#endif
++
++
++	/* Similar to `gettext' but select the plural form corresponding to the
++	number N.  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_ngettext(const char *__msgid1, const char *__msgid2,
++		unsigned long int __n)
++		_INTL_MAY_RETURN_STRING_ARG(1) _INTL_MAY_RETURN_STRING_ARG(2);
++	static inline char *ngettext(const char *__msgid1, const char *__msgid2,
++		unsigned long int __n)
++	{
++		return libintl_ngettext(__msgid1, __msgid2, __n);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define ngettext libintl_ngettext
++#endif
++	extern LIBINTL_DLL_EXPORTED char *ngettext(const char *__msgid1, const char *__msgid2,
++		unsigned long int __n)
++		_INTL_ASM(libintl_ngettext)
++		_INTL_MAY_RETURN_STRING_ARG(1) _INTL_MAY_RETURN_STRING_ARG(2);
++#endif
++
++	/* Similar to `dgettext' but select the plural form corresponding to the
++	number N.  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_dngettext(const char *__domainname, const char *__msgid1,
++		const char *__msgid2, unsigned long int __n)
++		_INTL_MAY_RETURN_STRING_ARG(2) _INTL_MAY_RETURN_STRING_ARG(3);
++	static inline char *dngettext(const char *__domainname, const char *__msgid1,
++		const char *__msgid2, unsigned long int __n)
++	{
++		return libintl_dngettext(__domainname, __msgid1, __msgid2, __n);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define dngettext libintl_dngettext
++#endif
++	extern LIBINTL_DLL_EXPORTED char *dngettext(const char *__domainname,
++		const char *__msgid1, const char *__msgid2,
++		unsigned long int __n)
++		_INTL_ASM(libintl_dngettext)
++		_INTL_MAY_RETURN_STRING_ARG(2) _INTL_MAY_RETURN_STRING_ARG(3);
++#endif
++
++	/* Similar to `dcgettext' but select the plural form corresponding to the
++	number N.  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_dcngettext(const char *__domainname,
++		const char *__msgid1, const char *__msgid2,
++		unsigned long int __n, int __category)
++		_INTL_MAY_RETURN_STRING_ARG(2) _INTL_MAY_RETURN_STRING_ARG(3);
++	static inline char *dcngettext(const char *__domainname,
++		const char *__msgid1, const char *__msgid2,
++		unsigned long int __n, int __category)
++	{
++		return libintl_dcngettext(__domainname, __msgid1, __msgid2, __n, __category);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define dcngettext libintl_dcngettext
++#endif
++	extern LIBINTL_DLL_EXPORTED char *dcngettext(const char *__domainname,
++		const char *__msgid1, const char *__msgid2,
++		unsigned long int __n, int __category)
++		_INTL_ASM(libintl_dcngettext)
++		_INTL_MAY_RETURN_STRING_ARG(2) _INTL_MAY_RETURN_STRING_ARG(3);
++#endif
++
++
++
++	/* Set the current default message catalog to DOMAINNAME.
++	If DOMAINNAME is null, return the current default.
++	If DOMAINNAME is "", reset to the default of "messages".  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_textdomain(const char *__domainname);
++	static inline char *textdomain(const char *__domainname)
++	{
++		return libintl_textdomain(__domainname);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define textdomain libintl_textdomain
++#endif
++	extern LIBINTL_DLL_EXPORTED char *textdomain(const char *__domainname)
++		_INTL_ASM(libintl_textdomain);
++#endif
++
++	/* Specify that the DOMAINNAME message catalog will be found
++	in DIRNAME rather than in the system locale data base.  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_bindtextdomain(const char *__domainname,
++		const char *__dirname);
++	static inline char *bindtextdomain(const char *__domainname,
++		const char *__dirname)
++	{
++		return libintl_bindtextdomain(__domainname, __dirname);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define bindtextdomain libintl_bindtextdomain
++#endif
++	extern LIBINTL_DLL_EXPORTED char *bindtextdomain(const char *__domainname, const char *__dirname)
++		_INTL_ASM(libintl_bindtextdomain);
++#endif
++
++	/* Specify the character encoding in which the messages from the
++	DOMAINNAME message catalog will be returned.  */
++#ifdef _INTL_REDIRECT_INLINE
++	extern LIBINTL_DLL_EXPORTED char *libintl_bind_textdomain_codeset(const char *__domainname,
++		const char *__codeset);
++	static inline char *bind_textdomain_codeset(const char *__domainname,
++		const char *__codeset)
++	{
++		return libintl_bind_textdomain_codeset(__domainname, __codeset);
++	}
++#else
++#ifdef _INTL_REDIRECT_MACROS
++# define bind_textdomain_codeset libintl_bind_textdomain_codeset
++#endif
++	extern LIBINTL_DLL_EXPORTED char *bind_textdomain_codeset(const char *__domainname,
++		const char *__codeset)
++		_INTL_ASM(libintl_bind_textdomain_codeset);
++#endif
++
++
++
++	/* Support for format strings with positions in *printf(), following the
++	POSIX/XSI specification.
++	Note: These replacements for the *printf() functions are visible only
++	in source files that #include <libintl.h> or #include "gettext.h".
++	Packages that use *printf() in source files that don't refer to _()
++	or gettext() but for which the format string could be the return value
++	of _() or gettext() need to add this #include.  Oh well.  */
++
++#if !0
++
++#include <stdio.h>
++#include <stddef.h>
++
++	/* Get va_list.  */
++#if __STDC__ || defined __cplusplus || defined _MSC_VER
++# include <stdarg.h>
++#else
++# include <varargs.h>
++#endif
++
++#undef fprintf
++#define fprintf libintl_fprintf
++	extern LIBINTL_DLL_EXPORTED int fprintf(FILE *, const char *, ...);
++#undef vfprintf
++#define vfprintf libintl_vfprintf
++	extern LIBINTL_DLL_EXPORTED int vfprintf(FILE *, const char *, va_list);
++
++#undef printf
++#if defined __NetBSD__ || defined __BEOS__ || defined __CYGWIN__ || defined __MINGW32__
++	/* Don't break __attribute__((format(printf,M,N))).
++	This redefinition is only possible because the libc in NetBSD, Cygwin,
++	mingw does not have a function __printf__.  */
++# define libintl_printf __printf__
++#endif
++#define printf libintl_printf
++	extern LIBINTL_DLL_EXPORTED int printf(const char *, ...);
++#undef vprintf
++#define vprintf libintl_vprintf
++	extern LIBINTL_DLL_EXPORTED int vprintf(const char *, va_list);
++
++#undef sprintf
++#define sprintf libintl_sprintf
++	extern LIBINTL_DLL_EXPORTED int sprintf(char *, const char *, ...);
++#undef vsprintf
++#define vsprintf libintl_vsprintf
++	extern LIBINTL_DLL_EXPORTED int vsprintf(char *, const char *, va_list);
++
++#if 0
++
++#undef snprintf
++#define snprintf libintl_snprintf
++	extern LIBINTL_DLL_EXPORTED int snprintf(char *, size_t, const char *, ...);
++#undef vsnprintf
++#define vsnprintf libintl_vsnprintf
++	extern LIBINTL_DLL_EXPORTED int vsnprintf(char *, size_t, const char *, va_list);
++
++#endif
++
++#if 0
++
++#undef asprintf
++#define asprintf libintl_asprintf
++	extern LIBINTL_DLL_EXPORTED int asprintf(char **, const char *, ...);
++#undef vasprintf
++#define vasprintf libintl_vasprintf
++	extern LIBINTL_DLL_EXPORTED int vasprintf(char **, const char *, va_list);
++
++#endif
++
++#if 0
++
++#undef fwprintf
++#define fwprintf libintl_fwprintf
++	extern LIBINTL_DLL_EXPORTED int fwprintf(FILE *, const wchar_t *, ...);
++#undef vfwprintf
++#define vfwprintf libintl_vfwprintf
++	extern LIBINTL_DLL_EXPORTED int vfwprintf(FILE *, const wchar_t *, va_list);
++
++#undef wprintf
++#define wprintf libintl_wprintf
++	extern LIBINTL_DLL_EXPORTED int wprintf(const wchar_t *, ...);
++#undef vwprintf
++#define vwprintf libintl_vwprintf
++	extern LIBINTL_DLL_EXPORTED int vwprintf(const wchar_t *, va_list);
++
++#undef swprintf
++#define swprintf libintl_swprintf
++	extern LIBINTL_DLL_EXPORTED int swprintf(wchar_t *, size_t, const wchar_t *, ...);
++#undef vswprintf
++#define vswprintf libintl_vswprintf
++	extern LIBINTL_DLL_EXPORTED int vswprintf(wchar_t *, size_t, const wchar_t *, va_list);
++
++#endif
++
++#endif
++
++
++	/* Support for relocatable packages.  */
++
++	/* Sets the original and the current installation prefix of the package.
++	Relocation simply replaces a pathname starting with the original prefix
++	by the corresponding pathname with the current prefix instead.  Both
++	prefixes should be directory names without trailing slash (i.e. use ""
++	instead of "/").  */
++#define libintl_set_relocation_prefix libintl_set_relocation_prefix
++	extern LIBINTL_DLL_EXPORTED void
++		libintl_set_relocation_prefix(const char *orig_prefix,
++			const char *curr_prefix);
++
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* libintl.h */
+\ No newline at end of file
+diff --git a/gettext-runtime/intl/libintl.rc b/gettext-runtime/intl/libintl.rc
+deleted file mode 100644
+index 25224183..00000000
+--- a/gettext-runtime/intl/libintl.rc
++++ /dev/null
+@@ -1,38 +0,0 @@
+-/* Resources for intl.dll */
+-
+-#include <winver.h>
+-
+-VS_VERSION_INFO VERSIONINFO
+- FILEVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
+- PRODUCTVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
+- FILEFLAGSMASK 0x3fL /* VS_FFI_FILEFLAGSMASK */
+-#ifdef _DEBUG
+- FILEFLAGS 0x1L  /* VS_FF_DEBUG */
+-#else
+- FILEFLAGS 0x0L
+-#endif
+- FILEOS 0x10004L  /* VOS_DOS_WINDOWS32 */
+- FILETYPE 0x2L  /* VFT_DLL */
+- FILESUBTYPE 0x0L  /* VFT2_UNKNOWN */
+-BEGIN
+-    BLOCK "StringFileInfo"
+-    BEGIN
+-        BLOCK "04090000"  /* Lang = US English, Charset = ASCII */
+-        BEGIN
+-            VALUE "Comments", "This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License. You should have received a copy of the GNU Lesser General Public License along with this library; if not, see <https://www.gnu.org/licenses/>.\0"
+-            VALUE "CompanyName", "Free Software Foundation\0"
+-            VALUE "FileDescription", "LGPLed libintl for Windows\0"
+-            VALUE "FileVersion", PACKAGE_VERSION_STRING "\0"
+-            VALUE "InternalName", "intl.dll\0"
+-            VALUE "LegalCopyright", "Copyright (C) 1995-2019\0"
+-            VALUE "LegalTrademarks", "\0"
+-            VALUE "OriginalFilename", "intl.dll\0"
+-            VALUE "ProductName", "GNU libintl: accessing NLS message catalogs\0"
+-            VALUE "ProductVersion", PACKAGE_VERSION_STRING "\0"
+-        END
+-    END
+-    BLOCK "VarFileInfo"
+-    BEGIN
+-        VALUE "Translation", 0x0409, 0  /* US English, ASCII */
+-    END
+-END
+diff --git a/gettext-runtime/intl/libintl.rc.in b/gettext-runtime/intl/libintl.rc.in
+new file mode 100644
+index 00000000..f213dc64
+--- /dev/null
++++ b/gettext-runtime/intl/libintl.rc.in
+@@ -0,0 +1,38 @@
++/* Resources for intl.dll */
++
++#include <winver.h>
++
++VS_VERSION_INFO VERSIONINFO
++ FILEVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
++ PRODUCTVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
++ FILEFLAGSMASK 0x3fL /* VS_FFI_FILEFLAGSMASK */
++#ifdef _DEBUG
++ FILEFLAGS 0x1L  /* VS_FF_DEBUG */
++#else
++ FILEFLAGS 0x0L
++#endif
++ FILEOS 0x10004L  /* VOS_DOS_WINDOWS32 */
++ FILETYPE 0x2L  /* VFT_DLL */
++ FILESUBTYPE 0x0L  /* VFT2_UNKNOWN */
++BEGIN
++    BLOCK "StringFileInfo"
++    BEGIN
++        BLOCK "04090000"  /* Lang = US English, Charset = ASCII */
++        BEGIN
++            VALUE "Comments", "This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License. You should have received a copy of the GNU Lesser General Public License along with this library; if not, see <https://www.gnu.org/licenses/>.\0"
++            VALUE "CompanyName", "Free Software Foundation\0"
++            VALUE "FileDescription", "LGPLed libintl for Windows\0"
++            VALUE "FileVersion", "@PACKAGE_VERSION_STRING@\0"
++            VALUE "InternalName", "intl.dll\0"
++            VALUE "LegalCopyright", "Copyright (C) 1995-2019\0"
++            VALUE "LegalTrademarks", "\0"
++            VALUE "OriginalFilename", "intl.dll\0"
++            VALUE "ProductName", "GNU libintl: accessing NLS message catalogs\0"
++            VALUE "ProductVersion", "@PACKAGE_VERSION_STRING@\0"
++        END
++    END
++    BLOCK "VarFileInfo"
++    BEGIN
++        VALUE "Translation", 0x0409, 0  /* US English, ASCII */
++    END
++END
+-- 
+2.30.0
+

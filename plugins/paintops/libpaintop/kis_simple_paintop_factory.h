@@ -50,16 +50,16 @@ struct has_prepare_linked_resources<T, std::void_t<decltype(std::declval<T>().pr
 
 template <typename T>
 QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings,
-                                     KisResourcesInterfaceSP resourcesInterface,
-                                     std::enable_if_t<has_prepare_linked_resources<T>::value> * = 0)
+                                           KisResourcesInterfaceSP resourcesInterface,
+                                           std::enable_if_t<has_prepare_linked_resources<T>::value> * = 0)
 {
     return T::prepareLinkedResources(settings, resourcesInterface);
 }
 
 template <typename T>
 QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings,
-                                     KisResourcesInterfaceSP resourcesInterface,
-                                     std::enable_if_t<!has_prepare_linked_resources<T>::value> * = 0)
+                                           KisResourcesInterfaceSP resourcesInterface,
+                                           std::enable_if_t<!has_prepare_linked_resources<T>::value> * = 0)
 {
     Q_UNUSED(settings);
     Q_UNUSED(resourcesInterface);
@@ -76,16 +76,16 @@ struct has_prepare_embedded_resources<T, std::void_t<decltype(std::declval<T>().
 
 template <typename T>
 QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,
-                                     KisResourcesInterfaceSP resourcesInterface,
-                                     std::enable_if_t<has_prepare_embedded_resources<T>::value> * = 0)
+                                             KisResourcesInterfaceSP resourcesInterface,
+                                             std::enable_if_t<has_prepare_embedded_resources<T>::value> * = 0)
 {
     return T::prepareEmbeddedResources(settings, resourcesInterface);
 }
 
 template <typename T>
 QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,
-                                     KisResourcesInterfaceSP resourcesInterface,
-                                     std::enable_if_t<!has_prepare_embedded_resources<T>::value> * = 0)
+                                             KisResourcesInterfaceSP resourcesInterface,
+                                             std::enable_if_t<!has_prepare_embedded_resources<T>::value> * = 0)
 {
     Q_UNUSED(settings);
     Q_UNUSED(resourcesInterface);

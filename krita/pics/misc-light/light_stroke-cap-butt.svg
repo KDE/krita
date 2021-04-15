@@ -201,7 +201,7 @@
        id="g4171-7"
        transform="matrix(0,-1,1,0,0,30)" />
     <path
-       style="fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        d="m 10,10 0,4 -6,0 0,18 10,0 0,-12 -2,0 0,-8 8,0 0,8 -2,0 0,12 10,0 0,-18 -6,0 0,-4 z"
        id="rect9032"
        inkscape:connector-curvature="0"

@@ -7,7 +7,7 @@
 #ifndef KIS_PAINT_DEVICE_TESTER_H
 #define KIS_PAINT_DEVICE_TESTER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPaintDeviceTest : public QObject
 {

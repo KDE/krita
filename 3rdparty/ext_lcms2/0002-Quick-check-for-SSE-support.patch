@@ -1,14 +1,14 @@
-From c20d100da7542d253d9496a40960075bfe3abe99 Mon Sep 17 00:00:00 2001
+From 15abb1344882d96479b2bc2889664b6e256069e3 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Fri, 19 Feb 2021 11:27:33 +0000
-Subject: [PATCH 2/2] Quick check for SSE support
+Subject: [PATCH 2/3] Quick check for SSE support
 
 ---
  src/CMakeLists.txt | 19 +++++++++++++++++++
  1 file changed, 19 insertions(+)
 
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 43df937..1f26a2b 100644
+index b83ea07..9bccbc6 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -17,6 +17,25 @@ if(WIN32)
@@ -31,12 +31,12 @@ index 43df937..1f26a2b 100644
 +
 +if (NOT HAVE_SSE2)
 +    message(STATUS "Disabling SSE optimizations, as the target doesn't support them")
-+    add_compile_definitions(CMS_DONT_USE_SSE2=1)
++    add_compile_definitions(-DCMS_DONT_USE_SSE2=1)
 +endif()
 +
  set(lcms_SRCS
      cmscnvrt.c
      cmserr.c
 -- 
-2.30.0
+2.30.1
 

@@ -7,7 +7,7 @@
 #ifndef _KIS_GIF_TEST_H_
 #define _KIS_GIF_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisGifTest : public QObject
 {

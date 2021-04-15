@@ -11,7 +11,7 @@
 #include "../tools/KoPathToolSelection.h"
 #include "../KoPathPointData.h"
 #include <MockShapes.h>
-#include <QTest>
+#include <simpletest.h>
 
 void TestPathTool::koPathPointSelection_selectedSegmentsData()
 {
@@ -75,4 +75,4 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
 }
 
 
-QTEST_MAIN(TestPathTool)
+SIMPLE_TEST_MAIN(TestPathTool)

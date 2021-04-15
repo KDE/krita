@@ -22,8 +22,11 @@ class KisPainter;
 class KisGridProperties
 {
 public:
+    quint16 diameter;
     quint16 gridWidth;
     quint16 gridHeight;
+    qreal horizontalOffset;
+    qreal verticalOffset;
     quint16 divisionLevel;
     bool pressureDivision;
     bool randomBorder;

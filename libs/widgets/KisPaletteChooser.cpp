@@ -30,15 +30,13 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     , m_ui(new Ui_WdgPaletteListWidget)
     , m_d(new KisPaletteChooserPrivate(this))
 {
-    m_d->allowModification = false;
-
     m_d->actAdd.reset(new QAction(KisIconUtils::loadIcon("list-add"),
                                   i18n("Add a new palette")));
-    m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("list-remove"),
+    m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("edit-delete"),
                                      i18n("Remove current palette")));
-    m_d->actImport.reset(new QAction(KisIconUtils::loadIcon("document-import"),
+    m_d->actImport.reset(new QAction(KisIconUtils::loadIcon("document-import-16"),
                                      i18n("Import a new palette from file")));
-    m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export"),
+    m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export-16"),
                                      i18n("Export current palette to file")));
     m_ui->setupUi(this);
     m_ui->bnAdd->setDefaultAction(m_d->actAdd.data());
@@ -46,13 +44,9 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     m_ui->bnImport->setDefaultAction(m_d->actImport.data());
     m_ui->bnExport->setDefaultAction(m_d->actExport.data());
 
-    m_ui->bnAdd->setEnabled(false);
     m_ui->bnAdd->setAutoRaise(true);
-    m_ui->bnRemove->setEnabled(false);
     m_ui->bnRemove->setAutoRaise(true);
-    m_ui->bnImport->setEnabled(false);
     m_ui->bnImport->setAutoRaise(true);
-    m_ui->bnExport->setEnabled(false);
     m_ui->bnExport->setAutoRaise(true);
 
     connect(m_d->actAdd.data(), SIGNAL(triggered()), SLOT(slotAdd()));
@@ -68,34 +62,29 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     QHBoxLayout *paletteLayout = new QHBoxLayout(m_ui->viewPalette);
     paletteLayout->addWidget(m_d->itemChooser.data());
 
-    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotPaletteResourceSelected(KoResourceSP )));
+    m_d->itemChooser->setCurrentItem(0);
+
+    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(paletteSelected(KoResourceSP )));
 }
 
 KisPaletteChooser::~KisPaletteChooser()
 { }
 
-void KisPaletteChooser::slotPaletteResourceSelected(KoResourceSP r)
+void KisPaletteChooser::paletteSelected(KoResourceSP r)
 {
     KoColorSetSP g = r.staticCast<KoColorSet>();
     emit sigPaletteSelected(g);
-    if (!m_d->allowModification) { return; }
-    if (g->isEditable()) {
-        m_ui->bnRemove->setEnabled(true);
-    } else {
-        m_ui->bnRemove->setEnabled(false);
-    }
+    m_ui->bnRemove->setEnabled(true);
 }
 
 void KisPaletteChooser::slotAdd()
 {
-    if (!m_d->allowModification) { return; }
     emit sigAddPalette();
     m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
 void KisPaletteChooser::slotRemove()
 {
-    if (!m_d->allowModification) { return; }
     if (m_d->itemChooser->currentResource()) {
         KoColorSetSP cs = m_d->itemChooser->currentResource().staticCast<KoColorSet>();
         emit sigRemovePalette(cs);
@@ -105,25 +94,16 @@ void KisPaletteChooser::slotRemove()
 
 void KisPaletteChooser::slotImport()
 {
-    if (!m_d->allowModification) { return; }
     emit sigImportPalette();
-    m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
 void KisPaletteChooser::slotExport()
 {
-    if (!m_d->allowModification) { return; }
-    emit sigExportPalette(m_d->itemChooser->currentResource().staticCast<KoColorSet>());
-}
-
-void KisPaletteChooser::setAllowModification(bool allowModification)
-{
-    m_d->allowModification = allowModification;
-    m_ui->bnAdd->setEnabled(allowModification);
-    m_ui->bnImport->setEnabled(allowModification);
-    m_ui->bnExport->setEnabled(allowModification);
-    KoColorSetSP cs = m_d->itemChooser->currentResource().staticCast<KoColorSet>();
-    m_ui->bnRemove->setEnabled(allowModification && cs && cs->isEditable());
+    if (!m_d->itemChooser->currentResource()) {
+        m_d->itemChooser->setCurrentItem(0);
+    }
+    KoColorSetSP palette = m_d->itemChooser->currentResource().dynamicCast<KoColorSet>();
+    emit sigExportPalette(palette);
 }
 
 /************************* KisPaletteChooserPrivate **********************/

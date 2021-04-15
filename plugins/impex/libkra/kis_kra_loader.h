@@ -9,13 +9,13 @@
 class QString;
 class QStringList;
 
-#include "KoXmlReaderForward.h"
+#include "QDomDocument"
 class KoStore;
 
 class KisDocument;
 class KoColorSpace;
 class KisPaintingAssistant;
-class StoryboardComment;
+struct StoryboardComment;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"
@@ -37,7 +37,7 @@ public:
      * Loading is done in two steps: first all xml is loaded, then, in finishLoading,
      * the actual layer data is loaded.
      */
-    KisImageSP loadXML(const KoXmlElement& elem);
+    KisImageSP loadXML(const QDomElement& elem);
 
     void loadBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external);
 
@@ -71,49 +71,49 @@ private:
     // this needs to be private, for neatness sake
     void loadAssistants(KoStore* store, const QString & uri, bool external);
 
-    void loadAnimationMetadataFromXML(const KoXmlElement& element, KisImageSP image);
+    void loadAnimationMetadataFromXML(const QDomElement& element, KisImageSP image);
 
-    KisNodeSP loadNodes(const KoXmlElement& element, KisImageSP image, KisNodeSP parent);
+    KisNodeSP loadNodes(const QDomElement& element, KisImageSP image, KisNodeSP parent);
 
-    KisNodeSP loadNode(const KoXmlElement& elem, KisImageSP image);
+    KisNodeSP loadNode(const QDomElement& elem, KisImageSP image);
 
-    KisNodeSP loadPaintLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadPaintLayer(const QDomElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNodeSP loadGroupLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadGroupLayer(const QDomElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNodeSP loadAdjustmentLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNodeSP loadShapeLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadShapeLayer(const QDomElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNodeSP loadGeneratorLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadGeneratorLayer(const QDomElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNodeSP loadCloneLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadCloneLayer(const QDomElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNodeSP loadFilterMask(KisImageSP image, const KoXmlElement& elem);
+    KisNodeSP loadFilterMask(KisImageSP image, const QDomElement& elem);
 
-    KisNodeSP loadTransformMask(KisImageSP image, const KoXmlElement& elem);
+    KisNodeSP loadTransformMask(KisImageSP image, const QDomElement& elem);
 
-    KisNodeSP loadTransparencyMask(KisImageSP image, const KoXmlElement& elem);
+    KisNodeSP loadTransparencyMask(KisImageSP image, const QDomElement& elem);
 
-    KisNodeSP loadSelectionMask(KisImageSP image, const KoXmlElement& elem);
+    KisNodeSP loadSelectionMask(KisImageSP image, const QDomElement& elem);
 
-    KisNodeSP loadColorizeMask(KisImageSP image, const KoXmlElement& elem, const KoColorSpace *colorSpace);
+    KisNodeSP loadColorizeMask(KisImageSP image, const QDomElement& elem, const KoColorSpace *colorSpace);
 
-    KisNodeSP loadFileLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, quint32 opacity);
+    KisNodeSP loadFileLayer(const QDomElement& elem, KisImageSP image, const QString& name, quint32 opacity);
 
-    KisNodeSP loadReferenceImagesLayer(const KoXmlElement& elem, KisImageSP image);
+    KisNodeSP loadReferenceImagesLayer(const QDomElement& elem, KisImageSP image);
 
     void loadNodeKeyframes(KoStore *store, const QString &location, KisNodeSP node);
 
-    void loadCompositions(const KoXmlElement& elem, KisImageSP image);
+    void loadCompositions(const QDomElement& elem, KisImageSP image);
 
-    void loadAssistantsList(const KoXmlElement& elem);
-    void loadGrid(const KoXmlElement& elem);
-    void loadGuides(const KoXmlElement& elem);
-    void loadMirrorAxis(const KoXmlElement& elem);
-    void loadAudio(const KoXmlElement& elem, KisImageSP image);
-    void loadStoryboardItemList(const KoXmlElement& elem);
-    void loadStoryboardCommentList(const KoXmlElement& elem);
+    void loadAssistantsList(const QDomElement& elem);
+    void loadGrid(const QDomElement& elem);
+    void loadGuides(const QDomElement& elem);
+    void loadMirrorAxis(const QDomElement& elem);
+    void loadAudio(const QDomElement& elem, KisImageSP image);
+    void loadStoryboardItemList(const QDomElement& elem);
+    void loadStoryboardCommentList(const QDomElement& elem);
 private:
 
     struct Private;

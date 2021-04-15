@@ -124,7 +124,7 @@
      id="layer1"
      transform="translate(-378.85714,-540.07647)">
     <path
-       style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 4.5 3 A 1.4999964 1.4999965 0 0 0 3 4.5 A 1.4999964 1.4999965 0 0 0 4 5.9121094 L 4 6 L 4 13 L 4 19 L 5 19 L 5 13 L 12 13 L 12 14 L 19 14 L 19 7 L 13 7 L 13 6 L 5 6 L 5 5.9121094 A 1.4999964 1.4999965 0 0 0 6 4.5 A 1.4999964 1.4999965 0 0 0 4.5 3 z M 5 7 L 12 7 L 12 12 L 5 12 L 5 7 z M 13 8 L 18 8 L 18 13 L 13 13 L 13 8 z "
        transform="translate(378.85714,540.07647)"
        id="rect4155" />

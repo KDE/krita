@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
    id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="32"
-   width="32">
+   viewBox="0 0 16 16"
+   height="16"
+   width="16">
   <defs
      id="defs4" />
   <metadata
@@ -23,11 +23,12 @@
         <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andrei Rudenko</dc:title>
+            <dc:title>Timothée Giet</dc:title>
           </cc:Agent>
         </dc:creator>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:date>2021</dc:date>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -47,8 +48,9 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:inline"
-     id="layer2">
+     style="display:inline;fill:#d2d2d2;fill-opacity:1"
+     id="layer2"
+     transform="scale(0.5)">
     <rect
        ry="3.3546499e-08"
        rx="3.3546499e-08"
@@ -57,9 +59,9 @@
        height="4"
        width="8"
        id="rect4155-8"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
     <rect
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        ry="3.3546499e-08"
        rx="3.3546499e-08"
        y="-32"
@@ -67,9 +69,9 @@
        height="4"
        width="8"
        id="rect4155-8-7"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
     <rect
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        ry="3.3546499e-08"
        rx="3.3546499e-08"
        y="-4"
@@ -77,38 +79,55 @@
        height="4"
        width="8"
        id="rect4155-8-7-8"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+    <rect
+       transform="rotate(45)"
+       ry="3.3546499e-08"
+       rx="3.3546499e-08"
+       y="12.727922"
+       x="18.384777"
+       height="4"
+       width="8"
+       id="rect4155-8-7-8-3"
+       style="display:inline;opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+    <rect
+       transform="matrix(0.70710678,-0.70710678,-0.70710678,-0.70710678,0,0)"
+       ry="3.3546499e-08"
+       rx="3.3546499e-08"
+       y="-39.355339"
+       x="-3.7573593"
+       height="4"
+       width="8"
+       id="rect4155-8-7-8-3-6"
+       style="display:inline;opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
   </g>
   <g
      id="g4151"
-     style="display:inline">
+     style="display:inline;fill:#d2d2d2;fill-opacity:1"
+     transform="scale(0.5)">
     <path
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 12,0.85095148 0,8.00000002 8,0 0,-8.00000002 z m 2,2.00000002 4,0 0,4 -4,0 z"
+       style="display:inline;opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 12,6e-7 v 8 h 8 v -8 z m 2,2 h 4 v 4 h -4 z"
        id="path4153" />
     <path
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 20,2.8509505 12,0 0,10e-8 0,3.9999999 0,0 -12,0 0,0 z"
+       style="display:inline;opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:3.65148377;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 20,1.9999996 h 10 v 1e-7 3.9999999 0 H 20 v 0 z"
        id="path4155" />
     <path
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 26,0.85095088 4,0 0,0 0,8.00000002 0,0 -4,0 0,0 z"
-       id="path4157" />
-    <path
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 2,0.85095048 4,0 0,1e-7 0,7.99999992 0,0 -4,0 0,0 z"
-       id="path4159" />
-    <path
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 0,2.8509509 12,0 0,0 0,4 0,0 -12,0 0,0 z"
+       style="display:inline;opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:3.65148377;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 2,2 H 12 V 2 6 6 H 2 v 0 z"
        id="path4161" />
-    <path
-       id="path4158"
-       d="m 4.5369275,22.742829 c 0.686265,1.358472 0.864745,3.163245 4.244009,4.854937"
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#c8c8c8;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path4158-3"
-       d="m 24.121221,27.578921 c 1.259109,-0.855015 3.026025,-1.263754 4.269808,-4.832263"
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#c8c8c8;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <circle
+       style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1"
+       id="path826"
+       cx="4"
+       cy="4"
+       r="4" />
+    <circle
+       style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1"
+       id="path828"
+       cx="28"
+       cy="4"
+       r="4" />
   </g>
 </svg>

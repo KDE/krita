@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>264</height>
+    <width>448</width>
+    <height>314</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,25 +31,12 @@
     <rect>
      <x>10</x>
      <y>4</y>
-     <width>361</width>
-     <height>244</height>
+     <width>411</width>
+     <height>291</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item column="0" row="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Grid width:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item colspan="2" column="1" row="0">
-     <widget class="KisDoubleSliderSpinBox" name="gridWidthSPBox"/>
-    </item>
-    <item column="0" row="1">
+    <item row="2" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Grid height:</string>
@@ -59,43 +46,7 @@
       </property>
      </widget>
     </item>
-    <item colspan="2" column="1" row="1">
-     <widget class="KisDoubleSliderSpinBox" name="gridHeightSPBox"/>
-    </item>
-    <item column="0" row="2">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Division level:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item colspan="2" column="1" row="2">
-     <widget class="KisDoubleSliderSpinBox" name="divisionLevelSPBox"/>
-    </item>
-    <item colspan="3" column="0" row="3">
-     <widget class="QCheckBox" name="divisionPressureCHBox">
-      <property name="text">
-       <string>Division by pressure</string>
-      </property>
-     </widget>
-    </item>
-    <item column="0" row="4">
-     <widget class="QLabel" name="label_6">
-      <property name="text">
-       <string>Scale:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item colspan="2" column="1" row="4">
-     <widget class="KisDoubleSliderSpinBox" name="scaleDSPBox"/>
-    </item>
-    <item colspan="2" column="0" row="5">
+    <item row="8" column="0" colspan="2">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Vertical border:</string>
@@ -105,10 +56,43 @@
       </property>
      </widget>
     </item>
-    <item column="2" row="5">
-     <widget class="KisDoubleSliderSpinBox" name="vertBorderDSPBox"/>
+    <item row="7" column="1" colspan="2">
+     <widget class="KisDoubleSliderSpinBox" name="scaleDSPBox" native="true"/>
     </item>
-    <item colspan="2" column="0" row="6">
+    <item row="9" column="2">
+     <widget class="KisDoubleSliderSpinBox" name="horizBorderDSPBox" native="true"/>
+    </item>
+    <item row="6" column="0" colspan="3">
+     <widget class="QCheckBox" name="divisionPressureCHBox">
+      <property name="text">
+       <string>Division by pressure</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Scale:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="2">
+     <widget class="KisDoubleSliderSpinBox" name="divisionLevelSPBox" native="true"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Diameter:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0" colspan="2">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>Horizontal border:</string>
@@ -118,15 +102,70 @@
       </property>
      </widget>
     </item>
-    <item column="2" row="6">
-     <widget class="KisDoubleSliderSpinBox" name="horizBorderDSPBox"/>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Grid width:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
     </item>
-    <item colspan="2" column="0" row="7">
+    <item row="1" column="1" colspan="2">
+     <widget class="KisDoubleSliderSpinBox" name="gridWidthSPBox" native="true"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Division level:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0" colspan="2">
      <widget class="QCheckBox" name="jitterBorderCHBox">
       <property name="text">
        <string>Jitter borders</string>
       </property>
      </widget>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="KisDoubleSliderSpinBox" name="gridHeightSPBox" native="true"/>
+    </item>
+    <item row="8" column="2">
+     <widget class="KisDoubleSliderSpinBox" name="vertBorderDSPBox" native="true"/>
+    </item>
+    <item row="0" column="1" colspan="2">
+     <widget class="KisDoubleSliderSpinBox" name="diameterSPBox" native="true"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Horizontal offset:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" colspan="2">
+     <widget class="KisDoubleSliderSpinBox" name="horizontalOffsetSPBox" native="true"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Vertical offset:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="KisDoubleSliderSpinBox" name="verticalOffsetSPBox" native="true"/>
     </item>
    </layout>
   </widget>

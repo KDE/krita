@@ -8,7 +8,7 @@
 
 #include "kis_painter.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include "kis_transaction.h"
 #include <KoCompositeOpRegistry.h>
@@ -278,4 +278,4 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
         dbgKrita << "bitBlt with sel:\t\t\t" << avTime;
 }
 
-QTEST_MAIN(KisFilterSelectionsBenchmark)
+SIMPLE_TEST_MAIN(KisFilterSelectionsBenchmark)

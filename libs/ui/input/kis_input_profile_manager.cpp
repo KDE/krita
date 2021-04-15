@@ -22,7 +22,7 @@
 #include "kis_change_primary_setting_action.h"
 #include "kis_pan_action.h"
 #include "kis_rotate_canvas_action.h"
-#include "kis_show_palette_action.h"
+#include "KisPopupWidgetAction.h".h"
 #include "kis_tool_invocation_action.h"
 #include "kis_zoom_action.h"
 #include "kis_shortcut_configuration.h"
@@ -360,7 +360,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisPanAction());
     actions.append(new KisRotateCanvasAction());
     actions.append(new KisZoomAction());
-    actions.append(new KisShowPaletteAction());
+    actions.append(new KisPopupWidgetAction());
     actions.append(new KisSelectLayerAction());
     actions.append(new KisGammaExposureAction());
     actions.append(new KisChangeFrameAction());

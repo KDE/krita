@@ -1,64 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="32"
-   height="32"
-   viewBox="0 0 32 32.000001"
+   width="22"
+   height="22"
+   viewBox="0 0 22 22.000001"
    id="svg2"
-   version="1.1"
-   inkscape:version="0.92.1 r15371"
-   sodipodi:docname="dark_paintop_settings_01.svg"
-   inkscape:export-filename="C:\dribbble\krita icons\Collaborate\1_flat\other\paintop_settings_01.png"
-   inkscape:export-xdpi="45"
-   inkscape:export-ydpi="45">
+   version="1.1">
   <defs
      id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#474747"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="14.82314"
-     inkscape:cy="25.271648"
-     inkscape:document-units="px"
-     inkscape:current-layer="g4192"
-     showgrid="false"
-     units="px"
-     inkscape:showpageshadow="false"
-     showborder="true"
-     inkscape:window-width="1884"
-     inkscape:window-height="1051"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     objecttolerance="20"
-     showguides="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3336"
-       dotted="false"
-       empspacing="1"
-       snapvisiblegridlinesonly="true"
-       enabled="true"
-       visible="true"
-       empcolor="#aaaaff"
-       empopacity="0.25098039"
-       color="#7878ff"
-       opacity="0.1254902"
-       spacingx="2"
-       spacingy="2.0000001" />
-  </sodipodi:namedview>
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -73,8 +26,7 @@
             <dc:title>Timothée Giet</dc:title>
           </cc:Agent>
         </dc:creator>
-        <dc:date>2015</dc:date>
-        <dc:description></dc:description>
+        <dc:date>2021</dc:date>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
@@ -97,27 +49,23 @@
   </metadata>
   <g
      style="display:inline"
-     inkscape:label="v2"
      id="g4192"
-     inkscape:groupmode="layer">
+     transform="translate(0,-10)">
     <path
-       style="display:inline;opacity:0.98999999;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       d="M 0 18 L 0 32 L 14 32 L 14 18 L 0 18 z M 8 22 L 10 22 L 10 24 L 8 24 L 8 26 L 8 28 L 4 28 L 4 26 L 4 24 L 6 24 L 8 24 L 8 22 z "
-       id="path4200" />
-    <path
-       inkscape:connector-curvature="0"
-       style="display:inline;opacity:0.98999999;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       d="m 18,18 0,14 14,0 0,-14 -14,0 z m 8,4 2,0 0,2 -2,0 0,2 0,2 -4,0 0,-2 0,-2 2,0 2,0 0,-2 z"
-       id="path4200-7" />
-    <path
-       inkscape:connector-curvature="0"
-       style="display:inline;opacity:0.98999999;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       d="M 18,-3.3749998e-7 18,14 32,14 32,-3.3749998e-7 l -14,0 z M 26,3.9999997 l 2,0 0,2 -2,0 0,2 0,2 -4,0 0,-2 0,-2 2,0 2,0 0,-2 z"
-       id="path4200-3" />
-    <path
-       inkscape:connector-curvature="0"
-       style="display:inline;opacity:0.98999999;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       d="M 0,-3.3749998e-7 0,14 14,14 14,-3.3749998e-7 l -14,0 z M 8,3.9999997 l 2,0 0,2 -2,0 0,2 0,2 -4,0 0,-2 0,-2 2,0 2,0 0,-2 z"
+       style="display:inline;opacity:0.98999999;fill:#373737;fill-opacity:1;stroke:none;stroke-width:1.375;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 0,9.9999989 V 19.999999 H 10 V 9.9999989 Z m 6,2.0000001 h 2 v 2 H 6 v 4 H 2 v -4 h 4 z"
        id="path4200-9" />
+    <path
+       style="display:inline;opacity:0.98999999;fill:#373737;fill-opacity:1;stroke:none;stroke-width:1.375;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 12,9.9999989 V 19.999999 H 22 V 9.9999989 Z m 6,2.0000001 h 2 v 2 h -2 v 4 h -4 v -4 h 4 z"
+       id="path4200-9-3" />
+    <path
+       style="display:inline;opacity:0.98999999;fill:#373737;fill-opacity:1;stroke:none;stroke-width:1.375;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 0,22 V 32 H 10 V 22 Z m 6,2 h 2 v 2 H 6 v 4 H 2 v -4 h 4 z"
+       id="path4200-9-6" />
+    <path
+       style="display:inline;opacity:0.98999999;fill:#373737;fill-opacity:1;stroke:none;stroke-width:1.375;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 12,22 V 32 H 22 V 22 Z m 6,2 h 2 v 2 h -2 v 4 h -4 v -4 h 4 z"
+       id="path4200-9-3-7" />
   </g>
 </svg>

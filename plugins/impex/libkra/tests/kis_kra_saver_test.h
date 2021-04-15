@@ -7,7 +7,7 @@
 #ifndef KIS_KRA_SAVER_TEST_H
 #define KIS_KRA_SAVER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisKraSaverTest : public QObject
 {

@@ -13,7 +13,7 @@ inline double drand48()
 }
 #endif
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QImage>
 #include <kis_debug.h>
@@ -450,4 +450,4 @@ void KisPainterBenchmark::benchmarkMassiveBltFixed()
 
 
 
-QTEST_MAIN(KisPainterBenchmark)
+SIMPLE_TEST_MAIN(KisPainterBenchmark)

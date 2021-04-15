@@ -17,7 +17,7 @@ StoryboardCommentModel::StoryboardCommentModel(QObject *parent)
     //initialize variables
 }
 
-int StoryboardCommentModel::rowCount(const QModelIndex &parent) const
+int StoryboardCommentModel::rowCount(const QModelIndex &/*parent*/) const
 {
    return m_commentList.count();
 }
@@ -73,7 +73,7 @@ Qt::ItemFlags StoryboardCommentModel::flags(const QModelIndex & index) const
            Qt::ItemIsEditable | Qt::ItemIsEnabled ;
 }
 
-bool StoryboardCommentModel::insertRows(int position, int rows, const QModelIndex &parent)
+bool StoryboardCommentModel::insertRows(int position, int rows, const QModelIndex &/*parent*/)
 {
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
@@ -93,7 +93,7 @@ bool StoryboardCommentModel::insertRows(int position, int rows, const QModelInde
     return true;
 }
 
-bool StoryboardCommentModel::removeRows(int position, int rows, const QModelIndex &parent)
+bool StoryboardCommentModel::removeRows(int position, int rows, const QModelIndex &/*parent*/)
 {
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
@@ -163,7 +163,7 @@ QMimeData *StoryboardCommentModel::mimeData(const QModelIndexList &indexes) cons
 }
 
 bool StoryboardCommentModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                                int row, int column, const QModelIndex &parent)
+                                          int row, int /*column*/, const QModelIndex &parent)
 {
     if (action == Qt::IgnoreAction) {
         return false;

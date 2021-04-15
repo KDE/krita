@@ -327,7 +327,7 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
     return true;
 }
 
-QPair<qreal, QColor> SvgStyleParser::parseColorStop(const KoXmlElement& stop,
+QPair<qreal, QColor> SvgStyleParser::parseColorStop(const QDomElement& stop,
                                     SvgGraphicsContext *context,
                                     qreal& previousOffset)
 {
@@ -377,7 +377,7 @@ QPair<qreal, QColor> SvgStyleParser::parseColorStop(const KoXmlElement& stop,
 }
 
 void SvgStyleParser::parseColorStops(QGradient *gradient,
-                                     const KoXmlElement &e,
+                                     const QDomElement &e,
                                      SvgGraphicsContext *context,
                                      const QGradientStops &defaultStops)
 {
@@ -385,7 +385,7 @@ void SvgStyleParser::parseColorStops(QGradient *gradient,
 
     qreal previousOffset = 0.0;
 
-    KoXmlElement stop;
+    QDomElement stop;
     forEachElement(stop, e) {
         if (stop.tagName() == "stop") {
             stops.append(parseColorStop(stop, context, previousOffset));
@@ -422,7 +422,7 @@ SvgStyles SvgStyleParser::parseOneCssStyle(const QString &style, const QStringLi
     return parsedStyles;
 }
 
-SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
+SvgStyles SvgStyleParser::collectStyles(const QDomElement &e)
 {
     SvgStyles styleMap;
 
@@ -501,16 +501,16 @@ SvgStyles SvgStyleParser::mergeStyles(const SvgStyles &referencedBy, const SvgSt
     return mergedStyles;
 }
 
-SvgStyles SvgStyleParser::mergeStyles(const KoXmlElement &e1, const KoXmlElement &e2)
+SvgStyles SvgStyleParser::mergeStyles(const QDomElement &e1, const QDomElement &e2)
 {
     return mergeStyles(collectStyles(e1), collectStyles(e2));
 }
 
-QString SvgStyleParser::inheritedAttribute(const QString &attributeName, const KoXmlElement &e)
+QString SvgStyleParser::inheritedAttribute(const QString &attributeName, const QDomElement &e)
 {
-    KoXmlNode parent = e.parentNode();
+    QDomNode parent = e.parentNode();
     while (!parent.isNull()) {
-        KoXmlElement currentElement = parent.toElement();
+        QDomElement currentElement = parent.toElement();
         if (currentElement.hasAttribute(attributeName)) {
             return currentElement.attribute(attributeName);
         }

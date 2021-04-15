@@ -5,15 +5,14 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="32"
-   height="32"
-   viewBox="0 0 32 32.000001"
-   id="svg2"
-   version="1.1">
-  <defs
-     id="defs4" />
+   id="Layer_2"
+   data-name="Layer 2"
+   viewBox="0 0 16 16"
+   version="1.1"
+   width="16"
+   height="16">
   <metadata
-     id="metadata7">
+     id="metadata21">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -21,9 +20,10 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <dc:date>2021</dc:date>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andrei Rudenko</dc:title>
+            <dc:title>Timothée Giet</dc:title>
           </cc:Agent>
         </dc:creator>
         <cc:license
@@ -46,44 +46,13 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     id="layer1"
-     style="display:inline">
-    <path
-       style="display:inline;fill:#cacaca;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1.84375,0.0078125 30.043928,29.5584715 0.143572,2.550903 -3.75,-0.125 L -0.384478,3.984605 -0.34375,0.0078125 Z"
-       id="path4153" />
-    <path
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#cacaca;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 1.40625,3.1796875 V 27.242187 h 24.625"
-       id="path4155" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4157"
-       width="5.875"
-       height="3.1875"
-       x="-0.46875"
-       y="28.742188" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4157-3"
-       width="4"
-       height="3.8490567"
-       x="8.375"
-       y="28.085938" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4157-3-6"
-       width="4"
-       height="3.8490567"
-       x="14.3125"
-       y="28.236881" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4157-3-7"
-       width="4"
-       height="3.8490567"
-       x="20.25"
-       y="28.236881" />
-  </g>
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:none;stroke:#cacaca;stroke-miterlimit:10;stroke-width:4px;}.cls-2{fill:#cacaca;}</style>
+  </defs>
+  <path
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.99875081px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     d="M 1,0 H 0 v 16 h 2 v -2 h 2 v 2 h 2 v -2 h 2 v 2 h 2 v -2 h 2 v 2 h 4 v -1 z m 1,4 8,8 H 2 Z"
+     id="line6" />
 </svg>

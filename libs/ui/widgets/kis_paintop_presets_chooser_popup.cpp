@@ -22,13 +22,14 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_icon.h>
 #include <brushengine/kis_paintop_settings.h>
+#include "KisPopupButton.h"
 
 struct KisPaintOpPresetsChooserPopup::Private
 {
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
     bool firstShown;
-    QToolButton *viewModeButton;
+    KisPopupButton *viewModeButton;
 };
 
 KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
@@ -79,9 +80,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
     m_d->viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
-    m_d->viewModeButton->setMenu(menu);
-    m_d->viewModeButton->setAutoRaise(true);
-    m_d->viewModeButton->setIconSize(QSize(10,10));
+    m_d->viewModeButton->setPopupWidget(menu);
 
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResourceSP )),

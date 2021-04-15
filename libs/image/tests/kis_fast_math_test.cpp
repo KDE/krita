@@ -6,7 +6,7 @@
 
 #include "kis_fast_math_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_fast_math.h"
 
 void KisFastMathTest::testAtan2()
@@ -28,4 +28,4 @@ void KisFastMathTest::testAtan2()
 }
 
 
-QTEST_MAIN(KisFastMathTest)
+SIMPLE_TEST_MAIN(KisFastMathTest)

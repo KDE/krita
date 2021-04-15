@@ -19,9 +19,11 @@ class KoShape;
 class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;
+class KoToolFactoryBase;
 class KoToolSelection;
 class KoToolBasePrivate;
 class KoShapeControllerBase;
+class KisPopupWidgetInterface;
 
 class QAction;
 class QKeyEvent;
@@ -52,18 +54,25 @@ class KRITAFLAKE_EXPORT KoToolBase : public QObject
 {
     Q_OBJECT
 public:
-    /// Option for activate()
-    enum ToolActivation {
-        TemporaryActivation, ///< The tool is activated temporarily and works 'in-place' of another one.
-        DefaultActivation   ///< The tool is activated normally and emitting 'done' goes to the defaultTool
-    };
-
     /**
      * Constructor, normally only called by the factory (see KoToolFactoryBase)
      * @param canvas the canvas interface this tool will work for.
      */
     explicit KoToolBase(KoCanvasBase *canvas);
     ~KoToolBase() override;
+
+    /**
+     * The factory holds properties common to all instances of the same
+     * tool type, such as the string identifying the class or the icon name.
+     *
+     * Not all tool instances have a factory reference, for example the
+     * "delegated" inner implementations to which events are forwarded
+     * don't have one, as well as instances created by regression tests.
+     *
+     * Every instance used by the tool manager has a factory reference and
+     * a tool identifier, but they're not available during construction.
+     */
+    KoToolFactoryBase* factory() const;
 
     virtual QRectF decorationsRect() const;
 
@@ -289,7 +298,13 @@ public:
      * @return a menu with context-aware actions for the current selection. If
      *         the returned value is null, no context menu is shown.
      */
-    virtual QMenu* popupActionsMenu();
+    virtual QMenu* popupActionsMenu() {return nullptr;}
+
+    /**
+     * @return a widget with useful controls to be popped up on top of the canvas.
+     *         Will not be called if `popupActionsMenu()` does not return null.
+     */
+    virtual KisPopupWidgetInterface* popupWidget() {return nullptr;}
 
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;
@@ -315,6 +330,13 @@ public Q_SLOTS:
     virtual void requestUndoDuringStroke();
 
     /**
+     * Called when the user requested redo while the stroke is active. If your
+     * tool supports redo and maintains an intermediate state which can
+     * interfere with redo override this method to handle the state.
+     */
+    virtual void requestRedoDuringStroke();
+
+    /**
      * Called when the user requested the cancellation of the current
      * stroke. If you tool supports cancelling, override this method
      * and do the needed work there
@@ -336,20 +358,12 @@ public Q_SLOTS:
      * new tool allowing the tool to flush items (like a selection)
      * when it is not in use.
      *
-     * <p>There is one case where two tools are activated at the same.  This is the case
-     * where one tool delegates work to another temporarily.  For example, while shift is
-     * being held down.  The second tool will get activated with temporary=true and
-     * it should emit done() when the state that activated it is ended.
-     * <p>One of the important tasks of activate is to call useCursor()
-     *
      * @param shapes the set of shapes that are selected or suggested for editing by a
      *      selected shape for the tool to work on.  Not all shapes will be meant for this
      *      tool.
-     * @param toolActivation if TemporaryActivation, this tool is only temporarily activated
-     *                  and should emit done when it is done.
      * @see deactivate()
      */
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(const QSet<KoShape*> &shapes);
 
     /**
      * This method is called whenever this tool is no longer the
@@ -393,21 +407,6 @@ Q_SIGNALS:
      * @see toolId(), KoToolFactoryBase::id()
      */
     void activateTool(const QString &id);
-
-    /**
-     * Emitted when this tool wants itself to temporarily be replaced by another tool.
-     * For instance, a paint tool could desire to be
-     * temporarily replaced by a pan tool which could be temporarily
-     * replaced by a color sampler.
-     * @param id the identification of the desired tool
-     */
-    void activateTemporary(const QString &id);
-
-    /**
-     * Emitted when the tool has been temporarily activated and wants
-     * to notify the world that it's done.
-     */
-    void done();
 
     /**
      * Emitted by useCursor() when the cursor to display on the canvas is changed.
@@ -497,14 +496,14 @@ protected:
 
 private:
 
-    friend class ToolHelper;
+    friend class KoToolManager;
 
     /**
-     * Set the identifier code from the KoToolFactoryBase that created this tool.
-     * @param id the identifier code
-     * @see KoToolFactoryBase::id()
+     * Set the KoToolFactoryBase that created this tool.
+     * @param factory the KoToolFactoryBase
+     * @see KoToolFactoryBase
      */
-    void setToolId(const QString &id);
+    void setFactory(KoToolFactoryBase *factory);
 
     KoToolBase();
     KoToolBase(const KoToolBase&);

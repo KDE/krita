@@ -34,7 +34,7 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void listenToModifiers(bool listen) override;
     bool listeningToModifiers() override;
@@ -52,15 +52,22 @@ protected:
     bool m_isRatioForced;
     bool m_isWidthForced;
     bool m_isHeightForced;
+    bool m_rotateActive;
     bool m_listenToModifiers;
     float m_forcedRatio;
     float m_forcedWidth;
     float m_forcedHeight;
     int m_roundCornersX;
     int m_roundCornersY;
+    qreal m_referenceAngle;
+    qreal m_angle;
+    qreal m_angleBuffer;
 
     bool isFixedSize();
+    qreal getRotationAngle();
+    QPainterPath drawX(const QPointF &pt);
     void applyConstraints(QSizeF& area, bool overrideRatio);
+    void getRotatedPath(QPainterPath &path, const QPointF &center, const qreal &angle);
 
     void updateArea();
     virtual void paintRectangle(QPainter &gc, const QRectF &imageRect);

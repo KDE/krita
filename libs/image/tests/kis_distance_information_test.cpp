@@ -4,7 +4,7 @@
 
 #include "kis_distance_information_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QPointF>
@@ -183,4 +183,4 @@ void KisDistanceInformationTest::testInterpolationImpl(const KisPaintInformation
     QCOMPARE(dist.needsTimingUpdate(), needTimingUpdate);
 }
 
-QTEST_MAIN(KisDistanceInformationTest)
+SIMPLE_TEST_MAIN(KisDistanceInformationTest)

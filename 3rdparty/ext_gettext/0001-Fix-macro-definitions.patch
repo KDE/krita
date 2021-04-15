@@ -1,0 +1,29 @@
+From 2cc77af610d89a97322f662aaead435c1597941c Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 20 Feb 2021 20:03:28 +0000
+Subject: [PATCH 1/5] Fix macro definitions
+
+https://github.com/microsoft/vcpkg/tree/c84dfe7ddd6f3ba14ec9f4b1f2c577365175128b/ports/gettext
+---
+ gettext-runtime/intl/xsize.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/gettext-runtime/intl/xsize.h b/gettext-runtime/intl/xsize.h
+index 9b9840f7..3007228a 100644
+--- a/gettext-runtime/intl/xsize.h
++++ b/gettext-runtime/intl/xsize.h
+@@ -29,6 +29,11 @@
+ 
+ /* Get ATTRIBUTE_PURE.  */
+ #include "attribute.h"
++#if defined _WIN32
++# define _GL_INLINE_HEADER_BEGIN
++# define _GL_INLINE_HEADER_END
++# define _GL_INLINE static inline
++#endif
+ 
+ #ifndef _GL_INLINE_HEADER_BEGIN
+  #error "Please include config.h first."
+-- 
+2.30.0
+

@@ -7,7 +7,7 @@
 #ifndef __KIS_MODEL_INDEX_CONVERTER_TEST_H
 #define __KIS_MODEL_INDEX_CONVERTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include "empty_nodes_test.h"
 

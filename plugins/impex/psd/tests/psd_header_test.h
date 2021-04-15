@@ -7,7 +7,7 @@
 #ifndef _PSD_HEADER_TEST_H_
 #define _PSD_HEADER_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class PSDHeaderTest : public QObject
 {

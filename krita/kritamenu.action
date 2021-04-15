@@ -99,6 +99,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="file_export_advanced">
+      <icon>document-export</icon>
+      <text>E&amp;xport Advanced...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Advanced Export</toolTip>
+      <iconText>Export</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="file_import_animation">
       <icon></icon>
       <text>Import animation frames...</text>
@@ -106,6 +119,18 @@
       <toolTip>Import animation frames</toolTip>
       <iconText>Import animation frames</iconText>
       <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="file_import_video_animation">
+      <icon></icon>
+      <text>Import video animation...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Import video animation</toolTip>
+      <iconText>Import video animation</iconText>
+      <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -340,6 +365,18 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Alt+V</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="paste_into">
+      <icon></icon>
+      <text>Paste into Active Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste into Active Layer</toolTip>
+      <iconText>Paste into Active Layer</iconText>
+      <activationFlags>100000000000</activationFlags>
+      <activationConditions>10</activationConditions>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1187,7 +1224,7 @@
   <Actions category="Select">
     <text>Select</text>
     <Action name="select_all">
-      <icon>edit-select-all</icon>
+      <icon>select-all</icon>
       <text>Select &amp;All</text>
       <whatsThis></whatsThis>
       <toolTip>Select All</toolTip>
@@ -1199,7 +1236,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="deselect">
-      <icon>edit-select-none</icon>
+      <icon>select-clear</icon>
       <text>&amp;Deselect</text>
       <whatsThis></whatsThis>
       <toolTip>Deselect</toolTip>
@@ -1570,7 +1607,19 @@
     </Action>
     <Action name="manage_bundles">
       <icon></icon>
-      <text>&amp;Manage Resources...</text>
+      <text>&amp;Manage Resource Libraries...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Manage Resource Libraries</toolTip>
+      <iconText>Manage Resources Libraries</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="manage_resources">
+      <icon></icon>
+      <text>Manage Resources...</text>
       <whatsThis></whatsThis>
       <toolTip>Manage Resources</toolTip>
       <iconText>Manage Resources</iconText>
@@ -1668,10 +1717,10 @@
     </Action>
     <Action name="reset_configurations">
       <icon></icon>
-      <text>Reset Krita Configurations</text>
+      <text>Reset All Settings</text>
       <whatsThis></whatsThis>
-      <toolTip>Reset Krita Configurations</toolTip>
-      <iconText>Reset Krita Configurations</iconText>
+      <toolTip>Reset All Settings to Default</toolTip>
+      <iconText>Reset Settings</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

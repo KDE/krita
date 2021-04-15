@@ -38,6 +38,8 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     , m_backgroundPainter(new KisPainter(m_precisePainterWrapper.createPreciseCompositionSourceDevice()))
 
 {
+    m_blendDevice = KisFixedPaintDeviceSP(new KisFixedPaintDevice(m_precisePainterWrapper.preciseColorSpace()));
+
     m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
     m_backgroundPainter->setOpacity(OPACITY_OPAQUE_U8);
     m_tempPainter->setCompositeOp(COMPOSITE_COPY);
@@ -117,6 +119,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
                                 float aspect_ratio, float angle, float lock_alpha, float colorize) {
 
     Q_UNUSED(self);
+    Q_UNUSED(lock_alpha);
     const float one_over_radius2 = 1.0f / (radius * radius);
     const double angle_rad = kisDegreesToRadians(angle);
     const float cs = cos(angle_rad);
@@ -287,9 +290,14 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     float maxValue = KoColorSpaceMathsTraits<channelType>::max;
 
     quint32 size = dabRectAligned.width() * dabRectAligned.height();
-    qint16 weights[size];
-    const quint8* buffer[size];
+    m_blendDevice->setRect(dabRectAligned);
+    m_blendDevice->lazyGrowBufferWithoutInitialization();
+
+
+    qint16* weights = new qint16[size];
     quint32 num_colors = 0;
+
+    activeDev->readBytes(m_blendDevice->data(), dabRectAligned);
 
     while(it.nextPixel()) {
 
@@ -305,13 +313,12 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         }
 
         weights[num_colors] = qRound((1.0f - rr) * 255);
-        buffer[num_colors] = it.oldRawData();
         sum_weight += weights[num_colors];
         num_colors += 1;
     }
 
     KoColor color(Qt::transparent, activeDev->colorSpace());
-    activeDev->colorSpace()->mixColorsOp()->mixColors(buffer, weights, size, color.data(), sum_weight);
+    activeDev->colorSpace()->mixColorsOp()->mixColors(m_blendDevice->data(), weights, size, color.data(), sum_weight);
 
     if (sum_weight > 0.0f) {
         qreal r, g, b, a;
@@ -333,6 +340,8 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
             *color_a = CLAMP(a, 0.0f, 1.0f);
         }
     }
+
+    delete [] weights;
 }
 
 KisPainter* KisMyPaintSurface::painter() {

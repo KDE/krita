@@ -7,7 +7,7 @@
 #ifndef _KIS_NODE_QUERY_PATH_TEST_H_
 #define _KIS_NODE_QUERY_PATH_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include "kis_types.h"
 #include "kis_image.h"

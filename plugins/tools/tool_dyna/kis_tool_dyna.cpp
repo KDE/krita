@@ -35,7 +35,7 @@
 
 
 KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
-        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), kundo2_i18n("Dynamic Brush Stroke"))
+        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.xpm", 2, 2), kundo2_i18n("Dynamic Brush Stroke"))
 {
     setObjectName("tool_dyna");
     initDyna();
@@ -66,9 +66,9 @@ void KisToolDyna::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolDyna::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolDyna::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(toolActivation, shapes);
+    KisToolPaint::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -276,13 +276,15 @@ QWidget * KisToolDyna::createOptionWidget()
 
     QLabel* massLbl = new QLabel(i18n("Mass:"), optionsWidget);
     m_massSPBox = new KisDoubleSliderSpinBox(optionsWidget);
-    m_massSPBox->setRange(0.0,1.0,2);  
+    m_massSPBox->setRange(0.0,1.0,2);
+    m_massSPBox->setSingleStep(.01);
     connect(m_massSPBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetMass(qreal)));
     KisToolFreehand::addOptionWidgetOption(m_massSPBox,massLbl);
 
     QLabel* dragLbl = new QLabel(i18n("Drag:"), optionsWidget);
     m_dragSPBox = new KisDoubleSliderSpinBox(optionsWidget);
     m_dragSPBox->setRange(0.0,1.0,2);
+    m_dragSPBox->setSingleStep(.01);
     connect(m_dragSPBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetDrag(qreal)));
     KisToolFreehand::addOptionWidgetOption(m_dragSPBox,dragLbl);
 

@@ -20,7 +20,8 @@
 #include <KoResourceServerProvider.h>
 #include <KoMixColorsOp.h>
 #include <kis_wrapped_rect.h>
-#include <KisResourceModel.h>
+#include <KisTagFilterResourceProxyModel.h>
+#include <KisResourceTypes.h>
 
 #include "kis_tool_utils.h"
 
@@ -41,7 +42,7 @@ KisToolColorSampler::KisToolColorSampler(KoCanvasBase *canvas)
 KisToolColorSampler::~KisToolColorSampler()
 {
     if (m_isActivated) {
-        m_config->save(m_toolActivationSource == KisTool::DefaultActivation);
+        m_config->save();
     }
 }
 
@@ -51,19 +52,18 @@ void KisToolColorSampler::paint(QPainter &gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
 }
 
-void KisToolColorSampler::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolColorSampler::activate(const QSet<KoShape*> &shapes)
 {
     m_isActivated = true;
-    m_toolActivationSource = activation;
-    m_config->load(m_toolActivationSource == KisTool::DefaultActivation);
+    m_config->load();
     updateOptionWidget();
 
-    KisTool::activate(activation, shapes);
+    KisTool::activate(shapes);
 }
 
 void KisToolColorSampler::deactivate()
 {
-    m_config->save(m_toolActivationSource == KisTool::DefaultActivation);
+    m_config->save();
     m_isActivated = false;
     KisTool::deactivate();
 }
@@ -188,8 +188,8 @@ void KisToolColorSampler::endPrimaryAction(KoPointerEvent *event)
         swatch.setColor(m_sampledColor);
         // We don't ask for a name, too intrusive here
 
-        QModelIndex idx = m_resourceModel->index(m_optionsWidget->cmbPalette->currentIndex(), 0);
-        KoColorSetSP palette = qSharedPointerDynamicCast<KoColorSet>(m_resourceModel->resourceForIndex(idx));
+        QModelIndex idx = m_tagFilterProxyModel->index(m_optionsWidget->cmbPalette->currentIndex(), 0);
+        KoColorSetSP palette = qSharedPointerDynamicCast<KoColorSet>(m_tagFilterProxyModel->resourceForIndex(idx));
 
         if (palette) {
             palette->add(swatch);
@@ -282,15 +282,10 @@ QWidget* KisToolColorSampler::createOptionWidget()
     connect(m_optionsWidget->cmbSources, SIGNAL(currentIndexChanged(int)),
             SLOT(slotSetColorSource(int)));
 
-    KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
-
-    if (!srv) {
-        return m_optionsWidget;
-    }
-
-    m_resourceModel = srv->resourceModel();
-    m_optionsWidget->cmbPalette->setModel(srv->resourceModel());
+    m_tagFilterProxyModel = new KisTagFilterResourceProxyModel(ResourceType::Palettes, this);
+    m_optionsWidget->cmbPalette->setModel(m_tagFilterProxyModel);
     m_optionsWidget->cmbPalette->setModelColumn(KisAbstractResourceModel::Name);
+    m_tagFilterProxyModel->sort(Qt::DisplayRole);
 
     return m_optionsWidget;
 }

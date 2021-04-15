@@ -37,7 +37,7 @@ version=5
 [Select Layer]
 0={0;2;[52];1;0;0}
 
-[Show Popup Palette]
+[Show Popup Widget]
 0={0;2;[1000021,1000023];2;0;0}
 
 [Switch Time]

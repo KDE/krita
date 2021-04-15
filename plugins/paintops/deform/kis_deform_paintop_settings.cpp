@@ -66,7 +66,7 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &i
     if (mode.isVisible) {
         qreal width = getInt(BRUSH_DIAMETER);
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
-        path = ellipseOutline(width, height, getDouble(BRUSH_SCALE), getDouble(BRUSH_ROTATION));
+        path = ellipseOutline(width, height, getDouble(BRUSH_SCALE), -getDouble(BRUSH_ROTATION));
 
         path = outlineFetcher()->fetchOutline(info, this, path, mode, alignForZoom);
 

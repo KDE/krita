@@ -56,8 +56,8 @@ private:
     bool saveToStream(QIODevice *dev);
     QDomDocument createDomDocument();
     KisImportExportErrorCode savePreview(KoStore *store);
-    KisImportExportErrorCode oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc);
-    KisImportExportErrorCode loadXML(const KoXmlDocument &doc, KoStore *store);
+    KisImportExportErrorCode oldLoadAndParse(KoStore *store, const QString &filename, QDomDocument &xmldoc);
+    KisImportExportErrorCode loadXML(const QDomDocument &doc, KoStore *store);
     bool completeLoading(KoStore *store);
 
     void setProgress(int progress);

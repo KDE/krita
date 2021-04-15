@@ -7,7 +7,7 @@
 #include "TestKoIntegerMaths.h"
 #include "KoIntegerMaths.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestKoIntegerMaths::UINT8Tests()
 {

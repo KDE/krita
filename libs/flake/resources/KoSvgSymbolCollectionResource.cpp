@@ -117,7 +117,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
     int errorLine = 0;
     int errorColumn;
 
-    KoXmlDocument doc = SvgParser::createDocumentFromSvg(dev, &errorMsg, &errorLine, &errorColumn);
+    QDomDocument doc = SvgParser::createDocumentFromSvg(dev, &errorMsg, &errorLine, &errorColumn);
     if (doc.isNull()) {
 
         errKrita << "Parsing error in " << filename() << "! Aborting!" << endl

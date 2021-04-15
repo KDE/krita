@@ -6,7 +6,7 @@
 
 #include "kis_derived_resources_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <brushengine/kis_paintop_preset.h>
 
 #include <QApplication>

@@ -38,12 +38,12 @@ class KisAction;
  * animator's workflow should be available at a glace, while
  * set-and-forget types of things should be hidden inside of menus.
  */
-class KisAnimTimelineDocker : public KisUtilityTitleBar
+class KisAnimTimelineDockerTitlebar : public KisUtilityTitleBar
 {
     Q_OBJECT
 
 public:
-    KisAnimTimelineDocker(QWidget *parent = nullptr);
+    KisAnimTimelineDockerTitlebar(QWidget *parent = nullptr);
 
     KisTransportControls* transport;
 
@@ -81,12 +81,12 @@ private:
  * the KisImageAnimationInterface. (TODO: Consider refactoring to
  * streamline this interaction towards Docker -> AnimationPlayer -> ImageAnimInterface)
  */
-class TimelineDocker : public QDockWidget, public KisMainwindowObserver
+class KisAnimTimelineDocker : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:
-    TimelineDocker();
-    ~TimelineDocker() override;
+    KisAnimTimelineDocker();
+    ~KisAnimTimelineDocker() override;
 
     QString observerName() override { return "TimelineDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;

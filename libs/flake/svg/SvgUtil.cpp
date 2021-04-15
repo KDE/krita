@@ -131,7 +131,7 @@ void SvgUtil::writeTransformAttributeLazy(const QString &name, const QTransform 
     }
 }
 
-bool SvgUtil::parseViewBox(const KoXmlElement &e,
+bool SvgUtil::parseViewBox(const QDomElement &e,
                            const QRectF &elementBounds,
                            QRectF *_viewRect, QTransform *_viewTransform)
 {
@@ -396,7 +396,7 @@ const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
     return ptr;
 }
 
-QString SvgUtil::mapExtendedShapeTag(const QString &tagName, const KoXmlElement &element)
+QString SvgUtil::mapExtendedShapeTag(const QString &tagName, const QDomElement &element)
 {
     QString result = tagName;
 

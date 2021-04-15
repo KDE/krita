@@ -5,7 +5,7 @@
 #ifndef KISPAINTONTRANSPARENCYMASKTEST_H
 #define KISPAINTONTRANSPARENCYMASKTEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPaintOnTransparencyMaskTest : public QObject
 {

@@ -36,7 +36,7 @@ public:
 
     QDockWidget *createDockWidget() override
     {
-        TimelineDocker *dockWidget = new TimelineDocker();
+        KisAnimTimelineDocker *dockWidget = new KisAnimTimelineDocker();
         dockWidget->setObjectName(id());
 
         return dockWidget;

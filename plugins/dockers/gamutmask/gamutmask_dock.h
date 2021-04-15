@@ -16,13 +16,13 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerObserver.h>
 #include <resources/KoGamutMask.h>
-#include <KisDocument.h>
 #include <KisView.h>
 #include <kis_types.h>
 #include <KisResourceItemChooser.h>
 
 #include <kis_mainwindow_observer.h>
 
+class KisDocument;
 class KisCanvasResourceProvider;
 class QButtonGroup;
 class QMenu;
@@ -46,9 +46,6 @@ public: // KoResourceServerObserver
     void resourceAdded(KoGamutMaskSP /*resource*/) override {}
     void removingResource(KoGamutMaskSP resource) override;
     void resourceChanged(KoGamutMaskSP resource) override;
-    void syncTaggedResourceView() override {}
-    void syncTagAddition(const QString&) override {}
-    void syncTagRemoval(const QString&) override {}
 
 Q_SIGNALS:
     void sigGamutMaskSet(KoGamutMaskSP mask);

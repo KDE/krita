@@ -9,110 +9,27 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-namespace {
-    /* XPM -- copyright The Gimp */
-    const char * const _chain_broken_24[] = {
-        /* columns rows colors chars-per-pixel */
-        "9 24 10 1",
-        "  c black",
-        ". c #020204",
-        "X c #5A5A5C",
-        "o c gray43",
-        "O c #8F8F91",
-        "+ c #9A9A98",
-        "@ c #B5B5B6",
-        "# c #D0D0D1",
-        "$ c #E8E8E9",
-        "% c None",
-        /* pixels */
-        "%%.....%%",
-        "%.o##@X.%",
-        "%.+...$.%",
-        "%.#.%.#.%",
-        "%.#.%.#.%",
-        "%.@.%.#.%",
-        "%.+...#.%",
-        "%.O.o.O.%",
-        "%%..@..%%",
-        "%%%.#.%%%",
-        "%%%%%%%%%",
-        "%%%%%%%%%",
-        "%%%%%%%%%",
-        "%%%%%%%%%",
-        "%%%.#.%%%",
-        "%%..#..%%",
-        "%.o.@.O.%",
-        "%.@...@.%",
-        "%.@.%.$.%",
-        "%.@.%.$.%",
-        "%.@.%.$.%",
-        "%.#...$.%",
-        "%.o$#$@.%",
-        "%%.....%%"
-    };
-
-    /* XPM  -- copyright The Gimp */
-    const char * const _chain_24[] = {
-        /* columns rows colors chars-per-pixel */
-        "9 24 10 1",
-        "  c black",
-        ". c #020204",
-        "X c #5A5A5C",
-        "o c gray43",
-        "O c #8F8F91",
-        "+ c #9A9A98",
-        "@ c #B5B5B6",
-        "# c #D0D0D1",
-        "$ c #E8E8E9",
-        "% c None",
-        /* pixels */
-        "%%%%%%%%%",
-        "%%%%%%%%%",
-        "%%.....%%",
-        "%.o##@X.%",
-        "%.+...$.%",
-        "%.#.%.#.%",
-        "%.#.%.#.%",
-        "%.@.%.#.%",
-        "%.+...#.%",
-        "%.O.o.O.%",
-        "%%..@..%%",
-        "%%%.#.%%%",
-        "%%%.#.%%%",
-        "%%..#..%%",
-        "%.o.@.O.%",
-        "%.@...@.%",
-        "%.@.%.$.%",
-        "%.@.%.$.%",
-        "%.@.%.$.%",
-        "%.#...$.%",
-        "%.o$#$@.%",
-        "%%.....%%",
-        "%%%%%%%%%",
-        "%%%%%%%%%"
-    };
-}
+#include <kis_icon_utils.h>
 
 class Q_DECL_HIDDEN KoAspectButton::Private
 {
 public:
     Private()
-        : chain(_chain_24),
-        brokenChain(_chain_broken_24),
-        keepAspect(true)
+        : keepAspect(true)
     {
     }
-    const QPixmap chain, brokenChain;
     bool keepAspect;
 };
 
 KoAspectButton::KoAspectButton(QWidget *parent)
-    : QAbstractButton(parent),
+    : QToolButton(parent),
     d( new Private() )
 {
-    //setPixmap(d->chain);
-    //setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    setIconSize(QSize(9, 24));
+    setFixedSize(19, 34);
+    setAutoRaise(true);
+
+    connect(this, SIGNAL(released()), this, SLOT(buttonReleased()));
 }
 
 KoAspectButton::~KoAspectButton()
@@ -120,35 +37,19 @@ KoAspectButton::~KoAspectButton()
     delete d;
 }
 
-void KoAspectButton::mouseReleaseEvent (QMouseEvent *ev) {
-    if(! isEnabled() || ev->button() != Qt::LeftButton)
+void KoAspectButton::buttonReleased() {
+    if(! isEnabled())
         return;
     setKeepAspectRatio(!d->keepAspect);
 }
 
 void KoAspectButton::setKeepAspectRatio(bool on) {
+    this->setIcon(on ? KisIconUtils::loadIcon("chain-icon") : KisIconUtils::loadIcon("chain-broken-icon"));
     if(d->keepAspect == on)
         return;
     d->keepAspect = on;
     update();
     emit keepAspectRatioChanged(d->keepAspect);
-}
-
-void KoAspectButton::paintEvent (QPaintEvent *) {
-    QPainter painter(this);
-    painter.drawPixmap(0, (height() - 24) / 2, 9, 24, d->keepAspect ? d->chain : d->brokenChain, 0, 0, 9, 24);
-    painter.end();
-}
-
-QSize KoAspectButton::sizeHint () const {
-    return QSize(9, 24);
-}
-
-void KoAspectButton::keyReleaseEvent (QKeyEvent *e) {
-    if(e->text() == " ") {
-        setKeepAspectRatio(! d->keepAspect);
-        e->accept();
-    }
 }
 
 bool KoAspectButton::keepAspectRatio() const

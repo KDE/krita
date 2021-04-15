@@ -5,78 +5,14 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   height="16"
+   width="16"
    version="1.1"
-   id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="32"
-   width="32">
-  <defs
-     id="defs4">
-    <filter
-       id="filter4429"
-       style="color-interpolation-filters:sRGB;">
-      <feFlood
-         id="feFlood4431"
-         result="flood"
-         flood-color="rgb(0,0,0)"
-         flood-opacity="0.501961" />
-      <feComposite
-         id="feComposite4433"
-         result="composite1"
-         operator="in"
-         in2="SourceGraphic"
-         in="flood" />
-      <feGaussianBlur
-         id="feGaussianBlur4435"
-         result="blur"
-         stdDeviation="0"
-         in="composite1" />
-      <feOffset
-         id="feOffset4437"
-         result="offset"
-         dy="-2"
-         dx="0" />
-      <feComposite
-         id="feComposite4439"
-         result="composite2"
-         operator="over"
-         in2="offset"
-         in="SourceGraphic" />
-    </filter>
-    <filter
-       id="filter4238"
-       style="color-interpolation-filters:sRGB;">
-      <feFlood
-         id="feFlood4240"
-         result="flood"
-         flood-color="rgb(0,0,0)"
-         flood-opacity="0.501961" />
-      <feComposite
-         id="feComposite4242"
-         result="composite1"
-         operator="in"
-         in2="SourceGraphic"
-         in="flood" />
-      <feGaussianBlur
-         id="feGaussianBlur4244"
-         result="blur"
-         stdDeviation="0"
-         in="composite1" />
-      <feOffset
-         id="feOffset4246"
-         result="offset"
-         dy="-2"
-         dx="0" />
-      <feComposite
-         id="feComposite4248"
-         result="composite2"
-         operator="over"
-         in2="offset"
-         in="SourceGraphic" />
-    </filter>
-  </defs>
+   viewBox="0 0 16 16"
+   data-name="Layer 2"
+   id="Layer_2">
   <metadata
-     id="metadata7">
+     id="metadata16">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -89,23 +25,56 @@
             <dc:title>Andrei Rudenko</dc:title>
           </cc:Agent>
         </dc:creator>
+        <dc:date>2021</dc:date>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     style="display:inline"
-     id="layer4">
-    <path
-       id="rect4883"
-       d="M 0,0 V 4 8 H 4 V 4 H 8 V 0 Z m 0,12 v 8 h 4 v -8 z m 0,12 v 4 4 H 8 V 28 H 4 v -4 z m 28,0 v 4 h -4 v 4 h 8 v -4 -4 z m -16,4 v 4 h 8 v -4 z"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
-  </g>
-  <g
-     id="layer1">
-    <path
-       id="path4"
-       class="ColorScheme-Text"
-       d="M 28.363961,17.778175 C 32.659725,13.48241 33.399006,7.2568706 29.071068,2.9289322 24.74313,-1.3990061 18.51759,-0.65972524 14.221825,3.636039 l -2.474873,2.4748737 2.916816,2.9168162 2.474874,-2.4748738 c 2.684854,-2.684854 6.861086,-2.8616307 9.01561,-0.7071064 2.154524,2.154524 1.977748,6.3307563 -0.707106,9.0156103 l -2.474874,2.474874 2.916815,2.916815 z M 24.916815,21.225321 21.999999,18.308505 19.083185,21.22532 22,24.142136 Z M 13.691495,10.000001 10.774679,7.0831852 7.8578644,10 10.774681,12.916816 Z"
-       style="fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1.375" />
-  </g>
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#cacaca;}.cls-2{fill:none;stroke:#cacaca;stroke-miterlimit:10;stroke-width:4px;}</style>
+  </defs>
+  <path
+     style="fill:#d2d2d2;stroke-width:0.5;fill-opacity:1"
+     d="M 0,0 V 4 H 2 V 2 H 4 V 0 Z m 0,6 v 4 H 2 V 6 Z m 0,6 v 4 H 4 V 14 H 2 v -2 z m 14,0 v 2 h -2 v 2 h 4 v -4 z m -8,2 v 2 h 4 v -2 z"
+     class="cls-1"
+     id="rect4883-3" />
+  <path
+     style="fill:none;stroke:#d2d2d2;stroke-width:2px;stroke-miterlimit:10;stroke-opacity:1"
+     id="path7"
+     d="M 12.06,9.595 13.83,7.83 A 4.0022244,4.0022244 0 0 0 8.17,2.17 L 6.405,3.94"
+     class="cls-2" />
+  <line
+     style="fill:none;stroke:#d2d2d2;stroke-width:2px;stroke-miterlimit:10;stroke-opacity:1"
+     id="line9"
+     y2="6.0599999"
+     x2="4.2800002"
+     y1="4.645"
+     x1="5.6950002"
+     class="cls-2" />
+  <line
+     style="fill:none;stroke:#d2d2d2;stroke-width:2px;stroke-miterlimit:10;stroke-opacity:1"
+     id="line11"
+     y2="11.72"
+     x2="9.9399996"
+     y1="10.305"
+     x1="11.355"
+     class="cls-2" />
 </svg>

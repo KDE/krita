@@ -21,7 +21,7 @@ struct KisSessionResource::Private
     struct View
     {
         QUuid windowId;
-        QUrl file;
+        QString file;
         KisPropertiesConfiguration viewConfig;
 
         KisMainWindow *getWindow() const {
@@ -61,37 +61,37 @@ void KisSessionResource::restore()
 
     applyLayout();
 
-    QMap<QUrl, KisDocument *> documents;
+    QMap<QString, KisDocument *> documents;
 
     // Find documents which are already open so we don't need to reload them
     QList<QPointer<KisView>> oldViews = kisPart->views();
     Q_FOREACH(const QPointer<KisView> view, oldViews) {
         KisDocument *document = view->document();
-        const QUrl url = document->url();
-        documents.insert(url, document);
+        const QString path = document->path();
+        documents.insert(path, document);
     }
 
     Q_FOREACH(auto &viewData, d->views) {
-        QUrl url = viewData.file;
+        QString path = viewData.file;
 
         KisMainWindow *window = viewData.getWindow();
 
         if (!window) {
             qDebug() << "Warning: session file contains inconsistent data.";
         } else {
-            KisDocument *document = documents.value(url);
+            KisDocument *document = documents.value(path);
 
             if (!document) {
                 document = kisPart->createDocument();
 
-                bool ok = document->openUrl(url);
+                bool ok = document->openPath(path);
                 if (!ok) {
                     delete document;
                     continue;
                 }
 
                 kisPart->addDocument(document);
-                documents.insert(url, document);
+                documents.insert(path, document);
             }
             //update profile
             QString profileName;
@@ -125,11 +125,11 @@ void KisSessionResource::storeCurrentWindows()
 
     d->views.clear();
     Q_FOREACH(const KisView *view, kisPart->views()) {
-        if (view->document()->url().isEmpty()) continue;
+        if (view->document()->path().isEmpty()) continue;
 
         auto viewData = Private::View();
         viewData.windowId = view->mainWindow()->id();
-        viewData.file = view->document()->url();
+        viewData.file = view->document()->path();
         view->saveViewState(viewData.viewConfig);
         d->views.append(viewData);
     }
@@ -145,7 +145,7 @@ void KisSessionResource::saveXml(QDomDocument &doc, QDomElement &root) const
         QDomElement elem = doc.createElement("view");
 
         elem.setAttribute("window", view.windowId.toString());
-        elem.setAttribute("src", view.file.toString());
+        elem.setAttribute("src", view.file);
         view.viewConfig.toXML(doc, elem);
 
         root.appendChild(elem);
@@ -172,7 +172,7 @@ void KisSessionResource::loadXml(const QDomElement &root) const
          viewElement = viewElement.nextSiblingElement("view")) {
         Private::View view;
 
-        view.file = QUrl(viewElement.attribute("src"));
+        view.file = viewElement.attribute("src");
         view.windowId = QUuid(viewElement.attribute("window"));
         view.viewConfig.fromXML(viewElement);
 

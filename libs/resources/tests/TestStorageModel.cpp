@@ -5,7 +5,7 @@
  */
 #include "TestStorageModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -142,5 +142,5 @@ void TestStorageModel::testMetaData()
 
 
 
-QTEST_MAIN(TestStorageModel)
+SIMPLE_TEST_MAIN(TestStorageModel)
 

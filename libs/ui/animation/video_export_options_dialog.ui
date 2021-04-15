@@ -24,7 +24,7 @@
       <number>3</number>
      </property>
      <widget class="QWidget" name="pgH264">
-      <layout class="QFormLayout" name="formLayout">
+      <layout class="QFormLayout" name="formLayout_0">
        <item column="0" row="0">
         <widget class="QLabel" name="lblCRFH264">
          <property name="text">
@@ -75,7 +75,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pgH265">
-      <layout class="QFormLayout" name="formLayout_3">
+      <layout class="QFormLayout" name="formLayout_1">
        <item column="0" row="0">
         <widget class="QLabel" name="lblCRFH265">
          <property name="text">
@@ -180,6 +180,154 @@
         <widget class="QCheckBox" name="vp9Lossless">
          <property name="text">
           <string>Lossless</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pgGIF">
+      <layout class="QFormLayout" name="formLayout_4">
+       <item column="0" row="0">
+        <widget class="QCheckBox" name="gifLoop">
+         <property name="text">
+          <string>Loop Animation</string>
+         </property>
+        </widget>
+       </item>
+       <item column="0" row="1">
+        <widget class="QCheckBox" name="gifTransDiff">
+         <property name="text">
+          <string>Transparency Difference</string>
+         </property>
+        </widget>
+       </item>
+       <item column="0" row="2">
+        <widget class="QRadioButton" name="gifAutoPalette">
+         <property name="text">
+          <string>Auto-generate 8bit Palette</string>
+         </property>
+        </widget>
+       </item>
+       <item column="1" row="2">
+        <widget class="QComboBox" name="cmbPalettegenStatsModeGIF"/>
+       </item>
+       <item column="0" row="3">
+        <widget class="QLabel" name="lblPaletteuseDitherGIF">
+         <property name="text">
+          <string>Dithering:</string>
+         </property>
+        </widget>
+       </item>
+       <item column="1" row="3">
+        <widget class="QComboBox" name="cmbPaletteuseDitherGIF"/>
+       </item>
+       <item column="0" row="4">
+        <widget class="QLabel" name="lblPaletteuseBayerScaleGIF">
+         <property name="text">
+          <string>Bayer Scale:</string>
+         </property>
+        </widget>
+       </item>
+       <item column="1" row="4">
+        <widget class="KisSliderSpinBox" name="intPaletteuseBayerScaleGIF" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item column="0" row="5">
+        <widget class="QLabel" name="lblPaletteuseDiffModeGIF">
+         <property name="text">
+          <string>Difference Mode:</string>
+         </property>
+        </widget>
+       </item>
+       <item column="1" row="5">
+        <widget class="QComboBox" name="cmbPaletteuseDiffModeGIF"/>
+       </item>
+       </layout>
+     </widget>
+     <widget class="QWidget" name="pgAPNG">
+      <layout class="QFormLayout" name="formLayout_5">
+       <item column="0" row="0">
+        <widget class="QCheckBox" name="apngLoop">
+         <property name="text">
+          <string>Loop Animation</string>
+         </property>
+        </widget>
+       </item>
+       <item column="0" row="1">
+        <widget class="QLabel" name="lblPredAPNG">
+         <property name="text">
+          <string>Prediction Mode:</string>
+         </property>
+        </widget>
+       </item>
+       <item column="1" row="1">
+        <widget class="QComboBox" name="cmbPredAPNG"/>
+       </item>
+       </layout>
+     </widget>
+     <widget class="QWidget" name="pgWEBP">
+      <layout class="QFormLayout" name="formLayout_6">
+       <item column="0" row="0">
+        <widget class="QCheckBox" name="webpLossless">
+         <property name="text">
+          <string>Lossless</string>
+         </property>
+        </widget>
+       </item>
+       <item column="0" row="1">
+        <widget class="QLabel" name="lblCompressWEBP">
+         <property name="text">
+          <string>Compression Level:</string>
+         </property>
+        </widget>
+       </item>
+       <item column="1" row="1">
+        <widget class="KisSliderSpinBox" name="intCompressWEBP" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item column="0" row="2">
+        <widget class="QLabel" name="lblQscaleWEBP">
+         <property name="text">
+          <string>Image Quality:</string>
+         </property>
+        </widget>
+       </item>
+       <item column="1" row="2">
+        <widget class="KisSliderSpinBox" name="intQscaleWEBP" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item column="0" row="3">
+        <widget class="QLabel" name="lblPresetWEBP">
+         <property name="text">
+          <string>Preset:</string>
+         </property>
+        </widget>
+       </item>
+       <item column="1" row="3">
+        <widget class="QComboBox" name="cmbPresetWEBP"/>
+       </item>
+       <item column="0" row="4">
+        <widget class="QCheckBox" name="webpLoop">
+         <property name="text">
+          <string>Loop Animation</string>
          </property>
         </widget>
        </item>

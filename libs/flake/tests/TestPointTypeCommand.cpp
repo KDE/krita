@@ -9,7 +9,7 @@
 #include "KoPathShape.h"
 #include "KoPathPointTypeCommand.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestPointTypeCommand::redoUndoSymmetric()
 {
@@ -144,4 +144,4 @@ void TestPointTypeCommand::redoUndoCorner()
     QVERIFY(ppath2Org == path2.outline());
 }
 
-QTEST_MAIN(TestPointTypeCommand)
+SIMPLE_TEST_MAIN(TestPointTypeCommand)

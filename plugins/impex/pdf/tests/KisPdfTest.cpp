@@ -7,7 +7,7 @@
 #include "KisPdfTest.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include "filestest.h"

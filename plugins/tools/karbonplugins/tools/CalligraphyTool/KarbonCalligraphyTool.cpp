@@ -23,6 +23,7 @@
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
 #include <KoViewConverter.h>
+#include <KisPopupWidgetInterface.h>
 
 #include <QAction>
 #include <QDebug>
@@ -329,9 +330,9 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPoin
     return angle;
 }
 
-void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KarbonCalligraphyTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     if (!m_widget) {
         createOptionWidgets();
@@ -377,7 +378,7 @@ void KarbonCalligraphyTool::deactivate()
     KoToolBase::deactivate();
 }
 
-QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
+QList<QPointer<QWidget>> KarbonCalligraphyTool::createOptionWidgets()
 {
     // if the widget don't exists yet create it
     QList<QPointer<QWidget> > widgets;
@@ -427,6 +428,11 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     widgets.append(m_widget);
 
     return widgets;
+}
+
+KisPopupWidgetInterface *KarbonCalligraphyTool::popupWidget()
+{
+    return nullptr;
 }
 
 void KarbonCalligraphyTool::setStrokeWidth(double width)

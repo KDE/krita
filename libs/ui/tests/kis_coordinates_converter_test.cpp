@@ -5,7 +5,7 @@
  */
 
 #include "kis_coordinates_converter_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <QTransform>
 
@@ -255,5 +255,5 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
 }
 
 
-QTEST_MAIN(KisCoordinatesConverterTest)
+SIMPLE_TEST_MAIN(KisCoordinatesConverterTest)
 

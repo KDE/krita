@@ -5,7 +5,7 @@
  */
 
 #include "kis_base_node_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <limits.h>
 #include "kis_types.h"
 #include "kis_global.h"
@@ -201,6 +201,6 @@ void KisBaseNodeTest::testOpacityKeyframing()
     }
 }
 
-QTEST_MAIN(KisBaseNodeTest)
+SIMPLE_TEST_MAIN(KisBaseNodeTest)
 
 

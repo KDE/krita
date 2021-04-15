@@ -49,6 +49,8 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     KisResourceStorageSP storageForIndex(const QModelIndex &index) const;
+    KisResourceStorageSP storageForId(const int storageId) const;
+
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 

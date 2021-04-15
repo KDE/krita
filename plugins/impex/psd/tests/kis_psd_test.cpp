@@ -7,7 +7,7 @@
 #include "kis_psd_test.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include  <sdk/tests/testui.h>
@@ -79,7 +79,7 @@ void KisPSDTest::testTransparencyMask()
     doc->setMimeType("image/vnd.adobe.photoshop");
 
     QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_tmask.psd");
-    bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), "image/vnd.adobe.photoshop");
+    bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), "image/vnd.adobe.photoshop");
     QVERIFY(retval);
 
     {
@@ -150,8 +150,13 @@ void KisPSDTest::testOpenLayerStylesWithPattern()
     QVERIFY(layer->layerStyle());
     QVERIFY(layer->layerStyle()->patternOverlay());
     QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+
+    KoPatternSP pattern =
+        layer->layerStyle()->patternOverlay()->pattern(
+                layer->layerStyle()->resourcesInterface());
+
+    QVERIFY(pattern);
+    QVERIFY(pattern->valid());
 }
 
 void KisPSDTest::testOpenLayerStylesWithPatternMulti()
@@ -168,13 +173,25 @@ void KisPSDTest::testOpenLayerStylesWithPatternMulti()
 
     QVERIFY(layer->layerStyle()->patternOverlay());
     QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+    {
+        KoPatternSP pattern =
+            layer->layerStyle()->patternOverlay()->pattern(
+                    layer->layerStyle()->resourcesInterface());
+
+        QVERIFY(pattern);
+        QVERIFY(pattern->valid());
+    }
 
     QVERIFY(layer->layerStyle()->stroke());
     QVERIFY(layer->layerStyle()->stroke()->effectEnabled());
-    QVERIFY(layer->layerStyle()->stroke()->pattern());
-    QVERIFY(layer->layerStyle()->stroke()->pattern()->valid());
+    {
+        KoPatternSP pattern =
+            layer->layerStyle()->stroke()->pattern(
+                layer->layerStyle()->resourcesInterface());
+
+        QVERIFY(pattern);
+        QVERIFY(pattern->valid());
+    }
 }
 
 void KisPSDTest::testSaveLayerStylesWithPatternMulti()
@@ -191,18 +208,30 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
 
     QVERIFY(layer->layerStyle()->patternOverlay());
     QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
-    QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+    {
+        KoPatternSP pattern =
+            layer->layerStyle()->patternOverlay()->pattern(
+                    layer->layerStyle()->resourcesInterface());
+
+        QVERIFY(pattern);
+        QVERIFY(pattern->valid());
+    }
 
     QVERIFY(layer->layerStyle()->stroke());
     QVERIFY(layer->layerStyle()->stroke()->effectEnabled());
-    QVERIFY(layer->layerStyle()->stroke()->pattern());
-    QVERIFY(layer->layerStyle()->stroke()->pattern()->valid());
+    {
+        KoPatternSP pattern =
+            layer->layerStyle()->stroke()->pattern(
+                    layer->layerStyle()->resourcesInterface());
+
+        QVERIFY(pattern);
+        QVERIFY(pattern->valid());
+    }
 
     doc->setFileBatchMode(true);
     const QByteArray mimeType("image/vnd.adobe.photoshop");
     QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_save_styles.psd");
-    bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), mimeType);
+    bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), mimeType);
     QVERIFY(retval);
 
     {
@@ -217,13 +246,25 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
 
         QVERIFY(layer->layerStyle()->patternOverlay());
         QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
-        QVERIFY(layer->layerStyle()->patternOverlay()->pattern());
-        QVERIFY(layer->layerStyle()->patternOverlay()->pattern()->valid());
+        {
+            KoPatternSP pattern =
+                layer->layerStyle()->patternOverlay()->pattern(
+                        layer->layerStyle()->resourcesInterface());
+
+            QVERIFY(pattern);
+            QVERIFY(pattern->valid());
+        }
 
         QVERIFY(layer->layerStyle()->stroke());
         QVERIFY(layer->layerStyle()->stroke()->effectEnabled());
-        QVERIFY(layer->layerStyle()->stroke()->pattern());
-        QVERIFY(layer->layerStyle()->stroke()->pattern()->valid());
+        {
+            KoPatternSP pattern =
+                layer->layerStyle()->stroke()->pattern(
+                        layer->layerStyle()->resourcesInterface());
+
+            QVERIFY(pattern);
+            QVERIFY(pattern->valid());
+        }
     }
 
 }
@@ -333,7 +374,7 @@ void KisPSDTest::testSavingAllFormats()
 
         dbgKrita << "Saving" << ppVar(dstFileInfo.fileName());
 
-        bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), "image/vnd.adobe.photoshop");
+        bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), "image/vnd.adobe.photoshop");
         QVERIFY(retval);
 
         {

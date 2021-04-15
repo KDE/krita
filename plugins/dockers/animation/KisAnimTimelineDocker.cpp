@@ -47,11 +47,14 @@
 #include "kis_slider_spin_box.h"
 #include "kis_signals_blocker.h"
 
-KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
+KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
     KisUtilityTitleBar(new QLabel(i18n("Animation Timeline"), parent), parent)
 {
+    setFocusPolicy(Qt::ClickFocus);
+
     // Transport Controls...
     transport = new KisTransportControls(this);
+    transport->showSkipButtons(true);
     widgetAreaLayout->addWidget(transport);
 
     widgetAreaLayout->addSpacing(SPACING_UNIT);
@@ -116,6 +119,7 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
         // Onion skins menu.
         btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
         btnOnionSkinsMenu->setToolTip(i18n("Onion skins menu"));
+        btnOnionSkinsMenu->setIconSize(QSize(22, 22));
         btnOnionSkinsMenu->setFlat(true);
         layout->addWidget(btnOnionSkinsMenu);
 
@@ -127,8 +131,9 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
 
         {   // Settings menu..
             btnSettingsMenu = new QToolButton(this);
-            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("view-choose"));
+            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("view-choose-22"));
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
+            btnSettingsMenu->setIconSize(QSize(22, 22));
             btnSettingsMenu->setAutoRaise(true);
 
             QWidget *settingsMenuWidget = new QWidget(this);
@@ -204,20 +209,21 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
     }
 }
 
-struct TimelineDocker::Private
+struct KisAnimTimelineDocker::Private
 {
     Private(QWidget *parent)
         : framesModel(new KisAnimTimelineFramesModel(parent))
         , framesView(new KisAnimTimelineFramesView(parent))
-        , titlebar(new KisAnimTimelineDocker(parent))
+        , titlebar(new KisAnimTimelineDockerTitlebar(parent))
         , mainWindow(nullptr)
     {
         framesView->setModel(framesModel);
+        framesView->setMinimumHeight(50);
     }
 
     KisAnimTimelineFramesModel *framesModel;
     KisAnimTimelineFramesView *framesView;
-    KisAnimTimelineDocker *titlebar;
+    KisAnimTimelineDockerTitlebar *titlebar;
 
     QPointer<KisCanvas2> canvas;
 
@@ -225,7 +231,7 @@ struct TimelineDocker::Private
     KisMainWindow *mainWindow;
 };
 
-TimelineDocker::TimelineDocker()
+KisAnimTimelineDocker::KisAnimTimelineDocker()
     : QDockWidget(i18n("Animation Timeline"))
     , m_d(new Private(this))
 {
@@ -244,7 +250,7 @@ TimelineDocker::TimelineDocker()
     });
 }
 
-TimelineDocker::~TimelineDocker()
+KisAnimTimelineDocker::~KisAnimTimelineDocker()
 {
 }
 
@@ -269,7 +275,7 @@ private:
     KisNodeManager *m_manager;
 };
 
-void TimelineDocker::setCanvas(KoCanvasBase * canvas)
+void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
 {
     if (m_d->canvas == canvas) return;
 
@@ -350,10 +356,13 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
                     m_d->canvas, SIGNAL(sigCanvasEngineChanged()),
                     this, SLOT(updateFrameCache()));
 
+        connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));
         connect(m_d->titlebar->transport, SIGNAL(playPause()), m_d->canvas->animationPlayer(), SLOT(playPause()));
         connect(m_d->titlebar->transport, SIGNAL(forward()), m_d->canvas->animationPlayer(), SLOT(nextFrame()));
+        connect(m_d->titlebar->transport, SIGNAL(skipForward()), m_d->canvas->animationPlayer(), SLOT(nextKeyframe()));
+
         connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), m_d->canvas->animationPlayer(), SLOT(seek(int)));
         connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), m_d->canvas->animationPlayer(), SLOT(setPlaybackSpeedPercent(int)));
 
@@ -374,19 +383,19 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
     }
 }
 
-void TimelineDocker::handleThemeChange()
+void KisAnimTimelineDocker::handleThemeChange()
 {
     if (m_d->framesView) {
         m_d->framesView->slotUpdateIcons();
     }
 }
 
-void TimelineDocker::updateFrameCache()
+void KisAnimTimelineDocker::updateFrameCache()
 {
     m_d->framesModel->setFrameCache(m_d->canvas->frameCache());
 }
 
-void TimelineDocker::updateFrameRegister()
+void KisAnimTimelineDocker::updateFrameRegister()
 {
     if (!m_d->canvas && !m_d->canvas->image()) {
         return;
@@ -399,7 +408,7 @@ void TimelineDocker::updateFrameRegister()
     m_d->titlebar->frameRegister->setValue(frame);
 }
 
-void TimelineDocker::updatePlaybackStatistics()
+void KisAnimTimelineDocker::updatePlaybackStatistics()
 {
     qreal effectiveFps = 0.0;
     qreal realFps = 0.0;
@@ -441,12 +450,12 @@ void TimelineDocker::updatePlaybackStatistics()
     action->setText(actionText);
 }
 
-void TimelineDocker::unsetCanvas()
+void KisAnimTimelineDocker::unsetCanvas()
 {
     setCanvas(0);
 }
 
-void TimelineDocker::setViewManager(KisViewManager *view)
+void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
 {
     m_d->mainWindow = view->mainWindow();
     KisActionManager *actionManager = view->actionManager();
@@ -454,16 +463,19 @@ void TimelineDocker::setViewManager(KisViewManager *view)
 
     KisAction *action = 0;
 
-    KisAnimTimelineDocker* titleBar = static_cast<KisAnimTimelineDocker*>(titleBarWidget());
+    KisAnimTimelineDockerTitlebar* titleBar = static_cast<KisAnimTimelineDockerTitlebar*>(titleBarWidget());
 
     action = actionManager->actionByName("add_blank_frame");
     titleBar->btnAddKeyframe->setDefaultAction(action);
+    titleBar->btnAddKeyframe->setIconSize(QSize(22, 22));
 
     action = actionManager->actionByName("add_duplicate_frame");
     titleBar->btnDuplicateKeyframe->setDefaultAction(action);
+    titleBar->btnDuplicateKeyframe->setIconSize(QSize(22, 22));
 
     action = actionManager->actionByName("remove_frames");
     titleBar->btnRemoveKeyframe->setDefaultAction(action);
+    titleBar->btnRemoveKeyframe->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -529,8 +541,25 @@ void TimelineDocker::setViewManager(KisViewManager *view)
         }
     });
 
+    action = actionManager->createAction("previous_unfiltered_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, &KisAction::triggered, [this](bool){
+        if (m_d->canvas) {
+            m_d->canvas->animationPlayer()->previousUnfilteredKeyframe();
+        }
+    });
+
+    action = actionManager->createAction("next_unfiltered_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, &KisAction::triggered, [this](bool){
+        if (m_d->canvas) {
+            m_d->canvas->animationPlayer()->nextUnfilteredKeyframe();
+        }
+    });
+
     action = actionManager->createAction("auto_key");
     m_d->titlebar->btnAutoKey->setDefaultAction(action);
+    m_d->titlebar->btnAutoKey->setIconSize(QSize(22, 22));
     connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
 
     {
@@ -546,6 +575,7 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     {
         action = actionManager->createAction("drop_frames");
         m_d->titlebar->btnDropFrames->setDefaultAction(action);
+        m_d->titlebar->btnDropFrames->setIconSize(QSize(22, 22));
         connect(action, &KisAction::triggered, [this](bool dropFrames){
             KisConfig cfg(false);
             if (dropFrames != cfg.animationDropFrames()) {
@@ -559,7 +589,7 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     }
 }
 
-void TimelineDocker::setAutoKey(bool value)
+void KisAnimTimelineDocker::setAutoKey(bool value)
 {
     KisImageConfig cfg(false);
     if (value != cfg.autoKeyEnabled()) {
@@ -570,7 +600,7 @@ void TimelineDocker::setAutoKey(bool value)
     }
 }
 
-void TimelineDocker::handleClipRangeChange()
+void KisAnimTimelineDocker::handleClipRangeChange()
 {
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
@@ -580,7 +610,7 @@ void TimelineDocker::handleClipRangeChange()
     m_d->titlebar->sbEndFrame->setValue(animInterface->fullClipRange().end());
 }
 
-void TimelineDocker::handleFrameRateChange()
+void KisAnimTimelineDocker::handleFrameRateChange()
 {
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
@@ -589,7 +619,7 @@ void TimelineDocker::handleFrameRateChange()
     m_d->titlebar->sbFrameRate->setValue(animInterface->framerate());
 }
 
-void TimelineDocker::handlePlaybackSpeedChange(double normalizedPlaybackSpeed)
+void KisAnimTimelineDocker::handlePlaybackSpeedChange(double normalizedPlaybackSpeed)
 {
     m_d->titlebar->sbSpeed->setValue(normalizedPlaybackSpeed * 100);
 }

@@ -229,10 +229,15 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
 {
     /* Check for nonsense and let the user know, this helps debugging.
     Otherwise the program will crash at a later point, in a very obscure way, probably by division by zero */
-    Q_ASSERT_X(m_xscale != 0, "KisTransformer::run() validation step", "xscale == 0");
-    Q_ASSERT_X(m_yscale != 0, "KisTransformer::run() validation step", "yscale == 0");
+    /* Note that because KisFilterWeightsBuffer uses KisFixedPoint, we need to check the fixed point as well
+     * since it has different precision than qreal or double */
+    KisFixedPoint m_xscale_fixedPoint = KisFixedPoint(m_xscale);
+    KisFixedPoint m_yscale_fixedPoint = KisFixedPoint(m_yscale);
+    Q_ASSERT_X(m_xscale != 0 && m_xscale_fixedPoint != 0, "KisTransformer::run() validation step", "xscale == 0");
+    Q_ASSERT_X(m_yscale != 0 && m_yscale_fixedPoint != 0, "KisTransformer::run() validation step", "yscale == 0");
+
     // Fallback safety line in case Krita is compiled without ASSERTS
-    if (m_xscale == 0 || m_yscale == 0) return false;
+    if (m_xscale == 0 || m_yscale == 0 || m_xscale_fixedPoint == 0 || m_yscale_fixedPoint == 0) return false;
 
     m_boundRect = processRect;
 

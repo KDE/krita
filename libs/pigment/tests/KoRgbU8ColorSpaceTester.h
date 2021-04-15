@@ -19,10 +19,6 @@ private Q_SLOTS:
     void testMixColors();
     void testMixColorsAverage();
     void testCompositeOpsWithChannelFlags();
-
-    void testScaler();
-
-    void testIterativeMixing();
     void testCompositeCopyDivisionByZero();
 };
 

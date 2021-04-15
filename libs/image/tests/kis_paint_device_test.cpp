@@ -5,7 +5,8 @@
  */
 
 #include "kis_paint_device_test.h"
-#include <QTest>
+#include "kis_image_config.h"
+#include <simpletest.h>
 
 #include <QElapsedTimer>
 

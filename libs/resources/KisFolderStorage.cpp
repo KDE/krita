@@ -97,7 +97,6 @@ bool KisFolderStorage::addTag(const QString &/*resourceType*/, KisTagSP /*tag*/)
 
 bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
 {
-    QString fn = location() + "/" + resourceType + "/" + _resource->filename();
     return KisStorageVersioningHelper::addVersionedResource(location() + "/" + resourceType, _resource, 0);
 }
 
@@ -121,7 +120,18 @@ bool KisFolderStorage::loadVersionedResource(KoResourceSP resource)
         return false;
     }
 
-    return resource->loadFromDevice(&f, KisGlobalResourcesInterface::instance());
+    bool r = resource->loadFromDevice(&f, KisGlobalResourcesInterface::instance());
+
+    // Check for the thumbnail
+    if (r) {
+        if ((resource->image().isNull() || resource->thumbnail().isNull()) && !resource->thumbnailPath().isNull()) {
+            QImage img(location() + '/' + resource->resourceType().first + '/' + resource->thumbnailPath());
+            resource->setImage(img);
+            resource->updateThumbnail();
+        }
+    }
+
+    return r;
 }
 
 QByteArray KisFolderStorage::resourceMd5(const QString &url)

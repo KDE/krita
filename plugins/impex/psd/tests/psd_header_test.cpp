@@ -6,7 +6,7 @@
 
 #include "psd_header_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <psd_header.h>
@@ -73,5 +73,5 @@ void PSDHeaderTest::testRoundTripping()
 
 
 
-QTEST_MAIN(PSDHeaderTest)
+SIMPLE_TEST_MAIN(PSDHeaderTest)
 

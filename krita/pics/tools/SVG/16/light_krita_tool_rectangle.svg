@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
    id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="32"
-   width="32">
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -47,15 +47,16 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:inline"
-     id="layer3">
+     transform="scale(0.5)"
+     id="layer3"
+     style="display:inline">
     <g
-       transform="matrix(0,-1,1,0,0,30)"
+       style="display:inline"
        id="g4171-7"
-       style="display:inline" />
+       transform="rotate(-90,15,15)" />
     <path
-       id="rect4157"
-       d="m 0,0 0,4 0,24 0,4 32,0 0,-4 0,-24 0,-4 z m 4,4 24,0 0,24 -24,0 z"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 0,0 V 32 H 32 V 0 Z M 4,4 H 28 V 28 H 4 Z"
+       id="rect4157" />
   </g>
 </svg>

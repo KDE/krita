@@ -55,9 +55,6 @@ public: //KoResourceServerObserver
     void resourceAdded(QSharedPointer<KoColorSet> resource) override;
     void removingResource(QSharedPointer<KoColorSet> resource) override;
     void resourceChanged(QSharedPointer<KoColorSet> resource) override;
-    void syncTaggedResourceView() override;
-    void syncTagAddition(const QString& tag) override;
-    void syncTagRemoval(const QString& tag) override;
 
 private Q_SLOTS:
     void slotContextMenu(const QModelIndex &);
@@ -71,6 +68,7 @@ private Q_SLOTS:
     void slotRemoveColor();
     void slotEditEntry();
     void slotEditPalette();
+    void slotSavePalette();
 
     void slotPaletteIndexSelected(const QModelIndex &index);
     void slotPaletteIndexClicked(const QModelIndex &index);
@@ -88,6 +86,7 @@ private Q_SLOTS:
 private:
     void setEntryByForeground(const QModelIndex &index);
     void setFGColorByPalette(const KisSwatch &entry);
+    void updatePaletteName();
 
 private /* member variables */:
     QScopedPointer<Ui_WdgPaletteDock> m_ui;
@@ -107,6 +106,7 @@ private /* member variables */:
     QScopedPointer<QAction> m_actRemove;
     QScopedPointer<QAction> m_actModify;
     QScopedPointer<QAction> m_actEditPalette;
+    QScopedPointer<QAction> m_actSavePalette;
     QMenu m_viewContextMenu;
 
     bool m_colorSelfUpdate;

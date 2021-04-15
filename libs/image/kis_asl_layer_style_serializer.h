@@ -11,9 +11,11 @@
 
 class QIODevice;
 class KoPattern;
+class KisResourceModel;
 
 #include "kis_psd_layer_style.h"
 #include "asl/kis_asl_callback_object_catcher.h"
+#include "KisLocalStrokeResources.h"
 
 class KRITAIMAGE_EXPORT KisAslLayerStyleSerializer
 {
@@ -26,13 +28,14 @@ public:
     void readFromDevice(QIODevice *device);
     bool readFromFile(const QString& filename);
 
-    void assignAllLayerStylesToLayers(KisNodeSP root);
+    void assignAllLayerStylesToLayers(KisNodeSP root, const QString &storageLocation);
     static QVector<KisPSDLayerStyleSP> collectAllLayerStyles(KisNodeSP root);
 
     QVector<KisPSDLayerStyleSP> styles() const;
     void setStyles(const QVector<KisPSDLayerStyleSP> &styles);
 
     QHash<QString, KoPatternSP> patterns() const;
+    QVector<KoAbstractGradientSP> gradients() const;
     QHash<QString, KisPSDLayerStyleSP> stylesHash();
 
 
@@ -50,6 +53,7 @@ public:
         return isInitialized() && m_isValid;
     }
 
+    static QVector<KoResourceSP> fetchEmbeddedResources(const KisPSDLayerStyle *style);
 
 private:
     void registerPatternObject(const KoPatternSP pattern, const  QString& patternUuid);
@@ -57,8 +61,9 @@ private:
     void assignPatternObject(const QString &patternUuid,
                              const QString &patternName,
                              boost::function<void (KoPatternSP )> setPattern);
+    void assignGradientObject(KoAbstractGradientSP gradient, boost::function<void (KoAbstractGradientSP)> setGradient);
 
-    QVector<KoPatternSP> fetchAllPatterns(KisPSDLayerStyle *style) const;
+    static QVector<KoPatternSP> fetchAllPatterns(const KisPSDLayerStyle *style);
 
     void newStyleStarted(bool isPsdStructure);
     void connectCatcherToStyle(KisPSDLayerStyle *style, const QString &prefix);
@@ -68,9 +73,11 @@ private:
 
     KisAslCallbackObjectCatcher m_catcher;
     QVector<KisPSDLayerStyleSP> m_stylesVector;
+    QVector<KoAbstractGradientSP> m_gradientsStore;
     QHash<QString, KisPSDLayerStyleSP> m_stylesHash;
     bool m_initialized {false};
     bool m_isValid {true};
+    QSharedPointer<KisLocalStrokeResources> m_localResourcesInterface;
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_H */

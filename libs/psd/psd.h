@@ -20,7 +20,7 @@
 #include <resources/KoAbstractGradient.h>
 #include <KoPattern.h>
 #include "kritapsd_export.h"
-
+#include <KisLinkedResourceWrapper.h>
 
 
 const int MAX_CHANNELS = 56;
@@ -237,7 +237,6 @@ public:
         , m_technique(psd_technique_softer)
         , m_range(100)
         , m_jitter(0)
-        , m_gradient(0)
     {
         for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
             m_contourLookupTable[i] = i;
@@ -332,8 +331,8 @@ public:
         return m_jitter;
     }
 
-    KoAbstractGradientSP gradient() const {
-        return m_gradient;
+    KoAbstractGradientSP gradient(KisResourcesInterfaceSP resourcesInterface) const {
+        return m_gradientWrapper.isValid() ? m_gradientWrapper.resource(resourcesInterface) : KoAbstractGradientSP();
     }
 
 public:
@@ -415,7 +414,7 @@ public:
     }
 
     void setGradient(KoAbstractGradientSP value) {
-        m_gradient = value;
+        m_gradientWrapper = value;
     }
 
     virtual void scaleLinearSizes(qreal scale);
@@ -449,7 +448,7 @@ private:
     psd_technique_type m_technique;
     qint32 m_range;
     qint32 m_jitter;
-    KoAbstractGradientSP m_gradient;
+    KisLinkedResourceWrapper<KoAbstractGradient> m_gradientWrapper;
 };
 
 class KRITAPSD_EXPORT psd_layer_effects_shadow_common : public psd_layer_effects_shadow_base
@@ -633,7 +632,6 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
           m_contourRange(100),
 
           m_textureEnabled(false),
-          m_texturePattern(0),
           m_textureScale(100),
           m_textureDepth(100),
           m_textureInvert(false),
@@ -785,11 +783,12 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_textureEnabled = value;
     }
 
-    KoPatternSP texturePattern() const {
-        return m_texturePattern;
+    KoPatternSP texturePattern(KisResourcesInterfaceSP interface) const {
+        return m_texturePatternLink.isValid() ? m_texturePatternLink.resource(interface) : KoPatternSP();
     }
+
     void setTexturePattern(KoPatternSP value) {
-        m_texturePattern = value;
+        m_texturePatternLink = value;
     }
 
     int textureScale() const {
@@ -874,7 +873,7 @@ private:
     int m_contourRange;
 
     bool m_textureEnabled;
-    KoPatternSP m_texturePattern;
+    KisLinkedResourceWrapper<KoPattern> m_texturePatternLink;
     int m_textureScale;
     int m_textureDepth;
     bool m_textureInvert;
@@ -894,7 +893,6 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
           m_style(psd_gradient_style_linear),
           m_gradientXOffset(0),
           m_gradientYOffset(0),
-          m_pattern(0),
           m_horizontalPhase(0),
           m_verticalPhase(0)
     {
@@ -936,8 +934,8 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
         return m_gradientYOffset;
     }
 
-    KoPatternSP pattern() const {
-        return m_pattern;
+    KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const {
+        return m_patternLink.isValid() ? m_patternLink.resource(resourcesInterface) : KoPatternSP();
     }
 
     int horizontalPhase() const {
@@ -981,7 +979,7 @@ public:
     }
 
     void setPattern(KoPatternSP value) {
-        m_pattern = value;
+        m_patternLink = KisLinkedResourceWrapper<KoPattern>(value);
     }
 
     void setPatternPhase(const QPointF &phase) {
@@ -1012,7 +1010,7 @@ private:
     int m_gradientYOffset; // 0..100%
 
     // Pattern
-    KoPatternSP m_pattern;
+    KisLinkedResourceWrapper<KoPattern> m_patternLink;
     int m_horizontalPhase; // 0..100%
     int m_verticalPhase; // 0..100%
 

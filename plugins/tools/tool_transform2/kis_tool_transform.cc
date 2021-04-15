@@ -354,7 +354,7 @@ void KisToolTransform::endActionImpl(KoPointerEvent *event, bool usePrimaryActio
     updateApplyResetAvailability();
 }
 
-QMenu*  KisToolTransform::popupActionsMenu()
+QMenu* KisToolTransform::popupActionsMenu()
 {
     if (m_contextMenu) {
         m_contextMenu->clear();
@@ -715,9 +715,21 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     m_meshStrategy->setThumbnailImage(origImg, thumbToImageTransform);
 }
 
-void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolTransform::newActivationWithExternalSource(KisPaintDeviceSP externalSource)
 {
-    KisTool::activate(toolActivation, shapes);
+    m_externalSourceForNextActivation = externalSource;
+    if (isActive()) {
+        QSet<KoShape*> dummy;
+        deactivate();
+        activate(dummy);
+    } else {
+        KoToolManager::instance()->switchToolRequested("KisToolTransform");
+    }
+}
+
+void KisToolTransform::activate(const QSet<KoShape*> &shapes)
+{
+    KisTool::activate(shapes);
     m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteUp()));
     m_actionConnections.addConnection(action("movetool-move-up-more"), SIGNAL(triggered(bool)),
@@ -754,11 +766,18 @@ void KisToolTransform::requestUndoDuringStroke()
 {
     if (!m_strokeId || !m_transaction.rootNode()) return;
 
-    if (m_changesTracker.isEmpty()) {
+    if (m_changesTracker.isEmpty(true)) {
         cancelStroke();
     } else {
         m_changesTracker.requestUndo();
     }
+}
+
+void KisToolTransform::requestRedoDuringStroke()
+{
+    if (!m_strokeId || !m_transaction.rootNode()) return;
+
+    m_changesTracker.requestRedo();
 }
 
 void KisToolTransform::requestStrokeEnd()
@@ -785,6 +804,9 @@ void KisToolTransform::requestImageRecalculation()
 void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)
 {
     Q_ASSERT(!m_strokeId);
+
+    KisPaintDeviceSP externalSource = m_externalSourceForNextActivation;
+    m_externalSourceForNextActivation.clear();
 
     // set up and null checks before we do anything
     KisResourcesSnapshotSP resources =
@@ -841,7 +863,8 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         selection = 0;
     }
 
-    m_currentlyUsingOverlayPreviewStyle = m_preferOverlayPreviewStyle;
+    // Overlay preview is never used when transforming an externally provided image
+    m_currentlyUsingOverlayPreviewStyle = m_preferOverlayPreviewStyle && !externalSource;
 
     KisStrokeStrategy *strategy = 0;
 
@@ -858,7 +881,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         m_strokeStrategyCookie = transformStrategy;
 
     } else {
-        InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data(), image()->root(), m_forceLodMode);
+        InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, externalSource, image().data(), image().data(), image()->root(), m_forceLodMode);
         connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
         strategy = transformStrategy;
 
@@ -872,7 +895,8 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     m_strokeId = image()->startStroke(strategy);
 
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(true));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(false));
 
     slotPreviewDeviceGenerated(0);
 }
@@ -883,7 +907,7 @@ void KisToolTransform::endStroke()
 
     if (m_currentlyUsingOverlayPreviewStyle &&
         m_transaction.rootNode() &&
-        !m_currentArgs.isIdentity()) {
+        !m_currentArgs.isUnchanging()) {
 
         image()->addJob(m_strokeId,
                         new TransformStrokeStrategy::TransformAllData(m_currentArgs));
@@ -929,7 +953,7 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
         m_asyncUpdateHelper.startUpdateStream(image().data(), m_strokeId);
     }
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(true));
     commitChanges();
 
     initGuiAfterTransformMode();

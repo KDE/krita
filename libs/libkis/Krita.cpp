@@ -287,16 +287,17 @@ QMap<QString, Resource*> Krita::resources(QString &type) const
         resourceModel = KisResourceServerProvider::instance()->paintOpPresetServer()->resourceModel();
     }
 
+    if (resourceModel) {
+        for (int i = 0; i < resourceModel->rowCount(); ++i) {
 
-    for (int i = 0; i < resourceModel->rowCount(); ++i) {
+            QModelIndex idx = resourceModel->index(i, 0);
+            int id = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+            QString name  = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+            QString filename  = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+            QImage image = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
-        QModelIndex idx = resourceModel->index(i, 0);
-        int id = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
-        QString name  = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-        QString filename  = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
-        QImage image = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
-
-        resources[name] = new Resource(id, type, name, filename, image, 0);
+            resources[name] = new Resource(id, type, name, filename, image, 0);
+        }
     }
 
     return resources;
@@ -350,7 +351,7 @@ Document* Krita::openDocument(const QString &filename)
     KisDocument *document = KisPart::instance()->createDocument();
     document->setFileBatchMode(this->batchmode());
     KisPart::instance()->addDocument(document);
-    document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
+    document->openPath(filename, KisDocument::DontAddToRecent);
     document->setFileBatchMode(false);
     return new Document(document, true);
 }

@@ -7,7 +7,7 @@
 #ifndef KIS_SIGNAL_AUTO_CONNECTION_TEST_H_
 #define KIS_SIGNAL_AUTO_CONNECTION_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisSignalAutoConnectionTest : public QObject
 {

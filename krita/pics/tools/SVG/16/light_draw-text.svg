@@ -52,13 +52,13 @@
     <path
        id="rect4360"
        d="m 2,0 0,4 0,6 4,0 0,-2 C 6,5.9999995 8,4 12,4 l 2,0 0,22 c 0,1 -1,2 -2,2 l -2,0 0,4 4,0 4,0 4,0 0,-4 -2,0 c -1,0 -2,-1 -2,-2 l 0,-22 2,0 c 4,0 6,1.9999995 6,4 l 0,2 4,0 L 30,0 6,0 Z"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
   </g>
   <g
      id="g4154"
      style="display:inline">
     <path
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        d="m 2,0 0,4 0,6 4,0 0,-6 6,0 2,0 0,24 -2,0 -2,0 0,4 4,0 4,0 4,0 0,-4 -2,0 -2,0 0,-24 2,0 6,0 0,6 4,0 L 30,0 6,0 Z"
        id="path4156" />
   </g>

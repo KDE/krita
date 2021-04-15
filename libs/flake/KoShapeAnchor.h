@@ -12,7 +12,7 @@
 
 
 class KoShape;
-#include <KoXmlReaderForward.h>
+#include <QDomDocument>
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoShapeAnchorPrivate;

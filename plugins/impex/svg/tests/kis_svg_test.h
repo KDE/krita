@@ -7,7 +7,7 @@
 #ifndef _KIS_SVG_TEST_H_
 #define _KIS_SVG_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisSvgTest : public QObject
 {

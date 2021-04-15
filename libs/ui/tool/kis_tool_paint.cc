@@ -62,6 +62,7 @@
 #include <kis_action_manager.h>
 #include <kis_action.h>
 #include "strokes/kis_color_sampler_stroke_strategy.h"
+#include "kis_popup_palette.h"
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
@@ -132,17 +133,20 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 }
 
 
-void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 {
     if (currentPaintOpPreset()) {
         QString formattedBrushName = currentPaintOpPreset()->name().replace("_", " ");
         emit statusTextChanged(formattedBrushName);
     }
 
-    KisTool::activate(toolActivation, shapes);
+    KisTool::activate(shapes);
     if (flags() & KisTool::FLAG_USES_CUSTOM_SIZE) {
         connect(action("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
         connect(action("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
+        connect(action("increase_brush_size"), SIGNAL(triggered()), this, SLOT(showBrushSize()));
+        connect(action("decrease_brush_size"), SIGNAL(triggered()), this, SLOT(showBrushSize()));
+
     }
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
@@ -456,6 +460,18 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
+KisPopupWidgetInterface *KisToolPaint::popupWidget()
+{
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+
+    if (!kisCanvas) {
+        return nullptr;
+    }
+
+    KisPopupWidgetInterface* popupWidget = kisCanvas->popupPalette();
+    return popupWidget;
+}
+
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 {
     KisTool::mouseReleaseEvent(event);
@@ -464,7 +480,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
-QWidget * KisToolPaint::createOptionWidget()
+QWidget *KisToolPaint::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
@@ -638,6 +654,13 @@ void KisToolPaint::decreaseBrushSize()
 
     currentPaintOpPreset()->settings()->setPaintOpSize(newValue);
     requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolPaint::showBrushSize()
+{
+     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+     kisCanvas->viewManager()->showFloatingMessage(i18n("%1 %2 px", QString("Brush Size:"), currentPaintOpPreset()->settings()->paintOpSize())
+                                                                   , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 std::pair<QRectF,QRectF> KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)

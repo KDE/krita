@@ -7,7 +7,7 @@
 #ifndef KIS_NODE_VISITOR_TEST_H
 #define KIS_NODE_VISITOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisNodeVisitorTest : public QObject
 {

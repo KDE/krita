@@ -5,7 +5,7 @@
  */
 
 #include "KisDialogStateSaverTest.h"
-#include <QTest>
+#include <simpletest.h>
 #include <KisDialogStateSaver.h>
 #include <QWidget>
 #include <ksharedconfig.h>
@@ -52,4 +52,4 @@ void KisDialogStateSaverTest::testRestore()
 }
 
 
-QTEST_MAIN(KisDialogStateSaverTest)
+SIMPLE_TEST_MAIN(KisDialogStateSaverTest)

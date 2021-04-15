@@ -16,7 +16,8 @@
 #include "kactioncollection.h"
 #include "kis_tool_button.h"
 #include "KisHighlightedToolButton.h"
-#include <KisColorSelectorInterface.h>
+#include "KisColorSelectorInterface.h"
+#include "KisPopupWidgetInterface.h"
 
 class KisFavoriteResourceManager;
 class QWidget;
@@ -30,7 +31,7 @@ class KisVisualColorSelector;
 class KisAcyclicSignalConnector;
 class KisMouseClickEater;
 
-class KisPopupPalette : public QWidget
+class KisPopupPalette : public QWidget, public KisPopupWidgetInterface
 {
     Q_OBJECT
 
@@ -43,9 +44,7 @@ public:
                     KisCanvasResourceProvider *provider, QWidget *parent = 0);
     ~KisPopupPalette() override;
     QSize sizeHint() const override;
-
-    void showPopupPalette(const QPoint&);
-    void showPopupPalette(bool b);
+    QSize calculateSize() const;
 
     //functions to set up selectedBrush
     void setSelectedBrush(int x);
@@ -57,11 +56,12 @@ public:
 
     void tabletEvent(QTabletEvent *event) override;
 
-protected:
+    void popup(const QPoint& position) override;
 
+protected:
     void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
-    void resizeEvent(QResizeEvent*) override;
+    void resizeEvent(QResizeEvent*) override {}
     void mouseReleaseEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mousePressEvent(QMouseEvent*) override;
@@ -80,8 +80,6 @@ protected:
     int hoveredColor() const;
 
 private:
-    void setVisible(bool b) override;
-
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
     QPainterPath drawRotationIndicator(qreal rotationAngle, bool canDrag);
@@ -90,9 +88,7 @@ private:
     QPainterPath createPathFromPresetIndex(int index);
 
     int numSlots();
-    void adjustLayout(const QPoint &p);
 
-private:
     int m_hoveredPreset {0};
     int m_hoveredColor {0};
     int m_selectedColor {0};
@@ -154,7 +150,7 @@ private Q_SLOTS:
     void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
     void slotUpdate() { update(); }
-    void slotHide() { showPopupPalette(false); }
+    void slotHide() { setVisible(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
     void slotZoomToOneHundredPercentClicked();
@@ -162,7 +158,6 @@ private Q_SLOTS:
 
     void slotZoomSliderPressed();
     void slotZoomSliderReleased();
-
 };
 
 #endif // KIS_POPUP_PALETTE_H

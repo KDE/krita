@@ -86,7 +86,7 @@ void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, const QPoin
 
     QRect boundingRect;
 
-    if (m_properties->scale.x() < 0 || m_properties->scale.y() < 0) {
+    if (m_properties->scale.x() < 0 || m_properties->scale.y() < 0 || m_properties->gravity < 0) {
         boundingRect = dab->defaultBounds()->bounds();
     }
 

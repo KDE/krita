@@ -6,7 +6,7 @@
 
 #include "kis_projection_leaf_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #define USE_DOCUMENT 0
 #include "qimage_based_test.h"

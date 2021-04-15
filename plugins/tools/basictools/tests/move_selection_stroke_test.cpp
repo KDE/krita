@@ -6,7 +6,7 @@
 
 #include "move_selection_stroke_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 

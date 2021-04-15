@@ -6,7 +6,7 @@
 
 #include "kis_transform_mask_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 

@@ -6,7 +6,7 @@
 
 #include "kis_algebra_2d_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_algebra_2d.h"
 #include "kis_debug.h"
@@ -432,4 +432,4 @@ void KisAlgebra2DTest::testHaltonSequence()
     }
 }
 
-QTEST_MAIN(KisAlgebra2DTest)
+SIMPLE_TEST_MAIN(KisAlgebra2DTest)

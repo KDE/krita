@@ -7,7 +7,7 @@
 #ifndef __KIS_CATEGORIZED_LIST_MODEL_TEST_H
 #define __KIS_CATEGORIZED_LIST_MODEL_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCategorizedListModelTest : public QObject
 {

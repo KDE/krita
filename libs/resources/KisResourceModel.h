@@ -67,6 +67,13 @@ public:
     virtual QModelIndex indexForResource(KoResourceSP resource) const = 0;
 
     /**
+     * @brief indexFromResource
+     * @param resourceId resource id for which we want to get an index
+     * @return
+     */
+    virtual QModelIndex indexForResourceId(int resourceId) const = 0;
+
+    /**
      * @brief setResourceInactive deactivates the specified resource
      * @param index
      * @return
@@ -78,7 +85,7 @@ public:
      * @param filename
      * @return
      */
-    virtual bool importResourceFile(const QString &filename) = 0;
+    virtual KoResourceSP importResourceFile(const QString &filename, const QString &storageId = QString()) = 0;
 
     /**
      * @brief addResource adds the given resource to the database and storage
@@ -157,8 +164,9 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
-    bool importResourceFile(const QString &filename) override;
+    KoResourceSP importResourceFile(const QString &filename, const QString &storageId = QString()) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
@@ -170,7 +178,7 @@ private Q_SLOTS:
     void addStorage(const QString &location);
     void removeStorage(const QString &location);
 
-private:
+public:
 
     KoResourceSP resourceForId(int id) const;
 
@@ -195,6 +203,8 @@ private:
     KoResourceSP resourceForName(QString name) const;
     KoResourceSP resourceForMD5(const QByteArray md5sum) const;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
+
+private:
 
     bool resetQuery();
 
@@ -239,8 +249,9 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
-    bool importResourceFile(const QString &filename) override;
+    KoResourceSP importResourceFile(const QString &filename, const QString &storageId = QString()) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
@@ -280,6 +291,8 @@ protected:
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
 private:
+
+    bool filterResource(const QModelIndex &idx) const;
 
     struct Private;
     Private *const d;

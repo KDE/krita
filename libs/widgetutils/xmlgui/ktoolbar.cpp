@@ -1241,6 +1241,11 @@ bool KToolBar::eventFilter(QObject *watched, QEvent *event)
                         }
                     }
                 }
+                // Set highlight color on checked buttons, same as in KisHighlightedButton
+                QPalette p = tb->palette();
+                QColor color = p.color(tb->isChecked() ? QPalette::Highlight : QPalette::Button);
+                p.setColor(QPalette::Button, color);
+                tb->setPalette(p);
             }
 
             // CJK languages use more verbose accelerator marker: they add a Latin
@@ -1325,6 +1330,10 @@ void KToolBar::actionEvent(QActionEvent *event)
                 if (index != -1) {
                     layout()->itemAt(index)->setAlignment(Qt::AlignJustify);
                 }
+            }
+            // NOTE: set a fixed button size, same size as the buttonsize used in kis_paintop_box
+            if (widget->inherits("QToolButton") && event->action()->icon().isNull() == false) {
+                widget->setFixedSize(32, 32);
             }
         }
     }

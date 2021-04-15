@@ -78,8 +78,7 @@ public:
 
     /**
      * Create the new factory
-     * @param id a string that will be used internally for referencing the shape, for
-     *   example for use by the KoToolBase::activateTemporary.
+     * @param id a string that will be used internally for referencing the shape
      * @param name the user visible name of the shape this factory creates.
      */
     KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString());
@@ -137,7 +136,7 @@ public:
 
     /// returns true if this shapeFactory is able to load the ODF type
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
-    virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const = 0;
+    virtual bool supports(const QDomElement &element, KoShapeLoadingContext &context) const = 0;
 
     /**
      * The hidden boolean requests if the shape should be hidden in the
@@ -203,7 +202,7 @@ public:
      * One example is creating different shapes depending on the content of the passed
      * xml element.
      */
-    virtual KoShape *createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual KoShape *createShapeFromXML(const QDomElement &element, KoShapeLoadingContext &context);
 
 protected:
 

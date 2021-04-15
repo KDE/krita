@@ -5,15 +5,14 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   height="16"
+   width="16"
    version="1.1"
-   id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="32"
-   width="32">
-  <defs
-     id="defs4" />
+   viewBox="0 0 16 16"
+   data-name="Layer 2"
+   id="Layer_2">
   <metadata
-     id="metadata7">
+     id="metadata11">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -26,6 +25,7 @@
             <dc:title>Andrei Rudenko</dc:title>
           </cc:Agent>
         </dc:creator>
+        <dc:date>2021</dc:date>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
@@ -46,40 +46,14 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     id="layer1"
-     style="display:inline">
-    <path
-       id="path4196"
-       d="m 21.410973,5.8367911 c 0,0 3.87067,3.1115782 5.059799,4.9443489"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:1;stroke:#cacaca;stroke-width:4.09316301;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.4000001;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path4198"
-       d="m 28.19003,13.867683 c 0,0 1.301243,4.792782 1.185424,6.974448"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:1;stroke:#cacaca;stroke-width:4.09316301;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.4000001;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path4200"
-       d="m 29.375454,24.401043 c -0.242889,2.307444 -1.59826,5.307452 -4.551189,5.416165"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:1;stroke:#cacaca;stroke-width:4.09316301;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.4000001;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path4202"
-       d="m 20.397727,29.284356 c 0,0 -4.888941,-2.934317 -3.204191,-6.324307"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:1;stroke:#cacaca;stroke-width:4.09316301;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.4000001;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path4204"
-       d="m 12.975323,15.015247 c 1.803359,-0.257622 6.966839,0.817426 4.915489,5.341106"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:1;stroke:#cacaca;stroke-width:4.09316301;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.4000001;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path4206"
-       d="m 9.444994,15.126469 c -3.279,1.214444 -7.181346,0.854136 -6.842019,-3.836108"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:1;stroke:#cacaca;stroke-width:4.09316301;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.4000001;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path4208"
-       d="M 2.683605,6.6064767 C 4.383827,3.3274768 5.27621,2.6705436 8.367252,2.3940772"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:1;stroke:#cacaca;stroke-width:4.09316301;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.4000001;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path4210"
-       d="m 11.968271,2.6477263 c 0,0 4.850468,1.0662923 6.730444,2.1792939"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:1;stroke:#cacaca;stroke-width:4.09316301;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.4000001;stroke-dasharray:none;stroke-opacity:1" />
-  </g>
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:none;stroke:#cacaca;stroke-miterlimit:3.4;stroke-width:4px;stroke-dasharray:7.7 3.85;}</style>
+  </defs>
+  <path
+     style="fill:none;stroke:#d2d2d2;stroke-width:2px;stroke-miterlimit:3.4000001;stroke-dasharray:3.85, 1.92500000000000004;stroke-opacity:1"
+     id="path6"
+     d="M 15,11 C 15,0.5 1,-1.5 1,5 c 0,5 5.5,0.5 7.5,2.5 1.5,1.5 0,3.11 0,5 0,3 6.5,3.5 6.5,-1.5 z"
+     class="cls-1" />
 </svg>

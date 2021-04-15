@@ -105,7 +105,7 @@ Q_SIGNALS:
     void sigMeshGradientResetted();
 
 private:
-    void uploadNewGradientBackground(const QGradient *gradient);
+    void updateGradientUi(const QGradient *gradient);
     void setNewGradientBackgroundToShape();
     void updateGradientSaveButtonAvailability();
     void loadCurrentFillFromResourceServer();
@@ -118,10 +118,8 @@ private:
 
     void updateWidgetComponentVisbility();
 
-    /// update the widget with the KoShape background
-    void updateFillIndexFromShape(KoShape *shape);
-
-    void updateFillColorFromShape(KoShape *shape);
+    /// updates the UI based on KoFlake::FillType it gets from the shape.
+    void updateUiFromFillType(KoShape *shape);
 
     class Private;
     Private * const d;

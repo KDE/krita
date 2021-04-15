@@ -72,9 +72,9 @@ void KisToolLine::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolLine::activate(const QSet<KoShape*> &shapes)
 {
-   KisToolPaint::activate(activation, shapes);
+   KisToolPaint::activate(shapes);
    configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -359,6 +359,9 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         path.lineTo(viewStartEnd);
         paintToolOutline(&gc, path);
     }
+    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    kisCanvas->viewManager()->showFloatingMessage(i18n("Length: %1 px", QString::number(QLineF(m_startPoint,m_endPoint).length(), 'f',1))
+                                                        , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 QString KisToolLine::quickHelp() const

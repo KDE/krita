@@ -7,7 +7,7 @@
 #ifndef TESTSVGTEXT_H
 #define TESTSVGTEXT_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class TestSvgText : public QObject
 {

@@ -22,7 +22,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
 # We want to use $prefix/deps/usr/ for all our dependencies
-export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
+export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr
 export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
 # Setup variables needed to help everything find what we built
@@ -32,7 +32,8 @@ export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/$TRIPL
 export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
-export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.8/site-packages/:$DEPS_INSTALL_PREFIX/lib/python3.8/
+# https://docs.python.org/3.8/using/cmdline.html#envvar-PYTHONHOME
+export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
 if [ -n "${CHANNEL}" ]; then
@@ -53,7 +54,7 @@ cd $BUILD_PREFIX
 
 # Step 0: place the translations where ki18n and Qt look for them
 if [ -d $APPDIR/usr/share/locale ] ; then
-    rsync -prul $APPDIR/usr/share/locale/ $APPDIR/usr/share/krita/
+    rsync -prul $APPDIR/usr/share/locale $APPDIR/usr/share/krita
     rm -rf $APPDIR/usr/share/locale
 fi
 

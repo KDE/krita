@@ -6,7 +6,7 @@
 #ifndef KIS_TILED_DATA_MANAGER_TEST_H
 #define KIS_TILED_DATA_MANAGER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisTiledDataManager;
 

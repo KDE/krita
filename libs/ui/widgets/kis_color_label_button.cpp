@@ -267,7 +267,7 @@ QSet<int> KisColorLabelFilterGroup::getActiveLabels() const {
         }
     }
 
-    return checkedLabels.count() == viableColorLabels.count() ? QSet<int>() : checkedLabels;
+    return checkedLabels.count() == viableColorLabels.count() && minimumRequiredChecked() > 0 ? QSet<int>() : checkedLabels;
 }
 
 QList<QAbstractButton *> KisColorLabelFilterGroup::checkedViableButtons() const {
@@ -293,7 +293,7 @@ void KisColorLabelFilterGroup::setMinimumRequiredChecked(int checkedBtns)
     minimumCheckedButtons = checkedBtns;
 }
 
-int KisColorLabelFilterGroup::minimumRequiredChecked()
+int KisColorLabelFilterGroup::minimumRequiredChecked() const
 {
     return minimumCheckedButtons;
 }

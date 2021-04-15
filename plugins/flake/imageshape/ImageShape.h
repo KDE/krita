@@ -28,7 +28,7 @@ public:
     void setSize(const QSizeF &size) override;
 
     bool saveSvg(SvgSavingContext &context) override;
-    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
+    bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
 
 private:
     ImageShape(const ImageShape &rhs);

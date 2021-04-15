@@ -40,7 +40,7 @@ public:
     ~KoPathTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    void repaintDecorations();
+    void repaintDecorations() override;
     QRectF decorationsRect() const override;
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
@@ -48,7 +48,7 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void deleteSelection() override;
     KoToolSelection* selection() override;
@@ -133,7 +133,6 @@ private:
     QAction *m_actionMergePoints;
     QAction *m_actionConvertToPath;
     QCursor m_moveCursor;
-    bool m_activatedTemporarily;
     QScopedPointer<QMenu> m_contextMenu;
     KisSignalAutoConnectionsStore m_canvasConnections;
     KoShapeFillResourceConnector m_shapeFillResourceConnector;

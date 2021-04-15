@@ -30,12 +30,13 @@ public:
     MyPaintBrush* brush();
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
-    bool save() override;
 
     QPair<QString, QString> resourceType() const override {
         return QPair<QString, QString>(ResourceType::PaintOpPresets, ResourceSubType::MyPaintPaintOpPresets);
     }
 
+    void updateThumbnail() override;
+    QString thumbnailPath() const override;
 
     QByteArray getJsonData();
     float getSize();

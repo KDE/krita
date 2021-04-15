@@ -16,6 +16,7 @@
 #include <QLabel>
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
+#include "KisViewManager.h"
 
 #include "kis_tool_multihand_helper.h"
 
@@ -493,6 +494,12 @@ void KisToolMultihand::updateCanvas()
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     kisCanvas->updateCanvas();
+    if(customUI->moveOriginButton->isChecked())
+    {
+        kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1 px\nY: %2 px"
+                , QString::number(this->m_axesPoint.x(),'f',1),QString::number(this->m_axesPoint.y(),'f',1))
+                , QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+    }
 }
 
 void KisToolMultihand::slotSetHandsCount(int count)

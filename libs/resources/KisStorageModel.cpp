@@ -9,6 +9,7 @@
 #include <QElapsedTimer>
 #include <KisResourceLocator.h>
 #include <KisResourceModelProvider.h>
+#include <QFileInfo>
 
 Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
@@ -263,6 +264,36 @@ KisResourceStorageSP KisStorageModel::storageForIndex(const QModelIndex &index) 
     return KisResourceLocator::instance()->storageByLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(location));
 }
 
+KisResourceStorageSP KisStorageModel::storageForId(const int storageId) const
+{
+    QSqlQuery query;
+
+    bool r = query.prepare("SELECT location\n"
+                           "FROM   storages\n"
+                           "WHERE  storages.id = :storageId");
+
+    if (!r) {
+        qWarning() << "Could not prepare KisStorageModel data query" << query.lastError();
+        return 0;
+    }
+
+    query.bindValue(":storageId", storageId);
+
+    r = query.exec();
+
+    if (!r) {
+        qWarning() << "Could not execute KisStorageModel data query" << query.lastError() << query.boundValues();
+        return 0;
+    }
+
+    if (!query.first()) {
+        qWarning() << "KisStorageModel data query did not return anything";
+        return 0;
+    }
+
+    return KisResourceLocator::instance()->storageByLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(query.value("location").toString()));
+}
+
 QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     QVariant v = QVariant();
@@ -304,7 +335,7 @@ void KisStorageModel::addStorage(const QString &location)
 
 void KisStorageModel::removeStorage(const QString &location)
 {
-    int row = d->storages.indexOf(location);
+    int row = d->storages.indexOf(QFileInfo(location).fileName());
     beginRemoveRows(QModelIndex(), row, row);
     d->storages.removeAt(row);
     endRemoveRows();

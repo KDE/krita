@@ -6,7 +6,7 @@
 
 #include "kis_selection_decoration_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <stroke_testing_utils.h>
 #include "kis_processing_applicator.h"
 #include "commands/kis_selection_commands.h"
@@ -38,4 +38,4 @@ void KisSelectionDecorationTest::testConcurrentSelectionFetches()
     image->waitForDone();
 }
 
-QTEST_MAIN(KisSelectionDecorationTest)
+SIMPLE_TEST_MAIN(KisSelectionDecorationTest)

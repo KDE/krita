@@ -7,7 +7,7 @@
 #ifndef __KO_ANCHOR_SELECTION_WIDGET_TEST_H
 #define __KO_ANCHOR_SELECTION_WIDGET_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include <KoAnchorSelectionWidget.h>
 

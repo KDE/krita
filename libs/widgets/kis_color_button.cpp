@@ -26,14 +26,9 @@ class KisColorButton::KisColorButtonPrivate
 {
 public:
     KisColorButtonPrivate(KisColorButton *q);
-    ~KisColorButtonPrivate() {
-        if (dialogPtr) {
-            dialogPtr.data()->close();
-        }
-    }
+    ~KisColorButtonPrivate() {}
 
     void _k_chooseColor();
-    void _k_colorChosen();
 
     KisColorButton *q;
     KoColor m_defaultColor;
@@ -43,11 +38,6 @@ public:
 
     KoColor col;
     QPoint mPos;
-#ifndef Q_OS_MACOS
-    QPointer<KisDlgInternalColorSelector> dialogPtr;
-#else
-    QPointer<QColorDialog> dialogPtr;
-#endif
 
     void initStyleOption(QStyleOptionButton *opt) const;
 };
@@ -312,61 +302,31 @@ void KisColorButton::mouseMoveEvent(QMouseEvent *e)
 void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
 {
 #ifndef Q_OS_MACOS
-    KisDlgInternalColorSelector *dialog = dialogPtr.data();
-#else
-    QColorDialog *dialog = dialogPtr.data();
-#endif
-    if (dialog) {
-#ifndef Q_OS_MACOS
-        dialog->setPreviousColor(q->color());
-#else
-        dialog->setCurrentColor(q->color().toQColor());
-#endif
-        dialog->show();
-        dialog->raise();
-        dialog->activateWindow();
-        return;
-    }
-
     KisDlgInternalColorSelector::Config cfg;
     cfg.paletteBox = q->paletteViewEnabled();
-#ifndef Q_OS_MACOS
-    dialog = new KisDlgInternalColorSelector(q,
-                                             q->color(),
-                                             cfg,
-                                             i18n("Choose a color"));
-#else
-    dialog = new QColorDialog(q);
-    dialog->setOption(QColorDialog::ShowAlphaChannel, m_alphaChannel);
-#endif
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    connect(dialog, SIGNAL(accepted()), q, SLOT(_k_colorChosen()));
-    dialogPtr = dialog;
-#ifndef Q_OS_MACOS
+    KisDlgInternalColorSelector *dialog = new KisDlgInternalColorSelector(q, q->color(), cfg, i18n("Choose a color"));
     dialog->setPreviousColor(q->color());
+    auto setColorFn = [dialog, this]() { q->setColor(dialog->getCurrentColor()); };
+    connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
 #else
+    QColorDialog *dialog = new QColorDialog(q);
+    dialog->setOption(QColorDialog::ShowAlphaChannel, m_alphaChannel);
     dialog->setCurrentColor(q->color().toQColor());
+    auto setColorFn = [dialog, this]()
+                      {
+                          KoColor c;
+                          c.fromQColor(dialog->currentColor());
+                          q->setColor(c);
+                      };
+    connect(dialog, &QColorDialog::currentColorChanged, setColorFn);
 #endif
+    KoColor colorBeforeColorDialogChanges = col;
+    connect(dialog, &QDialog::accepted, setColorFn);
+    connect(dialog, &QDialog::rejected, [colorBeforeColorDialogChanges, this](){ q->setColor(colorBeforeColorDialogChanges); });
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
-}
-
-void KisColorButton::KisColorButtonPrivate::_k_colorChosen()
-{
-#ifndef Q_OS_MACOS
-    KisDlgInternalColorSelector *dialog = dialogPtr.data();
-#else
-    QColorDialog *dialog = dialogPtr.data();
-#endif
-    if (!dialog) {
-        return;
-    }
-#ifndef Q_OS_MACOS
-    q->setColor(dialog->getCurrentColor());
-#else
-    KoColor c;
-    c.fromQColor(dialog->currentColor());
-    q->setColor(c);
-#endif
+    dialog->raise();
+    dialog->activateWindow();
 }
 
 #include "moc_kis_color_button.cpp"

@@ -16,8 +16,11 @@ StoryboardItem::StoryboardItem()
 {}
 
 StoryboardItem::StoryboardItem(const StoryboardItem& other)
-    : m_childData()
-{}
+    : QEnableSharedFromThis<StoryboardItem>()
+    , m_childData()
+{
+    cloneChildrenFrom(other);
+}
 
 StoryboardItem::~StoryboardItem()
 {
@@ -33,6 +36,7 @@ void StoryboardItem::appendChild(QVariant data)
 
 void StoryboardItem::cloneChildrenFrom(const StoryboardItem& other)
 {
+    m_childData.clear();
     for (int i = 0; i < other.m_childData.count(); i++) {
         QSharedPointer<StoryboardChild> child = toQShared( new StoryboardChild(*other.m_childData.at(i)));
         child->setParent(sharedFromThis());

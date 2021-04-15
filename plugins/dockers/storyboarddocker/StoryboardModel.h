@@ -21,6 +21,7 @@
 class StoryboardView;
 class KisTimeSpan;
 class KisStoryboardThumbnailRenderScheduler;
+class KUndo2Command;
 
 /**
  * @class StoryboardModel
@@ -33,6 +34,28 @@ class KRITASTORYBOARDDOCKER_EXPORT StoryboardModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
+    enum AdditionalRoles {
+        TotalSceneDurationInFrames = Qt::UserRole + 1,
+        TotalSceneDurationInSeconds = Qt::UserRole + 2,
+    };
+
+    class KeyframeReorderLock {
+    public:
+        KeyframeReorderLock(StoryboardModel* model)
+            : m_model(model)
+            , m_originalLock(!model->m_reorderingKeyframes) {
+            m_model->m_reorderingKeyframes = true;
+        }
+
+        ~KeyframeReorderLock() {
+            m_model->m_reorderingKeyframes = !m_originalLock;
+        }
+
+    private:
+        StoryboardModel* m_model;
+        bool m_originalLock = false;
+    };
+
     StoryboardModel(QObject *parent);
     ~StoryboardModel() override;
 
@@ -78,7 +101,7 @@ public:
     bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex())override;
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
-                    const QModelIndex &destinationParent, int destinationChild) override;
+                  const QModelIndex &destinationParent, int destinationChild) override;
 
     //for drag and drop
     QStringList mimeTypes() const override;
@@ -193,6 +216,14 @@ public:
     bool insertItem(QModelIndex index, bool after);
 
     /**
+     * @brief removes item, deletes keyframes within and shifts keyframe after
+     * the scene to fill in the gap
+     * @param index The index of the item to be removed
+     * @return true if item was removed
+     */
+    bool removeItem(QModelIndex index, KUndo2Command *command = nullptr);
+
+    /**
      * @brief resets @c m_items to @c list
      * @param list The new list of StoryboardItem*
      */
@@ -203,25 +234,38 @@ public:
      */
     StoryboardItemList getData();
 
+    void pushUndoCommand(KUndo2Command *command);
 
-    void shiftKeyframes(KisTimeSpan affected, int offset);
+    void shiftKeyframes(KisTimeSpan affected, int offset, KUndo2Command *cmd = nullptr);
 
     int lastKeyframeGlobal() const;
     void slotUpdateThumbnailsForItems(QModelIndexList indices);
+
+    /**
+     * @brief must be called after a first level index is inserted. Adds child nodes to the
+     * first level indices
+     * @param position Index of the first level node.
+     */
+    void insertChildRows(int position, KUndo2Command* cmd = nullptr);
+
+    /**
+     * @brief Adds child nodes from the item provided
+     * @param position Index of the first level node.
+     */
+    void insertChildRows(int position, StoryboardItemSP item);
+
+    void visualizeScene(const QModelIndex& index, bool useUndo = true);
+
+private:
+    bool moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
+                    const QModelIndex &destinationParent, int destinationChild, KUndo2Command *parentCMD = nullptr);
+
 private Q_SLOTS:
     /**
      * @brief called when currentUiTime changes
      * @sa KisImageAnimationInterface::sigUiTimeChanged(int)
      */
     void slotCurrentFrameChanged(int frameId);
-
-    /**
-     * @brief called when selection in storyboardView changes. Switches the current time
-     * to the frame of first item selected.
-     * @sa QItemSelectionModel::selectionChanged(QItemSelection, QItemSelection)
-     */
-    void slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected);
-
     void slotKeyframeAdded(const KisKeyframeChannel *channel, int time);
     void slotKeyframeRemoved(const KisKeyframeChannel *channel, int time);
     void slotNodeRemoved(KisNodeSP node);
@@ -258,14 +302,6 @@ private Q_SLOTS:
     void slotCommentRowMoved(const QModelIndex &sourceParent, int sourceRow, int count,
                             const QModelIndex &destinationParent, int destinationChild);
 
-    /**
-     * @brief called when a first level index is inserted. Adds child nodes to the
-     * first level indices
-     * @param parent The parent of the inseted first level indices.
-     * @param first index of the first item inseted.
-     * @param last index of the last itme inserted.
-     */
-    void slotInsertChildRows(const QModelIndex parent, int first, int last);
 
 public Q_SLOTS:
     void slotSetActiveNode(KisNodeSP);
@@ -279,20 +315,21 @@ Q_SIGNALS:
     void sigStoryboardItemListChanged();
 
 private:
+    friend class KisMoveStoryboardCommand;
+
     StoryboardItemList m_items;
     QVector<StoryboardComment> m_commentList;
-    StoryboardCommentModel *m_commentModel;
-    bool m_freezeKeyframePosition;
-    bool m_lockBoards;
-    bool m_reorderingKeyframes;
-    int m_lastScene = 0;
+    StoryboardCommentModel *m_commentModel {0};
+    bool m_freezeKeyframePosition {false};
+    bool m_lockBoards {false};
+    bool m_reorderingKeyframes {false};
+    int m_lastScene {0};
     KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;
-    StoryboardView *m_view;
+    StoryboardView *m_view {0};
     KisNodeSP m_activeNode;
-    KisStoryboardThumbnailRenderScheduler *m_renderScheduler;
+    KisStoryboardThumbnailRenderScheduler *m_renderScheduler {0};
     KisSignalCompressor m_renderSchedulingCompressor;
-    KisImageSP cloneImage;
 };
 
 #endif

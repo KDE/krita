@@ -70,7 +70,7 @@ QList<KoShape*> KoSvgPaste::fetchShapesFromData(const QByteArray &data, const QR
     int errorLine = 0;
     int errorColumn = 0;
 
-    KoXmlDocument doc = SvgParser::createDocumentFromSvg(data, &errorMsg, &errorLine, &errorColumn);
+    QDomDocument doc = SvgParser::createDocumentFromSvg(data, &errorMsg, &errorLine, &errorColumn);
     if (doc.isNull()) {
         qWarning() << "Failed to process an SVG file at"
                    << errorLine << ":" << errorColumn << "->" << errorMsg;

@@ -143,13 +143,13 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     btnZoomHori = new KisZoomButton(this);
     btnZoomHori->setAutoRaise(true);
     btnZoomHori->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
-    btnZoomHori->setIconSize(QSize(20, 20)); // this icon is very small on windows if no explicitly set
+    btnZoomHori->setIconSize(QSize(22, 22));
     widgetAreaLayout->addWidget(btnZoomHori);
 
     btnZoomVert = new KisZoomButton(this);
     btnZoomVert->setAutoRaise(true);
     btnZoomVert->setIcon(KisIconUtils::loadIcon("zoom-vertical"));
-    btnZoomVert->setIconSize(QSize(20, 20)); // this icon is very small on windows if no explicitly set
+    btnZoomVert->setIconSize(QSize(22, 22));
     widgetAreaLayout->addWidget(btnZoomVert);
 
     widgetAreaLayout->addStretch();
@@ -164,20 +164,23 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
         // Onion skins menu.
         btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
         btnOnionSkinsMenu->setToolTip(i18n("Onion skins menu"));
+        btnOnionSkinsMenu->setIconSize(QSize(22, 22));
         btnOnionSkinsMenu->setFlat(true);
         layout->addWidget(btnOnionSkinsMenu);
 
         // Audio menu..
         btnAudioMenu = new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this);
         btnAudioMenu->setToolTip(i18n("Audio menu"));
+        btnAudioMenu->setIconSize(QSize(22, 22));
         btnAudioMenu->setFlat(true);
         btnAudioMenu->hide(); // (NOTE: Hidden for now while audio features develop.)
         layout->addWidget(btnAudioMenu);
 
         {   // Settings menu..
             btnSettingsMenu = new QToolButton(this);
-            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("view-choose"));
+            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("view-choose-22"));
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
+            btnSettingsMenu->setIconSize(QSize(22, 22));
             btnSettingsMenu->setAutoRaise(true);
 
             QWidget *settingsMenuWidget = new QWidget(this);
@@ -406,10 +409,13 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
                                                       activeIndex.data(KisAnimCurvesModel::ScalarValueRole).toReal() : 0.0f);
         }
 
+        connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));
         connect(m_d->titlebar->transport, SIGNAL(playPause()), m_d->canvas->animationPlayer(), SLOT(playPause()));
         connect(m_d->titlebar->transport, SIGNAL(forward()), m_d->canvas->animationPlayer(), SLOT(nextFrame()));
+        connect(m_d->titlebar->transport, SIGNAL(skipForward()), m_d->canvas->animationPlayer(), SLOT(nextKeyframe()));
+
         connect(m_d->titlebar->sbFrameRegister, SIGNAL(valueChanged(int)), m_d->canvas->animationPlayer(), SLOT(seek(int)));
         connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), m_d->canvas->animationPlayer(), SLOT(setPlaybackSpeedPercent(int)));
 
@@ -448,12 +454,14 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotAddAllEnabledKeys()));
     m_d->titlebar->btnAddKey->setDefaultAction(action);
+    m_d->titlebar->btnAddKey->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("remove_scalar_keyframe");
     action->setIcon(KisIconUtils::loadIcon("keyframe-remove"));
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotRemoveSelectedKeys()));
     m_d->titlebar->btnRemoveKey->setDefaultAction(action);
+    m_d->titlebar->btnRemoveKey->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("interpolation_constant");
     action->setIcon(KisIconUtils::loadIcon("interpolation_constant"));
@@ -461,6 +469,7 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyConstantMode);
     m_d->titlebar->btnInterpConstant->setDefaultAction(action);
+    m_d->titlebar->btnInterpConstant->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("interpolation_linear");
     action->setIcon(KisIconUtils::loadIcon("interpolation_linear"));
@@ -468,6 +477,7 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyLinearMode);
     m_d->titlebar->btnInterpLinear->setDefaultAction(action);
+    m_d->titlebar->btnInterpLinear->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("interpolation_bezier");
     action->setIcon(KisIconUtils::loadIcon("interpolation_bezier"));
@@ -475,6 +485,7 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyBezierMode);
     m_d->titlebar->btnInterpBezier->setDefaultAction(action);
+    m_d->titlebar->btnInterpBezier->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("tangents_sharp");
     action->setIcon(KisIconUtils::loadIcon("interpolation_sharp"));
@@ -482,6 +493,7 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applySharpMode);
     m_d->titlebar->btnTangentSharp->setDefaultAction(action);
+    m_d->titlebar->btnTangentSharp->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("tangents_smooth");
     action->setIcon(KisIconUtils::loadIcon("interpolation_smooth"));
@@ -489,6 +501,7 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applySmoothMode);
     m_d->titlebar->btnTangentSmooth->setDefaultAction(action);
+    m_d->titlebar->btnTangentSmooth->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("zoom_to_fit_range");
     action->setIcon(KisIconUtils::loadIcon("zoom-fit"));
@@ -496,6 +509,7 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::zoomToFitChannel);
     m_d->titlebar->btnZoomFitRange->setDefaultAction(action);
+    m_d->titlebar->btnZoomFitRange->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("zoom_to_fit_curve");
     action->setIcon(KisIconUtils::loadIcon("zoom-fit-curve"));
@@ -503,10 +517,12 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::zoomToFitCurve);
     m_d->titlebar->btnZoomFitCurve->setDefaultAction(action);
+    m_d->titlebar->btnZoomFitCurve->setIconSize(QSize(22, 22));
 
     {
         action = actionManager->createAction("drop_frames");
         m_d->titlebar->btnDropFrames->setDefaultAction(action);
+        m_d->titlebar->btnDropFrames->setIconSize(QSize(22, 22));
         connect(action, &KisAction::triggered, [](bool dropFrames){
             KisConfig cfg(false);
             if (dropFrames != cfg.animationDropFrames()) {

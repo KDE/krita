@@ -7,7 +7,7 @@
 #ifndef KIS_FILTER_PROCESSING_INFORMATION_TEST_H
 #define KIS_FILTER_PROCESSING_INFORMATION_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisProcessingInformationTest : public QObject
 {

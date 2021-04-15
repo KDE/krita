@@ -8,7 +8,7 @@
 #ifndef KIS_IMAGE_TESTER_H
 #define KIS_IMAGE_TESTER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisImageTest : public QObject
 {

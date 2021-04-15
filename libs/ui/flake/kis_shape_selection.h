@@ -120,7 +120,7 @@ public:
         return 0;
     }
 
-    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const override {
+    bool supports(const QDomElement & e, KoShapeLoadingContext &context) const override {
         Q_UNUSED(e);
         Q_UNUSED(context);
         return false;

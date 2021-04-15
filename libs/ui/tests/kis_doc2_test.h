@@ -7,7 +7,7 @@
 #ifndef KIS_DOC2_TEST_H
 #define KIS_DOC2_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisDocumentTest : public QObject
 {

@@ -604,7 +604,6 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredPatch);
 
         using KisAlgebra2D::linearReshapeFunc;
-        using Mesh = KisBezierTransformMesh;
 
         KisBezierTransformMesh &mesh = *m_d->currentArgs.meshTransform();
         mesh = m_d->initialMeshState;

@@ -156,12 +156,12 @@ void KisFileLayer::openFile() const
 {
     bool fileAlreadyOpen = false;
     Q_FOREACH (KisDocument *doc, KisPart::instance()->documents()) {
-        if (doc->url().toLocalFile()==path()){
+        if (doc->path()==path()){
             fileAlreadyOpen = true;
         }
     }
     if (!fileAlreadyOpen) {
-        KisPart::instance()->openExistingFile(QUrl::fromLocalFile(QFileInfo(path()).absoluteFilePath()));
+        KisPart::instance()->openExistingFile(QFileInfo(path()).absoluteFilePath());
     }
 }
 

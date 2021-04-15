@@ -13,6 +13,7 @@ set(kritaassistanttool_SOURCES
     SplineAssistant.cc
     VanishingPointAssistant.cc
     EditAssistantsCommand.cpp
+    TwoPointAssistant.cc
 )
 
 ki18n_wrap_ui(kritaassistanttool_SOURCES AssistantsToolOptions.ui )

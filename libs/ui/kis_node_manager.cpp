@@ -1189,9 +1189,8 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (filename.isEmpty()) return;
 
-    QUrl url = QUrl::fromLocalFile(filename);
 
-    if (url.isEmpty()) return;
+    if (filename.isEmpty()) return;
 
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename, false);
 
@@ -1210,7 +1209,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     dst->initialRefreshGraph();
 
-    if (!doc->exportDocumentSync(url, mimefilter.toLatin1())) {
+    if (!doc->exportDocumentSync(filename, mimefilter.toLatin1())) {
         QMessageBox::warning(qApp->activeWindow(),
                              i18nc("@title:window", "Krita"),
                              i18n("Could not save the layer. %1", doc->errorMessage().toUtf8().data()),

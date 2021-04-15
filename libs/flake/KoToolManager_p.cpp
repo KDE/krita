@@ -12,114 +12,18 @@
 #include <KoToolFactoryBase.h>
 #include "kis_action_registry.h"
 
-static int newUniqueToolHelperId()
-{
-    static int idCounter = 0;
-    return ++idCounter;
-}
-
-/*    ************ ToolHelper **********
- * This class wrangles the tool factory, toolbox button and switch-tool action
- * for a single tool. It assumes the  will continue to live once it is created.
- * (Hiding the toolbox is OK.)
- */
-
-ToolHelper::ToolHelper(KoToolFactoryBase *tool)
-    : m_toolFactory(tool),
-      m_uniqueId(newUniqueToolHelperId()),
-      m_hasCustomShortcut(false),
-      m_toolAction(0)
-{
-}
-
-KoToolAction *ToolHelper::toolAction()
-{
-    // create lazily
-    if (!m_toolAction) {
-        m_toolAction = new KoToolAction(this);
-    }
-    return m_toolAction;
-}
-
-QString ToolHelper::id() const
-{
-    return m_toolFactory->id();
-}
-
-QString ToolHelper::activationShapeId() const
-{
-    return m_toolFactory->activationShapeId();
-}
-
-QString ToolHelper::iconName() const
-{
-    return m_toolFactory->iconName();
-}
-
-QString ToolHelper::text() const
-{
-    // TODO: add text property to KoToolFactoryBase
-    return m_toolFactory->toolTip();
-}
-
-QString ToolHelper::iconText() const
-{
-    // TODO: add text iconText to KoToolFactoryBase
-    return m_toolFactory->toolTip();
-}
-
-QString ToolHelper::toolTip() const
-{
-    return m_toolFactory->toolTip();
-}
-
-void ToolHelper::activate()
-{
-    emit toolActivated(this);
-}
-
-KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
-{
-    KoToolBase *tool = m_toolFactory->createTool(canvas);
-    if (tool) {
-        tool->setToolId(id());
-    }
-    return tool;
-}
-
-QString ToolHelper::section() const
-{
-    return m_toolFactory->section();
-}
-
-int ToolHelper::priority() const
-{
-    return m_toolFactory->priority();
-}
-
-QKeySequence ToolHelper::shortcut() const
-{
-    if (m_hasCustomShortcut) {
-        return m_customShortcut;
-    }
-
-    return m_toolFactory->shortcut();
-}
-
-
 //   ************ KoToolAction::Private **********
 
 class Q_DECL_HIDDEN KoToolAction::Private
 {
 public:
-    ToolHelper* toolHelper;
+    KoToolFactoryBase *toolFactory;
 };
 
-KoToolAction::KoToolAction(ToolHelper* toolHelper)
-    : QObject(toolHelper)
-    , d(new Private)
+KoToolAction::KoToolAction(KoToolFactoryBase* toolFactory)
+    : d(new Private)
 {
-    d->toolHelper = toolHelper;
+    d->toolFactory = toolFactory;
 }
 
 KoToolAction::~KoToolAction()
@@ -129,57 +33,56 @@ KoToolAction::~KoToolAction()
 
 void KoToolAction::trigger()
 {
-    d->toolHelper->activate();
+    KoToolManager::instance()->switchToolRequested(id());
 }
 
 
 QString KoToolAction::iconText() const
 {
-    return d->toolHelper->iconText();
+    // There is no specific iconText in KoToolFactoryBase
+    return d->toolFactory->toolTip();
 }
 
 QString KoToolAction::toolTip() const
 {
-    return d->toolHelper->toolTip();
+    return d->toolFactory->toolTip();
 }
 
 QString KoToolAction::id() const
 {
-    return d->toolHelper->id();
+    return d->toolFactory->id();
 }
 
 QString KoToolAction::iconName() const
 {
-    return d->toolHelper->iconName();
+    return d->toolFactory->iconName();
 }
 
 QKeySequence KoToolAction::shortcut() const
 {
-    return d->toolHelper->shortcut();
+    return d->toolFactory->shortcut();
 }
 
 
 QString KoToolAction::section() const
 {
-    return d->toolHelper->section();
+    return d->toolFactory->section();
 }
 
 int KoToolAction::priority() const
 {
-    return d->toolHelper->priority();
-}
-
-int KoToolAction::buttonGroupId() const
-{
-    return d->toolHelper->uniqueId();
+    return d->toolFactory->priority();
 }
 
 QString KoToolAction::visibilityCode() const
 {
-    return d->toolHelper->activationShapeId();
+    return d->toolFactory->activationShapeId();
 }
 
-
+KoToolFactoryBase *KoToolAction::toolFactory() const
+{
+    return d->toolFactory;
+}
 
 //   ************ Connector **********
 Connector::Connector(KoShapeManager *parent)

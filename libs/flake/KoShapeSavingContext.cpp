@@ -49,9 +49,8 @@ public:
 };
 
 KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w)
-        : xmlWriter(&w)
-        , savingOptions(0)
-        , imageId(0)
+    : xmlWriter(&w)
+    , imageId(0)
 {
 }
 

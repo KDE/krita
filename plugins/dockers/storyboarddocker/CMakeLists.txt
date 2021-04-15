@@ -11,6 +11,7 @@ set(KRITA_STORYBOARDDOCKER_SOURCES
     KisAsyncStoryboardThumbnailRenderer.cpp
     KisStoryboardThumbnailRenderScheduler.cpp
     DlgExportStoryboard.cpp
+    KisAddRemoveStoryboardCommand.cpp
     )
 
 set(KRITA_STORYBOARDDOCKER_PART_HEADERS
@@ -24,6 +25,7 @@ set(KRITA_STORYBOARDDOCKER_PART_HEADERS
     KisAsyncStoryboardThumbnailRenderer.h
     KisStoryboardThumbnailRenderScheduler.h
     DlgExportStoryboard.h
+    KisAddRemoveStoryboardCommand.h
 )
 
 ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES

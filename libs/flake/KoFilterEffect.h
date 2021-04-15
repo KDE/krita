@@ -14,7 +14,8 @@ class QRectF;
 class KoXmlWriter;
 class KoFilterEffectRenderContext;
 class KoFilterEffectLoadingContext;
-#include <KoXmlReaderForward.h>
+
+#include <QDomDocument>
 
 #include "kritaflake_export.h"
 #include <QList>
@@ -125,7 +126,7 @@ public:
      * @param context the loading context providing additional data
      * @return true if loading was successful, else false
      */
-    virtual bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context) = 0;
+    virtual bool load(const QDomElement &element, const KoFilterEffectLoadingContext &context) = 0;
 
     /**
      * Writes custom data to given xml element.

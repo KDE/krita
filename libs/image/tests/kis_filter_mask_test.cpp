@@ -5,7 +5,7 @@
  */
 
 #include "kis_filter_mask_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColorSpaceRegistry.h>
 
@@ -98,4 +98,4 @@ void KisFilterMaskTest::testProjectionSelected()
 
 }
 
-QTEST_MAIN(KisFilterMaskTest)
+SIMPLE_TEST_MAIN(KisFilterMaskTest)

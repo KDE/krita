@@ -6,7 +6,7 @@
 
 #include "kis_mask_similarity_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QPointF>
 
 #include <KoColor.h>
@@ -247,4 +247,4 @@ void KisMaskSimilarityTest::testSoftRectMask()
     KisMaskSimilarityTester::runMaskGenTest(generator,RECT_SOFT);
 }
 
-QTEST_MAIN(KisMaskSimilarityTest)
+SIMPLE_TEST_MAIN(KisMaskSimilarityTest)

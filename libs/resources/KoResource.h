@@ -64,14 +64,14 @@ public:
      * Load this resource.
      * @return true if loading the resource succeeded.
      */
-    virtual bool load(KisResourcesInterfaceSP resourcesInterface);
+    bool load(KisResourcesInterfaceSP resourcesInterface);
     virtual bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) = 0;
 
     /**
      * Save this resource.
      *@return true if saving the resource succeeded.
      */
-    virtual bool save();
+    bool save();
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
@@ -97,6 +97,15 @@ public:
      * be square. By default it's the same as image(), but that is not guaranteed.
      */
     virtual QImage thumbnail() const;
+
+    /**
+     * @brief thumbnailPath returns the path to a separate thumbnail image, outside
+     *        the actual resource file itself. If the path is relative, it is supposed
+     *        start in the same location as the resource itself. If it's absolute,
+     *        that is, it starts with "/", it is from the root of the storage.
+     * @return an empty string if the thumbnail is part of the resource
+     */
+    virtual QString thumbnailPath() const;
 
     /// @return the md5sum calculated over the contents of the resource.
     QByteArray md5() const;

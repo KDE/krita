@@ -1591,7 +1591,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
     page->setObjectName("general");
     page->setHeader(i18n("General"));
-    page->setIcon(KisIconUtils::loadIcon("go-home"));
+    page->setIcon(KisIconUtils::loadIcon("config-general"));
     m_pages << page;
     addPage(page);
     m_general = new GeneralTab(vbox);
@@ -1601,7 +1601,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Keyboard Shortcuts"));
     page->setObjectName("shortcuts");
     page->setHeader(i18n("Shortcuts"));
-    page->setIcon(KisIconUtils::loadIcon("document-export"));
+    page->setIcon(KisIconUtils::loadIcon("config-keyboard"));
     m_pages << page;
     addPage(page);
     m_shortcutSettings = new ShortcutSettingsTab(vbox);
@@ -1613,7 +1613,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
     page->setHeader(i18n("Canvas Input"));
     page->setObjectName("canvasinput");
-    page->setIcon(KisIconUtils::loadIcon("configure"));
+    page->setIcon(KisIconUtils::loadIcon("config-canvas-input"));
     m_pages << page;
 
     // Display
@@ -1621,7 +1621,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Display"));
     page->setObjectName("display");
     page->setHeader(i18n("Display"));
-    page->setIcon(KisIconUtils::loadIcon("preferences-desktop-display"));
+    page->setIcon(KisIconUtils::loadIcon("config-display"));
     m_pages << page;
     addPage(page);
     m_displaySettings = new DisplaySettingsTab(vbox);
@@ -1631,7 +1631,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
     page->setObjectName("colormanagement");
     page->setHeader(i18nc("Label of color as in Color Management", "Color"));
-    page->setIcon(KisIconUtils::loadIcon("preferences-desktop-color"));
+    page->setIcon(KisIconUtils::loadIcon("config-color-manage"));
     m_pages << page;
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
@@ -1641,7 +1641,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Performance"));
     page->setObjectName("performance");
     page->setHeader(i18n("Performance"));
-    page->setIcon(KisIconUtils::loadIcon("applications-system"));
+    page->setIcon(KisIconUtils::loadIcon("config-performance"));
     m_pages << page;
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
@@ -1651,7 +1651,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
     page->setObjectName("tablet");
     page->setHeader(i18n("Tablet"));
-    page->setIcon(KisIconUtils::loadIcon("document-edit"));
+    page->setIcon(KisIconUtils::loadIcon("config-tablet"));
     m_pages << page;
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
@@ -1661,7 +1661,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
     page->setObjectName("canvasonly");
     page->setHeader(i18n("Canvas-only"));
-    page->setIcon(KisIconUtils::loadIcon("folder-pictures"));
+    page->setIcon(KisIconUtils::loadIcon("config-canvas-only"));
     m_pages << page;
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
@@ -1671,7 +1671,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
     page->setObjectName("author");
     page->setHeader(i18n("Author"));
-    page->setIcon(KisIconUtils::loadIcon("im-user"));
+    page->setIcon(KisIconUtils::loadIcon("user-identity"));
     m_pages << page;
 
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);

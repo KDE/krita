@@ -234,6 +234,7 @@ public:
     static const QString s_meta_version;
     static const QString s_meta_license;
     static const QString s_meta_email;
+    static const QString s_meta_website;
 
     void setMetaData(const QString &key, const QVariant &value);
     QStringList metaDataKeys() const;
@@ -272,6 +273,8 @@ inline QDebug operator<<(QDebug dbg, const KisResourceStorageSP storage)
 class KRITARESOURCES_EXPORT KisStoragePluginRegistry {
 public:
     KisStoragePluginRegistry();
+    virtual ~KisStoragePluginRegistry();
+
     void addStoragePluginFactory(KisResourceStorage::StorageType storageType, KisStoragePluginFactoryBase *factory);
     static KisStoragePluginRegistry *instance();
 private:

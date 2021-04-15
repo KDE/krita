@@ -15,7 +15,7 @@
 #include <sdk/tests/testflake.h>
 #include <MockShapes.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapePainting::testPaintShape()
 {

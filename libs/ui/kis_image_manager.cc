@@ -98,7 +98,7 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
         return 0;
     }
 
-    QList<QUrl> urls;
+    QList<QString> paths;
     qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
@@ -108,23 +108,23 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
         dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
         QStringList fileNames = dialog.filenames();
         Q_FOREACH (const QString &fileName, fileNames) {
-            urls << QUrl::fromLocalFile(fileName);
+            paths << fileName;
         }
 
     } else {
-        urls.push_back(urlArg);
+        paths.push_back(urlArg.toLocalFile());
     }
 
-    if (urls.empty()) {
+    if (paths.empty()) {
         return 0;
     }
 
-    Q_FOREACH(const QUrl &url, urls) {
-        if (url.toLocalFile().endsWith("svg")) {
-            new KisImportCatcher(url, m_view, "KisShapeLayer");
+    Q_FOREACH(const QString &path, paths) {
+        if (path.endsWith("svg")) {
+            new KisImportCatcher(path, m_view, "KisShapeLayer");
         }
         else {
-            new KisImportCatcher(url, m_view, layerType);
+            new KisImportCatcher(path, m_view, layerType);
         }
     }
 

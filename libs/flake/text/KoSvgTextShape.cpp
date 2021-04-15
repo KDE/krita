@@ -626,7 +626,7 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
     return shape;
 }
 
-bool KoSvgTextShapeFactory::supports(const KoXmlElement &/*e*/, KoShapeLoadingContext &/*context*/) const
+bool KoSvgTextShapeFactory::supports(const QDomElement &/*e*/, KoShapeLoadingContext &/*context*/) const
 {
     return false;
 }

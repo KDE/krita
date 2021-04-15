@@ -53,7 +53,7 @@ struct Q_DECL_HIDDEN KisFilterConfiguration::Private {
 };
 
 KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
-        : d(new Private(name, version, resourcesInterface))
+    : d(new Private(name, version, resourcesInterface))
 {
 }
 
@@ -63,8 +63,8 @@ KisFilterConfigurationSP KisFilterConfiguration::clone() const
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
-        : KisPropertiesConfiguration(rhs)
-        , d(new Private(*rhs.d))
+    : KisPropertiesConfiguration(rhs)
+    , d(new Private(*rhs.d))
 {
 }
 
@@ -155,21 +155,6 @@ void KisFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resou
     d->resourcesInterface = resourcesInterface;
 }
 
-namespace KisRequiredResourcesOperators
-{
-template <>
-struct ResourceTraits<KisFilterConfiguration>
-{
-    template <typename T>
-    using SharedPointerType = KisPinnedSharedPtr<T>;
-
-    template <typename D, typename S>
-    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
-        return SharedPointerType<D>(dynamic_cast<D*>(src.data()));
-    }
-};
-}
-
 void KisFilterConfiguration::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
     KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
@@ -182,7 +167,7 @@ bool KisFilterConfiguration::hasLocalResourcesSnapshot() const
 
 KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisFilterConfigurationSP>(this, globalResourcesInterface);
 }
 
 QList<KoResourceSP> KisFilterConfiguration::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
@@ -217,12 +202,12 @@ bool KisFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) co
     const KisFilterConfiguration *otherConfig = dynamic_cast<const KisFilterConfiguration *>(rhs);
 
     return otherConfig
-        && KisPropertiesConfiguration::compareTo(rhs)
-        && name() == otherConfig->name()
-        && version() == otherConfig->version()
-        && channelFlags() == otherConfig->channelFlags()
-        && curve() == otherConfig->curve()
-        && curves() == otherConfig->curves();
+            && KisPropertiesConfiguration::compareTo(rhs)
+            && name() == otherConfig->name()
+            && version() == otherConfig->version()
+            && channelFlags() == otherConfig->channelFlags()
+            && curve() == otherConfig->curve()
+            && curves() == otherConfig->curves();
 }
 
 QBitArray KisFilterConfiguration::channelFlags() const

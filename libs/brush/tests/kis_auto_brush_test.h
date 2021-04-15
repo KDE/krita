@@ -7,7 +7,7 @@
 #ifndef KIS_AUTOBRUSH_RESOURCE_TEST_H
 #define KIS_AUTOBRUSH_RESOURCE_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAutoBrushTest : public QObject
 {

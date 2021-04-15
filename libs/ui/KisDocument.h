@@ -112,42 +112,42 @@ public:
     KisDocument* clone();
 
     /**
-     * @brief openUrl Open an URL
-     * @param url The URL to open
+     * @brief openPath Open a Path
+     * @param path Path to file
      * @param flags Control specific behavior
      * @return success status
      */
-    bool openUrl(const QUrl &url, OpenFlags flags = None);
+    bool openPath(const QString &path, OpenFlags flags = None);
 
     /**
-     * Opens the document given by @p url, without storing the URL
+     * Opens the document given by @p path, without storing the Path
      * in the KisDocument.
-     * Call this instead of openUrl() to implement KisMainWindow's
+     * Call this instead of openPath() to implement KisMainWindow's
      * File --> Import feature.
      *
-     * @note This will call openUrl(). To differentiate this from an ordinary
-     *       Open operation (in any reimplementation of openUrl() or openFile())
+     * @note This will call openPath(). To differentiate this from an ordinary
+     *       Open operation (in any reimplementation of openPath() or openFile())
      *       call isImporting().
      */
-    bool importDocument(const QUrl &url);
+    bool importDocument(const QString &path);
 
     /**
-     * Saves the document as @p url without changing the state of the
-     * KisDocument (URL, modified flag etc.). Call this instead of
+     * Saves the document as @p path without changing the state of the
+     * KisDocument (Path, modified flag etc.). Call this instead of
      * KisParts::ReadWritePart::saveAs() to implement KisMainWindow's
      * File --> Export feature.
+     * Make sure to provide two seprate bool parameters otherwise it will mix them
      */
-    bool exportDocument(const QUrl &url, const QByteArray &mimeType, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
-
+    bool exportDocument(const QString &path, const QByteArray &mimeType,bool isAdvancedExporting = false, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
     /**
      * Exports he document is a synchronous way. The caller must ensure that the
      * image is not accessed by any other actors, because the exporting happens
      * without holding the image lock.
      */
-    bool exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
+    bool exportDocumentSync(const QString &path, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 private:
-    bool exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration);
+    bool exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting= false);
 
 public:
     /**
@@ -232,7 +232,7 @@ public:
     /**
      *  Tells the document that its title has been modified, either because
      *  the modified status changes (this is done by setModified() ) or
-     *  because the URL or the document-info's title changed.
+     *  because the Path or the document-info's title changed.
      */
     void setTitleModified();
 
@@ -265,7 +265,7 @@ public:
     static QDomDocument createDomDocument(const QString& appName, const QString& tagName, const QString& version);
 
    /**
-     *  Loads a document in the native format from a given URL.
+     *  Loads a document in the native format from a given Path.
      *  Reimplement if your native format isn't XML.
      *
      *  @param file the file to load - usually KReadOnlyPart::m_file or the result of a filter
@@ -307,20 +307,20 @@ public:
     /**
      * @return caption of the document
      *
-     * Caption is of the form "[title] - [url]",
+     * Caption is of the form "[title] - [path]",
      * built out of the document info (title) and pretty-printed
-     * document URL.
-     * If the title is not present, only the URL it returned.
+     * document Path.
+     * If the title is not present, only the Path it returned.
      */
     QString caption() const;
 
     /**
-     * Sets the document URL to empty URL
+     * Sets the document Path to empty Path
      * KParts doesn't allow this, but %Calligra apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
-     * to set the url to QUrl()
+     * to set the path to QString()
      */
-    void resetURL();
+    void resetPath();
 
     /**
      * @internal (public for KisMainWindow)
@@ -515,18 +515,18 @@ private:
                                     const QObject *receiverObject, const char *receiverMethod,
                                     const KritaUtils::ExportFileJob &job,
                                     KisPropertiesConfigurationSP exportConfiguration,
-                                    std::unique_ptr<KisDocument> &&optionalClonedDocument);
+                                    std::unique_ptr<KisDocument> &&optionalClonedDocument, bool isAdvancedExporting = false);
 
     bool initiateSavingInBackground(const QString actionName,
                                     const QObject *receiverObject, const char *receiverMethod,
                                     const KritaUtils::ExportFileJob &job,
-                                    KisPropertiesConfigurationSP exportConfiguration);
+                                    KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting =false );
 
     bool startExportInBackground(const QString &actionName, const QString &location,
                                  const QString &realLocation,
                                  const QByteArray &mimeType,
                                  bool showWarnings,
-                                 KisPropertiesConfigurationSP exportConfiguration);
+                                 KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting= false);
 
     /**
      * Activate/deactivate/configure the autosave feature.
@@ -549,7 +549,7 @@ private:
      *
      * NOTE: this method also creates a new KisView instance!
      *
-     * This method is called from the KReadOnlyPart::openUrl method.
+     * This method is called from the KReadOnlyPart::openPath method.
      */
     bool openFile();
 
@@ -566,12 +566,12 @@ public:
 
     bool isReadWrite() const;
 
-    QUrl url() const;
-    void setUrl(const QUrl &url);
+    QString path() const;
+    void setPath(const QString &path);
 
-    bool closeUrl(bool promptToSave = true);
+    bool closePath(bool promptToSave = true);
 
-    bool saveAs(const QUrl &url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfigration = 0);
+    bool saveAs(const QString &path, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfigration = 0);
 
     /**
      * Create a new image that has this document as a parent and
@@ -664,12 +664,6 @@ public:
      */
     void autoSaveOnPause();
 
-    /**
-      * @brief Helper method to convert a URI to path. Specifically for handling Android's
-      * "content://" URIs
-      */
-    QString toPath(const QUrl& url) const;
-
 Q_SIGNALS:
 
     void completed();
@@ -712,9 +706,9 @@ private:
 
     QString exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage);
 
-    QString prettyPathOrUrl() const;
+    QString prettyPath() const;
 
-    bool openUrlInternal(const QUrl &url);
+    bool openPathInternal(const QString &path);
 
     void slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument);
 

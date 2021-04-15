@@ -6,7 +6,7 @@
 
 #include "kis_node_query_path_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_node_query_path.h"
 #include <kis_node.h>
@@ -85,4 +85,4 @@ void KisNodeQueryPathTest::testPathCompression()
     QCOMPARE(path2.toString(), QString("/"));
 }
 
-QTEST_MAIN(KisNodeQueryPathTest)
+SIMPLE_TEST_MAIN(KisNodeQueryPathTest)

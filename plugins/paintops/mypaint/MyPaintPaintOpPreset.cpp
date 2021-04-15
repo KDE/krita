@@ -46,7 +46,7 @@ KisMyPaintPaintOpPreset::~KisMyPaintPaintOpPreset() {
 void KisMyPaintPaintOpPreset::setColor(const KoColor color, const KoColorSpace *colorSpace) {
 
     float hue, saturation, value;
-    qreal r, g, b;
+    qreal r = 0, g = 0, b = 0;
     QColor dstColor;
 
     if (colorSpace->colorModelId() == RGBAColorModelID) {
@@ -97,14 +97,6 @@ MyPaintBrush* KisMyPaintPaintOpPreset::brush() {
 
 bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    // XXX: this breaks when myb files are in bundles!
-    QString thumnailFile = KisResourceLocator::instance()->makeStorageLocationAbsolute(storageLocation()) + ResourceType::PaintOpPresets + '/' + QFileInfo(filename()).baseName() + "_prev.png";
-    if (QFileInfo(thumnailFile).exists()) {
-        d->icon.load(thumnailFile);
-    }
-
-    setImage(d->icon);
-
     QByteArray ba = dev->readAll();
     d->json = ba;
     mypaint_brush_from_string(d->brush, ba);
@@ -125,15 +117,24 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
     s->setProperty(MYPAINT_ERASER, this->isEraser());
     s->setProperty("EraserMode", qRound(this->isEraser()));
 
+    if (!metadata().contains("paintopid")) {
+        addMetaData("paintopid", "mypaintbrush");
+    }
+
     this->setSettings(s);
     setValid(true);
 
     return true;
 }
 
-bool KisMyPaintPaintOpPreset::save() {
+void KisMyPaintPaintOpPreset::updateThumbnail()
+{
+    d->icon = thumbnail();
+}
 
-    return false;
+QString KisMyPaintPaintOpPreset::thumbnailPath() const
+{
+    return QFileInfo(filename()).baseName() + "_prev.png";
 }
 
 QByteArray KisMyPaintPaintOpPreset::getJsonData() {

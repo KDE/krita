@@ -940,7 +940,7 @@ void SvgTextEditor::setSettings()
 {
     KoDialog settingsDialog(this);
     Ui_WdgSvgTextSettings textSettings;
-    QWidget *settingsPage = new QWidget(&settingsDialog, 0);
+    QWidget *settingsPage = new QWidget(&settingsDialog);
     settingsDialog.setMainWidget(settingsPage);
     textSettings.setupUi(settingsPage);
 

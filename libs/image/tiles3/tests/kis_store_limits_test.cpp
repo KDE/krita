@@ -5,7 +5,7 @@
  */
 
 #include "kis_store_limits_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_debug.h"
 
@@ -36,5 +36,5 @@ void KisStoreLimitsTest::testLimits()
     QCOMPARE(limits.softLimit(), softLimit);
 }
 
-QTEST_MAIN(KisStoreLimitsTest)
+SIMPLE_TEST_MAIN(KisStoreLimitsTest)
 

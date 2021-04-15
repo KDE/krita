@@ -1,0 +1,40 @@
+From 0e7c1066d6a7cdc4e3fa860c4ecbd41a37a52c63 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 10 Mar 2021 12:39:16 +0300
+Subject: [PATCH] Fix fallback latin shortcuts not to be the top priority on
+ Windows
+
+The sortcuts from the current layout should have the topmost
+priority, and the latin ones should be used only when there
+is noi other option.
+---
+ src/plugins/platforms/windows/qwindowskeymapper.cpp | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowskeymapper.cpp b/src/plugins/platforms/windows/qwindowskeymapper.cpp
+index b392894d..68074ad6 100644
+--- a/src/plugins/platforms/windows/qwindowskeymapper.cpp
++++ b/src/plugins/platforms/windows/qwindowskeymapper.cpp
+@@ -1402,10 +1402,16 @@ QList<int> QWindowsKeyMapper::possibleKeys(const QKeyEvent *e) const
+                              [key] (int k) { return (k & ~Qt::KeyboardModifierMask) == key; });
+             // QTBUG-67200: Use the match with the least modifiers (prefer
+             // Shift+9 over Alt + Shift + 9) resulting in more missing modifiers.
+-            if (it == result.end())
+-                result << matchedKey;
+-            else if (missingMods > (*it & Qt::KeyboardModifierMask))
++            if (it == result.end()) {
++                // The shortcut mapper scans the possible keys in the reverse order,
++                // so we should put the fallback latin key into the front of the list
++                if (i != 8)
++                    result.append(matchedKey);
++                else
++                    result.prepend(matchedKey);
++            } else if (missingMods > (*it & Qt::KeyboardModifierMask)) {
+                 *it = matchedKey;
++            }
+         }
+     }
+     qCDebug(lcQpaEvents) << __FUNCTION__  << e << "nativeVirtualKey="
+-- 
+2.20.1.windows.1
+

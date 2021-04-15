@@ -532,6 +532,9 @@ public Q_SLOTS:
      */
     QImage thumbnail(int w, int h);
 
+    QUuid uniqueId() const;
+
+
 private:
 
     friend class Filter;

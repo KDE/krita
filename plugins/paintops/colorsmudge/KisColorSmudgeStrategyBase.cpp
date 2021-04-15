@@ -8,6 +8,7 @@
 #include "KisColorSmudgeStrategyBase.h"
 #include "kis_painter.h"
 #include "kis_fixed_paint_device.h"
+#include "kis_paint_device.h"
 #include "KisColorSmudgeSampleUtils.h"
 
 /**********************************************************************************/
@@ -244,15 +245,15 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
     const bool preserveDab = preserveMaskDab && dstPainters.size() > 1;
 
     Q_FOREACH (KisPainter *dstPainter, dstPainters) {
-            dstPainter->setOpacity(finalPainterOpacity(opacity, smudgeRateValue));
+        dstPainter->setOpacity(finalPainterOpacity(opacity, smudgeRateValue));
 
-            dstPainter->bltFixedWithFixedSelection(dstRect.x(), dstRect.y(),
-                                                   m_blendDevice, maskDab,
-                                                   maskDab->bounds().x(), maskDab->bounds().y(),
-                                                   m_blendDevice->bounds().x(), m_blendDevice->bounds().y(),
-                                                   dstRect.width(), dstRect.height());
-            dstPainter->renderMirrorMaskSafe(dstRect, m_blendDevice, maskDab, false);
-        }
+        dstPainter->bltFixedWithFixedSelection(dstRect.x(), dstRect.y(),
+                                               m_blendDevice, maskDab,
+                                               maskDab->bounds().x(), maskDab->bounds().y(),
+                                               m_blendDevice->bounds().x(), m_blendDevice->bounds().y(),
+                                               dstRect.width(), dstRect.height());
+        dstPainter->renderMirrorMaskSafe(dstRect, m_blendDevice, maskDab, false);
+    }
 
 }
 

@@ -88,10 +88,10 @@ void TestKoColor::testExistingSerializations()
 
     QVector<float> rec2020ChannelValues(4);
     rec2020color.colorSpace()->normalisedChannelsValue(rec2020color.data(), rec2020ChannelValues);
-    QVERIFY(qFuzzyCompare(rec2020ChannelValues[0], 3.0));
-    QVERIFY(qFuzzyCompare(rec2020ChannelValues[1], 0.0));
-    QVERIFY(qFuzzyCompare(rec2020ChannelValues[2], 1.0));
-    QVERIFY(qFuzzyCompare(rec2020ChannelValues[3], 1.0));
+    QVERIFY(qFuzzyCompare(rec2020ChannelValues[0], 3.0f));
+    QVERIFY(qFuzzyCompare(rec2020ChannelValues[1], 0.0f));
+    QVERIFY(qFuzzyCompare(rec2020ChannelValues[2], 1.0f));
+    QVERIFY(qFuzzyCompare(rec2020ChannelValues[3], 1.0f));
 
 
     // Test cmyk, we can only check that the channels deserialize properly here.

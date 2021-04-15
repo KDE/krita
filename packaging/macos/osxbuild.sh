@@ -388,7 +388,7 @@ build_3rdparty () {
 
     cmake_3rdparty ext_seexpr
     cmake_3rdparty ext_mypaint
-    cmake_3rdparty ext_fcitx-qt5
+
 
 
     ## All builds done, creating a new install onlydeps install dir

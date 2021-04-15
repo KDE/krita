@@ -99,7 +99,6 @@ build_ext() {
     cmake --build . --config $BUILD_TYPE --target ext_eigen3 -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_seexpr -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_mypaint -- -j$PROC_COUNT
-    cmake --build . --config $BUILD_TYPE --target ext_fcitx-qt5 -- -j$PROC_COUNT
 
     cd $BUILD_ROOT
 }

@@ -168,6 +168,9 @@ void KisToolCrop::activate(const QSet<KoShape*> &shapes)
     }
     //vector layer
     else {
+        if (m_cropType != ImageCropType && m_cropType != CanvasCropType) {
+            setCropType(ImageCropType);
+        }
         setCropTypeSelectable(false);
     }
     connect(&m_finalRect, SIGNAL(sigValuesChanged()), SLOT(showSizeOnCanvas()));
@@ -215,7 +218,7 @@ void KisToolCrop::canvasResourceChanged(int key, const QVariant &res)
     }
     //vector layer
     else {
-        if (m_cropType != ImageCropType || m_cropType != CanvasCropType) {
+        if (m_cropType != ImageCropType && m_cropType != CanvasCropType) {
             setCropType(ImageCropType);
         }
         setCropTypeSelectable(false);

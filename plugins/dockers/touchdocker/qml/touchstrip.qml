@@ -165,7 +165,7 @@ Rectangle {
                             mainWindow.slotButtonPressed("button" + modelData)
                         }
                     }
-                    image: root.width != 0 ? modelData === "view_zoom_in" ? mainWindow.imageForButton(modelData) : mainWindow.imageForButton("button" + modelData) : ""
+                    image: root.width != 0 ? mainWindow.imageForButton("button" + modelData) : ""
                 }
             }
         }
@@ -194,7 +194,7 @@ Rectangle {
                             mainWindow.slotButtonPressed("button" + modelData)
                         }
                     }
-                    image: root.width != 0 ? modelData === "view_zoom_out" ? mainWindow.imageForButton(modelData) : mainWindow.imageForButton("button" + modelData) : "";
+                    image: root.width != 0 ? mainWindow.imageForButton("button" + modelData) : "";
                 }
             }
         }

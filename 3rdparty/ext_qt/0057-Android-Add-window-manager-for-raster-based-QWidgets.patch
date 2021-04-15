@@ -1,0 +1,476 @@
+From 86ca782f4b864bc00adece3339046f05b7defbd5 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Thu, 15 Apr 2021 21:35:50 +0000
+Subject: [PATCH] Android: Add window manager for raster based QWidgets
+
+The way this works is for window types: (Qt::Dialog || Qt::Tool (without
+Qt::FramelessWindowHint)) which on other platforms are typically
+expected to have a frame around them; Before we add them to window stack
+we add another window which we call Window Manager, this window is
+offsetted by specific value and is white which makes it look like a
+window manager. We also handle events on this window, using which we can
+currently move the window around.
+
+The window is rendered like any other window which does not have
+renderToTexture enabled.
+---
+ src/plugins/platforms/android/android.pro     |   6 +-
+ .../platforms/android/androidjniinput.cpp     |  10 +-
+ .../android/qandroidplatformbackingstore.cpp  |  13 ++-
+ .../android/qandroidplatformbackingstore.h    |   2 +-
+ .../android/qandroidplatformopenglwindow.cpp  |  13 ++-
+ .../android/qandroidplatformscreen.cpp        |  44 +++++++-
+ .../android/qandroidplatformscreen.h          |   4 +
+ .../android/qandroidplatformwindow.cpp        |   2 +
+ .../android/qandroidplatformwindowmanager.cpp | 105 ++++++++++++++++++
+ .../android/qandroidplatformwindowmanager.h   |  44 ++++++++
+ 10 files changed, 228 insertions(+), 15 deletions(-)
+ create mode 100644 src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
+ create mode 100644 src/plugins/platforms/android/qandroidplatformwindowmanager.h
+
+diff --git a/src/plugins/platforms/android/android.pro b/src/plugins/platforms/android/android.pro
+index 78632a9bea..8f62cb4c1e 100644
+--- a/src/plugins/platforms/android/android.pro
++++ b/src/plugins/platforms/android/android.pro
+@@ -48,7 +48,8 @@ SOURCES += $$PWD/androidplatformplugin.cpp \
+            $$PWD/qandroidplatformforeignwindow.cpp \
+            $$PWD/qandroideventdispatcher.cpp \
+            $$PWD/qandroidplatformoffscreensurface.cpp \
+-           $$PWD/qandroidplatformfiledialoghelper.cpp
++           $$PWD/qandroidplatformfiledialoghelper.cpp \
++           $$PWD/qandroidplatformwindowmanager.cpp
+ 
+ HEADERS += $$PWD/qandroidplatformintegration.h \
+            $$PWD/androidcontentfileengine.h \
+@@ -79,7 +80,8 @@ HEADERS += $$PWD/qandroidplatformintegration.h \
+            $$PWD/qandroidplatformforeignwindow.h \
+            $$PWD/qandroideventdispatcher.h \
+            $$PWD/qandroidplatformoffscreensurface.h \
+-           $$PWD/qandroidplatformfiledialoghelper.h
++           $$PWD/qandroidplatformfiledialoghelper.h \
++           $$PWD/qandroidplatformwindowmanager.h
+ 
+ qtConfig(android-style-assets): SOURCES += $$PWD/extract.cpp
+ else: SOURCES += $$PWD/extract-dummy.cpp
+diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
+index 81075e7f94..f0a0ddfec7 100644
+--- a/src/plugins/platforms/android/androidjniinput.cpp
++++ b/src/plugins/platforms/android/androidjniinput.cpp
+@@ -352,7 +352,10 @@ namespace QtAndroidInput
+ #if QT_CONFIG(tabletevent)
+         QPointF globalPosF(x, y);
+         QPoint globalPos((int)x, (int)y);
+-        QWindow *tlw = topLevelWindowAt(globalPos);
++        QWindow *tlw = m_mouseGrabber.data();
++        if (!tlw) {
++            tlw = topLevelWindowAt(globalPos);
++        }
+ 
+         QPointF localPos = globalPosF;
+         if (tlw) {
+@@ -378,10 +381,13 @@ namespace QtAndroidInput
+         Qt::MouseButtons buttons = Qt::NoButton;
+         switch (action) {
+         case AMOTION_EVENT_ACTION_UP:
++            m_mouseGrabber = nullptr;
+             buttons = Qt::NoButton;
+             break;
+-        case AMOTION_EVENT_ACTION_MOVE:
+         case AMOTION_EVENT_ACTION_DOWN:
++            m_mouseGrabber = tlw;
++            // fall through
++        case AMOTION_EVENT_ACTION_MOVE:
+             if (!buttonState)
+                 buttons = Qt::LeftButton;
+         default:
+diff --git a/src/plugins/platforms/android/qandroidplatformbackingstore.cpp b/src/plugins/platforms/android/qandroidplatformbackingstore.cpp
+index 61d4969c41..75f9b41342 100644
+--- a/src/plugins/platforms/android/qandroidplatformbackingstore.cpp
++++ b/src/plugins/platforms/android/qandroidplatformbackingstore.cpp
+@@ -42,6 +42,7 @@
+ #include "qandroidplatformscreen.h"
+ #include "qandroidplatformwindow.h"
+ #include <qpa/qplatformscreen.h>
++#include <private/qhighdpiscaling_p.h>
+ 
+ QT_BEGIN_NAMESPACE
+ 
+@@ -54,6 +55,7 @@ QAndroidPlatformBackingStore::QAndroidPlatformBackingStore(QWindow *window)
+ 
+ QPaintDevice *QAndroidPlatformBackingStore::paintDevice()
+ {
++    Q_ASSERT(!m_image.isNull());
+     return &m_image;
+ }
+ 
+@@ -71,8 +73,17 @@ void QAndroidPlatformBackingStore::resize(const QSize &size, const QRegion &stat
+ {
+     Q_UNUSED(staticContents);
+ 
+-    if (m_image.size() != size)
++    if (m_image.size() != size) {
+         m_image = QImage(size, window()->screen()->handle()->format());
++    }
++}
++
++QImage QAndroidPlatformBackingStore::toImage() const
++{
++    if (m_image.isNull()) {
++        qDebug() << "QAndroidPlatformBackingStore::toImage(): image is null";
++    }
++    return m_image;
+ }
+ 
+ void QAndroidPlatformBackingStore::setBackingStore(QWindow *window)
+diff --git a/src/plugins/platforms/android/qandroidplatformbackingstore.h b/src/plugins/platforms/android/qandroidplatformbackingstore.h
+index a3a65aa30e..ec1761c789 100644
+--- a/src/plugins/platforms/android/qandroidplatformbackingstore.h
++++ b/src/plugins/platforms/android/qandroidplatformbackingstore.h
+@@ -53,7 +53,7 @@ public:
+     QPaintDevice *paintDevice() override;
+     void flush(QWindow *window, const QRegion &region, const QPoint &offset) override;
+     void resize(const QSize &size, const QRegion &staticContents) override;
+-    QImage toImage() const override { return m_image; }
++    QImage toImage() const override;
+     void setBackingStore(QWindow *window);
+ protected:
+     QImage m_image;
+diff --git a/src/plugins/platforms/android/qandroidplatformopenglwindow.cpp b/src/plugins/platforms/android/qandroidplatformopenglwindow.cpp
+index 3de5d30623..91df6d0fb4 100644
+--- a/src/plugins/platforms/android/qandroidplatformopenglwindow.cpp
++++ b/src/plugins/platforms/android/qandroidplatformopenglwindow.cpp
+@@ -82,17 +82,18 @@ void QAndroidPlatformOpenGLWindow::repaint(const QRegion &region)
+ 
+     QRect currentGeometry = geometry();
+ 
+-    QRect dirtyClient = region.boundingRect();
+-    QRect dirtyRegion(currentGeometry.left() + dirtyClient.left(),
+-                      currentGeometry.top() + dirtyClient.top(),
+-                      dirtyClient.width(),
+-                      dirtyClient.height());
++    QRect dirtyClient = region.boundingRect(); // not sure if this is necessary
++    QRegion dirtyRegion = dirtyClient;
++    dirtyRegion += currentGeometry;
++
+     QRect mOldGeometryLocal = m_oldGeometry;
+     m_oldGeometry = currentGeometry;
+     // If this is a move, redraw the previous location
+     if (mOldGeometryLocal != currentGeometry)
+         platformScreen()->setDirty(mOldGeometryLocal);
+-    platformScreen()->setDirty(dirtyRegion);
++    for (const auto &dirtyRect : dirtyRegion) {
++        platformScreen()->setDirty(dirtyRect);
++    }
+ }
+ 
+ void QAndroidPlatformOpenGLWindow::setGeometry(const QRect &rect)
+diff --git a/src/plugins/platforms/android/qandroidplatformscreen.cpp b/src/plugins/platforms/android/qandroidplatformscreen.cpp
+index 191967b913..92cb24fb50 100644
+--- a/src/plugins/platforms/android/qandroidplatformscreen.cpp
++++ b/src/plugins/platforms/android/qandroidplatformscreen.cpp
+@@ -50,6 +50,7 @@
+ #include "androidjnimain.h"
+ #include "androidjnimenu.h"
+ #include "androiddeadlockprotector.h"
++#include "qandroidplatformwindowmanager.h"
+ 
+ #include <android/bitmap.h>
+ #include <android/native_window_jni.h>
+@@ -157,6 +158,15 @@ void QAndroidPlatformScreen::addWindow(QAndroidPlatformWindow *window)
+     if (window->parent() && window->isRaster())
+         return;
+ 
++    if ((window->window()->type() == Qt::Dialog || window->window()->type() == Qt::Tool)
++        && (window->window()->flags() & Qt::FramelessWindowHint) == 0) {
++        // we will manage memory ourselves, because our parent is always
++        // MainWindow
++        QAndroidPlatformWindowManager *wm = new QAndroidPlatformWindowManager(window);
++        wm->show();
++        m_windowManagers.insert(window->winId(), wm);
++    }
++
+     Q_ASSERT(!m_windowStack.contains(window));
+     m_windowStack.prepend(window);
+     if (window->isRaster()) {
+@@ -177,6 +187,11 @@ void QAndroidPlatformScreen::removeWindow(QAndroidPlatformWindow *window)
+     if (window->parent() && window->isRaster())
+         return;
+ 
++    if (m_windowManagers.contains(window->winId())) {
++        QAndroidPlatformWindowManager *wm = m_windowManagers[window->winId()];
++        wm->close();
++        delete wm;
++    }
+ 
+     Q_ASSERT(m_windowStack.contains(window));
+     m_windowStack.removeOne(window);
+@@ -202,6 +217,9 @@ void QAndroidPlatformScreen::raise(QAndroidPlatformWindow *window)
+     if (index <= 0)
+         return;
+     m_windowStack.move(index, 0);
++    if (m_windowManagers.contains(window->winId())) {
++        m_windowStack.move(index + 1, 1);
++    }
+     if (window->isRaster()) {
+         setDirty(window->geometry());
+     }
+@@ -216,9 +234,19 @@ void QAndroidPlatformScreen::lower(QAndroidPlatformWindow *window)
+         return;
+ 
+     int index = m_windowStack.indexOf(window);
+-    if (index == -1 || index == (m_windowStack.size() - 1))
++    if (index == -1)
+         return;
+-    m_windowStack.move(index, m_windowStack.size() - 1);
++
++    // check if current window is not the last window
++    if (m_windowManagers.contains(window->winId()) && index != (m_windowStack.size() - 2)) {
++        m_windowStack.move(index    , m_windowStack.size() - 2);
++        m_windowStack.move(index + 1, m_windowStack.size() - 1);
++    } else if (index != (m_windowStack.size() - 1)) {
++        m_windowStack.move(index, m_windowStack.size() - 1);
++    } else {
++        return;
++    }
++
+     if (window->isRaster()) {
+         setDirty(window->geometry());
+     }
+@@ -227,6 +255,14 @@ void QAndroidPlatformScreen::lower(QAndroidPlatformWindow *window)
+     topWindowChanged(w);
+ }
+ 
++
++void QAndroidPlatformScreen::setWindowGeometry(QAndroidPlatformWindow *window, const QRect &rect)
++{
++    if (m_windowManagers.contains(window->winId())) {
++        m_windowManagers[window->winId()]->updateGeometry(rect);
++    }
++}
++
+ void QAndroidPlatformScreen::scheduleUpdate()
+ {
+     if (!m_updatePending) {
+@@ -398,13 +434,15 @@ void QAndroidPlatformScreen::doRedraw()
+             visibleRegion -= targetRect;
+             QRect windowRect = targetRect.translated(-window->geometry().topLeft());
+             QAndroidPlatformBackingStore *backingStore = static_cast<QAndroidPlatformWindow *>(window)->backingStore();
++
+             if (backingStore)
+                 compositePainter.drawImage(targetRect.topLeft(), backingStore->toImage(), windowRect);
+         }
+     }
+ 
+-    for (const QRect &rect : visibleRegion)
++    for (const QRect &rect : visibleRegion) {
+         compositePainter.fillRect(rect, QColor(Qt::transparent));
++    }
+ 
+     ret = ANativeWindow_unlockAndPost(m_nativeSurface);
+     if (ret >= 0)
+diff --git a/src/plugins/platforms/android/qandroidplatformscreen.h b/src/plugins/platforms/android/qandroidplatformscreen.h
+index 2cb2002874..878e33546a 100644
+--- a/src/plugins/platforms/android/qandroidplatformscreen.h
++++ b/src/plugins/platforms/android/qandroidplatformscreen.h
+@@ -54,6 +54,7 @@
+ 
+ QT_BEGIN_NAMESPACE
+ 
++class QAndroidPlatformWindowManager;
+ class QAndroidPlatformWindow;
+ 
+ class QAndroidPlatformScreen: public QObject, public QPlatformScreen, public AndroidSurfaceClient
+@@ -77,6 +78,8 @@ public:
+     void removeWindow(QAndroidPlatformWindow *window);
+     void raise(QAndroidPlatformWindow *window);
+     void lower(QAndroidPlatformWindow *window);
++    /// @param rect should be in native pixels
++    void setWindowGeometry(QAndroidPlatformWindow *window, const QRect &rect);
+ 
+     void scheduleUpdate();
+     void topWindowChanged(QWindow *w);
+@@ -120,6 +123,7 @@ private:
+     ANativeWindow* m_nativeSurface = nullptr;
+     QWaitCondition m_surfaceWaitCondition;
+     QSize m_size;
++    QMap<int, QAndroidPlatformWindowManager *> m_windowManagers;
+ };
+ 
+ QT_END_NAMESPACE
+diff --git a/src/plugins/platforms/android/qandroidplatformwindow.cpp b/src/plugins/platforms/android/qandroidplatformwindow.cpp
+index f9972ee4e1..8b6c674e0c 100644
+--- a/src/plugins/platforms/android/qandroidplatformwindow.cpp
++++ b/src/plugins/platforms/android/qandroidplatformwindow.cpp
+@@ -72,6 +72,8 @@ void QAndroidPlatformWindow::raise()
+ 
+ void QAndroidPlatformWindow::setGeometry(const QRect &rect)
+ {
++    QPlatformWindow::setGeometry(rect);
++    platformScreen()->setWindowGeometry(this, rect);
+     QWindowSystemInterface::handleGeometryChange(window(), rect);
+ }
+ 
+diff --git a/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
+new file mode 100644
+index 0000000000..182b1477ff
+--- /dev/null
++++ b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
+@@ -0,0 +1,105 @@
++#include "qandroidplatformwindowmanager.h"
++
++#include "qandroidplatformwindow.h"
++#include "qandroidplatformbackingstore.h"
++
++#include <private/qhighdpiscaling_p.h>
++#include <QPainter>
++#include <qbackingstore.h>
++
++// In HighDPI
++static const int paddingTop = 25;
++static const int paddingLBR = 2; // left, bottom and right
++
++QAndroidPlatformWindowManager::QAndroidPlatformWindowManager(QAndroidPlatformWindow *window)
++    : QWindow(window->window()->parent())
++    , m_realWindow(window)
++    , m_backingStore(new QAndroidPlatformBackingStore(this))
++{
++    setObjectName("QAndroidPlatformWindowManager");
++    // popup because they are special, frameless because recursion
++    setFlags(Qt::Popup | Qt::FramelessWindowHint);
++}
++
++void QAndroidPlatformWindowManager::updateGeometry(const QRect &rect)
++{
++    if (m_oldChildGeometry == rect) {
++        return;
++    }
++    m_oldChildGeometry = rect;
++    QRect childGeometry = QHighDpi::fromNativePixels(rect, m_realWindow->window());
++    childGeometry.translate(-paddingLBR, -paddingTop);
++    childGeometry.setSize({ 2 * paddingLBR + childGeometry.width(),
++                            paddingLBR + childGeometry.height() + paddingTop });
++
++    setGeometry(childGeometry);
++    resize(QHighDpi::toNativePixels(geometry().size(), this));
++}
++
++void QAndroidPlatformWindowManager::mousePressEvent(QMouseEvent *event)
++{
++    m_startingPoint = event->globalPos();
++    m_realWindowOffset = m_startingPoint - m_realWindow->window()->geometry().topLeft();
++    m_mousePressed = true;
++    event->accept();
++}
++
++void QAndroidPlatformWindowManager::mouseMoveEvent(QMouseEvent *event)
++{
++    if (m_mousePressed) {
++        move(event->globalPos());
++        event->accept();
++    }
++}
++
++void QAndroidPlatformWindowManager::mouseReleaseEvent(QMouseEvent *event)
++{
++    m_mousePressed = false;
++    event->accept();
++}
++
++void QAndroidPlatformWindowManager::resizeEvent(QResizeEvent *event)
++{
++    resize(event->size());
++}
++
++void QAndroidPlatformWindowManager::showEvent(QShowEvent *event)
++{
++    updateGeometry(m_realWindow->geometry());
++
++    setWindowState(Qt::WindowNoState);
++    // NOTE: platformWindow won't be created yet, so set flags for it.
++    // popup because they are special, frameless because recursion
++    setFlags(Qt::Popup | Qt::FramelessWindowHint);
++
++    event->accept();
++}
++
++void QAndroidPlatformWindowManager::repaint()
++{
++    QRect childGeometry = handle()->geometry();
++    QAndroidPlatformWindow *platformWindow = static_cast<QAndroidPlatformWindow *>(handle());
++    platformWindow->setBackingStore(m_backingStore);
++
++    QPainter painter(m_backingStore->paintDevice());
++    painter.fillRect(0, 0, childGeometry.width(), childGeometry.height(), Qt::white);
++    m_backingStore->endPaint();
++
++    // m_backingStore->toImage().save(QString("/data/data/org.krita/files/%1.png").arg(this->objectName()));
++}
++
++void QAndroidPlatformWindowManager::move(const QPoint &pos)
++{
++    // this will trigger the update of parent
++    m_realWindow->window()->setPosition(pos - m_realWindowOffset);
++}
++
++void QAndroidPlatformWindowManager::resize(const QSize &size)
++{
++    if (m_oldSize == size) {
++        return;
++    }
++    m_oldSize = size;
++    m_backingStore->resize(QHighDpi::toNativePixels(size, this), QRegion());
++    repaint();
++}
+diff --git a/src/plugins/platforms/android/qandroidplatformwindowmanager.h b/src/plugins/platforms/android/qandroidplatformwindowmanager.h
+new file mode 100644
+index 0000000000..ecba3e65eb
+--- /dev/null
++++ b/src/plugins/platforms/android/qandroidplatformwindowmanager.h
+@@ -0,0 +1,44 @@
++#ifndef __QANDROIDPLATFORMWINDOWMANAGER_H_
++#define __QANDROIDPLATFORMWINDOWMANAGER_H_
++
++#include <qpa/qplatformwindow.h>
++
++class QAndroidPlatformWindow;
++class QAndroidPlatformBackingStore;
++
++class QAndroidPlatformWindowManager: public QWindow {
++public:
++    QAndroidPlatformWindowManager(QAndroidPlatformWindow *window = nullptr);
++
++    /*
++     * Updates the geometry of the window manager as per its child
++     * @param geometry of window to be managed, rect should be in native pixels
++     */
++    void updateGeometry(const QRect &rect);
++
++protected:
++    void resizeEvent(QResizeEvent *event) override;
++    void showEvent(QShowEvent *event) override;
++
++    void mousePressEvent(QMouseEvent *event) override;
++    void mouseMoveEvent(QMouseEvent *event) override;
++    void mouseReleaseEvent(QMouseEvent *event) override;
++
++private:
++    void repaint();
++    void move(const QPoint &pos);
++    void resize(const QSize &size);
++
++private:
++    QAndroidPlatformWindow *m_realWindow;
++    QAndroidPlatformBackingStore *m_backingStore;
++
++    QPoint m_startingPoint;
++    QPoint m_realWindowOffset;
++    QRect m_oldChildGeometry;
++    QSize m_oldSize;
++    bool m_mousePressed {false}; // because synthesized events
++};
++
++
++#endif // __QANDROIDPLATFORMWINDOWMANAGER_H_
+-- 
+2.31.0
+

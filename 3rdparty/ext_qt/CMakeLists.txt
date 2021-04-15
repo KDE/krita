@@ -161,6 +161,7 @@ elseif (ANDROID)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0055-Android-prevent-out-of-order-events.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0056-Android-check-if-the-Uri-is-writable.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0056-Android-Give-preference-to-certain-WindowTypes.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0057-Android-Add-window-manager-for-raster-based-QWidgets.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Don-t-invoke-Qt-s-exit-path.patch
 
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0105-Android-Don-t-hide-Menubar-even-if-MenuKey-is-presen.patch

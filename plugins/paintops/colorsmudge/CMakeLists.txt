@@ -9,7 +9,15 @@ set(kritacolorsmudgepaintop_SOURCES
     kis_smudge_option.cpp
     kis_smudge_option_widget.cpp
     kis_smudge_radius_option.cpp
-)
+    KisColorSmudgeStrategy.cpp
+    KisColorSmudgeSource.cpp
+    KisColorSmudgeStrategyBase.cpp
+    KisColorSmudgeInterstrokeData.cpp
+    KisColorSmudgeStrategyLightness.cpp
+    KisColorSmudgeStrategyWithOverlay.cpp
+    KisColorSmudgeStrategyMask.cpp
+    KisColorSmudgeStrategyStamp.cpp
+    KisColorSmudgeStrategyMaskLegacy.cpp)
 
 add_library(kritacolorsmudgepaintop MODULE ${kritacolorsmudgepaintop_SOURCES})
 

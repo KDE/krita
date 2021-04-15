@@ -51,6 +51,10 @@ void KisFixedPaintDevice::setRect(const QRect& rc)
     m_bounds = rc;
 }
 
+void KisFixedPaintDevice::setColorSpace(const KoColorSpace *cs)
+{
+    m_colorSpace = cs;
+}
 
 QRect KisFixedPaintDevice::bounds() const
 {

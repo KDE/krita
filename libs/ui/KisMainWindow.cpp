@@ -150,6 +150,7 @@
 #include <katecommandbar.h>
 #include "KisNodeActivationActionCreatorVisitor.h"
 
+
 #include <mutex>
 
 class ToolDockerFactory : public KoDockFactoryBase

@@ -17,7 +17,7 @@ class ImageSize : public KisActionPlugin
 {
     Q_OBJECT
 public:
-    ImageSize(QObject *parent, const QVariantList &);
+    ImageSize(QObject *parent);
     ~ImageSize() override;
 
 private:

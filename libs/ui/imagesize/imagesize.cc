@@ -31,11 +31,10 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(ImageSizeFactory, "kritaimagesize.json", registerPlugin<ImageSize>();)
-
-ImageSize::ImageSize(QObject *parent, const QVariantList &)
+ImageSize::ImageSize(QObject *parent)
     : KisActionPlugin(parent)
 {
+
     KisAction *action  = createAction("imagesize");
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
@@ -61,7 +60,7 @@ void ImageSize::slotImageSize()
     KisImageSP image = viewManager()->image().toStrongRef();
     if (!image) return;
 
-    if(!viewManager()->blockUntilOperationsFinished(image)) return;
+    if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
     DlgImageSize * dlgImageSize = new DlgImageSize(viewManager()->mainWindow(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgImageSize);

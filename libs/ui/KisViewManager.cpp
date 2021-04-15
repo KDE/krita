@@ -119,6 +119,7 @@
 #include "dialogs/kis_delayed_save_dialog.h"
 #include <KisMainWindow.h>
 #include "kis_signals_blocker.h"
+#include "imagesize/imagesize.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -308,6 +309,9 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
     KoColor background(Qt::white, cs);
     d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
+
+    // Initialize the old imagesize plugin
+    new ImageSize(this);
 }
 
 

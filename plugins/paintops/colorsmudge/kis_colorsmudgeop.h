@@ -56,28 +56,9 @@ protected:
     KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
-    // Sets the m_maskDab _and m_maskDabRect
-    void updateMask(const KisPaintInformation& info, const KisDabShape &shape, const QPointF &cursorPoint);
-    KoColor getOverlayDullingFillColor(QPoint canvasLocalSamplePoint);
-    KoColor getDullingFillColor(const KisPaintInformation& info, KisOverlayPaintDeviceWrapper& activeWrapper, QPoint canvasLocalSamplePoint);
-    void mixSmudgePaintAt(const KisPaintInformation& info, KisOverlayPaintDeviceWrapper& activeWrapper, QRect srcDabRect, QPoint canvasLocalSamplePoint, bool useDullingMode);
-
-    inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
-
-private:
     bool                      m_firstRun;
-    bool                      m_useNewEngine;
 
-    KisImageWSP               m_image;
-    KisOverlayPaintDeviceWrapper m_precisePainterWrapper;
     KoColor                   m_paintColor;
-    KisPaintDeviceSP          m_tempDev;
-    QScopedPointer<KisOverlayPaintDeviceWrapper> m_preciseImageDeviceWrapper;
-    QScopedPointer<KisPainter> m_backgroundPainter;
-    QScopedPointer<KisPainter> m_smudgePainter;
-    QScopedPointer<KisPainter> m_overlayPainter;
-    QScopedPointer<KisPainter> m_colorRatePainter;
-    QScopedPointer<KisPainter> m_finalPainter;
     KoAbstractGradientSP      m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
@@ -95,12 +76,9 @@ private:
     QList<KisPressureHSVOption*> m_hsvOptions;
     KisAirbrushOptionProperties m_airbrushOption;
     QRect                     m_dstDabRect;
-    KisFixedPaintDeviceSP     m_maskDab;
-    KisFixedPaintDeviceSP     m_origDab;
     QPointF                   m_lastPaintPos;
 
     KoColorTransformation *m_hsvTransform {0};
-    const KoCompositeOp *m_preciseColorRateCompositeOp {0};
     QScopedPointer<KisColorSmudgeStrategy> m_strategy;
 };
 

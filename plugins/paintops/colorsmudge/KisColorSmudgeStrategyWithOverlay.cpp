@@ -28,7 +28,7 @@ KisColorSmudgeStrategyWithOverlay::KisColorSmudgeStrategyWithOverlay(KisPainter 
         m_imageOverlayDevice.reset(new KisOverlayPaintDeviceWrapper(image->projection(), 1, KisOverlayPaintDeviceWrapper::PreciseMode));
         m_sourceWrapperDevice.reset(new KisColorSmudgeSourceImage(image, *m_imageOverlayDevice));
     } else {
-        m_sourceWrapperDevice.reset(new KisColorSmudgeSourcePaintDevice(m_layerOverlayDevice->overlay()));
+        m_sourceWrapperDevice.reset(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice));
     }
 }
 
@@ -81,10 +81,15 @@ QVector<QRect> KisColorSmudgeStrategyWithOverlay::paintDab(const QRect &srcRect,
     QVector<QRect> readRects;
     readRects << mirroredRects;
     readRects << srcRect;
-    m_layerOverlayDevice->readRects(readRects);
+
+    m_sourceWrapperDevice->readRects(readRects);
 
     if (m_imageOverlayDevice) {
-        m_imageOverlayDevice->readRects(readRects);
+        /**
+         * If we have m_imageOverlayDevice set, then m_sourceWrapperOverlay points to it, not
+         * to the layer's overlay. Therefore, we should read from it as well.
+         */
+        m_layerOverlayDevice->readRects(readRects);
     }
 
     blendBrush(finalPainters(),

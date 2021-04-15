@@ -23,7 +23,6 @@ KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *pai
         , m_smearAlpha(smearAlpha)
         , m_initializationPainter(painter)
 {
-
 }
 
 void KisColorSmudgeStrategyLightness::initializePainting()
@@ -67,6 +66,8 @@ void KisColorSmudgeStrategyLightness::initializePainting()
     m_heightmapPainter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
     m_heightmapPainter.setSelection(m_initializationPainter->selection());
     m_heightmapPainter.copyMirrorInformationFrom(m_initializationPainter);
+
+    m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice));
 }
 
 KisColorSmudgeStrategyBase::DabColoringStrategy &KisColorSmudgeStrategyLightness::coloringStrategy()
@@ -108,10 +109,10 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
     QVector<QRect> readRects;
     readRects << mirroredRects;
     readRects << srcRect;
-    m_layerOverlayDevice->readRects(readRects);
+    m_sourceWrapperDevice->readRects(readRects);
 
     blendBrush({&m_finalPainter},
-               toQShared(new KisColorSmudgeSourcePaintDevice(m_colorOnlyDevice)),
+               m_sourceWrapperDevice,
                m_maskDab, m_shouldPreserveOriginalDab,
                srcRect, dstRect,
                currentPaintColor,

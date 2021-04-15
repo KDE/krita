@@ -111,6 +111,7 @@ void sampleColor(const QRect &srcRect,
 
     const KoColorSpace *cs = tempFixedDevice->colorSpace();
     const int numPixels = sampleRect.width() * sampleRect.height();
+    sourceDevice->readRect(sampleRect);
     sourceDevice->readBytes(tempFixedDevice->data(), sampleRect);
 
     KisAlgebra2D::HaltonSequenceGenerator hGen(2);

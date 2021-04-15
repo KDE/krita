@@ -38,6 +38,7 @@ private:
     KisPaintDeviceSP m_colorOnlyDevice;
     KisPaintDeviceSP m_projectionDevice;
     KisOverlayPaintDeviceWrapper *m_layerOverlayDevice;
+    KisColorSmudgeSourceSP m_sourceWrapperDevice;
     KisPainter m_finalPainter;
     KisPainter m_heightmapPainter;
     bool m_shouldPreserveOriginalDab = true;

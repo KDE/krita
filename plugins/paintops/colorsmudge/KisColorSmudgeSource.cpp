@@ -10,23 +10,30 @@
 #include "kis_image.h"
 #include "KisOverlayPaintDeviceWrapper.h"
 
+void KisColorSmudgeSource::readRect(const QRect &rect) {
+    readRects({rect});
+}
+
 /**********************************************************************************/
 /*                 KisColorSmudgeSourcePaintDevice                                */
 /**********************************************************************************/
 
-KisColorSmudgeSourcePaintDevice::KisColorSmudgeSourcePaintDevice(KisPaintDeviceSP sourceDevice)
-        : m_sourceDevice(sourceDevice)
+KisColorSmudgeSourcePaintDevice::KisColorSmudgeSourcePaintDevice(KisOverlayPaintDeviceWrapper &overlayDevice)
+    : m_overlayDevice(overlayDevice)
 {
 }
 
+void KisColorSmudgeSourcePaintDevice::readRects(const QVector<QRect> &rects) {
+    m_overlayDevice.readRects(rects);
+}
+
 void KisColorSmudgeSourcePaintDevice::readBytes(quint8 *dstPtr, const QRect &rect) {
-    m_sourceDevice->readBytes(dstPtr, rect);
+    m_overlayDevice.overlay()->readBytes(dstPtr, rect);
 }
 
 const KoColorSpace *KisColorSmudgeSourcePaintDevice::colorSpace() const {
-    return m_sourceDevice->colorSpace();
+    return m_overlayDevice.overlayColorSpace();
 }
-
 /**********************************************************************************/
 /*                 KisColorSmudgeSourceImage                                      */
 /**********************************************************************************/
@@ -38,10 +45,15 @@ KisColorSmudgeSourceImage::KisColorSmudgeSourceImage(KisImageSP image, KisOverla
     KIS_ASSERT(m_image->projection() == m_overlayDevice.source());
 }
 
-void KisColorSmudgeSourceImage::readBytes(quint8 *dstPtr, const QRect &rect) {
+void KisColorSmudgeSourceImage::readRects(const QVector<QRect> &rects)
+{
     m_image->blockUpdates();
-    m_overlayDevice.readRect(rect);
+    m_overlayDevice.readRects(rects);
     m_image->unblockUpdates();
+}
+
+void KisColorSmudgeSourceImage::readBytes(quint8 *dstPtr, const QRect &rect)
+{
     m_overlayDevice.overlay()->readBytes(dstPtr, rect);
 }
 

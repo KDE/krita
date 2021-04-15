@@ -23,6 +23,7 @@
         <file alias="dark_go-previous.svg">dark_arrow-left.svg</file>
         <file alias="dark_go-up.svg">dark_arrow-up.svg</file>
         <file>dark_bookmarks.svg</file>
+        <file>dark_camera-photo.svg</file>
         <file>dark_configure-thicker.svg</file>
         <file>dark_convert-to-fileLayer.svg</file>
         <file>dark_convert-to-filterMask.svg</file>
@@ -123,6 +124,7 @@
         <file alias="light_go-previous.svg">light_arrow-left.svg</file>
         <file alias="light_go-up.svg">light_arrow-up.svg</file>
         <file>light_bookmarks.svg</file>
+        <file>light_camera-photo.svg</file>
         <file>light_configure-thicker.svg</file>
         <file>light_convert-to-fileLayer.svg</file>
         <file>light_convert-to-filterMask.svg</file>

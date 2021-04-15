@@ -32,7 +32,7 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
 {
     m_d->source = source;
 
-    const KoColorSpace *overlayColorSpace = source->colorSpace();
+    const KoColorSpace *overlayColorSpace = source->compositionSourceColorSpace();
 
     const bool usePreciseMode = mode == PreciseMode || mode == LazyPreciseMode;
 

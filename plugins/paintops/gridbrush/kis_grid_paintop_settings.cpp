@@ -21,7 +21,8 @@ struct KisGridPaintOpSettings::Private
 KisGridPaintOpSettings::KisGridPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION,
                                                      resourcesInterface),
-    m_d(new Private)
+    m_d(new Private),
+    m_modifyOffsetWithShortcut(false)
 {
 }
 
@@ -49,6 +50,40 @@ bool KisGridPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
+bool KisGridPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
+{
+    KisGridOpProperties option;
+    option.readOptionSetting(this);
+    bool ignoreEvent = false;
+    qreal newHorizontalOffset = std::fmod(info.pos().x() + option.grid_width/2.0, (float)option.grid_width);
+    qreal newVerticalOffset = std::fmod(info.pos().y() + option.grid_height/2.0, (float)option.grid_height);
+
+    // If pressing ctrl+alt change the offset according to mouse position
+    if (modifiers & (Qt::ControlModifier + Qt::AltModifier) || m_modifyOffsetWithShortcut) {
+        m_modifyOffsetWithShortcut = true;
+        newHorizontalOffset = (newHorizontalOffset / (float)option.grid_width);
+        newVerticalOffset = (newVerticalOffset / (float)option.grid_height);
+
+        if (newHorizontalOffset > 0.5) {
+            newHorizontalOffset = newHorizontalOffset - 1;
+        }
+        if (newVerticalOffset > 0.5) {
+            newVerticalOffset = newVerticalOffset -1;
+        }
+        option.horizontal_offset = newHorizontalOffset * option.grid_width;
+        option.vertical_offset = newVerticalOffset * option.grid_height;
+        option.writeOptionSetting(this);
+        ignoreEvent = true;
+    }
+    return ignoreEvent;
+}
+
+bool KisGridPaintOpSettings::mouseReleaseEvent()
+{
+    m_modifyOffsetWithShortcut = false;
+    bool ignoreEvent = true;
+    return ignoreEvent;
+}
 QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;

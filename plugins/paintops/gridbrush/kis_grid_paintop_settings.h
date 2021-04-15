@@ -31,10 +31,16 @@ public:
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
+    bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode) override;
+    bool mouseReleaseEvent() override;
+
 private:
 
     struct Private;
     const QScopedPointer<Private> m_d;
+
+public:
+    bool m_modifyOffsetWithShortcut;
 
 };
 

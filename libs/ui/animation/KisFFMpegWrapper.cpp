@@ -18,6 +18,8 @@
 #include <QRegularExpression>
 #include <QApplication>
 
+#include "kis_config.h"
+
 #include "KisPart.h"
 
 namespace
@@ -294,6 +296,18 @@ QByteArray KisFFMpegWrapper::runProcessAndReturn(const QString &processPath, con
     if (successfulStart) return runProcess.readAllStandardOutput();
 
     return "";
+}
+
+QString KisFFMpegWrapper::configuredFFMpegLocation()
+{
+    KisConfig cfg(true);
+    return cfg.ffmpegLocation();
+}
+
+void KisFFMpegWrapper::setConfiguredFFMpegLocation(QString &location)
+{
+    KisConfig cfg(false);
+    cfg.setFFMpegLocation(location);
 }
 
 QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const QString &customLocation, bool includeProcessInfo)

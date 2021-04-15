@@ -51,6 +51,8 @@ public:
     static QJsonObject findFFProbe(const QString &customLocation);
     static QJsonObject findProcessInfo(const QString &processName, const QString &processPath, bool includeProcessInfo);
     static QByteArray runProcessAndReturn(const QString &processPath, const QStringList &args, int msecs = 5000);
+    static QString configuredFFMpegLocation();
+    static void setConfiguredFFMpegLocation(QString& location);
     QJsonObject ffprobe(const QString &inputFile, const QString &ffprobePath);
     QJsonObject ffmpegProbe(const QString &inputFile, const QString &ffmpegPath, bool batchMode);
 

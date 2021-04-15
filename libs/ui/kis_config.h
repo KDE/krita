@@ -561,6 +561,9 @@ public:
 
     bool adaptivePlaybackRange(bool defaultValue = false) const;
     void setAdaptivePlaybackRange(bool value);
+    
+    QString ffmpegLocation(bool defaultValue = false) const;
+    void setFFMpegLocation(const QString& value);
 
     qreal timelineZoom(bool defaultValue = false) const;
     void setTimelineZoom(qreal value);

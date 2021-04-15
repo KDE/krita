@@ -13,6 +13,7 @@
 
 #include <klocalizedstring.h>
 #include <kis_icon_utils.h>
+#include "kis_config.h"
 
 #include <QAction>
 #include <QDesktopServices>
@@ -24,8 +25,10 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QJsonObject>
 
 #include "kis_debug.h"
+
 
 namespace
 {
@@ -213,6 +216,7 @@ public:
         QObject::connect(ffmpeg.data(), SIGNAL(sigProgressUpdated(int)), q, SLOT(onFFMpegProgressUpdated(int)));
 
         KisFFMpegWrapperSettings settings;
+        KisConfig cfg(true);
         settings.processPath = ffmpegPath;
         settings.args = splitCommand(arguments);
         settings.outputFile = videoFilePath;
@@ -336,13 +340,13 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     }
 
     RecorderExportConfig config(true);
-
+    
     d->inputFps = config.inputFps();
     d->fps = config.fps();
     d->resize = config.resize();
     d->size = config.size();
     d->lockRatio = config.lockRatio();
-    d->ffmpegPath = config.ffmpegPath();
+    d->ffmpegPath = KisFFMpegWrapper::findFFMpeg(config.ffmpegPath())["path"].toString();
     d->profiles = config.profiles();
     d->defaultProfiles = config.defaultProfiles();
     d->profileIndex = config.profileIndex();

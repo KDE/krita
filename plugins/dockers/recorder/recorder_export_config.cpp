@@ -212,14 +212,13 @@ void RecorderExportConfig::setEditedProfilesIndexes(const QSet<int> &value)
 
 QString RecorderExportConfig::ffmpegPath() const
 {
-    return config->exportConfiguration(keyAnimationExport)->getPropertyLazy(keyFfmpegPath, "ffmpeg");
+    return KisConfig(true).ffmpegLocation();
 }
 
 void RecorderExportConfig::setFfmpegPath(const QString &value)
 {
-    KisPropertiesConfigurationSP exportConfig = config->exportConfiguration(keyAnimationExport);
-    exportConfig->setProperty(keyFfmpegPath, value);
-    config->setExportConfiguration(keyAnimationExport, exportConfig);
+    KisConfig cfg(false);
+    cfg.setFFMpegLocation(value);
 }
 
 

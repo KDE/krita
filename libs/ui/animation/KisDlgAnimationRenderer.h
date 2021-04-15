@@ -90,9 +90,6 @@ private:
     static void saveLastUsedConfiguration(QString configurationID, KisPropertiesConfigurationSP config);
 
 private:
-
-    static QString findFFMpeg(const QString &customLocation);
-
     KisImageSP m_image;
     KisDocument *m_doc;
     WdgAnimationRenderer *m_page {0};

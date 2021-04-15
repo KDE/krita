@@ -37,6 +37,7 @@
 #include "kis_acyclic_signal_connector.h"
 #include "KisVideoSaver.h"
 #include "KisAnimationRenderingOptions.h"
+#include "animation/KisFFMpegWrapper.h"
 #include "VideoExportOptionsDialog.h"
 #include "kis_image_config.h"
 
@@ -281,7 +282,20 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     }
 
     m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
-    m_page->ffmpegLocation->setFileName(findFFMpeg(lastUsedOptions.ffmpegPath));
+    KisConfig cfg(false);
+    QString ffmpegPath = cfg.ffmpegLocation();
+    if (ffmpegPath.isEmpty()) {
+        ffmpegPath = KisFFMpegWrapper::findFFMpeg(lastUsedOptions.ffmpegPath)["path"].toString();
+    } else {
+        ffmpegPath = KisFFMpegWrapper::findFFMpeg(ffmpegPath)["path"].toString();
+    }
+    m_page->ffmpegLocation->setFileName(ffmpegPath);
+    cfg.setFFMpegLocation(ffmpegPath);
+    
+    connect(m_page->ffmpegLocation, &KisFileNameRequester::textChanged, [](const QString& path){
+        KisConfig cfg(false);
+        cfg.setFFMpegLocation(KisFFMpegWrapper::findFFMpeg(path)["path"].toString());
+    });
 
     // Initialize these settings based on the current document context..
     m_page->intStart->setValue(doc.image()->animationInterface()->playbackRange().start());
@@ -539,62 +553,6 @@ void KisDlgAnimationRenderer::slotDialogAccepted()
     m_image->animationInterface()->setExportSequenceBaseName(options.basename);
     m_image->animationInterface()->setExportSequenceFilePath(options.directory);
     m_image->animationInterface()->setExportInitialFrameNumber(options.sequenceStart);
-}
-
-QString KisDlgAnimationRenderer::findFFMpeg(const QString &customLocation)
-{
-    QString result;
-
-    QStringList proposedPaths;
-
-    if (!customLocation.isEmpty()) {
-        proposedPaths << customLocation;
-        proposedPaths << customLocation + '/' + "ffmpeg";
-    }
-
-    proposedPaths << KoResourcePaths::getApplicationRoot() +
-        '/' + "bin" + '/' + "ffmpeg";
-
-#ifndef Q_OS_WIN
-    proposedPaths << QDir::homePath() + "/bin/ffmpeg";
-    proposedPaths << "/usr/bin/ffmpeg";
-    proposedPaths << "/usr/local/bin/ffmpeg";
-#endif
-
-    Q_FOREACH (QString path, proposedPaths) {
-        if (path.isEmpty()) continue;
-
-#ifdef Q_OS_WIN
-        path = QDir::toNativeSeparators(QDir::cleanPath(path));
-        if (path.endsWith('/')) {
-            continue;
-        }
-        if (!path.endsWith(".exe")) {
-            if (!QFile::exists(path)) {
-                path += ".exe";
-                if (!QFile::exists(path)) {
-                    continue;
-                }
-            }
-        }
-#endif
-        QProcess testProcess;
-        testProcess.start(path, QStringList() << "-version");
-        if (testProcess.waitForStarted(1000)) {
-            testProcess.waitForFinished(1000);
-        }
-
-        const bool successfulStart =
-            testProcess.state() == QProcess::NotRunning &&
-            testProcess.error() == QProcess::UnknownError;
-
-        if (successfulStart) {
-            result = path;
-            break;
-        }
-    }
-
-    return result;
 }
 
 void KisDlgAnimationRenderer::slotExportTypeChanged()

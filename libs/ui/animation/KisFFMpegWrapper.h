@@ -74,16 +74,16 @@ private:
 
     
 private:
-    QScopedPointer<QProcess> process;
-    QSharedPointer<QProgressDialog> progress = nullptr;
-    KisFFMpegWrapperSettings processSettings;
+    QScopedPointer<QProcess> m_process;
+    QSharedPointer<QProgressDialog> m_progress = nullptr;
+    KisFFMpegWrapperSettings m_processSettings;
     
-    QString stdoutBuffer;
-    QString stderrBuffer;
-    QString errorMessage;
+    QString m_stdoutBuffer;
+    QString m_stderrBuffer;
+    QString m_errorMessage;
     
-    QByteArray processSTDOUT;
-    QString processSTDERR;
+    QByteArray m_processSTDOUT;
+    QString m_processSTDERR;
 
 };
 

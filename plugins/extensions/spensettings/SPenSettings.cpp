@@ -19,6 +19,7 @@
 #include <kis_canvas2.h>
 #include <input/kis_input_manager.h>
 #include <kis_canvas_controller.h>
+#include <kis_popup_palette.h>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(SPenSettingsFactory, "kritaspensettings.json", registerPlugin<SPenSettings>();)
@@ -105,7 +106,10 @@ void SPenSettings::slotTriggerPopupPalette()
     if (KisPart::instance()->currentInputManager()->canvas()) {
         // determine the current location of cursor on the screen, for popup palette placement
         QPoint cursorPosition = KisPart::instance()->currentInputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
-        KisPart::instance()->currentInputManager()->canvas()->slotShowPopupPalette(cursorPosition);
+        KisPopupPalette *popupPalette = KisPart::instance()->currentInputManager()->canvas()->popupPalette();
+        if (popupPalette) {
+            popupPalette->popup(cursorPosition);
+        }
     }
 }
 

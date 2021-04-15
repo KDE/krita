@@ -96,6 +96,9 @@ public:
 
     ~KisOverlayPaintDeviceWrapper();
 
+    void setExternalDestination(KisPaintDeviceSP device);
+    KisPaintDeviceSP externalDestination() const;
+
     KisPaintDeviceSP source() const;
     KisPaintDeviceSP overlay(int index = 0) const;
 

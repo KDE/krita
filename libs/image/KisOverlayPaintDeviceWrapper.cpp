@@ -23,6 +23,7 @@ struct KisOverlayPaintDeviceWrapper::Private
     KisRectsGrid grid;
     bool usePreciseMode = false;
     QScopedPointer<KoOptimizedRgbPixelDataScalerU8ToU16Base> scaler;
+    KisPaintDeviceSP externalDestination;
 };
 
 
@@ -67,6 +68,16 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
 
 KisOverlayPaintDeviceWrapper::~KisOverlayPaintDeviceWrapper()
 {
+}
+
+void KisOverlayPaintDeviceWrapper::setExternalDestination(KisPaintDeviceSP device)
+{
+    m_d->externalDestination = device;
+}
+
+KisPaintDeviceSP KisOverlayPaintDeviceWrapper::externalDestination() const
+{
+    return m_d->externalDestination;
 }
 
 KisPaintDeviceSP KisOverlayPaintDeviceWrapper::source() const
@@ -162,17 +173,23 @@ void KisOverlayPaintDeviceWrapper::writeRects(const QVector<QRect> &rects, int i
     if (rects.isEmpty()) return;
     if (m_d->overlays.isEmpty()) return;
 
-    if (!m_d->scaler) {
+    KisPaintDeviceSP destinationDevice =
+        m_d->externalDestination ? m_d->externalDestination : m_d->source;
+
+    if (!m_d->scaler ||
+        (destinationDevice != m_d->source &&
+         *destinationDevice->colorSpace() != *m_d->source->colorSpace())) {
+
         Q_FOREACH (const QRect &rc, rects) {
             KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->grid.contains(rc));
-            KisPainter::copyAreaOptimized(rc.topLeft(), m_d->overlays[index], m_d->source, rc);
+            KisPainter::copyAreaOptimized(rc.topLeft(), m_d->overlays[index], destinationDevice, rc);
         }
     } else {
         KisPaintDeviceSP overlay = m_d->overlays[index];
 
 
         KisRandomConstAccessorSP srcIt = overlay->createRandomConstAccessorNG();
-        KisRandomAccessorSP dstIt = m_d->source->createRandomAccessorNG();
+        KisRandomAccessorSP dstIt = destinationDevice->createRandomAccessorNG();
 
         Q_FOREACH (const QRect &rc, rects) {
             KritaUtils::processTwoDevicesWithStrides(rc,

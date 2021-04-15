@@ -121,3 +121,4 @@ cmake --build . --config RelWithDebInfo --target ext_libde265
 cmake --build . --config RelWithDebInfo --target ext_libheif
 cmake --build . --config RelWithDebInfo --target ext_seexpr
 cmake --build . --config RelWithDebInfo --target ext_mypaint
+cmake --build . --config RelWithDebInfo --target ext_fcitx-qt5

@@ -38,11 +38,12 @@ Item {
             id: arrowsList
             anchors {
                 right: parent.right;
-                top: parent.top;
-                topMargin: 1;
+                verticalCenter: parent.verticalCenter;
+                rightMargin: -2;
             }
             height: parent.height;
             width: height;
+            sourceSize.height: height
             source: Settings.theme.icon("combo-arrows-white");
             smooth: true
         }

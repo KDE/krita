@@ -34,10 +34,10 @@ Page {
         background: "images/header_krita_sketch.png";
 
         leftArea: Button {
-            width: Krita.Constants.GridWidth;
-            height: Krita.Constants.GridHeight;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight;
             image: Settings.theme.icon("close");
-            onClicked: mainWindow.hideFileSaveAsDialog()();
+            onClicked: mainWindow.hideFileSaveAsDialog();
         }
 
         rightArea: Button {
@@ -127,7 +127,9 @@ Page {
                 anchors.bottomMargin: 1;
 
                 width: childrenRect.width;
-                height: childrenRect.height + Constants.GridHeight * 0.5 - 1;
+                height: fileType.state == "expanded" ?
+                    Constants.GridHeight * 3.5 - 1 :
+                    Constants.GridHeight - 1;
 
                 radius: Constants.GridHeight * 0.25;
 

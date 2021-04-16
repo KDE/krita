@@ -18,6 +18,7 @@
 #include <CompositionsCheck.h>
 #include <ExifCheck.h>
 #include <MultiLayerCheck.h>
+#include <MultiTransparencyMaskCheck.h>
 #include <PSDLayerStylesCheck.h>
 #include <sRGBProfileCheck.h>
 #include <NodeTypeCheck.h>
@@ -34,6 +35,10 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
 
     // Multilayer check
     chkFactory = new MultiLayerCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
+    // Multi transparency mask check
+    chkFactory = new MultiTransparencyMaskCheckFactory();
     add(chkFactory->id(), chkFactory);
 
     // Animation check

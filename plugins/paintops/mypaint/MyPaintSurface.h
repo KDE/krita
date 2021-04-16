@@ -17,7 +17,7 @@
 #include <KoColor.h>
 #include <kis_marker_painter.h>
 #include <kis_sequential_iterator.h>
-#include <KisPrecisePaintDeviceWrapper.h>
+#include <KisOverlayPaintDeviceWrapper.h>
 
 #include <libmypaint/mypaint-brush.h>
 #include <libmypaint/mypaint-surface.h>
@@ -81,7 +81,7 @@ private:
     KisPaintDeviceSP m_imageDevice;
     MyPaintSurfaceInternal *m_surface;
     KisImageSP m_image;
-    KisPrecisePaintDeviceWrapper m_precisePainterWrapper;
+    KisOverlayPaintDeviceWrapper m_precisePainterWrapper;
     KisPaintDeviceSP m_dab;
     QScopedPointer<KisPainter> m_tempPainter;
     QScopedPointer<KisPainter> m_backgroundPainter;

@@ -34,11 +34,11 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     , m_image(image)
     , m_precisePainterWrapper(painter->device())
     , m_dab(m_precisePainterWrapper.createPreciseCompositionSourceDevice())
-    , m_tempPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
+    , m_tempPainter(new KisPainter(m_precisePainterWrapper.overlay()))
     , m_backgroundPainter(new KisPainter(m_precisePainterWrapper.createPreciseCompositionSourceDevice()))
 
 {
-    m_blendDevice = KisFixedPaintDeviceSP(new KisFixedPaintDevice(m_precisePainterWrapper.preciseColorSpace()));
+    m_blendDevice = KisFixedPaintDeviceSP(new KisFixedPaintDevice(m_precisePainterWrapper.overlayColorSpace()));
 
     m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
     m_backgroundPainter->setOpacity(OPACITY_OPAQUE_U8);
@@ -53,7 +53,7 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     m_surface->draw_dab = this->draw_dab;
     m_surface->get_color = this->get_color;
     m_surface->destroy = destroy_internal_surface_callback;
-    m_surface->bitDepth = m_precisePainterWrapper.preciseColorSpace()->channels()[0]->channelValueType();
+    m_surface->bitDepth = m_precisePainterWrapper.overlayColorSpace()->channels()[0]->channelValueType();
 }
 
 KisMyPaintSurface::~KisMyPaintSurface()
@@ -270,7 +270,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     quint32 sum_weight = 0.0f;
 
     m_precisePainterWrapper.readRect(dabRectAligned);
-    KisPaintDeviceSP activeDev = m_precisePainterWrapper.preciseDevice();
+    KisPaintDeviceSP activeDev = m_precisePainterWrapper.overlay();
     if(m_image) {
         //m_image->blockUpdates();
         m_backgroundPainter->device()->clear();

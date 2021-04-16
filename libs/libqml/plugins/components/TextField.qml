@@ -32,7 +32,6 @@ Item {
 
     Item {
         anchors.fill: parent;
-        anchors.margins: Constants.DefaultMargin;
 
         Rectangle {
             id: fill;

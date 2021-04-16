@@ -40,14 +40,14 @@ var values = {
         },
         expandingListView: {
             selection: {
-                border: "#ffffff",
+                border: "#d2d2d2",
                 fill: Qt.rgba(1.0, 1.0, 1.0, 0.4),
                 text: Qt.rgba(0.0, 0.0, 0.0, 0.65),
             },
             list: {
                 background: Qt.rgba(1.0, 1.0, 1.0, 0.4),
                 item: "#ffffff",
-                itemBorder: "silver",
+                itemBorder: "#d2d2d2",
                 itemText: Qt.rgba(0.0, 0.0, 0.0, 0.65),
             },
         },
@@ -86,7 +86,7 @@ var values = {
             backLink: "#999999",
         },
         panelTextField: {
-            border: "silver",
+            border: "#d2d2d2",
             background: Qt.rgba(1.0, 1.0, 1.0, 0.4),
             enabled: Qt.rgba(0.0, 0.0, 0.0, 0.0),
             disabled: Qt.rgba(0.0, 0.0, 0.0, 0.7),

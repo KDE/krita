@@ -110,6 +110,7 @@ Page {
                 leftMargin: Constants.GridWidth * 0.25;
                 rightMargin: Constants.GridWidth * 0.25;
             }
+            spacing: Constants.DefaultMargin;
 
             PanelTextField {
                 id: fileNameField;
@@ -117,19 +118,18 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter;
 
                 height: Constants.GridHeight * 0.75;
-                width: Constants.GridWidth * 7.75;
+                width: Constants.GridWidth * 7.25;
 
                 placeholder: "File Name";
             }
 
             Rectangle {
                 anchors.bottom: parent.bottom;
-                anchors.bottomMargin: 1;
 
                 width: childrenRect.width;
                 height: fileType.state == "expanded" ?
-                    Constants.GridHeight * 3.5 - 1 :
-                    Constants.GridHeight - 1;
+                    Constants.GridHeight * 3.5:
+                    Constants.GridHeight;
 
                 radius: Constants.GridHeight * 0.25;
 
@@ -139,9 +139,9 @@ Page {
                     id: fileType;
 
                     anchors.bottom: parent.bottom;
-                    anchors.bottomMargin: Constants.GridHeight * 0.25;
+                    anchors.bottomMargin: Constants.GridHeight * 0.125;
 
-                    height: Constants.GridHeight * 0.5;
+                    height: Constants.GridHeight * 0.75;
                     width: Constants.GridWidth * 3.25;
 
                     expandedHeight: Constants.GridHeight * 3;
@@ -160,7 +160,7 @@ Page {
 
             Button {
                 anchors.verticalCenter: parent.verticalCenter;
-                height: Constants.GridHeight
+                height: Math.min(Constants.GridHeight, Constants.GridWidth);
                 width: height
 
                 image: Settings.theme.icon("filesave");

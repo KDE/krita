@@ -1254,9 +1254,9 @@ void KisPaintopBox::slotUnsetEraseMode()
 void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 {
     if (checked) {
-        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transparency-locked"));
+        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("bar-transparency-locked"));
     } else {
-        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transparency-unlocked"));
+        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("bar-transparency-unlocked"));
     }
     m_resourceProvider->setGlobalAlphaLock(checked);
 }

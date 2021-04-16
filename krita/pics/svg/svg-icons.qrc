@@ -229,6 +229,8 @@
         <file>dark_selection-info.svg</file>
         <file>light_selection-info.svg</file>
         <file>svg-icons.qrc</file>
+        <file>bar-transparency-locked.svg</file>
+        <file>bar-transparency-unlocked.svg</file>
         <file>transparency-locked.svg</file>
         <file>transparency-unlocked.svg</file>
         <file>dark_mirror-view.svg</file>

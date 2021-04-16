@@ -37,7 +37,9 @@ KisFFMpegWrapper::KisFFMpegWrapper(QObject *parent)
 {
 }
 
-
+KisFFMpegWrapper::~KisFFMpegWrapper()
+{
+}
 
 
 void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings)

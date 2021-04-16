@@ -13,11 +13,11 @@
 
 #include "KisImportExportErrorCode.h"
 
-#include <kritaimage_export.h>
+#include <kritaui_export.h>
 
 class QProcess;
 
-struct KRITAIMAGE_EXPORT KisFFMpegWrapperSettings
+struct KRITAUI_EXPORT KisFFMpegWrapperSettings
 {
     QString processPath;
     QStringList args;
@@ -35,11 +35,12 @@ struct KRITAIMAGE_EXPORT KisFFMpegWrapperSettings
 };
 
 
-class KRITAIMAGE_EXPORT  KisFFMpegWrapper : public QObject
+class KRITAUI_EXPORT  KisFFMpegWrapper : public QObject
 {
     Q_OBJECT
 public:
     explicit KisFFMpegWrapper(QObject *parent = nullptr);
+    ~KisFFMpegWrapper();
 
     void startNonBlocking(const KisFFMpegWrapperSettings &settings);
     KisImportExportErrorCode start(const KisFFMpegWrapperSettings &settings);

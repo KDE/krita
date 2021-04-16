@@ -160,8 +160,8 @@ Page {
 
             Button {
                 anchors.verticalCenter: parent.verticalCenter;
-                height: Constants.GridHeight * 0.75;
-                width: Constants.GridWidth * 0.5;
+                height: Constants.GridHeight
+                width: height
 
                 image: Settings.theme.icon("filesave");
 

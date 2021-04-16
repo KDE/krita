@@ -39,8 +39,7 @@ QImage getImageFromClipboard()
     static const QList<ClipboardImageFormat> supportedFormats = {
             {{"image/png"}, "PNG"},
             {{"image/tiff"}, "TIFF"},
-            {{"image/bmp", "image/x-bmp", "image/x-MS-bmp", "image/x-win-bitmap"}, "BMP"},
-            {{"image/jpeg"}, "JPG"}
+            {{"image/bmp", "image/x-bmp", "image/x-MS-bmp", "image/x-win-bitmap"}, "BMP"}
     };
 
     QClipboard *clipboard = QApplication::clipboard();

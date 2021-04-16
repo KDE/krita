@@ -206,9 +206,6 @@ private:
         void computeMixedColor(quint8 *dst) {
 #ifdef SANITY_CHECKS
 
-            KIS_ASSERT(normalizeFactor >= 0);
-            KIS_ASSERT(totalAlpha >= 0);
-
             const mix_type maxSaneNumPixels =
                 std::numeric_limits<mix_type>::max() / pow2(mix_type(MathsTraits::unitValue));
 

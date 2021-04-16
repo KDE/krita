@@ -95,8 +95,8 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     divide = qRound(m_properties.scale * divide);
 
     //Adjust the start position of the drawn grid to the top left of the brush instead of in the center
-    qreal posX = info.pos().x() - (gridWidth/2) + cellWidth/2;
-    qreal posY = info.pos().y() - (gridHeight/2) + cellHeight/2;
+    qreal posX = info.pos().x() - (gridWidth/2) + (cellWidth/2) - horizontalOffset;
+    qreal posY = info.pos().y() - (gridHeight/2) + (cellHeight/2) - verticalOffset;
 
     //Lock the grid alignment
     posX = posX - std::fmod(posX, cellWidth) + horizontalOffset;

@@ -902,7 +902,7 @@ void NodeDelegate::drawAnimatedDecoration(QPainter *p, const QStyleOptionViewIte
     KisNodeViewColorScheme scm;
     QRect rc = decorationClickRect(option, index);
 
-    QIcon animatedIndicatorIcon = KisIconUtils::loadIcon("addduplicateframe");
+    QIcon animatedIndicatorIcon = KisIconUtils::loadIcon("layer-animated");
     const bool isAnimated = index.data(KisNodeModel::IsAnimatedRole).toBool();
 
     rc = kisGrowRect(rc, -(scm.decorationMargin()+scm.border()));

@@ -15,6 +15,8 @@ Rectangle {
     }
 
     property int rowHeight: height/9;
+    // same rule as defined in kis_icon_utils to determine useDarkIcons, but in the 0-1 range
+    property bool useDarkIcons: palette.button.hsvValue > 0.39 ? true : false;
     color: palette.base;
 
     Column {
@@ -33,7 +35,8 @@ Rectangle {
                     onClicked: {
                         mainWindow.slotButtonPressed(modelData+"Button")
                     }
-                    image: Settings.theme.icon(modelData.toLowerCase());
+                    image: root.useDarkIcons ? Settings.theme.icon(modelData.toLowerCase() + "-black") :
+                               Settings.theme.icon(modelData.toLowerCase());
                 }
             }
         }
@@ -49,7 +52,8 @@ Rectangle {
                 id: undoButton
                 width: root.width / 2
                 height: parent.height;
-                image: Settings.theme.icon("undo");
+                image: root.useDarkIcons ? Settings.theme.icon("undo-black") :
+                               Settings.theme.icon("undo");
                 onClicked: {
                     mainWindow.slotButtonPressed("edit_undo")
                 }
@@ -62,7 +66,8 @@ Rectangle {
                 radius: 8;
                 width: root.width / 2
                 height: parent.height;
-                image: Settings.theme.icon("redo");
+                image: root.useDarkIcons ? Settings.theme.icon("redo-black") :
+                               Settings.theme.icon("redo");
                 onClicked: {
                     mainWindow.slotButtonPressed("edit_redo")
                 }

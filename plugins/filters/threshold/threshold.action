@@ -3,7 +3,7 @@
   <Actions category="Filters">
     <text>Filters</text>
     <Action name="krita_filter_threshold">
-      <icon></icon>
+      <icon>filter-threshold</icon>
       <text>Threshold Filter</text>
       <whatsThis></whatsThis>
       <toolTip>Threshold Filter</toolTip>

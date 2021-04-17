@@ -426,7 +426,7 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
         delete [] row_pointer;
         return ImportExportCodes::OK;
     }
-    catch( std::runtime_error &e) {
+    catch( std::runtime_error &) {
         jpeg_destroy_decompress(&cinfo);
         return ImportExportCodes::FileFormatIncorrect;
     }
@@ -712,7 +712,7 @@ KisImportExportErrorCode KisJPEGConverter::buildFile(QIODevice *io, KisPaintLaye
 
         return ImportExportCodes::OK;
 
-    } catch( std::runtime_error &e) {
+    } catch( std::runtime_error &) {
         jpeg_destroy_compress(&cinfo);
         return ImportExportCodes::ErrorWhileWriting;
     }

@@ -94,10 +94,10 @@ TouchDockerDock::TouchDockerDock()
     QStringList mapping = KisConfig(true).readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
     for (int i = 0; i < 8; ++i) {
         if (i < mapping.size()) {
-            d->buttonMapping[QString("button%1").arg(i + 1)] = mapping[i];
+            d->buttonMapping[QString("%1").arg(i + 1)] = mapping[i];
         }
         else if (i < defaultMapping.size()) {
-            d->buttonMapping[QString("button%1").arg(i + 1)] = defaultMapping[i];
+            d->buttonMapping[QString("%1").arg(i + 1)] = defaultMapping[i];
         }
     }
 
@@ -264,6 +264,44 @@ QString TouchDockerDock::imageForButton(QString id)
         QString a = KisActionRegistry::instance()->getActionProperty(id, "icon");
         if (!a.isEmpty()) {
             return "image://icon/" + a;
+        }
+    }
+    return QString();
+}
+
+QString TouchDockerDock::iconForButton(QString id, bool useDarkIcons)
+{
+    // adapted from kis_icon_utils, as here we need a path to give to qml, not a QIcon
+    const char * const prefix = useDarkIcons ? "dark_" : "light_";
+
+    QString name = "";
+
+    if (d->buttonMapping.contains(id)) {
+        name = d->buttonMapping[id];
+    }
+    else {
+        name = id;
+    }
+    QString  realName = QLatin1String(prefix) + name;
+
+    // Dark and light, no size specified
+    const QStringList names = { "pics/" + realName + ".png",
+                                "pics/" + realName + ".svg",
+                                "pics/" + realName + ".svgz",
+                                "pics/" + name + ".png",
+                                "pics/" + name + ".svg",
+                                "pics/" + name + ".svz",
+                                realName + ".png",
+                                realName + ".svg",
+                                realName + ".svz",
+                                name,
+                                name + ".png",
+                                name + ".svg",
+                                name + ".svgz"};
+
+    for (const QString &resname : names) {
+        if (QFile(":/" + resname).exists()) {
+            return resname;
         }
     }
     return QString();

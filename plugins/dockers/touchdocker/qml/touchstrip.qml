@@ -79,19 +79,18 @@ Rectangle {
             height: childrenRect.height;
             Repeater {
                 model: [2, 3]
-                Button {
+                ButtonSquared {
                     color: palette.button
                     highlightColor: palette.highlight
                     textColor: palette.buttonText
                     radius: 8;
                     width: parent.width/2;
                     height: root.rowHeight
-                    text: mainWindow.imageForButton("button" + modelData) === "" ? mainWindow.textForButton("button" + modelData) : ""
                     checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
                     onClicked: {
-                        mainWindow.slotButtonPressed("button" + modelData)
+                        mainWindow.slotButtonPressed(modelData)
                     }
-                    image: root.width != 0 ? mainWindow.imageForButton("button" + modelData) : "";
+                    image: root.useDarkIcons ? mainWindow.iconForButton(modelData, true) : mainWindow.iconForButton(modelData, false);
                 }
             }
         }
@@ -101,19 +100,18 @@ Rectangle {
             height: childrenRect.height;
             Repeater {
                 model: [1, 4]
-                Button {
+                ButtonSquared {
                     color: palette.button
                     highlightColor: palette.highlight
                     textColor: palette.buttonText
                     radius: 8;
                     width: parent.width/2;
                     height: root.rowHeight
-                    text: mainWindow.imageForButton("button" + modelData) === "" ? mainWindow.textForButton("button" + modelData) : ""
                     checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
                     onClicked: {
-                        mainWindow.slotButtonPressed("button" + modelData)
+                        mainWindow.slotButtonPressed(modelData)
                     }
-                    image: root.width != 0 ? mainWindow.imageForButton("button" + modelData) : "";
+                    image: root.useDarkIcons ? mainWindow.iconForButton(modelData, true) : mainWindow.iconForButton(modelData, false);
                 }
             }
         }
@@ -126,7 +124,7 @@ Rectangle {
                 Item {
                     height: root.rowHeight
                     width: root.width/3
-                    Button {
+                    ButtonSquared {
                         id: rockerSwitch
                         color: palette.button
                         highlightColor: palette.highlight
@@ -134,7 +132,7 @@ Rectangle {
                         radius: 8;
                         anchors.fill: parent;
                         visible: modelData !== "";
-                        image: root.width != 0 ? mainWindow.imageForButton(modelData) : "";
+                        image: root.useDarkIcons ? mainWindow.iconForButton(modelData, true) : mainWindow.iconForButton(modelData, false);
                         onClicked: {
                             mainWindow.slotButtonPressed(modelData)
                             if (modelData === "reset_canvas_rotation") {
@@ -151,14 +149,13 @@ Rectangle {
             height: childrenRect.height;
             Repeater {
                 model: [6, "view_zoom_in"]
-                Button {
+                ButtonSquared {
                     color: palette.button
                     highlightColor: palette.highlight
                     textColor: palette.buttonText
                     radius: 8;
                     width: parent.width/2;
                     height: root.rowHeight
-                    text: (modelData !== "view_zoom_in" && mainWindow.imageForButton("button" + modelData) === "") ? mainWindow.textForButton("button" + modelData) : ""
                     checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
                     onClicked: {
                         if (modelData === "view_zoom_in")
@@ -167,12 +164,10 @@ Rectangle {
                         }
                         else
                         {
-                            mainWindow.slotButtonPressed("button" + modelData)
+                            mainWindow.slotButtonPressed(modelData)
                         }
                     }
-                    image: root.width != 0 ? (modelData === "view_zoom_in" ?
-                        mainWindow.imageForButton(modelData) :
-                        mainWindow.imageForButton("button" + modelData)) : ""
+                    image: root.useDarkIcons ? mainWindow.iconForButton(modelData, true) : mainWindow.iconForButton(modelData, false);
                 }
             }
         }
@@ -182,14 +177,13 @@ Rectangle {
             height: childrenRect.height;
             Repeater {
                 model: [5, "view_zoom_out"]
-                Button {
+                ButtonSquared {
                     color: palette.button
                     highlightColor: palette.highlight
                     textColor: palette.buttonText
                     radius: 8;
                     width: parent.width/2;
                     height: root.rowHeight
-                    text: (modelData !== "view_zoom_out" && mainWindow.imageForButton("button" + modelData) === "") ? mainWindow.textForButton("button" + modelData) : ""
                     checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
                     onClicked: {
                         if(modelData === "view_zoom_out")
@@ -198,12 +192,11 @@ Rectangle {
                         }
                         else
                         {
-                            mainWindow.slotButtonPressed("button" + modelData)
+                            mainWindow.slotButtonPressed(modelData)
                         }
                     }
-                    image: root.width != 0 ? (modelData === "view_zoom_out" ?
-                        mainWindow.imageForButton(modelData) :
-                        mainWindow.imageForButton("button" + modelData)) : ""                }
+                    image: root.useDarkIcons ? mainWindow.iconForButton(modelData, true) : mainWindow.iconForButton(modelData, false);
+                }
             }
         }
 
@@ -211,19 +204,18 @@ Rectangle {
             width: parent.width;
             height: childrenRect.height;
             model: [7, 8]
-            Button {
+            ButtonSquared {
                 color: palette.button
                 highlightColor: palette.highlight
                 textColor: palette.buttonText
                 radius: 8;
                 width: parent.width;
                 height: root.rowHeight
-                text: mainWindow.imageForButton("button" + modelData) === "" ? mainWindow.textForButton("button" + modelData) : ""
                 checkable: text === "shift" || text == "ctrl" || text == "alt" ? true : false;
                 onClicked: {
-                    mainWindow.slotButtonPressed("button" + modelData)
+                    mainWindow.slotButtonPressed(modelData)
                 }
-                image: root.width != 0 ? mainWindow.imageForButton("button" + modelData) : ""
+                image: root.useDarkIcons ? mainWindow.iconForButton(modelData, true) : mainWindow.iconForButton(modelData, false);
             }
         }
     }

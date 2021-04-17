@@ -23,6 +23,7 @@
         <file>dark_download.svg</file>
         <file>dark_drive-harddisk.svg</file>
         <file>dark_edit-clear.svg</file>
+        <file alias="dark_clear.svg">dark_edit-clear.svg</file>
         <file>dark_edit-copy.svg</file>
         <file>dark_edit-cut.svg</file>
         <file>dark_edit-paste.svg</file>
@@ -51,8 +52,10 @@
         <file>dark_window-close.svg</file>
         <file>dark_window-new.svg</file>
         <file>dark_zoom-in.svg</file>
+        <file alias="dark_view_zoom_in.svg">dark_zoom-in.svg</file>
         <file>dark_zoom-original.svg</file>
         <file>dark_zoom-out.svg</file>
+        <file alias="dark_view_zoom_out.svg">dark_zoom-out.svg</file>
         <file>dark_update-medium.svg</file>
     </qresource>
 </RCC>

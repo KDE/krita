@@ -1,5 +1,6 @@
 BusyIndicator 1.0 BusyIndicator.qml
 Button 1.0 Button.qml
+ButtonSquared 1.0 ButtonSquared.qml
 CategorySwitcher 1.0 CategorySwitcher.qml
 CheckBox 1.0 CheckBox.qml
 ColorSwatch 1.0 ColorSwatch.qml

@@ -115,6 +115,7 @@
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
         <file>dark_user-identity.svg</file>
+        <file>dark_view-filter.svg</file>
         <file>dark_view-list-details.svg</file>
         <file>dark_view-list-text-16.svg</file>
         <file>dark_view-preview.svg</file>
@@ -230,6 +231,7 @@
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
         <file>light_user-identity.svg</file>
+        <file>light_view-filter.svg</file>
         <file>light_view-list-details.svg</file>
         <file>light_view-list-text-16.svg</file>
         <file>light_view-preview.svg</file>

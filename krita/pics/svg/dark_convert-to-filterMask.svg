@@ -5,35 +5,13 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   version="1.1"
-   id="svg2"
-   viewBox="0 0 16 16"
+   width="16"
    height="16"
-   width="16">
+   viewBox="0 0 16 16"
+   id="svg2"
+   version="1.1">
   <defs
-     id="defs4">
-    <linearGradient
-       gradientUnits="userSpaceOnUse"
-       y2="1049.3622"
-       x2="6"
-       y1="1043.3622"
-       x1="6"
-       id="linearGradient5761"
-       xlink:href="#linearGradient5755"
-       gradientTransform="translate(6,-2)" />
-    <linearGradient
-       id="linearGradient5755">
-      <stop
-         id="stop5757"
-         offset="0"
-         style="stop-color:#d2d2d2;stop-opacity:1" />
-      <stop
-         id="stop5759"
-         offset="1"
-         style="stop-color:#d2d2d2;stop-opacity:0" />
-    </linearGradient>
-  </defs>
+     id="defs4" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -70,15 +48,15 @@
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(0,-1036.3622)"
-     id="layer1">
+     id="layer1"
+     transform="translate(0,-1036.3622)">
     <path
-       id="path838"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 5,1044.3622 -5,-5 v 10 z"
-       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       id="path838" />
     <path
-       id="path5822"
-       d="m 7,1039.3622 v 1 l 3,3 v 4.4464 l 3,1.6607 v -6.1071 l 3,-3 v -1 z m 1.4464286,1 H 14.553571 L 12,1042.9158 v 4.5535 l -1,-0.1071 v -4.4464 z"
-       style="fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 7,1039.3622 v 1 l 3,3 v 4.4464 l 3,1.5536 v -6 l 3,-3 v -1 z m 1.4464286,1 H 14.553571 L 12,1042.9158 v 4.4464 h -1 v -4.4464 z"
+       id="path5822" />
   </g>
 </svg>

@@ -56,6 +56,7 @@
         <file>dark_edit-redo.svg</file>
         <file>dark_edit-undo.svg</file>
         <file>dark_extended_color_selector.svg</file>
+        <file>dark_filter-invert.svg</file>
         <file>dark_filter-threshold.svg</file>
         <file>dark_import-as-filterMask.svg</file>
         <file>dark_import-as-paintLayer.svg</file>
@@ -168,6 +169,7 @@
         <file>light_edit-redo.svg</file>
         <file>light_edit-undo.svg</file>
         <file>light_extended_color_selector.svg</file>
+        <file>light_filter-invert.svg</file>
         <file>light_filter-threshold.svg</file>
         <file>light_import-as-filterMask.svg</file>
         <file>light_import-as-paintLayer.svg</file>

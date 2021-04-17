@@ -1,0 +1,31 @@
+From a958850fa3d283847618b0437be8bc4181bd90e9 Mon Sep 17 00:00:00 2001
+From: Jan Grulich <jgrulich@redhat.com>
+Date: Thu, 24 Sep 2020 07:17:02 +0200
+Subject: OpenFile portal: use "writable" option to specify our FD is writable
+
+When using OpenFile portal and passing a file descriptor, we open the
+file with qt_safe_open() which by defaults make the file descriptor
+writable. However we didn't specify in options that the FD is writable
+which leads into rejection on xdg-desktop-portal side as there is a
+mismatch between writable FD and read-only request.
+
+Pick-to: 5.15
+Change-Id: Ide02c0a1061243fbbe14264b3c31b8e5e292c165
+
+diff --git a/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
+index cd32cd2a0b..e7b9ae3368 100644
+--- a/src/platformsupport/services/genericunix/qgenericunixservices.cpp
++++ b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
+@@ -214,8 +214,10 @@ static inline QDBusMessage xdgDesktopPortalOpenFile(const QUrl &url)
+         QDBusUnixFileDescriptor descriptor;
+         descriptor.giveFileDescriptor(fd);
+ 
+-        // FIXME parent_window_id and handle writable option
+-        message << QString() << QVariant::fromValue(descriptor) << QVariantMap();
++        const QVariantMap options = {{QLatin1String("writable"), true}};
++
++        // FIXME parent_window_id
++        message << QString() << QVariant::fromValue(descriptor) << options;
+ 
+         return QDBusConnection::sessionBus().call(message);
+     }

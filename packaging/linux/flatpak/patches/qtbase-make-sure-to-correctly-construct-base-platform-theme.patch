@@ -1,0 +1,26 @@
+From 8f45a46e5969898497295608ad0ea93d55291bda Mon Sep 17 00:00:00 2001
+From: Jan Grulich <jgrulich@redhat.com>
+Date: Wed, 27 May 2020 13:34:37 +0200
+Subject: [PATCH] Make sure we correctly construct underlying base platform theme
+
+When the base platform theme is not set to a null pointer, then we might
+assume it has been already constructed and later on try to access an
+invalid address which will cause a crash.
+
+Change-Id: I1bd6b1f07087baefaa9738d4dd644bb649e3e5df
+---
+
+diff --git a/src/plugins/platformthemes/xdgdesktopportal/qxdgdesktopportaltheme.cpp b/src/plugins/platformthemes/xdgdesktopportal/qxdgdesktopportaltheme.cpp
+index fb65f6d9..72fbb9be 100644
+--- a/src/plugins/platformthemes/xdgdesktopportal/qxdgdesktopportaltheme.cpp
++++ b/src/plugins/platformthemes/xdgdesktopportal/qxdgdesktopportaltheme.cpp
+@@ -59,7 +59,7 @@ public:
+         delete baseTheme;
+     }
+ 
+-    QPlatformTheme *baseTheme;
++    QPlatformTheme *baseTheme = nullptr;
+ };
+ 
+ QXdgDesktopPortalTheme::QXdgDesktopPortalTheme()
+ 

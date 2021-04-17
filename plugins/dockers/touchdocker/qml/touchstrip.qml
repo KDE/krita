@@ -44,7 +44,7 @@ Rectangle {
         Row {
             width: parent.width;
             height: root.rowHeight;
-            Button {
+            ButtonSquared {
                 color: palette.button
                 highlightColor: palette.highlight
                 textColor: palette.buttonText
@@ -52,22 +52,22 @@ Rectangle {
                 id: undoButton
                 width: root.width / 2
                 height: parent.height;
-                image: root.useDarkIcons ? Settings.theme.icon("undo-black") :
-                               Settings.theme.icon("undo");
+                image: root.useDarkIcons ? mainWindow.iconForButton("edit-undo", true) : mainWindow.iconForButton("edit-undo", false);
+
                 onClicked: {
                     mainWindow.slotButtonPressed("edit_undo")
                 }
             }
 
-            Button {
+            ButtonSquared {
                 color: palette.button
                 highlightColor: palette.highlight
                 textColor: palette.buttonText
                 radius: 8;
                 width: root.width / 2
                 height: parent.height;
-                image: root.useDarkIcons ? Settings.theme.icon("redo-black") :
-                               Settings.theme.icon("redo");
+                image: root.useDarkIcons ? mainWindow.iconForButton("edit-redo", true) : mainWindow.iconForButton("edit-redo", false);
+
                 onClicked: {
                     mainWindow.slotButtonPressed("edit_redo")
                 }

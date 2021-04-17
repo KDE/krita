@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 5.8208332 5.8208335"
+   height="22"
+   width="22">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient1167">
+      <stop
+         style="stop-color:#373737;stop-opacity:1"
+         offset="0"
+         id="stop1163" />
+      <stop
+         style="stop-color:#373737;stop-opacity:0"
+         offset="1"
+         id="stop1165" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1081">
+      <stop
+         id="stop1077"
+         offset="0"
+         style="stop-color:#d2d2d2;stop-opacity:1;" />
+      <stop
+         id="stop1079"
+         offset="1"
+         style="stop-color:#d2d2d2;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="translate(-5.820833,0.26458002)"
+       gradientUnits="userSpaceOnUse"
+       y2="294.75103"
+       x2="5.5562498"
+       y1="294.75103"
+       x1="0.26458332"
+       id="linearGradient1083"
+       xlink:href="#linearGradient1081" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="294.75104"
+       x2="5.5562496"
+       y1="294.75104"
+       x1="0.26458332"
+       id="linearGradient1083-2"
+       xlink:href="#linearGradient1167"
+       gradientTransform="translate(-2.706604e-7,-2.6458271)" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="294.75104"
+       x2="5.5562496"
+       y1="294.75104"
+       x1="0.26458332"
+       id="linearGradient1083-2-6"
+       xlink:href="#linearGradient1167"
+       gradientTransform="translate(4.8301392e-7,0.26453755)" />
+  </defs>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2021</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-291.17915)"
+     id="layer1">
+    <path
+       id="rect1070"
+       d="m -5.0000004e-8,294.35415 v 1.32291 H 5.8208332 v -1.32291 z M 0.26458328,294.61873 H 5.5562499 v 0.79375 H 0.26458328 Z"
+       style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+    <path
+       id="path1085-5"
+       d="M 5.2916666,295.67706 4.7625,296.7354 h 1.0583333 z"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path1085-6"
+       d="M 0.52916662,295.67706 1.8181814e-8,296.7354 H 1.0583333 Z"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="rect1070-2"
+       d="m -5.0000004e-8,291.44373 v 1.32292 H 5.8208332 v -1.32292 z M 0.26458328,291.70831 H 5.5562499 v 0.79375 H 0.26458328 Z"
+       style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+    <rect
+       y="291.70834"
+       x="0.26458311"
+       height="0.79374999"
+       width="5.2916665"
+       id="rect1075-7"
+       style="opacity:1;vector-effect:none;fill:url(#linearGradient1083-2);fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+    <path
+       id="path1085-0"
+       d="M 2.9104166,292.76664 2.38125,293.82498 h 1.0583332 z"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path1085-5-9"
+       d="m 5.2916666,292.76664 -0.5291667,1.05834 h 1.0583333 z"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path1085-6-3"
+       d="M 0.52916662,292.76664 2.2272723e-8,293.82498 H 1.0583333 Z"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       y="294.61874"
+       x="0.26458359"
+       height="0.79374999"
+       width="5.2916665"
+       id="rect1075-7-2"
+       style="opacity:1;vector-effect:none;fill:url(#linearGradient1083-2-6);fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+  </g>
+</svg>

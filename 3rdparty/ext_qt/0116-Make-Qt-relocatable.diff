@@ -1,0 +1,446 @@
+From 4ac872639ed0dd3ae6627e05bdda821f7d128500 Mon Sep 17 00:00:00 2001
+From: Alexandru Croitor <alexandru.croitor@qt.io>
+Date: Thu, 09 Nov 2017 18:00:46 +0100
+Subject: [PATCH] Make Qt relocatable
+
+[ChangeLog][QtCore] Qt installations on the host system can now be
+relocated, i.e. moved to other directories.
+
+Add a new feature 'relocatable' that's by default enabled for
+non-static builds
+  - on platforms where libdl is available,
+  - on macOS when configured with -framework,
+  - on Windows.
+
+If the feature is enabled, the directory where plugins, translations
+and other assets are loaded from is determined by the location of
+libQt5Core.so and the lib dir (bin dir on Windows) relative to the
+prefix.
+
+For static builds, the feature 'relocatable' is off by default. It can
+be turned on manually by passing -feature-relocatable to configure. In
+that case, QLibraryInfo::location(QLibraryInfo::TranslationsPaths) and
+friends will return paths rooted in the user application's directory.
+
+The installed and relocated qmake determines properties like
+QT_INSTALL_PREFIX and QT_HOST_PREFIX from the location of the qmake
+executable and the host bin dir relative to the host prefix. This is
+now always done, independent of the 'relocatable' feature.
+
+Note that qmake is currently only relocatable within an environment
+that has the same layout as the original build machine due to absolute
+paths to the original prefix in .prl, .pc and .la files.
+This will be addressed in a separate patch.
+
+Task-number: QTBUG-15234
+Change-Id: I7319e2856d8fe17f277082d71216442f52580633
+Reviewed-by: Alexandru Croitor <alexandru.croitor@qt.io>
+---
+
+diff --git a/configure.json b/configure.json
+index 5fc35a1..13cca85 100644
+--- a/configure.json
++++ b/configure.json
+@@ -222,6 +222,21 @@
+                 { "type": "pkgConfig", "args": "libudev" },
+                 "-ludev"
+             ]
++        },
++        "libdl": {
++            "label": "dlopen()",
++            "test": {
++                "main": [
++                    "dlclose(dlopen(0, 0));",
++                    "dlsym(RTLD_DEFAULT, 0);",
++                    "dlerror();"
++                ]
++            },
++            "headers": "dlfcn.h",
++            "sources": [
++                "",
++                "-ldl"
++            ]
+         }
+     },
+ 
+@@ -1340,6 +1355,17 @@
+             "autoDetect": false,
+             "condition": "!features.shared",
+             "output": [ "publicConfig", "publicQtConfig" ]
++        },
++        "dlopen": {
++            "label": "dlopen()",
++            "condition": "config.unix && libs.libdl",
++            "output": [ "privateFeature" ]
++        },
++        "relocatable": {
++            "label": "Relocatable",
++            "autoDetect": "features.shared",
++            "condition": "features.dlopen || config.win32 || !features.shared",
++            "output": [ "privateFeature" ]
+         }
+     },
+ 
+@@ -1466,6 +1492,7 @@
+                     "args": "enable_gdb_index",
+                     "condition": "config.gcc && !config.clang && (features.debug || features.force_debug_info || features.debug_and_release)"
+                 },
++                "relocatable",
+                 "precompile_header",
+                 "ltcg",
+                 {
+diff --git a/configure.pri b/configure.pri
+index e26b557..5f82efb 100644
+--- a/configure.pri
++++ b/configure.pri
+@@ -763,6 +763,11 @@
+         have_hostprefix = true
+     }
+ 
++    equals(config.input.prefix, $$config.input.extprefix): \
++        qmake_crossbuild = false
++    else: \
++        qmake_crossbuild = true
++
+     PREFIX_COMPLAINTS =
+     PREFIX_REMINDER = false
+     win32: \
+@@ -802,6 +807,18 @@
+         processQtPath(host, hostdatadir, $$config.rel_input.archdatadir)
+     }
+ 
++    win32:$$qtConfEvaluate("features.shared") {
++        # Windows DLLs are in the bin dir.
++        libloc_absolute_path = $$absolute_path($$config.rel_input.bindir, $$config.input.prefix)
++    } else {
++        libloc_absolute_path = $$absolute_path($$config.rel_input.libdir, $$config.input.prefix)
++    }
++    config.input.liblocation_to_prefix = $$relative_path($$config.input.prefix, $$libloc_absolute_path)
++
++    hostbindir_absolute_path = $$absolute_path($$config.rel_input.hostbindir, $$config.input.hostprefix)
++    config.input.hostbindir_to_hostprefix = $$relative_path($$config.input.hostprefix, $$hostbindir_absolute_path)
++    config.input.hostbindir_to_extprefix = $$relative_path($$config.input.extprefix, $$hostbindir_absolute_path)
++
+     !isEmpty(PREFIX_COMPLAINTS) {
+         PREFIX_COMPLAINTS = "$$join(PREFIX_COMPLAINTS, "$$escape_expand(\\n)Note: ")"
+         $$PREFIX_REMINDER: \
+@@ -864,9 +881,13 @@
+         ";" \
+         "" \
+         "$${LITERAL_HASH}define QT_CONFIGURE_SETTINGS_PATH \"$$config.rel_input.sysconfdir\"" \
++        "$${LITERAL_HASH}define QT_CONFIGURE_LIBLOCATION_TO_PREFIX_PATH \"$$config.input.liblocation_to_prefix\"" \
++        "$${LITERAL_HASH}define QT_CONFIGURE_HOSTBINDIR_TO_EXTPREFIX_PATH \"$$config.input.hostbindir_to_extprefix\"" \
++        "$${LITERAL_HASH}define QT_CONFIGURE_HOSTBINDIR_TO_HOSTPREFIX_PATH \"$$config.input.hostbindir_to_hostprefix\"" \
+         "" \
+         "$${LITERAL_HASH}ifdef QT_BUILD_QMAKE" \
+         "$${LITERAL_HASH} define QT_CONFIGURE_SYSROOTIFY_PREFIX $$qmake_sysrootify" \
++        "$${LITERAL_HASH} define QT_CONFIGURE_CROSSBUILD $$qmake_crossbuild" \
+         "$${LITERAL_HASH}endif" \
+         "" \
+         "$${LITERAL_HASH}define QT_CONFIGURE_PREFIX_PATH qt_configure_prefix_path_str + 12" \
+diff --git a/qmake/option.cpp b/qmake/option.cpp
+index d814346..9ec2fe6 100644
+--- a/qmake/option.cpp
++++ b/qmake/option.cpp
+@@ -658,4 +658,9 @@
+     return QString();
+ }
+ 
++QString qmake_abslocation()
++{
++    return Option::globals->qmake_abslocation;
++}
++
+ QT_END_NAMESPACE
+diff --git a/src/corelib/configure.json b/src/corelib/configure.json
+index f7b6d41..ae36023 100644
+--- a/src/corelib/configure.json
++++ b/src/corelib/configure.json
+@@ -158,21 +158,6 @@
+                 "-latomic"
+             ]
+         },
+-        "libdl": {
+-            "label": "dlopen()",
+-            "test": {
+-                "main": [
+-                    "dlclose(dlopen(0, 0));",
+-                    "dlsym(RTLD_DEFAULT, 0);",
+-                    "dlerror();"
+-                ]
+-            },
+-            "headers": "dlfcn.h",
+-            "sources": [
+-                "",
+-                "-ldl"
+-            ]
+-        },
+         "librt": {
+             "label": "clock_gettime()",
+             "test": {
+@@ -612,11 +597,6 @@
+             "condition": "features.clock-gettime && tests.clock-monotonic",
+             "output": [ "feature" ]
+         },
+-        "dlopen": {
+-            "label": "dlopen()",
+-            "condition": "config.unix && libs.libdl",
+-            "output": [ "privateFeature" ]
+-        },
+         "doubleconversion": {
+             "label": "DoubleConversion",
+             "output": [ "privateFeature", "feature" ]
+diff --git a/src/corelib/global/qlibraryinfo.cpp b/src/corelib/global/qlibraryinfo.cpp
+index 4c1b04f..c7357f9 100644
+--- a/src/corelib/global/qlibraryinfo.cpp
++++ b/src/corelib/global/qlibraryinfo.cpp
+@@ -55,16 +55,25 @@
+ # include "qcoreapplication.h"
+ #endif
+ 
++#ifndef QT_BUILD_QMAKE_BOOTSTRAP
++#  include "private/qglobal_p.h"
++#  include "qconfig.cpp"
++#endif
++
+ #ifdef Q_OS_DARWIN
+ #  include "private/qcore_mac_p.h"
+-#endif
+-
+-#ifndef QT_BUILD_QMAKE_BOOTSTRAP
+-# include "qconfig.cpp"
+-#endif
++#endif // Q_OS_DARWIN
+ 
+ #include "archdetect.cpp"
+ 
++#if !defined(QT_BUILD_QMAKE) && QT_CONFIG(relocatable) && QT_CONFIG(dlopen) && !QT_CONFIG(framework)
++#  include <dlfcn.h>
++#endif
++
++#if !defined(QT_BUILD_QMAKE) && QT_CONFIG(relocatable) && defined(Q_OS_WIN)
++#  include <qt_windows.h>
++#endif
++
+ QT_BEGIN_NAMESPACE
+ 
+ extern void qDumpCPUFeatures(); // in qsimd.cpp
+@@ -453,6 +462,160 @@
+ }
+ #endif // QT_BUILD_QMAKE
+ 
++#ifndef QT_BUILD_QMAKE
++static QString prefixFromAppDirHelper()
++{
++    QString appDir;
++
++    if (QCoreApplication::instance()) {
++#ifdef Q_OS_DARWIN
++        CFBundleRef bundleRef = CFBundleGetMainBundle();
++        if (bundleRef) {
++            QCFType<CFURLRef> urlRef = CFBundleCopyBundleURL(bundleRef);
++            if (urlRef) {
++                QCFString path = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
++#ifdef Q_OS_MACOS
++                QString bundleContentsDir = QString(path) + QLatin1String("/Contents/");
++                if (QDir(bundleContentsDir).exists())
++                    return QDir::cleanPath(bundleContentsDir);
++#else
++                return QDir::cleanPath(QString(path)); // iOS
++#endif // Q_OS_MACOS
++            }
++        }
++#endif // Q_OS_DARWIN
++        // We make the prefix path absolute to the executable's directory.
++        appDir = QCoreApplication::applicationDirPath();
++    } else {
++        appDir = QDir::currentPath();
++    }
++
++    return appDir;
++}
++#endif
++
++#if !defined(QT_BUILD_QMAKE) && QT_CONFIG(relocatable)
++static QString prefixFromQtCoreLibraryHelper(const QString &qtCoreLibraryPath)
++{
++    const QString qtCoreLibrary = QDir::fromNativeSeparators(qtCoreLibraryPath);
++    const QString libDir = QFileInfo(qtCoreLibrary).absolutePath();
++    const QString prefixDir = libDir + QLatin1Char('/')
++            + QLatin1String(QT_CONFIGURE_LIBLOCATION_TO_PREFIX_PATH);
++    return QDir::cleanPath(prefixDir);
++}
++
++#if defined(Q_OS_WIN)
++#if defined(Q_OS_WINRT)
++EXTERN_C IMAGE_DOS_HEADER __ImageBase;
++static HMODULE getWindowsModuleHandle()
++{
++    return reinterpret_cast<HMODULE>(&__ImageBase);
++}
++#else  // Q_OS_WINRT
++static HMODULE getWindowsModuleHandle()
++{
++    HMODULE hModule = NULL;
++    GetModuleHandleEx(
++        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
++        (LPCTSTR)&QLibraryInfo::isDebugBuild, &hModule);
++    return hModule;
++}
++#endif // !Q_OS_WINRT
++#endif // Q_OS_WIN
++
++static QString getRelocatablePrefix()
++{
++    QString prefixPath;
++
++    // For static builds, the prefix will be the app directory.
++    // For regular builds, the prefix will be relative to the location of the QtCore shared library.
++#if defined(QT_STATIC)
++    prefixPath = prefixFromAppDirHelper();
++#elif defined(Q_OS_DARWIN) && QT_CONFIG(framework)
++    CFBundleRef qtCoreBundle = CFBundleGetBundleWithIdentifier(
++            CFSTR("org.qt-project.QtCore"));
++    Q_ASSERT(qtCoreBundle);
++
++    QCFType<CFURLRef> qtCorePath = CFBundleCopyBundleURL(qtCoreBundle);
++    Q_ASSERT(qtCorePath);
++
++    QCFType<CFURLRef> qtCorePathAbsolute = CFURLCopyAbsoluteURL(qtCorePath);
++    Q_ASSERT(qtCorePathAbsolute);
++
++    QCFType<CFURLRef> libDirCFPath = CFURLCreateCopyDeletingLastPathComponent(NULL, qtCorePathAbsolute);
++
++    const QCFString libDirCFString = CFURLCopyFileSystemPath(libDirCFPath, kCFURLPOSIXPathStyle);
++
++    const QString prefixDir = QString(libDirCFString) + QLatin1Char('/')
++        + QLatin1String(QT_CONFIGURE_LIBLOCATION_TO_PREFIX_PATH);
++
++    prefixPath = QDir::cleanPath(prefixDir);
++#elif QT_CONFIG(dlopen)
++    Dl_info info;
++    int result = dladdr(reinterpret_cast<void *>(&QLibraryInfo::isDebugBuild), &info);
++    if (result > 0 && info.dli_fname)
++        prefixPath = prefixFromQtCoreLibraryHelper(QString::fromLatin1(info.dli_fname));
++#elif defined(Q_OS_WIN)
++    HMODULE hModule = getWindowsModuleHandle();
++    const int kBufferSize = 4096;
++    wchar_t buffer[kBufferSize];
++    const int pathSize = GetModuleFileName(hModule, buffer, kBufferSize);
++    if (pathSize > 0)
++        prefixPath = prefixFromQtCoreLibraryHelper(QString::fromWCharArray(buffer, pathSize));
++#else
++#error "The chosen platform / config does not support querying for a dynamic prefix."
++#endif
++
++    Q_ASSERT_X(!prefixPath.isEmpty(), "getRelocatablePrefix",
++                                      "Failed to find the Qt prefix path.");
++    return prefixPath;
++}
++#endif
++
++#if defined(QT_BUILD_QMAKE) && !defined(QT_BUILD_QMAKE_BOOTSTRAP)
++QString qmake_abslocation();
++
++static QString getPrefixFromHostBinDir(const char *hostBinDirToPrefixPath)
++{
++    const QFileInfo qmfi = QFileInfo(qmake_abslocation()).canonicalFilePath();
++    return QDir::cleanPath(qmfi.absolutePath() + QLatin1Char('/')
++                           + QLatin1String(hostBinDirToPrefixPath));
++}
++
++static QString getExtPrefixFromHostBinDir()
++{
++    return getPrefixFromHostBinDir(QT_CONFIGURE_HOSTBINDIR_TO_EXTPREFIX_PATH);
++}
++
++static QString getHostPrefixFromHostBinDir()
++{
++    return getPrefixFromHostBinDir(QT_CONFIGURE_HOSTBINDIR_TO_HOSTPREFIX_PATH);
++}
++#endif
++
++#ifndef QT_BUILD_QMAKE_BOOTSTRAP
++static const char *getPrefix(
++#ifdef QT_BUILD_QMAKE
++        QLibraryInfo::PathGroup group
++#endif
++        )
++{
++#if defined(QT_BUILD_QMAKE)
++#  if QT_CONFIGURE_CROSSBUILD
++    if (group == QLibraryInfo::DevicePaths)
++        return QT_CONFIGURE_PREFIX_PATH;
++#  endif
++    static QByteArray extPrefixPath = getExtPrefixFromHostBinDir().toLatin1();
++    return extPrefixPath.constData();
++#elif QT_CONFIG(relocatable)
++    static QByteArray prefixPath = getRelocatablePrefix().toLatin1();
++    return prefixPath.constData();
++#else
++    return QT_CONFIGURE_PREFIX_PATH;
++#endif
++}
++#endif // QT_BUILD_QMAKE_BOOTSTRAP
++
+ /*!
+   Returns the location specified by \a loc.
+ */
+@@ -564,12 +727,11 @@
+     if (!fromConf) {
+         const char * volatile path = 0;
+         if (loc == PrefixPath) {
+-            path =
+-# ifdef QT_BUILD_QMAKE
+-                (group != DevicePaths) ?
+-                    QT_CONFIGURE_EXT_PREFIX_PATH :
+-# endif
+-                    QT_CONFIGURE_PREFIX_PATH;
++            path = getPrefix(
++#ifdef QT_BUILD_QMAKE
++                        group
++#endif
++                   );
+         } else if (unsigned(loc) <= sizeof(qt_configure_str_offsets)/sizeof(qt_configure_str_offsets[0])) {
+             path = qt_configure_strs + qt_configure_str_offsets[loc - 1];
+ #ifndef Q_OS_WIN // On Windows we use the registry
+@@ -578,7 +740,8 @@
+ #endif
+ # ifdef QT_BUILD_QMAKE
+         } else if (loc == HostPrefixPath) {
+-            path = QT_CONFIGURE_HOST_PREFIX_PATH;
++            static const QByteArray hostPrefixPath = getHostPrefixFromHostBinDir().toLatin1();
++            path = hostPrefixPath.constData();
+ # endif
+         }
+ 
+@@ -612,28 +775,7 @@
+         }
+ #else
+         if (loc == PrefixPath) {
+-            if (QCoreApplication::instance()) {
+-#ifdef Q_OS_DARWIN
+-                CFBundleRef bundleRef = CFBundleGetMainBundle();
+-                if (bundleRef) {
+-                    QCFType<CFURLRef> urlRef = CFBundleCopyBundleURL(bundleRef);
+-                    if (urlRef) {
+-                        QCFString path = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
+-#ifdef Q_OS_OSX
+-                        QString bundleContentsDir = QString(path) + QLatin1String("/Contents/");
+-                        if (QDir(bundleContentsDir).exists())
+-                            return QDir::cleanPath(bundleContentsDir + ret);
+-#else
+-                        return QDir::cleanPath(QString(path) + QLatin1Char('/') + ret); // iOS
+-#endif // Q_OS_OSX
+-                    }
+-                }
+-#endif // Q_OS_DARWIN
+-                // We make the prefix path absolute to the executable's directory.
+-                baseDir = QCoreApplication::applicationDirPath();
+-            } else {
+-                baseDir = QDir::currentPath();
+-            }
++            baseDir = prefixFromAppDirHelper();
+         } else {
+             // we make any other path absolute to the prefix directory
+             baseDir = location(PrefixPath);

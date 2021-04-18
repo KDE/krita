@@ -1,20 +1,20 @@
-From 853eced543356b39deae6aa455640c0b45c633dd Mon Sep 17 00:00:00 2001
+From cb8dc9ac0c61ceeb73b9a103e581994401bd4704 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
-Date: Thu, 15 Apr 2021 00:16:10 +0000
+Date: Sun, 18 Apr 2021 00:20:31 +0000
 Subject: [PATCH 6/6] Add support for MSVC
 
 ---
- CMakeLists.txt                          | 78 +++++++++++++++++++------
+ CMakeLists.txt                          | 81 +++++++++++++++++++------
  cmake/modules/FindFFTW3.cmake           |  2 +-
  src/FilterParameters/PointParameter.cpp |  2 +-
  src/FilterSelector/FiltersPresenter.cpp |  2 +-
- 4 files changed, 63 insertions(+), 21 deletions(-)
+ 4 files changed, 67 insertions(+), 20 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 30aa10d..899f16c 100644
+index 30aa10d..58ceab4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -44,15 +44,14 @@ set (GMIC_LIB_PATH "${GMIC_PATH}" CACHE STRING "Define the path to the GMIC shar
+@@ -44,15 +44,19 @@ set (GMIC_LIB_PATH "${GMIC_PATH}" CACHE STRING "Define the path to the GMIC shar
  option(ENABLE_ASAN "Enable -fsanitize=address (if debug build)" ON)
  option(ENABLE_FFTW3 "Enable FFTW3 library support" ON)
  
@@ -23,9 +23,13 @@ index 30aa10d..899f16c 100644
  
 -if (WIN32)
 -    message("LTO is disabled (windows platform)")
--    set(ENABLE_LTO OFF)
 +if (MSVC)
 +  option(ENABLE_CFG "Enable Control Flow Guard (MSVC)" ON)
++endif()
++
++if (WIN32 AND NOT MSVC)
++    message("LTO is disabled (windows platform, not MSVC)")
+     set(ENABLE_LTO OFF)
  endif()
  
  if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -34,7 +38,7 @@ index 30aa10d..899f16c 100644
  endif()
  
  
-@@ -123,6 +122,11 @@ endif()
+@@ -123,6 +127,11 @@ endif()
  
  # Required packages
  
@@ -46,7 +50,7 @@ index 30aa10d..899f16c 100644
  #
  # Qt5
  #
-@@ -203,10 +207,33 @@ endif()
+@@ -203,10 +212,33 @@ endif()
  # LTO option
  #
  
@@ -83,7 +87,7 @@ index 30aa10d..899f16c 100644
  endif()
  
  #
-@@ -265,9 +292,13 @@ if (WIN32)
+@@ -265,9 +297,13 @@ if (WIN32)
      add_definitions(-Dcimg_display=2)
      add_definitions(-DPSAPI_VERSION=1)
      add_definitions(-D_IS_WINDOWS_)
@@ -98,7 +102,7 @@ index 30aa10d..899f16c 100644
      )
  endif()
  
-@@ -282,19 +313,30 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+@@ -282,19 +318,30 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
      endif(ENABLE_ASAN)
  elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
      add_definitions(-DQT_NO_DEBUG_OUTPUT)

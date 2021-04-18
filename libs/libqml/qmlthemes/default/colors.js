@@ -119,7 +119,7 @@ var values = {
                 error: "red",
                 focus: "gray",
             },
-            placeholder: "#5a5a5a",
+            placeholder: Qt.rgba(0.0, 0.0, 0.0, 0.5),
         },
         textFieldMultiline: {
             background: Qt.rgba(1.0, 1.0, 1.0, 0.75),

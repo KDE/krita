@@ -30,7 +30,7 @@ Page {
             right: parent.right;
         }
 
-        text: "Save Image";
+        text: qsTr("Save Image");
         background: "images/header_krita_sketch.png";
 
         leftArea: Button {
@@ -120,7 +120,7 @@ Page {
                 height: Constants.GridHeight * 0.75;
                 width: Constants.GridWidth * 7.25;
 
-                placeholder: "File Name";
+                placeholder: qsTr("File Name");
             }
 
             Rectangle {
@@ -148,12 +148,12 @@ Page {
                     expandToTop: true;
 
                     model: ListModel {
-                        ListElement { text: "Krita Image"; type: "kra"; mime: "application/x-krita"; }
-                        ListElement { text: "OpenRaster Image"; type: "ora"; mime: "image/openraster"; }
-                        ListElement { text: "PhotoShop Image"; type: "psd"; mime: "image/vnd.adobe.photoshop"; }
-                        ListElement { text: "PNG Image"; type: "png"; mime: "image/png"; }
-                        ListElement { text: "BMP Image"; type: "bmp"; mime: "image/bmp"; }
-                        ListElement { text: "JPEG Image"; type: "jpg"; mime: "image/jpeg"; }
+                        ListElement { text: qsTr("Krita Image"); type: "kra"; mime: "application/x-krita"; }
+                        ListElement { text: qsTr("OpenRaster Image"); type: "ora"; mime: "image/openraster"; }
+                        ListElement { text: qsTr("PhotoShop Image"); type: "psd"; mime: "image/vnd.adobe.photoshop"; }
+                        ListElement { text: qsTr("PNG Image"); type: "png"; mime: "image/png"; }
+                        ListElement { text: qsTr("BMP Image"); type: "bmp"; mime: "image/bmp"; }
+                        ListElement { text: qsTr("JPEG Image"); type: "jpg"; mime: "image/jpeg"; }
                     }
                 }
             }
@@ -213,7 +213,7 @@ Page {
     Dialog {
         id: confirmOverwrite;
         title: "File already exists";
-        message: "A file with the name %1.%2 already exists in this folder. Do you wish to overwrite?".arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+        message: qsTr("A file with the name %1.%2 already exists in this folder. Do you wish to overwrite?").arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
         buttons: [ "Overwrite", "Cancel" ];
         onButtonClicked: {
             switch(button) {

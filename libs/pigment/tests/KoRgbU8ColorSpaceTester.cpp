@@ -328,11 +328,6 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
     quint8 * srcPtr = reinterpret_cast<quint8*>(src) + cs->pixelSize();
     quint8 * dstPtr = reinterpret_cast<quint8*>(dst) + cs->pixelSize();
 
-    quint8 goodSrc[] = {128,128,128,129};
-    quint8 goodDst[] = {10,10,10,11};
-    quint8 badSrc[] = {128,128,128,0};
-    quint8 badDst[] = {12,12,12,0};
-
 
     auto testBadPixel = [cs, op, srcPtr, dstPtr, numTestablePixels] (int badPixelPos,
             const quint8 *goodSrc,

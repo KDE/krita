@@ -16,7 +16,7 @@ public:
         : tool(t)
     {
     }
-    ~KoInteractionStrategyPrivate()
+    virtual ~KoInteractionStrategyPrivate()
     {
         tool->setStatusText(QString());
     }

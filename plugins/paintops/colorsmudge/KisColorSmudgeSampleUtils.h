@@ -164,8 +164,8 @@ void sampleColor(const QRect &srcRect,
         while (numSamplesLeft > 0) {
             const int currentBatchSize = qMin(numSamplesLeft, batchSize);
             for (int i = 0; i < currentBatchSize; i++) {
-                const QPoint pt(hGen.generate(sampleRect.width()),
-                                vGen.generate(sampleRect.height()));
+                const QPoint pt(hGen.generate(sampleRect.width() - 1),
+                                vGen.generate(sampleRect.height() - 1));
 
                 weightingModeWrapper.samplePixel(pt);
             }

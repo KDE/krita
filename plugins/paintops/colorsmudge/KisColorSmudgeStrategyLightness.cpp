@@ -123,6 +123,7 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
                colorRateValue,
                smudgeRadiusValue);
 
+    m_heightmapPainter.setOpacity(qRound(lightnessStrengthValue * 255.0));
     m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
     m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
 
@@ -145,7 +146,7 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
                     modulateLightnessByGrayBrush(tempColorDevice->data(),
                                                  reinterpret_cast<const QRgb*>(tempHeightmapDevice->data()),
                                                  0,
-                                                 lightnessStrengthValue,
+                                                 1.0,
                                                  numPixels);
             m_projectionDevice->writeBytes(tempColorDevice->data(), tempColorDevice->bounds());
         }

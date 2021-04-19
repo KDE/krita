@@ -21,7 +21,8 @@
  * @brief The PopupWidgetInterface abstract class defines
  * the basic interface that will be used by all popup widgets.
  */
-struct KisPopupWidgetInterface {
+class KisPopupWidgetInterface {
+public:
     virtual ~KisPopupWidgetInterface() {}
     virtual void popup(const QPoint& position) = 0;
 };

@@ -151,13 +151,24 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     m_precisePainterWrapper.readRects(m_tempPainter->calculateAllMirroredRects(dabRectAligned));
     m_tempPainter->copyAreaOptimized(dabRectAligned.topLeft(), m_tempPainter->device(), m_dab, dabRectAligned);
 
+
+    static const KoColorSpace *maskCs = KoColorSpaceRegistry::instance()->alpha8();
+    KisPaintDeviceSP maskDev = KisPaintDeviceSP(new KisPaintDevice(maskCs));
+
     KisSequentialIterator it(m_dab, dabRectAligned);
+    KisSequentialIterator itmask(maskDev, dabRectAligned);
+
+    quint8 maskUnitValue = KoColorSpaceMathsTraits<quint8>::unitValue; // because it's alpha8
+
     float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
     float minValue = KoColorSpaceMathsTraits<channelType>::min;
     float maxValue = KoColorSpaceMathsTraits<channelType>::max;
     bool eraser = painter()->compositeOp()->id() == COMPOSITE_ERASE;
 
-    while(it.nextPixel()) {
+    while(it.nextPixel() && itmask.nextPixel()) {
+
+        // first initialize to 0;
+        *(itmask.rawData()) = 0;
 
         QPoint pt(it.x(), it.y());
 
@@ -174,8 +185,14 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         }
 
         base_alpha = calculate_alpha_for_rr (rr, hardness, segment1_slope, segment2_slope);
+
         m_tempPainter->selection();
         alpha = base_alpha * normal_mode;
+
+        // set alpha to mask
+        if (alpha > minValue) {
+            *(itmask.rawData()) = (quint8)(maskUnitValue);
+        }
 
         channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
 
@@ -238,8 +255,15 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         nativeArray[2] = qBound(minValue, r * unitValue, maxValue);
         nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
     }
-    m_tempPainter->bitBlt(dabRectAligned.topLeft(), m_dab, dabRectAligned);
-    // Mirror mode is missing because I cannot figure out how to make a mask for the fixed paintdevice.
+
+
+    KisFixedPaintDeviceSP mask = KisFixedPaintDeviceSP(new KisFixedPaintDevice(maskCs));
+    mask->setRect(dabRectAligned);
+    mask->lazyGrowBufferWithoutInitialization();
+    maskDev->readBytes(mask->data(), dabRectAligned);
+
+    m_tempPainter->bitBltWithFixedSelection(dabRectAligned.x(), dabRectAligned.y(), m_dab, mask, dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.width(), dabRectAligned.height());
+    m_tempPainter->renderMirrorMask(dabRectAligned, m_dab, dabRectAligned.x(), dabRectAligned.y(), mask);
     const QVector<QRect> dirtyRects = m_tempPainter->takeDirtyRegion();
     m_precisePainterWrapper.writeRects(dirtyRects);
     painter()->addDirtyRects(dirtyRects);

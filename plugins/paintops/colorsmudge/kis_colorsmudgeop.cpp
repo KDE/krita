@@ -124,7 +124,9 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
                                                         useSmearAlpha,
                                                         useDullingMode,
                                                         useOverlayMode));
-    } else if (useNewEngine && m_brush->brushApplication() == IMAGESTAMP) {
+    } else if (useNewEngine &&
+               (m_brush->brushApplication() == IMAGESTAMP ||
+                m_brush->brushApplication() == GRADIENTMAP)) {
         m_strategy.reset(new KisColorSmudgeStrategyStamp(painter,
                                                          image,
                                                          useSmearAlpha,

@@ -780,6 +780,9 @@ void KisAnimCurvesDocker::slotActiveNodeUpdate(const QModelIndex index)
 
 void KisAnimCurvesDocker::requestChannelMenuAt(const QPoint &point)
 {
+    if (m_d->channelTreeView->selectionModel()->selectedIndexes().size() == 0) {
+        return;
+    }
     QModelIndex selected = m_d->channelTreeView->selectionModel()->selectedIndexes().first();
 
     if (selected.data(KisAnimCurvesChannelsModel::CurveRole).toBool()) {

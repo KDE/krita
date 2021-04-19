@@ -31,6 +31,8 @@ class KMainWindow;
 class KMainWindowPrivate
 {
 public:
+    virtual ~KMainWindowPrivate() = default;
+
     bool autoSaveSettings: 1;
     bool settingsDirty: 1;
     bool autoSaveWindowSize: 1;

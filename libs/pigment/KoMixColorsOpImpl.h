@@ -288,6 +288,11 @@ private:
 
             normalizeFactor += weightsWrapper.normalizeFactor();
         }
+
+        qint64 currentWeightsSum() const
+        {
+            return normalizeFactor;
+        }
     };
 
     template<class AbstractSource, class WeightsWrapper>
@@ -321,6 +326,12 @@ public:
     {
         result.computeMixedColor(data);
     }
+
+    qint64 currentWeightsSum() const override
+    {
+        return result.currentWeightsSum();
+    }
+
 private:
     MixDataResult result;
 };

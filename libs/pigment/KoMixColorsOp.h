@@ -24,6 +24,7 @@ public:
         virtual void accumulate(const quint8 *data, const qint16 *weights, int weightSum, int nPixels) = 0;
         virtual void accumulateAverage(const quint8 *data, int nPixels) = 0;
         virtual void computeMixedColor(quint8 *data) = 0;
+        virtual qint64 currentWeightsSum() const = 0;
     };
 
     virtual Mixer* createMixer() const = 0;

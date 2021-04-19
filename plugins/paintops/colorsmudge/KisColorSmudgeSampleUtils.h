@@ -11,6 +11,12 @@
 #include "KoMixColorsOp.h"
 #include "kis_algebra_2d.h"
 
+#include <KoColor.h>
+
+#include "kis_fixed_paint_device.h"
+#include "KisColorSmudgeSource.h"
+
+
 namespace KisColorSmudgeSampleUtils {
 
 struct WeightedSampleWrapper
@@ -43,6 +49,15 @@ struct WeightedSampleWrapper
         KIS_SAFE_ASSERT_RECOVER(*sampleRadiusValue <= 1.0) {
             *sampleRadiusValue = 1.0;
         }
+    }
+
+
+    bool shouldRestartWithBiggerRadius() const {
+        // if all the pixels we sampled appeared to be masked out
+        // we should ask the sampling algorithm to restart with
+        // bigger sampling radius
+
+        return m_mixer->currentWeightsSum() < 128;
     }
 
     KoMixColorsOp::Mixer *m_mixer;
@@ -79,6 +94,10 @@ struct AveragedSampleWrapper
         Q_UNUSED(sampleRadiusValue);
     }
 
+    bool shouldRestartWithBiggerRadius() const {
+        return false;
+    }
+
     KoMixColorsOp::Mixer *m_mixer;
     int m_samplePixelSize;
     const QRect m_sampleRect;
@@ -102,64 +121,73 @@ void sampleColor(const QRect &srcRect,
 
     const QRect minimalRect = QRect(srcRect.center(), QSize(1,1));
 
-    const QRect sampleRect = sampleRadiusValue > 0 ?
-                             KisAlgebra2D::blowRect(srcRect, 0.5 * (sampleRadiusValue - 1.0)) | minimalRect :
-                             minimalRect;
+    do {
+        const QRect sampleRect = sampleRadiusValue > 0 ?
+                    KisAlgebra2D::blowRect(srcRect, 0.5 * (sampleRadiusValue - 1.0)) | minimalRect :
+                    minimalRect;
 
-    tempFixedDevice->setRect(sampleRect);
-    tempFixedDevice->lazyGrowBufferWithoutInitialization();
+        tempFixedDevice->setRect(sampleRect);
+        tempFixedDevice->lazyGrowBufferWithoutInitialization();
 
-    const KoColorSpace *cs = tempFixedDevice->colorSpace();
-    const int numPixels = sampleRect.width() * sampleRect.height();
-    sourceDevice->readRect(sampleRect);
-    sourceDevice->readBytes(tempFixedDevice->data(), sampleRect);
+        const KoColorSpace *cs = tempFixedDevice->colorSpace();
+        const int numPixels = sampleRect.width() * sampleRect.height();
+        sourceDevice->readRect(sampleRect);
+        sourceDevice->readBytes(tempFixedDevice->data(), sampleRect);
 
-    KisAlgebra2D::HaltonSequenceGenerator hGen(2);
-    KisAlgebra2D::HaltonSequenceGenerator vGen(3);
+        KisAlgebra2D::HaltonSequenceGenerator hGen(2);
+        KisAlgebra2D::HaltonSequenceGenerator vGen(3);
 
-    QScopedPointer<KoMixColorsOp::Mixer> mixer(cs->mixColorsOp()->createMixer());
+        QScopedPointer<KoMixColorsOp::Mixer> mixer(cs->mixColorsOp()->createMixer());
 
-    const int minSamples =
-            qMin(numPixels, qMax(64, qRound(0.02 * numPixels)));
+        const int minSamples =
+                qMin(numPixels, qMax(64, qRound(0.02 * numPixels)));
 
-    WeightingModeWrapper weightingModeWrapper(mixer.data(),
-                                              maskDab, srcRect,
-                                              tempFixedDevice, sampleRect);
+        WeightingModeWrapper weightingModeWrapper(mixer.data(),
+                                                  maskDab, srcRect,
+                                                  tempFixedDevice, sampleRect);
 
-    KoColor lastPickedColor(*resultColor);
+        KoColor lastPickedColor(*resultColor);
 
-    for (int i = 0; i < minSamples; i++) {
-        const QPoint pt(hGen.generate(sampleRect.width() - 1),
-                        vGen.generate(sampleRect.height() - 1));
-
-        weightingModeWrapper.samplePixel(pt);
-    }
-
-    mixer->computeMixedColor(resultColor->data());
-    lastPickedColor = *resultColor;
-
-    const int batchSize = 16;
-    int numSamplesLeft = numPixels - minSamples;
-
-    while (numSamplesLeft > 0) {
-        const int currentBatchSize = qMin(numSamplesLeft, batchSize);
-        for (int i = 0; i < currentBatchSize; i++) {
-            const QPoint pt(hGen.generate(sampleRect.width()),
-                            vGen.generate(sampleRect.height()));
+        for (int i = 0; i < minSamples; i++) {
+            const QPoint pt(hGen.generate(sampleRect.width() - 1),
+                            vGen.generate(sampleRect.height() - 1));
 
             weightingModeWrapper.samplePixel(pt);
         }
 
         mixer->computeMixedColor(resultColor->data());
-
-        const quint8 difference =
-                cs->differenceA(resultColor->data(), lastPickedColor.data());
-
-        if (difference <= 2) break;
-
         lastPickedColor = *resultColor;
-        numSamplesLeft -= currentBatchSize;
-    }
+
+        const int batchSize = 16;
+        int numSamplesLeft = numPixels - minSamples;
+
+        while (numSamplesLeft > 0) {
+            const int currentBatchSize = qMin(numSamplesLeft, batchSize);
+            for (int i = 0; i < currentBatchSize; i++) {
+                const QPoint pt(hGen.generate(sampleRect.width()),
+                                vGen.generate(sampleRect.height()));
+
+                weightingModeWrapper.samplePixel(pt);
+            }
+
+            mixer->computeMixedColor(resultColor->data());
+
+            const quint8 difference =
+                    cs->differenceA(resultColor->data(), lastPickedColor.data());
+
+            if (difference <= 2) break;
+
+            lastPickedColor = *resultColor;
+            numSamplesLeft -= currentBatchSize;
+        }
+
+        if (!weightingModeWrapper.shouldRestartWithBiggerRadius() || sampleRadiusValue >= 1.0) {
+            break;
+        }
+
+        sampleRadiusValue = qMin(1.0, sampleRadiusValue + 0.05);
+
+    } while (1);
 }
 
 }

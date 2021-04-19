@@ -825,12 +825,12 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
-//    if (event->buttons() == Qt::NoButton &&
-//        event->button() == Qt::RightButton) {
+   if (event->buttons() == Qt::NoButton &&
+       event->button() == Qt::RightButton) {
 
-//        setVisible(false);
-//        return;
-//    }
+       setVisible(false);
+       return;
+   }
 
     m_isOverCanvasRotationIndicator = false;
     m_isRotatingCanvasIndicator = false;

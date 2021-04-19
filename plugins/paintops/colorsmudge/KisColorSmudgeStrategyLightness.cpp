@@ -67,7 +67,8 @@ void KisColorSmudgeStrategyLightness::initializePainting()
     m_heightmapPainter.setSelection(m_initializationPainter->selection());
     m_heightmapPainter.copyMirrorInformationFrom(m_initializationPainter);
 
-    m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice));
+    // we should read data from the color layer, not from the final projection layer
+    m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice, 1));
 }
 
 KisColorSmudgeStrategyBase::DabColoringStrategy &KisColorSmudgeStrategyLightness::coloringStrategy()

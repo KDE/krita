@@ -49,6 +49,7 @@ echo "$(cmake --version | head -n 1)"
 # Set some global variables.
 OSXBUILD_TYPE="RelWithDebInfo"
 OSXBUILD_TESTING="OFF"
+OSXBUILD_HIDE_SAFEASSERTS="ON"
 
 # -- Parse input args
 for arg in "${@}"; do
@@ -61,6 +62,8 @@ for arg in "${@}"; do
         OSXBUILD_TARBALLINSTALL="TRUE"
     elif [[ "${arg}" = --universal ]]; then
         OSXBUILD_UNIVERSAL="TRUE"
+    elif [[ "${arg}" = --showasserts ]]; then
+        OSXBUILD_HIDE_SAFEASSERTS="OFF"
     else
         parsed_args="${parsed_args} ${arg}"
     fi
@@ -434,7 +437,7 @@ build_krita () {
         -DCMAKE_PREFIX_PATH=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \
         -DBUILD_TESTING=${OSXBUILD_TESTING} \
-        -DHIDE_SAFE_ASSERTS=ON \
+        -DHIDE_SAFE_ASSERTS=${OSXBUILD_HIDE_SAFEASSERTS} \
         -DFETCH_TRANSLATIONS=ON \
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \

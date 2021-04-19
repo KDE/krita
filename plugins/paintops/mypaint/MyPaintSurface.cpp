@@ -36,7 +36,6 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     , m_dab(m_precisePainterWrapper.createPreciseCompositionSourceDevice())
     , m_tempPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
     , m_backgroundPainter(new KisPainter(m_precisePainterWrapper.createPreciseCompositionSourceDevice()))
-
 {
     m_blendDevice = KisFixedPaintDeviceSP(new KisFixedPaintDevice(m_precisePainterWrapper.preciseColorSpace()));
 
@@ -54,6 +53,11 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     m_surface->get_color = this->get_color;
     m_surface->destroy = destroy_internal_surface_callback;
     m_surface->bitDepth = m_precisePainterWrapper.preciseColorSpace()->channels()[0]->channelValueType();
+
+    // devices for mask information
+    static const KoColorSpace *maskCs = KoColorSpaceRegistry::instance()->alpha8();
+    m_maskDeviceIntermediate = KisPaintDeviceSP(new KisPaintDevice(maskCs));
+    m_maskDeviceFinal = KisFixedPaintDeviceSP(new KisFixedPaintDevice(maskCs));
 }
 
 KisMyPaintSurface::~KisMyPaintSurface()
@@ -152,11 +156,9 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     m_tempPainter->copyAreaOptimized(dabRectAligned.topLeft(), m_tempPainter->device(), m_dab, dabRectAligned);
 
 
-    static const KoColorSpace *maskCs = KoColorSpaceRegistry::instance()->alpha8();
-    KisPaintDeviceSP maskDev = KisPaintDeviceSP(new KisPaintDevice(maskCs));
 
     KisSequentialIterator it(m_dab, dabRectAligned);
-    KisSequentialIterator itmask(maskDev, dabRectAligned);
+    KisSequentialIterator itmask(m_maskDeviceIntermediate, dabRectAligned);
 
     quint8 maskUnitValue = KoColorSpaceMathsTraits<quint8>::unitValue; // because it's alpha8
 
@@ -256,14 +258,12 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
     }
 
+    m_maskDeviceFinal->setRect(dabRectAligned);
+    m_maskDeviceFinal->lazyGrowBufferWithoutInitialization();
+    m_maskDeviceIntermediate->readBytes(m_maskDeviceFinal->data(), dabRectAligned);
 
-    KisFixedPaintDeviceSP mask = KisFixedPaintDeviceSP(new KisFixedPaintDevice(maskCs));
-    mask->setRect(dabRectAligned);
-    mask->lazyGrowBufferWithoutInitialization();
-    maskDev->readBytes(mask->data(), dabRectAligned);
-
-    m_tempPainter->bitBltWithFixedSelection(dabRectAligned.x(), dabRectAligned.y(), m_dab, mask, dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.width(), dabRectAligned.height());
-    m_tempPainter->renderMirrorMask(dabRectAligned, m_dab, dabRectAligned.x(), dabRectAligned.y(), mask);
+    m_tempPainter->bitBltWithFixedSelection(dabRectAligned.x(), dabRectAligned.y(), m_dab, m_maskDeviceFinal, dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.width(), dabRectAligned.height());
+    m_tempPainter->renderMirrorMask(dabRectAligned, m_dab, dabRectAligned.x(), dabRectAligned.y(), m_maskDeviceFinal);
     const QVector<QRect> dirtyRects = m_tempPainter->takeDirtyRegion();
     m_precisePainterWrapper.writeRects(dirtyRects);
     painter()->addDirtyRects(dirtyRects);

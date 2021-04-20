@@ -573,6 +573,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent* resizeEvent) {
+    Q_UNUSED(resizeEvent);
     // Ensure that the resized geometry fits within the desired rect...
     QRect tempGeo = rect(); 
     tempGeo.translate(pos());

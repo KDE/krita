@@ -22,7 +22,7 @@
 #include "kis_change_primary_setting_action.h"
 #include "kis_pan_action.h"
 #include "kis_rotate_canvas_action.h"
-#include "KisPopupWidgetAction.h".h"
+#include "KisPopupWidgetAction.h"
 #include "kis_tool_invocation_action.h"
 #include "kis_zoom_action.h"
 #include "kis_shortcut_configuration.h"

@@ -57,11 +57,13 @@ public:
     void tabletEvent(QTabletEvent *event) override;
 
     void popup(const QPoint& position) override;
+    
+    void ensureWithinParent(const QPoint& position, bool useUpperLeft);
 
 protected:
     void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
-    void resizeEvent(QResizeEvent*) override {}
+    void resizeEvent(QResizeEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mousePressEvent(QMouseEvent*) override;

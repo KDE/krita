@@ -582,6 +582,13 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
 }
 
+void KisPopupPalette::resizeEvent(QResizeEvent* resizeEvent) {
+    // Ensure that the resized geometry fits within the desired rect...
+    QRect tempGeo = rect(); 
+    tempGeo.translate(pos());
+    ensureWithinParent(tempGeo.topLeft(), true);
+}
+
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
 {
     QPainterPath path;
@@ -789,7 +796,10 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event) {
 
 void KisPopupPalette::popup(const QPoint &position) {
     setVisible(!isVisible());
+    ensureWithinParent(position, false);
+}
 
+void KisPopupPalette::ensureWithinParent(const QPoint& position, bool useUpperLeft) {
     if (isVisible() && parentWidget())  {
         const float widgetMargin = -20.0f;
         const QRect fitRect = kisGrowRect(parentWidget()->rect(), widgetMargin);
@@ -797,7 +807,11 @@ void KisPopupPalette::popup(const QPoint &position) {
 
         QRect paletteRect = rect();
 
-        paletteRect.moveTo(position - paletteCenterOffset);
+        if (!useUpperLeft) {
+            paletteRect.moveTo(position - paletteCenterOffset);
+        } else {
+            paletteRect.moveTopLeft(position);
+        }
 
         paletteRect = kisEnsureInRect(paletteRect, fitRect);
         move(paletteRect.topLeft());

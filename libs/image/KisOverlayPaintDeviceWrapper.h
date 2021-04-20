@@ -124,8 +124,12 @@ public:
      */
     KisPaintDeviceSP createPreciseCompositionSourceDevice();
 
+    void beginTransaction(KUndo2Command *parent = 0);
+    KUndo2Command *endTransaction();
 
 private:
+
+    friend struct KisChangeOverlayWrapperCommand;
     struct Private;
     const QScopedPointer<Private> m_d;
 };

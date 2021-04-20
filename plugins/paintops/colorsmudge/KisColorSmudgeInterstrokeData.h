@@ -29,9 +29,7 @@ struct KisColorSmudgeInterstrokeData : public KisInterstrokeData
 
 private:
     QScopedPointer<KUndo2Command> m_parentCommand;
-    QScopedPointer<KisTransaction> m_colorBlendDeviceTransaction;
     QScopedPointer<KisTransaction> m_heightmapDeviceTransaction;
-    QScopedPointer<KisTransaction> m_projectionDeviceTransaction;
 };
 
 #endif //KRITA_KISCOLORSMUDGEINTERSTROKEDATA_H

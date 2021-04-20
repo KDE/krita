@@ -26,6 +26,8 @@ public:
 
     bool contains(const QRect &rc) const;
 
+    QRect boundingRect() const;
+
 private:
     void resize(const QRect &newMappedAreaSize);
     static QRect shrinkRectToAlignedGrid(const QRect &srcRect, int lod);

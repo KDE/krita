@@ -155,3 +155,14 @@ bool KisRectsGrid::contains(const QRect &rc) const
     return true;
 }
 
+QRect KisRectsGrid::boundingRect() const {
+    QRect gridBounds;
+
+    for (int y = m_mappedAreaSize.y(); y <= m_mappedAreaSize.bottom(); y++) {
+        for (int x = m_mappedAreaSize.x(); x <= m_mappedAreaSize.right(); x++) {
+            gridBounds |= QRect(x, y, 1, 1);
+        }
+    }
+
+    return KisLodTransformBase::upscaledRect(gridBounds, m_logGridSize);
+}

@@ -15,6 +15,12 @@
 #include "KisRegion.h"
 #include "kis_wrapped_rect.h"
 #include <KoOptimizedRgbPixelDataScalerU8ToU16Factory.h>
+#include <kundo2command.h>
+#include <memory>
+#include <kis_transaction.h>
+#include "kis_command_utils.h"
+
+struct KisChangeOverlayWrapperCommand;
 
 struct KisOverlayPaintDeviceWrapper::Private
 {
@@ -24,6 +30,36 @@ struct KisOverlayPaintDeviceWrapper::Private
     bool usePreciseMode = false;
     QScopedPointer<KoOptimizedRgbPixelDataScalerU8ToU16Base> scaler;
     KisPaintDeviceSP externalDestination;
+
+    QScopedPointer<KUndo2Command> rootTransactionData;
+    KisChangeOverlayWrapperCommand *changeOverlayCommand;
+    std::vector<std::unique_ptr<KisTransaction>> overlayTransactions;
+    QSharedPointer<KisRectsGrid> previousGrid;
+};
+
+struct KisChangeOverlayWrapperCommand : public KUndo2Command
+{
+    KisChangeOverlayWrapperCommand(KisOverlayPaintDeviceWrapper::Private *d, KUndo2Command *parent = 0)
+            : KUndo2Command(parent)
+            , m_d(d)
+    {
+    }
+
+    void undo() override {
+        KUndo2Command::undo();
+        m_d->grid = *m_oldRectsGrid;
+        m_d->previousGrid = m_oldRectsGrid;
+    }
+
+    void redo() override {
+        KUndo2Command::redo();
+        m_d->grid = *m_newRectsGrid;
+        m_d->previousGrid = m_newRectsGrid;
+    }
+
+    QSharedPointer<KisRectsGrid> m_oldRectsGrid;
+    QSharedPointer<KisRectsGrid> m_newRectsGrid;
+    KisOverlayPaintDeviceWrapper::Private *m_d;
 };
 
 
@@ -231,6 +267,50 @@ KisPaintDeviceSP KisOverlayPaintDeviceWrapper::createPreciseCompositionSourceDev
         device->setDefaultBounds(m_d->source->defaultBounds());
         result = device;
     }
+
+    return result;
+}
+
+void KisOverlayPaintDeviceWrapper::beginTransaction(KUndo2Command *parent)
+{
+    KIS_SAFE_ASSERT_RECOVER(!m_d->rootTransactionData) {
+        m_d->rootTransactionData.reset();
+    }
+
+    if (!m_d->previousGrid) {
+        m_d->previousGrid.reset(new KisRectsGrid(m_d->grid));
+    }
+
+    m_d->rootTransactionData.reset(new KUndo2Command(parent));
+
+    m_d->changeOverlayCommand = new KisChangeOverlayWrapperCommand(m_d.data());
+    (void) new KisCommandUtils::SkipFirstRedoWrapper(m_d->changeOverlayCommand, m_d->rootTransactionData.data());
+    m_d->changeOverlayCommand->m_oldRectsGrid = m_d->previousGrid;
+
+    for (const auto &overlayDevice : m_d->overlays) {
+        m_d->overlayTransactions.emplace_back(new KisTransaction(overlayDevice, m_d->rootTransactionData.data()));
+    }
+}
+
+KUndo2Command *KisOverlayPaintDeviceWrapper::endTransaction()
+{
+    KUndo2Command *result = nullptr;
+
+    KIS_SAFE_ASSERT_RECOVER(m_d->rootTransactionData) {
+        m_d->overlayTransactions.clear();
+        return result;
+    }
+
+    m_d->previousGrid.reset(new KisRectsGrid(m_d->grid));
+
+    m_d->changeOverlayCommand->m_newRectsGrid = m_d->previousGrid;
+    result = m_d->rootTransactionData.take();
+
+    for (auto &transactionPtr : m_d->overlayTransactions) {
+        // the transactions are assigned as children to m_d->changeOverlayCommand
+        (void) transactionPtr->endAndTake();
+    }
+    m_d->overlayTransactions.clear();
 
     return result;
 }

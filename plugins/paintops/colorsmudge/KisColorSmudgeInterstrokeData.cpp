@@ -22,7 +22,9 @@ KisColorSmudgeInterstrokeData::KisColorSmudgeInterstrokeData(KisPaintDeviceSP so
 
 KisColorSmudgeInterstrokeData::~KisColorSmudgeInterstrokeData()
 {
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_parentCommand);
+    KIS_SAFE_ASSERT_RECOVER(!m_parentCommand) {
+        (void) overlayDeviceWrapper.endTransaction();
+    }
 }
 
 void KisColorSmudgeInterstrokeData::beginTransaction()
@@ -30,9 +32,8 @@ void KisColorSmudgeInterstrokeData::beginTransaction()
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_parentCommand);
 
     m_parentCommand.reset(new KUndo2Command());
-    m_colorBlendDeviceTransaction.reset(new KisTransaction(colorBlendDevice, m_parentCommand.data()));
     m_heightmapDeviceTransaction.reset(new KisTransaction(heightmapDevice, m_parentCommand.data()));
-    m_projectionDeviceTransaction.reset(new KisTransaction(projectionDevice, m_parentCommand.data()));
+    overlayDeviceWrapper.beginTransaction(m_parentCommand.data());
 }
 
 KUndo2Command *KisColorSmudgeInterstrokeData::endTransaction()
@@ -40,9 +41,8 @@ KUndo2Command *KisColorSmudgeInterstrokeData::endTransaction()
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_parentCommand, 0);
 
     // the internal undo commands are owned by m_parentCommand
-    (void) m_colorBlendDeviceTransaction->endAndTake();
     (void) m_heightmapDeviceTransaction->endAndTake();
-    (void) m_projectionDeviceTransaction->endAndTake();
+    (void) overlayDeviceWrapper.endTransaction();
 
     return m_parentCommand.take();
 }

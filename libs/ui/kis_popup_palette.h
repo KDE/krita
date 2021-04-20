@@ -44,7 +44,6 @@ public:
                     KisCanvasResourceProvider *provider, QWidget *parent = 0);
     ~KisPopupPalette() override;
     QSize sizeHint() const override;
-    QSize calculateSize() const;
 
     //functions to set up selectedBrush
     void setSelectedBrush(int x);

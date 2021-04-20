@@ -375,16 +375,6 @@ QSize KisPopupPalette::sizeHint() const
     return QSize(m_popupPaletteSize, m_popupPaletteSize);
 }
 
-QSize KisPopupPalette::calculateSize() const
-{
-    const int toolbarSize = 50;
-    const int width = m_brushHudButton->isChecked() ?
-                m_popupPaletteSize + m_brushHud->width() + BRUSH_HUD_MARGIN :
-                m_popupPaletteSize;
-
-    return QSize(width, m_popupPaletteSize + toolbarSize);
-}
-
 void KisPopupPalette::paintEvent(QPaintEvent* e)
 {
     Q_UNUSED(e);

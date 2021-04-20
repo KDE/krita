@@ -63,7 +63,7 @@ void KisColorSmudgeStrategyLightness::initializePainting()
     m_finalPainter.setChannelFlags(m_initializationPainter->channelFlags());
     m_finalPainter.copyMirrorInformationFrom(m_initializationPainter);
 
-    m_heightmapPainter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
+    m_heightmapPainter.setCompositeOp(COMPOSITE_OVER);
     m_heightmapPainter.setSelection(m_initializationPainter->selection());
     m_heightmapPainter.copyMirrorInformationFrom(m_initializationPainter);
 

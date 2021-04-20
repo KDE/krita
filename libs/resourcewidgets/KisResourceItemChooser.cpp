@@ -103,6 +103,9 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         d->view->setFixedToolTipThumbnailSize(QSize(256, 64));
         d->view->setToolTipShouldRenderCheckers(true);
     }
+    else if (d->resourceType == ResourceType::PaintOpPresets) {
+        d->view->setFixedToolTipThumbnailSize(QSize(128, 128));
+    }
 
     d->view->setItemDelegate(new KisResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);

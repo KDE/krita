@@ -158,7 +158,8 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
 
     KisSequentialIterator it(m_dab, dabRectAligned);
-    KisSequentialIterator itmask(m_maskDeviceIntermediate, dabRectAligned);
+    QRect maskTempRect = QRect(QPoint(0, 0), dabRectAligned.size());
+    KisSequentialIterator itmask(m_maskDeviceIntermediate, maskTempRect); // to make it not take too much memory after subsequent dabs
 
     quint8 maskUnitValue = KoColorSpaceMathsTraits<quint8>::unitValue; // because it's alpha8
 
@@ -260,7 +261,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
     m_maskDeviceFinal->setRect(dabRectAligned);
     m_maskDeviceFinal->lazyGrowBufferWithoutInitialization();
-    m_maskDeviceIntermediate->readBytes(m_maskDeviceFinal->data(), dabRectAligned);
+    m_maskDeviceIntermediate->readBytes(m_maskDeviceFinal->data(), maskTempRect);
 
     m_tempPainter->bitBltWithFixedSelection(dabRectAligned.x(), dabRectAligned.y(), m_dab, m_maskDeviceFinal, dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.width(), dabRectAligned.height());
     m_tempPainter->renderMirrorMask(dabRectAligned, m_dab, dabRectAligned.x(), dabRectAligned.y(), m_maskDeviceFinal);

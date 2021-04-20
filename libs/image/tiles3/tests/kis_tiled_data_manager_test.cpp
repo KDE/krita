@@ -995,7 +995,9 @@ void KisTiledDataManagerTest::benchmaskQRegion()
         }
     }
 
-    std::random_shuffle(rects.begin(), rects.end());
+    std::random_device randomDevice;
+    std::mt19937 generator(randomDevice());
+    std::shuffle(rects.begin(), rects.end(), generator);
 
     QElapsedTimer timer;
     timer.start();
@@ -1024,7 +1026,9 @@ void KisTiledDataManagerTest::benchmaskKisRegion()
         }
     }
 
-    std::random_shuffle(rects.begin(), rects.end());
+    std::random_device randomDevice;
+    std::mt19937 generator(randomDevice());
+    std::shuffle(rects.begin(), rects.end(), generator);
 
     QElapsedTimer timer;
     timer.start();
@@ -1059,7 +1063,9 @@ void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
     const int originalSize = rects.size();
     QVector<QRect> originalRects = rects;
 
-    std::random_shuffle(rects.begin(), rects.end());
+    std::random_device randomDevice;
+    std::mt19937 generator(randomDevice());
+    std::shuffle(rects.begin(), rects.end(), generator);
 
     QElapsedTimer timer;
     timer.start();

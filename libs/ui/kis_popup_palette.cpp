@@ -142,8 +142,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     gLayout->setSizeConstraint(QLayout::SetFixedSize);
     gLayout->setSpacing(0);
     gLayout->setContentsMargins(QMargins());
-    QSpacerItem* verticalSpacer = new QSpacerItem(m_popupPaletteSize, m_popupPaletteSize);
-    gLayout->addItem(verticalSpacer, 0, 0); // this should push the box to the bottom
+    m_mainArea = new QSpacerItem(m_popupPaletteSize, m_popupPaletteSize);
+    gLayout->addItem(m_mainArea, 0, 0); // this should push the box to the bottom
     gLayout->setColumnMinimumWidth(1, BRUSH_HUD_MARGIN);
     gLayout->addWidget(m_brushHud, 0, 2);
 
@@ -235,7 +235,17 @@ void KisPopupPalette::slotConfigurationChanged()
 
 void KisPopupPalette::reconfigure()
 {
-    bool useVisualSelector = KisConfig(true).readEntry<bool>("popuppalette/usevisualcolorselector", false);
+    KisConfig config(true);
+    const int borderWidth = 3;
+    m_presetSlotCount = qMax(config.favoritePresets(), 10);
+    m_popupPaletteSize = config.readEntry("popuppalette/size", 385);
+    qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2;
+    m_colorHistoryInnerRadius = selectorRadius + borderWidth;
+    m_colorHistoryOuterRadius = m_colorHistoryInnerRadius + 20;
+
+    m_mainArea->changeSize(m_popupPaletteSize, m_popupPaletteSize);
+
+    bool useVisualSelector = config.readEntry<bool>("popuppalette/usevisualcolorselector", false);
     if (m_colorSelector) {
         // if the selector type changed, delete it
         bool haveVisualSelector = qobject_cast<KisVisualColorSelector*>(m_colorSelector) != 0;
@@ -264,9 +274,9 @@ void KisPopupPalette::reconfigure()
                 m_colorSelector, SLOT(configurationChanged()));
     }
 
-    const int borderWidth = 3;
+
     const int auxButtonSize = 35;
-    m_colorSelector->move(m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth, m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth);
+    m_colorSelector->move(m_popupPaletteSize/2 - selectorRadius, m_popupPaletteSize/2 - selectorRadius);
     m_colorSelector->resize(m_popupPaletteSize - 2*m_colorSelector->x(), m_popupPaletteSize - 2*m_colorSelector->y());
 
     // ellipse - to make sure the widget doesn't eat events meant for recent colors or brushes
@@ -1050,6 +1060,5 @@ int KisPopupPalette::findPresetSlot(QPointF position) const
 
 int KisPopupPalette::numSlots() const
 {
-    KisConfig config(true);
-    return qMax(config.favoritePresets(), 10);
+    return m_presetSlotCount;
 }

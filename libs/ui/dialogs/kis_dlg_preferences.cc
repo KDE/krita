@@ -298,8 +298,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_undoStackSize->setValue(cfg.undoStackLimit());
 
-    m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
-
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline());
@@ -375,7 +373,6 @@ void GeneralTab::setDefault()
         
     m_cmbMDIType->setCurrentIndex((int)QMdiArea::TabbedView);
     m_chkRubberBand->setChecked(cfg.useOpenGL(true));
-    m_favoritePresetsSpinBox->setValue(cfg.favoritePresets(true));
     KoColor mdiColor;
     mdiColor.fromXML(cfg.getMDIBackgroundColor(true));
     m_mdiColor->setColor(mdiColor);
@@ -461,11 +458,6 @@ bool GeneralTab::showOutlineWhilePainting()
 int GeneralTab::mdiMode()
 {
     return m_cmbMDIType->currentIndex();
-}
-
-int GeneralTab::favoritePresets()
-{
-    return m_favoritePresetsSpinBox->value();
 }
 
 bool GeneralTab::showCanvasMessages()
@@ -1602,6 +1594,42 @@ void FullscreenSettingsTab::setDefault()
 
 //---------------------------------------------------------------------------------------------------
 
+PopupPaletteTab::PopupPaletteTab(QWidget *parent, const char *name)
+    : WdgPopupPaletteSettingsBase(parent, name)
+{
+    load();
+}
+
+void PopupPaletteTab::load()
+{
+    KisConfig config(true);
+    sbNumPresets->setValue(config.favoritePresets());
+    sbPaletteSize->setValue(config.readEntry("popuppalette/size", 385));
+    sbSelectorSize->setValue(config.readEntry("popuppalette/selectorSize", 140));
+    cmbSelectorType->setCurrentIndex(config.readEntry<bool>("popuppalette/usevisualcolorselector", false) ? 1 : 0);
+}
+
+void PopupPaletteTab::save()
+{
+    KisConfig config(true);
+    config.setFavoritePresets(sbNumPresets->value());
+    config.writeEntry("popuppalette/size", sbPaletteSize->value());
+    config.writeEntry("popuppalette/selectorSize", sbSelectorSize->value());
+    config.writeEntry<bool>("popuppalette/usevisualcolorselector", cmbSelectorType->currentIndex() > 0);
+
+}
+
+void PopupPaletteTab::setDefault()
+{
+    KisConfig config(true);
+    sbNumPresets->setValue(config.favoritePresets(true));
+    sbPaletteSize->setValue(385);
+    sbSelectorSize->setValue(140);
+    cmbSelectorType->setCurrentIndex(0);
+}
+
+//---------------------------------------------------------------------------------------------------
+
 KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     : KPageDialog(parent)
 {
@@ -1690,6 +1718,16 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_pages << page;
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
+
+    // Pop-up Palette
+    vbox = new KoVBox();
+    page = new KPageWidgetItem(vbox, i18n("Pop-up Palette"));
+    page->setObjectName("popuppalette");
+    page->setHeader(i18n("Pop-up Palette"));
+    page->setIcon(KisIconUtils::loadIcon("popup-palette"));
+    m_pages << page;
+    addPage(page);
+    m_popupPaletteSettings = new PopupPaletteTab(vbox);
 
     // Author profiles
     m_authorPage = new KoConfigAuthorPage();
@@ -1784,6 +1822,9 @@ void KisDlgPreferences::slotDefault()
     else if (currentPage()->objectName() == "canvasinput") {
         m_inputConfiguration->setDefaults();
     }
+    else if (currentPage()->objectName() == "popuppalette") {
+        m_popupPaletteSettings->setDefault();
+    }
 }
 
 bool KisDlgPreferences::editPreferences()
@@ -1859,7 +1900,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTranformToolAfterPaste->isChecked());
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());
-        cfg.setFavoritePresets(m_general->favoritePresets());
 
         cfg.setAutoPinLayersToTimeline(m_general->autopinLayersToTimeline());
         cfg.setAdaptivePlaybackRange(m_general->adaptivePlaybackRange());
@@ -1963,6 +2003,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setPixelGridColor(m_displaySettings->pixelGridColorButton->color().toQColor());
         cfg.setPixelGridDrawingThreshold(m_displaySettings->pixelGridDrawingThresholdBox->value() / 100);
 
+        m_popupPaletteSettings->save();
         m_authorPage->apply();
 
         cfg.logImportantSettings();
@@ -1972,4 +2013,3 @@ bool KisDlgPreferences::editPreferences()
 
     return !m_cancelClicked;
 }
-

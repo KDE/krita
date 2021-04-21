@@ -100,6 +100,7 @@ private:
 
     int numSlots() const;
 
+    int m_presetSlotCount {10};
     int m_hoveredPreset {0};
     int m_hoveredColor {0};
     int m_selectedColor {0};
@@ -114,6 +115,7 @@ private:
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
     KActionCollection *m_actionCollection;
 
+    QSpacerItem *m_mainArea {0};
     KisBrushHud *m_brushHud {0};
     float m_popupPaletteSize {385.0};
     float m_colorHistoryInnerRadius {72.0};

@@ -27,6 +27,7 @@
 #include "ui_wdgtabletsettings.h"
 #include "ui_wdgperformancesettings.h"
 #include "ui_wdgfullscreensettings.h"
+#include "ui_WdgPopupPaletteSettings.h"
 #include "KisShortcutsDialog.h"
 
 class KoID;
@@ -70,7 +71,6 @@ public:
     bool showOutlineWhilePainting();
 
     int mdiMode();
-    int favoritePresets();
     bool showCanvasMessages();
     bool compressKra();
     bool trimKra();
@@ -303,6 +303,33 @@ public:
     void setDefault();
 };
 
+//=======================
+
+/**
+  * "Pop-up Palette"-tab for preferences dialog
+ */
+
+class WdgPopupPaletteSettingsBase : public QWidget, public Ui::WdgPopupPaletteSettings
+{
+    Q_OBJECT
+
+public:
+    WdgPopupPaletteSettingsBase(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
+};
+
+class PopupPaletteTab : public WdgPopupPaletteSettingsBase
+{
+    Q_OBJECT
+
+public:
+    PopupPaletteTab(QWidget *parent = 0, const char *name = 0);
+
+    void load();
+    void save();
+    void setDefault();
+};
 
 //=======================
 
@@ -333,6 +360,7 @@ private:
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;
+    PopupPaletteTab *m_popupPaletteSettings;
     KoConfigAuthorPage *m_authorPage;
 
     QList<KPageWidgetItem*> m_pages;

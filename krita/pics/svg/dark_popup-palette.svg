@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg820"
+   version="1.1"
+   viewBox="0 0 32 32"
+   height="32"
+   width="32"
+   sodipodi:docname="dark_popup-palette.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1258"
+     inkscape:window-height="883"
+     id="namedview13"
+     showgrid="false"
+     inkscape:snap-page="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-object-midpoints="false"
+     inkscape:zoom="29.5"
+     inkscape:cx="6.1438925"
+     inkscape:cy="17.100256"
+     inkscape:window-x="84"
+     inkscape:window-y="106"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg820">
+    <sodipodi:guide
+       position="16,23.154751"
+       orientation="1,0"
+       id="guide827"
+       inkscape:locked="false"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="16,16"
+       orientation="0,1"
+       id="guide877"
+       inkscape:locked="false"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+  </sodipodi:namedview>
+  <defs
+     id="defs814">
+    <linearGradient
+       gradientTransform="matrix(1.2500008,0,0,1.2000018,-484.71412,468.56127)"
+       gradientUnits="userSpaceOnUse"
+       y2="520.79797"
+       x2="401.57144"
+       y1="535.79797"
+       x1="401.57144"
+       id="linearGradient4358"
+       xlink:href="#linearGradient4424" />
+    <linearGradient
+       id="linearGradient4424">
+      <stop
+         style="stop-color:#60a5e7;stop-opacity:0"
+         offset="0"
+         id="stop4426" />
+      <stop
+         style="stop-color:#a6f3fb;stop-opacity:0.25773194"
+         offset="1"
+         id="stop4428" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata817">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2021</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title></dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:56.69291306;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="M 16,0 C 7.163444,0 0,7.163444 0,16 0,24.836556 7.163444,32 16,32 24.836556,32 32,24.836556 32,16 32,7.163444 24.836556,0 16,0 Z m 0,1 c 1.932997,0 3.5,1.5670034 3.5,3.5 C 19.5,6.4329966 17.932997,8 16,8 14.067003,8 12.5,6.4329966 12.5,4.5 12.5,2.5670034 14.067003,1 16,1 Z M 9.2402344,3.1972656 c 1.9329966,2e-7 3.4999996,1.5670035 3.4999996,3.5 0,1.9329966 -1.567003,3.5000004 -3.4999996,3.5000004 -1.9329968,0 -3.5000002,-1.5670036 -3.5,-3.5000004 0,-1.9329966 1.5670034,-3.5 3.5,-3.5 z m 13.5195316,0 c 1.932997,0 3.5,1.5670034 3.5,3.5 0,1.9329968 -1.567003,3.5000004 -3.5,3.5000004 -1.932997,0 -3.5,-1.5670036 -3.5,-3.5000004 0,-1.9329966 1.567003,-3.5 3.5,-3.5 z M 16,9.6712461 C 19.495116,9.6716292 22.328371,12.504884 22.328754,16 22.328371,19.495115 19.495115,22.328371 16,22.328754 12.504884,22.328371 9.6716292,19.495116 9.6712461,16 9.6716292,12.504884 12.504884,9.6716292 16,9.6712461 Z M 5.0625,8.9472656 c 1.9329968,0 3.5000002,1.5670034 3.5,3.5000004 0,1.932997 -1.5670034,3.5 -3.5,3.5 -1.9329966,0 -3.5,-1.567003 -3.5,-3.5 -2e-7,-1.932997 1.5670032,-3.5000004 3.5,-3.5000004 z m 21.875,0 c 1.932997,0 3.5,1.5670034 3.5,3.5000004 0,1.932997 -1.567003,3.5 -3.5,3.5 -1.932997,0 -3.5,-1.567003 -3.5,-3.5 0,-1.932997 1.567003,-3.5000004 3.5,-3.5000004 z M 16,10.99219 C 13.234253,10.992165 10.992165,13.234253 10.99219,16 10.992165,18.765747 13.234253,21.007835 16,21.00781 18.765747,21.007835 21.007835,18.765747 21.00781,16 21.007835,13.234253 18.765747,10.992165 16,10.99219 Z m 0,0.251951 4.226562,6.86914 H 11.773438 Z M 5.0625,16.052734 c 1.9329966,0 3.5,1.567003 3.5,3.5 0,1.932997 -1.5670034,3.5 -3.5,3.5 -1.9329966,0 -3.5,-1.567003 -3.5,-3.5 0,-1.932997 1.5670034,-3.5 3.5,-3.5 z m 21.875,0 c 1.932997,0 3.5,1.567003 3.5,3.5 0,1.932997 -1.567003,3.5 -3.5,3.5 -1.932997,0 -3.5,-1.567003 -3.5,-3.5 0,-1.932997 1.567003,-3.5 3.5,-3.5 z m -17.6972656,5.75 c 1.9329966,0 3.4999996,1.567004 3.4999996,3.5 0,1.932996 -1.567003,3.5 -3.4999996,3.5 -1.9329966,0 -3.5,-1.567003 -3.5,-3.5 0,-1.932997 1.5670034,-3.5 3.5,-3.5 z m 13.5195316,0 c 1.932997,0 3.5,1.567003 3.5,3.5 0,1.932997 -1.567003,3.5 -3.5,3.5 -1.932997,0 -3.5,-1.567003 -3.5,-3.5 0,-1.932997 1.567003,-3.5 3.5,-3.5 z M 16,24 c 1.932997,0 3.5,1.567003 3.5,3.5 0,1.932997 -1.567003,3.5 -3.5,3.5 -1.932997,0 -3.5,-1.567003 -3.5,-3.5 0,-1.932997 1.567003,-3.5 3.5,-3.5 z"
+     id="path825"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="sssssssssssssssssssscccccsssssssssscccccccccsssssssssssssssssssssssss" />
+</svg>

@@ -645,8 +645,6 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
-    setToolTip(QString());
-
     // check if mouse is over the canvas rotation knob
     bool wasOverRotationIndicator = m_isOverCanvasRotationIndicator;
     m_isOverCanvasRotationIndicator = m_canvasRotationIndicatorRect.contains(point);
@@ -681,6 +679,11 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
     if (m_isRotatingCanvasIndicator == false) {
         QPainterPath pathColor(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
         if (pathColor.contains(point)) {
+            if (hoveredPreset() >= 0) {
+                setToolTip(QString());
+                setHoveredPreset(-1);
+            }
+
             int pos = calculateColorIndex(point, m_resourceManager->recentColorsTotal());
 
             if (pos != hoveredColor()) {
@@ -689,18 +692,24 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
             }
         }
         else {
-            int pos = findPresetSlot(point);
-            int previous = hoveredPreset();
+            if (hoveredColor() >= 0) {
+                setHoveredColor(-1);
+                update();
+            }
 
-            if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
-                setToolTip(m_resourceManager->favoritePresetNamesList().at(pos));
-                setHoveredPreset(pos);
-            }
-            else {
-                setToolTip(QString());
-                setHoveredPreset(-1);
-            }
-            if (previous != hoveredPreset()) {
+            int pos = findPresetSlot(point);
+
+            if (pos != hoveredPreset()) {
+
+                if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
+                    setToolTip(m_resourceManager->favoritePresetNamesList().at(pos));
+                    setHoveredPreset(pos);
+                }
+                else {
+                    setToolTip(QString());
+                    setHoveredPreset(-1);
+                }
+
                 update();
             }
         }

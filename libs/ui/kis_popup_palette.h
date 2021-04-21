@@ -45,9 +45,6 @@ public:
     ~KisPopupPalette() override;
     QSize sizeHint() const override;
 
-    //functions to set up selectedBrush
-    void setSelectedBrush(int x);
-    int selectedBrush() const;
     //functions to set up selectedColor
     void setSelectedColor(int x);
     int selectedColor() const;
@@ -67,11 +64,17 @@ protected:
     void mouseMoveEvent(QMouseEvent*) override;
     void mousePressEvent(QMouseEvent*) override;
 
-    //functions to calculate index of favorite brush or recent color in array
-    //n is the total number of favorite brushes or recent colors
-    int calculateIndex(QPointF, int n);
-
-    int calculatePresetIndex(QPointF, int n);
+    /**
+     * @brief Calculate index of recent color in array
+     * @param numColors the total number of recent colors
+     * @return -1 if numColors < 1
+     */
+    int calculateColorIndex(QPointF position, int numColors) const;
+    /**
+     * @brief/ find the index of the brush preset slot containing @position.
+     * @return -1 if none is found
+     */
+    int findPresetSlot(QPointF position) const;
 
     //functions to set up hoveredBrush
     void setHoveredPreset(int x);
@@ -85,7 +88,7 @@ private:
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
-    QPainterPath drawRotationIndicator(qreal rotationAngle, bool canDrag);
+    QRectF rotationIndicatorRect(qreal rotationAngle, bool absolute) const;
     bool isPointInPixmap(QPointF&, int pos);
 
     /**
@@ -93,9 +96,9 @@ private:
      * and calculate the radius of the brush preset slots.
     */
     void calculatePresetLayout();
-    QPainterPath createPathFromPresetIndex(int index);
+    QPainterPath createPathFromPresetIndex(int index) const;
 
-    int numSlots();
+    int numSlots() const;
 
     int m_hoveredPreset {0};
     int m_hoveredColor {0};
@@ -119,8 +122,8 @@ private:
     KisRoundHudButton *m_settingsButton {0};
     KisRoundHudButton *m_brushHudButton {0};
     QPoint m_lastCenterPoint;
-    QRect m_canvasRotationIndicatorRect;
-    QRect m_resetCanvasRotationIndicatorRect;
+    QRectF m_canvasRotationIndicatorRect;
+    QRectF m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};
     bool m_isRotatingCanvasIndicator {false};
     bool m_isZoomingCanvas {false};

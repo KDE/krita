@@ -99,50 +99,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_acyclicConnector(new KisAcyclicSignalConnector(this))
     , m_clicksEater(new KisMouseClickEater(Qt::RightButton, 1, this))
 {
-    const int borderWidth = 3;
-
-    if (KisConfig(true).readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
-        KisVisualColorSelector *selector = new KisVisualColorSelector(this);
-        selector->setAcceptTabletEvents(true);
-        m_triangleColorSelector = selector;
-    }
-    else {
-        m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
-    }
-    m_triangleColorSelector->setDisplayRenderer(displayRenderer);
-    m_triangleColorSelector->setConfig(true,false);
-    m_triangleColorSelector->move(m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth, m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth);
-    m_triangleColorSelector->resize(m_popupPaletteSize - 2*m_triangleColorSelector->x(), m_popupPaletteSize - 2*m_triangleColorSelector->y());
-    m_triangleColorSelector->setVisible(true);
-    KoColor fgcolor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
-    if (m_resourceManager) {
-        fgcolor = provider->fgColor();
-    }
-    m_triangleColorSelector->slotSetColor(fgcolor);
-
-
-    /**
-     * Tablet support code generates a spurious right-click right after opening
-     * the window, so we should ignore it. Next right-click will be used for
-     * closing the popup palette
-     */
-    this->installEventFilter(m_clicksEater);
-    m_triangleColorSelector->installEventFilter(m_clicksEater);
-
-    // ellipse - to make sure the widget doesn't eat events meant for recent colors or brushes
-    //         - needs to be +2 pixels on every side for anti-aliasing to look nice on high dpi displays
-    // rectange - to make sure the area doesn't extend outside of the widget
-    QRegion maskedEllipse(-2, -2, m_triangleColorSelector->width() + 4, m_triangleColorSelector->height() + 4, QRegion::Ellipse );
-    QRegion maskedRectange(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Rectangle);
-    QRegion maskedRegion = maskedEllipse.intersected(maskedRectange);
-    m_triangleColorSelector->setMask(maskedRegion);
-
-    connect(m_triangleColorSelector, SIGNAL(sigNewColor(KoColor)),
-            m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(slotConfigurationChanged()));
     connect(m_displayRenderer,  SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
 
     m_acyclicConnector->connectForwardKoColor(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
@@ -165,20 +125,14 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     setSelectedColor(-1);
 
     m_brushHud = new KisBrushHud(provider, this);
-    m_brushHud->setFixedHeight(int(m_popupPaletteSize));
 
-    const int auxButtonSize = 35;
     m_settingsButton = new KisRoundHudButton(this);
-    m_settingsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
-                                  auxButtonSize, auxButtonSize);
 
     connect(m_settingsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
 
     m_brushHudButton = new KisRoundHudButton(this);
     m_brushHudButton->setCheckable(true);
 
-    m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
-                                  auxButtonSize, auxButtonSize);
     connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
     
 
@@ -252,10 +206,18 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     
     setVisible(true);
     setVisible(false);
-    calculatePresetLayout();
+    reconfigure();
 
     opacityChange = new QGraphicsOpacityEffect(this);
     setGraphicsEffect(opacityChange);
+
+    /**
+     * Tablet support code generates a spurious right-click right after opening
+     * the window, so we should ignore it. Next right-click will be used for
+     * closing the popup palette
+     */
+    this->installEventFilter(m_clicksEater);
+    m_colorSelector->installEventFilter(m_clicksEater);
 
     // Prevent tablet events from being captured by the canvas
     setAttribute(Qt::WA_NoMousePropagation, true);
@@ -263,6 +225,66 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     // Load configuration..
     KisConfig cfg(true);
     m_brushHudButton->setChecked(cfg.showBrushHud());
+}
+
+void KisPopupPalette::slotConfigurationChanged()
+{
+    reconfigure();
+    adjustSize();
+}
+
+void KisPopupPalette::reconfigure()
+{
+    bool useVisualSelector = KisConfig(true).readEntry<bool>("popuppalette/usevisualcolorselector", false);
+    if (m_colorSelector) {
+        // if the selector type changed, delete it
+        bool haveVisualSelector = qobject_cast<KisVisualColorSelector*>(m_colorSelector) != 0;
+        if (useVisualSelector != haveVisualSelector) {
+            delete m_colorSelector;
+            m_colorSelector = 0;
+        }
+    }
+    if (!m_colorSelector) {
+        if (useVisualSelector) {
+            KisVisualColorSelector *selector = new KisVisualColorSelector(this);
+            selector->setAcceptTabletEvents(true);
+            m_colorSelector = selector;
+        }
+        else {
+            m_colorSelector  = new PopupColorTriangle(m_displayRenderer, this);
+            connect(m_colorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
+        }
+        m_colorSelector->setDisplayRenderer(m_displayRenderer);
+        m_colorSelector->setConfig(true,false);
+        m_colorSelector->setVisible(true);
+        slotDisplayConfigurationChanged();
+        connect(m_colorSelector, SIGNAL(sigNewColor(KoColor)),
+                m_colorChangeCompressor.data(), SLOT(start()));
+        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+                m_colorSelector, SLOT(configurationChanged()));
+    }
+
+    const int borderWidth = 3;
+    const int auxButtonSize = 35;
+    m_colorSelector->move(m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth, m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth);
+    m_colorSelector->resize(m_popupPaletteSize - 2*m_colorSelector->x(), m_popupPaletteSize - 2*m_colorSelector->y());
+
+    // ellipse - to make sure the widget doesn't eat events meant for recent colors or brushes
+    //         - needs to be +2 pixels on every side for anti-aliasing to look nice on high dpi displays
+    // rectange - to make sure the area doesn't extend outside of the widget
+    QRegion maskedEllipse(-2, -2, m_colorSelector->width() + 4, m_colorSelector->height() + 4, QRegion::Ellipse );
+    QRegion maskedRectange(0, 0, m_colorSelector->width(), m_colorSelector->height(), QRegion::Rectangle);
+    QRegion maskedRegion = maskedEllipse.intersected(maskedRectange);
+
+    m_colorSelector->setMask(maskedRegion);
+
+    m_brushHud->setFixedHeight(int(m_popupPaletteSize));
+
+    m_settingsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
+                                  auxButtonSize, auxButtonSize);
+    m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
+                                  auxButtonSize, auxButtonSize);
+    calculatePresetLayout();
 }
 
 void KisPopupPalette::slotDisplayConfigurationChanged()
@@ -274,20 +296,20 @@ void KisPopupPalette::slotDisplayConfigurationChanged()
     if (paintingCS->colorChannelCount()>3) {
         paintingCS = KoColorSpaceRegistry::instance()->rgb8();
     }
-    m_triangleColorSelector->slotSetColorSpace(paintingCS);
-    m_triangleColorSelector->slotSetColor(col);
+    m_colorSelector->slotSetColorSpace(paintingCS);
+    m_colorSelector->slotSetColor(col);
 }
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
-    m_triangleColorSelector->slotSetColor(color);
+    m_colorSelector->slotSetColor(color);
 }
 
 void KisPopupPalette::slotEmitColorChanged()
 {
     if (isVisible()) {
         update();
-        emit sigChangefGColor(m_triangleColorSelector->getCurrentColor());
+        emit sigChangefGColor(m_colorSelector->getCurrentColor());
     }
 }
 
@@ -400,7 +422,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     // painting foreground color indicator
     QPainterPath fgColor;
     fgColor.addEllipse(QPoint( 60, 50), 30, 30);
-    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->getCurrentColor()));
+    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_colorSelector->getCurrentColor()));
     painter.drawPath(fgColor);
 
     // create a circle background that everything else will go into
@@ -952,9 +974,6 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index)
     qreal angleSlice = 360.0 / numSlots() ; // how many degrees each slice will get
     qreal ringWidth = (0.5 * m_popupPaletteSize) - m_colorHistoryOuterRadius - 18; //= 2 * 41.25
 
-    if (numSlots() != m_cachedNumSlots) {
-        calculatePresetLayout();
-    }
     // the starting angle of the slice we need to draw. the negative sign makes us go clockwise.
     // adding 90 degrees makes us start at the top. otherwise we would start at the right
     qreal startingAngle = -(index * angleSlice) + 90;

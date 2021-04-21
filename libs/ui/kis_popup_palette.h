@@ -81,6 +81,8 @@ protected:
     int hoveredColor() const;
 
 private:
+    void reconfigure();
+
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
     QPainterPath drawRotationIndicator(qreal rotationAngle, bool canDrag);
@@ -104,7 +106,7 @@ private:
     KisViewManager *m_viewManager;
     KisActionManager *m_actionManager;
     KisFavoriteResourceManager *m_resourceManager;
-    KisColorSelectorInterface *m_triangleColorSelector {0};
+    KisColorSelectorInterface *m_colorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
     KActionCollection *m_actionCollection;
@@ -153,6 +155,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();
+    void slotConfigurationChanged();
     void slotExternalFgColorChanged(const KoColor &color);
     void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }

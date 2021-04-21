@@ -230,7 +230,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
 
     if (m_texturingMode == GRADIENT && canvasResourcesInterface) {
-        KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+        KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()->cloneAndBakeVariableColors(canvasResourcesInterface);
         if (gradient) {
             m_gradient = gradient;
             m_cachedGradient.setGradient(gradient, 256);

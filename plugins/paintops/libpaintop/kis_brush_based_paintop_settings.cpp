@@ -338,6 +338,8 @@ QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
 
     if (brush()->applyingGradient() || KisTextureProperties::applyingGradient(this)) {
         result << KoCanvasResource::CurrentGradient;
+        result << KoCanvasResource::ForegroundColor;
+        result << KoCanvasResource::BackgroundColor;
     }
 
     return result;

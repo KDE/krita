@@ -961,18 +961,18 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
             c.append("font-family").append(":")
                     .append(format.properties()[propertyId].toString());
         }
-        if (propertyId == QTextCharFormat::FontPointSize) {
+        if (propertyId == QTextCharFormat::FontPointSize ||
+            propertyId == QTextCharFormat::FontPixelSize) {
+
+            // in Krita we unify point size and pixel size of the font
+
             c.append("font-size").append(":")
-                    .append(format.properties()[propertyId].toString()+"pt");
+                    .append(format.properties()[propertyId].toString());
             style.append(c);
             c.clear();
             QFontMetricsF metrics(format.fontFamily());
             qreal xRatio = metrics.xHeight()/metrics.height();
             c.append("font-size-adjust").append(":").append(QString::number(xRatio));
-        }
-        if (propertyId == QTextCharFormat::FontPixelSize) {
-            c.append("font-size").append(":")
-                    .append(format.properties()[propertyId].toString()+"px");
         }
         if (propertyId == QTextCharFormat::FontWeight) {
             // Convert from QFont::Weight range to SVG range,

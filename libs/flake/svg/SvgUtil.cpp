@@ -234,12 +234,12 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
             value = ptToPx(gc, MM_TO_POINT(value));
         else if (unit.right(2) == "in")
             value = ptToPx(gc, INCH_TO_POINT(value));
-        else if (unit.right(2) == "em")
-            // NOTE: all the fonts should be created with 'pt' size, not px!
-            value = ptToPx(gc, value * gc->font.pointSize());
+        else if (unit.right(2) == "em") {
+            value = value * gc->font.pointSize();
+        }
         else if (unit.right(2) == "ex") {
             QFontMetrics metrics(gc->font);
-            value = ptToPx(gc, value * metrics.xHeight());
+            value = value * metrics.xHeight();
         } else if (unit.right(1) == "%") {
             if (horiz && vert)
                 value = (value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));

@@ -12,6 +12,7 @@
 #include "kis_image.h"
 #include "kis_regenerate_frame_stroke_strategy.h"
 #include "kis_switch_time_stroke_strategy.h"
+#include "KoProperties.h"
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_time_span.h"
@@ -279,7 +280,6 @@ bool KisImageAnimationInterface::externalFrameActive() const
 
 void KisImageAnimationInterface::requestTimeSwitchWithUndo(int time)
 {
-    if (currentUITime() == time) return;
     requestTimeSwitchNonGUI(time, true);
 }
 
@@ -305,17 +305,18 @@ void KisImageAnimationInterface::explicitlySetCurrentTime(int frameId)
 
 void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUndo)
 {
-    if (currentUITime() == frameId) return;
-
+    const bool sameFrame = currentUITime() == frameId;
+    const bool needsCompositingUpdate = requiresOnionSkinRendering();
     const KisTimeSpan range = KisTimeSpan::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
-    const bool needsRegeneration = !range.contains(frameId);
+    
+    const bool needsRegeneration = !range.contains(frameId) || needsCompositingUpdate;
 
-    KisSwitchTimeStrokeStrategy::SharedTokenSP token =
-        m_d->switchToken.toStrongRef();
+    KisSwitchTimeStrokeStrategy::SharedTokenSP token = m_d->switchToken.toStrongRef();
 
+    // Handle switching frame to new time..    
     if (!token || !token->tryResetDestinationTime(frameId, needsRegeneration)) {
 
-        {
+        if (!sameFrame) {
             KisPostExecutionUndoAdapter *undoAdapter = useUndo ?
                 m_d->image->postExecutionUndoAdapter() : 0;
 
@@ -328,7 +329,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             KisStrokeId stroke = m_d->image->startStroke(strategy);
             m_d->image->endStroke(stroke);
         }
-
+        
         if (needsRegeneration) {
             KisStrokeStrategy *strategy =
                 new KisRegenerateFrameStrokeStrategy(this);
@@ -336,8 +337,9 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             KisStrokeId strokeId = m_d->image->startStroke(strategy);
             m_d->image->endStroke(strokeId);
         }
-
     }
+    
+    
 
     m_d->setCurrentUITime(frameId);
     emit sigUiTimeChanged(frameId);
@@ -380,6 +382,16 @@ void KisImageAnimationInterface::notifyFrameReady()
 void KisImageAnimationInterface::notifyFrameCancelled()
 {
     emit sigFrameCancelled();
+}
+
+bool KisImageAnimationInterface::requiresOnionSkinRendering() {
+    
+    KisNodeSP onionskinned = KisLayerUtils::recursiveFindNode(m_d->image->root(), [](KisNodeSP p) {
+        bool onionSkinProp = p->nodeProperties().boolProperty("onionskin", false);
+        return onionSkinProp;
+    });
+    
+    return onionskinned != nullptr;
 }
 
 KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const

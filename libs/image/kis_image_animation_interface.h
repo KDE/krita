@@ -82,7 +82,6 @@ public:
      */
     void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion);
 
-
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);
     void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
@@ -202,6 +201,7 @@ private:
     void restoreCurrentTime(int *savedValue);
     void notifyFrameReady();
     void notifyFrameCancelled();
+    bool requiresOnionSkinRendering();
 
     KisUpdatesFacade* updatesFacade() const;
 

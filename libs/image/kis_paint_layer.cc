@@ -166,7 +166,6 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
     if (!m_d->contentChannel ||
         (m_d->contentChannel->keyframeCount() <= 1) || !onionSkinEnabled()) {
-
         m_d->onionSkinCache.reset();
     }
 }

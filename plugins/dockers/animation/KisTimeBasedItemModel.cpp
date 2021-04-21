@@ -505,12 +505,7 @@ void KisTimeBasedItemModel::setScrubState(bool active)
 
         m_d->scrubInProgress = false;
 
-        if (m_d->scrubStartFrame >= 0 &&
-            m_d->scrubStartFrame != m_d->activeFrameIndex) {
-
-            scrubTo(m_d->activeFrameIndex, false);
-        }
-
+        scrubTo(m_d->activeFrameIndex, false);
         m_d->scrubStartFrame = -1;
     }
 }

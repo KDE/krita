@@ -69,6 +69,14 @@ void addProp(SvgLoadingContext &context,
     }
 }
 
+void TestSvgText::initTestCase()
+{
+    /// The test initialization function sets Qt::AA_Use96Dpi
+    /// application attribute, but it doesn't affect the font
+    /// that has already been set as the default application
+    /// font.
+    qApp->setFont(QFont("sans", 10));
+}
 
 void TestSvgText::testTextProperties()
 {
@@ -543,6 +551,9 @@ void TestSvgText::testHindiText()
 #endif
     }
 
+    t.setCheckQImagePremultiplied(true);
+    t.setFuzzyThreshold(5);
+
     t.test_standard("text_hindi", QSize(200, 30), 72);
 }
 
@@ -570,6 +581,7 @@ void TestSvgText::testTextBaselineShift()
 
     SvgRenderTester t (data);
 
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_baseline_shift", QSize(180, 40), 72);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -964,7 +976,7 @@ void TestSvgText::testConvertToStrippedSvg()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" stroke=\"#000000\" stroke-opacity=\"0\" stroke-width=\"0\" stroke-linecap=\"square\" stroke-linejoin=\"bevel\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 
     // test loading
 
@@ -1023,7 +1035,7 @@ void TestSvgText::testConvertToStrippedSvgNullOrigin()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" stroke=\"#000000\" stroke-opacity=\"0\" stroke-width=\"0\" stroke-linecap=\"square\" stroke-linejoin=\"bevel\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 }
 
 void TestSvgText::testConvertFromIncorrectStrippedSvg()
@@ -1113,7 +1125,7 @@ void TestSvgText::testTrailingWhitespace()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"DejaVu Sans\" font-size=\"10\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
             "        <tspan>%1</tspan>%2<tspan>%3</tspan>"
             "    </text>"
 
@@ -1318,7 +1330,7 @@ void testTextFontSizeHelper(QString filename, int dpi, bool pixelSize)
 
     QFont testFont("Chilanka");
     if (!QFontInfo(testFont).exactMatch()) {
-        QEXPECT_FAIL(0, "Chilanka is *not* found! Text rendering might be broken!", Continue);
+        qWarning() << "Chilanka is *not* found! Text rendering might be broken!";
     }
 
     if (pixelSize) {
@@ -1409,7 +1421,7 @@ void TestSvgText::testTextFontSize()
 
 }
 
+#include "kistest.h"
 
 
-
-SIMPLE_TEST_MAIN(TestSvgText)
+KISTEST_MAIN(TestSvgText)

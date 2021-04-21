@@ -928,7 +928,6 @@ void KisPopupPalette::calculatePresetLayout()
     // 10 slots == 41.14365, at default inner radius of 92
 
     qreal presetRadius = qMin(0.5 * ringWidth, ringMidRadius * qSin(qDegreesToRadians(angleSlice/2)) - 1);
-    m_cachedRadius = presetRadius;
     m_presetRingCount = 1;
 
     // can we can fit in a second row? We don't want the preset icons to get too tiny.
@@ -964,10 +963,44 @@ void KisPopupPalette::calculatePresetLayout()
         // but we want at least a small gain (3% currently)
         if (tempRadius > 1.03 * presetRadius) {
             m_presetRingCount = 2;
-            m_cachedRadius = tempRadius;
+            presetRadius = tempRadius;
         }
     }
-    m_cachedNumSlots = numSlots();
+    // can we use even bigger icons by forming triplets with two on the same angle
+    // and a third one touching both?
+    if (ringWidth > presetRadius * 4) {
+        angleSlice = 180.0 / ((numSlots() + 2) / 3);
+        qreal sinAngleSlice = qSin(qDegreesToRadians(angleSlice));
+        // radius where innermost circles would touch (2 angle slices apart)
+        qreal maxRadius = m_colorHistoryOuterRadius * sinAngleSlice / (1 - sinAngleSlice);
+        // radius where innermost and outermost circles touch
+        maxRadius = qMin(maxRadius, ringWidth * 0.25);
+
+        qreal tempRadius = maxRadius;
+        qreal pathX2 = ringMidRadius;
+        qreal pathY2 = ringMidRadius * sinAngleSlice;
+        bool found = false;
+        // do we need to reduce radius even more?
+        while (tempRadius > presetRadius) {
+            qreal pathX1 = m_colorHistoryOuterRadius + tempRadius;
+
+            qreal deltaX = pathX2-pathX1;
+            qreal distance = sqrt((deltaX*deltaX)+(pathY2*pathY2));
+
+            if (distance > 2*(tempRadius+1)) {
+                found = true;
+                break;
+            }
+            tempRadius -= 0.1;
+        }
+        if (found) {
+            //qDebug() << "triplet possible, radius:" << tempRadius << "/ staggered radius:" << presetRadius;
+            m_presetRingCount = 3;
+            m_middleRadius = sqrt(pathX2 * pathX2 + pathY2 * pathY2);
+            presetRadius = tempRadius;
+        }
+    }
+    m_cachedRadius = presetRadius;
 }
 
 QPainterPath KisPopupPalette::createPathFromPresetIndex(int index)
@@ -980,16 +1013,41 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index)
     qreal startingAngle = -(index * angleSlice) + 90;
     qreal length = m_colorHistoryOuterRadius + 0.5 * ringWidth;
 
-    if (m_presetRingCount > 1) {
-        if (numSlots() % 2) {
-            angleSlice = 360.0/(numSlots()+1);
-            startingAngle = -(index * angleSlice) + 90;
-        }
+    switch (m_presetRingCount) {
+    case 1: break;
+    case 2: {
+        angleSlice = 180.0/((numSlots()+1) / 2);
+        startingAngle = -(index * angleSlice) + 90;
 
         length = m_colorHistoryOuterRadius + m_cachedRadius;
         if (index % 2) {
             length = m_colorHistoryOuterRadius + ringWidth - m_cachedRadius;
         }
+        break;
+    }
+    case 3: {
+        int triplet = index / 3;
+        angleSlice = 180.0 / ((numSlots() + 2) / 3);
+        switch (index % 3) {
+        case 0:
+            startingAngle = -(triplet * 2 * angleSlice) + 90;
+            length = m_colorHistoryOuterRadius + m_cachedRadius;
+            break;
+        case 1:
+            startingAngle = -(triplet * 2 * angleSlice) + 90;
+            length = m_colorHistoryOuterRadius + ringWidth - m_cachedRadius;
+            break;
+        case 2:
+            startingAngle = -((triplet * 2 + 1) * angleSlice) + 90;
+            length = m_middleRadius;
+            break;
+        default:
+            KIS_ASSERT(false);
+        }
+        break;
+    }
+    default:
+        KIS_ASSERT_RECOVER_NOOP(false);
     }
     QPainterPath path;
     qreal pathX = length * qCos(qDegreesToRadians(startingAngle)) - m_cachedRadius;

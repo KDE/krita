@@ -138,6 +138,7 @@ private:
     int m_presetRingCount {1};
     int m_cachedNumSlots {0};
     qreal m_cachedRadius {0.0};
+    qreal m_middleRadius {0.0};
 
     // updates the transparency and effects of the whole widget
     QGraphicsOpacityEffect *opacityChange {0};

@@ -91,7 +91,7 @@ private:
             qreal softnessFactor,
             QRect *dstDabRect,
             qreal lightnessStrength = 1.0,
-            bool forceImageStamp = false);
+            bool forceNormalizedRGBAImageStamp = false);
 
 private:
 

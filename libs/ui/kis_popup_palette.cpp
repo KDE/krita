@@ -185,10 +185,13 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     // add some stuff below the pop-up palette that will make it easier to use for tablet people
     QGridLayout* gLayout = new QGridLayout(this);
+    gLayout->setSizeConstraint(QLayout::SetFixedSize);
     gLayout->setSpacing(0);
-    QSpacerItem* verticalSpacer = new QSpacerItem(m_popupPaletteSize, m_popupPaletteSize, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    gLayout->addItem(verticalSpacer, 0, 0); // this should push the box to the bottom    
-    gLayout->addWidget(m_brushHud, 0, 1);
+    gLayout->setContentsMargins(QMargins());
+    QSpacerItem* verticalSpacer = new QSpacerItem(m_popupPaletteSize, m_popupPaletteSize);
+    gLayout->addItem(verticalSpacer, 0, 0); // this should push the box to the bottom
+    gLayout->setColumnMinimumWidth(1, BRUSH_HUD_MARGIN);
+    gLayout->addWidget(m_brushHud, 0, 2);
 
     QHBoxLayout* hLayout = new QHBoxLayout();
     gLayout->addItem(hLayout, 1, 0);
@@ -240,6 +243,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     slotUpdateIcons();
 
     hLayout->setSpacing(2);
+    hLayout->setContentsMargins(0, 6, 0, 0);
     hLayout->addWidget(mirrorMode);
     hLayout->addWidget(canvasOnlyButton);
     hLayout->addWidget(zoomToOneHundredPercentButton);
@@ -361,8 +365,6 @@ void KisPopupPalette::showHudWidget(bool visible)
 
     KisConfig cfg(false);
     cfg.setShowBrushHud(visible);
-
-    resize(layout()->sizeHint());
 }
 
 void KisPopupPalette::setParent(QWidget *parent) {
@@ -823,7 +825,6 @@ void KisPopupPalette::showEvent(QShowEvent *event)
 
     m_brushHud->setVisible(m_brushHudButton->isChecked());
 
-    resize(layout()->sizeHint());
     QWidget::showEvent(event);
 }
 

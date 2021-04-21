@@ -86,6 +86,11 @@ private:
     QPainterPath drawRotationIndicator(qreal rotationAngle, bool canDrag);
     bool isPointInPixmap(QPointF&, int pos);
 
+    /**
+     * @brief Determine the number of rings to distribute the presets
+     * and calculate the radius of the brush preset slots.
+    */
+    void calculatePresetLayout();
     QPainterPath createPathFromPresetIndex(int index);
 
     int numSlots();
@@ -128,6 +133,7 @@ private:
     QPushButton *clearHistoryButton {0};
     KisAcyclicSignalConnector *m_acyclicConnector = 0;
 
+    int m_presetRingCount {1};
     int m_cachedNumSlots {0};
     qreal m_cachedRadius {0.0};
 

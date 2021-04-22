@@ -90,6 +90,9 @@ if (WIN32)
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Check-whether-there-is-a-QGestureRecognizer-at-all.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Check-if-we-reached-the-end-of-Iterator.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0116-Make-Qt-relocatable.diff
+        COMMAND  ${PATCH_COMMAND} -p1 -d qttools -i ${CMAKE_CURRENT_SOURCE_DIR}/0117-windeployqt-Warn-only-in-case-patching-of-Qt5Core-fails.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qttools -i ${CMAKE_CURRENT_SOURCE_DIR}/0118-Don-t-patch-QtCore-when--feature-relocatable-is-enabled.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0119-Fix-relocated-Qt-to-be-found-when-its-path-has-non-A.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0031-Compute-logical-DPI-on-a-per-screen-basis.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0032-Update-Dpi-and-scale-factor-computation.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0033-Move-QT_FONT_DPI-to-cross-platform-code.patch
@@ -194,6 +197,7 @@ elseif (NOT APPLE)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0114-Fix-shortcuts-with-special-keys-on-non-US-layouts-on.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Check-if-we-reached-the-end-of-Iterator.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0116-Make-Qt-relocatable.diff
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0119-Fix-relocated-Qt-to-be-found-when-its-path-has-non-ASCII.diff
 
 
       CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'

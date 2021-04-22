@@ -1,0 +1,45 @@
+From 98d4ae0ad61a3f51d4803d08ab8c16783d822b62 Mon Sep 17 00:00:00 2001
+From: Alexandru Croitor <alexandru.croitor@qt.io>
+Date: Wed, 11 Sep 2019 08:41:49 +0200
+Subject: [PATCH] Don't patch QtCore when -feature-relocatable is enabled
+
+The reasons:
+1) Patching is not needed anymore
+2) It will fail in a Release build because the symbol
+   windeployqt is looking for is optimized away.
+
+Task-number: QTBUG-15234
+Change-Id: I930b5470f038778bf7e3aa8d82e5d11fccc9f001
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+---
+
+diff --git a/src/windeployqt/main.cpp b/src/windeployqt/main.cpp
+index a4ceded..1fefc6d 100644
+--- a/src/windeployqt/main.cpp
++++ b/src/windeployqt/main.cpp
+@@ -1493,11 +1493,12 @@
+         if (options.patchQt  && !options.dryRun && !options.isWinRt()) {
+             const QString qt5CoreName = QFileInfo(libraryPath(libraryLocation, "Qt5Core", qtLibInfix,
+                                                               options.platform, isDebug)).fileName();
+-
++#ifndef QT_RELOCATABLE
+             if (!patchQtCore(targetPath + QLatin1Char('/') + qt5CoreName, errorMessage)) {
+                 std::wcerr << "Warning: " << *errorMessage << '\n';
+                 errorMessage->clear();
+             }
++#endif
+         }
+     } // optLibraries
+ 
+diff --git a/src/windeployqt/windeployqt.pro b/src/windeployqt/windeployqt.pro
+index fb12a12..cd09c23 100644
+--- a/src/windeployqt/windeployqt.pro
++++ b/src/windeployqt/windeployqt.pro
+@@ -10,4 +10,7 @@
+ win32: LIBS += -lshlwapi
+ 
+ QMAKE_TARGET_DESCRIPTION = "Qt Windows Deployment Tool"
++
++qtConfig(relocatable): DEFINES += QT_RELOCATABLE
++
+ load(qt_tool)

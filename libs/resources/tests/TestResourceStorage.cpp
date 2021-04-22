@@ -36,6 +36,7 @@ void TestResourceStorage::initTestCase()
 {
     m_dstLocation = QString(FILES_DEST_DIR);
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
+    QDir().mkpath(m_dstLocation);
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_dstLocation);
     m_locator = KisResourceLocator::instance();
@@ -67,13 +68,13 @@ void TestResourceStorage ::testStorage()
         QVERIFY(storage.type() == KisResourceStorage::StorageType::Unknown);
         QVERIFY(!storage.valid());
     }
-
-
 }
 
 void TestResourceStorage::testImportResourceFile()
 {
-    KisResourceStorage storage(QString(FILES_DATA_DIR));
+    QDir().mkpath(m_dstLocation + "/" + ResourceType::Patterns);
+    KisResourceStorage storage(m_dstLocation);
+
     QImage img(256, 256, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(0, 0, 256, 256, Qt::red);
@@ -87,8 +88,9 @@ void TestResourceStorage::testImportResourceFile()
     QByteArray md5 = KoMD5Generator::generateHash(ba);
 
     bool r = storage.importResourceFile(ResourceType::Patterns, "testpattern.png");
-    QCOMPARE(md5.toHex(), storage.resourceMd5("patterns/testpattern.png").toHex());
     QVERIFY(r);
+    QCOMPARE(md5.toHex(), storage.resourceMd5("patterns/testpattern.png").toHex());
+
 }
 
 void TestResourceStorage::cleanupTestCase()

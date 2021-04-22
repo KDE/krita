@@ -218,8 +218,7 @@ bool KisResourceStorage::saveAsNewVersion(KoResourceSP resource)
 
 bool KisResourceStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
 {
-//      return d->storagePlugin->importResourceFile(resourceType, resourceFile);
-    return false;
+    return d->storagePlugin->importResourceFile(resourceType, resourceFile);
 }
 
 bool KisResourceStorage::supportsVersioning() const

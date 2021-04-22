@@ -185,6 +185,27 @@ QSharedPointer<KisResourceStorage::TagIterator> KisFolderStorage::tags(const QSt
     return QSharedPointer<KisResourceStorage::TagIterator>(new FolderTagIterator(location(), resourceType));
 }
 
+bool KisFolderStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
+{
+
+    QFileInfo fi(resourceFile);
+    if (!fi.exists()) {
+        qWarning() << "Cannot import" << resourceFile << ": file does not exist";
+        return false;
+    }
+
+    const QString resourcesSaveLocation = location() + "/" + resourceType;
+
+    QFile f(resourceFile);
+    if (!f.copy(resourcesSaveLocation + "/" + fi.fileName())) {
+        qWarning() << "Cannot copy" << resourceFile << "to" << resourcesSaveLocation + "/" + fi.fileName();
+        return false;
+    }
+
+    return true;
+
+}
+
 QStringList KisFolderStorage::metaDataKeys() const
 {
     return QStringList() << KisResourceStorage::s_meta_name;

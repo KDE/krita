@@ -39,6 +39,7 @@ public:
 
     virtual bool addTag(const QString &resourceType, KisTagSP tag) {Q_UNUSED(resourceType); Q_UNUSED(tag); return false;}
     virtual bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) {Q_UNUSED(resourceType); Q_UNUSED(resource); return false;}
+    virtual bool importResourceFile(const QString &resourceType, const QString &resourceFile) {Q_UNUSED(resourceType); Q_UNUSED(resourceFile); return false;}
 
     virtual QImage thumbnail() const { return QImage(); }
 

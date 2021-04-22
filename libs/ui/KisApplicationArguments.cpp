@@ -91,7 +91,11 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-filename"), i18n("Filename for export"), QLatin1String("filename")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("file-layer"), i18n("File layer to be added to existing or new file"), QLatin1String("file-layer")));
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
-    parser.process(app);
+
+
+    if (parser.parse(app.arguments())) {
+        parser.process(app);
+    }
 
     QString dpiValues = parser.value("dpi");
     if (!dpiValues.isEmpty()) {

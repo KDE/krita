@@ -13,10 +13,10 @@
 class KUndo2Command;
 
 /**
- * A simple factory that allows to wrap a paint device transaction
- * with two commands. One command will be executed before the own
+ * A simple factory that allows wrapping a paint device transaction
+ * with two commands. One command will be executed before the device
  * transaction's code, and the other one after the transaction has
- * been exected.
+ * been executed.
  *
  * The only use of this class now is to change/reset interstroke data of
  * a paint device alongside executing the transaction.

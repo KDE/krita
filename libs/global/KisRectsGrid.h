@@ -17,11 +17,11 @@
  *
  * KisRectsGrid manages the presence of the rectangular cells in the grid
  * covering some specific area. The main usecase of the class is to maintain
- * an overlay device over some other paint device.
+ * an overlay device over another paint device.
  *
  * When you need to ensure that the overlay has some particular `rect` loaded,
- * you just call `grid->addRect(rect)` and get a list of rects that should
- * still be loaded into the overlay. The returned list may be empty if all the
+ * you just call `grid->addRect(rect)` and get a list of rects that have not
+ * yet been loaded into the overlay. The returned list may be empty if all the
  * grid cells intersecting `rect` has already been loaded (added to the grid).
  *
  * The size of the cell is defined at the construction stage and must be
@@ -45,8 +45,8 @@ public:
     /**
      * Add an arbitrary (non-aligned) rect to the grid
      *
-     * The grid will form a list of cells that intersect \p rc and are still
-     * not loaded, mark them as loaded and return the list to the caller.
+     * The grid will form a list of cells that intersect \p rc and have not
+     * not yet been loaded, mark them as loaded and return the list to the caller.
      *
      * \param rc the rect to be added, not necessary aligned to the grid
      * \return the list of cells that has actually been changed
@@ -72,8 +72,8 @@ public:
     /**
      * Add an aligned rect to the grid
      *
-     * The grid will form a list of cells that intersect \p rc and are still
-     * not loaded, mark them as loaded and return the list to the caller.
+     * The grid will form a list of cells that intersect \p rc and have not
+     * not yet been loaded, mark them as loaded and return the list to the caller.
      *
      * \param rc the rect to be added, the rect must be aligned
      * \return the list of cells that has actually been changed

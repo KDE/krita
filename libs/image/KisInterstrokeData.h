@@ -24,7 +24,7 @@ class KoColorSpace;
  * The data is stored inside device->interstrokeData() and added
  * via passing a factory to the transaction.
  *
- * The data is automatically removed when some incompatible change
+ * The data is automatically removed when an incompatible change
  * happens to a device, e.g. colorspace change or painting with
  * incompatible brush.
  */

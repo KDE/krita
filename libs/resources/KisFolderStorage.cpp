@@ -95,7 +95,7 @@ bool KisFolderStorage::addTag(const QString &/*resourceType*/, KisTagSP /*tag*/)
     return false;
 }
 
-bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
+bool KisFolderStorage::saveAsNewVersion(const QString &resourceType, KoResourceSP _resource)
 {
     return KisStorageVersioningHelper::addVersionedResource(location() + "/" + resourceType, _resource, 0);
 }

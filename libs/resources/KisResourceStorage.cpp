@@ -213,13 +213,12 @@ bool KisResourceStorage::addTag(const QString &resourceType, KisTagSP tag)
 
 bool KisResourceStorage::saveAsNewVersion(KoResourceSP resource)
 {
-    return d->storagePlugin->addResource(resource->resourceType().first, resource);
+    return d->storagePlugin->saveAsNewVersion(resource->resourceType().first, resource);
 }
 
 bool KisResourceStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
 {
-    Q_UNUSED(resourceType)
-    Q_UNUSED(resourceFile)
+//      return d->storagePlugin->importResourceFile(resourceType, resourceFile);
     return false;
 }
 

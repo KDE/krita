@@ -30,7 +30,7 @@ public:
     KisMemoryStorage &operator=(const KisMemoryStorage &rhs);
 
     bool addTag(const QString &resourceType, KisTagSP tag) override;
-    bool addResource(const QString &resourceType, KoResourceSP resource) override;
+    bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     bool loadVersionedResource(KoResourceSP resource) override;

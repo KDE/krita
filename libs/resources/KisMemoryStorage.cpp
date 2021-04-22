@@ -126,7 +126,7 @@ bool KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)
     return true;
 }
 
-bool KisMemoryStorage::addResource(const QString &resourceType, KoResourceSP resource)
+bool KisMemoryStorage::saveAsNewVersion(const QString &resourceType, KoResourceSP resource)
 {
     QHash<QString, StoredResource> &typedResources =
         d->resourcesNew[resourceType];

@@ -91,7 +91,7 @@ void TestFolderStorage::testAddResource()
     resource->setVersion(0);
 
     KisFolderStorage folderStorage(QString(FILES_DEST_DIR));
-    bool r = folderStorage.addResource(ResourceType::PaintOpPresets, resource);
+    bool r = folderStorage.saveAsNewVersion(ResourceType::PaintOpPresets, resource);
     QVERIFY(r);
 
     ResourceTestHelper::testVersionedStorage(folderStorage,

@@ -28,7 +28,7 @@ public:
     bool addTag(const QString &resourceType, KisTagSP tag) override;
 
     /// Adds or updates this resource to the storage
-    bool addResource(const QString &resourceType, KoResourceSP resource) override;
+    bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     bool loadVersionedResource(KoResourceSP resource) override;

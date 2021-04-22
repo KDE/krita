@@ -38,7 +38,7 @@ public:
     virtual QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) = 0;
 
     virtual bool addTag(const QString &resourceType, KisTagSP tag) {Q_UNUSED(resourceType); Q_UNUSED(tag); return false;}
-    virtual bool addResource(const QString &resourceType, KoResourceSP resource) {Q_UNUSED(resourceType); Q_UNUSED(resource); return false;}
+    virtual bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) {Q_UNUSED(resourceType); Q_UNUSED(resource); return false;}
 
     virtual QImage thumbnail() const { return QImage(); }
 

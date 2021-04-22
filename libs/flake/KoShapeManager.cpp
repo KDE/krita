@@ -498,7 +498,10 @@ void KoShapeManager::preparePaintJobs(PaintJobsOrder &jobsOrder,
     QList<KoShape*> newRootShapes;
 
     Q_FOREACH (KoShape *srcShape, rootShapes) {
-        KIS_SAFE_ASSERT_RECOVER(srcShape->parent() == excludeRoot) { continue; }
+        KIS_SAFE_ASSERT_RECOVER(srcShape->parent() == excludeRoot
+                                || !srcShape->parent()) {
+            continue;
+        }
 
         KoShape *clonedShape = srcShape->cloneShape();
 

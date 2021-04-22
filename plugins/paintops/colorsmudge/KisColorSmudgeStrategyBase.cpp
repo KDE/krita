@@ -144,6 +144,9 @@ QString KisColorSmudgeStrategyBase::finalCompositeOp(bool smearAlpha) const
 
 quint8 KisColorSmudgeStrategyBase::finalPainterOpacity(qreal opacity, qreal smudgeRateValue)
 {
+    Q_UNUSED(opacity);
+    Q_UNUSED(smudgeRateValue);
+
     return OPACITY_OPAQUE_U8;
 }
 

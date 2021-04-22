@@ -14,8 +14,6 @@
 #include <kis_pressure_sharpness_option.h>
 #include <kis_texture_option.h>
 
-#include <KoColorModelStandardIds.h>
-
 #include <kundo2command.h>
 
 namespace KisDabCacheUtils

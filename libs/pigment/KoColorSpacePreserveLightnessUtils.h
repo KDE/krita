@@ -97,7 +97,7 @@ inline static void modulateLightnessByGrayBrushRGB(quint8 *pixels, const QRgb *b
             const float srcColorR = KoColorSpaceMaths<channels_type, float>::scaleToA(pixelRGB->red);
             const float srcColorG = KoColorSpaceMaths<channels_type, float>::scaleToA(pixelRGB->green);
             const float srcColorB = KoColorSpaceMaths<channels_type, float>::scaleToA(pixelRGB->blue);
-            const float srcColorA = KoColorSpaceMaths<channels_type, float>::scaleToA(pixelRGB->alpha);
+            //const float srcColorA = KoColorSpaceMaths<channels_type, float>::scaleToA(pixelRGB->alpha);
 
             const float srcColorL = getLightness<HSLType, float>(srcColorR, srcColorG, srcColorB);
             const float lightnessB = 4 * srcColorL - 1;

@@ -62,6 +62,8 @@ class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScale
                 srcPtr += channelsPerAvx2Block;
                 dstPtr += channelsPerAvx2Block;
             }
+#else
+            Q_UNUSED(avx2Block);
 #endif
 
 #ifdef __SSE4_1__
@@ -77,6 +79,8 @@ class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScale
                 srcPtr += channelsPerSse2Block;
                 dstPtr += channelsPerSse2Block;
             }
+#else
+            Q_UNUSED(sse2Block);
 #endif
 
             for (int i = 0; i < scalarBlock; i++) {
@@ -160,6 +164,8 @@ class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScale
                 srcPtr += channelsPerAvx2Block;
                 dstPtr += channelsPerAvx2Block;
             }
+#else
+            Q_UNUSED(avx2Block);
 #endif
 
 #ifdef __SSE2__
@@ -185,6 +191,8 @@ class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScale
                 srcPtr += channelsPerSse2Block;
                 dstPtr += channelsPerSse2Block;
             }
+#else
+            Q_UNUSED(sse2Block);
 #endif
 
             for (int i = 0; i < scalarBlock; i++) {

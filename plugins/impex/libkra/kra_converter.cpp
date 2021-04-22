@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QScopedPointer>
 #include <QUrl>
+#include <QVersionNumber>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -343,7 +344,11 @@ KisImportExportErrorCode KraConverter::loadXML(const QDomDocument &doc, KoStore 
        return ImportExportCodes::FileFormatIncorrect;
     }
     root = doc.documentElement();
-    int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
+    
+    QString versionTag = root.attribute("syntaxVersion", "3.0");
+    QVersionNumber parsedVersionNumber = QVersionNumber::fromString(versionTag);
+    const int syntaxVersion = parsedVersionNumber.isNull() ? 3 : parsedVersionNumber.majorVersion();
+    
     if (syntaxVersion > 2) {
         errUI << "The file is too new for this version of Krita:" << syntaxVersion;
         m_doc->setErrorMessage(i18n("The file is too new for this version of Krita (%1).", syntaxVersion));

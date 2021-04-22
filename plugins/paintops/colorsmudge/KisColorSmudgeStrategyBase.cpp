@@ -1,4 +1,5 @@
 /*
+ *  SPDX-FileCopyrightText: 2020 Peter Schatz <voronwe13@gmail.com>
  *  SPDX-FileCopyrightText: 2021 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later

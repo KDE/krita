@@ -525,9 +525,10 @@ public:
      * see KoColorSpacePreserveLightnessUtils.h
      */
     virtual void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const;
-    //Same as above, but with contrast adjusted by strength.  Strength == 1 -> full contrast.  Allows softer lightness adjustments.
+    // Same as above, but with contrast adjusted by strength.  Strength == 1 -> full contrast.  Allows softer lightness adjustments.
     virtual void fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const;
-    virtual void modulateLightnessByGrayBrush(quint8* dst, const QRgb *brush, quint8* src, qreal strength, qint32 nPixels) const;
+    // Same as above, but applies lightness adjustment to \p dst in-place
+    virtual void modulateLightnessByGrayBrush(quint8* dst, const QRgb *brush, qreal strength, qint32 nPixels) const;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast

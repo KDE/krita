@@ -145,7 +145,6 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
             tempColorDevice->colorSpace()->
                     modulateLightnessByGrayBrush(tempColorDevice->data(),
                                                  reinterpret_cast<const QRgb*>(tempHeightmapDevice->data()),
-                                                 0,
                                                  1.0,
                                                  numPixels);
             m_projectionDevice->writeBytes(tempColorDevice->data(), tempColorDevice->bounds());

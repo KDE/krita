@@ -17,13 +17,38 @@
 class KoMixColorsOp
 {
 public:
+
+    /**
+     * An accumulator-like object for mixing color without copying and allocations
+     */
     class Mixer
     {
     public:
         virtual ~Mixer() {}
+        /**
+         * Add \p nPixels pixels pointed by \p data to the mixing sum. The
+         * passed pixels are weighted by coefficients in \p weights.
+         */
         virtual void accumulate(const quint8 *data, const qint16 *weights, int weightSum, int nPixels) = 0;
+
+        /**
+         * Add \p nPixels pixels pointed by \p data to the mixing sum. The
+         * passed pixels are weighted uniformly, that is, each pixel has
+         * implicit weight of 1.
+         */
         virtual void accumulateAverage(const quint8 *data, int nPixels) = 0;
+
+        /**
+         * Calculate the final mixed color. This function may be called
+         * as many times as needed on any stage of the mixing.
+         */
         virtual void computeMixedColor(quint8 *data) = 0;
+
+        /**
+         * Return the current sum of the weights of the averaging
+         * algorithm. That might be needed to make a decision whether
+         * we had a meaningful amount of data passed.
+         */
         virtual qint64 currentWeightsSum() const = 0;
     };
 

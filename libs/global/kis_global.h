@@ -147,12 +147,12 @@ inline PointType snapToClosestAxis(PointType P) {
 }
 
 template<typename T>
-inline const T pow2(const T& x) {
+inline T pow2(const T& x) {
     return x * x;
 }
 
 template<typename T>
-inline const T pow3(const T& x) {
+inline T pow3(const T& x) {
     return x * x * x;
 }
 

@@ -15,7 +15,19 @@
 class KUndo2Command;
 class KoColorSpace;
 
-
+/**
+ * A special base class for storing temporary data inside a paint
+ * device between brush strokes. That might be used by the brushes to
+ * store data that needs to be passes between different strokes of the
+ * same brush, e.g. paint drying drying or heightmap information.
+ *
+ * The data is stored inside device->interstrokeData() and added
+ * via passing a factory to the transaction.
+ *
+ * The data is automatically removed when some incompatible change
+ * happens to a device, e.g. colorspace change or painting with
+ * incompatible brush.
+ */
 class KRITAIMAGE_EXPORT KisInterstrokeData
 {
 public:

@@ -618,7 +618,13 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 }
 
 namespace {
-
+/**
+ * Some brush engines may need the gray brush image to be normalized,
+ * that is, to have average lightness value of 127. That is important
+ * for the lightness mode of the colorsmudge paintop, because the dab
+ * adds color inside a feedback loop. So non-neutral average lightness
+ * may lead to a rapid color drift to either black or white.
+ */
 void normalalizeRGBADab(QImage &image)
 {
     qint64 lightnessSum = 0;

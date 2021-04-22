@@ -67,7 +67,7 @@ inline static void fillGrayBrushWithColorPreserveLightnessRGB(quint8 *pixels, co
 }
 
 template<typename CSTraits>
-inline static void modulateLightnessByGrayBrushRGB(quint8 *pixels, const QRgb *brush, quint8 *src, qreal strength, qint32 nPixels) {
+inline static void modulateLightnessByGrayBrushRGB(quint8 *pixels, const QRgb *brush, qreal strength, qint32 nPixels) {
     using RGBPixel = typename CSTraits::Pixel;
         using channels_type = typename CSTraits::channels_type;
         static const quint32 pixelSize = CSTraits::pixelSize;

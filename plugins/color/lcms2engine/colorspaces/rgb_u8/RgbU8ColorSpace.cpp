@@ -113,7 +113,7 @@ void RgbU8ColorSpace::fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst
     fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU8Traits>(dst, brush, brushColor, strength, nPixels);
 }
 
-void RgbU8ColorSpace::modulateLightnessByGrayBrush(quint8 *dst, const QRgb *brush, quint8 *src, qreal strength, qint32 nPixels) const
+void RgbU8ColorSpace::modulateLightnessByGrayBrush(quint8 *dst, const QRgb *brush, qreal strength, qint32 nPixels) const
 {
-    modulateLightnessByGrayBrushRGB<KoBgrU8Traits>(dst, brush, src, strength, nPixels);
+    modulateLightnessByGrayBrushRGB<KoBgrU8Traits>(dst, brush, strength, nPixels);
 }

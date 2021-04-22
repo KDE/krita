@@ -216,8 +216,9 @@ bool KisResourceStorage::saveAsNewVersion(KoResourceSP resource)
     return d->storagePlugin->addResource(resource->resourceType().first, resource);
 }
 
-bool KisResourceStorage::importResourceFile(const QString &resourceFile)
+bool KisResourceStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
 {
+    Q_UNUSED(resourceType)
     Q_UNUSED(resourceFile)
     return false;
 }

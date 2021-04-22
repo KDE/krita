@@ -4,6 +4,7 @@ ResourceType=paintoppreset
 Name=FX
 Name[ca]=Efectes especials
 Name[ca@valencia]=Efectes especials
+Name[cs]=FX
 Name[en_GB]=FX
 Name[es]=FX
 Name[fr]=FX

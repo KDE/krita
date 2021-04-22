@@ -4,6 +4,7 @@ ResourceType=paintoppreset
 Name=Ink
 Name[ca]=Tinta
 Name[ca@valencia]=Tinta
+Name[cs]=Inkoust
 Name[en_GB]=Ink
 Name[es]=Tinta
 Name[fr]=Encre

@@ -4,6 +4,7 @@ ResourceType=paintoppreset
 Name=Paint
 Name[ca]=Pintura
 Name[ca@valencia]=Pintura
+Name[cs]=Namalovat
 Name[en_GB]=Paint
 Name[es]=Pintura
 Name[fr]=Peinture

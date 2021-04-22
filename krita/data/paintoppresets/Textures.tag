@@ -4,6 +4,7 @@ ResourceType=paintoppreset
 Name=Textures
 Name[ca]=Textures
 Name[ca@valencia]=Textures
+Name[cs]=Textury
 Name[en_GB]=Textures
 Name[es]=Texturas
 Name[fr]=Textures

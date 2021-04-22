@@ -4,6 +4,7 @@ ResourceType=paintoppreset
 Name=★ My Favorites
 Name[ca]=★ Preferits
 Name[ca@valencia]=★ Preferits
+Name[cs]=★ Moje oblíbené
 Name[en_GB]=★ My Favorites
 Name[es]=★ Mis favoritos
 Name[fr]=★ Mes préférés

@@ -88,12 +88,24 @@ public:
     }
 
     KisFixedPoint& operator*=(const KisFixedPoint& x) {
+        /**
+         * Until C++20 `d >>= 8` is "implementation defined" for negative `d`.
+         * But we have a unittest that confirms that the our compiler handles
+         * that in an expected way
+         */
+
         d *= x.d;
         d >>= 8;
         return *this;
     }
 
     KisFixedPoint& operator/=(const KisFixedPoint& x) {
+        /**
+         * Until C++20 `d <<= 8` is an "undefined behavior" for negative `d`.
+         * But we have a unittest that confirms that the our compiler handles
+         * that in an expected way
+         */
+
         d <<= 8;
         d /= x.d;
         return *this;

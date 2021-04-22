@@ -210,8 +210,8 @@ public:
     /// tags and resources.
     bool addTag(const QString &resourceType, KisTagSP tag);
 
-    /// Adds the given resource to the storage.
-    bool addResource(KoResourceSP resource);
+    /// Creates a new version of the given resource.
+    bool saveAsNewVersion(KoResourceSP resource);
 
     /// Returns true if the storage supports versioning of the resources.
     /// It enables loadVersionedResource() call.

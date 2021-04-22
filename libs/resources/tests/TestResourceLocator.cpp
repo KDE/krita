@@ -145,7 +145,7 @@ void TestResourceLocator::testDocumentStorage()
 
     KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
     KoResourceSP resource(new DummyResource("test.kpp", ResourceType::PaintOpPresets));
-    documentStorage->addResource(resource);
+    documentStorage->saveAsNewVersion(resource);
 
     m_locator->addStorage(documentName, documentStorage);
 

@@ -328,7 +328,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
 
     // Save the resource to the storage storage
-    if (!storage->addResource(resource)) {
+    if (!storage->saveAsNewVersion(resource)) {
         qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
         return false;
     }
@@ -369,7 +369,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     resource->updateThumbnail();
     resource->setVersion(resource->version() + 1);
 
-    if (!storage->addResource(resource)) {
+    if (!storage->saveAsNewVersion(resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
         return false;
     }

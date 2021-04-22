@@ -26,7 +26,7 @@
 #include <KisDocument.h>
 #include <kis_clone_layer.h>
 
-static const char CURRENT_DTD_VERSION[] = "2";
+static const char CURRENT_DTD_VERSION[] = "2.0";
 
 KraConverter::KraConverter(KisDocument *doc)
     : m_doc(doc)
@@ -344,7 +344,6 @@ KisImportExportErrorCode KraConverter::loadXML(const QDomDocument &doc, KoStore 
     }
     root = doc.documentElement();
     int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
-    
     if (syntaxVersion > 2) {
         errUI << "The file is too new for this version of Krita:" << syntaxVersion;
         m_doc->setErrorMessage(i18n("The file is too new for this version of Krita (%1).", syntaxVersion));
@@ -356,7 +355,7 @@ KisImportExportErrorCode KraConverter::loadXML(const QDomDocument &doc, KoStore 
         m_doc->setErrorMessage(i18n("The file has no layers."));
         return ImportExportCodes::FileFormatIncorrect;
     }
-    
+
     m_kraLoader = new KisKraLoader(m_doc, syntaxVersion);
 
     // reset the old image before loading the next one

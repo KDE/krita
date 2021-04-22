@@ -43,5 +43,12 @@ void TestResourceStorage ::testStorage()
 
 }
 
+void TestResourceStorage::testImportResourceFile()
+{
+    KisResourceStorage storage(QString(FILES_DATA_DIR));
+    bool r = storage.importResourceFile("test");
+    QVERIFY(r);
+}
+
 SIMPLE_TEST_MAIN(TestResourceStorage)
 

@@ -213,6 +213,9 @@ public:
     /// Creates a new version of the given resource.
     bool saveAsNewVersion(KoResourceSP resource);
 
+    /// Copies the given file into this storage
+    bool importResourceFile(const QString &resourceFile);
+
     /// Returns true if the storage supports versioning of the resources.
     /// It enables loadVersionedResource() call.
     bool supportsVersioning() const;

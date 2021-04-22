@@ -14,6 +14,9 @@ class TestResourceStorage : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testStorage();
+
+    void testImportResourceFile();
+
 private:
 };
 

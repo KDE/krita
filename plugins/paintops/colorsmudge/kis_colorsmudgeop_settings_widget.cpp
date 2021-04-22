@@ -61,7 +61,8 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
-    addPaintOpOption(new KisOverlayModeOptionWidget(), i18n("Overlay Mode"));
+    m_overlayOptionWidget = new KisOverlayModeOptionWidget();
+    addPaintOpOption(m_overlayOptionWidget, i18n("Overlay Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption(), i18n("0%"), i18n("100%")), i18n("Gradient"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()), i18n("Hue"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(), KisPressureHSVOption::saturationMinLabel(), KisPressureHSVOption::saturationmaxLabel()), i18n("Saturation"));
@@ -100,6 +101,9 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
             m_smudgeOptionWidget->setUseNewEngine(true);
         }
         m_lightnessStrengthOptionWidget->setEnabled(brush->preserveLightness());
+
+
+        m_overlayOptionWidget->setEnabled(brush->brushApplication() != LIGHTNESSMAP);
 
         m_radiusStrengthOptionWidget->updateRange(0.0, m_smudgeOptionWidget->useNewEngine() ? 1.0 : 3.0);
     }

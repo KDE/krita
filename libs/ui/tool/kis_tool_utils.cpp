@@ -37,6 +37,8 @@ namespace KisToolUtils {
 
         // Sampling radius.
         if (!pure && radius > 1) {
+            QScopedPointer<KoMixColorsOp::Mixer> mixer(cs->mixColorsOp()->createMixer());
+
             QVector<const quint8*> pixels;
             const int effectiveRadius = radius - 1;
 
@@ -46,16 +48,16 @@ namespace KisToolUtils {
 
             const int radiusSq = pow2(effectiveRadius);
 
-            while (it.nextPixel()) {
+            int nConseqPixels = it.nConseqPixels();
+            while (it.nextPixels(nConseqPixels)) {
                 const QPoint realPos(it.x(),  it.y());
-                const QPoint pt = realPos - pos;
-                if (pow2(pt.x()) + pow2(pt.y()) < radiusSq) {
-                    pixels << it.oldRawData();
+                if (kisSquareDistance(realPos, pos) < radiusSq) {
+                    mixer->accumulateAverage(it.oldRawData(), nConseqPixels);
                 }
             }
 
-            const quint8 **cpixels = const_cast<const quint8**>(pixels.constData());
-            cs->mixColorsOp()->mixColors(cpixels, pixels.size(), sampledColor.data());
+            mixer->computeMixedColor(sampledColor.data());
+
         } else {
             dev->pixel(pos.x(), pos.y(), &sampledColor);
         }

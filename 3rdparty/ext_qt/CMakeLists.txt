@@ -197,7 +197,7 @@ elseif (NOT APPLE)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0114-Fix-shortcuts-with-special-keys-on-non-US-layouts-on.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Check-if-we-reached-the-end-of-Iterator.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0116-Make-Qt-relocatable.diff
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0119-Fix-relocated-Qt-to-be-found-when-its-path-has-non-ASCII.diff
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0119-Fix-relocated-Qt-to-be-found-when-its-path-has-non-A.patch
 
 
       CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'

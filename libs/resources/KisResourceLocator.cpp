@@ -173,7 +173,7 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
     Q_FOREACH (KoResourceSP res, requiredResources) {
         if (res->resourceId() < 0) {
             // we put all the embedded resources into the global shared "memory" storage
-            this->addResource(res->resourceType().first, res, "memory");
+            this->addResourceVersion(res->resourceType().first, res, "memory");
         }
     }
 }
@@ -290,6 +290,8 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
 
 KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation)
 {
+    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
+
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fileName));
     QFile f(fileName);
     if (!f.open(QFile::ReadOnly)) {
@@ -299,18 +301,42 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
 
     KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f, KisGlobalResourcesInterface::instance());
 
-    if (!resource) {
+    if (!resource || !resource->valid()) {
         qWarning() << "Could not import" << fileName << ": resource doesn't load.";
         return nullptr;
     }
 
-    if (addResource(resourceType, resource, storageLocation)) {
+    QByteArray md5 = resource->md5();
+
+    if (storage->importResourceFile(resourceType, fileName)) {
+
+        resource = storage->resource(resourceType + "/" + resource->filename());
+
+        if (!resource) {
+            qWarning() << "Could not retrieve imported resource from the storage" << resourceType << fileName << storageLocation;
+            return nullptr;
+        }
+
+        Q_ASSERT(resource->md5() == md5);
+
+        // Insert into the database
+        const bool result = KisResourceCacheDb::addResource(storage,
+                                                storage->timeStampForResource(resourceType, resource->filename()),
+                                                resource,
+                                                resourceType);
+        if (result) {
+            return resource;
+        }
+
+        // Add to the cache
+        d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
+
         return resource;
     }
     return nullptr;
 }
 
-bool KisResourceLocator::addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation)
+bool KisResourceLocator::addResourceVersion(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation)
 {
     if (!resource || !resource->valid()) return false;
 
@@ -351,7 +377,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 bool KisResourceLocator::updateResource(const QString &resourceType, const KoResourceSP resource)
 {
     if (resource->resourceId() < 0) {
-        return addResource(resourceType, resource, "");
+        return addResourceVersion(resourceType, resource, "");
     }
 
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());

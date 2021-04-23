@@ -173,7 +173,7 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
     Q_FOREACH (KoResourceSP res, requiredResources) {
         if (res->resourceId() < 0) {
             // we put all the embedded resources into the global shared "memory" storage
-            this->addResourceVersion(res->resourceType().first, res, "memory");
+            this->addResource(res->resourceType().first, res, "memory");
         }
     }
 }
@@ -336,12 +336,13 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
     return nullptr;
 }
 
-bool KisResourceLocator::addResourceVersion(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation)
+bool KisResourceLocator::addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation)
 {
     if (!resource || !resource->valid()) return false;
 
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
     Q_ASSERT(storage);
+    Q_ASSERT(resource->version() <= 0);
 
     //If we have gotten this far and the resource still doesn't have a filename to save to, we should generate one.
     if (resource->filename().isEmpty()) {
@@ -352,9 +353,8 @@ bool KisResourceLocator::addResourceVersion(const QString &resourceType, const K
         resource->setVersion(0);
     }
 
-
     // Save the resource to the storage storage
-    if (!storage->saveAsNewVersion(resource)) {
+    if (!storage->addResource(resource)) {
         qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
         return false;
     }
@@ -362,7 +362,6 @@ bool KisResourceLocator::addResourceVersion(const QString &resourceType, const K
     resource->setStorageLocation(storageLocation);
     resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
-
 
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
 
@@ -377,7 +376,7 @@ bool KisResourceLocator::addResourceVersion(const QString &resourceType, const K
 bool KisResourceLocator::updateResource(const QString &resourceType, const KoResourceSP resource)
 {
     if (resource->resourceId() < 0) {
-        return addResourceVersion(resourceType, resource, "");
+        return addResource(resourceType, resource, "");
     }
 
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());

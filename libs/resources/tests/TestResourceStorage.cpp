@@ -15,6 +15,7 @@
 #include <kconfiggroup.h>
 
 #include <KoMD5Generator.h>
+#include <KoPattern.h>
 
 #include "KisResourceLoaderRegistry.h"
 #include "DummyResource.h"
@@ -99,6 +100,20 @@ void TestResourceStorage::testImportResourceFile()
     KisResourceStorage bundleStorage(QString(FILES_DATA_DIR) + "/bundles/test1.bundle");
     r = bundleStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
     QVERIFY(!r);
+}
+
+void TestResourceStorage::testAddResource()
+{
+    QDir().mkpath(m_dstLocation + "/" + ResourceType::Patterns);
+    KisResourceStorage folderStorage(m_dstLocation);
+
+    QImage img(256, 256, QImage::Format_ARGB32);
+    QPainter gc(&img);
+    gc.fillRect(0, 0, 256, 256, Qt::red);
+
+    KoResourceSP res(new KoPattern(img, "testpattern2", "testpattern2.png"));
+    bool r =  folderStorage.addResource(res);
+    QVERIFY(r);
 }
 
 void TestResourceStorage::cleanupTestCase()

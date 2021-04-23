@@ -206,6 +206,37 @@ bool KisFolderStorage::importResourceFile(const QString &resourceType, const QSt
 
 }
 
+bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP resource)
+{
+    if (!resource || !resource->valid()) return false;
+
+    const QString resourcesSaveLocation = location() + "/" + resourceType;
+
+    QFileInfo fi(resourcesSaveLocation + "/" + resource->filename());
+    if (fi.exists()) {
+        qWarning() << "Resource" << resourceType << resource->filename() << "already exists in" << resourcesSaveLocation;
+        return false;
+    }
+
+    QFile f(fi.absoluteFilePath());
+    if (!f.open(QFile::WriteOnly)) {
+        qWarning() << "Could not open" << fi.absoluteFilePath() << "for writing.";
+        return false;
+    }
+
+    if (!resource->saveToDevice(&f)) {
+        qWarning() << "Could not save resource to" << fi.absoluteFilePath();
+        f.close();
+        return false;
+    }
+    f.close();
+
+
+
+
+    return true;
+}
+
 QStringList KisFolderStorage::metaDataKeys() const
 {
     return QStringList() << KisResourceStorage::s_meta_name;

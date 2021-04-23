@@ -217,6 +217,30 @@ bool KisMemoryStorage::importResourceFile(const QString &resourceType, const QSt
     return true;
 }
 
+bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP resource)
+{
+    QHash<QString, StoredResource> &typedResources = d->resourcesNew[resourceType];
+
+    if (typedResources.contains(resource->filename())) {
+        return false;
+    };
+
+    StoredResource storedResource;
+    storedResource.timestamp = QDateTime::currentDateTime();
+    storedResource.data.reset(new QByteArray());
+    QBuffer buffer(storedResource.data.data());
+    buffer.open(QIODevice::WriteOnly);
+    if (!resource->saveToDevice(&buffer)) {
+        qWarning() << "Could not save" << resource;
+        return false;
+    }
+    buffer.close();
+
+    typedResources.insert(resource->filename(), storedResource);
+
+    return true;
+}
+
 QByteArray KisMemoryStorage::resourceMd5(const QString &url)
 {
     QStringList parts = url.split('/', QString::SkipEmptyParts);

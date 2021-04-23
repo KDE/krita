@@ -320,7 +320,7 @@ bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &sto
 
     bool r = true;
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    if (!KisResourceLocator::instance()->addResourceVersion(d->resourceType, resource, storageId)) {
+    if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, storageId)) {
         qWarning() << "Failed to add resource" << resource->name();
         r = false;
     }

@@ -18,6 +18,7 @@ private Q_SLOTS:
     void initTestCase();
     void testStorage();
     void testImportResourceFile();
+    void testAddResource();
     void cleanupTestCase();
 private:
     QString m_dstLocation;

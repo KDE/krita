@@ -213,6 +213,11 @@ public:
     /// Creates a new version of the given resource.
     bool saveAsNewVersion(KoResourceSP resource);
 
+    /// Adds the given resource to the storage. If there is already a resource
+    /// with the given filename of the given type, this should return false and
+    /// saveAsnewVersion should be used.
+    bool addResource(KoResourceSP resource);
+
     /**
      * Copies the given file into this storage. Implementations should not overwrite
      * an existing resource with the same filename, but return false.

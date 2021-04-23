@@ -180,7 +180,7 @@ private:
      * @param storageLocation the storage where the resource will be saved. By default this is the the default folder storage.
      * @return true if successful
      */
-    bool addResourceVersion(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation = QString());
+    bool addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation = QString());
 
     /**
      * @brief updateResource

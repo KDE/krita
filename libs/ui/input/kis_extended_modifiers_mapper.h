@@ -43,7 +43,6 @@ public:
 
 #ifdef Q_OS_MACOS
     static void setLocalMonitor(bool activate, KisShortcutMatcher *matcher = 0);
-    static void setGlobalMonitor(bool activate);
 #endif
 
 private:

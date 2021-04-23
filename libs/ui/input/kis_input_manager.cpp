@@ -84,7 +84,6 @@ KisInputManager::KisInputManager(QObject *parent)
     // on macos global Monitor listen to keypresses when krita is not in focus
     // and local monitor listen presses when krita is in focus.
 #ifdef Q_OS_MACOS
-    KisExtendedModifiersMapper::setGlobalMonitor(true);
     KisExtendedModifiersMapper::setLocalMonitor(true, &d->matcher);
 #endif
 }
@@ -92,7 +91,6 @@ KisInputManager::KisInputManager(QObject *parent)
 KisInputManager::~KisInputManager()
 {
 #ifdef Q_OS_MACOS
-    KisExtendedModifiersMapper::setGlobalMonitor(false);
     KisExtendedModifiersMapper::setLocalMonitor(false);
 #endif
     delete d;

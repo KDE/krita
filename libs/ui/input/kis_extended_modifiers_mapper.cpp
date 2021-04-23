@@ -165,14 +165,8 @@ KisExtendedModifiersMapper::~KisExtendedModifiersMapper()
 #ifdef Q_OS_MACOS
 void KisExtendedModifiersMapper::setLocalMonitor(bool activate, KisShortcutMatcher *matcher)
 {
-    if (matcher) {
-        activateLocalMonitor(activate, *matcher);
-    }
-}
-
-void KisExtendedModifiersMapper::setGlobalMonitor(bool activate)
-{
-    activateGlobalMonitor(activate);
+    Q_UNUSED(matcher);
+    activateLocalMonitor(activate);
 }
 #endif
 

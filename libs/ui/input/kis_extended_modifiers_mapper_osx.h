@@ -12,14 +12,8 @@
 
 #include "kis_shortcut_matcher.h"
 
-/*
- * global Monitor captures events when other
- * applications have focus.
- *
- * */
-void activateGlobalMonitor(bool activate);
 
-void activateLocalMonitor(bool activate, KisShortcutMatcher &matcher);
+void activateLocalMonitor(bool activate);
 
 QVector<Qt::Key> queryPressedKeysMac();
 

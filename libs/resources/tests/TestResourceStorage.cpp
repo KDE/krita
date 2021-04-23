@@ -73,7 +73,7 @@ void TestResourceStorage ::testStorage()
 void TestResourceStorage::testImportResourceFile()
 {
     QDir().mkpath(m_dstLocation + "/" + ResourceType::Patterns);
-    KisResourceStorage storage(m_dstLocation);
+    KisResourceStorage folderStorage(m_dstLocation);
 
     QImage img(256, 256, QImage::Format_ARGB32);
     QPainter gc(&img);
@@ -87,10 +87,18 @@ void TestResourceStorage::testImportResourceFile()
 
     QByteArray md5 = KoMD5Generator::generateHash(ba);
 
-    bool r = storage.importResourceFile(ResourceType::Patterns, "testpattern.png");
+    bool r = folderStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
     QVERIFY(r);
-    QCOMPARE(md5.toHex(), storage.resourceMd5("patterns/testpattern.png").toHex());
+    QCOMPARE(md5.toHex(), folderStorage.resourceMd5("patterns/testpattern.png").toHex());
 
+    KisResourceStorage memoryStorage("memory");
+    r = memoryStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
+    QVERIFY(r);
+    QCOMPARE(md5.toHex(), memoryStorage.resourceMd5("patterns/testpattern.png").toHex());
+
+    KisResourceStorage bundleStorage(QString(FILES_DATA_DIR) + "/bundles/test1.bundle");
+    r = bundleStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
+    QVERIFY(!r);
 }
 
 void TestResourceStorage::cleanupTestCase()

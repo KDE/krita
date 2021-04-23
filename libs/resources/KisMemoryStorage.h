@@ -34,6 +34,8 @@ public:
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     bool loadVersionedResource(KoResourceSP resource) override;
+    bool importResourceFile(const QString &resourceType, const QString &resourceFile) override;
+
     QByteArray resourceMd5(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;

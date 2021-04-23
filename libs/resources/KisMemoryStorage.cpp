@@ -187,6 +187,36 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
     return retval;
 }
 
+bool KisMemoryStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
+{
+    QFileInfo fi(resourceFile);
+    if (d->resourcesNew.contains(resourceType) &&
+        d->resourcesNew[resourceType].contains(fi.fileName())) {
+        return false;
+    }
+
+    StoredResource storedResource;
+    storedResource.timestamp = QDateTime::currentDateTime();
+    storedResource.data.reset(new QByteArray());
+    QBuffer buffer(storedResource.data.data());
+    buffer.open(QIODevice::WriteOnly);
+    QFile f(resourceFile);
+
+    if (!f.open(QFile::ReadOnly)) {
+        return false;
+    }
+
+    buffer.write(f.readAll());
+    f.close();
+    buffer.close();
+
+    QHash<QString, StoredResource> &typedResources =
+        d->resourcesNew[resourceType];
+    typedResources.insert(fi.fileName(), storedResource);
+
+    return true;
+}
+
 QByteArray KisMemoryStorage::resourceMd5(const QString &url)
 {
     QStringList parts = url.split('/', QString::SkipEmptyParts);

@@ -649,15 +649,20 @@ set_package_properties(ZLIB PROPERTIES
     PURPOSE "Optionally used by the G'Mic and the PSD plugins")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 
-find_package(OpenEXR)
+find_package(OpenEXR 3.0 CONFIG QUIET)
+if(TARGET OpenEXR::OpenEXR)
+    set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
+else()
+    find_package(OpenEXR)
+endif()
 set_package_properties(OpenEXR PROPERTIES
     DESCRIPTION "High dynamic-range (HDR) image file format"
     URL "https://www.openexr.com"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita OpenEXR filter")
-macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+macro_bool_to_01(OpenEXR_FOUND HAVE_OPENEXR)
 set(LINK_OPENEXR_LIB)
-if(OPENEXR_FOUND)
+if(OpenEXR_FOUND)
     include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})

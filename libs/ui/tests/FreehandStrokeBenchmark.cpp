@@ -18,6 +18,10 @@
 #include "kis_image.h"
 #include <brushengine/kis_paint_information.h>
 
+#include "testutil.h"
+#include "KisResourceModel.h"
+#include "KisGlobalResourcesInterface.h"
+
 
 class FreehandStrokeBenchmarkTester : public utils::StrokeTester
 {
@@ -101,7 +105,7 @@ void benchmarkBrushUnthreaded(const QString &presetName)
     FreehandStrokeBenchmarkTester tester(presetName);
 
 
-    Q_FOREACH(int i, QVector<int>({/*1,*/ QThread::idealThreadCount()})) {
+    Q_FOREACH(int i, QVector<int>({1, QThread::idealThreadCount()})) {
         tester.setCpuCoresLimit(i);
         tester.benchmark();
 
@@ -123,32 +127,42 @@ void FreehandStrokeBenchmark::testDefaultTip()
 
 void FreehandStrokeBenchmark::testSoftTip()
 {
-    benchmarkBrush("testing_1000px_auto_soft.kpp");
+    benchmarkBrushUnthreaded("testing_1000px_auto_soft.kpp");
 }
 
 void FreehandStrokeBenchmark::testGaussianTip()
 {
-    benchmarkBrush("testing_1000px_auto_gaussian.kpp");
+    benchmarkBrushUnthreaded("testing_1000px_auto_gaussian.kpp");
 }
 
 void FreehandStrokeBenchmark::testRectangularTip()
 {
-    benchmarkBrush("testing_1000px_auto_rectangular.kpp");
+    benchmarkBrushUnthreaded("testing_1000px_auto_rectangular.kpp");
 }
 
 void FreehandStrokeBenchmark::testRectGaussianTip()
 {
-    benchmarkBrush("testing_1000px_auto_gaussian_rect.kpp");
+    benchmarkBrushUnthreaded("testing_1000px_auto_gaussian_rect.kpp");
 }
 
 void FreehandStrokeBenchmark::testRectSoftTip()
 {
-    benchmarkBrush("testing_1000px_auto_soft_rect.kpp");
+    benchmarkBrushUnthreaded("testing_1000px_auto_soft_rect.kpp");
 }
 
 void FreehandStrokeBenchmark::testStampTip()
 {
-    benchmarkBrush("testing_1000px_stamp_450_rotated.kpp");
+    QString fullFileName = TestUtil::fetchDataFileLazy("3_texture.png");
+    KIS_ASSERT(!fullFileName.isEmpty());
+    KIS_ASSERT(QFileInfo(fullFileName).exists());
+
+    KisResourceModel model(ResourceType::Brushes);
+    KisBrushSP brush(new KisPngBrush(fullFileName));
+    brush->load(KisGlobalResourcesInterface::instance());
+
+    model.addResource(brush);
+
+    benchmarkBrushUnthreaded("testing_1000px_stamp_450_rotated.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_old_sa()

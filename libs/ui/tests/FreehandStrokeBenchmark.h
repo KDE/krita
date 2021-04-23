@@ -15,7 +15,7 @@ class FreehandStrokeBenchmark : public QObject
 private Q_SLOTS:
     void initTestCase();
 
-private:
+private Q_SLOTS:
     void testDefaultTip();
     void testSoftTip();
     void testGaussianTip();
@@ -25,7 +25,7 @@ private:
     void testRectSoftTip();
 
     void testStampTip();
-private Q_SLOTS:
+
     void testColorsmudgeDefaultTip_dull_old_sa();
     void testColorsmudgeDefaultTip_dull_old_nsa();
     void testColorsmudgeDefaultTip_dull_new_sa();

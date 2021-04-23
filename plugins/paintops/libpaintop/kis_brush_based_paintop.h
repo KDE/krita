@@ -52,7 +52,7 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 
 public:
 
-    KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter);
+    KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisBrushTextureFlags textureFlags = None);
     ~KisBrushBasedPaintOp() override;
 
     bool checkSizeTooSmall(qreal scale);

@@ -9,7 +9,7 @@
 
 #include "widgets/kis_gradient_chooser.h"
 
-KisTextureChooser::KisTextureChooser(QWidget *parent)
+KisTextureChooser::KisTextureChooser(KisBrushTextureFlags flags, QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
@@ -40,9 +40,19 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
 
 
     QStringList texturingModes;
-    texturingModes << i18n("Multiply Alpha") << i18n("Subtract Alpha") << i18n("Lightness Map") << i18n("Gradient Map");
-    cmbTexturingMode->addItems(texturingModes);
-    cmbTexturingMode->setCurrentIndex(KisTextureProperties::SUBTRACT);
+
+    cmbTexturingMode->addItem(i18n("Multiply Alpha"), KisTextureProperties::MULTIPLY);
+    cmbTexturingMode->addItem(i18n("Subtract Alpha"), KisTextureProperties::SUBTRACT);
+
+    if (flags & SupportsLightnessMode) {
+        cmbTexturingMode->addItem(i18n("Lightness Map"), KisTextureProperties::LIGHTNESS);
+    }
+
+    if (flags & SupportsGradientMode) {
+        cmbTexturingMode->addItem(i18n("Gradient Map"), KisTextureProperties::GRADIENT);
+    }
+
+    selectTexturingMode(KisTextureProperties::SUBTRACT);
 
     QStringList cutOffPolicies;
     cutOffPolicies << i18n("Cut Off Disabled") << i18n("Cut Off Brush") << i18n("Cut Off Pattern");
@@ -61,4 +71,21 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
 KisTextureChooser::~KisTextureChooser()
 {
 
+}
+
+bool KisTextureChooser::selectTexturingMode(KisTextureProperties::TexturingMode mode)
+{
+    int i = 0;
+    for (; i < cmbTexturingMode->count(); i++) {
+        if (cmbTexturingMode->itemData(i) == mode) {
+            cmbTexturingMode->setCurrentIndex(i);
+        }
+    }
+
+    return i < cmbTexturingMode->count();
+}
+
+KisTextureProperties::TexturingMode KisTextureChooser::texturingMode() const
+{
+    return KisTextureProperties::TexturingMode(cmbTexturingMode->currentData().value<int>());
 }

@@ -77,7 +77,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     KisPaintActionTypeOption *actionTypeOption = new KisPaintActionTypeOption();
     addPaintOpOption(actionTypeOption, i18n("Painting Mode"));
 
-    addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
+    addPaintOpOption(new KisTextureOption(SupportsLightnessMode | SupportsGradientMode), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 
     KisMaskingBrushOption::MasterBrushSizeAdapter sizeAdapter =

@@ -34,6 +34,7 @@ Name[zh_TW]=指定設定檔到圖像
 Comment=Assign a profile to an image without converting it.
 Comment[ca]=Assigna un perfil a una imatge sense convertir-la.
 Comment[ca@valencia]=Assigna un perfil a una imatge sense convertir-la.
+Comment[de]=Weisen Sie einem Bild ein Profil zu, ohne es zu konvertieren.
 Comment[en_GB]=Assign a profile to an image without converting it.
 Comment[es]=Asignar un perfil a una imagen sin convertirla.
 Comment[et]=Pildile profiili omistamine ilma seda teisendamata.

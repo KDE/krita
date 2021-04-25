@@ -717,6 +717,7 @@ void KisAssistantTool::updateToolOptionsUI()
 
          m_options.vanishingPointAngleSpinbox->setVisible(isVanishingPointAssistant);
          m_options.twoPointDensitySpinbox->setVisible(isTwoPointAssistant);
+         m_options.twoPointUseVerticalCheckbox->setVisible(isTwoPointAssistant);
 
          if (isVanishingPointAssistant) {
              QSharedPointer <VanishingPointAssistant> assis = qSharedPointerCast<VanishingPointAssistant>(m_selectedAssistant);
@@ -726,6 +727,7 @@ void KisAssistantTool::updateToolOptionsUI()
          if (isTwoPointAssistant) {
              QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_selectedAssistant);
              m_options.twoPointDensitySpinbox->setValue(assis->gridDensity());
+             m_options.twoPointUseVerticalCheckbox->setChecked(assis->useVertical());
          }
 
          // load custom color settings from assistant (this happens when changing assistant
@@ -744,6 +746,7 @@ void KisAssistantTool::updateToolOptionsUI()
      } else {
          m_options.vanishingPointAngleSpinbox->setVisible(false);
          m_options.twoPointDensitySpinbox->setVisible(false);
+         m_options.twoPointUseVerticalCheckbox->setVisible(false);
      }
 
      // show/hide elements if an assistant is selected or not
@@ -795,6 +798,26 @@ void KisAssistantTool::slotChangeTwoPointDensity(double value)
         if (isTwoPointAssistant) {
             QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_selectedAssistant);
             assis->setGridDensity((float)value);
+        }
+    }
+
+    m_canvas->canvasWidget()->update();
+}
+
+void KisAssistantTool::slotChangeTwoPointUseVertical(int value)
+{
+    if ( m_canvas->paintingAssistantsDecoration()->assistants().length() == 0) {
+        return;
+    }
+
+    // get the selected assistant and change the angle value
+    KisPaintingAssistantSP m_selectedAssistant =  m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+    if (m_selectedAssistant) {
+        bool isTwoPointAssistant = m_selectedAssistant->id() == "two point";
+
+        if (isTwoPointAssistant) {
+            QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_selectedAssistant);
+            assis->setUseVertical(value == Qt::Checked);
         }
     }
 
@@ -1186,6 +1209,8 @@ QWidget *KisAssistantTool::createOptionWidget()
 
         connect(m_options.vanishingPointAngleSpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeVanishingPointAngle(double)));
         connect(m_options.twoPointDensitySpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeTwoPointDensity(double)));
+        connect(m_options.twoPointUseVerticalCheckbox, SIGNAL(stateChanged(int)), this, SLOT(slotChangeTwoPointUseVertical(int)));
+
 
         // initialize UI elements with existing data if possible
         if (m_canvas && m_canvas->paintingAssistantsDecoration()) {

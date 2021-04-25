@@ -35,6 +35,12 @@ public:
     double gridDensity();
     void setGridDensity(double density);
 
+    /* If true, it means the assistant will have three handles
+     * If false,
+     * */
+    bool useVertical();
+    void setUseVertical(bool value);
+
     bool isAssistantComplete() const override;
 
     /* Generate a transform for converting handles into easier local
@@ -58,6 +64,7 @@ private:
 
     QLineF m_snapLine;
     double m_gridDensity = 1.0;
+    bool m_useVertical = true;
 
     // Needed to make sure that when we are in the middle of a brush stroke, the
     // guides follow the brush position, not the cursor position.

@@ -34,6 +34,7 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
     , m_canvas(rhs.m_canvas)
     , m_snapLine(rhs.m_snapLine)
     , m_gridDensity(rhs.m_gridDensity)
+    , m_useVertical(rhs.m_useVertical)
     , m_followBrushPosition(rhs.m_followBrushPosition)
     , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
     , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
@@ -57,10 +58,19 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
     bool overrideLastUsedPoint = false;
     bool useBeginInstead = false;
 
-    if (!snapToAny && m_lastUsedPoint >= 0 && m_lastUsedPoint < 3) {
+    // must be above 0;
+    // if useVertical, then last used point must be below 3 (sanity check)
+    // if !useVertical, then it must be below 2, because 2 means vertical
+    bool isLastUsedPointCorrectNow = m_lastUsedPoint >= 0 && (m_useVertical ? m_lastUsedPoint < 3 : m_lastUsedPoint < 2);
+
+    if (!snapToAny && isLastUsedPointCorrectNow) {
         possibleHandles = QList<int>({m_lastUsedPoint});
     } else {
-        possibleHandles = QList<int>({0, 1, 2});
+        if (m_useVertical) {
+            possibleHandles = QList<int>({0, 1, 2});
+        } else {
+            possibleHandles = QList<int>({0, 1});
+        }
         overrideLastUsedPoint = true;
     }
 
@@ -245,20 +255,22 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
             if ((vp_a.x() < 0 && vp_b.x() > 0) ||
                 (vp_a.x() > 0 && vp_b.x() < 0)) {
-                // Draw vertical line, but only if the center is between both VPs
-                QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
-                if (!isEditing) vertical.translate(mousePos - vertical.p1());
-                KisAlgebra2D::intersectLineRect(vertical,viewport);
-                path.moveTo(vertical.p1());
-                path.lineTo(vertical.p2());
+                if (m_useVertical) {
+                    // Draw vertical line, but only if the center is between both VPs
+                    QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
+                    if (!isEditing) vertical.translate(mousePos - vertical.p1());
+                    KisAlgebra2D::intersectLineRect(vertical,viewport);
+                    path.moveTo(vertical.p1());
+                    path.lineTo(vertical.p2());
 
-                if (assistantVisible) {
-                    // Display a notch to represent the center of vision
-                    path.moveTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()-10))));
-                    path.lineTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()+10))));
+                    if (assistantVisible) {
+                        // Display a notch to represent the center of vision
+                        path.moveTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()-10))));
+                        path.lineTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()+10))));
+                    }
+                    drawPreview(gc,path);
+                    path = QPainterPath(); // clear
                 }
-                drawPreview(gc,path);
-                path = QPainterPath(); // clear
             }
 
             const QPointF upper = QPointF(0,vp_a.y() + size);
@@ -346,6 +358,16 @@ void TwoPointAssistant::setGridDensity(double density)
     m_gridDensity = density;
 }
 
+bool TwoPointAssistant::useVertical()
+{
+    return m_useVertical;
+}
+
+void TwoPointAssistant::setUseVertical(bool value)
+{
+    m_useVertical = value;
+}
+
 double TwoPointAssistant::gridDensity()
 {
     return m_gridDensity;
@@ -371,6 +393,8 @@ void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
 {
     xml->writeStartElement("gridDensity");
     xml->writeAttribute("value", KisDomUtils::toString( this->gridDensity()));
+    xml->writeStartElement("useVertical");
+    xml->writeAttribute("value", KisDomUtils::toString( (int)this->useVertical()));
     xml->writeEndElement();
 }
 
@@ -378,6 +402,9 @@ bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
 {
     if (xml && xml->name() == "gridDensity") {
         this->setGridDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
+    }
+    if (xml && xml->name() == "useVertical") {
+        this->setUseVertical((bool)KisDomUtils::toInt(xml->attributes().value("value").toString()));
     }
     return true;
 }

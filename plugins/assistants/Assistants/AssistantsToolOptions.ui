@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>255</width>
-    <height>265</height>
+    <height>314</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -20,7 +20,7 @@
      <property name="rowWrapPolicy">
       <enum>QFormLayout::WrapLongRows</enum>
      </property>
-     <item column="0" row="0">
+     <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -33,7 +33,7 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="0">
+     <item row="0" column="1">
       <widget class="QComboBox" name="availableAssistantsComboBox"/>
      </item>
     </layout>
@@ -55,6 +55,16 @@
        <width>50</width>
        <height>20</height>
       </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="twoPointUseVerticalCheckbox">
+     <property name="toolTip">
+      <string>When enabled, it gives assistance for drawing vertical lines (perpendicular to the horizon line)</string>
+     </property>
+     <property name="text">
+      <string extracomment="User/snap to vertical line in 2 point perspective assistant">Enable vertical ruler</string>
      </property>
     </widget>
    </item>
@@ -251,6 +261,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
@@ -260,12 +276,6 @@
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

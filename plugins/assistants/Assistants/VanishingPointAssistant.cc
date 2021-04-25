@@ -93,7 +93,7 @@ QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strok
     return r;
 }
 
-QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
 }

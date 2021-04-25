@@ -37,6 +37,7 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
     , m_followBrushPosition(rhs.m_followBrushPosition)
     , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
     , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
+    , m_lastUsedPoint(rhs.m_lastUsedPoint)
 {
 }
 
@@ -45,13 +46,26 @@ KisPaintingAssistantSP TwoPointAssistant::clone(QMap<KisPaintingAssistantHandleS
     return KisPaintingAssistantSP(new TwoPointAssistant(*this, handleMap));
 }
 
-QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBegin)
+QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny)
 {
     Q_ASSERT(isAssistantComplete());
 
     QPointF best_pt = point;
     double best_dist = DBL_MAX;
-    Q_FOREACH (QPointF vp, QList<QPointF>({*handles()[0],*handles()[1],*handles()[2]})) {
+    QList<int> possibleHandles;
+
+    bool overrideLastUsedPoint = false;
+    bool useBeginInstead = false;
+
+    if (!snapToAny && m_lastUsedPoint >= 0 && m_lastUsedPoint < 3) {
+        possibleHandles = QList<int>({m_lastUsedPoint});
+    } else {
+        possibleHandles = QList<int>({0, 1, 2});
+        overrideLastUsedPoint = true;
+    }
+
+    Q_FOREACH (int vpIndex, possibleHandles) {
+        QPointF vp = *handles()[vpIndex];
         double dist = 0;
         QPointF pt = QPointF();
         QLineF snapLine = QLineF();
@@ -64,7 +78,8 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
         qreal dy = point.y() - strokeBegin.y();
 
         if (dx * dx + dy * dy < 4.0) {
-            return strokeBegin;
+            // we cannot return here because m_lastUsedPoint needs to be set properly
+            useBeginInstead = true;
         }
 
         if (vp != *handles()[2]) {
@@ -92,10 +107,13 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
         if (dist < best_dist) {
             best_pt = pt;
             best_dist = dist;
+            if (overrideLastUsedPoint) {
+                m_lastUsedPoint = vpIndex;
+            }
         }
     }
 
-    return best_pt;
+    return useBeginInstead ? strokeBegin : best_pt;
 }
 
 void TwoPointAssistant::setAdjustedBrushPosition(const QPointF position)
@@ -117,9 +135,9 @@ void TwoPointAssistant::endStroke()
     m_snapLine = QLineF();
 }
 
-QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny)
 {
-    return project(pt, strokeBegin);
+    return project(pt, strokeBegin, snapToAny);
 }
 
 void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)

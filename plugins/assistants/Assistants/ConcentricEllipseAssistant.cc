@@ -91,7 +91,7 @@ QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& st
     return m_extraEllipse.project(pt);
 }
 
-QPointF ConcentricEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF ConcentricEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
 

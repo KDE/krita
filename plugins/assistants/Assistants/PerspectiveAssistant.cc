@@ -130,7 +130,7 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
     return r;
 }
 
-QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
 }

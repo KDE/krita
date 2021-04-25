@@ -20,7 +20,7 @@ public:
     ConcentricEllipseAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
 
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
     void setAdjustedBrushPosition(const QPointF position) override;
     void setFollowBrushPosition(bool follow) override;
     void endStroke() override;

@@ -66,7 +66,7 @@ QPointF InfiniteRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     //return pt;
 }
 
-QPointF InfiniteRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF InfiniteRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
 }

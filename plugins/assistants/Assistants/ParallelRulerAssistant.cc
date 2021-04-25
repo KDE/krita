@@ -93,7 +93,7 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     //return pt;
 }
 
-QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
 }

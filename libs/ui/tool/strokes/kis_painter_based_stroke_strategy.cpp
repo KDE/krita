@@ -78,7 +78,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBas
       m_transaction(rhs.m_transaction),
       m_useMergeID(rhs.m_useMergeID),
       m_supportsMaskingBrush(rhs.m_supportsMaskingBrush),
-      m_supportsIndirectPainting(rhs.m_supportsIndirectPainting)
+      m_supportsIndirectPainting(rhs.m_supportsIndirectPainting),
+      m_supportsContinuedInterstrokeData(rhs.m_supportsContinuedInterstrokeData)
 {
     Q_FOREACH (KisFreehandStrokeInfo *info, rhs.m_strokeInfos) {
         m_strokeInfos.append(new KisFreehandStrokeInfo(info, levelOfDetail));
@@ -151,6 +152,16 @@ void KisPainterBasedStrokeStrategy::setSupportsIndirectPainting(bool value)
 bool KisPainterBasedStrokeStrategy::supportsIndirectPainting() const
 {
     return m_supportsIndirectPainting;
+}
+
+bool KisPainterBasedStrokeStrategy::supportsContinuedInterstrokeData() const
+{
+    return m_supportsContinuedInterstrokeData;
+}
+
+void KisPainterBasedStrokeStrategy::setSupportsContinuedInterstrokeData(bool value)
+{
+    m_supportsContinuedInterstrokeData = value;
 }
 
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
@@ -259,7 +270,9 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     QScopedPointer<KisInterstrokeDataTransactionWrapperFactory> wrapper;
 
     if (interstrokeDataFactory) {
-        wrapper.reset(new KisInterstrokeDataTransactionWrapperFactory(interstrokeDataFactory.take()));
+        wrapper.reset(new KisInterstrokeDataTransactionWrapperFactory(
+                          interstrokeDataFactory.take(),
+                          supportsContinuedInterstrokeData()));
     }
 
     if (m_useMergeID) {

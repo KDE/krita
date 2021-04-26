@@ -24,7 +24,7 @@ class KisInterstrokeDataFactory;
 class KRITAIMAGE_EXPORT KisInterstrokeDataTransactionWrapperFactory : public KisTransactionWrapperFactory
 {
 public:
-    KisInterstrokeDataTransactionWrapperFactory(KisInterstrokeDataFactory *factory);
+    KisInterstrokeDataTransactionWrapperFactory(KisInterstrokeDataFactory *factory, bool supportsContinuedInterstrokeData = true);
     ~KisInterstrokeDataTransactionWrapperFactory() override;
 
     KUndo2Command* createBeginTransactionCommand(KisPaintDeviceSP device) override;

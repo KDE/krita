@@ -7,6 +7,7 @@
 #ifndef __FREEHAND_STROKE_H
 #define __FREEHAND_STROKE_H
 
+
 #include "kritaui_export.h"
 #include "kis_types.h"
 #include "kis_node.h"
@@ -20,6 +21,13 @@
 
 class KRITAUI_EXPORT FreehandStrokeStrategy : public KisPainterBasedStrokeStrategy
 {
+public:
+    enum Flag {
+        None = 0x0,
+        SupportsContinuedInterstrokeData = 0x1
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
 public:
     class Data : public KisStrokeJobData {
     public:
@@ -167,11 +175,13 @@ public:
 public:
     FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                            KisFreehandStrokeInfo *strokeInfo,
-                           const KUndo2MagicString &name);
+                           const KUndo2MagicString &name,
+                           Flags flags = None);
 
     FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                            QVector<KisFreehandStrokeInfo*> strokeInfos,
-                           const KUndo2MagicString &name);
+                           const KUndo2MagicString &name,
+                           Flags flags = None);
 
     ~FreehandStrokeStrategy() override;
 
@@ -189,7 +199,7 @@ protected:
     FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail);
 
 private:
-    void init();
+    void init(FreehandStrokeStrategy::Flags flags);
 
     void tryDoUpdate(bool forceEnd = false);
     void issueSetDirtySignals();
@@ -198,5 +208,7 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(FreehandStrokeStrategy::Flags)
 
 #endif /* __FREEHAND_STROKE_H */

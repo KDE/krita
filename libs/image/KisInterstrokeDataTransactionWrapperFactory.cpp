@@ -13,6 +13,7 @@
 
 #include <kis_paint_device.h>
 #include <kis_pointer_utils.h>
+#include <kis_command_utils.h>
 
 
 namespace {
@@ -92,12 +93,14 @@ struct KisInterstrokeDataTransactionWrapperFactory::Private
 {
     QScopedPointer<KisInterstrokeDataFactory> factory;
     KisPaintDeviceSP device;
+    bool supportsContinuedInterstrokeData = true;
 };
 
-KisInterstrokeDataTransactionWrapperFactory::KisInterstrokeDataTransactionWrapperFactory(KisInterstrokeDataFactory *factory)
+KisInterstrokeDataTransactionWrapperFactory::KisInterstrokeDataTransactionWrapperFactory(KisInterstrokeDataFactory *factory, bool supportsContinuedInterstrokeData)
     : m_d(new Private())
 {
     m_d->factory.reset(factory);
+    m_d->supportsContinuedInterstrokeData = supportsContinuedInterstrokeData;
 }
 
 KisInterstrokeDataTransactionWrapperFactory::~KisInterstrokeDataTransactionWrapperFactory()
@@ -108,7 +111,8 @@ KUndo2Command *KisInterstrokeDataTransactionWrapperFactory::createBeginTransacti
 {
     KisInterstrokeDataSP data = device->interstrokeData();
     if (m_d->factory) {
-        if (!data ||
+        if (!m_d->supportsContinuedInterstrokeData ||
+            !data ||
             !data->isStillCompatible() ||
             !m_d->factory->isCompatible(data.data())) {
 
@@ -130,5 +134,21 @@ KUndo2Command *KisInterstrokeDataTransactionWrapperFactory::createBeginTransacti
 
 KUndo2Command *KisInterstrokeDataTransactionWrapperFactory::createEndTransactionCommand()
 {
-    return m_d->device ? new EndInterstrokeDataTransactionCommand(m_d->device) : 0;
+    KUndo2Command *result = 0;
+
+    if (m_d->device) {
+        if (m_d->supportsContinuedInterstrokeData) {
+            result = new EndInterstrokeDataTransactionCommand(m_d->device);
+        } else {
+            KisCommandUtils::CompositeCommand *composite
+                = new KisCommandUtils::CompositeCommand();
+
+            composite->addCommand(new EndInterstrokeDataTransactionCommand(m_d->device));
+            composite->addCommand(new BeginInterstrokeDataTransactionCommand(m_d->device, 0));
+
+            result = composite;
+        }
+    }
+
+    return result;
 }

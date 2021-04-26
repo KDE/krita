@@ -344,7 +344,7 @@ void DlgBundleManager::updateBundleInformation(QModelIndex idx)
 
     }
 
-    QImage thumbnail = KisStorageModel::instance()->data(idx, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
+    QImage thumbnail = KisStorageModel::instance()->data(m_proxyModel->mapToSource(idx), Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(thumbnail));
     m_ui->lblType->setText(KisResourceStorage::storageTypeToString(storage->type()));
 }

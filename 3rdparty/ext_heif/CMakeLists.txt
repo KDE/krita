@@ -108,7 +108,7 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
 
         COMMENT "Installing cargo-c 0.8.0 to ${EXTPREFIX_heif}"
 
-        COMMAND cargo install cargo-c --version 0.8.0+cargo-0.51 --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
+        COMMAND cargo install cargo-c --version "0.8.0+cargo-0.51" --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
 
         DEPENDEES configure
         DEPENDERS build

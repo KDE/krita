@@ -32,7 +32,7 @@ ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES
     wdgstoryboarddock.ui wdgarrangemenu.ui wdgcommentmenu.ui wdgexportstoryboard.ui
 )
 
-add_library(kritastoryboarddocker MODULE ${KRITA_STORYBOARDDOCKER_SOURCES}
+add_library(kritastoryboarddocker SHARED ${KRITA_STORYBOARDDOCKER_SOURCES}
                                          ${KRITA_STORYBOARDDOCKER_PART_HEADERS}
 )
 

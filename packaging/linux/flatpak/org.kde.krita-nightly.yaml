@@ -615,20 +615,24 @@ modules:
         ensure-writable:
           - /run/build/rav1e
         build-options:
-          build-args:
-            - --share=network
           append-path: /usr/lib/sdk/rust-stable/bin
           env:
               CARGO_HOME: /run/build/rav1e/cargo
         sources:
           - type: archive
-            url: https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
-            sha256: fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
+            url: https://files.kde.org/krita/build/dependencies/flatpak/cargo-c-0.8.0.tar.gz
+            sha256: 391774d35e228a09895a6e3e23e56d4bc6247426b2603052f4c02519b9015e1c
+            dest: cargo-c
+          - type: archive
+            url: https://files.kde.org/krita/build/dependencies/flatpak/rav1e-0.5.0-alpha.tar.gz
+            sha256: 9020ddf1e2a9711d6e8be387f64faff636d0c9e072650a796b26a7e85a08b516
+            dest: rav1e
         build-commands:
-          - 
-          - cargo install cargo-c -j $FLATPAK_BUILDER_N_JOBS
-          - cargo cbuild --release --prefix=/app --library-type=cdylib -j $FLATPAK_BUILDER_N_JOBS --verbose
-          - cargo cinstall --release --library-type=cdylib --prefix=/app
+          - cd cargo-c && cargo --offline build --release
+          - cargo install --path cargo-c/  --verbose
+          - echo $PWD
+          - cd rav1e && cargo cbuild --release --prefix=/app --library-type=cdylib -j $FLATPAK_BUILDER_N_JOBS --verbose
+          - cd rav1e && cargo cinstall --release --library-type=cdylib --prefix=/app
           
       - name: libde265
         cleanup:

@@ -60,11 +60,22 @@ if (APPLE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
+    set(MACOS_GUI_TEST "GUI")
     add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
     if (CMAKE_OSX_ARCHITECTURES)
         message(STATUS "CMake OSX architectures: ${CMAKE_OSX_ARCHITECTURES}")
     endif()
+
 endif()
+
+function(macos_test_fixrpath)
+    if (APPLE AND BUILD_TESTING)
+    foreach(TEST IN LISTS ARGN)
+        set_property(TARGET ${TEST}
+                     PROPERTY BUILD_RPATH "@loader_path/../../../../lib;@loader_path/../lib;@loader_path/../Frameworks;${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
+    endforeach()
+    endif()
+endfunction()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
     add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-suggest-override> -Wextra -Wno-class-memaccess)

@@ -190,14 +190,17 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     connect(cmbBrushMode, SIGNAL(currentIndexChanged(int)), SLOT(slotUpdateBrushAdjustmentsState()));
     connect(cmbBrushMode, SIGNAL(currentIndexChanged(int)), SLOT(slotWriteBrushMode()));
     connect(cmbBrushMode, SIGNAL(currentIndexChanged(int)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
+    connect(chkAutoMidPoint, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
 
     connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
     connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
     connect(intContrastAdjustment, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
+    connect(chkAutoMidPoint, SIGNAL(toggled(bool)), SLOT(slotWriteBrushAdjustments()));
 
     connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
     connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
     connect(intContrastAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
+    connect(chkAutoMidPoint, SIGNAL(toggled(bool)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
 
     updateBrushTip(m_itemChooser->currentResource());
 }
@@ -413,6 +416,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
             intAdjustmentMidPoint->setValue(colorfulBrush->adjustmentMidPoint());
             intBrightnessAdjustment->setValue(qRound(colorfulBrush->brightnessAdjustment() * 100.0));
             intContrastAdjustment->setValue(qRound(colorfulBrush->contrastAdjustment() * 100.0));
+            chkAutoMidPoint->setChecked(colorfulBrush->autoAdjustMidPoint());
         }
 
         intAdjustmentMidPoint->setToolTip(i18nc("@info:tooltip", "Luminosity value of the brush that will not change the painting color. All brush pixels darker than neutral point will paint with darker color, pixels lighter than neutral point — lighter."));
@@ -432,6 +436,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
         intAdjustmentMidPoint->setToolTip("");
         intBrightnessAdjustment->setToolTip("");
         intContrastAdjustment->setToolTip("");
+        chkAutoMidPoint->setToolTip("");
         if (m_hslBrushTipEnabled) {
             grpBrushMode->setToolTip(i18nc("@info:tooltip", "The selected brush tip does not have color channels. The brush will work in \"Mask\" mode."));
         }
@@ -451,9 +456,10 @@ void KisPredefinedBrushChooser::slotUpdateBrushAdjustmentsState()
 {
     const bool adjustmentsEnabled = (cmbBrushMode->currentIndex() == LIGHTNESSMAP) ||
                     (cmbBrushMode->currentIndex() == GRADIENTMAP);
-    intAdjustmentMidPoint->setEnabled(adjustmentsEnabled);
+    intAdjustmentMidPoint->setEnabled(adjustmentsEnabled && !chkAutoMidPoint->isChecked());
     intBrightnessAdjustment->setEnabled(adjustmentsEnabled);
     intContrastAdjustment->setEnabled(adjustmentsEnabled);
+    chkAutoMidPoint->setEnabled(adjustmentsEnabled);
 }
 
 void KisPredefinedBrushChooser::slotUpdateResetBrushAdjustmentsButtonState()
@@ -464,9 +470,18 @@ void KisPredefinedBrushChooser::slotUpdateResetBrushAdjustmentsButtonState()
     const bool adjustmentsDefault =
             intAdjustmentMidPoint->value() == 127 &&
             intBrightnessAdjustment->value() == 0 &&
-            intContrastAdjustment->value() == 0;
+            intContrastAdjustment->value() == 0 &&
+            chkAutoMidPoint->isCheckable() == m_autoMidpointAdjustmentIsDefault;
 
     btnResetAdjustments->setEnabled(!adjustmentsDefault && adjustmentsEnabled);
+
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
+    if (colorfulBrush && adjustmentsEnabled) {
+        chkAutoMidPoint->setToolTip(i18nc("@info:tooltip", "Brush average: %1\nAdjusted average: %2", colorfulBrush->estimatedSourceMidPoint(), colorfulBrush->adjustedMidPoint()));
+    } else {
+        chkAutoMidPoint->setToolTip("");
+    }
+
 }
 
 void KisPredefinedBrushChooser::slotWriteBrushMode()
@@ -490,6 +505,7 @@ void KisPredefinedBrushChooser::slotWriteBrushAdjustments()
         colorfulBrush->setAdjustmentMidPoint(quint8(intAdjustmentMidPoint->value()));
         colorfulBrush->setBrightnessAdjustment(intBrightnessAdjustment->value() / 100.0);
         colorfulBrush->setContrastAdjustment(intContrastAdjustment->value() / 100.0);
+        colorfulBrush->setAutoAdjustMidPoint(chkAutoMidPoint->isChecked());
     }
 
     emit sigBrushChanged();
@@ -500,6 +516,7 @@ void KisPredefinedBrushChooser::slotResetAdjustments()
     intAdjustmentMidPoint->setValue(127);
     intBrightnessAdjustment->setValue(0);
     intContrastAdjustment->setValue(0);
+    chkAutoMidPoint->setChecked(m_autoMidpointAdjustmentIsDefault);
 
     slotWriteBrushAdjustments();
 }

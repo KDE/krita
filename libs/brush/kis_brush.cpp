@@ -675,7 +675,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     QImage outputImage = d->brushPyramid->pyramid(this)->createImage(
                 KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
 
-    if (normalizeBrush) {
+    if (0 && normalizeBrush) {
         normalalizeRGBADab(outputImage);
     }
 

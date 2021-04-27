@@ -68,6 +68,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         colorfulBrush->setAdjustmentMidPoint(brushDefinition.attribute("AdjustmentMidPoint", "127").toInt());
         colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
         colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
+        colorfulBrush->setAutoAdjustMidPoint(brushDefinition.attribute("AutoAdjustMidPoint").toInt());
     }
 
     auto legacyBrushApplication = [] (KisColorfulBrush *colorfulBrush, bool forceColorToAlpha) {

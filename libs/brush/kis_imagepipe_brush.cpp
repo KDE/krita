@@ -176,6 +176,12 @@ public:
         }
     }
 
+    void setAutoAdjustMidPoint(bool value) {
+        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
+            brush->setAutoAdjustMidPoint(value);
+        }
+    }
+
     void makeMaskImage(bool preserveAlpha) {
         Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
             brush->makeMaskImage(preserveAlpha);
@@ -429,6 +435,12 @@ void KisImagePipeBrush::setContrastAdjustment(qreal value)
 {
     KisGbrBrush::setContrastAdjustment(value);
     d->brushesPipe.setContrastAdjustment(value);
+}
+
+void KisImagePipeBrush::setAutoAdjustMidPoint(bool value)
+{
+    KisGbrBrush::setAutoAdjustMidPoint(value);
+    d->brushesPipe.setAutoAdjustMidPoint(value);
 }
 
 const KisBoundary* KisImagePipeBrush::boundary() const

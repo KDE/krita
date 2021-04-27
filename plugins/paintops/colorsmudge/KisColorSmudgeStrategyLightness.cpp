@@ -123,7 +123,20 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
                colorRateValue,
                smudgeRadiusValue);
 
-    m_heightmapPainter.setOpacity(qRound(lightnessStrengthValue * 255.0));
+
+    const quint8 thresholdHeightmapOpacity = qRound(0.2 * 255.0);
+
+    quint8 heightmapOpacity = qRound(lightnessStrengthValue * 255.0);
+
+    if (heightmapOpacity < thresholdHeightmapOpacity) {
+        heightmapOpacity =
+                std::min(thresholdHeightmapOpacity,
+                         std::max(smearRateOpacity(opacity, smudgeRateValue),
+                                  colorRateOpacity(opacity, smudgeRateValue,
+                                                   colorRateValue, maxPossibleSmudgeRateValue)));
+    }
+
+    m_heightmapPainter.setOpacity(heightmapOpacity);
     m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
     m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
 

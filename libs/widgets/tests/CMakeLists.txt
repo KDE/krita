@@ -12,4 +12,8 @@ ecm_add_tests(
     TestKoZoomAction.cpp
     TestKisTagSelectionWidget.cpp
     NAME_PREFIX "libs-widgets-"
-    LINK_LIBRARIES kritawidgets Qt5::Test)
+    LINK_LIBRARIES kritawidgets Qt5::Test
+    TARGET_NAMES_VAR OK_TESTS
+    ${MACOS_GUI_TEST})
+
+macos_test_fixrpath(${OK_TESTS})

@@ -256,7 +256,7 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
                                                maskDab->bounds().x(), maskDab->bounds().y(),
                                                m_blendDevice->bounds().x(), m_blendDevice->bounds().y(),
                                                dstRect.width(), dstRect.height());
-        dstPainter->renderMirrorMaskSafe(dstRect, m_blendDevice, maskDab, false);
+        dstPainter->renderMirrorMaskSafe(dstRect, m_blendDevice, maskDab, preserveDab);
     }
 
 }

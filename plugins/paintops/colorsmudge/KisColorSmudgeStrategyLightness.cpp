@@ -126,7 +126,7 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
 
     const quint8 thresholdHeightmapOpacity = qRound(0.2 * 255.0);
 
-    quint8 heightmapOpacity = qRound(lightnessStrengthValue * 255.0);
+    quint8 heightmapOpacity = qRound(opacity * lightnessStrengthValue * 255.0);
 
     if (heightmapOpacity < thresholdHeightmapOpacity) {
         heightmapOpacity =

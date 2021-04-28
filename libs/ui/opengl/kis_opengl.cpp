@@ -194,16 +194,19 @@ void KisOpenGL::initialize()
      *       Qt5+openGL3 branch.
      */
 
-    if (openGLCheckResult->vendorString().toUpper().contains("NVIDIA")) {
+    if (openGLCheckResult->vendorString().toUpper().contains("NVIDIA")
+        || KisOpenGL::hasOpenGLES()) {
         g_needsPixmapCacheWorkaround = true;
 
-        const QRect screenSize = QGuiApplication::primaryScreen()->availableGeometry();
+        const qreal devicePixelRatio = QGuiApplication::primaryScreen()->devicePixelRatio();
+        const QSize screenSize = QGuiApplication::primaryScreen()->size() * devicePixelRatio;
         const int minCacheSize = 20 * 1024;
-        const int cacheSize = 2048 + 2 * 4 * screenSize.width() * screenSize.height() / 1024; //KiB
+
+        // reserve space for at least 4 textures
+        const int cacheSize = 2048 + 5 * 4 * screenSize.width() * screenSize.height() / 1024; // KiB
 
         QPixmapCache::setCacheLimit(qMax(minCacheSize, cacheSize));
     }
-
 }
 
 void KisOpenGL::initializeContext(QOpenGLContext *ctx)

@@ -20,6 +20,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeController.h>
 #include <KoFileDialog.h>
+#include "KisMimeDatabase.h"
 
 #include <kis_action_registry.h>
 #include <kis_canvas2.h>
@@ -202,6 +203,11 @@ void ToolReferenceImages::saveReferenceImages()
 
     QString filename = dialog.filename();
     if (filename.isEmpty()) return;
+
+    QString fileMime = KisMimeDatabase::mimeTypeForFile(filename, false);
+    if (fileMime != "application/x-krita-reference-images") {
+        filename.append(filename.endsWith(".") ? "krf" : ".krf");
+    }
 
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {

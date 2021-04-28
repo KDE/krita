@@ -716,7 +716,7 @@ KoResourceSP KisResourceModel::resourceForId(int id) const
 {
     KoResourceSP res = static_cast<KisAllResourcesModel*>(sourceModel())->resourceForId(id);
     QModelIndex idx = indexForResource(res);
-    if (filterResource(idx)) {
+    if (idx.isValid()) {
         return res;
     }
     return 0;
@@ -726,7 +726,7 @@ KoResourceSP KisResourceModel::resourceForFilename(QString fileName) const
 {
     KoResourceSP res = static_cast<KisAllResourcesModel*>(sourceModel())->resourceForFilename(fileName);
     QModelIndex idx = indexForResource(res);
-    if (filterResource(idx)) {
+    if (idx.isValid()) {
         return res;
     }
     return 0;
@@ -736,7 +736,7 @@ KoResourceSP KisResourceModel::resourceForName(QString name) const
 {
     KoResourceSP res = static_cast<KisAllResourcesModel*>(sourceModel())->resourceForName(name);
     QModelIndex idx = indexForResource(res);
-    if (filterResource(idx)) {
+    if (idx.isValid()) {
         return res;
     }
     return 0;

@@ -18,6 +18,16 @@
 class TwoPointAssistant : public KisPaintingAssistant
 {
 public:
+
+    enum TwoPointHandle {
+        FirstHandle,
+        SecondHandle,
+        VerticalHandle,
+        LocalFirstHandle,
+        LocalSecondHandle
+    };
+
+
     TwoPointAssistant();
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
@@ -27,7 +37,7 @@ public:
     void endStroke() override;
 
     QPointF getEditorPosition() const override;
-    int numHandles() const override { return 3; }
+    int numHandles() const override { return isLocal() ? 5 : 3; }
 
     void saveCustomXml(QXmlStreamWriter* xml) override;
     bool loadCustomXml(QXmlStreamReader* xml) override;
@@ -42,6 +52,7 @@ public:
     void setUseVertical(bool value);
 
     bool isAssistantComplete() const override;
+    bool canBeLocal() const override;
 
     /* Generate a transform for converting handles into easier local
        coordinate system that has the following properties:
@@ -62,6 +73,8 @@ private:
     explicit TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
     KisCanvas2 *m_canvas;
 
+    QRectF getLocalRect();
+
     QLineF m_snapLine;
     double m_gridDensity = 1.0;
     bool m_useVertical = true;
@@ -72,6 +85,7 @@ private:
     bool m_adjustedPositionValid;
     QPointF m_adjustedBrushPosition;
     int m_lastUsedPoint = -1;
+    bool m_hasBeenInsideLocal = false;
 
 };
 

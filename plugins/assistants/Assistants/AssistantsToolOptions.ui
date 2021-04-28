@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>255</width>
-    <height>314</height>
+    <height>337</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -37,6 +37,23 @@
       <widget class="QComboBox" name="availableAssistantsComboBox"/>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="localAssistantCheckbox">
+     <property name="toolTip">
+      <string>The assistant will have additional handles that describe the area the assistant works in</string>
+     </property>
+     <property name="text">
+      <string>Use limited area</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="KisDoubleSliderSpinBox" name="twoPointDensitySpinbox" native="true">

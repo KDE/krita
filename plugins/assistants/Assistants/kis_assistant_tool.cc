@@ -379,6 +379,9 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
     if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visibility//
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
+        if (m_newAssistant->canBeLocal()) {
+            m_newAssistant->setLocal(m_options.localAssistantCheckbox->isChecked());
+        }
         m_internalMode = MODE_CREATION;
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         if (m_newAssistant->numHandles() <= 1) {
@@ -742,7 +745,6 @@ void KisAssistantTool::updateToolOptionsUI()
          m_options.customColorOpacitySlider->setValue((double)opacity);
          m_options.customColorOpacitySlider->blockSignals(false);
 
-
      } else {
          m_options.vanishingPointAngleSpinbox->setVisible(false);
          m_options.twoPointDensitySpinbox->setVisible(false);
@@ -761,6 +763,9 @@ void KisAssistantTool::updateToolOptionsUI()
       m_options.assistantsGlobalOpacitySlider->setEnabled(!showCustomColorSettings);
       m_options.assistantsColor->setEnabled(!showCustomColorSettings);
       m_options.globalColorLabel->setEnabled(!showCustomColorSettings);
+
+      QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
+      m_options.localAssistantCheckbox->setVisible(key == "two point");
 
 }
 
@@ -1200,6 +1205,8 @@ QWidget *KisAssistantTool::createOptionWidget()
             m_options.availableAssistantsComboBox->addItem(id.name(), id.id());
         }
 
+        connect(m_options.availableAssistantsComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slotSelectedAssistantTypeChanged()));
+
         connect(m_options.saveAssistantButton, SIGNAL(clicked()), SLOT(saveAssistants()));
         connect(m_options.loadAssistantButton, SIGNAL(clicked()), SLOT(loadAssistants()));
         connect(m_options.deleteAllAssistantsButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
@@ -1319,6 +1326,11 @@ void KisAssistantTool::slotCustomOpacityChanged()
     // this forces the canvas to refresh to see the changes immediately
     m_canvas->paintingAssistantsDecoration()->uncache();
     m_canvas->canvasWidget()->update();
+}
+
+void KisAssistantTool::slotSelectedAssistantTypeChanged()
+{
+    updateToolOptionsUI();
 }
 
 void KisAssistantTool::beginAlternateAction(KoPointerEvent *event, AlternateAction action)

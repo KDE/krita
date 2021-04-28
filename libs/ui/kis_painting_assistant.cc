@@ -127,6 +127,7 @@ struct KisPaintingAssistant::Private {
         QString name;
         bool isSnappingActive;
         bool outlineVisible;
+        bool isLocal;
 
         KisCanvas2* m_canvas = 0;
 
@@ -251,6 +252,21 @@ bool KisPaintingAssistant::isSnappingActive() const
 void KisPaintingAssistant::setSnappingActive(bool set)
 {
     d->s->isSnappingActive = set;
+}
+
+bool KisPaintingAssistant::canBeLocal() const
+{
+    return false;
+}
+
+bool KisPaintingAssistant::isLocal() const
+{
+    return d->s->isLocal;
+}
+
+void KisPaintingAssistant::setLocal(bool value)
+{
+    d->s->isLocal = value;
 }
 
 

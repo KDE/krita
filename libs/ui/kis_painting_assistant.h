@@ -115,6 +115,10 @@ public:
     virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
 
+    virtual bool canBeLocal() const;
+    bool isLocal() const;
+    void setLocal(bool value);
+
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
 

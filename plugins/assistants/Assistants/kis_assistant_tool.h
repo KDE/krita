@@ -111,6 +111,8 @@ private Q_SLOTS:
     void slotUpdateCustomColor();
     void slotCustomOpacityChanged();
 
+    void slotSelectedAssistantTypeChanged();
+
 protected:
     /// Draws the editor widget controls with move, activate, and delete
     /// This also creates a lot of assistant specific stuff for vanishing points and perspective grids

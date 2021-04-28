@@ -42,6 +42,19 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
 {
 }
 
+QRectF TwoPointAssistant::getLocalRect()
+{
+    if (!isLocal() || handles().size() < 5) {
+        return QRect();
+    }
+
+    QPointF topLeft = QPointF(qMin(handles()[LocalFirstHandle]->x(), handles()[LocalSecondHandle]->x()), qMin(handles()[LocalFirstHandle]->y(), handles()[LocalSecondHandle]->y()));
+    QPointF bottomRight = QPointF(qMax(handles()[LocalFirstHandle]->x(), handles()[LocalSecondHandle]->x()), qMax(handles()[LocalFirstHandle]->y(), handles()[LocalSecondHandle]->y()));
+
+    QRectF rect(topLeft, bottomRight);
+    return rect;
+}
+
 KisPaintingAssistantSP TwoPointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new TwoPointAssistant(*this, handleMap));
@@ -62,6 +75,21 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
     // if useVertical, then last used point must be below 3 (sanity check)
     // if !useVertical, then it must be below 2, because 2 means vertical
     bool isLastUsedPointCorrectNow = m_lastUsedPoint >= 0 && (m_useVertical ? m_lastUsedPoint < 3 : m_lastUsedPoint < 2);
+
+    if (isLocal() && handles().size() == 5) {
+        // here we can just return since we don't want to do anything
+        // so we're returning a NaN
+        // but only if we don't have a point/axes it was already using
+
+        QRectF rect = getLocalRect();
+        bool insideLocalRect = rect.contains(point);
+        if (!insideLocalRect && (!isLastUsedPointCorrectNow || !m_hasBeenInsideLocal)) {
+            return QPointF(qQNaN(), qQNaN());
+        } else if (insideLocalRect) {
+            m_hasBeenInsideLocal = true;
+        }
+    }
+
 
     if (!snapToAny && isLastUsedPointCorrectNow) {
         possibleHandles = QList<int>({m_lastUsedPoint});
@@ -143,6 +171,7 @@ void TwoPointAssistant::endStroke()
     m_followBrushPosition = false;
     m_adjustedPositionValid = false;
     m_snapLine = QLineF();
+    m_hasBeenInsideLocal = false;
 }
 
 QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny)
@@ -160,6 +189,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
     const QTransform initialTransform = converter->documentToWidgetTransform();
     bool isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
+    bool showLocal = isLocal() && handles().size() == 5;
 
     if (canvas){
         //simplest, cheapest way to get the mouse-position//
@@ -202,23 +232,28 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
     if (handles().size() >= 2) {
         const QPointF p1 = *handles()[0];
         const QPointF p2 = *handles()[1];
+        const QRect localRect = (isLocal() && handles().size() == 5) ? initialTransform.mapRect(getLocalRect()).toRect() : QRect();
         const QRect viewport= gc.viewport();
+        const QRect viewportAndLocal = !localRect.isEmpty() ? viewport.intersected(localRect) : viewport;
+
         QPainterPath path;
 
         // draw the horizon
         if (assistantVisible == true || isEditing == true) {
             QLineF horizonLine = initialTransform.map(QLineF(p1,p2));
-            KisAlgebra2D::intersectLineRect(horizonLine, viewport, true);
+            KisAlgebra2D::cropLineToRect(horizonLine, viewportAndLocal, true, true);
             path.moveTo(horizonLine.p1());
             path.lineTo(horizonLine.p2());
         }
 
         // draw the VP-->mousePos lines
-        if (isEditing == false && previewVisible == true && isSnappingActive() == true) {
+        if (isEditing == false && previewVisible == true && isSnappingActive() == true && viewportAndLocal.contains(mousePos.toPoint())) {
+            // draw the line vp <-> mouse even outside of the local rectangle
+            // but only if the mouse pos is inside the rectangle
             QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
             QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
-            KisAlgebra2D::intersectLineRect(snapMouse1, viewport, true);
-            KisAlgebra2D::intersectLineRect(snapMouse2, viewport, true);
+            KisAlgebra2D::cropLineToRect(snapMouse1, viewportAndLocal, false, true);
+            KisAlgebra2D::cropLineToRect(snapMouse2, viewportAndLocal, false, true);
             path.moveTo(initialTransform.map(p1));
             path.lineTo(snapMouse1.p2());
             path.moveTo(initialTransform.map(p2));
@@ -241,6 +276,22 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             path.lineTo(initialTransform.map(*sideHandles()[7]));
         }
 
+        // draw the local rectangle
+        if (showLocal) {
+            QPointF p1 = *handles()[(int)LocalFirstHandle];
+            QPointF p3 = *handles()[(int)LocalSecondHandle];
+            QPointF p2 = QPointF(p1.x(), p3.y());
+            QPointF p4 = QPointF(p3.x(), p1.y());
+
+            path.moveTo(initialTransform.map(p1));
+
+            path.lineTo(initialTransform.map(p2));
+            path.lineTo(initialTransform.map(p3));
+            path.lineTo(initialTransform.map(p4));
+            path.lineTo(initialTransform.map(p1));
+        }
+
+
         drawPreview(gc,path);
 
         if (handles().size() >= 3 && isSnappingActive()) {
@@ -259,7 +310,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                     // Draw vertical line, but only if the center is between both VPs
                     QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
                     if (!isEditing) vertical.translate(mousePos - vertical.p1());
-                    KisAlgebra2D::intersectLineRect(vertical,viewport,true);
+                    KisAlgebra2D::cropLineToRect(vertical, viewportAndLocal, true, true);
                     if (previewVisible) {
                         path.moveTo(vertical.p1());
                         path.lineTo(vertical.p2());
@@ -320,16 +371,15 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                             }
 
                             QLineF drawn_gridline = initialTransform.map(inv.map(gridline));
-                            KisAlgebra2D::intersectLineRect(drawn_gridline, viewport, true);
+                            KisAlgebra2D::cropLineToRect(drawn_gridline, viewportAndLocal, true, false);
                             if (previewVisible || isEditing == true) {
-                                path.moveTo(initialTransform.map(inv.map(vp)));
+                                path.moveTo(drawn_gridline.p2());
                                 path.lineTo(drawn_gridline.p1());
                             }
                         }
                     }
                 }
             }
-
             gc.drawPath(path);
         }
     }
@@ -390,7 +440,12 @@ QTransform TwoPointAssistant::localTransform(QPointF vp_a, QPointF vp_b, QPointF
 
 bool TwoPointAssistant::isAssistantComplete() const
 {
-  return handles().size() == 3;
+    return handles().size() >= numHandles();
+}
+
+bool TwoPointAssistant::canBeLocal() const
+{
+    return true;
 }
 
 void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
@@ -401,6 +456,10 @@ void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
     xml->writeStartElement("useVertical");
     xml->writeAttribute("value", KisDomUtils::toString( (int)this->useVertical()));
     xml->writeEndElement();
+    xml->writeStartElement("isLocal");
+    xml->writeAttribute("value", KisDomUtils::toString( (int)this->isLocal()));
+    xml->writeEndElement();
+
 }
 
 bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
@@ -410,6 +469,9 @@ bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
     }
     if (xml && xml->name() == "useVertical") {
         this->setUseVertical((bool)KisDomUtils::toInt(xml->attributes().value("value").toString()));
+    }
+    if (xml && xml->name() == "isLocal") {
+        this->setLocal((bool)KisDomUtils::toInt(xml->attributes().value("value").toString()));
     }
     return true;
 }

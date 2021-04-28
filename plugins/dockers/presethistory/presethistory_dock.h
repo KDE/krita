@@ -46,7 +46,7 @@ private Q_SLOTS:
     void slotSortingModeChanged(QAction *action);
     void slotContextMenuRequest(const QPoint &pos);
 private:
-    void sortPresets(int position);
+    void updatePresetState(int position);
     int bubblePreset(int position);
     void addPreset(KisPaintOpPresetSP preset);
 private:

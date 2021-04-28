@@ -133,7 +133,14 @@ void TestResourceModel::testSetInactiveByIndex()
     QVERIFY(r);
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
     QVERIFY(!resourceModel.indexForResource(resource).isValid());
-
+    QVERIFY(!resourceModel.resourceForId(resource->resourceId()));
+    QVERIFY(!resourceModel.resourceForName(resource->name()));
+    // verify that all mapped resources are still reachable by id
+    for (int i = 0; i < resourceCount - 1; i++) {
+        KoResourceSP resource2 = resourceModel.resourceForIndex(resourceModel.index(i, 0));
+        QVERIFY(resource2);
+        QVERIFY(resourceModel.resourceForId(resource2->resourceId()));
+    }
 }
 
 void TestResourceModel::testImportResourceFile()

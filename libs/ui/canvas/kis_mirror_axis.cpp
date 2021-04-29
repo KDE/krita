@@ -457,10 +457,10 @@ void KisMirrorAxis::Private::recomputeVisibleAxes(QRect viewport)
     QPointF samplePt2 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x(), config.axisPosition().y() - 100));
 
     horizontalAxis = QLineF(samplePt1, samplePt2);
-    if (!KisAlgebra2D::intersectLineRect(horizontalAxis, viewport)) horizontalAxis = QLineF();
+    if (!KisAlgebra2D::intersectLineRect(horizontalAxis, viewport, true)) horizontalAxis = QLineF();
 
     samplePt2 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x() - 100, config.axisPosition().y()));
     verticalAxis = QLineF(samplePt1, samplePt2);
-    if (!KisAlgebra2D::intersectLineRect(verticalAxis, viewport)) verticalAxis = QLineF();
+    if (!KisAlgebra2D::intersectLineRect(verticalAxis, viewport, true)) verticalAxis = QLineF();
 }
 

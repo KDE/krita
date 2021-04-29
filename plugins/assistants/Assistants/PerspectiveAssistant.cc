@@ -277,7 +277,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
                 if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
                     intersectTransformed = initialTransform.map(intersection);
                     snapLine = QLineF(intersectTransformed, mousePos);
-                    KisAlgebra2D::intersectLineRect(snapLine, viewport);
+                    KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
                     bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
                     QPainterPath path;
 
@@ -295,7 +295,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
                 if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
                     intersectTransformed = initialTransform.map(intersection);
                     snapLine = QLineF(intersectTransformed, mousePos);
-                    KisAlgebra2D::intersectLineRect(snapLine, viewport);
+                    KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
                     bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
                     QPainterPath path;
 

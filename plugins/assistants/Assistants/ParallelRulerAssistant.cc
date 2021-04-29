@@ -127,7 +127,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         snapLine= snapLine.translated(translation);
 
         QRect viewport= gc.viewport();
-        KisAlgebra2D::intersectLineRect(snapLine, viewport);
+        KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
 
 
         QPainterPath path;

@@ -94,7 +94,7 @@ void InfiniteRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         QTransform initialTransform = converter->documentToWidgetTransform();
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
         QRect viewport= gc.viewport();
-        KisAlgebra2D::intersectLineRect(snapLine, viewport);
+        KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
         QPainterPath path;
         path.moveTo(snapLine.p1());
         path.lineTo(snapLine.p2());

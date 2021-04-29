@@ -142,7 +142,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
             QLineF snapLine= QLineF(startPoint, mousePos);
             QRect viewport= gc.viewport();
 
-            KisAlgebra2D::intersectLineRect(snapLine, viewport);
+            KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
 
             QRect bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
 
@@ -150,12 +150,12 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
             if (bounds.contains(startPoint.toPoint())){
                 path.moveTo(startPoint);
-                path.lineTo(snapLine.p1());
+                path.lineTo(snapLine.p2());
             }
             else
             {
-                path.moveTo(snapLine.p1());
-                path.lineTo(snapLine.p2());
+                path.moveTo(snapLine.p2());
+                path.lineTo(snapLine.p1());
             }
 
             drawPreview(gc, path);//and we draw the preview.
@@ -226,7 +226,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
             // find point
             QLineF snapLine= QLineF(p0, unitAngle);
             QRect viewport= gc.viewport();
-            KisAlgebra2D::intersectLineRect(snapLine, viewport);
+            KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
 
             // make a line from VP center to edge of canvas with that angle
             QPainterPath path;

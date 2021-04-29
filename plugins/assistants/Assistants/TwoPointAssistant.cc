@@ -208,7 +208,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
         // draw the horizon
         if (assistantVisible == true || isEditing == true) {
             QLineF horizonLine = initialTransform.map(QLineF(p1,p2));
-            KisAlgebra2D::intersectLineRect(horizonLine, viewport);
+            KisAlgebra2D::intersectLineRect(horizonLine, viewport, true);
             path.moveTo(horizonLine.p1());
             path.lineTo(horizonLine.p2());
         }
@@ -217,12 +217,12 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
         if (isEditing == false && previewVisible == true && isSnappingActive() == true) {
             QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
             QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
-            KisAlgebra2D::intersectLineRect(snapMouse1, viewport);
-            KisAlgebra2D::intersectLineRect(snapMouse2, viewport);
+            KisAlgebra2D::intersectLineRect(snapMouse1, viewport, true);
+            KisAlgebra2D::intersectLineRect(snapMouse2, viewport, true);
             path.moveTo(initialTransform.map(p1));
-            path.lineTo(snapMouse1.p1());
+            path.lineTo(snapMouse1.p2());
             path.moveTo(initialTransform.map(p2));
-            path.lineTo(snapMouse2.p1());
+            path.lineTo(snapMouse2.p2());
         }
 
         // draw the side handle bars
@@ -259,7 +259,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                     // Draw vertical line, but only if the center is between both VPs
                     QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
                     if (!isEditing) vertical.translate(mousePos - vertical.p1());
-                    KisAlgebra2D::intersectLineRect(vertical,viewport);
+                    KisAlgebra2D::intersectLineRect(vertical,viewport,true);
                     path.moveTo(vertical.p1());
                     path.lineTo(vertical.p2());
 
@@ -318,9 +318,9 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                             }
 
                             QLineF drawn_gridline = initialTransform.map(inv.map(gridline));
-                            KisAlgebra2D::intersectLineRect(drawn_gridline, viewport);
+                            KisAlgebra2D::intersectLineRect(drawn_gridline, viewport, true);
                             path.moveTo(initialTransform.map(inv.map(vp)));
-                            path.lineTo(drawn_gridline.p2());
+                            path.lineTo(drawn_gridline.p1());
                         }
                     }
                 }

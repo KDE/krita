@@ -1500,7 +1500,8 @@ void KisAnimTimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireC
             }
         }
     }
-
+    
+    
     if (!indexes.isEmpty()) {
         // add extra columns to the end of the timeline if we are adding hold frames
         // they will be truncated if we don't do this
@@ -1572,8 +1573,8 @@ void KisAnimTimelineFramesView::fanSelectedFrames(const QModelIndexList &selecti
         }
     }
 
-    selectionModel()->clearSelection();
     KisSignalsBlocker blockSig(selectionModel());
+    selectionModel()->clearSelection();
     foreach (const int &layer, indexMap.keys()) {
         QList<int>::const_iterator it;
         int progressIndex = 0;

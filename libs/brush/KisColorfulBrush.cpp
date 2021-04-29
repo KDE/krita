@@ -129,6 +129,7 @@ void KisColorfulBrush::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("AdjustmentMidPoint", QString::number(m_adjustmentMidPoint));
     e.setAttribute("BrightnessAdjustment", QString::number(m_brightnessAdjustment));
     e.setAttribute("ContrastAdjustment", QString::number(m_contrastAdjustment));
+    e.setAttribute("AdjustmentVersion", QString::number(2));
     KisBrush::toXML(d, e);
 }
 

@@ -103,6 +103,50 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
             path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, alignForZoom, 1.0, 0.0, true, 0, 0));
         }
     }
+    else if (m_modifyOffsetWithShortcut) {
+        qreal gridWidth = option.diameter * option.grid_scale ;
+        qreal gridHeight = option.diameter * option.grid_scale ;
+
+        qreal cellWidth = option.grid_width * option.grid_scale ;
+        qreal cellHeight = option.grid_height * option.grid_scale;
+
+        qreal horizontalOffset = option.horizontal_offset;
+        qreal verticalOffset = option.vertical_offset;
+
+        int divide;
+        if (option.grid_pressure_division) {
+            divide = option.grid_division_level * info.pressure();
+        }
+        else {
+            divide = option.grid_division_level;
+        }
+
+        divide = qRound(option.grid_scale * divide);
+
+        //Adjust the start position of the drawn grid to the top left of the brush instead of in the center
+        qreal posX = info.pos().x() - (gridWidth/2) + (cellWidth/2) - horizontalOffset;
+        qreal posY = info.pos().y() - (gridHeight/2) + (cellHeight/2) - verticalOffset;
+
+        //Lock the grid alignment
+        posX = posX - std::fmod(posX, cellWidth) + horizontalOffset;
+        posY = posY - std::fmod(posY, cellHeight) + verticalOffset;
+        const QRectF dabRect(posX , posY , cellWidth, cellHeight);
+
+        divide = qMax(1, divide);
+        const qreal yStep = cellHeight / (qreal)divide;
+        const qreal xStep = cellWidth / (qreal)divide;
+
+        QRectF tile;
+        QPainterPath cellPath;
+        for (int y = 0; y < (gridHeight)/yStep; y++) {
+            for (int x = 0; x < (gridWidth)/xStep; x++) {
+                tile = QRectF(dabRect.x() + x * xStep, dabRect.y() + y * yStep, xStep, yStep);
+                cellPath.addEllipse(tile);
+            }
+        }
+        cellPath = outlineFetcher()->fetchOutline(info, this, cellPath, mode, alignForZoom);
+        path.addPath(cellPath);
+    }
     return path;
 }
 

@@ -133,6 +133,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
         shapes = KisShapeLayer::createShapesFromSvg(&storeDev,
                                                     "", m_image->bounds(),
                                                     resolutionPPI, m_canvas->shapeController()->resourceManager(),
+                                                    true,
                                                     &fragmentSize);
 
         store->close();

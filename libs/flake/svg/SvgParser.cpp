@@ -210,6 +210,12 @@ void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
     m_context.currentGC()->matrix = t;
 }
 
+void SvgParser::setDefaultKraTextVersion(int version)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_context.currentGC());
+    m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, version);
+}
+
 QList<KoShape*> SvgParser::shapes() const
 {
     return m_shapes;
@@ -1728,6 +1734,14 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     m_context.pushGraphicsContext(e);
     uploadStyleToContext(e);
+
+    if (e.hasAttribute("krita:textVersion")) {
+        m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, e.attribute("krita:textVersion", "1").toInt());
+
+        if (m_isInsideTextSubtree) {
+            debugFlake << "WARNING: \"krita:textVersion\" attribute appeared in non-root text shape";
+        }
+    }
 
     KoSvgTextChunkShape *textChunk = rootTextShape ? rootTextShape : new KoSvgTextChunkShape();
 

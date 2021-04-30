@@ -116,6 +116,54 @@ QString convertListAttribute(const QVector<qreal> &values) {
 }
 }
 
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
+/**
+ * HACK ALERT: this is a function from a private Qt's header qfont_p.h,
+ * we don't include the whole header, because it is painful in the
+ * environments we don't fully control, e.g. in distribution packages.
+ */
+Q_GUI_EXPORT int qt_defaultDpi();
+
+namespace {
+int forcedDpiForQtFontBugWorkaround() {
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    int value = cfg.readEntry("forcedDpiForQtFontBugWorkaround", qt_defaultDpi());
+
+    if (value < 0) {
+        value = qt_defaultDpi();
+    }
+
+    return value;
+}
+
+
+KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextProperties &properties)
+{
+    if (!properties.hasProperty(KoSvgTextProperties::FontSizeId)) return properties;
+
+    KoSvgTextProperties result = properties;
+
+    const int forcedFontDPI = forcedDpiForQtFontBugWorkaround();
+
+    if (result.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
+        result.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2 &&
+        forcedFontDPI > 0) {
+
+        qreal fontSize = result.property(KoSvgTextProperties::FontSizeId).toReal();
+        fontSize *= qreal(forcedFontDPI) / 72.0;
+        result.setProperty(KoSvgTextProperties::FontSizeId, fontSize);
+    }
+
+    result.setProperty(KoSvgTextProperties::KraTextVersionId, 2);
+
+    return result;
+}
+
+}
+
+
 struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShapeLayoutInterface
 {
     LayoutInterface(KoSvgTextChunkShape *_q) : q(_q) {}
@@ -479,6 +527,10 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
         if (!context.strippedTextMode()) {
             context.shapeWriter().addAttribute("id", context.getID(this));
             context.shapeWriter().addAttribute("krita:useRichText", s->isRichTextPreferred ? "true" : "false");
+
+            // save the version to distinguish from the buggy Krita version
+            context.shapeWriter().addAttribute("krita:textVersion", 2);
+
             SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
             SvgStyleWriter::saveSvgStyle(this, context);
         } else {
@@ -523,6 +575,8 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 
     KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
 
+    ownProperties = adjustPropertiesForFontSizeWorkaround(ownProperties);
+
     // we write down stroke/fill iff they are different from the parent's value
     if (!isRootTextNode()) {
         if (ownProperties.hasProperty(KoSvgTextProperties::FillId)) {
@@ -555,12 +609,12 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     return true;
 }
 
+#include <SvgGraphicContext.h>
+
 
 void KoSvgTextChunkShape::SharedData::loadContextBasedProperties(SvgGraphicsContext *gc)
 {
     properties = gc->textProperties;
-    font = gc->font;
-    fontFamiliesList = gc->fontFamiliesList;
 }
 
 void KoSvgTextChunkShape::resetTextShape()
@@ -568,8 +622,6 @@ void KoSvgTextChunkShape::resetTextShape()
     using namespace KoSvgText;
 
     s->properties = KoSvgTextProperties();
-    s->font = QFont();
-    s->fontFamiliesList = QStringList();
 
     s->textLength = AutoValue();
     s->lengthAdjust = LengthAdjustSpacing;
@@ -838,8 +890,6 @@ KoSvgTextChunkShape::SharedData::SharedData()
 KoSvgTextChunkShape::SharedData::SharedData(const SharedData &rhs)
     : QSharedData()
     , properties(rhs.properties)
-    , font(rhs.font)
-    , fontFamiliesList(rhs.fontFamiliesList)
     , localTransformations(rhs.localTransformations)
     , textLength(rhs.textLength)
     , lengthAdjust(rhs.lengthAdjust)
@@ -855,28 +905,14 @@ KoSvgTextChunkShape::SharedData::~SharedData()
 #include <QBrush>
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
-
-/**
- * HACK ALERT: this is a function from a private Qt's header qfont_p.h,
- * we don't include the whole header, because it is painful in the
- * environments we don't fully control, e.g. in distribution packages.
- */
-Q_GUI_EXPORT int qt_defaultDpi();
-
-namespace {
-int forcedDpiForQtFontBugWorkaround() {
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    return cfg.readEntry("forcedDpiForQtFontBugWorkaround", -1);
-}
-}
 
 KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
 {
     KoSvgText::KoSvgCharChunkFormat format;
 
-    QFont font(s->font);
+    const KoSvgTextProperties properties = adjustPropertiesForFontSizeWorkaround(s->properties);
+
+    QFont font(properties.generateFont());
 
     /**
      * HACK ALERT: Qt has a bug. When requesting font from the font
@@ -898,27 +934,20 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
      *        fractional-sized fonts).
      */
     if (font.pointSizeF() > 0) {
-        const int forcedFontDPI = forcedDpiForQtFontBugWorkaround();
-
         qreal adjustedFontSize = 72.0 / qt_defaultDpi() * font.pointSizeF();
-
-        if (forcedFontDPI > 0) {
-            adjustedFontSize *= qreal(forcedFontDPI) / 72.0;
-        }
-
         font.setPointSizeF(adjustedFontSize);
     }
 
     format.setFont(font);
-    format.setTextAnchor(KoSvgText::TextAnchor(s->properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt()));
+    format.setTextAnchor(KoSvgText::TextAnchor(properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt()));
 
     KoSvgText::Direction direction =
-        KoSvgText::Direction(s->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+        KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     format.setLayoutDirection(direction == KoSvgText::DirectionLeftToRight ? Qt::LeftToRight : Qt::RightToLeft);
 
 
     KoSvgText::BaselineShiftMode shiftMode =
-        KoSvgText::BaselineShiftMode(s->properties.propertyOrDefault(KoSvgTextProperties::BaselineShiftModeId).toInt());
+        KoSvgText::BaselineShiftMode(properties.propertyOrDefault(KoSvgTextProperties::BaselineShiftModeId).toInt());
 
     // FIXME: we support only 'none', 'sub' and 'super' shifts at the moment.
     //        Please implement 'percentage' as well!
@@ -930,18 +959,18 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
         format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     }
 
-    KoSvgText::AutoValue letterSpacing = s->properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoValue>();
+    KoSvgText::AutoValue letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoValue>();
     if (!letterSpacing.isAuto) {
         format.setFontLetterSpacingType(QFont::AbsoluteSpacing);
         format.setFontLetterSpacing(letterSpacing.customValue);
     }
 
-    KoSvgText::AutoValue wordSpacing = s->properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId).value<KoSvgText::AutoValue>();
+    KoSvgText::AutoValue wordSpacing = properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId).value<KoSvgText::AutoValue>();
     if (!wordSpacing.isAuto) {
         format.setFontWordSpacing(wordSpacing.customValue);
     }
 
-    KoSvgText::AutoValue kerning = s->properties.propertyOrDefault(KoSvgTextProperties::KerningId).value<KoSvgText::AutoValue>();
+    KoSvgText::AutoValue kerning = properties.propertyOrDefault(KoSvgTextProperties::KerningId).value<KoSvgText::AutoValue>();
     if (kerning.isAuto) {
         format.setFontKerning(true);
     } else {

@@ -119,10 +119,10 @@ void TestSvgText::testTextProperties()
     addProp(context, props, "baseline-shift", "10%", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftPercentage);
     QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 0.1);
 
-    context.currentGC()->font.setPointSizeF(180);
+    context.currentGC()->textProperties.setProperty(KoSvgTextProperties::FontSizeId, 180.0);
 
     addProp(context, props, "baseline-shift", "36", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftPercentage);
-    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 0.2);
+    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 3.6);
 
     addProp(context, props, "kerning", "auto", KoSvgTextProperties::KerningId, KoSvgText::AutoValue());
     addProp(context, props, "kerning", "20", KoSvgTextProperties::KerningId, KoSvgText::AutoValue(20.0));
@@ -211,77 +211,82 @@ void TestSvgText::testParseFontStyles()
 
     //QCOMPARE(styles.size(), 3);
 
+    auto getFont = [&context] () {
+        return context.currentGC()->textProperties.generateFont();
+    };
+
+
     // TODO: multiple fonts!
-    QCOMPARE(context.currentGC()->font.family(), QString("Verdana"));
+    QCOMPARE(getFont().family(), QString("Verdana"));
 
     {
         QStringList expectedFonts = {"Verdana", "Times New Roman", "serif"};
-        QCOMPARE(context.currentGC()->fontFamiliesList, expectedFonts);
+        QCOMPARE(context.currentGC()->textProperties.property(KoSvgTextProperties::FontFamiliesId).toStringList(), expectedFonts);
     }
 
-    QCOMPARE(context.currentGC()->font.pointSizeF(), 15.0);
-    QCOMPARE(context.currentGC()->font.style(), QFont::StyleOblique);
-    QCOMPARE(context.currentGC()->font.capitalization(), QFont::SmallCaps);
-    QCOMPARE(context.currentGC()->font.weight(), 66);
+    QCOMPARE(getFont().pointSizeF(), 15.0);
+    QCOMPARE(getFont().style(), QFont::StyleOblique);
+    QCOMPARE(getFont().capitalization(), QFont::SmallCaps);
+    QCOMPARE(getFont().weight(), 66);
 
     {
         SvgStyles fontModifier;
         fontModifier["font-weight"] = "bolder";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.weight(), 75);
+        QCOMPARE(getFont().weight(), 75);
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["font-weight"] = "lighter";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.weight(), 66);
+        QCOMPARE(getFont().weight(), 66);
     }
 
-    QCOMPARE(context.currentGC()->font.stretch(), int(QFont::ExtraCondensed));
+    QCOMPARE(getFont().stretch(), int(QFont::ExtraCondensed));
 
     {
         SvgStyles fontModifier;
         fontModifier["font-stretch"] = "narrower";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.stretch(), int(QFont::UltraCondensed));
+        QCOMPARE(getFont().stretch(), int(QFont::UltraCondensed));
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["font-stretch"] = "wider";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.stretch(), int(QFont::ExtraCondensed));
+        QCOMPARE(getFont().stretch(), int(QFont::ExtraCondensed));
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["text-decoration"] = "underline";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.underline(), true);
+        QCOMPARE(getFont().underline(), true);
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["text-decoration"] = "overline";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.overline(), true);
+        QCOMPARE(getFont().overline(), true);
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["text-decoration"] = "line-through";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.strikeOut(), true);
+        QCOMPARE(getFont().strikeOut(), true);
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["text-decoration"] = " line-through overline";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.underline(), false);
-        QCOMPARE(context.currentGC()->font.strikeOut(), true);
-        QCOMPARE(context.currentGC()->font.overline(), true);
+        QCOMPARE(getFont().underline(), false);
+        QCOMPARE(getFont().strikeOut(), true);
+        QCOMPARE(getFont().overline(), true);
     }
 
 }
@@ -307,7 +312,11 @@ void TestSvgText::testParseTextStyles()
     SvgStyles styles = context.styleParser().collectStyles(root);
     context.styleParser().parseFont(styles);
 
-    QCOMPARE(context.currentGC()->font.family(), QString("Verdana"));
+    auto getFont = [&context] () {
+        return context.currentGC()->textProperties.generateFont();
+    };
+
+    QCOMPARE(getFont().family(), QString("Verdana"));
 
     KoSvgTextProperties &props = context.currentGC()->textProperties;
 

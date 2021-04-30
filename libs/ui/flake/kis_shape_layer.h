@@ -112,6 +112,7 @@ public:
                                                 const QRectF &rectInPixels,
                                                 qreal resolutionPPI,
                                                 KoDocumentResourceManager *resourceManager,
+                                                bool loadingFromKra,
                                                 QSizeF *fragmentSize);
 
 

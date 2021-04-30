@@ -55,6 +55,7 @@ public:
     void setXmlBaseDir(const QString &baseDir);
 
     void setResolution(const QRectF boundsInPixels, qreal pixelsPerInch);
+    void setDefaultKraTextVersion(int version);
 
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;

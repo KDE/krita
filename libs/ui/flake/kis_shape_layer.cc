@@ -530,7 +530,7 @@ bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, c
     return true;
 }
 
-QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, QSizeF *fragmentSize)
+QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, bool loadingFromKra, QSizeF *fragmentSize)
 {
 
     QString errorMsg;
@@ -549,6 +549,19 @@ QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QSt
     SvgParser parser(resourceManager);
     parser.setXmlBaseDir(baseXmlDir);
     parser.setResolution(rectInPixels /* px */, resolutionPPI /* ppi */);
+
+    if (loadingFromKra) {
+        /**
+         * We set default text version to 1, it will make all the
+         * files not having an explicit krita:textVersion tag load
+         * as "legacy" files with the bug.
+         *
+         * The tag is not needed when loading from pure SVG, because
+         * most probably they were not saved by a buggy Krita version.
+         */
+        parser.setDefaultKraTextVersion(1);
+    }
+
     return parser.parseSvg(doc.documentElement(), fragmentSize);
 }
 
@@ -576,6 +589,7 @@ bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
         createShapesFromSvg(device, baseXmlDir,
                             image->bounds(), resolutionPPI,
                             m_d->controller->resourceManager(),
+                            true,
                             &fragmentSize);
 
     Q_FOREACH (KoShape *shape, shapes) {

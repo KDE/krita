@@ -235,10 +235,11 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
         else if (unit.right(2) == "in")
             value = ptToPx(gc, INCH_TO_POINT(value));
         else if (unit.right(2) == "em") {
-            value = value * gc->font.pointSize();
+            value = value * gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
         }
         else if (unit.right(2) == "ex") {
-            QFontMetrics metrics(gc->font);
+
+            QFontMetrics metrics(gc->textProperties.generateFont());
             value = value * metrics.xHeight();
         } else if (unit.right(1) == "%") {
             if (horiz && vert)

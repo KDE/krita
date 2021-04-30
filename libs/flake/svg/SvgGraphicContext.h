@@ -45,8 +45,6 @@ public:
     qreal opacity {1.0};    ///< the shapes opacity
 
     QTransform matrix;      ///< the current transformation matrix
-    QFont   font;           ///< the current font
-    QStringList fontFamiliesList; ///< the full list of all the families to search glyphs in
     QColor  currentColor {Qt::black};   ///< the current color
     QString xmlBaseDir;     ///< the current base directory (used for loading external content)
     bool preserveWhitespace {false}; ///< preserve whitespace in element text

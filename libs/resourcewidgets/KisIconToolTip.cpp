@@ -51,7 +51,7 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     }
 
     if (!m_fixedToolTipThumbnailSize.isEmpty() && !thumb.isNull()) {
-        thumb = thumb.scaled(m_fixedToolTipThumbnailSize*devicePixelRatioF(), Qt::IgnoreAspectRatio);
+        thumb = thumb.scaled(m_fixedToolTipThumbnailSize*devicePixelRatioF(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
     if (m_checkersPainter) {

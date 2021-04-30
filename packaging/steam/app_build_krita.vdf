@@ -1,0 +1,17 @@
+"appbuild"
+{
+	"appid"	"KRITA_APP_ID" // Replace value with Krita's Steam AppID.
+	"desc" "Krita Desktop Steam Update"
+	"buildoutput" "..\output\" // build output folder for .log, .csm & .csd files, relative to location of this file
+	"contentroot" "..\content\" // root content folder, relative to location of this file
+	"setlive"	"" // branch to set live after successful build, non if empty
+	"preview" "0" // to enable preview builds
+	"local"	""	// set to file path of local content server 
+	
+	"depots"
+	{
+		"COMMON_DEPOT_ID" "depot_build_common.vdf" // Replace keys with various Krita depot ID's, as found on Steamworks web interface.
+		"WINDOWS_DEPOT_ID" "depot_build_windows.vdf"
+		"LINUX_DEPOT_ID" "depot_build_linux.vdf"
+	}
+}

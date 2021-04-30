@@ -201,12 +201,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         }
     } else if (command == "font-size") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
-        /**
-         * In ODF-based Krita vectors (<= 3.x) we used hardcoded font size values set to 96 ppi,
-         * so, when loading old files, we should adjust it accordingly.
-         */
-        gc->font.setPointSizeF(gc->forcedFontSizeCoeff * gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
+        gc->font.setPointSizeF(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
     } else if (command == "font-style") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
         const QFont::Style style =

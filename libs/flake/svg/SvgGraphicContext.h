@@ -59,7 +59,6 @@ public:
     bool visible {true};           ///< controls visibility of the shape (inherited)
     bool isResolutionFrame {false};
     qreal pixelsPerInch {72.0};    ///< controls the resolution of the image raster
-    qreal forcedFontSizeCoeff {1.0}; ///< workaround for a Krita 3.3 odf-based files that use different resolution for font size. No workaround by default
 
     QString markerStartId;
     QString markerMidId;

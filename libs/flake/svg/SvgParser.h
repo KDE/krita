@@ -56,10 +56,6 @@ public:
 
     void setResolution(const QRectF boundsInPixels, qreal pixelsPerInch);
 
-    /// A special workaround coeff for using when loading old ODF-embedded SVG files,
-    /// which used hard-coded 96 ppi for font size
-    void setForcedFontSizeResolution(qreal value);
-
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
 

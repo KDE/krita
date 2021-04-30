@@ -210,13 +210,6 @@ void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
     m_context.currentGC()->matrix = t;
 }
 
-void SvgParser::setForcedFontSizeResolution(qreal value)
-{
-    if (qFuzzyCompare(value, 0.0)) return;
-
-    m_context.currentGC()->forcedFontSizeCoeff = 72.0 / value;
-}
-
 QList<KoShape*> SvgParser::shapes() const
 {
     return m_shapes;

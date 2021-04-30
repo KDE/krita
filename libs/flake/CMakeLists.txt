@@ -196,7 +196,6 @@ set(kritaflake_SRCS
     svg/SvgCssHelper.cpp
     svg/SvgClipPathHelper.cpp
     svg/SvgLoadingContext.cpp
-    svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
     svg/SvgMeshGradient.cpp
     svg/SvgMeshPatch.cpp

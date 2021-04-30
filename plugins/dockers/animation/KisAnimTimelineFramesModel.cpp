@@ -86,7 +86,12 @@ struct KisAnimTimelineFramesModel::Private
     bool layerEditable(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return true;
-        return dummy->node()->visible() && !dummy->node()->userLocked();
+        
+        if (image->isIsolatingLayer()) {
+            return dummy->node()->isIsolatedRoot() && !dummy->node()->userLocked();
+        } else {
+            return dummy->node()->visible() && !dummy->node()->userLocked();
+        }
     }
 
     bool frameExists(int row, int column) const {
@@ -275,6 +280,7 @@ void KisAnimTimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesF
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigAudioVolumeChanged()), SIGNAL(sigAudioChannelChanged()));
         connect(m_d->image, SIGNAL(sigImageModified()), SLOT(slotImageContentChanged()));
+        connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotImageContentChanged()));
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade) {

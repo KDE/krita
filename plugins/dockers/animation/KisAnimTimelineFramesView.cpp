@@ -1049,7 +1049,15 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
 
 void KisAnimTimelineFramesView::mouseDoubleClickEvent(QMouseEvent *event) {
     QPersistentModelIndex index = indexAt(event->pos());
-    selectColumn(index.column());
+    
+    if (index.isValid()) {
+        if (event->modifiers() & Qt::AltModifier) {
+            selectRow(index.row());
+        } else {
+            selectColumn(index.column());
+        }
+    }
+    
     QAbstractItemView::mouseDoubleClickEvent(event);
 }
 

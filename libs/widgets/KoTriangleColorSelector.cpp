@@ -324,9 +324,10 @@ void KoTriangleColorSelector::generateWheel()
     QImage image(size, QImage::Format_ARGB32);
     image.setDevicePixelRatio(devicePixelRatioF());
 
-    qreal center = d->centerColorSelector*devicePixelRatioF();
-    qreal wheelNormExt = d->wheelNormExt*devicePixelRatioF();
-    qreal wheelNormInt = d->wheelNormInt*devicePixelRatioF();
+    // the -0.5 ensures dimensions are respective to pixel centers and hence symmetrical
+    qreal center = d->centerColorSelector*devicePixelRatioF() - 0.5;
+    qreal wheelNormExt = d->wheelNormExt*devicePixelRatioF() - 0.5;
+    qreal wheelNormInt = d->wheelNormInt*devicePixelRatioF() - 0.5;
 
 
     for(int y = 0; y < size.height(); y++)

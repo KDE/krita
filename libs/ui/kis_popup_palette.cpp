@@ -126,9 +126,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     m_brushHud = new KisBrushHud(provider, this);
 
-    m_settingsButton = new KisRoundHudButton(this);
+    m_tagsButton = new KisRoundHudButton(this);
 
-    connect(m_settingsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
+    connect(m_tagsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
 
     m_brushHudButton = new KisRoundHudButton(this);
     m_brushHudButton->setCheckable(true);
@@ -290,7 +290,7 @@ void KisPopupPalette::reconfigure()
 
     m_brushHud->setFixedHeight(int(m_popupPaletteSize));
 
-    m_settingsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
+    m_tagsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
     m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
@@ -380,7 +380,7 @@ void KisPopupPalette::slotUpdateIcons()
     }
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     m_brushHud->updateIcons();
-    m_settingsButton->setIcon(KisIconUtils::loadIcon("tag"));
+    m_tagsButton->setIcon(KisIconUtils::loadIcon("tag"));
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
 }
 

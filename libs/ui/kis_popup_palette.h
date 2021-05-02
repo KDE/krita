@@ -121,7 +121,7 @@ private:
     float m_colorHistoryInnerRadius {72.0};
     qreal m_colorHistoryOuterRadius {92.0};
 
-    KisRoundHudButton *m_settingsButton {0};
+    KisRoundHudButton *m_tagsButton {0};
     KisRoundHudButton *m_brushHudButton {0};
     QPoint m_lastCenterPoint;
     QRectF m_canvasRotationIndicatorRect;

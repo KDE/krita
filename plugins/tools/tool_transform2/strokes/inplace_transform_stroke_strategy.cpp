@@ -908,5 +908,3 @@ void InplaceTransformStrokeStrategy::addDirtyRect(KisNodeSP node, const QRect &r
     QMutexLocker l(&m_d->dirtyRectsMutex);
     m_d->effectiveDirtyRects(levelOfDetail)[node] |= rect;
 }
-
-#include "inplace_transform_stroke_strategy.moc"

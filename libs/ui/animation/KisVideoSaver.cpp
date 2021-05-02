@@ -203,5 +203,3 @@ KisImportExportErrorCode KisAnimationVideoSaver::convert(KisDocument *document, 
     KisImportExportErrorCode res = videoSaver.encode(savedFilesMask, options);
     return res;
 }
-
-#include "KisVideoSaver.moc"

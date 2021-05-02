@@ -42,5 +42,3 @@ void DlgHeifImport::toggleHLGOptions(bool toggle)
     ui->spnNits->setEnabled(toggle);
     ui->spnGamma->setEnabled(toggle);
 }
-
-#include <DlgHeifImport.moc>

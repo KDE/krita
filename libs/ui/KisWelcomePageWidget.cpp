@@ -408,7 +408,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
     if (!recentItemDelegate) {
         recentItemDelegate.reset(new RecentItemDelegate(this));
-        recentDocumentsListView->setItemDelegate(recentItemDelegate.get());
+        recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
     }
     recentItemDelegate->setItemHeight(itemSquareSideSize);
     recentDocumentsListView->setModel(&m_recentFilesModel.model());

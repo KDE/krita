@@ -18,7 +18,7 @@ if (APPLE)
     macos_test_fixrpath(${BROKEN_TESTS})
 
 else (APPLE)
-    ecm_add_test(
+    ecm_add_tests(
         kis_kra_loader_test.cpp
         kis_kra_saver_test.cpp
         LINK_LIBRARIES kritaui kritalibkra Qt5::Test

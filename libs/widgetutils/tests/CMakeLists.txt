@@ -21,13 +21,10 @@ if (APPLE)
 
 
 else (APPLE)
-
     ecm_add_test(
         KisActionsSnapshotTest.cpp
         NAME_PREFIX "libs-widgetutils-"
         LINK_LIBRARIES kritawidgetutils kritaimage Qt5::Test
-        TARGET_NAMES_VAR OK_TESTS
-        ${MACOS_GUI_TEST}
     )
 
 endif()

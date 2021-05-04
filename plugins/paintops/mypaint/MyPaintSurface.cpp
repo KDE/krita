@@ -56,8 +56,7 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
 
     // devices for mask information
     static const KoColorSpace *maskCs = KoColorSpaceRegistry::instance()->alpha8();
-    m_maskDeviceIntermediate = KisPaintDeviceSP(new KisPaintDevice(maskCs));
-    m_maskDeviceFinal = KisFixedPaintDeviceSP(new KisFixedPaintDevice(maskCs));
+    m_maskDevice = KisFixedPaintDeviceSP(new KisFixedPaintDevice(maskCs));
 }
 
 KisMyPaintSurface::~KisMyPaintSurface()
@@ -154,12 +153,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     KisAlgebra2D::OuterCircle outer(center, radius);
     m_precisePainterWrapper.readRects(m_tempPainter->calculateAllMirroredRects(dabRectAligned));
     m_tempPainter->copyAreaOptimized(dabRectAligned.topLeft(), m_tempPainter->device(), m_dab, dabRectAligned);
-
-
-
     KisSequentialIterator it(m_dab, dabRectAligned);
-    QRect maskTempRect = QRect(QPoint(0, 0), dabRectAligned.size());
-    KisSequentialIterator itmask(m_maskDeviceIntermediate, maskTempRect); // to make it not take too much memory after subsequent dabs
 
     quint8 maskUnitValue = KoColorSpaceMathsTraits<quint8>::unitValue; // because it's alpha8
 
@@ -168,15 +162,27 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     float maxValue = KoColorSpaceMathsTraits<channelType>::max;
     bool eraser = painter()->compositeOp()->id() == COMPOSITE_ERASE;
 
-    while(it.nextPixel() && itmask.nextPixel()) {
+
+    m_maskDevice->setRect(dabRectAligned);
+    m_maskDevice->lazyGrowBufferWithoutInitialization();
+
+
+    // Dmitry says that going with the pointer should be in the same order
+    // as using the sequential iterator
+    quint8* maskPointer = m_maskDevice->data();
+
+
+    while(it.nextPixel()) {
 
         // first initialize to 0;
-        *(itmask.rawData()) = 0;
+        *maskPointer = 0;
 
         QPoint pt(it.x(), it.y());
 
-        if(outer.fadeSq(pt) > 1.0f)
+        if(outer.fadeSq(pt) > 1.0f) {
+            maskPointer++;
             continue;
+        }
 
         float rr, base_alpha, alpha, dst_alpha, r, g, b, a;
 
@@ -194,7 +200,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
         // set alpha to mask
         if (alpha > minValue) {
-            *(itmask.rawData()) = (quint8)(maskUnitValue);
+            *maskPointer = (quint8)(maskUnitValue);
         }
 
         channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
@@ -257,14 +263,13 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         nativeArray[1] = qBound(minValue, g * unitValue, maxValue);
         nativeArray[2] = qBound(minValue, r * unitValue, maxValue);
         nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
+
+        maskPointer++;
     }
 
-    m_maskDeviceFinal->setRect(dabRectAligned);
-    m_maskDeviceFinal->lazyGrowBufferWithoutInitialization();
-    m_maskDeviceIntermediate->readBytes(m_maskDeviceFinal->data(), maskTempRect);
 
-    m_tempPainter->bitBltWithFixedSelection(dabRectAligned.x(), dabRectAligned.y(), m_dab, m_maskDeviceFinal, dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.width(), dabRectAligned.height());
-    m_tempPainter->renderMirrorMask(dabRectAligned, m_dab, dabRectAligned.x(), dabRectAligned.y(), m_maskDeviceFinal);
+    m_tempPainter->bitBltWithFixedSelection(dabRectAligned.x(), dabRectAligned.y(), m_dab, m_maskDevice, dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.x(), dabRectAligned.y(), dabRectAligned.width(), dabRectAligned.height());
+    m_tempPainter->renderMirrorMask(dabRectAligned, m_dab, dabRectAligned.x(), dabRectAligned.y(), m_maskDevice);
     const QVector<QRect> dirtyRects = m_tempPainter->takeDirtyRegion();
     m_precisePainterWrapper.writeRects(dirtyRects);
     painter()->addDirtyRects(dirtyRects);

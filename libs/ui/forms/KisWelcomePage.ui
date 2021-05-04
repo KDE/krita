@@ -1831,7 +1831,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita is an open source and community-driven tool for digital artists everywhere.&lt;br/&gt;Progress is made possible thanks to ongoing support from our community of &lt;a href=&quot;https://docs.krita.org/en/contributors_manual.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#1b6acb;&quot;&gt;contributors&lt;/span&gt;&lt;/a&gt;, sponsors, and &lt;a href=&quot;https://fund.krita.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#1b6acb;&quot;&gt;development fund&lt;/span&gt;&lt;/a&gt; members.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita is an open source and community-driven tool for digital artists everywhere.&lt;br/&gt;Progress is made possible thanks to ongoing support from our community of &lt;a href=&quot;https://docs.krita.org/en/contributors_manual.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#FFFFFF;&quot;&gt;contributors&lt;/span&gt;&lt;/a&gt;, sponsors, and &lt;a href=&quot;https://fund.krita.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#FFFFFF;&quot;&gt;development fund &lt;/span&gt;&lt;/a&gt;members.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

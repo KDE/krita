@@ -224,7 +224,7 @@ void KisSelectionMask::setActive(bool active)
 QRect KisSelectionMask::needRect(const QRect &rect, KisNode::PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
-
+    
     // selection masks just add an overlay, so the needed rect is simply passed through
     return rect;
 }
@@ -241,13 +241,16 @@ QRect KisSelectionMask::extent() const
 {
     // since mask overlay is inverted, the mask paints over
     // the entire image bounds
-
     QRect resultRect;
-
     KisSelectionSP selection = this->selection();
-
+    
     if (selection) {
         resultRect = selection->pixelSelection()->defaultBounds()->bounds();
+        
+        if (KisNodeSP parent = this->parent()) {
+            resultRect |= parent->extent();
+        }
+        
     } else if (KisNodeSP parent = this->parent()) {
         KisPaintDeviceSP dev = parent->projection();
         if (dev) {

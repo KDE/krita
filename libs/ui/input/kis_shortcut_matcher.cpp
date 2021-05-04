@@ -411,7 +411,9 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
 void KisShortcutMatcher::touchCancelEvent(const QPointF &localPos)
 {
     m_d->usingTouch = false;
-    forceEndRunningShortcut(localPos);
+    if (m_d->runningShortcut) {
+        forceEndRunningShortcut(localPos);
+    }
 }
 
 bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)

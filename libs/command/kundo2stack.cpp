@@ -381,30 +381,31 @@ QTime KUndo2Command::endTime()
 
 void KUndo2Command::undoMergedCommands()
 {
-
-    undo();
-    if (!mergeCommandsVector().isEmpty()) {
-        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
-        it.toFront();
-        while (it.hasNext()) {
-            KUndo2Command* cmd = it.next();
-            cmd->undoMergedCommands();
-        }
-    }
-}
-
-void KUndo2Command::redoMergedCommands()
-{
     if (!mergeCommandsVector().isEmpty()) {
 
         QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
         it.toBack();
         while (it.hasPrevious()) {
             KUndo2Command* cmd = it.previous();
+            cmd->undoMergedCommands();
+        }
+    }
+
+    undo();
+}
+
+void KUndo2Command::redoMergedCommands()
+{
+    redo();
+    if (!mergeCommandsVector().isEmpty()) {
+        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        it.toFront();
+        while (it.hasNext()) {
+            KUndo2Command* cmd = it.next();
             cmd->redoMergedCommands();
         }
     }
-    redo();
+
 }
 QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()
 {

@@ -147,7 +147,7 @@ inline T colorBurnHelper(T src, T dst) {
     // Handle the case where the denominator is 0. See color dodge for a
     // detailed explanation
     if(src == zeroValue<T>()) {
-        return dst == unitValue<T>() ? unitValue<T>() : KoColorSpaceMathsTraits<T>::max;
+        return dst == unitValue<T>() ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::max;
     }
     return clamp<T>(div(inv(dst), src));
 }

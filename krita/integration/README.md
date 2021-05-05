@@ -32,7 +32,11 @@ with:
 Be sure to reset QuickLook with `qlmanage -r` and `qlmanage -r cache`. If the
 changes don't happen right away, `killall Finder`.
 
-**NOTE:** `kritaquicklookng.appex` **cannot be used standalone. You must bundle it with Krita (see below).**
+**NOTE 1:** `kritaquicklookng.appex` **cannot be used standalone. You must bundle it with Krita (see below).**
+
+**NOTE 2:** If you have krita installed to `/Applications`, Quicklook will always find
+first `kritaquicklook.qlgenerator` from `/Applications/krita.app` application
+bundle.
 
 # Bundling
 
@@ -42,3 +46,10 @@ If you package Krita, place:
 - `kritaquicklookng.appex` inside `krita.app/Contents/Library/PlugIns`
 Ensure the app is defined as the default app for opening .kra and .ora files,
 and codesign it whole if necessary.
+
+# Hacking
+After applying changes and compiling, test your changes as instructed below.
+- Quicklook: run in terminal: `qlmanage -g <path to kritaquicklook.qlgenerator> -c image -d2 -p <path to a kra file>`
+- Spotlight: install `kritaspotlight.mdimporter` inside `~/Library/Spotlight` and 
+clear caches, then run `mdimport -d2 -t <path to a kra file>`. Installed 
+mdimporter will be first in the list when running `mdimport -L`.

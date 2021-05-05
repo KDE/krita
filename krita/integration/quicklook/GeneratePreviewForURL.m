@@ -44,7 +44,7 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
                                CFDictionaryRef options) {
   @autoreleasepool {
     NSData *appPlist =
-        UnzipTask([(__bridge NSURL *)url path], @"mergedImage.png");
+        UnzipTask([(__bridge NSURL *)url path], @"mergedimage.png");
 
     if (QLPreviewRequestIsCancelled(preview)) {
       return noErr;

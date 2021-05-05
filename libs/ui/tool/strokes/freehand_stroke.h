@@ -24,7 +24,8 @@ class KRITAUI_EXPORT FreehandStrokeStrategy : public KisPainterBasedStrokeStrate
 public:
     enum Flag {
         None = 0x0,
-        SupportsContinuedInterstrokeData = 0x1
+        SupportsContinuedInterstrokeData = 0x1,
+        SupportsTimedMergeId = 0x2
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 

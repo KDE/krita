@@ -31,12 +31,12 @@
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
-                                                             QVector<KisFreehandStrokeInfo*> strokeInfos,bool useMergeID)
+                                                             QVector<KisFreehandStrokeInfo*> strokeInfos)
     : KisRunnableBasedStrokeStrategy(id, name),
       m_resources(resources),
       m_strokeInfos(strokeInfos),
       m_transaction(0),
-      m_useMergeID(useMergeID),
+      m_useMergeID(false),
       m_supportsMaskingBrush(false),
       m_supportsIndirectPainting(false)
 {
@@ -46,12 +46,12 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
-                                                             KisFreehandStrokeInfo *strokeInfo,bool useMergeID)
+                                                             KisFreehandStrokeInfo *strokeInfo)
     : KisRunnableBasedStrokeStrategy(id, name),
       m_resources(resources),
       m_strokeInfos(QVector<KisFreehandStrokeInfo*>() <<  strokeInfo),
       m_transaction(0),
-      m_useMergeID(useMergeID),
+      m_useMergeID(false),
       m_supportsMaskingBrush(false),
       m_supportsIndirectPainting(false)
 {
@@ -162,6 +162,16 @@ bool KisPainterBasedStrokeStrategy::supportsContinuedInterstrokeData() const
 void KisPainterBasedStrokeStrategy::setSupportsContinuedInterstrokeData(bool value)
 {
     m_supportsContinuedInterstrokeData = value;
+}
+
+bool KisPainterBasedStrokeStrategy::supportsTimedMergeId() const
+{
+    return m_useMergeID;
+}
+
+void KisPainterBasedStrokeStrategy::setSupportsTimedMergeId(bool value)
+{
+    m_useMergeID = value;
 }
 
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,

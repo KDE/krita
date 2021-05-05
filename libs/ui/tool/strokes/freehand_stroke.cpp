@@ -109,6 +109,8 @@ void FreehandStrokeStrategy::init(Flags flags)
     setSupportsMaskingBrush(true);
     setSupportsIndirectPainting(true);
     setSupportsContinuedInterstrokeData(flags & SupportsContinuedInterstrokeData);
+    setSupportsTimedMergeId(flags & SupportsTimedMergeId);
+
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
     if (m_d->needsAsynchronousUpdates) {

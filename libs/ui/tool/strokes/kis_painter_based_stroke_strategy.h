@@ -28,12 +28,12 @@ public:
     KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  QVector<KisFreehandStrokeInfo*> strokeInfos, bool useMergeID = false);
+                                  QVector<KisFreehandStrokeInfo*> strokeInfos);
 
     KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  KisFreehandStrokeInfo *strokeInfo, bool useMergeID = false);
+                                  KisFreehandStrokeInfo *strokeInfo);
 
     ~KisPainterBasedStrokeStrategy();
 
@@ -95,6 +95,9 @@ protected:
 
     bool supportsContinuedInterstrokeData() const;
     void setSupportsContinuedInterstrokeData(bool value);
+
+    bool supportsTimedMergeId() const;
+    void setSupportsTimedMergeId(bool value);
 
 protected:
     KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail);

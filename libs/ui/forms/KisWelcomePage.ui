@@ -1831,10 +1831,17 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita is an open source and community-driven tool for digital artists everywhere.&lt;br/&gt;Progress is made possible thanks to ongoing support from our community of &lt;a href=&quot;https://docs.krita.org/en/contributors_manual.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#FFFFFF;&quot;&gt;contributors&lt;/span&gt;&lt;/a&gt;, sponsors, and &lt;a href=&quot;https://fund.krita.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#FFFFFF;&quot;&gt;development fund &lt;/span&gt;&lt;/a&gt;members.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Krita is an open source and community-driven tool for digital artists everywhere.&lt;br /&gt;Progress is made possible thanks to ongoing support from our community of &lt;a href=&quot;https://docs.krita.org/en/contributors_manual.html&quot;&gt;contributors&lt;/a&gt;, sponsors, and &lt;a href=&quot;https://fund.krita.org/&quot;&gt;development fund &lt;/a&gt;members.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>

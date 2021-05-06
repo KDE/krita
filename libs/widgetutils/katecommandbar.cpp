@@ -293,6 +293,7 @@ KateCommandBar::KateCommandBar(QWidget *parent)
 void KateCommandBar::updateBar(const QList<KActionCollection *> &actionCollections, int totalActions)
 {
     qDeleteAll(m_disposableActionCollections);
+    m_disposableActionCollections.clear();
 
     QVector<QPair<QString, QAction *>> actionList;
     actionList.reserve(totalActions);

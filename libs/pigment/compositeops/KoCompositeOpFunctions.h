@@ -162,7 +162,7 @@ cfColorBurn(T src, T dst) {
 
 // Floating point version of color burn
 template<class T>
-inline typename std::enable_if<!std::is_integral<T>::value, T>::type
+inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
 cfColorBurn(T src, T dst) {
     using namespace Arithmetic;
     const T result = colorBurnHelper(src, dst);

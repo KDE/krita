@@ -399,13 +399,17 @@ KisGuidesManager::Private::GuideHandle
 KisGuidesManager::Private::findGuide(const QPointF &docPos)
 {
     const int snapRadius = 16;
+    const KoViewConverter *converter = view->canvasBase()->viewConverter();
+    const QPointF docPosView = converter->documentToView(docPos);
 
     GuideHandle nearestGuide = invalidGuide;
     qreal nearestRadius = std::numeric_limits<int>::max();
 
+
     for (int i = 0; i < guidesConfig.horizontalGuideLines().size(); i++) {
-        const qreal guide = guidesConfig.horizontalGuideLines()[i];
-        const qreal radius = qAbs(docPos.y() - guide);
+        const QPointF guideCoord = {0, guidesConfig.horizontalGuideLines()[i]};
+        const qreal guide = converter->documentToView(guideCoord).y();
+        const qreal radius = qAbs(docPosView.y() - guide);
         if (radius < snapRadius && radius < nearestRadius) {
             nearestGuide = GuideHandle(Qt::Horizontal, i);
             nearestRadius = radius;
@@ -413,8 +417,9 @@ KisGuidesManager::Private::findGuide(const QPointF &docPos)
     }
 
     for (int i = 0; i < guidesConfig.verticalGuideLines().size(); i++) {
-        const qreal guide = guidesConfig.verticalGuideLines()[i];
-        const qreal radius = qAbs(docPos.x() - guide);
+        const QPointF guideCoord = {guidesConfig.verticalGuideLines()[i], 0};
+        const qreal guide = converter->documentToView(guideCoord).x();
+        const qreal radius = qAbs(docPosView.x() - guide);
         if (radius < snapRadius && radius < nearestRadius) {
             nearestGuide = GuideHandle(Qt::Vertical, i);
             nearestRadius = radius;

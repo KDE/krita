@@ -71,7 +71,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         QRect *dstDabRect,
         qreal lightnessStrength)
 {
-    Q_UNUSED(lightnessStrength);
+    //Q_UNUSED(lightnessStrength);
 
     return fetchDabCommon(cs, colorSource, KoColor(),
                           cursorPoint,
@@ -162,7 +162,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         bool forceNormalizedRGBAImageStamp)
 {
     Q_ASSERT(dstDabRect);
-    Q_UNUSED(lightnessStrength);
+    //Q_UNUSED(lightnessStrength);
 
     bool hasDabInCache = true;
 

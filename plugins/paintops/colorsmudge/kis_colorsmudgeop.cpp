@@ -195,7 +195,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_strategy, spacingInfo);
 
-    m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect);
+
+    const qreal lightnessStrength = m_lightnessStrengthOption.apply(info);
+    m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect, lightnessStrength);
 
     QPointF newCenterPos = QRectF(m_dstDabRect).center();
     /**
@@ -218,7 +220,6 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     const qreal smudgeRate = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
     const qreal maxSmudgeRate = m_smudgeRateOption.getRate();
     const qreal fpOpacity = m_opacityOption.getOpacityf(info);
-    const qreal lightnessStrength = m_lightnessStrengthOption.apply(info);
 
     KoColor paintColor = m_paintColor;
 

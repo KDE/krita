@@ -26,7 +26,7 @@ public:
                     const KisPaintInformation& info,
                     const KisDabShape &shape,
                     const QPointF &cursorPoint,
-                    QRect *dstDabRect) override;
+                    QRect *dstDabRect, qreal lightnessStrength) override;
 
     QVector<QRect> paintDab(const QRect &srcRect, const QRect &dstRect, const KoColor &currentPaintColor, qreal opacity,
                             qreal colorRateValue, qreal smudgeRateValue, qreal maxPossibleSmudgeRateValue,

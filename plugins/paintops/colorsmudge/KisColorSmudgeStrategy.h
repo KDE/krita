@@ -23,7 +23,8 @@ public:
                             const KisPaintInformation& info,
                             const KisDabShape &shape,
                             const QPointF &cursorPoint,
-                            QRect *dstDabRect) = 0;
+                            QRect *dstDabRect,
+                            qreal lightnessStrength) = 0;
 
     virtual QVector<QRect> paintDab(const QRect &srcRect, const QRect &dstRect,
                                     const KoColor &currentPaintColor,

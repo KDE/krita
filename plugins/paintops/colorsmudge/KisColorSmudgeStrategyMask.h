@@ -24,7 +24,8 @@ public:
                     const KisPaintInformation& info,
                     const KisDabShape &shape,
                     const QPointF &cursorPoint,
-                    QRect *dstDabRect) override;
+                    QRect *dstDabRect, 
+                    qreal lightnessStrength) override;
 
 private:
     DabColoringStrategyMask m_coloringStrategy;

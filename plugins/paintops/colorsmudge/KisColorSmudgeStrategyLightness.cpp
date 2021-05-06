@@ -78,15 +78,18 @@ KisColorSmudgeStrategyBase::DabColoringStrategy &KisColorSmudgeStrategyLightness
 
 void KisColorSmudgeStrategyLightness::updateMask(KisDabCache *dabCache, const KisPaintInformation &info,
                                                  const KisDabShape &shape, const QPointF &cursorPoint,
-                                                 QRect *dstDabRect)
+                                                 QRect *dstDabRect, qreal lightnessStrength)
 {
 
-    m_origDab = dabCache->fetchNormalizedImageDab(m_origDab->colorSpace(),
-                                                  cursorPoint,
-                                                  shape,
-                                                  info,
-                                                  1.0,
-                                                  dstDabRect);
+    static KoColor color(QColor(127, 127, 127), m_origDab->colorSpace());
+    m_origDab = dabCache->fetchDab(m_origDab->colorSpace(),
+        color,
+        cursorPoint,
+        shape,
+        info,
+        1.0,
+        dstDabRect,
+        lightnessStrength);
 
     const int numPixels = m_origDab->bounds().width() * m_origDab->bounds().height();
 
@@ -124,17 +127,17 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
                smudgeRadiusValue);
 
 
-    const quint8 thresholdHeightmapOpacity = qRound(0.2 * 255.0);
+    //const quint8 thresholdHeightmapOpacity = qRound(0.2 * 255.0);
 
-    quint8 heightmapOpacity = qRound(opacity * lightnessStrengthValue * 255.0);
+    quint8 heightmapOpacity = qRound(opacity * 255.0);
 
-    if (heightmapOpacity < thresholdHeightmapOpacity) {
-        heightmapOpacity =
-                std::min(thresholdHeightmapOpacity,
-                         std::max(smearRateOpacity(opacity, smudgeRateValue),
-                                  colorRateOpacity(opacity, smudgeRateValue,
-                                                   colorRateValue, maxPossibleSmudgeRateValue)));
-    }
+    //if (heightmapOpacity < thresholdHeightmapOpacity) {
+    //    heightmapOpacity =
+    //            std::min(thresholdHeightmapOpacity,
+    //                     std::max(smearRateOpacity(opacity, smudgeRateValue),
+    //                              colorRateOpacity(opacity, smudgeRateValue,
+    //                                               colorRateValue, maxPossibleSmudgeRateValue)));
+    //}
 
     m_heightmapPainter.setOpacity(heightmapOpacity);
     m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());

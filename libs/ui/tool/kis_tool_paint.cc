@@ -366,14 +366,20 @@ void KisToolPaint::addSamplerJob(const SamplingJob &samplingJob)
     KisPaintDeviceSP device = fromCurrentNode ?
         currentNode()->colorSampleSourceDevice() : image()->projection();
 
-    // Used for color sampler blending.
-    KoColor currentColor = canvas()->resourceManager()->foregroundColor();
-    if( samplingJob.action == SampleBgNode || samplingJob.action == SampleBgImage ){
-        currentColor = canvas()->resourceManager()->backgroundColor();
-    }
+    if (device) {
+        // Used for color sampler blending.
+        KoColor currentColor = canvas()->resourceManager()->foregroundColor();
+        if( samplingJob.action == SampleBgNode || samplingJob.action == SampleBgImage ){
+            currentColor = canvas()->resourceManager()->backgroundColor();
+        }
 
-    image()->addJob(m_samplerStrokeId,
-                    new KisColorSamplerStrokeStrategy::Data(device, imagePoint, currentColor));
+        image()->addJob(m_samplerStrokeId,
+                        new KisColorSamplerStrokeStrategy::Data(device, imagePoint, currentColor));
+    } else {
+        KisCanvas2 *kiscanvas = static_cast<KisCanvas2 *>(canvas());
+        QString message = i18n("Color sampler does not work on this layer.");
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+    }
 }
 
 void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction action)

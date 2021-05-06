@@ -229,7 +229,7 @@ public:
         if (filename.isEmpty() || filename.isNull()) {
             return 0;
         }
-        return m_resourceModel->resourceForFilename(filename).dynamicCast<T>();
+        return m_resourceModel->resourcesForFilename(filename).first().dynamicCast<T>();
     }
 
 
@@ -242,12 +242,12 @@ public:
             }
         }
 
-
-        //qDebug() << "resourceByName" << name;
         if (name.isEmpty() || name.isNull()) {
             return 0;
         }
-        return m_resourceModel->resourceForName(name).dynamicCast<T>();
+        KoResourceSP res = m_resourceModel->resourcesForName(name).first();
+        QSharedPointer<T> res2 = res.dynamicCast<T>();
+        return res2;
 
     }
 
@@ -265,7 +265,7 @@ public:
         if (md5.isEmpty() || md5.isNull()) {
             return 0;
         }
-        return m_resourceModel->resourceForMD5(md5).dynamicCast<T>();
+        return m_resourceModel->resourcesForMD5(md5).first().dynamicCast<T>();
     }
 
     /**

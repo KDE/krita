@@ -428,34 +428,34 @@ void KisViewManager::setCurrentView(KisView *view)
         // Restore the last used brush preset, color and background color.
         if (first) {
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-            KisResourceModel *resourceModel = rserver->resourceModel();
-            QString defaultPresetName = "basic_tip_default";
-            for (int i = 0; i < resourceModel->rowCount(); i++) {
-
-                QModelIndex idx = resourceModel->index(i, 0);
-
-                QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().toLower();
-                QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString().toLower();
-
-                if (resourceName.contains("basic_tip_default")) {
-                    defaultPresetName = resourceName;
-                }
-                else if (resourceName.contains("default") || fileName.contains("default")) {
-                    defaultPresetName = resourceName;
-                }
-            }
+            QString defaultPresetName = "b)_Basic-5_Size_Opacity";
 
             KisConfig cfg(true);
             QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
+
             KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
             if (!preset) {
                 preset = rserver->resourceByName(defaultPresetName);
             }
 
             if (!preset && rserver->resourceCount() > 0) {
-                preset = rserver->firstResource();
+                KisResourceModel *resourceModel = rserver->resourceModel();
+                for (int i = 0; i < resourceModel->rowCount(); i++) {
+
+                    QModelIndex idx = resourceModel->index(i, 0);
+
+                    QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
+                    QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+
+                    if (resourceName.toLower().contains("default") || fileName.toLower().contains("default")) {
+                        preset = resourceModel->resourceForIndex(idx).dynamicCast<KisPaintOpPreset>();
+                        break;
+                    }
+                }
             }
+
             if (preset) {
+
                 paintOpBox()->restoreResource(preset);
                 canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
             }

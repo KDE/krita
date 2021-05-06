@@ -873,16 +873,16 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         }
         else {
             preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), m_defaultPresetName));
-            //if (preset)
-            //qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
-            //else
-            //qDebug() << "no preset found for" << inputDevice.uniqueTabletId();
+//            if (preset)
+//                qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
+//            else
+//                qDebug() << "no preset found for" << inputDevice.uniqueTabletId();
         }
         if (!preset) {
             preset = rserver->resourceByName(m_defaultPresetName);
         }
         if (preset) {
-            //qDebug() << "inputdevicechanged 1" << preset;
+//            qDebug() << "inputdevicechanged 1" << preset;
             setCurrentPaintop(preset);
         }
     }
@@ -1462,31 +1462,6 @@ void KisPaintopBox::slotMoveToCenterMirrorY() {
 
 void KisPaintopBox::findDefaultPresets()
 {
-    KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    m_eraserName = "eraser_circle";
-    m_defaultPresetName = "basic_tip_default";
-
-    KisResourceModel *resourceModel = rserver->resourceModel();
-
-    for (int i = 0; i < resourceModel->rowCount(); i++) {
-
-        QModelIndex idx = resourceModel->index(i, 0);
-
-        QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().toLower();
-        QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString().toLower();
-
-        if (resourceName.contains("eraser_circle")) {
-            m_eraserName = resourceName;
-        }
-        else if (resourceName.contains("eraser") || fileName.contains("eraser")) {
-            m_eraserName = resourceName;
-        }
-
-        if (resourceName.contains("basic_tip_default")) {
-            m_defaultPresetName = resourceName;
-        }
-        else if (resourceName.contains("default") || fileName.contains("default")) {
-            m_defaultPresetName = resourceName;
-        }
-    }
+    m_eraserName = "Eraser_circle";
+    m_defaultPresetName = "b)_Basic-5_Size_Opacity";
 }

@@ -113,6 +113,8 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         return query.value("filename");
     case Qt::UserRole + KisAbstractResourceModel::Tooltip:
         return query.value("tooltip");
+    case Qt::UserRole + KisAbstractResourceModel::MD5:
+        return query.value("md5sum");
     case Qt::UserRole + KisAbstractResourceModel::Thumbnail:
     {
         return QVariant::fromValue<QImage>(getThumbnailFromQuery(query));

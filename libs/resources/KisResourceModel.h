@@ -40,6 +40,7 @@ public:
         Location,
         ResourceType,
         Tags,
+        MD5,
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
         LargeThumbnail,
         /// A dirty resource is one that has been modified locally but not saved
@@ -263,25 +264,22 @@ public:
     KoResourceSP resourceForId(int id) const;
 
     /**
-     * resourceForFilename returns the first resource with the given filename that
-     * is active and is in an active store. Note that the filename does not include
-     * a path to the storage, and if there are resources with the same filename
-     * in several active storages, only one resource is returned.
+     * resourceForFilename returns the resources with the given filename that
+     * fit the current filters. Note that the filename does not include
+     * a path to the storage.
      *
      * @return a resource if one is found, or 0 if none are found
      */
-    KoResourceSP resourceForFilename(QString fileName) const;
+    QVector<KoResourceSP> resourcesForFilename(QString fileName) const;
 
     /**
-     * resourceForName returns the first resource with the given name that
-     * is active and is in an active store. Note that if there are resources
-     * with the same name in several active storages, only one resource
-     * is returned.
+     * resourceForName returns the resources with the given name that
+     * fit the current filters.
      *
      * @return a resource if one is found, or 0 if none are found
      */
-    KoResourceSP resourceForName(QString name) const;
-    KoResourceSP resourceForMD5(const QByteArray md5sum) const;
+    QVector<KoResourceSP> resourcesForName(QString name) const;
+    QVector<KoResourceSP> resourcesForMD5(const QByteArray md5sum) const;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
 
 protected:
@@ -291,7 +289,7 @@ protected:
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
 private:
-
+    QVector<KoResourceSP> filterByColumn(const QString filter, KisAllResourcesModel::Columns column) const;
     bool filterResource(const QModelIndex &idx) const;
 
     struct Private;

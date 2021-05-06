@@ -49,6 +49,7 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
                                        ",      resources.tooltip\n"
                                        ",      resources.thumbnail\n"
                                        ",      resources.status\n"
+                                       ",      resources.md5sum\n"
                                        ",      storages.location\n"
                                        ",      resource_types.name as resource_type\n"
                                        ",      resources.status as resource_active\n"
@@ -126,6 +127,8 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
             return i18n("Active");
         case StorageActive:
             return i18n("Storage Active");
+        case MD5:
+            return i18n("md5sum");
         default:
             return QString::number(section);
         }
@@ -207,6 +210,8 @@ KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename) const
 
 KoResourceSP KisAllResourcesModel::resourceForName(QString name) const
 {
+    Q_ASSERT(!name.isEmpty());
+
     KoResourceSP resource = 0;
 
     QSqlQuery q;
@@ -232,6 +237,7 @@ KoResourceSP KisAllResourcesModel::resourceForName(QString name) const
         int id = q.value("id").toInt();
         resource = KisResourceLocator::instance()->resourceForId(id);
     }
+
     return resource;
 }
 
@@ -683,6 +689,19 @@ bool KisResourceModel::lessThan(const QModelIndex &source_left, const QModelInde
     return nameLeft.toLower() < nameRight.toLower();
 }
 
+QVector<KoResourceSP> KisResourceModel::filterByColumn(const QString filter, KisAbstractResourceModel::Columns column) const
+{
+    QVector<KoResourceSP> resources;
+    for (int i = 0; i < rowCount(); ++i) {
+        QModelIndex idx = index(i, 0);
+        if (idx.isValid() && data(idx, Qt::UserRole + column).toString() == filter) {
+            resources << resourceForIndex(idx);
+        }
+    }
+
+    return resources;
+}
+
 bool KisResourceModel::filterResource(const QModelIndex &idx) const
 {
     if (d->resourceFilter == ShowAllResources && d->storageFilter == ShowAllStorages) {
@@ -722,29 +741,20 @@ KoResourceSP KisResourceModel::resourceForId(int id) const
     return 0;
 }
 
-KoResourceSP KisResourceModel::resourceForFilename(QString fileName) const
+QVector<KoResourceSP> KisResourceModel::resourcesForFilename(QString filename) const
 {
-    KoResourceSP res = static_cast<KisAllResourcesModel*>(sourceModel())->resourceForFilename(fileName);
-    QModelIndex idx = indexForResource(res);
-    if (idx.isValid()) {
-        return res;
-    }
-    return 0;
+    return filterByColumn(filename, KisAllResourcesModel::Filename);
+
 }
 
-KoResourceSP KisResourceModel::resourceForName(QString name) const
+QVector<KoResourceSP> KisResourceModel::resourcesForName(QString name) const
 {
-    KoResourceSP res = static_cast<KisAllResourcesModel*>(sourceModel())->resourceForName(name);
-    QModelIndex idx = indexForResource(res);
-    if (idx.isValid()) {
-        return res;
-    }
-    return 0;
+    return filterByColumn(name, KisAllResourcesModel::Name);
 }
 
-KoResourceSP KisResourceModel::resourceForMD5(const QByteArray md5sum) const
+QVector<KoResourceSP> KisResourceModel::resourcesForMD5(const QByteArray md5sum) const
 {
-    return static_cast<KisAllResourcesModel*>(sourceModel())->resourceForMD5(md5sum);
+    return filterByColumn(md5sum.toHex(), KisAllResourcesModel::MD5);
 }
 
 QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const

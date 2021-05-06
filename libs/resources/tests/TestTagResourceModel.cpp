@@ -181,7 +181,7 @@ void TestTagResourceModel::testData()
 void TestTagResourceModel::testTagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourcesForName("test2.kpp").first();
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
@@ -203,7 +203,7 @@ void TestTagResourceModel::testTagResource()
 void TestTagResourceModel::testUntagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test1.kpp");
+    KoResourceSP resource = resourceModel.resourcesForName("test1.kpp").first();
     QVERIFY(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
@@ -225,7 +225,7 @@ void TestTagResourceModel::testUntagResource()
 void TestTagResourceModel::testIsResourceTagged()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourcesForName("test2.kpp").first();
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
@@ -237,7 +237,7 @@ void TestTagResourceModel::testIsResourceTagged()
     QVERIFY(tagResourceModel.tagResource(tag, resource->resourceId()));
     QCOMPARE(tagResourceModel.isResourceTagged(tag, resource->resourceId()), true);
 
-    resource = resourceModel.resourceForName("test1.kpp");
+    resource = resourceModel.resourcesForName("test1.kpp").first();
     QVERIFY(resource);
 
     tag = tagModel.tagForIndex(tagModel.index(2, 0));
@@ -250,7 +250,7 @@ void TestTagResourceModel::testIsResourceTagged()
 void TestTagResourceModel::testFilterTagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourcesForName("test2.kpp").first();
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);

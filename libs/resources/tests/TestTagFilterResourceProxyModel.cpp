@@ -115,7 +115,7 @@ void TestTagFilterResourceProxyModel::testFilterByTag()
     KisTagModel tagModel(ResourceType::PaintOpPresets);
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourcesForName("test2.kpp").first();
     QVERIFY(resource);
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
@@ -138,7 +138,7 @@ void TestTagFilterResourceProxyModel::testFilterByResource()
 
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourcesForName("test2.kpp").first();
 
     QVERIFY(resource);
 
@@ -166,7 +166,7 @@ void TestTagFilterResourceProxyModel::testFilterByString()
     proxyModel.setSearchText("test2");
     QCOMPARE(proxyModel.rowCount(), 1);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourcesForName("test2.kpp").first();
     QVERIFY(resource);
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
@@ -202,7 +202,7 @@ void TestTagFilterResourceProxyModel::testDataWhenSwitchingBetweenTagAllAllUntag
     KisTagFilterResourceProxyModel proxyModel(resourceType);
     KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
-    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel->resourcesForName("test2.kpp").first();
     QModelIndex idx = proxyModel.indexForResource(resource);
 
     QVERIFY(idx.isValid());
@@ -223,7 +223,7 @@ void TestTagFilterResourceProxyModel::testResourceForIndex()
     KisTagFilterResourceProxyModel proxyModel(resourceType);
     KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
-    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel->resourcesForName("test2.kpp").first();
     QVERIFY(resource);
 
     QModelIndex idx = proxyModel.indexForResource(resource);

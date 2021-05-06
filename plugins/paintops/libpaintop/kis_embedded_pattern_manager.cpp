@@ -77,7 +77,9 @@ KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfig
     if (pattern) return pattern;
 
     QString name = setting->getString("Texture/Pattern/Name");
-    pattern = resourceSourceAdapter.resourceForName(name);
+    if (!name.isEmpty()) {
+        pattern = resourceSourceAdapter.resourceForName(name);
+    }
     if (pattern) return pattern;
 
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");

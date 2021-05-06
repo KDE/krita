@@ -139,6 +139,7 @@ public /* methods */:
     void addGroup(const KisSwatchGroup &group);
     void setRowNumber(const QString &groupName, int rowCount);
     void clear();
+    void clear(int defaultColumnsCount);
 
     KisSwatch getEntry(const QModelIndex &index) const;
 

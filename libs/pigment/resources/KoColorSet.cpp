@@ -341,8 +341,8 @@ bool KoColorSet::changeGroupName(const QString &oldGroupName, const QString &new
 
 void KoColorSet::setColumnCount(int columns)
 {
-    d->groups[GLOBAL_GROUP_NAME].setColumnCount(columns);
-    for (KisSwatchGroup &g : d->groups.values()) {
+    for (auto it = d->groups.begin(); it != d->groups.end(); ++it) {
+        KisSwatchGroup &g = *it;
         g.setColumnCount(columns);
     }
 }

@@ -74,6 +74,8 @@ private /* methods */:
     static bool sortSwatchInfo(const SwatchInfoType &first, const SwatchInfoType &second);
 
 private /* member variables */:
+    friend struct PaletteEventFilter;
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

@@ -20,6 +20,7 @@
 
 #include "ui_kis_tool_lazy_brush_options_widget.h"
 
+#include <QWheelEvent>
 #include <KoColorSpaceRegistry.h>
 #include "KisPaletteModel.h"
 
@@ -43,6 +44,7 @@ struct KisToolLazyBrushOptionsWidget::Private
 
     Ui_KisToolLazyBrushOptionsWidget *ui;
     KisPaletteModel *colorModel;
+    int preferredColumnCount = 10;
     KisCanvasResourceProvider *provider;
 
     KisSignalAutoConnectionsStore providerSignals;
@@ -53,6 +55,40 @@ struct KisToolLazyBrushOptionsWidget::Private
     int transparentColorIndex;
 
     KisSignalCompressor baseNodeChangedCompressor;
+};
+
+struct PaletteEventFilter : public QObject
+{
+    bool eventFilter(QObject *watched, QEvent *event) {
+        if (event->type() == QEvent::Wheel) {
+            QWheelEvent *wevent = static_cast<QWheelEvent*>(event);
+
+            if (wevent->modifiers() == Qt::ControlModifier) {
+                if (watched == m_parentView->viewport()) {
+                    const int columnCountDelta = -wevent->delta() / QWheelEvent::DefaultDeltasPerStep;
+                    const int newColumnCount = qMax(1, m_optionsWidget->m_d->preferredColumnCount + columnCountDelta);
+
+                    m_optionsWidget->m_d->preferredColumnCount = newColumnCount;
+                    m_optionsWidget->slotColorLabelsChanged();
+                }
+
+                return true;
+            }
+
+        }
+
+        return QObject::eventFilter(watched, event);
+    }
+
+    PaletteEventFilter(KisPaletteView *parentView, KisToolLazyBrushOptionsWidget *optionsWidget)
+        : QObject(optionsWidget),
+          m_parentView(parentView),
+          m_optionsWidget(optionsWidget)
+
+    {}
+
+    KisPaletteView *m_parentView;
+    KisToolLazyBrushOptionsWidget *m_optionsWidget;
 };
 
 KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent)
@@ -66,6 +102,9 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
     m_d->ui->colorView->setPaletteModel(m_d->colorModel);
     m_d->ui->colorView->setAllowModification(false); //people proly shouldn't be able to edit the colorentries themselves.
     m_d->ui->colorView->setCrossedKeyword("transparent");
+
+    PaletteEventFilter *filter = new PaletteEventFilter(m_d->ui->colorView, this);
+    m_d->ui->colorView->viewport()->installEventFilter(filter);
 
     connect(m_d->ui->chkUseEdgeDetection, SIGNAL(toggled(bool)), SLOT(slotUseEdgeDetectionChanged(bool)));
     connect(m_d->ui->intEdgeDetectionSize, SIGNAL(valueChanged(int)), SLOT(slotEdgeDetectionSizeChanged(int)));
@@ -201,8 +240,7 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
 
 void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
 {
-    m_d->colorModel->clear();
-
+    m_d->colorModel->clear(m_d->preferredColumnCount);
     m_d->transparentColorIndex = -1;
 
     if (m_d->activeMask) {

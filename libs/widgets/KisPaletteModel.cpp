@@ -344,6 +344,14 @@ void KisPaletteModel::clear()
     endResetModel();
 }
 
+void KisPaletteModel::clear(int defaultColumnsCount)
+{
+    beginResetModel();
+    m_colorSet->clear();
+    m_colorSet->setColumnCount(defaultColumnsCount);
+    endResetModel();
+}
+
 QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) const
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());

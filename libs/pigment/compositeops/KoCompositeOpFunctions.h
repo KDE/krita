@@ -179,7 +179,7 @@ inline T cfLinearBurn(T src, T dst) {
 }
 
 template<class T>
-T colorDodgeHelper(T src, T dst) {
+inline T colorDodgeHelper(T src, T dst) {
     using namespace Arithmetic;
     // Handle the case where the denominator is 0.
     // When src is 1 then the denominator (1 - src) becomes 0, and to avoid
@@ -206,7 +206,7 @@ cfColorDodge(T src, T dst) {
 
 // Floating point version of color dodge
 template<class T>
-inline typename std::enable_if<!std::is_integral<T>::value, T>::type
+inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
 cfColorDodge(T src, T dst) {
     const T result = colorDodgeHelper(src, dst);
     // Constantly dividing by small numbers can quickly make the result

@@ -59,7 +59,7 @@ QVariant KisResourceTypeModel::data(const QModelIndex &index, int role) const
     if (pos) {
         QString id = d->query.value("id").toString();
         QString resourceType = d->query.value("name").toString();
-        QString name = i18n(resourceType.toLatin1().data());
+        QString name = ResourceName::resourceTypeToName(resourceType);
 
         switch(role) {
         case Qt::DisplayRole:

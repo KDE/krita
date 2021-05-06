@@ -91,7 +91,7 @@ void TestResourceTypeModel::testData()
 //                 << idx.data(Qt::UserRole + KisResourceTypeModel::ResourceType)
 //                 << idx.data(Qt::UserRole + KisResourceTypeModel::Name);
 
-        QCOMPARE("brushes", idx.data(Qt::UserRole + KisResourceTypeModel::Name).toString());
+        QCOMPARE(ResourceName::resourceTypeToName(ResourceType::Brushes), idx.data(Qt::UserRole + KisResourceTypeModel::Name).toString());
     }
 }
 

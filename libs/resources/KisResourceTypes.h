@@ -7,7 +7,7 @@
 #define KISRESOURCETYPES_H
 
 #include <klocalizedstring.h>
-
+#include "kritaresources_export.h"
 /**
  * These namespaces define the type keys and sub-type keys for resource types.
  * The type keys correspond to folders in the resource folder, the sub-type
@@ -43,20 +43,25 @@ namespace ResourceSubType {
 }
 
 namespace ResourceName {
-    static const KLocalizedString PaintOpPresets = ki18nc("resource type", "paintoppresets");
-    static const KLocalizedString Brushes = ki18nc("resource type", "brushes");
-    static const KLocalizedString Gradients = ki18nc("resource type", "gradients");
-    static const KLocalizedString Palettes = ki18nc("resource type", "palettes");
-    static const KLocalizedString Patterns = ki18nc("resource type", "patterns");
-    static const KLocalizedString Workspaces = ki18nc("resource type", "workspaces");
-    static const KLocalizedString Symbols = ki18nc("resource type", "symbols");
-    static const KLocalizedString WindowLayouts = ki18nc("resource type", "windowlayouts");
-    static const KLocalizedString Sessions = ki18nc("resource type", "sessions");
-    static const KLocalizedString GamutMasks = ki18nc("resource type", "gamutmasks");
-    static const KLocalizedString SeExprScripts = ki18nc("resource type", "seexpr_scripts");
-    static const KLocalizedString FilterEffects = ki18nc("resource type", "ko_effects");
-    static const KLocalizedString TaskSets = ki18nc("resource type", "tasksets");
-    static const KLocalizedString LayerStyles = ki18nc("resource type", "layerstyles");
+    static const KLocalizedString PaintOpPresets = ki18nc("resource type", "Brush Presets");
+    static const KLocalizedString Brushes = ki18nc("resource type", "Brush Tips");
+    static const KLocalizedString Gradients = ki18nc("resource type", "Gradients");
+    static const KLocalizedString Palettes = ki18nc("resource type", "Palettes");
+    static const KLocalizedString Patterns = ki18nc("resource type", "Patterns");
+    static const KLocalizedString Workspaces = ki18nc("resource type", "Workspaces");
+    static const KLocalizedString Symbols = ki18nc("resource type", "Symbol Libraries");
+    static const KLocalizedString WindowLayouts = ki18nc("resource type", "Window Layouts");
+    static const KLocalizedString Sessions = ki18nc("resource type", "Sessions");
+    static const KLocalizedString GamutMasks = ki18nc("resource type", "Gamut Masks");
+    static const KLocalizedString SeExprScripts = ki18nc("resource type", "SeExpr Scripts");
+    static const KLocalizedString FilterEffects = ki18nc("resource type", "Filter Effects");
+    static const KLocalizedString TaskSets = ki18nc("resource type", "Task Sets");
+    static const KLocalizedString LayerStyles = ki18nc("resource type", "Layer Styles");
+
+    KRITARESOURCES_EXPORT QString resourceTypeToName(const QString &resourceType);
+
 }
+
+
 
 #endif // KISRESOURCETYPES_H

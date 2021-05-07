@@ -353,9 +353,8 @@ QString findUnusedName(QString location, QString filename)
     bool success = !QFileInfo(location + "/" + newFilename).exists();
 
     if (!success) {
-        qCritical() << "The new filename for the bundle does exist...";
+        qCritical() << "The new filename for the bundle does exist." << newFilename;
     }
-
 
     return newFilename;
 
@@ -375,7 +374,6 @@ bool KisStorageModel::importStorage(QString filename, StorageImportOption import
     QString newLocation = newDir + '/' + newName;
 
     QFileInfo newFileInfo(newLocation);
-    qCritical() << "New path info = " << newFileInfo;
     if (newFileInfo.exists()) {
         if (importOption == Overwrite) {
             //QFile::remove(newLocation);

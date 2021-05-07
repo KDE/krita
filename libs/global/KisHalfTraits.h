@@ -30,7 +30,7 @@ template<>
 #elif defined _LIBCPP_VERSION
 
 template<>
-  struct __libcpp_is_integral_helper<half>
+  struct __libcpp_is_integral<half>
   : public false_type { };
 
 template<>

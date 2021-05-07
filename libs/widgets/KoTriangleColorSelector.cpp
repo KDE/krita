@@ -290,20 +290,33 @@ void KoTriangleColorSelector::generateTriangle()
         qreal ynormalize = ( triangleTop - y ) / ( triangleTop - triangleBottom );
         qreal v = 255 * ynormalize;
         qreal ls_ = (ynormalize) * d->triangleLength*devicePixelRatioF();
-        qreal startx_ = d->centerColorSelector*devicePixelRatioF() - 0.5 * ls_;
+        qreal xStart = d->centerColorSelector*devicePixelRatioF() - 0.5 * ls_;
+        qreal xEnd = xStart + ls_;
+        qreal xMin = xStart - 1.0;
+        qreal xMax = xEnd + 1.0;
         uint* data = reinterpret_cast<uint*>(image.scanLine(y));
         for(int x = 0; x < size.width(); ++x, ++data)
         {
-            qreal s = 255 * (x - startx_) / ls_;
-            if(v < -1.0 || v > 256.0 || s < -1.0 || s > 256.0 )
+            if (v < -1.0 || v > 256.0 || x < xMin || x > xMax)
             {
                 *data = qRgba(0,0,0,0);
             } else {
+                qreal s = 0.0;
                 qreal va = 1.0, sa = 1.0;
                 if( v < 0.0) { va = 1.0 + v; v = 0; }
                 else if( v > 255.0 ) { va = 256.0 - v; v = 255; }
-                if( s < 0.0) { sa = 1.0 + s; s = 0; }
-                else if( s > 255.0 ) { sa = 256.0 - s; s = 255; }
+
+                if (x < xStart) {
+                    sa = x - xMin;
+                } else if (x > xEnd) {
+                    sa = xMax - x;
+                    s = 255;
+                }
+                // avoid NaN values if we hit the triangle tip where ls_ is zero
+                // (and black has undefined saturation anyway)
+                else if (ls_ > 0.01) {
+                    s = 255 * (x - xStart) / ls_;
+                }
                 qreal coeff = va * sa;
 
                 KoColor color = d->displayRenderer->fromHsv(hue_, s, v, int(coeff * 255.0));

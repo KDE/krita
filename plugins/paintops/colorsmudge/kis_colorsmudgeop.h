@@ -23,7 +23,7 @@
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_gradient_option.h>
 #include <kis_pressure_hsv_option.h>
-#include <kis_pressure_lightness_strength_option.h>
+#include "kis_pressure_paint_thickness_option.h"
 #include <kis_airbrush_option_widget.h>
 
 #include "kis_overlay_mode_option.h"
@@ -65,7 +65,7 @@ private:
     KisPressureRatioOption    m_ratioOption;
     KisPressureSpacingOption  m_spacingOption;
     KisPressureRateOption     m_rateOption;
-    KisPressureLightnessStrengthOption   m_lightnessStrengthOption;
+    KisPressurePaintThicknessOption   m_paintThicknessOption;
     KisSmudgeOption           m_smudgeRateOption;
     KisRateOption             m_colorRateOption;
     KisSmudgeRadiusOption     m_smudgeRadiusOption;

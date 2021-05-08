@@ -61,7 +61,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_ratioOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
     m_rateOption.readOptionSetting(settings);
-    m_lightnessStrengthOption.readOptionSetting(settings);
+    m_paintThicknessOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
 
@@ -76,7 +76,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_ratioOption.resetAllSensors();
     m_spacingOption.resetAllSensors();
     m_rateOption.resetAllSensors();
-    m_lightnessStrengthOption.resetAllSensors();
+    m_paintThicknessOption.resetAllSensors();
     m_smudgeRateOption.resetAllSensors();
     m_colorRateOption.resetAllSensors();
 
@@ -117,7 +117,8 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     if (useNewEngine && m_brush->brushApplication() == LIGHTNESSMAP) {
         m_strategy.reset(new KisColorSmudgeStrategyLightness(painter,
                                                              useSmearAlpha,
-                                                             useDullingMode));
+                                                             useDullingMode,
+                                                             m_paintThicknessOption.getThicknessMode()));
     } else if (useNewEngine && m_brush->brushApplication() == ALPHAMASK) {
         m_strategy.reset(new KisColorSmudgeStrategyMask(painter,
                                                         image,
@@ -196,8 +197,8 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_strategy, spacingInfo);
 
 
-    const qreal lightnessStrength = m_lightnessStrengthOption.apply(info);
-    m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect, lightnessStrength);
+    const qreal paintThickness = m_paintThicknessOption.apply(info);
+    m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect, paintThickness);
 
     QPointF newCenterPos = QRectF(m_dstDabRect).center();
     /**
@@ -237,7 +238,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
                                  fpOpacity, colorRate,
                                  smudgeRate,
                                  maxSmudgeRate,
-                                 lightnessStrength,
+                                 paintThickness,
                                  smudgeRadiusPortion);
 
     painter()->addDirtyRects(dirtyRects);

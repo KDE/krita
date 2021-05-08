@@ -12,16 +12,18 @@
 #include "kis_paint_device.h"
 #include "kis_fixed_paint_device.h"
 #include "kis_selection.h"
+#include "kis_pressure_paint_thickness_option.h"
 
 #include "KisColorSmudgeInterstrokeData.h"
 
 KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *painter, bool smearAlpha,
-                                                                 bool useDullingMode)
+                                                                 bool useDullingMode, KisPressurePaintThicknessOption::ThicknessMode thicknessMode)
         : KisColorSmudgeStrategyBase(useDullingMode)
         , m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
         , m_origDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
         , m_smearAlpha(smearAlpha)
         , m_initializationPainter(painter)
+        , m_thicknessMode(thicknessMode)
 {
 }
 
@@ -78,7 +80,7 @@ KisColorSmudgeStrategyBase::DabColoringStrategy &KisColorSmudgeStrategyLightness
 
 void KisColorSmudgeStrategyLightness::updateMask(KisDabCache *dabCache, const KisPaintInformation &info,
                                                  const KisDabShape &shape, const QPointF &cursorPoint,
-                                                 QRect *dstDabRect, qreal lightnessStrength)
+                                                 QRect *dstDabRect, qreal paintThickness)
 {
 
     static KoColor color(QColor(127, 127, 127), m_origDab->colorSpace());
@@ -89,7 +91,7 @@ void KisColorSmudgeStrategyLightness::updateMask(KisDabCache *dabCache, const Ki
         info,
         1.0,
         dstDabRect,
-        lightnessStrength);
+        paintThickness);
 
     const int numPixels = m_origDab->bounds().width() * m_origDab->bounds().height();
 
@@ -103,7 +105,7 @@ void KisColorSmudgeStrategyLightness::updateMask(KisDabCache *dabCache, const Ki
 QVector<QRect>
 KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dstRect, const KoColor &currentPaintColor,
                                           qreal opacity, qreal colorRateValue, qreal smudgeRateValue,
-                                          qreal maxPossibleSmudgeRateValue, qreal lightnessStrengthValue,
+                                          qreal maxPossibleSmudgeRateValue, qreal paintThicknessValue,
                                           qreal smudgeRadiusValue)
 {
     const int numPixels = dstRect.width() * dstRect.height();

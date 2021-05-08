@@ -31,7 +31,7 @@ private Q_SLOTS:
 
 private:
     KisSmudgeOptionWidget *m_smudgeOptionWidget;
-    KisCurveOptionWidget* m_lightnessStrengthOptionWidget;
+    KisCurveOptionWidget* m_paintThicknessOptionWidget;
     KisCurveOptionWidget* m_radiusStrengthOptionWidget;
     KisOverlayModeOptionWidget* m_overlayOptionWidget;
 };

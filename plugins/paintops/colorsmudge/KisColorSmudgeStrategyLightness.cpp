@@ -59,8 +59,20 @@ void KisColorSmudgeStrategyLightness::initializePainting()
 
     m_heightmapPainter.begin(m_heightmapDevice);
 
-    m_finalPainter.begin(m_colorOnlyDevice);
-    m_finalPainter.setCompositeOp(COMPOSITE_COPY);
+    if (m_thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::OVERWRITE) {
+        // we should read data from the color layer, not from the final projection layer
+        m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice, 1));
+
+        m_finalPainter.begin(m_colorOnlyDevice);
+        m_finalPainter.setCompositeOp(COMPOSITE_COPY);
+
+    } else {
+
+        m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice));
+
+        m_finalPainter.begin(m_layerOverlayDevice->overlay());
+        m_finalPainter.setCompositeOp(finalCompositeOp(m_smearAlpha));
+    }
     m_finalPainter.setSelection(m_initializationPainter->selection());
     m_finalPainter.setChannelFlags(m_initializationPainter->channelFlags());
     m_finalPainter.copyMirrorInformationFrom(m_initializationPainter);
@@ -69,8 +81,6 @@ void KisColorSmudgeStrategyLightness::initializePainting()
     m_heightmapPainter.setSelection(m_initializationPainter->selection());
     m_heightmapPainter.copyMirrorInformationFrom(m_initializationPainter);
 
-    // we should read data from the color layer, not from the final projection layer
-    m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice, 1));
 }
 
 KisColorSmudgeStrategyBase::DabColoringStrategy &KisColorSmudgeStrategyLightness::coloringStrategy()
@@ -117,56 +127,79 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
     readRects << srcRect;
     m_sourceWrapperDevice->readRects(readRects);
 
-    blendBrush({&m_finalPainter},
-               m_sourceWrapperDevice,
-               m_maskDab, m_shouldPreserveOriginalDab,
-               srcRect, dstRect,
-               currentPaintColor,
-               opacity,
-               smudgeRateValue,
-               maxPossibleSmudgeRateValue,
-               colorRateValue,
-               smudgeRadiusValue);
+
+    blendBrush({ &m_finalPainter },
+        m_sourceWrapperDevice,
+        m_maskDab, m_shouldPreserveOriginalDab,
+        srcRect, dstRect,
+        currentPaintColor,
+        opacity,
+        smudgeRateValue,
+        maxPossibleSmudgeRateValue,
+        colorRateValue,
+        smudgeRadiusValue);
 
 
-    //const quint8 thresholdHeightmapOpacity = qRound(0.2 * 255.0);
+    KisPaintDeviceSP smudgeDevice;
+    if (m_thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::OVERWRITE) {
 
-    quint8 heightmapOpacity = qRound(opacity * 255.0);
+        //const quint8 thresholdHeightmapOpacity = qRound(0.2 * 255.0);
+        //qreal thicknessModeOpacity = (m_thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::OVERWRITE) ? 1.0 : paintThicknessValue * paintThicknessValue;
+        quint8 heightmapOpacity = qRound(opacity * 255.0);
+        smudgeDevice = m_colorOnlyDevice;
+        m_heightmapPainter.setOpacity(heightmapOpacity);
+        m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
+        m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
 
-    //if (heightmapOpacity < thresholdHeightmapOpacity) {
-    //    heightmapOpacity =
-    //            std::min(thresholdHeightmapOpacity,
-    //                     std::max(smearRateOpacity(opacity, smudgeRateValue),
-    //                              colorRateOpacity(opacity, smudgeRateValue,
-    //                                               colorRateValue, maxPossibleSmudgeRateValue)));
-    //}
 
-    m_heightmapPainter.setOpacity(heightmapOpacity);
-    m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
-    m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
+        KisFixedPaintDeviceSP tempColorDevice =
+            new KisFixedPaintDevice(smudgeDevice->colorSpace(), m_memoryAllocator);
 
-    KisFixedPaintDeviceSP tempColorDevice =
-            new KisFixedPaintDevice(m_colorOnlyDevice->colorSpace(), m_memoryAllocator);
-
-    KisFixedPaintDeviceSP tempHeightmapDevice =
+        KisFixedPaintDeviceSP tempHeightmapDevice =
             new KisFixedPaintDevice(m_heightmapDevice->colorSpace(), m_memoryAllocator);
 
-    Q_FOREACH (const QRect &rc, mirroredRects) {
+        Q_FOREACH(const QRect & rc, mirroredRects) {
             tempColorDevice->setRect(rc);
             tempColorDevice->lazyGrowBufferWithoutInitialization();
 
             tempHeightmapDevice->setRect(rc);
             tempHeightmapDevice->lazyGrowBufferWithoutInitialization();
 
-            m_colorOnlyDevice->readBytes(tempColorDevice->data(), rc);
+            smudgeDevice->readBytes(tempColorDevice->data(), rc);
             m_heightmapDevice->readBytes(tempHeightmapDevice->data(), rc);
             tempColorDevice->colorSpace()->
-                    modulateLightnessByGrayBrush(tempColorDevice->data(),
-                                                 reinterpret_cast<const QRgb*>(tempHeightmapDevice->data()),
-                                                 1.0,
-                                                 numPixels);
+                modulateLightnessByGrayBrush(tempColorDevice->data(),
+                    reinterpret_cast<const QRgb*>(tempHeightmapDevice->data()),
+                    1.0,
+                    numPixels);
             m_projectionDevice->writeBytes(tempColorDevice->data(), tempColorDevice->bounds());
         }
+
+    } else {
+        qreal strength = opacity * qMax(colorRateValue * colorRateValue, 0.025 * (1.0 - smudgeRateValue));
+        //qDebug() << "strength: " << strength << ", opacity: " << opacity << ", colorRateValue: " << colorRateValue << ", smudgeRateValue: " << smudgeRateValue;
+        smudgeDevice = m_layerOverlayDevice->overlay();
+
+        KisFixedPaintDeviceSP tempColorDevice =
+            new KisFixedPaintDevice(smudgeDevice->colorSpace(), m_memoryAllocator);
+
+        Q_FOREACH(const QRect & rc, mirroredRects) {
+            tempColorDevice->setRect(rc);
+            tempColorDevice->lazyGrowBufferWithoutInitialization();
+
+            smudgeDevice->readBytes(tempColorDevice->data(), rc);
+            smudgeDevice->colorSpace()->
+                modulateLightnessByGrayBrush(tempColorDevice->data(),
+                    reinterpret_cast<const QRgb*>(m_origDab->data()),
+                    strength,
+                    numPixels);
+
+            m_projectionDevice->writeBytes(tempColorDevice->data(), tempColorDevice->bounds());
+        }
+    }
+
+
+ 
     m_layerOverlayDevice->writeRects(mirroredRects);
 
     return mirroredRects;

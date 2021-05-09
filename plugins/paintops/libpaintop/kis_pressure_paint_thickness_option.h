@@ -10,7 +10,6 @@
 #include "kis_curve_option.h"
 #include <brushengine/kis_paint_information.h>
 
-
 /**
  * The paint thickness option defines a curve that is used to calculate
  * the effect of curve widget value on the strength of the lightness overlay

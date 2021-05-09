@@ -422,6 +422,20 @@ inline T cfHardMixPhotoshop(T src, T dst) {
     return sum > unitValue<T>() ? unitValue<T>() : zeroValue<T>();
 }
 
+// Approximation of the hard mix mode used by photoshop in the brush texturing
+// In contrast to the normal hard mix, this produces antialiased edges, better
+// for texturing the brush dab, at least visually
+template<class T>
+inline T cfHardMixSofterPhotoshop(T src, T dst) {
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    const composite_type srcScaleFactor = static_cast<composite_type>(2);
+    const composite_type dstScaleFactor = static_cast<composite_type>(3);
+
+    return clamp<T>(dstScaleFactor * dst - srcScaleFactor * inv(src));
+}
+
 template<class T>
 inline T cfAdditiveSubtractive(T src, T dst) {
     using namespace Arithmetic;

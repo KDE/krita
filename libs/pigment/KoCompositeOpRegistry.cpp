@@ -109,6 +109,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[6], KoID(COMPOSITE_ALPHA_DARKEN    ,  i18nc("Blending mode - Alpha Darken", "Alpha Darken")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX        ,  i18nc("Blending mode - Hard Mix", "Hard Mix")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_PHOTOSHOP,  i18nc("Blending mode - Hard Mix (Photoshop)", "Hard Mix (Photoshop)")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP,  i18nc("Blending mode - Hard Mix Softer (Photoshop)", "Hard Mix Softer (Photoshop)")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_GRAIN_MERGE     ,  i18nc("Blending mode - Grain Merge", "Grain Merge")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_GRAIN_EXTRACT   ,  i18nc("Blending mode - Grain Extract", "Grain Extract")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_PARALLEL        ,  i18nc("Blending mode - Parallel", "Parallel")));
@@ -227,6 +228,7 @@ KoCompositeOpRegistry::KoIDMap KoCompositeOpRegistry::getLayerStylesCompositeOps
     ids << COMPOSITE_LINEAR_LIGHT;
     ids << COMPOSITE_PIN_LIGHT;
     ids << COMPOSITE_HARD_MIX_PHOTOSHOP;
+    ids << COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP;
     ids << COMPOSITE_DIFF;
     ids << COMPOSITE_EXCLUSION;
     ids << COMPOSITE_SUBTRACT;

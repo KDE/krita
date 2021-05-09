@@ -67,6 +67,7 @@ const QString COMPOSITE_GRAIN_EXTRACT = "grain_extract";
 const QString COMPOSITE_EXCLUSION     = "exclusion";
 const QString COMPOSITE_HARD_MIX      = "hard mix";
 const QString COMPOSITE_HARD_MIX_PHOTOSHOP = "hard_mix_photoshop";
+const QString COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP = "hard_mix_softer_photoshop";
 const QString COMPOSITE_OVERLAY       = "overlay";
 const QString COMPOSITE_BEHIND        = "behind";
 const QString COMPOSITE_GREATER       = "greater";

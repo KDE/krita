@@ -9,11 +9,12 @@
 
 #include <QtGlobal>
 
+#include <kritaui_export.h>
 
-class KisMaskingBrushCompositeOpBase
+class KRITAUI_EXPORT KisMaskingBrushCompositeOpBase
 {
 public:
-    virtual ~KisMaskingBrushCompositeOpBase() {}
+    virtual ~KisMaskingBrushCompositeOpBase() = default;
     virtual void composite(const quint8 *srcRowStart, int srcRowStride,
                            quint8 *dstRowStart, int dstRowStride,
                            int columns, int rows) = 0;

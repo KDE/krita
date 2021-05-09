@@ -227,9 +227,13 @@ public:
 
         //qDebug() << "resourceByFilename" << filename;
         if (filename.isEmpty() || filename.isNull()) {
-            return 0;
+            return nullptr;
         }
-        return m_resourceModel->resourcesForFilename(filename).first().dynamicCast<T>();
+        QVector<KoResourceSP> resources = m_resourceModel->resourcesForFilename(filename);
+        if (resources.size() > 0) {
+            return resources.first().dynamicCast<T>();
+        }
+        return nullptr;
     }
 
 
@@ -243,11 +247,15 @@ public:
         }
 
         if (name.isEmpty() || name.isNull()) {
-            return 0;
+            return nullptr;
         }
-        KoResourceSP res = m_resourceModel->resourcesForName(name).first();
-        QSharedPointer<T> res2 = res.dynamicCast<T>();
-        return res2;
+
+        QVector<KoResourceSP> resources = m_resourceModel->resourcesForName(name);
+        if (resources.size() > 0) {
+            return resources.first().dynamicCast<T>();
+        }
+
+        return nullptr;
 
     }
 
@@ -263,9 +271,14 @@ public:
 
         //qDebug() << "resourceByMD5" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {
-            return 0;
+            return nullptr;
         }
-        return m_resourceModel->resourcesForMD5(md5).first().dynamicCast<T>();
+        QVector<KoResourceSP> resources = m_resourceModel->resourcesForMD5(md5);
+
+        if (resources.size() > 0) {
+            return resources.first().dynamicCast<T>();
+        }
+        return nullptr;
     }
 
     /**

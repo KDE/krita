@@ -18,7 +18,7 @@ if (APPLE)
     macos_test_fixrpath(${BROKEN_TESTS})
 
 else (APPLE)
-    ecm_add_tests(
+    ecm_add_test(
         KisHeifTest.cpp
         TEST_NAME KisHeifTest
         LINK_LIBRARIES kritaui Qt5::Test

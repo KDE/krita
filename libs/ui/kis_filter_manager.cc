@@ -258,7 +258,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfig
 
     if (filter->showConfigurationWidget()) {
         if (!d->filterDialog) {
-            d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this, d->view->canvas());
+            d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this, d->view->mainWindow());
             d->filterDialog->setAttribute(Qt::WA_DeleteOnClose);
         }
 

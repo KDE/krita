@@ -134,8 +134,7 @@ public:
     /**
      * Saves the document as @p path without changing the state of the
      * KisDocument (Path, modified flag etc.). Call this instead of
-     * KisParts::ReadWritePart::saveAs() to implement KisMainWindow's
-     * File --> Export feature.
+     * saveAs() to implement KisMainWindow's File --> Export feature.
      * Make sure to provide two seprate bool parameters otherwise it will mix them
      */
     bool exportDocument(const QString &path, const QByteArray &mimeType,bool isAdvancedExporting = false, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);

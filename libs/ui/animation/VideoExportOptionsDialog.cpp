@@ -168,6 +168,7 @@ KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType container
     ui->intBitrate->setSuffix(i18nc("kilo-bits-per-second, video bitrate suffix", "kbps"));
 
     ui->gifAutoPalette->setChecked(true);
+    ui->gifReserveTransparent->setChecked(true);
     ui->gifLoop->setChecked(true);
     ui->gifTransDiff->setChecked(true);
     
@@ -481,7 +482,9 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
         options << "-f" << "gif"
                 << "-loop" << ( ui->gifLoop->isChecked() ? "0":"-1" )
                 << "-gifflags" << ( ui->gifTransDiff->isChecked() ? "+transdiff":"-transdiff" )
-                << "-palettegen" << "palettegen=stats_mode=" + m_d->palettegenStatsMode[ ui->cmbPalettegenStatsModeGIF->currentIndex() ].id()
+                << "-palettegen" << QString("palettegen=stats_mode=%1%2") 
+                                            .arg(m_d->palettegenStatsMode[ ui->cmbPalettegenStatsModeGIF->currentIndex() ].id())
+                                            .arg(":reserve_transparent=" + QString(ui->gifReserveTransparent->isChecked() ? "1":"0"))
                 << "-lavfi" << QString("[0:v][1:v]paletteuse=dither=%1%2%3")
                                             .arg(ditherFilterString)
                                             .arg(ditherFilterString == "bayer" ? (QString(":bayer_scale=%1").arg(ui->intPaletteuseBayerScaleGIF->value()) ):"" )

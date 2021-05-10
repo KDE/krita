@@ -102,14 +102,15 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
         }
 
         //File cleanup
+        QDir d(framesDirectory);
+
         if (encoderOptions.shouldDeleteSequence) {
-            QDir d(framesDirectory);
+
             QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
             Q_FOREACH(const QString &f, sequenceFiles) {
                 d.remove(f);
             }
         } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
-            QDir d(framesDirectory);
 
             const QList<int> uniques = exporter.getUniqueFrames();
             QStringList uniqueFrameNames = getNamesForFrames(encoderOptions.basename, extension, encoderOptions.sequenceStart, uniques);
@@ -124,6 +125,12 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
                 d.remove(f);
             }
 
+        }
+
+        QStringList paletteFiles = d.entryList(QStringList() << "KritaTempPalettegen_*.png", QDir::Files);
+
+        Q_FOREACH(const QString &f, paletteFiles) {
+            d.remove(f);
         }
 
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {

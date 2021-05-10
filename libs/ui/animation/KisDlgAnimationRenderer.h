@@ -63,6 +63,7 @@ private Q_SLOTS:
     void slotLockAspectRatioDimensionsHeight(int height);
 
     void slotExportTypeChanged();
+    void slotFFMpegChanged(const QString& path);
 
     void frameRateChanged(int framerate);
 
@@ -74,6 +75,7 @@ protected Q_SLOTS:
 
 private: 
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
+    void ffmpegWarningCheck();
 
     static QString defaultVideoFileName(KisDocument *doc, const QString &mimeType);
 
@@ -95,6 +97,7 @@ private:
     WdgAnimationRenderer *m_page {0};
 
     QString m_customFFMpegOptionsString;
+    QString ffmpegVersion = "None";
     bool m_wantsRenderWithHDR = false;
 };
 

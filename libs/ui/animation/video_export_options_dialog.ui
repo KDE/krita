@@ -248,6 +248,16 @@
        <item column="1" row="5">
         <widget class="QComboBox" name="cmbPaletteuseDiffModeGIF"/>
        </item>
+       <item column="0" row="6">
+        <widget class="QCheckBox" name="gifReserveTransparent">
+         <property name="text">
+          <string>Preserve Transparency</string>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GIF format supports up to 256 colors per frame/image. This option enables transparency at the cost of 1 color, thus only 255 colors will be used for GIFs with this option enabled. Disabling this option gives you the entire 256 colors for your GIF for better quality output.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Note 1: For transparency to work properly, you need to make sure that the image sequence is exporting with transparency enabled, and that FFMpeg version is at least 4.2+. If your GIF output shows signs of screen tearing, FFMpeg version 4.4+ is highly recommended.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Note 2: GIF format only supports 100% transparency, or 0% transparency. Partial transparency is &lt;/span&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;not&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; supported. If you need partial transparency, consider APNG or WEBP.&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
        </layout>
      </widget>
      <widget class="QWidget" name="pgAPNG">

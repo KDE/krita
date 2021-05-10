@@ -76,7 +76,7 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
     const QDir videoDir(resultFileInfo.absolutePath());
 
     const QString suffix = resultFileInfo.suffix().toLower();
-    const QString palettePath = videoDir.filePath("palette.png");
+    const QString palettePath = videoDir.filePath("KritaTempPalettegen_\%06d.png");
     QStringList additionalOptionsList = options.customFFMpegOptions.split(' ', QString::SkipEmptyParts);
 
     QScopedPointer<KisFFMpegWrapper> ffmpegWrapper(new KisFFMpegWrapper(this));

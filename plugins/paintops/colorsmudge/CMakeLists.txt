@@ -14,6 +14,7 @@ set(kritacolorsmudgepaintop_SOURCES
     KisColorSmudgeStrategyBase.cpp
     KisColorSmudgeInterstrokeData.cpp
     KisColorSmudgeStrategyLightness.cpp
+    KisColorSmudgeStrategySmearLightness.cpp
     KisColorSmudgeStrategyWithOverlay.cpp
     KisColorSmudgeStrategyMask.cpp
     KisColorSmudgeStrategyStamp.cpp

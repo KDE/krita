@@ -25,6 +25,7 @@
 
 #include "KisColorSmudgeInterstrokeData.h"
 #include "KisColorSmudgeStrategyLightness.h"
+#include "KisColorSmudgeStrategySmearLightness.h"
 #include "KisColorSmudgeStrategyWithOverlay.h"
 #include "KisColorSmudgeStrategyMask.h"
 #include "KisColorSmudgeStrategyStamp.h"
@@ -115,10 +116,17 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_rotationOption.applyFanCornersInfo(this);
 
     if (useNewEngine && m_brush->brushApplication() == LIGHTNESSMAP) {
-        m_strategy.reset(new KisColorSmudgeStrategyLightness(painter,
-                                                             useSmearAlpha,
-                                                             useDullingMode,
-                                                             m_paintThicknessOption.getThicknessMode()));
+        KisPressurePaintThicknessOption::ThicknessMode thicknessMode = m_paintThicknessOption.getThicknessMode();
+        if (thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::SMUDGE) {
+            m_strategy.reset(new KisColorSmudgeStrategySmearLightness(painter,
+                useSmearAlpha,
+                useDullingMode));
+        } else {
+            m_strategy.reset(new KisColorSmudgeStrategyLightness(painter,
+                useSmearAlpha,
+                useDullingMode,
+                m_paintThicknessOption.getThicknessMode()));
+        }
     } else if (useNewEngine && m_brush->brushApplication() == ALPHAMASK) {
         m_strategy.reset(new KisColorSmudgeStrategyMask(painter,
                                                         image,

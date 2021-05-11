@@ -26,7 +26,6 @@
 #include <QTemporaryFile>
 
 #include "KoResource.h"
-#include "KoResourceServerObserver.h"
 #include "KoResourcePaths.h"
 #include "ksharedconfig.h"
 

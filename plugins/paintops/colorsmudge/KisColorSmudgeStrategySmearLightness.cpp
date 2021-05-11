@@ -31,9 +31,7 @@ KisColorSmudgeStrategySmearLightness::KisColorSmudgeStrategySmearLightness(KisPa
 void KisColorSmudgeStrategySmearLightness::initializePainting()
 {
 
-    m_projectionDevice = new KisPaintDevice(*m_initializationPainter->device());
-
-    initializePaintingImpl(m_projectionDevice->colorSpace(),
+    initializePaintingImpl(m_layerOverlayDevice->overlayColorSpace(),
         m_smearAlpha,
         m_initializationPainter->compositeOp()->id());
 
@@ -57,7 +55,6 @@ void KisColorSmudgeStrategySmearLightness::updateMask(KisDabCache* dabCache, con
     const KisDabShape& shape, const QPointF& cursorPoint,
     QRect* dstDabRect, qreal paintThickness)
 {
-
     static KoColor color(QColor(127, 127, 127), m_origDab->colorSpace());
     m_origDab = dabCache->fetchDab(m_origDab->colorSpace(),
         color,
@@ -122,7 +119,7 @@ KisColorSmudgeStrategySmearLightness::paintDab(const QRect& srcRect, const QRect
                 strength,
                 numPixels);
 
-        m_projectionDevice->writeBytes(tempColorDevice->data(), tempColorDevice->bounds());
+        smudgeDevice->writeBytes(tempColorDevice->data(), tempColorDevice->bounds());
     }
 
 

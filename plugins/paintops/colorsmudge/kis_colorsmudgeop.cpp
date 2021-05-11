@@ -273,9 +273,17 @@ KisInterstrokeDataFactory *KisColorSmudgeOp::createInterstrokeDataFactory(const 
 
     if (!needsInterstrokeData) return 0;
 
+
     KisBrushOptionProperties brushOption;
-    needsInterstrokeData &=
-        brushOption.brushApplication(settings.data(), resourcesInterface) == LIGHTNESSMAP;
+    bool usesLightnessBrush = brushOption.brushApplication(settings.data(), resourcesInterface) == LIGHTNESSMAP;
+    bool usesHeightChannel = usesLightnessBrush;
+    if (usesLightnessBrush) {
+        KisPressurePaintThicknessOption paintThicknessOption;
+        paintThicknessOption.readOptionSetting(settings);
+        usesHeightChannel = paintThicknessOption.getThicknessMode() != KisPressurePaintThicknessOption::ThicknessMode::SMUDGE;
+    }
+
+    needsInterstrokeData &= usesHeightChannel;
 
     return needsInterstrokeData ? new ColorSmudgeInterstrokeDataFactory() : 0;
 }

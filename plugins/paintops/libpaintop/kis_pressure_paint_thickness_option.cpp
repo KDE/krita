@@ -8,7 +8,7 @@
 KisPressurePaintThicknessOption::KisPressurePaintThicknessOption()
     : KisCurveOption("PaintThickness", KisPaintOpOption::GENERAL, false)
 {
-    m_mode = SMUDGE;
+    m_mode = OVERLAY;
 }
 
 

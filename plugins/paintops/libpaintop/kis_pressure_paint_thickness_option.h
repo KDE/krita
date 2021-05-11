@@ -18,13 +18,13 @@
 class PAINTOP_EXPORT KisPressurePaintThicknessOption : public KisCurveOption
 {
 public:
-    KisPressurePaintThicknessOption();
-
     enum ThicknessMode {
         SMUDGE,
         OVERWRITE,
         OVERLAY
     };
+
+    KisPressurePaintThicknessOption();
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;

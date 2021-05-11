@@ -35,7 +35,6 @@ public:
 private:
     KisFixedPaintDeviceSP m_maskDab;
     KisFixedPaintDeviceSP m_origDab;
-    KisPaintDeviceSP m_projectionDevice;
     QScopedPointer<KisOverlayPaintDeviceWrapper> m_layerOverlayDevice;
     KisColorSmudgeSourceSP m_sourceWrapperDevice;
     KisPainter m_finalPainter;

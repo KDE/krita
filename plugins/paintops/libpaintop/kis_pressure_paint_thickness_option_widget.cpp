@@ -52,6 +52,15 @@ void KisPressurePaintThicknessOptionWidget::setEnabled(bool enabled)
     m_enabledLabel->setVisible(!enabled);
 }
 
+void KisPressurePaintThicknessOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
+{
+    KisCurveOptionWidget::readOptionSetting(setting);
+
+    KisPressurePaintThicknessOption::ThicknessMode mode = static_cast<KisPressurePaintThicknessOption*>(curveOption())->getThicknessMode();
+    m_cbThicknessMode->setCurrentIndex(mode);
+
+}
+
 void KisPressurePaintThicknessOptionWidget::slotCurrentIndexChanged(int index)
 {
     static_cast<KisPressurePaintThicknessOption*>(curveOption())->setThicknessMode((KisPressurePaintThicknessOption::ThicknessMode)index);

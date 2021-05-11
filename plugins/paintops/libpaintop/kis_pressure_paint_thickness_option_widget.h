@@ -21,6 +21,8 @@ public:
 
     void setEnabled(bool enabled) override;
 
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+
 private Q_SLOTS:
     void slotCurrentIndexChanged(int index);
 

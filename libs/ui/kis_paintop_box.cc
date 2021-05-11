@@ -397,10 +397,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
     }
 
-    action = new QWidgetAction(this);
-    KisActionRegistry::instance()->propertizeAction("show_brush_editor", action);
-    viewManager->actionCollection()->addAction("show_brush_editor", action);
-    connect(action, SIGNAL(toggled(bool)), m_presetsEditor, SLOT(setVisible(bool)));
 
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("show_brush_presets", action);
@@ -439,9 +435,15 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_presetsEditor->hide();
     m_presetsEditor->setWindowTitle(i18n("Brush Editor"));
 
-    connect(m_brushEditorPopupButton, SIGNAL(toggled(bool)), m_presetsEditor, SLOT(setVisible(bool)));
+    connect(m_brushEditorPopupButton, SIGNAL(toggled(bool)), this, SLOT(togglePresetEditor()));
     connect(m_presetsEditor->editorWidget(), SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsEditor->editorWidget(), SLOT(updateThemedIcons()));
+
+    action = new QWidgetAction(this);
+    KisActionRegistry::instance()->propertizeAction("show_brush_editor", action);
+    viewManager->actionCollection()->addAction("show_brush_editor", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(togglePresetEditor()));
+
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetsChooserPopup->setMinimumHeight(550);
@@ -704,6 +706,11 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
     // the m_viewManager->image() is set earlier, but the reference will be missing when the stamp button is pressed
     // need to later do some research on how and when we should be using weak shared pointers (WSP) that creates this situation
     m_optionWidget->setImage(m_viewManager->image());
+}
+
+void KisPaintopBox::togglePresetEditor()
+{
+    m_presetsEditor->setVisible(!m_presetsEditor->isVisible());
 }
 
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)

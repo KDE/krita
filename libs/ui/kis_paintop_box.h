@@ -171,6 +171,8 @@ private Q_SLOTS:
 
     void slotUpdateOptionsWidgetPopup();
 
+    void togglePresetEditor();
+
 private:
     KisCanvasResourceProvider*          m_resourceProvider {0};
     QHBoxLayout*                        m_layout {0};

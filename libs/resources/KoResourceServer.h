@@ -39,6 +39,35 @@
 
 class KoResource;
 
+template <class T>
+class KoResourceServerObserver
+{
+public:
+    virtual ~KoResourceServerObserver() {}
+
+    virtual void unsetResourceServer() = 0;
+
+    /**
+     * Will be called by the resource server after a resource is added
+     * @param resource the added resource
+     */
+    virtual void resourceAdded(QSharedPointer<T> resource) = 0;
+
+    /**
+     * Will be called by the resource server before a resource will be removed
+     * @param resource the resource which is going to be removed
+     */
+    virtual void removingResource(QSharedPointer<T> resource) = 0;
+
+    /**
+     * Will be called by the resource server when a resource is changed
+     * @param resource the resource which is going to be removed
+     */
+    virtual void resourceChanged(QSharedPointer<T> resource) = 0;
+
+
+};
+
 /**
  * KoResourceServer is a shim around KisResourceModel. It knows
  * nothing by its own, and does nothing on its own. It can only

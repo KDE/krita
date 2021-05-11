@@ -25,37 +25,19 @@ KisColorSmudgeStrategySmearLightness::KisColorSmudgeStrategySmearLightness(KisPa
     , m_smearAlpha(smearAlpha)
     , m_initializationPainter(painter)
 {
+    m_layerOverlayDevice.reset(new KisOverlayPaintDeviceWrapper(painter->device(), 1, KisOverlayPaintDeviceWrapper::LazyPreciseMode));
 }
 
 void KisColorSmudgeStrategySmearLightness::initializePainting()
 {
-    KisColorSmudgeInterstrokeData* colorSmudgeData =
-        dynamic_cast<KisColorSmudgeInterstrokeData*>(m_initializationPainter->device()->interstrokeData().data());
 
-    if (colorSmudgeData) {
-        m_projectionDevice = colorSmudgeData->projectionDevice;
-        m_layerOverlayDevice = &colorSmudgeData->overlayDeviceWrapper;
-    }
-
-    KIS_SAFE_ASSERT_RECOVER(colorSmudgeData) {
-        m_projectionDevice = new KisPaintDevice(*m_initializationPainter->device());
-
-        const KoColorSpace* cs = m_initializationPainter->device()->colorSpace();
-        m_projectionDevice->convertTo(
-            KoColorSpaceRegistry::instance()->colorSpace(
-                cs->colorModelId().id(),
-                Integer16BitsColorDepthID.id(),
-                cs->profile()));
-
-    }
+    m_projectionDevice = new KisPaintDevice(*m_initializationPainter->device());
 
     initializePaintingImpl(m_projectionDevice->colorSpace(),
         m_smearAlpha,
         m_initializationPainter->compositeOp()->id());
 
-
-
-    m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice));
+    m_sourceWrapperDevice.reset(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice));
 
     m_finalPainter.begin(m_layerOverlayDevice->overlay());
     m_finalPainter.setCompositeOp(finalCompositeOp(m_smearAlpha));
@@ -123,12 +105,7 @@ KisColorSmudgeStrategySmearLightness::paintDab(const QRect& srcRect, const QRect
         smudgeRadiusValue);
 
 
-    
-
-    //const quint8 thresholdHeightmapOpacity = qRound(0.2 * 255.0);
-    //qreal thicknessModeOpacity = (m_thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::OVERWRITE) ? 1.0 : paintThicknessValue * paintThicknessValue;
     qreal strength = opacity * qMax(colorRateValue * colorRateValue, 0.025 * (1.0 - smudgeRateValue));
-    //qDebug() << "strength: " << strength << ", opacity: " << opacity << ", colorRateValue: " << colorRateValue << ", smudgeRateValue: " << smudgeRateValue;
     KisPaintDeviceSP smudgeDevice = m_layerOverlayDevice->overlay();
 
     KisFixedPaintDeviceSP tempColorDevice =

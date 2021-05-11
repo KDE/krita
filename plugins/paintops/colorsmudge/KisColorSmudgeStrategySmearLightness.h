@@ -36,7 +36,7 @@ private:
     KisFixedPaintDeviceSP m_maskDab;
     KisFixedPaintDeviceSP m_origDab;
     KisPaintDeviceSP m_projectionDevice;
-    KisOverlayPaintDeviceWrapper* m_layerOverlayDevice;
+    QScopedPointer<KisOverlayPaintDeviceWrapper> m_layerOverlayDevice;
     KisColorSmudgeSourceSP m_sourceWrapperDevice;
     KisPainter m_finalPainter;
     bool m_shouldPreserveOriginalDab = true;

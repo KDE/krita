@@ -234,6 +234,8 @@ static inline uint qHash(const KoResource &resource)
 
 Q_DECLARE_METATYPE(QSharedPointer<KoResource>)
 
+
+
 inline QDebug operator<<(QDebug dbg, const KoResourceSP res)
 {
     if (!res) {

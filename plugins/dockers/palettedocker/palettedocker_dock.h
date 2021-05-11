@@ -17,7 +17,7 @@
 #include <QAction>
 #include <QMenu>
 
-#include <KoResourceServerObserver.h>
+#include <KoResourceServer.h>
 #include <KoResourceServer.h>
 #include <resources/KoColorSet.h>
 

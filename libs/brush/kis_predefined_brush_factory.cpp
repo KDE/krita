@@ -89,6 +89,14 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
             adjustmentMidPoint = qBound(0, 127 + (int(adjustmentMidPoint) - 127) * 2, 255);
             brightnessAdjustment *= 2.0;
             contrastAdjustment *= 2.0;
+
+            /**
+             * In Krita we also changed formula for contrast calculation in
+             * negative part, so we need to convert that as well.
+             */
+            if (contrastAdjustment < 0) {
+                contrastAdjustment = 1.0 / (1.0 - contrastAdjustment) - 1.0;
+            }
         }
 
         colorfulBrush->setAdjustmentMidPoint(adjustmentMidPoint);

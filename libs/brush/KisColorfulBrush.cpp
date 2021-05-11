@@ -86,8 +86,13 @@ QImage KisColorfulBrush::brushTipImage() const
             qreal hiB = 255.0;
 
             if (!qFuzzyCompare(m_contrastAdjustment, 1.0)) {
-                loA = midY / (1.0 - m_contrastAdjustment) / midX;
-                hiA = (unit - midY) / (1.0 - m_contrastAdjustment) / (unit - midX);
+                if (m_contrastAdjustment > 0.0) {
+                    loA = midY / (1.0 - m_contrastAdjustment) / midX;
+                    hiA = (unit - midY) / (1.0 - m_contrastAdjustment) / (unit - midX);
+                } else {
+                    loA = midY * (1.0 + m_contrastAdjustment) / midX;
+                    hiA = (unit - midY) * (1.0 + m_contrastAdjustment) / (unit - midX);
+                }
 
                 loB = midY - midX * loA;
                 hiB = midY - midX * hiA;

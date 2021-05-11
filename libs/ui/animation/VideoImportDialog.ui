@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
+    <width>521</width>
     <height>493</height>
    </rect>
   </property>
@@ -275,7 +275,7 @@
            <item>
             <widget class="QGroupBox" name="exportOptionsGroup">
              <property name="title">
-              <string>Export Options</string>
+              <string>Import Options</string>
              </property>
              <widget class="QWidget" name="layoutWidget_3">
               <property name="geometry">
@@ -283,7 +283,7 @@
                 <x>20</x>
                 <y>27</y>
                 <width>411</width>
-                <height>101</height>
+                <height>135</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_2">
@@ -419,7 +419,7 @@
               <x>10</x>
               <y>30</y>
               <width>441</width>
-              <height>101</height>
+              <height>140</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0,0,0">
@@ -519,7 +519,7 @@
               <x>10</x>
               <y>30</y>
               <width>441</width>
-              <height>71</height>
+              <height>92</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,0,0">
@@ -580,7 +580,7 @@
               <x>10</x>
               <y>40</y>
               <width>441</width>
-              <height>71</height>
+              <height>82</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0,0" columnminimumwidth="0,0,0,0,0">

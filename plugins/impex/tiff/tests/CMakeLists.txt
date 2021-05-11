@@ -23,7 +23,6 @@ if (APPLE)
 else (APPLE)
     ecm_add_test(
         kis_tiff_test.cpp
-        TEST_NAME KisGifTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "plugins-impex-"
         )

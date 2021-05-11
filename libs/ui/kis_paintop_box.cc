@@ -116,6 +116,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_brushEditorPopupButton->setFixedSize(buttonsize, buttonsize);
     m_brushEditorPopupButton->setIconSize(QSize(iconsize, iconsize));
     m_brushEditorPopupButton->setFlat(true);
+    m_brushEditorPopupButton->setCheckable(true);
 
     m_presetSelectorPopupButton = new KisIconWidget(this);
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
@@ -399,7 +400,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("show_brush_editor", action);
     viewManager->actionCollection()->addAction("show_brush_editor", action);
-    connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
+    connect(action, SIGNAL(toggled(bool)), m_presetsEditor, SLOT(setVisible(bool)));
 
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("show_brush_presets", action);
@@ -438,7 +439,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_presetsEditor->hide();
     m_presetsEditor->setWindowTitle(i18n("Brush Editor"));
 
-    connect(m_brushEditorPopupButton, SIGNAL(clicked(bool)), m_presetsEditor, SLOT(show()));
+    connect(m_brushEditorPopupButton, SIGNAL(toggled(bool)), m_presetsEditor, SLOT(setVisible(bool)));
     connect(m_presetsEditor->editorWidget(), SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsEditor->editorWidget(), SLOT(updateThemedIcons()));
 

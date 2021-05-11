@@ -62,13 +62,39 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
 
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(brush.data());
     if (colorfulBrush) {
+        quint8 adjustmentMidPoint = brushDefinition.attribute("AdjustmentMidPoint", "127").toInt();
+        qreal brightnessAdjustment = brushDefinition.attribute("BrightnessAdjustment").toDouble();
+        qreal contrastAdjustment = brushDefinition.attribute("ContrastAdjustment").toDouble();
+
+        const int adjustmentVersion = brushDefinition.attribute("AdjustmentVersion", "1").toInt();
+        const bool autoAdjustMidPoint = brushDefinition.attribute("AutoAdjustMidPoint", "0").toInt();
+        const bool hasAutoAdjustMidPoint = brushDefinition.hasAttribute("AutoAdjustMidPoint");
+
         /**
-         * WARNING: see comment in KisColorfulBrush::setUseColorAsMask()
+         * In Krita 4.x releases there was a bug that caused lightness
+         * adjustments to be applied to the brush **twice**. It happened
+         * due to the fact that copy-ctor called brushTipImage() virtual
+         * method instead of just copying the image itself.
+         *
+         * In Krita 5 we should open these brushes in somehwat the same way.
+         * The problem is that we cannot convert the numbers precisely, because
+         * after applying a piecewice-linear function twice we get a
+         * quadratic function. So we fall-back to a blunt parameters scaling,
+         * which gives result that is just "good enough".
+         *
+         * NOTE: AutoAdjustMidPoint option appeared only in Krita 5, so it
+         * automatically means the adjustments should be applied in the new way.
          */
-        colorfulBrush->setAdjustmentMidPoint(brushDefinition.attribute("AdjustmentMidPoint", "127").toInt());
-        colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
-        colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
-        colorfulBrush->setAutoAdjustMidPoint(brushDefinition.attribute("AutoAdjustMidPoint").toInt());
+        if (adjustmentVersion < 2 && !hasAutoAdjustMidPoint) {
+            adjustmentMidPoint = qBound(0, 127 + (int(adjustmentMidPoint) - 127) * 2, 255);
+            brightnessAdjustment *= 2.0;
+            contrastAdjustment *= 2.0;
+        }
+
+        colorfulBrush->setAdjustmentMidPoint(adjustmentMidPoint);
+        colorfulBrush->setBrightnessAdjustment(brightnessAdjustment);
+        colorfulBrush->setContrastAdjustment(contrastAdjustment);
+        colorfulBrush->setAutoAdjustMidPoint(autoAdjustMidPoint);
     }
 
     auto legacyBrushApplication = [] (KisColorfulBrush *colorfulBrush, bool forceColorToAlpha) {

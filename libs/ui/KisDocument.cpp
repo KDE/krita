@@ -557,8 +557,12 @@ public:
             m_image->requestStrokeEnd();
             QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
-            // one more try...
-            m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+            // N more tries because try_lock() fails often on Windows...
+            int i = 0;
+            while(!m_locked && i++ < 10) {
+                QThread::msleep(2);
+                m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+            }
         }
     }
 

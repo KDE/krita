@@ -38,6 +38,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     }
 
     if (!brush) {
+        qWarning() << "Using fallback brush" << ppVar(brushFileName);
         brush = resourceSourceAdapter.fallbackResource();
         brushtipFound = false;
     }

@@ -172,6 +172,18 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
     float exportDuration = m_ui.exportDurationSpinbox->value();
     float fps = m_ui.fpsSpinbox->value(); 
 
+    if (exportDuration / fps > 100.0) {
+        if (QMessageBox::warning(this, i18nc("Title for a messagebox", "Krita"),
+                             i18n("Warning: you are trying to import more than 100 frames into Krita.\n\n"
+                                  "This means you might be overloading your system.\n"
+                                  "If you want to edit a clip larger than 100 frames, consider using a real video editor, like Kdeenlive (https://kdenlive.org)."),
+                                 QMessageBox::Ok | QMessageBox::Cancel,
+                                 QMessageBox::Cancel) == QMessageBox::Cancel) {
+            return frameList;
+        }
+    }
+
+
     args << "-ss" << QString::number(m_ui.startExportingAtSpinbox->value())
          << "-i" << videoInfo.file
          << "-t" << QString::number(exportDuration)

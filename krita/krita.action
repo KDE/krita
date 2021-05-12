@@ -127,7 +127,7 @@
       <toolTip>Show Brush Editor</toolTip>
       <iconText>Show Brush Editor</iconText>
       <shortcut>F5</shortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip/>
     </Action>
     <Action name="show_brush_presets">

@@ -417,6 +417,7 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
     // The resources table should be updated by the caller manually using
     // updateResourceTableForResourceIfNeeded()
 
+    Q_ASSERT(resource->version() >= 0);
 
     QSqlQuery q;
     r = q.prepare("INSERT INTO versioned_resources \n"
@@ -787,43 +788,14 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     resource->setResourceId(resourceId);
 
-    // Then add a new version
-    r = q.prepare("INSERT INTO versioned_resources\n"
-                  "(resource_id, storage_id, version, filename, timestamp, md5sum)\n"
-                  "VALUES\n"
-                  "(:resource_id\n"
-                  ",    (SELECT id FROM storages\n"
-                  "      WHERE location = :storage_location)\n"
-                  ", :version\n"
-                  ", :filename\n"
-                  ", :timestamp\n"
-                  ", :md5sum\n"
-                  ");");
 
-    if (!r) {
-        qWarning() << "Could not prepare intitial addResourceVersion statement" << q.lastError();
-        return r;
+    if (!addResourceVersionImpl(resourceId, timestamp, storage, resource)) {
+        qWarning() << "Could not add resource version" << resource;
+        return false;
     }
 
-    q.bindValue(":resource_id", resourceId);
-    q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
-    q.bindValue(":version", resource->version());
-    q.bindValue(":filename", resource->filename());
-    q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
-    if (resource->md5().isEmpty()) {
-        qWarning() << "No md5 for resource" << resource->name() << resourceType << storage->location();
-    }
-    q.bindValue(":md5sum", resource->md5().toHex());
+    return addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
 
-    r = q.exec();
-    if (!r) {
-        qWarning() << "Could not execute initial addResourceVersion statement" << q.boundValues() << q.lastError();
-    }
-
-    r = addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
-
-    return r;
 }
 
 bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString resourceType)

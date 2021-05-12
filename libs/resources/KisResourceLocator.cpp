@@ -216,8 +216,8 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     if (resource->resourceId() < 0 || resource->version() < 0) {
         QSqlQuery q;
         if (!q.prepare("SELECT resources.id\n"
-                       ",      versioned_resources.version\n"
-                       ",      versioned_resources.md5sum\n"
+                       ",      versioned_resources.version as version\n"
+                       ",      versioned_resources.md5sum as md5sum\n"
                        ",      resources.name\n"
                        "FROM   resources\n"
                        ",      storages\n"
@@ -318,6 +318,7 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
         }
 
         Q_ASSERT(resource->md5() == md5);
+        resource->setVersion(0);
 
         // Insert into the database
         const bool result = KisResourceCacheDb::addResource(storage,

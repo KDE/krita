@@ -42,7 +42,11 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
     KisOnionSkinsDocker.ui
 )
 
-add_library(kritaanimationdocker SHARED ${KRITA_ANIMATIONDOCKER_SOURCES})
+if (APPLE)
+    add_library(kritaanimationdocker SHARED ${KRITA_ANIMATIONDOCKER_SOURCES})
+else()
+    add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
+endif()
 
 generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
 target_link_libraries(kritaanimationdocker kritaui kritawidgets)

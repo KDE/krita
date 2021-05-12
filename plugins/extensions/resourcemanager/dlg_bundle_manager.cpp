@@ -106,7 +106,7 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
 
     QRect nameRect = paintRect;
     nameRect.setX(paintRect.x() + height + textMargin);
-    nameRect.setWidth(paintRect.width() - height - textMargin);
+    nameRect.setWidth(paintRect.width() - height - 1.5*textMargin); // should be 2, but with 1.5 it's more clear that it's cropped when it is
 
     QColor textColor = option.state & QStyle::State_Selected ?
                 qApp->palette().color(QPalette::HighlightedText) :
@@ -115,6 +115,7 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
 
     QTextOption textCenterOption;
     textCenterOption.setAlignment(Qt::AlignVCenter);
+    textCenterOption.setWrapMode(QTextOption::NoWrap);
     QString name = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::DisplayName).toString();
     painter->drawText(nameRect, name, textCenterOption);
 

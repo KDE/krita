@@ -35,6 +35,10 @@ private Q_SLOTS:
     void testColorsmudgeDefaultTip_smear_new_sa();
     void testColorsmudgeDefaultTip_smear_new_nsa();
 
+    void testColorsmudgeLightness_smear_old_nsa_nopt();
+    void testColorsmudgeLightness_smear_old_nsa_ptoverlay();
+    void testColorsmudgeLightness_smear_old_nsa_ptoverwrite();
+    void testColorsmudgeLightness_smear_old_nsa_ptsmear();
 };
 
 #endif // FREEHANDSTROKEBENCHMARK_H

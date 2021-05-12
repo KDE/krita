@@ -118,6 +118,27 @@ void benchmarkBrushUnthreaded(const QString &presetName)
 void FreehandStrokeBenchmark::initTestCase()
 {
     KoResourcePaths::addResourceType(ResourceType::Brushes, "data", FILES_DATA_DIR);
+
+    {
+        QString fullFileName = TestUtil::fetchDataFileLazy("3_texture.png");
+        KIS_ASSERT(!fullFileName.isEmpty());
+        KIS_ASSERT(QFileInfo(fullFileName).exists());
+
+        KisResourceModel model(ResourceType::Brushes);
+        KisBrushSP brush(new KisPngBrush(fullFileName));
+        brush->load(KisGlobalResourcesInterface::instance());
+        model.addResource(brush);
+    }
+    {
+        QString fullFileName = TestUtil::fetchDataFileLazy("DA_RGBA bluegreen_small1.png");
+        KIS_ASSERT(!fullFileName.isEmpty());
+        KIS_ASSERT(QFileInfo(fullFileName).exists());
+
+        KisResourceModel model(ResourceType::Brushes);
+        KisBrushSP brush(new KisPngBrush(fullFileName));
+        brush->load(KisGlobalResourcesInterface::instance());
+        model.addResource(brush);
+    }
 }
 
 void FreehandStrokeBenchmark::testDefaultTip()
@@ -152,16 +173,6 @@ void FreehandStrokeBenchmark::testRectSoftTip()
 
 void FreehandStrokeBenchmark::testStampTip()
 {
-    QString fullFileName = TestUtil::fetchDataFileLazy("3_texture.png");
-    KIS_ASSERT(!fullFileName.isEmpty());
-    KIS_ASSERT(QFileInfo(fullFileName).exists());
-
-    KisResourceModel model(ResourceType::Brushes);
-    KisBrushSP brush(new KisPngBrush(fullFileName));
-    brush->load(KisGlobalResourcesInterface::instance());
-
-    model.addResource(brush);
-
     benchmarkBrushUnthreaded("testing_1000px_stamp_450_rotated.kpp");
 }
 
@@ -203,6 +214,26 @@ void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_new_sa()
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_new_nsa()
 {
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_new_nsa.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_nopt()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_nopt.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_ptoverlay()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_ptoverlay.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_ptoverwrite()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_ptoverwrite.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_ptsmear()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_ptsmear.kpp");
 }
 
 

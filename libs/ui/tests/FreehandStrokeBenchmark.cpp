@@ -125,19 +125,16 @@ void FreehandStrokeBenchmark::initTestCase()
         KIS_ASSERT(QFileInfo(fullFileName).exists());
 
         KisResourceModel model(ResourceType::Brushes);
-        KisBrushSP brush(new KisPngBrush(fullFileName));
-        brush->load(KisGlobalResourcesInterface::instance());
-        model.addResource(brush);
+        model.importResourceFile(fullFileName);
     }
+
     {
         QString fullFileName = TestUtil::fetchDataFileLazy("DA_RGBA bluegreen_small1.png");
         KIS_ASSERT(!fullFileName.isEmpty());
         KIS_ASSERT(QFileInfo(fullFileName).exists());
 
         KisResourceModel model(ResourceType::Brushes);
-        KisBrushSP brush(new KisPngBrush(fullFileName));
-        brush->load(KisGlobalResourcesInterface::instance());
-        model.addResource(brush);
+        model.importResourceFile(fullFileName);
     }
 }
 

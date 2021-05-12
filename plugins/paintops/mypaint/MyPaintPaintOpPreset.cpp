@@ -126,6 +126,7 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
     }
 
     this->setSettings(s);
+    setName(QFileInfo(filename()).baseName());
     setValid(success);
 
     return success;

@@ -160,8 +160,29 @@ bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &r
     store->close();
     buf.close();
     if (size != buf.size()) {
-        ENTER_FUNCTION() << "Cannot save to the store" << size << buf.size();
+        qWarning() << "Cannot save resource to the store" << size << buf.size();
     }
+
+    if (!resource->thumbnailPath().isEmpty()) {
+        // hack for MyPaint brush presets previews
+        QImage thumbnail = resource->thumbnail();
+        if (!store->open(resType + "/" + resource->thumbnailPath())) {
+            qWarning() << "Could not open file in store for resource thumbnail";
+            return false;
+        }
+        QBuffer buf;
+        buf.open(QFile::ReadWrite);
+        thumbnail.save(&buf, "PNG");
+
+        int size2 = store->write(buf.data());
+        if (size2 != buf.size()) {
+            qWarning() << "Cannot save thumbnail to the store" << size << buf.size();
+        }
+        store->close();
+        buf.close();
+    }
+
+
     return size == buf.size();
 }
 

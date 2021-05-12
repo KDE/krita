@@ -406,6 +406,15 @@ bool KisStorageVersioningHelper::addVersionedResource(const QString &saveLocatio
     resource->setFilename(newFilename);
     file.close();
 
+    if (!resource->thumbnailPath().isEmpty()) {
+        // hack for MyPaint brush presets thumbnails
+        // note: for all versions of the preset, it will try to save in the same place
+        if (!QFileInfo(saveLocation + "/" + resource->thumbnailPath()).exists()) {
+            QImage thumbnail = resource->thumbnail();
+            thumbnail.save(saveLocation + "/" + resource->thumbnailPath());
+        }
+    }
+
     return true;
 }
 

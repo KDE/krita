@@ -77,6 +77,7 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     m_ui.exportDurationSpinbox->setValue(3.0);
     m_ui.exportDurationSpinbox->setSuffix(" s");
     
+    m_ui.lblWarning->hide();
 
     connect(m_ui.cmbDocumentHandler, SIGNAL(currentIndexChanged(int)), SLOT(slotDocumentHandlerChanged(int)));    
 
@@ -325,6 +326,8 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &file)
     if ( videoInfo.hasOverriddenFPS ) {
         textInfo += "*<br><font size='0.5em'><em>*FPS not right in file. Modified to see full duration</em></font>";
     }
+
+    m_ui.lblWarning->setVisible(videoInfo.frames > 100);
 
     m_ui.fpsSpinbox->setValue( videoInfo.fps );
     m_ui.fileLoadedDetails->setText(textInfo);

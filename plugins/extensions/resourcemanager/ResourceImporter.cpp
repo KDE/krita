@@ -26,6 +26,73 @@
 
 #include "DlgResourceTypeForFile.h"
 
+// ------------ Warnings dialog ---------------
+class FailureReasonsDialog : public KoDialog
+{
+
+public:
+
+    FailureReasonsDialog(QWidget* parent, QMap<ResourceImporter::ImportFailureReason, QStringList> failureReasons)
+        : KoDialog(parent)
+    {
+        setCaption(i18n("Import of some files failed"));
+        setBaseSize(QSize(0, 0));
+        setButtons(ButtonCode::Ok);
+
+        QVBoxLayout* layout = new QVBoxLayout(parent);
+        QWidget* widget = new QWidget(parent);
+        widget->setBaseSize(QSize(0, 0));
+
+        QList<ResourceImporter::ImportFailureReason> keys = failureReasons.keys();
+        for (int i = 0; i < keys.size(); i++) {
+            if (failureReasons[keys[i]].size() > 0) {
+                QLabel* label = new QLabel(widget);
+                QString text;
+                if (keys[i] == ResourceImporter::ResourceCannotBeLoaded) {
+                    label->setText(i18nc("Warning message after failed attempt to import resources, after this label there is a box with a list of files",
+                                         "The following files couldn't be opened as resources:"));
+                } else if (keys[i] == ResourceImporter::MimetypeResourceTypeUnknown) {
+                    label->setText(i18nc("Warning message after failed attempt to import resources, after this label there is a box with a list of files",
+                                         "The resource type of following files is unknown:"));
+                } else if (keys[i] == ResourceImporter::CancelledByTheUser) {
+                    label->setText(i18nc("Warning message after failed attempt to import resources, after this label there is a box with a list of files",
+                                         "The import of following files has been cancelled:"));
+                } else if (keys[i] == ResourceImporter::StorageAlreadyExists) {
+                    label->setText(i18nc("Warning message after failed attempt to import resources, after this label there is a box with a list of files",
+                                         "A resources bundle, an ASL or an ABR file with the same name already exists in the resources folder:"));
+                }
+
+                label->setWordWrap(true);
+                layout->addWidget(label);
+
+
+                QPlainTextEdit* textBox = new QPlainTextEdit(widget);
+                textBox->setBaseSize(0, 0);
+                for (int j = 0; j < failureReasons[keys[i]].size(); j++) {
+                    textBox->appendPlainText(failureReasons[keys[i]][j]);
+                }
+                textBox->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+
+                layout->addWidget(textBox, 0);
+
+            }
+        }
+
+
+        widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+        widget->setLayout(layout);
+        widget->setGeometry(QRect(QPoint(0,0), layout->sizeHint()));
+        this->setMainWidget(widget);
+
+        this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+    }
+
+};
+
+
+
+// ------------ Resource Importer --------------
+
 ResourceImporter::ResourceImporter(QWidget *parent)
     : m_widgetParent(parent)
 {
@@ -66,9 +133,12 @@ void ResourceImporter::importResources(QString startPath)
 
     QMap<QString, QString> resourceTypePerFile;
 
-    QStringList failedImportedFiles;
     QStringList successfullyImportedFiles;
-
+    QMap<ImportFailureReason, QStringList> failedFiles;
+    failedFiles.insert(StorageAlreadyExists, QStringList());
+    failedFiles.insert(MimetypeResourceTypeUnknown, QStringList());
+    failedFiles.insert(ResourceCannotBeLoaded, QStringList());
+    failedFiles.insert(CancelledByTheUser, QStringList());
 
 
     for (int i = 0; i < filenames.count(); i++) {
@@ -97,7 +167,7 @@ void ResourceImporter::importResources(QString startPath)
                 */
             }
             if (skip || !KisStorageModel::instance()->importStorage(filenames[i], importMode)) {
-                failedImportedFiles << filenames[i];
+                failedFiles[StorageAlreadyExists] << filenames[i];
             } else {
                 successfullyImportedFiles << filenames[i];
             }
@@ -124,7 +194,7 @@ void ResourceImporter::importResources(QString startPath)
                 resourceTypePerFile.insert(filenames[i], m_resourceTypesForMimetype[mimetype][0]);
             }
         } else {
-            failedImportedFiles << filenames[i];
+            failedFiles[MimetypeResourceTypeUnknown] << filenames[i];
         }
 
     }
@@ -149,7 +219,7 @@ void ResourceImporter::importResources(QString startPath)
         } else {
             for (int i = 0; i < troublesomeMimetypes.count(); i++) {
                 for (int j = 0; j < troublesomeFilesPerMimetype[troublesomeMimetypes[i]].size(); j++) {
-                    failedImportedFiles << troublesomeFilesPerMimetype[troublesomeMimetypes[i]][j];
+                    failedFiles[CancelledByTheUser] << troublesomeFilesPerMimetype[troublesomeMimetypes[i]][j];
                 }
             }
         }
@@ -180,24 +250,27 @@ void ResourceImporter::importResources(QString startPath)
             KoResourceSP res = model->importResourceFile(resourceFiles[i]);
             if (res.isNull()) {
                 if (debug) qCritical() << "But the resource is null :( ";
-                failedImportedFiles << resourceFiles[i];
+                failedFiles[ResourceCannotBeLoaded] << resourceFiles[i];
             } else {
                 if (debug) qCritical() << "The resource isn't null, great!";
                 successfullyImportedFiles << resourceFiles[i];
             }
         } else {
-            failedImportedFiles << resourceFiles[i];
+            failedFiles[MimetypeResourceTypeUnknown] << resourceFiles[i];
         }
     }
 
-    if (debug) qCritical() << "Failed files: " << failedImportedFiles;
+    if (debug) qCritical() << "Failed files: " << failedFiles;
     if (debug) qCritical() << "Successfully imported files: " << successfullyImportedFiles;
 
-    if (failedImportedFiles.count() > 0) {
-        QMessageBox::StandardButton button = QMessageBox::information(m_widgetParent, i18nc("Resource Importer dialog warning", "Import of some files failed"),
-                                                                      i18nc("Resource Importer dialog warning", "The following files couldn't have been imported: %1",
-                                                                            failedImportedFiles.join(", ")));
-        Q_UNUSED(button);
+    QList<ImportFailureReason> keys = failedFiles.keys();
+    int failedFilesCount = 0;
+    for (int i = 0; i < keys.size(); i++) {
+        failedFilesCount += failedFiles[keys[i]].size();
+    }
+    if (failedFilesCount > 0) {
+        FailureReasonsDialog dlg(m_widgetParent, failedFiles);
+        dlg.exec();
     }
 
 }

@@ -37,7 +37,18 @@ private:
     void prepareModelsMap();
     void initialize();
 
+
+    enum ImportFailureReason
+    {
+        MimetypeResourceTypeUnknown, // when someone tries to import a .foo file
+        ResourceCannotBeLoaded,
+        CancelledByTheUser, // the user pressed Cancel when asked
+        StorageAlreadyExists, // bundle, asl or abr file already exists in that location
+    };
+
 private:
+
+    friend class FailureReasonsDialog;
 
     QMap<QString, KisResourceModel*> m_resourceModelsForResourceType;
     QMap<QString, QStringList> m_resourceTypesForMimetype;

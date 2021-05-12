@@ -88,6 +88,9 @@ p, li { white-space: pre-wrap; }
            <property name="wordWrap">
             <bool>true</bool>
            </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>

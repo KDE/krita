@@ -39,7 +39,8 @@
 #include <KisResourceLocator.h>
 #include <KisResourceTypes.h>
 #include <KisGlobalResourcesInterface.h>
-
+#include <KisResourceLoaderRegistry.h>
+#include <KisResourceModelProvider.h>
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
 #include "kis_scratch_pad.h"
@@ -339,8 +340,8 @@ public:
 
     KisImportExportManager *importExportManager = 0; // The filter-manager to use when loading/saving [for the options]
 
-    QByteArray mimeType; // The actual mimetype of the document
-    QByteArray outputMimeType; // The mimetype to use when saving
+    QByteArray mimeType; // The actual mimeType of the document
+    QByteArray outputMimeType; // The mimeType to use when saving
 
     QTimer *autoSaveTimer;
     QString lastErrorMessage; // see openFile()
@@ -356,7 +357,7 @@ public:
     KisGuidesConfig guidesConfig;
     KisMirrorAxisConfig mirrorAxisConfig;
 
-    bool m_bAutoDetectedMime = false; // whether the mimetype in the arguments was detected by the part itself
+    bool m_bAutoDetectedMime = false; // whether the mimeType in the arguments was detected by the part itself
     QString m_path; // local url - the one displayed to the user.
     QString m_file; // Local file - the only one the part implementation should deal with.
 
@@ -429,7 +430,7 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
 
     KisImageSP image = this->image;
     KisDecorationsWrapperLayerSP decorationsLayer =
-        KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(image->root());
+            KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(image->root());
 
     const bool needsDecorationsWrapper =
             gridConfig.showGrid() || (guidesConfig.showGuides() && guidesConfig.hasGuides()) || !assistants.isEmpty();
@@ -447,7 +448,7 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
 
         void initStrokeCallback() override {
             KisDecorationsWrapperLayerSP decorationsLayer =
-                KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(m_document->image()->root());
+                    KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(m_document->image()->root());
 
             if (m_needsDecorationsWrapper && !decorationsLayer) {
                 m_document->image()->addNode(new KisDecorationsWrapperLayer(m_document));
@@ -748,14 +749,14 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     }
 
     const QString actionName =
-        job.flags & KritaUtils::SaveIsExporting ?
-        i18n("Exporting Document...") :
-        i18n("Saving Document...");
+            job.flags & KritaUtils::SaveIsExporting ?
+                i18n("Exporting Document...") :
+                i18n("Saving Document...");
 
     bool started =
-        initiateSavingInBackground(actionName,
-                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
-                                   job, exportConfiguration, isAdvancedExporting);
+            initiateSavingInBackground(actionName,
+                                       this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
+                                       job, exportConfiguration, isAdvancedExporting);
     if (!started) {
         emit canceled(QString());
     }
@@ -803,6 +804,12 @@ bool KisDocument::saveAs(const QString &_path, const QByteArray &mimeType, bool 
                         .arg(d->image->animationInterface()->framerate())
                         .arg(exportConfiguration ? exportConfiguration->toXML() : "No configuration")
                         .arg(path()));
+
+
+    // Check whether it's an existing resource were are saving to
+    if (resourceSavingFilter(_path, mimeType, exportConfiguration)) {
+        return true;
+    }
 
 
     return exportDocumentImpl(ExportFileJob(_path,
@@ -998,15 +1005,15 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.d->image->root(),
                                            [&linearizedNodes](KisNodeSP node) {
-                                               linearizedNodes.enqueue(node);
-                                           });
+            linearizedNodes.enqueue(node);
+        });
         KisLayerUtils::recursiveApplyNodes(d->image->root(),
                                            [&linearizedNodes, &rhs, this](KisNodeSP node) {
-                                               KisNodeSP refNode = linearizedNodes.dequeue();
-                                               if (rhs.d->preActivatedNode.data() == refNode.data()) {
-                                                   d->preActivatedNode = node;
-                                               }
-                                           });
+            KisNodeSP refNode = linearizedNodes.dequeue();
+            if (rhs.d->preActivatedNode.data() == refNode.data()) {
+                d->preActivatedNode = node;
+            }
+        });
     }
 
     // reinitialize references' signal connection
@@ -1014,14 +1021,14 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
     if (referencesLayer) {
         d->referenceLayerConnections.clear();
         d->referenceLayerConnections.addConnection(
-            referencesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
-            this, SIGNAL(sigReferenceImagesChanged()));
+                    referencesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+                    this, SIGNAL(sigReferenceImagesChanged()));
 
         emit sigReferenceImagesLayerChanged(referencesLayer);
     }
 
     KisDecorationsWrapperLayerSP decorationsLayer =
-        KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(d->image->root());
+            KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(d->image->root());
     if (decorationsLayer) {
         decorationsLayer->setDocument(this);
     }
@@ -1035,7 +1042,6 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
 bool KisDocument::exportDocumentSync(const QString &path, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)
 {
     {
-
         /**
          * The caller guarantees that no one else uses the document (usually,
          * it is a temporary document created specifically for exporting), so
@@ -1055,6 +1061,8 @@ bool KisDocument::exportDocumentSync(const QString &path, const QByteArray &mime
             exportDocument(path, path, mimeType, false, exportConfiguration);
 
     d->savingImage = 0;
+
+    qDebug() << "exportDocumentSync" << status.errorMessage();
 
     return status.isOk();
 }
@@ -1242,6 +1250,59 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
     }
 }
 
+bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)
+{
+    if (QFileInfo(path).absolutePath().startsWith(KisResourceLocator::instance()->resourceLocationBase())) {
+
+        QStringList pathParts = QFileInfo(path).absolutePath().split('/');
+        if (pathParts.size() > 0) {
+            QString resourceType = pathParts.last();
+            if (KisResourceLoaderRegistry::instance()->resourceTypes().contains(resourceType)) {
+
+                KisResourceModel model(resourceType);
+
+                QString tempFileName = QDir::tempPath() + "/" + QFileInfo(path).fileName();
+                if (QFileInfo(path).exists()) {
+                    QVector<KoResourceSP> resources = model.resourcesForFilename(QFileInfo(path).fileName());
+                    KoResourceSP res;
+                    Q_FOREACH(res, resources) {
+                        if (res->storageLocation() == KisResourceLocator::instance()->resourceLocationBase()) {
+                            break;
+                        }
+                        res.reset(nullptr);
+                    }
+
+                    if (res) {
+                        if (exportDocumentSync(tempFileName, mimeType, exportConfiguration)) {
+                            QFile f2(tempFileName);
+                            f2.open(QFile::ReadOnly);
+
+                            QByteArray ba = f2.readAll();
+
+                            QBuffer buf(&ba);
+                            buf.open(QBuffer::ReadOnly);
+
+                            if (res->loadFromDevice(&buf, KisGlobalResourcesInterface::instance())) {
+                                if (model.updateResource(res)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    if (exportDocumentSync(tempFileName, mimeType, exportConfiguration)) {
+                        if (model.importResourceFile(tempFileName)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void KisDocument::slotAutoSave()
 {
     slotAutoSaveImpl(std::unique_ptr<KisDocument>());
@@ -1344,7 +1405,7 @@ void KisDocument::finishExportInBackground()
         return;
     }
 
-   KisImportExportErrorCode status =
+    KisImportExportErrorCode status =
             d->childSavingFuture.result();
     const QString errorMessage = status.errorMessage();
 
@@ -1633,7 +1694,7 @@ bool KisDocument::openFile()
         typeName = KisMimeDatabase::mimeTypeForFile(filename);
     }
 
-    // Allow to open backup files, don't keep the mimetype application/x-trash.
+    // Allow to open backup files, don't keep the mimeType application/x-trash.
     if (typeName == "application/x-trash") {
         QString path = filename;
         while (path.length() > 0) {
@@ -1839,11 +1900,11 @@ QDomDocument KisDocument::createDomDocument(const QString& appName, const QStrin
     return doc;
 }
 
-bool KisDocument::isNativeFormat(const QByteArray& mimetype) const
+bool KisDocument::isNativeFormat(const QByteArray& mimeType) const
 {
-    if (mimetype == nativeFormatMimeType())
+    if (mimeType == nativeFormatMimeType())
         return true;
-    return extraNativeMimeTypes().contains(mimetype);
+    return extraNativeMimeTypes().contains(mimeType);
 }
 
 void KisDocument::setErrorMessage(const QString& errMsg)
@@ -2157,13 +2218,13 @@ bool KisDocument::openPathInternal(const QString &path)
         d->m_bAutoDetectedMime = false;
     }
 
-    QByteArray mimetype = d->mimeType;
+    QByteArray mimeType = d->mimeType;
 
     if ( !closePath() ) {
         return false;
     }
 
-    d->mimeType = mimetype;
+    d->mimeType = mimeType;
     setPath(path);
 
     d->m_file.clear();
@@ -2171,9 +2232,9 @@ bool KisDocument::openPathInternal(const QString &path)
     d->m_file = d->m_path;
 
     bool ret = false;
-    // set the mimetype only if it was not already set (for example, by the host application)
+    // set the mimeType only if it was not already set (for example, by the host application)
     if (d->mimeType.isEmpty()) {
-        // get the mimetype of the file
+        // get the mimeType of the file
         // using findByUrl() to avoid another string -> url conversion
         QString mime = KisMimeDatabase::mimeTypeForFile(d->m_path);
         d->mimeType = mime.toLocal8Bit();
@@ -2275,13 +2336,13 @@ bool KisDocument::newImage(const QString& name,
     }
 
     KisUsageLogger::log(QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
-                             .arg(name)
-                             .arg(width).arg(height)
-                             .arg(imageResolution * 72.0)
-                             .arg(image->colorSpace()->colorModelId().name())
-                             .arg(image->colorSpace()->colorDepthId().name())
-                             .arg(image->colorSpace()->profile()->name())
-                             .arg(numberOfLayers));
+                        .arg(name)
+                        .arg(width).arg(height)
+                        .arg(imageResolution * 72.0)
+                        .arg(image->colorSpace()->colorModelId().name())
+                        .arg(image->colorSpace()->colorDepthId().name())
+                        .arg(image->colorSpace()->profile()->name())
+                        .arg(numberOfLayers));
 
     QApplication::restoreOverrideCursor();
 
@@ -2334,7 +2395,7 @@ KisReferenceImagesLayerSP KisDocument::referenceImagesLayer() const
     if (!d->image) return KisReferenceImagesLayerSP();
 
     KisReferenceImagesLayerSP referencesLayer =
-        KisLayerUtils::findNodeByType<KisReferenceImagesLayer>(d->image->root());
+            KisLayerUtils::findNodeByType<KisReferenceImagesLayer>(d->image->root());
 
     return referencesLayer;
 }
@@ -2365,8 +2426,8 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
 
     if (currentReferenceLayer) {
         d->referenceLayerConnections.addConnection(
-            currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
-            this, SIGNAL(sigReferenceImagesChanged()));
+                    currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+                    this, SIGNAL(sigReferenceImagesChanged()));
     }
 
     emit sigReferenceImagesLayerChanged(layer);

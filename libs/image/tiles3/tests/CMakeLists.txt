@@ -21,6 +21,10 @@ ecm_add_tests(
     kis_tile_data_store_test.cpp
     kis_tile_data_pooler_test.cpp
     LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-tiles3-")
+    NAME_PREFIX "libs-image-tiles3-"
+    TARGET_NAMES_VAR OK_TESTS
+    ${MACOS_GUI_TEST})
 
 set_tests_properties(libs-image-tiles3-kis_low_memory_tests PROPERTIES TIMEOUT 180)
+
+macos_test_fixrpath(${OK_TESTS})

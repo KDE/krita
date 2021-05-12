@@ -106,9 +106,9 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
     ExternalProject_Add_Step(
         ext_rav1e ext_cargo_c
 
-        COMMENT "Installing cargo-c 0.7.2 to ${EXTPREFIX_heif}"
+        COMMENT "Installing cargo-c 0.8.0 to ${EXTPREFIX_heif}"
 
-        COMMAND cargo install cargo-c --version 0.7.2 --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
+        COMMAND ${CMAKE_CURRENT_LIST_DIR}/cargo-install-wrapper cargo-c --version "0.8.0+cargo-0.51" --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
 
         DEPENDEES configure
         DEPENDERS build

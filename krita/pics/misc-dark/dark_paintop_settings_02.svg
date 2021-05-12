@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="22"
-   height="22"
-   viewBox="0 0 22 22.000001"
+   version="1.1"
    id="svg2"
-   version="1.1">
+   viewBox="0 0 22 22.000001"
+   height="22"
+   width="22">
   <defs
      id="defs4" />
   <metadata
@@ -47,28 +47,37 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <path
-     id="rect4197"
-     d="m 0,-1e-6 v 10 h 10 v -10 z m 6,2.0000001 h 2 v 2 H 6 v 4 H 2 v -4 h 4 z"
-     style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.75;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-  <path
-     id="rect4205"
-     d="m 12,1.9999991 h 8 v 2 h -8 z"
-     style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.75;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-  <path
-     id="rect4207"
-     d="m 12,5.9999991 h 10 v 2 H 12 Z"
-     style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.45967484;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-  <path
-     id="rect4205-6-6"
-     d="m 0,12 h 22 v 2 H 0 Z"
-     style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.75;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-  <path
-     id="rect4207-3-7"
-     d="m 0,16 h 22 v 2 H 0 Z"
-     style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.75;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-  <path
-     id="rect4207-3-3-5"
-     d="m 0,20 h 22 v 2 H 0 Z"
-     style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.75;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  <g
+     transform="translate(0,-10)"
+     style="display:inline"
+     id="g4187">
+    <path
+       id="rect4205-6-6"
+       d="m 7,20 h 12 v 2 H 7 Z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.03100944;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="rect4207-3-7"
+       d="m 7,24 h 12 v 2 H 7 Z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.03100944;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="rect4207-3-3-5"
+       d="m 7,28 h 12 v 2 H 7 Z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2.03100944;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="path853"
+       d="m 1,18 c 0,0 3,-4 6,-4 2,0 3,4 6,4 3,0 6,-2 6,-2 3.1875,-1.75 1.46875,-5.1875 0,-4 0,0 -4,3 -6,3 -2,0 -3,-3 -6,-3 -3,0 -6,6 -6,6 z"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="rect4205-6-6-5"
+       d="m 3,20 h 2 v 2 H 3 Z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.8291561;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="rect4207-3-7-3"
+       d="m 3,24 h 2 v 2 H 3 Z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.8291561;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="rect4207-3-3-5-5"
+       d="m 3,28 h 2 v 2 H 3 Z"
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.8291561;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  </g>
 </svg>

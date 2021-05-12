@@ -171,6 +171,8 @@ private Q_SLOTS:
 
     void slotUpdateOptionsWidgetPopup();
 
+    void togglePresetEditor();
+
 private:
     KisCanvasResourceProvider*          m_resourceProvider {0};
     QHBoxLayout*                        m_layout {0};
@@ -188,7 +190,7 @@ private:
     QToolButton*                        m_vMirrorButton {0};
     QToolButton*                        m_wrapAroundButton {0};
     KisToolOptionsPopup*                m_toolOptionsPopup {0};
-    KisPaintOpPresetsEditorDialog*       m_presetsEditor {0};
+    KisPaintOpPresetsEditorDialog*      m_presetsEditor {0};
     KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup {0};
     KisViewManager*                     m_viewManager {0};
     KisPopupButton*                     m_workspaceWidget {0};

@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "KisPopupWidgetAction.h".h"
+#include "KisPopupWidgetAction.h"
 
 #include <QCursor>
 #include <QMenu>

@@ -103,6 +103,11 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         d->view->setFixedToolTipThumbnailSize(QSize(256, 64));
         d->view->setToolTipShouldRenderCheckers(true);
     }
+    else if (d->resourceType == ResourceType::PaintOpPresets) {
+        d->view->setFixedToolTipThumbnailSize(QSize(128, 128));
+    } else if (d->resourceType == ResourceType::Patterns || d->resourceType == ResourceType::Palettes) {
+        d->view->setFixedToolTipThumbnailSize(QSize(256, 256));
+    }
 
     d->view->setItemDelegate(new KisResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -115,7 +120,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     connect(d->tagFilterProxyModel, SIGNAL(beforeFilterChanges()), this, SLOT(beforeFilterChanges()));
     connect(d->tagFilterProxyModel, SIGNAL(afterFilterChanged()), this, SLOT(afterFilterChanged()));
 
-    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
+    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activate(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
     connect(d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
     connect(d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));
@@ -199,7 +204,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     updateButtonState();
     showTaggingBar(false);
-    activated(d->view->model()->index(0, 0));
+    activate(d->view->model()->index(0, 0));
 }
 
 KisResourceItemChooser::~KisResourceItemChooser()
@@ -236,7 +241,7 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         int rowMin = --row;
         row = qBound(0, rowMin, row);
         setCurrentItem(row);
-        activated(d->tagFilterProxyModel->index(row, index.column()));
+        activate(d->tagFilterProxyModel->index(row, index.column()));
     }
     updateButtonState();
 }
@@ -332,7 +337,7 @@ void KisResourceItemChooser::setCurrentItem(int row)
     }
 }
 
-void KisResourceItemChooser::activated(const QModelIndex &index)
+void KisResourceItemChooser::activate(const QModelIndex &index)
 {
     if (!index.isValid()) return;
 

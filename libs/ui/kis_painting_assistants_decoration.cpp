@@ -151,12 +151,23 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     if (assistants().count() == 1) {
         // Things are easy when there is only one assistant
         if(assistants().first()->isSnappingActive() == true){
-            QPointF newpoint = assistants().first()->adjustPosition(point, strokeBegin);
+            bool snapSingle = d->snapOnlyOneAssistant && d->aFirstStroke;
+            QPointF newpoint = assistants().first()->adjustPosition(point, strokeBegin, !snapSingle);
             // check for NaN
             if (newpoint.x() != newpoint.x()) return point;
             // Tell the assistant that its guidelines should
             // follow the adjusted bush position.
             assistants().first()->setFollowBrushPosition(true);
+
+            // we need setting d->aFirstStroke even for one assistant, because now
+            // single assistants can be made out of several inner ones (vide TwoPointPerspective).
+            //this is here to be compatible with the movement in the perspective tool.
+            qreal dx = point.x() - strokeBegin.x();
+            qreal dy = point.y() - strokeBegin.y();
+            if (dx * dx + dy * dy >= 4.0) {
+                // allow some movement before snapping
+                d->aFirstStroke=true;
+            }
             return newpoint;
         } else {
             // One assisant, but it is not active, so no adjustment
@@ -175,7 +186,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
         // In this mode the best assistant is constantly computed anew.
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
             if (assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
-                QPointF pt = assistant->adjustPosition(point, strokeBegin);
+                QPointF pt = assistant->adjustPosition(point, strokeBegin, true);
                 // check for NaN
                 if (pt.x() != pt.x()) continue;
                 double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
@@ -192,7 +203,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
         // assistant).
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
             if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
-                QPointF pt = assistant->adjustPosition(point, strokeBegin);
+                QPointF pt = assistant->adjustPosition(point, strokeBegin, true);
                 if (pt.x() != pt.x()) continue;
                 double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
                 if (dist < distance) {
@@ -205,7 +216,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
         }
     } else if (d->firstAssistant) {
         //make sure there's a first assistant to begin with.//
-        QPointF newpoint = d->firstAssistant->adjustPosition(point, strokeBegin);
+        QPointF newpoint = d->firstAssistant->adjustPosition(point, strokeBegin, false);
         // BUGFIX: 402535
         // assistants might return (NaN,NaN), must always check for that
         if (newpoint.x() == newpoint.x()) {

@@ -17,6 +17,7 @@
 #include "ui_KisWelcomePage.h"
 #include <QStandardItemModel>
 #include <QScopedPointer>
+#include "KisRecentDocumentsModelWrapper.h"
 
 #include "config-updaters.h"
 class RecentItemDelegate;
@@ -49,8 +50,10 @@ public Q_SLOTS:
 
     void slotUpdateThemeColors();
 
-    /// this could be called multiple times. If a recent document doesn't
-    /// have a preview, an icon is used that needs to be updated
+    /**
+     * Populate `recentDocumentsListView` with m_recentFilesModel
+     * This could be called multiple times in a session
+     */
     void populateRecentDocuments();
 
 #ifdef ENABLE_UPDATERS
@@ -82,10 +85,7 @@ private:
 #endif
 
     KisMainWindow *m_mainWindow;
-    QStandardItemModel m_recentFilesModel;
-
-    QMap<QString, QIcon> m_thumbnailMap;
-
+    KisRecentDocumentsModelWrapper m_recentFilesModel;
 
     /// help us see how many people are clicking startup screen links
     /// you can see the results in Matomo (stats.kde.org)
@@ -111,13 +111,22 @@ public:
     static QPushButton* donationLink;
     static QLabel* donationBannerImage;
 #endif
-    RecentItemDelegate *recentItemDelegate = nullptr;
+    QScopedPointer<RecentItemDelegate> recentItemDelegate;
 
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
 
     void recentDocumentClicked(QModelIndex index);
+
+    /**
+     * Once all files in the recent documents model are checked, cleanup the UI if the model is empty
+     */
+    void slotRecentFilesModelIsUpToDate();
+    /**
+     * m_recentFilesModel reported an invalid recent document, we shall report it to m_mainWindow
+     */
+    void slotReportInvalidRecentDocument(QUrl url);
 
 #ifdef ENABLE_UPDATERS
     void slotRunVersionUpdate();

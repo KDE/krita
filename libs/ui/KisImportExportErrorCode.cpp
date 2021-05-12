@@ -70,8 +70,6 @@ bool KisImportExportErrorCannotRead::operator==(KisImportExportErrorCannotRead o
     return other.m_error == m_error;
 }
 
-
-
 KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite() : KisImportExportComplexError(QFileDevice::FileError()) { }
 
 KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite(QFileDevice::FileError error) : KisImportExportComplexError(error) {

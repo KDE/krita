@@ -1021,6 +1021,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
             menu.addAction(m_d->multiframeColorSelectorAction);
             menu.exec(event->globalPos());
         }
+        
     } else if (event->button() == Qt::MidButton) {
         QModelIndex index = model()->buddy(indexAt(event->pos()));
         if (index.isValid()) {
@@ -1030,6 +1031,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
             m_d->tip.showTip(this, event->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
         }
         event->accept();
+        
     } else {
         if (index.isValid()) {
             m_d->model->setLastClickedIndex(index);
@@ -1043,6 +1045,20 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
 
         QAbstractItemView::mousePressEvent(event);
     }
+}
+
+void KisAnimTimelineFramesView::mouseDoubleClickEvent(QMouseEvent *event) {
+    QPersistentModelIndex index = indexAt(event->pos());
+    
+    if (index.isValid()) {
+        if (event->modifiers() & Qt::AltModifier) {
+            selectRow(index.row());
+        } else {
+            selectColumn(index.column());
+        }
+    }
+    
+    QAbstractItemView::mouseDoubleClickEvent(event);
 }
 
 void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
@@ -1492,7 +1508,8 @@ void KisAnimTimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireC
             }
         }
     }
-
+    
+    
     if (!indexes.isEmpty()) {
         // add extra columns to the end of the timeline if we are adding hold frames
         // they will be truncated if we don't do this
@@ -1564,8 +1581,8 @@ void KisAnimTimelineFramesView::fanSelectedFrames(const QModelIndexList &selecti
         }
     }
 
-    selectionModel()->clearSelection();
     KisSignalsBlocker blockSig(selectionModel());
+    selectionModel()->clearSelection();
     foreach (const int &layer, indexMap.keys()) {
         QList<int>::const_iterator it;
         int progressIndex = 0;

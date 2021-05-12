@@ -171,7 +171,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 setProperty(BaselineShiftValueId, SvgUtil::fromPercentage(value));
             } else {
                 const qreal parsedValue = SvgUtil::parseUnitXY(context.currentGC(), value);
-                const qreal lineHeight = context.currentGC()->font.pointSizeF();
+                const qreal lineHeight = propertyOrDefault(FontSizeId).toReal();
 
                 if (lineHeight != 0.0) {
                     setProperty(BaselineShiftValueId, parsedValue / lineHeight);
@@ -219,13 +219,13 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         if (value == "wider") {
             auto it = std::upper_bound(fontStretches.begin(),
                                        fontStretches.end(),
-                                       context.currentGC()->font.stretch());
+                                       propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
 
             newStretch = it != fontStretches.end() ? *it : fontStretches.back();
         } else if (value == "narrower") {
             auto it = std::upper_bound(fontStretches.rbegin(),
                                        fontStretches.rend(),
-                                       context.currentGC()->font.stretch(),
+                                       propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
                                        std::greater<int>());
 
             newStretch = it != fontStretches.rend() ? *it : fontStretches.front();
@@ -258,13 +258,13 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         else if (value == "bolder") {
             auto it = std::upper_bound(fontWeights.begin(),
                                        fontWeights.end(),
-                                       context.currentGC()->font.weight());
+                                       propertyOrDefault(FontWeightId).toInt());
 
             weight = it != fontWeights.end() ? *it : fontWeights.back();
         } else if (value == "lighter") {
             auto it = std::upper_bound(fontWeights.rbegin(),
                                        fontWeights.rend(),
-                                       context.currentGC()->font.weight(),
+                                       propertyOrDefault(FontWeightId).toInt(),
                                        std::greater<int>());
 
             weight = it != fontWeights.rend() ? *it : fontWeights.front();
@@ -444,6 +444,64 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     }
 
     return result;
+}
+
+QFont KoSvgTextProperties::generateFont() const
+{
+    QFont font;
+
+    QStringList familiesList =
+        propertyOrDefault(KoSvgTextProperties::FontFamiliesId).toStringList();
+
+    if (!familiesList.isEmpty()) {
+        font.setFamily(familiesList.first());
+    }
+
+    font.setPointSizeF(propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
+
+    const QFont::Style style =
+        QFont::Style(propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+    font.setStyle(style);
+
+    font.setCapitalization(
+        propertyOrDefault(KoSvgTextProperties::FontIsSmallCapsId).toBool() ?
+            QFont::SmallCaps : QFont::MixedCase);
+
+    font.setStretch(propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
+
+    font.setWeight(propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
+
+    using namespace KoSvgText;
+
+    TextDecorations deco =
+        propertyOrDefault(KoSvgTextProperties::TextDecorationId)
+            .value<KoSvgText::TextDecorations>();
+
+    font.setStrikeOut(deco & DecorationLineThrough);
+    font.setUnderline(deco & DecorationUnderline);
+    font.setOverline(deco & DecorationOverline);
+
+    struct FakePaintDevice : public QPaintDevice
+    {
+        QPaintEngine *paintEngine() const override {
+            return nullptr;
+        }
+
+        int metric(QPaintDevice::PaintDeviceMetric metric) const override {
+
+            if (metric == QPaintDevice::PdmDpiX || metric == QPaintDevice::PdmDpiY) {
+                return 72;
+            }
+
+
+            return QPaintDevice::metric(metric);
+        }
+    };
+
+    // paint device is used only to initialize DPI, so
+    // we can delete it right after creation of the font
+    FakePaintDevice fake72DpiPaintDevice;
+    return QFont(font, &fake72DpiPaintDevice);
 }
 
 QStringList KoSvgTextProperties::supportedXmlAttributes()

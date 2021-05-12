@@ -65,7 +65,6 @@ SvgLoadingContext::SvgLoadingContext(KoDocumentResourceManager *documentResource
 
 SvgLoadingContext::~SvgLoadingContext()
 {
-    delete d;
 }
 
 SvgGraphicsContext *SvgLoadingContext::currentGC() const

@@ -14,6 +14,7 @@
 #include "kis_paint_device.h"
 #include "kis_onion_skin_compositor.h"
 #include "kis_default_bounds.h"
+#include "kis_time_span.h"
 #include "kis_image.h"
 #include "KoColorSpace.h"
 
@@ -33,10 +34,11 @@ struct KisOnionSkinCache::Private
         const KisRasterKeyframeChannel *keyframes = source->keyframeChannel();
 
         const int time = source->defaultBounds()->currentTime();
+        const KisTimeSpan span = source->keyframeChannel()->identicalFrames(cacheTime);
         const int seqNo = compositor->configSeqNo();
         const int hash = keyframes->channelHash();
 
-        return time == cacheTime && cacheConfigSeqNo == seqNo && framesHash == hash;
+        return span.contains(time) && cacheConfigSeqNo == seqNo && framesHash == hash;
     }
 
     void updateCacheMetrics(KisPaintDeviceSP source, KisOnionSkinCompositor *compositor) {
@@ -69,7 +71,8 @@ KisPaintDeviceSP KisOnionSkinCache::projection(KisPaintDeviceSP source)
 
     QReadLocker readLocker(&m_d->lock);
     cachedProjection = m_d->cachedProjection;
-
+    
+    
     if (!cachedProjection || !m_d->checkCacheValid(source, compositor)) {
 
         readLocker.unlock();

@@ -53,10 +53,16 @@
         <file>light_pathsegment-line.svg</file>
         <file>light_opacity-increase.svg</file>
         <file>light_opacity-decrease.svg</file>
+        <file alias="light_increase_opacity.svg">light_opacity-increase.svg</file>
+        <file alias="light_decrease_opacity.svg">light_opacity-decrease.svg</file>
         <file>light_lightness-increase.svg</file>
         <file>light_lightness-decrease.svg</file>
+        <file alias="light_make_brush_color_lighter.svg">light_lightness-increase.svg</file>
+        <file alias="light_make_brush_color_darker.svg">light_lightness-decrease.svg</file>
         <file>light_brushsize-increase.svg</file>
         <file>light_brushsize-decrease.svg</file>
+        <file alias="light_increase_brush_size.svg">light_brushsize-increase.svg</file>
+        <file alias="light_decrease_brush_size.svg">light_brushsize-decrease.svg</file>
         <file>light_curve-preset-u.svg</file>
         <file>light_curve-preset-s.svg</file>
         <file>light_curve-preset-s-reverse.svg</file>

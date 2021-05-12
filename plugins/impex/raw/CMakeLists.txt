@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-if(OPENEXR_FOUND)
+if(OpenEXR_FOUND)
 	include_directories(${OPENEXR_INCLUDE_DIRS})
 endif()
 include_directories(${LibRaw_INCLUDE_DIR})

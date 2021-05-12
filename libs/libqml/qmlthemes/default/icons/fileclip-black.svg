@@ -1,87 +1,124 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48"
+   id="svg3930"
    height="48"
-   id="svg4351"
-   version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="icon-fileclip-green.svg">
+   width="48"
+   version="1.1">
   <defs
-     id="defs4353" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="20.714286"
-     inkscape:cy="17.857143"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     inkscape:window-width="645"
-     inkscape:window-height="418"
-     inkscape:window-x="825"
-     inkscape:window-y="438"
-     inkscape:window-maximized="0" />
+     id="defs3932" />
   <metadata
-     id="metadata4356">
+     id="metadata3935">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
+        <dc:date>2012</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1004.3622)">
     <g
-       transform="translate(-507.99997,160.0001)"
-       style="display:inline;fill:#000000"
-       id="g4538">
-      <path
-         id="path3850-7-6"
-         d="m 184,184 c -17.67311,0 -32,14.32689 -32,32 0,17.67311 14.32689,32 32,32 17.67311,0 32,-14.32689 32,-32 0,-17.67311 -14.32689,-32 -32,-32 z m 0,5.33333 c 14.72759,0 26.66666,11.93907 26.66666,26.66667 0,14.72759 -11.93907,26.66666 -26.66666,26.66666 -14.7276,0 -26.66667,-11.93907 -26.66667,-26.66666 0,-14.7276 11.93907,-26.66667 26.66667,-26.66667 z"
-         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         inkscape:connector-curvature="0"
-         transform="matrix(0.74999994,0,0,0.74999994,393.99998,706.36211)" />
-      <path
-         inkscape:connector-curvature="0"
-         id="rect4318-3"
-         transform="translate(1.96e-6,284.36218)"
-         d="m 522,571 0,26 20,0 0,-26 -20,0 z m 3,1 14,0 0,1 2,0 0,22 -18,0 0,-22 2,0 0,-1 z"
-         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-      <path
-         sodipodi:nodetypes="ccccccccc"
-         transform="translate(0,284.36218)"
-         inkscape:connector-curvature="0"
-         id="path4326"
-         d="m 529,570 6,0 0,3 3,0 0,2 -12,0 0,-2 3,0 z"
-         style="fill:#000000;fill-opacity:1;stroke:none" />
-      <path
-         sodipodi:nodetypes="ccccccccc"
-         inkscape:connector-curvature="0"
-         id="rect4335"
-         transform="translate(0,284.36218)"
-         d="m 524,574 0,20 16,0 0,-20 -1,0 0,2 -14,0 0,-2 z"
-         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       style="display:inline"
+       id="g4471"
+       transform="translate(-168,300.3622)">
+      <g
+         style="display:inline"
+         transform="matrix(1.5,0,0,1.5,144,572)"
+         id="g3974">
+        <g
+           id="g4719"
+           style="display:inline"
+           transform="matrix(0.66666667,0,0,0.66666667,-106.66667,-3.3333329e-7)">
+          <g
+             style="display:inline;fill:#373737;fill-opacity:1"
+             transform="matrix(1.5,0,0,1.4999992,184,-1458.5425)"
+             id="layer1-0-2">
+            <g
+               transform="matrix(0.50000001,0,0,0.50000001,-76.000002,928.3622)"
+               id="g4182-3-3"
+               style="display:inline;fill:#373737;fill-opacity:1">
+              <g
+                 transform="matrix(0,-1.333334,1.3333333,0,152.00001,248.00005)"
+                 id="layer1-1"
+                 style="display:inline">
+                <g
+                   transform="translate(-80,-7.99993)"
+                   style="display:inline"
+                   id="g4240">
+                  <g
+                     id="g4792"
+                     style="display:inline"
+                     transform="rotate(90,156.00004,-20.000037)">
+                    <g
+                       style="display:inline"
+                       id="layer1-5-1-6"
+                       transform="translate(184,8)">
+                      <g
+                         id="g3450-9-7"
+                         style="display:inline"
+                         transform="matrix(1.2,0,0,1.2,-48,-86.4)">
+                        <g
+                           id="g4538"
+                           style="display:inline;fill:#373737"
+                           transform="matrix(0.83333333,0,0,0.83333334,-383.3333,-631.63509)">
+                          <path
+                             style="color:#373737;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;enable-background:accumulate"
+                             d="m 522,915.36218 v 26 h 20 v -26 z m 3,1 h 14 v 1 h 2 v 22 h -18 v -22 h 2 z"
+                             id="rect4318-3" />
+                          <path
+                             style="fill:#373737;fill-opacity:1;stroke:none"
+                             d="m 529,914.36218 h 6 v 3 h 3 v 2 h -12 v -2 h 3 z"
+                             id="path4326" />
+                          <path
+                             style="color:#373737;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+                             d="m 524,918.36218 v 20 h 16 v -20 h -1 v 2 h -14 v -2 z"
+                             id="rect4335" />
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
     </g>
   </g>
+  <path
+     id="path820"
+     d="M 24 1 A 23 23 0 0 0 1 24 A 23 23 0 0 0 24 47 A 23 23 0 0 0 47 24 A 23 23 0 0 0 24 1 z M 24 5 A 19 19 0 0 1 43 24 A 19 19 0 0 1 24 43 A 19 19 0 0 1 5 24 A 19 19 0 0 1 24 5 z "
+     style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
 </svg>

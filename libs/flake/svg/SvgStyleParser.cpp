@@ -192,41 +192,21 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         gc->opacity = SvgUtil::fromPercentage(params);
     } else if (command == "font-family") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-        QStringList familiesList =
-            gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontFamiliesId).toStringList();
-
-        if (!familiesList.isEmpty()) {
-            gc->font.setFamily(familiesList.first());
-            gc->fontFamiliesList = familiesList;
-        }
     } else if (command == "font-size") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
-        /**
-         * In ODF-based Krita vectors (<= 3.x) we used hardcoded font size values set to 96 ppi,
-         * so, when loading old files, we should adjust it accordingly.
-         */
-        gc->font.setPointSizeF(gc->forcedFontSizeCoeff * gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
     } else if (command == "font-style") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-        const QFont::Style style =
-            QFont::Style(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-        gc->font.setStyle(style);
 
     } else if (command == "font-variant") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
-        gc->font.setCapitalization(
-            gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontIsSmallCapsId).toBool() ?
-                QFont::SmallCaps : QFont::MixedCase);
     } else if (command == "font-stretch") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-        gc->font.setStretch(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
+
 
     } else if (command == "font-weight") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-        //ENTER_FUNCTION() << ppVar(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
-        gc->font.setWeight(gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
+
     } else if (command == "font-size-adjust") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
         warnFile << "WARNING: \'font-size-adjust\' SVG attribute is not supported!";
@@ -235,15 +215,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "text-decoration") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
-        using namespace KoSvgText;
 
-        TextDecorations deco =
-            gc->textProperties.propertyOrDefault(KoSvgTextProperties::TextDecorationId)
-                .value<KoSvgText::TextDecorations>();
-
-        gc->font.setStrikeOut(deco & DecorationLineThrough);
-        gc->font.setUnderline(deco & DecorationUnderline);
-        gc->font.setOverline(deco & DecorationOverline);
 
     } else if (command == "color") {
         QColor color;

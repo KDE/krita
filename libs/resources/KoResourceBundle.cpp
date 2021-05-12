@@ -181,8 +181,8 @@ bool KoResourceBundle::save()
     Q_FOREACH (const QString &resType, m_manifest.types()) {
         KisResourceModel model(resType);
         Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-            KoResourceSP res = model.resourceForMD5(ref.md5sum);
-            if (!res) res = model.resourceForFilename(QFileInfo(ref.resourcePath).fileName());
+            KoResourceSP res = model.resourcesForMD5(ref.md5sum).first();
+            if (!res) res = model.resourcesForFilename(QFileInfo(ref.resourcePath).fileName()).first();
             if (!saveResourceToStore(res, store.data(), resType)) {
                 if (res) {
                     qWarning() << "Could not save resource" << resType << res->name();

@@ -11,7 +11,7 @@ include_directories( ../colorspaces/cmyk_u16
     ../colorprofiles
     ..
 )
-if(OPENEXR_FOUND)
+if(OpenEXR_FOUND)
     include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
 endif()
 include_directories( ${LCMS2_INCLUDE_DIR} )
@@ -22,11 +22,32 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
+if (APPLE)
+    include(KritaAddBrokenUnitTest)
 
-ecm_add_tests(
-    TestKoLcmsColorProfile.cpp
-    TestColorSpaceRegistry.cpp
-    TestLcmsRGBP2020PQColorSpace.cpp
-    TestProfileGeneration.cpp
-    NAME_PREFIX "plugins-lcmsengine-"
-    LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})
+    krita_add_broken_unit_tests(
+        TestKoLcmsColorProfile.cpp
+        TestColorSpaceRegistry.cpp
+        TestLcmsRGBP2020PQColorSpace.cpp
+        TestProfileGeneration.cpp
+        NAME_PREFIX "plugins-lcmsengine-"
+        LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES}
+        TARGET_NAMES_VAR BROKEN_TESTS
+        ${MACOS_GUI_TEST}
+        )
+
+    macos_test_fixrpath(${BROKEN_TESTS})
+
+
+else (APPLE)
+    ecm_add_tests(
+        TestKoLcmsColorProfile.cpp
+        TestColorSpaceRegistry.cpp
+        TestLcmsRGBP2020PQColorSpace.cpp
+        TestProfileGeneration.cpp
+        NAME_PREFIX "plugins-lcmsengine-"
+        LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})
+
+endif()
+
+

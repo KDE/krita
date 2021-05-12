@@ -30,10 +30,13 @@ public:
     KisMemoryStorage &operator=(const KisMemoryStorage &rhs);
 
     bool addTag(const QString &resourceType, KisTagSP tag) override;
-    bool addResource(const QString &resourceType, KoResourceSP resource) override;
+    bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     bool loadVersionedResource(KoResourceSP resource) override;
+    bool importResourceFile(const QString &resourceType, const QString &resourceFile) override;
+    bool addResource(const QString &resourceType,  KoResourceSP resource) override;
+
     QByteArray resourceMd5(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;

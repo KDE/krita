@@ -7,23 +7,7 @@
 #include "KisVideoSaver.h"
 
 #include <QDebug>
-
 #include <QFileInfo>
-
-#include <KisDocument.h>
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoColorModelStandardIds.h>
-#include <KoResourcePaths.h>
-
-
-#include <kis_image.h>
-#include <kis_image_animation_interface.h>
-#include <kis_time_span.h>
-
-#include "kis_config.h"
-
-#include "KisAnimationRenderingOptions.h"
 #include <QFileSystemWatcher>
 #include <QProcess>
 #include <QProgressDialog>
@@ -32,165 +16,37 @@
 #include <QTemporaryDir>
 #include <QTime>
 
+#include <KisDocument.h>
+#include <kis_image.h>
+#include <kis_image_animation_interface.h>
+#include <kis_time_span.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+#include <KoResourcePaths.h>
+#include "kis_config.h"
+#include "KisAnimationRenderingOptions.h"
+#include "animation/KisFFMpegWrapper.h"
+
 #include "KisPart.h"
 
-class KisFFMpegProgressWatcher : public QObject {
-    Q_OBJECT
-public:
-    KisFFMpegProgressWatcher(QFile &progressFile, int totalFrames)
-        : m_progressFile(progressFile),
-          m_totalFrames(totalFrames)
-        {
-            connect(&m_progressWatcher, SIGNAL(fileChanged(QString)), SLOT(slotFileChanged()));
-
-
-            m_progressWatcher.addPath(m_progressFile.fileName());
-        }
-
-private Q_SLOTS:
-    void slotFileChanged() {
-        int currentFrame = -1;
-        bool isEnded = false;
-
-        while(!m_progressFile.atEnd()) {
-            QString line = QString(m_progressFile.readLine()).remove(QChar('\n'));
-            QStringList var = line.split("=");
-
-            if (var[0] == "frame") {
-                currentFrame = var[1].toInt();
-            } else if (var[0] == "progress") {
-                isEnded = var[1] == "end";
-            }
-        }
-
-        if (isEnded) {
-            emit sigProgressChanged(100);
-            emit sigProcessingFinished();
-        } else {
-
-            emit sigProgressChanged(100 * currentFrame / m_totalFrames);
-        }
-    }
-
-Q_SIGNALS:
-    void sigProgressChanged(int percent);
-    void sigProcessingFinished();
-
-private:
-    QFileSystemWatcher m_progressWatcher;
-    QFile &m_progressFile;
-    int m_totalFrames;
-};
-
-
-class KisFFMpegRunner
-{
-public:
-    KisFFMpegRunner(const QString &ffmpegPath)
-        : m_cancelled(false),
-          m_ffmpegPath(ffmpegPath) {}
-public:
-    KisImportExportErrorCode runFFMpeg(const QStringList &specialArgs,
-                                     const QString &actionName,
-                                     const QString &logPath,
-                                     int totalFrames)
-    {
-        dbgFile << "runFFMpeg: specialArgs" << specialArgs
-                << "actionName" << actionName
-                << "logPath" << logPath
-                << "totalFrames" << totalFrames;
-
-        QTemporaryFile progressFile(QDir::tempPath() + '/' + "KritaFFmpegProgress.XXXXXX");
-        progressFile.open();
-
-        m_process.setStandardOutputFile(logPath);
-        m_process.setProcessChannelMode(QProcess::MergedChannels);
-        QStringList args;
-        args << "-v" << "debug"
-             << "-nostdin"
-             << "-progress" << progressFile.fileName()
-             << specialArgs;
-
-        qDebug() << "\t" << m_ffmpegPath << args.join(" ");
-
-        m_cancelled = false;
-        m_process.start(m_ffmpegPath, args);
-        return waitForFFMpegProcess(actionName, progressFile, m_process, totalFrames);
-    }
-
-    void cancel() {
-        m_cancelled = true;
-        m_process.kill();
-    }
-
-private:
-    KisImportExportErrorCode waitForFFMpegProcess(const QString &message,
-                                                QFile &progressFile,
-                                                QProcess &ffmpegProcess,
-                                                int totalFrames)
-    {
-
-        KisFFMpegProgressWatcher watcher(progressFile, totalFrames);
-
-        QProgressDialog progress(message, "", 0, 0, KisPart::instance()->currentMainwindow());
-        progress.setWindowModality(Qt::ApplicationModal);
-        progress.setCancelButton(0);
-        progress.setMinimumDuration(0);
-        progress.setValue(0);
-        progress.setRange(0, 100);
-
-        QEventLoop loop;
-        loop.connect(&watcher, SIGNAL(sigProcessingFinished()), SLOT(quit()));
-        loop.connect(&ffmpegProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(quit()));
-        loop.connect(&ffmpegProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(quit()));
-        loop.connect(&watcher, SIGNAL(sigProgressChanged(int)), &progress, SLOT(setValue(int)));
-
-        if (ffmpegProcess.state() != QProcess::NotRunning) {
-            loop.exec();
-
-            // wait for some erroneous case
-            ffmpegProcess.waitForFinished(5000);
-        }
-
-        KisImportExportErrorCode retval = ImportExportCodes::OK;
-
-        if (ffmpegProcess.state() != QProcess::NotRunning) {
-            // sorry...
-            ffmpegProcess.kill();
-            retval = ImportExportCodes::Failure;
-        } else if (m_cancelled) {
-            retval = ImportExportCodes::Cancelled;
-        } else if (ffmpegProcess.exitCode()) {
-            retval = ImportExportCodes::Failure;
-        }
-
-        return retval;
-    }
-
-private:
-    QProcess m_process;
-    bool m_cancelled;
-    QString m_ffmpegPath;
-};
-
-
-KisVideoSaver::KisVideoSaver(KisDocument *doc, bool batchMode)
+KisAnimationVideoSaver::KisAnimationVideoSaver(KisDocument *doc, bool batchMode)
     : m_image(doc->image())
     , m_doc(doc)
     , m_batchMode(batchMode)
 {
 }
 
-KisVideoSaver::~KisVideoSaver()
+KisAnimationVideoSaver::~KisAnimationVideoSaver()
 {
 }
 
-KisImageSP KisVideoSaver::image()
+KisImageSP KisAnimationVideoSaver::image()
 {
     return m_image;
 }
 
-KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
+KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
 {
     if (!QFileInfo(options.ffmpegPath).exists()) {
         m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", options.ffmpegPath));
@@ -220,9 +76,10 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
     const QDir videoDir(resultFileInfo.absolutePath());
 
     const QString suffix = resultFileInfo.suffix().toLower();
-    const QString palettePath = videoDir.filePath("palette.png");
+    const QString palettePath = videoDir.filePath("KritaTempPalettegen_\%06d.png");
     QStringList additionalOptionsList = options.customFFMpegOptions.split(' ', QString::SkipEmptyParts);
-    QScopedPointer<KisFFMpegRunner> runner(new KisFFMpegRunner(options.ffmpegPath));
+
+    QScopedPointer<KisFFMpegWrapper> ffmpegWrapper(new KisFFMpegWrapper(this));
     
     {
         
@@ -265,10 +122,21 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
                  
             paletteArgs << "-y" << palettePath;
 
-            KisImportExportErrorCode result =
-                runner->runFFMpeg(paletteArgs, i18n("Fetching palette..."),
-                                    videoDir.filePath("log_generate_palette_" + suffix + ".log"),
-                                    clipRange.duration());
+
+            QStringList ffmpegArgs;
+            ffmpegArgs << "-v" << "debug"
+                         << "-nostdin"
+                         << paletteArgs;
+
+            KisFFMpegWrapperSettings ffmpegSettings;
+            ffmpegSettings.args = ffmpegArgs;
+            ffmpegSettings.processPath = options.ffmpegPath;
+
+            ffmpegSettings.progressIndeterminate = true;
+            ffmpegSettings.progressMessage = i18n("Creating palette required for gif format...");
+            // ffmpegSettings.progressFile TEMP: Allow optional pointer for specifying a directory to save a temp file.
+
+            KisImportExportErrorCode result = ffmpegWrapper->start(ffmpegSettings);
 
             if (!result.isOk()) {
                 return result;
@@ -309,27 +177,29 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
         
         args << additionalOptionsList;
 
-        args << "-y" << resultFile;
-
         dbgFile << "savedFilesMask" << savedFilesMask 
                 << "start" << QString::number(clipRange.start()) 
                 << "duration" << clipRange.duration();
 
-        resultOuter = runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                          videoDir.filePath("log_encode_" + suffix + ".log"),
-                                          clipRange.duration());    
 
+        KisFFMpegWrapperSettings ffmpegSettings;
+        ffmpegSettings.processPath = options.ffmpegPath;
+        ffmpegSettings.args = args;
+        ffmpegSettings.outputFile = resultFile;
+        ffmpegSettings.totalFrames = clipRange.duration();
+        ffmpegSettings.progressMessage = i18nc("Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, arg2: progress frame number, arg3: totalFrameCount.",
+                                               "Creating desired %1 file: %2/%3 frames.", "[suffix]", "[progress]", "[framecount]");
+
+        resultOuter = ffmpegWrapper->start(ffmpegSettings);
     }
      
 
     return resultOuter;
 }
 
-KisImportExportErrorCode KisVideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
+KisImportExportErrorCode KisAnimationVideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
 {
-    KisVideoSaver videoSaver(document, batchMode);
+    KisAnimationVideoSaver videoSaver(document, batchMode);
     KisImportExportErrorCode res = videoSaver.encode(savedFilesMask, options);
     return res;
 }
-
-#include "KisVideoSaver.moc"

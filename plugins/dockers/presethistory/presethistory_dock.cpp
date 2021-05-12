@@ -99,6 +99,8 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
             m_actionSortBubble->setChecked(true);
         }
 
+        QVariant currentPreset = m_canvas->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset);
+        canvasResourceChanged(KoCanvasResource::CurrentPaintOpPreset, currentPreset);
         m_initialized = true;
     }
 }
@@ -122,7 +124,7 @@ void PresetHistoryDock::presetSelected(QListWidgetItem *item)
 {
     if (item) {
         int oldPosition = m_presetHistory->currentRow();
-        sortPresets(oldPosition);
+        updatePresetState(oldPosition);
         QVariant v = item->data(BrushPresetRole);
         KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
         m_block = true;
@@ -140,7 +142,7 @@ void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& v)
         if (preset) {
             for (int i = 0; i < m_presetHistory->count(); ++i) {
                 if (preset->name() == m_presetHistory->item(i)->text()) {
-                    sortPresets(i);
+                    updatePresetState(i);
                     return;
                 }
             }
@@ -162,10 +164,11 @@ void PresetHistoryDock::slotSortingModeChanged(QAction *action)
     cfg.writeEntry("presethistorySorting", int(m_sorting));
 }
 
-void PresetHistoryDock::sortPresets(int position)
+void PresetHistoryDock::updatePresetState(int position)
 {
     switch (m_sorting) {
     case Static:
+        m_presetHistory->setCurrentRow(position);
         break;
     case MostRecent:
         m_presetHistory->insertItem(0, m_presetHistory->takeItem(position));

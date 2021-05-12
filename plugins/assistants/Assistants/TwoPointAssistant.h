@@ -19,7 +19,7 @@ class TwoPointAssistant : public KisPaintingAssistant
 {
 public:
     TwoPointAssistant();
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
 
     void setAdjustedBrushPosition(const QPointF position) override;
@@ -34,6 +34,12 @@ public:
 
     double gridDensity();
     void setGridDensity(double density);
+
+    /* If true, it means the assistant will have three handles
+     * If false,
+     * */
+    bool useVertical();
+    void setUseVertical(bool value);
 
     bool isAssistantComplete() const override;
 
@@ -52,18 +58,20 @@ protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny);
     explicit TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
     KisCanvas2 *m_canvas;
 
     QLineF m_snapLine;
     double m_gridDensity = 1.0;
+    bool m_useVertical = true;
 
     // Needed to make sure that when we are in the middle of a brush stroke, the
     // guides follow the brush position, not the cursor position.
     bool m_followBrushPosition;
     bool m_adjustedPositionValid;
     QPointF m_adjustedBrushPosition;
+    int m_lastUsedPoint = -1;
 
 };
 

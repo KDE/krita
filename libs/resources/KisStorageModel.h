@@ -35,6 +35,12 @@ public:
         MetaData
     };
 
+    enum StorageImportOption {
+        None,
+        Overwrite,
+        Rename,
+    };
+
     KisStorageModel(QObject *parent = 0);
     ~KisStorageModel() override;
 
@@ -50,6 +56,8 @@ public:
 
     KisResourceStorageSP storageForIndex(const QModelIndex &index) const;
     KisResourceStorageSP storageForId(const int storageId) const;
+
+    bool importStorage(QString filename, StorageImportOption importOption) const;
 
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

@@ -104,7 +104,8 @@ Item {
             }
 
             color: Settings.theme.color("components/listItem/description");
-            font: Settings.theme.font("small");
+            font.styleName: "Light";
+            font.pixelSize: Constants.SmallFontSize;
             verticalAlignment: Text.AlignBottom;
         }
     }

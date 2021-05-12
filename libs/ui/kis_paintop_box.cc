@@ -73,6 +73,9 @@
 #include "kis_action_manager.h"
 #include "KisHighlightedToolButton.h"
 #include <KisGlobalResourcesInterface.h>
+#include "KisResourceLoader.h"
+#include "KisResourceLoaderRegistry.h"
+
 
 KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const char *name)
     : QWidget(parent)
@@ -113,6 +116,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_brushEditorPopupButton->setFixedSize(buttonsize, buttonsize);
     m_brushEditorPopupButton->setIconSize(QSize(iconsize, iconsize));
     m_brushEditorPopupButton->setFlat(true);
+    m_brushEditorPopupButton->setCheckable(true);
 
     m_presetSelectorPopupButton = new KisIconWidget(this);
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
@@ -393,10 +397,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
     }
 
-    action = new QWidgetAction(this);
-    KisActionRegistry::instance()->propertizeAction("show_brush_editor", action);
-    viewManager->actionCollection()->addAction("show_brush_editor", action);
-    connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
 
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("show_brush_presets", action);
@@ -435,9 +435,15 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_presetsEditor->hide();
     m_presetsEditor->setWindowTitle(i18n("Brush Editor"));
 
-    connect(m_brushEditorPopupButton, SIGNAL(clicked(bool)), m_presetsEditor, SLOT(show()));
+    connect(m_brushEditorPopupButton, SIGNAL(toggled(bool)), this, SLOT(togglePresetEditor()));
     connect(m_presetsEditor->editorWidget(), SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsEditor->editorWidget(), SLOT(updateThemedIcons()));
+
+    action = new QWidgetAction(this);
+    KisActionRegistry::instance()->propertizeAction("show_brush_editor", action);
+    viewManager->actionCollection()->addAction("show_brush_editor", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(togglePresetEditor()));
+
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetsChooserPopup->setMinimumHeight(550);
@@ -702,15 +708,49 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
     m_optionWidget->setImage(m_viewManager->image());
 }
 
+void KisPaintopBox::togglePresetEditor()
+{
+    m_presetsEditor->setVisible(!m_presetsEditor->isVisible());
+}
+
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
     QString path = ":/presets/" + paintOp.id() + ".kpp";
+
+    if (paintOp.id() == "mypaintbrush") {
+        path = ":/presets/" + paintOp.id() + ".myb";
+    }
+
     dbgResources << "Getting default presets from qrc resources" << path;
 
     KisPaintOpPresetSP preset(new KisPaintOpPreset(path));
 
     if (!preset->load(KisGlobalResourcesInterface::instance())) {
-        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, KisGlobalResourcesInterface::instance());
+        bool success = false;
+
+        QFile file(path);
+
+        if (file.open(QIODevice::ReadOnly))
+        {
+            // this is needed specifically for MyPaint brushes
+            QVector<KisResourceLoaderBase*> loaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(ResourceType::PaintOpPresets);
+            for (int i = 0; i < loaders.count(); i++) {
+                file.seek(0); // to ensure that one loader reading bytes won't interfere with another
+                KoResourceSP resource = loaders[i]->load(paintOp.id(), file, KisGlobalResourcesInterface::instance());
+                if (resource) {
+                    preset = resource.dynamicCast<KisPaintOpPreset>();
+                    success = !preset.isNull();
+                    if (success) {
+                        break;
+                    }
+                }
+            }
+            file.close();
+        }
+
+        if (!success) {
+            preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, KisGlobalResourcesInterface::instance());
+        }
     }
 
     Q_ASSERT(preset);
@@ -841,16 +881,16 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         }
         else {
             preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), m_defaultPresetName));
-            //if (preset)
-            //qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
-            //else
-            //qDebug() << "no preset found for" << inputDevice.uniqueTabletId();
+//            if (preset)
+//                qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
+//            else
+//                qDebug() << "no preset found for" << inputDevice.uniqueTabletId();
         }
         if (!preset) {
             preset = rserver->resourceByName(m_defaultPresetName);
         }
         if (preset) {
-            //qDebug() << "inputdevicechanged 1" << preset;
+//            qDebug() << "inputdevicechanged 1" << preset;
             setCurrentPaintop(preset);
         }
     }
@@ -1254,9 +1294,9 @@ void KisPaintopBox::slotUnsetEraseMode()
 void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 {
     if (checked) {
-        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transparency-locked"));
+        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("bar-transparency-locked"));
     } else {
-        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transparency-unlocked"));
+        m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("bar-transparency-unlocked"));
     }
     m_resourceProvider->setGlobalAlphaLock(checked);
 }
@@ -1430,31 +1470,6 @@ void KisPaintopBox::slotMoveToCenterMirrorY() {
 
 void KisPaintopBox::findDefaultPresets()
 {
-    KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    m_eraserName = "eraser_circle";
-    m_defaultPresetName = "basic_tip_default";
-
-    KisResourceModel *resourceModel = rserver->resourceModel();
-
-    for (int i = 0; i < resourceModel->rowCount(); i++) {
-
-        QModelIndex idx = resourceModel->index(i, 0);
-
-        QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().toLower();
-        QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString().toLower();
-
-        if (resourceName.contains("eraser_circle")) {
-            m_eraserName = resourceName;
-        }
-        else if (resourceName.contains("eraser") || fileName.contains("eraser")) {
-            m_eraserName = resourceName;
-        }
-
-        if (resourceName.contains("basic_tip_default")) {
-            m_defaultPresetName = resourceName;
-        }
-        else if (resourceName.contains("default") || fileName.contains("default")) {
-            m_defaultPresetName = resourceName;
-        }
-    }
+    m_eraserName = "Eraser_circle";
+    m_defaultPresetName = "b)_Basic-5_Size_Opacity";
 }

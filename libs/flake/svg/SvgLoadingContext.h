@@ -91,7 +91,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    QScopedPointer<Private> d;
 };
 
 #endif // SVGLOADINGCONTEXT_H

@@ -40,6 +40,7 @@ public:
     bool listeningToModifiers() override;
 
     QList<QPointer<QWidget> > createOptionWidgets() override;
+    void showSize();
 
 protected:
     virtual void finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY) = 0;

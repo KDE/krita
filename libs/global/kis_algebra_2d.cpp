@@ -167,49 +167,82 @@ QPointF ensureInRect(QPointF pt, const QRectF &bounds)
     return ensureInRectImpl(pt, bounds);
 }
 
-bool intersectLineRect(QLineF &line, const QRect rect)
+bool intersectLineRect(QLineF &line, const QRect rect, bool extend)
 {
-    QPointF pt1 = QPointF(), pt2 = QPointF();
-    QPointF tmp;
+    return intersectLineRect(line, rect, extend, extend);
+}
 
-    if (line.intersect(QLineF(rect.topLeft(), rect.topRight()), &tmp) != QLineF::NoIntersection) {
-        if (tmp.x() >= rect.left() && tmp.x() <= rect.right()) {
-            pt1 = tmp;
+bool intersectLineRect(QLineF &line, const QRect rect, bool extendFirst, bool extendSecond)
+{
+    // using Liang-Barsky algorithm
+    // using parametric equation for a line:
+    // X = x1 + t(x2-x1) = x1 + t*p2
+    // Y = y1 + t(y2-y1) = y1 + t*p4
+    // note that we have a line *segment* here, not a line
+    // t1 = 0, t2 = 1, no matter what points we got
+
+    double p1 = -(line.x2() - line.x1());
+    double p2 = -p1;
+    double p3 = -(line.y2() - line.y1());
+    double p4 = -p3;
+
+    QVector<double> p = QVector<double>({p1, p2, p3, p4});
+    QVector<double> q = QVector<double>({line.x1() - rect.x(), rect.x() + rect.width() - line.x1(), line.y1() - rect.y(), rect.y() + rect.height() - line.y1()});
+
+    float tmin = extendFirst ? -std::numeric_limits<float>::infinity() : 0; // line.p1() - first point, or infinity
+    float tmax = extendSecond ? std::numeric_limits<float>::infinity() : 1; // line.p2() - second point, or infinity
+
+    for (int i = 0; i < p.length(); i++) {
+        // now clipping
+        if (p[i] == 0 && q[i] < 0) {
+            // line is parallel to the boundary and outside of it
+            return false;
+        } else if (p[i] < 0) {
+            // line entry point (should be tmin)
+            double t = q[i]/p[i];
+            if (t > tmax) {
+                if (extendSecond) {
+                    tmax = t;
+                } else {
+                    return false;
+                }
+            }
+            if (t > tmin) {
+                tmin = t;
+            }
+
+
+        } else if (p[i] > 0) {
+            // line leaving point (should be tmax)
+            double t = q[i]/p[i];
+            if (t < tmin) {
+                if (extendFirst) {
+                    tmin = t;
+                } else {
+                    return false;
+                }
+            }
+            if (t < tmax) {
+                tmax = t;
+            }
         }
     }
 
-    if (line.intersect(QLineF(rect.topRight(), rect.bottomRight()), &tmp) != QLineF::NoIntersection) {
-        if (tmp.y() >= rect.top() && tmp.y() <= rect.bottom()) {
-            if (pt1.isNull()) pt1 = tmp;
-            else pt2 = tmp;
-        }
-    }
-    if (line.intersect(QLineF(rect.bottomRight(), rect.bottomLeft()), &tmp) != QLineF::NoIntersection) {
-        if (tmp.x() >= rect.left() && tmp.x() <= rect.right()) {
-            if (pt1.isNull()) pt1 = tmp;
-            else pt2 = tmp;
-        }
-    }
-    if (line.intersect(QLineF(rect.bottomLeft(), rect.topLeft()), &tmp) != QLineF::NoIntersection) {
-        if (tmp.y() >= rect.top() && tmp.y() <= rect.bottom()) {
-            if (pt1.isNull()) pt1 = tmp;
-            else pt2 = tmp;
-        }
-    }
+    QPointF pt1 = line.p1();
+    QPointF pt2 = line.p2();
 
-    if (pt1.isNull() || pt2.isNull()) return false;
-
-    // Attempt to retain polarity of end points
-    if ((line.x1() < line.x2()) != (pt1.x() > pt2.x()) || (line.y1() < line.y2()) != (pt1.y() > pt2.y())) {
-        tmp = pt1;
-        pt1 = pt2;
-        pt2 = tmp;
+    if (extendFirst || tmin > 0) {
+        pt1 = QPointF(line.x1() + tmin*(line.x2() - line.x1()), line.y1() + tmin*(line.y2() - line.y1()));
+    }
+    if (extendSecond || tmax < 1) {
+        pt2 = QPointF(line.x1() + tmax*(line.x2() - line.x1()), line.y1() + tmax*(line.y2() - line.y1()));
     }
 
     line.setP1(pt1);
     line.setP2(pt2);
 
     return true;
+
 }
 
     template <class Rect, class Point>
@@ -985,4 +1018,5 @@ QPointF moveElasticPoint(const QPointF &pt,
 
     return newResultPoint;
 }
+
 }

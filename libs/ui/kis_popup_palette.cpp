@@ -166,7 +166,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     m_brushHud = new KisBrushHud(provider, this);
     m_brushHud->setFixedHeight(int(m_popupPaletteSize));
-    m_brushHud->move(int(m_popupPaletteSize + BRUSH_HUD_MARGIN), 0);
 
     const int auxButtonSize = 35;
     m_settingsButton = new KisRoundHudButton(this);
@@ -175,26 +174,24 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     connect(m_settingsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
 
-    KisConfig cfg(true);
     m_brushHudButton = new KisRoundHudButton(this);
     m_brushHudButton->setCheckable(true);
 
     m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
     connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
-    m_brushHudButton->setChecked(cfg.showBrushHud());
+    
 
 
     // add some stuff below the pop-up palette that will make it easier to use for tablet people
-    QVBoxLayout* vLayout = new QVBoxLayout(this); // main layout
-
-    QSpacerItem* verticalSpacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding);
-    vLayout->addSpacerItem(verticalSpacer); // this should push the box to the bottom
-
+    QGridLayout* gLayout = new QGridLayout(this);
+    gLayout->setSpacing(0);
+    QSpacerItem* verticalSpacer = new QSpacerItem(m_popupPaletteSize, m_popupPaletteSize, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    gLayout->addItem(verticalSpacer, 0, 0); // this should push the box to the bottom    
+    gLayout->addWidget(m_brushHud, 0, 1);
 
     QHBoxLayout* hLayout = new QHBoxLayout();
-
-    vLayout->addLayout(hLayout);
+    gLayout->addItem(hLayout, 1, 0);
 
     mirrorMode = new KisHighlightedToolButton(this);
     mirrorMode->setFixedSize(35, 35);
@@ -239,15 +236,16 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(clearHistoryButton, SIGNAL(clicked(bool)), m_resourceManager, SLOT(slotClearHistory()));
     //Otherwise the colors won't disappear until the cursor moves away from the button:
     connect(clearHistoryButton, SIGNAL(released()), this, SLOT(slotUpdate()));
-
+    
     slotUpdateIcons();
 
+    hLayout->setSpacing(2);
     hLayout->addWidget(mirrorMode);
     hLayout->addWidget(canvasOnlyButton);
     hLayout->addWidget(zoomToOneHundredPercentButton);
     hLayout->addWidget(zoomCanvasSlider);
     hLayout->addWidget(clearHistoryButton);
-
+    
     setVisible(true);
     setVisible(false);
 
@@ -256,6 +254,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     // Prevent tablet events from being captured by the canvas
     setAttribute(Qt::WA_NoMousePropagation, true);
+    
+    // Load configuration..
+    KisConfig cfg(true);
+    m_brushHudButton->setChecked(cfg.showBrushHud());
 }
 
 void KisPopupPalette::slotDisplayConfigurationChanged()
@@ -360,7 +362,7 @@ void KisPopupPalette::showHudWidget(bool visible)
     KisConfig cfg(false);
     cfg.setShowBrushHud(visible);
 
-    resize(calculateSize());
+    resize(layout()->sizeHint());
 }
 
 void KisPopupPalette::setParent(QWidget *parent) {
@@ -371,16 +373,6 @@ void KisPopupPalette::setParent(QWidget *parent) {
 QSize KisPopupPalette::sizeHint() const
 {
     return QSize(m_popupPaletteSize, m_popupPaletteSize);
-}
-
-QSize KisPopupPalette::calculateSize() const
-{
-    const int toolbarSize = 50;
-    const int width = m_brushHudButton->isChecked() ?
-                m_popupPaletteSize + m_brushHud->width() + BRUSH_HUD_MARGIN :
-                m_popupPaletteSize;
-
-    return QSize(width, m_popupPaletteSize + toolbarSize);
 }
 
 void KisPopupPalette::paintEvent(QPaintEvent* e)
@@ -578,6 +570,14 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         opacityChange->setOpacity(1.0);
     }
 
+}
+
+void KisPopupPalette::resizeEvent(QResizeEvent* resizeEvent) {
+    Q_UNUSED(resizeEvent);
+    // Ensure that the resized geometry fits within the desired rect...
+    QRect tempGeo = rect(); 
+    tempGeo.translate(pos());
+    ensureWithinParent(tempGeo.topLeft(), true);
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -787,7 +787,10 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event) {
 
 void KisPopupPalette::popup(const QPoint &position) {
     setVisible(!isVisible());
+    ensureWithinParent(position, false);
+}
 
+void KisPopupPalette::ensureWithinParent(const QPoint& position, bool useUpperLeft) {
     if (isVisible() && parentWidget())  {
         const float widgetMargin = -20.0f;
         const QRect fitRect = kisGrowRect(parentWidget()->rect(), widgetMargin);
@@ -795,7 +798,11 @@ void KisPopupPalette::popup(const QPoint &position) {
 
         QRect paletteRect = rect();
 
-        paletteRect.moveTo(position - paletteCenterOffset);
+        if (!useUpperLeft) {
+            paletteRect.moveTo(position - paletteCenterOffset);
+        } else {
+            paletteRect.moveTopLeft(position);
+        }
 
         paletteRect = kisEnsureInRect(paletteRect, fitRect);
         move(paletteRect.topLeft());
@@ -816,7 +823,7 @@ void KisPopupPalette::showEvent(QShowEvent *event)
 
     m_brushHud->setVisible(m_brushHudButton->isChecked());
 
-    resize(calculateSize());
+    resize(layout()->sizeHint());
     QWidget::showEvent(event);
 }
 
@@ -825,12 +832,12 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
-//    if (event->buttons() == Qt::NoButton &&
-//        event->button() == Qt::RightButton) {
+   if (event->buttons() == Qt::NoButton &&
+       event->button() == Qt::RightButton) {
 
-//        setVisible(false);
-//        return;
-//    }
+       setVisible(false);
+       return;
+   }
 
     m_isOverCanvasRotationIndicator = false;
     m_isRotatingCanvasIndicator = false;

@@ -60,7 +60,7 @@ public:
         return true;
     }
 
-    bool saveToDevice(QIODevice *dev) const
+    bool saveToDevice(QIODevice *dev) const override
     {
         if (!dev->isOpen()) {
             dev->open(QIODevice::WriteOnly);

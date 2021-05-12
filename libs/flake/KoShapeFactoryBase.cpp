@@ -192,19 +192,6 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
     return createDefaultShape(documentResources);
 }
 
-KoShape *KoShapeFactoryBase::createShapeFromXML(const QDomElement &element, KoShapeLoadingContext &context)
-{
-    Q_UNUSED(element);
-    KoShape *shape = createDefaultShape(context.documentResourceManager());
-    if (!shape)
-        return 0;
-
-    if (shape->shapeId().isEmpty())
-        shape->setShapeId(id());
-
-    return shape;
-}
-
 void KoShapeFactoryBase::getDeferredPlugin()
 {
     QMutexLocker(&d->pluginLoadingMutex);

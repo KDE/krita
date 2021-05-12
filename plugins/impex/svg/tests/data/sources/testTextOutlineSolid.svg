@@ -1,0 +1,1 @@
+<svg width="100px" height="30px"    xmlns="http://www.w3.org/2000/svg" version="1.1"><g id="test">    <rect id="boundingRect" x="4" y="5" width="89" height="19"        fill="none" stroke="red"/>    <text id="testRect" x="2" y="30"        font-family="DejaVu Sans" font-size="30" fill="blue" stroke="red" stroke-width="1">        SA    </text></g></svg>

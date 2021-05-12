@@ -56,12 +56,18 @@
         <file>dark_edit-redo.svg</file>
         <file>dark_edit-undo.svg</file>
         <file>dark_extended_color_selector.svg</file>
+        <file>dark_filter-apply-again.svg</file>
+        <file>dark_filter-color-curves.svg</file>
+        <file>dark_filter-invert.svg</file>
+        <file>dark_filter-levels.svg</file>
+        <file>dark_filter-threshold.svg</file>
         <file>dark_import-as-filterMask.svg</file>
         <file>dark_import-as-paintLayer.svg</file>
         <file>dark_import-as-selectionMask.svg</file>
         <file>dark_import-as-transparencyMask.svg</file>
         <file>dark_novisible.svg</file>
         <file>dark_visible.svg</file>
+        <file>dark_layer-animated.svg</file>
         <file>dark_layer-locked.svg</file>
         <file>dark_layer-unlocked.svg</file>
         <file>dark_layer-style-disabled.svg</file>
@@ -109,6 +115,7 @@
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
         <file>dark_user-identity.svg</file>
+        <file>dark_view-filter.svg</file>
         <file>dark_view-list-details.svg</file>
         <file>dark_view-list-text-16.svg</file>
         <file>dark_view-preview.svg</file>
@@ -166,12 +173,18 @@
         <file>light_edit-redo.svg</file>
         <file>light_edit-undo.svg</file>
         <file>light_extended_color_selector.svg</file>
+        <file>light_filter-apply-again.svg</file>
+        <file>light_filter-color-curves.svg</file>
+        <file>light_filter-invert.svg</file>
+        <file>light_filter-levels.svg</file>
+        <file>light_filter-threshold.svg</file>
         <file>light_import-as-filterMask.svg</file>
         <file>light_import-as-paintLayer.svg</file>
         <file>light_import-as-selectionMask.svg</file>
         <file>light_import-as-transparencyMask.svg</file>
         <file>light_novisible.svg</file>
         <file>light_visible.svg</file>
+        <file>light_layer-animated.svg</file>
         <file>light_layer-locked.svg</file>
         <file>light_layer-unlocked.svg</file>
         <file>light_layer-style-disabled.svg</file>
@@ -218,6 +231,7 @@
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
         <file>light_user-identity.svg</file>
+        <file>light_view-filter.svg</file>
         <file>light_view-list-details.svg</file>
         <file>light_view-list-text-16.svg</file>
         <file>light_view-preview.svg</file>
@@ -229,12 +243,16 @@
         <file>dark_selection-info.svg</file>
         <file>light_selection-info.svg</file>
         <file>svg-icons.qrc</file>
+        <file>bar-transparency-locked.svg</file>
+        <file>bar-transparency-unlocked.svg</file>
         <file>transparency-locked.svg</file>
         <file>transparency-unlocked.svg</file>
         <file>dark_mirror-view.svg</file>
         <file>light_mirror-view.svg</file>
         <file>dark_rotation-reset.svg</file>
+        <file alias="dark_reset_canvas_rotation.svg">dark_rotation-reset.svg</file>
         <file>light_rotation-reset.svg</file>
+        <file alias="light_reset_canvas_rotation.svg">light_rotation-reset.svg</file>
         <file>light_smoothing-basic.svg</file>
         <file>light_smoothing-no.svg</file>
         <file>light_smoothing-stabilizer.svg</file>
@@ -247,8 +265,12 @@
         <file>dark_merge-layer-below.svg</file>
         <file>light_rotate-canvas-left.svg</file>
         <file>light_rotate-canvas-right.svg</file>
+        <file alias="light_rotate_canvas_left.svg">light_rotate-canvas-left.svg</file>
+        <file alias="light_rotate_canvas_right.svg">light_rotate-canvas-right.svg</file>
         <file>dark_rotate-canvas-left.svg</file>
         <file>dark_rotate-canvas-right.svg</file>
+        <file alias="dark_rotate_canvas_left.svg">dark_rotate-canvas-left.svg</file>
+        <file alias="dark_rotate_canvas_right.svg">dark_rotate-canvas-right.svg</file>
         <file>light_gmic.svg</file>
         <file>dark_gmic.svg</file>
         <file>light_split-layer.svg</file>
@@ -256,7 +278,9 @@
         <file>light_color-to-alpha.svg</file>
         <file>dark_color-to-alpha.svg</file>
         <file>light_preset-switcher.svg</file>
+        <file alias="light_previous_preset.svg">light_preset-switcher.svg</file>
         <file>dark_preset-switcher.svg</file>
+        <file alias="dark_previous_preset.svg">dark_preset-switcher.svg</file>
         <file>dark_animation_play.svg</file>
         <file>dark_animation_pause.svg</file>
         <file>dark_animation_stop.svg</file>

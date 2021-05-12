@@ -335,5 +335,3 @@ void KisPresetChooser::slotScrollerStateChanged(QScroller::State state)
 {
     KisKineticScroller::updateCursor(this, state);
 }
-
-#include "kis_preset_chooser.moc"

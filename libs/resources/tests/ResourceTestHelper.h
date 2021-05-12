@@ -171,7 +171,7 @@ void testVersionedStorage(KisStoragePlugin &storage, const QString &resourceType
 
     const QString versionedName = fileInfo.baseName() + ".0001." + fileInfo.suffix();
 
-    storage.addResource(resourceType, res2);
+    storage.saveAsNewVersion(resourceType, res2);
     QCOMPARE(res2->filename(), versionedName);
     QCOMPARE(res2->version(), -1); // storages don't work with versions
     QCOMPARE(res2->valid(), true);
@@ -185,14 +185,14 @@ void testVersionedStorage(KisStoragePlugin &storage, const QString &resourceType
     verifyFileExists(res4);
 
     overrideResourceVesion(res4, 10000);
-    storage.addResource(resourceType, res4);
+    storage.saveAsNewVersion(resourceType, res4);
     QCOMPARE(res4->filename(), fileInfo.baseName() + ".10000." + fileInfo.suffix());
     verifyFileExists(res4);
 
     overrideResourceVesion(res4, -1);
     const QString versionedName2 = fileInfo.baseName() + ".10001." + fileInfo.suffix();
 
-    storage.addResource(resourceType, res4);
+    storage.saveAsNewVersion(resourceType, res4);
     QCOMPARE(res4->filename(), versionedName2);
     QCOMPARE(res4->version(), -1); // storages don't work with versions
     QCOMPARE(res4->valid(), true);

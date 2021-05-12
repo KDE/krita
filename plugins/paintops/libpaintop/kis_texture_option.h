@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2021 Deif Lou <ginoba@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -70,7 +71,19 @@ public:
         MULTIPLY,
         SUBTRACT,
         LIGHTNESS,
-        GRADIENT
+        GRADIENT,
+        DARKEN,
+        OVERLAY,
+        COLOR_DODGE,
+        COLOR_BURN,
+        LINEAR_DODGE,
+        LINEAR_BURN,
+        HARD_MIX_PHOTOSHOP,
+        HARD_MIX_SOFTER_PHOTOSHOP,
+        HEIGHT,
+        LINEAR_HEIGHT,
+        HEIGHT_PHOTOSHOP,
+        LINEAR_HEIGHT_PHOTOSHOP
     };
 
     bool m_enabled;
@@ -89,7 +102,6 @@ public:
     static bool applyingGradient(const KisPropertiesConfiguration *settings);
 
 private:
-
     void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
     void applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
 

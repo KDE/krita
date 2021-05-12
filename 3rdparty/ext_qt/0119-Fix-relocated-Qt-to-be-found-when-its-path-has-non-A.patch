@@ -1,0 +1,47 @@
+From 52e52dcb48baa577199425a4e582612011be32c0 Mon Sep 17 00:00:00 2001
+From: Alexandru Croitor <alexandru.croitor@qt.io>
+Date: Thu, 22 Apr 2021 09:07:46 +0300
+Subject: [PATCH] Fix relocated Qt to be found when its path has non-ASCII
+ characters
+
+The path returned by dladdr seems to be encoded with the current
+locale encoding which means that if it contains unicode characters, the
+fromLatin1() call mangles the path, and QFile::exists reports that
+the path does not exist.
+
+To preserve non-ASCII characters use fromLocal8Bit() instead.
+
+This should fix the runtime issue of finding the Qt prefix when the
+Qt library path has non-ASCII characters.
+
+Amends 2f52afda8e77429c00029f94e887ed37dfb4e584.
+Amends 4ac872639ed0dd3ae6627e05bdda821f7d128500.
+
+Fixes: QTBUG-84272
+Task-number: QTBUG-15234
+Change-Id: I37019ed219cf2cf7d9663cb1e16acdb97b3bdf09
+Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
+Reviewed-by: Joerg Bornemann <joerg.bornemann@qt.io>
+Reviewed-by: Qt CI Bot <qt_ci_bot@qt-project.org>
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+(cherry picked from commit 19b6ae6637bde73ec508b6d1d29f3233e2c4e2d4)
+---
+ src/corelib/global/qlibraryinfo.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/corelib/global/qlibraryinfo.cpp b/src/corelib/global/qlibraryinfo.cpp
+index 9da9039f1a..9e9a8866f6 100644
+--- a/src/corelib/global/qlibraryinfo.cpp
++++ b/src/corelib/global/qlibraryinfo.cpp
+@@ -554,7 +554,7 @@ static QString getRelocatablePrefix()
+     Dl_info info;
+     int result = dladdr(reinterpret_cast<void *>(&QLibraryInfo::isDebugBuild), &info);
+     if (result > 0 && info.dli_fname)
+-        prefixPath = prefixFromQtCoreLibraryHelper(QString::fromLatin1(info.dli_fname));
++        prefixPath = prefixFromQtCoreLibraryHelper(QString::fromLocal8Bit(info.dli_fname));
+ #elif defined(Q_OS_WIN)
+     HMODULE hModule = getWindowsModuleHandle();
+     const int kBufferSize = 4096;
+-- 
+2.20.1.windows.1
+

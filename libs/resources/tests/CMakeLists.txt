@@ -23,4 +23,8 @@ ecm_add_tests(
     TestStorageFilterProxyModel
     TestTagResourceModel
     NAME_PREFIX "libs-kritaresources-"
-    LINK_LIBRARIES kritaglobal kritapigment kritaplugin kritaresources kritawidgets kritaversion KF5::ConfigCore Qt5::Sql Qt5::Test)
+    LINK_LIBRARIES kritaglobal kritapigment kritaplugin kritaresources kritawidgets kritaversion KF5::ConfigCore Qt5::Sql Qt5::Test
+    TARGET_NAMES_VAR OK_TESTS
+    ${MACOS_GUI_TEST})
+
+macos_test_fixrpath(${OK_TESTS})

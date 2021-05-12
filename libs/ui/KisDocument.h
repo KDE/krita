@@ -134,8 +134,7 @@ public:
     /**
      * Saves the document as @p path without changing the state of the
      * KisDocument (Path, modified flag etc.). Call this instead of
-     * KisParts::ReadWritePart::saveAs() to implement KisMainWindow's
-     * File --> Export feature.
+     * saveAs() to implement KisMainWindow's File --> Export feature.
      * Make sure to provide two seprate bool parameters otherwise it will mix them
      */
     bool exportDocument(const QString &path, const QByteArray &mimeType,bool isAdvancedExporting = false, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
@@ -167,15 +166,15 @@ public:
      */
     static QByteArray nativeFormatMimeType() { return KIS_MIME_TYPE; }
 
-    /// Checks whether a given mimetype can be handled natively.
-    bool isNativeFormat(const QByteArray& mimetype) const;
+    /// Checks whether a given mimeType can be handled natively.
+    bool isNativeFormat(const QByteArray& mimeType) const;
 
-    /// Returns a list of the mimetypes considered "native", i.e. which can
+    /// Returns a list of the mimeTypes considered "native", i.e. which can
     /// be saved by KisDocument without a filter, in *addition* to the main one
     static QStringList extraNativeMimeTypes() { return QStringList() << KIS_MIME_TYPE; }
 
     /**
-     * Returns the actual mimetype of the document
+     * Returns the actual mimeType of the document
      */
     QByteArray mimeType() const;
 
@@ -711,6 +710,11 @@ private:
     bool openPathInternal(const QString &path);
 
     void slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument);
+
+    /// Checks whether we are saving a resource we've been editing, and if so,
+    /// uses the resource server to update the resource.
+    /// @return true if this was a resource, false if the document needs to be saved
+    bool resourceSavingFilter(const QString &path, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration);
 
     class Private;
     Private *const d;

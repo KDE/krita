@@ -313,9 +313,26 @@
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="lblGifWarning">
+         <widget class="QLabel" name="lblFFMpegVersion">
+          <property name="text">
+             <string>FFMpeg Version: None</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblGifWarningFPS">
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Warning:&lt;/span&gt; animated gif images cannot have a framerate higher than 50. The framerate will be reduced to 50 frames per second.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblGifWarningFFMpeg">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Warning:&lt;/span&gt; FFMpeg must be at least version 4.2+ for gif transparency to work&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>

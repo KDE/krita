@@ -8,32 +8,92 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-ecm_add_tests(
-    TestKoColorSpaceRegistry.cpp
-    TestKoColorSpaceAbstract.cpp
-    TestColorConversionSystem.cpp
-    TestKoColor.cpp
-    TestKoIntegerMaths.cpp
-    TestConvolutionOpImpl.cpp
-    KoRgbU8ColorSpaceTester.cpp
-    TestKoColorSpaceSanity.cpp
-    TestFallBackColorTransformation.cpp
-    TestKoChannelInfo.cpp
-
-
-    NAME_PREFIX "libs-pigment-"
-    LINK_LIBRARIES kritapigment KF5::I18n Qt5::Test)
-
-ecm_add_tests(
-    TestColorConversion.cpp
-    TestKoColorSpaceMaths.cpp
-    TestKisSwatchGroup.cpp
-    # TestKoColorSet.cpp
-    TestKoStopGradient.cpp
-
-    NAME_PREFIX "libs-pigment-"
-    LINK_LIBRARIES kritapigment Qt5::Test)
+include(KritaAddBrokenUnitTest)
 
 add_executable(CCSGraph CCSGraph.cpp)
 target_link_libraries(CCSGraph  kritapigment KF5::I18n)
 ecm_mark_as_test(CCSGraph)
+
+if (APPLE)
+    ecm_add_tests(
+        TestKoColorSpaceAbstract.cpp
+        TestKoIntegerMaths.cpp
+        TestConvolutionOpImpl.cpp
+        TestKoChannelInfo.cpp
+        NAME_PREFIX "libs-pigment-"
+        LINK_LIBRARIES kritapigment KF5::I18n Qt5::Test
+        TARGET_NAMES_VAR OK_TESTS
+        ${MACOS_GUI_TEST})
+
+    macos_test_fixrpath(${OK_TESTS})
+
+    ecm_add_tests(
+        TestColorConversion.cpp
+        TestKoColorSpaceMaths.cpp
+
+        NAME_PREFIX "libs-pigment-"
+        LINK_LIBRARIES kritapigment Qt5::Test
+        TARGET_NAMES_VAR OK_TESTS
+        ${MACOS_GUI_TEST})
+
+   macos_test_fixrpath(${OK_TESTS} CCSGraph)
+
+    # Broken unit test.app can be run if installed
+    krita_add_broken_unit_tests(
+        TestKoColorSpaceRegistry.cpp
+        TestColorConversionSystem.cpp
+        TestKoColor.cpp
+        TestColorConversionSystem.cpp
+        TestKoColor.cpp
+        KoRgbU8ColorSpaceTester.cpp
+        TestKoColorSpaceSanity.cpp
+        TestFallBackColorTransformation.cpp
+
+        NAME_PREFIX "libs-pigment-"
+        LINK_LIBRARIES kritapigment KF5::I18n Qt5::Test
+        TARGET_NAMES_VAR BROKEN_TESTS
+        ${MACOS_GUI_TEST})
+
+    macos_test_fixrpath(${BROKEN_TESTS})
+
+    krita_add_broken_unit_tests(
+        TestKisSwatchGroup.cpp
+        TestKoStopGradient.cpp
+
+        NAME_PREFIX "libs-pigment-"
+        LINK_LIBRARIES kritapigment Qt5::Test
+        TARGET_NAMES_VAR BROKEN_TESTS
+        ${MACOS_GUI_TEST})
+
+
+    macos_test_fixrpath(${BROKEN_TESTS})
+
+
+else (APPLE)
+
+    ecm_add_tests(
+        TestKoColorSpaceRegistry.cpp
+        TestKoColorSpaceAbstract.cpp
+        TestColorConversionSystem.cpp
+        TestKoColor.cpp
+        TestKoIntegerMaths.cpp
+        TestConvolutionOpImpl.cpp
+        KoRgbU8ColorSpaceTester.cpp
+        TestKoColorSpaceSanity.cpp
+        TestFallBackColorTransformation.cpp
+        TestKoChannelInfo.cpp
+        NAME_PREFIX "libs-pigment-"
+        LINK_LIBRARIES kritapigment KF5::I18n Qt5::Test)
+
+
+    ecm_add_tests(
+        TestColorConversion.cpp
+        TestKoColorSpaceMaths.cpp
+        TestKisSwatchGroup.cpp
+        # TestKoColorSet.cpp
+        TestKoStopGradient.cpp
+
+        NAME_PREFIX "libs-pigment-"
+        LINK_LIBRARIES kritapigment Qt5::Test)
+
+endif()

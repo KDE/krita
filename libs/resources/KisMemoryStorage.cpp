@@ -126,7 +126,7 @@ bool KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)
     return true;
 }
 
-bool KisMemoryStorage::addResource(const QString &resourceType, KoResourceSP resource)
+bool KisMemoryStorage::saveAsNewVersion(const QString &resourceType, KoResourceSP resource)
 {
     QHash<QString, StoredResource> &typedResources =
         d->resourcesNew[resourceType];
@@ -185,6 +185,60 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
     }
 
     return retval;
+}
+
+bool KisMemoryStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
+{
+    QFileInfo fi(resourceFile);
+    if (d->resourcesNew.contains(resourceType) &&
+        d->resourcesNew[resourceType].contains(fi.fileName())) {
+        return false;
+    }
+
+    StoredResource storedResource;
+    storedResource.timestamp = QDateTime::currentDateTime();
+    storedResource.data.reset(new QByteArray());
+    QBuffer buffer(storedResource.data.data());
+    buffer.open(QIODevice::WriteOnly);
+    QFile f(resourceFile);
+
+    if (!f.open(QFile::ReadOnly)) {
+        return false;
+    }
+
+    buffer.write(f.readAll());
+    f.close();
+    buffer.close();
+
+    QHash<QString, StoredResource> &typedResources =
+        d->resourcesNew[resourceType];
+    typedResources.insert(fi.fileName(), storedResource);
+
+    return true;
+}
+
+bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP resource)
+{
+    QHash<QString, StoredResource> &typedResources = d->resourcesNew[resourceType];
+
+    if (typedResources.contains(resource->filename())) {
+        return false;
+    };
+
+    StoredResource storedResource;
+    storedResource.timestamp = QDateTime::currentDateTime();
+    storedResource.data.reset(new QByteArray());
+    QBuffer buffer(storedResource.data.data());
+    buffer.open(QIODevice::WriteOnly);
+    if (!resource->saveToDevice(&buffer)) {
+        qWarning() << "Could not save" << resource;
+        return false;
+    }
+    buffer.close();
+
+    typedResources.insert(resource->filename(), storedResource);
+
+    return true;
 }
 
 QByteArray KisMemoryStorage::resourceMd5(const QString &url)

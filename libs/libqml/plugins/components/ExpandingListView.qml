@@ -17,19 +17,18 @@ Item {
     Rectangle {
         id: topButton
         border {
-            width: 1;
+            width: 2;
             color: Settings.theme.color("components/expandingListView/selection/border");
         }
-        radius: (Constants.GridHeight / 4) - 2;
+        radius: height * 0.5;
         anchors {
             top: base.expandToTop ? undefined : parent.top;
             bottom: base.expandToTop ? parent.bottom : undefined;
-            bottomMargin: 1;
             right: parent.right;
             left: parent.left;
         }
         width: (Constants.GridWidth * 2) - 8 ;
-        height: Constants.GridHeight / 2;
+        height: Constants.GridHeight * 0.75;
         color: Settings.theme.color("components/expandingListView/selection/fill");
         z: 10;
 
@@ -38,11 +37,12 @@ Item {
             id: arrowsList
             anchors {
                 right: parent.right;
-                top: parent.top;
-                topMargin: 1;
+                verticalCenter: parent.verticalCenter;
+                rightMargin: -1;
             }
             height: parent.height;
             width: height;
+            sourceSize.height: height
             source: Settings.theme.icon("combo-arrows-white");
             smooth: true
         }
@@ -98,7 +98,7 @@ Item {
                 Rectangle {
                     anchors.fill: parent;
                     radius: height / 2;
-                    border.width: 1;
+                    border.width: 2;
                     border.color: Settings.theme.color("components/expandingListView/list/itemBorder");
                     color: Settings.theme.color("components/expandingListView/list/item");
                     opacity: model.isCategory ? 0.3 : 0;

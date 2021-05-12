@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
  * SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ * SPDX-FileCopyrightText: 2021 Deif Lou <ginoba@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -40,10 +41,13 @@
 #include <time.h>
 #include "kis_signals_blocker.h"
 #include <KisGlobalResourcesInterface.h>
+#include <strokes/KisMaskingBrushCompositeOpBase.h>
+#include <strokes/KisMaskingBrushCompositeOpFactory.h>
+#include <kis_random_accessor_ng.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
-
 
 KisTextureOption::KisTextureOption(KisBrushTextureFlags flags)
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
@@ -240,7 +244,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
 
     if (m_texturingMode == GRADIENT && canvasResourcesInterface) {
-        KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+        KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()->cloneAndBakeVariableColors(canvasResourcesInterface);
         if (gradient) {
             m_gradient = gradient;
             m_cachedGradient.setGradient(gradient, 256);
@@ -369,7 +373,8 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
         return;
     }
 
-    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    // Create mask device
+    KisPaintDeviceSP maskPatch = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect rect = dab->bounds();
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
@@ -380,33 +385,118 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;
 
-
-    KisFillPainter fillPainter(fillDevice);
+    KisFillPainter fillPainter(maskPatch);
     fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
     fillPainter.end();
 
-    qreal pressure = m_strengthOption.apply(info);
-    quint8* dabData = dab->data();
+    // Compute final strength
+    qreal strength = m_strengthOption.apply(info);
 
-    KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
-    for (int row = 0; row < rect.height(); ++row) {
-        for (int col = 0; col < rect.width(); ++col) {
-            if (m_texturingMode == MULTIPLY) {
-                dab->colorSpace()->multiplyAlpha(dabData, quint8(*iter->oldRawData() * pressure), 1);
-            }
-            else {
-                int pressureOffset = (1.0 - pressure) * 255;
+    // Select mask compositing op
+    KoChannelInfo::enumChannelValueType alphaChannelType = KoChannelInfo::UINT8;
+    int alphaChannelOffset = -1;
 
-                qint16 maskA = *iter->oldRawData() + pressureOffset;
-                quint8 dabA = dab->colorSpace()->opacityU8(dabData);
-
-                dabA = qMax(0, (qint16)dabA - maskA);
-                dab->colorSpace()->setOpacity(dabData, dabA, 1);
-            }
-
-            iter->nextPixel();
-            dabData += dab->pixelSize();
+    QList<KoChannelInfo *> channels = dab->colorSpace()->channels();
+    for (quint32 i = 0; i < dab->pixelSize(); i++) {
+        if (channels[i]->channelType() == KoChannelInfo::ALPHA) {
+            // TODO: check correctness for 16bits!
+            alphaChannelOffset = channels[i]->pos()/* * channels[i]->size()*/;
+            alphaChannelType = channels[i]->channelValueType();
+            break;
         }
-        iter->nextRow();
+    }
+
+    KIS_SAFE_ASSERT_RECOVER (alphaChannelOffset >= 0) {
+        alphaChannelOffset = 0;
+    }
+
+    QScopedPointer<KisMaskingBrushCompositeOpBase> compositeOp;
+
+    switch (m_texturingMode) {
+    case MULTIPLY:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_MULT, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case SUBTRACT:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_SUBTRACT, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case DARKEN:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_DARKEN, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case OVERLAY:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_OVERLAY, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case COLOR_DODGE:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_DODGE, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case COLOR_BURN:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_BURN, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case LINEAR_DODGE:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_LINEAR_DODGE, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case LINEAR_BURN:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_LINEAR_BURN, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case HARD_MIX_PHOTOSHOP:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_HARD_MIX_PHOTOSHOP, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case HARD_MIX_SOFTER_PHOTOSHOP:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case HEIGHT:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc("height", alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case LINEAR_HEIGHT:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc("linear_height", alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case HEIGHT_PHOTOSHOP:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc("height_photoshop", alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    case LINEAR_HEIGHT_PHOTOSHOP:
+        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc("linear_height_photoshop", alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
+        break;
+    default: return;
+    }
+
+    // Apply the mask to the dab
+    {
+        quint8 *dabIt = nullptr;
+        KisRandomConstAccessorSP maskPatchIt = maskPatch->createRandomConstAccessorNG();
+
+        qint32 dabY = dab->bounds().y();
+        qint32 maskPatchY = maskPatch->exactBounds().y() + 1;
+        qint32 rowsRemaining = dab->bounds().height();
+        const qint32 dabRowStride = dab->bounds().width() * dab->pixelSize();
+
+        while (rowsRemaining > 0) {
+            qint32 dabX = dab->bounds().x();
+            qint32 maskPatchX = maskPatch->exactBounds().x() + 1;
+            const qint32 numContiguousMaskPatchRows = maskPatchIt->numContiguousRows(maskPatchY);
+            const qint32 rows = std::min(rowsRemaining, numContiguousMaskPatchRows);
+            qint32 columnsRemaining = dab->bounds().width();
+
+            while (columnsRemaining > 0) {
+                const qint32 numContiguousMaskPatchColumns = maskPatchIt->numContiguousColumns(maskPatchX);
+                const qint32 columns = std::min(columnsRemaining, numContiguousMaskPatchColumns);
+
+                const qint32 maskPatchRowStride = maskPatchIt->rowStride(maskPatchX, maskPatchY);
+
+                dabIt = dab->data() + (dabY * dab->bounds().width() + dabX) * dab->pixelSize();
+                maskPatchIt->moveTo(maskPatchX, maskPatchY);
+
+                compositeOp->composite(maskPatchIt->rawDataConst(), maskPatchRowStride,
+                                       dabIt, dabRowStride,
+                                       columns, rows);
+
+                dabX += columns;
+                maskPatchX += columns;
+                columnsRemaining -= columns;
+
+            }
+
+            dabY += rows;
+            maskPatchY += rows;
+            rowsRemaining -= rows;
+        }
     }
 }

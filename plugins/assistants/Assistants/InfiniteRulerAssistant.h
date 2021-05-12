@@ -24,7 +24,7 @@ class InfiniteRulerAssistant : public KisPaintingAssistant
 public:
     InfiniteRulerAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
     //virtual void endStroke();
     QPointF getEditorPosition() const override;
     int numHandles() const override { return 2; }

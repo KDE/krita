@@ -26,8 +26,8 @@
 
 using namespace std;
 
-class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
-
+class GradientResourceServer : public KoResourceServer<KoAbstractGradient>
+{
 public:
 
     GradientResourceServer(const QString& type)

@@ -86,6 +86,7 @@ private:
     QScopedPointer<KisPainter> m_tempPainter;
     QScopedPointer<KisPainter> m_backgroundPainter;
     KisFixedPaintDeviceSP m_blendDevice;
+    KisFixedPaintDeviceSP m_maskDevice;
 
 };
 

@@ -6,6 +6,7 @@
 
 #include "kis_texture_chooser.h"
 #include "kis_texture_option.h"
+#include <KoCompositeOpRegistry.h>
 
 #include "widgets/kis_gradient_chooser.h"
 
@@ -40,19 +41,34 @@ KisTextureChooser::KisTextureChooser(KisBrushTextureFlags flags, QWidget *parent
 
 
     QStringList texturingModes;
+// TODO:
+//    if (flags & SupportsLightnessMode) {
+//        cmbTexturingMode->addItem(i18n("Lightness Map"), KisTextureProperties::LIGHTNESS);
+//    }
 
-    cmbTexturingMode->addItem(i18n("Multiply Alpha"), KisTextureProperties::MULTIPLY);
-    cmbTexturingMode->addItem(i18n("Subtract Alpha"), KisTextureProperties::SUBTRACT);
+//    if (flags & SupportsGradientMode) {
+//        cmbTexturingMode->addItem(i18n("Gradient Map"), KisTextureProperties::GRADIENT);
+//    }
 
-    if (flags & SupportsLightnessMode) {
-        cmbTexturingMode->addItem(i18n("Lightness Map"), KisTextureProperties::LIGHTNESS);
-    }
-
-    if (flags & SupportsGradientMode) {
-        cmbTexturingMode->addItem(i18n("Gradient Map"), KisTextureProperties::GRADIENT);
-    }
-
-    selectTexturingMode(KisTextureProperties::SUBTRACT);
+    texturingModes
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_MULT).name()
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_SUBTRACT).name()
+        << i18nc("Lightness Map blend mode for brush texture", "Lightness Map")
+        << i18nc("Gradient Map blend mode for brush texture", "Gradient Map")
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_DARKEN).name()
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_OVERLAY).name()
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_DODGE).name()
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_BURN).name()
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LINEAR_DODGE).name()
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LINEAR_BURN).name()
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_MIX_PHOTOSHOP).name()
+        << KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP).name()
+        << i18nc("Height blend mode for brush texture", "Height")
+        << i18nc("Linear Height blend mode for brush texture", "Linear Height")
+        << i18nc("Height (Photoshop) blend mode for brush texture", "Height (Photoshop)")
+        << i18nc("Linear Height (Photoshop) blend mode for brush texture", "Linear Height (Photoshop)");
+    cmbTexturingMode->addItems(texturingModes);
+    cmbTexturingMode->setCurrentIndex(KisTextureProperties::SUBTRACT);
 
     QStringList cutOffPolicies;
     cutOffPolicies << i18n("Cut Off Disabled") << i18n("Cut Off Brush") << i18n("Cut Off Pattern");

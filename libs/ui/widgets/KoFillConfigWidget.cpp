@@ -355,6 +355,8 @@ void KoFillConfigWidget::activate()
 
 void KoFillConfigWidget::deactivate()
 {
+    // don't trigger shape update during deactivation
+    KisSignalsBlocker b(d->canvas->resourceManager());
     emit sigInternalRecoverColorInResourceManager();
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(d->deactivationLocks.empty());

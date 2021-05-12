@@ -210,11 +210,10 @@ void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
     m_context.currentGC()->matrix = t;
 }
 
-void SvgParser::setForcedFontSizeResolution(qreal value)
+void SvgParser::setDefaultKraTextVersion(int version)
 {
-    if (qFuzzyCompare(value, 0.0)) return;
-
-    m_context.currentGC()->forcedFontSizeCoeff = 72.0 / value;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_context.currentGC());
+    m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, version);
 }
 
 QList<KoShape*> SvgParser::shapes() const
@@ -1562,6 +1561,15 @@ QList<KoShape*> SvgParser::parseSvg(const QDomElement &e, QSizeF *fragmentSize)
         gc->matrix = move * gc->matrix;
     }
 
+    /**
+     * In internal SVG coordinate systems pixles are linked to absolute
+     * values with a fixed ratio.
+     *
+     * See CSS specification:
+     * https://www.w3.org/TR/css-values-3/#absolute-lengths
+     */
+    gc->pixelsPerInch = 96.0;
+
     applyViewBoxTransform(e);
 
     QList<KoShape*> shapes;
@@ -1726,6 +1734,14 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     m_context.pushGraphicsContext(e);
     uploadStyleToContext(e);
+
+    if (e.hasAttribute("krita:textVersion")) {
+        m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, e.attribute("krita:textVersion", "1").toInt());
+
+        if (m_isInsideTextSubtree) {
+            debugFlake << "WARNING: \"krita:textVersion\" attribute appeared in non-root text shape";
+        }
+    }
 
     KoSvgTextChunkShape *textChunk = rootTextShape ? rootTextShape : new KoSvgTextChunkShape();
 

@@ -44,17 +44,6 @@ public:
     void addFactory(KoShapeFactoryBase *factory);
 
     /**
-     * Use the element to find out which flake plugin can load it, and
-     * returns the loaded shape. The element expected is one of
-     * 'draw:line', 'draw:frame' / etc.
-     *
-     * @returns the shape or 0 if no shape could be created. The shape may have as its parent
-     *    set a layer which was previously created and stored in the context.
-     * @see KoShapeLoadingContext::layer()
-     */
-    KoShape *createShapeFromXML(const QDomElement &element, KoShapeLoadingContext &context) const;
-
-    /**
      * Returns a list of shape factories supporting the specified xml element.
      * @param nameSpace the namespace of the xml element, see KoXmlNS for valid namespaces
      * @param elementName the tag name of the element

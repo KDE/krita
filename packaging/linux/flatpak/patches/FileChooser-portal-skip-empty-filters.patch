@@ -1,0 +1,14 @@
+diff -ur qtbase-everywhere-src-5.12.9/src/plugins/platformthemes/xdgdesktopportal/qxdgdesktopportalfiledialog.cpp qtbase-everywhere-src-5.12.9_new/src/plugins/platformthemes/xdgdesktopportal/qxdgdesktopportalfiledialog.cpp
+--- qtbase-everywhere-src-5.12.9/src/plugins/platformthemes/xdgdesktopportal/qxdgdesktopportalfiledialog.cpp	2020-06-03 12:51:20.000000000 +0200
++++ qtbase-everywhere-src-5.12.9_new/src/plugins/platformthemes/xdgdesktopportal/qxdgdesktopportalfiledialog.cpp	2020-10-08 06:33:03.770265829 +0200
+@@ -227,6 +227,10 @@
+                 QString userVisibleName = match.captured(1);
+                 QStringList filterStrings = match.captured(2).split(QLatin1Char(' '), QString::SkipEmptyParts);
+ 
++                if (filterStrings.isEmpty()) {
++                    continue;
++                }
++
+                 FilterConditionList filterConditions;
+                 for (const QString &filterString : filterStrings) {
+                     FilterCondition filterCondition;

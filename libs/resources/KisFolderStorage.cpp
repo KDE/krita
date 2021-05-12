@@ -95,7 +95,7 @@ bool KisFolderStorage::addTag(const QString &/*resourceType*/, KisTagSP /*tag*/)
     return false;
 }
 
-bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
+bool KisFolderStorage::saveAsNewVersion(const QString &resourceType, KoResourceSP _resource)
 {
     return KisStorageVersioningHelper::addVersionedResource(location() + "/" + resourceType, _resource, 0);
 }
@@ -183,6 +183,58 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources
 QSharedPointer<KisResourceStorage::TagIterator> KisFolderStorage::tags(const QString &resourceType)
 {
     return QSharedPointer<KisResourceStorage::TagIterator>(new FolderTagIterator(location(), resourceType));
+}
+
+bool KisFolderStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
+{
+
+    QFileInfo fi(resourceFile);
+    if (!fi.exists()) {
+        qWarning() << "Cannot import" << resourceFile << ": file does not exist";
+        return false;
+    }
+
+    const QString resourcesSaveLocation = location() + "/" + resourceType;
+
+    QFile f(resourceFile);
+    if (!f.copy(resourcesSaveLocation + "/" + fi.fileName())) {
+        qWarning() << "Cannot copy" << resourceFile << "to" << resourcesSaveLocation + "/" + fi.fileName();
+        return false;
+    }
+
+    return true;
+
+}
+
+bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP resource)
+{
+    if (!resource || !resource->valid()) return false;
+
+    const QString resourcesSaveLocation = location() + "/" + resourceType;
+
+    QFileInfo fi(resourcesSaveLocation + "/" + resource->filename());
+    if (fi.exists()) {
+        qWarning() << "Resource" << resourceType << resource->filename() << "already exists in" << resourcesSaveLocation;
+        return false;
+    }
+
+    QFile f(fi.absoluteFilePath());
+    if (!f.open(QFile::WriteOnly)) {
+        qWarning() << "Could not open" << fi.absoluteFilePath() << "for writing.";
+        return false;
+    }
+
+    if (!resource->saveToDevice(&f)) {
+        qWarning() << "Could not save resource to" << fi.absoluteFilePath();
+        f.close();
+        return false;
+    }
+    f.close();
+
+
+
+
+    return true;
 }
 
 QStringList KisFolderStorage::metaDataKeys() const

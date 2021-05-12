@@ -24,6 +24,7 @@
         <file>light_download.svg</file>
         <file>light_drive-harddisk.svg</file>
         <file>light_edit-clear.svg</file>
+        <file alias="light_clear.svg">light_edit-clear.svg</file>
         <file>light_edit-copy.svg</file>
         <file>light_edit-cut.svg</file>
         <file>light_edit-paste.svg</file>
@@ -45,7 +46,6 @@
         <file>light_tag.svg</file>
         <file>light_tools-report-bug.svg</file>
         <file>light_tools-wizard.svg</file>
-        <file>light_view-filter.svg</file>
         <file>light_view-fullscreen.svg</file>
         <file>light_view-grid.svg</file>
         <file>light_view-list-text.svg</file>
@@ -53,8 +53,10 @@
         <file>light_window-close.svg</file>
         <file>light_window-new.svg</file>
         <file>light_zoom-in.svg</file>
+        <file alias="light_view_zoom_in.svg">light_zoom-in.svg</file>
         <file>light_zoom-original.svg</file>
         <file>light_zoom-out.svg</file>
+        <file alias="light_view_zoom_out.svg">light_zoom-out.svg</file>
         <file>breeze-light-icons.qrc</file>
         <file>light_update-medium.svg</file>
     </qresource>

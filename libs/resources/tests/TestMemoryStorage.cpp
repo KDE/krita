@@ -32,7 +32,7 @@ void TestMemoryStorage ::testStorage()
 {
     KisMemoryStorage memoryStorage;
     KoResourceSP resource(new DummyResource("test.gbr", ResourceType::Brushes));
-    memoryStorage.addResource(ResourceType::Brushes, resource);
+    memoryStorage.saveAsNewVersion(ResourceType::Brushes, resource);
 
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = memoryStorage.resources(ResourceType::Brushes);
     QVERIFY(iter->hasNext());
@@ -49,9 +49,9 @@ void TestMemoryStorage ::testStorageRetrieval()
 {
     KisMemoryStorage memoryStorage;
     KoResourceSP resource1(new DummyResource("test1.gbr", ResourceType::Brushes));
-    memoryStorage.addResource(ResourceType::Brushes, resource1);
+    memoryStorage.saveAsNewVersion(ResourceType::Brushes, resource1);
     KoResourceSP resource2(new DummyResource("test2.gbr", ResourceType::Brushes));
-    memoryStorage.addResource(ResourceType::Brushes, resource2);
+    memoryStorage.saveAsNewVersion(ResourceType::Brushes, resource2);
 
     QString url = QString("brushes/test1.0000.gbr");
     KoResourceSP resource = memoryStorage.resource(url);
@@ -82,7 +82,7 @@ void TestMemoryStorage::testAddResource()
 {
     KisMemoryStorage memoryStorage;
     KoResourceSP res1(new DummyResource("test1.gbr", ResourceType::Brushes));
-    memoryStorage.addResource(ResourceType::Brushes, res1);
+    memoryStorage.saveAsNewVersion(ResourceType::Brushes, res1);
 
     ResourceTestHelper::testVersionedStorage(memoryStorage, ResourceType::Brushes, "brushes/test1.0000.gbr");
     ResourceTestHelper::testVersionedStorageIterator(memoryStorage, ResourceType::Brushes, "brushes/test1.0000.gbr");

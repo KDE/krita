@@ -18,6 +18,7 @@ private Q_SLOTS:
     void testSetActive();
     void cleanupTestCase();
     void testMetaData();
+    void testImportStorage();
 
 private:
 

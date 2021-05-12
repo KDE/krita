@@ -69,6 +69,14 @@ void addProp(SvgLoadingContext &context,
     }
 }
 
+void TestSvgText::initTestCase()
+{
+    /// The test initialization function sets Qt::AA_Use96Dpi
+    /// application attribute, but it doesn't affect the font
+    /// that has already been set as the default application
+    /// font.
+    qApp->setFont(QFont("sans", 10));
+}
 
 void TestSvgText::testTextProperties()
 {
@@ -111,10 +119,10 @@ void TestSvgText::testTextProperties()
     addProp(context, props, "baseline-shift", "10%", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftPercentage);
     QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 0.1);
 
-    context.currentGC()->font.setPointSizeF(180);
+    context.currentGC()->textProperties.setProperty(KoSvgTextProperties::FontSizeId, 180.0);
 
     addProp(context, props, "baseline-shift", "36", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftPercentage);
-    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 0.2);
+    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 3.6);
 
     addProp(context, props, "kerning", "auto", KoSvgTextProperties::KerningId, KoSvgText::AutoValue());
     addProp(context, props, "kerning", "20", KoSvgTextProperties::KerningId, KoSvgText::AutoValue(20.0));
@@ -203,77 +211,82 @@ void TestSvgText::testParseFontStyles()
 
     //QCOMPARE(styles.size(), 3);
 
+    auto getFont = [&context] () {
+        return context.currentGC()->textProperties.generateFont();
+    };
+
+
     // TODO: multiple fonts!
-    QCOMPARE(context.currentGC()->font.family(), QString("Verdana"));
+    QCOMPARE(getFont().family(), QString("Verdana"));
 
     {
         QStringList expectedFonts = {"Verdana", "Times New Roman", "serif"};
-        QCOMPARE(context.currentGC()->fontFamiliesList, expectedFonts);
+        QCOMPARE(context.currentGC()->textProperties.property(KoSvgTextProperties::FontFamiliesId).toStringList(), expectedFonts);
     }
 
-    QCOMPARE(context.currentGC()->font.pointSizeF(), 15.0);
-    QCOMPARE(context.currentGC()->font.style(), QFont::StyleOblique);
-    QCOMPARE(context.currentGC()->font.capitalization(), QFont::SmallCaps);
-    QCOMPARE(context.currentGC()->font.weight(), 66);
+    QCOMPARE(getFont().pointSizeF(), 15.0);
+    QCOMPARE(getFont().style(), QFont::StyleOblique);
+    QCOMPARE(getFont().capitalization(), QFont::SmallCaps);
+    QCOMPARE(getFont().weight(), 66);
 
     {
         SvgStyles fontModifier;
         fontModifier["font-weight"] = "bolder";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.weight(), 75);
+        QCOMPARE(getFont().weight(), 75);
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["font-weight"] = "lighter";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.weight(), 66);
+        QCOMPARE(getFont().weight(), 66);
     }
 
-    QCOMPARE(context.currentGC()->font.stretch(), int(QFont::ExtraCondensed));
+    QCOMPARE(getFont().stretch(), int(QFont::ExtraCondensed));
 
     {
         SvgStyles fontModifier;
         fontModifier["font-stretch"] = "narrower";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.stretch(), int(QFont::UltraCondensed));
+        QCOMPARE(getFont().stretch(), int(QFont::UltraCondensed));
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["font-stretch"] = "wider";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.stretch(), int(QFont::ExtraCondensed));
+        QCOMPARE(getFont().stretch(), int(QFont::ExtraCondensed));
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["text-decoration"] = "underline";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.underline(), true);
+        QCOMPARE(getFont().underline(), true);
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["text-decoration"] = "overline";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.overline(), true);
+        QCOMPARE(getFont().overline(), true);
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["text-decoration"] = "line-through";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.strikeOut(), true);
+        QCOMPARE(getFont().strikeOut(), true);
     }
 
     {
         SvgStyles fontModifier;
         fontModifier["text-decoration"] = " line-through overline";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(context.currentGC()->font.underline(), false);
-        QCOMPARE(context.currentGC()->font.strikeOut(), true);
-        QCOMPARE(context.currentGC()->font.overline(), true);
+        QCOMPARE(getFont().underline(), false);
+        QCOMPARE(getFont().strikeOut(), true);
+        QCOMPARE(getFont().overline(), true);
     }
 
 }
@@ -299,7 +312,11 @@ void TestSvgText::testParseTextStyles()
     SvgStyles styles = context.styleParser().collectStyles(root);
     context.styleParser().parseFont(styles);
 
-    QCOMPARE(context.currentGC()->font.family(), QString("Verdana"));
+    auto getFont = [&context] () {
+        return context.currentGC()->textProperties.generateFont();
+    };
+
+    QCOMPARE(getFont().family(), QString("Verdana"));
 
     KoSvgTextProperties &props = context.currentGC()->textProperties;
 
@@ -338,7 +355,7 @@ void TestSvgText::testSimpleText()
     }
 
     SvgRenderTester t (data);
-    t.test_standard("text_simple", QSize(175, 40), 72.0);
+    t.test_standard("text_simple", QSize(140, 40), 72.0);
 
     KoShape *shape = t.findShape("testRect");
     KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
@@ -403,7 +420,7 @@ void TestSvgText::testComplexText()
             "</svg>";
 
     SvgRenderTester t (data);
-    t.test_standard("text_complex", QSize(385, 56), 72.0);
+    t.test_standard("text_complex", QSize(370, 56), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
     QVERIFY(baseShape);
@@ -543,7 +560,10 @@ void TestSvgText::testHindiText()
 #endif
     }
 
-    t.test_standard("text_hindi", QSize(260, 30), 72);
+    t.setCheckQImagePremultiplied(true);
+    t.setFuzzyThreshold(5);
+
+    t.test_standard("text_hindi", QSize(200, 30), 72);
 }
 
 void TestSvgText::testTextBaselineShift()
@@ -570,6 +590,7 @@ void TestSvgText::testTextBaselineShift()
 
     SvgRenderTester t (data);
 
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_baseline_shift", QSize(180, 40), 72);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -964,7 +985,7 @@ void TestSvgText::testConvertToStrippedSvg()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" stroke=\"#000000\" stroke-opacity=\"0\" stroke-width=\"0\" stroke-linecap=\"square\" stroke-linejoin=\"bevel\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 
     // test loading
 
@@ -1023,7 +1044,7 @@ void TestSvgText::testConvertToStrippedSvgNullOrigin()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" stroke=\"#000000\" stroke-opacity=\"0\" stroke-width=\"0\" stroke-linecap=\"square\" stroke-linejoin=\"bevel\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 }
 
 void TestSvgText::testConvertFromIncorrectStrippedSvg()
@@ -1113,7 +1134,7 @@ void TestSvgText::testTrailingWhitespace()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"DejaVu Sans\" font-size=\"10\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
             "        <tspan>%1</tspan>%2<tspan>%3</tspan>"
             "    </text>"
 
@@ -1312,6 +1333,104 @@ void TestSvgText::testTextOutline()
 }
 
 
+void testTextFontSizeHelper(QString filename, int dpi, bool pixelSize)
+{
+    ENTER_FUNCTION() << ppVar(dpi) << ppVar(filename) << ppVar(pixelSize);
+
+    QFont testFont("Chilanka");
+    if (!QFontInfo(testFont).exactMatch()) {
+        qWarning() << "Chilanka is *not* found! Text rendering might be broken!";
+    }
+
+    if (pixelSize) {
+        testFont.setPixelSize(20);
+    } else {
+        testFont.setPointSize(20);
+    }
+
+    QTextLayout layout("Chy QTextLayout", testFont);
+
+    QFontMetricsF fontMetrics(testFont);
+    int leading = fontMetrics.leading();
+    qreal height = 0;
+    layout.setCacheEnabled(true);
+    layout.beginLayout();
+    qreal lineWidth = 1000;
+    while (1) {
+        QTextLine line = layout.createLine();
+        if (!line.isValid())
+            break;
+
+        line.setLineWidth(lineWidth);
+        height += leading;
+        line.setPosition(QPointF(0, height));
+        height += line.height();
+    }
+    layout.endLayout();
+
+    ENTER_FUNCTION() << ppVar(layout.boundingRect());
+    QImage image(QSize(200, 100), QImage::Format_ARGB32);
+    // 72 dpi => ~2834 dpm
+    qreal inchesInMeter = 39.37007874;
+    qreal dpm = dpi*inchesInMeter;
+
+    image.setDotsPerMeterX((int)dpm);
+    image.setDotsPerMeterY((int)dpm);
+
+    ENTER_FUNCTION() << ppVar(image.dotsPerMeterX()) << ppVar(image.dotsPerMeterY()) << ppVar(image.devicePixelRatioF())
+                     << ppVar(image.devicePixelRatioFScale()) << ppVar(image.logicalDpiX()) << ppVar(image.logicalDpiY())
+                     << ppVar(image.logicalDpiX()) << ppVar(image.physicalDpiX())<< ppVar(image.physicalDpiY());
+
+    image.fill(Qt::white);
+    QPainter painter(&image);
+    //painter.se
+    layout.draw(&painter, QPointF(0, 0));
 
 
-SIMPLE_TEST_MAIN(TestSvgText)
+    QBrush brush(Qt::red);
+    QPen pen(Qt::red);
+    painter.setBrush(brush);
+    painter.setPen(pen);
+    painter.drawLine(QPoint(0, 20), QPoint(200, 20));
+    painter.drawLine(QPoint(0, 40), QPoint(200, 40));
+    painter.drawLine(QPoint(0, 60), QPoint(200, 60));
+    painter.drawLine(QPoint(0, 80), QPoint(200, 80));
+
+    QBrush brush2(Qt::blue);
+    QPen pen2(Qt::blue);
+    painter.setBrush(brush2);
+    painter.setPen(pen2);
+
+    painter.setFont(testFont);
+    //painter.drawText(QPointF(0, 0), "Chy QPainter");
+    painter.drawText(QRectF(0, 40, 200, 100), "Chy QPainter");
+
+    ENTER_FUNCTION() << ppVar(painter.fontMetrics().height()) << ppVar(painter.fontMetrics().xHeight());
+    ENTER_FUNCTION() << ppVar(QFontMetrics(testFont).height()) << ppVar(QFontMetrics(testFont).xHeight());
+
+
+
+    QString filenameSuffix = (pixelSize ? "pixel_" : "point_") + QString::number(dpi);
+
+    image.save(QString(FILES_OUTPUT_DIR) + '/' + filename + "_" + filenameSuffix + ".png");
+
+}
+
+void TestSvgText::testTextFontSize()
+{
+    QString filename = "testTextFontSize";
+
+    testTextFontSizeHelper(filename, 72, true);
+    testTextFontSizeHelper(filename, 72, false);
+    testTextFontSizeHelper(filename, 4*72, true);
+    testTextFontSizeHelper(filename, 4*72, false);
+
+    testTextFontSizeHelper(filename, 96, true);
+    testTextFontSizeHelper(filename, 96, false);
+
+}
+
+#include "kistest.h"
+
+
+KISTEST_MAIN(TestSvgText)

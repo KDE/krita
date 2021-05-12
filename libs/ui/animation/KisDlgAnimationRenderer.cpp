@@ -37,6 +37,7 @@
 #include "kis_acyclic_signal_connector.h"
 #include "KisVideoSaver.h"
 #include "KisAnimationRenderingOptions.h"
+#include "animation/KisFFMpegWrapper.h"
 #include "VideoExportOptionsDialog.h"
 #include "kis_image_config.h"
 
@@ -281,7 +282,20 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     }
 
     m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
-    m_page->ffmpegLocation->setFileName(findFFMpeg(lastUsedOptions.ffmpegPath));
+    KisConfig cfg(false);
+    QString ffmpegPath = cfg.ffmpegLocation();
+    QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(ffmpegPath.isEmpty() ? lastUsedOptions.ffmpegPath:ffmpegPath);
+
+    ffmpegPath = ffmpegJsonObj["path"].toString();
+    ffmpegVersion = ffmpegJsonObj["version"].toString();
+
+    m_page->ffmpegLocation->setFileName(ffmpegPath);
+    cfg.setFFMpegLocation(ffmpegPath);
+    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion);
+    
+    ffmpegWarningCheck();
+
+    connect(m_page->ffmpegLocation, SIGNAL(textChanged(QString)), SLOT(slotFFMpegChanged(QString)));
 
     // Initialize these settings based on the current document context..
     m_page->intStart->setValue(doc.image()->animationInterface()->playbackRange().start());
@@ -305,6 +319,26 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     m_page->chkIncludeAudio->setChecked(!doc.image()->animationInterface()->isAudioMuted());
 }
 
+void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
+    KisConfig cfg(false);
+    QJsonObject ffmpegChangeJsonObj = KisFFMpegWrapper::findFFMpeg(path);
+    ffmpegVersion = ffmpegChangeJsonObj["version"].toString();
+
+    cfg.setFFMpegLocation(ffmpegChangeJsonObj["path"].toString());
+    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion);
+
+    ffmpegWarningCheck();
+}
+
+void KisDlgAnimationRenderer::ffmpegWarningCheck() {
+    const QString mimeType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
+
+    QRegularExpression minVerFFMpegRX("^n{0,1}(?:[0-3]|4\\.[01])[\\.\\-]");
+    QRegularExpressionMatch minVerFFMpegMatch = minVerFFMpegRX.match(ffmpegVersion);
+
+    m_page->lblGifWarningFFMpeg->setVisible((mimeType == "image/gif" && minVerFFMpegMatch.hasMatch() ));
+}
+
 QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QString &mimeType)
 {
     const QString docFileName = !doc->localFilePath().isEmpty() ?
@@ -321,7 +355,9 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
 
     // m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png" );
-    m_page->lblGifWarning->setVisible((mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50));
+    m_page->lblGifWarningFPS->setVisible((mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50));
+
+    ffmpegWarningCheck();
 
     QString videoFileName = defaultVideoFileName(m_doc, mimeType);
 
@@ -541,62 +577,6 @@ void KisDlgAnimationRenderer::slotDialogAccepted()
     m_image->animationInterface()->setExportInitialFrameNumber(options.sequenceStart);
 }
 
-QString KisDlgAnimationRenderer::findFFMpeg(const QString &customLocation)
-{
-    QString result;
-
-    QStringList proposedPaths;
-
-    if (!customLocation.isEmpty()) {
-        proposedPaths << customLocation;
-        proposedPaths << customLocation + '/' + "ffmpeg";
-    }
-
-    proposedPaths << KoResourcePaths::getApplicationRoot() +
-        '/' + "bin" + '/' + "ffmpeg";
-
-#ifndef Q_OS_WIN
-    proposedPaths << QDir::homePath() + "/bin/ffmpeg";
-    proposedPaths << "/usr/bin/ffmpeg";
-    proposedPaths << "/usr/local/bin/ffmpeg";
-#endif
-
-    Q_FOREACH (QString path, proposedPaths) {
-        if (path.isEmpty()) continue;
-
-#ifdef Q_OS_WIN
-        path = QDir::toNativeSeparators(QDir::cleanPath(path));
-        if (path.endsWith('/')) {
-            continue;
-        }
-        if (!path.endsWith(".exe")) {
-            if (!QFile::exists(path)) {
-                path += ".exe";
-                if (!QFile::exists(path)) {
-                    continue;
-                }
-            }
-        }
-#endif
-        QProcess testProcess;
-        testProcess.start(path, QStringList() << "-version");
-        if (testProcess.waitForStarted(1000)) {
-            testProcess.waitForFinished(1000);
-        }
-
-        const bool successfulStart =
-            testProcess.state() == QProcess::NotRunning &&
-            testProcess.error() == QProcess::UnknownError;
-
-        if (successfulStart) {
-            result = path;
-            break;
-        }
-    }
-
-    return result;
-}
-
 void KisDlgAnimationRenderer::slotExportTypeChanged()
 {
     KisConfig cfg(false);
@@ -657,7 +637,7 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
 void KisDlgAnimationRenderer::frameRateChanged(int framerate)
 {
     const QString mimeType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
-    m_page->lblGifWarning->setVisible((mimeType == "image/gif" && framerate > 50));
+    m_page->lblGifWarningFPS->setVisible((mimeType == "image/gif" && framerate > 50));
 }
 
 void KisDlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)

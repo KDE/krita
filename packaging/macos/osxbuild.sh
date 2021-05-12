@@ -49,6 +49,7 @@ echo "$(cmake --version | head -n 1)"
 # Set some global variables.
 OSXBUILD_TYPE="RelWithDebInfo"
 OSXBUILD_TESTING="OFF"
+OSXBUILD_HIDE_SAFEASSERTS="ON"
 
 # -- Parse input args
 for arg in "${@}"; do
@@ -61,6 +62,8 @@ for arg in "${@}"; do
         OSXBUILD_TARBALLINSTALL="TRUE"
     elif [[ "${arg}" = --universal ]]; then
         OSXBUILD_UNIVERSAL="TRUE"
+    elif [[ "${arg}" = --showasserts ]]; then
+        OSXBUILD_HIDE_SAFEASSERTS="OFF"
     else
         parsed_args="${parsed_args} ${arg}"
     fi
@@ -390,6 +393,7 @@ build_3rdparty () {
     cmake_3rdparty ext_mypaint
 
 
+
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"
     log "Copying ${KIS_INSTALL_DIR} to ${KIS_INSTALL_DIR}.onlydeps"
@@ -433,7 +437,7 @@ build_krita () {
         -DCMAKE_PREFIX_PATH=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \
         -DBUILD_TESTING=${OSXBUILD_TESTING} \
-        -DHIDE_SAFE_ASSERTS=ON \
+        -DHIDE_SAFE_ASSERTS=${OSXBUILD_HIDE_SAFEASSERTS} \
         -DFETCH_TRANSLATIONS=ON \
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
@@ -570,7 +574,7 @@ fix_boost_rpath () {
 
     print_msg "Fixing boost in... ${KIS_INSTALL_DIR}"
     # install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $BUILDROOT/$KRITA_INSTALL/bin/krita.app/Contents/MacOS/gmic_krita_qt
-    log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
+    # log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
     # echo "Added rpath ${KIS_INSTALL_DIR}/lib to krita bin"
     # install_name_tool -add_rpath ${BUILDROOT}/deps/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
     log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita

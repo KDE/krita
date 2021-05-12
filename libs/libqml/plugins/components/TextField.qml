@@ -32,7 +32,6 @@ Item {
 
     Item {
         anchors.fill: parent;
-        anchors.margins: Constants.DefaultMargin;
 
         Rectangle {
             id: fill;
@@ -70,7 +69,9 @@ Item {
                     rightMargin: base.height / 4;
                     verticalCenter: parent.verticalCenter;
                 }
-                font: Settings.theme.font("application");
+                font.family: "Source Sans Pro";
+                font.styleName: "Regular";
+                font.pixelSize: Constants.DefaultFontSize;
                 onFocusChanged: {
                     if (focus === false) {
                         Qt.inputMethod.hide()

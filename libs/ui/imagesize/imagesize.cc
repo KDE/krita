@@ -178,5 +178,3 @@ void ImageSize::slotSelectionScale()
     }
     delete dlgSize;
 }
-
-#include "imagesize.moc"

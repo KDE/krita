@@ -357,6 +357,355 @@ void KisAlgebra2DTest::testLineIntersections()
     }
 }
 
+void testLineRectIntersection(QRect rect, QLineF line, QLineF expected, bool extendFirst, bool extendSecond, bool intersectsExpected)
+{
+    QLineF result = line;
+    bool intersects = KisAlgebra2D::intersectLineRect(result, rect, extendFirst, extendSecond);
+
+    float epsilon = 1e-4; // good enough for most usecases // I don't use qFuzzyCompare because it has too small epsilon
+
+    auto fuzzyCompare = [epsilon] (float a, float b) -> bool {
+            return (qAbs(a - b) < epsilon); };
+    auto fuzzyComparePoint = [&] (QPointF a, QPointF b) -> bool {
+            return fuzzyCompare(a.x(), b.x()) && fuzzyCompare(a.y(), b.y()); };
+    auto fuzzyCompareLine = [&] (QLineF a, QLineF b) -> bool {
+            return fuzzyComparePoint(a.p1(), b.p1()) && fuzzyComparePoint(a.p2(), b.p2()); };
+
+    bool success = fuzzyCompareLine(result, expected) && intersectsExpected == intersects;
+
+    if (!success) {
+        qCritical() << "FAILURE";
+        qCritical() << "intersects: " << intersects;
+        qCritical() << "intersects expected: " << intersectsExpected;
+        qCritical() << "Extend: " << extendFirst << extendSecond;
+        qCritical();
+
+        qCritical() << "original: " << line;
+        qCritical() << "rectangle was: " << rect;
+        qCritical() << "expected: " << expected;
+        qCritical() << "result: " << result;
+    }
+
+    QVERIFY(success);
+
+}
+
+
+void KisAlgebra2DTest::testLineRectIntersectionsManual()
+{
+    int x1 = 100, x2 = 400; // for x values
+    int y1 = 130, y2 = 430; // for y values
+
+
+    QRect rect1(x1, y1, x2 - x1, y2 - y1);
+    QLineF line1original(x1, y1, x2, y2);
+    QLineF line1expected = line1original;
+
+    testLineRectIntersection(rect1, line1original, line1expected, false, false, true);
+
+
+    QRect rect2(x1, y1, x2, y2);
+    QLineF line2original(x1, y1, x2, y2);
+    QLineF line2expected = line2original;
+
+    testLineRectIntersection(rect2, line2original, line2expected, false, false, true);
+
+    QRect rect3 = QRect(0,0, 2616, 1748);
+    QLineF line3original = QLineF(QPointF(1110.74,398.93), QPointF(0,394.068));
+    QLineF line3expected = line3original;
+
+    testLineRectIntersection(rect3, line3original, line3expected, false, false, true);
+
+    QRect rect4 = rect1;
+    QLineF line4 = QLineF(x2, y1, x1, y2);
+    testLineRectIntersection(rect4, line4, line4, false, false, true);
+
+
+    QRect rect5 = rect1;
+    QLineF line5 = QLineF(x2, y2, x1, y1);
+    testLineRectIntersection(rect5, line5, line5, false, false, true);
+
+    QRect rect6 = rect1;
+    QLineF line6 = QLineF(x2, y1, x2, y2);
+    testLineRectIntersection(rect6, line6, line6, false, false, true);
+
+    QRect rect7 = rect3;
+    QLineF line7 = QLineF(QPointF(338.69,421.014),QPointF(983.456,421.014));
+    testLineRectIntersection(rect7, line7, line7, false, false, true);
+
+    QRect rect8 = rect3;
+    QLineF line8 = QLineF(QPointF(-3545.25,618.966),QPointF(102.104,618.966));
+    QLineF line8expected = QLineF(QPointF(0,618.966),QPointF(102.104,618.966));
+    testLineRectIntersection(rect8, line8, line8expected, false, false, true);
+
+
+    // vertical
+    //   inside the line
+    testLineRectIntersection(QRect(0, 0, 20, 20), QLineF(0, 5, 0, 15), QLineF(0, 5, 0, 15), false, false, true);
+    //   exactly the line
+    testLineRectIntersection(QRect(0, 0, 20, 20), QLineF(0, 0, 0, 20), QLineF(0, 0, 0, 20), false, false, true);
+    //   extending the line
+    testLineRectIntersection(QRect(0, 0, 20, 20), QLineF(0, -5, 0, 25), QLineF(0, 0, 0, 20), false, false, true);
+
+    // diagonal
+    //   exactly
+    testLineRectIntersection(QRect(0, 0, 20, 20), QLineF(0, 0, 20, 20), QLineF(0, 0, 20, 20), false, false, true);
+    //   inside
+    testLineRectIntersection(QRect(0, 0, 20, 20), QLineF(5, 5, 15, 15), QLineF(5, 5, 15, 15), false, false, true);
+    //   extending
+    testLineRectIntersection(QRect(0, 0, 20, 20), QLineF(-5, -5, 30, 30), QLineF(0, 0, 20, 20), false, false, true);
+
+
+    // start: (-1, -2)
+    // end: (4, 5);
+    // width, height: 5, 7
+    QRect testRect = QRect(-1, -2, 5, 7);
+
+    // first item: line, second item: result after cropping
+    QList<QLineF> linesListIntersecting = QList<QLineF>({
+                                                            // horizontal
+                                                            QLineF(-1, -2, 4, -2), QLineF(-1, -2, 4, -2), // on the edge, exact
+                                                            QLineF(-1, 0, 4, 0), QLineF(-1, 0, 4, 0), // below the edge, exact
+                                                            QLineF(-10, -2, 10, -2), QLineF(-1, -2, 4, -2), // on the edge, longer
+                                                            QLineF(-10, 0, 10, 0), QLineF(-1, 0, 4, 0), // below the edge, longer
+                                                            QLineF(0, -2, 3, -2), QLineF(0, -2, 3, -2), // on the edge, shorter
+                                                            QLineF(0, 0, 3, -2), QLineF(0, 0, 3, -2), // below the edge, shorter
+
+                                                            // vertical
+                                                            QLineF(-1, -2, -1, 5), QLineF(-1, -2, -1, 5), // on the edge, exact
+                                                            QLineF(0, -2, 0, 5), QLineF(0, -2, 0, 5), // below the edge, exact
+                                                            QLineF(-1, -10, -1, 10), QLineF(-1, -2, -1, 5), // on the edge, longer
+                                                            QLineF(0, -10, 0, 10), QLineF(0, -2, 0, 5), // below the edge, longer
+                                                            QLineF(-1, 0, -1, 3), QLineF(-1, 0, -1, 3), // on the edge, shorter
+                                                            QLineF(0, 0, 0, 3), QLineF(0, 0, 0, 3), // below the edge, shorter
+
+
+                                                            // skewed
+                                                            QLineF(-6, 0, 9, 3), QLineF(-1, 1, 4, 2), // very horizontal-like
+                                                            QLineF(-1, 1, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, exact
+                                                            QLineF(-6, 0, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, half-exact
+
+                                                            QLineF(-6, -9, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal
+                                                            QLineF(-1, -2, 4, 5), QLineF(-1, -2, 4, 5), // perfectly diagonal, exact
+                                                            QLineF(-1, -2, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal, half-exact
+
+                                                            QLineF(9, 12, -6, -9), QLineF(4, 5, -1, -2), // perfectly diagonal, p1 and p2 reversed
+
+                                                            QLineF(1, 3, 3, 4), QLineF(1, 3, 3, 4), // skewed, fully inside
+                                                            QLineF(2, 2, 6, 4), QLineF(2, 2, 4, 3), // skewed, partially inside
+
+
+                                                        });
+
+    for (int i = 0; i < linesListIntersecting.size()/2; i++)
+    {
+        testLineRectIntersection(testRect, linesListIntersecting[2*i], linesListIntersecting[2*i + 1], false, false, true);
+    }
+
+    // now with extend = true
+
+    // first item: line, second item: result after cropping
+    QList<QLineF> linesListIntersectingExtend = QList<QLineF>({
+                                                            // horizontal
+                                                            QLineF(-1, -2, 4, -2), QLineF(-1, -2, 4, -2), // on the edge, exact
+                                                            QLineF(-1, 0, 4, 0), QLineF(-1, 0, 4, 0), // below the edge, exact
+                                                            QLineF(-10, -2, 10, -2), QLineF(-1, -2, 4, -2), // on the edge, longer
+                                                            QLineF(-10, 0, 10, 0), QLineF(-1, 0, 4, 0), // below the edge, longer
+                                                            QLineF(0, -2, 3, -2), QLineF(-1, -2, 4, -2), // on the edge, shorter
+                                                            QLineF(0, 0, 3, 0), QLineF(-1, 0, 4, 0), // below the edge, shorter
+
+                                                            // vertical
+                                                            QLineF(-1, -2, -1, 5), QLineF(-1, -2, -1, 5), // on the edge, exact
+                                                            QLineF(0, -2, 0, 5), QLineF(0, -2, 0, 5), // below the edge, exact
+                                                            QLineF(-1, -10, -1, 10), QLineF(-1, -2, -1, 5), // on the edge, longer
+                                                            QLineF(0, -10, 0, 10), QLineF(0, -2, 0, 5), // below the edge, longer
+                                                            QLineF(-1, 0, -1, 3), QLineF(-1, -2, -1, 5), // on the edge, shorter
+                                                            QLineF(0, 0, 0, 3), QLineF(0, -2, 0, 5), // below the edge, shorter
+
+
+                                                            // skewed
+                                                            QLineF(-6, 0, 9, 3), QLineF(-1, 1, 4, 2), // very horizontal-like
+                                                            QLineF(-1, 1, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, exact
+                                                            QLineF(-6, 0, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, half-exact
+
+                                                            QLineF(-6, -9, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal
+                                                            QLineF(-1, -2, 4, 5), QLineF(-1, -2, 4, 5), // perfectly diagonal, exact
+                                                            QLineF(-1, -2, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal, half-exact
+
+                                                            QLineF(9, 12, -6, -9), QLineF(4, 5, -1, -2), // perfectly diagonal, p1 and p2 reversed
+
+                                                            QLineF(1, 3, 3, 4), QLineF(-1, 2, 4, 4.5), // skewed, fully inside
+                                                            QLineF(2, 2, 6, 4), QLineF(-1, 0.5, 4, 3), // skewed, partially inside
+
+                                                        });
+
+    for (int i = 0; i < linesListIntersectingExtend.size()/2; i++)
+    {
+        testLineRectIntersection(testRect, linesListIntersectingExtend[2*i], linesListIntersectingExtend[2*i + 1], true, true, true);
+    }
+
+    QList<QLineF> linesListIntersectingExtendOneSide = QList<QLineF>({
+                                                            // horizontal
+
+                                                            QLineF(-1, -2, 4, -2), QLineF(-1, -2, 4, -2), // on the edge, exact
+                                                            QLineF(-1, 0, 4, 0), QLineF(-1, 0, 4, 0), // below the edge, exact
+                                                            QLineF(-10, -2, 10, -2), QLineF(-1, -2, 4, -2), // on the edge, longer
+                                                            QLineF(-10, 0, 10, 0), QLineF(-1, 0, 4, 0), // below the edge, longer
+                                                            QLineF(0, -2, 3, -2), QLineF(-1, -2, 3, -2), // on the edge, shorter
+                                                            QLineF(0, 0, 3, 0), QLineF(-1, 0, 3, 0), // below the edge, shorter
+
+                                                            // vertical
+                                                            QLineF(-1, -2, -1, 5), QLineF(-1, -2, -1, 5), // on the edge, exact
+                                                            QLineF(0, -2, 0, 5), QLineF(0, -2, 0, 5), // below the edge, exact
+                                                            QLineF(-1, -10, -1, 10), QLineF(-1, -2, -1, 5), // on the edge, longer
+                                                            QLineF(0, -10, 0, 10), QLineF(0, -2, 0, 5), // below the edge, longer
+                                                            QLineF(-1, 0, -1, 3), QLineF(-1, -2, -1, 3), // on the edge, shorter
+                                                            QLineF(0, 0, 0, 3), QLineF(0, -2, 0, 3), // below the edge, shorter
+
+
+                                                            // skewed
+                                                            QLineF(-6, 0, 9, 3), QLineF(-1, 1, 4, 2), // very horizontal-like
+                                                            QLineF(-1, 1, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, exact
+                                                            QLineF(-6, 0, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, half-exact
+
+                                                            QLineF(-6, -9, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal
+                                                            QLineF(-1, -2, 4, 5), QLineF(-1, -2, 4, 5), // perfectly diagonal, exact
+                                                            QLineF(-1, -2, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal, half-exact
+
+                                                            QLineF(9, 12, -6, -9), QLineF(4, 5, -1, -2), // perfectly diagonal, p1 and p2 reversed
+
+                                                            QLineF(1, 3, 3, 4), QLineF(-1, 2, 3, 4), // skewed, fully inside
+                                                            QLineF(2, 2, 6, 4), QLineF(-1, 0.5, 4, 3), // skewed, partially inside
+
+
+                                                        });
+
+    for (int i = 0; i < linesListIntersectingExtend.size()/2; i++)
+    {
+        // first from one side
+        testLineRectIntersection(testRect, linesListIntersectingExtendOneSide[2*i], linesListIntersectingExtendOneSide[2*i + 1], true, false, true);
+
+        // and then reversed
+        QLineF l = QLineF(linesListIntersectingExtendOneSide[2*i].p2(), linesListIntersectingExtendOneSide[2*i].p1());
+        QLineF lexp = QLineF(linesListIntersectingExtendOneSide[2*i + 1].p2(), linesListIntersectingExtendOneSide[2*i + 1].p1());
+        testLineRectIntersection(testRect, l, lexp, false, true, true);
+    }
+
+
+}
+
+void KisAlgebra2DTest::testLineRectIntersectionsRandom()
+{
+    // start: (-1, -2)
+    // end: (4, 5);
+    // width, height: 5, 7
+    QRect testRect = QRect(-1, -2, 5, 7);
+
+    int numberOfTests = 100;
+    int skipped = 0;
+    int negative = 0;
+    QRandomGenerator random(1000);
+
+    for (int i = 0; i < numberOfTests; i++) {
+
+        QList<QPointF> points;
+        for (int j = 0; j < 2; j++)
+        {
+            // find two random points on the edges of the rectangle
+            int direction = random.generate()%2;
+            int boundary = random.generate()%2;
+            points.append(QPointF());
+            if (direction == 0) {
+                points[j].setX(testRect.x() + random.generateDouble()*testRect.width());
+                points[j].setY(boundary == 0 ? testRect.y() : (testRect.y() + testRect.height()));
+            } else {
+                points[j].setY(testRect.y() + random.generateDouble()*testRect.height());
+                points[j].setX(boundary == 0 ? testRect.x() : (testRect.x() + testRect.width()));
+            }
+        }
+
+        bool onEdge = false;
+        if (points[0].x() == points[1].x() || points[0].y() == points[1].y()) {
+            onEdge = true;
+            // 25% chance that it happens
+        }
+
+        // line equation: x = x1 + t*(x2 - x1)
+        float t1 = random.generateDouble()*3 - 1; // range: [-2, 3] - which means 2x higher chance it would end up outside of the rectangle than inside
+        float t2 = random.generateDouble()*3 - 1; // range: [-2, 3] - which means 2x higher chance it would end up outside of the rectangle than inside
+
+        if (t1 > t2) {
+            float tmp = t1;
+            t1 = t2;
+            t2 = tmp;
+        }
+
+        QLineF testLine(points[0] + t1*(points[1] - points[0]), points[0] + t2*(points[1] - points[0]));
+
+        QLineF expectedLine = testLine;
+        bool expectedResult = true;
+        if (onEdge) {
+            if (points[0].x() == points[1].x()) /*vertical*/ {
+                if (points[0].y() < points[1].y()) {
+                    if (points[1].y() < testRect.y() || points[0].y() > testRect.y() + testRect.height()) {
+                        expectedResult = false;
+                    } else {
+                        expectedLine.setP1(QPointF(points[1].x(), qMax(testLine.p1().y(), (double)testRect.y())));
+                        expectedLine.setP2(QPointF(points[1].x(), qMin(testLine.p2().y(), (double)testRect.y() + testRect.height())));
+                    }
+                } else {
+                    if (points[0].y() < testRect.y() || points[1].y() > testRect.y() + testRect.height()) {
+                        expectedResult = false;
+                    } else {
+                        expectedLine.setP2(QPointF(points[1].x(), qMax(testLine.p2().y(), (double)testRect.y())));
+                        expectedLine.setP1(QPointF(points[1].x(), qMin(testLine.p1().y(), (double)testRect.y() + testRect.height())));
+                    }
+                }
+            } else /* horizontal */ {
+                if (points[0].x() < points[1].x()) {
+                    if (points[1].x() < testRect.x() || points[0].x() > testRect.x() + testRect.width()) {
+                        expectedResult = false;
+                    } else {
+                        expectedLine.setP1(QPointF(qMax(testLine.p1().x(), (double)testRect.x()), points[1].y()));
+                        expectedLine.setP2(QPointF(qMin(testLine.p2().x(), (double)testRect.x() + testRect.width()), points[1].y()));
+                    }
+                } else {
+                    if (points[0].x() < testRect.x() || points[1].x() > testRect.x() + testRect.width()) {
+                        expectedResult = false;
+                    } else {
+                        expectedLine.setP2(QPointF(qMax(testLine.p2().x(), (double)testRect.x()), points[1].y()));
+                        expectedLine.setP1(QPointF(qMin(testLine.p1().x(), (double)testRect.x() + testRect.width()), points[1].y()));
+                    }
+                }
+            }
+            testLineRectIntersection(testRect, testLine, expectedLine, false, false, expectedResult);
+        } else if ((t2 < 0) || (t1 > 1)) {
+            if (!onEdge) {
+                testLineRectIntersection(testRect, testLine, testLine, false, false, false);
+                negative++;
+            } else {
+                skipped++;
+            }
+        } else {
+            if (t1 < 0) {
+                expectedLine.setP1(points[0]);
+            } else {
+                expectedLine.setP1(testLine.p1());
+            }
+            if (t2 > 1) {
+                expectedLine.setP2(points[1]);
+            } else {
+                expectedLine.setP2(testLine.p2());
+            }
+            testLineRectIntersection(testRect, testLine, expectedLine, false, false, true);
+            testLineRectIntersection(testRect, testLine, QLineF(points[0], expectedLine.p2()), true, false, true);
+            testLineRectIntersection(testRect, testLine, QLineF(expectedLine.p1(), points[1]), false, true, true);
+            testLineRectIntersection(testRect, testLine, QLineF(points[0], points[1]), true, true, true);
+        }
+    }
+
+}
+
 void KisAlgebra2DTest::testFindTrianglePoint()
 {
     using KisAlgebra2D::findTrianglePoint;

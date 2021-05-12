@@ -11,7 +11,7 @@
 #include <kis_types.h>
 #include <QQueue>
 #include <QList>
-#include "KoResourceServerObserver.h"
+#include "KoResourceServer.h"
 #include <KisTag.h>
 #include "KisTagFilterResourceProxyModel.h"
 

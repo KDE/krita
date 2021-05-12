@@ -17,6 +17,14 @@
 #include "KoMD5Generator.h"
 
 
+struct KoResourceSPStaticRegistrar {
+    KoResourceSPStaticRegistrar() {
+        qRegisterMetaType<KoResourceSP>("KoResourceSP");
+    }
+};
+static KoResourceSPStaticRegistrar __registrar1;
+
+
 struct Q_DECL_HIDDEN KoResource::Private {
     int version {-1};
     int resourceId {-1};

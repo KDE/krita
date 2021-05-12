@@ -30,14 +30,14 @@ Page {
             right: parent.right;
         }
 
-        text: "Save Image";
+        text: qsTr("Save Image");
         background: "images/header_krita_sketch.png";
 
         leftArea: Button {
-            width: Krita.Constants.GridWidth;
-            height: Krita.Constants.GridHeight;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight;
             image: Settings.theme.icon("close");
-            onClicked: mainWindow.hideFileSaveAsDialog()();
+            onClicked: mainWindow.hideFileSaveAsDialog();
         }
 
         rightArea: Button {
@@ -110,6 +110,7 @@ Page {
                 leftMargin: Constants.GridWidth * 0.25;
                 rightMargin: Constants.GridWidth * 0.25;
             }
+            spacing: Constants.DefaultMargin;
 
             PanelTextField {
                 id: fileNameField;
@@ -117,17 +118,18 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter;
 
                 height: Constants.GridHeight * 0.75;
-                width: Constants.GridWidth * 7.75;
+                width: Constants.GridWidth * 7.25;
 
-                placeholder: "File Name";
+                placeholder: qsTr("File Name");
             }
 
             Rectangle {
                 anchors.bottom: parent.bottom;
-                anchors.bottomMargin: 1;
 
                 width: childrenRect.width;
-                height: childrenRect.height + Constants.GridHeight * 0.5 - 1;
+                height: fileType.state == "expanded" ?
+                    Constants.GridHeight * 3.5:
+                    Constants.GridHeight;
 
                 radius: Constants.GridHeight * 0.25;
 
@@ -137,29 +139,29 @@ Page {
                     id: fileType;
 
                     anchors.bottom: parent.bottom;
-                    anchors.bottomMargin: Constants.GridHeight * 0.25;
+                    anchors.bottomMargin: Constants.GridHeight * 0.125;
 
-                    height: Constants.GridHeight * 0.5;
+                    height: Constants.GridHeight * 0.75;
                     width: Constants.GridWidth * 3.25;
 
                     expandedHeight: Constants.GridHeight * 3;
                     expandToTop: true;
 
                     model: ListModel {
-                        ListElement { text: "Krita Image"; type: "kra"; mime: "application/x-krita"; }
-                        ListElement { text: "OpenRaster Image"; type: "ora"; mime: "image/openraster"; }
-                        ListElement { text: "PhotoShop Image"; type: "psd"; mime: "image/vnd.adobe.photoshop"; }
-                        ListElement { text: "PNG Image"; type: "png"; mime: "image/png"; }
-                        ListElement { text: "BMP Image"; type: "bmp"; mime: "image/bmp"; }
-                        ListElement { text: "JPEG Image"; type: "jpg"; mime: "image/jpeg"; }
+                        ListElement { text: qsTr("Krita Image"); type: "kra"; mime: "application/x-krita"; }
+                        ListElement { text: qsTr("OpenRaster Image"); type: "ora"; mime: "image/openraster"; }
+                        ListElement { text: qsTr("PhotoShop Image"); type: "psd"; mime: "image/vnd.adobe.photoshop"; }
+                        ListElement { text: qsTr("PNG Image"); type: "png"; mime: "image/png"; }
+                        ListElement { text: qsTr("BMP Image"); type: "bmp"; mime: "image/bmp"; }
+                        ListElement { text: qsTr("JPEG Image"); type: "jpg"; mime: "image/jpeg"; }
                     }
                 }
             }
 
             Button {
                 anchors.verticalCenter: parent.verticalCenter;
-                height: Constants.GridHeight * 0.75;
-                width: Constants.GridWidth * 0.5;
+                height: Math.min(Constants.GridHeight, Constants.GridWidth);
+                width: height
 
                 image: Settings.theme.icon("filesave");
 
@@ -211,7 +213,7 @@ Page {
     Dialog {
         id: confirmOverwrite;
         title: "File already exists";
-        message: "A file with the name %1.%2 already exists in this folder. Do you wish to overwrite?".arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+        message: qsTr("A file with the name %1.%2 already exists in this folder. Do you wish to overwrite?").arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
         buttons: [ "Overwrite", "Cancel" ];
         onButtonClicked: {
             switch(button) {

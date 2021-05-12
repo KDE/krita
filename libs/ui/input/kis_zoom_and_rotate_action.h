@@ -12,8 +12,9 @@
 #include <QScopedPointer>
 
 /**
- * @brief This class merely deligates the actions to KisZoomAction
- * _and_ KisRotateCanvasAction at the same time.
+ * @brief This class handles both rotation and zooming operation. This is
+ * separate from Zoom and Rotate operation applied individually because the
+ * order of transformation is different.
  */
 class KisZoomAndRotateAction : public KisAbstractInputAction
 {

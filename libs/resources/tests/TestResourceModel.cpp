@@ -133,7 +133,14 @@ void TestResourceModel::testSetInactiveByIndex()
     QVERIFY(r);
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
     QVERIFY(!resourceModel.indexForResource(resource).isValid());
-
+    QVERIFY(!resourceModel.resourceForId(resource->resourceId()));
+    QVERIFY(resourceModel.resourcesForName(resource->name()).isEmpty());
+    // verify that all mapped resources are still reachable by id
+    for (int i = 0; i < resourceCount - 1; i++) {
+        KoResourceSP resource2 = resourceModel.resourceForIndex(resourceModel.index(i, 0));
+        QVERIFY(resource2);
+        QVERIFY(resourceModel.resourceForId(resource2->resourceId()));
+    }
 }
 
 void TestResourceModel::testImportResourceFile()
@@ -197,7 +204,7 @@ void TestResourceModel::testResourceForName()
 
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(!resource.isNull());
-    KoResourceSP resource2 = resourceModel.resourceForName(resource->name());
+    KoResourceSP resource2 = resourceModel.resourcesForName(resource->name()).first();
     QVERIFY(!resource2.isNull());
     QCOMPARE(resource, resource2);
 }
@@ -209,7 +216,7 @@ void TestResourceModel::testResourceForFileName()
 
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(!resource.isNull());
-    KoResourceSP resource2 = resourceModel.resourceForFilename(resource->filename());
+    KoResourceSP resource2 = resourceModel.resourcesForFilename(resource->filename()).first();
     QVERIFY(!resource2.isNull());
     QCOMPARE(resource, resource2);
 }
@@ -221,7 +228,8 @@ void TestResourceModel::testResourceForMD5()
 
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(!resource.isNull());
-    KoResourceSP resource2 = resourceModel.resourceForMD5(resource->md5());
+    QVector<KoResourceSP> v = resourceModel.resourcesForMD5(resource->md5());
+    KoResourceSP resource2 = v.first();
     QVERIFY(!resource2.isNull());
     QCOMPARE(resource->md5(), resource2->md5());
 }

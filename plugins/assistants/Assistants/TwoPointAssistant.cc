@@ -34,9 +34,11 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
     , m_canvas(rhs.m_canvas)
     , m_snapLine(rhs.m_snapLine)
     , m_gridDensity(rhs.m_gridDensity)
+    , m_useVertical(rhs.m_useVertical)
     , m_followBrushPosition(rhs.m_followBrushPosition)
     , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
     , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
+    , m_lastUsedPoint(rhs.m_lastUsedPoint)
 {
 }
 
@@ -45,13 +47,35 @@ KisPaintingAssistantSP TwoPointAssistant::clone(QMap<KisPaintingAssistantHandleS
     return KisPaintingAssistantSP(new TwoPointAssistant(*this, handleMap));
 }
 
-QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBegin)
+QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny)
 {
     Q_ASSERT(isAssistantComplete());
 
     QPointF best_pt = point;
     double best_dist = DBL_MAX;
-    Q_FOREACH (QPointF vp, QList<QPointF>({*handles()[0],*handles()[1],*handles()[2]})) {
+    QList<int> possibleHandles;
+
+    bool overrideLastUsedPoint = false;
+    bool useBeginInstead = false;
+
+    // must be above 0;
+    // if useVertical, then last used point must be below 3 (sanity check)
+    // if !useVertical, then it must be below 2, because 2 means vertical
+    bool isLastUsedPointCorrectNow = m_lastUsedPoint >= 0 && (m_useVertical ? m_lastUsedPoint < 3 : m_lastUsedPoint < 2);
+
+    if (!snapToAny && isLastUsedPointCorrectNow) {
+        possibleHandles = QList<int>({m_lastUsedPoint});
+    } else {
+        if (m_useVertical) {
+            possibleHandles = QList<int>({0, 1, 2});
+        } else {
+            possibleHandles = QList<int>({0, 1});
+        }
+        overrideLastUsedPoint = true;
+    }
+
+    Q_FOREACH (int vpIndex, possibleHandles) {
+        QPointF vp = *handles()[vpIndex];
         double dist = 0;
         QPointF pt = QPointF();
         QLineF snapLine = QLineF();
@@ -64,7 +88,8 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
         qreal dy = point.y() - strokeBegin.y();
 
         if (dx * dx + dy * dy < 4.0) {
-            return strokeBegin;
+            // we cannot return here because m_lastUsedPoint needs to be set properly
+            useBeginInstead = true;
         }
 
         if (vp != *handles()[2]) {
@@ -92,10 +117,13 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
         if (dist < best_dist) {
             best_pt = pt;
             best_dist = dist;
+            if (overrideLastUsedPoint) {
+                m_lastUsedPoint = vpIndex;
+            }
         }
     }
 
-    return best_pt;
+    return useBeginInstead ? strokeBegin : best_pt;
 }
 
 void TwoPointAssistant::setAdjustedBrushPosition(const QPointF position)
@@ -117,9 +145,9 @@ void TwoPointAssistant::endStroke()
     m_snapLine = QLineF();
 }
 
-QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny)
 {
-    return project(pt, strokeBegin);
+    return project(pt, strokeBegin, snapToAny);
 }
 
 void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
@@ -180,7 +208,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
         // draw the horizon
         if (assistantVisible == true || isEditing == true) {
             QLineF horizonLine = initialTransform.map(QLineF(p1,p2));
-            KisAlgebra2D::intersectLineRect(horizonLine, viewport);
+            KisAlgebra2D::intersectLineRect(horizonLine, viewport, true);
             path.moveTo(horizonLine.p1());
             path.lineTo(horizonLine.p2());
         }
@@ -189,12 +217,12 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
         if (isEditing == false && previewVisible == true && isSnappingActive() == true) {
             QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
             QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
-            KisAlgebra2D::intersectLineRect(snapMouse1, viewport);
-            KisAlgebra2D::intersectLineRect(snapMouse2, viewport);
+            KisAlgebra2D::intersectLineRect(snapMouse1, viewport, true);
+            KisAlgebra2D::intersectLineRect(snapMouse2, viewport, true);
             path.moveTo(initialTransform.map(p1));
-            path.lineTo(snapMouse1.p1());
+            path.lineTo(snapMouse1.p2());
             path.moveTo(initialTransform.map(p2));
-            path.lineTo(snapMouse2.p1());
+            path.lineTo(snapMouse2.p2());
         }
 
         // draw the side handle bars
@@ -227,20 +255,22 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
             if ((vp_a.x() < 0 && vp_b.x() > 0) ||
                 (vp_a.x() > 0 && vp_b.x() < 0)) {
-                // Draw vertical line, but only if the center is between both VPs
-                QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
-                if (!isEditing) vertical.translate(mousePos - vertical.p1());
-                KisAlgebra2D::intersectLineRect(vertical,viewport);
-                path.moveTo(vertical.p1());
-                path.lineTo(vertical.p2());
+                if (m_useVertical) {
+                    // Draw vertical line, but only if the center is between both VPs
+                    QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
+                    if (!isEditing) vertical.translate(mousePos - vertical.p1());
+                    KisAlgebra2D::intersectLineRect(vertical,viewport,true);
+                    path.moveTo(vertical.p1());
+                    path.lineTo(vertical.p2());
 
-                if (assistantVisible) {
-                    // Display a notch to represent the center of vision
-                    path.moveTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()-10))));
-                    path.lineTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()+10))));
+                    if (assistantVisible) {
+                        // Display a notch to represent the center of vision
+                        path.moveTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()-10))));
+                        path.lineTo(initialTransform.map(inv.map(QPointF(0,vp_a.y()+10))));
+                    }
+                    drawPreview(gc,path);
+                    path = QPainterPath(); // clear
                 }
-                drawPreview(gc,path);
-                path = QPainterPath(); // clear
             }
 
             const QPointF upper = QPointF(0,vp_a.y() + size);
@@ -288,9 +318,9 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                             }
 
                             QLineF drawn_gridline = initialTransform.map(inv.map(gridline));
-                            KisAlgebra2D::intersectLineRect(drawn_gridline, viewport);
+                            KisAlgebra2D::intersectLineRect(drawn_gridline, viewport, true);
                             path.moveTo(initialTransform.map(inv.map(vp)));
-                            path.lineTo(drawn_gridline.p2());
+                            path.lineTo(drawn_gridline.p1());
                         }
                     }
                 }
@@ -328,6 +358,16 @@ void TwoPointAssistant::setGridDensity(double density)
     m_gridDensity = density;
 }
 
+bool TwoPointAssistant::useVertical()
+{
+    return m_useVertical;
+}
+
+void TwoPointAssistant::setUseVertical(bool value)
+{
+    m_useVertical = value;
+}
+
 double TwoPointAssistant::gridDensity()
 {
     return m_gridDensity;
@@ -353,6 +393,8 @@ void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
 {
     xml->writeStartElement("gridDensity");
     xml->writeAttribute("value", KisDomUtils::toString( this->gridDensity()));
+    xml->writeStartElement("useVertical");
+    xml->writeAttribute("value", KisDomUtils::toString( (int)this->useVertical()));
     xml->writeEndElement();
 }
 
@@ -360,6 +402,9 @@ bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
 {
     if (xml && xml->name() == "gridDensity") {
         this->setGridDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
+    }
+    if (xml && xml->name() == "useVertical") {
+        this->setUseVertical((bool)KisDomUtils::toInt(xml->attributes().value("value").toString()));
     }
     return true;
 }

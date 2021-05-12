@@ -440,13 +440,13 @@ echo Python: %PYTHON_BIN_DIR%
 
 @REM Translation tools
 
-if "%GIT_DIR%" == "" (
-    call :find_on_path GIT_EXE_DIR git.exe
-    if NOT "!GIT_EXE_DIR!" == "" (
-        call :get_dir_path GIT_DIR "!GIT_EXE_DIR!"
-        echo Found Git on PATH: !GIT_DIR!
+if "%KRITA_GIT_DIR%" == "" (
+    call :find_on_path KRITA_GIT_EXE_DIR git.exe
+    if NOT "!KRITA_GIT_EXE_DIR!" == "" (
+        call :get_dir_path KRITA_GIT_DIR "!KRITA_GIT_EXE_DIR!"
+        echo Found Git on PATH: !KRITA_GIT_DIR!
     )
-) else echo Git found on %GIT_DIR%
+) else echo Git found on %KRITA_GIT_DIR%
 
 if "%SVN_DIR%" == "" (
     call :find_on_path SVN_EXE_DIR svn.exe
@@ -703,8 +703,8 @@ if not "%ARG_NO_INTERACTIVE%" == "1" (
 :: Initialize clean PATH
 set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
 set PATH=%MINGW_BIN_DIR%;%PYTHON_BIN_DIR%;%PATH%
-if NOT "%GIT_DIR%" == "" (
-    set PATH=%PATH%;%GIT_DIR%
+if NOT "%KRITA_GIT_DIR%" == "" (
+    set PATH=%PATH%;%KRITA_GIT_DIR%
 )
 if NOT "%SVN_DIR%" == "" (
     set PATH=%PATH%;%SVN_DIR%
@@ -879,7 +879,7 @@ set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio openexr png tiff gsl vc libraw
 set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw gmic freetype poppler 
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libheif
-set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint
+set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint 
 
 for %%a in (%EXT_TARGETS%) do (
     echo Building ext_%%a...

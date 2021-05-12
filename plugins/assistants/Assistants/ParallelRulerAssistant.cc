@@ -93,7 +93,7 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     //return pt;
 }
 
-QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
 }
@@ -127,7 +127,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         snapLine= snapLine.translated(translation);
 
         QRect viewport= gc.viewport();
-        KisAlgebra2D::intersectLineRect(snapLine, viewport);
+        KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
 
 
         QPainterPath path;

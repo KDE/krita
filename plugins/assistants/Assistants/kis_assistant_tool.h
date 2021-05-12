@@ -95,6 +95,7 @@ public Q_SLOTS:
 
     void slotChangeVanishingPointAngle(double value);
     void slotChangeTwoPointDensity(double value);
+    void slotChangeTwoPointUseVertical(int value);
 
 private Q_SLOTS:
     void removeAllAssistants();

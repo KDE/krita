@@ -1456,7 +1456,7 @@
   <Actions category="Filter">
     <text>Filter</text>
     <Action name="filter_apply_again">
-      <icon></icon>
+      <icon>filter-apply-again</icon>
       <text>&amp;Apply Filter Again</text>
       <whatsThis></whatsThis>
       <toolTip>Apply Filter Again</toolTip>

@@ -237,7 +237,7 @@ QVariant KisBundleStorage::metaData(const QString &key) const
     return d->bundle->metaData(key);
 }
 
-bool KisBundleStorage::addResource(const QString &resourceType, KoResourceSP resource)
+bool KisBundleStorage::saveAsNewVersion(const QString &resourceType, KoResourceSP resource)
 {
     QString bundleSaveLocation = location() + "_modified" + "/" + resourceType;
 

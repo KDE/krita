@@ -1,0 +1,32 @@
+From 112147de44d2ecd9b4cb33f6601f8aa29638ee37 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Tue, 10 Sep 2019 10:09:11 +0200
+Subject: [PATCH] windeployqt: Warn only in case patching of Qt5Core fails
+
+After qtbase/4ac872639ed0dd3ae6627e05bdda821f7d128500, can
+fail for relocatable builds:
+
+Unable to patch ...\Qt5Core.dll: Could not locate pattern "qt_prfxpath="
+
+Task-number: QTBUG-15234
+Change-Id: I6df337b369d5e4c461293193bfe1c63e08b7fd35
+Reviewed-by: Kai Koehne <kai.koehne@qt.io>
+---
+
+diff --git a/src/windeployqt/main.cpp b/src/windeployqt/main.cpp
+index 00fa4fb..a4ceded 100644
+--- a/src/windeployqt/main.cpp
++++ b/src/windeployqt/main.cpp
+@@ -1494,8 +1494,10 @@
+             const QString qt5CoreName = QFileInfo(libraryPath(libraryLocation, "Qt5Core", qtLibInfix,
+                                                               options.platform, isDebug)).fileName();
+ 
+-            if (!patchQtCore(targetPath + QLatin1Char('/') + qt5CoreName, errorMessage))
+-                return result;
++            if (!patchQtCore(targetPath + QLatin1Char('/') + qt5CoreName, errorMessage)) {
++                std::wcerr << "Warning: " << *errorMessage << '\n';
++                errorMessage->clear();
++            }
+         }
+     } // optLibraries
+ 

@@ -194,16 +194,6 @@ public:
      */
     virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
 
-    /**
-     * This method provides the default implementation for creating a shape
-     * from a specified xml element of an odf document.
-     * Most derived factories do not need to reimplement this method, however if a factory
-     * has some special requirements or does something special it is still possible.
-     * One example is creating different shapes depending on the content of the passed
-     * xml element.
-     */
-    virtual KoShape *createShapeFromXML(const QDomElement &element, KoShapeLoadingContext &context);
-
 protected:
 
     /**

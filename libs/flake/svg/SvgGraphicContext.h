@@ -45,8 +45,6 @@ public:
     qreal opacity {1.0};    ///< the shapes opacity
 
     QTransform matrix;      ///< the current transformation matrix
-    QFont   font;           ///< the current font
-    QStringList fontFamiliesList; ///< the full list of all the families to search glyphs in
     QColor  currentColor {Qt::black};   ///< the current color
     QString xmlBaseDir;     ///< the current base directory (used for loading external content)
     bool preserveWhitespace {false}; ///< preserve whitespace in element text
@@ -59,7 +57,6 @@ public:
     bool visible {true};           ///< controls visibility of the shape (inherited)
     bool isResolutionFrame {false};
     qreal pixelsPerInch {72.0};    ///< controls the resolution of the image raster
-    qreal forcedFontSizeCoeff {1.0}; ///< workaround for a Krita 3.3 odf-based files that use different resolution for font size. No workaround by default
 
     QString markerStartId;
     QString markerMidId;

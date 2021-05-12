@@ -229,14 +229,13 @@ void KisZoomAction::inputEvent( QEvent* event )
             // If this is the first valid set of points that we are getting,
             // then use that as the reference for the zoom.
 
-            QPointF center = d->centerPoint(tevent);
             if (d->lastPosition.isNull()) {
-                d->lastPosition = center;
+                d->lastPosition = p0;
                 d->lastDistance = 0;
                 return;
             }
 
-            float dist = ((p0 - center).manhattanLength() + (p1 - center).manhattanLength()) / 2;
+            float dist = QLineF(p0, p1).length();
             float delta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
 
             // Workaround: only apply the zoom delta if it's not too
@@ -248,18 +247,17 @@ void KisZoomAction::inputEvent( QEvent* event )
                 // values over time, so assume that the new position is
                 // likelier to be correct than the last and use that as the new
                 // reference.
-                d->lastPosition = center;
+                d->lastPosition = p0;
                 return;
             }
 
-            qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
-            Q_UNUSED(zoom);
-            static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
+            KisCanvasController *controller = static_cast<KisCanvasController *>(inputManager()->canvas()->canvasController());
+            controller->zoomRelativeToPoint(p0.toPoint(), delta);
             d->lastDistance = dist;
-            // Also do panning here, as doing it later requires a further check for validity
-            QPointF moveDelta = center - d->lastPosition;
-            inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
-            d->lastPosition = center;
+
+            QPointF moveDelta = (p0 - d->lastPosition) * delta;
+            controller->pan(-moveDelta.toPoint());
+            d->lastPosition = p0;
             return;  // Don't try to update the cursor during a pinch-zoom
         }
         case QEvent::NativeGesture: {

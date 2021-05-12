@@ -97,9 +97,13 @@ MyPaintBrush* KisMyPaintPaintOpPreset::brush() {
 
 bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    dev->seek(0); // ensure we do read *all* the bytes
     QByteArray ba = dev->readAll();
     d->json = ba;
-    mypaint_brush_from_string(d->brush, ba);
+    // mypaint can handle invalid json files too, so this is the only way to find out if it was correct mypaint file or not...
+    // if the json is incorrect, the brush will get the default mypaint brush settings
+    // which looks like a round brush with low opacity and high spacing
+    bool success = mypaint_brush_from_string(d->brush, ba);
     d->diameter = 2*exp(mypaint_brush_get_base_value(d->brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC));
     d->hardness = mypaint_brush_get_base_value(d->brush, MYPAINT_BRUSH_SETTING_HARDNESS);
     d->opacity = mypaint_brush_get_base_value(d->brush, MYPAINT_BRUSH_SETTING_OPAQUE);
@@ -122,9 +126,9 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
     }
 
     this->setSettings(s);
-    setValid(true);
+    setValid(success);
 
-    return true;
+    return success;
 }
 
 void KisMyPaintPaintOpPreset::updateThumbnail()

@@ -13,7 +13,11 @@ Item {
     signal clicked();
 
     property alias image: icon.source;
-    property color color: Settings.theme.color("components/button/base");
+    //property color color: Settings.theme.color("components/button/base");
+    // define background and highlight color transparent by default,
+    // so they can be defined depending on the context; also make the icon half transparent on click
+    // if the color is transparent #00000000
+    property color color: "#00000000"
     property alias border: fill.border;
     property alias radius: fill.radius;
     property alias text: label.text;
@@ -25,7 +29,8 @@ Item {
     property alias asynchronous: icon.asynchronous;
 
     property bool highlight: false;
-    property color highlightColor: Settings.theme.color("components/button/highlight");
+    //property color highlightColor: Settings.theme.color("components/button/highlight");
+    property color highlightColor: "#00000000"
 
     property bool checkable: false;
     property bool checked: false;
@@ -77,8 +82,8 @@ Item {
             fillMode: Image.PreserveAspectFit;
             smooth: true;
             asynchronous: true;
-            opacity: base.enabled ? 1 : 0.7;
-            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
+            opacity: base.enabled ? (mouse.pressed && base.highlightColor == "#00000000" ? 0.5 : 1) : 0.7;
+            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration * 0.5; } }
 
             sourceSize.width: width;
             sourceSize.height: width;
@@ -107,7 +112,7 @@ Item {
         onTouched: {
             if (base.enabled) {
                 base.clicked();
-                if ( base.checkable ) {
+                if (base.checkable) {
                     base.checked = !base.checked;
                 }
             }
@@ -122,7 +127,7 @@ Item {
         onClicked: {
             if(mouse.button == Qt.LeftButton && base.enabled) {
                 base.clicked();
-                if ( base.checkable ) {
+                if(base.checkable) {
                     base.checked = !base.checked;
                 }
             } else if(mouse.button == Qt.RightButton && base.tooltip != "") {

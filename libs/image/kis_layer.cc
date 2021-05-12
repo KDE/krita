@@ -592,7 +592,7 @@ QRect KisLayer::masksNeedRect(const QList<KisEffectMaskSP> &masks,
 
     QRect prevNeedRect = changeRect;
     QRect needRect;
-
+    
     for (qint32 i = masks.size() - 1; i >= 0; i--) {
         applyRects.push(prevNeedRect);
 
@@ -682,7 +682,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                 const QRect maskApplyRect = applyRects.pop();
                 const QRect maskNeedRect =
                     applyRects.isEmpty() ? needRect : applyRects.top();
-
+                    
                 PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
                 mask->apply(destination, maskApplyRect, maskNeedRect, maskPosition);
             }

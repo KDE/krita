@@ -39,7 +39,8 @@ Image {
         id: title;
         anchors.centerIn: parent;
 
-        font: Settings.theme.font("pageHeader");
+        font.styleName: "Bold";
+        font.pixelSize: Constants.HugeFontSize;
         color: Settings.theme.color("components/header");
     }
 

@@ -17,7 +17,6 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeGroup.h"
 #include "KoShapeLayer.h"
-#include "SvgShapeFactory.h"
 
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
@@ -38,8 +37,6 @@ class Q_DECL_HIDDEN KoShapeRegistry::Private
 public:
     void insertFactory(KoShapeFactoryBase *factory);
     void init(KoShapeRegistry *q);
-
-    KoShape *createShapeInternal(const QDomElement &fullElement, KoShapeLoadingContext &context, const QDomElement &element) const;
 
     // Map namespace,tagname to priority:factory
     QHash<QPair<QString, QString>, QMultiMap<int, KoShapeFactoryBase*> > factoryMap;
@@ -75,9 +72,6 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     // Also add our hard-coded basic shapes
     q->add(new KoSvgTextShapeFactory());
     q->add(new KoPathShapeFactory(QStringList()));
-    // As long as there is no shape dealing with embedded svg images
-    // we add the svg shape factory here by default
-    q->add(new SvgShapeFactory);
 
     // Now all shape factories are registered with us, determine their
     // associated odf tagname & priority and prepare ourselves for
@@ -129,7 +123,6 @@ void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
     }
 }
 
-#include <svg/SvgShapeFactory.h>
 #include "kis_debug.h"
 #include <QMimeDatabase>
 #include <KoUnit.h>
@@ -137,71 +130,6 @@ void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
 #include <KoShapeController.h>
 #include <KoShapeGroupCommand.h>
 
-
-KoShape * KoShapeRegistry::createShapeFromXML(const QDomElement & e, KoShapeLoadingContext & context) const
-{
-    Q_UNUSED(e);
-    Q_UNUSED(context);
-    return 0;
-}
-
-KoShape *KoShapeRegistry::Private::createShapeInternal(const QDomElement &fullElement,
-                                                       KoShapeLoadingContext &context,
-                                                       const QDomElement &element) const
-{
-    // Pair of namespace, tagname
-    QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
-
-    // Remove duplicate lookup.
-    if (!factoryMap.contains(p))
-        return 0;
-
-    QMultiMap<int, KoShapeFactoryBase*> priorityMap = factoryMap.value(p);
-    QList<KoShapeFactoryBase*> factories = priorityMap.values();
-
-#ifndef NDEBUG
-    debugFlake << "Supported factories for=" << p;
-    foreach (KoShapeFactoryBase *f, factories)
-        debugFlake << f->id() << f->name();
-#endif
-
-    // Loop through all shape factories. If any of them supports this
-    // element, then we let the factory create a shape from it. This
-    // may fail because the element itself is too generic to draw any
-    // real conclusions from it - we actually have to try to load it.
-    // An example of this is the draw:image element which have
-    // potentially hundreds of different image formats to support,
-    // including vector formats.
-    //
-    // If it succeeds, then we use this shape, if it fails, then just
-    // try the next.
-    //
-    // Higher numbers are more specific, map is sorted by keys.
-    for (int i = factories.size() - 1; i >= 0; --i) {
-        KoShapeFactoryBase * factory = factories[i];
-        if (factory->supports(element, context)) {
-            KoShape *shape = factory->createShapeFromXML(fullElement, context);
-            if (shape) {
-                debugFlake << "Shape found for factory " << factory->id() << factory->name();
-                // we return the top-level most shape as that's the one that we'll have to
-                // add to the KoShapeManager for painting later (and also to avoid memory leaks)
-                // but don't go past a KoShapeLayer as KoShape adds those from the context
-                // during loading and those are already added.
-                while (shape->parent() && dynamic_cast<KoShapeLayer*>(shape->parent()) == 0)
-                    shape = shape->parent();
-
-                return shape;
-            }
-            // Maybe a shape with a lower priority can load our
-            // element, but this attempt has failed.
-        }
-        else {
-            debugFlake << "No support for" << p << "by" << factory->id();
-        }
-    }
-
-    return 0;
-}
 
 QList<KoShapeFactoryBase*> KoShapeRegistry::factoriesForElement(const QString &nameSpace, const QString &elementName)
 {

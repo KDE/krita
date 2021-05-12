@@ -13,6 +13,8 @@ class TestSvgText : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
+
     void testTextProperties();
     void testDefaultTextProperties();
     void testTextPropertiesDifference();
@@ -50,6 +52,8 @@ private Q_SLOTS:
     void testTextWithMultipleRelativeOffsetsArabic();
 
     void testTextOutline();
+
+    void testTextFontSize();
 
 };
 

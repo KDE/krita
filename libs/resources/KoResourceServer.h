@@ -26,7 +26,6 @@
 #include <QTemporaryFile>
 
 #include "KoResource.h"
-#include "KoResourceServerObserver.h"
 #include "KoResourcePaths.h"
 #include "ksharedconfig.h"
 
@@ -39,6 +38,35 @@
 #include <ResourceDebug.h>
 
 class KoResource;
+
+template <class T>
+class KoResourceServerObserver
+{
+public:
+    virtual ~KoResourceServerObserver() {}
+
+    virtual void unsetResourceServer() = 0;
+
+    /**
+     * Will be called by the resource server after a resource is added
+     * @param resource the added resource
+     */
+    virtual void resourceAdded(QSharedPointer<T> resource) = 0;
+
+    /**
+     * Will be called by the resource server before a resource will be removed
+     * @param resource the resource which is going to be removed
+     */
+    virtual void removingResource(QSharedPointer<T> resource) = 0;
+
+    /**
+     * Will be called by the resource server when a resource is changed
+     * @param resource the resource which is going to be removed
+     */
+    virtual void resourceChanged(QSharedPointer<T> resource) = 0;
+
+
+};
 
 /**
  * KoResourceServer is a shim around KisResourceModel. It knows
@@ -227,9 +255,13 @@ public:
 
         //qDebug() << "resourceByFilename" << filename;
         if (filename.isEmpty() || filename.isNull()) {
-            return 0;
+            return nullptr;
         }
-        return m_resourceModel->resourceForFilename(filename).dynamicCast<T>();
+        QVector<KoResourceSP> resources = m_resourceModel->resourcesForFilename(filename);
+        if (resources.size() > 0) {
+            return resources.first().dynamicCast<T>();
+        }
+        return nullptr;
     }
 
 
@@ -242,12 +274,16 @@ public:
             }
         }
 
-
-        //qDebug() << "resourceByName" << name;
         if (name.isEmpty() || name.isNull()) {
-            return 0;
+            return nullptr;
         }
-        return m_resourceModel->resourceForName(name).dynamicCast<T>();
+
+        QVector<KoResourceSP> resources = m_resourceModel->resourcesForName(name);
+        if (resources.size() > 0) {
+            return resources.first().dynamicCast<T>();
+        }
+
+        return nullptr;
 
     }
 
@@ -263,9 +299,14 @@ public:
 
         //qDebug() << "resourceByMD5" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {
-            return 0;
+            return nullptr;
         }
-        return m_resourceModel->resourceForMD5(md5).dynamicCast<T>();
+        QVector<KoResourceSP> resources = m_resourceModel->resourcesForMD5(md5);
+
+        if (resources.size() > 0) {
+            return resources.first().dynamicCast<T>();
+        }
+        return nullptr;
     }
 
     /**

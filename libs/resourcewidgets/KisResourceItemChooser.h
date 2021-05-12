@@ -120,7 +120,7 @@ public Q_SLOTS:
     void updateView();
 
 private Q_SLOTS:
-    void activated(const QModelIndex &index);
+    void activate(const QModelIndex &index);
     void clicked(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);

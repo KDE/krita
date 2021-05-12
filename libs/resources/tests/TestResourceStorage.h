@@ -9,12 +9,21 @@
 
 #include <QObject>
 
+class KisResourceLocator;
+
 class TestResourceStorage : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testStorage();
+    void testImportResourceFile();
+    void testAddResource();
+    void cleanupTestCase();
 private:
+    QString m_dstLocation;
+    KisResourceLocator *m_locator;
+
 };
 
 #endif

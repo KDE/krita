@@ -26,7 +26,7 @@ Page {
             right: parent.right;
         }
 
-        //text: "Open Image";
+        text: qsTr("Open Image");
 
         background: "images/header_krita_sketch.png";
 

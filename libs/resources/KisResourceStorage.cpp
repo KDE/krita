@@ -211,9 +211,19 @@ bool KisResourceStorage::addTag(const QString &resourceType, KisTagSP tag)
     return d->storagePlugin->addTag(resourceType, tag);
 }
 
+bool KisResourceStorage::saveAsNewVersion(KoResourceSP resource)
+{
+    return d->storagePlugin->saveAsNewVersion(resource->resourceType().first, resource);
+}
+
 bool KisResourceStorage::addResource(KoResourceSP resource)
 {
     return d->storagePlugin->addResource(resource->resourceType().first, resource);
+}
+
+bool KisResourceStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
+{
+    return d->storagePlugin->importResourceFile(resourceType, resourceFile);
 }
 
 bool KisResourceStorage::supportsVersioning() const

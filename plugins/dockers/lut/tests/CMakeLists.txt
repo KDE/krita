@@ -12,4 +12,7 @@ krita_add_broken_unit_test(kis_ocio_display_filter_test.cpp
     ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
     TEST_NAME KisOcioDisplayFilterTest
     LINK_LIBRARIES kritaui ${OCIO_LIBRARIES} KF5::I18n Qt5::Test
-    NAME_PREFIX "plugins-dockers-lut-")
+    NAME_PREFIX "plugins-dockers-lut-"
+    ${MACOS_GUI_TEST})
+
+macos_test_fixrpath(KisOcioDisplayFilterTest)

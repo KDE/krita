@@ -166,6 +166,10 @@ void CompositionDockerDock::deleteClicked()
         KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
         m_canvas->viewManager()->image()->removeComposition(composition);
         updateModel();
+
+        if (index.isValid()) {
+            compositionView->setCurrentIndex(index);
+        }
     }
 }
 

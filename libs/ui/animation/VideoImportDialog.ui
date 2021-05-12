@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
-    <height>493</height>
+    <width>512</width>
+    <height>511</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,7 +27,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -79,6 +79,12 @@
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
               <widget class="QLabel" name="thumbnailImageHolder">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>300</width>
@@ -158,6 +164,22 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
+              <widget class="QLabel" name="label">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Metadata</string>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QLabel" name="fileLoadedDetails">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -179,11 +201,12 @@
                </property>
                <property name="font">
                 <font>
+                 <pointsize>10</pointsize>
                  <kerning>true</kerning>
                 </font>
                </property>
                <property name="text">
-                <string>File details...</string>
+                <string>Please choose a file.</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -192,7 +215,7 @@
                 <bool>true</bool>
                </property>
                <property name="margin">
-                <number>3</number>
+                <number>8</number>
                </property>
               </widget>
              </item>
@@ -210,34 +233,28 @@
               </spacer>
              </item>
              <item>
-              <widget class="QSpinBox" name="currentFrameNumberInput">
-               <property name="font">
-                <font>
-                 <pointsize>16</pointsize>
-                </font>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="maximum">
-                <number>99999</number>
-               </property>
-              </widget>
-             </item>
-             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <property name="spacing">
+                <number>0</number>
+               </property>
                <item>
                 <widget class="QPushButton" name="prevFrameButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimumSize">
                   <size>
-                   <width>30</width>
-                   <height>30</height>
+                   <width>32</width>
+                   <height>32</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>30</width>
-                   <height>30</height>
+                   <width>32</width>
+                   <height>32</height>
                   </size>
                  </property>
                  <property name="text">
@@ -246,17 +263,44 @@
                 </widget>
                </item>
                <item>
+                <widget class="QSpinBox" name="currentFrameNumberInput">
+                 <property name="maximumSize">
+                  <size>
+                   <width>96</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>12</pointsize>
+                  </font>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="maximum">
+                  <number>99999</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QPushButton" name="nextFrameButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimumSize">
                   <size>
-                   <width>50</width>
-                   <height>50</height>
+                   <width>32</width>
+                   <height>32</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>49</width>
-                   <height>49</height>
+                   <width>32</width>
+                   <height>32</height>
                   </size>
                  </property>
                  <property name="text">
@@ -275,7 +319,7 @@
            <item>
             <widget class="QGroupBox" name="exportOptionsGroup">
              <property name="title">
-              <string>Export Options</string>
+              <string>Import Options</string>
              </property>
              <widget class="QWidget" name="layoutWidget_3">
               <property name="geometry">
@@ -283,7 +327,7 @@
                 <x>20</x>
                 <y>27</y>
                 <width>411</width>
-                <height>101</height>
+                <height>135</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_2">
@@ -403,7 +447,7 @@
      </widget>
      <widget class="QWidget" name="tabOptions">
       <attribute name="title">
-       <string>Options</string>
+       <string>Advanced</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
@@ -419,7 +463,7 @@
               <x>10</x>
               <y>30</y>
               <width>441</width>
-              <height>101</height>
+              <height>140</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0,0,0">
@@ -519,7 +563,7 @@
               <x>10</x>
               <y>30</y>
               <width>441</width>
-              <height>71</height>
+              <height>92</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,0,0">
@@ -580,7 +624,7 @@
               <x>10</x>
               <y>40</y>
               <width>441</width>
-              <height>71</height>
+              <height>82</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0,0" columnminimumwidth="0,0,0,0,0">

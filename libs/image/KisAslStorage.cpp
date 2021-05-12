@@ -232,7 +232,7 @@ QSharedPointer<KisResourceStorage::TagIterator> KisAslStorage::tags(const QStrin
     return QSharedPointer<KisResourceStorage::TagIterator>(new AslTagIterator(location(), resourceType));
 }
 
-bool KisAslStorage::addResource(const QString &/*resourceType*/, KoResourceSP resource)
+bool KisAslStorage::saveAsNewVersion(const QString &/*resourceType*/, KoResourceSP resource)
 {
     if (!resource) {
         warnKrita << "Trying to add a null resource to KisAslStorage";

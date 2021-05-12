@@ -19,7 +19,7 @@ if(PNG_FOUND)
     add_subdirectory(csv)
 endif()
 
-if(OPENEXR_FOUND)
+if(OpenEXR_FOUND)
     add_subdirectory(exr)
 endif()
 

@@ -13,33 +13,31 @@
 
 #include <KisImportExportFilter.h>
 
-
-class KisFFMpegRunner;
-
 class KisDocument;
 class KisAnimationRenderingOptions;
 
 #include "kritaui_export.h"
 
-class KRITAUI_EXPORT KisVideoSaver : public QObject {
+class KRITAUI_EXPORT KisAnimationVideoSaver : public QObject {
     Q_OBJECT
 public:
     /**
-     * @brief KisVideoSaver
+     * @brief KisAnimationVideoSaver
      * This is the object that takes an animation document and config and tells ffmpeg
-     * to render it. Log files are generated here too.
+     * to render it via KisFFMpegWrapper.
      * @param doc the document to use for rendering.
      * @param ffmpegPath the path to the ffmpeg executable.
      * @param batchMode whether Krita is in batchmde and we can thus not show gui widgets.
      */
-    KisVideoSaver(KisDocument* doc, bool batchMode);
-    ~KisVideoSaver() override;
+    KisAnimationVideoSaver(KisDocument* doc, bool batchMode);
+    ~KisAnimationVideoSaver() override;
 
     /**
      * @brief image
      * @return get the image used by this exporter.
      */
     KisImageSP image();
+
     /**
      * @brief encode the main encoding function.
      * This in turn calls runFFMpeg, which is a private function inside this class.

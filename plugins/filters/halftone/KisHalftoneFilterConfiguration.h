@@ -101,9 +101,6 @@ public:
     void setForegroundOpacity(const QString &prefix, int newOpacity);
     void setBackgroundColor(const QString &prefix, const KoColor &newBackgroundColor);
     void setBackgroundOpacity(const QString &prefix, int newBackgroundOpacity);
-
-private:
-    QHash<QString, KisFilterConfigurationSP> m_generatorConfigurations;
 };
 
 #endif

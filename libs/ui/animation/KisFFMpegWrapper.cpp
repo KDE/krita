@@ -18,6 +18,8 @@
 #include <QRegularExpression>
 #include <QApplication>
 
+#include "kis_config.h"
+
 #include "KisPart.h"
 
 namespace
@@ -35,46 +37,53 @@ KisFFMpegWrapper::KisFFMpegWrapper(QObject *parent)
 {
 }
 
-
-
-
-void KisFFMpegWrapper::start(const KisFFMpegWrapperSettings &settings)
+KisFFMpegWrapper::~KisFFMpegWrapper()
 {
-    Q_ASSERT(process == nullptr); // shall never happen
+}
 
-    stdoutBuffer.clear();
-    errorMessage.clear();
-    processSTDOUT.clear();
-    processSTDERR.clear();
 
-    process = new QProcess(this);
-    processSettings = settings;
+void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings)
+{
+    KIS_ASSERT(m_process == nullptr);
+
+    m_stdoutBuffer.clear();
+    m_errorMessage.clear();
+    m_processSTDOUT.clear();
+    m_processSTDERR.clear();
+
+    m_process.reset(new QProcess(this));
+    m_processSettings = settings;
     
     if ( !settings.logPath.isEmpty() )
-        process->setStandardOutputFile(settings.logPath);
+        m_process->setStandardOutputFile(settings.logPath);
     
-    if (!processSettings.batchMode) {
-        QString progressText = processSettings.progressMessage;
+    if (!m_processSettings.batchMode) {
+        QString progressText = m_processSettings.progressMessage;
     
         progressText.replace("[progress]", "0");
     
-        progress = new QProgressDialog(progressText, "", 0, 0, KisPart::instance()->currentMainwindow());
+        m_progress = toQShared(new QProgressDialog(progressText, "", 0, 0, KisPart::instance()->currentMainwindow()));
 
-        progress->setWindowModality(Qt::ApplicationModal);
-        progress->setCancelButton(0);
-        progress->setMinimumDuration(0);
-        progress->setValue(0);
-        progress->setRange(0, 100);
+        m_progress->setWindowModality(Qt::ApplicationModal);
+        m_progress->setCancelButton(0);
+        m_progress->setMinimumDuration(0);
+        m_progress->setValue(0);
+
+        if (settings.progressIndeterminate) {
+            m_progress->setRange(0,0);
+        } else {
+            m_progress->setRange(0, 100);
+        }
         
-        progress->show();
+        m_progress->show();
         
         dbgFile << "Open progress dialog!";
     }
 
-    connect(process, SIGNAL(readyReadStandardOutput()), SLOT(slotReadyReadSTDOUT()));
-    connect(process, SIGNAL(readyReadStandardError()), SLOT(slotReadyReadSTDERR()));
-    connect(process, SIGNAL(started()), SLOT(slotStarted()));
-    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotFinished(int)));
+    connect(m_process.data(), SIGNAL(readyReadStandardOutput()), SLOT(slotReadyReadSTDOUT()));
+    connect(m_process.data(), SIGNAL(readyReadStandardError()), SLOT(slotReadyReadSTDERR()));
+    connect(m_process.data(), SIGNAL(started()), SLOT(slotStarted()));
+    connect(m_process.data(), SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotFinished(int)));
 
     QStringList args;
   
@@ -90,65 +99,101 @@ void KisFFMpegWrapper::start(const KisFFMpegWrapperSettings &settings)
 
     dbgFile << "starting process: " << qUtf8Printable(settings.processPath) << args;
 
-    process->start(settings.processPath, args);
+    m_process->start(settings.processPath, args);
+}
+
+KisImportExportErrorCode KisFFMpegWrapper::start(const KisFFMpegWrapperSettings &settings)
+{
+    struct ProcessResults {
+        bool finish = false;
+        QString error = QString();
+    };
+
+    QSharedPointer<ProcessResults> processResults = toQShared(new ProcessResults);
+
+    connect( this, &KisFFMpegWrapper::sigFinishedWithError, [processResults](const QString& errMsg){
+        processResults->finish = true;
+        processResults->error = errMsg;
+    });
+
+    connect( this, &KisFFMpegWrapper::sigFinished, [processResults](){
+       processResults->finish = true;
+    });
+
+    startNonBlocking(settings);
+    waitForFinished();
+
+    if (processResults->finish == true) {
+        if (processResults->error.isEmpty()) {
+            return ImportExportCodes::OK;
+        } else {
+            return ImportExportCodes::Failure;
+        }
+    } else {
+        kill(); // Ensure process isn't running before returning failure here.
+        return ImportExportCodes::Failure;
+    }
 }
 
 void KisFFMpegWrapper::waitForFinished(int msecs)
 {
-    if (process == nullptr) return;
+    if (m_process == nullptr) return;
 
-    if (process->waitForStarted(msecs)) process->waitForFinished(msecs);
+    if (m_process->waitForStarted(msecs)) m_process->waitForFinished(msecs);
 
 }
 
 void KisFFMpegWrapper::updateProgressDialog(int progressValue) {
     
-    dbgFile << "Update Progress" << progressValue << "/" << processSettings.totalFrames;
+    dbgFile << "Update Progress" << progressValue << "/" << m_processSettings.totalFrames;
     
-    if (progress == nullptr) return;
+    if (!m_progress) return;
 
-    QString progressText = processSettings.progressMessage;
+    QString progressText = m_processSettings.progressMessage;
+    QStringList outputFileParts = m_processSettings.outputFile.split(".");
+    QString suffix = outputFileParts.size() == 2 ? outputFileParts[1] : m_processSettings.outputFile;
 
     progressText.replace("[progress]", QString::number(progressValue));
-    progress->setLabelText(progressText);
+    progressText.replace("[framecount]", QString::number(m_processSettings.totalFrames));
+    progressText.replace("[suffix]", suffix );
+    m_progress->setLabelText(progressText);
 
-    if (processSettings.totalFrames > 0) progress->setValue(progressValue/processSettings.totalFrames);
-     QApplication::processEvents();
+    if (m_processSettings.totalFrames > 0) m_progress->setValue(100 * progressValue / m_processSettings.totalFrames);
 
+    QApplication::processEvents();
 }
 
 void KisFFMpegWrapper::kill()
 {
-    if (process == nullptr)
+    if (m_process == nullptr)
         return;
 
-    process->disconnect(this);
-    process->kill();
-    process->deleteLater();
-    process = nullptr;
+    m_process->disconnect(this);
+    m_process->kill();
+    m_process.reset();
 }
 
 void KisFFMpegWrapper::slotReadyReadSTDERR()
 {
-    QByteArray stderrRawBuffer = process->readAllStandardError();
+    QByteArray stderrRawBuffer = m_process->readAllStandardError();
     
     emit sigReadSTDOUT(stderrRawBuffer);
-    stderrBuffer += stderrRawBuffer;
+    m_stderrBuffer += stderrRawBuffer;
     
     int frameNo = -1;
     int startPos = 0;
     int endPos = 0;
     
-    while ((endPos = stderrBuffer.indexOf(lineDelimiter, startPos)) != -1) {
-        const QString &line = stderrBuffer.mid(startPos, endPos - startPos).trimmed();
+    while ((endPos = m_stderrBuffer.indexOf(lineDelimiter, startPos)) != -1) {
+        const QString &line = m_stderrBuffer.mid(startPos, endPos - startPos).trimmed();
 
-        if (processSettings.storeOutput) processSTDERR += line + "\n";
+        if (m_processSettings.storeOutput) m_processSTDERR += line + "\n";
                 
         emit sigReadLine(2,line);
         
         for (const QString &word : errorWords) {
             if (line.contains(word)) {
-                errorMessage += line % "\n";
+                m_errorMessage += line % "\n";
                 break;
             }
         }
@@ -164,7 +209,7 @@ void KisFFMpegWrapper::slotReadyReadSTDERR()
         startPos = endPos + 1;
     }
 
-    stderrBuffer.remove(0, startPos);
+    m_stderrBuffer.remove(0, startPos);
     
     if (frameNo != -1) {
         updateProgressDialog(frameNo);
@@ -175,32 +220,32 @@ void KisFFMpegWrapper::slotReadyReadSTDERR()
 
 void KisFFMpegWrapper::slotReadyReadSTDOUT()
 {
-    QByteArray stdoutRawBuffer = process->readAllStandardOutput();
+    QByteArray stdoutRawBuffer = m_process->readAllStandardOutput();
     
     emit sigReadSTDOUT(stdoutRawBuffer);
-    stdoutBuffer += stdoutRawBuffer;
+    m_stdoutBuffer += stdoutRawBuffer;
 
   
-    if (processSettings.binaryOutput) {
-        if (processSettings.storeOutput) processSTDOUT += stdoutRawBuffer;
+    if (m_processSettings.binaryOutput) {
+        if (m_processSettings.storeOutput) m_processSTDOUT += stdoutRawBuffer;
     } else {
         
         int startPos = 0;
         int endPos = 0;
         QString str;
         
-        if (processSettings.storeOutput) processSTDOUT += stdoutRawBuffer + "\n";
+        if (m_processSettings.storeOutput) m_processSTDOUT += stdoutRawBuffer + "\n";
         
         // ffmpeg splits normal lines by '\n' and progress data lines by '\r'
-        while ((endPos = stdoutBuffer.indexOf(lineDelimiter, startPos)) != -1) {
-            const QString &line = stdoutBuffer.mid(startPos, endPos - startPos).trimmed();
+        while ((endPos = m_stdoutBuffer.indexOf(lineDelimiter, startPos)) != -1) {
+            const QString &line = m_stdoutBuffer.mid(startPos, endPos - startPos).trimmed();
 
             dbgFile << "ffmpeg stdout:" << line;
             emit sigReadLine(1,line);
             startPos = endPos + 1;
         }
         
-        stdoutBuffer.remove(0, startPos);
+        m_stdoutBuffer.remove(0, startPos);
     }
 
     
@@ -216,19 +261,22 @@ void KisFFMpegWrapper::slotStarted()
 void KisFFMpegWrapper::slotFinished(int exitCode)
 {
     dbgFile << "FFMpeg finished with code" << exitCode;
-    if (!processSettings.batchMode && progress != nullptr) progress->setValue(100);
-    if (exitCode != 0) {
-        errorMessage.remove(junkRegex);
-        if (process->exitStatus() == QProcess::CrashExit) {
-            errorMessage = i18n("FFMpeg Crashed") % "\n" % errorMessage;
-        }
-        emit sigFinishedWithError(errorMessage);
-    } else {
-        emit sigFinished();
+    if (!m_processSettings.batchMode && m_progress){
+        m_progress->setValue(100);
     }
 
-    process->deleteLater();
-    process = nullptr;
+    if (exitCode != 0) {
+        m_errorMessage.remove(junkRegex);
+        if (m_process->exitStatus() == QProcess::CrashExit) {
+            m_errorMessage = i18n("FFMpeg Crashed") % "\n" % m_errorMessage;
+        }
+
+        m_process.reset();
+        emit sigFinishedWithError(m_errorMessage);
+    } else {
+        m_process.reset();
+        emit sigFinished();
+    }
 }
 
 QByteArray KisFFMpegWrapper::runProcessAndReturn(const QString &processPath, const QStringList &args, int msecs)
@@ -250,6 +298,18 @@ QByteArray KisFFMpegWrapper::runProcessAndReturn(const QString &processPath, con
     if (successfulStart) return runProcess.readAllStandardOutput();
 
     return "";
+}
+
+QString KisFFMpegWrapper::configuredFFMpegLocation()
+{
+    KisConfig cfg(true);
+    return cfg.ffmpegLocation();
+}
+
+void KisFFMpegWrapper::setConfiguredFFMpegLocation(QString &location)
+{
+    KisConfig cfg(false);
+    cfg.setFFMpegLocation(location);
 }
 
 QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const QString &customLocation, bool includeProcessInfo)
@@ -386,11 +446,11 @@ QJsonObject KisFFMpegWrapper::ffprobe(const QString &inputFile, const QString &f
                          << "-show_format" 
                          << "-show_streams" 
                          << "-i" << inputFile;
-    this->start(ffprobeSettings);
+    this->startNonBlocking(ffprobeSettings);
     this->waitForFinished();
     
-    QString ffprobeSTDOUT = processSTDOUT;
-    QString ffprobeSTDERR = processSTDERR;
+    QString ffprobeSTDOUT = m_processSTDOUT;
+    QString ffprobeSTDERR = m_processSTDERR;
      
     QJsonDocument ffprobeJsonDoc = QJsonDocument::fromJson(ffprobeSTDOUT.toUtf8());
     QJsonObject ffprobeJsonObj;
@@ -420,7 +480,7 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
      
     ffmpegSettings.processPath = ffmpegPath;
     ffmpegSettings.storeOutput = true;
-    ffmpegSettings.progressMessage = "Loading video data... [progress] frames loaded";
+    ffmpegSettings.progressMessage = i18nc("Video information probing dialog. arg1: frame number.", "Loading video data... %1 frames loaded.", "[progress]");
     ffmpegSettings.batchMode = batchMode;
 
     ffmpegSettings.args << "-stats"
@@ -432,11 +492,11 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
                         << "-i" << inputFile;
                         
 
-    this->start(ffmpegSettings);
+    this->startNonBlocking(ffmpegSettings);
     this->waitForFinished();
 
     
-    QString ffmpegSTDOUT = processSTDERR + "\n" + processSTDOUT;
+    QString ffmpegSTDOUT = m_processSTDERR + "\n" + m_processSTDOUT;
     
     dbgFile << "ffmpegProbe stdout:" << ffmpegSTDOUT;
 

@@ -97,7 +97,7 @@ QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeB
 
 }
 
-QPointF FisheyePointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF FisheyePointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
 }

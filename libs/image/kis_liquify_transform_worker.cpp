@@ -406,9 +406,10 @@ QRect KisLiquifyTransformWorker::approxChangeRect(const QRect &rc)
     const int maxSamplePoints = 200;
     const int minStep = 3;
     const int step = qMax(minStep, m_d->transformedPoints.size() / maxSamplePoints);
+    Q_UNUSED(step);
 
     QVector<QPoint> samplePoints;
-    for (auto it = m_d->transformedPoints.constBegin(); it != m_d->transformedPoints.constEnd(); it+=step) {
+    for (auto it = m_d->transformedPoints.constBegin(); it != m_d->transformedPoints.constEnd(); ++it) {
         samplePoints << it->toPoint();
     }
 

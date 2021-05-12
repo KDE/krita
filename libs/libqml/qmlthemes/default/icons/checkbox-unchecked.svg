@@ -1,13 +1,206 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38.4pt" height="38.4pt">
-<defs/>
-<g id="layer1">
-  <g id="g4182-3" transform="translate(-0.468748, -0.46875)" fill="none">
-   <path id="path3850-7" transform="matrix(0.75 0 0 0.75 0.46875 0.46875)" fill="#000000" d="M32 0C14.3269 0 0 14.3269 0 32C0 49.6731 14.3269 64 32 64C49.6731 64 64 49.6731 64 32C64 14.3269 49.6731 0 32 0ZM32 5.33333C46.7276 5.33333 58.6667 17.2724 58.6667 32C58.6667 46.7276 46.7276 58.6667 32 58.6667C17.2724 58.6667 5.33333 46.7276 5.33333 32C5.33333 17.2724 17.2724 5.33333 32 5.33333Z"/>
-   <rect id="rect3905" transform="matrix(0.53033 -0.53033 0.53033 0.53033 13.8621 18.1048)" fill="#838383" width="6.40000000000pt" height="25.59999680000pt"/>
-   <rect id="rect3907" transform="matrix(0.53033 -0.53033 0.53033 0.53033 13.8621 30.8327)" fill="#838383" width="25.60000000000pt" height="6.39999656000pt"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg3930"
+   height="48"
+   width="48"
+   version="1.1">
+  <defs
+     id="defs3932" />
+  <metadata
+     id="metadata3935">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2012</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     id="path820"
+     d="M 24 1 A 23 23 0 0 0 1 24 A 23 23 0 0 0 24 47 A 23 23 0 0 0 47 24 A 23 23 0 0 0 24 1 z M 24 5 A 19 19 0 0 1 43 24 A 19 19 0 0 1 24 43 A 19 19 0 0 1 5 24 A 19 19 0 0 1 24 5 z "
+     style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+  <g
+     id="g5000"
+     style="display:inline"
+     transform="matrix(1.2,0,0,1.2,-192,-146.4)">
+    <g
+       style="display:inline;fill:#373737;fill-opacity:1"
+       transform="matrix(0.83333333,0,0,0.83333333,160,-764.96859)"
+       id="layer1-4-5">
+      <g
+         transform="translate(-168,300.3622)"
+         id="g4471-1"
+         style="display:inline;fill:#373737;fill-opacity:1">
+        <g
+           id="g3450"
+           style="display:inline"
+           transform="matrix(1.2,0,0,1.2,120,617.60011)">
+          <g
+             style="display:inline;fill:#373737;fill-opacity:1"
+             transform="matrix(0.83333334,0,0,0.83333334,40.000002,71.999996)"
+             id="layer1-1">
+            <g
+               transform="matrix(0.9999989,0,0,0.99999897,-127.99986,-287.99965)"
+               style="display:inline;fill:#373737;fill-opacity:1"
+               id="g3419">
+              <g
+                 style="display:inline;fill:#373737;fill-opacity:1"
+                 transform="matrix(1.0000011,0,0,1.000001,128,287.99995)"
+                 id="layer1-5">
+                <g
+                   transform="matrix(0.9999989,0,0,0.99999897,-127.99986,-287.99965)"
+                   style="display:inline;fill:#373737;fill-opacity:1"
+                   id="g3389">
+                  <g
+                     transform="matrix(1.0000011,0,0,1.0000011,-32.061217,-56.000428)"
+                     id="g5007"
+                     style="display:inline;fill:#373737">
+                    <g
+                       id="g5098"
+                       style="display:inline;fill:#373737"
+                       transform="translate(132)">
+                      <g
+                         style="display:inline;fill:#373737"
+                         id="g5007-4-5"
+                         transform="translate(-132)">
+                        <g
+                           transform="translate(160.06104,344)"
+                           id="layer1-5-2-5-0-1-7"
+                           style="display:inline;fill:#373737;stroke:#0078b4;stroke-opacity:1">
+                          <g
+                             id="g5109"
+                             style="display:inline;fill:#373737"
+                             transform="translate(-96.06104,-344)">
+                            <g
+                               transform="matrix(1.5000003,0,0,1.5000003,12.061018,271.96563)"
+                               id="g4222-5-0"
+                               style="display:inline">
+                              <g
+                                 transform="matrix(0.53333321,0,0,0.53333321,-93.467983,-38.57024)"
+                                 style="display:inline"
+                                 id="g4077-6-1">
+                                <g
+                                   transform="rotate(45,355.75179,112.57078)"
+                                   id="g3941-7-8">
+                                <g
+                                   id="g3946-0-5" />
+                                </g>
+                                <g
+                                   transform="matrix(1.8750006,0,0,1.8750006,175.2525,147.31921)"
+                                   id="g4222-5-0-0"
+                                   style="display:inline">
+                                <g
+                                   id="g4929"
+                                   style="display:inline;fill:#373737"
+                                   transform="matrix(0.66666647,0,0,0.66666644,-29.333285,-98.643715)">
+                                <g
+                                   style="display:inline;fill:#373737;fill-opacity:1"
+                                   transform="translate(47.999971,152.00007)"
+                                   id="g4240-4">
+                                <g
+                                   id="g4621"
+                                   style="display:inline"
+                                   transform="translate(-47.999971,-64.000069)">
+                                <g
+                                   style="display:inline"
+                                   id="g6302-6-0"
+                                   transform="translate(120)">
+                                <g
+                                   id="g4719"
+                                   style="display:inline"
+                                   transform="translate(-176.00003)">
+                                <g
+                                   style="display:inline"
+                                   id="g6302-6-0-6"
+                                   transform="translate(176.00003)">
+                                <g
+                                   id="g4866"
+                                   style="display:inline;fill:#373737"
+                                   transform="translate(-64.00003,-88)">
+                                <g
+                                   style="display:inline;fill:#373737"
+                                   id="g6302-4-7"
+                                   transform="translate(64,88)">
+                                <g
+                                   id="g4539"
+                                   style="display:inline;fill:#373737"
+                                   transform="translate(-63.999972)">
+                                <g
+                                   style="display:inline;opacity:1;fill:#373737"
+                                   transform="translate(63.999973)"
+                                   id="g6302">
+                                <g
+                                   style="display:inline;opacity:1;fill:#373737"
+                                   id="g6781"
+                                   transform="translate(-7.9999729,-88)">
+                                <g
+                                   style="display:inline;fill:#373737"
+                                   id="g6302-4"
+                                   transform="translate(8.0000005,88)" />
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                                </g>
+                              </g>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
   </g>
- </g>
+  <path
+     style="fill:#373737;fill-opacity:1;stroke-width:0.74999988"
+     d="m 13,18.000001 5,-5 L 35,30 30,35 Z"
+     id="rect3905" />
+  <path
+     style="fill:#373737;fill-opacity:1;stroke-width:0.74999988"
+     d="m 13,30 5,5 17,-17 -5,-5 z"
+     id="rect3905-6" />
 </svg>

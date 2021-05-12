@@ -45,11 +45,6 @@ void TestBundleStorage::initTestCase()
     ResourceTestHelper::createDummyLoaderRegistry();
 }
 
-void TestBundleStorage::cleanupTestCase()
-{
-    ResourceTestHelper::cleanDstLocation(FILES_DEST_DIR);
-}
-
 void TestBundleStorage::testMetaData()
 {
     KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
@@ -120,6 +115,13 @@ void TestBundleStorage::testAddResource()
 
     ResourceTestHelper::testVersionedStorageIterator(storage, resourceType, resourceUrl);
 }
+
+void TestBundleStorage::cleanupTestCase()
+{
+    ResourceTestHelper::cleanDstLocation(FILES_DEST_DIR);
+}
+
+
 
 SIMPLE_TEST_MAIN(TestBundleStorage)
 

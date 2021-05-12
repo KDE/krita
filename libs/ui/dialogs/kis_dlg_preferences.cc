@@ -94,6 +94,13 @@
 #include "config-high-dpi-scale-factor-rounding-policy.h"
 #endif
 
+/**
+ * HACK ALERT: this is a function from a private Qt's header qfont_p.h,
+ * we don't include the whole header, because it is painful in the
+ * environments we don't fully control, e.g. in distribution packages.
+ */
+Q_GUI_EXPORT int qt_defaultDpi();
+
 QString shortNameOfDisplay(QScreen* screen)
 {
     // Depending on the display, all of those properties might be
@@ -325,6 +332,15 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_urlResourceFolder->setMode(KoFileDialog::OpenDirectory);
     m_urlResourceFolder->setConfigurationName("resource_directory");
     m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+
+
+    const int forcedFontDPI = cfg.readEntry("forcedDpiForQtFontBugWorkaround", -1);
+    chkForcedFontDPI->setChecked(forcedFontDPI > 0);
+    intForcedFontDPI->setValue(forcedFontDPI > 0 ? forcedFontDPI : qt_defaultDpi());
+    intForcedFontDPI->setEnabled(forcedFontDPI > 0);
+    connect(chkForcedFontDPI, SIGNAL(toggled(bool)), intForcedFontDPI, SLOT(setEnabled(bool)));
+
+
 }
 
 void GeneralTab::setDefault()
@@ -395,6 +411,10 @@ void GeneralTab::setDefault()
 
     m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
     m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+
+    chkForcedFontDPI->setChecked(false);
+    intForcedFontDPI->setValue(qt_defaultDpi());
+    intForcedFontDPI->setEnabled(false);
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -511,6 +531,11 @@ bool GeneralTab::autopinLayersToTimeline()
 bool GeneralTab::adaptivePlaybackRange()
 {
     return m_chkAdaptivePlaybackRange->isChecked();
+}
+
+int GeneralTab::forcedFontDpi()
+{
+    return chkForcedFontDPI->isChecked() ? intForcedFontDPI->value() : -1;
 }
 
 void GeneralTab::getBackgroundImage()
@@ -1941,6 +1966,7 @@ bool KisDlgPreferences::editPreferences()
         m_authorPage->apply();
 
         cfg.logImportantSettings();
+        cfg.writeEntry("forcedDpiForQtFontBugWorkaround", m_general->forcedFontDpi());
 
     }
 

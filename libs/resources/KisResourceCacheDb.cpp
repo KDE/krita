@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.8" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.9" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -730,7 +730,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     QSqlQuery q;
     r = q.prepare("INSERT INTO resources \n"
-                  "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary) \n"
+                  "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary, md5sum) \n"
                   "VALUES \n"
                   "((SELECT id "
                   "  FROM storages "
@@ -743,7 +743,8 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
                   ", :tooltip\n"
                   ", :thumbnail\n"
                   ", :status\n"
-                  ", :temporary)\n");
+                  ", :temporary\n"
+                  ", :md5sum)");
 
     if (!r) {
         qWarning() << "Could not prepare addResource statement" << q.lastError();
@@ -765,6 +766,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     q.bindValue(":status", active);
     q.bindValue(":temporary", (temporary ? 1 : 0));
+    q.bindValue(":md5sum", resource->md5().toHex());
 
     r = q.exec();
     if (!r) {

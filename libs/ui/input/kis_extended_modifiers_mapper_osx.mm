@@ -62,50 +62,25 @@ void processEvent(NSEvent *event)
         extendedMods.setFlag(ExtendedModifiers::Control, modifiers & NSEventModifierFlagControl);
         extendedMods.setFlag(ExtendedModifiers::Option, modifiers & NSEventModifierFlagOption);
     }
-}
-
-void activateGlobalMonitor(bool activate)
-{
-    if (activate) {
-        NSEventMask eventMask = (NSEventMaskFlagsChanged | NSEventMaskKeyDown | NSEventMaskKeyUp);
-        // global will capture events when focus is on another windows
-        globalMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:eventMask handler:^(NSEvent *event) {
-            fromGlobalEvent = true;
-            processEvent(event);
-            return;
-        }];
-    } else {
-        [NSEvent removeMonitor:globalMonitor];
+    if (eventType == NSEventTypeMouseExited) {
+        extendedMods = ExtendedModifiers::None;
     }
 }
 
-void activateLocalMonitor(bool activate, KisShortcutMatcher &matcher)
+void activateLocalMonitor(bool activate)
 {
     if (activate) {
         if (localMonitor) {
             return;
         }
-        NSEventMask eventMask = (NSEventMaskFlagsChanged | NSEventMaskKeyDown | NSEventMaskKeyUp | NSEventMaskLeftMouseUp | NSEventMaskLeftMouseDown);
+        NSEventMask eventMask = (NSEventMaskFlagsChanged | NSEventMaskKeyDown | NSEventMaskKeyUp | NSEventMaskLeftMouseUp
+                                 | NSEventMaskLeftMouseDown | NSEventMaskMouseEntered | NSEventMaskMouseExited );
         localMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:eventMask handler:^(NSEvent *event)
         {
-            bool recoveryFromGlobal = false;
-
             mutex.lock();
             processEvent(event);
-
-            if (fromGlobalEvent && extendedMods == ExtendedModifiers::None) {
-                recoveryFromGlobal = true;
-            }
-
             mutex.unlock();
 
-            // HACK workaround: we call recoveryModifiers once after
-            // all extended modifiers are released to avoid locking
-            // modifiers when coming from other applications focus.
-            if (fromGlobalEvent && recoveryFromGlobal) {
-                matcher.recoveryModifiersWithoutFocus(queryPressedKeysMac());
-                fromGlobalEvent = false;
-            }
             return event;
         }];
 

@@ -22,7 +22,7 @@ class KisDocument;
 class KisImportExportFilter;
 class KisConfigWidget;
 class QHBoxLayout;
-class KisVideoSaver;
+class KisAnimationVideoSaver;
 class KisAnimationRenderingOptions;
 
 class WdgAnimationRenderer : public QWidget, public Ui::WdgAnimaterionRenderer
@@ -63,6 +63,7 @@ private Q_SLOTS:
     void slotLockAspectRatioDimensionsHeight(int height);
 
     void slotExportTypeChanged();
+    void slotFFMpegChanged(const QString& path);
 
     void frameRateChanged(int framerate);
 
@@ -74,6 +75,7 @@ protected Q_SLOTS:
 
 private: 
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
+    void ffmpegWarningCheck();
 
     static QString defaultVideoFileName(KisDocument *doc, const QString &mimeType);
 
@@ -90,14 +92,12 @@ private:
     static void saveLastUsedConfiguration(QString configurationID, KisPropertiesConfigurationSP config);
 
 private:
-
-    static QString findFFMpeg(const QString &customLocation);
-
     KisImageSP m_image;
     KisDocument *m_doc;
     WdgAnimationRenderer *m_page {0};
 
     QString m_customFFMpegOptionsString;
+    QString ffmpegVersion = "None";
     bool m_wantsRenderWithHDR = false;
 };
 

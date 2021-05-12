@@ -85,7 +85,7 @@ qreal Constants::largeFontSize() const
 
 qreal Constants::hugeFontSize() const
 {
-    return 0.9 * m_gridHeight;
+    return 0.6 * m_gridHeight;
 }
 
 bool Constants::isLandscape() const

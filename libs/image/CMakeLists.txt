@@ -371,7 +371,7 @@ if(NOT HAVE_CXX_ATOMICS_WITHOUT_LIB)
     endif()
 endif()
 
-if(OPENEXR_FOUND)
+if(OpenEXR_FOUND)
   target_link_libraries(kritaimage PUBLIC ${OPENEXR_LIBRARIES})
 endif()
 

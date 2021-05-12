@@ -340,18 +340,42 @@ Size ensureSizeNotSmaller(const Size &size, const Size &bounds)
     return result;
 }
 
+/**
+ * Attempt to intersect a line to the area of the a rectangle.
+ *
+ * If the line intersects the rectangle, it will be modified to represent the intersecting line segment and true is returned.
+ * If the line does not intersect the area, it remains unmodified and false will be returned.
+ * If the line is fully inside the rectangle, it's considered "intersecting" so true will be returned.
+ *
+ * @param line line segment
+ * @param rect area
+ * @param extend extend the line to the edges of the rect area even if the line segment fits inside the rectangle
+ *     (so, consider the line to be a line defined by those two points, not a line segment)
+ * @return true if successful
+ */
+bool KRITAGLOBAL_EXPORT intersectLineRect(QLineF &line, const QRect rect, bool extend);
 
 /**
  * Attempt to intersect a line to the area of the a rectangle.
  *
  * If the line intersects the rectangle, it will be modified to represent the intersecting line segment and true is returned.
  * If the line does not intersect the area, it remains unmodified and false will be returned.
+ * If the line is fully inside the rectangle, it's considered "intersecting" so true will be returned.
  *
- * @param segment
- * @param area
+ * extendFirst and extendSecond parameters allow one to use this function in case of unbounded lines (if both are true),
+ * line segments (if both are false) or half-lines/rays (if one is true and another is false).
+ * Note that which point is the "first" and which is the "second" is determined by which is the p1() and which is p2() in QLineF.
+ *
+ * @param line line segment
+ * @param rect area
+ * @param extendFirst extend the line to the edge of the rect area even if the first point of the line segment lies inside the rectangle
+ * @param extendSecond extend the line to the edge of the rect area even if the second point of the line segment lies inside the rectangle
  * @return true if successful
  */
-bool KRITAGLOBAL_EXPORT intersectLineRect(QLineF &line, const QRect rect);
+bool KRITAGLOBAL_EXPORT intersectLineRect(QLineF &line, const QRect rect, bool extendFirst, bool extendSecond);
+
+
+
 
 
 template <class Point>

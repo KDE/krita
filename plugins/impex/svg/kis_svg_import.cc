@@ -64,6 +64,7 @@ KisImportExportErrorCode KisSVGImport::convert(KisDocument *document, QIODevice 
             KisShapeLayer::createShapesFromSvg(io, baseXmlDir,
                                                QRectF(0,0,1200,800), resolutionPPI,
                                                doc->shapeController()->resourceManager(),
+                                               false,
                                                &fragmentSize);
 
     QRectF rawImageRect(QPointF(), fragmentSize);

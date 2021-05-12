@@ -32,7 +32,6 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <KisPart.h>
-#include <utils/KisFileIconCreator.h>
 
 #include <utils/KisUpdaterBase.h>
 
@@ -108,6 +107,11 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
     recentDocumentsListView->installEventFilter(this);
+
+    connect(&m_recentFilesModel, SIGNAL(sigInvalidDocumentForIcon(QUrl)),
+            this, SLOT(slotReportInvalidRecentDocument(QUrl)));
+    connect(&m_recentFilesModel, SIGNAL(sigModelIsUpToDate()),
+            this, SLOT(slotRecentFilesModelIsUpToDate()));
 
     // set up URLs that go to web browser
     devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
@@ -391,65 +395,25 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 #endif
 }
 
+constexpr const int maxRecentItemsCount = 5;
 void KisWelcomePageWidget::populateRecentDocuments()
 {
-    constexpr const int maxItemsCount = 5;
-    const int itemHeight = recentDocumentsListView->height() / maxItemsCount
+    const int itemSquareSideSize = recentDocumentsListView->height() / maxRecentItemsCount
             - recentDocumentsListView->spacing() * 2;
+    const QSize iconSize(itemSquareSideSize, itemSquareSideSize);
+    using URLs=QList<QUrl>;
+    const URLs &recentFileUrls = m_mainWindow->recentFilesUrls();
 
-    const QList<QUrl> &recentFileUrls = m_mainWindow->recentFilesUrls();
-    // grab recent files data
-    int numRecentFiles = qMin(recentFileUrls.length(), maxItemsCount); // grab at most 5
-    KisFileIconCreator iconCreator;
-    QSize iconSize(itemHeight, itemHeight);
-    QList<QUrl> brokenUrls;
-    QList<QStandardItem *> items;
+    m_recentFilesModel.setFiles(recentFileUrls, iconSize, devicePixelRatioF());
 
-    for (int i = 0; i < numRecentFiles; i++) {
-        QString recentFileUrlPath = recentFileUrls.at(i).toLocalFile();
-        QIcon icon;
-
-        if (m_thumbnailMap.contains(recentFileUrlPath)) {
-            icon = m_thumbnailMap[recentFileUrlPath];
-        } else {
-            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF(), iconSize);
-            if (success) {
-                m_thumbnailMap[recentFileUrlPath] = icon;
-            } else {
-                brokenUrls << recentFileUrls.at(i);
-                continue;
-            }
-        }
-
-        const QString &fileName = QFileInfo(recentFileUrlPath).fileName();
-        QStandardItem *recentItem = new QStandardItem(icon, fileName);
-        recentItem->setToolTip(recentFileUrlPath);
-        items.append(recentItem);
-    }
-
-    for (const QUrl &url : brokenUrls) {
-        m_mainWindow->removeRecentUrl(url);
-    }
-
-    // hide clear and Recent files title if there are none
-    labelNoRecentDocs->setVisible(items.isEmpty());
-    recentDocumentsListView->setVisible(!items.isEmpty());
-    clearRecentFilesLink->setVisible(!items.isEmpty());
-
-    m_recentFilesModel.clear(); // clear existing data before it gets re-populated
-    for (QStandardItem *item : items) {
-        m_recentFilesModel.appendRow(item);
-    }
-
-    recentDocumentsListView->setIconSize(iconSize);
     if (!recentItemDelegate) {
-        recentItemDelegate = new RecentItemDelegate(this);
-        recentDocumentsListView->setItemDelegate(recentItemDelegate);
+        recentItemDelegate.reset(new RecentItemDelegate(this));
+        recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
     }
-    recentItemDelegate->setItemHeight(itemHeight);
-    recentDocumentsListView->setModel(&m_recentFilesModel);
+    recentItemDelegate->setItemHeight(itemSquareSideSize);
+    recentDocumentsListView->setModel(&m_recentFilesModel.model());
+    recentDocumentsListView->setIconSize(iconSize);
 }
-
 
 
 #ifdef Q_OS_ANDROID
@@ -674,6 +638,19 @@ void KisWelcomePageWidget::slotOpenFileClicked()
 {
     m_mainWindow->slotFileOpen();
 }
+void KisWelcomePageWidget::slotReportInvalidRecentDocument(QUrl url)
+{
+    m_mainWindow->removeRecentUrl(url);
+}
+
+void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()
+{
+    const bool modelIsEmpty = m_recentFilesModel.model().rowCount() == 0;
+
+    labelNoRecentDocs->setVisible(modelIsEmpty);
+    recentDocumentsListView->setVisible(!modelIsEmpty);
+    clearRecentFilesLink->setVisible(!modelIsEmpty);
+}
 
 #ifdef ENABLE_UPDATERS
 void KisWelcomePageWidget::slotToggleUpdateChecks(bool state)
@@ -690,7 +667,6 @@ void KisWelcomePageWidget::slotToggleUpdateChecks(bool state)
 
     updateVersionUpdaterFrame();
 }
-
 void KisWelcomePageWidget::slotRunVersionUpdate()
 {
 	if (m_versionUpdater.isNull()) {

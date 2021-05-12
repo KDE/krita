@@ -106,6 +106,7 @@ public:
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
+#include <KisHalfTraits.h>
 
 template<>
 class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<half>

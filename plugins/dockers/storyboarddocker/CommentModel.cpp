@@ -17,8 +17,9 @@ StoryboardCommentModel::StoryboardCommentModel(QObject *parent)
     //initialize variables
 }
 
-int StoryboardCommentModel::rowCount(const QModelIndex &/*parent*/) const
+int StoryboardCommentModel::rowCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) return 0;
    return m_commentList.count();
 }
 

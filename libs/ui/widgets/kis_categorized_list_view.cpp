@@ -149,7 +149,7 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
 
-            QIcon icon = locked ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked");
+            QIcon icon = locked ? KisIconUtils::loadIcon("unlocked") : KisIconUtils::loadIcon("locked");
 
             QAction* action1 = menu.addAction(icon, locked ? i18n("Unlock (restore settings from preset)") : i18n("Lock"));
 

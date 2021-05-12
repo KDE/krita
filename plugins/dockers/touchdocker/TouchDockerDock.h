@@ -56,6 +56,7 @@ public Q_SLOTS:
     void hideFileSaveAsDialog();
 
     QString imageForButton(QString id);
+    QString iconForButton(QString id, bool useDarkIcons);
     QString textForButton(QString id);
     QAction *action(QString id) const;
 

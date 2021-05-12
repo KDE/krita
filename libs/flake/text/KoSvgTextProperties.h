@@ -66,7 +66,9 @@ public:
         TextDecorationId,
 
         FillId,
-        StrokeId
+        StrokeId,
+
+        KraTextVersionId
     };
 
 public:
@@ -160,6 +162,8 @@ public:
      * pairs.
      */
     QMap<QString,QString> convertToSvgTextAttributes() const;
+
+    QFont generateFont() const;
 
     /**
      * Return a list of supported XML attribute names (defined in SVG)

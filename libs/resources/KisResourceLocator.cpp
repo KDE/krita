@@ -290,6 +290,8 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
 
 KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation)
 {
+    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
+
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fileName));
     QFile f(fileName);
     if (!f.open(QFile::ReadOnly)) {
@@ -299,12 +301,36 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
 
     KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f, KisGlobalResourcesInterface::instance());
 
-    if (!resource) {
+    if (!resource || !resource->valid()) {
         qWarning() << "Could not import" << fileName << ": resource doesn't load.";
         return nullptr;
     }
 
-    if (addResource(resourceType, resource, storageLocation)) {
+    QByteArray md5 = resource->md5();
+
+    if (storage->importResourceFile(resourceType, fileName)) {
+
+        resource = storage->resource(resourceType + "/" + resource->filename());
+
+        if (!resource) {
+            qWarning() << "Could not retrieve imported resource from the storage" << resourceType << fileName << storageLocation;
+            return nullptr;
+        }
+
+        Q_ASSERT(resource->md5() == md5);
+
+        // Insert into the database
+        const bool result = KisResourceCacheDb::addResource(storage,
+                                                storage->timeStampForResource(resourceType, resource->filename()),
+                                                resource,
+                                                resourceType);
+        if (result) {
+            return resource;
+        }
+
+        // Add to the cache
+        d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
+
         return resource;
     }
     return nullptr;
@@ -316,6 +342,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
     Q_ASSERT(storage);
+    Q_ASSERT(resource->version() <= 0);
 
     //If we have gotten this far and the resource still doesn't have a filename to save to, we should generate one.
     if (resource->filename().isEmpty()) {
@@ -326,7 +353,6 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
         resource->setVersion(0);
     }
 
-
     // Save the resource to the storage storage
     if (!storage->addResource(resource)) {
         qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
@@ -336,7 +362,6 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     resource->setStorageLocation(storageLocation);
     resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
-
 
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
 
@@ -369,7 +394,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     resource->updateThumbnail();
     resource->setVersion(resource->version() + 1);
 
-    if (!storage->addResource(resource)) {
+    if (!storage->saveAsNewVersion(resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
         return false;
     }

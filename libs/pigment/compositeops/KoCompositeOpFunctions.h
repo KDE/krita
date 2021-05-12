@@ -9,6 +9,9 @@
 
 #include <KoColorSpaceMaths.h>
 
+#include <type_traits>
+#include <cmath>
+
 template<class HSXType, class TReal>
 inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
 {
@@ -139,18 +142,33 @@ inline void cfLighterColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, T
 }
 
 template<class T>
-inline T cfColorBurn(T src, T dst) {
+inline T colorBurnHelper(T src, T dst) {
     using namespace Arithmetic;
-    
-    if(dst == unitValue<T>())
-        return unitValue<T>();
-    
-    T invDst = inv(dst);
-    
-    if(src < invDst)
-        return zeroValue<T>();
-    
-    return inv(clamp<T>(div(invDst, src)));
+    // Handle the case where the denominator is 0. See color dodge for a
+    // detailed explanation
+    if(src == zeroValue<T>()) {
+        return dst == unitValue<T>() ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::max;
+    }
+    return clamp<T>(div(inv(dst), src));
+}
+
+// Integer version of color burn
+template<class T>
+inline typename std::enable_if<std::is_integral<T>::value, T>::type
+cfColorBurn(T src, T dst) {
+    using namespace Arithmetic;
+    return inv(colorBurnHelper(src, dst));
+}
+
+// Floating point version of color burn
+template<class T>
+inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
+cfColorBurn(T src, T dst) {
+    using namespace Arithmetic;
+    const T result = colorBurnHelper(src, dst);
+    // Constantly dividing by small numbers can quickly make the result
+    // become infinity or NaN, so we check that and correct (kind of clamping)
+    return inv(std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::max);
 }
 
 template<class T>
@@ -161,19 +179,39 @@ inline T cfLinearBurn(T src, T dst) {
 }
 
 template<class T>
-inline T cfColorDodge(T src, T dst) {
+inline T colorDodgeHelper(T src, T dst) {
     using namespace Arithmetic;
-    //Fixing Color Dodge to avoid ZX Colors on bright area.
+    // Handle the case where the denominator is 0.
+    // When src is 1 then the denominator (1 - src) becomes 0, and to avoid
+    // dividing by 0 we treat the denominator as an infinitelly small number,
+    // so the result of the formula would approach infinity. As in the generic
+    // case, that result is clamped to the maximum value (which for integer
+    // types is the same as the unit value).
+    // Another special case is when both numerator and denominator are 0. In
+    // this case we also treat the denominator as an infinitelly small number,
+    // and the numerator can remain as 0, so dividing 0 over a number (no matter
+    // how small it is) gives 0.
+    if (src == unitValue<T>()) {
+        return dst == zeroValue<T>() ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::max;
+    }
+    return Arithmetic::clamp<T>(div(dst, inv(src)));
+}
 
-    if(src == unitValue<T>())
-        return unitValue<T>();
-    
-    T invSrc = inv(src);
-    
-    if(invSrc == zeroValue<T>())
-        return unitValue<T>();
-    
-    return Arithmetic::clamp<T>(div(dst, invSrc));
+// Integer version of color dodge
+template<class T>
+inline typename std::enable_if<std::is_integral<T>::value, T>::type
+cfColorDodge(T src, T dst) {
+    return colorDodgeHelper(src, dst);
+}
+
+// Floating point version of color dodge
+template<class T>
+inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
+cfColorDodge(T src, T dst) {
+    const T result = colorDodgeHelper(src, dst);
+    // Constantly dividing by small numbers can quickly make the result
+    // become infinity or NaN, so we check that and correct (kind of clamping)
+    return std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::max;
 }
 
 template<class T>
@@ -382,6 +420,20 @@ inline T cfHardMixPhotoshop(T src, T dst) {
     const composite_type sum = composite_type(src) + dst;
 
     return sum > unitValue<T>() ? unitValue<T>() : zeroValue<T>();
+}
+
+// Approximation of the hard mix mode used by photoshop in the brush texturing
+// In contrast to the normal hard mix, this produces antialiased edges, better
+// for texturing the brush dab, at least visually
+template<class T>
+inline T cfHardMixSofterPhotoshop(T src, T dst) {
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    const composite_type srcScaleFactor = static_cast<composite_type>(2);
+    const composite_type dstScaleFactor = static_cast<composite_type>(3);
+
+    return clamp<T>(dstScaleFactor * dst - srcScaleFactor * inv(src));
 }
 
 template<class T>

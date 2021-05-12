@@ -28,12 +28,14 @@ public:
     bool addTag(const QString &resourceType, KisTagSP tag) override;
 
     /// Adds or updates this resource to the storage
-    bool addResource(const QString &resourceType, KoResourceSP resource) override;
+    bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     bool loadVersionedResource(KoResourceSP resource) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
+    bool importResourceFile(const QString &resourceType, const QString &resourceFile) override;
+    bool addResource(const QString  &resourceType, KoResourceSP resource) override;
 
     QStringList metaDataKeys() const override;
     QVariant metaData(const QString &key) const override;

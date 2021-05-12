@@ -294,6 +294,7 @@ set(kritaui_LIB_SRCS
     utils/KisClipboardUtil.cpp
     utils/KisDitherUtil.cpp
     utils/KisFileIconCreator.cpp
+    utils/KisRecentDocumentsModelWrapper.cpp
 
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp

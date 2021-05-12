@@ -58,6 +58,7 @@ QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &paren
     if (column !=0) {
         return QModelIndex();
     }
+    
     //1st level node has invalid parent
     if (!parent.isValid()) {
         return createIndex(row, column, m_items.at(row).data());

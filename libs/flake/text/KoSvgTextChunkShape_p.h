@@ -25,8 +25,6 @@ public:
     ~SharedData();
 
     KoSvgTextProperties properties;
-    QFont font;
-    QStringList fontFamiliesList;
 
     QVector<KoSvgText::CharTransformation> localTransformations;
 

@@ -185,6 +185,10 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 
             KisSignalsBlocker b(m_d->chkLod);
             m_d->chkLod->setChecked(false);
+        } else if (m_d->resourceManager) {
+            KisSignalsBlocker b(m_d->chkLod);
+            bool lodActive = m_d->resourceManager->resource(KoCanvasResource::LodAvailability).toBool();
+            m_d->chkLod->setChecked(lodActive);
         }
     }
 

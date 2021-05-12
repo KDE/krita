@@ -9,7 +9,7 @@
 #include <klocalizedstring.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceServerObserver.h>
+#include <KoResourceServer.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
 #include <KoColor.h>

@@ -1,3 +1,12 @@
+/*
+ *  SPDX-FileCopyrightText: 2021 Know Zero
+ *  SPDX-FileCopyrightText: 2021 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KISDLGIMPORTVIDEOANIMATION_H
 #define KISDLGIMPORTVIDEOANIMATION_H
 
@@ -46,6 +55,7 @@ protected Q_SLOTS:
     void slotFrameNumberChanged(int frame);
     void slotVideoSliderChanged();
     void slotVideoTimerTimeout();
+    void slotImportDurationChanged(qreal time);
     
     void slotDocumentHandlerChanged(int selectedIndex);
 
@@ -70,14 +80,12 @@ private:
     KisMainWindow *m_mainWindow;
     KisView *m_activeView;
 
-    QTimer *videoSliderTimer;
-    QDir videoWorkDir;
-    KisBasicVideoInfo videoInfo;
-    int currentFrame;
- 
+    QTimer *m_videoSliderTimer;
+    QDir m_videoWorkDir;
+    KisBasicVideoInfo m_videoInfo;
+    int m_currentFrame;
 
-
-    int ffmpegFindInput;
+    int m_ffmpegFindInput;
 
 
 };

@@ -1,19 +1,33 @@
+/*
+ *  SPDX-FileCopyrightText: 2021 Know Zero
+ *  SPDX-FileCopyrightText: 2021 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "KisDlgImportVideoAnimation.h"
 
-#include "KisDocument.h"
-#include "KisMainWindow.h"
-#include "kis_image.h"
-#include "kis_image_animation_interface.h"
-#include "KisImportExportManager.h"
-#include "KoFileDialog.h"
 #include <QStandardPaths>
 #include <QRegExp>
 #include <QtMath>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QMessageBox>
+
+#include <KFormat>
+
+#include "KoFileDialog.h"
+
+#include <KisDocument.h>
+#include <KisMainWindow.h>
+#include <KisImportExportManager.h>
+#include <kis_image.h>
+#include <kis_image_animation_interface.h>
+#include <kis_memory_statistics_server.h>
 #include <kis_icon_utils.h>
 
-#include <QMessageBox>
 #include "KisFFMpegWrapper.h"
 
 KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow, KisView *activeView) :
@@ -124,12 +138,12 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     mainWidget()->setMinimumSize( page->size() );
     mainWidget()->adjustSize();
 
-    videoSliderTimer = new QTimer(this);
-    videoSliderTimer->setSingleShot(true);
+    m_videoSliderTimer = new QTimer(this);
+    m_videoSliderTimer->setSingleShot(true);
 
-    connect(videoSliderTimer, SIGNAL(timeout()), SLOT(slotVideoTimerTimeout()));
+    connect(m_videoSliderTimer, SIGNAL(timeout()), SLOT(slotVideoTimerTimeout()));
 
-    currentFrame = 0;
+    m_currentFrame = 0;
     CurrentFrameChanged(0);
 
     connect(m_ui.filePickerButton, SIGNAL(clicked()), SLOT(slotAddFile()));
@@ -140,6 +154,8 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
 
     connect(m_ui.ffprobePickerButton, SIGNAL(clicked()), SLOT(slotFFProbeFile()));
     connect(m_ui.ffmpegPickerButton, SIGNAL(clicked()), SLOT(slotFFMpegFile()));
+
+    connect(m_ui.exportDurationSpinbox, SIGNAL(valueChanged(qreal)), SLOT(slotImportDurationChanged(qreal)));
      
 }
 
@@ -160,7 +176,7 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
     QStringList frameList;
 
 
-    if ( !videoWorkDir.mkpath(".") ) {
+    if ( !m_videoWorkDir.mkpath(".") ) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Failed to create a work directory, make sure you have write permission"));
         return frameList;
     }
@@ -176,7 +192,7 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
         if (QMessageBox::warning(this, i18nc("Title for a messagebox", "Krita"),
                              i18n("Warning: you are trying to import more than 100 frames into Krita.\n\n"
                                   "This means you might be overloading your system.\n"
-                                  "If you want to edit a clip larger than 100 frames, consider using a real video editor, like Kdeenlive (https://kdenlive.org)."),
+                                  "If you want to edit a clip larger than 100 frames, consider using a real video editor, like Kdenlive (https://kdenlive.org)."),
                                  QMessageBox::Ok | QMessageBox::Cancel,
                                  QMessageBox::Cancel) == QMessageBox::Cancel) {
             return frameList;
@@ -185,12 +201,12 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
 
 
     args << "-ss" << QString::number(m_ui.startExportingAtSpinbox->value())
-         << "-i" << videoInfo.file
+         << "-i" << m_videoInfo.file
          << "-t" << QString::number(exportDuration)
          << "-r" << QString::number(fps);
 
 
-    if ( videoInfo.width != m_ui.videoWidthSpinbox->value() || videoInfo.height != m_ui.videoHeightSpinbox->value() ) {         
+    if ( m_videoInfo.width != m_ui.videoWidthSpinbox->value() || m_videoInfo.height != m_ui.videoHeightSpinbox->value() ) {
         args << "-vf" <<  QString("scale=w=")
                                     .append(QString::number(m_ui.videoWidthSpinbox->value()))
                                     .append(":h=")
@@ -213,15 +229,15 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
 
     ffmpegSettings.processPath = ffmpegInfo["path"].toString();
     ffmpegSettings.args = args;
-    ffmpegSettings.outputFile = videoWorkDir.filePath("output_%04d.png");
+    ffmpegSettings.outputFile = m_videoWorkDir.filePath("output_%04d.png");
     ffmpegSettings.totalFrames = qCeil(exportDuration * fps);
     ffmpegSettings.progressMessage = "Extracted [progress] frames from video...";
 
     ffmpeg->startNonBlocking(ffmpegSettings);
     ffmpeg->waitForFinished();
 
-    frameList = videoWorkDir.entryList(QStringList() << "output_*.png",QDir::Files);
-    frameList.replaceInStrings("output_", videoWorkDir.absolutePath() + QDir::separator() + "output_");
+    frameList = m_videoWorkDir.entryList(QStringList() << "output_*.png",QDir::Files);
+    frameList.replaceInStrings("output_", m_videoWorkDir.absolutePath() + QDir::separator() + "output_");
 
     dbgFile << "Import frames list:" << frameList;
 
@@ -239,7 +255,7 @@ QStringList KisDlgImportVideoAnimation::documentInfo() {
     documentInfoList << QString::number(m_ui.frameSkipSpinbox->value())
                      << QString::number(m_ui.fpsSpinbox->value())
                      << QString::number(qCeil(m_ui.fpsSpinbox->value() * m_ui.exportDurationSpinbox->value()))
-                     << videoInfo.file;
+                     << m_videoInfo.file;
 
     if ( m_ui.cmbDocumentHandler->currentIndex() == 0 ) {
         documentInfoList << "0"
@@ -297,7 +313,7 @@ QStringList KisDlgImportVideoAnimation::showOpenFileDialog()
 void KisDlgImportVideoAnimation::cleanupWorkDir() 
 {
     dbgFile << "Cleanup Animation import work directory";
-    videoWorkDir.removeRecursively();
+    m_videoWorkDir.removeRecursively();
 }
 
 
@@ -315,9 +331,9 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
     const QFileInfo resultFileInfo(filename);
     const QDir videoDir(resultFileInfo.absolutePath());
 
-    videoWorkDir.setPath(videoDir.filePath("Krita_Animation_Import_Temp"));
+    m_videoWorkDir.setPath(videoDir.filePath("Krita_Animation_Import_Temp"));
 
-    if (videoWorkDir.exists()) cleanupWorkDir();
+    if (m_videoWorkDir.exists()) cleanupWorkDir();
 
     QFontMetrics metrics(m_ui.fileLocationLabel->font());
     const int fileLabelWidth = m_ui.fileLocationLabel->width() > 400 ? m_ui.fileLocationLabel->width():400;
@@ -326,41 +342,39 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
                              + "/" + metrics.elidedText(resultFileInfo.fileName(), Qt::ElideMiddle, qFloor(fileLabelWidth*0.4));
 
     m_ui.fileLocationLabel->setText(elidedFileString);
-    videoInfo = loadVideoInfo(filename);
+    m_videoInfo = loadVideoInfo(filename);
 
-    QString textInfo = "Width: " + QString::number(videoInfo.width) + "px" + "<br>"
-                     + "Height: " + QString::number(videoInfo.height) + "px" + "<br>"
-                     + "Duration: "  +  QString::number(videoInfo.duration, 'f', 2) + " s" + "<br>"
-                     + "Frames: " + QString::number(videoInfo.frames) + "<br>"
-                     + "FPS: " + QString::number(videoInfo.fps);
+    QString textInfo = "Width: " + QString::number(m_videoInfo.width) + "px" + "<br>"
+                     + "Height: " + QString::number(m_videoInfo.height) + "px" + "<br>"
+                     + "Duration: "  +  QString::number(m_videoInfo.duration, 'f', 2) + " s" + "<br>"
+                     + "Frames: " + QString::number(m_videoInfo.frames) + "<br>"
+                     + "FPS: " + QString::number(m_videoInfo.fps);
 
-    if ( videoInfo.hasOverriddenFPS ) {
+    if ( m_videoInfo.hasOverriddenFPS ) {
         textInfo += "*<br><font size='0.5em'><em>*FPS not right in file. Modified to see full duration</em></font>";
     }
 
-    m_ui.lblWarning->setVisible(videoInfo.frames > 100);
-
-    m_ui.fpsSpinbox->setValue( videoInfo.fps );
+    m_ui.fpsSpinbox->setValue( m_videoInfo.fps );
     m_ui.fileLoadedDetails->setText(textInfo);
 
 
-    m_ui.videoPreviewSlider->setRange(0, videoInfo.frames); 
-    m_ui.currentFrameNumberInput->setRange(0, videoInfo.frames);
+    m_ui.videoPreviewSlider->setRange(0, m_videoInfo.frames);
+    m_ui.currentFrameNumberInput->setRange(0, m_videoInfo.frames);
     m_ui.exportDurationSpinbox->setRange(0, 9999.0);
 
     if (m_ui.cmbDocumentHandler->currentIndex() == 0) {
-        m_ui.documentWidthSpinbox->setValue(videoInfo.width);
-        m_ui.documentHeightSpinbox->setValue(videoInfo.height);        
+        m_ui.documentWidthSpinbox->setValue(m_videoInfo.width);
+        m_ui.documentHeightSpinbox->setValue(m_videoInfo.height);
     }
 
-    m_ui.videoWidthSpinbox->setValue(videoInfo.width);
-    m_ui.videoHeightSpinbox->setValue(videoInfo.height);
+    m_ui.videoWidthSpinbox->setValue(m_videoInfo.width);
+    m_ui.videoHeightSpinbox->setValue(m_videoInfo.height);
 
-    m_ui.exportDurationSpinbox->setValue(videoInfo.duration);
+    m_ui.exportDurationSpinbox->setValue(m_videoInfo.duration);
 
     CurrentFrameChanged(0);
 
-    if ( videoInfo.file.isEmpty() ) {
+    if ( m_videoInfo.file.isEmpty() ) {
         toggleInputControls(false);
     } else {
         toggleInputControls(true);
@@ -373,11 +387,11 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
 
 void KisDlgImportVideoAnimation::updateVideoPreview() 
 {
-    int currentDurration = ( videoInfo.stream != -1 ) ?  (currentFrame / videoInfo.fps):0;
+    int currentDurration = ( m_videoInfo.stream != -1 ) ?  (m_currentFrame / m_videoInfo.fps):0;
     QStringList args;
 
     args << "-ss" << QString::number(currentDurration)
-         << "-i" << videoInfo.file
+         << "-i" << m_videoInfo.file
          << "-v" << "quiet"
          << "-vframes" << "1"
          << "-vcodec" << "mjpeg"
@@ -390,7 +404,7 @@ void KisDlgImportVideoAnimation::updateVideoPreview()
     QByteArray byteImage = KisFFMpegWrapper::runProcessAndReturn(ffmpegInfo["path"].toString(), args, 3000);
 
     if ( byteImage.isEmpty() ) {
-        m_ui.thumbnailImageHolder->setText( videoInfo.frames == currentFrame ? "End of Video":"No Preview" );
+        m_ui.thumbnailImageHolder->setText( m_videoInfo.frames == m_currentFrame ? "End of Video":"No Preview" );
     } else {
         QPixmap thumbnailPixmap;
         thumbnailPixmap.loadFromData(byteImage,"JFIF");
@@ -410,14 +424,58 @@ void KisDlgImportVideoAnimation::slotVideoTimerTimeout()
     updateVideoPreview();
 }
 
+void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
+{
+
+    KisMemoryStatisticsServer::Statistics stats =
+            KisMemoryStatisticsServer::instance()
+            ->fetchMemoryStatistics(m_activeView ? m_activeView->image() : 0);
+    const KFormat format;
+
+    int resolution = m_videoInfo.width * m_videoInfo.height;
+    int pixelSize = 4; //how do we even go about getting the bitdepth???
+    if (m_activeView && m_ui.cmbDocumentHandler->currentIndex() > 0) {
+        pixelSize = m_activeView->image()->colorSpace()->pixelSize() * 4;
+    } else if (m_ui.cmbDocumentColorDepth->currentText() == "U16"){
+        pixelSize = 8;
+    }
+    int frames = m_videoInfo.fps * time + 2;
+    // Sometimes, the potential size of the file is so big (a feature length film taking easily 970 gib), that we cannot put it into a number.
+    // It's more efficient therefore to calculate the maximum amount of frames possible.
+
+    int maxFrames = stats.totalMemoryLimit / resolution / pixelSize;
+
+    QString text_frames = i18nc("part of warning in video importer.", "WARNING, you are trying to import %1 frames, the maximum amount you can import is %2."
+                               , frames
+                               , maxFrames);
+    QString text_memory;
+
+    QString text_video_editor = i18nc("part of warning in video importer.",
+                                      "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!");
+
+
+    if (maxFrames < frames) {
+        text_memory = i18nc("part of warning in video importer.", "You do not have enough memory to load this many frames, the computer will be overloaded.");
+        m_ui.lblWarning->setText("<span style=\"color:#ff1500;\">"+text_frames+" "+text_memory+" "+text_video_editor+"</span>");
+        m_ui.lblWarning->setVisible(true);
+    } else if (maxFrames < frames * 2) {
+        text_memory = i18nc("part of warning in video importer.", "This will take over half the available memory, editing will be difficult.");
+        m_ui.lblWarning->setText("<span style=\"color:#ffee00;\">"+text_frames+" "+text_memory+" "+text_video_editor+"</span>");
+        m_ui.lblWarning->setVisible(true);
+    } else {
+        m_ui.lblWarning->setVisible(false);
+    }
+
+}
+
 void KisDlgImportVideoAnimation::slotNextFrame()
 {
-    CurrentFrameChanged(currentFrame+1);
+    CurrentFrameChanged(m_currentFrame+1);
 }
 
 void KisDlgImportVideoAnimation::slotPrevFrame()
 {
-    CurrentFrameChanged(currentFrame-1);
+    CurrentFrameChanged(m_currentFrame-1);
 }
 
 void KisDlgImportVideoAnimation::slotFrameNumberChanged(int frame)
@@ -482,9 +540,9 @@ void KisDlgImportVideoAnimation::slotDocumentHandlerChanged(int selectedIndex)
     if (toggleDocumentOptions) {
         m_ui.fpsDocumentLabel->setText(" ");
         
-        if (videoInfo.stream != -1) {
-            m_ui.documentWidthSpinbox->setValue(videoInfo.width);
-            m_ui.documentHeightSpinbox->setValue(videoInfo.height);
+        if (m_videoInfo.stream != -1) {
+            m_ui.documentWidthSpinbox->setValue(m_videoInfo.width);
+            m_ui.documentHeightSpinbox->setValue(m_videoInfo.height);
         }
 
     } else if (m_activeView) {
@@ -499,7 +557,7 @@ void KisDlgImportVideoAnimation::slotVideoSliderChanged()
 {
     CurrentFrameChanged(m_ui.videoPreviewSlider->value());
 
-    if (!videoSliderTimer->isActive()) videoSliderTimer->start(300);
+    if (!m_videoSliderTimer->isActive()) m_videoSliderTimer->start(300);
 
 }
 
@@ -510,18 +568,18 @@ void KisDlgImportVideoAnimation::CurrentFrameChanged(int frame)
     float currentSeconds = 0;
 
     // update frame and seconds model data if they have changed
-    if (currentFrame != frame ) {
+    if (m_currentFrame != frame ) {
         dbgFile << "Frame change to:" << frame;
-        currentFrame = frame;
-        currentSeconds = currentFrame / videoInfo.fps; 
+        m_currentFrame = frame;
+        currentSeconds = m_currentFrame / m_videoInfo.fps;
     }
 
     // update UI components if they are out of sync
-    if (currentFrame != m_ui.currentFrameNumberInput->value())
-        m_ui.currentFrameNumberInput->setValue(currentFrame);
+    if (m_currentFrame != m_ui.currentFrameNumberInput->value())
+        m_ui.currentFrameNumberInput->setValue(m_currentFrame);
         
-    if (currentFrame != m_ui.videoPreviewSlider->value())
-        m_ui.videoPreviewSlider->setValue(currentFrame);
+    if (m_currentFrame != m_ui.videoPreviewSlider->value())
+        m_ui.videoPreviewSlider->setValue(m_currentFrame);
             
     m_ui.videoPreviewSliderValueLabel->setText( QString::number(currentSeconds, 'f', 2).append(" s") );
 }

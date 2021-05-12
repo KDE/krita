@@ -30,6 +30,7 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <dlg_embed_tags.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KisResourceTypeModel.h>
 
 #include <wdgtagselection.h>
 
@@ -246,6 +247,17 @@ QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagS
 void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
 {
     KisResourceModel emptyModel("");
+    QMap<QString, QSharedPointer<KisResourceModel>> modelsPerResourceType;
+    KisResourceTypeModel resourceTypesModel;
+    for (int i = 0; i < resourceTypesModel.rowCount(); i++) {
+        QModelIndex idx = resourceTypesModel.index(i, 0);
+        QString resourceType = resourceTypesModel.data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
+        QSharedPointer<KisResourceModel> model = QSharedPointer<KisResourceModel>(new KisResourceModel(resourceType));
+        modelsPerResourceType.insert(resourceType, model);
+    }
+
+    QStringList resourceTypes = modelsPerResourceType.keys();
+
     QStack<int> allResourcesIds;
     Q_FOREACH(int id, m_selectedResourcesIds) {
         allResourcesIds << id;
@@ -254,13 +266,22 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
     // note: if there are repetitions, it's fine; the bundle will filter them out
     while(!allResourcesIds.isEmpty()) {
         int id = allResourcesIds.takeFirst();
-        KoResourceSP res = emptyModel.resourceForId(id);
+        KoResourceSP res;
+        QString resourceTypeHere = "";
+        QSharedPointer<KisResourceModel> resModel;
+        for (int i = 0; i < resourceTypes.size(); i++) {
+            res = modelsPerResourceType[resourceTypes[i]]->resourceForId(id);
+            if (!res.isNull()) {
+                resModel = modelsPerResourceType[resourceTypes[i]];
+                resourceTypeHere = resourceTypes[i];
+                break;
+            }
+        }
         if (!res) {
             warnKrita << "No resource for id " << id;
             continue;
         }
-        KisResourceModel resModel(res->resourceType().first);
-        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel.tagsForResource(id));
+        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
         bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
 
         QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());

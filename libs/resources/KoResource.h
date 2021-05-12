@@ -109,6 +109,8 @@ public:
 
     /// @return the md5sum calculated over the contents of the resource.
     QByteArray md5() const;
+    void setMD5(const QByteArray &md5);
+
 
     /// @return the filename of this resource within the container (folder, bundle, ...)
     QString filename() const;
@@ -131,6 +133,7 @@ public:
 
     /// @return the name of the storage location of the resource
     QString storageLocation() const;
+    void setStorageLocation(const QString &location);
 
     /// Mark the preset as modified but not saved
     void setDirty(bool value);
@@ -146,9 +149,11 @@ public:
 
     /// Get the version of the resource
     int version() const;
+    void setVersion(int version);
 
     /// @return the unique id of the resource in the resource database
     int resourceId() const;
+    void setResourceId(int id);
 
     /// @return the resource type
     virtual QPair<QString, QString> resourceType() const = 0;
@@ -188,34 +193,11 @@ public:
      */
     virtual QList<int> requiredCanvasResources() const;
 
-private:
-
-    friend class KisResourceCacheDb;
-    friend class KisResourceModel;
-    friend class KisResourceLocator;
-    friend class TestResourceModel;
-    friend class TestResourceLocator;
-    friend class TestFolderStorage;
-    friend class TestBundleStorage;
-    friend class KisFolderStorage;
-    friend class KisBundleStorage;
-    friend class KisStorageVersioningHelper;
-    friend class KisMemoryStorage;
-
-    friend void ResourceTestHelper::overrideResourceVesion(KoResourceSP resource, int version);
-
-    void setVersion(int version);
-    void setResourceId(int id);
-    void setStorageLocation(const QString &location);
 
 protected:
 
     /// override generateMD5 and in your resource subclass
     virtual QByteArray generateMD5() const;
-
-    /// call this when the contents of the resource change so the md5 needs to be recalculated
-    void setMD5(const QByteArray &md5);
-
 
 private:
     struct Private;

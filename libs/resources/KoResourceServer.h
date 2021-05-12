@@ -85,6 +85,7 @@ public:
         , m_tagModel(new KisTagModel(type))
         , m_type(type)
     {
+        Q_ASSERT(!type.isEmpty());
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
@@ -183,7 +184,7 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     QString saveLocation() {
-        return KisResourceLocator::instance()->resourceLocationBase() + '/' + m_type;
+        return KisResourceLocator::instance()->resourceLocationBase() + m_type;
     }
 
     /**
@@ -313,18 +314,17 @@ public:
      * Call after changing the content of a resource and saving it;
      * Notifies the connected views.
      */
-    void updateResource(QSharedPointer<T> resource)
+    bool updateResource(QSharedPointer<T> resource)
     {
-
-
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
                 qDebug() << s;
             }
         }
-        m_resourceModel->updateResource(resource);
+        bool result = m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
+        return result;
     }
 
     /**

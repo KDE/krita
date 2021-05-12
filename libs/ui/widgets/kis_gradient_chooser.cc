@@ -15,6 +15,7 @@
 #include <QSlider>
 #include <QWidgetAction>
 #include <QSet>
+#include <QBuffer>
 
 #include <klocalizedstring.h>
 #include <resources/KoAbstractGradient.h>
@@ -34,6 +35,7 @@
 #include "kis_stopgradient_editor.h"
 #include "KisPopupButton.h"
 #include <KisTagFilterResourceProxyModel.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
@@ -169,14 +171,14 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
     m_d->actionViewModeIcon->setCheckable(true);
     m_d->actionViewModeIcon->setActionGroup(actionGroupViewMode);
     m_d->actionViewModeIcon->setText(
-        i18nc("Set the gradient chooser to show icons instead of a list", "Icon view")
-    );
+                i18nc("Set the gradient chooser to show icons instead of a list", "Icon view")
+                );
     m_d->actionViewModeList = new QAction(this);
     m_d->actionViewModeList->setCheckable(true);
     m_d->actionViewModeList->setActionGroup(actionGroupViewMode);
     m_d->actionViewModeList->setText(
-        i18nc("Set the gradient chooser to show a list instead of icons", "List view")
-    );
+                i18nc("Set the gradient chooser to show a list instead of icons", "List view")
+                );
     QAction *separatorViewMode1 = new QAction(this);
     separatorViewMode1->setSeparator(true);
     QActionGroup *actionGroupItemSize = new QActionGroup(this);
@@ -184,26 +186,26 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
     m_d->actionItemSizeSmall->setCheckable(true);
     m_d->actionItemSizeSmall->setActionGroup(actionGroupItemSize);
     m_d->actionItemSizeSmall->setText(
-        i18nc("Set the gradient chooser to show small items", "Small items")
-    );
+                i18nc("Set the gradient chooser to show small items", "Small items")
+                );
     m_d->actionItemSizeMedium = new QAction(this);
     m_d->actionItemSizeMedium->setCheckable(true);
     m_d->actionItemSizeMedium->setActionGroup(actionGroupItemSize);
     m_d->actionItemSizeMedium->setText(
-        i18nc("Set the gradient chooser to show medium size items", "Medium size items")
-    );
+                i18nc("Set the gradient chooser to show medium size items", "Medium size items")
+                );
     m_d->actionItemSizeLarge = new QAction(this);
     m_d->actionItemSizeLarge->setCheckable(true);
     m_d->actionItemSizeLarge->setActionGroup(actionGroupItemSize);
     m_d->actionItemSizeLarge->setText(
-        i18nc("Set the gradient chooser to show large items", "Large items")
-    );
+                i18nc("Set the gradient chooser to show large items", "Large items")
+                );
     m_d->actionItemSizeCustom = new QAction(this);
     m_d->actionItemSizeCustom->setCheckable(true);
     m_d->actionItemSizeCustom->setActionGroup(actionGroupItemSize);
     m_d->actionItemSizeCustom->setText(
-        i18nc("Set the gradient chooser to show custom size items", "Custom size items")
-    );
+                i18nc("Set the gradient chooser to show custom size items", "Custom size items")
+                );
     m_d->sliderItemSizeCustom = new QSlider(this);
     m_d->sliderItemSizeCustom->setRange(16, 128);
     m_d->sliderItemSizeCustom->setOrientation(Qt::Horizontal);
@@ -479,7 +481,7 @@ void KisGradientChooser::Private::addStopGradient()
 
     QList<KoGradientStop> stops;
     stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP)
-        << KoGradientStop(1.0, KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP);
+          << KoGradientStop(1.0, KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP);
     gradient->setType(QGradient::LinearGradient);
     gradient->setName(i18n("unnamed"));
     gradient->setStops(stops);
@@ -499,7 +501,6 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
     if (!gradient) return;
 
     KoResourceServer<KoAbstractGradient> *rserver = KoResourceServerProvider::instance()->gradientServer();
-    QString saveLocation = rserver->saveLocation();
 
     gradient->updateVariableColors(canvasResourcesInterface);
 
@@ -507,51 +508,85 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
 
     QString oldname = gradient->name();
 
-    bool shouldSaveResource = true;
+    QByteArray oldData;
+    QBuffer buf(&oldData);
+    buf.open(QIODevice::WriteOnly);
+    gradient->saveToDevice(&buf);
+    buf.close();
 
+    bool shouldSaveResource = false;
     bool fileOverwriteAccepted = false;
-    while(!fileOverwriteAccepted) {
-        if (dialog.exec() == KoDialog::Accepted) {
 
-            if (gradient->name().isEmpty()) {
-                shouldSaveResource = false;
-                break;
-            }
+    if (dialog.exec() == KoDialog::Accepted) {
 
-            if (editGradient && oldname == gradient->name()) {
-                fileOverwriteAccepted = true;
-                continue;
-            }
-
-            const QFileInfo fileInfo(saveLocation + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
-            if (fileInfo.exists()) {
-                int res = QMessageBox::warning(q, i18nc("@title:window", "Name Already Exists")
-                                               , i18n("The name '%1' already exists, do you wish to overwrite it?", gradient->name())
-                                               , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                if (res == QMessageBox::Yes) fileOverwriteAccepted = true;
-            } else {
-                fileOverwriteAccepted = true;
-            }
-        } else {
+        if (gradient->name().isEmpty()) {
             shouldSaveResource = false;
-            break;
         }
-    }
 
-    if (shouldSaveResource) {
-        gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
-        gradient->setValid(true);
-        if (fileOverwriteAccepted) {
-            rserver->updateResource(gradient);
+        if (editGradient && oldname == gradient->name()) {
+            fileOverwriteAccepted = true;
+        }
+
+        QString saveLocation = rserver->saveLocation();
+        const QFileInfo fileInfo(saveLocation + '/' + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
+
+        if (fileInfo.exists()) {
+            int res = QMessageBox::warning(q, i18nc("@title:window", "Name Already Exists")
+                                           , i18n("The name '%1' already exists, do you wish to overwrite it?", gradient->name())
+                                           , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            if (res == QMessageBox::Yes) {
+                fileOverwriteAccepted = true;
+                shouldSaveResource = true;
+            }
         }
         else {
-            rserver->addResource(gradient);
+            shouldSaveResource = true;
         }
-        itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
-        itemChooser->setCurrentResource(gradient);
-    }
-    else {
-        // TODO: revert the changes made to the resource
+
+        if (shouldSaveResource) {
+            gradient->setFilename(gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
+            gradient->setValid(true);
+
+            if (fileOverwriteAccepted) {
+                if (!editGradient) {
+                    // Find the gradient we're overwriting with our new gradient that only matches in name...
+                    QVector<KoResourceSP> resources = KisResourceModel(ResourceType::Gradients).resourcesForName(gradient->name());
+                    KoResourceSP res;
+                    Q_FOREACH(res, resources) {
+                        if (res->storageLocation() + ResourceType::Gradients == saveLocation) {
+                            QByteArray ba;
+                            QBuffer buf(&ba);
+                            buf.open(QIODevice::WriteOnly);
+                            gradient->saveToDevice(&buf);
+                            buf.close();
+                            buf.open(QIODevice::ReadOnly);
+                            res->loadFromDevice(&buf, KisGlobalResourcesInterface::instance());
+                            break;
+                        }
+                        else {
+
+                            res = nullptr;
+                        }
+                    }
+                    if (res) {
+                        bool r = rserver->updateResource(res.dynamicCast<KoAbstractGradient>());
+                    }
+                }
+                else {
+                    bool r = rserver->updateResource(gradient);
+                }
+            }
+            else {
+                bool r = rserver->addResource(gradient);
+            }
+            itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
+            itemChooser->setCurrentResource(gradient);
+        }
+        else {
+
+            buf.open(QFile::ReadOnly);
+            bool r = gradient->loadFromDevice(&buf, KisGlobalResourcesInterface::instance());
+        }
     }
 }
 
@@ -602,10 +637,10 @@ void KisGradientChooser::Private::updatePresetChooser(bool globalUpdate)
     }
 
     itemChooser->itemView()->setViewMode(
-        viewOptions->viewMode == ViewMode_Icon
-        ? QListView::IconMode
-        : QListView::ListMode
-    );
+                viewOptions->viewMode == ViewMode_Icon
+                ? QListView::IconMode
+                : QListView::ListMode
+                  );
 
     updatePresetChooserIcons();
 
@@ -643,8 +678,8 @@ void KisGradientChooser::Private::updatePresetChooserIcons()
     }
     itemChooser->setRowHeight(itemHeight);
     itemChooser->setColumnWidth(
-        static_cast<int>(qRound(itemHeight * viewOptions->itemSizeWidthFactor))
-    );
+                static_cast<int>(qRound(itemHeight * viewOptions->itemSizeWidthFactor))
+                );
 }
 
 void KisGradientChooser::Private::updateContainerSliderItemSizeCustom()
@@ -653,8 +688,8 @@ void KisGradientChooser::Private::updateContainerSliderItemSizeCustom()
     const int indicatorSize = q->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
     const int spacingSize = q->style()->pixelMetric(QStyle::PM_RadioButtonLabelSpacing);
     containerSliderItemSizeCustom->layout()->setContentsMargins(
-        indicatorSize + spacingSize, marginSize, marginSize, marginSize
-    );
+                indicatorSize + spacingSize, marginSize, marginSize, marginSize
+                );
 }
 
 #include "kis_gradient_chooser.moc"

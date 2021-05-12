@@ -310,15 +310,14 @@ void KisDlgImportVideoAnimation::toggleInputControls(bool toggleBool)
     m_ui.prevFrameButton->setEnabled(toggleBool);    
 }
 
-void KisDlgImportVideoAnimation::loadVideoFile(const QString &file) 
+void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
 {
-    const QFileInfo resultFileInfo(file);
+    const QFileInfo resultFileInfo(filename);
     const QDir videoDir(resultFileInfo.absolutePath());
 
     videoWorkDir.setPath(videoDir.filePath("Krita_Animation_Import_Temp"));
 
     if (videoWorkDir.exists()) cleanupWorkDir();
-
 
     QFontMetrics metrics(m_ui.fileLocationLabel->font());
     const int fileLabelWidth = m_ui.fileLocationLabel->width() > 400 ? m_ui.fileLocationLabel->width():400;
@@ -327,7 +326,7 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &file)
                              + "/" + metrics.elidedText(resultFileInfo.fileName(), Qt::ElideMiddle, qFloor(fileLabelWidth*0.4));
 
     m_ui.fileLocationLabel->setText(elidedFileString);
-    videoInfo = loadVideoInfo(file);
+    videoInfo = loadVideoInfo(filename);
 
     QString textInfo = "Width: " + QString::number(videoInfo.width) + "px" + "<br>"
                      + "Height: " + QString::number(videoInfo.height) + "px" + "<br>"

@@ -57,7 +57,7 @@ protected Q_SLOTS:
 
 private:
     void toggleInputControls(bool toggleBool);
-    void loadVideoFile(const QString &file);
+    void loadVideoFile(const QString &filename);
     void CurrentFrameChanged(int frame);
     void updateVideoPreview();
     QStringList makeVideoMimeTypesList();

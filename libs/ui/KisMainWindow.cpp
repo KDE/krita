@@ -2043,7 +2043,7 @@ void KisMainWindow::importVideoAnimation()
         const int step = documentInfoList[0].toInt();
         const int fps = documentInfoList[1].toInt();
         const int totalFrames = files.size() * step;
-        const QString name = documentInfoList[3];
+        const QString name = QFileInfo(documentInfoList[3]).fileName();
         const bool useCurrentDocument = documentInfoList[4].toInt();
 
         if ( useCurrentDocument ) {
@@ -2056,6 +2056,7 @@ void KisMainWindow::importVideoAnimation()
             }
 
         } else {
+
             const int width = documentInfoList[5].toInt();
             const int height = documentInfoList[6].toInt();
             const double resolution = documentInfoList[7].toDouble();

@@ -116,7 +116,11 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_rotationOption.applyFanCornersInfo(this);
 
     if (useNewEngine && m_brush->brushApplication() == LIGHTNESSMAP) {
-        KisPressurePaintThicknessOption::ThicknessMode thicknessMode = m_paintThicknessOption.getThicknessMode();
+        KisPressurePaintThicknessOption::ThicknessMode thicknessMode =
+            m_paintThicknessOption.isChecked() ?
+                m_paintThicknessOption.getThicknessMode() :
+                KisPressurePaintThicknessOption::OVERWRITE;
+
         if (thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::SMUDGE) {
             m_strategy.reset(new KisColorSmudgeStrategySmearLightness(painter,
                 useSmearAlpha,

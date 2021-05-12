@@ -15,6 +15,7 @@
 #include "kis_pressure_paint_thickness_option.h"
 
 #include "KisColorSmudgeInterstrokeData.h"
+#include "kis_algebra_2d.h"
 
 KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *painter, bool smearAlpha,
                                                                  bool useDullingMode, KisPressurePaintThicknessOption::ThicknessMode thicknessMode)
@@ -25,6 +26,11 @@ KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *pai
         , m_initializationPainter(painter)
         , m_thicknessMode(thicknessMode)
 {
+    KIS_SAFE_ASSERT_RECOVER(thicknessMode == KisPressurePaintThicknessOption::OVERLAY ||
+                            thicknessMode == KisPressurePaintThicknessOption::OVERWRITE) {
+
+        thicknessMode = KisPressurePaintThicknessOption::OVERLAY;
+    }
 }
 
 void KisColorSmudgeStrategyLightness::initializePainting()
@@ -130,17 +136,19 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
         colorRateValue,
         smudgeRadiusValue);
 
-    smudgeRateValue -= 0.01; //adjust so minimum value is 0 instead of 1%
-    qreal overlayAdjustment = (m_thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::OVERWRITE) ? 1.0 : (paintThicknessValue + (1.0 - paintThicknessValue) * smudgeRateValue);
-    quint8 brushHeightmapOpacity = qRound(opacity * overlayAdjustment * 255.0);
-    KisPaintDeviceSP smudgeDevice = m_colorOnlyDevice;
+
+    const qreal overlaySmearRate = smudgeRateValue - 0.01; //adjust so minimum value is 0 instead of 1%
+    const qreal overlayAdjustment =
+        (m_thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::OVERWRITE) ?
+        1.0 : KisAlgebra2D::lerp(overlaySmearRate, 1.0, paintThicknessValue);
+    const quint8 brushHeightmapOpacity = qRound(opacity * overlayAdjustment * 255.0);
     m_heightmapPainter.setOpacity(brushHeightmapOpacity);
     m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
     m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
 
 
     KisFixedPaintDeviceSP tempColorDevice =
-        new KisFixedPaintDevice(smudgeDevice->colorSpace(), m_memoryAllocator);
+        new KisFixedPaintDevice(m_colorOnlyDevice->colorSpace(), m_memoryAllocator);
 
     KisFixedPaintDeviceSP tempHeightmapDevice =
         new KisFixedPaintDevice(m_heightmapDevice->colorSpace(), m_memoryAllocator);
@@ -152,7 +160,7 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
         tempHeightmapDevice->setRect(rc);
         tempHeightmapDevice->lazyGrowBufferWithoutInitialization();
 
-        smudgeDevice->readBytes(tempColorDevice->data(), rc);
+        m_colorOnlyDevice->readBytes(tempColorDevice->data(), rc);
         m_heightmapDevice->readBytes(tempHeightmapDevice->data(), rc);
         tempColorDevice->colorSpace()->
             modulateLightnessByGrayBrush(tempColorDevice->data(),

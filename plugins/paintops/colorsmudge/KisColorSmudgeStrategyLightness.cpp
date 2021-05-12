@@ -16,6 +16,7 @@
 
 #include "KisColorSmudgeInterstrokeData.h"
 #include "kis_algebra_2d.h"
+#include <KoBgrColorSpaceTraits.h>
 
 KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *painter, bool smearAlpha,
                                                                  bool useDullingMode, KisPressurePaintThicknessOption::ThicknessMode thicknessMode)
@@ -89,24 +90,47 @@ void KisColorSmudgeStrategyLightness::updateMask(KisDabCache *dabCache, const Ki
                                                  const KisDabShape &shape, const QPointF &cursorPoint,
                                                  QRect *dstDabRect, qreal paintThickness)
 {
+    m_origDab = dabCache->fetchNormalizedImageDab(m_origDab->colorSpace(),
+                                                  cursorPoint,
+                                                  shape,
+                                                  info,
+                                                  1.0,
+                                                  dstDabRect);
 
-    static KoColor color(QColor(127, 127, 127), m_origDab->colorSpace());
-    m_origDab = dabCache->fetchDab(m_origDab->colorSpace(),
-        color,
-        cursorPoint,
-        shape,
-        info,
-        1.0,
-        dstDabRect,
-        paintThickness);
+    m_shouldPreserveOriginalDab = !dabCache->needSeparateOriginal();
 
     const int numPixels = m_origDab->bounds().width() * m_origDab->bounds().height();
+
+    if (paintThickness < 1.0) {
+        if (m_shouldPreserveOriginalDab) {
+            m_shouldPreserveOriginalDab = false;
+            m_origDab = new KisFixedPaintDevice(*m_origDab);
+        }
+
+        const int denormedPaintThickness = qRound(paintThickness * 255.0);
+        KoBgrU8Traits::Pixel *pixelPtr = reinterpret_cast<KoBgrU8Traits::Pixel *>(m_origDab->data());
+        for (int i = 0; i < numPixels; i++) {
+            int gray = pixelPtr->red - 127;
+
+            if (gray >= 0) {
+                gray = KoColorSpaceMaths<quint8>::multiply(gray, denormedPaintThickness);
+            } else {
+                gray = -KoColorSpaceMaths<quint8>::multiply(-gray, denormedPaintThickness);
+            }
+
+            gray = qBound(0, gray + 127, 255);
+
+            pixelPtr->red = gray;
+            pixelPtr->green = gray;
+            pixelPtr->blue = gray;
+
+            pixelPtr++;
+        }
+    }
 
     m_maskDab->setRect(m_origDab->bounds());
     m_maskDab->lazyGrowBufferWithoutInitialization();
     m_origDab->colorSpace()->copyOpacityU8(m_origDab->data(), m_maskDab->data(), numPixels);
-
-    m_shouldPreserveOriginalDab = !dabCache->needSeparateOriginal();
 }
 
 QVector<QRect>

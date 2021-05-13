@@ -12,7 +12,7 @@
 #include "KoVcMultiArchBuildSupport.h"
 #include "kis_debug.h"
 
-#include <x86intrin.h>
+#include <immintrin.h>
 
 
 template<Vc::Implementation _impl>

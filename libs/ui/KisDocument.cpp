@@ -1062,8 +1062,6 @@ bool KisDocument::exportDocumentSync(const QString &path, const QByteArray &mime
 
     d->savingImage = 0;
 
-    qDebug() << "exportDocumentSync" << status.errorMessage();
-
     return status.isOk();
 }
 

@@ -134,8 +134,8 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
 
             ffmpegSettings.progressIndeterminate = true;
             ffmpegSettings.progressMessage = i18n("Creating palette required for gif format...");
-            // ffmpegSettings.progressFile TEMP: Allow optional pointer for specifying a directory to save a temp file.
-
+            ffmpegSettings.logPath = QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "ffmpeg.log";
+            
             KisImportExportErrorCode result = ffmpegWrapper->start(ffmpegSettings);
 
             if (!result.isOk()) {
@@ -187,6 +187,7 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         ffmpegSettings.args = args;
         ffmpegSettings.outputFile = resultFile;
         ffmpegSettings.totalFrames = clipRange.duration();
+        ffmpegSettings.logPath = QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "ffmpeg.log";
         ffmpegSettings.progressMessage = i18nc("Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, arg2: progress frame number, arg3: totalFrameCount.",
                                                "Creating desired %1 file: %2/%3 frames.", "[suffix]", "[progress]", "[framecount]");
 

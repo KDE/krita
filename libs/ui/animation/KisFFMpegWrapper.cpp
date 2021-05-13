@@ -54,8 +54,40 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
     m_process.reset(new QProcess(this));
     m_processSettings = settings;
     
-    if ( !settings.logPath.isEmpty() )
-        m_process->setStandardOutputFile(settings.logPath);
+    if ( !settings.logPath.isEmpty() ) {
+        const QString basePath = QFileInfo(settings.logPath).dir().path();
+        QDir().mkpath(basePath);
+        
+        //First we open the file with truncate,
+        //Then, we connect our signals for response
+        //After that, every message will append to that file if possible...
+        QFile loggingFile(settings.logPath);
+        if (loggingFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            //Due to various reasons (including image preview), ffmpeg uses STDERR and not STDOUT
+            //for general output logging.
+            connect(this, &KisFFMpegWrapper::sigReadSTDERR, [this](QByteArray stderrBuffer){
+                QString line = stderrBuffer;
+                QFile loggingFile(m_processSettings.logPath);
+                if (loggingFile.open(QIODevice::WriteOnly | QIODevice::Append)) {
+                    loggingFile.write(stderrBuffer);
+                }
+            });
+            
+            if (!settings.outputFile.isEmpty()) {
+                connect(this, &KisFFMpegWrapper::sigFinishedWithError, [this](QString){
+                    QFile loggingFile(m_processSettings.logPath);
+                    QString targetPath = m_processSettings.outputFile + ".log";
+                    
+                    if (QFile::exists(targetPath)) {
+                        QFile existingFile(targetPath);
+                        existingFile.remove();
+                    }
+                    
+                    loggingFile.copy(targetPath);
+                });
+            }
+        }
+    }
     
     if (!m_processSettings.batchMode) {
         QString progressText = m_processSettings.progressMessage;
@@ -177,7 +209,7 @@ void KisFFMpegWrapper::slotReadyReadSTDERR()
 {
     QByteArray stderrRawBuffer = m_process->readAllStandardError();
     
-    emit sigReadSTDOUT(stderrRawBuffer);
+    emit sigReadSTDERR(stderrRawBuffer);
     m_stderrBuffer += stderrRawBuffer;
     
     int frameNo = -1;
@@ -264,7 +296,7 @@ void KisFFMpegWrapper::slotFinished(int exitCode)
     if (!m_processSettings.batchMode && m_progress){
         m_progress->setValue(100);
     }
-
+    
     if (exitCode != 0) {
         m_errorMessage.remove(junkRegex);
         if (m_process->exitStatus() == QProcess::CrashExit) {

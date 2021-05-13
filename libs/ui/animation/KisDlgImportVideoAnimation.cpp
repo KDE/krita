@@ -230,6 +230,7 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
     ffmpegSettings.processPath = ffmpegInfo["path"].toString();
     ffmpegSettings.args = args;
     ffmpegSettings.outputFile = m_videoWorkDir.filePath("output_%04d.png");
+    ffmpegSettings.logPath = QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "ffmpeg.log";
     ffmpegSettings.totalFrames = qCeil(exportDuration * fps);
     ffmpegSettings.progressMessage = "Extracted [progress] frames from video...";
 

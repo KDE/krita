@@ -31,6 +31,10 @@ void KisPressurePaintThicknessOption::readOptionSetting(const KisPropertiesConfi
 {
     KisCurveOption::readOptionSetting(setting);
     m_mode = (ThicknessMode)setting->getInt(name() + "ThicknessMode", OVERLAY);
+
+    if (m_mode == RESERVED) {
+        m_mode = OVERLAY;
+    }
 }
 
 double KisPressurePaintThicknessOption::apply(const KisPaintInformation& info) const

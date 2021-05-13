@@ -26,7 +26,6 @@ KisPressurePaintThicknessOptionWidget::KisPressurePaintThicknessOptionWidget()
     m_enabledLabel->setAlignment(Qt::AlignHCenter);
 
     m_cbThicknessMode = new QComboBox();
-    m_cbThicknessMode->addItem(i18n("Smear existing paint thickness"), KisPressurePaintThicknessOption::SMUDGE);
     m_cbThicknessMode->addItem(i18n("Overwrite (Smooth out when low) existing paint thickness"), KisPressurePaintThicknessOption::OVERWRITE);
     m_cbThicknessMode->addItem(i18n("Paint over existing paint thickness (controlled by Smudge Length)"), KisPressurePaintThicknessOption::OVERLAY);
 
@@ -57,13 +56,20 @@ void KisPressurePaintThicknessOptionWidget::readOptionSetting(const KisPropertie
     KisCurveOptionWidget::readOptionSetting(setting);
 
     KisPressurePaintThicknessOption::ThicknessMode mode = static_cast<KisPressurePaintThicknessOption*>(curveOption())->getThicknessMode();
-    m_cbThicknessMode->setCurrentIndex(mode);
+    KIS_SAFE_ASSERT_RECOVER(mode != KisPressurePaintThicknessOption::RESERVED) {
+        mode = KisPressurePaintThicknessOption::OVERLAY;
+    }
+
+    const int index = m_cbThicknessMode->findData((int)mode);
+    m_cbThicknessMode->setCurrentIndex(index);
 
 }
 
 void KisPressurePaintThicknessOptionWidget::slotCurrentIndexChanged(int index)
 {
-    static_cast<KisPressurePaintThicknessOption*>(curveOption())->setThicknessMode((KisPressurePaintThicknessOption::ThicknessMode)index);
+    const int mode = m_cbThicknessMode->itemData(index).toInt();
+
+    static_cast<KisPressurePaintThicknessOption*>(curveOption())->setThicknessMode((KisPressurePaintThicknessOption::ThicknessMode)mode);
     emitSettingChanged();
 }
 

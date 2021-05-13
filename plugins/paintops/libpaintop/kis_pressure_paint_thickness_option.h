@@ -19,7 +19,7 @@ class PAINTOP_EXPORT KisPressurePaintThicknessOption : public KisCurveOption
 {
 public:
     enum ThicknessMode {
-        SMUDGE,
+        RESERVED,
         OVERWRITE,
         OVERLAY
     };

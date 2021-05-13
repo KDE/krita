@@ -228,10 +228,5 @@ void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_ptoverwrite
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_ptoverwrite.kpp");
 }
 
-void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_ptsmear()
-{
-    benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_ptsmear.kpp");
-}
-
 
 KISTEST_MAIN(FreehandStrokeBenchmark)

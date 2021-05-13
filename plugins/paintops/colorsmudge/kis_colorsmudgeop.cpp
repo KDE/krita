@@ -25,7 +25,6 @@
 
 #include "KisColorSmudgeInterstrokeData.h"
 #include "KisColorSmudgeStrategyLightness.h"
-#include "KisColorSmudgeStrategySmearLightness.h"
 #include "KisColorSmudgeStrategyWithOverlay.h"
 #include "KisColorSmudgeStrategyMask.h"
 #include "KisColorSmudgeStrategyStamp.h"
@@ -121,16 +120,10 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
                 m_paintThicknessOption.getThicknessMode() :
                 KisPressurePaintThicknessOption::OVERWRITE;
 
-        if (thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::SMUDGE) {
-            m_strategy.reset(new KisColorSmudgeStrategySmearLightness(painter,
-                useSmearAlpha,
-                useDullingMode));
-        } else {
-            m_strategy.reset(new KisColorSmudgeStrategyLightness(painter,
-                useSmearAlpha,
-                useDullingMode,
-                m_paintThicknessOption.getThicknessMode()));
-        }
+        m_strategy.reset(new KisColorSmudgeStrategyLightness(painter,
+                                                             useSmearAlpha,
+                                                             useDullingMode,
+                                                             thicknessMode));
     } else if (useNewEngine && m_brush->brushApplication() == ALPHAMASK) {
         m_strategy.reset(new KisColorSmudgeStrategyMask(painter,
                                                         image,
@@ -277,17 +270,9 @@ KisInterstrokeDataFactory *KisColorSmudgeOp::createInterstrokeDataFactory(const 
 
     if (!needsInterstrokeData) return 0;
 
-
     KisBrushOptionProperties brushOption;
-    bool usesLightnessBrush = brushOption.brushApplication(settings.data(), resourcesInterface) == LIGHTNESSMAP;
-    bool usesHeightChannel = usesLightnessBrush;
-    if (usesLightnessBrush) {
-        KisPressurePaintThicknessOption paintThicknessOption;
-        paintThicknessOption.readOptionSetting(settings);
-        usesHeightChannel = paintThicknessOption.getThicknessMode() != KisPressurePaintThicknessOption::ThicknessMode::SMUDGE;
-    }
-
-    needsInterstrokeData &= usesHeightChannel;
+    needsInterstrokeData &=
+        brushOption.brushApplication(settings.data(), resourcesInterface) == LIGHTNESSMAP;
 
     return needsInterstrokeData ? new ColorSmudgeInterstrokeDataFactory() : 0;
 }

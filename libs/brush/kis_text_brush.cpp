@@ -247,14 +247,13 @@ void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
 KisFixedPaintDeviceSP KisTextBrush::paintDevice(const KoColorSpace * colorSpace,
     KisDabShape const& shape,
     const KisPaintInformation& info,
-    double subPixelX, double subPixelY,
-    bool normalizeBrush) const
+    double subPixelX, double subPixelY) const
 {
     if (brushType() == MASK) {
-        return KisBrush::paintDevice(colorSpace, shape, info, subPixelX, subPixelY, normalizeBrush);
+        return KisBrush::paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
     }
     else { /* if (brushType() == PIPE_MASK)*/
-        return m_brushesPipe->paintDevice(colorSpace, shape, info, subPixelX, subPixelY, normalizeBrush);
+        return m_brushesPipe->paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
     }
 }
 

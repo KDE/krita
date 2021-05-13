@@ -401,10 +401,9 @@ KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
     const KoColorSpace * colorSpace,
     KisDabShape const& shape,
     const KisPaintInformation& info,
-    double subPixelX, double subPixelY,
-    bool normalizeBrush) const
+    double subPixelX, double subPixelY) const
 {
-    return d->brushesPipe.paintDevice(colorSpace, shape, info, subPixelX, subPixelY, normalizeBrush);
+    return d->brushesPipe.paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
 }
 
 QString KisImagePipeBrush::parasiteSelection()

@@ -47,7 +47,7 @@ public:
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
             KisDabShape const&,
             const KisPaintInformation&,
-            double = 0, double = 0, bool = false) const override {
+            double = 0, double = 0) const override {
         return 0; // The autobrush does NOT support images!
     }
 

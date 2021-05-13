@@ -40,7 +40,7 @@ public:
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = 1.0) const override;
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-        KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY, bool normalizeBrush) const override;
+        KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY) const override;
 
     void setText(const QString& txt);
     QString text(void) const;

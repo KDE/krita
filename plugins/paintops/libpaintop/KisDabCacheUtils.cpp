@@ -51,8 +51,7 @@ void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, 
     if (forceNormalizedRGBAImageStamp || resources->brush->brushApplication() == IMAGESTAMP) {
         *dab = resources->brush->paintDevice(cs, di.shape, di.info,
                                              di.subPixel.x(),
-                                             di.subPixel.y(),
-                                             forceNormalizedRGBAImageStamp);
+                                             di.subPixel.y());
 
     } else if (di.solidColorFill) {
         resources->brush->mask(*dab,

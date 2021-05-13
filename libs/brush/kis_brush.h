@@ -244,8 +244,7 @@ public:
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0,
-            bool normalizeBrush = false) const;
+            double subPixelX = 0, double subPixelY = 0) const;
 
     /**
      * clear dst fill it with a mask colored with KoColor

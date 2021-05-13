@@ -66,8 +66,7 @@ public:
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0,
-            bool normalizeBrush = false) const override;
+            double subPixelX = 0, double subPixelY = 0) const override;
 
     void setAdjustmentMidPoint(quint8 value) override;
     void setBrightnessAdjustment(qreal value) override;

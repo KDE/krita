@@ -213,20 +213,24 @@ void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_new_nsa()
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_new_nsa.kpp");
 }
 
-void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_nopt()
+void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_new_nsa_maskmode()
+{
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_maskmode.kpp");
+}
+
+void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_new_nsa_nopt()
 {
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_nopt.kpp");
 }
 
-void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_ptoverlay()
+void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_new_nsa_ptoverlay()
 {
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_ptoverlay.kpp");
 }
 
-void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_old_nsa_ptoverwrite()
+void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_new_nsa_ptoverwrite()
 {
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_lightness_smearing_new_nsa_ptoverwrite.kpp");
 }
-
 
 KISTEST_MAIN(FreehandStrokeBenchmark)

@@ -141,7 +141,34 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
         for (int y = 0; y < (gridHeight)/yStep; y++) {
             for (int x = 0; x < (gridWidth)/xStep; x++) {
                 tile = QRectF(dabRect.x() + x * xStep, dabRect.y() + y * yStep, xStep, yStep);
-                cellPath.addEllipse(tile);
+                switch (option.grid_shape) {
+                case 0: {
+                    cellPath.addEllipse(tile);
+                    break;
+                }
+                case 1: {
+                    cellPath.addRect(tile);
+                    break;
+                }
+                case 2: {
+                    cellPath.moveTo(tile.topRight());
+                    cellPath.lineTo(tile.bottomLeft());
+                    break;
+                }
+                case 3: {
+                    cellPath.moveTo(tile.topRight());
+                    cellPath.lineTo(tile.bottomLeft());
+                    break;
+                }
+                case 4: {
+                    cellPath.moveTo(tile.topRight());
+                    cellPath.lineTo(tile.bottomLeft());
+                    break;
+                }
+                default: {
+                break;
+                }
+                }
             }
         }
         cellPath = outlineFetcher()->fetchOutline(info, this, cellPath, mode, alignForZoom);

@@ -225,12 +225,12 @@
          <property name="title">
           <string>Brush mode</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <widget class="QComboBox" name="cmbBrushMode"/>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <spacer name="horizontalSpacer">
               <property name="orientation">
@@ -248,9 +248,20 @@
              </spacer>
             </item>
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
-               <widget class="KisSliderSpinBox" name="intAdjustmentMidPoint" native="true"/>
+               <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+                <item>
+                 <widget class="QCheckBox" name="chkAutoMidPoint">
+                  <property name="text">
+                   <string>Auto</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="KisSliderSpinBox" name="intAdjustmentMidPoint" native="true"/>
+                </item>
+               </layout>
               </item>
               <item>
                <widget class="KisSliderSpinBox" name="intBrightnessAdjustment" native="true"/>

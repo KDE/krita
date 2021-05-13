@@ -23,25 +23,31 @@
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_gradient_option.h>
 #include <kis_pressure_hsv_option.h>
+#include "kis_pressure_paint_thickness_option.h"
 #include <kis_airbrush_option_widget.h>
 
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
 #include "kis_smudge_radius_option.h"
-#include "KisPrecisePaintDeviceWrapper.h"
+#include "KisOverlayPaintDeviceWrapper.h"
 
 class QPointF;
 
 class KisBrushBasedPaintOpSettings;
 class KisPainter;
 class KoColorSpace;
+class KisInterstrokeDataFactory;
+
+class KisColorSmudgeStrategy;
 
 class KisColorSmudgeOp: public KisBrushBasedPaintOp
 {
 public:
     KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     ~KisColorSmudgeOp() override;
+
+    static KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
@@ -50,28 +56,16 @@ protected:
     KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
-    // Sets the m_maskDab _and m_maskDabRect
-    void updateMask(const KisPaintInformation& info, const KisDabShape &shape, const QPointF &cursorPoint);
-
-    inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
-
-private:
     bool                      m_firstRun;
-    KisImageWSP               m_image;
-    KisPrecisePaintDeviceWrapper m_precisePainterWrapper;
+
     KoColor                   m_paintColor;
-    KisPaintDeviceSP          m_tempDev;
-    QScopedPointer<KisPrecisePaintDeviceWrapper> m_preciseImageDeviceWrapper;
-    QScopedPointer<KisPainter> m_backgroundPainter;
-    QScopedPointer<KisPainter> m_smudgePainter;
-    QScopedPointer<KisPainter> m_colorRatePainter;
-    QScopedPointer<KisPainter> m_finalPainter;
     KoAbstractGradientSP      m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
     KisPressureRatioOption    m_ratioOption;
     KisPressureSpacingOption  m_spacingOption;
     KisPressureRateOption     m_rateOption;
+    KisPressurePaintThicknessOption   m_paintThicknessOption;
     KisSmudgeOption           m_smudgeRateOption;
     KisRateOption             m_colorRateOption;
     KisSmudgeRadiusOption     m_smudgeRadiusOption;
@@ -82,11 +76,10 @@ private:
     QList<KisPressureHSVOption*> m_hsvOptions;
     KisAirbrushOptionProperties m_airbrushOption;
     QRect                     m_dstDabRect;
-    KisFixedPaintDeviceSP     m_maskDab;
     QPointF                   m_lastPaintPos;
 
     KoColorTransformation *m_hsvTransform {0};
-    const KoCompositeOp *m_preciseColorRateCompositeOp {0};
+    QScopedPointer<KisColorSmudgeStrategy> m_strategy;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

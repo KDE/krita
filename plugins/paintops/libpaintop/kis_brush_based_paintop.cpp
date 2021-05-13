@@ -63,9 +63,9 @@ void KisBrushBasedPaintOp::preinitializeOpStatically(KisPaintOpSettingsSP settin
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 
-KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter)
+KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisBrushTextureFlags textureFlags)
     : KisPaintOp(painter),
-      m_textureProperties(painter->device()->defaultBounds()->currentLevelOfDetail())
+      m_textureProperties(painter->device()->defaultBounds()->currentLevelOfDetail(), textureFlags)
 {
     Q_ASSERT(settings);
 

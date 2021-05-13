@@ -176,6 +176,12 @@ public:
         }
     }
 
+    void setAutoAdjustMidPoint(bool value) {
+        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
+            brush->setAutoAdjustMidPoint(value);
+        }
+    }
+
     void makeMaskImage(bool preserveAlpha) {
         Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
             brush->makeMaskImage(preserveAlpha);
@@ -394,7 +400,8 @@ QVector<KisGbrBrushSP> KisImagePipeBrush::brushes() const
 KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
     const KoColorSpace * colorSpace,
     KisDabShape const& shape,
-    const KisPaintInformation& info, double subPixelX, double subPixelY) const
+    const KisPaintInformation& info,
+    double subPixelX, double subPixelY) const
 {
     return d->brushesPipe.paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
 }
@@ -427,6 +434,12 @@ void KisImagePipeBrush::setContrastAdjustment(qreal value)
 {
     KisGbrBrush::setContrastAdjustment(value);
     d->brushesPipe.setContrastAdjustment(value);
+}
+
+void KisImagePipeBrush::setAutoAdjustMidPoint(bool value)
+{
+    KisGbrBrush::setAutoAdjustMidPoint(value);
+    d->brushesPipe.setAutoAdjustMidPoint(value);
 }
 
 const KisBoundary* KisImagePipeBrush::boundary() const

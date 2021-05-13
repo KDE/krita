@@ -125,7 +125,17 @@ struct CopyCompositor128 {
         const channels_type *s = reinterpret_cast<const channels_type*>(src);
         channels_type *d = reinterpret_cast<channels_type*>(dst);
 
-        float srcAlpha = s[alpha_pos];
+        const channels_type nativeOriginalSrcAlpha = s[alpha_pos];
+
+        // we shouldn't leak undefined color value from under the locked zero alpha
+        // into our destination
+        if (alphaLocked &&
+            nativeOriginalSrcAlpha == KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+
+            return;
+        }
+
+        float srcAlpha = nativeOriginalSrcAlpha;
         PixelWrapper<channels_type, _impl>::normalizeAlpha(srcAlpha);
 
         if (haveMask) {
@@ -136,7 +146,7 @@ struct CopyCompositor128 {
         if (opacity == 0.0f) {
             // noop
         } else if (opacity == 1.0f) {
-            if (allChannelsFlag) {
+            if (allChannelsFlag && !alphaLocked) {
                 if (srcAlpha == 0.0f) {
                     KoStreamedMathFunctions::clearPixel<sizeof(Pixel)>(dst);
                 } else {
@@ -169,7 +179,7 @@ struct CopyCompositor128 {
             float newAlpha = dstAlpha + opacity * (srcAlpha - dstAlpha);
 
             if (newAlpha == 0.0f) {
-                if (allChannelsFlag || dstAlpha == 0.0f) {
+                if ((allChannelsFlag && !alphaLocked) || dstAlpha == 0.0f) {
                     KoStreamedMathFunctions::clearPixel<sizeof(Pixel)>(dst);
                 } else {
                     const QBitArray &channelFlags = oparams.channelFlags;

@@ -71,7 +71,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         QRect *dstDabRect,
         qreal lightnessStrength)
 {
-    Q_UNUSED(lightnessStrength);
+    //Q_UNUSED(lightnessStrength);
 
     return fetchDabCommon(cs, colorSource, KoColor(),
                           cursorPoint,
@@ -98,6 +98,23 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
                           softnessFactor,
                           dstDabRect,
                           lightnessStrength);
+}
+
+KisFixedPaintDeviceSP KisDabCache::fetchNormalizedImageDab(const KoColorSpace *cs,
+                                                           const QPointF &cursorPoint,
+                                                           KisDabShape const& shape,
+                                                           const KisPaintInformation& info,
+                                                           qreal softnessFactor,
+                                                           QRect *dstDabRect)
+{
+    return fetchDabCommon(cs, 0, KoColor(),
+                          cursorPoint,
+                          shape,
+                          info,
+                          softnessFactor,
+                          dstDabRect,
+                          1.0,
+                          true);
 }
 
 inline
@@ -141,10 +158,11 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         const KisPaintInformation& info,
         qreal softnessFactor,
         QRect *dstDabRect,
-        qreal lightnessStrength)
+        qreal lightnessStrength,
+        bool forceNormalizedRGBAImageStamp)
 {
     Q_ASSERT(dstDabRect);
-    Q_UNUSED(lightnessStrength);
+    //Q_UNUSED(lightnessStrength);
 
     bool hasDabInCache = true;
 
@@ -199,7 +217,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
 
     // 3. Generate new dab
 
-    generateDab(di, &resources, &m_d->dab);
+    generateDab(di, &resources, &m_d->dab, forceNormalizedRGBAImageStamp);
 
     // 4. Do postprocessing
     if (di.needsPostprocessing) {

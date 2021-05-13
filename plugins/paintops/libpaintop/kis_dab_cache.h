@@ -64,6 +64,14 @@ public:
                                    QRect *dstDabRect,
                                    qreal lightnessStrength = 1.0);
 
+    KisFixedPaintDeviceSP fetchNormalizedImageDab(const KoColorSpace *cs,
+                                                  const QPointF &cursorPoint,
+                                                  KisDabShape const& shape,
+                                                  const KisPaintInformation& info,
+                                                  qreal softnessFactor,
+                                                  QRect *dstDabRect);
+
+
     void setSharpnessPostprocessing(KisPressureSharpnessOption *option);
     void setTexturePostprocessing(KisTextureProperties *option);
 
@@ -82,7 +90,8 @@ private:
             const KisPaintInformation& info,
             qreal softnessFactor,
             QRect *dstDabRect,
-            qreal lightnessStrength = 1.0);
+            qreal lightnessStrength = 1.0,
+            bool forceNormalizedRGBAImageStamp = false);
 
 private:
 

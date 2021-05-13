@@ -44,6 +44,7 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint8>
 {
 public:
     typedef qint32 compositetype;
+    typedef qint64 mixtype;
     static const quint8 zeroValue = 0;
     static const quint8 unitValue = 0x00FF;
     static const quint8 halfValue = 0x00FF / 2;
@@ -59,6 +60,7 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint16>
 {
 public:
     typedef qint64 compositetype;
+    typedef qint64 mixtype;
     static const quint16 zeroValue = 0;
     static const quint16 unitValue = 0xFFFF;
     static const quint16 halfValue = 0xFFFF / 2;
@@ -74,6 +76,7 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<qint16>
 {
 public:
     typedef qint64 compositetype;
+    typedef qint64 mixtype;
     static const qint16 zeroValue = 0;
     static const qint16 unitValue = 32767;
     static const qint16 halfValue = 32767 / 2;
@@ -89,6 +92,7 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint32>
 {
 public:
     typedef qint64 compositetype;
+    typedef qint64 mixtype;
     static const quint32 zeroValue = 0;
     static const quint32 unitValue = 0xFFFFFFFF;
     static const quint32 halfValue = 0xFFFFFFFF / 2;
@@ -109,6 +113,7 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<half>
 {
 public:
     typedef double compositetype;
+    typedef double mixtype;
     static const half zeroValue;
     static const half unitValue;
     static const half halfValue;
@@ -125,6 +130,7 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<float>
 {
 public:
     typedef double compositetype;
+    typedef double mixtype;
     static const float zeroValue;
     static const float unitValue;
     static const float halfValue;
@@ -140,6 +146,7 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<double>
 {
 public:
     typedef double compositetype;
+    typedef double mixtype;
     static const double zeroValue;
     static const double unitValue;
     static const double halfValue;

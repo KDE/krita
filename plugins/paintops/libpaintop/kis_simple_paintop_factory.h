@@ -93,6 +93,28 @@ QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings
     return {};
 }
 
+template< class, class = std::void_t<> >
+struct has_create_interstroke_data_factory : std::false_type { };
+
+template< class T >
+struct has_create_interstroke_data_factory<T, std::void_t<decltype(std::declval<T>().createInterstrokeDataFactory(KisPaintOpSettingsSP(), KisResourcesInterfaceSP()))>> : std::true_type { };
+
+template <typename T>
+KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface,
+                                                        std::enable_if_t<has_create_interstroke_data_factory<T>::value> * = 0)
+{
+    return T::createInterstrokeDataFactory(settings, resourcesInterface);
+}
+
+template <typename T>
+KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface,
+                                                        std::enable_if_t<!has_create_interstroke_data_factory<T>::value> * = 0)
+{
+    Q_UNUSED(settings);
+    Q_UNUSED(resourcesInterface);
+    // noop
+    return 0;
+}
 
 }
 
@@ -137,6 +159,10 @@ public:
 
     QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override {
         return detail::prepareEmbeddedResources<Op>(settings, resourcesInterface);
+    }
+
+    KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) const override {
+        return detail::createInterstrokeDataFactory<Op>(settings, resourcesInterface);
     }
 
     KisPaintOpSettingsSP createSettings(KisResourcesInterfaceSP resourcesInterface) override {

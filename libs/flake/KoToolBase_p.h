@@ -34,7 +34,7 @@ public:
     {
     }
 
-    ~KoToolBasePrivate()
+    virtual ~KoToolBasePrivate()
     {
         Q_FOREACH (QPointer<QWidget> optionWidget, optionWidgets) {
             if (optionWidget) {

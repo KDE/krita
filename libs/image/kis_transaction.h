@@ -19,20 +19,22 @@
 #include "kis_undo_adapter.h"
 #include "kis_post_execution_undo_adapter.h"
 
+class KisTransactionWrapperFactory;
+
 class KisTransaction
 {
 public:
 
-    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, AutoKeyMode autoKeyMode, KUndo2Command* parent = 0, int timedID = -1) {
-        m_transactionData = new KisTransactionData(name, device, true, autoKeyMode, parent);
+    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, AutoKeyMode autoKeyMode, KUndo2Command* parent = 0, int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0) {
+        m_transactionData = new KisTransactionData(name, device, true, autoKeyMode, interstrokeDataFactory, parent);
         m_transactionData->setTimedID(timedID);
     }
 
-    KisTransaction(KisPaintDeviceSP device, AutoKeyMode autoKeyMode, KUndo2Command* parent = 0, int timedID = -1)
-        : KisTransaction(KUndo2MagicString(), device, autoKeyMode, parent, timedID){
+    KisTransaction(KisPaintDeviceSP device, AutoKeyMode autoKeyMode, KUndo2Command* parent = 0, int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0)
+        : KisTransaction(KUndo2MagicString(), device, autoKeyMode, parent, timedID, interstrokeDataFactory){
     }
 
-    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1) {
+    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0) {
 
         KisImageConfig cfg(true);
         AutoKeyMode autoKeyMode = AUTOKEY_DISABLED;
@@ -45,9 +47,8 @@ public:
             }
         }
 
-        m_transactionData = new KisTransactionData(name, device, true, autoKeyMode, parent);
+        m_transactionData = new KisTransactionData(name, device, true, autoKeyMode, interstrokeDataFactory, parent);
         m_transactionData->setTimedID(timedID);
-
     }
 
     KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1)
@@ -136,12 +137,12 @@ class KisSelectionTransaction : public KisTransaction
 public:
     KisSelectionTransaction(KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, AUTOKEY_DISABLED, parent);
+        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, AUTOKEY_DISABLED, 0, parent);
     }
 
     KisSelectionTransaction(const KUndo2MagicString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisTransactionData(name, pixelSelection, false, AUTOKEY_DISABLED, parent);
+        m_transactionData = new KisTransactionData(name, pixelSelection, false, AUTOKEY_DISABLED, 0, parent);
     }
 };
 

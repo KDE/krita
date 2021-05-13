@@ -1047,9 +1047,9 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
 
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
-    Q_ASSERT(srcBounds.contains(srcRect));
+    KIS_ASSERT(srcBounds.contains(srcRect));
     Q_UNUSED(srcRect); // only used in above assertion
-    Q_ASSERT(selBounds.contains(selRect));
+    KIS_ASSERT(selBounds.contains(selRect));
     Q_UNUSED(selRect); // only used in above assertion
 
     /* Create an intermediate byte array to hold information before it is written
@@ -2846,6 +2846,17 @@ void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool 
         dabToProcess = new KisFixedPaintDevice(*dab);
     }
     renderMirrorMask(rc, dabToProcess);
+}
+
+void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask, bool preserveDab)
+{
+    if (!d->mirrorHorizontally && !d->mirrorVertically) return;
+
+    KisFixedPaintDeviceSP dabToProcess = dab;
+    if (preserveDab) {
+        dabToProcess = new KisFixedPaintDevice(*dab);
+    }
+    renderMirrorMask(rc, dabToProcess, mask);
 }
 
 void KisPainter::renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask)

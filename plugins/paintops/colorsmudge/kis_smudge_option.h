@@ -43,9 +43,13 @@ public:
     bool getSmearAlpha() const;
     void setSmearAlpha(bool smearAlpha);
 
+    bool getUseNewEngine() const;
+    void setUseNewEngine(bool useNew);
+
 private:
     Mode m_mode;
     bool m_smearAlpha = true;
+    bool m_useNewEngine = false;
 };
 
 #endif // KIS_SMUDGE_OPTION_H

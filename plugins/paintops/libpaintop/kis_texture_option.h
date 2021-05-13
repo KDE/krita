@@ -28,12 +28,22 @@ class KisPropertiesConfiguration;
 class KisPaintopLodLimitations;
 class KisResourcesInterface;
 
+
+enum KisBrushTextureFlag
+{
+    None = 0x0,
+    SupportsLightnessMode = 0x1,
+    SupportsGradientMode = 0x2,
+};
+Q_DECLARE_FLAGS(KisBrushTextureFlags, KisBrushTextureFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisBrushTextureFlags)
+
 class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
 {
     Q_OBJECT
 public:
 
-    explicit KisTextureOption();
+    explicit KisTextureOption(KisBrushTextureFlags flags = None);
     ~KisTextureOption() override;
 
 public Q_SLOTS:
@@ -50,13 +60,12 @@ private Q_SLOTS:
 private:
     /// UI Widget that stores all the texture options
     KisTextureChooser* m_textureOptions;
-
 };
 
 class PAINTOP_EXPORT KisTextureProperties
 {
 public:
-    KisTextureProperties(int levelOfDetail);
+    KisTextureProperties(int levelOfDetail, KisBrushTextureFlags flags = None);
 
     enum TexturingMode {
         MULTIPLY,
@@ -109,6 +118,7 @@ private:
 private:
     KisPressureTextureStrengthOption m_strengthOption;
     KisTextureMaskInfoSP m_maskInfo;
+    KisBrushTextureFlags m_flags;
 };
 
 #endif // KIS_TEXTURE_OPTION_H

@@ -38,6 +38,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     }
 
     if (!brush) {
+        qWarning() << "Using fallback brush" << ppVar(brushFileName);
         brush = resourceSourceAdapter.fallbackResource();
         brushtipFound = false;
     }
@@ -67,7 +68,8 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         qreal contrastAdjustment = brushDefinition.attribute("ContrastAdjustment").toDouble();
 
         const int adjustmentVersion = brushDefinition.attribute("AdjustmentVersion", "1").toInt();
-
+        const bool autoAdjustMidPoint = brushDefinition.attribute("AutoAdjustMidPoint", "0").toInt();
+        const bool hasAutoAdjustMidPoint = brushDefinition.hasAttribute("AutoAdjustMidPoint");
 
         /**
          * In Krita 4.x releases there was a bug that caused lightness
@@ -80,16 +82,28 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
          * after applying a piecewice-linear function twice we get a
          * quadratic function. So we fall-back to a blunt parameters scaling,
          * which gives result that is just "good enough".
+         *
+         * NOTE: AutoAdjustMidPoint option appeared only in Krita 5, so it
+         * automatically means the adjustments should be applied in the new way.
          */
-        if (adjustmentVersion < 2) {
+        if (adjustmentVersion < 2 && !hasAutoAdjustMidPoint) {
             adjustmentMidPoint = qBound(0, 127 + (int(adjustmentMidPoint) - 127) * 2, 255);
             brightnessAdjustment *= 2.0;
             contrastAdjustment *= 2.0;
+
+            /**
+             * In Krita we also changed formula for contrast calculation in
+             * negative part, so we need to convert that as well.
+             */
+            if (contrastAdjustment < 0) {
+                contrastAdjustment = 1.0 / (1.0 - contrastAdjustment) - 1.0;
+            }
         }
 
         colorfulBrush->setAdjustmentMidPoint(adjustmentMidPoint);
         colorfulBrush->setBrightnessAdjustment(brightnessAdjustment);
         colorfulBrush->setContrastAdjustment(contrastAdjustment);
+        colorfulBrush->setAutoAdjustMidPoint(autoAdjustMidPoint);
     }
 
     auto legacyBrushApplication = [] (KisColorfulBrush *colorfulBrush, bool forceColorToAlpha) {

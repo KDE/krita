@@ -11,6 +11,7 @@
 #include "kis_types.h"
 #include <kritaimage_export.h>
 
+class KisTransactionWrapperFactory;
 
 enum AutoKeyMode {
     AUTOKEY_DISABLED = 0,
@@ -30,7 +31,7 @@ enum AutoKeyMode {
 class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
 {
 public:
-    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, AutoKeyMode autoKeyMode, KUndo2Command* parent);
+    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, AutoKeyMode autoKeyMode, KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent);
     ~KisTransactionData() override;
 
 public:

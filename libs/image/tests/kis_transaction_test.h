@@ -20,6 +20,12 @@ private Q_SLOTS:
     void testDeviceMove();
 
     void testUndoWithUnswitchedFrames();
+
+    void testTransactionWrapperFactory();
+
+    void testInterstrokeData();
+
+    void testInterstrokeDataWithUnswitchedFrames();
 };
 
 #endif

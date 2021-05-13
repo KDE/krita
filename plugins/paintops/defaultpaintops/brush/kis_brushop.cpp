@@ -45,7 +45,7 @@
 
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
-    : KisBrushBasedPaintOp(settings, painter)
+    : KisBrushBasedPaintOp(settings, painter, SupportsGradientMode | SupportsLightnessMode)
     , m_opacityOption(node)
     , m_avgSpacing(50)
     , m_avgNumDabs(50)

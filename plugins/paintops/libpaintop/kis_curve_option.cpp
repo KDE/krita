@@ -165,6 +165,13 @@ QString KisCurveOption::valueSuffix() const
     return i18n("%");
 }
 
+void KisCurveOption::updateRange(qreal minValue, qreal maxValue)
+{
+    m_minValue = minValue;
+    m_maxValue = maxValue;
+    m_value = qBound(m_minValue, m_value, m_maxValue);
+}
+
 void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting)
 {
     if (!setting) return;

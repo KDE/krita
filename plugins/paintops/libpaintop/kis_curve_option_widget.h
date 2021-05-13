@@ -34,6 +34,8 @@ public:
     void show();
     virtual void setEnabled(bool enabled);
 
+    void updateRange(qreal minValue, qreal maxValue);
+
 protected:
 
     KisCurveOption* curveOption();

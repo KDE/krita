@@ -76,6 +76,58 @@ void processTwoDevices(const QRect &rc,
         rowsRemaining -= rows;
     }
 }
+
+/**
+ * this is a special helper function for iterating through pixels in an
+ * extremely efficient way using strides. One should either pass a functor or a
+ * lambda to it.
+ */
+template <class PixelProcessor>
+void processTwoDevicesWithStrides(const QRect &rc,
+                                  KisRandomConstAccessorSP srcIt,
+                                  KisRandomAccessorSP dstIt,
+                                  PixelProcessor pixelProcessor)
+{
+    qint32 dstY = rc.y();
+    qint32 rowsRemaining = rc.height();
+
+    while (rowsRemaining > 0) {
+        qint32 dstX = rc.x();
+
+        qint32 numContiguousSrcRows = srcIt->numContiguousRows(dstY);
+        qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
+        qint32 rows = std::min({rowsRemaining, numContiguousSrcRows, numContiguousDstRows});
+
+        qint32 columnsRemaining = rc.width();
+
+        while (columnsRemaining > 0) {
+
+            qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(dstX);
+            qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX);
+            qint32 columns = std::min({columnsRemaining, numContiguousSrcColumns, numContiguousDstColumns});
+
+            qint32 dstRowStride = dstIt->rowStride(dstX, dstY);
+            qint32 srcRowStride = srcIt->rowStride(dstX, dstY);
+
+            dstIt->moveTo(dstX, dstY);
+            srcIt->moveTo(dstX, dstY);
+
+            quint8 *dstRowStart = dstIt->rawData();
+            const quint8 *srcRowStart = srcIt->rawDataConst();
+
+            pixelProcessor(srcRowStart, srcRowStride,
+                           dstRowStart, dstRowStride,
+                           rows, columns);
+
+            dstX += columns;
+            columnsRemaining -= columns;
+        }
+
+        dstY += rows;
+        rowsRemaining -= rows;
+    }
+}
+
 }
 
 

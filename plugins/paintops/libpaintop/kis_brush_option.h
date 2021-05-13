@@ -28,6 +28,8 @@ public:
     KisBrushSP brush() const;
     void setBrush(KisBrushSP brush);
 
+    enumBrushApplication brushApplication(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface);
+
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     static bool isTextBrush(const KisPropertiesConfiguration *setting);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */

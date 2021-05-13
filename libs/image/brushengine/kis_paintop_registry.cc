@@ -94,6 +94,18 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
     return paintOp(preset->paintOp().id(), preset->settings(), painter, node, image);
 }
 
+KisInterstrokeDataFactory *KisPaintOpRegistry::createInterstrokeDataFactory(KisPaintOpPresetSP preset) const
+{
+    if (preset) {
+        KisPaintOpFactory* f = value(preset->paintOp().id());
+        if (f) {
+            return f->createInterstrokeDataFactory(preset->settings(), preset->resourcesInterface());
+        }
+    }
+
+    return 0;
+}
+
 KisPaintOpSettingsSP KisPaintOpRegistry::createSettings(const KoID& id, KisResourcesInterfaceSP resourcesInterface) const
 {
     KisPaintOpFactory *f = value(id.id());

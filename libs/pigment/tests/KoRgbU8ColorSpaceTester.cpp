@@ -19,6 +19,7 @@
 #include "KoCompositeOp.h"
 #include "KoMixColorsOp.h"
 #include <KoCompositeOpRegistry.h>
+#include "sdk/tests/kistest.h"
 
 
 #define NUM_CHANNELS 4
@@ -293,7 +294,6 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
     }
 }
 
-
 // for posix_memalign()
 #include <stdlib.h>
 
@@ -448,4 +448,4 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
     }
 }
 
-QTEST_GUILESS_MAIN(KoRgbU8ColorSpaceTester)
+KISTEST_MAIN(KoRgbU8ColorSpaceTester)

@@ -34,7 +34,14 @@ public:
     void setHasColorAndTransparency(bool value);
     bool hasColorAndTransparency() const;
 
+    qreal estimatedSourceMidPoint() const;
+    qreal adjustedMidPoint() const;
+
+    bool autoAdjustMidPoint() const;
+    virtual void setAutoAdjustMidPoint(bool autoAdjustMidPoint);
+
 private:
+    bool m_autoAdjustMidPoint = false;
     quint8 m_adjustmentMidPoint = 127;
     qreal m_brightnessAdjustment = 0.0;
     qreal m_contrastAdjustment = 0.0;

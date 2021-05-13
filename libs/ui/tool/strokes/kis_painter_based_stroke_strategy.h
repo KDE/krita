@@ -93,6 +93,9 @@ protected:
     void setSupportsIndirectPainting(bool value);
     bool supportsIndirectPainting() const;
 
+    bool supportsContinuedInterstrokeData() const;
+    void setSupportsContinuedInterstrokeData(bool value);
+
 protected:
     KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail);
 
@@ -123,6 +126,7 @@ private:
 
     bool m_supportsMaskingBrush;
     bool m_supportsIndirectPainting;
+    bool m_supportsContinuedInterstrokeData;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

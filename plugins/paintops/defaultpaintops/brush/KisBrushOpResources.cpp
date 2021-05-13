@@ -41,7 +41,7 @@ KisBrushOpResources::KisBrushOpResources(const KisPaintOpSettingsSP settings, Ki
     sharpnessOption->readOptionSetting(settings);
     sharpnessOption->resetAllSensors();
 
-    textureOption.reset(new KisTextureProperties(painter->device()->defaultBounds()->currentLevelOfDetail()));
+    textureOption.reset(new KisTextureProperties(painter->device()->defaultBounds()->currentLevelOfDetail(), SupportsGradientMode | SupportsLightnessMode));
     textureOption->fillProperties(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
 
     m_d->hsvOptions.append(KisPressureHSVOption::createHueOption());

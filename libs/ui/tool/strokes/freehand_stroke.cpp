@@ -66,22 +66,24 @@ struct FreehandStrokeStrategy::Private
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                                                KisFreehandStrokeInfo *strokeInfo,
-                                               const KUndo2MagicString &name)
+                                               const KUndo2MagicString &name,
+                                               Flags flags)
     : KisPainterBasedStrokeStrategy(QLatin1String("FREEHAND_STROKE"), name,
                                     resources, strokeInfo),
       m_d(new Private(resources))
 {
-    init();
+    init(flags);
 }
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                                                QVector<KisFreehandStrokeInfo*> strokeInfos,
-                                               const KUndo2MagicString &name)
+                                               const KUndo2MagicString &name,
+                                               Flags flags)
     : KisPainterBasedStrokeStrategy(QLatin1String("FREEHAND_STROKE"), name,
                                     resources, strokeInfos),
       m_d(new Private(resources))
 {
-    init();
+    init(flags);
 }
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail)
@@ -101,11 +103,12 @@ FreehandStrokeStrategy::~FreehandStrokeStrategy()
     KisUpdateTimeMonitor::instance()->endStrokeMeasure();
 }
 
-void FreehandStrokeStrategy::init()
+void FreehandStrokeStrategy::init(Flags flags)
 {
     setSupportsWrapAroundMode(true);
     setSupportsMaskingBrush(true);
     setSupportsIndirectPainting(true);
+    setSupportsContinuedInterstrokeData(flags & SupportsContinuedInterstrokeData);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
     if (m_d->needsAsynchronousUpdates) {

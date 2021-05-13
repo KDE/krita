@@ -27,6 +27,8 @@ if(HAVE_VC)
     set(LINK_VC_LIB ${Vc_LIBRARIES})
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
     ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
+    ko_compile_for_all_implementations(__per_arch_rgb_scaler_factory_objs KoOptimizedRgbPixelDataScalerU8ToU16FactoryImpl.cpp)
+
     message("Following objects are generated from the per-arch lib")
     message("${__per_arch_factory_objs}")
 else()
@@ -40,6 +42,8 @@ set(kritapigment_SRCS
     DebugPigment.cpp
     KoBasicHistogramProducers.cpp
     KoAlphaMaskApplicatorBase.cpp
+    KoOptimizedRgbPixelDataScalerU8ToU16Base.cpp
+    KoOptimizedRgbPixelDataScalerU8ToU16Factory.cpp
     KoColor.cpp
     KoColorDisplayRendererInterface.cpp
     KoColorConversionAlphaTransformation.cpp
@@ -80,6 +84,7 @@ set(kritapigment_SRCS
     compositeops/KoAlphaDarkenParamsWrapper.cpp
     ${__per_arch_factory_objs}
     ${__per_arch_alpha_applicator_factory_objs}
+    ${__per_arch_rgb_scaler_factory_objs}
     KoAlphaMaskApplicatorFactory.cpp
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp

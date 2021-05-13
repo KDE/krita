@@ -56,7 +56,7 @@ set(kritaimage_LIB_SRCS
    kis_painter.cc
    kis_painter_blt_multi_fixed.cpp
    kis_marker_painter.cpp
-   KisPrecisePaintDeviceWrapper.cpp
+   KisOverlayPaintDeviceWrapper.cpp
    kis_progress_updater.cpp
    KisAnimatedOpacityProperty.cpp
    brushengine/kis_paint_information.cc
@@ -269,6 +269,10 @@ set(kritaimage_LIB_SRCS
    kis_update_selection_job.cpp
    kis_serializable_configuration.cc
    kis_transaction_data.cpp
+   KisTransactionWrapperFactory.cpp
+   KisInterstrokeDataTransactionWrapperFactory.cpp
+   KisInterstrokeData.cpp
+   KisInterstrokeDataFactory.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
    bsplines/kis_bspline_1d.cpp

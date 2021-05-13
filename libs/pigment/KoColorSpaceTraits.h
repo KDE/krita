@@ -98,6 +98,18 @@ struct KoColorSpaceTrait {
     }
 
     /**
+     * Copy alpha channel of all pixels in src to dst
+     */
+    inline static void copyOpacityU8(quint8* src, quint8* dst, qint32 nPixels) {
+        if (alpha_pos < 0) return;
+        qint32 psize = pixelSize;
+        for (; nPixels > 0; --nPixels, src += psize, dst++) {
+            channels_type c = nativeArray(src)[alpha_pos];
+            *dst = KoColorSpaceMaths<channels_type, quint8>::scaleToA(c);
+        }
+    }
+
+    /**
      * Convenient function for transforming a quint8* array in a pointer of the native channels type
      */
     inline static const channels_type* nativeArray(const quint8 * a) {

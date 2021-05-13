@@ -42,17 +42,17 @@ QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
                  realDabSize.width() , realDabSize.height());
 }
 
-
-void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, KisFixedPaintDeviceSP *dab)
+void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, KisFixedPaintDeviceSP *dab, bool forceNormalizedRGBAImageStamp)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(*dab);
     const KoColorSpace *cs = (*dab)->colorSpace();
 
 
-    if (resources->brush->brushApplication() == IMAGESTAMP) {
+    if (forceNormalizedRGBAImageStamp || resources->brush->brushApplication() == IMAGESTAMP) {
         *dab = resources->brush->paintDevice(cs, di.shape, di.info,
-                                            di.subPixel.x(),
-                                            di.subPixel.y());
+                                             di.subPixel.x(),
+                                             di.subPixel.y());
+
     } else if (di.solidColorFill) {
         resources->brush->mask(*dab,
                                di.paintColor,

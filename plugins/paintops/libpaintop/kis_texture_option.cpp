@@ -49,9 +49,9 @@
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
 
-KisTextureOption::KisTextureOption()
+KisTextureOption::KisTextureOption(KisBrushTextureFlags flags)
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
-    , m_textureOptions(new KisTextureChooser())
+    , m_textureOptions(new KisTextureChooser(flags))
 {
     setObjectName("KisTextureOption");
     setConfigurationPage(m_textureOptions);
@@ -130,7 +130,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
         m_textureOptions->offsetSliderY ->setEnabled(true);
     }
 
-    int texturingMode = m_textureOptions->cmbTexturingMode->currentIndex();
+    int texturingMode = m_textureOptions->texturingMode();
     bool invert = (m_textureOptions->chkInvert->checkState() == Qt::Checked);
 
     setting->setProperty("Texture/Pattern/Scale", scale);
@@ -176,7 +176,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_textureOptions->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
     m_textureOptions->randomOffsetX->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetX"));
     m_textureOptions->randomOffsetY->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetY"));
-    m_textureOptions->cmbTexturingMode->setCurrentIndex(setting->getInt("Texture/Pattern/TexturingMode", KisTextureProperties::MULTIPLY));
+    m_textureOptions->selectTexturingMode(KisTextureProperties::TexturingMode(setting->getInt("Texture/Pattern/TexturingMode", KisTextureProperties::MULTIPLY)));
     m_textureOptions->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
     m_textureOptions->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
     m_textureOptions->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
@@ -204,9 +204,10 @@ void KisTextureOption::resetGUI(KoResourceSP res)
 /**********************************************************************/
 
 
-KisTextureProperties::KisTextureProperties(int levelOfDetail)
+KisTextureProperties::KisTextureProperties(int levelOfDetail, KisBrushTextureFlags flags)
     : m_gradient(0)
     , m_levelOfDetail(levelOfDetail)
+    , m_flags(flags)
 {
 }
 
@@ -218,7 +219,16 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     }
 
     m_texturingMode = (TexturingMode)setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
-    bool preserveAlpha = m_texturingMode == LIGHTNESS || m_texturingMode == GRADIENT;
+
+    if (!(m_flags & SupportsLightnessMode) && (m_texturingMode == LIGHTNESS)) {
+        m_texturingMode = SUBTRACT;
+    }
+
+    if (!(m_flags & SupportsGradientMode) && (m_texturingMode == GRADIENT)) {
+        m_texturingMode = SUBTRACT;
+    }
+
+    const bool preserveAlpha = m_texturingMode == LIGHTNESS || m_texturingMode == GRADIENT;
 
     m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail, preserveAlpha));
     if (!m_maskInfo->fillProperties(setting, resourcesInterface)) {

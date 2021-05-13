@@ -53,6 +53,13 @@ public:
     void setRect(const QRect& rc);
 
     /**
+     * setColorSpace reassigns the color space of the paint device
+     * **without** converting or reallocating the buffer. One needs
+     * to update the buffer manually after that.
+     */
+    void setColorSpace(const KoColorSpace *cs);
+
+    /**
      * @return the rect that the data represents
      */
     QRect bounds() const;

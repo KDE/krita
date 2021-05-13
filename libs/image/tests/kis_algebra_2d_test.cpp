@@ -762,4 +762,23 @@ void KisAlgebra2DTest::testElasticMotion()
     ENTER_FUNCTION() << ppVar(newResultPoint);
 }
 
+void KisAlgebra2DTest::testHaltonSequence()
+{
+    {
+
+        KisAlgebra2D::HaltonSequenceGenerator g(2);
+
+        for (int i = 0; i < 10; i++) {
+            qDebug() << g.generate();
+        }
+    }
+
+    {
+        KisAlgebra2D::HaltonSequenceGenerator g(2);
+        for (int i = 0; i < 10; i++) {
+            qDebug() << g.generate(10);
+        }
+    }
+}
+
 SIMPLE_TEST_MAIN(KisAlgebra2DTest)

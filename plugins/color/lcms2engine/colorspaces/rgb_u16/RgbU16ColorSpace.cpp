@@ -107,3 +107,8 @@ void RgbU16ColorSpace::fillGrayBrushWithColorAndLightnessWithStrength(quint8* ds
 {
     fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU16Traits>(dst, brush, brushColor, strength, nPixels);
 }
+
+void RgbU16ColorSpace::modulateLightnessByGrayBrush(quint8 *dst, const QRgb *brush, qreal strength, qint32 nPixels) const
+{
+   modulateLightnessByGrayBrushRGB<KoBgrU16Traits>(dst, brush, strength, nPixels);
+}

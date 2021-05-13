@@ -71,6 +71,7 @@ public:
     void setAdjustmentMidPoint(quint8 value) override;
     void setBrightnessAdjustment(qreal value) override;
     void setContrastAdjustment(qreal value) override;
+    void setAutoAdjustMidPoint(bool value) override;
 
     QString parasiteSelection(); // returns random, constant, etc
 

@@ -445,6 +445,17 @@ public:
     virtual void setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) const = 0;
     virtual void setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) const = 0;
 
+
+    /**
+    * Copy the opacity of a run of pixels.
+    *
+    * src -- pixels to get opacity from.  This is in the source colorspace.
+    * dst -- pixels in Alpha8 colorspace to be assigned the opacity of src pixel
+    * nPixels -- the number of pixels
+    *
+    */
+    virtual void copyOpacityU8(quint8* src, quint8* dst, qint32 nPixels) const = 0;
+
     /**
      * Multiply the alpha channel of the given run of pixels by the given value.
      *
@@ -514,8 +525,10 @@ public:
      * see KoColorSpacePreserveLightnessUtils.h
      */
     virtual void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const;
-    //Same as above, but with contrast adjusted by strength.  Strength == 1 -> full contrast.  Allows softer lightness adjustments.
+    // Same as above, but with contrast adjusted by strength.  Strength == 1 -> full contrast.  Allows softer lightness adjustments.
     virtual void fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const;
+    // Same as above, but applies lightness adjustment to \p dst in-place
+    virtual void modulateLightnessByGrayBrush(quint8* dst, const QRgb *brush, qreal strength, qint32 nPixels) const;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast

@@ -37,6 +37,8 @@ private Q_SLOTS:
     void testTriangularMotion();
 
     void testElasticMotion();
+
+    void testHaltonSequence();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

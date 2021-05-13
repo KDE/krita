@@ -13,19 +13,67 @@ KisColorfulBrush::KisColorfulBrush(const QString &filename)
 }
 
 #include <KoColorSpaceMaths.h>
+#include <KoColorSpaceTraits.h>
+
+namespace {
+
+qreal estimateImageAverage(const QImage &image) {
+    qint64 lightnessSum = 0;
+    qint64 alphaSum = 0;
+
+    for (int y = 0; y < image.height(); ++y) {
+        const QRgb *pixel = reinterpret_cast<const QRgb*>(image.scanLine(y));
+
+        for (int i = 0; i < image.width(); ++i) {
+            lightnessSum += qRound(qGray(*pixel) * qAlpha(*pixel) / 255.0);
+            alphaSum += qAlpha(*pixel);
+            pixel++;
+        }
+    }
+
+    return 255.0 * qreal(lightnessSum) / alphaSum;
+}
+
+}
+
+qreal KisColorfulBrush::estimatedSourceMidPoint() const
+{
+    return estimateImageAverage(KisBrush::brushTipImage());
+}
+
+qreal KisColorfulBrush::adjustedMidPoint() const
+{
+    return estimateImageAverage(this->brushTipImage());
+}
+
+bool KisColorfulBrush::autoAdjustMidPoint() const
+{
+    return m_autoAdjustMidPoint;
+}
+
+void KisColorfulBrush::setAutoAdjustMidPoint(bool autoAdjustMidPoint)
+{
+    m_autoAdjustMidPoint = autoAdjustMidPoint;
+}
 
 QImage KisColorfulBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
     if (isImageType() && brushApplication() != IMAGESTAMP) {
-        if (m_adjustmentMidPoint != 127 ||
+
+        const qreal adjustmentMidPoint =
+                m_autoAdjustMidPoint ?
+                estimateImageAverage(image) :
+                m_adjustmentMidPoint;
+
+        if (qAbs(adjustmentMidPoint - 127.0) > 0.1 ||
             !qFuzzyIsNull(m_brightnessAdjustment) ||
             !qFuzzyIsNull(m_contrastAdjustment)) {
 
             const int half = KoColorSpaceMathsTraits<quint8>::halfValue;
             const int unit = KoColorSpaceMathsTraits<quint8>::unitValue;
 
-            const qreal midX = m_adjustmentMidPoint;
+            const qreal midX = adjustmentMidPoint;
             const qreal midY = m_brightnessAdjustment > 0 ?
                         KoColorSpaceMaths<qreal>::blend(unit, half, m_brightnessAdjustment) :
                         KoColorSpaceMaths<qreal>::blend(0, half, -m_brightnessAdjustment);
@@ -37,8 +85,13 @@ QImage KisColorfulBrush::brushTipImage() const
             qreal hiB = 255.0;
 
             if (!qFuzzyCompare(m_contrastAdjustment, 1.0)) {
-                loA = midY / (1.0 - m_contrastAdjustment) / midX;
-                hiA = (unit - midY) / (1.0 - m_contrastAdjustment) / (unit - midX);
+                if (m_contrastAdjustment > 0.0) {
+                    loA = midY / (1.0 - m_contrastAdjustment) / midX;
+                    hiA = (unit - midY) / (1.0 - m_contrastAdjustment) / (unit - midX);
+                } else {
+                    loA = midY * (1.0 + m_contrastAdjustment) / midX;
+                    hiA = (unit - midY) * (1.0 + m_contrastAdjustment) / (unit - midX);
+                }
 
                 loB = midY - midX * loA;
                 hiB = midY - midX * hiA;
@@ -129,6 +182,7 @@ void KisColorfulBrush::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("AdjustmentMidPoint", QString::number(m_adjustmentMidPoint));
     e.setAttribute("BrightnessAdjustment", QString::number(m_brightnessAdjustment));
     e.setAttribute("ContrastAdjustment", QString::number(m_contrastAdjustment));
+    e.setAttribute("AutoAdjustMidPoint", QString::number(m_autoAdjustMidPoint));
     e.setAttribute("AdjustmentVersion", QString::number(2));
     KisBrush::toXML(d, e);
 }

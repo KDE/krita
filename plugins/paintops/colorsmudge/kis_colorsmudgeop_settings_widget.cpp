@@ -9,6 +9,7 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option_widget.h"
+#include "kis_brush_option_widget.h"
 #include "kis_smudge_radius_option.h"
 
 #include <kis_properties_configuration.h>
@@ -16,6 +17,8 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_ratio_option.h>
 #include <kis_curve_option_widget.h>
+#include <kis_pressure_paint_thickness_option.h>
+#include <kis_pressure_paint_thickness_option_widget.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_opacity_option.h>
@@ -36,10 +39,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
-
-    // ColorSmudge paintoip doesn't support colorful
-    // HSL brushes yet. Though it would be nice feature to have.
-    setHSLBrushTipEnabled(false);
+    setHSLBrushTipEnabled(true);
 
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
@@ -51,12 +51,18 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     m_smudgeOptionWidget = new KisSmudgeOptionWidget();
 
     addPaintOpOption(m_smudgeOptionWidget, i18n("Smudge Length"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0")), i18n("Smudge Radius"));
+
+    m_radiusStrengthOptionWidget = new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0"));
+    addPaintOpOption(m_radiusStrengthOptionWidget, i18n("Smudge Radius"));
+
     addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18n("Color Rate"));
+    m_paintThicknessOptionWidget = new KisPressurePaintThicknessOptionWidget();
+    addPaintOpOption(m_paintThicknessOptionWidget, i18n("Paint Thickness"));
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
-    addPaintOpOption(new KisOverlayModeOptionWidget(), i18n("Overlay Mode"));
+    m_overlayOptionWidget = new KisOverlayModeOptionWidget();
+    addPaintOpOption(m_overlayOptionWidget, i18n("Overlay Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption(), i18n("0%"), i18n("100%")), i18n("Gradient"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()), i18n("Hue"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(), KisPressureHSVOption::saturationMinLabel(), KisPressureHSVOption::saturationmaxLabel()), i18n("Saturation"));
@@ -67,6 +73,8 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 
+    const KisBrushOptionWidget* brushOption = brushOptionWidget();
+    connect(brushOption, SIGNAL(sigSettingChanged()), SLOT(slotBrushOptionChanged()));
 }
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
@@ -85,4 +93,22 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
     KisBrushSP brush = this->brush();
     bool pierced =  brush ? brush->isPiercedApprox() : false;
     m_smudgeOptionWidget->updateBrushPierced(pierced);
+
+    //If brush is a mask, it can use either engine, but if its not, it must use the new engine
+    if (brush) {
+        m_smudgeOptionWidget->setUseNewEngineCheckboxEnabled(brush->brushApplication() == ALPHAMASK);
+        if (brush->brushApplication() != ALPHAMASK) {
+            m_smudgeOptionWidget->setUseNewEngine(true);
+        }
+        m_paintThicknessOptionWidget->setEnabled(brush->preserveLightness());
+
+
+        m_overlayOptionWidget->setEnabled(brush->brushApplication() != LIGHTNESSMAP);
+
+        m_radiusStrengthOptionWidget->updateRange(0.0, m_smudgeOptionWidget->useNewEngine() ? 1.0 : 3.0);
+    }
+}
+
+void KisColorSmudgeOpSettingsWidget::slotBrushOptionChanged() {
+    notifyPageChanged();
 }

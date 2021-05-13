@@ -141,6 +141,13 @@ public:
         return currentData()->cacheInvalidator();
     }
 
+    inline KisInterstrokeDataSP interstrokeData() const {
+        return currentData()->interstrokeData();
+    }
+
+    inline KUndo2Command* createChangeInterstrokeDataCommand(KisInterstrokeDataSP value) {
+        return currentData()->createChangeInterstrokeDataCommand(value);
+    }
 
     void cloneAllDataObjects(Private *rhs, bool copyFrames)
     {
@@ -2023,6 +2030,16 @@ quint32 KisPaintDevice::channelCount() const
     quint32 _channelCount = m_d->colorSpace()->channelCount();
     Q_ASSERT(_channelCount > 0);
     return _channelCount;
+}
+
+KisInterstrokeDataSP KisPaintDevice::interstrokeData() const
+{
+    return m_d->interstrokeData();
+}
+
+KUndo2Command* KisPaintDevice::createChangeInterstrokeDataCommand(KisInterstrokeDataSP data)
+{
+    return m_d->createChangeInterstrokeDataCommand(data);
 }
 
 KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)

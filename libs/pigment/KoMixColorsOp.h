@@ -17,6 +17,44 @@
 class KoMixColorsOp
 {
 public:
+
+    /**
+     * An accumulator-like object for mixing color without copying and allocations
+     */
+    class Mixer
+    {
+    public:
+        virtual ~Mixer() {}
+        /**
+         * Add \p nPixels pixels pointed by \p data to the mixing sum. The
+         * passed pixels are weighted by coefficients in \p weights.
+         */
+        virtual void accumulate(const quint8 *data, const qint16 *weights, int weightSum, int nPixels) = 0;
+
+        /**
+         * Add \p nPixels pixels pointed by \p data to the mixing sum. The
+         * passed pixels are weighted uniformly, that is, each pixel has
+         * implicit weight of 1.
+         */
+        virtual void accumulateAverage(const quint8 *data, int nPixels) = 0;
+
+        /**
+         * Calculate the final mixed color. This function may be called
+         * as many times as needed on any stage of the mixing.
+         */
+        virtual void computeMixedColor(quint8 *data) = 0;
+
+        /**
+         * Return the current sum of the weights of the averaging
+         * algorithm. That might be needed to make a decision whether
+         * we had a meaningful amount of data passed.
+         */
+        virtual qint64 currentWeightsSum() const = 0;
+    };
+
+    virtual Mixer* createMixer() const = 0;
+
+public:
     virtual ~KoMixColorsOp() { }
     /**
      * Mix the colors.
@@ -44,8 +82,8 @@ public:
      * mixColors(colors, weights, nColors, ptrToDestinationPixel);
      * @endcode
      */
-    virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst, int weightSum = 255) const = 0;
-    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst, int weightSum = 255) const = 0;
+    virtual void mixColors(const quint8 * const*colors, const qint16 *weights, int nColors, quint8 *dst, int weightSum = 255) const = 0;
+    virtual void mixColors(const quint8 *colors, const qint16 *weights, int nColors, quint8 *dst, int weightSum = 255) const = 0;
 
 
     /**
@@ -64,8 +102,24 @@ public:
      * mixColors(colors, nColors, ptrToDestinationPixel);
      * @endcode
      */
-    virtual void mixColors(const quint8 * const*colors, quint32 nColors, quint8 *dst) const = 0;
-    virtual void mixColors(const quint8 *colors, quint32 nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 * const*colors, int nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 *colors, int nColors, quint8 *dst) const = 0;
+
+    /**
+     *   Convenience function to mix two color arrays with one weight.  Mixes colorsA[x] with colorsB[x] with 
+     *   weight as the percentage of B vs A (0.0 -> 100% A, 1.0 -> 100% B), for all x = [0 .. nColors-1].
+     *
+     *
+    */
+    virtual void mixTwoColorArrays(const quint8* colorsA, const quint8* colorsB, int nColors, qreal weight, quint8* dst) const = 0;
+
+    /**
+     *   Convenience function to mix one color array with one color with a specific weight.  Mixes colorArray[x] with color with
+     *   weight as the percentage of B vs A (0.0 -> 100% A, 1.0 -> 100% B), for all x = [0 .. nColors-1].
+     *
+     *
+    */
+    virtual void mixArrayWithColor(const quint8* colorArray, const quint8* color, int nColors, qreal weight, quint8* dst) const = 0;
 };
 
 #endif

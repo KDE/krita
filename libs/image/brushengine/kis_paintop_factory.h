@@ -19,6 +19,7 @@ class KisPainter;
 class KisPaintOp;
 class QWidget;
 class KisPaintOpConfigWidget;
+class KisInterstrokeDataFactory;
 
 class KoResource;
 using KoResourceSP = QSharedPointer<KoResource>;
@@ -77,6 +78,8 @@ public:
      * from \p resourcesInterface, and, if it fails, loaded from the embedded data.
      */
     virtual QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
+
+    virtual KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) const;
 
     /**
      * List of usually hidden compositeops that are useful for this paintop.

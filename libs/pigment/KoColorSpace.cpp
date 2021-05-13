@@ -853,8 +853,22 @@ void KoColorSpace::fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, c
     QScopedArrayPointer<quint8> rgbBuffer(new quint8[(nPixels + 1) * rgbPixelSize]);
     quint8* rgbBrushColorBuffer = rgbBuffer.data() + nPixels * rgbPixelSize;
 
-    this->toRgbA16(dst, rgbBuffer.data(), nPixels);
+    // NOTE: dst buffer is not read during the process, so there is
+    //       no need to convert that, just pass an uninitialized array
     this->toRgbA16(brushColor, rgbBrushColorBuffer, 1);
     fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU16Traits>(rgbBuffer.data(), brush, rgbBrushColorBuffer, strength, nPixels);
     this->fromRgbA16(rgbBuffer.data(), dst, nPixels);
+}
+
+void KoColorSpace::modulateLightnessByGrayBrush(quint8 *dst, const QRgb *brush, qreal strength, qint32 nPixels) const
+{
+    /// Fallback implementation. All RGB color spaces have their own
+    /// implementation without any conversions.
+
+    const int rgbPixelSize = sizeof(KoBgrU16Traits::Pixel);
+    QScopedArrayPointer<quint8> dstBuffer(new quint8[nPixels * rgbPixelSize]);
+
+    this->toRgbA16(dst, dstBuffer.data(), nPixels);
+    modulateLightnessByGrayBrushRGB<KoBgrU16Traits>(dstBuffer.data(), brush, strength, nPixels);
+    this->fromRgbA16(dstBuffer.data(), dst, nPixels);
 }

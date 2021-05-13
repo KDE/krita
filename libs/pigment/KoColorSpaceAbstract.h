@@ -108,6 +108,10 @@ public:
         _CSTrait::setOpacity(pixels, alpha, nPixels);
     }
 
+    void copyOpacityU8(quint8* src, quint8 *dst, qint32 nPixels) const override {
+        _CSTrait::copyOpacityU8(src, dst, nPixels);
+    }
+
     void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const override {
         _CSTrait::multiplyAlpha(pixels, alpha, nPixels);
     }

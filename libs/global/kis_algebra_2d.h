@@ -785,6 +785,57 @@ QPointF KRITAGLOBAL_EXPORT moveElasticPoint(const QPointF &pt,
                                             const QPointF &base, const QPointF &newBase,
                                             const QVector<QPointF> &anchorPoints);
 
+
+/**
+ * @brief a simple class to generate Halton sequence
+ *
+ * This sequence of numbers can be used to sample areas
+ * in somewhat uniform way. See Wikipedia for more info:
+ *
+ * https://en.wikipedia.org/wiki/Halton_sequence
+ */
+
+class HaltonSequenceGenerator
+{
+public:
+    HaltonSequenceGenerator(int base)
+        : m_base(base)
+    {
+    }
+
+    int generate(int maxRange) {
+        generationStep();
+        return (m_n * maxRange + m_d / 2) / m_d;
+    }
+
+    qreal generate() {
+        generationStep();
+        return qreal(m_n) / m_d;
+    }
+
+private:
+    inline void generationStep() {
+        int x = m_d - m_n;
+
+        if (x == 1) {
+            m_n = 1;
+            m_d *= m_base;
+        } else {
+            int y = m_d / m_base;
+            while (x <= y) {
+                y /= m_base;
+            }
+            m_n = (m_base + 1) * y - x;
+        }
+    }
+
+private:
+    int m_n = 0;
+    int m_d = 1;
+    const int m_base = 0;
+};
+
+
 }
 
 

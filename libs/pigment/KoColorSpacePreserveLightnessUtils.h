@@ -46,8 +46,6 @@ inline static void fillGrayBrushWithColorPreserveLightnessRGB(quint8 *pixels, co
         const float lightnessA = 1 - lightnessB;
 
         for (; nPixels > 0; --nPixels, pixels += pixelSize, ++brush) {
-            RGBPixel *pixelRGB = reinterpret_cast<RGBPixel*>(pixels);
-
             float brushMaskL = qRed(*brush) / 255.0f;
             brushMaskL = (brushMaskL - 0.5) * strength + 0.5;
             const float finalLightness = lightnessA * pow2(brushMaskL) + lightnessB * brushMaskL;
@@ -59,6 +57,7 @@ inline static void fillGrayBrushWithColorPreserveLightnessRGB(quint8 *pixels, co
 
             setLightness<HSLType, float>(pixelR, pixelG, pixelB, finalLightness);
 
+            RGBPixel *pixelRGB = reinterpret_cast<RGBPixel*>(pixels);
             pixelRGB->red = KoColorSpaceMaths<float, channels_type>::scaleToA(pixelR);
             pixelRGB->green = KoColorSpaceMaths<float, channels_type>::scaleToA(pixelG);
             pixelRGB->blue = KoColorSpaceMaths<float, channels_type>::scaleToA(pixelB);

@@ -53,7 +53,6 @@ bool KisColorfulBrush::autoAdjustMidPoint() const
 
 void KisColorfulBrush::setAutoAdjustMidPoint(bool autoAdjustMidPoint)
 {
-    // TODO: fix in the imagepipe brush
     m_autoAdjustMidPoint = autoAdjustMidPoint;
 }
 

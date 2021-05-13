@@ -17,8 +17,6 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_ratio_option.h>
 #include <kis_curve_option_widget.h>
-//#include <kis_pressure_lightness_strength_option.h>
-//#include <kis_pressure_lightness_strength_option_widget.h>
 #include <kis_pressure_paint_thickness_option.h>
 #include <kis_pressure_paint_thickness_option_widget.h>
 #include <kis_pressure_rotation_option.h>

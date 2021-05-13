@@ -17,7 +17,7 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
-#define SANITY_CHECKS
+//#define SANITY_CHECKS
 
 template <typename T>
 static inline T safeDivideWithRound(T dividend,

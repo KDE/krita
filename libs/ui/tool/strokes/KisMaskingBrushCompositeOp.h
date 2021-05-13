@@ -111,12 +111,63 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, tru
     }
 };
 
+/**
+ * A special Color Dodge variant for alpha channel.
+ *
+ * The meaning of alpha channel is a bit different from the one in color.
+ * Color dodge can quickly make the values higher than 1 or less than 0 so,
+ * contrary to the color values case, we should clamp to the unit range
+ */
+
+template<class T>
+inline T colorDodgeAlphaHelper(T src, T dst)
+{
+    using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
+    using namespace Arithmetic;
+    // Handle the case where the denominator is 0.
+    // When src is 1 then the denominator (1 - src) becomes 0, and to avoid
+    // dividing by 0 we treat the denominator as an infinitelly small number,
+    // so the result of the formula would approach infinity.
+    // For alpha values, the result should be clamped to the unit range,
+    // contrary to the color version, where the values should be clamped to
+    // the min/max range.
+    // Another special case is when both numerator and denominator are 0. In
+    // this case we also treat the denominator as an infinitelly small number,
+    // and the numerator can remain as 0, so dividing 0 over a number (no matter
+    // how small it is) gives 0.
+    if (src == unitValue<T>()) {
+        return dst == zeroValue<T>() ? zeroValue<T>() : unitValue<T>();
+    }
+    return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
+                  div(dst, inv(src)),
+                  composite_type(KoColorSpaceMathsTraits<T>::unitValue));
+}
+
+// Integer version of color dodge alpha
+template<class T>
+inline typename std::enable_if<std::is_integral<T>::value, T>::type
+colorDodgeAlpha(T src, T dst)
+{
+    return colorDodgeAlphaHelper(src, dst);
+}
+
+// Floating point version of color dodge alpha
+template<class T>
+inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
+colorDodgeAlpha(T src, T dst)
+{
+    const T result = colorDodgeAlphaHelper(src, dst);
+    // Constantly dividing by small numbers can quickly make the result
+    // become infinity or NaN, so we check that and correct (kind of clamping)
+    return std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue;
+}
+
 template <typename channels_type>
 struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_DODGE, false>
 {
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfColorDodge(src, dst);
+        return colorDodgeAlpha(src, dst);
     }
 };
 
@@ -127,16 +178,60 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_DODGE, true>
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfColorDodge(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
+        return colorDodgeAlpha(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };
+
+/**
+ * A special Color Burn variant for alpha channel.
+ *
+ * The meaning of alpha channel is a bit different from the one in color.
+ * Color burn can quickly make the values less than 0 so,
+ * contrary to the color values case, we should clamp to the unit range
+ */
+
+template<class T>
+inline T colorBurnAlphaHelper(T src, T dst)
+{
+    using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
+    using namespace Arithmetic;
+    // Handle the case where the denominator is 0. See color dodge for a
+    // detailed explanation
+    if(src == zeroValue<T>()) {
+        return dst == unitValue<T>() ? zeroValue<T>() : unitValue<T>();
+    }
+    return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
+                  div(inv(dst), src),
+                  composite_type(KoColorSpaceMathsTraits<T>::unitValue));
+}
+
+// Integer version of color burn alpha
+template<class T>
+inline typename std::enable_if<std::is_integral<T>::value, T>::type
+colorBurnAlpha(T src, T dst)
+{
+    using namespace Arithmetic;
+    return inv(colorBurnHelper(src, dst));
+}
+
+// Floating point version of color burn alpha
+template<class T>
+inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
+colorBurnAlpha(T src, T dst)
+{
+    using namespace Arithmetic;
+    const T result = colorBurnAlphaHelper(src, dst);
+    // Constantly dividing by small numbers can quickly make the result
+    // become infinity or NaN, so we check that and correct (kind of clamping)
+    return inv(std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue);
+}
 
 template <typename channels_type>
 struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_BURN, false>
 {
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfColorBurn(src, dst);
+        return colorBurnAlpha(src, dst);
     }
 };
 
@@ -147,7 +242,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_BURN, true> 
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfColorBurn(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
+        return colorBurnAlpha(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };
 
@@ -247,12 +342,30 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHO
     }
 };
 
+/**
+ * A special Hard Mix Softer variant for alpha channel
+ *
+ * The meaning of alpha channel is a bit different from the one in color.
+ * We have to clamp the values to the unit range
+ */
+
+template<class T>
+inline T hardMixSofterPhotoshopAlpha(T src, T dst) {
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    const composite_type srcScaleFactor = static_cast<composite_type>(2);
+    const composite_type dstScaleFactor = static_cast<composite_type>(3);
+    return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
+                  dstScaleFactor * dst - srcScaleFactor * inv(src),
+                  composite_type(KoColorSpaceMathsTraits<T>::unitValue));
+}
+
 template <typename channels_type>
 struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, false>
 {
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfHardMixSofterPhotoshop(src, dst);
+        return hardMixSofterPhotoshopAlpha(src, dst);
     }
 };
 
@@ -263,7 +376,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_SOF
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfHardMixSofterPhotoshop(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
+        return hardMixSofterPhotoshopAlpha(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };
 

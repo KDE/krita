@@ -54,13 +54,6 @@ struct MoveNodeStruct {
 
         bool result = true;
 
-        // qDebug() << "Merging";
-        // qDebug() << ppVar(node);
-        // qDebug() << ppVar(oldParent) << ppVar(newParent);
-        // qDebug() << ppVar(oldAbove) << ppVar(newAbove);
-        // qDebug() << ppVar(rhs.oldParent) << ppVar(rhs.newParent);
-        // qDebug() << ppVar(rhs.oldAbove) << ppVar(rhs.newAbove);
-
         if (newParent == rhs.oldParent) {
             // 'rhs' is newer
             newParent = rhs.newParent;

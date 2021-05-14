@@ -83,7 +83,7 @@ protected:
 
 
 private:
-    int m_size { 21 };
+    int m_size { 18 };
     bool m_addNewTagAvailable { true };
 
     LastAction m_lastAction { CreateNewTag };

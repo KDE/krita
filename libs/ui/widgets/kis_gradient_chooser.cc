@@ -569,15 +569,15 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
                         }
                     }
                     if (res) {
-                        bool r = rserver->updateResource(res.dynamicCast<KoAbstractGradient>());
+                        rserver->updateResource(res.dynamicCast<KoAbstractGradient>());
                     }
                 }
                 else {
-                    bool r = rserver->updateResource(gradient);
+                    rserver->updateResource(gradient);
                 }
             }
             else {
-                bool r = rserver->addResource(gradient);
+                rserver->addResource(gradient);
             }
             itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
             itemChooser->setCurrentResource(gradient);
@@ -585,7 +585,7 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
         else {
 
             buf.open(QFile::ReadOnly);
-            bool r = gradient->loadFromDevice(&buf, KisGlobalResourcesInterface::instance());
+            gradient->loadFromDevice(&buf, KisGlobalResourcesInterface::instance());
         }
     }
 }

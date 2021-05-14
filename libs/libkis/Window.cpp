@@ -119,7 +119,9 @@ void Window::close()
 QAction *Window::createAction(const QString &id, const QString &text, const QString &menuLocation)
 {
     KisAction *action = d->window->viewManager()->actionManager()->createAction(id);
-    action->setText(text);
+    if (!text.isEmpty()) {
+        action->setText(text);
+    }
     action->setObjectName(id);
     action->setProperty("menulocation", menuLocation);
     return action;

@@ -885,7 +885,14 @@ void KisAnimTimelineFramesView::slotEnsureRowVisible(int row)
     if (!index.isValid() || row < 0) return;
 
     index = m_d->model->index(row, index.column());
-    scrollTo(index);
+
+    // WORKAROUND BUG:437029
+    // Delay's UI scrolling by 1/60 of a second to compensate for
+    // inconsistent dummy indexing caused by a brief period where
+    // two unpinned dummies exist on the timeline simultaneously.
+    QTimer::singleShot(16, [this, index](){
+        scrollTo(index);
+    });
 }
 
 void KisAnimTimelineFramesView::calculateActiveLayerSelectedTimes(const QModelIndexList &selection)

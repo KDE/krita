@@ -2028,7 +2028,12 @@ namespace KisLayerUtils {
         if (!rootNode->isFakeNode()) {
             // TODO: it would be better to count up changeRect inside
             // node's extent() method
-            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
+            //
+            // NOTE: when flattening a group layer, we should take the change rect of the
+            // all the child layers as the source of the change. We are calculating
+            // the change rect **before** the update itself, therefore rootNode->exactBounds()
+            // is not yet prepared, hence its exact bounds still contail old values.
+            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds() | currentRect);
         }
 
         return currentRect;

@@ -10,7 +10,6 @@
 #include "kis_keyframe_channel.h"
 #include "kis_node.h"
 #include "kis_layer_utils.h"
-#include "kis_image.h"
 
 struct KisTimeSpanStaticRegistrar {
     KisTimeSpanStaticRegistrar() {

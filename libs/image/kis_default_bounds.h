@@ -9,6 +9,7 @@
 
 #include <QRect>
 #include "kis_types.h"
+#include "kis_image.h"
 #include "kis_default_bounds_base.h"
 
 class KisDefaultBounds;

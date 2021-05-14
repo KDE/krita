@@ -9,7 +9,6 @@
 #include "kundo2command.h"
 #include "kis_keyframe_commands.h"
 #include "kis_time_span.h"
-#include "kis_image.h"
 #include <kis_global.h>
 #include <kis_dom_utils.h>
 

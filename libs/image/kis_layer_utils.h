@@ -131,9 +131,11 @@ namespace KisLayerUtils
 
     struct KRITAIMAGE_EXPORT SelectGlobalSelectionMask : public KUndo2Command
     {
+    public:
         SelectGlobalSelectionMask(KisImageSP image);
         void redo() override;
 
+    private:
         KisImageSP m_image;
     };
 

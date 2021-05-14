@@ -151,11 +151,21 @@ InplaceTransformStrokeStrategy::~InplaceTransformStrokeStrategy()
 void InplaceTransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     if (UpdateTransformData *upd = dynamic_cast<UpdateTransformData*>(data)) {
-        m_d->pendingUpdateArgs = upd->args;
-        tryPostUpdateJob(false);
+        if (upd->destination == UpdateTransformData::PAINT_DEVICE) {
+            m_d->pendingUpdateArgs = upd->args;
+            tryPostUpdateJob(false);
+        } else if (m_d->selection) {
+            KisTransaction transaction(m_d->selection->pixelSelection());
 
-    } else if (BarrierUpdateData *barrierData =
-               dynamic_cast<BarrierUpdateData*>(data)) {
+            KisProcessingVisitor::ProgressHelper helper(m_d->imageRoot.data());
+            KisTransformUtils::transformDevice(upd->args,
+                                               m_d->selection->pixelSelection(), &helper);
+
+            runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
+                              KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+        }
+
+    } else if (BarrierUpdateData *barrierData = dynamic_cast<BarrierUpdateData *>(data)) {
 
         doCanvasUpdate(barrierData->forceUpdate);
 
@@ -825,6 +835,9 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
         reapplyTransform(m_d->currentTransformArgs, mutatedJobs, 0);
         mutatedJobs << new Data(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING), false, KisStrokeJobData::BARRIER);
     }
+
+    mutatedJobs << new UpdateTransformData(m_d->currentTransformArgs,
+                                           UpdateTransformData::SELECTION);
 
     finalizeStrokeImpl(mutatedJobs, true);
 

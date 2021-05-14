@@ -797,7 +797,11 @@ void KisToolTransform::requestStrokeCancellation()
 void KisToolTransform::requestImageRecalculation()
 {
     if (!m_currentlyUsingOverlayPreviewStyle && m_strokeId && m_transaction.rootNode()) {
-        image()->addJob(m_strokeId, new InplaceTransformStrokeStrategy::UpdateTransformData(m_currentArgs));
+        image()->addJob(
+            m_strokeId,
+            new InplaceTransformStrokeStrategy::UpdateTransformData(
+                m_currentArgs,
+                InplaceTransformStrokeStrategy::UpdateTransformData::PAINT_DEVICE));
     }
 }
 

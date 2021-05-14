@@ -33,6 +33,7 @@ if(HAVE_VC)
     message("${__per_arch_factory_objs}")
 else()
     set(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
+    set(__per_arch_rgb_scaler_factory_objs KoOptimizedRgbPixelDataScalerU8ToU16FactoryImpl.cpp)
 endif()
 
 add_subdirectory(tests)

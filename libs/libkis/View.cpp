@@ -19,7 +19,9 @@
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
+#include <kis_display_filter.h>
 #include <KisResourceTypes.h>
+
 #include <KisDocument.h>
 #include "Document.h"
 #include "Canvas.h"
@@ -209,6 +211,12 @@ void View::setHDRExposure(float exposure)
 {
     if (!d->view) return;
     d->view->resourceProvider()->setHDRExposure(exposure);
+    auto displayFilter = d->view->viewManager()->canvasBase()->displayFilter();
+    if (displayFilter) {
+        displayFilter->exposure  = exposure;
+        displayFilter->updateProcessor();
+        d->view->viewManager()->canvasBase()->updateCanvas();
+    }
 }
 
 float View::HDRGamma() const
@@ -221,6 +229,12 @@ void View::setHDRGamma(float gamma)
 {
     if (!d->view) return;
     d->view->resourceProvider()->setHDRGamma(gamma);
+    auto displayFilter= d->view->viewManager()->canvasBase()->displayFilter();
+    if (displayFilter) {
+        displayFilter->gamma = gamma;
+        displayFilter->updateProcessor();
+        d->view->viewManager()->canvasBase()->updateCanvas();
+    }
 }
 
 qreal View::paintingOpacity() const

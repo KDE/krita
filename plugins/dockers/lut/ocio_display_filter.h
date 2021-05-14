@@ -30,23 +30,26 @@ public:
     explicit OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent = 0);
     ~OcioDisplayFilter();
 
-    void filter(quint8 *pixels, quint32 numPixels);
-    void approximateInverseTransformation(quint8 *pixels, quint32 numPixels);
-    void approximateForwardTransformation(quint8 *pixels, quint32 numPixels);
-    bool useInternalColorManagement() const;
-    bool lockCurrentColorVisualRepresentation() const;
+    QString program() const override;
+    GLuint lutTexture() const override;
+    void filter(quint8 *pixels, quint32 numPixels) override;
+    void approximateInverseTransformation(quint8 *pixels, quint32 numPixels) override;
+    void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) override;
+    bool useInternalColorManagement() const override;
+    KisExposureGammaCorrectionInterface *correctionInterface() const override;
+    bool lockCurrentColorVisualRepresentation() const override;
+    bool updateShader() override;
+    void updateProcessor() override;
+
+    // -------------
+
     void setLockCurrentColorVisualRepresentation(bool value);
 
-    bool updateShader();
     template <class F>
     bool updateShaderImpl(F *f);
 
-    KisExposureGammaCorrectionInterface *correctionInterface() const;
 
-    virtual QString program() const;
-    GLuint lutTexture() const;
 
-    void updateProcessor();
 
     OCIO::ConstConfigRcPtr config;
 
@@ -55,8 +58,6 @@ public:
     const char *view;
     const char *look;
     OCIO_CHANNEL_SWIZZLE swizzle;
-    float exposure;
-    float gamma;
     float blackPoint;
     float whitePoint;
     bool forceInternalColorManagement;

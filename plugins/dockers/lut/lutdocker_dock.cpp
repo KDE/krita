@@ -163,6 +163,11 @@ LutDockerDock::LutDockerDock()
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetOcioConfiguration()));
 
+    connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigHDRExposureChanged(float)),
+            this, SLOT(updateDisplaySettings()));
+    connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigHDRGammaChanged(float)),
+            this, SLOT(updateDisplaySettings()));
+
     resetOcioConfiguration();
 }
 
@@ -310,6 +315,8 @@ void LutDockerDock::slotImageColorSpaceChanged()
 void LutDockerDock::exposureValueChanged(double exposure)
 {
     if (m_canvas && !m_draggingSlider) {
+        KisSignalsBlocker blocker(m_canvas->viewManager()->canvasResourceProvider());
+        Q_UNUSED(blocker);
         m_canvas->viewManager()->canvasResourceProvider()->setHDRExposure(exposure);
         updateDisplaySettings();
     }
@@ -330,6 +337,8 @@ void LutDockerDock::exposureSliderReleased()
 void LutDockerDock::gammaValueChanged(double gamma)
 {
     if (m_canvas && !m_draggingSlider) {
+        KisSignalsBlocker blocker(m_canvas->viewManager()->canvasResourceProvider());
+        Q_UNUSED(blocker);
         m_canvas->viewManager()->canvasResourceProvider()->setHDRGamma(gamma);
         updateDisplaySettings();
     }

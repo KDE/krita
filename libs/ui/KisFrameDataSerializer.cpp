@@ -269,7 +269,7 @@ boost::optional<qreal> KisFrameDataSerializer::estimateFrameUniqueness(const Kis
                 quint8 *lhsDataPtr = lhsTile.data.data() + j * pixelSize;
                 quint8 *rhsDataPtr = rhsTile.data.data() + j * pixelSize;
 
-                if (std::memcmp(lhsDataPtr, rhsDataPtr, pixelSize) != 0) {
+                if (lhsDataPtr && rhsDataPtr && std::memcmp(lhsDataPtr, rhsDataPtr, pixelSize) != 0) {
                     numUniquePixels++;
                 }
                 numSampledPixels++;

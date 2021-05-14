@@ -614,7 +614,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop)
 void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 {
     if (preset == m_resourceProvider->currentPreset()) {
-
         if (preset == m_tabletToolMap[m_currTabletToolID].preset) {
             return;
         }
@@ -624,7 +623,6 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     m_presetConnections.clear();
 
     if (m_resourceProvider->currentPreset()) {
-
         m_resourceProvider->setPreviousPaintOpPreset(m_resourceProvider->currentPreset());
 
         if (m_optionWidget) {
@@ -685,6 +683,16 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     }
     else {
         setWidgetState(DISABLE_PATTERNSIZE);
+    }
+
+    if (preset->paintOp().id() == "mypaintbrush") {
+        setWidgetState(DISABLE_COMPOSITEOP);
+        if (m_resourceProvider->currentCompositeOp() != COMPOSITE_ERASE && m_resourceProvider->currentCompositeOp() != COMPOSITE_OVER) {
+            m_resourceProvider->setCurrentCompositeOp(COMPOSITE_OVER);
+        }
+    }
+    else {
+        setWidgetState(ENABLE_COMPOSITEOP);
     }
 }
 

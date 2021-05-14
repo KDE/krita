@@ -68,36 +68,44 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
 
     int channelToConvert = configuration->getInt("channelToConvert", 0);
 
-    QVector<int> channelOrder(3);
-    QVector<bool> channelFlip(3);
+    QVector<int> channelOrder(device->colorSpace()->channelCount());
+    QVector<bool> channelFlip(device->colorSpace()->channelCount());
     channelFlip.fill(false);
 
 
     int i = config->getInt("redSwizzle", 0);
-    if (i%2==1 || i==2) {
+    if (i % 2 == 1 || i == 2) {
         channelFlip[0] = true;
     }
-    if (i==3) {
+    if (i == 3) {
         channelFlip[0] = false;
     }
-    channelOrder[device->colorSpace()->channels().at(0)->displayPosition()] = qMax(i/2,0);
+
+    int displayPosition = device->colorSpace()->channels().at(0)->displayPosition();
+    channelOrder[displayPosition] = qMax(i/2,0);
 
     i = config->getInt("greenSwizzle", 2);
-    if (i%2==1 || i==2) {
+    if (i % 2 == 1 || i == 2) {
         channelFlip[1] = true;
     }
-    if (i==3) {
+    if (i == 3) {
         channelFlip[1] = false;
     }
-    channelOrder[device->colorSpace()->channels().at(1)->displayPosition()] = qMax(i/2,0);
+
+    displayPosition = device->colorSpace()->channels().at(1)->displayPosition();
+    channelOrder[displayPosition] = qMax(i/2,0);
+
     i = config->getInt("blueSwizzle", 4);
-    if (i%2==1 || i==2) {
+    if (i % 2 == 1 || i == 2) {
         channelFlip[2] = true;
     }
-    if (i==3) {
+    if (i == 3) {
         channelFlip[2] = false;
     }
-    channelOrder[device->colorSpace()->channels().at(2)->displayPosition()] = qMax(i/2,0);
+
+    displayPosition = device->colorSpace()->channels().at(2)->displayPosition();
+    channelOrder[displayPosition] = qMax(i / 2, 0);
+
     KisEdgeDetectionKernel::convertToNormalMap(device,
                                               rect,
                                               horizontalRadius,

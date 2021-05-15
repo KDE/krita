@@ -222,7 +222,7 @@ public:
     QVector<Qt::Key> debugPressedKeys() const;
 
     /**
-     * Kirta lost focus, it means that all the running actions should be ended
+     * Krita lost focus, it means that all the running actions should be ended
      * forcefully.
      */
     void lostFocusEvent(const QPointF &localPos);

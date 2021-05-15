@@ -958,7 +958,7 @@
 
 When loading old files Krita will try to adjust font size to the DPI of the current screen. If the file has been created on a different display, try adjusting this value manually.
 
-After saving the file in Kirta 5.0 at least once, no convertions will be needed anymore.</string>
+After saving the file in Krita 5.0 at least once, no convertions will be needed anymore.</string>
          </property>
          <property name="text">
           <string>Font DPI workaround</string>

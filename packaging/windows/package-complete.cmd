@@ -554,8 +554,10 @@ echo.
 echo Copying files...
 :: krita.exe
 copy %KRITA_INSTALL_DIR%\bin\krita.exe %pkg_root%\bin
+copy %KRITA_INSTALL_DIR%\bin\krita.com %pkg_root%\bin
 :: kritarunner.exe
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.exe %pkg_root%\bin
+copy %KRITA_INSTALL_DIR%\bin\kritarunner.com %pkg_root%\bin
 :: DLLs from bin/
 echo INFO: Copying all DLLs except Qt5* from bin/
 setlocal enableextensions enabledelayedexpansion
@@ -681,7 +683,9 @@ endlocal
 echo.
 echo Splitting debug info from binaries...
 call :split-debug "%pkg_root%\bin\krita.exe" bin\krita.exe
+call :split-debug "%pkg_root%\bin\krita.com" bin\krita.com
 call :split-debug "%pkg_root%\bin\kritarunner.exe" bin\kritarunner.exe
+call :split-debug "%pkg_root%\bin\kritarunner.com" bin\kritarunner.com
 call :split-debug "%pkg_root%\bin\gmic_krita_qt.exe" bin\gmic_krita_qt.exe
 setlocal enableextensions enabledelayedexpansion
 :: Find all DLLs

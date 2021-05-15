@@ -543,7 +543,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
         {QString("jp"), QStringLiteral("日本語")},
         {QString("zh"), QStringLiteral("中文 (简体)")},
         {QString("zh-tw"), QStringLiteral("中文 (台灣正體)")},
-        {QString("zh-hk"), QStringLiteral("香港廣東話")},
+        {QString("zh-hk"), QStringLiteral("廣東話 (香港)")},
     }};
 
     static const QString newsLangConfigName = QStringLiteral("FetchNewsLanguages");

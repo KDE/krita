@@ -681,6 +681,8 @@ endlocal
 echo.
 echo Splitting debug info from binaries...
 call :split-debug "%pkg_root%\bin\krita.exe" bin\krita.exe
+call :split-debug "%pkg_root%\bin\kritarunner.exe" bin\kritarunner.exe
+call :split-debug "%pkg_root%\bin\gmic_krita_qt.exe" bin\gmic_krita_qt.exe
 setlocal enableextensions enabledelayedexpansion
 :: Find all DLLs
 for /r "%pkg_root%" %%F in (*.dll) do (

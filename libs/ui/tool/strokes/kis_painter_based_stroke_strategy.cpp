@@ -420,6 +420,9 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
             indirect->setTemporaryCompositeOp(m_resources->compositeOpId());
             indirect->setTemporaryOpacity(m_resources->opacity());
             indirect->setTemporarySelection(m_activeSelection);
+
+            QBitArray channelLockFlags = m_resources->channelLockFlags();
+            indirect->setTemporaryChannelFlags(channelLockFlags);
         }
     }
 }

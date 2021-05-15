@@ -27,7 +27,7 @@ if(MINGW)
 else()
 	ExternalProject_Add( ext_boost
         	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	        URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.bz2
+            URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
         	URL_HASH SHA256=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee
 
         	CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${PREFIX_ext_boost} --with-libraries=system

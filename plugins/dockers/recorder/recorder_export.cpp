@@ -96,7 +96,7 @@ public:
             action->setToolTip(out);
         } else {
             ui->editFfmpegPath->setText(i18nc("This text is displayed instead of path to external tool in case of external tool is not found", "[NOT FOUND]"));
-            action->setToolTip(i18n("FFMpeg executable location couldn't be detected, please install it or select it's location manually"));
+            action->setToolTip(i18n("FFMpeg executable location couldn't be detected, please install it or select its location manually"));
         }
         ui->buttonExport->setEnabled(success);
     }

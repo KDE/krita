@@ -351,6 +351,8 @@ void KisAnimTimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
 
     if (row >= 0 && m_d->activeLayerIndex != row) {
         setData(index(row, 0), true, ActiveLayerRole);
+    } else if (row >= 0 ){
+        sigEnsureRowVisible(row);
     }
 }
 

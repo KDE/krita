@@ -12,6 +12,8 @@ namespace std {
 
 // from C++14
 
+// MSVC STL is C++14 by default
+
 #if __cplusplus < 201402L && (!defined(_MSC_VER))
 
 template <typename Cont>
@@ -46,6 +48,7 @@ using add_const_t    = typename add_const<T>::type;
 
 // NOTE: MSVC breaks the standard and defines these functions
 //       even when C++14 is explicitly selected
+// https://github.com/microsoft/STL/issues/1925
 
 #if (__cplusplus < 201703L) && (!defined(_MSC_VER))
 

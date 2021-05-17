@@ -9,7 +9,6 @@
 
 #include <QRect>
 #include "kis_types.h"
-#include "kis_image.h"
 #include "kis_default_bounds_base.h"
 
 class KisDefaultBounds;
@@ -24,7 +23,8 @@ typedef KisSharedPtr<KisWrapAroundBoundsWrapper> KisWrapAroundBoundsWrapperSP;
 class KRITAIMAGE_EXPORT KisDefaultBounds :  public KisDefaultBoundsBase
 {
 public:
-    KisDefaultBounds(KisImageWSP image = 0);
+    KisDefaultBounds();
+    KisDefaultBounds(KisImageWSP image);
     ~KisDefaultBounds() override;
 
     QRect bounds() const override;

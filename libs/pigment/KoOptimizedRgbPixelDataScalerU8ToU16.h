@@ -12,7 +12,11 @@
 #include "KoVcMultiArchBuildSupport.h"
 #include "kis_debug.h"
 
+#if defined(__arm__) || defined(_M_ARM)
 #ifdef HAVE_VC
+#include <immintrin.h>
+#endif
+#else //if it is not arm so we dont need to check VC dep
 #include <immintrin.h>
 #endif
 

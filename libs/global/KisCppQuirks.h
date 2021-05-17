@@ -44,6 +44,9 @@ using add_const_t    = typename add_const<T>::type;
 
 // from C++17
 
+// NOTE: MSVC breaks the standard and defines these functions
+//       even when C++14 is explicitly selected
+
 #if (__cplusplus < 201703L) && (!defined(_MSC_VER))
 
 template<typename...>

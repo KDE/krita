@@ -1317,21 +1317,24 @@ void KisAnimTimelineFramesView::dropEvent(QDropEvent *event)
 
 void KisAnimTimelineFramesView::wheelEvent(QWheelEvent *e)
 {
-    QModelIndex index = currentIndex();
-    int column= -1;
+    if (e->modifiers() & Qt::ShiftModifier)  {
+        
+        QModelIndex index = currentIndex();
+        int column= -1;
 
-    if (verticalHeader()->rect().contains(verticalHeader()->mapFromGlobal(e->globalPos()))) {
+        if (index.isValid()) {
+            column= index.column() + ((e->delta() > 0) ? 1 : -1);
+        }
+
+        if (column >= 0 && !m_d->dragInProgress) {
+            setCurrentIndex(m_d->model->index(index.row(), column));
+        }
+        
+    } else {
+        
         QTableView::wheelEvent(e);
-        return;
     }
-
-    if (index.isValid()) {
-        column= index.column() + ((e->delta() > 0) ? 1 : -1);
-    }
-
-    if (column >= 0 && !m_d->dragInProgress) {
-        setCurrentIndex(m_d->model->index(index.row(), column));
-    }
+    
 }
 
 void KisAnimTimelineFramesView::resizeEvent(QResizeEvent *event)

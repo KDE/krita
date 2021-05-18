@@ -24,9 +24,6 @@ class KRITAUI_EXPORT KisDisplayFilter : public QObject
 public:
     explicit KisDisplayFilter(QObject *parent = 0);
 
-    float exposure {1.0};
-    float gamma {2.2};
-
     virtual QString program() const = 0;
     virtual GLuint lutTexture() const = 0;
     virtual void filter(quint8 *pixels, quint32 numPixels) = 0;
@@ -39,7 +36,6 @@ public:
      * @return true if the shader should be recompiled
      */
     virtual bool updateShader() = 0;
-    virtual void updateProcessor() = 0;
 };
 
 

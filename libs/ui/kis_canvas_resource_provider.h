@@ -183,9 +183,6 @@ Q_SIGNALS:
     void sigGamutMaskPreviewUpdate();
     void sigGamutMaskDeactivated();
 
-    void sigHDRExposureChanged(float exposure);
-    void sigHDRGammaChanged(float exposure);
-
 private:
 
     KisViewManager * m_view;

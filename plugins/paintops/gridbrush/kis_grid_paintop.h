@@ -13,32 +13,12 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 #include <kis_color_option.h>
+#include <kis_gridop_option.h>
 
 #include "kis_grid_paintop_settings.h"
 
-
 class KisPainter;
 
-class KisGridProperties
-{
-public:
-    quint16 diameter;
-    quint16 gridWidth;
-    quint16 gridHeight;
-    qreal horizontalOffset;
-    qreal verticalOffset;
-    quint16 divisionLevel;
-    bool pressureDivision;
-    bool randomBorder;
-    qreal scale;
-    qreal vertBorder;
-    qreal horizBorder;
-
-    quint8 shape;
-public:
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
-    void writeOptionSetting(KisPropertiesConfigurationSP setting);
-};
 
 class KisGridPaintOp : public KisPaintOp
 {
@@ -63,7 +43,7 @@ private:
     qreal              m_xSpacing;
     qreal              m_ySpacing;
     qreal              m_spacing;
-    KisGridProperties   m_properties;
+    KisGridOpProperties   m_properties;
     KisColorProperties  m_colorProperties;
     KisNodeSP m_node;
 

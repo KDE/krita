@@ -41,11 +41,12 @@ KisGridPaintOp::KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter *
     , m_settings(static_cast<KisGridPaintOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
     , m_node(node)
 {
+
     m_properties.readOptionSetting(settings);
     m_colorProperties.fillProperties(settings);
 
-    m_xSpacing = m_properties.gridWidth * m_properties.scale;
-    m_ySpacing = m_properties.gridHeight * m_properties.scale;
+    m_xSpacing = m_properties.grid_width * m_properties.grid_scale;
+    m_ySpacing = m_properties.grid_height * m_properties.grid_scale;
     m_spacing = m_xSpacing;
 
     m_dab = source()->createCompositionSourceDevice();
@@ -75,28 +76,28 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
     m_dab->clear();
 
-    qreal gridWidth = m_properties.diameter * m_properties.scale * additionalScale;
-    qreal gridHeight = m_properties.diameter * m_properties.scale * additionalScale;
+    qreal gridWidth = m_properties.diameter * m_properties.grid_scale * additionalScale;
+    qreal gridHeight = m_properties.diameter * m_properties.grid_scale * additionalScale;
 
-    qreal cellWidth = m_properties.gridWidth * m_properties.scale * additionalScale;
-    qreal cellHeight = m_properties.gridHeight * m_properties.scale * additionalScale;
+    qreal cellWidth = m_properties.grid_width * m_properties.grid_scale * additionalScale;
+    qreal cellHeight = m_properties.grid_height * m_properties.grid_scale * additionalScale;
 
-    qreal horizontalOffset = m_properties.horizontalOffset;
-    qreal verticalOffset = m_properties.verticalOffset;
+    qreal horizontalOffset = m_properties.horizontal_offset;
+    qreal verticalOffset = m_properties.vertical_offset;
 
     int divide;
-    if (m_properties.pressureDivision) {
-        divide = m_properties.divisionLevel * info.pressure();
+    if (m_properties.grid_pressure_division) {
+        divide = m_properties.grid_division_level * info.pressure();
     }
     else {
-        divide = m_properties.divisionLevel;
+        divide = m_properties.grid_division_level;
     }
 
-    divide = qRound(m_properties.scale * divide);
+    divide = qRound(m_properties.grid_scale * divide);
 
     //Adjust the start position of the drawn grid to the top left of the brush instead of in the center
-    qreal posX = info.pos().x() - (gridWidth/2) + cellWidth/2;
-    qreal posY = info.pos().y() - (gridHeight/2) + cellHeight/2;
+    qreal posX = info.pos().x() - (gridWidth/2) + (cellWidth/2) - horizontalOffset;
+    qreal posY = info.pos().y() - (gridHeight/2) + (cellHeight/2) - verticalOffset;
 
     //Lock the grid alignment
     posX = posX - std::fmod(posX, cellWidth) + horizontalOffset;
@@ -116,9 +117,9 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
         colorSampler.reset(new KisCrossDeviceColorSampler(m_node->paintDevice(), color));
     }
 
-    qreal vertBorder = m_properties.vertBorder * additionalScale;
-    qreal horzBorder = m_properties.horizBorder * additionalScale;
-    if (m_properties.randomBorder) {
+    qreal vertBorder = m_properties.grid_vertical_border * additionalScale;
+    qreal horzBorder = m_properties.grid_horizontal_border * additionalScale;
+    if (m_properties.grid_random_border) {
         if (vertBorder == horzBorder) {
             vertBorder = horzBorder = vertBorder * randomSource->generateNormalized();
         }
@@ -188,7 +189,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
             }
 
             // paint some element
-            switch (m_properties.shape) {
+            switch (m_properties.grid_shape) {
             case 0: {
                 m_painter->paintEllipse(tile);
                 break;
@@ -244,28 +245,4 @@ KisSpacingInformation KisGridPaintOp::updateSpacingImpl(const KisPaintInformatio
 KisSpacingInformation KisGridPaintOp::computeSpacing(qreal lodScale) const
 {
     return KisSpacingInformation(m_spacing * lodScale);
-}
-
-void KisGridProperties::readOptionSetting(const KisPropertiesConfigurationSP setting)
-{
-    gridWidth = qMax(1, setting->getInt(GRID_WIDTH));
-    gridHeight = qMax(1, setting->getInt(GRID_HEIGHT));
-    diameter = setting->getInt(DIAMETER);
-    // If loading an old brush without a diameter set, set to grid_width as was the old logic
-    if (!diameter) {
-        diameter = gridWidth;
-    }
-    else {
-        diameter = qMax(1, setting->getInt(DIAMETER));
-    }
-    horizontalOffset = setting->getDouble(HORIZONTAL_OFFSET);
-    verticalOffset = setting->getDouble(VERTICAL_OFFSET);
-    divisionLevel = qMax(1, setting->getInt(GRID_DIVISION_LEVEL));
-    pressureDivision =  setting->getBool(GRID_PRESSURE_DIVISION);
-    randomBorder = setting->getBool(GRID_RANDOM_BORDER);
-    scale = qMax(0.1, setting->getDouble(GRID_SCALE));
-    vertBorder  = setting->getDouble(GRID_VERTICAL_BORDER);
-    horizBorder = setting->getDouble(GRID_HORIZONTAL_BORDER);
-
-    shape = setting->getInt(GRIDSHAPE_SHAPE);
 }

@@ -20,6 +20,7 @@ const QString GRID_SCALE = "Grid/scale";
 const QString GRID_VERTICAL_BORDER = "Grid/verticalBorder";
 const QString GRID_HORIZONTAL_BORDER = "Grid/horizontalBorder";
 const QString GRID_RANDOM_BORDER = "Grid/randomBorder";
+const QString GRID_SHAPE = "GridShape/shape";
 
 
 class KisGridOpOptionsWidget;
@@ -75,7 +76,7 @@ struct KisGridOpProperties : public KisPaintopPropertiesBase
     qreal grid_vertical_border;
     qreal grid_horizontal_border;
     bool grid_random_border;
-
+    int grid_shape;
 
     void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override {
 
@@ -97,6 +98,7 @@ struct KisGridOpProperties : public KisPaintopPropertiesBase
         grid_vertical_border = setting->getDouble(GRID_VERTICAL_BORDER);
         grid_horizontal_border = setting->getDouble(GRID_HORIZONTAL_BORDER);
         grid_random_border = setting->getBool(GRID_RANDOM_BORDER);
+        grid_shape = setting->getInt(GRID_SHAPE);
     }
 
     void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override {
@@ -111,6 +113,7 @@ struct KisGridOpProperties : public KisPaintopPropertiesBase
         setting->setProperty(GRID_VERTICAL_BORDER, grid_vertical_border);
         setting->setProperty(GRID_HORIZONTAL_BORDER, grid_horizontal_border);
         setting->setProperty(GRID_RANDOM_BORDER, grid_random_border);
+        setting->setProperty(GRID_SHAPE, grid_shape);
     }
 };
 

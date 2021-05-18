@@ -54,7 +54,7 @@ bool KisGridPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt
 {
     KisGridOpProperties option;
     option.readOptionSetting(this);
-    bool ignoreEvent = false;
+    bool eventIgnored = true;
     qreal newHorizontalOffset = std::fmod(info.pos().x() + option.grid_width/2.0, (float)option.grid_width);
     qreal newVerticalOffset = std::fmod(info.pos().y() + option.grid_height/2.0, (float)option.grid_height);
 
@@ -73,9 +73,9 @@ bool KisGridPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt
         option.horizontal_offset = newHorizontalOffset * option.grid_width;
         option.vertical_offset = newVerticalOffset * option.grid_height;
         option.writeOptionSetting(this);
-        ignoreEvent = true;
+        eventIgnored = false;
     }
-    return ignoreEvent;
+    return eventIgnored;
 }
 
 bool KisGridPaintOpSettings::mouseReleaseEvent()

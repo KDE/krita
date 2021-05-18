@@ -5,8 +5,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef _KIS_STOP_GRADIENT_SLIDER_WIDGET_H_
-#define _KIS_STOP_GRADIENT_SLIDER_WIDGET_H_
+#ifndef _KIS_STOP_GRADIENT_SLIDER_H_
+#define _KIS_STOP_GRADIENT_SLIDER_H_
 
 #include <QWidget>
 #include <QMouseEvent>
@@ -15,12 +15,12 @@
 #include <KoStopGradient.h>
 #include <resources/KoStopGradient.h>
 
-class KisStopGradientSliderWidget : public QWidget
+class KisStopGradientSlider : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisStopGradientSliderWidget(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    KisStopGradientSlider(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
 public:
     void paintEvent(QPaintEvent *) override;

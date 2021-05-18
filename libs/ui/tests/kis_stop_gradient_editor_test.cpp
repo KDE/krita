@@ -12,7 +12,7 @@
 #include <QLinearGradient>
 
 #include "kis_debug.h"
-#include "kis_stopgradient_editor.h"
+#include "KisStopGradientEditor.h"
 
 
 void KisStopGradientEditorTest::test()

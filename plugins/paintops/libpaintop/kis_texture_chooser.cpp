@@ -8,7 +8,7 @@
 #include "kis_texture_option.h"
 #include <KoCompositeOpRegistry.h>
 
-#include "widgets/kis_gradient_chooser.h"
+#include <KisGradientChooser.h>
 
 KisTextureChooser::KisTextureChooser(KisBrushTextureFlags flags, QWidget *parent)
     : QWidget(parent)

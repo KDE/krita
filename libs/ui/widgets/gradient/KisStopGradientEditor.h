@@ -5,8 +5,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef _KIS_STOPGRADIENT_EDITOR_H_
-#define _KIS_STOPGRADIENT_EDITOR_H_
+#ifndef _KIS_STOP_GRADIENT_EDITOR_H_
+#define _KIS_STOP_GRADIENT_EDITOR_H_
 
 #include "kritaui_export.h"
 #include "ui_wdgstopgradienteditor.h"

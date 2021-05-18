@@ -5,8 +5,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef _KIS_GRADIENT_SLIDER_WIDGET_H_
-#define _KIS_GRADIENT_SLIDER_WIDGET_H_
+#ifndef _KIS_SEGMENT_GRADIENT_SLIDER_H_
+#define _KIS_SEGMENT_GRADIENT_SLIDER_H_
 
 #include <QWidget>
 #include <QMouseEvent>
@@ -19,17 +19,17 @@ class QMenu;
 
 class KoGradientSegment;
 
-#include "kritawidgets_export.h"
+#include "kritaui_export.h"
 
 /**
- * @brief The KisGradientSliderWidget class makes it possible to edit gradients.
+ * @brief The KisSegmentGradientSlider class makes it possible to edit gradients.
  */
-class KRITAWIDGETS_EXPORT KisGradientSliderWidget : public QWidget
+class KRITAUI_EXPORT KisSegmentGradientSlider : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    KisSegmentGradientSlider(QWidget *parent = 0, const char* name = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
 public:
     void paintEvent(QPaintEvent *) override;

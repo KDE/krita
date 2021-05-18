@@ -168,7 +168,7 @@
   <customwidget>
    <class>KisStopGradientEditor</class>
    <extends>QWidget</extends>
-   <header>kis_stopgradient_editor.h</header>
+   <header>KisStopGradientEditor.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

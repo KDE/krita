@@ -4,8 +4,8 @@
     SPDX-FileCopyrightText: none
     SPDX-License-Identifier: GPL-3.0-or-later
   </author>
- <class>KisWdgAutogradient</class>
- <widget class="QWidget" name="KisWdgAutogradient">
+ <class>KisWdgSegmentGradientEditor</class>
+ <widget class="QWidget" name="KisWdgSegmentGradientEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -36,7 +36,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisGradientSliderWidget" name="gradientSlider" native="true">
+    <widget class="KisSegmentGradientSlider" name="gradientSlider" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -463,9 +463,9 @@
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KisGradientSliderWidget</class>
+   <class>KisSegmentGradientSlider</class>
    <extends/>
-   <header>KisGradientSliderWidget.h</header>
+   <header>KisSegmentGradientSlider.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -5,8 +5,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "widgets/kis_gradient_chooser.h"
-
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -30,9 +28,9 @@
 #include <kis_icon.h>
 #include <kis_config.h>
 #include <kis_signals_blocker.h>
-#include "kis_autogradient.h"
+#include "KisSegmentGradientEditor.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_stopgradient_editor.h"
+#include "KisStopGradientEditor.h"
 #include "KisPopupButton.h"
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisGlobalResourcesInterface.h>
@@ -43,6 +41,8 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <ksqueezedtextlabel.h>
+
+#include "KisGradientChooser.h"
 
 class KisCustomGradientDialog : public KoDialog
 {
@@ -79,7 +79,7 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient,
     else {
         KoSegmentGradientSP segmentedGradient = gradient.dynamicCast<KoSegmentGradient>();
         if (segmentedGradient) {
-            m_page = new KisAutogradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"), canvasResourcesInterface);
+            m_page = new KisSegmentGradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"), canvasResourcesInterface);
         }
     }
     setCaption(m_page->windowTitle());
@@ -692,4 +692,4 @@ void KisGradientChooser::Private::updateContainerSliderItemSizeCustom()
                 );
 }
 
-#include "kis_gradient_chooser.moc"
+#include "KisGradientChooser.moc"

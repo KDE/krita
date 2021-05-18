@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_autogradient.h"
 #include <QPainter>
 #include <QComboBox>
 #include <QSpinBox>
@@ -16,14 +15,16 @@
 
 #include "kis_debug.h"
 
-#include "KisGradientSliderWidget.h"
+#include "KisSegmentGradientSlider.h"
 
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
 
-/****************************** KisAutogradient ******************************/
+#include "KisSegmentGradientEditor.h"
 
-KisAutogradientEditor::KisAutogradientEditor(QWidget *parent)
+/****************************** KisSegmentGradientEditor ******************************/
+
+KisSegmentGradientEditor::KisSegmentGradientEditor(QWidget *parent)
     : QWidget(parent)
     , m_autogradientResource(nullptr)
     , m_canvasResourcesInterface(nullptr)
@@ -53,8 +54,8 @@ KisAutogradientEditor::KisAutogradientEditor(QWidget *parent)
     setGradient(0);
 }
 
-KisAutogradientEditor::KisAutogradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
-    : KisAutogradientEditor(parent)
+KisSegmentGradientEditor::KisSegmentGradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+    : KisSegmentGradientEditor(parent)
 {
     m_canvasResourcesInterface = canvasResourcesInterface;
     setObjectName(name);
@@ -62,18 +63,18 @@ KisAutogradientEditor::KisAutogradientEditor(KoSegmentGradientSP gradient, QWidg
     setGradient(gradient);
 }
 
-void KisAutogradientEditor::activate()
+void KisSegmentGradientEditor::activate()
 {
     paramChanged();
 }
 
-void KisAutogradientEditor::setCompactMode(bool value)
+void KisSegmentGradientEditor::setCompactMode(bool value)
 {
     label->setVisible(!value);
     nameedit->setVisible(!value);
 }
 
-void KisAutogradientEditor::setGradient(KoSegmentGradientSP gradient)
+void KisSegmentGradientEditor::setGradient(KoSegmentGradientSP gradient)
 {
     m_autogradientResource = gradient;
     setEnabled(m_autogradientResource);
@@ -87,24 +88,24 @@ void KisAutogradientEditor::setGradient(KoSegmentGradientSP gradient)
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+void KisSegmentGradientEditor::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     m_canvasResourcesInterface = canvasResourcesInterface;
 }
 
-KoCanvasResourcesInterfaceSP KisAutogradientEditor::canvasResourcesInterface() const
+KoCanvasResourcesInterfaceSP KisSegmentGradientEditor::canvasResourcesInterface() const
 {
     return m_canvasResourcesInterface;
 }
 
-void KisAutogradientEditor::disableTransparentCheckboxes() {
+void KisSegmentGradientEditor::disableTransparentCheckboxes() {
     leftForegroundTransparent->setEnabled(false);
     leftBackgroundTransparent->setEnabled(false);
     rightForegroundTransparent->setEnabled(false);
     rightBackgroundTransparent->setEnabled(false);
 }
 
-void KisAutogradientEditor::slotSelectedSegment(KoGradientSegment* segment)
+void KisSegmentGradientEditor::slotSelectedSegment(KoGradientSegment* segment)
 {
 
     leftColorButton->setColor(segment->startColor());
@@ -160,13 +161,13 @@ void KisAutogradientEditor::slotSelectedSegment(KoGradientSegment* segment)
     paramChanged();
 }
 
-void KisAutogradientEditor::slotChangedSegment(KoGradientSegment*)
+void KisSegmentGradientEditor::slotChangedSegment(KoGradientSegment*)
 {
     paramChanged();
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::slotChangedInterpolation(int type)
+void KisSegmentGradientEditor::slotChangedInterpolation(int type)
 {
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment)
@@ -177,7 +178,7 @@ void KisAutogradientEditor::slotChangedInterpolation(int type)
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::slotChangedColorInterpolation(int type)
+void KisSegmentGradientEditor::slotChangedColorInterpolation(int type)
 {
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment)
@@ -188,7 +189,7 @@ void KisAutogradientEditor::slotChangedColorInterpolation(int type)
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::slotChangedLeftColor(const KoColor& color)
+void KisSegmentGradientEditor::slotChangedLeftColor(const KoColor& color)
 {
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
@@ -202,7 +203,7 @@ void KisAutogradientEditor::slotChangedLeftColor(const KoColor& color)
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::slotChangedRightColor(const KoColor& color)
+void KisSegmentGradientEditor::slotChangedRightColor(const KoColor& color)
 {
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
@@ -216,7 +217,7 @@ void KisAutogradientEditor::slotChangedRightColor(const KoColor& color)
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::slotChangedLeftOpacity(int value)
+void KisSegmentGradientEditor::slotChangedLeftOpacity(int value)
 {
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
@@ -230,7 +231,7 @@ void KisAutogradientEditor::slotChangedLeftOpacity(int value)
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::slotChangedRightOpacity(int value)
+void KisSegmentGradientEditor::slotChangedRightOpacity(int value)
 {
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
@@ -244,7 +245,7 @@ void KisAutogradientEditor::slotChangedRightOpacity(int value)
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::slotChangedLeftType(QAbstractButton* button, bool checked)
+void KisSegmentGradientEditor::slotChangedLeftType(QAbstractButton* button, bool checked)
 {
     if (!checked) { //Radio buttons, so we only care about the one that was checked, not the one unchecked
         return;
@@ -295,7 +296,7 @@ void KisAutogradientEditor::slotChangedLeftType(QAbstractButton* button, bool ch
 
 }
 
-void KisAutogradientEditor::slotChangedRightType(QAbstractButton* button, bool checked)
+void KisSegmentGradientEditor::slotChangedRightType(QAbstractButton* button, bool checked)
 {
     if (!checked) { //Radio buttons, so we only care about the one that was checked, not the one unchecked
         return;
@@ -343,7 +344,7 @@ void KisAutogradientEditor::slotChangedRightType(QAbstractButton* button, bool c
     slotChangedRightColor(color);
 }
 
-void KisAutogradientEditor::slotChangedLeftTypeTransparent(bool checked)
+void KisSegmentGradientEditor::slotChangedLeftTypeTransparent(bool checked)
 {
     if (leftColorRadioButton->isChecked()) { //shouldn't be able to check/uncheck in this state, but just in case
         return;
@@ -371,7 +372,7 @@ void KisAutogradientEditor::slotChangedLeftTypeTransparent(bool checked)
     }
 }
 
-void KisAutogradientEditor::slotChangedRightTypeTransparent(bool checked)
+void KisSegmentGradientEditor::slotChangedRightTypeTransparent(bool checked)
 {
     if (rightColorRadioButton->isChecked()) { //shouldn't be able to check/uncheck in this state, but just in case
         return;
@@ -399,13 +400,13 @@ void KisAutogradientEditor::slotChangedRightTypeTransparent(bool checked)
     }
 }
 
-void KisAutogradientEditor::slotChangedName()
+void KisSegmentGradientEditor::slotChangedName()
 {
     m_autogradientResource->setName(nameedit->text());
     emit sigGradientChanged();
 }
 
-void KisAutogradientEditor::paramChanged()
+void KisSegmentGradientEditor::paramChanged()
 {
     m_autogradientResource->updatePreview();
 }

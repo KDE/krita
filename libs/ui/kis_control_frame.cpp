@@ -41,7 +41,7 @@
 
 #include "widgets/kis_iconwidget.h"
 
-#include "widgets/kis_gradient_chooser.h"
+#include "widgets/gradient/KisGradientChooser.h"
 #include "KisViewManager.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"

@@ -39,15 +39,12 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="KisStopGradientSliderWidget" name="gradientSlider" native="true">
+      <widget class="KisStopGradientSlider" name="gradientSlider" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>1</verstretch>
         </sizepolicy>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
        </property>
       </widget>
      </item>
@@ -164,9 +161,9 @@
    <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
-   <class>KisStopGradientSliderWidget</class>
+   <class>KisStopGradientSlider</class>
    <extends>QWidget</extends>
-   <header>kis_stopgradient_slider_widget.h</header>
+   <header>KisStopGradientSlider.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

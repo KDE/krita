@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "widgets/kis_stopgradient_slider_widget.h"
 #include <QWindow>
 #include <QPainter>
 #include <QPixmap>
@@ -21,7 +20,9 @@
 #include "kis_debug.h"
 #include "krita_utils.h"
 
-KisStopGradientSliderWidget::KisStopGradientSliderWidget(QWidget *parent, Qt::WindowFlags f)
+#include "KisStopGradientSlider.h"
+
+KisStopGradientSlider::KisStopGradientSlider(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
     , m_selectedStop(0)
     , m_drag(0)
@@ -41,20 +42,20 @@ KisStopGradientSliderWidget::KisStopGradientSliderWidget(QWidget *parent, Qt::Wi
     updateHandleSize();
 }
 
-void KisStopGradientSliderWidget::updateHandleSize()
+void KisStopGradientSlider::updateHandleSize()
 {
     QFontMetrics fm(font());
     const int h = fm.height();
     m_handleSize = QSize(0.34 * h, h);
 }
 
-int KisStopGradientSliderWidget::handleClickTolerance() const
+int KisStopGradientSlider::handleClickTolerance() const
 {
     // the size of the default text!
     return m_handleSize.width();
 }
 
-void KisStopGradientSliderWidget::setGradientResource(KoStopGradientSP gradient)
+void KisStopGradientSlider::setGradientResource(KoStopGradientSP gradient)
 {
     m_gradient = gradient ? gradient : m_defaultGradient;
 
@@ -67,7 +68,7 @@ void KisStopGradientSliderWidget::setGradientResource(KoStopGradientSP gradient)
 
 }
 
-void KisStopGradientSliderWidget::paintHandle(qreal position, const QColor &color, bool isSelected, QString text, QPainter *painter)
+void KisStopGradientSlider::paintHandle(qreal position, const QColor &color, bool isSelected, QString text, QPainter *painter)
 {
     const QRect handlesRect = this->handlesStripeRect();
 
@@ -97,7 +98,7 @@ void KisStopGradientSliderWidget::paintHandle(qreal position, const QColor &colo
     painter->drawText(textPos, text);
 }
 
-void KisStopGradientSliderWidget::paintEvent(QPaintEvent* pe)
+void KisStopGradientSlider::paintEvent(QPaintEvent* pe)
 {
     QWidget::paintEvent(pe);
     QPainter painter(this);
@@ -147,7 +148,7 @@ int findNearestHandle(qreal t, const qreal tolerance, const QList<KoGradientStop
 }
 
 
-void KisStopGradientSliderWidget::mousePressEvent(QMouseEvent * e)
+void KisStopGradientSlider::mousePressEvent(QMouseEvent * e)
 {
     if (!allowedClickRegion(handleClickTolerance()).contains(e->pos())) {
         QWidget::mousePressEvent(e);
@@ -180,7 +181,7 @@ void KisStopGradientSliderWidget::mousePressEvent(QMouseEvent * e)
     updateCursor(e->pos());
 }
 
-void KisStopGradientSliderWidget::mouseReleaseEvent(QMouseEvent * e)
+void KisStopGradientSlider::mouseReleaseEvent(QMouseEvent * e)
 {
      Q_UNUSED(e);
      m_drag = false;
@@ -200,7 +201,7 @@ int getNewInsertPosition(const KoGradientStop &stop, const QList<KoGradientStop>
     return result;
 }
 
-void KisStopGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
+void KisStopGradientSlider::mouseMoveEvent(QMouseEvent * e)
 {
     updateCursor(e->pos());
 
@@ -245,7 +246,7 @@ void KisStopGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
 
 }
 
-void KisStopGradientSliderWidget::updateCursor(const QPoint &pos)
+void KisStopGradientSlider::updateCursor(const QPoint &pos)
 {
     const bool isInAllowedRegion =
             allowedClickRegion(handleClickTolerance()).contains(pos);
@@ -271,7 +272,7 @@ void KisStopGradientSliderWidget::updateCursor(const QPoint &pos)
     }
 }
 
-void KisStopGradientSliderWidget::insertStop(double t)
+void KisStopGradientSlider::insertStop(double t)
 {
     KIS_ASSERT_RECOVER(t >= 0 && t <= 1.0 ) {
         t = qBound(0.0, t, 1.0);
@@ -292,24 +293,24 @@ void KisStopGradientSliderWidget::insertStop(double t)
     emit sigSelectedStop(m_selectedStop);
 }
 
-QRect KisStopGradientSliderWidget::sliderRect() const
+QRect KisStopGradientSlider::sliderRect() const
 {
     return QRect(QPoint(), size()).adjusted(m_handleSize.width(), 1, -m_handleSize.width(), -1);
 }
 
-QRect KisStopGradientSliderWidget::gradientStripeRect() const
+QRect KisStopGradientSlider::gradientStripeRect() const
 {
     const QRect rc = sliderRect();
     return rc.adjusted(0, 0, 0, -m_handleSize.height());
 }
 
-QRect KisStopGradientSliderWidget::handlesStripeRect() const
+QRect KisStopGradientSlider::handlesStripeRect() const
 {
     const QRect rc = sliderRect();
     return rc.adjusted(0, rc.height() - m_handleSize.height(), 0, 0);
 }
 
-QRegion KisStopGradientSliderWidget::allowedClickRegion(int tolerance) const
+QRegion KisStopGradientSlider::allowedClickRegion(int tolerance) const
 {
     QRegion result;
     result += sliderRect();
@@ -317,12 +318,12 @@ QRegion KisStopGradientSliderWidget::allowedClickRegion(int tolerance) const
     return result;
 }
 
-int KisStopGradientSliderWidget::selectedStop()
+int KisStopGradientSlider::selectedStop()
 {
     return m_selectedStop;
 }
 
-void KisStopGradientSliderWidget::setSelectedStop(int selected)
+void KisStopGradientSlider::setSelectedStop(int selected)
 {
     m_selectedStop = selected;
     emit sigSelectedStop(m_selectedStop);
@@ -330,7 +331,7 @@ void KisStopGradientSliderWidget::setSelectedStop(int selected)
     update();
 }
 
-int KisStopGradientSliderWidget::minimalHeight() const
+int KisStopGradientSlider::minimalHeight() const
 {
     QFontMetrics fm(font());
     const int h = fm.height();
@@ -341,13 +342,13 @@ int KisStopGradientSliderWidget::minimalHeight() const
     return sz.height() + m_handleSize.height();
 }
 
-QSize KisStopGradientSliderWidget::sizeHint() const
+QSize KisStopGradientSlider::sizeHint() const
 {
     const int h = minimalHeight();
     return QSize(2 * h, h);
 }
 
-QSize KisStopGradientSliderWidget::minimumSizeHint() const
+QSize KisStopGradientSlider::minimumSizeHint() const
 {
     const int h = minimalHeight();
     return QSize(h, h);

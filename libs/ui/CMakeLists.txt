@@ -93,7 +93,6 @@ set(kritaui_LIB_SRCS
     brushhud/kis_brush_hud_properties_config.cpp
 
     kis_aspect_ratio_locker.cpp
-    kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
@@ -159,10 +158,8 @@ set(kritaui_LIB_SRCS
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp
-    kis_stopgradient_editor.cpp
     KisWelcomePageWidget.cpp
     KisChangeCloneLayersCommand.cpp
-    KisGenericGradientEditor.cpp
 
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
@@ -237,7 +234,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_image_from_clipboard_widget.cpp
     widgets/kis_double_widget.cc
     widgets/kis_filter_selector_widget.cc
-    widgets/kis_gradient_chooser.cc
     widgets/kis_iconwidget.cc
     widgets/kis_mask_widgets.cpp
     widgets/kis_meta_data_merge_strategy_chooser_widget.cc
@@ -272,7 +268,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_label_button.cpp
     widgets/kis_layer_filter_widget.cpp
     widgets/kis_elided_label.cpp
-    widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_preset_live_preview_view.cpp
     widgets/KisScreenColorSampler.cpp
     widgets/KoDualColorButton.cpp
@@ -282,6 +277,14 @@ set(kritaui_LIB_SRCS
     widgets/KisMemoryReportButton.cpp
     widgets/KisDitherWidget.cpp
     widgets/KisWarningWidget.cpp
+
+    # Gradient related widgets
+    widgets/gradient/KisStopGradientEditor.cpp
+    widgets/gradient/KisSegmentGradientEditor.cpp
+    widgets/gradient/KisStopGradientSlider.cpp
+    widgets/gradient/KisSegmentGradientSlider.cpp
+    widgets/gradient/KisGradientChooser.cpp
+    widgets/gradient/KisGenericGradientEditor.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp
@@ -529,7 +532,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KisDitherWidget.ui
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
-    forms/wdgautogradient.ui
+    forms/wdgsegmentgradienteditor.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
     forms/wdggenerators.ui
@@ -679,6 +682,7 @@ target_include_directories(kritaui
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tool>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets/gradient>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/input/wintab>
 )
 

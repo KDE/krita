@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "KisGradientSliderWidget.h"
+#include "KisSegmentGradientSlider.h"
 #include <QPainter>
 #include <QContextMenuEvent>
 #include <QPixmap>
@@ -24,7 +24,7 @@
 #define HANDLE_SIZE 10
 #define MIN_HEIGHT 60
 
-KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, Qt::WindowFlags f)
+KisSegmentGradientSlider::KisSegmentGradientSlider(QWidget *parent, const char* name, Qt::WindowFlags f)
         : QWidget(parent, f),
         m_currentSegment(0),
         m_selectedSegment(0),
@@ -44,7 +44,7 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
     m_segmentMenu->addAction(m_removeSegmentAction);
 }
 
-void KisGradientSliderWidget::setGradientResource(KoSegmentGradientSP agr)
+void KisSegmentGradientSlider::setGradientResource(KoSegmentGradientSP agr)
 {
     m_autogradientResource = agr;
     m_selectedSegment = m_autogradientResource->segmentAt(0.0);
@@ -53,7 +53,7 @@ void KisGradientSliderWidget::setGradientResource(KoSegmentGradientSP agr)
 
 
 
-void KisGradientSliderWidget::paintSegmentHandle(int position, const QString text, const QPoint& textPos, QPainter& painter)
+void KisSegmentGradientSlider::paintSegmentHandle(int position, const QString text, const QPoint& textPos, QPainter& painter)
 {
     QPolygon triangle(3);
     triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
@@ -63,7 +63,7 @@ void KisGradientSliderWidget::paintSegmentHandle(int position, const QString tex
     painter.drawText(textPos, text);
 }
 
-void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
+void KisSegmentGradientSlider::paintEvent(QPaintEvent* pe)
 {
     QWidget::paintEvent(pe);
     QPainter painter(this);
@@ -110,7 +110,7 @@ void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
     }
 }
 
-void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
+void KisSegmentGradientSlider::mousePressEvent(QMouseEvent * e)
 {
     if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN) || e-> button() != Qt::LeftButton) {
         QWidget::mousePressEvent(e);
@@ -159,13 +159,13 @@ void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
     repaint();
 }
 
-void KisGradientSliderWidget::mouseReleaseEvent(QMouseEvent * e)
+void KisSegmentGradientSlider::mouseReleaseEvent(QMouseEvent * e)
 {
     Q_UNUSED(e);
     m_drag = NO_DRAG;
 }
 
-void KisGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
+void KisSegmentGradientSlider::mouseMoveEvent(QMouseEvent * e)
 {
     if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN)) {
         QWidget::mouseMoveEvent(e);
@@ -191,34 +191,34 @@ void KisGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
     repaint();
 }
 
-void KisGradientSliderWidget::contextMenuEvent(QContextMenuEvent * e)
+void KisSegmentGradientSlider::contextMenuEvent(QContextMenuEvent * e)
 {
     m_removeSegmentAction->setEnabled(m_autogradientResource->removeSegmentPossible());
     m_segmentMenu->popup(e->globalPos());
 }
 
-void KisGradientSliderWidget::slotSplitSegment()
+void KisSegmentGradientSlider::slotSplitSegment()
 {
     m_autogradientResource->splitSegment(m_selectedSegment);
     emit sigSelectedSegment(m_selectedSegment);
     repaint();
 }
 
-void KisGradientSliderWidget::slotDuplicateSegment()
+void KisSegmentGradientSlider::slotDuplicateSegment()
 {
     m_autogradientResource->duplicateSegment(m_selectedSegment);
     emit sigSelectedSegment(m_selectedSegment);
     repaint();
 }
 
-void KisGradientSliderWidget::slotMirrorSegment()
+void KisSegmentGradientSlider::slotMirrorSegment()
 {
     m_autogradientResource->mirrorSegment(m_selectedSegment);
     emit sigSelectedSegment(m_selectedSegment);
     repaint();
 }
 
-void KisGradientSliderWidget::slotRemoveSegment()
+void KisSegmentGradientSlider::slotRemoveSegment()
 {
     m_selectedSegment = m_autogradientResource->removeSegment(m_selectedSegment);
     emit sigSelectedSegment(m_selectedSegment);

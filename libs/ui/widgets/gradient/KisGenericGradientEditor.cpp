@@ -16,9 +16,9 @@
 
 #include <KoStopGradient.h>
 #include <KoSegmentGradient.h>
-#include <kis_stopgradient_editor.h>
-#include <kis_autogradient.h>
-#include <kis_gradient_chooser.h>
+#include <KisStopGradientEditor.h>
+#include <KisSegmentGradientEditor.h>
+#include <KisGradientChooser.h>
 #include <kis_icon_utils.h>
 #include <KisGradientConversion.h>
 #include <kis_signals_blocker.h>
@@ -333,11 +333,11 @@ void KisGenericGradientEditor::setGradient(KoAbstractGradientSP newGradient)
                 new KisStopGradientEditor(m_d->gradient.dynamicCast<KoStopGradient>(), nullptr, "", "", m_d->canvasResourcesInterface);
         }
     } else if (m_d->gradient.dynamicCast<KoSegmentGradient>()) {
-        if (dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)) {
-            dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)->setGradient(m_d->gradient.dynamicCast<KoSegmentGradient>());
+        if (dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)) {
+            dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)->setGradient(m_d->gradient.dynamicCast<KoSegmentGradient>());
         } else {
             newGradientEditorWidget =
-                new KisAutogradientEditor(m_d->gradient.dynamicCast<KoSegmentGradient>(), nullptr, "", "", m_d->canvasResourcesInterface);
+                new KisSegmentGradientEditor(m_d->gradient.dynamicCast<KoSegmentGradient>(), nullptr, "", "", m_d->canvasResourcesInterface);
         }
     }
 
@@ -350,7 +350,7 @@ void KisGenericGradientEditor::setGradient(KoAbstractGradientSP newGradient)
         if (dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)) {
             dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientPresetChooserMode);
         } else {
-            dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientPresetChooserMode);
+            dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientPresetChooserMode);
         }
         if (oldGradientEditorWidget) {
             setUpdatesEnabled(false);
@@ -382,8 +382,8 @@ void KisGenericGradientEditor::setCanvasResourcesInterface(KoCanvasResourcesInte
 
     if (dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)) {
         dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)->setCanvasResourcesInterface(m_d->canvasResourcesInterface);
-    } else if (dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)) {
-        dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)->setCanvasResourcesInterface(m_d->canvasResourcesInterface);
+    } else if (dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)) {
+        dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)->setCanvasResourcesInterface(m_d->canvasResourcesInterface);
     }
 
     m_d->widgetGradientPresetChooser->setCanvasResourcesInterface(newCanvasResourcesInterface);
@@ -449,7 +449,7 @@ void KisGenericGradientEditor::setCompactGradientEditorMode(bool compact)
 
 void KisGenericGradientEditor::updateConvertGradientButton()
 {
-    bool isSegmentGradient = dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor);
+    bool isSegmentGradient = dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor);
 
     m_d->buttonConvertGradient->setVisible(!m_d->compactMode && m_d->isConvertGradientButtonVisible);
     m_d->labelConvertGradientWarning->setVisible(!m_d->compactMode && m_d->isConvertGradientButtonVisible && isSegmentGradient);
@@ -534,8 +534,8 @@ void KisGenericGradientEditor::updateGradientEditor()
 {
     if (dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)) {
         dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientEditorMode);
-    } else if (dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)) {
-        dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientEditorMode);
+    } else if (dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)) {
+        dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientEditorMode);
     }
 }
 

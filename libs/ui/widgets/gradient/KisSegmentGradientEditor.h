@@ -5,23 +5,23 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef _KIS_AUTOGRADIENT_H_
-#define _KIS_AUTOGRADIENT_H_
+#ifndef _KIS_SEGMENT_GRADIENT_EDITOR_H_
+#define _KIS_SEGMENT_GRADIENT_EDITOR_H_
 
 #include <kritaui_export.h>
 #include <KoSegmentGradient.h>
 
-#include "ui_wdgautogradient.h"
+#include "ui_wdgsegmentgradienteditor.h"
 
 class KoGradientSegment;
 
-class KRITAUI_EXPORT KisAutogradientEditor : public QWidget, public Ui::KisWdgAutogradient
+class KRITAUI_EXPORT KisSegmentGradientEditor : public QWidget, public Ui::KisWdgSegmentGradientEditor
 {
     Q_OBJECT
 
 public:
-    KisAutogradientEditor(QWidget *parent);
-    KisAutogradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    KisSegmentGradientEditor(QWidget *parent);
+    KisSegmentGradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     void activate();
 

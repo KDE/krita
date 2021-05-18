@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_stopgradient_editor.h"
 #include <QPainter>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
@@ -21,6 +20,8 @@
 
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
+
+#include "KisStopGradientEditor.h"
 
 /****************************** KisStopGradientEditor ******************************/
 

@@ -13,7 +13,7 @@
 #include <KoCheckerBoardPainter.h>
 #include <KoResource.h>
 #include <resources/KoAbstractGradient.h>
-#include "kis_gradient_chooser.h"
+#include <KisGradientChooser.h>
 
 KisCmbGradient::KisCmbGradient(QWidget *parent)
     : KisPopupButton(parent)

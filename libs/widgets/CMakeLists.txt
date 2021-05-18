@@ -53,7 +53,6 @@ set(kritawidgets_LIB_SRCS
     KoAnchorSelectionWidget.cpp
 
     KisGradientSlider.cpp
-    KisGradientSliderWidget.cpp
 
     kis_color_input.cpp
 

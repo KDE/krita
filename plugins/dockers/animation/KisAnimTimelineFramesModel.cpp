@@ -329,7 +329,7 @@ void KisAnimTimelineFramesModel::processUpdateQueue()
 }
 
 void KisAnimTimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
-{
+{    
     if (!node) {
         m_d->activeLayerIndex = -1;
         return;
@@ -341,7 +341,9 @@ void KisAnimTimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
         // when views get activated while Krita is closing down.
         return;
     }
-
+    
+    int lastActiveLayerIndex = m_d->activeLayerIndex;
+    const bool prevActiveWasPinned = headerData(m_d->activeLayerIndex, Qt::Vertical, PinnedToTimelineRole).toBool();
     m_d->converter->updateActiveDummy(dummy);
 
     const int row = m_d->converter->rowForDummy(dummy);
@@ -353,7 +355,19 @@ void KisAnimTimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
         setData(index(row, 0), true, ActiveLayerRole);
     } else if (row >= 0 ){
         sigEnsureRowVisible(row);
+        
+        // If the activeLayerIndex is considered to be the same "row", but the last one was pinned,
+        // it means that the previousActiveLayer has actually moved down the list because a new
+        // layer was inserted.
+        if (prevActiveWasPinned) {
+            lastActiveLayerIndex += 1;
+        }
     }
+    
+    // NOTE: Not in love with exposing 'selection' concepts to the model,
+    // but since this issue already existed, this is alright for now.
+    // Especially since it's just a signal...
+    requestTransferSelectionBetweenRows(lastActiveLayerIndex, m_d->activeLayerIndex);
 }
 
 int KisAnimTimelineFramesModel::rowCount(const QModelIndex &parent) const
@@ -416,8 +430,7 @@ bool KisAnimTimelineFramesModel::setData(const QModelIndex &index, const QVarian
     switch (role) {
     case ActiveLayerRole: {
         if (value.toBool() &&
-            index.row() != m_d->activeLayerIndex) {
-
+            index.row() != m_d->activeLayerIndex) {            
             int prevLayer = m_d->activeLayerIndex;
             m_d->activeLayerIndex = index.row();
 

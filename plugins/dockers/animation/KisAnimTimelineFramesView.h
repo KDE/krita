@@ -47,6 +47,10 @@ public Q_SLOTS:
 
     void slotSelectionChanged();
     void slotReselectCurrentIndex();
+    
+    // This is used for keeping single selection in-sync with active layer
+    // traversal when desired.
+    void slotTryTransferSelectionBetweenRows(int fromRow, int toRow);
 
     void slotSetStartTimeToCurrentPosition();
     void slotSetEndTimeToCurrentPosition();

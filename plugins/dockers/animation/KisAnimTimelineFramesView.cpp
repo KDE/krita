@@ -342,6 +342,9 @@ void KisAnimTimelineFramesView::setModel(QAbstractItemModel *model)
 
     connect(m_d->model, SIGNAL(sigAudioChannelChanged()),
             this, SLOT(slotUpdateAudioActions()));
+    
+    connect(m_d->model, SIGNAL(requestTransferSelectionBetweenRows(int,int)),
+            this, SLOT(slotTryTransferSelectionBetweenRows(int,int)));
 
     connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             &m_d->selectionChangedCompressor, SLOT(start()));
@@ -555,6 +558,20 @@ void KisAnimTimelineFramesView::slotReselectCurrentIndex()
     currentChanged(index, index);
 }
 
+void KisAnimTimelineFramesView::slotTryTransferSelectionBetweenRows(int fromRow, int toRow)
+{
+    //If there's only one selected index, or less, just select the current index if valid...
+    QModelIndex current = model()->index(toRow, m_d->model->currentTime());
+    if (selectedIndexes().count() <= 1) {
+        if (selectedIndexes().count() != 1 || 
+            (selectedIndexes().first().column() == current.column() &&
+            selectedIndexes().first().row() == fromRow)) {
+            setCurrentIndex(current);
+        }
+        
+    }
+}
+
 void KisAnimTimelineFramesView::slotSetStartTimeToCurrentPosition()
 {
      m_d->model->setFullClipRangeStart(this->currentIndex().column());
@@ -665,7 +682,6 @@ void KisAnimTimelineFramesView::slotRemoveLayer()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid()) return;
-
     model()->removeRow(index.row());
 }
 

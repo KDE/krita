@@ -1,8 +1,7 @@
-From 520db0b20dd9ebc4343aa5944d5b1aa55c86672d Mon Sep 17 00:00:00 2001
+From a7efeb291bfd05bbc32c29bd720de49667ac2349 Mon Sep 17 00:00:00 2001
 From: Assam Boudjelthia <assam.boudjelthia@qt.io>
 Date: Fri, 14 Feb 2020 14:20:13 +0200
-Subject: [PATCH 1/4] Android: handle check permissions before any file
- operations
+Subject: [PATCH] Android: handle check permissions before any file operations
 
 This is required because opening a Uri with no permissions can cause
 crashes.
@@ -11,12 +10,12 @@ Some exceptions were not handled at all.
 Change-Id: I2e8f9505879b9fc4c1c47bdfa1bf173b39ada3ea
 Reviewed-by: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@qt.io>
 ---
- .../org/qtproject/qt5/android/QtNative.java   | 68 ++++++++++++++++---
+ .../org/qtproject/qt5/android/QtNative.java   | 72 ++++++++++++++++---
  .../android/qandroidplatformservices.cpp      | 15 ++--
- 2 files changed, 67 insertions(+), 16 deletions(-)
+ 2 files changed, 71 insertions(+), 16 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 34a8c7d788..f3c4189400 100644
+index 37623ce7f6..adb0dc8f8f 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -47,11 +47,13 @@ import java.util.concurrent.Semaphore;
@@ -41,7 +40,7 @@ index 34a8c7d788..f3c4189400 100644
  import javax.net.ssl.TrustManagerFactory;
  import javax.net.ssl.TrustManager;
  import javax.net.ssl.X509TrustManager;
-@@ -152,32 +155,79 @@ public class QtNative
+@@ -152,32 +155,83 @@ public class QtNative
          }
      }
  
@@ -73,11 +72,15 @@ index 34a8c7d788..f3c4189400 100644
 +
 +    public static boolean openURL(Context context, String url, String mime)
 +    {
-+        Uri uri = getUriWithValidPermission(context, url, "r");
-+
-+        if (uri == null) {
-+            Log.e(QtTAG, "openURL(): No permissions to open Uri");
-+            return false;
++        Uri uri;
++        if (url.startsWith("content:")) {
++            uri = getUriWithValidPermission(context, url, "r");
++            if (uri == null) {
++                Log.e(QtTAG, "openURL(): No permissions to open Uri");
++                return false;
++            }
++        } else {
++            uri = Uri.parse(url);
 +        }
  
          try {
@@ -171,5 +174,5 @@ index 136637800b..c095613ce7 100644
  
  bool QAndroidPlatformServices::openDocument(const QUrl &url)
 -- 
-2.26.2
+2.31.1
 

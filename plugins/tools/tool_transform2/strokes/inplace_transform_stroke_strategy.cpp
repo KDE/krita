@@ -155,6 +155,10 @@ void InplaceTransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             m_d->pendingUpdateArgs = upd->args;
             tryPostUpdateJob(false);
         } else if (m_d->selection) {
+            // NOTE: selection is hidden during the transformation, so we
+            //       don't have to do any preview for that. We transform
+            //       that in one go in the end of the stroke.
+
             KisTransaction transaction(m_d->selection->pixelSelection());
 
             KisProcessingVisitor::ProgressHelper helper(m_d->imageRoot.data());

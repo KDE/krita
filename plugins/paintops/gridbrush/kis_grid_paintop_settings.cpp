@@ -59,7 +59,7 @@ bool KisGridPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt
     qreal newVerticalOffset = std::fmod(info.pos().y() + option.grid_height/2.0, (float)option.grid_height);
 
     // If pressing ctrl+alt change the offset according to mouse position
-    if (modifiers & (Qt::ControlModifier + Qt::AltModifier) || m_modifyOffsetWithShortcut) {
+    if (modifiers == (Qt::ControlModifier | Qt::AltModifier) || m_modifyOffsetWithShortcut) {
         m_modifyOffsetWithShortcut = true;
         newHorizontalOffset = (newHorizontalOffset / (float)option.grid_width);
         newVerticalOffset = (newVerticalOffset / (float)option.grid_height);

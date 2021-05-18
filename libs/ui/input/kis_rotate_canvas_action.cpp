@@ -223,7 +223,8 @@ KisInputActionGroup KisRotateCanvasAction::inputActionGroup(int shortcut) const
     return ViewTransformActionGroup;
 }
 
-bool KisRotateCanvasAction::supportsHiResInputEvents() const
+bool KisRotateCanvasAction::supportsHiResInputEvents(int shortcut) const
 {
+    Q_UNUSED(shortcut);
     return true;
 }

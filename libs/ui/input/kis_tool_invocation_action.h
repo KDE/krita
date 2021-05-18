@@ -51,7 +51,7 @@ public:
 
     void processUnhandledEvent(QEvent* event);
 
-    bool supportsHiResInputEvents() const override;
+    bool supportsHiResInputEvents(int shortcut) const override;
 
     bool isShortcutRequired(int shortcut) const override;
 

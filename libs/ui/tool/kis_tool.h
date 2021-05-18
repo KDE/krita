@@ -180,7 +180,7 @@ public:
     virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action);
-
+    virtual bool alternateActionSupportsHiResEvents(AlternateAction action) const;
 
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;

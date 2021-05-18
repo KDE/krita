@@ -187,7 +187,7 @@ bool KisShortcutMatcher::supportsHiResInputEvents()
     return
         m_d->runningShortcut &&
         m_d->runningShortcut->action() &&
-        m_d->runningShortcut->action()->supportsHiResInputEvents();
+        m_d->runningShortcut->action()->supportsHiResInputEvents(m_d->runningShortcut->shortcutIndex());
 }
 
 bool KisShortcutMatcher::keyPressed(Qt::Key key)

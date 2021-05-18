@@ -644,7 +644,7 @@ if EXIST "%DEPS_INSTALL_DIR%\bin\gmic_krita_qt.exe" (
 )
 
 :: windeployqt
-windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -multimedia -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %WINDEPLOYQT_GMIC_ARGS%
+windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -multimedia -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %pkg_root%\bin\krita.dll %WINDEPLOYQT_GMIC_ARGS%
 if errorlevel 1 (
 	echo ERROR: WinDeployQt failed! 1>&2
 	exit /B 1

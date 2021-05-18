@@ -313,7 +313,9 @@ KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
     Q_FOREACH (const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-        if (dynamic_cast<const KoShapeGroup*>(shape)) {
+
+        // don't transform the container
+        if (dynamic_cast<const KoShapeGroup *>(shape) || !shape->parent()) {
             newTransformations.append(oldTransform);
         } else {
             QTransform globalTransform = shape->absoluteTransformation();

@@ -15,6 +15,7 @@
 #include <kis_node_manager.h>
 #include <kis_selection_manager.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_exposure_gamma_correction_interface.h>
 #include <kis_paintop_box.h>
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
@@ -202,25 +203,29 @@ void View::setCurrentBlendingMode(const QString &blendingMode)
 float View::HDRExposure() const
 {
     if (!d->view) return 0.0;
-    return d->view->resourceProvider()->HDRExposure();
+    KisExposureGammaCorrectionInterface *iface = d->view->canvasBase()->exposureGammaCorrectionInterface();
+    return iface->currentExposure();
 }
 
 void View::setHDRExposure(float exposure)
 {
     if (!d->view) return;
-    d->view->resourceProvider()->setHDRExposure(exposure);
+    KisExposureGammaCorrectionInterface *iface = d->view->canvasBase()->exposureGammaCorrectionInterface();
+    iface->setCurrentExposure(exposure);
 }
 
 float View::HDRGamma() const
 {
     if (!d->view) return 0.0;
-    return d->view->resourceProvider()->HDRGamma();
+    KisExposureGammaCorrectionInterface *iface = d->view->canvasBase()->exposureGammaCorrectionInterface();
+    return iface->currentGamma();
 }
 
 void View::setHDRGamma(float gamma)
 {
     if (!d->view) return;
-    d->view->resourceProvider()->setHDRGamma(gamma);
+    KisExposureGammaCorrectionInterface *iface = d->view->canvasBase()->exposureGammaCorrectionInterface();
+    return iface->setCurrentGamma(gamma);
 }
 
 qreal View::paintingOpacity() const

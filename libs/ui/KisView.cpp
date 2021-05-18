@@ -248,6 +248,8 @@ KisView::~KisView()
         d->viewManager->mainWindow()->notifyChildViewDestroyed(this);
     }
 
+    d->viewManager->inputManager()->registerPopupWidget(nullptr);
+
     KoToolManager::instance()->removeCanvasController(&d->canvasController);
     d->canvasController.setCanvas(0);
 

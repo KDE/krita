@@ -86,8 +86,9 @@ void KisAbstractInputAction::cursorMovedAbsolute(const QPointF &startPos, const 
     Q_UNUSED(pos);
 }
 
-bool KisAbstractInputAction::supportsHiResInputEvents() const
+bool KisAbstractInputAction::supportsHiResInputEvents(int shortcut) const
 {
+    Q_UNUSED(shortcut);
     return false;
 }
 

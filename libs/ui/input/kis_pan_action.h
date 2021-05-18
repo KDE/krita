@@ -45,7 +45,7 @@ public:
     bool isShortcutRequired(int shortcut) const override;
 
     KisInputActionGroup inputActionGroup(int shortcut) const override;
-    bool supportsHiResInputEvents() const override;
+    bool supportsHiResInputEvents(int shortcut) const override;
 
 private:
     class Private;

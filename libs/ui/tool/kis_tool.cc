@@ -483,6 +483,12 @@ void KisTool::endAlternateAction(KoPointerEvent *event, AlternateAction action)
     Q_UNUSED(action);
 }
 
+bool KisTool::alternateActionSupportsHiResEvents(AlternateAction action) const
+{
+    Q_UNUSED(action);
+    return false;
+}
+
 void KisTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);

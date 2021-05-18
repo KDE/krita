@@ -38,6 +38,7 @@ public:
      */
     bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent);
     bool primaryActionSupportsHiResEvents() const;
+    bool alternateActionSupportsHiResEvents(KisTool::AlternateAction action) const;
 
     void setActiveTool(KoToolBase *tool) override;
 

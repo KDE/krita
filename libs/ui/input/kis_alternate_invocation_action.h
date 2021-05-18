@@ -46,8 +46,11 @@ public:
     void end(QEvent *event) override;
     void inputEvent(QEvent* event) override;
 
+    bool supportsHiResInputEvents(int shortcut) const override;
+
+
 private:
-    KisTool::ToolAction shortcutToToolAction(int shortcut);
+    KisTool::ToolAction shortcutToToolAction(int shortcut) const;
 
 private:
     struct Private;

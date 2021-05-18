@@ -226,7 +226,22 @@ void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
     }
 }
 
+bool KisToolSelectOutline::primaryActionSupportsHiResEvents() const
+{
+    return !selectionDragInProgress();
+}
 
+bool KisToolSelectOutline::alternateActionSupportsHiResEvents(AlternateAction action) const
+{
+    /**
+     * In selection tools we abuse alternate actions to switch different
+     * selection modes. So we should notify input manager that we need a
+     * good precision for them
+     */
+
+    Q_UNUSED(action);
+    return !selectionDragInProgress();
+}
 
 void KisToolSelectOutline::updateFeedback()
 {

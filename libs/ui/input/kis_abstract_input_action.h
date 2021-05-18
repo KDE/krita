@@ -103,7 +103,7 @@ public:
      * most of the actions in Krita (except of real painting) it is
      * perfectly acceptable, so 'false' is the default value.
      */
-    virtual bool supportsHiResInputEvents() const;
+    virtual bool supportsHiResInputEvents(int shortcut) const;
 
     /**
      * \return the group of the action the specified \p shortcut belongs to

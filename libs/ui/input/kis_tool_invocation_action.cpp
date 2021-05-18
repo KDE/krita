@@ -225,8 +225,9 @@ void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
     d->runningToolProxy = savedToolProxy;
 }
 
-bool KisToolInvocationAction::supportsHiResInputEvents() const
+bool KisToolInvocationAction::supportsHiResInputEvents(int shortcut) const
 {
+    Q_UNUSED(shortcut);
     return inputManager()->toolProxy()->primaryActionSupportsHiResEvents();
 }
 

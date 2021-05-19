@@ -1019,4 +1019,12 @@ QPointF moveElasticPoint(const QPointF &pt,
     return newResultPoint;
 }
 
+void cropLineToRect(QLineF &line, const QRect rect, bool extendFirst, bool extendSecond)
+{
+    bool intersects = intersectLineRect(line, rect, extendFirst, extendSecond);
+    if (!intersects) {
+        line = QLineF(); // empty line to help with drawing
+    }
+}
+
 }

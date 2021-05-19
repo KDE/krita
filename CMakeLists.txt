@@ -928,6 +928,8 @@ set_package_properties(QuaZip PROPERTIES
 # FIXME: better way to do this?
 list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${EXPAT_LIBRARY}
+                                ${KF5_LIBRARIES}/libssl_1_1.so
+                                ${KF5_LIBRARIES}/libcrypto_1_1.so
                                 ${KF5_LIBRARIES}/libKF5Completion.so
                                 ${KF5_LIBRARIES}/libKF5WindowSystem.so
                                 ${KF5_LIBRARIES}/libKF5WidgetsAddons.so

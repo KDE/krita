@@ -33,7 +33,31 @@ if (WIN32)
             UPDATE_COMMAND ""
         )
     endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+elseif (ANDROID)
+    ExternalProject_Add( ext_openssl
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://www.openssl.org/source/openssl-1.1.1i.tar.gz
+        URL_HASH SHA1=eb684ba4ed31fe2c48062aead75233ecd36882a6
 
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
+            ANDROID_NDK_HOME=${CMAKE_ANDROID_NDK}
+            PATH=${ANDROID_TOOLCHAIN_ROOT}/bin:$ENV{PATH}
+            CXXFLAGS=-D__ANDROID_API__=${ANDROID_PLATFORM_LEVEL}
+            <SOURCE_DIR>/Configure android-${CMAKE_ANDROID_ARCH} --prefix=${PREFIX_ext_openssl} --openssldir=ssl
+
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env
+            PATH=${ANDROID_TOOLCHAIN_ROOT}/bin:$ENV{PATH}
+            CXXFLAGS=-D__ANDROID_API__=${ANDROID_PLATFORM_LEVEL}
+            make build_libs SHLIB_VERSION_NUMBER= SHLIB_EXT=_1_1.so
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env
+            PATH=${ANDROID_TOOLCHAIN_ROOT}/bin:$ENV{PATH}
+            CXXFLAGS=-D__ANDROID_API__=${ANDROID_PLATFORM_LEVEL}
+            make install_sw SHLIB_VERSION_NUMBER= SHLIB_EXT=_1_1.so
+
+        INSTALL_DIR ${PREFIX_ext_openssl}
+
+        UPDATE_COMMAND ""
+)
 else (WIN32)
 
     ExternalProject_Add( ext_openssl

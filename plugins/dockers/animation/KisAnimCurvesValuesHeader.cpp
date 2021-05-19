@@ -8,6 +8,7 @@
 
 #include <math.h>
 #include "kis_debug.h"
+#include "kis_custom_modifiers_catcher.h"
 
 #include <QPaintEvent>
 #include <QPainter>
@@ -20,21 +21,26 @@ struct KisAnimCurvesValuesHeader::Private
     Private()
         : valueOffset(-1.f)
         , scale(1.f)
-        , zoomTracking(false)
+        , mouseTracking(false)
         , mouseLastPos(QPoint(0,0))
     {}
 
     qreal valueOffset;
     qreal scale;
     
-    bool zoomTracking;
+    bool mouseTracking;
     QPoint mouseLastPos;
+    
+    QScopedPointer<KisCustomModifiersCatcher> modifiersCatcher;
 };
 
 KisAnimCurvesValuesHeader::KisAnimCurvesValuesHeader(QWidget *parent)
     : QHeaderView(Qt::Vertical, parent)
     , m_d(new Private())
-{}
+{
+    m_d->modifiersCatcher.reset(new KisCustomModifiersCatcher(parent));
+    m_d->modifiersCatcher->addModifier("pan-zoom", Qt::Key_Space);
+}
 
 KisAnimCurvesValuesHeader::~KisAnimCurvesValuesHeader()
 {}
@@ -56,6 +62,7 @@ void KisAnimCurvesValuesHeader::setValueOffset(qreal offset)
 {
     m_d->valueOffset = offset;
     viewport()->update();
+    valueOffsetChanged(m_d->valueOffset);
 }
 
 qreal KisAnimCurvesValuesHeader::valueOffset() const
@@ -156,16 +163,21 @@ void KisAnimCurvesValuesHeader::paintEvent(QPaintEvent */*e*/)
 
 void KisAnimCurvesValuesHeader::mouseMoveEvent(QMouseEvent* mouseEvent) {
     if (mouseEvent->buttons() & Qt::LeftButton) {
-        if (m_d->zoomTracking) {
+        if (m_d->mouseTracking) {
             const qreal oldValue = orientation() == Qt::Vertical ? m_d->mouseLastPos.y() : m_d->mouseLastPos.x();
             const qreal newValue = orientation() == Qt::Vertical ? mouseEvent->pos().y() : mouseEvent->pos().x();
-            const qreal delta = -1 * (newValue - oldValue) / 16;
-            setScale(scale() + delta / step());
+            if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
+                const qreal delta = (newValue - oldValue);
+                setValueOffset(valueOffset() + delta * step() / 64);
+            } else {
+                const qreal delta = -1 * (newValue - oldValue) / 16;
+                setScale(scale() + delta / step());
+            }
             m_d->mouseLastPos = mouseEvent->pos();
         }
     } else {
-        if (m_d->zoomTracking == true) {
-            m_d->zoomTracking = false;
+        if (m_d->mouseTracking == true) {
+            m_d->mouseTracking = false;
         }
     }
     
@@ -174,7 +186,7 @@ void KisAnimCurvesValuesHeader::mouseMoveEvent(QMouseEvent* mouseEvent) {
 
 void KisAnimCurvesValuesHeader::mousePressEvent(QMouseEvent* mouseEvent) {
     if (mouseEvent->buttons() & Qt::LeftButton) {
-        m_d->zoomTracking = true;
+        m_d->mouseTracking = true;
         m_d->mouseLastPos = mouseEvent->pos();
     }
     

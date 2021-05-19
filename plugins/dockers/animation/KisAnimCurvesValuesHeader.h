@@ -67,6 +67,7 @@ public:
     
 Q_SIGNALS:
     void scaleChanged(qreal scale);
+    void valueOffsetChanged(qreal offset);
     
 protected:
     virtual void mouseMoveEvent(QMouseEvent* mouseEvent) override;

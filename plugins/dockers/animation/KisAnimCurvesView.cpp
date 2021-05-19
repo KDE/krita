@@ -109,11 +109,13 @@ KisAnimCurvesView::KisAnimCurvesView(QWidget *parent)
     connect(vertZoomableBar, &KisZoomableScrollBar::overscroll, [this](qreal overscroll){
        qreal currentOffset = m_d->verticalHeader->valueOffset();
        m_d->verticalHeader->setValueOffset(currentOffset - overscroll * m_d->verticalHeader->step() * 0.25);
-       viewport()->update();
     });
     
-    
     connect(m_d->verticalHeader, &KisAnimCurvesValuesHeader::scaleChanged, [this](qreal){
+        viewport()->update();
+    });
+    
+    connect(m_d->verticalHeader, &KisAnimCurvesValuesHeader::valueOffsetChanged, [this](qreal){
         viewport()->update();
     });
 

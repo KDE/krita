@@ -20,10 +20,15 @@ struct KisAnimCurvesValuesHeader::Private
     Private()
         : valueOffset(-1.f)
         , scale(1.f)
+        , zoomTracking(false)
+        , mouseLastPos(QPoint(0,0))
     {}
 
     qreal valueOffset;
     qreal scale;
+    
+    bool zoomTracking;
+    QPoint mouseLastPos;
 };
 
 KisAnimCurvesValuesHeader::KisAnimCurvesValuesHeader(QWidget *parent)
@@ -39,6 +44,7 @@ void KisAnimCurvesValuesHeader::setScale(qreal scale)
     const qreal minimumScale = 0.001f;
     m_d->scale = qMax(scale, minimumScale);
     viewport()->update();
+    scaleChanged(m_d->scale);
 }
 
 qreal KisAnimCurvesValuesHeader::scale() const
@@ -146,4 +152,31 @@ void KisAnimCurvesValuesHeader::paintEvent(QPaintEvent */*e*/)
             painter.drawText(textRect, label, QTextOption(Qt::AlignRight));
         }
     }
+}
+
+void KisAnimCurvesValuesHeader::mouseMoveEvent(QMouseEvent* mouseEvent) {
+    if (mouseEvent->buttons() & Qt::LeftButton) {
+        if (m_d->zoomTracking) {
+            const qreal oldValue = orientation() == Qt::Vertical ? m_d->mouseLastPos.y() : m_d->mouseLastPos.x();
+            const qreal newValue = orientation() == Qt::Vertical ? mouseEvent->pos().y() : mouseEvent->pos().x();
+            const qreal delta = -1 * (newValue - oldValue) / 16;
+            setScale(scale() + delta / step());
+            m_d->mouseLastPos = mouseEvent->pos();
+        }
+    } else {
+        if (m_d->zoomTracking == true) {
+            m_d->zoomTracking = false;
+        }
+    }
+    
+    QHeaderView::mouseMoveEvent(mouseEvent);
+}
+
+void KisAnimCurvesValuesHeader::mousePressEvent(QMouseEvent* mouseEvent) {
+    if (mouseEvent->buttons() & Qt::LeftButton) {
+        m_d->zoomTracking = true;
+        m_d->mouseLastPos = mouseEvent->pos();
+    }
+    
+    QHeaderView::mousePressEvent(mouseEvent);
 }

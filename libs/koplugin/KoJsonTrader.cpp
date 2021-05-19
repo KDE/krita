@@ -67,7 +67,15 @@ KoJsonTrader::KoJsonTrader()
                     QDir libDir(info.absoluteFilePath());
 
 #ifdef Q_OS_ANDROID
-                    libDir.cd("arm");
+#if defined(Q_PROCESSOR_ARM_64)
+                    libDir.cd("arm64-v8a");
+#elif defined(Q_PROCESSOR_ARM)
+                    libDir.cd("armeabi-v7a");
+#elif defined(Q_PROCESSOR_X86_64)
+                    libDir.cd("x86_64");
+#elif defined(Q_PROCESSOR_x86)
+                    libDir.cd("x86");
+#endif
                     m_pluginPath = libDir.absolutePath();
                     break;
 #else

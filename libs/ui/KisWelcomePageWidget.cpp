@@ -140,10 +140,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif
 
 #ifdef Q_OS_ANDROID
-    // enabling this widgets crashes the app, so it is better for it to be hidden for now
-    newsWidget->hide();
-    helpTitleLabel->hide();
-    btnNewsOptions->hide();
 
     donationLink = new QPushButton(dropFrameBorder);
     donationLink->setFlat(true);

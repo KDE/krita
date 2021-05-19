@@ -324,7 +324,12 @@ void KisLayerManager::layerProperties()
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);
         Qt::WindowFlags flags = dialog->windowFlags();
+#ifdef Q_OS_ANDROID
+        // a Qt::Tool window seems incapable of receiving keyboard focus
+        dialog->setWindowFlags(flags | Qt::Dialog);
+#else
         dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
+#endif
         dialog->show();
         dialog->activateWindow();
     }

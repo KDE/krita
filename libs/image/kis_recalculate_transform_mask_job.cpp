@@ -69,7 +69,7 @@ void KisRecalculateTransformMaskJob::run()
         } else {
             m_mask->setDirtyDontResetAnimationCache(updateRect);
         }
-    } else if (!m_mask->isAnimated()) {
+    } else {
         /**
          * When we call requestProjectionUpdateNoFilthy() on a layer,
          * its masks' change rect is not counted, because it is considered

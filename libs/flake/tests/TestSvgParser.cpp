@@ -1334,6 +1334,29 @@ void TestSvgParser::testRenderFillLinearGradientRotatedShapeUserCoord()
     t.test_standard_30px_72ppi("fill_gradient_shape_rotated_in_user", false);
 }
 
+void TestSvgParser::testRenderFillLinearGradientTransparent()
+{
+    const QString data =
+            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30px\" height=\"30px\" "
+            "    version=\"1.1\">"
+            ""
+            "  <linearGradient x1=\"0\" y1=\"15\" x2=\"30\" y2=\"15\""
+            "      gradientUnits=\"userSpaceOnUse\" id=\"linearGradient5574\" >"
+            ""
+            "      <stop style=\"stop-color:#0000ff;stop-opacity:1\" offset=\"0\" />"
+            "      <stop style=\"stop-color:#ff0000;stop-opacity:0\" offset=\"1\" />"
+            ""
+            "  </linearGradient>"
+            ""
+            "  <rect id=\"testRect\" style=\"fill:url(#linearGradient5574);fill-opacity:1\""
+            "        width=\"30\" height=\"30\" x=\"0\" y=\"0\"/>"
+            "</svg>";
+
+    SvgRenderTester t(data);
+    t.setCheckQImagePremultiplied(true);
+    t.test_standard_30px_72ppi("fill_gradient_transparent", false);
+}
+
 void TestSvgParser::testRenderFillRadialGradient()
 {
     const QString data =
@@ -1374,6 +1397,31 @@ void TestSvgParser::testRenderFillRadialGradientUserCoord()
     SvgRenderTester t (data);
     t.setFuzzyThreshold(1);
     t.test_standard_30px_72ppi("fill_gradient_radial_in_user");
+}
+
+void TestSvgParser::testRenderFillRadialGradientTransparent()
+{
+    const QString data =
+            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30px\" height=\"30px\""
+            "     version=\"1.1\" >"
+            ""
+            "    <radialGradient id=\"radialGradient10189\""
+            "      cx=\"15\" cy=\"15\" fx=\"15\" fy=\"15\" r=\"15\""
+            "      gradientUnits=\"userSpaceOnUse\" >"
+            ""
+            "      <stop style=\"stop-color:#0000ff;stop-opacity:1\" offset=\"0\" />"
+            "      <stop style=\"stop-color:#ff0000;stop-opacity:0\" offset=\"1\" />"
+            "    </radialGradient>"
+            ""
+            "  <rect"
+            "    id=\"testRect\" style=\"fill:url(#radialGradient10189);fill-opacity:1\""
+            "    width=\"30\" height=\"30\" x=\"0\" y=\"0\" />"
+            "</svg>";
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(1);
+    t.setCheckQImagePremultiplied(true);
+    t.test_standard_30px_72ppi("fill_gradient_radial_transparent", false);
 }
 
 void TestSvgParser::testRenderFillLinearGradientUserCoordPercent()

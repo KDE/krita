@@ -81,9 +81,11 @@ private Q_SLOTS:
     void testRenderFillLinearGradientTransformUserCoord();
     void testRenderFillLinearGradientRotatedShape();
     void testRenderFillLinearGradientRotatedShapeUserCoord();
+    void testRenderFillLinearGradientTransparent();
 
     void testRenderFillRadialGradient();
     void testRenderFillRadialGradientUserCoord();
+    void testRenderFillRadialGradientTransparent();
 
     void testRenderFillLinearGradientUserCoordPercent();
 

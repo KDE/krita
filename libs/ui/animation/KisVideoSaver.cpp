@@ -133,7 +133,8 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
             ffmpegSettings.processPath = options.ffmpegPath;
 
             ffmpegSettings.progressIndeterminate = true;
-            ffmpegSettings.progressMessage = i18n("Creating palette required for gif format...");
+            ffmpegSettings.progressMessage = i18nc("Animation export dialog for palette exporting. arg1: file-suffix",
+                                               "Creating palette for %1 file format.", "[suffix]");
             ffmpegSettings.logPath = QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "ffmpeg.log";
             
             KisImportExportErrorCode result = ffmpegWrapper->start(ffmpegSettings);

@@ -512,7 +512,7 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
      
     ffmpegSettings.processPath = ffmpegPath;
     ffmpegSettings.storeOutput = true;
-    ffmpegSettings.progressMessage = i18nc("Video information probing dialog. arg1: frame number.", "Loading video data... %1 frames loaded.", "[progress]");
+    ffmpegSettings.progressMessage = i18nc("Video information probing dialog. arg1: frame number.", "Loading video data... %1 frames examined.", "[progress]");
     ffmpegSettings.batchMode = batchMode;
 
     ffmpegSettings.args << "-stats"

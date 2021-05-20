@@ -493,11 +493,14 @@ QRect KisTransformMask::exactBounds() const
 
 QRect KisTransformMask::sourceDataBounds() const
 {
-    QRect rc = KisMask::exactBounds();
+    /// NOTE: we should avoid including parent layer's projection's
+    ///       extent into the source of changeRect calculation, because
+    ///       that is exactly what partialChangeRect() calculates.
 
-    QRect partialChangeRect = rc;
+    QRect partialChangeRect;
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     if (parentLayer) {
+        const QRect rc = parentLayer->original()->exactBounds();
         partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
     }
 

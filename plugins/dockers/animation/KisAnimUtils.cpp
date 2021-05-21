@@ -47,6 +47,7 @@ namespace KisAnimUtils {
                 quint8 originalOpacity = node->opacity();
                 bool createdChannel = false;
 
+                // Try get channel...
                 if (!channel) {
                     node->enableAnimation();
                     channel = node->getKeyframeChannel(channelId, true);
@@ -61,7 +62,7 @@ namespace KisAnimUtils {
                         result = true;
                     }
                 } else {
-                    if (channel->keyframeAt(time) && !createdChannel) {
+                    if (channel->keyframeAt(time) && !createdChannel) { // Overwrite existing...
                         if (image->animationInterface()->currentTime() == time && channelId == KisKeyframeChannel::Raster.id()) {
 
                             //shortcut: clearing the image instead
@@ -78,8 +79,16 @@ namespace KisAnimUtils {
                                 result = true;
                             }
                         }
-                    } else {
+                    } else { // Make new...
+                        KisKeyframeSP previousKey = channel->activeKeyframeAt(time);
+
                         channel->addKeyframe(time, cmd.data());
+
+                        // Use color label of previous key, if exists...
+                        if (previousKey && channel->keyframeAt(time)) {
+                            channel->keyframeAt(time)->setColorLabel(previousKey->colorLabel());
+                        }
+
                         result = true;
                     }
                 }

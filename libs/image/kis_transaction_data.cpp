@@ -100,8 +100,9 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
 
     KisKeyframeSP keyframe = channel->keyframeAt(time);
     if (!keyframe) {
+        int activeKeyTime = channel->activeKeyframeTime(time);
+
         if (autoKeyMode == AUTOKEY_DUPLICATE) {
-            int activeKeyTime = channel->activeKeyframeTime(time);
             channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
         } else {
             channel->addKeyframe(time, &newFrameCommand);
@@ -109,7 +110,12 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
 
         keyframe = channel->keyframeAt(time);
         KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
-        keyframe->setColorLabel(KisImageConfig(true).defaultFrameColorLabel());
+
+        // Use the same color label as previous keyframe...
+        KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
+        if (previousKey) {
+            keyframe->setColorLabel(previousKey->colorLabel());
+        }
     }
 }
 

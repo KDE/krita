@@ -193,7 +193,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
         mousePos = initialTransform.map(m_adjustedBrushPosition);
     }
 
-    if (isEditing){
+    if (isEditing) {
         Q_FOREACH (const QPointF* handle, handles()) {
             QPointF h = initialTransform.map(*handle);
             QRectF ellipse = QRectF(QPointF(h.x() -15, h.y() -15), QSizeF(30, 30));
@@ -215,7 +215,49 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                 pathCenter.addEllipse(center_ellipse);
                 drawPath(gc, pathCenter, isSnappingActive());
             }
-        }}
+        }
+
+        if (handles().size() <= 2) {
+            QPainterPath path;
+            int tempDensity = m_gridDensity * 10; // the vanishing point density seems visibly more dense, hence let's make it less dense
+            QRect viewport = gc.viewport();
+
+            for (int i = 0; i < handles().size(); i++) {
+                const QPointF p = initialTransform.map(*handles()[i]);
+                for (int currentAngle=0; currentAngle <= 180; currentAngle = currentAngle + tempDensity) {
+
+                    // determine the correct angle based on the iteration
+                    float xPos = cos(currentAngle * M_PI / 180);
+                    float yPos = sin(currentAngle * M_PI / 180);
+                    float length = 100;
+                    QPointF unit = QPointF(length*xPos, length*yPos);
+
+                    // find point
+                    QLineF snapLine = QLineF(p, p + unit);
+                    if (KisAlgebra2D::intersectLineRect(snapLine, viewport, false)) {
+                        // make a line from VP center to edge of canvas with that angle
+
+                        path.moveTo(snapLine.p1());
+                        path.lineTo(snapLine.p2());
+                    }
+
+                    QLineF snapLine2 = QLineF(p, p - unit);
+                    if (KisAlgebra2D::intersectLineRect(snapLine2, viewport, false)) {
+                        // make a line from VP center to edge of canvas with that angle
+
+                        path.moveTo(snapLine2.p1());
+                        path.lineTo(snapLine2.p2());
+                    }
+
+
+                }
+
+                drawPreview(gc, path);//and we draw the preview.
+
+            }
+        }
+
+    }
 
     if (handles().size() >= 2) {
         const QPointF p1 = *handles()[0];

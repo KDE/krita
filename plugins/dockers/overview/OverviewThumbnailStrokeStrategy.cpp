@@ -42,12 +42,21 @@ public:
     QRect tileRect;
 };
 
-OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize, bool isPixelArt)
+OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device,
+                                                                 const QRect& rect,
+                                                                 const QSize& thumbnailSize,
+                                                                 bool isPixelArt,
+                                                                 const KoColorProfile *profile,
+                                                                 KoColorConversionTransformation::Intent renderingIntent,
+                                                                 KoColorConversionTransformation::ConversionFlags conversionFlags)
     : KisSimpleStrokeStrategy(QLatin1String("OverviewThumbnail")),
       m_device(device),
       m_rect(rect),
       m_thumbnailSize(thumbnailSize),
-      m_isPixelArt(isPixelArt)
+      m_isPixelArt(isPixelArt),
+      m_profile(profile),
+      m_renderingIntent(renderingIntent),
+      m_conversionFlags(conversionFlags)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
@@ -124,8 +133,10 @@ void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
                               &updater, KisFilterStrategyRegistry::instance()->value(algorithm));
     worker.run();
 
-    overviewImage = m_thumbnailDevice->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(),
-                                                       QRect(QPoint(0,0), m_thumbnailSize));
+    overviewImage = m_thumbnailDevice->convertToQImage(m_profile,
+                                                       QRect(QPoint(0,0), m_thumbnailSize),
+                                                       m_renderingIntent,
+                                                       m_conversionFlags);
     emit thumbnailUpdated(overviewImage);
 }
 

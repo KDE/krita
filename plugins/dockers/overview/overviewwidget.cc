@@ -35,7 +35,7 @@
 #include "kis_idle_watcher.h"
 #include <QApplication>
 #include "OverviewThumbnailStrokeStrategy.h"
-
+#include <kis_display_color_converter.h>
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : QWidget(parent)
@@ -219,8 +219,16 @@ void OverviewWidget::generateThumbnail()
                     m_imageIdleWatcher.startCountdown();
                     return;
                 }
+
+                const KoColorProfile *profile =
+                   m_canvas->displayColorConverter()->monitorProfile();
+                KoColorConversionTransformation::ConversionFlags conversionFlags =
+                    m_canvas->displayColorConverter()->conversionFlags();
+                KoColorConversionTransformation::Intent renderingIntent =
+                    m_canvas->displayColorConverter()->renderingIntent();
+
                 OverviewThumbnailStrokeStrategy* stroke;
-                stroke = new OverviewThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt());
+                stroke = new OverviewThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt(), profile, renderingIntent, conversionFlags);
 
                 connect(stroke, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
 

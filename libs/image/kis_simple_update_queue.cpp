@@ -133,9 +133,12 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
         qint32 numStrokeJobs;
         updaterContext.getJobsSnapshot(numMergeJobs, numStrokeJobs);
 
-        if (!numMergeJobs && !numStrokeJobs) {
-            KisSpontaneousJob *job = m_spontaneousJobsList.takeFirst();
+        KisSpontaneousJob *job = m_spontaneousJobsList.first();
+        if (!numMergeJobs && !numStrokeJobs &&
+            (currentLevelOfDetail < 0 || currentLevelOfDetail == job->levelOfDetail())) {
+
             updaterContext.addSpontaneousJob(job);
+            m_spontaneousJobsList.removeFirst();
             jobAdded = true;
         }
     }

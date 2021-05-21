@@ -10,6 +10,7 @@ ExternalProject_Add( ext_gmic
     INSTALL_DIR ${PREFIX_ext_gmic}
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gmic} -DGMIC_QT_HOST=krita-plugin -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+    LIST_SEPARATOR "|"
 
     UPDATE_COMMAND ""
 )

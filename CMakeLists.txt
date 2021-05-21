@@ -195,6 +195,11 @@ add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
             add_link_options(/GUARD:CF)
         endif (USE_CONTROL_FLOW_GUARD)
     endif (MINGW)
+elseif(ANDROID)
+    # Increase the stack size to match MinGW's. Prevents crashes with GMic.
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
@@ -814,6 +819,12 @@ set_package_properties(FFTW3 PROPERTIES
 macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 if (FFTW3_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${FFTW3_LIBRARY})
+
+    # GMic uses the Threads library if available.
+    find_library(FFTW3_THREADS_LIB fftw3_threads PATHS ${FFTW3_LIBRARY_DIRS})
+    if(FFTW3_THREADS_LIB)
+        list(APPEND ANDROID_EXTRA_LIBS ${FFTW3_THREADS_LIB})
+    endif()
 endif()
 
 find_package(OCIO 1.1.1 EXACT)

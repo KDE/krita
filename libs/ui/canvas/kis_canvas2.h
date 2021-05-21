@@ -306,6 +306,7 @@ public:
     bool lodPreferredInCanvas() const;
 
     void initializeImage();
+    void disconnectImage();
 
     void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);
 

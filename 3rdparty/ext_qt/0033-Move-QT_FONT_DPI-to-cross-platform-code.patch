@@ -1,7 +1,7 @@
-From 4757dc87c9350e40621b633ae8ac5d8a1f5228b7 Mon Sep 17 00:00:00 2001
+From 18e5220ef5864212aabd8cb5da1330e74ac8b63e Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Thu, 2 Jun 2016 09:52:21 +0200
-Subject: [PATCH 24/27] Move QT_FONT_DPI to cross-platform code
+Subject: [PATCH 3/9] Move QT_FONT_DPI to cross-platform code
 
 This makes it possible to test the effects of setting
 Qt::AA_HighDpiScaling/QT_AUTO_SCREEN_SCALE_FACTOR, with different DPI
@@ -17,6 +17,8 @@ further simplified later on.
 Done-with: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Task-number: QTBUG-53022
 Change-Id: Idd6463219d3ae58fe0ab72c17686cce2eb9dbadd
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit 70a893e9bee7c1b8994a1218038a302e406d0aa3)
 ---
  src/gui/kernel/qhighdpiscaling.cpp        | 4 ++--
  src/gui/kernel/qplatformscreen.cpp        | 8 ++++++++
@@ -27,10 +29,10 @@ Change-Id: Idd6463219d3ae58fe0ab72c17686cce2eb9dbadd
  6 files changed, 19 insertions(+), 10 deletions(-)
 
 diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
-index ae531569..fc8084c4 100644
+index 7ffbfbe1e5..c8a2634929 100644
 --- a/src/gui/kernel/qhighdpiscaling.cpp
 +++ b/src/gui/kernel/qhighdpiscaling.cpp
-@@ -274,7 +274,7 @@ qreal QHighDpiScaling::rawScaleFactor(const QPlatformScreen *screen)
+@@ -276,7 +276,7 @@ qreal QHighDpiScaling::rawScaleFactor(const QPlatformScreen *screen)
          qreal platformPhysicalDpi = screen->screen()->physicalDotsPerInch();
          factor = qreal(platformPhysicalDpi) / qreal(platformBaseDpi.first);
      } else {
@@ -39,7 +41,7 @@ index ae531569..fc8084c4 100644
          factor = qreal(platformLogicalDpi.first) / qreal(platformBaseDpi.first);
      }
  
-@@ -587,7 +587,7 @@ QDpi QHighDpiScaling::logicalDpi(const QScreen *screen)
+@@ -629,7 +629,7 @@ QDpi QHighDpiScaling::logicalDpi(const QScreen *screen)
          return QDpi(96, 96);
  
      if (!m_usePixelDensity)
@@ -49,7 +51,7 @@ index ae531569..fc8084c4 100644
      const qreal scaleFactor = rawScaleFactor(screen->handle());
      const qreal roundedScaleFactor = roundScaleFactor(scaleFactor);
 diff --git a/src/gui/kernel/qplatformscreen.cpp b/src/gui/kernel/qplatformscreen.cpp
-index ff76528a..9e684c9f 100644
+index ff76528a0e..9e684c9fbf 100644
 --- a/src/gui/kernel/qplatformscreen.cpp
 +++ b/src/gui/kernel/qplatformscreen.cpp
 @@ -197,6 +197,14 @@ QDpi QPlatformScreen::logicalDpi() const
@@ -68,7 +70,7 @@ index ff76528a..9e684c9f 100644
      Reimplement to return the base logical DPI for the platform. This
      DPI value should correspond to a standard-DPI (1x) display. The
 diff --git a/src/gui/kernel/qplatformscreen.h b/src/gui/kernel/qplatformscreen.h
-index 63b5d5a4..32e6bf7e 100644
+index 63b5d5a4a7..32e6bf7ec7 100644
 --- a/src/gui/kernel/qplatformscreen.h
 +++ b/src/gui/kernel/qplatformscreen.h
 @@ -159,6 +159,8 @@ public:
@@ -81,7 +83,7 @@ index 63b5d5a4..32e6bf7e 100644
      void resizeMaximizedWindows();
  
 diff --git a/src/gui/kernel/qscreen.cpp b/src/gui/kernel/qscreen.cpp
-index 82ee62e6..b856435f 100644
+index 82ee62e6b4..b856435f67 100644
 --- a/src/gui/kernel/qscreen.cpp
 +++ b/src/gui/kernel/qscreen.cpp
 @@ -84,8 +84,11 @@ void QScreenPrivate::setPlatformScreen(QPlatformScreen *screen)
@@ -99,10 +101,10 @@ index 82ee62e6..b856435f 100644
      // safeguard ourselves against buggy platform behavior...
      if (refreshRate < 1.0)
 diff --git a/src/gui/kernel/qwindowsysteminterface.cpp b/src/gui/kernel/qwindowsysteminterface.cpp
-index b3b6167c..efc1d90e 100644
+index 8e50e5ef9e..19166d1946 100644
 --- a/src/gui/kernel/qwindowsysteminterface.cpp
 +++ b/src/gui/kernel/qwindowsysteminterface.cpp
-@@ -860,8 +860,8 @@ void QWindowSystemInterface::handleScreenGeometryChange(QScreen *screen, const Q
+@@ -866,8 +866,8 @@ void QWindowSystemInterface::handleScreenGeometryChange(QScreen *screen, const Q
  
  void QWindowSystemInterface::handleScreenLogicalDotsPerInchChange(QScreen *screen, qreal dpiX, qreal dpiY)
  {
@@ -114,20 +116,20 @@ index b3b6167c..efc1d90e 100644
  }
  
 diff --git a/src/plugins/platforms/xcb/qxcbscreen.cpp b/src/plugins/platforms/xcb/qxcbscreen.cpp
-index 9af0794d..27ffcad9 100644
+index ab5faa7212..ccd1a672bc 100644
 --- a/src/plugins/platforms/xcb/qxcbscreen.cpp
 +++ b/src/plugins/platforms/xcb/qxcbscreen.cpp
 @@ -660,10 +660,6 @@ QImage::Format QXcbScreen::format() const
  
- QDpi QXcbScreen::logicalDpi() const
+ int QXcbScreen::forcedDpi() const
  {
 -    static const int overrideDpi = qEnvironmentVariableIntValue("QT_FONT_DPI");
 -    if (overrideDpi)
--        return QDpi(overrideDpi, overrideDpi);
+-        return overrideDpi;
 -
      const int forcedDpi = m_virtualDesktop->forcedDpi();
-     if (forcedDpi > 0) {
-         return QDpi(forcedDpi, forcedDpi);
+     if (forcedDpi > 0)
+         return forcedDpi;
 -- 
-2.22.0.windows.1
+2.24.1.windows.2
 

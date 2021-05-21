@@ -1,7 +1,7 @@
-From 44d40db1bd8a101ee28414edd27f4fa7e73fbc97 Mon Sep 17 00:00:00 2001
+From dc29f0e54876373f07b9e09781371da11a3b8ad6 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Mon, 25 Apr 2016 09:27:48 +0200
-Subject: [PATCH 22/27] Compute logical DPI on a per-screen basis
+Subject: [PATCH 1/9] Compute logical DPI on a per-screen basis
 
 The logical DPI reported to applications is the platform screen
 logical DPI divided by the platform screen scale factor.
@@ -14,6 +14,8 @@ QHighDpiScaling::logicalDpi now takes a QScreen pointer.
 Done-with: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Task-number: QTBUG-53022
 Change-Id: I0f62b5878c37e3488e9a8cc48aef183ff822d0c4
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit dd9da0441b18d1946a7b3d28e4e8819b1921de6f)
 ---
  src/gui/kernel/qhighdpiscaling.cpp | 20 +++++++++-----------
  src/gui/kernel/qhighdpiscaling_p.h |  2 +-
@@ -21,10 +23,10 @@ Change-Id: I0f62b5878c37e3488e9a8cc48aef183ff822d0c4
  3 files changed, 13 insertions(+), 15 deletions(-)
 
 diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
-index 22e46e08..541d4f12 100644
+index 64f1397771..95790b96a9 100644
 --- a/src/gui/kernel/qhighdpiscaling.cpp
 +++ b/src/gui/kernel/qhighdpiscaling.cpp
-@@ -224,7 +224,6 @@ bool QHighDpiScaling::m_usePixelDensity = false; // use scale factor from platfo
+@@ -226,7 +226,6 @@ bool QHighDpiScaling::m_usePixelDensity = false; // use scale factor from platfo
  bool QHighDpiScaling::m_pixelDensityScalingActive = false; // pixel density scale factor > 1
  bool QHighDpiScaling::m_globalScalingActive = false; // global scale factor is active
  bool QHighDpiScaling::m_screenFactorSet = false; // QHighDpiScaling::setScreenFactor has been used
@@ -32,7 +34,7 @@ index 22e46e08..541d4f12 100644
  
  /*
      Initializes the QHighDpiScaling global variables. Called before the
-@@ -312,14 +311,6 @@ void QHighDpiScaling::updateHighDpiScaling()
+@@ -314,14 +313,6 @@ void QHighDpiScaling::updateHighDpiScaling()
          }
      }
      m_active = m_globalScalingActive || m_screenFactorSet || m_pixelDensityScalingActive;
@@ -47,7 +49,7 @@ index 22e46e08..541d4f12 100644
  }
  
  /*
-@@ -405,9 +396,16 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
+@@ -447,9 +438,16 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
      return factor;
  }
  
@@ -65,22 +67,22 @@ index 22e46e08..541d4f12 100644
 +                platformScreenDpi.second / platformScreenfactor);
  }
  
- qreal QHighDpiScaling::factor(const QScreen *screen)
+ QHighDpiScaling::ScaleAndOrigin QHighDpiScaling::scaleAndOrigin(const QPlatformScreen *platformScreen, QPoint *nativePosition)
 diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
-index 83fc9452..ecd9ed65 100644
+index c43641b8c9..6980c02275 100644
 --- a/src/gui/kernel/qhighdpiscaling_p.h
 +++ b/src/gui/kernel/qhighdpiscaling_p.h
-@@ -85,7 +85,7 @@ public:
-     static QPoint origin(const QPlatformScreen *platformScreen);
-     static QPoint mapPositionFromNative(const QPoint &pos, const QPlatformScreen *platformScreen);
+@@ -98,7 +98,7 @@ public:
      static QPoint mapPositionToNative(const QPoint &pos, const QPlatformScreen *platformScreen);
+     static QPoint mapPositionToGlobal(const QPoint &pos, const QPoint &windowGlobalPosition, const QWindow *window);
+     static QPoint mapPositionFromGlobal(const QPoint &pos, const QPoint &windowGlobalPosition, const QWindow *window);
 -    static QDpi logicalDpi();
 +    static QDpi logicalDpi(const QScreen *screen);
  
  private:
      static qreal screenSubfactor(const QPlatformScreen *screen);
 diff --git a/src/gui/kernel/qscreen.cpp b/src/gui/kernel/qscreen.cpp
-index f208eb02..82ee62e6 100644
+index f208eb02be..82ee62e6b4 100644
 --- a/src/gui/kernel/qscreen.cpp
 +++ b/src/gui/kernel/qscreen.cpp
 @@ -279,7 +279,7 @@ qreal QScreen::logicalDotsPerInchX() const
@@ -111,5 +113,5 @@ index f208eb02..82ee62e6 100644
  }
  
 -- 
-2.22.0.windows.1
+2.24.1.windows.2
 

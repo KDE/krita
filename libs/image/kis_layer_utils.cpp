@@ -2020,10 +2020,6 @@ namespace KisLayerUtils {
             currentRect |= realNodeChangeRect(node, currentRect);
             node = node->nextSibling();
         }
-        
-        if (rootNode->isAnimated() && rootNode->image()) {
-            rootNode->projectionPlane()->recalculate(rootNode->image()->bounds(), rootNode);
-        }
 
         if (!rootNode->isFakeNode()) {
             // TODO: it would be better to count up changeRect inside
@@ -2033,7 +2029,7 @@ namespace KisLayerUtils {
             // all the child layers as the source of the change. We are calculating
             // the change rect **before** the update itself, therefore rootNode->exactBounds()
             // is not yet prepared, hence its exact bounds still contail old values.
-            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds() | currentRect | rootNode->projectionPlane()->needRect(currentRect));
+            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds() | currentRect);
         }
 
         return currentRect;
@@ -2043,6 +2039,7 @@ namespace KisLayerUtils {
     void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea) {
         QRect realNodeRect = Private::realNodeChangeRect(rootNode);
         if (!preparedArea.contains(realNodeRect)) {
+
             QRegion dirtyRegion = realNodeRect;
             dirtyRegion -= preparedArea;
 

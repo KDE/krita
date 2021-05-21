@@ -518,14 +518,12 @@ void KoFillConfigWidget::noColorSelected()
         d->canvas->addCommand(command);
     }
 
-
     if (d->fillVariant == KoFlake::StrokeFill) {
-         KUndo2Command *lineCommand = wrapper.setLineWidth(0.0);
-         if (lineCommand) {
-             d->canvas->addCommand(lineCommand);
-         }
-     }
-
+        KUndo2Command *lineCommand = wrapper.setColor(Qt::transparent);
+        if (lineCommand) {
+            d->canvas->addCommand(lineCommand);
+        }
+    }
 
     emit sigFillChanged();
 }

@@ -397,6 +397,7 @@ void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
 {
     xml->writeStartElement("gridDensity");
     xml->writeAttribute("value", KisDomUtils::toString( this->gridDensity()));
+    xml->writeEndElement();
     xml->writeStartElement("useVertical");
     xml->writeAttribute("value", KisDomUtils::toString( (int)this->useVertical()));
     xml->writeEndElement();

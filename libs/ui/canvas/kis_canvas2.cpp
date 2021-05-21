@@ -726,8 +726,8 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     m_d->proofingConfig->conversionFlags = conversionFlags;
 
     m_d->proofingConfigUpdated = true;
-    startUpdateInPatches(this->image()->bounds());
 
+    refetchDataFromImage();
 }
 
 void KisCanvas2::slotSoftProofing(bool softProofing)

@@ -43,6 +43,7 @@ Comment[es]=Asignar un guion de Python a uno de los diez accesos rápidos config
 Comment[fr]=Associer un script Python parmi n'importe lequel des 10 raccourcis configurables.
 Comment[hi]=दस कॉन्फ़िगर किए गए शॉर्टकट में से किसी एक पायथन स्क्रिप्ट निर्दिष्ट करें। 
 Comment[it]=Assegna uno script Python a una qualsiasi delle dieci scorciatoie configurabili.
+Comment[ko]=Python 스크립트를 단축키 10개 중 하나에 할당합니다.
 Comment[nl]=Een Python script toekennen aan elk van tien te configureren sneltoetsen.
 Comment[pl]=Przypisz skrypt Pythona do jednego z dziesięciu dostępnych skrótów.
 Comment[pt]=Atribui um programa em Python a um conjunto de dez atalhos configuráveis.

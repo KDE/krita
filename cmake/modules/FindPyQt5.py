@@ -1,7 +1,10 @@
-# Copyright (c) 2014, Simon Edwards <simon@simonzone.com>
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-FileCopyrightText: 2014 Simon Edwards <simon@simonzone.com>
+# SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
+import re
 import sys
 import os
 from distutils.sysconfig import get_python_lib
@@ -47,3 +50,6 @@ if not os.path.exists(pyqt_sip_dir):  # Fallback for older PyQt5/SIP
 print("pyqt_sip_dir:%s" % pyqt_sip_dir)
 
 print("pyqt_sip_flags:%s" % PyQt5.QtCore.PYQT_CONFIGURATION["sip_flags"])
+
+tags = re.findall(r"-t ([^\s]+)", PyQt5.QtCore.PYQT_CONFIGURATION["sip_flags"])
+print("pyqt_sip_tags:%s" % ",".join(tags))

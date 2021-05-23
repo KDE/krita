@@ -1,8 +1,9 @@
 /*
  * This file is part of PyKrita, Krita' Python scripting plugin.
  *
- * Copyright (C) 2013 Alex Turbov <i.zaufi@gmail.com>
- * Copyright (C) 2014-2016 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2013 Alex Turbov <i.zaufi@gmail.com>
+ * SPDX-FileCopyrightText: 2014-2016 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 #define  __PYKRITA_MODULE_H__
 
 #include <Python.h>
+#include "config.h"
 
 #if PY_MAJOR_VERSION >= 3
 #ifndef IS_PY3K
@@ -31,11 +33,17 @@
 #endif
 #endif
 
+#if SIP_VERSION >= 0x0500000
+#define PYKRITA_INIT PyInit_krita
+#else
+#define PYKRITA_INIT PyInit_pykrita
+#endif
+
 /**
  * Initializer for the built-in Python module.
  */
 #if defined(IS_PY3K)
-PyMODINIT_FUNC PyInit_pykrita();
+PyMODINIT_FUNC PYKRITA_INIT();
 #else
 void initpykrita();
 #endif

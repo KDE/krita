@@ -1,8 +1,9 @@
 # Find PyQt5
 # ~~~~~~~~~~
-# Copyright (c) 2014, Simon Edwards <simon@simonzone.com>
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-FileCopyrightText: 2014 Simon Edwards <simon@simonzone.com>
+# SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+#
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # PyQt5 website: http://www.riverbankcomputing.co.uk/pyqt/index.php
 #
@@ -21,6 +22,8 @@
 # PYQT5_SIP_DIR - The directory holding the PyQt5 .sip files.
 #
 # PYQT5_SIP_FLAGS - The SIP flags used to build PyQt.
+#
+# PYQT5_SIP_TAGS - The SIP tags necessary to bind to PyQt. (v5+)
 
 IF(EXISTS PYQT5_VERSION)
   # Already in cache, be silent
@@ -49,6 +52,8 @@ ELSE(EXISTS PYQT5_VERSION)
     STRING(REGEX REPLACE ".*\npyqt_version_tag:([^\n]+).*$" "\\1" PYQT5_VERSION_TAG ${pyqt5_config})
     STRING(REGEX REPLACE ".*\npyqt_sip_dir:([^\n]+).*$" "\\1" PYQT5_SIP_DIR ${pyqt5_config})
     STRING(REGEX REPLACE ".*\npyqt_sip_flags:([^\n]+).*$" "\\1" PYQT5_SIP_FLAGS ${pyqt5_config})
+    STRING(REGEX REPLACE ".*\npyqt_sip_tags:([^\n]+).*$" "\\1" _tags ${pyqt5_config})
+    STRING(REPLACE "," ";" PYQT5_SIP_TAGS ${_tags})
     IF(${pyqt5_config} MATCHES pyqt_sip_name)
       STRING(REGEX REPLACE ".*\npyqt_sip_name:([^\n]+).*$" "\\1" PYQT5_SIP_NAME ${pyqt5_config})
     ENDIF(${pyqt5_config} MATCHES pyqt_sip_name)

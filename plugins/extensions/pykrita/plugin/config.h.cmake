@@ -1,6 +1,7 @@
 // This file is part of PyKrita, Krita' Python scripting plugin.
 //
-// Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
+// SPDX-FileCopyrightText: 2006 Paul Giannaros <paul@giannaros.org>
+// SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -18,6 +19,8 @@
 // Boston, MA 02110-1301, USA.
 
 #define PYKRITA_PYTHON_LIBRARY "${PYTHON_LIBRARY}"
+
+#define SIP_VERSION 0x@SIP_VERSION@
 
 /// Name of the file where per-plugin configuration is stored
 #define CONFIG_FILE "kritapykritarc"

@@ -1,8 +1,9 @@
 // This file is part of PyKrita, Krita' Python scripting plugin.
 //
-// Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
-// Copyright (C) 2012, 2013 Shaheed Haque <srhaque@theiet.org>
-// Copyright (C) 2013 Alex Turbov <i.zaufi@gmail.com>
+// SPDX-FileCopyrightText: 2006 Paul Giannaros <paul@giannaros.org>
+// SPDX-FileCopyrightText: 2012, 2013 Shaheed Haque <srhaque@theiet.org>
+// SPDX-FileCopyrightText: 2013 Alex Turbov <i.zaufi@gmail.com>
+// SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -24,8 +25,6 @@
 #include "PykritaModule.h"
 
 #include "kis_debug.h"
-
-#define PYKRITA_INIT PyInit_pykrita
 
 struct module_state {
     PyObject *error;
@@ -84,7 +83,7 @@ static struct PyModuleDef moduledef = {
 
 #define INITERROR return NULL
 
-PyMODINIT_FUNC PyInit_pykrita()
+PyMODINIT_FUNC PYKRITA_INIT()
 
 #else
 #define INITERROR return

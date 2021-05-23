@@ -1,7 +1,8 @@
 // This file is part of PyKrita, Krita' Python scripting plugin.
 //
-// Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
-// Copyright (C) 2012, 2013 Shaheed Haque <srhaque@theiet.org>
+// SPDX-FileCopyrightText: 2006 Paul Giannaros <paul@giannaros.org>
+// SPDX-FileCopyrightText: 2012, 2013 Shaheed Haque <srhaque@theiet.org>
+// SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -77,7 +78,7 @@ namespace PyKrita
         }
 
 #if defined(IS_PY3K)
-        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PyInit_pykrita)) {
+        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
 #else
         if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, initpykrita)) {
 #endif
@@ -96,7 +97,7 @@ namespace PyKrita
 
 #if defined(IS_PY3K)
         // Initialize our built-in module.
-        auto pykritaModule = PyInit_pykrita();
+        auto pykritaModule = PYKRITA_INIT();
 
         if (!pykritaModule) {
             initStatus = INIT_CANNOT_LOAD_PYKRITA_MODULE;

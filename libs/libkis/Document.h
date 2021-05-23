@@ -897,6 +897,7 @@ private:
     friend class Window;
     friend class Filter;
     friend class View;
+    friend class VectorLayer;
     QPointer<KisDocument> document() const;
     void setOwnsDocument(bool ownsDocument);
 

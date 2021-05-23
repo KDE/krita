@@ -2,6 +2,7 @@
 //
 // SPDX-FileCopyrightText: 2006 Paul Giannaros <paul@giannaros.org>
 // SPDX-FileCopyrightText: 2012, 2013 Shaheed Haque <srhaque@theiet.org>
+// SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 //
 // SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
 //
@@ -63,7 +64,7 @@ namespace PyKrita
         }
 
 #if defined(IS_PY3K)
-        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PyInit_pykrita)) {
+        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
 #else
         if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, initpykrita)) {
 #endif
@@ -82,7 +83,7 @@ namespace PyKrita
 
 #if defined(IS_PY3K)
         // Initialize our built-in module.
-        auto pykritaModule = PyInit_pykrita();
+        auto pykritaModule = PYKRITA_INIT();
 
         if (!pykritaModule) {
             initStatus = INIT_CANNOT_LOAD_PYKRITA_MODULE;

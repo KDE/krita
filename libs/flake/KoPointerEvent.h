@@ -182,6 +182,11 @@ public:
      */
     int rotationZ() const;
 
+    /**
+     * Returns the time the event was registered.
+     */
+    ulong time() const;
+
 
     /// The point in document coordinates.
     const QPointF point;

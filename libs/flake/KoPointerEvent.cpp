@@ -232,6 +232,11 @@ int KoPointerEvent::rotationZ() const
     return d->rotationZ;
 }
 
+ulong KoPointerEvent::time() const
+{
+    return static_cast<QInputEvent*>(m_event)->timestamp();
+}
+
 bool KoPointerEvent::isTabletEvent()
 {
     return dynamic_cast<QTabletEvent*>(m_event) != 0;

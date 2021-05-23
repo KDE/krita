@@ -9,7 +9,7 @@
 
 #include <QScopedPointer>
 
-class QPointF;
+class KoPointerEvent;
 
 
 class KisSpeedSmoother
@@ -19,7 +19,7 @@ public:
     ~KisSpeedSmoother();
 
     qreal lastSpeed() const;
-    qreal getNextSpeed(const QPointF &pt);
+    qreal getNextSpeed(const KoPointerEvent *event);
     void clear();
 
 private:

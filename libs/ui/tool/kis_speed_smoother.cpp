@@ -7,7 +7,6 @@
 #include "kis_speed_smoother.h"
 
 #include <boost/circular_buffer.hpp>
-#include <QElapsedTimer>
 #include <QPointF>
 
 #include <KoPointerEvent.h>
@@ -26,7 +25,6 @@ struct KisSpeedSmoother::Private
         : distances(historySize),
           lastSpeed(0)
     {
-        timer.start();
     }
 
     struct DistancePoint {
@@ -49,7 +47,6 @@ struct KisSpeedSmoother::Private
 
     QPointF lastPoint;
     qreal lastTime;
-    QElapsedTimer timer;
     qreal lastSpeed;
 };
 
@@ -113,7 +110,6 @@ qreal KisSpeedSmoother::getNextSpeed(const KoPointerEvent *event)
 
 void KisSpeedSmoother::clear()
 {
-    m_d->timer.restart();
     m_d->distances.clear();
     m_d->distances.push_back(Private::DistancePoint(0.0, 0.0));
     m_d->lastPoint = QPointF();

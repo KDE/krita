@@ -34,18 +34,26 @@ class VanishingPointAssistant : public KisPaintingAssistant
 {
 public:
     VanishingPointAssistant();
+
+    enum VanishingPointAssistantHandle {
+        VanishingPointHandle,
+        LocalFirstHandle,
+        LocalSecondHandle
+    };
+
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny) override;
     void setAdjustedBrushPosition(const QPointF position) override;
     void setFollowBrushPosition(bool follow) override;
     void endStroke() override;
     QPointF getEditorPosition() const override;
-    int numHandles() const override { return 1; }
+    int numHandles() const override { return isLocal() ? 3 : 1; }
 
     float referenceLineDensity();
     void setReferenceLineDensity(float value);
 
     bool isAssistantComplete() const override;
+    bool canBeLocal() const override;
 
     void saveCustomXml(QXmlStreamWriter* xml) override;
     bool loadCustomXml(QXmlStreamReader* xml) override;
@@ -54,8 +62,13 @@ protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
+
+
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     explicit VanishingPointAssistant(const VanishingPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
+
+    QRectF getLocalRect();
+
     KisCanvas2 *m_canvas;
 
     float m_referenceLineDensity = 15.0;
@@ -65,6 +78,7 @@ private:
     bool m_followBrushPosition;
     bool m_adjustedPositionValid;
     QPointF m_adjustedBrushPosition;
+    bool m_hasBeenInsideLocalRect;
 
 };
 

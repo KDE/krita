@@ -56,6 +56,7 @@ void VanishingPointAssistant::endStroke()
     // Brush stroke ended, guides should follow the brush position again.
     m_followBrushPosition = false;
     m_adjustedPositionValid = false;
+    m_hasBeenInsideLocalRect = false;
 }
 
 void VanishingPointAssistant::setFollowBrushPosition(bool follow)
@@ -73,6 +74,14 @@ QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strok
     if (dx * dx + dy * dy < 4.0) {
         // allow some movement before snapping
         return strokeBegin;
+    }
+
+    if (isLocal() && isAssistantComplete()) {
+        if (getLocalRect().contains(pt)) {
+            m_hasBeenInsideLocalRect = true;
+        } else if (!m_hasBeenInsideLocalRect) { // isn't inside and wasn't inside before
+            return QPointF(qQNaN(), qQNaN());
+        }
     }
 
     //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
@@ -96,6 +105,19 @@ QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strok
 QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
+}
+
+QRectF VanishingPointAssistant::getLocalRect()
+{
+    if (!isLocal() || handles().size() < 3) {
+        return QRect();
+    }
+
+    QPointF topLeft = QPointF(qMin(handles()[LocalFirstHandle]->x(), handles()[LocalSecondHandle]->x()), qMin(handles()[LocalFirstHandle]->y(), handles()[LocalSecondHandle]->y()));
+    QPointF bottomRight = QPointF(qMax(handles()[LocalFirstHandle]->x(), handles()[LocalSecondHandle]->x()), qMax(handles()[LocalFirstHandle]->y(), handles()[LocalSecondHandle]->y()));
+
+    QRectF rect(topLeft, bottomRight);
+    return rect;
 }
 
 void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
@@ -125,40 +147,36 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
 
-
+    QRect viewport= gc.viewport();
+    QRect viewportAndLocal = (isLocal() && isAssistantComplete()) ?
+                QRectF(viewport).intersected(converter->documentToWidgetTransform().mapRect(getLocalRect())).toRect() : viewport;
 
     // draw controls when we are not editing
     if (canvas && canvas->paintingAssistantsDecoration()->isEditingAssistants() == false && isAssistantComplete()) {
 
         if (isSnappingActive() && previewVisible == true) {
             //don't draw if invalid.
-            QTransform initialTransform = converter->documentToWidgetTransform();
-            QPointF startPoint = initialTransform.map(*handles()[0]);
 
-            if (m_followBrushPosition && m_adjustedPositionValid) {
-                mousePos = initialTransform.map(m_adjustedBrushPosition);
-            }
+            if (!isLocal() || getLocalRect().contains(m_adjustedBrushPosition)) {
 
-            QLineF snapLine= QLineF(startPoint, mousePos);
-            QRect viewport= gc.viewport();
+                QTransform initialTransform = converter->documentToWidgetTransform();
+                QPointF startPoint = initialTransform.map(*handles()[0]);
 
-            KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
+                if (m_followBrushPosition && m_adjustedPositionValid) {
+                    mousePos = initialTransform.map(m_adjustedBrushPosition);
+                }
 
-            QRect bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+                QLineF snapLine= QLineF(startPoint, mousePos);
 
-            QPainterPath path;
+                KisAlgebra2D::intersectLineRect(snapLine, viewport, false, true);
 
-            if (bounds.contains(startPoint.toPoint())){
-                path.moveTo(startPoint);
-                path.lineTo(snapLine.p2());
-            }
-            else
-            {
+                QPainterPath path;
+
                 path.moveTo(snapLine.p2());
                 path.lineTo(snapLine.p1());
-            }
 
-            drawPreview(gc, path);//and we draw the preview.
+                drawPreview(gc, path);//and we draw the preview.
+            }
         }
     }
 
@@ -214,6 +232,22 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         QTransform initialTransform = converter->documentToWidgetTransform();
         QPointF p0 = initialTransform.map(*handles()[0]); // main vanishing point
 
+        if (isLocal() && isAssistantComplete()) {
+            QPainterPath path;
+            QPointF p1 = *handles()[(int)LocalFirstHandle];
+            QPointF p3 = *handles()[(int)LocalSecondHandle];
+            QPointF p2 = QPointF(p1.x(), p3.y());
+            QPointF p4 = QPointF(p3.x(), p1.y());
+
+            path.moveTo(initialTransform.map(p1));
+
+            path.lineTo(initialTransform.map(p2));
+            path.lineTo(initialTransform.map(p3));
+            path.lineTo(initialTransform.map(p4));
+            path.lineTo(initialTransform.map(p1));
+            drawPreview(gc, path);//and we draw the preview.
+        }
+
         for (int currentAngle=0; currentAngle <= 180; currentAngle = currentAngle + m_referenceLineDensity ) {
 
             // determine the correct angle based on the iteration
@@ -225,8 +259,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
             // find point
             QLineF snapLine= QLineF(p0, unitAngle);
-            QRect viewport= gc.viewport();
-            KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
+            KisAlgebra2D::intersectLineRect(snapLine, viewportAndLocal, true);
 
             // make a line from VP center to edge of canvas with that angle
             QPainterPath path;
@@ -289,7 +322,12 @@ float VanishingPointAssistant::referenceLineDensity()
 
 bool VanishingPointAssistant::isAssistantComplete() const
 {
-    return handles().size() > 0; // only need one point to be ready
+    return handles().size() == numHandles();
+}
+
+bool VanishingPointAssistant::canBeLocal() const
+{
+    return true;
 }
 
 void VanishingPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
@@ -297,12 +335,18 @@ void VanishingPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
     xml->writeStartElement("angleDensity");
     xml->writeAttribute("value", KisDomUtils::toString( this->referenceLineDensity()));
     xml->writeEndElement();
+    xml->writeStartElement("isLocal");
+    xml->writeAttribute("value", KisDomUtils::toString( (int)this->isLocal()));
+    xml->writeEndElement();
 }
 
 bool VanishingPointAssistant::loadCustomXml(QXmlStreamReader* xml)
 {
     if (xml && xml->name() == "angleDensity") {
         this->setReferenceLineDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
+    }
+    if (xml && xml->name() == "isLocal") {
+        this->setLocal((bool)KisDomUtils::toInt(xml->attributes().value("value").toString()));
     }
 
     return true;

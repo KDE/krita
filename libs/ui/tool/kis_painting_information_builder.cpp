@@ -111,7 +111,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
     QPointF adjusted = adjustDocumentPoint(event->point, m_startPoint);
     QPointF imagePoint = documentToImage(adjusted);
     qreal perspective = calculatePerspective(adjusted);
-    qreal speed = m_speedSmoother->getNextSpeed(event);
+    qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint), event->time());
 
     KisPaintInformation pi(imagePoint,
                            !m_pressureDisabled ? 1.0 : pressureToCurve(event->pressure()),
@@ -135,7 +135,7 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
 {
     qreal perspective = calculatePerspective(imagePoint);
     qreal speed = !isStrokeStarted && event ?
-                m_speedSmoother->getNextSpeed(event) :
+                m_speedSmoother->getNextSpeed(imageToView(imagePoint), event->time()) :
                 m_speedSmoother->lastSpeed();
 
     if (event) {

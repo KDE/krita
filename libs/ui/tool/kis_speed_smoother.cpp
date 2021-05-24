@@ -65,22 +65,20 @@ qreal KisSpeedSmoother::lastSpeed() const
     return m_d->lastSpeed;
 }
 
-qreal KisSpeedSmoother::getNextSpeed(const KoPointerEvent *event)
+qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt, ulong timestamp)
 {
-    QPointF pt(event->pos());
     qreal dist = kisDistance(pt, m_d->lastPoint);
-    qreal time = event->time();
 
     if (m_d->lastPoint.isNull()) {
         m_d->lastPoint = pt;
-        m_d->lastTime = time;
+        m_d->lastTime = timestamp;
         m_d->lastSpeed = 0.0;
         return m_d->lastSpeed;
     }
 
-    m_d->distances.push_back(Private::DistancePoint(dist, time - m_d->lastTime));
+    m_d->distances.push_back(Private::DistancePoint(dist, timestamp - m_d->lastTime));
     m_d->lastPoint = pt;
-    m_d->lastTime = time;
+    m_d->lastTime = timestamp;
 
 
     Private::DistanceBuffer::const_reverse_iterator it = m_d->distances.rbegin();
@@ -92,14 +90,28 @@ qreal KisSpeedSmoother::getNextSpeed(const KoPointerEvent *event)
 
     for (; it != end; ++it) {
         itemsSearched++;
-        if(itemsSearched > MAX_SAMPLE_COUNT || it->time > MAX_TIME_DIFF) {
+        if (itemsSearched > MAX_SAMPLE_COUNT || it->time > MAX_TIME_DIFF) {
             break;
         }
         totalDistance += it->distance;
-        totalTime += it->time;
+        if (it->time > 0) {
+            totalTime += it->time;
+        } else { // workaround for Windows event queue
+            if (totalTime == 0) {
+                if (m_d->lastSpeed > 0.0001) {
+                    // we assume the cursor is moving at the same speed as lastSpeed.
+                    totalTime += it->distance/m_d->lastSpeed;
+                } else {
+                    // No information to proceed so we assume it took 7ms
+                    totalTime += 7;
+                }
+            } else {
+                totalTime += totalDistance/totalTime;
+            }
+        }
     }
 
-    if(totalTime == 0) {
+    if (totalTime == 0) {
         m_d->lastSpeed = 0.0;
     } else {
         m_d->lastSpeed = totalDistance / totalTime;

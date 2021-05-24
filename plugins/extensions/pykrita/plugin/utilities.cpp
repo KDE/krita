@@ -372,6 +372,16 @@ bool Python::setPath(const QStringList& scriptPaths)
         errScript << "Bundled Python not found, cannot set Python library paths";
         return false;
     }
+
+    // Add stock Python libs folder at <root>/lib/site-packages
+    QString distToolsPath = findKritaPythonLibsPath("site-packages");
+    dbgScript << "distToolsPath (site-packages)" << distToolsPath;
+    if (distToolsPath.isEmpty()) {
+        dbgScript << "Cannot find site-packages";
+        return false;
+    }
+    dbgScript << "Found site-packages at" << distToolsPath;
+    paths.append(distToolsPath);
 #else
     // If using a system Python install, respect the current PYTHONPATH
     if (runningInBundle) {

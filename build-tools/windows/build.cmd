@@ -629,6 +629,7 @@ if not "%ARG_NO_INTERACTIVE%" == "1" (
 :: Initialize clean PATH
 set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
 set PATH=%MINGW_BIN_DIR%;%PYTHON_BIN_DIR%;%PATH%
+set PYTHONPATH=%DEPS_INSTALL_DIR%\Lib\site-packages;%PYTHONPATH%
 
 echo Creating dirs...
 if NOT "%ARG_SKIP_DEPS%" == "1" (

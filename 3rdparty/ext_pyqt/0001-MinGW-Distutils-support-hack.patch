@@ -1,0 +1,40 @@
+From d13bc940f9400305cbd7474f6a74b67d76101e68 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvin@alvinhc.com>
+Date: Mon, 24 May 2021 13:25:42 +0000
+Subject: [PATCH] MinGW Distutils support hack
+
+---
+ setup.py | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/setup.py b/setup.py
+index 18984ce..4852658 100644
+--- a/setup.py
++++ b/setup.py
+@@ -20,6 +20,23 @@
+ # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ # POSSIBILITY OF SUCH DAMAGE.
+ 
++from distutils import cygwinccompiler
++
++
++def _get_msvcr_replacement():
++    # So, the original `get_msvcr` function is supposed to return the name
++    # of the specific version of MS C runtime so that it can be (?) copied
++    # over. But we don't really need to do it since we have the packaging
++    # script to take care of that.
++    return []
++
++
++if not callable(cygwinccompiler.get_msvcr):
++    raise RuntimeError(
++        "distutils.cygwinccompiler.get_msvcr is not a function, which is unexpected")
++
++# HACK: Replace the function to apply our hack...
++cygwinccompiler.get_msvcr = _get_msvcr_replacement
+ 
+ import glob
+ import sys
+-- 
+2.31.1.windows.1
+

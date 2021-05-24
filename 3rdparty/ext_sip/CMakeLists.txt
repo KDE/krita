@@ -53,28 +53,30 @@ if (UNIX)
             UPDATE_COMMAND ""
         )
     endif()
-elseif (MINGW)
-    list(APPEND _SIP_conf
-        --platform win32-g++
-        -b ${PREFIX_ext_sip}/bin
-        -d ${PREFIX_ext_sip}/lib/krita-python-libs
-        -e ${PREFIX_ext_sip}/include
-        --sipdir ${PREFIX_ext_sip}/share/sip
-        --target-py-version 3.8
-        --sip-module PyQt5.sip
-    )
+elseif (WIN32)
+    if(MINGW)
+        set(_compiler -c mingw32)
+    elseif(MSVC)
+        set(_compiler -c msvc)
+    endif()
+
+    string(REPLACE "/" "\\" _sip_prefix ${PREFIX_ext_sip})
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/sip-4.19.19.tar.gz
-        URL_MD5 98111479309dc472410f26080d6d4a88
+        URL https://pypi.python.org/packages/source/s/sip/sip-6.1.0.tar.gz
+        URL_HASH SHA256=f069d550dd819609e019e5dc58fc5193e081c7f3fb4f7dc8f9be734e34d4e56e
 
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf}
-        BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MinGW-Distutils-support-hack.patch
 
-        # force single-threaded installation to avoid
-        # race conditions in post-install .py script
-        INSTALL_COMMAND mingw32-make -j1 install
-        
+        CONFIGURE_COMMAND ""
+
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS} ${_compiler}
+
+        # HACK: Create lib\site-packages before installing
+        # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_sip_prefix}\\lib\\site-packages
+            COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix ${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
+
         BUILD_IN_SOURCE 1
 
         UPDATE_COMMAND ""

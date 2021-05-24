@@ -230,7 +230,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 void KisPopupPalette::slotConfigurationChanged()
 {
     reconfigure();
-    adjustSize();
+    layout()->invalidate();
 }
 
 void KisPopupPalette::reconfigure()

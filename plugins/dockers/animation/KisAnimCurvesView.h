@@ -42,6 +42,7 @@ protected:
     void scrollContentsBy(int dx, int dy) override;
 
     void mousePressEvent(QMouseEvent *) override;
+    void mouseDoubleClickEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
 

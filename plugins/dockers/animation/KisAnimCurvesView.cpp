@@ -557,9 +557,52 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
                 continue;
             }
         }
+
+
+
     }
 
-    QAbstractItemView::mousePressEvent(e);
+    QModelIndex i = indexAt(e->pos());
+    if(indexHasKey(i)) {
+        clearSelection();
+        if (i == selectionModel()->currentIndex() && selectionModel()->hasSelection()) {
+            selectionModel()->select(i, QItemSelectionModel::Deselect);
+        } else {
+            selectionModel()->select(i, QItemSelectionModel::SelectCurrent);
+        }
+    }
+}
+
+
+void KisAnimCurvesView::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    QModelIndex clicked = indexAt(e->pos());
+
+    if(clicked.isValid()) {
+        selectionModel()->clear();
+        bool firstSelection = true;
+        if (e->modifiers() & Qt::AltModifier) {
+            for (int column = 0; column <= model()->columnCount(); column++) {
+                QModelIndex toSelect = model()->index(clicked.row(), column);
+                bool hasSpecial = toSelect.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool();
+                if (toSelect.isValid() && hasSpecial) {
+                    selectionModel()->select(toSelect, firstSelection ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Select);
+                    firstSelection = false;
+                }
+            }
+        } else {
+            for (int row = 0; row <= model()->rowCount(); row++) {
+                QModelIndex toSelect = model()->index(row, clicked.column());
+                bool hasSpecial = toSelect.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool();
+                if (toSelect.isValid() && hasSpecial) {
+                    selectionModel()->select(toSelect, firstSelection ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Select);
+                    firstSelection = false;
+                }
+            }
+        }
+    } else {
+        QAbstractItemView::mouseDoubleClickEvent(e);
+    }
 }
 
 void KisAnimCurvesView::mouseMoveEvent(QMouseEvent *e)
@@ -611,9 +654,9 @@ void KisAnimCurvesView::mouseMoveEvent(QMouseEvent *e)
                 m_d->isDraggingKeyframe = true;
             }
         }
+    } else {
+        QAbstractItemView::mouseMoveEvent(e);
     }
-
-    QAbstractItemView::mouseMoveEvent(e);
 }
 
 void KisAnimCurvesView::mouseReleaseEvent(QMouseEvent *e)

@@ -63,10 +63,46 @@ public Q_SLOTS:
     virtual QString type() const;
 
     /**
+     * @brief zIndex
+     * @return the zindex of the shape.
+     */
+    int zIndex() const;
+
+    /**
+     * @brief setZIndex
+     * @param zindex set the shape zindex value.
+     */
+    void setZIndex(int zindex);
+
+    /**
+     * @brief selectable
+     * @return whether the shape is user selectable.
+     */
+    bool selectable() const;
+
+    /**
+     * @brief setSelectable
+     * @param selectable whether the shape should be user selectable.
+     */
+    void setSelectable(bool selectable);
+
+    /**
+     * @brief geometryProtected
+     * @return whether the shape is protected from user changing the shape geometry.
+     */
+    bool geometryProtected() const;
+
+    /**
+     * @brief setGeometryProtected
+     * @param protect whether the shape should be geometry protected from the user.
+     */
+    void setGeometryProtected(bool protect);
+
+    /**
      * @brief visible
      * @return whether the shape is visible.
      */
-    bool visible();
+    bool visible() const;
 
     /**
      * @brief setVisible
@@ -93,11 +129,42 @@ public Q_SLOTS:
     void setPosition(QPointF point);
 
     /**
+     * @brief transformation the 2D transformation matrix of the shape.
+     * @return the 2D transformation matrix.
+     */
+    QTransform transformation() const;
+
+    /**
+     * @brief setTransformation set the 2D transformation matrix of the shape.
+     * @param matrix the new 2D transformation matrix.
+     */
+    void setTransformation(QTransform matrix);
+
+    /**
+     * @brief remove delete the shape.
+     */
+    bool remove();
+
+    /**
+     * @brief update queue the shape update.
+     */
+    void update();
+
+    /**
+     * @brief updateAbsolute queue the shape update in the specified rectangle.
+     * @param box the RectF rectangle to update.
+     */
+    void updateAbsolute(QRectF box);
+
+    /**
      * @brief toSvg
      * convert the shape to svg, will not include style definitions.
+     * @param prependStyles prepend the style data. Default: false
+     * @param stripTextMode enable strip text mode. Default: true
      * @return the svg in a string.
      */
-    QString toSvg();
+
+    QString toSvg(bool prependStyles = false, bool stripTextMode = true);
 
 private:
     friend class GroupShape;

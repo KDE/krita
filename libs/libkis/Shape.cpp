@@ -10,6 +10,16 @@
 #include <SvgSavingContext.h>
 #include <QBuffer>
 #include <KoDocumentResourceManager.h>
+#include <kis_processing_applicator.h>
+#include <KisPart.h>
+#include <KisView.h>
+#include <KisDocument.h>
+#include <kis_canvas2.h>
+#include <KoShapeController.h>
+
+#include "Krita.h"
+#include "Document.h"
+
 struct Shape::Private {
     Private() {}
     KoShape *shape {0};
@@ -42,7 +52,37 @@ QString Shape::type() const
     return d->shape->shapeId();
 }
 
-bool Shape::visible()
+int Shape::zIndex() const
+{
+    return d->shape->zIndex();
+}
+
+void Shape::setZIndex(int zindex)
+{
+    d->shape->setZIndex(zindex);
+}
+
+bool Shape::selectable() const
+{
+    return d->shape->isSelectable();
+}
+
+void Shape::setSelectable(bool selectable)
+{
+    d->shape->setSelectable(selectable);
+}
+
+bool Shape::geometryProtected() const
+{
+    return d->shape->isGeometryProtected();
+}
+
+void Shape::setGeometryProtected(bool protect)
+{
+    d->shape->setGeometryProtected(protect);
+}
+
+bool Shape::visible() const
 {
     return d->shape->isVisible();
 }
@@ -67,7 +107,51 @@ void Shape::setPosition(QPointF point)
     d->shape->setPosition(point);
 }
 
-QString Shape::toSvg()
+QTransform Shape::transformation() const
+{
+    return d->shape->transformation();
+}
+
+void Shape::setTransformation(QTransform matrix)
+{
+    d->shape->setTransformation(matrix);
+}
+
+void Shape::update()
+{
+    return d->shape->update();
+}
+
+void Shape::updateAbsolute(QRectF box)
+{
+    return d->shape->updateAbsolute(box);
+}
+
+bool Shape::remove()
+{
+    if (!d->shape) return false;
+    if (!d->shape->parent()) return false;
+
+    bool removeStatus = false;
+    Document *document = Krita::instance()->activeDocument();
+
+    if (KisPart::instance()->viewCount(document->document()) > 0) {
+        for (QPointer<KisView> view : KisPart::instance()->views()) {
+            if (view && view->document() == document->document()) {
+                KisProcessingApplicator::runSingleCommandStroke(view->image(), view->canvasBase()->shapeController()->removeShape(d->shape));
+                view->image()->waitForDone();
+                removeStatus = true;
+                break;
+            }
+        }
+    }
+
+    delete document;
+
+    return removeStatus;
+}
+
+QString Shape::toSvg(bool prependStyles, bool stripTextMode)
 {
     QBuffer shapesBuffer;
     QBuffer stylesBuffer;
@@ -77,7 +161,7 @@ QString Shape::toSvg()
 
     {
         SvgSavingContext savingContext(shapesBuffer, stylesBuffer);
-        savingContext.setStrippedTextMode(true);
+        savingContext.setStrippedTextMode(stripTextMode);
         SvgWriter writer({d->shape});
         writer.saveDetached(savingContext);
     }
@@ -85,7 +169,7 @@ QString Shape::toSvg()
     shapesBuffer.close();
     stylesBuffer.close();
 
-    return QString::fromUtf8(shapesBuffer.data());
+    return (prependStyles ? QString::fromUtf8(stylesBuffer.data()):"") + QString::fromUtf8(shapesBuffer.data());
 }
 
 KoShape *Shape::shape()

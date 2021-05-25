@@ -107,19 +107,6 @@ QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF
     return project(pt, strokeBegin);
 }
 
-QRectF VanishingPointAssistant::getLocalRect()
-{
-    if (!isLocal() || handles().size() < 3) {
-        return QRect();
-    }
-
-    QPointF topLeft = QPointF(qMin(handles()[LocalFirstHandle]->x(), handles()[LocalSecondHandle]->x()), qMin(handles()[LocalFirstHandle]->y(), handles()[LocalSecondHandle]->y()));
-    QPointF bottomRight = QPointF(qMax(handles()[LocalFirstHandle]->x(), handles()[LocalSecondHandle]->x()), qMax(handles()[LocalFirstHandle]->y(), handles()[LocalSecondHandle]->y()));
-
-    QRectF rect(topLeft, bottomRight);
-    return rect;
-}
-
 void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     // HACK ALERT: side handles aren't saved in old krita versions
@@ -300,9 +287,33 @@ void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConver
     drawPath(gc, path, isSnappingActive());
 }
 
+KisPaintingAssistantHandleSP VanishingPointAssistant::firstLocalHandle() const
+{
+    if (handles().size() > LocalFirstHandle) {
+        return handles().at(LocalFirstHandle);
+    } else {
+        return 0;
+    }
+}
+
+KisPaintingAssistantHandleSP VanishingPointAssistant::secondLocalHandle() const
+{
+    if (handles().size() > LocalSecondHandle) {
+        return handles().at(LocalSecondHandle);
+    } else {
+        return 0;
+    }
+}
+
 QPointF VanishingPointAssistant::getEditorPosition() const
 {
-    return (*handles()[0]);
+    int pointHandle = 0;
+    if (handles().size() > pointHandle) {
+        return *handles().at(pointHandle);
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, QPointF(0, 0));
+        return QPointF(0, 0);
+    }
 }
 
 void VanishingPointAssistant::setReferenceLineDensity(float value)
@@ -322,7 +333,7 @@ float VanishingPointAssistant::referenceLineDensity()
 
 bool VanishingPointAssistant::isAssistantComplete() const
 {
-    return handles().size() == numHandles();
+    return handles().size() >= numHandles();
 }
 
 bool VanishingPointAssistant::canBeLocal() const

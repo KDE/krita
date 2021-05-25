@@ -935,6 +935,32 @@ QPointF KisPaintingAssistant::pixelToView(const QPoint pixelCoords) const
     return d->s->m_canvas->viewConverter()->documentToView(documentCoord);
 }
 
+KisPaintingAssistantHandleSP KisPaintingAssistant::firstLocalHandle() const
+{
+    return 0;
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::secondLocalHandle() const
+{
+    return 0;
+}
+
+QRectF KisPaintingAssistant::getLocalRect() const
+{
+    if (!isLocal() || !firstLocalHandle() || !secondLocalHandle()) {
+        return QRect();
+    }
+
+    KisPaintingAssistantHandleSP first = firstLocalHandle();
+    KisPaintingAssistantHandleSP second = secondLocalHandle();
+
+    QPointF topLeft = QPointF(qMin(first->x(), second->x()), qMin(first->y(), second->y()));
+    QPointF bottomRight = QPointF(qMax(first->x(), second->x()), qMax(first->y(), second->y()));
+
+    QRectF rect(topLeft, bottomRight);
+    return rect;
+}
+
 double KisPaintingAssistant::norm2(const QPointF& p)
 {
     return p.x() * p.x() + p.y() * p.y();

@@ -209,6 +209,12 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_handles;
 
     QPointF pixelToView(const QPoint pixelCoords) const;
+
+    virtual KisPaintingAssistantHandleSP firstLocalHandle() const;
+    virtual KisPaintingAssistantHandleSP secondLocalHandle() const;
+    QRectF getLocalRect() const;
+
+
 public:
     /// clones the list of assistants
     /// the originally shared handles will still be shared

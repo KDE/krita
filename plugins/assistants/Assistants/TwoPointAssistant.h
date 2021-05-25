@@ -68,12 +68,15 @@ public:
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
+
+    KisPaintingAssistantHandleSP firstLocalHandle() const override;
+    KisPaintingAssistantHandleSP secondLocalHandle() const override;
+
+
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny);
     explicit TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
     KisCanvas2 *m_canvas;
-
-    QRectF getLocalRect();
 
     QLineF m_snapLine;
     double m_gridDensity = 1.0;

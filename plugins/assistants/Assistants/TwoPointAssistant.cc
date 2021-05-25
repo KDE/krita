@@ -21,6 +21,7 @@
 #include <kis_dom_utils.h>
 #include <math.h>
 #include <QtCore/qmath.h>
+#include <kis_assert.h>
 
 TwoPointAssistant::TwoPointAssistant()
     : KisPaintingAssistant("two point", i18n("Two point assistant"))
@@ -40,19 +41,6 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
     , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
     , m_lastUsedPoint(rhs.m_lastUsedPoint)
 {
-}
-
-QRectF TwoPointAssistant::getLocalRect()
-{
-    if (!isLocal() || handles().size() < 5) {
-        return QRect();
-    }
-
-    QPointF topLeft = QPointF(qMin(handles()[LocalFirstHandle]->x(), handles()[LocalSecondHandle]->x()), qMin(handles()[LocalFirstHandle]->y(), handles()[LocalSecondHandle]->y()));
-    QPointF bottomRight = QPointF(qMax(handles()[LocalFirstHandle]->x(), handles()[LocalSecondHandle]->x()), qMax(handles()[LocalFirstHandle]->y(), handles()[LocalSecondHandle]->y()));
-
-    QRectF rect(topLeft, bottomRight);
-    return rect;
 }
 
 KisPaintingAssistantSP TwoPointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
@@ -335,9 +323,9 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             QGradient fade = QLinearGradient(initialTransform.map(inv.map(upper)),
                                              initialTransform.map(inv.map(lower)));
             color.setAlphaF(0);
-            fade.setColorAt(0.2, effectiveAssistantColor());
+            fade.setColorAt(0.4, effectiveAssistantColor());
             fade.setColorAt(0.5, color);
-            fade.setColorAt(0.8, effectiveAssistantColor());
+            fade.setColorAt(0.6, effectiveAssistantColor());
             const QPen pen = gc.pen();
             const QBrush new_brush = QBrush(fade);
             const QPen new_pen = QPen(new_brush, pen.width(), pen.style());
@@ -402,9 +390,36 @@ void TwoPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *c
     }
 }
 
+KisPaintingAssistantHandleSP TwoPointAssistant::firstLocalHandle() const
+{
+    if (handles().size() > LocalFirstHandle) {
+        return handles().at(LocalFirstHandle);
+    } else {
+        return 0;
+    }
+}
+
+KisPaintingAssistantHandleSP TwoPointAssistant::secondLocalHandle() const
+{
+    if (handles().size() > LocalSecondHandle) {
+        return handles().at(LocalSecondHandle);
+    } else {
+        return 0;
+    }
+}
+
 QPointF TwoPointAssistant::getEditorPosition() const
 {
-    return *handles()[2];
+    int centerOfVisionHandle = 2;
+    if (handles().size() > centerOfVisionHandle) {
+        return *handles().at(centerOfVisionHandle);
+    } else if (handles().size() > 0) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, *handles().at(0));
+        return *handles().at(0);
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, QPointF(0, 0));
+        return QPointF(0, 0);
+    }
 }
 
 void TwoPointAssistant::setGridDensity(double density)

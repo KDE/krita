@@ -33,6 +33,7 @@ public:
     virtual void toXML(QDomElement *e) const = 0;
 
     virtual void translate(const QPointF &offset) = 0;
+    virtual void transformSrcAndDst(const QTransform &t) = 0;
 
     virtual QRect nonAffineChangeRect(const QRect &rc) = 0;
     virtual QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) = 0;
@@ -75,6 +76,7 @@ public:
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
 
     void translate(const QPointF &offset) override;
+    void transformSrcAndDst(const QTransform &t) override;
 
     // for tesing purposes only
     QTransform testingGetTransform() const;

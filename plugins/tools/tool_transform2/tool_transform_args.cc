@@ -270,22 +270,36 @@ ToolTransformArgs::~ToolTransformArgs()
 
 void ToolTransformArgs::translate(const QPointF &offset)
 {
-    if (m_mode == FREE_TRANSFORM || m_mode == PERSPECTIVE_4POINT) {
-        m_originalCenter += offset;
-        m_transformedCenter += offset;
+    transformSrcAndDst(QTransform::fromTranslate(offset.x(), offset.y()));
+}
+
+void ToolTransformArgs::transformSrcAndDst(const QTransform &t)
+{
+    if (m_mode == FREE_TRANSFORM ) {
+        m_originalCenter = t.map(m_originalCenter);
+        m_transformedCenter = t.map(m_transformedCenter);
+
+        QMatrix4x4 m(t);
+        m_cameraPos = m * m_cameraPos;
+    } else if (m_mode == PERSPECTIVE_4POINT) {
+        m_originalCenter = t.map(m_originalCenter);
+        m_transformedCenter = t.map(m_transformedCenter);
+
+        m_flattenedPerspectiveTransform = t.inverted() * m_flattenedPerspectiveTransform * t;
+
     } else if(m_mode == WARP || m_mode == CAGE) {
         for (auto &pt : m_origPoints) {
-            pt += offset;
+            pt = t.map(pt);
         }
 
         for (auto &pt : m_transfPoints) {
-            pt += offset;
+            pt = t.map(pt);
         }
     } else if (m_mode == LIQUIFY) {
         KIS_ASSERT_RECOVER_RETURN(m_liquifyWorker);
-        m_liquifyWorker->translate(offset);
+        m_liquifyWorker->transformSrcAndDst(t);
     } else if (m_mode == MESH) {
-        m_meshTransform.transformSrcAndDst(QTransform::fromTranslate(offset.x(), offset.y()));
+        m_meshTransform.transformSrcAndDst(t);
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
     }
@@ -568,38 +582,20 @@ void ToolTransformArgs::setMeshSymmetricalHandles(bool value)
     configGroup.writeEntry("meshSymmetricalHandles", value);
 }
 
-void ToolTransformArgs::scaleSrcAndDst(qreal scale)
+void ToolTransformArgs::scale3dSrcAndDst(qreal scale)
 {
     const QTransform t = QTransform::fromScale(scale, scale);
 
-    if (m_mode == FREE_TRANSFORM) {
-        m_transformedCenter = t.map(m_transformedCenter);
+    if (m_mode == FREE_TRANSFORM ) {
         m_originalCenter = t.map(m_originalCenter);
+        m_transformedCenter = t.map(m_transformedCenter);
 
+        // we need to scale Z-coordinate of the camera pos as well,
+        // so we cannot just do `QMatrix4x4 m(t)`.
         QMatrix4x4 m;
         m.scale(scale);
         m_cameraPos = m * m_cameraPos;
-
-    } else if (m_mode == PERSPECTIVE_4POINT) {
-        m_transformedCenter = t.map(m_transformedCenter);
-        m_originalCenter = t.map(m_originalCenter);
-
-        m_flattenedPerspectiveTransform = t.inverted() * m_flattenedPerspectiveTransform * t;
-
-
-    } else if(m_mode == WARP || m_mode == CAGE) {
-        for (auto it = m_origPoints.begin(); it != m_origPoints.end(); ++it) {
-            *it = t.map(*it);
-        }
-
-        for (auto it = m_transfPoints.begin(); it != m_transfPoints.end(); ++it) {
-            *it = t.map(*it);
-        }
-    } else if (m_mode == LIQUIFY) {
-        m_liquifyWorker->transformSrcAndDst(t);
-    } else if (m_mode == MESH) {
-        m_meshTransform.transformSrcAndDst(t);
     } else {
-        KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
+        transformSrcAndDst(t);
     }
 }

@@ -135,6 +135,17 @@ void KisDumbTransformMaskParams::translate(const QPointF &offset)
      */
 }
 
+void KisDumbTransformMaskParams::transformSrcAndDst(const QTransform &t)
+{
+    Q_UNUSED(t);
+
+    /**
+     * Normal translation doesn't change affine transformations
+     * in full-featured KisTransformMaskAdapter, so we should resemble
+     * this behavior in the dumb one
+     */
+}
+
 QRect KisDumbTransformMaskParams::nonAffineChangeRect(const QRect &rc)
 {
     return rc;

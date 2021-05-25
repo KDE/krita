@@ -35,6 +35,7 @@ public:
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
 
     void translate(const QPointF &offset) override;
+    void transformSrcAndDst(const QTransform &t) override;
 
     QRect nonAffineChangeRect(const QRect &rc) override;
     QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) override;

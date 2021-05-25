@@ -33,6 +33,7 @@
 #include "commands_new/kis_node_move_command2.h"
 
 #include "kis_do_something_command.h"
+#include <kis_transform_mask_params_interface.h>
 
 
 KisTransformProcessingVisitor::
@@ -139,7 +140,42 @@ void KisTransformProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter
     Q_UNUSED(mask);
     Q_UNUSED(undoAdapter);
 
-    warnKrita << "WARNING: transformation of the transform mask is not implemented";
+    KisTransformWorker tw(0, m_sx, m_sy, m_shearx, m_sheary,
+                          m_shearOrigin.x(), m_shearOrigin.y(),
+                          m_angle, m_tx, m_ty, 0,
+                          m_filter);
+
+    KisTransformMaskParamsInterfaceSP params = mask->transformParams()->clone();
+    params->transformSrcAndDst(tw.transform());
+
+    struct UndoCommand : public KUndo2Command
+    {
+        UndoCommand(KisTransformMaskSP mask,
+                    KisTransformMaskParamsInterfaceSP oldParams,
+                    KisTransformMaskParamsInterfaceSP newParams)
+            : m_mask(mask),
+              m_oldParams(oldParams),
+              m_newParams(newParams)
+        {
+        }
+
+        void undo() override {
+            m_mask->setTransformParams(m_oldParams);
+            m_mask->threadSafeForceStaticImageUpdate();
+        }
+
+        void redo() override {
+            m_mask->setTransformParams(m_newParams);
+            m_mask->threadSafeForceStaticImageUpdate();
+        }
+
+    private:
+        KisTransformMaskSP m_mask;
+        KisTransformMaskParamsInterfaceSP m_oldParams;
+        KisTransformMaskParamsInterfaceSP m_newParams;
+    };
+
+    undoAdapter->addCommand(new UndoCommand(mask, mask->transformParams(), params));
 }
 
 void KisTransformProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)

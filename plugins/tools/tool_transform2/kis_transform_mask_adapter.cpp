@@ -96,6 +96,11 @@ void KisTransformMaskAdapter::translate(const QPointF &offset)
     m_d->args->translate(offset);
 }
 
+void KisTransformMaskAdapter::transformSrcAndDst(const QTransform &t)
+{
+    m_d->args->transformSrcAndDst(t);
+}
+
 QRect KisTransformMaskAdapter::nonAffineChangeRect(const QRect &rc)
 {
     return KisTransformUtils::changeRect(*transformArgs(), rc);

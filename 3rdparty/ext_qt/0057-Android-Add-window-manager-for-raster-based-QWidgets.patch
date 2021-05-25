@@ -1,4 +1,4 @@
-From 7eb468209ca74002db998d381947ef097f202f26 Mon Sep 17 00:00:00 2001
+From cb50a72309837b831a58809b8fc83299392c3307 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 15 Apr 2021 21:35:50 +0000
 Subject: [PATCH] Android: Add window manager for raster based QWidgets
@@ -19,13 +19,13 @@ renderToTexture enabled.
  .../android/qandroidplatformbackingstore.cpp  |  13 +-
  .../android/qandroidplatformbackingstore.h    |   2 +-
  .../android/qandroidplatformopenglwindow.cpp  |  16 +-
- .../android/qandroidplatformscreen.cpp        |  44 +++-
+ .../android/qandroidplatformscreen.cpp        |  45 +++-
  .../android/qandroidplatformscreen.h          |   4 +
  .../android/qandroidplatformwindow.cpp        |   1 +
  .../android/qandroidplatformwindow.h          |   1 -
- .../android/qandroidplatformwindowmanager.cpp | 202 ++++++++++++++++++
+ .../android/qandroidplatformwindowmanager.cpp | 209 ++++++++++++++++++
  .../android/qandroidplatformwindowmanager.h   |  58 +++++
- 11 files changed, 339 insertions(+), 18 deletions(-)
+ 11 files changed, 347 insertions(+), 18 deletions(-)
  create mode 100644 src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
  create mode 100644 src/plugins/platforms/android/qandroidplatformwindowmanager.h
 
@@ -176,7 +176,7 @@ index 3de5d30623..35b437dd59 100644
  
  EGLSurface QAndroidPlatformOpenGLWindow::eglSurface(EGLConfig config)
 diff --git a/src/plugins/platforms/android/qandroidplatformscreen.cpp b/src/plugins/platforms/android/qandroidplatformscreen.cpp
-index 191967b913..92cb24fb50 100644
+index 191967b913..61ab6f58c7 100644
 --- a/src/plugins/platforms/android/qandroidplatformscreen.cpp
 +++ b/src/plugins/platforms/android/qandroidplatformscreen.cpp
 @@ -50,6 +50,7 @@
@@ -203,19 +203,20 @@ index 191967b913..92cb24fb50 100644
      Q_ASSERT(!m_windowStack.contains(window));
      m_windowStack.prepend(window);
      if (window->isRaster()) {
-@@ -177,6 +187,11 @@ void QAndroidPlatformScreen::removeWindow(QAndroidPlatformWindow *window)
+@@ -177,6 +187,12 @@ void QAndroidPlatformScreen::removeWindow(QAndroidPlatformWindow *window)
      if (window->parent() && window->isRaster())
          return;
  
 +    if (m_windowManagers.contains(window->winId())) {
 +        QAndroidPlatformWindowManager *wm = m_windowManagers[window->winId()];
++        m_windowManagers.remove(window->winId());
 +        wm->close();
 +        delete wm;
 +    }
  
      Q_ASSERT(m_windowStack.contains(window));
      m_windowStack.removeOne(window);
-@@ -202,6 +217,9 @@ void QAndroidPlatformScreen::raise(QAndroidPlatformWindow *window)
+@@ -202,6 +218,9 @@ void QAndroidPlatformScreen::raise(QAndroidPlatformWindow *window)
      if (index <= 0)
          return;
      m_windowStack.move(index, 0);
@@ -225,7 +226,7 @@ index 191967b913..92cb24fb50 100644
      if (window->isRaster()) {
          setDirty(window->geometry());
      }
-@@ -216,9 +234,19 @@ void QAndroidPlatformScreen::lower(QAndroidPlatformWindow *window)
+@@ -216,9 +235,19 @@ void QAndroidPlatformScreen::lower(QAndroidPlatformWindow *window)
          return;
  
      int index = m_windowStack.indexOf(window);
@@ -247,7 +248,7 @@ index 191967b913..92cb24fb50 100644
      if (window->isRaster()) {
          setDirty(window->geometry());
      }
-@@ -227,6 +255,14 @@ void QAndroidPlatformScreen::lower(QAndroidPlatformWindow *window)
+@@ -227,6 +256,14 @@ void QAndroidPlatformScreen::lower(QAndroidPlatformWindow *window)
      topWindowChanged(w);
  }
  
@@ -262,7 +263,7 @@ index 191967b913..92cb24fb50 100644
  void QAndroidPlatformScreen::scheduleUpdate()
  {
      if (!m_updatePending) {
-@@ -398,13 +434,15 @@ void QAndroidPlatformScreen::doRedraw()
+@@ -398,13 +435,15 @@ void QAndroidPlatformScreen::doRedraw()
              visibleRegion -= targetRect;
              QRect windowRect = targetRect.translated(-window->geometry().topLeft());
              QAndroidPlatformBackingStore *backingStore = static_cast<QAndroidPlatformWindow *>(window)->backingStore();
@@ -334,10 +335,10 @@ index f2e51bd3df..aad001c359 100644
  protected:
 diff --git a/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
 new file mode 100644
-index 0000000000..4214bb7a4e
+index 0000000000..d72dc67561
 --- /dev/null
 +++ b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
-@@ -0,0 +1,202 @@
+@@ -0,0 +1,209 @@
 +#include "qandroidplatformwindowmanager.h"
 +
 +#include "qandroidplatformwindow.h"
@@ -369,12 +370,12 @@ index 0000000000..4214bb7a4e
 +        return;
 +    }
 +    m_oldChildGeometry = rect;
-+    QRect childGeometry = QHighDpi::fromNativePixels(rect, m_realWindow->window());
-+    childGeometry.translate(-paddingLBR, -paddingTop);
-+    childGeometry.setSize({ 2 * paddingLBR + childGeometry.width(),
-+                            paddingLBR + childGeometry.height() + paddingTop });
++    QRect wmGeometry = QHighDpi::fromNativePixels(rect, m_realWindow->window());
++    wmGeometry.translate(-paddingLBR, -paddingTop);
++    wmGeometry.setSize({ 2 * paddingLBR + wmGeometry.width(),
++                            paddingLBR + wmGeometry.height() + paddingTop });
 +
-+    setGeometry(childGeometry);
++    setGeometry(wmGeometry);
 +    resize(QHighDpi::toNativePixels(geometry().size(), this));
 +}
 +
@@ -448,6 +449,12 @@ index 0000000000..4214bb7a4e
 +
 +void QAndroidPlatformWindowManager::showEvent(QShowEvent *event)
 +{
++    if (m_realWindow->geometry().topLeft().y() < paddingTop) {
++        QRect geom = m_realWindow->geometry();
++        geom.translate(0, paddingTop);
++        m_realWindow->setGeometry(geom);
++    }
++
 +    updateGeometry(m_realWindow->geometry());
 +
 +    setWindowState(Qt::WindowNoState);
@@ -475,7 +482,8 @@ index 0000000000..4214bb7a4e
 +{
 +    switch (m_grabbedAction) {
 +    case MOVE:
-+        m_realWindow->window()->setPosition(pos - m_realWindowOffset);
++        m_realWindow->window()->setPosition(QPoint(pos.x(), std::max(10, pos.y()))
++                                            - m_realWindowOffset);
 +        break;
 +    case HORIZONTAL_RESIZE_LEFT:
 +        resizeChildWindow(QRect(pos.x(), m_startingGeometry.y(),
@@ -605,5 +613,5 @@ index 0000000000..b12eb949f4
 +
 +#endif // __QANDROIDPLATFORMWINDOWMANAGER_H_
 -- 
-2.31.0
+2.31.1
 

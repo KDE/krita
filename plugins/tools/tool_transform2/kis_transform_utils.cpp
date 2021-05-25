@@ -255,8 +255,8 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
                                        config.originalCenter().x(),
                                        config.originalCenter().y(),
                                        config.aZ(),
-                                       (int)(translation.x()),
-                                       (int)(translation.y()),
+                                       translation.x(),
+                                       translation.y(),
                                        updater,
                                        config.filter());
 

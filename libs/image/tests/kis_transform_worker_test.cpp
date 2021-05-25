@@ -979,4 +979,46 @@ void KisTransformWorkerTest::testPartialProcessing()
     TestUtil::checkQImage(result, "transform_test", "partial", "single");
 }
 
+void KisTransformWorkerTest::testXScaleUpPixelAlignment_data()
+{
+    QTest::addColumn<int>("newSize");
+    QTest::newRow("35->36") << 36;
+    QTest::newRow("35->37") << 37;
+    QTest::newRow("35->43") << 43;
+
+    QTest::newRow("35->32") << 32;
+    QTest::newRow("35->15") << 15;
+    QTest::newRow("35->17") << 17;
+}
+
+void KisTransformWorkerTest::testXScaleUpPixelAlignment()
+{
+    QFETCH(int, newSize);
+
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    dev->fill(QRect(10,10,35,35), KoColor(Qt::blue, cs));
+
+    //qDebug() << "0" << ppVar(dev->exactBounds());
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisTransaction t(dev);
+    KisTransformWorker tw(dev, qreal(newSize) / 35.0, 1.0,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter);
+    tw.run();
+    t.end();
+
+    //qDebug() << "1" << ppVar(dev->exactBounds());
+
+    QCOMPARE(dev->exactBounds().width(), newSize);
+}
 KISTEST_MAIN(KisTransformWorkerTest)

@@ -52,6 +52,9 @@ private Q_SLOTS:
 
     void testPartialProcessing();
 
+    void testXScaleUpPixelAlignment_data();
+    void testXScaleUpPixelAlignment();
+
 private:
     void generateTestImages();
 };

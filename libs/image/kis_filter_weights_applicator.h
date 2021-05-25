@@ -278,12 +278,12 @@ private:
 
     int findAntialiasedDstStart(int src_l, qreal support, int line) {
         qreal dst = srcToDst(src_l, line);
-        return !m_clampToEdge ? floor(dst - support) : floor(dst);
+        return !m_clampToEdge ? qRound(dst - support) : qRound(dst);
     }
 
     int findAntialiasedDstEnd(int src_l, qreal support, int line) {
         qreal dst = srcToDst(src_l, line);
-        return !m_clampToEdge ? ceil(dst + support) : ceil(dst);
+        return !m_clampToEdge ? qRound(dst + support) : qRound(dst);
     }
 
     int getLeftSrcNeedBorder(int dst_l, int line, KisFilterWeightsBuffer *buffer) {

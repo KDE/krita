@@ -295,6 +295,15 @@ namespace GSL
             size = gsl_multimin_fminimizer_size (s);
             status = gsl_multimin_test_size (size, 1e-6);
 
+            /**
+             * Sometimes the algorithm may converge to a wrond point,
+             * they just try to force it search better or return invalid
+             * result.
+             */
+            if (status == GSL_SUCCESS && scaleError2D(s->x, &p) > 0.5) {
+                status = GSL_CONTINUE;
+            }
+
             if (status == GSL_SUCCESS)
             {
                 // dbgKrita << "*******Converged to minimum";
@@ -308,6 +317,7 @@ namespace GSL
                 result.transformedCenter =
                     QPointF(gsl_vector_get (s->x, 2),
                             gsl_vector_get (s->x, 3));
+                result.isValid = true;
             }
         }
         while (status == GSL_CONTINUE && iter < 10000);

@@ -856,9 +856,10 @@ void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
     }
 
     int destinationTime = keyframes->activeKeyframeTime(time);
-    while (keyframes->keyframeAt(destinationTime) &&
-                (keyframes->keyframeAt(destinationTime) == keyframes->keyframeAt(time) ||
-                 !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
+    while ( keyframes->keyframeAt(destinationTime) &&
+            ((destinationTime == time) ||
+            !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
+
         destinationTime = keyframes->nextKeyframeTime(destinationTime);
     }
 
@@ -888,10 +889,11 @@ void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
     int time = animInterface->currentUITime();
 
-    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
     int destinationTime = keyframes->activeKeyframeTime(time);
     while (keyframes->keyframeAt(destinationTime) &&
-           (currentKeyframe == keyframes->keyframeAt(destinationTime) || !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
+           ((destinationTime == time) ||
+           !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
+
         destinationTime = keyframes->previousKeyframeTime(destinationTime);
     }
 

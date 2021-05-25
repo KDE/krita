@@ -37,7 +37,12 @@ public:
 
     ~KisPerspectiveTransformWorker();
 
-    void run();
+    enum SampleType {
+        NearestNeighbour = 0,
+        Bilinear
+    };
+
+    void run(SampleType sampleType = Bilinear);
     void runPartialDst(KisPaintDeviceSP srcDev,
                        KisPaintDeviceSP dstDev,
                        const QRect &dstRect);
@@ -54,6 +59,9 @@ private:
                     const QRect &dstBaseClipRect,
                     KisRegion *dstRegion,
                     QPolygonF *dstClipPolygon);
+
+    template <class SrcAccessorPolicy>
+    void runImpl();
 
 private:
     KisPaintDeviceSP m_dev;

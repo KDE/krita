@@ -318,6 +318,11 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
 
         transformWorker.run();
 
+        KisPerspectiveTransformWorker::SampleType sampleType =
+            config.filterId() == "NearestNeighbor" ?
+            KisPerspectiveTransformWorker::NearestNeighbour :
+            KisPerspectiveTransformWorker::Bilinear;
+
         if (config.mode() == ToolTransformArgs::FREE_TRANSFORM) {
             KisPerspectiveTransformWorker perspectiveWorker(device,
                                                             config.transformedCenter(),
@@ -325,7 +330,7 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
                                                             config.aY(),
                                                             config.cameraPos().z(),
                                                             updater2);
-            perspectiveWorker.run();
+            perspectiveWorker.run(sampleType);
         } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
             QTransform T =
                 QTransform::fromTranslate(config.transformedCenter().x(),
@@ -334,7 +339,7 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
             KisPerspectiveTransformWorker perspectiveWorker(device,
                                                             T.inverted() * config.flattenedPerspectiveTransform() * T,
                                                             updater2);
-            perspectiveWorker.run();
+            perspectiveWorker.run(sampleType);
         }
     }
 }

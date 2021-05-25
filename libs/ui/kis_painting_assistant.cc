@@ -948,7 +948,7 @@ KisPaintingAssistantHandleSP KisPaintingAssistant::secondLocalHandle() const
 QRectF KisPaintingAssistant::getLocalRect() const
 {
     if (!isLocal() || !firstLocalHandle() || !secondLocalHandle()) {
-        return QRect();
+        return QRectF();
     }
 
     KisPaintingAssistantHandleSP first = firstLocalHandle();

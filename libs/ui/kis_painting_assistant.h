@@ -115,8 +115,20 @@ public:
     virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
 
+    /**
+     * @brief canBeLocal
+     * @return if the assistant can be potentially a "local assistant" (limited to rectangular area) or not
+     */
     virtual bool canBeLocal() const;
+    /**
+     * @brief isLocal
+     * @return if the assistant is limited to a rectangular area or not
+     */
     bool isLocal() const;
+    /**
+     * @brief setLocal
+     * @param value set the indication if the assistant is limited to a rectangular area or not
+     */
     void setLocal(bool value);
 
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
@@ -210,8 +222,33 @@ protected:
 
     QPointF pixelToView(const QPoint pixelCoords) const;
 
+    /**
+     * @brief firstLocalHandle
+     * Note: this doesn't guarantee it will be the topleft corner!
+     * For that, use getLocalRect().topLeft()
+     * The only purpose of those functions to exist is to be able to
+     * put getLocalRect() function in the KisPaintingAssistant
+     * instead of reimplementing it in every specific assistant.
+     * @return the first handle of the rectangle of the limited area
+     */
     virtual KisPaintingAssistantHandleSP firstLocalHandle() const;
+    /**
+     * @brief secondLocalHandle
+     * Note: this doesn't guarantee it will be the bottomRight corner!
+     * For that, use getLocalRect().bottomRight()
+     * (and remember that for QRect bottomRight() works differently than for QRectF,
+     * so don't convert to QRect before accessing the corner)
+     * @return
+     */
     virtual KisPaintingAssistantHandleSP secondLocalHandle() const;
+    /**
+     * @brief getLocalRect
+     * The function deals with local handles not being topLeft and bottomRight
+     * gracefully and returns a correct rectangle.
+     * Thanks to that the user can place handles in a "wrong" order or move them around
+     * but the local rectangle will still be correct.
+     * @return the rectangle of the area that the assistant is limited to
+     */
     QRectF getLocalRect() const;
 
 

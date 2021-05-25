@@ -12,6 +12,7 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 
+#include <KoMD5Generator.h>
 #include <kis_debug.h>
 #include <KisGlobalResourcesInterface.h>
 
@@ -27,6 +28,7 @@ void KoPatternTest::testRoundTripMd5()
 
     KoPattern pngPattern(filename);
     QVERIFY(pngPattern.load(KisGlobalResourcesInterface::instance()));
+    pngPattern.setMD5(KoMD5Generator::generateHash(filename));
 
     dbgKrita << "PNG Name:" << pngPattern.name();
     dbgKrita << "PNG Filename:" << pngPattern.filename();
@@ -36,6 +38,7 @@ void KoPatternTest::testRoundTripMd5()
 
     KoPattern patPattern(patFilename);
     QVERIFY(patPattern.load(KisGlobalResourcesInterface::instance()));
+    patPattern.setMD5(KoMD5Generator::generateHash(patFilename));
 
     dbgKrita << "PAT Name:" << patPattern.name();
     dbgKrita << "PAT Filename:" << patPattern.filename();
@@ -53,6 +56,7 @@ void KoPatternTest::testRoundTripMd5()
 #else
     h1.addData(QByteArray::fromRawData((const char*)im1.constBits(), im1.byteCount()));
 #endif
+
     QCryptographicHash h2(QCryptographicHash::Md5);
 #if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
     h2.addData(QByteArray::fromRawData((const char*)im2.constBits(), im2.sizeInBytes()));
@@ -60,9 +64,11 @@ void KoPatternTest::testRoundTripMd5()
     h2.addData(QByteArray::fromRawData((const char*)im2.constBits(), im2.byteCount()));
 #endif
 
+    // Compares the images: they should be the same
     QCOMPARE(h1.result(), h2.result());
     QCOMPARE(im1, im2);
-    QCOMPARE(pngPattern.md5(), patPattern.md5());
+    // Compares the md5sum taken from the file: they should be different
+    QVERIFY(pngPattern.md5() != patPattern.md5());
 }
 
 

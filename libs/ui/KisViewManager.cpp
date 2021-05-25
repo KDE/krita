@@ -317,8 +317,6 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
 KisViewManager::~KisViewManager()
 {
-    inputManager()->registerPopupWidget(nullptr);
-
     KisConfig cfg(false);
     if (canvasResourceProvider() && canvasResourceProvider()->currentPreset()) {
         cfg.writeKoColor("LastForeGroundColor",canvasResourceProvider()->fgColor());

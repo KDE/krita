@@ -269,8 +269,6 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
         img = image();
     }
 
-    KoResource::saveToDevice(dev);
-
     return writer.write(img);
 
 }

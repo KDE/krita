@@ -120,12 +120,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
 
 bool KisPngBrush::saveToDevice(QIODevice *dev) const
 {
-    if(brushTipImage().save(dev, "PNG")) {
-        KoResource::saveToDevice(dev);
-        return true;
-    }
-
-    return false;
+    return brushTipImage().save(dev, "PNG");
 }
 
 QString KisPngBrush::defaultFileExtension() const

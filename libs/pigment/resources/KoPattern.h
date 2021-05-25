@@ -78,7 +78,6 @@ private:
 private:
     QImage m_pattern;
     bool m_hasAlpha = false;
-    mutable QByteArray m_md5;
 };
 
 Q_DECLARE_METATYPE(KoPattern*)

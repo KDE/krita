@@ -209,8 +209,6 @@ bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
 
     }
 
-    KoResource::saveToDevice(dev);
-
     return true;
 }
 

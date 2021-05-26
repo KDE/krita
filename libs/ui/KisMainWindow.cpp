@@ -144,7 +144,6 @@
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
 #include <KritaVersionWrapper.h>
-#include <kritaversion.h>
 #include "KisCanvasWindow.h"
 #include "kis_action.h"
 #include <katecommandbar.h>

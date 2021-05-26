@@ -55,7 +55,6 @@
 #include <KritaVersionWrapper.h>
 
 #include <KisUsageLogger.h>
-#include <kritaversion.h>
 #include <QSysInfo>
 #include <kis_config.h>
 #include <kis_image_config.h>

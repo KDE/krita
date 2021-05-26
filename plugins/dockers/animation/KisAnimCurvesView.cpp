@@ -236,7 +236,7 @@ void KisAnimCurvesView::paintGrid(QPainter &painter)
 
         const int offsetHori = m_d->horizontalHeader ? m_d->horizontalHeader->offset() : 0;
         const int stepHori = m_d->horizontalHeader->defaultSectionSize();
-        int xPosition = stepHori * (firstVisibleFrame + time) - offsetHori;
+        const int xPosition = stepHori * (firstVisibleFrame + time) - offsetHori;
 
         QRect frameRect = QRect(xPosition, -10, stepHori, 9999);
 
@@ -564,12 +564,23 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
 
     QModelIndex i = indexAt(e->pos());
     if(indexHasKey(i)) {
-        clearSelection();
+        if ((e->modifiers() & Qt::ShiftModifier) == 0 && selectionModel()->currentIndex() != i) {
+            clearSelection();
+        }
+
         if (i == selectionModel()->currentIndex() && selectionModel()->hasSelection()) {
             selectionModel()->select(i, QItemSelectionModel::Deselect);
         } else {
-            selectionModel()->select(i, QItemSelectionModel::SelectCurrent);
+            QModelIndex prevCurrent = selectionModel()->currentIndex();
+            selectionModel()->select(i, QItemSelectionModel::Select);
+            selectionModel()->setCurrentIndex(i, QItemSelectionModel::NoUpdate);
+            emit currentChanged(i, prevCurrent);
         }
+
+        emit clicked(i);
+        emit activeDataChanged(selectionModel()->currentIndex());
+    } else {
+        QAbstractItemView::mousePressEvent(e);
     }
 }
 
@@ -578,13 +589,13 @@ void KisAnimCurvesView::mouseDoubleClickEvent(QMouseEvent *e)
 {
     QModelIndex clicked = indexAt(e->pos());
 
-    if(clicked.isValid()) {
+    if(clicked.isValid() && indexHasKey(clicked)) {
         selectionModel()->clear();
         bool firstSelection = true;
         if (e->modifiers() & Qt::AltModifier) {
             for (int column = 0; column <= model()->columnCount(); column++) {
                 QModelIndex toSelect = model()->index(clicked.row(), column);
-                bool hasSpecial = toSelect.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool();
+                const bool hasSpecial = toSelect.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool();
                 if (toSelect.isValid() && hasSpecial) {
                     selectionModel()->select(toSelect, firstSelection ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Select);
                     firstSelection = false;
@@ -593,13 +604,17 @@ void KisAnimCurvesView::mouseDoubleClickEvent(QMouseEvent *e)
         } else {
             for (int row = 0; row <= model()->rowCount(); row++) {
                 QModelIndex toSelect = model()->index(row, clicked.column());
-                bool hasSpecial = toSelect.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool();
+                const bool hasSpecial = toSelect.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool();
                 if (toSelect.isValid() && hasSpecial) {
                     selectionModel()->select(toSelect, firstSelection ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Select);
                     firstSelection = false;
                 }
             }
         }
+
+        QModelIndex oldCurrent = selectionModel()->currentIndex();
+        selectionModel()->setCurrentIndex(clicked, QItemSelectionModel::NoUpdate);
+        currentChanged(clicked, oldCurrent);
     } else {
         QAbstractItemView::mouseDoubleClickEvent(e);
     }

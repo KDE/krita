@@ -158,7 +158,7 @@
     <p xml:lang="tr">Eskiz ve boyama için mükemmeldir ve ustaların sıfırdan dijital boyama dosyaları oluşturmak için uçtan-uca bir çözüm sunar.</p>
     <p xml:lang="uk">Цей комплекс чудово пасує для створення ескізів та художніх зображень і є самодостатнім набором для створення файлів цифрових полотен «з нуля» для справжніх художників.</p>
     <p xml:lang="x-test">xxIt is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.xx</p>
-    <p xml:lang="zh-CN">它专门为数字绘画设计，为美术工作者提供了一个从起草、上色到完成作品等整个创作流程的完整解决方案。</p>
+    <p xml:lang="zh-CN">Krita 既适合起草，也适合上色细化。您可以轻松使用 Krita 从头到尾完成一副精美的画作。</p>
     <p xml:lang="zh-TW">它是素描和繪畫的完美選擇，並提供了一個從零開始建立數位繪畫檔的端到端解決方案。</p>
     <p>
       Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK
@@ -192,7 +192,7 @@
     <p xml:lang="tr">Krita, konsept sanat, çizgi roman, kaplama ve mat resimler için dokular oluşturmak için mükemmel bir seçimdir. Krita, 8 ve 16 bit tamsayı kanallarında RGB ve CMYK gibi birçok renk alanını ve 16 ve 32 bit kayan nokta kanallarını desteklemektedir.</p>
     <p xml:lang="uk">Krita — чудовий інструмент для створення концептуального живопису, коміксів, текстур для моделей та декорацій. У Krita передбачено підтримку багатьох просторів кольорів, зокрема RGB та CMYK з 8-бітовими та 16-бітовими цілими значеннями, а також 16-бітовими та 32-бітовими значеннями з рухомою крапкою для каналів кольорів.</p>
     <p xml:lang="x-test">xxKrita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.xx</p>
-    <p xml:lang="zh-CN">Krita 是绘制概念美术、漫画、纹理和接景的理想选择。Krita 支持多种色彩空间，如 8 位和 16 位整数及 16 位和 32 位浮点的 RGB 和 CMYK 颜色模型。</p>
+    <p xml:lang="zh-CN">Krita 是绘制概念美术、漫画、纹理和贴图接景的理想工具。它支持多种色彩空间，如 8 位、16 位整数以及 16 位、32 位浮点通道的 RGB 和 CMYK 颜色模型。</p>
     <p xml:lang="zh-TW">Krita 是創造概念藝術、漫畫、彩現紋理和場景繪畫的絕佳選擇。Krita 在 8 位元和 16 位元整數色版，以及 16 位元和 32 位元浮點色板中支援 RGB 和 CMYK 等多種色彩空間。</p>
     <p>Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
     <p xml:lang="bs">Zabavite se kreirajući napredne pogone četki, filtere i mnoge praktične osobine koje čine Krita vrlo produktivnim.</p>
@@ -223,7 +223,7 @@
     <p xml:lang="tr">Gelişmiş fırça motorları, şaşırtıcı filtreler ve Krita'yı son derece üretken yapan bir çok kullanışlı özellikli boya ile iyi eğlenceler.</p>
     <p xml:lang="uk">Отримуйте задоволення від малювання за допомогою пензлів з найширшими можливостями, чудових фільтрів та багатьох зручних можливостей, які роблять Krita надзвичайно продуктивним засобом малювання.</p>
     <p xml:lang="x-test">xxHave fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.xx</p>
-    <p xml:lang="zh-CN">Krita 具有功能强大的笔刷引擎、种类繁多的滤镜以及便于操作的交互设计，可让你尽情、高效地挥洒无限创意。</p>
+    <p xml:lang="zh-CN">Krita 具有功能强大的笔刷引擎、种类繁多的滤镜以及便于操作的交互设计。您可以在 Krita 中高效自如地发挥创意。</p>
     <p xml:lang="zh-TW">使用先進的筆刷引擎、驚人的濾鏡和許多方便的功能來開心地繪畫，讓 Krita 擁有巨大的生產力。</p>
   </description>
   <url type="homepage">https://www.krita.org/</url>

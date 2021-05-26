@@ -99,7 +99,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
                 assignables2.removeAll(*b2);
             }
 
-            SimpleExistingTagAction * removeTagAction = new SimpleExistingTagAction(resource, currentTag, this);
+            SimpleExistingTagAction *removeTagAction = new SimpleExistingTagAction(resource, currentTag, this);
             removeTagAction->setText(i18n("Remove from this tag"));
             removeTagAction->setIcon(koIcon("list-remove"));
 
@@ -161,7 +161,7 @@ KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()
 
 void KisResourceItemChooserContextMenu::removeResourceExistingTag(const KisTagSP tag, KoResourceSP resource)
 {
-    if (m_tagChooserWidget->currentlySelectedTag()->url() == tag->url()) {
+    if (m_tagChooserWidget->currentlySelectedTag() && m_tagChooserWidget->currentlySelectedTag()->url() == tag->url()) {
         m_tagChooserWidget->setCurrentItem(KisAllTagsModel::urlAll());
     }
     KisTagResourceModel tagResourceModel(resource->resourceType().first);

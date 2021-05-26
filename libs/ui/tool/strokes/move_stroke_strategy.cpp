@@ -20,6 +20,9 @@
 #include "kis_abstract_projection_plane.h"
 #include "kis_image.h"
 
+#include "kis_transform_mask.h"
+#include "kis_transform_mask_params_interface.h"
+#include "commands_new/KisSimpleModifyTransformMaskCommand.h"
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
                                        KisUpdatesFacade *updatesFacade,
@@ -49,8 +52,10 @@ MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs, int lod)
       m_finalOffset(rhs.m_finalOffset),
       m_dirtyRect(rhs.m_dirtyRect),
       m_dirtyRects(rhs.m_dirtyRects),
-      m_updatesEnabled(rhs.m_updatesEnabled)
+      m_updatesEnabled(rhs.m_updatesEnabled),
+      m_transformMaskData()
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rhs.m_transformMaskData.empty());
 }
 void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
 {
@@ -260,23 +265,54 @@ void MoveStrokeStrategy::doCanvasUpdate(bool forceUpdate)
     m_updateTimer.restart();
 }
 
+
 QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 {
     QRect dirtyRect;
 
     if (!m_blacklistedNodes.contains(node)) {
         dirtyRect = node->projectionPlane()->tightUserVisibleBounds();
-        QPoint newOffset = m_initialNodeOffsets[node] + offset;
 
-        /**
-         * Some layers, e.g. clones need an update to change extent(), so
-         * calculate the dirty rect manually
-         */
-        QPoint currentOffset(node->x(), node->y());
-        dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
+        KisTransformMask *mask = dynamic_cast<KisTransformMask*>(node.data());
+        if (mask && !KisLayerUtils::checkIsChildOf(node, m_nodes)) {
 
-        node->setX(newOffset.x());
-        node->setY(newOffset.y());
+            TransformMaskData &data = m_transformMaskData[node];
+
+            KisTransformMaskParamsInterfaceSP oldParams = mask->transformParams();
+            KisTransformMaskParamsInterfaceSP params = oldParams->clone();
+            params->translateDstSpace(offset - data.currentOffset);
+            mask->setTransformParams(params);
+
+            std::unique_ptr<KUndo2Command> cmd(new KisSimpleModifyTransformMaskCommand(mask, oldParams, params));
+
+            if (data.undoCommand) {
+                const bool mergeResult = data.undoCommand->mergeWith(cmd.get());
+
+                KIS_SAFE_ASSERT_RECOVER_NOOP(mergeResult);
+
+                cmd.reset();
+            } else {
+                std::swap(data.undoCommand, cmd);
+            }
+
+            data.currentOffset = offset;
+
+            dirtyRect |= node->projectionPlane()->tightUserVisibleBounds();
+
+        } else {
+            QPoint newOffset = m_initialNodeOffsets[node] + offset;
+
+            /**
+             * Some layers, e.g. clones need an update to change extent(), so
+             * calculate the dirty rect manually
+             */
+            QPoint currentOffset(node->x(), node->y());
+            dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
+
+
+            node->setX(newOffset.x());
+            node->setY(newOffset.y());
+        }
         KisNodeMoveCommand2::tryNotifySelection(node);
     }
 
@@ -292,8 +328,13 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
 {
     if (!m_blacklistedNodes.contains(node)) {
-        QPoint nodeOffset(node->x(), node->y());
-        new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
+        if (m_transformMaskData.find(node) == m_transformMaskData.end()) {
+            QPoint nodeOffset(node->x(), node->y());
+            new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
+        } else {
+            KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand(parent);
+            cmd->addCommand(m_transformMaskData[node].undoCommand.release());
+        }
     }
 
     KisNodeSP child = node->firstChild();

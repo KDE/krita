@@ -309,8 +309,9 @@ public:
     void toXML(QDomElement *e) const;
     static ToolTransformArgs fromXML(const QDomElement &e);
 
-    void translate(const QPointF &offset);
+    void translateSrcAndDst(const QPointF &offset);
     void transformSrcAndDst(const QTransform &t);
+    void translateDstSpace(const QPointF &offset);
 
     void saveContinuedState();
     void restoreContinuedState();

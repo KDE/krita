@@ -91,14 +91,19 @@ KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromXML(const QDomEle
         new KisTransformMaskAdapter(ToolTransformArgs::fromXML(e)));
 }
 
-void KisTransformMaskAdapter::translate(const QPointF &offset)
+void KisTransformMaskAdapter::translateSrcAndDst(const QPointF &offset)
 {
-    m_d->args->translate(offset);
+    m_d->args->translateSrcAndDst(offset);
 }
 
 void KisTransformMaskAdapter::transformSrcAndDst(const QTransform &t)
 {
     m_d->args->transformSrcAndDst(t);
+}
+
+void KisTransformMaskAdapter::translateDstSpace(const QPointF &offset)
+{
+    m_d->args->translateDstSpace(offset);
 }
 
 QRect KisTransformMaskAdapter::nonAffineChangeRect(const QRect &rc)

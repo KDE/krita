@@ -191,10 +191,10 @@ void KisAnimatedTransformMaskParameters::toXML(QDomElement *e) const
     return KisTransformMaskAdapter::toXML(e);
 }
 
-void KisAnimatedTransformMaskParameters::translate(const QPointF &offset)
+void KisAnimatedTransformMaskParameters::translateSrcAndDst(const QPointF &offset)
 {
     QSharedPointer<ToolTransformArgs> args = transformArgs();
-    args->translate(offset);
+    args->translateSrcAndDst(offset);
 }
 
 KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(const QString &id, KisNodeWSP parent)

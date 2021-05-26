@@ -35,6 +35,8 @@
 #include "kis_do_something_command.h"
 #include <kis_transform_mask_params_interface.h>
 
+#include "KisSimpleModifyTransformMaskCommand.h"
+
 
 KisTransformProcessingVisitor::
 KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
@@ -148,34 +150,7 @@ void KisTransformProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter
     KisTransformMaskParamsInterfaceSP params = mask->transformParams()->clone();
     params->transformSrcAndDst(tw.transform());
 
-    struct UndoCommand : public KUndo2Command
-    {
-        UndoCommand(KisTransformMaskSP mask,
-                    KisTransformMaskParamsInterfaceSP oldParams,
-                    KisTransformMaskParamsInterfaceSP newParams)
-            : m_mask(mask),
-              m_oldParams(oldParams),
-              m_newParams(newParams)
-        {
-        }
-
-        void undo() override {
-            m_mask->setTransformParams(m_oldParams);
-            m_mask->threadSafeForceStaticImageUpdate();
-        }
-
-        void redo() override {
-            m_mask->setTransformParams(m_newParams);
-            m_mask->threadSafeForceStaticImageUpdate();
-        }
-
-    private:
-        KisTransformMaskSP m_mask;
-        KisTransformMaskParamsInterfaceSP m_oldParams;
-        KisTransformMaskParamsInterfaceSP m_newParams;
-    };
-
-    undoAdapter->addCommand(new UndoCommand(mask, mask->transformParams(), params));
+    undoAdapter->addCommand(new KisSimpleModifyTransformMaskCommand(mask, mask->transformParams(), params));
 }
 
 void KisTransformProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)

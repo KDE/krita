@@ -73,6 +73,7 @@ public:
     static KisLiquifyTransformWorker* fromXML(const QDomElement &e);
 
     void translate(const QPointF &offset);
+    void translateDstSpace(const QPointF &offset);
 
     QRect approxChangeRect(const QRect &rc);
     QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);

@@ -519,14 +519,14 @@ qint32 KisTransformMask::y() const
 
 void KisTransformMask::setX(qint32 x)
 {
-    m_d->params->translate(QPointF(x - this->x(), 0));
+    m_d->params->translateSrcAndDst(QPointF(x - this->x(), 0));
     setTransformParams(m_d->params);
     m_d->offset.setX(x);
 }
 
 void KisTransformMask::setY(qint32 y)
 {
-    m_d->params->translate(QPointF(0, y - this->y()));
+    m_d->params->translateSrcAndDst(QPointF(0, y - this->y()));
     setTransformParams(m_d->params);
     m_d->offset.setY(y);
 }

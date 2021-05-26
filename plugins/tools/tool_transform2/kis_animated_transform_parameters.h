@@ -29,7 +29,7 @@ public:
     QString id() const override;
     void toXML(QDomElement *e) const override;
 
-    void translate(const QPointF &offset) override;
+    void translateSrcAndDst(const QPointF &offset) override;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id, KisNodeWSP parent) override;
     void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) override;

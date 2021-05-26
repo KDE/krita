@@ -268,7 +268,7 @@ ToolTransformArgs::~ToolTransformArgs()
     clear();
 }
 
-void ToolTransformArgs::translate(const QPointF &offset)
+void ToolTransformArgs::translateSrcAndDst(const QPointF &offset)
 {
     transformSrcAndDst(QTransform::fromTranslate(offset.x(), offset.y()));
 }
@@ -300,6 +300,24 @@ void ToolTransformArgs::transformSrcAndDst(const QTransform &t)
         m_liquifyWorker->transformSrcAndDst(t);
     } else if (m_mode == MESH) {
         m_meshTransform.transformSrcAndDst(t);
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
+    }
+}
+
+void ToolTransformArgs::translateDstSpace(const QPointF &offset)
+{
+    if (m_mode == FREE_TRANSFORM || m_mode == PERSPECTIVE_4POINT) {
+        m_transformedCenter += offset;
+    } else if(m_mode == WARP || m_mode == CAGE) {
+        for (auto &pt : m_transfPoints) {
+            pt += offset;
+        }
+    } else if (m_mode == LIQUIFY) {
+        KIS_ASSERT_RECOVER_RETURN(m_liquifyWorker);
+        m_liquifyWorker->translateDstSpace(offset);
+    } else if (m_mode == MESH) {
+        m_meshTransform.translate(offset);
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
     }

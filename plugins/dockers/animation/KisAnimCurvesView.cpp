@@ -50,6 +50,9 @@ struct KisAnimCurvesView::Private
 
     bool dragZooming {false};
     QPoint zoomAnchor;
+
+    bool deselectIntended {false};
+    QModelIndex toDeselect;
 };
 
 KisAnimCurvesView::KisAnimCurvesView(QWidget *parent)
@@ -558,26 +561,25 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
             }
         }
 
-
-
     }
 
-    QModelIndex i = indexAt(e->pos());
-    if(indexHasKey(i)) {
-        if ((e->modifiers() & Qt::ShiftModifier) == 0 && selectionModel()->currentIndex() != i) {
+    QModelIndex clickedIndex = indexAt(e->pos());
+    if(indexHasKey(clickedIndex)) {
+        if ((e->modifiers() & Qt::ShiftModifier) == 0 && selectionModel()->currentIndex() != clickedIndex) {
             clearSelection();
         }
 
-        if (i == selectionModel()->currentIndex() && selectionModel()->hasSelection()) {
-            selectionModel()->select(i, QItemSelectionModel::Deselect);
+        if (clickedIndex == selectionModel()->currentIndex() && selectionModel()->hasSelection()) {
+            m_d->deselectIntended = true;
+            m_d->toDeselect = clickedIndex;
         } else {
             QModelIndex prevCurrent = selectionModel()->currentIndex();
-            selectionModel()->select(i, QItemSelectionModel::Select);
-            selectionModel()->setCurrentIndex(i, QItemSelectionModel::NoUpdate);
-            emit currentChanged(i, prevCurrent);
+            selectionModel()->select(clickedIndex, QItemSelectionModel::Select);
+            selectionModel()->setCurrentIndex(clickedIndex, QItemSelectionModel::NoUpdate);
+            emit currentChanged(clickedIndex, prevCurrent);
         }
 
-        emit clicked(i);
+        emit clicked(clickedIndex);
         emit activeDataChanged(selectionModel()->currentIndex());
     } else {
         QAbstractItemView::mousePressEvent(e);
@@ -734,7 +736,16 @@ void KisAnimCurvesView::mouseReleaseEvent(QMouseEvent *e)
 
             m_d->isAdjustingHandle = false;
             m_d->itemDelegate->setHandleAdjustment(QPointF(), m_d->adjustedHandle);
+        } else {
+
+            if (m_d->deselectIntended){
+                selectionModel()->select(m_d->toDeselect, QItemSelectionModel::Deselect);
+            }
+
         }
+
+        m_d->deselectIntended = false;
+        m_d->toDeselect = QModelIndex();
     }
 
     QAbstractItemView::mouseReleaseEvent(e);

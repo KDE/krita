@@ -191,7 +191,8 @@ QModelIndex KisAnimCurvesView::indexAt(const QPoint &point) const
     for (int row=0; row < rows; row++) {
         QModelIndex index = model()->index(row, time);
 
-        if (index.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool()) {
+        if (index.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool()
+            && index.data(KisAnimCurvesModel::CurveVisibleRole).toBool()) {
             QRect nodePos = m_d->itemDelegate->itemRect(index);
 
             if (nodePos.contains(point)) {

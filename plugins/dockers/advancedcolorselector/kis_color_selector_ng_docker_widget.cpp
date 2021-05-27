@@ -24,6 +24,7 @@
 #include "kis_node_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_color_space_selector.h"
+#include "kis_config_notifier.h"
 #include "kis_preference_set_registry.h"
 #include "kis_node.h"
 #include "kis_paint_device.h"
@@ -177,6 +178,7 @@ void KisColorSelectorNgDockerWidget::openSettings()
     KisColorSelectorSettingsDialog settings;
     if(settings.exec()==QDialog::Accepted) {
         emit settingsChanged();
+        KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }
 

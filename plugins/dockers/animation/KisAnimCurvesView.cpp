@@ -599,7 +599,8 @@ void KisAnimCurvesView::mouseDoubleClickEvent(QMouseEvent *e)
             for (int column = 0; column <= model()->columnCount(); column++) {
                 QModelIndex toSelect = model()->index(clicked.row(), column);
                 const bool hasSpecial = toSelect.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool();
-                if (toSelect.isValid() && hasSpecial) {
+                const bool curveVisible = toSelect.data(KisAnimCurvesModel::CurveVisibleRole).toBool();
+                if (toSelect.isValid() && hasSpecial && curveVisible) {
                     selectionModel()->select(toSelect, firstSelection ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Select);
                     firstSelection = false;
                 }
@@ -608,7 +609,8 @@ void KisAnimCurvesView::mouseDoubleClickEvent(QMouseEvent *e)
             for (int row = 0; row <= model()->rowCount(); row++) {
                 QModelIndex toSelect = model()->index(row, clicked.column());
                 const bool hasSpecial = toSelect.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool();
-                if (toSelect.isValid() && hasSpecial) {
+                const bool curveVisible = toSelect.data(KisAnimCurvesModel::CurveVisibleRole).toBool();
+                if (toSelect.isValid() && hasSpecial && curveVisible) {
                     selectionModel()->select(toSelect, firstSelection ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Select);
                     firstSelection = false;
                 }

@@ -195,12 +195,26 @@ public:
             dstStart = findAntialiasedDstStart(srcLine.start(), filterSupport, line);
             dstEnd = findAntialiasedDstEnd(srcLine.end(), filterSupport, line);
 
+            /// Since we are rounding the borders of the line we might
+            /// end up to squashing our line into a single pixel. In such
+            /// a case we should correct our line to be exactly one pixel
+            if (dstStart == dstEnd) {
+                dstEnd = dstStart + 1;
+            }
+
             leftSrcBorder = getLeftSrcNeedBorder(dstStart, line, buffer);
             rightSrcBorder = getRightSrcNeedBorder(dstEnd - 1, line, buffer);
         }
         else {
             dstStart = findAntialiasedDstStart(srcLine.end(), filterSupport, line);
             dstEnd = findAntialiasedDstEnd(srcLine.start(), filterSupport, line);
+
+            /// Since we are rounding the borders of the line we might
+            /// end up to squashing our line into a single pixel. In such
+            /// a case we should correct our line to be exactly one pixel
+            if (dstStart == dstEnd) {
+                dstEnd = dstStart + 1;
+            }
 
             leftSrcBorder = getLeftSrcNeedBorder(dstEnd - 1, line, buffer);
             rightSrcBorder = getRightSrcNeedBorder(dstStart, line, buffer);

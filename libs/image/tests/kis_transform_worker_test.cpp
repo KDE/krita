@@ -372,8 +372,8 @@ void KisTransformWorkerTest::testScaleDown()
 
     QRect rc = dev->exactBounds();
 
-    QCOMPARE(rc.width(), qCeil(image.width() * 0.123));
-    QCOMPARE(rc.height(), qCeil(image.height() * 0.123));
+    QCOMPARE(rc.width(), qRound(image.width() * 0.123));
+    QCOMPARE(rc.height(), qRound(image.height() * 0.123));
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -453,7 +453,7 @@ void KisTransformWorkerTest::testYScaleDown()
     QRect rc = dev->exactBounds();
 
     QCOMPARE(rc.width(), image.width());
-    QCOMPARE(rc.height(), qCeil(image.height() * 0.123));
+    QCOMPARE(rc.height(), qRound(image.height() * 0.123));
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;

@@ -43,7 +43,7 @@ KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
                               qreal  xshear, qreal  yshear,
                               const QPointF &shearOrigin,
                               qreal angle,
-                              qint32  tx, qint32  ty,
+                              qreal  tx, qreal  ty,
                               KisFilterStrategy *filter,
                               const QTransform &shapesCorrection)
     : m_sx(xscale), m_sy(yscale)

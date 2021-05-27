@@ -74,6 +74,7 @@ namespace KisLayerUtils {
               storage(new SwitchFrameCommand::SharedStorage())
         {
         }
+
         virtual ~MergeDownInfoBase() {}
 
         KisImageWSP image;
@@ -1269,6 +1270,11 @@ namespace KisLayerUtils {
             KisScalarKeyframeChannel *scalarChan = dynamic_cast<KisScalarKeyframeChannel*>(channel);
             if (scalarChan) {
                 const int initialKeyframe = scalarChan->firstKeyframeTime();
+
+                if (initialKeyframe == -1) {
+                    continue;
+                }
+
                 const int lastKeyframe = scalarChan->lastKeyframeTime();
                 KisTimeSpan currentSpan = scalarChan->identicalFrames(initialKeyframe);
                 while (!currentSpan.isInfinite() && currentSpan.isValid() && currentSpan.start() < lastKeyframe) {

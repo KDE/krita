@@ -782,6 +782,10 @@ set_package_properties(LibMyPaint PROPERTIES
 if(LibMyPaint_FOUND)
     if(LibMyPaint_VERSION VERSION_LESS "1.4.0")
         message(WARNING "Please update libmypaint to version above 1.4.0 as lower versions are known to crash")
+    else()
+        list (APPEND ANDROID_EXTRA_LIBS ${libmypaint_LIBRARY_DIRS}/libmypaint.so
+            ${libmypaint_LIBRARY_DIRS}/libjson-c.so    # this is a direct dependency of libmypaint
+            )
     endif()
 endif()
 macro_bool_to_01(LibMyPaint_FOUND HAVE_LIBMYPAINT)

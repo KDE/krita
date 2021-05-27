@@ -34,45 +34,25 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 #endif
               | f)
       , m_themed(themed)
+      , m_splashPixmap(pixmap)
+      , m_splashPixmap_x2(pixmap_x2)
       , m_versionHtml(version.toHtmlEscaped())
 {
 
     setupUi(this);
     setWindowIcon(KisIconUtils::loadIcon("krita"));
 
-    QImage img;
-
-    if (devicePixelRatioF() > 1.01) {
-        img = pixmap_x2.toImage();
-        img.setDevicePixelRatio(devicePixelRatioF());
-
-        // actual size : image size (x1)
-        m_scaleFactor = 2 / devicePixelRatioF();
-    } else {
-        img = pixmap.toImage();
-        m_scaleFactor = 1;
-    }
-
-    setFixedWidth(pixmap.width() * m_scaleFactor);
-    setFixedHeight(pixmap.height() * m_scaleFactor);
-    lblSplash->setFixedWidth(pixmap.width() * m_scaleFactor);
-    lblSplash->setFixedHeight(pixmap.height() * m_scaleFactor);
-
     m_loadingTextLabel = new QLabel(lblSplash);
     m_loadingTextLabel->setTextFormat(Qt::RichText);
     m_loadingTextLabel->setStyleSheet("QLabel { color: #fff; background-color: transparent; font-size: 10pt; }");
     m_loadingTextLabel->setAlignment(Qt::AlignRight | Qt::AlignTop);
-    m_loadingTextLabel->move(0, 58 * m_scaleFactor);
-    m_loadingTextLabel->setFixedWidth(475 * m_scaleFactor);
 
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(m_loadingTextLabel);
     effect->setOffset(1);
     m_loadingTextLabel->setGraphicsEffect(effect);
 
+    updateSplashImage();
     setLoadingText(QString());
-
-    // Maintain the aspect ratio on high DPI screens when scaling
-    lblSplash->setPixmap(QPixmap::fromImage(img));
 
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
@@ -92,6 +72,33 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     m_timer.setSingleShot(true);
     m_timer.start(10);
+}
+
+void KisSplashScreen::updateSplashImage()
+{
+    QPixmap img;
+
+    if (devicePixelRatioF() > 1.01) {
+        img = m_splashPixmap_x2;
+        img.setDevicePixelRatio(devicePixelRatioF());
+
+        // actual size : image size (x1)
+        m_scaleFactor = 2 / devicePixelRatioF();
+    } else {
+        img = m_splashPixmap;
+        m_scaleFactor = 1;
+    }
+
+    setFixedWidth(m_splashPixmap.width() * m_scaleFactor);
+    setFixedHeight(m_splashPixmap.height() * m_scaleFactor);
+    lblSplash->setFixedWidth(m_splashPixmap.width() * m_scaleFactor);
+    lblSplash->setFixedHeight(m_splashPixmap.height() * m_scaleFactor);
+
+    // Maintain the aspect ratio on high DPI screens when scaling
+    lblSplash->setPixmap(img);
+
+    m_loadingTextLabel->move(0, 58 * m_scaleFactor);
+    m_loadingTextLabel->setFixedWidth(475 * m_scaleFactor);
 }
 
 void KisSplashScreen::resizeEvent(QResizeEvent *event)
@@ -211,19 +218,28 @@ void KisSplashScreen::repaint()
 
 void KisSplashScreen::show()
 {
-    QRect r(QPoint(), sizeHint());
-    resize(r.size());
     if (!this->parentWidget()) {
         this->winId(); // Force creation of native window
-        if (this->windowHandle()) {
+        QWindow *windowHandle = this->windowHandle();
+        QScreen *screen = windowHandle ? windowHandle->screen() : nullptr;
+        if (windowHandle && !screen) {
             // At least on Windows, the window may be created on a non-primary
             // screen with a different scale factor. If we don't explicitly
             // move it to the primary screen, the position will be scaled with
             // the wrong factor and the splash will be offset.
-            this->windowHandle()->setScreen(QApplication::primaryScreen());
+            // XXX: In theory this branch should be unreachable, but leaving
+            //      this here just in case.
+            windowHandle->setScreen(QApplication::primaryScreen());
         }
+        if (!screen) {
+            screen = QApplication::primaryScreen();
+        }
+        // Reinitialize the splash image as the screen may have a different
+        // devicePixelRatio.
+        updateSplashImage();
+        QRect r(QPoint(), size());
+        move(screen->availableGeometry().center() - r.center());
     }
-    move(QApplication::primaryScreen()->availableGeometry().center() - r.center());
     if (isVisible()) {
         repaint();
     }

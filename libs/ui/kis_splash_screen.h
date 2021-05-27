@@ -40,11 +40,14 @@ protected:
 private:
     void updateText();
     QString colorString() const;
+    void updateSplashImage();
 
 private:
 
     QTimer m_timer;
     bool m_themed;
+    QPixmap m_splashPixmap;
+    QPixmap m_splashPixmap_x2;
     qreal m_scaleFactor;
     QLabel *m_loadingTextLabel;
     QString m_versionHtml;

@@ -523,9 +523,10 @@ void KisTool::deleteSelection()
         return;
     }
 
-    if (!KisToolUtils::clearImage(image(), resources->currentNode(), resources->activeSelection())) {
+    if (!KisToolUtils::clearImage(image(), selectedNodes(), resources->activeSelection())) {
         KoToolBase::deleteSelection();
     }
+    qDebug() << selectedNodes().size();
 }
 
 KisTool::NodePaintAbility KisTool::nodePaintAbility()

@@ -340,7 +340,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     intForcedFontDPI->setEnabled(forcedFontDPI > 0);
     connect(chkForcedFontDPI, SIGNAL(toggled(bool)), intForcedFontDPI, SLOT(setEnabled(bool)));
 
-
+    bool speedUseTimestamps = false;
+#ifdef Q_OS_UNIX
+    speedUseTimestamps = true;
+#endif
+    chkAltBrushSpeed->setChecked(cfg.readEntry("altBrushSpeed", speedUseTimestamps));
 }
 
 void GeneralTab::setDefault()
@@ -415,6 +419,8 @@ void GeneralTab::setDefault()
     chkForcedFontDPI->setChecked(false);
     intForcedFontDPI->setValue(qt_defaultDpi());
     intForcedFontDPI->setEnabled(false);
+
+    chkAltBrushSpeed->setChecked(cfg.readEntry("altBrushSpeed", false));
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -1968,6 +1974,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.logImportantSettings();
         cfg.writeEntry("forcedDpiForQtFontBugWorkaround", m_general->forcedFontDpi());
 
+        cfg.writeEntry<bool>("altBrushSpeed", m_general->chkAltBrushSpeed->isChecked());
     }
 
     return !m_cancelClicked;

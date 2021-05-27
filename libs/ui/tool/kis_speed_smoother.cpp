@@ -7,16 +7,21 @@
 #include "kis_speed_smoother.h"
 
 #include <boost/circular_buffer.hpp>
+#include <QElapsedTimer>
 #include <QPointF>
-
-#include <KoPointerEvent.h>
 
 #include "kis_debug.h"
 #include "kis_global.h"
+#include "kis_config.h"
 
 #define MAX_SMOOTH_HISTORY 512
+#define MAX_TIME_DIFF 500
+#define MIN_TIME_DIFF 15
+#define MAX_TRACKING_DISTANCE 300
+#define MIN_TRACKING_DISTANCE 5
+
 #define MAX_SAMPLE_COUNT 10
-#define MAX_TIME_DIFF 15
+#define MAX_TIME_DIFF_STRICT 15
 
 
 struct KisSpeedSmoother::Private
@@ -25,6 +30,7 @@ struct KisSpeedSmoother::Private
         : distances(historySize),
           lastSpeed(0)
     {
+        timer.start();
     }
 
     struct DistancePoint {
@@ -46,6 +52,7 @@ struct KisSpeedSmoother::Private
     DistanceBuffer distances;
 
     QPointF lastPoint;
+    QElapsedTimer timer;
     qreal lastTime;
     qreal lastSpeed;
 };
@@ -90,25 +97,11 @@ qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt, ulong timestamp)
 
     for (; it != end; ++it) {
         itemsSearched++;
-        if (itemsSearched > MAX_SAMPLE_COUNT || it->time > MAX_TIME_DIFF) {
+        if (itemsSearched > MAX_SAMPLE_COUNT || it->time > MAX_TIME_DIFF_STRICT) {
             break;
         }
         totalDistance += it->distance;
-        if (it->time > 0) {
-            totalTime += it->time;
-        } else { // workaround for Windows event queue
-            if (totalTime == 0) {
-                if (m_d->lastSpeed > 0.0001) {
-                    // we assume the cursor is moving at the same speed as lastSpeed.
-                    totalTime += it->distance/m_d->lastSpeed;
-                } else {
-                    // No information to proceed so we assume it took 7ms
-                    totalTime += 7;
-                }
-            } else {
-                totalTime += totalDistance/totalTime;
-            }
-        }
+        totalTime += it->time;
     }
 
     if (totalTime == 0) {
@@ -120,8 +113,59 @@ qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt, ulong timestamp)
     return m_d->lastSpeed;
 }
 
+qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt)
+{
+    if (m_d->lastPoint.isNull()) {
+        m_d->lastPoint = pt;
+        return 0.0;
+    }
+
+    qreal time = qreal(m_d->timer.nsecsElapsed()) / 1000000;
+    qreal dist = kisDistance(pt, m_d->lastPoint);
+    m_d->lastPoint = pt;
+
+    m_d->distances.push_back(Private::DistancePoint(dist, time));
+
+    Private::DistanceBuffer::const_reverse_iterator it = m_d->distances.rbegin();
+    Private::DistanceBuffer::const_reverse_iterator end = m_d->distances.rend();
+
+    const qreal currentTime = it->time;
+
+    qreal totalDistance = 0;
+    qreal totalTime = 0.0;
+    int itemsSearched = 0;
+
+    for (; it != end; ++it) {
+        itemsSearched++;
+        totalDistance += it->distance;
+        totalTime = currentTime - it->time;
+
+        if (totalTime > MIN_TIME_DIFF) {
+            if (totalTime > MAX_TIME_DIFF) {
+                break;
+            }
+
+            if (totalDistance > MAX_TRACKING_DISTANCE) {
+                break;
+            }
+        }
+    }
+
+
+
+    if (totalTime > 0 && totalDistance > MIN_TRACKING_DISTANCE) {
+        qreal speed = totalDistance / totalTime;
+
+        const qreal alpha = 0.2;
+        m_d->lastSpeed = alpha * speed + (1 - alpha) * m_d->lastSpeed;
+    }
+
+    return m_d->lastSpeed;
+}
+
 void KisSpeedSmoother::clear()
 {
+    m_d->timer.restart();
     m_d->distances.clear();
     m_d->distances.push_back(Private::DistancePoint(0.0, 0.0));
     m_d->lastPoint = QPointF();

@@ -989,7 +989,21 @@ After saving the file in Krita 5.0 at least once, no conversions will be needed 
          </item>
         </layout>
        </item>
+       <item row="18" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Use timestamps for brush speed:</string>
+         </property>
+        </widget>
+       </item>
        <item row="18" column="1">
+        <widget class="QCheckBox" name="chkAltBrushSpeed">
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="1">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

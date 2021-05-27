@@ -54,6 +54,7 @@ void ParallelRulerAssistant::endStroke()
     // Brush stroke ended, guides should follow the brush position again.
     m_followBrushPosition = false;
     m_adjustedPositionValid = false;
+    m_hasBeenInsideLocalRect = false;
 }
 
 
@@ -72,6 +73,14 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
 
     if (dx * dx + dy * dy < 4.0) {
         return strokeBegin; // allow some movement before snapping
+    }
+
+    if (isLocal() && isAssistantComplete()) {
+        if (getLocalRect().contains(pt)) {
+            m_hasBeenInsideLocalRect = true;
+        } else if (isLocal() && !m_hasBeenInsideLocalRect) {
+            return QPointF(qQNaN(), qQNaN());
+        }
     }
 
     //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
@@ -114,27 +123,48 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
 
+    QRectF local = getLocalRect();
+
+    QTransform initialTransform = converter->documentToWidgetTransform();
+
+    if (isLocal() && isAssistantComplete()) {
+        QPainterPath path;
+        QRectF local = getLocalRect();
+        // note: be careful; bottom and right only work with RectF, not Rect
+        path.moveTo(initialTransform.map(local.topLeft()));
+
+        path.lineTo(initialTransform.map(local.topRight()));
+        path.lineTo(initialTransform.map(local.bottomRight()));
+        path.lineTo(initialTransform.map(local.bottomLeft()));
+        path.lineTo(initialTransform.map(local.topLeft()));
+        drawPreview(gc, path);//and we draw the preview.
+    }
+
+
     if (isAssistantComplete() && isSnappingActive() && previewVisible==true) {
         //don't draw if invalid.
-        QTransform initialTransform = converter->documentToWidgetTransform();
-        QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
 
-        if (m_followBrushPosition && m_adjustedPositionValid) {
-            mousePos = initialTransform.map(m_adjustedBrushPosition);
+        if (!isLocal() || local.contains(mousePos)) {
+
+            QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
+
+            if (m_followBrushPosition && m_adjustedPositionValid) {
+                mousePos = initialTransform.map(m_adjustedBrushPosition);
+            }
+
+            QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
+            snapLine= snapLine.translated(translation);
+
+            QRect viewport= gc.viewport();
+            KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
+
+
+            QPainterPath path;
+            path.moveTo(snapLine.p1());
+            path.lineTo(snapLine.p2());
+
+            drawPreview(gc, path);//and we draw the preview.
         }
-
-        QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
-        snapLine= snapLine.translated(translation);
-
-        QRect viewport= gc.viewport();
-        KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
-
-
-        QPainterPath path;
-        path.moveTo(snapLine.p1());
-        path.lineTo(snapLine.p2());
-
-        drawPreview(gc, path);//and we draw the preview.
     }
     gc.restore();
 
@@ -144,7 +174,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 
 void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible == false || !isAssistantComplete()){
+    if (assistantVisible == false || handles().size() < 2) {
         return;
     }
 
@@ -162,14 +192,37 @@ void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConvert
 
 }
 
+KisPaintingAssistantHandleSP ParallelRulerAssistant::firstLocalHandle() const
+{
+    return handles().size() > 2 ? handles()[2] : 0;
+}
+
+KisPaintingAssistantHandleSP ParallelRulerAssistant::secondLocalHandle() const
+{
+    return handles().size() > 3 ? handles()[3] : 0;
+}
+
 QPointF ParallelRulerAssistant::getEditorPosition() const
 {
-    return (*handles()[0] + *handles()[1]) * 0.5;
+    if (handles().size() > 1) {
+        return (*handles()[0] + *handles()[1]) * 0.5;
+    } else if (handles().size() > 0) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, *handles()[0]);
+        return *handles()[0];
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, QPointF(0, 0));
+        return QPointF(0, 0);
+    }
 }
 
 bool ParallelRulerAssistant::isAssistantComplete() const
 {
-    return handles().size() >= 2;
+    return handles().size() >= numHandles();
+}
+
+bool ParallelRulerAssistant::canBeLocal() const
+{
+    return true;
 }
 
 ParallelRulerAssistantFactory::ParallelRulerAssistantFactory()

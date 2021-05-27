@@ -29,12 +29,17 @@ public:
     void setFollowBrushPosition(bool follow) override;
     void endStroke() override;
     QPointF getEditorPosition() const override;
-    int numHandles() const override { return 2; }
+    int numHandles() const override { return isLocal() ? 4 : 2; }
     bool isAssistantComplete() const override;
+    bool canBeLocal() const override;
 
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
+
+    KisPaintingAssistantHandleSP firstLocalHandle() const override;
+    KisPaintingAssistantHandleSP secondLocalHandle() const override;
+
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     explicit ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
@@ -44,6 +49,7 @@ private:
     bool m_followBrushPosition;
     bool m_adjustedPositionValid;
     QPointF m_adjustedBrushPosition;
+    bool m_hasBeenInsideLocalRect {false};
 };
 
 class ParallelRulerAssistantFactory : public KisPaintingAssistantFactory

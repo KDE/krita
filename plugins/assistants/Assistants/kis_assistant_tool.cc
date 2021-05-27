@@ -765,7 +765,7 @@ void KisAssistantTool::updateToolOptionsUI()
       m_options.globalColorLabel->setEnabled(!showCustomColorSettings);
 
       QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-      m_options.localAssistantCheckbox->setVisible(key == "two point" || key == "vanishing point");
+      m_options.localAssistantCheckbox->setVisible(key == "two point" || key == "vanishing point" || "parallel ruler");
 
 }
 

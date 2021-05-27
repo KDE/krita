@@ -7,6 +7,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QGraphicsDropShadowEffect>
 #include <QPixmap>
 #include <QPainter>
 #include <QCheckBox>
@@ -31,8 +32,9 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 #ifdef Q_OS_LINUX
               | Qt::WindowStaysOnTopHint
 #endif
-              | f),
-      m_themed(themed)
+              | f)
+      , m_themed(themed)
+      , m_versionHtml(version.toHtmlEscaped())
 {
 
     setupUi(this);
@@ -56,37 +58,18 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     lblSplash->setFixedWidth(pixmap.width() * m_scaleFactor);
     lblSplash->setFixedHeight(pixmap.height() * m_scaleFactor);
 
-    QFont font = this->font();
-    font.setPointSize(11);
-    font.setBold(true);
-    QFontMetrics metrics(font);
+    m_loadingTextLabel = new QLabel(lblSplash);
+    m_loadingTextLabel->setTextFormat(Qt::RichText);
+    m_loadingTextLabel->setStyleSheet("QLabel { color: #fff; background-color: transparent; font-size: 10pt; }");
+    m_loadingTextLabel->setAlignment(Qt::AlignRight | Qt::AlignTop);
+    m_loadingTextLabel->move(0, 58 * m_scaleFactor);
+    m_loadingTextLabel->setFixedWidth(475 * m_scaleFactor);
 
-    QPainter p(&img);
-    p.setFont(font);
-    p.setRenderHint(QPainter::Antialiasing);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(m_loadingTextLabel);
+    effect->setOffset(1);
+    m_loadingTextLabel->setGraphicsEffect(effect);
 
-    // positioning of the text over the image (version)
-    // also see setLoadingText() for positiong (loading progress text)
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
-    qreal leftEdge = 475 * m_scaleFactor - metrics.horizontalAdvance(version);
-#else
-    qreal leftEdge = 475 * m_scaleFactor - metrics.width(version);
-#endif
-    qreal topEdge = 58 * m_scaleFactor + metrics.ascent();
-
-    //draw shadow
-    QPen pen(QColor(0, 0, 0, 80));
-    p.setPen(pen);
-    p.drawText(QPointF(leftEdge+1, topEdge+1), version);
-    //draw main text
-    p.setPen(QPen(QColor(255, 255, 255, 255)));
-    p.drawText(QPointF(leftEdge, topEdge), version);
-    p.end();
-
-
-    //get this to have the loading text painted on later.
-    m_splashImage = img;
-    m_textTop = topEdge+metrics.height();
+    setLoadingText(QString());
 
     // Maintain the aspect ratio on high DPI screens when scaling
     lblSplash->setPixmap(QPixmap::fromImage(img));
@@ -203,33 +186,8 @@ void KisSplashScreen::displayRecentFiles(bool show) {
 
 void KisSplashScreen::setLoadingText(QString text)
 {
-    QFont font = this->font();
-    font.setPointSize(10);
-    font.setItalic(true);
-
-    QImage img = m_splashImage;
-    QPainter p(&img);
-    QFontMetrics metrics(font);
-    p.setFont(font);
-    p.setRenderHint(QPainter::Antialiasing);
-
-    // position text for loading text
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
-    qreal leftEdge = 475 *  m_scaleFactor - metrics.horizontalAdvance(text);
-#else
-    qreal leftEdge = 475 *  m_scaleFactor - metrics.width(text);
-#endif
-    qreal topEdge = m_textTop;
-
-    //draw shadow
-    QPen pen(QColor(0, 0, 0, 80));
-    p.setPen(pen);
-    p.drawText(QPointF(leftEdge+1, topEdge+1), text);
-    //draw main text
-    p.setPen(QPen(QColor(255, 255, 255, 255)));
-    p.drawText(QPointF(leftEdge, topEdge), text);
-    p.end();
-    lblSplash->setPixmap(QPixmap::fromImage(img));
+    QString htmlText = QStringLiteral("<span style='font-size: 11pt'><b>%1</b></span><br><i>%2</i>").arg(m_versionHtml, text.toHtmlEscaped());
+    m_loadingTextLabel->setText(htmlText);
 }
 
 

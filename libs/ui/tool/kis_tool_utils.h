@@ -59,6 +59,7 @@ KisNodeSP KRITAUI_EXPORT findNode(KisNodeSP node, const QPoint &point, bool whol
  * return true if success
  * Clears the image. Selection is optional, use 0 to clear everything.
  */
+bool KRITAUI_EXPORT clearImage(KisImageSP image, KisNodeList nodes, KisSelectionSP selection);
 bool KRITAUI_EXPORT clearImage(KisImageSP image, KisNodeSP node, KisSelectionSP selection);
 }
 

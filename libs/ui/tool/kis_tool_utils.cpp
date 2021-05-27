@@ -124,6 +124,51 @@ namespace KisToolUtils {
         return foundNode;
     }
 
+    bool clearImage(KisImageSP image, KisNodeList nodes, KisSelectionSP selection)
+    {
+        KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE,
+                                           KisImageSignalVector(), kundo2_i18n("Clear"));
+
+        while (!nodes.empty()) {
+            KisNodeSP node = nodes.first();
+            nodes.erase(nodes.begin());
+
+            if (node->inherits("KisGroupLayer")) {
+                KisNodeSP child = node->firstChild();
+                while (child) {
+                    nodes.append(child);
+                    child = child->nextSibling();
+                }
+                continue;
+            }
+
+            if(node && node->hasEditablePaintDevice()) {
+                applicator.applyCommand(new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
+                                        [node, selection] () {
+                                            KisPaintDeviceSP device = node->paintDevice();
+
+                                            KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
+
+                                            QRect dirtyRect;
+                                            if (selection) {
+                                                dirtyRect = selection->selectedRect();
+                                                device->clearSelection(selection);
+                                            } else {
+                                                dirtyRect = device->extent();
+                                                device->clear();
+                                            }
+
+                                            device->setDirty(dirtyRect);
+                                            return transaction.endAndTake();
+                                        }));
+            }
+        }
+        applicator.end();
+
+        return true;
+
+        //KisProcessingApplicator::runSingleCommandStroke(image, cmd);
+    }
     bool clearImage(KisImageSP image, KisNodeSP node, KisSelectionSP selection)
     {
         if(node && node->hasEditablePaintDevice()) {
@@ -146,7 +191,7 @@ namespace KisToolUtils {
                         device->setDirty(dirtyRect);
                         return transaction.endAndTake();
                     });
-            KisProcessingApplicator::runSingleCommandStroke(image, cmd);
+            //KisProcessingApplicator::runSingleCommandStroke(image, cmd);
             return true;
         }
         return false;

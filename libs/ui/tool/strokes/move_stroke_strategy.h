@@ -18,6 +18,9 @@
 #include "KisAsyncronousStrokeUpdateHelper.h"
 #include "KisNodeSelectionRecipe.h"
 
+#include <memory>
+#include <unordered_map>
+
 class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
 
@@ -101,6 +104,13 @@ private:
     QHash<KisNodeSP, QRect> m_dirtyRects;
     bool m_updatesEnabled;
     QHash<KisNodeSP, QPoint> m_initialNodeOffsets;
+
+    struct TransformMaskData {
+        QPointF currentOffset;
+        std::unique_ptr<KUndo2Command> undoCommand;
+    };
+
+    std::unordered_map<KisNodeSP, TransformMaskData> m_transformMaskData;
 
     QElapsedTimer m_updateTimer;
     bool m_hasPostponedJob = false;

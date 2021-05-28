@@ -144,7 +144,6 @@
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
 #include <KritaVersionWrapper.h>
-#include <kritaversion.h>
 #include "KisCanvasWindow.h"
 #include "kis_action.h"
 #include <katecommandbar.h>
@@ -3039,9 +3038,12 @@ void KisMainWindow::orientationChanged()
     QScreen *screen = QGuiApplication::primaryScreen();
 
     for (QWindow* window: QGuiApplication::topLevelWindows()) {
-        if (window->geometry().topLeft() != QPoint(0, 0)) {
-            // We are using reversed values. Because geometry returned is not the updated one,
-            // but the previous one.
+        // Android: we shouldn't transform Window managers independent of its child
+        if ((window->type() == Qt::Popup)
+            && (window->flags() & Qt::FramelessWindowHint) == 0
+            && (window->geometry().topLeft() != QPoint(0, 0))) {
+            // We are using reversed values. Because geometry returned is not the updated
+            // one, but the previous one.
             int screenHeight = screen->geometry().width();
             int screenWidth = screen->geometry().height();
 

@@ -176,6 +176,16 @@ void KisLiquifyTransformWorker::translate(const QPointF &offset)
     }
 }
 
+void KisLiquifyTransformWorker::translateDstSpace(const QPointF &offset)
+{
+    QVector<QPointF>::iterator it = m_d->transformedPoints.begin();
+    QVector<QPointF>::iterator end = m_d->transformedPoints.end();
+
+    for (; it != end; ++it) {
+        *it += offset;
+    }
+}
+
 void KisLiquifyTransformWorker::undoPoints(const QPointF &base,
                                            qreal amount,
                                            qreal sigma)

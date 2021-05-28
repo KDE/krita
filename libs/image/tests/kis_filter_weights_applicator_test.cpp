@@ -244,7 +244,7 @@ void testLineImpl(qreal scale, qreal dx, quint8 expR[], quint8 expA[], int x0, i
     KisFilterWeightsApplicator applicator(dev, dev, scale, 0.0, dx, clampToEdge);
 
 
-    KisFilterWeightsApplicator::LinePos srcPos(startPos, endPos);
+    KisFilterWeightsApplicator::LinePos srcPos(startPos, endPos - startPos);
     KisFilterWeightsApplicator::LinePos dstPos;
 
     if (horizontal) {

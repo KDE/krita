@@ -36,6 +36,7 @@
 #include <kis_filter_strategy.h>
 #include <commands/kis_node_compositeop_command.h>
 #include <commands/kis_image_layer_add_command.h>
+#include <commands/kis_image_layer_remove_command.h>
 #include <kis_processing_applicator.h>
 
 #include <kis_raster_keyframe_channel.h>
@@ -222,7 +223,7 @@ bool Node::addChildNode(Node *child, Node *above)
 bool Node::removeChildNode(Node *child)
 {
     if (!d->node) return false;
-    return d->image->removeNode(child->node());
+    return child->remove();
 }
 
 void Node::setChildNodes(QList<Node*> nodes)
@@ -562,7 +563,13 @@ bool Node::remove()
 {
     if (!d->node) return false;
     if (!d->node->parent()) return false;
-    return d->image->removeNode(d->node);
+
+    KUndo2Command *cmd = new KisImageLayerRemoveCommand(d->image, d->node);
+
+    KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+    d->image->waitForDone();
+
+    return true;
 }
 
 Node* Node::duplicate()

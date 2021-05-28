@@ -138,7 +138,9 @@ install(FILES  org.kde.krita.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} 
 install(DIRECTORY DESTINATION ${DATA_INSTALL_DIR}/krita/shortcuts)
 
 if (WIN32)
-    add_executable(krita_windows_stub_exe windows_stub_main.cpp ${krita_windows_stub_ICONS_SRCS})
+    configure_file(versioninfo.rc.in ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
+
+    add_executable(krita_windows_stub_exe windows_stub_main.cpp ${krita_windows_stub_ICONS_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
     target_link_libraries(krita_windows_stub_exe PRIVATE krita)
     set_target_properties(krita_windows_stub_exe
         PROPERTIES
@@ -146,7 +148,7 @@ if (WIN32)
     )
     install(TARGETS krita_windows_stub_exe ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-    add_executable(krita_windows_stub_com windows_stub_main.cpp)
+    add_executable(krita_windows_stub_com windows_stub_main.cpp ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
     target_link_libraries(krita_windows_stub_com PRIVATE krita)
     set_target_properties(krita_windows_stub_com
         PROPERTIES

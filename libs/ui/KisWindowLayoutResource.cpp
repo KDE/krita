@@ -312,9 +312,6 @@ bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const
     QTextStream textStream(dev);
     textStream.setCodec("UTF-8");
     doc.save(textStream, 4);
-
-    KoResource::saveToDevice(dev);
-
     return true;
 }
 

@@ -4,6 +4,7 @@ adopt-info: krita
 
 base: core18
 confinement: strict
+compression: lzo
 
 apps:
   krita:

@@ -21,6 +21,8 @@ public:
 public Q_SLOTS:
     virtual QString type() const;
     QList<Shape *> shapes() const /Factory/;
+    QString toSvg();
+    QList<Shape *> addShapesFromSvg(const QString &svg) /Factory/;
 Q_SIGNALS:
 private:
 };

@@ -100,7 +100,7 @@ void KisProcessingsTest::testTransformVisitorScaleRotate()
         new KisTransformProcessingVisitor(0.5, 0.5,
                                           0,0,QPointF(),
                                           M_PI,
-                                          320,221,
+                                          320,220.5,
                                           filter);
 
     tester.test("transform_scale_rotate", visitor);

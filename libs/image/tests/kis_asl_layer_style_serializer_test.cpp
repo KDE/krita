@@ -334,7 +334,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
 
 void KisAslLayerStyleSerializerTest::testWritingGradients()
 {
-    KoStopGradient stopGradient("");
+    KoStopGradientSP stopGradient(new KoStopGradient(""));
 
     {
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -343,25 +343,24 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
         stops << KoGradientStop(0.3, KoColor(Qt::red, cs), COLORSTOP);
         stops << KoGradientStop(0.6, KoColor(Qt::green, cs), COLORSTOP);
         stops << KoGradientStop(1.0, KoColor(Qt::white, cs), COLORSTOP);
-        stopGradient.setStops(stops);
+        stopGradient->setStops(stops);
     }
-
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
 
     style->outerGlow()->setEffectEnabled(true);
     style->outerGlow()->setFillType(psd_fill_gradient);
-    style->outerGlow()->setGradient(toQShared(new KoStopGradient(stopGradient)));
+    style->outerGlow()->setGradient(toQShared(new KoStopGradient(*stopGradient)));
 
     style->innerGlow()->setEffectEnabled(true);
     style->innerGlow()->setFillType(psd_fill_gradient);
-    style->innerGlow()->setGradient(toQShared(new KoStopGradient(stopGradient)));
+    style->innerGlow()->setGradient(toQShared(new KoStopGradient(*stopGradient)));
 
     style->gradientOverlay()->setEffectEnabled(true);
-    style->gradientOverlay()->setGradient(toQShared(new KoStopGradient(stopGradient)));
+    style->gradientOverlay()->setGradient(toQShared(new KoStopGradient(*stopGradient)));
 
     style->stroke()->setEffectEnabled(true);
     style->stroke()->setFillType(psd_fill_gradient);
-    style->stroke()->setGradient(toQShared(new KoStopGradient(stopGradient)));
+    style->stroke()->setGradient(toQShared(new KoStopGradient(*stopGradient)));
 
     {
         KisAslLayerStyleSerializer s;

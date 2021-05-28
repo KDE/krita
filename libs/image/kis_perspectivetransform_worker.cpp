@@ -99,7 +99,45 @@ void KisPerspectiveTransformWorker::setForwardTransform(const QTransform &transf
     init(transform);
 }
 
-void KisPerspectiveTransformWorker::run()
+
+struct BilinearWrapper
+{
+    using SrcAccessorSP = KisRandomSubAccessorSP;
+
+    BilinearWrapper(KisPaintDeviceSP device)
+        : m_accessor(device->createRandomSubAccessor())
+    {
+    }
+
+    void samplePixel(const QPointF &pt, quint8 *dst) {
+        m_accessor->moveTo(pt.x(), pt.y());
+        m_accessor->sampledOldRawData(dst);
+    }
+
+    KisRandomSubAccessorSP m_accessor;
+};
+
+struct NearestNeighbourWrapper
+{
+    using SrcAccessorSP = KisRandomAccessorSP;
+
+    NearestNeighbourWrapper(KisPaintDeviceSP device)
+        : m_accessor(device->createRandomConstAccessorNG()),
+          m_pixelSize(device->pixelSize())
+    {
+    }
+
+    void samplePixel(const QPointF &pt, quint8 *dst) {
+        m_accessor->moveTo(qRound(pt.x()), qRound(pt.y()));
+        memcpy(dst, m_accessor->oldRawData(), m_pixelSize);
+    }
+
+    KisRandomConstAccessorSP m_accessor;
+    int m_pixelSize;
+};
+
+template <class SrcAccessorWrapper>
+void KisPerspectiveTransformWorker::runImpl()
 {
     KIS_ASSERT_RECOVER_RETURN(m_dev);
 
@@ -124,7 +162,7 @@ void KisPerspectiveTransformWorker::run()
 
     KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, m_dstRegion.rectCount());
 
-    KisRandomSubAccessorSP srcAcc = cloneDevice->createRandomSubAccessor();
+    SrcAccessorWrapper srcAcc(cloneDevice);
     KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG();
 
     Q_FOREACH (const QRect &rect, m_dstRegion.rects()) {
@@ -136,12 +174,20 @@ void KisPerspectiveTransformWorker::run()
 
                 if (m_srcRect.contains(srcPoint)) {
                     accessor->moveTo(dstPoint.x(), dstPoint.y());
-                    srcAcc->moveTo(srcPoint.x(), srcPoint.y());
-                    srcAcc->sampledOldRawData(accessor->rawData());
+                    srcAcc.samplePixel(srcPoint, accessor->rawData());
                 }
             }
         }
         progressHelper.step();
+    }
+}
+
+void KisPerspectiveTransformWorker::run(SampleType sampleType)
+{
+    if (sampleType == Bilinear) {
+        runImpl<BilinearWrapper>();
+    } else {
+        runImpl<NearestNeighbourWrapper>();
     }
 }
 

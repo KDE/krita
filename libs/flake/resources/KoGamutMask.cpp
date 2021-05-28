@@ -355,7 +355,7 @@ bool KoGamutMask::saveToDevice(QIODevice *dev) const
     image().save(&previewDev, "PNG");
     if (!store->close()) { return false; }
 
-    return store->finalize() && KoResource::saveToDevice(dev);
+    return store->finalize();
 }
 
 QString KoGamutMask::title() const

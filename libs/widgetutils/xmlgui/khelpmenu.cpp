@@ -35,8 +35,6 @@
 #include <klocalizedstring.h>
 #include <kstandardaction.h>
 
-#include <kritaversion.h>
-
 using namespace KDEPrivate;
 
 class KHelpMenuPrivate

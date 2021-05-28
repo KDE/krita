@@ -178,7 +178,7 @@ KisTagSP KisTagChooserWidget::currentlySelectedTag()
 {
     int row = d->comboBox->currentIndex();
     if (row < 0) {
-        return KisTagSP();
+        return nullptr;
     }
 
     QModelIndex index = d->model->index(row, 0);

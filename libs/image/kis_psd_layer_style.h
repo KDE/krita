@@ -44,8 +44,6 @@ public:
     QString name() const;
     void setName(const QString &value);
 
-    QByteArray generateMD5() const override;
-
     QUuid uuid() const;
     void setUuid(const QUuid &value) const;
 

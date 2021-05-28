@@ -93,6 +93,7 @@
         <file>dark_palette-library.svg</file>
         <file>dark_passthrough-disabled.svg</file>
         <file>dark_passthrough-enabled.svg</file>
+		<file>dark_popup-palette.svg</file>
         <file>dark_prevframe.svg</file>
         <file>dark_reload-preset.svg</file>
         <file>dark_reload-preset-16.svg</file>
@@ -208,6 +209,7 @@
         <file>light_prevframe.svg</file>
         <file>light_nextkeyframe.svg</file>
         <file>light_lastframe.svg</file>
+		<file>light_popup-palette.svg</file>
         <file>light_prevkeyframe.svg</file>
         <file>light_firstframe.svg</file>
         <file>light_reload-preset.svg</file>

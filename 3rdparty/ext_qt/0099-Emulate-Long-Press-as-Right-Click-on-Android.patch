@@ -1,17 +1,17 @@
-From 326fb937882230242fc560fd6da35e731d281141 Mon Sep 17 00:00:00 2001
+From d4270e608d2d2cd222b09b91ffc754d5b555fb67 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Sat, 12 Sep 2020 10:43:06 +0000
 Subject: [PATCH] Emulate Long Press as Right Click on Android
 
 ---
- src/plugins/platforms/android/androidjniinput.cpp | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ src/plugins/platforms/android/androidjniinput.cpp | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 313407575e..0d2eaa6f8a 100644
+index deb30e404a..a71c56bba7 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
-@@ -225,7 +225,7 @@ namespace QtAndroidInput
+@@ -224,13 +224,16 @@ namespace QtAndroidInput
              QMetaObject::invokeMethod(inputContext, "longPress", Q_ARG(int, x), Q_ARG(int, y));
  
          //### TODO: add proper API for Qt 5.2
@@ -20,7 +20,17 @@ index 313407575e..0d2eaa6f8a 100644
          if (!rightMouseFromLongPress)
              return;
          m_ignoreMouseEvents = true;
-@@ -244,6 +244,12 @@ namespace QtAndroidInput
+         QPoint globalPos(x,y);
+         QWindow *tlw = topLevelWindowAt(globalPos);
+-        QPoint localPos = tlw ? (globalPos-tlw->position()) : globalPos;
++        QPoint localPos = globalPos;
++        if (tlw && tlw->handle()) {
++            localPos = tlw->handle()->mapFromGlobal(globalPos);
++        }
+ 
+         // Release left button
+         QWindowSystemInterface::handleMouseEvent(tlw,
+@@ -243,6 +246,12 @@ namespace QtAndroidInput
                                                   localPos,
                                                   globalPos,
                                                   Qt::MouseButtons(Qt::RightButton));
@@ -34,5 +44,5 @@ index 313407575e..0d2eaa6f8a 100644
  
      static void touchBegin(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/)
 -- 
-2.28.0
+2.31.1
 

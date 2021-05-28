@@ -74,11 +74,7 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
 
 bool KisSvgBrush::saveToDevice(QIODevice *dev) const
 {
-    if((dev->write(m_svg.constData(), m_svg.size()) == m_svg.size())) {
-        KoResource::saveToDevice(dev);
-        return true;
-    }
-    return false;
+    return dev->write(m_svg.constData(), m_svg.size()) == m_svg.size();
 }
 
 QString KisSvgBrush::defaultFileExtension() const

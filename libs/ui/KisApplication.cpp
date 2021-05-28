@@ -568,6 +568,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     qApp->processEvents(); // For vector layers to be updated
 
                     doc->setFileBatchMode(true);
+                    doc->image()->waitForDone();
+
                     if (!doc->exportDocumentSync(exportFileName, outputMimetype.toLatin1())) {
                         errKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }

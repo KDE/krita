@@ -147,9 +147,6 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
     default:
         res = d->saveKpl(dev);
     }
-    if (res) {
-        res = KoResource::saveToDevice(dev);
-    }
     return res;
 }
 

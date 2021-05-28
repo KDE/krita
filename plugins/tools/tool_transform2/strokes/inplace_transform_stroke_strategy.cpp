@@ -727,7 +727,7 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
                                                       int levelOfDetail)
 {
     if (levelOfDetail > 0) {
-        args.scaleSrcAndDst(KisLodTransform::lodToScale(levelOfDetail));
+        args.scale3dSrcAndDst(KisLodTransform::lodToScale(levelOfDetail));
     }
 
     KritaUtils::addJobBarrier(mutatedJobs, levelOfDetail,

@@ -577,6 +577,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgchangeclonesource.ui
     forms/koDocumentInfoAboutWidget.ui
     forms/koDocumentInfoAuthorWidget.ui
+    forms/WdgPopupPaletteSettings.ui
 
 
     brushhud/kis_dlg_brush_hud_config.ui

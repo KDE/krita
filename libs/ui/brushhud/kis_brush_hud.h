@@ -20,7 +20,6 @@ public:
     ~KisBrushHud() override;
 
     void updateProperties();
-    QSize sizeHint() const override;
 
     void updateIcons();
 

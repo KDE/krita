@@ -30,6 +30,26 @@ uint qHash(KisWeakSharedPtr<T> ptr) {
     return qHash(ptr.data());
 }
 
+namespace std {
+template <class T>
+struct hash<KisSharedPtr<T>>
+{
+    size_t operator()(const KisSharedPtr<T> &ptr) const {
+        return hash<const T*>()(ptr.data());
+    }
+};
+
+template <class T>
+struct hash<KisWeakSharedPtr<T>>
+{
+    size_t operator()(const KisWeakSharedPtr<T> &ptr) const {
+        return hash<const T*>()(ptr.data());
+    }
+};
+
+}
+
+
 /**
  * Define lots of shared pointer versions of Krita classes.
  * Shared pointer classes have the advantage of near automatic

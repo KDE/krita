@@ -39,6 +39,8 @@ namespace GSL
         QPointF transformedCenter;
         qreal scaleX;
         qreal scaleY;
+
+        bool isValid = false;
     };
 
     ScaleResult2D calculateScale2D(const ToolTransformArgs &args,

@@ -14,6 +14,7 @@
 #include <QTime>
 #include <QDir>
 
+#include <KoResource.h>
 #include <KoConfig.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

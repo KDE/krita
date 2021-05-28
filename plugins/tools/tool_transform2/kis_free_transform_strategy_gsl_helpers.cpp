@@ -12,6 +12,24 @@
 #include <QMessageBox>
 #include <kis_algebra_2d.h>
 
+#include <Eigen/Dense>
+#include <kis_algebra_2d.h>
+
+namespace KisAlgebra2D {
+
+// TODO: avoid code-duplication
+inline Eigen::Matrix3d fromQTransformStraight(const QTransform &t)
+{
+    Eigen::Matrix3d m;
+
+    m << t.m11() , t.m12() , t.m13()
+        ,t.m21() , t.m22() , t.m23()
+        ,t.m31() , t.m32() , t.m33();
+
+    return m;
+}
+}
+
 #include <config-gsl.h>
 
 #ifdef HAVE_GSL
@@ -317,6 +335,68 @@ namespace GSL
         return result;
     }
 
+    ScaleResult2D calculateScale2DAffine(const ToolTransformArgs &args,
+                                         const QPointF &staticPointSrc,
+                                         const QPointF &staticPointDst,
+                                         const QPointF &movingPointSrc,
+                                         const QPointF &movingPointDst)
+    {
+        KisTransformUtils::MatricesPack m(args);
+
+        /// We are solving an system of two equations:
+        ///
+        /// T' * projP' * S' * SC' * TS' * P_src1 = P_dst2
+        /// T' * projP' * S' * SC' * TS' * P_src2 = P_dst2
+        ///
+        /// When projP is an affine transformation matrix,
+        /// this system has a trivial solution. For the
+        /// non-affine case, the things get much more
+        /// complicated...
+
+        Eigen::Matrix3d TS_t = KisAlgebra2D::fromQTransformStraight(m.TS.transposed());
+        Eigen::Matrix3d S_t = KisAlgebra2D::fromQTransformStraight(m.S.transposed());
+        Eigen::Matrix3d projP_t = KisAlgebra2D::fromQTransformStraight(m.projectedP.transposed());
+
+        Eigen::Matrix3d M1 = projP_t * S_t;
+
+        Eigen::Matrix<double, 3, 2> P_src;
+        P_src << staticPointSrc.x(), movingPointSrc.x(),
+                 staticPointSrc.y(), movingPointSrc.y(),
+                 1, 1;
+
+        P_src = TS_t * P_src;
+
+        Eigen::Matrix<double, 3, 2> P_dst;
+        P_dst << staticPointDst.x(), movingPointDst.x(),
+                 staticPointDst.y(), movingPointDst.y(),
+                 1, 1;
+
+        Eigen::Matrix<double, 4, 4> A;
+        A << M1(0,0) * P_src(0,0), M1(0,1) * P_src(1,0), 1, 0,
+             M1(1,0) * P_src(0,0), M1(1,1) * P_src(1,0), 0, 1,
+             M1(0,0) * P_src(0,1), M1(0,1) * P_src(1,1), 1, 0,
+             M1(1,0) * P_src(0,1), M1(1,1) * P_src(1,1), 0, 1;
+
+        Eigen::Matrix<double, 4, 1> B;
+        B << P_dst(0,0), P_dst(1,0), P_dst(0,1), P_dst(1,1);
+
+
+        ScaleResult2D result;
+
+        Eigen::Matrix<double, 4, 1> X = A.inverse() * B;
+
+        result.isValid = !qFuzzyIsNull(A.determinant());
+
+        if (result.isValid) {
+            result.scaleX = X(0);
+            result.scaleY = X(1);
+            result.transformedCenter.rx() = X(2);
+            result.transformedCenter.ry() = X(3);
+        }
+
+        return result;
+    }
+
     ScaleResult1D calculateScaleX(const ToolTransformArgs &args,
                                   const QPointF &staticPointSrc,
                                   const QPointF &staticPointDst,
@@ -374,6 +454,15 @@ namespace GSL
         result.scaleY = args.scaleY();
         result.transformedCenter = args.transformedCenter();
         return result;
+    }
+
+    ScaleResult2D calculateScale2DAffine(const ToolTransformArgs &args,
+                                         const QPointF &staticPointSrc,
+                                         const QPointF &staticPointDst,
+                                         const QPointF &movingPointSrc,
+                                         const QPointF &movingPointDst)
+    {
+        return calculateScale2D(args, staticPointSrc, staticPointDst, movingPointSrc, movingPointDst);
     }
 
     ScaleResult1D calculateScaleX(const ToolTransformArgs &args,

@@ -12,11 +12,11 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_animated_transform_parameters.h"
 
-KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, bool skipUpdate)
+KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, QWeakPointer<boost::none_t> updatesBlockerCookie)
 : m_mask(mask),
   m_params(params),
   m_oldParams(m_mask->transformParams()),
-  m_skipUpdate(skipUpdate)
+  m_updatesBlockerCookie(updatesBlockerCookie)
 {
     m_wasHidden = m_oldParams->isHidden();
 
@@ -40,7 +40,7 @@ void KisModifyTransformMaskCommand::redo() {
     }
 
     m_mask->setTransformParams(params);
-    if (!m_skipUpdate) {
+    if (!m_updatesBlockerCookie) {
         m_mask->threadSafeForceStaticImageUpdate();
     }
 }
@@ -54,7 +54,7 @@ void KisModifyTransformMaskCommand::undo() {
     }
 
     m_mask->setTransformParams(m_oldParams);
-    if (!m_skipUpdate) {
+    if (!m_updatesBlockerCookie) {
         m_mask->threadSafeForceStaticImageUpdate();
     }
 }

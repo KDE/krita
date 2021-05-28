@@ -40,7 +40,7 @@ public:
                        double  xshear, double  yshear,
                        double  xshearOrigin, double yshearOrigin,
                        double rotation,
-                       qint32  xtranslate, qint32  ytranslate,
+                       qreal xtranslate, qreal ytranslate,
                        KoUpdaterPtr progress,
                        KisFilterStrategy *filter);
     ~KisTransformWorker();
@@ -139,7 +139,7 @@ private:
     double  m_xscale, m_yscale;
     double  m_xshear, m_yshear, m_rotation;
     double  m_xshearOrigin, m_yshearOrigin;
-    qint32  m_xtranslate, m_ytranslate;
+    qreal  m_xtranslate, m_ytranslate;
     KoUpdaterPtr m_progressUpdater;
     KisFilterStrategy *m_filter;
     QRect m_boundRect;

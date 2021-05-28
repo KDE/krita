@@ -368,15 +368,19 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
         // filename - filename of the file , e.g. test.abr
         // name - test_number_of_the_brush, e.g test_1, test_2
         KisAbrBrushSP abrBrush;
+        QImage brushTipImage = convertToQImage(buffer, width, height);
         if (m_abrBrushes->contains(name)) {
             abrBrush = m_abrBrushes.data()->operator[](name);
         }
         else {
             abrBrush = KisAbrBrushSP(new KisAbrBrush(name, this));
-            abrBrush->setMD5(md5());
+            QBuffer buf;
+            buf.open(QFile::ReadWrite);
+            brushTipImage.save(&buf, "PNG");
+            abrBrush->setMD5(KoMD5Generator::generateHash(buf.data()));
         }
 
-        abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
+        abrBrush->setBrushTipImage(brushTipImage);
         // XXX: call extra setters on abrBrush for other options of ABR brushes
         abrBrush->setValid(true);
         abrBrush->setName(name);
@@ -467,15 +471,19 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
             }
 
             KisAbrBrushSP abrBrush;
+            QImage brushTipImage = convertToQImage(buffer, width, height);
             if (m_abrBrushes->contains(name)) {
                 abrBrush = m_abrBrushes.data()->operator[](name);
             }
             else {
                 abrBrush = KisAbrBrushSP(new KisAbrBrush(name, this));
-                abrBrush->setMD5(md5());
+                QBuffer buf;
+                buf.open(QFile::ReadWrite);
+                brushTipImage.save(&buf, "PNG");
+                abrBrush->setMD5(KoMD5Generator::generateHash(buf.data()));
             }
 
-            abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
+            abrBrush->setBrushTipImage(brushTipImage);
             // XXX: call extra setters on abrBrush for other options of ABR brushes   free (buffer);
             abrBrush->setValid(true);
             abrBrush->setName(name);

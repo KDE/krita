@@ -12,7 +12,7 @@
 #include "KoVcMultiArchBuildSupport.h"
 #include "kis_debug.h"
 
-#ifdef HAVE_VC
+#if defined(__i386__) || defined(__x86_64__)
 #include <immintrin.h>
 #endif
 

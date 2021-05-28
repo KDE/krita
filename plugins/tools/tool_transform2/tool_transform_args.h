@@ -309,7 +309,9 @@ public:
     void toXML(QDomElement *e) const;
     static ToolTransformArgs fromXML(const QDomElement &e);
 
-    void translate(const QPointF &offset);
+    void translateSrcAndDst(const QPointF &offset);
+    void transformSrcAndDst(const QTransform &t);
+    void translateDstSpace(const QPointF &offset);
 
     void saveContinuedState();
     void restoreContinuedState();
@@ -327,7 +329,7 @@ public:
     bool meshScaleHandles() const;
     void setMeshScaleHandles(bool meshScaleHandles);
 
-    void scaleSrcAndDst(qreal scale);
+    void scale3dSrcAndDst(qreal scale);
 
 private:
     void clear();

@@ -1,0 +1,36 @@
+From 4414518b345c0b428591dad81a24d4645ae2408c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Pekka=20Geh=C3=B6r?= <pekka.gehor@qt.io>
+Date: Mon, 21 Dec 2020 16:37:25 +0200
+Subject: [PATCH] Fix Text select handle misplaced on fields inside QDialog
+ issues
+
+ Get cursorPoint from a mapToGlobal with a cursorRectangle of the selected inputMethod
+
+Fixes: QTBUG-65229
+Fixes: QTBUG-58503
+Pick-to: 6.0 5.15
+Change-Id: I89b056fa91c59d260f02164c9bd6672b5ada64d6
+Reviewed-by: Rami Potinkara <rami.potinkara@qt.io>
+Reviewed-by: Ville Voutilainen <ville.voutilainen@qt.io>
+---
+ src/plugins/platforms/android/qandroidinputcontext.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/android/qandroidinputcontext.cpp b/src/plugins/platforms/android/qandroidinputcontext.cpp
+index e78c317863..629574a466 100644
+--- a/src/plugins/platforms/android/qandroidinputcontext.cpp
++++ b/src/plugins/platforms/android/qandroidinputcontext.cpp
+@@ -645,8 +645,8 @@ void QAndroidInputContext::updateSelectionHandles()
+         }
+ 
+         auto curRect = im->cursorRectangle();
+-        QPoint cursorPoint(curRect.center().x(), curRect.bottom());
+-        QPoint editMenuPoint(curRect.x(), curRect.y());
++        QPoint cursorPoint = qGuiApp->focusWindow()->mapToGlobal(QPoint(curRect.x() + (curRect.width() / 2), curRect.y() + curRect.height()));
++        QPoint editMenuPoint(cursorPoint.x(), cursorPoint.y());
+         m_handleMode &= ShowEditPopup;
+         m_handleMode |= ShowCursor;
+         uint32_t buttons = EditContext::PasteButton;
+-- 
+2.31.1
+

@@ -6,37 +6,40 @@
  */
 
 #include <testutil.h>
+#include <KoResource.h>
+#include <KoMD5Generator.h>
 
 namespace TestUtil
 {
-    QStringList getHierarchy(KisNodeSP root, const QString &prefix) {
-        QStringList list;
 
-        QString nextPrefix;
-        if (root->parent()) {
-            nextPrefix = prefix + "+";
-            list << prefix + root->name();
-        }
+QStringList getHierarchy(KisNodeSP root, const QString &prefix) {
+    QStringList list;
 
-        KisNodeSP node = root->firstChild();
-        while (node) {
-            list += getHierarchy(node, nextPrefix);
-            node = node->nextSibling();
-        }
-
-        return list;
+    QString nextPrefix;
+    if (root->parent()) {
+        nextPrefix = prefix + "+";
+        list << prefix + root->name();
     }
 
-    bool checkHierarchy(KisNodeSP root, const QStringList &expected)
-    {
-        QStringList result = getHierarchy(root);
-        if (result != expected) {
-            qDebug() << "Failed to compare hierarchy:";
-            qDebug() << "   " << ppVar(result);
-            qDebug() << "   " << ppVar(expected);
-            return false;
-        }
-
-        return true;
+    KisNodeSP node = root->firstChild();
+    while (node) {
+        list += getHierarchy(node, nextPrefix);
+        node = node->nextSibling();
     }
+
+    return list;
+}
+
+bool checkHierarchy(KisNodeSP root, const QStringList &expected)
+{
+    QStringList result = getHierarchy(root);
+    if (result != expected) {
+        qDebug() << "Failed to compare hierarchy:";
+        qDebug() << "   " << ppVar(result);
+        qDebug() << "   " << ppVar(expected);
+        return false;
+    }
+
+    return true;
+}
 }

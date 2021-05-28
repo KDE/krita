@@ -109,7 +109,8 @@ public:
 
     // Calculate ARGB average value using carry save adder:
     //   https://www.qt.io/blog/2009/01/20/50-scaling-of-argb32-image
-    inline quint32 avg(quint32 c1, quint32 c2) {
+    inline quint32 avg(quint32 c1, quint32 c2)
+    {
         return (((c1 ^ c2) & 0xfefefefeUL) >> 1) + (c1 & c2);
     }
 
@@ -190,7 +191,10 @@ public:
                 break;
         }
 
-        return frame.save(fileName, RecorderFormatInfo::fileFormat(settings.format).data(), factor);
+        bool result = frame.save(fileName, RecorderFormatInfo::fileFormat(settings.format).data(), factor);
+        if (!result)
+            QFile(fileName).remove(); // remove corrupted frame
+        return result;
     }
 
 };

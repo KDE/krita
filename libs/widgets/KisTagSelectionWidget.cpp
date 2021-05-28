@@ -55,8 +55,8 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
     layout->insertStretch(2, 1);
     if (m_editble) {
         m_closeIconLabel = new QLabel(parent);
-        QIcon icon = KisIconUtils::loadIcon("tagclose");
-        QSize size = QSize(1, 1)*m_textLabel->height()*0.3;
+        QIcon icon = KisIconUtils::loadIcon("docker_close");
+        QSize size = QSize(1, 1)*m_textLabel->height()*0.45;
         m_closeIconLabel->setPixmap(icon.pixmap(size));
         layout->addWidget(m_closeIconLabel);
     }
@@ -236,9 +236,10 @@ void WdgAddTagButton::paintEvent(QPaintEvent *event)
     QSize size = this->rect().size()*0.6;
 
     QSize iconSize = icon.actualSize(size);
-    QPixmap pix = icon.pixmap(size);
-    QSize realSize = iconSize.scaled(size, Qt::KeepAspectRatio);//pix.rect().size();
-    QPoint p = this->rect().topLeft() + QPoint(this->rect().width()/2 - realSize.width()/2, this->rect().height()/2 - realSize.height()/2);
+    QPixmap pix = icon.pixmap(iconSize);
+    QSize realSize = iconSize.scaled(iconSize, Qt::KeepAspectRatio);//pix.rect().size();
+    qreal hack = 0.5;
+    QPointF p = this->rect().topLeft() + QPointF(this->rect().width()/2 - realSize.width()/2 - hack, this->rect().height()/2 - realSize.height()/2 - hack);
     painter.setOpacity(!isEnabled() ? 0.3 : 1.0);
     painter.drawPixmap(p, pix);
     painter.setOpacity(1.0);

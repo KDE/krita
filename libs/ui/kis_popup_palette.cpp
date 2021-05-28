@@ -99,50 +99,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_acyclicConnector(new KisAcyclicSignalConnector(this))
     , m_clicksEater(new KisMouseClickEater(Qt::RightButton, 1, this))
 {
-    const int borderWidth = 3;
-
-    if (KisConfig(true).readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
-        KisVisualColorSelector *selector = new KisVisualColorSelector(this);
-        selector->setAcceptTabletEvents(true);
-        m_triangleColorSelector = selector;
-    }
-    else {
-        m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
-    }
-    m_triangleColorSelector->setDisplayRenderer(displayRenderer);
-    m_triangleColorSelector->setConfig(true,false);
-    m_triangleColorSelector->move(m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth, m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth);
-    m_triangleColorSelector->resize(m_popupPaletteSize - 2*m_triangleColorSelector->x(), m_popupPaletteSize - 2*m_triangleColorSelector->y());
-    m_triangleColorSelector->setVisible(true);
-    KoColor fgcolor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
-    if (m_resourceManager) {
-        fgcolor = provider->fgColor();
-    }
-    m_triangleColorSelector->slotSetColor(fgcolor);
-
-
-    /**
-     * Tablet support code generates a spurious right-click right after opening
-     * the window, so we should ignore it. Next right-click will be used for
-     * closing the popup palette
-     */
-    this->installEventFilter(m_clicksEater);
-    m_triangleColorSelector->installEventFilter(m_clicksEater);
-
-    // ellipse - to make sure the widget doesn't eat events meant for recent colors or brushes
-    //         - needs to be +2 pixels on every side for anti-aliasing to look nice on high dpi displays
-    // rectange - to make sure the area doesn't extend outside of the widget
-    QRegion maskedEllipse(-2, -2, m_triangleColorSelector->width() + 4, m_triangleColorSelector->height() + 4, QRegion::Ellipse );
-    QRegion maskedRectange(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Rectangle);
-    QRegion maskedRegion = maskedEllipse.intersected(maskedRectange);
-    m_triangleColorSelector->setMask(maskedRegion);
-
-    connect(m_triangleColorSelector, SIGNAL(sigNewColor(KoColor)),
-            m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(slotConfigurationChanged()));
     connect(m_displayRenderer,  SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
 
     m_acyclicConnector->connectForwardKoColor(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
@@ -165,30 +125,27 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     setSelectedColor(-1);
 
     m_brushHud = new KisBrushHud(provider, this);
-    m_brushHud->setFixedHeight(int(m_popupPaletteSize));
 
-    const int auxButtonSize = 35;
-    m_settingsButton = new KisRoundHudButton(this);
-    m_settingsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
-                                  auxButtonSize, auxButtonSize);
+    m_tagsButton = new KisRoundHudButton(this);
 
-    connect(m_settingsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
+    connect(m_tagsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
 
     m_brushHudButton = new KisRoundHudButton(this);
     m_brushHudButton->setCheckable(true);
 
-    m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
-                                  auxButtonSize, auxButtonSize);
     connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
     
 
 
     // add some stuff below the pop-up palette that will make it easier to use for tablet people
     QGridLayout* gLayout = new QGridLayout(this);
+    gLayout->setSizeConstraint(QLayout::SetFixedSize);
     gLayout->setSpacing(0);
-    QSpacerItem* verticalSpacer = new QSpacerItem(m_popupPaletteSize, m_popupPaletteSize, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    gLayout->addItem(verticalSpacer, 0, 0); // this should push the box to the bottom    
-    gLayout->addWidget(m_brushHud, 0, 1);
+    gLayout->setContentsMargins(QMargins());
+    m_mainArea = new QSpacerItem(m_popupPaletteSize, m_popupPaletteSize);
+    gLayout->addItem(m_mainArea, 0, 0); // this should push the box to the bottom
+    gLayout->setColumnMinimumWidth(1, BRUSH_HUD_MARGIN);
+    gLayout->addWidget(m_brushHud, 0, 2);
 
     QHBoxLayout* hLayout = new QHBoxLayout();
     gLayout->addItem(hLayout, 1, 0);
@@ -240,6 +197,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     slotUpdateIcons();
 
     hLayout->setSpacing(2);
+    hLayout->setContentsMargins(0, 6, 0, 0);
     hLayout->addWidget(mirrorMode);
     hLayout->addWidget(canvasOnlyButton);
     hLayout->addWidget(zoomToOneHundredPercentButton);
@@ -248,9 +206,18 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     
     setVisible(true);
     setVisible(false);
+    reconfigure();
 
     opacityChange = new QGraphicsOpacityEffect(this);
     setGraphicsEffect(opacityChange);
+
+    /**
+     * Tablet support code generates a spurious right-click right after opening
+     * the window, so we should ignore it. Next right-click will be used for
+     * closing the popup palette
+     */
+    this->installEventFilter(m_clicksEater);
+    m_colorSelector->installEventFilter(m_clicksEater);
 
     // Prevent tablet events from being captured by the canvas
     setAttribute(Qt::WA_NoMousePropagation, true);
@@ -258,6 +225,76 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     // Load configuration..
     KisConfig cfg(true);
     m_brushHudButton->setChecked(cfg.showBrushHud());
+}
+
+void KisPopupPalette::slotConfigurationChanged()
+{
+    reconfigure();
+    layout()->invalidate();
+}
+
+void KisPopupPalette::reconfigure()
+{
+    KisConfig config(true);
+    const int borderWidth = 3;
+    m_presetSlotCount = qMax(config.favoritePresets(), 10);
+    m_popupPaletteSize = config.readEntry("popuppalette/size", 385);
+    qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2;
+    m_colorHistoryInnerRadius = selectorRadius + borderWidth;
+    m_colorHistoryOuterRadius = m_colorHistoryInnerRadius + 20;
+
+    m_mainArea->changeSize(m_popupPaletteSize, m_popupPaletteSize);
+
+    bool useVisualSelector = config.readEntry<bool>("popuppalette/usevisualcolorselector", false);
+    if (m_colorSelector) {
+        // if the selector type changed, delete it
+        bool haveVisualSelector = qobject_cast<KisVisualColorSelector*>(m_colorSelector) != 0;
+        if (useVisualSelector != haveVisualSelector) {
+            delete m_colorSelector;
+            m_colorSelector = 0;
+        }
+    }
+    if (!m_colorSelector) {
+        if (useVisualSelector) {
+            KisVisualColorSelector *selector = new KisVisualColorSelector(this);
+            selector->setAcceptTabletEvents(true);
+            m_colorSelector = selector;
+        }
+        else {
+            m_colorSelector  = new PopupColorTriangle(m_displayRenderer, this);
+            connect(m_colorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
+        }
+        m_colorSelector->setDisplayRenderer(m_displayRenderer);
+        m_colorSelector->setConfig(true,false);
+        m_colorSelector->setVisible(true);
+        slotDisplayConfigurationChanged();
+        connect(m_colorSelector, SIGNAL(sigNewColor(KoColor)),
+                m_colorChangeCompressor.data(), SLOT(start()));
+        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+                m_colorSelector, SLOT(configurationChanged()));
+    }
+
+
+    const int auxButtonSize = 35;
+    m_colorSelector->move(m_popupPaletteSize/2 - selectorRadius, m_popupPaletteSize/2 - selectorRadius);
+    m_colorSelector->resize(m_popupPaletteSize - 2*m_colorSelector->x(), m_popupPaletteSize - 2*m_colorSelector->y());
+
+    // ellipse - to make sure the widget doesn't eat events meant for recent colors or brushes
+    //         - needs to be +2 pixels on every side for anti-aliasing to look nice on high dpi displays
+    // rectange - to make sure the area doesn't extend outside of the widget
+    QRegion maskedEllipse(-2, -2, m_colorSelector->width() + 4, m_colorSelector->height() + 4, QRegion::Ellipse );
+    QRegion maskedRectange(0, 0, m_colorSelector->width(), m_colorSelector->height(), QRegion::Rectangle);
+    QRegion maskedRegion = maskedEllipse.intersected(maskedRectange);
+
+    m_colorSelector->setMask(maskedRegion);
+
+    m_brushHud->setFixedHeight(int(m_popupPaletteSize));
+
+    m_tagsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
+                                  auxButtonSize, auxButtonSize);
+    m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
+                                  auxButtonSize, auxButtonSize);
+    calculatePresetLayout();
 }
 
 void KisPopupPalette::slotDisplayConfigurationChanged()
@@ -269,20 +306,20 @@ void KisPopupPalette::slotDisplayConfigurationChanged()
     if (paintingCS->colorChannelCount()>3) {
         paintingCS = KoColorSpaceRegistry::instance()->rgb8();
     }
-    m_triangleColorSelector->slotSetColorSpace(paintingCS);
-    m_triangleColorSelector->slotSetColor(col);
+    m_colorSelector->slotSetColorSpace(paintingCS);
+    m_colorSelector->slotSetColor(col);
 }
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
-    m_triangleColorSelector->slotSetColor(color);
+    m_colorSelector->slotSetColor(color);
 }
 
 void KisPopupPalette::slotEmitColorChanged()
 {
     if (isVisible()) {
         update();
-        emit sigChangefGColor(m_triangleColorSelector->getCurrentColor());
+        emit sigChangefGColor(m_colorSelector->getCurrentColor());
     }
 }
 
@@ -343,7 +380,7 @@ void KisPopupPalette::slotUpdateIcons()
     }
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     m_brushHud->updateIcons();
-    m_settingsButton->setIcon(KisIconUtils::loadIcon("tag"));
+    m_tagsButton->setIcon(KisIconUtils::loadIcon("tag"));
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
 }
 
@@ -361,8 +398,6 @@ void KisPopupPalette::showHudWidget(bool visible)
 
     KisConfig cfg(false);
     cfg.setShowBrushHud(visible);
-
-    resize(layout()->sizeHint());
 }
 
 void KisPopupPalette::setParent(QWidget *parent) {
@@ -372,6 +407,8 @@ void KisPopupPalette::setParent(QWidget *parent) {
 
 QSize KisPopupPalette::sizeHint() const
 {
+    // Note: the canvas popup widget system "abuses" the sizeHint to determine
+    // the position to show the widget; this does not reflect the true size.
     return QSize(m_popupPaletteSize, m_popupPaletteSize);
 }
 
@@ -388,16 +425,17 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
+    QPointF edgePoint = QPointF(0.14645, 0.14645) * m_popupPaletteSize;
     // painting background color indicator
     QPainterPath bgColor;
-    bgColor.addEllipse(QPoint( 50, 80), 30, 30);
+    bgColor.addEllipse(edgePoint + QPointF(-6, 24), 30, 30);
     painter.fillPath(bgColor, m_displayRenderer->toQColor(m_resourceManager->bgColor()));
     painter.drawPath(bgColor);
 
     // painting foreground color indicator
     QPainterPath fgColor;
-    fgColor.addEllipse(QPoint( 60, 50), 30, 30);
-    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->getCurrentColor()));
+    fgColor.addEllipse(edgePoint + QPointF(4, -6), 30, 30);
+    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_colorSelector->getCurrentColor()));
     painter.drawPath(fgColor);
 
     // create a circle background that everything else will go into
@@ -445,31 +483,25 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     // the following things needs to be based off the center, so let's translate the painter
     painter.translate(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
 
-    // create the canvas rotation handle
-    QPainterPath rotationIndicator = drawRotationIndicator(m_coordinatesConverter->rotationAngle(), true);
+    painter.save();
+    // create a reset canvas rotation indicator to bring the canvas back to 0 degrees
+    QRectF resetRotationIndicator = rotationIndicatorRect(0, false);
 
-    painter.fillPath(rotationIndicator,palette().brush(QPalette::Text));
+    painter.setPen(QPen(palette().color(QPalette::Text), 1.0));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawEllipse(resetRotationIndicator);
+    QRectF rotationIndicator = rotationIndicatorRect(m_coordinatesConverter->rotationAngle(), false);
+
+    // create the canvas rotation handle
+    painter.setBrush(palette().brush(QPalette::Text));
 
     // hover indicator for the canvas rotation
-    if (m_isOverCanvasRotationIndicator == true) {
-        painter.save();
-
-        QPen pen(palette().color(QPalette::Highlight));
-        pen.setWidth(2);
+    // draw highlight if either just hovering or currently rotating
+    if (m_isOverCanvasRotationIndicator || m_isRotatingCanvasIndicator) {
+        QPen pen(palette().color(QPalette::Highlight), 2.0);
         painter.setPen(pen);
-        painter.drawPath(rotationIndicator);
-
-        painter.restore();
     }
-
-    // create a reset canvas rotation indicator to bring the canvas back to 0 degrees
-    QPainterPath resetRotationIndicator = drawRotationIndicator(0, false);
-
-    QPen resetPen(palette().color(QPalette::Text));
-    resetPen.setWidth(1);
-    painter.save();
-    painter.setPen(resetPen);
-    painter.drawPath(resetRotationIndicator);
+    painter.drawEllipse(rotationIndicator);
 
     painter.restore();
 
@@ -574,6 +606,8 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
 void KisPopupPalette::resizeEvent(QResizeEvent* resizeEvent) {
     Q_UNUSED(resizeEvent);
+    m_resetCanvasRotationIndicatorRect = rotationIndicatorRect(0, true);
+    m_canvasRotationIndicatorRect = rotationIndicatorRect(m_coordinatesConverter->rotationAngle(), true);
     // Ensure that the resized geometry fits within the desired rect...
     QRect tempGeo = rect(); 
     tempGeo.translate(pos());
@@ -603,56 +637,30 @@ QPainterPath KisPopupPalette::drawDonutPathAngle(int inner_radius, int outer_rad
     return path;
 }
 
-QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool canDrag)
+QRectF KisPopupPalette::rotationIndicatorRect(qreal rotationAngle, bool absolute) const
 {
-    // used for canvas rotation. This function gets called twice. Once by the canvas rotation indicator,
-    // and another time by the reset canvas position
-
-    float canvasRotationRadians = qDegreesToRadians(rotationAngle - 90);  // -90 will make 0 degrees be at the top
-    float rotationDialXPosition = qCos(canvasRotationRadians) * (m_popupPaletteSize/2 - 10); // m_popupPaletteSize/2  = radius
-    float rotationDialYPosition = qSin(canvasRotationRadians) * (m_popupPaletteSize/2 - 10);
-
-    QPainterPath canvasRotationIndicator;
-    int canvasIndicatorSize = 15;
-    int canvasIndicatorMiddle = canvasIndicatorSize / 2;
-    QRect indicatorRectangle = QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
-                                      canvasIndicatorSize, canvasIndicatorSize );
-
-    if (canDrag) {
-        m_canvasRotationIndicatorRect = indicatorRectangle;
-    } else {
-        m_resetCanvasRotationIndicatorRect = indicatorRectangle;
+    qreal indicatorRadians = qDegreesToRadians(rotationAngle - 90);  // -90 will make 0 degrees be at the top
+    qreal paletteRadius = 0.5 * m_popupPaletteSize;
+    QPointF rotationDialPosition(qCos(indicatorRadians) * (paletteRadius - 10),
+                                 qSin(indicatorRadians) * (paletteRadius - 10));
+    if (absolute) {
+        rotationDialPosition += QPointF(paletteRadius, paletteRadius);
     }
-
-    canvasRotationIndicator.addEllipse(indicatorRectangle.x(), indicatorRectangle.y(),
-                                       indicatorRectangle.width(), indicatorRectangle.height() );
-
-    return canvasRotationIndicator;
+    QPointF indicatorDiagonal(7.5, 7.5);
+    return QRectF(rotationDialPosition - indicatorDiagonal, rotationDialPosition + indicatorDiagonal);
 }
-
 
 void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
 {
     QPointF point = event->localPos();
     event->accept();
 
-    setToolTip(QString());
-    setHoveredPreset(-1);
-    setHoveredColor(-1);
+    // check if mouse is over the canvas rotation knob
+    bool wasOverRotationIndicator = m_isOverCanvasRotationIndicator;
+    m_isOverCanvasRotationIndicator = m_canvasRotationIndicatorRect.contains(point);
 
-    // calculate if we are over the canvas rotation knob
-    // before we started painting, we moved the painter to the center of the widget, so the X/Y positions are offset. we need to
-    // correct them first before looking for a click event intersection
-
-    float rotationCorrectedXPos = m_canvasRotationIndicatorRect.x() + (m_popupPaletteSize / 2);
-    float rotationCorrectedYPos = m_canvasRotationIndicatorRect.y() + (m_popupPaletteSize / 2);
-    QRect correctedCanvasRotationIndicator = QRect(rotationCorrectedXPos, rotationCorrectedYPos,
-                                                   m_canvasRotationIndicatorRect.width(), m_canvasRotationIndicatorRect.height());
-
-    if (correctedCanvasRotationIndicator.contains(point.x(), point.y())) {
-        m_isOverCanvasRotationIndicator = true;
-    } else {
-        m_isOverCanvasRotationIndicator = false;
+    if (wasOverRotationIndicator != m_isOverCanvasRotationIndicator) {
+        update();
     }
 
     if (m_isRotatingCanvasIndicator) {
@@ -671,32 +679,51 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
         KisCanvasController *canvasController =
             dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
         canvasController->rotateCanvas(angleDifference);
+        m_canvasRotationIndicatorRect = rotationIndicatorRect(finalAngle, true);
 
-
+        update();
         emit sigUpdateCanvas();
     }
 
     // don't highlight the presets if we are in the middle of rotating the canvas
     if (m_isRotatingCanvasIndicator == false) {
         QPainterPath pathColor(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
-        {
-            int pos = calculatePresetIndex(point, m_resourceManager->numFavoritePresets());
+        if (pathColor.contains(point)) {
+            if (hoveredPreset() >= 0) {
+                setToolTip(QString());
+                setHoveredPreset(-1);
+            }
 
-            if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
-                setToolTip(m_resourceManager->favoritePresetNamesList().at(pos));
-                setHoveredPreset(pos);
+            int pos = calculateColorIndex(point, m_resourceManager->recentColorsTotal());
+
+            if (pos != hoveredColor()) {
+                setHoveredColor(pos);
+                update();
             }
         }
-        if (pathColor.contains(point)) {
-            int pos = calculateIndex(point, m_resourceManager->recentColorsTotal());
+        else {
+            if (hoveredColor() >= 0) {
+                setHoveredColor(-1);
+                update();
+            }
 
-            if (pos >= 0 && pos < m_resourceManager->recentColorsTotal()) {
-                setHoveredColor(pos);
+            int pos = findPresetSlot(point);
+
+            if (pos != hoveredPreset()) {
+
+                if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
+                    setToolTip(m_resourceManager->favoritePresetNamesList().at(pos));
+                    setHoveredPreset(pos);
+                }
+                else {
+                    setToolTip(QString());
+                    setHoveredPreset(-1);
+                }
+
+                update();
             }
         }
     }
-
-    update();
 }
 
 void KisPopupPalette::mousePressEvent(QMouseEvent *event)
@@ -706,29 +733,17 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 
     if (event->button() == Qt::LeftButton) {
 
-        //in favorite brushes area
-        int pos = calculateIndex(point, m_resourceManager->numFavoritePresets());
-        if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()
-                && isPointInPixmap(point, pos)) {
-            //setSelectedBrush(pos);
+        if (m_isOverCanvasRotationIndicator) {
+            m_isRotatingCanvasIndicator = true;
             update();
         }
 
-        if (m_isOverCanvasRotationIndicator) {
-            m_isRotatingCanvasIndicator = true;
-        }
-
-        // reset the canvas if we are over the reset canvas rotation indicator
-        float rotationCorrectedXPos = m_resetCanvasRotationIndicatorRect.x() + (m_popupPaletteSize / 2);
-        float rotationCorrectedYPos = m_resetCanvasRotationIndicatorRect.y() + (m_popupPaletteSize / 2);
-        QRect correctedResetCanvasRotationIndicator = QRect(rotationCorrectedXPos, rotationCorrectedYPos,
-                                                            m_resetCanvasRotationIndicatorRect.width(), m_resetCanvasRotationIndicatorRect.height());
-
-        if (correctedResetCanvasRotationIndicator.contains(point.x(), point.y())) {
+        if (m_resetCanvasRotationIndicatorRect.contains(point)) {
             float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs
             KisCanvasController *canvasController =
                     dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
             canvasController->rotateCanvas(angleDifference);
+            m_canvasRotationIndicatorRect = rotationIndicatorRect(0, true);
 
             emit sigUpdateCanvas();
         }
@@ -823,7 +838,6 @@ void KisPopupPalette::showEvent(QShowEvent *event)
 
     m_brushHud->setVisible(m_brushHudButton->isChecked());
 
-    resize(layout()->sizeHint());
     QWidget::showEvent(event);
 }
 
@@ -839,7 +853,10 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
        return;
    }
 
-    m_isOverCanvasRotationIndicator = false;
+    if (m_isRotatingCanvasIndicator) {
+        update();
+    }
+
     m_isRotatingCanvasIndicator = false;
 
     if (event->button() == Qt::LeftButton) {
@@ -851,7 +868,7 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
             emit sigChangeActivePaintop(hoveredPreset());
         }
         if (pathColor.contains(point)) {
-            int pos = calculateIndex(point, m_resourceManager->recentColorsTotal());
+            int pos = calculateColorIndex(point, m_resourceManager->recentColorsTotal());
 
             if (pos >= 0 && pos < m_resourceManager->recentColorsTotal()) {
                 emit sigUpdateRecentColor(pos);
@@ -860,24 +877,22 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-int KisPopupPalette::calculateIndex(QPointF point, int n)
+int KisPopupPalette::calculateColorIndex(QPointF position, int numColors) const
 {
-    calculatePresetIndex(point, n);
-    //translate to (0,0)
-    point.setX(point.x() - m_popupPaletteSize / 2);
-    point.setY(point.y() - m_popupPaletteSize / 2);
+    if (numColors < 1) {
+        return -1;
+    }
+    // relative to palette center
+    QPointF relPosition = position - QPointF(0.5 * m_popupPaletteSize, 0.5 * m_popupPaletteSize);
 
-    //rotate
-    float smallerAngle = M_PI / 2 + M_PI / n - atan2(point.y(), point.x());
-    float radius = sqrt((float)point.x() * point.x() + point.y() * point.y());
-    point.setX(radius * cos(smallerAngle));
-    point.setY(radius * sin(smallerAngle));
+    qreal angle = qAtan2(relPosition.x(), relPosition.y()) + M_PI/numColors;
+    if (angle < 0) {
+        angle += 2 * M_PI;
+    }
 
-    //calculate brush index
-    int pos = floor(acos(point.x() / radius) * n / (2 * M_PI));
-    if (point.y() < 0) pos =  n - pos - 1;
+    int index = floor(angle * numColors / (2 * M_PI));
 
-    return pos;
+    return qBound(0, index, numColors - 1);
 }
 
 bool KisPopupPalette::isPointInPixmap(QPointF &point, int pos)
@@ -892,85 +907,158 @@ KisPopupPalette::~KisPopupPalette()
 {
 }
 
-QPainterPath KisPopupPalette::createPathFromPresetIndex(int index)
+void KisPopupPalette::calculatePresetLayout()
 {
     qreal angleSlice = 360.0 / numSlots() ; // how many degrees each slice will get
+    qreal ringWidth = (0.5 * m_popupPaletteSize) - m_colorHistoryOuterRadius - 18; //= 2 * 41.25
+    qreal ringMidRadius = m_colorHistoryOuterRadius + 0.5 * ringWidth;
+
+    // the radius will get smaller as the amount of presets shown increases.
+    // max radius until they touch = (innerRadius * sin(180/nSlots) / (1 - sin(180/nSlots)
+    // 10 slots == 41.14365, at default inner radius of 92
+
+    qreal presetRadius = qMin(0.5 * ringWidth, ringMidRadius * qSin(qDegreesToRadians(angleSlice/2)) - 1);
+    m_presetRingCount = 1;
+
+    // can we can fit in a second row? We don't want the preset icons to get too tiny.
+    // staggered arrangement only makes sense if there is more than a tiny offset.
+    if (ringWidth > presetRadius * 2.2) {
+        //redo all calculations assuming a second row.
+        angleSlice = 180.0/((numSlots()+1) / 2);
+        qreal tempRadius = ringMidRadius * qSin(0.5 * qDegreesToRadians(angleSlice)) - 1;
+
+        qreal distance = 0;
+        do {
+            tempRadius += 0.1;
+
+            // Calculate the X,Y of two adjectant circles using this tempRadius. (Y1 == 0)
+            qreal radius2 = m_colorHistoryOuterRadius + ringWidth - tempRadius;
+            qreal pathX1 = m_colorHistoryOuterRadius + tempRadius;
+            qreal pathX2 = radius2 * qCos(qDegreesToRadians(angleSlice));
+            qreal pathY2 = radius2 * qSin(qDegreesToRadians(angleSlice));
+
+            // Use Pythagorean Theorem to calculate the distance between these two points.
+            qreal deltaX = pathX2-pathX1;
+            distance = sqrt((deltaX*deltaX)+(pathY2*pathY2));
+        }
+        //As long at there's more distance than the radius of the two presets, continue increasing the radius.
+        while ((tempRadius+1)*2 < distance);
+
+        // even when presets between rings don't touch, the ones on the inner ring may overlap,
+        // so determine the radius where inner ones touch
+        qreal sinAngleSlice = qSin(qDegreesToRadians(angleSlice));
+        qreal maxRadius = m_colorHistoryOuterRadius * sinAngleSlice / (1 - sinAngleSlice);
+        tempRadius = qMin(maxRadius, tempRadius);
+        // since we may round up the preset count, radius may end up smaller than originally
+        // but we want at least a small gain (3% currently)
+        if (tempRadius > 1.03 * presetRadius) {
+            m_presetRingCount = 2;
+            presetRadius = tempRadius;
+        }
+    }
+    // can we use even bigger icons by forming triplets with two on the same angle
+    // and a third one touching both?
+    if (ringWidth > presetRadius * 4) {
+        angleSlice = 180.0 / ((numSlots() + 2) / 3);
+        qreal sinAngleSlice = qSin(qDegreesToRadians(angleSlice));
+        // radius where innermost circles would touch (2 angle slices apart)
+        qreal maxRadius = m_colorHistoryOuterRadius * sinAngleSlice / (1 - sinAngleSlice);
+        // radius where innermost and outermost circles touch
+        maxRadius = qMin(maxRadius, ringWidth * 0.25);
+
+        qreal tempRadius = maxRadius;
+        qreal pathX2 = ringMidRadius;
+        qreal pathY2 = ringMidRadius * sinAngleSlice;
+        bool found = false;
+        // do we need to reduce radius even more?
+        while (tempRadius > presetRadius) {
+            qreal pathX1 = m_colorHistoryOuterRadius + tempRadius;
+
+            qreal deltaX = pathX2-pathX1;
+            qreal distance = sqrt((deltaX*deltaX)+(pathY2*pathY2));
+
+            if (distance > 2*(tempRadius+1)) {
+                found = true;
+                break;
+            }
+            tempRadius -= 0.1;
+        }
+        if (found) {
+            //qDebug() << "triplet possible, radius:" << tempRadius << "/ staggered radius:" << presetRadius;
+            m_presetRingCount = 3;
+            m_middleRadius = sqrt(pathX2 * pathX2 + pathY2 * pathY2);
+            presetRadius = tempRadius;
+        }
+    }
+    m_cachedRadius = presetRadius;
+}
+
+QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
+{
+    qreal angleSlice = 360.0 / numSlots() ; // how many degrees each slice will get
+    qreal ringWidth = (0.5 * m_popupPaletteSize) - m_colorHistoryOuterRadius - 18; //= 2 * 41.25
 
     // the starting angle of the slice we need to draw. the negative sign makes us go clockwise.
     // adding 90 degrees makes us start at the top. otherwise we would start at the right
     qreal startingAngle = -(index * angleSlice) + 90;
+    qreal length = m_colorHistoryOuterRadius + 0.5 * ringWidth;
 
-    // the radius will get smaller as the amount of presets shown increases. 10 slots == 41
-    qreal radians = qDegreesToRadians((360.0/10)/2);
-    qreal maxRadius = (m_colorHistoryOuterRadius * qSin(radians) / (1-qSin(radians)))-2;
+    switch (m_presetRingCount) {
+    case 1: break;
+    case 2: {
+        angleSlice = 180.0/((numSlots()+1) / 2);
+        startingAngle = -(index * angleSlice) + 90;
 
-    radians = qDegreesToRadians(angleSlice/2);
-    qreal presetRadius = m_colorHistoryOuterRadius * qSin(radians) / (1-qSin(radians));
-    //If we assume that circles will mesh like a hexagonal grid, then 3.5r is the size of two hexagons interlocking.
-
-    qreal length = m_colorHistoryOuterRadius + presetRadius;
-    // can we can fit in a second row? We don't want the preset icons to get too tiny.
-    if (maxRadius > presetRadius) {
-        //redo all calculations assuming a second row.
-        if (numSlots() % 2) {
-            angleSlice = 360.0/(numSlots()+1);
-            startingAngle = -(index * angleSlice) + 90;
-        }
-        if (numSlots() != m_cachedNumSlots){
-            qreal tempRadius = presetRadius;
-            qreal distance = 0;
-            do{
-                tempRadius+=0.1;
-
-                // Calculate the XY of two adjectant circles using this tempRadius.
-                qreal length1 = m_colorHistoryOuterRadius + tempRadius;
-                qreal length2 = m_colorHistoryOuterRadius + ((maxRadius*2)-tempRadius);
-                qreal pathX1 = length1 * qCos(qDegreesToRadians(startingAngle)) - tempRadius;
-                qreal pathY1 = -(length1) * qSin(qDegreesToRadians(startingAngle)) - tempRadius;
-                qreal startingAngle2 = -(index+1 * angleSlice) + 90;
-                qreal pathX2 = length2 * qCos(qDegreesToRadians(startingAngle2)) - tempRadius;
-                qreal pathY2 = -(length2) * qSin(qDegreesToRadians(startingAngle2)) - tempRadius;
-
-                // Use Pythagorean Theorem to calculate the distance between these two values.
-                qreal m1 = pathX2-pathX1;
-                qreal m2 = pathY2-pathY1;
-
-                distance = sqrt((m1*m1)+(m2*m2));
-            }
-            //As long at there's more distance than the radius of the two presets, continue increasing the radius.
-            while((tempRadius+1)*2 < distance);
-            m_cachedRadius = tempRadius;
-        }
-        m_cachedNumSlots = numSlots();
-        presetRadius = m_cachedRadius;
-        length = m_colorHistoryOuterRadius + presetRadius;
+        length = m_colorHistoryOuterRadius + m_cachedRadius;
         if (index % 2) {
-            length = m_colorHistoryOuterRadius + ((maxRadius*2)-presetRadius);
+            length = m_colorHistoryOuterRadius + ringWidth - m_cachedRadius;
         }
+        break;
+    }
+    case 3: {
+        int triplet = index / 3;
+        angleSlice = 180.0 / ((numSlots() + 2) / 3);
+        switch (index % 3) {
+        case 0:
+            startingAngle = -(triplet * 2 * angleSlice) + 90;
+            length = m_colorHistoryOuterRadius + m_cachedRadius;
+            break;
+        case 1:
+            startingAngle = -(triplet * 2 * angleSlice) + 90;
+            length = m_colorHistoryOuterRadius + ringWidth - m_cachedRadius;
+            break;
+        case 2:
+            startingAngle = -((triplet * 2 + 1) * angleSlice) + 90;
+            length = m_middleRadius;
+            break;
+        default:
+            KIS_ASSERT(false);
+        }
+        break;
+    }
+    default:
+        KIS_ASSERT_RECOVER_NOOP(false);
     }
     QPainterPath path;
-    qreal pathX = length * qCos(qDegreesToRadians(startingAngle)) - presetRadius;
-    qreal pathY = -(length) * qSin(qDegreesToRadians(startingAngle)) - presetRadius;
-    qreal pathDiameter = 2 * presetRadius; // distance is used to calculate the X/Y in addition to the preset circle size
+    qreal pathX = length * qCos(qDegreesToRadians(startingAngle)) - m_cachedRadius;
+    qreal pathY = -(length) * qSin(qDegreesToRadians(startingAngle)) - m_cachedRadius;
+    qreal pathDiameter = 2 * m_cachedRadius; // distance is used to calculate the X/Y in addition to the preset circle size
     path.addEllipse(pathX, pathY, pathDiameter, pathDiameter);
     return path;
 }
 
-int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
+int KisPopupPalette::findPresetSlot(QPointF position) const
 {
-    for(int i = 0; i < numSlots(); i++)
-    {
-        QPointF adujustedPoint = point - QPointF(m_popupPaletteSize/2, m_popupPaletteSize/2);
-        if(createPathFromPresetIndex(i).contains(adujustedPoint))
-        {
+    QPointF adujustedPoint = position - QPointF(m_popupPaletteSize/2, m_popupPaletteSize/2);
+    for (int i = 0; i < numSlots(); i++) {
+        if (createPathFromPresetIndex(i).contains(adujustedPoint)) {
             return i;
         }
     }
     return -1;
 }
 
-int KisPopupPalette::numSlots()
+int KisPopupPalette::numSlots() const
 {
-    KisConfig config(true);
-    return qMax(config.favoritePresets(), 10);
+    return m_presetSlotCount;
 }

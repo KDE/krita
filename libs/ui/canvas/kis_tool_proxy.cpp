@@ -203,6 +203,12 @@ bool KisToolProxy::primaryActionSupportsHiResEvents() const
     return activeTool && activeTool->primaryActionSupportsHiResEvents();
 }
 
+bool KisToolProxy::alternateActionSupportsHiResEvents(KisTool::AlternateAction action) const
+{
+    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+    return activeTool && activeTool->alternateActionSupportsHiResEvents(action);
+}
+
 void KisToolProxy::setActiveTool(KoToolBase *tool)
 {
     if (!tool) return;

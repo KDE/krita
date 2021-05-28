@@ -32,9 +32,16 @@ class InplaceTransformStrokeStrategy : public QObject, public KisStrokeStrategyU
 public:
     class UpdateTransformData : public KisStrokeJobData {
     public:
-        UpdateTransformData(ToolTransformArgs _args)
+        enum Destination {
+            PAINT_DEVICE,
+            SELECTION,
+        };
+
+    public:
+        UpdateTransformData(ToolTransformArgs _args, Destination _dest)
             : KisStrokeJobData(SEQUENTIAL, NORMAL),
-              args(_args)
+              args(_args),
+              destination(_dest)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
@@ -44,13 +51,15 @@ public:
     private:
         UpdateTransformData(const UpdateTransformData &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs),
-              args(rhs.args)
+              args(rhs.args),
+              destination(rhs.destination)
         {
             Q_UNUSED(levelOfDetail);
         }
 
     public:
         ToolTransformArgs args;
+        Destination destination;
     };
 
 private:

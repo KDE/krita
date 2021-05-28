@@ -218,8 +218,8 @@ void KisGridOpOption::readOptionSetting(const KisPropertiesConfigurationSP setti
     m_options->diameterSPBox->setValue(op.diameter);
     m_options->gridWidthSPBox->setValue(op.grid_width);
     m_options->gridHeightSPBox->setValue(op.grid_height);
-    m_options->horizontalOffsetSPBox->setValue(op.horizontal_offset);
-    m_options->verticalOffsetSPBox->setValue(op.vertical_offset);
+    m_options->horizontalOffsetSPBox->setValue((op.horizontal_offset*100) / op.grid_width);
+    m_options->verticalOffsetSPBox->setValue((op.vertical_offset*100) / op.grid_height);
     m_options->divisionLevelSPBox->setValue(op.grid_division_level);
     m_options->divisionPressureCHBox->setChecked(op.grid_pressure_division);
     m_options->scaleDSPBox->setValue(op.grid_scale);

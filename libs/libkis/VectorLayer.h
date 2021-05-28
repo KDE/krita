@@ -53,6 +53,21 @@ public Q_SLOTS:
      */
     QList<Shape *> shapes() const;
 
+    /**
+     * @brief toSvg
+     * convert the shapes in the layer to svg.
+     * @return the svg in a string.
+     */
+    QString toSvg();
+
+    /**
+     * @brief addShapesFromSvg
+     * add shapes to the layer from a valid svg.
+     * @param svg valid svg string.
+     * @return the list of shapes added to the layer from the svg.
+     */
+    QList<Shape *> addShapesFromSvg(const QString &svg);
+
 };
 
 #endif // LIBKIS_VECTORLAYER_H

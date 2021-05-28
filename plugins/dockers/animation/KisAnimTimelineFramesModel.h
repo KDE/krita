@@ -155,6 +155,7 @@ Q_SIGNALS:
     void sigInfiniteTimelineUpdateNeeded();
     void sigAudioChannelChanged();
     void sigEnsureRowVisible(int row);
+    void requestTransferSelectionBetweenRows(int rowFrom, int rowTo);
     void sigFullClipRangeChanged();
 
 private:

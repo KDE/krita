@@ -39,6 +39,8 @@ namespace GSL
         QPointF transformedCenter;
         qreal scaleX;
         qreal scaleY;
+
+        bool isValid = false;
     };
 
     ScaleResult2D calculateScale2D(const ToolTransformArgs &args,
@@ -47,6 +49,11 @@ namespace GSL
                                    const QPointF &movingPointSrc,
                                    const QPointF &movingPointDst);
 
+    ScaleResult2D calculateScale2DAffine(const ToolTransformArgs &args,
+                                         const QPointF &staticPointSrc,
+                                         const QPointF &staticPointDst,
+                                         const QPointF &movingPointSrc,
+                                         const QPointF &movingPointDst);
 }
 
 #endif /* __KIS_FREE_TRANSFORM_STRATEGY_GSL_HELPERS_H */

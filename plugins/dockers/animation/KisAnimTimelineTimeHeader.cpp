@@ -358,9 +358,16 @@ void KisAnimTimelineTimeHeader::paintSection1(QPainter *painter, const QRect &re
         QVariant cachedValue = model()->headerData(logicalIndex, orientation(),
                                                    KisTimeBasedItemModel::FrameCachedRole);
 
-        if (activeValue.isValid() && activeValue.toBool()) {
+        QVariant withinRangeValue = model()->headerData(logicalIndex, orientation(),
+                                                        KisTimeBasedItemModel::WithinClipRange);
+
+        const bool isActive = activeValue.isValid() && activeValue.toBool();
+        const bool isCached = cachedValue.isValid() && cachedValue.toBool();
+        const bool isWithinRange = withinRangeValue.isValid() && withinRangeValue.toBool();
+
+        if (isActive) {
             fillColor = KisAnimTimelineColors::instance()->headerActive();
-        } else if (cachedValue.isValid() && cachedValue.toBool()) {
+        } else if (isCached && isWithinRange) {
             fillColor = KisAnimTimelineColors::instance()->headerCachedFrame();
         }
 

@@ -187,7 +187,8 @@ KisInputActionGroup KisPanAction::inputActionGroup(int shortcut) const
     return ViewTransformActionGroup;
 }
 
-bool KisPanAction::supportsHiResInputEvents() const
+bool KisPanAction::supportsHiResInputEvents(int shortcut) const
 {
+    Q_UNUSED(shortcut);
     return true;
 }

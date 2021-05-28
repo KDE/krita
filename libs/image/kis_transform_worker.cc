@@ -37,7 +37,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
                                        double xshear, double yshear,
                                        double xshearOrigin, double yshearOrigin,
                                        double rotation,
-                                       qint32 xtranslate, qint32 ytranslate,
+                                       qreal xtranslate, qreal ytranslate,
                                        KoUpdaterPtr progress,
                                        KisFilterStrategy *filter)
 {
@@ -251,8 +251,8 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
     double xscale = m_xscale;
     double yscale = m_yscale;
     double rotation = m_rotation;
-    qint32 xtranslate = m_xtranslate;
-    qint32 ytranslate = m_ytranslate;
+    qreal xtranslate = m_xtranslate;
+    qreal ytranslate = m_ytranslate;
 
     // Apply shearX/Y separately. In Krita it is demanded separately
     // most of the times.
@@ -295,7 +295,9 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
     bool simpleTranslation =
         qFuzzyCompare(rotation, 0.0) &&
         qFuzzyCompare(xscale, 1.0) &&
-        qFuzzyCompare(yscale, 1.0);
+        qFuzzyCompare(yscale, 1.0) &&
+        qAbs(xtranslate - std::round(xtranslate)) < 0.01 &&
+        qAbs(ytranslate - std::round(ytranslate)) < 0.01;
 
 
     int progressTotalSteps = qMax(1, 2 * (!simpleTranslation) + (rotQuadrant != 0));
@@ -324,8 +326,11 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
     }
 
     if (simpleTranslation) {
-        m_boundRect.translate(xtranslate, ytranslate);
-        m_dev->moveTo(m_dev->x() + xtranslate, m_dev->y() + ytranslate);
+        const int intXTranslate = qRound(xtranslate);
+        const int intYTranslate = qRound(ytranslate);
+
+        m_boundRect.translate(intXTranslate, intYTranslate);
+        m_dev->moveTo(m_dev->x() + intXTranslate, m_dev->y() + intYTranslate);
     } else {
         QTransform SC = QTransform::fromScale(xscale, yscale);
         QTransform R; R.rotateRadians(rotation);

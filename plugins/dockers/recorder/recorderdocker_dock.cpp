@@ -26,6 +26,7 @@
 #include <QFileInfo>
 #include <QPointer>
 #include <QFileDialog>
+#include <QMessageBox>
 
 namespace
 {
@@ -251,6 +252,7 @@ RecorderDockerDock::RecorderDockerDock()
     connect(&d->writer, SIGNAL(started()), this, SLOT(onWriterStarted()));
     connect(&d->writer, SIGNAL(finished()), this, SLOT(onWriterFinished()));
     connect(&d->writer, SIGNAL(pausedChanged(bool)), this, SLOT(onWriterPausedChanged(bool)));
+    connect(&d->writer, SIGNAL(frameWriteFailed()), this, SLOT(onWriterFrameWriteFailed()));
 
     setWidget(page);
 }
@@ -437,4 +439,10 @@ void RecorderDockerDock::onWriterFinished()
 void RecorderDockerDock::onWriterPausedChanged(bool paused)
 {
     d->updateRecIndicator(paused);
+}
+
+void RecorderDockerDock::onWriterFrameWriteFailed()
+{
+    QMessageBox::warning(this, i18nc("@title:window", "Recorder"),
+        i18n("The recorder have been stopped due to failure while writing a frame. Please check free disk space and start recorder again."));
 }

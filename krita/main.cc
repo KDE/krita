@@ -186,9 +186,17 @@ Java_org_krita_android_JNIWrappers_openFileFromIntent(JNIEnv* /*env*/,
     }
 }
 
-__attribute__ ((visibility ("default")))
+#define MAIN_EXPORT __attribute__ ((visibility ("default")))
+#define MAIN_FN main
+#elif defined Q_OS_WIN
+#define MAIN_EXPORT __declspec(dllexport)
+#define MAIN_FN krita_main
+#else
+#define MAIN_EXPORT
+#define MAIN_FN main
 #endif
-extern "C" int main(int argc, char **argv)
+
+extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 {
     // The global initialization of the random generator
     qsrand(time(0));

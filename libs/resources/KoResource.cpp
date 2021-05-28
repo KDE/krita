@@ -106,8 +106,6 @@ bool KoResource::save()
 bool KoResource::saveToDevice(QIODevice *dev) const
 {
     Q_UNUSED(dev);
-    d->md5 = QByteArray();
-
     return true;
 }
 
@@ -138,30 +136,21 @@ void KoResource::setImage(const QImage &image)
 QByteArray KoResource::md5() const
 {
     if (d->md5.isEmpty()) {
-        const_cast<KoResource*>(this)->setMD5(generateMD5());
+        qWarning() << "No MD5 for" << this;
+        QByteArray ba;
+        QBuffer buf(&ba);
+        buf.open(QFile::WriteOnly);
+        saveToDevice(&buf);
+        buf.close();
+        const_cast<KoResource*>(this)->setMD5(KoMD5Generator::generateHash(ba));
     }
     return d->md5;
 }
 
 void KoResource::setMD5(const QByteArray &md5)
 {
+    Q_ASSERT(!md5.isEmpty());
     d->md5 = md5;
-}
-
-QByteArray KoResource::generateMD5() const
-{
-    QByteArray hash;
-    QByteArray ba;
-    QBuffer buf(&ba);
-    buf.open(QBuffer::WriteOnly);
-    if (saveToDevice(&buf)) {
-        buf.close();
-        hash = KoMD5Generator::generateHash(ba);
-    }
-    else {
-        qWarning() << "Could not create md5sum for resource" << d->filename;
-    }
-    return hash;
 }
 
 QString KoResource::filename() const
@@ -281,4 +270,3 @@ void KoResource::setStorageLocation(const QString &location)
 {
     d->storageLocation = location;
 }
-

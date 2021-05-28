@@ -111,7 +111,6 @@ public:
     QByteArray md5() const;
     void setMD5(const QByteArray &md5);
 
-
     /// @return the filename of this resource within the container (folder, bundle, ...)
     QString filename() const;
     void setFilename(const QString& filename);
@@ -192,12 +191,6 @@ public:
      * @return a list of canvas resources needed for the current resource
      */
     virtual QList<int> requiredCanvasResources() const;
-
-
-protected:
-
-    /// override generateMD5 and in your resource subclass
-    virtual QByteArray generateMD5() const;
 
 private:
     struct Private;

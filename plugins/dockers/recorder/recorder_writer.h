@@ -43,6 +43,7 @@ public:
 Q_SIGNALS:
     void pausedChanged(bool paused);
     void prefixChanged(QString prefix);
+    void frameWriteFailed();
 
 protected:
     void run() override;

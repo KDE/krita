@@ -246,7 +246,14 @@ KisView::~KisView()
         }
 
         d->viewManager->mainWindow()->notifyChildViewDestroyed(this);
+        d->viewManager->inputManager()->registerPopupWidget(nullptr);
     }
+
+    /**
+     * KisCanvas2 maintains direct connections to the image, so we should
+     * disconnect it from the image before the destruction process starts
+     */
+    d->canvas.disconnectImage();
 
     KoToolManager::instance()->removeCanvasController(&d->canvasController);
     d->canvasController.setCanvas(0);

@@ -92,8 +92,14 @@ public:
         } else {
             action = ui->editFfmpegPath->addAction(icon, QLineEdit::TrailingPosition);
         }
-        action->setToolTip(out);
-        ui->editFfmpegPath->setText(ffmpegPath);
+        if (success) {
+            ui->editFfmpegPath->setText(ffmpegPath);
+            action->setToolTip(out);
+        } else {
+            ui->editFfmpegPath->setText(i18nc("This text is displayed instead of path to external tool in case of external tool is not found", "[NOT FOUND]"));
+            action->setToolTip(i18n("FFMpeg executable location couldn't be detected, please install it or select its location manually"));
+        }
+        ui->buttonExport->setEnabled(success);
     }
 
     void fillComboProfiles()

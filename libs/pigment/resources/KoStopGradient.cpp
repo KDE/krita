@@ -46,12 +46,13 @@ KoStopGradient::~KoStopGradient()
 }
 
 KoStopGradient::KoStopGradient(const KoStopGradient &rhs)
-    : KoAbstractGradient(rhs),
-      m_stops(rhs.m_stops),
-      m_start(rhs.m_start),
-      m_stop(rhs.m_stop),
-      m_focalPoint(rhs.m_focalPoint)
+    : KoAbstractGradient(rhs)
+    , m_stops(rhs.m_stops)
+    , m_start(rhs.m_start)
+    , m_stop(rhs.m_stop)
+    , m_focalPoint(rhs.m_focalPoint)
 {
+    setMD5(rhs.md5());
 }
 
 bool KoStopGradient::operator==(const KoStopGradient& rhs) const
@@ -628,8 +629,6 @@ bool KoStopGradient::saveToDevice(QIODevice* dev) const
     QTextStream stream(dev);
 
     stream << saveSvgGradient();
-
-    KoResource::saveToDevice(dev);
 
     return true;
 }

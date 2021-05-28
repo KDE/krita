@@ -79,9 +79,7 @@ void KisRecalculateTransformMaskJob::run()
         QRect updateRect = oldMaskExtent |
             layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
 
-        QVector<QRect> rectsToUpdate;
-        rectsToUpdate << updateRect;
-        image->requestProjectionUpdate(layer.data(), rectsToUpdate, false);
+        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
     }
 }
 

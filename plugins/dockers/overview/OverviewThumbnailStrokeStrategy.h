@@ -13,15 +13,24 @@
 #include <QSize>
 #include <QImage>
 
+#include <KoColorConversionTransformation.h>
 #include "kis_types.h"
 #include "kis_simple_stroke_strategy.h"
+
+class KoColorProfile;
 
 
 class OverviewThumbnailStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
     Q_OBJECT
 public:
-    OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize, bool isPixelArt = false);
+    OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device,
+                                    const QRect& rect,
+                                    const QSize& thumbnailSize,
+                                    bool isPixelArt,
+                                    const KoColorProfile *profile,
+                                    KoColorConversionTransformation::Intent renderingIntent,
+                                    KoColorConversionTransformation::ConversionFlags conversionFlags);
     ~OverviewThumbnailStrokeStrategy() override;
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
@@ -46,6 +55,10 @@ private:
     QSize m_thumbnailOversampledSize;
     bool m_isPixelArt {false};
     KisPaintDeviceSP m_thumbnailDevice;
+
+    const KoColorProfile *m_profile;
+    KoColorConversionTransformation::Intent m_renderingIntent;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 };
 
 #endif // OVERVIEWTHUMBNAILSTROKESTRATEGY_H

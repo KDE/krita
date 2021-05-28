@@ -23,7 +23,7 @@
 #include "kis_idle_watcher.h"
 #include <QApplication>
 #include "OverviewThumbnailStrokeStrategy.h"
-
+#include <kis_display_color_converter.h>
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : QWidget(parent)
@@ -45,6 +45,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas) {
         m_canvas->image()->disconnect(this);
+        m_canvas->displayColorConverter()->disconnect(this);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -56,6 +57,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)),SLOT(startUpdateCanvasProjection()));
         connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),SLOT(startUpdateCanvasProjection()));
+        connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), SLOT(startUpdateCanvasProjection()));
 
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
         connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()), Qt::UniqueConnection);
@@ -207,8 +209,16 @@ void OverviewWidget::generateThumbnail()
                     m_imageIdleWatcher.startCountdown();
                     return;
                 }
+
+                const KoColorProfile *profile =
+                   m_canvas->displayColorConverter()->monitorProfile();
+                KoColorConversionTransformation::ConversionFlags conversionFlags =
+                    m_canvas->displayColorConverter()->conversionFlags();
+                KoColorConversionTransformation::Intent renderingIntent =
+                    m_canvas->displayColorConverter()->renderingIntent();
+
                 OverviewThumbnailStrokeStrategy* stroke;
-                stroke = new OverviewThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt());
+                stroke = new OverviewThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt(), profile, renderingIntent, conversionFlags);
 
                 connect(stroke, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
 

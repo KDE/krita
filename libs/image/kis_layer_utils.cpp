@@ -74,6 +74,7 @@ namespace KisLayerUtils {
               storage(new SwitchFrameCommand::SharedStorage())
         {
         }
+
         virtual ~MergeDownInfoBase() {}
 
         KisImageWSP image;
@@ -1269,6 +1270,11 @@ namespace KisLayerUtils {
             KisScalarKeyframeChannel *scalarChan = dynamic_cast<KisScalarKeyframeChannel*>(channel);
             if (scalarChan) {
                 const int initialKeyframe = scalarChan->firstKeyframeTime();
+
+                if (initialKeyframe == -1) {
+                    continue;
+                }
+
                 const int lastKeyframe = scalarChan->lastKeyframeTime();
                 KisTimeSpan currentSpan = scalarChan->identicalFrames(initialKeyframe);
                 while (!currentSpan.isInfinite() && currentSpan.isValid() && currentSpan.start() < lastKeyframe) {
@@ -1369,10 +1375,8 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
-
                     applicator.applyCommand(new RefreshHiddenAreas(info));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
-
                     applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
 
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage), KisStrokeJobData::BARRIER);
@@ -1766,10 +1770,8 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
-
                     applicator.applyCommand(new RefreshHiddenAreas(info));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
-
                     applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
 
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
@@ -2028,7 +2030,12 @@ namespace KisLayerUtils {
         if (!rootNode->isFakeNode()) {
             // TODO: it would be better to count up changeRect inside
             // node's extent() method
-            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
+            //
+            // NOTE: when flattening a group layer, we should take the change rect of the
+            // all the child layers as the source of the change. We are calculating
+            // the change rect **before** the update itself, therefore rootNode->exactBounds()
+            // is not yet prepared, hence its exact bounds still contail old values.
+            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds() | currentRect);
         }
 
         return currentRect;

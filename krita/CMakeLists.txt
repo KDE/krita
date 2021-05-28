@@ -31,7 +31,13 @@ else()
 	     "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/1024-apps-krita.png"
 	)
 endif()
-ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
+
+if (WIN32)
+    set(krita_windows_stub_ICONS_SRCS "")
+    ecm_add_app_icon(krita_windows_stub_ICONS_SRCS ICONS ${ICON_SRCS})
+else()
+    ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
+endif()
 
 # Install the mimetype icons
 ecm_install_icons(ICONS
@@ -75,6 +81,10 @@ qt5_add_resources(krita_SRCS ${krita_QRCS})
 if (ANDROID)
     add_library(krita SHARED ${krita_SRCS})
     target_link_libraries(krita PRIVATE Qt5::AndroidExtras)
+elseif (WIN32)
+    # Build the main implementation into a DLL to be called by a stub EXE.
+    add_library(krita SHARED ${krita_SRCS})
+    set_target_properties(krita PROPERTIES PREFIX "")
 else()
     add_executable(krita ${krita_SRCS})
 endif()
@@ -127,3 +137,24 @@ install(FILES  org.kde.krita.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} 
 
 install(DIRECTORY DESTINATION ${DATA_INSTALL_DIR}/krita/shortcuts)
 
+if (WIN32)
+    configure_file(versioninfo.rc.in ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
+
+    add_executable(krita_windows_stub_exe windows_stub_main.cpp ${krita_windows_stub_ICONS_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
+    target_link_libraries(krita_windows_stub_exe PRIVATE krita)
+    set_target_properties(krita_windows_stub_exe
+        PROPERTIES
+            OUTPUT_NAME "krita"
+    )
+    install(TARGETS krita_windows_stub_exe ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+    add_executable(krita_windows_stub_com windows_stub_main.cpp ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
+    target_link_libraries(krita_windows_stub_com PRIVATE krita)
+    set_target_properties(krita_windows_stub_com
+        PROPERTIES
+            WIN32_EXECUTABLE false
+            OUTPUT_NAME "krita"
+            SUFFIX ".com"
+    )
+    install(TARGETS krita_windows_stub_com ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif (WIN32)

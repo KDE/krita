@@ -124,7 +124,7 @@ KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::fromXML(const QDom
         new KisDumbTransformMaskParams(transform));
 }
 
-void KisDumbTransformMaskParams::translate(const QPointF &offset)
+void KisDumbTransformMaskParams::translateSrcAndDst(const QPointF &offset)
 {
     Q_UNUSED(offset);
 
@@ -133,6 +133,22 @@ void KisDumbTransformMaskParams::translate(const QPointF &offset)
      * in full-featured KisTransformMaskAdapter, so we should resemble
      * this behavior in the dumb one
      */
+}
+
+void KisDumbTransformMaskParams::transformSrcAndDst(const QTransform &t)
+{
+    Q_UNUSED(t);
+
+    /**
+     * Normal translation doesn't change affine transformations
+     * in full-featured KisTransformMaskAdapter, so we should resemble
+     * this behavior in the dumb one
+     */
+}
+
+void KisDumbTransformMaskParams::translateDstSpace(const QPointF &offset)
+{
+    m_d->transform.translate(offset.x(), offset.y());
 }
 
 QRect KisDumbTransformMaskParams::nonAffineChangeRect(const QRect &rc)

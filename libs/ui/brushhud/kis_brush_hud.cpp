@@ -127,12 +127,6 @@ KisBrushHud::~KisBrushHud()
 {
 }
 
-QSize KisBrushHud::sizeHint() const
-{
-    QSize size = QWidget::sizeHint();
-    return QSize(size.width(), parentWidget()->height());
-}
-
 void KisBrushHud::updateIcons()
 {
     this->setPalette(qApp->palette());
@@ -282,10 +276,6 @@ bool KisBrushHud::event(QEvent *event)
     case QEvent::MouseButtonRelease:
     case QEvent::Wheel:
         event->accept();
-        return true;
-    case QEvent::LayoutRequest:
-        // resize when our layout determined a new recommended size
-        resize(sizeHint());
         return true;
     default:
         break;

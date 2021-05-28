@@ -68,9 +68,9 @@ public:
         FrameCachedRole,
         FrameEditableRole,
         FramesPerSecondRole,
-        UserRole,
         FrameHasContent,
-        WithinClipRange
+        WithinClipRange,
+        UserRole
     };
 
 protected:

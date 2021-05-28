@@ -38,6 +38,7 @@ private Q_SLOTS:
 
 private:
     void test(KisPSDLayerStyleSP style, const QString testName);
+
 };
 
 #endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H */

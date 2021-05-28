@@ -64,9 +64,16 @@ public:
 
     QSize sizeHint() const override {return QSize(64, 0);}
     void paintEvent(QPaintEvent *e) override;
+    
+Q_SIGNALS:
+    void scaleChanged(qreal scale);
+    void valueOffsetChanged(qreal offset);
+    
+protected:
+    virtual void mouseMoveEvent(QMouseEvent* mouseEvent) override;
+    virtual void mousePressEvent(QMouseEvent* mouseEvent) override;
 
 private:
-
     inline qreal scaledUnit() const {
         return UNIT_SIZE_PIXELS * scale();
     }

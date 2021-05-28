@@ -45,7 +45,7 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 {
 }
 
-KisTool::ToolAction KisAlternateInvocationAction::shortcutToToolAction(int shortcut)
+KisTool::ToolAction KisAlternateInvocationAction::shortcutToToolAction(int shortcut) const
 {
     KisTool::ToolAction action = KisTool::Alternate_NONE;
 
@@ -147,4 +147,10 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
         QMouseEvent targetEvent(QEvent::MouseMove, eventPosF(event), Qt::LeftButton, Qt::LeftButton, modifiers);
         inputManager()->toolProxy()->forwardEvent(KisToolProxy::CONTINUE, m_d->savedAction, &targetEvent, event);
     }
+}
+
+bool KisAlternateInvocationAction::supportsHiResInputEvents(int shortcut) const
+{
+    return inputManager()->toolProxy()->alternateActionSupportsHiResEvents(
+        KisTool::actionToAlternateAction(shortcutToToolAction(shortcut)));
 }

@@ -333,9 +333,9 @@ index e8f13b388f..e59114bb88 100644
 +        {
 +            IDXGISwapChain3 *swapChain3 = d3d11::DynamicCastComObject<IDXGISwapChain3>(mSwapChain);
 +
-+            printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
-+            printf("*** EGL format: 0x%X\n", mOffscreenRenderTargetFormat);
-+            printf("*** Native format: 0x%X\n", getSwapChainNativeFormat());
++            // printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
++            // printf("*** EGL format: 0x%X\n", mOffscreenRenderTargetFormat);
++            // printf("*** Native format: 0x%X\n", getSwapChainNativeFormat());
 +
 +            if (mColorSpace != EGL_GL_COLORSPACE_LINEAR_KHR) {
 +                DXGI_COLOR_SPACE_TYPE nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
@@ -354,7 +354,7 @@ index e8f13b388f..e59114bb88 100644
 +                    ASSERT(0 && "Unsupported colorspace requested");
 +                }
 +
-+                printf("*** Native colorSpace: 0x%X\n", nativeColorSpace);
++                // printf("*** Native colorSpace: 0x%X\n", nativeColorSpace);
 +
 +                UINT supported = 0;
 +                result = swapChain3->CheckColorSpaceSupport(nativeColorSpace, &supported);
@@ -388,7 +388,7 @@ index e8f13b388f..e59114bb88 100644
 +            md.MaxContentLightLevel = 1000;
 +            md.MaxFrameAverageLightLevel = 200;
 +            result = swapChain4->SetHDRMetaData(DXGI_HDR_METADATA_TYPE_HDR10, sizeof(md), &md);
-+            printf("*** Result hdr 0x%X\n", result);
++            // printf("*** Result hdr 0x%X\n", result);
 +            SafeRelease(swapChain4);
 +#endif
 +        }
@@ -932,9 +932,9 @@ index 0000000000..dfbe362690
 ++        {
 ++            IDXGISwapChain3 *swapChain3 = d3d11::DynamicCastComObject<IDXGISwapChain3>(mSwapChain);
 ++
-++            printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
-++            printf("*** EGL format: 0x%X\n", mOffscreenRenderTargetFormat);
-++            printf("*** Native format: 0x%X\n", getSwapChainNativeFormat());
+++            // printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
+++            // printf("*** EGL format: 0x%X\n", mOffscreenRenderTargetFormat);
+++            // printf("*** Native format: 0x%X\n", getSwapChainNativeFormat());
 ++
 ++            if (mColorSpace != EGL_GL_COLORSPACE_LINEAR_KHR) {
 ++                DXGI_COLOR_SPACE_TYPE nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
@@ -953,7 +953,7 @@ index 0000000000..dfbe362690
 ++                    ASSERT(0 && "Unsupported colorspace requested");
 ++                }
 ++
-++                printf("*** Native colorSpace: 0x%X\n", nativeColorSpace);
+++                // printf("*** Native colorSpace: 0x%X\n", nativeColorSpace);
 ++
 ++                UINT supported = 0;
 ++                result = swapChain3->CheckColorSpaceSupport(nativeColorSpace, &supported);
@@ -987,7 +987,7 @@ index 0000000000..dfbe362690
 ++            md.MaxContentLightLevel = 1000;
 ++            md.MaxFrameAverageLightLevel = 200;
 ++            result = swapChain4->SetHDRMetaData(DXGI_HDR_METADATA_TYPE_HDR10, sizeof(md), &md);
-++            printf("*** Result hdr 0x%X\n", result);
+++            // printf("*** Result hdr 0x%X\n", result);
 ++            SafeRelease(swapChain4);
 ++#endif
 ++        }

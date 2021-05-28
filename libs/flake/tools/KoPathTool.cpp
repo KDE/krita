@@ -349,7 +349,7 @@ void KoPathTool::convertToPath()
             pathShape->setBackground(shape->background());
             pathShape->setStroke(shape->stroke());
             pathShape->setZIndex(shape->zIndex());
-            pathShape->setTransformation(shape->transformation());
+            pathShape->setTransformation(shape->absoluteTransformation());
 
             KoShapeContainer *parent = shape->parent();
             canvas()->shapeController()->addShapeDirect(pathShape, parent, cmd);

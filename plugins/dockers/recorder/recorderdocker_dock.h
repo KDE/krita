@@ -43,6 +43,7 @@ private Q_SLOTS:
     void onWriterStarted();
     void onWriterFinished();
     void onWriterPausedChanged(bool paused);
+    void onWriterFrameWriteFailed();
 
 private:
     Q_DISABLE_COPY(RecorderDockerDock)

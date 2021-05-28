@@ -191,6 +191,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
     }
 }
 
+
 void KisLayerStyleProjectionPlaneTest::testShadow()
 {
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
@@ -270,6 +271,8 @@ void KisLayerStyleProjectionPlaneTest::testGlowGradientJitter()
     style->outerGlow()->setGradient(gradient);
     style->outerGlow()->setFillType(psd_fill_gradient);
     style->outerGlow()->setJitter(20);
+
+
 
     test(style, "glow_outer_grad_jit");
 }
@@ -366,7 +369,9 @@ void KisLayerStyleProjectionPlaneTest::testPatternOverlay()
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
 
     KoPatternSP pattern(new KoPattern(fileName));
+
     QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
+
 
     QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources({}));
     resourcesInterface->addResource(pattern);
@@ -488,11 +493,12 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
     KoPatternSP pattern(new KoPattern(fileName));
     QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
-
+    Q_ASSERT(!pattern->md5().isEmpty());
+    qDebug() << ">>>>>>>>>>>" << pattern->md5().toHex();
     QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources({}));
     resourcesInterface->addResource(pattern);
-    style->setResourcesInterface(resourcesInterface);
 
+    style->setResourcesInterface(resourcesInterface);
     style->bevelAndEmboss()->setTexturePattern(pattern);
 
     style->bevelAndEmboss()->setTextureEnabled(true);

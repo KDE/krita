@@ -1097,6 +1097,10 @@ QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
         }
     }
 
+    // NOTE: this is an internal API in Qt. SVG specs specificy that we
+    // shouldn't interpolate in pre-multiplied space.
+    resultGradient->setInterpolationMode(QGradient::ComponentInterpolation);
+
     return resultGradient;
 }
 

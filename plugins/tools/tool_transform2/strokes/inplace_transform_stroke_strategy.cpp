@@ -107,6 +107,14 @@ struct InplaceTransformStrokeStrategy::Private
 
     // temporary variable to share data betwen jobs at the initialization phase
     QVector<KisDecoratedNodeInterface*> disabledDecoratedNodes;
+
+    /**
+     * A special cookie-object, which blocks updates in transform mask
+     * modification commands untils the stroke ends. As soon as the stroke
+     * ends, the object is destroyed and the transform mask modification
+     * commands start to behave normally.
+     */
+    QSharedPointer<boost::none_t> commandUpdatesBlockerCookie;
 };
 
 
@@ -136,6 +144,7 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
     m_d->undoFacade = undoFacade;
     m_d->imageRoot = imageRoot;
     m_d->forceLodMode = forceLodMode;
+    m_d->commandUpdatesBlockerCookie.reset(new boost::none_t(boost::none));
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(!selection || !dynamic_cast<KisTransformMask*>(rootNode.data()));
     setMacroId(KisCommandUtils::TransformToolId);
@@ -151,11 +160,25 @@ InplaceTransformStrokeStrategy::~InplaceTransformStrokeStrategy()
 void InplaceTransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     if (UpdateTransformData *upd = dynamic_cast<UpdateTransformData*>(data)) {
-        m_d->pendingUpdateArgs = upd->args;
-        tryPostUpdateJob(false);
+        if (upd->destination == UpdateTransformData::PAINT_DEVICE) {
+            m_d->pendingUpdateArgs = upd->args;
+            tryPostUpdateJob(false);
+        } else if (m_d->selection) {
+            // NOTE: selection is hidden during the transformation, so we
+            //       don't have to do any preview for that. We transform
+            //       that in one go in the end of the stroke.
 
-    } else if (BarrierUpdateData *barrierData =
-               dynamic_cast<BarrierUpdateData*>(data)) {
+            KisTransaction transaction(m_d->selection->pixelSelection());
+
+            KisProcessingVisitor::ProgressHelper helper(m_d->imageRoot.data());
+            KisTransformUtils::transformDevice(upd->args,
+                                               m_d->selection->pixelSelection(), &helper);
+
+            runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
+                              KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+        }
+
+    } else if (BarrierUpdateData *barrierData = dynamic_cast<BarrierUpdateData *>(data)) {
 
         doCanvasUpdate(barrierData->forceUpdate);
 
@@ -528,13 +551,6 @@ void InplaceTransformStrokeStrategy::postAllUpdates(int levelOfDetail)
         const QRect dirtyRect = dirtyRects[node] | prevDirtyRects[node];
         if (dirtyRect.isEmpty()) continue;
 
-        /**
-         * When transforming transform masks in non-lod mode, the projection is
-         * jenerated by KisRecalculateTransformMaskJob, which is forced by the
-         * undo command. We shouldn't try to start the update after a command.
-         */
-        if (dynamic_cast<KisTransformMask*>(node.data()) && levelOfDetail <= 0) continue;
-
         m_d->updatesFacade->refreshGraphAsync(node, dirtyRect);
     }
 
@@ -601,13 +617,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
 
         const QRect oldDirtyRect = transformMask->extent();
 
-        if (levelOfDetail <= 0) {
-
-            KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
-                                                                   KisTransformMaskParamsInterfaceSP(
-                                                                       new KisTransformMaskAdapter(config)));
-            executeAndAddCommand(cmd, Transform);
-        } else {
+        if (levelOfDetail > 0) {
             KisPaintDeviceSP cachedPortion;
 
             {
@@ -625,14 +635,14 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                                                        dst, &helper);
 
             transformMask->overrideStaticCacheDevice(dst);
-            KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
-                                                                   KisTransformMaskParamsInterfaceSP(
-                                                                       new KisTransformMaskAdapter(config)),
-                                                                   true);
-            executeAndAddCommand(cmd, commandGroup);
-
-            addDirtyRect(node, oldDirtyRect | transformMask->extent(), TransformLod);
         }
+
+        KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
+                                                               KisTransformMaskParamsInterfaceSP(
+                                                                   new KisTransformMaskAdapter(config)),
+                                                               m_d->commandUpdatesBlockerCookie);
+        executeAndAddCommand(cmd, commandGroup);
+        addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
     }
 }
 
@@ -717,7 +727,7 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
                                                       int levelOfDetail)
 {
     if (levelOfDetail > 0) {
-        args.scaleSrcAndDst(KisLodTransform::lodToScale(levelOfDetail));
+        args.scale3dSrcAndDst(KisLodTransform::lodToScale(levelOfDetail));
     }
 
     KritaUtils::addJobBarrier(mutatedJobs, levelOfDetail,
@@ -752,6 +762,8 @@ void InplaceTransformStrokeStrategy::finalizeStrokeImpl(QVector<KisStrokeJobData
             m_d->deactivatedOverlaySelectionMask->selection()->setVisible(true);
             m_d->deactivatedOverlaySelectionMask->setDirty();
         }
+
+        m_d->commandUpdatesBlockerCookie.reset();
     });
 
 
@@ -825,6 +837,9 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
         reapplyTransform(m_d->currentTransformArgs, mutatedJobs, 0);
         mutatedJobs << new Data(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING), false, KisStrokeJobData::BARRIER);
     }
+
+    mutatedJobs << new UpdateTransformData(m_d->currentTransformArgs,
+                                           UpdateTransformData::SELECTION);
 
     finalizeStrokeImpl(mutatedJobs, true);
 

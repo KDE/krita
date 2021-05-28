@@ -62,9 +62,8 @@ KoPattern::~KoPattern()
 }
 
 KoPattern::KoPattern(const KoPattern &rhs)
-    : KoResource(rhs),
-      m_pattern(rhs.m_pattern),
-      m_md5(rhs.m_md5)
+    : KoResource(rhs)
+    , m_pattern(rhs.m_pattern)
 {
 }
 
@@ -129,8 +128,6 @@ bool KoPattern::savePatToDevice(QIODevice* dev) const
     if (wrote == -1)
         return false;
 
-    KoResource::saveToDevice(dev);
-
     return true;
 }
 
@@ -165,11 +162,8 @@ bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resources
 
 bool KoPattern::saveToDevice(QIODevice *dev) const
 {
-    QString fileExtension;
-    int index = filename().lastIndexOf('.');
-
-    if (index != -1)
-        fileExtension = filename().mid(index + 1).toLower();
+    QFileInfo fi(filename());
+    QString fileExtension = fi.suffix();
 
     bool result = false;
 
@@ -177,10 +171,14 @@ bool KoPattern::saveToDevice(QIODevice *dev) const
         result = savePatToDevice(dev);
     }
     else {
+        if (fileExtension.isEmpty()) {
+            fileExtension = "PNG";
+        }
         result = m_pattern.save(dev, fileExtension.toUpper().toLatin1());
+        Q_ASSERT(result);
     }
 
-    return result && KoResource::saveToDevice(dev);
+    return result;
 }
 
 bool KoPattern::init(QByteArray& bytes)

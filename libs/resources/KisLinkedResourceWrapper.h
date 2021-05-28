@@ -32,7 +32,9 @@ public:
     }
 
     KisLinkedResourceWrapper(const QByteArray &md5, const QString &filename, const QString &name)
-        : m_md5(md5), m_filename(filename), m_name(name)
+        : m_md5(md5)
+        , m_filename(filename)
+        , m_name(name)
     {
     }
 

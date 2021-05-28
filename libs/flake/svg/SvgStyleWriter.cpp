@@ -128,12 +128,13 @@ void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
         strokeStr = "url(#" + gradientId + ")";
     } else {
         strokeStr = lineBorder->color().name();
+        if (lineBorder->color().alphaF() < 1.0) {
+            context.shapeWriter().addAttribute("stroke-opacity", lineBorder->color().alphaF());
+        }
     }
     if (!strokeStr.isEmpty())
         context.shapeWriter().addAttribute("stroke", strokeStr);
 
-    if (lineBorder->color().alphaF() < 1.0)
-        context.shapeWriter().addAttribute("stroke-opacity", lineBorder->color().alphaF());
     context.shapeWriter().addAttribute("stroke-width", SvgUtil::toUserSpace(lineBorder->lineWidth()));
 
     if (lineBorder->capStyle() == Qt::FlatCap)

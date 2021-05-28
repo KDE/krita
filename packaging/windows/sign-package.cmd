@@ -39,7 +39,7 @@ if not exist "%pkg_root%\" (
     echo ERROR: No packaging dir %pkg_root% 1>&2
     exit /b 1
 )
-for /r "%pkg_root%\" %%F in (*.exe *.dll *.pyd) do (
+for /r "%pkg_root%\" %%F in (*.exe *.com *.dll *.pyd) do (
     :: Check for existing signature
     "%SIGNTOOL%" verify /q /pa "%%F" > NUL
     if errorlevel 1 (

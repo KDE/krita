@@ -260,8 +260,10 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                     QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
                     if (!isEditing) vertical.translate(mousePos - vertical.p1());
                     KisAlgebra2D::intersectLineRect(vertical,viewport,true);
-                    path.moveTo(vertical.p1());
-                    path.lineTo(vertical.p2());
+                    if (previewVisible) {
+                        path.moveTo(vertical.p1());
+                        path.lineTo(vertical.p2());
+                    }
 
                     if (assistantVisible) {
                         // Display a notch to represent the center of vision
@@ -319,8 +321,10 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
                             QLineF drawn_gridline = initialTransform.map(inv.map(gridline));
                             KisAlgebra2D::intersectLineRect(drawn_gridline, viewport, true);
-                            path.moveTo(initialTransform.map(inv.map(vp)));
-                            path.lineTo(drawn_gridline.p1());
+                            if (previewVisible || isEditing == true) {
+                                path.moveTo(initialTransform.map(inv.map(vp)));
+                                path.lineTo(drawn_gridline.p1());
+                            }
                         }
                     }
                 }
@@ -393,6 +397,7 @@ void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
 {
     xml->writeStartElement("gridDensity");
     xml->writeAttribute("value", KisDomUtils::toString( this->gridDensity()));
+    xml->writeEndElement();
     xml->writeStartElement("useVertical");
     xml->writeAttribute("value", KisDomUtils::toString( (int)this->useVertical()));
     xml->writeEndElement();

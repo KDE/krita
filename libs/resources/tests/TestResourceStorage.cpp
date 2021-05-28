@@ -112,6 +112,7 @@ void TestResourceStorage::testAddResource()
     gc.fillRect(0, 0, 256, 256, Qt::red);
 
     KoResourceSP res(new KoPattern(img, "testpattern2", "testpattern2.png"));
+    Q_ASSERT(res->resourceType().first == ResourceType::Patterns);
     bool r =  folderStorage.addResource(res);
     QVERIFY(r);
 }

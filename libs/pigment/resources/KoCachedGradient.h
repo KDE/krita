@@ -84,8 +84,6 @@ public:
 
     KoAbstractGradientSP gradient() { return m_subject; }
 
-    QByteArray generateMD5() const override { return QByteArray(); }
-
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override {
         return m_subject->loadFromDevice(dev, resourcesInterface);
     }

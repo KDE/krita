@@ -115,6 +115,8 @@ struct KisFreeTransformStrategy::Private
 
     ToolTransformArgs clickArgs;
     QPointF clickPos;
+    QTransform clickTransform;
+
     bool isTransforming {false};
 
     QCursor getScaleCursor(const QPointF &handlePt);
@@ -378,6 +380,9 @@ bool KisFreeTransformStrategy::beginPrimaryAction(const QPointF &pt)
     m_d->clickArgs = m_d->currentArgs;
     m_d->clickPos = pt;
 
+    KisTransformUtils::MatricesPack m(m_d->clickArgs);
+    m_d->clickTransform = m.finalTransform();
+
     return true;
 }
 
@@ -482,8 +487,8 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
             movingPoint = m_d->transaction.originalMiddleBottom();
         }
 
-        QPointF staticPointInView = m_d->transform.map(staticPoint);
-        const QPointF movingPointInView = m_d->transform.map(movingPoint);
+        QPointF staticPointInView = m_d->clickTransform.map(staticPoint);
+        const QPointF movingPointInView = m_d->clickTransform.map(movingPoint);
 
         const QPointF projNormVector =
             KisAlgebra2D::normalize(movingPointInView - staticPointInView);
@@ -494,11 +499,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         const QPointF targetMovingPointInView = staticPointInView + projNormVector * projLength;
 
         // override scale static point if it is locked
-        if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
+        if ((m_d->clickArgs.transformAroundRotationCenter() ^ altModifierActive) &&
             !qFuzzyCompare(anchorPoint.y(), movingPoint.y())) {
 
             staticPoint = anchorPoint;
-            staticPointInView = m_d->transform.map(staticPoint);
+            staticPointInView = m_d->clickTransform.map(staticPoint);
         }
 
         GSL::ScaleResult1D result =
@@ -535,8 +540,8 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
             movingPoint = m_d->transaction.originalMiddleRight();
         }
 
-        QPointF staticPointInView = m_d->transform.map(staticPoint);
-        const QPointF movingPointInView = m_d->transform.map(movingPoint);
+        QPointF staticPointInView = m_d->clickTransform.map(staticPoint);
+        const QPointF movingPointInView = m_d->clickTransform.map(movingPoint);
 
         const QPointF projNormVector =
             KisAlgebra2D::normalize(movingPointInView - staticPointInView);
@@ -551,7 +556,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
             !qFuzzyCompare(anchorPoint.x(), movingPoint.x())) {
 
             staticPoint = anchorPoint;
-            staticPointInView = m_d->transform.map(staticPoint);
+            staticPointInView = m_d->clickTransform.map(staticPoint);
         }
 
         GSL::ScaleResult1D result =
@@ -603,30 +608,40 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
             staticPoint = anchorPoint;
         }
 
-        QPointF staticPointInView = m_d->transform.map(staticPoint);
+        QPointF staticPointInView = m_d->clickTransform.map(staticPoint);
         QPointF movingPointInView = mousePos;
 
         if (shiftModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
-            KisTransformUtils::MatricesPack m(m_d->clickArgs);
-            QTransform t = m.finalTransform();
-
-            QPointF refDiff = t.map(movingPoint) - staticPointInView;
+            QPointF refDiff = m_d->clickTransform.map(movingPoint) - staticPointInView;
             QPointF realDiff = mousePos - staticPointInView;
             realDiff = kisProjectOnVector(refDiff, realDiff);
 
             movingPointInView = staticPointInView + realDiff;
         }
 
-        GSL::ScaleResult2D result =
-            GSL::calculateScale2D(m_d->currentArgs,
-                                  staticPoint,
-                                  staticPointInView,
-                                  movingPoint,
-                                  movingPointInView);
+        const bool isAffine =
+            qFuzzyIsNull(m_d->currentArgs.aX()) &&
+            qFuzzyIsNull(m_d->currentArgs.aY());
 
-        m_d->currentArgs.setScaleX(result.scaleX);
-        m_d->currentArgs.setScaleY(result.scaleY);
-        m_d->currentArgs.setTransformedCenter(result.transformedCenter);
+        GSL::ScaleResult2D result =
+                !isAffine ?
+                    GSL::calculateScale2D(m_d->currentArgs,
+                                          staticPoint,
+                                          staticPointInView,
+                                          movingPoint,
+                                          movingPointInView) :
+                    GSL::calculateScale2DAffine(m_d->currentArgs,
+                                                staticPoint,
+                                                staticPointInView,
+                                                movingPoint,
+                                                movingPointInView);
+
+        if (result.isValid) {
+            m_d->currentArgs.setScaleX(result.scaleX);
+            m_d->currentArgs.setScaleY(result.scaleY);
+            m_d->currentArgs.setTransformedCenter(result.transformedCenter);
+        }
+
         break;
     }
     case MOVECENTER: {

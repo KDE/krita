@@ -7,6 +7,8 @@
 #ifndef RECORDER_WRITER_H
 #define RECORDER_WRITER_H
 
+#include "recorder_format.h"
+
 #include <QThread>
 #include <QPointer>
 
@@ -16,7 +18,9 @@ class KisCanvas2;
 struct RecorderWriterSettings
 {
     QString outputDirectory;
+    RecorderFormat format;
     int quality;
+    int compression;
     int resolution;
     int captureInterval;
     bool recordIsolateLayerMode;

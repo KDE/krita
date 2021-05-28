@@ -49,13 +49,15 @@ public:
         timer.start();
 
         QDirIterator dirIterator(directory);
+        const QString &extension = RecorderFormatInfo::fileExtension(settings.format);
+        const QRegularExpression &snapshotFilePattern = RecorderConst::snapshotFilePatternFor(extension);
 
         int recordIndex = -1;
         while (dirIterator.hasNext()) {
             dirIterator.next();
 
             const QString &fileName = dirIterator.fileName();
-            const QRegularExpressionMatch &match = RecorderConst::snapshotFilePattern.match(fileName);
+            const QRegularExpressionMatch &match = snapshotFilePattern.match(fileName);
             if (match.hasMatch()) {
                 int index = match.captured(1).toInt();
                 if (recordIndex < index)
@@ -173,10 +175,22 @@ public:
         if (!outputDir.exists() && !outputDir.mkpath(settings.outputDirectory))
             return false;
 
-        const QString &fileName = QString("%1%2.jpg")
+        const QString &fileName = QString("%1%2.%3")
                                   .arg(settings.outputDirectory)
-                                  .arg(partIndex, 7, 10, QLatin1Char('0'));
-        return frame.save(fileName, "JPEG", settings.quality);
+                                  .arg(partIndex, 7, 10, QLatin1Char('0'))
+                                  .arg(RecorderFormatInfo::fileExtension(settings.format));
+
+        int factor = -1; // default value
+        switch (settings.format) {
+            case RecorderFormat::JPEG:
+                factor = settings.quality; // 0...100
+                break;
+            case RecorderFormat::PNG:
+                factor = qBound(0, 100 - (settings.compression * 10), 100); // 0..10 -> 100..0
+                break;
+        }
+
+        return frame.save(fileName, RecorderFormatInfo::fileFormat(settings.format).data(), factor);
     }
 
 };

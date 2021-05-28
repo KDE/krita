@@ -49,7 +49,9 @@ public:
     QString prefix;
     QString outputDirectory;
     int captureInterval = 0;
+    RecorderFormat format = RecorderFormat::JPEG;
     int quality = 0;
+    int compression = 0;
     int resolution = 0;
     bool recordIsolateLayerMode = false;
     bool recordAutomatically = false;
@@ -73,17 +75,60 @@ public:
         RecorderConfig config(true);
         snapshotDirectory = config.snapshotDirectory();
         captureInterval = config.captureInterval();
+        format = config.format();
         quality = config.quality();
+        compression = config.compression();
         resolution = config.resolution();
         recordIsolateLayerMode = config.recordIsolateLayerMode();
         recordAutomatically = config.recordAutomatically();
+
+        updateUiFormat();
     }
 
+
+    void updateUiFormat() {
+        int index = 0;
+        QString title;
+        QString hint;
+        int minValue = 0;
+        int maxValue = 0;
+        QString suffix;
+        int factor = 0;
+        switch (format) {
+            case RecorderFormat::JPEG:
+                index = 0;
+                title = i18nc("Title for label. JPEG Quality level", "Quality:");
+                hint = i18n("Greater value will produce a larger file and a better quality. Doesn't affect CPU consumption.\nValues lower than 50 are not recommended due to high artifacts");
+                minValue = 1;
+                maxValue = 100;
+                suffix = "%";
+                factor = quality;
+                break;
+            case RecorderFormat::PNG:
+                index = 1;
+                title = i18nc("Title for label. PNG Compression level", "Compression:");
+                hint = i18n("Greater value will produce a smaller file and affect a higher CPU consumption. Doesn't affect quality.\nZero value is not recommended due to high disk space consumtion.\nValues upper than 3 are not recommended due to high performance impact.");
+                minValue = 0;
+                maxValue = 5;
+                suffix = "";
+                factor = compression;
+                break;
+        }
+
+        ui->comboFormat->setCurrentIndex(index);
+        ui->labelQuality->setText(title);
+        ui->spinQuality->setToolTip(hint);
+        QSignalBlocker blocker(ui->spinQuality);
+        ui->spinQuality->setMinimum(minValue);
+        ui->spinQuality->setMaximum(maxValue);
+        ui->spinQuality->setValue(factor);
+        ui->spinQuality->setSuffix(suffix);
+    }
 
     void updateWriterSettings()
     {
         outputDirectory = snapshotDirectory % QDir::separator() % prefix % QDir::separator();
-        writer.setup({ outputDirectory, quality, resolution, captureInterval, recordIsolateLayerMode });
+        writer.setup({ outputDirectory, format, quality, compression, resolution, captureInterval, recordIsolateLayerMode });
     }
 
     QString getPrefix()
@@ -170,9 +215,6 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
     d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export-16"));
-    d->ui->spinQuality->setMinimum(1);
-    d->ui->spinQuality->setMaximum(100);
-    d->ui->spinQuality->setSuffix("%");
 
     d->loadSettings();
 
@@ -198,6 +240,7 @@ RecorderDockerDock::RecorderDockerDock()
     connect(d->ui->buttonManageRecordings, SIGNAL(clicked()), this, SLOT(onManageRecordingsButtonClicked()));
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
     connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
+    connect(d->ui->comboFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(onFormatChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
     connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
     connect(d->ui->checkBoxRecordIsolateMode, SIGNAL(toggled(bool)), this, SLOT(onRecordIsolateLayerModeToggled(bool)));
@@ -239,6 +282,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 
     d->prefix = d->getPrefix();
     d->updateWriterSettings();
+    d->updateUiFormat();
 
     bool enabled = d->enabledIds.value(document->uniqueID(), false);
     d->writer.setEnabled(enabled && d->isColorSpaceSupported);
@@ -290,6 +334,7 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
 
     if (checked) {
         d->updateWriterSettings();
+        d->updateUiFormat();
         d->writer.start();
     } else {
         d->writer.stop();
@@ -306,7 +351,8 @@ void RecorderDockerDock::onExportButtonClicked()
     RecorderExport exportDialog(this);
     exportDialog.setup({
         QFileInfo(document->caption().trimmed()).completeBaseName(),
-        d->outputDirectory
+        d->outputDirectory,
+        d->format
     });
     exportDialog.exec();
 }
@@ -350,10 +396,26 @@ void RecorderDockerDock::onCaptureIntervalChanged(int interval)
     RecorderConfig(false).setCaptureInterval(interval);
 }
 
-void RecorderDockerDock::onQualityChanged(int quality)
+void RecorderDockerDock::onQualityChanged(int value)
 {
-    d->quality = quality;
-    RecorderConfig(false).setQuality(quality);
+    switch (d->format) {
+    case RecorderFormat::JPEG:
+        d->quality = value;
+        RecorderConfig(false).setQuality(value);
+        break;
+    case RecorderFormat::PNG:
+        d->compression = value;
+        RecorderConfig(false).setCompression(value);
+        break;
+    }
+}
+
+void RecorderDockerDock::onFormatChanged(int format)
+{
+    d->format = static_cast<RecorderFormat>(format);
+    d->updateUiFormat();
+
+    RecorderConfig(false).setFormat(d->format);
 }
 
 void RecorderDockerDock::onResolutionChanged(int resolution)

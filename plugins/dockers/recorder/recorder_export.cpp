@@ -26,6 +26,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QJsonObject>
+#include <QImageReader>
 
 #include "kis_debug.h"
 
@@ -106,12 +107,15 @@ public:
         ui->comboProfile->setCurrentIndex(profileIndex);
     }
 
-    void updateFramesCount()
+    void updateFrameInfo()
     {
-        QDir dir(settings.inputDirectory, "*.jpg", QDir::Name | QDir::Reversed, QDir::Files | QDir::NoDotAndDotDot);
-        framesCount = dir.count();
+        QDir dir(settings.inputDirectory, "*." % RecorderFormatInfo::fileExtension(settings.format),
+                QDir::Name, QDir::Files | QDir::NoDotAndDotDot);
+        const QStringList &frames = dir.entryList(); // dir.count() calls entryList().count() internally
+        framesCount = frames.count();
         if (framesCount != 0) {
-            imageSize = QImage(QDirIterator(dir).next()).size();
+            const QString &fileName = settings.inputDirectory % QDir::separator() % frames.last();
+            imageSize = QImageReader(fileName).size();
             imageSize.rwidth() &= ~1;
             imageSize.rheight() &= ~1;
         }
@@ -205,7 +209,7 @@ public:
     {
         Q_ASSERT(ffmpeg == nullptr);
 
-        updateFramesCount();
+        updateFrameInfo();
 
         const QString &arguments = applyVariables(profiles[profileIndex].arguments);
 
@@ -242,7 +246,8 @@ public:
                .replace("$WIDTH", QString::number(outSize.width()))
                .replace("$HEIGHT", QString::number(outSize.height()))
                .replace("$FRAMES", QString::number(framesCount))
-               .replace("$INPUT_DIR", settings.inputDirectory);
+               .replace("$INPUT_DIR", settings.inputDirectory)
+               .replace("$EXT", RecorderFormatInfo::fileExtension(settings.format));
     }
 
     void updateVideoDuration()
@@ -323,7 +328,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     d->settings = settings;
     d->videoFileName = settings.name;
 
-    d->updateFramesCount();
+    d->updateFrameInfo();
 
     if (d->framesCount == 0) {
         d->ui->labelRecordInfo->setText(i18nc("Can't export recording because nothing to export", "No frames to export"));

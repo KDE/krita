@@ -6,6 +6,7 @@ set(KRITA_RECORDERDOCKER_SOURCES
     recorder_const.cpp
     recorder_config.cpp
     recorder_export_config.cpp
+    recorder_format.cpp
     recorder_writer.cpp
     recorder_export.cpp
     recorder_profile_settings.cpp

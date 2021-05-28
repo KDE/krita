@@ -7,12 +7,15 @@
 #ifndef RECORDER_EXPORT_H
 #define RECORDER_EXPORT_H
 
+#include "recorder_format.h"
+
 #include <QDialog>
 
 struct RecorderExportSettings
 {
     QString name;
     QString inputDirectory;
+    RecorderFormat format;
 };
 
 class RecorderExport : public QDialog

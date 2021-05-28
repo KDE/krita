@@ -15,7 +15,9 @@ namespace
 {
 const QString keySnapshotDirectory = "recorder/snapshotdirectory";
 const QString keyCaptureInterval = "recorder/captureinterval";
+const QString keyFormat = "recorder/format";
 const QString keyQuality = "recorder/quality";
+const QString keyCompression = "recorder/compression";
 const QString keyResolution = "recorder/resolution";
 const QString keyRecordIsolateLayerMode = "recorder/recordisolatelayermode";
 const QString keyRecordAutomatically = "recorder/recordautomatically";
@@ -55,6 +57,17 @@ void RecorderConfig::setCaptureInterval(int value)
 }
 
 
+RecorderFormat RecorderConfig::format() const
+{
+    return static_cast<RecorderFormat>(config->readEntry(keyFormat, static_cast<int>(RecorderFormat::JPEG)));
+}
+
+void RecorderConfig::setFormat(RecorderFormat value)
+{
+    return config->writeEntry(keyFormat, static_cast<int>(value));
+}
+
+
 int RecorderConfig::quality() const
 {
     return config->readEntry(keyQuality, 80);
@@ -63,6 +76,17 @@ int RecorderConfig::quality() const
 void RecorderConfig::setQuality(int value)
 {
     config->writeEntry(keyQuality, value);
+}
+
+
+int RecorderConfig::compression() const
+{
+    return config->readEntry(keyCompression, 1);
+}
+
+void RecorderConfig::setCompression(int value)
+{
+    config->writeEntry(keyCompression, value);
 }
 
 

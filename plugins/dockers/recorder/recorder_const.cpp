@@ -11,6 +11,9 @@
 namespace RecorderConst
 {
 
-const QRegularExpression snapshotFilePattern("^([0-9]{7}).jpg$");
+QRegularExpression snapshotFilePatternFor(const QString &extension)
+{
+    return QRegularExpression("^([0-9]{7})\\." % extension % "$");
+}
 
 }

@@ -25,7 +25,7 @@ const QString keyProfileIndex = "recorder_export/profileIndex";
 const QString keyProfiles = "recorder_export/profiles";
 const QString keyEditedProfiles = "recorder_export/editedprofiles";
 
-const QString profilePrefix = "-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.jpg\"\n";
+const QString profilePrefix = "-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.$EXT\"\n";
 
 const QList<RecorderProfile> defaultProfiles = {
     { "MP4 x264",   "mp4",  profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },

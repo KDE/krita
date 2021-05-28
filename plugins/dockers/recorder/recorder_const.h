@@ -7,6 +7,7 @@
 #ifndef RECORDER_CONST_H
 #define RECORDER_CONST_H
 
+class QString;
 class QRegularExpression;
 
 namespace RecorderConst
@@ -14,7 +15,7 @@ namespace RecorderConst
 
 constexpr int waitThreadTimeoutMs = 5000;
 
-extern const QRegularExpression snapshotFilePattern;
+QRegularExpression snapshotFilePatternFor(const QString &extension);
 
 }
 

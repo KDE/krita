@@ -78,6 +78,7 @@ SnapshotDirInfo RecorderSnapshotsScanner::readSnapshotDirInfo(const QString &pat
 
     int recordIndex = -1;
     QDirIterator dirIterator(path, QDir::Files | QDir::NoDotAndDotDot);
+    const QRegularExpression &snapshotFilePattern = RecorderConst::snapshotFilePatternFor(".*");
 
     while (dirIterator.hasNext()) {
         dirIterator.next();
@@ -86,7 +87,7 @@ SnapshotDirInfo RecorderSnapshotsScanner::readSnapshotDirInfo(const QString &pat
             return {};
         }
 
-        const QRegularExpressionMatch &match = RecorderConst::snapshotFilePattern.match(dirIterator.fileName());
+        const QRegularExpressionMatch &match = snapshotFilePattern.match(dirIterator.fileName());
         if (!match.hasMatch())
             continue;
 

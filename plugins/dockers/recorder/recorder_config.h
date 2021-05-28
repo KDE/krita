@@ -7,6 +7,8 @@
 #ifndef RECORDER_CONFIG_H
 #define RECORDER_CONFIG_H
 
+#include "recorder_format.h"
+
 #include <QtGlobal>
 
 class KisConfig;
@@ -23,8 +25,16 @@ public:
     int captureInterval() const;
     void setCaptureInterval(int value);
 
+    RecorderFormat format() const;
+    void setFormat(RecorderFormat value);
+
+    // for JPEG (0...100)
     int quality() const;
     void setQuality(int value);
+
+    // for PNG (0...10)
+    int compression() const;
+    void setCompression(int value);
 
     int resolution() const;
     void setResolution(int value);

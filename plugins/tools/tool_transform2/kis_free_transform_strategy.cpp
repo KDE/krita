@@ -519,7 +519,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         }
 
         GSL::ScaleResult1D result =
-            GSL::calculateScaleY(m_d->clickArgs,
+            GSL::calculateScaleY(m_d->currentArgs,
                                  staticPoint,
                                  staticPointInView,
                                  movingPoint,
@@ -572,7 +572,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         }
 
         GSL::ScaleResult1D result =
-            GSL::calculateScaleX(m_d->clickArgs,
+            GSL::calculateScaleX(m_d->currentArgs,
                                  staticPoint,
                                  staticPointInView,
                                  movingPoint,
@@ -631,20 +631,29 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
             movingPointInView = staticPointInView + realDiff;
         }
 
-        GSL::ScaleResult2D result =
-            GSL::calculateScale2D(m_d->clickArgs,
-                                  staticPoint,
-                                  staticPointInView,
-                                  movingPoint,
-                                  movingPointInView);
+        const bool isAffine =
+            qFuzzyIsNull(m_d->currentArgs.aX()) &&
+            qFuzzyIsNull(m_d->currentArgs.aY());
 
-        if (!result.isValid) {
-            break;
+        GSL::ScaleResult2D result =
+                !isAffine ?
+                    GSL::calculateScale2D(m_d->currentArgs,
+                                          staticPoint,
+                                          staticPointInView,
+                                          movingPoint,
+                                          movingPointInView) :
+                    GSL::calculateScale2DAffine(m_d->currentArgs,
+                                                staticPoint,
+                                                staticPointInView,
+                                                movingPoint,
+                                                movingPointInView);
+
+        if (result.isValid) {
+            m_d->currentArgs.setScaleX(result.scaleX);
+            m_d->currentArgs.setScaleY(result.scaleY);
+            m_d->currentArgs.setTransformedCenter(result.transformedCenter);
         }
 
-        m_d->currentArgs.setScaleX(result.scaleX);
-        m_d->currentArgs.setScaleY(result.scaleY);
-        m_d->currentArgs.setTransformedCenter(result.transformedCenter);
         break;
     }
     case MOVECENTER: {

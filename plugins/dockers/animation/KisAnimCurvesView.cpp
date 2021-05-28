@@ -688,7 +688,12 @@ void KisAnimCurvesView::mouseReleaseEvent(QMouseEvent *e)
 
         if (m_d->isDraggingKeyframe) {
             const QModelIndexList indices = selectedIndexes();
-            const QPointF offset = qAbs(m_d->dragOffset.y()) > qAbs(m_d->dragOffset.x()) ? QPointF(0.0f, m_d->dragOffset.y()) : QPointF(m_d->dragOffset.x(), 0.0f);
+            const QPointF largestOffset = qAbs(m_d->dragOffset.y()) > qAbs(m_d->dragOffset.x()) ? QPointF(0.0f, m_d->dragOffset.y()) :
+                                                                                                  QPointF(m_d->dragOffset.x(), 0.0f);
+
+            //Only use the largest offset when axis snap is enabled on mouse button release..
+            const bool axisSnap = (e->modifiers() & Qt::ShiftModifier);
+            const QPointF offset = axisSnap ? largestOffset : m_d->dragOffset;
             const int timeOffset = qRound( qreal(offset.x()) / m_d->horizontalHeader->defaultSectionSize() );
             const qreal valueOffset = m_d->verticalHeader->pixelsToValueOffset(offset.y());
 

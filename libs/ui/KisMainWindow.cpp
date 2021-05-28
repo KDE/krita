@@ -143,6 +143,7 @@
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
+#include "KisRecentDocumentsModelWrapper.h"
 #include <KritaVersionWrapper.h>
 #include "KisCanvasWindow.h"
 #include "kis_action.h"
@@ -266,6 +267,7 @@ public:
     KHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
+    KisRecentDocumentsModelWrapper recentFilesModel;
     KisResourceModel *workspacemodel {0};
 
     QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
@@ -472,6 +474,27 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     // the welcome screen needs to grab actions...so make sure this line goes after the createAction() so they exist
     d->welcomePage->setMainWindow(this);
+
+    connect(&d->recentFilesModel, &KisRecentDocumentsModelWrapper::sigInvalidDocumentForIcon, [this](QUrl url) {
+        this->removeRecentUrl(url);
+    });
+    connect(&d->recentFilesModel.model(), &QStandardItemModel::itemChanged, [this](QStandardItem *item) {
+        QUrl url = item->data().toUrl();
+        QIcon icon = item->icon();
+        if (url.isValid() && !icon.isNull()) {
+            d->recentFiles->setUrlIcon(url, icon);
+        }
+    });
+    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &parent, int first, int last) {
+        for (int i = first; i <= last; i++) {
+            QStandardItem *item = d->recentFilesModel.model().item(i);
+            QUrl url = item->data().toUrl();
+            QIcon icon = item->icon();
+            if (url.isValid() && !icon.isNull()) {
+                d->recentFiles->setUrlIcon(url, icon);
+            }
+        }
+    });
 
     setAutoSaveSettings(d->windowStateConfig, false);
 
@@ -944,7 +967,7 @@ void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
             d->recentFiles->addUrl(url);
         }
         saveRecentFiles();
-
+        d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
     }
 }
 
@@ -972,7 +995,7 @@ QList<QUrl> KisMainWindow::recentFilesUrls()
 void KisMainWindow::clearRecentFiles()
 {
     d->recentFiles->clear();
-    d->welcomePage->populateRecentDocuments();
+    d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
 }
 
 void KisMainWindow::removeRecentUrl(const QUrl &url)
@@ -986,6 +1009,7 @@ void KisMainWindow::removeRecentUrl(const QUrl &url)
 void KisMainWindow::reloadRecentFileList()
 {
     d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
+    d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
 }
 
 void KisMainWindow::updateCaption()
@@ -1580,6 +1604,11 @@ void KisMainWindow::setActiveView(KisView* view)
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 
     emit activeViewChanged();
+}
+
+KisRecentDocumentsModelWrapper *KisMainWindow::recentFilesModel()
+{
+    return &d->recentFilesModel;
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)
@@ -2600,7 +2629,6 @@ void KisMainWindow::updateWindowMenu()
         showWelcomeScreen(true); // see workaround in function in header
         // keep the recent file list updated when going back to welcome screen
         reloadRecentFileList();
-        d->welcomePage->populateRecentDocuments();
     }
 
     // enable/disable the toolbox docker if there are no documents open

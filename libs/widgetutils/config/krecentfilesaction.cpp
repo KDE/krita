@@ -22,10 +22,29 @@
 #include <QMenu>
 #include <QComboBox>
 #include <QScreen>
+#include <QProxyStyle>
+#include <QStyleFactory>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
+
+class KRecentFilesIconProxyStyle : public QProxyStyle
+{
+public:
+    KRecentFilesIconProxyStyle(QStyle *style = nullptr)
+        : QProxyStyle(style)
+    {
+    }
+
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override
+    {
+        if (metric == QStyle::PM_SmallIconSize) {
+            return 48;
+        }
+        return QProxyStyle::pixelMetric(metric, option, widget);
+    }
+};
 
 KRecentFilesAction::KRecentFilesAction(QObject *parent)
     : KSelectAction(parent),
@@ -75,6 +94,11 @@ void KRecentFilesActionPrivate::init()
     clearAction->setVisible(false);
     q->setEnabled(false);
     q->connect(q, SIGNAL(triggered(QAction*)), SLOT(_k_urlSelected(QAction*)));
+
+    QStyle *baseStyle = QStyleFactory::create(q->menu()->style()->objectName());
+    QStyle *newStyle = new KRecentFilesIconProxyStyle(baseStyle);
+    newStyle->setParent(q->menu());
+    q->menu()->setStyle(newStyle);
 }
 
 KRecentFilesAction::~KRecentFilesAction()
@@ -187,6 +211,9 @@ void KRecentFilesAction::addUrl(const QUrl &_url, const QString &name)
     const QString title = titleWithSensibleWidth(tmpName, file);
     QAction *action = new QAction(title, selectableActionGroup());
     addAction(action, url, tmpName);
+
+    // This is needed to load thumbnail for the recents menu.
+    d_urls.append(QUrl(url));
 }
 
 void KRecentFilesAction::addAction(QAction *action, const QUrl &url, const QString &name)
@@ -228,6 +255,18 @@ QList<QUrl> KRecentFilesAction::urls() const
     }
 
     return sortedList;
+}
+
+void KRecentFilesAction::setUrlIcon(const QUrl &url, const QIcon &icon)
+{
+    Q_D(KRecentFilesAction);
+    for (QMap<QAction *, QUrl>::ConstIterator it = d->m_urls.constBegin(); it != d->m_urls.constEnd(); ++it) {
+        if (it.value() == url) {
+            it.key()->setIcon(icon);
+            it.key()->setIconVisibleInMenu(true);
+            return;
+        }
+    }
 }
 
 void KRecentFilesAction::clear()

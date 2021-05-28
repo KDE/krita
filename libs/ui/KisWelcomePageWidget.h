@@ -17,7 +17,6 @@
 #include "ui_KisWelcomePage.h"
 #include <QStandardItemModel>
 #include <QScopedPointer>
-#include "KisRecentDocumentsModelWrapper.h"
 
 #include "config-updaters.h"
 class RecentItemDelegate;
@@ -50,12 +49,6 @@ public Q_SLOTS:
 
     void slotUpdateThemeColors();
 
-    /**
-     * Populate `recentDocumentsListView` with m_recentFilesModel
-     * This could be called multiple times in a session
-     */
-    void populateRecentDocuments();
-
 #ifdef ENABLE_UPDATERS
     void slotSetUpdateStatus(KisUpdaterStatus updateStatus);
     void slotShowUpdaterErrorDetails();
@@ -85,7 +78,6 @@ private:
 #endif
 
     KisMainWindow *m_mainWindow;
-    KisRecentDocumentsModelWrapper m_recentFilesModel;
 
     /// help us see how many people are clicking startup screen links
     /// you can see the results in Matomo (stats.kde.org)
@@ -123,10 +115,6 @@ private Q_SLOTS:
      * Once all files in the recent documents model are checked, cleanup the UI if the model is empty
      */
     void slotRecentFilesModelIsUpToDate();
-    /**
-     * m_recentFilesModel reported an invalid recent document, we shall report it to m_mainWindow
-     */
-    void slotReportInvalidRecentDocument(QUrl url);
 
 #ifdef ENABLE_UPDATERS
     void slotRunVersionUpdate();

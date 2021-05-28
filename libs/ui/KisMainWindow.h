@@ -33,6 +33,7 @@ class QDockWidget;
 class KisView;
 class KisViewManager;
 class KoCanvasController;
+class KisRecentDocumentsModelWrapper;
 
 
 /**
@@ -469,6 +470,7 @@ protected:
 private:
 
     friend class KisWelcomePageWidget;
+    KisRecentDocumentsModelWrapper *recentFilesModel();
     void dragMove(QDragMoveEvent *event);
     void dragLeave();
 

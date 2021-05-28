@@ -94,7 +94,9 @@ KisRecentDocumentsModelWrapper::KisRecentDocumentsModelWrapper(){
 KisRecentDocumentsModelWrapper::~KisRecentDocumentsModelWrapper(){
     cancelAndWaitIfRunning();
 }
-void KisRecentDocumentsModelWrapper::setFiles(const URLs &urls, QSize iconSize, qreal devicePixelRatioF){
+void KisRecentDocumentsModelWrapper::setFiles(const URLs &urls, qreal devicePixelRatioF){
+    const QSize iconSize(ICON_SIZE_LENGTH, ICON_SIZE_LENGTH);
+
     m_currentWorkerId++;
     // before launching any thread, make sure that there's no working being done
     cancelAndWaitIfRunning();
@@ -106,6 +108,7 @@ void KisRecentDocumentsModelWrapper::setFiles(const URLs &urls, QSize iconSize, 
         Q_FOREACH(const QUrl &recentFileUrl, urls){
             const QString recentFileUrlPath = recentFileUrl.toLocalFile();
             QStandardItem *recentItem = new QStandardItem(stubIcon, recentFileUrl.fileName());
+            recentItem->setData(recentFileUrl);
             recentItem->setToolTip(recentFileUrlPath);
             items.append(recentItem);
         }
@@ -133,8 +136,10 @@ void KisRecentDocumentsModelWrapper::setFiles(const URLs &urls, QSize iconSize, 
         row++;
     }
 
-    if(manyFileIconParameters.empty())
+    if (manyFileIconParameters.empty()) {
+        slotIconFetchingFinished();
         return;
+    }
 
     // use c++17's decomposition declaration when available
     SelfContainedIteratorRange range(SelfContainedIterator::range(manyFileIconParametersPtr));

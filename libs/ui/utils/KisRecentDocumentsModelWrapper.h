@@ -25,13 +25,15 @@ class KisRecentDocumentsModelWrapper : public QObject
 {
     Q_OBJECT
 public:
+    static constexpr const int ICON_SIZE_LENGTH = 48;
+
     KisRecentDocumentsModelWrapper();
     ~KisRecentDocumentsModelWrapper();
     using URLs=QList<QUrl>;
     /**
      * Update m_filesAndThumbnailsModel and launch worker thread to fetch icons in background
      */
-    void setFiles(const URLs &urls, QSize iconSize, qreal devicePixelRatioF);
+    void setFiles(const URLs &urls, qreal devicePixelRatioF);
     /**
      * Get underlying model
      *

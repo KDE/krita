@@ -22,6 +22,8 @@
 class KConfigGroup;
 class KRecentFilesActionPrivate;
 
+class QIcon;
+
 /**
  *  @short Recent files action
  *
@@ -150,6 +152,8 @@ public:
      *  Retrieve a list of all URLs in the recent files list.
      */
     QList<QUrl> urls() const;
+
+    void setUrlIcon(const QUrl &url, const QIcon &icon);
 
 Q_SIGNALS:
     /**

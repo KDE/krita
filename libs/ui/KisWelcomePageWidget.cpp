@@ -5,6 +5,7 @@
  */
 
 #include "KisWelcomePageWidget.h"
+#include "KisRecentDocumentsModelWrapper.h"
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QMimeData>
@@ -106,11 +107,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
     recentDocumentsListView->installEventFilter(this);
-
-    connect(&m_recentFilesModel, SIGNAL(sigInvalidDocumentForIcon(QUrl)),
-            this, SLOT(slotReportInvalidRecentDocument(QUrl)));
-    connect(&m_recentFilesModel, SIGNAL(sigModelIsUpToDate()),
-            this, SLOT(slotRecentFilesModelIsUpToDate()));
 
     // set up URLs that go to web browser
     devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
@@ -235,6 +231,16 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     newsWidget->setVisible(m_checkUpdates);
 
     setAcceptDrops(true);
+
+    constexpr const int visibleRecentItemsCount = 5;
+    const int listHeight = visibleRecentItemsCount * (KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH + recentDocumentsListView->spacing() * 2);
+    recentDocumentsListView->setFixedHeight(listHeight);
+    recentDocsFrame->setFixedHeight(listHeight + 2);
+
+    recentItemDelegate.reset(new RecentItemDelegate(this));
+    recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
+    recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
+    recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -267,6 +273,10 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         // allows RSS news items to apply analytics tracking.
         newsWidget->setAnalyticsTracking("?" + analyticsString);
 
+        KisRecentDocumentsModelWrapper *recentFilesModel = mainWin->recentFilesModel();
+        connect(recentFilesModel, SIGNAL(sigModelIsUpToDate()),
+                this, SLOT(slotRecentFilesModelIsUpToDate()));
+        recentDocumentsListView->setModel(&recentFilesModel->model());
     }
 }
 
@@ -393,27 +403,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
 #endif
 }
-
-constexpr const int maxRecentItemsCount = 5;
-void KisWelcomePageWidget::populateRecentDocuments()
-{
-    const int itemSquareSideSize = recentDocumentsListView->height() / maxRecentItemsCount
-            - recentDocumentsListView->spacing() * 2;
-    const QSize iconSize(itemSquareSideSize, itemSquareSideSize);
-    using URLs=QList<QUrl>;
-    const URLs &recentFileUrls = m_mainWindow->recentFilesUrls();
-
-    m_recentFilesModel.setFiles(recentFileUrls, iconSize, devicePixelRatioF());
-
-    if (!recentItemDelegate) {
-        recentItemDelegate.reset(new RecentItemDelegate(this));
-        recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
-    }
-    recentItemDelegate->setItemHeight(itemSquareSideSize);
-    recentDocumentsListView->setModel(&m_recentFilesModel.model());
-    recentDocumentsListView->setIconSize(iconSize);
-}
-
 
 #ifdef Q_OS_ANDROID
 void KisWelcomePageWidget::slotStartDonationFlow()
@@ -637,14 +626,11 @@ void KisWelcomePageWidget::slotOpenFileClicked()
 {
     m_mainWindow->slotFileOpen();
 }
-void KisWelcomePageWidget::slotReportInvalidRecentDocument(QUrl url)
-{
-    m_mainWindow->removeRecentUrl(url);
-}
 
 void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()
 {
-    const bool modelIsEmpty = m_recentFilesModel.model().rowCount() == 0;
+    KisRecentDocumentsModelWrapper *recentFilesModel = m_mainWindow->recentFilesModel();
+    const bool modelIsEmpty = recentFilesModel->model().rowCount() == 0;
 
     labelNoRecentDocs->setVisible(modelIsEmpty);
     recentDocumentsListView->setVisible(!modelIsEmpty);

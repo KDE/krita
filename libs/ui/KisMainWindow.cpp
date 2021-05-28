@@ -2044,6 +2044,7 @@ void KisMainWindow::importVideoAnimation()
         const int totalFrames = files.size() * step;
         const QString name = QFileInfo(documentInfoList[3]).fileName();
         const bool useCurrentDocument = documentInfoList[4].toInt();
+        bool useDocumentColorSpace = false;
 
         if ( useCurrentDocument ) {
             document = activeView()->document();
@@ -2063,6 +2064,7 @@ void KisMainWindow::importVideoAnimation()
             const QString colorModel = documentInfoList[8];
             const QString colorDepth = documentInfoList[9];
             const QString profile = documentInfoList[10];
+            useDocumentColorSpace = profile != "Default";
 
             document = KisPart::instance()->createDocument();
             document->setObjectName(name);
@@ -2093,7 +2095,7 @@ void KisMainWindow::importVideoAnimation()
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        KisImportExportErrorCode status = importer.import(files, firstFrame, step);
+        KisImportExportErrorCode status = importer.import(files, firstFrame, step, false, false, 0, useDocumentColorSpace);
 
         dlg.cleanupWorkDir();
 

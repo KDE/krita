@@ -14,6 +14,7 @@
 #include <QDir>
 #include <QJsonObject>
 #include "KoDialog.h"
+#include <KoColorProfileConstants.h>
 #include "KisView.h"
 #include "kis_properties_configuration.h"
 #include "ui_VideoImportDialog.h"
@@ -33,6 +34,9 @@ struct KisBasicVideoInfo
     QString encoding;
     QString pixFormat;
     bool hasOverriddenFPS = 0;
+    ColorPrimaries colorPrimaries = PRIMARIES_UNSPECIFIED;
+    TransferCharacteristics colorTransfer = TRC_UNSPECIFIED;
+    QString colorDepth = "";
 
 };
 

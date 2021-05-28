@@ -602,3 +602,99 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
     
     return ffmpegJsonObj;
 }
+
+ColorPrimaries KisFFMpegWrapper::colorPrimariesFromName(QString name)
+{
+    if (name == "bt709") {
+        return PRIMARIES_ITU_R_BT_709_5;
+    }
+    if (name == "bt470m") {
+        return PRIMARIES_ITU_R_BT_470_6_SYSTEM_M;
+    }
+    if (name == "bt470bg") {
+        return PRIMARIES_ITU_R_BT_470_6_SYSTEM_B_G;
+    }
+    if (name == "smpte170m") {
+        return PRIMARIES_ITU_R_BT_601_6;
+    }
+    if (name == "smpte240m") {
+        return PRIMARIES_SMPTE_240M;
+    }
+    if (name == "film") {
+        return PRIMARIES_GENERIC_FILM;
+    }
+    if (name == "bt2020") {
+        return PRIMARIES_ITU_R_BT_2020_2_AND_2100_0;
+    }
+    if (name.startsWith("smpte428")) {
+        return PRIMARIES_SMPTE_ST_428_1;
+    }
+    if (name == "smpte431") {
+        return PRIMARIES_SMPTE_RP_431_2;
+    }
+    if (name == "smpte432") {
+        return PRIMARIES_SMPTE_EG_432_1;
+    }
+    if (name == "jedec-p22") {
+        return PRIMARIES_EBU_Tech_3213_E;
+    }
+
+    return PRIMARIES_UNSPECIFIED;
+}
+
+TransferCharacteristics KisFFMpegWrapper::transferCharacteristicsFromName(QString name)
+{
+    if (name == "bt709") {
+        return TRC_ITU_R_BT_709_5;
+    }
+    if (name == "gamma22") {
+        return TRC_ITU_R_BT_470_6_SYSTEM_M;
+    }
+    if (name == "gamma28") {
+        return TRC_ITU_R_BT_470_6_SYSTEM_B_G;
+    }
+    if (name == "smpte170m") {
+        return TRC_ITU_R_BT_601_6;
+    }
+    if (name == "smpte240m") {
+        return TRC_SMPTE_240M;
+    }
+    if (name == "linear") {
+        return TRC_LINEAR;
+    }
+    if (name == "log" || name == "log100") {
+        return TRC_LOGARITHMIC_100;
+    }
+    if (name == "log316" || name == "log_sqrt") {
+        return TRC_LOGARITHMIC_100_sqrt10;
+    }
+    if (name == "iec61966_2_4" || name == "iec61966-2-4") {
+        return TRC_IEC_61966_2_4;
+    }
+    if (name.startsWith("bt1361")) {
+        return TRC_ITU_R_BT_1361;
+    }
+    if (name == "iec61966_2_1" || name == "iec61966-2-1") {
+        return TRC_IEC_61966_2_1;
+    }
+    if (name.startsWith("bt2020_10")) {
+        return TRC_ITU_R_BT_2020_2_10bit;
+    }
+    if (name.startsWith("bt2020_12")) {
+        return TRC_ITU_R_BT_2020_2_12bit;
+    }
+    if (name == "smpte2084") {
+        return TRC_ITU_R_BT_2100_0_PQ;
+    }
+    if (name == "smpte240m") {
+        return TRC_SMPTE_240M;
+    }
+    if (name.startsWith("smpte428")) {
+        return TRC_SMPTE_ST_428_1;
+    }
+    if (name == "arib-std-b67") {
+        return TRC_ITU_R_BT_2100_0_HLG;
+    }
+
+    return TRC_UNSPECIFIED;
+}

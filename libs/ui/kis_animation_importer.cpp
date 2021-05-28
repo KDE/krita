@@ -49,7 +49,7 @@ KisAnimationImporter::KisAnimationImporter(KisDocument* document)
 KisAnimationImporter::~KisAnimationImporter()
 {}
 
-KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int firstFrame, int step, bool autoAddHoldframes, bool startfrom0, int isAscending)
+KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int firstFrame, int step, bool autoAddHoldframes, bool startfrom0, int isAscending, bool assignDocumentProfile)
 {
     Q_ASSERT(step > 0);
 
@@ -67,6 +67,7 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
         m_d->updater->setRange(0, files.size());
     }
 
+    KisPaintLayerSP paintLayer = 0;
     KisRasterKeyframeChannel *contentChannel = 0;
 
     const QRegExp rx(QLatin1String("(\\d+)"));    //regex for extracting numbers
@@ -107,7 +108,7 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
 
         if (frame == firstFrame) {
             const KoColorSpace *cs = importDoc->image()->colorSpace();
-            KisPaintLayerSP paintLayer = new KisPaintLayer(m_d->image, m_d->image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
+            paintLayer = new KisPaintLayer(m_d->image, m_d->image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
             undo->addCommand(new KisImageLayerAddCommand(m_d->image, paintLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount()));
 
             paintLayer->enableAnimation();
@@ -160,6 +161,12 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
 
         frame += step;
         filesProcessed++;
+    }
+
+    if (paintLayer && assignDocumentProfile) {
+        if (paintLayer->colorSpace()->colorModelId() == m_d->image->colorSpace()->colorModelId()) {
+            m_d->image->assignLayerProfile(paintLayer, m_d->image->colorSpace()->profile());
+        }
     }
 
     undo->endMacro();

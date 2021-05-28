@@ -24,7 +24,13 @@ public:
     KisAnimationImporter(KisDocument* document);
     ~KisAnimationImporter() override;
 
-    KisImportExportErrorCode import(QStringList files, int firstFrame, int step, bool autoAddHoldframes = false , bool startfrom0 = false, int isAscending = 0);
+    KisImportExportErrorCode import(QStringList files
+                                    , int firstFrame
+                                    , int step
+                                    , bool autoAddHoldframes = false
+                                    , bool startfrom0 = false
+                                    , int isAscending = 0
+                                    , bool assignDocumentProfile = false);
 
 private Q_SLOTS:
     void cancel();

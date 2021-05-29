@@ -99,7 +99,7 @@ public:
             case RecorderFormat::JPEG:
                 index = 0;
                 title = i18nc("Title for label. JPEG Quality level", "Quality:");
-                hint = i18n("Greater value will produce a larger file and a better quality. Doesn't affect CPU consumption.\nValues lower than 50 are not recommended due to high artifacts");
+                hint = i18nc("@tooltip", "Greater value will produce a larger file and a better quality. Doesn't affect CPU consumption.\nValues lower than 50 are not recommended due to high artifacts");
                 minValue = 1;
                 maxValue = 100;
                 suffix = "%";
@@ -108,7 +108,7 @@ public:
             case RecorderFormat::PNG:
                 index = 1;
                 title = i18nc("Title for label. PNG Compression level", "Compression:");
-                hint = i18n("Greater value will produce a smaller file and affect a higher CPU consumption. Doesn't affect quality.\nZero value is not recommended due to high disk space consumtion.\nValues upper than 3 are not recommended due to high performance impact.");
+                hint = i18nc("@tooltip", "Greater value will produce a smaller file but will require more from your CPU. Doesn't affect quality.\nCompression set to 0 is not recommended due to high disk space consumption.\nValues above 3 are not recommended due to high performance impact.");
                 minValue = 0;
                 maxValue = 5;
                 suffix = "";

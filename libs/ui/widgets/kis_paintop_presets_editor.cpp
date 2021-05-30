@@ -60,11 +60,9 @@ public:
     KisCanvasResourceProvider *resourceProvider;
     KisFavoriteResourceManager *favoriteResManager;
 
-    bool detached;
     bool ignoreHideEvents;
     bool isCreatingBrushFromScratch = false;
     QSize minimumSettingsWidgetSize;
-    QRect detachedGeometry;
 
     KisSignalAutoConnectionsStore widgetConnections;
 };
@@ -271,11 +269,9 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()), SLOT(slotUpdatePresetSettings()));
 
-    m_d->detached = false;
     m_d->ignoreHideEvents = false;
     m_d->minimumSettingsWidgetSize = QSize(0, 0);
 
-    m_d->detachedGeometry = QRect(100, 100, 0, 0);
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox->setChecked(cfg.useDirtyPresets());
     m_d->uiWdgPaintOpPresetSettings.eraserBrushSizeCheckBox->setChecked(cfg.useEraserBrushSize());
     m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox->setChecked(cfg.useEraserBrushOpacity());
@@ -508,27 +504,6 @@ void KisPaintOpPresetsEditor::contextMenuEvent(QContextMenuEvent *e)
     Q_UNUSED(e);
 }
 
-void KisPaintOpPresetsEditor::switchDetached(bool show)
-{
-    if (parentWidget()) {
-
-        m_d->detached = !m_d->detached;
-
-        if (m_d->detached) {
-            m_d->ignoreHideEvents = true;
-
-            if (show) {
-                parentWidget()->show();
-            }
-            m_d->ignoreHideEvents = false;
-
-        }
-        else {
-            parentWidget()->hide();
-        }
-    }
-}
-
 void KisPaintOpPresetsEditor::setCreatingBrushFromScratch(bool enabled)
 {
     m_d->isCreatingBrushFromScratch = enabled;
@@ -646,18 +621,11 @@ void KisPaintOpPresetsEditor::hideEvent(QHideEvent *event)
     if (m_d->ignoreHideEvents) {
         return;
     }
-    if (m_d->detached) {
-        m_d->detachedGeometry = window()->geometry();
-    }
     QWidget::hideEvent(event);
 }
 
 void KisPaintOpPresetsEditor::showEvent(QShowEvent *)
 {
-    if (m_d->detached) {
-        window()->setGeometry(m_d->detachedGeometry);
-    }
-
     emit brushEditorShown();
 }
 
@@ -670,11 +638,6 @@ void KisPaintOpPresetsEditor::resizeEvent(QResizeEvent* event)
         QRect newPositionRect = kisEnsureInRect(parentWidget()->geometry(), screenRect);
         parentWidget()->setGeometry(newPositionRect);
     }
-}
-
-bool KisPaintOpPresetsEditor::detached() const
-{
-    return m_d->detached;
 }
 
 void KisPaintOpPresetsEditor::slotSwitchScratchpad(bool visible)

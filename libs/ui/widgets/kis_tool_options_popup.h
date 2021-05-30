@@ -16,15 +16,11 @@ public:
     explicit KisToolOptionsPopup(QWidget *parent = 0);
     ~KisToolOptionsPopup() override;
 
-    bool detached() const;
-
     void newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
 
 Q_SIGNALS:
 
 public Q_SLOTS:
-
-    void switchDetached(bool show = true);
 
 protected:
     void contextMenuEvent(QContextMenuEvent *) override;

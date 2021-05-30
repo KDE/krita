@@ -30,9 +30,7 @@ struct KisToolOptionsPopup::Private
 {
 public:
     QFont smallFont;
-    bool detached;
     bool ignoreHideEvents;
-    QRect detachedGeometry;
 
     QList<QPointer<QWidget> > currentWidgetList;
     QSet<QWidget *> currentAuxWidgets;
@@ -108,7 +106,6 @@ KisToolOptionsPopup::KisToolOptionsPopup(QWidget *parent)
     KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     setFont(KoDockRegistry::dockFont());
 
-    d->detached = true;
     d->ignoreHideEvents = false;
 
     d->housekeeperLayout = new QGridLayout(this);
@@ -131,10 +128,7 @@ void KisToolOptionsPopup::newOptionWidgets(const QList<QPointer<QWidget> > &opti
 
 void KisToolOptionsPopup::contextMenuEvent(QContextMenuEvent *e) {
 
-    QMenu menu(this);
-    QAction* action = menu.addAction(d->detached ? i18n("Attach to Toolbar") : i18n("Detach from Toolbar"));
-    connect(action, SIGNAL(triggered()), this, SLOT(switchDetached()));
-    menu.exec(e->globalPos());
+    Q_UNUSED(e);
 }
 
 void KisToolOptionsPopup::hideEvent(QHideEvent *event)
@@ -142,38 +136,9 @@ void KisToolOptionsPopup::hideEvent(QHideEvent *event)
     if (d->ignoreHideEvents) {
         return;
     }
-    if (d->detached) {
-        d->detachedGeometry = window()->geometry();
-    }
     QWidget::hideEvent(event);
 }
 
 void KisToolOptionsPopup::showEvent(QShowEvent *)
 {
-    if (d->detached) {
-        window()->setGeometry(d->detachedGeometry);
-    }
 }
-
-void KisToolOptionsPopup::switchDetached(bool show)
-{
-    if (parentWidget()) {
-        d->detached = !d->detached;
-
-        if (d->detached) {
-            d->ignoreHideEvents = true;
-
-            if (show) {
-                parentWidget()->show();
-            }
-            d->ignoreHideEvents = false;
-        }
-        else {
-            parentWidget()->hide();
-        }
-
-        KisConfig cfg(false);
-        cfg.setToolOptionsPopupDetached(d->detached);
-    }
-}
-

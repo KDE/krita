@@ -424,7 +424,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopup = new KisToolOptionsPopup();
         m_toolOptionsPopupButton->setPopupWidget(m_toolOptionsPopup);
-        m_toolOptionsPopup->switchDetached(false);
     }
 
 

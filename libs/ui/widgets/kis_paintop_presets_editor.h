@@ -60,8 +60,6 @@ public:
 
     void resizeEvent(QResizeEvent* ) override;
 
-    bool detached() const;
-
     void updateViewSettings();
 
     void currentPresetChanged(KisPaintOpPresetSP  preset);
@@ -77,7 +75,6 @@ protected:
     void showEvent(QShowEvent *) override;
 
 public Q_SLOTS:
-    void switchDetached(bool show = true);
     void resourceSelected(KoResourceSP resource);
     void updateThemedIcons();
 

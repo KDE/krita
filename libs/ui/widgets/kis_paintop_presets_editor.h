@@ -101,6 +101,7 @@ Q_SIGNALS:
     void eraserBrushOpacityToggled(bool value);
     void brushEditorShown();
     void createPresetFromScratch(const QString& paintOpName);
+    void toggleDetachState(bool detach);
 
 private Q_SLOTS:
     void slotSwitchScratchpad(bool visible);
@@ -112,6 +113,7 @@ private Q_SLOTS:
     void slotSwitchShowPresets(bool visible);
     void slotSaveBrushPreset();
     void slotSaveNewBrushPreset();
+    void slotToggleDetach(bool detach);
 
     /// we do not delete brushe presets, but blacklist them so they disappear from the interface
     void slotBlackListCurrentPreset();
@@ -130,26 +132,5 @@ private:
 
     void toggleBrushRenameUIActive(bool isRenaming);
 };
-
-class KisPaintOpPresetsEditorDialog : public KoDialog
-{
-    Q_OBJECT
-
-public:
-    KisPaintOpPresetsEditorDialog(KisCanvasResourceProvider * resourceProvider,
-                           KisFavoriteResourceManager* favoriteResourceManager,
-                           KisPresetSaveWidget* savePresetWidget,
-                           QWidget * parent = 0);
-
-
-
-    KisPaintOpPresetsEditor*  m_popupWidget {0};
-    ~KisPaintOpPresetsEditorDialog() override;
-
-    KisPaintOpPresetsEditor* editorWidget() { return m_popupWidget; }
-
-};
-
-
 
 #endif

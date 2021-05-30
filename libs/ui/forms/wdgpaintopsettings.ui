@@ -624,7 +624,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0">
         <property name="spacing">
          <number>5</number>
         </property>
@@ -714,6 +714,13 @@
             <width>60</width>
             <height>0</height>
            </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="viewOptionButton">
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </item>

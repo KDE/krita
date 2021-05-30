@@ -12,20 +12,62 @@
 #include <QDesktopWidget>
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QKeyEvent>
 #include <QStyleOption>
 #include <QStylePainter>
 
 #include "kis_global.h"
 #include <kis_debug.h>
 
+
+class KisPopupButtonFrame : public QFrame
+{
+public:
+    KisPopupButtonFrame(QWidget *parent, bool detach)
+        : QFrame(parent)
+    {
+        setDetached(detach);
+    }
+
+    void setDetached(bool detach)
+    {
+        // Need to destroy the platform window before changing window flags
+        // so that Qt knows to actually apply the new flags...
+        // At least on Windows, not doing this may result in weird window drop
+        // shadows.
+        destroy();
+        if (detach) {
+            setWindowFlags(Qt::Dialog);
+            setFrameStyle(QFrame::NoFrame);
+        } else {
+            setWindowFlags(Qt::Popup);
+            setFrameStyle(QFrame::Box | QFrame::Plain);
+        }
+    }
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override
+    {
+        if (event->matches(QKeySequence::Cancel)) {
+            event->accept();
+            hide();
+        } else {
+            QFrame::keyPressEvent(event);
+        }
+    }
+};
+
+
 struct KisPopupButton::Private {
     Private()
-        : frameLayout(0)
+        : frameLayout(nullptr)
     {}
-    QScopedPointer<QFrame> frame;
+    QPointer<KisPopupButtonFrame> frame;
     QPointer<QWidget> popupWidget;
     QPointer<QHBoxLayout> frameLayout;
-    bool arrowVisible = true;
+    bool arrowVisible { true };
+    bool isPopupDetached { false };
+    bool isDetachedGeometrySet { false };
 };
 
 KisPopupButton::KisPopupButton(QWidget* parent)
@@ -38,32 +80,34 @@ KisPopupButton::KisPopupButton(QWidget* parent)
 
 KisPopupButton::~KisPopupButton()
 {
+    delete m_d->frame;
     delete m_d;
 }
 
-void KisPopupButton::setAlwaysVisible(bool v)
+void KisPopupButton::setPopupWidgetDetached(bool detach)
 {
-    if (v) {
-        m_d->frame->setFrameStyle(Qt::SubWindow);
-        showPopupWidget();
-    } else {
-        m_d->frame->setFrameStyle(Qt::Popup);
+    m_d->isPopupDetached = detach;
+    if (m_d->frame) {
+        bool wasVisible = isPopupWidgetVisible();
+        m_d->frame->setDetached(detach);
+        if (wasVisible) {
+            // Setting the window flags closes the widget, so make it visible again.
+            setPopupWidgetVisible(true);
+            if (detach) {
+                m_d->isDetachedGeometrySet = true;
+            }
+            adjustPosition();
+        }
     }
 }
 
 void KisPopupButton::setPopupWidget(QWidget* widget)
 {
     if (widget) {
-        /**
-         * Set parent explicitly to null to avoid propagation of the
-         * ignored events (specifically, QEvent::ShortcutOverride) to
-         * the view object. This avoids starting global actions while
-         * the PopUp is active. See bug 329842.
-         */
-        m_d->frame.reset(new QFrame(0));
+        delete m_d->frame;
+        m_d->frame = new KisPopupButtonFrame(this->window(), m_d->isPopupDetached);
         m_d->frame->setObjectName("popup frame");
-        m_d->frame->setFrameStyle(QFrame::Box | QFrame::Plain);
-        m_d->frame->setWindowFlags(Qt::Popup);
+        m_d->frame->setWindowTitle(widget->windowTitle());
         m_d->frameLayout = new QHBoxLayout(m_d->frame.data());
         m_d->frameLayout->setMargin(0);
         m_d->frameLayout->setSizeConstraint(QLayout::SetFixedSize);
@@ -82,21 +126,34 @@ void KisPopupButton::setPopupWidgetWidth(int w)
 void KisPopupButton::showPopupWidget()
 {
     if (m_d->popupWidget && !m_d->frame->isVisible()) {
-        m_d->frame->raise();
-        m_d->frame->show();
-        m_d->frame->activateWindow();
+        setPopupWidgetVisible(true);
         adjustPosition();
-    }
-    else {
+    } else {
         hidePopupWidget();
     }
 }
 
 void KisPopupButton::hidePopupWidget()
 {
+    setPopupWidgetVisible(false);
+}
+
+void KisPopupButton::setPopupWidgetVisible(bool visible)
+{
     if (m_d->popupWidget) {
-        m_d->frame->setVisible(false);
+        if (visible) {
+            m_d->frame->raise();
+            m_d->frame->show();
+            m_d->frame->activateWindow();
+        } else {
+            m_d->frame->setVisible(false);
+        }
     }
+}
+
+bool KisPopupButton::isPopupWidgetVisible()
+{
+    return m_d->popupWidget && m_d->frame->isVisible();
 }
 
 void KisPopupButton::paintEvent ( QPaintEvent * event  )
@@ -128,6 +185,14 @@ void KisPopupButton::adjustPosition()
     // Get the available geometry of the screen which contains this KisPopupButton
     QDesktopWidget* desktopWidget = QApplication::desktop();
     QRect screenRect = desktopWidget->availableGeometry(this);
+    if (m_d->isPopupDetached) {
+        if (m_d->isDetachedGeometrySet) {
+            popupRect.moveTo(m_d->frame->geometry().topLeft());
+        } else {
+            popupRect.moveTo(this->window()->geometry().center() - QRect(QPoint(0, 0), popSize).center());
+            m_d->isDetachedGeometrySet = true;
+        }
+    }
     popupRect = kisEnsureInRect(popupRect, screenRect);
 
     m_d->frame->setGeometry(popupRect);

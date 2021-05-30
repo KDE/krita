@@ -108,8 +108,7 @@ KisToolOptionsPopup::KisToolOptionsPopup(QWidget *parent)
     KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     setFont(KoDockRegistry::dockFont());
 
-    KisConfig cfg(true);
-    d->detached = !cfg.paintopPopupDetached();
+    d->detached = true;
     d->ignoreHideEvents = false;
 
     d->housekeeperLayout = new QGridLayout(this);

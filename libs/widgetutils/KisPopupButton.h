@@ -32,13 +32,6 @@ public:
     void setPopupWidget(QWidget* widget);
 
     /**
-     * This function allow to force the popup to be visible.
-     * @param v set to true to force the popup to be visible, set to false
-     *          to allow the popup to be hidden
-     */
-    void setAlwaysVisible(bool v);
-
-    /**
      * Set the width of the popup widget.
      * @return new width of the popup widget
      */
@@ -57,11 +50,21 @@ public:
      */
     void setArrowVisible(bool v);
 
+    bool isPopupWidgetVisible();
+
 public Q_SLOTS:
 
     void showPopupWidget();
 
     void hidePopupWidget();
+
+    void setPopupWidgetVisible(bool visible);
+
+    /**
+     * Set whether the popup is detached as a dialog.
+     * @param v set to true to cause the popup to be detached
+     */
+    void setPopupWidgetDetached(bool detach);
 
 protected:
     void paintEvent(QPaintEvent* event) override;

@@ -41,7 +41,6 @@ class KisPopupButton;
 class KisIconWidget;
 class KisToolOptionsPopup;
 class KisPaintOpPresetsEditor;
-class KisPaintOpPresetsEditorDialog;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpConfigWidget;
 class KisCompositeOpComboBox;
@@ -190,7 +189,7 @@ private:
     QToolButton*                        m_vMirrorButton {0};
     QToolButton*                        m_wrapAroundButton {0};
     KisToolOptionsPopup*                m_toolOptionsPopup {0};
-    KisPaintOpPresetsEditorDialog*      m_presetsEditor {0};
+    KisPaintOpPresetsEditor*            m_presetsEditor {0};
     KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup {0};
     KisViewManager*                     m_viewManager {0};
     KisPopupButton*                     m_workspaceWidget {0};

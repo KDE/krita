@@ -79,6 +79,8 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     setObjectName("KisPaintOpPresetsPopup");
     setFont(KoDockRegistry::dockFont());
 
+    KisConfig cfg(true);
+
     current_paintOpId = "";
 
     m_d->resourceProvider = resourceProvider;
@@ -128,7 +130,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
-    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig(true).presetChooserViewMode();
+    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)cfg.presetChooserViewMode();
 
     QAction* action = menu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
@@ -170,8 +172,6 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
     // show/hide buttons
 
-    KisConfig cfg(true);
-
     m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setCheckable(true);
     m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(cfg.scratchpadVisible());
 
@@ -185,6 +185,11 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setChecked(false);
     slotSwitchShowPresets(false); // hide presets by default
 
+    QMenu *viewOptionsMenu = new QMenu(this);
+    QAction *detachBrushEditorAction = viewOptionsMenu->addAction(i18n("Detach Brush Editor"));
+    detachBrushEditorAction->setCheckable(true);
+    detachBrushEditorAction->setChecked(cfg.paintopPopupDetached());
+    m_d->uiWdgPaintOpPresetSettings.viewOptionButton->setMenu(viewOptionsMenu);
 
     // Connections
     connect(m_d->uiWdgPaintOpPresetSettings.paintPresetIcon, SIGNAL(clicked()),
@@ -216,6 +221,9 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
 
     connect(m_d->uiWdgPaintOpPresetSettings.showPresetsButton, SIGNAL(clicked(bool)), this, SLOT(slotSwitchShowPresets(bool)));
+
+    connect(detachBrushEditorAction, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggleDetach(bool)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));
@@ -518,9 +526,6 @@ void KisPaintOpPresetsEditor::switchDetached(bool show)
         else {
             parentWidget()->hide();
         }
-
-        KisConfig cfg(false);
-        cfg.setPaintopPopupDetached(m_d->detached);
     }
 }
 
@@ -748,6 +753,13 @@ void KisPaintOpPresetsEditor::slotSaveNewBrushPreset() {
     saveDialog->showDialog();
 }
 
+void KisPaintOpPresetsEditor::slotToggleDetach(bool detach)
+{
+    emit toggleDetachState(detach);
+    KisConfig cfg(false);
+    cfg.setPaintopPopupDetached(detach);
+}
+
 void KisPaintOpPresetsEditor::slotCreateNewBrushPresetEngine()
 {
     emit createPresetFromScratch(sender()->objectName());
@@ -768,6 +780,8 @@ void KisPaintOpPresetsEditor::currentPresetChanged(KisPaintOpPresetSP preset)
 
 void KisPaintOpPresetsEditor::updateThemedIcons()
 {
+    m_d->uiWdgPaintOpPresetSettings.viewOptionButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KisIconUtils::loadIcon("document-new"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();
@@ -836,18 +850,4 @@ void KisPaintOpPresetsEditor::slotUpdatePresetSettings()
         m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setCurrentPreset(m_d->resourceProvider->currentPreset());
         m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->requestUpdateStroke();
     }
-}
-
-KisPaintOpPresetsEditorDialog::KisPaintOpPresetsEditorDialog(KisCanvasResourceProvider *resourceProvider, KisFavoriteResourceManager *favoriteResourceManager,
-                                                           KisPresetSaveWidget *savePresetWidget, QWidget *parent)
-    : KoDialog(parent)
-{
-    m_popupWidget = new KisPaintOpPresetsEditor(resourceProvider, favoriteResourceManager, savePresetWidget, 0);
-    setMainWidget(m_popupWidget);
-    setButtons(KoDialog::Close);
-}
-
-KisPaintOpPresetsEditorDialog::~KisPaintOpPresetsEditorDialog()
-{
-
 }

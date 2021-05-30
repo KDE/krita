@@ -370,5 +370,11 @@
         <file>mirrorAxis-HorizontalMove.svg</file>
         <file>mirrorAxis-VerticalMove.svg</file>
         <file>support-krita.svg</file>
+        <file>dark_sort-by-value.svg</file>
+        <file>light_sort-by-value.svg</file>
+        <file>dark_sort-by-hue.svg</file>
+        <file>light_sort-by-hue.svg</file>
+        <file>dark_cut-item.svg</file>
+        <file>light_cut-item.svg</file>
     </qresource>
 </RCC>

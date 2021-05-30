@@ -285,6 +285,8 @@ set(kritaui_LIB_SRCS
     widgets/gradient/KisSegmentGradientSlider.cpp
     widgets/gradient/KisGradientChooser.cpp
     widgets/gradient/KisGenericGradientEditor.cpp
+    widgets/gradient/KisGradientWidgetsUtils.cpp
+    widgets/gradient/KisGradientColorEditor.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp

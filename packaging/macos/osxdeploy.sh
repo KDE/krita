@@ -89,9 +89,9 @@ KRITA_DMG_TEMPLATE=${BUILDROOT}/kritadmg-template
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 
 # flags for OSX environment
-# We only support from 10.11 up
-export MACOSX_DEPLOYMENT_TARGET=10.11
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
+# We only support from 10.13 up
+export MACOSX_DEPLOYMENT_TARGET=10.13
+export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
 
 
 print_usage () {

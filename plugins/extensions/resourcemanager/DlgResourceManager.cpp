@@ -82,7 +82,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     connect(m_ui->btnCreateBundle, SIGNAL(clicked(bool)), SLOT(slotCreateBundle()));
     connect(m_ui->btnOpenResourceFolder, SIGNAL(clicked(bool)), SLOT(slotOpenResourceFolder()));
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
-    connect(m_ui->btnDeleteBackupFiles, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
+    connect(m_ui->btnExtractTagsToResourceFolder, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
 
     connect(m_ui->lneFilterText, SIGNAL(textChanged(const QString&)), SLOT(slotFilterTextChanged(const QString&)));
     connect(m_ui->chkShowDeleted, SIGNAL(stateChanged(int)), SLOT(slotShowDeletedChanged(int)));

@@ -5,6 +5,7 @@
     SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
     SPDX-FileCopyrightText: 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
     SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+    SPDX-FileCopyrightText: 2021 Deif Lou <ginoba@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -567,7 +568,7 @@ void KoGradientSegment::colorAt(KoColor& dst, qreal t) const
     if (m_length < DBL_EPSILON) {
         segmentT = 0.5;
     } else {
-        segmentT = (t - m_start.offset) / m_length;
+        segmentT = qBound(0.0, (t - m_start.offset) / m_length, 1.0);
     }
 
     qreal colorT = m_interpolator->valueAt(segmentT, m_middleT);
@@ -1008,6 +1009,47 @@ KoGradientSegment* KoSegmentGradient::removeSegment(KoGradientSegment* segment)
         delete segment;
         m_segments.erase(it);
         return nextSegment;
+    }
+    return 0;
+}
+
+KoGradientSegment* KoSegmentGradient::collapseSegment(KoGradientSegment* segment)
+{
+    Q_ASSERT(segment != 0);
+    if (m_segments.count() < 2)
+        return 0;
+    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
+    if (it != m_segments.end()) {
+        double nextMiddlePostionPercentage, prevMiddlePostionPercentage;
+        KoGradientSegment *nextSegment, *prevSegment, *returnSegment;
+        if (it == m_segments.begin()) {
+            nextSegment = (*(it + 1));
+            nextMiddlePostionPercentage = (nextSegment->middleOffset() - nextSegment->startOffset()) / nextSegment->length();
+            nextSegment->setStartOffset(segment->startOffset());
+            nextSegment->setMiddleOffset(nextMiddlePostionPercentage * nextSegment->length() + nextSegment->startOffset());
+            returnSegment = nextSegment;
+        } else if (it == m_segments.end() - 1) {
+            prevSegment = (*(it - 1));
+            prevMiddlePostionPercentage = (prevSegment->middleOffset() - prevSegment->startOffset()) / prevSegment->length();
+            prevSegment->setEndOffset(segment->endOffset());
+            prevSegment->setMiddleOffset(prevMiddlePostionPercentage * prevSegment->length() + prevSegment->startOffset());
+            returnSegment = prevSegment;
+        } else {
+            prevSegment = (*(it - 1));
+            nextSegment = (*(it + 1));
+            prevMiddlePostionPercentage = (prevSegment->middleOffset() - prevSegment->startOffset()) / prevSegment->length();
+            nextMiddlePostionPercentage = (nextSegment->middleOffset() - nextSegment->startOffset()) / nextSegment->length();
+            qreal offset = (segment->startOffset() + segment->endOffset()) / 2.0;
+            prevSegment->setEndOffset(offset);
+            prevSegment->setMiddleOffset(prevMiddlePostionPercentage * prevSegment->length() + prevSegment->startOffset());
+            nextSegment->setStartOffset(offset);
+            nextSegment->setMiddleOffset(nextMiddlePostionPercentage * nextSegment->length() + nextSegment->startOffset());
+            returnSegment = prevSegment;
+        }
+
+        delete segment;
+        m_segments.erase(it);
+        return returnSegment;
     }
     return 0;
 }

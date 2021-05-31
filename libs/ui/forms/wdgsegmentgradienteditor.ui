@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -10,21 +10,33 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>250</height>
+    <width>562</width>
+    <height>339</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>500</width>
-    <height>250</height>
-   </size>
-  </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,0">
+   <property name="spacing">
+    <number>10</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>5</number>
+     </property>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="lblName">
        <property name="text">
         <string>Name:</string>
        </property>
@@ -36,442 +48,532 @@
     </layout>
    </item>
    <item>
-    <widget class="KisSegmentGradientSlider" name="gradientSlider" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
-     </property>
+    <widget class="QWidget" name="buttonsContainer" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QToolButton" name="selectPreviousHandleButton"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="selectNextHandleButton"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="selectedHandleLabel">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="segmentButtonsContainer" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="deleteSegmentButton"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="flipSegmentButton"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="splitSegmentButton"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="duplicateSegmentButton"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="stopButtonsContainer" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="deleteStopButton"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="centerStopButton"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="midPointButtonsContainer" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="centerMidPointButton"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QToolButton" name="flipGradientButton"/>
+      </item>
+      <item>
+       <widget class="QToolButton" name="distributeSegmentsEvenlyButton"/>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <item column="0" row="1">
-      <widget class="QLabel" name="labelLeftColor">
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="text">
-        <string>Left:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item column="2" row="1">
-      <widget class="KisColorButton" name="leftColorButton">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="KisSegmentGradientSlider" name="gradientSlider" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
+         <verstretch>1</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
       </widget>
      </item>
-     <item column="1" row="1">
-      <widget class="QRadioButton" name="leftColorRadioButton">
-       <property name="text">
-        <string>Color</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">leftBtnGroup</string>
-       </attribute>
-      </widget>
-     </item>
-     <item column="0" row="4">
-      <widget class="QLabel" name="labelRightColor">
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="text">
-        <string>Right:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="4">
-      <widget class="QRadioButton" name="rightColorRadioButton">
-       <property name="text">
-        <string>Color</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rightBtnGroup</string>
-       </attribute>
-      </widget>
-     </item>
-     <item column="1" row="5">
-      <widget class="QRadioButton" name="rightForegroundRadioButton">
-       <property name="text">
-        <string>Foreground</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rightBtnGroup</string>
-       </attribute>
-      </widget>
-     </item>
-     <item column="2" row="4">
-      <widget class="KisColorButton" name="rightColorButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-      </widget>
-     </item>
-     <item column="3" row="0">
-      <widget class="QLabel" name="textLabel2">
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="text">
-        <string>Opacity:</string>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="3">
-      <widget class="QRadioButton" name="leftBackgroundRadioButton">
-       <property name="text">
-        <string>Background</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">leftBtnGroup</string>
-       </attribute>
-      </widget>
-     </item>
-     <item column="3" row="4">
-      <widget class="KisIntParseSpinBox" name="intNumInputRightOpacity">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="value">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="2">
-      <widget class="QRadioButton" name="leftForegroundRadioButton">
-       <property name="text">
-        <string>Foreground</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">leftBtnGroup</string>
-       </attribute>
-      </widget>
-     </item>
-     <item colspan="3" column="0" row="0">
-      <widget class="QLabel" name="textLabel1">
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="text">
-        <string>Segment Color</string>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="6">
-      <widget class="QRadioButton" name="rightBackgroundRadioButton">
-       <property name="text">
-        <string>Background</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rightBtnGroup</string>
-       </attribute>
-      </widget>
-     </item>
-     <item column="3" row="1">
-      <widget class="KisIntParseSpinBox" name="intNumInputLeftOpacity">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="value">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-     <item column="2" row="2">
-      <widget class="QCheckBox" name="leftForegroundTransparent">
-       <property name="text">
-        <string>Transparent</string>
-       </property>
-      </widget>
-     </item>
-     <item column="2" row="3">
-      <widget class="QCheckBox" name="leftBackgroundTransparent">
-       <property name="text">
-        <string>Transparent</string>
-       </property>
-      </widget>
-     </item>
-     <item column="2" row="5">
-      <widget class="QCheckBox" name="rightForegroundTransparent">
-       <property name="text">
-        <string>Transparent</string>
-       </property>
-      </widget>
-     </item>
-     <item column="2" row="6">
-      <widget class="QCheckBox" name="rightBackgroundTransparent">
-       <property name="text">
-        <string>Transparent</string>
-       </property>
+     <item>
+      <widget class="QWidget" name="compactModeButtonsContainer" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="compactModeSelectPreviousHandleButton"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="compactModeSelectNextHandleButton"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="compactModeMiscOptionsButton"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout">
-     <property name="leftMargin">
-      <number>0</number>
+    <widget class="QStackedWidget" name="handleEditorContainer">
+     <property name="currentIndex">
+      <number>3</number>
      </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+     <widget class="QWidget" name="handleEditorSegmentPage">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
+       <property name="leftMargin">
+        <number>0</number>
        </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBoxInterpolationType">
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
+       <property name="topMargin">
+        <number>0</number>
        </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
        </property>
        <item>
-        <property name="text">
-         <string comment="Gradient type - Linear">Linear</string>
-        </property>
+        <layout class="QFormLayout" name="formLayout">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+         </property>
+         <property name="horizontalSpacing">
+          <number>5</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>5</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string comment="Edit left side of segment in segment editor">Left Color:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="KisGradientColorEditor" name="segmentLeftEditor" native="true"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string comment="Edit right side of segment in segment editor">Right Color:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="KisGradientColorEditor" name="segmentRightEditor" native="true"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="interpolationLabel">
+           <property name="text">
+            <string comment="Edit interpolation of segment in segment editor">Interpolation:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout">
+           <property name="spacing">
+            <number>5</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QComboBox" name="segmentInterpolationTypeComboBox">
+             <property name="focusPolicy">
+              <enum>Qt::ClickFocus</enum>
+             </property>
+             <item>
+              <property name="text">
+               <string comment="Gradient type - Linear">Linear</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Curved</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Sine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Sphere Inc.</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Sphere Dec.</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="segmentColorInterpolationTypeComboBox">
+             <property name="focusPolicy">
+              <enum>Qt::ClickFocus</enum>
+             </property>
+             <item>
+              <property name="text">
+               <string>RGB</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HSV CW</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HSV CCW</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
        <item>
-        <property name="text">
-         <string>Curved</string>
-        </property>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item>
-        <property name="text">
-         <string>Sine</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Sphere Inc.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Sphere Dec.</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBoxColorInterpolationType">
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="handleEditorStopPage">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
        </property>
        <item>
-        <property name="text">
-         <string>RGB</string>
-        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item>
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+           </property>
+           <property name="horizontalSpacing">
+            <number>5</number>
+           </property>
+           <property name="verticalSpacing">
+            <number>5</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="stopLeftLabel">
+             <property name="text">
+              <string comment="Edit left side of segment in segment editor">Left Color:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="KisGradientColorEditor" name="stopLeftEditor" native="true"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="stopRightLabel">
+             <property name="text">
+              <string comment="Edit right side of segment in segment editor">Right Color:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="KisGradientColorEditor" name="stopRightEditor" native="true"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <property name="spacing">
+            <number>5</number>
+           </property>
+           <item>
+            <widget class="KoAspectButton" name="constrainStopButton"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="KisDoubleSliderSpinBox" name="stopPositionSlider" native="true"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
        <item>
-        <property name="text">
-         <string>HSV CW</string>
-        </property>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="handleEditorMidPointPage">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="KisDoubleSliderSpinBox" name="midPointPositionSlider" native="true"/>
        </item>
        <item>
-        <property name="text">
-         <string>HSV CCW</string>
-        </property>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-      </widget>
-     </item>
-    </layout>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="handleEditorNullPage"/>
+    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
+   <class>KisGradientColorEditor</class>
+   <extends>QWidget</extends>
+   <header location="global">KisGradientColorEditor.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisSegmentGradientSlider</class>
-   <extends/>
-   <header>KisSegmentGradientSlider.h</header>
+   <extends>QWidget</extends>
+   <header location="global">KisSegmentGradientSlider.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QToolButton</extends>
+   <header location="global">KoAspectButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="rightBtnGroup"/>
-  <buttongroup name="leftBtnGroup"/>
- </buttongroups>
 </ui>

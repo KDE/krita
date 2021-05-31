@@ -445,6 +445,18 @@ public:
     KoGradientSegment* removeSegment(KoGradientSegment* segment);
 
     /**
+     * removes the specific segment from the gradient colour picker and
+     * modifies the previous and next segments so that they end and start
+     * where the middle of the passed segment was respectively.
+     * @param segment the segment to remove
+     * @return the segment which will be at the place of the old
+     * segment: the previous segment if the passed segment was not the first;
+     * the next segment if the passed segment was the first; 0 if the passed
+     * segment is not in the gradient or it is not possible to remove the segment.
+     */
+    KoGradientSegment* collapseSegment(KoGradientSegment* segment);
+
+    /**
      * checks if it's possible to remove a segment (at least two
      * segments in the gradient)
      * @return true if it's possible to remove an segment

@@ -65,7 +65,7 @@
     <widget class="QComboBox" name="cmbSelectorType">
      <item>
       <property name="text">
-       <string>Spinning Triangle</string>
+       <string>sRGB Triangle Selector</string>
       </property>
      </item>
      <item>

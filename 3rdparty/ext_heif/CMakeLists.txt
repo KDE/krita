@@ -73,8 +73,8 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
     ExternalProject_Add(
         ext_dav1d
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://downloads.videolan.org/pub/videolan/dav1d/0.8.2/dav1d-0.8.2.tar.xz
-        URL_HASH SHA256=3dd91d96b44e9d8ba7e82ad9e730d6c579ab5e19edca0db857a60f5ae6a0eb13
+        URL https://downloads.videolan.org/pub/videolan/dav1d/0.9.0/dav1d-0.9.0.tar.xz
+        URL_HASH SHA256=cfae88e8067c9b2e5b96d95a7a00155c353376fe9b992a96b4336e0eab19f9f6
 
         CONFIGURE_COMMAND meson <SOURCE_DIR> --prefix=${EXTPREFIX_heif}
 
@@ -88,8 +88,8 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
     ExternalProject_Add(
         ext_rav1e
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
-        URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
+        URL https://github.com/xiph/rav1e/archive/refs/tags/p20210525.tar.gz
+        URL_HASH SHA256=bd1a27e430781d7f1714ea6e73d489b1718d2883936654f665cc57edf1f6e58e
 
         CONFIGURE_COMMAND ""
 
@@ -106,9 +106,9 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
     ExternalProject_Add_Step(
         ext_rav1e ext_cargo_c
 
-        COMMENT "Installing cargo-c 0.8.0 to ${EXTPREFIX_heif}"
+        COMMENT "Installing cargo-c 0.8.1 to ${EXTPREFIX_heif}"
 
-        COMMAND ${CMAKE_CURRENT_LIST_DIR}/cargo-install-wrapper cargo-c --version "0.8.0+cargo-0.51" --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
+        COMMAND ${CMAKE_CURRENT_LIST_DIR}/cargo-install-wrapper cargo-c --version "0.8.1+cargo-0.53" --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
 
         DEPENDEES configure
         DEPENDERS build
@@ -192,8 +192,8 @@ ExternalProject_Add(
     ext_libheif
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-    GIT_REPOSITORY https://github.com/strukturag/libheif.git
-    GIT_TAG f5a3d8e090674be349f5c1e24083b3e553c516bd
+    URL https://github.com/strukturag/libheif/archive/8f8035a102e959a3488f69e8befe09d51cf596a7.tar.gz
+    URL_HASH SHA256=12cfab1aaa588191bb28a67b275d0e99b379ab8221dcc7a18adcb6a34b661943
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 

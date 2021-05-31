@@ -1,4 +1,4 @@
-From b10def35c7ea99ba977dd8f76407862e3836f51e Mon Sep 17 00:00:00 2001
+From 4c60c51ee8aa08db6d1249fa7a55e8781921ac62 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 8 Oct 2020 13:35:02 +0000
 Subject: [PATCH] Android: Add clipboard buffer for mimeTypes that aren't
@@ -11,35 +11,40 @@ Copy: If we set the data and it isn't a compatible mimeType,
 then we clear the system clipboard and store the data on
 app's buffer.
 ---
- .../org/qtproject/qt5/android/QtNative.java   | 11 +++++++++
+ .../org/qtproject/qt5/android/QtNative.java   | 16 +++++++++++++
  .../platforms/android/androidjniclipboard.cpp | 11 +++++++++
  .../platforms/android/androidjniclipboard.h   |  2 ++
  .../android/qandroidplatformclipboard.cpp     | 24 +++++++++++++++----
  .../android/qandroidplatformclipboard.h       |  3 +++
- 5 files changed, 46 insertions(+), 5 deletions(-)
+ 5 files changed, 51 insertions(+), 5 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 3ad14c5f47..f4f8914d5a 100644
+index e03b665ee3..ecb6d099e9 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-@@ -923,6 +923,9 @@ public class QtNative
+@@ -896,6 +896,14 @@ public class QtNative
      private static void clearClipData()
      {
          m_usePrimaryClip = false;
 +        if (m_clipboardManager != null) {
-+            m_clipboardManager.clearPrimaryClip();
++            if (Build.VERSION.SDK_INT >= 28) {
++                m_clipboardManager.clearPrimaryClip();
++            } else {
++                ClipData clipData = ClipData.newPlainText("text/plain", "");
++                m_clipboardManager.setPrimaryClip(clipData);
++            }
 +        }
      }
      private static void setClipboardText(String text)
      {
-@@ -997,6 +1000,14 @@ public class QtNative
+@@ -970,6 +978,14 @@ public class QtNative
          }
      }
  
 +    private static boolean hasClipData()
 +    {
 +        if (m_clipboardManager != null) {
-+            return m_clipboardManager.hasPrimaryClip();
++            return m_clipboardManager.hasPrimaryClip() && m_usePrimaryClip;
 +        }
 +        return false;
 +    }
@@ -143,5 +148,5 @@ index 3ed9d323f8..d7d319f504 100644
  
  QT_END_NAMESPACE
 -- 
-2.28.0
+2.31.1
 

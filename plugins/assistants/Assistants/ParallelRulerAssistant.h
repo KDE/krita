@@ -33,6 +33,9 @@ public:
     bool isAssistantComplete() const override;
     bool canBeLocal() const override;
 
+    void saveCustomXml(QXmlStreamWriter* xml) override;
+    bool loadCustomXml(QXmlStreamReader* xml) override;
+
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;

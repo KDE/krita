@@ -20,6 +20,7 @@
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
 #include <kis_algebra_2d.h>
+#include <kis_dom_utils.h>
 
 #include <math.h>
 
@@ -222,6 +223,21 @@ bool ParallelRulerAssistant::isAssistantComplete() const
 
 bool ParallelRulerAssistant::canBeLocal() const
 {
+    return true;
+}
+
+void ParallelRulerAssistant::saveCustomXml(QXmlStreamWriter *xml)
+{
+    xml->writeStartElement("isLocal");
+    xml->writeAttribute("value", KisDomUtils::toString( (int)this->isLocal()));
+    xml->writeEndElement();
+}
+
+bool ParallelRulerAssistant::loadCustomXml(QXmlStreamReader *xml)
+{
+    if (xml && xml->name() == "isLocal") {
+        this->setLocal((bool)KisDomUtils::toInt(xml->attributes().value("value").toString()));
+    }
     return true;
 }
 

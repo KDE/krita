@@ -182,7 +182,7 @@ public:
 
     static KisNodeSP tryOverrideRootToTransformMask(KisNodeSP root);
 
-    static QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
+    static QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent);
     static bool tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args);
     static bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode, KisNodeList selectedNodes, KisStrokeUndoFacade *undoFacade, QVector<KisStrokeJobData *> *undoJobs, const KisSavedMacroCommand **overriddenCommand);
 

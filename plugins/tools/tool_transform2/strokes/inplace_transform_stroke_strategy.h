@@ -90,7 +90,6 @@ public:
 
 public:
     InplaceTransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
-                                   bool workRecursively,
                                    const QString &filterId,
                                    bool forceReset,
                                    KisNodeSP rootNode,

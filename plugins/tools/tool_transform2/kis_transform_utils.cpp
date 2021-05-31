@@ -609,7 +609,7 @@ KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
     return root;
 }
 
-QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive)
+QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent)
 {
     QList<KisNodeSP> result;
 
@@ -634,10 +634,10 @@ QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformM
             }
     };
 
-    if (recursive) {
-        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
-    } else {
+    if (isExternalSourcePresent) {
         fetchFunc(root);
+    } else {
+        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
     }
 
     return result;

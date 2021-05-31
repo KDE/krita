@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>515</width>
-    <height>724</height>
+    <height>780</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -371,6 +371,12 @@
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
               </spacer>
              </item>
              <item>
@@ -564,6 +570,12 @@
               <spacer name="horizontalSpacer_4">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
                </property>
               </spacer>
              </item>
@@ -1172,6 +1184,9 @@
               <width>32</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
             </property>
             <property name="toolTip">
              <string>Flip selection horizontally</string>
@@ -2112,35 +2127,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
-     <item>
-      <widget class="QPushButton" name="chkWorkRecursively">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>32</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Work Recursively</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
      <item>
       <spacer name="horizontalSpacer_5">
        <property name="orientation">
@@ -2210,8 +2197,8 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="cageTransformButtonGroup"/>
  </buttongroups>
 </ui>

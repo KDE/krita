@@ -54,7 +54,6 @@ struct InplaceTransformStrokeStrategy::Private
     KisUpdatesFacade *updatesFacade;
     KisStrokeUndoFacade *undoFacade;
     ToolTransformArgs::TransformMode mode;
-    bool workRecursively;
     QString filterId;
     bool forceReset;
     KisNodeSP rootNode;
@@ -119,7 +118,6 @@ struct InplaceTransformStrokeStrategy::Private
 
 
 InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
-                                                               bool workRecursively,
                                                                const QString &filterId,
                                                                bool forceReset,
                                                                KisNodeSP rootNode,
@@ -134,7 +132,6 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
 {
 
     m_d->mode = mode;
-    m_d->workRecursively = workRecursively;
     m_d->filterId = filterId;
     m_d->forceReset = forceReset;
     m_d->rootNode = rootNode;
@@ -286,7 +283,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     m_d->rootNode = KisTransformUtils::tryOverrideRootToTransformMask(m_d->rootNode);
 
     // When placing an external source image, we never work recursively on any layer masks
-    m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->workRecursively && !m_d->externalSource);
+    m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->externalSource);
 
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;

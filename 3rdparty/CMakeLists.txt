@@ -188,6 +188,7 @@ if (MINGW)
 endif ()
 
 # this list must be dependency-ordered
+add_subdirectory( ext_openssl )
 if (ENABLE_PYTHON_DEPS OR NOT MINGW)
 	add_subdirectory( ext_python )
 endif ()
@@ -208,7 +209,6 @@ add_subdirectory( ext_expat ) # for exiv2
 add_subdirectory( ext_exiv2 )
 add_subdirectory( ext_lcms2 )
 add_subdirectory( ext_openexr )
-add_subdirectory( ext_openssl )
 add_subdirectory( ext_vc )
 add_subdirectory( ext_gsl )
 add_subdirectory( ext_fftw3 )

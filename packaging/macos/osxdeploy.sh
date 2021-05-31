@@ -373,6 +373,9 @@ strip_python_dmginstall() {
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
     rm -rf distutils tkinter ensurepip venv lib2to3 idlelib turtledemo
 
+    cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}/site-packages"
+    rm -rf pip* PyQt_builder* setuptools* sip* easy-install.pth
+
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/Resources"
     rm -rf Python.app
 }
@@ -417,7 +420,7 @@ fix_python_framework() {
 
     # Fix rpaths from Python.Framework
     find "${PythonFrameworkBase}" -type f -perm 755 | delete_install_rpath
-    find "${PythonFrameworkBase}/Versions/Current/site-packages/PyQt5" -type f -name "*.so" | delete_install_rpath
+    find "${PythonFrameworkBase}/Versions/Current/lib/python${PY_VERSION}/site-packages/PyQt5" -type f -name "*.so" | delete_install_rpath
 }
 
 # Checks for macdeployqt

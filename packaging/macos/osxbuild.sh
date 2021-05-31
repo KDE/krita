@@ -91,7 +91,7 @@ export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 
 # export PYTHONHOME=${KIS_INSTALL_DIR}
-# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.8/site-packages:${KIS_INSTALL_DIR}/lib/python3.8
+# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.9/site-packages:${KIS_INSTALL_DIR}/lib/python3.9
 
 # This will make the debug output prettier
 export KDE_COLOR_DEBUG=1

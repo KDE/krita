@@ -1,35 +1,5 @@
 SET(PREFIX_ext_pyqt "${EXTPREFIX}" )
-if (APPLE)
-    SET(PYTHON_EXECUTABLE_PATH ${PREFIX_ext_pyqt}/bin/python3)
-    if(NOT EXISTS ${PYTHON_EXECUTABLE_PATH})
-      message("WARNING: using system python3!")
-      SET(PYTHON_EXECUTABLE_PATH python3)
-    endif()
-
-    list(APPEND _PYQT_conf
-        --confirm-license
-        --qmake ${PREFIX_ext_pyqt}/bin/qmake
-        --sip ${PREFIX_ext_pyqt}/bin/sip
-        --sip-incdir ${PREFIX_ext_pyqt}/include
-        --sipdir ${PREFIX_ext_pyqt}/share/sip
-    )
-    ExternalProject_Add( ext_pyqt
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.13.1.tar.gz
-        URL_MD5 c77af2f4e230b0053fd22bc2ece2e6c0
-        
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py ${_PYQT_conf}
-        BUILD_COMMAND make
-
-        # force single-threaded installation to avoid
-        # race conditions in post-install .py script
-        INSTALL_COMMAND make -j1 install
-        
-        BUILD_IN_SOURCE 1
-
-        UPDATE_COMMAND ""
-    )
-elseif(UNIX)
+if(UNIX)
     SET(PYTHON_EXECUTABLE_PATH ${PREFIX_ext_pyqt}/bin/python3)
     if(NOT EXISTS ${PYTHON_EXECUTABLE_PATH})
       message("WARNING: using system python3!")
@@ -57,7 +27,7 @@ elseif(UNIX)
         URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.4.tar.gz
         URL_HASH SHA256=2a69597e0dd11caabe75fae133feca66387819fc9bc050f547e5551bce97e5be
 
-        CONFIGURE_COMMAND sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS}
+        CONFIGURE_COMMAND ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS}
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build make -j${SUBMAKE_JOBS}
 
@@ -81,10 +51,11 @@ elseif(UNIX)
 
         BUILD_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
-        # distutils already specifies the full path to the AppImage root
-        # it trims the first path separator and appends the rest to the root below
-        # if this is not set, it doesn't install the egg within site-packages
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --root=/
+        # Here we need a flat-egg installation, otherwise the egg is deployed
+        # inside its own directory in site-packages.
+        # So we set as root our 3rdparty layout, and a sufficiently dud prefix.
+        # See https://github.com/msys2/MINGW-packages/blob/8a4066591cf1e023971526c55bf2d5fe0c7aa84a/mingw-w64-pyqt5-sip/PKGBUILD
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --prefix "." --root=${PREFIX_ext_pyqt} --optimize=1
 
         BUILD_IN_SOURCE 1
 

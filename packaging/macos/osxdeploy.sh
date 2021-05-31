@@ -794,6 +794,7 @@ if [[ -n "${CODE_SIGNATURE}" ]]; then
 fi
 
 # Manually check every single Mach-O file for signature status
+if [[ "${NOTARIZE}" = "true" ]]; then
 print_msg "Checking if all files are signed before sending for notarization..."
 if [[ $(sign_hasError) -eq 1 ]]; then
     print_error "CodeSign errors cannot send to notarize!"
@@ -804,6 +805,7 @@ print_msg "Done! all files appear to be correct."
 
 # notarize apple
 notarize_build "${KRITA_DMG}" krita.app
+fi
 
 # Create DMG from files inside ${KRITA_DMG} folder
 createDMG

@@ -12,6 +12,7 @@
 #include "ui_wdgstopgradienteditor.h"
 #include <boost/optional.hpp>
 #include <KoStopGradient.h>
+#include <KisGradientWidgetsUtils.h>
 
 class KRITAUI_EXPORT KisStopGradientEditor : public QWidget, public Ui::KisWdgStopGradientEditor
 {
@@ -43,18 +44,23 @@ Q_SIGNALS:
     void sigGradientChanged();
 
 private:
-     KoStopGradientSP m_gradient;
-     KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
+    KoStopGradientSP m_gradient;
+    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
+    QAction *m_editStopAction;
+    QAction *m_deleteStopAction;
 
 private Q_SLOTS:
     void stopChanged(int stop);
-    void stopTypeChanged();
+    void stopTypeChanged(KisGradientWidgetsUtils::ColorType type);
     void colorChanged(const KoColor& color);
     void opacityChanged(qreal value);
+    void positionChanged(qreal value);
     void nameChanged();
     void reverse();
+    void distributeStopsEvenly();
     void sortByValue(SortFlags flags);
-    void showContextMenu( const class QPoint& origin );
+    void sortByHue(SortFlags flags);
+    void editSelectedStop();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisStopGradientEditor::SortFlags);

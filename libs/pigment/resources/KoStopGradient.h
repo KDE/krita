@@ -76,6 +76,13 @@ struct KoGradientStopValueSort
     }
 };
 
+struct KoGradientStopHueSort
+{
+    inline bool operator() (const KoGradientStop& a, const KoGradientStop& b) {
+        return (a.color.toQColor().hueF() < b.color.toQColor().hueF());
+    }
+};
+
 /**
  * Resource for colorstop based gradients like SVG gradients
  */

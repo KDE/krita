@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -10,13 +10,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>368</width>
-    <height>231</height>
+    <width>490</width>
+    <height>291</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,1,0">
+   <property name="spacing">
+    <number>10</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>5</number>
+     </property>
      <item>
       <widget class="QLabel" name="lblName">
        <property name="text">
@@ -27,17 +45,92 @@
      <item>
       <widget class="QLineEdit" name="nameedit"/>
      </item>
-     <item>
-      <widget class="QToolButton" name="buttonReverse">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
+    <widget class="QWidget" name="buttonsContainer" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QToolButton" name="selectPreviousStopButton"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="selectNextStopButton"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="selectedStopLabel">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="deleteStopButton"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QToolButton" name="flipStopsButton"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QToolButton" name="sortByValueButton"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="sortByHueButton"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QToolButton" name="distributeEvenlyButton"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
       <widget class="KisStopGradientSlider" name="gradientSlider" native="true">
        <property name="sizePolicy">
@@ -49,124 +142,114 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QToolButton" name="buttonReverseSecond">
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      <widget class="QWidget" name="compactModeButtonsContainer" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="compactModeSelectPreviousStopButton"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="compactModeSelectNextStopButton"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="compactModeMiscOptionsButton"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout_3">
-     <item column="1" row="1">
-      <widget class="QRadioButton" name="foregroundRadioButton">
-       <property name="text">
-        <string>Foreground</string>
+    <widget class="QStackedWidget" name="stopEditorContainer">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
        </property>
-      </widget>
-     </item>
-     <item column="2" row="0">
-      <widget class="KisColorButton" name="colorButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+       <property name="leftMargin">
+        <number>0</number>
        </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
+       <property name="topMargin">
+        <number>0</number>
        </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
+       <property name="rightMargin">
+        <number>0</number>
        </property>
-      </widget>
-     </item>
-     <item column="3" row="0">
-      <widget class="KisDoubleSliderSpinBox" name="opacitySlider" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+       <property name="bottomMargin">
+        <number>0</number>
        </property>
-      </widget>
-     </item>
-     <item column="1" row="0">
-      <widget class="QRadioButton" name="colorRadioButton">
-       <property name="text">
-        <string>Color</string>
-       </property>
-      </widget>
-     </item>
-     <item column="0" row="0">
-      <widget class="QLabel" name="stopLabel">
-       <property name="text">
-        <string>Stop: </string>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="2">
-      <widget class="QRadioButton" name="backgroundRadioButton">
-       <property name="text">
-        <string>Background</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+       <item>
+        <widget class="KisGradientColorEditor" name="stopEditor" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2"/>
+    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisStopGradientSlider</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header location="global">KisStopGradientSlider.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisStopGradientSlider</class>
+   <class>KisGradientColorEditor</class>
    <extends>QWidget</extends>
-   <header>KisStopGradientSlider.h</header>
+   <header location="global">KisGradientColorEditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>nameedit</tabstop>
+  <tabstop>selectPreviousStopButton</tabstop>
+  <tabstop>selectNextStopButton</tabstop>
+  <tabstop>deleteStopButton</tabstop>
+  <tabstop>flipStopsButton</tabstop>
+  <tabstop>sortByValueButton</tabstop>
+  <tabstop>sortByHueButton</tabstop>
+  <tabstop>distributeEvenlyButton</tabstop>
+  <tabstop>compactModeMiscOptionsButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

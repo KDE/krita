@@ -9,11 +9,14 @@
 #define _KIS_STOP_GRADIENT_SLIDER_H_
 
 #include <QWidget>
-#include <QMouseEvent>
-#include <QPaintEvent>
 #include <QScopedPointer>
+
 #include <KoStopGradient.h>
-#include <resources/KoStopGradient.h>
+#include <kis_signal_compressor.h>
+
+class QEvent;
+class QMouseEvent;
+class QKeyEvent;
 
 class KisStopGradientSlider : public QWidget
 {
@@ -22,27 +25,35 @@ class KisStopGradientSlider : public QWidget
 public:
     KisStopGradientSlider(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
-public:
-    void paintEvent(QPaintEvent *) override;
-    void setGradientResource(KoStopGradientSP gradient);
-
     int selectedStop();
-
-    void setSelectedStop(int selected);
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
+public Q_SLOTS:
+    void setGradientResource(KoStopGradientSP gradient);
+    void setSelectedStop(int selected);
+    void selectPreviousStop();
+    void selectNextStop();
+    void deleteSelectedStop(bool selectNeighborStop = true);
+    void chooseSelectedStopColor();
+
 Q_SIGNALS:
-     void sigSelectedStop(int stop);
+    void sigSelectedStop(int stop);
+    void updateRequested();
 
 protected:
-    void mousePressEvent(QMouseEvent * e) override;
-    void mouseReleaseEvent(QMouseEvent * e) override;
-    void mouseMoveEvent(QMouseEvent * e) override;
+    void paintEvent(QPaintEvent *) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
+    void leaveEvent(QEvent *e) override;
 
 private Q_SLOTS:
-     void updateHandleSize();
+    void updateHandleSize();
 
 private:
     void insertStop(double t);
@@ -52,19 +63,22 @@ private:
     QRect handlesStripeRect() const;
     QRegion allowedClickRegion(int tolerance) const;
 
-    void updateCursor(const QPoint &pos);
-    void paintHandle(qreal position, const QColor &color, bool isSelected, QString text, QPainter *painter);
+    void updateHoveredStop(const QPoint &pos);
     int handleClickTolerance() const;
+    void handleIncrementInput(int direction, Qt::KeyboardModifiers modifiers);
     int minimalHeight() const;
 
 private:
+    static constexpr int removeStopDistance{32};
+
     KoStopGradientSP m_defaultGradient;
     KoStopGradientSP m_gradient;
     int m_selectedStop;
+    int m_hoveredStop;
     KoGradientStop m_removedStop;
     bool m_drag;
     QSize m_handleSize;
-
+    KisSignalCompressor m_updateCompressor;
 };
 
 #endif

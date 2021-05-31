@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
- *                2016 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Deif Lou <ginoba@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,6 +11,8 @@
 #include <QDoubleSpinBox>
 #include <QPoint>
 #include <QMenu>
+#include <QAction>
+#include <QDialog>
 
 #include <KoColorSpace.h>
 #include <resources/KoStopGradient.h>
@@ -23,41 +26,93 @@
 
 #include "KisStopGradientEditor.h"
 
-/****************************** KisStopGradientEditor ******************************/
-
 KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     : QWidget(parent),
       m_gradient(0)
 {
     setupUi(this);
 
+    QAction *selectPreviousStopAction = new QAction(KisIconUtils::loadIcon("arrow-left"), i18nc("Button to select previous stop in the stop gradient editor", "Select previous stop"), this);
+    selectPreviousStopAction->setToolTip(selectPreviousStopAction->text());
+    connect(selectPreviousStopAction, SIGNAL(triggered()), gradientSlider, SLOT(selectPreviousStop()));
+
+    QAction *selectNextStopAction = new QAction(KisIconUtils::loadIcon("arrow-right"), i18nc("Button to select next stop in the stop gradient editor", "Select next stop"), this);
+    selectNextStopAction->setToolTip(selectNextStopAction->text());
+    connect(selectNextStopAction, SIGNAL(triggered()), gradientSlider, SLOT(selectNextStop()));
+
+    m_editStopAction = new QAction(KisIconUtils::loadIcon("document-edit"), i18nc("Button to edit the selected stop color in the stop gradient editor", "Edit stop"), this);
+    m_editStopAction->setToolTip(m_editStopAction->text());
+    connect(m_editStopAction, SIGNAL(triggered()), this, SLOT(editSelectedStop()));
+
+    m_deleteStopAction = new QAction(KisIconUtils::loadIcon("edit-delete"), i18nc("Button to delete the selected stop in the stop gradient editor", "Delete stop"), this);
+    m_deleteStopAction->setToolTip(m_deleteStopAction->text());
+    connect(m_deleteStopAction, SIGNAL(triggered()), gradientSlider, SLOT(deleteSelectedStop()));
+
+    QAction *flipStopsAction = new QAction(KisIconUtils::loadIcon("transform_icons_mirror_x"), i18nc("Button to flip the stops in the stop gradient editor", "Flip gradient"), this);
+    flipStopsAction->setToolTip(flipStopsAction->text());
+    connect(flipStopsAction, SIGNAL(triggered()), this, SLOT(reverse()));
+
+    QAction *sortByValueAction = new QAction(KisIconUtils::loadIcon("sort-by-value"), i18nc("Button to sort the stops by value in the stop gradient editor", "Sort stops by value"), this);
+    sortByValueAction->setToolTip(sortByValueAction->text());
+    connect(sortByValueAction, &QAction::triggered, this, [this]{ this->sortByValue(SORT_ASCENDING); } );
+    
+    QAction *sortByHueAction = new QAction(KisIconUtils::loadIcon("sort-by-hue"), i18nc("Button to sort the stops by hue in the stop gradient editor", "Sort stops by hue"), this);
+    sortByHueAction->setToolTip(sortByHueAction->text());
+    connect(sortByHueAction, &QAction::triggered, this, [this]{ this->sortByHue(SORT_ASCENDING); } );
+
+    QAction *distributeEvenlyAction = new QAction(KisIconUtils::loadIcon("distribute-horizontal"), i18nc("Button to evenly distribute the stops in the stop gradient editor", "Distribute stops evenly"), this);
+    distributeEvenlyAction->setToolTip(distributeEvenlyAction->text());
+    connect(distributeEvenlyAction, SIGNAL(triggered()), this, SLOT(distributeStopsEvenly()));
+
+    selectPreviousStopButton->setAutoRaise(true);
+    selectPreviousStopButton->setDefaultAction(selectPreviousStopAction);
+    
+    selectNextStopButton->setAutoRaise(true);
+    selectNextStopButton->setDefaultAction(selectNextStopAction);
+
+    deleteStopButton->setAutoRaise(true);
+    deleteStopButton->setDefaultAction(m_deleteStopAction);
+
+    flipStopsButton->setAutoRaise(true);
+    flipStopsButton->setDefaultAction(flipStopsAction);
+
+    sortByValueButton->setAutoRaise(true);
+    sortByValueButton->setDefaultAction(sortByValueAction);
+
+    sortByHueButton->setAutoRaise(true);
+    sortByHueButton->setDefaultAction(sortByHueAction);
+
+    distributeEvenlyButton->setAutoRaise(true);
+    distributeEvenlyButton->setDefaultAction(distributeEvenlyAction);
+
+    compactModeSelectPreviousStopButton->setAutoRaise(true);
+    compactModeSelectPreviousStopButton->setDefaultAction(selectPreviousStopAction);
+    
+    compactModeSelectNextStopButton->setAutoRaise(true);
+    compactModeSelectNextStopButton->setDefaultAction(selectNextStopAction);
+    
+    compactModeMiscOptionsButton->setPopupMode(QToolButton::InstantPopup);
+    compactModeMiscOptionsButton->setAutoRaise(true);
+    compactModeMiscOptionsButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+    compactModeMiscOptionsButton->setStyleSheet("QToolButton::menu-indicator { image: none; }");
+    QAction *separator = new QAction;
+    separator->setSeparator(true);
+    compactModeMiscOptionsButton->addAction(m_editStopAction);
+    compactModeMiscOptionsButton->addAction(m_deleteStopAction);
+    compactModeMiscOptionsButton->addAction(separator);
+    compactModeMiscOptionsButton->addAction(flipStopsAction);
+    compactModeMiscOptionsButton->addAction(sortByValueAction);
+    compactModeMiscOptionsButton->addAction(sortByHueAction);
+    compactModeMiscOptionsButton->addAction(distributeEvenlyAction);
+
+    stopEditor->setUseTransParentCheckBox(false);
+
     connect(gradientSlider, SIGNAL(sigSelectedStop(int)), this, SLOT(stopChanged(int)));
     connect(nameedit, SIGNAL(editingFinished()), this, SLOT(nameChanged()));
-    connect(colorButton, SIGNAL(changed(KoColor)), SLOT(colorChanged(KoColor)));
-
-
-    connect(colorRadioButton, SIGNAL(toggled(bool)), this, SLOT(stopTypeChanged()));
-    connect(foregroundRadioButton, SIGNAL(toggled(bool)), this, SLOT(stopTypeChanged()));
-    connect(backgroundRadioButton, SIGNAL(toggled(bool)), this, SLOT(stopTypeChanged()));
-
-    opacitySlider->setPrefix(i18n("Opacity: "));
-    opacitySlider->setRange(0.0, 1.0, 2);
-    connect(opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(opacityChanged(qreal)));
-
-
-    buttonReverse->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
-    buttonReverse->setToolTip(i18n("Flip Gradient"));
-    KisIconUtils::updateIcon(buttonReverse);
-    connect(buttonReverse, SIGNAL(pressed()), SLOT(reverse()));
-
-    buttonReverseSecond->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
-    buttonReverseSecond->setToolTip(i18n("Flip Gradient"));
-    KisIconUtils::updateIcon(buttonReverseSecond);
-    connect(buttonReverseSecond, SIGNAL(clicked()), SLOT(reverse()));
-
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(showContextMenu(const QPoint &)));
+    connect(stopEditor, SIGNAL(colorChanged(KoColor)), SLOT(colorChanged(KoColor)));
+    connect(stopEditor, SIGNAL(colorTypeChanged(KisGradientWidgetsUtils::ColorType)), this, SLOT(stopTypeChanged(KisGradientWidgetsUtils::ColorType)));
+    connect(stopEditor, SIGNAL(opacityChanged(qreal)), this, SLOT(opacityChanged(qreal)));
+    connect(stopEditor, SIGNAL(positionChanged(qreal)), this, SLOT(positionChanged(qreal)));
 
     setCompactMode(false);
 
@@ -78,13 +133,10 @@ KisStopGradientEditor::KisStopGradientEditor(KoStopGradientSP gradient, QWidget 
 void KisStopGradientEditor::setCompactMode(bool value)
 {
     lblName->setVisible(!value);
-    buttonReverse->setVisible(!value);
     nameedit->setVisible(!value);
-    foregroundRadioButton->setVisible(!value);
-    backgroundRadioButton->setVisible(!value);
-    colorRadioButton->setVisible(!value);
-
-    buttonReverseSecond->setVisible(value);
+    buttonsContainer->setVisible(!value);
+    stopEditorContainer->setVisible(!value);
+    compactModeButtonsContainer->setVisible(value);
 }
 
 void KisStopGradientEditor::setGradient(KoStopGradientSP gradient)
@@ -93,9 +145,9 @@ void KisStopGradientEditor::setGradient(KoStopGradientSP gradient)
     setEnabled(m_gradient);
 
     if (m_gradient) {
-        gradientSlider->setGradientResource(m_gradient);
         nameedit->setText(gradient->name());
-        stopChanged(gradientSlider->selectedStop());
+        gradientSlider->setGradientResource(m_gradient);
+        // stopChanged(gradientSlider->selectedStop());
     }
 
     emit sigGradientChanged();
@@ -113,17 +165,16 @@ KoCanvasResourcesInterfaceSP KisStopGradientEditor::canvasResourcesInterface() c
 
 void KisStopGradientEditor::notifyGlobalColorChanged(const KoColor &color)
 {
-    if (colorButton->isEnabled() &&
-        color != colorButton->color()) {
+    if (stopEditor->colorType() == KisGradientWidgetsUtils::Custom) {
 
-        colorButton->setColor(color);
+        stopEditor->setColor(color);
     }
 }
 
 boost::optional<KoColor> KisStopGradientEditor::currentActiveStopColor() const
 {
-    if (!colorButton->isEnabled()) return boost::none;
-    return colorButton->color();
+    if (stopEditor->colorType() != KisGradientWidgetsUtils::Custom) return boost::none;
+    return stopEditor->color();
 }
 
 void KisStopGradientEditor::stopChanged(int stop)
@@ -132,78 +183,80 @@ void KisStopGradientEditor::stopChanged(int stop)
 
     const bool hasStopSelected = stop >= 0;
 
-    opacitySlider->setEnabled(hasStopSelected);
-    colorButton->setEnabled(hasStopSelected);
-    stopLabel->setEnabled(hasStopSelected);
-    foregroundRadioButton->setEnabled(hasStopSelected);
-    backgroundRadioButton->setEnabled(hasStopSelected);
-    colorRadioButton->setEnabled(hasStopSelected);
+    m_editStopAction->setEnabled(hasStopSelected);
+    m_deleteStopAction->setEnabled(hasStopSelected && m_gradient->stops().size() > 2);
+    stopEditorContainer->setCurrentIndex(hasStopSelected ? 0 : 1);
 
     if (hasStopSelected) {
+        selectedStopLabel->setText(i18nc("Text that indicates the selected stop in the stop gradient editor", "Stop #%1", stop + 1));
+
+        KoGradientStop gradientStop = m_gradient->stops()[stop];
+        stopEditor->setPosition(gradientStop.position * 100.0);
+
         KoColor color;
-        KoGradientStopType type = m_gradient->stops()[stop].type;
+        qreal opacity;
+        KoGradientStopType type = gradientStop.type;
+
         if (type == FOREGROUNDSTOP) {
-            foregroundRadioButton->setChecked(true);
-            opacitySlider->setEnabled(false);
+            stopEditor->setColorType(KisGradientWidgetsUtils::Foreground);
             if (m_canvasResourcesInterface) {
                 color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
             } else {
-                color = m_gradient->stops()[stop].color;
+                color = gradientStop.color;
             }
+            opacity = 100.0;
         }
         else if (type == BACKGROUNDSTOP) {
-            backgroundRadioButton->setChecked(true);
-            opacitySlider->setEnabled(false);
+            stopEditor->setColorType(KisGradientWidgetsUtils::Background);
             if (m_canvasResourcesInterface) {
                 color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
             } else {
-                color = m_gradient->stops()[stop].color;
+                color = gradientStop.color;
             }
+            opacity = 100.0;
         }
         else {
-            colorRadioButton->setChecked(true);
-            opacitySlider->setEnabled(true);
-            color = m_gradient->stops()[stop].color;
+            stopEditor->setColorType(KisGradientWidgetsUtils::Custom);
+            color = gradientStop.color;
+            opacity = color.opacityF() * 100.0;
         }
 
-        opacitySlider->setValue(color.opacityF());
+        stopEditor->setColor(color);
+        stopEditor->setOpacity(opacity);
 
-        color.setOpacity(1.0);
-        colorButton->setColor(color);
-
+    } else {
+        selectedStopLabel->setText(i18nc("Text that indicates no stop is selected in the stop gradient editor", "No stop selected"));
     }
 
     emit sigGradientChanged();
 }
 
-void KisStopGradientEditor::stopTypeChanged() {
+void KisStopGradientEditor::stopTypeChanged(KisGradientWidgetsUtils::ColorType type) {
     QList<KoGradientStop> stops = m_gradient->stops();
     int currentStop = gradientSlider->selectedStop();
-    double t = stops[currentStop].position;
-    KoColor color = stops[currentStop].color;
+    KoGradientStop stop = stops[currentStop];
+ 
+    if (type == KisGradientWidgetsUtils::Foreground) {
+        stop.type = FOREGROUNDSTOP;
+        if (m_canvasResourcesInterface) {
+            stop.color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+        }
+    } else if (type == KisGradientWidgetsUtils::Background) {
+        stop.type = BACKGROUNDSTOP;
+        if (m_canvasResourcesInterface) {
+            stop.color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+        }
+    } else {
+        stop.type = COLORSTOP;
+    }
 
-    KoGradientStopType type;    
-    if (foregroundRadioButton->isChecked()) {
-        type = FOREGROUNDSTOP;
-        if (m_canvasResourcesInterface) {
-            color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
-        }
-        opacitySlider->setEnabled(false);
-    } else if (backgroundRadioButton->isChecked()) {
-        type = BACKGROUNDSTOP;
-        if (m_canvasResourcesInterface) {
-            color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
-        }
-        opacitySlider->setEnabled(false);
-    }
-    else {
-        type = COLORSTOP;
-        opacitySlider->setEnabled(true);
-    }
+    stop.color.setOpacity(1.0);
 
     stops.removeAt(currentStop);
-    stops.insert(currentStop, KoGradientStop(t, color, type));
+    stops.insert(currentStop, stop);
     m_gradient->setStops(stops);
+    stopEditor->setColor(stop.color);
+    stopEditor->setOpacity(100.0);
     gradientSlider->update(); //setSelectedStopType(type);
     emit sigGradientChanged();
 }
@@ -213,17 +266,15 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     if (!m_gradient) return;
 
     QList<KoGradientStop> stops = m_gradient->stops();
-
     int currentStop = gradientSlider->selectedStop();
-    double t = stops[currentStop].position;
-    
+    KoGradientStop stop = stops[currentStop];
+        
     KoColor c(color);
-    c.setOpacity(stops[currentStop].color.opacityU8());
-
-    KoGradientStopType type = stops[currentStop].type;
+    c.setOpacity(stop.color.opacityU8());
+    stop.color = c;
     
     stops.removeAt(currentStop);
-    stops.insert(currentStop, KoGradientStop(t, c, type));
+    stops.insert(currentStop, stop);
     m_gradient->setStops(stops);
     gradientSlider->update();
 
@@ -235,23 +286,44 @@ void KisStopGradientEditor::opacityChanged(qreal value)
     if (!m_gradient) return;
 
     QList<KoGradientStop> stops = m_gradient->stops();
-
     int currentStop = gradientSlider->selectedStop();
-    double t = stops[currentStop].position;
+    KoGradientStop stop = stops[currentStop];
     
-    KoColor c = stops[currentStop].color;
-    c.setOpacity(value);
-    
-    KoGradientStopType type = stops[currentStop].type;
+    stop.color.setOpacity(value / 100.0);
 
     stops.removeAt(currentStop);
-    stops.insert(currentStop, KoGradientStop(t, c, type));
+    stops.insert(currentStop, stop);
     m_gradient->setStops(stops);
     gradientSlider->update();
 
     emit sigGradientChanged();
 }
 
+void KisStopGradientEditor::positionChanged(qreal value)
+{
+    if (!m_gradient) return;
+
+    QList<KoGradientStop> stops = m_gradient->stops();
+    int currentStop = gradientSlider->selectedStop();
+    KoGradientStop stop = stops[currentStop];
+    stop.position = value / 100.0;
+    
+    stops.removeAt(currentStop);
+    {
+        currentStop = 0;
+        for (int i = 0; i < stops.size(); i++) {
+            if (stop.position <= stops[i].position) break;
+
+            currentStop = i + 1;
+        }
+    }
+    stops.insert(currentStop, stop);
+    m_gradient->setStops(stops);
+    gradientSlider->setSelectedStop(currentStop);
+    gradientSlider->update();
+
+    emit sigGradientChanged();
+}
 
 void KisStopGradientEditor::nameChanged()
 {
@@ -271,8 +343,29 @@ void KisStopGradientEditor::reverse()
         reversedStops.push_front(KoGradientStop(1 - stop.position, stop.color, stop.type));
     }
     m_gradient->setStops(reversedStops);
-    gradientSlider->setSelectedStop(stops.size() - 1 - gradientSlider->selectedStop());
+    if (gradientSlider->selectedStop() >= 0) {
+        gradientSlider->setSelectedStop(stops.size() - 1 - gradientSlider->selectedStop());
+    } else {
+        gradientSlider->update();
+    }
 
+    emit sigGradientChanged();
+}
+
+void KisStopGradientEditor::distributeStopsEvenly()
+{
+    if (!m_gradient) return;
+
+    QList<KoGradientStop> stops = m_gradient->stops();
+    qreal spacing = 1.0 / static_cast<qreal>(stops.size() - 1);
+    for (int i = 0; i < stops.size(); ++i) {
+        stops[i].position = qBound(0.0, static_cast<qreal>(i) * spacing, 1.0);
+    }
+    m_gradient->setStops(stops);
+    if (gradientSlider->selectedStop() >= 0) {
+        stopEditor->setPosition(stops[gradientSlider->selectedStop()].position * 100.0);
+    }
+    gradientSlider->update();
     emit sigGradientChanged();
 }
 
@@ -310,23 +403,70 @@ void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
     emit sigGradientChanged();
 }
 
-void KisStopGradientEditor::showContextMenu(const QPoint &origin)
+void KisStopGradientEditor::sortByHue( SortFlags flags = SORT_ASCENDING )
 {
-    QMenu contextMenu(i18n("Options"), this);
+    if (!m_gradient) return;
 
-    QAction reverseValues(i18n("Reverse Values"), this);
-    connect(&reverseValues, &QAction::triggered, this, &KisStopGradientEditor::reverse);
+    bool ascending = (flags & SORT_ASCENDING) > 0;
+    bool evenDistribution = (flags & EVEN_DISTRIBUTION) > 0;
 
-    QAction sortAscendingValues(i18n("Sort by Value"), this);
-    connect(&sortAscendingValues, &QAction::triggered, this, [this]{ this->sortByValue(SORT_ASCENDING); } );
-    QAction sortAscendingDistributed(i18n("Sort by Value (Even Distribution)"), this);
-    connect(&sortAscendingDistributed, &QAction::triggered, this, [this]{ this->sortByValue(SORT_ASCENDING | EVEN_DISTRIBUTION);} );
+    QList<KoGradientStop> stops = m_gradient->stops();
+    const int stopCount = stops.size();
 
-    contextMenu.addAction(&reverseValues);
-    contextMenu.addSeparator();
-    contextMenu.addAction(&sortAscendingValues);
-    contextMenu.addAction(&sortAscendingDistributed);
+    QList<KoGradientStop> sortedStops;
+    std::sort(stops.begin(), stops.end(), KoGradientStopHueSort());
 
-    contextMenu.exec(mapToGlobal(origin));
+    int stopIndex = 0;
+    for (const KoGradientStop& stop : stops) {
+        const float value = evenDistribution ? (float)stopIndex / (float)(stopCount - 1) : qMax(0.0, stop.color.toQColor().hueF());
+        const float position = ascending ? value : 1.f - value;
+
+        if (ascending) {
+            sortedStops.push_back(KoGradientStop(position, stop.color, stop.type));
+        } else {
+            sortedStops.push_front(KoGradientStop(position, stop.color, stop.type));
+        }
+
+        stopIndex++;
+    }
+
+    m_gradient->setStops(sortedStops);
+    gradientSlider->setSelectedStop(stopCount - 1);
+    gradientSlider->update();
+
+    emit sigGradientChanged();
 }
 
+void KisStopGradientEditor::editSelectedStop()
+{
+    if (gradientSlider->selectedStop() < 0) {
+        return;
+    }
+
+    QDialog *dialog = new QDialog(this);
+    dialog->setModal(true);
+    dialog->setWindowTitle(i18nc("Title for the gradient stop editor", "Edit Stop"));
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    QWidget *editor = stopEditorContainer->currentWidget();
+    int index = stopEditorContainer->indexOf(editor);
+    stopEditorContainer->removeWidget(editor);
+
+    QVBoxLayout *dialogLayout = new QVBoxLayout;
+    dialogLayout->setMargin(10);
+    dialogLayout->addWidget(editor);
+
+    dialog->setLayout(dialogLayout);
+    editor->show();
+    dialog->resize(0, 0);
+
+    connect(dialog, &QDialog::finished, [this, editor, index](int)
+                                        {
+                                            stopEditorContainer->insertWidget(index, editor);
+                                            stopEditorContainer->setCurrentIndex(index);
+                                        });
+
+    dialog->show();
+    dialog->raise();
+    dialog->activateWindow();
+}

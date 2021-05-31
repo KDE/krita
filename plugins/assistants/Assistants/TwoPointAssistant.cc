@@ -59,8 +59,9 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
     bool overrideLastUsedPoint = false;
     bool useBeginInstead = false;
 
-    // must be above 0;
-    // if useVertical, then last used point must be below 3 (sanity check)
+    // must be above or equal to 0;
+    // if useVertical, then last used point must be below 3, because 2 means vertical
+    //     and it's the last possible point here (sanity check)
     // if !useVertical, then it must be below 2, because 2 means vertical
     bool isLastUsedPointCorrectNow = m_lastUsedPoint >= 0 && (m_useVertical ? m_lastUsedPoint < 3 : m_lastUsedPoint < 2);
 
@@ -160,6 +161,7 @@ void TwoPointAssistant::endStroke()
     m_adjustedPositionValid = false;
     m_snapLine = QLineF();
     m_hasBeenInsideLocal = false;
+    m_lastUsedPoint = -1;
 }
 
 QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny)

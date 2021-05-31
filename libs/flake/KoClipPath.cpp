@@ -114,6 +114,17 @@ KoClipPath::~KoClipPath()
 {
 }
 
+KoClipPath::KoClipPath(const KoClipPath &rhs)
+    : d(new Private(*rhs.d))
+{
+}
+
+KoClipPath &KoClipPath::operator=(const KoClipPath &rhs)
+{
+    d = rhs.d;
+    return *this;
+}
+
 KoClipPath *KoClipPath::clone() const
 {
     return new KoClipPath(*this);

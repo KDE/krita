@@ -110,6 +110,7 @@ private Q_SLOTS:
 
     void slotUpdateCustomColor();
     void slotCustomOpacityChanged();
+    void slotLocalAssistantCheckboxChanged();
 
     void slotSelectedAssistantTypeChanged();
 

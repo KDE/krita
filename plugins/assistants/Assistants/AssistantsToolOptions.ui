@@ -41,10 +41,10 @@
    <item>
     <widget class="QCheckBox" name="localAssistantCheckbox">
      <property name="toolTip">
-      <string>The assistant will have additional handles that describe the area the assistant works in</string>
+      <string>The assistant will have two additional points that describe the area the assistant works in</string>
      </property>
      <property name="text">
-      <string>Use limited area</string>
+      <string>Limit assistant to area</string>
      </property>
     </widget>
    </item>

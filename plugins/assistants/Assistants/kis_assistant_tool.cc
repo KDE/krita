@@ -1261,6 +1261,10 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.vanishingPointAngleSpinbox->setVisible(false);
         m_options.twoPointDensitySpinbox->setVisible(false);
 
+        KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
+        m_options.localAssistantCheckbox->setChecked(cfg.readEntry("LimitAssistantToArea", false));
+
+        connect(m_options.localAssistantCheckbox, SIGNAL(stateChanged(int)), SLOT(slotLocalAssistantCheckboxChanged()));
     }
 
     updateToolOptionsUI();
@@ -1326,6 +1330,12 @@ void KisAssistantTool::slotCustomOpacityChanged()
     // this forces the canvas to refresh to see the changes immediately
     m_canvas->paintingAssistantsDecoration()->uncache();
     m_canvas->canvasWidget()->update();
+}
+
+void KisAssistantTool::slotLocalAssistantCheckboxChanged()
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
+    cfg.writeEntry("LimitAssistantToArea", m_options.localAssistantCheckbox->isChecked());
 }
 
 void KisAssistantTool::slotSelectedAssistantTypeChanged()

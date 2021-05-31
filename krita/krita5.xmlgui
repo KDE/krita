@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="499"
+version="500"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -356,7 +356,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="options_configure"/>
       <Action name="manage_bundles"/>
       <Action name="manage_resources"/>
-      <Action name="dbexplorer"/>
       <Separator/>
       <Action name="options_configure_toolbars"/>
       <Merge name="StandardToolBarMenuHandler" />

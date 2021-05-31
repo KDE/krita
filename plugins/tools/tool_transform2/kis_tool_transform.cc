@@ -83,7 +83,6 @@
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::rotateCursor())
-    , m_workRecursively(true)
     , m_warpStrategy(
         new KisWarpTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
@@ -845,11 +844,6 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         return;
     }
 
-    if (m_optionsWidget) {
-        m_workRecursively = m_optionsWidget->workRecursively() ||
-            !currentNode->paintDevice();
-    }
-
     KisSelectionSP selection = resources->activeSelection();
 
     /**
@@ -873,7 +867,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     KisStrokeStrategy *strategy = 0;
 
     if (m_currentlyUsingOverlayPreviewStyle) {
-        TransformStrokeStrategy *transformStrategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
+        TransformStrokeStrategy *transformStrategy = new TransformStrokeStrategy(mode, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
         connect(transformStrategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
         connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
         strategy = transformStrategy;
@@ -885,7 +879,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         m_strokeStrategyCookie = transformStrategy;
 
     } else {
-        InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, externalSource, image().data(), image().data(), image()->root(), m_forceLodMode);
+        InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_currentArgs.filterId(), forceReset, currentNode, selection, externalSource, image().data(), image().data(), image()->root(), m_forceLodMode);
         connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
         strategy = transformStrategy;
 
@@ -1023,7 +1017,7 @@ void KisToolTransform::slotTrackerChangedConfig(KisToolChangesTrackerDataSP stat
     updateOptionWidget();
 }
 
-QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive)
+QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent)
 {
     QList<KisNodeSP> result;
 
@@ -1038,10 +1032,10 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
             }
     };
 
-    if (recursive) {
-        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
-    } else {
+    if (isExternalSourcePresent) {
         fetchFunc(root);
+    } else {
+        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
     }
 
     return result;
@@ -1050,8 +1044,8 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
 QWidget* KisToolTransform::createOptionWidget()
 {
     if (!m_canvas) return 0;
-
-    m_optionsWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, m_workRecursively, 0);
+     
+    m_optionsWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, 0);
     Q_CHECK_PTR(m_optionsWidget);
     m_optionsWidget->setObjectName(toolId() + " option widget");
 
@@ -1104,7 +1098,7 @@ QWidget* KisToolTransform::createOptionWidget()
 }
 
 void KisToolTransform::updateOptionWidget()
-{
+{    
     if (!m_optionsWidget) return;
 
     if (!currentNode()) {

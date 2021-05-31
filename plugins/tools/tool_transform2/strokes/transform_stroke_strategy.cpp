@@ -44,7 +44,6 @@
 
 
 TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
-                                                 bool workRecursively,
                                                  const QString &filterId,
                                                  bool forceReset,
                                                  KisNodeSP rootNode,
@@ -54,7 +53,6 @@ TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMod
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoFacade),
       m_updatesFacade(updatesFacade),
       m_mode(mode),
-      m_workRecursively(workRecursively),
       m_filterId(filterId),
       m_forceReset(forceReset),
       m_selection(selection)
@@ -392,7 +390,8 @@ void TransformStrokeStrategy::initStrokeCallback()
     }
 
     ToolTransformArgs initialTransformArgs;
-    m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, m_workRecursively);
+    bool isExternalSourcePresent = false;
+    m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, isExternalSourcePresent);
 
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;

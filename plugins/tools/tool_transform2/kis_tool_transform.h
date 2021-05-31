@@ -230,7 +230,7 @@ public Q_SLOTS:
     void imageTooBigRequested(bool value);
 
 private:
-    QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
+    QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent);
     QScopedPointer<QMenu> m_contextMenu;
 
     void startStroke(ToolTransformArgs::TransformMode mode, bool forceReset);
@@ -268,7 +268,6 @@ private:
     bool m_preferOverlayPreviewStyle {false};
     bool m_forceLodMode {false};
 
-    bool m_workRecursively {false};
 
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
 

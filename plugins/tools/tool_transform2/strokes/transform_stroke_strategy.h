@@ -78,7 +78,6 @@ public:
 
 public:
     TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
-                            bool workRecursively,
                             const QString &filterId,
                             bool forceReset,
                             KisNodeSP rootNode,
@@ -118,7 +117,6 @@ private:
 private:
     KisUpdatesFacade *m_updatesFacade;
     ToolTransformArgs::TransformMode m_mode;
-    bool m_workRecursively;
     QString m_filterId;
     bool m_forceReset;
 

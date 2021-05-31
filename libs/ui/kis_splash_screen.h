@@ -40,14 +40,17 @@ protected:
 private:
     void updateText();
     QString colorString() const;
+    void updateSplashImage();
 
 private:
 
     QTimer m_timer;
     bool m_themed;
-    QImage m_splashImage;
-    int m_textTop;
+    QPixmap m_splashPixmap;
+    QPixmap m_splashPixmap_x2;
     qreal m_scaleFactor;
+    QLabel *m_loadingTextLabel;
+    QString m_versionHtml;
 };
 
 #endif // KIS_SPLASH_SCREEN_H

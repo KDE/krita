@@ -45,10 +45,10 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     QDate currentDate = QDate::currentDate();
     if (currentDate > QDate(currentDate.year(), 12, 4) ||
             currentDate < QDate(currentDate.year(), 1, 9)) {
-        splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_holidays_xpm), QPixmap(splash_holidays_x2_xpm));
+        splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_holidays_xpm), QPixmap(splash_holidays_x2_xpm), true);
     }
     else {
-        splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm));
+        splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm), true);
     }
 
     splash->setWindowFlags(Qt::Widget);
@@ -56,8 +56,6 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     splash->setFixedSize(splash->sizeHint());
 
     wdgTab->addTab(splash, i18n("About"));
-    setMinimumSize(wdgTab->sizeHint());
-
 
     QTextEdit *lblAuthors = new QTextEdit();
     lblAuthors->setReadOnly(true);
@@ -214,6 +212,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     vlayout->addLayout(hlayout);
 
+    setMinimumSize(vlayout->sizeHint());
 }
 
 QWidget *KisAboutApplication::createTranslatorsWidget(const QList<KAboutPerson> &translators, const QString &ocsProviderUrl)

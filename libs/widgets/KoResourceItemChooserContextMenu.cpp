@@ -29,6 +29,29 @@
 
 #include <resources/KoResource.h>
 
+// HACK: This QLineEdit calls `QWidget::activateWindow` on focus if it is
+// housed inside a Qt::Popup, in order to work around a bug causing input
+// methods to not work in it.
+// See https://bugs.kde.org/show_bug.cgi?id=395598
+class PopupSelfActivatingLineEdit : public QLineEdit
+{
+public:
+    PopupSelfActivatingLineEdit(QWidget *parent = nullptr)
+        : QLineEdit(parent)
+    {
+    }
+
+protected:
+    void focusInEvent(QFocusEvent *e) override
+    {
+        QWidget *w = window();
+        if (w->windowType() == Qt::Popup) {
+            w->activateWindow();
+        }
+        QLineEdit::focusInEvent(e);
+    }
+};
+
 KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)
     , m_closeParentOnTrigger(false)
@@ -36,7 +59,7 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     QWidget* pWidget = new QWidget (0);
     QHBoxLayout* pLayout = new QHBoxLayout();
     m_label = new QLabel(0);
-    m_editBox = new QLineEdit(0);
+    m_editBox = new PopupSelfActivatingLineEdit(0);
     m_editBox->setClearButtonEnabled(true);
     m_AddButton = new QPushButton();
     m_AddButton->setIcon(koIcon("list-add"));

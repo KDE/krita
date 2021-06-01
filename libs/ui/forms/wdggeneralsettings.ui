@@ -997,7 +997,7 @@ After saving the file in Krita 5.0 at least once, no conversions will be needed 
         </widget>
        </item>
        <item row="18" column="1">
-        <widget class="QCheckBox" name="chkAltBrushSpeed">
+        <widget class="QCheckBox" name="chkUseTimestampsForBrushSpeed">
          <property name="checked">
           <bool>false</bool>
          </property>

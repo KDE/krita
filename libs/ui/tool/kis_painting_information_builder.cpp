@@ -47,7 +47,7 @@ void KisPaintingInformationBuilder::updateSettings()
     KisCubicCurve curve;
     curve.fromString(cfg.pressureTabletCurve());
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
-    m_useTimestamps = cfg.readEntry("altBrushSpeed", false);
+    m_useTimestamps = cfg.readEntry("useTimestampsForBrushSpeed", false);
 }
 
 KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,

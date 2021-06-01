@@ -189,7 +189,7 @@ namespace KisToolUtils {
                         device->setDirty(dirtyRect);
                         return transaction.endAndTake();
                     });
-            //KisProcessingApplicator::runSingleCommandStroke(image, cmd);
+            KisProcessingApplicator::runSingleCommandStroke(image, cmd);
             return true;
         }
         return false;

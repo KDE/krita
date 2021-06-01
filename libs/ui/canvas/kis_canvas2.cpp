@@ -596,6 +596,22 @@ void KisCanvas2::initializeImage()
     connectCurrentCanvas();
 }
 
+void KisCanvas2::disconnectImage()
+{
+    KisImageSP image = m_d->view->image();
+
+    /**
+     * We explicitly don't use barrierLock() here, because we don't care about
+     * all the updates completed (we don't use image's content). We only need to
+     * guarantee that the image will not try to access us in a multithreaded way,
+     * while we are being destroyed.
+     */
+
+    image->lock();
+    disconnect(image.data(), 0, this, 0);
+    image->unlock();
+}
+
 void KisCanvas2::connectCurrentCanvas()
 {
     KisImageWSP image = m_d->view->image();

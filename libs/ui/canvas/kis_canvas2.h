@@ -318,6 +318,7 @@ public:
     bool lodAllowedInCanvas() const;
 
     void initializeImage();
+    void disconnectImage();
 
     void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);
 

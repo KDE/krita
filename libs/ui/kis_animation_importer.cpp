@@ -18,6 +18,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_raster_keyframe_channel.h"
+#include "kis_assign_profile_processing_visitor.h"
 #include "commands/kis_image_layer_add_command.h"
 #include <QRegExp>
 
@@ -164,8 +165,17 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
     }
 
     if (paintLayer && assignDocumentProfile) {
+
         if (paintLayer->colorSpace()->colorModelId() == m_d->image->colorSpace()->colorModelId()) {
-            m_d->image->assignLayerProfile(paintLayer, m_d->image->colorSpace()->profile());
+
+            const KoColorSpace *srcColorSpace = paintLayer->colorSpace();
+            const KoColorSpace *dstColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
+                        srcColorSpace->colorModelId().id()
+                        , srcColorSpace->colorDepthId().id()
+                        , m_d->image->colorSpace()->profile());
+
+            KisAssignProfileProcessingVisitor *visitor = new KisAssignProfileProcessingVisitor(srcColorSpace, dstColorSpace);
+            visitor->visit(paintLayer.data(), undo);
         }
     }
 

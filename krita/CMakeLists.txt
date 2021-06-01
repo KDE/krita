@@ -161,6 +161,9 @@ if (WIN32)
         PROPERTIES
             OUTPUT_NAME "krita"
     )
+    if (MSVC)
+        target_link_options(krita_windows_stub_exe PRIVATE "/DEBUG:NONE")
+    endif()
     install(TARGETS krita_windows_stub_exe ${INSTALL_TARGETS_DEFAULT_ARGS})
 
     add_executable(krita_windows_stub_com windows_stub_main.cpp ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
@@ -171,5 +174,8 @@ if (WIN32)
             OUTPUT_NAME "krita"
             SUFFIX ".com"
     )
+    if (MSVC)
+        target_link_options(krita_windows_stub_com PRIVATE "/DEBUG:NONE")
+    endif()
     install(TARGETS krita_windows_stub_com ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif (WIN32)

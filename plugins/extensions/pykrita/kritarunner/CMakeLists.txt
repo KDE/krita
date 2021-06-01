@@ -45,5 +45,9 @@ if (WIN32)
         target_compile_definitions(kritarunner_com PRIVATE _hypot=hypot)
     endif (MINGW)
 
+    if (MSVC)
+        target_link_options(kritarunner_com PRIVATE "/DEBUG:NONE")
+    endif()
+
     install(TARGETS kritarunner_com ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif (WIN32)

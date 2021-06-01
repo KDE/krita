@@ -1452,7 +1452,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                     ret = document->saveAs(newFilePath, outputFormat, true);
                     if (ret) {
                         dbgUI << "Successful Save As!";
-                        KisPart::instance()->addRecentURLToAllMainWindows(QUrl::fromLocalFile(newFilePath));
+                        KisPart::instance()->queueAddRecentURLToAllMainWindowsOnFileSaved(QUrl::fromLocalFile(newFilePath));
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";

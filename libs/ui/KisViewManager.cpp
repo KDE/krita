@@ -994,8 +994,8 @@ void KisViewManager::slotSaveIncremental()
     document()->setFileBatchMode(true);
     document()->saveAs(newFilePath, document()->mimeType(), true);
     document()->setFileBatchMode(false);
-    KisPart::instance()->addRecentURLToAllMainWindows(QUrl::fromLocalFile(newFilePath),
-                                                      QUrl::fromLocalFile(document()->path()));
+    KisPart::instance()->queueAddRecentURLToAllMainWindowsOnFileSaved(QUrl::fromLocalFile(newFilePath),
+                                                                      QUrl::fromLocalFile(document()->path()));
 
     if (mainWindow()) {
         mainWindow()->updateCaption();

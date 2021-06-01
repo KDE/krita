@@ -33,6 +33,7 @@
 #include <KoDialog.h>
 #include <QMessageBox>
 #include <QMenu>
+#include <QMap>
 
 #include <QMenuBar>
 #include <klocalizedstring.h>
@@ -97,6 +98,8 @@ public:
     KisSessionResourceSP currentSession;
     bool closingSession{false};
     QScopedPointer<KisSessionManagerDialog> sessionManager;
+
+    QMap<QUrl, QUrl> pendingAddRecentUrlMap;
 
     bool queryCloseDocument(KisDocument *document) {
         Q_FOREACH(auto view, views) {
@@ -414,6 +417,13 @@ void KisPart::slotDocumentSaved()
 {
     KisDocument *doc = qobject_cast<KisDocument*>(sender());
     emit sigDocumentSaved(doc->path());
+
+    QUrl url = QUrl::fromLocalFile(doc->path());
+    if (!d->pendingAddRecentUrlMap.contains(url)) {
+        return;
+    }
+    QUrl oldUrl = d->pendingAddRecentUrlMap.take(url);
+    addRecentURLToAllMainWindows(QUrl::fromLocalFile(doc->path()));
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)
@@ -570,6 +580,10 @@ void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)
     }
 }
 
+void KisPart::queueAddRecentURLToAllMainWindowsOnFileSaved(QUrl url, QUrl oldUrl)
+{
+    d->pendingAddRecentUrlMap.insert(url, oldUrl);
+}
 
 void KisPart::startCustomDocument(KisDocument* doc)
 {

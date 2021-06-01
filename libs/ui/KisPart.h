@@ -133,6 +133,12 @@ public:
     void addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl = QUrl());
 
     /**
+     * Registers a file path to be added to the recents list, but do not apply
+     * until the file has finished saving.
+     */
+    void queueAddRecentURLToAllMainWindowsOnFileSaved(QUrl url, QUrl oldUrl = QUrl());
+
+    /**
      * @return the currently active main window.
      */
     KisMainWindow *currentMainwindow() const;

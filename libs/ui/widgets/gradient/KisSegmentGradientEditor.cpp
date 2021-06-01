@@ -727,7 +727,7 @@ void KisSegmentGradientEditor::on_stopRightEditor_colorChanged(KoColor color)
     KoColor c(color, segment->startColor().colorSpace());
     c.setOpacity(stopRightEditor->opacity() / 100.0);
     segment->setStartColor(c);
-    stopRightEditor->update();
+    emit gradientSlider->updateRequested();
     emit sigGradientChanged();
     if (constrainStopButton->keepAspectRatio() && gradientSlider->selectedHandle().index > 0) {
         stopLeftEditor->setColor(stopRightEditor->color());

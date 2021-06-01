@@ -105,11 +105,6 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
                                              , QString::number(m_activeView->document()->image()->animationInterface()->framerate()))
                                        );
     }
-    
-    m_ui.cmbDocumentColorProfile->addItem("Default","");
-
-    m_ui.documentResolutionSpinbox->setRange(0,10000);
-    m_ui.documentResolutionSpinbox->setValue(120);
 
     m_ui.documentWidthSpinbox->setValue(0);
     m_ui.documentHeightSpinbox->setValue(0);
@@ -249,8 +244,8 @@ QStringList KisDlgImportVideoAnimation::documentInfo() {
     QStringList documentInfoList;
 
     // We're looking for a possible profile here, otherwise it gets generated. Then we get the name.
-    QString profileName = m_ui.cmbDocumentColorProfile->currentData().toString();
     QString profileColorSpace = RGBAColorModelID.id();
+    QString profileName = KoColorSpaceRegistry::instance()->p709SRGBProfile()->name();
     if (m_videoInfo.colorTransfer != TRC_UNSPECIFIED && m_videoInfo.colorPrimaries != PRIMARIES_UNSPECIFIED) {
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileFor(QVector<double>(), m_videoInfo.colorPrimaries, m_videoInfo.colorTransfer);
         profileName = profile->name();
@@ -266,7 +261,7 @@ QStringList KisDlgImportVideoAnimation::documentInfo() {
         documentInfoList << "0"
                          << QString::number(m_ui.documentWidthSpinbox->value())
                          << QString::number(m_ui.documentHeightSpinbox->value())
-                         << QString::number(m_ui.documentResolutionSpinbox->value())
+                         << QString::number(72)
                          << profileColorSpace
                          << m_videoInfo.colorDepth
                          << profileName;
@@ -453,7 +448,7 @@ void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
     int pixelSize = 4; //how do we even go about getting the bitdepth???
     if (m_activeView && m_ui.cmbDocumentHandler->currentIndex() > 0) {
         pixelSize = m_activeView->image()->colorSpace()->pixelSize() * 4;
-    } else if (m_ui.cmbDocumentColorDepth->currentText() == "U16"){
+    } else if (m_videoInfo.colorDepth == "U16"){
         pixelSize = 8;
     }
     int frames = m_videoInfo.fps * time + 2;

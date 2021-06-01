@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>614</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,7 +27,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -474,99 +474,34 @@ p, li { white-space: pre-wrap; }
            <property name="title">
             <string>Document</string>
            </property>
-           <widget class="QWidget" name="layoutWidget_5">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>30</y>
-              <width>441</width>
-              <height>140</height>
-             </rect>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0,0,0">
-             <property name="sizeConstraint">
-              <enum>QLayout::SetMinimumSize</enum>
-             </property>
-             <item row="0" column="3">
-              <widget class="QComboBox" name="cmbDocumentColorModel"/>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="documentHeightSpinbox"/>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="documentColorDepthLabel">
-               <property name="text">
-                <string>Depth:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="documentWidthSpinbox"/>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLabel" name="documentColorModelLabel">
-               <property name="text">
-                <string>Model:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="documentWidthLabel">
-               <property name="text">
-                <string>Width:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="documentHeightLabel">
-               <property name="text">
-                <string>Height:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="documentResolutionLabel">
-               <property name="text">
-                <string>Resolution:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="3">
-              <widget class="QComboBox" name="cmbDocumentColorDepth"/>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="documentColorProfileLabel">
-               <property name="text">
-                <string>Profile:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="3">
-              <widget class="QComboBox" name="cmbDocumentColorProfile"/>
-             </item>
-             <item row="2" column="1">
-              <widget class="QSpinBox" name="documentResolutionSpinbox"/>
-             </item>
-            </layout>
-           </widget>
+           <layout class="QFormLayout" name="formLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="documentWidthLabel">
+              <property name="text">
+               <string>Width:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="documentWidthSpinbox"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="documentHeightLabel">
+              <property name="text">
+               <string>Height:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="documentHeightSpinbox"/>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>

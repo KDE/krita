@@ -338,11 +338,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     intForcedFontDPI->setEnabled(forcedFontDPI > 0);
     connect(chkForcedFontDPI, SIGNAL(toggled(bool)), intForcedFontDPI, SLOT(setEnabled(bool)));
 
-    bool useTimestamps = false;
-#ifdef Q_OS_UNIX
-    useTimestamps = true;
-#endif
-    chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", useTimestamps));
+    chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 }
 
 void GeneralTab::setDefault()

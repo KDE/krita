@@ -1161,7 +1161,7 @@ void KisConfig::setToolOptionsPopupDetached(bool detached) const
 
 bool KisConfig::paintopPopupDetached(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("PaintopPopupDetached", false));
+    return (defaultValue ? true : m_cfg.readEntry("PaintopPopupDetached", true));
 }
 
 void KisConfig::setPaintopPopupDetached(bool detached) const

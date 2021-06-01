@@ -302,7 +302,7 @@ public:
     bool toolOptionsPopupDetached(bool defaultValue = false) const;
     void setToolOptionsPopupDetached(bool detached) const;
 
-    bool paintopPopupDetached(bool defaultValue = false) const;
+    bool paintopPopupDetached(bool defaultValue = true) const;
     void setPaintopPopupDetached(bool detached) const;
 
     QString pressureTabletCurve(bool defaultValue = false) const;

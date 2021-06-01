@@ -156,7 +156,7 @@ if (WIN32)
     configure_file(versioninfo.rc.in ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
 
     add_executable(krita_windows_stub_exe windows_stub_main.cpp ${krita_windows_stub_ICONS_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
-    target_link_libraries(krita_windows_stub_exe PRIVATE krita)
+    target_link_libraries(krita_windows_stub_exe PRIVATE krita Qt5::WinMain)
     set_target_properties(krita_windows_stub_exe
         PROPERTIES
             OUTPUT_NAME "krita"

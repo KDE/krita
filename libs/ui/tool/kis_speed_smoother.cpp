@@ -15,13 +15,16 @@
 #include "kis_config.h"
 
 #define MAX_SMOOTH_HISTORY 512
+
+// Timer-based smoothing settings
 #define MAX_TIME_DIFF 500
 #define MIN_TIME_DIFF 15
 #define MAX_TRACKING_DISTANCE 300
 #define MIN_TRACKING_DISTANCE 5
 
-#define MAX_SAMPLE_COUNT 10
-#define MAX_TIME_DIFF_STRICT 15
+// Timestamps-based smoothing settings
+#define MAX_TRACKING_TIME 80
+#define MAX_TIME_GAP 200
 
 
 struct KisSpeedSmoother::Private
@@ -97,7 +100,7 @@ qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt, ulong timestamp)
 
     for (; it != end; ++it) {
         itemsSearched++;
-        if (itemsSearched > MAX_SAMPLE_COUNT || it->time > MAX_TIME_DIFF_STRICT) {
+        if (totalTime > MAX_TRACKING_TIME || it->time > MAX_TIME_GAP) {
             break;
         }
         totalDistance += it->distance;

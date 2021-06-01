@@ -49,7 +49,7 @@ DlgResourceTypeForFile::DlgResourceTypeForFile(QWidget *parent, QMap<QString, QS
         {
             QString resourceName = ResourceName::resourceTypeToName(resourceTypes[j]);
             QRadioButton* button = new QRadioButton(resourceName, parent);
-            button->setProperty("resourceType", resourceName);
+            button->setProperty("resourceType", resourceTypes[j]);
             buttonGroup->addButton(button);
             layout->addWidget(button);
         }

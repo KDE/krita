@@ -299,9 +299,12 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
     d->removeFrameTransparency();
 
     ++d->partIndex;
+
     bool isFrameWritten = d->writeFrame();
-    if (!isFrameWritten)
+    if (!isFrameWritten) {
+        emit frameWriteFailed();
         quit();
+    }
 }
 
 void RecorderWriter::onImageModified()

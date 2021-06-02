@@ -239,8 +239,12 @@ void KisPopupPalette::reconfigure()
     m_presetSlotCount = qMax(config.favoritePresets(), 10);
     m_popupPaletteSize = config.readEntry("popuppalette/size", 385);
     qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2;
+    
+    m_showColorHistory = config.readEntry("popuppalette/showColorHistory", true);
+    
     m_colorHistoryInnerRadius = selectorRadius + borderWidth;
-    m_colorHistoryOuterRadius = m_colorHistoryInnerRadius + 20;
+    m_colorHistoryOuterRadius = m_colorHistoryInnerRadius;
+    if (m_showColorHistory) m_colorHistoryOuterRadius += 20;
 
     m_mainArea->changeSize(m_popupPaletteSize, m_popupPaletteSize);
 
@@ -521,56 +525,58 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.drawPath(presetPath);
     }
 
-    // paint recent colors area.
-    painter.setPen(Qt::NoPen);
-    float rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
+    if (m_showColorHistory) {
+        // paint recent colors area.
+        painter.setPen(Qt::NoPen);
+        float rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
 
-    // there might be no recent colors at the start, so paint a placeholder
-    if (m_resourceManager->recentColorsTotal() == 0) {
-        painter.setBrush(Qt::transparent);
+        // there might be no recent colors at the start, so paint a placeholder
+        if (m_resourceManager->recentColorsTotal() == 0) {
+            painter.setBrush(Qt::transparent);
 
-        QPainterPath emptyRecentColorsPath(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
-        painter.setPen(QPen(palette().color(QPalette::Background).lighter(150), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-        painter.drawPath(emptyRecentColorsPath);
-    } else {
-
-        for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
-            QPainterPath recentColorsPath(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
-
-            //accessing recent color of index pos
-            painter.fillPath(recentColorsPath, m_displayRenderer->toQColor( m_resourceManager->recentColorAt(pos) ));
-            painter.drawPath(recentColorsPath);
-            painter.rotate(rotationAngle);
-        }
-    }
-
-    // painting hovered color
-    if (hoveredColor() > -1) {
-        painter.setPen(QPen(palette().color(QPalette::Highlight), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-
-        if (m_resourceManager->recentColorsTotal() == 1) {
-            QPainterPath path_ColorDonut(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
-            painter.drawPath(path_ColorDonut);
+            QPainterPath emptyRecentColorsPath(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
+            painter.setPen(QPen(palette().color(QPalette::Background).lighter(150), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+            painter.drawPath(emptyRecentColorsPath);
         } else {
-            painter.rotate((m_resourceManager->recentColorsTotal() + hoveredColor()) *rotationAngle);
-            QPainterPath path(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
-            painter.drawPath(path);
-            painter.rotate(hoveredColor() * -1 * rotationAngle);
+
+            for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
+                QPainterPath recentColorsPath(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
+
+                //accessing recent color of index pos
+                painter.fillPath(recentColorsPath, m_displayRenderer->toQColor( m_resourceManager->recentColorAt(pos) ));
+                painter.drawPath(recentColorsPath);
+                painter.rotate(rotationAngle);
+            }
         }
-    }
 
-    // painting selected color
-    if (selectedColor() > -1) {
-        painter.setPen(QPen(palette().color(QPalette::Highlight).darker(130), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+        // painting hovered color
+        if (hoveredColor() > -1) {
+            painter.setPen(QPen(palette().color(QPalette::Highlight), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
 
-        if (m_resourceManager->recentColorsTotal() == 1) {
-            QPainterPath path_ColorDonut(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
-            painter.drawPath(path_ColorDonut);
-        } else {
-            painter.rotate((m_resourceManager->recentColorsTotal() + selectedColor()) *rotationAngle);
-            QPainterPath path(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
-            painter.drawPath(path);
-            painter.rotate(selectedColor() * -1 * rotationAngle);
+            if (m_resourceManager->recentColorsTotal() == 1) {
+                QPainterPath path_ColorDonut(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
+                painter.drawPath(path_ColorDonut);
+            } else {
+                painter.rotate((m_resourceManager->recentColorsTotal() + hoveredColor()) *rotationAngle);
+                QPainterPath path(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
+                painter.drawPath(path);
+                painter.rotate(hoveredColor() * -1 * rotationAngle);
+            }
+        }
+
+        // painting selected color
+        if (selectedColor() > -1) {
+            painter.setPen(QPen(palette().color(QPalette::Highlight).darker(130), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+
+            if (m_resourceManager->recentColorsTotal() == 1) {
+                QPainterPath path_ColorDonut(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
+                painter.drawPath(path_ColorDonut);
+            } else {
+                painter.rotate((m_resourceManager->recentColorsTotal() + selectedColor()) *rotationAngle);
+                QPainterPath path(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
+                painter.drawPath(path);
+                painter.rotate(selectedColor() * -1 * rotationAngle);
+            }
         }
     }
 
@@ -665,10 +671,10 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
         emit sigUpdateCanvas();
     }
 
-    // don't highlight the presets if we are in the middle of rotating the canvas
+    // highlight the colors/presets (when not rotating)
     if (m_isRotatingCanvasIndicator == false) {
-        QPainterPath pathColor(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
-        if (pathColor.contains(point)) {
+        QPainterPath colorHistoryPath(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
+        if (colorHistoryPath.contains(point)) {
             if (hoveredPreset() >= 0) {
                 setToolTip(QString());
                 setHoveredPreset(-1);
@@ -840,18 +846,20 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     m_isRotatingCanvasIndicator = false;
 
     if (event->button() == Qt::LeftButton) {
-        QPainterPath pathColor(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
-
         //in favorite brushes area
         if (hoveredPreset() > -1) {
             //setSelectedBrush(hoveredBrush());
             emit sigChangeActivePaintop(hoveredPreset());
         }
-        if (pathColor.contains(point)) {
-            int pos = calculateColorIndex(point, m_resourceManager->recentColorsTotal());
 
-            if (pos >= 0 && pos < m_resourceManager->recentColorsTotal()) {
-                emit sigUpdateRecentColor(pos);
+        if (m_showColorHistory) {
+            QPainterPath pathColor(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
+            if (pathColor.contains(point)) {
+                int pos = calculateColorIndex(point, m_resourceManager->recentColorsTotal());
+
+                if (pos >= 0 && pos < m_resourceManager->recentColorsTotal()) {
+                    emit sigUpdateRecentColor(pos);
+                }
             }
         }
     }

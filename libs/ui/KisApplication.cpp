@@ -566,6 +566,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     }
 
                     qApp->processEvents(); // For vector layers to be updated
+                    doc->image()->waitForDone();
 
                     doc->setFileBatchMode(true);
                     if (!doc->exportDocumentSync(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {

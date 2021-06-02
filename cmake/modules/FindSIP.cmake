@@ -33,9 +33,19 @@ ELSE(SIP_VERSION)
   FIND_FILE(_find_sip_py FindSIP.py PATHS ${CMAKE_MODULE_PATH})
 
   if (WIN32)
-    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/krita-python-libs;$ENV{PYTHONPATH}" ${PYTHON_EXECUTABLE} ${_find_sip_py} OUTPUT_VARIABLE sip_config)
+    set(_sip_python_path "${KRITA_PYTHONPATH_V4};${KRITA_PYTHONPATH_V5};$ENV{PYTHONPATH}")
+
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env
+      "PYTHONPATH=${_sip_python_path}"
+      ${PYTHON_EXECUTABLE} ${_find_sip_py}
+      OUTPUT_VARIABLE sip_config)
   else (WIN32)
-    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_sip_py} OUTPUT_VARIABLE sip_config)
+    set(_pyqt5_python_path "${KRITA_PYTHONPATH_V4}:${KRITA_PYTHONPATH_V5}:$ENV{PYTHONPATH}")
+
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env 
+      "PYTHONPATH=${_sip_python_path}"
+      ${PYTHON_EXECUTABLE} ${_find_sip_py}
+      OUTPUT_VARIABLE sip_config)
   endif (WIN32)
 
   IF(sip_config)

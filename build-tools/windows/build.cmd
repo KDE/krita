@@ -709,7 +709,6 @@ if NOT "%KRITA_GIT_DIR%" == "" (
 if NOT "%SVN_DIR%" == "" (
     set PATH=%PATH%;%SVN_DIR%
 )
-set PYTHONPATH=%DEPS_INSTALL_DIR%\Lib\site-packages;%PYTHONPATH%
 
 echo Creating dirs...
 if NOT "%ARG_SKIP_DEPS%" == "1" (

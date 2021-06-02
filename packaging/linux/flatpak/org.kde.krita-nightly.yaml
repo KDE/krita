@@ -509,9 +509,9 @@ modules:
       - -DBUILD_STATIC=FALSE
       - -DBUILD_PLUGINS=TRUE
     sources:
-      - type: archive
-        url: https://github.com/mm2/Little-CMS/releases/download/lcms2.12/lcms2-2.12.tar.gz
-        sha256: 18663985e864100455ac3e507625c438c3710354d85e5cbb7cd4043e11fe10f5
+      - type: git
+        url: https://github.com/mm2/Little-CMS.git
+        commit: 807809d7dd9b09c0380b71d5d5ebee3c1439ca99
       - type: patch
         paths:
           - ../../../3rdparty/ext_lcms2/0001-Add-cmake-build-system.patch
@@ -590,7 +590,6 @@ modules:
       - type: archive
         url: https://github.com/mypaint/libmypaint/releases/download/v1.6.1/libmypaint-1.6.1.tar.xz
         sha256: 741754f293f6b7668f941506da07cd7725629a793108bb31633fb6c3eae5315f
-  
         
   - name: libheif
     buildsystem: cmake-ninja
@@ -601,14 +600,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/strukturag/libheif.git
-        commit: f5a3d8e090674be349f5c1e24083b3e553c516bd
+        commit: 8f8035a102e959a3488f69e8befe09d51cf596a7
     modules:
       - name: dav1d
         buildsystem: meson
         sources:
           - type: archive
-            url: https://downloads.videolan.org/pub/videolan/dav1d/0.8.2/dav1d-0.8.2.tar.xz
-            sha256: 3dd91d96b44e9d8ba7e82ad9e730d6c579ab5e19edca0db857a60f5ae6a0eb13
+            url: https://downloads.videolan.org/pub/videolan/dav1d/0.9.0/dav1d-0.9.0.tar.xz
+            sha256: cfae88e8067c9b2e5b96d95a7a00155c353376fe9b992a96b4336e0eab19f9f6
               
       - name: rav1e
         buildsystem: simple
@@ -620,17 +619,16 @@ modules:
               CARGO_HOME: /run/build/rav1e/cargo
         sources:
           - type: archive
-            url: https://files.kde.org/krita/build/dependencies/flatpak/cargo-c-0.8.0.tar.gz
-            sha256: 391774d35e228a09895a6e3e23e56d4bc6247426b2603052f4c02519b9015e1c
+            url: https://files.kde.org/krita/build/dependencies/flatpak/cargo-c-0.8.1.tar.gz
+            sha256: 3b1fe50e210e3800608372b47e4488caecd7789117fb4dfe2e5f50813d9ddff6
             dest: cargo-c
           - type: archive
-            url: https://files.kde.org/krita/build/dependencies/flatpak/rav1e-0.5.0-alpha.tar.gz
-            sha256: 9020ddf1e2a9711d6e8be387f64faff636d0c9e072650a796b26a7e85a08b516
+            url: https://files.kde.org/krita/build/dependencies/flatpak/rav1e-p20210525.tar.gz
+            sha256: cf52b5180a645473f6262c9c225b77810707aa2ec652b914ca48421c0f802579
             dest: rav1e
         build-commands:
           - cd cargo-c && cargo --offline build --release
           - cargo install --path cargo-c/  --verbose
-          - echo $PWD
           - cd rav1e && cargo cbuild --release --prefix=/app --library-type=cdylib -j $FLATPAK_BUILDER_N_JOBS --verbose
           - cd rav1e && cargo cinstall --release --library-type=cdylib --prefix=/app
           

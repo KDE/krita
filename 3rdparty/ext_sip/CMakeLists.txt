@@ -13,9 +13,13 @@ if (UNIX)
 
         CONFIGURE_COMMAND ""
 
-        BUILD_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS}
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS}
 
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_sip} --optimize=1
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_sip} --optimize=1
 
         BUILD_IN_SOURCE 1
 
@@ -29,6 +33,7 @@ elseif (WIN32)
     endif()
 
     string(REPLACE "/" "\\" _sip_prefix ${PREFIX_ext_sip})
+    string(REPLACE "/" "\\" _krita_pythonpath ${KRITA_PYTHONPATH})
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.python.org/packages/source/s/sip/sip-6.1.0.tar.gz
@@ -38,12 +43,16 @@ elseif (WIN32)
 
         CONFIGURE_COMMAND ""
 
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS} ${_compiler}
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${_krita_pythonpath}"
+            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS} ${_compiler}
 
         # HACK: Create lib\site-packages before installing
         # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
         INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_sip_prefix}\\lib\\site-packages
-            COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix ${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
+            COMMAND ${CMAKE_COMMAND} -E env 
+                "PYTHONPATH=${_krita_pythonpath}"
+                ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix ${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 

@@ -41,9 +41,20 @@ ELSE(EXISTS PYQT5_VERSION)
     get_filename_component(LIBQT5CORE_PATH ${LIBQT5CORE_PATH} PATH)
     get_filename_component(MINGW_PATH ${CMAKE_CXX_COMPILER} PATH)
 
-    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/krita-python-libs;$ENV{PYTHONPATH}" "PYTHONDLLPATH=${LIBQT5CORE_PATH};${MINGW_PATH};" ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
+    set(_pyqt5_python_path "${KRITA_PYTHONPATH_V4};${KRITA_PYTHONPATH_V5};$ENV{PYTHONPATH}")
+
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env
+      "PYTHONPATH=${_pyqt5_python_path}"
+      "PYTHONDLLPATH=${LIBQT5CORE_PATH};${MINGW_PATH};"
+      ${PYTHON_EXECUTABLE} ${_find_pyqt5_py}
+      OUTPUT_VARIABLE pyqt5_config)
   else (WIN32)
-    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
+    set(_pyqt5_python_path "${KRITA_PYTHONPATH_V4}:${KRITA_PYTHONPATH_V5}:$ENV{PYTHONPATH}")
+
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env 
+      "PYTHONPATH=${_pyqt5_python_path}"
+      ${PYTHON_EXECUTABLE} ${_find_pyqt5_py}
+      OUTPUT_VARIABLE pyqt5_config)
   endif (WIN32)
 
   IF(pyqt5_config)

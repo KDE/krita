@@ -180,10 +180,18 @@ else()
             ${pyproject_toml}
             ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml
         )
+        if (WIN32)
+            set(_krita_python_path "${KRITA_PYTHONPATH_V5};$ENV{PYTHONPATH}")
+        else()
+            set(_krita_python_path "${KRITA_PYTHONPATH_V5}:$ENV{PYTHONPATH}")
+        endif()
+
         add_custom_command(
             COMMAND
                 ${CMAKE_COMMAND} -E echo "Generating SIP 5+ bindings for ${MODULE_NAME}..."
             COMMAND
+                ${CMAKE_COMMAND} -E env
+                "PYTHONPATH=${_krita_python_path}"
                 ${PYTHON_EXECUTABLE}
                 ${sip_generate}
                 --build-dir ${CMAKE_CURRENT_SIP_OUTPUT_DIR}

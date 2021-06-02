@@ -1,7 +1,6 @@
 SET(PREFIX_ext_python "${EXTPREFIX}" )
 if (UNIX)
     if (APPLE)
-        set(PYTHON_VERSION "3.8")
         ExternalProject_Add( ext_python
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz

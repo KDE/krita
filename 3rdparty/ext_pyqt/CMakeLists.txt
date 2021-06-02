@@ -13,9 +13,13 @@ if(UNIX)
 
         CONFIGURE_COMMAND ""
 
-        BUILD_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_pyqt} --optimize=1
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_pyqt} --optimize=1
 
         BUILD_IN_SOURCE 1
 
@@ -27,13 +31,21 @@ if(UNIX)
         URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.4.tar.gz
         URL_HASH SHA256=2a69597e0dd11caabe75fae133feca66387819fc9bc050f547e5551bce97e5be
 
-        CONFIGURE_COMMAND ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS}
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS}
 
-        BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build make -j${SUBMAKE_JOBS}
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
+                make -j${SUBMAKE_JOBS}
 
         # force single-threaded installation to avoid
         # race conditions in post-install .py script
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build make -j1 install
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
+                make -j1 install
 
         BUILD_IN_SOURCE 1
 
@@ -49,13 +61,17 @@ if(UNIX)
 
         CONFIGURE_COMMAND ""
 
-        BUILD_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # Here we need a flat-egg installation, otherwise the egg is deployed
         # inside its own directory in site-packages.
         # So we set as root our 3rdparty layout, and a sufficiently dud prefix.
         # See https://github.com/msys2/MINGW-packages/blob/8a4066591cf1e023971526c55bf2d5fe0c7aa84a/mingw-w64-pyqt5-sip/PKGBUILD
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --prefix "." --root=${PREFIX_ext_pyqt} --optimize=1
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${KRITA_PYTHONPATH}"
+            ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --prefix "." --root=${PREFIX_ext_pyqt} --optimize=1
 
         BUILD_IN_SOURCE 1
 
@@ -67,10 +83,11 @@ if(UNIX)
 elseif(WIN32)
     if(MINGW)
         set(_compiler -c mingw32)
-        string(REPLACE "/" "\\" _pyqt_prefix ${PREFIX_ext_pyqt})
     elseif(MSVC)
         set(_compiler -c msvc)
     endif()
+    string(REPLACE "/" "\\" _pyqt_prefix ${PREFIX_ext_pyqt})
+    string(REPLACE "/" "\\" _krita_pythonpath ${KRITA_PYTHONPATH})
 
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -81,12 +98,16 @@ elseif(WIN32)
 
         CONFIGURE_COMMAND ""
 
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${_krita_pythonpath}"
+            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # HACK: Create lib\site-packages before installing
         # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
         INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_pyqt_prefix}\\lib\\site-packages
-            COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
+            COMMAND ${CMAKE_COMMAND} -E env 
+                "PYTHONPATH=${_krita_pythonpath}"
+                ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 
@@ -98,13 +119,21 @@ elseif(WIN32)
         URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.4.tar.gz
         URL_HASH SHA256=2a69597e0dd11caabe75fae133feca66387819fc9bc050f547e5551bce97e5be
 
-        CONFIGURE_COMMAND sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\Lib\\site-packages --jobs ${SUBMAKE_JOBS}
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${_krita_pythonpath}"
+            sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\Lib\\site-packages --jobs ${SUBMAKE_JOBS}
 
-        BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build mingw32-make -j${SUBMAKE_JOBS}
+        BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
+            ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${_krita_pythonpath}"
+            mingw32-make -j${SUBMAKE_JOBS}
 
         # force single-threaded installation to avoid
         # race conditions in post-install .py script
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build mingw32-make -j1 install
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
+            ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${_krita_pythonpath}"
+            mingw32-make -j1 install
 
         BUILD_IN_SOURCE 1
 
@@ -122,13 +151,17 @@ elseif(WIN32)
 
         CONFIGURE_COMMAND ""
 
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${_krita_pythonpath}"
+            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # Here we need a flat-egg installation, otherwise the egg is deployed
         # inside its own directory in site-packages.
         # So we set as root our 3rdparty layout, and a sufficiently dud prefix.
         # See https://github.com/msys2/MINGW-packages/blob/8a4066591cf1e023971526c55bf2d5fe0c7aa84a/mingw-w64-pyqt5-sip/PKGBUILD
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix "." --root=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
+            "PYTHONPATH=${_krita_pythonpath}"
+            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix "." --root=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 

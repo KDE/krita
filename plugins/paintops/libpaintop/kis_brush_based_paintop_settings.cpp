@@ -223,7 +223,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                 new KisIntSliderBasedPaintOpPropertyCallback(
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "angle",
-                    "Angle",
+                    i18n("Angle"),
                     settings, 0);
 
             prop->setRange(0, 360);
@@ -253,7 +253,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                 new KisUniformPaintOpPropertyCallback(
                     KisUniformPaintOpPropertyCallback::Bool,
                     "auto_spacing",
-                    "Auto Spacing",
+                    i18n("Auto Spacing"),
                     settings, 0);
 
             prop->setReadCallback(
@@ -281,7 +281,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                 new KisDoubleSliderBasedPaintOpPropertyCallback(
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "spacing",
-                    "Spacing",
+                    i18n("Spacing"),
                     settings, 0);
 
             prop->setRange(0.01, 10);

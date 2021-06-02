@@ -87,6 +87,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void configChanged();
+    void presetsChanged();
 
 private:
 

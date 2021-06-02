@@ -239,7 +239,18 @@ void KisPopupPalette::slotConfigurationChanged()
 void KisPopupPalette::reconfigure()
 {
     KisConfig config(true);
-    m_presetSlotCount = qMax(config.favoritePresets(), 10);
+    m_useDynamicSlotCount = config.readEntry("popuppalette/useDynamicSlotCount", true);
+    m_maxPresetSlotCount = config.favoritePresets();
+    if (m_useDynamicSlotCount) {
+        int presetCount = m_resourceManager->numFavoritePresets();
+        // if there are no presets because the tag is empty
+        // show the maximum number allowed (they will be painted as empty slots)
+        m_presetSlotCount = presetCount == 0
+            ? m_maxPresetSlotCount
+            : qMin(m_maxPresetSlotCount, m_resourceManager->numFavoritePresets());
+    } else {
+        m_presetSlotCount = m_maxPresetSlotCount;
+    }
     m_popupPaletteSize = config.readEntry("popuppalette/size", 385);
     qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2;
     
@@ -377,6 +388,17 @@ void KisPopupPalette::slotEmitColorChanged()
         update();
         emit sigChangefGColor(m_colorSelector->getCurrentColor());
     }
+}
+
+void KisPopupPalette::slotUpdate() {
+    int presetCount = m_resourceManager->numFavoritePresets();
+    if (m_useDynamicSlotCount && presetCount != m_presetSlotCount) {
+         m_presetSlotCount = presetCount == 0
+            ? m_maxPresetSlotCount
+            : qMin(m_maxPresetSlotCount, presetCount);
+        calculatePresetLayout();
+    }  
+    update();
 }
 
 //setting KisPopupPalette properties
@@ -558,30 +580,32 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     // painting favorite brushes
     QList<QImage> images(m_resourceManager->favoritePresetImages());
-
+    
     // painting favorite brushes pixmap/icon
     QPainterPath presetPath;
-    for (int pos = 0; pos < numSlots(); pos++) {
+    int presetCount = images.size();
+    bool isTagEmpty = presetCount == 0;
+    for (int pos = 0; pos < m_presetSlotCount; pos++) {
         painter.save();
-
         presetPath = createPathFromPresetIndex(pos);
 
-        if (pos < images.size()) {
+        if (pos < presetCount) {
             painter.setClipPath(presetPath);
 
             QRect bounds = presetPath.boundingRect().toAlignedRect();
             QImage previewHighDPI = images.at(pos).scaled(bounds.size()*devicePixelRatioF() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
             previewHighDPI.setDevicePixelRatio(devicePixelRatioF());
             painter.drawImage(bounds.topLeft(), previewHighDPI);
-        }
-        else {
+        } else {
             painter.fillPath(presetPath, palette().brush(QPalette::Window));  // brush slot that has no brush in it
         }
         // needs to be called here so that the clipping is removed
         painter.restore();
-        QPen pen = painter.pen();
-        pen.setWidth(1);
-        painter.setPen(pen);
+        // if the slot is empty, stroke it slightly darker
+        QColor color = isTagEmpty || pos >= presetCount
+            ? palette().color(QPalette::Background).lighter(150)
+            : palette().color(QPalette::Text);
+        painter.setPen(QPen(color, 1));
         painter.drawPath(presetPath);
     }
     if (hoveredPreset() > -1) {
@@ -827,6 +851,7 @@ void KisPopupPalette::slotShowTagsPopup()
                 QModelIndex idx = model.index(i, 0);
                 if (model.data(idx, Qt::DisplayRole).toString() == KLocalizedString::removeAcceleratorMarker(action->text())) {
                     m_resourceManager->setCurrentTag(model.tagForIndex(idx));
+                    reconfigure();
                     break;
                 }
             }
@@ -965,7 +990,9 @@ KisPopupPalette::~KisPopupPalette()
 
 void KisPopupPalette::calculatePresetLayout()
 {
-    qreal angleSlice = 360.0 / numSlots() ; // how many degrees each slice will get
+    // how many degrees each slice will get
+    // if the slot count is 1, we must divide by 2 to get 180 for the algorithm to work
+    qreal angleSlice = 360.0 / qMax(m_presetSlotCount, 2);
     qreal outerRadius = m_popupPaletteSize/2 - m_presetRingMargin - (m_showRotationTrack ? m_rotationTrackSize + 1 /* half of stroke */ : BORDER_WIDTH);
     qreal innerRadius = m_colorHistoryOuterRadius +
     (m_showColorHistory
@@ -987,7 +1014,7 @@ void KisPopupPalette::calculatePresetLayout()
     // staggered arrangement only makes sense if there is more than a tiny offset.
     if (ringWidth > presetRadius * 2.2) {
         //redo all calculations assuming a second row.
-        angleSlice = 180.0/((numSlots()+1) / 2);
+        angleSlice = 180.0/((m_presetSlotCount+1) / 2);
         qreal tempRadius = ringMidRadius * qSin(0.5 * qDegreesToRadians(angleSlice)) - 1;
 
         qreal distance = 0;
@@ -1022,7 +1049,7 @@ void KisPopupPalette::calculatePresetLayout()
     // can we use even bigger icons by forming triplets with two on the same angle
     // and a third one touching both?
     if (ringWidth > presetRadius * 4) {
-        angleSlice = 180.0 / ((numSlots() + 2) / 3);
+        angleSlice = 180.0 / ((m_presetSlotCount + 2) / 3);
         qreal sinAngleSlice = qSin(qDegreesToRadians(angleSlice));
         // radius where innermost circles would touch (2 angle slices apart)
         qreal maxRadius = innerRadius * sinAngleSlice / (1 - sinAngleSlice);
@@ -1075,7 +1102,7 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
     switch (m_presetRingCount) {
     case 1: break;
     case 2: {
-        angleSlice = 180.0/((numSlots()+1) / 2);
+        angleSlice = 180.0/((m_presetSlotCount+1) / 2);
         startingAngle = -(index * angleSlice) + 90;
 
         length = innerRadius + m_cachedRadius;
@@ -1086,7 +1113,7 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
     }
     case 3: {
         int triplet = index / 3;
-        angleSlice = 180.0 / ((numSlots() + 2) / 3);
+        angleSlice = 180.0 / ((m_presetSlotCount + 2) / 3);
         switch (index % 3) {
         case 0:
             startingAngle = -(triplet * 2 * angleSlice) + 90;
@@ -1119,15 +1146,10 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
 int KisPopupPalette::findPresetSlot(QPointF position) const
 {
     QPointF adujustedPoint = position - QPointF(m_popupPaletteSize/2, m_popupPaletteSize/2);
-    for (int i = 0; i < numSlots(); i++) {
+    for (int i = 0; i < m_presetSlotCount; i++) {
         if (createPathFromPresetIndex(i).contains(adujustedPoint)) {
             return i;
         }
     }
     return -1;
-}
-
-int KisPopupPalette::numSlots() const
-{
-    return m_presetSlotCount;
 }

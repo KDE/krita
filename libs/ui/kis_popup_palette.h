@@ -97,10 +97,10 @@ private:
     void calculatePresetLayout();
     QPainterPath createPathFromPresetIndex(int index) const;
 
-    int numSlots() const;
-
+    int m_maxPresetSlotCount {10};
     int m_presetSlotCount {10};
     int m_hoveredPreset {0};
+    bool m_useDynamicSlotCount {true};
     int m_hoveredColor {0};
     int m_selectedColor {0};
 
@@ -168,7 +168,7 @@ private Q_SLOTS:
     void slotExternalFgColorChanged(const KoColor &color);
     void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
-    void slotUpdate() { update(); }
+    void slotUpdate();
     void slotHide() { setVisible(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);

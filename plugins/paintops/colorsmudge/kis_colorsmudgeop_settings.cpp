@@ -29,6 +29,7 @@ KisColorSmudgeOpSettings::~KisColorSmudgeOpSettings()
 #include "kis_paintop_settings_update_proxy.h"
 #include "kis_curve_option_uniform_property.h"
 #include "kis_smudge_radius_option.h"
+#include "kis_pressure_paint_thickness_option.h"
 
 QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
@@ -98,6 +99,79 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
                     "smudge_color_rate",
                     new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false),
                     settings, 0);
+
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+
+        {
+            KisUniformPaintOpPropertyCallback *prop =
+                new KisUniformPaintOpPropertyCallback(
+                    KisUniformPaintOpPropertyCallback::Bool,
+                    "smudge_smear_alpha",
+                    i18n("Smear Alpha"),
+                    settings, 0);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisSmudgeOption option;
+                    option.readOptionSetting(prop->settings().data());
+
+                    prop->setValue(option.getSmearAlpha());
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisSmudgeOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.setSmearAlpha(prop->value().toBool());
+                    option.writeOptionSetting(prop->settings().data());
+                });
+
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+
+        {
+            KisCurveOptionUniformProperty *prop =
+                new KisCurveOptionUniformProperty(
+                    "smudge_paint_thickness_rate",
+                    new KisPressurePaintThicknessOption(),
+                    settings, 0);
+
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+
+        {
+            KisComboBasedPaintOpPropertyCallback *prop =
+                new KisComboBasedPaintOpPropertyCallback(
+                    "smudge_paint_thickness_mode",
+                    i18n("Paint Thickness Mode"),
+                    settings, 0);
+
+            QList<QString> modes;
+            modes << i18n("Overwrite");
+            modes << i18n("Paint over");
+
+            prop->setItems(modes);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisPressurePaintThicknessOption option;
+                    option.readOptionSetting(prop->settings().data());
+
+                    prop->setValue(int(option.getThicknessMode()) - 1);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisPressurePaintThicknessOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.setThicknessMode(KisPressurePaintThicknessOption::ThicknessMode(prop->value().toInt() + 1));
+                    option.writeOptionSetting(prop->settings().data());
+                });
 
             QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();

@@ -14,7 +14,14 @@ class KisBrushOpSettings : public KisBrushBasedPaintOpSettings
 {
 public:
     KisBrushOpSettings(KisResourcesInterfaceSP resourcesInterface);
-    bool needsAsynchronousUpdates() const;
+    ~KisBrushOpSettings();
+
+    bool needsAsynchronousUpdates() const override;
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif // KISBRUSHOPSETTINGS_H

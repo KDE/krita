@@ -16,4 +16,22 @@ if (MINGW)
         UPDATE_COMMAND ""
     )
 
+elseif (MSVC)
+
+    ExternalProject_Add(
+        ext_icoutils
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://files.kde.org/krita/build/dependencies/icoutils-bin-0.32.3.tar.gz
+        URL_HASH SHA256=e2de7f65a82ff0f0377002f9cfb4182ec8bbd7de6d714bb7ae40af8da5d8a451
+
+        INSTALL_DIR ${PREFIX_ext_icoutils}
+
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying icoutils
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/icotool.exe ${PREFIX_ext_icoutils}/bin/
+
+        DEPENDS ext_png
+        UPDATE_COMMAND ""
+    )
+
 endif (MINGW)

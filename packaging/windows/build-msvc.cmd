@@ -856,9 +856,9 @@ echo Running CMake for deps...
 @echo off
 echo.
 
-set EXT_TARGETS=patch png2ico zlib gettext openssl boost exiv2 fftw3 eigen3 
-set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio openexr png tiff gsl vc libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem gmic freetype poppler 
+set EXT_TARGETS=patch zlib gettext openssl boost exiv2 fftw3 eigen3 jpeg lcms2
+set EXT_TARGETS=%EXT_TARGETS% ocio openexr png icoutils tiff gsl vc libraw
+set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw gmic freetype poppler 
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint

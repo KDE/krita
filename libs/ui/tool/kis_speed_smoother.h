@@ -19,6 +19,7 @@ public:
     ~KisSpeedSmoother();
 
     qreal lastSpeed() const;
+    qreal getNextSpeed(const QPointF &pt, ulong timestamp);
     qreal getNextSpeed(const QPointF &pt);
     void clear();
 

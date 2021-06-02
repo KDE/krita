@@ -12,12 +12,19 @@
 
 #include "kis_debug.h"
 #include "kis_global.h"
+#include "kis_config.h"
 
 #define MAX_SMOOTH_HISTORY 512
+
+// Timer-based smoothing settings
 #define MAX_TIME_DIFF 500
 #define MIN_TIME_DIFF 15
 #define MAX_TRACKING_DISTANCE 300
 #define MIN_TRACKING_DISTANCE 5
+
+// Timestamps-based smoothing settings
+#define MAX_TRACKING_TIME 80
+#define MAX_TIME_GAP 200
 
 
 struct KisSpeedSmoother::Private
@@ -49,6 +56,7 @@ struct KisSpeedSmoother::Private
 
     QPointF lastPoint;
     QElapsedTimer timer;
+    qreal lastTime;
     qreal lastSpeed;
 };
 
@@ -64,6 +72,47 @@ KisSpeedSmoother::~KisSpeedSmoother()
 
 qreal KisSpeedSmoother::lastSpeed() const
 {
+    return m_d->lastSpeed;
+}
+
+qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt, ulong timestamp)
+{
+    qreal dist = kisDistance(pt, m_d->lastPoint);
+
+    if (m_d->lastPoint.isNull()) {
+        m_d->lastPoint = pt;
+        m_d->lastTime = timestamp;
+        m_d->lastSpeed = 0.0;
+        return m_d->lastSpeed;
+    }
+
+    m_d->distances.push_back(Private::DistancePoint(dist, timestamp - m_d->lastTime));
+    m_d->lastPoint = pt;
+    m_d->lastTime = timestamp;
+
+
+    Private::DistanceBuffer::const_reverse_iterator it = m_d->distances.rbegin();
+    Private::DistanceBuffer::const_reverse_iterator end = m_d->distances.rend();
+
+    qreal totalDistance = 0.0;
+    qreal totalTime = 0.0;
+    int itemsSearched = 0;
+
+    for (; it != end; ++it) {
+        itemsSearched++;
+        if (totalTime > MAX_TRACKING_TIME || it->time > MAX_TIME_GAP) {
+            break;
+        }
+        totalDistance += it->distance;
+        totalTime += it->time;
+    }
+
+    if (totalTime == 0) {
+        m_d->lastSpeed = 0.0;
+    } else {
+        m_d->lastSpeed = totalDistance / totalTime;
+    }
+
     return m_d->lastSpeed;
 }
 

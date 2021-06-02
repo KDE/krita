@@ -338,7 +338,13 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     intForcedFontDPI->setEnabled(forcedFontDPI > 0);
     connect(chkForcedFontDPI, SIGNAL(toggled(bool)), intForcedFontDPI, SLOT(setEnabled(bool)));
 
+#ifdef Q_OS_WINxx
+    lblUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed (may cause severe artifacts when using WinTab tablet API):"));
+#else
+    lblUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed:"));
+#endif
 
+    chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 }
 
 void GeneralTab::setDefault()
@@ -412,6 +418,8 @@ void GeneralTab::setDefault()
     chkForcedFontDPI->setChecked(false);
     intForcedFontDPI->setValue(qt_defaultDpi());
     intForcedFontDPI->setEnabled(false);
+
+    chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -2009,6 +2017,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.logImportantSettings();
         cfg.writeEntry("forcedDpiForQtFontBugWorkaround", m_general->forcedFontDpi());
 
+        cfg.writeEntry<bool>("useTimestampsForBrushSpeed", m_general->chkUseTimestampsForBrushSpeed->isChecked());
     }
 
     return !m_cancelClicked;

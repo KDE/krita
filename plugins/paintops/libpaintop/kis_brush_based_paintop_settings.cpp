@@ -222,6 +222,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
             KisIntSliderBasedPaintOpPropertyCallback *prop =
                 new KisIntSliderBasedPaintOpPropertyCallback(
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
+                    KisIntSliderBasedPaintOpPropertyCallback::SubType_Angle,
                     "angle",
                     i18n("Angle"),
                     settings, 0);

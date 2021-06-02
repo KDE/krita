@@ -13,10 +13,12 @@
 struct KisUniformPaintOpProperty::Private
 {
     Private(Type _type,
+            SubType _subType,
             const QString &_id,
             const QString &_name,
             KisPaintOpSettingsSP _settings)
         : type(_type),
+          subType(_subType),
           id(_id),
           name(_name),
           settings(_settings),
@@ -24,6 +26,7 @@ struct KisUniformPaintOpProperty::Private
           isWritingValue(false) {}
 
     Type type;
+    SubType subType;
     QString id;
     QString name;
 
@@ -35,12 +38,23 @@ struct KisUniformPaintOpProperty::Private
 };
 
 KisUniformPaintOpProperty::KisUniformPaintOpProperty(Type type,
+                                                     SubType subType,
                                                      const QString &id,
                                                      const QString &name,
                                                      KisPaintOpSettingsRestrictedSP settings,
                                                      QObject *parent)
     : QObject(parent),
-      m_d(new Private(type, id, name, settings))
+      m_d(new Private(type, subType, id, name, settings))
+{
+}
+
+KisUniformPaintOpProperty::KisUniformPaintOpProperty(Type type,
+                                                     const QString &id,
+                                                     const QString &name,
+                                                     KisPaintOpSettingsRestrictedSP settings,
+                                                     QObject *parent)
+    : QObject(parent),
+      m_d(new Private(type, SubType_None, id, name, settings))
 {
 }
 
@@ -49,7 +63,7 @@ KisUniformPaintOpProperty::KisUniformPaintOpProperty(const QString &id,
                                                      KisPaintOpSettingsRestrictedSP settings,
                                                      QObject *parent)
     : QObject(parent),
-      m_d(new Private(Bool, id, name, settings))
+      m_d(new Private(Bool, SubType_None, id, name, settings))
 {
 }
 
@@ -70,6 +84,11 @@ QString KisUniformPaintOpProperty::name() const
 KisUniformPaintOpProperty::Type KisUniformPaintOpProperty::type() const
 {
     return m_d->type;
+}
+
+KisUniformPaintOpProperty::SubType KisUniformPaintOpProperty::subType() const
+{
+    return m_d->subType;
 }
 
 QVariant KisUniformPaintOpProperty::value() const

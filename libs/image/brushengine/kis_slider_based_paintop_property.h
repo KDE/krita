@@ -25,6 +25,13 @@ class KRITAIMAGE_EXPORT KisSliderBasedPaintOpProperty : public KisUniformPaintOp
 {
 public:
     KisSliderBasedPaintOpProperty(Type type,
+                                  SubType subType,
+                                  const QString &id,
+                                  const QString &name,
+                                  KisPaintOpSettingsRestrictedSP settings,
+                                  QObject *parent);
+                                  
+    KisSliderBasedPaintOpProperty(Type type,
                                   const QString &id,
                                   const QString &name,
                                   KisPaintOpSettingsRestrictedSP settings,

@@ -11,6 +11,17 @@
 
 template <class ParentClass>
 KisCallbackBasedPaintopProperty<ParentClass>::KisCallbackBasedPaintopProperty(typename ParentClass::Type type,
+                                                                              typename ParentClass::SubType subType,
+                                                                              const QString &id,
+                                                                              const QString &name,
+                                                                              KisPaintOpSettingsRestrictedSP settings,
+                                                                              QObject *parent)
+    : ParentClass(type, subType, id, name, settings, parent)
+{
+}
+
+template <class ParentClass>
+KisCallbackBasedPaintopProperty<ParentClass>::KisCallbackBasedPaintopProperty(typename ParentClass::Type type,
                                                                               const QString &id,
                                                                               const QString &name,
                                                                               KisPaintOpSettingsRestrictedSP settings,

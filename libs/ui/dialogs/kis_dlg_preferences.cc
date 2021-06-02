@@ -338,6 +338,12 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     intForcedFontDPI->setEnabled(forcedFontDPI > 0);
     connect(chkForcedFontDPI, SIGNAL(toggled(bool)), intForcedFontDPI, SLOT(setEnabled(bool)));
 
+#ifdef Q_OS_WINxx
+    lblUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed (may cause severe artifacts when using WinTab tablet API):"));
+#else
+    lblUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed:"));
+#endif
+
     chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 }
 

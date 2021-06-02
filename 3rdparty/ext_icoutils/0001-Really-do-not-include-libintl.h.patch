@@ -1,0 +1,59 @@
+From be3b6d63f630478cdf3f2b00cf8ce936bf94a8ef Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Tue, 1 Jun 2021 19:06:42 +0800
+Subject: [PATCH 1/2] Really do not include libintl.h
+
+---
+ lib/error.c   | 4 +++-
+ lib/getopt.c  | 4 +++-
+ lib/gettext.h | 4 +++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/lib/error.c b/lib/error.c
+index 81788c7..89ca69f 100644
+--- a/lib/error.c
++++ b/lib/error.c
+@@ -34,7 +34,9 @@
+ #endif
+ 
+ #ifdef _LIBC
+-# include <libintl.h>
++# if ENABLE_NLS
++#  include <libintl.h>
++# endif
+ # include <stdbool.h>
+ # include <stdint.h>
+ # include <wchar.h>
+diff --git a/lib/getopt.c b/lib/getopt.c
+index 55375cc..c9d4699 100644
+--- a/lib/getopt.c
++++ b/lib/getopt.c
+@@ -36,7 +36,9 @@
+    functions in the "user namespace" related to stdio locking.
+    Finally, it must use glibc's internal message translation so that
+    the messages are looked up in the proper text domain.  */
+-# include <libintl.h>
++# if ENABLE_NLS
++#  include <libintl.h>
++# endif
+ # define fprintf __fxprintf_nocancel
+ # define flockfile(fp) _IO_flockfile (fp)
+ # define funlockfile(fp) _IO_funlockfile (fp)
+diff --git a/lib/gettext.h b/lib/gettext.h
+index f2d7458..da2ebcb 100644
+--- a/lib/gettext.h
++++ b/lib/gettext.h
+@@ -55,7 +55,9 @@
+ #if defined(__cplusplus) && defined(__GNUG__) && (__GNUC__ >= 3)
+ # include <cstdlib>
+ # if (__GLIBC__ >= 2 && !defined __UCLIBC__) || _GLIBCXX_HAVE_LIBINTL_H
+-#  include <libintl.h>
++#  if ENABLE_NLS
++#   include <libintl.h>
++#  endif
+ # endif
+ #endif
+ 
+-- 
+2.24.1.windows.2
+

@@ -19,8 +19,8 @@
 #define OCIO_DISPLAY_FILTER_H
 
 #include <kis_display_filter.h>
-#include <OpenColorIO/OpenColorIO.h>
-#include <OpenColorIO/OpenColorTransforms.h>
+#include <OpenColorIO.h>
+#include <OpenColorTransforms.h>
 #include <QVector>
 #include "kis_exposure_gamma_correction_interface.h"
 

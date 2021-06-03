@@ -373,14 +373,14 @@ inline T cfParallel(T src, T dst) {
     const bool srcIsSafe = !isUnsafeAsDivisor(src);
     const bool dstIsSafe = !isUnsafeAsDivisor(dst);
 
-    if (!srcIsSafe && !dstIsSafe) {
+    if (!srcIsSafe || !dstIsSafe) {
         return zeroValue<T>();
     }
 
     // min(max(2 / (1/dst + 1/src), 0), 1)
     composite_type unit = unitValue<T>();
-    composite_type s    = srcIsSafe ? div<T>(unit, src) : unit;
-    composite_type d    = dstIsSafe ? div<T>(unit, dst) : unit;
+    composite_type s    = div<T>(unit, src);
+    composite_type d    = div<T>(unit, dst);
 
     return clamp<T>((unit+unit) * unit / (d+s));
 }

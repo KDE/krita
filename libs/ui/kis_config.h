@@ -591,6 +591,9 @@ public:
 
     bool showBrushHud(bool defaultValue = false) const;
     void setShowBrushHud(bool value);
+    
+    bool showPaletteBottomBar(bool defaultValue = false) const;
+    void setShowPaletteBottomBar(bool value);
 
     QString brushHudSetting(bool defaultValue = false) const;
     void setBrushHudSetting(const QString &value) const;

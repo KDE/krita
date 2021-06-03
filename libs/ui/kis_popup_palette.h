@@ -116,6 +116,7 @@ private:
 
     QSpacerItem *m_mainArea {0};
     KisBrushHud *m_brushHud {0};
+    QWidget* m_bottomBarWidget {0};
     float m_popupPaletteSize {385.0};
     float m_colorHistoryInnerRadius {72.0};
     qreal m_colorHistoryOuterRadius {92.0};
@@ -125,14 +126,14 @@ private:
     qreal m_presetRingMargin {3.0};
 
     KisRoundHudButton *m_tagsButton {0};
+    KisRoundHudButton *m_bottomBarButton {0};
     KisRoundHudButton *m_brushHudButton {0};
     QRectF m_canvasRotationIndicatorRect;
     QRectF m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};
     bool m_isRotatingCanvasIndicator {false};
     bool m_isZoomingCanvas {false};
-
-
+    
     KisHighlightedToolButton *mirrorMode {0};
     KisHighlightedToolButton *canvasOnlyButton {0};
     QPushButton *zoomToOneHundredPercentButton {0};
@@ -171,6 +172,7 @@ private Q_SLOTS:
     void slotHide() { setVisible(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
+    void showBottomBarWidget(bool visible);
     void slotZoomToOneHundredPercentClicked();
     void slotZoomSliderChanged(int zoom);
 

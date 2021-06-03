@@ -135,6 +135,12 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
     
+    m_bottomBarWidget = new QWidget(this);
+    
+    m_bottomBarButton = new KisRoundHudButton(this);
+    m_bottomBarButton->setCheckable(true);
+
+    connect( m_bottomBarButton, SIGNAL(toggled(bool)), SLOT(showBottomBarWidget(bool)));
 
 
     // add some stuff below the pop-up palette that will make it easier to use for tablet people
@@ -146,10 +152,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     gLayout->addItem(m_mainArea, 0, 0); // this should push the box to the bottom
     gLayout->setColumnMinimumWidth(1, BRUSH_HUD_MARGIN);
     gLayout->addWidget(m_brushHud, 0, 2);
+    gLayout->addWidget(m_bottomBarWidget, 2, 0);
 
-    QHBoxLayout* hLayout = new QHBoxLayout();
-    gLayout->addItem(hLayout, 1, 0);
-
+    QHBoxLayout* hLayout = new QHBoxLayout(m_bottomBarWidget);
+    
     mirrorMode = new KisHighlightedToolButton(this);
     mirrorMode->setFixedSize(35, 35);
 
@@ -225,6 +231,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     // Load configuration..
     KisConfig cfg(true);
     m_brushHudButton->setChecked(cfg.showBrushHud());
+    m_bottomBarButton->setChecked(cfg.showPaletteBottomBar());
 }
 
 void KisPopupPalette::slotConfigurationChanged()
@@ -294,6 +301,8 @@ void KisPopupPalette::reconfigure()
 
     m_brushHud->setFixedHeight(int(m_popupPaletteSize));
 
+    m_bottomBarButton->setGeometry(m_popupPaletteSize - 3.4 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
+                                  auxButtonSize, auxButtonSize);
     m_tagsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
     m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
@@ -385,6 +394,7 @@ void KisPopupPalette::slotUpdateIcons()
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     m_brushHud->updateIcons();
     m_tagsButton->setIcon(KisIconUtils::loadIcon("tag"));
+    m_bottomBarButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-up"), KisIconUtils::loadIcon("arrow-down"));
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
 }
 
@@ -400,6 +410,16 @@ void KisPopupPalette::showHudWidget(bool visible)
 
     KisConfig cfg(false);
     cfg.setShowBrushHud(visible);
+}
+
+void KisPopupPalette::showBottomBarWidget(bool visible)
+{
+    const bool reallyVisible = visible && m_bottomBarButton->isChecked();
+
+    m_bottomBarWidget->setVisible(reallyVisible);
+
+    KisConfig cfg(false);
+    cfg.setShowPaletteBottomBar(visible);
 }
 
 void KisPopupPalette::setParent(QWidget *parent) {
@@ -826,6 +846,7 @@ void KisPopupPalette::showEvent(QShowEvent *event)
     }
 
     m_brushHud->setVisible(m_brushHudButton->isChecked());
+    m_bottomBarWidget->setVisible(m_bottomBarButton->isChecked());
 
     QWidget::showEvent(event);
 }

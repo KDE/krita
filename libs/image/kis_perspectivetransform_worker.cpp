@@ -30,6 +30,7 @@
 #include "kis_progress_update_helper.h"
 #include "kis_painter.h"
 #include "kis_image.h"
+#include "kis_algebra_2d.h"
 
 
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, bool cropDst, KoUpdaterPtr progress)
@@ -62,10 +63,14 @@ void KisPerspectiveTransformWorker::fillParams(const QRectF &srcRect,
     QPolygonF bounds = srcRect;
     QPolygonF newBounds = m_forwardTransform.map(bounds);
 
-    if (m_cropDst) {
-        newBounds = newBounds.intersected(QRectF(dstBaseClipRect));
+    QRectF clipRect = dstBaseClipRect;
+
+    if (!m_cropDst) {
+        clipRect |= srcRect;
+        clipRect = KisAlgebra2D::blowRect(clipRect, 3.0);
     }
 
+    newBounds = newBounds.intersected(clipRect);
     QPainterPath path;
     path.addPolygon(newBounds);
     *dstRegion = KritaUtils::splitPath(path);

@@ -100,22 +100,11 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     if (m_activeView && m_activeView->document()) {
         m_ui.cmbDocumentHandler->addItem("Current Document", "1");
         m_ui.cmbDocumentHandler->setCurrentIndex(1);
-        m_ui.fpsDocumentLabel->setText("<small>Document:<br>" + QString::number(m_activeView->document()->image()->animationInterface()->framerate()) + " FPS</small>");
+        m_ui.fpsDocumentLabel->setText(i18nc("Video importer: fps of the document you're importing into"
+                                             , "<small>Document:\n %1 FPS</small>"
+                                             , QString::number(m_activeView->document()->image()->animationInterface()->framerate()))
+                                       );
     }
-
-    m_ui.cmbDocumentColorModel->addItem("RGBA","RGBA");
-    m_ui.cmbDocumentColorModel->addItem("XYZA","XYZA");
-    m_ui.cmbDocumentColorModel->addItem("LABA","LABA");
-    m_ui.cmbDocumentColorModel->addItem("CMYKA","CMYKA");
-    m_ui.cmbDocumentColorModel->addItem("GRAYA","GRAYA");
-    
-    m_ui.cmbDocumentColorDepth->addItem("U8","U8");
-    m_ui.cmbDocumentColorDepth->addItem("U16","U16");
-    
-    m_ui.cmbDocumentColorProfile->addItem("Default","");
-
-    m_ui.documentResolutionSpinbox->setRange(0,10000);
-    m_ui.documentResolutionSpinbox->setValue(120);
 
     m_ui.documentWidthSpinbox->setValue(0);
     m_ui.documentHeightSpinbox->setValue(0);
@@ -232,7 +221,8 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
     ffmpegSettings.outputFile = m_videoWorkDir.filePath("output_%04d.png");
     ffmpegSettings.logPath = QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "ffmpeg.log";
     ffmpegSettings.totalFrames = qCeil(exportDuration * fps);
-    ffmpegSettings.progressMessage = i18nc("FFMPEG animated video import message. arg1: frame progress number. arg2: file suffix.", "Extracted %1 frames from %2 video.", "[progress]", "[suffix]");
+    ffmpegSettings.progressMessage = i18nc("FFMPEG animated video import message. arg1: frame progress number. arg2: file suffix."
+                                           , "Extracted %1 frames from %2 video.", "[progress]", "[suffix]");
 
     ffmpeg->startNonBlocking(ffmpegSettings);
     ffmpeg->waitForFinished();
@@ -253,6 +243,15 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
 QStringList KisDlgImportVideoAnimation::documentInfo() {
     QStringList documentInfoList;
 
+    // We're looking for a possible profile here, otherwise it gets generated. Then we get the name.
+    QString profileColorSpace = RGBAColorModelID.id();
+    QString profileName = KoColorSpaceRegistry::instance()->p709SRGBProfile()->name();
+    if (m_videoInfo.colorTransfer != TRC_UNSPECIFIED && m_videoInfo.colorPrimaries != PRIMARIES_UNSPECIFIED) {
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileFor(QVector<double>(), m_videoInfo.colorPrimaries, m_videoInfo.colorTransfer);
+        profileName = profile->name();
+        profileColorSpace = profile->colorModelID();
+    }
+
     documentInfoList << QString::number(m_ui.frameSkipSpinbox->value())
                      << QString::number(m_ui.fpsSpinbox->value())
                      << QString::number(qCeil(m_ui.fpsSpinbox->value() * m_ui.exportDurationSpinbox->value()))
@@ -262,10 +261,10 @@ QStringList KisDlgImportVideoAnimation::documentInfo() {
         documentInfoList << "0"
                          << QString::number(m_ui.documentWidthSpinbox->value())
                          << QString::number(m_ui.documentHeightSpinbox->value())
-                         << QString::number(m_ui.documentResolutionSpinbox->value())
-                         << m_ui.cmbDocumentColorModel->currentData().toString()
-                         << m_ui.cmbDocumentColorDepth->currentData().toString()
-                         << m_ui.cmbDocumentColorProfile->currentData().toString();
+                         << QString::number(72)
+                         << profileColorSpace
+                         << m_videoInfo.colorDepth
+                         << profileName;
     } else {
         documentInfoList << "1";
     }
@@ -345,18 +344,30 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
     m_ui.fileLocationLabel->setText(elidedFileString);
     m_videoInfo = loadVideoInfo(filename);
 
-    QString textInfo = "Width: " + QString::number(m_videoInfo.width) + "px" + "<br>"
-                     + "Height: " + QString::number(m_videoInfo.height) + "px" + "<br>"
-                     + "Duration: "  +  QString::number(m_videoInfo.duration, 'f', 2) + " s" + "<br>"
-                     + "Frames: " + QString::number(m_videoInfo.frames) + "<br>"
-                     + "FPS: " + QString::number(m_videoInfo.fps);
+    QStringList textInfo;
+
+    textInfo.append(i18nc("video importer: video file statistics", "Width: %1 px", QString::number(m_videoInfo.width)));
+    textInfo.append(i18nc("video importer: video file statistics", "Height: %1 px", QString::number(m_videoInfo.height)));
+
+    if (m_videoInfo.colorPrimaries != PRIMARIES_UNSPECIFIED && m_videoInfo.colorTransfer != TRC_UNSPECIFIED) {
+        textInfo.append(i18nc("video importer: video file statistics"
+                              , "Color Primaries: %1"
+                              , KoColorProfile::getColorPrimariesName(m_videoInfo.colorPrimaries)));
+        textInfo.append(i18nc("video importer: video file statistics"
+                              , "Color Transfer: %1"
+                              , KoColorProfile::getTransferCharacteristicName(m_videoInfo.colorTransfer)));
+    }
+    textInfo.append(i18nc("video importer: video file statistics", "Duration: %1 s", QString::number(m_videoInfo.duration, 'f', 2)));
+    textInfo.append(i18nc("video importer: video file statistics", "Frames: %1", QString::number(m_videoInfo.frames)));
+    textInfo.append(i18nc("video importer: video file statistics", "FPS: %1", QString::number(m_videoInfo.fps)));
+
 
     if ( m_videoInfo.hasOverriddenFPS ) {
-        textInfo += "*<br><font size='0.5em'><em>*FPS not right in file. Modified to see full duration</em></font>";
+        textInfo.append(i18nc("video importer: video file statistics", "*<font size='0.5em'><em>*FPS not right in file. Modified to see full duration</em></font>"));
     }
 
     m_ui.fpsSpinbox->setValue( m_videoInfo.fps );
-    m_ui.fileLoadedDetails->setText(textInfo);
+    m_ui.fileLoadedDetails->setText(textInfo.join("\n"));
 
 
     m_ui.videoPreviewSlider->setRange(0, m_videoInfo.frames);
@@ -437,7 +448,7 @@ void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
     int pixelSize = 4; //how do we even go about getting the bitdepth???
     if (m_activeView && m_ui.cmbDocumentHandler->currentIndex() > 0) {
         pixelSize = m_activeView->image()->colorSpace()->pixelSize() * 4;
-    } else if (m_ui.cmbDocumentColorDepth->currentText() == "U16"){
+    } else if (m_videoInfo.colorDepth == "U16"){
         pixelSize = 8;
     }
     int frames = m_videoInfo.fps * time + 2;
@@ -446,26 +457,47 @@ void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
 
     int maxFrames = stats.totalMemoryLimit / resolution / pixelSize;
 
-    QString text_frames = i18nc("part of warning in video importer.", "WARNING, you are trying to import %1 frames, the maximum amount you can import is %2."
-                               , frames
-                               , maxFrames);
+    QStringList warnings;
+
+    QString text_frames = i18nc("part of warning in video importer."
+                                , "WARNING, you are trying to import %1 frames, the maximum amount you can import is %2."
+                                , frames
+                                , maxFrames);
+    warnings.append(text_frames);
     QString text_memory;
 
     QString text_video_editor = i18nc("part of warning in video importer.",
                                       "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!");
 
 
+
     if (maxFrames < frames) {
-        text_memory = i18nc("part of warning in video importer.", "You do not have enough memory to load this many frames, the computer will be overloaded.");
-        m_ui.lblWarning->setText("<span style=\"color:#ff1500;\">"+text_frames+" "+text_memory+" "+text_video_editor+"</span>");
+        text_memory = i18nc("part of warning in video importer."
+                            , "You do not have enough memory to load this many frames, the computer will be overloaded.");
+        warnings.insert(0, "<span style=\"color:#ff1500;\">");
+        warnings.append(text_memory);
+        warnings.append(text_video_editor);
         m_ui.lblWarning->setVisible(true);
     } else if (maxFrames < frames * 2) {
-        text_memory = i18nc("part of warning in video importer.", "This will take over half the available memory, editing will be difficult.");
-        m_ui.lblWarning->setText("<span style=\"color:#ffee00;\">"+text_frames+" "+text_memory+" "+text_video_editor+"</span>");
+        text_memory = i18nc("part of warning in video importer."
+                            , "This will take over half the available memory, editing will be difficult.");
+        warnings.insert(0, "<span style=\"color:#ffee00;\">");
+        warnings.append(text_memory);
+        warnings.append(text_video_editor);
         m_ui.lblWarning->setVisible(true);
+    } else if (m_videoInfo.colorTransfer == TRC_ITU_R_BT_2100_0_HLG
+               || m_videoInfo.colorTransfer == TRC_SMPTE_ST_428_1) {
+
+        QString text_trc =  i18nc("part of warning in video importer."
+                                  , "Krita does not support the video transfer curve (%1), it will be loaded as linear"
+                                  , KoColorProfile::getTransferCharacteristicName(m_videoInfo.colorTransfer));
+        warnings.append(text_trc);
     } else {
         m_ui.lblWarning->setVisible(false);
     }
+
+    warnings.append("</span>");
+    m_ui.lblWarning->setText(warnings.join(" "));
 
 }
 
@@ -547,7 +579,10 @@ void KisDlgImportVideoAnimation::slotDocumentHandlerChanged(int selectedIndex)
         }
 
     } else if (m_activeView) {
-        m_ui.fpsDocumentLabel->setText("<small>Document:<br>" + QString::number(m_activeView->document()->image()->animationInterface()->framerate()) + " FPS</small>");   
+        m_ui.fpsDocumentLabel->setText(i18nc("Video importer: fps of the document you're importing into"
+                                             , "<small>Document:\n %1 FPS</small>"
+                                             , QString::number(m_activeView->document()->image()->animationInterface()->framerate()))
+                                       );
     }
 
     m_ui.optionsDocumentGroup->setEnabled(toggleDocumentOptions);
@@ -640,6 +675,15 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
         videoInfoData.width = ffprobeSelectedStream["width"].toInt();
         videoInfoData.height = ffprobeSelectedStream["height"].toInt();
         videoInfoData.encoding = ffprobeSelectedStream["codec_name"].toString();
+        videoInfoData.colorPrimaries = KisFFMpegWrapper::colorPrimariesFromName(ffprobeSelectedStream["color_primaries"].toString());
+        videoInfoData.colorTransfer = KisFFMpegWrapper::transferCharacteristicsFromName(ffprobeSelectedStream["color_transfer"].toString());
+
+        // bits_per_raw_sample was introduced in 2014.
+        if (ffprobeSelectedStream.value("bits_per_raw_sample").toInt() > 8) {
+            videoInfoData.colorDepth = Integer16BitsColorDepthID.id();
+        } else {
+            videoInfoData.colorDepth = Integer8BitsColorDepthID.id();
+        }
 
         // frame rate comes back in odd format...so we need to do a bit of work so it is more usable. 
         // data will come back like "50/3"

@@ -12,6 +12,7 @@
 #include <QProgressDialog>
 
 #include "KisImportExportErrorCode.h"
+#include <KoColorProfileConstants.h>
 
 #include <kritaui_export.h>
 
@@ -56,6 +57,10 @@ public:
     static void setConfiguredFFMpegLocation(QString& location);
     QJsonObject ffprobe(const QString &inputFile, const QString &ffprobePath);
     QJsonObject ffmpegProbe(const QString &inputFile, const QString &ffmpegPath, bool batchMode);
+
+    // Functions to convert the ffprobe shorthands for the H.273 constants into the appropriate enum values.
+    static ColorPrimaries colorPrimariesFromName(QString name);
+    static TransferCharacteristics transferCharacteristicsFromName(QString name);
 
 Q_SIGNALS:
     void sigStarted();

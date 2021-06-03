@@ -1671,8 +1671,8 @@
       <icon>prevframe</icon>
       <text>Previous Frame</text>
       <whatsThis/>
-      <toolTip>Move selection to previous frame</toolTip>
-      <iconText>Move selection to previous frame</iconText>
+      <toolTip>Change time to previous frame</toolTip>
+      <iconText>Change time to previous frame</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -2094,7 +2094,7 @@ Enable to preserve playback timing.</text>
       <icon></icon>
       <text>Add scalar keyframes</text>
       <whatsThis></whatsThis>
-      <toolTip>Adds keyframe to control layer opacity</toolTip>
+      <toolTip>Adds keyframe to control scalar property</toolTip>
       <iconText></iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>

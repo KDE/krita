@@ -41,21 +41,21 @@
         <item column="0" row="1">
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Depth</string>
+           <string comment="Color depth">Depth</string>
           </property>
          </widget>
         </item>
         <item column="0" row="0">
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Model</string>
+           <string comment="Color model">Model</string>
           </property>
          </widget>
         </item>
         <item column="0" row="2">
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Profile</string>
+           <string comment="ICC color profile">Profile</string>
           </property>
          </widget>
         </item>

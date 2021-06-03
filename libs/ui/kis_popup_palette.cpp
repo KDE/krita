@@ -32,7 +32,7 @@
 #include <kis_paintop_preset.h>
 #include "KisMouseClickEater.h"
 
-static const int BRUSH_HUD_MARGIN = 16;
+static const int WIDGET_MARGIN = 16;
 static const qreal BORDER_WIDTH = 3.0;
 
 class PopupColorTriangle : public KoTriangleColorSelector
@@ -142,6 +142,12 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     connect( m_bottomBarButton, SIGNAL(toggled(bool)), SLOT(showBottomBarWidget(bool)));
 
+    m_clearColorHistoryButton = new KisRoundHudButton(this);
+    m_clearColorHistoryButton->setToolTip(i18n("Clear color history"));
+
+    connect(m_clearColorHistoryButton, SIGNAL(clicked(bool)), m_resourceManager, SLOT(slotClearHistory()));
+    //Otherwise the colors won't disappear until the cursor moves away from the button:
+    connect(m_clearColorHistoryButton, SIGNAL(released()), this, SLOT(slotUpdate()));
 
     // add some stuff below the pop-up palette that will make it easier to use for tablet people
     QGridLayout* gLayout = new QGridLayout(this);
@@ -150,8 +156,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     gLayout->setContentsMargins(QMargins());
     m_mainArea = new QSpacerItem(m_popupPaletteSize, m_popupPaletteSize);
     gLayout->addItem(m_mainArea, 0, 0); // this should push the box to the bottom
-    gLayout->setColumnMinimumWidth(1, BRUSH_HUD_MARGIN);
+    gLayout->setColumnMinimumWidth(1, WIDGET_MARGIN);
     gLayout->addWidget(m_brushHud, 0, 2);
+    gLayout->setRowMinimumHeight(1, WIDGET_MARGIN);
     gLayout->addWidget(m_bottomBarWidget, 2, 0);
 
     QHBoxLayout* hLayout = new QHBoxLayout(m_bottomBarWidget);
@@ -189,16 +196,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(zoomCanvasSlider, SIGNAL(valueChanged(int)), this, SLOT(slotZoomSliderChanged(int)));
     connect(zoomCanvasSlider, SIGNAL(sliderPressed()), this, SLOT(slotZoomSliderPressed()));
     connect(zoomCanvasSlider, SIGNAL(sliderReleased()), this, SLOT(slotZoomSliderReleased()));
-
-    clearHistoryButton = new QPushButton(this);
-    clearHistoryButton->setFixedHeight(35);
-
-    clearHistoryButton->setText(i18nc("verb, to clear", "Clear colors"));
-    clearHistoryButton->setToolTip(i18n("Clear the colors of the popup palette"));
-
-    connect(clearHistoryButton, SIGNAL(clicked(bool)), m_resourceManager, SLOT(slotClearHistory()));
-    //Otherwise the colors won't disappear until the cursor moves away from the button:
-    connect(clearHistoryButton, SIGNAL(released()), this, SLOT(slotUpdate()));
     
     slotUpdateIcons();
 
@@ -206,9 +203,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     hLayout->setContentsMargins(0, 6, 0, 0);
     hLayout->addWidget(mirrorMode);
     hLayout->addWidget(canvasOnlyButton);
-    hLayout->addWidget(zoomToOneHundredPercentButton);
     hLayout->addWidget(zoomCanvasSlider);
-    hLayout->addWidget(clearHistoryButton);
+    hLayout->addWidget(zoomToOneHundredPercentButton);
     
     setVisible(true);
     setVisible(false);
@@ -252,7 +248,12 @@ void KisPopupPalette::reconfigure()
     
     m_colorHistoryInnerRadius = selectorRadius + m_presetRingMargin;
     m_colorHistoryOuterRadius = m_colorHistoryInnerRadius;
-    if (m_showColorHistory) m_colorHistoryOuterRadius += 20;
+    if (m_showColorHistory) {
+         m_colorHistoryOuterRadius += 20;
+         m_clearColorHistoryButton->setVisible(true);
+    } else {
+         m_clearColorHistoryButton->setVisible(false);
+    }
 
     m_mainArea->changeSize(m_popupPaletteSize, m_popupPaletteSize);
 
@@ -300,13 +301,55 @@ void KisPopupPalette::reconfigure()
     m_colorSelector->setMask(maskedRegion);
 
     m_brushHud->setFixedHeight(int(m_popupPaletteSize));
-
-    m_bottomBarButton->setGeometry(m_popupPaletteSize - 3.4 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
-                                  auxButtonSize, auxButtonSize);
-    m_tagsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
-                                  auxButtonSize, auxButtonSize);
-    m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
-                                  auxButtonSize, auxButtonSize);
+    
+    // arranges the buttons around the popup palette
+    // buttons are spread out from the center of the set arc length
+    
+    // the margin in degrees between buttons
+    qreal margin = 10.0; 
+    // visual center
+    qreal center = m_popupPaletteSize/2 - auxButtonSize/2;
+    qreal length = m_popupPaletteSize/2 + auxButtonSize/2 + 5;
+    {
+        int buttonCount = 2;
+        int arcLength = 90;
+        // note the int buttonCount/2 is on purpose
+        qreal start = arcLength/2 - (buttonCount/2) * margin;
+        if (buttonCount % 2 == 0) start += margin / 2;
+        int place = 0;
+        m_brushHudButton->setGeometry(
+            center + qCos(qDegreesToRadians(start + place*margin))*length,
+            center + qSin(qDegreesToRadians(start + place*margin))*length,
+            auxButtonSize, auxButtonSize
+        );
+        place++;
+        m_bottomBarButton->setGeometry (
+            center + qCos(qDegreesToRadians(start + place*margin))*length,
+            center + qSin(qDegreesToRadians(start + place*margin))*length,
+            auxButtonSize, auxButtonSize
+        );
+    }
+    {
+        int buttonCount = m_showColorHistory ? 2 : 1 ;
+        int arcLength = 90;
+        int shiftArc = 90;
+        // note the int buttonCount/2 is on purpose
+        qreal start = shiftArc + arcLength / 2 - (buttonCount/2) * margin;
+        if (buttonCount % 2 == 0) start += margin / 2;
+        int place = 0;
+        if (m_showColorHistory) {
+            m_clearColorHistoryButton->setGeometry(
+                center + qCos(qDegreesToRadians(start + place * margin)) * length,
+                center + qSin(qDegreesToRadians(start + place * margin)) * length,
+                auxButtonSize, auxButtonSize);
+            place++;
+        }
+        m_tagsButton->setGeometry(
+            center + qCos(qDegreesToRadians(start + place*margin))*length,
+            center + qSin(qDegreesToRadians(start + place*margin))*length,
+            auxButtonSize, auxButtonSize
+        );
+    }
     calculatePresetLayout();
 }
 
@@ -394,6 +437,7 @@ void KisPopupPalette::slotUpdateIcons()
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     m_brushHud->updateIcons();
     m_tagsButton->setIcon(KisIconUtils::loadIcon("tag"));
+    m_clearColorHistoryButton->setIcon(KisIconUtils::loadIcon("reload-preset-16"));
     m_bottomBarButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-up"), KisIconUtils::loadIcon("arrow-down"));
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
 }

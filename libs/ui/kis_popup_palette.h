@@ -125,6 +125,7 @@ private:
     bool m_showRotationTrack {true};
     qreal m_presetRingMargin {3.0};
 
+    KisRoundHudButton *m_clearColorHistoryButton {0};
     KisRoundHudButton *m_tagsButton {0};
     KisRoundHudButton *m_bottomBarButton {0};
     KisRoundHudButton *m_brushHudButton {0};
@@ -133,14 +134,13 @@ private:
     bool m_isOverCanvasRotationIndicator {false};
     bool m_isRotatingCanvasIndicator {false};
     bool m_isZoomingCanvas {false};
-    
+
     KisHighlightedToolButton *mirrorMode {0};
     KisHighlightedToolButton *canvasOnlyButton {0};
     QPushButton *zoomToOneHundredPercentButton {0};
     QSlider *zoomCanvasSlider {0};
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
-    QPushButton *clearHistoryButton {0};
     KisAcyclicSignalConnector *m_acyclicConnector = 0;
 
     int m_presetRingCount {1};

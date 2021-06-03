@@ -79,7 +79,7 @@ public:
         QTransform finalTransform() const;
     };
 
-    static bool checkImageTooBig(const QRectF &bounds, const MatricesPack &m);
+    static bool checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight);
 
     static KisTransformWorker createTransformWorker(const ToolTransformArgs &config,
                                                     KisPaintDeviceSP device,

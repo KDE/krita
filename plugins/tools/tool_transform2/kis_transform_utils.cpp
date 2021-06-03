@@ -200,7 +200,7 @@ QTransform KisTransformUtils::MatricesPack::finalTransform() const
     return TS * SC * S * projectedP * T;
 }
 
-bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPack &m)
+bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight)
 {
     bool imageTooBig = false;
 
@@ -217,7 +217,7 @@ bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPac
         v = unprojectedMatrix * v;
         qreal z = v.z() / v.w();
 
-        imageTooBig = z > 1024.0;
+        imageTooBig = z > 1.5 * cameraHeight;
 
         if (imageTooBig) {
             break;

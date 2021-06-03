@@ -314,7 +314,22 @@ void KSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *but
             // See: QTBUG-51323
             const QString languageName = nativeName.isEmpty() ? QLocale::languageToString(l.language()) : nativeName;
             if (!insertedLanguges.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
-                button->insertLanguage(languageCode, languageName);
+                QString displayName;
+                // Check if languageCode contains a country name.
+                // For en and en_GB their native names already contain "American"
+                // and "British", so no need to append the country name.
+                if (languageCode.contains('_') && l.language() != QLocale::English) {
+                    QString countryName = l.nativeCountryName();
+                    // Fallback just in case.
+                    if (countryName.isEmpty()) {
+                        countryName = QLocale::countryToString(l.country());
+                    }
+                    // Append the country name for disambiguation.
+                    displayName = languageName % " (" % countryName % ")";
+                } else {
+                    displayName = languageName;
+                }
+                button->insertLanguage(languageCode, displayName);
                 insertedLanguges << languageCode;
             } else if (stripCountryCode(&languageCode)) {
                 if (!insertedLanguges.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {

@@ -10,7 +10,6 @@
 #include <QMenu>
 #include <QWhatsThis>
 #include <QVBoxLayout>
-#include <QElapsedTimer>
 
 #include <KisTagModel.h>
 
@@ -386,8 +385,6 @@ void KisPopupPalette::slotUpdateIcons()
 
 void KisPopupPalette::showHudWidget(bool visible)
 {
-    KIS_ASSERT_RECOVER_RETURN(m_brushHud);
-
     const bool reallyVisible = visible && m_brushHudButton->isChecked();
 
     if (reallyVisible) {
@@ -462,23 +459,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     pen.setWidth(1);
     painter.setPen(pen);
     painter.drawPath(rotationTrackPath);
-
-    // this thing will help indicate where the starting brush preset is at.
-    // also what direction they go to give sor order to the presets populated
-    /*
-    pen.setWidth(6);
-    pen.setCapStyle(Qt::RoundCap);
-    painter.setPen(pen);
-    painter.drawArc(circleRect, (16*90), (16*-30)); // span angle (last parameter) is in 16th of degrees
-
-    QPainterPath brushDir;
-    brushDir.arcMoveTo(circleRect, 60);
-    brushDir.lineTo(brushDir.currentPosition().x()-5, brushDir.currentPosition().y() - 14);
-    painter.drawPath(brushDir);
-
-    brushDir.lineTo(brushDir.currentPosition().x()-2, brushDir.currentPosition().y() + 6);
-    painter.drawPath(brushDir);
-    */
 
     // the following things needs to be based off the center, so let's translate the painter
     painter.translate(m_popupPaletteSize / 2, m_popupPaletteSize / 2);

@@ -8,7 +8,6 @@
 #ifndef KIS_POPUP_PALETTE_H
 #define KIS_POPUP_PALETTE_H
 
-#include <QElapsedTimer>
 #include <QPushButton>
 #include <QSlider>
 #include <QGraphicsOpacityEffect>
@@ -123,7 +122,6 @@ private:
 
     KisRoundHudButton *m_tagsButton {0};
     KisRoundHudButton *m_brushHudButton {0};
-    QPoint m_lastCenterPoint;
     QRectF m_canvasRotationIndicatorRect;
     QRectF m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};

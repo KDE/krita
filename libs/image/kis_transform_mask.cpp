@@ -47,7 +47,7 @@
 struct Q_DECL_HIDDEN KisTransformMask::Private
 {
     Private(KisImageSP image)
-        : worker(0, QTransform(), 0),
+        : worker(0, QTransform(), true, 0),
           staticCacheValid(false),
           recalculatingStaticImage(false),
           offset(new KisDefaultBounds(image)),

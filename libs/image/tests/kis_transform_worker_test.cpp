@@ -967,7 +967,7 @@ void KisTransformWorkerTest::testPartialProcessing()
     transform.shear(1.1, 0);
     transform.rotateRadians(M_PI / 18);
 
-    KisPerspectiveTransformWorker tw(0, transform, updater);
+    KisPerspectiveTransformWorker tw(0, transform, true, updater);
     tw.runPartialDst(dev, dev, QRect(1200, 1200, 150, 150));
     tw.runPartialDst(dev, dev, QRect(1350, 1200, 150, 150));
     tw.runPartialDst(dev, dev, QRect(1200, 1350, 150, 150));

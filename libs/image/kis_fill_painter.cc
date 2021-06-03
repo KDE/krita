@@ -151,7 +151,7 @@ void KisFillPainter::fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h,
     KisDefaultBoundsBaseSP oldBounds = wrapped->defaultBounds();
     wrapped->setDefaultBounds(new KisWrapAroundBoundsWrapper(oldBounds, deviceRect));
 
-    KisPerspectiveTransformWorker worker = KisPerspectiveTransformWorker(this->device(), transform, this->progressUpdater());
+    KisPerspectiveTransformWorker worker(this->device(), transform, false, this->progressUpdater());
     worker.runPartialDst(device, this->device(), QRect(x1, y1, w, h));
 
     addDirtyRect(QRect(x1, y1, w, h));

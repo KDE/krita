@@ -32,8 +32,8 @@
 #include "kis_image.h"
 
 
-KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress)
-        : m_dev(dev), m_progressUpdater(progress)
+KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, bool cropDst, KoUpdaterPtr progress)
+        : m_dev(dev), m_progressUpdater(progress), m_cropDst(cropDst)
 
 {
     QMatrix4x4 m;
@@ -48,8 +48,8 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
     init(forwardTransform);
 }
 
-KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QTransform &transform, KoUpdaterPtr progress)
-    : m_dev(dev), m_progressUpdater(progress)
+KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QTransform &transform, bool cropDst, KoUpdaterPtr progress)
+    : m_dev(dev), m_progressUpdater(progress), m_cropDst(cropDst)
 {
     init(transform);
 }
@@ -62,7 +62,9 @@ void KisPerspectiveTransformWorker::fillParams(const QRectF &srcRect,
     QPolygonF bounds = srcRect;
     QPolygonF newBounds = m_forwardTransform.map(bounds);
 
-    newBounds = newBounds.intersected(QRectF(dstBaseClipRect));
+    if (m_cropDst) {
+        newBounds = newBounds.intersected(QRectF(dstBaseClipRect));
+    }
 
     QPainterPath path;
     path.addPolygon(newBounds);

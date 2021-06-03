@@ -272,10 +272,13 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
 }
 
 
-void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
-                                        KisPaintDeviceSP srcDevice,
-                                        KisPaintDeviceSP dstDevice,
-                                        KisProcessingVisitor::ProgressHelper *helper)
+namespace {
+
+void transformDeviceImpl(const ToolTransformArgs &config,
+                         KisPaintDeviceSP srcDevice,
+                         KisPaintDeviceSP dstDevice,
+                         KisProcessingVisitor::ProgressHelper *helper,
+                         bool cropDst)
 {
     if (config.mode() == ToolTransformArgs::WARP) {
         KoUpdaterPtr updater = helper->updater();
@@ -321,7 +324,7 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
         dstDevice->makeCloneFromRough(srcDevice, srcDevice->extent());
 
         KisTransformWorker transformWorker =
-            createTransformWorker(config, dstDevice, updater1, &transformedCenter);
+            KisTransformUtils::createTransformWorker(config, dstDevice, updater1, &transformedCenter);
 
         transformWorker.run();
 
@@ -336,6 +339,7 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
                                                             config.aX(),
                                                             config.aY(),
                                                             config.cameraPos().z(),
+                                                            cropDst,
                                                             updater2);
             perspectiveWorker.run(sampleType);
         } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
@@ -345,10 +349,26 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
 
             KisPerspectiveTransformWorker perspectiveWorker(dstDevice,
                                                             T.inverted() * config.flattenedPerspectiveTransform() * T,
+                                                            cropDst,
                                                             updater2);
             perspectiveWorker.run(sampleType);
         }
     }
+}
+
+}
+
+void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
+                                        KisPaintDeviceSP srcDevice,
+                                        KisPaintDeviceSP dstDevice,
+                                        KisProcessingVisitor::ProgressHelper *helper)
+{
+    transformDeviceImpl(config, srcDevice, dstDevice, helper, false);
+}
+
+void KisTransformUtils::transformDeviceWithCroppedDst(const ToolTransformArgs &config, KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice, KisProcessingVisitor::ProgressHelper *helper)
+{
+    transformDeviceImpl(config, srcDevice, dstDevice, helper, true);
 }
 
 QRect KisTransformUtils::needRect(const ToolTransformArgs &config,

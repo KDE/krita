@@ -20,8 +20,8 @@
 class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker
 {
 public:
-    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress);
-    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QTransform &transform, KoUpdaterPtr progress);
+    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, bool cropDst, KoUpdaterPtr progress);
+    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QTransform &transform, bool cropDst, KoUpdaterPtr progress);
 
     ~KisPerspectiveTransformWorker();
 
@@ -60,6 +60,7 @@ private:
     QTransform m_forwardTransform;
     bool m_isIdentity;
     bool m_isTranslating;
+    bool m_cropDst;
 };
 
 #endif

@@ -54,7 +54,7 @@ void KisPerspectiveTransformWorkerTest::testSimpleTransform()
     qreal aY = 0.8;
     qreal z = 1024;
 
-    KisPerspectiveTransformWorker worker(dev, dx, aX, aY, z, 0);
+    KisPerspectiveTransformWorker worker(dev, dx, aX, aY, z, true, 0);
     worker.run();
 
     t.checkLayer("simple_transform");

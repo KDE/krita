@@ -63,7 +63,7 @@ void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP s
 
     KisProcessingVisitor::ProgressHelper helper(node);
 
-    KisTransformUtils::transformDevice(*transformArgs(), src, dst, &helper);
+    KisTransformUtils::transformDeviceWithCroppedDst(*transformArgs(), src, dst, &helper);
 }
 
 const QSharedPointer<ToolTransformArgs> KisTransformMaskAdapter::transformArgs() const {

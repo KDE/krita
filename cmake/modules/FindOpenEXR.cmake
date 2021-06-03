@@ -65,16 +65,21 @@ foreach(OPENEXR_LIB
         list(APPEND OPENEXR_LIBRARIES ${OPENEXR_${OPENEXR_LIB}_LIBRARY})
     endif()
 endforeach(OPENEXR_LIB)
+if(OPENEXR_INCLUDE_DIR)
+  # So #include <half.h> works
+  list(APPEND OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR})
+  list(APPEND OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR}/OpenEXR)
 
-# So #include <half.h> works
-list(APPEND OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR})
-list(APPEND OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR}/OpenEXR)
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(OpenEXR
-    REQUIRED_VARS
-        OPENEXR_INCLUDE_DIRS
-        OPENEXR_LIBRARIES
-    VERSION_VAR
-        OPENEXR_VERSION
-)
+  include(FindPackageHandleStandardArgs)
+  find_package_handle_standard_args(OpenEXR
+      FOUND_VAR
+          OPENEXR_FOUND
+      REQUIRED_VARS
+          OPENEXR_INCLUDE_DIRS
+          OPENEXR_LIBRARIES
+      VERSION_VAR
+          OPENEXR_VERSION
+  )
+else()
+  set(OPENEXR_FOUND FALSE)
+endif()

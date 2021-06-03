@@ -104,20 +104,9 @@ build_ext() {
 }
 
 build_boost() {
-    VERSION="1_70"
-    if [[ ! -d $DOWNLOADS_DIR/boost ]]; then
-        git clone https://github.com/moritz-wundke/Boost-for-Android $DOWNLOADS_DIR/boost
-    fi
-
-    cd $DOWNLOADS_DIR/boost
-    ./build-android.sh --prefix=$THIRDPARTY_INSTALL --with-libraries=system \
-        --boost=1.70.0 --arch=$ANDROID_ABI $CMAKE_ANDROID_NDK
-
-    cd $THIRDPARTY_INSTALL/$ANDROID_ABI/lib
-
-    # possible because just one library is being used
-    mv libboost_system-*-$VERSION.a libboost_system.a
-
+    configure_ext
+    cd $DEPS_BUILD
+    cmake --build . --config $BUILD_TYPE --target ext_boost -- -j$PROC_COUNT
     cd $BUILD_ROOT
 }
 

@@ -25,8 +25,8 @@
 
 #include <config-ocio.h>
 #ifdef HAVE_OCIO
-#include <OpenColorIO/OpenColorIO.h>
-#include <OpenColorIO/OpenColorTransforms.h>
+#include <OpenColorIO.h>
+#include <OpenColorTransforms.h>
 #endif
 
 #define ORIGINAL_INDEX           0

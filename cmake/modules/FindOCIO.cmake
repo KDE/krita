@@ -27,6 +27,7 @@ if(OCIO_LIBRARY_PATH)
 endif()
 
 find_path(OCIO_INCLUDE_DIR OpenColorIO.h
+        PATHS
         ${OCIO_INCLUDE_PATH}
         ${OCIO_PATH}/include/
         /usr/include

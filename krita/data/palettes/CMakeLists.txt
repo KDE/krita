@@ -14,4 +14,5 @@ install( FILES
     swatche.gpl
     swatch-rgb.gpl
     web.gpl
+    animation-color-set.gpl
 DESTINATION ${DATA_INSTALL_DIR}/krita/palettes)

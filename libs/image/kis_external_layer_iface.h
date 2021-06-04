@@ -66,7 +66,13 @@ public:
         return 0;
     }
 
-
+    /**
+     * Some external layers use original() only as a projection and render
+     * some internal state into it, e.g. using KisSpontaneousProjection
+     * asynchronously. theoreticalBoundingRect() is used to get real bounding
+     * rect of a layer without relying on original().
+     */
+    virtual QRect theoreticalBoundingRect() const;
 };
 
 #endif // KIS_EXTERNAL_IFACE_LAYER_IFACE_

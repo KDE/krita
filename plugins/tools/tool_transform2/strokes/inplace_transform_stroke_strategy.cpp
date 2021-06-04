@@ -570,7 +570,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                      extLayer->supportsPerspectiveTransform())) {
 
                 if (levelOfDetail <= 0) {
-                    const QRect oldDirtyRect = extLayer->extent();
+                    const QRect oldDirtyRect = extLayer->extent() | extLayer->theoreticalBoundingRect();
 
                     QVector3D transformedCenter;
                     KisTransformWorker w = KisTransformUtils::createTransformWorker(config, 0, 0, &transformedCenter);
@@ -578,7 +578,20 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                     KUndo2Command *cmd = extLayer->transform(t);
 
                     executeAndAddCommand(cmd, Transform);
-                    addDirtyRect(node, oldDirtyRect | node->extent(), 0);
+
+                    /**
+                     * Shape layer's projection may not be yet ready right
+                     * after transformation, because it need to do that in
+                     * the GUI thread, so we should approximate that.
+                     */
+                    const QRect theoreticalNewDirtyRect =
+                        kisGrowRect(t.mapRect(oldDirtyRect), 1);
+
+                    addDirtyRect(node,
+                                 oldDirtyRect |
+                                 theoreticalNewDirtyRect |
+                                 extLayer->extent() |
+                                 extLayer->theoreticalBoundingRect(), 0);
                     return;
                 } else {
                     device = node->projection();

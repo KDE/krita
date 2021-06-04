@@ -355,6 +355,11 @@ KisPaintDeviceSP KisShapeLayer::paintDevice() const
     return 0;
 }
 
+QRect KisShapeLayer::theoreticalBoundingRect() const
+{
+    return kisGrowRect(m_d->canvas->viewConverter()->documentToView(this->boundingRect()).toAlignedRect(), 1);
+}
+
 qint32 KisShapeLayer::x() const
 {
     return m_d->x;

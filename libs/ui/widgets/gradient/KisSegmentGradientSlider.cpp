@@ -16,6 +16,7 @@
 #include <QStyleOptionToolButton>
 #include <QWindow>
 #include <QAction>
+#include <QColorDialog>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>

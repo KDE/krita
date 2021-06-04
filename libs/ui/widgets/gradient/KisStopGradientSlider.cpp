@@ -18,6 +18,7 @@
 #include <QApplication>
 #include <QStyleOptionToolButton>
 #include <QPainterPath>
+#include <QColorDialog>
 
 #include <KisGradientWidgetsUtils.h>
 #include "kis_global.h"

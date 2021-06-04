@@ -1732,7 +1732,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page = new KPageWidgetItem(vbox, i18n("Pop-up Palette"));
     page->setObjectName("popuppalette");
     page->setHeader(i18n("Pop-up Palette"));
-    page->setIcon(KisIconUtils::loadIcon("popup-palette"));
+    page->setIcon(KisIconUtils::loadIcon("config-popup-palette"));
     m_pages << page;
     addPage(page);
     m_popupPaletteSettings = new PopupPaletteTab(vbox);

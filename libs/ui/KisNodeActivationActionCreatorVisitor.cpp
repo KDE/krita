@@ -10,6 +10,7 @@
 #include <kactioncollection.h>
 #include <QObject>
 #include <QRect>
+#include <kis_projection_leaf.h>
 
 KisNodeActivationActionCreatorVisitor::KisNodeActivationActionCreatorVisitor(KActionCollection *actionCollection, KisNodeManager *nodeManager)
     : m_nodeManager(nodeManager)
@@ -20,8 +21,7 @@ KisNodeActivationActionCreatorVisitor::KisNodeActivationActionCreatorVisitor(KAc
 
 bool KisNodeActivationActionCreatorVisitor::createAction(KisNode *node)
 {
-    if (node->name() != i18n("root")) {
-
+    if (!node->projectionLeaf()->isRoot()) {
         QAction *action = new QAction(i18nc("A temporary action that actives a layer or mask",
                                             "Activate %1", node->name()),
                                       m_actionCollection);

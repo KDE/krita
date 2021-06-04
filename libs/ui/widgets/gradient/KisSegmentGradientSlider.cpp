@@ -858,6 +858,9 @@ void KisSegmentGradientSlider::collapseSelectedSegment()
         return;
     }
     if (m_gradient->collapseSegment(m_gradient->segments()[m_selectedHandle.index])) {
+        if (m_selectedHandle.index == m_gradient->segments().size()) {
+            --m_selectedHandle.index;
+        }
         emit selectedHandleChanged();
         emit updateRequested();
     }

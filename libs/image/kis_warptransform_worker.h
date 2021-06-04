@@ -80,7 +80,6 @@ private:
     QVector<QPointF> m_origPoint;
     QVector<QPointF> m_transfPoint;
     
-    KoUpdater *m_progress;
     qreal m_alpha {1.0};
     KisPaintDeviceSP m_dev;
     KoUpdater *m_progress {0};

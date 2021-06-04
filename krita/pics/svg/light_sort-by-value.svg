@@ -1,11 +1,84 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
- <defs>
-  <linearGradient id="a" x1="1.5721" x2="14.06" y1="7.2776" y2="7.2776" gradientTransform="rotate(-90)" gradientUnits="userSpaceOnUse">
-   <stop stop-color="#373737" offset="0"/>
-   <stop stop-color="#fff" stop-opacity=".95448" offset="1"/>
-  </linearGradient>
- </defs>
- <path d="m14 11.5-3.5-3.5-0.70703 0.70703 2.293 2.293h-10.086v1h10.086l-2.293 2.293 0.70703 0.70703 3.293-3.293z" fill="#d2d2d2"/>
- <rect transform="rotate(90)" x="1.5" y="-14.5" width="5" height="13" fill="url(#a)" stroke="#d2d2d2" stroke-dashoffset="1.15"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg13"
+   viewBox="0 0 16 16"
+   version="1.1"
+   height="16"
+   width="16">
+  <metadata
+     id="metadata17">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2021</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs7">
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(-90)"
+       y2="7"
+       y1="7"
+       x2="15"
+       x1="1"
+       id="a">
+      <stop
+         style="stop-color:#000000;stop-opacity:1"
+         id="stop2"
+         offset="0"
+         stop-color="#373737" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         id="stop4"
+         offset="1"
+         stop-opacity=".95448"
+         stop-color="#fff" />
+    </linearGradient>
+  </defs>
+  <path
+     style="fill:#d2d2d2"
+     id="path9"
+     d="M 15,12 11,8 v 3 L 0.99997,11.00003 1,13 h 10 v 3 z" />
+  <path
+     id="rect11"
+     d="m 0.5,-15.5 5,0 0,15 -5,0 z"
+     style="fill:url(#a);stroke:none;stroke-dashoffset:1.14999998"
+     transform="rotate(90)" />
+  <path
+     style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="M 0,0 V 6 H 16 V 0 Z M 1,1 H 15 V 5 H 1 Z"
+     id="rect819" />
 </svg>

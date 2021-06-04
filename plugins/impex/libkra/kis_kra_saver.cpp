@@ -170,7 +170,7 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     for (const KoColorSet *palette : m_d->doc->paletteList()) {
         if (!palette->isGlobal()) {
             if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
-                m_d->errorMessages << i18n("could not save palettes");
+                m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save palettes.");
                 return false;
             }
             QByteArray ba = palette->toByteArray();
@@ -185,6 +185,9 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
         }
     }
 
+    if (!res) {
+        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save palettes.");
+    }
     return res;
 }
 
@@ -243,7 +246,7 @@ bool KisKraSaver::saveNodeKeyframes(KoStore *store, QString location, const KisN
         success = false;
     }
     if (!success) {
-        m_d->errorMessages << i18n("could not save keyframes");
+        m_d->errorMessages << i18nc("Error message on saving a .kra file", "Could not save keyframes.");
         return false;
     }
 
@@ -289,6 +292,10 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         }
     }
 
+    if (!savingAnnotationsSuccess) {
+        m_d->errorMessages.append(i18nc("Saving .kra file error message", "Could not save annotations."));
+    }
+
     success = success && savingAnnotationsSuccess;
 
     bool savingImageProfileSuccess = true;
@@ -319,6 +326,9 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         }
     }
 
+    if (!savingImageProfileSuccess) {
+        m_d->errorMessages.append(i18nc("Saving .kra file error message", "Could not save image profile."));
+    }
     success = success && savingImageProfileSuccess;
 
     //This'll embed the profile used for proofing into the kra file.
@@ -346,6 +356,9 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         }
     }
 
+    if (!savingSoftproofingProfileSuccess) {
+        m_d->errorMessages.append(i18nc("Saving .kra file error message", "Could not save softproofing color profile."));
+    }
 
     success = success && savingSoftproofingProfileSuccess;
 
@@ -376,6 +389,9 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         }
     }
 
+    if (!savingLayerStylesSuccess) {
+        m_d->errorMessages.append(i18nc("Saving .kra file error message", "Could not save layer styles."));
+    }
 
     success = success && savingLayerStylesSuccess;
 
@@ -390,6 +406,9 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         store->setCompressionEnabled(KisConfig(true).compressKra());
     }
 
+    if (!savingMergedImageSuccess) {
+        m_d->errorMessages.append(i18nc("Saving .kra file error message", "Could not save merged image."));
+    }
 
     success = success && savingMergedImageSuccess;
 
@@ -474,7 +493,9 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
             }
             assistantcounters[assist->id()]++;
         }
-
+    }
+    if (!success) {
+        m_d->errorMessages.append(i18nc("Saving .kra file error message", "Could not save assistants."));
     }
     return true;
 }

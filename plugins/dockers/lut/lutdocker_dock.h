@@ -32,7 +32,7 @@
 
 #include "ui_wdglut.h"
 
-#include <OpenColorIO.h>
+#include <OpenColorIO/OpenColorIO.h>
 #include "kis_signal_compressor_with_param.h"
 
 

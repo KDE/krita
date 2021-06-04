@@ -37,7 +37,7 @@
 #include "lutdocker_dock.h"
 #include <KoDockRegistry.h>
 
-#include <OpenColorIO.h>
+#include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 
 

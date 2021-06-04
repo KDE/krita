@@ -41,8 +41,12 @@ protected:
     void enterEvent(QEvent*) override;
     void leaveEvent(QEvent*) override;
     bool event(QEvent *e) override;
+    bool eventFilter(QObject *o, QEvent *e) override;
 
 private:
+    static constexpr int showControlsTimerDuration{200};
+    // Hou much the cursor has to move to prevent the showing animation
+    static constexpr double showControlsAreaRadius{4.0};
     static constexpr double showControlsAnimationDuration{150.0};
 
     QVBoxLayout *m_controlsLayout;
@@ -58,10 +62,18 @@ private:
     bool m_pinControls;
     bool m_cursorIsHover;
     mutable QVariantAnimation m_showControlsAnimation;
+    QTimer m_showControlsTimer;
+    mutable bool m_areControlsHidden;
+    QPointF m_lastOverviewMousePos;
+    double m_cumulatedMouseDistanceSquared;
 
     void layoutMainWidgets();
+
+private Q_SLOTS:
     void showControls() const;
     void hideControls() const;
+
+    void on_overviewWidget_signalDraggingFinished();
 };
 
 

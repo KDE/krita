@@ -41,6 +41,8 @@ OverviewDockerDock::OverviewDockerDock()
     , m_pinControlsButton(nullptr)
     , m_canvas(nullptr)
     , m_cursorIsHover(false)
+    , m_lastOverviewMousePos(0.0, 0.0)
+    , m_cumulatedMouseDistanceSquared(0.0)
 {
     m_page = new QWidget(this);
 
@@ -49,6 +51,9 @@ OverviewDockerDock::OverviewDockerDock()
     m_overviewWidget->setBackgroundRole(QPalette::Base);
     // paints background role before paint()
     m_overviewWidget->setAutoFillBackground(true);
+    m_overviewWidget->installEventFilter(this);
+    connect(m_overviewWidget, SIGNAL(signalDraggingStarted()), &m_showControlsTimer, SLOT(stop()));
+    connect(m_overviewWidget, SIGNAL(signalDraggingFinished()), SLOT(on_overviewWidget_signalDraggingFinished()));
 
     m_controlsContainer = new QWidget(m_page);
 
@@ -61,11 +66,14 @@ OverviewDockerDock::OverviewDockerDock()
 
     setWidget(m_page);
 
+    connect(&m_showControlsTimer, SIGNAL(timeout()), SLOT(showControls()));
+
     m_showControlsAnimation.setEasingCurve(QEasingCurve(QEasingCurve::InOutCubic));
     connect(&m_showControlsAnimation, &QVariantAnimation::valueChanged, this, &OverviewDockerDock::layoutMainWidgets);
 
     KConfigGroup config = KSharedConfig::openConfig()->group("OverviewDocker");
     m_pinControls = config.readEntry("pinControls", true);
+    m_areControlsHidden = !m_pinControls;
 
     setEnabled(false);
 }
@@ -232,7 +240,9 @@ void OverviewDockerDock::leaveEvent(QEvent*)
 {
     m_cursorIsHover = false;
     if (isEnabled() && !m_pinControls) {
+        m_showControlsTimer.stop();
         hideControls();
+        m_cumulatedMouseDistanceSquared = 0.0;
     }
 }
 
@@ -240,7 +250,11 @@ void OverviewDockerDock::enterEvent(QEvent*)
 {
     m_cursorIsHover = true;
     if (isEnabled() && !m_pinControls) {
-        showControls();
+        if (m_showControlsAnimation.state() == QVariantAnimation::Running) {
+            showControls();
+        } else {
+            m_showControlsTimer.start(showControlsTimerDuration);
+        }
     }
 }
 
@@ -254,6 +268,28 @@ bool OverviewDockerDock::event(QEvent *e)
         resizeEvent(nullptr);
     }
     return QDockWidget::event(e);
+}
+
+bool OverviewDockerDock::eventFilter(QObject *o, QEvent *e)
+{
+    if (o == m_overviewWidget && e->type() == QEvent::MouseMove) {
+        if (isEnabled() && !m_overviewWidget->isDragging() && !m_pinControls && m_areControlsHidden) {
+            QMouseEvent *me = static_cast<QMouseEvent*>(e);
+            constexpr double showControlsAreaRadiusSquared = showControlsAreaRadius * showControlsAreaRadius;
+            const QPointF d = me->localPos() - m_lastOverviewMousePos;
+            const double distanceSquared = d.x() * d.x() + d.y() * d.y();
+            if (distanceSquared > m_cumulatedMouseDistanceSquared) {
+                if (distanceSquared >= showControlsAreaRadiusSquared) {
+                    m_showControlsTimer.start(showControlsTimerDuration);
+                    m_lastOverviewMousePos = me->localPos();
+                    m_cumulatedMouseDistanceSquared = 0.0;
+                } else {
+                    m_cumulatedMouseDistanceSquared = distanceSquared;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void OverviewDockerDock::layoutMainWidgets()
@@ -286,6 +322,7 @@ void OverviewDockerDock::showControls() const
     m_showControlsAnimation.setEndValue(1.0);
     m_showControlsAnimation.setDuration(animationDuration);
     m_showControlsAnimation.start();
+    m_areControlsHidden = false;
 }
 
 void OverviewDockerDock::hideControls() const
@@ -298,4 +335,12 @@ void OverviewDockerDock::hideControls() const
     m_showControlsAnimation.setEndValue(0.0);
     m_showControlsAnimation.setDuration(animationDuration);
     m_showControlsAnimation.start();
+    m_areControlsHidden = true;
+}
+
+void OverviewDockerDock::on_overviewWidget_signalDraggingFinished()
+{
+    if (!m_pinControls && m_areControlsHidden) {
+        m_showControlsTimer.start(showControlsTimerDuration);
+    }
 }

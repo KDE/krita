@@ -152,6 +152,7 @@ void OverviewWidget::mousePressEvent(QMouseEvent* event)
         }
         m_lastPos = previewPos;
         m_dragging = true;
+        emit signalDraggingStarted();
     }
     event->accept();
     update();
@@ -173,7 +174,10 @@ void OverviewWidget::mouseMoveEvent(QMouseEvent* event)
 
 void OverviewWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-    m_dragging = false;
+    if (m_dragging) {
+        m_dragging = false;
+        emit signalDraggingFinished();
+    }
     event->accept();
     update();
 }

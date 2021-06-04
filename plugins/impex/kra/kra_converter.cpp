@@ -147,6 +147,8 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
     setProgress(5);
     m_store = KoStore::createStore(io, KoStore::Write, m_doc->nativeFormatMimeType(), KoStore::Zip);
 
+    bool success = true;    
+
     if (m_store->bad()) {
         m_doc->setErrorMessage(i18n("Could not create the file for saving"));
         return ImportExportCodes::CannotCreateFile;
@@ -167,25 +169,28 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
 
     result = m_kraSaver->saveKeyframes(m_store, m_doc->url().toLocalFile(), true);
     if (!result) {
+        success = false;
         qWarning() << "saving key frames failed";
     }
     setProgress(60);
     result = m_kraSaver->saveBinaryData(m_store, m_image, m_doc->url().toLocalFile(), true, m_doc->isAutosaving());
     if (!result) {
+        success = false;
         qWarning() << "saving binary data failed";
     }
     setProgress(70);
     result = m_kraSaver->savePalettes(m_store, m_image, m_doc->url().toLocalFile());
     if (!result) {
+        success = false;
         qWarning() << "saving palettes data failed";
     }
 
     setProgress(80);
     if (!m_store->finalize()) {
-        return ImportExportCodes::Failure;
+        success = false;
     }
 
-    if (!m_kraSaver->errorMessages().isEmpty()) {
+    if (!success || !m_kraSaver->errorMessages().isEmpty()) {
         m_doc->setErrorMessage(m_kraSaver->errorMessages().join(".\n"));
         return ImportExportCodes::Failure;
     }

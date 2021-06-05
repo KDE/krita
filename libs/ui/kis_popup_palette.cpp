@@ -33,6 +33,7 @@
 #include "KisMouseClickEater.h"
 
 static const int BRUSH_HUD_MARGIN = 16;
+static const qreal BORDER_WIDTH = 3.0;
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -235,14 +236,14 @@ void KisPopupPalette::slotConfigurationChanged()
 void KisPopupPalette::reconfigure()
 {
     KisConfig config(true);
-    const int borderWidth = 3;
     m_presetSlotCount = qMax(config.favoritePresets(), 10);
     m_popupPaletteSize = config.readEntry("popuppalette/size", 385);
     qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2;
     
     m_showColorHistory = config.readEntry("popuppalette/showColorHistory", true);
+    m_showRotationTrack = config.readEntry("popuppalette/showRotationTrack", true);
     
-    m_colorHistoryInnerRadius = selectorRadius + borderWidth;
+    m_colorHistoryInnerRadius = selectorRadius + m_presetRingMargin;
     m_colorHistoryOuterRadius = m_colorHistoryInnerRadius;
     if (m_showColorHistory) m_colorHistoryOuterRadius += 20;
 
@@ -419,8 +420,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     QPainter painter(this);
 
-    QPen pen(palette().color(QPalette::Text));
-    pen.setWidth(3);
+    QPen pen(palette().color(QPalette::Text), BORDER_WIDTH);
     painter.setPen(pen);
 
     painter.setRenderHint(QPainter::Antialiasing);
@@ -441,53 +441,56 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     // create a circle background that everything else will go into
     QPainterPath backgroundContainer;
-    float shrinkCircleAmount = 3;// helps the circle when the stroke is put around it
 
-    QRectF circleRect(shrinkCircleAmount, shrinkCircleAmount,
-                      m_popupPaletteSize - shrinkCircleAmount*2,m_popupPaletteSize - shrinkCircleAmount*2);
-
-
-    backgroundContainer.addEllipse( circleRect );
-    painter.fillPath(backgroundContainer,palette().brush(QPalette::Background));
-
+    // draws the circle halfway into the border so that the border never goes past the bounds of the popup
+    QRectF circleRect(BORDER_WIDTH/2, BORDER_WIDTH/2, m_popupPaletteSize - BORDER_WIDTH, m_popupPaletteSize - BORDER_WIDTH);
+    backgroundContainer.addEllipse(circleRect);
+    painter.fillPath(backgroundContainer, palette().brush(QPalette::Background));
     painter.drawPath(backgroundContainer);
 
-    // create a path slightly inside the container circle. this will create a 'track' to indicate that we can rotate the canvas
-    // with the indicator
-    QPainterPath rotationTrackPath;
-    shrinkCircleAmount = 18;
-    QRectF circleRect2(shrinkCircleAmount, shrinkCircleAmount,
-                       m_popupPaletteSize - shrinkCircleAmount*2,m_popupPaletteSize - shrinkCircleAmount*2);
+    if (m_showRotationTrack) {
+        painter.save();
+        // create a path slightly inside the container circle. this will create a 'track' to indicate that we can rotate the canvas
+        // with the indicator
+        QPainterPath rotationTrackPath;
+        QRectF circleRect2(m_rotationTrackSize, m_rotationTrackSize,
+                        m_popupPaletteSize - m_rotationTrackSize * 2, m_popupPaletteSize - m_rotationTrackSize * 2);
 
-    rotationTrackPath.addEllipse( circleRect2 );
-    pen.setWidth(1);
-    painter.setPen(pen);
-    painter.drawPath(rotationTrackPath);
-
+        rotationTrackPath.addEllipse(circleRect2);
+        QPen pen = painter.pen();
+        pen.setColor(palette().color(QPalette::Background).lighter(150));
+        pen.setWidth(2);
+        painter.setPen(pen);
+        painter.drawPath(rotationTrackPath);
+        painter.restore();
+    }
+    
     // the following things needs to be based off the center, so let's translate the painter
     painter.translate(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
 
-    painter.save();
-    // create a reset canvas rotation indicator to bring the canvas back to 0 degrees
-    QRectF resetRotationIndicator = rotationIndicatorRect(0, false);
+    if (m_showRotationTrack) {
+        painter.save();
+        // create a reset canvas rotation indicator to bring the canvas back to 0 degrees
+        QRectF resetRotationIndicator = rotationIndicatorRect(0, false);
 
-    painter.setPen(QPen(palette().color(QPalette::Text), 1.0));
-    painter.setBrush(Qt::NoBrush);
-    painter.drawEllipse(resetRotationIndicator);
-    QRectF rotationIndicator = rotationIndicatorRect(m_coordinatesConverter->rotationAngle(), false);
+        painter.setPen(QPen(palette().color(QPalette::Text), 1.0));
+        painter.setBrush(Qt::NoBrush);
+        painter.drawEllipse(resetRotationIndicator);
+        QRectF rotationIndicator = rotationIndicatorRect(m_coordinatesConverter->rotationAngle(), false);
 
-    // create the canvas rotation handle
-    painter.setBrush(palette().brush(QPalette::Text));
+        // create the canvas rotation handle
+        painter.setBrush(palette().brush(QPalette::Text));
 
-    // hover indicator for the canvas rotation
-    // draw highlight if either just hovering or currently rotating
-    if (m_isOverCanvasRotationIndicator || m_isRotatingCanvasIndicator) {
-        QPen pen(palette().color(QPalette::Highlight), 2.0);
-        painter.setPen(pen);
+        // hover indicator for the canvas rotation
+        // draw highlight if either just hovering or currently rotating
+        if (m_isOverCanvasRotationIndicator || m_isRotatingCanvasIndicator) {
+            QPen pen(palette().color(QPalette::Highlight), 2.0);
+            painter.setPen(pen);
+        }
+        painter.drawEllipse(rotationIndicator);
+
+        painter.restore();
     }
-    painter.drawEllipse(rotationIndicator);
-
-    painter.restore();
 
     // painting favorite brushes
     QList<QImage> images(m_resourceManager->favoritePresetImages());
@@ -519,9 +522,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     }
     if (hoveredPreset() > -1) {
         presetPath = createPathFromPresetIndex(hoveredPreset());
-        QPen pen(palette().color(QPalette::Highlight));
-        pen.setWidth(3);
-        painter.setPen(pen);
+        painter.setPen(QPen(palette().color(QPalette::Highlight), BORDER_WIDTH));
         painter.drawPath(presetPath);
     }
 
@@ -641,37 +642,38 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
-    // check if mouse is over the canvas rotation knob
-    bool wasOverRotationIndicator = m_isOverCanvasRotationIndicator;
-    m_isOverCanvasRotationIndicator = m_canvasRotationIndicatorRect.contains(point);
+    if (m_showRotationTrack) {
+        // check if mouse is over the canvas rotation knob
+        bool wasOverRotationIndicator = m_isOverCanvasRotationIndicator;
+        m_isOverCanvasRotationIndicator = m_canvasRotationIndicatorRect.contains(point);
 
-    if (wasOverRotationIndicator != m_isOverCanvasRotationIndicator) {
-        update();
+        if (wasOverRotationIndicator != m_isOverCanvasRotationIndicator) {
+            update();
+        }
+
+        if (m_isRotatingCanvasIndicator) {
+            // we are rotating the canvas, so calculate the rotation angle based off the center
+            // calculate the angle we are at first
+            QPoint widgetCenterPoint = QPoint(m_popupPaletteSize/2, m_popupPaletteSize/2);
+
+            float dX = point.x() - widgetCenterPoint.x();
+            float dY = point.y() - widgetCenterPoint.y();
+
+
+            float finalAngle = qAtan2(dY,dX) * 180 / M_PI; // what we need if we have two points, but don't know the angle
+            finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
+            float angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
+
+            KisCanvasController *canvasController =
+                dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
+            canvasController->rotateCanvas(angleDifference);
+            m_canvasRotationIndicatorRect = rotationIndicatorRect(finalAngle, true);
+
+            update();
+            emit sigUpdateCanvas();
+        }
     }
 
-    if (m_isRotatingCanvasIndicator) {
-        // we are rotating the canvas, so calculate the rotation angle based off the center
-        // calculate the angle we are at first
-        QPoint widgetCenterPoint = QPoint(m_popupPaletteSize/2, m_popupPaletteSize/2);
-
-        float dX = point.x() - widgetCenterPoint.x();
-        float dY = point.y() - widgetCenterPoint.y();
-
-
-        float finalAngle = qAtan2(dY,dX) * 180 / M_PI; // what we need if we have two points, but don't know the angle
-        finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
-        float angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
-
-        KisCanvasController *canvasController =
-            dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
-        canvasController->rotateCanvas(angleDifference);
-        m_canvasRotationIndicatorRect = rotationIndicatorRect(finalAngle, true);
-
-        update();
-        emit sigUpdateCanvas();
-    }
-
-    // highlight the colors/presets (when not rotating)
     if (m_isRotatingCanvasIndicator == false) {
         QPainterPath colorHistoryPath(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
         if (colorHistoryPath.contains(point)) {
@@ -718,20 +720,21 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
     event->accept();
 
     if (event->button() == Qt::LeftButton) {
+        if (m_showRotationTrack) {
+            if (m_isOverCanvasRotationIndicator) {
+                m_isRotatingCanvasIndicator = true;
+                update();
+            }
 
-        if (m_isOverCanvasRotationIndicator) {
-            m_isRotatingCanvasIndicator = true;
-            update();
-        }
+            if (m_resetCanvasRotationIndicatorRect.contains(point)) {
+                float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs
+                KisCanvasController *canvasController =
+                        dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
+                canvasController->rotateCanvas(angleDifference);
+                m_canvasRotationIndicatorRect = rotationIndicatorRect(0, true);
 
-        if (m_resetCanvasRotationIndicatorRect.contains(point)) {
-            float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs
-            KisCanvasController *canvasController =
-                    dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
-            canvasController->rotateCanvas(angleDifference);
-            m_canvasRotationIndicatorRect = rotationIndicatorRect(0, true);
-
-            emit sigUpdateCanvas();
+                emit sigUpdateCanvas();
+            }
         }
     }
 }
@@ -898,8 +901,15 @@ KisPopupPalette::~KisPopupPalette()
 void KisPopupPalette::calculatePresetLayout()
 {
     qreal angleSlice = 360.0 / numSlots() ; // how many degrees each slice will get
-    qreal ringWidth = (0.5 * m_popupPaletteSize) - m_colorHistoryOuterRadius - 18; //= 2 * 41.25
-    qreal ringMidRadius = m_colorHistoryOuterRadius + 0.5 * ringWidth;
+    qreal outerRadius = m_popupPaletteSize/2 - m_presetRingMargin - (m_showRotationTrack ? m_rotationTrackSize + 1 /* half of stroke */ : BORDER_WIDTH);
+    qreal innerRadius = m_colorHistoryOuterRadius +
+    (m_showColorHistory
+        ? 1 /* half of stroke */ + m_presetRingMargin
+        : 0 /* preset margin is already included in either color history radius when it's not showing */
+    );
+    
+    qreal ringWidth = outerRadius - innerRadius;
+    qreal ringMidRadius = innerRadius + 0.5 * ringWidth;
 
     // the radius will get smaller as the amount of presets shown increases.
     // max radius until they touch = (innerRadius * sin(180/nSlots) / (1 - sin(180/nSlots)
@@ -920,8 +930,8 @@ void KisPopupPalette::calculatePresetLayout()
             tempRadius += 0.1;
 
             // Calculate the X,Y of two adjectant circles using this tempRadius. (Y1 == 0)
-            qreal radius2 = m_colorHistoryOuterRadius + ringWidth - tempRadius;
-            qreal pathX1 = m_colorHistoryOuterRadius + tempRadius;
+            qreal radius2 = innerRadius + ringWidth - tempRadius;
+            qreal pathX1 = innerRadius + tempRadius;
             qreal pathX2 = radius2 * qCos(qDegreesToRadians(angleSlice));
             qreal pathY2 = radius2 * qSin(qDegreesToRadians(angleSlice));
 
@@ -935,7 +945,7 @@ void KisPopupPalette::calculatePresetLayout()
         // even when presets between rings don't touch, the ones on the inner ring may overlap,
         // so determine the radius where inner ones touch
         qreal sinAngleSlice = qSin(qDegreesToRadians(angleSlice));
-        qreal maxRadius = m_colorHistoryOuterRadius * sinAngleSlice / (1 - sinAngleSlice);
+        qreal maxRadius = innerRadius * sinAngleSlice / (1 - sinAngleSlice);
         tempRadius = qMin(maxRadius, tempRadius);
         // since we may round up the preset count, radius may end up smaller than originally
         // but we want at least a small gain (3% currently)
@@ -950,7 +960,7 @@ void KisPopupPalette::calculatePresetLayout()
         angleSlice = 180.0 / ((numSlots() + 2) / 3);
         qreal sinAngleSlice = qSin(qDegreesToRadians(angleSlice));
         // radius where innermost circles would touch (2 angle slices apart)
-        qreal maxRadius = m_colorHistoryOuterRadius * sinAngleSlice / (1 - sinAngleSlice);
+        qreal maxRadius = innerRadius * sinAngleSlice / (1 - sinAngleSlice);
         // radius where innermost and outermost circles touch
         maxRadius = qMin(maxRadius, ringWidth * 0.25);
 
@@ -960,7 +970,7 @@ void KisPopupPalette::calculatePresetLayout()
         bool found = false;
         // do we need to reduce radius even more?
         while (tempRadius > presetRadius) {
-            qreal pathX1 = m_colorHistoryOuterRadius + tempRadius;
+            qreal pathX1 = innerRadius + tempRadius;
 
             qreal deltaX = pathX2-pathX1;
             qreal distance = sqrt((deltaX*deltaX)+(pathY2*pathY2));
@@ -983,23 +993,29 @@ void KisPopupPalette::calculatePresetLayout()
 
 QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
 {
-    qreal angleSlice = 360.0 / numSlots() ; // how many degrees each slice will get
-    qreal ringWidth = (0.5 * m_popupPaletteSize) - m_colorHistoryOuterRadius - 18; //= 2 * 41.25
-
+    // how many degrees each slice will get
+    // if the slot count is 1, we must divide by 2 to get 180 for the algorithm to work
+    qreal angleSlice = 360.0 / qMax(m_presetSlotCount, 2);
+    qreal outerRadius = m_popupPaletteSize/2 - m_presetRingMargin - (m_showRotationTrack ? m_rotationTrackSize + 1 /* half of stroke */  : BORDER_WIDTH);
+    qreal innerRadius = m_colorHistoryOuterRadius +
+    (m_showColorHistory
+        ? 1 /* half of stroke */ + m_presetRingMargin
+        : 0 /* preset margin is already included in either color history radius when it's not showing */
+    );
+    qreal ringWidth = outerRadius - innerRadius;
     // the starting angle of the slice we need to draw. the negative sign makes us go clockwise.
     // adding 90 degrees makes us start at the top. otherwise we would start at the right
     qreal startingAngle = -(index * angleSlice) + 90;
-    qreal length = m_colorHistoryOuterRadius + 0.5 * ringWidth;
-
+    qreal length = innerRadius + 0.5 * ringWidth;
     switch (m_presetRingCount) {
     case 1: break;
     case 2: {
         angleSlice = 180.0/((numSlots()+1) / 2);
         startingAngle = -(index * angleSlice) + 90;
 
-        length = m_colorHistoryOuterRadius + m_cachedRadius;
+        length = innerRadius + m_cachedRadius;
         if (index % 2) {
-            length = m_colorHistoryOuterRadius + ringWidth - m_cachedRadius;
+            length = innerRadius + ringWidth - m_cachedRadius;
         }
         break;
     }
@@ -1009,11 +1025,11 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
         switch (index % 3) {
         case 0:
             startingAngle = -(triplet * 2 * angleSlice) + 90;
-            length = m_colorHistoryOuterRadius + m_cachedRadius;
+            length = innerRadius + m_cachedRadius;
             break;
         case 1:
             startingAngle = -(triplet * 2 * angleSlice) + 90;
-            length = m_colorHistoryOuterRadius + ringWidth - m_cachedRadius;
+            length = innerRadius + ringWidth - m_cachedRadius;
             break;
         case 2:
             startingAngle = -((triplet * 2 + 1) * angleSlice) + 90;

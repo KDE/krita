@@ -120,6 +120,9 @@ private:
     float m_colorHistoryInnerRadius {72.0};
     qreal m_colorHistoryOuterRadius {92.0};
     bool m_showColorHistory {true};
+    qreal m_rotationTrackSize {18.0};
+    bool m_showRotationTrack {true};
+    qreal m_presetRingMargin {3.0};
 
     KisRoundHudButton *m_tagsButton {0};
     KisRoundHudButton *m_brushHudButton {0};

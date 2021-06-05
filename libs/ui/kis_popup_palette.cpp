@@ -510,12 +510,12 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         else {
             painter.fillPath(presetPath, palette().brush(QPalette::Window));  // brush slot that has no brush in it
         }
+        // needs to be called here so that the clipping is removed
+        painter.restore();
         QPen pen = painter.pen();
         pen.setWidth(1);
         painter.setPen(pen);
         painter.drawPath(presetPath);
-
-        painter.restore();
     }
     if (hoveredPreset() > -1) {
         presetPath = createPathFromPresetIndex(hoveredPreset());

@@ -423,8 +423,10 @@ void KisDlgImportVideoAnimation::updateVideoPreview()
         thumbnailPixmap.loadFromData(byteImage,"JFIF");
        
         m_ui.thumbnailImageHolder->setText("");
-        m_ui.thumbnailImageHolder->setPixmap(thumbnailPixmap);
-        m_ui.thumbnailImageHolder->setScaledContents(true);
+        m_ui.thumbnailImageHolder->setPixmap(thumbnailPixmap.scaled(m_ui.thumbnailImageHolder->width()
+                                                                    , m_ui.thumbnailImageHolder->height()
+                                                                    , Qt::KeepAspectRatio
+                                                                    , Qt::SmoothTransformation));
     }
 
     m_ui.thumbnailImageHolder->show();

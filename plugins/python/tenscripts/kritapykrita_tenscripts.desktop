@@ -51,3 +51,4 @@ Comment[sv]=Tilldela ett Python-skript till någon av tio inställningsbara genv
 Comment[uk]=Прив'язка скрипту Python до будь-якого з десяти придатних до налаштовування скорочень.
 Comment[x-test]=xxAssign a Python script to any of ten configurable shortcuts.xx
 Comment[zh_CN]=可将任意 Python 脚本指定到10个可配置的快捷键。
+Comment[zh_TW]=指定 10 個可執行 Python 指令稿的快捷鍵。

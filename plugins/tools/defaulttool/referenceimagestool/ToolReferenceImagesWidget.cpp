@@ -15,6 +15,9 @@
 #include <kis_signals_blocker.h>
 #include <kis_signal_compressor.h>
 #include <KisReferenceImage.h>
+#include <KisDocument.h>
+#include <KisReferenceImagesLayer.h>
+#include "KisViewManager.h"
 
 #include <QClipboard>
 #include <QApplication>
@@ -78,12 +81,16 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste-16"));
     d->ui->bnPasteReferenceImage->setIconSize(QSize(16, 16));
 
+    d->ui->bnLock->setVisible(false);
+    d->ui->bnLock->setCheckable(true);
+
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
     connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));
 
     connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
+    connect(d->ui->bnLock, SIGNAL(toggled(bool)), this, SLOT(slotUpdateLock(bool)));
 
     connect(d->ui->chkKeepAspectRatio, SIGNAL(stateChanged(int)), this, SLOT(slotKeepAspectChanged()));
 
@@ -206,6 +213,13 @@ void ToolReferenceImagesWidget::slotSaveLocationChanged(int index)
     }
 }
 
+void ToolReferenceImagesWidget::slotUpdateLock(bool value)
+{
+    d->ui->bnLock->setChecked(value);
+    d->ui->bnLock->setIcon(d->ui->bnLock->isChecked() ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
+    d->tool->document()->referenceImagesLayer()->setLock(d->ui->bnLock->isChecked());
+}
+
 void ToolReferenceImagesWidget::slotImageValuesChanged()
 {
     slotSaturationSliderChanged(d->ui->saturationSlider->value());
@@ -220,10 +234,16 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->saveLocationLabel->setVisible(hasSelection);
     d->ui->opacitySlider->setVisible(hasSelection);
     d->ui->saturationSlider->setVisible(hasSelection);
+    d->ui->bnLock->setVisible(hasSelection);
 
     // show a label indicating that a selection is required to show options
     d->ui->referenceImageOptionsLabel->setVisible(!hasSelection);
 
+    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
+    if(layer) {
+        d->ui->bnLock->setChecked(layer->getLock());
+        d->ui->bnLock->setIcon(d->ui->bnLock->isChecked() ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
+    }
     if (hasSelection) {
         KoSelection* selection = d->tool->koSelection();
         QList<KoShape*> shapes = selection->selectedEditableShapes();

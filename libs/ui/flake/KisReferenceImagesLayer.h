@@ -10,6 +10,7 @@
 #include "kis_shape_layer.h"
 
 #include <kis_types.h>
+#include <KisView.h>
 
 class KisDocument;
 class KoCanvasBase;
@@ -48,6 +49,9 @@ public:
                                  KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
 
 
+    bool getLock();
+    void setLock(bool);
+
 Q_SIGNALS:
     /**
      * The content of the layer has changed, and the canvas decoration
@@ -60,6 +64,8 @@ private:
     friend struct AddReferenceImagesCommand;
     friend struct RemoveReferenceImagesCommand;
     friend class ReferenceImagesCanvas;
+
+    bool lock = false;
 };
 
 typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;

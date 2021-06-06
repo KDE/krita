@@ -163,7 +163,8 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
     return references;
 }
 
-void KisReferenceImagesLayer::paintReferences(QPainter &painter) {
+void KisReferenceImagesLayer::paintReferences(QPainter &painter)
+{
     painter.setTransform(converter()->documentToView(), true);
     shapeManager()->paint(painter, false);
 }
@@ -228,4 +229,13 @@ QColor KisReferenceImagesLayer::getPixel(QPointF position) const
     }
 
     return QColor();
+}
+bool KisReferenceImagesLayer::getLock()
+{
+     return lock;
+}
+
+void KisReferenceImagesLayer::setLock(bool val)
+{
+    lock =val;
 }

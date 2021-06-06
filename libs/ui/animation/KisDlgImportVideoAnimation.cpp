@@ -37,6 +37,7 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
+    setWindowTitle(i18nc("@title:window", "Import Video Animation"));
 
     QWidget *page = new QWidget(this);
     m_ui.setupUi(page);

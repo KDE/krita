@@ -102,7 +102,7 @@
   <summary xml:lang="uk">Цифрове малювання, творча свобода</summary>
   <summary xml:lang="x-test">xxDigital Painting, Creative Freedomxx</summary>
   <summary xml:lang="zh-CN">自由开源的数字绘画软件</summary>
-  <summary xml:lang="zh-TW">數位繪畫，創作自由</summary>
+  <summary xml:lang="zh-TW">數位繪圖，自由創作</summary>
   <description>
     <p>Krita is the full-featured digital art studio.</p>
     <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
@@ -330,6 +330,7 @@
       <caption xml:lang="uk">У програмі передбачено понад десяток надзвичайно потужних рушіїв пензлів</caption>
       <caption xml:lang="x-test">xxThere are over ten immensely powerful brush enginesxx</caption>
       <caption xml:lang="zh-CN">Krita 内建超过十种功能强大的笔刷引擎。</caption>
+      <caption xml:lang="zh-TW">有超過十款功能非常強大的筆刷引擎</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
     <screenshot>
@@ -357,6 +358,7 @@
       <caption xml:lang="uk">Створюйте маски палітри і користуйтеся ними для надання вашим малюнкам однорідного вигляду</caption>
       <caption xml:lang="x-test">xxCreate and use gamut masks to give your images a coherent feelxx</caption>
       <caption xml:lang="zh-CN">它支持建立并使用色域蒙版，让图像的颜色选用更有条理。</caption>
+      <caption xml:lang="zh-TW">建立和使用色域遮罩，使得您的影像看上去感覺有條有紊</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_004.png</image>
     </screenshot>
     <screenshot type="default">
@@ -413,6 +415,7 @@
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні, скористайтеся нашим докладним і актуальним підручником</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, there's an extensive, up-to-date manualxx</caption>
       <caption xml:lang="zh-CN">如果您是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册。</caption>
+      <caption xml:lang="zh-TW">如果你是數位繪圖的新手，我們提供廣範而且不斷更新的說明手冊</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>

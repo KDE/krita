@@ -321,3 +321,5 @@ add_subdirectory(ext_mypaint)
 if (UNIX AND NOT APPLE)
     add_subdirectory(ext_fcitx-qt)
 endif()
+
+add_subdirectory(ext_webp)

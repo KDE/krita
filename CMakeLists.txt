@@ -697,6 +697,18 @@ endif()
 ############################
 ###########################
 
+
+find_package(WebP 0.6.1)
+set_package_properties(WebP PROPERTIES
+    URL "https://developers.google.com/speed/webp"
+    TYPE OPTIONAL
+    PURPOSE "Required by the WebP plugin"
+)
+if(WebP_FOUND)
+    get_target_property(WebP_LIBRARY WebP::webp "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${WebP_LIBRARY})
+endif()
+
 ##
 ## Test for KSeExpr
 ##

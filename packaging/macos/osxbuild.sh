@@ -392,7 +392,7 @@ build_3rdparty () {
 
     cmake_3rdparty ext_seexpr
     cmake_3rdparty ext_mypaint
-
+    cmake_3rdparty ext_webp
 
 
     ## All builds done, creating a new install onlydeps install dir

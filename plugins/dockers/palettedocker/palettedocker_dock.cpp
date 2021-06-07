@@ -194,7 +194,11 @@ void PaletteDockerDock::slotContextMenu(const QModelIndex &)
 
 void PaletteDockerDock::slotAddPalette()
 {
-    m_paletteEditor->addPalette();
+    KoColorSetSP palette = m_paletteEditor->addPalette();
+
+    if (palette) {
+        m_paletteChooser->paletteSelected(palette);
+    }
 }
 
 void PaletteDockerDock::slotRemovePalette(KoColorSetSP cs)

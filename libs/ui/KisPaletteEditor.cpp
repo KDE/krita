@@ -87,10 +87,10 @@ void KisPaletteEditor::setView(KisViewManager *view)
     m_d->view = view;
 }
 
-void KisPaletteEditor::addPalette()
+KoColorSetSP KisPaletteEditor::addPalette()
 {
-    if (!m_d->view) { return; }
-    if (!m_d->view->document()) { return; }
+    if (!m_d->view) { return 0; }
+    if (!m_d->view->document()) { return 0; }
 
     KoColorSetSP colorSet(new KoColorSet());
 
@@ -106,7 +106,7 @@ void KisPaletteEditor::addPalette()
     chkSaveInDocument->setChecked(false);
     layout->addRow(chkSaveInDocument);
 
-    if (dialog.exec() != QDialog::Accepted) { return; }
+    if (dialog.exec() != QDialog::Accepted) { return 0; }
 
     QString name = le->text();
     colorSet->setPaletteType(KoColorSet::KPL);
@@ -119,6 +119,7 @@ void KisPaletteEditor::addPalette()
         resourceLocation = m_d->view->document()->uniqueID();
     }
     m_d->rServer->resourceModel()->addResource(colorSet, resourceLocation);
+    return colorSet;
 }
 
 KoColorSetSP KisPaletteEditor::importPalette()

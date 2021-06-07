@@ -466,7 +466,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             possibleConversionIntents += "<li>"+i18n("Absolute Colorimetric")+"</li>";
         }
         if (currentColorSpace()->profile()->supportsSaturation()){
-            possibleConversionIntents += "<li>"+i18n("Saturation")+"</li>";
+            possibleConversionIntents += "<li>"+i18nc("ICC profile rendering intent", "Saturation")+"</li>";
         }
         possibleConversionIntents += "</ul></ul></p>";
         d->colorSpaceSelector->textProfileDescription->append(possibleConversionIntents);

@@ -117,7 +117,7 @@
             <string>Hue and saturation maintained with lightness sacrificed to maintain saturation. White point changed to result in neutral grays. Intended for business graphics (make it colorful charts, graphs, overheads, ...)</string>
            </property>
            <property name="text">
-            <string>Saturation</string>
+            <string comment="ICC profile rendering intent">Saturation</string>
            </property>
           </widget>
          </item>

@@ -193,8 +193,7 @@ void KisToolColorSampler::endPrimaryAction(KoPointerEvent *event)
 
         if (palette) {
             palette->add(swatch);
-            KoResourceServerProvider::instance()->paletteServer()->updateResource(palette);
-            if (!palette->save()) {
+            if (!KoResourceServerProvider::instance()->paletteServer()->updateResource(palette)) {
                 QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
             }
         }

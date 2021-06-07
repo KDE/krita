@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest package="org.krita" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="4.4.4-alpha" android:installLocation="auto">
+<manifest package="org.krita" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="4.4.5" android:installLocation="auto">
     <application android:hardwareAccelerated="true"
                  android:name="org.qtproject.qt5.android.bindings.QtApplication"
                  android:label="Krita"

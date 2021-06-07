@@ -123,7 +123,7 @@ android {
     project.ext.versionCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, 'x86': 3, 'x86_64': 4]
 
     def versionMajor    = 4
-    def versionMinor    = 4
+    def versionMinor    = 5
 
     /**
      * This version does **not** correspond to the patch version
@@ -131,7 +131,7 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 6
+    def versionRelease  = 7
 
 	defaultConfig {
         targetSdkVersion 29

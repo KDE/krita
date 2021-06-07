@@ -485,7 +485,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
             d->recentFiles->setUrlIcon(url, icon);
         }
     });
-    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &parent, int first, int last) {
+    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &/*parent*/, int first, int last) {
         for (int i = first; i <= last; i++) {
             QStandardItem *item = d->recentFilesModel.model().item(i);
             QUrl url = item->data().toUrl();

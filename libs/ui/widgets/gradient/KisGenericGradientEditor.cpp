@@ -81,7 +81,7 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     m_d->labelConvertGradientWarning->setToolTip(
         i18nc(
             "Warning text shown when converting from a segment gradient to a stop gradient",
-            "Converting a segment gradient to a stop gradient may cause lose of information"
+            "Converting a segment gradient to a stop gradient may cause loss of information"
         )
     );
 

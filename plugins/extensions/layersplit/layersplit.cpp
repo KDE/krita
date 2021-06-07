@@ -73,6 +73,11 @@ void LayerSplit::slotLayerSplit()
 
         bool modeToLayer = !dlg.m_modeToMask;
         dlg.hide();
+        
+        // Convert to paint layer prior to splitting if current node is a colorize mask
+        if(viewManager()->activeNode()->inherits("KisColorizeMask")) {
+            viewManager()->nodeManager()->convertNode("KisPaintLayer");
+        }
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
 

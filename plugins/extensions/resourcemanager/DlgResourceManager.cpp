@@ -70,6 +70,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     proxyModel->setResourceModel(resourceModel);
     proxyModel->setTagFilter(0);
     proxyModel->setStorageFilter(true, getCurrentStorageId());
+    proxyModel->sort(KisAbstractResourceModel::Name);
     m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
 
     m_ui->resourceItemView->setModel(proxyModel);
@@ -123,6 +124,7 @@ void DlgResourceManager::slotResourceTypeSelected(int)
         proxyModel->setResourceModel(resourceModel);
         proxyModel->setTagFilter(getCurrentTag());
         proxyModel->setStorageFilter(true, getCurrentStorageId());
+        proxyModel->sort(KisAbstractResourceModel::Name);
         m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
     }
     m_ui->resourceItemView->setModel(m_resourceProxyModelsForResourceType[selectedResourceType]);

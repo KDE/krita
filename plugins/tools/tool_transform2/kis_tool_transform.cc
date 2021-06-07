@@ -157,7 +157,6 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
             this, SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotGlobalConfigChanged()));
-    slotGlobalConfigChanged();
 }
 
 KisToolTransform::~KisToolTransform()
@@ -729,6 +728,11 @@ void KisToolTransform::newActivationWithExternalSource(KisPaintDeviceSP external
 void KisToolTransform::activate(const QSet<KoShape*> &shapes)
 {
     KisTool::activate(shapes);
+
+    /// we cannot initialize the setting in the constructor, because
+    /// factory() is not yet initialized, so we cannot get toolId()
+    slotGlobalConfigChanged();
+
     m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteUp()));
     m_actionConnections.addConnection(action("movetool-move-up-more"), SIGNAL(triggered(bool)),

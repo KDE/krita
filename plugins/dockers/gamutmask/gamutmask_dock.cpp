@@ -346,6 +346,8 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     KoGamutMaskSP newMask;
     if (sourceMask) {
         newMask = KoGamutMaskSP(new KoGamutMask(sourceMask.data()));
+        newMask->setVersion(-1);
+        newMask->setResourceId(-1);
         newMask->setImage(sourceMask->image());
     } else {
         newMask = KoGamutMaskSP(new KoGamutMask());

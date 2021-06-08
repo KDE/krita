@@ -703,10 +703,12 @@ void KisPaintOpPresetsEditor::slotSaveBrushPreset() {
     // there is a dialog with save options, but we don't need to show it in this situation
 
     saveDialog->useNewBrushDialog(false); // this mostly just makes sure we keep the existing brush preset name when saving
+    saveDialog->saveScratchPadThumbnailArea(m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay());
     saveDialog->loadExistingThumbnail(); // This makes sure we use the existing preset icon when updating the existing brush preset
-    saveDialog->savePreset();
+    saveDialog->showDialog();
 
     // refresh the view settings so the brush doesn't appear dirty
+    // tiar 2021: I'm not sure if it's needed anymore; seems to work without it...
     slotUpdatePresetSettings();
 }
 

@@ -44,6 +44,14 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
 
     m_ui->cmbResourceType->setModel(m_resourceTypeModel);
     m_ui->cmbResourceType->setModelColumn(KisResourceTypeModel::Name);
+    for (int i = 0; i < m_resourceTypeModel->rowCount(); i++) {
+        QModelIndex idx = m_resourceTypeModel->index(i, 0);
+        QString resourceType = m_resourceTypeModel->data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
+        if (resourceType == "paintoppresets") {
+            m_ui->cmbResourceType->setCurrentIndex(i);
+            break;
+        }
+    }
     connect(m_ui->cmbResourceType, SIGNAL(activated(int)), SLOT(slotResourceTypeSelected(int)));
 
     m_storageModel = new KisStorageModel(this);

@@ -22,10 +22,6 @@ wget $WIN64_ARTIFACTS_URL/krita-x64-$KRITA_VERSION-dbg.zip
 wget $WIN64_ARTIFACTS_URL/krita-x64-$KRITA_VERSION.zip
 wget $WIN64_ARTIFACTS_URL/krita-x64-$KRITA_VERSION-setup.exe
 
-wget $WIN32_ARTIFACTS_URL/krita-x86-$KRITA_VERSION-dbg.zip
-wget $WIN32_ARTIFACTS_URL/krita-x86-$KRITA_VERSION.zip
-wget $WIN32_ARTIFACTS_URL/krita-x86-$KRITA_VERSION-setup.exe
-
 wget $APPIMAGE_ARTIFACTS_URL/gmic_krita_qt-x86_64.appimage
 wget $APPIMAGE_ARTIFACTS_URL/krita-$KRITA_VERSION-x86_64.appimage
 # only for Krita 5.0.0

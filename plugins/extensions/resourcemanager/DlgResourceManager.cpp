@@ -63,6 +63,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     QString selectedResourceType = getCurrentResourceType();
 
     KisTagModel* tagModel = new KisTagModel(selectedResourceType);
+    tagModel->sort(KisAllTagsModel::Name);
     m_tagModelsForResourceType.insert(selectedResourceType, tagModel);
 
     m_ui->cmbTag->setModel(tagModel);
@@ -110,6 +111,7 @@ void DlgResourceManager::slotResourceTypeSelected(int)
     QString selectedResourceType = getCurrentResourceType();
     if (!m_tagModelsForResourceType.contains(selectedResourceType)) {
         m_tagModelsForResourceType.insert(selectedResourceType, new KisTagModel(selectedResourceType));
+        m_tagModelsForResourceType[selectedResourceType]->sort(KisAllTagsModel::Name);
     }
 
     m_ui->cmbTag->setModel(m_tagModelsForResourceType[selectedResourceType]);

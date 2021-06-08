@@ -423,7 +423,7 @@ void KisPart::slotDocumentSaved()
         return;
     }
     QUrl oldUrl = d->pendingAddRecentUrlMap.take(url);
-    addRecentURLToAllMainWindows(QUrl::fromLocalFile(doc->path()));
+    addRecentURLToAllMainWindows(QUrl::fromLocalFile(doc->path()), oldUrl);
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)

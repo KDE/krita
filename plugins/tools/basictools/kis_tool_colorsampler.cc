@@ -286,6 +286,22 @@ QWidget* KisToolColorSampler::createOptionWidget()
     m_optionsWidget->cmbPalette->setModelColumn(KisAbstractResourceModel::Name);
     m_tagFilterProxyModel->sort(Qt::DisplayRole);
 
+
+    KConfigGroup config =  KSharedConfig::openConfig()->group(toolId());
+    QString paletteName = config.readEntry("ColorSamplerPalette", "");
+    if (!paletteName.isEmpty()) {
+        for (int i = 0; i < m_tagFilterProxyModel->rowCount(); i++) {
+            QModelIndex idx = m_tagFilterProxyModel->index(i, 0);
+            QString name = m_tagFilterProxyModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+            if (name == paletteName) {
+                m_optionsWidget->cmbPalette->setCurrentIndex(i);
+                break;
+            }
+        }
+    }
+
+    connect(m_optionsWidget->cmbPalette, SIGNAL(currentIndexChanged(int)), SLOT(slotChangePalette(int)));
+
     return m_optionsWidget;
 }
 
@@ -341,4 +357,11 @@ void KisToolColorSampler::slotChangeBlend(int value)
 void KisToolColorSampler::slotSetColorSource(int value)
 {
     m_config->sampleMerged = value == SAMPLE_MERGED;
+}
+
+void KisToolColorSampler::slotChangePalette(int)
+{
+    QString paletteName = m_optionsWidget->cmbPalette->currentData(Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    KConfigGroup config =  KSharedConfig::openConfig()->group(toolId());
+    config.writeEntry("ColorSamplerPalette", paletteName);
 }

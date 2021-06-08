@@ -85,6 +85,9 @@ public Q_SLOTS:
     void slotChangeBlend(int);
     void slotSetColorSource(int value);
 
+private Q_SLOTS:
+    void slotChangePalette(int);
+
 private:
     void displaySampledColor();
     bool sampleColor(const QPointF& pos);

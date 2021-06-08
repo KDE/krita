@@ -39,6 +39,7 @@ struct KisResourcesSnapshot::Private {
     KisNodeSP currentNode {0};
     qreal currentExposure {0.0};
     KisFilterConfigurationSP currentGenerator;
+    KisNodeList selectedNodes;
 
     QPointF axesCenter;
     bool mirrorMaskHorizontal {false};
@@ -61,7 +62,7 @@ struct KisResourcesSnapshot::Private {
     KoCanvasResourcesInterfaceSP globalCanvasResourcesInterface;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds, KisNodeList selectedNodes)
     : m_d(new Private())
 {
     m_d->image = image;
@@ -118,6 +119,8 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
 
     m_d->compositeOpId = resourceManager->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString();
     setCurrentNode(currentNode);
+
+    m_d->selectedNodes = selectedNodes;
 
     /**
      * Fill and Stroke styles are not a part of the resource manager
@@ -258,6 +261,11 @@ void KisResourcesSnapshot::setFillStyle(KisPainter::FillStyle fillStyle)
 void KisResourcesSnapshot::setFillTransform(QTransform transform)
 {
     m_d->fillTransform = transform;
+}
+
+KisNodeList KisResourcesSnapshot::selectedNodes() const
+{
+    return m_d->selectedNodes;
 }
 
 KisNodeSP KisResourcesSnapshot::currentNode() const

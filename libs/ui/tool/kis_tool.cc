@@ -517,13 +517,13 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 void KisTool::deleteSelection()
 {
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager(), 0, selectedNodes());
 
     if (!blockUntilOperationsFinished()) {
         return;
     }
 
-    if (!KisToolUtils::clearImage(image(), selectedNodes(), resources->activeSelection())) {
+    if (!KisToolUtils::clearImage(image(), resources->selectedNodes(), resources->activeSelection())) {
         KoToolBase::deleteSelection();
     }
 }

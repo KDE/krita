@@ -14,6 +14,7 @@
 #include <kis_properties_configuration.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include "kis_layer_utils.h"
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
 
@@ -126,52 +127,41 @@ namespace KisToolUtils {
 
     bool clearImage(KisImageSP image, KisNodeList nodes, KisSelectionSP selection)
     {
-        QSet<KisNodeSP> modifyNodes;
+        KisLayerUtils::filterMergableNodes(nodes);
 
-        while (!nodes.isEmpty()) {
-            KisNodeSP node = nodes.first();
-            nodes.erase(nodes.begin());
-
-            if (node->inherits("KisGroupLayer")) {
-                KisNodeSP child = node->firstChild();
-                while (child) {
-                    nodes.append(child);
-                    child = child->nextSibling();
-                }
-                continue;
-            }
-
-            if(node && node->hasEditablePaintDevice()) {
-                modifyNodes.insert(node);
-            }
-        }
-
-        if (modifyNodes.isEmpty()) {
+        if (nodes.isEmpty()) {
             return false;
         }
 
         KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE,
                                            KisImageSignalVector(), kundo2_i18n("Clear"));
 
-        Q_FOREACH (KisNodeSP node, modifyNodes) {
-            applicator.applyCommand(new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
-                                    [node, selection] () {
-                                        KisPaintDeviceSP device = node->paintDevice();
+        Q_FOREACH (KisNodeSP node, nodes) {
+            KisLayerUtils::recursiveApplyNodes(node, [&applicator, selection] (KisNodeSP node) {
 
-                                        KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
+                if(node && node->hasEditablePaintDevice()) {
+                    KUndo2Command *cmd =
+                        new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
+                            [node, selection] () {
+                                KisPaintDeviceSP device = node->paintDevice();
 
-                                        QRect dirtyRect;
-                                        if (selection) {
-                                            dirtyRect = selection->selectedRect();
-                                            device->clearSelection(selection);
-                                        } else {
-                                            dirtyRect = device->extent();
-                                            device->clear();
-                                        }
+                                KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
 
-                                        device->setDirty(dirtyRect);
-                                        return transaction.endAndTake();
-                                    }), KisStrokeJobData::CONCURRENT);
+                                QRect dirtyRect;
+                                if (selection) {
+                                    dirtyRect = selection->selectedRect();
+                                    device->clearSelection(selection);
+                                } else {
+                                    dirtyRect = device->extent();
+                                    device->clear();
+                                }
+
+                                device->setDirty(dirtyRect);
+                                return transaction.endAndTake();
+                            });
+                    applicator.applyCommand(cmd, KisStrokeJobData::CONCURRENT);
+                }
+            });
         }
         applicator.end();
 

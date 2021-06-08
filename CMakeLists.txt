@@ -101,6 +101,9 @@ set(KRITA_VERSION_RELEASE 0)
 # - Beta: Starts from 50, increment 1 per release
 # - Stable: Set to 100, bump to 101 if emergency update is needed
 set(KRITA_VERSION_REVISION 0)
+# Uncomment the following if this is currently in the "stable" branch.
+# Do not uncomment for master branch.
+#set(KRITA_STABLE_BRANCH 1)
 set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
@@ -216,8 +219,18 @@ configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-update
 add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
 
 # Branding. Available options: default, Beta, Plus, Next. Can be set from command line
-if (NOT DEFINED BRANDING)
-	set(BRANDING "default")
+if ("${BRANDING}" STREQUAL "")
+    if (DEFINED KRITA_STABLE)
+        set(BRANDING "default")
+    elseif (DEFINED KRITA_BETA OR DEFINED KRITA_RC)
+        set(BRANDING "Beta")
+    elseif (DEFINED KRITA_STABLE_BRANCH)
+        # Alpha/pre-alpha in stable branch
+        set(BRANDING "Plus")
+    else ()
+        # Alpha/pre-alpha in master branch or other experiments
+        set(BRANDING "Next")
+    endif ()
 endif()
 message(STATUS "Branding selected: ${BRANDING}")
 
@@ -964,7 +977,7 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)
     if (Subversion_FOUND AND Python3_FOUND) 
        set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
 
-        if (KRITA_STABLE)
+        if (DEFINED KRITA_STABLE_BRANCH)
             set(tr_EXTRA_FLAGS "")
         else()
             set(tr_EXTRA_FLAGS "--unstable")

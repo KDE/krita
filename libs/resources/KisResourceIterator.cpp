@@ -98,19 +98,19 @@ KisResourceIterator::~KisResourceIterator()
 
 bool KisResourceIterator::hasNext() const
 {
-    return d->currentRow < d->resourceModel->rowCount() - 1;
+    return d->currentRow < d->resourceModel->rowCount();
 }
 
 bool KisResourceIterator::hasPrevious() const
 {
-    return d->currentRow > 0 && d->resourceModel->rowCount() > 1 && d->currentRow < d->resourceModel->rowCount();
+    return d->currentRow > 0 && d->resourceModel->rowCount() > 0;
 }
 
 const KisResourceItemSP KisResourceIterator::next()
 {
-    if (d->currentRow < d->resourceModel->rowCount() - 1) {
-        d->currentRow++;
+    if (hasNext()) {
         QModelIndex idx = d->resourceModel->index(d->currentRow, 0);
+        d->currentRow++;
         return KisResourceItemSP(new KisResourceItem(d->resourceModel, idx));
     }
     return KisResourceItemSP(new KisResourceItem(0, QModelIndex()));
@@ -118,8 +118,8 @@ const KisResourceItemSP KisResourceIterator::next()
 
 const KisResourceItemSP KisResourceIterator::peekNext() const
 {
-    if (d->currentRow < d->resourceModel->rowCount() - 2) {
-        QModelIndex idx = d->resourceModel->index(d->currentRow + 1, 0);
+    if (hasNext()) {
+        QModelIndex idx = d->resourceModel->index(d->currentRow, 0);
         return KisResourceItemSP(new KisResourceItem(d->resourceModel, idx));
     }
     return KisResourceItemSP(new KisResourceItem(0, QModelIndex()));
@@ -127,8 +127,8 @@ const KisResourceItemSP KisResourceIterator::peekNext() const
 
 const KisResourceItemSP KisResourceIterator::peekPrevious() const
 {
-    if (d->currentRow > 1 && d->resourceModel->rowCount() > 2) {
-        QModelIndex idx = d->resourceModel->index(d->currentRow -1, 0);
+    if (hasPrevious()) {
+        QModelIndex idx = d->resourceModel->index(d->currentRow - 1, 0);
         return KisResourceItemSP(new KisResourceItem(d->resourceModel, idx));
     }
     return KisResourceItemSP(new KisResourceItem(0, QModelIndex()));
@@ -136,7 +136,7 @@ const KisResourceItemSP KisResourceIterator::peekPrevious() const
 
 const KisResourceItemSP KisResourceIterator::previous()
 {
-    if (d->currentRow > 1 && d->resourceModel->rowCount() > 2) {
+    if (hasPrevious()) {
         d->currentRow--;
         QModelIndex idx = d->resourceModel->index(d->currentRow, 0);
         return KisResourceItemSP(new KisResourceItem(d->resourceModel, idx));
@@ -145,12 +145,12 @@ const KisResourceItemSP KisResourceIterator::previous()
 
 }
 
-void KisResourceIterator::toBack()
+void KisResourceIterator::toFront()
 {
     d->currentRow = 0;
 }
 
 void KisResourceIterator::toEnd()
 {
-    d->currentRow = d->resourceModel->rowCount() -1;
+    d->currentRow = d->resourceModel->rowCount();
 }

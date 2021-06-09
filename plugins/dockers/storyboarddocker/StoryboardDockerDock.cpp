@@ -34,6 +34,7 @@
 #include <kis_icon.h>
 #include <kis_image_animation_interface.h>
 #include <kis_time_span.h>
+#include <kis_global.h>
 
 #include "ui_wdgstoryboarddock.h"
 #include "ui_wdgcommentmenu.h"
@@ -395,7 +396,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             QFont font = p.font();
             font.setPointSize(dlg.fontSize());
             p.setFont(font);
-            StoryboardItemList list = m_storyboardModel->getData();
+            StoryboardItemList storyboardList = m_storyboardModel->getData();
 
             for (int i = 0; i < numItems; i++) {
                 if (i % layoutCellRects.size() == 0 && i != 0) {
@@ -413,98 +414,131 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                         printer.newPage();
                     }
                 }
-                QRectF cellRect = layoutCellRects.at(i % layoutCellRects.size());
 
-                //draw the cell rectangle
-                QPen pen(QColor(1, 0, 0));
-                pen.setWidth(5);
-                p.setPen(pen);
-
-                ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i + firstItemRow)->child(StoryboardItem::FrameNumber)->data());
+                const QRect cellRect = layoutCellRects.at(i % layoutCellRects.size()).toAlignedRect();
+                const bool horizontal = cellRect.width() > cellRect.height(); // Determine general image / text flow orientation.
+                ThumbnailData data = qvariant_cast<ThumbnailData>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::FrameNumber)->data());
                 QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);
+                QVector<StoryboardComment> comments = m_commentModel->getData();
+                const int numComments = comments.size();
 
-                //get the thumbnail rectangle and draw it with content
-                float scale = qMin(cellRect.width() / pxmp.rect().width(), (cellRect.height() - p.fontMetrics().height()) /  pxmp.rect().height());
-                QRectF thumbRect = cellRect;
-                thumbRect.setSize(scale * pxmp.rect().size());
-
-                thumbRect.moveTop(thumbRect.top() + p.fontMetrics().height());
-                p.drawRect(thumbRect);
-
-                thumbRect.setSize(thumbRect.size() - QSize(30,30));
-                thumbRect.moveTopLeft(thumbRect.topLeft() + QPointF(15,15));
-                p.drawPixmap(thumbRect, pxmp, pxmp.rect());
-
-                //get the panelInfo rect and draw panel name and duration
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
                 int numericFontWidth = p.fontMetrics().horizontalAdvance("0");
 #else
                 int numericFontWidth = p.fontMetrics().width("0");
 #endif
 
-                QRectF panelInfoRect = cellRect;
-                panelInfoRect.setHeight(p.fontMetrics().height());
-                panelInfoRect.setWidth((scale * pxmp.rect().size()).width() - 6 * numericFontWidth);
+                struct ElementLayout {
+                    QRect panelNameRect;
+                    QRect panelDurationRect;
+                    QRect imageAreaRect;
+                    QList<QRect> commentRects;
+                    bool renderComments;
 
-                QString str = list.at(i + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
-                p.drawRect(panelInfoRect);
-                QRectF boundRect = panelInfoRect;
-                p.drawText(panelInfoRect, Qt::AlignLeft | Qt::AlignVCenter, str, &boundRect);
+                    ElementLayout()
+                        : panelNameRect(0,0,-1,-1)
+                        , panelDurationRect(0,0,-1,-1)
+                        , imageAreaRect(0,0, -1, -1)
+                        , commentRects()
+                        , renderComments(false) {
+                    }
+                };
 
-                //get the duration rect and draw duration
-                QRectF durationRect = panelInfoRect;
-                durationRect.setWidth(6 * numericFontWidth);
-                durationRect.moveLeft(panelInfoRect.right());
+                QScopedPointer<ElementLayout> layout;
 
-                QString duration = QString::number(list.at(i + firstItemRow)->child(StoryboardItem::DurationSecond)->data().toInt());
-                duration +=i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
-                duration += QString::number(list.at(i + firstItemRow)->child(StoryboardItem::DurationFrame)->data().toInt());
-                duration +=i18nc("suffix in spin box in storyboard that means 'frames'", "f");
+                if (horizontal) {
+                    QRect sourceRect = cellRect;
+                    layout.reset(new ElementLayout);
+                    layout->panelDurationRect = kisTrimTop(p.fontMetrics().height() * 1.5, sourceRect);
+                    layout->panelNameRect = kisTrimLeft(layout->panelDurationRect.width() - numericFontWidth * 6, layout->panelDurationRect);
 
-                boundRect = durationRect;
-                boundRect.setSize(boundRect.size() - QSize(10,10));
-                p.drawRect(durationRect);
-                p.drawText(durationRect, Qt::AlignCenter, duration, &boundRect);
+                    QSize resizedImage = pxmp.size().scaled(sourceRect.size(), Qt::KeepAspectRatio);
+                    layout->imageAreaRect = kisTrimLeft(resizedImage.width(), sourceRect);
+                    const float commentWidth = sourceRect.width() / numComments;
+                    layout->renderComments = commentWidth > 100;
+                    for (int i = 0; i < numComments; i++) {
+                        QRect rest = kisTrimLeft(commentWidth, sourceRect);
+                        layout->commentRects.push_back(rest);
+                    }
+                } else {
+                    QRect sourceRect = cellRect;
+                    layout.reset(new ElementLayout);
+                    layout->panelDurationRect = kisTrimTop(p.fontMetrics().height() * 1.5, sourceRect);
+                    layout->panelNameRect = kisTrimLeft(layout->panelDurationRect.width() - numericFontWidth * 6, layout->panelDurationRect);
 
-                //if the comments are to be drawn below thumbnail
-                QTextDocument doc;
-                doc.setDocumentMargin(0);
-                doc.setDefaultFont(p.font());
-                QVector<StoryboardComment> comments = m_commentModel->getData();
-                int numComments = comments.size();
-                QString comment;
-                for (int j = 0; j < numComments; j++) {
-                    comment += "<p><b>" + comments.at(j).name + "</b>"; // if arrange options are used check for visibility
-                    comment += " : " + qvariant_cast<CommentBox>(list.at(i + firstItemRow)->child(StoryboardItem::Comments + j)->data()).content.toString() + "</p>";
+                    QSize resizedImage = pxmp.size().scaled(sourceRect.size(), Qt::KeepAspectRatio);
+                    layout->imageAreaRect = kisTrimTop(resizedImage.height(), sourceRect);
+                    const float commentHeight = sourceRect.height() / numComments;
+                    layout->renderComments = commentHeight > 200;
+                    for (int i = 0; i < numComments; i++) {
+                        QRect rest = kisTrimTop(commentHeight, sourceRect);
+                        layout->commentRects.push_back(rest);
+                    }
                 }
 
-                doc.setHtml(comment);
-                doc.setTextWidth(cellRect.width());
+                //draw the cell rectangle
+                QPen pen(QColor(1, 0, 0));
+                pen.setWidth(5);
+                p.setPen(pen);
 
-                QRectF clipRect = cellRect;
-                clipRect.setTop(thumbRect.bottom() + 15);
-                QRectF commentRect = clipRect;
-                clipRect.moveTopLeft(QPoint(0,0));
-                clipRect.setWidth(thumbRect.width());
-
-                if (clipRect.height() > 10) {
-                    p.drawRect(commentRect);
+                {
+                    p.drawRect(layout->imageAreaRect);
+                    QRect imgRect = layout->imageAreaRect;
+                    QSize resizedImage = pxmp.size().scaled(layout->imageAreaRect.size(), Qt::KeepAspectRatio);
+                    const int MARGIN = -2;
+                    resizedImage = resizedImage.grownBy(QMargins(MARGIN, MARGIN, MARGIN, MARGIN));
+                    imgRect.setSize(resizedImage);
+                    imgRect.translate((layout->imageAreaRect.width() - imgRect.size().width()) / 2 - MARGIN, (layout->imageAreaRect.height() - imgRect.size().height()) / 2 - MARGIN);
+                    p.drawPixmap(imgRect, pxmp, pxmp.rect());
                 }
 
-                QAbstractTextDocumentLayout::PaintContext ctx;
-                ctx.palette.setColor(QPalette::Text, p.pen().color());
-                ctx.clip = clipRect;
+                //Draw panel name
+                QString str = storyboardList.at(i + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
+                p.drawRect(layout->panelNameRect);
+                p.drawText(layout->panelNameRect.translated(p.fontMetrics().averageCharWidth() / 2, 0), Qt::AlignLeft | Qt::AlignVCenter, str);
 
-                //draw the comments
-                p.save();
-                p.translate(thumbRect.bottomLeft());
-                doc.documentLayout()->draw( &p, ctx);
-                p.restore();
+                //Draw duration
+                QString duration = QString::number(storyboardList.at(i + firstItemRow)->child(StoryboardItem::DurationSecond)->data().toInt());
+                duration += i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
+                duration += "+";
+                duration += QString::number(storyboardList.at(i + firstItemRow)->child(StoryboardItem::DurationFrame)->data().toInt());
+                duration += i18nc("suffix in spin box in storyboard that means 'frames'", "f");
 
-                if (commentRect.height() < doc.size().height()) {
-                    QRectF eRect(QPointF(commentRect.topLeft()), doc.size());
-                    eRect.setTop(cellRect.bottom() + 20);
-                    p.eraseRect(eRect);
+                p.drawRect(layout->panelDurationRect);
+                p.drawText(layout->panelDurationRect, Qt::AlignCenter, duration);
+
+                if (layout->renderComments) {
+                    for (int commentIndex = 0; commentIndex < numComments; commentIndex++) {
+                        if (commentIndex >= layout->commentRects.size())
+                            break;
+
+                        QTextDocument doc;
+                        doc.setDocumentMargin(0);
+                        doc.setDefaultFont(p.font());
+                        QString comment;
+                        comment += "<p><b>" + comments.at(commentIndex).name + "</b></p>"; // if arrange options are used check for visibility
+                        comment += "<p>&nbsp;" + qvariant_cast<CommentBox>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString() + "</p>";
+                        const int MARGIN = p.fontMetrics().averageCharWidth() / 2;
+
+                        doc.setHtml(comment);
+                        doc.setTextWidth(layout->commentRects[commentIndex].width() - MARGIN * 2);
+                        p.drawRect(layout->commentRects[commentIndex]);
+
+                        QAbstractTextDocumentLayout::PaintContext ctx;
+                        ctx.palette.setColor(QPalette::Text, p.pen().color());
+
+                        //draw the comments
+                        p.save();
+                        p.translate(layout->commentRects[commentIndex].topLeft() + QPoint(MARGIN, MARGIN));
+                        doc.documentLayout()->draw(&p, ctx);
+                        p.restore();
+
+                        if (layout->commentRects[commentIndex].height() < doc.size().height()) {
+                            QRectF eRect(QPointF(layout->commentRects[commentIndex].topLeft()), doc.size());
+                            eRect.setTop(cellRect.bottom() + 20);
+                            p.eraseRect(eRect);
+                        }
+                    }
                 }
             }
             p.end();

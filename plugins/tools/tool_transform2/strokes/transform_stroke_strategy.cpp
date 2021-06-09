@@ -41,6 +41,8 @@
 #include "KisRunnableStrokeJobUtils.h"
 #include "commands_new/KisHoldUIUpdatesCommand.h"
 #include "KisDecoratedNodeInterface.h"
+#include "kis_paint_device_debug_utils.h"
+#include "kis_layer_utils.h"
 
 
 TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
@@ -262,13 +264,15 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::CONCURRENT,
                                   KisStrokeJobData::NORMAL);
 
-                td->node->setDirty(oldExtent | td->node->extent());
+                m_updateData->push_back(std::make_pair(td->node, oldExtent | td->node->extent()));
             } else if (KisExternalLayer *extLayer =
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
                 if (td->config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
                     (td->config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT &&
                      extLayer->supportsPerspectiveTransform())) {
+
+                    QRect oldDirtyRect = oldExtent | extLayer->theoreticalBoundingRect();
 
                     QVector3D transformedCenter;
                     KisTransformWorker w = KisTransformUtils::createTransformWorker(td->config, 0, 0, &transformedCenter);
@@ -277,6 +281,16 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                     runAndSaveCommand(KUndo2CommandSP(extLayer->transform(t)),
                                       KisStrokeJobData::CONCURRENT,
                                       KisStrokeJobData::NORMAL);
+
+                    /**
+                     * Shape layer's projection may not be yet ready right
+                     * after transformation, because it need to do that in
+                     * the GUI thread, so we should approximate that.
+                     */
+                    const QRect theoreticalNewDirtyRect =
+                        kisGrowRect(t.mapRect(oldDirtyRect), 1);
+
+                    m_updateData->push_back(std::make_pair(td->node, oldDirtyRect | td->node->extent() | extLayer->theoreticalBoundingRect() | theoreticalNewDirtyRect));
                 }
 
             } else if (KisTransformMask *transformMask =
@@ -288,6 +302,8 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                                                          new KisTransformMaskAdapter(td->config)))),
                                   KisStrokeJobData::CONCURRENT,
                                   KisStrokeJobData::NORMAL);
+
+                m_updateData->push_back(std::make_pair(td->node, oldExtent | td->node->extent()));
             }
         } else if (m_selection) {
 
@@ -323,12 +339,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 if (selection) {
                     selection->setVisible(false);
                     m_deactivatedSelections.append(selection);
-                    mask->setDirty();
                 }
             }
         } else if (KisExternalLayer *externalLayer = dynamic_cast<KisExternalLayer*>(csd->node.data())) {
             externalLayer->projectionLeaf()->setTemporaryHiddenFromRendering(true);
-            externalLayer->setDirty();
             m_hiddenProjectionLeaves.append(csd->node);
         } else if (KisTransformMask *transformMask =
                    dynamic_cast<KisTransformMask*>(csd->node.data())) {
@@ -351,9 +365,7 @@ void TransformStrokeStrategy::clearSelection(KisPaintDeviceSP device)
     if (m_selection) {
         device->clearSelection(m_selection);
     } else {
-        QRect oldExtent = device->extent();
         device->clear();
-        device->setDirty(oldExtent);
     }
     runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                       KisStrokeJobData::SEQUENTIAL,
@@ -475,9 +487,20 @@ void TransformStrokeStrategy::initStrokeCallback()
 
     extraInitJobs << new PreparePreviewData();
 
+    KisUpdateCommandEx::SharedDataSP sharedData(new KisUpdateCommandEx::SharedData());
+
+    KisNodeList filteredRoots = KisLayerUtils::sortAndFilterMergableInternalNodes(m_processedNodes, true);
+    Q_FOREACH (KisNodeSP root, filteredRoots) {
+        sharedData->push_back(std::make_pair(root, root->extent()));
+    }
+
+    extraInitJobs << new Data(new KisUpdateCommandEx(sharedData, m_updatesFacade, KisUpdateCommandEx::INITIALIZING), false, Data::BARRIER);
+
     Q_FOREACH (KisNodeSP node, m_processedNodes) {
         extraInitJobs << new ClearSelectionData(node);
     }
+
+    extraInitJobs << new Data(new KisUpdateCommandEx(sharedData, m_updatesFacade, KisUpdateCommandEx::FINALIZING), false, Data::BARRIER);
 
     /// recover back visibility of decorated nodes
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
@@ -534,6 +557,14 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
     if (applyTransform) {
         m_savedTransformArgs = args;
 
+        m_updateData.reset(new KisUpdateCommandEx::SharedData());
+
+        KritaUtils::addJobBarrier(mutatedJobs, [this] () {
+            runAndSaveCommand(toQShared(new KisUpdateCommandEx(m_updateData, m_updatesFacade, KisUpdateCommandEx::INITIALIZING)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+            m_updatesDisabled = true;
+            m_updatesFacade->disableDirtyRequests();
+        });
+
         Q_FOREACH (KisNodeSP node, m_processedNodes) {
             mutatedJobs << new TransformData(TransformData::PAINT_DEVICE,
                                              args,
@@ -542,6 +573,38 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
         mutatedJobs << new TransformData(TransformData::SELECTION,
                                          args,
                                          m_rootNode);
+
+        KritaUtils::addJobBarrier(mutatedJobs, [this] () {
+            {
+                /// Here is a bit of code-duplication from
+                /// InplaceTransformStrokeStrategy. This code reduced the
+                /// amount of updates we do in the course of transformation.
+                /// Basically, we find the minimum set of parents for the
+                /// selected layers and do full refresh for them
+
+                KisNodeList filteredNodes = m_processedNodes;
+                KisLayerUtils::sortAndFilterMergableInternalNodes(filteredNodes);
+
+                KisUpdateCommandEx::SharedData newUpdateData;
+
+                Q_FOREACH (KisNodeSP root, filteredNodes) {
+                    QRect dirtyRect;
+
+                    for (auto it = m_updateData->begin(); it != m_updateData->end(); ++it) {
+                        if (KisLayerUtils::checkIsChildOf(it->first, {root})) {
+                            dirtyRect |= it->second;
+                        }
+                    }
+                    newUpdateData.push_back(std::make_pair(root, dirtyRect));
+                }
+
+                *m_updateData = newUpdateData;
+            }
+
+            m_updatesFacade->enableDirtyRequests();
+            m_updatesDisabled = false;
+            runAndSaveCommand(toQShared(new KisUpdateCommandEx(m_updateData, m_updatesFacade, KisUpdateCommandEx::FINALIZING)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+        });
     }
 
     KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {
@@ -580,5 +643,9 @@ void TransformStrokeStrategy::finishStrokeCallback()
 
 void TransformStrokeStrategy::cancelStrokeCallback()
 {
+    if (m_updatesDisabled) {
+        m_updatesFacade->enableDirtyRequests();
+    }
+
     finishStrokeImpl(!m_initialTransformArgs.isUnchanging(), m_initialTransformArgs);
 }

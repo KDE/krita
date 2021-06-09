@@ -504,7 +504,12 @@ void InplaceTransformStrokeStrategy::notifyAllCommandsDone()
 
     for (auto it = m_d->commands.begin(); it != m_d->commands.end(); ++it) {
         if (it->first == Transform) {
-            notifyCommandDone(it->second, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+
+            KisStrokeJobData::Sequentiality seq =
+                it->second.dynamicCast<KisUpdateCommandEx>() ?
+                KisStrokeJobData::BARRIER : KisStrokeJobData::CONCURRENT;
+
+            notifyCommandDone(it->second, seq, KisStrokeJobData::NORMAL);
         }
     }
 }
@@ -539,16 +544,35 @@ void InplaceTransformStrokeStrategy::undoTransformCommands(int levelOfDetail)
     }
 }
 
-void InplaceTransformStrokeStrategy::postAllUpdates(int levelOfDetail)
+void InplaceTransformStrokeStrategy::postAllUpdates(int levelOfDetail, KisUpdateCommandEx::SharedDataSP updateData)
 {
     QHash<KisNodeSP, QRect> &dirtyRects = m_d->effectiveDirtyRects(levelOfDetail);
     QHash<KisNodeSP, QRect> &prevDirtyRects = m_d->effectivePrevDirtyRects(levelOfDetail);
 
-    Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-        const QRect dirtyRect = dirtyRects[node] | prevDirtyRects[node];
+    KisNodeList nodes = KisLayerUtils::sortAndFilterMergableInternalNodes(m_d->processedNodes, true);
+
+
+    Q_FOREACH (KisNodeSP node, nodes) {
+        QRect dirtyRect;
+
+        KisLayerUtils::recursiveApplyNodes(node,
+            [&dirtyRect, &dirtyRects, &prevDirtyRects] (KisNodeSP node) {
+
+                KIS_SAFE_ASSERT_RECOVER_NOOP(dirtyRects.contains(node) == prevDirtyRects.contains(node));
+
+                if (dirtyRects.contains(node)) {
+                    dirtyRect |= dirtyRects[node];
+                }
+
+                if (prevDirtyRects.contains(node)) {
+                    dirtyRect |= prevDirtyRects[node];
+                }
+            });
+
         if (dirtyRect.isEmpty()) continue;
 
         m_d->updatesFacade->refreshGraphAsync(node, dirtyRect);
+        updateData->push_back(std::make_pair(node, dirtyRect));
     }
 
     prevDirtyRects.clear();
@@ -740,11 +764,14 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
         args.scale3dSrcAndDst(KisLodTransform::lodToScale(levelOfDetail));
     }
 
+    KisUpdateCommandEx::SharedDataSP updateData(new KisUpdateCommandEx::SharedData());
+
     KritaUtils::addJobBarrier(mutatedJobs, levelOfDetail,
-                              [this, args, levelOfDetail]() {
+                              [this, args, levelOfDetail, updateData]() {
         m_d->updatesFacade->disableDirtyRequests();
         m_d->updatesDisabled = true;
         undoTransformCommands(levelOfDetail);
+        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::INITIALIZING, m_d->commandUpdatesBlockerCookie), Transform);
     });
 
     Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
@@ -754,10 +781,12 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
         });
     }
 
-    KritaUtils::addJobBarrier(mutatedJobs, levelOfDetail, [this, levelOfDetail]() {
+    KritaUtils::addJobBarrier(mutatedJobs, levelOfDetail, [this, levelOfDetail, updateData]() {
+        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::FINALIZING, m_d->commandUpdatesBlockerCookie), Transform);
+
         m_d->updatesFacade->enableDirtyRequests();
         m_d->updatesDisabled = false;
-        postAllUpdates(levelOfDetail);
+        postAllUpdates(levelOfDetail, updateData);
     });
 }
 

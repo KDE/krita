@@ -16,7 +16,7 @@
 #include <kis_processing_visitor.h>
 #include <kritatooltransform_export.h>
 #include <boost/optional.hpp>
-
+#include "commands_new/KisUpdateCommandEx.h"
 
 class KisPostExecutionUndoAdapter;
 class TransformTransactionProperties;
@@ -116,6 +116,8 @@ private:
 
 private:
     KisUpdatesFacade *m_updatesFacade;
+    KisUpdateCommandEx::SharedDataSP m_updateData;
+    bool m_updatesDisabled = false;
     ToolTransformArgs::TransformMode m_mode;
     QString m_filterId;
     bool m_forceReset;

@@ -63,9 +63,9 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, KisTimeSpan span)
     mimeTypes << "image/svg+xml";
     m_page->svgLayoutFileName->setMimeTypeFilters(mimeTypes);
     m_page->svgLayoutFileName->setMode(KoFileDialog::OpenFile);
-    slotChkUseSvgLayoutChanged(layoutSpecifiedBySvgFile());
 
     setMainWidget(m_page);
+    slotChkUseSvgLayoutChanged(m_page->chkUseSVGLayout->checkState());
 }
 
 DlgExportStoryboard::~DlgExportStoryboard()

@@ -355,7 +355,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     // Save the resource to the storage storage
     if (!storage->addResource(resource)) {
-        qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
+        qWarning() << "Could not add resource" << resource->filename() << "to the storage" << storageLocation;
         return false;
     }
 

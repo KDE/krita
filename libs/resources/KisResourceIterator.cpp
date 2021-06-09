@@ -150,7 +150,7 @@ void KisResourceIterator::toFront()
     d->currentRow = 0;
 }
 
-void KisResourceIterator::toEnd()
+void KisResourceIterator::toBack()
 {
     d->currentRow = d->resourceModel->rowCount();
 }

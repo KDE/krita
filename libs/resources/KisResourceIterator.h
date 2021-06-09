@@ -61,7 +61,7 @@ public:
     const KisResourceItemSP peekPrevious() const;
     const KisResourceItemSP previous();
     void toFront();
-    void toEnd();
+    void toBack();
 
 private:
     struct Private;

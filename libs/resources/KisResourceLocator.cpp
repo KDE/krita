@@ -343,14 +343,13 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
     Q_ASSERT(storage);
-    Q_ASSERT(resource->version() <= 0);
 
     //If we have gotten this far and the resource still doesn't have a filename to save to, we should generate one.
     if (resource->filename().isEmpty()) {
         resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
     }
 
-    if (resource->version() < 0) {
+    if (resource->version() != 0) { // Can happen with cloned resources
         resource->setVersion(0);
     }
 

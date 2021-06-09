@@ -30,7 +30,6 @@ static const int maxImagePixelSize = 100000000;
 static KisFilterStrategy *lastUsedFilter = nullptr;
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
-static const QString percentStr(i18n("Percent (%)"));
 static const QString pixelsInchStr(i18n("Pixels/Inch"));
 static const QString pixelsCentimeterStr(i18n("Pixels/Centimeter"));
 

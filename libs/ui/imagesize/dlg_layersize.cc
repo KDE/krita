@@ -29,7 +29,6 @@ const QString DlgLayerSize::PARAM_KEEP_AR = DlgLayerSize::PARAM_PREFIX + "_keepa
 const QString DlgLayerSize::PARAM_KEEP_PROP = DlgLayerSize::PARAM_PREFIX + "_keepprop";
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
-static const QString percentStr(i18n("Percent (%)"));
 
 static KisFilterStrategy *lastUsedFilter = nullptr;
 

@@ -29,13 +29,6 @@
    </property>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="bnLock">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
@@ -48,6 +41,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="bnLock">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -82,6 +82,27 @@
      <property name="wordWrap">
       <bool>true</bool>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpCrop">
+     <property name="title">
+      <string>Crop</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="KisDoubleSliderSpinBox" name="sldOffsetX" native="true"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="sldHeight" native="true"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="sldWidth" native="true"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="KisDoubleSliderSpinBox" name="sldOffsetY" native="true"/>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -247,6 +268,12 @@
    <class>KisShapePropertySlider</class>
    <extends>QWidget</extends>
    <header>KisSelectionPropertySlider.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

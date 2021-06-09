@@ -84,6 +84,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnLock->setVisible(false);
     d->ui->bnLock->setCheckable(true);
 
+    d->ui->grpCrop->setVisible(false);
+
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
     connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));
 
@@ -235,6 +237,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->opacitySlider->setVisible(hasSelection);
     d->ui->saturationSlider->setVisible(hasSelection);
     d->ui->bnLock->setVisible(hasSelection);
+    d->ui->grpCrop->setVisible(hasSelection);
 
     // show a label indicating that a selection is required to show options
     d->ui->referenceImageOptionsLabel->setVisible(!hasSelection);

@@ -61,7 +61,7 @@ public:
     class ClearSelectionData : public KisStrokeJobData {
     public:
         ClearSelectionData(KisNodeSP _node)
-            : KisStrokeJobData(SEQUENTIAL, NORMAL),
+            : KisStrokeJobData(SEQUENTIAL, EXCLUSIVE),
               node(_node)
         {
         }

@@ -26,6 +26,7 @@ public:
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
 
     bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;
+    bool addResource(const QString &resourceType, KoResourceSP resource) override;
 
     QSharedPointer<KisAslLayerStyleSerializer> m_aslSerializer;
 };

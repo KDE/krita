@@ -244,15 +244,6 @@ inline QRect kisTrimLeft( int width, QRect &toTakeFrom)
     return QRect(trimmedOrigin, trimmedSize);
 }
 
-inline QRect kisTrimTop( int height, QRect& toTakeFrom)
-{
-    QPoint trimmedOrigin = toTakeFrom.topLeft();
-    QSize trimmedSize = QSize(toTakeFrom.width(), height);
-    toTakeFrom.setHeight(toTakeFrom.height() - height);
-    toTakeFrom.translate(0, height);
-    return QRect(trimmedOrigin, trimmedSize);
-}
-
 #include "kis_pointer_utils.h"
 
 /**

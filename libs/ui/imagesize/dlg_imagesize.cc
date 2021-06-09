@@ -30,8 +30,6 @@ static const int maxImagePixelSize = 100000000;
 static KisFilterStrategy *lastUsedFilter = nullptr;
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
-static const QString pixelsInchStr(i18n("Pixels/Inch"));
-static const QString pixelsCentimeterStr(i18n("Pixels/Centimeter"));
 
 const QString DlgImageSize::PARAM_PREFIX = "imagesizedlg";
 const QString DlgImageSize::PARAM_IMSIZE_UNIT = DlgImageSize::PARAM_PREFIX + "_imsizeunit";
@@ -39,6 +37,18 @@ const QString DlgImageSize::PARAM_SIZE_UNIT = DlgImageSize::PARAM_PREFIX + "_siz
 const QString DlgImageSize::PARAM_RES_UNIT = DlgImageSize::PARAM_PREFIX + "_resunit";
 const QString DlgImageSize::PARAM_RATIO_LOCK = DlgImageSize::PARAM_PREFIX + "_ratioLock";
 const QString DlgImageSize::PARAM_PRINT_SIZE_SEPARATE = DlgImageSize::PARAM_PREFIX + "_printSizeSeparatly";
+
+static QString pixelsInchStr()
+{
+    static QString str = i18n("Pixels/Inch");
+    return str;
+}
+
+static const QString pixelsCentimeterStr()
+{
+    static QString str = i18n("Pixels/Centimeter");
+    return str;
+}
 
 DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
     : KoDialog(parent)
@@ -144,8 +154,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->printWidthUnit->setModel(m_printSizeUnitManager);
 
     //TODO: create a resolution dimension in the unit manager.
-    m_page->printResolutionUnit->addItem(pixelsInchStr);
-    m_page->printResolutionUnit->addItem(pixelsCentimeterStr);
+    m_page->printResolutionUnit->addItem(pixelsInchStr());
+    m_page->printResolutionUnit->addItem(pixelsCentimeterStr());
 
 
     /**
@@ -358,7 +368,7 @@ void DlgImageSize::slotPrintResolutionUnitChanged()
 {
     qreal resolution = m_page->printResolution->value();
 
-    if (m_page->printResolutionUnit->currentText() == pixelsInchStr) {
+    if (m_page->printResolutionUnit->currentText() == pixelsInchStr()) {
         resolution = KoUnit::convertFromUnitToUnit(resolution, KoUnit(KoUnit::Inch), KoUnit(KoUnit::Centimeter));
     } else {
         resolution = KoUnit::convertFromUnitToUnit(resolution, KoUnit(KoUnit::Centimeter), KoUnit(KoUnit::Inch));
@@ -407,7 +417,7 @@ qreal DlgImageSize::currentResolutionPPI() const
 {
     qreal resolution = m_page->printResolution->value();
 
-    if (m_page->printResolutionUnit->currentText() == pixelsInchStr) {
+    if (m_page->printResolutionUnit->currentText() == pixelsInchStr()) {
         resolution = KoUnit::convertFromUnitToUnit(resolution, KoUnit(KoUnit::Point), KoUnit(KoUnit::Inch));
     } else {
         resolution = KoUnit::convertFromUnitToUnit(resolution, KoUnit(KoUnit::Point), KoUnit(KoUnit::Centimeter));
@@ -420,7 +430,7 @@ void DlgImageSize::setCurrentResolutionPPI(qreal value)
 {
     qreal newValue = value;
 
-    if (m_page->printResolutionUnit->currentText() == pixelsInchStr) {
+    if (m_page->printResolutionUnit->currentText() == pixelsInchStr()) {
         newValue = KoUnit::convertFromUnitToUnit(value, KoUnit(KoUnit::Inch), KoUnit(KoUnit::Point));
     } else {
         newValue = KoUnit::convertFromUnitToUnit(value, KoUnit(KoUnit::Centimeter), KoUnit(KoUnit::Point));

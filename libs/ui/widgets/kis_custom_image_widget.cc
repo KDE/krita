@@ -52,8 +52,17 @@
 #include <KisSqueezedComboBox.h>
 #include "kis_signals_blocker.h"
 
-static const QString pixelsInchStr(i18n("Pixels/Inch"));
-static const QString pixelsCentimeterStr(i18n("Pixels/Centimeter"));
+static QString pixelsInchStr()
+{
+    static QString str = i18n("Pixels/Inch");
+    return str;
+}
+
+static const QString pixelsCentimeterStr()
+{
+    static QString str = i18n("Pixels/Centimeter");
+    return str;
+}
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : WdgNewImage(parent)
@@ -77,8 +86,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     cmbHeightUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
     cmbHeightUnit->setCurrentIndex(m_heightUnit.indexInListForUi(KoUnit::ListAll));
 
-    cmbResolutionUnit->addItem(pixelsInchStr);
-    cmbResolutionUnit->addItem(pixelsCentimeterStr);
+    cmbResolutionUnit->addItem(pixelsInchStr());
+    cmbResolutionUnit->addItem(pixelsCentimeterStr());
 
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(2);
@@ -199,7 +208,7 @@ void KisCustomImageWidget::resolutionUnitChanged()
 {
     qreal resolution = doubleResolution->value();
 
-    if (cmbResolutionUnit->currentText() == pixelsInchStr) {
+    if (cmbResolutionUnit->currentText() == pixelsInchStr()) {
         resolution = KoUnit::convertFromUnitToUnit(resolution, KoUnit(KoUnit::Inch), KoUnit(KoUnit::Centimeter));
     } else {
         resolution = KoUnit::convertFromUnitToUnit(resolution, KoUnit(KoUnit::Centimeter), KoUnit(KoUnit::Inch));
@@ -306,10 +315,10 @@ KisDocument* KisCustomImageWidget::createNewImage()
 
     qint32 width, height;
     double resolution ;
-    KIS_SAFE_ASSERT_RECOVER(cmbResolutionUnit->currentText() == pixelsInchStr || cmbResolutionUnit->currentText() == pixelsCentimeterStr) { resolution = 1.0; }
-    if (cmbResolutionUnit->currentText() == pixelsInchStr) {
+    KIS_SAFE_ASSERT_RECOVER(cmbResolutionUnit->currentText() == pixelsInchStr() || cmbResolutionUnit->currentText() == pixelsCentimeterStr()) { resolution = 1.0; }
+    if (cmbResolutionUnit->currentText() == pixelsInchStr()) {
         resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
-    } else if (cmbResolutionUnit->currentText() == pixelsCentimeterStr) {
+    } else if (cmbResolutionUnit->currentText() == pixelsCentimeterStr()) {
         resolution = doubleResolution->value() / 28.34;
     } else {
         resolution = 1.0;
@@ -405,7 +414,7 @@ void KisCustomImageWidget::predefinedClicked(int index)
 
     KisPropertiesConfigurationSP predefined = m_predefined[index - 1];
     txtPredefinedName->setText(predefined->getString("name"));
-    if (cmbResolutionUnit->currentText() == pixelsInchStr) {
+    if (cmbResolutionUnit->currentText() == pixelsInchStr()) {
         doubleResolution->setValue(predefined->getDouble("resolution"));
     } else {
         doubleResolution->setValue(KoUnit::convertFromUnitToUnit(predefined->getDouble("resolution"), KoUnit(KoUnit::Centimeter), KoUnit(KoUnit::Inch)));

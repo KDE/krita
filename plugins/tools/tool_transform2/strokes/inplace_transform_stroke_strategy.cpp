@@ -927,6 +927,7 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
 
         if (m_d->overriddenCommand) {
             KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+                m_d->currentTransformArgs = m_d->initialTransformArgs;
                 KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
             });
         } else {

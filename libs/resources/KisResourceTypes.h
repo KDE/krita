@@ -14,49 +14,49 @@
  * keys to different types that have their own resource loader instance.
  */
 namespace ResourceType {
-    static const QString PaintOpPresets {"paintoppresets"};
-    static const QString Brushes {"brushes"};
-    static const QString Gradients {"gradients"};
-    static const QString Palettes {"palettes"};
-    static const QString Patterns {"patterns"};
-    static const QString Workspaces {"workspaces"};
-    static const QString Symbols {"symbols"};
-    static const QString WindowLayouts {"windowlayouts"};
-    static const QString Sessions {"sessions"};
-    static const QString GamutMasks {"gamutmasks"};
-    static const QString SeExprScripts {"seexpr_scripts"};
-    static const QString FilterEffects {"ko_effects"};
-    static const QString TaskSets {"tasksets"};
-    static const QString LayerStyles {"layerstyles"};
+    KRITARESOURCES_EXPORT extern const QString PaintOpPresets;
+    KRITARESOURCES_EXPORT extern const QString Brushes;
+    KRITARESOURCES_EXPORT extern const QString Gradients;
+    KRITARESOURCES_EXPORT extern const QString Palettes;
+    KRITARESOURCES_EXPORT extern const QString Patterns;
+    KRITARESOURCES_EXPORT extern const QString Workspaces;
+    KRITARESOURCES_EXPORT extern const QString Symbols;
+    KRITARESOURCES_EXPORT extern const QString WindowLayouts;
+    KRITARESOURCES_EXPORT extern const QString Sessions;
+    KRITARESOURCES_EXPORT extern const QString GamutMasks;
+    KRITARESOURCES_EXPORT extern const QString SeExprScripts;
+    KRITARESOURCES_EXPORT extern const QString FilterEffects;
+    KRITARESOURCES_EXPORT extern const QString TaskSets;
+    KRITARESOURCES_EXPORT extern const QString LayerStyles;
 }
 
 namespace ResourceSubType {
-    static const QString AbrBrushes {"abr_brushes"};
-    static const QString GbrBrushes {"gbr_brushes"};
-    static const QString GihBrushes {"gih_brushes"};
-    static const QString SvgBrushes {"svg_brushes"};
-    static const QString PngBrushes {"png_brushes"};
-    static const QString SegmentedGradients {"segmented_gradients"};
-    static const QString StopGradients {"stop_gradients"};
-    static const QString KritaPaintOpPresets {"krita_paintop_presets"};
-    static const QString MyPaintPaintOpPresets {"mypaint_paintop_presets"};
+    KRITARESOURCES_EXPORT extern const QString AbrBrushes;
+    KRITARESOURCES_EXPORT extern const QString GbrBrushes;
+    KRITARESOURCES_EXPORT extern const QString GihBrushes;
+    KRITARESOURCES_EXPORT extern const QString SvgBrushes;
+    KRITARESOURCES_EXPORT extern const QString PngBrushes;
+    KRITARESOURCES_EXPORT extern const QString SegmentedGradients;
+    KRITARESOURCES_EXPORT extern const QString StopGradients;
+    KRITARESOURCES_EXPORT extern const QString KritaPaintOpPresets;
+    KRITARESOURCES_EXPORT extern const QString MyPaintPaintOpPresets;
 }
 
 namespace ResourceName {
-    static const KLocalizedString PaintOpPresets = ki18nc("resource type", "Brush Presets");
-    static const KLocalizedString Brushes = ki18nc("resource type", "Brush Tips");
-    static const KLocalizedString Gradients = ki18nc("resource type", "Gradients");
-    static const KLocalizedString Palettes = ki18nc("resource type", "Palettes");
-    static const KLocalizedString Patterns = ki18nc("resource type", "Patterns");
-    static const KLocalizedString Workspaces = ki18nc("resource type", "Workspaces");
-    static const KLocalizedString Symbols = ki18nc("resource type", "Symbol Libraries");
-    static const KLocalizedString WindowLayouts = ki18nc("resource type", "Window Layouts");
-    static const KLocalizedString Sessions = ki18nc("resource type", "Sessions");
-    static const KLocalizedString GamutMasks = ki18nc("resource type", "Gamut Masks");
-    static const KLocalizedString SeExprScripts = ki18nc("resource type", "SeExpr Scripts");
-    static const KLocalizedString FilterEffects = ki18nc("resource type", "Filter Effects");
-    static const KLocalizedString TaskSets = ki18nc("resource type", "Task Sets");
-    static const KLocalizedString LayerStyles = ki18nc("resource type", "Layer Styles");
+    KRITARESOURCES_EXPORT extern const KLocalizedString PaintOpPresets;
+    KRITARESOURCES_EXPORT extern const KLocalizedString Brushes;
+    KRITARESOURCES_EXPORT extern const KLocalizedString Gradients;
+    KRITARESOURCES_EXPORT extern const KLocalizedString Palettes;
+    KRITARESOURCES_EXPORT extern const KLocalizedString Patterns;
+    KRITARESOURCES_EXPORT extern const KLocalizedString Workspaces;
+    KRITARESOURCES_EXPORT extern const KLocalizedString Symbols;
+    KRITARESOURCES_EXPORT extern const KLocalizedString WindowLayouts;
+    KRITARESOURCES_EXPORT extern const KLocalizedString Sessions;
+    KRITARESOURCES_EXPORT extern const KLocalizedString GamutMasks;
+    KRITARESOURCES_EXPORT extern const KLocalizedString SeExprScripts;
+    KRITARESOURCES_EXPORT extern const KLocalizedString FilterEffects;
+    KRITARESOURCES_EXPORT extern const KLocalizedString TaskSets;
+    KRITARESOURCES_EXPORT extern const KLocalizedString LayerStyles;
 
     KRITARESOURCES_EXPORT QString resourceTypeToName(const QString &resourceType);
 

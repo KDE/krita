@@ -815,13 +815,18 @@ QRect KisLayer::tightUserVisibleBounds() const
     return changeRect;
 }
 
+QRect KisLayer::amortizedProjectionRectForCleanupInChangePass() const
+{
+    return projection()->exactBoundsAmortized();
+}
+
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect changeRect = rect;
     changeRect = incomingChangeRect(changeRect);
 
     if(pos == KisNode::N_FILTHY) {
-        QRect projectionToBeUpdated = projection()->exactBoundsAmortized() & changeRect;
+        QRect projectionToBeUpdated = amortizedProjectionRectForCleanupInChangePass() & changeRect;
 
         bool changeRectVaries;
         changeRect = outgoingChangeRect(changeRect);

@@ -12,6 +12,7 @@
 #include <QModelIndex>
 
 #include "kis_types.h"
+#include <KoShape.h>
 
 class KoColor;
 class KoSelection;
@@ -36,11 +37,13 @@ private Q_SLOTS:
     void slotUpdateLock(bool);
 
     void slotImageValuesChanged();
+    void slotCropValuesChanged();
 
 private:
     struct Private;
     const QScopedPointer<Private> d;
     void updateVisibility(bool hasSelection);
+    void updateCropSliders(QList<KoShape*>);
 };
 
 #endif

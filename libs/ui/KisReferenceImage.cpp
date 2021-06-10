@@ -404,3 +404,48 @@ KoShape *KisReferenceImage::cloneShape() const
 {
     return new KisReferenceImage(*this);
 }
+
+qreal KisReferenceImage::cropX() const
+{
+    //return cropRect.x();
+    return 100;
+}
+
+qreal KisReferenceImage::cropY() const
+{
+    //return cropRect.y();
+    return 100;
+}
+
+qreal KisReferenceImage::cropWidth() const
+{
+    //return cropRect.width();
+    return 100;
+}
+
+qreal KisReferenceImage::cropHeight() const
+{
+    //return cropRect.height();
+    return 100;
+}
+
+void KisReferenceImage::setCropX(qreal x)
+{
+
+}
+
+void KisReferenceImage::setCropY(qreal y)
+{
+
+}
+
+void KisReferenceImage::setCropWidth(qreal w)
+{
+
+}
+
+void setCropHeight(qreal h)
+{
+
+}
+

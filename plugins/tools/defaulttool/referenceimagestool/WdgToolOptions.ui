@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>288</width>
-    <height>352</height>
+    <width>329</width>
+    <height>327</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -85,38 +85,66 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="grpCrop">
-     <property name="title">
-      <string>Crop</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="KisDoubleSliderSpinBox" name="sldOffsetX" native="true"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="sldHeight" native="true"/>
-      </item>
-      <item row="0" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="sldWidth" native="true"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="KisDoubleSliderSpinBox" name="sldOffsetY" native="true"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Crop</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="grpCrop">
+       <property name="title">
+        <string/>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="0">
+         <widget class="KisShapePropertySlider" name="sldOffsetY" native="true"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="KisShapePropertySlider" name="sldHeight" native="true"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="KisShapePropertySlider" name="sldOffsetX" native="true"/>
+        </item>
+        <item row="0" column="1">
+         <widget class="KisShapePropertySlider" name="sldWidth" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="Line" name="line">
@@ -268,12 +296,6 @@
    <class>KisShapePropertySlider</class>
    <extends>QWidget</extends>
    <header>KisSelectionPropertySlider.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

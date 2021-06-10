@@ -149,7 +149,7 @@ private:
 
     int calculatePreferredLevelOfDetail(const QRect &srcRect);
 
-    void executeAndAddCommand(KUndo2Command *cmd, CommandGroup group);
+    void executeAndAddCommand(KUndo2Command *cmd, CommandGroup group, KisStrokeJobData::Sequentiality seq);
 
     void notifyAllCommandsDone();
     void undoAllCommands();

@@ -75,7 +75,14 @@ struct InplaceTransformStrokeStrategy::Private
     bool updatesDisabled = false;
 
     QMutex commandsMutex;
-    QVector<std::pair<CommandGroup, KUndo2CommandSP>> commands;
+
+    struct SavedCommand {
+        CommandGroup commandGroup;
+        KUndo2CommandSP command;
+        KisStrokeJobData::Sequentiality sequentiality;
+    };
+
+    QVector<SavedCommand> commands;
 
     QMutex devicesCacheMutex;
     QHash<KisPaintDevice*, KisPaintDeviceSP> devicesCacheHash;
@@ -95,9 +102,6 @@ struct InplaceTransformStrokeStrategy::Private
     inline QHash<KisNodeSP, QRect>& effectivePrevDirtyRects(int levelOfDetail) {
         return levelOfDetail > 0 ? prevDirtyPreviewRects : prevDirtyRects;
     }
-
-    // a flag to avoid recursion in finish/cancel routines
-    bool finalizingActionsStarted = false;
 
     // data for asynchronous updates
     boost::optional<ToolTransformArgs> pendingUpdateArgs;
@@ -484,32 +488,27 @@ InplaceTransformStrokeStrategy::BarrierUpdateData::BarrierUpdateData(const Inpla
 {
 }
 
-void InplaceTransformStrokeStrategy::executeAndAddCommand(KUndo2Command *cmd, InplaceTransformStrokeStrategy::CommandGroup group)
+void InplaceTransformStrokeStrategy::executeAndAddCommand(KUndo2Command *cmd, InplaceTransformStrokeStrategy::CommandGroup group, KisStrokeJobData::Sequentiality seq)
 {
     QMutexLocker l(&m_d->commandsMutex);
     KUndo2CommandSP sharedCommand = toQShared(cmd);
     executeCommand(sharedCommand, false);
-    m_d->commands.append(std::make_pair(group, sharedCommand));
+    m_d->commands.append({group, sharedCommand, seq});
 }
 
 void InplaceTransformStrokeStrategy::notifyAllCommandsDone()
 {
     for (auto it = m_d->commands.begin(); it != m_d->commands.end(); ++it) {
-        if (it->first == Clear) {
-            notifyCommandDone(it->second, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+        if (it->commandGroup == Clear) {
+            notifyCommandDone(it->command, it->sequentiality, KisStrokeJobData::NORMAL);
         }
     }
 
     notifyCommandDone(toQShared(new KUndo2Command()), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
 
     for (auto it = m_d->commands.begin(); it != m_d->commands.end(); ++it) {
-        if (it->first == Transform) {
-
-            KisStrokeJobData::Sequentiality seq =
-                it->second.dynamicCast<KisUpdateCommandEx>() ?
-                KisStrokeJobData::BARRIER : KisStrokeJobData::CONCURRENT;
-
-            notifyCommandDone(it->second, seq, KisStrokeJobData::NORMAL);
+        if (it->commandGroup == Transform) {
+            notifyCommandDone(it->command, it->sequentiality, KisStrokeJobData::NORMAL);
         }
     }
 }
@@ -520,7 +519,7 @@ void InplaceTransformStrokeStrategy::undoAllCommands()
          it != std::make_reverse_iterator(m_d->commands.begin());
          ++it) {
 
-        executeCommand(it->second, true);
+        executeCommand(it->command, true);
     }
 
     m_d->commands.clear();
@@ -532,11 +531,11 @@ void InplaceTransformStrokeStrategy::undoTransformCommands(int levelOfDetail)
          it != std::make_reverse_iterator(m_d->commands.begin());) {
 
         if ((levelOfDetail > 0 &&
-             (it->first == TransformLod || it->first == TransformLodTemporary)) ||
+             (it->commandGroup == TransformLod || it->commandGroup == TransformLodTemporary)) ||
             (levelOfDetail <= 0 &&
-             (it->first == Transform || it->first == TransformTemporary))) {
+             (it->commandGroup == Transform || it->commandGroup == TransformTemporary))) {
 
-            executeCommand(it->second, true);
+            executeCommand(it->command, true);
             it = std::make_reverse_iterator(m_d->commands.erase(std::next(it).base()));
         } else {
             ++it;
@@ -601,7 +600,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                     QTransform t = w.transform();
                     KUndo2Command *cmd = extLayer->transform(t);
 
-                    executeAndAddCommand(cmd, Transform);
+                    executeAndAddCommand(cmd, Transform, KisStrokeJobData::CONCURRENT);
 
                     /**
                      * Shape layer's projection may not be yet ready right
@@ -643,7 +642,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
         KisTransformUtils::transformAndMergeDevice(config, cachedPortion,
                                                    device, &helper);
 
-        executeAndAddCommand(transaction.endAndTake(), commandGroup);
+        executeAndAddCommand(transaction.endAndTake(), commandGroup, KisStrokeJobData::CONCURRENT);
         addDirtyRect(node, cachedPortion->extent() | device->extent(), levelOfDetail);
 
     } else if (KisTransformMask *transformMask =
@@ -675,7 +674,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                                                                KisTransformMaskParamsInterfaceSP(
                                                                    new KisTransformMaskAdapter(config)),
                                                                m_d->commandUpdatesBlockerCookie);
-        executeAndAddCommand(cmd, commandGroup);
+        executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::CONCURRENT);
         addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
     }
 }
@@ -752,7 +751,7 @@ void InplaceTransformStrokeStrategy::createCacheAndClearNode(KisNodeSP node)
             device->setDirty(oldExtent);
         }
 
-        executeAndAddCommand(transaction.endAndTake(), commandGroup);
+        executeAndAddCommand(transaction.endAndTake(), commandGroup, KisStrokeJobData::CONCURRENT);
     }
 }
 
@@ -771,7 +770,7 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
         m_d->updatesFacade->disableDirtyRequests();
         m_d->updatesDisabled = true;
         undoTransformCommands(levelOfDetail);
-        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::INITIALIZING, m_d->commandUpdatesBlockerCookie), Transform);
+        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::INITIALIZING, m_d->commandUpdatesBlockerCookie), Transform, KisStrokeJobData::BARRIER);
     });
 
     Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
@@ -782,7 +781,7 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
     }
 
     KritaUtils::addJobBarrier(mutatedJobs, levelOfDetail, [this, levelOfDetail, updateData]() {
-        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::FINALIZING, m_d->commandUpdatesBlockerCookie), Transform);
+        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::FINALIZING, m_d->commandUpdatesBlockerCookie), Transform, KisStrokeJobData::BARRIER);
 
         m_d->updatesFacade->enableDirtyRequests();
         m_d->updatesDisabled = false;
@@ -830,19 +829,6 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
         return;
     }
 
-    /**
-     * Since our finishStrokeCallback() initiates new jobs,
-     * cancellation request may come even after
-     * finishStrokeCallback() (cancellations may be called
-     * until there are no jobs left in the stroke's queue).
-     *
-     * Therefore we should check for double-entry here and
-     * make sure the finilizing jobs are no cancellable.
-     */
-
-    if (m_d->finalizingActionsStarted) return;
-    m_d->finalizingActionsStarted = true;
-
     if (m_d->previewLevelOfDetail > 0) {
         /**
          * Update jobs from level of detail updates may cause dirtying
@@ -851,8 +837,6 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
          * them.
          */
         KritaUtils::addJobBarrier(mutatedJobs, [this]() { Q_UNUSED(this) });
-
-        mutatedJobs << new Data(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
 
         if (!m_d->transformMaskCacheHash.isEmpty()) {
             KritaUtils::addJobSequential(mutatedJobs, [this]() {
@@ -873,8 +857,15 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
             });
         }
 
+        KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+            executeAndAddCommand(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), Transform, KisStrokeJobData::BARRIER);
+        });
+
         reapplyTransform(m_d->currentTransformArgs, mutatedJobs, 0);
-        mutatedJobs << new Data(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING), false, KisStrokeJobData::BARRIER);
+
+        KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+            executeAndAddCommand(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING), Transform, KisStrokeJobData::BARRIER);
+        });
     }
 
     mutatedJobs << new UpdateTransformData(m_d->currentTransformArgs,
@@ -891,20 +882,8 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
 {
     if (m_d->updatesDisabled) {
         m_d->updatesFacade->enableDirtyRequests();
+        m_d->updatesDisabled = false;
     }
-
-    /**
-     * Since our finishStrokeCallback() initiates new jobs,
-     * cancellation request may come even after
-     * finishStrokeCallback() (cancellations may be called
-     * until there are no jobs left in the stroke's queue).
-     *
-     * Therefore we should check for double-entry here and
-     * make sure the finilizing jobs are no cancellable.
-     */
-
-    if (m_d->finalizingActionsStarted) return;
-    m_d->finalizingActionsStarted = true;
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->transformMaskCacheHash.isEmpty() ||
                                  (m_d->transformMaskCacheHash.size() == 1 && m_d->processedNodes.size() == 1));

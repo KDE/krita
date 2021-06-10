@@ -438,11 +438,10 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         if (shiftModifierActive) {
             const qreal snapAngle = M_PI_4 / 6.0; // fifteen degrees
             qint32 thetaIndex = static_cast<qint32>((theta / snapAngle) + 0.5);
-            m_d->currentArgs.setAZ(normalizeAngle(thetaIndex * snapAngle));
+            m_d->currentArgs.setAZ(thetaIndex * snapAngle);
         }
-
         else {
-            m_d->currentArgs.setAZ(normalizeAngle(m_d->clickArgs.aZ() + theta));
+            m_d->currentArgs.setAZ(m_d->clickArgs.aZ() + theta);
         }
 
         KisTransformUtils::MatricesPack m(m_d->currentArgs);

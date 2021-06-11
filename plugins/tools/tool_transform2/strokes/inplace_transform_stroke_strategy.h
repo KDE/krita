@@ -155,11 +155,11 @@ private:
     void undoAllCommands();
     void undoTransformCommands(int levelOfDetail);
 
-    void postAllUpdates(int levelOfDetail, KisUpdateCommandEx::SharedDataSP updateData);
+    void fetchAllUpdateRequests(int levelOfDetail, KisUpdateCommandEx::SharedDataSP updateData);
 
     void transformNode(KisNodeSP node, const ToolTransformArgs &config, int levelOfDetail);
     void createCacheAndClearNode(KisNodeSP node);
-    void reapplyTransform(ToolTransformArgs args, QVector<KisStrokeJobData *> &mutatedJobs, int levelOfDetail);
+    void reapplyTransform(ToolTransformArgs args, QVector<KisStrokeJobData *> &mutatedJobs, int levelOfDetail, bool useHoldUI);
     void finalizeStrokeImpl(QVector<KisStrokeJobData *> &mutatedJobs, bool saveCommands);
 
     void finishAction(QVector<KisStrokeJobData *> &mutatedJobs);

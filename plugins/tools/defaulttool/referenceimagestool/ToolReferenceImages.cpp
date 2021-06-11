@@ -64,6 +64,45 @@ void ToolReferenceImages::deactivate()
     DefaultTool::deactivate();
 }
 
+void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &converter)
+{
+    if(true) {  // ToDo Use enableCrop and integrate with wdg
+        paintOutlineWithHandles(painter,converter);
+    }
+    else {
+    DefaultTool::paint(painter,converter);
+    }
+}
+
+void ToolReferenceImages::paintOutlineWithHandles(QPainter& gc, const KoViewConverter &converter)
+{
+    //To Do Integrate this with wdg options
+    if(koSelection()) {
+
+        gc.save();
+
+        QList<KoShape *> shapes = koSelection()->selectedShapes();
+        if(!shapes.isEmpty()) {
+            KoShape* shape = shapes.at(0);
+            KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+            if(shape) {
+                QRectF shapeRect = converter.documentToView(shape->boundingRect());
+
+                QPainterPath path;
+
+                path.addRect(shapeRect);
+                //path.addRect(borderRect);
+                gc.setPen(Qt::NoPen);
+                gc.setBrush(QColor(0, 0, 0, 200));
+                gc.drawPath(path);
+            }
+        }
+        gc.restore();
+    }
+
+
+}
+
 void ToolReferenceImages::slotNodeAdded(KisNodeSP node)
 {
     auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());

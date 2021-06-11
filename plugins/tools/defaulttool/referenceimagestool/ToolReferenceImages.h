@@ -35,6 +35,8 @@ public:
         return 3;
     }
 
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+
     void mouseDoubleClickEvent(KoPointerEvent */*event*/) override {}
 
     void deleteSelection() override;
@@ -76,6 +78,7 @@ private:
 
     KisDocument *document() const;
     void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
+    void paintOutlineWithHandles(QPainter& gc , const KoViewConverter &converter);
 };
 
 

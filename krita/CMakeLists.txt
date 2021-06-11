@@ -34,7 +34,22 @@ endif()
 
 if (WIN32)
     set(krita_windows_stub_ICONS_SRCS "")
-    ecm_add_app_icon(krita_windows_stub_ICONS_SRCS ICONS ${ICON_SRCS})
+    ecm_add_app_icon(krita_windows_stub_ICONS_SRCS ICONS ${ICON_SRCS} OUTFILE_BASENAME krita)
+
+    # This is used to generate an ICO file for the file icon, We don't actually
+    # want to embed this icon into an EXE.
+	file(GLOB krafile_ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/*-mimetypes-application-x-krita.png")
+    set(krafile_dummy_ICONS_SRCS "")
+    ecm_add_app_icon(krafile_dummy_ICONS_SRCS ICONS ${krafile_ICON_SRCS} OUTFILE_BASENAME kritafile)
+    add_library(krafile_dummy_obj OBJECT ${krafile_dummy_ICONS_SRCS})
+
+    # These icons are used to replace those in the shell extension package.
+    install(
+        FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/krita.ico
+            ${CMAKE_CURRENT_BINARY_DIR}/kritafile.ico
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/installer
+    )
 else()
     ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
 endif()

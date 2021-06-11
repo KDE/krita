@@ -17,6 +17,7 @@
 
 #include "kis_config.h"
 #include "KisMultiFeedRSSModel.h"
+#include <KisKineticScroller.h>
 
 KisNewsDelegate::KisNewsDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -83,11 +84,15 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     listNews->installEventFilter(this);
     listNews->setVerticalScrollMode(QListView::ScrollPerPixel);
     listNews->verticalScrollBar()->setSingleStep(50);
+    {
+        QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(listNews);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
 
     m_rssModel = new MultiFeedRssModel(this);
     connect(m_rssModel, SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()), Qt::UniqueConnection);
-
-    setCursor(Qt::PointingHandCursor);
 
     listNews->setModel(m_rssModel);
     listNews->setItemDelegate(new KisNewsDelegate(listNews));

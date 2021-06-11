@@ -34,6 +34,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <KisPart.h>
+#include <KisKineticScroller.h>
 
 #include <utils/KisUpdaterBase.h>
 
@@ -235,6 +236,12 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
     recentDocumentsListView->setVerticalScrollMode(QListView::ScrollPerPixel);
     recentDocumentsListView->verticalScrollBar()->setSingleStep(50);
+    {
+        QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(recentDocumentsListView);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()

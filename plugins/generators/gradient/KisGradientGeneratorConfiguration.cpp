@@ -126,7 +126,7 @@ KisGradientGeneratorConfiguration::SpatialUnits KisGradientGeneratorConfiguratio
     return stringToSpatialUnits(getString("end_position_distance_units"), defaultEndPositionDistanceUnits());
 }
 
-KoAbstractGradientSP KisGradientGeneratorConfiguration::gradient() const
+KoAbstractGradientSP KisGradientGeneratorConfiguration::gradient(KoAbstractGradientSP fallbackGradient) const
 {
     QDomDocument document;
     if (document.setContent(this->getString("gradient", ""))) {
@@ -146,7 +146,7 @@ KoAbstractGradientSP KisGradientGeneratorConfiguration::gradient() const
             }
         }
     }
-    return defaultGradient();
+    return fallbackGradient ? fallbackGradient : defaultGradient();
 }
 
 QPair<QPointF, QPointF> KisGradientGeneratorConfiguration::absoluteCartesianPositionsInPixels(int width, int height) const
@@ -313,5 +313,5 @@ void KisGradientGeneratorConfiguration::setDefaults()
     setEndPositionAngle(defaultEndPositionAngle());
     setEndPositionDistance(defaultEndPositionDistance());
     setEndPositionDistanceUnits(defaultEndPositionDistanceUnits());
-    setGradient(defaultGradient());
+    setGradient(nullptr);
 }

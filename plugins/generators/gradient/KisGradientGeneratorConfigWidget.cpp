@@ -142,7 +142,17 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.spinBoxEndPositionDistance->setValue(generatorConfig->endPositionDistance());
         m_ui.comboBoxEndPositionDistanceUnits->setCurrentIndex(generatorConfig->endPositionDistanceUnits());
 
-        m_ui.widgetGradientEditor->setGradient(generatorConfig->gradient());
+        KoAbstractGradientSP fallbackGradient = nullptr;
+        KoCanvasResourcesInterfaceSP canvasResourcesInterface =
+            m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
+        if (canvasResourcesInterface) {
+            KoAbstractGradientSP currentGradient =
+                canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+            if (currentGradient) {
+                fallbackGradient = currentGradient->clone().dynamicCast<KoAbstractGradient>();
+            }
+        }
+        m_ui.widgetGradientEditor->setGradient(generatorConfig->gradient(fallbackGradient));
     }
 
     emit sigConfigurationUpdated();

@@ -65,7 +65,7 @@ QList<KoResourceSP> KisGradientMapFilterConfiguration::embeddedResources(KisReso
     return resources;
 }
 
-KoAbstractGradientSP KisGradientMapFilterConfiguration::gradient() const
+KoAbstractGradientSP KisGradientMapFilterConfiguration::gradient(KoAbstractGradientSP fallbackGradient) const
 {
     if (version() == 1) {
         KoAbstractGradientSP resourceGradient = 
@@ -97,7 +97,7 @@ KoAbstractGradientSP KisGradientMapFilterConfiguration::gradient() const
             }
         }
     }
-    return defaultGradient(resourcesInterface());
+    return fallbackGradient ? fallbackGradient : defaultGradient(resourcesInterface());
 }
 
 int KisGradientMapFilterConfiguration::colorMode() const
@@ -135,7 +135,7 @@ void KisGradientMapFilterConfiguration::setColorMode(int newColorMode)
 
 void KisGradientMapFilterConfiguration::setDefaults()
 {
-    setGradient(defaultGradient(resourcesInterface()));
+    setGradient(nullptr);
     setColorMode(defaultColorMode());
     KisDitherWidget::factoryConfiguration(*this, "dither/");
 }

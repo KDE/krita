@@ -77,7 +77,7 @@ public:
         return ColorMode_Blend;
     }
 
-    KoAbstractGradientSP gradient() const;
+    KoAbstractGradientSP gradient(KoAbstractGradientSP fallbackGradient = nullptr) const;
     int colorMode() const;
 
     void setGradient(KoAbstractGradientSP newGradient);

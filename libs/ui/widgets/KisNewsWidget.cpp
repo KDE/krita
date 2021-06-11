@@ -13,6 +13,7 @@
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
 #include <QRegularExpression>
+#include <QScrollBar>
 
 #include "kis_config.h"
 #include "KisMultiFeedRSSModel.h"
@@ -80,6 +81,8 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     setupUi(this);
     listNews->viewport()->setAutoFillBackground(false);
     listNews->installEventFilter(this);
+    listNews->setVerticalScrollMode(QListView::ScrollPerPixel);
+    listNews->verticalScrollBar()->setSingleStep(50);
 
     m_rssModel = new MultiFeedRssModel(this);
     connect(m_rssModel, SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()), Qt::UniqueConnection);

@@ -30,6 +30,17 @@ class KisVisualColorSelector;
 class KisAcyclicSignalConnector;
 class KisMouseClickEater;
 
+
+struct CachedPresetLayout {
+    int ringCount{1};
+    qreal firstRowRadius{0};
+    qreal secondRowRadius{0};
+    qreal thirdRowRadius{0};
+    qreal firstRowPos{0};
+    qreal secondRowPos{0};
+    qreal thirdRowPos{0};
+};
+
 class KisPopupPalette : public QWidget, public KisPopupWidgetInterface
 {
     Q_OBJECT
@@ -91,9 +102,11 @@ private:
     QRectF rotationIndicatorRect(qreal rotationAngle, bool absolute) const;
     bool isPointInPixmap(QPointF&, int pos);
 
+    QPointF drawPointOnAngle(qreal angle, qreal radius) const;
     /**
      * @brief Determine the number of rings to distribute the presets
-     * and calculate the radius of the brush preset slots.
+     * and calculate the radius of the brush preset slots
+     * and saves the "layout" to m_cachedPresetLayout.
     */
     void calculatePresetLayout();
     QPainterPath createPathFromPresetIndex(int index) const;
@@ -145,10 +158,7 @@ private:
     int zoomSliderMaxValue {200};
     KisAcyclicSignalConnector *m_acyclicConnector = 0;
 
-    int m_presetRingCount {1};
-    int m_cachedNumSlots {0};
-    qreal m_cachedRadius {0.0};
-    qreal m_middleRadius {0.0};
+    CachedPresetLayout m_cachedPresetLayout;
 
     // updates the transparency and effects of the whole widget
     QGraphicsOpacityEffect *opacityChange {0};

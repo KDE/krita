@@ -1042,8 +1042,22 @@ KisPopupPalette::~KisPopupPalette()
 {
 }
 
+QPointF KisPopupPalette::drawPointOnAngle(qreal angle, qreal radius) const
+{
+    QPointF p(
+        // -90 so it starts at the top since this is mainly used by calculatePresetLayout
+        radius * qCos(qDegreesToRadians(angle - 90)),
+        radius * qSin(qDegreesToRadians(angle - 90))
+    );
+    return p;
+}
+
 void KisPopupPalette::calculatePresetLayout()
 {
+    if (m_presetSlotCount == 0) {
+        m_cachedPresetLayout = {};
+        return;
+    }
     // how many degrees each slice will get
     // if the slot count is 1, we must divide by 2 to get 180 for the algorithm to work
     qreal angleSlice = 360.0 / qMax(m_presetSlotCount, 2);
@@ -1055,86 +1069,248 @@ void KisPopupPalette::calculatePresetLayout()
     );
     
     qreal ringWidth = outerRadius - innerRadius;
-    qreal ringMidRadius = innerRadius + 0.5 * ringWidth;
+    qreal halfRingWidth = 0.5 * ringWidth;
+    qreal ringMidRadius = innerRadius + halfRingWidth;
 
-    // the radius will get smaller as the amount of presets shown increases.
-    // max radius until they touch = (innerRadius * sin(180/nSlots) / (1 - sin(180/nSlots)
-    // 10 slots == 41.14365, at default inner radius of 92
+    // reset the cached layout
+    m_cachedPresetLayout = {};
+    CachedPresetLayout& c = m_cachedPresetLayout;
 
-    qreal presetRadius = qMin(0.5 * ringWidth, ringMidRadius * qSin(qDegreesToRadians(angleSlice/2)) - 1);
-    m_presetRingCount = 1;
+    // note: adding the margin the way it's done
+    // (calculating the radiuses without taking it into account then subtracting it after)
+    // is not particularly accurate, but it looks fine since it's so small
+    int margin = 2;
 
-    // can we can fit in a second row? We don't want the preset icons to get too tiny.
-    // staggered arrangement only makes sense if there is more than a tiny offset.
-    if (ringWidth > presetRadius * 2.2) {
-        //redo all calculations assuming a second row.
-        angleSlice = 180.0/((m_presetSlotCount+1) / 2);
-        qreal tempRadius = ringMidRadius * qSin(0.5 * qDegreesToRadians(angleSlice)) - 1;
+    // assume one row and get the max radius until the circles would touch
+    qreal oneRowAngleSlice = angleSlice / 2;
+    qreal oneRowMaxRadius = ringMidRadius * qSin(qDegreesToRadians(oneRowAngleSlice));
 
-        qreal distance = 0;
-        do {
-            tempRadius += 0.1;
-
-            // Calculate the X,Y of two adjectant circles using this tempRadius. (Y1 == 0)
-            qreal radius2 = innerRadius + ringWidth - tempRadius;
-            qreal pathX1 = innerRadius + tempRadius;
-            qreal pathX2 = radius2 * qCos(qDegreesToRadians(angleSlice));
-            qreal pathY2 = radius2 * qSin(qDegreesToRadians(angleSlice));
-
-            // Use Pythagorean Theorem to calculate the distance between these two points.
-            qreal deltaX = pathX2-pathX1;
-            distance = sqrt((deltaX*deltaX)+(pathY2*pathY2));
-        }
-        //As long at there's more distance than the radius of the two presets, continue increasing the radius.
-        while ((tempRadius+1)*2 < distance);
-
-        // even when presets between rings don't touch, the ones on the inner ring may overlap,
-        // so determine the radius where inner ones touch
-        qreal sinAngleSlice = qSin(qDegreesToRadians(angleSlice));
-        qreal maxRadius = innerRadius * sinAngleSlice / (1 - sinAngleSlice);
-        tempRadius = qMin(maxRadius, tempRadius);
-        // since we may round up the preset count, radius may end up smaller than originally
-        // but we want at least a small gain (3% currently)
-        if (tempRadius > 1.03 * presetRadius) {
-            m_presetRingCount = 2;
-            presetRadius = tempRadius;
-        }
+    // if the circles are bigger than the ring we're limited by the
+    // ring's width instead and only one row would fit
+    
+    // oneRowMaxRadius * 0.2 is to make sure that we still do one row if
+    // there isn't that much of a difference and two would just look weirder
+    if (oneRowMaxRadius - margin > halfRingWidth - oneRowMaxRadius * 0.2) {
+        c.ringCount = 1;
+        c.firstRowRadius = qMin(halfRingWidth, oneRowMaxRadius - margin);
+        c.firstRowPos = ringMidRadius;
+        return;
     }
-    // can we use even bigger icons by forming triplets with two on the same angle
-    // and a third one touching both?
-    if (ringWidth > presetRadius * 4) {
-        angleSlice = 180.0 / ((m_presetSlotCount + 2) / 3);
-        qreal sinAngleSlice = qSin(qDegreesToRadians(angleSlice));
-        // radius where innermost circles would touch (2 angle slices apart)
-        qreal maxRadius = innerRadius * sinAngleSlice / (1 - sinAngleSlice);
-        // radius where innermost and outermost circles touch
-        maxRadius = qMin(maxRadius, ringWidth * 0.25);
+    
+    // otherwise 2 or 3 rows always fit
+    qreal tempRadius = halfRingWidth;
+    {
+        // for two rows, the first row is tangent to the inner radius
+        // and the second row to the outer one
+        qreal twoRowInnerCount = ceil(qMax(m_presetSlotCount, 2) / 2.0);
+        qreal twoRowAngleSlice = 360.0 / twoRowInnerCount;
 
-        qreal tempRadius = maxRadius;
-        qreal pathX2 = ringMidRadius;
-        qreal pathY2 = ringMidRadius * sinAngleSlice;
-        bool found = false;
-        // do we need to reduce radius even more?
-        while (tempRadius > presetRadius) {
-            qreal pathX1 = innerRadius + tempRadius;
-
-            qreal deltaX = pathX2-pathX1;
-            qreal distance = sqrt((deltaX*deltaX)+(pathY2*pathY2));
-
-            if (distance > 2*(tempRadius+1)) {
-                found = true;
-                break;
+        // we can start at half the ring width and shrink the radius until nothing is overlapping
+        while (tempRadius >= 0) {
+            tempRadius -= 0.2;
+            QPointF r1p1(drawPointOnAngle(twoRowAngleSlice / 2, innerRadius + tempRadius));
+            QPointF r1p2(drawPointOnAngle(twoRowAngleSlice / 2 * 3, innerRadius + tempRadius));
+            QPointF r2p(drawPointOnAngle(twoRowAngleSlice, outerRadius - tempRadius));
+            qreal row1SiblingDistance = kisDistance(r1p1, r1p2);
+            qreal row1To2Distance = kisDistance(r1p1, r2p);
+            if (row1To2Distance >= (tempRadius + margin) * 2) {
+                // the previous radius is the one that's guaranteed not to be overlapping
+                if (row1SiblingDistance < (tempRadius + margin) * 2) {
+                    // the inner row still overlaps, attempt 3 rows instead
+                    break;
+                }
+                c.ringCount = 2;
+                c.secondRowRadius = tempRadius;
+                c.secondRowPos = outerRadius - tempRadius;
+                c.firstRowRadius = tempRadius;
+                c.firstRowPos = innerRadius + tempRadius;
+                return;
             }
-            tempRadius -= 0.1;
-        }
-        if (found) {
-            //qDebug() << "triplet possible, radius:" << tempRadius << "/ staggered radius:" << presetRadius;
-            m_presetRingCount = 3;
-            m_middleRadius = sqrt(pathX2 * pathX2 + pathY2 * pathY2);
-            presetRadius = tempRadius;
         }
     }
-    m_cachedRadius = presetRadius;
+
+    // for three rows, we initially arrange them like so:
+    // the first row tangent to the inner radius
+    // the second row in the middle
+    // the third row tangent to the outer radius
+
+    qreal threeRowInnerCount = ceil(qMax(m_presetSlotCount, 2) / 3.0);
+    qreal threeRowAngleSlice = 360.0 / threeRowInnerCount;
+
+    // then we decrease the radius until no row is overlapping eachother or itself
+    while (tempRadius >= 0) {
+        QPointF r1p1(drawPointOnAngle(threeRowAngleSlice / 2, innerRadius + tempRadius));
+        QPointF r1p2(drawPointOnAngle(threeRowAngleSlice / 2 * 3, innerRadius + tempRadius));
+        QPointF r2p1(drawPointOnAngle(threeRowAngleSlice, ringMidRadius));
+        QPointF r2p2(drawPointOnAngle(threeRowAngleSlice * 2, ringMidRadius));
+        QPointF r3p(drawPointOnAngle(threeRowAngleSlice / 2, outerRadius - tempRadius));
+
+        qreal row1SiblingDistance = kisDistance(r1p1, r1p2);
+        qreal row1to2Distance = kisDistance(r1p1, r2p1);
+        qreal row2to3Distance = kisDistance(r2p1, r3p);
+        qreal row1to3Distance = kisDistance(r1p1, r3p);
+
+        if (
+            row1to2Distance >= tempRadius * 2 &&
+            row2to3Distance >= tempRadius * 2 &&
+            row1to3Distance >= tempRadius * 2 &&
+            row1SiblingDistance >= tempRadius * 2
+        ) {
+
+            qreal row2SiblingDistance = kisDistance(r2p1, r2p2);
+
+            qreal firstRowRadius = tempRadius;
+            qreal thirdRowRadius = tempRadius;
+            qreal secondRowRadius = tempRadius;
+
+            bool firstRowTouching = row1SiblingDistance - firstRowRadius * 2 < 1;
+            if (firstRowTouching) {
+                // attempt to expand the second row
+                // and expand + move the third row inwards
+                QPointF tempR3p = r3p;
+                qreal tempSecondThirdRowRadius = secondRowRadius;
+                qreal tempRow2to3Distance = row2to3Distance;
+                qreal tempRow1to3Distance = row1to3Distance;
+                while (
+                    tempSecondThirdRowRadius * 2 < tempRow2to3Distance &&
+                    tempSecondThirdRowRadius * 2 < row2SiblingDistance &&
+                    tempSecondThirdRowRadius * 2 < tempRow1to3Distance &&
+                    tempSecondThirdRowRadius + firstRowRadius < row1to2Distance
+                ) {
+                    // the previous temp variables are within limits
+                    r3p = tempR3p;
+                    row2to3Distance = tempRow2to3Distance;
+                    row1to3Distance = tempRow1to3Distance;
+                    secondRowRadius = tempSecondThirdRowRadius;
+
+                    tempSecondThirdRowRadius += 1;
+
+                    tempR3p = drawPointOnAngle(threeRowAngleSlice / 2, outerRadius - tempSecondThirdRowRadius);
+
+                    tempRow2to3Distance = kisDistance(r2p1, tempR3p);
+                    tempRow1to3Distance = kisDistance(r1p1, tempR3p);
+                }
+                thirdRowRadius = secondRowRadius;
+            }
+
+            {
+                // the third row can sometimes be expanded + moved a bit more
+                qreal tempThirdRowRadius = thirdRowRadius;
+                QPointF tempR3p = r3p;
+                qreal tempRow2to3Distance = row2to3Distance;
+                qreal tempRow1to3Distance = row1to3Distance;
+                while (
+                    tempThirdRowRadius < halfRingWidth &&
+                    secondRowRadius + tempThirdRowRadius < tempRow2to3Distance &&
+                    firstRowRadius + tempThirdRowRadius < tempRow1to3Distance
+                ) {
+                    r3p = tempR3p;
+                    row2to3Distance = tempRow2to3Distance;
+                    row1to3Distance = tempRow1to3Distance;
+                    thirdRowRadius = tempThirdRowRadius;
+
+                    tempThirdRowRadius += 1;
+
+                    tempR3p = drawPointOnAngle(threeRowAngleSlice / 2, outerRadius - tempThirdRowRadius);
+                    tempRow2to3Distance = kisDistance(r2p1, tempR3p);
+                    tempRow1to3Distance = kisDistance(r1p1, tempR3p);
+                }
+            }
+            // the third row is no longer moved
+            qreal thirdRowPos = outerRadius - thirdRowRadius;
+
+            // many times, e.g. when the second row is touching
+            // the first row can be moved outwards and expanded
+            // sometimes it will even detach from the inner radius if the ringwidth is large enough
+            // and there's a lot of presets
+            qreal firstRowPos = innerRadius + tempRadius;
+            {
+                qreal tempFirstRowPos = firstRowPos;
+                qreal tempFirstRowRadius = firstRowRadius;
+                qreal tempRow1SiblingDistance = row1SiblingDistance;
+                qreal tempRow1to3Distance = row1to3Distance;
+                qreal tempRow1to2Distance = row1to2Distance;
+                QPointF tempR1p1 = r1p1;
+                QPointF tempR1p2 = r1p2;
+
+                while (
+                    tempFirstRowPos < ringMidRadius &&
+                    tempFirstRowRadius + secondRowRadius < tempRow1to2Distance &&
+                    tempFirstRowRadius + thirdRowRadius < tempRow1to3Distance
+                ) {
+                    firstRowPos = tempFirstRowPos;
+                    firstRowRadius = tempFirstRowRadius;
+                    row1to2Distance = tempRow1to2Distance;
+                    r1p1 = tempR1p1;
+                    // these are unused after so it's not neccesary to update them
+                    // row1to3Distance = tempRow1to3Distance;
+                    // row1SiblingDistance = tempRow1SiblingDistance;
+                    // r1p2 = tempR1p2;
+
+                    tempFirstRowPos += 1;
+
+                    tempR1p1 = drawPointOnAngle(threeRowAngleSlice / 2, tempFirstRowPos);
+                    tempR1p2 = drawPointOnAngle(threeRowAngleSlice / 2 * 3, tempFirstRowPos);
+                    tempRow1SiblingDistance = kisDistance(tempR1p1, tempR1p2);
+                    // expand it to the max size
+                    tempFirstRowRadius = tempRow1SiblingDistance / 2;
+                    tempRow1to2Distance = kisDistance(tempR1p2, r2p1);
+                    tempRow1to3Distance = kisDistance(tempR1p1, r3p);
+                }
+            }
+
+            // finally it's rare, but sometimes possible to also move + expand the second row
+            qreal secondRowPos = ringMidRadius;
+            bool row2touching1 = row1to2Distance - (firstRowRadius + secondRowRadius) < 1;
+            bool row2touching3 = row2to3Distance - (thirdRowRadius + secondRowRadius) < 1;
+            if (!row2touching1 && !row2touching3) {
+                // move the second row in until it's touching the first row
+                qreal knownAngleRatio = qSin(qDegreesToRadians(threeRowAngleSlice / 2)) /
+                                        (firstRowRadius + secondRowRadius);
+                qreal angleRow1Row2Center = qAsin(knownAngleRatio * firstRowPos);
+                qreal angleCenterRow2Row1 = 180 - threeRowAngleSlice / 2 - qRadiansToDegrees(angleRow1Row2Center);
+                secondRowPos = qSin(qDegreesToRadians(angleCenterRow2Row1)) / knownAngleRatio;
+            }
+            if (!row2touching3) {
+                QPointF tempR2p1 = r2p1;
+                qreal tempRadius = secondRowRadius;
+                qreal tempRow1to2Distance = row1to2Distance;
+                qreal tempRow2to3Distance = row2to3Distance;
+                qreal tempSecondRowPos = secondRowPos;
+                while (
+                    tempSecondRowPos < thirdRowPos &&
+                    tempRadius + thirdRowRadius < tempRow2to3Distance &&
+                    // this is an artificial limit, it could get bigger but looks weird
+                    tempRadius < thirdRowRadius
+                ) {
+                    secondRowRadius = tempRadius;
+                    secondRowPos = tempSecondRowPos;
+                    // these are unused after so it's not neccesary to update them
+                    // r2p1 = tempR2p1;
+                    // row1to2Distance = tempRow1to2Distance;
+                    // row2to3Distance = tempRow2to3Distance;
+
+                    tempSecondRowPos += 1;
+
+                    tempR2p1 = drawPointOnAngle(threeRowAngleSlice, secondRowPos + 1);
+                    tempRow1to2Distance = kisDistance(tempR2p1, r1p1);
+                    tempRow2to3Distance = kisDistance(tempR2p1, r3p);
+                    tempRadius = tempRow1to2Distance - firstRowRadius;
+                }
+            }
+            c = {
+                3, //ringCount
+                firstRowRadius - margin,
+                secondRowRadius - margin,
+                thirdRowRadius - margin,
+                firstRowPos,
+                secondRowPos,
+                thirdRowPos
+            };
+            return;
+        }
+        tempRadius -= 0.2;
+    }
 }
 
 QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
@@ -1142,26 +1318,20 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
     // how many degrees each slice will get
     // if the slot count is 1, we must divide by 2 to get 180 for the algorithm to work
     qreal angleSlice = 360.0 / qMax(m_presetSlotCount, 2);
-    qreal outerRadius = m_popupPaletteSize/2 - m_presetRingMargin - (m_showRotationTrack ? m_rotationTrackSize + 1 /* half of stroke */  : BORDER_WIDTH);
-    qreal innerRadius = m_colorHistoryOuterRadius +
-    (m_showColorHistory
-        ? 1 /* half of stroke */ + m_presetRingMargin
-        : 0 /* preset margin is already included in either color history radius when it's not showing */
-    );
-    qreal ringWidth = outerRadius - innerRadius;
     // the starting angle of the slice we need to draw. the negative sign makes us go clockwise.
     // adding 90 degrees makes us start at the top. otherwise we would start at the right
     qreal startingAngle = -(index * angleSlice) + 90;
-    qreal length = innerRadius + 0.5 * ringWidth;
-    switch (m_presetRingCount) {
+    qreal length = m_cachedPresetLayout.firstRowPos;
+    qreal radius = m_cachedPresetLayout.firstRowRadius;
+    switch (m_cachedPresetLayout.ringCount) {
     case 1: break;
     case 2: {
         angleSlice = 180.0/((m_presetSlotCount+1) / 2);
         startingAngle = -(index * angleSlice) + 90;
 
-        length = innerRadius + m_cachedRadius;
         if (index % 2) {
-            length = innerRadius + ringWidth - m_cachedRadius;
+            length = m_cachedPresetLayout.secondRowPos;
+            radius = m_cachedPresetLayout.secondRowRadius;
         }
         break;
     }
@@ -1171,15 +1341,18 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
         switch (index % 3) {
         case 0:
             startingAngle = -(triplet * 2 * angleSlice) + 90;
-            length = innerRadius + m_cachedRadius;
+            length = m_cachedPresetLayout.firstRowPos;
+            radius = m_cachedPresetLayout.firstRowRadius;
             break;
         case 1:
             startingAngle = -(triplet * 2 * angleSlice) + 90;
-            length = innerRadius + ringWidth - m_cachedRadius;
+            length = m_cachedPresetLayout.thirdRowPos;
+            radius = m_cachedPresetLayout.thirdRowRadius;
             break;
         case 2:
             startingAngle = -((triplet * 2 + 1) * angleSlice) + 90;
-            length = m_middleRadius;
+            length = m_cachedPresetLayout.secondRowPos;
+            radius = m_cachedPresetLayout.secondRowRadius;
             break;
         default:
             KIS_ASSERT(false);
@@ -1190,9 +1363,9 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
         KIS_ASSERT_RECOVER_NOOP(false);
     }
     QPainterPath path;
-    qreal pathX = length * qCos(qDegreesToRadians(startingAngle)) - m_cachedRadius;
-    qreal pathY = -(length) * qSin(qDegreesToRadians(startingAngle)) - m_cachedRadius;
-    qreal pathDiameter = 2 * m_cachedRadius; // distance is used to calculate the X/Y in addition to the preset circle size
+    qreal pathX = length * qCos(qDegreesToRadians(startingAngle)) - radius;
+    qreal pathY = -(length) * qSin(qDegreesToRadians(startingAngle)) - radius;
+    qreal pathDiameter = 2 * radius; // distance is used to calculate the X/Y in addition to the preset circle size
     path.addEllipse(pathX, pathY, pathDiameter, pathDiameter);
     return path;
 }

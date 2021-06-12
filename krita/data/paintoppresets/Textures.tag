@@ -38,5 +38,5 @@ Comment[sv]=Förinställningar av strukturpenslar
 Comment[uk]=Набори текстурованих пензлів
 Comment[x-test]=xxTextured Brush Presetsxx
 Comment[zh_CN]=带有纹理的笔刷预设
-Comment[zh_TW]=紋理筆刷預設
+Comment[zh_TW]=帶紋理的筆刷預設
 URL=Textures

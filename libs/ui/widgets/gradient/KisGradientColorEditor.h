@@ -31,6 +31,9 @@ public:
     KoColor color() const;
     qreal opacity() const;
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
 public Q_SLOTS:
     void setPosition(qreal position);
     void setColorType(KisGradientWidgetsUtils::ColorType type);

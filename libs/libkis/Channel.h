@@ -15,7 +15,7 @@
 #include <kis_node.h>
 
 /**
- * A Channel represents a singel channel in a Node. Krita does not
+ * A Channel represents a single channel in a Node. Krita does not
  * use channels to store local selections: these are strictly the
  * color and alpha channels.
  */

@@ -180,7 +180,7 @@ public:
 
     /**
      * @return return true if the image is in a locked state, i.e. all the internal
-     *         jobs are blocked from execution by calling wither lock() or barrierLock().
+     *         jobs are blocked from execution by calling whether lock() or barrierLock().
      *
      *         When the image is locked, the user can do some modifications to the image
      *         contents safely without a perspective having race conditions with internal
@@ -410,7 +410,7 @@ public:
      * Returns the current undo adapter. You can add new commands to the
      * undo stack using the adapter. This adapter is used for a backward
      * compatibility for old commands created before strokes. It blocks
-     * all the porcessing at the scheduler, waits until it's finished
+     * all the processing at the scheduler, waits until it's finished
      * and executes commands exclusively.
      */
     KisUndoAdapter* undoAdapter() const;
@@ -741,7 +741,7 @@ public:
 
     /**
      * Set preferences for the level-of-detail functionality.
-     * Due to multithreading considerations they may be aplied
+     * Due to multithreading considerations they may be applied
      * not immediately, but some time later.
      */
     void setLodPreferences(const KisLodPreferences &value);
@@ -1150,9 +1150,9 @@ public Q_SLOTS:
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     /**
-     * \return true if there are some updates in the updates queue
+     * \return true if there are some updates in the updates queue.
      * Please note, that is doesn't guarantee that there are no updates
-     * running in in the updater context at the very moment. To guarantee that
+     * running in the updater context at the very moment. To guarantee that
      * there are no updates left at all, please use barrier jobs instead.
      */
     bool hasUpdatesRunning() const override;

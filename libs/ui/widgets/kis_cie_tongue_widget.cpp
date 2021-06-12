@@ -18,7 +18,7 @@ increments from 380 nm through 780 nm. This table is used in conjunction
 with Planck's law for the energy spectrum of a black body at a given
 temperature to plot the black body curve on the CIE chart.
  
-The following table gives the spectral chromaticity co-ordinates
+The following table gives the spectral chromaticity coordinates
 \f$x(\lambda)\f$ and \f$y(\lambda)\f$ for wavelengths in 5 nanometer
 increments from 380 nm through 780 nm. These coordinates represent the
 position in the CIE x-y space of pure spectral colors of the given

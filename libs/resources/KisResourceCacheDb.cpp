@@ -1474,7 +1474,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         /// to the storage or database. If *itA < *itB, then the resource
         /// is present in the storage only and should be added to the
         /// database. If *itA > *itB, then the resource is present in
-        /// the database only and should be removed (bacause it has been
+        /// the database only and should be removed (because it has been
         /// removed from the storage);
 
         while (itA != endA || itB != endB) {

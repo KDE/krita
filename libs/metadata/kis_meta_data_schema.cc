@@ -255,7 +255,7 @@ const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStruc
 
 const TypeInfo* Schema::Private::parseEmbType(QDomElement& elt, bool ignoreStructure)
 {
-    dbgMetaData << "Parse embbedded type for " << elt.tagName();
+    dbgMetaData << "Parse embedded type for " << elt.tagName();
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();

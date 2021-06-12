@@ -102,7 +102,7 @@ public:
     QList<const KoColorProfile *>  profilesFor(const KoColorSpaceFactory * csf) const;
     /**
      * @brief profilesFor
-     * Retun the list of profiles for a colorspace represented by it's colorants and type.
+     * Return the list of profiles for a colorspace represented by it's colorants and type.
      * @param colorants list of at the least 2 values representing the whitePoint xyY, or 8
      * representing whitePoint, red, green and blue x and y xyY values. If the colorant type
      * is set, the colorants will not be used.

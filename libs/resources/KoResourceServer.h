@@ -220,7 +220,7 @@ public:
     }
 
     /**
-     * Addes an observer to the server
+     * Adds an observer to the server
      * @param observer the observer to be added
      * @param notifyLoadedResources determines if the observer should be notified about the already loaded resources
      */

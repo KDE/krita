@@ -256,7 +256,7 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
 
     // fill in a dot for the origin if showing axis
     if (m_showAxes) {
-        // draw a dot at the origin point to help with precisly moving
+        // draw a dot at the origin point to help with precisely moving
         QPainterPath dotPath;
         int dotRadius = 4;
         dotPath.moveTo(m_axesPoint.x(), m_axesPoint.y());

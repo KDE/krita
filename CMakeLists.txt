@@ -237,7 +237,7 @@ message(STATUS "Branding selected: ${BRANDING}")
 include(MacroJPEG)
 
  #########################################################
-## Look for Python3 It is also searched by KF5,         ##
+## Look for Python3 - it is also searched by KF5,       ##
 ## so we should request the correct version in advance  ##
 #########################################################
 

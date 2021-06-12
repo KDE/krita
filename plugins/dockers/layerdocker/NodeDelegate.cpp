@@ -135,7 +135,7 @@ void NodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, c
 {
     QModelIndex tmp = index.parent();
 
-    // there is no indention if we have no parent group, so don't draw a branch
+    // there is no indentation if we have no parent group, so don't draw a branch
     if (!tmp.isValid()) return;
 
     KisNodeViewColorScheme scm;

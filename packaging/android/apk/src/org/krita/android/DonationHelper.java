@@ -162,7 +162,7 @@ public class DonationHelper implements PurchasesUpdatedListener, BillingClientSt
         }
 
         if (getInstance().mSkuDetails != null) {
-            // there's only one for nwo
+            // there's only one for now
             for (SkuDetails detail: getInstance().mSkuDetails) {
                 BillingFlowParams flowParams = BillingFlowParams.newBuilder()
                   .setSkuDetails(detail)

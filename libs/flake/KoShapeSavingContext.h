@@ -217,7 +217,7 @@ public:
     void removeShapeOffset(const KoShape *shape);
 
     /**
-     * Get the offest that will be applied to the shape position when saved.
+     * Get the offset that will be applied to the shape position when saved.
      *
      * @param shape The shape for which the offset should be get.
      * @return the saved offset or QTransform() when offset is not set.

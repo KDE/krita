@@ -130,7 +130,7 @@ log () {
 # print msg
 print_if_error() {
     if [ "${osxbuild_error}" -ne 0 ]; then
-        printf "\nERROR: Printing last lines of log ouput\n\n"
+        printf "\nERROR: Printing last lines of log output\n\n"
         tail ${OUPUT_LOG}
         printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
     fi
@@ -210,7 +210,7 @@ cmake_3rdparty () {
 
         elif [[ "${error}" = "true" ]]; then
             log "ERROR: ${pkg} failed a second time, time to check the logs"
-            log "stoping..."
+            log "stopping..."
         fi
     done
 }
@@ -236,7 +236,7 @@ cmake_3rdparty_plugins () {
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${package}"
         else
-            log "${pkg} build fail, stoping..."
+            log "${pkg} build fail, stopping..."
             error="true"
         fi
     done
@@ -609,7 +609,7 @@ get_directory_fromargs() {
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-####      Universal ARM x86_64 build functions and paramterers    #####
+####      Universal ARM x86_64 build functions and parameters     #####
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -669,7 +669,7 @@ consolidate_universal_binaries () {
 }
 
 prebuild_cleanup() {
-    # asume if an argument is given is a package name, do not erase install dir
+    # assume if an argument is given is a package name, do not erase install dir
     if [[ ${#@} > 0 ]]; then
         rsync -aq "${KIS_INSTALL_DIR}/" "${BUILDROOT}/i.temp"
     fi
@@ -689,7 +689,7 @@ universal_plugin_build() {
     DEPBUILD_ARM64_DIR="${BUILDROOT}/i_plug.arm64"
     # DEPBUILD_FATBIN_DIR="${BUILDROOT}/i.universal"
 
-    # asume i is universal but i.universal has to exist
+    # assume i is universal but i.universal has to exist
     if [[ ! -d "${DEPBUILD_FATBIN_DIR}" ]]; then
         log "WARNING no i.universal install dir found! Make sure universal build finished properly"
         log "If you get errors building plugins this is likely the error."

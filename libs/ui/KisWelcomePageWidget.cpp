@@ -583,7 +583,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
 
 void KisWelcomePageWidget::showDevVersionHighlight()
 {
-    // always flag developement version
+    // always flag development version
     if (isDevelopmentBuild()) {
         QString devBuildLabelText = QString("<a style=\"color: " +
                                            blendedColor.name() +

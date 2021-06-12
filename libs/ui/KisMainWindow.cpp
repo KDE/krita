@@ -799,7 +799,7 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 #ifdef Q_OS_ANDROID
         // HACK! When loading a new document, Krita wouldn't refresh the screen,
         // even though it has been successfully created in background. So, When
-        // appliction is hidden and made active QPA Android force-requests a
+        // application is hidden and made active QPA Android force-requests a
         // redraw call. So, this workaround fixes that.
         QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationHidden);
         QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
@@ -1106,7 +1106,7 @@ bool KisMainWindow::openDocumentInternal(const QString &path, OpenFlags flags)
     connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
     KisDocument::OpenFlags openFlags = KisDocument::None;
-    // XXX: Why this duplication of of OpenFlags...
+    // XXX: Why this duplication of OpenFlags...
     if (flags & RecoveryFile) {
         openFlags |= KisDocument::RecoveryFile;
     }

@@ -233,7 +233,7 @@ namespace KisGradientConversion
     /**
      * @brief Convert a QGradientStop list to a krita segment gradient
      * 
-     * If two stops have the same position a new segment beween them is not created
+     * If two stops have the same position a new segment between them is not created
      * 
      * @param gradient A QGradientStop list with the stops of the gradient
      * @return KoSegmentGradientSP containing segments with the positions and colors of the gradient

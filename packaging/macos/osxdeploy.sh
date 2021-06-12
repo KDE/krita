@@ -728,7 +728,7 @@ createDMG () {
     ## Build dmg from folder
 
     # create dmg on local system
-    # usage of -fsargs minimze gaps at front of filesystem (reduce size)
+    # usage of -fsargs minimize gaps at front of filesystem (reduce size)
     hdiutil create -srcfolder "${KRITA_DMG}" -volname "${DMG_title}" -fs APFS \
         -format UDIF -verbose -size ${DMG_size}m krita.temp.dmg
 

@@ -371,12 +371,12 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         if (visibleRect.contains(uiMousePosition)) {
             newAssistantAllowed = false;
             assistant->setSnappingActive(!assistant->isSnappingActive()); // toggle
-            assistant->uncache();//this updates the chache of the assistant, very important.
+            assistant->uncache();//this updates the cache of the assistant, very important.
 
             assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
         }
     }
-    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visibility//
+    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toggling visibility//
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         if (m_newAssistant->canBeLocal()) {

@@ -105,7 +105,7 @@ void KisAppimageUpdaterTest::testDoUpdate()
 
     // for error also check for output
     if (secondStatus.status() == UpdaterStatus::StatusID::UPDATE_ERROR) {
-        QCOMPARE(secondStatus.updaterOutput(), QString("DUMMY: an error occured\n"));
+        QCOMPARE(secondStatus.updaterOutput(), QString("DUMMY: an error occurred\n"));
     }
 }
 

@@ -187,7 +187,7 @@ bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const int resourc
     if (!d->query.isSelect()) return false;
     if (rowCount() < 1) return false;
 
-    if (!isResourceTagged(tag, resourceId)) return true; // we check it later but this is qith sql, so probably faster
+    if (!isResourceTagged(tag, resourceId)) return true; // we check it later but this is with sql, so probably faster
 
     d->query.seek(0);
     bool found = false;

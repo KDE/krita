@@ -503,7 +503,7 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
     }
 
     if (needsReadjustParams) {
-        // Readjust the function paramenters to the new dimensions.
+        // Readjust the function parameters to the new dimensions.
         *dstX += srcRect->x() - *srcX;    // This will only add, not subtract
         *dstY += srcRect->y() - *srcY;    // Idem
         srcRect->getRect(srcX, srcY, srcWidth, srcHeight);

@@ -58,7 +58,7 @@ private:
 private:
     /**
      * Visits a node @leaf and goes on crowling
-     * towards the top of the graph, caling visitHigherNode() or
+     * towards the top of the graph, calling visitHigherNode() or
      * startTrip() one more time. After the top is reached
      * returns back to the @leaf.
      */
@@ -66,7 +66,7 @@ private:
 
     /**
      * Visits a node @leaf and goes on crowling
-     * towards the bottom of the graph, caling visitLowerNode() or
+     * towards the bottom of the graph, calling visitLowerNode() or
      * startTrip() one more time.
      */
     void visitLowerNode(KisProjectionLeafSP leaf);

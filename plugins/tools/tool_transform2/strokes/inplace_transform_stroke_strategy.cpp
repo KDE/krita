@@ -108,12 +108,12 @@ struct InplaceTransformStrokeStrategy::Private
     QElapsedTimer updateTimer;
     const int updateInterval = 30;
 
-    // temporary variable to share data betwen jobs at the initialization phase
+    // temporary variable to share data between jobs at the initialization phase
     QVector<KisDecoratedNodeInterface*> disabledDecoratedNodes;
 
     /**
      * A special cookie-object, which blocks updates in transform mask
-     * modification commands untils the stroke ends. As soon as the stroke
+     * modification commands until the stroke ends. As soon as the stroke
      * ends, the object is destroyed and the transform mask modification
      * commands start to behave normally.
      */

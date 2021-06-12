@@ -102,7 +102,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * @brief Signal emited when the angle has changed
+     * @brief Signal emitted when the angle has changed
      * @param angle The new angle
      */
     void angleChanged(qreal angle);

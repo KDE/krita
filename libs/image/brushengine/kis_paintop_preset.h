@@ -142,7 +142,7 @@ public:
      * Returns canvas resources interface associated with the current preset.
      *
      * In contrast to resourcesInterface() the canvas resources interface may
-     * be null, becuase the preset is created without any canvas resources.
+     * be null, because the preset is created without any canvas resources.
      * The resources are assigned to the preset only when the ser starts to
      * paint with it.
      *

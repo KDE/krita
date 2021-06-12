@@ -163,9 +163,9 @@ public:
 
     /**
      * @brief Returns the index of the item with largest frame smaller
-     * than arguemnt frame
+     * than argument frame
      * @param frame
-     * @return The index with largest frame less than arguemnt frame.
+     * @return The index with largest frame less than argument frame.
      */
     QModelIndex lastIndexBeforeFrame(int frame) const;
 
@@ -193,7 +193,7 @@ public:
 
     /**
      * @brief reorders all keyframes to reflect storyboard docker's arrangement.
-     * typically used after drag and drop to keep storyboard timing acurate
+     * typically used after drag and drop to keep storyboard timing accurate
      * to timeline timing.
      */
     void reorderKeyframes();
@@ -274,7 +274,7 @@ private Q_SLOTS:
 
     /**
      * @brief calls regeneration of @c frame in the background i.e. in another thread.
-     * @param frame The frame to be regenrated.
+     * @param frame The frame to be regenerated.
      * @param delay Update thumbnail with delay if true
      */
     void slotUpdateThumbnailForFrame(int frame, bool delay = true);

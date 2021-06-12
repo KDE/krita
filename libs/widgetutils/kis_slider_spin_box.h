@@ -27,7 +27,7 @@ class KisSliderSpinBoxPrivate;
  * typing in with the keyboard. To enter the edit mode, in which the keyboard
  * can be used, one has to right-click inside the spinbox or click and hold
  * the pointer inside or press the enter key. To leave the edit mode, one
- * can press the enter key again, in which case the value is commited, or
+ * can press the enter key again, in which case the value is committed, or
  * press the escape key, in which case the value is rejected.
  * 
  * When dragging with the pointer, one can fine tune the value by dragging
@@ -40,7 +40,7 @@ class KisSliderSpinBoxPrivate;
  * 
  * A "soft range" can be set to make the slider display only a sub-range of the
  * spinbox range. This way one can have a large range but display and set with
- * the pointer and with more precission only the most commonly used sub-set
+ * the pointer and with more precision only the most commonly used sub-set
  * of values.
  * A value outside the "soft range" can be set by entering the edit
  * mode and using the keyboard.
@@ -142,7 +142,7 @@ public:
      * 
      * This is useful to prevent multiple updates when changing the value if
      * the update operation is costly.
-     * A valueChanged signal will be emited when the pointer is released from
+     * A valueChanged signal will be emitted when the pointer is released from
      * the slider.
      * @param newBlockUpdateSignalOnDrag true if the spinbox should not emit
      * signals when dragging the slider. false otherwise

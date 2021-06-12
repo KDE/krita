@@ -30,7 +30,7 @@
 
     All resources are captured in a QSharedPointer and should not be used naked.
 
-    KisResourceLocator is also repsonsible for initializing the cache database.
+    KisResourceLocator is also responsible for initializing the cache database.
 
   - KisResourceCacheDB: this class creates the sqlite database and handles synchronizing resources
     with the contents of storages.

@@ -22,7 +22,7 @@ class KoInteractionToolPrivate;
  * The interaction tool adds to the normal KoToolBase class the concept of strategies
  * as a means to get one tool to have different actions the user can perform using the mouse.
  * Each time the user presses the mouse until she releases the mouse a strategy object
- * will be created, used and disgarded.
+ * will be created, used and discarded.
  * If the usage of a tool fits this pattern you need to inherit from this class instead of the
  * plain KoToolBase and reimplement your createStrategy() method which returns a tool-specific
  * strategy where all the real interaction code is placed.

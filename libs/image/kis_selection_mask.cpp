@@ -210,7 +210,7 @@ void KisSelectionMask::setActive(bool active)
     /**
      * WARNING: we have a direct link to the image here, but we
      * must not use it for notification until we are a part of
-     * the nore graph! Notifications should be emitted iff we
+     * the node graph! Notifications should be emitted iff we
      * have graph listener link set up.
      */
     if (graphListener() &&

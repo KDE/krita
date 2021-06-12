@@ -63,7 +63,7 @@ private:
             if (widgetRect.isNull()) return;
 
             buffer.position = widgetRect.topLeft();
-            // to ensure that buffor is big enough for all the pixels on high dpi displays
+            // to ensure that buffer is big enough for all the pixels on high dpi displays
             // BUG 411118
             buffer.image = QImage((widgetRect.size()*devicePixelRatioF).toSize(), QImage::Format_ARGB32);
             buffer.image.setDevicePixelRatio(devicePixelRatioF);

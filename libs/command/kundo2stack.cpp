@@ -347,7 +347,7 @@ bool KUndo2Command::timedMergeWith(KUndo2Command *other)
     If this function returns true, calling this command's redo() followed by
     \p other redo() must have no effect.
 
-    The function itself shouln't do any changes to the command, because
+    The function itself shouldn't do any changes to the command, because
     after returning true, the command will be deleted as a "noop"
 
     KUndo2QStack will only try to merge two commands if they have the same id, and

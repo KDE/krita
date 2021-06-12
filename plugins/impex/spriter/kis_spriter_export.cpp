@@ -617,7 +617,7 @@ KisImportExportErrorCode KisSpriterExport::convert(KisDocument *document, QIODev
     delete m_rootBone;
 
     if (openedHere) {
-        // FIXME: casues crash...
+        // FIXME: causes crash...
         //io->close();
     }
 

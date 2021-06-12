@@ -74,7 +74,7 @@ public:
     virtual QRect needRectForOriginal(const QRect &rect) const = 0;
 
     /**
-     * Return a tight rectange, where the contents of the plane
+     * Return a tight rectangle, where the contents of the plane
      * is placed from user's point of view. It includes everything
      * belonging to the plane (e.g. layer styles).
      */

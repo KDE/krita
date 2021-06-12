@@ -123,7 +123,7 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
 
     QString compop = elem.attribute("composite-op");
     if (compop.startsWith("svg:")) {
-        //we don't have a 'composite op clear' despite the registery reserving a string for it, doesn't matter, ora doesn't use it.
+        //we don't have a 'composite op clear' despite the registry reserving a string for it, doesn't matter, ora doesn't use it.
         //if (compop == "svg:clear") layer->setCompositeOpId(COMPOSITE_CLEAR);
         if (compop == "svg:src-over") layer->setCompositeOpId(COMPOSITE_OVER);
         //not part of the spec.

@@ -83,7 +83,7 @@ private:
 
     /**
      * The rect that was requested during creation
-     * of the patch. It equals to patchRect withount
+     * of the patch. It equals to patchRect without
      * borders
      * These borders are introduced for more accurate
      * smooth scaling to reduce border effects

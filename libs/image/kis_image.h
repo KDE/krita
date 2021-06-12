@@ -180,7 +180,7 @@ public:
 
     /**
      * @return return true if the image is in a locked state, i.e. all the internal
-     *         jobs are blocked from execution by calling whether lock() or barrierLock().
+     *         jobs are blocked from execution by calling either lock() or barrierLock().
      *
      *         When the image is locked, the user can do some modifications to the image
      *         contents safely without a perspective having race conditions with internal

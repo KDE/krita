@@ -73,7 +73,7 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
 
     if(ref && ref->isCropEnabled()) {
       m_cropDecorator->setReferenceImage(ref);
-      m_cropDecorator->paint(painter, converter);
+      m_cropDecorator->paint(painter, converter ,canvas());
 
     }
     else {

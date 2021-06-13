@@ -408,54 +408,72 @@ KoShape *KisReferenceImage::cloneShape() const
 
 qreal KisReferenceImage::cropX() const
 {
-    //return cropRect.x();
-    return 100;
+    return cropRect.x();
 }
 
 qreal KisReferenceImage::cropY() const
 {
-    //return cropRect.y();
-    return 100;
+    return cropRect.y();
 }
 
 qreal KisReferenceImage::cropWidth() const
 {
-    //return cropRect.width();
-    return 100;
+    return cropRect.width();
 }
 
 qreal KisReferenceImage::cropHeight() const
 {
-    //return cropRect.height();
-    return 100;
+    return cropRect.height();
 }
 
 bool KisReferenceImage::isCropEnabled()
 {
     return enableCrop;
+
 }
 
 void KisReferenceImage::setCropX(qreal x)
 {
-
+    QPointF offset = cropRect.topLeft();
+    offset.setX(x);
+    cropRect.moveTo(offset);
 }
 
 void KisReferenceImage::setCropY(qreal y)
 {
-
+    QPointF offset = cropRect.topLeft();
+    offset.setX(y);
+    cropRect.moveTo(offset);
 }
 
 void KisReferenceImage::setCropWidth(qreal w)
 {
-
+    QSizeF size = cropRect.size();
+    size.setWidth(w);
+    cropRect.setSize(size);
 }
 
-void setCropHeight(qreal h)
+void KisReferenceImage::setCropHeight(qreal h)
 {
-
+    QSizeF size = cropRect.size();
+    size.setWidth(h);
+    cropRect.setSize(size);
 }
 
 void KisReferenceImage::setEnableCrop(bool v)
 {
     enableCrop = v;
+    if(v) {
+        cropRect.setSize(this->size());
+    }
+}
+
+QRectF KisReferenceImage::getCropRect()
+{
+    return cropRect;
+}
+
+void KisReferenceImage::setCropRect(QRectF rect)
+{
+    cropRect = rect;
 }

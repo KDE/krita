@@ -149,10 +149,10 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     KisSignalCompressor *cropCompressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(compressor, SIGNAL(timeout()), this, SLOT(slotCropValuesChanged()));
 
-    connect(d->ui->sldOffsetX, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
-    connect(d->ui->sldOffsetY, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
-    connect(d->ui->sldWidth, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
-    connect(d->ui->sldHeight, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
+    connect(d->ui->sldOffsetX, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
+    connect(d->ui->sldOffsetY, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
+    connect(d->ui->sldWidth, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
+    connect(d->ui->sldHeight, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
 
     d->ui->referenceImageLocationCombobox->addItem(i18n("Embed to .KRA"));
     d->ui->referenceImageLocationCombobox->addItem(i18n("Link to Image"));
@@ -171,7 +171,11 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
 
     d->ui->opacitySlider->setSelection(shapes);
     d->ui->saturationSlider->setSelection(shapes);
-    updateCropSliders(shapes);
+
+    KisReferenceImage *ref = d->tool->getActiveReferenceImage();
+    if(ref && ref->isCropEnabled()) {
+        updateCropSliders();
+    }
 
 
     bool anyKeepingAspectRatio = false;
@@ -281,7 +285,12 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
     d->ui->bnCrop->setChecked(value);
     bool enable = d->ui->bnCrop->isChecked();
     d->ui->grpCrop->setVisible(enable);
-    d->tool->getActiveReferenceImage()->setEnableCrop(enable);
+
+    KisReferenceImage* ref = d->tool->getActiveReferenceImage();
+    ref->setEnableCrop(enable);
+    if(enable && ref) {
+        updateCropSliders();
+    }
 }
 
 void ToolReferenceImagesWidget::slotImageValuesChanged()
@@ -292,7 +301,13 @@ void ToolReferenceImagesWidget::slotImageValuesChanged()
 
 void ToolReferenceImagesWidget::slotCropValuesChanged()
 {
-
+    KisReferenceImage *ref = d->tool->getActiveReferenceImage();
+    if(ref) {
+        ref->setCropX(d->ui->sldOffsetX->value());
+        ref->setCropY(d->ui->sldOffsetY->value());
+        ref->setCropWidth(d->ui->sldWidth->value());
+        ref->setCropHeight(d->ui->sldHeight->value());
+    }
 }
 
 void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
@@ -337,21 +352,30 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     }
 }
 
-void ToolReferenceImagesWidget::updateCropSliders(QList<KoShape *> shapes)
-{/*
-    KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shapes.at(0));
-    KIS_SAFE_ASSERT_RECOVER_RETURN(reference);
+void ToolReferenceImagesWidget::updateCropSliders()
+{
+    KisReferenceImage* ref = d->tool->getActiveReferenceImage();
+    if(!ref) return;
 
-    d->ui->sldOffsetX->setSelection(shapes);
-    d->ui->sldOffsetX->setRange(0,reference->cropWidth()-1);
+    QList<KoShape*> shape;
+    shape.append(ref);
 
-    d->ui->sldOffsetY->setSelection(shapes);
-    d->ui->sldOffsetY->setRange(0,reference->cropHeight()-1);
+    KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
+    const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
 
-    d->ui->sldWidth->setSelection(shapes);
-    d->ui->sldOffsetX->setRange(0,reference->cropWidth()-1);
+    QRectF rect = converter->documentToImage(ref->boundingRect());
+    ref->setCropRect(rect);
 
-    d->ui->sldHeight->setSelection(shapes);
-    d->ui->sldOffsetY->setRange(0,reference->cropHeight()-1);*/
+    //d->ui->sldOffsetX->setSelection(shape);
+    d->ui->sldOffsetX->setRange(0,rect.width());
+
+    //d->ui->sldOffsetY->setSelection(shape);
+    d->ui->sldOffsetY->setRange(0,rect.height());
+
+    //d->ui->sldWidth->setSelection(shape);
+    d->ui->sldWidth->setRange(0,rect.width());
+
+    //d->ui->sldHeight->setSelection(shape);
+    d->ui->sldHeight->setRange(0,rect.height());
 }
 

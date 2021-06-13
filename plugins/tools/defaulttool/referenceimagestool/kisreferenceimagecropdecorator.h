@@ -2,6 +2,7 @@
 #define KISREFERENCEIMAGECROPDECORATOR_H
 
 #include "KisReferenceImage.h"
+#include "KoCanvasBase.h"
 
 class KisReferenceImage;
 
@@ -11,7 +12,7 @@ public:
     KisReferenceImageCropDecorator();
     ~KisReferenceImageCropDecorator() {};
 
-    void paint(QPainter &gc, const KoViewConverter &converter);
+    void paint(QPainter &gc, const KoViewConverter &converter, KoCanvasBase *canvas);
 
     void setReferenceImage(KisReferenceImage *reference);
 

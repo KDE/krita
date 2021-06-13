@@ -44,7 +44,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
     void updateVisibility(bool hasSelection);
-    void updateCropSliders(QList<KoShape*>);
+    void updateCropSliders();
 };
 
 #endif

@@ -39,8 +39,10 @@ KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     connect(loadExistingThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadExistingThumbnail()));
     connect(loadIconLibraryThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromLibrary()));
 
-    connect(savePresetButton, SIGNAL(clicked(bool)), this, SLOT(savePreset()));
-    connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Save), KStandardGuiItem::save());
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
+    connect(buttons, SIGNAL(accepted()), this, SLOT(savePreset()));
+    connect(buttons, SIGNAL(rejected()), this, SLOT(close()));
 }
 
 KisPresetSaveWidget::~KisPresetSaveWidget()

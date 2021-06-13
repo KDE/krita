@@ -28,8 +28,6 @@ const QString DlgLayerSize::PARAM_HEIGHT_UNIT = DlgLayerSize::PARAM_PREFIX + "_h
 const QString DlgLayerSize::PARAM_KEEP_AR = DlgLayerSize::PARAM_PREFIX + "_keepar";
 const QString DlgLayerSize::PARAM_KEEP_PROP = DlgLayerSize::PARAM_PREFIX + "_keepprop";
 
-static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
-
 static KisFilterStrategy *lastUsedFilter = nullptr;
 
 DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,

@@ -29,8 +29,6 @@
 static const int maxImagePixelSize = 100000000;
 static KisFilterStrategy *lastUsedFilter = nullptr;
 
-static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
-
 const QString DlgImageSize::PARAM_PREFIX = "imagesizedlg";
 const QString DlgImageSize::PARAM_IMSIZE_UNIT = DlgImageSize::PARAM_PREFIX + "_imsizeunit";
 const QString DlgImageSize::PARAM_SIZE_UNIT = DlgImageSize::PARAM_PREFIX + "_sizeunit";

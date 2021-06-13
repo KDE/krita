@@ -512,18 +512,23 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    QPointF edgePoint = QPointF(0.14645, 0.14645) * m_popupPaletteSize;
+    if (m_isOverFgBgColors) {
+        painter.save();
+        painter.setPen(QPen(palette().color(QPalette::Highlight), BORDER_WIDTH));
+    }
+    
     // painting background color indicator
-    QPainterPath bgColor;
-    bgColor.addEllipse(edgePoint + QPointF(-6, 24), 30, 30);
+    QPainterPath bgColor(drawFgBgColorIndicator(0));
     painter.fillPath(bgColor, m_displayRenderer->toQColor(m_resourceManager->bgColor()));
     painter.drawPath(bgColor);
 
     // painting foreground color indicator
-    QPainterPath fgColor;
-    fgColor.addEllipse(edgePoint + QPointF(4, -6), 30, 30);
+    QPainterPath fgColor(drawFgBgColorIndicator(1));
     painter.fillPath(fgColor, m_displayRenderer->toQColor(m_colorSelector->getCurrentColor()));
     painter.drawPath(fgColor);
+    
+    if (m_isOverFgBgColors) painter.restore();
+    
 
     // create a circle background that everything else will go into
     QPainterPath backgroundContainer;
@@ -712,6 +717,26 @@ QPainterPath KisPopupPalette::drawDonutPathAngle(int inner_radius, int outer_rad
     return path;
 }
 
+QPainterPath KisPopupPalette::drawFgBgColorIndicator(int type) const
+{
+    QPointF edgePoint = QPointF(0.14645, 0.14645) * (m_popupPaletteSize);
+    
+    // the points are really (-5, 15) and (5, 15) shifted right 1px
+    // this is so that where the circles meet the circle of the palette, the space occupied is exactly half to either side of the -45deg line
+    QPainterPath indicator;
+    switch (type) {
+        case 0: { // background
+            indicator.addEllipse(edgePoint + QPointF(-4, 15), 30, 30);
+            break;
+        }
+        case 1: { //foreground
+            indicator.addEllipse(edgePoint + QPointF(6, -15), 30, 30);
+            break;
+        }
+    }
+    return indicator;
+}
+
 QRectF KisPopupPalette::rotationIndicatorRect(qreal rotationAngle, bool absolute) const
 {
     qreal indicatorRadians = qDegreesToRadians(rotationAngle - 90);  // -90 will make 0 degrees be at the top
@@ -763,6 +788,28 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
     }
 
     if (m_isRotatingCanvasIndicator == false) {
+        QPainterPath bgColor(drawFgBgColorIndicator(0));
+        QPainterPath fgColor(drawFgBgColorIndicator(1));
+        QPainterPath backgroundContainer;
+        QRectF circleRect(BORDER_WIDTH / 2, BORDER_WIDTH / 2, m_popupPaletteSize - BORDER_WIDTH, m_popupPaletteSize - BORDER_WIDTH);
+        backgroundContainer.addEllipse(circleRect);
+        
+        QPainterPath fgBgColors = (fgColor + bgColor) - backgroundContainer;
+        
+        if (fgBgColors.contains(point)) {
+            if (!m_isOverFgBgColors) {
+                m_isOverFgBgColors = true;
+                setToolTip(i18n("Swap foreground and background colors"));
+                update();
+            }
+        } else {
+            if (m_isOverFgBgColors) {
+                m_isOverFgBgColors = false;
+                setToolTip(QString());
+                update();
+            }
+        }
+
         QPainterPath colorHistoryPath(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
         if (colorHistoryPath.contains(point)) {
             if (hoveredPreset() >= 0) {
@@ -939,6 +986,10 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     m_isRotatingCanvasIndicator = false;
 
     if (event->button() == Qt::LeftButton) {
+        if (m_isOverFgBgColors) {
+            m_viewManager->slotToggleFgBg();
+        }
+        
         //in favorite brushes area
         if (hoveredPreset() > -1) {
             //setSelectedBrush(hoveredBrush());

@@ -87,6 +87,7 @@ private:
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
+    QPainterPath drawFgBgColorIndicator(int type) const;
     QRectF rotationIndicatorRect(qreal rotationAngle, bool absolute) const;
     bool isPointInPixmap(QPointF&, int pos);
 
@@ -103,6 +104,7 @@ private:
     bool m_useDynamicSlotCount {true};
     int m_hoveredColor {0};
     int m_selectedColor {0};
+    bool m_isOverFgBgColors {false};
 
     KisCoordinatesConverter *m_coordinatesConverter;
 

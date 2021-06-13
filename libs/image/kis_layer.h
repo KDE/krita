@@ -273,6 +273,13 @@ public:
     KisMetaData::Store* metaData();
 
 protected:
+    /**
+     * Internal projection device that should be updated in the
+     * changeRect pass even when the change rect is cropped by
+     * masks or something like that
+     */
+    virtual QRect amortizedProjectionRectForCleanupInChangePass() const;
+
     // override from KisNode
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
 

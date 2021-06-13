@@ -31,13 +31,14 @@
 #include "kis_node_view_color_scheme.h"
 
 #include "KisMouseClickEater.h"
+#include "KisPopupSelfActivatingLineEdit.h"
 
 KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    textFilter = new QLineEdit(this);
+    textFilter = new KisPopupSelfActivatingLineEdit(this);
     textFilter->setPlaceholderText(i18n("Filter by name..."));
     textFilter->setMinimumWidth(255);
     textFilter->setMinimumHeight(28);

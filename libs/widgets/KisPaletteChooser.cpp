@@ -79,8 +79,10 @@ void KisPaletteChooser::paletteSelected(KoResourceSP r)
 
 void KisPaletteChooser::slotAdd()
 {
+    // Don't select any palette,
+    //  because it doesn't need to be added at the end of the list.
+    // The PaletteEditor will select the newly added palette.
     emit sigAddPalette();
-    m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
 void KisPaletteChooser::slotRemove()

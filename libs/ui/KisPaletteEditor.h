@@ -40,7 +40,7 @@ public:
     void setPaletteModel(KisPaletteModel *model);
     void setView(KisViewManager *view);
 
-    void addPalette();
+    KoColorSetSP addPalette();
     KoColorSetSP importPalette();
     void removePalette(KoColorSetSP );
 

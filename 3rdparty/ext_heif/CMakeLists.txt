@@ -88,8 +88,8 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
     ExternalProject_Add(
         ext_rav1e
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/xiph/rav1e/archive/refs/tags/p20210525.tar.gz
-        URL_HASH SHA256=bd1a27e430781d7f1714ea6e73d489b1718d2883936654f665cc57edf1f6e58e
+        URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
+        URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
 
         CONFIGURE_COMMAND ""
 

@@ -44,6 +44,14 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
 
     m_ui->cmbResourceType->setModel(m_resourceTypeModel);
     m_ui->cmbResourceType->setModelColumn(KisResourceTypeModel::Name);
+    for (int i = 0; i < m_resourceTypeModel->rowCount(); i++) {
+        QModelIndex idx = m_resourceTypeModel->index(i, 0);
+        QString resourceType = m_resourceTypeModel->data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
+        if (resourceType == "paintoppresets") {
+            m_ui->cmbResourceType->setCurrentIndex(i);
+            break;
+        }
+    }
     connect(m_ui->cmbResourceType, SIGNAL(activated(int)), SLOT(slotResourceTypeSelected(int)));
 
     m_storageModel = new KisStorageModel(this);
@@ -55,6 +63,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     QString selectedResourceType = getCurrentResourceType();
 
     KisTagModel* tagModel = new KisTagModel(selectedResourceType);
+    tagModel->sort(KisAllTagsModel::Name);
     m_tagModelsForResourceType.insert(selectedResourceType, tagModel);
 
     m_ui->cmbTag->setModel(tagModel);
@@ -70,6 +79,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     proxyModel->setResourceModel(resourceModel);
     proxyModel->setTagFilter(0);
     proxyModel->setStorageFilter(true, getCurrentStorageId());
+    proxyModel->sort(KisAbstractResourceModel::Name);
     m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
 
     m_ui->resourceItemView->setModel(proxyModel);
@@ -82,7 +92,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     connect(m_ui->btnCreateBundle, SIGNAL(clicked(bool)), SLOT(slotCreateBundle()));
     connect(m_ui->btnOpenResourceFolder, SIGNAL(clicked(bool)), SLOT(slotOpenResourceFolder()));
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
-    connect(m_ui->btnDeleteBackupFiles, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
+    connect(m_ui->btnExtractTagsToResourceFolder, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
 
     connect(m_ui->lneFilterText, SIGNAL(textChanged(const QString&)), SLOT(slotFilterTextChanged(const QString&)));
     connect(m_ui->chkShowDeleted, SIGNAL(stateChanged(int)), SLOT(slotShowDeletedChanged(int)));
@@ -101,6 +111,7 @@ void DlgResourceManager::slotResourceTypeSelected(int)
     QString selectedResourceType = getCurrentResourceType();
     if (!m_tagModelsForResourceType.contains(selectedResourceType)) {
         m_tagModelsForResourceType.insert(selectedResourceType, new KisTagModel(selectedResourceType));
+        m_tagModelsForResourceType[selectedResourceType]->sort(KisAllTagsModel::Name);
     }
 
     m_ui->cmbTag->setModel(m_tagModelsForResourceType[selectedResourceType]);
@@ -123,6 +134,7 @@ void DlgResourceManager::slotResourceTypeSelected(int)
         proxyModel->setResourceModel(resourceModel);
         proxyModel->setTagFilter(getCurrentTag());
         proxyModel->setStorageFilter(true, getCurrentStorageId());
+        proxyModel->sort(KisAbstractResourceModel::Name);
         m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
     }
     m_ui->resourceItemView->setModel(m_resourceProxyModelsForResourceType[selectedResourceType]);

@@ -195,7 +195,7 @@ public:
     qreal endPositionAngle() const;
     qreal endPositionDistance() const;
     SpatialUnits endPositionDistanceUnits() const;
-    KoAbstractGradientSP gradient() const;
+    KoAbstractGradientSP gradient(KoAbstractGradientSP fallbackGradient = nullptr) const;
 
     QPair<QPointF, QPointF> absoluteCartesianPositionsInPixels(int width, int height) const;
 

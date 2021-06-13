@@ -1,24 +1,23 @@
-From da96bead3af1bfc9c808ac4774597be0bbe2fb9e Mon Sep 17 00:00:00 2001
+From 10ee55f1b5b6dcd5bfda71c5d66bb14fcbb9cd34 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 1 Jun 2020 00:05:25 +0530
-Subject: [PATCH 2/2] Android: return the actual file name the URI is pointing
- to
+Subject: [PATCH] Android: return the actual file name the URI is pointing to
 
 This only manages QFileInfo::filename() and QFileInfo::suffix().
 
 Change-Id: Iec527e2a6808f04dca25fd17e82e8d2aa7e45cfc
 ---
- .../org/qtproject/qt5/android/QtNative.java   | 24 +++++++++++
+ .../org/qtproject/qt5/android/QtNative.java   | 26 ++++++++++++
  src/corelib/io/qfileinfo.cpp                  | 11 +++++
  .../android/androidcontentfileengine.cpp      | 42 ++++++++++++++-----
  .../android/androidcontentfileengine.h        |  5 ++-
- 4 files changed, 70 insertions(+), 12 deletions(-)
+ 4 files changed, 72 insertions(+), 12 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index b5d2b9e6a6..4282f73638 100644
+index 71f628ddc8..baee701753 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-@@ -290,6 +290,30 @@ public class QtNative
+@@ -294,6 +294,32 @@ public class QtNative
          }
      }
  
@@ -40,7 +39,9 @@ index b5d2b9e6a6..4282f73638 100644
 +                cursor.close();
 +            }
 +        } catch (IllegalArgumentException e) {
-+            Log.e(QtTAG, "getFileNameFromUri(): Couldn't get filename");
++            Log.e(QtTAG, "getFileNameFromUri(): Couldn't get filename: " + e.getMessage());
++        } catch (UnsupportedOperationException e) {
++            Log.e(QtTAG, "getFileNameFromUri(): UnsupportedOperation on the Uri: " + e.getMessage());
 +        }
 +
 +        return filename;
@@ -79,7 +80,7 @@ index 185e061d8f..189b704b51 100644
  }
  
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
-index 6351b642ae..31f68780df 100644
+index 3e3bdc2592..c15352d60e 100644
 --- a/src/plugins/platforms/android/androidcontentfileengine.cpp
 +++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
 @@ -45,9 +45,10 @@
@@ -190,5 +191,5 @@ index 09e5d77553..bb97bd6975 100644
  
  class AndroidContentFileEngineHandler : public QAbstractFileEngineHandler
 -- 
-2.26.2
+2.31.1
 

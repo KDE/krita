@@ -485,7 +485,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
             d->recentFiles->setUrlIcon(url, icon);
         }
     });
-    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &parent, int first, int last) {
+    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &/*parent*/, int first, int last) {
         for (int i = first; i <= last; i++) {
             QStandardItem *item = d->recentFilesModel.model().item(i);
             QUrl url = item->data().toUrl();
@@ -1888,7 +1888,18 @@ void KisMainWindow::openCommandBar()
     }
 
     d->commandBar->updateBar(actionCollections, actionsCount);
-    centralWidget()->setFocusProxy(d->commandBar);
+
+    // The following line is needed to work around input method not working
+    // on Windows.
+    // See https://bugs.kde.org/show_bug.cgi?id=395598
+    // and https://bugs.kde.org/show_bug.cgi?id=438122
+    d->commandBar->activateWindow();
+
+    // The following line is present in Kate's version and was ported over
+    // but I am sceptical of its use. I worry that it may subtly cause other
+    // issues, and since the command bar appears to work fine without it, I
+    // believe it may be better to leave it out.  -- Alvin
+    // centralWidget()->setFocusProxy(d->commandBar);
 }
 
 void KisMainWindow::slotStoragesWarning(const QString &/*location*/)

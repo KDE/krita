@@ -92,10 +92,63 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("file-layer"), i18n("File layer to be added to existing or new file"), QLatin1String("file-layer")));
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
 
+    QStringList filteredArgs;
+#ifdef Q_OS_WIN
+    {
+        auto checkIsIgnoreEpic = [](const QString &arg) {
+            // List according to https://dev.epicgames.com/docs/services/en-US/Interfaces/Auth/index.html#epicgameslauncher
+            static const QStringList epicIgnoreArgsStart = {
+                QStringLiteral("AUTH_PASSWORD="),
+                QStringLiteral("AUTH_TYPE="),
+                QStringLiteral("epicapp="),
+                QStringLiteral("epicenv="),
+                QStringLiteral("epicusername="),
+                QStringLiteral("epicuserid="),
+                QStringLiteral("epiclocale="),
+            };
+            static const QStringList epicIgnoreArgsExact = {
+                QStringLiteral("EpicPortal"),
+            };
+            QStringRef argDashless(&arg);
+            // Strip leading dashes.
+            while (argDashless.startsWith('-')) {
+                argDashless = argDashless.mid(1);
+            }
+            Q_FOREACH(const auto &argToIgnore, epicIgnoreArgsStart) {
+                if (argDashless.startsWith(argToIgnore, Qt::CaseInsensitive)) {
+                    return true;
+                }
+            }
+            Q_FOREACH(const auto &argToIgnore, epicIgnoreArgsExact) {
+                if (argDashless.compare(argToIgnore, Qt::CaseInsensitive) == 0) {
+                    return true;
+                }
+            }
+            return false;
+        };
 
-    if (parser.parse(app.arguments())) {
-        parser.process(app);
+        QStringListIterator iter(app.arguments());
+        if (iter.hasNext()) {
+            // First argument is application name.
+            filteredArgs.append(iter.next());
+
+            bool isAfterDoubleDash = false;
+            while (iter.hasNext()) {
+                QString arg = iter.next();
+                if (arg == QLatin1String("--")) {
+                    isAfterDoubleDash = true;
+                }
+                if (isAfterDoubleDash || !checkIsIgnoreEpic(arg)) {
+                    filteredArgs.append(arg);
+                }
+            }
+        }
     }
+#else // !defined(Q_OS_WIN)
+    filteredArgs = app.arguments();
+#endif // Q_OS_WIN
+
+    parser.process(filteredArgs);
 
     QString dpiValues = parser.value("dpi");
     if (!dpiValues.isEmpty()) {

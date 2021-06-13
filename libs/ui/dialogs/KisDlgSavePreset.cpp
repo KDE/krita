@@ -186,11 +186,12 @@ void KisPresetSaveWidget::savePreset()
     }
     else { // saving a preset that is replacing an existing one
         curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
-        if (curPreset->image().isNull()) {
-            curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
-        }
+        curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
 
         rServer->updateResource(curPreset);
+
+        // this helps updating the thumbnail in the big label in the editor
+        emit resourceSelected(curPreset);
     }
 
 

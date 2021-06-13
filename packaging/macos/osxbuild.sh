@@ -429,9 +429,21 @@ build_krita () {
     log_cmd check_dir_path ${KIS_BUILD_DIR}
     cd ${KIS_BUILD_DIR}
 
+    if [ -z "${KRITA_BRANDING}" ]; then
+        # determine the channel for branding
+        if [ "${JOB_NAME}" == "Krita_Nightly_MacOS_Build" ]; then
+            KRITA_BRANDING="Next"
+        elif [ "${JOB_NAME}" == "Krita_Stable_MacOS_Build" ]; then
+            KRITA_BRANDING="Plus"
+        else
+            KRITA_BRANDING=""
+        fi
+    fi
+
 
     CMAKE_CMD="cmake ${KIS_SRC_DIR} \
         -DFOUNDATION_BUILD=ON \
+        -DBRANDING=${KRITA_BRANDING} \
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DCMAKE_PREFIX_PATH=${KIS_INSTALL_DIR} \

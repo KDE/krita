@@ -10,7 +10,7 @@ set -x
 # Read in our parameters
 export BUILD_PREFIX=$1
 export KRITA_SOURCES=$2
-export BRANDING="${3}"
+export KRITA_BRANDING="${3}"
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
 # That's not always the case, so make sure it is
@@ -32,30 +32,14 @@ export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
 cd $KRITA_SOURCES
 
-if [ -z "${BRANDING}" ]; then
+if [ -z "${KRITA_BRANDING}" ]; then
     # determine the channel for branding
-    if [[ -d .git ]]; then
-        BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-        if [ "$BRANCH" = "master" ]; then
-            BRANDING="Next"
-        elif [[ "${BRANCH}" =~ krita/.* ]]; then
-            BRANDING="Plus"
-        else
-            BRANDING="default"
-        fi
+    if [ "${JOB_NAME}" == "Krita_Nightly_Appimage_Build" ]; then
+        KRITA_BRANDING="Next"
+    elif [ "${JOB_NAME}" == "Krita_Stable_Appimage_Build" ]; then
+        KRITA_BRANDING="Plus"
     else
-        #if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
-        grep "define KRITA_BETA 1" libs/version/kritaversion.h;
-        is_beta=$?
-
-        grep "define KRITA_RC 1" libs/version/kritaversion.h;
-        is_rc=$?
-
-        if [ is_beta -eq 0 -o is_rc -eq 0 ]; then
-            BRANDING="Beta"
-        else
-            BRANDING="default"
-        fi
+        KRITA_BRANDING=""
     fi
 fi
 
@@ -83,7 +67,7 @@ cmake $KRITA_SOURCES \
     -DBUILD_TESTING=FALSE \
     -DPYQT_SIP_DIR_OVERRIDE=$DEPS_INSTALL_PREFIX/share/sip/ \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE \
-    -DBRANDING="${BRANDING}"
+    -DBRANDING="${KRITA_BRANDING}"
 
 
 # Build and Install Krita (ready for the next phase)

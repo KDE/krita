@@ -255,7 +255,15 @@ bool GamutMaskDock::saveSelectedMaskResource()
             m_selectedMask->setDescription(m_dockerUI->maskDescriptionEdit->toPlainText());
 
             m_selectedMask->clearPreview();
-            KoResourceServerProvider::instance()->gamutMaskServer()->addResource(m_selectedMask);
+            KisResourceModel model(ResourceType::GamutMasks);
+            QModelIndex idx = model.indexForResourceId(m_selectedMask->resourceId());
+            if (idx.isValid()) {
+                // don't add, only update
+                model.updateResource(m_selectedMask);
+            } else {
+                model.addResource(m_selectedMask);
+            }
+
             maskSaved = true;
         } else {
             getUserFeedback(i18n("Saving of gamut mask '%1' was aborted.", m_selectedMask->title()),
@@ -276,8 +284,9 @@ bool GamutMaskDock::saveSelectedMaskResource()
 
 void GamutMaskDock::deleteMask()
 {
-    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    rServer->removeResourceFromServer(m_selectedMask);
+    KisResourceModel model(ResourceType::GamutMasks);
+    QModelIndex idx = model.indexForResource(m_selectedMask);
+    model.setResourceInactive(idx);
     m_selectedMask = nullptr;
 }
 
@@ -337,6 +346,8 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     KoGamutMaskSP newMask;
     if (sourceMask) {
         newMask = KoGamutMaskSP(new KoGamutMask(sourceMask.data()));
+        newMask->setVersion(-1);
+        newMask->setResourceId(-1);
         newMask->setImage(sourceMask->image());
     } else {
         newMask = KoGamutMaskSP(new KoGamutMask());
@@ -352,7 +363,7 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     QString saveLocation = rServer->saveLocation();
     QString name = newTitle;
 
-    QFileInfo fileInfo(saveLocation + name + newMask->defaultFileExtension());
+    QFileInfo fileInfo(saveLocation + "/" + name + newMask->defaultFileExtension());
     bool fileOverWriteAccepted = false;
 
     while(!fileOverWriteAccepted) {
@@ -361,7 +372,7 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
         if (name.isNull() || name.isEmpty()) {
             QMessageBox::warning(this, i18nc("@title:window", "Invalid Name"), i18n("Please enter a name"));
         } else {
-            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + newMask->defaultFileExtension());
+            fileInfo = QFileInfo(saveLocation + "/" + name.split(" ").join("_") + newMask->defaultFileExtension());
             if (fileInfo.exists()) {
                 int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
                                                             , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
@@ -376,7 +387,14 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     newMask->setTitle(name);
     newMask->setFilename(fileInfo.fileName());
     newMask->setValid(true);
-    rServer->addResource(newMask, true);
+    KisResourceModel model(ResourceType::GamutMasks);
+    QModelIndex idx = model.indexForResourceId(newMask->resourceId());
+
+    if (idx.isValid()) {
+        model.updateResource(newMask);
+    } else {
+        model.addResource(newMask);
+    }
 
     return newMask;
 }

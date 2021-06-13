@@ -309,7 +309,7 @@ void KateCommandBar::updateBar(const QList<KActionCollection *> &actionCollectio
         for (const auto action : collectionActions) {
             // sanity + empty check ensures displayable actions and removes ourself
             // from the action list
-            if (action && !action->text().isEmpty()) {
+            if (action && action->isEnabled() && !action->text().isEmpty()) {
                 actionList.append({componentName, action});
             }
         }

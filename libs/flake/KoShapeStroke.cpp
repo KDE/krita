@@ -256,7 +256,7 @@ QPen KoShapeStroke::resultLinePen() const
     if (d->brush.gradient()) {
         pen.setBrush(d->brush);
     } else {
-        pen.setColor(d->color);
+        pen.setColor(d->color.isValid() ? d->color : Qt::transparent);
     }
 
     return pen;

@@ -255,37 +255,47 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
     QByteArray ba = store->read(store->size());
     store->close();
 
-    QString errorMsg;
-    int errorLine = 0;
-    int errorColumn = 0;
+    if (ba.size() == 0) { // empty gamutmask.svg is possible when the first temporary resource is saved
+        setMaskShapes(QList<KoShape*>());
+        d->maskSize = QSizeF(0, 0);
+        d->title = "";
+    } else {
 
-    QDomDocument xmlDocument = SvgParser::createDocumentFromSvg(ba, &errorMsg, &errorLine, &errorColumn);
-    if (xmlDocument.isNull()) {
+        QString errorMsg;
+        int errorLine = 0;
+        int errorColumn = 0;
 
-        errorFlake << "Parsing error in " << filename() << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
-        errorFlake << "Parsing error in the main document at line" << errorLine
-                   << ", column" << errorColumn << endl
-                   << "Error message: " << errorMsg;
+        QDomDocument xmlDocument = SvgParser::createDocumentFromSvg(ba, &errorMsg, &errorLine, &errorColumn);
+        if (xmlDocument.isNull()) {
 
-        return false;
+            errorFlake << "Parsing error in " << filename() << "! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+            errorFlake << "Parsing error in the main document at line" << errorLine
+                       << ", column" << errorColumn << endl
+                       << "Error message: " << errorMsg;
+
+            return false;
+        }
+
+        KoDocumentResourceManager manager;
+        SvgParser parser(&manager);
+        parser.setResolution(QRectF(0,0,100,100), 72); // initialize with default values
+        QSizeF fragmentSize;
+
+        QList<KoShape*> shapes = parser.parseSvg(xmlDocument.documentElement(), &fragmentSize);
+
+        d->maskSize = fragmentSize;
+
+        d->title = parser.documentTitle();
+        setName(d->title);
+        setDescription(parser.documentDescription());
+
+        setMaskShapes(shapes);
+
     }
 
-    KoDocumentResourceManager manager;
-    SvgParser parser(&manager);
-    parser.setResolution(QRectF(0,0,100,100), 72); // initialize with default values
-    QSizeF fragmentSize;
 
-    QList<KoShape*> shapes = parser.parseSvg(xmlDocument.documentElement(), &fragmentSize);
-
-    d->maskSize = fragmentSize;
-
-    d->title = parser.documentTitle();
-    setName(d->title);
-    setDescription(parser.documentDescription());
-
-    setMaskShapes(shapes);
 
     if (store->open("preview.png")) {
         KoStoreDevice previewDev(store.data());

@@ -99,6 +99,7 @@ protected:
     KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;
 
+    QRect amortizedProjectionRectForCleanupInChangePass() const override;
 private:
     bool checkCloneLayer(KisCloneLayerSP clone) const;
     bool checkNodeRecursively(KisNodeSP node) const;

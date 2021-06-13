@@ -1323,7 +1323,14 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             while (verIt->hasNext()) {
                 verIt->next();
 
-                int id = resourceIdForResource("", QFileInfo(verIt->url()).fileName(),
+                // verIt->url() contains paths like "brushes/ink.png" or "brushes/subfolder/splash.png".
+                // we need to cut off the first part and get "ink.png" in the first case,
+                // but "subfolder/splash.png" in the second case in order for subfolders to work
+                // so it cannot just use QFileInfo(verIt->url()).fileName() here.
+                QString path = QDir::fromNativeSeparators(verIt->url()); // make sure it uses Unix separators
+                int folderEndIdx = path.indexOf("/");
+                QString properFilenameWithSubfolders = path.right(path.length() - folderEndIdx - 1);
+                int id = resourceIdForResource("", properFilenameWithSubfolders,
                                                verIt->type(),
                                                KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
 

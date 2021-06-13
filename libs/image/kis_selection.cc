@@ -83,6 +83,55 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
         KisSelectionComponent *m_shapeSelection = 0;
     };
 
+    /**
+     * Yes, you see it right. We create a fake object, then put it into the GUI
+     * events queue using delete later. This object, on destruction creates a
+     * stroke, whose only purpose of life is to give birth to another fake
+     * object, which will be put into delete-later queue again. This final
+     * object, on destruction will finally release the shape selection.
+     *
+     * If you don't understand that, relax, it is impossible.
+     *
+     * This trickery is needed to satisfy the following requirements:
+     *
+     * 1) KisShapeSelection object should be deleted in the GUI thread (all
+     * shape manipulations should happen in the GUI thread). Hence we have the
+     * last step of wrapping m_shapeSelection into KisDeleteLaterWrapper.
+     *
+     * 2) KisShapeSelection cannot be deleted before all the updates using this
+     * layer/selection has completed its execution. Hence we create of the
+     * stroke that uses a BARRIER job of wait until all the updates are
+     * finished.
+     *
+     * 3) We cannot call image->startStroke() from within
+     * safeDeleteShapeSelection() directly, because it may be called in the
+     * destructor of KisTransactionData, which may theoretically be called from
+     * the destructor of KisStrokeStrategy, which will cause a deadlock in the
+     * strokes queue. Hence we do the first layer of wrapping into
+     * GuiStrokeWrapper.
+     */
+    struct GuiStrokeWrapper
+    {
+        GuiStrokeWrapper(KisImageSP image, KisSelectionComponent *shapeSelection)
+            : m_image(image), m_shapeSelection(shapeSelection)
+        {
+        }
+
+        ~GuiStrokeWrapper()
+        {
+            KisImageSP image = m_image;
+
+            if (image) {
+                KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(m_shapeSelection));
+                image->endStroke(strokeId);
+            } else {
+                delete m_shapeSelection;
+            }
+        }
+
+        KisImageWSP m_image;
+        KisSelectionComponent *m_shapeSelection;
+    };
 
     if (selection) {
         KisImageSP image = 0;
@@ -93,8 +142,7 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
         }
 
         if (image) {
-            KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(shapeSelection));
-            image->endStroke(strokeId);
+            makeKisDeleteLaterWrapper(new GuiStrokeWrapper(image, shapeSelection))->deleteLater();
             shapeSelection = 0;
         }
     }

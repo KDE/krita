@@ -1,7 +1,7 @@
 From dc29f0e54876373f07b9e09781371da11a3b8ad6 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Mon, 25 Apr 2016 09:27:48 +0200
-Subject: [PATCH 1/9] Compute logical DPI on a per-screen basis
+Subject: [PATCH 01/11] Compute logical DPI on a per-screen basis
 
 The logical DPI reported to applications is the platform screen
 logical DPI divided by the platform screen scale factor.

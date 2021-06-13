@@ -1,7 +1,7 @@
 From 503838cec8a91650928b11fbb0b018281f4b1c01 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Date: Tue, 3 Sep 2019 13:43:58 +0200
-Subject: [PATCH 7/9] QtGui: Refactor parsing of the High DPI scaling env
+Subject: [PATCH 07/11] QtGui: Refactor parsing of the High DPI scaling env
  variables
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

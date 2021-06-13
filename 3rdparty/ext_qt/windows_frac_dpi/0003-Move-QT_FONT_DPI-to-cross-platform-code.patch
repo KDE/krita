@@ -1,7 +1,7 @@
 From 18e5220ef5864212aabd8cb5da1330e74ac8b63e Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Thu, 2 Jun 2016 09:52:21 +0200
-Subject: [PATCH 3/9] Move QT_FONT_DPI to cross-platform code
+Subject: [PATCH 03/11] Move QT_FONT_DPI to cross-platform code
 
 This makes it possible to test the effects of setting
 Qt::AA_HighDpiScaling/QT_AUTO_SCREEN_SCALE_FACTOR, with different DPI

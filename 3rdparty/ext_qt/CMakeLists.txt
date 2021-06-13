@@ -93,15 +93,17 @@ if (WIN32)
         COMMAND  ${PATCH_COMMAND} -p1 -d qttools -i ${CMAKE_CURRENT_SOURCE_DIR}/0117-windeployqt-Warn-only-in-case-patching-of-Qt5Core-fails.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qttools -i ${CMAKE_CURRENT_SOURCE_DIR}/0118-Don-t-patch-QtCore-when--feature-relocatable-is-enabled.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0119-Fix-relocated-Qt-to-be-found-when-its-path-has-non-A.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0031-Compute-logical-DPI-on-a-per-screen-basis.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0032-Update-Dpi-and-scale-factor-computation.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0033-Move-QT_FONT_DPI-to-cross-platform-code.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0034-Update-QT_SCREEN_SCALE_FACTORS.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0035-Deprecate-QT_AUTO_SCREEN_SCALE_FACTOR.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0036-Add-high-DPI-scale-factor-rounding-policy-C-API.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0037-QtGui-Refactor-parsing-of-the-High-DPI-scaling-env-v.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0038-QHighDpiScaling-fix-potential-null-pointer-dereferen.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0039-QHighDpiScaling-impove-readability-of-screenSubfacto.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0001-Compute-logical-DPI-on-a-per-screen-basis.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0002-Update-Dpi-and-scale-factor-computation.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0003-Move-QT_FONT_DPI-to-cross-platform-code.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0004-Update-QT_SCREEN_SCALE_FACTORS.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0005-Deprecate-QT_AUTO_SCREEN_SCALE_FACTOR.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0006-Add-high-DPI-scale-factor-rounding-policy-C-API.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0007-QtGui-Refactor-parsing-of-the-High-DPI-scaling-env-v.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0008-QHighDpiScaling-fix-potential-null-pointer-dereferen.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0009-QHighDpiScaling-impove-readability-of-screenSubfacto.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0010-Windows-Add-support-for-PerMonitorV2-DPI-awareness.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/windows_frac_dpi/0011-Windows-Change-default-to-ProcessPerMonitorV2DpiAwar.patch
     )
 
   ExternalProject_Add(

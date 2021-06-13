@@ -1,7 +1,7 @@
 From e4bd4c83de705c782a345ae1f2ad67f43b5230d7 Mon Sep 17 00:00:00 2001
 From: Vitaly Fanaskov <vitaly.fanaskov@qt.io>
 Date: Fri, 25 Oct 2019 14:47:15 +0200
-Subject: [PATCH 8/9] QHighDpiScaling: fix potential null pointer dereference
+Subject: [PATCH 08/11] QHighDpiScaling: fix potential null pointer dereference
 
 It's not guaranteed that QPlatformScreen::screen should always return a
 valid pointer. Furthermore, you can run into this situation with, for

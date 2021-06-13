@@ -1,7 +1,7 @@
 From 0c1461f15e0d76ab34876c9716d5dadc02fdedf5 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Date: Wed, 27 Feb 2019 08:46:47 +0100
-Subject: [PATCH 4/9] Update QT_SCREEN_SCALE_FACTORS
+Subject: [PATCH 04/11] Update QT_SCREEN_SCALE_FACTORS
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

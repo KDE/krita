@@ -122,6 +122,11 @@ public:
      */
     bool compactGradientEditorMode() const;
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
+    bool event(QEvent *e) override;
+
 public Q_SLOTS:
     /**
      * @brief Set the gradient

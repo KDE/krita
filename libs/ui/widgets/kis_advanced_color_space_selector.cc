@@ -32,6 +32,8 @@
 
 #include <kis_debug.h>
 
+#include <kstandardguiitem.h>
+
 struct KisAdvancedColorSpaceSelector::Private {
     Ui_WdgColorSpaceSelectorAdvanced* colorSpaceSelector;
     QString knsrcFile;
@@ -67,6 +69,8 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
 
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), this, SLOT(installProfile()));
 
+    KGuiItem::assign(d->colorSpaceSelector->bnOK->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(d->colorSpaceSelector->bnOK->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(d->colorSpaceSelector->bnOK, SIGNAL(accepted()), this, SLOT(accept()));
     connect(d->colorSpaceSelector->bnOK, SIGNAL(rejected()), this, SLOT(reject()));
 

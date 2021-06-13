@@ -12,6 +12,7 @@
 #include <kconfig.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <kstandardguiitem.h>
 
 
 #include "kis_debug.h"
@@ -55,6 +56,8 @@ KisScreenSizeChoiceDialog::KisScreenSizeChoiceDialog(QWidget *parent,
     loadSettings(wintabRect);
 
     connect(this, SIGNAL(finished(int)), SLOT(slotFinished()));
+    
+    KGuiItem::assign(ui->buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
 }
 
 void KisScreenSizeChoiceDialog::slotFinished()

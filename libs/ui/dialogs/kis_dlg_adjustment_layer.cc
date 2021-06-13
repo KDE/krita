@@ -7,6 +7,7 @@
 
 #include "kis_dlg_adjustment_layer.h"
 #include <klocalizedstring.h>
+#include <kstandardguiitem.h>
 
 #include <QGroupBox>
 #include <QLabel>
@@ -58,6 +59,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     connect(wdgFilterNodeCreation.filterGalleryToggle, SIGNAL(toggled(bool)), wdgFilterNodeCreation.filterSelector, SLOT(showFilterGallery(bool)));
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(sigSizeChanged()), this, SLOT(slotFilterWidgetSizeChanged()));
 
+    KGuiItem::assign(wdgFilterNodeCreation.buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(wdgFilterNodeCreation.buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(wdgFilterNodeCreation.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(wdgFilterNodeCreation.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 

@@ -28,6 +28,8 @@
 #include "kis_signal_compressor.h"
 #include <kis_icon_utils.h>
 
+#include <kstandardguiitem.h>
+
 struct KisDlgFilter::Private {
     Private(KisFilterManager *_filterManager, KisViewManager *_view)
             : currentFilter(0)
@@ -85,6 +87,9 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     }
 
     d->uiFilterDialog.filterSelection->setPaintDevice(true, d->node->paintDevice());
+
+    KGuiItem::assign(d->uiFilterDialog.buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(d->uiFilterDialog.buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     connect(d->uiFilterDialog.buttonBox, SIGNAL(accepted()), SLOT(accept()));
     connect(d->uiFilterDialog.buttonBox, SIGNAL(rejected()), SLOT(reject()));

@@ -16,6 +16,7 @@
 #include "KisDocument.h"
 #include "KoPageWidgetItem.h"
 #include <KoIcon.h>
+#include <kstandardguiitem.h>
 
 
 #include <klocalizedstring.h>
@@ -75,6 +76,8 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     setFaceType(KPageDialog::List);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
+    KGuiItem::assign(button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     d->aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();

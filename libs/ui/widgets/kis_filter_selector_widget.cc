@@ -37,6 +37,8 @@
 #include "kis_filters_model.h"
 #include "kis_config.h"
 
+#include <kstandardguiitem.h>
+
 class ThumbnailBounds : public KisDefaultBounds {
 public:
     ThumbnailBounds() : KisDefaultBounds() {}
@@ -159,6 +161,8 @@ void KisFilterSelectorWidget::showXMLdialog()
         text->setPlainText(config->toXML());
         xmllayout->addWidget(text);
         QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, xmlDialog);
+        KGuiItem::assign(buttons->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+        KGuiItem::assign(buttons->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
         connect(buttons, SIGNAL(accepted()), xmlDialog, SLOT(accept()));
         connect(buttons, SIGNAL(rejected()), xmlDialog, SLOT(reject()));
         xmllayout->addWidget(buttons);

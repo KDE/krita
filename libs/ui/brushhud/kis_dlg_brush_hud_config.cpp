@@ -12,6 +12,8 @@
 
 #include "kis_brush_hud_properties_config.h"
 
+#include <kstandardguiitem.h>
+
 
 struct KisDlgConfigureBrushHud::Private
 {
@@ -25,6 +27,9 @@ KisDlgConfigureBrushHud::KisDlgConfigureBrushHud(KisPaintOpPresetSP preset, QWid
     m_d(new Private)
 {
     ui->setupUi(this);
+
+    KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     m_d->preset = preset;
     m_d->properties = preset->uniformProperties();

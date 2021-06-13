@@ -19,6 +19,8 @@
 #include "KisResourceServerProvider.h"
 #include <kis_paintop_preset_icon_library.h>
 
+#include <kstandardguiitem.h>
+
 
 KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     : KisPaintOpPresetSaveDialog(parent)
@@ -131,6 +133,8 @@ void KisPresetSaveWidget::loadImageFromLibrary()
     KisPaintopPresetIconLibrary *libWidget = new KisPaintopPresetIconLibrary(&dialog);
     layout->addWidget(libWidget);
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
     connect(buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
     layout->addWidget(buttons);

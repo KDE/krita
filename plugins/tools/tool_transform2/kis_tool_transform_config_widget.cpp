@@ -16,6 +16,8 @@
 #include "KisViewManager.h"
 #include "kis_transform_utils.h"
 
+#include <kstandardguiitem.h>
+
 
 template<typename T> inline T sign(T x) {
     return x > 0 ? 1 : x == (T)0 ? 0 : -1;
@@ -297,6 +299,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     connect(canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
     slotUpdateIcons();
+
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Apply), KStandardGuiItem::apply());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Reset), KStandardGuiItem::reset());
 }
 
 void KisToolTransformConfigWidget::slotUpdateIcons()

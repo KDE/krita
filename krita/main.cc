@@ -103,6 +103,15 @@ void tryInitDrMingw()
 } // namespace
 #endif
 
+namespace
+{
+
+Q_LOGGING_CATEGORY(loggingKritaLocale, "krita.locale", QtInfoMsg)
+
+#define dbgLocale qCDebug(loggingKritaLocale)
+
+} // namespace
+
 #ifdef Q_OS_WIN
 namespace
 {
@@ -364,7 +373,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
 
-    dbgKrita << "Override language:" << language;
+    dbgLocale << "Override language:" << language;
     bool rightToLeft = false;
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
@@ -387,7 +396,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
     }
     else {
-        dbgKrita << "Qt UI languages:" << QLocale::system().uiLanguages() << qgetenv("LANG");
+        dbgLocale << "Qt UI languages:" << QLocale::system().uiLanguages() << qgetenv("LANG");
 
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
@@ -441,7 +450,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
                         uiLanguages.replace(i, uiLanguage);
                     }
                 }
-                dbgKrita << "Converted ui languages:" << uiLanguages;
+                dbgLocale << "Converted ui languages:" << uiLanguages;
 #ifdef Q_OS_MAC
                 // See https://bugs.kde.org/show_bug.cgi?id=396370
                 KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
@@ -502,8 +511,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     KLocalizedString::setApplicationDomain("krita");
 
-    dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();
-    dbgKrita << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
+    dbgLocale << "Available translations" << KLocalizedString::availableApplicationTranslations();
+    dbgLocale << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
 
 
 #ifdef Q_OS_WIN

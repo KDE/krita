@@ -42,6 +42,8 @@ void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &
     gc.setBrush(QColor(200, 200, 200, 200));
     gc.drawPath(handlesPath());
 
+    gc.restore();
+
 }
 
 QPainterPath KisReferenceImageCropDecorator::handlesPath()

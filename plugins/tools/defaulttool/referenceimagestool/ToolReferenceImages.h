@@ -22,6 +22,7 @@
 
 class ToolReferenceImagesWidget;
 class KisReferenceImagesLayer;
+#include "kisreferenceimagecropdecorator.h"
 
 class ToolReferenceImages : public DefaultTool
 {
@@ -42,6 +43,8 @@ public:
     void deleteSelection() override;
 
     QMenu* popupActionsMenu() override;
+
+    KisReferenceImage* getActiveReferenceImage();
 
 protected:
     QList<QPointer<QWidget>> createOptionWidgets() override;
@@ -75,10 +78,10 @@ private:
     friend class ToolReferenceImagesWidget;
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
     KisWeakSharedPtr<KisReferenceImagesLayer> m_layer;
+    KisReferenceImageCropDecorator* m_cropDecorator;
 
     KisDocument *document() const;
     void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
-    void paintOutlineWithHandles(QPainter& gc , const KoViewConverter &converter);
 };
 
 

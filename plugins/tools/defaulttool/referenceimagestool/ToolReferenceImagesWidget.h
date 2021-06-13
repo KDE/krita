@@ -35,6 +35,7 @@ private Q_SLOTS:
     void slotKeepAspectChanged();
     void slotSaveLocationChanged(int index);
     void slotUpdateLock(bool);
+    void slotUpdateCrop(bool);
 
     void slotImageValuesChanged();
     void slotCropValuesChanged();

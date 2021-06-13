@@ -149,6 +149,7 @@ void KisReferenceImage::SetSaturationCommand::redo()
 
 KisReferenceImage::KisReferenceImage()
     : d(new Private())
+    , enableCrop(false)
 {
     setKeepAspectRatio(true);
 }
@@ -429,6 +430,11 @@ qreal KisReferenceImage::cropHeight() const
     return 100;
 }
 
+bool KisReferenceImage::isCropEnabled()
+{
+    return enableCrop;
+}
+
 void KisReferenceImage::setCropX(qreal x)
 {
 
@@ -449,3 +455,7 @@ void setCropHeight(qreal h)
 
 }
 
+void KisReferenceImage::setEnableCrop(bool v)
+{
+    enableCrop = v;
+}

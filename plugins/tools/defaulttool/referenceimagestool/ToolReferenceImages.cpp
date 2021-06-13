@@ -34,9 +34,12 @@
 
 #include "ToolReferenceImagesWidget.h"
 #include "KisReferenceImageCollection.h"
+#include "KisReferenceImage.h"
+#include "kisreferenceimagecropdecorator.h"
 
 ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
     : DefaultTool(canvas, false)
+    , m_cropDecorator(new KisReferenceImageCropDecorator)
 {
     setObjectName("ToolReferenceImages");
 }
@@ -66,41 +69,16 @@ void ToolReferenceImages::deactivate()
 
 void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if(true) {  // ToDo Use enableCrop and integrate with wdg
-        paintOutlineWithHandles(painter,converter);
+    KisReferenceImage* ref = getActiveReferenceImage();
+
+    if(ref && ref->isCropEnabled()) {
+      m_cropDecorator->setReferenceImage(ref);
+      m_cropDecorator->paint(painter, converter);
+
     }
     else {
     DefaultTool::paint(painter,converter);
     }
-}
-
-void ToolReferenceImages::paintOutlineWithHandles(QPainter& gc, const KoViewConverter &converter)
-{
-    //To Do Integrate this with wdg options
-    if(koSelection()) {
-
-        gc.save();
-
-        QList<KoShape *> shapes = koSelection()->selectedShapes();
-        if(!shapes.isEmpty()) {
-            KoShape* shape = shapes.at(0);
-            KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
-            if(shape) {
-                QRectF shapeRect = converter.documentToView(shape->boundingRect());
-
-                QPainterPath path;
-
-                path.addRect(shapeRect);
-                //path.addRect(borderRect);
-                gc.setPen(Qt::NoPen);
-                gc.setBrush(QColor(0, 0, 0, 200));
-                gc.drawPath(path);
-            }
-        }
-        gc.restore();
-    }
-
-
 }
 
 void ToolReferenceImages::slotNodeAdded(KisNodeSP node)
@@ -396,6 +374,20 @@ bool ToolReferenceImages::paste()
     pasteReferenceImage();
     return true;
 }
+
+KisReferenceImage *ToolReferenceImages::getActiveReferenceImage()
+{
+    KisReferenceImage *ref;
+    if(koSelection()) {
+        QList<KoShape*> shapes = koSelection()->selectedVisibleShapes();
+        if(!shapes.isEmpty()) {
+            ref = dynamic_cast<KisReferenceImage*>(shapes.at(0));
+            return ref;
+        }
+    }
+    return nullptr;
+}
+
 KisDocument *ToolReferenceImages::document() const
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

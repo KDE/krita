@@ -89,9 +89,9 @@
      <item>
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="bnCrop">
          <property name="text">
-          <string>Crop</string>
+          <string/>
          </property>
         </widget>
        </item>

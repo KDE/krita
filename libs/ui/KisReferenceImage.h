@@ -79,17 +79,20 @@ public:
     qreal cropY() const;
     qreal cropWidth() const;
     qreal cropHeight() const;
+    bool isCropEnabled();
 
     void setCropX(qreal x);
     void setCropY(qreal y);
     void setCropWidth(qreal x);
     void setCropHeight(qreal y);
+    void setEnableCrop(bool);
 
 private:
     struct Private;
     QSharedDataPointer<Private> d;
     QRect cropRect;
     QImage cropImage;
+    bool enableCrop;
 };
 
 #endif // KISREFERENCEIMAGE_H

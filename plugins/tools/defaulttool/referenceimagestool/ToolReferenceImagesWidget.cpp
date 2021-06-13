@@ -121,6 +121,12 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnLock->setVisible(false);
     d->ui->bnLock->setCheckable(true);
 
+    d->ui->bnCrop->setVisible(false);
+    d->ui->bnCrop->setCheckable(true);
+    d->ui->bnCrop->setToolTip(i18n("Enable Crop"));
+    d->ui->bnCrop->setIcon(KisIconUtils::loadIcon("tool_crop"));
+    d->ui->bnCrop->setIconSize(QSize(16, 16));
+
     d->ui->grpCrop->setVisible(false);
 
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
@@ -130,6 +136,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
     connect(d->ui->bnLock, SIGNAL(toggled(bool)), this, SLOT(slotUpdateLock(bool)));
+    connect(d->ui->bnCrop, SIGNAL(toggled(bool)), this, SLOT(slotUpdateCrop(bool)));
 
     connect(d->ui->chkKeepAspectRatio, SIGNAL(stateChanged(int)), this, SLOT(slotKeepAspectChanged()));
 
@@ -269,6 +276,14 @@ void ToolReferenceImagesWidget::slotUpdateLock(bool value)
     d->tool->document()->referenceImagesLayer()->setLock(d->ui->bnLock->isChecked());
 }
 
+void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
+{
+    d->ui->bnCrop->setChecked(value);
+    bool enable = d->ui->bnCrop->isChecked();
+    d->ui->grpCrop->setVisible(enable);
+    d->tool->getActiveReferenceImage()->setEnableCrop(enable);
+}
+
 void ToolReferenceImagesWidget::slotImageValuesChanged()
 {
     slotSaturationSliderChanged(d->ui->saturationSlider->value());
@@ -289,7 +304,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->opacitySlider->setVisible(hasSelection);
     d->ui->saturationSlider->setVisible(hasSelection);
     d->ui->bnLock->setVisible(hasSelection);
-    d->ui->grpCrop->setVisible(hasSelection);
+    d->ui->bnCrop->setVisible(hasSelection);
 
     // show a label indicating that a selection is required to show options
     d->ui->referenceImageOptionsLabel->setVisible(!hasSelection);

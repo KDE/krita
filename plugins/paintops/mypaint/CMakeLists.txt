@@ -22,11 +22,7 @@ set(kritamypaintop_SOURCES
 
 ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui)
 
-if (APPLE)
-    add_library(kritamypaintop SHARED ${kritamypaintop_SOURCES})
-else()
-    add_library(kritamypaintop MODULE ${kritamypaintop_SOURCES})
-endif()
+add_library(kritamypaintop MODULE ${kritamypaintop_SOURCES})
 
 target_link_libraries(kritamypaintop kritalibpaintop mypaint kritawidgetutils kritaui kritalibbrush kritaresources)
 

@@ -24,6 +24,7 @@
 #include <KoResourcePaths.h>
 
 #include <KFormat>
+#include <kstandardguiitem.h>
 
 #include <kis_debug.h>
 
@@ -116,6 +117,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
     // Create image
     newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setText(i18n("&Create"));
+    KGuiItem::assign(newDialogConfirmationButtonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(newDialogConfirmationButtonBox, SIGNAL(accepted()), this, SLOT(createImage()));
 
 

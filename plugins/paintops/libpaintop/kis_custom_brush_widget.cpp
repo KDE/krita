@@ -36,6 +36,8 @@
 #include "kis_iterator_ng.h"
 #include "kis_image_barrier_locker.h"
 
+#include <kstandardguiitem.h>
+
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
     : KisWdgCustomBrush(parent)
     , m_image(image)
@@ -59,6 +61,9 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     colorAsMask->setChecked(true); // use color as mask by default. This is by far the most common way to make tip.
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
+
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Save), KStandardGuiItem::save());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 }
 
 KisCustomBrushWidget::~KisCustomBrushWidget()

@@ -25,6 +25,8 @@
 #include "KisBrushServerProvider.h"
 #include "kis_icon.h"
 
+#include <kstandardguiitem.h>
+
 KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP /*image*/)
     : KisWdgClipboardBrush(parent)
 {
@@ -48,6 +50,9 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
 
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
+
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Save), KStandardGuiItem::save());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 }
 
 KisClipboardBrushWidget::~KisClipboardBrushWidget()

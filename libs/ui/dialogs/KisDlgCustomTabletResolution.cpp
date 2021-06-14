@@ -15,6 +15,8 @@
 #include <QStandardPaths>
 #include <qpa/qplatformscreen.h>
 
+#include <kstandardguiitem.h>
+
 namespace {
 QString rectToString(const QRect &rc) {
     return QString("%1, %2 %3 x %4")
@@ -30,6 +32,8 @@ KisDlgCustomTabletResolution::KisDlgCustomTabletResolution(QWidget *parent) :
     ui(new Ui::KisDlgCustomTabletResolution)
 {
     ui->setupUi(this);
+    KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(ui->btnBox, SIGNAL(rejected()), this, SLOT(reject()));
     connect(ui->btnBox, SIGNAL(accepted()), this, SLOT(accept()));
 

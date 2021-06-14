@@ -9,11 +9,16 @@
 
 #include "KisHDRMetadataOptions.h"
 
+#include <kstandardguiitem.h>
+
 VideoHDRMetadataOptionsDialog::VideoHDRMetadataOptionsDialog(QWidget *parent)
     : QDialog(parent),
     ui(new Ui::VideoHDRMetadataOptionsDialog)
 {
     ui->setupUi(this);
+
+    KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     connect(ui->btnBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui->btnBox, SIGNAL(rejected()), this, SLOT(reject()));

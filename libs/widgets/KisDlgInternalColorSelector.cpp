@@ -14,6 +14,7 @@
 #include <functional>
 
 #include <KConfigGroup>
+#include <kstandardguiitem.h>
 
 #include "KoColorSpaceRegistry.h"
 #include <KoColorSet.h>
@@ -156,6 +157,8 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(m_d->compressColorChanges, SIGNAL(timeout()), this, SLOT(endUpdateWithNewColor()));
 
+    KGuiItem::assign(m_ui->buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(m_ui->buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()), Qt::UniqueConnection);
     connect(m_ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()), Qt::UniqueConnection);
 

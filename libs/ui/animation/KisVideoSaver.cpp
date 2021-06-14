@@ -157,10 +157,10 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
 
             const QTime startTime = QTime::fromMSecsSinceStartOfDay(msecStart);
             const QTime durationTime = QTime::fromMSecsSinceStartOfDay(msecDuration);
-            const QString ffmpegTimeFormat("H:m:s.zzz");
+            const QString ffmpegTimeFormat = QStringLiteral("H:m:s.zzz");
 
-            args << "-ss" << startTime.toString(ffmpegTimeFormat);
-            args << "-t" << durationTime.toString(ffmpegTimeFormat);
+            args << "-ss" << QLocale::c().toString(startTime, ffmpegTimeFormat);
+            args << "-t" << QLocale::c().toString(durationTime, ffmpegTimeFormat);
             args << "-i" << audioFileInfo.absoluteFilePath();
         }
       

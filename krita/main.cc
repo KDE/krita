@@ -696,6 +696,25 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 namespace
 {
 
+void removeInstalledTranslators(KisApplication &app)
+{
+    // HACK: We try to remove all the translators installed by ECMQmLoader.
+    // The reason is that it always load translations for the system locale
+    // which interferes with our effort to handle override languages. Since
+    // `en_US` (or `en`) strings are defined in code, the QTranslator doesn't
+    // actually handle translations for them, so even if we try to install
+    // a QTranslator loaded from `en`, the strings always get translated by
+    // the system language QTranslator that ECMQmLoader installed instead
+    // of the English one.
+
+    // ECMQmLoader creates all QTranslator's parented to the active QApp.
+    QList<QTranslator *> translators = app.findChildren<QTranslator *>(QString(), Qt::FindDirectChildrenOnly);
+    Q_FOREACH(const auto &translator, translators) {
+        app.removeTranslator(translator);
+    }
+    dbgLocale << "Removed" << translators.size() << "QTranslator's";
+}
+
 void installQtTranslations(KisApplication &app)
 {
     QStringList qtCatalogs = {
@@ -747,10 +766,27 @@ void installEcmTranslations(KisApplication &app)
     };
 
     QStringList ki18nLangs = KLocalizedString::languages();
+    const QString langEn = QStringLiteral("en");
+    // Replace "en_US" with "en" because that's what we have in the locale dir.
+    int indexOfEnUs = ki18nLangs.indexOf(QStringLiteral("en_US"));
+    if (indexOfEnUs != -1) {
+        ki18nLangs[indexOfEnUs] = langEn;
+    }
+    // We need to have "en" to the end of the list, because we explicitly
+    // removed the "en" translators added by ECMQmLoader.
+    // If "en" is already on the list, we truncate the ones after, because
+    // "en" is the catch-all fallback that has the strings in code.
+    int indexOfEn = ki18nLangs.indexOf(langEn);
+    if (indexOfEn != -1) {
+        for (int i = ki18nLangs.size() - indexOfEn - 1; i > 0; i--) {
+            ki18nLangs.removeLast();
+        }
+    } else {
+        ki18nLangs.append(langEn);
+    }
+
     // The last added one has the highest precedence, so we iterate the
     // list backwards.
-    // We don't need to explicitly add "en" because ECMQmLoader has already
-    // done that.
     QStringListIterator langIter(ki18nLangs);
     langIter.toBack();
 
@@ -782,6 +818,7 @@ void installEcmTranslations(KisApplication &app)
 
 void installTranslators(KisApplication &app)
 {
+    removeInstalledTranslators(app);
     installQtTranslations(app);
     installEcmTranslations(app);
 }

@@ -1,7 +1,7 @@
-From f9f524b9cf964be802682e30571bf83d6cbf16b3 Mon Sep 17 00:00:00 2001
+From 083eda8804eed3581dc325d32378a6b5157a2c24 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Thu, 10 Nov 2016 14:17:53 +0100
-Subject: [PATCH 26/27] Deprecate QT_AUTO_SCREEN_SCALE_FACTOR
+Subject: [PATCH 05/11] Deprecate QT_AUTO_SCREEN_SCALE_FACTOR
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -21,15 +21,17 @@ QT_SCREEN_SCALE_FACTORS).
 Done-with: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Task-number: QTBUG-53022
 Change-Id: I30033d91175a00db7837efc9c48c33396f5f0449
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit 1de8b01d2b6db8a4fe2eddd0c595d9e680964db5)
 ---
  src/gui/kernel/qhighdpiscaling.cpp | 29 +++++++++++++++++++++++------
  1 file changed, 23 insertions(+), 6 deletions(-)
 
 diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
-index b1350599..52c0665b 100644
+index 3de67d5cfa..4a9c9a9934 100644
 --- a/src/gui/kernel/qhighdpiscaling.cpp
 +++ b/src/gui/kernel/qhighdpiscaling.cpp
-@@ -54,8 +54,10 @@ Q_LOGGING_CATEGORY(lcScaling, "qt.scaling");
+@@ -56,8 +56,10 @@ Q_LOGGING_CATEGORY(lcScaling, "qt.scaling");
  
  #ifndef QT_NO_HIGHDPISCALING
  static const char legacyDevicePixelEnvVar[] = "QT_DEVICE_PIXEL_RATIO";
@@ -41,7 +43,7 @@ index b1350599..52c0665b 100644
  static const char screenFactorsEnvVar[] = "QT_SCREEN_SCALE_FACTORS";
  static const char scaleFactorRoundingPolicyEnvVar[] = "QT_SCALE_FACTOR_ROUNDING_POLICY";
  static const char dpiAdjustmentPolicyEnvVar[] = "QT_DPI_ADJUSTMENT_POLICY";
-@@ -88,17 +90,24 @@ static inline qreal initialGlobalScaleFactor()
+@@ -90,17 +92,24 @@ static inline qreal initialGlobalScaleFactor()
              result = f;
          }
      } else {
@@ -68,7 +70,7 @@ index b1350599..52c0665b 100644
      }
      return result;
  }
-@@ -256,16 +265,24 @@ static inline bool usePixelDensity()
+@@ -258,16 +267,24 @@ static inline bool usePixelDensity()
      // Determine if we should set a scale factor based on the pixel density
      // reported by the platform plugin. There are several enablers and several
      // disablers. A single disable may veto all other enablers.
@@ -97,5 +99,5 @@ index b1350599..52c0665b 100644
  
  qreal QHighDpiScaling::rawScaleFactor(const QPlatformScreen *screen)
 -- 
-2.22.0.windows.1
+2.24.1.windows.2
 

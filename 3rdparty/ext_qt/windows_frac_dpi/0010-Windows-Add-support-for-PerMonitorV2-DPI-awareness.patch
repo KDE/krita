@@ -1,0 +1,182 @@
+From 21c583a9069479fb105dd46596ad70910a8c090e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
+Date: Tue, 1 Dec 2020 15:24:23 +0100
+Subject: [PATCH 10/11] Windows: Add support for PerMonitorV2 DPI awareness
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add support for opting in to PerMonitorV2 DPI awareness
+on the command line:
+	-platform windows:dpiawareness=3
+
+This mode is supported on Windows 10 and up. Setting it
+requires using the new SetProcessDpiAwarenessContext
+API, which can be resolved from user32.dll.
+
+Task-number: QTBUG-68712
+Change-Id: I37821e27a67e08c2e9fef25e494cfd7abed13314
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@qt.io>
+(cherry picked from commit c35643dba3efabaf3fa036895f152bf5b8725f5e)
+---
+ .../platforms/windows/qtwindowsglobal.h       | 11 +++++++++-
+ .../platforms/windows/qwindowscontext.cpp     | 22 +++++++++++++++++++
+ .../platforms/windows/qwindowscontext.h       |  5 +++++
+ .../platforms/windows/qwindowsintegration.cpp | 19 +++++++++++-----
+ 4 files changed, 51 insertions(+), 6 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qtwindowsglobal.h b/src/plugins/platforms/windows/qtwindowsglobal.h
+index 985f13bdc5..573a8d07c8 100644
+--- a/src/plugins/platforms/windows/qtwindowsglobal.h
++++ b/src/plugins/platforms/windows/qtwindowsglobal.h
+@@ -76,6 +76,14 @@
+ #  define WM_POINTERHWHEEL   0x024F
+ #endif // WM_POINTERUPDATE
+ 
++#if !defined(_DPI_AWARENESS_CONTEXTS_)
++#  define DPI_AWARENESS_CONTEXT_UNAWARE              ((HANDLE)-1)
++#  define DPI_AWARENESS_CONTEXT_SYSTEM_AWARE         ((HANDLE)-2)
++#  define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE    ((HANDLE)-3)
++#  define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((HANDLE)-4)
++#  define DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED    ((HANDLE)-5)
++#endif
++
+ QT_BEGIN_NAMESPACE
+ 
+ namespace QtWindows
+@@ -167,7 +175,8 @@ enum ProcessDpiAwareness
+ {
+     ProcessDpiUnaware,
+     ProcessSystemDpiAware,
+-    ProcessPerMonitorDpiAware
++    ProcessPerMonitorDpiAware,
++    ProcessPerMonitorV2DpiAware // Qt extension (not in Process_DPI_Awareness)
+ };
+ 
+ } // namespace QtWindows
+diff --git a/src/plugins/platforms/windows/qwindowscontext.cpp b/src/plugins/platforms/windows/qwindowscontext.cpp
+index 38b9823d6b..25faa73374 100644
+--- a/src/plugins/platforms/windows/qwindowscontext.cpp
++++ b/src/plugins/platforms/windows/qwindowscontext.cpp
+@@ -189,6 +189,7 @@ void QWindowsUser32DLL::init()
+ {
+     QSystemLibrary library(QStringLiteral("user32"));
+     setProcessDPIAware = (SetProcessDPIAware)library.resolve("SetProcessDPIAware");
++    setProcessDpiAwarenessContext = (SetProcessDpiAwarenessContext)library.resolve("SetProcessDpiAwarenessContext");
+ 
+     addClipboardFormatListener = (AddClipboardFormatListener)library.resolve("AddClipboardFormatListener");
+     removeClipboardFormatListener = (RemoveClipboardFormatListener)library.resolve("RemoveClipboardFormatListener");
+@@ -273,8 +274,11 @@ struct QWindowsContextPrivate {
+     const HRESULT m_oleInitializeResult;
+     QWindow *m_lastActiveWindow = nullptr;
+     bool m_asyncExpose = false;
++    static bool m_v2DpiAware;
+ };
+ 
++bool QWindowsContextPrivate::m_v2DpiAware = false;
++
+ QWindowsContextPrivate::QWindowsContextPrivate()
+     : m_oleInitializeResult(OleInitialize(nullptr))
+ {
+@@ -425,6 +429,23 @@ void QWindowsContext::setProcessDpiAwareness(QtWindows::ProcessDpiAwareness dpiA
+     }
+ }
+ 
++void QWindowsContext::setProcessDpiV2Awareness()
++{
++    qCDebug(lcQpaWindows) << __FUNCTION__;
++    const BOOL ok = QWindowsContext::user32dll.setProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
++    if (ok) {
++        QWindowsContextPrivate::m_v2DpiAware = true;
++    } else {
++        const HRESULT errorCode = GetLastError();
++        // E_ACCESSDENIED means set externally (MSVC manifest or external app loading Qt plugin).
++        // Silence warning in that case unless debug is enabled.
++        if (errorCode != E_ACCESSDENIED || lcQpaWindows().isDebugEnabled()) {
++            qWarning().noquote().nospace() << "setProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) failed: "
++                << QWindowsContext::comErrorString(errorCode);
++        }
++    }
++}
++
+ QWindowsContext *QWindowsContext::instance()
+ {
+     return m_instance;
+@@ -991,6 +1012,7 @@ static inline bool resizeOnDpiChanged(const QWindow *w)
+ bool QWindowsContext::shouldHaveNonClientDpiScaling(const QWindow *window)
+ {
+     return QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows10
++        && !QWindowsContextPrivate::m_v2DpiAware // V2 implies NonClientDpiScaling; no need to enable
+         && window->isTopLevel()
+         && !window->property(QWindowsWindow::embeddedNativeParentHandleProperty).isValid()
+ #if QT_CONFIG(opengl) // /QTBUG-62901, EnableNonClientDpiScaling has problems with GL
+diff --git a/src/plugins/platforms/windows/qwindowscontext.h b/src/plugins/platforms/windows/qwindowscontext.h
+index 4908f14629..012dd4e75d 100644
+--- a/src/plugins/platforms/windows/qwindowscontext.h
++++ b/src/plugins/platforms/windows/qwindowscontext.h
+@@ -98,6 +98,7 @@ struct QWindowsUser32DLL
+     typedef BOOL (WINAPI *GetPointerPenInfoHistory)(UINT32, UINT32 *, PVOID);
+     typedef BOOL (WINAPI *SkipPointerFrameMessages)(UINT32);
+     typedef BOOL (WINAPI *SetProcessDPIAware)();
++    typedef BOOL (WINAPI *SetProcessDpiAwarenessContext)(HANDLE);
+     typedef BOOL (WINAPI *AddClipboardFormatListener)(HWND);
+     typedef BOOL (WINAPI *RemoveClipboardFormatListener)(HWND);
+     typedef BOOL (WINAPI *GetDisplayAutoRotationPreferences)(DWORD *);
+@@ -123,6 +124,9 @@ struct QWindowsUser32DLL
+     // Windows Vista onwards
+     SetProcessDPIAware setProcessDPIAware = nullptr;
+ 
++    // Windows 10 version 1703 onwards
++    SetProcessDpiAwarenessContext setProcessDpiAwarenessContext = nullptr;
++
+     // Clipboard listeners are present on Windows Vista onwards
+     // but missing in MinGW 4.9 stub libs. Can be removed in MinGW 5.
+     AddClipboardFormatListener addClipboardFormatListener = nullptr;
+@@ -222,6 +226,7 @@ public:
+     void setTabletAbsoluteRange(int a);
+     void setProcessDpiAwareness(QtWindows::ProcessDpiAwareness dpiAwareness);
+     static int processDpiAwareness();
++    void setProcessDpiV2Awareness();
+ 
+     void setDetectAltGrModifier(bool a);
+ 
+diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
+index 5c1fa00088..2ec61aad80 100644
+--- a/src/plugins/platforms/windows/qwindowsintegration.cpp
++++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
+@@ -210,7 +210,7 @@ static inline unsigned parseOptions(const QStringList &paramList,
+             options |= QWindowsIntegration::DontPassOsMouseEventsSynthesizedFromTouch;
+         } else if (parseIntOption(param, QLatin1String("verbose"), 0, INT_MAX, &QWindowsContext::verbose)
+             || parseIntOption(param, QLatin1String("tabletabsoluterange"), 0, INT_MAX, tabletAbsoluteRange)
+-            || parseIntOption(param, QLatin1String("dpiawareness"), QtWindows::ProcessDpiUnaware, QtWindows::ProcessPerMonitorDpiAware, dpiAwareness)) {
++            || parseIntOption(param, QLatin1String("dpiawareness"), QtWindows::ProcessDpiUnaware, QtWindows::ProcessPerMonitorV2DpiAware, dpiAwareness)) {
+         } else if (param == QLatin1String("menus=native")) {
+             options |= QWindowsIntegration::AlwaysUseNativeMenus;
+         } else if (param == QLatin1String("menus=none")) {
+@@ -246,10 +246,19 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
+ 
+     if (!dpiAwarenessSet) { // Set only once in case of repeated instantiations of QGuiApplication.
+         if (!QCoreApplication::testAttribute(Qt::AA_PluginApplication)) {
+-            m_context.setProcessDpiAwareness(dpiAwareness);
+-            qCDebug(lcQpaWindows)
+-                << __FUNCTION__ << "DpiAwareness=" << dpiAwareness
+-                << "effective process DPI awareness=" << QWindowsContext::processDpiAwareness();
++
++            // DpiAwareV2 requires using new API
++            bool hasDpiAwarenessContext = QWindowsContext::user32dll.setProcessDpiAwarenessContext != nullptr;
++            if (dpiAwareness == QtWindows::ProcessPerMonitorV2DpiAware && hasDpiAwarenessContext) {
++                m_context.setProcessDpiV2Awareness();
++                qCDebug(lcQpaWindows)
++                    << __FUNCTION__ << "DpiAwareness: DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2";
++            } else {
++                m_context.setProcessDpiAwareness(dpiAwareness);
++                qCDebug(lcQpaWindows)
++                    << __FUNCTION__ << "DpiAwareness=" << dpiAwareness
++                    << "effective process DPI awareness=" << QWindowsContext::processDpiAwareness();
++            }
+         }
+         dpiAwarenessSet = true;
+     }
+-- 
+2.24.1.windows.2
+

@@ -1,0 +1,46 @@
+From ed0811952e6bb78b8f31b863f2396ed6ff7cf3ce Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
+Date: Thu, 21 Jan 2021 14:17:28 +0100
+Subject: [PATCH 11/11] Windows: Change default to ProcessPerMonitorV2DpiAware
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes: QTBUG-68712
+Change-Id: Id73c4a5422e50b5bee2160468feb4d2f09c5461a
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@qt.io>
+(cherry picked from commit d66cb667efbc33b3a81ecc495e90a2e2f44616b2)
+---
+ src/plugins/platforms/windows/qwindowsintegration.cpp | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
+index 2ec61aad80..3f3acb2c5c 100644
+--- a/src/plugins/platforms/windows/qwindowsintegration.cpp
++++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
+@@ -230,9 +230,11 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
+ 
+     static bool dpiAwarenessSet = false;
+     int tabletAbsoluteRange = -1;
+-    // Default to per-monitor awareness to avoid being scaled when monitors with different DPI
+-    // are connected to Windows 8.1
+-    QtWindows::ProcessDpiAwareness dpiAwareness = QtWindows::ProcessPerMonitorDpiAware;
++    static bool hasDpiAwarenessContext = QWindowsContext::user32dll.setProcessDpiAwarenessContext != nullptr;
++    // Default to per-monitor-v2 awareness (if available)
++    QtWindows::ProcessDpiAwareness dpiAwareness = hasDpiAwarenessContext ?
++        QtWindows::ProcessPerMonitorV2DpiAware : QtWindows::ProcessPerMonitorDpiAware;
++
+     m_options = parseOptions(paramList, &tabletAbsoluteRange, &dpiAwareness);
+     QWindowsFontDatabase::setFontOptions(m_options);
+ 
+@@ -248,7 +250,6 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
+         if (!QCoreApplication::testAttribute(Qt::AA_PluginApplication)) {
+ 
+             // DpiAwareV2 requires using new API
+-            bool hasDpiAwarenessContext = QWindowsContext::user32dll.setProcessDpiAwarenessContext != nullptr;
+             if (dpiAwareness == QtWindows::ProcessPerMonitorV2DpiAware && hasDpiAwarenessContext) {
+                 m_context.setProcessDpiV2Awareness();
+                 qCDebug(lcQpaWindows)
+-- 
+2.24.1.windows.2
+

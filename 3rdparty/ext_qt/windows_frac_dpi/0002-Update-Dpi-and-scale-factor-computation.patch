@@ -1,7 +1,7 @@
-From 0735b61f7e0868ab2272838ef52fe34aed0dfe25 Mon Sep 17 00:00:00 2001
+From a0b3691fb1c324b1ac336838f3021e5dfe8904a5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Mon, 25 Apr 2016 11:31:34 +0200
-Subject: [PATCH 23/27] Update Dpi and scale factor computation
+Subject: [PATCH 02/11] Update Dpi and scale factor computation
 
 Remove pixelScale() in favor of logicalBaseDpi(). Compute scale factor
 based on logical DPI and logical base DPI, or optionally based on the
@@ -18,6 +18,8 @@ variables:
 Done-with: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Task-number: QTBUG-53022
 Change-Id: I4846f223186df665eb0a9c827eaef0a96d1f458f
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit 900f2cb6f7070b4d426f3b83787ac489b8a2e827)
 ---
  src/gui/kernel/qhighdpiscaling.cpp            | 234 ++++++++++++++++--
  src/gui/kernel/qhighdpiscaling_p.h            |  29 +++
@@ -28,17 +30,17 @@ Change-Id: I4846f223186df665eb0a9c827eaef0a96d1f458f
  src/plugins/platforms/cocoa/qcocoascreen.h    |   1 +
  .../platforms/windows/qwindowsscreen.cpp      |   9 -
  .../platforms/windows/qwindowsscreen.h        |   2 +-
- src/plugins/platforms/xcb/qxcbscreen.cpp      |  11 -
+ src/plugins/platforms/xcb/qxcbscreen.cpp      |  13 -
  src/plugins/platforms/xcb/qxcbscreen.h        |   3 +-
  tests/manual/highdpi/highdpi.pro              |   1 +
- 12 files changed, 264 insertions(+), 51 deletions(-)
+ 12 files changed, 264 insertions(+), 53 deletions(-)
 
 diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
-index 541d4f12..ae531569 100644
+index 95790b96a9..7ffbfbe1e5 100644
 --- a/src/gui/kernel/qhighdpiscaling.cpp
 +++ b/src/gui/kernel/qhighdpiscaling.cpp
-@@ -44,6 +44,9 @@
- #include "private/qscreen_p.h"
+@@ -46,6 +46,9 @@
+ #include <private/qguiapplication_p.h>
  
  #include <QtCore/qdebug.h>
 +#include <QtCore/qmetaobject.h>
@@ -47,7 +49,7 @@ index 541d4f12..ae531569 100644
  
  QT_BEGIN_NAMESPACE
  
-@@ -54,6 +57,18 @@ static const char legacyDevicePixelEnvVar[] = "QT_DEVICE_PIXEL_RATIO";
+@@ -56,6 +59,18 @@ static const char legacyDevicePixelEnvVar[] = "QT_DEVICE_PIXEL_RATIO";
  static const char scaleFactorEnvVar[] = "QT_SCALE_FACTOR";
  static const char autoScreenEnvVar[] = "QT_AUTO_SCREEN_SCALE_FACTOR";
  static const char screenFactorsEnvVar[] = "QT_SCREEN_SCALE_FACTORS";
@@ -66,14 +68,14 @@ index 541d4f12..ae531569 100644
  
  static inline qreal initialGlobalScaleFactor()
  {
-@@ -247,6 +262,191 @@ static inline bool usePixelDensity()
+@@ -249,6 +264,191 @@ static inline bool usePixelDensity()
              qgetenv(legacyDevicePixelEnvVar).compare("auto", Qt::CaseInsensitive) == 0);
  }
  
 +qreal QHighDpiScaling::rawScaleFactor(const QPlatformScreen *screen)
 +{
 +    // Determine if physical DPI should be used
-+    static bool usePhysicalDpi = qEnvironmentVariableAsBool(usePhysicalDpiEnvVar, false);
++    static const bool usePhysicalDpi = qEnvironmentVariableAsBool(usePhysicalDpiEnvVar, false);
 +
 +    // Calculate scale factor beased on platform screen DPI values
 +    qreal factor;
@@ -130,8 +132,8 @@ index 541d4f12..ae531569 100644
 +{
 +    auto end = std::end(scaleFactorRoundingPolicyLookup);
 +    auto it = std::find(std::begin(scaleFactorRoundingPolicyLookup), end,
-+                        ScaleFactorRoundingPolicyLookup{v.constData(), QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::NotSet});
-+    return it != end ? it->value : QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::NotSet;
++                        ScaleFactorRoundingPolicyLookup{v.constData(), QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::Unset});
++    return it != end ? it->value : QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::Unset;
 +}
 +
 +using DpiAdjustmentPolicyLookup = EnumLookup<QHighDpiScaling::DpiAdjustmentPolicy>;
@@ -148,8 +150,8 @@ index 541d4f12..ae531569 100644
 +{
 +    auto end = std::end(dpiAdjustmentPolicyLookup);
 +    auto it = std::find(std::begin(dpiAdjustmentPolicyLookup), end,
-+                        DpiAdjustmentPolicyLookup{v.constData(), QHighDpiScaling::DpiAdjustmentPolicy::NotSet});
-+    return it != end ? it->value : QHighDpiScaling::DpiAdjustmentPolicy::NotSet;
++                        DpiAdjustmentPolicyLookup{v.constData(), QHighDpiScaling::DpiAdjustmentPolicy::Unset});
++    return it != end ? it->value : QHighDpiScaling::DpiAdjustmentPolicy::Unset;
 +}
 +
 +qreal QHighDpiScaling::roundScaleFactor(qreal rawFactor)
@@ -160,15 +162,15 @@ index 541d4f12..ae531569 100644
 +    // sizes that are smaller than the ideal size, and opposite for rounding up.
 +    // Rounding down is then preferable since "small UI" is a more acceptable
 +    // high-DPI experience than "large UI".
-+    static auto scaleFactorRoundingPolicy = HighDpiScaleFactorRoundingPolicy::NotSet;
++    static auto scaleFactorRoundingPolicy = HighDpiScaleFactorRoundingPolicy::Unset;
 +
 +    // Determine rounding policy
-+    if (scaleFactorRoundingPolicy == HighDpiScaleFactorRoundingPolicy::NotSet) {
++    if (scaleFactorRoundingPolicy == HighDpiScaleFactorRoundingPolicy::Unset) {
 +        // Check environment
 +        if (qEnvironmentVariableIsSet(scaleFactorRoundingPolicyEnvVar)) {
 +            QByteArray policyText = qgetenv(scaleFactorRoundingPolicyEnvVar);
 +            auto policyEnumValue = lookupScaleFactorRoundingPolicy(policyText);
-+            if (policyEnumValue != HighDpiScaleFactorRoundingPolicy::NotSet) {
++            if (policyEnumValue != HighDpiScaleFactorRoundingPolicy::Unset) {
 +                scaleFactorRoundingPolicy = policyEnumValue;
 +            } else {
 +                auto values = joinEnumValues(std::begin(scaleFactorRoundingPolicyLookup),
@@ -200,7 +202,7 @@ index 541d4f12..ae531569 100644
 +            ? qFloor(rawFactor) : qCeil(rawFactor);
 +        break;
 +    case HighDpiScaleFactorRoundingPolicy::PassThrough:
-+    case HighDpiScaleFactorRoundingPolicy::NotSet:
++    case HighDpiScaleFactorRoundingPolicy::Unset:
 +        break;
 +    }
 +
@@ -215,21 +217,21 @@ index 541d4f12..ae531569 100644
 +
 +QDpi QHighDpiScaling::effectiveLogicalDpi(const QPlatformScreen *screen, qreal rawFactor, qreal roundedFactor)
 +{
-+    // Apply DPI adjustment policy, if needed. If enabled this will change
-+    // the reported logical DPI to account for the difference between the
-+    // rounded scale factor and the actual scale factor. The effect
-+    // is that text size will be correct for the screen dpi, but may be (slightly)
-+    // out of sync with the rest of the UI. The amount of out-of-synch-ness
-+    // depends on how well user code handles a non-standard DPI values, but
-+    // since the adjustment is small (typically +/- 48 max) this might be OK.
-+    static auto dpiAdjustmentPolicy = DpiAdjustmentPolicy::NotSet;
++    // Apply DPI adjustment policy, if needed. If enabled this will change the
++    // reported logical DPI to account for the difference between the rounded
++    // scale factor and the actual scale factor. The effect is that text size
++    // will be correct for the screen dpi, but may be (slightly) out of sync
++    // with the rest of the UI. The amount of out-of-synch-ness depends on how
++    // well user code handles a non-standard DPI values, but since the
++    // adjustment is small (typically +/- 48 max) this might be OK.
++    static auto dpiAdjustmentPolicy = DpiAdjustmentPolicy::Unset;
 +
 +    // Determine adjustment policy.
-+    if (dpiAdjustmentPolicy == DpiAdjustmentPolicy::NotSet) {
++    if (dpiAdjustmentPolicy == DpiAdjustmentPolicy::Unset) {
 +        if (qEnvironmentVariableIsSet(dpiAdjustmentPolicyEnvVar)) {
 +            QByteArray policyText = qgetenv(dpiAdjustmentPolicyEnvVar);
 +            auto policyEnumValue = lookupDpiAdjustmentPolicy(policyText);
-+            if (policyEnumValue != DpiAdjustmentPolicy::NotSet) {
++            if (policyEnumValue != DpiAdjustmentPolicy::Unset) {
 +                dpiAdjustmentPolicy = policyEnumValue;
 +            } else {
 +                auto values = joinEnumValues(std::begin(dpiAdjustmentPolicyLookup),
@@ -238,7 +240,7 @@ index 541d4f12..ae531569 100644
 +                         policyText.constData(), values.constData());
 +            }
 +        }
-+        if (dpiAdjustmentPolicy == DpiAdjustmentPolicy::NotSet)
++        if (dpiAdjustmentPolicy == DpiAdjustmentPolicy::Unset)
 +            dpiAdjustmentPolicy = DpiAdjustmentPolicy::UpOnly;
 +    }
 +
@@ -258,7 +260,7 @@ index 541d4f12..ae531569 100644
  void QHighDpiScaling::initHighDpiScaling()
  {
      // Determine if there is a global scale factor set.
-@@ -257,8 +457,6 @@ void QHighDpiScaling::initHighDpiScaling()
+@@ -259,8 +459,6 @@ void QHighDpiScaling::initHighDpiScaling()
  
      m_pixelDensityScalingActive = false; //set in updateHighDpiScaling below
  
@@ -267,7 +269,7 @@ index 541d4f12..ae531569 100644
      m_active = m_globalScalingActive || m_usePixelDensity;
  }
  
-@@ -310,7 +508,7 @@ void QHighDpiScaling::updateHighDpiScaling()
+@@ -312,7 +510,7 @@ void QHighDpiScaling::updateHighDpiScaling()
              ++i;
          }
      }
@@ -276,7 +278,7 @@ index 541d4f12..ae531569 100644
  }
  
  /*
-@@ -371,22 +569,8 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
+@@ -413,22 +611,8 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
  {
      qreal factor = qreal(1.0);
      if (screen) {
@@ -301,7 +303,7 @@ index 541d4f12..ae531569 100644
          if (m_screenFactorSet) {
              QVariant screenFactor = screen->screen()->property(scaleFactorProperty);
              if (screenFactor.isValid())
-@@ -399,13 +583,15 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
+@@ -441,13 +625,15 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
  QDpi QHighDpiScaling::logicalDpi(const QScreen *screen)
  {
      // (Note: m_active test is performed at call site.)
@@ -321,19 +323,19 @@ index 541d4f12..ae531569 100644
 +    return effectiveLogicalDpi(screen->handle(), scaleFactor, roundedScaleFactor);
  }
  
- qreal QHighDpiScaling::factor(const QScreen *screen)
+ QHighDpiScaling::ScaleAndOrigin QHighDpiScaling::scaleAndOrigin(const QPlatformScreen *platformScreen, QPoint *nativePosition)
 diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
-index ecd9ed65..55bddfeb 100644
+index 6980c02275..1023ef82a9 100644
 --- a/src/gui/kernel/qhighdpiscaling_p.h
 +++ b/src/gui/kernel/qhighdpiscaling_p.h
-@@ -71,7 +71,33 @@ typedef QPair<qreal, qreal> QDpi;
+@@ -72,7 +72,33 @@ typedef QPair<qreal, qreal> QDpi;
  
  #ifndef QT_NO_HIGHDPISCALING
  class Q_GUI_EXPORT QHighDpiScaling {
 +    Q_GADGET
  public:
 +    enum class HighDpiScaleFactorRoundingPolicy {
-+        NotSet,
++        Unset,
 +        Round,
 +        Ceil,
 +        Floor,
@@ -343,7 +345,7 @@ index ecd9ed65..55bddfeb 100644
 +    Q_ENUM(HighDpiScaleFactorRoundingPolicy)
 +
 +    enum class DpiAdjustmentPolicy {
-+        NotSet,
++        Unset,
 +        Enabled,
 +        Disabled,
 +        UpOnly
@@ -360,7 +362,7 @@ index ecd9ed65..55bddfeb 100644
      static void initHighDpiScaling();
      static void updateHighDpiScaling();
      static void setGlobalFactor(qreal factor);
-@@ -88,6 +114,9 @@ public:
+@@ -101,6 +127,9 @@ public:
      static QDpi logicalDpi(const QScreen *screen);
  
  private:
@@ -371,7 +373,7 @@ index ecd9ed65..55bddfeb 100644
  
      static qreal m_factor;
 diff --git a/src/gui/kernel/qplatformscreen.cpp b/src/gui/kernel/qplatformscreen.cpp
-index 21ae75ba..ff76528a 100644
+index 21ae75ba8f..ff76528a0e 100644
 --- a/src/gui/kernel/qplatformscreen.cpp
 +++ b/src/gui/kernel/qplatformscreen.cpp
 @@ -197,6 +197,20 @@ QDpi QPlatformScreen::logicalDpi() const
@@ -396,7 +398,7 @@ index 21ae75ba..ff76528a 100644
      Reimplement this function in subclass to return the device pixel ratio
      for the screen. This is the ratio between physical pixels and the
 diff --git a/src/gui/kernel/qplatformscreen.h b/src/gui/kernel/qplatformscreen.h
-index e9d64c8a..63b5d5a4 100644
+index e9d64c8a29..63b5d5a4a7 100644
 --- a/src/gui/kernel/qplatformscreen.h
 +++ b/src/gui/kernel/qplatformscreen.h
 @@ -113,6 +113,7 @@ public:
@@ -408,7 +410,7 @@ index e9d64c8a..63b5d5a4 100644
      virtual qreal pixelDensity()  const;
  
 diff --git a/src/plugins/platforms/android/qandroidplatformscreen.cpp b/src/plugins/platforms/android/qandroidplatformscreen.cpp
-index 7dc8bb80..80757c21 100644
+index 7dc8bb8080..80757c2135 100644
 --- a/src/plugins/platforms/android/qandroidplatformscreen.cpp
 +++ b/src/plugins/platforms/android/qandroidplatformscreen.cpp
 @@ -401,15 +401,17 @@ void QAndroidPlatformScreen::doRedraw()
@@ -433,7 +435,7 @@ index 7dc8bb80..80757c21 100644
  
  Qt::ScreenOrientation QAndroidPlatformScreen::orientation() const
 diff --git a/src/plugins/platforms/android/qandroidplatformscreen.h b/src/plugins/platforms/android/qandroidplatformscreen.h
-index f15aeae3..5dc158e3 100644
+index f15aeae3fd..5dc158e351 100644
 --- a/src/plugins/platforms/android/qandroidplatformscreen.h
 +++ b/src/plugins/platforms/android/qandroidplatformscreen.h
 @@ -103,7 +103,7 @@ protected:
@@ -446,7 +448,7 @@ index f15aeae3..5dc158e3 100644
      Qt::ScreenOrientation nativeOrientation() const override;
      void surfaceChanged(JNIEnv *env, jobject surface, int w, int h) override;
 diff --git a/src/plugins/platforms/cocoa/qcocoascreen.h b/src/plugins/platforms/cocoa/qcocoascreen.h
-index 9ded98df..a73b97c7 100644
+index 9ded98df32..a73b97c771 100644
 --- a/src/plugins/platforms/cocoa/qcocoascreen.h
 +++ b/src/plugins/platforms/cocoa/qcocoascreen.h
 @@ -64,6 +64,7 @@ public:
@@ -458,10 +460,10 @@ index 9ded98df..a73b97c7 100644
      QString name() const override { return m_name; }
      QPlatformCursor *cursor() const override { return m_cursor; }
 diff --git a/src/plugins/platforms/windows/qwindowsscreen.cpp b/src/plugins/platforms/windows/qwindowsscreen.cpp
-index b70b0bbe..e34a8e3c 100644
+index cecd06f5a4..6a55708c59 100644
 --- a/src/plugins/platforms/windows/qwindowsscreen.cpp
 +++ b/src/plugins/platforms/windows/qwindowsscreen.cpp
-@@ -254,15 +254,6 @@ QWindow *QWindowsScreen::windowAt(const QPoint &screenPoint, unsigned flags)
+@@ -257,15 +257,6 @@ QWindow *QWindowsScreen::windowAt(const QPoint &screenPoint, unsigned flags)
      return result;
  }
  
@@ -478,7 +480,7 @@ index b70b0bbe..e34a8e3c 100644
      \brief Determine siblings in a virtual desktop system.
  
 diff --git a/src/plugins/platforms/windows/qwindowsscreen.h b/src/plugins/platforms/windows/qwindowsscreen.h
-index 33c9effa..a7b1c64e 100644
+index 8ad012512e..938ca9f865 100644
 --- a/src/plugins/platforms/windows/qwindowsscreen.h
 +++ b/src/plugins/platforms/windows/qwindowsscreen.h
 @@ -87,7 +87,7 @@ public:
@@ -491,10 +493,10 @@ index 33c9effa..a7b1c64e 100644
      qreal refreshRate() const override { return m_data.refreshRateHz; }
      QString name() const override { return m_data.name; }
 diff --git a/src/plugins/platforms/xcb/qxcbscreen.cpp b/src/plugins/platforms/xcb/qxcbscreen.cpp
-index 57dbdc9b..9af0794d 100644
+index 39e83e0451..ab5faa7212 100644
 --- a/src/plugins/platforms/xcb/qxcbscreen.cpp
 +++ b/src/plugins/platforms/xcb/qxcbscreen.cpp
-@@ -671,11 +671,6 @@ QDpi QXcbScreen::logicalDpi() const
+@@ -679,11 +679,6 @@ QDpi QXcbScreen::logicalDpi() const
      return m_virtualDesktop->dpi();
  }
  
@@ -506,11 +508,13 @@ index 57dbdc9b..9af0794d 100644
  QPlatformCursor *QXcbScreen::cursor() const
  {
      return m_cursor;
-@@ -739,12 +734,6 @@ void QXcbScreen::updateGeometry(const QRect &geometry, uint8_t rotation)
+@@ -747,14 +742,6 @@ void QXcbScreen::updateGeometry(const QRect &geometry, uint8_t rotation)
      if (m_sizeMillimeters.isEmpty())
          m_sizeMillimeters = sizeInMillimeters(geometry.size(), m_virtualDesktop->dpi());
  
--    qreal dpi = geometry.width() / physicalSize().width() * qreal(25.4);
+-    qreal dpi = forcedDpi();
+-    if (dpi <= 0)
+-        dpi = geometry.width() / physicalSize().width() * qreal(25.4);
 -
 -    // Use 128 as a reference DPI on small screens. This favors "small UI" over "large UI".
 -    qreal referenceDpi = physicalSize().width() <= 320 ? 128 : 96;
@@ -520,7 +524,7 @@ index 57dbdc9b..9af0794d 100644
      m_availableGeometry = geometry & m_virtualDesktop->workArea();
      QWindowSystemInterface::handleScreenGeometryChange(QPlatformScreen::screen(), m_geometry, m_availableGeometry);
 diff --git a/src/plugins/platforms/xcb/qxcbscreen.h b/src/plugins/platforms/xcb/qxcbscreen.h
-index be6c45e4..3f619d71 100644
+index ec3b07bfb7..62931d2500 100644
 --- a/src/plugins/platforms/xcb/qxcbscreen.h
 +++ b/src/plugins/platforms/xcb/qxcbscreen.h
 @@ -161,7 +161,7 @@ public:
@@ -532,7 +536,7 @@ index be6c45e4..3f619d71 100644
      QPlatformCursor *cursor() const override;
      qreal refreshRate() const override { return m_refreshRate; }
      Qt::ScreenOrientation orientation() const override { return m_orientation; }
-@@ -226,7 +226,6 @@ private:
+@@ -227,7 +227,6 @@ private:
      Qt::ScreenOrientation m_orientation = Qt::PrimaryOrientation;
      QXcbCursor *m_cursor;
      int m_refreshRate = 60;
@@ -541,7 +545,7 @@ index be6c45e4..3f619d71 100644
  };
  
 diff --git a/tests/manual/highdpi/highdpi.pro b/tests/manual/highdpi/highdpi.pro
-index 9db083cd..2de8ed3b 100644
+index 9db083cd82..2de8ed3bb5 100644
 --- a/tests/manual/highdpi/highdpi.pro
 +++ b/tests/manual/highdpi/highdpi.pro
 @@ -15,3 +15,4 @@ HEADERS += \
@@ -550,5 +554,5 @@ index 9db083cd..2de8ed3b 100644
  
 +DEFINES += HAVE_SCREEN_BASE_DPI
 -- 
-2.22.0.windows.1
+2.24.1.windows.2
 

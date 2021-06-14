@@ -267,7 +267,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
-        if (kritarc.value("EnableHiDPIFractionalScaling", true).toBool()) {
+        if (kritarc.value("EnableHiDPIFractionalScaling", false).toBool()) {
             QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
         }
 #endif

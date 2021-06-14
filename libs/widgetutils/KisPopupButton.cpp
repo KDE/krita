@@ -55,6 +55,16 @@ protected:
             QFrame::keyPressEvent(event);
         }
     }
+
+    bool event(QEvent *e) override
+    {
+        if (e->type() == QEvent::Close) {
+            e->ignore();
+            hide();
+            return true;
+        }
+        return QFrame::event(e);
+    }
 };
 
 

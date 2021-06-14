@@ -37,6 +37,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41014();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41015();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41016();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41017();
+extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
 
 #define dbgResources qCDebug(_30009)
 #define dbgKrita qCDebug(_41000)
@@ -57,6 +58,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41017();
 #define dbgOpenGL qCDebug(_41015)
 #define dbgMetaData qCDebug(_41016)
 #define dbgAndroid qCDebug(_41017)
+#define dbgLocale qCDebug(_41018)
 
 #define infoResources qCInfo(_30009)
 #define infoKrita qCInfo(_41000)

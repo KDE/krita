@@ -89,6 +89,7 @@ Q_LOGGING_CATEGORY(_41014, "krita.tabletlog", QtDebugMsg)
 Q_LOGGING_CATEGORY(_41015, "krita.opengl", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41016, "krita.metadata", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41017, "krita.android", QtDebugMsg)
+Q_LOGGING_CATEGORY(_41018, "krita.locale", QtInfoMsg)
 
 QString __methodName(const char *_prettyFunction)
 {

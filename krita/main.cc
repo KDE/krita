@@ -30,6 +30,8 @@
 #include <QByteArray>
 #include <QMessageBox>
 #include <QThread>
+#include <QLibraryInfo>
+#include <QTranslator>
 
 #include <QOperatingSystemVersion>
 
@@ -102,6 +104,13 @@ void tryInitDrMingw()
 }
 } // namespace
 #endif
+
+namespace
+{
+
+void installTranslators(KisApplication &app);
+
+} // namespace
 
 #ifdef Q_OS_WIN
 namespace
@@ -364,7 +373,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
 
-    dbgKrita << "Override language:" << language;
+    dbgLocale << "Override language:" << language;
     bool rightToLeft = false;
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
@@ -387,7 +396,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
     }
     else {
-        dbgKrita << "Qt UI languages:" << QLocale::system().uiLanguages() << qgetenv("LANG");
+        dbgLocale << "Qt UI languages:" << QLocale::system().uiLanguages() << qgetenv("LANG");
 
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
@@ -441,7 +450,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
                         uiLanguages.replace(i, uiLanguage);
                     }
                 }
-                dbgKrita << "Converted ui languages:" << uiLanguages;
+                dbgLocale << "Converted ui languages:" << uiLanguages;
 #ifdef Q_OS_MAC
                 // See https://bugs.kde.org/show_bug.cgi?id=396370
                 KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
@@ -470,6 +479,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+    installTranslators(app);
 
     if (app.platformName() == "wayland") {
         QMessageBox::critical(0, i18nc("@title:window", "Fatal Error"), i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
@@ -502,8 +513,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     KLocalizedString::setApplicationDomain("krita");
 
-    dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();
-    dbgKrita << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
+    dbgLocale << "Available translations" << KLocalizedString::availableApplicationTranslations();
+    dbgLocale << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
 
 
 #ifdef Q_OS_WIN
@@ -681,3 +692,135 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     return state;
 }
+
+namespace
+{
+
+void removeInstalledTranslators(KisApplication &app)
+{
+    // HACK: We try to remove all the translators installed by ECMQmLoader.
+    // The reason is that it always load translations for the system locale
+    // which interferes with our effort to handle override languages. Since
+    // `en_US` (or `en`) strings are defined in code, the QTranslator doesn't
+    // actually handle translations for them, so even if we try to install
+    // a QTranslator loaded from `en`, the strings always get translated by
+    // the system language QTranslator that ECMQmLoader installed instead
+    // of the English one.
+
+    // ECMQmLoader creates all QTranslator's parented to the active QApp.
+    QList<QTranslator *> translators = app.findChildren<QTranslator *>(QString(), Qt::FindDirectChildrenOnly);
+    Q_FOREACH(const auto &translator, translators) {
+        app.removeTranslator(translator);
+    }
+    dbgLocale << "Removed" << translators.size() << "QTranslator's";
+}
+
+void installQtTranslations(KisApplication &app)
+{
+    QStringList qtCatalogs = {
+        QStringLiteral("qt_"),
+        QStringLiteral("qtbase_"),
+        QStringLiteral("qtmultimedia_"),
+        QStringLiteral("qtdeclarative_"),
+    };
+    // A list of locale to add, note that the last added one has the
+    // highest precedence.
+    QList<QLocale> localeList;
+    // We always use English as the final fallback.
+    localeList.append(QLocale(QLocale::English));
+    QLocale defaultLocale;
+    if (defaultLocale.language() != QLocale::English) {
+        localeList.append(defaultLocale);
+    }
+
+    QString translationsPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    dbgLocale << "Qt translations path:" << translationsPath;
+
+    Q_FOREACH(const auto &localeToLoad, localeList) {
+        Q_FOREACH(const auto &catalog, qtCatalogs) {
+            QTranslator *translator = new QTranslator(&app);
+            if (translator->load(localeToLoad, catalog, QString(), translationsPath)) {
+                dbgLocale << "Loaded Qt translations for" << localeToLoad << catalog;
+                app.installTranslator(translator);
+            } else {
+                delete translator;
+            }
+        }
+    }
+}
+
+void installEcmTranslations(KisApplication &app)
+{
+    // Load translations created using the ECMPoQmTools module.
+    // This function is based on the code in:
+    // https://invent.kde.org/frameworks/extra-cmake-modules/-/blob/master/modules/ECMQmLoader.cpp.in
+
+    QStringList ecmCatalogs = {
+        QStringLiteral("kcompletion5_qt"),
+        QStringLiteral("kconfig5_qt"),
+        QStringLiteral("kcoreaddons5_qt"),
+        QStringLiteral("kitemviews5_qt"),
+        QStringLiteral("kwidgetsaddons5_qt"),
+        QStringLiteral("kwindowsystem5_qt"),
+        QStringLiteral("seexpr2_qt"),
+    };
+
+    QStringList ki18nLangs = KLocalizedString::languages();
+    const QString langEn = QStringLiteral("en");
+    // Replace "en_US" with "en" because that's what we have in the locale dir.
+    int indexOfEnUs = ki18nLangs.indexOf(QStringLiteral("en_US"));
+    if (indexOfEnUs != -1) {
+        ki18nLangs[indexOfEnUs] = langEn;
+    }
+    // We need to have "en" to the end of the list, because we explicitly
+    // removed the "en" translators added by ECMQmLoader.
+    // If "en" is already on the list, we truncate the ones after, because
+    // "en" is the catch-all fallback that has the strings in code.
+    int indexOfEn = ki18nLangs.indexOf(langEn);
+    if (indexOfEn != -1) {
+        for (int i = ki18nLangs.size() - indexOfEn - 1; i > 0; i--) {
+            ki18nLangs.removeLast();
+        }
+    } else {
+        ki18nLangs.append(langEn);
+    }
+
+    // The last added one has the highest precedence, so we iterate the
+    // list backwards.
+    QStringListIterator langIter(ki18nLangs);
+    langIter.toBack();
+
+    while (langIter.hasPrevious()) {
+        const QString &localeDirName = langIter.previous();
+        Q_FOREACH(const auto &catalog, ecmCatalogs) {
+            QString subPath = QStringLiteral("locale/") % localeDirName % QStringLiteral("/LC_MESSAGES/") % catalog % QStringLiteral(".qm");
+#if defined(Q_OS_ANDROID)
+            const QString fullPath = QStringLiteral("assets:/share/") + subPath;
+            if (!QFile::exists(fullPath)) {
+                continue;
+            }
+#else
+            const QString fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
+            if (fullPath.isEmpty()) {
+                continue;
+            }
+#endif
+            QTranslator *translator = new QTranslator(&app);
+            if (translator->load(fullPath)) {
+                dbgLocale << "Loaded ECM translations for" << localeDirName << catalog;
+                app.installTranslator(translator);
+            } else {
+                delete translator;
+            }
+        }
+    }
+}
+
+void installTranslators(KisApplication &app)
+{
+    removeInstalledTranslators(app);
+    installQtTranslations(app);
+    installEcmTranslations(app);
+}
+
+} // namespace

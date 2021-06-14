@@ -558,6 +558,8 @@ copy %KRITA_INSTALL_DIR%\bin\krita.com %pkg_root%\bin
 :: kritarunner.exe
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.exe %pkg_root%\bin
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.com %pkg_root%\bin
+:: qt.conf -- to specify the location to Qt translations
+copy %KRITA_SRC_DIR%\packaging\windows\qt.conf %pkg_root%\bin
 :: DLLs from bin/
 echo INFO: Copying all DLLs except Qt5* from bin/
 setlocal enableextensions enabledelayedexpansion

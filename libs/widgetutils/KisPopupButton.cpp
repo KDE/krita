@@ -31,6 +31,12 @@ public:
 
     void setDetached(bool detach)
     {
+#ifdef Q_OS_ANDROID
+        // for some reason when calling destroy() the platform window isn't
+        // hidden first, this corrupts state of the window stack
+        hide();
+#endif
+
         // Need to destroy the platform window before changing window flags
         // so that Qt knows to actually apply the new flags...
         // At least on Windows, not doing this may result in weird window drop

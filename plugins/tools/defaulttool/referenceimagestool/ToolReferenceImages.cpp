@@ -81,6 +81,15 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
     }
 }
 
+KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event)
+{
+    KisReferenceImage* ref = getActiveReferenceImage();
+    if(!ref->isCropEnabled()) {
+        return DefaultTool::createStrategy(event);
+    }
+    return 0;
+}
+
 void ToolReferenceImages::slotNodeAdded(KisNodeSP node)
 {
     auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());

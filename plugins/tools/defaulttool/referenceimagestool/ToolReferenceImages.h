@@ -56,6 +56,8 @@ protected:
 
     void updateDistinctiveActions(const QList<KoShape*> &editableShapes) override;
 
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
+
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;

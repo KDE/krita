@@ -89,7 +89,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     );
 
     d->ui->sldHeight->setPrefixes(i18n("H: "), i18n("H [*varies*]: "));
-    d->ui->saturationSlider->setValueGetter(
+    d->ui->sldHeight->setValueGetter(
         [](KoShape *s){
             auto *r = dynamic_cast<KisReferenceImage*>(s);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(r, 0.0);
@@ -149,10 +149,10 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     KisSignalCompressor *cropCompressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(compressor, SIGNAL(timeout()), this, SLOT(slotCropValuesChanged()));
 
-    connect(d->ui->sldOffsetX, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
-    connect(d->ui->sldOffsetY, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
-    connect(d->ui->sldWidth, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
-    connect(d->ui->sldHeight, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
+    connect(d->ui->sldOffsetX, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
+    connect(d->ui->sldOffsetY, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
+    connect(d->ui->sldWidth, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
+    connect(d->ui->sldHeight, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
 
     d->ui->referenceImageLocationCombobox->addItem(i18n("Embed to .KRA"));
     d->ui->referenceImageLocationCombobox->addItem(i18n("Link to Image"));
@@ -173,7 +173,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     d->ui->saturationSlider->setSelection(shapes);
 
     KisReferenceImage *ref = d->tool->getActiveReferenceImage();
-    if(ref && ref->isCropEnabled()) {
+    if(ref) {
         updateCropSliders();
     }
 
@@ -282,11 +282,11 @@ void ToolReferenceImagesWidget::slotUpdateLock(bool value)
 
 void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
 {
+    KisReferenceImage* ref = d->tool->getActiveReferenceImage();
     d->ui->bnCrop->setChecked(value);
     bool enable = d->ui->bnCrop->isChecked();
     d->ui->grpCrop->setVisible(enable);
 
-    KisReferenceImage* ref = d->tool->getActiveReferenceImage();
     ref->setEnableCrop(enable);
     if(enable && ref) {
         updateCropSliders();
@@ -366,16 +366,28 @@ void ToolReferenceImagesWidget::updateCropSliders()
     QRectF rect = converter->documentToImage(ref->boundingRect());
     ref->setCropRect(rect);
 
-    //d->ui->sldOffsetX->setSelection(shape);
+    d->ui->sldOffsetX->setSelection(shape);
     d->ui->sldOffsetX->setRange(0,rect.width());
+    d->ui->sldOffsetX->blockSignals(true);
+    d->ui->sldOffsetX->setValue(0);
+    d->ui->sldOffsetX->blockSignals(false);
 
-    //d->ui->sldOffsetY->setSelection(shape);
+    d->ui->sldOffsetY->setSelection(shape);
     d->ui->sldOffsetY->setRange(0,rect.height());
+    d->ui->sldOffsetY->blockSignals(true);
+    d->ui->sldOffsetY->setValue(0);
+    d->ui->sldOffsetY->blockSignals(false);
 
-    //d->ui->sldWidth->setSelection(shape);
+    d->ui->sldWidth->setSelection(shape);
     d->ui->sldWidth->setRange(0,rect.width());
+    d->ui->sldWidth->blockSignals(true);
+    d->ui->sldWidth->setValue(ref->cropWidth());
+    d->ui->sldWidth->blockSignals(false);
 
-    //d->ui->sldHeight->setSelection(shape);
+    d->ui->sldHeight->setSelection(shape);
     d->ui->sldHeight->setRange(0,rect.height());
+    d->ui->sldHeight->blockSignals(true);
+    d->ui->sldHeight->setValue(ref->cropHeight());
+    d->ui->sldHeight->blockSignals(false);
 }
 

@@ -108,10 +108,6 @@ void tryInitDrMingw()
 namespace
 {
 
-Q_LOGGING_CATEGORY(loggingKritaLocale, "krita.locale", QtInfoMsg)
-
-#define dbgLocale qCDebug(loggingKritaLocale)
-
 void installTranslators(KisApplication &app);
 
 } // namespace

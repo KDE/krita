@@ -43,7 +43,7 @@
 #include "kis_take_all_shapes_command.h"
 #include "kis_image_view_converter.h"
 #include "kis_shape_layer.h"
-
+#include "kis_lod_transform.h"
 
 #include <kis_debug.h>
 
@@ -230,7 +230,12 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
 
-    const QPainterPath selectionOutline = outlineCache();
+    QPainterPath selectionOutline = outlineCache();
+
+    if (projection->defaultBounds()->currentLevelOfDetail() > 0) {
+        KisLodTransform t(projection);
+        selectionOutline = t.map(selectionOutline);
+    }
 
     if (*projection->defaultPixel().data() == OPACITY_TRANSPARENT_U8) {
         projection->clear(requestedRect);

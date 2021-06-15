@@ -873,25 +873,34 @@ void KisMainWindow::customizeTabBar()
     // update MDI area theme
     // Tab close button override
     // just switch this icon out for all OSs so it is easier to see
-    QString tabStyleSheet = R"(
+    QString closeButtonImageUrl;
+    QString closeButtonHoverColor;
+    if (KisIconUtils::useDarkIcons()) {
+        closeButtonImageUrl = QStringLiteral(":/dark_close-tab.svg");
+        closeButtonHoverColor = QStringLiteral("lightcoral");
+    } else {
+        closeButtonImageUrl = QStringLiteral(":/light_close-tab.svg");
+        closeButtonHoverColor = QStringLiteral("darkred");
+    }
+    QString tabStyleSheet = QStringLiteral(R"(
             QTabBar::close-button {
-                image: url({close-button-location});
+                image: url(%1);
                 padding-top: 3px;
+            }
+            QTabBar::close-button:hover {
+                background-color: %2;
+            }
+            QTabBar::close-button:pressed {
+                background-color: red;
             }
 
             QHeaderView::section {
                 padding: 7px;
             }
 
-           )";
+           )")
+           .arg(closeButtonImageUrl, closeButtonHoverColor);
 
-    if (KisIconUtils::useDarkIcons()) {
-        tabStyleSheet = tabStyleSheet.replace("{close-button-location}", ":/dark_close-tab.svg");
-    }
-    else {
-        tabStyleSheet = tabStyleSheet.replace("{close-button-location}", ":/light_close-tab.svg");
-
-    }
 
     QTabBar* tabBar = d->findTabBarHACK();
     if (tabBar) {

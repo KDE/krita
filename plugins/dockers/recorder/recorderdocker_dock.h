@@ -8,6 +8,7 @@
 #ifndef _RECORDER_DOCK_H_
 #define _RECORDER_DOCK_H_
 
+#include <QScroller>
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
@@ -44,6 +45,8 @@ private Q_SLOTS:
     void onWriterFinished();
     void onWriterPausedChanged(bool paused);
     void onWriterFrameWriteFailed();
+
+    void slotScrollerStateChanged(QScroller::State state);
 
 private:
     Q_DISABLE_COPY(RecorderDockerDock)

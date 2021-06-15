@@ -107,7 +107,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
         m_toolOptionsPopupButton->setFixedSize(buttonsize, buttonsize);
         m_toolOptionsPopupButton->setIconSize(QSize(iconsize, iconsize));
-        m_toolOptionsPopupButton->setFlat(true);
+        m_toolOptionsPopupButton->setAutoRaise(true);
     }
 
     m_brushEditorPopupButton = new KisIconWidget(this);
@@ -115,14 +115,14 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_brushEditorPopupButton->setToolTip(i18n("Edit brush settings"));
     m_brushEditorPopupButton->setFixedSize(buttonsize, buttonsize);
     m_brushEditorPopupButton->setIconSize(QSize(iconsize, iconsize));
-    m_brushEditorPopupButton->setFlat(true);
+    m_brushEditorPopupButton->setAutoRaise(true);
 
     m_presetSelectorPopupButton = new KisIconWidget(this);
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_presetSelectorPopupButton->setToolTip(i18n("Choose brush preset"));
     m_presetSelectorPopupButton->setFixedSize(buttonsize, buttonsize);
     m_presetSelectorPopupButton->setIconSize(QSize(iconsize, iconsize));
-    m_presetSelectorPopupButton->setFlat(true);
+    m_presetSelectorPopupButton->setAutoRaise(true);
     m_presetSelectorPopupButton->setArrowVisible(false);
 
     m_eraseModeButton = new KisHighlightedToolButton(this);
@@ -310,7 +310,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_workspaceWidget->setFixedSize(buttonsize, buttonsize);
     m_workspaceWidget->setIconSize(QSize(iconsize, iconsize));
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(viewManager));
-    m_workspaceWidget->setFlat(true);
+    m_workspaceWidget->setAutoRaise(true);
     m_workspaceWidget->setArrowVisible(false);
 
     QHBoxLayout* baseLayout = new QHBoxLayout(this);

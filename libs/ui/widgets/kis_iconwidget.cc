@@ -44,7 +44,7 @@ QSize KisIconWidget::preferredIconSize() const
 
 void KisIconWidget::paintEvent(QPaintEvent *event)
 {
-    QPushButton::paintEvent(event);
+    QToolButton::paintEvent(event);
 
     QPainter p;
     p.begin(this);

@@ -108,7 +108,7 @@
  <customwidgets>
   <customwidget>
    <class>KisPopupButton</class>
-   <extends>QPushButton</extends>
+   <extends>QToolButton</extends>
    <header>KisPopupButton.h</header>
   </customwidget>
  </customwidgets>

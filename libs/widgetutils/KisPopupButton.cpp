@@ -87,7 +87,7 @@ struct KisPopupButton::Private {
 };
 
 KisPopupButton::KisPopupButton(QWidget* parent)
-        : QPushButton(parent)
+        : QToolButton(parent)
         , m_d(new Private)
 {
     setObjectName("KisPopupButton");
@@ -174,7 +174,7 @@ bool KisPopupButton::isPopupWidgetVisible()
 
 void KisPopupButton::paintEvent ( QPaintEvent * event  )
 {
-    QPushButton::paintEvent(event);
+    QToolButton::paintEvent(event);
     if (m_d->arrowVisible) {
         paintPopupArrow();
     }

@@ -1,7 +1,7 @@
-From 769ef6c47efaf552e3c6ff35e12733cdb1d80f17 Mon Sep 17 00:00:00 2001
+From 01bc26c9b77c54544fc25184b1b229894f83d9fc Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sat, 20 Feb 2021 20:04:21 +0000
-Subject: [PATCH 2/5] Fix uwp build
+Subject: [PATCH 2/4] Fix uwp build
 
 ---
  gettext-runtime/intl/langprefs.c    | 10 ++++++++--
@@ -10,7 +10,7 @@ Subject: [PATCH 2/5] Fix uwp build
  3 files changed, 28 insertions(+), 6 deletions(-)
 
 diff --git a/gettext-runtime/intl/langprefs.c b/gettext-runtime/intl/langprefs.c
-index f774ba2b..498933a7 100644
+index f774ba2..498933a 100644
 --- a/gettext-runtime/intl/langprefs.c
 +++ b/gettext-runtime/intl/langprefs.c
 @@ -36,8 +36,14 @@
@@ -31,7 +31,7 @@ index f774ba2b..498933a7 100644
  
  #ifdef WIN32_NATIVE
 diff --git a/gettext-runtime/intl/localcharset.c b/gettext-runtime/intl/localcharset.c
-index ec754276..3028bc28 100644
+index ec75427..3028bc2 100644
 --- a/gettext-runtime/intl/localcharset.c
 +++ b/gettext-runtime/intl/localcharset.c
 @@ -36,6 +36,16 @@
@@ -70,7 +70,7 @@ index ec754276..3028bc28 100644
    char buf[2 + 10 + 1];
    static char resultbuf[2 + 10 + 1];
 diff --git a/gettext-runtime/intl/localename.c b/gettext-runtime/intl/localename.c
-index 6458f757..a3845a4f 100644
+index 6458f75..a3845a4 100644
 --- a/gettext-runtime/intl/localename.c
 +++ b/gettext-runtime/intl/localename.c
 @@ -72,8 +72,14 @@ extern char * getlocalename_l(int, locale_t);
@@ -91,5 +91,5 @@ index 6458f757..a3845a4f 100644
  #  include "glthread/lock.h"
  # endif
 -- 
-2.30.0
+2.31.1.windows.1
 

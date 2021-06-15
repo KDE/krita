@@ -28,4 +28,9 @@ private:
     QWeakPointer<boost::none_t> m_updatesBlockerCookie;
 };
 
+class KRITATOOLTRANSFORM_EXPORT KisInitializeTransformMaskKeyframesCommand : public KUndo2Command {
+public:
+    KisInitializeTransformMaskKeyframesCommand(KisTransformMaskSP mask);
+};
+
 #endif

@@ -400,6 +400,9 @@ void KisFilterManager::cancel()
     d->currentlyAppliedConfiguration.clear();
     d->lastProcessRect = QRect();
     d->lastExtendedUpdateRect = QRect();
+
+    // cleanup before the canvas is deleted
+    delete d->filterDialog;
 }
 
 bool KisFilterManager::isStrokeRunning() const

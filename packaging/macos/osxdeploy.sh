@@ -89,9 +89,9 @@ KRITA_DMG_TEMPLATE=${BUILDROOT}/kritadmg-template
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 
 # flags for OSX environment
-# We only support from 10.11 up
-export MACOSX_DEPLOYMENT_TARGET=10.11
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
+# We only support from 10.13 up
+export MACOSX_DEPLOYMENT_TARGET=10.13
+export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
 
 
 print_usage () {
@@ -373,6 +373,9 @@ strip_python_dmginstall() {
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
     rm -rf distutils tkinter ensurepip venv lib2to3 idlelib turtledemo
 
+    cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}/site-packages"
+    rm -rf pip* PyQt_builder* setuptools* sip* easy-install.pth
+
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/Resources"
     rm -rf Python.app
 }
@@ -417,7 +420,7 @@ fix_python_framework() {
 
     # Fix rpaths from Python.Framework
     find "${PythonFrameworkBase}" -type f -perm 755 | delete_install_rpath
-    find "${PythonFrameworkBase}/Versions/Current/site-packages/PyQt5" -type f -name "*.so" | delete_install_rpath
+    find "${PythonFrameworkBase}/Versions/Current/lib/python${PY_VERSION}/site-packages/PyQt5" -type f -name "*.so" | delete_install_rpath
 }
 
 # Checks for macdeployqt
@@ -791,6 +794,7 @@ if [[ -n "${CODE_SIGNATURE}" ]]; then
 fi
 
 # Manually check every single Mach-O file for signature status
+if [[ "${NOTARIZE}" = "true" ]]; then
 print_msg "Checking if all files are signed before sending for notarization..."
 if [[ $(sign_hasError) -eq 1 ]]; then
     print_error "CodeSign errors cannot send to notarize!"
@@ -801,6 +805,7 @@ print_msg "Done! all files appear to be correct."
 
 # notarize apple
 notarize_build "${KRITA_DMG}" krita.app
+fi
 
 # Create DMG from files inside ${KRITA_DMG} folder
 createDMG

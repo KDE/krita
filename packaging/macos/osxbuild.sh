@@ -79,8 +79,8 @@ export KIS_INSTALL_DIR=${BUILDROOT}/i
 
 # flags for OSX environment
 # Qt only supports from 10.12 up, and https://doc.qt.io/qt-5/macos.html#target-platforms warns against setting it lower
-export MACOSX_DEPLOYMENT_TARGET=10.12
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.12
+export MACOSX_DEPLOYMENT_TARGET=10.13
+export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
 
 
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
@@ -94,7 +94,7 @@ export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 
 # export PYTHONHOME=${KIS_INSTALL_DIR}
-# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.8/site-packages:${KIS_INSTALL_DIR}/lib/python3.8
+# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.9/site-packages:${KIS_INSTALL_DIR}/lib/python3.9
 
 # This will make the debug output prettier
 export KDE_COLOR_DEBUG=1
@@ -304,7 +304,7 @@ build_3rdparty () {
     cd ${KIS_TBUILD_DIR}
 
     log_cmd cmake ${KIS_SRC_DIR}/3rdparty/ \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
@@ -454,7 +454,7 @@ build_krita () {
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
         -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}"
 

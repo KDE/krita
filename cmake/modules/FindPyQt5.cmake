@@ -1,6 +1,7 @@
 # Find PyQt5
 # ~~~~~~~~~~
 # SPDX-FileCopyrightText: 2014 Simon Edwards <simon@simonzone.com>
+# SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
@@ -21,6 +22,8 @@
 # PYQT5_SIP_DIR - The directory holding the PyQt5 .sip files.
 #
 # PYQT5_SIP_FLAGS - The SIP flags used to build PyQt.
+#
+# PYQT5_SIP_TAGS - The SIP tags necessary to bind to PyQt. (v5+)
 
 IF(EXISTS PYQT5_VERSION)
   # Already in cache, be silent
@@ -38,9 +41,20 @@ ELSE(EXISTS PYQT5_VERSION)
     get_filename_component(LIBQT5CORE_PATH ${LIBQT5CORE_PATH} PATH)
     get_filename_component(MINGW_PATH ${CMAKE_CXX_COMPILER} PATH)
 
-    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/krita-python-libs" "PYTHONDLLPATH=${LIBQT5CORE_PATH};${MINGW_PATH}" ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
+    set(_pyqt5_python_path "${KRITA_PYTHONPATH_V4};${KRITA_PYTHONPATH_V5};$ENV{PYTHONPATH}")
+
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env
+      "PYTHONPATH=${_pyqt5_python_path}"
+      "PYTHONDLLPATH=${LIBQT5CORE_PATH};${MINGW_PATH};"
+      ${PYTHON_EXECUTABLE} ${_find_pyqt5_py}
+      OUTPUT_VARIABLE pyqt5_config)
   else (WIN32)
-    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
+    set(_pyqt5_python_path "${KRITA_PYTHONPATH_V4}:${KRITA_PYTHONPATH_V5}:$ENV{PYTHONPATH}")
+
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env 
+      "PYTHONPATH=${_pyqt5_python_path}"
+      ${PYTHON_EXECUTABLE} ${_find_pyqt5_py}
+      OUTPUT_VARIABLE pyqt5_config)
   endif (WIN32)
 
   IF(pyqt5_config)
@@ -49,6 +63,8 @@ ELSE(EXISTS PYQT5_VERSION)
     STRING(REGEX REPLACE ".*\npyqt_version_tag:([^\n]+).*$" "\\1" PYQT5_VERSION_TAG ${pyqt5_config})
     STRING(REGEX REPLACE ".*\npyqt_sip_dir:([^\n]+).*$" "\\1" PYQT5_SIP_DIR ${pyqt5_config})
     STRING(REGEX REPLACE ".*\npyqt_sip_flags:([^\n]+).*$" "\\1" PYQT5_SIP_FLAGS ${pyqt5_config})
+    STRING(REGEX REPLACE ".*\npyqt_sip_tags:([^\n]+).*$" "\\1" _tags ${pyqt5_config})
+    STRING(REPLACE "," ";" PYQT5_SIP_TAGS ${_tags})
     IF(${pyqt5_config} MATCHES pyqt_sip_name)
       STRING(REGEX REPLACE ".*\npyqt_sip_name:([^\n]+).*$" "\\1" PYQT5_SIP_NAME ${pyqt5_config})
     ENDIF(${pyqt5_config} MATCHES pyqt_sip_name)

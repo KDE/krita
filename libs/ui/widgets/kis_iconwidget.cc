@@ -9,7 +9,8 @@
 
 #include <QPainter>
 #include <QIcon>
-#include <QStyleOption>
+#include <QStylePainter>
+#include <QStyleOptionToolButton>
 #include <KoResource.h>
 
 KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
@@ -19,7 +20,7 @@ KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
     m_resource = 0;
 }
 
-void KisIconWidget::KisIconWidget::setThumbnail(const QImage &thumbnail)
+void KisIconWidget::setThumbnail(const QImage &thumbnail)
 {
     m_thumbnail = thumbnail;
     update();
@@ -44,29 +45,26 @@ QSize KisIconWidget::preferredIconSize() const
 
 void KisIconWidget::paintEvent(QPaintEvent *event)
 {
-    QToolButton::paintEvent(event);
-
-    QPainter p;
-    p.begin(this);
-
-    const qint32 cw = width();
-    const qint32 ch = height();
     const qint32 border = 3;
-    const qint32 iconWidth = cw - (border*2);
-    const qint32 iconHeight = ch - (border*2);
+    const qint32 iconWidth = width() - (border*2);
+    const qint32 iconHeight = height() - (border*2);
+
+    bool useCustomIcon = false;
+
+    QPixmap pixmap(iconWidth * devicePixelRatioF(), iconHeight * devicePixelRatioF());
+    pixmap.setDevicePixelRatio(devicePixelRatioF());
+    pixmap.fill(Qt::transparent);
+    QPainter p(&pixmap);
 
     // Round off the corners of the preview
-    QRegion clipRegion(border, border, iconWidth, iconHeight);
-    clipRegion -= QRegion(border, border, 1, 1);
-    clipRegion -= QRegion(cw-border-1, border, 1, 1);
-    clipRegion -= QRegion(cw-border-1, ch-border-1, 1, 1);
-    clipRegion -= QRegion(border, ch-border-1, 1, 1);
+    QRegion clipRegion(0, 0, iconWidth, iconHeight);
+    clipRegion -= QRegion(0, 0, 1, 1);
+    clipRegion -= QRegion(iconWidth - 1, 0, 1, 1);
+    clipRegion -= QRegion(iconWidth - 1, iconHeight - 1, 1, 1);
+    clipRegion -= QRegion(0, iconHeight - 1, 1, 1);
 
     p.setClipRegion(clipRegion);
     p.setClipping(true);
-
-    p.setBrush(this->palette().window());
-    p.drawRect(QRect(0,0,cw,ch));
 
     if (!m_thumbnail.isNull()) {
         QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
@@ -85,7 +83,8 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
         } else {
             img = m_thumbnail.scaled(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
+        p.drawImage(QRect(0, 0, iconWidth, iconHeight), img);
+        useCustomIcon = true;
     }
     else if (m_resource) {
         QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
@@ -102,13 +101,20 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
             img = m_resource->image().scaled(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
             img.setDevicePixelRatio(devicePixelRatioF());
         }
-        p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
-    } else if (!icon().isNull()) {
-        QSize size = QSize(22, 22);
-        int border2 = qRound((cw - size.rwidth()) * 0.5);
-        QImage image = icon().pixmap(size).toImage();
-        p.drawImage(QRect(border2, border2, size.rwidth(), size.rheight()), image);
+        p.drawImage(QRect(0, 0, iconWidth, iconHeight), img);
+        useCustomIcon = true;
     }
     p.setClipping(false);
+    p.end();
+
+    QStylePainter ps(this);
+    QStyleOptionToolButton opt;
+    initStyleOption(&opt);
+    if (useCustomIcon) {
+        opt.iconSize = QSize(iconWidth, iconHeight);
+        opt.icon = QIcon(pixmap);
+        opt.toolButtonStyle = Qt::ToolButtonIconOnly;
+    }
+    ps.drawComplexControl(QStyle::CC_ToolButton, opt);
 }
 

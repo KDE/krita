@@ -24,6 +24,7 @@ class KRITAUI_EXPORT KisIconWidget : public KisPopupButton
 
 public:
     KisIconWidget(QWidget *parent = 0, const QString &name = QString());
+    ~KisIconWidget() override;
     void setThumbnail(const QImage &thumbnail);
     void setResource(KoResourceSP resource);
 
@@ -33,8 +34,8 @@ protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
-    QImage m_thumbnail;
-    KoResourceSP m_resource;
+    struct Private;
+    Private* const m_d;
 };
 
 #endif // KIS_ICONWIDGET_H_

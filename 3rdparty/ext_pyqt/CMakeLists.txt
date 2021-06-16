@@ -86,8 +86,11 @@ elseif(WIN32)
     elseif(MSVC)
         set(_compiler -c msvc)
     endif()
-    string(REPLACE "/" "\\" _pyqt_prefix ${PREFIX_ext_pyqt})
-    string(REPLACE "/" "\\" _krita_pythonpath ${KRITA_PYTHONPATH})
+    string(REPLACE "//" "/" __pyqt_prefix ${PREFIX_ext_pyqt})
+    string(REPLACE "/" "\\" _pyqt_prefix ${__pyqt_prefix})
+    string(REPLACE "//" "/" ___krita_pythonpath ${KRITA_PYTHONPATH})
+    string(REPLACE "/" "\\" __krita_pythonpath ${___krita_pythonpath})
+    string(TOLOWER ${__krita_pythonpath} _krita_pythonpath)
 
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -121,7 +124,7 @@ elseif(WIN32)
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${_krita_pythonpath}"
-            sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\Lib\\site-packages --jobs ${SUBMAKE_JOBS}
+            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\lib\\site-packages --jobs ${SUBMAKE_JOBS}
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 

@@ -176,10 +176,30 @@ int main(int argc, char *argv[]) {
 }" ${OUTPUT_VARNAME})
 endfunction()
 
+function(DumpSitePackages PYTHONPATH)
+    if (WIN32)
+        string(REPLACE "//" "/" ___krita_pythonpath ${${PYTHONPATH}})
+        string(REPLACE "/" "\\" __krita_pythonpath ${___krita_pythonpath})
+        string(TOLOWER ${__krita_pythonpath} _krita_pythonpath)
+    else()
+        set(_krita_pythonpath ${${PYTHONPATH}})
+    endif()
+    execute_process(COMMAND ${CMAKE_COMMAND}
+        -E env PYTHONPATH=${_krita_pythonpath}
+        ${PYTHON_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_paths());"
+        OUTPUT_VARIABLE __sysconfig)
+    message(STATUS "Python's system directories: ${__sysconfig}")
+    execute_process(COMMAND ${CMAKE_COMMAND}
+        -E env PYTHONPATH=${_krita_pythonpath}
+        ${PYTHON_EXECUTABLE} -c "from setuptools.command import easy_install; print(easy_install.get_site_dirs())"
+        OUTPUT_VARIABLE __setuptools)
+    message(STATUS "Python's setuptools directories: ${__setuptools}")
+endfunction()
+
 if (WIN32)
     option(ENABLE_PYTHON_DEPS "Enable Python deps (sip, pyqt)" ON)
     if (ENABLE_PYTHON_DEPS)
-        set(KRITA_PYTHONPATH "${INSTALL_ROOT}/Lib/site-packages;$ENV{PYTHONPATH}")
+        set(KRITA_PYTHONPATH "${INSTALL_ROOT}/lib/site-packages;$ENV{PYTHONPATH}")
         message(STATUS "Krita's PEP-0250 root: ${KRITA_PYTHONPATH}")
         if (ENABLE_PYTHON_2)
             message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
@@ -190,6 +210,7 @@ if (WIN32)
         if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
             message(STATUS "Python requirements met.")
             TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
+            DumpSitePackages(KRITA_PYTHONPATH)
             if (NOT CAN_USE_PYTHON_LIBS)
                 message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct!")
             endif ()

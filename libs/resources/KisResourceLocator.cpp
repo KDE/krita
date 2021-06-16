@@ -737,6 +737,22 @@ bool KisResourceLocator::synchronizeDb()
             d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
         }
     }
+    // now remove the storages that no longer exists
+    KisStorageModel model;
+    for (int i = 0; i < model.rowCount(); i++) {
+        QModelIndex idx = model.index(i, 0);
+        QString location = model.data(idx, Qt::UserRole + KisStorageModel::Location).toString();
+        if (!d->storages.contains(this->makeStorageLocationAbsolute(location))) {
+            if (!KisResourceCacheDb::deleteStorage(location)) {
+                d->errorMessages.append(i18n("Could not remove storage %1 from the database", this->makeStorageLocationAbsolute(location)));
+                qWarning() << d->errorMessages;
+                return false;
+            }
+            emit storageRemoved(this->makeStorageLocationAbsolute(location));
+        }
+    }
+
+
     d->resourceCache.clear();
     return d->errorMessages.isEmpty();
 }

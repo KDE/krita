@@ -1165,8 +1165,9 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
     return r;
 }
 
-bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
+bool KisResourceCacheDb::deleteStorage(QString location)
 {
+    // location is already relative
     {
         QSqlQuery q;
         if (!q.prepare("DELETE FROM resources\n"
@@ -1179,7 +1180,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete resources query in deleteStorage" << q.lastError();
             return false;
         }
-        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+        q.bindValue(":location", location);
         if (!q.exec()) {
             qWarning() << "Could not execute delete resources query in deleteStorage" << q.lastError();
             return false;
@@ -1195,7 +1196,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete versioned_resources query" << q.lastError();
             return false;
         }
-        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+        q.bindValue(":location", location);
         if (!q.exec()) {
             qWarning() << "Could not execute delete versioned_resources query" << q.lastError();
             return false;
@@ -1209,7 +1210,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete storages query" << q.lastError();
             return false;
         }
-        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+        q.bindValue(":location", location);
         if (!q.exec()) {
             qWarning() << "Could not execute delete storages query" << q.lastError();
             return false;
@@ -1218,6 +1219,10 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
     return true;
 }
 
+bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
+{
+    return deleteStorage(KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+}
 
 namespace {
 struct ResourceVersion : public boost::less_than_comparable<ResourceVersion>

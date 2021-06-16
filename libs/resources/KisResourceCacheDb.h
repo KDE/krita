@@ -110,6 +110,9 @@ private:
 
     /// Actually delete the storage and all its resources from the database (i.e., nothing is set to inactive, it's deleted)
     static bool deleteStorage(KisResourceStorageSP storage);
+    /// Actually delete the storage and all its resources from the database (i.e., nothing is set to inactive, it's deleted)
+    ///  location - relative
+    static bool deleteStorage(QString location);
     static bool synchronizeStorage(KisResourceStorageSP storage);
 
     /**

@@ -29,7 +29,7 @@
 if test -z $BUILDROOT; then
     echo "ERROR: BUILDROOT env not set, exiting!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
-    exit
+    exit 1
 fi
 
 BUILDROOT="${BUILDROOT%/}"
@@ -41,7 +41,7 @@ if test -z $(which cmake); then
     export PATH=/Applications/CMake.app/Contents/bin:${PATH}
     if test -z $(which cmake); then
         echo "ERROR: cmake not found, exiting!"
-        exit
+        exit 1
     fi
 fi
 echo "$(cmake --version | head -n 1)"
@@ -290,7 +290,7 @@ build_3rdparty_fixes(){
 
     if [[ "${error}" = "true" ]]; then
         log "Error building package ${pkg}, stopping..."
-        exit
+        exit 1
     fi
 }
 
@@ -364,7 +364,7 @@ build_3rdparty () {
     link: ${KIS_INSTALL_DIR}/bin/qmake-qt5 missing!
     It probably means ext_qt failed!!
     check, fix and rerun!\n"
-        exit
+        exit 1
     fi
 
     # for python
@@ -492,7 +492,7 @@ build_krita_tarball () {
 
     print_if_error "Failed untar of ${filename}"
     if [[ ${osxbuild_error} -ne 0 ]]; then
-        exit
+        exit 1
     fi
 
     KIS_BUILD_DIR="${KIS_CUSTOM_BUILD}/build"
@@ -523,7 +523,7 @@ install_krita () {
     osxbuild_error=$?
     print_if_error "could not cd to ${KIS_BUILD_DIR}"
     if [[ ${osxbuild_error} -ne 0 ]]; then
-        exit
+        exit 1
     fi
 
     make install

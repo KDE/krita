@@ -14,7 +14,7 @@
 if test -z $BUILDROOT; then
     echo "ERROR: BUILDROOT env not set, exiting!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
-    exit
+    exit 1
 fi
 
 BUILDROOT="${BUILDROOT%/}"
@@ -117,7 +117,7 @@ done
 if [[ -n "${WORK_DIR_CHECK}" && "${WORK_DIR_CHECK}" != "SET" ]] ; then
     echo "Current directory not inside buildroot"
     echo "use --work_dir=<path> to set custom"
-    exit
+    exit 1
 fi
 
 find_execute_tests ${parsed_args}

@@ -44,7 +44,7 @@ if test -z ${BUILDROOT}; then
     echo "ERROR: BUILDROOT env not set!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
     echo "exiting..."
-    exit
+    exit 1
 fi
 
 BUILDROOT="${BUILDROOT%/}"
@@ -128,7 +128,7 @@ if [[ -d "/Volumes/${DMG_title}" ]]; then
     echo "Attempting eject…"
     hdiutil detach "/Volumes/${DMG_title}"
     if [ $? -ne 0  ]; then
-        exit
+        exit 1
     fi
     echo "Success!"
 fi
@@ -184,7 +184,7 @@ for arg in "${@}"; do
 
     if [[ ${arg} = "-h" || ${arg} = "--help" ]]; then
         print_usage
-        exit
+        exit 1
     fi
 done
 
@@ -455,7 +455,7 @@ ERROR: Failed to install macdeployqt!
         make install
 "
         printf "\nexiting...\n"
-        exit
+        exit 1
         else
             echo "Done!"
         fi
@@ -799,7 +799,7 @@ print_msg "Checking if all files are signed before sending for notarization..."
 if [[ $(sign_hasError) -eq 1 ]]; then
     print_error "CodeSign errors cannot send to notarize!"
     echo "krita.app not sent to notarization, stopping...."
-    exit
+    exit 1
 fi
 print_msg "Done! all files appear to be correct."
 

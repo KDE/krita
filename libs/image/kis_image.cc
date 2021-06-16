@@ -1714,8 +1714,11 @@ KisAnnotationSP KisImage::annotation(const QString& type)
 {
     vKisAnnotationSP_it it = m_d->annotations.begin();
     while (it != m_d->annotations.end()) {
-        if ((*it)->type() == type) {
+        if ((*it) && (*it)->type() == type) {
             return *it;
+        }
+        else if (!*it) {
+            qWarning() << "Skipping deleted annotation";
         }
         ++it;
     }

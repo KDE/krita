@@ -164,6 +164,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
             QString type = (*it)->type();
 
             if (!m_d->specialAnnotations.contains(type)) {
+
                 QString description = (*it)->description();
                 QDomElement annotationElement = doc.createElement(ANNOTATION);
                 annotationsElement.appendChild(annotationElement);
@@ -198,8 +199,6 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
         }
 
         QByteArray ba = palette->toByteArray();
-
-        qDebug() << "Storing palette inside document" << palette->colorCount();
 
         qint64 nwritten = 0;
         if (!ba.isEmpty()) {

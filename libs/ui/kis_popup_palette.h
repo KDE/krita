@@ -99,7 +99,7 @@ private:
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
     QPainterPath drawFgBgColorIndicator(int type) const;
-    QRectF rotationIndicatorRect(qreal rotationAngle, bool absolute) const;
+    QRectF rotationIndicatorRect(qreal rotationAngle) const;
     bool isPointInPixmap(QPointF&, int pos);
 
     QPointF drawPointOnAngle(qreal angle, qreal radius) const;

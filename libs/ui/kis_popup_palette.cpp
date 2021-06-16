@@ -168,6 +168,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     mirrorMode->setToolTip(i18n("Mirror Canvas"));
     mirrorMode->setDefaultAction(m_actionCollection->action("mirror_canvas"));
+    connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotUpdate()));
 
     canvasOnlyButton = new KisHighlightedToolButton(this);
     canvasOnlyButton->setFixedSize(35, 35);
@@ -397,7 +398,8 @@ void KisPopupPalette::slotUpdate() {
             ? m_maxPresetSlotCount
             : qMin(m_maxPresetSlotCount, presetCount);
         calculatePresetLayout();
-    }  
+    }
+    m_canvasRotationIndicatorRect = rotationIndicatorRect(m_coordinatesConverter->rotationAngle());
     update();
 }
 
@@ -553,21 +555,13 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         pen.setWidth(2);
         painter.setPen(pen);
         painter.drawPath(rotationTrackPath);
-        painter.restore();
-    }
-    
-    // the following things needs to be based off the center, so let's translate the painter
-    painter.translate(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
-
-    if (m_showRotationTrack) {
-        painter.save();
+        
         // create a reset canvas rotation indicator to bring the canvas back to 0 degrees
-        QRectF resetRotationIndicator = rotationIndicatorRect(0, false);
+        QRectF resetRotationIndicator = rotationIndicatorRect(0);
 
         painter.setPen(QPen(palette().color(QPalette::Text), 1.0));
         painter.setBrush(Qt::NoBrush);
         painter.drawEllipse(resetRotationIndicator);
-        QRectF rotationIndicator = rotationIndicatorRect(m_coordinatesConverter->rotationAngle(), false);
 
         // create the canvas rotation handle
         painter.setBrush(palette().brush(QPalette::Text));
@@ -578,10 +572,13 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             QPen pen(palette().color(QPalette::Highlight), 2.0);
             painter.setPen(pen);
         }
-        painter.drawEllipse(rotationIndicator);
+        painter.drawEllipse(m_canvasRotationIndicatorRect);
 
         painter.restore();
     }
+    
+    // the following things needs to be based off the center, so let's translate the painter
+    painter.translate(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
 
     // painting favorite brushes
     QList<QImage> images(m_resourceManager->favoritePresetImages());
@@ -686,8 +683,8 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
 void KisPopupPalette::resizeEvent(QResizeEvent* resizeEvent) {
     Q_UNUSED(resizeEvent);
-    m_resetCanvasRotationIndicatorRect = rotationIndicatorRect(0, true);
-    m_canvasRotationIndicatorRect = rotationIndicatorRect(m_coordinatesConverter->rotationAngle(), true);
+    m_resetCanvasRotationIndicatorRect = rotationIndicatorRect(0);
+    m_canvasRotationIndicatorRect = rotationIndicatorRect(m_coordinatesConverter->rotationAngle());
     // Ensure that the resized geometry fits within the desired rect...
     QRect tempGeo = rect(); 
     tempGeo.translate(pos());
@@ -737,15 +734,12 @@ QPainterPath KisPopupPalette::drawFgBgColorIndicator(int type) const
     return indicator;
 }
 
-QRectF KisPopupPalette::rotationIndicatorRect(qreal rotationAngle, bool absolute) const
+QRectF KisPopupPalette::rotationIndicatorRect(qreal rotationAngle) const
 {
-    qreal indicatorRadians = qDegreesToRadians(rotationAngle - 90);  // -90 will make 0 degrees be at the top
     qreal paletteRadius = 0.5 * m_popupPaletteSize;
-    QPointF rotationDialPosition(qCos(indicatorRadians) * (paletteRadius - 10),
-                                 qSin(indicatorRadians) * (paletteRadius - 10));
-    if (absolute) {
-        rotationDialPosition += QPointF(paletteRadius, paletteRadius);
-    }
+    QPointF rotationDialPosition(drawPointOnAngle(rotationAngle, paletteRadius - 10));
+    rotationDialPosition += QPointF(paletteRadius, paletteRadius);
+    
     QPointF indicatorDiagonal(7.5, 7.5);
     return QRectF(rotationDialPosition - indicatorDiagonal, rotationDialPosition + indicatorDiagonal);
 }
@@ -780,7 +774,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
             KisCanvasController *canvasController =
                 dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
             canvasController->rotateCanvas(angleDifference);
-            m_canvasRotationIndicatorRect = rotationIndicatorRect(finalAngle, true);
+            m_canvasRotationIndicatorRect = rotationIndicatorRect(finalAngle);
 
             update();
             emit sigUpdateCanvas();
@@ -866,7 +860,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
                 KisCanvasController *canvasController =
                         dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
                 canvasController->rotateCanvas(angleDifference);
-                m_canvasRotationIndicatorRect = rotationIndicatorRect(0, true);
+                m_canvasRotationIndicatorRect = rotationIndicatorRect(0);
 
                 emit sigUpdateCanvas();
             }

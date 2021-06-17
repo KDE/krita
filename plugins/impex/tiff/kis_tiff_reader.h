@@ -142,6 +142,7 @@ public:
                       uint16_t sample_format,
                       uint8_t nbcolorssamples,
                       uint8_t extrasamplescount,
+                      bool premultipliedAlpha,
                       KoColorTransformation *transformProfile,
                       KisTIFFPostProcessor *postprocessor)
         : m_device(device)
@@ -150,6 +151,7 @@ public:
         , m_sample_format(sample_format)
         , m_nbcolorssamples(nbcolorssamples)
         , m_nbextrasamples(extrasamplescount)
+        , m_premultipliedAlpha(premultipliedAlpha)
         , m_poses(poses)
         , m_transformProfile(transformProfile)
         , mpostProcessImpl(postprocessor)
@@ -208,6 +210,11 @@ protected:
         return m_nbextrasamples;
     }
 
+    inline bool hasPremultipliedAlpha()
+    {
+        return m_premultipliedAlpha;
+    }
+
     inline quint8 *poses()
     {
         return m_poses;
@@ -230,6 +237,7 @@ private:
     uint16_t m_sample_format;
     quint8 m_nbcolorssamples;
     quint8 m_nbextrasamples;
+    bool m_premultipliedAlpha;
     quint8 *m_poses;
     KoColorTransformation *m_transformProfile;
     KisTIFFPostProcessor *mpostProcessImpl;
@@ -247,10 +255,11 @@ public:
                         uint16_t sample_format,
                         uint8_t nbcolorssamples,
                         uint8_t extrasamplescount,
+                        bool premultipliedAlpha,
                         KoColorTransformation *transformProfile,
                         KisTIFFPostProcessor *postprocessor,
                         T alphaValue)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor)
+        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, premultipliedAlpha, transformProfile, postprocessor)
         , m_alphaValue(alphaValue)
     {
     }
@@ -285,6 +294,48 @@ private:
                     (void)tiffstream->nextValue();
                 }
             }
+
+            if (this->hasPremultipliedAlpha()) {
+                auto unmultipliedColorsConsistent = [this, i](T *d) { return !(std::abs(d[this->poses()[i]]) < std::numeric_limits<T>::epsilon()); };
+
+                auto checkUnmultipliedColorsConsistent = [this, i](const T *d) {
+                    const T alpha = std::abs(d[this->poses()[i]]);
+
+                    if (alpha >= static_cast<T>(0.01)) {
+                        return true;
+                    } else {
+                        for (size_t i = 0; i < this->nbColorsSamples(); i++) {
+                            if (!qFuzzyCompare(T(d[i] * alpha), d[i])) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                };
+
+                if (!unmultipliedColorsConsistent(d)) {
+                    while (1) {
+                        T newAlpha = d[this->poses()[i]];
+
+                        for (quint8 i = 0; i < this->nbColorsSamples(); i++) {
+                            d[i] = std::lroundf(d[i] * newAlpha);
+                        }
+
+                        d[this->poses()[i]] = newAlpha;
+
+                        if (checkUnmultipliedColorsConsistent(d)) {
+                            break;
+                        }
+
+                        newAlpha += std::numeric_limits<T>::epsilon();
+                    }
+                } else {
+                    const T alpha = d[this->poses()[i]];
+                    for (quint8 i = 0; i < this->nbColorsSamples(); i++) {
+                        d[i] = std::lroundf(d[i] * alpha);
+                    }
+                }
+            }
         } while (it->nextPixel());
         return 1;
     }
@@ -317,6 +368,15 @@ private:
                     tiffstream->nextValue();
                 }
             }
+
+            if (hasPremultipliedAlpha()) {
+                const T alpha = d[poses()[i]];
+                const float factor = alpha == 0 ? 0 : static_cast<float>(std::numeric_limits<T>::max()) / alpha;
+
+                for (quint8 i = 0; i < nbColorsSamples(); i++) {
+                    d[i] = std::lroundf(d[i] * factor);
+                }
+            }
         } while (it->nextPixel());
         return 1;
     }
@@ -339,10 +399,11 @@ public:
                              uint8_t sourceDepth,
                              uint16_t sample_format,
                              uint8_t nbcolorssamples,
+                             bool premultipliedAlpha,
                              uint8_t extrasamplescount,
                              KoColorTransformation *transformProfile,
                              KisTIFFPostProcessor *postprocessor)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor)
+        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, premultipliedAlpha, transformProfile, postprocessor)
         , m_red(red)
         , m_green(green)
         , m_blue(blue)

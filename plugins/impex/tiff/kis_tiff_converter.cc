@@ -484,20 +484,28 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
 
     // Check if there is an alpha channel
     int8_t alphapos = -1; // <- no alpha
+    bool hasPremultipliedAlpha = false;
     // Check which extra is alpha if any
     dbgFile << "There are" << nbchannels << " channels and" << extrasamplescount << " extra channels";
     if (sampleinfo) { // index images don't have any sampleinfo, and therefore sampleinfo == 0
         for (int i = 0; i < extrasamplescount; i++) {
             dbgFile << "sample" << i << "extra sample count" << extrasamplescount << "color channel count" << (cs->colorChannelCount()) << "Number of channels" << nbchannels << "sample info" << sampleinfo[i];
-            if (sampleinfo[i] == EXTRASAMPLE_UNSPECIFIED) {
+            switch (sampleinfo[i]) {
+            case EXTRASAMPLE_ASSOCALPHA:
+                // The color values are already multiplied with the alpha value. This is reversed in the postprocessor.
+                dbgPlugins << "Detected associated alpha @ " << i;
+                hasPremultipliedAlpha = true;
+                alphapos = extrasamplescount - 1; // nbsamples - 1
+                break;
+            case EXTRASAMPLE_UNASSALPHA:
+                // color values are not premultiplied with alpha, and can be used as they are.
+                alphapos = i;
+                break;
+            case EXTRASAMPLE_UNSPECIFIED:
+            default:
                 qWarning() << "Extra sample type not defined for this file, assuming unassociated alpha.";
                 alphapos = i;
-            }
-            if (sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA) {
-                // XXX: dangelo: the color values are already multiplied with
-                // the alpha value.  This needs to be reversed later (postprocessor?)
-                qWarning() << "Associated alpha in this file: krita does not handle pre-multiplied alpha.";
-                alphapos = i;
+                break;
             }
 
             if (sampleinfo[i] == EXTRASAMPLE_UNASSALPHA) {
@@ -622,7 +630,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
             return ImportExportCodes::FileFormatIncorrect;
         }
 
-        tiffReader = new KisTIFFReaderFromPalette(layer->paintDevice(), red, green, blue, poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor);
+        tiffReader = new KisTIFFReaderFromPalette(layer->paintDevice(), red, green, blue, poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor);
     } else if (color_type == PHOTOMETRIC_YCBCR) {
         TIFFGetFieldDefaulted(image, TIFFTAG_YCBCRSUBSAMPLING, &hsubsampling, &vsubsampling);
         lineSizeCoeffs[1] = hsubsampling;
@@ -631,7 +639,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
         TIFFGetFieldDefaulted(image, TIFFTAG_YCBCRPOSITIONING, &position);
         if (dstDepth == 8) {
             tiffReader = new KisTIFFYCbCrReader<uint8_t>(
-                layer->paintDevice(), layer->image()->width(), layer->image()->height(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, hsubsampling, vsubsampling);
+                layer->paintDevice(), layer->image()->width(), layer->image()->height(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, hsubsampling, vsubsampling);
         } else if (dstDepth == 16) {
             if (sampletype == SAMPLEFORMAT_IEEEFP) {
 #ifdef HAVE_OPENEXR
@@ -644,6 +652,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
                                                           sampletype,
                                                           nbcolorsamples,
                                                           extrasamplescount,
+                                                          hasPremultipliedAlpha,
                                                           transform,
                                                           postprocessor,
                                                           hsubsampling,
@@ -659,6 +668,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
                                                               sampletype,
                                                               nbcolorsamples,
                                                               extrasamplescount,
+                                                              hasPremultipliedAlpha,
                                                               transform,
                                                               postprocessor,
                                                               hsubsampling,
@@ -675,6 +685,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
                                                            sampletype,
                                                            nbcolorsamples,
                                                            extrasamplescount,
+                                                           hasPremultipliedAlpha,
                                                            transform,
                                                            postprocessor,
                                                            hsubsampling,
@@ -689,6 +700,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
                                                               sampletype,
                                                               nbcolorsamples,
                                                               extrasamplescount,
+                                                              hasPremultipliedAlpha,
                                                               transform,
                                                               postprocessor,
                                                               hsubsampling,
@@ -696,20 +708,20 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
             }
         }
     } else if (dstDepth == 8) {
-        tiffReader = new KisTIFFReaderTarget<uint8_t>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, quint8_MAX);
+        tiffReader = new KisTIFFReaderTarget<uint8_t>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, quint8_MAX);
     } else if (dstDepth == 16) {
         if (sampletype == SAMPLEFORMAT_IEEEFP) {
 #ifdef HAVE_OPENEXR
-            tiffReader = new KisTIFFReaderTarget<half>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, 1.0);
+            tiffReader = new KisTIFFReaderTarget<half>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, 1.0);
 #endif
         } else {
-            tiffReader = new KisTIFFReaderTarget<uint16_t>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, quint16_MAX);
+            tiffReader = new KisTIFFReaderTarget<uint16_t>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, quint16_MAX);
         }
     } else if (dstDepth == 32) {
         if (sampletype == SAMPLEFORMAT_IEEEFP) {
-            tiffReader = new KisTIFFReaderTarget<float>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, 1.0f);
+            tiffReader = new KisTIFFReaderTarget<float>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, 1.0f);
         } else {
-            tiffReader = new KisTIFFReaderTarget<uint32_t>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, quint32_MAX);
+            tiffReader = new KisTIFFReaderTarget<uint32_t>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, quint32_MAX);
         }
     }
 

@@ -42,11 +42,12 @@ public:
                        uint16_t sampleformat,
                        uint8_t nbcolorssamples,
                        uint8_t extrasamplescount,
+                       bool premultipliedAlpha,
                        KoColorTransformation *transformProfile,
                        KisTIFFPostProcessor *postprocessor,
                        uint16_t hsub,
                        uint16_t vsub)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sampleformat, nbcolorssamples, extrasamplescount, transformProfile, postprocessor)
+        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sampleformat, nbcolorssamples, extrasamplescount, premultipliedAlpha, transformProfile, postprocessor)
         , m_hsub(hsub)
         , m_vsub(vsub)
     {
@@ -144,6 +145,48 @@ private:
                 d[1] = m_bufferCb[index];
                 d[2] = m_bufferCr[index];
                 ++x;
+
+                if (this->hasPremultipliedAlpha()) {
+                    auto unmultipliedColorsConsistent = [](T *d) { return !(std::abs(d[3]) < std::numeric_limits<T>::epsilon()); };
+
+                    auto checkUnmultipliedColorsConsistent = [this](const T *d) {
+                        const T alpha = std::abs(d[3]);
+
+                        if (alpha >= static_cast<T>(0.01)) {
+                            return true;
+                        } else {
+                            for (size_t i = 0; i < this->nbColorsSamples(); i++) {
+                                if (!qFuzzyCompare(T(d[i] * alpha), d[i])) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                    };
+
+                    if (!unmultipliedColorsConsistent(d)) {
+                        while (1) {
+                            T newAlpha = d[3];
+
+                            for (quint8 i = 0; i < this->nbColorsSamples(); i++) {
+                                d[i] = std::lroundf(d[i] * newAlpha);
+                            }
+
+                            d[3] = newAlpha;
+
+                            if (checkUnmultipliedColorsConsistent(d)) {
+                                break;
+                            }
+
+                            newAlpha += std::numeric_limits<T>::epsilon();
+                        }
+                    } else {
+                        const T alpha = d[3];
+                        for (quint8 i = 0; i < this->nbColorsSamples(); i++) {
+                            d[i] = std::lroundf(d[i] * alpha);
+                        }
+                    }
+                }
             } while (it->nextPixel());
             it->nextRow();
         }
@@ -161,6 +204,14 @@ private:
                 d[2] = m_bufferCr[index];
                 ++x;
 
+                if (this->hasPremultipliedAlpha()) {
+                    const T alpha = d[3];
+                    const float factor = alpha == 0 ? 0 : static_cast<float>(std::numeric_limits<T>::max()) / alpha;
+
+                    for (quint8 i = 0; i < this->nbColorsSamples(); i++) {
+                        d[i] = std::lroundf(d[i] * factor);
+                    }
+                }
             } while (it->nextPixel());
             it->nextRow();
         }

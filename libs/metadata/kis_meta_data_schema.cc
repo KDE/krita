@@ -333,7 +333,7 @@ Schema::Schema(const QString & _uri, const QString & _ns)
 Schema::~Schema()
 {
     dbgMetaData << "Deleting schema " << d->uri << " " << d->prefix;
-    dbgMetaData << kisBacktrace();
+    dbgMetaData.noquote() << kisBacktrace();
     delete d;
 }
 

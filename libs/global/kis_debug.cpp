@@ -62,7 +62,7 @@ QString kisBacktrace()
     s = QLatin1String("[\n");
 
     for (int i = 0; i < n; ++i)
-        s += QString::number(i) + QLatin1String(": ") +
+        s += QLatin1String("\t") + QString::number(i) + QLatin1String(": ") +
              maybeDemangledName(strings[i]) + QLatin1Char('\n');
     s += QLatin1String("]\n");
     free(strings);
@@ -104,8 +104,5 @@ QString __methodName(const char *_prettyFunction)
 
 void printBacktrace()
 {
-    QString bt = kisBacktrace();
-    Q_FOREACH(const QString &line, bt.split('\n')) {
-        qDebug() << line;
-    }
+    qDebug().noquote() << kisBacktrace();
 }

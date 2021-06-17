@@ -59,7 +59,7 @@ KisConfig::~KisConfig()
     if (m_readOnly) return;
 
     if (qApp && qApp->thread() != QThread::currentThread()) {
-        dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Called from:" << kisBacktrace();
+        dbgKrita.noquote() << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Called from:" << kisBacktrace();
         return;
     }
 

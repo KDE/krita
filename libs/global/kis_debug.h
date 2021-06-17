@@ -154,7 +154,7 @@ KRITAGLOBAL_EXPORT void printBacktrace();
 
 #  ifndef QT_NO_DEBUG
 #    undef Q_ASSERT
-#    define Q_ASSERT(cond) if(!(cond)) { errKrita << kisBacktrace(); qt_assert(#cond,__FILE__,__LINE__); } qt_noop()
+#    define Q_ASSERT(cond) if(!(cond)) { errKrita.noquote() << kisBacktrace(); qt_assert(#cond,__FILE__,__LINE__); } qt_noop()
 #  endif
 
 

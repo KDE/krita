@@ -136,7 +136,7 @@ void KoResource::setImage(const QImage &image)
 QByteArray KoResource::md5() const
 {
     if (d->md5.isEmpty()) {
-        qWarning() << "No MD5 for" << this;
+        dbgResources << "No MD5 for" << this << this->name();
         QByteArray ba;
         QBuffer buf(&ba);
         buf.open(QFile::WriteOnly);

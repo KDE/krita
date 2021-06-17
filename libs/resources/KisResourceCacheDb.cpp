@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.9" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.10" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -55,12 +55,12 @@ QSqlError createDatabase(const QString &location)
     // NOTE: if the id's of Unknown and Memory in the database
     //       will change, and that will break the queries that
     //       remove Unknown and Memory storages on start-up.
-    KisResourceCacheDb::storageTypes << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(1))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(2))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(3))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(4))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(5))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(6))
+    KisResourceCacheDb::storageTypes << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(1))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(2))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(3))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(4))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(5))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(6))
                                      ;
 
     if (!QSqlDatabase::connectionNames().isEmpty()) {

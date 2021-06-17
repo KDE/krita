@@ -88,8 +88,8 @@ elseif(WIN32)
     endif()
     string(REPLACE "//" "/" __pyqt_prefix ${PREFIX_ext_pyqt})
     string(REPLACE "/" "\\" _pyqt_prefix ${__pyqt_prefix})
-    string(REPLACE "//" "/" ___krita_pythonpath ${KRITA_PYTHONPATH})
-    string(REPLACE "/" "\\" __krita_pythonpath ${___krita_pythonpath})
+    string(REPLACE "//" "/" ___krita_pythonpath "${KRITA_PYTHONPATH}")
+    string(REPLACE "/" "\\" __krita_pythonpath "${___krita_pythonpath}")
     string(TOLOWER ${__krita_pythonpath} _krita_pythonpath)
 
     ExternalProject_Add(ext_pyqtbuilder

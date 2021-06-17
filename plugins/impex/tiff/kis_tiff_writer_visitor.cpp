@@ -45,12 +45,6 @@ namespace
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
 
-            if (depth == "F16") {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), cs->profile());
-                return false;
-            }
-
             if (isBitDepthFloat(depth)) {
                 sample_format = SAMPLEFORMAT_IEEEFP;
             }
@@ -58,12 +52,6 @@ namespace
 
         } else if (id.contains("LABA")) {
             color_type = PHOTOMETRIC_ICCLAB;
-
-            if (depth == "F16") {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), cs->profile());
-                return false;
-            }
 
             if (isBitDepthFloat(depth)) {
                 sample_format = SAMPLEFORMAT_IEEEFP;

@@ -12,6 +12,7 @@
 #include <stdio.h>
 #endif
 
+#include <cstdint>
 #include <tiffio.h>
 
 class KisBufferStreamBase

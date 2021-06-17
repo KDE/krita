@@ -543,6 +543,15 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     if (m_showRotationTrack) {
         painter.save();
+        QPen pen(palette().color(QPalette::Background).lighter(150), 2);
+        painter.setPen(pen);
+
+        // draw rotation snap lines
+        if (m_isRotatingCanvasIndicator) {
+            for (QLineF &line: m_snapLines) {
+                painter.drawLine(line);
+            }
+        }
         // create a path slightly inside the container circle. this will create a 'track' to indicate that we can rotate the canvas
         // with the indicator
         QPainterPath rotationTrackPath;
@@ -550,28 +559,31 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
                         m_popupPaletteSize - m_rotationTrackSize * 2, m_popupPaletteSize - m_rotationTrackSize * 2);
 
         rotationTrackPath.addEllipse(circleRect2);
-        QPen pen = painter.pen();
-        pen.setColor(palette().color(QPalette::Background).lighter(150));
-        pen.setWidth(2);
-        painter.setPen(pen);
         painter.drawPath(rotationTrackPath);
         
         // create a reset canvas rotation indicator to bring the canvas back to 0 degrees
-        QRectF resetRotationIndicator = rotationIndicatorRect(0);
+        QRectF resetRotationIndicator = m_resetCanvasRotationIndicatorRect;
 
-        painter.setPen(QPen(palette().color(QPalette::Text), 1.0));
-        painter.setBrush(Qt::NoBrush);
+        pen.setColor(m_isOverResetCanvasRotationIndicator
+            ? palette().color(QPalette::Highlight)
+            : palette().color(QPalette::Text));
+        // cover the first snap line
+        painter.setBrush(palette().brush(QPalette::Background));
+        painter.setPen(pen);
         painter.drawEllipse(resetRotationIndicator);
 
         // create the canvas rotation handle
-        painter.setBrush(palette().brush(QPalette::Text));
-
-        // hover indicator for the canvas rotation
-        // draw highlight if either just hovering or currently rotating
-        if (m_isOverCanvasRotationIndicator || m_isRotatingCanvasIndicator) {
-            QPen pen(palette().color(QPalette::Highlight), 2.0);
-            painter.setPen(pen);
-        }
+        // highlight if either just hovering or currently rotating
+        pen.setColor(m_isOverCanvasRotationIndicator || m_isRotatingCanvasIndicator
+            ? palette().color(QPalette::Highlight)
+            : palette().color(QPalette::Text));
+        painter.setPen(pen);
+        
+        // fill with highlight if snapping
+        painter.setBrush(m_isRotatingCanvasIndicator && m_snapRotation
+            ? palette().brush(QPalette::Highlight)
+            : palette().brush(QPalette::Text));
+        
         painter.drawEllipse(m_canvasRotationIndicatorRect);
 
         painter.restore();
@@ -683,6 +695,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
 void KisPopupPalette::resizeEvent(QResizeEvent* resizeEvent) {
     Q_UNUSED(resizeEvent);
+    calculateRotationSnapAreas();
     m_resetCanvasRotationIndicatorRect = rotationIndicatorRect(0);
     m_canvasRotationIndicatorRect = rotationIndicatorRect(m_coordinatesConverter->rotationAngle());
     // Ensure that the resized geometry fits within the desired rect...
@@ -753,22 +766,48 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
         // check if mouse is over the canvas rotation knob
         bool wasOverRotationIndicator = m_isOverCanvasRotationIndicator;
         m_isOverCanvasRotationIndicator = m_canvasRotationIndicatorRect.contains(point);
+        bool wasOverResetRotationIndicator = m_isOverResetCanvasRotationIndicator;
+        m_isOverResetCanvasRotationIndicator = m_resetCanvasRotationIndicatorRect.contains(point);
 
-        if (wasOverRotationIndicator != m_isOverCanvasRotationIndicator) {
+        if (
+            wasOverRotationIndicator != m_isOverCanvasRotationIndicator ||
+            wasOverResetRotationIndicator != m_isOverResetCanvasRotationIndicator
+        ) {
             update();
         }
 
         if (m_isRotatingCanvasIndicator) {
-            // we are rotating the canvas, so calculate the rotation angle based off the center
-            // calculate the angle we are at first
-            QPoint widgetCenterPoint = QPoint(m_popupPaletteSize/2, m_popupPaletteSize/2);
+            m_snapRotation = false;
+            int i = 0;
+            for (QRect &rect: m_snapRects) {
+                QPainterPath circle;
+                circle.addEllipse(rect);
+                if (circle.contains(point)) {
+                    m_snapRotation = true;
+                    m_rotationSnapAngle = i * 15;
+                    break;
+                }
+                i++;
+            }
+            qreal finalAngle = 0.0;
+            if (m_snapRotation) {
+                finalAngle = m_rotationSnapAngle;
+                // to match the numbers displayed when rotating without snapping
+                if (finalAngle >= 270) {
+                    finalAngle = finalAngle - 360;
+                }
+            } else {
+                // we are rotating the canvas, so calculate the rotation angle based off the center
+                // calculate the angle we are at first
+                QPoint widgetCenterPoint = QPoint(m_popupPaletteSize/2, m_popupPaletteSize/2);
 
-            float dX = point.x() - widgetCenterPoint.x();
-            float dY = point.y() - widgetCenterPoint.y();
+                float dX = point.x() - widgetCenterPoint.x();
+                float dY = point.y() - widgetCenterPoint.y();
 
 
-            float finalAngle = qAtan2(dY,dX) * 180 / M_PI; // what we need if we have two points, but don't know the angle
-            finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
+                finalAngle = qAtan2(dY,dX) * 180 / M_PI; // what we need if we have two points, but don't know the angle
+                finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
+            }
             float angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
 
             KisCanvasController *canvasController =
@@ -845,7 +884,6 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
 
 void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 {
-    QPointF point = event->localPos();
     event->accept();
 
     if (event->button() == Qt::LeftButton) {
@@ -855,7 +893,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
                 update();
             }
 
-            if (m_resetCanvasRotationIndicatorRect.contains(point)) {
+            if (m_isOverResetCanvasRotationIndicator) {
                 float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs
                 KisCanvasController *canvasController =
                         dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
@@ -1362,6 +1400,26 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index) const
     qreal pathDiameter = 2 * radius; // distance is used to calculate the X/Y in addition to the preset circle size
     path.addEllipse(pathX, pathY, pathDiameter, pathDiameter);
     return path;
+}
+
+void KisPopupPalette::calculateRotationSnapAreas() {
+    int i = 0;
+    for (QRect &rect: m_snapRects) {
+        QPointF point(drawPointOnAngle(i * 15, m_popupPaletteSize / 2 - BORDER_WIDTH - m_snapRadius/2));
+        point += QPointF(m_popupPaletteSize / 2 - m_snapRadius, m_popupPaletteSize / 2 - m_snapRadius);
+        rect = QRect(point.x(), point.y(), m_snapRadius*2, m_snapRadius*2);
+        i++;
+    }
+    i = 0;
+    for (QLineF &line: m_snapLines) {
+        qreal penWidth = BORDER_WIDTH / 2;
+        QPointF point1 = drawPointOnAngle(i * 15, m_popupPaletteSize / 2 - m_rotationTrackSize + penWidth);
+        point1 += QPointF(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
+        QPointF point2 = drawPointOnAngle(i * 15, m_popupPaletteSize / 2 - BORDER_WIDTH - penWidth);
+        point2 += QPointF(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
+        line = QLineF(point1, point2);
+        i++;
+    }
 }
 
 int KisPopupPalette::findPresetSlot(QPointF position) const

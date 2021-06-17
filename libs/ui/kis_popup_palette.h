@@ -111,6 +111,8 @@ private:
     void calculatePresetLayout();
     QPainterPath createPathFromPresetIndex(int index) const;
 
+    void calculateRotationSnapAreas();
+
     int m_maxPresetSlotCount {10};
     int m_presetSlotCount {10};
     int m_hoveredPreset {0};
@@ -118,6 +120,11 @@ private:
     int m_hoveredColor {0};
     int m_selectedColor {0};
     bool m_isOverFgBgColors {false};
+    bool m_snapRotation {false};
+    qreal m_rotationSnapAngle {0};
+    qreal m_snapRadius {15};
+    std::array<QRect, 24> m_snapRects{};
+    std::array<QLineF, 24> m_snapLines {};
 
     KisCoordinatesConverter *m_coordinatesConverter;
 
@@ -147,7 +154,8 @@ private:
     QRectF m_canvasRotationIndicatorRect;
     QRectF m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};
-    bool m_isRotatingCanvasIndicator {false};
+    bool m_isOverResetCanvasRotationIndicator{false};
+    bool m_isRotatingCanvasIndicator{false};
     bool m_isZoomingCanvas {false};
 
     KisHighlightedToolButton *mirrorMode {0};

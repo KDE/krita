@@ -374,6 +374,11 @@ KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDispl
 
     QWidget* m_input = createInput();
     m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+
+    m_colorPreview = new QLabel("");
+    m_colorPreview->setMinimumWidth(30);
+    m_layout->addWidget(m_colorPreview);
+
     m_layout->addWidget(m_input);
 }
 
@@ -411,6 +416,7 @@ void KisHexColorInput::update()
         }
     }
     m_hexInput->setText(hexString);
+    m_colorPreview->setStyleSheet(QString("background-color: %1").arg(m_color->toQColor().name()));
 }
 
 QWidget* KisHexColorInput::createInput()

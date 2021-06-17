@@ -18,12 +18,14 @@
 #include <KisGlobalResourcesInterface.h>
 #include <kis_pointer_utils.h>
 #include <KoMD5Generator.h>
+#include <kis_assert.h>
 
 
 struct StoredResource
 {
     QDateTime timestamp;
     QSharedPointer<QByteArray> data;
+    KoResourceSP resource;
 };
 
 class MemoryTagIterator : public KisResourceStorage::TagIterator
@@ -148,8 +150,11 @@ bool KisMemoryStorage::saveAsNewVersion(const QString &resourceType, KoResourceS
     storedResource.data.reset(new QByteArray());
     QBuffer buffer(storedResource.data.data());
     buffer.open(QIODevice::WriteOnly);
-    resource->saveToDevice(&buffer);
+    bool result = resource->saveToDevice(&buffer);
     buffer.close();
+    if (!result) {
+        storedResource.resource = resource;
+    }
 
     typedResources.insert(newFilename, storedResource);
 
@@ -178,9 +183,15 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
         const StoredResource &storedResource =
             d->resourcesNew[resourceType][resourceFilename];
 
-        QBuffer buffer(storedResource.data.data());
-        buffer.open(QIODevice::ReadOnly);
-        resource->loadFromDevice(&buffer, KisGlobalResourcesInterface::instance());
+        if (storedResource.data->size() > 0) {
+            QBuffer buffer(storedResource.data.data());
+            buffer.open(QIODevice::ReadOnly);
+            resource->loadFromDevice(&buffer, KisGlobalResourcesInterface::instance());
+        } else {
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(storedResource.data->size() > 0, false);
+            qWarning() << "Cannot load resource from device in KisMemoryStorage::loadVersionedResource";
+            return false;
+        }
         retval = true;
     }
 
@@ -231,8 +242,7 @@ bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP re
     QBuffer buffer(storedResource.data.data());
     buffer.open(QIODevice::WriteOnly);
     if (!resource->saveToDevice(&buffer)) {
-        qWarning() << "Could not save" << resource;
-        return false;
+        storedResource.resource = resource;
     }
     buffer.close();
 
@@ -257,7 +267,11 @@ QByteArray KisMemoryStorage::resourceMd5(const QString &url)
         const StoredResource &storedResource =
             d->resourcesNew[resourceType][resourceFilename];
 
-        result = KoMD5Generator::generateHash(*storedResource.data);
+        if (storedResource.data->size() > 0 || storedResource.resource.isNull()) {
+            result = KoMD5Generator::generateHash(*storedResource.data);
+        } else {
+            result = storedResource.resource->md5();
+        }
     }
 
     return result;

@@ -22,7 +22,7 @@ namespace
         return depth.contains("F");
     }
 
-    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_format, const KoColorSpace* &destColorSpace)
+    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16_t& color_type, uint16_t& sample_format, const KoColorSpace* &destColorSpace)
     {
         dbgKrita << cs->id();
         QString id = cs->id();
@@ -100,7 +100,7 @@ KisTIFFWriterVisitor::~KisTIFFWriterVisitor()
 {
 }
 
-bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint16 sample_format, uint8 nbcolorssamples, quint8* poses)
+bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8_t depth, uint16_t sample_format, uint8_t nbcolorssamples, quint8* poses)
 {
     if (depth == 32) {
         Q_ASSERT(sample_format == SAMPLEFORMAT_IEEEFP);
@@ -166,8 +166,8 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     dbgFile << "visiting on layer" << layer->name() << "";
     KisPaintDeviceSP pd = layer->projection();
 
-    uint16 color_type;
-    uint16 sample_format = SAMPLEFORMAT_UINT;
+    uint16_t color_type;
+    uint16_t sample_format = SAMPLEFORMAT_UINT;
     const KoColorSpace* destColorSpace;
     // Check colorspace
     if (!writeColorSpaceInformation(image(), pd->colorSpace(), color_type, sample_format, destColorSpace)) { // unsupported colorspace
@@ -184,7 +184,7 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     // Save number of samples
     if (m_options->alpha) {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount());
-        uint16 sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
+        uint16_t sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo);
     } else {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount() - 1);

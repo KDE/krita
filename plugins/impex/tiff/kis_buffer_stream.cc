@@ -88,7 +88,7 @@ uint32_t KisBufferStreamContigAbove32::nextValue()
     return value;
 }
 
-KisBufferStreamSeperate::KisBufferStreamSeperate(uint8_t** srcs, uint8_t nb_samples , uint16_t depth, uint32_t* lineSize) : KisBufferStreamBase(depth), m_nb_samples(nb_samples)
+KisBufferStreamSeparate::KisBufferStreamSeparate(uint8_t** srcs, uint8_t nb_samples , uint16_t depth, uint32_t* lineSize) : KisBufferStreamBase(depth), m_nb_samples(nb_samples)
 {
     streams = new KisBufferStreamContigBase*[nb_samples];
     if (depth < 16) {
@@ -107,7 +107,7 @@ KisBufferStreamSeperate::KisBufferStreamSeperate(uint8_t** srcs, uint8_t nb_samp
     restart();
 }
 
-KisBufferStreamSeperate::~KisBufferStreamSeperate()
+KisBufferStreamSeparate::~KisBufferStreamSeparate()
 {
     for (uint8_t i = 0; i < m_nb_samples; i++) {
         delete streams[i];
@@ -115,7 +115,7 @@ KisBufferStreamSeperate::~KisBufferStreamSeperate()
     delete[] streams;
 }
 
-uint32_t KisBufferStreamSeperate::nextValue()
+uint32_t KisBufferStreamSeparate::nextValue()
 {
     uint32_t value = streams[ m_current_sample ]->nextValue();
     if ((++m_current_sample) >= m_nb_samples)
@@ -123,7 +123,7 @@ uint32_t KisBufferStreamSeperate::nextValue()
     return value;
 }
 
-void KisBufferStreamSeperate::restart()
+void KisBufferStreamSeparate::restart()
 {
     m_current_sample = 0;
     for (uint8_t i = 0; i < m_nb_samples; i++) {
@@ -131,7 +131,7 @@ void KisBufferStreamSeperate::restart()
     }
 }
 
-void KisBufferStreamSeperate::moveToLine(uint32_t lineNumber)
+void KisBufferStreamSeparate::moveToLine(uint32_t lineNumber)
 {
     for (uint8_t i = 0; i < m_nb_samples; i++) {
         streams[i]->moveToLine(lineNumber);

@@ -623,8 +623,8 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF* image)
                 ps_buf[i] = _TIFFmalloc(baseSize);
                 lineSizes[i] = tileWidth;;
             }
-            tiffstream = new KisBufferStreamSeperate((uint8**) ps_buf, nbchannels, depth, lineSizes);
-            delete [] lineSizes;
+            tiffstream = new KisBufferStreamSeparate((uint8 **)ps_buf, nbchannels, depth, lineSizes);
+            delete[] lineSizes;
         }
         dbgFile << linewidth << "" << nbchannels << "" << layer->paintDevice()->colorSpace()->colorChannelCount();
         for (y = 0; y < height; y += tileHeight) {
@@ -676,8 +676,8 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF* image)
                 ps_buf[i] = _TIFFmalloc(stripsize);
                 lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
-            tiffstream = new KisBufferStreamSeperate((uint8**) ps_buf, nbchannels, depth, lineSizes);
-            delete [] lineSizes;
+            tiffstream = new KisBufferStreamSeparate((uint8 **)ps_buf, nbchannels, depth, lineSizes);
+            delete[] lineSizes;
         }
 
         dbgFile << "Scanline size =" << TIFFRasterScanlineSize(image) << " / strip size =" << TIFFStripSize(image) << " / rowsPerStrip =" << rowsPerStrip << " stripsize/rowsPerStrip =" << stripsize / rowsPerStrip;

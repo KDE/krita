@@ -68,11 +68,11 @@ public:
 };
 
 
-class KisBufferStreamSeperate : public KisBufferStreamBase
+class KisBufferStreamSeparate : public KisBufferStreamBase
 {
 public:
-    KisBufferStreamSeperate(uint8_t** srcs, uint8_t nb_samples , uint16_t depth, uint32_t* lineSize);
-    ~KisBufferStreamSeperate() override;
+    KisBufferStreamSeparate(uint8_t** srcs, uint8_t nb_samples , uint16_t depth, uint32_t* lineSize);
+    ~KisBufferStreamSeparate() override;
     uint32_t nextValue() override;
     void restart() override;
     void moveToLine(uint32_t lineNumber) override;

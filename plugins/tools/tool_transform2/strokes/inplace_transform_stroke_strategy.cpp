@@ -676,12 +676,30 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
             transformMask->overrideStaticCacheDevice(dst);
         }
 
-        KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
-                                                               KisTransformMaskParamsInterfaceSP(
-                                                                   new KisTransformMaskAdapter(config)),
-                                                               m_d->commandUpdatesBlockerCookie);
-        executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::CONCURRENT);
-        addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
+
+        { // Set Keyframe Data.
+            ToolTransformArgs unscaled = ToolTransformArgs(config);
+
+            if (levelOfDetail > 0) {
+                unscaled.scale3dSrcAndDst(KisLodTransform::lodToInvScale(levelOfDetail));
+            }
+
+            KUndo2Command* cmd = new KisSetTransformMaskKeyframesCommand(transformMask,
+                                                          KisTransformMaskParamsInterfaceSP(
+                                                                new KisTransformMaskAdapter(unscaled)));
+            executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::BARRIER);
+        }
+
+
+        {
+            KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
+                                                                   KisTransformMaskParamsInterfaceSP(
+                                                                       new KisTransformMaskAdapter(config)),
+                                                                   m_d->commandUpdatesBlockerCookie);
+            executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::CONCURRENT);
+            addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
+        }
+
     }
 }
 

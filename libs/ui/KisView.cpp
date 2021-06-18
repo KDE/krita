@@ -249,6 +249,8 @@ KisView::~KisView()
         d->viewManager->inputManager()->registerPopupWidget(nullptr);
     }
 
+    image()->requestStrokeCancellation();
+
     /**
      * KisCanvas2 maintains direct connections to the image, so we should
      * disconnect it from the image before the destruction process starts

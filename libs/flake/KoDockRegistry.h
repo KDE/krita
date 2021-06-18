@@ -35,13 +35,6 @@ public:
      */
     static KoDockRegistry *instance();
 
-
-    /**
-     * @brief dockFontSize calculates a smallish font size for dock widgets to use
-     * @return the point size in floating point.
-     */
-    static QFont dockFont();
-
 private:
 
     KoDockRegistry(const KoDockRegistry&);

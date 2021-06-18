@@ -54,6 +54,7 @@
 #include "input/KisQtWidgetsTweaker.h"
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
+#include "KisUiFont.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
@@ -672,6 +673,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     KisUsageLogger::writeSysInfo(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
 
     KisConfig(true).logImportantSettings();
+
+    app.setFont(KisUiFont::normalFont());
 
     if (!app.start(args)) {
         KisUsageLogger::log("Could not start Krita Application");

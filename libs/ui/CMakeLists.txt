@@ -165,6 +165,7 @@ set(kritaui_LIB_SRCS
     kis_multinode_property.cpp
     KisWelcomePageWidget.cpp
     KisChangeCloneLayersCommand.cpp
+    KisUiFont.cpp
 
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp

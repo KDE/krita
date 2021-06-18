@@ -7,7 +7,6 @@
 #include "KoDockRegistry.h"
 
 #include <QGlobalStatic>
-#include <QFontDatabase>
 #include <QDebug>
 #include <QApplication>
 
@@ -49,45 +48,4 @@ KoDockRegistry* KoDockRegistry::instance()
         s_instance->init();
     }
     return s_instance;
-}
-
-QFont KoDockRegistry::dockFont()
-{
-    KConfigGroup config(KSharedConfig::openConfig(), "");
-
-    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    QFont smallFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
-
-
-    if (config.readEntry<bool>("use_custom_system_font", false)) {
-        QString fontName = config.readEntry<QString>("custom_system_font", "");
-        int smallFontSize = config.readEntry<int>("custom_font_size", -1);
-
-        if (smallFontSize <= 6) {
-            smallFontSize = dockWidgetFont.pointSize();
-        }
-
-        if (!fontName.isEmpty()) {
-            dockWidgetFont = QFont(fontName, dockWidgetFont.pointSize());
-            smallFont = QFont(fontName, smallFontSize * 0.9);
-        }
-    }
-    else {
-        int pointSize = config.readEntry("palettefontsize", dockWidgetFont.pointSize());
-
-        // Not set by the user
-        if (pointSize == dockWidgetFont.pointSize()) {
-            // and there is no setting for the smallest readable font, calculate something small
-            if (smallFont.pointSize() >= pointSize) {
-                smallFont.setPointSizeF(pointSize * 0.9);
-            }
-        }
-        else {
-            // paletteFontSize was set, use that
-            smallFont.setPointSize(pointSize);
-        }
-
-    }
-
-    return smallFont;
 }

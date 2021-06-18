@@ -52,6 +52,7 @@
 #include "kis_time_span.h"
 #include "kis_keyframe_channel.h"
 #include "kis_node_manager.h"
+#include "kis_layer_utils.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -73,20 +74,22 @@ namespace ActionHelper {
 
         QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
 
-        KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
+        //KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
+        KisPaintDeviceSP clip = new KisPaintDevice(*device);
         Q_CHECK_PTR(clip);
+        device->clear();
 
         const KoColorSpace *cs = clip->colorSpace();
 
         // TODO if the source is linked... copy from all linked layers?!?
 
         // Copy image data
-        KisPainter::copyAreaOptimized(QPoint(), device, clip, rc);
+        KisPainter::copyAreaOptimized(rc.topLeft(), clip, device, rc);
 
         if (selection) {
             // Apply selection mask.
             KisPaintDeviceSP selectionProjection = selection->projection();
-            KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, rc.width());
+            KisHLineIteratorSP layerIt = device->createHLineIteratorNG(0, 0, rc.width());
             KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
 
             const KoColorSpace *selCs = selection->projection()->colorSpace();
@@ -119,7 +122,7 @@ namespace ActionHelper {
             }
         }
 
-        KisClipboard::instance()->setClip(clip, rc.topLeft(), range);
+        KisClipboard::instance()->setClip(device, rc.topLeft(), range);
     }
 
 }
@@ -271,8 +274,62 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         } else {
             view->canvasBase()->toolProxy()->copy();
         }
-    } else if (node && selection) {
-        {
+    } else if (selection) {
+        KisNodeList selectedNodes = view->nodeManager()->selectedNodes();
+        KisNodeList nodes;
+        KisGroupLayerSP group = new KisGroupLayer(image.data(), "", OPACITY_OPAQUE_U8);
+        Q_FOREACH (KisNodeSP node, selectedNodes) {
+            KisNodeSP dupNode = node->clone();
+            nodes.append(dupNode);
+            image->addNode(dupNode, group);
+        }
+        
+        Q_FOREACH (KisNodeSP node, nodes) {
+            KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
+                KisImageBarrierLocker locker(image);
+                KisPaintDeviceSP dev = node->paintDevice();
+/*                if (!dev) {
+                    dev = node->projection();
+                }*/
+/*
+                if (!dev) {
+                    view->showFloatingMessage(
+                        i18nc("floating message when cannot copy from a node",
+                              "Cannot copy pixels from this type of layer "),
+                        QIcon(), 3000, KisFloatingMessage::Medium);
+
+                    return;
+                }
+
+                if (dev->exactBounds().isEmpty()) {
+                    view->showFloatingMessage(
+                        i18nc("floating message when copying empty selection",
+                              "Selection is empty: no pixels were copied "),
+                        QIcon(), 3000, KisFloatingMessage::Medium);
+
+                    return;
+                }*/
+
+                KisTimeSpan range;
+
+                KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+                if (channel) {
+                    const int currentTime = image->animationInterface()->currentTime();
+                    range = channel->affectedFrames(currentTime);
+                }
+
+                qDebug() << node->name();
+                if (dev)
+                    ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
+            });
+        }
+        //QString groupName = !overrideGroupName.isEmpty() ? overrideGroupName : image->nextLayerName(i18n("Group"));
+        image->addNode(group, image->root());
+        KisClipboard::instance()->setLayers(nodes, image);
+        qDebug() << "Successfully copied to clipboard";
+        image->removeNode(group);
+        
+/*        {
             KisImageBarrierLocker locker(image);
             KisPaintDeviceSP dev = node->paintDevice();
             if (!dev) {
@@ -306,7 +363,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             }
 
             ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
-        }
+        }*/
 
         KUndo2Command *command = 0;
 

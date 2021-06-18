@@ -361,7 +361,7 @@ void KisFloatColorInput::update()
     m_colorSlider->blockSignals(false);
 }
 
-KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :
+KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage, bool usePreview) :
     KisColorInput(parent, 0, color, displayRenderer, usePercentage)
 {
     QHBoxLayout* m_layout = new QHBoxLayout(this);
@@ -375,9 +375,11 @@ KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDispl
     QWidget* m_input = createInput();
     m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
-    m_colorPreview = new QLabel("");
-    m_colorPreview->setMinimumWidth(30);
-    m_layout->addWidget(m_colorPreview);
+    if(usePreview) {
+        m_colorPreview = new QLabel("");
+        m_colorPreview->setMinimumWidth(30);
+        m_layout->addWidget(m_colorPreview);
+    }
 
     m_layout->addWidget(m_input);
 }
@@ -416,7 +418,9 @@ void KisHexColorInput::update()
         }
     }
     m_hexInput->setText(hexString);
-    m_colorPreview->setStyleSheet(QString("background-color: %1").arg(m_color->toQColor().name()));
+    if( m_colorPreview) {
+        m_colorPreview->setStyleSheet(QString("background-color: %1").arg(m_color->toQColor().name()));
+    }
 }
 
 QWidget* KisHexColorInput::createInput()

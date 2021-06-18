@@ -419,7 +419,7 @@ void KisHexColorInput::update()
     }
     m_hexInput->setText(hexString);
     if( m_colorPreview) {
-        m_colorPreview->setStyleSheet(QString("background-color: %1").arg(m_color->toQColor().name()));
+        m_colorPreview->setStyleSheet(QString("background-color: %1").arg(m_displayRenderer->toQColor(*m_color).name()));
     }
 }
 

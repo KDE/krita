@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2013 Alex Turbov <i.zaufi@gmail.com>
 # SPDX-FileCopyrightText: 2014-2016 Boudewijn Rempt <boud@valdyas.org>
 #
-# SPDX-License-Identifier: BSD-2-Clause.
+# SPDX-License-Identifier: BSD-2-Clause
 
 include(CMakeParseArguments)
 

@@ -2093,7 +2093,7 @@ index 0000000..8ffb22f
 +#endif
 +
 +#include <locale.h>
-+#if (defined __APPLE__ && defined __MACH__) && @HAVE_NEWLOCALE @
++#if (defined __APPLE__ && defined __MACH__) && @HAVE_NEWLOCALE@
 +#include <xlocale.h>
 +#endif
 +
@@ -2360,7 +2360,7 @@ index 0000000..8ffb22f
 +   or gettext() but for which the format string could be the return value
 +   of _() or gettext() need to add this #include.  Oh well.  */
 +
-+#if !@HAVE_POSIX_PRINTF @
++#if !@HAVE_POSIX_PRINTF@
 +
 +#include <stddef.h>
 +#include <stdio.h>
@@ -2417,7 +2417,7 @@ index 0000000..8ffb22f
 +extern LIBINTL_DLL_EXPORTED int vsprintf(char *, const char *, va_list);
 +#endif
 +
-+#if @HAVE_SNPRINTF @
++#if @HAVE_SNPRINTF@
 +
 +#if !(defined snprintf && defined _GL_STDIO_H) /* don't override gnulib */
 +#undef snprintf
@@ -2432,7 +2432,7 @@ index 0000000..8ffb22f
 +
 +#endif
 +
-+#if @HAVE_ASPRINTF @
++#if @HAVE_ASPRINTF@
 +
 +#if !(defined asprintf && defined _GL_STDIO_H) /* don't override gnulib */
 +#undef asprintf
@@ -2447,7 +2447,7 @@ index 0000000..8ffb22f
 +
 +#endif
 +
-+#if @HAVE_WPRINTF @
++#if @HAVE_WPRINTF@
 +
 +#undef fwprintf
 +#define fwprintf libintl_fwprintf
@@ -2475,7 +2475,7 @@ index 0000000..8ffb22f
 +#endif
 +
 +/* Support for retrieving the name of a locale_t object.  */
-+#if @HAVE_NAMELESS_LOCALES @
++#if @HAVE_NAMELESS_LOCALES@
 +
 +#ifndef GNULIB_defined_newlocale /* don't override gnulib */
 +#undef newlocale
@@ -2506,7 +2506,7 @@ index 0000000..8ffb22f
 +extern LIBINTL_DLL_EXPORTED char *setlocale(int, const char *);
 +#endif
 +
-+#if @HAVE_NEWLOCALE @
++#if @HAVE_NEWLOCALE@
 +
 +#undef newlocale
 +#define newlocale libintl_newlocale

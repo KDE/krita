@@ -83,8 +83,10 @@ if(UNIX)
 elseif(WIN32)
     if(MINGW)
         set(_compiler -c mingw32)
+        set(_make_command mingw32-make)
     elseif(MSVC)
         set(_compiler -c msvc)
+        set(_make_command jom)
     endif()
     string(REPLACE "//" "/" __pyqt_prefix ${PREFIX_ext_pyqt})
     string(REPLACE "/" "\\" _pyqt_prefix ${__pyqt_prefix})
@@ -129,14 +131,14 @@ elseif(WIN32)
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${_krita_pythonpath}"
-            mingw32-make -j${SUBMAKE_JOBS}
+            ${_make_command} -j${SUBMAKE_JOBS}
 
         # force single-threaded installation to avoid
         # race conditions in post-install .py script
         INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${_krita_pythonpath}"
-            mingw32-make -j1 install
+            ${_make_command} -j1 install
 
         BUILD_IN_SOURCE 1
 

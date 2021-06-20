@@ -198,12 +198,6 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     if (!closeRect.isNull())
         d->closeButton->setGeometry(closeRect);
 
-    int top = fw;
-    if (!floatRect.isNull())
-        top = floatRect.y();
-    else if (!closeRect.isNull())
-        top = closeRect.y();
-
     QSize lockRectSize = d->lockButton->size();
     if (!closeRect.isNull()) {
         lockRectSize = d->closeButton->size();
@@ -225,15 +219,12 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
         offset = 3;
     }
 
-    // To not move the lock button up when it's locked
-    int verticalOffset = 0;
-    if (d->lockButton->isChecked()){
-        verticalOffset = 3;
-    } else {
-        verticalOffset = 0;
-    }
+    // Just centre the button vertically to prevent the button from shifting
+    // up and down when toggling due to the close and float buttons changing
+    // visibility.
+    int top = (height() - lockRectSize.height()) * 0.5;
 
-    QRect lockRect = QRect(QPoint(fw + 2 + offset, top + verticalOffset), lockRectSize);
+    QRect lockRect = QRect(QPoint(fw + 2 + offset, top), lockRectSize);
     d->lockButton->setGeometry(lockRect);
 }
 

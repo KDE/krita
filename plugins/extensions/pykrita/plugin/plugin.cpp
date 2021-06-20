@@ -13,6 +13,8 @@
 #include <kis_preference_set_registry.h>
 #include "pyqtpluginsettings.h"
 
+#include <QCoreApplication>
+
 #include <Krita.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaPyQtPluginFactory, "kritapykrita.json", registerPlugin<KritaPyQtPlugin>();)
@@ -74,15 +76,18 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     Q_FOREACH (Extension *extension, Krita::instance()->extensions()) {
         extension->setup();
     }
+
+    // This ensures that QObject's owned by Python are destructed before
+    // the destructor of QCoreApplication is called, in order to prevent
+    // a crash on exit.
+    // See https://bugs.kde.org/show_bug.cgi?id=417465
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, []() { PyKrita::finalize(); });
 }
 
 KritaPyQtPlugin::~KritaPyQtPlugin()
 {
-    // XXX: With Qt 5.14, this crashes Krita on exit. See https://bugs.kde.org/show_bug.cgi?id=417465
-    //      So, for now, we just don't call finalize...
-#if QT_VERSION < QT_VERSION_CHECK(5,14,0)
-    PyKrita::finalize();
-#endif
+    // Don't call PyKrita::finalize here, because that can result in a crash
+    // deep inside Qt.
 }
 
 #include "plugin.moc"

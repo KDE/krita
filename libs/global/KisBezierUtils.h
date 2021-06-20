@@ -189,7 +189,7 @@ KRITAGLOBAL_EXPORT
 int controlPolygonZeros(const QList<QPointF> &controlPoints);
 
 /**
- * @brief calculates local (u,v) coordinates of the patch corrresponding to \p globalPoint
+ * @brief calculates local (u,v) coordinates of the patch corresponding to \p globalPoint
  *
  * The function uses Krita's own level-based patch interpolation algorithm
  *
@@ -214,7 +214,7 @@ KRITAGLOBAL_EXPORT
 QPointF calculateGlobalPos(const std::array<QPointF, 12> &points, const QPointF &localPoint);
 
 /**
- * @brief calculates local (u,v) coordinates of the patch corrresponding to \p globalPoint
+ * @brief calculates local (u,v) coordinates of the patch corresponding to \p globalPoint
  *
  * The function uses SVG2 toon patches algorithm
  *

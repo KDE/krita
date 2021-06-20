@@ -32,7 +32,7 @@ public:
      * @brief Sets an image, the class takes an image, clones it and calls frame
      * regeneration on the clone so do not pass cloned image explicitly. The image
      * should be set only_once and not every time before scheduling a frame for
-     * regenration. Setting an image cancels rendering of all previously scheduled frames.
+     * regeneration. Setting an image cancels rendering of all previously scheduled frames.
      * @param image Image whose frames are to be rendered.
     */
     void setImage(KisImageSP image);
@@ -59,12 +59,12 @@ public Q_SLOTS:
 private Q_SLOTS:
     /**
      * @brief Emits @c sigFrameCompleted(int,KisPaintDeviceSP) if the regeneration was complete
-     * and calls regenration of the next frame in queue.
+     * and calls regeneration of the next frame in queue.
      */
     void slotFrameRegenerationCompleted(int frame, KisPaintDeviceSP contents);
 
     /**
-     * @brief Emits @c sigFrameCancelled(int) and schedules the next frame for regenration.
+     * @brief Emits @c sigFrameCancelled(int) and schedules the next frame for regeneration.
      */
     void slotFrameRegenerationCancelled(int frame);
 

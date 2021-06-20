@@ -292,7 +292,7 @@ void KisAnimTimelineFrameDelegate::paint(QPainter *painter,
         paintActiveFrameSelector(painter, option.rect, layerIsCurrent);
     }
 
-    { // Shade over anthing that's outside of the animation range...
+    { // Shade over anything that's outside of the animation range...
         if (index.data(KisAnimTimelineFramesModel::WithinClipRange).toBool() == false) {
             painter->save();
 

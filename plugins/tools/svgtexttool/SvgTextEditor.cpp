@@ -43,6 +43,7 @@
 #include <ktoolbar.h>
 #include <ktoggleaction.h>
 #include <kguiitem.h>
+#include <kstandardguiitem.h>
 
 #include <KoDialog.h>
 #include <KoResourcePaths.h>
@@ -243,6 +244,8 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_charSelectDialog->hide();
     m_charSelectDialog->setButtons(KoDialog::Close);
 #endif
+    KGuiItem::assign(m_textEditorWidget.buttons->button(QDialogButtonBox::Save), KStandardGuiItem::save());
+    KGuiItem::assign(m_textEditorWidget.buttons->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(save()));
     connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(slotCloseEditor()));
     connect(m_textEditorWidget.buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(dialogButtonClicked(QAbstractButton*)));
@@ -578,6 +581,9 @@ void SvgTextEditor::find()
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     layout->addWidget(buttons);
 
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
+
     connect(buttons, SIGNAL(accepted()), &findDialog, SLOT(accept()));
     connect(buttons, SIGNAL(rejected()), &findDialog, SLOT(reject()));
 
@@ -618,6 +624,9 @@ void SvgTextEditor::replace()
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     layout->addRow(i18n("Replace:"), lnReplaceKey);
     layout->addWidget(buttons);
+
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     connect(buttons, SIGNAL(accepted()), &findDialog, SLOT(accept()));
     connect(buttons, SIGNAL(rejected()), &findDialog, SLOT(reject()));
@@ -1086,9 +1095,13 @@ void SvgTextEditor::setModified(bool modified)
 {
     if (modified) {
         m_textEditorWidget.buttons->setStandardButtons(QDialogButtonBox::Save | QDialogButtonBox::Discard);
+        KGuiItem::assign(m_textEditorWidget.buttons->button(QDialogButtonBox::Save), KStandardGuiItem::save());
+        KGuiItem::assign(m_textEditorWidget.buttons->button(QDialogButtonBox::Discard), KStandardGuiItem::discard());
     }
     else {
         m_textEditorWidget.buttons->setStandardButtons(QDialogButtonBox::Save | QDialogButtonBox::Close);
+        KGuiItem::assign(m_textEditorWidget.buttons->button(QDialogButtonBox::Save), KStandardGuiItem::save());
+        KGuiItem::assign(m_textEditorWidget.buttons->button(QDialogButtonBox::Close), KStandardGuiItem::close());
     }
 }
 

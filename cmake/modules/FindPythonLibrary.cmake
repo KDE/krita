@@ -58,6 +58,23 @@ if (PYTHONINTERP_FOUND)
 
     message(STATUS "Python system site-packages directory: ${PYTHON_SITE_PACKAGES_DIR}")
 
+    unset(KRITA_PYTHONPATH_V4 CACHE)
+    unset(KRITA_PYTHONPATH_V5 CACHE)
+    set(_python_prefix_path ${CMAKE_PREFIX_PATH})
+    if (WIN32)
+        foreach(__p ${_python_prefix_path})
+            set(KRITA_PYTHONPATH_V4 "${__p}/lib/krita-python-libs;${KRITA_PYTHONPATH_V4}")
+            set(KRITA_PYTHONPATH_V5 "${__p}/Lib/site-packages;${KRITA_PYTHONPATH_V5}")
+        endforeach()
+    else()
+        foreach(__p ${_python_prefix_path})
+            set(KRITA_PYTHONPATH_V4 "${__p}/lib/krita-python-libs:${KRITA_PYTHONPATH_V4}")
+            set(KRITA_PYTHONPATH_V5 "${__p}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages:${KRITA_PYTHONPATH_V5}")
+        endforeach(p)
+    endif()
+
+    message(STATUS "Krita site-packages directories for SIP v4: ${KRITA_PYTHONPATH_V4}")
+    message(STATUS "Krita site-packages directories for SIP v5+: ${KRITA_PYTHONPATH_V5}")
 endif(PYTHONINTERP_FOUND)
 
 find_package_handle_standard_args(PythonLibrary DEFAULT_MSG PYTHON_LIBRARY)

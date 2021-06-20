@@ -558,6 +558,8 @@ copy %KRITA_INSTALL_DIR%\bin\krita.com %pkg_root%\bin
 :: kritarunner.exe
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.exe %pkg_root%\bin
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.com %pkg_root%\bin
+:: qt.conf -- to specify the location to Qt translations
+copy %KRITA_SRC_DIR%\packaging\windows\qt.conf %pkg_root%\bin
 :: DLLs from bin/
 echo INFO: Copying all DLLs except Qt5* from bin/
 setlocal enableextensions enabledelayedexpansion
@@ -614,6 +616,7 @@ xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\kf5 %pkg_root%\share\kf5
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\mime %pkg_root%\share\mime
 :: Python libs
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\krita\pykrita %pkg_root%\share\krita\pykrita
+xcopy /Y /S /I %DEPS_INSTALL_DIR%\lib\site-packages %pkg_root%\lib\site-packages
 :: Not useful on Windows it seems
 rem xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\appdata %pkg_root%\share\appdata
 rem xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\applications %pkg_root%\share\applications
@@ -703,6 +706,11 @@ for /r "%pkg_root%\share\krita\pykrita\" %%F in (*.pyd) do (
 	call :split-debug "%%F" !relpath!
 )
 for /r "%pkg_root%\lib\krita-python-libs\" %%F in (*.pyd) do (
+	set relpath=%%F
+	set relpath=!relpath:~%pkg_root_len_plus_one%!
+	call :split-debug "%%F" !relpath!
+)
+for /r "%pkg_root%\lib\site-packages\" %%F in (*.pyd) do (
 	set relpath=%%F
 	set relpath=!relpath:~%pkg_root_len_plus_one%!
 	call :split-debug "%%F" !relpath!

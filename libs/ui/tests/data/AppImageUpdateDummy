@@ -49,7 +49,7 @@ if (state_string in states.keys()):
     state = states[state_string]
 
     if state_string in ['update_error', 'runtime_error']:
-        print("DUMMY: an error occured")
+        print("DUMMY: an error occurred")
 
     sys.exit(states[state_string])
 

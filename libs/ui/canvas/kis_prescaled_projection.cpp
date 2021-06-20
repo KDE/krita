@@ -191,7 +191,7 @@ void KisPrescaledProjection::slotImageSizeChanged(qint32 w, qint32 h)
 KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
 {
     if (!m_d->image) {
-        dbgRender << "Calling updateCache without an image: " << kisBacktrace() << endl;
+        dbgRender.noquote() << "Calling updateCache without an image:" << kisBacktrace() << endl;
         // return invalid info
         return new KisPPUpdateInfo();
     }

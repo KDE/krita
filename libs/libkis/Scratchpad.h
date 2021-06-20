@@ -46,7 +46,7 @@ public Q_SLOTS:
 
     /**
      * @brief Switches between a GUI controlling the current mode and when mouse clicks control mode
-     * @param Setting to true allows GUI to control the mode with explicity setting mode
+     * @param Setting to true allows GUI to control the mode with explicitly setting mode
      */
     void setModeManually(bool value);
 

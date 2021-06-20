@@ -72,7 +72,7 @@
        <property name="text">
         <string/>
        </property>
-       <property name="flat">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
@@ -97,7 +97,7 @@
        <property name="text">
         <string/>
        </property>
-       <property name="flat">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
@@ -119,7 +119,7 @@
  <customwidgets>
   <customwidget>
    <class>KisPopupButton</class>
-   <extends>QPushButton</extends>
+   <extends>QToolButton</extends>
    <header>KisPopupButton.h</header>
   </customwidget>
   <customwidget>

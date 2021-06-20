@@ -17,6 +17,8 @@
 
 #include "kis_wdg_seexpr_presets_save.h"
 
+#include <kstandardguiitem.h>
+
 KisWdgSeExprPresetsSave::KisWdgSeExprPresetsSave(QWidget *parent)
     : KisWdgSeExprSavePreset(parent)
     , m_currentPreset(nullptr)
@@ -27,6 +29,9 @@ KisWdgSeExprPresetsSave::KisWdgSeExprPresetsSave(QWidget *parent)
     connect(loadImageIntoThumbnailButton, SIGNAL(clicked(bool)), this, SLOT(loadImageFromFile()));
     connect(loadRenderFromScriptButton, SIGNAL(clicked(bool)), this, SLOT(renderScriptToThumbnail()));
     connect(clearPresetThumbnailButton, SIGNAL(clicked(bool)), presetThumbnailWidget, SLOT(clear()));
+
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Save), KStandardGuiItem::save());
+    KGuiItem::assign(buttons->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     connect(buttons, SIGNAL(accepted()), this, SLOT(savePreset()));
     connect(buttons, SIGNAL(rejected()), this, SLOT(close()));

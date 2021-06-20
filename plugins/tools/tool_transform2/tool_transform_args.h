@@ -271,7 +271,7 @@ public:
     bool isIdentity() const;
 
     // True if the target device does not need changing as a result of this
-    // transformation, because the tranformation does not differ from the initial
+    // transformation, because the transformation does not differ from the initial
     // one and the source image is not external.
     bool isUnchanging() const;
 
@@ -366,7 +366,7 @@ private:
     double m_shearY {0.0};
     bool m_keepAspectRatio {false};
 
-    // perspective trasform related
+    // perspective transform related
     QTransform m_flattenedPerspectiveTransform;
 
     KisFilterStrategy *m_filter {0};

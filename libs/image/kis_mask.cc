@@ -50,7 +50,7 @@ struct Q_DECL_HIDDEN KisMask::Private {
      * device belongs to the node, but not to the device itself.  So
      * the offset is set when the node is created, but not when the
      * selection is initialized. This causes the X,Y values to be
-     * lost, since the selection doen not exist at the moment. That is
+     * lost, since the selection does not exist at the moment. That is
      * why we save it separately.
      */
     QScopedPointer<QPoint> deferredSelectionOffset;

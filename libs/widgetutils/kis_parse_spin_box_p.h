@@ -181,7 +181,7 @@ public:
     // and not in the prefix or suffix. This makes those unselectable
     void fixupSelection()
     {
-        // If theres no selection just do nothing
+        // If there's no selection just do nothing
         if (m_lineEdit->selectedText().isEmpty()) {
             return;
         }
@@ -210,7 +210,7 @@ public:
         }
     }
 
-    // Inmediately show the warning overlay and icon
+    // Immediately show the warning overlay and icon
     void showWarning() const
     {
         if (m_isWarningActive && m_warningAnimation.state() == QVariantAnimation::Running) {
@@ -257,7 +257,7 @@ public:
             return;
         }
         // If "delay" is not greater that 0 then the warning will be
-        // inmediately shown
+        // immediately shown
         showWarning();
     }
 
@@ -285,7 +285,7 @@ public:
         m_q->initStyleOption(&spinBoxOptions);
         QRect rect = m_q->style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions, QStyle::SC_SpinBoxEditField);
         // Offset the rect to make it take all the available space inside the
-        // spinbox, without overlaping the buttons
+        // spinbox, without overlapping the buttons
         QString style = qApp->property(currentUnderlyingStyleNameProperty).toString().toLower();
         if (style == "breeze") {
             rect.adjust(-4, -4, 0, 4);
@@ -314,12 +314,12 @@ public:
             case Qt::Key_Enter:
             case Qt::Key_Return:
                 if (!isLastValid()) {
-                    // Inmediately show the warning if the expression is not valid
+                    // Immediately show the warning if the expression is not valid
                     showWarning();
                     return true;
                 } else {
                     // Set the value forcing the expression to be overwritten.
-                    // This will make an expression like "2*4" automaticaly be changed
+                    // This will make an expression like "2*4" automatically be changed
                     // to "8" when enter/return key is pressed
                     setValue(m_q->value(), true);
                 }
@@ -351,11 +351,11 @@ public:
     bool qFocusOutEvent(QFocusEvent*)
     {
         if (!isLastValid()) {
-            // Inmediately show the warning if the expression is not valid
+            // Immediately show the warning if the expression is not valid
             showWarning();
         } else {
             // Set the value forcing the expression to be overwritten.
-            // This will make an expression like "2*4" automaticaly be changed
+            // This will make an expression like "2*4" automatically be changed
             // to "8" when the spinbox looses focus 
             setValue(m_q->value(), true);
         }

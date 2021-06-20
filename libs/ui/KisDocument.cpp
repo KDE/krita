@@ -1316,7 +1316,7 @@ void KisDocument::slotPerformIdleRoutines()
     d->image->explicitRegenerateLevelOfDetail();
 
 
-    /// TODO: automatical purging is disabled for now: it modifies
+    /// TODO: automatic purging is disabled for now: it modifies
     ///       data managers without creating a transaction, which breaks
     ///       undo.
 

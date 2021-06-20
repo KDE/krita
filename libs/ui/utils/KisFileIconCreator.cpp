@@ -102,7 +102,6 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
                     store->close();
                     QImage img;
                     img.loadFromData(bytes);
-                    img.setDevicePixelRatio(devicePixelRatioF);
 
                     icon = createIcon(img, iconSize, dontUpsize);
                     return true;
@@ -133,7 +132,6 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
             }
         } else {
             QImage img;
-            img.setDevicePixelRatio(devicePixelRatioF);
             img.load(path);
             if (!img.isNull()) {
                 icon = createIcon(img, iconSize, dontUpsize);

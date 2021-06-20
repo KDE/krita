@@ -112,7 +112,7 @@ if test -z ${BUILDROOT}; then
     echo "ERROR: BUILDROOT env not set!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
     print_help
-    exit
+    exit 1
 fi
 
 BUILDROOT=$(cd "$(dirname "${BUILDROOT}")"; pwd -P)/$(basename "${BUILDROOT}") # force full path
@@ -140,7 +140,7 @@ KIS_INSTALL_DIR="${BUILDROOT}/i"
 
 if [[ ${1} = "-h" || ${1} = "--help" ]]; then
     print_help
-    exit
+    exit 1
 fi
 
 if [[ ${1} = "set" ]]; then
@@ -168,7 +168,7 @@ if [[ ${1} = "set" ]]; then
 
     if [[ ${DMG_validBG} -eq 0 ]]; then
         echo "No jpg or png given or valid file detected!!"
-        exit
+        exit 1
     else
         BG_DPI=$(sips --getProperty dpiWidth ${DMG_background} | grep dpi | awk '{print $2}')
         if [[ $(echo "${BG_DPI} > 150" | bc -l) -eq 1 ]]; then
@@ -182,7 +182,7 @@ Current dpi is: %s\n" ${BG_DPI}
 else
     if [[ ! -e ${DMG_STYLE_DIR} ]]; then
         echo "First run must use option [set]!!"
-        exit
+        exit 1
     fi
     osa_values=$(get_dmgfolder_props)
     print_osascript_cmd "${osa_values}"

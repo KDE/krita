@@ -4,7 +4,7 @@
  * SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_canvas2.h"

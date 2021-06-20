@@ -46,6 +46,7 @@
 #include "kis_zoom_button.h"
 #include "kis_signals_blocker.h"
 #include "kis_time_span.h"
+#include "kis_processing_applicator.h"
 #include <QItemSelection>
 
 KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
@@ -536,7 +537,7 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     }
 }
 
-void KisAnimCurvesDocker::addKeyframe(const QString &channelIdentity)
+void KisAnimCurvesDocker::addKeyframeCommandToParent(const QString &channelIdentity, KUndo2Command* parentCMD)
 {
     if (!m_d->canvas) return;
 
@@ -544,7 +545,17 @@ void KisAnimCurvesDocker::addKeyframe(const QString &channelIdentity)
     if (!node) return;
 
     const int time = m_d->canvas->image()->animationInterface()->currentTime();
+    KisAnimUtils::createKeyframeCommand(m_d->canvas->image(), node, channelIdentity, time, true, parentCMD);
+}
 
+void KisAnimCurvesDocker::addKeyframeQuick(const QString &channelIdentity)
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    const int time = m_d->canvas->image()->animationInterface()->currentTime();
     KisAnimUtils::createKeyframeLazy(m_d->canvas->image(), node, channelIdentity, time, true);
 }
 
@@ -635,48 +646,36 @@ void KisAnimCurvesDocker::slotAddAllEnabledKeys()
     KisNodeSP node = m_d->canvas->viewManager()->activeNode();
     KIS_SAFE_ASSERT_RECOVER_RETURN(node);
 
-    /* Once we have more than one supported scalar key value,
+    /* Once we start dealing with more scalar values,
      * we should add a dropdown check-box set of actions that can
-     * enable and disable keys. For now, since opacity is the only
-     * key officially supported, we will just presume opacity. */
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id())) {
-        addKeyframe(KisKeyframeChannel::Opacity.id());
+     * enable and disable keys. For now, we will just consider all channels
+     * enabled. */
+    KUndo2Command* parentCMD = new KUndo2Command; //TODO: give undo name once out of string freeze...
+
+    //This should eventually be a list of all currently enabled channels.
+    QList<KoID> ids = {
+        KisKeyframeChannel::Opacity,
+        KisKeyframeChannel::PositionX,
+        KisKeyframeChannel::PositionY,
+        KisKeyframeChannel::ScaleX,
+        KisKeyframeChannel::ScaleY,
+        KisKeyframeChannel::ShearX,
+        KisKeyframeChannel::ShearY,
+        KisKeyframeChannel::RotationX,
+        KisKeyframeChannel::RotationY,
+        KisKeyframeChannel::RotationZ
+    };
+
+    Q_FOREACH( const KoID& koid, ids ) {
+        if (node->supportsKeyframeChannel(koid.id())) {
+            addKeyframeCommandToParent(koid.id(), parentCMD);
+        }
     }
 
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::PositionX.id())) {
-        addKeyframe(KisKeyframeChannel::PositionX.id());
-    }
-
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::PositionY.id())) {
-        addKeyframe(KisKeyframeChannel::PositionY.id());
-    }
-
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::ScaleX.id())) {
-        addKeyframe(KisKeyframeChannel::ScaleX.id());
-    }
-
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::ScaleY.id())) {
-        addKeyframe(KisKeyframeChannel::ScaleY.id());
-    }
-
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::ShearX.id())) {
-        addKeyframe(KisKeyframeChannel::ShearX.id());
-    }
-
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::ShearY.id())) {
-        addKeyframe(KisKeyframeChannel::ShearY.id());
-    }
-
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::RotationX.id())) {
-        addKeyframe(KisKeyframeChannel::RotationX.id());
-    }
-
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::RotationY.id())) {
-        addKeyframe(KisKeyframeChannel::RotationY.id());
-    }
-
-    if (node->supportsKeyframeChannel(KisKeyframeChannel::RotationZ.id())) {
-        addKeyframe(KisKeyframeChannel::RotationZ.id());
+    if (m_d->canvas && m_d->canvas->image()) {
+        KisProcessingApplicator::runSingleCommandStroke(m_d->canvas->image(), parentCMD,
+                                                        KisStrokeJobData::BARRIER,
+                                                        KisStrokeJobData::EXCLUSIVE);
     }
 }
 
@@ -688,7 +687,7 @@ void KisAnimCurvesDocker::slotAddOpacityKey()
     KIS_SAFE_ASSERT_RECOVER_RETURN(node);
 
     if (node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id())) {
-        addKeyframe(KisKeyframeChannel::Opacity.id());
+        addKeyframeQuick(KisKeyframeChannel::Opacity.id());
     }
 }
 
@@ -704,6 +703,7 @@ void KisAnimCurvesDocker::slotRemoveSelectedKeys()
     QItemSelectionModel* selectionModel = m_d->curvesView->selectionModel();
     QModelIndexList selected = selectionModel ? selectionModel->selectedIndexes() : QModelIndexList();
 
+    QVector<KisAnimUtils::FrameItem> framesToRemove;
 
     if (selected.count() > 0) {
         Q_FOREACH(const QModelIndex& selection, selected) {
@@ -714,7 +714,7 @@ void KisAnimCurvesDocker::slotRemoveSelectedKeys()
 
             const QString identifier = data.toString();
             const int time = selection.column();
-            KisAnimUtils::removeKeyframe(m_d->canvas->image(), node, identifier, time);
+            framesToRemove.push_back(KisAnimUtils::FrameItem(node, identifier, time));
         }
     } else {
         const int time = m_d->canvas->image()->animationInterface()->currentTime();
@@ -728,8 +728,12 @@ void KisAnimCurvesDocker::slotRemoveSelectedKeys()
                 continue;
 
             const QString identifier = data.toString();
-            KisAnimUtils::removeKeyframe(m_d->canvas->image(), node, identifier, time);
+            framesToRemove.push_back(KisAnimUtils::FrameItem(node, identifier, time));
         }
+    }
+
+    if (m_d->canvas && m_d->canvas->image()) {
+        KisAnimUtils::removeKeyframes(m_d->canvas->image(), framesToRemove);
     }
 }
 

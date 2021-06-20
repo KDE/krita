@@ -19,6 +19,7 @@
 #include <klocalizedstring.h>
 #include <ktitlewidget.h>
 #include <kwidgetsaddons_version.h>
+#include <kstandardguiitem.h>
 
 #include <kis_icon_utils.h>
 
@@ -138,6 +139,7 @@ KAboutKdeDialog::KAboutKdeDialog(QWidget *parent)
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox;
     buttonBox->setStandardButtons(QDialogButtonBox::Close);
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Close), KStandardGuiItem::close());
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 

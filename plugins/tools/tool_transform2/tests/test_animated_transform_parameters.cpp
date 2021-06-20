@@ -36,9 +36,15 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
         args.setMode(ToolTransformArgs::FREE_TRANSFORM);
         args.setScaleX(0.75);
 
-        QScopedPointer<KisModifyTransformMaskCommand> command1(
-            new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+        QScopedPointer<KisInitializeTransformMaskKeyframesCommand> command0(
+                    new KisInitializeTransformMaskKeyframesCommand(mask));
+        QScopedPointer<KisSetTransformMaskKeyframesCommand> command1(
+                    new KisSetTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+        QScopedPointer<KisModifyTransformMaskCommand> command2(
+                    new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+        command0->redo();
         command1->redo();
+        command2->redo();
     }
 
     {
@@ -47,8 +53,14 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
 
         args.setScaleX(0.5);
 
+        QScopedPointer<KisInitializeTransformMaskKeyframesCommand> command0(
+                    new KisInitializeTransformMaskKeyframesCommand(mask));
+        QScopedPointer<KisSetTransformMaskKeyframesCommand> command1(
+                    new KisSetTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
         QScopedPointer<KisModifyTransformMaskCommand> command2(
-            new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+                    new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+        command0->redo();
+        command1->redo();
         command2->redo();
     }
 

@@ -56,9 +56,9 @@ public:
 
     /* Generate a transform for converting handles into easier local
        coordinate system that has the following properties:
-       - Rotated so horizon is perfectly horizonal
+       - Rotated so horizon is perfectly horizontal
        - Translated so 3rd handle is the origin
-       Paremeters are the first VP, second VP, a 3rd point which
+       Parameters are the first VP, second VP, a 3rd point which
        defines the center of vision, and lastly a reference to a size
        variable which is the radius of the 90 degree cone of vision
        (useful for computing snapping behaviour and drawing grid

@@ -12,7 +12,7 @@
 
 /**
  * KisBundleStorage is KisStoragePlugin that can load resources 
- * from bundles. It can also manage overrridden resources from bundles,
+ * from bundles. It can also manage overridden resources from bundles,
  * which are not stored in the bundles themselves.
  */
 class KRITARESOURCES_EXPORT KisBundleStorage : public KisStoragePlugin

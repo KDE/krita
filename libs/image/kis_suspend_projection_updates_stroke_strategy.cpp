@@ -425,11 +425,11 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
         void undo() override {
             /**
-             * Even though this comand is the last command of the stroke is can
+             * Even though this command is the last command of the stroke is can
              * still be undone by suspendStrokeCallback(). It happens when a LodN
              * stroke is started right after the last job of resume strategy was
              * being executed. In such a case new stroke is placed right in front
-             * of our resume strategy and all the resuming work is undone (mimicing
+             * of our resume strategy and all the resuming work is undone (mimicking
              * a normal suspend strategy).
              *
              * The only thing we should control here is whether the state of the

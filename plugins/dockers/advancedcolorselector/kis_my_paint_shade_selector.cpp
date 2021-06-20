@@ -219,6 +219,9 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     gc.bitBlt(QPoint(0,0), m_realCircleBorder, QRect(rect().topLeft(), rect().size()*devicePixelRatioF()));
 
     QPainter painter(this);
+    if (!isEnabled()) {
+        painter.setOpacity(0.2);
+    }
     QImage renderedImage = converter()->toQImage(m_realPixelCache);
     renderedImage.setDevicePixelRatio(devicePixelRatioF());
 

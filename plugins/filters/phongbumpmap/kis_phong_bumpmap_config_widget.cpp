@@ -13,8 +13,8 @@
 #include <KisGlobalResourcesInterface.h>
 
 KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget *parent, Qt::WindowFlags f)
-                            : KisConfigWidget(parent, f)
-                            , m_device(dev)
+    : KisConfigWidget(parent, f)
+    , m_device(dev)
 {
     Q_ASSERT(m_device);
     m_page = new KisPhongBumpmapWidget(this);
@@ -30,7 +30,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     connect(m_page->azimuthAngleSelector2, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->azimuthAngleSelector3, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->azimuthAngleSelector4, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-        
+
     connect(m_page->lightKColorCombo1, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->lightKColorCombo2, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->lightKColorCombo3, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));

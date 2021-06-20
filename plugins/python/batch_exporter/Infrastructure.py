@@ -327,7 +327,7 @@ class WNode:
 
     def saveCOASpriteSheet(self, dirname=""):
         """
-        Generate a vertical sheet of equaly sized frames
+        Generate a vertical sheet of equally sized frames
         Each child of self is pasted to a master sheet
         """
         images = self.children

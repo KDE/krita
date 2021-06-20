@@ -24,7 +24,7 @@ index 0000000..680267b
 +    set(APPLE_SUPPRESS_X11_WARNING TRUE)
 +    set(CMAKE_MACOSX_RPATH 1)
 +    set(BUILD_WITH_INSTALL_RPATH 1)
-+    add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
++    add_definitions(-mmacosx-version-min=10.13 -Wno-macro-redefined -Wno-deprecated-register)
 +endif()
 +
 +

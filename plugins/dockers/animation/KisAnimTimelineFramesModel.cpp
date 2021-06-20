@@ -693,8 +693,8 @@ bool KisAnimTimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt:
     stream >> size >> baseRow >> baseColumn;
 
     const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
-
     KisAnimUtils::FrameMovePairList frameMoves;
+    int necessaryOffset = 0;  //Necessary offset to keep move above 0, used later.
 
     for (int i = 0; i < size; i++) {
         int relRow, relColumn;
@@ -730,6 +730,11 @@ bool KisAnimTimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt:
         Q_FOREACH (KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
             KisAnimUtils::FrameItem srcItem(srcNode, channel->id(), srcColumn);
             KisAnimUtils::FrameItem dstItem(dstNode, channel->id(), srcColumn + offset.x());
+
+            if ((srcColumn + offset.x()) * -1 > necessaryOffset ) {
+                necessaryOffset = (srcColumn + offset.x()) * -1;
+            }
+
             frameMoves << std::make_pair(srcItem, dstItem);
         }
     }
@@ -755,6 +760,15 @@ bool KisAnimTimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt:
     KUndo2Command *cmd = 0;
 
     if (!frameMoves.isEmpty()) {
+
+        // We need to make sure that no movement ever occurs into the negative values.
+        // TODO: Probably a better way to fix this, I'm not happy with this fix.
+        if (necessaryOffset > 0) {
+            for (int i = 0; i < frameMoves.count(); i++){
+                frameMoves[i].second.time += necessaryOffset;
+            }
+        }
+
         KisImageBarrierLockerWithFeedback locker(m_d->image);
 
         if (cloneFrames) {

@@ -97,7 +97,7 @@ MergingIndexList::Iterator ContainerNode::findIndex(const QString &name)
 
 /*
  * Check if the given container widget is a child of this node and return the node structure
- * if fonud.
+ * if found.
  */
 ContainerNode *ContainerNode::findContainerNode(QWidget *container)
 {

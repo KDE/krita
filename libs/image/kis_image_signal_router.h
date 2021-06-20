@@ -45,7 +45,7 @@ Q_SIGNALS:
 
     /**
      * Emitted whenever the image wants to update Lod0 plane of the canvas. Blocking
-     * synching effectively means that the canvas will not try to read from these planes
+     * syncing effectively means that the canvas will not try to read from these planes
      * until the **all** the data is loaded. Otherwise the user will see weird flickering
      * because of partially loaded lod0 tiles.
      *
@@ -56,7 +56,7 @@ Q_SIGNALS:
 
     /**
      * Emitted whenever the image is going to issue a lot of canvas update signals and
-     * it it a good idea to group then and rerender the canvas in one go. The canvas
+     * it is a good idea to group then and rerender the canvas in one go. The canvas
      * should initiate new rerenders while the batch is in progress.
      *
      * NOTE: even though the batched updates will not initiate a rerender, it does

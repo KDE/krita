@@ -108,12 +108,12 @@ struct InplaceTransformStrokeStrategy::Private
     QElapsedTimer updateTimer;
     const int updateInterval = 30;
 
-    // temporary variable to share data betwen jobs at the initialization phase
+    // temporary variable to share data between jobs at the initialization phase
     QVector<KisDecoratedNodeInterface*> disabledDecoratedNodes;
 
     /**
      * A special cookie-object, which blocks updates in transform mask
-     * modification commands untils the stroke ends. As soon as the stroke
+     * modification commands until the stroke ends. As soon as the stroke
      * ends, the object is destroyed and the transform mask modification
      * commands start to behave normally.
      */
@@ -291,6 +291,14 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     // When placing an external source image, we never work recursively on any layer masks
     m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->externalSource);
 
+    // When dealing with animated transform mask layers, create keyframe and save the command for undo.
+    Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
+        if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
+            QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask));
+            runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+        }
+    }
+
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;
 
@@ -446,7 +454,6 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
             addMutatedJobs(lodSyncJobs);
         }
     });
-
 
     addMutatedJobs(extraInitJobs);
 }
@@ -669,12 +676,30 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
             transformMask->overrideStaticCacheDevice(dst);
         }
 
-        KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
-                                                               KisTransformMaskParamsInterfaceSP(
-                                                                   new KisTransformMaskAdapter(config)),
-                                                               m_d->commandUpdatesBlockerCookie);
-        executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::CONCURRENT);
-        addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
+
+        { // Set Keyframe Data.
+            ToolTransformArgs unscaled = ToolTransformArgs(config);
+
+            if (levelOfDetail > 0) {
+                unscaled.scale3dSrcAndDst(KisLodTransform::lodToInvScale(levelOfDetail));
+            }
+
+            KUndo2Command* cmd = new KisSetTransformMaskKeyframesCommand(transformMask,
+                                                          KisTransformMaskParamsInterfaceSP(
+                                                                new KisTransformMaskAdapter(unscaled)));
+            executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::BARRIER);
+        }
+
+
+        {
+            KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
+                                                                   KisTransformMaskParamsInterfaceSP(
+                                                                       new KisTransformMaskAdapter(config)),
+                                                                   m_d->commandUpdatesBlockerCookie);
+            executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::CONCURRENT);
+            addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
+        }
+
     }
 }
 

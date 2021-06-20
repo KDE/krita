@@ -90,7 +90,7 @@ public:
      * @li All absolute paths (most recent first).
      *
      * The filename should be a filename relative to the base dir
-     * for resources. So is a way to get the path to libkdecore.la
+     * for resources. So it's a way to get the path to libkdecore.la
      * to findResource("lib", "libkdecore.la"). KStandardDirs will
      * then look into the subdir lib of all elements of all prefixes
      * ($KDEDIRS) for a file libkdecore.la and return the path to

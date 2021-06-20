@@ -11,6 +11,11 @@
 
 #include <QtMath>
 
+static QString percentStr()
+{
+    static QString str = i18n("Percent (%)");
+    return str;
+}
 
 KisSpinBoxUnitManagerBuilder* KisSpinBoxUnitManagerFactory::builder = nullptr;
 
@@ -174,7 +179,7 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
         if (hasPercent(LENGTH)) {
 
             if (withName) {
-                list << i18n("percent (%)");
+                list << percentStr();
             } else {
                 list << "%";
             }
@@ -203,7 +208,7 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
         if (hasPercent(IMLENGTH)) {
 
             if (withName) {
-                list << i18n("percent (%)");
+                list << percentStr();
             } else {
                 list << "%";
             }

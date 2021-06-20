@@ -1299,10 +1299,11 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
 
     Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         KisPSDLayerStyleSP newStyle = style->clone().dynamicCast<KisPSDLayerStyle>();
-        style->setResourcesInterface(KisGlobalResourcesInterface::instance());
+        newStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
+        newStyle->setValid(true);
         stylesModel.addResource(newStyle, storageLocation);
 
-        styles << style;
+        styles << newStyle;
     }
 
     KisLayerUtils::recursiveApplyNodes(root, [styles] (KisNodeSP node) {

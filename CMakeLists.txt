@@ -61,7 +61,7 @@ if (APPLE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
     set(MACOS_GUI_TEST "GUI")
-    add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
+    add_definitions(-mmacosx-version-min=10.13 -Wno-macro-redefined -Wno-deprecated-register)
     if (CMAKE_OSX_ARCHITECTURES)
         message(STATUS "CMake OSX architectures: ${CMAKE_OSX_ARCHITECTURES}")
     endif()
@@ -237,7 +237,7 @@ message(STATUS "Branding selected: ${BRANDING}")
 include(MacroJPEG)
 
  #########################################################
-## Look for Python3 It is also searched by KF5,         ##
+## Look for Python3 - it is also searched by KF5,       ##
 ## so we should request the correct version in advance  ##
 #########################################################
 

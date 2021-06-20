@@ -32,13 +32,9 @@ ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES
     wdgstoryboarddock.ui wdgarrangemenu.ui wdgcommentmenu.ui wdgexportstoryboard.ui
 )
 
-if (APPLE)
-    add_library(kritastoryboarddocker SHARED ${KRITA_STORYBOARDDOCKER_SOURCES}
-                                         ${KRITA_STORYBOARDDOCKER_PART_HEADERS})
-else()
-    add_library(kritastoryboarddocker MODULE ${KRITA_STORYBOARDDOCKER_SOURCES}
-                                         ${KRITA_STORYBOARDDOCKER_PART_HEADERS})
-endif()
+add_library(kritastoryboarddocker MODULE ${KRITA_STORYBOARDDOCKER_SOURCES}
+                                         ${KRITA_STORYBOARDDOCKER_PART_HEADERS}
+)
 
 generate_export_header(kritastoryboarddocker BASE_NAME kritastoryboarddocker)
 

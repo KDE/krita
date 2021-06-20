@@ -9,7 +9,7 @@
 
 
 /*
- * Paramaters that we can map (using a function) to a
+ * Parameters that we can map (using a function) to a
  * @see IconFetched
  */
 struct GetFileIconParameters

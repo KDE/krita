@@ -174,6 +174,9 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     }
 
     QPainter wpainter(this);
+    if (!isEnabled()) {
+        wpainter.setOpacity(0.2);
+    }
     QImage renderedImage = m_parentProxy->converter()->toQImage(m_realPixelCache);
     wpainter.drawImage(0, 0, renderedImage);
     if (m_gradient) {

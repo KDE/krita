@@ -73,6 +73,9 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 {
     painter->save();
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+    if (!(option.state & QStyle::State_Enabled)) {
+        painter->setOpacity(0.2);
+    }
 
     if (!index.isValid()) {
         qDebug() << "KisPresetDelegate::paint: index is invalid";

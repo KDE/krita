@@ -143,7 +143,7 @@ private:
      * but only through KisResourceModel.
      *
      * @param resourceType the type of the resource
-     * @param filename the filename of the resource including extension, but withou
+     * @param filename the filename of the resource including extension, but without
      * any paths
      * @return A resource if found, or 0
      */

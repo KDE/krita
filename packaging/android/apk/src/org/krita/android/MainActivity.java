@@ -98,7 +98,11 @@ public class MainActivity extends QtActivity {
 
         // Docs say: this method will not be called if the activity's hosting process
         // is killed. This means, for us that the service has been stopped.
-        startService(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent);
+        } else {
+            startService(intent);
+        }
 
         super.onDestroy();
     }

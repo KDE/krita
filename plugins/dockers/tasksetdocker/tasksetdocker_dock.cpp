@@ -93,7 +93,7 @@ TasksetDockerDock::TasksetDockerDock( )
     saveButton->setFlat(true);
 
     chooserButton->setIcon(KisIconUtils::loadIcon("folder"));
-    chooserButton->setFlat(true);
+    chooserButton->setAutoRaise(true);
 
     m_rserver = new KoResourceServer<TasksetResource>(ResourceType::TaskSets);
     KisResourceItemChooser *itemChooser = new KisResourceItemChooser(ResourceType::TaskSets, false, this);

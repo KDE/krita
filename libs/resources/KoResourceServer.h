@@ -88,9 +88,7 @@ public:
         Q_ASSERT(!type.isEmpty());
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
     }
@@ -109,9 +107,7 @@ public:
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
         return m_resourceModel;
@@ -123,16 +119,9 @@ public:
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
-        if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
-        }
         return m_resourceModel->resourceForIndex(m_resourceModel->index(0, 0)).dynamicCast<T>();
     }
 
@@ -147,9 +136,7 @@ public:
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
         if (!resource->valid()) {
@@ -170,9 +157,7 @@ public:
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
         if (m_resourceModel->setResourceInactive(m_resourceModel->indexForResource(resource))) {
@@ -198,9 +183,7 @@ public:
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
         return m_resourceModel->importResourceFile(filename);
@@ -220,7 +203,7 @@ public:
     }
 
     /**
-     * Addes an observer to the server
+     * Adds an observer to the server
      * @param observer the observer to be added
      * @param notifyLoadedResources determines if the observer should be notified about the already loaded resources
      */
@@ -248,9 +231,7 @@ public:
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
 
@@ -270,9 +251,7 @@ public:
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
         if (name.isEmpty() || name.isNull()) {
@@ -292,9 +271,7 @@ public:
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
 
 
@@ -318,9 +295,7 @@ public:
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
         bool result = m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
@@ -334,9 +309,7 @@ public:
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
+            qDebug().noquote() << kisBacktrace();
         }
         bool result = m_resourceModel->reloadResource(resource);
         notifyResourceChanged(resource);

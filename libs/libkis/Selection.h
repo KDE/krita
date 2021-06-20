@@ -51,7 +51,7 @@ public:
 public Q_SLOTS:
 
     /**
-     * @return a duplicate of the seletion
+     * @return a duplicate of the selection
      */
     Selection *duplicate() const;
 

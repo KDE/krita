@@ -23,7 +23,7 @@ from krita import *
 from . import exporters
 
 """
-The sizesCalculator is a convenience class for interpretting the resize configuration
+The sizesCalculator is a convenience class for interpreting the resize configuration
 from the export settings dialog. It is also used for batch resize.
 """
 
@@ -338,7 +338,7 @@ class comicsExporter():
                     folderName = str(key + "-" + w["FileType"])
                     if Path(exportPath / folderName).exists() is False:
                         Path.mkdir(exportPath / folderName)
-                    # Get a nice and descriptive fle name.
+                    # Get a nice and descriptive file name.
                     fn = str(Path(exportPath / folderName) / str("page_" + format(p, "03d") + "_" + str(listScales[0]) + "x" + str(listScales[1]) + "." + w["FileType"]))
                     # Finally save and add the page to a list of pages. This will make it easy for the packaging function to
                     # find the pages and store them.

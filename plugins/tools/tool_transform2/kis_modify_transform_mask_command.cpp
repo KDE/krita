@@ -19,12 +19,6 @@ KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP 
   m_updatesBlockerCookie(updatesBlockerCookie)
 {
     m_wasHidden = m_oldParams->isHidden();
-
-    auto *animatedParameters = dynamic_cast<KisAnimatedTransformMaskParameters*>(m_oldParams.data());
-    if (animatedParameters) {
-        int time = m_mask->parent()->original()->defaultBounds()->currentTime();
-        KisAnimatedTransformMaskParameters::addKeyframes(m_mask, time, params, this);
-    }
 }
 
 void KisModifyTransformMaskCommand::redo() {
@@ -56,5 +50,21 @@ void KisModifyTransformMaskCommand::undo() {
     m_mask->setTransformParams(m_oldParams);
     if (!m_updatesBlockerCookie) {
         m_mask->threadSafeForceStaticImageUpdate();
+    }
+}
+
+KisInitializeTransformMaskKeyframesCommand::KisInitializeTransformMaskKeyframesCommand(KisTransformMaskSP mask) : KUndo2Command() {
+    auto *animatedParameters = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask->transformParams().data());
+    if (animatedParameters) {
+        int time = mask->parent()->original()->defaultBounds()->currentTime();
+        KisAnimatedTransformMaskParameters::addKeyframes(mask, time, mask->transformParams(), this);
+    }
+}
+
+KisSetTransformMaskKeyframesCommand::KisSetTransformMaskKeyframesCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params) : KUndo2Command() {
+    auto *animatedParameters = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask->transformParams().data());
+    if (animatedParameters) {
+        const int time = mask->parent()->original()->defaultBounds()->currentTime();
+        KisAnimatedTransformMaskParameters::setKeyframes(mask, time, params, this);
     }
 }

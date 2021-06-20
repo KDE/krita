@@ -45,6 +45,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -147,6 +148,9 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
 
     QPushButton* const applyBtn  = d->buttons->button(QDialogButtonBox::Apply);
     QPushButton* const cancelBtn = d->buttons->button(QDialogButtonBox::Close);
+
+    KGuiItem::assign(applyBtn, KStandardGuiItem::apply());
+    KGuiItem::assign(cancelBtn, KStandardGuiItem::cancel());
 
     connect(applyBtn, SIGNAL(clicked()),
             this, SLOT(slotStart()));

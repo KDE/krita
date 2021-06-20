@@ -9,6 +9,7 @@
 #include "ui_recorder_profile_settings.h"
 
 #include <klocalizedstring.h>
+#include <kstandardguiitem.h>
 #include <kis_icon_utils.h>
 
 namespace
@@ -26,6 +27,9 @@ RecorderProfileSettings::RecorderProfileSettings(QWidget *parent)
     , ui(new Ui::RecorderProfileSettings)
 {
     ui->setupUi(this);
+
+    KGuiItem::assign(ui->buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(ui->buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     ui->buttonPresetRevert->setIcon(KisIconUtils::loadIcon("edit-undo"));
     ui->stackedWidget->setCurrentIndex(ArgumentsPageIndex::PageEdit);

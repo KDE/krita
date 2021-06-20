@@ -1,7 +1,6 @@
 SET(PREFIX_ext_python "${EXTPREFIX}" )
 if (UNIX)
     if (APPLE)
-        set(PYTHON_VERSION "3.9")
         ExternalProject_Add( ext_python
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tar.xz
@@ -9,13 +8,14 @@ if (UNIX)
             
             PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/osx_fixappinstall.diff
 
-            CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.13 --prefix=${PREFIX_ext_python} ${GLOBAL_AUTOMAKE_PROFILE}
-                --without-ensurepip --enable-framework=${PREFIX_ext_python}/lib --enable-optimizations
+            # Setuptools needs OpenSSL 1.1, the stock libssl isn't enough
+            CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.13 --prefix=${PREFIX_ext_python} ${GLOBAL_AUTOMAKE_PROFILE} --with-openssl=${PREFIX_ext_python}
+                --enable-framework=${PREFIX_ext_python}/lib --enable-optimizations
             BUILD_COMMAND make
-            INSTALL_COMMAND make install
+            INSTALL_COMMAND make -j1 install
                 COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python
                 COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sitecustomize.py ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib/python${PYTHON_VERSION}/
-                COMMAND ${CMAKE_COMMAND} -E create_symlink ./lib/python${PYTHON_VERSION}/site-packages ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/site-packages
+                COMMAND ${CMAKE_COMMAND} -E create_symlink ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib/python${PYTHON_VERSION} ${PREFIX_ext_python}/lib/python${PYTHON_VERSION}
                 # CMake FindPythonLib can't find framework libraries, lack of maintainer for Python
                 COMMAND find ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib -type l -d 1
                 | grep -o "[^/]*$"
@@ -23,6 +23,8 @@ if (UNIX)
 
             UPDATE_COMMAND ""
             ALWAYS 0
+
+            DEPENDS ext_openssl
         )
     else()
 
@@ -54,6 +56,8 @@ elseif(MINGW)
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python3.dll ${PREFIX_ext_python}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python38.dll ${PREFIX_ext_python}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/vcruntime140.dll ${PREFIX_ext_python}/bin
+                    COMMAND ${CMAKE_COMMAND} -E make_directory ${PREFIX_ext_python}/lib/site-packages/
+                    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sitecustomize.py ${PREFIX_ext_python}/lib/site-packages/
             UPDATE_COMMAND ""
         )
     else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
@@ -69,6 +73,8 @@ elseif(MINGW)
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python3.dll ${PREFIX_ext_python}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python38.dll ${PREFIX_ext_python}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/vcruntime140.dll ${PREFIX_ext_python}/bin
+                    COMMAND ${CMAKE_COMMAND} -E make_directory ${PREFIX_ext_python}/lib/site-packages/
+                    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sitecustomize.py ${PREFIX_ext_python}/lib/site-packages/
             UPDATE_COMMAND ""
         )
     endif("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")

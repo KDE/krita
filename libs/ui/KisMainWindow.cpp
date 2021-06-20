@@ -799,7 +799,7 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 #ifdef Q_OS_ANDROID
         // HACK! When loading a new document, Krita wouldn't refresh the screen,
         // even though it has been successfully created in background. So, When
-        // appliction is hidden and made active QPA Android force-requests a
+        // application is hidden and made active QPA Android force-requests a
         // redraw call. So, this workaround fixes that.
         QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationHidden);
         QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
@@ -873,25 +873,34 @@ void KisMainWindow::customizeTabBar()
     // update MDI area theme
     // Tab close button override
     // just switch this icon out for all OSs so it is easier to see
-    QString tabStyleSheet = R"(
+    QString closeButtonImageUrl;
+    QString closeButtonHoverColor;
+    if (KisIconUtils::useDarkIcons()) {
+        closeButtonImageUrl = QStringLiteral(":/dark_close-tab.svg");
+        closeButtonHoverColor = QStringLiteral("lightcoral");
+    } else {
+        closeButtonImageUrl = QStringLiteral(":/light_close-tab.svg");
+        closeButtonHoverColor = QStringLiteral("darkred");
+    }
+    QString tabStyleSheet = QStringLiteral(R"(
             QTabBar::close-button {
-                image: url({close-button-location});
+                image: url(%1);
                 padding-top: 3px;
+            }
+            QTabBar::close-button:hover {
+                background-color: %2;
+            }
+            QTabBar::close-button:pressed {
+                background-color: red;
             }
 
             QHeaderView::section {
                 padding: 7px;
             }
 
-           )";
+           )")
+           .arg(closeButtonImageUrl, closeButtonHoverColor);
 
-    if (KisIconUtils::useDarkIcons()) {
-        tabStyleSheet = tabStyleSheet.replace("{close-button-location}", ":/dark_close-tab.svg");
-    }
-    else {
-        tabStyleSheet = tabStyleSheet.replace("{close-button-location}", ":/light_close-tab.svg");
-
-    }
 
     QTabBar* tabBar = d->findTabBarHACK();
     if (tabBar) {
@@ -1106,7 +1115,7 @@ bool KisMainWindow::openDocumentInternal(const QString &path, OpenFlags flags)
     connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
     KisDocument::OpenFlags openFlags = KisDocument::None;
-    // XXX: Why this duplication of of OpenFlags...
+    // XXX: Why this duplication of OpenFlags...
     if (flags & RecoveryFile) {
         openFlags |= KisDocument::RecoveryFile;
     }

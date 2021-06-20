@@ -267,7 +267,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
 
                     /*
                      * In order to try to correct rendering issues while preserving performance, we will
-                     * deffer updates just long enough that visual artifacts aren't majorly noticible.
+                     * defer updates just long enough that visual artifacts aren't majorly noticeable.
                      * By using a signal compressor, we're going to update the range of columns between
                      * min / max. That min max is reset every time the update occurs. This should fix
                      * rendering issues to a configurable framerate.

@@ -1,14 +1,30 @@
-From 61cefcbb98613fff9a3864b81299611c4493adf5 Mon Sep 17 00:00:00 2001
+From bceab06e99595db3ff6d84cf18af3f6b576a1e5b Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sat, 20 Feb 2021 20:05:25 +0000
-Subject: [PATCH 3/5] Fix win unicode paths
+Subject: [PATCH 3/4] Fix win unicode paths
 
 ---
- gettext-runtime/intl/loadmsgcat.c | 49 +++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ gettext-runtime/intl/libgnuintl.in.h |  4 +++
+ gettext-runtime/intl/loadmsgcat.c    | 49 ++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+)
 
+diff --git a/gettext-runtime/intl/libgnuintl.in.h b/gettext-runtime/intl/libgnuintl.in.h
+index 6fb1920..93cd4b5 100644
+--- a/gettext-runtime/intl/libgnuintl.in.h
++++ b/gettext-runtime/intl/libgnuintl.in.h
+@@ -37,6 +37,10 @@
+    implementation of gettext.  */
+ #define __USE_GNU_GETTEXT 1
+ 
++/* We define an additional symbol to signal that this version of
++   gettext is patched to use UTF-8 paths on Windows.  */
++#define __WIN32_USE_UTF8 1
++
+ /* Provide information about the supported file formats.  Returns the
+    maximum minor revision number supported for a given major revision.  */
+ #define __GNU_GETTEXT_SUPPORTED_REVISION(major) \
 diff --git a/gettext-runtime/intl/loadmsgcat.c b/gettext-runtime/intl/loadmsgcat.c
-index 016fe575..030b8619 100644
+index 016fe57..030b861 100644
 --- a/gettext-runtime/intl/loadmsgcat.c
 +++ b/gettext-runtime/intl/loadmsgcat.c
 @@ -388,6 +388,55 @@ char *alloca ();
@@ -68,5 +84,5 @@ index 016fe575..030b8619 100644
     some additional code emulating it.  */
  #ifdef HAVE_ALLOCA
 -- 
-2.30.0
+2.31.1.windows.1
 

@@ -1,7 +1,7 @@
 BUGS:
 * freehand drawing tool with curve: sometimes the result disappears (seems to be caused by bezierFit receiving two points in sequence that are the same)
 * when painting something at the side it becomes impossible to scroll to all areas of the screen
-* when painting while the view is zoomed in very much in, the item may get somewere outside the visible area.
+* when painting while the view is zoomed in very much in, the item may get somewhere outside the visible area.
 * ctrl+mouse weel zoom don't center correctly
 * at times the cpu usage remains very high even without doing anything (shape proprieties seem to be the cause)
 * colors used are not those of the global palette (I think)

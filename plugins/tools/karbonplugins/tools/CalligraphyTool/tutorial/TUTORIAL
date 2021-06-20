@@ -50,7 +50,7 @@ Switch to the Calligraphy tool by clicking on its button in the tools docker. In
 
 Following an Existing Path
 ==========================
-When checking the "Follow selected path" option the stroke will follow the outline of the currently selected path, instead of following the mouse or tablet position. This way you can use the calligraphy tool to draw poligons, stars, etc. Or you can fist use the path tool to create a precise guide path, and than use the calligraphy tool on the created path.
+When checking the "Follow selected path" option the stroke will follow the outline of the currently selected path, instead of following the mouse or tablet position. This way you can use the calligraphy tool to draw polygons, stars, etc. Or you can fist use the path tool to create a precise guide path, and than use the calligraphy tool on the created path.
   <image2 (example of following a flower path)>
 
 Width & Thinning

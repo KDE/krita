@@ -76,7 +76,7 @@ private:
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);
 
     /**
-     * @brief addResourceVersion addes a new version of the resource to the database.
+     * @brief addResourceVersion adds a new version of the resource to the database.
      * The resource itself already should be updated with the updated filename and version.
      * @param resourceId unique identifier for the resource
      * @param timestamp
@@ -110,6 +110,9 @@ private:
 
     /// Actually delete the storage and all its resources from the database (i.e., nothing is set to inactive, it's deleted)
     static bool deleteStorage(KisResourceStorageSP storage);
+    /// Actually delete the storage and all its resources from the database (i.e., nothing is set to inactive, it's deleted)
+    ///  location - relative
+    static bool deleteStorage(QString location);
     static bool synchronizeStorage(KisResourceStorageSP storage);
 
     /**

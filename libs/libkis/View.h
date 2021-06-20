@@ -121,7 +121,7 @@ Application.activeWindow().activeView().setForeGroundColor(color)
     void setPaintingFlow(qreal flow);
 
     /**
-     * @brief showFloatingMessage displayes a floating message box on the top-left corner of the canvas
+     * @brief showFloatingMessage displays a floating message box on the top-left corner of the canvas
      * @param message: Message to be displayed inside the floating message box
      * @param icon: Icon to be displayed inside the message box next to the message string
      * @param timeout: Milliseconds until the message box disappears

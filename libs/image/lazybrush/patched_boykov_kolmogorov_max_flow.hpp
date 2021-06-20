@@ -302,7 +302,7 @@ class bk_max_flow {
        * target(e, m_g) is the beginning of the path found in the sink-tree
        * this phase generates orphans on satured edges, if the attached verts are
        * from different search-trees orphans are ordered in distance to
-       * sink/source. first the farest from the source are front_inserted into
+       * sink/source. first the farthest from the source are front_inserted into
        * the orphans list, and after that the sink-tree-orphans are
        * front_inserted. when going to adoption stage the orphans are popped_front,
        * and so we process the nearest verts to the terminals first

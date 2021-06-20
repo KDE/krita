@@ -109,7 +109,7 @@ private:
     EnhancedPathParameter *m_positionX; ///< the position x-coordinate
     EnhancedPathParameter *m_positionY; ///< the position y-coordinate
     EnhancedPathParameter *m_minimumX;  ///< the minimum x-coordinate
-    EnhancedPathParameter *m_minimumY;  ///< the minmum y-coordinate
+    EnhancedPathParameter *m_minimumY;  ///< the minimum y-coordinate
     EnhancedPathParameter *m_maximumX;  ///< the maximum x-coordinate
     EnhancedPathParameter *m_maximumY;  ///< the maximum y-coordinate
     EnhancedPathParameter *m_polarX;    ///< the polar center x-coordinate

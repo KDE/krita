@@ -32,6 +32,8 @@
 
 #include "KisDlgPaletteEditor.h"
 
+#include <kstandardguiitem.h>
+
 KisDlgPaletteEditor::KisDlgPaletteEditor()
     : m_ui(new Ui_WdgDlgPaletteEditor)
     , m_actAddGroup(new QAction(i18n("Add a group")))
@@ -71,6 +73,9 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
 
     m_warnPalette.setColor(QPalette::Text, Qt::red);
+
+    KGuiItem::assign(m_ui->buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(m_ui->buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 }
 
 KisDlgPaletteEditor::~KisDlgPaletteEditor()

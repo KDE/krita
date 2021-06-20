@@ -23,7 +23,7 @@
 
 /**
  * @brief The KisFloatingMessage class shows the given message in a semi-transparent
- * bubble that doesn' take focus and slowly fades away.
+ * bubble that doesn't take focus and slowly fades away.
  *
  * Heavily based on Amarok's Osd.cpp
  */

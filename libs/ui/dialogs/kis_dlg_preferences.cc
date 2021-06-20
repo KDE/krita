@@ -54,6 +54,7 @@
 #include <klocalizedstring.h>
 #include <kformat.h>
 #include <kundo2stack.h>
+#include <kstandardguiitem.h>
 #include <KoResourcePaths.h>
 
 #include <KisResourceCacheDb.h>
@@ -235,7 +236,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", true).toBool());
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
-    m_chkHiDPIFractionalScaling->setChecked(kritarc.value("EnableHiDPIFractionalScaling", true).toBool());
+    m_chkHiDPIFractionalScaling->setChecked(kritarc.value("EnableHiDPIFractionalScaling", false).toBool());
 #else
     m_chkHiDPIFractionalScaling->setVisible(false);
 #endif
@@ -1745,6 +1746,8 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KisIconUtils::loadIcon("user-identity"));
     m_pages << page;
 
+    KGuiItem::assign(button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
     restoreDefaultsButton->setText(i18nc("@action:button", "Restore Defaults"));
 

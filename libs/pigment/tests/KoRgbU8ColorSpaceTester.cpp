@@ -416,7 +416,7 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
         quint8 goodDst[] = {10,10,10,11};
         quint8 badSrc[] = {128,128,128,0};
         quint8 badDst[] = {12,12,12,0};
-        quint8 expectedDst[] = {0,0,0,0}; // NOTE: the pixel has been changed, even though visualy it hasn't (due to zero alpha)
+        quint8 expectedDst[] = {0,0,0,0}; // NOTE: the pixel has been changed, even though visually it hasn't (due to zero alpha)
         testBadPixel(1, goodSrc, goodDst, badSrc, badDst, 128, expectedDst);
     }
 

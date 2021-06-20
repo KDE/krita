@@ -14,6 +14,7 @@
 #include <QPushButton>
 
 #include <klocalizedstring.h>
+#include <kstandardguiitem.h>
 
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
@@ -46,6 +47,8 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     dlgWidget.setupUi(this);
     dlgWidget.wdgGenerator->initialize(m_view);
     dlgWidget.btnBox->button(QDialogButtonBox::Ok)->setDefault(true);
+    KGuiItem::assign(dlgWidget.btnBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(dlgWidget.btnBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     dlgWidget.txtLayerName->setText( isEditing ? layer->name() : defaultName );
     connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),

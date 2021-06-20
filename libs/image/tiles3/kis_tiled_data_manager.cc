@@ -687,7 +687,7 @@ void KisTiledDataManager::writeBytes(const quint8 *data,
                                      qint32 dataRowStride)
 {
     QWriteLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header
+    // Actual bytes reading/writing is done in private header
     writeBytesBody(data, x, y, width, height, dataRowStride);
 }
 
@@ -707,7 +707,7 @@ KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
                                      qint32 width, qint32 height) const
 {
     QReadLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header
+    // Actual bytes reading/writing is done in private header
     return readPlanarBytesBody(channelSizes, x, y, width, height);
 }
 
@@ -718,7 +718,7 @@ void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes,
                                            qint32 width, qint32 height)
 {
     QWriteLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header
+    // Actual bytes reading/writing is done in private header
 
     bool allChannelsPresent = true;
 

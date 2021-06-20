@@ -7,7 +7,7 @@
 #ifndef _KIS_POPUP_BUTTON_H_
 #define _KIS_POPUP_BUTTON_H_
 
-#include <QPushButton>
+#include <QToolButton>
 
 #include <kritawidgetutils_export.h>
 
@@ -15,7 +15,7 @@
  * This class is a convenience class for a button that
  * when clicked displays a popup widget.
  */
-class KRITAWIDGETUTILS_EXPORT KisPopupButton : public QPushButton
+class KRITAWIDGETUTILS_EXPORT KisPopupButton : public QToolButton
 {
 
     Q_OBJECT

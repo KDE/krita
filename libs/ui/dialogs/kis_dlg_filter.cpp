@@ -223,16 +223,16 @@ void KisDlgFilter::createMask()
     adapter.addNode(mask, layer, layer->lastChild());
 }
 
-void KisDlgFilter::enablePreviewToggled(bool isToggled)
+void KisDlgFilter::enablePreviewToggled(bool checked)
 {
-    if (isToggled) {
+    if (checked) {
         d->updateCompressor.start();
     } else if (d->filterManager->isStrokeRunning()) {
         d->filterManager->cancelRunningStroke();
     }
 
     KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
-    group.writeEntry("showPreview", isToggled);
+    group.writeEntry("showPreview", checked);
 
     group.config()->sync();
 }

@@ -34,7 +34,7 @@ protected Q_SLOTS:
 
     void createMask();
 
-    void enablePreviewToggled(bool isToggled);
+    void enablePreviewToggled(bool checked);
 
     void filterSelectionChanged();
 

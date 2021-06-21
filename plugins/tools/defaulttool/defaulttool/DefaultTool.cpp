@@ -69,6 +69,7 @@
 #include "kis_global.h"
 #include "kis_debug.h"
 #include "krita_utils.h"
+#include "KisDocument.h"
 
 #include <QVector2D>
 
@@ -806,6 +807,7 @@ void DefaultTool::updateCursor()
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoSelection *selection = koSelection();
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
     if (selection) {
         m_decorator.reset(new SelectionDecorator(canvas()->resourceManager()));
 
@@ -815,13 +817,13 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
              * do that explicitly when rendering them via selection
              */
 
-            KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
             KisNodeSP node = kisCanvas->viewManager()->nodeManager()->activeNode();
             const bool isSelectionMask = node && node->inherits("KisSelectionMask");
             m_decorator->setForceShapeOutlines(isSelectionMask);
         }
 
         m_decorator->setSelection(selection);
+        m_decorator->setReferenceImagesLayer(kisCanvas->imageView()->document()->referenceImagesLayer());
         m_decorator->setHandleRadius(handleRadius());
         m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
         m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));

@@ -276,8 +276,14 @@ void ToolReferenceImagesWidget::slotSaveLocationChanged(int index)
 void ToolReferenceImagesWidget::slotUpdateLock(bool value)
 {
     d->ui->bnLock->setChecked(value);
-    d->ui->bnLock->setIcon(d->ui->bnLock->isChecked() ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
-    d->tool->document()->referenceImagesLayer()->setLock(d->ui->bnLock->isChecked());
+    bool locked = d->ui->bnLock->isChecked();
+    if(locked) {
+        d->ui->bnLock->setIcon(KisIconUtils::loadIcon("locked"));
+    }
+    else {
+        d->ui->bnLock->setIcon(KisIconUtils::loadIcon("unlocked"));
+    }
+    d->tool->document()->referenceImagesLayer()->setLock(locked, d->tool->canvas());
 }
 
 void ToolReferenceImagesWidget::slotUpdateCrop(bool value)

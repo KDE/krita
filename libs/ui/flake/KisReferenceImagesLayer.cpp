@@ -15,6 +15,7 @@
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
 #include "KisDocument.h"
+#include "kis_canvas2.h"
 
 struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
@@ -122,10 +123,12 @@ private:
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
+    , lock(false)
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
     : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
+    , lock(false)
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)
@@ -165,7 +168,12 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter)
 {
-    painter.setTransform(converter()->documentToView(), true);
+    if(lock) {
+        painter.setTransform(lockedDocToViewTransform, true);
+    }
+    else {
+        painter.setTransform(converter()->documentToView(), true);
+    }
     shapeManager()->paint(painter, false);
 }
 
@@ -235,7 +243,22 @@ bool KisReferenceImagesLayer::getLock()
      return lock;
 }
 
-void KisReferenceImagesLayer::setLock(bool val)
+void KisReferenceImagesLayer::setLock(bool val, KoCanvasBase* canvas)
 {
-    lock =val;
+    lock = val;
+    if(val) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
+        lockedFlakeToWidgetTransform = kisCanvas->coordinatesConverter()->flakeToWidgetTransform();
+        lockedDocToViewTransform = converter()->documentToView();
+    }
+}
+
+QTransform KisReferenceImagesLayer::getLockedFlakeToWidgetTransform()
+{
+    return lockedFlakeToWidgetTransform;
+}
+
+QTransform KisReferenceImagesLayer::getLockedDocToViewTransform()
+{
+    return lockedDocToViewTransform;
 }

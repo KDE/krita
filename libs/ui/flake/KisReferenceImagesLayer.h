@@ -50,7 +50,9 @@ public:
 
 
     bool getLock();
-    void setLock(bool);
+    void setLock(bool, KoCanvasBase*);
+    QTransform getLockedFlakeToWidgetTransform();
+    QTransform getLockedDocToViewTransform();
 
 Q_SIGNALS:
     /**
@@ -65,7 +67,9 @@ private:
     friend struct RemoveReferenceImagesCommand;
     friend class ReferenceImagesCanvas;
 
-    bool lock = false;
+    bool lock;
+    QTransform lockedFlakeToWidgetTransform;
+    QTransform lockedDocToViewTransform;
 };
 
 typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;

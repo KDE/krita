@@ -77,6 +77,9 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
 
     }
     else {
+        if(m_layer && m_layer->getLock()) {
+            painter.setTransform(m_layer->getLockedFlakeToWidgetTransform());
+        }
     DefaultTool::paint(painter,converter);
     }
 }

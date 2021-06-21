@@ -26,6 +26,7 @@
 #include "kis_painting_tweaks.h"
 #include "kis_coordinates_converter.h"
 #include "kis_icon_utils.h"
+#include "KisReferenceImage.h"
 
 
 
@@ -88,11 +89,17 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     bool editable = false;
     bool forceBoundngRubberLine = false;
+    QTransform referenceDocToViewTransform;
 
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
+
+            KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+            if(reference && referenceImagesLayer && referenceImagesLayer->getLock()) {
+                referenceDocToViewTransform = referenceImagesLayer->getLockedDocToViewTransform();
+            }
             KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius, referenceDocToViewTransform);
 
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
@@ -125,7 +132,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // draw extra rubber line around all the shapes
     if (selectedShapes.size() > 1 || forceBoundngRubberLine) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius, referenceDocToViewTransform);
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         helper.drawRubberLine(handleArea);
@@ -135,7 +142,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // is no need drawing the selection handles
     if (editable) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius, referenceDocToViewTransform);
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         QPolygonF outline = handleArea;
@@ -246,4 +253,9 @@ void SelectionDecorator::paintMeshGradientHandles(KoShape *shape,
 void SelectionDecorator::setForceShapeOutlines(bool value)
 {
     m_forceShapeOutlines = value;
+}
+
+void SelectionDecorator::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+{
+    referenceImagesLayer = layer;
 }

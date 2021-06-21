@@ -44,23 +44,14 @@
 #include "kis_layer_utils.h"
 #include <KisGlobalResourcesInterface.h>
 
-
 struct KisFilterManager::Private {
-    Private()
-        : reapplyAction(0)
-        , reapplyActionReprompt(0)
-        , actionCollection(0)
-        , actionManager(0)
-        , view(0)
-    {
-    }
-    KisAction* reapplyAction;
-    KisAction* reapplyActionReprompt;
+    KisAction* reapplyAction = nullptr;
+    KisAction* reapplyActionReprompt = nullptr;
     QHash<QString, KActionMenu*> filterActionMenus;
     QHash<KisFilter*, QAction *> filters2Action;
-    KActionCollection *actionCollection;
-    KisActionManager *actionManager;
-    KisViewManager *view;
+    KActionCollection *actionCollection = nullptr;
+    KisActionManager *actionManager = nullptr;
+    KisViewManager *view = nullptr;
 
     KisFilterConfigurationSP lastConfiguration;
     KisFilterConfigurationSP currentlyAppliedConfiguration;
@@ -86,7 +77,6 @@ KisFilterManager::KisFilterManager(KisViewManager * view)
 
 KisFilterManager::~KisFilterManager()
 {
-    delete d;
 }
 
 void KisFilterManager::setView(QPointer<KisView>imageView)

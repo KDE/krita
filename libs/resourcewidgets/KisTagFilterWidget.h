@@ -22,6 +22,8 @@ public:
     ~KisTagFilterWidget() override;
     void clear();
 
+    bool isFilterByTagChecked();
+
 Q_SIGNALS:
     void filterTextChanged(const QString &filterText);
     void filterByTagChanged(const bool filterByTag);

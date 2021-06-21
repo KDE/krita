@@ -388,7 +388,7 @@ void KisFilterManager::finish()
     d->lastExtendedUpdateRect = QRect();
 }
 
-void KisFilterManager::cancel()
+void KisFilterManager::cancelRunningStroke()
 {
     Q_ASSERT(d->currentStrokeId);
 
@@ -401,8 +401,17 @@ void KisFilterManager::cancel()
     d->lastProcessRect = QRect();
     d->lastExtendedUpdateRect = QRect();
 
-    // cleanup before the canvas is deleted
-    delete d->filterDialog;
+}
+
+void KisFilterManager::cancelDialog()
+{
+    cancelRunningStroke();
+
+    // d->filterDialog.deleteLater();
+    QTimer::singleShot(0, [filterDialog = std::move(d->filterDialog)]()
+            {
+            delete filterDialog;
+            });
 }
 
 bool KisFilterManager::isStrokeRunning() const

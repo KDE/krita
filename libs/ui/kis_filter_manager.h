@@ -36,7 +36,10 @@ public:
 
     void apply(KisFilterConfigurationSP filterConfig);
     void finish();
-    void cancel();
+    //! Cancel current running stroke
+    void cancelRunningStroke();
+    //! Call `cancelRunningStroke()` and then delete dialog `d`
+    void cancelDialog();
     bool isStrokeRunning() const;
 
     bool isIdle() const;

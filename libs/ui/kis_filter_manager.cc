@@ -66,7 +66,11 @@ struct KisFilterManager::Private {
 
     KisSignalMapper actionsMapper;
 
-    QPointer<KisDlgFilter> filterDialog;
+    /*!
+     * \brief The filter dialog shown to the user
+     * \note parent QWidget is set to mainwindow, so we delegate deletion of this widget to Qt (we don't `delete` it ourselves)
+     */
+    KisDlgFilter *filterDialog = nullptr;
 };
 
 KisFilterManager::KisFilterManager(KisViewManager * view)
@@ -249,7 +253,9 @@ void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfig
     if (filter->showConfigurationWidget()) {
         if (!d->filterDialog) {
             d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this, d->view->mainWindow());
-            d->filterDialog->setAttribute(Qt::WA_DeleteOnClose);
+            d->filterDialog->setAttribute(Qt::WA_DeleteOnClose); // make sure that the dialog is deleted when calling `done()`
+            connect(d->filterDialog, SIGNAL(finished(int)),
+                    this, SLOT(filterDialogHasFinished(int)));
         }
 
         d->filterDialog->setFilter(filter, overrideDefaultConfig);
@@ -397,11 +403,7 @@ void KisFilterManager::cancelDialog()
 {
     cancelRunningStroke();
 
-    // d->filterDialog.deleteLater();
-    QTimer::singleShot(0, [filterDialog = std::move(d->filterDialog)]()
-            {
-            delete filterDialog;
-            });
+    d->filterDialog->reject();
 }
 
 bool KisFilterManager::isStrokeRunning() const
@@ -436,4 +438,9 @@ void KisFilterManager::slotStrokeCancelRequested()
     if (d->currentStrokeId && d->filterDialog) {
         d->filterDialog->reject();
     }
+}
+void KisFilterManager::filterDialogHasFinished(int)
+{
+    // as far as we are concerned, filterDialog has been deleted
+    d->filterDialog = nullptr;
 }

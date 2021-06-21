@@ -57,6 +57,9 @@ private Q_SLOTS:
     void slotStrokeEndRequested();
     void slotStrokeCancelRequested();
 
+    //! Clean up after filter dialog has been accepted / rejected / closed
+    void filterDialogHasFinished(int);
+
 private:
     struct Private;
     QScopedPointer<Private> d;

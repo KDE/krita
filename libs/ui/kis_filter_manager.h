@@ -59,7 +59,7 @@ private Q_SLOTS:
 
 private:
     struct Private;
-    Private * const d;
+    QScopedPointer<Private> d;
 };
 
 #endif

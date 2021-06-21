@@ -276,52 +276,34 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         }
     } else if (selection) {
         KisNodeList selectedNodes = view->nodeManager()->selectedNodes();
+        KisLayerUtils::filterMergableNodes(selectedNodes, true);
         KisNodeList nodes;
-        KisGroupLayerSP group = new KisGroupLayer(image.data(), "", OPACITY_OPAQUE_U8);
+        KisGroupLayerSP group = new KisGroupLayer(image.data(), "Clipboard", OPACITY_OPAQUE_U8);
         Q_FOREACH (KisNodeSP node, selectedNodes) {
             KisNodeSP dupNode = node->clone();
             nodes.append(dupNode);
             image->addNode(dupNode, group);
         }
         
-        Q_FOREACH (KisNodeSP node, nodes) {
-            KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
-                KisImageBarrierLocker locker(image);
-                KisPaintDeviceSP dev = node->paintDevice();
-/*                if (!dev) {
-                    dev = node->projection();
-                }*/
-/*
-                if (!dev) {
-                    view->showFloatingMessage(
-                        i18nc("floating message when cannot copy from a node",
-                              "Cannot copy pixels from this type of layer "),
-                        QIcon(), 3000, KisFloatingMessage::Medium);
+        {
+            KisImageBarrierLocker locker(image);
+            Q_FOREACH (KisNodeSP node, nodes) {
+                KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
+                    KisPaintDeviceSP dev = node->paintDevice();
 
-                    return;
-                }
+                    KisTimeSpan range;
 
-                if (dev->exactBounds().isEmpty()) {
-                    view->showFloatingMessage(
-                        i18nc("floating message when copying empty selection",
-                              "Selection is empty: no pixels were copied "),
-                        QIcon(), 3000, KisFloatingMessage::Medium);
+                    KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+                    if (channel) {
+                        const int currentTime = image->animationInterface()->currentTime();
+                        range = channel->affectedFrames(currentTime);
+                    }
 
-                    return;
-                }*/
-
-                KisTimeSpan range;
-
-                KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-                if (channel) {
-                    const int currentTime = image->animationInterface()->currentTime();
-                    range = channel->affectedFrames(currentTime);
-                }
-
-                qDebug() << node->name();
-                if (dev)
-                    ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
-            });
+                    qDebug() << node->name();
+                    if (dev)
+                        ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
+                });
+            }
         }
         //QString groupName = !overrideGroupName.isEmpty() ? overrideGroupName : image->nextLayerName(i18n("Group"));
         image->addNode(group, image->root());
@@ -365,53 +347,56 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
         }*/
 
-        KUndo2Command *command = 0;
-
-        if (willCut && node->hasEditablePaintDevice()) {
-            struct ClearSelection : public KisTransactionBasedCommand {
-                ClearSelection(KisNodeSP node, KisSelectionSP sel)
-                    : m_node(node), m_sel(sel) {}
-                KisNodeSP m_node;
-                KisSelectionSP m_sel;
-
-                KUndo2Command* paint() override {
-                    KisSelectionSP cutSelection = m_sel;
-                    // Shrinking the cutting area was previously used
-                    // for getting seamless cut-paste. Now we use makeSharpClip
-                    // instead.
-                    // QRect originalRect = cutSelection->selectedExactRect();
-                    // static const int preciseSelectionThreshold = 16;
-                    //
-                    // if (originalRect.width() > preciseSelectionThreshold ||
-                    //     originalRect.height() > preciseSelectionThreshold) {
-                    //     cutSelection = new KisSelection(*m_sel);
-                    //     delete cutSelection->flatten();
-                    //
-                    //     KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
-                    //
-                    //     QRect processingRect = filter->changeRect(originalRect);
-                    //     filter->process(cutSelection->pixelSelection(), processingRect);
-                    // }
-
-                    KisTransaction transaction(m_node->paintDevice());
-                    m_node->paintDevice()->clearSelection(cutSelection);
-                    m_node->setDirty(cutSelection->selectedRect());
-                    return transaction.endAndTake();
-                }
-            };
-
-            command = new ClearSelection(node, selection);
-        }
-
         KUndo2MagicString actionName = willCut ?
                     kundo2_i18n("Cut") :
                     kundo2_i18n("Copy");
         KisProcessingApplicator *ap = beginAction(view, actionName);
 
-        if (command) {
-            ap->applyCommand(command,
-                             KisStrokeJobData::SEQUENTIAL,
-                             KisStrokeJobData::NORMAL);
+        if (willCut) {
+            Q_FOREACH (KisNodeSP node, selectedNodes) {
+                KisLayerUtils::recursiveApplyNodes(node, [selection, ap] (KisNodeSP node){
+
+                    if (!node->hasEditablePaintDevice()) {
+                        return;
+                    }
+
+                    struct ClearSelection : public KisTransactionBasedCommand {
+                        ClearSelection(KisNodeSP node, KisSelectionSP sel)
+                            : m_node(node), m_sel(sel) {}
+                        KisNodeSP m_node;
+                        KisSelectionSP m_sel;
+
+                        KUndo2Command* paint() override {
+                            KisSelectionSP cutSelection = m_sel;
+                            // Shrinking the cutting area was previously used
+                            // for getting seamless cut-paste. Now we use makeSharpClip
+                            // instead.
+                            // QRect originalRect = cutSelection->selectedExactRect();
+                            // static const int preciseSelectionThreshold = 16;
+                            //
+                            // if (originalRect.width() > preciseSelectionThreshold ||
+                            //     originalRect.height() > preciseSelectionThreshold) {
+                            //     cutSelection = new KisSelection(*m_sel);
+                            //     delete cutSelection->flatten();
+                            //
+                            //     KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
+                            //
+                            //     QRect processingRect = filter->changeRect(originalRect);
+                            //     filter->process(cutSelection->pixelSelection(), processingRect);
+                            // }
+
+                            KisTransaction transaction(m_node->paintDevice());
+                            m_node->paintDevice()->clearSelection(cutSelection);
+                            m_node->setDirty(cutSelection->selectedRect());
+                            return transaction.endAndTake();
+                        }
+                    };
+
+                    KUndo2Command *command = new ClearSelection(node, selection);
+                    ap->applyCommand(command, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+
+                });
+            }
         }
 
         KisOperationConfiguration config(id());

@@ -143,7 +143,9 @@ bool KoResourceBundleManifest::save(QIODevice *device)
            Q_FOREACH (const ResourceReference &resource, m_resources[resourceType].values()) {
                manifestWriter.startElement("manifest:file-entry");
                manifestWriter.addAttribute("manifest:media-type", resourceTypeToManifestType(resourceType));
-               manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + QFileInfo(resource.resourcePath).fileName());
+               // we cannot just use QFileInfo(resource.resourcePath).fileName() because it would cut off the subfolder
+               // but the resourcePath is already correct, so let's just add the resourceType
+               manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + resource.resourcePath);
                manifestWriter.addAttribute("manifest:md5sum", QString(resource.md5sum.toHex()));
                if (!resource.tagList.isEmpty()) {
                    manifestWriter.startElement("manifest:tags");

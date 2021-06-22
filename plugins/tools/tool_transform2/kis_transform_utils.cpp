@@ -254,9 +254,9 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
                                        config.shearX(), config.shearY(),
                                        config.originalCenter().x(),
                                        config.originalCenter().y(),
-                                       config.aZ(),
-                                       translation.x(),
-                                       translation.y(),
+                                       normalizeAngle(config.aZ()),
+                                       normalizeAngle(translation.x()),
+                                       normalizeAngle(translation.y()),
                                        updater,
                                        config.filter());
 

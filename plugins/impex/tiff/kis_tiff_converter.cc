@@ -294,14 +294,14 @@ void KisTIFFOptions::fromProperties(KisPropertiesConfigurationSP cfg)
     // old value that might be still stored in a config (remove after Krita 5.0 :) )
     indexToComp[8] = COMPRESSION_PIXARLOG;
 
-    compressionType = indexToComp.value(cfg->getInt("compressiontype", 0), COMPRESSION_NONE);
+    compressionType = static_cast<quint16>(indexToComp.value(cfg->getInt("compressiontype", 0), COMPRESSION_NONE));
 
-    predictor = cfg->getInt("predictor", 0) + 1;
+    predictor = static_cast<quint16>(cfg->getInt("predictor", 0)) + 1;
     alpha = cfg->getBool("alpha", true);
     flatten = cfg->getBool("flatten", true);
-    jpegQuality = cfg->getInt("quality", 80);
-    deflateCompress = cfg->getInt("deflate", 6);
-    pixarLogCompress = cfg->getInt("pixarlog", 6);
+    jpegQuality = static_cast<quint16>(cfg->getInt("quality", 80));
+    deflateCompress = static_cast<quint16>(cfg->getInt("deflate", 6));
+    pixarLogCompress = static_cast<quint16>(cfg->getInt("pixarlog", 6));
     saveProfile = cfg->getBool("saveProfile", true);
 }
 
@@ -427,7 +427,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
     if (TIFFGetField(image, TIFFTAG_ICCPROFILE, &EmbedLen, &EmbedBuffer) == 1) {
         dbgFile << "Profile found";
         QByteArray rawdata;
-        rawdata.resize(EmbedLen);
+        rawdata.resize(static_cast<int>(EmbedLen));
         memcpy(rawdata.data(), EmbedBuffer, EmbedLen);
         profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceIdTag.first, colorSpaceIdTag.second, rawdata);
     }
@@ -483,19 +483,19 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
     }
 
     // Check if there is an alpha channel
-    int8_t alphapos = -1; // <- no alpha
+    int32_t alphapos = -1; // <- no alpha
     bool hasPremultipliedAlpha = false;
     // Check which extra is alpha if any
     dbgFile << "There are" << nbchannels << " channels and" << extrasamplescount << " extra channels";
     if (sampleinfo) { // index images don't have any sampleinfo, and therefore sampleinfo == 0
-        for (int i = 0; i < extrasamplescount; i++) {
+        for (uint16_t i = 0; i < extrasamplescount; i++) {
             dbgFile << "sample" << i << "extra sample count" << extrasamplescount << "color channel count" << (cs->colorChannelCount()) << "Number of channels" << nbchannels << "sample info" << sampleinfo[i];
             switch (sampleinfo[i]) {
             case EXTRASAMPLE_ASSOCALPHA:
                 // The color values are already multiplied with the alpha value. This is reversed in the postprocessor.
                 dbgPlugins << "Detected associated alpha @ " << i;
                 hasPremultipliedAlpha = true;
-                alphapos = extrasamplescount - 1; // nbsamples - 1
+                alphapos = extrasamplescount - 1U; // nbsamples - 1
                 break;
             case EXTRASAMPLE_UNASSALPHA:
                 // color values are not premultiplied with alpha, and can be used as they are.
@@ -539,13 +539,13 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
     }
     // Creating the KisImageSP
     if (!m_image) {
-        m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
-        m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres)); // It is the "invert" macro because we convert from pointer-per-inchs to points
+        m_image = new KisImage(m_doc->createUndoStore(), static_cast<qint32>(width), static_cast<qint32>(height), cs, "built image");
+        m_image->setResolution(POINT_TO_INCH(static_cast<qreal>(xres)), POINT_TO_INCH(static_cast<qreal>(yres))); // It is the "invert" macro because we convert from pointer-per-inchs to points
         Q_CHECK_PTR(m_image);
     } else {
-        if (m_image->width() < (qint32)width || m_image->height() < (qint32)height) {
-            quint32 newwidth = (m_image->width() < (qint32)width) ? width : m_image->width();
-            quint32 newheight = (m_image->height() < (qint32)height) ? height : m_image->height();
+        if (m_image->width() < static_cast<qint32>(width) || m_image->height() < static_cast<qint32>(height)) {
+            qint32 newwidth = (m_image->width() < static_cast<qint32>(width)) ? static_cast<qint32>(width) : m_image->width();
+            qint32 newheight = (m_image->height() < static_cast<qint32>(height)) ? static_cast<qint32>(height) : m_image->height();
             m_image->resizeImage(QRect(0, 0, newwidth, newheight));
         }
     }
@@ -560,7 +560,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
     KisTIFFPostProcessor *postprocessor = 0;
 
     // Configure poses
-    uint8_t nbcolorsamples = nbchannels - extrasamplescount;
+    uint16_t nbcolorsamples = nbchannels - extrasamplescount;
     switch (color_type) {
     case PHOTOMETRIC_MINISWHITE: {
         poses[0] = 0;
@@ -639,13 +639,13 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
         TIFFGetFieldDefaulted(image, TIFFTAG_YCBCRPOSITIONING, &position);
         if (dstDepth == 8) {
             tiffReader = new KisTIFFYCbCrReader<uint8_t>(
-                layer->paintDevice(), layer->image()->width(), layer->image()->height(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, hsubsampling, vsubsampling);
+                layer->paintDevice(), static_cast<quint32>(layer->image()->width()), static_cast<quint32>(layer->image()->height()), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, hsubsampling, vsubsampling);
         } else if (dstDepth == 16) {
             if (sampletype == SAMPLEFORMAT_IEEEFP) {
 #ifdef HAVE_OPENEXR
                 tiffReader = new KisTIFFYCbCrReader<half>(layer->paintDevice(),
-                                                          layer->image()->width(),
-                                                          layer->image()->height(),
+                                                          static_cast<quint32>(layer->image()->width()),
+                                                          static_cast<quint32>(layer->image()->height()),
                                                           poses,
                                                           alphapos,
                                                           depth,
@@ -660,8 +660,8 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
 #endif
             } else {
                 tiffReader = new KisTIFFYCbCrReader<uint16_t>(layer->paintDevice(),
-                                                              layer->image()->width(),
-                                                              layer->image()->height(),
+                                                              static_cast<quint32>(layer->image()->width()),
+                                                              static_cast<quint32>(layer->image()->height()),
                                                               poses,
                                                               alphapos,
                                                               depth,
@@ -677,8 +677,8 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
         } else if (dstDepth == 32) {
             if (sampletype == SAMPLEFORMAT_IEEEFP) {
                 tiffReader = new KisTIFFYCbCrReader<float>(layer->paintDevice(),
-                                                           layer->image()->width(),
-                                                           layer->image()->height(),
+                                                           static_cast<quint32>(layer->image()->width()),
+                                                           static_cast<quint32>(layer->image()->height()),
                                                            poses,
                                                            alphapos,
                                                            depth,
@@ -692,8 +692,8 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
                                                            vsubsampling);
             } else {
                 tiffReader = new KisTIFFYCbCrReader<uint32_t>(layer->paintDevice(),
-                                                              layer->image()->width(),
-                                                              layer->image()->height(),
+                                                              static_cast<quint32>(layer->image()->width()),
+                                                              static_cast<quint32>(layer->image()->height()),
                                                               poses,
                                                               alphapos,
                                                               depth,
@@ -721,7 +721,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
         if (sampletype == SAMPLEFORMAT_IEEEFP) {
             tiffReader = new KisTIFFReaderTarget<float>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, 1.0f);
         } else {
-            tiffReader = new KisTIFFReaderTarget<uint32_t>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, quint32_MAX);
+            tiffReader = new KisTIFFReaderTarget<uint32_t>(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, hasPremultipliedAlpha, transform, postprocessor, std::numeric_limits<uint32_t>::max());
         }
     }
 
@@ -751,14 +751,14 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
             }
         } else {
             ps_buf = new tdata_t[nbchannels];
-            uint32_t *lineSizes = new uint32_t[nbchannels];
+            tsize_t *lineSizes = new tsize_t[nbchannels];
             tmsize_t baseSize = TIFFTileSize(image);
             for (uint32_t i = 0; i < nbchannels; i++) {
                 ps_buf[i] = _TIFFmalloc(baseSize);
                 lineSizes[i] = tileWidth;
                 ;
             }
-            tiffstream = new KisBufferStreamSeparate((uint8_t **)ps_buf, nbchannels, depth, lineSizes);
+            tiffstream = new KisBufferStreamSeparate(reinterpret_cast<uint8_t **>(ps_buf), nbchannels, depth, lineSizes);
             delete[] lineSizes;
         }
         dbgFile << linewidth << "" << nbchannels << "" << layer->paintDevice()->colorSpace()->colorChannelCount();
@@ -768,7 +768,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
                 if (planarconfig == PLANARCONFIG_CONTIG) {
                     TIFFReadTile(image, buf, x, y, 0, (tsample_t)-1);
                 } else {
-                    for (uint32_t i = 0; i < nbchannels; i++) {
+                    for (uint16_t i = 0; i < nbchannels; i++) {
                         TIFFReadTile(image, ps_buf[i], x, y, 0, i);
                     }
                 }
@@ -791,22 +791,22 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
         if (planarconfig == PLANARCONFIG_CONTIG) {
             buf = _TIFFmalloc(stripsize);
             if (depth < 16) {
-                tiffstream = new KisBufferStreamContigBelow16((uint8_t *)buf, depth, stripsize / rowsPerStrip);
+                tiffstream = new KisBufferStreamContigBelow16(reinterpret_cast<uint8_t *>(buf), depth, stripsize / rowsPerStrip);
             } else if (depth < 32) {
-                tiffstream = new KisBufferStreamContigBelow32((uint8_t *)buf, depth, stripsize / rowsPerStrip);
+                tiffstream = new KisBufferStreamContigBelow32(reinterpret_cast<uint8_t *>(buf), depth, stripsize / rowsPerStrip);
             } else {
-                tiffstream = new KisBufferStreamContigAbove32((uint8_t *)buf, depth, stripsize / rowsPerStrip);
+                tiffstream = new KisBufferStreamContigAbove32(reinterpret_cast<uint8_t *>(buf), depth, stripsize / rowsPerStrip);
             }
         } else {
             ps_buf = new tdata_t[nbchannels];
-            uint32_t scanLineSize = stripsize / rowsPerStrip;
+            tsize_t scanLineSize = stripsize / rowsPerStrip;
             dbgFile << " scanLineSize for each plan =" << scanLineSize;
-            uint32_t *lineSizes = new uint32_t[nbchannels];
+            tsize_t *lineSizes = new tsize_t[nbchannels];
             for (uint32_t i = 0; i < nbchannels; i++) {
                 ps_buf[i] = _TIFFmalloc(stripsize);
                 lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
-            tiffstream = new KisBufferStreamSeparate((uint8_t **)ps_buf, nbchannels, depth, lineSizes);
+            tiffstream = new KisBufferStreamSeparate(reinterpret_cast<uint8_t **>(ps_buf), nbchannels, depth, lineSizes);
             delete[] lineSizes;
         }
 
@@ -817,7 +817,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
             if (planarconfig == PLANARCONFIG_CONTIG) {
                 TIFFReadEncodedStrip(image, TIFFComputeStrip(image, y, 0), buf, (tsize_t)-1);
             } else {
-                for (uint32_t i = 0; i < nbchannels; i++) {
+                for (uint16_t i = 0; i < nbchannels; i++) {
                     TIFFReadEncodedStrip(image, TIFFComputeStrip(image, y, i), ps_buf[i], (tsize_t)-1);
                 }
             }

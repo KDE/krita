@@ -5,8 +5,12 @@
  */
 
 #include "kis_buffer_stream.h"
+#include <tiffio.h>
 
-KisBufferStreamContigBase::KisBufferStreamContigBase(uint8_t* src, uint16_t depth, uint32_t lineSize) : KisBufferStreamBase(depth), m_src(src), m_lineSize(lineSize)
+KisBufferStreamContigBase::KisBufferStreamContigBase(uint8_t *src, uint16_t depth, tsize_t lineSize)
+    : KisBufferStreamBase(depth)
+    , m_src(src)
+    , m_lineSize(lineSize)
 {
     restart();
 }
@@ -17,7 +21,7 @@ void KisBufferStreamContigBase::restart()
     m_posinc = 8;
 }
 
-void KisBufferStreamContigBase::moveToLine(uint32_t lineNumber)
+void KisBufferStreamContigBase::moveToLine(tsize_t lineNumber)
 {
     m_srcIt = m_src + lineNumber * m_lineSize;
     m_posinc = 8;
@@ -50,10 +54,10 @@ uint32_t KisBufferStreamContigBelow32::nextValue()
         if (toread > m_posinc) toread = m_posinc;
         remain -= toread;
         m_posinc -= toread;
-        value = (value) | ((((*m_srcIt) >> (m_posinc)) & ((1 << toread) - 1)) << (m_depth - 8 - remain));
+        value = (value) | ((((*m_srcIt) >> (m_posinc)) & ((1 << toread) - 1U)) << (m_depth - 8U - remain));
         if (m_posinc == 0) {
             m_srcIt++;
-            m_posinc = 8;
+            m_posinc = 8U;
         }
     }
     return value;
@@ -65,21 +69,24 @@ uint32_t KisBufferStreamContigAbove32::nextValue()
     uint32_t value = 0;
     while (remain > 0) {
         uint8_t toread = remain;
-        if (toread > m_posinc) toread = m_posinc;
+        if (toread > m_posinc)
+            toread = m_posinc;
         remain -= toread;
-        m_posinc -= toread;
-        if (remain < 32) {
-            value = (value) | ((((*m_srcIt) >> (m_posinc)) & ((1 << toread) - 1)) << (24 - remain));
+        m_posinc = m_posinc - toread;
+        if (remain < 32U) {
+            value |= (((*m_srcIt >> m_posinc) & ((1U << toread) - 1U)) << (24U - remain));
         }
         if (m_posinc == 0) {
             m_srcIt++;
-            m_posinc = 8;
+            m_posinc = 8U;
         }
     }
     return value;
 }
 
-KisBufferStreamSeparate::KisBufferStreamSeparate(uint8_t** srcs, uint8_t nb_samples , uint16_t depth, uint32_t* lineSize) : KisBufferStreamBase(depth), m_nb_samples(nb_samples)
+KisBufferStreamSeparate::KisBufferStreamSeparate(uint8_t **srcs, uint16_t nb_samples, uint16_t depth, tsize_t *lineSize)
+    : KisBufferStreamBase(depth)
+    , m_nb_samples(nb_samples)
 {
     streams = new KisBufferStreamContigBase*[nb_samples];
     if (depth < 16) {
@@ -122,7 +129,7 @@ void KisBufferStreamSeparate::restart()
     }
 }
 
-void KisBufferStreamSeparate::moveToLine(uint32_t lineNumber)
+void KisBufferStreamSeparate::moveToLine(tsize_t lineNumber)
 {
     for (uint8_t i = 0; i < m_nb_samples; i++) {
         streams[i]->moveToLine(lineNumber);

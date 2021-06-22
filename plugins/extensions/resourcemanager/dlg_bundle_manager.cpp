@@ -337,11 +337,15 @@ void DlgBundleManager::updateBundleInformation(QModelIndex idx)
 
         m_ui->lblAuthor->setText(storage->metaData(KisResourceStorage::s_meta_author).toString());
         QString date = storage->metaData(KisResourceStorage::s_meta_creation_date).toString();
-        date = QDateTime::fromSecsSinceEpoch(date.toInt()).toString();
         m_ui->lblCreated->setText(date);
+        QString date2 = storage->metaData(KisResourceStorage::s_meta_dc_date).toString();
+        m_ui->lblUpdated->setText(date2);
+
         m_ui->lblDescription->setPlainText(storage->metaData(KisResourceStorage::s_meta_description).toString());
         m_ui->lblEmail->setText(storage->metaData(KisResourceStorage::s_meta_email).toString());
         m_ui->lblLicense->setText(storage->metaData(KisResourceStorage::s_meta_license).toString());
+        m_ui->lblWebsite->setText(storage->metaData(KisResourceStorage::s_meta_website).toString());
+
 
     }
 

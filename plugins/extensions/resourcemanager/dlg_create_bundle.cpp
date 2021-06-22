@@ -300,7 +300,9 @@ void DlgCreateBundle::putMetaDataInTheBundle(KoResourceBundleSP bundle) const
     bundle->setMetaData(KisResourceStorage::s_meta_author, authorName());
     bundle->setMetaData(KisResourceStorage::s_meta_title,  bundleName());
     bundle->setMetaData(KisResourceStorage::s_meta_description, description());
-    bundle->setMetaData(KisResourceStorage::s_meta_initial_creator,  authorName());
+    if (bundle->metaData(KisResourceStorage::s_meta_initial_creator, "").isEmpty()) {
+        bundle->setMetaData(KisResourceStorage::s_meta_initial_creator,  authorName());
+    }
     bundle->setMetaData(KisResourceStorage::s_meta_creator, authorName());
     bundle->setMetaData(KisResourceStorage::s_meta_email, email());
     bundle->setMetaData(KisResourceStorage::s_meta_license, license());

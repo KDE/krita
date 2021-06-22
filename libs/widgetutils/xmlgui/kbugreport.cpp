@@ -37,6 +37,7 @@
 
 #include <ktitlewidget.h>
 #include <kwidgetsaddons_version.h>
+#include <kstandardguiitem.h>
 
 #include "systeminformation_p.h"
 
@@ -84,6 +85,8 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
     buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 

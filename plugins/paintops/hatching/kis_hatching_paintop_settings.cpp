@@ -112,6 +112,7 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
                 new KisDoubleSliderBasedPaintOpPropertyCallback(
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                    KisDoubleSliderBasedPaintOpPropertyCallback::SubType_Angle,
                     "hatching_angle",
                     i18n("Hatching Angle"),
                     settings, 0);

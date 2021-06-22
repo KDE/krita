@@ -1,12 +1,108 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <radialGradient id="a" cx="8" cy="8" r="5" gradientUnits="userSpaceOnUse">
-   <stop stop-color="#fff" offset="0"/>
-   <stop stop-color="#373737" offset="1"/>
-  </radialGradient>
- </defs>
- <path d="m5 15-1e-7 -4h-1.01l-1.095e-4 2.9899-2.9899 1.1e-4 1e-7 1.01h3.7042z" fill="#d2d2d2"/>
- <circle cx="8" cy="8" r="4.5" fill="url(#a)" stroke="#d2d2d2" stroke-dashoffset="1.15"/>
- <path d="m4.2498 14.496a7.5002 7.5002 0 0 1-3.2978-9.0606 7.5002 7.5002 0 0 1 8.3502-4.821 7.5002 7.5002 0 0 1 6.1978 7.3863" fill="none" stroke="#d2d2d2" stroke-dashoffset="1.15"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg13"
+   viewBox="0 0 16 16"
+   version="1.1"
+   height="16"
+   width="16">
+  <metadata
+     id="metadata17">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2021</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs7">
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(-90,-0.5,0.5)"
+       y2="7"
+       y1="7"
+       x2="15.5"
+       x1="0.5"
+       id="a">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1"
+         id="stop2"
+         offset="0"
+         stop-color="#ff0000" />
+      <stop
+         stop-color="#ffff00"
+         offset="0.16666667"
+         id="stop846"
+         style="stop-color:#ffff00;stop-opacity:1" />
+      <stop
+         stop-color="#00ff00"
+         offset="0.33333334"
+         id="stop862"
+         style="stop-color:#00ff00;stop-opacity:1" />
+      <stop
+         style="stop-color:#00ffff;stop-opacity:1"
+         id="stop844"
+         offset="0.5"
+         stop-color="#00ffff" />
+      <stop
+         stop-color="#0000ff"
+         offset="0.66666669"
+         id="stop848"
+         style="stop-color:#0000ff;stop-opacity:1" />
+      <stop
+         style="stop-color:#ff00ff;stop-opacity:1"
+         id="stop850"
+         offset="0.83333331"
+         stop-color="#ff00ff" />
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1"
+         id="stop4"
+         offset="1"
+         stop-color="#ff0000" />
+    </linearGradient>
+  </defs>
+  <path
+     style="fill:#d2d2d2;fill-opacity:1"
+     id="path9"
+     d="M 15,12 11,8 v 3 L 0.99997,11.00003 1,13 h 10 v 3 z" />
+  <path
+     id="rect11"
+     d="m 0.5,-15.5 5.0338984,0 v 15 L 0.5,-0.5 Z"
+     style="fill:url(#a);stroke:none;stroke-dashoffset:1.14999998"
+     transform="rotate(90)" />
+  <path
+     style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="M 0,0 V 6 H 16 V 0 Z M 1,1 H 15 V 5 H 1 Z"
+     id="rect819" />
 </svg>

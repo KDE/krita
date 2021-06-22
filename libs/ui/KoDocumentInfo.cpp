@@ -274,7 +274,7 @@ bool KoDocumentInfo::loadOasisAboutInfo(const QDomNode &metaDoc)
             if (!e.text().isEmpty())
                 keywords << e.text().trimmed();
         } else if (tag == "description") {
-            //this is the odf way but add meta:comment if is already loaded
+            //this is the odf way but add meta:comment if it's already loaded
             QDomElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo("description", aboutInfo("description") + e.text().trimmed());

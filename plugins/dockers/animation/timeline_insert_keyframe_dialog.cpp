@@ -16,6 +16,7 @@
 #include <QVBoxLayout>
 #include <QFormLayout>
 #include <klocalizedstring.h>
+#include <kstandardguiitem.h>
 
 #include "KSharedConfig"
 #include "KConfigGroup"
@@ -60,6 +61,9 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
     {   // Cancel / OK Buttons.
         QDialogButtonBox *buttonbox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
         layout->addWidget(buttonbox);
+
+        KGuiItem::assign(buttonbox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+        KGuiItem::assign(buttonbox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
         connect(buttonbox, SIGNAL(accepted()), this, SLOT(accept()));
         connect(buttonbox, SIGNAL(rejected()), this, SLOT(reject()));

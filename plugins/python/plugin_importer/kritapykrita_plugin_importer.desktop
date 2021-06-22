@@ -56,4 +56,4 @@ Comment[tr]=Python eklentilerini zip dosyasından içe aktarır.
 Comment[uk]=Імпортує додатки Python з файлів zip.
 Comment[x-test]=xxImports Python plugins from zip files.xx
 Comment[zh_CN]=从 ZIP 压缩包导入 Python 插件
-Comment[zh_TW]=匯入 Zip 檔案中的 Python 外掛程式。
+Comment[zh_TW]=從 ZIP 檔案匯入 Python 外掛程式。

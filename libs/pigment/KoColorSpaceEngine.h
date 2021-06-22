@@ -37,7 +37,7 @@ public:
     virtual const KoColorProfile* addProfile(const QByteArray &data) = 0;
     /**
      * @brief getProfile
-     * This tries to generate a profile with the given characteristics and add it to the registery.
+     * This tries to generate a profile with the given characteristics and add it to the registry.
      * @param colorants a double of xy (for xyY) values, this expects the first two as the white point,
      * then the red, green and blue. Will only be used if primaries is unspecified.
      * If there's only a whitepoint, a grayscale profile will be returned.

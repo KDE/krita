@@ -41,7 +41,7 @@ https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug
 
 Most of the developers hang out here. If you are interested in helping with the project this is a great place to start.
 
-irc.freenode.net, #krita
+libera.chat, #krita
 
 ### Project Website
 

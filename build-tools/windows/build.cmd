@@ -771,6 +771,17 @@ echo.
 set CMAKE_BUILD_TYPE=RelWithDebInfo
 set QT_ENABLE_DEBUG_INFO=OFF
 
+if "%KRITA_BRANDING%" == "" (
+    rem Check Jenkins job name
+    if "%JOB_NAME%" == "Krita_Nightly_Windows_Build" (
+        set KRITA_BRANDING=Next
+    ) else (
+        if "%JOB_NAME%" == "Krita_Stable_Windows_Build" (
+            set KRITA_BRANDING=Plus
+        )
+    )
+)
+
 :: Paths for CMake
 set "BUILDDIR_DOWNLOAD_CMAKE=%DEPS_DOWNLOAD_DIR:\=/%"
 set "BUILDDIR_DOWNLOAD_CMAKE=%BUILDDIR_DOWNLOAD_CMAKE: =\ %"
@@ -812,6 +823,7 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHIDE_SAFE_ASSERTS=ON ^
     -DFETCH_TRANSLATIONS=ON ^
+    -DBRANDING=%KRITA_BRANDING% ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%

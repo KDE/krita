@@ -384,7 +384,7 @@ struct MaskParent
         image->waitForDone();
         KisLayerUtils::forceAllDelayedNodesUpdate(image->root());
         /**
-         * Shape updates have two chanis of compresion, 100ms each.
+         * Shape updates have two channels of compression, 100ms each.
          * One in KoShapeManager, the other one in KisShapeLayerCanvas.
          * Therefore we should wait for a decent amount of time for all
          * of them to land.

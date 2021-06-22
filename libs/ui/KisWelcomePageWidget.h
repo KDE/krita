@@ -11,6 +11,7 @@
 #include "KisViewManager.h"
 #include "KisMainWindow.h"
 #include <KisUpdaterBase.h>
+#include <KisKineticScroller.h>
 
 #include <QAction>
 #include <QWidget>
@@ -115,6 +116,8 @@ private Q_SLOTS:
      * Once all files in the recent documents model are checked, cleanup the UI if the model is empty
      */
     void slotRecentFilesModelIsUpToDate();
+
+    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 #ifdef ENABLE_UPDATERS
     void slotRunVersionUpdate();

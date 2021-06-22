@@ -63,7 +63,7 @@
         y:             The layer's vertical position in the image.
         width:       The layer's width in pixels OBSOLETE
         height:      The layers height in pixels OBSOLETE
-        opacity:    The layer's opactiy. A value betwenn 0 and 255.
+        opacity:    The layer's opactiy. A value between 0 and 255.
         visible       Is the layer visible? (yes or no)
         linked:       Is the layer linked? (yes or no) OBSOLETE
         filename:   The name of the binary file of the layer' data.

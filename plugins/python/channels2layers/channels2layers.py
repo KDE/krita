@@ -849,7 +849,7 @@ class ChannelsToLayers(Extension):
 
 
     def translateDictKey(self, key, value):
-        """Translate key from dictionnary (mostly internal Krita internal values) to human readable values"""
+        """Translate key from dictionary (mostly internal Krita internal values) to human readable values"""
         returned = i18n('Unknown')
 
         if key in TRANSLATIONS_DICT.keys():

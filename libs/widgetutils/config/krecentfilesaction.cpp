@@ -95,7 +95,13 @@ void KRecentFilesActionPrivate::init()
     q->setEnabled(false);
     q->connect(q, SIGNAL(triggered(QAction*)), SLOT(_k_urlSelected(QAction*)));
 
-    QStyle *baseStyle = QStyleFactory::create(q->menu()->style()->objectName());
+    QString baseStyleName = q->menu()->style()->objectName();
+    if (baseStyleName != QLatin1String("windows")) {
+        // Force Fusion theme because other themes like Breeze doesn't
+        // work well with QProxyStyle, may result in small icons.
+        baseStyleName = QStringLiteral("fusion");
+    }
+    QStyle *baseStyle = QStyleFactory::create(baseStyleName);
     QStyle *newStyle = new KRecentFilesIconProxyStyle(baseStyle);
     newStyle->setParent(q->menu());
     q->menu()->setStyle(newStyle);

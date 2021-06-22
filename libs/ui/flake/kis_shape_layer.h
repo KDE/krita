@@ -95,6 +95,8 @@ public:
     KisPaintDeviceSP original() const override;
     KisPaintDeviceSP paintDevice() const override;
 
+    QRect theoreticalBoundingRect() const;
+
     qint32 x() const override;
     qint32 y() const override;
     void setX(qint32) override;

@@ -64,12 +64,23 @@ public:
 
     KisAnnotation* clone() const Q_DECL_OVERRIDE {
         // HACK ALERT: we are evil! use normal copying instead!
-
         PSDResourceBlock *copied = new PSDResourceBlock();
 
-        QBuffer buffer;
-        write(&buffer);
-        copied->read(&buffer);
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QBuffer::WriteOnly);
+
+        if (!write(&buffer)) {
+            qWarning() << "Could not copy PSDResourceBlock" << error;
+            return 0;
+        }
+        buffer.close();
+        buffer.open(QBuffer::ReadOnly);
+
+        if (!copied->read(&buffer)) {
+            qWarning() << "Could not copy PSDResourceBlock" << copied->error;
+            return 0;
+        }
 
         return copied;
     }

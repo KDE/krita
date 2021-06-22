@@ -821,7 +821,7 @@ class comics_project_manager_docker(DockWidget):
             self.load_config()
     """
     This is triggered by any document save.
-    It checks if the given url in in the pages list, and if so,
+    It checks if the given url is in the pages list, and if so,
     updates the appropriate page thumbnail.
     This helps with the management of the pages, because the user
     will be able to see the thumbnails as a todo for the whole comic,

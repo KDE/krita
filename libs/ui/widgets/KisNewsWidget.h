@@ -10,6 +10,7 @@
 #include <QListView>
 #include <QSet>
 #include <QStyledItemDelegate>
+#include <KisKineticScroller.h>
 
 #include <ui_KisNewsPage.h>
 
@@ -46,6 +47,7 @@ private Q_SLOTS:
     void toggleNews(bool toggle);
     void itemSelected(const QModelIndex &idx);
     void rssDataChanged();
+    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 private:
     bool m_getNews {false};

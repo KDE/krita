@@ -38,6 +38,7 @@ if os.name == 'nt':
     env["LANG"] = "English"
 else:
     env["LANG"] = "en_US.UTF-8"
+    env["LANGUAGE"] = "en_US.UTF-8"
 
 subdirs = subprocess.run(["svn", "cat", svn_command], stdout=subprocess.PIPE)
 for subdir in subdirs.stdout.decode('utf-8').strip().split('\n'):
@@ -68,7 +69,7 @@ for subdir in subdirs.stdout.decode('utf-8').strip().split('\n'):
         with open(revfile, 'r', encoding='utf-8') as r:
             existing = r.readline()
 
-            if existing == current[0]:
+            if existing == current.groups()[0]:
                 print("Translation {} is up to date, skipping.".format(subdir))
                 continue
     except:
@@ -83,5 +84,5 @@ for subdir in subdirs.stdout.decode('utf-8').strip().split('\n'):
         with open(revfile, "w", encoding="utf-8") as r:
             print("{}: rev {}, {} bytes".format(
                 pofile, current.groups()[0], len(po_contents)))
-            r.write(current[0])
+            r.write(current.groups()[0])
         f.write(po_contents)

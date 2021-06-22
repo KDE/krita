@@ -226,7 +226,9 @@ bool KoQuaZipStore::closeWrite()
     Q_D(KoStore);
 
     bool r = true;
-    if (!dd->currentFile->write(dd->cache)) {
+    if (dd->currentFile->write(dd->cache) != dd->cache.size()) {
+        // write() returns number of bytes written, or -1 in case of error
+        // let's allow write 0 bytes in the cache, when needed
         qWarning() << "Could not write buffer to the file";
         r = false;
     }

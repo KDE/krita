@@ -66,7 +66,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     // Colors options
     addPaintOpOption(new KisColorSourceOptionWidget(), i18n("Source"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption(), i18n("0.0"), i18n("1.0")), i18n("Darken"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption(), i18n("Foreground"), i18n("Background")), i18n("Mix"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption(), i18n("Background"), i18n("Foreground")), i18n("Mix"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()), i18n("Hue"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(), KisPressureHSVOption::saturationMinLabel(), KisPressureHSVOption::saturationmaxLabel()), i18n("Saturation"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()), i18nc("Label of Brightness value in brush settings", "Value"));

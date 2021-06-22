@@ -149,6 +149,7 @@
 #include "kis_action.h"
 #include <katecommandbar.h>
 #include "KisNodeActivationActionCreatorVisitor.h"
+#include "KisUiFont.h"
 
 
 #include <mutex>
@@ -485,7 +486,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
             d->recentFiles->setUrlIcon(url, icon);
         }
     });
-    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &parent, int first, int last) {
+    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &/*parent*/, int first, int last) {
         for (int i = first; i <= last; i++) {
             QStandardItem *item = d->recentFilesModel.model().item(i);
             QUrl url = item->data().toUrl();
@@ -799,7 +800,7 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 #ifdef Q_OS_ANDROID
         // HACK! When loading a new document, Krita wouldn't refresh the screen,
         // even though it has been successfully created in background. So, When
-        // appliction is hidden and made active QPA Android force-requests a
+        // application is hidden and made active QPA Android force-requests a
         // redraw call. So, this workaround fixes that.
         QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationHidden);
         QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
@@ -873,25 +874,34 @@ void KisMainWindow::customizeTabBar()
     // update MDI area theme
     // Tab close button override
     // just switch this icon out for all OSs so it is easier to see
-    QString tabStyleSheet = R"(
+    QString closeButtonImageUrl;
+    QString closeButtonHoverColor;
+    if (KisIconUtils::useDarkIcons()) {
+        closeButtonImageUrl = QStringLiteral(":/dark_close-tab.svg");
+        closeButtonHoverColor = QStringLiteral("lightcoral");
+    } else {
+        closeButtonImageUrl = QStringLiteral(":/light_close-tab.svg");
+        closeButtonHoverColor = QStringLiteral("darkred");
+    }
+    QString tabStyleSheet = QStringLiteral(R"(
             QTabBar::close-button {
-                image: url({close-button-location});
+                image: url(%1);
                 padding-top: 3px;
+            }
+            QTabBar::close-button:hover {
+                background-color: %2;
+            }
+            QTabBar::close-button:pressed {
+                background-color: red;
             }
 
             QHeaderView::section {
                 padding: 7px;
             }
 
-           )";
+           )")
+           .arg(closeButtonImageUrl, closeButtonHoverColor);
 
-    if (KisIconUtils::useDarkIcons()) {
-        tabStyleSheet = tabStyleSheet.replace("{close-button-location}", ":/dark_close-tab.svg");
-    }
-    else {
-        tabStyleSheet = tabStyleSheet.replace("{close-button-location}", ":/light_close-tab.svg");
-
-    }
 
     QTabBar* tabBar = d->findTabBarHACK();
     if (tabBar) {
@@ -1106,7 +1116,7 @@ bool KisMainWindow::openDocumentInternal(const QString &path, OpenFlags flags)
     connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
     KisDocument::OpenFlags openFlags = KisDocument::None;
-    // XXX: Why this duplication of of OpenFlags...
+    // XXX: Why this duplication of OpenFlags...
     if (flags & RecoveryFile) {
         openFlags |= KisDocument::RecoveryFile;
     }
@@ -1888,7 +1898,18 @@ void KisMainWindow::openCommandBar()
     }
 
     d->commandBar->updateBar(actionCollections, actionsCount);
-    centralWidget()->setFocusProxy(d->commandBar);
+
+    // The following line is needed to work around input method not working
+    // on Windows.
+    // See https://bugs.kde.org/show_bug.cgi?id=395598
+    // and https://bugs.kde.org/show_bug.cgi?id=438122
+    d->commandBar->activateWindow();
+
+    // The following line is present in Kate's version and was ported over
+    // but I am sceptical of its use. I worry that it may subtly cause other
+    // issues, and since the command bar appears to work fine without it, I
+    // believe it may be better to leave it out.  -- Alvin
+    // centralWidget()->setFocusProxy(d->commandBar);
 }
 
 void KisMainWindow::slotStoragesWarning(const QString &/*location*/)
@@ -2269,7 +2290,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             dockWidget->setTitleBarWidget(titleBar);
         }
         if (titleBar) {
-            titleBar->setFont(KoDockRegistry::dockFont());
+            titleBar->setFont(KisUiFont::dockFont());
         }
 
 
@@ -2328,7 +2349,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 #ifdef Q_OS_MACOS
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-    dockWidget->setFont(KoDockRegistry::dockFont());
+    dockWidget->setFont(KisUiFont::dockFont());
 
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 
@@ -2339,7 +2360,7 @@ void KisMainWindow::forceDockTabFonts()
 {
     Q_FOREACH (QObject *child, children()) {
         if (child->inherits("QTabBar")) {
-            ((QTabBar *)child)->setFont(KoDockRegistry::dockFont());
+            ((QTabBar *)child)->setFont(KisUiFont::dockFont());
         }
     }
 }
@@ -2733,28 +2754,13 @@ void KisMainWindow::configChanged()
 
     d->mdiArea->update();
 
-    if (KisConfig(false).readEntry<bool>("use_custom_system_font", false)) {
-        QString fontName = KisConfig(false).readEntry<QString>("custom_system_font", "");
-        int fontSize = KisConfig(false).readEntry<int>("custom_font_size", -1);
+    qApp->setFont(KisUiFont::normalFont());
 
-        if (fontSize <= 6) {
-            fontSize = qApp->font().pointSize();
+    Q_FOREACH (QObject* widget, children()) {
+        if (widget->inherits("QDockWidget")) {
+            QDockWidget* dw = static_cast<QDockWidget*>(widget);
+            dw->setFont(KisUiFont::dockFont());
         }
-        if (!fontName.isEmpty()) {
-            QFont f(fontName, fontSize);
-            qApp->setFont(f);
-
-            Q_FOREACH (QObject* widget, children()) {
-                if (widget->inherits("QDockWidget")) {
-                    QDockWidget* dw = static_cast<QDockWidget*>(widget);
-                    dw->setFont(KoDockRegistry::dockFont());
-                }
-            }
-
-        }
-    }
-    else {
-        qApp->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     }
 }
 
@@ -2841,7 +2847,7 @@ void KisMainWindow::newOptionWidgets(KoCanvasController *controller, const QList
 #ifdef Q_OS_MACOS
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-        w->setFont(KoDockRegistry::dockFont());
+        w->setFont(KisUiFont::dockFont());
     }
 
     if (d->toolOptionsDocker) {

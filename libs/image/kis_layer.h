@@ -206,7 +206,7 @@ public:
     bool hasClones() const;
 
     /**
-     * It is calles by the async merger after projection update is done
+     * It is called by the async merger after projection update is done
      */
     void updateClones(const QRect &rect);
 
@@ -239,7 +239,7 @@ public:
     QImage createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
     /**
-     * Return a tight rectange, where the contents of the layer
+     * Return a tight rectangle, where the contents of the layer
      * is placed from user's point of view. This rectangle includes
      * all the masks and effects the layer has (excluding layer
      * styles, they report their bounds via projection plane).
@@ -273,6 +273,13 @@ public:
     KisMetaData::Store* metaData();
 
 protected:
+    /**
+     * Internal projection device that should be updated in the
+     * changeRect pass even when the change rect is cropped by
+     * masks or something like that
+     */
+    virtual QRect amortizedProjectionRectForCleanupInChangePass() const;
+
     // override from KisNode
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
 

@@ -97,7 +97,7 @@ public:
     QByteArray toSvg(const QString &attributes = QString()) const;
 
     /**
-     * Return a difference measurement betwenn this gesture and the @p other
+     * Return a difference measurement between this gesture and the @p other
      * gesture. Abort comparison if difference is larger than @p abortThreshold
      * and return a very large difference in that case.
      * Usual return values range from x to y //TODO: fill in x and y

@@ -16,7 +16,7 @@
 #define DECLARE_OUT_VAR
 #define OUT_VAR gl_FragColor
 #endif
-// vertices datas
+// vertices data
 INATTR highp vec4 textureCoordinates;
 uniform sampler2D f_tileTexture;
 DECLARE_OUT_VAR

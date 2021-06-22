@@ -14,7 +14,7 @@
  * LAB traits, it provides some convenient functions to
  * access LAB channels through an explicit API.
  *
- * Use this class in conjonction with KoColorSpace::toLabA16 and
+ * Use this class in conjunction with KoColorSpace::toLabA16 and
  * KoColorSpace::fromLabA16 data.
  *
  * Example:

@@ -166,6 +166,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
             KisIntSliderBasedPaintOpPropertyCallback *prop =
                 new KisIntSliderBasedPaintOpPropertyCallback(
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
+                    KisIntSliderBasedPaintOpPropertyCallback::SubType_Angle,
                     "deform_angle",
                     i18n("Angle"),
                     settings, 0);

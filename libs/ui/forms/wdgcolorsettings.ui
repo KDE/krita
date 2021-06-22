@@ -224,7 +224,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Saturation</string>
+             <string comment="ICC profile rendering intent">Saturation</string>
             </property>
            </item>
            <item>
@@ -309,7 +309,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Saturation</string>
+             <string comment="ICC profile rendering intent">Saturation</string>
             </property>
            </item>
            <item>

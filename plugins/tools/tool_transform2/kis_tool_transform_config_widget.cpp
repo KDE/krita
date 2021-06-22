@@ -16,6 +16,8 @@
 #include "KisViewManager.h"
 #include "kis_transform_utils.h"
 
+#include <kstandardguiitem.h>
+
 
 template<typename T> inline T sign(T x) {
     return x > 0 ? 1 : x == (T)0 ? 0 : -1;
@@ -132,6 +134,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     aYBox->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
     aZBox->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
+    cameraHeightBox->setRange(1, 20000, 2);
 
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
     connect(btnTransformAroundPivotPoint, SIGNAL(clicked(bool)), this, SLOT(slotTransformAroundRotationCenter(bool)));
@@ -146,6 +149,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(aXBox, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetAX(qreal)));
     connect(aYBox, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetAY(qreal)));
     connect(aZBox, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetAZ(qreal)));
+    connect(cameraHeightBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetCameraHeight(qreal)));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotSetKeepAspectRatio(bool)));
     connect(flipXButton, SIGNAL(clicked(bool)), this, SLOT(slotFlipX()));
     connect(flipYButton, SIGNAL(clicked(bool)), this, SLOT(slotFlipY()));
@@ -295,6 +299,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     connect(canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
     slotUpdateIcons();
+
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Apply), KStandardGuiItem::apply());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Reset), KStandardGuiItem::reset());
 }
 
 void KisToolTransformConfigWidget::slotUpdateIcons()
@@ -517,6 +524,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         aXBox->setEnabled(freeTransformIsActive);
         aYBox->setEnabled(freeTransformIsActive);
         aZBox->setEnabled(freeTransformIsActive);
+        cameraHeightBox->setEnabled(freeTransformIsActive);
         freeRotationRadioButton->setEnabled(freeTransformIsActive);
 
         scaleXBox->setValue(config.scaleX() * 100.);
@@ -534,6 +542,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         aXBox->setAngle(normalizeAngleDegrees(kisRadiansToDegrees(config.aX())));
         aYBox->setAngle(normalizeAngleDegrees(kisRadiansToDegrees(config.aY())));
         aZBox->setAngle(normalizeAngleDegrees(kisRadiansToDegrees(config.aZ())));
+        cameraHeightBox->setValue(config.cameraPos().z());
         aspectButton->setKeepAspectRatio(config.keepAspectRatio());
         cmbFilter->setCurrent(config.filterId());
 
@@ -992,6 +1001,17 @@ void KisToolTransformConfigWidget::slotSetAZ(qreal value)
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
         config->setAZ(normalizeAngle(kisDegreesToRadians(value)));
     }
+
+    notifyConfigChanged();
+    notifyEditingFinished();
+}
+
+void KisToolTransformConfigWidget::slotSetCameraHeight(qreal value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setCameraPos(QVector3D(0,0,value));
 
     notifyConfigChanged();
     notifyEditingFinished();

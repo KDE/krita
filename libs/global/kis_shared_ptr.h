@@ -306,7 +306,7 @@ public:
      */
     inline T* data() {
         if (!isConsistent()) {
-            warnKrita << kisBacktrace();
+            warnKrita.noquote() << kisBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
         }
 
@@ -318,7 +318,7 @@ public:
      */
     inline const T* data() const {
         if (!isConsistent()) {
-            warnKrita << kisBacktrace();
+            warnKrita.noquote() << kisBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
         }
 
@@ -330,7 +330,7 @@ public:
      */
     inline const T* constData() const {
         if (!isConsistent()) {
-            warnKrita << kisBacktrace();
+            warnKrita.noquote() << kisBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
         }
 
@@ -351,7 +351,7 @@ public:
 
     inline const T& operator*() const {
         if (!isValid()) {
-            warnKrita << kisBacktrace();
+            warnKrita.noquote() << kisBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
         }
 
@@ -360,7 +360,7 @@ public:
 
     inline T& operator*() {
         if (!isValid()) {
-            warnKrita << kisBacktrace();
+            warnKrita.noquote() << kisBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
         }
 
@@ -369,7 +369,7 @@ public:
 
     inline const T* operator->() const {
         if (!isValid()) {
-            warnKrita << kisBacktrace();
+            warnKrita.noquote() << kisBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
         }
 
@@ -378,7 +378,7 @@ public:
 
     inline T* operator->() {
         if (!isValid()) {
-            warnKrita << kisBacktrace();
+            warnKrita.noquote() << kisBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
         }
 

@@ -750,7 +750,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
     paintingOffset = transaction.originalTopLeft();
 
     // check whether image is too big to be displayed or not
-    imageTooBig = KisTransformUtils::checkImageTooBig(transaction.originalRect(), m);
+    imageTooBig = KisTransformUtils::checkImageTooBig(transaction.originalRect(), m, currentArgs.cameraPos().z());
 
     // recalculate cached handles position
     recalculateTransformedHandles();

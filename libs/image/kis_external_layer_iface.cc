@@ -10,3 +10,8 @@
 void KisExternalLayer::resetCache()
 {
 }
+
+QRect KisExternalLayer::theoreticalBoundingRect() const
+{
+    return KisLayer::exactBounds();
+}

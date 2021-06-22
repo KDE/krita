@@ -9,7 +9,7 @@
 	// the location of this script file, which probably isn't what you want
 	"ContentRoot"	"..\content\"
 
-	// include all files recursivley
+	// include all files recursively
   "FileMapping"
   {
   	// This can be a full path, or a path relative to ContentRoot

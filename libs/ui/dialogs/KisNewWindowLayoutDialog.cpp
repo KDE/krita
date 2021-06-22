@@ -6,11 +6,15 @@
 
 #include "KisNewWindowLayoutDialog.h"
 
+#include <kstandardguiitem.h>
+
 KisNewWindowLayoutDialog::KisNewWindowLayoutDialog(QWidget *parent)
     : QDialog(parent)
 {
     setupUi(this);
 
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }

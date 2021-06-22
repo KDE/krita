@@ -384,7 +384,7 @@ void NodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottom
      */
     if (topLeft == bottomRight) {
         const QRect rect = fullLineVisualRect(topLeft);
-        //this test is important for peformance reason
+        //this test is important for performance reason
         //For example in dataChanged we simply update all the cells without checking
         //it can be a major bottleneck to update rects that aren't even part of the viewport
         if (viewport()->rect().intersects(rect)) {

@@ -34,8 +34,8 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, KisTimeSpan span)
     m_page->spinboxColumn->setMinimum(1);
 
     KisConfig cfg(true);
-    m_page->spinboxFirstItem->setValue(cfg.readEntry<int>("storyboard/firstItem", 0));
-    m_page->spinboxLastItem->setValue(cfg.readEntry<int>("storyboard/lastItem", span.end()));
+    m_page->spinboxFirstItem->setValue(span.start());
+    m_page->spinboxLastItem->setValue(span.end());
     m_page->spinboxRow->setValue(cfg.readEntry<int>("storyboard/rows", 3));
     m_page->spinboxColumn->setValue(cfg.readEntry<int>("storyboard/columns", 3));
     m_page->spinboxFontSize->setValue(cfg.readEntry<int>("storyboard/fontSize", 15));
@@ -63,9 +63,9 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, KisTimeSpan span)
     mimeTypes << "image/svg+xml";
     m_page->svgLayoutFileName->setMimeTypeFilters(mimeTypes);
     m_page->svgLayoutFileName->setMode(KoFileDialog::OpenFile);
-    slotChkUseSvgLayoutChanged(layoutSpecifiedBySvgFile());
 
     setMainWidget(m_page);
+    slotChkUseSvgLayoutChanged(m_page->chkUseSVGLayout->checkState());
 }
 
 DlgExportStoryboard::~DlgExportStoryboard()

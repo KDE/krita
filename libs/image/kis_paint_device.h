@@ -458,7 +458,7 @@ public:
     QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
-     * Write the data in the separate arrays to the channes. If there
+     * Write the data in the separate arrays to the channels. If there
      * are less vectors than channels, the remaining channels will not
      * be copied. If any of the arrays points to 0, the channel in
      * that location will not be touched. If the specified area is
@@ -743,7 +743,7 @@ public:
      * to store some data that can be shared betweet the strokes. For
      * example, information about drying of the pigment.
      *
-     * The interstroke data is sotred in a per-frame manner, that is,
+     * The interstroke data is stored in a per-frame manner, that is,
      * there is a separate per-stroke data for each frame.
      */
     KisInterstrokeDataSP interstrokeData() const;

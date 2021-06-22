@@ -1088,7 +1088,7 @@ std::pair<QPointF, QPointF> removeBezierNode(const QPointF &p0,
 {
     /**
      * Calculates the curve control point after removal of a node
-     * by minimizing squared error for the folloing problem:
+     * by minimizing squared error for the following problem:
      *
      * Given two consequent 3rd order curves P and Q with lengths Lp and Lq,
      * find 3rd order curve B, so that when splitting it at t = Lp / (Lp + Lq)

@@ -31,6 +31,7 @@
         <file>dark_config-general.svg</file>
         <file>dark_config-keyboard.svg</file>
         <file>dark_config-performance.svg</file>
+        <file>dark_config-popup-palette.svg</file>
         <file>dark_config-tablet.svg</file>
         <file>dark_configure-thicker.svg</file>
         <file>dark_convert-to-fileLayer.svg</file>
@@ -51,6 +52,7 @@
         <file>dark_document-save-16.svg</file>
         <file>dark_duplicateitem.svg</file>
         <file>dark_edit-clear-16.svg</file>
+        <file>dark_edit-cut.svg</file>
         <file>dark_edit-delete.svg</file>
         <file>dark_edit-paste-16.svg</file>
         <file>dark_edit-redo.svg</file>
@@ -93,7 +95,6 @@
         <file>dark_palette-library.svg</file>
         <file>dark_passthrough-disabled.svg</file>
         <file>dark_passthrough-enabled.svg</file>
-		<file>dark_popup-palette.svg</file>
         <file>dark_prevframe.svg</file>
         <file>dark_reload-preset.svg</file>
         <file>dark_reload-preset-16.svg</file>
@@ -149,6 +150,7 @@
         <file>light_config-general.svg</file>
         <file>light_config-keyboard.svg</file>
         <file>light_config-performance.svg</file>
+        <file>light_config-popup-palette.svg</file>
         <file>light_config-tablet.svg</file>
         <file>light_configure-thicker.svg</file>
         <file>light_convert-to-fileLayer.svg</file>
@@ -169,6 +171,7 @@
         <file>light_document-save-16.svg</file>
         <file>light_duplicateitem.svg</file>
         <file>light_edit-clear-16.svg</file>
+        <file>light_edit-cut.svg</file>
         <file>light_edit-delete.svg</file>
         <file>light_edit-paste-16.svg</file>
         <file>light_edit-redo.svg</file>
@@ -209,7 +212,6 @@
         <file>light_prevframe.svg</file>
         <file>light_nextkeyframe.svg</file>
         <file>light_lastframe.svg</file>
-		<file>light_popup-palette.svg</file>
         <file>light_prevkeyframe.svg</file>
         <file>light_firstframe.svg</file>
         <file>light_reload-preset.svg</file>

@@ -246,12 +246,15 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QPushButton" name="btnDeleteBackupFiles">
+          <widget class="QPushButton" name="btnExtractTagsToResourceFolder">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
+           </property>
+           <property name="toolTip">
+            <string>Make a backup of all your tags in the resource folder so they won't get lost on upgrading Krita</string>
            </property>
            <property name="text">
-            <string>Delete Backup Files</string>
+            <string>Save Tags to Folder</string>
            </property>
           </widget>
          </item>
@@ -292,7 +295,7 @@
   <tabstop>btnImportResources</tabstop>
   <tabstop>btnOpenResourceFolder</tabstop>
   <tabstop>btnCreateBundle</tabstop>
-  <tabstop>btnDeleteBackupFiles</tabstop>
+  <tabstop>btnExtractTagsToResourceFolder</tabstop>
  </tabstops>
  <resources/>
  <connections/>

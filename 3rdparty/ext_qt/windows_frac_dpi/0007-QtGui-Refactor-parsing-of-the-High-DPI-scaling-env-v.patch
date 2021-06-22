@@ -1,0 +1,74 @@
+From 503838cec8a91650928b11fbb0b018281f4b1c01 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Tue, 3 Sep 2019 13:43:58 +0200
+Subject: [PATCH 07/11] QtGui: Refactor parsing of the High DPI scaling env
+ variables
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Use qEnvironmentVariable() where applicable and refactor the
+parsing of QT_SCREEN_SCALE_FACTORS to use QStringRef.
+
+Task-number: QTBUG-53022
+Change-Id: I8956c6cecd7b634679eb5e66d2a87cccaf9e7936
+Reviewed-by: Morten Johan Sørvig <morten.sorvig@qt.io>
+(cherry picked from commit 18088d4706bdd2fefafe7dbb44dc467126f2c795)
+---
+ src/gui/kernel/qhighdpiscaling.cpp | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
+index c031885d5d..ec4feeba8b 100644
+--- a/src/gui/kernel/qhighdpiscaling.cpp
++++ b/src/gui/kernel/qhighdpiscaling.cpp
+@@ -86,7 +86,7 @@ static inline qreal initialGlobalScaleFactor()
+     qreal result = 1;
+     if (qEnvironmentVariableIsSet(scaleFactorEnvVar)) {
+         bool ok;
+-        const qreal f = qgetenv(scaleFactorEnvVar).toDouble(&ok);
++        const qreal f = qEnvironmentVariable(scaleFactorEnvVar).toDouble(&ok);
+         if (ok && f > 0) {
+             qCDebug(lcScaling) << "Apply " << scaleFactorEnvVar << f;
+             result = f;
+@@ -284,7 +284,8 @@ static inline bool usePixelDensity()
+     return QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling)
+         || (screenEnvValueOk && screenEnvValue > 0)
+         || (enableEnvValueOk && enableEnvValue > 0)
+-        || (qEnvironmentVariableIsSet(legacyDevicePixelEnvVar) && qgetenv(legacyDevicePixelEnvVar).toLower() == "auto");
++        || (qEnvironmentVariableIsSet(legacyDevicePixelEnvVar)
++            && qEnvironmentVariable(legacyDevicePixelEnvVar).compare(QLatin1String("auto"), Qt::CaseInsensitive) == 0);
+ }
+ 
+ qreal QHighDpiScaling::rawScaleFactor(const QPlatformScreen *screen)
+@@ -506,20 +507,20 @@ void QHighDpiScaling::updateHighDpiScaling()
+     }
+     if (qEnvironmentVariableIsSet(screenFactorsEnvVar)) {
+         int i = 0;
+-        const auto specs = qgetenv(screenFactorsEnvVar).split(';');
+-        for (const QByteArray &spec : specs) {
+-            int equalsPos = spec.lastIndexOf('=');
++        const QString spec = qEnvironmentVariable(screenFactorsEnvVar);
++        const auto specs = spec.splitRef(QLatin1Char(';'));
++        for (const QStringRef &spec : specs) {
++            int equalsPos = spec.lastIndexOf(QLatin1Char('='));
+             qreal factor = 0;
+             if (equalsPos > 0) {
+                 // support "name=factor"
+-                QByteArray name = spec.mid(0, equalsPos);
+-                QByteArray f = spec.mid(equalsPos + 1);
+                 bool ok;
+-                factor = f.toDouble(&ok);
++                const auto name = spec.left(equalsPos);
++                factor = spec.mid(equalsPos + 1).toDouble(&ok);
+                 if (ok && factor > 0 ) {
+                     const auto screens = QGuiApplication::screens();
+                     for (QScreen *s : screens) {
+-                        if (s->name() == QString::fromLocal8Bit(name)) {
++                        if (s->name() == name) {
+                             setScreenFactor(s, factor);
+                             break;
+                         }
+-- 
+2.24.1.windows.2
+

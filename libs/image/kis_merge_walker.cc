@@ -50,7 +50,7 @@ void KisMergeWalker::startTripWithMask(KisProjectionLeafSP filthyMask, KisMergeW
     /**
      * Under very rare circumstances it may happen that the update
      * queue will contain a job pointing to a node that has
-     * already been deleted from the image (direclty or by undo
+     * already been deleted from the image (directly or by undo
      * command). If it happens to a layer then the walker will
      * handle it as usual by building a trivial graph pointing to
      * nowhere, but when it happens to a mask... not. Because the

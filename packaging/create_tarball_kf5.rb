@@ -119,7 +119,7 @@ end
 
 puts "Last KDE version found: " + kde_version
 if (options.ask)
-    puts "Which apps (multiple sep by space, posibilities: all kde_release " + app.join(" ") + ")?"
+    puts "Which apps (multiple sep by space, possibilities: all kde_release " + app.join(" ") + ")?"
     apps = gets.split(" ")
 end
 

@@ -24,7 +24,7 @@ KisColorSmudgeStrategyWithOverlay::KisColorSmudgeStrategyWithOverlay(KisPainter 
 {
     m_layerOverlayDevice.reset(new KisOverlayPaintDeviceWrapper(painter->device(), 1, KisOverlayPaintDeviceWrapper::LazyPreciseMode));
 
-    if (useOverlayMode) {
+    if (useOverlayMode && image) {
         m_imageOverlayDevice.reset(new KisOverlayPaintDeviceWrapper(image->projection(), 1, KisOverlayPaintDeviceWrapper::PreciseMode));
         m_sourceWrapperDevice.reset(new KisColorSmudgeSourceImage(image, *m_imageOverlayDevice));
     } else {

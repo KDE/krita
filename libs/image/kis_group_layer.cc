@@ -226,24 +226,26 @@ KisLayer* KisGroupLayer::onlyMeaningfulChild() const
 
 KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
-    const KisLayer *child = onlyMeaningfulChild();
+    KisLayer *child = onlyMeaningfulChild();
 
-    if (child &&
-        child->channelFlags().isEmpty() &&
-        child->projection() &&
-        child->visible() &&
-        (child->compositeOpId() == COMPOSITE_OVER ||
-         child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
-         child->compositeOpId() == COMPOSITE_COPY) &&
-        child->opacity() == OPACITY_OPAQUE_U8 &&
-        *child->projection()->colorSpace() == *colorSpace() &&
-        !child->layerStyle()) {
+    if (child) {
+        KisPaintDeviceSP projection = child->projection();
+        if (child->channelFlags().isEmpty() &&
+                projection &&
+                child->visible() &&
+                (child->compositeOpId() == COMPOSITE_OVER ||
+                 child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+                 child->compositeOpId() == COMPOSITE_COPY) &&
+                child->opacity() == OPACITY_OPAQUE_U8 &&
+                *projection->colorSpace() == *colorSpace() &&
+                !child->layerStyle()) {
 
-        quint8 defaultOpacity =
-            m_d->paintDevice->defaultPixel().opacityU8();
+            quint8 defaultOpacity =
+                    m_d->paintDevice->defaultPixel().opacityU8();
 
-        if(defaultOpacity == OPACITY_TRANSPARENT_U8) {
-            return child->projection();
+            if(defaultOpacity == OPACITY_TRANSPARENT_U8) {
+                return projection;
+            }
         }
     }
 
@@ -267,6 +269,11 @@ KisPaintDeviceSP KisGroupLayer::original() const
     }
 
     return realOriginal;
+}
+
+QRect KisGroupLayer::amortizedProjectionRectForCleanupInChangePass() const
+{
+    return hasEffectMasks() ? projection()->exactBoundsAmortized() : m_d->paintDevice->exactBoundsAmortized();
 }
 
 KisPaintDeviceSP KisGroupLayer::paintDevice() const

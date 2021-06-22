@@ -42,7 +42,7 @@ int borderSize(psd_stroke_position position, int size)
 {
     int border = 1;
 
-    // The need rect border should not depend on the postition;
+    // The need rect border should not depend on the position;
     // instead it should extend the area all the time. Otherwise
     // small changes on the borderline will not be propagated to
     // the inner side of the blob. See bug 429165.

@@ -36,6 +36,18 @@ KisComboBasedPaintOpProperty::KisComboBasedPaintOpProperty(Type type,
     KIS_ASSERT_RECOVER_RETURN(type == Combo);
 }
 
+KisComboBasedPaintOpProperty::KisComboBasedPaintOpProperty(Type type,
+                                                           SubType subType,
+                                                           const QString &id,
+                                                           const QString &name,
+                                                           KisPaintOpSettingsRestrictedSP settings,
+                                                           QObject *parent)
+    : KisUniformPaintOpProperty(Combo, subType, id, name, settings, parent),
+      m_d(new Private)
+{
+    KIS_ASSERT_RECOVER_RETURN(type == Combo);
+}
+
 KisComboBasedPaintOpProperty::~KisComboBasedPaintOpProperty()
 {
 }

@@ -318,7 +318,10 @@ void KSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *but
                 // Check if languageCode contains a country name.
                 // For en and en_GB their native names already contain "American"
                 // and "British", so no need to append the country name.
-                if (languageCode.contains('_') && l.language() != QLocale::English) {
+                // Same applies for zh_CN and zh_TW, however we will need to
+                // disambiguate between zh_TW and zh_HK if it is eventually
+                // added.
+                if (l.language() != QLocale::English && l.language() != QLocale::Chinese && languageCode.contains('_')) {
                     QString countryName = l.nativeCountryName();
                     // Fallback just in case.
                     if (countryName.isEmpty()) {

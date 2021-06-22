@@ -138,7 +138,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 dbgFile << "icc profile is empty";
             }
         } else if (profileType == heif_color_profile_type_nclx) {
-            dbgFile << "profile type is nclx coding independant code points";
+            dbgFile << "profile type is nclx coding independent code points";
             // NCLX parameters is a colorspace description used for videofiles.
             // We generate a color profile for most entries, except that we cannot handle
             // PQ, HLG or 428 in an icc profile, so we convert those on the fly to linear.

@@ -21,7 +21,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>AnimationRenderer Image</string>
+   <string>Animation Renderer Image</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>

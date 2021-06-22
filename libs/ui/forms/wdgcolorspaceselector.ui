@@ -32,7 +32,7 @@
      <item>
       <widget class="QLabel" name="lblColorSpaces">
        <property name="text">
-        <string>&amp;Model:</string>
+        <string comment="Color model">&amp;Model:</string>
        </property>
        <property name="buddy">
         <cstring>cmbColorModels</cstring>

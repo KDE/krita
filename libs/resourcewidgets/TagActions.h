@@ -180,7 +180,7 @@ private:
 /// \brief The CompareWithOtherTagFunctor class defines a comparer for tags
 ///
 /// It contains a saved tag and can be used to determine if another tag is equal
-///   to the saved tag ("referece tag") or not. It can be used in stl list features
+///   to the saved tag ("reference tag") or not. It can be used in stl list features
 ///   like erase() etc.
 ///
 class CompareWithOtherTagFunctor

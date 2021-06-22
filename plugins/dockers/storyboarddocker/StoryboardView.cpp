@@ -321,7 +321,7 @@ void StoryboardView::setCurrentItem(int frame)
 void StoryboardView::mouseReleaseEvent(QMouseEvent *event) {
     QModelIndex index = indexAt(event->pos());
 
-    // To prevent selection changes from occuring when hitting the "plus" button,
+    // To prevent selection changes from occurring when hitting the "plus" button,
     // we want to filter out these inputs before passing it up to QListView / QAbstractItemView
     if (index.isValid() && index.parent().isValid() && index.row() == StoryboardItem::FrameNumber) {
         StoryboardDelegate* sbDelegate = dynamic_cast<StoryboardDelegate*>(itemDelegate(index));

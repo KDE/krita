@@ -22,6 +22,7 @@
 #include <KoDocumentInfo.h>
 #include <kactioncollection.h>
 #include <KisPart.h>
+#include <KisKineticScroller.h>
 
 #include <QFileInfo>
 #include <QPointer>
@@ -254,6 +255,14 @@ RecorderDockerDock::RecorderDockerDock()
     connect(&d->writer, SIGNAL(pausedChanged(bool)), this, SLOT(onWriterPausedChanged(bool)));
     connect(&d->writer, SIGNAL(frameWriteFailed()), this, SLOT(onWriterFrameWriteFailed()));
 
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(d->ui->scrollArea);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
+
+
     setWidget(page);
 }
 
@@ -445,4 +454,9 @@ void RecorderDockerDock::onWriterFrameWriteFailed()
 {
     QMessageBox::warning(this, i18nc("@title:window", "Recorder"),
         i18n("The recorder have been stopped due to failure while writing a frame. Please check free disk space and start recorder again."));
+}
+
+void RecorderDockerDock::slotScrollerStateChanged(QScroller::State state)
+{
+    KisKineticScroller::updateCursor(this, state);
 }

@@ -16,10 +16,12 @@
 #include <QSpinBox>
 #include <QUuid>
 #include <QInputDialog>
+#include <QBuffer>
 
 #include <KoColorPopupButton.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServerProvider.h>
+#include <KoMD5Generator.h>
 
 #include "kis_config.h"
 #include "kis_cmb_contour.h"
@@ -28,6 +30,7 @@
 #include "kis_psd_layer_style.h"
 #include <KisAslStorage.h>
 #include <KisResourceLocator.h>
+#include <KisStorageModel.h>
 
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
@@ -277,6 +280,7 @@ void KisDlgLayerStyle::slotNewStyle()
     clone->setUuid(QUuid::createUuid());
     clone->setFilename(clone->uuid().toString());
     clone->setValid(true);
+
     m_stylesSelector->addNewStyle(clone);
     const QString customStylesStorageLocation = "asl/CustomStyles.asl";
     KisConfig cfg(true);
@@ -296,6 +300,8 @@ void KisDlgLayerStyle::slotNewStyle()
         QSharedPointer<KisResourceStorage> storage = QSharedPointer<KisResourceStorage>(new KisResourceStorage(storagePath));
         KisResourceLocator::instance()->addStorage(storagePath, storage);
     }
+
+    m_stylesSelector->refillCollections();
 
 }
 
@@ -544,7 +550,6 @@ StylesSelector::StylesSelector(QWidget *parent)
 {
     ui.setupUi(this);
 
-    //ui.cmbStyleCollections->setModel();
     m_resourceModel = new KisResourceModel(ResourceType::LayerStyles, this);
     m_locationsProxyModel = new LocationProxyModel(this);
     m_locationsProxyModel->setSourceModel(m_resourceModel);
@@ -708,14 +713,7 @@ void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
 
     refillCollections();
 
-    // select in gui
-
-    //int index = ui.cmbStyleCollections->findText(customName);
-    int index = 0;
-    KIS_ASSERT_RECOVER_RETURN(index >= 0);
-    ui.cmbStyleCollections->setCurrentIndex(index);
-
-    loadStyles("");
+    ui.cmbStyleCollections->setCurrentText(style->name());
 
     notifyExternalStyleChanged(style->name(), style->uuid());
 }

@@ -36,11 +36,20 @@ public:
         m_canvas = 0;
     }
 
+    inline bool isDragging() const
+    {
+        return m_dragging;
+    }
+
 public Q_SLOTS:
     void startUpdateCanvasProjection();
     void generateThumbnail();
     void updateThumbnail(QImage pixmap);
     void slotThemeChanged();
+
+Q_SIGNALS:
+    void signalDraggingStarted();
+    void signalDraggingFinished();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

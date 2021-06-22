@@ -343,20 +343,19 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
     Q_ASSERT(storage);
-    Q_ASSERT(resource->version() <= 0);
 
     //If we have gotten this far and the resource still doesn't have a filename to save to, we should generate one.
     if (resource->filename().isEmpty()) {
         resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
     }
 
-    if (resource->version() < 0) {
+    if (resource->version() != 0) { // Can happen with cloned resources
         resource->setVersion(0);
     }
 
     // Save the resource to the storage storage
     if (!storage->addResource(resource)) {
-        qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
+        qWarning() << "Could not add resource" << resource->filename() << "to the storage" << storageLocation;
         return false;
     }
 
@@ -738,6 +737,22 @@ bool KisResourceLocator::synchronizeDb()
             d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
         }
     }
+    // now remove the storages that no longer exists
+    KisStorageModel model;
+    for (int i = 0; i < model.rowCount(); i++) {
+        QModelIndex idx = model.index(i, 0);
+        QString location = model.data(idx, Qt::UserRole + KisStorageModel::Location).toString();
+        if (!d->storages.contains(this->makeStorageLocationAbsolute(location))) {
+            if (!KisResourceCacheDb::deleteStorage(location)) {
+                d->errorMessages.append(i18n("Could not remove storage %1 from the database", this->makeStorageLocationAbsolute(location)));
+                qWarning() << d->errorMessages;
+                return false;
+            }
+            emit storageRemoved(this->makeStorageLocationAbsolute(location));
+        }
+    }
+
+
     d->resourceCache.clear();
     return d->errorMessages.isEmpty();
 }

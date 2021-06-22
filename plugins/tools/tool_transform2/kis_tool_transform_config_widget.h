@@ -57,6 +57,7 @@ public Q_SLOTS:
     void slotSetAX(qreal value);
     void slotSetAY(qreal value);
     void slotSetAZ(qreal value);
+    void slotSetCameraHeight(qreal value);
 
     void slotFlipX();
     void slotFlipY();

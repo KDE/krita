@@ -107,11 +107,11 @@ struct ShapeStrokeFillFetchPolicy
         } else {
 
             // strokes without any width are none
-            if (stroke->lineWidth() == 0.0) {
-                return Type::None;
+            if (stroke->color().isValid() && stroke->lineWidth() != 0.0) {
+                return Type::Solid;
             }
 
-            return Type::Solid;
+            return Type::None;
         }
     }
 
@@ -346,7 +346,7 @@ KUndo2Command *KoShapeFillWrapper::setColor(const QColor &color)
         command = KoFlake::modifyShapesStrokes(m_d->shapes,
             [color] (KoShapeStrokeSP stroke) {
                 stroke->setLineBrush(Qt::NoBrush);
-                stroke->setColor(color.isValid() ? color : Qt::transparent);
+                stroke->setColor(color);
 
             });
     }

@@ -180,7 +180,7 @@ public:
     }
 
     /**
-     * Removes all the history that preceds the revision
+     * Removes all the history that precedes the revision
      * pointed by oldestMemento. That is after calling to
      * purgeHistory(someMemento) you won't be able to do
      * rollback(someMemento) anymore.

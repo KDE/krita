@@ -24,6 +24,28 @@ if(MINGW)
        COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-1_61.dll ${PREFIX_ext_boost}/bin/
        DEPENDEES install
    )
+elseif(ANDROID)
+    ExternalProject_Add( ext_boost
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/moritz-wundke/Boost-for-Android/archive/dc37be02fd7e4bc87a184d0f6934da5a5beb7f51.tar.gz
+        URL_HASH SHA256=a962e2572bd15b5b8fcf5a9331195ebd41954209b556766ae178bb82de5dd0d1
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Update-Boost-URLs-Bintray-shut-down.patch
+
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND <SOURCE_DIR>/build-android.sh --prefix=${PREFIX_ext_boost} --with-libraries=system --boost=1.70.0 --arch=${ANDROID_ABI} ${CMAKE_ANDROID_NDK}
+        INSTALL_COMMAND ""
+        INSTALL_DIR ${PREFIX_ext_boost}
+
+        UPDATE_COMMAND ""
+        BUILD_IN_SOURCE 1
+    )
+    ExternalProject_Add_Step(
+       ext_boost
+       post_install
+       COMMAND sh -c "cp ${PREFIX_ext_boost}/${ANDROID_ABI}/lib/libboost_system-*-1_70.a ${PREFIX_ext_boost}/${ANDROID_ABI}/lib/libboost_system.a"
+       DEPENDEES install
+   )
 else()
 	ExternalProject_Add( ext_boost
         	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.9" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.10" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -55,12 +55,12 @@ QSqlError createDatabase(const QString &location)
     // NOTE: if the id's of Unknown and Memory in the database
     //       will change, and that will break the queries that
     //       remove Unknown and Memory storages on start-up.
-    KisResourceCacheDb::storageTypes << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(1))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(2))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(3))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(4))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(5))
-                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(6))
+    KisResourceCacheDb::storageTypes << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(1))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(2))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(3))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(4))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(5))
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(6))
                                      ;
 
     if (!QSqlDatabase::connectionNames().isEmpty()) {
@@ -1165,8 +1165,9 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
     return r;
 }
 
-bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
+bool KisResourceCacheDb::deleteStorage(QString location)
 {
+    // location is already relative
     {
         QSqlQuery q;
         if (!q.prepare("DELETE FROM resources\n"
@@ -1179,7 +1180,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete resources query in deleteStorage" << q.lastError();
             return false;
         }
-        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+        q.bindValue(":location", location);
         if (!q.exec()) {
             qWarning() << "Could not execute delete resources query in deleteStorage" << q.lastError();
             return false;
@@ -1195,7 +1196,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete versioned_resources query" << q.lastError();
             return false;
         }
-        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+        q.bindValue(":location", location);
         if (!q.exec()) {
             qWarning() << "Could not execute delete versioned_resources query" << q.lastError();
             return false;
@@ -1209,7 +1210,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete storages query" << q.lastError();
             return false;
         }
-        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+        q.bindValue(":location", location);
         if (!q.exec()) {
             qWarning() << "Could not execute delete storages query" << q.lastError();
             return false;
@@ -1218,6 +1219,10 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
     return true;
 }
 
+bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
+{
+    return deleteStorage(KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+}
 
 namespace {
 struct ResourceVersion : public boost::less_than_comparable<ResourceVersion>
@@ -1323,7 +1328,14 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             while (verIt->hasNext()) {
                 verIt->next();
 
-                int id = resourceIdForResource("", QFileInfo(verIt->url()).fileName(),
+                // verIt->url() contains paths like "brushes/ink.png" or "brushes/subfolder/splash.png".
+                // we need to cut off the first part and get "ink.png" in the first case,
+                // but "subfolder/splash.png" in the second case in order for subfolders to work
+                // so it cannot just use QFileInfo(verIt->url()).fileName() here.
+                QString path = QDir::fromNativeSeparators(verIt->url()); // make sure it uses Unix separators
+                int folderEndIdx = path.indexOf("/");
+                QString properFilenameWithSubfolders = path.right(path.length() - folderEndIdx - 1);
+                int id = resourceIdForResource("", properFilenameWithSubfolders,
                                                verIt->type(),
                                                KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
 
@@ -1467,7 +1479,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         /// to the storage or database. If *itA < *itB, then the resource
         /// is present in the storage only and should be added to the
         /// database. If *itA > *itB, then the resource is present in
-        /// the database only and should be removed (bacause it has been
+        /// the database only and should be removed (because it has been
         /// removed from the storage);
 
         while (itA != endA || itB != endB) {

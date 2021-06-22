@@ -117,7 +117,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
             continue;
         }
 
-        m_page->cmbAnnotations->addItem((*it) -> type());
+        m_page->cmbAnnotations->addItem((*it)->type());
         it++;
     }
     connect(m_page->cmbAnnotations, SIGNAL(activated(QString)), SLOT(setAnnotation(QString)));

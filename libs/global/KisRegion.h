@@ -17,7 +17,7 @@ class QRegion;
  * An more efficient (and more limited) replacement for QRegion.
  *
  * Its main purpose it to be able to merge a huge set of rectangles
- * into a smalles set of bigger rectangles, the same thing that QRegion
+ * into a smaller set of bigger rectangles, the same thing that QRegion
  * is supposed to do. The main difference (and limitation) is: all the
  * input rects must be non-intersecting. This requirement is perfectly
  * fine for Krita's tiles, which do never intersect.
@@ -28,10 +28,10 @@ class KRITAGLOBAL_EXPORT KisRegion :
 {
 public:
     /**
-     * @brief merge a set of rectanges into a smaller set of bigger rectangles
+     * @brief merge a set of rectangles into a smaller set of bigger rectangles
      *
-     * The algorithm does two passes over the rectanges. First it tries to
-     * merge all the rectanges horizontally, then vertically. The merge happens
+     * The algorithm does two passes over the rectangles. First it tries to
+     * merge all the rectangles horizontally, then vertically. The merge happens
      * in-place, that is, all the merged elements will be moved to the front
      * of the original range.
      *
@@ -60,7 +60,7 @@ public:
     KisRegion(std::initializer_list<QRect> rects);
 
     /**
-     * @brief creates a region from a set of non-intersecting rectanges
+     * @brief creates a region from a set of non-intersecting rectangles
      * @param rects rectangles that should be merged. Rectangles must not intersect.
      */
     KisRegion(const QVector<QRect> &rects);

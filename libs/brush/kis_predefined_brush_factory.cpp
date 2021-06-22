@@ -77,7 +77,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
          * due to the fact that copy-ctor called brushTipImage() virtual
          * method instead of just copying the image itself.
          *
-         * In Krita 5 we should open these brushes in somehwat the same way.
+         * In Krita 5 we should open these brushes in somewhat the same way.
          * The problem is that we cannot convert the numbers precisely, because
          * after applying a piecewice-linear function twice we get a
          * quadratic function. So we fall-back to a blunt parameters scaling,

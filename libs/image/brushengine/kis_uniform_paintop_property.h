@@ -25,7 +25,21 @@ public:
         Combo
     };
 
+    /**
+     * @brief Hint to guess what this property is used for
+     */
+    enum SubType {
+        SubType_None = 0,
+        SubType_Angle
+    };
+
 public:
+    KisUniformPaintOpProperty(Type type,
+                              SubType subType,
+                              const QString &id,
+                              const QString &name,
+                              KisPaintOpSettingsRestrictedSP settings,
+                              QObject *parent);
     KisUniformPaintOpProperty(Type type,
                               const QString &id,
                               const QString &name,
@@ -40,6 +54,7 @@ public:
     QString id() const;
     QString name() const;
     Type type() const;
+    SubType subType() const;
 
     QVariant value() const;
 

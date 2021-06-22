@@ -33,7 +33,9 @@ export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 # https://docs.python.org/3.8/using/cmdline.html#envvar-PYTHONHOME
+if [ -d $DEPS_INSTALL_PREFIX/sip ] ; then
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
+fi
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
 if [ -n "${CHANNEL}" ]; then
@@ -63,8 +65,21 @@ cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/lib/python3.8 $APPDIR/usr/lib
+if [ -d $DEPS_INSTALL_PREFIX/share/sip ] ; then
 cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
+fi
 cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
+
+if [ -d $APPDIR/usr/lib/python3.8/site-packages ]; then
+    rm -rf $APPDIR/usr/lib/python3.8/site-packages/packaging*
+    rm -rf $APPDIR/usr/lib/python3.8/site-packages/pip*
+    rm -rf $APPDIR/usr/lib/python3.8/site-packages/pyparsing*
+    rm -rf $APPDIR/usr/lib/python3.8/site-packages/PyQt_builder*
+    rm -rf $APPDIR/usr/lib/python3.8/site-packages/setuptools*
+    rm -rf $APPDIR/usr/lib/python3.8/site-packages/sip*
+    rm -rf $APPDIR/usr/lib/python3.8/site-packages/toml*
+    rm -rf $APPDIR/usr/lib/python3.8/site-packages/easy-install.pth
+fi
 
 # Step 2: Relocate binaries from the architecture specific directory as required for Appimages
 if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
@@ -88,7 +103,9 @@ done
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
+if [ -f $APPDIR/usr/lib/python3.8/site-packages/PyQt5/sip.so ] ; then
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.8/site-packages/PyQt5/sip.so
+fi
 
 
 # Step 4: Install AppImageUpdate

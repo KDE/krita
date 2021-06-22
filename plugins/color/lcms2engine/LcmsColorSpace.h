@@ -204,21 +204,27 @@ protected:
         }
         d->defaultTransformations = KoLcmsDefaultTransformations::s_transformations[this->id()][ d->profile];
         if (!d->defaultTransformations) {
+            KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags();
             d->defaultTransformations = new KoLcmsDefaultTransformations;
             d->defaultTransformations->fromRGB = cmsCreateTransform(KoLcmsDefaultTransformations::s_RGBProfile,
                                                  TYPE_BGR_8,
                                                  d->profile->lcmsProfile(),
                                                  this->colorSpaceType(),
                                                  KoColorConversionTransformation::internalRenderingIntent(),
-                                                 KoColorConversionTransformation::internalConversionFlags());
+                                                 conversionFlags);
             KIS_SAFE_ASSERT_RECOVER_NOOP(d->defaultTransformations->fromRGB || !d->colorProfile->isSuitableForOutput());
+
+            // LCMS has a too optimistic optimization when transforming from linear color spaces
+            if (d->profile->isLinear()) {
+                conversionFlags |= KoColorConversionTransformation::NoOptimization;
+            }
 
             d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(),
                                                this->colorSpaceType(),
                                                KoLcmsDefaultTransformations::s_RGBProfile,
                                                TYPE_BGR_8,
                                                KoColorConversionTransformation::internalRenderingIntent(),
-                                               KoColorConversionTransformation::internalConversionFlags());
+                                               conversionFlags);
             KIS_SAFE_ASSERT_RECOVER_NOOP(d->defaultTransformations->toRGB);
             KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
         }

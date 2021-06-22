@@ -370,6 +370,11 @@ qreal KisAngleSelector::minimum() const
     return m_d->spinBox->minimum();
 }
 
+QString KisAngleSelector::prefix() const
+{
+    return m_d->spinBox->prefix();
+}
+
 bool KisAngleSelector::wrapping() const
 {
     return m_d->spinBox->wrapping();
@@ -440,6 +445,11 @@ void KisAngleSelector::setMinimum(qreal newMinimum)
 void KisAngleSelector::setRange(qreal newMinimum, qreal newMaximum)
 {
     m_d->spinBox->setRange(newMinimum, newMaximum);
+}
+
+void KisAngleSelector::setPrefix(const QString &newPrefix)
+{
+    m_d->spinBox->setPrefix(newPrefix);
 }
 
 void KisAngleSelector::setWrapping(bool newWrapping)

@@ -440,7 +440,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
             channel3 = 2;
             break;
         case KisColorSelectorConfiguration::IH:
-            modelS = KisVisualColorSelector::HSL;
+            modelS = KisVisualColorSelector::HSI;
             channel2 = 0;
             channel3 = 2;
             break;

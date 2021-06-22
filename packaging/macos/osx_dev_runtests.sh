@@ -6,15 +6,15 @@
 # Simple script to test all .app test's
 #
 # 1. Find any ./test/*.app
-# 2. copies file to install folder (Assumed i/bin)
-# 3. Excutes test
-# 4. report back pass/fail status
+# 2. Copies file to install folder (Assumed i/bin)
+# 3. Executes test
+# 4. Report back pass/fail status
 #
 
 if test -z $BUILDROOT; then
     echo "ERROR: BUILDROOT env not set, exiting!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
-    exit
+    exit 1
 fi
 
 BUILDROOT="${BUILDROOT%/}"
@@ -45,7 +45,7 @@ find_execute_tests() {
     local test_found=($(find "${WORK_DIR}" -type d -name "*.app"))
     local total_tests=${#test_found[@]}
 
-    if [[ ${#} > 0 ]]; then 
+    if [[ ${#} > 0 ]]; then
         local specifyc_tests="TRUE"
         local total_tests=${#}
     fi
@@ -57,7 +57,7 @@ find_execute_tests() {
 
     for FILE_PATH in "${test_found[@]}"; do
         if [[ $(grep "tests" <<< "${FILE_PATH}") ]]; then
-            
+
             local app_name="$(basename ${FILE_PATH})"
 
             # if names supplied skip any test not in args
@@ -117,7 +117,7 @@ done
 if [[ -n "${WORK_DIR_CHECK}" && "${WORK_DIR_CHECK}" != "SET" ]] ; then
     echo "Current directory not inside buildroot"
     echo "use --work_dir=<path> to set custom"
-    exit
+    exit 1
 fi
 
 find_execute_tests ${parsed_args}

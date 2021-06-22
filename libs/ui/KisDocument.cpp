@@ -1316,7 +1316,7 @@ void KisDocument::slotPerformIdleRoutines()
     d->image->explicitRegenerateLevelOfDetail();
 
 
-    /// TODO: automatical purging is disabled for now: it modifies
+    /// TODO: automatic purging is disabled for now: it modifies
     ///       data managers without creating a transaction, which breaks
     ///       undo.
 
@@ -1788,7 +1788,7 @@ void KisDocument::setModified(bool mod)
     if (d->isAutosaving)   // ignore setModified calls due to autosaving
         return;
 
-    if ( !d->readwrite && d->modified ) {
+    if ( !d->readwrite && mod ) {
         errKrita << "Can't set a read-only document to 'modified' !" << endl;
         return;
     }

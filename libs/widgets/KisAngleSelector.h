@@ -145,6 +145,12 @@ public:
      */
     qreal minimum() const;
     /**
+     * @brief Gets the prefix shown in the spin box
+     * @return The prefix shown in the spin box
+     * @see setPrefix(const QString&)
+     */
+    QString prefix() const;
+    /**
      * @brief Gets if the angle should wrap pass the minimum or maximum angles
      * @return True if the angle should wrap pass the minimum or maximum angles,
      * false otherwise
@@ -224,6 +230,12 @@ public:
      * @see setMaximum(qreal)
      */
     void setRange(qreal newMinimum, qreal newMaximum);
+    /**
+     * @brief Sets the prefix shown in the spin box
+     * @param newPrefix the new prefix for the spin box
+     * @see prefix() const
+     */
+    void setPrefix(const QString &newPrefix);
     /**
      * @brief Sets if the angle should wrap pass the minimum or maximum angles
      * @param newWrapping true if the angle should wrap pass the minimum or

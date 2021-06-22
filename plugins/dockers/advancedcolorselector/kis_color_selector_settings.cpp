@@ -13,6 +13,7 @@
 #include <QComboBox>
 
 #include <kconfiggroup.h>
+#include <kstandardguiitem.h>
 
 
 #include <kis_icon.h>
@@ -626,6 +627,10 @@ KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) 
                                                        Qt::Horizontal,
                                                        this);
     l->addWidget(buttonBox);
+
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::RestoreDefaults), KStandardGuiItem::defaults());
 
     connect(buttonBox, SIGNAL(accepted()), m_widget, SLOT(savePreferences()));
     connect(buttonBox, SIGNAL(accepted()), this,     SLOT(accept()));

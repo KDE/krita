@@ -118,6 +118,8 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
     mainLayout->addStretch();
     mainLayout->addWidget(m_d->positionSlider);
     setLayout(mainLayout);
+
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 }
 
 KisGradientColorEditor::KisGradientColorEditor(const KisGradientColorEditor &other)
@@ -230,4 +232,58 @@ void KisGradientColorEditor::setUsePositionSlider(bool use)
 void KisGradientColorEditor::setPositionSliderEnabled(bool enabled)
 {
     m_d->positionSlider->setEnabled(enabled);
+}
+
+QSize KisGradientColorEditor::sizeHint() const
+{
+    return QSize(
+        m_d->colorTypeForegroundButton->sizeHint().width() +
+        m_d->colorTypeBackgroundButton->sizeHint().width() +
+        m_d->colorTypeCustomButton->sizeHint().width() +
+        qMax(
+            m_d->transparentCheckBox->sizeHint().width(),
+            m_d->colorButton->sizeHint().width() +
+            m_d->opacitySlider->sizeHint().width()
+        ) +
+        (m_d->positionSlider->isVisible() ? m_d->positionSlider->sizeHint().width() : 0) +
+        15, // spacing
+
+        qMax(
+            m_d->colorTypeForegroundButton->sizeHint().height(),
+            qMax(
+                m_d->transparentCheckBox->sizeHint().height(),
+                qMax(
+                    m_d->colorButton->sizeHint().height(),
+                    m_d->opacitySlider->sizeHint().height()
+                )
+            )
+        )
+    );
+}
+
+QSize KisGradientColorEditor::minimumSizeHint() const
+{
+    return QSize(
+        m_d->colorTypeForegroundButton->minimumSizeHint().width() +
+        m_d->colorTypeBackgroundButton->minimumSizeHint().width() +
+        m_d->colorTypeCustomButton->minimumSizeHint().width() +
+        qMax(
+            m_d->transparentCheckBox->minimumSizeHint().width(),
+            m_d->colorButton->minimumSizeHint().width() +
+            m_d->opacitySlider->minimumSizeHint().width()
+        ) +
+        (m_d->positionSlider->isVisible() ? m_d->positionSlider->minimumSizeHint().width() : 0) +
+        15, // spacing
+
+        qMax(
+            m_d->colorTypeForegroundButton->minimumSizeHint().height(),
+            qMax(
+                m_d->transparentCheckBox->minimumSizeHint().height(),
+                qMax(
+                    m_d->colorButton->minimumSizeHint().height(),
+                    m_d->opacitySlider->minimumSizeHint().height()
+                )
+            )
+        )
+    );
 }

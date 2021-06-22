@@ -159,10 +159,13 @@ void KisPresetLivePreviewView::paintBackground()
         // experimentbrush -- this creates artifacts that carry over to other previews and messes up their display
         // duplicate (clone) brush doesn't have a preview as it doesn't show anything)
 
-        if(m_sceneImageItem) {
-            this->scene()->removeItem(m_sceneImageItem);
-            m_sceneImageItem = 0;
-        }
+        // fill with gray first to clear out what existed from previous preview        
+        KisTransaction t(m_layer->paintDevice());
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        t.end();
+
+        m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
+
         QFont font;
         font.setPixelSize(14);
         font.setBold(false);

@@ -24,6 +24,7 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QMenu>
+#include <QScrollBar>
 
 #include "kis_icon_utils.h"
 #include <kis_painting_tweaks.h>
@@ -33,6 +34,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <KisPart.h>
+#include <KisKineticScroller.h>
 
 #include <utils/KisUpdaterBase.h>
 
@@ -228,15 +230,18 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     setAcceptDrops(true);
 
-    constexpr const int visibleRecentItemsCount = 5;
-    const int listHeight = visibleRecentItemsCount * (KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH + recentDocumentsListView->spacing() * 2);
-    recentDocumentsListView->setFixedHeight(listHeight);
-    recentDocsFrame->setFixedHeight(listHeight + 2);
-
     recentItemDelegate.reset(new RecentItemDelegate(this));
     recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
     recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
     recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
+    recentDocumentsListView->setVerticalScrollMode(QListView::ScrollPerPixel);
+    recentDocumentsListView->verticalScrollBar()->setSingleStep(50);
+    {
+        QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(recentDocumentsListView);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -280,7 +285,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
 void KisWelcomePageWidget::showDropAreaIndicator(bool show)
 {
     if (!show) {
-        QString dropFrameStyle = "QFrame#dropAreaIndicator { border: 0px }";
+        QString dropFrameStyle = QStringLiteral("QFrame#dropAreaIndicator { border: 2px solid transparent }");
         dropFrameBorder->setStyleSheet(dropFrameStyle);
     } else {
         QColor textColor = qApp->palette().color(QPalette::Text);
@@ -383,7 +388,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     const QColor frameColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.1);
     const QString &frameQss = "{border: 1px solid " + frameColor.name() + "}";
-    recentDocsFrame->setStyleSheet("QFrame#recentDocsFrame" + frameQss);
+    recentDocsStackedWidget->setStyleSheet("QStackedWidget#recentDocsStackedWidget" + frameQss);
     newsFrame->setStyleSheet("QFrame#newsFrame" + frameQss);
 
     // show the dev version labels, if dev version is detected
@@ -578,7 +583,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
 
 void KisWelcomePageWidget::showDevVersionHighlight()
 {
-    // always flag developement version
+    // always flag development version
     if (isDevelopmentBuild()) {
         QString devBuildLabelText = QString("<a style=\"color: " +
                                            blendedColor.name() +
@@ -628,8 +633,11 @@ void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()
     KisRecentDocumentsModelWrapper *recentFilesModel = m_mainWindow->recentFilesModel();
     const bool modelIsEmpty = recentFilesModel->model().rowCount() == 0;
 
-    labelNoRecentDocs->setVisible(modelIsEmpty);
-    recentDocumentsListView->setVisible(!modelIsEmpty);
+    if (modelIsEmpty) {
+        recentDocsStackedWidget->setCurrentWidget(labelNoRecentDocs);
+    } else {
+        recentDocsStackedWidget->setCurrentWidget(recentDocumentsListView);
+    }
     clearRecentFilesLink->setVisible(!modelIsEmpty);
 }
 

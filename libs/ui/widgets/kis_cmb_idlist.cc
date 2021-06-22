@@ -25,7 +25,7 @@ KisCmbIDList::~KisCmbIDList()
 {
 }
 
-const KoID KisCmbIDList::AutoOptionID = KoID("AUTO", i18nc("Automatic", "Auto"));
+const KoID KisCmbIDList::AutoOptionID = KoID("AUTO", ki18nc("Automatic", "Auto"));
 
 void KisCmbIDList::setIDList(const QList<KoID>  & list, bool sorted)
 {

@@ -11,6 +11,7 @@
 #include <QComboBox>
 
 #include "kis_slider_spin_box.h"
+#include <KisAngleSelector.h>
 #include "kis_acyclic_signal_connector.h"
 #include "kis_slider_based_paintop_property.h"
 #include "kis_combo_based_paintop_property.h"
@@ -74,24 +75,43 @@ KisUniformPaintOpPropertyIntSlider::KisUniformPaintOpPropertyIntSlider(KisUnifor
         dynamic_cast<KisIntSliderBasedPaintOpProperty*>(property.data());
     KIS_ASSERT_RECOVER_RETURN(sliderProperty);
 
-    m_slider = new KisSliderSpinBox(this);
-    m_slider->setBlockUpdateSignalOnDrag(true);
-    m_slider->setRange(sliderProperty->min(), sliderProperty->max());
-    m_slider->setSingleStep(sliderProperty->singleStep());
-    m_slider->setPageStep(sliderProperty->pageStep());
-    m_slider->setPrefix(prefix);
-    m_slider->setSuffix(sliderProperty->suffix());
-    m_slider->setExponentRatio(sliderProperty->exponentRatio());
+    if (property->subType() == KisUniformPaintOpProperty::SubType_Angle) {
+        KisAngleSelector *slider = new KisAngleSelector(this);
+        slider->setPrefix(prefix);
+        slider->setDecimals(0);
+        slider->setRange(static_cast<qreal>(sliderProperty->min()), static_cast<qreal>(sliderProperty->max()));
+        slider->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
-    m_slider->setValue(sliderProperty->value().toInt());
-    connect(m_slider, SIGNAL(valueChanged(int)), SLOT(slotSliderChanged(int)));
+        slider->setAngle(static_cast<qreal>(sliderProperty->value().toInt()));
+        connect(slider, &KisAngleSelector::angleChanged, [this](qreal angle) { slotSliderChanged(static_cast<int>(angle)); });
+
+        m_slider = slider;
+    } else {
+        KisSliderSpinBox *slider = new KisSliderSpinBox(this);
+        slider->setBlockUpdateSignalOnDrag(true);
+        slider->setRange(sliderProperty->min(), sliderProperty->max());
+        slider->setSingleStep(sliderProperty->singleStep());
+        slider->setPageStep(sliderProperty->pageStep());
+        slider->setPrefix(prefix);
+        slider->setSuffix(sliderProperty->suffix());
+        slider->setExponentRatio(sliderProperty->exponentRatio());
+
+        slider->setValue(sliderProperty->value().toInt());
+        connect(slider, SIGNAL(valueChanged(int)), SLOT(slotSliderChanged(int)));
+
+        m_slider = slider;
+    }
 
     layout->addWidget(m_slider);
 }
 
 void KisUniformPaintOpPropertyIntSlider::setValue(const QVariant &value)
 {
-    m_slider->setValue(value.toInt());
+    if (dynamic_cast<KisAngleSelector*>(m_slider)) {
+        dynamic_cast<KisAngleSelector*>(m_slider)->setAngle(static_cast<qreal>(value.toInt()));
+    } else {
+        dynamic_cast<KisSliderSpinBox*>(m_slider)->setValue(value.toInt());
+    }
 }
 
 void KisUniformPaintOpPropertyIntSlider::slotSliderChanged(int value)
@@ -113,23 +133,42 @@ KisUniformPaintOpPropertyDoubleSlider::KisUniformPaintOpPropertyDoubleSlider(Kis
         dynamic_cast<KisDoubleSliderBasedPaintOpProperty*>(property.data());
     KIS_ASSERT_RECOVER_RETURN(sliderProperty);
 
-    m_slider = new KisDoubleSliderSpinBox(this);
-    m_slider->setBlockUpdateSignalOnDrag(true);
-    m_slider->setRange(sliderProperty->min(), sliderProperty->max(), sliderProperty->decimals());
-    m_slider->setSingleStep(sliderProperty->singleStep());
-    m_slider->setPrefix(prefix);
-    m_slider->setSuffix(sliderProperty->suffix());
-    m_slider->setExponentRatio(sliderProperty->exponentRatio());
+    if (property->subType() == KisUniformPaintOpProperty::SubType_Angle) {
+        KisAngleSelector *slider = new KisAngleSelector(this);
+        slider->setPrefix(prefix);
+        slider->setDecimals(sliderProperty->decimals());
+        slider->setRange(sliderProperty->min(), sliderProperty->max());
+        slider->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
-    m_slider->setValue(sliderProperty->value().toReal());
-    connect(m_slider, SIGNAL(valueChanged(qreal)), SLOT(slotSliderChanged(qreal)));
+        slider->setAngle(sliderProperty->value().toReal());
+        connect(slider, SIGNAL(angleChanged(qreal)), SLOT(slotSliderChanged(qreal)));
+
+        m_slider = slider;
+    } else {
+        KisDoubleSliderSpinBox *slider = new KisDoubleSliderSpinBox(this);
+        slider->setBlockUpdateSignalOnDrag(true);
+        slider->setRange(sliderProperty->min(), sliderProperty->max(), sliderProperty->decimals());
+        slider->setSingleStep(sliderProperty->singleStep());
+        slider->setPrefix(prefix);
+        slider->setSuffix(sliderProperty->suffix());
+        slider->setExponentRatio(sliderProperty->exponentRatio());
+
+        slider->setValue(sliderProperty->value().toReal());
+        connect(slider, SIGNAL(valueChanged(qreal)), SLOT(slotSliderChanged(qreal)));
+
+        m_slider = slider;
+    }
 
     layout->addWidget(m_slider);
 }
 
 void KisUniformPaintOpPropertyDoubleSlider::setValue(const QVariant &value)
 {
-    m_slider->setValue(value.toReal());
+    if (dynamic_cast<KisAngleSelector*>(m_slider)) {
+        dynamic_cast<KisAngleSelector*>(m_slider)->setAngle(value.toInt());
+    } else {
+        dynamic_cast<KisDoubleSliderSpinBox*>(m_slider)->setValue(value.toInt());
+    }
 }
 
 void KisUniformPaintOpPropertyDoubleSlider::slotSliderChanged(qreal value)

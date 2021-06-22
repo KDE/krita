@@ -51,13 +51,13 @@ public:
 
     /**
      * @brief Sets the visibility of comments
-     * @param value The new visiblity value
+     * @param value The new visibility value
      */
     void setCommentVisibility(bool value);
 
     /**
      * @brief Sets the visibility of thumbnails
-     * @param value The new visiblity value
+     * @param value The new visibility value
      */
     void setThumbnailVisibility(bool value);
 

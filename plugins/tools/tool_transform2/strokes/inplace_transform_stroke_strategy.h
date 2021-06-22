@@ -19,6 +19,7 @@
 #include <transform_transaction_properties.h>
 
 #include "KisAsyncronousStrokeUpdateHelper.h"
+#include <commands_new/KisUpdateCommandEx.h>
 
 class KisPostExecutionUndoAdapter;
 class TransformTransactionProperties;
@@ -78,6 +79,33 @@ private:
 
 public:
 
+    /**
+     * The transformation pipeline usually looks like that:
+     *
+     * 1) Apply Clear commands for all the layers. Some clear commands might
+     * be "temporary", that is, they do not go to the final history, e.g. when
+     * clearing a shape layer's projection.
+     *
+     * 2) Apply TransoformLod commands to generate preview of the
+     * transformation. Some commands may be declared as "temporary", that is,
+     * they do not go to the final history, e.g. for the shape layer, for
+     * which we just write to the projection device explicitly.
+     *
+     * 3) When transformation is changed we undo all TransformLod and
+     * TransformTemporary commands to recover the old state. The temporary
+     * command recovers the state of shape layers' projection device.
+     *
+     * 4) Repeat steps 2) and 3) until the user is satisfied.
+     *
+     * 5) When "Apply" button is pressed, all transform commands are undone
+     * like in step 2).
+     *
+     * 6) All Transform commands are applied at Lod0-level. TransformTemporary
+     * is not used atm.
+     *
+     * 7) All non-temporary commands go to the undo history.
+     */
+
     enum CommandGroup {
         Clear = 0,
         ClearTemporary,
@@ -121,17 +149,17 @@ private:
 
     int calculatePreferredLevelOfDetail(const QRect &srcRect);
 
-    void executeAndAddCommand(KUndo2Command *cmd, CommandGroup group);
+    void executeAndAddCommand(KUndo2Command *cmd, CommandGroup group, KisStrokeJobData::Sequentiality seq);
 
     void notifyAllCommandsDone();
     void undoAllCommands();
     void undoTransformCommands(int levelOfDetail);
 
-    void postAllUpdates(int levelOfDetail);
+    void fetchAllUpdateRequests(int levelOfDetail, KisUpdateCommandEx::SharedDataSP updateData);
 
     void transformNode(KisNodeSP node, const ToolTransformArgs &config, int levelOfDetail);
     void createCacheAndClearNode(KisNodeSP node);
-    void reapplyTransform(ToolTransformArgs args, QVector<KisStrokeJobData *> &mutatedJobs, int levelOfDetail);
+    void reapplyTransform(ToolTransformArgs args, QVector<KisStrokeJobData *> &mutatedJobs, int levelOfDetail, bool useHoldUI);
     void finalizeStrokeImpl(QVector<KisStrokeJobData *> &mutatedJobs, bool saveCommands);
 
     void finishAction(QVector<KisStrokeJobData *> &mutatedJobs);

@@ -64,7 +64,7 @@ public:
      * @param dst the destination pixel
      * @param weightSum an integer representing the sum of the coefficients.
      *                  by default 255. If for some reason you do not want a
-     *                  perfect avarage, make this anything but the sum. Try
+     *                  perfect average, make this anything but the sum. Try
      *                  to keep this below 255 for division-related performance.
      *
      * @code

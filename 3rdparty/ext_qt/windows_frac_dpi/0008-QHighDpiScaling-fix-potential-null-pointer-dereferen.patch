@@ -1,0 +1,34 @@
+From e4bd4c83de705c782a345ae1f2ad67f43b5230d7 Mon Sep 17 00:00:00 2001
+From: Vitaly Fanaskov <vitaly.fanaskov@qt.io>
+Date: Fri, 25 Oct 2019 14:47:15 +0200
+Subject: [PATCH 08/11] QHighDpiScaling: fix potential null pointer dereference
+
+It's not guaranteed that QPlatformScreen::screen should always return a
+valid pointer. Furthermore, you can run into this situation with, for
+example, two screens setup.
+
+Task-number: QTBUG-53022
+Change-Id: Ic23bb2c30b1245f98a793a44cc5e0b39f9afac4b
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit ed20f3209804d865804f9eb14c3fcfb4b7941140)
+---
+ src/gui/kernel/qhighdpiscaling.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
+index ec4feeba8b..0ac4928504 100644
+--- a/src/gui/kernel/qhighdpiscaling.cpp
++++ b/src/gui/kernel/qhighdpiscaling.cpp
+@@ -657,7 +657,8 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
+         // Check if there is a factor set on the screen object or associated
+         // with the screen name. These are mutually exclusive, so checking
+         // order is not significant.
+-        QVariant byIndex = screen->screen()->property(scaleFactorProperty);
++        auto qScreen = screen->screen();
++        auto byIndex = qScreen ? qScreen->property(scaleFactorProperty) : QVariant();
+         auto byNameIt = qNamedScreenScaleFactors()->constFind(screen->name());
+         if (byIndex.isValid()) {
+             screenPropertyUsed = true;
+-- 
+2.24.1.windows.2
+

@@ -45,7 +45,9 @@ QList<KoResourceSP> KisHalftoneFilterConfiguration::linkedResources(KisResources
     } else {
         QString prefix = mode() + "_";
         KisFilterConfigurationSP generatorConfig = generatorConfiguration(prefix);
-        resourcesList += generatorConfig->linkedResources(globalResourcesInterface);
+        if (generatorConfig) {
+            resourcesList += generatorConfig->linkedResources(globalResourcesInterface);
+        }
     }
 
     return resourcesList;
@@ -67,7 +69,9 @@ QList<KoResourceSP> KisHalftoneFilterConfiguration::embeddedResources(KisResourc
     } else {
         QString prefix = mode() + "_";
         KisFilterConfigurationSP generatorConfig = generatorConfiguration(prefix);
-        resourcesList += generatorConfig->embeddedResources(globalResourcesInterface);
+        if (generatorConfig) {
+            resourcesList += generatorConfig->embeddedResources(globalResourcesInterface);
+        }
     }
 
     return resourcesList;

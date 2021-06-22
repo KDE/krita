@@ -163,13 +163,23 @@ ExternalProject_Add(
     DEPENDS ext_kguiaddons ext_gettext
 )
 else()
+
+set(ext_ki18n_PATCH_COMMAND
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n-appdatalocation.diff
+)
+if (WIN32)
+set(ext_ki18n_PATCH_COMMAND ${_ki18n_patch}
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-ki18n-fix-loading-catalogs-with-patched-gettext.patch
+)
+endif()
+
 ExternalProject_Add(
     ext_ki18n
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://download.kde.org/stable/frameworks/5.64/ki18n-5.64.0.zip
     URL_MD5 75a86675bf2b352b53cbcaece956b486
     INSTALL_DIR ${EXTPREFIX_frameworks}
-    PATCH_COMMAND COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n-appdatalocation.diff
+    PATCH_COMMAND ${ext_ki18n_PATCH_COMMAND}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}

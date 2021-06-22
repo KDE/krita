@@ -586,7 +586,7 @@ p, li { white-space: pre-wrap; }
              <item row="0" column="0">
               <widget class="QLabel" name="ffmpegLocationLabel">
                <property name="text">
-                <string>FFMPeg Path:</string>
+                <string>FFMpeg Path:</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

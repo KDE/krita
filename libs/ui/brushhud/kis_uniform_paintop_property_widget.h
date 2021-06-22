@@ -35,8 +35,6 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-class KisSliderSpinBox;
-class KisDoubleSliderSpinBox;
 class QCheckBox;
 
 class KisUniformPaintOpPropertyIntSlider : public KisUniformPaintOpPropertyWidget
@@ -51,7 +49,7 @@ private Q_SLOTS:
     void slotSliderChanged(int value);
 
 private:
-    KisSliderSpinBox *m_slider;
+    QWidget *m_slider;
 };
 
 class KisUniformPaintOpPropertyDoubleSlider : public KisUniformPaintOpPropertyWidget
@@ -66,7 +64,7 @@ private Q_SLOTS:
     void slotSliderChanged(qreal value);
 
 private:
-    KisDoubleSliderSpinBox *m_slider;
+    QWidget *m_slider;
 };
 
 class KisUniformPaintOpPropertyCheckBox : public KisUniformPaintOpPropertyWidget

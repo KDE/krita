@@ -144,7 +144,7 @@ void KisMaskTest::testDeferredOffsetInitialization()
     QCOMPARE(mask->x(), 10);
     QCOMPARE(mask->y(), 11);
 
-    // Now there is no deferred initialization, so the offest
+    // Now there is no deferred initialization, so the offset
     // should simply be reset
     mask->initSelection(image->rootLayer());
     QCOMPARE(mask->x(), 0);

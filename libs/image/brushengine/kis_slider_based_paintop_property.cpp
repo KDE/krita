@@ -11,6 +11,23 @@
 
 template <typename T>
 KisSliderBasedPaintOpProperty<T>::KisSliderBasedPaintOpProperty(Type type,
+                                                                SubType subType,
+                                                                const QString &id,
+                                                                const QString &name,
+                                                                KisPaintOpSettingsRestrictedSP settings,
+                                                                QObject *parent)
+    : KisUniformPaintOpProperty(type, subType, id, name, settings, parent),
+      m_min(T(0)),
+      m_max(T(100)),
+      m_singleStep(T(1)),
+      m_pageStep(T(10)),
+      m_exponentRatio(1.0),
+      m_decimals(2)
+{
+}
+
+template <typename T>
+KisSliderBasedPaintOpProperty<T>::KisSliderBasedPaintOpProperty(Type type,
                                                                 const QString &id,
                                                                 const QString &name,
                                                                 KisPaintOpSettingsRestrictedSP settings,

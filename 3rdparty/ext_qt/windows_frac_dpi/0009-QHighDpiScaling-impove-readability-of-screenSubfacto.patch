@@ -1,0 +1,56 @@
+From 616f7f10335a9421f9d135e9599db6448a180c1f Mon Sep 17 00:00:00 2001
+From: Vitaly Fanaskov <vitaly.fanaskov@qt.io>
+Date: Wed, 6 Nov 2019 21:37:48 +0100
+Subject: [PATCH 09/11] QHighDpiScaling: impove readability of screenSubfactor
+ method
+
+Task-number: QTBUG-53022
+Change-Id: Idae4379dd78d3125c375fad37a5a3af5bbcdc51e
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit a866055d18b2c2efc0f3cf5307d8eac78cce26eb)
+---
+ src/gui/kernel/qhighdpiscaling.cpp | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
+index 0ac4928504..fe9ac85c7d 100644
+--- a/src/gui/kernel/qhighdpiscaling.cpp
++++ b/src/gui/kernel/qhighdpiscaling.cpp
+@@ -644,7 +644,7 @@ QPoint QHighDpiScaling::mapPositionFromGlobal(const QPoint &pos, const QPoint &w
+ 
+ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
+ {
+-    qreal factor = qreal(1.0);
++    auto factor = qreal(1.0);
+     if (!screen)
+         return factor;
+ 
+@@ -657,15 +657,16 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
+         // Check if there is a factor set on the screen object or associated
+         // with the screen name. These are mutually exclusive, so checking
+         // order is not significant.
+-        auto qScreen = screen->screen();
+-        auto byIndex = qScreen ? qScreen->property(scaleFactorProperty) : QVariant();
+-        auto byNameIt = qNamedScreenScaleFactors()->constFind(screen->name());
+-        if (byIndex.isValid()) {
+-            screenPropertyUsed = true;
+-            factor = byIndex.toReal();
+-        } else if (byNameIt != qNamedScreenScaleFactors()->cend()) {
+-            screenPropertyUsed = true;
+-            factor = *byNameIt;
++        if (auto qScreen = screen->screen()) {
++            auto screenFactor = qScreen->property(scaleFactorProperty).toReal(&screenPropertyUsed);
++            if (screenPropertyUsed)
++                factor = screenFactor;
++        }
++
++        if (!screenPropertyUsed) {
++            auto byNameIt = qNamedScreenScaleFactors()->constFind(screen->name());
++            if ((screenPropertyUsed = byNameIt != qNamedScreenScaleFactors()->cend()))
++                factor = *byNameIt;
+         }
+     }
+ 
+-- 
+2.24.1.windows.2
+

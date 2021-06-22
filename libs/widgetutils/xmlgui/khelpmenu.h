@@ -140,7 +140,7 @@ public:
     /**
      * Destructor
      *
-     * Destroys dialogs and the menu pointer retuned by menu
+     * Destroys dialogs and the menu pointer returned by menu
      */
     ~KHelpMenu() override;
 

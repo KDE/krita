@@ -120,7 +120,12 @@ private Q_SLOTS:
     void requestChannelMenuAt(const QPoint& point);
     void resetChannelTreeSelection();
 private:
-    void addKeyframe(const QString &channelIdentity);
+    // Used for adding multiple keyframes as a batch under one undo command.
+    void addKeyframeCommandToParent(const QString &channelIdentity, KUndo2Command* parentCMD);
+
+    // Used to quickly add one type of specific key automatically, e.g. Opacity.
+    void addKeyframeQuick(const QString &channelIdentity);
+
     void removeKeyframe(const QString &channel);
 
     struct Private;

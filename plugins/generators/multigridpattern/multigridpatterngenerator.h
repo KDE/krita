@@ -21,9 +21,9 @@ class KisConfigWidget;
  * makes penrose tilings.
  * Other configurations show up in nature as quasicrystals.
  * 
- * Based off the explaination of the algorithm here:
+ * Based off the explanation of the algorithm here:
  * http://www.physics.emory.edu/faculty/weeks//software/exquasi.html
- * With extra explaination here: https://www.schoengeometry.com/c-infintil.html
+ * With extra explanation here: https://www.schoengeometry.com/c-infintil.html
  */
 
 class KritaMultigridPatternGenerator : public QObject

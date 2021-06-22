@@ -232,7 +232,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         strategy->setForceLodModeIfPossible(forceLodMode);
     }
 
-    // disable outline feedback until the stroke calcualtes
+    // disable outline feedback until the stroke calculates
     // correct bounding rect
     m_handlesRect = QRect();
     m_strokeId = image->startStroke(strategy);

@@ -86,7 +86,7 @@ then, it is used. Else reverts to perceptual
 intent.</string>
         </property>
         <property name="text">
-         <string>Saturation</string>
+         <string comment="ICC profile rendering intent">Saturation</string>
         </property>
         <property name="shortcut">
          <string/>

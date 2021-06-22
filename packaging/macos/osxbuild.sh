@@ -29,7 +29,7 @@
 if test -z $BUILDROOT; then
     echo "ERROR: BUILDROOT env not set, exiting!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
-    exit
+    exit 1
 fi
 
 BUILDROOT="${BUILDROOT%/}"
@@ -41,7 +41,7 @@ if test -z $(which cmake); then
     export PATH=/Applications/CMake.app/Contents/bin:${PATH}
     if test -z $(which cmake); then
         echo "ERROR: cmake not found, exiting!"
-        exit
+        exit 1
     fi
 fi
 echo "$(cmake --version | head -n 1)"
@@ -79,8 +79,8 @@ export KIS_INSTALL_DIR=${BUILDROOT}/i
 
 # flags for OSX environment
 # Qt only supports from 10.12 up, and https://doc.qt.io/qt-5/macos.html#target-platforms warns against setting it lower
-export MACOSX_DEPLOYMENT_TARGET=10.12
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.12
+export MACOSX_DEPLOYMENT_TARGET=10.13
+export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
 
 
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
@@ -94,7 +94,7 @@ export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 
 # export PYTHONHOME=${KIS_INSTALL_DIR}
-# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.8/site-packages:${KIS_INSTALL_DIR}/lib/python3.8
+# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.9/site-packages:${KIS_INSTALL_DIR}/lib/python3.9
 
 # This will make the debug output prettier
 export KDE_COLOR_DEBUG=1
@@ -130,7 +130,7 @@ log () {
 # print msg
 print_if_error() {
     if [ "${osxbuild_error}" -ne 0 ]; then
-        printf "\nERROR: Printing last lines of log ouput\n\n"
+        printf "\nERROR: Printing last lines of log output\n\n"
         tail ${OUPUT_LOG}
         printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
     fi
@@ -210,7 +210,7 @@ cmake_3rdparty () {
 
         elif [[ "${error}" = "true" ]]; then
             log "ERROR: ${pkg} failed a second time, time to check the logs"
-            log "stoping..."
+            log "stopping..."
         fi
     done
 }
@@ -236,7 +236,7 @@ cmake_3rdparty_plugins () {
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${package}"
         else
-            log "${pkg} build fail, stoping..."
+            log "${pkg} build fail, stopping..."
             error="true"
         fi
     done
@@ -290,7 +290,7 @@ build_3rdparty_fixes(){
 
     if [[ "${error}" = "true" ]]; then
         log "Error building package ${pkg}, stopping..."
-        exit
+        exit 1
     fi
 }
 
@@ -304,7 +304,7 @@ build_3rdparty () {
     cd ${KIS_TBUILD_DIR}
 
     log_cmd cmake ${KIS_SRC_DIR}/3rdparty/ \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
@@ -364,7 +364,7 @@ build_3rdparty () {
     link: ${KIS_INSTALL_DIR}/bin/qmake-qt5 missing!
     It probably means ext_qt failed!!
     check, fix and rerun!\n"
-        exit
+        exit 1
     fi
 
     # for python
@@ -429,9 +429,21 @@ build_krita () {
     log_cmd check_dir_path ${KIS_BUILD_DIR}
     cd ${KIS_BUILD_DIR}
 
+    if [ -z "${KRITA_BRANDING}" ]; then
+        # determine the channel for branding
+        if [ "${JOB_NAME}" == "Krita_Nightly_MacOS_Build" ]; then
+            KRITA_BRANDING="Next"
+        elif [ "${JOB_NAME}" == "Krita_Stable_MacOS_Build" ]; then
+            KRITA_BRANDING="Plus"
+        else
+            KRITA_BRANDING=""
+        fi
+    fi
+
 
     CMAKE_CMD="cmake ${KIS_SRC_DIR} \
         -DFOUNDATION_BUILD=ON \
+        -DBRANDING=${KRITA_BRANDING} \
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DCMAKE_PREFIX_PATH=${KIS_INSTALL_DIR} \
@@ -442,7 +454,7 @@ build_krita () {
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
         -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}"
 
@@ -480,7 +492,7 @@ build_krita_tarball () {
 
     print_if_error "Failed untar of ${filename}"
     if [[ ${osxbuild_error} -ne 0 ]]; then
-        exit
+        exit 1
     fi
 
     KIS_BUILD_DIR="${KIS_CUSTOM_BUILD}/build"
@@ -511,7 +523,7 @@ install_krita () {
     osxbuild_error=$?
     print_if_error "could not cd to ${KIS_BUILD_DIR}"
     if [[ ${osxbuild_error} -ne 0 ]]; then
-        exit
+        exit 1
     fi
 
     make install
@@ -597,7 +609,7 @@ get_directory_fromargs() {
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-####      Universal ARM x86_64 build functions and paramterers    #####
+####      Universal ARM x86_64 build functions and parameters     #####
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -657,7 +669,7 @@ consolidate_universal_binaries () {
 }
 
 prebuild_cleanup() {
-    # asume if an argument is given is a package name, do not erase install dir
+    # assume if an argument is given is a package name, do not erase install dir
     if [[ ${#@} > 0 ]]; then
         rsync -aq "${KIS_INSTALL_DIR}/" "${BUILDROOT}/i.temp"
     fi
@@ -677,7 +689,7 @@ universal_plugin_build() {
     DEPBUILD_ARM64_DIR="${BUILDROOT}/i_plug.arm64"
     # DEPBUILD_FATBIN_DIR="${BUILDROOT}/i.universal"
 
-    # asume i is universal but i.universal has to exist
+    # assume i is universal but i.universal has to exist
     if [[ ! -d "${DEPBUILD_FATBIN_DIR}" ]]; then
         log "WARNING no i.universal install dir found! Make sure universal build finished properly"
         log "If you get errors building plugins this is likely the error."

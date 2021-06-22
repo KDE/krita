@@ -389,7 +389,7 @@ public:
         m_q->initStyleOption(&spinBoxOptions);
         QRect rect = m_q->style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions, QStyle::SC_SpinBoxEditField);
         // Offset the rect to make it take all the available space inside the
-        // spinbox, without overlaping the buttons
+        // spinbox, without overlapping the buttons
         QString style = qApp->property(currentUnderlyingStyleNameProperty).toString().toLower();
         if (style == "breeze") {
             rect.adjust(-4, -4, 0, 4);
@@ -722,7 +722,7 @@ public:
                 QTimer::singleShot(0, &m_startEditingSignalProxy, SLOT(start()));
             // Releasing the left mouse button stops the dragging and also
             // the "enter edition mode" timer. If signals must be blocked when
-            // dragging then whe set the value here and emit a signal
+            // dragging then we set the value here and emit a signal
             } else if (e->button() == Qt::LeftButton) {
                 m_timerStartEditing.stop();
                 m_isDragging = false;

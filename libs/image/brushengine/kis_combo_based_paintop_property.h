@@ -27,6 +27,12 @@ public:
 
     // callback-compatible c-tor
     KisComboBasedPaintOpProperty(Type type,
+                                 SubType subType,
+                                 const QString &id,
+                                 const QString &name,
+                                 KisPaintOpSettingsRestrictedSP settings,
+                                 QObject *parent);
+    KisComboBasedPaintOpProperty(Type type,
                                  const QString &id,
                                  const QString &name,
                                  KisPaintOpSettingsRestrictedSP settings,

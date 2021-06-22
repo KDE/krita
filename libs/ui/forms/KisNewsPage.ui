@@ -29,6 +29,9 @@
    </property>
    <item>
     <widget class="QListView" name="listNews">
+     <property name="cursor" stdset="0">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>

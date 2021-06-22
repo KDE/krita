@@ -58,7 +58,7 @@ SnapshotDocker::SnapshotDocker()
     QVBoxLayout *mainLayout = new QVBoxLayout(widget);
     m_d->view->setModel(m_d->model.data());
     mainLayout->addWidget(m_d->view);
-    QHBoxLayout *buttonsLayout = new QHBoxLayout(widget);
+    QHBoxLayout *buttonsLayout = new QHBoxLayout();
     m_d->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->bnAdd->setToolTip(i18nc("@info:tooltip", "Create snapshot"));
     m_d->bnAdd->setAutoRaise(true);

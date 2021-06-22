@@ -1,0 +1,40 @@
+From 7442b1415a651a1396a0b2387cf085d0a0dfdfef Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvin@alvinhc.com>
+Date: Tue, 15 Jun 2021 16:43:02 +0000
+Subject: [PATCH] ki18n: fix loading catalogs with patched gettext
+
+---
+ src/kcatalog.cpp | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/kcatalog.cpp b/src/kcatalog.cpp
+index df33e5f..0143c13 100644
+--- a/src/kcatalog.cpp
++++ b/src/kcatalog.cpp
+@@ -32,6 +32,7 @@
+ #include <QFileInfo>
+ #include <QMutexLocker>
+ #include <QSet>
++#include <QString>
+ #include <QStringList>
+ 
+ #include <kcatalog_p.h>
+@@ -92,8 +93,15 @@ KCatalog::KCatalog(const QByteArray &domain, const QString &language_)
+     : d(new KCatalogPrivate)
+ {
+     d->domain = domain;
++#if defined(_WIN32) && defined(__WIN32_USE_UTF8)
++    // Krita uses Microsoft's patched version of gettext to support UTF-8 paths.
++    // Convert the paths to UTF-8 prior to sending.
++    d->language = language_.toUtf8();
++    d->localeDir = catalogLocaleDir(domain, language_).toUtf8();
++#else
+     d->language = QFile::encodeName(language_);
+     d->localeDir = QFile::encodeName(catalogLocaleDir(domain, language_));
++#endif
+ 
+     if (!d->localeDir.isEmpty()) {
+         // Always get translations in UTF-8, regardless of user's environment.
+-- 
+2.31.1.windows.1
+

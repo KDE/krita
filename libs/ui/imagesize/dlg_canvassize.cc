@@ -20,9 +20,6 @@
 #include <QComboBox>
 #include <QButtonGroup>
 
-// used to extend KoUnit in comboboxes
-static const QString percentStr(i18n("Percent (%)"));
-
 const QString DlgCanvasSize::PARAM_PREFIX = "canvasizedlg";
 const QString DlgCanvasSize::PARAM_WIDTH_UNIT = DlgCanvasSize::PARAM_PREFIX + "_widthunit";
 const QString DlgCanvasSize::PARAM_HEIGHT_UNIT = DlgCanvasSize::PARAM_PREFIX + "_heightunit";
@@ -446,15 +443,10 @@ void DlgCanvasSize::updateButtons(int forceId)
         // convert values to internal unit
         int internalXOffset = 0;
         int internalYOffset = 0;
-        if (m_page->xOffUnit->currentText() == percentStr) {
-            internalXOffset = qRound((xOffset * m_newWidth) / 100.0);
-            internalYOffset = qRound((yOffset * m_newHeight) / 100.0);
-        } else {
-            const KoUnit xOffsetUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
-            internalXOffset = qRound(xOffsetUnit.fromUserValue(xOffset));
-            const KoUnit yOffsetUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
-            internalYOffset = qRound(yOffsetUnit.fromUserValue(yOffset));
-        }
+        const KoUnit xOffsetUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
+        internalXOffset = qRound(xOffsetUnit.fromUserValue(xOffset));
+        const KoUnit yOffsetUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
+        internalYOffset = qRound(yOffsetUnit.fromUserValue(yOffset));
 
         bool offsetAsExpected =
                 internalXOffset == m_xOffset &&

@@ -22,7 +22,7 @@ public:
     ~HeifImport() override;
     bool supportsIO() const override { return true; }
 
-    // Not all embeded nclx color space definitions can be converted to icc, so we keep an enum to load those.
+    // Not all embedded nclx color space definitions can be converted to icc, so we keep an enum to load those.
     enum LinearizePolicy {
         KeepTheSame,
         LinearFromPQ,

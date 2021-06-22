@@ -16,7 +16,7 @@ class KoColorSpace;
 /**
  * A special wrapper class for a paint device that allows working with parts of
  * the source paint device using an overlay, that is without modifying the
- * device itself. The overlay may have highter bit depthr if PreciseMode or
+ * device itself. The overlay may have higher bit depth if PreciseMode or
  * LazyPreciseMode is used.
  *
  * For example, you have an RGBA8 paint device, but you want all the blending

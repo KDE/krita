@@ -21,8 +21,8 @@ class QDomElement;
 
 /**
  * @struct Comment
- * @brief This class is a simple combination of two varibles.
- * It stores the name and visiblity of comments. It is used in
+ * @brief This class is a simple combination of two variables.
+ * It stores the name and visibility of comments. It is used in
  * @c CommentModel and @c StoryboardModel.
  */
 struct StoryboardComment

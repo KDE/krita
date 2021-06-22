@@ -4,8 +4,13 @@ include_directories(
 
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
+)
+
+if(HAVE_OCIO)
+include_directories(SYSTEM
     ${OCIO_INCLUDE_DIR}
 )
+endif()
 
 if (ANDROID OR (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)" AND NOT APPLE))
     add_definitions(-DQT_OPENGL_ES_3)
@@ -160,6 +165,7 @@ set(kritaui_LIB_SRCS
     kis_multinode_property.cpp
     KisWelcomePageWidget.cpp
     KisChangeCloneLayersCommand.cpp
+    KisUiFont.cpp
 
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp

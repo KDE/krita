@@ -120,6 +120,12 @@ if(NOT IS_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis")
 endif()
 
 
+# We supply our own freshly-generated icons, so no need for the bundled ones.
+file(REMOVE
+    "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis/krita.ico"
+    "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis/kritafile.ico"
+)
+
 # Place Krita installer files in the right place
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/installer/"
     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis/"

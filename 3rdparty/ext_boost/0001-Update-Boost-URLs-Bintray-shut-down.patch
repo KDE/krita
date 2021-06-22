@@ -1,0 +1,26 @@
+From e4d661b7d0d5324348a2c91a8dd5e816eaf0eb38 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 2 Jun 2021 01:55:16 +0000
+Subject: [PATCH] Update Boost URLs, Bintray shut down
+
+Closes #220
+---
+ build-android.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build-android.sh b/build-android.sh
+index 308a4eb..fed08b9 100755
+--- a/build-android.sh
++++ b/build-android.sh
+@@ -205,7 +205,7 @@ echo "Building boost version: $BOOST_VER1.$BOOST_VER2.$BOOST_VER3"
+ # Build constants
+ # -----------------------
+ 
+-BOOST_DOWNLOAD_LINK="http://dl.bintray.com/boostorg/release/$BOOST_VER1.$BOOST_VER2.$BOOST_VER3/source/boost_${BOOST_VER1}_${BOOST_VER2}_${BOOST_VER3}.tar.bz2"
++BOOST_DOWNLOAD_LINK="https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VER1.$BOOST_VER2.$BOOST_VER3/source/boost_${BOOST_VER1}_${BOOST_VER2}_${BOOST_VER3}.tar.bz2"
+ BOOST_TAR="boost_${BOOST_VER1}_${BOOST_VER2}_${BOOST_VER3}.tar.bz2"
+ BOOST_DIR="boost_${BOOST_VER1}_${BOOST_VER2}_${BOOST_VER3}"
+ BUILD_DIR="./build/"
+-- 
+2.31.1
+

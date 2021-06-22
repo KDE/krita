@@ -970,7 +970,7 @@ void KisToolTransformConfigWidget::slotSetAX(qreal value)
     ToolTransformArgs *config = m_transaction->currentConfig();
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAX(normalizeAngle(kisDegreesToRadians(value)));
+        config->setAX(kisDegreesToRadians(value));
     }
     notifyConfigChanged();
     notifyEditingFinished();
@@ -984,7 +984,7 @@ void KisToolTransformConfigWidget::slotSetAY(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAY(normalizeAngle(kisDegreesToRadians(value)));
+        config->setAY(kisDegreesToRadians(value));
     }
 
     notifyConfigChanged();
@@ -999,7 +999,7 @@ void KisToolTransformConfigWidget::slotSetAZ(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAZ(normalizeAngle(kisDegreesToRadians(value)));
+        config->setAZ(kisDegreesToRadians(value));
     }
 
     notifyConfigChanged();

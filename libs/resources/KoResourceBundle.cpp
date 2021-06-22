@@ -191,9 +191,9 @@ bool KoResourceBundle::save()
     if (m_filename.isEmpty()) return false;
 
     if (metaData(KisResourceStorage::s_meta_creation_date, "").isEmpty()) {
-        setMetaData(KisResourceStorage::s_meta_creation_date, QDate::currentDate().toString("dd/MM/yyyy"));
+        setMetaData(KisResourceStorage::s_meta_creation_date, QLocale::c().toString(QDate::currentDate(), QStringLiteral("dd/MM/yyyy")));
     }
-    setMetaData(KisResourceStorage::s_meta_dc_date, QDate::currentDate().toString("dd/MM/yyyy"));
+    setMetaData(KisResourceStorage::s_meta_dc_date, QLocale::c().toString(QDate::currentDate(), QStringLiteral("dd/MM/yyyy")));
 
     QDir bundleDir = KoResourcePaths::saveLocation("data", "bundles");
     bundleDir.cdUp();

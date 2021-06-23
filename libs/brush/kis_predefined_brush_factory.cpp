@@ -68,7 +68,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         qreal contrastAdjustment = brushDefinition.attribute("ContrastAdjustment").toDouble();
 
         const int adjustmentVersion = brushDefinition.attribute("AdjustmentVersion", "1").toInt();
-        const bool autoAdjustMidPoint = brushDefinition.attribute("AutoAdjustMidPoint", "0").toInt();
+        const bool autoAdjustMidPoint = brushDefinition.attribute("AutoAdjustMidPoint", "1").toInt();
         const bool hasAutoAdjustMidPoint = brushDefinition.hasAttribute("AutoAdjustMidPoint");
 
         /**

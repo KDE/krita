@@ -167,7 +167,7 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
 
     brush->setName(exportOptions.name);
     // brushes are created after devices are loaded, call mask mode after that
-    brush->setBrushApplication(exportOptions.mask ? ALPHAMASK : IMAGESTAMP);
+    brush->setBrushApplication(exportOptions.mask ? ALPHAMASK : LIGHTNESSMAP);
     brush->setWidth(rc.width());
     brush->setHeight(rc.height());
 

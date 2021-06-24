@@ -47,6 +47,8 @@ public:
      */
     void paint(QPainter &painter, const KoViewConverter &converter);
 
+    KisHandlePainterHelper createHandle(QPainter *painter, KoShape *shape, const KoViewConverter &converter);
+
     /**
      * set the selection that is to be painted.
      * @param selection the current selection.
@@ -89,13 +91,14 @@ private:
     KoSelection *m_selection;
     KoShapeMeshGradientHandles::Handle m_currentHoveredMeshHandle;
     KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
-    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
+    KisSharedPtr<KisReferenceImagesLayer> m_referenceImagesLayer;
     int m_handleRadius;
     int m_lineWidth;
     bool m_showFillGradientHandles;
     bool m_showStrokeFillGradientHandles;
     bool m_showFillMeshGradientHandles;
     bool m_forceShapeOutlines;
+    bool m_applyScaling;
 };
 
 #endif

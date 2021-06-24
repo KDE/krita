@@ -48,11 +48,13 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                  KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
 
+    KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
 
     bool getLock();
     void setLock(bool, KoCanvasBase*);
     QTransform getLockedFlakeToWidgetTransform();
     QTransform getLockedDocToViewTransform();
+    QTransform getImageToWidgetTransform();
 
 Q_SIGNALS:
     /**
@@ -70,6 +72,7 @@ private:
     bool lock;
     QTransform lockedFlakeToWidgetTransform;
     QTransform lockedDocToViewTransform;
+    QTransform lockedImageToWidgetTransform;
 };
 
 typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;

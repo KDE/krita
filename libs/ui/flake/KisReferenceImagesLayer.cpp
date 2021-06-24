@@ -16,6 +16,7 @@
 #include "KisReferenceImage.h"
 #include "KisDocument.h"
 #include "kis_canvas2.h"
+#include "KisHandlePainterHelper.h"
 
 struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
@@ -238,6 +239,26 @@ QColor KisReferenceImagesLayer::getPixel(QPointF position) const
 
     return QColor();
 }
+
+KisHandlePainterHelper KisReferenceImagesLayer::createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius)
+{
+    const QTransform originalPainterTransform = painter->transform();
+
+    if(lock) {
+        painter->setTransform(shape->absoluteTransformation() *
+                              lockedDocToViewTransform *
+                              painter->transform());
+    }
+    else {
+        painter->setTransform(shape->absoluteTransformation() *
+                              converter.documentToView() *
+                              painter->transform());
+    }
+
+    // move c-tor
+    return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);
+}
+
 bool KisReferenceImagesLayer::getLock()
 {
      return lock;
@@ -250,6 +271,7 @@ void KisReferenceImagesLayer::setLock(bool val, KoCanvasBase* canvas)
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
         lockedFlakeToWidgetTransform = kisCanvas->coordinatesConverter()->flakeToWidgetTransform();
         lockedDocToViewTransform = converter()->documentToView();
+        lockedImageToWidgetTransform = kisCanvas->coordinatesConverter()->imageToWidgetTransform();
     }
 }
 
@@ -261,4 +283,9 @@ QTransform KisReferenceImagesLayer::getLockedFlakeToWidgetTransform()
 QTransform KisReferenceImagesLayer::getLockedDocToViewTransform()
 {
     return lockedDocToViewTransform;
+}
+
+QTransform KisReferenceImagesLayer::getImageToWidgetTransform()
+{
+    return lockedImageToWidgetTransform;
 }

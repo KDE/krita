@@ -1100,20 +1100,13 @@ bool KoShape::isShapeEditable(bool recursive) const
     return true;
 }
 
-KisHandlePainterHelper KoShape::createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius, QTransform docToView)
+KisHandlePainterHelper KoShape::createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius)
 {
     const QTransform originalPainterTransform = painter->transform();
 
-    if(docToView.isIdentity()) {
-        painter->setTransform(shape->absoluteTransformation() *
-                              converter.documentToView() *
-                              painter->transform());
-    }
-    else {
-        painter->setTransform(shape->absoluteTransformation() *
-                              docToView *
-                              painter->transform());
-    }
+    painter->setTransform(shape->absoluteTransformation() *
+                          converter.documentToView() *
+                          painter->transform());
 
     // move c-tor
     return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);

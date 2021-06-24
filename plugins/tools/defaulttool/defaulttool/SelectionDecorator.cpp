@@ -39,6 +39,7 @@ SelectionDecorator::SelectionDecorator(KoCanvasResourceProvider *resourceManager
     , m_showFillGradientHandles(false)
     , m_showStrokeFillGradientHandles(false)
     , m_forceShapeOutlines(false)
+    , m_applyScaling(true)
 {
     m_hotPosition =
         KoFlake::AnchorPosition(
@@ -89,17 +90,12 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     bool editable = false;
     bool forceBoundngRubberLine = false;
-    QTransform referenceDocToViewTransform;
 
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
 
-            KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
-            if(reference && referenceImagesLayer && referenceImagesLayer->getLock()) {
-                referenceDocToViewTransform = referenceImagesLayer->getLockedDocToViewTransform();
-            }
             KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius, referenceDocToViewTransform);
+                    createHandle(&painter, shape, converter);
 
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
@@ -132,7 +128,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // draw extra rubber line around all the shapes
     if (selectedShapes.size() > 1 || forceBoundngRubberLine) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius, referenceDocToViewTransform);
+            createHandle(&painter, m_selection, converter);
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         helper.drawRubberLine(handleArea);
@@ -142,7 +138,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // is no need drawing the selection handles
     if (editable) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius, referenceDocToViewTransform);
+            createHandle(&painter, m_selection, converter);
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         QPolygonF outline = handleArea;
@@ -178,6 +174,21 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         }
     }
 
+}
+
+KisHandlePainterHelper SelectionDecorator::createHandle(QPainter *painter, KoShape *shape, const KoViewConverter &converter)
+{
+    KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+    if(reference && m_referenceImagesLayer->getLock())
+    {
+        m_applyScaling = false;
+    }
+
+    if(!m_applyScaling) {
+        return m_referenceImagesLayer->createHandlePainterHelperView(painter, shape, converter, m_handleRadius);
+    }
+
+    return KoShape::createHandlePainterHelperView(painter, shape, converter, m_handleRadius);
 }
 
 void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter)
@@ -257,5 +268,5 @@ void SelectionDecorator::setForceShapeOutlines(bool value)
 
 void SelectionDecorator::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
 {
-    referenceImagesLayer = layer;
+    m_referenceImagesLayer = layer;
 }

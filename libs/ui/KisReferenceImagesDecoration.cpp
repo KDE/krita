@@ -54,9 +54,7 @@ private:
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         QTransform transform;
         if(layer->getLock()) {
-            transform = viewConverter->imageToDocumentTransform()
-                            * viewConverter->documentToFlakeTransform()
-                               * layer->getLockedFlakeToWidgetTransform();
+            transform = layer->getImageToWidgetTransform();
         }
         else {
             transform = viewConverter->imageToWidgetTransform();

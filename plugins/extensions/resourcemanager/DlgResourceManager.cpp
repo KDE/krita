@@ -138,6 +138,18 @@ void DlgResourceManager::slotResourceTypeSelected(int)
         m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
     }
     m_ui->resourceItemView->setModel(m_resourceProxyModelsForResourceType[selectedResourceType]);
+
+    if (selectedResourceType == ResourceType::Gradients) {
+        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(256, 64));
+        m_ui->resourceItemView->setToolTipShouldRenderCheckers(true);
+    }
+    else if (selectedResourceType == ResourceType::PaintOpPresets) {
+        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(128, 128));
+    } else if (selectedResourceType == ResourceType::Patterns || selectedResourceType == ResourceType::Palettes) {
+        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(256, 256));
+        m_ui->resourceItemView->setToolTipShouldRenderCheckers(false);
+    }
+
 }
 
 void DlgResourceManager::slotStorageSelected(int)

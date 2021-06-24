@@ -347,11 +347,23 @@ bool KoResourceBundle::readMetaData(KoStore *resourceStore)
                         m_bundletags << e.attribute("meta:value");
                     }
                     else {
+                        QString metaName = e.attribute("meta:name");
+                        if (!metaName.startsWith("meta:") && !metaName.startsWith("dc:")) {
+                            if (metaName == "email" || metaName == "license" || metaName == "website") { // legacy metadata options
+                                if (!m_metadata.contains("meta:" + metaName)) {
+                                    m_metadata.insert("meta:" + metaName, e.attribute("meta:value"));
+                                }
+                            } else {
+                                qWarning() << "Unrecognized metadata: " << e.tagName() << e.attribute("meta:name") << e.attribute("meta:value");
+                            }
+                        }
                         m_metadata.insert(e.attribute("meta:name"), e.attribute("meta:value"));
                     }
                 }
                 else {
-                    m_metadata.insert(e.tagName(), e.firstChild().toText().data());
+                    if (!m_metadata.contains(e.tagName())) {
+                        m_metadata.insert(e.tagName(), e.firstChild().toText().data());
+                    }
                 }
             }
         }

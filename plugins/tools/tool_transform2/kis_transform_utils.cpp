@@ -182,9 +182,9 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
     S.shear(0, args.shearY()); S.shear(args.shearX(), 0);
 
     if (args.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-        P.rotate(180. * args.aX() / M_PI, QVector3D(1, 0, 0));
-        P.rotate(180. * args.aY() / M_PI, QVector3D(0, 1, 0));
-        P.rotate(180. * args.aZ() / M_PI, QVector3D(0, 0, 1));
+        P.rotate(180. * normalizeAngle(args.aX()) / M_PI, QVector3D(1, 0, 0));
+        P.rotate(180. * normalizeAngle(args.aY()) / M_PI, QVector3D(0, 1, 0));
+        P.rotate(180. * normalizeAngle(args.aZ()) / M_PI, QVector3D(0, 0, 1));
         projectedP = P.toTransform(args.cameraPos().z());
     } else if (args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
         projectedP = args.flattenedPerspectiveTransform();
@@ -255,8 +255,8 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
                                        config.originalCenter().x(),
                                        config.originalCenter().y(),
                                        normalizeAngle(config.aZ()),
-                                       normalizeAngle(translation.x()),
-                                       normalizeAngle(translation.y()),
+                                       translation.x(),
+                                       translation.y(),
                                        updater,
                                        config.filter());
 

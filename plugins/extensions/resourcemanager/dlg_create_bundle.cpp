@@ -25,6 +25,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 #include <KoResource.h>
+#include <kstandardguiitem.h>
 
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -49,7 +50,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     setFixedSize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setButtonText(Ok, i18n("Save"));
+    setButtonGuiItem(Ok, KStandardGuiItem::save());
 
     connect(m_ui->bnSelectSaveLocation, SIGNAL(clicked()), SLOT(selectSaveLocation()));
 

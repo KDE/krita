@@ -43,10 +43,10 @@ QIcon loadIcon(const QString &name)
                                 ":/pics/" + realName + ".svgz",
                                 ":/pics/" + name + ".png",
                                 ":/pics/" + name + ".svg",
-                                ":/pics/" + name + ".svz",
+                                ":/pics/" + name + ".svgz",
                                 ":/" + realName + ".png",
                                 ":/" + realName + ".svg",
-                                ":/" + realName + ".svz",
+                                ":/" + realName + ".svgz",
                                 ":/" + name,
                                 ":/" + name + ".png",
                                 ":/" + name + ".svg",
@@ -62,7 +62,7 @@ QIcon loadIcon(const QString &name)
     }
 
     // Now check for icons with sizes
-    QStringList sizes = QStringList() << "16_" << "22_" << "32_" << "48_" << "64_" << "128_" << "256_" << "512_" << "1048_";
+    QStringList sizes = QStringList() << "16_" << "22_" << "32_" << "48_" << "64_" << "128_" << "256_" << "512_" << "1024_";
     QVector<QPair<QString, QString> > icons;
     Q_FOREACH (const QString &size, sizes) {
         const QStringList names = { ":/pics/" + size + realName + ".png",
@@ -70,10 +70,10 @@ QIcon loadIcon(const QString &name)
                                     ":/pics/" + size + realName + ".svgz",
                                     ":/pics/" + size + name + ".png",
                                     ":/pics/" + size + name + ".svg",
-                                    ":/pics/" + size + name + ".svz",
+                                    ":/pics/" + size + name + ".svgz",
                                     ":/" + size + realName + ".png",
                                     ":/" + size + realName + ".svg",
-                                    ":/" + size + realName + ".svz",
+                                    ":/" + size + realName + ".svgz",
                                     ":/" + size + name,
                                     ":/" + size + name + ".png",
                                     ":/" + size + name + ".svg",

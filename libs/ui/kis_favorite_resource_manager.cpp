@@ -350,6 +350,7 @@ void KisFavoriteResourceManager::init()
             }
         }
         m_resourcesProxyModel->setTagFilter(m_currentTag);
+        m_resourcesProxyModel->sort(KisAbstractResourceModel::Name);
 
         updateFavoritePresets();
     }

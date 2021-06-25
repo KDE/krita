@@ -660,8 +660,10 @@ void KisNode::handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect 
 {
     invalidateFrames(range, rect);
 
-    if (original() && original()->defaultBounds()) {
-        if (range.contains(original()->defaultBounds()->currentTime())) {
+    if (image()) {
+        KisDefaultBoundsSP bounds(new KisDefaultBounds(image()));
+
+        if (range.contains(bounds->currentTime())) {
             setDirty(rect);
         }
     }

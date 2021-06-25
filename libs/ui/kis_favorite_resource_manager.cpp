@@ -339,14 +339,32 @@ void KisFavoriteResourceManager::init()
         KisResourceServerProvider::instance()->paintOpPresetServer();
         QString currentTag = KisConfig(true).readEntry<QString>("favoritePresetsTag", "★ My Favorites");
 
-        // TODO: RESOURCES: tag by url?
         KisTagModel tagModel(ResourceType::PaintOpPresets);
-        for (int i = 0; i < tagModel.rowCount(); i++) {
-            QModelIndex index = tagModel.index(i, 0);
-            KisTagSP tag = tagModel.tagForIndex(index);
-            if (!tag.isNull() && tag->url() == currentTag) {
-                 m_currentTag = tag;
-                 break;
+        KisTagSP currentTagSP = tagModel.tagForUrl(currentTag);
+        if (!currentTagSP.isNull()) {
+            m_currentTag = currentTagSP;
+        }
+        if (m_currentTag.isNull() && tagModel.rowCount() > 0) {
+            // HACK: try to find the My Favourites tag on non-English system
+            // it would be better to just use i18n() above, but it's a string freeze
+            // in the moment of writing, so better hack than nothing...
+            // It might not work well for non-latin languages.
+            for (int i = 0; i < tagModel.rowCount(); i++) {
+                QModelIndex idxHack = tagModel.index(i, 0);
+                QString name = tagModel.data(idxHack, Qt::UserRole + KisAllTagsModel::Name).toString();
+                if (name.contains("★") || name.contains("*")) {
+                    currentTagSP = tagModel.tagForIndex(idxHack);
+                    if (currentTagSP) {
+                        m_currentTag = currentTagSP;
+                    }
+                }
+            }
+
+            // safety measure to have at least *some* tag chosen
+            QModelIndex idx = tagModel.index(0, 0);
+            currentTagSP = tagModel.tagForIndex(idx);
+            if (currentTagSP && !m_currentTag) {
+                m_currentTag = currentTagSP;
             }
         }
         m_resourcesProxyModel->setTagFilter(m_currentTag);

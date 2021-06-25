@@ -1,0 +1,51 @@
+From 3a7585cc6c9c96db1408c57f261d2953be818702 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Fri, 2 Apr 2021 16:49:18 +0000
+Subject: [PATCH 2/2] Work around CMake multi-config generators
+
+Mixing generator expressions and CMAKE_CURRENT_BINARY_DIR results in all
+configurations trying to write to the same file.
+
+https://gitlab.kitware.com/cmake/cmake/-/issues/20682
+
+Workaround based on:
+https://codereview.qt-project.org/c/qt/qtbase/+/299372
+---
+ src/kconf_update/CMakeLists.txt | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/src/kconf_update/CMakeLists.txt b/src/kconf_update/CMakeLists.txt
+index 6947f94..a02eca8 100644
+--- a/src/kconf_update/CMakeLists.txt
++++ b/src/kconf_update/CMakeLists.txt
+@@ -18,10 +18,27 @@ target_link_libraries(kconf_update Qt5::Core KF5::ConfigCore)
+ include(ECMMarkNonGuiExecutable)
+ ecm_mark_nongui_executable(kconf_update)
+ 
++# https://gitlab.kitware.com/cmake/cmake/-/issues/20682
++# https://codereview.qt-project.org/c/qt/qtbase/+/299372
++if(GENERATOR_IS_MULTI_CONFIG OR CMAKE_GENERATOR MATCHES "^Visual Studio")
++file(
++  GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kconf-exec-$<CONFIG>.h
++  CONTENT "#define KCONF_UPDATE_EXECUTABLE \"$<TARGET_FILE:kconf_update>\""
++)
++add_custom_target(kconf-exec.h
++                  DEPENDS 
++                    ${CMAKE_CURRENT_BINARY_DIR}/kconf-exec-$<CONFIG>.h
++                  COMMAND ${CMAKE_COMMAND} -E copy
++                    ${CMAKE_CURRENT_BINARY_DIR}/kconf-exec-$<CONFIG>.h 
++                    ${CMAKE_CURRENT_BINARY_DIR}/kconf-exec.h
++)
++add_dependencies(kconf_update kconf-exec.h)
++else()
+ file(
+   GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kconf-exec.h
+   CONTENT "#define KCONF_UPDATE_EXECUTABLE \"$<TARGET_FILE:kconf_update>\""
+ )
++endif()
+ configure_file(config-kconf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kconf.h )
+ 
+ # Although this is mostly an internal binary (hence installing it in
+-- 
+2.30.1.windows.1
+

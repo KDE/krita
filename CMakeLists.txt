@@ -163,9 +163,8 @@ set(KRITA_BROKEN_TESTS "" CACHE INTERNAL "KRITA_BROKEN_TESTS")
 include(FeatureSummary)
 
 if (WIN32)
-    option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
-    add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
-
+option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
+add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
     if (MINGW)
         option(USE_MINGW_HARDENING_LINKER "Enable DEP (NX), ASLR and high-entropy ASLR linker flags (mingw-w64)" ON)
         add_feature_info("Linker Security Flags" USE_MINGW_HARDENING_LINKER "Enable DEP (NX), ASLR and high-entropy ASLR linker flags")
@@ -184,6 +183,17 @@ if (WIN32)
         else (USE_MINGW_HARDENING_LINKER)
             message(WARNING "Linker Security Flags not enabled!")
         endif (USE_MINGW_HARDENING_LINKER)
+    elseif (MSVC)
+        # Increase the stack size to match MinGW's. Prevents crashes with GMic.
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:4194304")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /STACK:4194304")
+        set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /STACK:4194304")
+        option(USE_CONTROL_FLOW_GUARD "Enable Control Flow Guard hardening (MSVC)" ON)
+        add_feature_info("Linker Security Flags" USE_CONTROL_FLOW_GUARD "Enable Control Flow Guard")
+        if (USE_CONTROL_FLOW_GUARD)
+            add_compile_options(/guard:cf)
+            add_link_options(/GUARD:CF)
+        endif (USE_CONTROL_FLOW_GUARD)
     endif (MINGW)
 endif ()
 
@@ -541,7 +551,40 @@ endif()
 if(WIN32)
     if(MSVC)
         # C4522: 'class' : multiple assignment operators specified
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4522")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4522 -wd4138 /Zc:__cplusplus")
+        # libs\ui\dialogs\kis_about_application.cpp : fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+
+        # Force enable a good many optimizations
+
+        # Aggresive inlining (Release)
+        string(REPLACE "Ob2" "Ob3" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+        # Aggresive inlining (RelWithDebInfo)
+        string(REPLACE "Ob1" "Ob3" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+        # Enable intrinsics
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Oi")
+        # Favor fast code
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ot")
+        # -ffast-math (fused multiply-add if the arch allows)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
+        # Whole program optimization
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
+        # Function-level linking
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Gy")
+
+        # For all objects:
+        # - strip unused functions
+        # - fold identical functions
+        # - link-time code generation
+        string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO}")
+        string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO}")
+        string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO}")
+        set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
+        set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
+        set(CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
+
+        # Our code is UTF-8 encoded.
+        add_compile_options(/utf-8)
     endif()
 endif()
 
@@ -626,6 +669,9 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
+if (MSVC)
+    set(Boost_USE_STATIC_LIBS OFF)
+endif()
 find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
@@ -690,6 +736,9 @@ if(OpenEXR_FOUND)
     include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
+    if(MSVC)
+        add_compile_definitions(OPENEXR_DLL) 
+    endif()
 endif()
 
 find_package(TIFF)
@@ -869,15 +918,13 @@ set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
 if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
-    if(NOT MSVC)
-        find_package(Vc 1.1.0)
-        set_package_properties(Vc PROPERTIES
-            DESCRIPTION "Portable, zero-overhead SIMD library for C++"
-            URL "https://github.com/VcDevel/Vc"
-            TYPE OPTIONAL
-            PURPOSE "Required by the Krita for vectorization")
-        macro_bool_to_01(Vc_FOUND HAVE_VC)
-    endif()
+    find_package(Vc 1.1.0)
+    set_package_properties(Vc PROPERTIES
+        DESCRIPTION "Portable, zero-overhead SIMD library for C++"
+        URL "https://github.com/VcDevel/Vc"
+        TYPE OPTIONAL
+        PURPOSE "Required by the Krita for vectorization")
+    macro_bool_to_01(Vc_FOUND HAVE_VC)
 endif()
 configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 

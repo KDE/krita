@@ -1,5 +1,5 @@
 SET(PREFIX_ext_lzma "${EXTPREFIX}" )
-if (MINGW)
+if (WIN32)
     if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8") # 64 bits
         ExternalProject_Add( ext_lzma
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

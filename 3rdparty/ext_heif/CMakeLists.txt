@@ -86,6 +86,23 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
     )
 
     ExternalProject_Add(
+        ext_cargo_c
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/lu-zero/cargo-c/archive/refs/tags/v0.8.1.tar.gz
+        URL_HASH SHA256=c8eeac1ac6852e551597f38411ac741aeacd6927cc8057e73ed73c7c1e63ee61
+
+        CONFIGURE_COMMAND ""
+
+        BUILD_COMMAND ""
+
+        INSTALL_COMMAND cargo install --path <SOURCE_DIR> -j ${SUBMAKE_JOBS} --root ${EXTPREFIX_heif}
+
+        UPDATE_COMMAND ""
+
+        BUILD_IN_SOURCE 1
+    )
+
+    ExternalProject_Add(
         ext_rav1e
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
@@ -99,19 +116,7 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
 
         BUILD_IN_SOURCE 1
 
-        DEPENDS ext_nasm
-    )
-
-    # External projects do not accept single commands.
-    ExternalProject_Add_Step(
-        ext_rav1e ext_cargo_c
-
-        COMMENT "Installing cargo-c 0.8.1 to ${EXTPREFIX_heif}"
-
-        COMMAND ${CMAKE_CURRENT_LIST_DIR}/cargo-install-wrapper cargo-c --version "0.8.1+cargo-0.53" --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
-
-        DEPENDEES configure
-        DEPENDERS build
+        DEPENDS ext_nasm ext_cargo_c
     )
 
     set(EXTRA_AVIF_DEPS ext_rav1e ext_dav1d)
@@ -131,6 +136,19 @@ endif()
 # Incorporate Handbrake's extensions for building x265
 # Multicoreware added detection of SSE2/3/4.1, so we can freely enable them now
 # Also ship their patch for Apple silicon
+if (MSVC)
+    set(x265_LIBDIR "$<CONFIG>/")
+    set(x265_LIBRARY x265-static.lib)
+    set(x265_10bit_LIBRARY x265_main10-static.lib)
+    set(x265_12bit_LIBRARY x265_main12-static.lib)
+    set(x265_EXTRA_LINK_FLAGS /LIBPATH:${EXTPREFIX_heif}/lib)
+else()
+    set(x265_LIBDIR "")
+    set(x265_LIBRARY libx265.a)
+    set(x265_10bit_LIBRARY libx265_main10.a)
+    set(x265_12bit_LIBRARY libx265_main12.a)
+    set(x265_EXTRA_LINK_FLAGS -L${EXTPREFIX_heif}/lib)
+endif()
 ExternalProject_Add(ext_libx265_10bit
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20210203-12666.tar.gz
@@ -146,7 +164,7 @@ ExternalProject_Add(ext_libx265_10bit
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DHIGH_BIT_DEPTH=TRUE -DEXPORT_C_API=FALSE -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main10.a
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${x265_LIBDIR}${x265_LIBRARY} ${EXTPREFIX_heif}/lib/${x265_10bit_LIBRARY}
 )
 ExternalProject_Add(ext_libx265_12bit
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -164,7 +182,7 @@ ExternalProject_Add(ext_libx265_12bit
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} 
     -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main12.a
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${x265_LIBDIR}${x265_LIBRARY} ${EXTPREFIX_heif}/lib/${x265_12bit_LIBRARY}
 )
 ExternalProject_Add(
     ext_libx265
@@ -181,7 +199,7 @@ ExternalProject_Add(
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-rc-versioning.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
 
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE  -DENABLE_HDR10_PLUS=TRUE -DEXTRA_LIB:String=x265_main10.a$<SEMICOLON>x265_main12.a -DEXTRA_LINK_FLAGS:String=-L${EXTPREFIX_heif}/lib -DLINKED_10BIT=TRUE -DLINKED_12BIT=TRUE
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE  -DENABLE_HDR10_PLUS=TRUE -DEXTRA_LIB:String=${x265_10bit_LIBRARY}$<SEMICOLON>${x265_12bit_LIBRARY} -DEXTRA_LINK_FLAGS:String=${x265_EXTRA_LINK_FLAGS} -DLINKED_10BIT=TRUE -DLINKED_12BIT=TRUE
 
     UPDATE_COMMAND ""
 

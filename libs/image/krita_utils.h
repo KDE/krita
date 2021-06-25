@@ -34,9 +34,9 @@ namespace KritaUtils
     QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const QRegion &region, const QSize &patchSize);
     QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const KisRegion &region, const QSize &patchSize);
 
-    KisRegion splitTriangles(const QPointF &center,
+    KRITAIMAGE_EXPORT KisRegion splitTriangles(const QPointF &center,
                                              const QVector<QPointF> &points);
-    KisRegion splitPath(const QPainterPath &path);
+    KRITAIMAGE_EXPORT KisRegion splitPath(const QPainterPath &path);
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
 

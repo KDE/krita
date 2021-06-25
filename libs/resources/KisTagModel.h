@@ -16,7 +16,7 @@
 
 #include "kritaresources_export.h"
 
-class KisAbstractTagModel
+class KRITARESOURCES_EXPORT KisAbstractTagModel
 {
 public:
 

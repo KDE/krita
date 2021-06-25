@@ -127,6 +127,17 @@ KoPatternBackground::~KoPatternBackground()
 {
 }
 
+KoPatternBackground::KoPatternBackground(const KoPatternBackground &rhs)
+    : d(new Private(*rhs.d))
+{
+}
+
+KoPatternBackground& KoPatternBackground::operator=(const KoPatternBackground &rhs)
+{
+    d = rhs.d;
+    return *this;
+}
+
 bool KoPatternBackground::compareTo(const KoShapeBackground *other) const
 {
     Q_UNUSED(other);

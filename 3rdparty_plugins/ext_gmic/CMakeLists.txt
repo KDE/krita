@@ -25,6 +25,7 @@ ExternalProject_Add( ext_gmic_qt
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Refactor-into-a-completely-Krita-native-plugin.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Enable-all-input-modes-for-Krita-plugin.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Update-function-signatures-to-2.9.6.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Add-support-for-MSVC.patch
 
     SOURCE_DIR gmic-qt
     INSTALL_DIR ${PREFIX_ext_gmic}

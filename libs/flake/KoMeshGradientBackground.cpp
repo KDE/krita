@@ -53,6 +53,16 @@ KoMeshGradientBackground::~KoMeshGradientBackground()
 {
 }
 
+KoMeshGradientBackground::KoMeshGradientBackground(const KoMeshGradientBackground &rhs)
+    : d(new Private(*rhs.d))
+{
+}
+KoMeshGradientBackground &KoMeshGradientBackground::operator=(const KoMeshGradientBackground &rhs)
+{
+    d = rhs.d;
+    return *this;
+}
+
 void KoMeshGradientBackground::paint(QPainter &painter,
                                      KoShapePaintingContext &,
                                      const QPainterPath &fillPath) const

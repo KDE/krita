@@ -15,6 +15,7 @@
 #include <KoXmlReader.h>
 #include <FlakeDebug.h>
 #include <QRectF>
+#include <KoMarker.h>
 
 bool KoSvgPaste::hasShapes()
 {

@@ -663,11 +663,11 @@ index 0000000..948a0a0
 +       )
 +
 +IF(MSVC)
-+    INSTALL(FILES ${PROJECT_BINARY_DIR}/raw.pdb
++    INSTALL(FILES $<TARGET_PDB_FILE:raw>
 +            DESTINATION lib
 +            CONFIGURATIONS Debug RelWithDebInfo
 +           )
-+    INSTALL(FILES ${PROJECT_BINARY_DIR}/raw_r.pdb
++    INSTALL(FILES $<TARGET_PDB_FILE:raw_r>
 +            DESTINATION lib
 +            CONFIGURATIONS Debug RelWithDebInfo
 +           )

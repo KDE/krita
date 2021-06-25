@@ -41,7 +41,7 @@ else()
 
     find_library(
         FFTW3_LIBRARY
-        NAMES libfftw3 libfftw3-3 libfftw3f-3 libfftw3l-3
+        NAMES libfftw3 libfftw3-3 libfftw3f-3 libfftw3l-3 fftw3
         DOC "Libraries to link against for FFT Support")
 
     if (FFTW3_LIBRARY)

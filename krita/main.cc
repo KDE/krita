@@ -123,9 +123,15 @@ typedef enum ORIENTATION_PREFERENCE {
     ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED = 0x4,
     ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
 } ORIENTATION_PREFERENCE;
-typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
+#if !defined(_MSC_VER)
+    typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
+            ORIENTATION_PREFERENCE orientation
+            );
+#else
+    typedef BOOL (WINAPI *pSetDisplayAutoRotationPreferences_t)(
         ORIENTATION_PREFERENCE orientation
         );
+#endif()
 void resetRotation()
 {
     QLibrary user32Lib("user32");

@@ -1,7 +1,7 @@
 From 08e7bacd758d0f9dfd81d48e3d0d2c4b0107078c Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 8 Nov 2020 15:39:36 +0000
-Subject: [PATCH 1/5] First working version of the GMic-Qt Krita native plugin
+Subject: [PATCH 1/6] First working version of the GMic-Qt Krita native plugin
 
 ---
  CMakeLists.txt                            |  33 +++

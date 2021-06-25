@@ -12,7 +12,6 @@
 #include "KoColorSpace.h"
 #include "KoCompositeOpRegistry.h"
 #include "KoColorSpaceConstants.h"
-
 #include "kis_image_config.h"
 #include "kis_raster_keyframe_channel.h"
 

@@ -1,7 +1,7 @@
 From 3906087942de38c711dc0077b2c9baf0f1a60e66 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Tue, 10 Nov 2020 02:16:25 +0000
-Subject: [PATCH 2/5] Remove shared segment infrastructure
+Subject: [PATCH 2/6] Remove shared segment infrastructure
 
 ---
  src/Host/KritaPlugin/gmicqttoolplugin.cpp |   8 +-

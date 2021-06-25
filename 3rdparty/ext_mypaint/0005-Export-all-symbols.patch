@@ -1,0 +1,26 @@
+From 6c70f2fba1491b1bedc5c891d3add83b4eac67e3 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 3 Apr 2021 01:45:52 +0000
+Subject: [PATCH 5/5] Export all symbols
+
+---
+ CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f6f198c..0890f7c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -63,6 +63,9 @@ set(mypaint_HEADERS
+ 
+ add_library(mypaint SHARED ${mypaint_SOURCES} ${mypaint_HEADERS})
+ target_link_libraries(mypaint PRIVATE ${JSONC_LIBRARIES})
++if(MSVC)
++    set_property(TARGET mypaint PROPERTY WINDOWS_EXPORT_ALL_SYMBOLS ON)
++endif()
+ set_property(TARGET mypaint PROPERTY C_STANDARD 11)
+ install(TARGETS mypaint
+     EXPORT libmypaintTargets
+-- 
+2.30.1.windows.1
+

@@ -1,17 +1,45 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ed96b33..2f31edc 100644
+index ed96b33..af4e523 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -49,7 +49,11 @@ find_package(ZLIB REQUIRED)
- set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+@@ -1,6 +1,8 @@
+ cmake_minimum_required(VERSION 2.6)
+ project(QuaZip)
  
++include(GNUInstallDirs)
++
+ # CMP0042: Explicitly acknowledge MACOSX_RPATH
+ # (introduced in CMake 2.8.12, enabled by default in CMake 3.0,
+ # and producing a warning when unset since 3.7.1)
+@@ -45,12 +47,8 @@ endif()
+ # Use system zlib on unix and Qt ZLIB on Windows
+ find_package(ZLIB REQUIRED)
+ 
+-# All build libraries are moved to this directory
+-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+-
  set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
 -set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
-+if (WIN32)
-+    set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" CACHE STRING "Library directory name" FORCE)
-+else()
-+    set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
-+endif()
- set(INSTALL_PKGCONFIG_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/pkgconfig" CACHE STRING "Installation directory for pkgconfig (.pc) files" FORCE)
+-set(INSTALL_PKGCONFIG_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/pkgconfig" CACHE STRING "Installation directory for pkgconfig (.pc) files" FORCE)
++set(INSTALL_PKGCONFIG_DIR "${CMAKE_INSTALL_LIBDIR}/pkgconfig" CACHE STRING "Installation directory for pkgconfig (.pc) files" FORCE)
  set(QUAZIP_LIB_TARGET_NAME quazip${QUAZIP_LIB_VERSION_SUFFIX} CACHE
      INTERNAL "Target name of libquazip" FORCE)
+ 
+@@ -62,4 +60,4 @@ if(UNIX AND NOT APPLE)
+ 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/quazip.pc DESTINATION "${INSTALL_PKGCONFIG_DIR}")
+ endif()
+ 
+-install(FILES QuaZipConfig.cmake DESTINATION ${LIB_DESTINATION}/cmake/QuaZip${QUAZIP_LIB_VERSION_SUFFIX} RENAME QuaZip${QUAZIP_LIB_VERSION_SUFFIX}Config.cmake)
++install(FILES QuaZipConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake RENAME QuaZip${QUAZIP_LIB_VERSION_SUFFIX}Config.cmake)
+diff --git a/quazip/CMakeLists.txt b/quazip/CMakeLists.txt
+index 1efb5e2..f39d508 100644
+--- a/quazip/CMakeLists.txt
++++ b/quazip/CMakeLists.txt
+@@ -27,5 +27,5 @@ set_target_properties(${QUAZIP_LIB_TARGET_NAME} quazip_static PROPERTIES VERSION
+ target_link_libraries(${QUAZIP_LIB_TARGET_NAME} ${QT_QTMAIN_LIBRARY} ${QTCORE_LIBRARIES} ${ZLIB_LIBRARIES})
+ target_link_libraries(quazip_static ${QT_QTMAIN_LIBRARY} ${QTCORE_LIBRARIES} ${ZLIB_LIBRARIES})
+ 
+-install(FILES ${PUBLIC_HEADERS} DESTINATION include/quazip${QUAZIP_LIB_VERSION_SUFFIX})
+-install(TARGETS ${QUAZIP_LIB_TARGET_NAME} quazip_static LIBRARY DESTINATION ${LIB_DESTINATION} ARCHIVE DESTINATION ${LIB_DESTINATION} RUNTIME DESTINATION ${LIB_DESTINATION})
++install(FILES ${PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/quazip${QUAZIP_LIB_VERSION_SUFFIX})
++install(TARGETS ${QUAZIP_LIB_TARGET_NAME} quazip_static)

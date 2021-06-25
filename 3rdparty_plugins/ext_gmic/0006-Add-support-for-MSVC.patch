@@ -1,0 +1,186 @@
+From cb8dc9ac0c61ceeb73b9a103e581994401bd4704 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 18 Apr 2021 00:20:31 +0000
+Subject: [PATCH 6/6] Add support for MSVC
+
+---
+ CMakeLists.txt                          | 81 +++++++++++++++++++------
+ cmake/modules/FindFFTW3.cmake           |  2 +-
+ src/FilterParameters/PointParameter.cpp |  2 +-
+ src/FilterSelector/FiltersPresenter.cpp |  2 +-
+ 4 files changed, 67 insertions(+), 20 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 30aa10d..58ceab4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -44,15 +44,19 @@ set (GMIC_LIB_PATH "${GMIC_PATH}" CACHE STRING "Define the path to the GMIC shar
+ option(ENABLE_ASAN "Enable -fsanitize=address (if debug build)" ON)
+ option(ENABLE_FFTW3 "Enable FFTW3 library support" ON)
+ 
+-option(ENABLE_LTO "Enable -flto (Link Time Optimizer) on gcc and clang" ON)
++option(ENABLE_LTO "Enable Link Time Optimizer" ON)
+ 
+-if (WIN32)
+-    message("LTO is disabled (windows platform)")
++if (MSVC)
++  option(ENABLE_CFG "Enable Control Flow Guard (MSVC)" ON)
++endif()
++
++if (WIN32 AND NOT MSVC)
++    message("LTO is disabled (windows platform, not MSVC)")
+     set(ENABLE_LTO OFF)
+ endif()
+ 
+ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+-    set(ENABLE_LTO OFF)
++    set(ENABLE_LTO OFF CACHE INTERNAL "Skip LTO on Debug builds")
+ endif()
+ 
+ 
+@@ -123,6 +127,11 @@ endif()
+ 
+ # Required packages
+ 
++#
++# Threads
++#
++find_package(Threads REQUIRED)
++
+ #
+ # Qt5
+ #
+@@ -203,10 +212,33 @@ endif()
+ # LTO option
+ #
+ 
+-if (ENABLE_LTO AND (CMAKE_COMPILER_IS_GNUCC OR (CMAKE_CSS_COMPILER_IS STREQUAL "Clang")))
++if (ENABLE_LTO)
+     message("Link Time Optimizer enabled")
+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
+-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
++    if (MSVC)
++      string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO}")
++      string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO}")
++      string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO}")
++      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
++      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LTCG")
++      set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /LTCG")
++      set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /LTCG")
++    else()
++      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
++      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
++    endif()
++endif()
++
++#
++# Enable CFG
++#
++if (MSVC)
++    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:4194304")
++    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /STACK:4194304")
++    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /STACK:4194304")
++    if (ENABLE_CFG)
++        add_compile_options(/guard:CF)
++        add_link_options(/GUARD:CF)
++    endif()
+ endif()
+ 
+ #
+@@ -265,9 +297,13 @@ if (WIN32)
+     add_definitions(-Dcimg_display=2)
+     add_definitions(-DPSAPI_VERSION=1)
+     add_definitions(-D_IS_WINDOWS_)
++    if (MSVC)
++      add_definitions(-D_CRT_SECURE_NO_WARNINGS)
++      add_compile_options(/wd4267)
++    endif()
+     set(gmic_qt_LIBRARIES
+         ${gmic_qt_LIBRARIES}
+-        pthread psapi gdi32
++        Threads::Threads psapi gdi32
+     )
+ endif()
+ 
+@@ -282,19 +318,30 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+     endif(ENABLE_ASAN)
+ elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
+     add_definitions(-DQT_NO_DEBUG_OUTPUT)
+-    string(REPLACE "-O2" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+-    string(REPLACE "-O3" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
+-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s")
+-    if (WIN32)
++    if (MSVC)
++      set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /fp:fast /Oi")
++    else()
++      string(REPLACE "-O2" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
++      string(REPLACE "-O3" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
++      set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
++    endif()
++    if (NOT MSVC)
++      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s")
++    endif()
++    if (WIN32 AND NOT MSVC)
+       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mwindows")
+     endif()
+ elseif (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+     add_definitions(-DQT_NO_DEBUG_OUTPUT)
+-    string(REPLACE "-O2" "" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+-    string(REPLACE "-O3" "" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+-    set_source_files_properties(${GMIC_PATH}/gmic.cpp PROPERTIES COMPILE_FLAGS "-Ofast")
+-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2")
++    if(MSVC)
++      string(REPLACE "Ob1" "Ob2" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
++      set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /fp:fast /Oi")
++    else()
++      string(REPLACE "-O2" "" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
++      string(REPLACE "-O3" "" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
++      set_source_files_properties(${GMIC_PATH}/gmic.cpp PROPERTIES COMPILE_FLAGS "-Ofast")
++      set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2")
++    endif()
+ else()
+     message(FATAL_ERROR "Build type not recognized (${CMAKE_BUILD_TYPE})")
+ endif()
+diff --git a/cmake/modules/FindFFTW3.cmake b/cmake/modules/FindFFTW3.cmake
+index 919edb7..6f83b3c 100644
+--- a/cmake/modules/FindFFTW3.cmake
++++ b/cmake/modules/FindFFTW3.cmake
+@@ -62,7 +62,7 @@ else()
+ 
+     find_library(
+         FFTW3_LIBRARY
+-        NAMES libfftw3 libfftw3-3 libfftw3f-3 libfftw3l-3
++        NAMES libfftw3 libfftw3-3 libfftw3f-3 libfftw3l-3 fftw3
+         DOC "Libraries to link against for FFT Support")
+ 
+     if (FFTW3_LIBRARY)
+diff --git a/src/FilterParameters/PointParameter.cpp b/src/FilterParameters/PointParameter.cpp
+index 9dd2ba8..4d99072 100644
+--- a/src/FilterParameters/PointParameter.cpp
++++ b/src/FilterParameters/PointParameter.cpp
+@@ -189,7 +189,7 @@ void PointParameter::setVisibilityState(AbstractParameter::VisibilityState state
+ 
+ void PointParameter::updateView()
+ {
+-  if (not _spinBoxX) {
++  if (!_spinBoxX) {
+     return;
+   }
+   disconnectSpinboxes();
+diff --git a/src/FilterSelector/FiltersPresenter.cpp b/src/FilterSelector/FiltersPresenter.cpp
+index 427cd42..c3e1c43 100644
+--- a/src/FilterSelector/FiltersPresenter.cpp
++++ b/src/FilterSelector/FiltersPresenter.cpp
+@@ -395,7 +395,7 @@ bool FiltersPresenter::danglingFaveIsSelected() const
+   }
+   QString hash = _filtersView->selectedFilterHash();
+   if (_favesModel.contains(hash)) {
+-    return not _filtersModel.contains(_favesModel.getFaveFromHash(hash).originalHash());
++    return !_filtersModel.contains(_favesModel.getFaveFromHash(hash).originalHash());
+   }
+   return false;
+ }
+-- 
+2.31.1.windows.1
+

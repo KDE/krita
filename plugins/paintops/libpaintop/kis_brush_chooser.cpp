@@ -343,9 +343,6 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
 {
     QString animatedBrushTipSelectionMode; // incremental, random, etc
 
-    KisColorfulBrush* oldColorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
-    bool oldBrushIsRGBA = oldColorfulBrush && oldColorfulBrush->isImageType();
-
     {
         KisBrushSP brush = resource.dynamicCast<KisBrush>();
         m_brush = brush; //don't clone, because we want changes to persist during session
@@ -390,12 +387,6 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
             m_brush->setAngle(brushRotationAngleSelector->angle() * M_PI / 180);
             m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
             m_brush->setUserEffectiveSize(brushSizeSpinBox->value());
-
-            //preserve brush mode
-            KisColorfulBrush* colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
-            if (m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->isImageType() && oldBrushIsRGBA) {
-                m_brush->setBrushApplication(enumBrushApplication(cmbBrushMode->currentIndex()));
-            }
         }
 
         brushSpacingSelectionWidget->setSpacing(m_brush->autoSpacingActive(),

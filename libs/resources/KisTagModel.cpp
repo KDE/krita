@@ -540,7 +540,7 @@ KisTagModel::KisTagModel(const QString &type, QObject *parent)
     , d(new Private())
 {
     setSourceModel(KisResourceModelProvider::tagModel(type));
-
+    sort(KisAllTagsModel::Name);
 }
 
 KisTagModel::~KisTagModel()

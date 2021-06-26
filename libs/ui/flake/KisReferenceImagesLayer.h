@@ -50,11 +50,12 @@ public:
 
     KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
 
-    bool getLock();
+    bool lock();
     void setLock(bool, KoCanvasBase*);
-    QTransform getLockedFlakeToWidgetTransform();
-    QTransform getLockedDocToViewTransform();
-    QTransform getImageToWidgetTransform();
+    QTransform lockedFlakeToWidgetTransform();
+    QTransform lockedDocToViewTransform();
+    QTransform lockedImageToWidgetTransform();
+    QTransform lockedDocToWidgetTransform();
 
 Q_SIGNALS:
     /**
@@ -69,10 +70,11 @@ private:
     friend struct RemoveReferenceImagesCommand;
     friend class ReferenceImagesCanvas;
 
-    bool lock;
-    QTransform lockedFlakeToWidgetTransform;
-    QTransform lockedDocToViewTransform;
-    QTransform lockedImageToWidgetTransform;
+    bool m_lock;
+    QTransform m_lockedFlakeToWidgetTransform;
+    QTransform m_lockedDocToViewTransform;
+    QTransform m_lockedImageToWidgetTransform;
+    QTransform m_lockedDocToWidgetTransform;
 };
 
 typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;

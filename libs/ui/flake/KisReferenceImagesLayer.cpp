@@ -124,12 +124,12 @@ private:
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
-    , lock(false)
+    , m_lock(false)
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
     : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
-    , lock(false)
+    , m_lock(false)
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)
@@ -169,8 +169,8 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter)
 {
-    if(lock) {
-        painter.setTransform(lockedDocToViewTransform, true);
+    if(m_lock) {
+        painter.setTransform(m_lockedDocToViewTransform, true);
     }
     else {
         painter.setTransform(converter()->documentToView(), true);
@@ -244,9 +244,9 @@ KisHandlePainterHelper KisReferenceImagesLayer::createHandlePainterHelperView(QP
 {
     const QTransform originalPainterTransform = painter->transform();
 
-    if(lock) {
+    if(m_lock) {
         painter->setTransform(shape->absoluteTransformation() *
-                              lockedDocToViewTransform *
+                              m_lockedDocToViewTransform *
                               painter->transform());
     }
     else {
@@ -259,33 +259,33 @@ KisHandlePainterHelper KisReferenceImagesLayer::createHandlePainterHelperView(QP
     return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);
 }
 
-bool KisReferenceImagesLayer::getLock()
+bool KisReferenceImagesLayer::lock()
 {
-     return lock;
+     return m_lock;
 }
 
 void KisReferenceImagesLayer::setLock(bool val, KoCanvasBase* canvas)
 {
-    lock = val;
+    m_lock = val;
     if(val) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-        lockedFlakeToWidgetTransform = kisCanvas->coordinatesConverter()->flakeToWidgetTransform();
-        lockedDocToViewTransform = converter()->documentToView();
-        lockedImageToWidgetTransform = kisCanvas->coordinatesConverter()->imageToWidgetTransform();
+        m_lockedFlakeToWidgetTransform = kisCanvas->coordinatesConverter()->flakeToWidgetTransform();
+        m_lockedDocToViewTransform = converter()->documentToView();
+        m_lockedImageToWidgetTransform = kisCanvas->coordinatesConverter()->imageToWidgetTransform();
     }
 }
 
-QTransform KisReferenceImagesLayer::getLockedFlakeToWidgetTransform()
+QTransform KisReferenceImagesLayer::lockedFlakeToWidgetTransform()
 {
-    return lockedFlakeToWidgetTransform;
+    return m_lockedFlakeToWidgetTransform;
 }
 
-QTransform KisReferenceImagesLayer::getLockedDocToViewTransform()
+QTransform KisReferenceImagesLayer::lockedDocToViewTransform()
 {
-    return lockedDocToViewTransform;
+    return m_lockedDocToViewTransform;
 }
 
-QTransform KisReferenceImagesLayer::getImageToWidgetTransform()
+QTransform KisReferenceImagesLayer::lockedImageToWidgetTransform()
 {
-    return lockedImageToWidgetTransform;
+    return m_lockedImageToWidgetTransform;
 }

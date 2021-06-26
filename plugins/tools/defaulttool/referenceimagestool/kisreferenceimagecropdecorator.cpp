@@ -1,109 +1,60 @@
+#include <QPainter>
+
 #include "kisreferenceimagecropdecorator.h"
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include "kis_canvas2.h"
-
-#include <QPainter>
+#include "KisHandlePainterHelper.h"
 
 KisReferenceImageCropDecorator::KisReferenceImageCropDecorator()
-    : mHandleSize(10)
 {
-
 }
 
-void KisReferenceImageCropDecorator::setReferenceImage(KisReferenceImage *r)
+void KisReferenceImageCropDecorator::setReferenceImage(KisReferenceImage *referenceImage)
 {
-    mReference = r;
-    mCropBorderRect = r->getCropRect();
+    m_referenceImage = referenceImage;
+    m_cropBorderRect = referenceImage->cropRect();
 }
 
 void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &converter, KoCanvasBase *canvas)
 {
-    if(!mReference) {
+    if(!m_referenceImage) {
         return;
     }
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-    const KisCoordinatesConverter *conv = kisCanvas->coordinatesConverter();
+    const KisCoordinatesConverter *coordinateConverter = kisCanvas->coordinatesConverter();
 
     gc.save();
 
-    QRectF shapeRect = converter.documentToView(mReference->boundingRect());
-    QRectF borderRect = conv->imageToDocument(mCropBorderRect);
-    mCropBorderRect = converter.documentToView(borderRect);
+    QRectF shapeRect = converter.documentToView(m_referenceImage->boundingRect());
+    QRectF borderRect = coordinateConverter->imageToDocument(m_cropBorderRect);
+    m_cropBorderRect = converter.documentToView(borderRect);
 
     QPainterPath path;
 
     path.addRect(shapeRect);
-    path.addRect(mCropBorderRect);
+    path.addRect(m_cropBorderRect);
     gc.setPen(Qt::NoPen);
     gc.setBrush(QColor(0, 0, 0, 200));
     gc.drawPath(path);
 
-    // Handles
-    QPen pen(Qt::SolidLine);
-    pen.setWidth(1);
-    pen.setColor(Qt::black);
-    gc.setPen(pen);
-    gc.setBrush(QColor(200, 200, 200, 200));
-    gc.drawPath(handlesPath());
+    KisHandlePainterHelper helper =
+            KoShape::createHandlePainterHelperView(&gc, m_referenceImage, converter, 5);
+    helper.setHandleStyle(KisHandleStyle::primarySelection());
 
+    QPolygonF outline = coordinateConverter->viewToDocument(m_referenceImage->cropRect());
+
+    {
+        helper.drawHandleRect(outline.value(0));
+        helper.drawHandleRect(outline.value(1));
+        helper.drawHandleRect(outline.value(2));
+        helper.drawHandleRect(outline.value(3));
+        helper.drawHandleRect(0.5 * (outline.value(0) + outline.value(1)));
+        helper.drawHandleRect(0.5 * (outline.value(1) + outline.value(2)));
+        helper.drawHandleRect(0.5 * (outline.value(2) + outline.value(3)));
+        helper.drawHandleRect(0.5 * (outline.value(3) + outline.value(0)));
+    }
     gc.restore();
 
-}
-
-QPainterPath KisReferenceImageCropDecorator::handlesPath()
-{
-    QPainterPath path;
-
-    path.addRect(upperLeftHandleRect());
-    path.addRect(upperRightHandleRect());
-    path.addRect(lowerLeftHandleRect());
-    path.addRect(lowerRightHandleRect());
-    path.addRect(upperHandleRect());
-    path.addRect(lowerHandleRect());
-    path.addRect(leftHandleRect());
-    path.addRect(rightHandleRect());
-
-    return path;
-}
-
-QRectF KisReferenceImageCropDecorator::lowerRightHandleRect()
-{
-    return QRectF(mCropBorderRect.right() - mHandleSize / 2.0, mCropBorderRect.bottom() - mHandleSize / 2.0, mHandleSize, mHandleSize);
-}
-
-QRectF KisReferenceImageCropDecorator::upperRightHandleRect()
-{
-    return QRectF(mCropBorderRect.right() - mHandleSize / 2.0 , mCropBorderRect.top() - mHandleSize / 2.0, mHandleSize, mHandleSize);
-}
-
-QRectF KisReferenceImageCropDecorator::lowerLeftHandleRect()
-{
-    return QRectF(mCropBorderRect.left() - mHandleSize / 2.0 , mCropBorderRect.bottom() - mHandleSize / 2.0, mHandleSize, mHandleSize);
-}
-
-QRectF KisReferenceImageCropDecorator::upperLeftHandleRect()
-{
-    return QRectF(mCropBorderRect.left() - mHandleSize / 2.0, mCropBorderRect.top() - mHandleSize / 2.0, mHandleSize, mHandleSize);
-}
-
-QRectF KisReferenceImageCropDecorator::lowerHandleRect()
-{
-    return QRectF(mCropBorderRect.left() + (mCropBorderRect.width() - mHandleSize) / 2.0 , mCropBorderRect.bottom() - mHandleSize / 2.0, mHandleSize, mHandleSize);
-}
-
-QRectF KisReferenceImageCropDecorator::rightHandleRect()
-{
-    return QRectF(mCropBorderRect.right() - mHandleSize / 2.0 , mCropBorderRect.top() + (mCropBorderRect.height() - mHandleSize) / 2.0, mHandleSize, mHandleSize);
-}
-
-QRectF KisReferenceImageCropDecorator::upperHandleRect()
-{
-    return QRectF(mCropBorderRect.left() + (mCropBorderRect.width() - mHandleSize) / 2.0 , mCropBorderRect.top() - mHandleSize / 2.0, mHandleSize, mHandleSize);
-}
-
-QRectF KisReferenceImageCropDecorator::leftHandleRect()
-{
-    return QRectF(mCropBorderRect.left() - mHandleSize / 2.0, mCropBorderRect.top() + (mCropBorderRect.height() - mHandleSize) / 2.0, mHandleSize, mHandleSize);
 }

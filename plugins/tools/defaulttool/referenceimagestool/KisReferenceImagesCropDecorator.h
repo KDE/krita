@@ -16,9 +16,15 @@ public:
 
     void setReferenceImage(KisReferenceImage *reference);
 
+    void setBorderRect(QRectF);
+
+    QPainterPath handlesPath();
+
 private:
-    KisReferenceImage* m_referenceImage;
-    QRectF m_cropBorderRect;
+    KisReferenceImage* mReference;
+    int mHandleSize;
+    QRectF mCropBorderRect;
+
 };
 
 #endif // KISREFERENCEIMAGECROPDECORATOR_H

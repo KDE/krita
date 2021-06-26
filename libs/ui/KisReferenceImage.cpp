@@ -47,6 +47,9 @@ struct KisReferenceImage::Private : public QSharedData
     QImage cachedImage;
     KisQImagePyramid mipmap;
 
+    QRectF cropRect;
+    bool crop{false};
+
     qreal saturation{1.0};
     int id{-1};
     bool embed{true};
@@ -149,7 +152,6 @@ void KisReferenceImage::SetSaturationCommand::redo()
 
 KisReferenceImage::KisReferenceImage()
     : d(new Private())
-    , enableCrop(false)
 {
     setKeepAspectRatio(true);
 }
@@ -406,74 +408,25 @@ KoShape *KisReferenceImage::cloneShape() const
     return new KisReferenceImage(*this);
 }
 
-qreal KisReferenceImage::cropX() const
+bool KisReferenceImage::cropEnabled()
 {
-    return cropRect.x();
+    return d->crop;
 }
 
-qreal KisReferenceImage::cropY() const
+void KisReferenceImage::setCrop(bool v)
 {
-    return cropRect.y();
-}
-
-qreal KisReferenceImage::cropWidth() const
-{
-    return cropRect.width();
-}
-
-qreal KisReferenceImage::cropHeight() const
-{
-    return cropRect.height();
-}
-
-bool KisReferenceImage::isCropEnabled()
-{
-    return enableCrop;
-
-}
-
-void KisReferenceImage::setCropX(qreal x)
-{
-    QPointF offset = cropRect.topLeft();
-    offset.setX(x);
-    cropRect.moveTo(offset);
-}
-
-void KisReferenceImage::setCropY(qreal y)
-{
-    QPointF offset = cropRect.topLeft();
-    offset.setX(y);
-    cropRect.moveTo(offset);
-}
-
-void KisReferenceImage::setCropWidth(qreal w)
-{
-    QSizeF size = cropRect.size();
-    size.setWidth(w);
-    cropRect.setSize(size);
-}
-
-void KisReferenceImage::setCropHeight(qreal h)
-{
-    QSizeF size = cropRect.size();
-    size.setWidth(h);
-    cropRect.setSize(size);
-}
-
-void KisReferenceImage::setEnableCrop(bool v)
-{
-    enableCrop = v;
+    d->crop = v;
     if(v) {
-        cropRect.setSize(this->size());
+       d->cropRect.setSize(this->size());
     }
 }
 
-QRectF KisReferenceImage::getCropRect()
+QRectF KisReferenceImage::cropRect()
 {
-    return cropRect;
+    return d->cropRect;
 }
 
 void KisReferenceImage::setCropRect(QRectF rect)
 {
-    cropRect = rect;
+   d->cropRect = rect;
 }

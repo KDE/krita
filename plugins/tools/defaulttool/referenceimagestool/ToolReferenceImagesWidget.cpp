@@ -64,36 +64,36 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->sldOffsetX->setPrefixes(i18n("X: "), i18n("X [*varies*]: "));
     d->ui->sldOffsetX->setValueGetter(
         [](KoShape *s){
-            auto *r = dynamic_cast<KisReferenceImage*>(s);
+            KisReferenceImage *r = dynamic_cast<KisReferenceImage*>(s);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(r, 0.0);
-            return r->cropX();
+            return r->cropRect().x();
         }
     );
 
     d->ui->sldOffsetY->setPrefixes(i18n("Y: "), i18n("Y [*varies*]: "));
     d->ui->sldOffsetY->setValueGetter(
         [](KoShape *s){
-            auto *r = dynamic_cast<KisReferenceImage*>(s);
+            KisReferenceImage *r = dynamic_cast<KisReferenceImage*>(s);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(r, 0.0);
-            return r->cropY();
+            return r->cropRect().y();
         }
     );
 
     d->ui->sldWidth->setPrefixes(i18n("W: "), i18n("W [*varies*]: "));
     d->ui->sldWidth->setValueGetter(
         [](KoShape *s){
-            auto *r = dynamic_cast<KisReferenceImage*>(s);
+            KisReferenceImage *r = dynamic_cast<KisReferenceImage*>(s);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(r, 0.0);
-            return r->cropWidth();
+            return r->cropRect().width();
         }
     );
 
     d->ui->sldHeight->setPrefixes(i18n("H: "), i18n("H [*varies*]: "));
     d->ui->sldHeight->setValueGetter(
         [](KoShape *s){
-            auto *r = dynamic_cast<KisReferenceImage*>(s);
+            KisReferenceImage *r = dynamic_cast<KisReferenceImage*>(s);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(r, 0.0);
-            return r->cropHeight();
+            return r->cropRect().height();
         }
     );
 
@@ -123,7 +123,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
 
     d->ui->bnCrop->setVisible(false);
     d->ui->bnCrop->setCheckable(true);
-    d->ui->bnCrop->setToolTip(i18n("Enable Crop"));
+    d->ui->bnCrop->setToolTip(i18n("Crop selected Reference Image"));
     d->ui->bnCrop->setIcon(KisIconUtils::loadIcon("tool_crop"));
     d->ui->bnCrop->setIconSize(QSize(16, 16));
 
@@ -147,7 +147,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
 
     KisSignalCompressor *cropCompressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
-    connect(compressor, SIGNAL(timeout()), this, SLOT(slotCropValuesChanged()));
+    connect(cropCompressor, SIGNAL(timeout()), this, SLOT(slotCropValuesChanged()));
 
     connect(d->ui->sldOffsetX, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
     connect(d->ui->sldOffsetY, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
@@ -293,7 +293,7 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
     bool enable = d->ui->bnCrop->isChecked();
     d->ui->grpCrop->setVisible(enable);
 
-    ref->setEnableCrop(enable);
+    ref->setCrop(enable);
     if(enable && ref) {
         updateCropSliders();
     }
@@ -309,10 +309,12 @@ void ToolReferenceImagesWidget::slotCropValuesChanged()
 {
     KisReferenceImage *ref = d->tool->getActiveReferenceImage();
     if(ref) {
-        ref->setCropX(d->ui->sldOffsetX->value());
-        ref->setCropY(d->ui->sldOffsetY->value());
-        ref->setCropWidth(d->ui->sldWidth->value());
-        ref->setCropHeight(d->ui->sldHeight->value());
+
+        qreal x = d->ui->sldOffsetX->value();
+        qreal y = d->ui->sldOffsetY->value();
+        qreal width = d->ui->sldWidth->value();
+        qreal height = d->ui->sldHeight->value();
+        ref->setCropRect(QRectF(x, y, width, height));
     }
 }
 
@@ -332,7 +334,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
 
     KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
     if(layer) {
-        d->ui->bnLock->setChecked(layer->getLock());
+        d->ui->bnLock->setChecked(layer->lock());
         d->ui->bnLock->setIcon(d->ui->bnLock->isChecked() ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     }
     if (hasSelection) {
@@ -387,13 +389,13 @@ void ToolReferenceImagesWidget::updateCropSliders()
     d->ui->sldWidth->setSelection(shape);
     d->ui->sldWidth->setRange(0,rect.width());
     d->ui->sldWidth->blockSignals(true);
-    d->ui->sldWidth->setValue(ref->cropWidth());
+    d->ui->sldWidth->setValue(ref->cropRect().width());
     d->ui->sldWidth->blockSignals(false);
 
     d->ui->sldHeight->setSelection(shape);
     d->ui->sldHeight->setRange(0,rect.height());
     d->ui->sldHeight->blockSignals(true);
-    d->ui->sldHeight->setValue(ref->cropHeight());
+    d->ui->sldHeight->setValue(ref->cropRect().height());
     d->ui->sldHeight->blockSignals(false);
 }
 

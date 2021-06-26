@@ -179,7 +179,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 KisHandlePainterHelper SelectionDecorator::createHandle(QPainter *painter, KoShape *shape, const KoViewConverter &converter)
 {
     KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
-    if(reference && m_referenceImagesLayer->getLock())
+    if(reference && m_referenceImagesLayer->lock())
     {
         m_applyScaling = false;
     }

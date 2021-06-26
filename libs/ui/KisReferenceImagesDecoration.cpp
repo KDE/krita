@@ -53,8 +53,8 @@ private:
     {
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         QTransform transform;
-        if(layer->getLock()) {
-            transform = layer->getImageToWidgetTransform();
+        if(layer->lock()) {
+            transform = layer->lockedImageToWidgetTransform();
         }
         else {
             transform = viewConverter->imageToWidgetTransform();

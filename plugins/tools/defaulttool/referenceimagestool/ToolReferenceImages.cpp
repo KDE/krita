@@ -71,14 +71,14 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
 {
     KisReferenceImage* ref = getActiveReferenceImage();
 
-    if(ref && ref->isCropEnabled()) {
+    if(ref && ref->cropEnabled()) {
       m_cropDecorator->setReferenceImage(ref);
       m_cropDecorator->paint(painter, converter ,canvas());
 
     }
     else {
-        if(m_layer && m_layer->getLock()) {
-            painter.setTransform(m_layer->getLockedFlakeToWidgetTransform());
+        if(m_layer && m_layer->lock()) {
+            painter.setTransform(m_layer->lockedFlakeToWidgetTransform());
         }
     DefaultTool::paint(painter,converter);
     }
@@ -87,7 +87,7 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
 KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event)
 {
     KisReferenceImage* ref = getActiveReferenceImage();
-    if(!ref->isCropEnabled()) {
+    if(!ref->cropEnabled()) {
         return DefaultTool::createStrategy(event);
     }
     return 0;

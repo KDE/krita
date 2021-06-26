@@ -13,6 +13,7 @@
 #include <cstring>
 #include <limits>
 #include <tiffio.h>
+#include <type_traits>
 
 #include <kis_buffer_stream.h>
 #include <kis_debug.h>
@@ -348,10 +349,21 @@ private:
             T *d = reinterpret_cast<T *>(it->rawData());
             quint8 i;
             for (i = 0; i < this->nbColorsSamples(); i++) {
-                if (no_coeff) {
-                    d[this->poses()[i]] = static_cast<T>(tiffstream->nextValue());
+                if (sampleFormat() == SAMPLEFORMAT_INT) {
+                    T value;
+                    const typename std::make_signed<T>::type v = static_cast<typename std::make_signed<T>::type>(tiffstream->nextValue());
+                    value = v + (std::numeric_limits<T>::max() / 2) + 1;
+                    if (no_coeff) {
+                        d[this->poses()[i]] = static_cast<T>(value);
+                    } else {
+                        d[this->poses()[i]] = static_cast<T>(value * coeff);
+                    }
                 } else {
-                    d[this->poses()[i]] = static_cast<T>(tiffstream->nextValue() * coeff);
+                    if (no_coeff) {
+                        d[this->poses()[i]] = static_cast<T>(tiffstream->nextValue());
+                    } else {
+                        d[this->poses()[i]] = static_cast<T>(tiffstream->nextValue() * coeff);
+                    }
                 }
             }
             this->postProcessor()->postProcess(d);
@@ -361,7 +373,22 @@ private:
             d[this->poses()[i]] = m_alphaValue;
             for (quint8 k = 0; k < this->nbExtraSamples(); k++) {
                 if (k == this->alphaPos()) {
-                    d[this->poses()[i]] = no_coeff ? static_cast<T>(tiffstream->nextValue()) : static_cast<T>(tiffstream->nextValue() * coeff);
+                    if (sampleFormat() == SAMPLEFORMAT_INT) {
+                        T value;
+                        const typename std::make_signed<T>::type v = static_cast<typename std::make_signed<T>::type>(tiffstream->nextValue());
+                        value = v + (std::numeric_limits<T>::max() / 2) + 1;
+                        if (no_coeff) {
+                            d[this->poses()[i]] = static_cast<T>(value);
+                        } else {
+                            d[this->poses()[i]] = static_cast<T>(value * coeff);
+                        }
+                    } else {
+                        if (no_coeff) {
+                            d[this->poses()[i]] = static_cast<T>(tiffstream->nextValue());
+                        } else {
+                            d[this->poses()[i]] = static_cast<T>(tiffstream->nextValue() * coeff);
+                        }
+                    }
                 } else {
                     tiffstream->nextValue();
                 }

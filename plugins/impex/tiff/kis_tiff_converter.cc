@@ -49,6 +49,10 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype, uint16_t 
     const int bits16 = 16;
     const int bits8 = 8;
 
+    if (sampletype == SAMPLEFORMAT_INT) {
+        dbgFile << "Detected signed TIFF image" << color_type << color_nb_bits;
+    }
+
     if (color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK) {
         if (nbchannels == 0)
             nbchannels = 1;

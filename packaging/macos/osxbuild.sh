@@ -587,7 +587,6 @@ fix_boost_rpath () {
     export -f log_cmd
 
     print_msg "Fixing boost in... ${KIS_INSTALL_DIR}"
-    # install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $BUILDROOT/$KRITA_INSTALL/bin/krita.app/Contents/MacOS/gmic_krita_qt
     # log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
     # echo "Added rpath ${KIS_INSTALL_DIR}/lib to krita bin"
     # install_name_tool -add_rpath ${BUILDROOT}/deps/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita

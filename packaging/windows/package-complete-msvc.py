@@ -311,16 +311,9 @@ if os.path.isdir(f"{KRITA_INSTALL_DIR}\\lib\\qml"):
     # This doesn't really seem to do anything
     QMLDIR_ARGS.extend(["--qmldir", f"{KRITA_INSTALL_DIR}\\lib\\qml"])
 
-WINDEPLOYQT_GMIC_ARGS = ""
-
-if os.path.isfile(f"{DEPS_INSTALL_DIR}\\bin\\gmic_krita_qt.exe"):
-    shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\gmic_krita_qt.exe",
-                f"{pkg_root}\\bin")
-    WINDEPLOYQT_GMIC_ARGS = f"{pkg_root}\\bin\\gmic_krita_qt.exe"
-
 # windeployqt
 subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
-               "-xml", "-sql", "-multimedia", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", WINDEPLOYQT_GMIC_ARGS], check=True)
+               "-xml", "-sql", "-multimedia", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe"], check=True)
 
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):

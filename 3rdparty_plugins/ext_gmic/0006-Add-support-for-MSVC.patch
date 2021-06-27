@@ -1,7 +1,7 @@
 From cb8dc9ac0c61ceeb73b9a103e581994401bd4704 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 18 Apr 2021 00:20:31 +0000
-Subject: [PATCH 6/6] Add support for MSVC
+Subject: [PATCH 6/9] Add support for MSVC
 
 ---
  CMakeLists.txt                          | 81 +++++++++++++++++++------

@@ -1,7 +1,7 @@
 From 76f9bfab2269686e9cbebf68dc0ea01727c7755a Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Wed, 11 Nov 2020 17:05:57 +0000
-Subject: [PATCH 3/6] Refactor into a completely Krita native plugin
+Subject: [PATCH 3/9] Refactor into a completely Krita native plugin
 
 ---
  CMakeLists.txt                             | 33 +++++++++++++++++-----

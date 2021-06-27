@@ -15,6 +15,7 @@
 #include <QFileInfo>
 #include <QImageReader>
 #include <QUrl>
+#include <QPainterPath>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QColorSpace>
@@ -34,6 +35,7 @@
 
 #include <KisDocument.h>
 #include <KisPart.h>
+#include <KoClipPath.h>
 
 struct KisReferenceImage::Private : public QSharedData
 {
@@ -154,6 +156,7 @@ KisReferenceImage::KisReferenceImage()
     : d(new Private())
 {
     setKeepAspectRatio(true);
+    d->cropRect.setSize(size());
 }
 
 KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)
@@ -234,7 +237,8 @@ void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintconte
     } else {
         gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     }
-    gc.setClipRect(QRectF(QPointF(), shapeSize), Qt::IntersectClip);
+
+    gc.setClipRect(d->cropRect, Qt::IntersectClip);
     gc.setTransform(transform, true);
     gc.drawImage(QPoint(), prescaled);
 
@@ -417,7 +421,7 @@ void KisReferenceImage::setCrop(bool v)
 {
     d->crop = v;
     if(v) {
-       d->cropRect.setSize(this->size());
+       d->cropRect.setSize(size());
     }
 }
 
@@ -429,4 +433,5 @@ QRectF KisReferenceImage::cropRect()
 void KisReferenceImage::setCropRect(QRectF rect)
 {
    d->cropRect = rect;
+   update();
 }

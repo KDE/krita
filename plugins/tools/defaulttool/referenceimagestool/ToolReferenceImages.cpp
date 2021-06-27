@@ -69,7 +69,7 @@ void ToolReferenceImages::deactivate()
 
 void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    KisReferenceImage* ref = getActiveReferenceImage();
+    /*KisReferenceImage* ref = getActiveReferenceImage();
 
     if(ref && ref->cropEnabled()) {
       m_cropDecorator->setReferenceImage(ref);
@@ -79,18 +79,14 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
     else {
         if(m_layer && m_layer->lock()) {
             painter.setTransform(m_layer->lockedFlakeToWidgetTransform());
-        }
+        }*/
     DefaultTool::paint(painter,converter);
-    }
+  //  }
 }
 
 KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event)
 {
-    KisReferenceImage* ref = getActiveReferenceImage();
-    if(!ref->cropEnabled()) {
-        return DefaultTool::createStrategy(event);
-    }
-    return 0;
+    return DefaultTool::createStrategy(event);
 }
 
 void ToolReferenceImages::slotNodeAdded(KisNodeSP node)

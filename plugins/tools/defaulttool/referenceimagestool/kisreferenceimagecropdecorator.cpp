@@ -43,7 +43,7 @@ void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &
             KoShape::createHandlePainterHelperView(&gc, m_referenceImage, converter, 5);
     helper.setHandleStyle(KisHandleStyle::primarySelection());
 
-    QPolygonF outline = coordinateConverter->viewToDocument(m_referenceImage->cropRect());
+    QPolygonF outline = m_referenceImage->cropRect();
 
     {
         helper.drawHandleRect(outline.value(0));

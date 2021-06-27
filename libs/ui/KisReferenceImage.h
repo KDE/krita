@@ -13,6 +13,7 @@
 #include <kritaui_export.h>
 #include <KoTosContainer.h>
 #include <KoColor.h>
+#include <KoCanvasBase.h>
 
 class QImage;
 class QPointF;

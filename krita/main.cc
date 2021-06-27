@@ -56,6 +56,8 @@
 #include <kis_image_config.h>
 #include "KisUiFont.h"
 
+#include <KLocalizedTranslator>
+
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #endif
@@ -724,6 +726,17 @@ void removeInstalledTranslators(KisApplication &app)
     dbgLocale << "Removed" << translators.size() << "QTranslator's";
 }
 
+void installPythonPluginUITranslator(KisApplication &app)
+{
+    // Install a KLocalizedTranslator, so that when the bundled Python plugins
+    // load their UI files using uic.loadUi() it can be translated.
+    // These UI files must specify "pykrita_plugin_ui" as their class names.
+    KLocalizedTranslator *translator = new KLocalizedTranslator(&app);
+    translator->setTranslationDomain(QStringLiteral("krita"));
+    translator->addContextToMonitor(QStringLiteral("pykrita_plugin_ui"));
+    app.installTranslator(translator);
+}
+
 void installQtTranslations(KisApplication &app)
 {
     QStringList qtCatalogs = {
@@ -828,6 +841,7 @@ void installEcmTranslations(KisApplication &app)
 void installTranslators(KisApplication &app)
 {
     removeInstalledTranslators(app);
+    installPythonPluginUITranslator(app);
     installQtTranslations(app);
     installEcmTranslations(app);
 }

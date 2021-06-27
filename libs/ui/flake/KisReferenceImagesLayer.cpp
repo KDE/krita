@@ -267,12 +267,14 @@ bool KisReferenceImagesLayer::lock()
 void KisReferenceImagesLayer::setLock(bool val, KoCanvasBase* canvas)
 {
     m_lock = val;
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
     if(val) {
-        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-        m_lockedFlakeToWidgetTransform = kisCanvas->coordinatesConverter()->flakeToWidgetTransform();
         m_lockedDocToViewTransform = converter()->documentToView();
         m_lockedImageToWidgetTransform = kisCanvas->coordinatesConverter()->imageToWidgetTransform();
+        m_lockedDocToWidgetTransform = kisCanvas->coordinatesConverter()->documentToWidgetTransform();
+        m_lockedFlakeToWidgetTransform = kisCanvas->coordinatesConverter()->flakeToWidgetTransform();
     }
+    canvas->updateCanvas(kisCanvas->imageView()->rect());
 }
 
 QTransform KisReferenceImagesLayer::lockedFlakeToWidgetTransform()
@@ -288,4 +290,9 @@ QTransform KisReferenceImagesLayer::lockedDocToViewTransform()
 QTransform KisReferenceImagesLayer::lockedImageToWidgetTransform()
 {
     return m_lockedImageToWidgetTransform;
+}
+
+QTransform KisReferenceImagesLayer::lockedDocToWidgetTransform()
+{
+    return m_lockedDocToWidgetTransform;
 }

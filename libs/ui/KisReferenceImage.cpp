@@ -238,7 +238,8 @@ void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintconte
         gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     }
 
-    gc.setClipRect(d->cropRect, Qt::IntersectClip);
+    //gc.setClipRect(d->cropRect, Qt::IntersectClip); Fix this with scaling
+    gc.setClipRect(QRectF(QPointF(), shapeSize), Qt::IntersectClip);
     gc.setTransform(transform, true);
     gc.drawImage(QPoint(), prescaled);
 

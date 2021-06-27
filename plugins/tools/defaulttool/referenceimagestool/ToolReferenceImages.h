@@ -39,6 +39,8 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     void mouseDoubleClickEvent(KoPointerEvent */*event*/) override {}
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
 
     void deleteSelection() override;
 

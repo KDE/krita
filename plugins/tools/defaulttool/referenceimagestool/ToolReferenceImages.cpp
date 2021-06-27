@@ -36,6 +36,7 @@
 #include "KisReferenceImageCollection.h"
 #include "KisReferenceImage.h"
 #include "kisreferenceimagecropdecorator.h"
+#include "KisReferenceImagesLayer.h"
 
 ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
     : DefaultTool(canvas, false)
@@ -62,6 +63,29 @@ void ToolReferenceImages::activate(const QSet<KoShape*> &shapes)
     }
 }
 
+void ToolReferenceImages::mousePressEvent(KoPointerEvent *event)
+{
+    if(m_layer && m_layer->lock()) {
+        QPointF newPos = m_layer->lockedDocToWidgetTransform().inverted().map(event->pos());
+        KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
+        DefaultTool::mousePressEvent(newEvent);
+        return;
+    }
+    DefaultTool::mousePressEvent(event);
+}
+
+void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
+{
+    if(m_layer && m_layer->lock()) {
+        QPointF newPos = m_layer->lockedDocToWidgetTransform().inverted().map(event->pos());
+        KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
+        DefaultTool::mouseMoveEvent(newEvent);
+        koSelection()->update();
+        return;
+    }
+    DefaultTool::mouseMoveEvent(event);
+}
+
 void ToolReferenceImages::deactivate()
 {
     DefaultTool::deactivate();
@@ -69,19 +93,18 @@ void ToolReferenceImages::deactivate()
 
 void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    /*KisReferenceImage* ref = getActiveReferenceImage();
+    if(m_layer && m_layer->lock()) {
+        painter.setTransform(m_layer->lockedFlakeToWidgetTransform());
+    }
+    KisReferenceImage* ref = getActiveReferenceImage();
 
     if(ref && ref->cropEnabled()) {
       m_cropDecorator->setReferenceImage(ref);
       m_cropDecorator->paint(painter, converter ,canvas());
-
     }
     else {
-        if(m_layer && m_layer->lock()) {
-            painter.setTransform(m_layer->lockedFlakeToWidgetTransform());
-        }*/
     DefaultTool::paint(painter,converter);
-  //  }
+    }
 }
 
 KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event)

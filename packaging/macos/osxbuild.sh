@@ -309,7 +309,8 @@ build_3rdparty () {
         -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
         -DINSTALL_ROOT=${KIS_INSTALL_DIR} \
-        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}
+        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
+        -DAPPLE=1
 
         # -DCPPFLAGS=-I${KIS_INSTALL_DIR}/include \
         # -DLDFLAGS=-L${KIS_INSTALL_DIR}/lib
@@ -456,7 +457,8 @@ build_krita () {
         -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
-        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}"
+        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
+        -DAPPLE=1"
 
     # hack:: Jenkins runs in x86_64 env, force run cmake in arm64 env.
     if [[ ${OSXBUILD_UNIVERSAL} ]]; then

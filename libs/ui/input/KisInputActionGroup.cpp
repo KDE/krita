@@ -6,17 +6,29 @@
 
 #include "KisInputActionGroup.h"
 
-KisInputActionGroupsMaskInterface::~KisInputActionGroupsMaskInterface() {}
+KisInputActionGroupsMaskInterface::~KisInputActionGroupsMaskInterface() {
+    Q_FOREACH(KisInputActionGroupsMaskGuard *maskGuard, mRegisteredKisInputActionGroupsMaskGuards){
+        maskGuard->maskingInterfaceWasDeleted();
+    }
+}
+void KisInputActionGroupsMaskInterface::registerInputActionGroupsMaskGuard(KisInputActionGroupsMaskGuard *maskGuard) {
+    mRegisteredKisInputActionGroupsMaskGuards << maskGuard;
+}
 
 KisInputActionGroupsMaskGuard::KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface *object, KisInputActionGroupsMask mask)
     : m_object(object),
       m_oldMask(object->inputActionGroupsMask())
 {
+    m_object->registerInputActionGroupsMaskGuard(this);
     m_object->setInputActionGroupsMask(mask);
 }
 
+void KisInputActionGroupsMaskGuard::maskingInterfaceWasDeleted() {
+    m_object = nullptr;
+}
 KisInputActionGroupsMaskGuard::~KisInputActionGroupsMaskGuard() {
-    m_object->setInputActionGroupsMask(m_oldMask);
+    if(m_object)
+        m_object->setInputActionGroupsMask(m_oldMask);
 }
 
 

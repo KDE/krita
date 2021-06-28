@@ -56,6 +56,9 @@
    </item>
    <item row="2" column="1">
     <widget class="KisSliderSpinBox" name="sbPaletteSize">
+     <property name="suffix">
+      <string>px</string>
+     </property>
      <property name="minimum">
       <number>380</number>
      </property>
@@ -97,6 +100,9 @@
    </item>
    <item row="4" column="1">
     <widget class="KisSliderSpinBox" name="sbSelectorSize">
+     <property name="suffix">
+      <string>px</string>
+     </property>
      <property name="minimum">
       <number>100</number>
      </property>

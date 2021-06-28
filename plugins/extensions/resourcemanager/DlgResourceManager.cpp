@@ -132,11 +132,12 @@ void DlgResourceManager::slotResourceTypeSelected(int)
         KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
         KIS_SAFE_ASSERT_RECOVER_RETURN(proxyModel);
         proxyModel->setResourceModel(resourceModel);
-        proxyModel->setTagFilter(getCurrentTag());
-        proxyModel->setStorageFilter(true, getCurrentStorageId());
         proxyModel->sort(KisAbstractResourceModel::Name);
         m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
     }
+    m_resourceProxyModelsForResourceType[selectedResourceType]->setStorageFilter(true, getCurrentStorageId());
+    m_resourceProxyModelsForResourceType[selectedResourceType]->setTagFilter(getCurrentTag());
+
     m_ui->resourceItemView->setModel(m_resourceProxyModelsForResourceType[selectedResourceType]);
 
     if (selectedResourceType == ResourceType::Gradients) {

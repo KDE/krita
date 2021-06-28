@@ -8,11 +8,6 @@ project (krita-and-all-its-deps)
 #
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
-# M1 builds on binary factory have APPLE env set to false
-message(STATUS "${CMAKE_SYSTEM_NAME}")
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-    set(APPLE 1)
-endif()
 
 if(APPLE)
         execute_process(COMMAND sysctl -n hw.optional.arm64 OUTPUT_VARIABLE apple_has_arm64_optional)

@@ -197,7 +197,7 @@ void KisDlgFilter::slotOnAccept()
 void KisDlgFilter::slotOnReject()
 {
     if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancelDialog();
+        d->filterManager->cancelRunningStroke();
     }
 
     KisConfig(false).setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());

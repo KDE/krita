@@ -208,6 +208,7 @@ public Q_SLOTS:
     void slotUpdateAuthorProfileActions();
 
     void slotToggleFgBg();
+    void slotResetFgBg();
     
 Q_SIGNALS:
 
@@ -233,7 +234,6 @@ private Q_SLOTS:
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);
-    void slotResetFgBg();
     void slotResetRotation();
     void slotToggleFullscreen();
 private:

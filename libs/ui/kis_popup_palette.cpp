@@ -799,7 +799,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
         if (fgBgColors.contains(point)) {
             if (!m_isOverFgBgColors) {
                 m_isOverFgBgColors = true;
-                setToolTip(i18n("Swap foreground and background colors"));
+                setToolTip(i18n("Click to swap foreground and background colors.\nRight click to set to black and white."));
                 update();
             }
         } else {
@@ -972,12 +972,15 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
-   if (event->buttons() == Qt::NoButton &&
-       event->button() == Qt::RightButton) {
-
-       setVisible(false);
-       return;
-   }
+    if (event->buttons() == Qt::NoButton &&
+        event->button() == Qt::RightButton) {
+        if (m_isOverFgBgColors) {
+            m_viewManager->slotResetFgBg();
+        } else {
+            setVisible(false);
+        }
+        return;
+    }
 
     if (m_isRotatingCanvasIndicator) {
         update();

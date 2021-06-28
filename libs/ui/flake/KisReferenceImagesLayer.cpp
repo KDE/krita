@@ -169,12 +169,7 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter)
 {
-    //if(m_lock) {
-     //   painter.setTransform(m_lockedDocToViewTransform, true);
-    //}
-    //else {
-        painter.setTransform(converter()->documentToView(), true);
-    //}
+    painter.setTransform(converter()->documentToView(), true);
     shapeManager()->paint(painter, false);
 }
 

@@ -8,6 +8,7 @@
 #define KISINPUTACTIONGROUP_H
 
 #include <QFlags>
+#include <QList>
 
 enum KisInputActionGroup {
     NoActionGroup = 0x0,
@@ -19,6 +20,7 @@ enum KisInputActionGroup {
 Q_DECLARE_FLAGS(KisInputActionGroupsMask, KisInputActionGroup)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisInputActionGroupsMask)
 
+class KisInputActionGroupsMaskGuard;
 
 /**
  * A special interface class for accessing masking properties using
@@ -26,6 +28,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KisInputActionGroupsMask)
  */
 struct KisInputActionGroupsMaskInterface
 {
+    /**
+     * Unregister ourselves from all KisInputActionGroupsMaskGuard
+     */
     virtual ~KisInputActionGroupsMaskInterface();
 
     /**
@@ -37,6 +42,18 @@ struct KisInputActionGroupsMaskInterface
      * Set the mask of currently available action groups
      */
     virtual void setInputActionGroupsMask(KisInputActionGroupsMask mask) = 0;
+
+    /**
+     * Let a KisInputActionGroupsMaskGuard register itself as guarding this
+     */
+    void registerInputActionGroupsMaskGuard(KisInputActionGroupsMaskGuard *);
+
+private:
+    /**
+     * Keep a back reference to any MastGuard guarding this
+     * In case `this` is deleted, we will warn all registered guards to *not* try to update `this` on deletion
+     */
+    QList<KisInputActionGroupsMaskGuard *>mRegisteredKisInputActionGroupsMaskGuards;
 };
 
 /**
@@ -55,9 +72,14 @@ public:
     KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface *object, KisInputActionGroupsMask mask);
 
     /**
-     * Destroy the guard and reset the mask value to the old value
+     * Destroy the guard and reset the mask value to the old value (if masking interface wasn't deleted)
      */
     ~KisInputActionGroupsMaskGuard();
+
+    /**
+     * Let (anyone) tell us that underlying mask interface we were watching has been deleted
+     */
+    void maskingInterfaceWasDeleted();
 
 private:
     KisInputActionGroupsMaskInterface *m_object;

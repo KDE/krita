@@ -9,10 +9,10 @@ project (krita-and-all-its-deps)
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
 
-iF(APPLE)
+if(APPLE)
         execute_process(COMMAND sysctl -n hw.optional.arm64 OUTPUT_VARIABLE apple_has_arm64_optional)
         if(apple_has_arm64_optional)
-                message(NOTICE "Building on macos arm")
+                message(STATUS "Building on macos arm")
                 cmake_minimum_required(VERSION 3.19.3)
 	else()
         cmake_minimum_required(VERSION 3.7.2)

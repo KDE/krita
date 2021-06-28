@@ -169,12 +169,12 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter)
 {
-    if(m_lock) {
-        painter.setTransform(m_lockedDocToViewTransform, true);
-    }
-    else {
+    //if(m_lock) {
+     //   painter.setTransform(m_lockedDocToViewTransform, true);
+    //}
+    //else {
         painter.setTransform(converter()->documentToView(), true);
-    }
+    //}
     shapeManager()->paint(painter, false);
 }
 
@@ -269,7 +269,7 @@ void KisReferenceImagesLayer::setLock(bool val, KoCanvasBase* canvas)
     m_lock = val;
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
     if(val) {
-        m_lockedDocToViewTransform = converter()->documentToView();
+        m_lockedDocToViewTransform = kisCanvas->viewConverter()->documentToView();
         m_lockedImageToWidgetTransform = kisCanvas->coordinatesConverter()->imageToWidgetTransform();
         m_lockedDocToWidgetTransform = kisCanvas->coordinatesConverter()->documentToWidgetTransform();
         m_lockedFlakeToWidgetTransform = kisCanvas->coordinatesConverter()->flakeToWidgetTransform();

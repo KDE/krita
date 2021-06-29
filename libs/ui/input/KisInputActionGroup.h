@@ -8,7 +8,7 @@
 #define KISINPUTACTIONGROUP_H
 
 #include <QFlags>
-#include <QList>
+#include <QSharedPointer>
 
 enum KisInputActionGroup {
     NoActionGroup = 0x0,
@@ -43,17 +43,26 @@ struct KisInputActionGroupsMaskInterface
      */
     virtual void setInputActionGroupsMask(KisInputActionGroupsMask mask) = 0;
 
+    struct Reference
+    {
+        /**
+         * Pointer to interface that can be modified by `this` and be read by guards
+         */
+        KisInputActionGroupsMaskInterface *m_ref;
+    };
+    using SharedReference=QSharedPointer<Reference>;
     /**
-     * Let a KisInputActionGroupsMaskGuard register itself as guarding this
+     * Get a shared copy of `m_sharedReference`
      */
-    void registerInputActionGroupsMaskGuard(KisInputActionGroupsMaskGuard *);
+    SharedReference getSharedReference();
+
 
 private:
     /**
-     * Keep a back reference to any MastGuard guarding this
-     * In case `this` is deleted, we will warn all registered guards to *not* try to update `this` on deletion
+     * Keep a redundant reference to this
+     * In case `this` is deleted, we will un-register ourselves from here so guards will *not* try to update `this` after we've been deleted
      */
-    QList<KisInputActionGroupsMaskGuard *>mRegisteredKisInputActionGroupsMaskGuards;
+    SharedReference m_sharedReference;
 };
 
 /**
@@ -68,21 +77,21 @@ public:
     /**
      * Create a guard and set a new mask \p mask onto \p object. The old mask value is
      * saved in the guard itself.
+     * @param interfaceReference Shared reference that can be updated by original interface (taken from KisInputActionGroupsMaskInterface::getSharedReference())
      */
-    KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface *object, KisInputActionGroupsMask mask);
+    KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface::SharedReference interfaceReference, KisInputActionGroupsMask mask);
 
     /**
      * Destroy the guard and reset the mask value to the old value (if masking interface wasn't deleted)
      */
     ~KisInputActionGroupsMaskGuard();
 
-    /**
-     * Let (anyone) tell us that underlying mask interface we were watching has been deleted
-     */
-    void maskingInterfaceWasDeleted();
-
 private:
-    KisInputActionGroupsMaskInterface *m_object;
+    /**
+     * Reference the interface to be updated on delete
+     * In case interface is deleted, it will unregister itself here so any guard will *not* try to update it on deletion
+     */
+    KisInputActionGroupsMaskInterface::SharedReference m_interfaceReference;
     KisInputActionGroupsMask m_oldMask;
 };
 

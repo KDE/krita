@@ -200,6 +200,9 @@ endif ()
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 add_feature_info("Hide safe asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
 
+option(INSTALL_BENCHMARKS "Install benchmarks into the installation root to make them packagable" OFF)
+add_feature_info("Install benchmarks" INSTALL_BENCHMARKS "Install benchmarks into the installation root to make them packagable")
+
 option(CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests" OFF)
 add_feature_info("Crash on safe asserts" CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests")
 

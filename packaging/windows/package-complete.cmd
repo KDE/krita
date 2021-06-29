@@ -558,6 +558,13 @@ copy %KRITA_INSTALL_DIR%\bin\krita.com %pkg_root%\bin
 :: kritarunner.exe
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.exe %pkg_root%\bin
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.com %pkg_root%\bin
+
+if exist %KRITA_INSTALL_DIR%\bin\FreehandStrokeBenchmark.exe (
+    :: FreehandStrokeBenchmark.exe
+    copy %KRITA_INSTALL_DIR%\bin\FreehandStrokeBenchmark.exe %pkg_root%\bin
+    xcopy /S /Y /I %DEPS_INSTALL_DIR%\bin\data %pkg_root%\bin\data
+)
+
 :: qt.conf -- to specify the location to Qt translations
 copy %KRITA_SRC_DIR%\packaging\windows\qt.conf %pkg_root%\bin
 :: DLLs from bin/

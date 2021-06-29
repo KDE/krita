@@ -84,6 +84,9 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
         name = presetDisplayName;
     }
 
+    QString translatedName = index.data(Qt::UserRole + KisAbstractResourceModel::Tooltip).toString().replace("_", " ");
+
+
     QString tags;
     QString tagsData = index.data(Qt::UserRole + KisAbstractResourceModel::Tags).toStringList().join(", ");
     if (tagsData.length() > 0) {
@@ -92,7 +95,10 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     }
 
     const QString image = QString("<center><img src=\"data:thumbnail\"></center>");
-    const QString body = QString("<h3 align=\"center\">%1</h3>%2%3").arg(name, image, tags);
+    QString body = QString("<h3 align=\"center\">%1</h3>%2%3").arg(name, image, tags);
+    if (translatedName != name) {
+        body = QString("<h3 align=\"center\">%1</h3><h4 align=\"center\">%2</h4>%3%4").arg(name, translatedName, image, tags);
+    }
     const QString html = QString("<html><body>%1</body></html>").arg(body);
 
     doc->setHtml(html);

@@ -822,9 +822,15 @@ void installEcmTranslations(KisApplication &app)
                 continue;
             }
 #else
-            const QString fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
+            // Our patched k18n uses AppDataLocation (for AppImage).
+            QString fullPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, subPath);
             if (fullPath.isEmpty()) {
-                continue;
+                // ... but distro builds probably still use GenericDataLocation,
+                // so check that too.
+                fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
+                if (fullPath.isEmpty()) {
+                    continue;
+                }
             }
 #endif
             QTranslator *translator = new QTranslator(&app);

@@ -558,6 +558,13 @@ copy %KRITA_INSTALL_DIR%\bin\krita.com %pkg_root%\bin
 :: kritarunner.exe
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.exe %pkg_root%\bin
 copy %KRITA_INSTALL_DIR%\bin\kritarunner.com %pkg_root%\bin
+
+if exist %KRITA_INSTALL_DIR%\bin\FreehandStrokeBenchmark.exe (
+    :: FreehandStrokeBenchmark.exe
+    copy %KRITA_INSTALL_DIR%\bin\FreehandStrokeBenchmark.exe %pkg_root%\bin
+    xcopy /S /Y /I %DEPS_INSTALL_DIR%\bin\data %pkg_root%\bin\data
+)
+
 :: qt.conf -- to specify the location to Qt translations
 copy %KRITA_SRC_DIR%\packaging\windows\qt.conf %pkg_root%\bin
 :: DLLs from bin/
@@ -641,13 +648,8 @@ if exist "%KRITA_INSTALL_DIR%\lib\qml" (
     set "QMLDIR_ARGS=%QMLDIR_ARGS% --qmldir %KRITA_INSTALL_DIR%\lib\qml"
 )
 
-if EXIST "%DEPS_INSTALL_DIR%\bin\gmic_krita_qt.exe" (
-	copy %DEPS_INSTALL_DIR%\bin\gmic_krita_qt.exe %pkg_root%\bin
-    set "WINDEPLOYQT_GMIC_ARGS=%pkg_root%\bin\gmic_krita_qt.exe"
-)
-
 :: windeployqt
-windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -multimedia -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %pkg_root%\bin\krita.dll %WINDEPLOYQT_GMIC_ARGS%
+windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -multimedia -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %pkg_root%\bin\krita.dll
 if errorlevel 1 (
 	echo ERROR: WinDeployQt failed! 1>&2
 	exit /B 1
@@ -689,7 +691,6 @@ call :split-debug "%pkg_root%\bin\krita.exe" bin\krita.exe
 call :split-debug "%pkg_root%\bin\krita.com" bin\krita.com
 call :split-debug "%pkg_root%\bin\kritarunner.exe" bin\kritarunner.exe
 call :split-debug "%pkg_root%\bin\kritarunner.com" bin\kritarunner.com
-call :split-debug "%pkg_root%\bin\gmic_krita_qt.exe" bin\gmic_krita_qt.exe
 setlocal enableextensions enabledelayedexpansion
 :: Find all DLLs
 for /r "%pkg_root%" %%F in (*.dll) do (

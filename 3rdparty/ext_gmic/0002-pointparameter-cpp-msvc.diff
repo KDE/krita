@@ -1,0 +1,13 @@
+diff --git a/src/FilterParameters/PointParameter.cpp b/src/FilterParameters/PointParameter.cpp
+index 9dd2ba8..4d99072 100644
+--- a/src/FilterParameters/PointParameter.cpp
++++ b/src/FilterParameters/PointParameter.cpp
+@@ -189,7 +189,7 @@ void PointParameter::setVisibilityState(AbstractParameter::VisibilityState state
+ 
+ void PointParameter::updateView()
+ {
+-  if (not _spinBoxX) {
++  if (!_spinBoxX) {
+     return;
+   }
+   disconnectSpinboxes();

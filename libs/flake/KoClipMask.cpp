@@ -62,6 +62,17 @@ KoClipMask::~KoClipMask()
 {
 }
 
+KoClipMask::KoClipMask(const KoClipMask &rhs)
+    : m_d(new Private(*rhs.m_d))
+{
+}
+
+KoClipMask &KoClipMask::operator=(const KoClipMask &rhs)
+{
+    m_d = rhs.m_d;
+    return *this;
+}
+
 KoClipMask *KoClipMask::clone() const
 {
     return new KoClipMask(*this);

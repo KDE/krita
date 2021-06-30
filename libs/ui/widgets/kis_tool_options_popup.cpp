@@ -25,6 +25,7 @@
 
 
 #include "kis_config.h"
+#include "KisUiFont.h"
 
 struct KisToolOptionsPopup::Private
 {
@@ -104,7 +105,7 @@ KisToolOptionsPopup::KisToolOptionsPopup(QWidget *parent)
     setObjectName("KisToolOptionsPopup");
 
     KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    setFont(KoDockRegistry::dockFont());
+    setFont(KisUiFont::dockFont());
 
     d->ignoreHideEvents = false;
 

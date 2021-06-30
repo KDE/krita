@@ -1,7 +1,7 @@
-From 344f7f9c40f32d0447159429c679814d502a0b11 Mon Sep 17 00:00:00 2001
+From d7c779f29fc09445c71d006d95ee054258c3cdd6 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Tue, 16 Feb 2021 17:17:09 +0000
-Subject: [PATCH 5/5] Update function signatures to 2.9.6
+Subject: [PATCH 5/9] Update function signatures to 2.9.6
 
 ---
  src/Host/KritaPlugin/gmicqttoolplugin.cpp | 26 ++++++-----------------
@@ -9,7 +9,7 @@ Subject: [PATCH 5/5] Update function signatures to 2.9.6
  2 files changed, 7 insertions(+), 22 deletions(-)
 
 diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.cpp b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
-index d62e76b..9b09c1c 100644
+index 8ba0ea5..d45d337 100644
 --- a/src/Host/KritaPlugin/gmicqttoolplugin.cpp
 +++ b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
 @@ -28,14 +28,14 @@
@@ -61,8 +61,8 @@ index d62e76b..9b09c1c 100644
 -    }
 +    LanguageSettings::installTranslators();
  
-     disableInputMode(GmicQt::NoInput);
-     // disableInputMode(GmicQt::Active);
+     QPointer<MainWindow> mainWindow = new MainWindow(0);
+     // We want a non modal dialog here.
 diff --git a/src/Host/KritaPlugin/host.cpp b/src/Host/KritaPlugin/host.cpp
 index 4ff84e6..058d923 100644
 --- a/src/Host/KritaPlugin/host.cpp
@@ -78,5 +78,5 @@ index 4ff84e6..058d923 100644
    // qDebug() << "qmic-qt-output-images";
  
 -- 
-2.30.0
+2.32.0
 

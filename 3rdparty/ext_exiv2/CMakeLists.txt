@@ -12,7 +12,7 @@ if (ANDROID)
         DEPENDS ext_expat
     )
 
-elseif(MINGW)
+elseif(WIN32)
 
     ExternalProject_Add( ext_exiv2
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -26,8 +26,7 @@ elseif(MINGW)
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_exiv2} -DCMAKE_LIBRARY_PATH=${PREFIX_ext_exiv2}/lib -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DEXIV2_BUILD_SAMPLES=OFF -DIconv_INCLUDE_DIR=${PREFIX_ext_exiv2}/include -DEXIV2_ENABLE_NLS=OFF -DEXIV2_BUILD_EXIV2_COMMAND=OFF
 
         UPDATE_COMMAND ""
-        INSTALL_COMMAND $(MAKE) install
-        DEPENDS ext_iconv ext_expat
+        DEPENDS ext_iconv ext_expat ext_zlib
     )
 else()
     ExternalProject_Add( ext_exiv2

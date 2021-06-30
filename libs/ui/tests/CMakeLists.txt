@@ -363,3 +363,31 @@ endif()
         KisZoomAndPanTest
         KisCategoriesMapperTest
         )
+
+
+if (${INSTALL_BENCHMARKS})
+    install(TARGETS FreehandStrokeBenchmark  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+    install(FILES data/testing_200px_colorsmudge_default_dulling_old_sa.kpp
+        data/testing_200px_colorsmudge_defaut_dulling_new_nsa.kpp
+        data/testing_200px_colorsmudge_defaut_dulling_new_sa.kpp
+        data/testing_200px_colorsmudge_defaut_dulling_old_nsa.kpp
+        data/testing_200px_colorsmudge_defaut_smearing_new_nsa.kpp
+        data/testing_200px_colorsmudge_defaut_smearing_new_sa.kpp
+        data/testing_200px_colorsmudge_defaut_smearing_old_nsa.kpp
+        data/testing_200px_colorsmudge_defaut_smearing_old_sa.kpp
+        data/testing_200px_colorsmudge_lightness_smearing_new_nsa_maskmode.kpp
+        data/testing_200px_colorsmudge_lightness_smearing_new_nsa_nopt.kpp
+        data/testing_200px_colorsmudge_lightness_smearing_new_nsa_ptoverlay.kpp
+        data/testing_200px_colorsmudge_lightness_smearing_new_nsa_ptoverwrite.kpp
+        data/testing_1000px_auto_deafult.kpp
+        data/testing_1000px_auto_gaussian.kpp
+        data/testing_1000px_auto_gaussian_rect.kpp
+        data/testing_1000px_auto_rectangular.kpp
+        data/testing_1000px_auto_soft.kpp
+        data/testing_1000px_auto_soft_rect.kpp
+        data/testing_1000px_stamp_450_rotated.kpp
+        data/3_texture.png
+        data/DA_RGBA\ bluegreen_small1.png
+        DESTINATION ${CMAKE_INSTALL_BINDIR}/data)
+endif()

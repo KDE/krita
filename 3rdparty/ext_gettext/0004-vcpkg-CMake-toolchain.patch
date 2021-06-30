@@ -26,7 +26,7 @@ new file mode 100644
 index 0000000..340296a
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,18 @@
 +cmake_minimum_required(VERSION 3.5)
 +
 +project(gettext)
@@ -39,13 +39,18 @@ index 0000000..340296a
 +
 +add_definitions(-DPACKAGE_VERSION_MAJOR=${PACKAGE_VERSION_MAJOR} -DPACKAGE_VERSION_MINOR=${PACKAGE_VERSION_MINOR} -DPACKAGE_VERSION_SUBMINOR=${PACKAGE_VERSION_SUBMINOR} -DPACKAGE_VERSION_STRING="${PACKAGE_VERSION_STRING}")
 +
++find_package(iconv REQUIRED)
++include_directories(${Iconv_INCLUDE_DIRS})
++get_filename_component(Iconv_LIB_PATH ${Iconv_LIBRARY} DIRECTORY)
++link_directories(${Iconv_LIB_PATH})
++
 +add_subdirectory(gettext-runtime)
 diff --git a/gettext-runtime/CMakeLists.txt b/gettext-runtime/CMakeLists.txt
 new file mode 100644
 index 0000000..8c6d22e
 --- /dev/null
 +++ b/gettext-runtime/CMakeLists.txt
-@@ -0,0 +1,159 @@
+@@ -0,0 +1,162 @@
 +cmake_minimum_required(VERSION 3.5)
 +project(gettext-runtime C)
 +
@@ -158,6 +163,9 @@ index 0000000..8c6d22e
 +    "intl/relocatable.c"
 +    "intl/textdomain.c"
 +    "intl/version.c"
++    if (MSVC)
++      "intl/localcharset.c"	
++    endif()  
 +    "${CMAKE_CURRENT_BINARY_DIR}/intl/libintl.rc"
 +)
 +if(NOT WIN32)

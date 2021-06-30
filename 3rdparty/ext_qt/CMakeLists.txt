@@ -1,5 +1,30 @@
 SET(EXTPREFIX_qt  "${EXTPREFIX}")
 if (WIN32)
+
+    if(MINGW)
+      set(QT_CONFIG_PLATFORM win32-g++)
+      set(QT_BUILD_COMMAND   mingw32-make -j${SUBMAKE_JOBS})
+      set(QT_INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install)
+      set(QT_EXTRA_DEPS "")
+    elseif(MSVC)
+      ExternalProject_Add(ext_jom
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://download.qt.io/official_releases/jom/jom_1_1_3.zip
+        URL_HASH SHA256=128fdd846fe24f8594eed37d1d8929a0ea78df563537c0c1b1861a635013fff8
+
+        BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying Jom
+        CONFIGURE_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/jom.exe ${EXTPREFIX_qt}/bin
+
+        UPDATE_COMMAND ""
+      )
+
+      set(QT_CONFIG_PLATFORM win32-msvc)
+      set(QT_BUILD_COMMAND jom -j${SUBMAKE_JOBS})
+      set(QT_INSTALL_COMMAND jom -j${SUBMAKE_JOBS} install)
+      set(QT_EXTRA_DEPS ext_jom)
+    endif(MINGW)
+
     list(APPEND _QT_conf -skip qt3d -skip qtactiveqt -skip qtcanvas3d
         -skip qtconnectivity -skip qtdoc -skip qtgraphicaleffects
         -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
@@ -18,11 +43,17 @@ if (WIN32)
         -opensource -confirm-license
         -feature-relocatable
         #
-        -release -platform win32-g++ -prefix ${EXTPREFIX_qt}
+        -release -platform ${QT_CONFIG_PLATFORM} -prefix ${EXTPREFIX_qt}
         QMAKE_LFLAGS_APP+=${SECURITY_EXE_LINKER_FLAGS}
         QMAKE_LFLAGS_SHLIB+=${SECURITY_SHARED_LINKER_FLAGS}
         QMAKE_LFLAGS_SONAME+=${SECURITY_SHARED_LINKER_FLAGS}
     )
+    if (MSVC)
+      list(APPEND _QT_conf 
+        QMAKE_CFLAGS+=${SECURITY_C_FLAGS}
+        QMAKE_CXXFLAGS+=${SECURITY_CXX_FLAGS}
+      )
+    endif (MSVC)
     if (QT_ENABLE_DEBUG_INFO)
         # Set the option to build Qt with debugging info enabled
         list(APPEND _QT_conf -force-debug-info)
@@ -58,6 +89,13 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0030-Make-sure-if-WinInk-is-correctly-initialized-if-wint.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0051-Add-workaround-for-handling-table-press-correctly-in.patch
             )
+    endif()
+
+    if (MSVC)
+        # qwindowstablesupport patch for MSVC
+        set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0116-qwindowstabletsupport-cpp-msvc.patch
+        )
     endif()
 
     # HDR patches
@@ -117,14 +155,14 @@ if (WIN32)
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}
 
-      BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS}
+      BUILD_COMMAND ${QT_BUILD_COMMAND}
 
-      INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
+      INSTALL_COMMAND ${QT_INSTALL_COMMAND}
       UPDATE_COMMAND ""
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_patch ext_openssl
+      DEPENDS ext_patch ext_openssl ${QT_EXTRA_DEPS}
   )
 elseif (ANDROID)
   ExternalProject_Add(

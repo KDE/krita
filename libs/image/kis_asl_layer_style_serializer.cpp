@@ -6,6 +6,7 @@
  */
 
 #include "kis_asl_layer_style_serializer.h"
+#include "kis_image.h"
 
 #include <QDomDocument>
 

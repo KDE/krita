@@ -339,17 +339,21 @@ void KisFavoriteResourceManager::init()
         KisResourceServerProvider::instance()->paintOpPresetServer();
         QString currentTag = KisConfig(true).readEntry<QString>("favoritePresetsTag", "★ My Favorites");
 
-        // TODO: RESOURCES: tag by url?
         KisTagModel tagModel(ResourceType::PaintOpPresets);
-        for (int i = 0; i < tagModel.rowCount(); i++) {
-            QModelIndex index = tagModel.index(i, 0);
-            KisTagSP tag = tagModel.tagForIndex(index);
-            if (!tag.isNull() && tag->url() == currentTag) {
-                 m_currentTag = tag;
-                 break;
+        KisTagSP currentTagSP = tagModel.tagForUrl(currentTag);
+        if (!currentTagSP.isNull()) {
+            m_currentTag = currentTagSP;
+        }
+        if (m_currentTag.isNull() && tagModel.rowCount() > 0) {
+            // safety measure to have at least *some* tag chosen
+            QModelIndex idx = tagModel.index(0, 0);
+            currentTagSP = tagModel.tagForIndex(idx);
+            if (currentTagSP && !m_currentTag) {
+                m_currentTag = currentTagSP;
             }
         }
         m_resourcesProxyModel->setTagFilter(m_currentTag);
+        m_resourcesProxyModel->sort(KisAbstractResourceModel::Name);
 
         updateFavoritePresets();
     }

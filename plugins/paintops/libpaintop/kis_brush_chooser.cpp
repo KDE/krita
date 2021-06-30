@@ -24,6 +24,7 @@
 #include <kconfig.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <KoFileDialog.h>
 #include <KisKineticScroller.h>
 
 #include <KisResourceItemView.h>
@@ -41,6 +42,7 @@
 #include "kis_custom_brush_widget.h"
 #include "kis_clipboard_brush_widget.h"
 #include <kis_config.h>
+#include <KisMimeDatabase.h>
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
@@ -48,6 +50,9 @@
 #include "kis_debug.h"
 #include "kis_image.h"
 #include <KisGlobalResourcesInterface.h>
+#include <KisResourceLoaderRegistry.h>
+#include <KisTagFilterResourceProxyModel.h>
+#include <KisStorageModel.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -555,7 +560,24 @@ bool KisPredefinedBrushChooser::hslBrushTipEnabled() const
 
 
 void KisPredefinedBrushChooser::slotImportNewBrushResource() {
-    m_itemChooser->slotButtonClicked(KisResourceItemChooser::Button_Import);
+    // reflects m_itemChooser->slotButtonClicked(KisResourceItemChooser::Button_Import)
+    // but adds the .abr files support, as it was in Krita 4
+    QStringList mimeTypes = KisResourceLoaderRegistry::instance()->mimeTypes(ResourceType::Brushes);
+    QString abrMimeType = "image/x-adobe-brushlibrary";
+    mimeTypes.append(abrMimeType);
+    KoFileDialog dialog(0, KoFileDialog::OpenFiles, "OpenDocument");
+    dialog.setMimeTypeFilters(mimeTypes);
+    dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
+    Q_FOREACH(const QString &filename, dialog.filenames()) {
+        if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
+            if (KisMimeDatabase::mimeTypeForFile(filename).contains(abrMimeType)) {
+                KisStorageModel::instance()->importStorage(filename, KisStorageModel::None);
+            } else {
+                m_itemChooser->tagFilterModel()->importResourceFile(filename);
+            }
+        }
+    }
+    m_itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
 }
 
 void KisPredefinedBrushChooser::slotDeleteBrushResource() {

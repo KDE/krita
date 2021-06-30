@@ -149,6 +149,7 @@
 #include "kis_action.h"
 #include <katecommandbar.h>
 #include "KisNodeActivationActionCreatorVisitor.h"
+#include "KisUiFont.h"
 
 
 #include <mutex>
@@ -2289,7 +2290,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             dockWidget->setTitleBarWidget(titleBar);
         }
         if (titleBar) {
-            titleBar->setFont(KoDockRegistry::dockFont());
+            titleBar->setFont(KisUiFont::dockFont());
         }
 
 
@@ -2348,7 +2349,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 #ifdef Q_OS_MACOS
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-    dockWidget->setFont(KoDockRegistry::dockFont());
+    dockWidget->setFont(KisUiFont::dockFont());
 
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 
@@ -2359,7 +2360,7 @@ void KisMainWindow::forceDockTabFonts()
 {
     Q_FOREACH (QObject *child, children()) {
         if (child->inherits("QTabBar")) {
-            ((QTabBar *)child)->setFont(KoDockRegistry::dockFont());
+            ((QTabBar *)child)->setFont(KisUiFont::dockFont());
         }
     }
 }
@@ -2753,28 +2754,13 @@ void KisMainWindow::configChanged()
 
     d->mdiArea->update();
 
-    if (KisConfig(false).readEntry<bool>("use_custom_system_font", false)) {
-        QString fontName = KisConfig(false).readEntry<QString>("custom_system_font", "");
-        int fontSize = KisConfig(false).readEntry<int>("custom_font_size", -1);
+    qApp->setFont(KisUiFont::normalFont());
 
-        if (fontSize <= 6) {
-            fontSize = qApp->font().pointSize();
+    Q_FOREACH (QObject* widget, children()) {
+        if (widget->inherits("QDockWidget")) {
+            QDockWidget* dw = static_cast<QDockWidget*>(widget);
+            dw->setFont(KisUiFont::dockFont());
         }
-        if (!fontName.isEmpty()) {
-            QFont f(fontName, fontSize);
-            qApp->setFont(f);
-
-            Q_FOREACH (QObject* widget, children()) {
-                if (widget->inherits("QDockWidget")) {
-                    QDockWidget* dw = static_cast<QDockWidget*>(widget);
-                    dw->setFont(KoDockRegistry::dockFont());
-                }
-            }
-
-        }
-    }
-    else {
-        qApp->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     }
 }
 
@@ -2861,7 +2847,7 @@ void KisMainWindow::newOptionWidgets(KoCanvasController *controller, const QList
 #ifdef Q_OS_MACOS
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-        w->setFont(KoDockRegistry::dockFont());
+        w->setFont(KisUiFont::dockFont());
     }
 
     if (d->toolOptionsDocker) {

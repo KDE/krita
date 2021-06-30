@@ -25,6 +25,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 #include <KoResource.h>
+#include <kstandardguiitem.h>
 
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -49,7 +50,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     setFixedSize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setButtonText(Ok, i18n("Save"));
+    setButtonGuiItem(Ok, KStandardGuiItem::save());
 
     connect(m_ui->bnSelectSaveLocation, SIGNAL(clicked()), SLOT(selectSaveLocation()));
 
@@ -164,16 +165,15 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     m_ui->bnRemove->setIcon(KisIconUtils::loadIcon("arrow-left"));
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
-    m_ui->cmbResourceTypes->addItem(i18n("Brushes"), ResourceType::Brushes);
-    m_ui->cmbResourceTypes->addItem(i18n("Brush Presets"), ResourceType::PaintOpPresets);
-    m_ui->cmbResourceTypes->addItem(i18n("Gradients"), ResourceType::Gradients);
-    m_ui->cmbResourceTypes->addItem(i18n("Gamut Masks"), ResourceType::GamutMasks);
+    QStringList resourceTypes = QStringList() << ResourceType::Brushes << ResourceType::PaintOpPresets << ResourceType::Gradients << ResourceType::GamutMasks;
 #if defined HAVE_SEEXPR
-    m_ui->cmbResourceTypes->addItem(i18n("SeExpr Scripts"), ResourceType::SeExprScripts);
+    resourceTypes << ResourceType::SeExprScripts;
 #endif
-    m_ui->cmbResourceTypes->addItem(i18n("Patterns"), ResourceType::Patterns);
-    m_ui->cmbResourceTypes->addItem(i18n("Palettes"), ResourceType::Palettes);
-    m_ui->cmbResourceTypes->addItem(i18n("Workspaces"), ResourceType::Workspaces);
+    resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces;
+
+    for (int i = 0; i < resourceTypes.size(); i++) {
+        m_ui->cmbResourceTypes->addItem(ResourceName::resourceTypeToName(resourceTypes[i]), resourceTypes[i]);
+    }
     connect(m_ui->cmbResourceTypes, SIGNAL(activated(int)), SLOT(resourceTypeSelected(int)));
 
     m_ui->tableAvailable->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
@@ -300,7 +300,9 @@ void DlgCreateBundle::putMetaDataInTheBundle(KoResourceBundleSP bundle) const
     bundle->setMetaData(KisResourceStorage::s_meta_author, authorName());
     bundle->setMetaData(KisResourceStorage::s_meta_title,  bundleName());
     bundle->setMetaData(KisResourceStorage::s_meta_description, description());
-    bundle->setMetaData(KisResourceStorage::s_meta_initial_creator,  authorName());
+    if (bundle->metaData(KisResourceStorage::s_meta_initial_creator, "").isEmpty()) {
+        bundle->setMetaData(KisResourceStorage::s_meta_initial_creator,  authorName());
+    }
     bundle->setMetaData(KisResourceStorage::s_meta_creator, authorName());
     bundle->setMetaData(KisResourceStorage::s_meta_email, email());
     bundle->setMetaData(KisResourceStorage::s_meta_license, license());

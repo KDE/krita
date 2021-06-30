@@ -5,21 +5,23 @@ set(kritaqmicinterface_SOURCES
     kis_qmic_applicator.cpp
     kis_qmic_data.cpp
     kis_qmic_interface.cpp
+    kis_qmic_plugin_interface.cpp
     kis_qmic_progress_manager.cpp
     kis_qmic_simple_convertor.cpp
     kis_qmic_synchronize_image_size_command.cpp
     kis_qmic_synchronize_layers_command.cpp
 )
 
-add_library(kritaqmicinterface SHARED ${kritaqmicinterface_SOURCES})
-generate_export_header(kritaqmicinterface)
-target_link_libraries(kritaqmicinterface kritaui)
 
 set(kritaqmicinterface_HEADERS
     kis_qmic_interface.h
     kis_qmic_plugin_interface.h
     ${CMAKE_CURRENT_BINARY_DIR}/kritaqmicinterface_export.h
 )
+
+add_library(kritaqmicinterface SHARED ${kritaqmicinterface_SOURCES})
+generate_export_header(kritaqmicinterface)
+target_link_libraries(kritaqmicinterface kritaui)
 
 set_target_properties(kritaqmicinterface
     PROPERTIES

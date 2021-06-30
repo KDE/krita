@@ -286,7 +286,9 @@ void GamutMaskDock::deleteMask()
 {
     KisResourceModel model(ResourceType::GamutMasks);
     QModelIndex idx = model.indexForResource(m_selectedMask);
-    model.setResourceInactive(idx);
+    if (idx.isValid()) {
+        model.setResourceInactive(idx);
+    }
     m_selectedMask = nullptr;
 }
 
@@ -387,14 +389,8 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     newMask->setTitle(name);
     newMask->setFilename(fileInfo.fileName());
     newMask->setValid(true);
-    KisResourceModel model(ResourceType::GamutMasks);
-    QModelIndex idx = model.indexForResourceId(newMask->resourceId());
 
-    if (idx.isValid()) {
-        model.updateResource(newMask);
-    } else {
-        model.addResource(newMask);
-    }
+    // don't save just yet; saving will happen when the user presses Save button on editing
 
     return newMask;
 }

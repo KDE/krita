@@ -57,7 +57,7 @@ struct KRITAUI_EXPORT KisImportExportComplexError
     virtual QString errorMessage() const = 0;
     KisImportExportComplexError(QFileDevice::FileError error);
 
-    friend QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
+    friend KRITAUI_EXPORT QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
 
 
 protected:
@@ -119,7 +119,7 @@ public:
     bool isCancelled() const;
     bool isInternalError() const;
 
-    friend QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
+    friend KRITAUI_EXPORT QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
 
     bool operator==(KisImportExportErrorCode errorCode);
 

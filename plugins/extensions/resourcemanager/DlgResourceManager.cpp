@@ -132,12 +132,25 @@ void DlgResourceManager::slotResourceTypeSelected(int)
         KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
         KIS_SAFE_ASSERT_RECOVER_RETURN(proxyModel);
         proxyModel->setResourceModel(resourceModel);
-        proxyModel->setTagFilter(getCurrentTag());
-        proxyModel->setStorageFilter(true, getCurrentStorageId());
         proxyModel->sort(KisAbstractResourceModel::Name);
         m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
     }
+    m_resourceProxyModelsForResourceType[selectedResourceType]->setStorageFilter(true, getCurrentStorageId());
+    m_resourceProxyModelsForResourceType[selectedResourceType]->setTagFilter(getCurrentTag());
+
     m_ui->resourceItemView->setModel(m_resourceProxyModelsForResourceType[selectedResourceType]);
+
+    if (selectedResourceType == ResourceType::Gradients) {
+        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(256, 64));
+        m_ui->resourceItemView->setToolTipShouldRenderCheckers(true);
+    }
+    else if (selectedResourceType == ResourceType::PaintOpPresets) {
+        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(128, 128));
+    } else if (selectedResourceType == ResourceType::Patterns || selectedResourceType == ResourceType::Palettes) {
+        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(256, 256));
+        m_ui->resourceItemView->setToolTipShouldRenderCheckers(false);
+    }
+
 }
 
 void DlgResourceManager::slotStorageSelected(int)

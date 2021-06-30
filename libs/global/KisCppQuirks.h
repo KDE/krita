@@ -12,7 +12,9 @@ namespace std {
 
 // from C++14
 
-#if __cplusplus < 201402L
+// MSVC STL is C++14 by default
+
+#if __cplusplus < 201402L && (!defined(_MSC_VER))
 
 template <typename Cont>
 inline auto rbegin(Cont &cont) -> decltype(declval<Cont>().rbegin()) {
@@ -44,7 +46,11 @@ using add_const_t    = typename add_const<T>::type;
 
 // from C++17
 
-#if __cplusplus < 201703L
+// NOTE: MSVC breaks the standard and defines these functions
+//       even when C++14 is explicitly selected
+// https://github.com/microsoft/STL/issues/1925
+
+#if (__cplusplus < 201703L) && (!defined(_MSC_VER))
 
 template<typename...>
 using void_t = void;

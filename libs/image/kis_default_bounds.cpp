@@ -26,6 +26,10 @@ struct Q_DECL_HIDDEN KisDefaultBounds::Private
     KisImageWSP image;
 };
 
+KisDefaultBounds::KisDefaultBounds()
+    : KisDefaultBounds(0)
+{
+}
 
 KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
     : m_d(new Private())

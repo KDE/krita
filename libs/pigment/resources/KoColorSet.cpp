@@ -738,7 +738,8 @@ bool KoColorSet::Private::loadGpl()
         return false;
     }
 
-    colorSet->setName(i18n(lines[1].split(":")[1].trimmed().toLatin1()));
+    // translated name will be in a tooltip, here don't translate
+    colorSet->setName(lines[1].split(":")[1].trimmed());
 
     index = 2;
 

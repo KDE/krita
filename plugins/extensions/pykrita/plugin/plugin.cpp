@@ -81,7 +81,9 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     // the destructor of QCoreApplication is called, in order to prevent
     // a crash on exit.
     // See https://bugs.kde.org/show_bug.cgi?id=417465
-    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, []() { PyKrita::finalize(); });
+    // XXX: Commented out because this still can cause crashes:
+    // https://invent.kde.org/graphics/krita/-/commit/a0c29913114164ff3f2ba4e255ccee1c52cb3e86#note_260688
+    // connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, []() { PyKrita::finalize(); });
 }
 
 KritaPyQtPlugin::~KritaPyQtPlugin()

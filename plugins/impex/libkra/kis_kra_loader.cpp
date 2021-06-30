@@ -129,7 +129,7 @@ public:
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
     StoryboardItemList storyboardItemList;
-    QVector<StoryboardComment> storyboardCommentList;
+    StoryboardCommentList storyboardCommentList;
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QVector<QString> paletteFilenames;
@@ -604,7 +604,7 @@ StoryboardItemList KisKraLoader::storyboardItemList() const
     return m_d->storyboardItemList;
 }
 
-QVector<StoryboardComment> KisKraLoader::storyboardCommentList() const
+StoryboardCommentList KisKraLoader::storyboardCommentList() const
 {
     return m_d->storyboardCommentList;
 }

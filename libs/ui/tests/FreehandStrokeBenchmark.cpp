@@ -117,8 +117,6 @@ void benchmarkBrushUnthreaded(const QString &presetName)
 
 void FreehandStrokeBenchmark::initTestCase()
 {
-    KoResourcePaths::addResourceType(ResourceType::Brushes, "data", FILES_DATA_DIR);
-
     {
         QString fullFileName = TestUtil::fetchDataFileLazy("3_texture.png");
         KIS_ASSERT(!fullFileName.isEmpty());

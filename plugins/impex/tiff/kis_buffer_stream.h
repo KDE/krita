@@ -12,73 +12,87 @@
 #include <stdio.h>
 #endif
 
+#include <cstdint>
 #include <tiffio.h>
 
 class KisBufferStreamBase
 {
 public:
-    KisBufferStreamBase(uint16 depth) : m_depth(depth) {}
-    virtual uint32 nextValue() = 0;
+    KisBufferStreamBase(uint16_t depth) : m_depth(depth) {}
+    virtual uint32_t nextValue() = 0;
     virtual void restart() = 0;
-    virtual void moveToLine(uint32 lineNumber) = 0;
+    virtual void moveToLine(tsize_t lineNumber) = 0;
     virtual ~KisBufferStreamBase() {}
 protected:
-    uint16 m_depth;
+    uint16_t m_depth;
 };
 
 class KisBufferStreamContigBase : public KisBufferStreamBase
 {
 public:
-    KisBufferStreamContigBase(uint8* src, uint16 depth, uint32 lineSize);
+    KisBufferStreamContigBase(uint8_t *src, uint16_t depth, tsize_t lineSize);
     void restart() override;
-    void moveToLine(uint32 lineNumber) override;
+    void moveToLine(tsize_t lineNumber) override;
     ~KisBufferStreamContigBase() override {}
 protected:
-    uint8* m_src;
-    uint8* m_srcIt;
-    uint8 m_posinc;
-    uint32 m_lineSize;
+    uint8_t* m_src;
+    uint8_t* m_srcIt;
+    uint8_t m_posinc;
+    tsize_t m_lineSize;
 };
 
 class KisBufferStreamContigBelow16 : public KisBufferStreamContigBase
 {
 public:
-    KisBufferStreamContigBelow16(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
+    KisBufferStreamContigBelow16(uint8_t *src, uint16_t depth, tsize_t lineSize)
+        : KisBufferStreamContigBase(src, depth, lineSize)
+    {
+    }
+
 public:
     ~KisBufferStreamContigBelow16() override {}
-    uint32 nextValue() override;
+    uint32_t nextValue() override;
 };
 
 class KisBufferStreamContigBelow32 : public KisBufferStreamContigBase
 {
 public:
-    KisBufferStreamContigBelow32(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
+    KisBufferStreamContigBelow32(uint8_t *src, uint16_t depth, tsize_t lineSize)
+        : KisBufferStreamContigBase(src, depth, lineSize)
+    {
+    }
+
 public:
     ~KisBufferStreamContigBelow32() override {}
-    uint32 nextValue() override;
+    uint32_t nextValue() override;
 };
 
 class KisBufferStreamContigAbove32 : public KisBufferStreamContigBase
 {
 public:
-    KisBufferStreamContigAbove32(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
+    KisBufferStreamContigAbove32(uint8_t *src, uint16_t depth, tsize_t lineSize)
+        : KisBufferStreamContigBase(src, depth, lineSize)
+    {
+    }
+
 public:
     ~KisBufferStreamContigAbove32() override {}
-    uint32 nextValue() override;
+    uint32_t nextValue() override;
 };
 
 
-class KisBufferStreamSeperate : public KisBufferStreamBase
+class KisBufferStreamSeparate : public KisBufferStreamBase
 {
 public:
-    KisBufferStreamSeperate(uint8** srcs, uint8 nb_samples , uint16 depth, uint32* lineSize);
-    ~KisBufferStreamSeperate() override;
-    uint32 nextValue() override;
+    KisBufferStreamSeparate(uint8_t **srcs, uint16_t nb_samples, uint16_t depth, tsize_t *lineSize);
+    ~KisBufferStreamSeparate() override;
+    uint32_t nextValue() override;
     void restart() override;
-    void moveToLine(uint32 lineNumber) override;
+    void moveToLine(tsize_t lineNumber) override;
+
 private:
     KisBufferStreamContigBase** streams;
-    uint8 m_current_sample, m_nb_samples;
+    uint16_t m_current_sample, m_nb_samples;
 };
 
 #endif

@@ -1,7 +1,7 @@
 From 4722ec81754db474d185a2d05c77ed7f7eed4e8b Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Tue, 17 Nov 2020 22:57:09 +0000
-Subject: [PATCH 3/3] cmake: library versioning info for CMake itself
+Subject: [PATCH 3/5] cmake: library versioning info for CMake itself
 
 ---
  CMakeLists.txt             | 20 +++++++++++++++++++-

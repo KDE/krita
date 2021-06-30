@@ -132,6 +132,10 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     setupNewsLangSelection(newsOptionsMenu);
     btnNewsOptions->setMenu(newsOptionsMenu);
 
+    QFont largerFont = font();
+    largerFont.setPointSizeF(largerFont.pointSizeF() * (4.0 / 3.0));
+    labelSupportText->setFont(largerFont);
+
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
@@ -463,6 +467,15 @@ void KisWelcomePageWidget::dragLeaveEvent(QDragLeaveEvent */*event*/)
     //qDebug() << "dragLeaveEvent";
     showDropAreaIndicator(false);
     m_mainWindow->dragLeave();
+}
+
+void KisWelcomePageWidget::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        QFont largerFont = font();
+        largerFont.setPointSizeF(largerFont.pointSizeF() * (4.0 / 3.0));
+        labelSupportText->setFont(largerFont);
+    }
 }
 
 bool KisWelcomePageWidget::eventFilter(QObject *watched, QEvent *event)

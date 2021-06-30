@@ -42,7 +42,7 @@ if (UNIX)
 	    ALWAYS 0
     )
     endif()
-elseif(MINGW)
+elseif(WIN32)
     if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add( ext_python
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

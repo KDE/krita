@@ -382,9 +382,9 @@ class comics_project_manager_docker(DockWidget):
             if (os.path.exists(absurl)):
                 #page = Application.openDocument(absurl)
                 page = zipfile.ZipFile(absurl, "r")
-                thumbnail = QImage.fromData(page.read("mergedimage.png"))
-                if thumbnail.isNull():
-                    thumbnail = QImage.fromData(page.read("preview.png"))
+                # Note: We load preview.png instead of mergedimage.png as each mergedimage.png can take hundreds of MiB
+                # when loaded in memory.
+                thumbnail = QImage.fromData(page.read("preview.png"))
                 thumbnail.setDevicePixelRatio(self.devicePixelRatioF())
                 pageItem = QStandardItem()
                 dataList = self.get_description_and_title(page.read("documentinfo.xml"))

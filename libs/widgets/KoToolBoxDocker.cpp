@@ -28,7 +28,9 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     w->setFrameShadow(QFrame::Raised);
     w->setFrameStyle(QFrame::Panel | QFrame::Raised);
     w->setMinimumWidth(16);
-    w->setFixedHeight(QFontMetrics(KoDockRegistry::dockFont()).height());
+    QFont font = qApp->font();
+    font.setPointSizeF(font.pointSizeF() * 0.9);
+    w->setFixedHeight(QFontMetrics(font).height());
     setTitleBarWidget(w);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),

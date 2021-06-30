@@ -16,11 +16,25 @@ ExternalProject_Add( ext_gmic_base
 )
 
 # Download and build gmic-qt
+if (MSVC)
+    set(ext_gmic_PATCH_COMMAND
+    ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-desktop-entry-msvc.patch
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-pointparameter-cpp-msvc.diff
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-filterspresenter-cpp-msvc.diff
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-gmic-qt-delete-FindWWt3-msvc.diff
+       )
+else(MSVC)
+    set(ext_gmic_PATCH_COMMAND
+                     ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-desktop-entry.patch
+        )
+endif(MSVC)
+
 ExternalProject_Add( ext_gmic_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://github.com/c-koi/gmic-qt/archive/v.2.9.6.tar.gz
     URL_HASH SHA256=40712fb8b2e8d39a5a2c6349bc14277444db25c81b1cf51fde1c159ef622942b
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-desktop-entry.patch
+    
+    PATCH_COMMAND ${ext_gmic_PATCH_COMMAND}
 
     SOURCE_DIR gmic-qt
     INSTALL_DIR ${PREFIX_ext_gmic}

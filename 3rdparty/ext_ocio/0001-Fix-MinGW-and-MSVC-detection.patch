@@ -1,5 +1,22 @@
+From c9b6bf0510e905d117095a878556af800b7f814e Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Fri, 26 Feb 2021 11:58:52 +0000
+Subject: [PATCH 1/2] Fix MinGW and MSVC detection
+
+---
+ CMakeLists.txt                   | 19 +++++++++++++------
+ export/OpenColorIO/OpenColorIO.h |  8 ++++----
+ src/core/CMakeLists.txt          |  6 ++----
+ src/core/OCIOYaml.cpp            |  6 +++---
+ src/core/Platform.cpp            |  2 +-
+ src/core/UnitTest.cpp            |  4 ++--
+ src/core/UnitTest.h              |  4 ++--
+ src/core_tests/CMakeLists.txt    |  2 +-
+ src/pyglue/CMakeLists.txt        |  2 +-
+ 9 files changed, 29 insertions(+), 24 deletions(-)
+
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b05c7e4..c4f60f3 100644
+index e4f3119..44fc747 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -9,6 +9,12 @@ if(NOT DEFINED CMAKE_FIRST_RUN)
@@ -24,6 +41,15 @@ index b05c7e4..c4f60f3 100644
  
  option(OCIO_PYGLUE_LINK "If ON, link the Python module to the core shared library" OFF)
  option(OCIO_PYGLUE_RESPECT_ABI "If ON, the Python module install path includes Python UCS version" OFF)
+@@ -135,7 +141,7 @@ endif()
+ if(CMAKE_COMPILER_IS_GNUCXX)
+     # Enable a bunch of compiler warnings...
+     # http://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow -Wconversion -Wcast-qual -Wformat=2")
++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wshadow -Wconversion -Wcast-qual -Wformat=2 -Wno-unused-function -Wno-deprecated-declarations")
+     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+ endif(CMAKE_COMPILER_IS_GNUCXX)
+ 
 @@ -231,7 +237,7 @@ else(USE_EXTERNAL_TINYXML)
              INSTALL_DIR     ext/dist
              CMAKE_ARGS      ${TINYXML_CMAKE_ARGS}
@@ -33,7 +59,7 @@ index b05c7e4..c4f60f3 100644
              set(TINYXML_STATIC_LIBRARIES  ${PROJECT_BINARY_DIR}/ext/dist/lib/tinyxml.lib)
          else()
              set(TINYXML_STATIC_LIBRARIES ${PROJECT_BINARY_DIR}/ext/dist/lib/libtinyxml.a)
-@@ -348,7 +354,7 @@ else(USE_EXTERNAL_YAML) ## provide 2 ways to build this dependency
+@@ -348,11 +354,12 @@ else(USE_EXTERNAL_YAML) ## provide 2 ways to build this dependency
          set(YAML_CPP_INCLUDE_DIRS ${PROJECT_BINARY_DIR}/ext/dist/include)
          set(YAML_CPP_LIBRARY_DIRS ${PROJECT_BINARY_DIR}/ext/dist/lib)
          add_library(YAML_CPP_LIB STATIC IMPORTED)
@@ -41,8 +67,14 @@ index b05c7e4..c4f60f3 100644
 +        if(MSVC)
              set(YAML_CPP_STATIC_DEBUG_LIBRARIES     ${PROJECT_BINARY_DIR}/ext/dist/lib/libyaml-cppmdd.lib)
              set(YAML_CPP_STATIC_OPTIMIZED_LIBRARIES ${PROJECT_BINARY_DIR}/ext/dist/lib/libyaml-cppmd.lib)
++            set_property(TARGET YAML_CPP_LIB PROPERTY IMPORTED_LOCATION     ${YAML_CPP_STATIC_OPTIMIZED_LIBRARIES})
              set_property(TARGET YAML_CPP_LIB PROPERTY IMPORTED_LOCATION_DEBUG   ${YAML_CPP_STATIC_DEBUG_LIBRARIES})
-@@ -415,7 +421,7 @@ endif()
+-            set_property(TARGET YAML_CPP_LIB PROPERTY IMPORTED_LOCATION_RELEASE ${YAML_CPP_STATIC_OPTIMIZED_LIBRARIES})
++            set_property(TARGET YAML_CPP_LIB PROPERTY IMPORTED_CONFIGURATIONS "Release;Debug")
+         else()
+             set(YAML_CPP_STATIC_GENERAL_LIBRARIES           ${PROJECT_BINARY_DIR}/ext/dist/lib/libyaml-cpp.a)
+             set_property(TARGET YAML_CPP_LIB PROPERTY IMPORTED_LOCATION ${YAML_CPP_STATIC_GENERAL_LIBRARIES})
+@@ -415,7 +422,7 @@ endif()
  messageonce("SSE Optimizations: ${OCIO_USE_SSE}")
  
  if(OCIO_USE_SSE)
@@ -77,10 +109,10 @@ index 1c699c1..ff1554c 100644
      
      //!cpp:class:: An exception class for errors detected at
 diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
-index 1eb691b..fe226aa 100644
+index 1eb691b..2681217 100644
 --- a/src/core/CMakeLists.txt
 +++ b/src/core/CMakeLists.txt
-@@ -18,13 +18,15 @@ list(APPEND core_export_headers ${CMAKE_BINARY_DIR}/export/OpenColorABI.h)
+@@ -18,13 +18,11 @@ list(APPEND core_export_headers ${CMAKE_BINARY_DIR}/export/OpenColorABI.h)
  
  # Process all warnings as errors
  
@@ -90,15 +122,12 @@ index 1eb691b..fe226aa 100644
      if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
          set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} /WX")
      endif()
- else()
+-else()
 -    set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} -Werror")
-+    if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-+        set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} -Werror")
-+    endif()
  endif()
  
  # SHARED
-@@ -48,7 +50,7 @@ if(OCIO_BUILD_SHARED)
+@@ -48,7 +46,7 @@ if(OCIO_BUILD_SHARED)
          target_link_libraries(OpenColorIO ${EXTERNAL_LIBRARIES})
      endif()
  
@@ -138,7 +167,7 @@ index 68fcef6..24c7afd 100644
  #endif
  
 diff --git a/src/core/Platform.cpp b/src/core/Platform.cpp
-index 40db06b..b54091f 100644
+index d5d322f..9af8c61 100644
 --- a/src/core/Platform.cpp
 +++ b/src/core/Platform.cpp
 @@ -18,7 +18,7 @@ OCIO_NAMESPACE_ENTER
@@ -217,3 +246,6 @@ index a90ca1c..eda8ead 100644
      # Mute a design issue where the Exception public class inherits 
      # from a STL Exception. STL classes are never supposed to
      # be exported among different dynamic libraries.
+-- 
+2.30.1.windows.1
+

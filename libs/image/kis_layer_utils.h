@@ -57,7 +57,7 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
     KRITAIMAGE_EXPORT void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter);
-    
+
     KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
 
     KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
@@ -131,9 +131,12 @@ namespace KisLayerUtils
 
     struct KRITAIMAGE_EXPORT SelectGlobalSelectionMask : public KUndo2Command
     {
+    public:
         SelectGlobalSelectionMask(KisImageSP image);
+        ~SelectGlobalSelectionMask();
         void redo() override;
 
+    private:
         KisImageSP m_image;
     };
 

@@ -22,6 +22,7 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+#include <kstandardguiitem.h>
 #include <KisTagModel.h>
 
 #include <kis_workspace_resource.h>
@@ -42,7 +43,7 @@ DlgEmbedTags::DlgEmbedTags(QList<int> selectedTags, QWidget *parent)
     setFixedSize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setButtonText(Ok, i18n("Save"));
+    setButtonGuiItem(Ok, KStandardGuiItem::save());
     m_selectedTagIds = selectedTags;
 
 

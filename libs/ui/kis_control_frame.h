@@ -60,7 +60,6 @@ private:
 
 private:
 
-    QFont m_font;
     KisViewManager *m_viewManager;
 
     QTabWidget *m_gradientTab;

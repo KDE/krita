@@ -36,6 +36,7 @@
 #include <ui_wdgpaintopsettings.h>
 #include <kis_node.h>
 #include "kis_config.h"
+#include "KisUiFont.h"
 
 #include "KisResourceServerProvider.h"
 #include "kis_lod_availability_widget.h"
@@ -75,7 +76,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
-    setFont(KoDockRegistry::dockFont());
+    setFont(KisUiFont::dockFont());
 
     KisConfig cfg(true);
 

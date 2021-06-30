@@ -291,14 +291,6 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     // When placing an external source image, we never work recursively on any layer masks
     m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->externalSource);
 
-    // When dealing with animated transform mask layers, create keyframe and save the command for undo.
-    Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-        if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
-            QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask));
-            runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
-        }
-    }
-
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;
 
@@ -330,6 +322,16 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     });
 
     extraInitJobs << lastCommandUndoJobs;
+
+    KritaUtils::addJobSequential(extraInitJobs, [this]() {
+        // When dealing with animated transform mask layers, create keyframe and save the command for undo.
+        Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
+            if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
+                QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask));
+                runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+            }
+        }
+    });
 
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         /**

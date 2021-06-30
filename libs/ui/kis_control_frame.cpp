@@ -63,7 +63,6 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     , m_checkersPainter(4)
 {
     setObjectName(name);
-    m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     m_patternWidget = new KisIconWidget(parent, ResourceType::Patterns);
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
@@ -167,11 +166,9 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     m_patternsTab = new QTabWidget(m_patternChooserPopup);
     m_patternsTab->setObjectName("patternstab");
     m_patternsTab->setFocusPolicy(Qt::NoFocus);
-    m_patternsTab->setFont(m_font);
     l2->addWidget(m_patternsTab);
 
     m_patternChooser = new KisPatternChooser(m_patternChooserPopup);
-    m_patternChooser->setFont(m_font);
     m_patternChooser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QWidget *patternChooserPage = new QWidget(m_patternChooserPopup);
     QHBoxLayout *patternChooserPageLayout  = new QHBoxLayout(patternChooserPage);
@@ -180,7 +177,6 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
 
     KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
                                                             i18n("Custom Pattern"), m_viewManager);
-    customPatterns->setFont(m_font);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 
     connect(m_patternChooser, SIGNAL(resourceSelected(KoResourceSP )),
@@ -217,12 +213,10 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     m_gradientTab = new QTabWidget(m_gradientChooserPopup);
     m_gradientTab->setObjectName("gradientstab");
     m_gradientTab->setFocusPolicy(Qt::NoFocus);
-    m_gradientTab->setFont(m_font);
     l2->addWidget(m_gradientTab);
 
     m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup);
     m_gradientChooser->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
-    m_gradientChooser->setFont(m_font);
     QWidget *gradientChooserPage = new QWidget(m_gradientChooserPopup);
     QHBoxLayout *gradientChooserPageLayout  = new QHBoxLayout(gradientChooserPage);
     gradientChooserPageLayout->addWidget(m_gradientChooser);

@@ -265,13 +265,9 @@ KisTimingInformation KisColorSmudgeOp::updateTimingImpl(const KisPaintInformatio
 
 KisInterstrokeDataFactory *KisColorSmudgeOp::createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
-    bool needsInterstrokeData =
-        settings->getBool(QString("SmudgeRate") + "UseNewEngine", false);
-
-    if (!needsInterstrokeData) return 0;
 
     KisBrushOptionProperties brushOption;
-    needsInterstrokeData &=
+    bool needsInterstrokeData =
         brushOption.brushApplication(settings.data(), resourcesInterface) == LIGHTNESSMAP;
 
     return needsInterstrokeData ? new ColorSmudgeInterstrokeDataFactory() : 0;

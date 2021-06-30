@@ -345,7 +345,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
 
     {
         KisBrushSP brush = resource.dynamicCast<KisBrush>();
-        m_brush = brush; //don't clone, because we want changes to persist during session
+        m_brush = brush ? brush->clone().dynamicCast<KisBrush>() : 0;
     }
 
     if (m_brush) {

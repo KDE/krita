@@ -76,7 +76,7 @@ namespace ActionHelper {
         QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
 
         //KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
-        KisPaintDeviceSP clip = new KisPaintDevice(*device);
+        KisPaintDeviceSP clip = new KisPaintDevice(*device.data());
         Q_CHECK_PTR(clip);
         device->clear();
 
@@ -85,7 +85,7 @@ namespace ActionHelper {
         // TODO if the source is linked... copy from all linked layers?!?
 
         // Copy image data
-        KisPainter::copyAreaOptimized(rc.topLeft(), clip, device, rc);
+        KisPainter::copyAreaOptimized(QPoint(), clip, device, rc);
 
         if (selection) {
             // Apply selection mask.
@@ -124,6 +124,7 @@ namespace ActionHelper {
         }
 
         KisClipboard::instance()->setClip(device, rc.topLeft(), range);
+        device->moveTo(rc.topLeft());
     }
 
 }
@@ -276,8 +277,10 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             view->canvasBase()->toolProxy()->copy();
         }
     } else if (selection) {
-        KisNodeList selectedNodes = view->nodeManager()->selectedNodes();
+        KisNodeList selectedNodes = KisLayerUtils::sortMergableNodes(image->root(),
+                                                                     view->nodeManager()->selectedNodes());
         KisLayerUtils::filterMergableNodes(selectedNodes, true);
+
         KisNodeList nodes;
         KisGroupLayerSP group = new KisGroupLayer(image.data(), "Clipboard", OPACITY_OPAQUE_U8);
         Q_FOREACH (KisNodeSP node, selectedNodes) {
@@ -285,7 +288,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             nodes.append(dupNode);
             image->addNode(dupNode, group);
         }
-        
+
         {
             KisImageBarrierLocker locker(image);
             Q_FOREACH (KisNodeSP node, nodes) {
@@ -301,16 +304,16 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                     }
 
                     qDebug() << node->name();
-                    if (dev)
+                    if (dev && !node->inherits("KisMask"))
                         ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
                 });
             }
         }
-        //QString groupName = !overrideGroupName.isEmpty() ? overrideGroupName : image->nextLayerName(i18n("Group"));
-        image->addNode(group, image->root());
+        image->addNode(group, image->root(), node);
         KisClipboard::instance()->setLayers(nodes, image);
-        qDebug() << "Successfully copied to clipboard";
         image->removeNode(group);
+        qDebug() << "Successfully copied to clipboard";
+        view->nodeManager()->slotSetSelectedNodes(selectedNodes);
         
 /*        {
             KisImageBarrierLocker locker(image);
@@ -357,7 +360,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             Q_FOREACH (KisNodeSP node, selectedNodes) {
                 KisLayerUtils::recursiveApplyNodes(node, [selection, ap] (KisNodeSP node){
 
-                    if (!node->hasEditablePaintDevice()) {
+                    if (!node->hasEditablePaintDevice() || node->inherits("KisMask")) {
                         return;
                     }
 

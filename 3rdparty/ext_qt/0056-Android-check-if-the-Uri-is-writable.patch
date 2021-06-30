@@ -1,7 +1,7 @@
-From df7e453e92efd22a1c2b0a230f98c88415033c5b Mon Sep 17 00:00:00 2001
+From b54b923b07a94b806947bde8bd726b6a7a5b6710 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 18 Feb 2021 09:46:45 +0000
-Subject: [PATCH] Android: check if the Uri is writable
+Subject: [PATCH 36/43] Android: check if the Uri is writable
 
 We check if we have "w" permission on the Uri or not. We check both the
 explictly persisted permissions and implicity granted ones.
@@ -11,7 +11,7 @@ explictly persisted permissions and implicity granted ones.
  2 files changed, 27 insertions(+), 3 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 561403a823..3ca8cfb033 100644
+index 63dd6b4a26..2ed56e992f 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -178,13 +178,16 @@ public class QtNative
@@ -33,7 +33,7 @@ index 561403a823..3ca8cfb033 100644
      }
  
      private static Uri getUriWithValidPermission(Context context, String uri, String openMode)
-@@ -346,6 +349,18 @@ public class QtNative
+@@ -350,6 +353,18 @@ public class QtNative
          }
      }
  
@@ -83,5 +83,5 @@ index ffda6592f4..ba11a50e85 100644
  }
  
 -- 
-2.30.0
+2.20.1.windows.1
 

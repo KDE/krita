@@ -1,7 +1,7 @@
-From 04d815ab69d919f885360bfa70a10db2f94787d9 Mon Sep 17 00:00:00 2001
+From 8c5e4fec56124e22f05881ffa6e6127428d5ee1b Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sun, 10 Feb 2019 22:55:59 +0300
-Subject: [PATCH 15/22] Implement a manual test for checking is HDR features
+Subject: [PATCH 17/47] Implement a manual test for checking is HDR features
  work
 
 Test plan:

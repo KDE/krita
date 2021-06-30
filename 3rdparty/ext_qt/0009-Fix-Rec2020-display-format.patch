@@ -1,7 +1,7 @@
-From 5c98e57a2c96334e00bb8775e9d1c8a617d408cf Mon Sep 17 00:00:00 2001
+From 1f6fda5a721c37d86b116ba773687a9f2d9d72f2 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Mon, 10 Feb 2020 16:37:43 +0300
-Subject: [PATCH 17/22] Fix Rec2020 display format
+Subject: [PATCH 19/47] Fix Rec2020 display format
 
 This commit contains changes to smpte shader to fix the black screen
 in Rec2020 display format on Windows.

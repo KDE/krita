@@ -1,7 +1,7 @@
-From 5f5ccba65e77862f5555a071c20e8849f0e06191 Mon Sep 17 00:00:00 2001
+From 7e79ef05b9594d5cf8c182acaa5eadd77b55f8bc Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Mon, 15 Feb 2021 10:54:35 +0300
-Subject: [PATCH 113/113] Fix multiple shortcuts match from different keyboard
+Subject: [PATCH 09/43] Fix multiple shortcuts match from different keyboard
  layouts
 
 One key may have different meanings on different layout. Therefore
@@ -16,7 +16,7 @@ See https://bugs.kde.org/show_bug.cgi?id=430479
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/src/gui/kernel/qshortcutmap.cpp b/src/gui/kernel/qshortcutmap.cpp
-index 3bb42c1c..32bb175a 100644
+index 3bb42c1c0b..32bb175a2b 100644
 --- a/src/gui/kernel/qshortcutmap.cpp
 +++ b/src/gui/kernel/qshortcutmap.cpp
 @@ -498,9 +498,16 @@ QKeySequence::SequenceMatch QShortcutMap::find(QKeyEvent *e, int ignoredModifier

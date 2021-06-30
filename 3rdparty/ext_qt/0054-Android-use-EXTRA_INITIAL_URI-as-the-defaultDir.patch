@@ -1,7 +1,7 @@
-From 9de297110d3e18c94f278c9a98edc39e1d15ef8f Mon Sep 17 00:00:00 2001
+From b59c982a90e6cf37a33b344f2e0dde6707fed499 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 9 Nov 2020 08:40:57 +0000
-Subject: [PATCH] Android: use EXTRA_INITIAL_URI as the defaultDir
+Subject: [PATCH 34/43] Android: use EXTRA_INITIAL_URI as the defaultDir
 
 on API Level >= 26, Storage Access Framework attempts to use the URI to
 save a new file at its parent location (i.e the parent directory).
@@ -85,5 +85,5 @@ index 5a7a28a8a0..9a2e037e6f 100644
  
  }
 -- 
-2.28.0
+2.20.1.windows.1
 

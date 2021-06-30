@@ -1,7 +1,7 @@
-From 39d2940d1f855f6a16ccb82ffc7b9ea6009651e0 Mon Sep 17 00:00:00 2001
+From 96d92d83b4dc6ad201da82266d5e1edfb734bb90 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Mon, 11 Mar 2019 13:18:06 +0300
-Subject: [PATCH 03/22] Synthesize Enter/LeaveEvent for accepted QTabletEvent
+Subject: [PATCH 03/47] Synthesize Enter/LeaveEvent for accepted QTabletEvent
 
 When the tablet event is accepted, then Qt doesn't synthesize a mouse
 event, it means that QApplicationPrivate::sendMouseEvent() will not be
@@ -23,10 +23,10 @@ Change-Id: Ifbad6284483ee282ad129db54606f5d0d9ddd633
  1 file changed, 12 insertions(+)
 
 diff --git a/src/widgets/kernel/qwidgetwindow.cpp b/src/widgets/kernel/qwidgetwindow.cpp
-index c3f570ce4f..5c205a4941 100644
+index e74243203a..7f1db99f60 100644
 --- a/src/widgets/kernel/qwidgetwindow.cpp
 +++ b/src/widgets/kernel/qwidgetwindow.cpp
-@@ -1059,6 +1059,18 @@ void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
+@@ -1063,6 +1063,18 @@ void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
          event->setAccepted(ev.isAccepted());
      }
  

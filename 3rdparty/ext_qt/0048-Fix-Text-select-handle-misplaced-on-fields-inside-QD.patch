@@ -1,8 +1,8 @@
-From 4414518b345c0b428591dad81a24d4645ae2408c Mon Sep 17 00:00:00 2001
+From 0fac4527decb3fedd9b17207ce36d3693339eac7 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Pekka=20Geh=C3=B6r?= <pekka.gehor@qt.io>
 Date: Mon, 21 Dec 2020 16:37:25 +0200
-Subject: [PATCH] Fix Text select handle misplaced on fields inside QDialog
- issues
+Subject: [PATCH 25/43] Fix Text select handle misplaced on fields inside
+ QDialog issues
 
  Get cursorPoint from a mapToGlobal with a cursorRectangle of the selected inputMethod
 
@@ -32,5 +32,5 @@ index e78c317863..629574a466 100644
          m_handleMode |= ShowCursor;
          uint32_t buttons = EditContext::PasteButton;
 -- 
-2.31.1
+2.20.1.windows.1
 

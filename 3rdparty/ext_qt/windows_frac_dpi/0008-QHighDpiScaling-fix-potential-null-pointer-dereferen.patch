@@ -1,7 +1,7 @@
-From e4bd4c83de705c782a345ae1f2ad67f43b5230d7 Mon Sep 17 00:00:00 2001
+From dbb7b892861a702ad9bc9bd3cccacd4e943dbe54 Mon Sep 17 00:00:00 2001
 From: Vitaly Fanaskov <vitaly.fanaskov@qt.io>
 Date: Fri, 25 Oct 2019 14:47:15 +0200
-Subject: [PATCH 08/11] QHighDpiScaling: fix potential null pointer dereference
+Subject: [PATCH 44/47] QHighDpiScaling: fix potential null pointer dereference
 
 It's not guaranteed that QPlatformScreen::screen should always return a
 valid pointer. Furthermore, you can run into this situation with, for
@@ -30,5 +30,5 @@ index ec4feeba8b..0ac4928504 100644
          if (byIndex.isValid()) {
              screenPropertyUsed = true;
 -- 
-2.24.1.windows.2
+2.20.1.windows.1
 

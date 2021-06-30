@@ -1,7 +1,7 @@
-From ae0c27ed434fb73bec40bea7a8dac74c5da9f96e Mon Sep 17 00:00:00 2001
+From e24177dde304afbf807b0d71e3d21af50fef548d Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 4 Dec 2018 20:11:34 +0300
-Subject: [PATCH 14/22] Return QScreen's HMONITOR handle via
+Subject: [PATCH 16/47] Return QScreen's HMONITOR handle via
  QPlatformNativeInterface
 
 It is needed to be able to fetch extra information about the display via

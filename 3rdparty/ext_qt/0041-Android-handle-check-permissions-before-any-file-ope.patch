@@ -1,7 +1,8 @@
-From a7efeb291bfd05bbc32c29bd720de49667ac2349 Mon Sep 17 00:00:00 2001
+From 11c7f26c100a24d1a8410b21c4674f1db35f4241 Mon Sep 17 00:00:00 2001
 From: Assam Boudjelthia <assam.boudjelthia@qt.io>
 Date: Fri, 14 Feb 2020 14:20:13 +0200
-Subject: [PATCH] Android: handle check permissions before any file operations
+Subject: [PATCH 14/43] Android: handle check permissions before any file
+ operations
 
 This is required because opening a Uri with no permissions can cause
 crashes.
@@ -15,7 +16,7 @@ Reviewed-by: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@qt.io>
  2 files changed, 71 insertions(+), 16 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 37623ce7f6..adb0dc8f8f 100644
+index cb8c949674..e958dfc2c9 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -47,11 +47,13 @@ import java.util.concurrent.Semaphore;
@@ -174,5 +175,5 @@ index 136637800b..c095613ce7 100644
  
  bool QAndroidPlatformServices::openDocument(const QUrl &url)
 -- 
-2.31.1
+2.20.1.windows.1
 

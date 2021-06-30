@@ -1,7 +1,7 @@
-From ddcc0779c8562d15085ffa3b453981321f08616a Mon Sep 17 00:00:00 2001
+From 1ff6def2f34072920092ec857c2deaf057ffb48a Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 3 Oct 2019 19:20:07 +0300
-Subject: [PATCH 20/22] Sync buffers of the destination file after
+Subject: [PATCH 22/47] Sync buffers of the destination file after
  QFile::copy()
 
 After doing native file copying operating system (tested on Windows)

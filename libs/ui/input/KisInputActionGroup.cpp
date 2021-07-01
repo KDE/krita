@@ -7,15 +7,13 @@
 #include "KisInputActionGroup.h"
 
 KisInputActionGroupsMaskInterface::~KisInputActionGroupsMaskInterface() {
-    if(m_sharedReference)
-    {
+    if(m_sharedReference) {
         // unregister ourselves in case a guard is pointing at us (and avoid them trying to update already-deleted `this`)
         m_sharedReference->m_ref = nullptr;
     }
 }
 KisInputActionGroupsMaskInterface::SharedReference KisInputActionGroupsMaskInterface::getSharedReference() {
-    if(!m_sharedReference)
-    {
+    if(!m_sharedReference) {
         m_sharedReference = SharedReference(new Reference);
         m_sharedReference->m_ref = this;
     }

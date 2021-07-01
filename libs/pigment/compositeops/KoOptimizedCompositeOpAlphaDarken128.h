@@ -50,7 +50,7 @@ struct AlphaDarkenCompositor128 {
 
         Vc::float_v msk_norm_alpha;
         if (haveMask) {
-            const Vc::float_v uint8Rec1((float)1.0 / 255.0);
+            const Vc::float_v uint8Rec1(1.0f / 255.0f);
             Vc::float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
             msk_norm_alpha = mask_vec * uint8Rec1 * src_alpha;
         }
@@ -139,7 +139,7 @@ struct AlphaDarkenCompositor128 {
         float dstAlphaNorm = dst[alpha_pos];
         PixelWrapper<channels_type, _impl>::normalizeAlpha(dstAlphaNorm);
 
-        const float uint8Rec1 = 1.0 / 255.0;
+        const float uint8Rec1 = 1.0f / 255.0f;
         float mskAlphaNorm = haveMask ? float(*mask) * uint8Rec1 * src[alpha_pos] : src[alpha_pos];
         PixelWrapper<channels_type, _impl>::normalizeAlpha(mskAlphaNorm);
 
@@ -169,7 +169,7 @@ struct AlphaDarkenCompositor128 {
             fullFlowAlpha = opacity > dstAlphaNorm ? lerp(dstAlphaNorm, opacity, mskAlphaNorm) : dstAlphaNorm;
         }
 
-        if (flow == 1.0) {
+        if (flow == 1.0f) {
             dstAlphaNorm = fullFlowAlpha;
         } else {
             float zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(srcAlphaNorm, dstAlphaNorm);

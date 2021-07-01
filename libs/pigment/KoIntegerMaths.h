@@ -7,6 +7,8 @@
 #ifndef KO_INTEGER_MATHS_H
 #define KO_INTEGER_MATHS_H
 
+#include <cstdint>
+
 #ifndef UINT8_MAX
 #define UINT8_MAX 255u
 #endif

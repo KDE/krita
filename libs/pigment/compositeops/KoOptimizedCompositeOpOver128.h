@@ -139,7 +139,7 @@ struct OverCompositor128 {
         srcAlpha *= opacity;
 
         if (haveMask) {
-            const float uint8Rec1 = 1.0 / 255;
+            const float uint8Rec1 = 1.0f / 255.0f;
             srcAlpha *= float(*mask) * uint8Rec1;
         }
 
@@ -185,7 +185,7 @@ struct OverCompositor128 {
                         d[1] = s[1];
                         d[2] = s[2];
                     }
-                } else if (srcBlendNorm != 0.0){
+                } else if (srcBlendNorm != 0.0f){
 #if INFO_DEBUG
                     if (display) {
                         qInfo() << "calc" << s[0] << d[0] << srcBlendNorm * (s[0] - d[0]) + d[0] << s[0] - d[0] << srcBlendNorm * (s[0] - d[0]) << srcBlendNorm;
@@ -202,7 +202,7 @@ struct OverCompositor128 {
                     if(channelFlags.at(0)) d[0] = s[0];
                     if(channelFlags.at(1)) d[1] = s[1];
                     if(channelFlags.at(2)) d[2] = s[2];
-                } else if (srcBlendNorm != 0.0) {
+                } else if (srcBlendNorm != 0.0f) {
                     if(channelFlags.at(0)) d[0] = srcBlendNorm * (s[0] - d[0]) + d[0];
                     if(channelFlags.at(1)) d[1] = srcBlendNorm * (s[1] - d[1]) + d[1];
                     if(channelFlags.at(2)) d[2] = srcBlendNorm * (s[2] - d[2]) + d[2];

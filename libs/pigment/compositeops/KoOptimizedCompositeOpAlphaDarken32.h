@@ -42,15 +42,15 @@ struct AlphaDarkenCompositor32 {
 
         // instead we use value calculated by ParamsWrapper
         opacity = oparams.opacity;
-        Vc::float_v opacity_vec(255.0 * opacity);
+        Vc::float_v opacity_vec(255.0f * opacity);
 
         Vc::float_v average_opacity_vec(255.0 * oparams.averageOpacity);
         Vc::float_v flow_norm_vec(oparams.flow);
 
 
-        Vc::float_v uint8MaxRec2((float)1.0 / (255.0 * 255.0));
-        Vc::float_v uint8MaxRec1((float)1.0 / 255.0);
-        Vc::float_v uint8Max((float)255.0);
+        Vc::float_v uint8MaxRec2(1.0f / (255.0f * 255.0f));
+        Vc::float_v uint8MaxRec1(1.0f / 255.0f);
+        Vc::float_v uint8Max(255.0f);
         Vc::float_v zeroValue(Vc::Zero);
 
 
@@ -164,8 +164,8 @@ struct AlphaDarkenCompositor32 {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
-        const float uint8Rec1 = 1.0 / 255.0;
-        const float uint8Rec2 = 1.0 / (255.0 * 255.0);
+        const float uint8Rec1 = 1.0f / 255.0f;
+        const float uint8Rec2 = 1.0f / (255.0f * 255.0f);
         const float uint8Max = 255.0;
 
         quint8 dstAlphaInt = dst[alpha_pos];
@@ -208,7 +208,7 @@ struct AlphaDarkenCompositor32 {
 
         float dstAlpha;
 
-        if (flow == 1.0) {
+        if (flow == 1.0f) {
             dstAlpha = fullFlowAlpha * uint8Max;
         } else {
             float zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(srcAlphaNorm, dstAlphaNorm);

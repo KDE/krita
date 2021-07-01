@@ -65,7 +65,6 @@ foreach my $filename (@filenames)
   if( $filename =~ /ggr/ || $filename =~ /gpl/ || $filename =~ /gih/ )
   {
     my @lines = <FILE>;
-    close(FILE);
     if( $filename =~ /ggr/ || $filename =~ /gpl/ )
     {
       my @splited = split(/: /, $lines[1]);
@@ -144,6 +143,7 @@ foreach my $filename (@filenames)
       printi18n($name, $filename, $filename, -1);
     }
   }
+  close(FILE);
 }
 
 

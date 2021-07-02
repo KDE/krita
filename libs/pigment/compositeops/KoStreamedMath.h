@@ -246,7 +246,6 @@ static inline void write_channels_32_unaligned(void *data,
 
     // FIXME: Use single-instruction rounding + conversion
     //        The achieve that we need to implement Vc::iRound()
-    // or use roundps
 
     uint_v mask(lowByteMask);
     uint_v v1 = uint_v(int_v(Vc::round(alpha))) << 24;

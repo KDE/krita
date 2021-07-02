@@ -75,11 +75,19 @@ boost::optional<QFont> userCfgUiFont()
 
 QFont normalFont()
 {
+    QFont font;
     if (boost::optional<QFont> userFont = userCfgUiFont()) {
-        return *userFont;
+        font = *userFont;
     } else {
-        return systemDefaultUiFont();
+        font = systemDefaultUiFont();
     }
+#ifdef Q_OS_WIN
+    // XXX: Forces Qt to use full hinting for UI text, otherwise the default
+    //      will cause Qt to do vertical hinting only when High-DPI is active,
+    //      which makes some UI text extremely blurry on CJK systems.
+    font.setHintingPreference(QFont::PreferFullHinting);
+#endif
+    return font;
 }
 
 QFont dockFont()
@@ -151,10 +159,6 @@ static QFont LOGFONT_to_QFont(const LOGFONTW& logFont)
     qFont.setUnderline(logFont.lfUnderline);
     qFont.setOverline(false);
     qFont.setStrikeOut(logFont.lfStrikeOut);
-    // XXX: Forces Qt to use full hinting for UI text, otherwise the default
-    //      will cause Qt to do vertical hinting only when High-DPI is active,
-    //      which makes some UI text extremely blurry on CJK systems.
-    qFont.setHintingPreference(QFont::PreferFullHinting);
     return qFont;
 }
 

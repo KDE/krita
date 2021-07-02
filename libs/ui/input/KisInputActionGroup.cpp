@@ -7,29 +7,17 @@
 #include "KisInputActionGroup.h"
 
 KisInputActionGroupsMaskInterface::~KisInputActionGroupsMaskInterface() {
-    if(m_sharedReference) {
-        // unregister ourselves in case a guard is pointing at us (and avoid them trying to update already-deleted `this`)
-        m_sharedReference->m_ref = nullptr;
-    }
-}
-KisInputActionGroupsMaskInterface::SharedReference KisInputActionGroupsMaskInterface::getSharedReference() {
-    if(!m_sharedReference) {
-        m_sharedReference = SharedReference(new Reference);
-        m_sharedReference->m_ref = this;
-    }
-    return m_sharedReference;
 }
 
-KisInputActionGroupsMaskGuard::KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface::SharedReference interfaceReference, KisInputActionGroupsMask mask)
-    : m_interfaceReference(interfaceReference),
-      m_oldMask(interfaceReference->m_ref->inputActionGroupsMask())
+KisInputActionGroupsMaskGuard::KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface::SharedInterface sharedInterface, KisInputActionGroupsMask mask)
+    : m_sharedInterface(sharedInterface),
+      m_oldMask(sharedInterface->inputActionGroupsMask())
 {
-    interfaceReference->m_ref->setInputActionGroupsMask(mask);
+    m_sharedInterface->setInputActionGroupsMask(mask);
 }
 
 KisInputActionGroupsMaskGuard::~KisInputActionGroupsMaskGuard() {
-    if(m_interfaceReference->m_ref) // only update if view hasn't been deleted
-        m_interfaceReference->m_ref->setInputActionGroupsMask(m_oldMask);
+    m_sharedInterface->setInputActionGroupsMask(m_oldMask);
 }
 
 

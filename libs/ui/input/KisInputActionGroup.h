@@ -43,26 +43,7 @@ struct KisInputActionGroupsMaskInterface
      */
     virtual void setInputActionGroupsMask(KisInputActionGroupsMask mask) = 0;
 
-    struct Reference
-    {
-        /**
-         * Pointer to interface that can be modified by `this` and be read by guards
-         */
-        KisInputActionGroupsMaskInterface *m_ref;
-    };
-    using SharedReference=QSharedPointer<Reference>;
-    /**
-     * Get a shared copy of `m_sharedReference`
-     */
-    SharedReference getSharedReference();
-
-
-private:
-    /**
-     * Keep a redundant reference to this
-     * In case `this` is deleted, we will un-register ourselves from here so guards will *not* try to update `this` after we've been deleted
-     */
-    SharedReference m_sharedReference;
+    using SharedInterface=QSharedPointer<KisInputActionGroupsMaskInterface>;
 };
 
 /**
@@ -79,7 +60,7 @@ public:
      * saved in the guard itself.
      * @param interfaceReference Shared reference that can be updated by original interface (taken from KisInputActionGroupsMaskInterface::getSharedReference())
      */
-    KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface::SharedReference interfaceReference, KisInputActionGroupsMask mask);
+    KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface::SharedInterface sharedInterface, KisInputActionGroupsMask mask);
 
     /**
      * Destroy the guard and reset the mask value to the old value (if masking interface wasn't deleted)
@@ -91,7 +72,7 @@ private:
      * Reference the interface to be updated on delete
      * In case interface is deleted, it will unregister itself here so any guard will *not* try to update it on deletion
      */
-    KisInputActionGroupsMaskInterface::SharedReference m_interfaceReference;
+    KisInputActionGroupsMaskInterface::SharedInterface m_sharedInterface;
     KisInputActionGroupsMask m_oldMask;
 };
 

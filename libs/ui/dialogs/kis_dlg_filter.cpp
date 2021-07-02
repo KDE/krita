@@ -36,7 +36,7 @@ struct KisDlgFilter::Private {
             , resizeCount(0)
             , view(_view)
             , filterManager(_filterManager)
-            , blockModifyingActionsGuard(new KisInputActionGroupsMaskGuard(view->canvasBase()->getSharedReference(), ViewTransformActionGroup))
+            , blockModifyingActionsGuard(new KisInputActionGroupsMaskGuard(view->canvasBase()->inputActionGroupsMaskInterface(), ViewTransformActionGroup))
             , updateCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {
         updateCompressor.setDelay(

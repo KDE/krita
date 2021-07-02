@@ -1,7 +1,7 @@
-From ba5e586843477932e8ae1b48c0d977a7cac8ede6 Mon Sep 17 00:00:00 2001
+From f641973352cd8a0a79fd17e521b95b431b6cf3b3 Mon Sep 17 00:00:00 2001
 From: Andy Shaw <andy.shaw@qt.io>
 Date: Thu, 23 Apr 2020 18:47:17 +0300
-Subject: [PATCH 3/3] Fix QLocale::system() and uiLanguages() for the mobile
+Subject: [PATCH 01/43] Fix QLocale::system() and uiLanguages() for the mobile
  platforms
 
 On iOS, it was no longer using the Cocoa specific code needed to get
@@ -21,10 +21,10 @@ Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
  1 file changed, 2 insertions(+)
 
 diff --git a/src/corelib/tools/qlocale.cpp b/src/corelib/tools/qlocale.cpp
-index c0ca41826f..e29325d8e5 100644
+index 9b8ab78716..f865791971 100644
 --- a/src/corelib/tools/qlocale.cpp
 +++ b/src/corelib/tools/qlocale.cpp
-@@ -4000,6 +4000,8 @@ QStringList QLocale::uiLanguages() const
+@@ -4010,6 +4010,8 @@ QStringList QLocale::uiLanguages() const
              for (const auto entry : qAsConst(uiLanguages))
                  locales.append(QLocale(entry));
          }

@@ -1,7 +1,7 @@
-From effed55d16bf6c6618e0a52aef6b6d4b6ff1a2af Mon Sep 17 00:00:00 2001
+From 179b410697ff65a1a136e1ba851ecdde40713682 Mon Sep 17 00:00:00 2001
 From: Max Thomas <mtinc2@gmail.com>
 Date: Wed, 8 Jan 2020 10:34:10 -0700
-Subject: [PATCH 2/5] Add support for pen tilt/rotation for Android
+Subject: [PATCH 03/43] Add support for pen tilt/rotation for Android
 
 Change-Id: I195c891b47841ac86048dc38ea95beaeced8b70a
 ---
@@ -38,7 +38,7 @@ index a13c233712..ed599a4369 100644
  
      // keyboard methods
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index b97de05270..864744bf49 100644
+index a5bd1a58d1..0e74468266 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -323,7 +323,7 @@ namespace QtAndroidInput
@@ -69,5 +69,5 @@ index b97de05270..864744bf49 100644
          {"keyUp", "(IIIZ)V", (void *)keyUp},
          {"keyboardVisibilityChanged", "(Z)V", (void *)keyboardVisibilityChanged},
 -- 
-2.28.0
+2.20.1.windows.1
 

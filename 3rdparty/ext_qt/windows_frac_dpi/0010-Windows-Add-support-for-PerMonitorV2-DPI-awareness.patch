@@ -1,7 +1,7 @@
-From 21c583a9069479fb105dd46596ad70910a8c090e Mon Sep 17 00:00:00 2001
+From da873ea0ac11df032f82e080996737ebd291b577 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Tue, 1 Dec 2020 15:24:23 +0100
-Subject: [PATCH 10/11] Windows: Add support for PerMonitorV2 DPI awareness
+Subject: [PATCH 46/47] Windows: Add support for PerMonitorV2 DPI awareness
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -141,7 +141,7 @@ index 4908f14629..012dd4e75d 100644
      void setDetectAltGrModifier(bool a);
  
 diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
-index 5c1fa00088..2ec61aad80 100644
+index 47b2bbeb02..8923972d49 100644
 --- a/src/plugins/platforms/windows/qwindowsintegration.cpp
 +++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
 @@ -210,7 +210,7 @@ static inline unsigned parseOptions(const QStringList &paramList,
@@ -153,7 +153,7 @@ index 5c1fa00088..2ec61aad80 100644
          } else if (param == QLatin1String("menus=native")) {
              options |= QWindowsIntegration::AlwaysUseNativeMenus;
          } else if (param == QLatin1String("menus=none")) {
-@@ -246,10 +246,19 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
+@@ -259,10 +259,19 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
  
      if (!dpiAwarenessSet) { // Set only once in case of repeated instantiations of QGuiApplication.
          if (!QCoreApplication::testAttribute(Qt::AA_PluginApplication)) {
@@ -178,5 +178,5 @@ index 5c1fa00088..2ec61aad80 100644
          dpiAwarenessSet = true;
      }
 -- 
-2.24.1.windows.2
+2.20.1.windows.1
 

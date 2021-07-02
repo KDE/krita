@@ -1,57 +1,47 @@
-From 18151d0aa58321939195d4de978a21003153e2c8 Mon Sep 17 00:00:00 2001
+From 8fc846e3179fbe83085988b31adf8ca17cf72add Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Wed, 28 Oct 2020 08:53:23 +0000
-Subject: [PATCH] Android: don't use getExternalStorageDirectory and
+Subject: [PATCH 41/43] Android: don't use getExternalStorageDirectory and
  getExternalStoragePublicDirectory
 
 These methods have been deprecated for apps targetting Sdk 29+
 ---
- src/corelib/io/qstandardpaths_android.cpp | 32 ++++++-----------------
- 1 file changed, 8 insertions(+), 24 deletions(-)
+ src/corelib/io/qstandardpaths_android.cpp | 27 ++++++-----------------
+ 1 file changed, 7 insertions(+), 20 deletions(-)
 
 diff --git a/src/corelib/io/qstandardpaths_android.cpp b/src/corelib/io/qstandardpaths_android.cpp
-index 0667d170c7..2dbed9cc57 100644
+index 9fe98d34cd..0ac558f8c2 100644
 --- a/src/corelib/io/qstandardpaths_android.cpp
 +++ b/src/corelib/io/qstandardpaths_android.cpp
-@@ -233,24 +233,17 @@ QString QStandardPaths::writableLocation(StandardLocation type)
+@@ -188,18 +188,11 @@ QString QStandardPaths::writableLocation(StandardLocation type)
  {
      switch (type) {
      case QStandardPaths::MusicLocation:
--        return getExternalStoragePublicDirectory("DIRECTORY_MUSIC");
+-        return getExternalFilesDir("DIRECTORY_MUSIC");
      case QStandardPaths::MoviesLocation:
--        return getExternalStoragePublicDirectory("DIRECTORY_MOVIES");
+-        return getExternalFilesDir("DIRECTORY_MOVIES");
      case QStandardPaths::PicturesLocation:
--        return getExternalStoragePublicDirectory("DIRECTORY_PICTURES");
+-        return getExternalFilesDir("DIRECTORY_PICTURES");
      case QStandardPaths::DocumentsLocation:
 -        if (QtAndroidPrivate::androidSdkVersion() > 18)
--            return getExternalStoragePublicDirectory("DIRECTORY_DOCUMENTS");
+-            return getExternalFilesDir("DIRECTORY_DOCUMENTS");
 -        else
--            return getExternalStorageDirectory() + QLatin1String("/Documents");
+-            return getExternalFilesDir() + QLatin1String("/Documents");
      case QStandardPaths::DownloadLocation:
--        return getExternalStoragePublicDirectory("DIRECTORY_DOWNLOADS");
+-        return getExternalFilesDir("DIRECTORY_DOWNLOADS");
 +        return standardLocations(type).first();
      case QStandardPaths::GenericConfigLocation:
      case QStandardPaths::ConfigLocation:
      case QStandardPaths::AppConfigLocation:
-         return getFilesDir() + testDir() + QLatin1String("/settings");
-     case QStandardPaths::GenericDataLocation:
--        return getExternalStorageDirectory() + testDir();
-+        return getExternalFilesDir() + testDir();
-     case QStandardPaths::AppDataLocation:
-     case QStandardPaths::AppLocalDataLocation:
-         return getFilesDir() + testDir();
-@@ -274,39 +267,30 @@ QString QStandardPaths::writableLocation(StandardLocation type)
+@@ -229,36 +222,30 @@ QString QStandardPaths::writableLocation(StandardLocation type)
  QStringList QStandardPaths::standardLocations(StandardLocation type)
  {
      if (type == MusicLocation) {
 -        return QStringList() << writableLocation(type)
 -                             << getExternalFilesDir("DIRECTORY_MUSIC")
--                             << getExternalStoragePublicDirectory("DIRECTORY_PODCASTS")
 +        return QStringList() << getExternalFilesDir("DIRECTORY_MUSIC")
                               << getExternalFilesDir("DIRECTORY_PODCASTS")
--                             << getExternalStoragePublicDirectory("DIRECTORY_NOTIFICATIONS")
                               << getExternalFilesDir("DIRECTORY_NOTIFICATIONS")
--                             << getExternalStoragePublicDirectory("DIRECTORY_ALARMS")
                               << getExternalFilesDir("DIRECTORY_ALARMS");
      }
  
@@ -87,5 +77,5 @@ index 0667d170c7..2dbed9cc57 100644
  
      if (type == AppDataLocation || type == AppLocalDataLocation) {
 -- 
-2.28.0
+2.20.1.windows.1
 

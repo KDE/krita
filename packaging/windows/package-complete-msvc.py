@@ -224,6 +224,12 @@ shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb", f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe", f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.com", f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb", f"{pkg_root}\\bin\\")
+
+if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe"):
+    shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe", f"{pkg_root}\\bin\\")
+    subprocess.run(["xcopy", "/S", "/Y", "/I",
+                   f"{DEPS_INSTALL_DIR}\\bin\\data\\", f"{pkg_root}\\bin\\data\\"])
+
 # DLLs from bin/
 print("INFO: Copying all DLLs except Qt5 * from bin/")
 files = glob.glob(f"{KRITA_INSTALL_DIR}\\bin\\*.dll")

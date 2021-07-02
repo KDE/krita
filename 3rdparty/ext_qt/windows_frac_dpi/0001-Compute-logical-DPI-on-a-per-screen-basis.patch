@@ -1,7 +1,7 @@
-From dc29f0e54876373f07b9e09781371da11a3b8ad6 Mon Sep 17 00:00:00 2001
+From 26a7cc5c8f97c0a4fc38d67fcf46da9648dd4f6d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Mon, 25 Apr 2016 09:27:48 +0200
-Subject: [PATCH 01/11] Compute logical DPI on a per-screen basis
+Subject: [PATCH 37/47] Compute logical DPI on a per-screen basis
 
 The logical DPI reported to applications is the platform screen
 logical DPI divided by the platform screen scale factor.
@@ -69,7 +69,7 @@ index 64f1397771..95790b96a9 100644
  
  QHighDpiScaling::ScaleAndOrigin QHighDpiScaling::scaleAndOrigin(const QPlatformScreen *platformScreen, QPoint *nativePosition)
 diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
-index c43641b8c9..6980c02275 100644
+index 674b737808..e578625305 100644
 --- a/src/gui/kernel/qhighdpiscaling_p.h
 +++ b/src/gui/kernel/qhighdpiscaling_p.h
 @@ -98,7 +98,7 @@ public:
@@ -113,5 +113,5 @@ index f208eb02be..82ee62e6b4 100644
  }
  
 -- 
-2.24.1.windows.2
+2.20.1.windows.1
 

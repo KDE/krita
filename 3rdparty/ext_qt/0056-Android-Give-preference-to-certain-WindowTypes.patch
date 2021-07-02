@@ -1,7 +1,7 @@
-From 226a68397fefa4e493c7ca8003b99d451258ef6d Mon Sep 17 00:00:00 2001
+From c41b1052a991561668edc624b99cd3e05a524517 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Fri, 12 Feb 2021 17:44:50 +0000
-Subject: [PATCH] Android: Give preference to certain WindowTypes
+Subject: [PATCH 37/43] Android: Give preference to certain WindowTypes
 
 In some cases some widgets (like QDockWidget) may get added to the
 windowStack before the parent widget. This would make the widget
@@ -60,5 +60,5 @@ index f15aeae3fd..2cb2002874 100644
      bool m_updatePending = false;
  
 -- 
-2.30.0
+2.20.1.windows.1
 

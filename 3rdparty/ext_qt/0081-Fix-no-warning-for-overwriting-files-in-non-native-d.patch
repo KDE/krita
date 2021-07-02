@@ -1,7 +1,7 @@
-From f8395f13762bc69815547b169b1bb708835510bf Mon Sep 17 00:00:00 2001
+From 78cdcbb09623515d6e39dab80b24a3535bd803d4 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@theqtcompany.com>
 Date: Mon, 10 Feb 2020 16:58:17 +0300
-Subject: [PATCH 21/22] Fix no warning for overwriting files in non-native
+Subject: [PATCH 23/47] Fix no warning for overwriting files in non-native
  dialogs
 
 Before this commit, in case a user wanted to Save As "filename",

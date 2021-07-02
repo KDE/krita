@@ -1,7 +1,8 @@
-From 10ee55f1b5b6dcd5bfda71c5d66bb14fcbb9cd34 Mon Sep 17 00:00:00 2001
+From 0b5fb355c64013fa87689171b32b7c9f409a7068 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 1 Jun 2020 00:05:25 +0530
-Subject: [PATCH] Android: return the actual file name the URI is pointing to
+Subject: [PATCH 27/43] Android: return the actual file name the URI is
+ pointing to
 
 This only manages QFileInfo::filename() and QFileInfo::suffix().
 
@@ -14,10 +15,10 @@ Change-Id: Iec527e2a6808f04dca25fd17e82e8d2aa7e45cfc
  4 files changed, 72 insertions(+), 12 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 71f628ddc8..baee701753 100644
+index f6b3d3d71c..ead3fb7ec0 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-@@ -294,6 +294,32 @@ public class QtNative
+@@ -299,6 +299,32 @@ public class QtNative
          }
      }
  
@@ -191,5 +192,5 @@ index 09e5d77553..bb97bd6975 100644
  
  class AndroidContentFileEngineHandler : public QAbstractFileEngineHandler
 -- 
-2.31.1
+2.20.1.windows.1
 

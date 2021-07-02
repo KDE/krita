@@ -1,7 +1,7 @@
-From 4ac872639ed0dd3ae6627e05bdda821f7d128500 Mon Sep 17 00:00:00 2001
+From 716dcf21b9c025be6038b06736eec90038ec3a11 Mon Sep 17 00:00:00 2001
 From: Alexandru Croitor <alexandru.croitor@qt.io>
-Date: Thu, 09 Nov 2017 18:00:46 +0100
-Subject: [PATCH] Make Qt relocatable
+Date: Thu, 9 Nov 2017 18:00:46 +0100
+Subject: [PATCH 35/47] Make Qt relocatable
 
 [ChangeLog][QtCore] Qt installations on the host system can now be
 relocated, i.e. moved to other directories.
@@ -36,12 +36,18 @@ Task-number: QTBUG-15234
 Change-Id: I7319e2856d8fe17f277082d71216442f52580633
 Reviewed-by: Alexandru Croitor <alexandru.croitor@qt.io>
 ---
+ configure.json                      |  27 ++++
+ configure.pri                       |  21 +++
+ qmake/option.cpp                    |   5 +
+ src/corelib/configure.json          |  20 ---
+ src/corelib/global/qlibraryinfo.cpp | 208 +++++++++++++++++++++++-----
+ 5 files changed, 228 insertions(+), 53 deletions(-)
 
 diff --git a/configure.json b/configure.json
-index 5fc35a1..13cca85 100644
+index 7279259484..0b06f3549a 100644
 --- a/configure.json
 +++ b/configure.json
-@@ -222,6 +222,21 @@
+@@ -203,6 +203,21 @@
                  { "type": "pkgConfig", "args": "libudev" },
                  "-ludev"
              ]
@@ -63,7 +69,7 @@ index 5fc35a1..13cca85 100644
          }
      },
  
-@@ -1340,6 +1355,17 @@
+@@ -1247,6 +1262,17 @@
              "autoDetect": false,
              "condition": "!features.shared",
              "output": [ "publicConfig", "publicQtConfig" ]
@@ -81,7 +87,7 @@ index 5fc35a1..13cca85 100644
          }
      },
  
-@@ -1466,6 +1492,7 @@
+@@ -1363,6 +1389,7 @@ Configure with '-qreal float' to create a build that is binary-compatible with 5
                      "args": "enable_gdb_index",
                      "condition": "config.gcc && !config.clang && (features.debug || features.force_debug_info || features.debug_and_release)"
                  },
@@ -90,10 +96,10 @@ index 5fc35a1..13cca85 100644
                  "ltcg",
                  {
 diff --git a/configure.pri b/configure.pri
-index e26b557..5f82efb 100644
+index 33c90a8c2f..57c750b104 100644
 --- a/configure.pri
 +++ b/configure.pri
-@@ -763,6 +763,11 @@
+@@ -757,6 +757,11 @@ defineTest(qtConfOutput_preparePaths) {
          have_hostprefix = true
      }
  
@@ -105,7 +111,7 @@ index e26b557..5f82efb 100644
      PREFIX_COMPLAINTS =
      PREFIX_REMINDER = false
      win32: \
-@@ -802,6 +807,18 @@
+@@ -796,6 +801,18 @@ defineTest(qtConfOutput_preparePaths) {
          processQtPath(host, hostdatadir, $$config.rel_input.archdatadir)
      }
  
@@ -124,7 +130,7 @@ index e26b557..5f82efb 100644
      !isEmpty(PREFIX_COMPLAINTS) {
          PREFIX_COMPLAINTS = "$$join(PREFIX_COMPLAINTS, "$$escape_expand(\\n)Note: ")"
          $$PREFIX_REMINDER: \
-@@ -864,9 +881,13 @@
+@@ -858,9 +875,13 @@ defineTest(qtConfOutput_preparePaths) {
          ";" \
          "" \
          "$${LITERAL_HASH}define QT_CONFIGURE_SETTINGS_PATH \"$$config.rel_input.sysconfdir\"" \
@@ -139,10 +145,10 @@ index e26b557..5f82efb 100644
          "" \
          "$${LITERAL_HASH}define QT_CONFIGURE_PREFIX_PATH qt_configure_prefix_path_str + 12" \
 diff --git a/qmake/option.cpp b/qmake/option.cpp
-index d814346..9ec2fe6 100644
+index 626a2cec0d..e13fa47281 100644
 --- a/qmake/option.cpp
 +++ b/qmake/option.cpp
-@@ -658,4 +658,9 @@
+@@ -661,4 +661,9 @@ QString qmake_libraryInfoFile()
      return QString();
  }
  
@@ -153,10 +159,10 @@ index d814346..9ec2fe6 100644
 +
  QT_END_NAMESPACE
 diff --git a/src/corelib/configure.json b/src/corelib/configure.json
-index f7b6d41..ae36023 100644
+index 4de6cc19f3..5d657a13b5 100644
 --- a/src/corelib/configure.json
 +++ b/src/corelib/configure.json
-@@ -158,21 +158,6 @@
+@@ -157,21 +157,6 @@
                  "-latomic"
              ]
          },
@@ -178,7 +184,7 @@ index f7b6d41..ae36023 100644
          "librt": {
              "label": "clock_gettime()",
              "test": {
-@@ -612,11 +597,6 @@
+@@ -552,11 +537,6 @@
              "condition": "features.clock-gettime && tests.clock-monotonic",
              "output": [ "feature" ]
          },
@@ -191,10 +197,10 @@ index f7b6d41..ae36023 100644
              "label": "DoubleConversion",
              "output": [ "privateFeature", "feature" ]
 diff --git a/src/corelib/global/qlibraryinfo.cpp b/src/corelib/global/qlibraryinfo.cpp
-index 4c1b04f..c7357f9 100644
+index f2ada4ab30..9da9039f1a 100644
 --- a/src/corelib/global/qlibraryinfo.cpp
 +++ b/src/corelib/global/qlibraryinfo.cpp
-@@ -55,16 +55,25 @@
+@@ -55,15 +55,24 @@ QT_END_NAMESPACE
  # include "qcoreapplication.h"
  #endif
  
@@ -206,26 +212,24 @@ index 4c1b04f..c7357f9 100644
  #ifdef Q_OS_DARWIN
  #  include "private/qcore_mac_p.h"
 -#endif
--
--#ifndef QT_BUILD_QMAKE_BOOTSTRAP
--# include "qconfig.cpp"
--#endif
 +#endif // Q_OS_DARWIN
  
- #include "archdetect.cpp"
- 
+-#ifndef QT_BUILD_QMAKE_BOOTSTRAP
+-# include "qconfig.cpp"
++#include "archdetect.cpp"
++
 +#if !defined(QT_BUILD_QMAKE) && QT_CONFIG(relocatable) && QT_CONFIG(dlopen) && !QT_CONFIG(framework)
 +#  include <dlfcn.h>
-+#endif
-+
+ #endif
+ 
+-#include "archdetect.cpp"
 +#if !defined(QT_BUILD_QMAKE) && QT_CONFIG(relocatable) && defined(Q_OS_WIN)
 +#  include <qt_windows.h>
 +#endif
-+
+ 
  QT_BEGIN_NAMESPACE
  
- extern void qDumpCPUFeatures(); // in qsimd.cpp
-@@ -453,6 +462,160 @@
+@@ -453,6 +462,160 @@ void QLibraryInfo::sysrootify(QString *path)
  }
  #endif // QT_BUILD_QMAKE
  
@@ -386,7 +390,7 @@ index 4c1b04f..c7357f9 100644
  /*!
    Returns the location specified by \a loc.
  */
-@@ -564,12 +727,11 @@
+@@ -564,12 +727,11 @@ QLibraryInfo::rawLocation(LibraryLocation loc, PathGroup group)
      if (!fromConf) {
          const char * volatile path = 0;
          if (loc == PrefixPath) {
@@ -404,7 +408,7 @@ index 4c1b04f..c7357f9 100644
          } else if (unsigned(loc) <= sizeof(qt_configure_str_offsets)/sizeof(qt_configure_str_offsets[0])) {
              path = qt_configure_strs + qt_configure_str_offsets[loc - 1];
  #ifndef Q_OS_WIN // On Windows we use the registry
-@@ -578,7 +740,8 @@
+@@ -578,7 +740,8 @@ QLibraryInfo::rawLocation(LibraryLocation loc, PathGroup group)
  #endif
  # ifdef QT_BUILD_QMAKE
          } else if (loc == HostPrefixPath) {
@@ -414,7 +418,7 @@ index 4c1b04f..c7357f9 100644
  # endif
          }
  
-@@ -612,28 +775,7 @@
+@@ -612,28 +775,7 @@ QLibraryInfo::rawLocation(LibraryLocation loc, PathGroup group)
          }
  #else
          if (loc == PrefixPath) {
@@ -444,3 +448,6 @@ index 4c1b04f..c7357f9 100644
          } else {
              // we make any other path absolute to the prefix directory
              baseDir = location(PrefixPath);
+-- 
+2.20.1.windows.1
+

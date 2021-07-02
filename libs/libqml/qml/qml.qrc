@@ -128,14 +128,12 @@
         <file>SaveImagePage.qml</file>
         <file>WelcomePage.qml</file>
         <file>panels/EditLayerPage.qml</file>
-        <file>panels/toolconfigpages</file>
         <file>panels/toolconfigpages/paint.qml</file>
         <file>panels/toolconfigpages/fill.qml</file>
         <file>panels/toolconfigpages/transform.qml</file>
         <file>panels/toolconfigpages/move.qml</file>
         <file>panels/toolconfigpages/gradient.qml</file>
         <file>panels/toolconfigpages/crop.qml</file>
-        <file>panels/tooloverlays</file>
         <file>panels/tooloverlays/select.qml</file>
         <file>panels/tooloverlays/transform.qml</file>
         <file>panels/tooloverlays/none.qml</file>
@@ -150,7 +148,6 @@
         <file>panels/Panel.qml</file>
         <file>panels/LayersPanel.qml</file>
         <file>panels/PresetsPanel.qml</file>
-        <file>panels/filterconfigpages</file>
         <file>panels/filterconfigpages/wave.qml</file>
         <file>panels/filterconfigpages/motion blur.qml</file>
         <file>panels/filterconfigpages/emboss.qml</file>

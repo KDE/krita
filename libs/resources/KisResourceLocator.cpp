@@ -306,7 +306,18 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
         return nullptr;
     }
 
-    QByteArray md5 = resource->md5();
+    const QByteArray md5 = resource->md5();
+
+    const KoResourceSP existingResource = storage->resource(resourceType + "/" + resource->filename());
+
+    if (existingResource) {
+        if (existingResource->md5() == md5) {
+            return existingResource;
+        } else {
+            qWarning() << "A resource with the same filename but a different MD5 already exists in the storage" << resourceType << fileName << storageLocation;
+            return nullptr;
+        }
+    }
 
     if (storage->importResourceFile(resourceType, fileName)) {
 

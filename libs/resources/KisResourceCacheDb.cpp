@@ -756,7 +756,8 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":resource_type", resourceType);
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", resource->filename());
-    q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
+    QString translationContext = "./krita/data/" + resourceType + "/" + resource->filename();
+    q.bindValue(":tooltip", i18nc(translationContext.toUtf8(), resource->name().toUtf8()));
 
     QByteArray ba;
     QBuffer buf(&ba);

@@ -1,7 +1,7 @@
-From 544852c4222ff8e625730888248263b7b2910724 Mon Sep 17 00:00:00 2001
+From f31141eb0636b94ebe90ae60a6c0b07a771769cd Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 3 Sep 2020 15:19:59 +0300
-Subject: [PATCH 1/2] Pass proper dirty rect in paint event to QOpenGLWidget
+Subject: [PATCH 27/47] Pass proper dirty rect in paint event to QOpenGLWidget
  with partial updates
 
 When QOpenGLWidget has partial updates enabled, there is no reason to
@@ -24,7 +24,7 @@ the dirty region, but it is a different task.
  4 files changed, 29 insertions(+), 8 deletions(-)
 
 diff --git a/src/widgets/kernel/qopenglwidget.cpp b/src/widgets/kernel/qopenglwidget.cpp
-index 36eae9f9..7a0f4f24 100644
+index 36eae9f9db..7a0f4f2440 100644
 --- a/src/widgets/kernel/qopenglwidget.cpp
 +++ b/src/widgets/kernel/qopenglwidget.cpp
 @@ -1036,6 +1036,7 @@ void QOpenGLWidget::setUpdateBehavior(UpdateBehavior updateBehavior)
@@ -36,7 +36,7 @@ index 36eae9f9..7a0f4f24 100644
  
  /*!
 diff --git a/src/widgets/kernel/qwidget.cpp b/src/widgets/kernel/qwidget.cpp
-index b094172a..15556eb2 100644
+index 85fa2ffe39..79be7a1f88 100644
 --- a/src/widgets/kernel/qwidget.cpp
 +++ b/src/widgets/kernel/qwidget.cpp
 @@ -271,6 +271,7 @@ QWidgetPrivate::QWidgetPrivate(int version)
@@ -48,7 +48,7 @@ index b094172a..15556eb2 100644
  #ifndef QT_NO_IM
        , inheritsInputMethodHints(0)
 diff --git a/src/widgets/kernel/qwidget_p.h b/src/widgets/kernel/qwidget_p.h
-index e541cb70..8c3bd88d 100644
+index e541cb70e4..8c3bd88ddf 100644
 --- a/src/widgets/kernel/qwidget_p.h
 +++ b/src/widgets/kernel/qwidget_p.h
 @@ -772,6 +772,7 @@ public:
@@ -60,7 +60,7 @@ index e541cb70..8c3bd88d 100644
  #ifndef QT_NO_IM
      uint inheritsInputMethodHints : 1;
 diff --git a/src/widgets/kernel/qwidgetbackingstore.cpp b/src/widgets/kernel/qwidgetbackingstore.cpp
-index d5b613a4..8b29a4ed 100644
+index d5b613a4e5..8b29a4edeb 100644
 --- a/src/widgets/kernel/qwidgetbackingstore.cpp
 +++ b/src/widgets/kernel/qwidgetbackingstore.cpp
 @@ -557,8 +557,14 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget,

@@ -1,7 +1,7 @@
-From 260540b5e6b16facfa900f0ad1eef8e39b7ae992 Mon Sep 17 00:00:00 2001
+From 11ae6a1706716d3772a15a98ccca0d4ae4b08fde Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 1 Sep 2020 11:59:23 +0300
-Subject: [PATCH 3/3] Make sure if WinInk is correctly initialized if
+Subject: [PATCH 11/47] Make sure if WinInk is correctly initialized if
  wintab.dll is not found
 
 If the app requests WinTab, but the library is not found, WinInk sould
@@ -11,7 +11,7 @@ still be fully initialized.
  1 file changed, 13 insertions(+), 6 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
-index d2d12ff7..47b2bbeb 100644
+index d2d12ff7e5..47b2bbeb02 100644
 --- a/src/plugins/platforms/windows/qwindowsintegration.cpp
 +++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
 @@ -237,17 +237,24 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL

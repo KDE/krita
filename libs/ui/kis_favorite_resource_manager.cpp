@@ -345,21 +345,6 @@ void KisFavoriteResourceManager::init()
             m_currentTag = currentTagSP;
         }
         if (m_currentTag.isNull() && tagModel.rowCount() > 0) {
-            // HACK: try to find the My Favourites tag on non-English system
-            // it would be better to just use i18n() above, but it's a string freeze
-            // in the moment of writing, so better hack than nothing...
-            // It might not work well for non-latin languages.
-            for (int i = 0; i < tagModel.rowCount(); i++) {
-                QModelIndex idxHack = tagModel.index(i, 0);
-                QString name = tagModel.data(idxHack, Qt::UserRole + KisAllTagsModel::Name).toString();
-                if (name.contains("★") || name.contains("*")) {
-                    currentTagSP = tagModel.tagForIndex(idxHack);
-                    if (currentTagSP) {
-                        m_currentTag = currentTagSP;
-                    }
-                }
-            }
-
             // safety measure to have at least *some* tag chosen
             QModelIndex idx = tagModel.index(0, 0);
             currentTagSP = tagModel.tagForIndex(idx);

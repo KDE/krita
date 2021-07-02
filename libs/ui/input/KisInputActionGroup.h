@@ -58,7 +58,6 @@ public:
     /**
      * Create a guard and set a new mask \p mask onto \p object. The old mask value is
      * saved in the guard itself.
-     * @param interfaceReference Shared reference that can be updated by original interface (taken from KisInputActionGroupsMaskInterface::getSharedReference())
      */
     KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface::SharedInterface sharedInterface, KisInputActionGroupsMask mask);
 
@@ -69,8 +68,7 @@ public:
 
 private:
     /**
-     * Reference the interface to be updated on delete
-     * In case interface is deleted, it will unregister itself here so any guard will *not* try to update it on deletion
+     * Pointer to the interface to be updated on delete
      */
     KisInputActionGroupsMaskInterface::SharedInterface m_sharedInterface;
     KisInputActionGroupsMask m_oldMask;

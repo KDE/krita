@@ -1,4 +1,6 @@
+if(NOT APPLE)
 add_subdirectory(tests)
+endif()
 
 set(KRITA_STORYBOARDDOCKER_SOURCES
     CommentModel.cpp

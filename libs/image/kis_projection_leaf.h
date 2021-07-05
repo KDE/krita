@@ -49,6 +49,12 @@ public:
 
     bool isDroppedNode() const;
 
+    /**
+     * A leaf can be renderable even when it is invisible, e.g. when it has
+     * clones (it should update data for clones)
+     */
+    bool shouldBeRendered() const;
+
     enum NodeDropReason {
         NodeAvailable,
         DropPassThroughMask,

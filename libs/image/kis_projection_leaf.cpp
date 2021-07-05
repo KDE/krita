@@ -345,6 +345,11 @@ bool KisProjectionLeaf::isDroppedNode() const
     return dropReason() != NodeAvailable;
 }
 
+bool KisProjectionLeaf::shouldBeRendered() const
+{
+    return visible() || hasClones();
+}
+
 KisProjectionLeaf::NodeDropReason KisProjectionLeaf::dropReason() const
 {
     if (qobject_cast<KisMask*>(m_d->node.data()) &&

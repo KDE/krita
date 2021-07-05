@@ -1,0 +1,45 @@
+From 60f67a2cb5f3c1148ef6b5803183f46b2b3f9478 Mon Sep 17 00:00:00 2001
+From: Oliver Wolff <oliver.wolff@qt.io>
+Date: Fri, 21 Feb 2020 09:10:28 +0100
+Subject: [PATCH 3/5] qwindowswindow: Fix screen changes between different DPI
+ screens for native windows
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When asynchronous events are used for notifications about screen changes
+it is possible that we run into a race condition where the scale factor
+has not yet been updated for the new screen. This results in a wrong
+geometry being set for the window that is moved between the screens.
+We do not have that problem with synchronous events.
+
+Change-Id: I4eb6d2a7cb49517d271901b479f973e273a0926a
+Amends: 7eed1e40d4d3b6a066bac52995eed7e75d17de2d
+Task-number: QTBUG-65580
+Fixes: QTBUG-82312
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@qt.io>
+(cherry picked from commit 529cfe4e22cc02dc7c29f653e8ff23656aa16ff9)
+---
+ src/plugins/platforms/windows/qwindowswindow.cpp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+index bba01b9818..a3374a237d 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -1887,10 +1887,8 @@ void QWindowsWindow::checkForScreenChanged(ScreenChangeMode mode)
+     qCDebug(lcQpaWindows).noquote().nospace() << __FUNCTION__
+         << ' ' << window() << " \"" << (currentScreen ? currentScreen->name() : QString())
+         << "\"->\"" << newScreen->name() << '"';
+-    if (mode == FromGeometryChange)
+-        setFlag(SynchronousGeometryChangeEvent);
+     updateFullFrameMargins();
+-    QWindowSystemInterface::handleWindowScreenChanged(window(), newScreen->screen());
++    QWindowSystemInterface::handleWindowScreenChanged<QWindowSystemInterface::SynchronousDelivery>(window(), newScreen->screen());
+ }
+ 
+ void QWindowsWindow::handleGeometryChange()
+-- 
+2.24.1.windows.2
+

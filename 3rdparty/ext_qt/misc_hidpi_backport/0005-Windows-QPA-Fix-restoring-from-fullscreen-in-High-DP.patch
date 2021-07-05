@@ -1,0 +1,38 @@
+From 8b6300ddaf36b11ab54a504f438c96c19e545f7d Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Tue, 14 Apr 2020 08:09:04 +0200
+Subject: [PATCH 5/5] Windows QPA: Fix restoring from fullscreen in High DPI
+ setups
+
+The logic for checking whether the saved geometry (native pixels)
+is still within a screen compared them against logical coordinates.
+Work with the platform screen geometry instead.
+
+Fixes: QTBUG-83448
+Change-Id: Ib68f967d1a33a490f88a7bec6dcc788788a10389
+Reviewed-by: Oliver Wolff <oliver.wolff@qt.io>
+(cherry picked from commit c92fedd761206231f13838528943619b84df55bf)
+---
+ src/plugins/platforms/windows/qwindowswindow.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+index 1a78c692b1..66f0d3cb39 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -2221,8 +2221,10 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowStates newState)
+             if (!screen)
+                 screen = QGuiApplication::primaryScreen();
+             // That area of the virtual desktop might not be covered by a screen anymore.
+-            if (!screen->geometry().intersects(m_savedFrameGeometry))
+-                m_savedFrameGeometry.moveTo(screen->geometry().topLeft());
++            if (const auto platformScreen = screen->handle()) {
++                if (!platformScreen->geometry().intersects(m_savedFrameGeometry))
++                    m_savedFrameGeometry.moveTo(platformScreen->geometry().topLeft());
++            }
+ 
+             if (newState & Qt::WindowMinimized) {
+                 setMinimizedGeometry(m_data.hwnd, m_savedFrameGeometry);
+-- 
+2.24.1.windows.2
+

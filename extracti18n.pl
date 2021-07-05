@@ -11,13 +11,34 @@ use strict;
 use warnings;
 
 sub printi18n($$$$) {
-  if ($_[0] ne "") 
+  my ($name, $filename, $filename2, $linenum) = @_;
+  if ($name ne "")
     {
-      if ($_[3] > 0)
+      if ($filename =~ /myb$/)
+      {
+        print "// i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]\n";
+      }
+      else
+      {
+        print "// i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]\n";
+      }
+
+      if ($name =~ /^\w\)/)
+      {
+        print "// i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order ";
+        print "when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names\n";
+      }
+      if ($name =~ /DITH\b/)
+      {
+        print "// i18n: DITH probably means 'dithering'\n";
+      }
+
+      if ($linenum > 0)
       {
         print "// i18n: file: ".$_[2].":".$_[3]."\n";
       }
-          print "i18nc(\"".$_[1]."\",\"".$_[0]."\");\n";
+
+      print "i18nc(\"".$_[1]."\",\"".$_[0]."\");\n";
     }
 }
 

@@ -208,7 +208,7 @@ struct KisAnimationCachePopulator::Private
 
         // if we ever decide to add ROI to background cache
         // regeneration, it should be added here :)
-        regenerator.startFrameRegeneration(cache->image(), frame);
+        regenerator.startFrameRegeneration(cache->image(), frame, KisAsyncAnimationRendererBase::Cancellable);
 
         return true;
     }

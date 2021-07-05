@@ -69,6 +69,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
                                                                    const KisRegion &dirtyRegion,
+                                                                   bool isCancellable,
                                                                    KisImageAnimationInterface *interface)
     : KisSimpleStrokeStrategy(QLatin1String("regenerate_external_frame_stroke")),
       m_d(new Private)
@@ -90,7 +91,7 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
 
     setRequestsOtherStrokesToEnd(false);
     setClearsRedoOnStart(false);
-    setCanForgetAboutMe(true);
+    setCanForgetAboutMe(isCancellable);
 }
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface)

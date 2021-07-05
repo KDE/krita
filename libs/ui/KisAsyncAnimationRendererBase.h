@@ -27,6 +27,15 @@ class KisRegion;
 class KRITAUI_EXPORT KisAsyncAnimationRendererBase : public QObject
 {
     Q_OBJECT
+
+public:
+    enum Flag
+    {
+        None = 0x0,
+        Cancellable = 0x1
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
 public:
     explicit KisAsyncAnimationRendererBase(QObject *parent = 0);
     virtual ~KisAsyncAnimationRendererBase();
@@ -36,12 +45,12 @@ public:
      * Only \p regionOfInterest is regenerated. If \p regionOfInterest is
      * empty, then entire bounds of the image is regenerated.
      */
-    void startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest);
+    void startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest, Flags flags = None);
 
     /**
      * Convenience overload that regenerates the full image
      */
-    void startFrameRegeneration(KisImageSP image, int frame);
+    void startFrameRegeneration(KisImageSP image, int frame, Flags flags = None);
 
     /**
      * @return true if the regeneration process is in progress
@@ -131,5 +140,7 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisAsyncAnimationRendererBase::Flags)
 
 #endif // KISASYNCANIMATIONRENDERERBASE_H

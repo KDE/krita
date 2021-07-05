@@ -80,7 +80,7 @@ public:
      *    frameProjection().  After the signal handler is exited, the
      *    data will no longer be available.
      */
-    void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion);
+    void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable);
 
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);

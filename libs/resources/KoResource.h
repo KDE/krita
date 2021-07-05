@@ -109,7 +109,7 @@ public:
     virtual QString thumbnailPath() const;
 
     /// @return the md5sum calculated over the contents of the resource.
-    QByteArray md5() const;
+    QByteArray md5(bool generateIfEmpty = true) const;
     void setMD5(const QByteArray &md5);
 
     /// @return the filename of this resource within the container (folder, bundle, ...)

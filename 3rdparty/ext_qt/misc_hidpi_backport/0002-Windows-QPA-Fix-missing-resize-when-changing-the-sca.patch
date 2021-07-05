@@ -1,0 +1,40 @@
+From 86c5197abc5e4f4314a14eb8a36ff0432817c7d2 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Thu, 12 Sep 2019 08:54:58 +0200
+Subject: [PATCH 2/5] Windows QPA: Fix missing resize when changing the scale
+ factor
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Do not suppress the resize event caused by the handling of
+WM_DPICHANGED unless the screen really changed.
+
+Fixes: QTBUG-76510
+Change-Id: I8b9ae41ad7deb863c1633ec5901bc04304b2165c
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@qt.io>
+(cherry picked from commit 2dd781df87b98697c815183e4abeb226577230ab)
+---
+ src/plugins/platforms/windows/qwindowswindow.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+index adf0f918ca..bba01b9818 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -1897,8 +1897,10 @@ void QWindowsWindow::handleGeometryChange()
+ {
+     const QRect previousGeometry = m_data.geometry;
+     m_data.geometry = geometry_sys();
+-    if (testFlag(WithinDpiChanged))
+-        return;  // QGuiApplication will send resize
++    if (testFlag(WithinDpiChanged)
++        && QWindowsContext::instance()->screenManager().screenForHwnd(m_data.hwnd) != screen()) {
++        return; // QGuiApplication will send resize when screen actually changes
++    }
+     QWindowSystemInterface::handleGeometryChange(window(), m_data.geometry);
+     // QTBUG-32121: OpenGL/normal windows (with exception of ANGLE) do not receive
+     // expose events when shrinking, synthesize.
+-- 
+2.24.1.windows.2
+

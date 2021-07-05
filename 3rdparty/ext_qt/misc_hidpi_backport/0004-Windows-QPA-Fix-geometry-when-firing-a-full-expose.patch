@@ -1,0 +1,90 @@
+From 2901b92720135e8e2f0d2a1266826c6b47163875 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Tue, 14 Apr 2020 11:03:32 +0200
+Subject: [PATCH 4/5] Windows QPA: Fix geometry when firing a full expose
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+There are several places in the code where a full expose
+event is fired, but the geometry in logical coordinates is
+used (pre-dating High DPI scaling). Fix by introducing a
+helper function for it.
+
+Task-number: QTBUG-83449
+Change-Id: Ie8bb306de0b9b2b85306ed1bb6ba71181b76a958
+Reviewed-by: André de la Rocha <andre.rocha@qt.io>
+Reviewed-by: Oliver Wolff <oliver.wolff@qt.io>
+(cherry picked from commit 4bb803477bacc70f756b1aaea9e048b2bae0fa6a)
+---
+ src/plugins/platforms/windows/qwindowswindow.cpp | 13 +++++++++----
+ src/plugins/platforms/windows/qwindowswindow.h   |  1 +
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+index a3374a237d..1a78c692b1 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -1341,6 +1341,11 @@ void QWindowsWindow::fireExpose(const QRegion &region, bool force)
+     QWindowSystemInterface::handleExposeEvent(window(), region);
+ }
+ 
++void QWindowsWindow::fireFullExpose(bool force)
++{
++    fireExpose(QRect(QPoint(0, 0), m_data.geometry.size()), force);
++}
++
+ void QWindowsWindow::destroyWindow()
+ {
+     qCDebug(lcQpaWindows) << __FUNCTION__ << this << window() << m_data.hwnd;
+@@ -1501,7 +1506,7 @@ void QWindowsWindow::setVisible(bool visible)
+             // over the rendering of the window
+             // There is nobody waiting for this, so we don't need to flush afterwards.
+             if (isLayered())
+-                fireExpose(QRect(0, 0, win->width(), win->height()));
++                fireFullExpose();
+             // QTBUG-44928, QTBUG-7386: This is to resolve the problem where popups are
+             // opened from the system tray and not being implicitly activated
+ 
+@@ -1906,7 +1911,7 @@ void QWindowsWindow::handleGeometryChange()
+         && m_data.geometry.size() != previousGeometry.size() // Exclude plain move
+         // One dimension grew -> Windows will send expose, no need to synthesize.
+         && !(m_data.geometry.width() > previousGeometry.width() || m_data.geometry.height() > previousGeometry.height())) {
+-        fireExpose(QRect(QPoint(0, 0), m_data.geometry.size()), true);
++        fireFullExpose(true);
+     }
+ 
+     const bool wasSync = testFlag(SynchronousGeometryChangeEvent);
+@@ -2094,7 +2099,7 @@ void QWindowsWindow::handleWindowStateChange(Qt::WindowStates state)
+         QWindow *w = window();
+         bool exposeEventsSent = false;
+         if (isLayered()) {
+-            fireExpose(QRegion(0, 0, w->width(), w->height()));
++            fireFullExpose();
+             exposeEventsSent = true;
+         }
+         const QWindowList allWindows = QGuiApplication::allWindows();
+@@ -2102,7 +2107,7 @@ void QWindowsWindow::handleWindowStateChange(Qt::WindowStates state)
+             if (child != w && child->isVisible() && child->transientParent() == w) {
+                 QWindowsWindow *platformWindow = QWindowsWindow::windowsWindowOf(child);
+                 if (platformWindow && platformWindow->isLayered()) {
+-                    platformWindow->fireExpose(QRegion(0, 0, child->width(), child->height()));
++                    platformWindow->fireFullExpose();
+                     exposeEventsSent = true;
+                 }
+             }
+diff --git a/src/plugins/platforms/windows/qwindowswindow.h b/src/plugins/platforms/windows/qwindowswindow.h
+index ce67e46df3..9fb4492150 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.h
++++ b/src/plugins/platforms/windows/qwindowswindow.h
+@@ -361,6 +361,7 @@ private:
+     void handleWindowStateChange(Qt::WindowStates state);
+     inline void destroyIcon();
+     void fireExpose(const QRegion &region, bool force=false);
++    void fireFullExpose(bool force=false);
+ 
+     mutable QWindowsWindowData m_data;
+     QPointer<QWindowsMenuBar> m_menuBar;
+-- 
+2.24.1.windows.2
+

@@ -242,7 +242,7 @@ KisView::~KisView()
 {
     if (d->viewManager) {
         if (d->viewManager->filterManager()->isStrokeRunning()) {
-            d->viewManager->filterManager()->cancel();
+            d->viewManager->filterManager()->cancelDialog();
         }
 
         d->viewManager->mainWindow()->notifyChildViewDestroyed(this);

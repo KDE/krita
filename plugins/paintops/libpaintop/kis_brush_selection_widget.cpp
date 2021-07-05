@@ -1,8 +1,8 @@
 /*
- *  SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
- *  SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_brush_selection_widget.h"
 #include <QLayout>
@@ -24,14 +24,15 @@
 #include "kis_brush.h"
 #include "kis_auto_brush.h"
 #include "kis_imagepipe_brush.h"
-#include "kis_brush_chooser.h"
+#include "kis_predefined_brush_chooser.h"
 #include "kis_auto_brush_widget.h"
 #include "kis_custom_brush_widget.h"
 #include "kis_clipboard_brush_widget.h"
 #include "kis_text_brush_chooser.h"
 
-KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
-    : QWidget(parent), m_currentBrushWidget(0)
+KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_currentBrushWidget(0)
 {
     uiWdgBrushChooser.setupUi(this);
 
@@ -53,7 +54,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
 
-    Q_FOREACH (QWidget * widget, m_chooserMap.values()) {
+    Q_FOREACH (QWidget *widget, m_chooserMap.values()) {
         m_mininmumSize = m_mininmumSize.expandedTo(widget->sizeHint());
     }
 
@@ -66,8 +67,6 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     connect(uiWdgBrushChooser.autoPrecisionCheckBox, SIGNAL(stateChanged(int)), SLOT(setAutoPrecisionEnabled(int)));
     uiWdgBrushChooser.sliderPrecision->setValue(5);
     setPrecisionEnabled(false);
-
-    m_presetIsValid = true;
 }
 
 
@@ -99,32 +98,6 @@ KisBrushSP KisBrushSelectionWidget::brush() const
     return theBrush;
 
 }
-
-void KisBrushSelectionWidget::setAutoBrush(bool on)
-{
-    m_buttonGroup->button(AUTOBRUSH)->setVisible(on);
-}
-
-void KisBrushSelectionWidget::setPredefinedBrushes(bool on)
-{
-    m_buttonGroup->button(PREDEFINEDBRUSH)->setVisible(on);
-}
-
-void KisBrushSelectionWidget::setCustomBrush(bool on)
-{
-    m_buttonGroup->button(CUSTOMBRUSH)->setVisible(on);
-}
-
-void KisBrushSelectionWidget::setClipboardBrush(bool on)
-{
-    m_buttonGroup->button(CLIPBOARDBRUSH)->setVisible(on);
-}
-
-void KisBrushSelectionWidget::setTextBrush(bool on)
-{
-    m_buttonGroup->button(TEXTBRUSH)->setVisible(on);
-}
-
 void KisBrushSelectionWidget::setImage(KisImageWSP image)
 {
     m_predefinedBrushWidget->setImage(image);
@@ -287,13 +260,11 @@ void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
 
     m_currentBrushWidget->show();
     m_buttonGroup->button(m_chooserMap.key(widget))->setChecked(true);
-
-    m_presetIsValid = (m_buttonGroup->checkedId() != CUSTOMBRUSH);
 }
 
 void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, int id, KoGroupButton::GroupPosition pos)
 {
-    KoGroupButton * button = new KoGroupButton(this);
+    KoGroupButton *button = new KoGroupButton(this);
     button->setGroupPosition(pos);
     button->setText(text);
     button->setAutoRaise(false);

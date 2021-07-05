@@ -6,7 +6,7 @@
 
 #include "KisMaskingBrushOption.h"
 
-#include "kis_brush_chooser.h"
+#include "kis_predefined_brush_chooser.h"
 #include "kis_brush_selection_widget.h"
 
 #include <QWidget>

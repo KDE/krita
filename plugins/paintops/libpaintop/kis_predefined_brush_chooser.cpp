@@ -8,7 +8,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_brush_chooser.h"
+#include "kis_predefined_brush_chooser.h"
 
 #include <QLabel>
 #include <QLayout>
@@ -584,6 +584,6 @@ void KisPredefinedBrushChooser::slotDeleteBrushResource() {
 
 
 
-#include "moc_kis_brush_chooser.cpp"
+#include "moc_kis_predefined_brush_chooser.cpp"
 
 

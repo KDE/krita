@@ -182,9 +182,6 @@ Boolean operators
     using one, easily recognizable, C++ style.
 
 
-Boudewijn Rempt
-
-
 With Krita now supporting Python scripting, we need guidelines for these as well.
 These guidelines are preliminary and may be further refined in the future.
 

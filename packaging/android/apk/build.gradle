@@ -79,7 +79,9 @@ task removeDuplicateAssets(type: Delete) {
     delete "assets/share"
 }
 
-copyLibs.dependsOn configure
+def isPackagingAPK() {
+    return gradle.taskGraph.hasTask(assembleRelease) || gradle.taskGraph.hasTask(assembleDebug)
+}
 
 android {
     compileSdkVersion androidCompileSdkVersion.toInteger()
@@ -127,9 +129,11 @@ android {
         archivesBaseName = "krita-$abi-$versionName"
     }
 
-    preBuild.dependsOn(copyLibs)
-    preBuild.dependsOn(copyAssets)
-    preBuild.dependsOn(removeDuplicateAssets)
+    preBuild.dependsOn(configure)
+    configure.onlyIf { isPackagingAPK() }
+    configure.finalizedBy(copyLibs)
+    configure.finalizedBy(copyAssets)
+    configure.finalizedBy(removeDuplicateAssets)
 }
 
 dependencies {

@@ -151,7 +151,9 @@ QByteArray KoResource::md5(bool generateIfEmpty) const
 
 void KoResource::setMD5(const QByteArray &md5)
 {
-    Q_ASSERT(!md5.isEmpty());
+    if (valid()) {
+        Q_ASSERT(!md5.isEmpty());
+    }
     d->md5 = md5;
 }
 

@@ -28,14 +28,11 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     auto resourceSourceAdapter = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
 
     const QString brushFileName = brushDefinition.attribute("filename", "");
-    KisBrushSP brush = resourceSourceAdapter.resourceForFilename(brushFileName);
+
+    const QString brushMD5Sum = brushDefinition.attribute("md5sum", "");
+    KisBrushSP brush = resourceSourceAdapter.resourceForMD5(brushMD5Sum);
 
     bool brushtipFound = true;
-    //Fallback for files that still use the old format
-    if (!brush) {
-        QFileInfo info(brushFileName);
-        brush = resourceSourceAdapter.resourceForFilename(info.fileName());
-    }
 
     if (!brush) {
         qWarning() << "Using fallback brush" << ppVar(brushFileName);

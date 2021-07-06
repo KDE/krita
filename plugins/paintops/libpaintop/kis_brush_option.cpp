@@ -21,8 +21,7 @@
 
 void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
-    if (!m_brush)
-        return;
+    if (!m_brush) return;
 
     QDomDocument d;
     QDomElement e = d.createElement("Brush");
@@ -30,19 +29,24 @@ void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration
     d.appendChild(e);
     setting->setProperty("brush_definition", d.toString());
 
-    QString brushFileName  = !m_brush->filename().isEmpty() ?
-                            m_brush->filename() : QString();
-
+    QString brushFileName = !m_brush->filename().isEmpty() ? m_brush->filename() : QString();
     setting->setProperty(KisPaintOpUtils::RequiredBrushFileTag, brushFileName);
 
     {
         QStringList requiredFiles =
             setting->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
-
-
-
         requiredFiles << brushFileName;
         setting->setProperty(KisPaintOpUtils::RequiredBrushFilesListTag, requiredFiles);
+    }
+
+    QByteArray md5sum = m_brush->md5();
+    setting->setProperty(KisPaintOpUtils::RequiredBrushMD5Tag, QString::fromLatin1(md5sum.toHex()));
+
+    {
+        QStringList requiredMD5s =
+            setting->getStringList(KisPaintOpUtils::RequiredBrushMD5ListTag);
+        requiredMD5s << QString::fromLatin1(md5sum.toHex());
+        setting->setProperty(KisPaintOpUtils::RequiredBrushMD5ListTag, requiredMD5s);
     }
 
 }

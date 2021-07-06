@@ -92,14 +92,22 @@ bool KisRoundHudButton::hitButton(const QPoint &pos) const
 
 void KisRoundHudButton::mouseMoveEvent(QMouseEvent *event)
 {
-    m_d->isHighlighted = hitButton(event->pos());
+    bool isOver = hitButton(event->pos());
+    if (isOver != m_d->isHighlighted) {
+        m_d->isHighlighted = isOver;
+        update();
+    }
+    
     QAbstractButton::mouseMoveEvent(event);
 }
 
 void KisRoundHudButton::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    m_d->isHighlighted = false;
+    if (m_d->isHighlighted) {
+        m_d->isHighlighted = false;
+        update();
+    }
 
     QAbstractButton::leaveEvent(event);
 }

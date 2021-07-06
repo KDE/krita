@@ -143,6 +143,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect( m_bottomBarButton, SIGNAL(toggled(bool)), SLOT(showBottomBarWidget(bool)));
 
     m_clearColorHistoryButton = new KisRoundHudButton(this);
+    m_clearColorHistoryButton->setToolTip(i18n("Clear color history"));
 
     connect(m_clearColorHistoryButton, SIGNAL(clicked(bool)), m_resourceManager, SLOT(slotClearHistory()));
     //Otherwise the colors won't disappear until the cursor moves away from the button:
@@ -831,6 +832,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
         if (fgBgColors.contains(point)) {
             if (!m_isOverFgBgColors) {
                 m_isOverFgBgColors = true;
+                setToolTip(i18n("Click to swap foreground and background colors.\nRight click to set to black and white."));
                 update();
             }
         } else {

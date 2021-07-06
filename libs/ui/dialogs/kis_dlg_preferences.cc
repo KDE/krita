@@ -1614,6 +1614,10 @@ void PopupPaletteTab::load()
     sbNumPresets->setValue(config.favoritePresets());
     sbPaletteSize->setValue(config.readEntry("popuppalette/size", 385));
     sbSelectorSize->setValue(config.readEntry("popuppalette/selectorSize", 140));
+    cmbSelectorType->setCurrentIndex(config.readEntry<bool>("popuppalette/usevisualcolorselector", false) ? 1 : 0);
+    chkShowColorHistory->setChecked(config.readEntry("popuppalette/showColorHistory", true));
+    chkShowRotationTrack->setChecked(config.readEntry("popuppalette/showRotationTrack", true));
+    chkUseDynamicSlotCount->setChecked(config.readEntry("popuppalette/useDynamicSlotCount", true));
 }
 
 void PopupPaletteTab::save()
@@ -1623,9 +1627,9 @@ void PopupPaletteTab::save()
     config.writeEntry("popuppalette/size", sbPaletteSize->value());
     config.writeEntry("popuppalette/selectorSize", sbSelectorSize->value());
     config.writeEntry<bool>("popuppalette/usevisualcolorselector", cmbSelectorType->currentIndex() > 0);
-    config.writeEntry<bool>("popuppalette/showColorHistory", true);
-    config.writeEntry<bool>("popuppalette/showRotationTrack", true);
-    config.writeEntry<bool>("popuppalette/useDynamicSlotCount", true);
+    config.writeEntry<bool>("popuppalette/showColorHistory", chkShowColorHistory->isChecked());
+    config.writeEntry<bool>("popuppalette/showRotationTrack", chkShowRotationTrack->isChecked());
+    config.writeEntry<bool>("popuppalette/useDynamicSlotCount", chkUseDynamicSlotCount->isChecked());
 }
 
 void PopupPaletteTab::setDefault()
@@ -1635,6 +1639,9 @@ void PopupPaletteTab::setDefault()
     sbPaletteSize->setValue(385);
     sbSelectorSize->setValue(140);
     cmbSelectorType->setCurrentIndex(0);
+    chkShowColorHistory->setChecked(true);
+    chkShowRotationTrack->setChecked(true);
+    chkUseDynamicSlotCount->setChecked(true);
 }
 
 //---------------------------------------------------------------------------------------------------

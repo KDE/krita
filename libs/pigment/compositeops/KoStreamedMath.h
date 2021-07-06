@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <type_traits>
 #include <KoAlwaysInline.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceMaths.h>
@@ -135,6 +136,54 @@ static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
 }
 
 /**
+ * Round a vector of floats to the next corresponding integers.
+ */
+static inline int_v iRound(Vc::float_v::AsArg a)
+{
+#if defined(Vc_IMPL_AVX2)
+    return Vc::simd_cast<int_v>(Vc::int_v(_mm256_cvtps_epi32(a.data())));
+#elif defined(Vc_IMPL_AVX)
+    /**
+     * WARNING: Vc, on AVX, supplies 256-bit floating point vectors but stays
+     * in SSE land for integers. It is not possible to cast between Vc::int_v
+     * and uint_v without a custom SIMD type, because otherwise we lose the
+     * XMM1 register. By using such a type:
+     *    using avx_int_v = Vc::Vector<Vc::int_v::EntryType, Vc::float_v::abi>;
+     *    static_assert(int_v::size() == avx_int_v::size(),
+     *                  "uint_v must match the AVX placeholder");
+     * and copying the entries manually, a smart compiler can do a single move
+     * to memory (Clang 12):
+     *    mov     rax, rdi
+     *    vcvtps2dq       ymm0, ymm0
+     *    vmovapd ymmword ptr [rdi], ymm0
+     *    vzeroupper // useless since it's already stored in [rdi]
+     *    ret
+     * GCC 5.5 and 7.3, as well as MSVC, do not optimize such manual copying;
+     * but by handling the internal registers themselves (as done below),
+     * we achieve the following while still preserving Clang 12's optimization:
+     *    mov     rax, rdi
+     *    vcvtps2dq       ymm0, ymm0
+     *    vextractf128    XMMWORD PTR [rdi+16], ymm0, 0x1
+     *    vmovaps XMMWORD PTR [rdi], xmm0 // vmovdqu with MSVC
+     *    vzeroupper // same as above
+     *    ret
+     */
+
+    __m256i temp(_mm256_cvtps_epi32(a.data()));
+    int_v res;
+
+    internal_data(internal_data1(res)) = Vc_1::AVX::hi128(temp);
+    internal_data(internal_data0(res)) = Vc_1::AVX::lo128(temp);
+
+    return res;
+#elif defined(Vc_IMPL_SSE2)
+    return Vc::simd_cast<int_v>(Vc::int_v(_mm_cvtps_epi32(a.data())));
+#else
+    return Vc::simd_cast<int_v>(Vc::round(a));
+#endif
+}
+
+/**
  * Get a vector containing first Vc::float_v::size() values of mask.
  * Each source mask element is considered to be a 8-bit integer
  */
@@ -212,21 +261,13 @@ static inline void write_channels_32(void *data,
                                      Vc::float_v::AsArg c1,
                                      Vc::float_v::AsArg c2,
                                      Vc::float_v::AsArg c3) {
-    /**
-     * FIXME: make conversion float->int
-     * use mathematical rounding
-     */
-
     const quint32 lowByteMask = 0xFF;
 
-    // FIXME: Use single-instruction rounding + conversion
-    //        The achieve that we need to implement Vc::iRound()
-
     uint_v mask(lowByteMask);
-    uint_v v1 = uint_v(int_v(Vc::round(alpha))) << 24;
-    uint_v v2 = (uint_v(int_v(Vc::round(c1))) & mask) << 16;
-    uint_v v3 = (uint_v(int_v(Vc::round(c2))) & mask) <<  8;
-    uint_v v4 = uint_v(int_v(Vc::round(c3))) & mask;
+    uint_v v1 = uint_v(iRound(alpha)) << 24;
+    uint_v v2 = (uint_v(iRound(c1)) & mask) << 16;
+    uint_v v3 = (uint_v(iRound(c2)) & mask) <<  8;
+    uint_v v4 = uint_v(iRound(c3)) & mask;
     v1 = v1 | v2;
     v3 = v3 | v4;
     (v1 | v3).store(static_cast<quint32*>(data), Vc::Aligned);
@@ -237,21 +278,13 @@ static inline void write_channels_32_unaligned(void *data,
                                                Vc::float_v::AsArg c1,
                                                Vc::float_v::AsArg c2,
                                                Vc::float_v::AsArg c3) {
-    /**
-     * FIXME: make conversion float->int
-     * use mathematical rounding
-     */
-
     const quint32 lowByteMask = 0xFF;
 
-    // FIXME: Use single-instruction rounding + conversion
-    //        The achieve that we need to implement Vc::iRound()
-
     uint_v mask(lowByteMask);
-    uint_v v1 = uint_v(int_v(Vc::round(alpha))) << 24;
-    uint_v v2 = (uint_v(int_v(Vc::round(c1))) & mask) << 16;
-    uint_v v3 = (uint_v(int_v(Vc::round(c2))) & mask) <<  8;
-    uint_v v4 = uint_v(int_v(Vc::round(c3))) & mask;
+    uint_v v1 = uint_v(iRound(alpha)) << 24;
+    uint_v v2 = (uint_v(iRound(c1)) & mask) << 16;
+    uint_v v3 = (uint_v(iRound(c2)) & mask) << 8;
+    uint_v v4 = uint_v(iRound(c3)) & mask;
     v1 = v1 | v2;
     v3 = v3 | v4;
     (v1 | v3).store(static_cast<quint32*>(data), Vc::Unaligned);

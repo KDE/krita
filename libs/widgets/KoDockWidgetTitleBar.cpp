@@ -87,17 +87,17 @@ QSize KoDockWidgetTitleBar::sizeHint() const
     // get size of buttons...
     QSize closeSize(0, 0);
     if (d->closeButton && hasFeature(q, QDockWidget::DockWidgetClosable)) {
-        closeSize = d->closeButton->sizeHint();
+        closeSize = d->closeButton->size();
     }
 
     QSize floatSize(0, 0);
     if (d->floatButton && hasFeature(q, QDockWidget::DockWidgetFloatable)) {
-        floatSize = d->floatButton->sizeHint();
+        floatSize = d->floatButton->size();
     }
 
     QSize lockSize(0, 0);
     if (d->lockButton && d->lockable) {
-        lockSize = d->lockButton->sizeHint();
+        lockSize = d->lockButton->size();
     }
 
     int buttonHeight = qMax(qMax(closeSize.height(), floatSize.height()), lockSize.height()) + 2;

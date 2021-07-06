@@ -17,12 +17,10 @@
 
 
 struct KisEmbeddedPatternManager::Private {
+
+    /// For legacy presets: we now load and save all embedded/linked resources in the kpp file.
     static KoPatternSP tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
         KoPatternSP pattern;
-
-        QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
-        QImage img;
-        img.loadFromData(ba, "PNG");
 
         QString name = setting->getString("Texture/Pattern/Name");
         QString filename = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName(); // For broken embedded patters like in "i)_Wet_Paint"
@@ -31,6 +29,10 @@ struct KisEmbeddedPatternManager::Private {
             QFileInfo info(filename);
             name = info.completeBaseName();
         }
+
+        QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
+        QImage img;
+        img.loadFromData(ba, "PNG");
 
         if (!img.isNull()) {
             pattern = KoPatternSP(new KoPattern(img, name, filename));
@@ -43,28 +45,10 @@ struct KisEmbeddedPatternManager::Private {
 void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPatternSP pattern)
 {
     QByteArray patternMD5 = pattern->md5();
-
-    /**
-     * The process of saving a pattern may be quite expensive, so
-     * we won't rewrite the pattern if has the same md5-sum and at
-     * least some data is present
-     */
-    QByteArray existingMD5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
-    QString existingPatternBase64 = setting->getString("Texture/Pattern/PatternMD5").toLatin1();
-
-    if (patternMD5 == existingMD5 && !existingPatternBase64.isEmpty()) {
-        return;
-    }
     setting->setProperty("Texture/Pattern/PatternMD5", patternMD5.toBase64());
-
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
 
-    QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
-    pattern->pattern().save(&buffer, "PNG");
-    setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
 }
 
 KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)

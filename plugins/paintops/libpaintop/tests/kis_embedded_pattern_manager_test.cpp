@@ -17,6 +17,7 @@
 #include <kis_properties_configuration.h>
 #include <KisResourceServerProvider.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KoResourceServerProvider.h>
 
 #include "sdk/tests/testresources.h"
 
@@ -37,6 +38,9 @@ KoPatternSP KisEmbeddedPatternManagerTest::createPattern()
 void KisEmbeddedPatternManagerTest::testRoundTrip()
 {
     KoPatternSP pattern = createPattern();
+
+    KoResourceServer<KoPattern> *resourceServer = KoResourceServerProvider::instance()->patternServer();
+    resourceServer->addResource(pattern, false);
 
     KisPropertiesConfigurationSP config(new KisPropertiesConfiguration);
 

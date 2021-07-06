@@ -26,6 +26,8 @@
 #include <brushengine/kis_paintop_config_widget.h>
 #include <KisRequiredResourcesOperators.h>
 #include <KoLocalStrokeCanvasResources.h>
+#include <KisResourceLoaderRegistry.h>
+#include <KisResourceModel.h>
 
 #include <KoStore.h>
 
@@ -151,10 +153,10 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     QString version = reader.text("version");
     QString preset = reader.text("preset");
-
+    int resourceCount = reader.text("embbeded_resources").toInt();
     dbgImage << version;
 
-    if (version != "2.2") {
+    if (!(version == "2.2" || "5.0")) {
         return false;
     }
 
@@ -174,6 +176,45 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         return false;
     }
 
+    if (version == "5.0" && resourceCount > 0) {
+        // Load the embedded resources
+        QDomNode n = doc.firstChild();
+        while (!n.isNull()) {
+            QDomElement e = n.toElement();
+            if (!e.isNull()) {
+                if (e.tagName() == "resources") {
+                    QDomNode n2 = n.firstChild();
+                    while (!n2.isNull()) {
+                        n2 = n2.nextSibling();
+                        QDomElement e2 = n2.toElement();
+                        QString resourceType = e2.attribute("type");
+                        QString md5sum = e2.attribute("md5sum");
+                        QString name = e2.attribute("name");
+
+                        KisResourceModel model(resourceType);
+
+                        QVector<KoResourceSP> existingResources = model.resourcesForMD5(QByteArray::fromHex(md5sum.toLatin1()));
+
+                        if (existingResources.size() == 0) {
+                             QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
+                             QVector<KisResourceLoaderBase*> resourceLoaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceType);
+                             Q_FOREACH(KisResourceLoaderBase *loader, resourceLoaders) {
+                                 QBuffer buf(&ba);
+                                 buf.open(QBuffer::ReadOnly);
+                                 KoResourceSP res = loader->load(name, buf, resourcesInterface);
+                                 if (res) {
+                                     model.addResource(res, "memory");
+                                 }
+                             }
+                        }
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+
     fromXML(doc.documentElement(), resourcesInterface);
 
     if (!d->settings) {
@@ -191,6 +232,34 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
 
     elt.setAttribute("paintopid", paintopid);
     elt.setAttribute("name", name());
+
+    QList<KoResourceSP> resources = linkedResources(resourcesInterface());
+    resources += embeddedResources(resourcesInterface());
+
+    elt.setAttribute("embedded_resources", resources.count());
+
+    if (!resources.isEmpty()) {
+        QDomElement resourcesElement = doc.createElement("resources");
+        elt.appendChild(resourcesElement);
+        Q_FOREACH(KoResourceSP resource, resources) {
+
+            QByteArray ba;
+            QBuffer buf(&ba);
+            buf.open(QBuffer::WriteOnly);
+            bool r = resource->saveToDevice(&buf);
+            buf.close();
+            if (r) {
+                QDomText text = doc.createCDATASection(QString::fromLatin1(ba.toBase64()));
+                QDomElement e = doc.createElement("resource");
+                e.setAttribute("type", resource->resourceType().first);
+                e.setAttribute("md5sum", QString::fromLatin1(resource->md5().toHex()));
+                e.setAttribute("name", resource->name());
+                e.appendChild(text);
+                resourcesElement.appendChild(e);
+
+            }
+        }
+    }
 
     // sanitize the settings
     bool hasTexture = d->settings->getBool("Texture/Pattern/Enabled");
@@ -255,10 +324,12 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
     QDomDocument doc;
     QDomElement root = doc.createElement("Preset");
+
     toXML(doc, root);
+
     doc.appendChild(root);
 
-    writer.setText("version", "2.2");
+    writer.setText("version", "5.0");
     writer.setText("preset", doc.toString());
 
     QImage img;

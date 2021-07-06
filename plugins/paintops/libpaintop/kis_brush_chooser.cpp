@@ -261,7 +261,7 @@ void KisPredefinedBrushChooser::slotResetBrush()
         brush->setAngle(0.0);
 
         if (KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data())) {
-            colorfulBrush->setBrushApplication(IMAGESTAMP);
+            colorfulBrush->setBrushApplication(LIGHTNESSMAP);
             colorfulBrush->setAdjustmentMidPoint(127);
             colorfulBrush->setBrightnessAdjustment(0.0);
             colorfulBrush->setContrastAdjustment(0.0);
@@ -341,8 +341,6 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
 
 void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isChangingBrushPresets)
 {
-
-
     QString animatedBrushTipSelectionMode; // incremental, random, etc
 
     {

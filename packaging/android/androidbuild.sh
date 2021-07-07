@@ -161,7 +161,7 @@ build_apk() {
     if [[ $BUILD_TYPE == "Release" ]]; then
         make create-apk ARGS="--release"
     else
-        make create-apk
+        make create-apk ARGS="--no-gdbserver"
     fi
 }
 

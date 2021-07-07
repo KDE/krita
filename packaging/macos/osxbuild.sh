@@ -658,9 +658,6 @@ consolidate_universal_binaries () {
                 if [[ -f "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
                     log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
                     lipo -create "${f}" "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}"
-                else
-                    log "removing... ${f}"
-                    rm "${f}"
                 fi
             fi
             # log "ignoring ${f}"

@@ -57,6 +57,7 @@ public:
     };
 
     MemoryStatistics memoryStatistics();
+    void tryForceUpdateMemoryStatisticsWhileIdle();
 
     /**
      * Returns total number of tiles present: in memory

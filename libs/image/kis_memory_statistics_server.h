@@ -82,6 +82,7 @@ public:
 
 public Q_SLOTS:
     void notifyImageChanged();
+    void tryForceUpdateMemoryStatisticsWhileIdle();
 
 Q_SIGNALS:
     void sigUpdateMemoryStatistics();

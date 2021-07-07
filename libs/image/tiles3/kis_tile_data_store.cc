@@ -98,12 +98,6 @@ KisTileDataStore* KisTileDataStore::instance()
 
 KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
 {
-    // in case the pooler is disabled, we should force it
-    // to update the stats
-    if (!m_pooler.isRunning()) {
-        m_pooler.forceUpdateMemoryStats();
-    }
-
     QReadLocker lock(&m_iteratorLock);
 
     MemoryStatistics stats;
@@ -119,6 +113,15 @@ KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
     stats.swapSize = m_swappedStore.totalMemoryMetric() * metricCoeff;
 
     return stats;
+}
+
+void KisTileDataStore::tryForceUpdateMemoryStatisticsWhileIdle()
+{
+    // in case the pooler is disabled, we should force it
+    // to update the stats
+    if (!m_pooler.isRunning()) {
+        m_pooler.forceUpdateMemoryStats();
+    }
 }
 
 inline void KisTileDataStore::registerTileDataImp(KisTileData *td)

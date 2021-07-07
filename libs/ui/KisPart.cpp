@@ -80,6 +80,7 @@
 #include "KisSessionResource.h"
 #include "KisBusyWaitBroker.h"
 #include "dialogs/kis_delayed_save_dialog.h"
+#include "kis_memory_statistics_server.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -155,6 +156,8 @@ KisPart::KisPart()
             this, SLOT(updateShortcuts()));
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
             &d->animationCachePopulator, SLOT(slotRequestRegeneration()));
+    connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
+            KisMemoryStatisticsServer::instance(), SLOT(tryForceUpdateMemoryStatisticsWhileIdle()));
 
 
     d->animationCachePopulator.slotRequestRegeneration();
@@ -189,6 +192,11 @@ void KisPart::updateIdleWatcherConnections()
     }
 
     d->idleWatcher.setTrackedImages(images);
+
+    /**
+     * Update memory stats on changing the amount of images open in Krita
+     */
+    d->idleWatcher.startCountdown();
 }
 
 void KisPart::addDocument(KisDocument *document, bool notify)

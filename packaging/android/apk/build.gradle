@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:4.1.0'
     }
 }
 
@@ -22,6 +22,7 @@ dependencies {
 
 ext {
     abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
+    ndkpath = System.getenv('ANDROID_NDK_HOME') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
     installPrefix = '../krita-android-build'
 }
 
@@ -32,24 +33,21 @@ task configure() {
             abi = 'arm64-v8a'
         }
 
-        // if user specified the ABI through environment then overwrite the one in gradle.properties
-        if (System.getenv('ANDROID_ABI') != null) {
-            def f = file('gradle.properties')
-            def lines = f.readLines()
-            f.write("")
-            for (line in lines) {
-                if (line.matches('abi=.+'))
-                    continue
-                f.append("$line\n")
-            }
-            f.append("abi=${abi}\n")
-        }
-
         def libs = new File(installPrefix, 'lib')
         if (!libs.exists()) {
             throw new GradleException('Krita libraries not found, please check if -p=krita-bin finished without errors')
         }
     }
+}
+
+task writeConfig(type: WriteProperties) {
+    outputFile = file("gradle.properties")
+    def gradleProperties = new Properties()
+    outputFile.withInputStream { gradleProperties.load(it) }
+
+    properties gradleProperties
+    property 'abi', abi
+    property 'ndk.dir', ndkpath
 }
 
 // copy libs(plugins) which start with krita*.so and rename
@@ -85,6 +83,8 @@ def isPackagingAPK() {
 
 android {
     compileSdkVersion androidCompileSdkVersion.toInteger()
+
+    ndkPath ndkpath
 
     sourceSets {
         main {
@@ -131,12 +131,13 @@ android {
 
     preBuild.dependsOn(configure)
     configure.onlyIf { isPackagingAPK() }
+    configure.finalizedBy(writeConfig)
     configure.finalizedBy(copyLibs)
     configure.finalizedBy(copyAssets)
     configure.finalizedBy(removeDuplicateAssets)
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:2.2.0'
+    implementation 'com.android.billingclient:billing:3.0.3'
 }
 

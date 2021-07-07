@@ -9,9 +9,15 @@
 
 use strict;
 use warnings;
+use Archive::Zip qw( :ERROR_CODES );
+use Archive::Zip::MemberRead;
+
 
 sub printi18n($$$$) {
+  # function that prints the actual output
   my ($name, $filename, $filename2, $linenum) = @_;
+  chomp($name); # chomp out the null bytes at the end if relevant
+  $name =~ s/\0*//;
   if ($name ne "")
     {
       if ($filename =~ /myb$/)
@@ -35,21 +41,25 @@ sub printi18n($$$$) {
 
       if ($linenum > 0)
       {
-        print "// i18n: file: ".$_[2].":".$_[3]."\n";
+        print "// i18n: file: ".$filename.":".$linenum."\n";
       }
 
-      print "i18nc(\"".$_[1]."\",\"".$_[0]."\");\n";
+      print "i18nc(\"".$filename."\",\"".$name."\");\n";
     }
 }
 
 sub parseFromFilenameAuto($) {
-   my $name = $_[0];
-   my @extensions = split(/\./, $name);
-   my $extension = $extensions[$#extensions];
-   return parseFromFilename($name, $extension);
+  # function that prettifies filenames without needing to define the extension
+  # because it figures out the extension on its own
+  my $name = $_[0];
+  my @extensions = split(/\./, $name);
+  my $extension = $extensions[$#extensions];
+  return parseFromFilename($name, $extension);
 }
 
 sub parseFromFilename($$) {
+  # function that prettifies filenames
+  # it extracts the filename from the full path, cuts off the extension and replaces '_  with ' '
   my $name = $_[0];
   my $extension = $_[1];
   chomp($name);
@@ -61,6 +71,112 @@ sub parseFromFilename($$) {
   }
   return $name;
 }
+
+sub readGeneric($$$$) {
+  # function that reads all the lines from either the proper perl file handle
+  # or from the special buffer made out of the contents of the file in the bundle
+  my ($fh, $zipSpecialBuffer, $bufferref, $bytesnum) = @_;
+
+  my $response = undef;
+  my $buffer = ${$bufferref};
+  if(defined $fh)
+  {
+    $response = read($fh, $buffer, $bytesnum);
+  }
+  elsif(defined $zipSpecialBuffer)
+  {
+    my $where = $zipSpecialBuffer->{"pos"};
+    $buffer = unpack("x$where a${bytesnum}", $zipSpecialBuffer->{"buffer"});
+    $response = length($buffer);
+    $zipSpecialBuffer->{"pos"} = $zipSpecialBuffer->{"pos"} + $bytesnum;
+  }
+  ${$bufferref} = $buffer;
+  return $response;
+}
+
+sub readAllLinesGeneric($$) {
+  # function that reads all the lines from either the proper perl file handle
+  # or from the MemberRead from the Archive::Zip module file handle
+  my ($fh, $ziph) = @_;
+  my @response = undef;
+  if(defined $fh)
+  {
+    @response = <$fh>;
+  }
+  elsif(defined $ziph)
+  {
+    my $i = 0;
+    @response = ();
+    while (defined(my $line = $ziph->getline()))
+    {
+      push(@response, $line);
+      $i += 1;
+    }
+  }
+  return @response;
+}
+
+
+sub readGbrBytesWise($$) {
+  # function that extracts a name from a gbr file
+  # it's in the function to allow easier error checking
+  # (early returning)
+  my ($fh, $ziph) = @_;
+
+  my $success = 1;
+  my ($bytes, $size, $version);
+  $success = readGeneric($fh, $ziph, \$bytes, 4) == 4;
+
+  return "" if not $success;
+
+  $size = unpack("N", $bytes);
+  $success = readGeneric($fh, $ziph, \$bytes, 4) == 4;
+
+  return "" if not $success;
+
+  $version = unpack("N", $bytes);
+  if( $version == 1 )
+  {
+    $success = readGeneric($fh, $ziph, \$bytes, 12) == 12;
+    return "" if not $success;
+
+    my $name;
+    $success = readGeneric($fh, $ziph, \$name, $size - 21) == $size - 21;
+    return "" if not $success;
+
+    return $name;
+  }
+  else
+  {
+    $success = readGeneric($fh, $ziph, \$bytes, 20) == 20;
+    return "" if not $success;
+
+    my $name;
+    $success = readGeneric($fh, $ziph, \$name, $size - 29) == $size - 29;
+    return "" if not $success;
+
+    return $name;
+  }
+
+  return "";
+
+}
+
+sub readZipSpecialBuffer($)
+{
+  # this is a hack
+  # $ziph->read($buffer, $bytes) didn't work but ->getline() did
+  # this works for all binary files in the bundle that are supported at the moment
+  my ($ziph) = @_;
+  my $buffer = {};
+  $buffer->{"pos"} = 0;
+  my @array = readAllLinesGeneric(undef, $ziph);
+  $buffer->{"buffer"} = join("\n", @array);
+  return $buffer;
+}
+
+
+
 
 my @filenames = glob("./krita/data/gradients/*.ggr");
 push( @filenames, glob("./krita/data/palettes/*.gpl"));
@@ -77,15 +193,61 @@ push( @filenames, glob("./plugins/paintops/mypaint/brushes/*.myb"));
 push( @filenames, glob("./krita/data/symbols/*.svg"));
 
 
-foreach my $filename (@filenames)
+my %bundleForResource;
+my %internalFilenameForResource;
+
+# get the filename from the bundle
+my @bundlenames = glob("./krita/data/bundles/*.bundle");
+foreach my $bundlename (@bundlenames)
 {
-  unless ( open(FILE, '<'.$filename) )
+  my $bundle = Archive::Zip->new();
+  unless ( $bundle->read( $bundlename ) == AZ_OK )
   {
     next;
   }
+  my @memberNames = $bundle->memberNames();
+  foreach my $member (@memberNames)
+  {
+    unless ($member =~ /xml$/ or $member eq "mimetype" or $member eq "preview.png") {
+      my $newFilename = "$bundlename:$member";
+      push(@filenames, $newFilename);
+      $bundleForResource{$newFilename} = $bundle;
+      $internalFilenameForResource{$newFilename} = $member;
+    }
+  }
+}
+
+
+
+my $isZip = 0;
+
+my $i = 0;
+
+foreach my $filename (@filenames)
+{
+  $i = $i + 1;
+
+  my $fh = undef;
+  my $ziph = undef;
+
+  unless ( open($fh, '<'.$filename) )
+  {
+    $fh = undef;
+    unless ($filename =~ /\.bundle/) {
+      next;
+    }
+    $ziph = Archive::Zip::MemberRead->new($bundleForResource{$filename}, $internalFilenameForResource{$filename});
+
+    unless (defined $ziph) {
+      next;
+    }
+    $isZip = 1;
+  }
+
   if( $filename =~ /ggr/ || $filename =~ /gpl/ || $filename =~ /gih/ )
   {
-    my @lines = <FILE>;
+    my @lines = readAllLinesGeneric($fh, $ziph);
+
     if( $filename =~ /ggr/ || $filename =~ /gpl/ )
     {
       my @splited = split(/: /, $lines[1]);
@@ -102,7 +264,7 @@ foreach my $filename (@filenames)
   }
   elsif( $filename =~ /svg$/ )
   {
-    my @lines = <FILE>;
+    my @lines = readAllLinesGeneric($fh, $ziph);
     my $svg = join('', @lines);
     my $name = "";
     if( $svg =~ m:(<title.*?</title>):s )
@@ -130,33 +292,33 @@ foreach my $filename (@filenames)
     my $name = parseFromFilenameAuto($filename);
     printi18n($name, $filename, $filename, -1); # sadly, I'm not sure what the last number means exactly
   }
-  else
+  elsif($filename =~ /gbr|pat/)
   {
+    my $zipSpecialBuffer = undef;
+    if(defined($ziph)) {
+      $zipSpecialBuffer = readZipSpecialBuffer($ziph);
+    }
+
     if( $filename =~ /gbr/ )
     {
-      read(FILE, my $bytes, 4);
-      my $size = unpack("N", $bytes);
-      read(FILE, $bytes, 4);
-      my $version = unpack("N", $bytes);
-      if( $version == 1 )
+
+      my $name = readGbrBytesWise($fh, $zipSpecialBuffer);
+      if($name eq "")
       {
-        read(FILE, $bytes, 12);
-        read(FILE, my $name, $size - 21);
-        printi18n($name, $filename, $filename, -1);
+        $name = parseFromFilenameAuto($filename);
       }
-      else
-      {
-        read(FILE, $bytes, 20);
-        read(FILE, my $name, $size - 29);
-        printi18n($name, $filename, $filename, -1);
-      }
+
+      printi18n($name, $filename, $filename, -1);
+
     }
     elsif( $filename =~ /pat$/ )
     {
-      read(FILE, my $bytes, 4);
+      my $bytes;
+      my $name;
+      readGeneric($fh, $zipSpecialBuffer, \$bytes, 4);
       my $size = unpack("N", $bytes);
-      read(FILE, $bytes, 20);
-      read(FILE, my $name, $size - 25);
+      readGeneric($fh, $zipSpecialBuffer, \$bytes, 20);
+      readGeneric($fh, $zipSpecialBuffer, \$name, $size - 25);
       if( $name eq "" )
       {
         $name = parseFromFilenameAuto($filename);
@@ -164,7 +326,9 @@ foreach my $filename (@filenames)
       printi18n($name, $filename, $filename, -1);
     }
   }
-  close(FILE);
+
+  close($fh) if defined $fh;
+
 }
 
 

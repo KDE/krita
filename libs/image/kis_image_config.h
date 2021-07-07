@@ -108,6 +108,9 @@ public:
     int frameRenderingClones(bool defaultValue = false) const;
     void setFrameRenderingClones(int value);
 
+    int frameRenderingTimeout(bool defaultValue = false) const;
+    void setFrameRenderingTimeout(int value);
+
     int fpsLimit(bool defaultValue = false) const;
     void setFpsLimit(int value);
 

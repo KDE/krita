@@ -12,6 +12,8 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_image_config.h"
+
 
 struct KRITAUI_NO_EXPORT KisAsyncAnimationRendererBase::Private
 {
@@ -23,8 +25,6 @@ struct KRITAUI_NO_EXPORT KisAsyncAnimationRendererBase::Private
     int requestedFrame = -1;
     bool isCancelled = false;
     KisRegion requestedRegion;
-
-    static const int WAITING_FOR_FRAME_TIMEOUT = 30000;
 };
 
 KisAsyncAnimationRendererBase::KisAsyncAnimationRendererBase(QObject *parent)
@@ -32,8 +32,11 @@ KisAsyncAnimationRendererBase::KisAsyncAnimationRendererBase(QObject *parent)
       m_d(new Private())
 {
     connect(&m_d->regenerationTimeout, SIGNAL(timeout()), SLOT(slotFrameRegenerationCancelled()));
+
+    KisImageConfig cfg(true);
+
     m_d->regenerationTimeout.setSingleShot(true);
-    m_d->regenerationTimeout.setInterval(Private::WAITING_FOR_FRAME_TIMEOUT);
+    m_d->regenerationTimeout.setInterval(cfg.frameRenderingTimeout());
 }
 
 KisAsyncAnimationRendererBase::~KisAsyncAnimationRendererBase()

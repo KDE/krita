@@ -1,4 +1,5 @@
 SET(PREFIX_ext_sip "${EXTPREFIX}" )
+
 if (UNIX)
     set(PYTHON_EXECUTABLE_PATH ${PREFIX_ext_sip}/bin/python3)
     if(NOT EXISTS ${PYTHON_EXECUTABLE_PATH})
@@ -8,8 +9,8 @@ if (UNIX)
 
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/s/sip/sip-6.1.0.tar.gz
-        URL_HASH SHA256=f069d550dd819609e019e5dc58fc5193e081c7f3fb4f7dc8f9be734e34d4e56e
+        URL https://pypi.python.org/packages/source/s/sip/sip-6.1.1.tar.gz
+        URL_HASH SHA256=52d25af2fcd764c4e15cc9cd1350bdb0e63f52dfa2aa3c5e7679af7fde9f7e20
 
         CONFIGURE_COMMAND ""
 

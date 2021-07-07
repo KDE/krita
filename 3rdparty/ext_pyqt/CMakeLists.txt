@@ -6,6 +6,11 @@ if(UNIX)
       SET(PYTHON_EXECUTABLE_PATH python3)
     endif()
 
+    if(APPLE)
+        add_custom_target(ext_pyqtbuilder
+            COMMAND ${PREFIX_ext_pyqt}/bin/pip3 install PyQt-builder==1.10.0
+        )
+    else()
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.10.0.tar.gz
@@ -17,6 +22,7 @@ if(UNIX)
             "PYTHONPATH=${KRITA_PYTHONPATH}"
             ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
+
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
             ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_pyqt} --optimize=1
@@ -25,6 +31,7 @@ if(UNIX)
 
         UPDATE_COMMAND ""
     )
+    endif(APPLE)
 
     ExternalProject_Add( ext_pyqt5
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

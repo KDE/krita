@@ -117,7 +117,7 @@ fi
 # Prints stderr and stdout to log files
 # >(tee) works but breaks sigint
 log_cmd () {
-    "$@" 1>> ${OUPUT_LOG}
+    "$@" 2>&1 | tee -a ${OUPUT_LOG}
     osxbuild_error="${?}"
 }
 

@@ -223,7 +223,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="3" column="0" colspan="2">
     <widget class="QCheckBox" name="chkUseRightMiddleClickWorkaround">
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Some tablet devices don't pass barrel-button clicks via tablet API. If you have such a device, you can try activate this workaround. Krita will try to read right- and middle-button clicks from the mouse events stream. It may or may not work on your device (depends on the tablet driver implementation).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;After changing this option Krita should be restarted.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -233,7 +233,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="4" column="0" colspan="2">
     <widget class="QCheckBox" name="chkUseTimestampsForBrushSpeed">
      <property name="text">
       <string notr="true">Use tablet driver timestamps for brush speed</string>

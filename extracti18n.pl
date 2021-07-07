@@ -283,7 +283,7 @@ foreach my $filename (@filenames)
     }
     printi18n($name, $filename, $filename, -1);
   }
-  elsif( $filename =~ /kpp$/ || $filename =~ /kws$/ || $filename =~ /kwl$/ || $filename =~ /kgm$/ || $filename =~ /jpg$/ || $filename =~ /myb$/ || $filename =~ /png$/)
+  elsif( $filename =~ /kpp$/ || $filename =~ /kws$/ || $filename =~ /kwl$/ || $filename =~ /kgm$/ || $filename =~ /jpg$/ || $filename =~ /myb$/ || $filename =~ /png$/ || $filename =~ /kse$/)
   {
     # all of Krita's default brush presets and other resources with abovementioned extensions
     # are named the same way the file is called

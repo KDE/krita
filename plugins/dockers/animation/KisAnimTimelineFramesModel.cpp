@@ -1084,5 +1084,7 @@ void KisAnimTimelineFramesModel::clearEntireCache()
 
 void KisAnimTimelineFramesModel::setActiveLayerSelectedTimes(const QSet<int> &times)
 {
+    if (!m_d->image) return;
+
     m_d->image->animationInterface()->setActiveLayerSelectedTimes(times);
 }

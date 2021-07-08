@@ -282,15 +282,16 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         KisLayerUtils::filterMergableNodes(selectedNodes, true);
 
         KisNodeList nodes;
-        KisGroupLayerSP group = new KisGroupLayer(image.data(), "Clipboard", OPACITY_OPAQUE_U8);
+        //KisGroupLayerSP group = new KisGroupLayer(image.data(), "Clipboard", OPACITY_OPAQUE_U8);
+        KisImageSP tempImage = new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
         Q_FOREACH (KisNodeSP node, selectedNodes) {
             KisNodeSP dupNode = node->clone();
             nodes.append(dupNode);
-            image->addNode(dupNode, group);
+            tempImage->addNode(dupNode, tempImage->root());
         }
 
         {
-            KisImageBarrierLocker locker(image);
+            //KisImageBarrierLocker locker(image);  not needed as these nodes do not belong to 'image'
             Q_FOREACH (KisNodeSP node, nodes) {
                 KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
                     KisPaintDeviceSP dev = node->paintDevice();
@@ -309,12 +310,14 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                 });
             }
         }
-        image->addNode(group, image->root(), node);
-        KisClipboard::instance()->setLayers(nodes, image);
-        image->removeNode(group);
+        //tempImage->addNode(group, image->root(), node);
+        tempImage->refreshGraphAsync();
+        tempImage->waitForDone();
+        KisClipboard::instance()->setLayers(nodes, tempImage);
+        //image->removeNode(group);
         qDebug() << "Successfully copied to clipboard";
-        view->nodeManager()->slotSetSelectedNodes(selectedNodes);
-        
+        //view->nodeManager()->slotSetSelectedNodes(selectedNodes);
+
 /*        {
             KisImageBarrierLocker locker(image);
             KisPaintDeviceSP dev = node->paintDevice();

@@ -756,7 +756,20 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":resource_type", resourceType);
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", resource->filename());
-    QString translationContext = "./krita/data/" + resourceType + "/" + resource->filename();
+
+    QString translationContext;
+    if (storage->type() == KisResourceStorage::StorageType::Bundle) {
+        translationContext = "./krita/data/bundles/" + KisResourceLocator::instance()->makeStorageLocationRelative(storage->location())
+                + ":" + resourceType + "/" + resource->filename();
+    } else if (storage->location() == "memory") {
+        translationContext = "memory/" + resourceType + "/" + resource->filename();
+    }
+    else if (resource->filename().endsWith(".myb")) {
+        translationContext = "./plugins/paintops/mypaint/brushes/" + resource->filename();
+    } else {
+        translationContext = "./krita/data/" + resourceType + "/" + resource->filename();
+    }
+
     q.bindValue(":tooltip", i18nc(translationContext.toUtf8(), resource->name().toUtf8()));
 
     QByteArray ba;

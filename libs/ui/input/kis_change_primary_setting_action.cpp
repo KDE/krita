@@ -27,7 +27,8 @@ KisChangePrimarySettingAction::KisChangePrimarySettingAction()
     setShortcutIndexes(shortcuts);
 }
 
-KisTool::ToolAction KisChangePrimarySettingAction::decodeAction(int shortcut) {
+KisTool::ToolAction KisChangePrimarySettingAction::decodeAction(int shortcut) const
+{
     KisTool::ToolAction action = KisTool::ToolAction::Alternate_NONE;
     switch (shortcut) {
         case 0:
@@ -87,4 +88,10 @@ void KisChangePrimarySettingAction::inputEvent(QEvent* event)
         QMouseEvent targetEvent(QEvent::MouseMove, eventPos(event), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
         inputManager()->toolProxy()->forwardEvent(KisToolProxy::CONTINUE, savedAction, &targetEvent, event);
     }
+}
+
+bool KisChangePrimarySettingAction::supportsHiResInputEvents(int shortcut) const
+{
+    return inputManager()->toolProxy()->alternateActionSupportsHiResEvents(
+                KisTool::actionToAlternateAction(decodeAction(shortcut)));
 }

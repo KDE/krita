@@ -358,7 +358,7 @@ target_link_libraries(kritaimage
         kritaversion 
         kritawidgets 
         kritaglobal 
-        kritapsd 
+        kritapsdutils 
          
         kritapigment 
         kritacommand

@@ -132,11 +132,13 @@ void KisZoomableScrollBar::tabletEvent(QTabletEvent *event) {
         lastKnownPosition = globalMouseCoord;
         event->accept();
     } else {
-
         if (event->type() == QTabletEvent::TabletPress) {
             QPoint globalMouseCoord = mapToGlobal(event->pos());
             lastKnownPosition = globalMouseCoord;
             setSliderDown(true);
+            event->accept();
+        } else if(event->type() == QTabletEvent::TabletRelease) {
+            setSliderDown(false);
             event->accept();
         } else {
             QScrollBar::tabletEvent(event);

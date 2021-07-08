@@ -12,7 +12,7 @@ public:
     KisReferenceImageCropDecorator();
     ~KisReferenceImageCropDecorator() {};
 
-    void paint(QPainter &gc, const KoViewConverter &converter, KoCanvasBase *canvas);
+    void paint(QPainter &gc, const KoViewConverter &converter);
 
     void setReferenceImage(KisReferenceImage *reference);
 

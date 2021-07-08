@@ -45,6 +45,7 @@ private:
     const QScopedPointer<Private> d;
     void updateVisibility(bool hasSelection);
     void updateCropSliders();
+    QRectF cropRect();
 };
 
 #endif

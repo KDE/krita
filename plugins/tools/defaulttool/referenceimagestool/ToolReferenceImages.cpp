@@ -100,7 +100,7 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
 
     if(ref && ref->cropEnabled()) {
       m_cropDecorator->setReferenceImage(ref);
-      m_cropDecorator->paint(painter, converter ,canvas());
+      m_cropDecorator->paint(painter, converter);
     }
     else {
     DefaultTool::paint(painter,converter);
@@ -397,7 +397,7 @@ void ToolReferenceImages::copy() const
     KoShape* shape = shapes.at(0);
     KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
     QClipboard *cb = QApplication::clipboard();
-    cb->setImage(reference->getImage());
+    cb->setImage(reference->image());
 }
 
 bool ToolReferenceImages::paste()

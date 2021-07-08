@@ -16,20 +16,17 @@ void KisReferenceImageCropDecorator::setReferenceImage(KisReferenceImage *refere
     m_cropBorderRect = referenceImage->cropRect();
 }
 
-void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &converter, KoCanvasBase *canvas)
+void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &converter)
 {
     if(!m_referenceImage) {
         return;
     }
 
-    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-    const KisCoordinatesConverter *coordinateConverter = kisCanvas->coordinatesConverter();
-
     gc.save();
 
+    QTransform transform = m_referenceImage->absoluteTransformation() * converter.documentToView();
     QRectF shapeRect = converter.documentToView(m_referenceImage->boundingRect());
-    QRectF borderRect = coordinateConverter->imageToDocument(m_cropBorderRect);
-    m_cropBorderRect = converter.documentToView(borderRect);
+    m_cropBorderRect = transform.mapRect(m_cropBorderRect);
 
     QPainterPath path;
 

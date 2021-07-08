@@ -39,6 +39,19 @@ public:
         void redo() override;
     };
 
+    struct KRITAUI_EXPORT CropReferenceImage : public KUndo2Command {
+        KisReferenceImage *referenceImage;
+        QImage oldImage;
+        QRect imageRect;
+        QRect newRect;
+        QSizeF oldShapeSize;
+        QPointF oldPos;
+
+        explicit CropReferenceImage(KoShape *image, QRectF rect, KUndo2Command *parent = 0);
+        void undo() override;
+        void redo() override;
+    };
+
     KisReferenceImage();
     KisReferenceImage(const KisReferenceImage &rhs);
     ~KisReferenceImage();
@@ -74,7 +87,8 @@ public:
     static KisReferenceImage * fromXml(const QDomElement &elem);
     bool loadImage(KoStore *store);
 
-    QImage getImage();
+    QImage image();
+    void setImage(QImage);
 
     bool cropEnabled();
     QRectF cropRect();

@@ -146,13 +146,10 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
     connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
 
-    KisSignalCompressor *cropCompressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
-    connect(cropCompressor, SIGNAL(timeout()), this, SLOT(slotCropValuesChanged()));
-
-    connect(d->ui->sldOffsetX, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
-    connect(d->ui->sldOffsetY, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
-    connect(d->ui->sldWidth, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
-    connect(d->ui->sldHeight, SIGNAL(valueChanged(qreal)), cropCompressor, SLOT(start()));
+    connect(d->ui->sldOffsetX, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
+    connect(d->ui->sldOffsetY, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
+    connect(d->ui->sldWidth, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
+    connect(d->ui->sldHeight, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
 
     d->ui->referenceImageLocationCombobox->addItem(i18n("Embed to .KRA"));
     d->ui->referenceImageLocationCombobox->addItem(i18n("Link to Image"));
@@ -286,41 +283,10 @@ void ToolReferenceImagesWidget::slotUpdateLock(bool value)
     d->tool->document()->referenceImagesLayer()->setLock(locked, d->tool->canvas());
 }
 
-void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
-{
-    KisReferenceImage* ref = d->tool->getActiveReferenceImage();
-    d->ui->bnCrop->setChecked(value);
-    bool enable = d->ui->bnCrop->isChecked();
-    d->ui->grpCrop->setVisible(enable);
-
-    ref->setCrop(enable);
-    if(enable && ref) {
-        updateCropSliders();
-    }
-}
-
 void ToolReferenceImagesWidget::slotImageValuesChanged()
 {
     slotSaturationSliderChanged(d->ui->saturationSlider->value());
     slotOpacitySliderChanged(d->ui->opacitySlider->value());
-}
-
-void ToolReferenceImagesWidget::slotCropValuesChanged()
-{
-    KisReferenceImage *ref = d->tool->getActiveReferenceImage();
-    if(ref) {
-
-        KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
-        const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
-
-        qreal x = d->ui->sldOffsetX->value();
-        qreal y = d->ui->sldOffsetY->value();
-        qreal width = d->ui->sldWidth->value();
-        qreal height = d->ui->sldHeight->value();
-        QRectF rect = converter->imageToDocument(QRectF(x, y, width, height));
-
-        ref->setCropRect(rect);
-    }
 }
 
 void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
@@ -365,6 +331,61 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     }
 }
 
+void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
+{
+    KisReferenceImage* ref = d->tool->getActiveReferenceImage();
+    if(!ref) return;
+
+    d->ui->bnCrop->setChecked(value);
+    bool enable = d->ui->bnCrop->isChecked();
+    d->ui->grpCrop->setVisible(enable);
+    ref->setCrop(enable);
+
+    if(enable) {
+        updateCropSliders();
+    }
+    else {
+        KUndo2Command *cmd =
+                 new KisReferenceImage::CropReferenceImage(ref, cropRect());
+         d->tool->canvas()->addCommand(cmd);
+    }
+}
+
+void ToolReferenceImagesWidget::slotCropValuesChanged()
+{
+    KisReferenceImage *ref = d->tool->getActiveReferenceImage();
+    if(ref) {
+
+        KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
+        const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
+
+        QRectF rect = converter->documentToImage(ref->outlineRect());
+
+        qreal x = d->ui->sldOffsetX->value();
+        qreal y = d->ui->sldOffsetY->value();
+        qreal width = d->ui->sldWidth->value();
+        qreal height = d->ui->sldHeight->value();
+
+
+        if(x + width > rect.width()) {
+            width = rect.width() - x;
+            d->ui->sldWidth->blockSignals(true);
+            d->ui->sldWidth->setValue(width);
+            d->ui->sldWidth->blockSignals(false);
+        }
+        if(y + height > rect.height())
+        {
+            height = rect.height() - y;
+            d->ui->sldHeight->blockSignals(true);
+            d->ui->sldHeight->setValue(height);
+            d->ui->sldHeight->blockSignals(false);
+        }
+
+        QRectF finalRect = converter->imageToDocument(QRectF(x, y, width, height));
+        ref->setCropRect(finalRect);
+    }
+}
+
 void ToolReferenceImagesWidget::updateCropSliders()
 {
     KisReferenceImage* ref = d->tool->getActiveReferenceImage();
@@ -377,6 +398,8 @@ void ToolReferenceImagesWidget::updateCropSliders()
     const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
 
     QRectF rect = converter->documentToImage(ref->boundingRect());
+    qreal width = rect.width() - d->ui->sldOffsetX->value();
+    qreal height = rect.height() - d->ui->sldOffsetY->value();
 
     d->ui->sldOffsetX->setSelection(shape);
     d->ui->sldOffsetX->setRange(0,rect.width());
@@ -393,13 +416,29 @@ void ToolReferenceImagesWidget::updateCropSliders()
     d->ui->sldWidth->setSelection(shape);
     d->ui->sldWidth->setRange(0,rect.width());
     d->ui->sldWidth->blockSignals(true);
-    d->ui->sldWidth->setValue(rect.width() - d->ui->sldOffsetX->value());
+    d->ui->sldWidth->setValue(width);
     d->ui->sldWidth->blockSignals(false);
 
     d->ui->sldHeight->setSelection(shape);
     d->ui->sldHeight->setRange(0,rect.height());
     d->ui->sldHeight->blockSignals(true);
-    d->ui->sldHeight->setValue(rect.height() - d->ui->sldOffsetY->value());
+    d->ui->sldHeight->setValue(height);
     d->ui->sldHeight->blockSignals(false);
+
+    QRectF finalRect = converter->imageToDocument(QRectF(0, 0, width, height));
+    ref->setCropRect(finalRect);
 }
 
+QRectF ToolReferenceImagesWidget::cropRect()
+{
+    KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
+    const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
+
+    qreal x = d->ui->sldOffsetX->value();
+    qreal y = d->ui->sldOffsetY->value();
+    qreal width = d->ui->sldWidth->value();
+    qreal height = d->ui->sldHeight->value();
+
+    QRectF finalRect = converter->imageToDocument(QRectF(x, y, width, height));
+    return finalRect;
+}

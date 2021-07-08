@@ -152,6 +152,39 @@ void KisReferenceImage::SetSaturationCommand::redo()
     }
 }
 
+KisReferenceImage::CropReferenceImage::CropReferenceImage(KoShape *shape, QRectF rect, KUndo2Command *parent)
+    : KUndo2Command(kundo2_i18n("Crop Reference Image"), parent)
+    , newRect(rect.toRect())
+{
+    referenceImage  = dynamic_cast<KisReferenceImage*>(shape);
+    KIS_SAFE_ASSERT_RECOVER_BREAK(referenceImage);
+
+    oldImage = referenceImage->image();
+    oldPos = shape->absolutePosition(KoFlake::TopLeft);
+    oldShapeSize = shape->size();
+
+    QTransform transform = QTransform::fromScale(referenceImage->image().width() / referenceImage->size().width(),
+                                                 referenceImage->image().height() / referenceImage->size().height());
+    imageRect = transform.mapRect(rect.toRect());
+}
+
+void KisReferenceImage::CropReferenceImage::undo()
+{
+    referenceImage->setSize(oldShapeSize);
+    referenceImage->setImage(oldImage);
+    referenceImage->setAbsolutePosition(oldPos, KoFlake::TopLeft);
+    referenceImage->updateAbsolute(QRectF(QPointF(), oldShapeSize));
+}
+
+void KisReferenceImage::CropReferenceImage::redo()
+{
+    QImage newImage = referenceImage->image().copy(imageRect);
+    referenceImage->setSize(newRect.size());
+    referenceImage->setAbsolutePosition(oldPos + newRect.topLeft(), KoFlake::TopLeft);
+    referenceImage->setImage(newImage);
+    referenceImage->updateAbsolute(QRectF(QPointF(), oldShapeSize));
+}
+
 KisReferenceImage::KisReferenceImage()
     : d(new Private())
 {
@@ -403,9 +436,15 @@ bool KisReferenceImage::loadImage(KoStore *store)
     return store->close();
 }
 
-QImage KisReferenceImage::getImage()
+QImage KisReferenceImage::image()
 {
     return d->image;
+}
+
+void KisReferenceImage::setImage(QImage image)
+{
+    d->image = image;
+    d->cachedImage = QImage();
 }
 
 KoShape *KisReferenceImage::cloneShape() const
@@ -422,7 +461,12 @@ void KisReferenceImage::setCrop(bool v)
 {
     d->crop = v;
     if(v) {
+        // Handle the Lock Button here
        d->cropRect.setSize(size());
+       setGeometryProtected(true);
+    }
+    else {
+        setGeometryProtected(false);
     }
 }
 

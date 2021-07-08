@@ -7,47 +7,45 @@
 
 #include <QtEndian>
 
-#include <QIODevice>
+#include <KoColor.h>
 #include <QBuffer>
 #include <QDataStream>
+#include <QIODevice>
 #include <QStringList>
-#include <KoColor.h>
 
-
+#include "kis_iterator_ng.h"
 #include <kis_debug.h>
 #include <kis_node.h>
-#include "kis_iterator_ng.h"
 #include <kis_paint_layer.h>
 
-#include "psd_utils.h"
-#include "psd_header.h"
 #include "compression.h"
+#include "psd_header.h"
+#include "psd_utils.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
-#include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
 
-#include <asl/kis_offset_keeper.h>
-#include <asl/kis_asl_writer_utils.h>
 #include <asl/kis_asl_reader_utils.h>
+#include <asl/kis_asl_writer_utils.h>
+#include <asl/kis_offset_keeper.h>
 
 #include "psd_pixel_utils.h"
 #include <kundo2command.h>
 
-
 // Just for pretty debug messages
 QString channelIdToChannelType(int channelId, psd_color_mode colormode)
 {
-    switch(channelId) {
+    switch (channelId) {
     case -3:
         return "Real User Supplied Layer Mask (when both a user mask and a vector mask are present";
     case -2:
         return "User Supplied Layer Mask";
     case -1:
         return "Transparency mask";
-    case  0:
-        switch(colormode) {
+    case 0:
+        switch (colormode) {
         case Bitmap:
         case Indexed:
             return QString("bitmap or indexed: %1").arg(channelId);
@@ -73,7 +71,7 @@ QString channelIdToChannelType(int channelId, psd_color_mode colormode)
             return QString("unknown: %1").arg(channelId);
         };
     case 1:
-        switch(colormode) {
+        switch (colormode) {
         case Bitmap:
         case Indexed:
             return QString("WARNING bitmap or indexed: %1").arg(channelId);
@@ -99,7 +97,7 @@ QString channelIdToChannelType(int channelId, psd_color_mode colormode)
             return QString("unknown: %1").arg(channelId);
         };
     case 2:
-        switch(colormode) {
+        switch (colormode) {
         case Bitmap:
         case Indexed:
             return QString("WARNING bitmap or indexed: %1").arg(channelId);
@@ -125,7 +123,7 @@ QString channelIdToChannelType(int channelId, psd_color_mode colormode)
             return QString("unknown: %1").arg(channelId);
         };
     case 3:
-        switch(colormode) {
+        switch (colormode) {
         case Bitmap:
         case Indexed:
             return QString("WARNING bitmap or indexed: %1").arg(channelId);
@@ -153,10 +151,9 @@ QString channelIdToChannelType(int channelId, psd_color_mode colormode)
     default:
         return QString("unknown: %1").arg(channelId);
     };
-
 }
 
-PSDLayerRecord::PSDLayerRecord(const PSDHeader& header)
+PSDLayerRecord::PSDLayerRecord(const PSDHeader &header)
     : top(0)
     , left(0)
     , bottom(0)
@@ -174,16 +171,11 @@ PSDLayerRecord::PSDLayerRecord(const PSDHeader& header)
 {
 }
 
-bool PSDLayerRecord::read(QIODevice* io)
+bool PSDLayerRecord::read(QIODevice *io)
 {
     dbgFile << "Going to read layer record. Pos:" << io->pos();
 
-    if (!psdread(io, &top)  ||
-            !psdread(io, &left) ||
-            !psdread(io, &bottom) ||
-            !psdread(io, &right) ||
-            !psdread(io, &nChannels)) {
-
+    if (!psdread(io, &top) || !psdread(io, &left) || !psdread(io, &bottom) || !psdread(io, &right) || !psdread(io, &nChannels)) {
         error = "could not read layer record";
         return false;
     }
@@ -205,13 +197,12 @@ bool PSDLayerRecord::read(QIODevice* io)
     }
 
     for (int i = 0; i < nChannels; ++i) {
-
         if (io->atEnd()) {
             error = "Could not read enough data for channels";
             return false;
         }
 
-        ChannelInfo* info = new ChannelInfo;
+        ChannelInfo *info = new ChannelInfo;
 
         if (!psdread(io, &info->channelId)) {
             error = "could not read channel id";
@@ -223,8 +214,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             quint32 channelDataLength;
             r = psdread(io, &channelDataLength);
             info->channelDataLength = (quint64)channelDataLength;
-        }
-        else {
+        } else {
             r = psdread(io, &info->channelDataLength);
         }
         if (!r) {
@@ -233,15 +223,10 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-        dbgFile << "\tchannel" << i << "id"
-                << channelIdToChannelType(info->channelId, m_header.colormode)
-                << "length" << info->channelDataLength
-                << "start" << info->channelDataStart
-                << "offset" << info->channelOffset
-                << "channelInfoPosition" << info->channelInfoPosition;
+        dbgFile << "\tchannel" << i << "id" << channelIdToChannelType(info->channelId, m_header.colormode) << "length" << info->channelDataLength << "start"
+                << info->channelDataStart << "offset" << info->channelOffset << "channelInfoPosition" << info->channelInfoPosition;
 
         channelInfoRecords << info;
-
     }
 
     if (!psd_read_blendmode(io, blendModeKey)) {
@@ -282,8 +267,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
     if (flags & 8) {
         irrelevant = flags & 16 ? true : false;
-    }
-    else {
+    } else {
         irrelevant = false;
     }
 
@@ -308,17 +292,12 @@ bool PSDLayerRecord::read(QIODevice* io)
     dbgFile << "\tExtra data length" << extraDataLength;
 
     if (extraDataLength > 0) {
+        dbgFile << "Going to read extra data field. Bytes available: " << io->bytesAvailable() << "pos" << io->pos();
 
-        dbgFile << "Going to read extra data field. Bytes available: "
-                << io->bytesAvailable()
-                << "pos" << io->pos();
-
-                
         // See https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_22582
         quint32 layerMaskLength = 1; // invalid...
-        if (!psdread(io, &layerMaskLength) ||
-                io->bytesAvailable() < layerMaskLength ||
-                !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
+        if (!psdread(io, &layerMaskLength) || io->bytesAvailable() < layerMaskLength
+            || !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
             error = QString("Could not read layer mask length: %1").arg(layerMaskLength);
             return false;
         }
@@ -326,13 +305,8 @@ bool PSDLayerRecord::read(QIODevice* io)
         memset(&layerMask, 0, sizeof(LayerMaskData));
 
         if (layerMaskLength == 20 || layerMaskLength == 36) {
-            if (!psdread(io, &layerMask.top)  ||
-                    !psdread(io, &layerMask.left) ||
-                    !psdread(io, &layerMask.bottom) ||
-                    !psdread(io, &layerMask.right) ||
-                    !psdread(io, &layerMask.defaultColor) ||
-                    !psdread(io, &flags)) {
-
+            if (!psdread(io, &layerMask.top) || !psdread(io, &layerMask.left) || !psdread(io, &layerMask.bottom) || !psdread(io, &layerMask.right)
+                || !psdread(io, &layerMask.defaultColor) || !psdread(io, &flags)) {
                 error = "could not read mask record";
                 return false;
             }
@@ -346,14 +320,9 @@ bool PSDLayerRecord::read(QIODevice* io)
         }
 
         // If it's 36, that is, bit four of the flags is set, we also need to read the 'real' flags, background and rectangle
-        if (layerMaskLength == 36 ) {
-            if (!psdread(io, &flags) ||
-                    !psdread(io, &layerMask.defaultColor) ||
-                    !psdread(io, &layerMask.top)  ||
-                    !psdread(io, &layerMask.left) ||
-                    !psdread(io, &layerMask.bottom) ||
-                    !psdread(io, &layerMask.top)) {
-
+        if (layerMaskLength == 36) {
+            if (!psdread(io, &flags) || !psdread(io, &layerMask.defaultColor) || !psdread(io, &layerMask.top) || !psdread(io, &layerMask.left)
+                || !psdread(io, &layerMask.bottom) || !psdread(io, &layerMask.top)) {
                 error = "could not read 'real' mask record";
                 return false;
             }
@@ -363,8 +332,7 @@ bool PSDLayerRecord::read(QIODevice* io)
         layerMask.disabled = flags & 2 ? true : false;
         layerMask.invertLayerMaskWhenBlending = flags & 4 ? true : false;
 
-        dbgFile << "\tRead layer mask/adjustment layer data. Length of block:"
-                << layerMaskLength << "pos" << io->pos();
+        dbgFile << "\tRead layer mask/adjustment layer data. Length of block:" << layerMaskLength << "pos" << io->pos();
 
         // layer blending thingies
         quint32 blendingDataLength;
@@ -373,7 +341,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-        //dbgFile << "blending block data length" << blendingDataLength << ", pos" << io->pos();
+        // dbgFile << "blending block data length" << blendingDataLength << ", pos" << io->pos();
 
         blendingRanges.data = io->read(blendingDataLength);
         if ((quint32)blendingRanges.data.size() != blendingDataLength) {
@@ -425,13 +393,12 @@ bool PSDLayerRecord::read(QIODevice* io)
         if (infoBlocks.keys.contains("luni") && !infoBlocks.unicodeLayerName.isEmpty()) {
             layerName = infoBlocks.unicodeLayerName;
         }
-
     }
 
     return valid();
 }
 
-void PSDLayerRecord::write(QIODevice* io,
+void PSDLayerRecord::write(QIODevice *io,
                            KisPaintDeviceSP layerContentDevice,
                            KisNodeSP onlyTransparencyMask,
                            const QRect &maskRect,
@@ -439,7 +406,8 @@ void PSDLayerRecord::write(QIODevice* io,
                            const QDomDocument &stylesXmlDoc,
                            bool useLfxsLayerStyleFormat)
 {
-    dbgFile << "writing layer info record" << "at" << io->pos();
+    dbgFile << "writing layer info record"
+            << "at" << io->pos();
 
     m_layerContentDevice = layerContentDevice;
     m_onlyTransparencyMask = onlyTransparencyMask;
@@ -481,7 +449,7 @@ void PSDLayerRecord::write(QIODevice* io,
         }
 
         // blend mode
-        dbgFile  << ppVar(blendModeKey) << ppVar(io->pos());
+        dbgFile << ppVar(blendModeKey) << ppVar(io->pos());
 
         KisAslWriterUtils::writeFixedString("8BIM", io);
         KisAslWriterUtils::writeFixedString(blendModeKey, io);
@@ -491,8 +459,10 @@ void PSDLayerRecord::write(QIODevice* io,
 
         // visibility and protection
         quint8 flags = 0;
-        if (transparencyProtected) flags |= 1;
-        if (!visible) flags |= 2;
+        if (transparencyProtected)
+            flags |= 1;
+        if (!visible)
+            flags |= 2;
         if (irrelevant) {
             flags |= (1 << 3) | (1 << 4);
         }
@@ -546,7 +516,6 @@ void PSDLayerRecord::write(QIODevice* io,
             // layer name: Pascal string, padded to a multiple of 4 bytes.
             psdwrite_pascalstring(io, layerName, 4);
 
-
             PsdAdditionalLayerInfoBlock additionalInfoBlock(m_header);
 
             // write 'luni' data block
@@ -587,9 +556,15 @@ void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice *io)
         KisPaintDeviceSP device = convertMaskDeviceIfNeeded(m_onlyTransparencyMask->paintDevice());
 
         QByteArray buffer(device->pixelSize() * m_onlyTransparencyMaskRect.width() * m_onlyTransparencyMaskRect.height(), 0);
-        device->readBytes((quint8*)buffer.data(), m_onlyTransparencyMaskRect);
+        device->readBytes((quint8 *)buffer.data(), m_onlyTransparencyMaskRect);
 
-        PsdPixelUtils::writeChannelDataRLE(io, (quint8*)buffer.data(), device->pixelSize(), m_onlyTransparencyMaskRect, m_transparencyMaskSizeOffset, -1, true);
+        PsdPixelUtils::writeChannelDataRLE(io,
+                                           (quint8 *)buffer.data(),
+                                           device->pixelSize(),
+                                           m_onlyTransparencyMaskRect,
+                                           m_transparencyMaskSizeOffset,
+                                           -1,
+                                           true);
     }
 }
 
@@ -597,7 +572,7 @@ void PSDLayerRecord::writePixelData(QIODevice *io)
 {
     try {
         writePixelDataImpl(io);
-    }  catch (KisAslWriterUtils::ASLWriteException &e) {
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
         throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
     }
 }
@@ -631,9 +606,7 @@ void PSDLayerRecord::writePixelDataImpl(QIODevice *io)
 
     QVector<PsdPixelUtils::ChannelWritingInfo> writingInfoList;
     Q_FOREACH (const ChannelInfo *channelInfo, channelInfoRecords) {
-        writingInfoList <<
-            PsdPixelUtils::ChannelWritingInfo(channelInfo->channelId,
-                                              channelInfo->channelInfoPosition);
+        writingInfoList << PsdPixelUtils::ChannelWritingInfo(channelInfo->channelId, channelInfo->channelInfoPosition);
     }
 
     PsdPixelUtils::writePixelDataCommon(io, dev, rc, colorMode, channelSize, true, true, writingInfoList);
@@ -651,10 +624,7 @@ bool PSDLayerRecord::readPixelData(QIODevice *io, KisPaintDeviceSP device)
     dbgFile << "Reading pixel data for layer" << layerName << "pos" << io->pos();
 
     const int channelSize = m_header.channelDepth / 8;
-    const QRect layerRect = QRect(left,
-                                  top,
-                                  right - left,
-                                  bottom - top);
+    const QRect layerRect = QRect(left, top, right - left, bottom - top);
 
     try {
         PsdPixelUtils::readChannels(io, device, m_header.colormode, channelSize, layerRect, channelInfoRecords);
@@ -672,24 +642,20 @@ QRect PSDLayerRecord::channelRect(ChannelInfo *channel) const
     QRect result;
 
     if (channel->channelId < -1) {
-        result = QRect(layerMask.left,
-                       layerMask.top,
-                       layerMask.right - layerMask.left,
-                       layerMask.bottom - layerMask.top);
+        result = QRect(layerMask.left, layerMask.top, layerMask.right - layerMask.left, layerMask.bottom - layerMask.top);
     } else {
-        result = QRect(left,
-                       top,
-                       right - left,
-                       bottom - top);
+        result = QRect(left, top, right - left, bottom - top);
     }
 
     return result;
 }
 
-
 bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *channelInfo)
 {
-    KIS_ASSERT_RECOVER(channelInfo->channelId < -1) { return false; }
+    KIS_ASSERT_RECOVER(channelInfo->channelId < -1)
+    {
+        return false;
+    }
 
     dbgFile << "Going to read" << channelIdToChannelType(channelInfo->channelId, m_header.colormode) << "mask";
 
@@ -700,15 +666,16 @@ bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *
     }
 
     // the device must be a pixel selection
-    KIS_ASSERT_RECOVER(dev->pixelSize() == 1) { return false; }
+    KIS_ASSERT_RECOVER(dev->pixelSize() == 1)
+    {
+        return false;
+    }
 
     dev->setDefaultPixel(KoColor(&layerMask.defaultColor, dev->colorSpace()));
 
-    const int pixelSize =
-        m_header.channelDepth == 16 ? 2 :
-        m_header.channelDepth == 32 ? 4 : 1;
+    const int pixelSize = m_header.channelDepth == 16 ? 2 : m_header.channelDepth == 32 ? 4 : 1;
 
-    QVector<ChannelInfo*> infoRecords;
+    QVector<ChannelInfo *> infoRecords;
     infoRecords << channelInfo;
     PsdPixelUtils::readAlphaMaskChannels(io, dev, pixelSize, maskRect, infoRecords);
 
@@ -718,7 +685,7 @@ bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
 {
 #ifndef NODEBUG
-    dbg.nospace() << "valid: " << const_cast<PSDLayerRecord*>(&layer)->valid();
+    dbg.nospace() << "valid: " << const_cast<PSDLayerRecord *>(&layer)->valid();
     dbg.nospace() << ", name: " << layer.layerName;
     dbg.nospace() << ", top: " << layer.top;
     dbg.nospace() << ", left:" << layer.left;
@@ -731,20 +698,17 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
     dbg.nospace() << ", transparency protected: " << layer.transparencyProtected;
     dbg.nospace() << ", visible: " << layer.visible;
     dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
-    Q_FOREACH (const ChannelInfo* channel, layer.channelInfoRecords) {
+    Q_FOREACH (const ChannelInfo *channel, layer.channelInfoRecords) {
         dbg.space() << channel;
     }
 #endif
     return dbg.nospace();
 }
 
-
 QDebug operator<<(QDebug dbg, const ChannelInfo &channel)
 {
 #ifndef NODEBUG
-    dbg.nospace() << "\tChannel type" << channel.channelId
-                  << "size: " << channel.channelDataLength
-                  << "compression type" << channel.compressionType << "\n";
+    dbg.nospace() << "\tChannel type" << channel.channelId << "size: " << channel.channelDataLength << "compression type" << channel.compressionType << "\n";
 #endif
     return dbg.nospace();
 }

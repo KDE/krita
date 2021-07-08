@@ -6,24 +6,22 @@
 #ifndef PSD_LAYER_RECORD_H
 #define PSD_LAYER_RECORD_H
 
+#include "kritapsd_export.h"
+
+#include <QBitArray>
+#include <QByteArray>
 #include <QString>
 #include <QVector>
-#include <QByteArray>
-#include <QBitArray>
-
-#include <kis_types.h>
-#include <kis_paint_device.h>
-#include <kis_node.h>
-
-#include "psd.h"
-#include "psd_header.h"
-
-#include "compression.h"
-
-#include "psd_additional_layer_info_block.h"
 
 #include <boost/function.hpp>
+#include <compression.h>
+#include <kis_node.h>
+#include <kis_paint_device.h>
+#include <kis_types.h>
+#include <psd.h>
 
+#include "psd_additional_layer_info_block.h"
+#include "psd_header.h"
 
 class QIODevice;
 
@@ -48,8 +46,7 @@ enum psd_layer_type {
     psd_layer_type_photo_filter,
 };
 
-struct  ChannelInfo {
-
+struct KRITAPSD_EXPORT ChannelInfo {
     ChannelInfo()
         : channelId(0)
         , compressionType(Compression::Unknown)
@@ -57,7 +54,8 @@ struct  ChannelInfo {
         , channelDataLength(0)
         , channelOffset(0)
         , channelInfoPosition(0)
-    {}
+    {
+    }
 
     qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
     Compression::CompressionType compressionType;
@@ -68,10 +66,9 @@ struct  ChannelInfo {
     int channelInfoPosition; // where the channelinfo record is saved in the file
 };
 
-class PSDLayerRecord
+class KRITAPSD_EXPORT PSDLayerRecord
 {
 public:
-
     PSDLayerRecord(const PSDHeader &header);
 
     ~PSDLayerRecord()
@@ -81,12 +78,18 @@ public:
 
     QRect channelRect(ChannelInfo *channel) const;
 
-    bool read(QIODevice* io);
-    bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
-    bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);
+    bool read(QIODevice *io);
+    bool readPixelData(QIODevice *io, KisPaintDeviceSP device);
+    bool readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
-    void write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect, psd_section_type sectionType, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat);
-    void writePixelData(QIODevice* io);
+    void write(QIODevice *io,
+               KisPaintDeviceSP layerContentDevice,
+               KisNodeSP onlyTransparencyMask,
+               const QRect &maskRect,
+               psd_section_type sectionType,
+               const QDomDocument &stylesXmlDoc,
+               bool useLfxsLayerStyleFormat);
+    void writePixelData(QIODevice *io);
 
     bool valid();
 
@@ -99,16 +102,16 @@ public:
 
     quint16 nChannels;
 
-    QVector<ChannelInfo*> channelInfoRecords;
+    QVector<ChannelInfo *> channelInfoRecords;
 
     QString blendModeKey;
     bool isPassThrough;
 
     quint8 opacity;
     quint8 clipping;
-    bool   transparencyProtected;
-    bool   visible;
-    bool   irrelevant;
+    bool transparencyProtected;
+    bool visible;
+    bool irrelevant;
 
     struct LayerMaskData {
         qint32 top;
@@ -128,13 +131,12 @@ public:
     LayerMaskData layerMask;
 
     struct LayerBlendingRanges {
-
         QByteArray data;
 
         quint8 blackValues[2];
         quint8 whiteValues[2];
         quint32 compositeGrayBlendDestinationRange;
-        QVector<QPair<quint32, quint32> > sourceDestinationRanges;
+        QVector<QPair<quint32, quint32>> sourceDestinationRanges;
     };
 
     LayerBlendingRanges blendingRanges;
@@ -151,7 +153,6 @@ private:
     KisPaintDeviceSP convertMaskDeviceIfNeeded(KisPaintDeviceSP dev);
 
 private:
-
     KisPaintDeviceSP m_layerContentDevice;
     KisNodeSP m_onlyTransparencyMask;
     QRect m_onlyTransparencyMaskRect;
@@ -160,7 +161,7 @@ private:
     const PSDHeader m_header;
 };
 
-QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);
-QDebug operator<<(QDebug dbg, const ChannelInfo& layer);
+KRITAPSD_EXPORT QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer);
+KRITAPSD_EXPORT QDebug operator<<(QDebug dbg, const ChannelInfo &layer);
 
 #endif // PSD_LAYER_RECORD_H

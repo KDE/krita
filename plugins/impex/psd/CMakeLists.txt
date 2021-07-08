@@ -14,15 +14,8 @@ include_directories(SYSTEM
 )
 
 set(LIB_PSD_SRCS 
-    psd_header.cpp
     psd_colormode_block.cpp
-    psd_resource_section.cpp
-    psd_resource_block.cpp
-    psd_layer_section.cpp
-    psd_layer_record.cpp
     psd_image_data.cpp
-    psd_pixel_utils.cpp
-    psd_additional_layer_info_block.cpp
 )
 
 #
@@ -38,7 +31,7 @@ set(kritapsdimport_SOURCES
 
 add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
 
-target_link_libraries(kritapsdimport kritaglobal kritaui kritapsdutils KF5::I18n ${ZLIB_LIBRARIES})
+target_link_libraries(kritapsdimport kritaglobal kritaui kritapsd KF5::I18n ${ZLIB_LIBRARIES})
 
 install(TARGETS kritapsdimport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
@@ -55,9 +48,9 @@ set(kritapsdexport_SOURCES
 add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
 
 if (MSVC)
-    target_link_libraries(kritapsdexport kritaui kritapsdutils kritaimpex ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
+    target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
 else ()	
-    target_link_libraries(kritapsdexport kritaui kritapsdutils kritaimpex ${ZLIB_LIBRARIES})
+    target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex ${ZLIB_LIBRARIES})
 endif ()	
 
 install(TARGETS kritapsdexport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

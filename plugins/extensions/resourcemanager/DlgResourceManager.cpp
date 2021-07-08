@@ -284,12 +284,21 @@ void DlgResourceManager::slotDeleteResources()
         return;
     }
 
-    Q_FOREACH(QModelIndex index, list) {
+    // deleting a resource with "Show deleted resources" disabled will update the proxy model
+    // and next index in selection now points at wrong item.
+    QList<int> resourceIds;
+    Q_FOREACH (QModelIndex index, list) {
+        int resourceId = model->data(index, Qt::UserRole + KisResourceModel::Id).toInt();
+        resourceIds.append(resourceId);
+    }
+
+    Q_FOREACH (int resourceId, resourceIds) {
         if (m_undeleteMode) {
             // FIXME: There is currently no nicer way to set an inactive resource active again...
-            KoResourceSP resource = model->resourceForIndex(index);
-            allModel->setData(allModel->indexForResource(resource), true, Qt::CheckStateRole);
+            QModelIndex index = allModel->indexForResourceId(resourceId);
+            allModel->setData(index, true, Qt::CheckStateRole);
         } else {
+            QModelIndex index = model->indexForResourceId(resourceId);
             model->setResourceInactive(index);
         }
     }

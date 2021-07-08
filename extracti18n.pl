@@ -333,3 +333,11 @@ foreach my $filename (@filenames)
 }
 
 
+# add "memory" resources that are defined in Krita's code (KoResourceServerProvider)
+printi18n("0. Foreground to Background", "memory/gradients/Foreground to Background.svg", "memory/gradients/Foreground to Background.svg", -1);
+printi18n("1. Foreground to Transparent", "memory/gradients/Foreground to Transparent.svg", "memory/gradients/Foreground to Transparent.svg", -1);
+
+
+
+
+

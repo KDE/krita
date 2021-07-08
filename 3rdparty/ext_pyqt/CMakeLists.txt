@@ -6,11 +6,6 @@ if(UNIX)
       SET(PYTHON_EXECUTABLE_PATH python3)
     endif()
 
-    if(APPLE)
-        add_custom_target(ext_pyqtbuilder
-            COMMAND ${PREFIX_ext_pyqt}/bin/pip3 install PyQt-builder==1.10.0
-        )
-    else()
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.10.0.tar.gz
@@ -31,7 +26,15 @@ if(UNIX)
 
         UPDATE_COMMAND ""
     )
-    endif(APPLE)
+    if (APPLE)
+        ExternalProject_Add_Step( ext_pyqtbuilder rename_egg
+            WORKING_DIRECTORY <SOURCE_DIR>
+            COMMENT "Removing pyqt_builder egg dependencies requirements"
+            COMMAND ${CMAKE_COMMAND} -E remove <SOURCE_DIR>/PyQt_builder.egg-info/requires.txt
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macOS-remove-install_requires.patch
+            DEPENDEES patch
+        )
+    endif()
 
     ExternalProject_Add( ext_pyqt5
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

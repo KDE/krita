@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index 66dcfd9..d8a6e9c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -49,7 +49,6 @@ setup(
+         version=version,
+         license='SIP',
+         python_requires='>=3.5',
+-        install_requires=['packaging', 'sip >=5.5, <7'],
+         packages=find_packages(),
+         package_data={
+             'pyqtbuild.bundle': ['dlls/*/*', 'qt_wheel_distinfo/*'],

@@ -106,6 +106,7 @@ KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(const Kis
     : KisTransformMaskAdapter(*staticTransform->transformArgs()),
       m_d(new Private())
 {
+    clearChangedFlag();
 }
 
 KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(const KisAnimatedTransformMaskParameters &rhs)
@@ -122,7 +123,7 @@ KisAnimatedTransformMaskParameters::~KisAnimatedTransformMaskParameters()
 
 const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::transformArgs() const
 {
-    QSharedPointer<ToolTransformArgs> args = KisTransformMaskAdapter::transformArgs();
+    QSharedPointer<ToolTransformArgs> args( new ToolTransformArgs(*KisTransformMaskAdapter::transformArgs()) );
 
     if (m_d->transformChannels[KisKeyframeChannel::PositionX.id()] || m_d->transformChannels[KisKeyframeChannel::PositionY.id()]) { // Position
 
@@ -191,11 +192,6 @@ void KisAnimatedTransformMaskParameters::toXML(QDomElement *e) const
     return KisTransformMaskAdapter::toXML(e);
 }
 
-void KisAnimatedTransformMaskParameters::translateSrcAndDst(const QPointF &offset)
-{
-    QSharedPointer<ToolTransformArgs> args = transformArgs();
-    args->translateSrcAndDst(offset);
-}
 
 KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(const QString &id, KisNodeWSP parent)
 {

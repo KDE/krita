@@ -11,6 +11,7 @@
 #include "kis_image.h"
 #include "kis_node.h"
 #include "kis_keyframe_channel.h"
+#include "kis_scalar_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_global.h"
@@ -44,6 +45,7 @@ namespace KisAnimUtils {
                 QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
 
                 KisKeyframeChannel *channel = node->getKeyframeChannel(channelId);
+                bool isScalar = (channelId != KisKeyframeChannel::Raster.id());
                 quint8 originalOpacity = node->opacity();
                 bool createdChannel = false;
 
@@ -82,7 +84,13 @@ namespace KisAnimUtils {
                     } else { // Make new...
                         KisKeyframeSP previousKey = channel->activeKeyframeAt(time);
 
-                        channel->addKeyframe(time, cmd.data());
+                        if (isScalar) {
+                            KisScalarKeyframeChannel* scalarChannel = static_cast<KisScalarKeyframeChannel*>(channel);
+                            const qreal value = scalarChannel->valueAt(time); //Get interpolated value.
+                            scalarChannel->addScalarKeyframe(time, value, cmd.data());
+                        } else {
+                            channel->addKeyframe(time, cmd.data());
+                        }
 
                         // Use color label of previous key, if exists...
                         if (previousKey && channel->keyframeAt(time)) {

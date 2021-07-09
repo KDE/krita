@@ -130,56 +130,55 @@ namespace KisToolUtils {
         KisNodeList masks;
 
         Q_FOREACH (KisNodeSP node, nodes) {
-            if (node->inherits("KisMask"))
+            if (node->inherits("KisMask")) {
                 masks.append(node);
+            }
         }
-        KisLayerUtils::filterMergableNodes(nodes);
 
-        if (nodes.isEmpty() && masks.isEmpty()) {
+        // To prevent deleting same layer multiple times
+        KisLayerUtils::filterMergableNodes(nodes);
+        nodes.append(masks);
+
+        if (nodes.isEmpty()) {
             return false;
         }
 
         KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE,
                                            KisImageSignalVector(), kundo2_i18n("Clear"));
 
-        std::function<void(KisNodeSP)> func = [&applicator, selection] (KisNodeSP node) {
-
-                    if(node && node->hasEditablePaintDevice()) {
-                        KUndo2Command *cmd =
-                            new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
-                                [node, selection] () {
-                                    KisPaintDeviceSP device = node->paintDevice();
-
-                                    KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
-
-                                    QRect dirtyRect;
-                                    if (selection) {
-                                        dirtyRect = selection->selectedRect();
-                                        device->clearSelection(selection);
-                                    } else {
-                                        dirtyRect = device->extent();
-                                        device->clear();
-                                    }
-
-                                    device->setDirty(dirtyRect);
-                                    return transaction.endAndTake();
-                                });
-                        applicator.applyCommand(cmd, KisStrokeJobData::CONCURRENT);
-                    }
-                };
-
         Q_FOREACH (KisNodeSP node, nodes) {
-            KisLayerUtils::recursiveApplyNodes(node, [&func] (KisNodeSP node) {
-                if (!node->inherits("KisMask")) {
-                    func(node);
+            KisLayerUtils::recursiveApplyNodes(node, [&applicator, selection, masks] (KisNodeSP node) {
+
+                // applied on masks if selected explicitly
+                if (node->inherits("KisMask") && !masks.contains(node)) {
+                    return;
+                }
+
+                if(node->hasEditablePaintDevice()) {
+                    KUndo2Command *cmd =
+                        new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
+                            [node, selection] () {
+                                KisPaintDeviceSP device = node->paintDevice();
+
+                                KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
+
+                                QRect dirtyRect;
+                                if (selection) {
+                                    dirtyRect = selection->selectedRect();
+                                    device->clearSelection(selection);
+                                } else {
+                                    dirtyRect = device->extent();
+                                    device->clear();
+                                }
+
+                                device->setDirty(dirtyRect);
+                                return transaction.endAndTake();
+                            });
+                    applicator.applyCommand(cmd, KisStrokeJobData::CONCURRENT);
                 }
             });
         }
 
-        // apply to masks only if explicitly selected
-        Q_FOREACH (KisNodeSP node, masks) {
-            func(node);
-        }
         applicator.end();
 
         return true;

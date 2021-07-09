@@ -195,7 +195,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
                         QVector<KoResourceSP> existingResources = model.resourcesForMD5(QByteArray::fromHex(md5sum.toLatin1()));
 
-                        if (existingResources.size() == 0) {
+                        if (existingResources.isEmpty()) {
                              QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
                              QVector<KisResourceLoaderBase*> resourceLoaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceType);
                              Q_FOREACH(KisResourceLoaderBase *loader, resourceLoaders) {

@@ -306,16 +306,17 @@ void KisKraSaver::saveResourcesToXML(QDomDocument &doc, QDomElement &element)
     QDomElement eResources = doc.createElement(RESOURCES);
 
     Q_FOREACH (const KoResourceSP resource, m_d->doc->documentResources()) {
-        QDomElement eFile = doc.createElement("resource");
-        eFile.setAttribute("type", resource->resourceType().first);
-        eFile.setAttribute("filename", resource->filename());
-        eFile.setAttribute("md5sum", QString::fromLatin1(resource->md5().toHex()));
+        QDomElement eResource = doc.createElement("resource");
+        eResource.setAttribute("type", resource->resourceType().first);
+        eResource.setAttribute("name", resource->name());
+        eResource.setAttribute("filename", resource->filename());
+        eResource.setAttribute("md5sum", QString::fromLatin1(resource->md5().toHex()));
 
         if (resource->resourceType().first == ResourceType::Palettes) {
-            ePalette.appendChild(eFile);
+            ePalette.appendChild(eResource);
         }
         else {
-            eResources.appendChild(eFile);
+            eResources.appendChild(eResource);
 
         }
     }

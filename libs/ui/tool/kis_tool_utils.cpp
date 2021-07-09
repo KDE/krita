@@ -183,33 +183,6 @@ namespace KisToolUtils {
 
         return true;
     }
-    bool clearImage(KisImageSP image, KisNodeSP node, KisSelectionSP selection)
-    {
-        if(node && node->hasEditablePaintDevice()) {
-            KUndo2Command *cmd =
-                new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
-                    [node, selection] () {
-                        KisPaintDeviceSP device = node->paintDevice();
-
-                        KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
-
-                        QRect dirtyRect;
-                        if (selection) {
-                            dirtyRect = selection->selectedRect();
-                            device->clearSelection(selection);
-                        } else {
-                            dirtyRect = device->extent();
-                            device->clear();
-                        }
-
-                        device->setDirty(dirtyRect);
-                        return transaction.endAndTake();
-                    });
-            KisProcessingApplicator::runSingleCommandStroke(image, cmd);
-            return true;
-        }
-        return false;
-    }
 
     const QString ColorSamplerConfig::CONFIG_GROUP_NAME = "tool_color_sampler";
 

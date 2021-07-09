@@ -10,12 +10,14 @@
 #ifndef PSD_H
 #define PSD_H
 
+#include "kritapsdutils_export.h"
+
 #include <QColor>
 #include <QPair>
 #include <QString>
 #include <QVector>
+#include <cstdint>
 
-#include "kritapsdutils_export.h"
 #include <KisLinkedResourceWrapper.h>
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
@@ -25,6 +27,12 @@
 const int MAX_CHANNELS = 56;
 
 typedef qint32 Fixed; /* Represents a fixed point implied decimal */
+
+enum class psd_byte_order : std::uint_least8_t {
+    psdBigEndian = 0,
+    psdLittleEndian,
+    psdInvalidByteOrder = 255,
+};
 
 /**
  * Image color/depth modes

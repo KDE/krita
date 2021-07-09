@@ -3,18 +3,16 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "psd_utils.h"
-
-#include <QtEndian>
 
 #include <QIODevice>
 #include <QString>
+#include <QtEndian>
 
-#include "psd.h"
+#include "psd_utils.h"
 
 bool psdwrite(QIODevice *io, quint8 v)
 {
-    int written = io->write((char *)&v, 1);
+    const qint64 written = io->write(reinterpret_cast<char *>(&v), 1);
     return written == 1;
 }
 
@@ -122,149 +120,6 @@ bool psdwrite_pascalstring(QIODevice *io, const QString &s, int padding)
     if ((length % padding) != 0) {
         for (int i = 0; i < (padding - (length % padding)); i++) {
             psdwrite(io, (quint8)0);
-        }
-    }
-
-    return true;
-}
-
-bool psdread(QIODevice *io, quint8 *v)
-{
-    quint64 read = io->read((char *)v, 1);
-    if (read != 1)
-        return false;
-    return true;
-}
-
-bool psdread(QIODevice *io, quint16 *v)
-{
-    quint16 val;
-    quint64 read = io->read((char *)&val, 2);
-    if (read != 2)
-        return false;
-    *v = qFromBigEndian(val);
-    return true;
-}
-
-bool psdread(QIODevice *io, qint16 *v)
-{
-    qint16 val;
-    quint64 read = io->read((char *)&val, 2);
-    if (read != 2)
-        return false;
-    *v = qFromBigEndian(val);
-    return true;
-}
-
-bool psdread(QIODevice *io, quint32 *v)
-{
-    quint32 val;
-    quint64 read = io->read((char *)&val, 4);
-    if (read != 4)
-        return false;
-    *v = qFromBigEndian(val);
-    return true;
-}
-
-bool psdread(QIODevice *io, qint32 *v)
-{
-    qint32 val;
-    quint64 read = io->read((char *)&val, 4);
-    if (read != 4)
-        return false;
-    *v = qFromBigEndian(val);
-    return true;
-}
-
-bool psdread(QIODevice *io, quint64 *v)
-{
-    quint64 val;
-    quint64 read = io->read((char *)&val, 8);
-    if (read != 8)
-        return false;
-
-    *v = qFromBigEndian<qint64>((quint8 *)&val);
-    return true;
-}
-
-bool psdread(QIODevice *io, double *v)
-{
-    Q_ASSERT(sizeof(double) == sizeof(qint64));
-
-    qint64 val;
-    quint64 read = io->read((char *)&val, 8);
-    if (read != 8)
-        return false;
-    *(reinterpret_cast<qint64 *>(v)) = qFromBigEndian<qint64>(val);
-    return true;
-}
-
-bool psdread_pascalstring(QIODevice *io, QString &s, int padding)
-{
-    quint8 length;
-    if (!psdread(io, &length)) {
-        return false;
-    }
-
-    if (length == 0) {
-        // read the padding
-        for (int i = 0; i < padding - 1; ++i) {
-            io->seek(io->pos() + 1);
-        }
-        return true;
-    }
-
-    QByteArray chars = io->read(length);
-    if (chars.length() != length) {
-        return false;
-    }
-
-    // read padding byte
-    quint32 paddedLength = length + 1;
-    if (padding > 0) {
-        while (paddedLength % padding != 0) {
-            if (!io->seek(io->pos() + 1)) {
-                return false;
-            }
-            paddedLength++;
-        }
-    }
-
-    s.append(QString::fromLatin1(chars));
-
-    return true;
-}
-
-bool psd_read_blendmode(QIODevice *io, QString &blendModeKey)
-{
-    QByteArray b;
-    b = io->read(4);
-    if (b.size() != 4 || QString(b) != "8BIM") {
-        return false;
-    }
-    blendModeKey = QString(io->read(4));
-    if (blendModeKey.size() != 4) {
-        return false;
-    }
-    return true;
-}
-
-bool psdread_unicodestring(QIODevice *io, QString &s)
-{
-    quint32 stringlen;
-    if (!psdread(io, &stringlen)) {
-        return false;
-    }
-
-    for (uint i = 0; i < stringlen; ++i) {
-        quint16 ch;
-        if (!psdread(io, &ch)) {
-            return false;
-        }
-
-        if (ch != 0) {
-            QChar uch(ch);
-            s.append(uch);
         }
     }
 

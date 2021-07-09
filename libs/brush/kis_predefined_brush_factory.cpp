@@ -31,7 +31,6 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
 
     const QString brushMD5Sum = brushDefinition.attribute("md5sum", "");
     KisBrushSP brush = resourceSourceAdapter.resourceForMD5(brushMD5Sum.toLatin1());
-
     bool brushtipFound = true;
 
     if (!brush) {

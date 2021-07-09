@@ -276,7 +276,8 @@ inline QDebug operator<<(QDebug dbg, const KisResourceStorageSP storage)
                       << " Version: " << storage->location()
                       << " Valid: " << storage->valid()
                       << " Storage: " << KisResourceStorage::storageTypeToString(storage->type())
-                      << " Timestamp: " << storage->timestamp();
+                      << " Timestamp: " << storage->timestamp()
+                      << " Pointer: " << storage.data();
     }
     return dbg.space();
 }

@@ -177,7 +177,7 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
         qWarning() << "saving binary data failed";
     }
     setProgress(70);
-    result = m_kraSaver->savePalettes(m_store, m_image, m_doc->path());
+    result = m_kraSaver->saveResources(m_store, m_image, m_doc->path());
     if (!result) {
         success = false;
         qWarning() << "saving palettes data failed";

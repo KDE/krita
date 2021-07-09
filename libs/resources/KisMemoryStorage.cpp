@@ -98,6 +98,9 @@ KisMemoryStorage::KisMemoryStorage(const KisMemoryStorage &rhs)
     , d(new Private)
 {
     *this = rhs;
+    d->resourcesNew = rhs.d->resourcesNew;
+    d->tags = rhs.d->tags;
+    d->metadata = rhs.d->metadata;
 }
 
 KisMemoryStorage &KisMemoryStorage::operator=(const KisMemoryStorage &rhs)

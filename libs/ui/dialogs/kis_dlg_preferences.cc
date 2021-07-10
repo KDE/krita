@@ -1043,6 +1043,11 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
+
+    sliderFrameTimeout->setRange(5, 600);
+    sliderFrameTimeout->setSuffix(i18nc("suffix for \"seconds\"", " sec"));
+    sliderFrameTimeout->setValue(cfg.frameRenderingTimeout() / 1000);
+
     sliderFpsLimit->setRange(20, 300);
     sliderFpsLimit->setSuffix(i18n(" fps"));
 
@@ -1159,6 +1164,7 @@ void PerformanceTab::save()
 
     cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
     cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
+    cfg.setFrameRenderingTimeout(sliderFrameTimeout->value() * 1000);
     cfg.setFpsLimit(sliderFpsLimit->value());
 
     {

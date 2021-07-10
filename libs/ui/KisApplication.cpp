@@ -600,7 +600,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     exporter.setBatchMode(d->batchRun);
                     KisAsyncAnimationFramesSaveDialog::Result result =
                         exporter.regenerateRange(0);
-                    if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
+                    if (result != KisAsyncAnimationFramesSaveDialog::RenderComplete) {
                         errKrita << i18n("Failed to render animation frames!") << endl;
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));

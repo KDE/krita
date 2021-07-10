@@ -46,7 +46,7 @@ void KisAsyncAnimationCacheRenderer::slotCompleteRegenerationInternal(int frame)
     if (!isActive()) return;
 
     KIS_SAFE_ASSERT_RECOVER(m_d->requestInfo) {
-        frameCancelledCallback(frame);
+        frameCancelledCallback(frame, RenderingFailed);
         return;
     }
 
@@ -55,9 +55,9 @@ void KisAsyncAnimationCacheRenderer::slotCompleteRegenerationInternal(int frame)
 }
 
 
-void KisAsyncAnimationCacheRenderer::frameCancelledCallback(int frame)
+void KisAsyncAnimationCacheRenderer::frameCancelledCallback(int frame, CancelReason cancelReason)
 {
-    notifyFrameCancelled(frame);
+    notifyFrameCancelled(frame, cancelReason);
 }
 
 void KisAsyncAnimationCacheRenderer::clearFrameRegenerationState(bool isCancelled)

@@ -25,13 +25,13 @@ public:
 
 protected:
     void frameCompletedCallback(int frame, const KisRegion &requestedRegion) override;
-    void frameCancelledCallback(int frame) override;
+    void frameCancelledCallback(int frame, CancelReason cancelReason) override;
     void clearFrameRegenerationState(bool isCancelled) override;
 
 Q_SIGNALS:
     void sigNotifyFrameCompleted(int frameTime, KisPaintDeviceSP frameContents);
     void sigNotifyFrameCompleted(int frameTime);
-    void sigNotifyFrameCancelled(int frame);
+    void sigNotifyFrameCancelled(int frame, KisAsyncAnimationRendererBase::CancelReason cancelReason);
 
 };
 

@@ -36,6 +36,13 @@ public:
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
+    enum CancelReason {
+        UserCancelled = 0,
+        RenderingFailed,
+        RenderingTimedOut
+    };
+    Q_ENUM(CancelReason)
+
 public:
     explicit KisAsyncAnimationRendererBase(QObject *parent = 0);
     virtual ~KisAsyncAnimationRendererBase();
@@ -64,14 +71,15 @@ public Q_SLOTS:
      * After calling this slot requestedImage() becomes invalid.
      * @see requestedImage()
      */
-    void cancelCurrentFrameRendering();
+    void cancelCurrentFrameRendering(CancelReason cancelReason);
 
 Q_SIGNALS:
     void sigFrameCompleted(int frame);
-    void sigFrameCancelled(int frame);
+    void sigFrameCancelled(int frame, KisAsyncAnimationRendererBase::CancelReason cancelReason);
 
 private Q_SLOTS:
     void slotFrameRegenerationCancelled();
+    void slotFrameRegenerationTimedOut();
     void slotFrameRegenerationFinished(int frame);
 
 protected Q_SLOTS:
@@ -84,7 +92,7 @@ protected Q_SLOTS:
      * Called by a derived class to cancel processing of the frames. After calling
      * this method, the dialog will stop processing the frames and close.
      */
-    void notifyFrameCancelled(int frame);
+    void notifyFrameCancelled(int frame, KisAsyncAnimationRendererBase::CancelReason cancelReason);
 
 protected:
     /**
@@ -113,7 +121,7 @@ protected:
      * NOTE: the slot is called in the GUI thread. Don't forget to call
      *       notifyFrameCancelled() in he end of your call.
      */
-    virtual void frameCancelledCallback(int frame) = 0;
+    virtual void frameCancelledCallback(int frame, CancelReason cancelReason) = 0;
 
 
     /**

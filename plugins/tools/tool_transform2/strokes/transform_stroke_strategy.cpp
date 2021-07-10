@@ -264,7 +264,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::CONCURRENT,
                                   KisStrokeJobData::NORMAL);
 
-                m_updateData->push_back(std::make_pair(td->node, oldExtent | td->node->extent()));
+                m_updateData->push_back(std::make_pair(td->node, cachedPortion->extent() | oldExtent | td->node->extent()));
             } else if (KisExternalLayer *extLayer =
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
@@ -489,10 +489,12 @@ void TransformStrokeStrategy::initStrokeCallback()
 
     KisUpdateCommandEx::SharedDataSP sharedData(new KisUpdateCommandEx::SharedData());
 
-    KisNodeList filteredRoots = KisLayerUtils::sortAndFilterMergableInternalNodes(m_processedNodes, true);
-    Q_FOREACH (KisNodeSP root, filteredRoots) {
-        sharedData->push_back(std::make_pair(root, root->extent()));
-    }
+    KritaUtils::addJobBarrier(extraInitJobs, [this, sharedData]() {
+        KisNodeList filteredRoots = KisLayerUtils::sortAndFilterMergableInternalNodes(m_processedNodes, true);
+        Q_FOREACH (KisNodeSP root, filteredRoots) {
+            sharedData->push_back(std::make_pair(root, root->extent()));
+        }
+    });
 
     extraInitJobs << new Data(new KisUpdateCommandEx(sharedData, m_updatesFacade, KisUpdateCommandEx::INITIALIZING), false, Data::BARRIER);
 
@@ -591,7 +593,7 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
                     QRect dirtyRect;
 
                     for (auto it = m_updateData->begin(); it != m_updateData->end(); ++it) {
-                        if (KisLayerUtils::checkIsChildOf(it->first, {root})) {
+                        if (it->first == root || KisLayerUtils::checkIsChildOf(it->first, {root})) {
                             dirtyRect |= it->second;
                         }
                     }

@@ -52,11 +52,11 @@ PSDLoader::~PSDLoader()
 {
 }
 
-KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
+KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
 {
     // open the file
 
-    dbgFile << "pos:" << io->pos();
+    dbgFile << "pos:" << io.pos();
 
     PSDHeader header;
     if (!header.read(io)) {
@@ -65,7 +65,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     }
 
     dbgFile << header;
-    dbgFile << "Read header. pos:" << io->pos();
+    dbgFile << "Read header. pos:" << io.pos();
 
     PSDColorModeBlock colorModeBlock(header.colormode);
     if (!colorModeBlock.read(io)) {
@@ -73,21 +73,21 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
         return ImportExportCodes::FileFormatIncorrect;
     }
 
-    dbgFile << "Read color mode block. pos:" << io->pos();
+    dbgFile << "Read color mode block. pos:" << io.pos();
 
     PSDImageResourceSection resourceSection;
     if (!resourceSection.read(io)) {
         dbgFile << "failed image reading resource section: " << resourceSection.error;
         return ImportExportCodes::FileFormatIncorrect;
     }
-    dbgFile << "Read image resource section. pos:" << io->pos();
+    dbgFile << "Read image resource section. pos:" << io.pos();
 
     PSDLayerMaskSection layerSection(header);
     if (!layerSection.read(io)) {
         dbgFile << "failed reading layer/mask section: " << layerSection.error;
         return ImportExportCodes::FileFormatIncorrect;
     }
-    dbgFile << "Read layer/mask section. " << layerSection.nLayers << "layers. pos:" << io->pos();
+    dbgFile << "Read layer/mask section. " << layerSection.nLayers << "layers. pos:" << io.pos();
 
     // Done reading, except possibly for the image data block, which is only relevant if there
     // are no layers.
@@ -120,7 +120,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     }
 
     // Creating the KisImage
-    QFile *file = dynamic_cast<QFile*>(io);
+    QFile *file = dynamic_cast<QFile *>(&io);
     QString name = file ? file->fileName() : "Imported";
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, name);
     Q_CHECK_PTR(m_image);
@@ -157,7 +157,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     // first layer to the projection if the number of layers is negative/
     // See https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000.
     if (layerSection.nLayers == 0) {
-        dbgFile << "Position" << io->pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
+        dbgFile << "Position" << io.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
 
         KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
 
@@ -345,7 +345,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     return ImportExportCodes::OK;
 }
 
-KisImportExportErrorCode PSDLoader::buildImage(QIODevice *io)
+KisImportExportErrorCode PSDLoader::buildImage(QIODevice &io)
 {
     return decode(io);
 }

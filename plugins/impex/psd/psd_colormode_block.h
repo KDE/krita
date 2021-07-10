@@ -18,7 +18,7 @@ public:
 
     PSDColorModeBlock(psd_color_mode colormode);
 
-    bool read(QIODevice* io);
+    bool read(QIODevice &io);
     bool write(QIODevice* io);
     bool valid();
 

@@ -8,11 +8,11 @@
 
 namespace KisAslReaderUtils
 {
-QString readStringCommon(QIODevice *device, int length)
+QString readStringCommon(QIODevice &device, int length)
 {
     QByteArray data;
     data.resize(length);
-    qint64 dataRead = device->read(data.data(), length);
+    qint64 dataRead = device.read(data.data(), length);
 
     if (dataRead != length) {
         QString msg = QString(
@@ -26,12 +26,12 @@ QString readStringCommon(QIODevice *device, int length)
     return QString(data);
 }
 
-QString readFixedString(QIODevice *device)
+QString readFixedString(QIODevice &device)
 {
     return readStringCommon(device, 4);
 }
 
-QString readVarString(QIODevice *device)
+QString readVarString(QIODevice &device)
 {
     quint32 length = 0;
     SAFE_READ_EX(device, length);
@@ -43,7 +43,7 @@ QString readVarString(QIODevice *device)
     return readStringCommon(device, length);
 }
 
-QString readPascalString(QIODevice *device)
+QString readPascalString(QIODevice &device)
 {
     quint8 length = 0;
     SAFE_READ_EX(device, length);
@@ -51,7 +51,7 @@ QString readPascalString(QIODevice *device)
     return readStringCommon(device, length);
 }
 
-QString readUnicodeString(QIODevice *device)
+QString readUnicodeString(QIODevice &device)
 {
     QString string;
 

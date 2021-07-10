@@ -32,10 +32,10 @@ PSDHeader::PSDHeader()
 {
 }
 
-bool PSDHeader::read(QIODevice *device)
+bool PSDHeader::read(QIODevice &device)
 {
     Header header;
-    quint64 bytesRead = device->read((char *)&header, sizeof(Header));
+    quint64 bytesRead = device.read((char *)&header, sizeof(Header));
     if (bytesRead != sizeof(Header)) {
         error = "Could not read header: not enough bytes";
         return false;

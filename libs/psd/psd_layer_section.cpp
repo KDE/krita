@@ -40,7 +40,7 @@ PSDLayerMaskSection::~PSDLayerMaskSection()
     qDeleteAll(layers);
 }
 
-bool PSDLayerMaskSection::read(QIODevice *io)
+bool PSDLayerMaskSection::read(QIODevice &io)
 {
     bool retval = true; // be optimistic! <:-)
 
@@ -54,7 +54,7 @@ bool PSDLayerMaskSection::read(QIODevice *io)
     return retval;
 }
 
-bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
+bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
 {
     quint32 layerInfoSectionSize = 0;
     SAFE_READ_EX(io, layerInfoSectionSize);
@@ -69,7 +69,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
         dbgFile << "Layer info block size" << layerInfoSectionSize;
 
         if (layerInfoSectionSize > 0) {
-            if (!psdread(io, &nLayers) || nLayers == 0) {
+            if (!psdread(io, nLayers) || nLayers == 0) {
                 error = QString("Could not read read number of layers or no layers in image. %1").arg(nLayers);
                 return false;
             }
@@ -81,7 +81,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
             dbgFile << "Has separate projection transparency:" << hasTransparency;
 
             for (int i = 0; i < nLayers; ++i) {
-                dbgFile << "Going to read layer" << i << "pos" << io->pos();
+                dbgFile << "Going to read layer" << i << "pos" << io.pos();
                 dbgFile << "== Enter PSDLayerRecord";
                 QScopedPointer<PSDLayerRecord> layerRecord(new PSDLayerRecord(m_header));
                 if (!layerRecord->read(io)) {
@@ -89,7 +89,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
                     return false;
                 }
                 dbgFile << "== Leave PSDLayerRecord";
-                dbgFile << "Finished reading layer" << i << layerRecord->layerName << "blending mode" << layerRecord->blendModeKey << io->pos()
+                dbgFile << "Finished reading layer" << i << layerRecord->layerName << "blending mode" << layerRecord->blendModeKey << io.pos()
                         << "Number of channels:" << layerRecord->channelInfoRecords.size();
                 layers << layerRecord.take();
             }
@@ -97,7 +97,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
 
         // get the positions for the channels belonging to each layer
         for (int i = 0; i < nLayers; ++i) {
-            dbgFile << "Going to seek channel positions for layer" << i << "pos" << io->pos();
+            dbgFile << "Going to seek channel positions for layer" << i << "pos" << io.pos();
             if (i > layers.size()) {
                 error = QString("Expected layer %1, but only have %2 layers").arg(i).arg(layers.size());
                 return false;
@@ -107,8 +107,8 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
 
             for (int j = 0; j < layerRecord->nChannels; ++j) {
                 // save the current location so we can jump beyond this block later on.
-                quint64 channelStartPos = io->pos();
-                dbgFile << "\tReading channel image data for channel" << j << "from pos" << io->pos();
+                quint64 channelStartPos = io.pos();
+                dbgFile << "\tReading channel image data for channel" << j << "from pos" << io.pos();
 
                 KIS_ASSERT_RECOVER(j < layerRecord->channelInfoRecords.size())
                 {
@@ -118,7 +118,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
                 ChannelInfo *channelInfo = layerRecord->channelInfoRecords.at(j);
 
                 quint16 compressionType;
-                if (!psdread(io, &compressionType)) {
+                if (!psdread(io, compressionType)) {
                     error = "Could not read compression type for channel";
                     return false;
                 }
@@ -130,18 +130,18 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
                 // read the rle row lengths;
                 if (channelInfo->compressionType == Compression::RLE) {
                     for (qint64 row = 0; row < channelRect.height(); ++row) {
-                        // dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
+                        // dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io.pos();
 
                         quint32 byteCount;
                         if (m_header.version == 1) {
                             quint16 _byteCount;
-                            if (!psdread(io, &_byteCount)) {
+                            if (!psdread(io, _byteCount)) {
                                 error = QString("Could not read byteCount for rle-encoded channel");
                                 return 0;
                             }
                             byteCount = _byteCount;
                         } else {
-                            if (!psdread(io, &byteCount)) {
+                            if (!psdread(io, byteCount)) {
                                 error = QString("Could not read byteCount for rle-encoded channel");
                                 return 0;
                             }
@@ -153,13 +153,13 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
 
                 // we're beyond all the length bytes, rle bytes and whatever, this is the
                 // location of the real pixel data
-                channelInfo->channelDataStart = io->pos();
+                channelInfo->channelDataStart = io.pos();
 
                 dbgFile << "\t\tstart" << channelStartPos << "data start" << channelInfo->channelDataStart << "data length" << channelInfo->channelDataLength
-                        << "pos" << io->pos();
+                        << "pos" << io.pos();
 
                 // make sure we are at the start of the next channel data block
-                io->seek(channelStartPos + channelInfo->channelDataLength);
+                io.seek(channelStartPos + channelInfo->channelDataLength);
 
                 // this is the length of the actual channel data bytes
                 channelInfo->channelDataLength = channelInfo->channelDataLength - (channelInfo->channelDataStart - channelStartPos);
@@ -174,26 +174,26 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice *io)
     return true;
 }
 
-bool PSDLayerMaskSection::readImpl(QIODevice *io)
+bool PSDLayerMaskSection::readImpl(QIODevice &io)
 {
-    dbgFile << "reading layer section. Pos:" << io->pos() << "bytes left:" << io->bytesAvailable();
+    dbgFile << "reading layer section. Pos:" << io.pos() << "bytes left:" << io.bytesAvailable();
 
     layerMaskBlockSize = 0;
     if (m_header.version == 1) {
         quint32 _layerMaskBlockSize = 0;
-        if (!psdread(io, &_layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io->bytesAvailable()) {
-            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2").arg(_layerMaskBlockSize).arg(io->bytesAvailable());
+        if (!psdread(io, _layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io.bytesAvailable()) {
+            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2").arg(_layerMaskBlockSize).arg(io.bytesAvailable());
             return false;
         }
         layerMaskBlockSize = _layerMaskBlockSize;
     } else if (m_header.version == 2) {
-        if (!psdread(io, &layerMaskBlockSize) || layerMaskBlockSize > (quint64)io->bytesAvailable()) {
-            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2").arg(layerMaskBlockSize).arg(io->bytesAvailable());
+        if (!psdread(io, layerMaskBlockSize) || layerMaskBlockSize > (quint64)io.bytesAvailable()) {
+            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2").arg(layerMaskBlockSize).arg(io.bytesAvailable());
             return false;
         }
     }
 
-    quint64 start = io->pos();
+    quint64 start = io.pos();
 
     dbgFile << "layer + mask section size" << layerMaskBlockSize;
 
@@ -207,30 +207,30 @@ bool PSDLayerMaskSection::readImpl(QIODevice *io)
     }
 
     quint32 globalMaskBlockLength;
-    if (!psdread(io, &globalMaskBlockLength)) {
+    if (!psdread(io, globalMaskBlockLength)) {
         error = "Could not read global mask info block";
         return false;
     }
 
     if (globalMaskBlockLength > 0) {
-        if (!psdread(io, &globalLayerMaskInfo.overlayColorSpace)) {
+        if (!psdread(io, globalLayerMaskInfo.overlayColorSpace)) {
             error = "Could not read global mask info overlay colorspace";
             return false;
         }
 
         for (int i = 0; i < 4; ++i) {
-            if (!psdread(io, &globalLayerMaskInfo.colorComponents[i])) {
+            if (!psdread(io, globalLayerMaskInfo.colorComponents[i])) {
                 error = QString("Could not read mask info visualizaion color component %1").arg(i);
                 return false;
             }
         }
 
-        if (!psdread(io, &globalLayerMaskInfo.opacity)) {
+        if (!psdread(io, globalLayerMaskInfo.opacity)) {
             error = "Could not read global mask info visualization opacity";
             return false;
         }
 
-        if (!psdread(io, &globalLayerMaskInfo.kind)) {
+        if (!psdread(io, globalLayerMaskInfo.kind)) {
             error = "Could not read global mask info visualization type";
             return false;
         }
@@ -251,7 +251,7 @@ bool PSDLayerMaskSection::readImpl(QIODevice *io)
     globalInfoSection.read(io);
 
     /* put us after this section so reading the next section will work even if we mess up */
-    io->seek(start + layerMaskBlockSize);
+    io.seek(start + layerMaskBlockSize);
 
     return true;
 }

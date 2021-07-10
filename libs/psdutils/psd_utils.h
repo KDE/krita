@@ -34,84 +34,84 @@ bool KRITAPSDUTILS_EXPORT psdpad(QIODevice *io, quint32 padding);
  * Reading functions.
  */
 
-inline bool psdreadBE(QIODevice *io, quint8 *v)
+inline bool psdreadBE(QIODevice &io, quint8 &v)
 {
     std::array<quint8, 1> data;
-    qint64 read = io->read(reinterpret_cast<char *>(data.data()), 1);
+    qint64 read = io.read(reinterpret_cast<char *>(data.data()), 1);
     if (read != 1)
         return false;
-    *v = data[0];
+    v = data[0];
     return true;
 }
 
-inline bool psdreadLE(QIODevice *io, quint8 *v)
+inline bool psdreadLE(QIODevice &io, quint8 &v)
 {
     std::array<quint8, 1> data;
-    qint64 read = io->read(reinterpret_cast<char *>(data.data()), 1);
+    qint64 read = io.read(reinterpret_cast<char *>(data.data()), 1);
     if (read != 1)
         return false;
-    *v = data[0];
+    v = data[0];
     return true;
 }
 
-inline bool psdreadBE(QIODevice *io, quint16 *v)
+inline bool psdreadBE(QIODevice &io, quint16 &v)
 {
-    std::array<quint8, sizeof(quint16) / sizeof(quint8)> data;
-    qint64 read = io->read(reinterpret_cast<char *>(data.data()), 2);
+    std::array<quint8, 2> data;
+    qint64 read = io.read(reinterpret_cast<char *>(data.data()), 2);
     if (read != 2)
         return false;
-    *v = quint16((quint16(data[0]) << 8U) | data[1]);
+    v = quint16((quint16(data[0]) << 8U) | data[1]);
     return true;
 }
 
-inline bool psdreadLE(QIODevice *io, quint16 *v)
+inline bool psdreadLE(QIODevice &io, quint16 &v)
 {
-    std::array<quint8, sizeof(quint16) / sizeof(quint8)> data;
-    qint64 read = io->read(reinterpret_cast<char *>(data.data()), 2);
+    std::array<quint8, 2> data;
+    qint64 read = io.read(reinterpret_cast<char *>(data.data()), 2);
     if (read != 2)
         return false;
-    *v = quint16((quint16(data[1]) << 8U) | data[0]);
+    v = quint16((quint16(data[1]) << 8U) | data[0]);
     return true;
 }
 
-inline bool psdreadBE(QIODevice *io, quint32 *v)
+inline bool psdreadBE(QIODevice &io, quint32 &v)
 {
-    std::array<quint8, sizeof(quint32) / sizeof(quint8)> data;
-    qint64 read = io->read(reinterpret_cast<char *>(data.data()), 4);
+    std::array<quint8, 4> data;
+    qint64 read = io.read(reinterpret_cast<char *>(data.data()), 4);
     if (read != 4)
         return false;
-    *v = (quint32(data[0]) << 24U) | (quint32(data[1]) << 16U) | (quint32(data[2]) << 8U) | data[3];
+    v = (quint32(data[0]) << 24U) | (quint32(data[1]) << 16U) | (quint32(data[2]) << 8U) | data[3];
     return true;
 }
 
-inline bool psdreadLE(QIODevice *io, quint32 *v)
+inline bool psdreadLE(QIODevice &io, quint32 &v)
 {
-    std::array<quint8, sizeof(quint32) / sizeof(quint8)> data;
-    qint64 read = io->read(reinterpret_cast<char *>(data.data()), 4);
+    std::array<quint8, 4> data;
+    qint64 read = io.read(reinterpret_cast<char *>(data.data()), 4);
     if (read != 4)
         return false;
-    *v = (quint32(data[3]) << 24U) | (quint32(data[2]) << 16U) | (quint32(data[1]) << 8U) | data[0];
+    v = (quint32(data[3]) << 24U) | (quint32(data[2]) << 16U) | (quint32(data[1]) << 8U) | data[0];
     return true;
 }
 
-inline bool psdreadBE(QIODevice *io, quint64 *v)
+inline bool psdreadBE(QIODevice &io, quint64 &v)
 {
-    std::array<quint8, sizeof(quint64) / sizeof(quint8)> data;
-    qint64 read = io->read(reinterpret_cast<char *>(data.data()), 8);
+    std::array<quint8, 8> data;
+    qint64 read = io.read(reinterpret_cast<char *>(data.data()), 8);
     if (read != 8)
         return false;
-    *v = (quint64(data[0]) << 56U) | (quint64(data[1]) << 48U) | (quint64(data[2]) << 40U) | (quint64(data[3]) << 32U) | (quint64(data[4]) << 24U)
+    v = (quint64(data[0]) << 56U) | (quint64(data[1]) << 48U) | (quint64(data[2]) << 40U) | (quint64(data[3]) << 32U) | (quint64(data[4]) << 24U)
         | (quint64(data[5]) << 16U) | (quint64(data[6]) << 8U) | data[7];
     return true;
 }
 
-inline bool psdreadLE(QIODevice *io, quint64 *v)
+inline bool psdreadLE(QIODevice &io, quint64 &v)
 {
-    std::array<quint8, sizeof(quint64) / sizeof(quint8)> data;
-    qint64 read = io->read(reinterpret_cast<char *>(data.data()), 8);
+    std::array<quint8, 8> data;
+    qint64 read = io.read(reinterpret_cast<char *>(data.data()), 8);
     if (read != 8)
         return false;
-    *v = (quint64(data[7]) << 56U) | (quint64(data[6]) << 48U) | (quint64(data[5]) << 40U) | (quint64(data[4]) << 32U) | (quint64(data[3]) << 24U)
+    v = (quint64(data[7]) << 56U) | (quint64(data[6]) << 48U) | (quint64(data[5]) << 40U) | (quint64(data[4]) << 32U) | (quint64(data[3]) << 24U)
         | (quint64(data[2]) << 16U) | (quint64(data[1]) << 8U) | data[0];
     return true;
 }
@@ -121,55 +121,55 @@ inline bool psdreadLE(QIODevice *io, quint64 *v)
  */
 
 template<typename T>
-inline bool psdreadBE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint8), T *> v)
+inline bool psdreadBE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint8), T &> v)
 {
-    return psdreadBE(io, reinterpret_cast<quint8 *>(v));
+    return psdreadBE(io, reinterpret_cast<quint8 &>(v));
 }
 
 template<typename T>
-inline bool psdreadBE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint16), T *> v)
+inline bool psdreadBE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint16), T &> v)
 {
-    return psdreadBE(io, reinterpret_cast<quint16 *>(v));
+    return psdreadBE(io, reinterpret_cast<quint16 &>(v));
 }
 
 template<typename T>
-inline bool psdreadBE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint32), T *> v)
+inline bool psdreadBE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint32), T &> v)
 {
-    return psdreadBE(io, reinterpret_cast<quint32 *>(v));
+    return psdreadBE(io, reinterpret_cast<quint32 &>(v));
 }
 
 template<typename T>
-inline bool psdreadBE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint64), T *> v)
+inline bool psdreadBE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint64), T &> v)
 {
-    return psdreadBE(io, reinterpret_cast<quint64 *>(v));
+    return psdreadBE(io, reinterpret_cast<quint64 &>(v));
 }
 
 template<typename T>
-inline bool psdreadLE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint8), T *> v)
+inline bool psdreadLE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint8), T &> v)
 {
-    return psdreadLE(io, reinterpret_cast<quint8 *>(v));
+    return psdreadLE(io, reinterpret_cast<quint8 &>(v));
 }
 
 template<typename T>
-inline bool psdreadLE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint16), T *> v)
+inline bool psdreadLE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint16), T &> v)
 {
-    return psdreadLE(io, reinterpret_cast<quint16 *>(v));
+    return psdreadLE(io, reinterpret_cast<quint16 &>(v));
 }
 
 template<typename T>
-inline bool psdreadLE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint32), T *> v)
+inline bool psdreadLE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint32), T &> v)
 {
-    return psdreadLE(io, reinterpret_cast<quint32 *>(v));
+    return psdreadLE(io, reinterpret_cast<quint32 &>(v));
 }
 
 template<typename T>
-inline bool psdreadLE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint64), T *> v)
+inline bool psdreadLE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint64), T &> v)
 {
-    return psdreadLE(io, reinterpret_cast<quint64 *>(v));
+    return psdreadLE(io, reinterpret_cast<quint64 &>(v));
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian, typename T>
-inline bool psdread(QIODevice *io, T *v)
+inline bool psdread(QIODevice &io, T &v)
 {
     if (byteOrder == psd_byte_order::psdLittleEndian) {
         return psdreadLE<T>(io, v);
@@ -179,9 +179,9 @@ inline bool psdread(QIODevice *io, T *v)
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
-inline QByteArray psdreadBytes(QIODevice *io, qint64 v)
+inline QByteArray psdreadBytes(QIODevice &io, qint64 v)
 {
-    QByteArray b = io->read(v);
+    QByteArray b = io.read(v);
     if (byteOrder == psd_byte_order::psdLittleEndian) {
         std::reverse(b.begin(), b.end());
     }
@@ -189,22 +189,22 @@ inline QByteArray psdreadBytes(QIODevice *io, qint64 v)
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
-inline bool psdread_pascalstring(QIODevice *io, QString &s, qint64 padding)
+inline bool psdread_pascalstring(QIODevice &io, QString &s, qint64 padding)
 {
     quint8 length;
-    if (!psdread<byteOrder>(io, &length)) {
+    if (!psdread<byteOrder>(io, length)) {
         return false;
     }
 
     if (length == 0) {
         // read the padding
         for (qint64 i = 0; i < padding - 1; ++i) {
-            io->seek(io->pos() + 1);
+            io.seek(io.pos() + 1);
         }
         return true;
     }
 
-    QByteArray chars = io->read(length);
+    QByteArray chars = io.read(length);
     if (chars.length() != length) {
         return false;
     }
@@ -213,7 +213,7 @@ inline bool psdread_pascalstring(QIODevice *io, QString &s, qint64 padding)
     quint32 paddedLength = length + 1;
     if (padding > 0) {
         while (paddedLength % padding != 0) {
-            if (!io->seek(io->pos() + 1)) {
+            if (!io.seek(io.pos() + 1)) {
                 return false;
             }
             paddedLength++;
@@ -226,10 +226,10 @@ inline bool psdread_pascalstring(QIODevice *io, QString &s, qint64 padding)
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
-inline bool psdread_unicodestring(QIODevice *io, QString &s)
+inline bool psdread_unicodestring(QIODevice &io, QString &s)
 {
     quint32 stringlen;
-    if (!psdread<byteOrder>(io, &stringlen)) {
+    if (!psdread<byteOrder>(io, stringlen)) {
         return false;
     }
 
@@ -237,7 +237,7 @@ inline bool psdread_unicodestring(QIODevice *io, QString &s)
 
     for (quint32 i = 0; i < stringlen; ++i) {
         quint16 ch(0);
-        if (!psdread<byteOrder>(io, &ch)) {
+        if (!psdread<byteOrder>(io, ch)) {
             return false;
         }
 
@@ -251,7 +251,7 @@ inline bool psdread_unicodestring(QIODevice *io, QString &s)
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
-inline bool psd_read_blendmode(QIODevice *io, QString &blendModeKey)
+inline bool psd_read_blendmode(QIODevice &io, QString &blendModeKey)
 {
     QByteArray b(psdreadBytes<byteOrder>(io, 4));
     if (b.size() != 4 || QString(b) != "8BIM") {

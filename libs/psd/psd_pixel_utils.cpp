@@ -364,7 +364,7 @@ psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len, psd_uc
 /* End of third party block                                           */
 /**********************************************************************/
 
-QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo *> channelInfoRecords, int row, int width, int channelSize, bool processMasks)
+QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice &io, QVector<ChannelInfo *> channelInfoRecords, int row, int width, int channelSize, bool processMasks)
 {
     const int uncompressedLength = width * channelSize;
 
@@ -375,14 +375,14 @@ QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo 
         if (!processMasks && channelInfo->channelId < -1)
             continue;
 
-        io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+        io.seek(channelInfo->channelDataStart + channelInfo->channelOffset);
 
         if (channelInfo->compressionType == Compression::Uncompressed) {
-            channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
+            channelBytes[channelInfo->channelId] = io.read(uncompressedLength);
             channelInfo->channelOffset += uncompressedLength;
         } else if (channelInfo->compressionType == Compression::RLE) {
             int rleLength = channelInfo->rleRowLengths[row];
-            QByteArray compressedBytes = io->read(rleLength);
+            QByteArray compressedBytes = io.read(rleLength);
             QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
             channelBytes.insert(channelInfo->channelId, uncompressedBytes);
             channelInfo->channelOffset += rleLength;
@@ -399,14 +399,14 @@ QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo 
 typedef boost::function<void(int, const QMap<quint16, QByteArray> &, int, quint8 *)> PixelFunc;
 
 void readCommon(KisPaintDeviceSP dev,
-                QIODevice *io,
+                QIODevice &io,
                 const QRect &layerRect,
                 QVector<ChannelInfo *> infoRecords,
                 int channelSize,
                 PixelFunc pixelFunc,
                 bool processMasks)
 {
-    KisOffsetKeeper keeper(io);
+    KisOffsetKeeper keeper(&io);
 
     if (layerRect.isEmpty()) {
         dbgFile << "Empty layer!";
@@ -419,8 +419,8 @@ void readCommon(KisPaintDeviceSP dev,
         QMap<quint16, QByteArray> channelBytes;
 
         Q_FOREACH (ChannelInfo *info, infoRecords) {
-            io->seek(info->channelDataStart);
-            QByteArray compressedBytes = io->read(info->channelDataLength);
+            io.seek(info->channelDataStart);
+            QByteArray compressedBytes = io.read(info->channelDataLength);
             QByteArray uncompressedBytes(numPixels, 0);
 
             bool status = false;
@@ -474,7 +474,7 @@ void readCommon(KisPaintDeviceSP dev,
     }
 }
 
-void readChannels(QIODevice *io, KisPaintDeviceSP device, psd_color_mode colorMode, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords)
+void readChannels(QIODevice &io, KisPaintDeviceSP device, psd_color_mode colorMode, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords)
 {
     switch (colorMode) {
     case Grayscale:
@@ -500,7 +500,7 @@ void readChannels(QIODevice *io, KisPaintDeviceSP device, psd_color_mode colorMo
     }
 }
 
-void readAlphaMaskChannels(QIODevice *io, KisPaintDeviceSP device, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords)
+void readAlphaMaskChannels(QIODevice &io, KisPaintDeviceSP device, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(infoRecords.size() == 1);
     readCommon(device, io, layerRect, infoRecords, channelSize, &readAlphaMaskPixelCommon, true);

@@ -21,17 +21,17 @@ PSDImageResourceSection::~PSDImageResourceSection()
     resources.clear();
 }
 
-bool PSDImageResourceSection::read(QIODevice *io)
+bool PSDImageResourceSection::read(QIODevice &io)
 {
     quint32 resourceSectionLength = 0;
-    if (!psdread(io, &resourceSectionLength)) {
+    if (!psdread(io, resourceSectionLength)) {
         error = "Could not read image resource section length";
         return false;
     }
 
-    dbgFile << "Image Resource Sectionlength:" << resourceSectionLength << ", starts at:" << io->pos();
+    dbgFile << "Image Resource Sectionlength:" << resourceSectionLength << ", starts at:" << io.pos();
 
-    QByteArray ba = io->read(resourceSectionLength);
+    QByteArray ba = io.read(resourceSectionLength);
     if ((quint32)ba.size() != resourceSectionLength) {
         error = "Could not read all resources";
         return false;
@@ -43,7 +43,7 @@ bool PSDImageResourceSection::read(QIODevice *io)
 
     while (!buf.atEnd()) {
         PSDResourceBlock *block = new PSDResourceBlock();
-        if (!block->read(&buf)) {
+        if (!block->read(buf)) {
             error = "Error reading block: " + block->error;
             dbgFile << error << ", skipping.";
             delete block;

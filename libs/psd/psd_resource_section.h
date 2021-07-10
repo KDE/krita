@@ -148,7 +148,7 @@ public:
     PSDImageResourceSection();
     ~PSDImageResourceSection();
 
-    bool read(QIODevice *io);
+    bool read(QIODevice &io);
     bool write(QIODevice *io);
     bool valid();
 

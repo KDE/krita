@@ -26,7 +26,7 @@ void PsdAdditionalLayerInfoBlock::setExtraLayerInfoBlockHandler(ExtraLayerInfoBl
     m_layerInfoBlockHandler = handler;
 }
 
-bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
+bool PsdAdditionalLayerInfoBlock::read(QIODevice &io)
 {
     bool result = true;
 
@@ -40,7 +40,7 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
     return result;
 }
 
-void PsdAdditionalLayerInfoBlock::readImpl(QIODevice *io)
+void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
 {
     using namespace KisAslReaderUtils;
 
@@ -54,7 +54,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice *io)
                    << "Alph";
     }
 
-    while (!io->atEnd()) {
+    while (!io.atEnd()) {
         {
             const quint32 refSignature1 = 0x3842494D; // '8BIM' in little-endian
             const quint32 refSignature2 = 0x38423634; // '8B64' in little-endian
@@ -91,7 +91,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice *io)
         if (key == "Lr16" /* || key == "Lr32"*/) {
             if (m_layerInfoBlockHandler) {
                 int offset = m_header.version > 1 ? 8 : 4;
-                io->seek(io->pos() - offset);
+                io.seek(io.pos() - offset);
                 m_layerInfoBlockHandler(io);
             }
         } else if (key == "SoCo") {

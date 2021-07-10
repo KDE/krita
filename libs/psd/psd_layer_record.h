@@ -78,9 +78,9 @@ public:
 
     QRect channelRect(ChannelInfo *channel) const;
 
-    bool read(QIODevice *io);
-    bool readPixelData(QIODevice *io, KisPaintDeviceSP device);
-    bool readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *channel);
+    bool read(QIODevice &io);
+    bool readPixelData(QIODevice &io, KisPaintDeviceSP device);
+    bool readMask(QIODevice &io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
     void write(QIODevice *io,
                KisPaintDeviceSP layerContentDevice,

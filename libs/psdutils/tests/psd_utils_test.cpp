@@ -126,7 +126,7 @@ void PSDUtilsTest::test_psdread_quint8()
     buf.close();
     buf.open(QBuffer::ReadOnly);
     quint8 r;
-    QVERIFY(psdread(&buf, &r));
+    QVERIFY(psdread(buf, r));
     QCOMPARE(r, s);
 }
 
@@ -139,7 +139,7 @@ void PSDUtilsTest::test_psdread_quint16()
     buf.close();
     buf.open(QBuffer::ReadOnly);
     quint16 r;
-    QVERIFY(psdread(&buf, &r));
+    QVERIFY(psdread(buf, r));
     QCOMPARE(r, s);
 }
 
@@ -152,7 +152,7 @@ void PSDUtilsTest::test_psdread_quint32()
     buf.close();
     buf.open(QBuffer::ReadOnly);
     quint32 r;
-    QVERIFY(psdread(&buf, &r));
+    QVERIFY(psdread(buf, r));
     QCOMPARE(r, s);
 }
 
@@ -168,7 +168,7 @@ void PSDUtilsTest::test_psdread_pascalstring()
     QVERIFY(psdwrite_pascalstring(&buf, s));
     buf.close();
     buf.open(QBuffer::ReadOnly);
-    psdread_pascalstring(&buf, r, 2);
+    psdread_pascalstring(buf, r, 2);
     QCOMPARE(r, s);
     QVERIFY(buf.bytesAvailable() == 0);
 
@@ -181,7 +181,7 @@ void PSDUtilsTest::test_psdread_pascalstring()
     QVERIFY(psdwrite_pascalstring(&buf, s));
     buf.close();
     buf.open(QBuffer::ReadOnly);
-    psdread_pascalstring(&buf, r, 1);
+    psdread_pascalstring(buf, r, 1);
     QCOMPARE(r, s);
     QVERIFY(buf.bytesAvailable() == 0);
 
@@ -194,7 +194,7 @@ void PSDUtilsTest::test_psdread_pascalstring()
     QVERIFY(psdwrite_pascalstring(&buf, s, 2));
     buf.close();
     buf.open(QBuffer::ReadOnly);
-    psdread_pascalstring(&buf, r, 2);
+    psdread_pascalstring(buf, r, 2);
     QCOMPARE(r, s);
     dbgKrita << buf.bytesAvailable();
     QVERIFY(buf.bytesAvailable() == 0);

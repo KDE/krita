@@ -229,11 +229,11 @@ class KRITAPSD_EXPORT PsdAdditionalLayerInfoBlock
 public:
     PsdAdditionalLayerInfoBlock(const PSDHeader &header);
 
-    typedef boost::function<bool(QIODevice *)> ExtraLayerInfoBlockHandler;
+    typedef boost::function<bool(QIODevice &)> ExtraLayerInfoBlockHandler;
 
     void setExtraLayerInfoBlockHandler(ExtraLayerInfoBlockHandler handler);
 
-    bool read(QIODevice *io);
+    bool read(QIODevice &io);
     bool write(QIODevice *io, KisNodeSP node);
 
     void writeLuniBlockEx(QIODevice *io, const QString &layerName);
@@ -255,7 +255,7 @@ public:
     QString sectionDividerBlendMode;
 
 private:
-    void readImpl(QIODevice *io);
+    void readImpl(QIODevice &io);
 
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;

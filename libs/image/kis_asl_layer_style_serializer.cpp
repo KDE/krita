@@ -1255,7 +1255,7 @@ bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
         dbgKrita << "Can't open file " << filename;
         return false;
     }
-    readFromDevice(&file);
+    readFromDevice(file);
     m_initialized = true;
     file.close();
 
@@ -1330,7 +1330,7 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
     });
 }
 
-void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
+void KisAslLayerStyleSerializer::readFromDevice(QIODevice &device)
 {
     m_stylesVector.clear();
 

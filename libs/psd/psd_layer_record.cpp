@@ -171,11 +171,11 @@ PSDLayerRecord::PSDLayerRecord(const PSDHeader &header)
 {
 }
 
-bool PSDLayerRecord::read(QIODevice *io)
+bool PSDLayerRecord::read(QIODevice &io)
 {
-    dbgFile << "Going to read layer record. Pos:" << io->pos();
+    dbgFile << "Going to read layer record. Pos:" << io.pos();
 
-    if (!psdread(io, &top) || !psdread(io, &left) || !psdread(io, &bottom) || !psdread(io, &right) || !psdread(io, &nChannels)) {
+    if (!psdread(io, top) || !psdread(io, left) || !psdread(io, bottom) || !psdread(io, right) || !psdread(io, nChannels)) {
         error = "could not read layer record";
         return false;
     }
@@ -197,14 +197,14 @@ bool PSDLayerRecord::read(QIODevice *io)
     }
 
     for (int i = 0; i < nChannels; ++i) {
-        if (io->atEnd()) {
+        if (io.atEnd()) {
             error = "Could not read enough data for channels";
             return false;
         }
 
         ChannelInfo *info = new ChannelInfo;
 
-        if (!psdread(io, &info->channelId)) {
+        if (!psdread(io, info->channelId)) {
             error = "could not read channel id";
             delete info;
             return false;
@@ -212,10 +212,10 @@ bool PSDLayerRecord::read(QIODevice *io)
         bool r;
         if (m_header.version == 1) {
             quint32 channelDataLength;
-            r = psdread(io, &channelDataLength);
+            r = psdread(io, channelDataLength);
             info->channelDataLength = (quint64)channelDataLength;
         } else {
-            r = psdread(io, &info->channelDataLength);
+            r = psdread(io, info->channelDataLength);
         }
         if (!r) {
             error = "Could not read length for channel data";
@@ -234,28 +234,28 @@ bool PSDLayerRecord::read(QIODevice *io)
         return false;
     }
 
-    dbgFile << "\tBlend mode" << blendModeKey << "pos" << io->pos();
+    dbgFile << "\tBlend mode" << blendModeKey << "pos" << io.pos();
 
-    if (!psdread(io, &opacity)) {
+    if (!psdread(io, opacity)) {
         error = "Could not read opacity";
         return false;
     }
 
-    dbgFile << "\tOpacity" << opacity << io->pos();
+    dbgFile << "\tOpacity" << opacity << io.pos();
 
-    if (!psdread(io, &clipping)) {
+    if (!psdread(io, clipping)) {
         error = "Could not read clipping";
         return false;
     }
 
-    dbgFile << "\tclipping" << clipping << io->pos();
+    dbgFile << "\tclipping" << clipping << io.pos();
 
     quint8 flags;
-    if (!psdread(io, &flags)) {
+    if (!psdread(io, flags)) {
         error = "Could not read flags";
         return false;
     }
-    dbgFile << "\tflags" << flags << io->pos();
+    dbgFile << "\tflags" << flags << io.pos();
 
     transparencyProtected = flags & 1 ? true : false;
 
@@ -273,30 +273,30 @@ bool PSDLayerRecord::read(QIODevice *io)
 
     dbgFile << "\tirrelevant" << irrelevant;
 
-    dbgFile << "\tfiller at " << io->pos();
+    dbgFile << "\tfiller at " << io.pos();
 
     quint8 filler;
-    if (!psdread(io, &filler) || filler != 0) {
+    if (!psdread(io, filler) || filler != 0) {
         error = "Could not read padding";
         return false;
     }
 
-    dbgFile << "\tGoing to read extra data length" << io->pos();
+    dbgFile << "\tGoing to read extra data length" << io.pos();
 
     quint32 extraDataLength;
-    if (!psdread(io, &extraDataLength) || io->bytesAvailable() < extraDataLength) {
-        error = QString("Could not read extra layer data: %1 at pos %2").arg(extraDataLength).arg(io->pos());
+    if (!psdread(io, extraDataLength) || io.bytesAvailable() < extraDataLength) {
+        error = QString("Could not read extra layer data: %1 at pos %2").arg(extraDataLength).arg(io.pos());
         return false;
     }
 
     dbgFile << "\tExtra data length" << extraDataLength;
 
     if (extraDataLength > 0) {
-        dbgFile << "Going to read extra data field. Bytes available: " << io->bytesAvailable() << "pos" << io->pos();
+        dbgFile << "Going to read extra data field. Bytes available: " << io.bytesAvailable() << "pos" << io.pos();
 
         // See https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_22582
         quint32 layerMaskLength = 1; // invalid...
-        if (!psdread(io, &layerMaskLength) || io->bytesAvailable() < layerMaskLength
+        if (!psdread(io, layerMaskLength) || io.bytesAvailable() < layerMaskLength
             || !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
             error = QString("Could not read layer mask length: %1").arg(layerMaskLength);
             return false;
@@ -305,15 +305,15 @@ bool PSDLayerRecord::read(QIODevice *io)
         memset(&layerMask, 0, sizeof(LayerMaskData));
 
         if (layerMaskLength == 20 || layerMaskLength == 36) {
-            if (!psdread(io, &layerMask.top) || !psdread(io, &layerMask.left) || !psdread(io, &layerMask.bottom) || !psdread(io, &layerMask.right)
-                || !psdread(io, &layerMask.defaultColor) || !psdread(io, &flags)) {
+            if (!psdread(io, layerMask.top) || !psdread(io, layerMask.left) || !psdread(io, layerMask.bottom) || !psdread(io, layerMask.right)
+                || !psdread(io, layerMask.defaultColor) || !psdread(io, flags)) {
                 error = "could not read mask record";
                 return false;
             }
         }
         if (layerMaskLength == 20) {
             quint16 padding;
-            if (!psdread(io, &padding)) {
+            if (!psdread(io, padding)) {
                 error = "Could not read layer mask padding";
                 return false;
             }
@@ -321,8 +321,8 @@ bool PSDLayerRecord::read(QIODevice *io)
 
         // If it's 36, that is, bit four of the flags is set, we also need to read the 'real' flags, background and rectangle
         if (layerMaskLength == 36) {
-            if (!psdread(io, &flags) || !psdread(io, &layerMask.defaultColor) || !psdread(io, &layerMask.top) || !psdread(io, &layerMask.left)
-                || !psdread(io, &layerMask.bottom) || !psdread(io, &layerMask.top)) {
+            if (!psdread(io, flags) || !psdread(io, layerMask.defaultColor) || !psdread(io, layerMask.top) || !psdread(io, layerMask.left)
+                || !psdread(io, layerMask.bottom) || !psdread(io, layerMask.top)) {
                 error = "could not read 'real' mask record";
                 return false;
             }
@@ -332,29 +332,29 @@ bool PSDLayerRecord::read(QIODevice *io)
         layerMask.disabled = flags & 2 ? true : false;
         layerMask.invertLayerMaskWhenBlending = flags & 4 ? true : false;
 
-        dbgFile << "\tRead layer mask/adjustment layer data. Length of block:" << layerMaskLength << "pos" << io->pos();
+        dbgFile << "\tRead layer mask/adjustment layer data. Length of block:" << layerMaskLength << "pos" << io.pos();
 
         // layer blending thingies
         quint32 blendingDataLength;
-        if (!psdread(io, &blendingDataLength) || io->bytesAvailable() < blendingDataLength) {
+        if (!psdread(io, blendingDataLength) || io.bytesAvailable() < blendingDataLength) {
             error = "Could not read extra blending data.";
             return false;
         }
 
-        // dbgFile << "blending block data length" << blendingDataLength << ", pos" << io->pos();
+        // dbgFile << "blending block data length" << blendingDataLength << ", pos" << io.pos();
 
-        blendingRanges.data = io->read(blendingDataLength);
+        blendingRanges.data = io.read(blendingDataLength);
         if ((quint32)blendingRanges.data.size() != blendingDataLength) {
             error = QString("Got %1 bytes for the blending range block, needed %2").arg(blendingRanges.data.size(), blendingDataLength);
         }
         /*
         // XXX: reading this block correctly failed, I have more channel ranges than I'd expected.
 
-        if (!psdread(io, &blendingRanges.blackValues[0]) ||
-            !psdread(io, &blendingRanges.blackValues[1]) ||
-            !psdread(io, &blendingRanges.whiteValues[0]) ||
-            !psdread(io, &blendingRanges.whiteValues[1]) ||
-            !psdread(io, &blendingRanges.compositeGrayBlendDestinationRange)) {
+        if (!psdread(io, blendingRanges.blackValues[0]) ||
+            !psdread(io, blendingRanges.blackValues[1]) ||
+            !psdread(io, blendingRanges.whiteValues[0]) ||
+            !psdread(io, blendingRanges.whiteValues[1]) ||
+            !psdread(io, blendingRanges.compositeGrayBlendDestinationRange)) {
 
             error = "Could not read blending black/white values";
             return false;
@@ -363,7 +363,7 @@ bool PSDLayerRecord::read(QIODevice *io)
         for (int i = 0; i < nChannels; ++i) {
             quint32 src;
             quint32 dst;
-            if (!psdread(io, &src) || !psdread(io, &dst)) {
+            if (!psdread(io, src) || !psdread(io, dst)) {
                 error = QString("could not read src/dst range for channel %1").arg(i);
                 return false;
             }
@@ -371,19 +371,19 @@ bool PSDLayerRecord::read(QIODevice *io)
             blendingRanges.sourceDestinationRanges << QPair<quint32, quint32>(src, dst);
         }
         */
-        dbgFile << "\tGoing to read layer name at" << io->pos();
+        dbgFile << "\tGoing to read layer name at" << io.pos();
         quint8 layerNameLength;
-        if (!psdread(io, &layerNameLength)) {
+        if (!psdread(io, layerNameLength)) {
             error = "Could not read layer name length";
             return false;
         }
 
-        dbgFile << "\tlayer name length unpadded" << layerNameLength << "pos" << io->pos();
+        dbgFile << "\tlayer name length unpadded" << layerNameLength << "pos" << io.pos();
         layerNameLength = ((layerNameLength + 1 + 3) & ~0x03) - 1;
 
-        dbgFile << "\tlayer name length padded" << layerNameLength << "pos" << io->pos();
-        layerName = io->read(layerNameLength);
-        dbgFile << "\tlayer name" << layerName << io->pos();
+        dbgFile << "\tlayer name length padded" << layerNameLength << "pos" << io.pos();
+        layerName = io.read(layerNameLength);
+        dbgFile << "\tlayer name" << layerName << io.pos();
 
         if (!infoBlocks.read(io)) {
             error = infoBlocks.error;
@@ -619,9 +619,9 @@ bool PSDLayerRecord::valid()
     return true;
 }
 
-bool PSDLayerRecord::readPixelData(QIODevice *io, KisPaintDeviceSP device)
+bool PSDLayerRecord::readPixelData(QIODevice &io, KisPaintDeviceSP device)
 {
-    dbgFile << "Reading pixel data for layer" << layerName << "pos" << io->pos();
+    dbgFile << "Reading pixel data for layer" << layerName << "pos" << io.pos();
 
     const int channelSize = m_header.channelDepth / 8;
     const QRect layerRect = QRect(left, top, right - left, bottom - top);
@@ -650,7 +650,7 @@ QRect PSDLayerRecord::channelRect(ChannelInfo *channel) const
     return result;
 }
 
-bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *channelInfo)
+bool PSDLayerRecord::readMask(QIODevice &io, KisPaintDeviceSP dev, ChannelInfo *channelInfo)
 {
     KIS_ASSERT_RECOVER(channelInfo->channelId < -1)
     {

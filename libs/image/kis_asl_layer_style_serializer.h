@@ -25,7 +25,7 @@ public:
 
     void saveToDevice(QIODevice *device);
     bool saveToFile(const QString& filename);
-    void readFromDevice(QIODevice *device);
+    void readFromDevice(QIODevice &device);
     bool readFromFile(const QString& filename);
 
     void assignAllLayerStylesToLayers(KisNodeSP root, const QString &storageLocation);

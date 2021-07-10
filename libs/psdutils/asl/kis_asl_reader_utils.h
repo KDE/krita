@@ -38,13 +38,13 @@ struct KRITAPSDUTILS_EXPORT ASLParseException : public std::runtime_error {
 }
 
 #define SAFE_READ_EX(device, varname)                                                                                                                          \
-    if (!psdread(device, &varname)) {                                                                                                                          \
+    if (!psdread(device, varname)) {                                                                                                                           \
         QString msg = QString("Failed to read \'%1\' tag!").arg(#varname);                                                                                     \
         throw KisAslReaderUtils::ASLParseException(msg);                                                                                                       \
     }
 
 #define SAFE_READ_SIGNATURE_EX(device, varname, expected)                                                                                                      \
-    if (!psdread(device, &varname) || varname != expected) {                                                                                                   \
+    if (!psdread(device, varname) || varname != expected) {                                                                                                    \
         QString msg = QString(                                                                                                                                 \
                           "Failed to check signature \'%1\' tag!\n"                                                                                            \
                           "Value: \'%2\' Expected: \'%3\'")                                                                                                    \
@@ -55,7 +55,7 @@ struct KRITAPSDUTILS_EXPORT ASLParseException : public std::runtime_error {
     }
 
 #define SAFE_READ_SIGNATURE_2OPS_EX(device, varname, expected1, expected2)                                                                                     \
-    if (!psdread(device, &varname) || (varname != expected1 && varname != expected2)) {                                                                        \
+    if (!psdread(device, varname) || (varname != expected1 && varname != expected2)) {                                                                         \
         QString msg = QString(                                                                                                                                 \
                           "Failed to check signature \'%1\' tag!\n"                                                                                            \
                           "Value: \'%2\' Expected1: \'%3\' Expected2: \'%4\'")                                                                                 \
@@ -67,11 +67,11 @@ struct KRITAPSDUTILS_EXPORT ASLParseException : public std::runtime_error {
     }
 
 template<typename T>
-inline bool TRY_READ_SIGNATURE_2OPS_EX(QIODevice *device, T expected1, T expected2)
+inline bool TRY_READ_SIGNATURE_2OPS_EX(QIODevice &device, T expected1, T expected2)
 {
     T var;
 
-    qint64 bytesRead = device->peek((char *)&var, sizeof(T));
+    qint64 bytesRead = device.peek((char *)&var, sizeof(T));
     if (bytesRead != sizeof(T)) {
         return false;
     }
@@ -84,7 +84,7 @@ inline bool TRY_READ_SIGNATURE_2OPS_EX(QIODevice *device, T expected1, T expecte
 
     if (result) {
         // read, not seek, to support sequential devices
-        bytesRead = device->read((char *)&var, sizeof(T));
+        bytesRead = device.read((char *)&var, sizeof(T));
         if (bytesRead != sizeof(T)) {
             return false;
         }
@@ -106,10 +106,10 @@ namespace KisAslReaderUtils
  * - unicode string (length (4 bytes) + null-terminated unicode string (var)
  */
 
-KRITAPSDUTILS_EXPORT QString readFixedString(QIODevice *device);
-KRITAPSDUTILS_EXPORT QString readVarString(QIODevice *device);
-KRITAPSDUTILS_EXPORT QString readPascalString(QIODevice *device);
-KRITAPSDUTILS_EXPORT QString readUnicodeString(QIODevice *device);
+KRITAPSDUTILS_EXPORT QString readFixedString(QIODevice &device);
+KRITAPSDUTILS_EXPORT QString readVarString(QIODevice &device);
+KRITAPSDUTILS_EXPORT QString readPascalString(QIODevice &device);
+KRITAPSDUTILS_EXPORT QString readUnicodeString(QIODevice &device);
 
 }
 

@@ -16,10 +16,10 @@ PSDColorModeBlock::PSDColorModeBlock(psd_color_mode colormode)
 {
 }
 
-bool PSDColorModeBlock::read(QIODevice* io)
+bool PSDColorModeBlock::read(QIODevice &io)
 {
     // get length
-    psdread(io, &blocksize);
+    psdread(io, blocksize);
 
     if (blocksize == 0) {
         if (colormode == Indexed || colormode == DuoTone) {
@@ -36,7 +36,7 @@ bool PSDColorModeBlock::read(QIODevice* io)
         return false;
     }
 
-    data = io->read(blocksize);
+    data = io.read(blocksize);
     if ((quint32)data.size() != blocksize) return false;
 
     if (colormode == Indexed) {

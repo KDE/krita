@@ -32,7 +32,7 @@ namespace Private
  * them in XML.
  */
 
-QString readDoubleAsString(QIODevice *device)
+QString readDoubleAsString(QIODevice &device)
 {
     double value = 0.0;
     SAFE_READ_EX(device, value);
@@ -40,7 +40,7 @@ QString readDoubleAsString(QIODevice *device)
     return KisDomUtils::toString(value);
 }
 
-QString readIntAsString(QIODevice *device)
+QString readIntAsString(QIODevice &device)
 {
     quint32 value = 0.0;
     SAFE_READ_EX(device, value);
@@ -48,7 +48,7 @@ QString readIntAsString(QIODevice *device)
     return KisDomUtils::toString(value);
 }
 
-QString readBoolAsString(QIODevice *device)
+QString readBoolAsString(QIODevice &device)
 {
     quint8 value = 0.0;
     SAFE_READ_EX(device, value);
@@ -116,9 +116,9 @@ void appendPointXMLNode(const QString &key, const QPointF &pt, QDomElement *pare
  * ASL -> XML parsing functions
  */
 
-void readDescriptor(QIODevice *device, const QString &key, QDomElement *parent, QDomDocument *doc);
+void readDescriptor(QIODevice &device, const QString &key, QDomElement *parent, QDomDocument *doc);
 
-void readChildObject(QIODevice *device, QDomElement *parent, QDomDocument *doc, bool skipKey = false)
+void readChildObject(QIODevice &device, QDomElement *parent, QDomDocument *doc, bool skipKey = false)
 {
     using namespace KisAslReaderUtils;
 
@@ -186,7 +186,7 @@ void readChildObject(QIODevice *device, QDomElement *parent, QDomDocument *doc, 
     }
 }
 
-void readDescriptor(QIODevice *device, const QString &key, QDomElement *parent, QDomDocument *doc)
+void readDescriptor(QIODevice &device, const QString &key, QDomElement *parent, QDomDocument *doc)
 {
     using namespace KisAslReaderUtils;
 
@@ -207,7 +207,7 @@ void readDescriptor(QIODevice *device, const QString &key, QDomElement *parent, 
     }
 }
 
-QImage readVirtualArrayList(QIODevice *device, int numPlanes)
+QImage readVirtualArrayList(QIODevice &device, int numPlanes)
 {
     using namespace KisAslReaderUtils;
 
@@ -251,17 +251,17 @@ QImage readVirtualArrayList(QIODevice *device, int numPlanes)
 
     for (int i = 0; i < numPlanes; i++) {
         quint32 arrayWritten = GARBAGE_VALUE_MARK;
-        if (!psdread(device, &arrayWritten) || !arrayWritten) {
+        if (!psdread(device, arrayWritten) || !arrayWritten) {
             throw ASLParseException("VAList plane has not-written flag set!");
         }
 
         quint32 arrayPlaneLength = GARBAGE_VALUE_MARK;
-        if (!psdread(device, &arrayPlaneLength) || !arrayPlaneLength) {
+        if (!psdread(device, arrayPlaneLength) || !arrayPlaneLength) {
             throw ASLParseException("VAList has plane length set to zero!");
         }
 
         SETUP_OFFSET_VERIFIER(planeEndVerifier, device, arrayPlaneLength, 0);
-        qint64 nextPos = device->pos() + arrayPlaneLength;
+        qint64 nextPos = device.pos() + arrayPlaneLength;
 
         quint32 pixelDepth1 = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(device, pixelDepth1);
@@ -302,7 +302,7 @@ QImage readVirtualArrayList(QIODevice *device, int numPlanes)
         const int dataLength = planeRect.width() * planeRect.height();
 
         if (useCompression == Compression::Uncompressed) {
-            dataPlanes[i] = device->read(dataLength);
+            dataPlanes[i] = device.read(dataLength);
 
         } else if (useCompression == Compression::RLE) {
             const int numRows = planeRect.height();
@@ -319,7 +319,7 @@ QImage readVirtualArrayList(QIODevice *device, int numPlanes)
             for (int row = 0; row < numRows; row++) {
                 const quint16 rowSize = rowSizes[row];
 
-                QByteArray compressedData = device->read(rowSize);
+                QByteArray compressedData = device.read(rowSize);
 
                 if (compressedData.size() != rowSize) {
                     throw ASLParseException("VAList: failed to read compressed data!");
@@ -341,7 +341,7 @@ QImage readVirtualArrayList(QIODevice *device, int numPlanes)
             throw ASLParseException("VAList: failed to read/uncompress data plane!");
         }
 
-        device->seek(nextPos);
+        device.seek(nextPos);
     }
 
     QImage image(arrayRect.size(), QImage::Format_ARGB32);
@@ -367,7 +367,7 @@ QImage readVirtualArrayList(QIODevice *device, int numPlanes)
     return image;
 }
 
-qint64 readPattern(QIODevice *device, QDomElement *parent, QDomDocument *doc)
+qint64 readPattern(QIODevice &device, QDomElement *parent, QDomDocument *doc)
 {
     using namespace KisAslReaderUtils;
 
@@ -466,7 +466,7 @@ qint64 readPattern(QIODevice *device, QDomElement *parent, QDomDocument *doc)
     return sizeof(patternSize) + patternSize;
 }
 
-QDomDocument readFileImpl(QIODevice *device)
+QDomDocument readFileImpl(QIODevice &device)
 {
     using namespace KisAslReaderUtils;
 
@@ -547,11 +547,11 @@ QDomDocument readFileImpl(QIODevice *device)
 
 } // namespace
 
-QDomDocument KisAslReader::readFile(QIODevice *device)
+QDomDocument KisAslReader::readFile(QIODevice &device)
 {
     QDomDocument doc;
 
-    if (device->isSequential()) {
+    if (device.isSequential()) {
         warnKrita << "WARNING: *** KisAslReader::readFile: the supplied"
                   << "IO device is sequential. Chances are that"
                   << "the layer style will *not* be loaded correctly!";
@@ -566,11 +566,11 @@ QDomDocument KisAslReader::readFile(QIODevice *device)
     return doc;
 }
 
-QDomDocument KisAslReader::readLfx2PsdSection(QIODevice *device)
+QDomDocument KisAslReader::readLfx2PsdSection(QIODevice &device)
 {
     QDomDocument doc;
 
-    if (device->isSequential()) {
+    if (device.isSequential()) {
         warnKrita << "WARNING: *** KisAslReader::readLfx2PsdSection: the supplied"
                   << "IO device is sequential. Chances are that"
                   << "the layer style will *not* be loaded correctly!";
@@ -601,7 +601,7 @@ QDomDocument KisAslReader::readLfx2PsdSection(QIODevice *device)
     return doc;
 }
 
-QDomDocument KisAslReader::readPsdSectionPattern(QIODevice *device, qint64 bytesLeft)
+QDomDocument KisAslReader::readPsdSectionPattern(QIODevice &device, qint64 bytesLeft)
 {
     QDomDocument doc;
 

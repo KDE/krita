@@ -39,12 +39,10 @@ PSDImageData::~PSDImageData() {
 
 }
 
-bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
-
-
-
-    psdread(io, &m_compression);
-    quint64 start = io->pos();
+bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
+{
+    psdread(io, m_compression);
+    quint64 start = io.pos();
     m_channelSize = m_header->channelDepth/8;
     m_channelDataLength = quint64(m_header->height) * m_header->width * m_channelSize;
 
@@ -90,11 +88,11 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
             for (quint32 row = 0; row < m_header->height; row++ ) {
                 if (m_header->version == 1) {
                     quint16 rlelength16; // use temporary variable to not cast pointers and not rely on endianness
-                    psdread(io,&rlelength16);
+                    psdread(io, rlelength16);
                     rlelength = rlelength16;
                 }
                 else if (m_header->version == 2) {
-                    psdread(io,&rlelength);
+                    psdread(io, rlelength);
                 }
                 channelInfo.rleRowLengths.append(rlelength);
                 sumrlelength += rlelength;

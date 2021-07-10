@@ -23,7 +23,7 @@ public:
     PSDLayerMaskSection(const PSDHeader &header);
     ~PSDLayerMaskSection();
 
-    bool read(QIODevice *io);
+    bool read(QIODevice &io);
     bool write(QIODevice *io, KisNodeSP rootLayer);
 
     QString error;
@@ -50,8 +50,8 @@ public:
     PsdAdditionalLayerInfoBlock globalInfoSection;
 
 private:
-    bool readLayerInfoImpl(QIODevice *io);
-    bool readImpl(QIODevice *io);
+    bool readLayerInfoImpl(QIODevice &io);
+    bool readImpl(QIODevice &io);
     void writeImpl(QIODevice *io, KisNodeSP rootLayer);
 
 private:

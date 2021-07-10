@@ -93,7 +93,7 @@ public:
         buffer.close();
         buffer.open(QBuffer::ReadOnly);
 
-        if (!copied->read(&buffer)) {
+        if (!copied->read(buffer)) {
             qWarning() << "Could not copy PSDResourceBlock" << copied->error;
             return 0;
         }
@@ -109,7 +109,7 @@ public:
         return i18n("Unparsed Resource Block");
     }
 
-    bool read(QIODevice *io);
+    bool read(QIODevice &io);
     bool write(QIODevice *io) const;
     bool valid();
 

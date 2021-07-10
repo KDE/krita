@@ -36,25 +36,25 @@ KoPatternSP PsdPattern::pattern() const
     return d->patternResource;
 }
 
-bool psd_write_pattern(QIODevice *io)
+bool psd_write_pattern(QIODevice &io)
 {
     Q_UNUSED(io);
     return false;
 }
 
-bool psd_read_pattern(QIODevice *io)
+bool psd_read_pattern(QIODevice &io)
 {
     quint32 pattern_length;
     psd_pattern pattern;
 
-    psdread(io, &pattern_length);
+    psdread(io, pattern_length);
     pattern_length = (pattern_length + 3) & ~3;
-    psdread(io, &pattern.version);
+    psdread(io, pattern.version);
     if (pattern.version != 1)
         return false;
-    psdread(io, (quint32 *)&pattern.color_mode);
-    psdread(io, &pattern.height);
-    psdread(io, &pattern.width);
+    psdread(io, pattern.color_mode);
+    psdread(io, pattern.height);
+    psdread(io, pattern.width);
     psdread_unicodestring(io, pattern.name);
     psdread_pascalstring(io, pattern.uuid, 2);
 
@@ -64,23 +64,23 @@ bool psd_read_pattern(QIODevice *io)
         quint8 g;
         quint8 b;
         for (int i = 0; i < 256; ++i) {
-            psdread(io, &r);
-            psdread(io, &g);
-            psdread(io, &b);
+            psdread(io, r);
+            psdread(io, g);
+            psdread(io, b);
             pattern.color_table.append(qRgb(r, g, b));
         }
     }
 
     // Now load the virtual memory array
-    psdread(io, &pattern.version);
+    psdread(io, pattern.version);
     if (pattern.version != 3)
         return false;
     quint32 vm_array_length;
-    psdread(io, &vm_array_length);
-    psdread(io, &pattern.top);
-    psdread(io, &pattern.left);
-    psdread(io, &pattern.bottom);
-    psdread(io, &pattern.right);
+    psdread(io, vm_array_length);
+    psdread(io, pattern.top);
+    psdread(io, pattern.left);
+    psdread(io, pattern.bottom);
+    psdread(io, pattern.right);
 
     QImage img;
 
@@ -92,7 +92,7 @@ bool psd_read_pattern(QIODevice *io)
     }
 
     qint32 max_channels;
-    psdread(io, &max_channels);
+    psdread(io, max_channels);
 
     QVector<QByteArray> channelData;
 
@@ -107,8 +107,8 @@ bool psd_read_pattern(QIODevice *io)
         quint16 pixel_depth2;
         quint8 compression_mode;
 
-        psdread(io, &written);
-        psdread(io, &len);
+        psdread(io, written);
+        psdread(io, len);
         len -= 4 + 4 * 4 + 2 + 1;
         if (len < 0) {
             continue;
@@ -118,22 +118,22 @@ bool psd_read_pattern(QIODevice *io)
             // Note: channel_number is not read from the file, so always equals 0.
             // Other behavior may be implemented later.
             if (pattern.channel_number == 0) {
-                psdread(io, &pixel_depth1);
+                psdread(io, pixel_depth1);
             } else {
                 quint32 d;
-                psdread(io, &d);
+                psdread(io, d);
             }
         } else {
             quint32 d;
-            psdread(io, &d);
+            psdread(io, d);
         }
 
-        psdread(io, &top);
-        psdread(io, &left);
-        psdread(io, &bottom);
-        psdread(io, &right);
-        psdread(io, &pixel_depth2);
-        psdread(io, &compression_mode);
+        psdread(io, top);
+        psdread(io, left);
+        psdread(io, bottom);
+        psdread(io, right);
+        psdread(io, pixel_depth2);
+        psdread(io, compression_mode);
 
         quint32 per_channel_length = 0;
 
@@ -185,7 +185,7 @@ bool psd_read_pattern(QIODevice *io)
                     return false;
                 }
 
-                QByteArray ba = io->read(len);
+                QByteArray ba = io.read(len);
                 channelData << Compression::uncompress(length, ba, (Compression::CompressionType)compression_mode);
             }
         }

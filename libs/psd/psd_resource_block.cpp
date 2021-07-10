@@ -21,22 +21,22 @@ PSDResourceBlock::PSDResourceBlock()
 {
 }
 
-bool PSDResourceBlock::read(QIODevice *io)
+bool PSDResourceBlock::read(QIODevice &io)
 {
     dbgFile << "Reading resource block";
-    if (io->atEnd()) {
+    if (io.atEnd()) {
         error = "Could not read resource block: no bytes left.";
         return false;
     }
 
     QByteArray b;
-    b = io->read(4);
+    b = io.read(4);
     if (b.size() != 4 || QString(b) != "8BIM") {
         error = QString("Could not read resource block signature. Got %1.").arg(QString(b));
         return false;
     }
 
-    if (!psdread(io, &identifier)) {
+    if (!psdread(io, identifier)) {
         error = "Could not read resource block identifier";
         return false;
     }
@@ -52,7 +52,7 @@ bool PSDResourceBlock::read(QIODevice *io)
 
     dbgFile << "\tresource block name" << name;
 
-    if (!psdread(io, &dataSize)) {
+    if (!psdread(io, dataSize)) {
         error = QString("Could not read datasize for resource block with name %1 of type %2").arg(name).arg(identifier);
         return false;
     }
@@ -65,7 +65,7 @@ bool PSDResourceBlock::read(QIODevice *io)
 
     m_description = PSDImageResourceSection::idToString((PSDImageResourceSection::PSDResourceID)identifier);
 
-    data = io->read(dataSize);
+    data = io.read(dataSize);
     if (data.size() != (int)dataSize) {
         error = QString("Could not read data for resource block with name %1 of type %2").arg(name).arg(identifier);
         return false;

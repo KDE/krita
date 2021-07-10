@@ -26,7 +26,7 @@ void PSDHeaderTest::testLoading()
     QFile f(filename);
     f.open(QIODevice::ReadOnly);
     PSDHeader header;
-    header.read(&f);
+    header.read(f);
 
     QVERIFY(header.signature == QString("8BPS"));
     QVERIFY(header.version == 1);
@@ -59,7 +59,7 @@ void PSDHeaderTest::testRoundTripping()
     f.close();
     f.open(QIODevice::ReadOnly);
     PSDHeader header2;
-    retval = header2.read(&f);
+    retval = header2.read(f);
     Q_ASSERT(retval);
 
     QCOMPARE(header.signature, header2.signature);

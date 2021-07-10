@@ -26,18 +26,17 @@ public:
     PSDImageData(PSDHeader *header);
     virtual ~PSDImageData();
 
-    bool read(QIODevice *io, KisPaintDeviceSP dev);
+    bool read(QIODevice &io, KisPaintDeviceSP dev);
     bool write(QIODevice *io, KisPaintDeviceSP dev, bool hasAlpha);
 
 
     QString error;
 
 private:
-
-    bool readRGB(QIODevice *io, KisPaintDeviceSP dev);
-    bool readCMYK(QIODevice *io, KisPaintDeviceSP dev);
-    bool readLAB(QIODevice *io, KisPaintDeviceSP dev);
-    bool readGrayscale(QIODevice *io, KisPaintDeviceSP dev);
+    bool readRGB(QIODevice &io, KisPaintDeviceSP dev);
+    bool readCMYK(QIODevice &io, KisPaintDeviceSP dev);
+    bool readLAB(QIODevice &io, KisPaintDeviceSP dev);
+    bool readGrayscale(QIODevice &io, KisPaintDeviceSP dev);
 
     PSDHeader *m_header;
 

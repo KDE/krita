@@ -35,7 +35,7 @@ void KisAslLayerStyleSerializerTest::testReading()
     QString srcFileName(TestUtil::fetchDataFileLazy("asl/test_all_and_pattern.asl"));
     QFile aslFile(srcFileName);
     aslFile.open(QIODevice::ReadOnly);
-    s.readFromDevice(&aslFile);
+    s.readFromDevice(aslFile);
 
     QVector<KisPSDLayerStyleSP> styles = s.styles();
 
@@ -193,7 +193,7 @@ void KisAslLayerStyleSerializerTest::testWriting()
         QString srcFileName(TestUtil::fetchDataFileLazy("asl/test_all_and_pattern.asl"));
         QFile aslFile(srcFileName);
         aslFile.open(QIODevice::ReadOnly);
-        s.readFromDevice(&aslFile);
+        s.readFromDevice(aslFile);
 
         styles = s.styles();
 
@@ -201,7 +201,7 @@ void KisAslLayerStyleSerializerTest::testWriting()
             aslFile.seek(0);
 
             KisAslReader reader;
-            QDomDocument doc = reader.readFile(&aslFile);
+            QDomDocument doc = reader.readFile(aslFile);
             refXMLDoc = doc.toByteArray();
         }
     }
@@ -225,7 +225,7 @@ void KisAslLayerStyleSerializerTest::testWriting()
         resultFile.open(QIODevice::ReadOnly);
 
         KisAslReader reader;
-        QDomDocument doc = reader.readFile(&resultFile);
+        QDomDocument doc = reader.readFile(resultFile);
         resultXMLDoc = doc.toByteArray();
     }
 
@@ -301,7 +301,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
         QString srcFileName(TestUtil::fetchDataFileLazy("asl/multiple_styles.asl"));
         QFile aslFile(srcFileName);
         aslFile.open(QIODevice::ReadOnly);
-        s.readFromDevice(&aslFile);
+        s.readFromDevice(aslFile);
 
         styles = s.styles();
     }
@@ -324,7 +324,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
         QString srcFileName("multiple_styles_out.asl");
         QFile aslFile(srcFileName);
         aslFile.open(QIODevice::ReadOnly);
-        s.readFromDevice(&aslFile);
+        s.readFromDevice(aslFile);
 
         styles = s.styles();
 
@@ -380,7 +380,7 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
         resultFile.open(QIODevice::ReadOnly);
 
         KisAslReader reader;
-        QDomDocument doc = reader.readFile(&resultFile);
+        QDomDocument doc = reader.readFile(resultFile);
         xmlDoc = doc.toString();
     }
 

@@ -18,7 +18,7 @@ class RgbCompositeOpBumpmap : public KoCompositeOpAlphaBase<_CSTraits, RgbCompos
 public:
 
     RgbCompositeOpBumpmap(KoColorSpace *cs)
-        : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpBumpmap<_CSTraits>, true >(cs, COMPOSITE_BUMPMAP, i18n("Bumpmap"),  KoCompositeOp::categoryMisc())
+        : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpBumpmap<_CSTraits>, true >(cs, COMPOSITE_BUMPMAP, KoCompositeOp::categoryMisc())
     {
     }
 

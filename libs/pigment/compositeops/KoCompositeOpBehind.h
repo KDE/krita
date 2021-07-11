@@ -23,7 +23,7 @@ class KoCompositeOpBehind : public KoCompositeOpBase<CS_Traits, KoCompositeOpBeh
 
 public:
     KoCompositeOpBehind(const KoColorSpace * cs)
-        : base_class(cs, COMPOSITE_BEHIND, i18n("Behind"), KoCompositeOp::categoryMix()) { }
+        : base_class(cs, COMPOSITE_BEHIND, KoCompositeOp::categoryMix()) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>

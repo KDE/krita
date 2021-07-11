@@ -27,8 +27,8 @@ class KoCompositeOpCopyChannel: public KoCompositeOpBase< Traits, KoCompositeOpC
     static const qint32 alpha_pos = Traits::alpha_pos;
     
 public:
-    KoCompositeOpCopyChannel(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
-        : base_class(cs, id, description, category) { }
+    KoCompositeOpCopyChannel(const KoColorSpace* cs, const QString& id, const QString& category)
+        : base_class(cs, id, category) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>

@@ -30,8 +30,8 @@ class KoCompositeOpGenericSC: public KoCompositeOpBase< Traits, KoCompositeOpGen
     static const qint32 alpha_pos   = Traits::alpha_pos;
     
 public:
-    KoCompositeOpGenericSC(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
-        : base_class(cs, id, description, category) { }
+    KoCompositeOpGenericSC(const KoColorSpace* cs, const QString& id, const QString& category)
+        : base_class(cs, id, category) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>
@@ -88,8 +88,8 @@ class KoCompositeOpGenericHSL: public KoCompositeOpBase< Traits, KoCompositeOpGe
     static const qint32 blue_pos  = Traits::blue_pos;
     
 public:
-    KoCompositeOpGenericHSL(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
-        : base_class(cs, id, description, category) { }
+    KoCompositeOpGenericHSL(const KoColorSpace* cs, const QString& id, const QString& category)
+        : base_class(cs, id, category) { }
     
 public:
     template<bool alphaLocked, bool allChannelFlags>
@@ -176,8 +176,8 @@ class KoCompositeOpGenericSCAlpha: public KoCompositeOpBase< Traits, KoComposite
     static const qint32 alpha_pos  = Traits::alpha_pos;
 
 public:
-    KoCompositeOpGenericSCAlpha(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
-        : base_class(cs, id, description, category) { }
+    KoCompositeOpGenericSCAlpha(const KoColorSpace* cs, const QString& id, const QString& category)
+        : base_class(cs, id, category) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>

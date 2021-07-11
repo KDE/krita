@@ -233,7 +233,7 @@ class KoOptimizedCompositeOpOver128 : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpOver128(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_OVER, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
@@ -277,7 +277,7 @@ class KoOptimizedCompositeOpOverU64 : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpOverU64(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_OVER, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 

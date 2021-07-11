@@ -21,7 +21,7 @@ class RgbCompositeOpIn : public KoCompositeOp
 public:
 
     RgbCompositeOpIn(KoColorSpace *cs)
-        : KoCompositeOp(cs, COMPOSITE_IN, i18n("In"), "")
+        : KoCompositeOp(cs, COMPOSITE_IN, "")
     {
     }
 

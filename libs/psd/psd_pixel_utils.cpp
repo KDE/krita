@@ -396,7 +396,7 @@ QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice &io, QVector<ChannelInfo 
     return channelBytes;
 }
 
-typedef boost::function<void(int, const QMap<quint16, QByteArray> &, int, quint8 *)> PixelFunc;
+using PixelFunc = std::function<void(int, const QMap<quint16, QByteArray> &, int, quint8 *)>;
 
 void readCommon(KisPaintDeviceSP dev,
                 QIODevice &io,

@@ -15,7 +15,7 @@
 #include <QIODevice>
 #include <QString>
 #include <QVector>
-#include <boost/function.hpp>
+#include <functional>
 
 #include <kis_types.h>
 
@@ -229,7 +229,7 @@ class KRITAPSD_EXPORT PsdAdditionalLayerInfoBlock
 public:
     PsdAdditionalLayerInfoBlock(const PSDHeader &header);
 
-    typedef boost::function<bool(QIODevice &)> ExtraLayerInfoBlockHandler;
+    using ExtraLayerInfoBlockHandler = std::function<bool(QIODevice &)>;
 
     void setExtraLayerInfoBlockHandler(ExtraLayerInfoBlockHandler handler);
 

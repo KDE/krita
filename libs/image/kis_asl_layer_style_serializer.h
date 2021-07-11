@@ -58,10 +58,8 @@ public:
 private:
     void registerPatternObject(const KoPatternSP pattern, const  QString& patternUuid);
 
-    void assignPatternObject(const QString &patternUuid,
-                             const QString &patternName,
-                             boost::function<void (KoPatternSP )> setPattern);
-    void assignGradientObject(KoAbstractGradientSP gradient, boost::function<void (KoAbstractGradientSP)> setGradient);
+    void assignPatternObject(const QString &patternUuid, const QString &patternName, std::function<void(KoPatternSP)> setPattern);
+    void assignGradientObject(KoAbstractGradientSP gradient, std::function<void(KoAbstractGradientSP)> setGradient);
 
     static QVector<KoPatternSP> fetchAllPatterns(const KisPSDLayerStyle *style);
 

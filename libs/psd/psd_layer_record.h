@@ -14,7 +14,6 @@
 #include <QString>
 #include <QVector>
 
-#include <boost/function.hpp>
 #include <compression.h>
 #include <kis_node.h>
 #include <kis_paint_device.h>

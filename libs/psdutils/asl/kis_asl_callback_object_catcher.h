@@ -10,7 +10,7 @@
 #include "kis_asl_object_catcher.h"
 
 #include <QScopedPointer>
-#include <boost/function.hpp>
+#include <functional>
 
 #include <resources/KoAbstractGradient.h>
 
@@ -18,17 +18,17 @@
 
 class KoPattern;
 
-typedef boost::function<void(double)> ASLCallbackDouble;
-typedef boost::function<void(int)> ASLCallbackInteger;
-typedef boost::function<void(const QString &)> ASLCallbackString;
-typedef boost::function<void(bool)> ASLCallbackBoolean;
-typedef boost::function<void(const QColor &)> ASLCallbackColor;
-typedef boost::function<void(const QPointF &)> ASLCallbackPoint;
-typedef boost::function<void(const QString &, const QVector<QPointF> &)> ASLCallbackCurve;
-typedef boost::function<void(const KoPatternSP, const QString &)> ASLCallbackPattern;
-typedef boost::function<void(const QString &, const QString &)> ASLCallbackPatternRef;
-typedef boost::function<void(KoAbstractGradientSP)> ASLCallbackGradient;
-typedef boost::function<void()> ASLCallbackNewStyle;
+using ASLCallbackDouble = std::function<void(double)>;
+using ASLCallbackInteger = std::function<void(int)>;
+using ASLCallbackString = std::function<void(const QString &)>;
+using ASLCallbackBoolean = std::function<void(bool)>;
+using ASLCallbackColor = std::function<void(const QColor &)>;
+using ASLCallbackPoint = std::function<void(const QPointF &)>;
+using ASLCallbackCurve = std::function<void(const QString &, const QVector<QPointF> &)>;
+using ASLCallbackPattern = std::function<void(const KoPatternSP, const QString &)>;
+using ASLCallbackPatternRef = std::function<void(const QString &, const QString &)>;
+using ASLCallbackGradient = std::function<void(KoAbstractGradientSP)>;
+using ASLCallbackNewStyle = std::function<void()>;
 
 class KRITAPSDUTILS_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
 {

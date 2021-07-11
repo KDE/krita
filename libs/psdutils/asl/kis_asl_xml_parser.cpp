@@ -6,8 +6,6 @@
 
 #include "kis_asl_xml_parser.h"
 
-#include <boost/function.hpp>
-
 #include <stdexcept>
 #include <string>
 

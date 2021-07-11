@@ -255,6 +255,7 @@ public:
     QString sectionDividerBlendMode;
 
 private:
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void readImpl(QIODevice &io);
 
 private:

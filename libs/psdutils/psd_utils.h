@@ -12,7 +12,6 @@
 
 #include <QtEndian>
 #include <QtGlobal>
-#include <algorithm>
 #include <array>
 #include <psd.h>
 #include <resources/KoPattern.h>

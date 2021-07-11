@@ -19,6 +19,7 @@
 
 #include "kis_dom_utils.h"
 
+#include "psd.h"
 #include "psd_header.h"
 #include "psd_utils.h"
 
@@ -45,7 +46,14 @@ bool PSDLayerMaskSection::read(QIODevice &io)
     bool retval = true; // be optimistic! <:-)
 
     try {
-        retval = readImpl(io);
+        switch (m_header.byteOrder) {
+        case psd_byte_order::psdLittleEndian:
+            retval = readImpl<psd_byte_order::psdLittleEndian>(io);
+            break;
+        default:
+            retval = readImpl(io);
+            break;
+        }
     } catch (KisAslReaderUtils::ASLParseException &e) {
         warnKrita << "WARNING: PSD (emb. pattern):" << e.what();
         retval = false;
@@ -54,6 +62,7 @@ bool PSDLayerMaskSection::read(QIODevice &io)
     return retval;
 }
 
+template<psd_byte_order byteOrder>
 bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
 {
     quint32 layerInfoSectionSize = 0;
@@ -69,7 +78,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
         dbgFile << "Layer info block size" << layerInfoSectionSize;
 
         if (layerInfoSectionSize > 0) {
-            if (!psdread(io, nLayers) || nLayers == 0) {
+            if (!psdread<byteOrder>(io, nLayers) || nLayers == 0) {
                 error = QString("Could not read read number of layers or no layers in image. %1").arg(nLayers);
                 return false;
             }
@@ -118,7 +127,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
                 ChannelInfo *channelInfo = layerRecord->channelInfoRecords.at(j);
 
                 quint16 compressionType;
-                if (!psdread(io, compressionType)) {
+                if (!psdread<byteOrder>(io, compressionType)) {
                     error = "Could not read compression type for channel";
                     return false;
                 }
@@ -135,13 +144,13 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
                         quint32 byteCount;
                         if (m_header.version == 1) {
                             quint16 _byteCount;
-                            if (!psdread(io, _byteCount)) {
+                            if (!psdread<byteOrder>(io, _byteCount)) {
                                 error = QString("Could not read byteCount for rle-encoded channel");
                                 return 0;
                             }
                             byteCount = _byteCount;
                         } else {
-                            if (!psdread(io, byteCount)) {
+                            if (!psdread<byteOrder>(io, byteCount)) {
                                 error = QString("Could not read byteCount for rle-encoded channel");
                                 return 0;
                             }
@@ -174,6 +183,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
     return true;
 }
 
+template<psd_byte_order byteOrder>
 bool PSDLayerMaskSection::readImpl(QIODevice &io)
 {
     dbgFile << "reading layer section. Pos:" << io.pos() << "bytes left:" << io.bytesAvailable();
@@ -181,13 +191,13 @@ bool PSDLayerMaskSection::readImpl(QIODevice &io)
     layerMaskBlockSize = 0;
     if (m_header.version == 1) {
         quint32 _layerMaskBlockSize = 0;
-        if (!psdread(io, _layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io.bytesAvailable()) {
+        if (!psdread<byteOrder>(io, _layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io.bytesAvailable()) {
             error = QString("Could not read layer + mask block size. Got %1. Bytes left %2").arg(_layerMaskBlockSize).arg(io.bytesAvailable());
             return false;
         }
         layerMaskBlockSize = _layerMaskBlockSize;
     } else if (m_header.version == 2) {
-        if (!psdread(io, layerMaskBlockSize) || layerMaskBlockSize > (quint64)io.bytesAvailable()) {
+        if (!psdread<byteOrder>(io, layerMaskBlockSize) || layerMaskBlockSize > (quint64)io.bytesAvailable()) {
             error = QString("Could not read layer + mask block size. Got %1. Bytes left %2").arg(layerMaskBlockSize).arg(io.bytesAvailable());
             return false;
         }
@@ -202,35 +212,35 @@ bool PSDLayerMaskSection::readImpl(QIODevice &io)
         return true;
     }
 
-    if (!readLayerInfoImpl(io)) {
+    if (!readLayerInfoImpl<byteOrder>(io)) {
         return false;
     }
 
     quint32 globalMaskBlockLength;
-    if (!psdread(io, globalMaskBlockLength)) {
+    if (!psdread<byteOrder>(io, globalMaskBlockLength)) {
         error = "Could not read global mask info block";
         return false;
     }
 
     if (globalMaskBlockLength > 0) {
-        if (!psdread(io, globalLayerMaskInfo.overlayColorSpace)) {
+        if (!psdread<byteOrder>(io, globalLayerMaskInfo.overlayColorSpace)) {
             error = "Could not read global mask info overlay colorspace";
             return false;
         }
 
         for (int i = 0; i < 4; ++i) {
-            if (!psdread(io, globalLayerMaskInfo.colorComponents[i])) {
+            if (!psdread<byteOrder>(io, globalLayerMaskInfo.colorComponents[i])) {
                 error = QString("Could not read mask info visualizaion color component %1").arg(i);
                 return false;
             }
         }
 
-        if (!psdread(io, globalLayerMaskInfo.opacity)) {
+        if (!psdread<byteOrder>(io, globalLayerMaskInfo.opacity)) {
             error = "Could not read global mask info visualization opacity";
             return false;
         }
 
-        if (!psdread(io, globalLayerMaskInfo.kind)) {
+        if (!psdread<byteOrder>(io, globalLayerMaskInfo.kind)) {
             error = "Could not read global mask info visualization type";
             return false;
         }
@@ -246,7 +256,7 @@ bool PSDLayerMaskSection::readImpl(QIODevice &io)
      * Here we pass the callback which should be used when such
      * additional section is recognized.
      */
-    globalInfoSection.setExtraLayerInfoBlockHandler(std::bind(&PSDLayerMaskSection::readLayerInfoImpl, this, std::placeholders::_1));
+    globalInfoSection.setExtraLayerInfoBlockHandler(std::bind(&PSDLayerMaskSection::readLayerInfoImpl<byteOrder>, this, std::placeholders::_1));
 
     globalInfoSection.read(io);
 

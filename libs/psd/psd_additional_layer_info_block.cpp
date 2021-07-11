@@ -1,10 +1,12 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "psd_additional_layer_info_block.h"
+#include "psd.h"
 
 #include <QDomDocument>
 
@@ -31,7 +33,14 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice &io)
     bool result = true;
 
     try {
-        readImpl(io);
+        switch (m_header.byteOrder) {
+        case psd_byte_order::psdLittleEndian:
+            readImpl<psd_byte_order::psdLittleEndian>(io);
+            break;
+        default:
+            readImpl(io);
+            break;
+        }
     } catch (KisAslReaderUtils::ASLParseException &e) {
         error = e.what();
         result = false;
@@ -40,6 +49,7 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice &io)
     return result;
 }
 
+template<psd_byte_order byteOrder>
 void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
 {
     using namespace KisAslReaderUtils;
@@ -56,22 +66,23 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
 
     while (!io.atEnd()) {
         {
-            const quint32 refSignature1 = 0x3842494D; // '8BIM' in little-endian
-            const quint32 refSignature2 = 0x38423634; // '8B64' in little-endian
-            if (!TRY_READ_SIGNATURE_2OPS_EX(io, refSignature1, refSignature2)) {
+            const std::array<quint8, 4> refSignature1 = {'8', 'B', 'I', 'M'}; // '8BIM' in big-endian
+            const std::array<quint8, 4> refSignature2 = {'8', 'B', '6', '4'}; // '8B64' in big-endian
+
+            if (!TRY_READ_SIGNATURE_2OPS_EX<byteOrder>(io, refSignature1, refSignature2)) {
                 break;
             }
         }
 
-        QString key = readFixedString(io);
+        QString key = readFixedString<byteOrder>(io);
         dbgFile << "found info block with key" << key;
 
         quint64 blockSize = GARBAGE_VALUE_MARK;
         if (longBlocks.contains(key)) {
-            SAFE_READ_EX(io, blockSize);
+            SAFE_READ_EX(byteOrder, io, blockSize);
         } else {
             quint32 size32;
-            SAFE_READ_EX(io, size32);
+            SAFE_READ_EX(byteOrder, io, size32);
             blockSize = size32;
         }
 
@@ -91,6 +102,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         if (key == "Lr16" /* || key == "Lr32"*/) {
             if (m_layerInfoBlockHandler) {
                 int offset = m_header.version > 1 ? 8 : 4;
+                dbgFile << "Offset for block handler: " << io.pos() << offset;
                 io.seek(io.pos() - offset);
                 m_layerInfoBlockHandler(io);
             }
@@ -118,17 +130,14 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "tySh") {
         } else if (key == "luni") {
             // get the unicode layer name
-            unicodeLayerName = readUnicodeString(io);
+            unicodeLayerName = readUnicodeString<byteOrder>(io);
             dbgFile << "unicodeLayerName" << unicodeLayerName;
         } else if (key == "lyid") {
         } else if (key == "lfx2" || key == "lfxs") {
             // lfxs is a special variant of layer styles for group layers
-
-            KisAslReader reader;
-            layerStyleXml = reader.readLfx2PsdSection(io);
+            layerStyleXml = KisAslReader::readLfx2PsdSection(io, byteOrder);
         } else if (key == "Patt" || key == "Pat2" || key == "Pat3") {
-            KisAslReader reader;
-            QDomDocument pattern = reader.readPsdSectionPattern(io, blockSize);
+            QDomDocument pattern = KisAslReader::readPsdSectionPattern(io, blockSize, byteOrder);
             embeddedPatterns << pattern;
         } else if (key == "Anno") {
         } else if (key == "clbl") {
@@ -140,7 +149,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "grdm") {
         } else if (key == "lsct") {
             quint32 dividerType = GARBAGE_VALUE_MARK;
-            SAFE_READ_EX(io, dividerType);
+            SAFE_READ_EX(byteOrder, io, dividerType);
             this->sectionDividerType = (psd_section_type)dividerType;
 
             dbgFile << "Reading \"lsct\" block:";
@@ -150,9 +159,9 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
             if (blockSize >= 12) {
                 quint32 lsctSignature = GARBAGE_VALUE_MARK;
                 const quint32 refSignature1 = 0x3842494D; // '8BIM' in little-endian
-                SAFE_READ_SIGNATURE_EX(io, lsctSignature, refSignature1);
+                SAFE_READ_SIGNATURE_EX(byteOrder, io, lsctSignature, refSignature1);
 
-                this->sectionDividerBlendMode = readFixedString(io);
+                this->sectionDividerBlendMode = readFixedString<byteOrder>(io);
 
                 dbgFile << ppVar(this->sectionDividerBlendMode);
             }

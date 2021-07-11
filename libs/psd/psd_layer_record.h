@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -146,6 +147,9 @@ public:
     PsdAdditionalLayerInfoBlock infoBlocks;
 
 private:
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    bool readImpl(QIODevice &io);
+
     void writeTransparencyMaskPixelData(QIODevice *io);
 
     void writePixelDataImpl(QIODevice *io);

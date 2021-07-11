@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,9 +8,8 @@
 
 #include <QByteArray>
 #include <QIODevice>
-
-#include "psd_utils.h"
 #include <QtEndian>
+#include <psd_utils.h>
 
 struct Header {
     char signature[4]; // 8PBS
@@ -29,6 +29,7 @@ PSDHeader::PSDHeader()
     , width(0)
     , channelDepth(0)
     , colormode(COLORMODE_UNKNOWN)
+    , byteOrder(psd_byte_order::psdBigEndian)
 {
 }
 

@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -45,6 +46,7 @@ public:
     quint32 width; // 1-30,000 or 1 - 300,000
     quint16 channelDepth; // 1, 8, 16. XXX: check whether 32 is used!
     psd_color_mode colormode;
+    psd_byte_order byteOrder;
 
     QString error;
 };

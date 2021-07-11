@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,6 +14,7 @@
 class QIODevice;
 
 #include <kis_types.h>
+#include <psd.h>
 
 #include "psd_header.h"
 #include "psd_layer_record.h"
@@ -50,7 +52,9 @@ public:
     PsdAdditionalLayerInfoBlock globalInfoSection;
 
 private:
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     bool readLayerInfoImpl(QIODevice &io);
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     bool readImpl(QIODevice &io);
     void writeImpl(QIODevice *io, KisNodeSP rootLayer);
 

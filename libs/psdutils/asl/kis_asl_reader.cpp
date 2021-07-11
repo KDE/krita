@@ -32,26 +32,29 @@ namespace Private
  * them in XML.
  */
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 QString readDoubleAsString(QIODevice &device)
 {
     double value = 0.0;
-    SAFE_READ_EX(device, value);
+    SAFE_READ_EX(byteOrder, device, value);
 
     return KisDomUtils::toString(value);
 }
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 QString readIntAsString(QIODevice &device)
 {
     quint32 value = 0.0;
-    SAFE_READ_EX(device, value);
+    SAFE_READ_EX(byteOrder, device, value);
 
     return KisDomUtils::toString(value);
 }
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 QString readBoolAsString(QIODevice &device)
 {
     quint8 value = 0.0;
-    SAFE_READ_EX(device, value);
+    SAFE_READ_EX(byteOrder, device, value);
 
     return KisDomUtils::toString(value);
 }
@@ -116,8 +119,10 @@ void appendPointXMLNode(const QString &key, const QPointF &pt, QDomElement *pare
  * ASL -> XML parsing functions
  */
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 void readDescriptor(QIODevice &device, const QString &key, QDomElement *parent, QDomDocument *doc);
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 void readChildObject(QIODevice &device, QDomElement *parent, QDomDocument *doc, bool skipKey = false)
 {
     using namespace KisAslReaderUtils;
@@ -125,10 +130,10 @@ void readChildObject(QIODevice &device, QDomElement *parent, QDomDocument *doc, 
     QString key;
 
     if (!skipKey) {
-        key = readVarString(device);
+        key = readVarString<byteOrder>(device);
     }
 
-    QString OSType = readFixedString(device);
+    QString OSType = readFixedString<byteOrder>(device);
 
     // dbgKrita << "Child" << ppVar(key) << ppVar(OSType);
 
@@ -136,43 +141,43 @@ void readChildObject(QIODevice &device, QDomElement *parent, QDomDocument *doc, 
         throw KisAslReaderUtils::ASLParseException("OSType 'obj' not implemented");
 
     } else if (OSType == "Objc" || OSType == "GlbO") {
-        readDescriptor(device, key, parent, doc);
+        readDescriptor<byteOrder>(device, key, parent, doc);
 
     } else if (OSType == "VlLs") {
         quint32 numItems = GARBAGE_VALUE_MARK;
-        SAFE_READ_EX(device, numItems);
+        SAFE_READ_EX(byteOrder, device, numItems);
 
         QDomElement el = appendXMLNodeCommonNoValue(key, "List", parent, doc);
         for (quint32 i = 0; i < numItems; i++) {
-            readChildObject(device, &el, doc, true);
+            readChildObject<byteOrder>(device, &el, doc, true);
         }
 
     } else if (OSType == "doub") {
-        appendDoubleXMLNode(key, readDoubleAsString(device), parent, doc);
+        appendDoubleXMLNode(key, readDoubleAsString<byteOrder>(device), parent, doc);
 
     } else if (OSType == "UntF") {
-        const QString unit = readFixedString(device);
-        const QString value = readDoubleAsString(device);
+        const QString unit = readFixedString<byteOrder>(device);
+        const QString value = readDoubleAsString<byteOrder>(device);
 
         QDomElement el = appendXMLNodeCommon(key, value, "UnitFloat", parent, doc);
         el.setAttribute("unit", unit);
 
     } else if (OSType == "TEXT") {
-        QString unicodeString = readUnicodeString(device);
+        QString unicodeString = readUnicodeString<byteOrder>(device);
         appendTextXMLNode(key, unicodeString, parent, doc);
 
     } else if (OSType == "enum") {
-        const QString typeId = readVarString(device);
-        const QString value = readVarString(device);
+        const QString typeId = readVarString<byteOrder>(device);
+        const QString value = readVarString<byteOrder>(device);
 
         QDomElement el = appendXMLNodeCommon(key, value, "Enum", parent, doc);
         el.setAttribute("typeId", typeId);
 
     } else if (OSType == "long") {
-        appendIntegerXMLNode(key, readIntAsString(device), parent, doc);
+        appendIntegerXMLNode(key, readIntAsString<byteOrder>(device), parent, doc);
 
     } else if (OSType == "bool") {
-        const QString value = readBoolAsString(device);
+        const QString value = readBoolAsString<byteOrder>(device);
         appendXMLNodeCommon(key, value, "Boolean", parent, doc);
 
     } else if (OSType == "type") {
@@ -186,6 +191,7 @@ void readChildObject(QIODevice &device, QDomElement *parent, QDomDocument *doc, 
     }
 }
 
+template<psd_byte_order byteOrder>
 void readDescriptor(QIODevice &device, const QString &key, QDomElement *parent, QDomDocument *doc)
 {
     using namespace KisAslReaderUtils;
@@ -194,7 +200,7 @@ void readDescriptor(QIODevice &device, const QString &key, QDomElement *parent, 
     QString classId = readVarString(device);
 
     quint32 numChildren = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, numChildren);
+    SAFE_READ_EX(byteOrder, device, numChildren);
 
     QDomElement el = appendXMLNodeCommonNoValue(key, "Descriptor", parent, doc);
     el.setAttribute("classId", classId);
@@ -203,35 +209,36 @@ void readDescriptor(QIODevice &device, const QString &key, QDomElement *parent, 
     // dbgKrita << "Descriptor" << ppVar(key) << ppVar(classId) << ppVar(numChildren);
 
     for (quint32 i = 0; i < numChildren; i++) {
-        readChildObject(device, &el, doc);
+        readChildObject<byteOrder>(device, &el, doc);
     }
 }
 
+template<psd_byte_order byteOrder>
 QImage readVirtualArrayList(QIODevice &device, int numPlanes)
 {
     using namespace KisAslReaderUtils;
 
     quint32 arrayVersion = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, arrayVersion);
+    SAFE_READ_EX(byteOrder, device, arrayVersion);
 
     if (arrayVersion != 3) {
         throw ASLParseException("VAList version is not '3'!");
     }
 
     quint32 arrayLength = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, arrayLength);
+    SAFE_READ_EX(byteOrder, device, arrayLength);
 
     SETUP_OFFSET_VERIFIER(vaEndVerifier, device, arrayLength, 100);
 
     quint32 x0, y0, x1, y1;
-    SAFE_READ_EX(device, y0);
-    SAFE_READ_EX(device, x0);
-    SAFE_READ_EX(device, y1);
-    SAFE_READ_EX(device, x1);
+    SAFE_READ_EX(byteOrder, device, y0);
+    SAFE_READ_EX(byteOrder, device, x0);
+    SAFE_READ_EX(byteOrder, device, y1);
+    SAFE_READ_EX(byteOrder, device, x1);
     QRect arrayRect(x0, y0, x1 - x0, y1 - y0);
 
     quint32 numberOfChannels = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, numberOfChannels);
+    SAFE_READ_EX(byteOrder, device, numberOfChannels);
 
     if (numberOfChannels != 24) {
         throw ASLParseException("VAList: Krita doesn't support ASL files with 'numberOfChannels' flag not equal to 24 (it is not documented)!");
@@ -251,12 +258,12 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
 
     for (int i = 0; i < numPlanes; i++) {
         quint32 arrayWritten = GARBAGE_VALUE_MARK;
-        if (!psdread(device, arrayWritten) || !arrayWritten) {
+        if (!psdread<byteOrder>(device, arrayWritten) || !arrayWritten) {
             throw ASLParseException("VAList plane has not-written flag set!");
         }
 
         quint32 arrayPlaneLength = GARBAGE_VALUE_MARK;
-        if (!psdread(device, arrayPlaneLength) || !arrayPlaneLength) {
+        if (!psdread<byteOrder>(device, arrayPlaneLength) || !arrayPlaneLength) {
             throw ASLParseException("VAList has plane length set to zero!");
         }
 
@@ -264,13 +271,13 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
         qint64 nextPos = device.pos() + arrayPlaneLength;
 
         quint32 pixelDepth1 = GARBAGE_VALUE_MARK;
-        SAFE_READ_EX(device, pixelDepth1);
+        SAFE_READ_EX(byteOrder, device, pixelDepth1);
 
         quint32 x0, y0, x1, y1;
-        SAFE_READ_EX(device, y0);
-        SAFE_READ_EX(device, x0);
-        SAFE_READ_EX(device, y1);
-        SAFE_READ_EX(device, x1);
+        SAFE_READ_EX(byteOrder, device, y0);
+        SAFE_READ_EX(byteOrder, device, x0);
+        SAFE_READ_EX(byteOrder, device, y1);
+        SAFE_READ_EX(byteOrder, device, x1);
         QRect planeRect(x0, y0, x1 - x0, y1 - y0);
 
         if (planeRect != arrayRect) {
@@ -278,10 +285,10 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
         }
 
         quint16 pixelDepth2 = GARBAGE_VALUE_MARK;
-        SAFE_READ_EX(device, pixelDepth2);
+        SAFE_READ_EX(byteOrder, device, pixelDepth2);
 
         quint8 useCompression = 9;
-        SAFE_READ_EX(device, useCompression);
+        SAFE_READ_EX(byteOrder, device, useCompression);
 
         // dbgKrita << "plane index:" << ppVar(i);
         // dbgKrita << ppVar(arrayWritten);
@@ -312,7 +319,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
 
             for (int row = 0; row < numRows; row++) {
                 quint16 rowSize = GARBAGE_VALUE_MARK;
-                SAFE_READ_EX(device, rowSize);
+                SAFE_READ_EX(byteOrder, device, rowSize);
                 rowSizes[row] = rowSize;
             }
 
@@ -367,12 +374,13 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
     return image;
 }
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 qint64 readPattern(QIODevice &device, QDomElement *parent, QDomDocument *doc)
 {
     using namespace KisAslReaderUtils;
 
     quint32 patternSize = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, patternSize);
+    SAFE_READ_EX(byteOrder, device, patternSize);
 
     // patterns are always aligned by 4 bytes
     patternSize = KisAslWriterUtils::alignOffsetCeil(patternSize, 4);
@@ -380,25 +388,25 @@ qint64 readPattern(QIODevice &device, QDomElement *parent, QDomDocument *doc)
     SETUP_OFFSET_VERIFIER(patternEndVerifier, device, patternSize, 0);
 
     quint32 patternVersion = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, patternVersion);
+    SAFE_READ_EX(byteOrder, device, patternVersion);
 
     if (patternVersion != 1) {
         throw ASLParseException("Pattern version is not \'1\'");
     }
 
     quint32 patternImageMode = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, patternImageMode);
+    SAFE_READ_EX(byteOrder, device, patternImageMode);
 
     quint16 patternHeight = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, patternHeight);
+    SAFE_READ_EX(byteOrder, device, patternHeight);
 
     quint16 patternWidth = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, patternWidth);
+    SAFE_READ_EX(byteOrder, device, patternWidth);
 
     QString patternName;
-    psdread_unicodestring(device, patternName);
+    psdread_unicodestring<byteOrder>(device, patternName);
 
-    QString patternUuid = readPascalString(device);
+    QString patternUuid = readPascalString<byteOrder>(device);
 
     // dbgKrita << "--";
     // dbgKrita << ppVar(patternSize);
@@ -439,8 +447,9 @@ qint64 readPattern(QIODevice &device, QDomElement *parent, QDomDocument *doc)
     patternBuf.open(QIODevice::WriteOnly);
 
     { // ensure we don't keep resources for too long
+      // XXX: this appears to not need endianness handling...?
         QString fileName = QString("%1.pat").arg(patternUuid);
-        QImage patternImage = readVirtualArrayList(device, numPlanes);
+        QImage patternImage = readVirtualArrayList<byteOrder>(device, numPlanes);
         KoPattern realPattern(patternImage, patternName, fileName);
         realPattern.savePatToDevice(&patternBuf);
     }
@@ -476,25 +485,25 @@ QDomDocument readFileImpl(QIODevice &device)
 
     {
         quint16 stylesVersion = GARBAGE_VALUE_MARK;
-        SAFE_READ_SIGNATURE_EX(device, stylesVersion, 2);
+        SAFE_READ_SIGNATURE_EX(psd_byte_order::psdBigEndian, device, stylesVersion, 2);
     }
 
     {
         quint32 aslSignature = GARBAGE_VALUE_MARK;
         const quint32 refSignature = 0x3842534c; // '8BSL' in little-endian
-        SAFE_READ_SIGNATURE_EX(device, aslSignature, refSignature);
+        SAFE_READ_SIGNATURE_EX(psd_byte_order::psdBigEndian, device, aslSignature, refSignature);
     }
 
     {
         quint16 patternsVersion = GARBAGE_VALUE_MARK;
-        SAFE_READ_SIGNATURE_EX(device, patternsVersion, 3);
+        SAFE_READ_SIGNATURE_EX(psd_byte_order::psdBigEndian, device, patternsVersion, 3);
     }
 
     // Patterns
 
     {
         quint32 patternsSize = GARBAGE_VALUE_MARK;
-        SAFE_READ_EX(device, patternsSize);
+        SAFE_READ_EX(psd_byte_order::psdBigEndian, device, patternsSize);
 
         if (patternsSize > 0) {
             SETUP_OFFSET_VERIFIER(patternsSectionVerifier, device, patternsSize, 0);
@@ -519,24 +528,24 @@ QDomDocument readFileImpl(QIODevice &device)
     // Styles
 
     quint32 numStyles = GARBAGE_VALUE_MARK;
-    SAFE_READ_EX(device, numStyles);
+    SAFE_READ_EX(psd_byte_order::psdBigEndian, device, numStyles);
 
     for (int i = 0; i < (int)numStyles; i++) {
         quint32 bytesToRead = GARBAGE_VALUE_MARK;
-        SAFE_READ_EX(device, bytesToRead);
+        SAFE_READ_EX(psd_byte_order::psdBigEndian, device, bytesToRead);
 
         SETUP_OFFSET_VERIFIER(singleStyleSectionVerifier, device, bytesToRead, 0);
 
         {
             quint32 stylesFormatVersion = GARBAGE_VALUE_MARK;
-            SAFE_READ_SIGNATURE_EX(device, stylesFormatVersion, 16);
+            SAFE_READ_SIGNATURE_EX(psd_byte_order::psdBigEndian, device, stylesFormatVersion, 16);
         }
 
         readDescriptor(device, "", &root, &doc);
 
         {
             quint32 stylesFormatVersion = GARBAGE_VALUE_MARK;
-            SAFE_READ_SIGNATURE_EX(device, stylesFormatVersion, 16);
+            SAFE_READ_SIGNATURE_EX(psd_byte_order::psdBigEndian, device, stylesFormatVersion, 16);
         }
 
         readDescriptor(device, "", &root, &doc);
@@ -566,7 +575,21 @@ QDomDocument KisAslReader::readFile(QIODevice &device)
     return doc;
 }
 
-QDomDocument KisAslReader::readLfx2PsdSection(QIODevice &device)
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+QDomDocument readLfx2PsdSectionImpl(QIODevice &device);
+
+QDomDocument KisAslReader::readLfx2PsdSection(QIODevice &device, psd_byte_order byteOrder)
+{
+    switch (byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        return readLfx2PsdSectionImpl<psd_byte_order::psdLittleEndian>(device);
+    default:
+        return readLfx2PsdSectionImpl(device);
+    }
+}
+
+template<psd_byte_order byteOrder>
+QDomDocument readLfx2PsdSectionImpl(QIODevice &device)
 {
     QDomDocument doc;
 
@@ -580,19 +603,19 @@ QDomDocument KisAslReader::readLfx2PsdSection(QIODevice &device)
         {
             quint32 objectEffectsVersion = GARBAGE_VALUE_MARK;
             const quint32 ref = 0x00;
-            SAFE_READ_SIGNATURE_EX(device, objectEffectsVersion, ref);
+            SAFE_READ_SIGNATURE_EX(byteOrder, device, objectEffectsVersion, ref);
         }
 
         {
             quint32 descriptorVersion = GARBAGE_VALUE_MARK;
             const quint32 ref = 0x10;
-            SAFE_READ_SIGNATURE_EX(device, descriptorVersion, ref);
+            SAFE_READ_SIGNATURE_EX(byteOrder, device, descriptorVersion, ref);
         }
 
         QDomElement root = doc.createElement("asl");
         doc.appendChild(root);
 
-        Private::readDescriptor(device, "", &root, &doc);
+        Private::readDescriptor<byteOrder>(device, "", &root, &doc);
 
     } catch (KisAslReaderUtils::ASLParseException &e) {
         warnKrita << "WARNING: PSD: lfx2 section:" << e.what();
@@ -601,7 +624,21 @@ QDomDocument KisAslReader::readLfx2PsdSection(QIODevice &device)
     return doc;
 }
 
-QDomDocument KisAslReader::readPsdSectionPattern(QIODevice &device, qint64 bytesLeft)
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+QDomDocument readPsdSectionPatternImpl(QIODevice &device, qint64 bytesLeft);
+
+QDomDocument KisAslReader::readPsdSectionPattern(QIODevice &device, qint64 bytesLeft, psd_byte_order byteOrder)
+{
+    switch (byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        return readPsdSectionPatternImpl<psd_byte_order::psdLittleEndian>(device, bytesLeft);
+    default:
+        return readPsdSectionPatternImpl(device, bytesLeft);
+    }
+}
+
+template<psd_byte_order byteOrder>
+QDomDocument readPsdSectionPatternImpl(QIODevice &device, qint64 bytesLeft)
 {
     QDomDocument doc;
 
@@ -618,7 +655,7 @@ QDomDocument KisAslReader::readPsdSectionPattern(QIODevice &device, qint64 bytes
     try {
         qint64 bytesRead = 0;
         while (bytesRead < bytesLeft) {
-            qint64 chunk = Private::readPattern(device, &pat, &doc);
+            qint64 chunk = Private::readPattern<byteOrder>(device, &pat, &doc);
             bytesRead += chunk;
         }
     } catch (KisAslReaderUtils::ASLParseException &e) {

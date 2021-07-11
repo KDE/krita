@@ -45,7 +45,7 @@ class KoCompositeOpDissolve: public KoCompositeOp
 
 public:
     KoCompositeOpDissolve(const KoColorSpace* cs, const QString& category)
-        : KoCompositeOp(cs, COMPOSITE_DISSOLVE, i18n("Dissolve"), category) { }
+        : KoCompositeOp(cs, COMPOSITE_DISSOLVE, category) { }
 
     using KoCompositeOp::composite;
 

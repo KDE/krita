@@ -12,6 +12,12 @@
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceMaths.h"
+#include "KoCompositeOpRegistry.h"
+
+static QString compositeOpDisplayName(const QString &id)
+{
+    return KoCompositeOpRegistry::instance().getCompositeOpDisplayName(id);
+}
 
 QString KoCompositeOp::categoryColor()
 {
@@ -112,12 +118,12 @@ KoCompositeOp::~KoCompositeOp()
     delete d;
 }
 
-KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, const QString & category)
+KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString & category)
         : d(new Private)
 {
     d->colorSpace = cs;
     d->id = id;
-    d->description = description;
+    d->description = compositeOpDisplayName(id);
     d->category = category;
     if (d->category.isEmpty()) {
         d->category = categoryMisc();

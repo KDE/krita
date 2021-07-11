@@ -16,9 +16,14 @@
 #include "KoColorSpace.h"
 
 #include "kis_assert.h"
+#include "DebugPigment.h"
 
 Q_GLOBAL_STATIC(KoCompositeOpRegistry, registry)
 
+static KoID koidCompositeOverStatic() {
+    static const KoID compositeOver(COMPOSITE_OVER, i18nc("Blending mode - Normal", "Normal"));
+    return compositeOver;
+}
 
 KoCompositeOpRegistry::KoCompositeOpRegistry()
 {
@@ -101,7 +106,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[5], KoID(COMPOSITE_ARC_TANGENT          ,  i18nc("Blending mode - Arcus Tangent", "Arcus Tangent")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_NEGATION             ,  i18nc("Blending mode - Negation", "Negation")));
 
-    m_map.insert(m_categories[6], KoID(COMPOSITE_OVER            ,  i18nc("Blending mode - Normal", "Normal")));
+    m_map.insert(m_categories[6], koidCompositeOverStatic());
     m_map.insert(m_categories[6], KoID(COMPOSITE_BEHIND          ,  i18nc("Blending mode - Behind", "Behind")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_GREATER         ,  i18nc("Blending mode - Greater", "Greater")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_OVERLAY         ,  i18nc("Blending mode - Overlay", "Overlay")));
@@ -188,13 +193,31 @@ const KoCompositeOpRegistry& KoCompositeOpRegistry::instance()
 
 KoID KoCompositeOpRegistry::getDefaultCompositeOp() const
 {
-    return KoID(COMPOSITE_OVER,  i18nc("Blending mode - Normal", "Normal"));
+    return koidCompositeOverStatic();
 }
 
 KoID KoCompositeOpRegistry::getKoID(const QString& compositeOpID) const
 {
     KoIDMap::const_iterator itr = std::find(m_map.begin(), m_map.end(), KoID(compositeOpID));
     return (itr != m_map.end()) ? *itr : KoID();
+}
+
+QString KoCompositeOpRegistry::getCompositeOpDisplayName(const QString& compositeOpID) const
+{
+    // In and Out are created in lcms2engine but not registered in KoCompositeOpRegistry.
+    // FIXME: Change these to use i18nc with context?
+    if (compositeOpID == COMPOSITE_IN) {
+        return i18n("In");
+    } else if (compositeOpID == COMPOSITE_OUT) {
+        return i18n("Out");
+    }
+
+    const QString name = getKoID(compositeOpID).name();
+    if (name.isNull()) {
+        warnPigment << "Got null display name for composite op" << compositeOpID;
+        return compositeOpID;
+    }
+    return name;
 }
 
 KoCompositeOpRegistry::KoIDMap KoCompositeOpRegistry::getCompositeOps() const

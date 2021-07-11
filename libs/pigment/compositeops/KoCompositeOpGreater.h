@@ -37,7 +37,7 @@ class KoCompositeOpGreater : public KoCompositeOpBase<CS_Traits, KoCompositeOpGr
 
 public:
     KoCompositeOpGreater(const KoColorSpace * cs)
-        : base_class(cs, COMPOSITE_GREATER, i18n("Greater"), KoCompositeOp::categoryMix()) { }
+        : base_class(cs, COMPOSITE_GREATER, KoCompositeOp::categoryMix()) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>

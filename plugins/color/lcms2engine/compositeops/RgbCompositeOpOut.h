@@ -21,7 +21,7 @@ class RgbCompositeOpOut : public KoCompositeOp
 public:
 
     RgbCompositeOpOut(KoColorSpace *cs)
-        : KoCompositeOp(cs, COMPOSITE_OUT, i18n("Out"))
+        : KoCompositeOp(cs, COMPOSITE_OUT)
     {
     }
 

@@ -46,7 +46,7 @@ class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
 public:
 
     KoCompositeOpOver(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits>, false >(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits>, false >(cs, COMPOSITE_OVER, KoCompositeOp::categoryMix()) {
     }
 
 public:

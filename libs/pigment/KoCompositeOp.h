@@ -26,8 +26,6 @@ class KoColorSpace;
 class KRITAPIGMENT_EXPORT KoCompositeOp
 {
 public:
-    static QString categoryColor();
-
     static QString categoryArithmetic();
     static QString categoryBinary();
     static QString categoryModulo();

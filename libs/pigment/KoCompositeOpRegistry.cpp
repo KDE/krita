@@ -277,6 +277,17 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCategories() const
     return m_categories;
 }
 
+QString  KoCompositeOpRegistry::getCategoryDisplayName(const QString& categoryID) const
+{
+    KoIDList::const_iterator itr = std::find(m_categories.begin(), m_categories.end(), KoID(categoryID));
+    const QString name = (itr != m_categories.end()) ? itr->name() : QString();
+    if (name.isNull()) {
+        warnPigment << "Got null display name for composite op category" << categoryID;
+        return categoryID;
+    }
+    return name;
+}
+
 KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoID& category, const KoColorSpace* colorSpace) const
 {
     qint32                  num = m_map.count(category);

@@ -42,6 +42,10 @@
 
 #include <QVersionNumber>
 
+#ifdef Q_OS_WIN
+#include "TouchDockerQQuickWidget.h"
+#endif
+
 namespace
 {
 
@@ -101,7 +105,11 @@ TouchDockerDock::TouchDockerDock()
         }
     }
 
+#ifdef Q_OS_WIN
+    m_quickWidget = new TouchDockerQQuickWidget(this);
+#else
     m_quickWidget = new QQuickWidget(this);
+#endif
     if (shouldSetAcceptTouchEvents()) {
         m_quickWidget->setAttribute(Qt::WA_AcceptTouchEvents);
     }

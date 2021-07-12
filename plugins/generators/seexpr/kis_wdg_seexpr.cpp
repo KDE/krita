@@ -104,7 +104,7 @@ inline const Ui_WdgSeExpr *KisWdgSeExpr::widget() const
 void KisWdgSeExpr::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     auto rserver = KoResourceServerProvider::instance()->seExprScriptServer();
-    auto name = config->getString("pattern", "Disney_noisecolor2");
+    auto name = config->getString("seexpr", "Disney_noisecolor2");
     auto pattern = rserver->resourceByName(name);
     if (pattern) {
         m_widget->scriptSelectorWidget->setCurrentScript(pattern);

@@ -277,9 +277,16 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             view->canvasBase()->toolProxy()->copy();
         }
     } else if (selection) {
-        KisNodeList selectedNodes = KisLayerUtils::sortMergableNodes(image->root(),
-                                                                     view->nodeManager()->selectedNodes());
-        KisLayerUtils::filterMergableNodes(selectedNodes, true);
+        KisNodeList selectedNodes = view->nodeManager()->selectedNodes();
+
+        KisNodeList masks;
+        Q_FOREACH (KisNodeSP node, selectedNodes) {
+            if (node->inherits("KisMask")) {
+                masks.append(node);
+            }
+        }
+
+        selectedNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(selectedNodes);
 
         KisNodeList nodes;
         //KisGroupLayerSP group = new KisGroupLayer(image.data(), "Clipboard", OPACITY_OPAQUE_U8);
@@ -321,9 +328,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         tempImage->refreshGraphAsync();
         tempImage->waitForDone();
         KisClipboard::instance()->setLayers(nodes, tempImage);
-        //image->removeNode(group);
         qDebug() << "Successfully copied to clipboard";
-        //view->nodeManager()->slotSetSelectedNodes(selectedNodes);
 
 /*        {
             KisImageBarrierLocker locker(image);
@@ -367,10 +372,16 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         KisProcessingApplicator *ap = beginAction(view, actionName);
 
         if (willCut) {
+            selectedNodes.append(masks);
             Q_FOREACH (KisNodeSP node, selectedNodes) {
-                KisLayerUtils::recursiveApplyNodes(node, [selection, ap] (KisNodeSP node){
+                KisLayerUtils::recursiveApplyNodes(node, [selection, masks, ap] (KisNodeSP node){
 
-                    if (!node->hasEditablePaintDevice() || node->inherits("KisMask")) {
+                    if (!node->hasEditablePaintDevice()) {
+                        return;
+                    }
+
+                    // applied on masks if selected explicitly (when CTRL-X(cut) is used for deletion)
+                    if (node->inherits("KisMask") && !masks.contains(node)) {
                         return;
                     }
 

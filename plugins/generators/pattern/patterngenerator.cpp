@@ -71,9 +71,10 @@ public:
 
     KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const
     {
+        const QString patternMD5 = getString("pattern/md5");
         const QString patternName = getString("pattern", "Grid01.pat");
         auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-        auto pattern = source.resourceForName(patternName);
+        auto pattern = source.resource(patternMD5, "", patternName);
         return pattern;
     }
 
@@ -135,7 +136,8 @@ KisFilterConfigurationSP PatternGenerator::defaultConfiguration(KisResourcesInte
         return config;
     }
 
-    config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
+    config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->md5()));
+    config->setProperty("pattern/md5", QVariant::fromValue(source.fallbackResource()->name()));
 
     config->setProperty("transform_shear_x", QVariant::fromValue(0.0));
     config->setProperty("transform_shear_y", QVariant::fromValue(0.0));

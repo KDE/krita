@@ -285,7 +285,14 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         //KisGroupLayerSP group = new KisGroupLayer(image.data(), "Clipboard", OPACITY_OPAQUE_U8);
         KisImageSP tempImage = new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
         Q_FOREACH (KisNodeSP node, selectedNodes) {
-            KisNodeSP dupNode = node->clone();
+            KisNodeSP dupNode;
+            if (node->inherits("KisShapeLayer")) {
+                KisPaintDeviceSP dev = new KisPaintDevice(*node->projection());
+                // might have to change node's name (vector to paint layer)
+                dupNode = new KisPaintLayer(tempImage, node->name(), node->opacity(), dev);
+            } else {
+                dupNode = node->clone();
+            }
             nodes.append(dupNode);
             tempImage->addNode(dupNode, tempImage->root());
         }

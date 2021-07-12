@@ -38,6 +38,9 @@ public:
     {
     }
 
+
+    /// XXX: In contrast to KisResourcesInterface::resource, this falls back if the
+    /// resource cannot be found by md5sum, and I'm not sure whether that's correct.
     ResourceTypeSP resource(KisResourcesInterfaceSP resourcesInterface) const
     {
         ResourceTypeSP result;

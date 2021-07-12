@@ -247,7 +247,7 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setBrushApplication(IMAGESTAMP);
+        setBrushApplication(LIGHTNESSMAP);
         setBrushType(IMAGE);
 
         for (quint32 y = 0; y < bh.height; y++) {
@@ -283,7 +283,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setName(image->objectName());
 
     setBrushType(IMAGE);
-    setBrushApplication(IMAGESTAMP);
+    setBrushApplication(LIGHTNESSMAP);
 
     return true;
 }

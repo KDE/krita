@@ -14,10 +14,10 @@
 class KisFullRefreshWalker : public KisRefreshSubtreeWalker, public KisMergeWalker
 {
 public:
-    KisFullRefreshWalker(QRect cropRect)
-        : KisMergeWalker(NO_FILTHY)
+    KisFullRefreshWalker(QRect cropRect, bool skipNonRenderableNodes = false)
+        : KisRefreshSubtreeWalker(cropRect, skipNonRenderableNodes),
+          KisMergeWalker(cropRect, NO_FILTHY)
     {
-        setCropRect(cropRect);
     }
 
     UpdateType type() const override {

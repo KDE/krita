@@ -30,11 +30,6 @@ public:
      */
     KisBrushSP brush() const;
 
-    void setAutoBrush(bool on);
-    void setPredefinedBrushes(bool on);
-    void setCustomBrush(bool on);
-    void setTextBrush(bool on);
-
     void setImage(KisImageWSP image) override;
 
     void setPrecisionEnabled(bool value);
@@ -44,8 +39,6 @@ public:
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     void lodLimitations(KisPaintopLodLimitations *l) const override;
-
-    bool presetIsValid();
 
     void hideOptions(const QStringList &options);
 

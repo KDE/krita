@@ -1,0 +1,58 @@
+From c7d0af5a1718dc4ad877033d66e7d0618d04e002 Mon Sep 17 00:00:00 2001
+From: Assam Boudjelthia <assam.boudjelthia@qt.io>
+Date: Fri, 31 Jan 2020 17:04:54 +0200
+Subject: [PATCH 19/43] Android: Fix native fileDialog not waiting for user
+ selection
+
+Add an event loop to wait for user file selection in native fileDialog
+
+Task-number: QTBUG-77214
+Change-Id: I3d97d6c3f46cf2a8ed0ee6f98e555e8d62e12cc3
+Reviewed-by: Ville Voutilainen <ville.voutilainen@qt.io>
+Reviewed-by: Andy Shaw <andy.shaw@qt.io>
+---
+ .../platforms/android/qandroidplatformfiledialoghelper.cpp     | 3 +++
+ .../platforms/android/qandroidplatformfiledialoghelper.h       | 2 ++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+index 7585b7eb95..fb979ab6cc 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -100,10 +100,13 @@ bool QAndroidPlatformFileDialogHelper::show(Qt::WindowFlags windowFlags, Qt::Win
+ 
+ void QAndroidPlatformFileDialogHelper::exec()
+ {
++    m_eventLoop.exec(QEventLoop::DialogExec);
+ }
+ 
+ void QAndroidPlatformFileDialogHelper::hide()
+ {
++    if (m_eventLoop.isRunning())
++        m_eventLoop.exit();
+     QtAndroidPrivate::unregisterActivityResultListener(this);
+ }
+ 
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+index e445aa2fef..5cd26af7c9 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+@@ -41,6 +41,7 @@
+ #define QANDROIDPLATFORMFILEDIALOGHELPER_H
+ 
+ #include <jni.h>
++#include <QEventLoop>
+ #include <qpa/qplatformdialoghelper.h>
+ #include <QtCore/private/qjnihelpers_p.h>
+ 
+@@ -72,6 +73,7 @@ public:
+     bool handleActivityResult(jint requestCode, jint resultCode, jobject data) override;
+ 
+ private:
++    QEventLoop m_eventLoop;
+     QUrl m_selectedFile;
+ };
+ 
+-- 
+2.20.1.windows.1
+

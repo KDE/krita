@@ -20,7 +20,7 @@ public:
 
 protected:
     void frameCompletedCallback(int frame, const KisRegion &requestedRegion) override;
-    void frameCancelledCallback(int frame) override;
+    void frameCancelledCallback(int frame, CancelReason cancelReason) override;
     void clearFrameRegenerationState(bool isCancelled) override;
 
 

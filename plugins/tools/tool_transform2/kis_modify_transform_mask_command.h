@@ -30,7 +30,7 @@ private:
 
 class KRITATOOLTRANSFORM_EXPORT KisInitializeTransformMaskKeyframesCommand : public KUndo2Command {
 public:
-    KisInitializeTransformMaskKeyframesCommand(KisTransformMaskSP mask);
+    KisInitializeTransformMaskKeyframesCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params);
 };
 
 class KRITATOOLTRANSFORM_EXPORT KisSetTransformMaskKeyframesCommand : public KUndo2Command {

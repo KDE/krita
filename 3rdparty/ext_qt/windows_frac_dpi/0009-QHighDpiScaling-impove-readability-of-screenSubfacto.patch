@@ -1,7 +1,7 @@
-From 616f7f10335a9421f9d135e9599db6448a180c1f Mon Sep 17 00:00:00 2001
+From 1492decc76d6cbb8d86bb5146ff2e1dae365df96 Mon Sep 17 00:00:00 2001
 From: Vitaly Fanaskov <vitaly.fanaskov@qt.io>
 Date: Wed, 6 Nov 2019 21:37:48 +0100
-Subject: [PATCH 09/11] QHighDpiScaling: impove readability of screenSubfactor
+Subject: [PATCH 45/47] QHighDpiScaling: impove readability of screenSubfactor
  method
 
 Task-number: QTBUG-53022
@@ -52,5 +52,5 @@ index 0ac4928504..fe9ac85c7d 100644
      }
  
 -- 
-2.24.1.windows.2
+2.20.1.windows.1
 

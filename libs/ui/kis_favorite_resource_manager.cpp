@@ -326,6 +326,11 @@ void KisFavoriteResourceManager::configChanged()
     updateFavoritePresets();
 }
 
+void KisFavoriteResourceManager::presetsChanged()
+{
+    emit updatePalettes();
+}
+
 void KisFavoriteResourceManager::init()
 {
     if (!m_initialized) {
@@ -334,6 +339,9 @@ void KisFavoriteResourceManager::init()
         m_tagModel = new KisTagModel(ResourceType::PaintOpPresets, this);
         m_resourcesProxyModel = new KisTagFilterResourceProxyModel(ResourceType::PaintOpPresets, this);
 
+        connect(m_resourcesProxyModel, SIGNAL(rowsInserted(QModelIndex, int, int)), this, SLOT(presetsChanged()));
+        connect(m_resourcesProxyModel, SIGNAL(rowsRemoved(QModelIndex, int, int)), this, SLOT(presetsChanged()));
+        
         m_resourceModel = new KisResourceModel(ResourceType::PaintOpPresets, this);
 
         KisResourceServerProvider::instance()->paintOpPresetServer();

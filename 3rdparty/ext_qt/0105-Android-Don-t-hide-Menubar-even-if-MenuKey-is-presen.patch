@@ -1,7 +1,7 @@
-From ac26c91a9316371ab2889b157f7d13bfe9ef84c4 Mon Sep 17 00:00:00 2001
+From e0fa0b918476aabbea256d2629029d71463765f4 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 1 Jun 2020 00:34:46 +0530
-Subject: [PATCH] Android: Don't hide Menubar even if MenuKey is present
+Subject: [PATCH 40/43] Android: Don't hide Menubar even if MenuKey is present
 
 Change-Id: Id00266522f548bcf09b582fb2b0d27ff6bbb9d73
 ---
@@ -9,10 +9,10 @@ Change-Id: Id00266522f548bcf09b582fb2b0d27ff6bbb9d73
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java b/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
-index f776888652..8fdf18c999 100644
+index 98d9e81ba9..74b14b6435 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
-@@ -1119,7 +1119,7 @@ public class QtActivityDelegate
+@@ -1120,7 +1120,7 @@ public class QtActivityDelegate
      {
          if (m_activity.getActionBar() == null)
              return;
@@ -22,5 +22,5 @@ index f776888652..8fdf18c999 100644
          else
              m_activity.getActionBar().show();
 -- 
-2.26.2
+2.20.1.windows.1
 

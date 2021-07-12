@@ -51,7 +51,7 @@ public:
         const quint8* srcRowStart  = params.srcRowStart;
         const quint8* maskRowStart = params.maskRowStart;
 
-        for(quint32 r=params.rows; r>0; --r) {
+        for (qint32 r = params.rows; r > 0; --r) {
             const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
             channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
             const quint8*        mask = maskRowStart;
@@ -104,7 +104,7 @@ public:
                         fullFlowAlpha = opacity > dstAlpha ? lerp(dstAlpha, opacity, mskAlpha) : dstAlpha;
                     }
 
-                    if (params.flow == 1.0) {
+                    if (params.flow == 1.0f) {
                         dstAlpha = fullFlowAlpha;
                     } else {
                         channels_type zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlphaLegacy(srcAlpha, dstAlpha);

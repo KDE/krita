@@ -284,12 +284,12 @@ inline T cfSoftLightSvg(T src, T dst) {
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
 
-    if(fsrc > 0.5f) {
-        qreal D = (fdst > 0.25f) ? sqrt(fdst) : ((16.0f*fdst - 12.0)*fdst + 4.0f)*fdst;
-        return scale<T>(fdst + (2.0f*fsrc - 1.0f) * (D - fdst));
+    if(fsrc > 0.5) {
+        qreal D = (fdst > 0.25) ? sqrt(fdst) : ((16.0*fdst - 12.0)*fdst + 4.0)*fdst;
+        return scale<T>(fdst + (2.0*fsrc - 1.0) * (D - fdst));
     }
 
-    return scale<T>(fdst - (1.0f - 2.0f * fsrc) * fdst * (1.0f - fdst));
+    return scale<T>(fdst - (1.0 - 2.0 * fsrc) * fdst * (1.0 - fdst));
 }
 
 
@@ -300,11 +300,11 @@ inline T cfSoftLight(T src, T dst) {
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
     
-    if(fsrc > 0.5f) {
-        return scale<T>(fdst + (2.0f * fsrc - 1.0f) * (sqrt(fdst) - fdst));
+    if(fsrc > 0.5) {
+        return scale<T>(fdst + (2.0 * fsrc - 1.0) * (sqrt(fdst) - fdst));
     }
     
-    return scale<T>(fdst - (1.0f - 2.0f*fsrc) * fdst * (1.0f - fdst));
+    return scale<T>(fdst - (1.0 - 2.0*fsrc) * fdst * (1.0 - fdst));
 }
 
 template<class T>
@@ -496,8 +496,8 @@ inline T cfHardOverlay(T src, T dst) {
     if (fsrc == 1.0) {
         return scale<T>(1.0);}
 
-    if(fsrc > 0.5f) {
-        return scale<T>(cfDivide(inv(2.0 * fsrc - 1.0f), fdst));
+    if(fsrc > 0.5) {
+        return scale<T>(cfDivide(inv(2.0 * fsrc - 1.0), fdst));
     }
     return scale<T>(mul(2.0 * fsrc, fdst));
 }

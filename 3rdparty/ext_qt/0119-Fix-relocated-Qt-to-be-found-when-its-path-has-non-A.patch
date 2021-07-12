@@ -1,8 +1,8 @@
-From 52e52dcb48baa577199425a4e582612011be32c0 Mon Sep 17 00:00:00 2001
+From c1c9fb29d2eaf4c7aff4b3fb695c6366d2d5ecb6 Mon Sep 17 00:00:00 2001
 From: Alexandru Croitor <alexandru.croitor@qt.io>
 Date: Thu, 22 Apr 2021 09:07:46 +0300
-Subject: [PATCH] Fix relocated Qt to be found when its path has non-ASCII
- characters
+Subject: [PATCH 36/47] Fix relocated Qt to be found when its path has
+ non-ASCII characters
 
 The path returned by dladdr seems to be encoded with the current
 locale encoding which means that if it contains unicode characters, the

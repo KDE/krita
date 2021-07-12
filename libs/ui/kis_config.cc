@@ -1468,7 +1468,7 @@ void KisConfig::setUseOcio(bool useOCIO) const
 
 int KisConfig::favoritePresets(bool defaultValue) const
 {
-    return (defaultValue ? 10 : m_cfg.readEntry("numFavoritePresets", 10));
+    return (defaultValue ? 10: m_cfg.readEntry("numFavoritePresets", 10));
 }
 
 void KisConfig::setFavoritePresets(const int value)
@@ -2134,6 +2134,16 @@ bool KisConfig::showBrushHud(bool defaultValue) const
 void KisConfig::setShowBrushHud(bool value)
 {
     m_cfg.writeEntry("showBrushHud", value);
+}
+
+bool KisConfig::showPaletteBottomBar(bool defaultValue) const
+{
+    return defaultValue ? true : m_cfg.readEntry("showPaletteBottomBar", true);
+}
+
+void KisConfig::setShowPaletteBottomBar(bool value)
+{
+    m_cfg.writeEntry("showPaletteBottomBar", value);
 }
 
 QString KisConfig::brushHudSetting(bool defaultValue) const

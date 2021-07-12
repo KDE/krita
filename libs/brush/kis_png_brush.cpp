@@ -108,7 +108,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         }
         setBrushTipImage(image);
         setBrushType(IMAGE);
-        setBrushApplication(isAllGray ? ALPHAMASK : IMAGESTAMP);
+        setBrushApplication(isAllGray ? ALPHAMASK : LIGHTNESSMAP);
         setHasColorAndTransparency(!isAllGray);
     }
 

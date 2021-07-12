@@ -1,7 +1,7 @@
-From e52fd9ac1087465c54507efa5360dbf814960688 Mon Sep 17 00:00:00 2001
+From abf7f3d27f0382476f4b1e2848815c2a2547bf25 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 13 Apr 2019 18:08:33 +0300
-Subject: [PATCH 05/22] Fetch stylus button remapping from WinTab driver
+Subject: [PATCH 05/47] Fetch stylus button remapping from WinTab driver
 
 The user can remap the stylus buttons using tablet driver settings.
 This information is available to the application via CSR_SYSBTNMAP

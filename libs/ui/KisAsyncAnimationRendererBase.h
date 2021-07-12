@@ -27,6 +27,22 @@ class KisRegion;
 class KRITAUI_EXPORT KisAsyncAnimationRendererBase : public QObject
 {
     Q_OBJECT
+
+public:
+    enum Flag
+    {
+        None = 0x0,
+        Cancellable = 0x1
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
+    enum CancelReason {
+        UserCancelled = 0,
+        RenderingFailed,
+        RenderingTimedOut
+    };
+    Q_ENUM(CancelReason)
+
 public:
     explicit KisAsyncAnimationRendererBase(QObject *parent = 0);
     virtual ~KisAsyncAnimationRendererBase();
@@ -36,12 +52,12 @@ public:
      * Only \p regionOfInterest is regenerated. If \p regionOfInterest is
      * empty, then entire bounds of the image is regenerated.
      */
-    void startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest);
+    void startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest, Flags flags = None);
 
     /**
      * Convenience overload that regenerates the full image
      */
-    void startFrameRegeneration(KisImageSP image, int frame);
+    void startFrameRegeneration(KisImageSP image, int frame, Flags flags = None);
 
     /**
      * @return true if the regeneration process is in progress
@@ -55,14 +71,15 @@ public Q_SLOTS:
      * After calling this slot requestedImage() becomes invalid.
      * @see requestedImage()
      */
-    void cancelCurrentFrameRendering();
+    void cancelCurrentFrameRendering(CancelReason cancelReason);
 
 Q_SIGNALS:
     void sigFrameCompleted(int frame);
-    void sigFrameCancelled(int frame);
+    void sigFrameCancelled(int frame, KisAsyncAnimationRendererBase::CancelReason cancelReason);
 
 private Q_SLOTS:
     void slotFrameRegenerationCancelled();
+    void slotFrameRegenerationTimedOut();
     void slotFrameRegenerationFinished(int frame);
 
 protected Q_SLOTS:
@@ -75,7 +92,7 @@ protected Q_SLOTS:
      * Called by a derived class to cancel processing of the frames. After calling
      * this method, the dialog will stop processing the frames and close.
      */
-    void notifyFrameCancelled(int frame);
+    void notifyFrameCancelled(int frame, KisAsyncAnimationRendererBase::CancelReason cancelReason);
 
 protected:
     /**
@@ -104,7 +121,7 @@ protected:
      * NOTE: the slot is called in the GUI thread. Don't forget to call
      *       notifyFrameCancelled() in he end of your call.
      */
-    virtual void frameCancelledCallback(int frame) = 0;
+    virtual void frameCancelledCallback(int frame, CancelReason cancelReason) = 0;
 
 
     /**
@@ -131,5 +148,7 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisAsyncAnimationRendererBase::Flags)
 
 #endif // KISASYNCANIMATIONRENDERERBASE_H

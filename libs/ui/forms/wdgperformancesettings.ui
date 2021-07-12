@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -44,14 +44,14 @@
           <string>RAM</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
-          <item column="0" row="0">
+          <item row="0" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Memory available:</string>
             </property>
            </widget>
           </item>
-          <item column="1" row="0">
+          <item row="0" column="1">
            <widget class="QLabel" name="lblTotalMemory">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -67,7 +67,7 @@
             </property>
            </widget>
           </item>
-          <item column="0" row="1">
+          <item row="1" column="0">
            <widget class="QLabel" name="label">
             <property name="toolTip">
              <string>Krita will not use more memory than this limit.</string>
@@ -77,7 +77,7 @@
             </property>
            </widget>
           </item>
-          <item column="1" row="1">
+          <item row="1" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit" native="true">
@@ -101,14 +101,14 @@
             </item>
            </layout>
           </item>
-          <item column="0" row="2">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Internal Pool:</string>
             </property>
            </widget>
           </item>
-          <item column="1" row="2">
+          <item row="2" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit" native="true">
@@ -129,7 +129,7 @@
             </item>
            </layout>
           </item>
-          <item column="0" row="3">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_4">
             <property name="toolTip">
              <string>When undo information reaches this limit, it will be stored in a temporary file and memory will be freed. Undo will be slower.</string>
@@ -139,7 +139,7 @@
             </property>
            </widget>
           </item>
-          <item column="1" row="3">
+          <item row="3" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit" native="true">
@@ -175,7 +175,7 @@
           <property name="bottomMargin">
            <number>6</number>
           </property>
-          <item column="0" row="0">
+          <item row="0" column="0">
            <widget class="QLabel" name="label_6">
             <property name="toolTip">
              <string>The swap file will not be bigger than this limit.</string>
@@ -185,7 +185,7 @@
             </property>
            </widget>
           </item>
-          <item column="1" row="0">
+          <item row="0" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
              <widget class="KisSliderSpinBox" name="sliderSwapSize" native="true">
@@ -209,14 +209,14 @@
             </item>
            </layout>
           </item>
-          <item column="0" row="1">
+          <item row="1" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>Swap File Location:</string>
             </property>
            </widget>
           </item>
-          <item column="1" row="1">
+          <item row="1" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QLabel" name="lblSwapFileLocation">
@@ -275,14 +275,14 @@
           <string>Multithreading</string>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
-          <item column="0" row="0">
+          <item row="0" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>CPU Limit:</string>
             </property>
            </widget>
           </item>
-          <item column="1" row="0">
+          <item row="0" column="1">
            <widget class="KisSliderSpinBox" name="sliderThreadsLimit" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -295,14 +295,14 @@
             </property>
            </widget>
           </item>
-          <item column="0" row="1">
+          <item row="1" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
              <string>Frame Rendering Clones Limit</string>
             </property>
            </widget>
           </item>
-          <item column="1" row="1">
+          <item row="1" column="1">
            <widget class="KisSliderSpinBox" name="sliderFrameClonesLimit" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -315,19 +315,39 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Frame Rendering Timeout</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="KisSliderSpinBox" name="sliderFrameTimeout" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The timeout for rendering one frame. If your animation rendering fails regularly with a timeout, try increasing this value&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Recommended value:&lt;/span&gt; 30...60 seconds&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
        <item>
         <layout class="QFormLayout" name="formLayout_limitFps">
-         <item column="0" row="0">
+         <item row="0" column="0">
           <widget class="QLabel" name="label_fps">
            <property name="text">
             <string>Limit frames per second while painting:</string>
            </property>
           </widget>
          </item>
-         <item column="1" row="0">
+         <item row="0" column="1">
           <widget class="KisSliderSpinBox" name="sliderFpsLimit" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -452,7 +472,7 @@
           <string>Cache Generation Options</string>
          </property>
          <layout class="QFormLayout" name="formLayout_4">
-          <item column="0" row="0">
+          <item row="0" column="0">
            <widget class="QCheckBox" name="chkCachedFramesSizeLimit">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Render scaled down version of the frame if the image is bigger than the provided limit. Make sure you enable this option when using on-disk storage backend.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -462,7 +482,7 @@
             </property>
            </widget>
           </item>
-          <item column="1" row="0">
+          <item row="0" column="1">
            <widget class="KisSliderSpinBox" name="intCachedFramesSizeLimit" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -475,7 +495,7 @@
             </property>
            </widget>
           </item>
-          <item column="0" row="1">
+          <item row="1" column="0">
            <widget class="QCheckBox" name="chkUseRegionOfInterest">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When the image is too big, render only currently visible part of it&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -485,7 +505,7 @@
             </property>
            </widget>
           </item>
-          <item column="1" row="1">
+          <item row="1" column="1">
            <widget class="KisSliderSpinBox" name="intRegionOfInterestMargin" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -498,7 +518,7 @@
             </property>
            </widget>
           </item>
-          <item column="0" row="2">
+          <item row="2" column="0">
            <widget class="QCheckBox" name="chkBackgroundCacheGeneration">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Automatically prerender animation cache in background when the user is idle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

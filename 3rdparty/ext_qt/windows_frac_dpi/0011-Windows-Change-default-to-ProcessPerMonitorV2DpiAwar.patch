@@ -1,7 +1,7 @@
-From ed0811952e6bb78b8f31b863f2396ed6ff7cf3ce Mon Sep 17 00:00:00 2001
+From af038fed43912698170de6b637ddfc286ec82e0c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Thu, 21 Jan 2021 14:17:28 +0100
-Subject: [PATCH 11/11] Windows: Change default to ProcessPerMonitorV2DpiAware
+Subject: [PATCH 47/47] Windows: Change default to ProcessPerMonitorV2DpiAware
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -15,7 +15,7 @@ Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@qt.io>
  1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
-index 2ec61aad80..3f3acb2c5c 100644
+index 8923972d49..9c2f3c43d7 100644
 --- a/src/plugins/platforms/windows/qwindowsintegration.cpp
 +++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
 @@ -230,9 +230,11 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
@@ -33,7 +33,7 @@ index 2ec61aad80..3f3acb2c5c 100644
      m_options = parseOptions(paramList, &tabletAbsoluteRange, &dpiAwareness);
      QWindowsFontDatabase::setFontOptions(m_options);
  
-@@ -248,7 +250,6 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
+@@ -261,7 +263,6 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
          if (!QCoreApplication::testAttribute(Qt::AA_PluginApplication)) {
  
              // DpiAwareV2 requires using new API
@@ -42,5 +42,5 @@ index 2ec61aad80..3f3acb2c5c 100644
                  m_context.setProcessDpiV2Awareness();
                  qCDebug(lcQpaWindows)
 -- 
-2.24.1.windows.2
+2.20.1.windows.1
 

@@ -18,6 +18,7 @@
 #include "KisMimeDatabase.h"
 #include "dialogs/KisAsyncAnimationFramesSaveDialog.h"
 #include "kis_time_span.h"
+#include <QMessageBox>
 
 #include "krita_container_utils.h"
 
@@ -133,8 +134,10 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
             d.remove(f);
         }
 
+    } else if (result == KisAsyncAnimationFramesSaveDialog::RenderTimedOut) {
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Rendering error"), "Animation frame rendering has timed out. Output files are incomplete.\nTry to increase \"Frame Rendering Timeout\" or reduce \"Frame Rendering Clones Limit\" in Krita settings");
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
-        viewManager->mainWindow()->viewManager()->showFloatingMessage(i18n("Failed to render animation frames!"), QIcon());
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Rendering error"), i18n("Failed to render animation frames! Output files are incomplete."));
     }
 }
 

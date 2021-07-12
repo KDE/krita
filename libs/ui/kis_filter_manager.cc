@@ -44,23 +44,14 @@
 #include "kis_layer_utils.h"
 #include <KisGlobalResourcesInterface.h>
 
-
 struct KisFilterManager::Private {
-    Private()
-        : reapplyAction(0)
-        , reapplyActionReprompt(0)
-        , actionCollection(0)
-        , actionManager(0)
-        , view(0)
-    {
-    }
-    KisAction* reapplyAction;
-    KisAction* reapplyActionReprompt;
+    KisAction* reapplyAction = nullptr;
+    KisAction* reapplyActionReprompt = nullptr;
     QHash<QString, KActionMenu*> filterActionMenus;
     QHash<KisFilter*, QAction *> filters2Action;
-    KActionCollection *actionCollection;
-    KisActionManager *actionManager;
-    KisViewManager *view;
+    KActionCollection *actionCollection = nullptr;
+    KisActionManager *actionManager = nullptr;
+    KisViewManager *view = nullptr;
 
     KisFilterConfigurationSP lastConfiguration;
     KisFilterConfigurationSP currentlyAppliedConfiguration;
@@ -75,7 +66,11 @@ struct KisFilterManager::Private {
 
     KisSignalMapper actionsMapper;
 
-    QPointer<KisDlgFilter> filterDialog;
+    /*!
+     * \brief The filter dialog shown to the user
+     * \note parent QWidget is set to mainwindow, so we delegate deletion of this widget to Qt (we don't `delete` it ourselves)
+     */
+    KisDlgFilter *filterDialog = nullptr;
 };
 
 KisFilterManager::KisFilterManager(KisViewManager * view)
@@ -86,7 +81,6 @@ KisFilterManager::KisFilterManager(KisViewManager * view)
 
 KisFilterManager::~KisFilterManager()
 {
-    delete d;
 }
 
 void KisFilterManager::setView(QPointer<KisView>imageView)
@@ -259,7 +253,9 @@ void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfig
     if (filter->showConfigurationWidget()) {
         if (!d->filterDialog) {
             d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this, d->view->mainWindow());
-            d->filterDialog->setAttribute(Qt::WA_DeleteOnClose);
+            d->filterDialog->setAttribute(Qt::WA_DeleteOnClose); // make sure that the dialog is deleted when calling `done()`
+            connect(d->filterDialog, SIGNAL(finished(int)),
+                    this, SLOT(filterDialogHasFinished(int)));
         }
 
         d->filterDialog->setFilter(filter, overrideDefaultConfig);
@@ -388,7 +384,7 @@ void KisFilterManager::finish()
     d->lastExtendedUpdateRect = QRect();
 }
 
-void KisFilterManager::cancel()
+void KisFilterManager::cancelRunningStroke()
 {
     Q_ASSERT(d->currentStrokeId);
 
@@ -401,8 +397,13 @@ void KisFilterManager::cancel()
     d->lastProcessRect = QRect();
     d->lastExtendedUpdateRect = QRect();
 
-    // cleanup before the canvas is deleted
-    delete d->filterDialog;
+}
+
+void KisFilterManager::cancelDialog()
+{
+    cancelRunningStroke();
+
+    d->filterDialog->reject();
 }
 
 bool KisFilterManager::isStrokeRunning() const
@@ -437,4 +438,9 @@ void KisFilterManager::slotStrokeCancelRequested()
     if (d->currentStrokeId && d->filterDialog) {
         d->filterDialog->reject();
     }
+}
+void KisFilterManager::filterDialogHasFinished(int)
+{
+    // as far as we are concerned, filterDialog has been deleted
+    d->filterDialog = nullptr;
 }

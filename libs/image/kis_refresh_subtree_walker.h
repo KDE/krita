@@ -15,7 +15,8 @@ class KRITAIMAGE_EXPORT KisRefreshSubtreeWalker : public virtual KisBaseRectsWal
 {
 
 public:
-    KisRefreshSubtreeWalker(QRect cropRect)
+    KisRefreshSubtreeWalker(QRect cropRect, bool skipNonRenderableNodes = false)
+        : m_skipNonRenderableNodes(skipNonRenderableNodes)
     {
         setCropRect(cropRect);
     }
@@ -111,6 +112,13 @@ protected:
             }
         }
 
+        /**
+         * If the node is not renderable and we don't care about hidden groups,
+         * e.g. when generating animation frames, then just skip the entire group.
+         */
+        if (m_skipNonRenderableNodes && !startWith->shouldBeRendered()) return;
+
+
         KisProjectionLeafSP currentLeaf = startWith->lastChild();
         while(currentLeaf) {
             NodePosition pos = N_FILTHY | calculateNodePosition(currentLeaf);
@@ -129,6 +137,9 @@ protected:
             currentLeaf = currentLeaf->prevSibling();
         }
     }
+
+private:
+    bool m_skipNonRenderableNodes = false;
 };
 
 

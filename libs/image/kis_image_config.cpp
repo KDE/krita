@@ -555,6 +555,17 @@ void KisImageConfig::setFrameRenderingClones(int value)
     m_config.writeEntry("frameRenderingClones", value);
 }
 
+int KisImageConfig::frameRenderingTimeout(bool defaultValue) const
+{
+    const int defaultFrameRenderingTimeout = 30000; // 30 ms
+    return defaultValue ? defaultFrameRenderingTimeout : m_config.readEntry("frameRenderingTimeout", defaultFrameRenderingTimeout);
+}
+
+void KisImageConfig::setFrameRenderingTimeout(int value)
+{
+    m_config.writeEntry("frameRenderingTimeout", value);
+}
+
 int KisImageConfig::fpsLimit(bool defaultValue) const
 {
     int limit = defaultValue ? 100 : m_config.readEntry("fpsLimit", 100);

@@ -243,10 +243,11 @@ void KisCustomBrushWidget::createBrush()
 
         m_brush = KisBrushSP(new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes));
     }
-
-    static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(colorAsMask->isChecked() ? ALPHAMASK : IMAGESTAMP);
     if (colorAsMask->isChecked()) {
         static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage(preserveAlpha->isChecked());
+        static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(preserveAlpha->isChecked() ? LIGHTNESSMAP : ALPHAMASK);
+    } else {
+        static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(IMAGESTAMP);
     }
     m_brush->setSpacing(spacingWidget->spacing());
     m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());

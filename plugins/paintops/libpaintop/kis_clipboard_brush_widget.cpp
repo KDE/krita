@@ -86,9 +86,11 @@ void KisClipboardBrushWidget::slotCreateBrush()
             m_brush->setName(TEMPORARY_CLIPBOARD_BRUSH_NAME);
             m_brush->setValid(true);
 
-            static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(colorAsmask->isChecked() ? ALPHAMASK : IMAGESTAMP);
             if (colorAsmask->isChecked()) {
                 static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage(preserveAlpha->isChecked());
+                static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(preserveAlpha->isChecked() ? LIGHTNESSMAP : ALPHAMASK);
+            } else {
+                static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(IMAGESTAMP);
             }
 
             int w = preview->size().width()-10;

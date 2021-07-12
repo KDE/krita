@@ -1,7 +1,7 @@
-From c682ade6f8598b995cc20c78d45fed903e6375b8 Mon Sep 17 00:00:00 2001
+From 5bc6f1c26a036edd5df1e502de867f50df8bf443 Mon Sep 17 00:00:00 2001
 From: Volker Krause <vkrause@kde.org>
 Date: Sat, 26 Jan 2019 18:30:56 +0100
-Subject: [PATCH 1/5] Add file engine for Android content URLs
+Subject: [PATCH 13/43] Add file engine for Android content URLs
 
 The "file dialog" on Android returns such URLs, which so far required
 special-casing this in application code. With this change QFile can
@@ -22,7 +22,7 @@ Reviewed-by: Aleix Pol Gonzalez <aleixpol@kde.org>
  create mode 100644 src/plugins/platforms/android/androidcontentfileengine.h
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 0d8bf7b8a0..34a8c7d788 100644
+index ad78619cc9..cb8c949674 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -41,6 +41,7 @@
@@ -244,7 +244,7 @@ index 0000000000..db3def03d6
 +
 +#endif // ANDROIDCONTENTFILEENGINE_H
 diff --git a/src/plugins/platforms/android/androidjnimain.cpp b/src/plugins/platforms/android/androidjnimain.cpp
-index 74edfd8356..6ae429b24e 100644
+index 9ce3353040..a60b121979 100644
 --- a/src/plugins/platforms/android/androidjnimain.cpp
 +++ b/src/plugins/platforms/android/androidjnimain.cpp
 @@ -49,6 +49,7 @@
@@ -271,7 +271,7 @@ index 74edfd8356..6ae429b24e 100644
      m_mainLibraryHnd = nullptr;
      { // Set env. vars
          const char *nativeString = env->GetStringUTFChars(environmentString, 0);
-@@ -555,6 +558,8 @@ static void quitQtAndroidPlugin(JNIEnv *env, jclass /*clazz*/)
+@@ -556,6 +559,8 @@ static void quitQtAndroidPlugin(JNIEnv *env, jclass /*clazz*/)
      m_androidPlatformIntegration = nullptr;
      delete m_androidAssetsFileEngineHandler;
      m_androidAssetsFileEngineHandler = nullptr;
@@ -281,5 +281,5 @@ index 74edfd8356..6ae429b24e 100644
  
  static void terminateQt(JNIEnv *env, jclass /*clazz*/)
 -- 
-2.26.2
+2.20.1.windows.1
 

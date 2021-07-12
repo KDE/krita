@@ -1,8 +1,8 @@
 if (APPLE)
 project(kritaintegration)
 
-if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-    set(XCODEBUILD_ARCHS "-arch" "x86_64")
+if (NOT MACOS_UNIVERSAL)
+    set(XCODEBUILD_ARCHS "-arch" "${CMAKE_SYSTEM_PROCESSOR}")
 endif()
 
 add_custom_target( kritaintegration ALL xcodebuild -project "${CMAKE_CURRENT_SOURCE_DIR}/integration.xcodeproj" ${XCODEBUILD_ARCHS} -alltargets -configuration Release COMMENT build all macOS plugins )

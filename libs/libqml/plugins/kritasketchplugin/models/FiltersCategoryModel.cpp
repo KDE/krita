@@ -259,7 +259,7 @@ void FiltersCategoryModel::setPreviewEnabled(bool enabled)
         if (enabled)
             filterConfigurationChanged(d->previewFilterID, d->categories[d->currentCategory]);
         else
-            d->view->filterManager()->cancel();
+            d->view->filterManager()->cancelRunningStroke();
     }
 }
 

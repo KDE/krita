@@ -94,7 +94,7 @@ export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 
 # export PYTHONHOME=${KIS_INSTALL_DIR}
-# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.9/site-packages:${KIS_INSTALL_DIR}/lib/python3.9
+# export PYTHONPATH=${PYTHONPATH}:${KIS_INSTALL_DIR}/lib/Python.framework/Versions/Current/lib/python3.9/site-packages
 
 # This will make the debug output prettier
 export KDE_COLOR_DEBUG=1
@@ -117,7 +117,7 @@ fi
 # Prints stderr and stdout to log files
 # >(tee) works but breaks sigint
 log_cmd () {
-    "$@" 1>> ${OUPUT_LOG}
+    "$@" 2>&1 | tee -a ${OUPUT_LOG}
     osxbuild_error="${?}"
 }
 
@@ -310,7 +310,7 @@ build_3rdparty () {
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
         -DINSTALL_ROOT=${KIS_INSTALL_DIR} \
         -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
-        -DAPPLE=1
+        -DMACOS_UNIVERSAL=${OSXBUILD_UNIVERSAL}
 
         # -DCPPFLAGS=-I${KIS_INSTALL_DIR}/include \
         # -DLDFLAGS=-L${KIS_INSTALL_DIR}/lib
@@ -458,7 +458,7 @@ build_krita () {
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
         -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
-        -DAPPLE=1"
+        -DMACOS_UNIVERSAL=${OSXBUILD_UNIVERSAL}"
 
     # hack:: Jenkins runs in x86_64 env, force run cmake in arm64 env.
     if [[ ${OSXBUILD_UNIVERSAL} ]]; then
@@ -658,9 +658,6 @@ consolidate_universal_binaries () {
                 if [[ -f "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
                     log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
                     lipo -create "${f}" "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}"
-                else
-                    log "removing... ${f}"
-                    rm "${f}"
                 fi
             fi
             # log "ignoring ${f}"

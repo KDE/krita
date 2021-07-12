@@ -338,14 +338,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     intForcedFontDPI->setValue(forcedFontDPI > 0 ? forcedFontDPI : qt_defaultDpi());
     intForcedFontDPI->setEnabled(forcedFontDPI > 0);
     connect(chkForcedFontDPI, SIGNAL(toggled(bool)), intForcedFontDPI, SLOT(setEnabled(bool)));
-
-#ifdef Q_OS_WINxx
-    lblUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed (may cause severe artifacts when using WinTab tablet API):"));
-#else
-    lblUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed:"));
-#endif
-
-    chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 }
 
 void GeneralTab::setDefault()
@@ -419,8 +411,6 @@ void GeneralTab::setDefault()
     chkForcedFontDPI->setChecked(false);
     intForcedFontDPI->setValue(qt_defaultDpi());
     intForcedFontDPI->setEnabled(false);
-
-    chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -858,6 +848,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
 
 void TabletSettingsTab::setDefault()
 {
+    KisConfig cfg(true);
     KisCubicCurve curve;
     curve.fromString(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
@@ -874,7 +865,6 @@ void TabletSettingsTab::setDefault()
     const bool isWinInkAvailable = KisTabletSupportWin8::isAvailable();
 #endif
     if (isWinInkAvailable) {
-        KisConfig cfg(true);
         m_page->radioWintab->setChecked(!cfg.useWin8PointerInput(true));
         m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput(true));
     } else {
@@ -884,6 +874,8 @@ void TabletSettingsTab::setDefault()
 #else
         m_page->grpTabletApi->setVisible(false);
 #endif
+
+    m_page->chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 }
 
 TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
@@ -933,6 +925,13 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page->grpTabletApi->setVisible(false);
 #endif
     connect(m_page->btnTabletTest, SIGNAL(clicked()), SLOT(slotTabletTest()));
+
+#ifdef Q_OS_WIN
+    m_page->chkUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed (may cause severe artifacts when using WinTab tablet API)"));
+#else
+    m_page->chkUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed"));
+#endif
+    m_page->chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 }
 
 void TabletSettingsTab::slotTabletTest()
@@ -1044,6 +1043,11 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
+
+    sliderFrameTimeout->setRange(5, 600);
+    sliderFrameTimeout->setSuffix(i18nc("suffix for \"seconds\"", " sec"));
+    sliderFrameTimeout->setValue(cfg.frameRenderingTimeout() / 1000);
+
     sliderFpsLimit->setRange(20, 300);
     sliderFpsLimit->setSuffix(i18n(" fps"));
 
@@ -1160,6 +1164,7 @@ void PerformanceTab::save()
 
     cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
     cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
+    cfg.setFrameRenderingTimeout(sliderFrameTimeout->value() * 1000);
     cfg.setFpsLimit(sliderFpsLimit->value());
 
     {
@@ -1616,6 +1621,9 @@ void PopupPaletteTab::load()
     sbPaletteSize->setValue(config.readEntry("popuppalette/size", 385));
     sbSelectorSize->setValue(config.readEntry("popuppalette/selectorSize", 140));
     cmbSelectorType->setCurrentIndex(config.readEntry<bool>("popuppalette/usevisualcolorselector", false) ? 1 : 0);
+    chkShowColorHistory->setChecked(config.readEntry("popuppalette/showColorHistory", true));
+    chkShowRotationTrack->setChecked(config.readEntry("popuppalette/showRotationTrack", true));
+    chkUseDynamicSlotCount->setChecked(config.readEntry("popuppalette/useDynamicSlotCount", true));
 }
 
 void PopupPaletteTab::save()
@@ -1625,7 +1633,9 @@ void PopupPaletteTab::save()
     config.writeEntry("popuppalette/size", sbPaletteSize->value());
     config.writeEntry("popuppalette/selectorSize", sbSelectorSize->value());
     config.writeEntry<bool>("popuppalette/usevisualcolorselector", cmbSelectorType->currentIndex() > 0);
-
+    config.writeEntry<bool>("popuppalette/showColorHistory", chkShowColorHistory->isChecked());
+    config.writeEntry<bool>("popuppalette/showRotationTrack", chkShowRotationTrack->isChecked());
+    config.writeEntry<bool>("popuppalette/useDynamicSlotCount", chkUseDynamicSlotCount->isChecked());
 }
 
 void PopupPaletteTab::setDefault()
@@ -1635,6 +1645,9 @@ void PopupPaletteTab::setDefault()
     sbPaletteSize->setValue(385);
     sbSelectorSize->setValue(140);
     cmbSelectorType->setCurrentIndex(0);
+    chkShowColorHistory->setChecked(true);
+    chkShowRotationTrack->setChecked(true);
+    chkUseDynamicSlotCount->setChecked(true);
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -1969,6 +1982,7 @@ bool KisDlgPreferences::editPreferences()
             cfg.setUseWin8PointerInput(m_tabletSettings->m_page->radioWin8PointerInput->isChecked());
         }
 #endif
+        cfg.writeEntry<bool>("useTimestampsForBrushSpeed", m_tabletSettings->m_page->chkUseTimestampsForBrushSpeed->isChecked());
 
         m_performanceSettings->save();
 
@@ -2019,8 +2033,6 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.logImportantSettings();
         cfg.writeEntry("forcedDpiForQtFontBugWorkaround", m_general->forcedFontDpi());
-
-        cfg.writeEntry<bool>("useTimestampsForBrushSpeed", m_general->chkUseTimestampsForBrushSpeed->isChecked());
     }
 
     return !m_cancelClicked;

@@ -114,15 +114,15 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vCosaY_(cosay_);
     Vc::float_v vSinaY_(sinay_);
 
-    Vc::float_v vXCoeff(d->xcoef);
-    Vc::float_v vYCoeff(d->ycoef);
+    Vc::float_v vXCoeff(static_cast<float>(d->xcoef));
+    Vc::float_v vYCoeff(static_cast<float>(d->ycoef));
 
-    Vc::float_v vTransformedFadeX(d->transformedFadeX);
-    Vc::float_v vTransformedFadeY(d->transformedFadeY);
+    Vc::float_v vTransformedFadeX(static_cast<float>(d->transformedFadeX));
+    Vc::float_v vTransformedFadeY(static_cast<float>(d->transformedFadeY));
 
     Vc::float_v vOne(Vc::One);
 
-    for (int i=0; i < width; i+= Vc::float_v::size()){
+    for (size_t i=0; i < static_cast<size_t>(width); i+= Vc::float_v::size()){
 
         Vc::float_v x_ = currentIndices - vCenterX;
 
@@ -189,23 +189,23 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
     Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
 
-    Vc::float_v increment((float)Vc::float_v::size());
+    Vc::float_v increment(static_cast<float>(Vc::float_v::size()));
     Vc::float_v vCenterX(centerX);
-    Vc::float_v vCenter(d->center);
+    Vc::float_v vCenter(static_cast<float>(d->center));
 
     Vc::float_v vCosa(cosa);
     Vc::float_v vSina(sina);
     Vc::float_v vCosaY_(cosay_);
     Vc::float_v vSinaY_(sinay_);
 
-    Vc::float_v vYCoeff(d->ycoef);
-    Vc::float_v vDistfactor(d->distfactor);
-    Vc::float_v vAlphafactor(d->alphafactor);
+    Vc::float_v vYCoeff(static_cast<float>(d->ycoef));
+    Vc::float_v vDistfactor(static_cast<float>(d->distfactor));
+    Vc::float_v vAlphafactor(static_cast<float>(d->alphafactor));
 
     Vc::float_v vZero(Vc::Zero);
     Vc::float_v vValMax(255.f);
 
-    for (int i=0; i < width; i+= Vc::float_v::size()){
+    for (size_t i=0; i < static_cast<size_t>(width); i+= Vc::float_v::size()){
 
         Vc::float_v x_ = currentIndices - vCenterX;
 
@@ -281,9 +281,9 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vCosaY_(cosay_);
     Vc::float_v vSinaY_(sinay_);
 
-    Vc::float_v vYCoeff(d->ycoef);
-    Vc::float_v vXCoeff(d->xcoef);
-    Vc::float_v vCurveResolution(d->curveResolution);
+    Vc::float_v vYCoeff(static_cast<float>(d->ycoef));
+    Vc::float_v vXCoeff(static_cast<float>(d->xcoef));
+    Vc::float_v vCurveResolution(static_cast<float>(d->curveResolution));
 
     Vc::float_v vCurvedData(Vc::Zero);
     Vc::float_v vCurvedData1(Vc::Zero);
@@ -291,7 +291,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
 
-    for (int i=0; i < width; i+= Vc::float_v::size()){
+    for (size_t i=0; i < static_cast<size_t>(width); i+= Vc::float_v::size()){
 
         Vc::float_v x_ = currentIndices - vCenterX;
 
@@ -392,17 +392,17 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vCosaY_(cosay_);
     Vc::float_v vSinaY_(sinay_);
 
-    Vc::float_v vXCoeff(d->xcoeff);
-    Vc::float_v vYCoeff(d->ycoeff);
+    Vc::float_v vXCoeff(static_cast<float>(d->xcoeff));
+    Vc::float_v vYCoeff(static_cast<float>(d->ycoeff));
 
-    Vc::float_v vTransformedFadeX(d->transformedFadeX);
-    Vc::float_v vTransformedFadeY(d->transformedFadeY);
+    Vc::float_v vTransformedFadeX(static_cast<float>(d->transformedFadeX));
+    Vc::float_v vTransformedFadeY(static_cast<float>(d->transformedFadeY));
 
     Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
     Vc::float_v vTolerance(10000.f);
 
-    for (int i=0; i < width; i+= Vc::float_v::size()){
+    for (size_t i=0; i < static_cast<size_t>(width); i+= Vc::float_v::size()){
 
         Vc::float_v x_ = currentIndices - vCenterX;
 
@@ -469,19 +469,18 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vCosaY_(cosay_);
     Vc::float_v vSinaY_(sinay_);
 
-    Vc::float_v vhalfWidth(d->halfWidth);
-    Vc::float_v vhalfHeight(d->halfHeight);
-    Vc::float_v vXFade(d->xfade);
-    Vc::float_v vYFade(d->yfade);
+    Vc::float_v vhalfWidth(static_cast<float>(d->halfWidth));
+    Vc::float_v vhalfHeight(static_cast<float>(d->halfHeight));
+    Vc::float_v vXFade(static_cast<float>(d->xfade));
+    Vc::float_v vYFade(static_cast<float>(d->yfade));
 
-    Vc::float_v vAlphafactor(d->alphafactor);
+    Vc::float_v vAlphafactor(static_cast<float>(d->alphafactor));
 
     Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
     Vc::float_v vValMax(255.f);
 
-    for (int i=0; i < width; i+= Vc::float_v::size()){
-
+    for (size_t i = 0; i < static_cast<size_t>(width); i += Vc::float_v::size()) {
         Vc::float_v x_ = currentIndices - vCenterX;
 
         Vc::float_v xr = x_ * vCosa - vSinaY_;
@@ -560,16 +559,15 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vCosaY_(cosay_);
     Vc::float_v vSinaY_(sinay_);
 
-    Vc::float_v vYCoeff(d->ycoeff);
-    Vc::float_v vXCoeff(d->xcoeff);
-    Vc::float_v vCurveResolution(d->curveResolution);
+    Vc::float_v vYCoeff(static_cast<float>(d->ycoeff));
+    Vc::float_v vXCoeff(static_cast<float>(d->xcoeff));
+    Vc::float_v vCurveResolution(static_cast<float>(d->curveResolution));
 
     Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
     Vc::float_v vValMax(255.f);
 
-    for (int i=0; i < width; i+= Vc::float_v::size()){
-
+    for (size_t i = 0; i < static_cast<size_t>(width); i += Vc::float_v::size()) {
         Vc::float_v x_ = currentIndices - vCenterX;
 
         Vc::float_v xr = x_ * vCosa - vSinaY_;

@@ -17,6 +17,7 @@ if(UNIX)
             "PYTHONPATH=${KRITA_PYTHONPATH}"
             ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
+
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
             ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_pyqt} --optimize=1
@@ -25,6 +26,15 @@ if(UNIX)
 
         UPDATE_COMMAND ""
     )
+    if (APPLE)
+        ExternalProject_Add_Step( ext_pyqtbuilder rename_egg
+            WORKING_DIRECTORY <SOURCE_DIR>
+            COMMENT "Removing pyqt_builder egg dependencies requirements"
+            COMMAND ${CMAKE_COMMAND} -E remove <SOURCE_DIR>/PyQt_builder.egg-info/requires.txt
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macOS-remove-install_requires.patch
+            DEPENDEES patch
+        )
+    endif()
 
     ExternalProject_Add( ext_pyqt5
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

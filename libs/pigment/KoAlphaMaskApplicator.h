@@ -69,24 +69,24 @@ struct KoAlphaMaskApplicator<
                                      const float *alpha,
                                      qint32 nPixels) const override
     {
-        const int block1 = nPixels / Vc::float_v::size();
-        const int block2 = nPixels % Vc::float_v::size();
-        const int vectorPixelStride = numChannels * Vc::float_v::size();
+        const int block1 = nPixels / static_cast<int>(Vc::float_v::size());
+        const int block2 = nPixels % static_cast<int>(Vc::float_v::size());
+        const int vectorPixelStride = numChannels * static_cast<int>(Vc::float_v::size());
 
         for (int i = 0; i < block1; i++) {
             Vc::float_v maskAlpha(alpha, Vc::Unaligned);
 
             uint_v data_i;
-            data_i.load((const quint32*)pixels, Vc::Unaligned);
+            data_i.load(reinterpret_cast<const quint32*>(pixels), Vc::Unaligned);
 
-            Vc::float_v pixelAlpha = Vc::float_v(int_v(data_i >> 24));
+            Vc::float_v pixelAlpha = Vc::simd_cast<Vc::float_v>(data_i >> 24U);
             pixelAlpha *= Vc::float_v(1.0f) - maskAlpha;
 
             const quint32 colorChannelsMask = 0x00FFFFFF;
 
             uint_v pixelAlpha_i = uint_v(int_v(Vc::round(pixelAlpha)));
             data_i = (data_i & colorChannelsMask) | (pixelAlpha_i << 24);
-            data_i.store((quint32*)pixels, Vc::Unaligned);
+            data_i.store(reinterpret_cast<quint32 *>(pixels), Vc::Unaligned);
 
             pixels += vectorPixelStride;
             alpha += Vc::float_v::size();
@@ -100,9 +100,9 @@ struct KoAlphaMaskApplicator<
                                                   const float * alpha,
                                                   const quint8 *brushColor,
                                                   qint32 nPixels) const override {
-        const int block1 = nPixels / Vc::float_v::size();
-        const int block2 = nPixels % Vc::float_v::size();
-        const int vectorPixelStride = numChannels * Vc::float_v::size();
+        const int block1 = nPixels / static_cast<int>(Vc::float_v::size());
+        const int block2 = nPixels % static_cast<int>(Vc::float_v::size());
+        const int vectorPixelStride = numChannels * static_cast<int>(Vc::float_v::size());
         const uint_v brushColor_i(*reinterpret_cast<const quint32*>(brushColor) & 0x00FFFFFFu);
 
         for (int i = 0; i < block1; i++) {
@@ -111,7 +111,7 @@ struct KoAlphaMaskApplicator<
 
             uint_v pixelAlpha_i = uint_v(int_v(Vc::round(pixelAlpha)));
             uint_v data_i = brushColor_i | (pixelAlpha_i << 24);
-            data_i.store((quint32*)pixels, Vc::Unaligned);
+            data_i.store(reinterpret_cast<quint32 *>(pixels), Vc::Unaligned);
 
             pixels += vectorPixelStride;
             alpha += Vc::float_v::size();
@@ -128,9 +128,9 @@ struct KoAlphaMaskApplicator<
     }
 
     void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override {
-        const int block1 = nPixels / Vc::float_v::size();
-        const int block2 = nPixels % Vc::float_v::size();
-        const int vectorPixelStride = numChannels * Vc::float_v::size();
+        const int block1 = nPixels / static_cast<int>(Vc::float_v::size());
+        const int block2 = nPixels % static_cast<int>(Vc::float_v::size());
+        const int vectorPixelStride = numChannels * static_cast<int>(Vc::float_v::size());
         const uint_v brushColor_i(*reinterpret_cast<const quint32*>(brushColor) & 0x00FFFFFFu);
 
         const uint_v redChannelMask(0xFF);
@@ -144,7 +144,7 @@ struct KoAlphaMaskApplicator<
             const uint_v pixelAlpha_i = multiply(redChannelMask - pixelRed, pixelAlpha);
 
             const uint_v data_i = brushColor_i | (pixelAlpha_i << 24);
-            data_i.store((quint32*)dst, Vc::Unaligned);
+            data_i.store(reinterpret_cast<quint32 *>(dst), Vc::Unaligned);
 
             dst += vectorPixelStride;
             brush += Vc::float_v::size();

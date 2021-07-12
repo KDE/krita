@@ -1,7 +1,7 @@
-From 7547716c65630507a17d3beb73de46754071e78c Mon Sep 17 00:00:00 2001
+From befc66fd17772478fbb1212831dba86048e707ac Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Sat, 7 Oct 2017 01:35:29 +0200
-Subject: [PATCH 06/11] Add high-DPI scale factor rounding policy C++ API
+Subject: [PATCH 42/47] Add high-DPI scale factor rounding policy C++ API
 
 This API enables tuning of how Qt rounds fractional scale factors, and
 corresponds to the QT_SCALE_FACTOR_ROUNDING_POLICY environment
@@ -28,10 +28,10 @@ Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
  7 files changed, 106 insertions(+), 31 deletions(-)
 
 diff --git a/src/corelib/global/qnamespace.h b/src/corelib/global/qnamespace.h
-index dec2c44637..c9135fb2c6 100644
+index 3ab9921986..423c9b4a5b 100644
 --- a/src/corelib/global/qnamespace.h
 +++ b/src/corelib/global/qnamespace.h
-@@ -1727,6 +1727,15 @@ public:
+@@ -1728,6 +1728,15 @@ public:
          ChecksumItuV41
      };
  
@@ -47,7 +47,7 @@ index dec2c44637..c9135fb2c6 100644
  #ifndef Q_QDOC
      // NOTE: Generally, do not add QT_Q_ENUM if a corresponding Q_Q_FLAG exists.
      QT_Q_ENUM(ScrollBarPolicy)
-@@ -1812,6 +1821,7 @@ public:
+@@ -1813,6 +1822,7 @@ public:
      QT_Q_ENUM(MouseEventSource)
      QT_Q_FLAG(MouseEventFlag)
      QT_Q_ENUM(ChecksumType)
@@ -86,7 +86,7 @@ index 5bba8c5fe5..cce67eb376 100644
 +  \value PassThrough Don't round.
 +*/
 diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
-index 0e8abe76ce..275e4a808c 100644
+index a86bd22588..9a409d0288 100644
 --- a/src/gui/kernel/qguiapplication.cpp
 +++ b/src/gui/kernel/qguiapplication.cpp
 @@ -146,6 +146,8 @@ QString QGuiApplicationPrivate::styleOverride;
@@ -107,7 +107,7 @@ index 0e8abe76ce..275e4a808c 100644
      QGuiApplicationPrivate::highDpiScalingUpdated = false;
      QGuiApplicationPrivate::currentDragWindow = nullptr;
      QGuiApplicationPrivate::tabletDevicePoints.clear();
-@@ -3465,6 +3469,46 @@ Qt::ApplicationState QGuiApplication::applicationState()
+@@ -3522,6 +3526,46 @@ Qt::ApplicationState QGuiApplication::applicationState()
      return QGuiApplicationPrivate::applicationState;
  }
  
@@ -169,10 +169,10 @@ index 02dffef0fe..2814ba1d1b 100644
      bool notify(QObject *, QEvent *) override;
  
 diff --git a/src/gui/kernel/qguiapplication_p.h b/src/gui/kernel/qguiapplication_p.h
-index 217b62725c..079202da37 100644
+index ca7af43706..aaf6dd4c58 100644
 --- a/src/gui/kernel/qguiapplication_p.h
 +++ b/src/gui/kernel/qguiapplication_p.h
-@@ -215,6 +215,7 @@ public:
+@@ -216,6 +216,7 @@ public:
      static QPointer<QWindow> currentMouseWindow;
      static QPointer<QWindow> currentMousePressWindow;
      static Qt::ApplicationState applicationState;
@@ -291,7 +291,7 @@ index 4a9c9a9934..c031885d5d 100644
  
      return roundedFactor;
 diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
-index 784032f863..55ad6df5c9 100644
+index 9c24fa506d..f58944a7d2 100644
 --- a/src/gui/kernel/qhighdpiscaling_p.h
 +++ b/src/gui/kernel/qhighdpiscaling_p.h
 @@ -74,16 +74,6 @@ typedef QPair<qreal, qreal> QDpi;
@@ -312,5 +312,5 @@ index 784032f863..55ad6df5c9 100644
          Unset,
          Enabled,
 -- 
-2.24.1.windows.2
+2.20.1.windows.1
 

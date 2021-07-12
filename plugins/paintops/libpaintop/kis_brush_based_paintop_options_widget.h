@@ -25,8 +25,6 @@ public:
 
     KisBrushSP brush();
 
-    bool presetIsValid() override;
-
 protected:
     KisBrushOptionWidget *brushOptionWidget() const;
 

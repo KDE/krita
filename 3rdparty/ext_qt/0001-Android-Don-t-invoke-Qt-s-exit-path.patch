@@ -1,7 +1,7 @@
-From 392dd60c48b1009290c9c84821a58784dc185cac Mon Sep 17 00:00:00 2001
+From 512136954dc22c6120c312a6549dac40d4901b6b Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Fri, 9 Apr 2021 13:58:56 +0000
-Subject: [PATCH] Android: Don't invoke Qt's exit path
+Subject: [PATCH 39/43] Android: Don't invoke Qt's exit path
 
 ---
  .../java/src/org/qtproject/qt5/android/bindings/QtActivity.java  | 1 -
@@ -20,5 +20,5 @@ index 3348527b3c..8a61f2e9db 100644
      //---------------------------------------------------------------------------
  
 -- 
-2.31.0
+2.20.1.windows.1
 

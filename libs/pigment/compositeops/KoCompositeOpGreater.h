@@ -68,7 +68,7 @@ public:
         // Let us assume we're blending with a color with srcAlpha = 1 here
         // Therefore, opacity = (1.0 - a)/(1.0 - dstAlpha)
         if (a<dA) a = dA;
-		float fakeOpacity = 1.0 - (1.0f - a)/(1.0f - dA + 1e-16);
+		float fakeOpacity = 1.0f - (1.0f - a)/(1.0f - dA + 1e-16f);
         newDstAlpha=scale<channels_type>(a);
        
         if (dstAlpha != zeroValue<channels_type>()) {	   

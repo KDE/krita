@@ -1,7 +1,8 @@
-From 63cc83dc5a123bf5efbde740d562a569c73f33ae Mon Sep 17 00:00:00 2001
+From 1b557d0201dd3d9db6cf95eb5eb35d7c92937721 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Tue, 11 Feb 2020 18:12:20 +0300
-Subject: [PATCH 1/5] Bugfix: fix the offset bug when using Stylus with Android
+Subject: [PATCH 02/43] Bugfix: fix the offset bug when using Stylus with
+ Android
 
 Platform plugin for Android calculated the local coordinates of the
 tabletEvent by using QWindow::position(), which returned High-DPI
@@ -18,7 +19,7 @@ Change-Id: I4679df7de3b1491009708d7e80d5bc176e29afed
  1 file changed, 30 insertions(+), 6 deletions(-)
 
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 56885f2e23..b97de05270 100644
+index 6ba1aa5e24..a5bd1a58d1 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -43,6 +43,7 @@
@@ -109,5 +110,5 @@ index 56885f2e23..b97de05270 100644
          // Galaxy Note with plain Android:
          // 0 1 0    stylus press
 -- 
-2.28.0
+2.20.1.windows.1
 

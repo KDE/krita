@@ -1,7 +1,7 @@
-From 25a03c70881cb7f6b2252a164f13f661de0f5a5a Mon Sep 17 00:00:00 2001
+From b0bace55027432f8ddc59e6542e3274e8bbdb29b Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Sun, 31 May 2020 23:51:52 +0530
-Subject: [PATCH 1/2] Android: find column index at runtime
+Subject: [PATCH 26/43] Android: find column index at runtime
 
 Change-Id: Iabf33e5b436968904fedbce65b22773596ce15d3
 ---
@@ -9,7 +9,7 @@ Change-Id: Iabf33e5b436968904fedbce65b22773596ce15d3
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index caf6c6ea8a..b5d2b9e6a6 100644
+index 4c2e51a315..f6b3d3d71c 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -72,6 +72,7 @@ import android.view.MotionEvent;
@@ -20,7 +20,7 @@ index caf6c6ea8a..b5d2b9e6a6 100644
  
  import java.lang.reflect.Method;
  import java.security.KeyStore;
-@@ -246,9 +247,10 @@ public class QtNative
+@@ -255,9 +256,10 @@ public class QtNative
          try {
              ContentResolver resolver = context.getContentResolver();
              Cursor cur = resolver.query(uri, null, null, null, null);
@@ -33,5 +33,5 @@ index caf6c6ea8a..b5d2b9e6a6 100644
              }
              return size;
 -- 
-2.26.2
+2.20.1.windows.1
 

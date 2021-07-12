@@ -89,11 +89,11 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
     int width = rect.width();
 
     // We need to calculate with a multiple of the width of the simd register
-    int alignOffset = 0;
+    size_t alignOffset = 0;
     if (width % Vc::float_v::size() != 0) {
         alignOffset = Vc::float_v::size() - (width % Vc::float_v::size());
     }
-    int simdWidth = width + alignOffset;
+    size_t simdWidth = width + alignOffset;
 
     float *buffer = Vc::malloc<float, Vc::AlignOnCacheline>(simdWidth);
 
@@ -188,7 +188,7 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
             }
 
             if (m_d->color) {
-                memcpy(dabPointer, m_d->color, m_d->pixelSize);
+                memcpy(dabPointer, m_d->color, static_cast<size_t>(m_d->pixelSize));
             }
 
             m_d->colorSpace->applyAlphaU8Mask(dabPointer, &alphaValue, 1);

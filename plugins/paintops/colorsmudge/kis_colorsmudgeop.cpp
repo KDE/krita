@@ -86,20 +86,12 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
 
     m_gradient = painter->gradient();
 
-    const bool useNewEngine = m_brush->brushApplication() != ALPHAMASK || m_smudgeRateOption.getUseNewEngine();
+    // useNewEngine should be true if brushApplication is not ALPHAMASK
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_brush->brushApplication() == ALPHAMASK || m_smudgeRateOption.getUseNewEngine());
+
     const bool useSmearAlpha = m_smudgeRateOption.getSmearAlpha();
     const bool useDullingMode = m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE;
     const bool useOverlayMode = m_overlayModeOption.isChecked();
-
-    if (useNewEngine){
-        m_smudgeRadiusOption.updateRange(0.0, 1.0);
-    } else {
-        m_smudgeRadiusOption.updateRange(0.0, 3.0);
-    }
-
-    // Initialize smudge radius only after the proper range is set
-    m_smudgeRadiusOption.readOptionSetting(settings);
-    m_smudgeRadiusOption.resetAllSensors();
 
     m_hsvOptions.append(KisPressureHSVOption::createHueOption());
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
@@ -114,7 +106,9 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     }
     m_rotationOption.applyFanCornersInfo(this);
 
-    if (useNewEngine && m_brush->brushApplication() == LIGHTNESSMAP) {
+    bool usesNewEngine = true;
+
+    if (m_brush->brushApplication() == LIGHTNESSMAP) {
         KisPressurePaintThicknessOption::ThicknessMode thicknessMode =
             m_paintThicknessOption.isChecked() ?
                 m_paintThicknessOption.getThicknessMode() :
@@ -124,15 +118,15 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
                                                              useSmearAlpha,
                                                              useDullingMode,
                                                              thicknessMode));
-    } else if (useNewEngine && m_brush->brushApplication() == ALPHAMASK) {
+    } else if (m_smudgeRateOption.getUseNewEngine() &&
+               m_brush->brushApplication() == ALPHAMASK) {
         m_strategy.reset(new KisColorSmudgeStrategyMask(painter,
                                                         image,
                                                         useSmearAlpha,
                                                         useDullingMode,
                                                         useOverlayMode));
-    } else if (useNewEngine &&
-               (m_brush->brushApplication() == IMAGESTAMP ||
-                m_brush->brushApplication() == GRADIENTMAP)) {
+    } else if (m_brush->brushApplication() == IMAGESTAMP ||
+               m_brush->brushApplication() == GRADIENTMAP) {
         m_strategy.reset(new KisColorSmudgeStrategyStamp(painter,
                                                          image,
                                                          useSmearAlpha,
@@ -144,7 +138,18 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
                                                               useSmearAlpha,
                                                               useDullingMode,
                                                               useOverlayMode));
+        usesNewEngine = false;
     }
+
+    if (usesNewEngine){
+        m_smudgeRadiusOption.updateRange(0.0, 1.0);
+    } else {
+        m_smudgeRadiusOption.updateRange(0.0, 3.0);
+    }
+
+    // Initialize smudge radius only after the proper range is set
+    m_smudgeRadiusOption.readOptionSetting(settings);
+    m_smudgeRadiusOption.resetAllSensors();
 
     m_strategy->initializePainting();
     m_paintColor = painter->paintColor().convertedTo(m_strategy->preciseColorSpace());
@@ -265,14 +270,13 @@ KisTimingInformation KisColorSmudgeOp::updateTimingImpl(const KisPaintInformatio
 
 KisInterstrokeDataFactory *KisColorSmudgeOp::createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
-    bool needsInterstrokeData =
-        settings->getBool(QString("SmudgeRate") + "UseNewEngine", false);
-
-    if (!needsInterstrokeData) return 0;
 
     KisBrushOptionProperties brushOption;
-    needsInterstrokeData &=
+    const bool needsInterstrokeData =
         brushOption.brushApplication(settings.data(), resourcesInterface) == LIGHTNESSMAP;
+
+    const bool needsNewEngine = settings->getBool(QString("SmudgeRate") + "UseNewEngine", false);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!needsInterstrokeData || needsNewEngine);
 
     return needsInterstrokeData ? new ColorSmudgeInterstrokeDataFactory() : 0;
 }

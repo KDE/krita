@@ -57,11 +57,6 @@ public:
     KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
     /**
-     * This is true for all of the paintop widget except for the Custom brush tab in the Brush tip dialog
-     */
-    virtual bool presetIsValid();
-
-    /**
      * Some paintops are more complicated and require full canvas with layers, projections and KisImage etc.
      * Example is duplicate paintop. In this case simple canvas like scratchbox does not work.
      * Every paintop supports the scratchbox by default, override and return false if paintop does not.

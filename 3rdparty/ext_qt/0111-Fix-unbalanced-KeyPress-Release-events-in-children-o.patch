@@ -1,7 +1,7 @@
-From 7bac78a0d0ab6ee0a66440cd654672d946b4e758 Mon Sep 17 00:00:00 2001
+From 55e6e6e995e642153abb95d3886a1ddf036c9de6 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 13 Feb 2021 16:46:55 +0300
-Subject: [PATCH] Fix unbalanced KeyPress/Release events in children of
+Subject: [PATCH 07/43] Fix unbalanced KeyPress/Release events in children of
  QMdiArea
 
 When the user presses Ctrl+Tab, QMdiArea is supposed to switch
@@ -15,7 +15,7 @@ See https://bugs.kde.org/show_bug.cgi?id=424319
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/src/widgets/widgets/qmdiarea.cpp b/src/widgets/widgets/qmdiarea.cpp
-index f32cd264..d493a32b 100644
+index f32cd26478..d493a32b60 100644
 --- a/src/widgets/widgets/qmdiarea.cpp
 +++ b/src/widgets/widgets/qmdiarea.cpp
 @@ -2555,7 +2555,9 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)

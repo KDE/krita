@@ -1,7 +1,7 @@
 SET(PREFIX_ext_vc "${EXTPREFIX}" )
 
 if(APPLE)
-    if(apple_has_arm64_optional)
+    if(MACOS_UNIVERSAL OR apple_has_arm64_optional)
         set(EXTRA_X86_ON_ARM_PATCHES ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macos_VcOnARM.patch)
     endif()
 

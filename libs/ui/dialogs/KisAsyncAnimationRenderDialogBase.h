@@ -11,8 +11,9 @@
 #include "kis_types.h"
 #include "kritaui_export.h"
 
+#include <KisAsyncAnimationRendererBase.h>
+
 class KisTimeSpan;
-class KisAsyncAnimationRendererBase;
 class KisViewManager;
 class KisRegion;
 
@@ -53,7 +54,8 @@ public:
     enum Result {
         RenderComplete,
         RenderCancelled,
-        RenderFailed
+        RenderFailed,
+        RenderTimedOut
     };
 
 public:
@@ -102,7 +104,7 @@ public:
 
 private Q_SLOTS:
     void slotFrameCompleted(int frame);
-    void slotFrameCancelled(int frame);
+    void slotFrameCancelled(int frame, KisAsyncAnimationRendererBase::CancelReason cancelReason);
 
     void slotCancelRegeneration();
     void slotUpdateCompressedProgressData();
@@ -110,7 +112,7 @@ private Q_SLOTS:
 private:
     void tryInitiateFrameRegeneration();
     void updateProgressLabel();
-    void cancelProcessingImpl(bool isUserCancelled);
+    void cancelProcessingImpl(KisAsyncAnimationRendererBase::CancelReason cancelReason);
 
 protected:
     /**

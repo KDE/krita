@@ -1,14 +1,14 @@
-From de0c4dab234f8daebdea308be48f4d9f443e5b3a Mon Sep 17 00:00:00 2001
+From ab2264e36be63ddc886f37441ec3263f0b5ccdc8 Mon Sep 17 00:00:00 2001
 From: Halla Rempt <halla@valdyas.org>
 Date: Wed, 30 Dec 2020 10:54:08 +0100
-Subject: [PATCH] Remove chunk size limits
+Subject: [PATCH 42/43] Remove chunk size limits
 
 ---
  src/gui/image/qpnghandler.cpp | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
 diff --git a/src/gui/image/qpnghandler.cpp b/src/gui/image/qpnghandler.cpp
-index e7e998ef..751ae4f0 100644
+index e7e998efd1..751ae4f043 100644
 --- a/src/gui/image/qpnghandler.cpp
 +++ b/src/gui/image/qpnghandler.cpp
 @@ -542,6 +542,12 @@ bool QPngHandlerPrivate::readPngHeader()
@@ -38,5 +38,5 @@ index e7e998ef..751ae4f0 100644
      if (!info_ptr) {
          png_destroy_write_struct(&png_ptr, 0);
 -- 
-2.25.1
+2.20.1.windows.1
 

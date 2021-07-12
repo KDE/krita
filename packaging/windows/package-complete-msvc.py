@@ -222,8 +222,10 @@ shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.com", f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb", f"{pkg_root}\\bin\\")
 # kritarunner.exe
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe", f"{pkg_root}\\bin\\")
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.com", f"{pkg_root}\\bin\\")
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb", f"{pkg_root}\\bin\\")
+shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb",
+            f"{pkg_root}\\bin\\")
+shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner_com.com",
+            f"{pkg_root}\\bin\\")
 
 if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe"):
     shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe", f"{pkg_root}\\bin\\")
@@ -319,7 +321,7 @@ if os.path.isdir(f"{KRITA_INSTALL_DIR}\\lib\\qml"):
 
 # windeployqt
 subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
-               "-xml", "-sql", "-multimedia", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe"], check=True)
+               "-xml", "-sql", "-multimedia", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
 
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):

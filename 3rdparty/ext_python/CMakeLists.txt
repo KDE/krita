@@ -1,6 +1,7 @@
 SET(PREFIX_ext_python "${EXTPREFIX}" )
 if (UNIX)
     if (APPLE)
+        set(ENV{PATH} "${PREFIX_ext_python}/lib/Python.framework/Versions/Current/bin:$ENV{PATH}")
         ExternalProject_Add( ext_python
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tar.xz
@@ -22,10 +23,16 @@ if (UNIX)
                 | xargs -I FILE ${CMAKE_COMMAND} -E create_symlink ./Python.framework/Python ${PREFIX_ext_python}/lib/FILE
 
             UPDATE_COMMAND ""
-            ALWAYS 0
 
             DEPENDS ext_openssl
         )
+
+        ExternalProject_Add_Step( ext_python update_sip
+            COMMENT "Updating pip"
+            COMMAND COMMAND ${PREFIX_ext_python}/bin/python3 -m pip install --upgrade pip
+            DEPENDEES install
+        )
+
     else()
 
     ExternalProject_Add( ext_python

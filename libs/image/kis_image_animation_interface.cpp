@@ -345,11 +345,12 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
     emit sigUiTimeChanged(frameId);
 }
 
-void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion)
+void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable)
 {
     KisStrokeStrategy *strategy =
         new KisRegenerateFrameStrokeStrategy(frameId,
                                              dirtyRegion,
+                                             isCancellable,
                                              this);
 
     QList<KisStrokeJobData*> jobs = KisRegenerateFrameStrokeStrategy::createJobsData(m_d->image);

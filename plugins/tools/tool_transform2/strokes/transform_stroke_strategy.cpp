@@ -264,7 +264,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::CONCURRENT,
                                   KisStrokeJobData::NORMAL);
 
-                m_updateData->push_back(std::make_pair(td->node, cachedPortion->extent() | oldExtent | td->node->extent()));
+                m_updateData->addUpdate(td->node, cachedPortion->extent() | oldExtent | td->node->extent());
             } else if (KisExternalLayer *extLayer =
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
@@ -290,7 +290,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                     const QRect theoreticalNewDirtyRect =
                         kisGrowRect(t.mapRect(oldDirtyRect), 1);
 
-                    m_updateData->push_back(std::make_pair(td->node, oldDirtyRect | td->node->extent() | extLayer->theoreticalBoundingRect() | theoreticalNewDirtyRect));
+                    m_updateData->addUpdate(td->node, oldDirtyRect | td->node->extent() | extLayer->theoreticalBoundingRect() | theoreticalNewDirtyRect);
                 }
 
             } else if (KisTransformMask *transformMask =
@@ -303,7 +303,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::CONCURRENT,
                                   KisStrokeJobData::NORMAL);
 
-                m_updateData->push_back(std::make_pair(td->node, oldExtent | td->node->extent()));
+                m_updateData->addUpdate(td->node, oldExtent | td->node->extent());
             }
         } else if (m_selection) {
 
@@ -487,12 +487,12 @@ void TransformStrokeStrategy::initStrokeCallback()
 
     extraInitJobs << new PreparePreviewData();
 
-    KisUpdateCommandEx::SharedDataSP sharedData(new KisUpdateCommandEx::SharedData());
+    KisBatchNodeUpdateSP sharedData(new KisBatchNodeUpdate());
 
     KritaUtils::addJobBarrier(extraInitJobs, [this, sharedData]() {
         KisNodeList filteredRoots = KisLayerUtils::sortAndFilterMergableInternalNodes(m_processedNodes, true);
         Q_FOREACH (KisNodeSP root, filteredRoots) {
-            sharedData->push_back(std::make_pair(root, root->extent()));
+            sharedData->addUpdate(root, root->extent());
         }
     });
 
@@ -559,7 +559,7 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
     if (applyTransform) {
         m_savedTransformArgs = args;
 
-        m_updateData.reset(new KisUpdateCommandEx::SharedData());
+        m_updateData.reset(new KisBatchNodeUpdate());
 
         KritaUtils::addJobBarrier(mutatedJobs, [this] () {
             runAndSaveCommand(toQShared(new KisUpdateCommandEx(m_updateData, m_updatesFacade, KisUpdateCommandEx::INITIALIZING)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
@@ -577,34 +577,10 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
                                          m_rootNode);
 
         KritaUtils::addJobBarrier(mutatedJobs, [this] () {
-            {
-                /// Here is a bit of code-duplication from
-                /// InplaceTransformStrokeStrategy. This code reduced the
-                /// amount of updates we do in the course of transformation.
-                /// Basically, we find the minimum set of parents for the
-                /// selected layers and do full refresh for them
-
-                KisNodeList filteredNodes = m_processedNodes;
-                KisLayerUtils::sortAndFilterMergableInternalNodes(filteredNodes);
-
-                KisUpdateCommandEx::SharedData newUpdateData;
-
-                Q_FOREACH (KisNodeSP root, filteredNodes) {
-                    QRect dirtyRect;
-
-                    for (auto it = m_updateData->begin(); it != m_updateData->end(); ++it) {
-                        if (it->first == root || KisLayerUtils::checkIsChildOf(it->first, {root})) {
-                            dirtyRect |= it->second;
-                        }
-                    }
-                    newUpdateData.push_back(std::make_pair(root, dirtyRect));
-                }
-
-                *m_updateData = newUpdateData;
-            }
-
             m_updatesFacade->enableDirtyRequests();
             m_updatesDisabled = false;
+
+            m_updateData->compress();
             runAndSaveCommand(toQShared(new KisUpdateCommandEx(m_updateData, m_updatesFacade, KisUpdateCommandEx::FINALIZING)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
         });
     }

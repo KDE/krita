@@ -155,7 +155,7 @@ private:
     void undoAllCommands();
     void undoTransformCommands(int levelOfDetail);
 
-    void fetchAllUpdateRequests(int levelOfDetail, KisUpdateCommandEx::SharedDataSP updateData);
+    void fetchAllUpdateRequests(int levelOfDetail, KisBatchNodeUpdateSP updateData);
 
     void transformNode(KisNodeSP node, const ToolTransformArgs &config, int levelOfDetail);
     void createCacheAndClearNode(KisNodeSP node);

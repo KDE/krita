@@ -9,7 +9,7 @@
 #include "kis_image_interfaces.h"
 #include "kis_node.h"
 
-KisUpdateCommandEx::KisUpdateCommandEx(SharedDataSP updateData,
+KisUpdateCommandEx::KisUpdateCommandEx(KisBatchNodeUpdateSP updateData,
                                        KisUpdatesFacade *updatesFacade,
                                        State state,
                                        QWeakPointer<boost::none_t> blockUpdatesCookie)
@@ -24,7 +24,7 @@ KisUpdateCommandEx::~KisUpdateCommandEx()
 {
 }
 
-KisUpdateCommandEx::KisUpdateCommandEx(SharedDataSP updateData, KisUpdatesFacade *updatesFacade, State state)
+KisUpdateCommandEx::KisUpdateCommandEx(KisBatchNodeUpdateSP updateData, KisUpdatesFacade *updatesFacade, State state)
     : KisUpdateCommandEx(updateData, updatesFacade, state, QWeakPointer<boost::none_t>())
 {
 }

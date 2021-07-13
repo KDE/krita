@@ -113,6 +113,8 @@ public:
     /// Used with image-wide transformations.
     void transform(const QTransform &transform);
 
+    bool isSameIgnoringSnapping(const KisGuidesConfig &rhs) const;
+
 private:
     class Private;
     const QScopedPointer<Private> d;

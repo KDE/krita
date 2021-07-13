@@ -1,7 +1,7 @@
-From d3b15422158bcc39e8ad4cac44c4efbe413652e9 Mon Sep 17 00:00:00 2001
+From 1a0c8356ded43b6ed0bd80122c65125b8d1a4714 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Wed, 6 Jan 2021 12:12:09 +0000
-Subject: [PATCH] Android: prevent out-of-order events
+Subject: [PATCH 35/43] Android: prevent out-of-order events
 
 QPlatformWindow::setVisible() flushes internal event queue which then
 sends events to widgets out-of-order fashion, which can make some
@@ -24,5 +24,5 @@ index c095f51fa3..f9972ee4e1 100644
  
  void QAndroidPlatformWindow::setWindowState(Qt::WindowStates state)
 -- 
-2.29.2
+2.20.1.windows.1
 

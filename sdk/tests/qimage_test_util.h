@@ -11,6 +11,7 @@
 
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QApplication>
 
 namespace TestUtil {
 
@@ -52,6 +53,24 @@ inline QString fetchDataFileLazy(const QString relativeFileName, bool externalTe
         filename  =
             QString(FILES_DEFAULT_DATA_DIR) +
             '/' +
+            relativeFileName;
+
+        if (QFileInfo(filename).exists()) {
+            return filename;
+        }
+
+        filename  =
+            QFileInfo(qApp->applicationFilePath()).absolutePath() +
+            "/" +
+            relativeFileName;
+
+        if (QFileInfo(filename).exists()) {
+            return filename;
+        }
+
+        filename  =
+            QFileInfo(qApp->applicationFilePath()).absolutePath() +
+            "/data/" +
             relativeFileName;
 
         if (QFileInfo(filename).exists()) {

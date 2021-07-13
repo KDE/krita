@@ -96,7 +96,7 @@ private:
     inline TIFF* image() {
         return m_image;
     }
-    bool copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint16 sample_format, uint8 nbcolorssamples, quint8* poses);
+    bool copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8_t depth, uint16_t sample_format, uint8_t nbcolorssamples, quint8* poses);
     bool saveLayerProjection(KisLayer *);
 private:
     TIFF* m_image;

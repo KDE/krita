@@ -66,11 +66,11 @@ struct OverCompositor32 {
 
         src_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<src_aligned>(src);
 
-        bool haveOpacity = opacity != 1.0;
+        bool haveOpacity = opacity != 1.0f;
         Vc::float_v opacity_norm_vec(opacity);
 
-        Vc::float_v uint8Max((float)255.0);
-        Vc::float_v uint8MaxRec1((float)1.0 / 255.0);
+        Vc::float_v uint8Max(255.0f);
+        Vc::float_v uint8MaxRec1(1.0f / 255.0f);
         Vc::float_v zeroValue(Vc::Zero);
         Vc::float_v oneValue(Vc::One);
 
@@ -152,8 +152,8 @@ struct OverCompositor32 {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
-        const float uint8Rec1 = 1.0 / 255.0;
-        const float uint8Max = 255.0;
+        const float uint8Rec1 = 1.0f / 255.0f;
+        const float uint8Max = 255.0f;
 
         float srcAlpha = src[alpha_pos];
         srcAlpha *= opacity;
@@ -162,16 +162,16 @@ struct OverCompositor32 {
             srcAlpha *= float(*mask) * uint8Rec1;
         }
 
-        if (srcAlpha != 0.0) {
+        if (srcAlpha != 0.0f) {
 
             float dstAlpha = dst[alpha_pos];
             float srcBlendNorm;
 
             if (alphaLocked || dstAlpha == uint8Max) {
                 srcBlendNorm = srcAlpha * uint8Rec1;
-            } else if (dstAlpha == 0.0) {
+            } else if (dstAlpha == 0.0f) {
                 dstAlpha = srcAlpha;
-                srcBlendNorm = 1.0;
+                srcBlendNorm = 1.0f;
 
                 if (!allChannelsFlag) {
                     pixel_type *d = reinterpret_cast<pixel_type*>(dst);
@@ -186,7 +186,7 @@ struct OverCompositor32 {
             }
 
             if(allChannelsFlag) {
-                if (srcBlendNorm == 1.0) {
+                if (srcBlendNorm == 1.0f) {
                     if (!alphaLocked) {
                         const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
                         pixel_type *d = reinterpret_cast<pixel_type*>(dst);
@@ -196,7 +196,7 @@ struct OverCompositor32 {
                         dst[1] = src[1];
                         dst[2] = src[2];
                     }
-                } else if (srcBlendNorm != 0.0){
+                } else if (srcBlendNorm != 0.0f){
                     dst[0] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
                     dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
                     dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
@@ -204,11 +204,11 @@ struct OverCompositor32 {
             } else {
                 const QBitArray &channelFlags = oparams.channelFlags;
 
-                if (srcBlendNorm == 1.0) {
+                if (srcBlendNorm == 1.0f) {
                     if(channelFlags.at(0)) dst[0] = src[0];
                     if(channelFlags.at(1)) dst[1] = src[1];
                     if(channelFlags.at(2)) dst[2] = src[2];
-                } else if (srcBlendNorm != 0.0) {
+                } else if (srcBlendNorm != 0.0f) {
                     if(channelFlags.at(0)) dst[0] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
                     if(channelFlags.at(1)) dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
                     if(channelFlags.at(2)) dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);

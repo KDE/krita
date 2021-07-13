@@ -52,6 +52,17 @@ KoGradientBackground::~KoGradientBackground()
     delete d->gradient;
 }
 
+KoGradientBackground::KoGradientBackground(const KoGradientBackground &rhs)
+    : d(new Private(*rhs.d))
+{
+}
+
+KoGradientBackground &KoGradientBackground::operator=(const KoGradientBackground &rhs)
+{
+    d = rhs.d;
+    return *this;
+}
+
 bool KoGradientBackground::compareTo(const KoShapeBackground *other) const
 {
     const KoGradientBackground *otherGradient = dynamic_cast<const KoGradientBackground*>(other);

@@ -1,7 +1,7 @@
-From ada45cc4f5e2ac61992fe10f4d22899971c07793 Mon Sep 17 00:00:00 2001
+From 6852265518ba9d2e38bd52843931b4deef418bf1 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 10 Sep 2020 10:42:31 +0000
-Subject: [PATCH 4/5] Pass keyboard modifiers for mouse and tablet events
+Subject: [PATCH 04/43] Pass keyboard modifiers for mouse and tablet events
 
 [Android] Pass keyboard modifiers for tablet and mouse events
 
@@ -75,7 +75,7 @@ index ed599a4369..81bdb83a65 100644
  
      // keyboard methods
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 864744bf49..deb30e404a 100644
+index 0e74468266..685f40d2ae 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -59,6 +59,7 @@ using namespace QtAndroid;
@@ -172,5 +172,5 @@ index 864744bf49..deb30e404a 100644
          {"keyUp", "(IIIZ)V", (void *)keyUp},
          {"keyboardVisibilityChanged", "(Z)V", (void *)keyboardVisibilityChanged},
 -- 
-2.28.0
+2.20.1.windows.1
 

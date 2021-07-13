@@ -66,6 +66,7 @@ protected:
     void dropEvent(QDropEvent * event) override;
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
+    void changeEvent(QEvent *event) override;
 
     bool eventFilter(QObject *watched, QEvent *event) override;
 

@@ -540,7 +540,7 @@ KisTagModel::KisTagModel(const QString &type, QObject *parent)
     , d(new Private())
 {
     setSourceModel(KisResourceModelProvider::tagModel(type));
-
+    sort(KisAllTagsModel::Name);
 }
 
 KisTagModel::~KisTagModel()
@@ -708,7 +708,18 @@ bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
 
 bool KisTagModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagsModel::Name).toString();
-    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagsModel::Name).toString();
-    return (nameLeft < nameRight);
+    const bool leftIsFakeRow = source_left.row() < s_fakeRowsCount;
+    const bool rightIsFakeRow = source_right.row() < s_fakeRowsCount;
+    // Always sort fake rows ("All" and "All Untagged") above the rest.
+    if (leftIsFakeRow && rightIsFakeRow) {
+        return source_left.row() < source_right.row();
+    } else if (leftIsFakeRow) {
+        return true;
+    } else if (rightIsFakeRow) {
+        return false;
+    } else {
+        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagsModel::Name).toString();
+        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagsModel::Name).toString();
+        return (nameLeft < nameRight);
+    }
 }

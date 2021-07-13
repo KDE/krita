@@ -1,7 +1,7 @@
-From af749499bc36d6c630b83fa6756515a90e797940 Mon Sep 17 00:00:00 2001
+From 886b7f3c749856b510cd279d7618ae878a0c5168 Mon Sep 17 00:00:00 2001
 From: Agata Cacko <tamtamy.tymona@gmail.com>
 Date: Mon, 10 Feb 2020 17:03:26 +0300
-Subject: [PATCH 22/22] Make jp(e)g default extensions context-aware
+Subject: [PATCH 24/47] Make jp(e)g default extensions context-aware
 
 This commit contains changes to Qt that enable two things:
 - non-native file dialogs give .jpg or .jpeg extension depending

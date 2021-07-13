@@ -1,7 +1,7 @@
-From 9f340b4ac4251a63c90b7c16a1b9f72535559a6d Mon Sep 17 00:00:00 2001
+From 6fc76b53a874dd85ce8511ac7bcff8ce234b76c1 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 19 Oct 2020 10:09:57 +0000
-Subject: [PATCH] Android: Move events handling to QtLayout
+Subject: [PATCH 32/43] Android: Move events handling to QtLayout
 
 Whenever a widget with Qt::Window flag is used a new
 QtSurface is created and this is used by Android to
@@ -159,5 +159,5 @@ index 08b5a80f7e..723a783c6b 100644
 -    }
  }
 -- 
-2.28.0
+2.20.1.windows.1
 

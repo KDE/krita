@@ -46,6 +46,17 @@ KoColorBackground::~KoColorBackground()
 {
 }
 
+KoColorBackground::KoColorBackground(const KoColorBackground &rhs)
+    : d(new Private(*rhs.d))
+{
+}
+
+KoColorBackground &KoColorBackground::operator=(const KoColorBackground &rhs)
+{
+    d = rhs.d;
+    return *this;
+}
+
 bool KoColorBackground::compareTo(const KoShapeBackground *other) const
 {
     const KoColorBackground *bg = dynamic_cast<const KoColorBackground*>(other);

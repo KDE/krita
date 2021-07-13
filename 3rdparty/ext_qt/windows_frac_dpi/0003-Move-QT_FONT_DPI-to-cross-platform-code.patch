@@ -1,7 +1,7 @@
-From 18e5220ef5864212aabd8cb5da1330e74ac8b63e Mon Sep 17 00:00:00 2001
+From a1f512aa3c0b32c597661aba5561541113144dc9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Thu, 2 Jun 2016 09:52:21 +0200
-Subject: [PATCH 03/11] Move QT_FONT_DPI to cross-platform code
+Subject: [PATCH 39/47] Move QT_FONT_DPI to cross-platform code
 
 This makes it possible to test the effects of setting
 Qt::AA_HighDpiScaling/QT_AUTO_SCREEN_SCALE_FACTOR, with different DPI
@@ -101,10 +101,10 @@ index 82ee62e6b4..b856435f67 100644
      // safeguard ourselves against buggy platform behavior...
      if (refreshRate < 1.0)
 diff --git a/src/gui/kernel/qwindowsysteminterface.cpp b/src/gui/kernel/qwindowsysteminterface.cpp
-index 8e50e5ef9e..19166d1946 100644
+index 5caf4802a0..7ce0e6b0ef 100644
 --- a/src/gui/kernel/qwindowsysteminterface.cpp
 +++ b/src/gui/kernel/qwindowsysteminterface.cpp
-@@ -866,8 +866,8 @@ void QWindowSystemInterface::handleScreenGeometryChange(QScreen *screen, const Q
+@@ -871,8 +871,8 @@ void QWindowSystemInterface::handleScreenGeometryChange(QScreen *screen, const Q
  
  void QWindowSystemInterface::handleScreenLogicalDotsPerInchChange(QScreen *screen, qreal dpiX, qreal dpiY)
  {
@@ -131,5 +131,5 @@ index ab5faa7212..ccd1a672bc 100644
      if (forcedDpi > 0)
          return forcedDpi;
 -- 
-2.24.1.windows.2
+2.20.1.windows.1
 

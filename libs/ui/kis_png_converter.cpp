@@ -336,7 +336,7 @@ class KisPNGReaderLineByLine : public KisPNGReaderAbstract
 {
 public:
     KisPNGReaderLineByLine(png_structp _png_ptr, png_infop info_ptr, int _width, int _height) : KisPNGReaderAbstract(_png_ptr, _width, _height) {
-        png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
+        std::size_t rowbytes = png_get_rowbytes(png_ptr, info_ptr);
         row_pointer = new png_byte[rowbytes];
     }
     ~KisPNGReaderLineByLine() override {
@@ -355,7 +355,7 @@ class KisPNGReaderFullImage : public KisPNGReaderAbstract
 public:
     KisPNGReaderFullImage(png_structp _png_ptr, png_infop info_ptr, int _width, int _height) : KisPNGReaderAbstract(_png_ptr, _width, _height), y(0) {
         row_pointers = new png_bytep[height];
-        png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
+        std::size_t rowbytes = png_get_rowbytes(png_ptr, info_ptr);
         for (int i = 0; i < height; i++) {
             row_pointers[i] = new png_byte[rowbytes];
         }

@@ -5,7 +5,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_bidirectional_mixing_option.cpp
     kis_bidirectional_mixing_option_widget.cpp
     kis_brush_based_paintop.cpp
-    kis_brush_chooser.cpp
+    kis_predefined_brush_chooser.cpp
     kis_brush_option_widget.cpp
     kis_brush_option.cpp
     kis_brush_selection_widget.cpp

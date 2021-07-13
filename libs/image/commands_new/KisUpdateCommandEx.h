@@ -12,6 +12,7 @@
 
 #include <kis_types.h>
 #include <boost/none.hpp>
+#include <KisBatchNodeUpdate.h>
 
 class KisUpdatesFacade;
 
@@ -19,15 +20,11 @@ class KisUpdatesFacade;
 class KRITAIMAGE_EXPORT KisUpdateCommandEx : public KisCommandUtils::FlipFlopCommand
 {
 public:
-    using SharedData = std::vector<std::pair<KisNodeSP, QRect>>;
-    using SharedDataSP = QSharedPointer<SharedData>;
-
-public:
-    KisUpdateCommandEx(SharedDataSP updateData,
+    KisUpdateCommandEx(KisBatchNodeUpdateSP updateData,
                        KisUpdatesFacade *updatesFacade,
                        State state);
 
-    KisUpdateCommandEx(SharedDataSP updateData,
+    KisUpdateCommandEx(KisBatchNodeUpdateSP updateData,
                        KisUpdatesFacade *updatesFacade,
                        State state,
                        QWeakPointer<boost::none_t> blockUpdatesCookie);
@@ -37,7 +34,7 @@ public:
     void partB() override;
 
 private:
-    SharedDataSP m_updateData;
+    KisBatchNodeUpdateSP m_updateData;
     QWeakPointer<boost::none_t> m_blockUpdatesCookie;
     KisUpdatesFacade *m_updatesFacade;
 };

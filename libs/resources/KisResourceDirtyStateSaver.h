@@ -18,28 +18,12 @@
 class KRITARESOURCES_EXPORT KisResourceDirtyStateSaver
 {
 public:
-    KisResourceDirtyStateSaver(KoResourceSP resource)
-        : m_resource(resource)
-        , m_isDirty(resource->isDirty())
-
-    {
-    }
+    KisResourceDirtyStateSaver(KoResourceSP resource);
 
     /// Extra constructor to be called from KoResource itself
-    KisResourceDirtyStateSaver(KoResource *resource)
-        : m_parentResource(resource)
-        , m_isDirty(resource->isDirty())
-    {
-    }
+    KisResourceDirtyStateSaver(KoResource* resource);
 
-    ~KisResourceDirtyStateSaver() {
-        if (m_resource) {
-            m_resource->setDirty(m_isDirty);
-        }
-        else if (m_parentResource) {
-            m_parentResource->setDirty(m_isDirty);
-        }
-    }
+    ~KisResourceDirtyStateSaver();
 
 private:
 

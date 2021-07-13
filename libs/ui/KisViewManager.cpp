@@ -121,6 +121,7 @@
 #include "kis_signals_blocker.h"
 #include "imagesize/imagesize.h"
 
+#include "kis_filter_configuration.h"
 
 class BlockingUserInputEventFilter : public QObject
 {

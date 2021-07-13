@@ -821,6 +821,10 @@ namespace KisLayerUtils {
     {
     }
 
+    SelectGlobalSelectionMask::~SelectGlobalSelectionMask()
+    {
+    }
+
     void SelectGlobalSelectionMask::redo() {
 
         KisImageSignalType type =

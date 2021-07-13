@@ -183,7 +183,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
         KisAsyncAnimationRendererBase *renderer = createRenderer(image);
 
         connect(renderer, SIGNAL(sigFrameCompleted(int)), SLOT(slotFrameCompleted(int)));
-        connect(renderer, SIGNAL(sigFrameCancelled(int)), SLOT(slotFrameCancelled(int)));
+        connect(renderer, SIGNAL(sigFrameCancelled(int, KisAsyncAnimationRendererBase::CancelReason)), SLOT(slotFrameCancelled(int, KisAsyncAnimationRendererBase::CancelReason)));
 
         m_d->asyncRenderers.push_back(RendererPair(renderer, image));
     }
@@ -241,30 +241,33 @@ void KisAsyncAnimationRenderDialogBase::slotFrameCompleted(int frame)
     updateProgressLabel();
 }
 
-void KisAsyncAnimationRenderDialogBase::slotFrameCancelled(int frame)
+void KisAsyncAnimationRenderDialogBase::slotFrameCancelled(int frame, KisAsyncAnimationRendererBase::CancelReason cancelReason)
 {
     Q_UNUSED(frame);
 
-    cancelProcessingImpl(false);
+    cancelProcessingImpl(cancelReason);
 }
 
 void KisAsyncAnimationRenderDialogBase::slotCancelRegeneration()
 {
-    cancelProcessingImpl(true);
+    cancelProcessingImpl(KisAsyncAnimationRendererBase::UserCancelled);
 }
 
-void KisAsyncAnimationRenderDialogBase::cancelProcessingImpl(bool isUserCancelled)
+void KisAsyncAnimationRenderDialogBase::cancelProcessingImpl(KisAsyncAnimationRendererBase::CancelReason cancelReason)
 {
     for (auto &pair : m_d->asyncRenderers) {
         if (pair.renderer->isActive()) {
-            pair.renderer->cancelCurrentFrameRendering();
+            pair.renderer->cancelCurrentFrameRendering(cancelReason);
         }
         KIS_SAFE_ASSERT_RECOVER_NOOP(!pair.renderer->isActive());
     }
 
     m_d->stillDirtyFrames.clear();
     m_d->framesInProgress.clear();
-    m_d->result = isUserCancelled ? RenderCancelled : RenderFailed;
+    m_d->result =
+        cancelReason == KisAsyncAnimationRendererBase::UserCancelled ? RenderCancelled :
+        cancelReason == KisAsyncAnimationRendererBase::RenderingFailed ? RenderFailed :
+        RenderTimedOut;
     updateProgressLabel();
 }
 

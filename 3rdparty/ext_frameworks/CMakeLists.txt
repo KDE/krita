@@ -46,12 +46,21 @@ ExternalProject_Add(
 )
 endif()
 
+set(kconfig_patches
+    ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Patch-kconfig-to-save-the-config-to-AppConfigLocatio.patch
+)
+if(MSVC)
+    set(kconfig_patches
+        ${kconfig_patches}
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Work-around-CMake-multi-config-generators.patch
+    )
+endif()
 ExternalProject_Add(
     ext_kconfig
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://download.kde.org/stable/frameworks/5.64/kconfig-5.64.0.zip
     URL_MD5 52858f7fdcd17d0c5680acf96dcaae9a
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kconfig.diff
+    PATCH_COMMAND ${kconfig_patches}
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 

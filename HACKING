@@ -95,16 +95,6 @@ Initializers
     in a mix of styles in the same file. You can still use that as an exception to solve
     some specific problems like the most vexing parse.
 
-    If you write new code and you think that it can benefit from the usage of {}-
-    initialization in function bodies, you can do that given given the following rules
-    are satisfied:
-
-        * the entire .cpp/.h files pair uses the same initialization style
-        * when converting existing file, the convention is done in a separate commit
-        * when converting existing file, the benefit of rewriting style outweigh the
-          loss of git-blame history (that is, your changes do already change the file
-          significantly).
-
 Scope prefixes
 
 	Use only m_ for class-level variables. No other scope prefixes; no g_, l_,
@@ -180,9 +170,6 @@ Boolean operators
 
     Use the standard !, !=, ==, && etc style, not the "not", "and" etc. style. Keep krita code
     using one, easily recognizable, C++ style.
-
-
-Boudewijn Rempt
 
 
 With Krita now supporting Python scripting, we need guidelines for these as well.

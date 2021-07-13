@@ -1,0 +1,33 @@
+From 99904fc123fc5c0e68e0d9aa176ddbc6604a85e8 Mon Sep 17 00:00:00 2001
+From: Andy Shaw <andy.shaw@qt.io>
+Date: Tue, 12 May 2020 14:06:35 +0200
+Subject: [PATCH 23/43] Android: Clear the m_selectedFile variable when showing
+ again
+
+Since the helper is being reused then the m_selectedFile variable should
+be cleared, otherwise it ends up appending the new result to the old
+one.
+
+Change-Id: I72c24409dc91f91bad55a7da2772605f03fb4623
+Pick-to: 5.15
+Reviewed-by: Assam Boudjelthia <assam.boudjelthia@qt.io>
+---
+ .../platforms/android/qandroidplatformfiledialoghelper.cpp      | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+index 689997f1eb..21e0c47909 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -203,6 +203,8 @@ bool QAndroidPlatformFileDialogHelper::show(Qt::WindowFlags windowFlags, Qt::Win
+ 
+     bool isDirDialog = false;
+ 
++    m_selectedFile.clear();
++
+     if (options()->acceptMode() == QFileDialogOptions::AcceptSave) {
+         m_intent = getFileDialogIntent("ACTION_CREATE_DOCUMENT");
+     } else if (options()->acceptMode() == QFileDialogOptions::AcceptOpen) {
+-- 
+2.20.1.windows.1
+

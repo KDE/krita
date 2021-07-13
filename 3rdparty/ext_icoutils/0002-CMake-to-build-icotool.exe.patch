@@ -1,10 +1,10 @@
-From cfdd736009d5f123b2d30e1e44b9713d5b15a63b Mon Sep 17 00:00:00 2001
+From fbc7e4331acf48e41a65181992138d48d841d831 Mon Sep 17 00:00:00 2001
 From: Alvin Wong <alvinhochun@gmail.com>
 Date: Wed, 2 Jun 2021 13:01:51 +0800
 Subject: [PATCH 2/2] CMake to build icotool.exe
 
 ---
- CMakeLists.txt        |   35 +
+ CMakeLists.txt        |   37 +
  common/CMakeLists.txt |   24 +
  common/string-utils.c |    2 +
  config.h              | 1511 +++++++++++++++++++++++++++++++++++++++++
@@ -12,7 +12,7 @@ Subject: [PATCH 2/2] CMake to build icotool.exe
  lib/CMakeLists.txt    |   37 +
  lib/byteswap.h        |   45 ++
  lib/error.c           |    2 +
- 8 files changed, 1657 insertions(+), 1 deletion(-)
+ 8 files changed, 1659 insertions(+), 1 deletion(-)
  create mode 100644 CMakeLists.txt
  create mode 100644 common/CMakeLists.txt
  create mode 100644 config.h
@@ -21,10 +21,10 @@ Subject: [PATCH 2/2] CMake to build icotool.exe
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..b049b3b
+index 0000000..0e492bb
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,37 @@
 +project(icotool)
 +
 +cmake_minimum_required(VERSION 3.7)
@@ -38,6 +38,8 @@ index 0000000..b049b3b
 +
 +
 +find_package(PNG REQUIRED)
++
++add_definitions(${PNG_DEFINITIONS})
 +
 +set(CONFIG_H config.h)
 +
@@ -56,7 +58,7 @@ index 0000000..b049b3b
 +add_executable(icotool ${ICOTOOL_SRCS})
 +target_include_directories(icotool PRIVATE ./ lib/)
 +target_include_directories(icotool PRIVATE ${PNG_INCLUDE_DIRS})
-+target_link_libraries(icotool ${PNG_LIBRARY})
++target_link_libraries(icotool ${PNG_LIBRARIES})
 +target_link_libraries(icotool gnulib common)
 +
 +install(TARGETS icotool RUNTIME DESTINATION bin)
@@ -1741,5 +1743,5 @@ index 89ca69f..ce5e494 100644
  #endif
  
 -- 
-2.24.1.windows.2
+2.31.1.windows.1
 

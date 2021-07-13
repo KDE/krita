@@ -1,7 +1,7 @@
-From f972e1cff05a7ca517e91d6fdfe99c964316cee5 Mon Sep 17 00:00:00 2001
+From 3906087942de38c711dc0077b2c9baf0f1a60e66 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Tue, 10 Nov 2020 02:16:25 +0000
-Subject: [PATCH 2/5] Remove shared segment infrastructure
+Subject: [PATCH 2/9] Remove shared segment infrastructure
 
 ---
  src/Host/KritaPlugin/gmicqttoolplugin.cpp |   8 +-
@@ -10,10 +10,10 @@ Subject: [PATCH 2/5] Remove shared segment infrastructure
  3 files changed, 39 insertions(+), 134 deletions(-)
 
 diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.cpp b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
-index 1402f82..012c783 100644
+index f5fbef9..23c0e14 100644
 --- a/src/Host/KritaPlugin/gmicqttoolplugin.cpp
 +++ b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
-@@ -121,14 +121,8 @@ int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
+@@ -108,14 +108,8 @@ int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
      r = loop.exec();
    }
  
@@ -286,5 +286,5 @@ index e814385..ffa5283 100644
 -#endif // DRMINGW
 -#endif // Q_OS_WIN
 -- 
-2.30.0
+2.32.0
 

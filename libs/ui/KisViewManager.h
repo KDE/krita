@@ -207,6 +207,9 @@ public Q_SLOTS:
     void changeAuthorProfile(const QString &profileName);
     void slotUpdateAuthorProfileActions();
 
+    void slotToggleFgBg();
+    void slotResetFgBg();
+    
 Q_SIGNALS:
 
     void floatingMessageRequested(const QString &message, const QString &iconName);
@@ -231,8 +234,6 @@ private Q_SLOTS:
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);
-    void slotToggleFgBg();
-    void slotResetFgBg();
     void slotResetRotation();
     void slotToggleFullscreen();
 private:

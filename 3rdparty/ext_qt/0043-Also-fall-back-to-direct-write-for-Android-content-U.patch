@@ -1,8 +1,8 @@
-From c430d52ba74975286756141c69cc5bc8ba84865b Mon Sep 17 00:00:00 2001
+From e7035a788d5ee1436bf3c536bcae6565e8001eb9 Mon Sep 17 00:00:00 2001
 From: Volker Krause <vkrause@kde.org>
 Date: Fri, 16 Aug 2019 18:59:03 +0200
-Subject: [PATCH 3/4] Also fall back to direct write for Android content: URLs
- in QSaveFile
+Subject: [PATCH 16/43] Also fall back to direct write for Android content:
+ URLs in QSaveFile
 
 We cannot rename into content: URLs, so that is the only option, and this
 is particularly relevant here as the native file dialog will give us
@@ -53,5 +53,5 @@ index fac8892da2..7ee9142e14 100644
      d->fileEngine = new QTemporaryFileEngine(&d->finalFileName, QTemporaryFileEngine::Win32NonShared);
      // if the target file exists, we'll copy its permissions below,
 -- 
-2.26.2
+2.20.1.windows.1
 

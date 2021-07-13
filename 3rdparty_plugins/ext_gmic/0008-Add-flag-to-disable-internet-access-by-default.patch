@@ -1,0 +1,75 @@
+From a2433bee7ae9e144d06f044e4408320dee2ef9e1 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 27 Jun 2021 02:08:30 +0000
+Subject: [PATCH 8/9] Add flag to disable internet access by default
+
+---
+ CMakeLists.txt         | 1 +
+ src/DialogSettings.cpp | 6 +-----
+ src/Globals.h          | 6 ++++++
+ src/MainWindow.cpp     | 2 +-
+ 4 files changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 14463d7..6718f7e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -630,6 +630,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
+     set (gmic_qt_SRCS ${gmic_qt_SRCS} )
+     add_definitions(-DGMIC_HOST=krita-plugin)
+     add_definitions(-D_GMIC_QT_DISABLE_THEMING_)
++    add_definitions(-D_GMIC_QT_CONSENT_TO_UPDATE_FIRST_)
+     add_library(krita_gmic_qt MODULE ${gmic_qt_SRCS} ${gmic_qt_QRC} ${qmic_qt_QM})
+     target_include_directories(
+       krita_gmic_qt
+diff --git a/src/DialogSettings.cpp b/src/DialogSettings.cpp
+index 7531762..156541c 100644
+--- a/src/DialogSettings.cpp
++++ b/src/DialogSettings.cpp
+@@ -75,11 +75,7 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
+ #ifdef _GMIC_QT_DEBUG_
+   ui->cbUpdatePeriodicity->addItem(tr("At launch (debug)"), QVariant(0));
+ #endif
+-  for (int i = 0; i < ui->cbUpdatePeriodicity->count(); ++i) {
+-    if (_updatePeriodicity == ui->cbUpdatePeriodicity->itemData(i).toInt()) {
+-      ui->cbUpdatePeriodicity->setCurrentIndex(i);
+-    }
+-  }
++  ui->cbUpdatePeriodicity->setCurrentIndex(ui->cbUpdatePeriodicity->findData(_updatePeriodicity));
+ 
+   ui->outputMessages->setToolTip(tr("Output messages"));
+   ui->outputMessages->addItem(tr("Quiet (default)"), GmicQt::Quiet);
+diff --git a/src/Globals.h b/src/Globals.h
+index ea9a06e..2e0ea8c 100644
+--- a/src/Globals.h
++++ b/src/Globals.h
+@@ -47,7 +47,13 @@ extern const float PreviewFactorActualSize;
+ #define REFRESH_USING_INTERNET_KEY "Config/RefreshInternetUpdate"
+ #define INTERNET_UPDATE_PERIODICITY_KEY "Config/UpdatesPeriodicityValue"
+ #define INTERNET_NEVER_UPDATE_PERIODICITY std::numeric_limits<int>::max()
++#ifdef _GMIC_QT_CONSENT_TO_UPDATE_FIRST_
++#define INTERNET_DEFAULT_PERIODICITY INTERNET_NEVER_UPDATE_PERIODICITY
++#define INTERNET_DEFAULT_REFRESH_UPDATE 0
++#else
+ #define INTERNET_DEFAULT_PERIODICITY (7 * 24)
++#define INTERNET_DEFAULT_REFRESH_UPDATE 1
++#endif
+ 
+ #define PREVIEW_MAX_ZOOM_FACTOR 40.0
+ 
+diff --git a/src/MainWindow.cpp b/src/MainWindow.cpp
+index 18f2c12..af2a8ff 100644
+--- a/src/MainWindow.cpp
++++ b/src/MainWindow.cpp
+@@ -976,7 +976,7 @@ void MainWindow::loadSettings()
+     ui->splitter->setSizes(sizes);
+   }
+ 
+-  ui->cbInternetUpdate->setChecked(settings.value("Config/RefreshInternetUpdate", true).toBool());
++  ui->cbInternetUpdate->setChecked(settings.value(REFRESH_USING_INTERNET_KEY, INTERNET_DEFAULT_REFRESH_UPDATE).toBool());
+ }
+ 
+ void MainWindow::setPreviewPosition(MainWindow::PreviewPosition position)
+-- 
+2.31.1.windows.1
+

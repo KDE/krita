@@ -109,12 +109,12 @@ Exiv2::Value* variantToExivValue(const QVariant& variant, Exiv2::TypeId type)
     }
     case Exiv2::asciiString:
         if (variant.type() == QVariant::DateTime) {
-            return new Exiv2::AsciiValue(qPrintable(variant.toDateTime().toString("yyyy:MM:dd hh:mm:ss")));
+            return new Exiv2::AsciiValue(qPrintable(QLocale::c().toString(variant.toDateTime(), QStringLiteral("yyyy:MM:dd hh:mm:ss"))));
         } else
             return new Exiv2::AsciiValue(qPrintable(variant.toString()));
     case Exiv2::string: {
         if (variant.type() == QVariant::DateTime) {
-            return new Exiv2::StringValue(qPrintable(variant.toDateTime().toString("yyyy:MM:dd hh:mm:ss")));
+            return new Exiv2::StringValue(qPrintable(QLocale::c().toString(variant.toDateTime(), QStringLiteral("yyyy:MM:dd hh:mm:ss"))));
         } else
             return new Exiv2::StringValue(qPrintable(variant.toString()));
     }

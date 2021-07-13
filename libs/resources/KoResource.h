@@ -50,6 +50,7 @@ public:
      *
      * @param filename the file name to save and load from.
      */
+    KoResource();
     explicit KoResource(const QString &filename);
     virtual ~KoResource();
     KoResource(const KoResource &rhs);
@@ -57,7 +58,7 @@ public:
 
     virtual KoResourceSP clone() const = 0;
 
-    bool operator==(const KoResource &other) const;
+
 
 public:
     /**
@@ -108,7 +109,7 @@ public:
     virtual QString thumbnailPath() const;
 
     /// @return the md5sum calculated over the contents of the resource.
-    QByteArray md5() const;
+    QByteArray md5(bool generateIfEmpty = true) const;
     void setMD5(const QByteArray &md5);
 
     /// @return the filename of this resource within the container (folder, bundle, ...)

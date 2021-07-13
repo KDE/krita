@@ -19,13 +19,12 @@
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_image.h"
-
+#include "kis_filter_configuration.h"
 #include "kritaimage_export.h"
 
 class QWidget;
 
 class KisBookmarkedConfigurationManager;
-class KisFilterConfiguration;
 class KisConfigWidget;
 
 class KoResource;

@@ -427,10 +427,10 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
 
         const QPointF rotationCenter = m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset();
         const QPointF clickMouseImagePos = clickT.inverted().map(m_d->clickPos) - rotationCenter;
-        const QPointF mouseImagePos = clickT.inverted().map(mousePos) - rotationCenter;
+        const QPointF mouseImagePosClickSpace = clickT.inverted().map(mousePos) - rotationCenter;
 
         const qreal a1 = atan2(clickMouseImagePos.y(), clickMouseImagePos.x());
-        const qreal a2 = atan2(mouseImagePos.y(), mouseImagePos.x());
+        const qreal a2 = atan2(mouseImagePosClickSpace.y(), mouseImagePosClickSpace.x());
 
         const qreal theta = KisAlgebra2D::signZZ(clickT.determinant()) * (a2 - a1);
 
@@ -438,11 +438,16 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         if (shiftModifierActive) {
             const qreal snapAngle = M_PI_4 / 6.0; // fifteen degrees
             qint32 thetaIndex = static_cast<qint32>((theta / snapAngle) + 0.5);
-            m_d->currentArgs.setAZ(normalizeAngle(thetaIndex * snapAngle));
+            m_d->currentArgs.setAZ(thetaIndex * snapAngle);
         }
-
         else {
-            m_d->currentArgs.setAZ(normalizeAngle(m_d->clickArgs.aZ() + theta));
+            const qreal clickAngle = m_d->clickArgs.aZ();
+            const qreal targetAngle = m_d->clickArgs.aZ() + theta;
+            qreal shortestDistance = shortestAngularDistance(clickAngle, targetAngle);
+            const bool clockwise = (clickAngle + shortestDistance) == targetAngle;
+            shortestDistance = clockwise ? shortestDistance : shortestDistance * -1;
+
+            m_d->currentArgs.setAZ(m_d->clickArgs.aZ() + shortestDistance);
         }
 
         KisTransformUtils::MatricesPack m(m_d->currentArgs);

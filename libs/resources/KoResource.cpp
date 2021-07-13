@@ -39,6 +39,11 @@ struct Q_DECL_HIDDEN KoResource::Private {
     QMap<QString, QVariant> metadata;
 };
 
+KoResource::KoResource()
+    : d(new Private)
+{
+}
+
 KoResource::KoResource(const QString& filename)
     : d(new Private)
 {
@@ -56,10 +61,7 @@ KoResource::KoResource(const KoResource &rhs)
 {
 }
 
-bool KoResource::operator==(const KoResource &other) const
-{
-    return other.md5() == md5();
-}
+
 
 bool KoResource::load(KisResourcesInterfaceSP resourcesInterface)
 {
@@ -133,9 +135,9 @@ void KoResource::setImage(const QImage &image)
     d->image = image;
 }
 
-QByteArray KoResource::md5() const
+QByteArray KoResource::md5(bool generateIfEmpty) const
 {
-    if (d->md5.isEmpty()) {
+    if (d->md5.isEmpty() && generateIfEmpty) {
         dbgResources << "No MD5 for" << this << this->name();
         QByteArray ba;
         QBuffer buf(&ba);

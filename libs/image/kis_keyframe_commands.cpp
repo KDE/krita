@@ -63,8 +63,7 @@ KisScalarKeyframeUpdateCommand::KisScalarKeyframeUpdateCommand(KisScalarKeyframe
 
 void KisScalarKeyframeUpdateCommand::redo()
 {
-    if (!keyframe)
-        return;
+    KIS_ASSERT(keyframe);
 
     QSharedPointer<ScalarKeyframeLimits> limits = keyframe->m_channelLimits.toStrongRef();
     if (limits) {
@@ -83,8 +82,7 @@ void KisScalarKeyframeUpdateCommand::redo()
 
 void KisScalarKeyframeUpdateCommand::undo()
 {
-    if (!keyframe)
-        return;
+    KIS_ASSERT(keyframe);
 
     QSharedPointer<ScalarKeyframeLimits> limits = keyframe->m_channelLimits.toStrongRef();
     if (limits) {

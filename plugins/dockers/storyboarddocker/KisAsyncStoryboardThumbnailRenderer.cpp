@@ -12,7 +12,9 @@ KisAsyncStoryboardThumbnailRenderer::KisAsyncStoryboardThumbnailRenderer(QObject
     : KisAsyncAnimationRendererBase(parent)
 {
     connect(this, SIGNAL(sigNotifyFrameCompleted(int)), SLOT(notifyFrameCompleted(int)), Qt::QueuedConnection);
-    connect(this, SIGNAL(sigNotifyFrameCancelled(int)), SLOT(notifyFrameCancelled(int)), Qt::QueuedConnection);
+    connect(this,
+            SIGNAL(sigNotifyFrameCancelled(int, KisAsyncAnimationRendererBase::CancelReason)),
+            SLOT(notifyFrameCancelled(int, KisAsyncAnimationRendererBase::CancelReason)), Qt::QueuedConnection);
 }
 
 KisAsyncStoryboardThumbnailRenderer::~KisAsyncStoryboardThumbnailRenderer()
@@ -28,13 +30,13 @@ void KisAsyncStoryboardThumbnailRenderer::frameCompletedCallback(int frameTime, 
         emit sigNotifyFrameCompleted(frameTime);
         emit sigNotifyFrameCompleted(frameTime, requestedFrame);
     } else {
-        emit sigNotifyFrameCancelled(frameTime);
+        emit sigNotifyFrameCancelled(frameTime, KisAsyncAnimationRendererBase::RenderingFailed);
     }
 }
 
-void KisAsyncStoryboardThumbnailRenderer::frameCancelledCallback(int frame)
+void KisAsyncStoryboardThumbnailRenderer::frameCancelledCallback(int frame, CancelReason cancelReason)
 {
-    emit sigNotifyFrameCancelled(frame);
+    emit sigNotifyFrameCancelled(frame, cancelReason);
 }
 
 void KisAsyncStoryboardThumbnailRenderer::clearFrameRegenerationState(bool isCancelled)

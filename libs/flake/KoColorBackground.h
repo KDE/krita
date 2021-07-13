@@ -27,6 +27,10 @@ public:
 
     ~KoColorBackground() override;
 
+    // Work around MSVC inability to generate copy ops with QSharedDataPointer.
+    KoColorBackground(const KoColorBackground &);
+    KoColorBackground &operator=(const KoColorBackground &);
+
     bool compareTo(const KoShapeBackground *other) const override;
 
     /// Returns the background color

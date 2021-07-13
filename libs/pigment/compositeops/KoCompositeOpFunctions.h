@@ -12,6 +12,10 @@
 #include <type_traits>
 #include <cmath>
 
+#ifdef HAVE_OPENEXR
+#include "half.h"
+#endif
+
 template<class HSXType, class TReal>
 inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
 {
@@ -154,7 +158,7 @@ inline T colorBurnHelper(T src, T dst) {
 
 // Integer version of color burn
 template<class T>
-inline typename std::enable_if<std::is_integral<T>::value, T>::type
+inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
 cfColorBurn(T src, T dst) {
     using namespace Arithmetic;
     return inv(colorBurnHelper(src, dst));
@@ -162,7 +166,7 @@ cfColorBurn(T src, T dst) {
 
 // Floating point version of color burn
 template<class T>
-inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
+inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
 cfColorBurn(T src, T dst) {
     using namespace Arithmetic;
     const T result = colorBurnHelper(src, dst);
@@ -199,14 +203,14 @@ inline T colorDodgeHelper(T src, T dst) {
 
 // Integer version of color dodge
 template<class T>
-inline typename std::enable_if<std::is_integral<T>::value, T>::type
+inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
 cfColorDodge(T src, T dst) {
     return colorDodgeHelper(src, dst);
 }
 
 // Floating point version of color dodge
 template<class T>
-inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
+inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
 cfColorDodge(T src, T dst) {
     const T result = colorDodgeHelper(src, dst);
     // Constantly dividing by small numbers can quickly make the result
@@ -280,12 +284,12 @@ inline T cfSoftLightSvg(T src, T dst) {
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
 
-    if(fsrc > 0.5f) {
-        qreal D = (fdst > 0.25f) ? sqrt(fdst) : ((16.0f*fdst - 12.0)*fdst + 4.0f)*fdst;
-        return scale<T>(fdst + (2.0f*fsrc - 1.0f) * (D - fdst));
+    if(fsrc > 0.5) {
+        qreal D = (fdst > 0.25) ? sqrt(fdst) : ((16.0*fdst - 12.0)*fdst + 4.0)*fdst;
+        return scale<T>(fdst + (2.0*fsrc - 1.0) * (D - fdst));
     }
 
-    return scale<T>(fdst - (1.0f - 2.0f * fsrc) * fdst * (1.0f - fdst));
+    return scale<T>(fdst - (1.0 - 2.0 * fsrc) * fdst * (1.0 - fdst));
 }
 
 
@@ -296,11 +300,11 @@ inline T cfSoftLight(T src, T dst) {
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
     
-    if(fsrc > 0.5f) {
-        return scale<T>(fdst + (2.0f * fsrc - 1.0f) * (sqrt(fdst) - fdst));
+    if(fsrc > 0.5) {
+        return scale<T>(fdst + (2.0 * fsrc - 1.0) * (sqrt(fdst) - fdst));
     }
     
-    return scale<T>(fdst - (1.0f - 2.0f*fsrc) * fdst * (1.0f - fdst));
+    return scale<T>(fdst - (1.0 - 2.0*fsrc) * fdst * (1.0 - fdst));
 }
 
 template<class T>
@@ -492,8 +496,8 @@ inline T cfHardOverlay(T src, T dst) {
     if (fsrc == 1.0) {
         return scale<T>(1.0);}
 
-    if(fsrc > 0.5f) {
-        return scale<T>(cfDivide(inv(2.0 * fsrc - 1.0f), fdst));
+    if(fsrc > 0.5) {
+        return scale<T>(cfDivide(inv(2.0 * fsrc - 1.0), fdst));
     }
     return scale<T>(mul(2.0 * fsrc, fdst));
 }

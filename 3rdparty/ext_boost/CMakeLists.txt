@@ -1,5 +1,6 @@
 SET(PREFIX_ext_boost "${EXTPREFIX}" )
-if(MINGW)
+if(WIN32)
+   if(MINGW)
    string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1\\2"
       KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
    ExternalProject_Add(
@@ -24,6 +25,40 @@ if(MINGW)
        COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-1_61.dll ${PREFIX_ext_boost}/bin/
        DEPENDEES install
    )
+   else()
+      # Boost.Build cannot append arbitrary flags to MSVC from the command line.
+      # It becomes unable to detect the target architecture or defaults to x86 only.
+      # On top of that, parameterizing the linkflags flag breaks the MinGW build.
+      ExternalProject_Add(
+        ext_boost
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+
+        URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
+        URL_HASH SHA256=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee
+
+        CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat msvc --prefix=${PREFIX_ext_boost}
+        BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc variant=release link=shared threading=multi architecture=x86 install
+        INSTALL_COMMAND ""
+        INSTALL_DIR ${EXTPREFIX_boost}
+
+        UPDATE_COMMAND ""
+        BUILD_IN_SOURCE 1
+      )
+      if (NOT DEFINED MSVC_TOOLSET_VERSION)
+        string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" KRITA_boost_COMPILER ${CMAKE_CXX_COMPILER})
+        string(REGEX REPLACE "^([0-9]+)\\.([0-9]).+$" "\\1\\2"
+        KRITA_boost_COMPILER_VERSION ${KRITA_boost_COMPILER})
+      else()
+        set(KRITA_boost_COMPILER_VERSION ${MSVC_TOOLSET_VERSION})
+      endif()
+      ExternalProject_Add_Step(
+        ext_boost
+        post_install
+        COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc${KRITA_boost_COMPILER_VERSION}-mt-x32-1_71.dll ${PREFIX_ext_boost}/bin/
+            COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc${KRITA_boost_COMPILER_VERSION}-mt-x64-1_71.dll ${PREFIX_ext_boost}/bin/
+        DEPENDEES install
+      )
+   endif()
 elseif(ANDROID)
     ExternalProject_Add( ext_boost
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -49,7 +84,7 @@ elseif(ANDROID)
 else()
 	ExternalProject_Add( ext_boost
         	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
+	        URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
         	URL_HASH SHA256=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee
 
         	CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${PREFIX_ext_boost} --with-libraries=system

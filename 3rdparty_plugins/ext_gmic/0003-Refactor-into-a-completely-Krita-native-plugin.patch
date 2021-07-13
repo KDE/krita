@@ -1,7 +1,7 @@
-From 7f99aec7447d3c21ada17b093f7956c6dbced641 Mon Sep 17 00:00:00 2001
+From 76f9bfab2269686e9cbebf68dc0ea01727c7755a Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Wed, 11 Nov 2020 17:05:57 +0000
-Subject: [PATCH 3/5] Refactor into a completely Krita native plugin
+Subject: [PATCH 3/9] Refactor into a completely Krita native plugin
 
 ---
  CMakeLists.txt                             | 33 +++++++++++++++++-----
@@ -81,7 +81,7 @@ index ce0ccff..30aa10d 100644
  elseif (${GMIC_QT_HOST} STREQUAL "none")
  
 diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.cpp b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
-index 012c783..ad1e912 100644
+index 23c0e14..0be0b6e 100644
 --- a/src/Host/KritaPlugin/gmicqttoolplugin.cpp
 +++ b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
 @@ -37,6 +37,13 @@
@@ -98,7 +98,7 @@ index 012c783..ad1e912 100644
  int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
                              bool headless) {
    disableInputMode(GmicQt::NoInput);
-@@ -126,3 +133,5 @@ int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
+@@ -113,3 +120,5 @@ int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
  
    return r;
  }
@@ -166,5 +166,5 @@ index ffa5283..4ff84e6 100644
  /*
   * No messages are sent in the plugin version of GMic.
 -- 
-2.30.0
+2.32.0
 

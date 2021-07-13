@@ -91,7 +91,7 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     {
         SignalToFunctionProxy proxy1(std::bind(checkFrame, i, p.image, 0, true, rc1 | rc2));
         connect(i, SIGNAL(sigFrameReady(int)), &proxy1, SLOT(start()), Qt::DirectConnection);
-        i->requestFrameRegeneration(0, KisRegion(refRect));
+        i->requestFrameRegeneration(0, KisRegion(refRect), false);
         QTest::qWait(200);
     }
 
@@ -114,7 +114,7 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     {
         SignalToFunctionProxy proxy2(std::bind(checkFrame, i, p.image, 10, true, rc3 | rc4));
         connect(i, SIGNAL(sigFrameReady(int)), &proxy2, SLOT(start()), Qt::DirectConnection);
-        i->requestFrameRegeneration(10, KisRegion(refRect));
+        i->requestFrameRegeneration(10, KisRegion(refRect), false);
         QTest::qWait(200);
     }
 
@@ -200,7 +200,7 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
 
     m_image = p.image;
     connect(p.image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(slotFrameDone()), Qt::DirectConnection);
-    p.image->animationInterface()->requestFrameRegeneration(5, rect);
+    p.image->animationInterface()->requestFrameRegeneration(5, rect, false);
     QTest::qWait(200);
 
     KisPaintDeviceSP tmpDevice = new KisPaintDevice(p.image->colorSpace());

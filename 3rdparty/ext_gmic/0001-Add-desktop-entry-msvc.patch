@@ -1,0 +1,59 @@
+From 9de5fddef1dc023e7cd76c2240dc0008fcb9a76c Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 22 Oct 2020 22:11:08 +0000
+Subject: [PATCH] Add desktop entry
+
+---
+ CMakeLists.txt        | 1 +
+ gmic_krita_qt.desktop | 9 +++++++++
+ 2 files changed, 10 insertions(+)
+ create mode 100644 gmic_krita_qt.desktop
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b61d54..ec94584 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -164,6 +164,7 @@ include_directories(SYSTEM ${ZLIB_INCLUDE_DIRS} )
+ find_package(FFTW3 REQUIRED)
+ add_definitions(-Dcimg_use_fftw3 )
+ include_directories(${FFTW3_INCLUDE_DIR})
++link_directories(${FFTW3_LIBRARY_DIRS})
+ find_library(FFTW3_THREADS_LIB fftw3_threads PATHS ${FFTW3_LIBRARY_DIRS})
+ if(FFTW3_THREADS_LIB STREQUAL "FFTW3_THREADS_LIB-NOTFOUND")
+     add_definitions(-Dcimg_use_fftw3_singlethread)
+@@ -267,7 +268,7 @@ if (WIN32)
+     add_definitions(-D_IS_WINDOWS_)
+     set(gmic_qt_LIBRARIES
+         ${gmic_qt_LIBRARIES}
+-        pthread psapi gdi32
++        psapi gdi32
+     )
+ endif()
+ 
+@@ -532,7 +533,8 @@ if (${GMIC_QT_HOST} STREQUAL "gimp")
+       ${gmic_qt_LIBRARIES}
+       )
+     install(TARGETS gmic_gimp_qt RUNTIME DESTINATION "${GIMP2_PKGLIBDIR}/plug-ins")
+-
++    install(FILES gmic_krita_qt.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/bin OPTIONAL)
++	
+ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+ 
+     set (gmic_qt_SRCS ${gmic_qt_SRCS} src/Host/Krita/host_krita.cpp)
+diff --git a/gmic_krita_qt.desktop b/gmic_krita_qt.desktop
+new file mode 100644
+index 0000000..579d427
+--- /dev/null
++++ b/gmic_krita_qt.desktop
+@@ -0,0 +1,9 @@
++[Desktop Entry]
++Name=gmic_krita_qt
++Exec=gmic_krita_qt
++GenericName=G'Mic plugin for Krita
++Comment=G'Mic plugin for Krita
++Type=Application
++Icon=gmic_krita_qt
++Categories=Qt;KDE;Graphics;
++StartupNotify=false
+-- 
+2.28.0

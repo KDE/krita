@@ -36,7 +36,7 @@ struct KisDlgFilter::Private {
             , resizeCount(0)
             , view(_view)
             , filterManager(_filterManager)
-            , blockModifyingActionsGuard(new KisInputActionGroupsMaskGuard(view->canvasBase(), ViewTransformActionGroup))
+            , blockModifyingActionsGuard(new KisInputActionGroupsMaskGuard(view->canvasBase()->inputActionGroupsMaskInterface(), ViewTransformActionGroup))
             , updateCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {
         updateCompressor.setDelay(
@@ -197,7 +197,7 @@ void KisDlgFilter::slotOnAccept()
 void KisDlgFilter::slotOnReject()
 {
     if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancel();
+        d->filterManager->cancelRunningStroke();
     }
 
     KisConfig(false).setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
@@ -208,7 +208,7 @@ void KisDlgFilter::createMask()
     if (d->node->inherits("KisMask")) return;
 
     if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancel();
+        d->filterManager->cancelRunningStroke();
     }
 
     KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
@@ -223,16 +223,16 @@ void KisDlgFilter::createMask()
     adapter.addNode(mask, layer, layer->lastChild());
 }
 
-void KisDlgFilter::enablePreviewToggled(bool state)
+void KisDlgFilter::enablePreviewToggled(bool checked)
 {
-    if (state) {
+    if (checked) {
         d->updateCompressor.start();
     } else if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancel();
+        d->filterManager->cancelRunningStroke();
     }
 
     KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
-    group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
+    group.writeEntry("showPreview", checked);
 
     group.config()->sync();
 }

@@ -74,9 +74,16 @@ message(STATUS "NSIS version ${MAKENSIS_VERSION}")
 
 # Check if package contains debug symbols
 file(TO_CMAKE_PATH "${KRITA_PACKAGE_ROOT}" KRITA_PACKAGE_ROOT_PATCHED)
-file(GLOB_RECURSE globForDebugFiles
-    "${KRITA_PACKAGE_ROOT_PATCHED}/*.debug"
-)
+set(is_msvc @MSVC@)
+if (is_msvc)
+    file(GLOB_RECURSE globForDebugFiles
+        "${KRITA_PACKAGE_ROOT_PATCHED}/*.pdb"
+    )
+else ()
+    file(GLOB_RECURSE globForDebugFiles
+        "${KRITA_PACKAGE_ROOT_PATCHED}/*.debug"
+    )
+endif()
 if(globForDebugFiles)
     if(REMOVE_DEBUG)
         message(STATUS "Removing debug symbols")

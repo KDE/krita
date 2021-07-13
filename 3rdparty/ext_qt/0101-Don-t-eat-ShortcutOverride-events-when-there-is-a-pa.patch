@@ -1,7 +1,7 @@
-From c0e035236696cd274f03ff15a7ca09d358aac9f1 Mon Sep 17 00:00:00 2001
+From b804ed1c3c5c6b2e43ae186ef307f6a026db3cfb Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Mon, 29 Jun 2020 23:41:13 +0300
-Subject: [PATCH] Don't eat ShortcutOverride events when there is a
+Subject: [PATCH 26/47] Don't eat ShortcutOverride events when there is a
  partial-match
 
 Some applications (e.g. Krita) may have its own shortcuts system. That
@@ -19,7 +19,7 @@ https://bugs.kde.org/show_bug.cgi?id=409613
  2 files changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/src/gui/kernel/qshortcutmap_p.h b/src/gui/kernel/qshortcutmap_p.h
-index 8fc68229..91191288 100644
+index 8fc68229fb..91191288d3 100644
 --- a/src/gui/kernel/qshortcutmap_p.h
 +++ b/src/gui/kernel/qshortcutmap_p.h
 @@ -91,8 +91,10 @@ public:
@@ -35,10 +35,10 @@ index 8fc68229..91191288 100644
      void dispatchEvent(QKeyEvent *e);
  
 diff --git a/src/gui/kernel/qwindowsysteminterface.cpp b/src/gui/kernel/qwindowsysteminterface.cpp
-index b3b6167c..9bb43f2a 100644
+index 62f309a1da..5caf4802a0 100644
 --- a/src/gui/kernel/qwindowsysteminterface.cpp
 +++ b/src/gui/kernel/qwindowsysteminterface.cpp
-@@ -441,7 +441,8 @@ bool QWindowSystemInterface::handleShortcutEvent(QWindow *window, ulong timestam
+@@ -440,7 +440,8 @@ bool QWindowSystemInterface::handleShortcutEvent(QWindow *window, ulong timestam
          window = QGuiApplication::focusWindow();
  
      QShortcutMap &shortcutMap = QGuiApplicationPrivate::instance()->shortcutMap;
@@ -48,7 +48,7 @@ index b3b6167c..9bb43f2a 100644
          // Check if the shortcut is overridden by some object in the event delivery path (typically the focus object).
          // If so, we should not look up the shortcut in the shortcut map, but instead deliver the event as a regular
          // key event, so that the target that accepted the shortcut override event can handle it. Note that we only
-@@ -451,8 +452,13 @@ bool QWindowSystemInterface::handleShortcutEvent(QWindow *window, ulong timestam
+@@ -450,8 +451,13 @@ bool QWindowSystemInterface::handleShortcutEvent(QWindow *window, ulong timestam
              QEvent::ShortcutOverride, keyCode, modifiers, nativeScanCode, nativeVirtualKey, nativeModifiers, text, autorepeat, count);
  
          {

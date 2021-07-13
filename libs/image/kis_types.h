@@ -323,6 +323,9 @@ class StoryboardItem;
 typedef QSharedPointer<StoryboardItem> StoryboardItemSP;
 typedef QVector<StoryboardItemSP> StoryboardItemList;
 
+class StoryboardComment;
+typedef QVector<StoryboardComment> StoryboardCommentList;
+
 #include <QSharedPointer>
 #include <QWeakPointer>
 #include <kis_shared_ptr.h>

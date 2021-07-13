@@ -7,7 +7,7 @@
 #include <kis_signal_compressor.h>
 
 #include "KisSelectionPropertySlider.h"
-
+template class KRITAUI_EXPORT KisSelectionPropertySlider<KoShape*>;
 struct KisSelectionPropertySliderBase::Private
 {
     KisSignalCompressor *signalCompressor;

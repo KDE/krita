@@ -1,7 +1,7 @@
-From bcd7cd5b0a3ce8099ca8ffdeb92e4b4a854466cf Mon Sep 17 00:00:00 2001
+From 17d9efa90e6893cf00c9cfd120fe28ad2e810e15 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 21 Sep 2020 12:05:19 +0000
-Subject: [PATCH] Android: Workarounds to explicitly handle content URIs
+Subject: [PATCH 29/43] Android: Workarounds to explicitly handle content URIs
 
 On Android we can't reliably get fileName, suffix etc
 from the Uri of the path, so we need to use ContentResolver
@@ -140,7 +140,7 @@ index 6d82981fd6..d834ffe225 100644
  }
  
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
-index cdefacfaf9..9a743f3946 100644
+index 2c11f5f14a..c367a7e362 100644
 --- a/src/plugins/platforms/android/androidcontentfileengine.cpp
 +++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
 @@ -133,6 +133,16 @@ QString AndroidContentFileEngine::fileName(FileName f) const
@@ -190,5 +190,5 @@ index 6bb3372380..05e4ccbbee 100644
      QJNIObjectPrivate contentResolver = m_activity.callObjectMethod(
              "getContentResolver", "()Landroid/content/ContentResolver;");
 -- 
-2.30.0
+2.20.1.windows.1
 

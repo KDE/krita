@@ -31,7 +31,7 @@ KisShadeSelectorLineComboBox::KisShadeSelectorLineComboBox(QWidget *parent) :
     QGridLayout* l = new QGridLayout(this);
     l->addWidget(m_currentLine);
 
-    m_currentLine->setEnabled(false);
+    m_currentLine->setAttribute(Qt::WA_TransparentForMouseEvents);
 
     KoColor color;
     color.fromQColor(QColor(190, 50, 50));

@@ -69,10 +69,6 @@ KoCanvasResourcesInterfaceSP KisPaintOpConfigWidget::canvasResourcesInterface() 
     return m_canvasResourcesInterface;
 }
 
-bool KisPaintOpConfigWidget::presetIsValid() {
-    return true;
-}
-
 bool KisPaintOpConfigWidget::supportScratchBox() {
     return true;
 }

@@ -89,17 +89,17 @@ struct InplaceTransformStrokeStrategy::Private
     QHash<KisTransformMask*, KisPaintDeviceSP> transformMaskCacheHash;
 
     QMutex dirtyRectsMutex;
-    QHash<KisNodeSP, QRect> dirtyRects;
-    QHash<KisNodeSP, QRect> prevDirtyRects;
+    KisBatchNodeUpdate dirtyRects;
+    KisBatchNodeUpdate prevDirtyRects;
 
-    QHash<KisNodeSP, QRect> dirtyPreviewRects;
-    QHash<KisNodeSP, QRect> prevDirtyPreviewRects;
+    KisBatchNodeUpdate dirtyPreviewRects;
+    KisBatchNodeUpdate prevDirtyPreviewRects;
 
-    inline QHash<KisNodeSP, QRect>& effectiveDirtyRects(int levelOfDetail) {
+    inline KisBatchNodeUpdate& effectiveDirtyRects(int levelOfDetail) {
         return levelOfDetail > 0 ? dirtyPreviewRects : dirtyRects;
     }
 
-    inline QHash<KisNodeSP, QRect>& effectivePrevDirtyRects(int levelOfDetail) {
+    inline KisBatchNodeUpdate& effectivePrevDirtyRects(int levelOfDetail) {
         return levelOfDetail > 0 ? prevDirtyPreviewRects : prevDirtyRects;
     }
 
@@ -120,6 +120,9 @@ struct InplaceTransformStrokeStrategy::Private
     QSharedPointer<boost::none_t> commandUpdatesBlockerCookie;
 
     bool strokeCompletionHasBeenStarted = false;
+
+    KisBatchNodeUpdateSP updateDataForUndo;
+    KisBatchNodeUpdate initialUpdatesBeforeClear;
 };
 
 
@@ -291,14 +294,6 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     // When placing an external source image, we never work recursively on any layer masks
     m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->externalSource);
 
-    // When dealing with animated transform mask layers, create keyframe and save the command for undo.
-    Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-        if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
-            QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask));
-            runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
-        }
-    }
-
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;
 
@@ -322,14 +317,30 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     }
 
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
-        executeAndAddCommand(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisDisableDirtyRequestsCommand::INITIALIZING), Clear, KisStrokeJobData::BARRIER);
-
         Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-            m_d->prevDirtyRects[node] = node->extent();
+            m_d->prevDirtyRects.addUpdate(node, node->extent());
         }
+
+        m_d->initialUpdatesBeforeClear = m_d->prevDirtyRects.compressed();
+        m_d->updateDataForUndo.reset(new KisBatchNodeUpdate(m_d->initialUpdatesBeforeClear));
+
+        executeAndAddCommand(new KisUpdateCommandEx(m_d->updateDataForUndo, m_d->updatesFacade, KisUpdateCommandEx::INITIALIZING, m_d->commandUpdatesBlockerCookie), Clear, KisStrokeJobData::BARRIER);
+        executeAndAddCommand(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisDisableDirtyRequestsCommand::INITIALIZING), Clear, KisStrokeJobData::BARRIER);
     });
 
     extraInitJobs << lastCommandUndoJobs;
+
+    KritaUtils::addJobSequential(extraInitJobs, [this]() {
+        // When dealing with animated transform mask layers, create keyframe and save the command for undo.
+        Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
+            if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
+                QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask,
+                                                                                                                                        KisTransformMaskParamsInterfaceSP(
+                                                                                                                                            new KisTransformMaskAdapter(m_d->initialTransformArgs))));
+                runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+            }
+        }
+    });
 
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         /**
@@ -401,7 +412,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         if (m_d->previewLevelOfDetail > 0) {
             for (auto it = m_d->prevDirtyRects.begin(); it != m_d->prevDirtyRects.end(); ++it) {
                 KisLodTransform t(m_d->previewLevelOfDetail);
-                m_d->prevDirtyPreviewRects[it.key()] = t.map(it.value());
+                m_d->prevDirtyPreviewRects.addUpdate(it->first, t.map(it->second));
             }
         }
 
@@ -550,34 +561,15 @@ void InplaceTransformStrokeStrategy::undoTransformCommands(int levelOfDetail)
     }
 }
 
-void InplaceTransformStrokeStrategy::fetchAllUpdateRequests(int levelOfDetail, KisUpdateCommandEx::SharedDataSP updateData)
+void InplaceTransformStrokeStrategy::fetchAllUpdateRequests(int levelOfDetail, KisBatchNodeUpdateSP updateData)
 {
-    QHash<KisNodeSP, QRect> &dirtyRects = m_d->effectiveDirtyRects(levelOfDetail);
-    QHash<KisNodeSP, QRect> &prevDirtyRects = m_d->effectivePrevDirtyRects(levelOfDetail);
+    KisBatchNodeUpdate &dirtyRects = m_d->effectiveDirtyRects(levelOfDetail);
+    KisBatchNodeUpdate &prevDirtyRects = m_d->effectivePrevDirtyRects(levelOfDetail);
 
-    KisNodeList nodes = KisLayerUtils::sortAndFilterMergableInternalNodes(m_d->processedNodes, true);
+    *updateData = (prevDirtyRects | dirtyRects).compressed();
 
-
-    Q_FOREACH (KisNodeSP node, nodes) {
-        QRect dirtyRect;
-
-        KisLayerUtils::recursiveApplyNodes(node,
-            [&dirtyRect, &dirtyRects, &prevDirtyRects] (KisNodeSP node) {
-
-                KIS_SAFE_ASSERT_RECOVER_NOOP(dirtyRects.contains(node) == prevDirtyRects.contains(node));
-
-                if (dirtyRects.contains(node)) {
-                    dirtyRect |= dirtyRects[node];
-                }
-
-                if (prevDirtyRects.contains(node)) {
-                    dirtyRect |= prevDirtyRects[node];
-                }
-            });
-
-        if (dirtyRect.isEmpty()) continue;
-
-        updateData->push_back(std::make_pair(node, dirtyRect));
+    if (levelOfDetail <= 0) {
+        *m_d->updateDataForUndo = (m_d->initialUpdatesBeforeClear | dirtyRects).compressed();
     }
 
     prevDirtyRects.clear();
@@ -677,7 +669,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
         }
 
 
-        { // Set Keyframe Data.
+        if (commandGroup == Transform) { // Set Keyframe Data.
             ToolTransformArgs unscaled = ToolTransformArgs(config);
 
             if (levelOfDetail > 0) {
@@ -787,7 +779,7 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
         args.scale3dSrcAndDst(KisLodTransform::lodToScale(levelOfDetail));
     }
 
-    KisUpdateCommandEx::SharedDataSP updateData(new KisUpdateCommandEx::SharedData());
+    KisBatchNodeUpdateSP updateData(new KisBatchNodeUpdate());
 
     CommandGroup commandGroup =
         levelOfDetail > 0 ? TransformLod : Transform;
@@ -802,7 +794,6 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
             executeAndAddCommand(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), commandGroup, KisStrokeJobData::BARRIER);
         }
 
-        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::INITIALIZING, m_d->commandUpdatesBlockerCookie), commandGroup, KisStrokeJobData::BARRIER);
         executeAndAddCommand(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisUpdateCommandEx::INITIALIZING), commandGroup, KisStrokeJobData::BARRIER);
     });
 
@@ -993,5 +984,5 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
 
 void InplaceTransformStrokeStrategy::addDirtyRect(KisNodeSP node, const QRect &rect, int levelOfDetail) {
     QMutexLocker l(&m_d->dirtyRectsMutex);
-    m_d->effectiveDirtyRects(levelOfDetail)[node] |= rect;
+    m_d->effectiveDirtyRects(levelOfDetail).addUpdate(node, rect);
 }

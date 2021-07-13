@@ -49,6 +49,10 @@ public:
 
     ~KoPatternBackground() override;
 
+    // Work around MSVC inability to generate copy ops with QSharedDataPointer.
+    KoPatternBackground(const KoPatternBackground &);
+    KoPatternBackground& operator=(const KoPatternBackground &);
+
     bool compareTo(const KoShapeBackground *other) const override;
 
     /// Sets the transform matrix

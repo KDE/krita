@@ -36,6 +36,10 @@ public:
     KoClipPath(QList<KoShape*> clipShapes, KoFlake::CoordinateSystem coordinates);
     ~KoClipPath();
 
+    // Work around MSVC inability to generate copy ops with QSharedDataPointer.
+    KoClipPath(const KoClipPath &);
+    KoClipPath &operator=(const KoClipPath &);
+
     KoClipPath *clone() const;
 
     KoFlake::CoordinateSystem coordinates() const;

@@ -10,6 +10,10 @@
 
 #include <type_traits>
 
+#ifdef HAVE_OPENEXR
+#include "half.h"
+#endif
+
 #include <KoColorSpaceTraits.h>
 #include <KoGrayColorSpaceTraits.h>
 #include <KoColorSpaceMaths.h>
@@ -145,7 +149,7 @@ inline T colorDodgeAlphaHelper(T src, T dst)
 
 // Integer version of color dodge alpha
 template<class T>
-inline typename std::enable_if<std::is_integral<T>::value, T>::type
+inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
 colorDodgeAlpha(T src, T dst)
 {
     return colorDodgeAlphaHelper(src, dst);
@@ -153,7 +157,7 @@ colorDodgeAlpha(T src, T dst)
 
 // Floating point version of color dodge alpha
 template<class T>
-inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
+inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
 colorDodgeAlpha(T src, T dst)
 {
     const T result = colorDodgeAlphaHelper(src, dst);
@@ -207,7 +211,7 @@ inline T colorBurnAlphaHelper(T src, T dst)
 
 // Integer version of color burn alpha
 template<class T>
-inline typename std::enable_if<std::is_integral<T>::value, T>::type
+inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
 colorBurnAlpha(T src, T dst)
 {
     using namespace Arithmetic;
@@ -216,7 +220,7 @@ colorBurnAlpha(T src, T dst)
 
 // Floating point version of color burn alpha
 template<class T>
-inline typename std::enable_if<std::is_floating_point<T>::value, T>::type
+inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
 colorBurnAlpha(T src, T dst)
 {
     using namespace Arithmetic;

@@ -1,0 +1,58 @@
+From 202ae2755b7393dd62c450f7878c254a30d86ec2 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Mon, 12 Apr 2021 21:36:07 +0000
+Subject: [PATCH 3/3] Define architectures only for each target
+
+---
+ cmake/OptimizeForArchitecture.cmake |  5 -----
+ cmake/VcMacros.cmake                | 11 ++++++++++-
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/cmake/OptimizeForArchitecture.cmake b/cmake/OptimizeForArchitecture.cmake
+index 12910a2..a11b333 100644
+--- a/cmake/OptimizeForArchitecture.cmake
++++ b/cmake/OptimizeForArchitecture.cmake
+@@ -489,11 +489,6 @@ Other supported values are: \"none\", \"generic\", \"core\", \"merom\" (65nm Cor
+                AddCompilerFlag("/arch:SSE2" CXX_FLAGS Vc_ARCHITECTURE_FLAGS)
+             endif()
+          endif()
+-         foreach(_flag ${_enable_vector_unit_list})
+-            string(TOUPPER "${_flag}" _flag)
+-            string(REPLACE "." "_" _flag "__${_flag}__")
+-            add_definitions("-D${_flag}")
+-         endforeach(_flag)
+       elseif(CMAKE_CXX_COMPILER MATCHES "/(icpc|icc)$") # ICC (on Linux)
+          set(OFA_map_knl "-xMIC-AVX512")
+          set(OFA_map_cannonlake "-xCORE-AVX512")
+diff --git a/cmake/VcMacros.cmake b/cmake/VcMacros.cmake
+index 23fc3e5..fddbc1b 100644
+--- a/cmake/VcMacros.cmake
++++ b/cmake/VcMacros.cmake
+@@ -385,6 +385,15 @@ macro(_vc_compile_one_implementation _srcs _impl)
+          if("${_impl}" MATCHES "SSE")
+             set(_ok TRUE)
+          endif()
++
++         set(_vc_arch_macros "")
++
++         string(REPLACE "+" ";" _amyspark_flags "${_impl}")
++         foreach(_flag ${_amyspark_flags})
++            string(TOUPPER "${_flag}" _flag)
++            string(REPLACE "." "_" _flag "__${_flag}__")
++            list(APPEND _vc_arch_macros "${_flag}")
++         endforeach(_flag)
+       endif()
+ 
+       if(_ok)
+@@ -398,7 +407,7 @@ macro(_vc_compile_one_implementation _srcs _impl)
+             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+             VERBATIM)
+          set_source_files_properties( "${_out}" PROPERTIES
+-            COMPILE_DEFINITIONS "Vc_IMPL=${_impl}"
++            COMPILE_DEFINITIONS "Vc_IMPL=${_impl};$<$<BOOL:Vc_COMPILER_IS_MSVC>:${_vc_arch_macros}>"
+             COMPILE_FLAGS "${_flags} ${_extra_flags}"
+          )
+          list(APPEND ${_srcs} "${_out}")
+-- 
+2.31.1.windows.1
+

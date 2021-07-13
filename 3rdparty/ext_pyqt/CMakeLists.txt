@@ -17,6 +17,7 @@ if(UNIX)
             "PYTHONPATH=${KRITA_PYTHONPATH}"
             ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
+
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
             ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_pyqt} --optimize=1
@@ -25,6 +26,15 @@ if(UNIX)
 
         UPDATE_COMMAND ""
     )
+    if (APPLE)
+        ExternalProject_Add_Step( ext_pyqtbuilder rename_egg
+            WORKING_DIRECTORY <SOURCE_DIR>
+            COMMENT "Removing pyqt_builder egg dependencies requirements"
+            COMMAND ${CMAKE_COMMAND} -E remove <SOURCE_DIR>/PyQt_builder.egg-info/requires.txt
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macOS-remove-install_requires.patch
+            DEPENDEES patch
+        )
+    endif()
 
     ExternalProject_Add( ext_pyqt5
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -83,8 +93,10 @@ if(UNIX)
 elseif(WIN32)
     if(MINGW)
         set(_compiler -c mingw32)
+        set(_make_command mingw32-make)
     elseif(MSVC)
         set(_compiler -c msvc)
+        set(_make_command jom)
     endif()
     string(REPLACE "//" "/" __pyqt_prefix ${PREFIX_ext_pyqt})
     string(REPLACE "/" "\\" _pyqt_prefix ${__pyqt_prefix})
@@ -129,14 +141,14 @@ elseif(WIN32)
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${_krita_pythonpath}"
-            mingw32-make -j${SUBMAKE_JOBS}
+            ${_make_command} -j${SUBMAKE_JOBS}
 
         # force single-threaded installation to avoid
         # race conditions in post-install .py script
         INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${_krita_pythonpath}"
-            mingw32-make -j1 install
+            ${_make_command} -j1 install
 
         BUILD_IN_SOURCE 1
 

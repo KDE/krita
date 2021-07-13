@@ -17,7 +17,7 @@
 #include <QPainter>
 
 #include <klocalizedstring.h>
-
+#include <KoMarker.h>
 #include <KoStore.h>
 #include <KoDocumentResourceManager.h>
 #include "kis_debug.h"

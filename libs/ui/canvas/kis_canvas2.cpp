@@ -94,6 +94,29 @@
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
+    /**
+     * Interface that can be void-ed when original canvas has been deleted
+     * Providing a void interface is necessary to avoid a KisInputActionGroupsMaskGuard updating
+     * an already-deleted canvas
+     */
+    struct CanvasInputActionGroupsMaskInterface : public KisInputActionGroupsMaskInterface
+    {
+        KisCanvas2Private * m_canvasPrivateRef = nullptr;
+        CanvasInputActionGroupsMaskInterface() = delete;
+        CanvasInputActionGroupsMaskInterface(KisCanvas2Private * canvasPrivateRef)
+            :m_canvasPrivateRef(canvasPrivateRef)
+        { }
+        KisInputActionGroupsMask inputActionGroupsMask() const override
+        {
+            Q_ASSERT(m_canvasPrivateRef); // this method should only be used upon creating a KisInputActionGroupsMaskGuard
+            return m_canvasPrivateRef->inputActionGroupsMask;
+        }
+        void setInputActionGroupsMask(KisInputActionGroupsMask mask) override
+        {
+            if(m_canvasPrivateRef)
+                m_canvasPrivateRef->inputActionGroupsMask = mask;
+        }
+    }; // class CanvasInputActionGroupsMask
 
 public:
 
@@ -104,9 +127,16 @@ public:
         , selectedShapesProxy(&shapeManager)
         , toolProxy(parent)
         , displayColorConverter(resourceManager, view)
+        , inputActionGroupsMaskInterface(new CanvasInputActionGroupsMaskInterface(this))
         , regionOfInterestUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     {
     }
+
+    ~KisCanvas2Private()
+    {
+        inputActionGroupsMaskInterface->m_canvasPrivateRef = nullptr;
+    }
+
 
     KisCoordinatesConverter *coordinatesConverter;
     QPointer<KisView>view;
@@ -138,6 +168,8 @@ public:
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
     KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
+
+    QSharedPointer<CanvasInputActionGroupsMaskInterface> inputActionGroupsMaskInterface;
 
     KisSignalCompressor frameRenderStartCompressor;
 
@@ -457,16 +489,6 @@ KoViewConverter* KisCanvas2::viewConverter() const
 KisInputManager* KisCanvas2::globalInputManager() const
 {
     return m_d->view->globalInputManager();
-}
-
-KisInputActionGroupsMask KisCanvas2::inputActionGroupsMask() const
-{
-    return m_d->inputActionGroupsMask;
-}
-
-void KisCanvas2::setInputActionGroupsMask(KisInputActionGroupsMask mask)
-{
-    m_d->inputActionGroupsMask = mask;
 }
 
 QWidget* KisCanvas2::canvasWidget()
@@ -1279,4 +1301,9 @@ KisReferenceImagesDecorationSP KisCanvas2::referenceImagesDecoration() const
 {
     KisCanvasDecorationSP deco = decoration("referenceImagesDecoration");
     return qobject_cast<KisReferenceImagesDecoration*>(deco.data());
+}
+
+KisInputActionGroupsMaskInterface::SharedInterface KisCanvas2::inputActionGroupsMaskInterface()
+{
+    return m_d->inputActionGroupsMaskInterface;
 }

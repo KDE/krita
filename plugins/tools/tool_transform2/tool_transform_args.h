@@ -217,24 +217,12 @@ public:
     void setTransformAroundRotationCenter(bool value);
 
     inline void setAX(double aX) {
-        if(qFuzzyCompare(aX, normalizeAngle(aX))) {
-            aX = normalizeAngle(aX);
-        }
-
         m_aX = aX;
     }
     inline void setAY(double aY) {
-        if(qFuzzyCompare(aY, normalizeAngle(aY))) {
-            aY = normalizeAngle(aY);
-        }
-
         m_aY = aY;
     }
     inline void setAZ(double aZ) {
-        if(qFuzzyCompare(aZ, normalizeAngle(aZ))) {
-            aZ = normalizeAngle(aZ);
-        }
-
         m_aZ = aZ;
     }
     inline void setCameraPos(const QVector3D &pos) {

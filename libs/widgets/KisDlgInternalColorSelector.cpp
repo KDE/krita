@@ -99,9 +99,10 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     if (config.paletteBox) {
         //TODO: Add disable signal as well. Might be not necessary...?
         KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
+        QString paletteMd5 = cfg.readEntry("internal_selector_active_color_set_md5", QString());
         QString paletteName = cfg.readEntry("internal_selector_active_color_set", QString());
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSetSP savedPal = rServer->resourceByName(paletteName);
+        KoColorSetSP savedPal = rServer->resource(paletteMd5, "", paletteName);
         if (savedPal) {
             this->slotChangePalette(savedPal);
         } else {
@@ -351,6 +352,7 @@ void KisDlgInternalColorSelector::slotFinishUp()
     KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     if (m_d->paletteModel) {
         if (m_d->paletteModel->colorSet()) {
+            cfg.writeEntry("internal_selector_active_color_set_md5", m_d->paletteModel->colorSet()->md5());
             cfg.writeEntry("internal_selector_active_color_set", m_d->paletteModel->colorSet()->name());
         }
     }

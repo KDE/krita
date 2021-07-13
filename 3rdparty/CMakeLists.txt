@@ -318,7 +318,7 @@ add_subdirectory(ext_seexpr)
 add_subdirectory(ext_json_c)
 add_subdirectory(ext_mypaint)
 
-if (UNIX AND NOT APLE)
+if (UNIX AND NOT APPLE)
     add_subdirectory(ext_fcitx-qt)
 endif()
 

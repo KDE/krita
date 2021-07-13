@@ -254,7 +254,7 @@ void SvgTextTool::showEditor()
         m_editor->setInitialShape(shape);
 #ifdef Q_OS_ANDROID
         // for window manager
-        m_editor->setWindowFlags(Qt::Tool);
+        m_editor->setWindowFlags(Qt::Dialog);
         m_editor->menuBar()->setNativeMenuBar(false);
 #endif
         m_editor->show();

@@ -321,10 +321,3 @@ add_subdirectory(ext_mypaint)
 if (UNIX AND NOT APPLE)
     add_subdirectory(ext_fcitx-qt)
 endif()
-
-# Print all current cmake variables.
-get_cmake_property(CURRENT_CMAKE_VARIABLES VARIABLES)
-list (SORT CURRENT_CMAKE_VARIABLES)
-foreach (VARIABLE_SET ${CURRENT_CMAKE_VARIABLES})
-    message(STATUS "${VARIABLE_SET} = ${${VARIABLE_SET}}")
-endforeach()

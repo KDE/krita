@@ -2312,14 +2312,14 @@ bool KisDocument::newImage(const QString& name,
         strippedAlpha.setOpacity(OPACITY_OPAQUE_U8);
 
         if (bgStyle == KisConfig::RASTER_LAYER) {
-            bgLayer = new KisPaintLayer(image.data(), "Background", OPACITY_OPAQUE_U8, cs);;
+            bgLayer = new KisPaintLayer(image.data(), i18n("Background"), OPACITY_OPAQUE_U8, cs);
             bgLayer->paintDevice()->setDefaultPixel(strippedAlpha);
             bgLayer->setPinnedToTimeline(autopin);
         } else if (bgStyle == KisConfig::FILL_LAYER) {
             KisFilterConfigurationSP filter_config = KisGeneratorRegistry::instance()->get("color")->defaultConfiguration(KisGlobalResourcesInterface::instance());
             filter_config->setProperty("color", strippedAlpha.toQColor());
             filter_config->createLocalResourcesSnapshot();
-            bgLayer = new KisGeneratorLayer(image.data(), "Background Fill", filter_config, image->globalSelection());
+            bgLayer = new KisGeneratorLayer(image.data(), i18nc("Name of automatically created background color fill layer", "Background Fill"), filter_config, image->globalSelection());
         }
 
         bgLayer->setOpacity(bgColor.opacityU8());

@@ -28,16 +28,11 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     auto resourceSourceAdapter = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
 
     const QString brushFileName = brushDefinition.attribute("filename", "");
-
     const QString brushMD5Sum = brushDefinition.attribute("md5sum", "");
-    KisBrushSP brush = resourceSourceAdapter.resourceForMD5(brushMD5Sum.toLatin1());
+
+    KisBrushSP brush = resourceSourceAdapter.resource(brushMD5Sum, brushFileName, "");
     bool brushtipFound = true;
 
-    if (!brush) {
-        qWarning() << "Using fallback brush" << ppVar(brushFileName);
-        brush = resourceSourceAdapter.fallbackResource();
-        brushtipFound = false;
-    }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
 

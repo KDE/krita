@@ -365,6 +365,7 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
 {
     e.setAttribute("type", type);
     e.setAttribute("filename", filename());
+    e.setAttribute("md5sum", QString::fromLatin1(md5().toHex()));
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));

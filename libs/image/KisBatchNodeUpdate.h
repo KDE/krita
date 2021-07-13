@@ -8,9 +8,11 @@
 #define KISBATCHNODEUPDATE_H
 
 #include "kritaimage_export.h"
+
+#include <QRect>
 #include <QSharedPointer>
-#include <kis_types.h>
 #include <boost/operators.hpp>
+#include <kis_types.h>
 
 /**
  * A simple class for storing the updates of multiple nodes
@@ -69,6 +71,8 @@ public:
      * separately for that.
      */
     KisBatchNodeUpdate& operator|(KisBatchNodeUpdate &rhs);
+
+    KisBatchNodeUpdate& operator|=(const KisBatchNodeUpdate &rhs);
 
 };
 

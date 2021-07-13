@@ -10,8 +10,9 @@
 #include "kis_layer_utils.h"
 
 KisBatchNodeUpdate::KisBatchNodeUpdate(const std::vector<std::pair<KisNodeSP, QRect>> &rhs)
+    : std::vector<std::pair<KisNodeSP, QRect>>(rhs)
 {
-    *this = rhs;
+
 }
 
 void KisBatchNodeUpdate::addUpdate(KisNodeSP node, const QRect &rc)
@@ -67,6 +68,32 @@ KisBatchNodeUpdate &KisBatchNodeUpdate::operator|(KisBatchNodeUpdate &rhs)
     for (auto prevIt = begin(), it = next(prevIt);
          it != end();) {
 
+        if (prevIt->first == it->first) {
+            prevIt->second |= it->second;
+            it = erase(it);
+        } else {
+            ++prevIt;
+            ++it;
+        }
+    }
+
+    return *this;
+}
+
+KisBatchNodeUpdate &KisBatchNodeUpdate::operator|=(const KisBatchNodeUpdate &rhs)
+{
+    if (this == &rhs)
+        return *this;
+
+    reserve(size() + rhs.size());
+
+    std::copy(rhs.begin(), rhs.end(), std::back_inserter(*this));
+    std::sort(begin(), end(), [](const std::pair<KisNodeSP, QRect> &lhs, const std::pair<KisNodeSP, QRect> &rhs) { return lhs.first.data() < rhs.first.data(); });
+
+    if (size() <= 1)
+        return *this;
+
+    for (auto prevIt = begin(), it = next(prevIt); it != end();) {
         if (prevIt->first == it->first) {
             prevIt->second |= it->second;
             it = erase(it);

@@ -70,8 +70,6 @@ public:
      * parent-child compression though. You need to call compress()
      * separately for that.
      */
-    KisBatchNodeUpdate& operator|(KisBatchNodeUpdate &rhs);
-
     KisBatchNodeUpdate& operator|=(const KisBatchNodeUpdate &rhs);
 
 };

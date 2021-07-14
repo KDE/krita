@@ -25,11 +25,9 @@ KisDitherWidget::KisDitherWidget(QWidget* parent)
 
     QObject::connect(thresholdModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisDitherWidget::sigConfigurationItemChanged);
 
-    patternIconWidget->setFixedSize(32, 32);
-    
-    // FIXME: the patterns are not rendered correctly in the dialog!
+    patternIconWidget->setFixedSize(64, 64);
+    patternIconWidget->setBackgroundColor(Qt::white);
     m_ditherPatternWidget = new KisResourceItemChooser(ResourceType::Patterns, false, this);
-
     patternIconWidget->setPopupWidget(m_ditherPatternWidget);
     QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, patternIconWidget, &KisIconWidget::setResource);
     QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, this, &KisDitherWidget::sigConfigurationItemChanged);

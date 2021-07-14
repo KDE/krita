@@ -240,13 +240,9 @@ bool checkCustomNameAvailable(const QString &name)
 {
     Q_UNUSED(name);
     const QString customName = "CustomStyles.asl";
-
     KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
-
-    KoResourceSP resource = server->resourceByName(customName);
-
+    KoResourceSP resource = server->resource("", "", customName);
     return !resource;
-
 }
 
 QString selectAvailableStyleName(const QString &name)
@@ -1051,7 +1047,7 @@ public:
         if (!gradient) return 0;
 
         KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
-        KoAbstractGradientSP resource = server->resourceByMD5(gradient->md5());
+        KoAbstractGradientSP resource = server->resource(QString::fromLatin1(gradient->md5().toHex()), "", "");
 
         if (!resource) {
             KoAbstractGradientSP clone = gradient->clone().dynamicCast<KoAbstractGradient>();
@@ -1069,7 +1065,7 @@ private:
         QString newName = name;
         int i = 0;
 
-        while (server->resourceByName(newName)) {
+        while (server->resource("", "", newName)) {
             newName = QString("%1%2").arg(name).arg(i++);
         }
 

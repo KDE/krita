@@ -18,7 +18,7 @@ public:
           m_cachedResources(cachedResources)
     {
     }
-
+protected:
     KoResourceSP resourceForFilename(const QString& filename) const override {
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),
@@ -29,6 +29,7 @@ public:
                                });
         return it != m_cachedResources.end() ? *it : KoResourceSP();
     }
+
     KoResourceSP resourceForName(const QString& name) const override {
         qDebug() << "LocalResourceSource::resourceForName" << name;
         auto it = std::find_if(m_cachedResources.begin(),
@@ -39,6 +40,7 @@ public:
                                });
         return it != m_cachedResources.end() ? *it : KoResourceSP();
     }
+
     KoResourceSP resourceForMD5(const QByteArray& md5) const override {
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),
@@ -48,6 +50,9 @@ public:
                                });
         return it != m_cachedResources.end() ? *it : KoResourceSP();
     }
+
+public:
+
     KoResourceSP fallbackResource() const override {
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),

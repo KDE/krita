@@ -888,17 +888,17 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         KisPaintOpPresetSP preset;
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
-            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), m_eraserName));
+            preset = rserver->resource("", "", cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), m_eraserName));
         }
         else {
-            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), m_defaultPresetName));
+            preset = rserver->resource("", "", cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), m_defaultPresetName));
 //            if (preset)
 //                qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
 //            else
 //                qDebug() << "no preset found for" << inputDevice.uniqueTabletId();
         }
         if (!preset) {
-            preset = rserver->resourceByName(m_defaultPresetName);
+            preset = rserver->resource("", "", m_defaultPresetName);
         }
         if (preset) {
 //            qDebug() << "inputdevicechanged 1" << preset;

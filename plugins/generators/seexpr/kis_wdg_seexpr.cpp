@@ -105,7 +105,7 @@ void KisWdgSeExpr::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     auto rserver = KoResourceServerProvider::instance()->seExprScriptServer();
     auto name = config->getString("seexpr", "Disney_noisecolor2");
-    auto pattern = rserver->resourceByName(name);
+    auto pattern = rserver->resource("", "", name);
     if (pattern) {
         m_widget->scriptSelectorWidget->setCurrentScript(pattern);
     }
@@ -278,7 +278,7 @@ void KisWdgSeExpr::slotSaveNewBrushPreset()
 void KisWdgSeExpr::slotReloadPresetClicked()
 {
     auto *rserver = KoResourceServerProvider::instance()->seExprScriptServer();
-    auto preset = rserver->resourceByName(m_currentPreset->name());
+    auto preset = rserver->resource("", "", m_currentPreset->name());
     if (preset) {
         preset->load(KisGlobalResourcesInterface::instance());
 

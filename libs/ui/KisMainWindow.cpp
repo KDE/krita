@@ -616,7 +616,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (cfg.readEntry("CanvasOnlyActive", false)) {
         QString currentWorkspace = cfg.readEntry<QString>("CurrentWorkspace", "Default");
         KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-        KisWorkspaceResourceSP workspace = rserver->resourceByName(currentWorkspace);
+        KisWorkspaceResourceSP workspace = rserver->resource("", "", currentWorkspace);
         if (workspace) {
             restoreWorkspace(workspace);
         }
@@ -1860,7 +1860,7 @@ void KisMainWindow::restoreWorkspace()
 {
     QByteArray md5 = sender()->property("md5").toByteArray();
     KoResourceServer<KisWorkspaceResource> *rserver = KisResourceServerProvider::instance()->workspaceServer();
-    KoResourceSP resource = rserver->resourceByMD5(md5);
+    KoResourceSP resource = rserver->resource(md5, "", "");
     if (resource) {
         restoreWorkspace(resource);
     }

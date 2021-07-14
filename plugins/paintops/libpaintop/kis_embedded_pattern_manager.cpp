@@ -57,17 +57,9 @@ KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfig
     auto resourceSourceAdapter = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
-    pattern = resourceSourceAdapter.resourceForMD5(md5);
-    if (pattern) return pattern;
-
-    QString name = setting->getString("Texture/Pattern/Name");
-    if (!name.isEmpty()) {
-        pattern = resourceSourceAdapter.resourceForName(name);
-    }
-    if (pattern) return pattern;
-
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");
-    pattern = resourceSourceAdapter.resourceForFilename(QFileInfo(fileName).fileName());
+    QString name = setting->getString("Texture/Pattern/Name");
+    pattern = resourceSourceAdapter.resource(md5, QFileInfo(fileName).fileName(), name);
 
     return pattern;
 }

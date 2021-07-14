@@ -58,7 +58,7 @@ public:
     KoColorSetSP palette(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoColorSet>(ResourceType::Palettes);
-        return source.resourceForName(this->getString("palette"));
+        return source.resource(this->getString("md5sum"), "", this->getString("palette"));
     }
 
     KoColorSetSP palette() const
@@ -156,7 +156,10 @@ KisPropertiesConfigurationSP KisPalettizeWidget::configuration() const
     KisFilterSP filter = KisFilterRegistry::instance()->get("palettize");
     KisFilterConfigurationSP config = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
 
-    if (m_paletteWidget->currentResource()) config->setProperty("palette", QVariant(m_paletteWidget->currentResource()->name()));
+    if (m_paletteWidget->currentResource()) {
+        config->setProperty("md5sum", QVariant(m_paletteWidget->currentResource()->md5()));
+        config->setProperty("palette", QVariant(m_paletteWidget->currentResource()->name()));
+    }
     config->setProperty("colorspace", colorspaceComboBox->currentIndex());
     config->setProperty("ditherEnabled", ditherGroupBox->isChecked());
     ditherWidget->configuration(*config, "dither/");

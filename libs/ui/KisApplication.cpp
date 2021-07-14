@@ -472,7 +472,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (!args.windowLayout().isEmpty()) {
             KoResourceServer<KisWindowLayoutResource> * rserver = KisResourceServerProvider::instance()->windowLayoutServer();
-            KisWindowLayoutResourceSP windowLayout = rserver->resourceByName(args.windowLayout());
+            KisWindowLayoutResourceSP windowLayout = rserver->resource("", "", args.windowLayout());
             if (windowLayout) {
                 windowLayout->applyLayout();
             }
@@ -483,7 +483,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
             if (!args.workspace().isEmpty()) {
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-                KisWorkspaceResourceSP workspace = rserver->resourceByName(args.workspace());
+                KisWorkspaceResourceSP workspace = rserver->resource("", "", args.workspace());
                 if (workspace) {
                     d->mainWindow->restoreWorkspace(workspace);
                 }
@@ -976,7 +976,7 @@ void KisApplication::resetConfig()
 
     QString currentWorkspace = cfg.readEntry<QString>("CurrentWorkspace", "Default");
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-    KisWorkspaceResourceSP workspace = rserver->resourceByName(currentWorkspace);
+    KisWorkspaceResourceSP workspace = rserver->resource("", "", currentWorkspace);
 
     if (workspace) {
         d->mainWindow->restoreWorkspace(workspace);

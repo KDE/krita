@@ -136,12 +136,23 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformatio
 
 bool KisBrushBasedPaintOpSettings::isValid() const
 {
+    QStringList md5sums = getStringList(KisPaintOpUtils::RequiredBrushMD5ListTag);
+    md5sums << getString(KisPaintOpUtils::RequiredBrushMD5Tag);
+    if (!md5sums.isEmpty()) {
+        Q_FOREACH (const QString &md5sum, md5sums) {
+            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resource(md5sum, "", "");
+            if (!brush) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     QStringList files = getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
     files << getString(KisPaintOpUtils::RequiredBrushFileTag);
-
-    Q_FOREACH (const QString &file, files) {
-        if (!file.isEmpty()) {
-            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resourceForFilename(file);
+    if (!files.isEmpty()) {
+        Q_FOREACH (const QString &file, files) {
+            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resource("", file, "");
             if (!brush) {
                 return false;
             }

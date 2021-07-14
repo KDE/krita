@@ -52,7 +52,7 @@ void KisDitherWidget::setConfiguration(const KisFilterConfiguration &config, con
     thresholdModeComboBox->setCurrentIndex(config.getInt(prefix + "thresholdMode"));
 
     auto source = config.resourcesInterface()->source<KoPattern>(ResourceType::Patterns);
-    KoPatternSP pattern = source.resourceForName(config.getString(prefix + "pattern"));
+    KoPatternSP pattern = source.resource(config.getString(prefix + "md5sum"), "", config.getString(prefix + "pattern"));
 
     if (pattern) m_ditherPatternWidget->setCurrentResource(pattern);
     patternValueModeComboBox->setCurrentIndex(config.getInt(prefix + "patternValueMode"));
@@ -81,7 +81,7 @@ void KisDitherWidget::factoryConfiguration(KisPropertiesConfiguration &config, c
 QList<KoResourceSP> KisDitherWidget::prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface)
 {
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-    KoPatternSP pattern = source.resourceForName(config.getString(prefix + "pattern"));
+    KoPatternSP pattern = source.resource(config.getString(prefix + "md5sum"), "", config.getString(prefix + "pattern"));
 
     QList<KoResourceSP> resources;
     if (pattern) {

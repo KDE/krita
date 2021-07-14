@@ -458,6 +458,8 @@ QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP gl
         resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
     }
 
+    qDebug() << "preset linked resources" << resources;
+
     return resources;
 }
 
@@ -478,6 +480,8 @@ QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP 
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
         resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
     }
+
+    qDebug() << "preset embeddede resources" << resources;
 
     return resources;
 }

@@ -45,11 +45,12 @@ public:
     public:
         ResourceSourceAdapter();
         virtual ~ResourceSourceAdapter();
-
+//protected:
+        friend class KisResourcesInterface;
         virtual KoResourceSP resourceForFilename(const QString& filename) const = 0;
         virtual KoResourceSP resourceForName(const QString& name) const = 0;
         virtual KoResourceSP resourceForMD5(const QByteArray& md5) const = 0;
-
+public:
         /**
          * @brief resource retrieves a resource, prefarably by md5, but with filename and name
          * as fallback for older files that do not store the md5sum. Note that if the resource is
@@ -70,7 +71,7 @@ public:
                 return resourceForName(name);
             }
 
-            return 0;
+            return nullptr;
         }
         virtual KoResourceSP fallbackResource() const = 0;
 
@@ -86,7 +87,7 @@ public:
             : m_source(adapter)
         {
         }
-
+private:
         QSharedPointer<T> resourceForFilename(const QString& filename) const
         {
             return m_source->resourceForFilename(filename).dynamicCast<T>();
@@ -101,7 +102,7 @@ public:
         {
             return m_source->resourceForMD5(md5).dynamicCast<T>();
         }
-
+public:
         /**
          * @brief resource retrieves a resource, prefarably by md5, but with filename and name
          * as fallback for older files that do not store the md5sum. Note that if the resource is
@@ -122,7 +123,7 @@ public:
                 return resourceForName(name);
             }
 
-            return 0;
+            return nullptr;
         }
 
 

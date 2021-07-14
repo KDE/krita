@@ -155,7 +155,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
 
 void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-
     setChecked(setting->getBool("Texture/Pattern/Enabled"));
     if (!isChecked()) {
         return;

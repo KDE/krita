@@ -69,13 +69,14 @@ KoAbstractGradientSP KisGradientMapFilterConfiguration::gradient(KoAbstractGradi
 {
     if (version() == 1) {
         KoAbstractGradientSP resourceGradient = 
-            resourcesInterface()->source<KoAbstractGradient>(ResourceType::Gradients).resourceForName(this->getString("gradientName"));
+            resourcesInterface()->source<KoAbstractGradient>(ResourceType::Gradients).resource(this->getString("md5sum"), "", this->getString("gradientName"));
+
         if (resourceGradient) {
             KoStopGradientSP gradient = KisGradientConversion::toStopGradient(resourceGradient);
             gradient->setValid(true);
             return gradient;
         } else {
-            qWarning() << "Could not find gradient" << getString("gradientName");
+            qWarning() << "Could not find gradient" << getString("md5sum") << getString("gradientName");
         }
     } else if (version() == 2) {
         QDomDocument document;
@@ -115,6 +116,7 @@ void KisGradientMapFilterConfiguration::setGradient(KoAbstractGradientSP newGrad
     QDomDocument document;
     QDomElement gradientElement = document.createElement("gradient");
     gradientElement.setAttribute("name", newGradient->name());
+    gradientElement.setAttribute("md5sum", QString::fromLatin1(newGradient->md5().toHex()));
 
     if (newGradient.dynamicCast<KoStopGradient>()) {
         KoStopGradient *gradient = static_cast<KoStopGradient*>(newGradient.data());

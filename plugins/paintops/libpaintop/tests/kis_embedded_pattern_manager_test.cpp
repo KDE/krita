@@ -119,7 +119,7 @@ KoPatternSP findOnServer(QByteArray md5)
     KoPatternSP pattern;
 
     if (!md5.isEmpty()) {
-        return KoResourceServerProvider::instance()->patternServer()->resourceByMD5(md5);
+        return KoResourceServerProvider::instance()->patternServer()->resource(md5, "", "");
     }
 
     return pattern;

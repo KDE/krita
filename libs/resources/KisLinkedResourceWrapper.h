@@ -39,8 +39,6 @@ public:
     }
 
 
-    /// XXX: In contrast to KisResourcesInterface::resource, this falls back if the
-    /// resource cannot be found by md5sum, and I'm not sure whether that's correct.
     ResourceTypeSP resource(KisResourcesInterfaceSP resourcesInterface) const
     {
         ResourceTypeSP result;
@@ -48,23 +46,7 @@ public:
 
         auto source = resourcesInterface->source<ResourceType>(m_type);
 
-        if (!m_md5.isEmpty()) {
-            result = source.resourceForMD5(m_md5);
-        }
-
-        if (result) return result;
-
-        if (!m_filename.isEmpty()) {
-            result = source.resourceForFilename(m_filename);
-        }
-
-        if (result) return result;
-
-        if (!m_name.isEmpty()) {
-            result = source.resourceForName(m_name);
-        }
-
-        return result;
+        return source.resource(m_md5, m_filename, m_name);
     }
 
     bool isValid() const {

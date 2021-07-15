@@ -848,6 +848,26 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         return;
     }
 
+    KisNodeSP impossibleMask =
+        KisLayerUtils::recursiveFindNode(currentNode,
+        [currentNode] (KisNodeSP node) {
+            // we can process transform masks of the first level
+            if (node == currentNode || node->parent() == currentNode) return false;
+
+            return node->inherits("KisTransformMask");
+        });
+
+    if (impossibleMask) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Layer has children with transform masks. Please disable them before doing transformation."),
+                koIcon("object-locked"), 8000, KisFloatingMessage::High);
+        return;
+    }
+
+
     KisSelectionSP selection = resources->activeSelection();
 
     /**

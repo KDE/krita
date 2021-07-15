@@ -401,6 +401,8 @@ void TransformStrokeStrategy::initStrokeCallback()
         m_deactivatedOverlaySelectionMask = overlaySelectionMask;
     }
 
+    m_rootNode = KisTransformUtils::tryOverrideRootToTransformMask(m_rootNode);
+
     ToolTransformArgs initialTransformArgs;
     bool isExternalSourcePresent = false;
     m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, isExternalSourcePresent);

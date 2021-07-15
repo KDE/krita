@@ -76,3 +76,18 @@ KisBatchNodeUpdate &KisBatchNodeUpdate::operator|=(const KisBatchNodeUpdate &rhs
 
     return *this;
 }
+
+QDebug operator<<(QDebug dbg, const KisBatchNodeUpdate &update)
+{
+    dbg.nospace() << "KisBatchNodeUpdate (";
+
+    for (auto it = update.begin(); it != update.end(); ++it) {
+        dbg.nospace() << it->first << "->" << it->second;
+
+        if (next(it) != update.end()) {
+            dbg.nospace() << "; ";
+        }
+    }
+
+    return dbg;
+}

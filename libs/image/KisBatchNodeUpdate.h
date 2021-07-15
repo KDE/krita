@@ -74,6 +74,8 @@ public:
 
 };
 
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisBatchNodeUpdate &update);
+
 using KisBatchNodeUpdateSP = QSharedPointer<KisBatchNodeUpdate>;
 using KisBatchNodeUpdateWSP = QWeakPointer<KisBatchNodeUpdate>;
 

@@ -1526,7 +1526,7 @@ namespace KisLayerUtils {
 
     KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks)
     {
-        KIS_ASSERT_RECOVER(!nodes.isEmpty()) { return nodes; }
+        KIS_SAFE_ASSERT_RECOVER(!nodes.isEmpty()) { return nodes; }
 
         KisNodeSP root;
         Q_FOREACH(KisNodeSP node, nodes) {
@@ -1538,7 +1538,7 @@ namespace KisLayerUtils {
             if (!root) {
                 root = localRoot;
             }
-            KIS_ASSERT_RECOVER(root == localRoot) { return nodes; }
+            KIS_SAFE_ASSERT_RECOVER(root == localRoot) { return nodes; }
         }
 
         KisNodeList result;

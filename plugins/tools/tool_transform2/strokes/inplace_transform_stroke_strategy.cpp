@@ -318,7 +318,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
         Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-            m_d->prevDirtyRects.addUpdate(node, node->extent());
+            m_d->prevDirtyRects.addUpdate(node, node->projectionPlane()->tightUserVisibleBounds());
         }
 
         m_d->initialUpdatesBeforeClear = m_d->prevDirtyRects.compressed();
@@ -593,7 +593,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                      extLayer->supportsPerspectiveTransform())) {
 
                 if (levelOfDetail <= 0) {
-                    const QRect oldDirtyRect = extLayer->extent() | extLayer->theoreticalBoundingRect();
+                    const QRect oldDirtyRect = extLayer->projectionPlane()->tightUserVisibleBounds() | extLayer->theoreticalBoundingRect();
 
                     QVector3D transformedCenter;
                     KisTransformWorker w = KisTransformUtils::createTransformWorker(config, 0, 0, &transformedCenter);
@@ -613,7 +613,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                     addDirtyRect(node,
                                  oldDirtyRect |
                                  theoreticalNewDirtyRect |
-                                 extLayer->extent() |
+                                 extLayer->projectionPlane()->tightUserVisibleBounds() |
                                  extLayer->theoreticalBoundingRect(), 0);
                     return;
                 } else {
@@ -643,7 +643,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                                                    device, &helper);
 
         executeAndAddCommand(transaction.endAndTake(), commandGroup, KisStrokeJobData::CONCURRENT);
-        addDirtyRect(node, cachedPortion->extent() | device->extent(), levelOfDetail);
+        addDirtyRect(node, cachedPortion->extent() | node->projectionPlane()->tightUserVisibleBounds(), levelOfDetail);
 
     } else if (KisTransformMask *transformMask =
                dynamic_cast<KisTransformMask*>(node.data())) {

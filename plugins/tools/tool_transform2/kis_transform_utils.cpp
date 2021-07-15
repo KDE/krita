@@ -629,7 +629,7 @@ KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
     KisNodeSP node = root->firstChild();
 
     while (node) {
-        if (node->inherits("KisTransformMask")) {
+        if (node->inherits("KisTransformMask") && node->isEditable()) {
             root = node;
             break;
         }
@@ -660,6 +660,7 @@ QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformM
         if (node->isEditable(node == root) &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
                 !node->inherits("KisFileLayer") &&
+                !node->inherits("KisColorizeMask") &&
                 (!node->inherits("KisTransformMask") || node == root)) {
 
                 result << node;

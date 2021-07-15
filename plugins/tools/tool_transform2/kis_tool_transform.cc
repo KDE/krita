@@ -854,7 +854,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
             // we can process transform masks of the first level
             if (node == currentNode || node->parent() == currentNode) return false;
 
-            return node->inherits("KisTransformMask");
+            return node->inherits("KisTransformMask") && node->visible(true);
         });
 
     if (impossibleMask) {

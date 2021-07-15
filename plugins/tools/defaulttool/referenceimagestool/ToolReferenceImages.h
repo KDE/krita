@@ -16,13 +16,13 @@
 #include "kis_painting_assistant.h"
 #include <kis_icon.h>
 #include <kis_canvas2.h>
+#include "kisreferenceimagecropdecorator.h"
 
 #include <defaulttool/DefaultTool.h>
 #include <defaulttool/DefaultToolFactory.h>
 
 class ToolReferenceImagesWidget;
 class KisReferenceImagesLayer;
-#include "kisreferenceimagecropdecorator.h"
 
 class ToolReferenceImages : public DefaultTool
 {
@@ -46,8 +46,10 @@ public:
 
     QMenu* popupActionsMenu() override;
 
-    KisReferenceImage* getActiveReferenceImage();
+    KisReferenceImage* activeReferenceImage();
 
+Q_SIGNALS:
+    void cropRectChanged();
 protected:
     QList<QPointer<QWidget>> createOptionWidgets() override;
     QWidget *createOptionWidget() override;
@@ -78,14 +80,25 @@ public Q_SLOTS:
     bool paste() override;
 
 
+
 private:
     friend class ToolReferenceImagesWidget;
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
     KisWeakSharedPtr<KisReferenceImagesLayer> m_layer;
     KisReferenceImageCropDecorator* m_cropDecorator;
+    KoFlake::SelectionHandle m_lastHandle;
+    bool m_mouseWasInsideHandles;
+    QPolygonF m_cropRect;
+    QPointF m_cropHandles[8];
+    QCursor m_sizeCursors[8];
 
     KisDocument *document() const;
     void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
+
+    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
+    void recalcCropHandles(KisReferenceImage *referenceImage);
+    void updateCursor();
+    QRectF handlesSize();
 };
 
 

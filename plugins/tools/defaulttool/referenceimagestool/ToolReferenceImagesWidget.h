@@ -28,6 +28,8 @@ public:
 
     void selectionChanged(KoSelection *selection);
 
+public Q_SLOTS:
+    void slotCropRectChanged();
 
 private Q_SLOTS:
     void slotOpacitySliderChanged(qreal);

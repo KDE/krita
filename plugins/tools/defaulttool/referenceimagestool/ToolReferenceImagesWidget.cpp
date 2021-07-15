@@ -169,7 +169,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     d->ui->opacitySlider->setSelection(shapes);
     d->ui->saturationSlider->setSelection(shapes);
 
-    KisReferenceImage *ref = d->tool->getActiveReferenceImage();
+    KisReferenceImage *ref = d->tool->activeReferenceImage();
     if(ref) {
         updateCropSliders();
     }
@@ -333,7 +333,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
 
 void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
 {
-    KisReferenceImage* ref = d->tool->getActiveReferenceImage();
+    KisReferenceImage* ref = d->tool->activeReferenceImage();
     if(!ref) return;
 
     d->ui->bnCrop->setChecked(value);
@@ -353,7 +353,7 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
 
 void ToolReferenceImagesWidget::slotCropValuesChanged()
 {
-    KisReferenceImage *ref = d->tool->getActiveReferenceImage();
+    KisReferenceImage *ref = d->tool->activeReferenceImage();
     if(ref) {
 
         KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
@@ -388,7 +388,7 @@ void ToolReferenceImagesWidget::slotCropValuesChanged()
 
 void ToolReferenceImagesWidget::updateCropSliders()
 {
-    KisReferenceImage* ref = d->tool->getActiveReferenceImage();
+    KisReferenceImage* ref = d->tool->activeReferenceImage();
     if(!ref) return;
 
     QList<KoShape*> shape;
@@ -397,7 +397,7 @@ void ToolReferenceImagesWidget::updateCropSliders()
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
     const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
 
-    QRectF rect = converter->documentToImage(ref->boundingRect());
+    QRectF rect = converter->documentToImage(ref->cropRect());
     qreal width = rect.width() - d->ui->sldOffsetX->value();
     qreal height = rect.height() - d->ui->sldOffsetY->value();
 
@@ -427,6 +427,32 @@ void ToolReferenceImagesWidget::updateCropSliders()
 
     QRectF finalRect = converter->imageToDocument(QRectF(0, 0, width, height));
     ref->setCropRect(finalRect);
+}
+
+void ToolReferenceImagesWidget::slotCropRectChanged()
+{
+    KisReferenceImage *ref = d->tool->activeReferenceImage();
+    if(!ref) return;
+
+    KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
+    const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
+    QRectF rect = converter->documentToImage(ref->cropRect());
+
+    d->ui->sldOffsetX->blockSignals(true);
+    d->ui->sldOffsetX->setValue(rect.topLeft().x());
+    d->ui->sldOffsetX->blockSignals(false);
+
+    d->ui->sldOffsetY->blockSignals(true);
+    d->ui->sldOffsetY->setValue(rect.topLeft().y());
+    d->ui->sldOffsetY->blockSignals(false);
+
+    d->ui->sldWidth->blockSignals(true);
+    d->ui->sldWidth->setValue(rect.width() - rect.topLeft().x());
+    d->ui->sldWidth->blockSignals(false);
+
+    d->ui->sldHeight->blockSignals(true);
+    d->ui->sldHeight->setValue(rect.height() - rect.topLeft().y());
+    d->ui->sldHeight->blockSignals(false);
 }
 
 QRectF ToolReferenceImagesWidget::cropRect()

@@ -461,12 +461,8 @@ void KisReferenceImage::setCrop(bool v)
 {
     d->crop = v;
     if(v) {
-        // Handle the Lock Button here
-       d->cropRect.setSize(size());
-       setGeometryProtected(true);
-    }
-    else {
-        setGeometryProtected(false);
+       // Handle the Lock Button here
+       d->cropRect = outlineRect();
     }
 }
 
@@ -477,6 +473,27 @@ QRectF KisReferenceImage::cropRect()
 
 void KisReferenceImage::setCropRect(QRectF rect)
 {
+    if(rect.width() > size().width()) {
+        rect.setWidth(size().width());
+    }
+    if(rect.height() > size().height()) {
+        rect.setHeight(size().height());
+    }
+    if(rect.bottomRight().x() > size().width()) {
+        rect.setWidth(absolutePosition(KoFlake::BottomRight).x() - rect.topLeft().x());
+    }
+    if(rect.bottomRight().y() > size().height()) {
+        rect.setHeight(absolutePosition(KoFlake::BottomRight).y() - rect.topLeft().y());
+    }
+    QPointF offset = rect.topLeft();
+    if(offset.x() < 0) {
+        offset.setX(0);
+    }
+    if(offset.y() < 0) {
+        offset.setY(0);
+    }
+    rect.moveTo(offset);
+
    d->cropRect = rect;
    update();
 }

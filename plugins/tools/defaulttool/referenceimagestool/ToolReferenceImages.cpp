@@ -37,12 +37,22 @@
 #include "KisReferenceImage.h"
 #include "kisreferenceimagecropdecorator.h"
 #include "KisReferenceImagesLayer.h"
+#include "KisReferenceImageCropStrategy.h"
 
 ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
     : DefaultTool(canvas, false)
     , m_cropDecorator(new KisReferenceImageCropDecorator)
 {
     setObjectName("ToolReferenceImages");
+
+    m_sizeCursors[0] = Qt::SizeVerCursor;
+    m_sizeCursors[1] = Qt::SizeBDiagCursor;
+    m_sizeCursors[2] = Qt::SizeHorCursor;
+    m_sizeCursors[3] = Qt::SizeFDiagCursor;
+    m_sizeCursors[4] = Qt::SizeVerCursor;
+    m_sizeCursors[5] = Qt::SizeBDiagCursor;
+    m_sizeCursors[6] = Qt::SizeHorCursor;
+    m_sizeCursors[7] = Qt::SizeFDiagCursor;
 }
 
 ToolReferenceImages::~ToolReferenceImages()
@@ -71,16 +81,45 @@ void ToolReferenceImages::mousePressEvent(KoPointerEvent *event)
         DefaultTool::mousePressEvent(newEvent);
         return;
     }
+    if (activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
+        KoInteractionTool::mousePressEvent(event);
+        updateCursor();
+        return;
+    }
     DefaultTool::mousePressEvent(event);
 }
 
 void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
 {
+
     if(m_layer && m_layer->lock()) {
         QPointF newPos = m_layer->lockedDocToWidgetTransform().inverted().map(event->pos());
         KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
         DefaultTool::mouseMoveEvent(newEvent);
         koSelection()->update();
+        return;
+    }
+    KisReferenceImage *referenceImage = activeReferenceImage();
+    if(referenceImage && referenceImage->cropEnabled()) {
+        KoInteractionTool::mouseMoveEvent(event);
+        if(currentStrategy() == 0) {
+        QRectF bounds = handlesSize();
+
+        if(bounds.contains(event->point)) {
+            bool inside;
+            KoFlake::SelectionHandle newDirection = handleAt(event->point, &inside);
+
+            if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
+                m_lastHandle = newDirection;
+                m_mouseWasInsideHandles = inside;
+            }
+        }
+        else {
+            m_lastHandle = KoFlake::NoHandle;
+            m_mouseWasInsideHandles = false;
+        }
+      }
+        updateCursor();
         return;
     }
     DefaultTool::mouseMoveEvent(event);
@@ -96,19 +135,149 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
     if(m_layer && m_layer->lock()) {
         painter.setTransform(m_layer->lockedFlakeToWidgetTransform());
     }
-    KisReferenceImage* ref = getActiveReferenceImage();
+    KisReferenceImage* ref = activeReferenceImage();
 
     if(ref && ref->cropEnabled()) {
       m_cropDecorator->setReferenceImage(ref);
       m_cropDecorator->paint(painter, converter);
     }
     else {
-    DefaultTool::paint(painter,converter);
+        DefaultTool::paint(painter,converter);
     }
 }
 
+QRectF ToolReferenceImages::handlesSize()
+{
+    KisReferenceImage *referenceImage = activeReferenceImage();
+    if(referenceImage && referenceImage->cropEnabled()) {
+        recalcCropHandles(activeReferenceImage());
+        QRectF bounds = m_cropRect.boundingRect();
+        QPointF border = canvas()->viewConverter()->viewToDocument(QPointF(5, 5));// HandleSize = 5
+        bounds.adjust(-border.x(), -border.y(), border.x(), border.y());
+        return bounds;
+    }
+    return QRectF();
+}
+
+KoFlake::SelectionHandle ToolReferenceImages::handleAt(const QPointF &point, bool *innerHandleMeaning)
+{
+    // check for handles in this order; meaning that when handles overlap the one on top is chosen
+    static const KoFlake::SelectionHandle handleOrder[] = {
+        KoFlake::BottomRightHandle,
+        KoFlake::TopLeftHandle,
+        KoFlake::BottomLeftHandle,
+        KoFlake::TopRightHandle,
+        KoFlake::BottomMiddleHandle,
+        KoFlake::RightMiddleHandle,
+        KoFlake::LeftMiddleHandle,
+        KoFlake::TopMiddleHandle,
+        KoFlake::NoHandle
+    };
+
+    const KoViewConverter *converter = canvas()->viewConverter();
+
+    if (!activeReferenceImage() || !converter) {
+        return KoFlake::NoHandle;
+    }
+
+    recalcCropHandles(activeReferenceImage());
+    if (innerHandleMeaning) {
+        QPainterPath path;
+        path.addPolygon(m_cropRect);
+        *innerHandleMeaning = path.contains(point) || path.intersects(handlePaintRect(point));
+    }
+
+    const QPointF viewPoint = converter->documentToView(point);
+
+    for (int i = 0; i < KoFlake::NoHandle; ++i) {
+        KoFlake::SelectionHandle handle = handleOrder[i];
+
+        const QPointF handlePoint = converter->documentToView(m_cropHandles[handle]);
+        const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
+
+        // if just inside the outline
+        if (distanceSq < 25) {
+
+            if (innerHandleMeaning) {
+                if (distanceSq < 16) {
+                    *innerHandleMeaning = true;
+                }
+            }
+
+            return handle;
+        }
+    }
+    return KoFlake::NoHandle;
+}
+
+void ToolReferenceImages::recalcCropHandles(KisReferenceImage *referenceImage)
+{
+    if(!referenceImage) return;
+
+    QTransform matrix = activeReferenceImage()->absoluteTransformation();
+    m_cropRect = matrix.map(QPolygonF(referenceImage->cropRect()));
+
+    m_cropHandles[KoFlake::TopMiddleHandle] = (m_cropRect.value(0) + m_cropRect.value(1)) / 2;
+    m_cropHandles[KoFlake::TopRightHandle] = m_cropRect.value(1);
+    m_cropHandles[KoFlake::RightMiddleHandle] = (m_cropRect.value(1) + m_cropRect.value(2)) / 2;
+    m_cropHandles[KoFlake::BottomRightHandle] = m_cropRect.value(2);
+    m_cropHandles[KoFlake::BottomMiddleHandle] = (m_cropRect.value(2) + m_cropRect.value(3)) / 2;
+    m_cropHandles[KoFlake::BottomLeftHandle] = m_cropRect.value(3);
+    m_cropHandles[KoFlake::LeftMiddleHandle] = (m_cropRect.value(3) + m_cropRect.value(0)) / 2;
+    m_cropHandles[KoFlake::TopLeftHandle] = m_cropRect.value(0);
+
+}
+
+void ToolReferenceImages::updateCursor()
+{
+    if (tryUseCustomCursor()) return;
+
+    QCursor cursor = Qt::ArrowCursor;
+
+    if(!activeReferenceImage() && activeReferenceImage()->cropEnabled()) return;
+    if (m_mouseWasInsideHandles) {
+
+            switch (m_lastHandle) {
+            case KoFlake::TopMiddleHandle:
+                cursor = m_sizeCursors[0];
+                break;
+            case KoFlake::TopRightHandle:
+                cursor = m_sizeCursors[1];
+                break;
+            case KoFlake::RightMiddleHandle:
+                cursor = m_sizeCursors[2];
+                break;
+            case KoFlake::BottomRightHandle:
+                cursor = m_sizeCursors[3];
+                break;
+            case KoFlake::BottomMiddleHandle:
+                cursor = m_sizeCursors[4];
+                break;
+            case KoFlake::BottomLeftHandle:
+                cursor = m_sizeCursors[5];
+                break;
+            case KoFlake::LeftMiddleHandle:
+                cursor = m_sizeCursors[6];
+                break;
+            case KoFlake::TopLeftHandle:
+                cursor = m_sizeCursors[7];
+                break;
+            case KoFlake::NoHandle:
+                cursor = Qt::SizeAllCursor;
+                break;
+            }
+        }
+
+    useCursor(cursor);
+
+}
 KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event)
 {
+    if(activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
+        bool insideSelection = false;
+        KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
+        return new KisReferenceImageCropStrategy(this, activeReferenceImage(), event->point, handle);
+    }
     return DefaultTool::createStrategy(event);
 }
 
@@ -296,6 +465,7 @@ QWidget *ToolReferenceImages::createOptionWidget()
         specialSpacer->setObjectName("SpecialSpacer");
         specialSpacer->setFixedSize(0, 0);
         m_optionsWidget->layout()->addWidget(specialSpacer);
+        connect(this, SIGNAL(cropRectChanged()), m_optionsWidget, SLOT(slotCropRectChanged()));
     }
     return m_optionsWidget;
 }
@@ -406,7 +576,7 @@ bool ToolReferenceImages::paste()
     return true;
 }
 
-KisReferenceImage *ToolReferenceImages::getActiveReferenceImage()
+KisReferenceImage *ToolReferenceImages::activeReferenceImage()
 {
     KisReferenceImage *ref;
     if(koSelection()) {

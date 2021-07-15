@@ -331,6 +331,25 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
     extraInitJobs << lastCommandUndoJobs;
 
+    if (!lastCommandUndoJobs.isEmpty()) {
+        KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+            /**
+             * In case we are doing a continued action, we need to
+             * set initial update to the "very initial" state that
+             * was present before the previous stroke. So here we
+             * just override the rect calculated before
+             */
+            KisBatchNodeUpdate updates;
+
+            Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
+                updates.addUpdate(node, node->projectionPlane()->tightUserVisibleBounds());
+            }
+
+            m_d->initialUpdatesBeforeClear = updates.compressed();
+            *m_d->updateDataForUndo = m_d->initialUpdatesBeforeClear;
+        });
+    }
+
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         // When dealing with animated transform mask layers, create keyframe and save the command for undo.
         Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
@@ -819,7 +838,7 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
         fetchAllUpdateRequests(levelOfDetail, updateData);
 
         executeAndAddCommand(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisUpdateCommandEx::FINALIZING), commandGroup, KisStrokeJobData::BARRIER);
-        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::FINALIZING, m_d->commandUpdatesBlockerCookie), commandGroup, KisStrokeJobData::BARRIER);
+        executeAndAddCommand(new KisUpdateCommandEx(m_d->updateDataForUndo, m_d->updatesFacade, KisUpdateCommandEx::FINALIZING, m_d->commandUpdatesBlockerCookie), commandGroup, KisStrokeJobData::BARRIER);
 
         if (useHoldUI) {
             executeAndAddCommand(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING), commandGroup, KisStrokeJobData::BARRIER);

@@ -590,10 +590,16 @@ void InplaceTransformStrokeStrategy::fetchAllUpdateRequests(int levelOfDetail, K
 
     *updateData = (prevDirtyRects | dirtyRects).compressed();
 
-    if (levelOfDetail <= 0) {
-        *m_d->updateDataForUndo = (m_d->initialUpdatesBeforeClear | dirtyRects).compressed();
+    KisBatchNodeUpdate savedUndoRects = dirtyRects;
+
+    if (levelOfDetail > 0) {
+
+        for (auto it = savedUndoRects.begin(); it != savedUndoRects.end(); ++it) {
+            it->second = KisLodTransform::upscaledRect(it->second, levelOfDetail);
+        }
     }
 
+    *m_d->updateDataForUndo = (m_d->initialUpdatesBeforeClear | savedUndoRects).compressed();
     prevDirtyRects.clear();
     dirtyRects.swap(prevDirtyRects);
 }
@@ -964,6 +970,7 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
 
     if (m_d->initialTransformArgs.isIdentity()) {
         KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+            m_d->commandUpdatesBlockerCookie.reset();
             undoTransformCommands(0);
             undoAllCommands();
         });

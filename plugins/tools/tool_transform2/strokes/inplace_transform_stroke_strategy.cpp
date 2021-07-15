@@ -47,6 +47,7 @@
 #include "kis_undo_stores.h"
 #include "kis_transparency_mask.h"
 #include "commands_new/KisDisableDirtyRequestsCommand.h"
+#include <kis_shape_layer.h>
 
 
 struct InplaceTransformStrokeStrategy::Private
@@ -601,6 +602,12 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                     KUndo2Command *cmd = extLayer->transform(t);
 
                     executeAndAddCommand(cmd, Transform, KisStrokeJobData::CONCURRENT);
+
+                    /// we should make sure that the asynchronous shape regeneration
+                    /// has completed before we issue the updates a bit later
+                    if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(extLayer)) {
+                        shapeLayer->forceUpdateTimedNode();
+                    }
 
                     /**
                      * Shape layer's projection may not be yet ready right

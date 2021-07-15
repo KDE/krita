@@ -471,7 +471,9 @@ void TransformStrokeStrategy::initStrokeCallback()
                 } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
                     srcRect |= mask->selection()->selectedExactRect();
                 } else {
-                    srcRect |= node->exactBounds();
+                    /// We shouldn't include masks or layer styles into the handles rect,
+                    /// in the end, we process the paint device only
+                    srcRect |= node->paintDevice() ? node->paintDevice()->exactBounds() : node->exactBounds();
                 }
             }
         }

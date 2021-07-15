@@ -394,7 +394,9 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                 } else if (const KisTransparencyMask *mask = dynamic_cast<const KisTransparencyMask*>(node.data())) {
                     srcRect |= mask->selection()->selectedExactRect();
                 } else {
-                    srcRect |= node->exactBounds();
+                    /// We shouldn't include masks or layer styles into the handles rect,
+                    /// in the end, we process the paint device only
+                    srcRect |= node->paintDevice() ? node->paintDevice()->exactBounds() : node->exactBounds();
                 }
             }
         }

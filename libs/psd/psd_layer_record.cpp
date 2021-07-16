@@ -15,6 +15,7 @@
 #include <QStringList>
 
 #include "kis_iterator_ng.h"
+#include <algorithm>
 #include <kis_debug.h>
 #include <kis_node.h>
 #include <kis_paint_layer.h>
@@ -422,6 +423,29 @@ void PSDLayerRecord::write(QIODevice &io,
                            const QDomDocument &stylesXmlDoc,
                            bool useLfxsLayerStyleFormat)
 {
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        return writeImpl<psd_byte_order::psdLittleEndian>(io,
+                                                          layerContentDevice,
+                                                          onlyTransparencyMask,
+                                                          maskRect,
+                                                          sectionType,
+                                                          stylesXmlDoc,
+                                                          useLfxsLayerStyleFormat);
+    default:
+        return writeImpl(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType, stylesXmlDoc, useLfxsLayerStyleFormat);
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PSDLayerRecord::writeImpl(QIODevice &io,
+                               KisPaintDeviceSP layerContentDevice,
+                               KisNodeSP onlyTransparencyMask,
+                               const QRect &maskRect,
+                               psd_section_type sectionType,
+                               const QDomDocument &stylesXmlDoc,
+                               bool useLfxsLayerStyleFormat)
+{
     dbgFile << "writing layer info record"
             << "at" << io.pos();
 
@@ -436,42 +460,58 @@ void PSDLayerRecord::write(QIODevice &io,
     Q_ASSERT(nChannels > 0);
 
     try {
+        QBuffer buf_little_endian;
+        buf_little_endian.open(QIODevice::WriteOnly);
+        QBuffer buf_big_endian;
+        buf_big_endian.open(QIODevice::WriteOnly);
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
+
         const QRect layerRect(left, top, right - left, bottom - top);
-        KisAslWriterUtils::writeRect(layerRect, io);
+        KisAslWriterUtils::writeRect<psd_byte_order::psdBigEndian>(layerRect, buf_big_endian);
+        KisAslWriterUtils::writeRect<psd_byte_order::psdLittleEndian>(layerRect, buf_little_endian);
+        KisAslWriterUtils::writeRect<byteOrder>(layerRect, buf);
+        KisAslWriterUtils::writeRect<byteOrder>(layerRect, io);
+
+        if (byteOrder == psd_byte_order::psdLittleEndian) {
+            dbgFile << "Testing LE equality of QRect: " << std::equal(buf_little_endian.data().begin(), buf_little_endian.data().end(), buf.data().begin());
+        } else {
+            dbgFile << "Testing BE equality of QRect: " << std::equal(buf_big_endian.data().begin(), buf_big_endian.data().end(), buf.data().begin());
+        }
 
         {
             quint16 realNumberOfChannels = nChannels + bool(m_onlyTransparencyMask);
-            SAFE_WRITE_EX(io, realNumberOfChannels);
+            SAFE_WRITE_EX(byteOrder, io, realNumberOfChannels);
         }
 
         Q_FOREACH (ChannelInfo *channel, channelInfoRecords) {
-            SAFE_WRITE_EX(io, (quint16)channel->channelId);
+            SAFE_WRITE_EX(byteOrder, io, (quint16)channel->channelId);
 
-            channel->channelInfoPosition = io.pos();
+            channel->channelInfoPosition = static_cast<int>(io.pos());
 
             // to be filled in when we know how big channel block is
             const quint32 fakeChannelSize = 0;
-            SAFE_WRITE_EX(io, fakeChannelSize);
+            SAFE_WRITE_EX(byteOrder, io, fakeChannelSize);
         }
 
         if (m_onlyTransparencyMask) {
             const quint16 userSuppliedMaskChannelId = -2;
-            SAFE_WRITE_EX(io, userSuppliedMaskChannelId);
+            SAFE_WRITE_EX(byteOrder, io, userSuppliedMaskChannelId);
 
             m_transparencyMaskSizeOffset = io.pos();
 
             const quint32 fakeTransparencyMaskSize = 0;
-            SAFE_WRITE_EX(io, fakeTransparencyMaskSize);
+            SAFE_WRITE_EX(byteOrder, io, fakeTransparencyMaskSize);
         }
 
         // blend mode
         dbgFile << ppVar(blendModeKey) << ppVar(io.pos());
 
-        KisAslWriterUtils::writeFixedString("8BIM", io);
-        KisAslWriterUtils::writeFixedString(blendModeKey, io);
+        KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+        KisAslWriterUtils::writeFixedString<byteOrder>(blendModeKey, io);
 
-        SAFE_WRITE_EX(io, opacity);
-        SAFE_WRITE_EX(io, clipping); // unused
+        SAFE_WRITE_EX(byteOrder, io, opacity);
+        SAFE_WRITE_EX(byteOrder, io, clipping); // unused
 
         // visibility and protection
         quint8 flags = 0;
@@ -483,24 +523,24 @@ void PSDLayerRecord::write(QIODevice &io,
             flags |= (1 << 3) | (1 << 4);
         }
 
-        SAFE_WRITE_EX(io, flags);
+        SAFE_WRITE_EX(byteOrder, io, flags);
 
         {
             quint8 padding = 0;
-            SAFE_WRITE_EX(io, padding);
+            SAFE_WRITE_EX(byteOrder, io, padding);
         }
 
         {
             // extra fields with their own length tag
-            KisAslWriterUtils::OffsetStreamPusher<quint32> extraDataSizeTag(io);
+            KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> extraDataSizeTag(io);
 
             if (m_onlyTransparencyMask) {
                 {
                     const quint32 layerMaskDataSize = 20; // support simple case only
-                    SAFE_WRITE_EX(io, layerMaskDataSize);
+                    SAFE_WRITE_EX(byteOrder, io, layerMaskDataSize);
                 }
 
-                KisAslWriterUtils::writeRect(m_onlyTransparencyMaskRect, io);
+                KisAslWriterUtils::writeRect<byteOrder>(m_onlyTransparencyMaskRect, io);
 
                 {
                     // NOTE: in PSD the default color of the mask is stored in 1 byte value!
@@ -508,29 +548,29 @@ void PSDLayerRecord::write(QIODevice &io,
                     //       actually treated in this case.
                     KIS_ASSERT_RECOVER_NOOP(m_onlyTransparencyMask->paintDevice()->pixelSize() == 1);
                     const quint8 defaultPixel = *m_onlyTransparencyMask->paintDevice()->defaultPixel().data();
-                    SAFE_WRITE_EX(io, defaultPixel);
+                    SAFE_WRITE_EX(byteOrder, io, defaultPixel);
                 }
 
                 {
                     const quint8 maskFlags = 0; // nothing serious
-                    SAFE_WRITE_EX(io, maskFlags);
+                    SAFE_WRITE_EX(byteOrder, io, maskFlags);
 
                     const quint16 padding = 0; // 2-byte padding
-                    SAFE_WRITE_EX(io, padding);
+                    SAFE_WRITE_EX(byteOrder, io, padding);
                 }
             } else {
                 const quint32 nullLayerMaskDataSize = 0;
-                SAFE_WRITE_EX(io, nullLayerMaskDataSize);
+                SAFE_WRITE_EX(byteOrder, io, nullLayerMaskDataSize);
             }
 
             {
                 // blending ranges are not implemented yet
                 const quint32 nullBlendingRangesSize = 0;
-                SAFE_WRITE_EX(io, nullBlendingRangesSize);
+                SAFE_WRITE_EX(byteOrder, io, nullBlendingRangesSize);
             }
 
             // layer name: Pascal string, padded to a multiple of 4 bytes.
-            psdwrite_pascalstring(io, layerName, 4);
+            psdwrite_pascalstring<byteOrder>(io, layerName, 4);
 
             PsdAdditionalLayerInfoBlock additionalInfoBlock(m_header);
 
@@ -571,12 +611,12 @@ void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice &io)
     if (m_onlyTransparencyMask) {
         KisPaintDeviceSP device = convertMaskDeviceIfNeeded(m_onlyTransparencyMask->paintDevice());
 
-        QByteArray buffer(device->pixelSize() * m_onlyTransparencyMaskRect.width() * m_onlyTransparencyMaskRect.height(), 0);
+        QByteArray buffer(static_cast<int>(device->pixelSize()) * m_onlyTransparencyMaskRect.width() * m_onlyTransparencyMaskRect.height(), 0);
         device->readBytes((quint8 *)buffer.data(), m_onlyTransparencyMaskRect);
 
         PsdPixelUtils::writeChannelDataRLE(io,
                                            (quint8 *)buffer.data(),
-                                           device->pixelSize(),
+                                           static_cast<int>(device->pixelSize()),
                                            m_onlyTransparencyMaskRect,
                                            m_transparencyMaskSizeOffset,
                                            -1,
@@ -605,8 +645,8 @@ void PSDLayerRecord::writePixelDataImpl(QIODevice &io)
 
         for (int i = 0; i < nChannels; i++) {
             const ChannelInfo *channelInfo = channelInfoRecords[i];
-            KisAslWriterUtils::OffsetStreamPusher<quint32> channelBlockSizeExternalTag(io, 0, channelInfo->channelInfoPosition);
-            SAFE_WRITE_EX(io, (quint16)Compression::Uncompressed);
+            KisAslWriterUtils::OffsetStreamPusher<quint32, psd_byte_order::psdBigEndian> channelBlockSizeExternalTag(io, 0, channelInfo->channelInfoPosition);
+            SAFE_WRITE_EX(psd_byte_order::psdBigEndian, io, (quint16)Compression::Uncompressed);
         }
 
         writeTransparencyMaskPixelData(io);

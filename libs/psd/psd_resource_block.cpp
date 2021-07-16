@@ -11,6 +11,7 @@
 
 #include <kis_debug.h>
 
+#include "psd.h"
 #include "psd_resource_section.h"
 #include "psd_utils.h"
 
@@ -274,7 +275,7 @@ bool PSDResourceBlock::write(QIODevice &io) const
         // reconstruct from the data
         QBuffer buf(&ba);
         buf.open(QBuffer::WriteOnly);
-        buf.write("8BIM", 4);
+        psdwrite(buf, "8BIM");
         psdwrite(buf, identifier);
         psdwrite_pascalstring(buf, name);
         psdwrite(buf, dataSize);
@@ -335,14 +336,14 @@ bool RESN_INFO_1005::createBlock(QByteArray &data)
     // Convert to 16.16 fixed point
     Fixed h = hRes * 65536.0 + 0.5;
     dbgFile << "h" << h << "hRes" << hRes;
-    psdwrite(buf, (quint32)h);
+    psdwrite(buf, h);
     psdwrite(buf, hResUnit);
     psdwrite(buf, widthUnit);
 
     // Convert to 16.16 fixed point
     Fixed v = vRes * 65536.0 + 0.5;
     dbgFile << "v" << v << "vRes" << vRes;
-    psdwrite(buf, (quint32)v);
+    psdwrite(buf, v);
     psdwrite(buf, vResUnit);
     psdwrite(buf, heightUnit);
 

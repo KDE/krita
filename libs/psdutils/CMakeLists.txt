@@ -11,7 +11,6 @@ set(kritapsdutils_LIB_SRCS
     asl/kis_asl_object_catcher.cpp
     asl/kis_asl_callback_object_catcher.cpp
     asl/kis_asl_xml_writer.cpp
-    asl/kis_asl_writer_utils.cpp
     asl/kis_asl_patterns_writer.cpp
     asl/kis_asl_writer.cpp
 )

@@ -487,7 +487,14 @@ bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer)
     bool retval = true;
 
     try {
-        writeImpl(io, rootLayer);
+        switch (m_header.byteOrder) {
+        case psd_byte_order::psdLittleEndian:
+            writeImpl<psd_byte_order::psdLittleEndian>(io, rootLayer);
+            break;
+        default:
+            writeImpl(io, rootLayer);
+            break;
+        }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         error = PREPEND_METHOD(e.what());
         retval = false;
@@ -496,6 +503,7 @@ bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer)
     return retval;
 }
 
+template<psd_byte_order byteOrder>
 void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
@@ -510,16 +518,16 @@ void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
     }
 
     {
-        KisAslWriterUtils::OffsetStreamPusher<quint32> layerAndMaskSectionSizeTag(io, 2);
+        KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> layerAndMaskSectionSizeTag(io, 2);
         QDomDocument mergedPatternsXmlDoc;
 
         {
-            KisAslWriterUtils::OffsetStreamPusher<quint32> layerInfoSizeTag(io, 4);
+            KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> layerInfoSizeTag(io, 4);
 
             {
                 // number of layers (negative, because krita always has alpha)
-                const qint16 layersSize = -nodes.size();
-                SAFE_WRITE_EX(io, layersSize);
+                const qint16 layersSize = static_cast<qint16>(-nodes.size());
+                SAFE_WRITE_EX(byteOrder, io, layersSize);
 
                 dbgFile << "Number of layers" << layersSize << "at" << io.pos();
             }
@@ -596,14 +604,14 @@ void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
 
                 // colors + alpha channel
                 // note: transparency mask not included
-                layerRecord->nChannels = colorSpace->colorChannelCount() + 1;
+                layerRecord->nChannels = static_cast<quint16>(colorSpace->colorChannelCount() + 1);
 
                 ChannelInfo *info = new ChannelInfo;
                 info->channelId = -1; // For the alpha channel, which we always have in Krita, and should be saved first in
                 layerRecord->channelInfoRecords << info;
 
                 // the rest is in display order: rgb, cmyk, lab...
-                for (int i = 0; i < (int)colorSpace->colorChannelCount(); ++i) {
+                for (qint16 i = 0; i < (int)colorSpace->colorChannelCount(); ++i) {
                     info = new ChannelInfo;
                     info->channelId = i; // 0 for red, 1 = green, etc
                     layerRecord->channelInfoRecords << info;
@@ -626,7 +634,9 @@ void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
             dbgFile << "start writing layer pixel data" << io.pos();
 
             // Now save the pixel data
-            Q_FOREACH (PSDLayerRecord *layerRecord, layers) {
+            for (PSDLayerRecord *layerRecord : layers) {
+                // XXX: endianness?
+                // Make consistent with PSDLayerRecord::readPixelData
                 layerRecord->writePixelData(io);
             }
         }
@@ -634,7 +644,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
         {
             // write the global layer mask info -- which is empty
             const quint32 globalMaskSize = 0;
-            SAFE_WRITE_EX(io, globalMaskSize);
+            SAFE_WRITE_EX(byteOrder, io, globalMaskSize);
         }
 
         globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);

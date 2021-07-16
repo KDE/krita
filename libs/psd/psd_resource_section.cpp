@@ -9,6 +9,7 @@
 #include <QIODevice>
 #include <kis_debug.h>
 
+#include "psd.h"
 #include "psd_resource_block.h"
 #include "psd_utils.h"
 

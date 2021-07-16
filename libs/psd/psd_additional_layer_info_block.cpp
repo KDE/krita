@@ -249,34 +249,73 @@ bool PsdAdditionalLayerInfoBlock::valid()
 
 void PsdAdditionalLayerInfoBlock::writeLuniBlockEx(QIODevice &io, const QString &layerName)
 {
-    KisAslWriterUtils::writeFixedString("8BIM", io);
-    KisAslWriterUtils::writeFixedString("luni", io);
-    KisAslWriterUtils::OffsetStreamPusher<quint32> layerNameSizeTag(io, 2);
-    KisAslWriterUtils::writeUnicodeString(layerName, io);
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeLuniBlockExImpl<psd_byte_order::psdLittleEndian>(io, layerName);
+        break;
+    default:
+        writeLuniBlockExImpl(io, layerName);
+        break;
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeLuniBlockExImpl(QIODevice &io, const QString &layerName)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("luni", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> layerNameSizeTag(io, 2);
+    KisAslWriterUtils::writeUnicodeString<byteOrder>(layerName, io);
 }
 
 void PsdAdditionalLayerInfoBlock::writeLsctBlockEx(QIODevice &io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey)
 {
-    KisAslWriterUtils::writeFixedString("8BIM", io);
-    KisAslWriterUtils::writeFixedString("lsct", io);
-    KisAslWriterUtils::OffsetStreamPusher<quint32> sectionTypeSizeTag(io, 2);
-    SAFE_WRITE_EX(io, (quint32)sectionType);
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeLsctBlockExImpl<psd_byte_order::psdLittleEndian>(io, sectionType, isPassThrough, blendModeKey);
+        break;
+    default:
+        writeLsctBlockExImpl(io, sectionType, isPassThrough, blendModeKey);
+        break;
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeLsctBlockExImpl(QIODevice &io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("lsct", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> sectionTypeSizeTag(io, 2);
+    SAFE_WRITE_EX(byteOrder, io, (quint32)sectionType);
 
     QString realBlendModeKey = isPassThrough ? QString("pass") : blendModeKey;
 
-    KisAslWriterUtils::writeFixedString("8BIM", io);
-    KisAslWriterUtils::writeFixedString(realBlendModeKey, io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>(realBlendModeKey, io);
 }
 
 void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice &io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat)
 {
-    KisAslWriterUtils::writeFixedString("8BIM", io);
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeLfx2BlockExImpl<psd_byte_order::psdLittleEndian>(io, stylesXmlDoc, useLfxsLayerStyleFormat);
+        break;
+    default:
+        writeLfx2BlockExImpl(io, stylesXmlDoc, useLfxsLayerStyleFormat);
+        break;
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeLfx2BlockExImpl(QIODevice &io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
     // 'lfxs' format is used for Group layers in PS
-    KisAslWriterUtils::writeFixedString(!useLfxsLayerStyleFormat ? "lfx2" : "lfxs", io);
-    KisAslWriterUtils::OffsetStreamPusher<quint32> lfx2SizeTag(io, 2);
+    KisAslWriterUtils::writeFixedString<byteOrder>(!useLfxsLayerStyleFormat ? "lfx2" : "lfxs", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> lfx2SizeTag(io, 2);
 
     try {
-        KisAslWriter writer;
+        KisAslWriter writer(byteOrder);
         writer.writePsdLfx2SectionEx(io, stylesXmlDoc);
 
     } catch (KisAslWriterUtils::ASLWriteException &e) {
@@ -289,12 +328,25 @@ void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice &io, const QDomDocu
 
 void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice &io, const QDomDocument &patternsXmlDoc)
 {
-    KisAslWriterUtils::writeFixedString("8BIM", io);
-    KisAslWriterUtils::writeFixedString("Patt", io);
-    KisAslWriterUtils::OffsetStreamPusher<quint32> pattSizeTag(io, 2);
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writePattBlockExImpl<psd_byte_order::psdLittleEndian>(io, patternsXmlDoc);
+        break;
+    default:
+        writePattBlockExImpl(io, patternsXmlDoc);
+        break;
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("Patt", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> pattSizeTag(io, 2);
 
     try {
-        KisAslPatternsWriter writer(patternsXmlDoc, io);
+        KisAslPatternsWriter writer(patternsXmlDoc, io, byteOrder);
         writer.writePatterns();
 
     } catch (KisAslWriterUtils::ASLWriteException &e) {

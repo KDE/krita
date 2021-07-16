@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,6 +23,7 @@
 #include <asl/kis_asl_writer_utils.h>
 
 #include "kis_iterator_ng.h"
+#include "psd.h"
 #include "psd_layer_record.h"
 #include <asl/kis_offset_keeper.h>
 
@@ -575,14 +577,14 @@ void writeChannelDataRLE(QIODevice &io,
                          const qint64 rleBlockOffset,
                          const bool writeCompressionType)
 {
-    typedef KisAslWriterUtils::OffsetStreamPusher<quint32> Pusher;
+    using Pusher = KisAslWriterUtils::OffsetStreamPusher<quint32, psd_byte_order::psdBigEndian>;
     QScopedPointer<Pusher> channelBlockSizeExternalTag;
     if (sizeFieldOffset >= 0) {
         channelBlockSizeExternalTag.reset(new Pusher(io, 0, sizeFieldOffset));
     }
 
     if (writeCompressionType) {
-        SAFE_WRITE_EX(io, (quint16)Compression::RLE);
+        SAFE_WRITE_EX(psd_byte_order::psdBigEndian, io, (quint16)Compression::RLE);
     }
 
     const bool externalRleBlock = rleBlockOffset >= 0;
@@ -602,16 +604,19 @@ void writeChannelDataRLE(QIODevice &io,
         for (int i = 0; i < rc.height(); ++i) {
             // XXX: choose size for PSB!
             const quint16 fakeRLEBLockSize = 0;
-            SAFE_WRITE_EX(io, fakeRLEBLockSize);
+            SAFE_WRITE_EX(psd_byte_order::psdBigEndian, io, fakeRLEBLockSize);
         }
     }
 
-    quint32 stride = channelSize * rc.width();
+    const int stride = channelSize * rc.width();
     for (qint32 row = 0; row < rc.height(); ++row) {
         QByteArray uncompressed = QByteArray::fromRawData((const char *)plane + row * stride, stride);
         QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
 
-        KisAslWriterUtils::OffsetStreamPusher<quint16> rleExternalTag(io, 0, channelRLESizePos + row * sizeof(quint16));
+        KisAslWriterUtils::OffsetStreamPusher<quint16, psd_byte_order::psdBigEndian> rleExternalTag(io,
+                                                                                                    0,
+                                                                                                    channelRLESizePos
+                                                                                                        + row * static_cast<qint64>(sizeof(quint16)));
 
         if (io.write(compressed) != compressed.size()) {
             throw KisAslWriterUtils::ASLWriteException("Failed to write image data");

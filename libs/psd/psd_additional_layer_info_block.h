@@ -260,6 +260,18 @@ private:
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void readImpl(QIODevice &io);
 
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeLuniBlockExImpl(QIODevice &io, const QString &layerName);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeLsctBlockExImpl(QIODevice &io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeLfx2BlockExImpl(QIODevice &io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc);
+
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;
     UserMaskInfoBlockHandler m_userMaskBlockHandler;

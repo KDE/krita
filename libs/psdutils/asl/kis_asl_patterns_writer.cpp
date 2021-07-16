@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,10 +17,11 @@
 
 #include "kis_asl_writer_utils.h"
 
-KisAslPatternsWriter::KisAslPatternsWriter(const QDomDocument &doc, QIODevice &device)
+KisAslPatternsWriter::KisAslPatternsWriter(const QDomDocument &doc, QIODevice &device, psd_byte_order byteOrder)
     : m_doc(doc)
     , m_device(device)
     , m_numPatternsWritten(0)
+    , m_byteOrder(byteOrder)
 {
 }
 
@@ -83,31 +85,44 @@ void sliceQImage(const QImage &image, QVector<QVector<QByteArray>> *dstPlanes, b
 
 void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
 {
+    switch (m_byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        addPatternImpl<psd_byte_order::psdLittleEndian>(pattern);
+        break;
+    default:
+        addPatternImpl(pattern);
+        break;
+    }
+}
+
+template<psd_byte_order byteOrder>
+void KisAslPatternsWriter::addPatternImpl(const KoPatternSP pattern)
+{
     {
-        KisAslWriterUtils::OffsetStreamPusher<quint32> patternSizeField(m_device);
+        KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> patternSizeField(m_device);
 
         {
             const quint32 patternVersion = 1;
-            SAFE_WRITE_EX(m_device, patternVersion);
+            SAFE_WRITE_EX(byteOrder, m_device, patternVersion);
         }
 
         {
             const quint32 patternImageMode = 3;
-            SAFE_WRITE_EX(m_device, patternImageMode);
+            SAFE_WRITE_EX(byteOrder, m_device, patternImageMode);
         }
 
         {
-            const quint16 patternHeight = pattern->height();
-            SAFE_WRITE_EX(m_device, patternHeight);
+            const quint16 patternHeight = static_cast<quint16>(pattern->height());
+            SAFE_WRITE_EX(byteOrder, m_device, patternHeight);
         }
 
         {
-            const quint16 patternWidth = pattern->width();
-            SAFE_WRITE_EX(m_device, patternWidth);
+            const quint16 patternWidth = static_cast<quint16>(pattern->width());
+            SAFE_WRITE_EX(byteOrder, m_device, patternWidth);
         }
 
-        KisAslWriterUtils::writeUnicodeString(pattern->name(), m_device);
-        KisAslWriterUtils::writePascalString(KisAslWriterUtils::getPatternUuidLazy(pattern), m_device);
+        KisAslWriterUtils::writeUnicodeString<byteOrder>(pattern->name(), m_device);
+        KisAslWriterUtils::writePascalString<byteOrder>(KisAslWriterUtils::getPatternUuidLazy(pattern), m_device);
 
         // Write "Virtual Memory Array List"
 
@@ -116,17 +131,17 @@ void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
         {
             {
                 const quint32 arrayVersion = 3;
-                SAFE_WRITE_EX(m_device, arrayVersion);
+                SAFE_WRITE_EX(byteOrder, m_device, arrayVersion);
             }
 
-            KisAslWriterUtils::OffsetStreamPusher<quint32> arraySizeField(m_device);
+            KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> arraySizeField(m_device);
 
-            KisAslWriterUtils::writeRect(patternRect, m_device);
+            KisAslWriterUtils::writeRect<byteOrder>(patternRect, m_device);
 
             {
                 // don't ask me why it is called this way...
                 const quint32 numberOfChannels = 24;
-                SAFE_WRITE_EX(m_device, numberOfChannels);
+                SAFE_WRITE_EX(byteOrder, m_device, numberOfChannels);
             }
 
             KIS_ASSERT_RECOVER_RETURN(patternRect.size() == pattern->pattern().size());
@@ -138,41 +153,41 @@ void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
             for (int i = 0; i < 3; i++) {
                 {
                     const quint32 planeIsWritten = 1;
-                    SAFE_WRITE_EX(m_device, planeIsWritten);
+                    SAFE_WRITE_EX(byteOrder, m_device, planeIsWritten);
                 }
 
-                KisAslWriterUtils::OffsetStreamPusher<quint32> planeSizeField(m_device);
+                KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> planeSizeField(m_device);
 
                 {
                     const quint32 pixelDepth1 = 8;
-                    SAFE_WRITE_EX(m_device, pixelDepth1);
+                    SAFE_WRITE_EX(byteOrder, m_device, pixelDepth1);
                 }
 
-                KisAslWriterUtils::writeRect(patternRect, m_device);
+                KisAslWriterUtils::writeRect<byteOrder>(patternRect, m_device);
 
                 {
                     // why twice? who knows...
                     const quint16 pixelDepth2 = 8;
-                    SAFE_WRITE_EX(m_device, pixelDepth2);
+                    SAFE_WRITE_EX(byteOrder, m_device, pixelDepth2);
                 }
 
                 {
                     // compress with RLE
                     const quint8 compressionMethod = isCompressed;
-                    SAFE_WRITE_EX(m_device, compressionMethod);
+                    SAFE_WRITE_EX(byteOrder, m_device, compressionMethod);
                 }
 
                 KIS_ASSERT_RECOVER_RETURN(imagePlanes[i].size() == pattern->pattern().height());
 
                 if (isCompressed) {
                     Q_FOREACH (const QByteArray &compressedRow, imagePlanes[i]) {
-                        const quint16 compressionRowSize = compressedRow.size();
-                        SAFE_WRITE_EX(m_device, compressionRowSize);
+                        const quint16 compressionRowSize = static_cast<quint16>(compressedRow.size());
+                        SAFE_WRITE_EX(byteOrder, m_device, compressionRowSize);
                     }
                 }
 
                 Q_FOREACH (const QByteArray &rowData, imagePlanes[i]) {
-                    int bytesWritten = m_device.write(rowData);
+                    const qint64 bytesWritten = m_device.write(rowData);
                     if (bytesWritten != rowData.size()) {
                         throw KisAslWriterUtils::ASLWriteException("Failed to write a compressed pattern plane");
                     }

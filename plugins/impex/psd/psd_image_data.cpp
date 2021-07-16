@@ -128,11 +128,10 @@ bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
                                         m_channelSize,
                                         imageRect,
                                         infoRecords);
-        } catch (KisAslReaderUtils::ASLParseException &e) {
+        } catch (KisAslReaderUtils::ASLParseException &) {
             dev->clear();
             return true;
         }
-
     }
 
     return true;

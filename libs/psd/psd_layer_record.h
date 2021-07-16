@@ -149,6 +149,15 @@ private:
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     bool readImpl(QIODevice &io);
 
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeImpl(QIODevice &io,
+                   KisPaintDeviceSP layerContentDevice,
+                   KisNodeSP onlyTransparencyMask,
+                   const QRect &maskRect,
+                   psd_section_type sectionType,
+                   const QDomDocument &stylesXmlDoc,
+                   bool useLfxsLayerStyleFormat);
+
     void writeTransparencyMaskPixelData(QIODevice &io);
 
     void writePixelDataImpl(QIODevice &io);

@@ -59,6 +59,7 @@ private:
     bool readTiffImpl(QIODevice &io);
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     bool readGlobalMask(QIODevice &io);
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeImpl(QIODevice &io, KisNodeSP rootLayer);
 
 private:

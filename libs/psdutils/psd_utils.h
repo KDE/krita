@@ -19,15 +19,240 @@
 class QIODevice;
 class QString;
 
-bool KRITAPSDUTILS_EXPORT psdwrite(QIODevice *io, quint8 v);
-bool KRITAPSDUTILS_EXPORT psdwrite(QIODevice *io, quint16 v);
-bool KRITAPSDUTILS_EXPORT psdwrite(QIODevice *io, qint16 v);
-bool KRITAPSDUTILS_EXPORT psdwrite(QIODevice *io, quint32 v);
-bool KRITAPSDUTILS_EXPORT psdwrite(QIODevice *io, const QString &s);
-bool KRITAPSDUTILS_EXPORT psdwrite(QIODevice *io, double v);
-bool KRITAPSDUTILS_EXPORT psdwrite_pascalstring(QIODevice *io, const QString &s);
-bool KRITAPSDUTILS_EXPORT psdwrite_pascalstring(QIODevice *io, const QString &s, int padding);
-bool KRITAPSDUTILS_EXPORT psdpad(QIODevice *io, quint32 padding);
+/**
+ * Writing functions.
+ */
+
+inline bool psdwriteBE(QIODevice *io, const quint8 &v)
+{
+    const std::array<quint8, 2> val = {v};
+    const qint64 written = io->write(reinterpret_cast<const char *>(val.data()), 1);
+    return written == 1;
+}
+
+inline bool psdwriteLE(QIODevice *io, const quint8 &v)
+{
+    const std::array<quint8, 2> val = {v};
+    const qint64 written = io->write(reinterpret_cast<const char *>(val.data()), 1);
+    return written == 1;
+}
+
+inline bool psdwriteBE(QIODevice *io, const quint16 &v)
+{
+    const std::array<quint8, 2> val = {
+        quint8(v >> 8U),
+        quint8(v),
+    };
+    const qint64 written = io->write(reinterpret_cast<const char *>(val.data()), 2);
+    return written == 2;
+}
+
+inline bool psdwriteLE(QIODevice *io, const quint16 &v)
+{
+    const std::array<quint8, 2> val = {
+        quint8(v),
+        quint8(v >> 8U),
+    };
+    const qint64 written = io->write(reinterpret_cast<const char *>(val.data()), 2);
+    return written == 2;
+}
+
+inline bool psdwriteBE(QIODevice *io, const quint32 &v)
+{
+    const std::array<quint8, 4> val = {
+        quint8(v >> 24U),
+        quint8(v >> 16U),
+        quint8(v >> 8U),
+        quint8(v),
+    };
+    const qint64 written = io->write(reinterpret_cast<const char *>(val.data()), 4);
+    return written == 4;
+}
+
+inline bool psdwriteLE(QIODevice *io, const quint32 &v)
+{
+    const std::array<quint8, 4> val = {
+        quint8(v),
+        quint8(v >> 8U),
+        quint8(v >> 16U),
+        quint8(v >> 24U),
+    };
+    const qint64 written = io->write(reinterpret_cast<const char *>(val.data()), 4);
+    return written == 4;
+}
+
+inline bool psdwriteBE(QIODevice *io, const quint64 &v)
+{
+    const std::array<quint8, 8> val = {
+        quint8(v >> 56U),
+        quint8(v >> 48U),
+        quint8(v >> 40U),
+        quint8(v >> 32U),
+        quint8(v >> 24U),
+        quint8(v >> 16U),
+        quint8(v >> 8U),
+        quint8(v),
+    };
+    const qint64 written = io->write(reinterpret_cast<const char *>(val.data()), 8);
+    return written == 8;
+}
+
+inline bool psdwriteLE(QIODevice *io, const quint64 &v)
+{
+    const std::array<quint8, 8> val = {
+        quint8(v),
+        quint8(v >> 8U),
+        quint8(v >> 16U),
+        quint8(v >> 24U),
+        quint8(v >> 32U),
+        quint8(v >> 40U),
+        quint8(v >> 48U),
+        quint8(v >> 56U),
+    };
+    const qint64 written = io->write(reinterpret_cast<const char *>(val.data()), 8);
+    return written == 8;
+}
+
+/**
+ * Templated writing fallbacks for non-integral types.
+ */
+
+template<typename T>
+inline bool psdwriteBE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint8), T &> v)
+{
+    return psdwriteBE(io, reinterpret_cast<quint8 &>(v));
+}
+
+template<typename T>
+inline bool psdwriteBE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint16), T &> v)
+{
+    return psdwriteBE(io, reinterpret_cast<quint16 &>(v));
+}
+
+template<typename T>
+inline bool psdwriteBE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint32), T &> v)
+{
+    return psdwriteBE(io, reinterpret_cast<quint32 &>(v));
+}
+
+template<typename T>
+inline bool psdwriteBE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint64), T &> v)
+{
+    return psdwriteBE(io, reinterpret_cast<quint64 &>(v));
+}
+
+template<typename T>
+inline bool psdwriteLE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint8), T &> v)
+{
+    return psdwriteLE(io, reinterpret_cast<quint8 &>(v));
+}
+
+template<typename T>
+inline bool psdwriteLE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint16), T &> v)
+{
+    return psdwriteLE(io, reinterpret_cast<quint16 &>(v));
+}
+
+template<typename T>
+inline bool psdwriteLE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint32), T &> v)
+{
+    return psdwriteLE(io, reinterpret_cast<quint32 &>(v));
+}
+
+template<typename T>
+inline bool psdwriteLE(QIODevice *io, std::enable_if_t<sizeof(T) == sizeof(quint64), T &> v)
+{
+    return psdwriteLE(io, reinterpret_cast<quint64 &>(v));
+}
+
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian, typename T>
+inline bool psdwrite(QIODevice *io, T v)
+{
+    if (byteOrder == psd_byte_order::psdLittleEndian) {
+        return psdwriteLE<T>(io, v);
+    } else {
+        return psdwriteBE<T>(io, v);
+    }
+}
+
+inline bool psdwrite(QIODevice *io, const QString &s)
+{
+    const QByteArray b = s.toLatin1();
+    int l = b.size();
+    const qint64 written = io->write(reinterpret_cast<const char *>(b.data()), l);
+    return written == l;
+}
+
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+inline bool psdwrite_pascalstring(QIODevice *io, const QString &s)
+{
+    Q_ASSERT(s.length() < 256);
+    Q_ASSERT(s.length() >= 0);
+    if (s.length() < 0 || s.length() > 255)
+        return false;
+
+    if (s.isNull()) {
+        psdwrite<byteOrder>(io, quint8(0));
+        psdwrite<byteOrder>(io, quint8(0));
+        return true;
+    }
+
+    quint8 length = static_cast<quint8>(s.length());
+    psdwrite<byteOrder>(io, length);
+
+    const QByteArray b = s.toLatin1();
+    const qint64 written = io->write(reinterpret_cast<const char *>(b.data()), length);
+    if (written != length)
+        return false;
+
+    if ((length & 0x01) != 0) {
+        return psdwrite<byteOrder>(io, quint8(0));
+    }
+
+    return true;
+}
+
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+inline bool psdwrite_pascalstring(QIODevice *io, const QString &s, int padding)
+{
+    Q_ASSERT(s.length() < 256);
+    Q_ASSERT(s.length() >= 0);
+    if (s.length() < 0 || s.length() > 255)
+        return false;
+
+    if (s.isNull()) {
+        psdwrite<byteOrder>(io, quint8(0));
+        psdwrite<byteOrder>(io, quint8(0));
+        return true;
+    }
+    quint8 length = static_cast<quint8>(s.length());
+    psdwrite<byteOrder>(io, length);
+
+    QByteArray b = s.toLatin1();
+    const qint64 written = io->write(b.data(), length);
+    if (written != length)
+        return false;
+
+    // If the total length (length byte + content) is not a multiple of padding, add zeroes to pad
+    length++;
+    if ((length % padding) != 0) {
+        for (int i = 0; i < (padding - (length % padding)); i++) {
+            psdwrite<byteOrder>(io, quint8(0));
+        }
+    }
+
+    return true;
+}
+
+inline bool psdpad(QIODevice *io, quint32 padding)
+{
+    for (quint32 i = 0; i < padding; i++) {
+        const bool written = io->putChar('\0');
+        if (!written)
+            return false;
+    }
+    return true;
+}
 
 /**
  * Reading functions.

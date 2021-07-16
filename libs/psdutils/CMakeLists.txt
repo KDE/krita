@@ -2,7 +2,6 @@ include_directories( ${CMAKE_BINARY_DIR}/libs/psdutils  #For kispsd_include.h
 )
 
 set(kritapsdutils_LIB_SRCS
-    psd_utils.cpp
     psd.cpp
     compression.cpp
     psd_pattern.cpp

@@ -546,6 +546,17 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
     QVector<KisStrokeJobData *> mutatedJobs;
 
+    auto restoreTemporaryHiddenNodes = [this] () {
+        Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+            node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
+            if (KisDelayedUpdateNodeInterface *delayedNode = dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data())) {
+                delayedNode->forceUpdateTimedNode();
+            } else {
+                node->setDirty();
+            }
+        }
+    };
+
     if (applyTransform) {
         m_savedTransformArgs = args;
 
@@ -566,6 +577,8 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
                                          args,
                                          m_rootNode);
 
+        KritaUtils::addJobBarrier(mutatedJobs, restoreTemporaryHiddenNodes);
+
         KritaUtils::addJobBarrier(mutatedJobs, [this] () {
             m_updatesFacade->enableDirtyRequests();
             m_updatesDisabled = false;
@@ -573,18 +586,13 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
             m_updateData->compress();
             runAndSaveCommand(toQShared(new KisUpdateCommandEx(m_updateData, m_updatesFacade, KisUpdateCommandEx::FINALIZING)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
         });
+    } else {
+        KritaUtils::addJobBarrier(mutatedJobs, restoreTemporaryHiddenNodes);
     }
 
     KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {
         Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
             selection->setVisible(true);
-        }
-
-        Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
-            node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
-            if (!applyTransform) {
-                node->setDirty();
-            }
         }
 
         if (m_deactivatedOverlaySelectionMask) {

@@ -762,7 +762,7 @@ QVector<KoResourceSP> KisAslLayerStyleSerializer::fetchEmbeddedResources(const K
     return embeddedResources;
 }
 
-void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
+void KisAslLayerStyleSerializer::saveToDevice(QIODevice &device)
 {
     QDomDocument doc = formXmlDocument();
     if (doc.isNull()) return ;
@@ -779,7 +779,7 @@ bool KisAslLayerStyleSerializer::saveToFile(const QString& filename)
         dbgKrita << "Can't open file " << filename;
         return false;
     }
-    saveToDevice(&file);
+    saveToDevice(file);
     file.close();
 
     return true;

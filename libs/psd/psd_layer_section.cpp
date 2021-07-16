@@ -482,7 +482,7 @@ void mergePatternsXMLSection(const QDomDocument &src, QDomDocument &dst)
     }
 }
 
-bool PSDLayerMaskSection::write(QIODevice *io, KisNodeSP rootLayer)
+bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer)
 {
     bool retval = true;
 
@@ -496,7 +496,7 @@ bool PSDLayerMaskSection::write(QIODevice *io, KisNodeSP rootLayer)
     return retval;
 }
 
-void PSDLayerMaskSection::writeImpl(QIODevice *io, KisNodeSP rootLayer)
+void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
 
@@ -521,7 +521,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice *io, KisNodeSP rootLayer)
                 const qint16 layersSize = -nodes.size();
                 SAFE_WRITE_EX(io, layersSize);
 
-                dbgFile << "Number of layers" << layersSize << "at" << io->pos();
+                dbgFile << "Number of layers" << layersSize << "at" << io.pos();
             }
 
             // Layer records section
@@ -623,7 +623,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice *io, KisNodeSP rootLayer)
                 layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType, stylesXmlDoc, node->inherits("KisGroupLayer"));
             }
 
-            dbgFile << "start writing layer pixel data" << io->pos();
+            dbgFile << "start writing layer pixel data" << io.pos();
 
             // Now save the pixel data
             Q_FOREACH (PSDLayerRecord *layerRecord, layers) {

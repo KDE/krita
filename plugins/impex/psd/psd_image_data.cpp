@@ -138,7 +138,7 @@ bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
     return true;
 }
 
-bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev, bool hasAlpha)
+bool PSDImageData::write(QIODevice &io, KisPaintDeviceSP dev, bool hasAlpha)
 {
     // XXX: make the compression setting configurable. For now, always use RLE.
     psdwrite(io, (quint16)Compression::RLE);
@@ -161,14 +161,14 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev, bool hasAlpha)
         dev->colorSpace()->colorChannelCount();
 
     for (int i = 0; i < numChannels; i++) {
-        const int rleOffset = io->pos();
+        const int rleOffset = io.pos();
 
         int channelId = writeAlpha && i == numChannels - 1 ? -1 : i;
 
         writingInfoList <<
             PsdPixelUtils::ChannelWritingInfo(channelId, -1, rleOffset);
 
-        io->seek(io->pos() + rc.height() * sizeof(quint16));
+        io.seek(io.pos() + rc.height() * sizeof(quint16));
     }
 
     PsdPixelUtils::writePixelDataCommon(io, dev, rc,

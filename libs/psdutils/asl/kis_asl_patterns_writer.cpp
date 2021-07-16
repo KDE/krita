@@ -16,7 +16,7 @@
 
 #include "kis_asl_writer_utils.h"
 
-KisAslPatternsWriter::KisAslPatternsWriter(const QDomDocument &doc, QIODevice *device)
+KisAslPatternsWriter::KisAslPatternsWriter(const QDomDocument &doc, QIODevice &device)
     : m_doc(doc)
     , m_device(device)
     , m_numPatternsWritten(0)
@@ -172,7 +172,7 @@ void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
                 }
 
                 Q_FOREACH (const QByteArray &rowData, imagePlanes[i]) {
-                    int bytesWritten = m_device->write(rowData);
+                    int bytesWritten = m_device.write(rowData);
                     if (bytesWritten != rowData.size()) {
                         throw KisAslWriterUtils::ASLWriteException("Failed to write a compressed pattern plane");
                     }
@@ -181,11 +181,11 @@ void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
         }
     }
 
-    const qint64 currentPos = m_device->pos();
+    const qint64 currentPos = m_device.pos();
     const qint64 alignedPos = KisAslWriterUtils::alignOffsetCeil(currentPos, 4);
 
     if (currentPos != alignedPos) {
-        m_device->seek(alignedPos);
+        m_device.seek(alignedPos);
     }
 
     m_numPatternsWritten++;

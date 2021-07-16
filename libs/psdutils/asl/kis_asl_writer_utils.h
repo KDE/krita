@@ -38,11 +38,11 @@ struct KRITAPSDUTILS_EXPORT ASLWriteException : public std::runtime_error {
 
 namespace KisAslWriterUtils
 {
-KRITAPSDUTILS_EXPORT void writeRect(const QRect &rect, QIODevice *device);
-KRITAPSDUTILS_EXPORT void writeUnicodeString(const QString &value, QIODevice *device);
-KRITAPSDUTILS_EXPORT void writeVarString(const QString &value, QIODevice *device);
-KRITAPSDUTILS_EXPORT void writePascalString(const QString &value, QIODevice *device);
-KRITAPSDUTILS_EXPORT void writeFixedString(const QString &value, QIODevice *device);
+KRITAPSDUTILS_EXPORT void writeRect(const QRect &rect, QIODevice &device);
+KRITAPSDUTILS_EXPORT void writeUnicodeString(const QString &value, QIODevice &device);
+KRITAPSDUTILS_EXPORT void writeVarString(const QString &value, QIODevice &device);
+KRITAPSDUTILS_EXPORT void writePascalString(const QString &value, QIODevice &device);
+KRITAPSDUTILS_EXPORT void writeFixedString(const QString &value, QIODevice &device);
 KRITAPSDUTILS_EXPORT QString getPatternUuidLazy(const KoPatternSP pattern);
 
 /**
@@ -62,12 +62,12 @@ template<class OffsetType>
 class OffsetStreamPusher
 {
 public:
-    OffsetStreamPusher(QIODevice *device, qint64 alignOnExit = 0, qint64 externalSizeTagOffset = -1)
+    OffsetStreamPusher(QIODevice &device, qint64 alignOnExit = 0, qint64 externalSizeTagOffset = -1)
         : m_device(device)
         , m_alignOnExit(alignOnExit)
         , m_externalSizeTagOffset(externalSizeTagOffset)
     {
-        m_chunkStartPos = m_device->pos();
+        m_chunkStartPos = m_device.pos();
 
         if (externalSizeTagOffset < 0) {
             const OffsetType fakeObjectSize = OffsetType(0xdeadbeef);
@@ -79,7 +79,7 @@ public:
     {
         try {
             if (m_alignOnExit) {
-                qint64 currentPos = m_device->pos();
+                qint64 currentPos = m_device.pos();
                 const qint64 alignedPos = alignOffsetCeil(currentPos, m_alignOnExit);
 
                 for (; currentPos < alignedPos; currentPos++) {
@@ -88,7 +88,7 @@ public:
                 }
             }
 
-            const qint64 currentPos = m_device->pos();
+            const qint64 currentPos = m_device.pos();
 
             qint64 writtenDataSize = 0;
             qint64 sizeFiledOffset = 0;
@@ -101,10 +101,10 @@ public:
                 sizeFiledOffset = m_chunkStartPos;
             }
 
-            m_device->seek(sizeFiledOffset);
+            m_device.seek(sizeFiledOffset);
             const OffsetType realObjectSize = writtenDataSize;
             SAFE_WRITE_EX(m_device, realObjectSize);
-            m_device->seek(currentPos);
+            m_device.seek(currentPos);
         } catch (ASLWriteException &e) {
             warnKrita << PREPEND_METHOD(e.what());
         }
@@ -112,7 +112,7 @@ public:
 
 private:
     qint64 m_chunkStartPos;
-    QIODevice *m_device;
+    QIODevice &m_device;
     qint64 m_alignOnExit;
     qint64 m_externalSizeTagOffset;
 };

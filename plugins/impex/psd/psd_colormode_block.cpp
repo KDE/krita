@@ -52,9 +52,7 @@ bool PSDColorModeBlock::read(QIODevice &io)
     return valid();
 }
 
-
-
-bool PSDColorModeBlock::write(QIODevice* io)
+bool PSDColorModeBlock::write(QIODevice &io)
 {
     if (!valid()) {
         error = "Cannot write an invalid Color Mode Block";
@@ -67,7 +65,7 @@ bool PSDColorModeBlock::write(QIODevice* io)
     else if (duotoneSpecification.size() > 0 && colormode == DuoTone) {
         quint32 blocksize = duotoneSpecification.size();
         psdwrite(io, blocksize);
-        if (io->write(duotoneSpecification.constData(), blocksize) != blocksize) {
+        if (io.write(duotoneSpecification.constData(), blocksize) != blocksize) {
             error = "Failed to write duotone specification";
             return false;
         }

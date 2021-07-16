@@ -20,21 +20,21 @@
 class KisOffsetKeeper
 {
 public:
-    KisOffsetKeeper(QIODevice *device)
+    KisOffsetKeeper(QIODevice &device)
         : m_device(device)
     {
-        m_expectedPos = m_device->pos();
+        m_expectedPos = m_device.pos();
     }
 
     ~KisOffsetKeeper()
     {
-        if (m_device->pos() != m_expectedPos) {
-            m_device->seek(m_expectedPos);
+        if (m_device.pos() != m_expectedPos) {
+            m_device.seek(m_expectedPos);
         }
     }
 
 private:
-    QIODevice *m_device;
+    QIODevice &m_device;
     qint64 m_expectedPos;
 };
 

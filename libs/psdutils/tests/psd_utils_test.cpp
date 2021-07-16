@@ -20,7 +20,7 @@ void PSDUtilsTest::test_psdwrite_quint8()
     QBuffer buf;
     buf.open(QBuffer::ReadWrite);
     quint8 i = 3;
-    QVERIFY(psdwrite(&buf, i));
+    QVERIFY(psdwrite(buf, i));
     QCOMPARE(buf.buffer().size(), 1);
     QCOMPARE(buf.buffer().at(0), '\3');
 }
@@ -31,7 +31,7 @@ void PSDUtilsTest::test_psdwrite_quint16()
     QBuffer buf;
     buf.open(QBuffer::ReadWrite);
     quint16 i = 3;
-    QVERIFY(psdwrite(&buf, i));
+    QVERIFY(psdwrite(buf, i));
     QCOMPARE(buf.buffer().size(), 2);
     QCOMPARE(buf.buffer().at(0), '\0');
     QCOMPARE(buf.buffer().at(1), '\3');
@@ -42,7 +42,7 @@ void PSDUtilsTest::test_psdwrite_quint32()
     QBuffer buf;
     buf.open(QBuffer::ReadWrite);
     quint32 i = 100;
-    QVERIFY(psdwrite(&buf, i));
+    QVERIFY(psdwrite(buf, i));
     QCOMPARE(buf.buffer().size(), 4);
     QCOMPARE(buf.buffer().at(0), '\0');
     QCOMPARE(buf.buffer().at(1), '\0');
@@ -55,7 +55,7 @@ void PSDUtilsTest::test_psdwrite_qstring()
     QBuffer buf;
     buf.open(QBuffer::ReadWrite);
     QString s = "8BPS";
-    QVERIFY(psdwrite(&buf, s));
+    QVERIFY(psdwrite(buf, s));
     QCOMPARE(buf.buffer().size(), 4);
     QCOMPARE(buf.buffer().at(0), '8');
     QCOMPARE(buf.buffer().at(1), 'B');
@@ -70,7 +70,7 @@ void PSDUtilsTest::test_psdwrite_pascalstring()
 
     // test null string
     QString s;
-    QVERIFY(psdwrite_pascalstring(&buf, s));
+    QVERIFY(psdwrite_pascalstring(buf, s));
     QCOMPARE(buf.buffer().size(), 2);
     QCOMPARE(buf.buffer().at(0), '\0');
     QCOMPARE(buf.buffer().at(1), '\0');
@@ -81,7 +81,7 @@ void PSDUtilsTest::test_psdwrite_pascalstring()
 
     // test even string
     s = QString("bl");
-    QVERIFY(psdwrite_pascalstring(&buf, s));
+    QVERIFY(psdwrite_pascalstring(buf, s));
     QCOMPARE(buf.buffer().size(), 3);
     QCOMPARE(buf.buffer().at(0), '\2');
     QCOMPARE(buf.buffer().at(1), 'b');
@@ -93,7 +93,7 @@ void PSDUtilsTest::test_psdwrite_pascalstring()
 
     // test uneven string
     s = QString("bla");
-    QVERIFY(psdwrite_pascalstring(&buf, s));
+    QVERIFY(psdwrite_pascalstring(buf, s));
     QCOMPARE(buf.buffer().size(), 5);
     QCOMPARE(buf.buffer().at(0), '\3');
     QCOMPARE(buf.buffer().at(1), 'b');
@@ -107,7 +107,7 @@ void PSDUtilsTest::test_psdpad()
 {
     QBuffer buf;
     buf.open(QBuffer::ReadWrite);
-    QVERIFY(psdpad(&buf, 6));
+    QVERIFY(psdpad(buf, 6));
     QCOMPARE(buf.buffer().size(), 6);
     QCOMPARE(buf.buffer().at(0), '\0');
     QCOMPARE(buf.buffer().at(1), '\0');
@@ -122,7 +122,7 @@ void PSDUtilsTest::test_psdread_quint8()
     QBuffer buf;
     buf.open(QBuffer::ReadWrite);
     quint8 s = 3;
-    QVERIFY(psdwrite(&buf, s));
+    QVERIFY(psdwrite(buf, s));
     buf.close();
     buf.open(QBuffer::ReadOnly);
     quint8 r;
@@ -135,7 +135,7 @@ void PSDUtilsTest::test_psdread_quint16()
     QBuffer buf;
     buf.open(QBuffer::ReadWrite);
     quint16 s = 1024;
-    QVERIFY(psdwrite(&buf, s));
+    QVERIFY(psdwrite(buf, s));
     buf.close();
     buf.open(QBuffer::ReadOnly);
     quint16 r;
@@ -148,7 +148,7 @@ void PSDUtilsTest::test_psdread_quint32()
     QBuffer buf;
     QVERIFY(buf.open(QBuffer::ReadWrite));
     quint32 s = 300000;
-    psdwrite(&buf, s);
+    psdwrite(buf, s);
     buf.close();
     buf.open(QBuffer::ReadOnly);
     quint32 r;
@@ -165,7 +165,7 @@ void PSDUtilsTest::test_psdread_pascalstring()
 
     // test null string
     buf.open(QBuffer::ReadWrite);
-    QVERIFY(psdwrite_pascalstring(&buf, s));
+    QVERIFY(psdwrite_pascalstring(buf, s));
     buf.close();
     buf.open(QBuffer::ReadOnly);
     psdread_pascalstring(buf, r, 2);
@@ -178,7 +178,7 @@ void PSDUtilsTest::test_psdread_pascalstring()
     r.clear();
     buf.open(QBuffer::ReadWrite);
     s = QString("bl");
-    QVERIFY(psdwrite_pascalstring(&buf, s));
+    QVERIFY(psdwrite_pascalstring(buf, s));
     buf.close();
     buf.open(QBuffer::ReadOnly);
     psdread_pascalstring(buf, r, 1);
@@ -191,7 +191,7 @@ void PSDUtilsTest::test_psdread_pascalstring()
     r.clear();
     buf.open(QBuffer::ReadWrite);
     s = QString("bla");
-    QVERIFY(psdwrite_pascalstring(&buf, s, 2));
+    QVERIFY(psdwrite_pascalstring(buf, s, 2));
     buf.close();
     buf.open(QBuffer::ReadOnly);
     psdread_pascalstring(buf, r, 2);

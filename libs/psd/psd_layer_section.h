@@ -26,7 +26,7 @@ public:
     ~PSDLayerMaskSection();
 
     bool read(QIODevice &io);
-    bool write(QIODevice *io, KisNodeSP rootLayer);
+    bool write(QIODevice &io, KisNodeSP rootLayer);
 
     QString error;
 
@@ -59,7 +59,7 @@ private:
     bool readTiffImpl(QIODevice &io);
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     bool readGlobalMask(QIODevice &io);
-    void writeImpl(QIODevice *io, KisNodeSP rootLayer);
+    void writeImpl(QIODevice &io, KisNodeSP rootLayer);
 
 private:
     const PSDHeader m_header;

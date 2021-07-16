@@ -35,7 +35,7 @@ public:
      *
      * @return false if writing failed or if this is not a valid header
      */
-    bool write(QIODevice *device);
+    bool write(QIODevice &device);
 
     bool valid();
 

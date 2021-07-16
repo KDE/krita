@@ -21,7 +21,7 @@ namespace Private
 {
 using namespace KisAslWriterUtils;
 
-void parseElement(const QDomElement &el, QIODevice *device, bool forceTypeInfo = false)
+void parseElement(const QDomElement &el, QIODevice &device, bool forceTypeInfo = false)
 {
     KIS_ASSERT_RECOVER_RETURN(el.tagName() == "node");
 
@@ -129,7 +129,7 @@ int calculateNumStyles(const QDomElement &root)
     return numStyles;
 }
 
-void writeFileImpl(QIODevice *device, const QDomDocument &doc)
+void writeFileImpl(QIODevice &device, const QDomDocument &doc)
 {
     {
         quint16 stylesVersion = 2;
@@ -138,7 +138,7 @@ void writeFileImpl(QIODevice *device, const QDomDocument &doc)
 
     {
         QString signature("8BSL");
-        if (!device->write(signature.toLatin1().data(), 4)) {
+        if (!device.write(signature.toLatin1().data(), 4)) {
             throw ASLWriteException("Failed to write ASL signature");
         }
     }
@@ -200,15 +200,15 @@ void writeFileImpl(QIODevice *device, const QDomDocument &doc)
         child = child.nextSibling();
 
         // ASL files' size should be 4-bytes aligned
-        const qint64 paddingSize = 4 - (device->pos() & 0x3);
+        const qint64 paddingSize = 4 - (device.pos() & 0x3);
         if (paddingSize != 4) {
             QByteArray padding(paddingSize, '\0');
-            device->write(padding);
+            device.write(padding);
         }
     }
 }
 
-void writePsdLfx2SectionImpl(QIODevice *device, const QDomDocument &doc)
+void writePsdLfx2SectionImpl(QIODevice &device, const QDomDocument &doc)
 {
     QDomElement root = doc.documentElement();
     KIS_ASSERT_RECOVER_RETURN(root.tagName() == "asl");
@@ -242,16 +242,16 @@ void writePsdLfx2SectionImpl(QIODevice *device, const QDomDocument &doc)
     child = child.nextSibling();
 
     // ASL files' size should be 4-bytes aligned
-    const qint64 paddingSize = 4 - (device->pos() & 0x3);
+    const qint64 paddingSize = 4 - (device.pos() & 0x3);
     if (paddingSize != 4) {
         QByteArray padding(paddingSize, '\0');
-        device->write(padding);
+        device.write(padding);
     }
 }
 
 } // namespace
 
-void KisAslWriter::writeFile(QIODevice *device, const QDomDocument &doc)
+void KisAslWriter::writeFile(QIODevice &device, const QDomDocument &doc)
 {
     try {
         Private::writeFileImpl(device, doc);
@@ -260,7 +260,7 @@ void KisAslWriter::writeFile(QIODevice *device, const QDomDocument &doc)
     }
 }
 
-void KisAslWriter::writePsdLfx2SectionEx(QIODevice *device, const QDomDocument &doc)
+void KisAslWriter::writePsdLfx2SectionEx(QIODevice &device, const QDomDocument &doc)
 {
     Private::writePsdLfx2SectionImpl(device, doc);
 }

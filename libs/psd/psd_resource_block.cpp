@@ -243,7 +243,7 @@ bool PSDResourceBlock::read(QIODevice &io)
     return valid();
 }
 
-bool PSDResourceBlock::write(QIODevice *io) const
+bool PSDResourceBlock::write(QIODevice &io) const
 {
     dbgFile << "Writing Resource Block" << PSDImageResourceSection::idToString((PSDImageResourceSection::PSDResourceID)identifier) << identifier;
 
@@ -275,13 +275,13 @@ bool PSDResourceBlock::write(QIODevice *io) const
         QBuffer buf(&ba);
         buf.open(QBuffer::WriteOnly);
         buf.write("8BIM", 4);
-        psdwrite(&buf, identifier);
-        psdwrite_pascalstring(&buf, name);
-        psdwrite(&buf, dataSize);
+        psdwrite(buf, identifier);
+        psdwrite_pascalstring(buf, name);
+        psdwrite(buf, dataSize);
         buf.write(data);
         buf.close();
     }
-    if (io->write(ba.constData(), ba.size()) != ba.size()) {
+    if (io.write(ba.constData(), ba.size()) != ba.size()) {
         error = QString("Could not write complete resource");
         return false;
     }
@@ -335,16 +335,16 @@ bool RESN_INFO_1005::createBlock(QByteArray &data)
     // Convert to 16.16 fixed point
     Fixed h = hRes * 65536.0 + 0.5;
     dbgFile << "h" << h << "hRes" << hRes;
-    psdwrite(&buf, (quint32)h);
-    psdwrite(&buf, hResUnit);
-    psdwrite(&buf, widthUnit);
+    psdwrite(buf, (quint32)h);
+    psdwrite(buf, hResUnit);
+    psdwrite(buf, widthUnit);
 
     // Convert to 16.16 fixed point
     Fixed v = vRes * 65536.0 + 0.5;
     dbgFile << "v" << v << "vRes" << vRes;
-    psdwrite(&buf, (quint32)v);
-    psdwrite(&buf, vResUnit);
-    psdwrite(&buf, heightUnit);
+    psdwrite(buf, (quint32)v);
+    psdwrite(buf, vResUnit);
+    psdwrite(buf, heightUnit);
 
     buf.close();
 

@@ -237,7 +237,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
     }
 }
 
-bool PsdAdditionalLayerInfoBlock::write(QIODevice * /*io*/, KisNodeSP /*node*/)
+bool PsdAdditionalLayerInfoBlock::write(QIODevice & /*io*/, KisNodeSP /*node*/)
 {
     return true;
 }
@@ -247,7 +247,7 @@ bool PsdAdditionalLayerInfoBlock::valid()
     return true;
 }
 
-void PsdAdditionalLayerInfoBlock::writeLuniBlockEx(QIODevice *io, const QString &layerName)
+void PsdAdditionalLayerInfoBlock::writeLuniBlockEx(QIODevice &io, const QString &layerName)
 {
     KisAslWriterUtils::writeFixedString("8BIM", io);
     KisAslWriterUtils::writeFixedString("luni", io);
@@ -255,7 +255,7 @@ void PsdAdditionalLayerInfoBlock::writeLuniBlockEx(QIODevice *io, const QString 
     KisAslWriterUtils::writeUnicodeString(layerName, io);
 }
 
-void PsdAdditionalLayerInfoBlock::writeLsctBlockEx(QIODevice *io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey)
+void PsdAdditionalLayerInfoBlock::writeLsctBlockEx(QIODevice &io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey)
 {
     KisAslWriterUtils::writeFixedString("8BIM", io);
     KisAslWriterUtils::writeFixedString("lsct", io);
@@ -268,7 +268,7 @@ void PsdAdditionalLayerInfoBlock::writeLsctBlockEx(QIODevice *io, psd_section_ty
     KisAslWriterUtils::writeFixedString(realBlendModeKey, io);
 }
 
-void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice *io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat)
+void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice &io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat)
 {
     KisAslWriterUtils::writeFixedString("8BIM", io);
     // 'lfxs' format is used for Group layers in PS
@@ -287,7 +287,7 @@ void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice *io, const QDomDocu
     }
 }
 
-void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice *io, const QDomDocument &patternsXmlDoc)
+void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice &io, const QDomDocument &patternsXmlDoc)
 {
     KisAslWriterUtils::writeFixedString("8BIM", io);
     KisAslWriterUtils::writeFixedString("Patt", io);

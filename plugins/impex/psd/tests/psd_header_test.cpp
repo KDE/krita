@@ -53,7 +53,7 @@ void PSDHeaderTest::testRoundTripping()
     header.channelDepth = 8;
     header.colormode = RGB;
     Q_ASSERT(header.valid());
-    bool retval = header.write(&f);
+    bool retval = header.write(f);
     Q_ASSERT(retval); Q_UNUSED(retval);
 
     f.close();

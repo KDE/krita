@@ -61,7 +61,7 @@ void KRITAPSD_EXPORT readAlphaMaskChannels(QIODevice &io,
                                            QVector<ChannelInfo *> infoRecords,
                                            psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
 
-void KRITAPSD_EXPORT writeChannelDataRLE(QIODevice *io,
+void KRITAPSD_EXPORT writeChannelDataRLE(QIODevice &io,
                                          const quint8 *plane,
                                          const int channelSize,
                                          const QRect &rc,
@@ -69,7 +69,7 @@ void KRITAPSD_EXPORT writeChannelDataRLE(QIODevice *io,
                                          const qint64 rleBlockOffset,
                                          const bool writeCompressionType);
 
-void KRITAPSD_EXPORT writePixelDataCommon(QIODevice *io,
+void KRITAPSD_EXPORT writePixelDataCommon(QIODevice &io,
                                           KisPaintDeviceSP dev,
                                           const QRect &rc,
                                           psd_color_mode colorMode,

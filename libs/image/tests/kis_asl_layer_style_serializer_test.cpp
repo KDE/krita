@@ -214,7 +214,7 @@ void KisAslLayerStyleSerializerTest::testWriting()
 
         QFile dstFile("test_written.asl");
         dstFile.open(QIODevice::WriteOnly);
-        s.saveToDevice(&dstFile);
+        s.saveToDevice(dstFile);
         dstFile.close();
     }
 
@@ -271,7 +271,7 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
 
         QFile dstFile("test_written_pattern_only.asl");
         dstFile.open(QIODevice::WriteOnly);
-        s.saveToDevice(&dstFile);
+        s.saveToDevice(dstFile);
         dstFile.close();
     }
 /*
@@ -315,7 +315,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
         aslFile.open(QIODevice::WriteOnly);
 
         s.setStyles(styles);
-        s.saveToDevice(&aslFile);
+        s.saveToDevice(aslFile);
     }
 
     {
@@ -369,7 +369,7 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
 
         QFile dstFile("test_written_stop_gradient.asl");
         dstFile.open(QIODevice::WriteOnly);
-        s.saveToDevice(&dstFile);
+        s.saveToDevice(dstFile);
         dstFile.close();
     }
 

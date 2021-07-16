@@ -60,7 +60,7 @@ bool PSDImageResourceSection::read(QIODevice &io)
     return valid();
 }
 
-bool PSDImageResourceSection::write(QIODevice *io)
+bool PSDImageResourceSection::write(QIODevice &io)
 {
     Q_UNUSED(io);
 
@@ -75,7 +75,7 @@ bool PSDImageResourceSection::write(QIODevice *io)
     buf.open(QBuffer::WriteOnly);
 
     Q_FOREACH (PSDResourceBlock *block, resources) {
-        if (!block->write(&buf)) {
+        if (!block->write(buf)) {
             error = block->error;
             return false;
         }
@@ -89,7 +89,7 @@ bool PSDImageResourceSection::write(QIODevice *io)
     psdwrite(io, resourceBlockLength);
 
     // and write the whole buffer;
-    return (io->write(ba.constData(), ba.size()) == resourceBlockLength);
+    return (io.write(ba.constData(), ba.size()) == resourceBlockLength);
 }
 
 bool PSDImageResourceSection::valid()

@@ -11,7 +11,7 @@
 
 namespace KisAslWriterUtils
 {
-void writeRect(const QRect &rect, QIODevice *device)
+void writeRect(const QRect &rect, QIODevice &device)
 {
     {
         const quint32 rectY0 = rect.y();
@@ -31,7 +31,7 @@ void writeRect(const QRect &rect, QIODevice *device)
     }
 }
 
-void writeUnicodeString(const QString &value, QIODevice *device)
+void writeUnicodeString(const QString &value, QIODevice &device)
 {
     quint32 len = value.length() + 1;
     SAFE_WRITE_EX(device, len);
@@ -42,33 +42,33 @@ void writeUnicodeString(const QString &value, QIODevice *device)
     }
 }
 
-void writeVarString(const QString &value, QIODevice *device)
+void writeVarString(const QString &value, QIODevice &device)
 {
     quint32 lenTag = value.length() != 4 ? value.length() : 0;
     SAFE_WRITE_EX(device, lenTag);
 
-    if (!device->write(value.toLatin1().data(), value.length())) {
+    if (!device.write(value.toLatin1().data(), value.length())) {
         warnKrita << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
         return;
     }
 }
 
-void writePascalString(const QString &value, QIODevice *device)
+void writePascalString(const QString &value, QIODevice &device)
 {
     quint8 lenTag = value.length();
     SAFE_WRITE_EX(device, lenTag);
 
-    if (!device->write(value.toLatin1().data(), value.length())) {
+    if (!device.write(value.toLatin1().data(), value.length())) {
         warnKrita << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
         return;
     }
 }
 
-void writeFixedString(const QString &value, QIODevice *device)
+void writeFixedString(const QString &value, QIODevice &device)
 {
     KIS_ASSERT_RECOVER_RETURN(value.length() == 4);
 
-    if (!device->write(value.toLatin1().data(), value.length())) {
+    if (!device.write(value.toLatin1().data(), value.length())) {
         warnKrita << "WARNING: ASL: Failed to write ASL string" << ppVar(value);
         return;
     }

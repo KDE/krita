@@ -429,7 +429,7 @@ void readCommon(KisPaintDeviceSP dev,
                 PixelFunc pixelFunc,
                 bool processMasks)
 {
-    KisOffsetKeeper keeper(&io);
+    KisOffsetKeeper keeper(io);
 
     if (layerRect.isEmpty()) {
         dbgFile << "Empty layer!";
@@ -567,7 +567,7 @@ void readAlphaMaskChannels(QIODevice &io,
     }
 }
 
-void writeChannelDataRLE(QIODevice *io,
+void writeChannelDataRLE(QIODevice &io,
                          const quint8 *plane,
                          const int channelSize,
                          const QRect &rc,
@@ -588,14 +588,14 @@ void writeChannelDataRLE(QIODevice *io,
     const bool externalRleBlock = rleBlockOffset >= 0;
 
     // the start of RLE sizes block
-    const qint64 channelRLESizePos = externalRleBlock ? rleBlockOffset : io->pos();
+    const qint64 channelRLESizePos = externalRleBlock ? rleBlockOffset : io.pos();
 
     {
         QScopedPointer<KisOffsetKeeper> rleOffsetKeeper;
 
         if (externalRleBlock) {
             rleOffsetKeeper.reset(new KisOffsetKeeper(io));
-            io->seek(rleBlockOffset);
+            io.seek(rleBlockOffset);
         }
 
         // write zero's for the channel lengths block
@@ -613,7 +613,7 @@ void writeChannelDataRLE(QIODevice *io,
 
         KisAslWriterUtils::OffsetStreamPusher<quint16> rleExternalTag(io, 0, channelRLESizePos + row * sizeof(quint16));
 
-        if (io->write(compressed) != compressed.size()) {
+        if (io.write(compressed) != compressed.size()) {
             throw KisAslWriterUtils::ASLWriteException("Failed to write image data");
         }
     }
@@ -656,7 +656,7 @@ inline void preparePixelForWrite(quint8 *dataPlane, int numPixels, int channelSi
     }
 }
 
-void writePixelDataCommon(QIODevice *io,
+void writePixelDataCommon(QIODevice &io,
                           KisPaintDeviceSP dev,
                           const QRect &rc,
                           psd_color_mode colorMode,
@@ -719,7 +719,7 @@ void writePixelDataCommon(QIODevice *io,
 
             preparePixelForWrite(planes[i], numPixels, channelSize, info.channelId, colorMode);
 
-            dbgFile << "\t\tchannel start" << ppVar(io->pos());
+            dbgFile << "\t\tchannel start" << ppVar(io.pos());
 
             writeChannelDataRLE(io, planes[i], channelSize, rc, info.sizeFieldOffset, info.rleBlockOffset, writeCompressionType);
         }

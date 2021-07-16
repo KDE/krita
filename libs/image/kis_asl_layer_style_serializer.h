@@ -23,7 +23,7 @@ public:
     KisAslLayerStyleSerializer();
     ~KisAslLayerStyleSerializer();
 
-    void saveToDevice(QIODevice *device);
+    void saveToDevice(QIODevice &device);
     bool saveToFile(const QString& filename);
     void readFromDevice(QIODevice &device);
     bool readFromFile(const QString& filename);

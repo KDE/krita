@@ -17,7 +17,7 @@ class QIODevice;
 class KRITAPSDUTILS_EXPORT KisAslPatternsWriter
 {
 public:
-    KisAslPatternsWriter(const QDomDocument &doc, QIODevice *device);
+    KisAslPatternsWriter(const QDomDocument &doc, QIODevice &device);
 
     void writePatterns();
 
@@ -26,7 +26,7 @@ private:
 
 private:
     const QDomDocument &m_doc;
-    QIODevice *m_device;
+    QIODevice &m_device;
 
     int m_numPatternsWritten;
 };

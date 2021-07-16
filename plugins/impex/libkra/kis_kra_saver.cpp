@@ -582,7 +582,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
                 QBuffer aslBuffer;
                 if (aslBuffer.open(QIODevice::WriteOnly)) {
                     serializer.setStyles(stylesClones);
-                    serializer.saveToDevice(&aslBuffer);
+                    serializer.saveToDevice(aslBuffer);
                     aslBuffer.close();
                     nwritten = store->write(aslBuffer.buffer());
                     savingLayerStylesSuccess = savingLayerStylesSuccess && (nwritten == aslBuffer.buffer().size());

@@ -60,7 +60,7 @@ bool PSDHeader::read(QIODevice &device)
     return valid();
 }
 
-bool PSDHeader::write(QIODevice *device)
+bool PSDHeader::write(QIODevice &device)
 {
     if (!valid())
         return false;

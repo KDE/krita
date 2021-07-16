@@ -58,9 +58,9 @@ protected:
             buf.open(QBuffer::WriteOnly);
         }
         buf.write("8BIM", 4);
-        psdwrite(&buf, (quint16)id);
-        psdwrite(&buf, (quint16)0); // We simply never save out the name, for now
-        psdwrite(&buf, (quint32)size);
+        psdwrite(buf, (quint16)id);
+        psdwrite(buf, (quint16)0); // We simply never save out the name, for now
+        psdwrite(buf, (quint32)size);
     }
 };
 
@@ -86,7 +86,7 @@ public:
         QBuffer buffer(&ba);
         buffer.open(QBuffer::WriteOnly);
 
-        if (!write(&buffer)) {
+        if (!write(buffer)) {
             qWarning() << "Could not copy PSDResourceBlock" << error;
             return 0;
         }
@@ -110,7 +110,7 @@ public:
     }
 
     bool read(QIODevice &io);
-    bool write(QIODevice *io) const;
+    bool write(QIODevice &io) const;
     bool valid();
 
     quint16 identifier;
@@ -431,7 +431,7 @@ struct KRITAPSD_EXPORT GLOBAL_ANGLE_1037 : public PSDInterpretedResource {
     {
         QBuffer buf(&data);
         startBlock(buf, PSDImageResourceSection::GLOBAL_ANGLE, 4);
-        psdwrite(&buf, (quint32)angle);
+        psdwrite(buf, (quint32)angle);
         return true;
     }
 
@@ -556,7 +556,7 @@ struct KRITAPSD_EXPORT GLOBAL_ALT_1049 : public PSDInterpretedResource {
     {
         QBuffer buf(&data);
         startBlock(buf, PSDImageResourceSection::GLOBAL_ALT, 4);
-        psdwrite(&buf, (quint32)altitude);
+        psdwrite(buf, (quint32)altitude);
         return true;
     }
 

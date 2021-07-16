@@ -414,7 +414,7 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
     return valid();
 }
 
-void PSDLayerRecord::write(QIODevice *io,
+void PSDLayerRecord::write(QIODevice &io,
                            KisPaintDeviceSP layerContentDevice,
                            KisNodeSP onlyTransparencyMask,
                            const QRect &maskRect,
@@ -423,13 +423,13 @@ void PSDLayerRecord::write(QIODevice *io,
                            bool useLfxsLayerStyleFormat)
 {
     dbgFile << "writing layer info record"
-            << "at" << io->pos();
+            << "at" << io.pos();
 
     m_layerContentDevice = layerContentDevice;
     m_onlyTransparencyMask = onlyTransparencyMask;
     m_onlyTransparencyMaskRect = maskRect;
 
-    dbgFile << "saving layer record for " << layerName << "at pos" << io->pos();
+    dbgFile << "saving layer record for " << layerName << "at pos" << io.pos();
     dbgFile << "\ttop" << top << "left" << left << "bottom" << bottom << "right" << right << "number of channels" << nChannels;
     Q_ASSERT(left <= right);
     Q_ASSERT(top <= bottom);
@@ -447,7 +447,7 @@ void PSDLayerRecord::write(QIODevice *io,
         Q_FOREACH (ChannelInfo *channel, channelInfoRecords) {
             SAFE_WRITE_EX(io, (quint16)channel->channelId);
 
-            channel->channelInfoPosition = io->pos();
+            channel->channelInfoPosition = io.pos();
 
             // to be filled in when we know how big channel block is
             const quint32 fakeChannelSize = 0;
@@ -458,14 +458,14 @@ void PSDLayerRecord::write(QIODevice *io,
             const quint16 userSuppliedMaskChannelId = -2;
             SAFE_WRITE_EX(io, userSuppliedMaskChannelId);
 
-            m_transparencyMaskSizeOffset = io->pos();
+            m_transparencyMaskSizeOffset = io.pos();
 
             const quint32 fakeTransparencyMaskSize = 0;
             SAFE_WRITE_EX(io, fakeTransparencyMaskSize);
         }
 
         // blend mode
-        dbgFile << ppVar(blendModeKey) << ppVar(io->pos());
+        dbgFile << ppVar(blendModeKey) << ppVar(io.pos());
 
         KisAslWriterUtils::writeFixedString("8BIM", io);
         KisAslWriterUtils::writeFixedString(blendModeKey, io);
@@ -566,7 +566,7 @@ KisPaintDeviceSP PSDLayerRecord::convertMaskDeviceIfNeeded(KisPaintDeviceSP dev)
     return result;
 }
 
-void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice *io)
+void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice &io)
 {
     if (m_onlyTransparencyMask) {
         KisPaintDeviceSP device = convertMaskDeviceIfNeeded(m_onlyTransparencyMask->paintDevice());
@@ -584,7 +584,7 @@ void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice *io)
     }
 }
 
-void PSDLayerRecord::writePixelData(QIODevice *io)
+void PSDLayerRecord::writePixelData(QIODevice &io)
 {
     try {
         writePixelDataImpl(io);
@@ -593,9 +593,9 @@ void PSDLayerRecord::writePixelData(QIODevice *io)
     }
 }
 
-void PSDLayerRecord::writePixelDataImpl(QIODevice *io)
+void PSDLayerRecord::writePixelDataImpl(QIODevice &io)
 {
-    dbgFile << "writing pixel data for layer" << layerName << "at" << io->pos();
+    dbgFile << "writing pixel data for layer" << layerName << "at" << io.pos();
 
     KisPaintDeviceSP dev = m_layerContentDevice;
     const QRect rc(left, top, right - left, bottom - top);

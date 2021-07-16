@@ -770,7 +770,19 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         translationContext = "./krita/data/" + resourceType + "/" + resource->filename();
     }
 
-    q.bindValue(":tooltip", i18nc(translationContext.toUtf8(), resource->name().toUtf8()));
+    {
+        QByteArray ctx = translationContext.toUtf8();
+        QString translatedName = i18nc(ctx, resource->name().toUtf8());
+        if (translatedName == resource->name()) {
+            // Try using the file name without the file extension, and replaces '_' with spaces.
+            QString altName = QFileInfo(resource->filename()).completeBaseName().replace('_', ' ');
+            QString altTranslatedName = i18nc(ctx, altName.toUtf8());
+            if (altName != altTranslatedName) {
+                translatedName = altTranslatedName;
+            }
+        }
+        q.bindValue(":tooltip", translatedName);
+    }
 
     QByteArray ba;
     QBuffer buf(&ba);

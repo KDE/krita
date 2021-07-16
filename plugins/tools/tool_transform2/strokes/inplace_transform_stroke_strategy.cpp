@@ -996,6 +996,10 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
         });
 
         reapplyTransform(m_d->initialTransformArgs, mutatedJobs, 0, true);
+
+        mutatedJobs << new UpdateTransformData(m_d->initialTransformArgs,
+                                               UpdateTransformData::SELECTION);
+
         finalizeStrokeImpl(mutatedJobs, bool(m_d->overriddenCommand));
 
         KritaUtils::addJobSequential(mutatedJobs, [this]() {

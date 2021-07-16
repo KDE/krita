@@ -395,9 +395,14 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                               argsAreInitialized]() mutable {
         QRect srcRect;
 
-        if (m_d->externalSource) {
+        KisPaintDeviceSP externalSource =
+            m_d->externalSource ? m_d->externalSource :
+            (argsAreInitialized && m_d->initialTransformArgs.externalSource()) ?
+                m_d->initialTransformArgs.externalSource() : 0;
+
+        if (externalSource) {
             // Start the transformation around the visible pixels of the external image
-            srcRect = m_d->externalSource->exactBounds();
+            srcRect = externalSource->exactBounds();
         } else if (m_d->selection) {
             srcRect = m_d->selection->selectedExactRect();
         } else {

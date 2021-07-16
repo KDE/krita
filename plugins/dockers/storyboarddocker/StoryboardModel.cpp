@@ -1153,6 +1153,7 @@ void StoryboardModel::slotFramerateChanged()
 
 void StoryboardModel::slotUpdateThumbnailForFrame(int frame, bool delay)
 {
+    Q_UNUSED(delay);
     if (!m_image) {
         return;
     }
@@ -1160,16 +1161,6 @@ void StoryboardModel::slotUpdateThumbnailForFrame(int frame, bool delay)
     QModelIndex index = indexFromFrame(frame);
     bool affected = true;
     if (index.isValid() && !isLocked()) {
-        if (frame == m_image->animationInterface()->currentUITime()) {
-            if(!delay) {
-                setThumbnailPixmapData(index, m_image->projection());
-                return;
-            }
-            else {
-                affected = false;
-            }
-        }
-
         m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
         m_renderScheduler->slotStartFrameRendering();
     }

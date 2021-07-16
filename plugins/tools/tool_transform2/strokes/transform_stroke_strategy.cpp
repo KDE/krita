@@ -546,20 +546,6 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
     QVector<KisStrokeJobData *> mutatedJobs;
 
-    /**
-     * We should make the shape layers visible **before** transforming them,
-     * otherwise the setDirty() call issued by KisShapeLayerCavas::repaint()
-     * may be lost.
-     */
-    KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {
-        Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
-            node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
-            if (!applyTransform) {
-                node->setDirty();
-            }
-        }
-    });
-
     if (applyTransform) {
         m_savedTransformArgs = args;
 
@@ -592,6 +578,13 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
     KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {
         Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
             selection->setVisible(true);
+        }
+
+        Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+            node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
+            if (!applyTransform) {
+                node->setDirty();
+            }
         }
 
         if (m_deactivatedOverlaySelectionMask) {

@@ -247,7 +247,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     }
     else if (td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
-            QRect oldExtent = td->node->extent();
+            QRect oldExtent = td->node->projectionPlane()->tightUserVisibleBounds();
             KisPaintDeviceSP device = td->node->paintDevice();
 
             if (device && !checkBelongsToSelection(device)) {
@@ -264,7 +264,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::CONCURRENT,
                                   KisStrokeJobData::NORMAL);
 
-                m_updateData->addUpdate(td->node, cachedPortion->extent() | oldExtent | td->node->extent());
+                m_updateData->addUpdate(td->node, cachedPortion->extent() | oldExtent | td->node->projectionPlane()->tightUserVisibleBounds());
             } else if (KisExternalLayer *extLayer =
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
@@ -290,7 +290,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                     const QRect theoreticalNewDirtyRect =
                         kisGrowRect(t.mapRect(oldDirtyRect), 1);
 
-                    m_updateData->addUpdate(td->node, oldDirtyRect | td->node->extent() | extLayer->theoreticalBoundingRect() | theoreticalNewDirtyRect);
+                    m_updateData->addUpdate(td->node, oldDirtyRect | td->node->projectionPlane()->tightUserVisibleBounds() | extLayer->theoreticalBoundingRect() | theoreticalNewDirtyRect);
                 }
 
             } else if (KisTransformMask *transformMask =
@@ -496,7 +496,7 @@ void TransformStrokeStrategy::initStrokeCallback()
     KritaUtils::addJobBarrier(extraInitJobs, [this, sharedData]() {
         KisNodeList filteredRoots = KisLayerUtils::sortAndFilterMergableInternalNodes(m_processedNodes, true);
         Q_FOREACH (KisNodeSP root, filteredRoots) {
-            sharedData->addUpdate(root, root->extent());
+            sharedData->addUpdate(root, root->projectionPlane()->tightUserVisibleBounds());
         }
     });
 

@@ -504,13 +504,15 @@ void KisTransformUtils::setDefaultWarpPoints(int pointsPerLine,
 
 ToolTransformArgs KisTransformUtils::resetArgsForMode(ToolTransformArgs::TransformMode mode,
                                                       const QString &filterId,
-                                                      const TransformTransactionProperties &transaction)
+                                                      const TransformTransactionProperties &transaction,
+                                                      KisPaintDeviceSP externalSource)
 {
     ToolTransformArgs args;
 
     args.setOriginalCenter(transaction.originalCenterGeometric());
     args.setTransformedCenter(transaction.originalCenterGeometric());
     args.setFilterId(filterId);
+    args.setExternalSource(externalSource);
 
     if (mode == ToolTransformArgs::FREE_TRANSFORM) {
         args.setMode(ToolTransformArgs::FREE_TRANSFORM);

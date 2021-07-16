@@ -654,7 +654,7 @@ void KisToolTransform::setWarpPointDensity( int density )
 
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
-    m_currentArgs = KisTransformUtils::resetArgsForMode(mode, m_currentArgs.filterId(), m_transaction);
+    m_currentArgs = KisTransformUtils::resetArgsForMode(mode, m_currentArgs.filterId(), m_transaction, m_currentArgs.externalSource());
     initGuiAfterTransformMode();
 }
 

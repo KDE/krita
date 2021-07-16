@@ -482,7 +482,7 @@ void TransformStrokeStrategy::initStrokeCallback()
 
         TransformTransactionProperties transaction(srcRect, &initialTransformArgs, m_rootNode, m_processedNodes);
         if (!argsAreInitialized) {
-            initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction);
+            initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction, 0);
         }
 
         this->m_initialTransformArgs = initialTransformArgs;

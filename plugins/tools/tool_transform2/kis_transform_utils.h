@@ -163,7 +163,7 @@ public:
 
     static ToolTransformArgs resetArgsForMode(ToolTransformArgs::TransformMode mode,
                                               const QString &filterId,
-                                              const TransformTransactionProperties &transaction);
+                                              const TransformTransactionProperties &transaction, KisPaintDeviceSP externalSource);
 
     static bool shouldRestartStrokeOnModeChange(ToolTransformArgs::TransformMode oldMode,
                                                 ToolTransformArgs::TransformMode newMode,

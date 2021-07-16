@@ -428,8 +428,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
         TransformTransactionProperties transaction(srcRect, &m_d->initialTransformArgs, m_d->rootNode, m_d->processedNodes);
         if (!argsAreInitialized) {
-            m_d->initialTransformArgs = KisTransformUtils::resetArgsForMode(m_d->mode, m_d->filterId, transaction);
-            m_d->initialTransformArgs.setExternalSource(m_d->externalSource);
+            m_d->initialTransformArgs = KisTransformUtils::resetArgsForMode(m_d->mode, m_d->filterId, transaction, m_d->externalSource);
         }
         m_d->externalSource.clear();
 

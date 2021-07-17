@@ -356,37 +356,41 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
             return false;
         }
 
-        // dbgFile << "blending block data length" << blendingDataLength << ", pos" << io.pos();
+        quint32 blendingNchannels = blendingDataLength > 0 ? (blendingDataLength - 8) / 4 / 2 : 0;
 
-        // XXX: Check what endianness this data has
-        blendingRanges.data = io.read(blendingDataLength);
-        if ((quint32)blendingRanges.data.size() != blendingDataLength) {
-            error = QString("Got %1 bytes for the blending range block, needed %2").arg(blendingRanges.data.size(), blendingDataLength);
-        }
-        /*
-        // XXX: reading this block correctly failed, I have more channel ranges than I'd expected.
+        dbgFile << "\tNumber of blending channels:" << blendingNchannels;
 
-        if (!psdread(io, blendingRanges.blackValues[0]) ||
-            !psdread(io, blendingRanges.blackValues[1]) ||
-            !psdread(io, blendingRanges.whiteValues[0]) ||
-            !psdread(io, blendingRanges.whiteValues[1]) ||
-            !psdread(io, blendingRanges.compositeGrayBlendDestinationRange)) {
-
-            error = "Could not read blending black/white values";
-            return false;
-        }
-
-        for (int i = 0; i < nChannels; ++i) {
-            quint32 src;
-            quint32 dst;
-            if (!psdread(io, src) || !psdread(io, dst)) {
-                error = QString("could not read src/dst range for channel %1").arg(i);
+        if (blendingNchannels > 0) {
+            if (!psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[0])
+                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[1])
+                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[0])
+                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[1])
+                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[0])
+                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[1])
+                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[0])
+                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[1])) {
+                error = "Could not read blending black/white values";
                 return false;
             }
-            dbgFile << "\tread range " << src << "to" << dst << "for channel" << i;
-            blendingRanges.sourceDestinationRanges << QPair<quint32, quint32>(src, dst);
+
+            dbgFile << "\tBlending ranges:";
+            dbgFile << "\t\tcomposite gray (source) :" << blendingRanges.compositeGrayRange.first;
+            dbgFile << "\t\tcomposite gray (dest):" << blendingRanges.compositeGrayRange.second;
+
+            for (quint32 i = 0; i < blendingNchannels; ++i) {
+                LayerBlendingRanges::LayerBlendingRange src;
+                LayerBlendingRanges::LayerBlendingRange dst;
+                if (!psdread<byteOrder>(io, src.blackValues[0]) || !psdread<byteOrder>(io, src.blackValues[1]) || !psdread<byteOrder>(io, src.whiteValues[0])
+                    || !psdread<byteOrder>(io, src.whiteValues[1]) || !psdread<byteOrder>(io, dst.blackValues[0]) || !psdread<byteOrder>(io, dst.blackValues[1])
+                    || !psdread<byteOrder>(io, dst.whiteValues[0]) || !psdread<byteOrder>(io, dst.whiteValues[1])) {
+                    error = QString("could not read src/dst range for channel %1").arg(i);
+                    return false;
+                }
+                dbgFile << "\t\tread range " << src << "to" << dst << "for channel" << i;
+                blendingRanges.sourceDestinationRanges << qMakePair(src, dst);
+            }
         }
-        */
+
         dbgFile << "\tGoing to read layer name at" << io.pos();
         quint8 layerNameLength;
         if (!psdread<byteOrder>(io, layerNameLength)) {
@@ -401,6 +405,8 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
         // XXX: This should use psdread_pascalstring
         layerName = io.read(layerNameLength);
         dbgFile << "\tlayer name" << layerName << io.pos();
+
+        dbgFile << "\tAbout to read additional info blocks at" << io.pos();
 
         if (!infoBlocks.read(io)) {
             error = infoBlocks.error;
@@ -460,23 +466,9 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
     Q_ASSERT(nChannels > 0);
 
     try {
-        QBuffer buf_little_endian;
-        buf_little_endian.open(QIODevice::WriteOnly);
-        QBuffer buf_big_endian;
-        buf_big_endian.open(QIODevice::WriteOnly);
-        QBuffer buf;
-        buf.open(QIODevice::WriteOnly);
-
-        const QRect layerRect(left, top, right - left, bottom - top);
-        KisAslWriterUtils::writeRect<psd_byte_order::psdBigEndian>(layerRect, buf_big_endian);
-        KisAslWriterUtils::writeRect<psd_byte_order::psdLittleEndian>(layerRect, buf_little_endian);
-        KisAslWriterUtils::writeRect<byteOrder>(layerRect, buf);
-        KisAslWriterUtils::writeRect<byteOrder>(layerRect, io);
-
-        if (byteOrder == psd_byte_order::psdLittleEndian) {
-            dbgFile << "Testing LE equality of QRect: " << std::equal(buf_little_endian.data().begin(), buf_little_endian.data().end(), buf.data().begin());
-        } else {
-            dbgFile << "Testing BE equality of QRect: " << std::equal(buf_big_endian.data().begin(), buf_big_endian.data().end(), buf.data().begin());
+        {
+            const QRect layerRect(left, top, right - left, bottom - top);
+            KisAslWriterUtils::writeRect<byteOrder>(layerRect, io);
         }
 
         {
@@ -519,8 +511,9 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
             flags |= 1;
         if (!visible)
             flags |= 2;
+        flags |= (1 << 3);
         if (irrelevant) {
-            flags |= (1 << 3) | (1 << 4);
+            flags |= (1 << 4);
         }
 
         SAFE_WRITE_EX(byteOrder, io, flags);
@@ -606,6 +599,7 @@ KisPaintDeviceSP PSDLayerRecord::convertMaskDeviceIfNeeded(KisPaintDeviceSP dev)
     return result;
 }
 
+template<psd_byte_order byteOrder>
 void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice &io)
 {
     if (m_onlyTransparencyMask) {
@@ -620,19 +614,28 @@ void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice &io)
                                            m_onlyTransparencyMaskRect,
                                            m_transparencyMaskSizeOffset,
                                            -1,
-                                           true);
+                                           true,
+                                           byteOrder);
     }
 }
 
 void PSDLayerRecord::writePixelData(QIODevice &io)
 {
     try {
-        writePixelDataImpl(io);
+        switch (m_header.byteOrder) {
+        case psd_byte_order::psdLittleEndian:
+            writePixelDataImpl<psd_byte_order::psdLittleEndian>(io);
+            break;
+        default:
+            writePixelDataImpl(io);
+            break;
+        }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
     }
 }
 
+template<psd_byte_order byteOrder>
 void PSDLayerRecord::writePixelDataImpl(QIODevice &io)
 {
     dbgFile << "writing pixel data for layer" << layerName << "at" << io.pos();
@@ -645,11 +648,11 @@ void PSDLayerRecord::writePixelDataImpl(QIODevice &io)
 
         for (int i = 0; i < nChannels; i++) {
             const ChannelInfo *channelInfo = channelInfoRecords[i];
-            KisAslWriterUtils::OffsetStreamPusher<quint32, psd_byte_order::psdBigEndian> channelBlockSizeExternalTag(io, 0, channelInfo->channelInfoPosition);
-            SAFE_WRITE_EX(psd_byte_order::psdBigEndian, io, (quint16)Compression::Uncompressed);
+            KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> channelBlockSizeExternalTag(io, 0, channelInfo->channelInfoPosition);
+            SAFE_WRITE_EX(byteOrder, io, (quint16)Compression::Uncompressed);
         }
 
-        writeTransparencyMaskPixelData(io);
+        writeTransparencyMaskPixelData<byteOrder>(io);
 
         return;
     }
@@ -665,8 +668,8 @@ void PSDLayerRecord::writePixelDataImpl(QIODevice &io)
         writingInfoList << PsdPixelUtils::ChannelWritingInfo(channelInfo->channelId, channelInfo->channelInfoPosition);
     }
 
-    PsdPixelUtils::writePixelDataCommon(io, dev, rc, colorMode, channelSize, true, true, writingInfoList);
-    writeTransparencyMaskPixelData(io);
+    PsdPixelUtils::writePixelDataCommon(io, dev, rc, colorMode, channelSize, true, true, writingInfoList, byteOrder);
+    writeTransparencyMaskPixelData<byteOrder>(io);
 }
 
 bool PSDLayerRecord::valid()

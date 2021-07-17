@@ -68,7 +68,8 @@ void KRITAPSD_EXPORT writeChannelDataRLE(QIODevice &io,
                                          const QRect &rc,
                                          const qint64 sizeFieldOffset,
                                          const qint64 rleBlockOffset,
-                                         const bool writeCompressionType);
+                                         const bool writeCompressionType,
+                                         psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
 
 void KRITAPSD_EXPORT writePixelDataCommon(QIODevice &io,
                                           KisPaintDeviceSP dev,
@@ -77,7 +78,8 @@ void KRITAPSD_EXPORT writePixelDataCommon(QIODevice &io,
                                           int channelSize,
                                           bool alphaFirst,
                                           const bool writeCompressionType,
-                                          QVector<ChannelWritingInfo> &writingInfoList);
+                                          QVector<ChannelWritingInfo> &writingInfoList,
+                                          psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
 }
 
 #endif /* __PSD_PIXEL_UTILS_H */

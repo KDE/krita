@@ -131,12 +131,15 @@ public:
     LayerMaskData layerMask;
 
     struct LayerBlendingRanges {
+        struct LayerBlendingRange {
+            std::array<quint8, 2> blackValues;
+            std::array<quint8, 2> whiteValues;
+        };
+
         QByteArray data;
 
-        quint8 blackValues[2];
-        quint8 whiteValues[2];
-        quint32 compositeGrayBlendDestinationRange;
-        QVector<QPair<quint32, quint32>> sourceDestinationRanges;
+        QPair<LayerBlendingRange, LayerBlendingRange> compositeGrayRange;
+        QVector<QPair<LayerBlendingRange, LayerBlendingRange>> sourceDestinationRanges;
     };
 
     LayerBlendingRanges blendingRanges;
@@ -158,8 +161,10 @@ private:
                    const QDomDocument &stylesXmlDoc,
                    bool useLfxsLayerStyleFormat);
 
+    template<psd_byte_order = psd_byte_order::psdBigEndian>
     void writeTransparencyMaskPixelData(QIODevice &io);
 
+    template<psd_byte_order = psd_byte_order::psdBigEndian>
     void writePixelDataImpl(QIODevice &io);
 
     KisPaintDeviceSP convertMaskDeviceIfNeeded(KisPaintDeviceSP dev);
@@ -175,5 +180,10 @@ private:
 
 KRITAPSD_EXPORT QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer);
 KRITAPSD_EXPORT QDebug operator<<(QDebug dbg, const ChannelInfo &layer);
+
+inline QDebug &operator<<(QDebug dbg, const PSDLayerRecord::LayerBlendingRanges::LayerBlendingRange &data)
+{
+    return dbg << data.blackValues[0] << data.blackValues[1] << data.whiteValues[0] << data.whiteValues[1];
+}
 
 #endif // PSD_LAYER_RECORD_H

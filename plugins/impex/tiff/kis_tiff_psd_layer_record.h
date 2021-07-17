@@ -17,9 +17,17 @@
 class KisTiffPsdLayerRecord
 {
 public:
-    KisTiffPsdLayerRecord(bool isBigEndian, uint32_t width, uint32_t height, uint16_t channelDepth, uint16_t nChannels, uint16_t photometricInterpretation);
+    KisTiffPsdLayerRecord(bool isBigEndian,
+                          uint32_t width,
+                          uint32_t height,
+                          uint16_t channelDepth,
+                          uint16_t nChannels,
+                          uint16_t photometricInterpretation,
+                          bool hasTransparency = false);
 
     bool read(QIODevice &io);
+
+    bool write(QIODevice &io, KisNodeSP rootLayer);
 
     std::shared_ptr<PSDLayerMaskSection> record() const;
 
@@ -43,11 +51,15 @@ private:
     uint16_t m_nChannels;
     psd_color_mode m_colorMode;
     std::shared_ptr<PSDLayerMaskSection> m_record;
+    bool m_hasTransparency;
     bool m_valid;
 
 private:
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     bool readImpl(QIODevice &device);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    bool writeImpl(QIODevice &device, KisNodeSP rootLayer);
 };
 
 #endif // _KIS_TIFF_PSD_LAYER_RECORD_H

@@ -6,6 +6,7 @@
  */
 #include "psd_layer_section.h"
 
+#include <QBuffer>
 #include <QIODevice>
 
 #include <KoColor.h>
@@ -487,13 +488,17 @@ bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer)
     bool retval = true;
 
     try {
-        switch (m_header.byteOrder) {
-        case psd_byte_order::psdLittleEndian:
-            writeImpl<psd_byte_order::psdLittleEndian>(io, rootLayer);
-            break;
-        default:
-            writeImpl(io, rootLayer);
-            break;
+        if (m_header.tiffStyleLayerBlock) {
+            switch (m_header.byteOrder) {
+            case psd_byte_order::psdLittleEndian:
+                writeTiffImpl<psd_byte_order::psdLittleEndian>(io, rootLayer);
+                break;
+            default:
+                writeTiffImpl(io, rootLayer);
+                break;
+            }
+        } else {
+            writePsdImpl(io, rootLayer);
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         error = PREPEND_METHOD(e.what());
@@ -503,8 +508,7 @@ bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer)
     return retval;
 }
 
-template<psd_byte_order byteOrder>
-void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
+void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
 
@@ -518,16 +522,16 @@ void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
     }
 
     {
-        KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> layerAndMaskSectionSizeTag(io, 2);
+        KisAslWriterUtils::OffsetStreamPusher<quint32, psd_byte_order::psdBigEndian> layerAndMaskSectionSizeTag(io, 2);
         QDomDocument mergedPatternsXmlDoc;
 
         {
-            KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> layerInfoSizeTag(io, 4);
+            KisAslWriterUtils::OffsetStreamPusher<quint32, psd_byte_order::psdBigEndian> layerInfoSizeTag(io, 2);
 
             {
                 // number of layers (negative, because krita always has alpha)
                 const qint16 layersSize = static_cast<qint16>(-nodes.size());
-                SAFE_WRITE_EX(byteOrder, io, layersSize);
+                SAFE_WRITE_EX(psd_byte_order::psdBigEndian, io, layersSize);
 
                 dbgFile << "Number of layers" << layersSize << "at" << io.pos();
             }
@@ -635,8 +639,6 @@ void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
 
             // Now save the pixel data
             for (PSDLayerRecord *layerRecord : layers) {
-                // XXX: endianness?
-                // Make consistent with PSDLayerRecord::readPixelData
                 layerRecord->writePixelData(io);
             }
         }
@@ -644,8 +646,163 @@ void PSDLayerMaskSection::writeImpl(QIODevice &io, KisNodeSP rootLayer)
         {
             // write the global layer mask info -- which is empty
             const quint32 globalMaskSize = 0;
-            SAFE_WRITE_EX(byteOrder, io, globalMaskSize);
+            SAFE_WRITE_EX(psd_byte_order::psdBigEndian, io, globalMaskSize);
         }
+
+        globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PSDLayerMaskSection::writeTiffImpl(QIODevice &io, KisNodeSP rootLayer)
+{
+    dbgFile << "(TIFF) Writing layer section";
+
+    // Build the whole layer structure
+    QList<FlattenedNode> nodes;
+    addBackgroundIfNeeded(rootLayer, nodes);
+    flattenNodes(rootLayer, nodes);
+
+    if (nodes.isEmpty()) {
+        throw KisAslWriterUtils::ASLWriteException("Could not find paint layers to save");
+    }
+
+    {
+        QDomDocument mergedPatternsXmlDoc;
+
+        {
+            KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+            KisAslWriterUtils::writeFixedString<byteOrder>("Layr", io);
+
+            KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> layerAndMaskSectionSizeTag(io, 4);
+            // number of layers (negative, because krita always has alpha)
+            const qint16 layersSize = nodes.size();
+            SAFE_WRITE_EX(byteOrder, io, layersSize);
+
+            dbgFile << "Number of layers" << layersSize << "at" << io.pos();
+
+            // Layer records section
+            for (const FlattenedNode &item : nodes) {
+                KisNodeSP node = item.node;
+
+                PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
+                layers.append(layerRecord);
+
+                const QRect maskRect;
+
+                const bool nodeVisible = node->visible();
+                const KoColorSpace *colorSpace = node->colorSpace();
+                const quint8 nodeOpacity = node->opacity();
+                const quint8 nodeClipping = 0;
+                const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer *>(node.data());
+                const bool alphaLocked = (paintLayer && paintLayer->alphaLocked());
+                const QString nodeCompositeOp = node->compositeOpId();
+
+                const KisGroupLayer *groupLayer = qobject_cast<KisGroupLayer *>(node.data());
+                const bool nodeIsPassThrough = groupLayer && groupLayer->passThroughMode();
+
+                QDomDocument stylesXmlDoc = fetchLayerStyleXmlData(node);
+
+                if (mergedPatternsXmlDoc.isNull() && !stylesXmlDoc.isNull()) {
+                    mergedPatternsXmlDoc = stylesXmlDoc;
+                } else if (!mergedPatternsXmlDoc.isNull() && !stylesXmlDoc.isNull()) {
+                    mergePatternsXMLSection(stylesXmlDoc, mergedPatternsXmlDoc);
+                }
+
+                bool nodeIrrelevant = false;
+                QString nodeName;
+                KisPaintDeviceSP layerContentDevice;
+                psd_section_type sectionType;
+
+                if (item.type == FlattenedNode::RASTER_LAYER) {
+                    nodeIrrelevant = false;
+                    nodeName = node->name();
+                    layerContentDevice = node->projection();
+                    sectionType = psd_other;
+                } else {
+                    nodeIrrelevant = true;
+                    nodeName = item.type == FlattenedNode::SECTION_DIVIDER ? QString("</Layer group>") : node->name();
+                    layerContentDevice = 0;
+                    sectionType = item.type == FlattenedNode::SECTION_DIVIDER ? psd_bounding_divider
+                        : item.type == FlattenedNode::FOLDER_OPEN             ? psd_open_folder
+                                                                              : psd_closed_folder;
+                }
+
+                // === no access to node anymore
+
+                QRect layerRect;
+
+                if (layerContentDevice) {
+                    QRect rc = layerContentDevice->exactBounds();
+                    rc = rc.normalized();
+
+                    // keep to the max of photoshop's capabilities
+                    // XXX: update this to PSB
+                    if (rc.width() > 30000)
+                        rc.setWidth(30000);
+                    if (rc.height() > 30000)
+                        rc.setHeight(30000);
+
+                    layerRect = rc;
+                }
+
+                layerRecord->top = layerRect.y();
+                layerRecord->left = layerRect.x();
+                layerRecord->bottom = layerRect.y() + layerRect.height();
+                layerRecord->right = layerRect.x() + layerRect.width();
+
+                // colors + alpha channel
+                // note: transparency mask not included
+                layerRecord->nChannels = static_cast<quint16>(colorSpace->colorChannelCount() + 1);
+
+                ChannelInfo *info = new ChannelInfo;
+                info->channelId = -1; // For the alpha channel, which we always have in Krita, and should be saved first in
+                layerRecord->channelInfoRecords << info;
+
+                // the rest is in display order: rgb, cmyk, lab...
+                for (quint32 i = 0; i < colorSpace->colorChannelCount(); ++i) {
+                    info = new ChannelInfo;
+                    info->channelId = static_cast<qint16>(i); // 0 for red, 1 = green, etc
+                    layerRecord->channelInfoRecords << info;
+                }
+
+                layerRecord->blendModeKey = composite_op_to_psd_blendmode(nodeCompositeOp);
+                layerRecord->isPassThrough = nodeIsPassThrough;
+                layerRecord->opacity = nodeOpacity;
+                layerRecord->clipping = nodeClipping;
+
+                layerRecord->transparencyProtected = alphaLocked;
+                layerRecord->visible = nodeVisible;
+                layerRecord->irrelevant = nodeIrrelevant;
+
+                layerRecord->layerName = nodeName.isEmpty() ? i18n("Unnamed Layer") : nodeName;
+
+                layerRecord->write(io, layerContentDevice, nullptr, QRect(), sectionType, stylesXmlDoc, node->inherits("KisGroupLayer"));
+            }
+
+            dbgFile << "start writing layer pixel data" << io.pos();
+
+            // Now save the pixel data
+            for (PSDLayerRecord *layerRecord : layers) {
+                layerRecord->writePixelData(io);
+            }
+        }
+
+        // {
+        //     // write the global layer mask info -- which is NOT empty but fixed
+        //     KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+        //     KisAslWriterUtils::writeFixedString<byteOrder>("LMsk", io);
+
+        //     KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> layerAndMaskSectionSizeTag(io, 4);
+        //     // https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577411_22664
+        //     psdwrite<byteOrder>(io, quint16(0));     // CS: RGB
+        //     psdwrite<byteOrder>(io, quint16(65535)); // Pure red verification
+        //     psdwrite<byteOrder>(io, quint16(0));
+        //     psdwrite<byteOrder>(io, quint16(0));
+        //     psdwrite<byteOrder>(io, quint16(0));
+        //     psdwrite<byteOrder>(io, quint16(50)); // opacity
+        //     psdwrite<byteOrder>(io, quint16(128)); // kind
+        // }
 
         globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);
     }

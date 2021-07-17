@@ -14,7 +14,6 @@
 #include <psd_utils.h>
 
 KisTiffPsdResourceRecord::KisTiffPsdResourceRecord()
-    : m_valid(false)
 {
 }
 
@@ -44,14 +43,39 @@ bool KisTiffPsdResourceRecord::read(QIODevice &buf)
 
     dbgFile << "Read" << resources.size() << "Image Resource Blocks";
 
-    m_valid = true;
-
     return valid();
+}
+
+bool KisTiffPsdResourceRecord::write(QIODevice &io)
+{
+    if (!valid()) {
+        error = "Resource Section is Invalid";
+        return false;
+    }
+    // write all the sections
+    QBuffer buf;
+    buf.open(QBuffer::WriteOnly);
+
+    for (const PSDResourceBlock *block : resources) {
+        if (!block->write(buf)) {
+            error = block->error;
+            return false;
+        }
+    }
+
+    buf.close();
+
+    // Then get the size
+    qint64 resourceSectionLength = buf.size();
+    dbgFile << "resource section has size" << resourceSectionLength;
+
+    // and write the whole buffer
+    return (io.write(buf.data()) == resourceSectionLength);
 }
 
 bool KisTiffPsdResourceRecord::valid()
 {
-    return m_valid;
+    return true;
 }
 
 QString KisTiffPsdResourceRecord::idToString(KisTiffPsdResourceRecord::PSDResourceID id)

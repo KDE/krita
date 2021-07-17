@@ -7,12 +7,16 @@
  */
 
 #include "kis_tiff_psd_layer_record.h"
+#include "psd_utils.h"
 
-#include <memory>
-
+#include <QBuffer>
+#include <QLatin1String>
 #include <asl/kis_asl_reader_utils.h>
+#include <asl/kis_asl_writer_utils.h>
 #include <kis_debug.h>
+#include <memory>
 #include <psd.h>
+#include <psd_header.h>
 #include <tiff.h>
 
 KisTiffPsdLayerRecord::KisTiffPsdLayerRecord(bool isBigEndian,
@@ -20,12 +24,14 @@ KisTiffPsdLayerRecord::KisTiffPsdLayerRecord(bool isBigEndian,
                                              uint32_t height,
                                              uint16_t channelDepth,
                                              uint16_t nChannels,
-                                             uint16_t photometricInterpretation)
+                                             uint16_t photometricInterpretation,
+                                             bool hasTransparency)
     : m_byteOrder(isBigEndian ? psd_byte_order::psdBigEndian : psd_byte_order::psdLittleEndian)
     , m_width(width)
     , m_height(height)
     , m_channelDepth(channelDepth)
     , m_nChannels(nChannels)
+    , m_hasTransparency(hasTransparency)
     , m_valid(false)
 {
     if (photometricInterpretation == PHOTOMETRIC_MINISWHITE || photometricInterpretation == PHOTOMETRIC_MINISBLACK) {
@@ -52,6 +58,16 @@ bool KisTiffPsdLayerRecord::read(QIODevice &io)
         return readImpl<psd_byte_order::psdLittleEndian>(io);
     default:
         return readImpl(io);
+    }
+}
+
+bool KisTiffPsdLayerRecord::write(QIODevice &io, KisNodeSP rootLayer)
+{
+    switch (m_byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        return writeImpl<psd_byte_order::psdLittleEndian>(io, rootLayer);
+    default:
+        return writeImpl(io, rootLayer);
     }
 }
 
@@ -86,6 +102,42 @@ bool KisTiffPsdLayerRecord::readImpl(QIODevice &device)
     m_valid = true;
 
     return true;
+}
+
+template<psd_byte_order byteOrder>
+bool KisTiffPsdLayerRecord::writeImpl(QIODevice &device, KisNodeSP rootLayer)
+{
+    PSDHeader header;
+    header.version = 1;
+    header.byteOrder = byteOrder;
+    header.width = m_width;
+    header.height = m_height;
+    header.channelDepth = m_channelDepth;
+    header.nChannels = m_nChannels;
+    header.colormode = m_colorMode;
+    header.tiffStyleLayerBlock = true;
+    m_record = std::make_shared<PSDLayerMaskSection>(header);
+    m_record->hasTransparency = m_hasTransparency;
+
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+
+    psdwrite(buf, "Adobe Photoshop Document Data Block");
+    psdpad(buf, 1);
+
+    if (!m_record->write(buf, rootLayer)) {
+        dbgFile << "failed writing PSD section: " << m_record->error;
+        return false;
+    }
+
+    buf.close();
+
+    // Then get the size
+    qint64 layerSectionLength = buf.size();
+    dbgFile << "layer section has size" << layerSectionLength;
+
+    // and write the whole buffer
+    return (device.write(buf.data()) == layerSectionLength);
 }
 
 std::shared_ptr<PSDLayerMaskSection> KisTiffPsdLayerRecord::record() const

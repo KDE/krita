@@ -39,6 +39,14 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
     activated(kComboBoxCompressionType->currentIndex());
     kComboBoxPredictor->setCurrentIndex(cfg->getInt("predictor", 0));
     alpha->setChecked(cfg->getBool("alpha", true));
+    bool canSaveAsPhotoshop = cfg->getBool("canSaveAsPhotoshop", false);
+    if (canSaveAsPhotoshop) {
+        chkPhotoshop->setEnabled(false);
+        chkPhotoshop->setChecked(false);
+    } else {
+        chkPhotoshop->setEnabled(true);
+        chkPhotoshop->setChecked(cfg->getBool("saveAsPhotoshop", false));
+    }
     flatten->setChecked(cfg->getBool("flatten", true));
     flattenToggled(flatten->isChecked());
     qualityLevel->setValue(cfg->getInt("quality", 80));
@@ -66,6 +74,7 @@ KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
     cfg->setProperty("compressiontype", kComboBoxCompressionType->currentIndex());
     cfg->setProperty("predictor", kComboBoxPredictor->currentIndex());
     cfg->setProperty("alpha", alpha->isChecked());
+    cfg->setProperty("saveAsPhotoshop", chkPhotoshop->isChecked());
     cfg->setProperty("flatten", flatten->isChecked());
     cfg->setProperty("quality", qualityLevel->value());
     cfg->setProperty("deflate", compressionLevelDeflate->value());
@@ -97,6 +106,10 @@ void KisTIFFOptionsWidget::flattenToggled(bool t)
     alpha->setEnabled(t);
     if (!t) {
         alpha->setChecked(true);
+    }
+    chkPhotoshop->setEnabled(!t);
+    if (t) {
+        chkPhotoshop->setChecked(false);
     }
 }
 

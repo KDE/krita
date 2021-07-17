@@ -15,6 +15,7 @@
 #include <array>
 #include <psd.h>
 #include <resources/KoPattern.h>
+#include <type_traits>
 
 class QIODevice;
 class QString;
@@ -166,7 +167,7 @@ inline bool psdwriteLE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian, typename T>
-inline bool psdwrite(QIODevice &io, T v)
+inline std::enable_if_t<std::is_arithmetic<T>::value, bool> psdwrite(QIODevice &io, T v)
 {
     if (byteOrder == psd_byte_order::psdLittleEndian) {
         return psdwriteLE<T>(io, v);

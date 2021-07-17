@@ -155,6 +155,7 @@ public:
     ~KisTiffPsdResourceRecord();
 
     bool read(QIODevice &io);
+    bool write(QIODevice &io);
     bool valid();
 
     static QString idToString(PSDResourceID id);
@@ -162,9 +163,6 @@ public:
     QMap<PSDResourceID, PSDResourceBlock *> resources;
 
     QString error;
-
-private:
-    bool m_valid;
 };
 
 #endif // _KIS_TIFF_PSD_RESOURCE_RECORD_H

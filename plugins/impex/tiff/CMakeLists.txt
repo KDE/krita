@@ -3,6 +3,7 @@ add_subdirectory(tests)
 set(libkritatiffconverter_LIB_SRCS
     kis_tiff_converter.cc
     kis_tiff_writer_visitor.cpp
+    kis_tiff_psd_writer_visitor.cpp
     kis_buffer_stream.cc
     kis_tiff_psd_layer_record.cpp
     kis_tiff_psd_resource_record.cpp

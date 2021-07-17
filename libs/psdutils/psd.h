@@ -26,6 +26,8 @@
 
 const int MAX_CHANNELS = 56;
 
+const int MAX_PSD_SIZE = 30000;
+
 typedef qint32 Fixed; /* Represents a fixed point implied decimal */
 
 enum class psd_byte_order : std::uint_least8_t {

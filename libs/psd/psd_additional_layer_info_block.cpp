@@ -155,6 +155,9 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
             unicodeLayerName = readUnicodeString<byteOrder>(io);
             dbgFile << "unicodeLayerName" << unicodeLayerName;
         } else if (key == "lyid") {
+            quint32 id;
+            psdread<byteOrder>(io, id);
+            dbgFile << "layer ID:" << id;
         } else if (key == "lfx2" || key == "lfxs") {
             // lfxs is a special variant of layer styles for group layers
             layerStyleXml = KisAslReader::readLfx2PsdSection(io, byteOrder);
@@ -343,7 +346,8 @@ void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDom
 {
     KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
     KisAslWriterUtils::writeFixedString<byteOrder>("Patt", io);
-    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> pattSizeTag(io, 2);
+    const quint32 padding = m_header.tiffStyleLayerBlock ? 4 : 2;
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> pattSizeTag(io, padding);
 
     try {
         KisAslPatternsWriter writer(patternsXmlDoc, io, byteOrder);

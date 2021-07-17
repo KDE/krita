@@ -31,17 +31,19 @@
 #include <kis_transaction.h>
 #include <kis_transform_worker.h>
 
+#include <psd_resource_block.h>
+
 #include "KoColorSpaceConstants.h"
 #include "kis_assert.h"
 #include "kis_buffer_stream.h"
 #include "kis_global.h"
 #include "kis_tiff_psd_layer_record.h"
 #include "kis_tiff_psd_resource_record.h"
+#include "kis_tiff_psd_writer_visitor.h"
 #include "kis_tiff_reader.h"
 #include "kis_tiff_writer_visitor.h"
 #include "kis_tiff_ycbcr_reader.h"
 #include "kis_transparency_mask.h"
-#include "psd_resource_block.h"
 
 #include <KisImportExportAdditionalChecks.h>
 
@@ -289,6 +291,10 @@ KisPropertiesConfigurationSP KisTIFFOptions::toProperties() const
     cfg->setProperty("compressiontype", compToIndex.value(compressionType, 0));
     cfg->setProperty("predictor", predictor - 1);
     cfg->setProperty("alpha", alpha);
+#ifdef TIFFLIB_KRITA_CAN_WRITE_PSD
+    cfg->setProperty("canWritePhotoshop", true);
+#endif
+    cfg->setProperty("saveAsPhotoshop", saveAsPhotoshop);
     cfg->setProperty("flatten", flatten);
     cfg->setProperty("quality", jpegQuality);
     cfg->setProperty("deflate", deflateCompress);
@@ -314,6 +320,7 @@ void KisTIFFOptions::fromProperties(KisPropertiesConfigurationSP cfg)
 
     predictor = static_cast<quint16>(cfg->getInt("predictor", 0)) + 1;
     alpha = cfg->getBool("alpha", true);
+    saveAsPhotoshop = cfg->getBool("saveAsPhotoshop", false);
     flatten = cfg->getBool("flatten", true);
     jpegQuality = static_cast<quint16>(cfg->getInt("quality", 80));
     deflateCompress = static_cast<quint16>(cfg->getInt("deflate", 6));
@@ -1253,10 +1260,19 @@ KisImportExportErrorCode KisTIFFConverter::buildFile(const QString &filename, Ki
         return ImportExportCodes::InternalError;
     }
 
-    KisTIFFWriterVisitor *visitor = new KisTIFFWriterVisitor(image, &options);
-    if (!(visitor->visit(root))) {
-        TIFFClose(image);
-        return ImportExportCodes::Failure;
+    if (options.saveAsPhotoshop) {
+        KisTiffPsdWriter writer(image, &options);
+        KisImportExportErrorCode result = writer.writeImage(root);
+        if (!result.isOk()) {
+            TIFFClose(image);
+            return result;
+        }
+    } else {
+        KisTIFFWriterVisitor *visitor = new KisTIFFWriterVisitor(image, &options);
+        if (!(visitor->visit(root))) {
+            TIFFClose(image);
+            return ImportExportCodes::Failure;
+        }
     }
 
     TIFFClose(image);

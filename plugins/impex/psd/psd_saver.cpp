@@ -35,7 +35,6 @@
 
 
 
-const int MAX_PSD_SIZE = 30000;
 
 
 QPair<psd_color_mode, quint16> colormodelid_to_psd_colormode(const QString &colorSpaceId, const QString &colorDepthId)

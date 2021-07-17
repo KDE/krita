@@ -174,10 +174,9 @@ QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compr
     case Uncompressed:
         return bytes;
     case RLE: {
-        char *dst = new char[unpacked_len];
-        decode_packbits(bytes.constData(), dst, bytes.length(), unpacked_len);
-        QByteArray ba(dst, unpacked_len);
-        delete[] dst;
+        QByteArray ba;
+        ba.resize(static_cast<int>(unpacked_len));
+        decode_packbits(bytes.constData(), ba.data(), static_cast<quint16>(bytes.length()), unpacked_len);
         return ba;
     }
     case ZIP:

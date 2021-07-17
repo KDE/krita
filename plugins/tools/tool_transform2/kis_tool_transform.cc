@@ -1037,7 +1037,7 @@ void KisToolTransform::slotTrackerChangedConfig(KisToolChangesTrackerDataSP stat
 
     *m_transaction.currentConfig() = *newArgs;
 
-    slotUiChangedConfig();
+    slotUiChangedConfig(true);
     updateOptionWidget();
 }
 
@@ -1080,8 +1080,8 @@ QWidget* KisToolTransform::createOptionWidget()
     m_optionsWidget->layout()->addWidget(specialSpacer);
 
 
-    connect(m_optionsWidget, SIGNAL(sigConfigChanged()),
-            this, SLOT(slotUiChangedConfig()));
+    connect(m_optionsWidget, SIGNAL(sigConfigChanged(bool)),
+            this, SLOT(slotUiChangedConfig(bool)));
 
     connect(m_optionsWidget, SIGNAL(sigApplyTransform()),
             this, SLOT(slotApplyTransform()));
@@ -1142,11 +1142,13 @@ void KisToolTransform::updateApplyResetAvailability()
     }
 }
 
-void KisToolTransform::slotUiChangedConfig()
+void KisToolTransform::slotUiChangedConfig(bool needsPreviewRecalculation)
 {
     if (mode() == KisTool::PAINT_MODE) return;
 
-    currentStrategy()->externalConfigChanged();
+    if (needsPreviewRecalculation) {
+        currentStrategy()->externalConfigChanged();
+    }
 
     if (m_currentArgs.mode() == ToolTransformArgs::LIQUIFY) {
         m_currentArgs.saveLiquifyTransformMode();

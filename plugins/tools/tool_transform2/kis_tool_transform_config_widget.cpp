@@ -396,7 +396,7 @@ void KisToolTransformConfigWidget::slotLiquifyModeChanged(int value)
 
     updateLiquifyControls();
 
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 }
 
 void KisToolTransformConfigWidget::liquifySizeChanged(qreal value)
@@ -408,7 +408,7 @@ void KisToolTransformConfigWidget::liquifySizeChanged(qreal value)
         config->liquifyProperties();
 
     props->setSize(value);
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 }
 
 void KisToolTransformConfigWidget::liquifyAmountChanged(qreal value)
@@ -420,7 +420,7 @@ void KisToolTransformConfigWidget::liquifyAmountChanged(qreal value)
         config->liquifyProperties();
 
     props->setAmount(value);
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 }
 
 void KisToolTransformConfigWidget::liquifyFlowChanged(qreal value)
@@ -432,7 +432,7 @@ void KisToolTransformConfigWidget::liquifyFlowChanged(qreal value)
         config->liquifyProperties();
 
     props->setFlow(value);
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 }
 
 void KisToolTransformConfigWidget::liquifyBuildUpChanged(int value)
@@ -445,7 +445,7 @@ void KisToolTransformConfigWidget::liquifyBuildUpChanged(int value)
 
     props->setUseWashMode(value); // 0 == build up mode / 1 == wash mode
 
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 
     // we need to enable/disable flow slider
     updateLiquifyControls();
@@ -460,7 +460,7 @@ void KisToolTransformConfigWidget::liquifySpacingChanged(qreal value)
         config->liquifyProperties();
 
     props->setSpacing(value);
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 }
 
 void KisToolTransformConfigWidget::liquifySizePressureChanged(bool value)
@@ -472,7 +472,7 @@ void KisToolTransformConfigWidget::liquifySizePressureChanged(bool value)
         config->liquifyProperties();
 
     props->setSizeHasPressure(value);
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 }
 
 void KisToolTransformConfigWidget::liquifyAmountPressureChanged(bool value)
@@ -484,7 +484,7 @@ void KisToolTransformConfigWidget::liquifyAmountPressureChanged(bool value)
         config->liquifyProperties();
 
     props->setAmountHasPressure(value);
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 }
 
 void KisToolTransformConfigWidget::liquifyReverseDirectionChanged(bool value)
@@ -496,7 +496,7 @@ void KisToolTransformConfigWidget::liquifyReverseDirectionChanged(bool value)
         config->liquifyProperties();
 
     props->setReverseDirection(value);
-    notifyConfigChanged();
+    notifyConfigChanged(false);
 }
 
 void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
@@ -690,10 +690,10 @@ void KisToolTransformConfigWidget::unblockNotifications()
     m_notificationsBlocked--;
 }
 
-void KisToolTransformConfigWidget::notifyConfigChanged()
+void KisToolTransformConfigWidget::notifyConfigChanged(bool needsPreviewRecalculation)
 {
     if (!m_notificationsBlocked) {
-        emit sigConfigChanged();
+        emit sigConfigChanged(needsPreviewRecalculation);
     }
     m_configChanged = true;
 }

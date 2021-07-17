@@ -74,7 +74,7 @@ private:
             buffer.image = QImage((widgetRect.size()*devicePixelRatioF).toSize(), QImage::Format_ARGB32);
             buffer.image.setDevicePixelRatio(devicePixelRatioF);
 
-            imageRect = q->view()->viewConverter()->widgetToImage(widgetRect);
+            imageRect = transform.inverted().mapRect(widgetRect);
 
         }
 

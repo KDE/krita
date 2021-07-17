@@ -343,11 +343,3 @@ void KisGuidesConfig::transform(const QTransform &transform)
     d->horzGuideLines = newHorzGuideLines;
     d->vertGuideLines = newVertGuideLines;
 }
-
-bool KisGuidesConfig::isSameIgnoringSnapping(const KisGuidesConfig &rhs) const
-{
-    KisGuidesConfig tmp(rhs);
-    tmp.setSnapToGuides(snapToGuides());
-
-    return *this == tmp;
-}

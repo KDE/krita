@@ -444,6 +444,7 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
             setClearsRedoOnStart(false);
+            setRequestsOtherStrokesToEnd(false);
         }
 
         void initStrokeCallback() override {

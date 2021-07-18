@@ -168,7 +168,7 @@ inline bool psdreadLE(QIODevice &io, std::enable_if_t<sizeof(T) == sizeof(quint6
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian, typename T>
-inline bool psdread(QIODevice &io, T &v)
+inline std::enable_if_t<std::is_arithmetic<T>::value, bool> psdread(QIODevice &io, T &v)
 {
     if (byteOrder == psd_byte_order::psdLittleEndian) {
         return psdreadLE<T>(io, v);

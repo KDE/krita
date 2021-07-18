@@ -643,7 +643,8 @@ bool PSDLayerRecord::readPixelData(QIODevice &io, KisPaintDeviceSP device)
     const QRect layerRect = QRect(left, top, right - left, bottom - top);
 
     try {
-        PsdPixelUtils::readChannels(io, device, m_header.colormode, channelSize, layerRect, channelInfoRecords);
+        // WARNING: Pixel data is ALWAYS in big endian!!!
+        PsdPixelUtils::readChannels(io, device, m_header.colormode, channelSize, layerRect, channelInfoRecords, psd_byte_order::psdBigEndian);
     } catch (KisAslReaderUtils::ASLParseException &e) {
         device->clear();
         error = e.what();

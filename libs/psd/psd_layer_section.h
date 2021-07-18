@@ -54,8 +54,11 @@ public:
 private:
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     bool readLayerInfoImpl(QIODevice &io);
+    bool readPsdImpl(QIODevice &io);
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
-    bool readImpl(QIODevice &io);
+    bool readTiffImpl(QIODevice &io);
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    bool readGlobalMask(QIODevice &io);
     void writeImpl(QIODevice *io, KisNodeSP rootLayer);
 
 private:

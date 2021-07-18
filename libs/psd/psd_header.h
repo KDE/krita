@@ -47,6 +47,7 @@ public:
     quint16 channelDepth; // 1, 8, 16. XXX: check whether 32 is used!
     psd_color_mode colormode;
     psd_byte_order byteOrder;
+    bool tiffStyleLayerBlock; // if true, treat layer section as 4-byte aligned blocks
 
     QString error;
 };

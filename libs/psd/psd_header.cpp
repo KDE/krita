@@ -30,6 +30,7 @@ PSDHeader::PSDHeader()
     , channelDepth(0)
     , colormode(COLORMODE_UNKNOWN)
     , byteOrder(psd_byte_order::psdBigEndian)
+    , tiffStyleLayerBlock(false)
 {
 }
 

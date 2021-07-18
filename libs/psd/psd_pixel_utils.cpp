@@ -127,36 +127,54 @@ inline float convertByteOrder<KoLabF32Traits>(float value)
 }
 
 template<class Traits>
-void readAlphaMaskPixel(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr);
+inline quint8 truncateToOpacity(typename Traits::channels_type value);
 
 template<>
-void readAlphaMaskPixel<AlphaU8Traits>(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
+inline quint8 truncateToOpacity<AlphaU8Traits>(typename AlphaU8Traits::channels_type value)
 {
-    *dstPtr = reinterpret_cast<const quint8 *>(channelBytes.first().constData())[col];
+    return value;
 }
 
 template<>
-void readAlphaMaskPixel<AlphaU16Traits>(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
+inline quint8 truncateToOpacity<AlphaU16Traits>(typename AlphaU16Traits::channels_type value)
 {
-    *dstPtr = reinterpret_cast<const quint16 *>(channelBytes.first().constData())[col] >> 8;
+    return value >> 8;
 }
 
 template<>
-void readAlphaMaskPixel<AlphaF32Traits>(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
+inline quint8 truncateToOpacity<AlphaF32Traits>(typename AlphaF32Traits::channels_type value)
 {
-    *dstPtr = reinterpret_cast<const float *>(channelBytes.first().constData())[col] * 255;
+    return static_cast<quint8>(value * 255U);
 }
 
-template<class Traits>
+template<class Traits, psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+void readAlphaMaskPixel(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
+{
+    using channels_type = typename Traits::channels_type;
+
+    const channels_type data = reinterpret_cast<const channels_type *>(channelBytes.first().constData())[col];
+    if (byteOrder == psd_byte_order::psdBigEndian) {
+        *dstPtr = truncateToOpacity<Traits>(convertByteOrder<Traits>(data));
+    } else {
+        *dstPtr = truncateToOpacity<Traits>(data);
+    }
+}
+
+template<class Traits, psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 inline typename Traits::channels_type
 readChannelValue(const QMap<quint16, QByteArray> &channelBytes, quint16 channelId, int col, typename Traits::channels_type defaultValue)
 {
-    typedef typename Traits::channels_type channels_type;
+    using channels_type = typename Traits::channels_type;
 
     if (channelBytes.contains(channelId)) {
         const QByteArray &bytes = channelBytes[channelId];
         if (col < bytes.size()) {
-            return convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(bytes.constData())[col]);
+            const channels_type data = reinterpret_cast<const channels_type *>(bytes.constData())[col];
+            if (byteOrder == psd_byte_order::psdBigEndian) {
+                return convertByteOrder<Traits>(data);
+            } else {
+                return data;
+            }
         }
 
         dbgFile << "col index out of range channelId: " << channelId << " col:" << col;
@@ -165,117 +183,122 @@ readChannelValue(const QMap<quint16, QByteArray> &channelBytes, quint16 channelI
     return defaultValue;
 }
 
-template<class Traits>
+template<class Traits, psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 void readGrayPixel(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
-    typedef typename Traits::Pixel Pixel;
-    typedef typename Traits::channels_type channels_type;
+    using Pixel = typename Traits::Pixel;
+    using channels_type = typename Traits::channels_type;
 
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     Pixel *pixelPtr = reinterpret_cast<Pixel *>(dstPtr);
 
-    pixelPtr->gray = readChannelValue<Traits>(channelBytes, 0, col, unitValue);
-    pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
+    pixelPtr->gray = readChannelValue<Traits, byteOrder>(channelBytes, 0, col, unitValue);
+    pixelPtr->alpha = readChannelValue<Traits, byteOrder>(channelBytes, -1, col, unitValue);
 }
 
-template<class Traits>
+template<class Traits, psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 void readRgbPixel(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
-    typedef typename Traits::Pixel Pixel;
-    typedef typename Traits::channels_type channels_type;
+    using Pixel = typename Traits::Pixel;
+    using channels_type = typename Traits::channels_type;
 
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     Pixel *pixelPtr = reinterpret_cast<Pixel *>(dstPtr);
 
-    pixelPtr->blue = readChannelValue<Traits>(channelBytes, 2, col, unitValue);
-    pixelPtr->green = readChannelValue<Traits>(channelBytes, 1, col, unitValue);
-    pixelPtr->red = readChannelValue<Traits>(channelBytes, 0, col, unitValue);
-    pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
+    pixelPtr->blue = readChannelValue<Traits, byteOrder>(channelBytes, 2, col, unitValue);
+    pixelPtr->green = readChannelValue<Traits, byteOrder>(channelBytes, 1, col, unitValue);
+    pixelPtr->red = readChannelValue<Traits, byteOrder>(channelBytes, 0, col, unitValue);
+    pixelPtr->alpha = readChannelValue<Traits, byteOrder>(channelBytes, -1, col, unitValue);
 }
 
-template<class Traits>
+template<class Traits, psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 void readCmykPixel(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
-    typedef typename Traits::Pixel Pixel;
-    typedef typename Traits::channels_type channels_type;
+    using Pixel = typename Traits::Pixel;
+    using channels_type = typename Traits::channels_type;
 
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     Pixel *pixelPtr = reinterpret_cast<Pixel *>(dstPtr);
 
-    pixelPtr->cyan = unitValue - readChannelValue<Traits>(channelBytes, 0, col, unitValue);
-    pixelPtr->magenta = unitValue - readChannelValue<Traits>(channelBytes, 1, col, unitValue);
-    pixelPtr->yellow = unitValue - readChannelValue<Traits>(channelBytes, 2, col, unitValue);
-    pixelPtr->black = unitValue - readChannelValue<Traits>(channelBytes, 3, col, unitValue);
-    pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
+    pixelPtr->cyan = unitValue - readChannelValue<Traits, byteOrder>(channelBytes, 0, col, unitValue);
+    pixelPtr->magenta = unitValue - readChannelValue<Traits, byteOrder>(channelBytes, 1, col, unitValue);
+    pixelPtr->yellow = unitValue - readChannelValue<Traits, byteOrder>(channelBytes, 2, col, unitValue);
+    pixelPtr->black = unitValue - readChannelValue<Traits, byteOrder>(channelBytes, 3, col, unitValue);
+    pixelPtr->alpha = readChannelValue<Traits, byteOrder>(channelBytes, -1, col, unitValue);
 }
 
-template<class Traits>
+template<class Traits, psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 void readLabPixel(const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
-    typedef typename Traits::Pixel Pixel;
-    typedef typename Traits::channels_type channels_type;
+    using Pixel = typename Traits::Pixel;
+    using channels_type = typename Traits::channels_type;
 
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     Pixel *pixelPtr = reinterpret_cast<Pixel *>(dstPtr);
 
-    pixelPtr->L = readChannelValue<Traits>(channelBytes, 0, col, unitValue);
-    pixelPtr->a = readChannelValue<Traits>(channelBytes, 1, col, unitValue);
-    pixelPtr->b = readChannelValue<Traits>(channelBytes, 2, col, unitValue);
-    pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
+    pixelPtr->L = readChannelValue<Traits, byteOrder>(channelBytes, 0, col, unitValue);
+    pixelPtr->a = readChannelValue<Traits, byteOrder>(channelBytes, 1, col, unitValue);
+    pixelPtr->b = readChannelValue<Traits, byteOrder>(channelBytes, 2, col, unitValue);
+    pixelPtr->alpha = readChannelValue<Traits, byteOrder>(channelBytes, -1, col, unitValue);
 }
 
+template<psd_byte_order byteOrder>
 void readRgbPixelCommon(int channelSize, const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
     if (channelSize == 1) {
-        readRgbPixel<KoBgrU8Traits>(channelBytes, col, dstPtr);
+        readRgbPixel<KoBgrU8Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 2) {
-        readRgbPixel<KoBgrU16Traits>(channelBytes, col, dstPtr);
+        readRgbPixel<KoBgrU16Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 4) {
-        readRgbPixel<KoBgrU16Traits>(channelBytes, col, dstPtr);
+        readRgbPixel<KoBgrU16Traits, byteOrder>(channelBytes, col, dstPtr);
     }
 }
 
+template<psd_byte_order byteOrder>
 void readGrayPixelCommon(int channelSize, const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
     if (channelSize == 1) {
-        readGrayPixel<KoGrayU8Traits>(channelBytes, col, dstPtr);
+        readGrayPixel<KoGrayU8Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 2) {
-        readGrayPixel<KoGrayU16Traits>(channelBytes, col, dstPtr);
+        readGrayPixel<KoGrayU16Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 4) {
-        readGrayPixel<KoGrayU32Traits>(channelBytes, col, dstPtr);
+        readGrayPixel<KoGrayU32Traits, byteOrder>(channelBytes, col, dstPtr);
     }
 }
 
+template<psd_byte_order byteOrder>
 void readCmykPixelCommon(int channelSize, const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
     if (channelSize == 1) {
-        readCmykPixel<KoCmykU8Traits>(channelBytes, col, dstPtr);
+        readCmykPixel<KoCmykU8Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 2) {
-        readCmykPixel<KoCmykU16Traits>(channelBytes, col, dstPtr);
+        readCmykPixel<KoCmykU16Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 4) {
-        readCmykPixel<KoCmykF32Traits>(channelBytes, col, dstPtr);
+        readCmykPixel<KoCmykF32Traits, byteOrder>(channelBytes, col, dstPtr);
     }
 }
 
+template<psd_byte_order byteOrder>
 void readLabPixelCommon(int channelSize, const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
     if (channelSize == 1) {
-        readLabPixel<KoLabU8Traits>(channelBytes, col, dstPtr);
+        readLabPixel<KoLabU8Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 2) {
-        readLabPixel<KoLabU16Traits>(channelBytes, col, dstPtr);
+        readLabPixel<KoLabU16Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 4) {
-        readLabPixel<KoLabF32Traits>(channelBytes, col, dstPtr);
+        readLabPixel<KoLabF32Traits, byteOrder>(channelBytes, col, dstPtr);
     }
 }
 
+template<psd_byte_order byteOrder>
 void readAlphaMaskPixelCommon(int channelSize, const QMap<quint16, QByteArray> &channelBytes, int col, quint8 *dstPtr)
 {
     if (channelSize == 1) {
-        readAlphaMaskPixel<AlphaU8Traits>(channelBytes, col, dstPtr);
+        readAlphaMaskPixel<AlphaU8Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 2) {
-        readAlphaMaskPixel<AlphaU16Traits>(channelBytes, col, dstPtr);
+        readAlphaMaskPixel<AlphaU16Traits, byteOrder>(channelBytes, col, dstPtr);
     } else if (channelSize == 4) {
-        readAlphaMaskPixel<AlphaF32Traits>(channelBytes, col, dstPtr);
+        readAlphaMaskPixel<AlphaF32Traits, byteOrder>(channelBytes, col, dstPtr);
     }
 }
 
@@ -465,7 +488,7 @@ void readCommon(KisPaintDeviceSP dev,
 
             channelBytes = fetchChannelsBytes(io, infoRecords, i, layerRect.width(), channelSize, processMasks);
 
-            for (qint64 col = 0; col < layerRect.width(); col++) {
+            for (int col = 0; col < layerRect.width(); col++) {
                 pixelFunc(channelSize, channelBytes, col, it->rawData());
                 it->nextPixel();
             }
@@ -474,20 +497,26 @@ void readCommon(KisPaintDeviceSP dev,
     }
 }
 
-void readChannels(QIODevice &io, KisPaintDeviceSP device, psd_color_mode colorMode, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords)
+template<psd_byte_order byteOrder>
+void readChannelsImpl(QIODevice &io,
+                      KisPaintDeviceSP device,
+                      psd_color_mode colorMode,
+                      int channelSize,
+                      const QRect &layerRect,
+                      QVector<ChannelInfo *> infoRecords)
 {
     switch (colorMode) {
     case Grayscale:
-        readCommon(device, io, layerRect, infoRecords, channelSize, &readGrayPixelCommon, false);
+        readCommon(device, io, layerRect, infoRecords, channelSize, &readGrayPixelCommon<byteOrder>, false);
         break;
     case RGB:
-        readCommon(device, io, layerRect, infoRecords, channelSize, &readRgbPixelCommon, false);
+        readCommon(device, io, layerRect, infoRecords, channelSize, &readRgbPixelCommon<byteOrder>, false);
         break;
     case CMYK:
-        readCommon(device, io, layerRect, infoRecords, channelSize, &readCmykPixelCommon, false);
+        readCommon(device, io, layerRect, infoRecords, channelSize, &readCmykPixelCommon<byteOrder>, false);
         break;
     case Lab:
-        readCommon(device, io, layerRect, infoRecords, channelSize, &readLabPixelCommon, false);
+        readCommon(device, io, layerRect, infoRecords, channelSize, &readLabPixelCommon<byteOrder>, false);
         break;
     case Bitmap:
     case Indexed:
@@ -500,10 +529,42 @@ void readChannels(QIODevice &io, KisPaintDeviceSP device, psd_color_mode colorMo
     }
 }
 
-void readAlphaMaskChannels(QIODevice &io, KisPaintDeviceSP device, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords)
+void readChannels(QIODevice &io,
+                  KisPaintDeviceSP device,
+                  psd_color_mode colorMode,
+                  int channelSize,
+                  const QRect &layerRect,
+                  QVector<ChannelInfo *> infoRecords,
+                  psd_byte_order byteOrder)
+{
+    switch (byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        return readChannelsImpl<psd_byte_order::psdLittleEndian>(io, device, colorMode, channelSize, layerRect, infoRecords);
+    default:
+        return readChannelsImpl<psd_byte_order::psdBigEndian>(io, device, colorMode, channelSize, layerRect, infoRecords);
+    }
+}
+
+template<psd_byte_order byteOrder>
+void readAlphaMaskChannelsImpl(QIODevice &io, KisPaintDeviceSP device, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(infoRecords.size() == 1);
-    readCommon(device, io, layerRect, infoRecords, channelSize, &readAlphaMaskPixelCommon, true);
+    readCommon(device, io, layerRect, infoRecords, channelSize, &readAlphaMaskPixelCommon<byteOrder>, true);
+}
+
+void readAlphaMaskChannels(QIODevice &io,
+                           KisPaintDeviceSP device,
+                           int channelSize,
+                           const QRect &layerRect,
+                           QVector<ChannelInfo *> infoRecords,
+                           psd_byte_order byteOrder)
+{
+    switch (byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        return readAlphaMaskChannelsImpl<psd_byte_order::psdLittleEndian>(io, device, channelSize, layerRect, infoRecords);
+    default:
+        return readAlphaMaskChannelsImpl<psd_byte_order::psdBigEndian>(io, device, channelSize, layerRect, infoRecords);
+    }
 }
 
 void writeChannelDataRLE(QIODevice *io,

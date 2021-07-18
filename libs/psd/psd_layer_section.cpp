@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -46,13 +47,17 @@ bool PSDLayerMaskSection::read(QIODevice &io)
     bool retval = true; // be optimistic! <:-)
 
     try {
-        switch (m_header.byteOrder) {
-        case psd_byte_order::psdLittleEndian:
-            retval = readImpl<psd_byte_order::psdLittleEndian>(io);
-            break;
-        default:
-            retval = readImpl(io);
-            break;
+        if (m_header.tiffStyleLayerBlock) {
+            switch (m_header.byteOrder) {
+            case psd_byte_order::psdLittleEndian:
+                retval = readTiffImpl<psd_byte_order::psdLittleEndian>(io);
+                break;
+            default:
+                retval = readTiffImpl(io);
+                break;
+            }
+        } else {
+            retval = readPsdImpl(io);
         }
     } catch (KisAslReaderUtils::ASLParseException &e) {
         warnKrita << "WARNING: PSD (emb. pattern):" << e.what();
@@ -66,7 +71,7 @@ template<psd_byte_order byteOrder>
 bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
 {
     quint32 layerInfoSectionSize = 0;
-    SAFE_READ_EX(io, layerInfoSectionSize);
+    SAFE_READ_EX(byteOrder, io, layerInfoSectionSize);
 
     if (layerInfoSectionSize & 0x1) {
         warnKrita << "WARNING: layerInfoSectionSize is NOT even! Fixing...";
@@ -92,7 +97,9 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
             for (int i = 0; i < nLayers; ++i) {
                 dbgFile << "Going to read layer" << i << "pos" << io.pos();
                 dbgFile << "== Enter PSDLayerRecord";
-                QScopedPointer<PSDLayerRecord> layerRecord(new PSDLayerRecord(m_header));
+                PSDHeader sanitizedHeader(m_header);
+                sanitizedHeader.tiffStyleLayerBlock = false; // disable padding
+                QScopedPointer<PSDLayerRecord> layerRecord(new PSDLayerRecord(sanitizedHeader));
                 if (!layerRecord->read(io)) {
                     error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
                     return false;
@@ -183,44 +190,103 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
     return true;
 }
 
-template<psd_byte_order byteOrder>
-bool PSDLayerMaskSection::readImpl(QIODevice &io)
+bool PSDLayerMaskSection::readPsdImpl(QIODevice &io)
 {
-    dbgFile << "reading layer section. Pos:" << io.pos() << "bytes left:" << io.bytesAvailable();
+    dbgFile << "(PSD) reading layer section. Pos:" << io.pos() << "bytes left:" << io.bytesAvailable();
 
     layerMaskBlockSize = 0;
     if (m_header.version == 1) {
         quint32 _layerMaskBlockSize = 0;
-        if (!psdread<byteOrder>(io, _layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io.bytesAvailable()) {
-            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2").arg(_layerMaskBlockSize).arg(io.bytesAvailable());
+        if (!psdread(io, _layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io.bytesAvailable()) {
+            error = QString("Could not read layer block size. Got %1. Bytes left %2").arg(_layerMaskBlockSize).arg(io.bytesAvailable());
             return false;
         }
         layerMaskBlockSize = _layerMaskBlockSize;
     } else if (m_header.version == 2) {
-        if (!psdread<byteOrder>(io, layerMaskBlockSize) || layerMaskBlockSize > (quint64)io.bytesAvailable()) {
-            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2").arg(layerMaskBlockSize).arg(io.bytesAvailable());
+        if (!psdread(io, layerMaskBlockSize) || layerMaskBlockSize > (quint64)io.bytesAvailable()) {
+            error = QString("Could not read layer block size. Got %1. Bytes left %2").arg(layerMaskBlockSize).arg(io.bytesAvailable());
             return false;
         }
     }
 
-    quint64 start = io.pos();
+    qint64 start = io.pos();
 
-    dbgFile << "layer + mask section size" << layerMaskBlockSize;
+    dbgFile << "layer block size" << layerMaskBlockSize;
 
     if (layerMaskBlockSize == 0) {
-        dbgFile << "No layer + mask info, so no layers, only a background layer";
-        return true;
-    }
-
-    if (!readLayerInfoImpl<byteOrder>(io)) {
+        dbgFile << "No layer info, so no PSD layers available";
         return false;
     }
 
+    if (!readLayerInfoImpl(io)) {
+        return false;
+    }
+
+    dbgFile << "Leftover before additional blocks:" << io.pos() << io.bytesAvailable();
+
+    quint32 globalMaskBlockLength;
+    if (!psdread(io, globalMaskBlockLength)) {
+        error = "Could not read global mask info block";
+        return false;
+    }
+
+    dbgFile << "Global mask size:" << globalMaskBlockLength << "(" << io.pos() << io.bytesAvailable() << ")";
+
+    if (globalMaskBlockLength > 0) {
+        if (!psdread(io, globalLayerMaskInfo.overlayColorSpace)) {
+            error = "Could not read global mask info overlay colorspace";
+            return false;
+        }
+
+        for (int i = 0; i < 4; ++i) {
+            if (!psdread(io, globalLayerMaskInfo.colorComponents[i])) {
+                error = QString("Could not read mask info visualizaion color component %1").arg(i);
+                return false;
+            }
+        }
+
+        if (!psdread(io, globalLayerMaskInfo.opacity)) {
+            error = "Could not read global mask info visualization opacity";
+            return false;
+        }
+
+        if (!psdread(io, globalLayerMaskInfo.kind)) {
+            error = "Could not read global mask info visualization type";
+            return false;
+        }
+    }
+
+    // global additional sections
+
+    /**
+     * Newer versions of PSD have layers info block wrapped into
+     * 'Lr16' or 'Lr32' additional section, while the main block is
+     * absent.
+     *
+     * Here we pass the callback which should be used when such
+     * additional section is recognized.
+     */
+    globalInfoSection.setExtraLayerInfoBlockHandler(
+        std::bind(&PSDLayerMaskSection::readLayerInfoImpl<psd_byte_order::psdBigEndian>, this, std::placeholders::_1));
+
+    globalInfoSection.read(io);
+
+    /* put us after this section so reading the next section will work even if we mess up */
+    io.seek(start + static_cast<qint64>(layerMaskBlockSize));
+
+    return true;
+}
+
+template<psd_byte_order byteOrder>
+bool PSDLayerMaskSection::readGlobalMask(QIODevice &io)
+{
     quint32 globalMaskBlockLength;
     if (!psdread<byteOrder>(io, globalMaskBlockLength)) {
         error = "Could not read global mask info block";
         return false;
     }
+
+    dbgFile << "Global mask size:" << globalMaskBlockLength << "(" << io.pos() << io.bytesAvailable() << ")";
 
     if (globalMaskBlockLength > 0) {
         if (!psdread<byteOrder>(io, globalLayerMaskInfo.overlayColorSpace)) {
@@ -244,24 +310,46 @@ bool PSDLayerMaskSection::readImpl(QIODevice &io)
             error = "Could not read global mask info visualization type";
             return false;
         }
+
+        dbgFile << "Global mask info: ";
+        dbgFile << "\tOverlay:" << globalLayerMaskInfo.overlayColorSpace; // 0
+        dbgFile << "\tColor components:" << globalLayerMaskInfo.colorComponents[0] // 65535
+                << globalLayerMaskInfo.colorComponents[1] // 0
+                << globalLayerMaskInfo.colorComponents[2] // 0
+                << globalLayerMaskInfo.colorComponents[3]; // 0
+        dbgFile << "\tOpacity:" << globalLayerMaskInfo.opacity; // 50
+        dbgFile << "\tKind:" << globalLayerMaskInfo.kind; // 128
     }
 
-    // global additional sections
+    return true;
+}
+
+template<psd_byte_order byteOrder>
+bool PSDLayerMaskSection::readTiffImpl(QIODevice &io)
+{
+    dbgFile << "(TIFF) reading layer section. Pos:" << io.pos() << "bytes left:" << io.bytesAvailable();
+
+    // TIFF additional sections
 
     /**
-     * Newer versions of PSD have layers info block wrapped into
+     * Just like PSD, new versions of PSD have layers info block wrapped into
      * 'Lr16' or 'Lr32' additional section, while the main block is
      * absent.
+     * Additionally, the global mask info is stored in a separate "LMsk" block.
      *
-     * Here we pass the callback which should be used when such
-     * additional section is recognized.
+     * So, instead of having special handling, we just ship everything to the
+     * additional layer info block handlers
      */
+
     globalInfoSection.setExtraLayerInfoBlockHandler(std::bind(&PSDLayerMaskSection::readLayerInfoImpl<byteOrder>, this, std::placeholders::_1));
+    globalInfoSection.setUserMaskInfoBlockHandler(std::bind(&PSDLayerMaskSection::readGlobalMask<byteOrder>, this, std::placeholders::_1));
 
-    globalInfoSection.read(io);
+    if (!globalInfoSection.read(io)) {
+        dbgFile << "Failed to read TIFF Photoshop blocks!";
+        return false;
+    }
 
-    /* put us after this section so reading the next section will work even if we mess up */
-    io.seek(start + layerMaskBlockSize);
+    dbgFile << "Leftover data after parsing layer/extra blocks:" << io.pos() << io.bytesAvailable() << io.peek(io.bytesAvailable());
 
     return true;
 }

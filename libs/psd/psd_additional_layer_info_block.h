@@ -230,8 +230,10 @@ public:
     PsdAdditionalLayerInfoBlock(const PSDHeader &header);
 
     using ExtraLayerInfoBlockHandler = std::function<bool(QIODevice &)>;
+    using UserMaskInfoBlockHandler = std::function<bool(QIODevice &)>;
 
     void setExtraLayerInfoBlockHandler(ExtraLayerInfoBlockHandler handler);
+    void setUserMaskInfoBlockHandler(UserMaskInfoBlockHandler handler);
 
     bool read(QIODevice &io);
     bool write(QIODevice *io, KisNodeSP node);
@@ -260,6 +262,7 @@ private:
 
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;
+    UserMaskInfoBlockHandler m_userMaskBlockHandler;
 };
 
 #endif // PSD_ADDITIONAL_LAYER_INFO_BLOCK_H

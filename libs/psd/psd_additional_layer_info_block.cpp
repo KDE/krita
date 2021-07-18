@@ -28,6 +28,11 @@ void PsdAdditionalLayerInfoBlock::setExtraLayerInfoBlockHandler(ExtraLayerInfoBl
     m_layerInfoBlockHandler = handler;
 }
 
+void PsdAdditionalLayerInfoBlock::setUserMaskInfoBlockHandler(UserMaskInfoBlockHandler handler)
+{
+    m_userMaskBlockHandler = handler;
+}
+
 bool PsdAdditionalLayerInfoBlock::read(QIODevice &io)
 {
     bool result = true;
@@ -75,7 +80,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         }
 
         QString key = readFixedString<byteOrder>(io);
-        dbgFile << "found info block with key" << key;
+        dbgFile << "found info block with key" << key << "(" << io.pos() << ")";
 
         quint64 blockSize = GARBAGE_VALUE_MARK;
         if (longBlocks.contains(key)) {
@@ -85,6 +90,17 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
             SAFE_READ_EX(byteOrder, io, size32);
             blockSize = size32;
         }
+
+        // Since TIFF headers are padded to multiples of 4,
+        // staving them off here is way easier.
+        if (m_header.tiffStyleLayerBlock) {
+            if (blockSize % 4U) {
+                dbgFile << "(TIFF) WARNING: current block size is NOT a multiple of 4! Fixing...";
+                blockSize += (4U - blockSize % 4U);
+            }
+        }
+
+        dbgFile << "info block size" << blockSize << "(" << io.pos() << ")";
 
         // offset verifier will correct the position on the exit from
         // current namespace, including 'continue', 'return' and
@@ -98,11 +114,17 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         keys << key;
 
         // TODO: Loading of 32 bit files is not supported yet
-
         if (key == "Lr16" /* || key == "Lr32"*/) {
             if (m_layerInfoBlockHandler) {
                 int offset = m_header.version > 1 ? 8 : 4;
                 dbgFile << "Offset for block handler: " << io.pos() << offset;
+                io.seek(io.pos() - offset);
+                m_layerInfoBlockHandler(io);
+            }
+        } else if (key == "Layr") {
+            if (m_header.tiffStyleLayerBlock && m_layerInfoBlockHandler) {
+                int offset = m_header.version > 1 ? 8 : 4;
+                dbgFile << "(TIFF) Offset for block handler: " << io.pos() << offset;
                 io.seek(io.pos() - offset);
                 m_layerInfoBlockHandler(io);
             }
@@ -202,6 +224,13 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "Mtrn" || key == "Mt16" || key == "Mt32") { // There is no data associated with these keys.
 
         } else if (key == "LMsk") {
+            // TIFFs store the global mask here.
+            if (m_header.tiffStyleLayerBlock) {
+                int offset = m_header.version > 1 ? 8 : 4;
+                dbgFile << "(TIFF) Offset for block handler: " << io.pos() << offset;
+                io.seek(io.pos() - offset);
+                m_userMaskBlockHandler(io);
+            }
         } else if (key == "FXid") {
         } else if (key == "FEid") {
         }

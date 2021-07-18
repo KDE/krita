@@ -46,10 +46,20 @@ struct KRITAPSD_EXPORT ChannelWritingInfo {
     int rleBlockOffset;
 };
 
-void KRITAPSD_EXPORT
-readChannels(QIODevice &io, KisPaintDeviceSP device, psd_color_mode colorMode, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords);
+void KRITAPSD_EXPORT readChannels(QIODevice &io,
+                                  KisPaintDeviceSP device,
+                                  psd_color_mode colorMode,
+                                  int channelSize,
+                                  const QRect &layerRect,
+                                  QVector<ChannelInfo *> infoRecords,
+                                  psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
 
-void KRITAPSD_EXPORT readAlphaMaskChannels(QIODevice &io, KisPaintDeviceSP device, int channelSize, const QRect &layerRect, QVector<ChannelInfo *> infoRecords);
+void KRITAPSD_EXPORT readAlphaMaskChannels(QIODevice &io,
+                                           KisPaintDeviceSP device,
+                                           int channelSize,
+                                           const QRect &layerRect,
+                                           QVector<ChannelInfo *> infoRecords,
+                                           psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
 
 void KRITAPSD_EXPORT writeChannelDataRLE(QIODevice *io,
                                          const quint8 *plane,

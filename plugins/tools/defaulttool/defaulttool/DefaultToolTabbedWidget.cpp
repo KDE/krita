@@ -53,14 +53,20 @@ DefaultToolTabbedWidget::~DefaultToolTabbedWidget()
 
 void DefaultToolTabbedWidget::activate()
 {
-    m_fillWidget->activate();
-    m_strokeWidget->activate();
+    if (currentIndex() == StrokeTab) {
+        m_strokeWidget->activate();
+    } else {
+        m_fillWidget->activate();
+    }
 }
 
 void DefaultToolTabbedWidget::deactivate()
 {
-    m_fillWidget->deactivate();
-    m_strokeWidget->deactivate();
+    if (m_oldTabIndex == StrokeTab) {
+        m_strokeWidget->deactivate();
+    } else {
+        m_fillWidget->deactivate();
+    }
 }
 
 bool DefaultToolTabbedWidget::useUniformScaling() const
@@ -79,6 +85,10 @@ void DefaultToolTabbedWidget::slotMeshGradientHandleSelected(KoShapeMeshGradient
 
 void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)
 {
+    // because of nesting we are required to only let one widget be active at at time
+    deactivate();
+    activate();
+
     if (m_oldTabIndex == FillTab) {
         emit sigSwitchModeEditFillGradient(false);
     } else if (m_oldTabIndex == StrokeTab) {

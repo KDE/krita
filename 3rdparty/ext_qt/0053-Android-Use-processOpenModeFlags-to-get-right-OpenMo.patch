@@ -1,7 +1,7 @@
-From c900904bf64a4e8345c8c2bb8aec3e041330c26e Mon Sep 17 00:00:00 2001
+From 7f53e1192806a86f2fe3ef3dbb909be3713e9480 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 5 Nov 2020 11:13:49 +0000
-Subject: [PATCH] Android: Use processOpenModeFlags to get right OpenMode
+Subject: [PATCH 33/43] Android: Use processOpenModeFlags to get right OpenMode
 
 processOpenModeFlags handles flags individually so, we get the right
 behavior which is consistent with rest of the Qt. Previously using
@@ -13,10 +13,10 @@ handles the additional Truncate flag.
  2 files changed, 15 insertions(+), 5 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 8c8ed6f4c9..b56a8642cf 100644
+index 2bb0190fee..63dd6b4a26 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-@@ -238,9 +238,10 @@ public class QtNative
+@@ -269,9 +269,10 @@ public class QtNative
              m_parcelFileDescriptors.put(fdDesc.getFd(), fdDesc);
              return fdDesc.getFd();
          } catch (FileNotFoundException e) {
@@ -29,7 +29,7 @@ index 8c8ed6f4c9..b56a8642cf 100644
          }
      }
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
-index 9a743f3946..18de8b0e59 100644
+index c367a7e362..ffda6592f4 100644
 --- a/src/plugins/platforms/android/androidcontentfileengine.cpp
 +++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
 @@ -54,15 +54,23 @@ AndroidContentFileEngine::AndroidContentFileEngine(const QString &f)
@@ -69,5 +69,5 @@ index 9a743f3946..18de8b0e59 100644
      }
  
 -- 
-2.30.0
+2.20.1.windows.1
 

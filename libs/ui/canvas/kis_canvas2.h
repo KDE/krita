@@ -52,7 +52,7 @@ class KisPopupPalette;
  * the widget it contains, which may be either a QPainter based
  * canvas, or an OpenGL based canvas: that are the real widgets.
  */
-class KRITAUI_EXPORT KisCanvas2 : public KoCanvasBase, public KisInputActionGroupsMaskInterface
+class KRITAUI_EXPORT KisCanvas2 : public KoCanvasBase
 {
 
     Q_OBJECT
@@ -147,18 +147,6 @@ public: // KoCanvasBase implementation
      */
     KisInputManager* globalInputManager() const;
 
-    /**
-     * Return the mask of currently available input action groups
-     * Note: Override from KisInputActionGroupsMaskInterface
-     */
-    KisInputActionGroupsMask inputActionGroupsMask() const override;
-
-    /**
-     * Set the mask of currently available action groups
-     * Note: Override from KisInputActionGroupsMaskInterface
-     */
-    void setInputActionGroupsMask(KisInputActionGroupsMask mask) override;
-
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration() const;
     KisReferenceImagesDecorationSP referenceImagesDecoration() const;
 
@@ -223,6 +211,10 @@ public: // KisCanvas2 methods
 
     KisPopupPalette* popupPalette();
 
+    /**
+     * @return a reference to alter this canvas' input action groups mask
+     */
+    KisInputActionGroupsMaskInterface::SharedInterface inputActionGroupsMaskInterface();
 Q_SIGNALS:
     void sigCanvasEngineChanged();
 

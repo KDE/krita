@@ -1,4 +1,6 @@
+if(NOT APPLE)
 add_subdirectory(tests)
+endif()
 add_subdirectory(brushes)
 
 include_directories(${LIBMYPAINT_INCLUDE_DIR})

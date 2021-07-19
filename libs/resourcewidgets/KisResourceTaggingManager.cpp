@@ -62,6 +62,8 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
     d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
+    d->model->setFilterInCurrentTag(d->tagFilter->isFilterByTagChecked());
+
     connect(d->tagChooser, SIGNAL(sigTagChosen(KisTagSP)), this, SLOT(tagChooserIndexChanged(KisTagSP)));
 
     connect(d->tagFilter, SIGNAL(filterByTagChanged(bool)), this, SLOT(slotFilterByTagChanged(bool)));

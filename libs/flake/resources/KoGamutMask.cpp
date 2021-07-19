@@ -28,6 +28,7 @@
 #include <KoShape.h>
 #include <kis_assert.h>
 #include <QTransform>
+#include <KoMarker.h>
 
 //#include <kis_debug.h>
 

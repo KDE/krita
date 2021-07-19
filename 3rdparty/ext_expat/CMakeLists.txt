@@ -1,6 +1,6 @@
 SET(PREFIX_ext_expat "${EXTPREFIX}" )
 
-if (MINGW)
+if (WIN32)
 ExternalProject_Add( ext_expat
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.gz

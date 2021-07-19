@@ -190,7 +190,10 @@ bool KoResourceBundle::save()
 {
     if (m_filename.isEmpty()) return false;
 
-    setMetaData(KisResourceStorage::s_meta_dc_date, QDate::currentDate().toString("dd/MM/yyyy"));
+    if (metaData(KisResourceStorage::s_meta_creation_date, "").isEmpty()) {
+        setMetaData(KisResourceStorage::s_meta_creation_date, QLocale::c().toString(QDate::currentDate(), QStringLiteral("dd/MM/yyyy")));
+    }
+    setMetaData(KisResourceStorage::s_meta_dc_date, QLocale::c().toString(QDate::currentDate(), QStringLiteral("dd/MM/yyyy")));
 
     QDir bundleDir = KoResourcePaths::saveLocation("data", "bundles");
     bundleDir.cdUp();
@@ -344,11 +347,23 @@ bool KoResourceBundle::readMetaData(KoStore *resourceStore)
                         m_bundletags << e.attribute("meta:value");
                     }
                     else {
+                        QString metaName = e.attribute("meta:name");
+                        if (!metaName.startsWith("meta:") && !metaName.startsWith("dc:")) {
+                            if (metaName == "email" || metaName == "license" || metaName == "website") { // legacy metadata options
+                                if (!m_metadata.contains("meta:" + metaName)) {
+                                    m_metadata.insert("meta:" + metaName, e.attribute("meta:value"));
+                                }
+                            } else {
+                                qWarning() << "Unrecognized metadata: " << e.tagName() << e.attribute("meta:name") << e.attribute("meta:value");
+                            }
+                        }
                         m_metadata.insert(e.attribute("meta:name"), e.attribute("meta:value"));
                     }
                 }
                 else {
-                    m_metadata.insert(e.tagName(), e.firstChild().toText().data());
+                    if (!m_metadata.contains(e.tagName())) {
+                        m_metadata.insert(e.tagName(), e.firstChild().toText().data());
+                    }
                 }
             }
         }

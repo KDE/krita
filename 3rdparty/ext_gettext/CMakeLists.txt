@@ -1,5 +1,5 @@
 SET(PREFIX_ext_gettext "${EXTPREFIX}" )
-if (MINGW)
+if (WIN32)
     if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add(ext_gettext_bin
         
@@ -44,7 +44,7 @@ if (MINGW)
     )
     add_custom_target(ext_gettext)
     add_dependencies(ext_gettext ext_gettext_bin ext_gettext_lib)
-else (MINGW)
+else (WIN32)
 ExternalProject_Add( ext_gettext
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://ftpmirror.gnu.org/gettext/gettext-0.21.tar.gz
@@ -59,4 +59,4 @@ ExternalProject_Add( ext_gettext
     UPDATE_COMMAND ""
     DEPENDS ext_iconv
 )
-endif (MINGW)
+endif (WIN32)

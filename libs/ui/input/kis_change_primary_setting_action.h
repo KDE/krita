@@ -34,8 +34,10 @@ public:
     void begin(int shortcut, QEvent *event) override;
     void end(QEvent *event) override;
     void inputEvent(QEvent* event) override;
+
+    bool supportsHiResInputEvents(int shortcut) const override;
 private:
-    KisTool::ToolAction decodeAction(int shorcut);
+    KisTool::ToolAction decodeAction(int shorcut) const;
     KisTool::ToolAction savedAction;
 };
 

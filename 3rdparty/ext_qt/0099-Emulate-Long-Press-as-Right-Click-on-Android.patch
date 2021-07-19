@@ -1,14 +1,14 @@
-From d4270e608d2d2cd222b09b91ffc754d5b555fb67 Mon Sep 17 00:00:00 2001
+From 0d8367c5a883c001d81a802d0312f7c9a32448c7 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Sat, 12 Sep 2020 10:43:06 +0000
-Subject: [PATCH] Emulate Long Press as Right Click on Android
+Subject: [PATCH 05/43] Emulate Long Press as Right Click on Android
 
 ---
  src/plugins/platforms/android/androidjniinput.cpp | 13 +++++++++++--
  1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index deb30e404a..a71c56bba7 100644
+index 685f40d2ae..b59be80a1b 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -224,13 +224,16 @@ namespace QtAndroidInput
@@ -44,5 +44,5 @@ index deb30e404a..a71c56bba7 100644
  
      static void touchBegin(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/)
 -- 
-2.31.1
+2.20.1.windows.1
 

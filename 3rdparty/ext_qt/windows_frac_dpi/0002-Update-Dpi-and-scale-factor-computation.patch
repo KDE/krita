@@ -1,7 +1,7 @@
-From a0b3691fb1c324b1ac336838f3021e5dfe8904a5 Mon Sep 17 00:00:00 2001
+From 328000e223dad2d9cf0f4a8bf9eadeed03303af1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Mon, 25 Apr 2016 11:31:34 +0200
-Subject: [PATCH 02/11] Update Dpi and scale factor computation
+Subject: [PATCH 38/47] Update Dpi and scale factor computation
 
 Remove pixelScale() in favor of logicalBaseDpi(). Compute scale factor
 based on logical DPI and logical base DPI, or optionally based on the
@@ -325,7 +325,7 @@ index 95790b96a9..7ffbfbe1e5 100644
  
  QHighDpiScaling::ScaleAndOrigin QHighDpiScaling::scaleAndOrigin(const QPlatformScreen *platformScreen, QPoint *nativePosition)
 diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
-index 6980c02275..1023ef82a9 100644
+index e578625305..e24628a69a 100644
 --- a/src/gui/kernel/qhighdpiscaling_p.h
 +++ b/src/gui/kernel/qhighdpiscaling_p.h
 @@ -72,7 +72,33 @@ typedef QPair<qreal, qreal> QDpi;
@@ -460,7 +460,7 @@ index 9ded98df32..a73b97c771 100644
      QString name() const override { return m_name; }
      QPlatformCursor *cursor() const override { return m_cursor; }
 diff --git a/src/plugins/platforms/windows/qwindowsscreen.cpp b/src/plugins/platforms/windows/qwindowsscreen.cpp
-index cecd06f5a4..6a55708c59 100644
+index 46e107d75e..88881e9cab 100644
 --- a/src/plugins/platforms/windows/qwindowsscreen.cpp
 +++ b/src/plugins/platforms/windows/qwindowsscreen.cpp
 @@ -257,15 +257,6 @@ QWindow *QWindowsScreen::windowAt(const QPoint &screenPoint, unsigned flags)
@@ -480,7 +480,7 @@ index cecd06f5a4..6a55708c59 100644
      \brief Determine siblings in a virtual desktop system.
  
 diff --git a/src/plugins/platforms/windows/qwindowsscreen.h b/src/plugins/platforms/windows/qwindowsscreen.h
-index 8ad012512e..938ca9f865 100644
+index 3eb2d35b27..c3cb87d3b7 100644
 --- a/src/plugins/platforms/windows/qwindowsscreen.h
 +++ b/src/plugins/platforms/windows/qwindowsscreen.h
 @@ -87,7 +87,7 @@ public:
@@ -554,5 +554,5 @@ index 9db083cd82..2de8ed3bb5 100644
  
 +DEFINES += HAVE_SCREEN_BASE_DPI
 -- 
-2.24.1.windows.2
+2.20.1.windows.1
 

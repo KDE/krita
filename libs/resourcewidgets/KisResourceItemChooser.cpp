@@ -106,6 +106,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     else if (d->resourceType == ResourceType::PaintOpPresets) {
         d->view->setFixedToolTipThumbnailSize(QSize(128, 128));
     } else if (d->resourceType == ResourceType::Patterns || d->resourceType == ResourceType::Palettes) {
+        d->view->setToolTipShouldRenderCheckers(false);
         d->view->setFixedToolTipThumbnailSize(QSize(256, 256));
     }
 

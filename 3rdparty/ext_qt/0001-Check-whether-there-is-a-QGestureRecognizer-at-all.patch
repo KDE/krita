@@ -1,7 +1,7 @@
-From 217bed0c6b4b2bab93f9b3597c99487b099ddccd Mon Sep 17 00:00:00 2001
+From 6dc973e6054224ebd1815d5da0f54bae7a6ef011 Mon Sep 17 00:00:00 2001
 From: Halla Rempt <halla@valdyas.org>
 Date: Sat, 13 Feb 2021 14:09:53 +0100
-Subject: [PATCH] Check whether there is a QGestureRecognizer at all
+Subject: [PATCH 33/47] Check whether there is a QGestureRecognizer at all
 
 See https://bugs.kde.org/show_bug.cgi?id=421707
 ---
@@ -9,7 +9,7 @@ See https://bugs.kde.org/show_bug.cgi?id=421707
  1 file changed, 2 insertions(+)
 
 diff --git a/src/widgets/kernel/qgesturerecognizer.cpp b/src/widgets/kernel/qgesturerecognizer.cpp
-index 75d091ce4..4f3df2464 100644
+index 75d091ce4e..ec96214c26 100644
 --- a/src/widgets/kernel/qgesturerecognizer.cpp
 +++ b/src/widgets/kernel/qgesturerecognizer.cpp
 @@ -237,6 +237,8 @@ void QGestureRecognizer::unregisterRecognizer(Qt::GestureType type)
@@ -22,5 +22,5 @@ index 75d091ce4..4f3df2464 100644
  }
  
 -- 
-2.25.1
+2.20.1.windows.1
 

@@ -186,7 +186,7 @@ KisInputManager::Private::Private(KisInputManager *qq)
 
     matcher.setInputActionGroupsMaskCallback(
         [this] () {
-            return this->canvas ? this->canvas->inputActionGroupsMask() : AllActionGroup;
+            return this->canvas ? this->canvas->inputActionGroupsMaskInterface()->inputActionGroupsMask() : AllActionGroup;
         });
 }
 

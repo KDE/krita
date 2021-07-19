@@ -30,10 +30,7 @@ public:
     {
     }
 
-    KisOutlineGenerationPolicy(const KisOutlineGenerationPolicy &rhs)
-        : ParentClass(rhs)
-    {
-    }
+
 
     const KisCurrentOutlineFetcher *outlineFetcher() const
     {

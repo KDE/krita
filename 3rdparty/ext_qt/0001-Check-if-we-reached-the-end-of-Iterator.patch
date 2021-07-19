@@ -1,7 +1,7 @@
-From 0694d6b13607acb7aaa3abdcb8639ba814f89b8e Mon Sep 17 00:00:00 2001
+From 377be35f1a7c3f4c0763f6e42d05d061858cd61d Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Tue, 6 Apr 2021 16:39:09 +0000
-Subject: [PATCH] Check if we reached the end of Iterator
+Subject: [PATCH 43/43] Check if we reached the end of Iterator
 
 After the first iteration typeToRecognizerEnd can hold a value which has
 been removed from m_recognizers. So, the next iteration may be checking
@@ -26,5 +26,5 @@ index cfa1759dd7..85beca5a93 100644
              QObject *target = context.key();
              QGesture *state = getState(target, recognizer, gestureType);
 -- 
-2.31.0
+2.20.1.windows.1
 

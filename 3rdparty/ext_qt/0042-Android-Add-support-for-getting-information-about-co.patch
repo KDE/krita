@@ -1,7 +1,7 @@
-From d947f2e5ca72f4a88aa71b545492550695464a41 Mon Sep 17 00:00:00 2001
+From 9df033856be5f7d590b1a16e2f340e271888e627 Mon Sep 17 00:00:00 2001
 From: Andy Shaw <andy.shaw@qt.io>
 Date: Tue, 4 Feb 2020 11:39:29 +0100
-Subject: [PATCH 2/4] Android: Add support for getting information about
+Subject: [PATCH 15/43] Android: Add support for getting information about
  content uris
 
 This enables things like size(), exists() to work with Android content
@@ -19,7 +19,7 @@ Reviewed-by: BogDan Vatra <bogdan@kdab.com>
  3 files changed, 108 insertions(+), 2 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index f3c4189400..caf6c6ea8a 100644
+index e958dfc2c9..6324c574c1 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -44,6 +44,7 @@ import java.io.File;
@@ -38,7 +38,7 @@ index f3c4189400..caf6c6ea8a 100644
  
  import java.lang.reflect.Method;
  import java.security.KeyStore;
-@@ -231,6 +233,61 @@ public class QtNative
+@@ -235,6 +237,61 @@ public class QtNative
          }
      }
  
@@ -184,5 +184,5 @@ index db3def03d6..09e5d77553 100644
  
  class AndroidContentFileEngineHandler : public QAbstractFileEngineHandler
 -- 
-2.26.2
+2.20.1.windows.1
 

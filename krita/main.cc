@@ -56,6 +56,8 @@
 #include <kis_image_config.h>
 #include "KisUiFont.h"
 
+#include <KLocalizedTranslator>
+
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #endif
@@ -123,9 +125,15 @@ typedef enum ORIENTATION_PREFERENCE {
     ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED = 0x4,
     ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
 } ORIENTATION_PREFERENCE;
-typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
+#if !defined(_MSC_VER)
+    typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
+            ORIENTATION_PREFERENCE orientation
+            );
+#else
+    typedef BOOL (WINAPI *pSetDisplayAutoRotationPreferences_t)(
         ORIENTATION_PREFERENCE orientation
         );
+#endif()
 void resetRotation()
 {
     QLibrary user32Lib("user32");
@@ -220,7 +228,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     qputenv("QT_BEARER_POLL_TIMEOUT", QByteArray::number(-1));
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
-    QString key = "Krita4" + QStandardPaths::writableLocation(QStandardPaths::HomeLocation).replace("/", "_");
+    QString key = "Krita5" + QStandardPaths::writableLocation(QStandardPaths::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
@@ -718,6 +726,18 @@ void removeInstalledTranslators(KisApplication &app)
     dbgLocale << "Removed" << translators.size() << "QTranslator's";
 }
 
+void installPythonPluginUITranslator(KisApplication &app)
+{
+    // Install a KLocalizedTranslator, so that when the bundled Python plugins
+    // load their UI files using uic.loadUi() it can be translated.
+    // These UI files must specify "pykrita_plugin_ui" as their class names.
+    KLocalizedTranslator *translator = new KLocalizedTranslator(&app);
+    translator->setObjectName(QStringLiteral("KLocalizedTranslator.pykrita_plugin_ui"));
+    translator->setTranslationDomain(QStringLiteral("krita"));
+    translator->addContextToMonitor(QStringLiteral("pykrita_plugin_ui"));
+    app.installTranslator(translator);
+}
+
 void installQtTranslations(KisApplication &app)
 {
     QStringList qtCatalogs = {
@@ -744,6 +764,7 @@ void installQtTranslations(KisApplication &app)
             QTranslator *translator = new QTranslator(&app);
             if (translator->load(localeToLoad, catalog, QString(), translationsPath)) {
                 dbgLocale << "Loaded Qt translations for" << localeToLoad << catalog;
+                translator->setObjectName(QStringLiteral("QTranslator.%1.%2").arg(localeToLoad.name(), catalog));
                 app.installTranslator(translator);
             } else {
                 delete translator;
@@ -803,14 +824,21 @@ void installEcmTranslations(KisApplication &app)
                 continue;
             }
 #else
-            const QString fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
+            // Our patched k18n uses AppDataLocation (for AppImage).
+            QString fullPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, subPath);
             if (fullPath.isEmpty()) {
-                continue;
+                // ... but distro builds probably still use GenericDataLocation,
+                // so check that too.
+                fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
+                if (fullPath.isEmpty()) {
+                    continue;
+                }
             }
 #endif
             QTranslator *translator = new QTranslator(&app);
             if (translator->load(fullPath)) {
                 dbgLocale << "Loaded ECM translations for" << localeDirName << catalog;
+                translator->setObjectName(QStringLiteral("QTranslator.%1.%2").arg(localeDirName, catalog));
                 app.installTranslator(translator);
             } else {
                 delete translator;
@@ -822,6 +850,7 @@ void installEcmTranslations(KisApplication &app)
 void installTranslators(KisApplication &app)
 {
     removeInstalledTranslators(app);
+    installPythonPluginUITranslator(app);
     installQtTranslations(app);
     installEcmTranslations(app);
 }

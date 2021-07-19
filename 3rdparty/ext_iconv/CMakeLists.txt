@@ -1,5 +1,5 @@
 SET(PREFIX_ext_iconv "${EXTPREFIX}" )
-if (MINGW)
+if (WIN32)
 ExternalProject_Add( ext_iconv
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL https://github.com/win-iconv/win-iconv/archive/v0.0.8.tar.gz

@@ -1,7 +1,7 @@
-From 216b88c9c2e44a55e4954767b1c0c4c8317b58a1 Mon Sep 17 00:00:00 2001
+From 6c58e4bded4c5bc64a88d5f8c075861bb0c437b1 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Date: Wed, 21 Nov 2018 09:06:50 +0100
-Subject: [PATCH 18/22] Windows: Add a default setting for
+Subject: [PATCH 20/47] Windows: Add a default setting for
  hasBorderInFullScreen
 
 The hasBorderInFullScreen only has an effect when set before
@@ -106,7 +106,7 @@ index 1c5be44150..42193baf46 100644
          return QFunctionPointer(QWindowsNativeInterface::setWindowActivationBehavior);
      if (function == QWindowsWindowFunctions::isTabletModeIdentifier())
 diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 35520a00ed..668d82026c 100644
+index 394486073a..4e3c7309a1 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.cpp
 +++ b/src/plugins/platforms/windows/qwindowswindow.cpp
 @@ -1258,6 +1258,7 @@ void QWindowCreationContext::applyToMinMaxInfo(MINMAXINFO *mmi) const
@@ -126,7 +126,7 @@ index 35520a00ed..668d82026c 100644
          setFlag(HasBorderInFullScreen);
      clearFlag(WithinCreate);
  }
-@@ -2963,6 +2964,11 @@ void QWindowsWindow::setHasBorderInFullScreenStatic(QWindow *window, bool border
+@@ -2965,6 +2966,11 @@ void QWindowsWindow::setHasBorderInFullScreenStatic(QWindow *window, bool border
          window->setProperty(hasBorderInFullScreenProperty, QVariant(border));
  }
  

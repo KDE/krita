@@ -294,6 +294,20 @@ Section "-Main_refreshShell"
 	${RefreshShell}
 SectionEnd
 
+Section "-Main_MSVC"
+!ifdef KRITA_INSTALLER_64
+	${If} ${FileExists} "$INSTDIR\bin\vc_redist.x64.exe"
+		ExecWait "$INSTDIR\bin\vc_redist.x64.exe /install /quiet /norestart"
+		Delete "$INSTDIR\bin\vc_redist.x64.exe"
+	${Endif}
+!else
+	${If} ${FileExists} "$INSTDIR\bin\vc_redist.exe"
+		ExecWait "$INSTDIR\bin\vc_redist.x86.exe /install /quiet /norestart"
+		Delete "$INSTDIR\bin\vc_redist.x86.exe"
+	${Endif}
+!endif
+SectionEnd
+
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 	#!insertmacro MUI_DESCRIPTION_TEXT ${SEC_remove_shellex} "Remove previously installed Krita Shell Integration."
 	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_remove_old_version} "$(SectionRemoveOldVerDesc)"

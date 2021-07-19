@@ -1,7 +1,7 @@
-From 4ff5e55d2ea8d8ad3a6dd2c3e8a41e68bcfd8e64 Mon Sep 17 00:00:00 2001
+From 69df067982434797a0152fc74d5171eeccd41601 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 3 Apr 2019 18:37:56 +0300
-Subject: [PATCH 04/22] Implement a switch for tablet API on Windows
+Subject: [PATCH 04/47] Implement a switch for tablet API on Windows
 
 Qt has support for two tablet APIs: WinTab and Windows Pointer API.
 The former one is used in professional graphical tablet devices,

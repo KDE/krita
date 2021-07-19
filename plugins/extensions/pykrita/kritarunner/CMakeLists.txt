@@ -37,13 +37,25 @@ if (WIN32)
     set_target_properties(kritarunner_com
         PROPERTIES
             WIN32_EXECUTABLE false
-            OUTPUT_NAME "kritarunner"
             SUFFIX ".com"
     )
+    if (NOT MSVC)
+        # MSBuild copies all binaries and library exports into a single 
+        # directory. This constitutes a write race condition with kritarunner.
+        # See https://gitlab.kitware.com/cmake/cmake/-/issues/22133
+        set_target_properties(kritarunner_com
+            PROPERTIES
+                OUTPUT_NAME "kritarunner"
+        )
+    endif()
 
     if (MINGW)
         target_compile_definitions(kritarunner_com PRIVATE _hypot=hypot)
     endif (MINGW)
+
+    if (MSVC)
+        target_link_options(kritarunner_com PRIVATE "/DEBUG:NONE")
+    endif()
 
     install(TARGETS kritarunner_com ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif (WIN32)

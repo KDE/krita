@@ -1,7 +1,7 @@
 From 62838fc9791a9fbe807b1cc4f90f802af91b39a5 Mon Sep 17 00:00:00 2001
 From: Boudewijn Rempt <boud@valdyas.org>
 Date: Tue, 17 Nov 2020 12:47:55 +0100
-Subject: [PATCH] Add cmake build system
+Subject: [PATCH 1/5] Add cmake build system
 
 ---
  CMakeLists.txt           | 64 ++++++++++++++++++++++++++++++++++++++++++++++++

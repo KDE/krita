@@ -61,7 +61,7 @@ KisShadeSelectorLineComboBoxPopup::KisShadeSelectorLineComboBoxPopup(QWidget* pa
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(this->layout()->itemAt(i)->widget());
         if(item!=0) {
             item->setMouseTracking(true);
-            item->setEnabled(false);
+            item->setAttribute(Qt::WA_TransparentForMouseEvents);
             KoColor color;
             color.fromQColor(QColor(190, 50, 50));
             item->setColor(color);

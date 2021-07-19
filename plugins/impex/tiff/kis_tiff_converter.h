@@ -7,6 +7,7 @@
 #ifndef _KIS_TIFF_CONVERTER_H_
 #define _KIS_TIFF_CONVERTER_H_
 
+#include <cstdint>
 #include <stdio.h>
 #include <tiffio.h>
 

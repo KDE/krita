@@ -10,8 +10,8 @@
 #include "kis_effect_mask.h"
 
 #include "kis_node_filter_interface.h"
+#include "kis_filter_configuration.h"
 
-class KisFilterConfiguration;
 
 /**
    An filter mask is a single channel mask that applies a particular

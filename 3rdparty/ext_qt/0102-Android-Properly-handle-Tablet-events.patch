@@ -1,7 +1,7 @@
-From 3a3d157d70fec22fac342568b93226598c0b6809 Mon Sep 17 00:00:00 2001
+From 4ec7144d97c34529ee91f97ad19fda69dd2ac80b Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 10 Sep 2020 10:46:57 +0000
-Subject: [PATCH] Android: Properly handle Tablet events
+Subject: [PATCH 12/43] Android: Properly handle Tablet events
 
 Prior to this Hover events from stylus/tablet were treated as Mouse
 events and primary and secondary stylus buttons weren't handled either.
@@ -12,10 +12,10 @@ This commit also passes batched tablet events to Qt.
  2 files changed, 38 insertions(+), 11 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 2c855a766b..45f9dbfbcc 100644
+index 9136f3ecf6..ad78619cc9 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-@@ -649,7 +649,7 @@ public class QtNative
+@@ -470,7 +470,7 @@ public class QtNative
      }
      //@ANDROID-9
  
@@ -24,7 +24,7 @@ index 2c855a766b..45f9dbfbcc 100644
      {
          int pointerType = 0;
  
-@@ -666,15 +666,29 @@ public class QtNative
+@@ -487,15 +487,29 @@ public class QtNative
          }
  
          if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
@@ -56,7 +56,7 @@ index 2c855a766b..45f9dbfbcc 100644
          } else {
              touchBegin(id);
              for (int i = 0; i < event.getPointerCount(); ++i) {
-@@ -690,6 +704,7 @@ public class QtNative
+@@ -511,6 +525,7 @@ public class QtNative
                               event.getPressure(i));
              }
              touchEnd(id, event.getAction());
@@ -64,7 +64,7 @@ index 2c855a766b..45f9dbfbcc 100644
          }
      }
  
-@@ -700,12 +715,19 @@ public class QtNative
+@@ -521,12 +536,19 @@ public class QtNative
  
      static public boolean sendGenericMotionEvent(MotionEvent event, int id)
      {
@@ -88,7 +88,7 @@ index 2c855a766b..45f9dbfbcc 100644
  
      static public boolean sendMouseEvent(MotionEvent event, int id)
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 86079011dc..ad8c428597 100644
+index 870b22e15e..fec394f95e 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -380,14 +380,19 @@ namespace QtAndroidInput
@@ -117,5 +117,5 @@ index 86079011dc..ad8c428597 100644
              break;
          }
 -- 
-2.31.1
+2.20.1.windows.1
 

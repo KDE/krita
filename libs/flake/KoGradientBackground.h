@@ -34,6 +34,10 @@ public:
     /// Destroys the background
     ~KoGradientBackground() override;
 
+    // Work around MSVC inability to generate copy ops with QSharedDataPointer.
+    KoGradientBackground(const KoGradientBackground &);
+    KoGradientBackground &operator=(const KoGradientBackground &);
+
     bool compareTo(const KoShapeBackground *other) const override;
 
     /// Sets the transform matrix

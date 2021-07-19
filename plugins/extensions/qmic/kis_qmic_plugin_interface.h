@@ -10,7 +10,7 @@
 #define KRITA_GMIC_PLUGIN_INTERFACE
 
 #include <memory>
-#include <qobject.h>
+#include <QObject>
 
 #include "kis_qmic_interface.h"
 #include "kritaqmicinterface_export.h"
@@ -20,7 +20,8 @@
 class KRITAQMICINTERFACE_EXPORT KisQmicPluginInterface
 {
 public:
-  virtual ~KisQmicPluginInterface() = default;
+  KisQmicPluginInterface();
+  virtual ~KisQmicPluginInterface();
   virtual int launch(std::shared_ptr<KisImageInterface> iface, bool headless = false) = 0;
 };
 

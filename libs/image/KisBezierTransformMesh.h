@@ -49,8 +49,8 @@ public:
     QRect approxNeedRect(const QRect &rc) const;
     QRect approxChangeRect(const QRect &rc) const;
 
-    friend void saveValue(QDomElement *parent, const QString &tag, const KisBezierTransformMesh &mesh);
-    friend bool loadValue(const QDomElement &parent, KisBezierTransformMesh *mesh);
+    friend KRITAIMAGE_EXPORT void saveValue(QDomElement *parent, const QString &tag, const KisBezierTransformMesh &mesh);
+    friend KRITAIMAGE_EXPORT bool loadValue(const QDomElement &parent, KisBezierTransformMesh *mesh);
 };
 
 KRITAIMAGE_EXPORT

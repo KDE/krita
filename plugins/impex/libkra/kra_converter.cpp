@@ -131,7 +131,7 @@ StoryboardItemList KraConverter::storyboardItemList()
     return m_storyboardItemList;
 }
 
-QVector<StoryboardComment> KraConverter::storyboardCommentList()
+StoryboardCommentList KraConverter::storyboardCommentList()
 {
     return m_storyboardCommentList;
 }

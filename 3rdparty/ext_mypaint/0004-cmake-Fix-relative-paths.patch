@@ -1,7 +1,7 @@
 From 165c022a9ab7b6dff88f20c576b41e36991e2f99 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Tue, 17 Nov 2020 23:44:44 +0000
-Subject: [PATCH 4/4] cmake: Fix relative paths
+Subject: [PATCH 4/5] cmake: Fix relative paths
 
 ---
  CMakeLists.txt | 16 ++++++++--------

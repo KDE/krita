@@ -1,7 +1,7 @@
-From cdd601c7c2c5f0ff2bbf7b1376fb2fc9a4e3024e Mon Sep 17 00:00:00 2001
+From e24af83bc9aa46ca49d28a3e27b85e7bd29a2e0f Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 13 Apr 2019 20:29:14 +0300
-Subject: [PATCH 06/22] Disable tablet relative mode in Qt
+Subject: [PATCH 06/47] Disable tablet relative mode in Qt
 
 ---
  src/plugins/platforms/windows/qwindowstabletsupport.cpp | 5 +++++

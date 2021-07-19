@@ -1,7 +1,7 @@
-From bf03bafa3cfaf3751dddc72ea685f783109f32dc Mon Sep 17 00:00:00 2001
+From 380305eb033ef5d5cdf471caad07dca9e2c94641 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 1 Sep 2020 11:11:50 +0300
-Subject: [PATCH 2/3] Add a workaround for button mapping on Lenovo Yoga C940
+Subject: [PATCH 10/47] Add a workaround for button mapping on Lenovo Yoga C940
 
 Its wintab driver fails to report button mapping and assings nothing
 to all the stylus' buttons. In such a case, force-map the stylus press to
@@ -11,7 +11,7 @@ the left mouse button.
  1 file changed, 17 insertions(+), 4 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index e9d10a2b..3091a0f1 100644
+index f0087556cf..17380a0e4f 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -544,10 +544,23 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L

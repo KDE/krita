@@ -1,8 +1,8 @@
-From 0e7c1066d6a7cdc4e3fa860c4ecbd41a37a52c63 Mon Sep 17 00:00:00 2001
+From ff22a09a02f166d4629e8e5962e4c299355dc794 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 10 Mar 2021 12:39:16 +0300
-Subject: [PATCH] Fix fallback latin shortcuts not to be the top priority on
- Windows
+Subject: [PATCH 31/47] Fix fallback latin shortcuts not to be the top priority
+ on Windows
 
 The sortcuts from the current layout should have the topmost
 priority, and the latin ones should be used only when there
@@ -12,7 +12,7 @@ is noi other option.
  1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowskeymapper.cpp b/src/plugins/platforms/windows/qwindowskeymapper.cpp
-index b392894d..68074ad6 100644
+index b392894dd9..68074ad605 100644
 --- a/src/plugins/platforms/windows/qwindowskeymapper.cpp
 +++ b/src/plugins/platforms/windows/qwindowskeymapper.cpp
 @@ -1402,10 +1402,16 @@ QList<int> QWindowsKeyMapper::possibleKeys(const QKeyEvent *e) const

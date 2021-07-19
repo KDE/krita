@@ -53,11 +53,11 @@ void KisModifyTransformMaskCommand::undo() {
     }
 }
 
-KisInitializeTransformMaskKeyframesCommand::KisInitializeTransformMaskKeyframesCommand(KisTransformMaskSP mask) : KUndo2Command() {
+KisInitializeTransformMaskKeyframesCommand::KisInitializeTransformMaskKeyframesCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params) : KUndo2Command() {
     auto *animatedParameters = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask->transformParams().data());
     if (animatedParameters) {
         int time = mask->parent()->original()->defaultBounds()->currentTime();
-        KisAnimatedTransformMaskParameters::addKeyframes(mask, time, mask->transformParams(), this);
+        KisAnimatedTransformMaskParameters::addKeyframes(mask, time, params, this);
     }
 }
 

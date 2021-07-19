@@ -28,11 +28,11 @@ public:
 
 protected:
     void frameCompletedCallback(int frame, const KisRegion &requestedRegion) override;
-    void frameCancelledCallback(int frame) override;
+    void frameCancelledCallback(int frame, CancelReason cancelReason) override;
 
 Q_SIGNALS:
     void sigCompleteRegenerationInternal(int frame);
-    void sigCancelRegenerationInternal(int frame);
+    void sigCancelRegenerationInternal(int frame, KisAsyncAnimationRendererBase::CancelReason cancelReason);
 
 private:
     struct Private;

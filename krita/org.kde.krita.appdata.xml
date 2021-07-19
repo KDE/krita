@@ -70,6 +70,7 @@
   <name xml:lang="zh-TW">Krita</name>
   <summary>Digital Painting, Creative Freedom</summary>
   <summary xml:lang="ar">رسم رقميّ، حريّة إبداعيّة</summary>
+  <summary xml:lang="ast">Pintura dixital, llibertá creativa</summary>
   <summary xml:lang="bs">Digitalno crtanje, kreativna sloboda</summary>
   <summary xml:lang="ca">Dibuix digital, Llibertat creativa</summary>
   <summary xml:lang="ca-valencia">Dibuix digital, Llibertat creativa</summary>
@@ -105,6 +106,7 @@
   <summary xml:lang="zh-TW">數位繪圖，自由創作</summary>
   <description>
     <p>Krita is the full-featured digital art studio.</p>
+    <p xml:lang="ast">Krita ye l'estudiu dixital d'arte completu.</p>
     <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
     <p xml:lang="ca">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="ca-valencia">El Krita és l'estudi d'art digital ple de funcionalitats.</p>

@@ -36,7 +36,10 @@ public:
 
     void apply(KisFilterConfigurationSP filterConfig);
     void finish();
-    void cancel();
+    //! Cancel current running stroke
+    void cancelRunningStroke();
+    //! Call `cancelRunningStroke()` and then delete dialog `d`
+    void cancelDialog();
     bool isStrokeRunning() const;
 
     bool isIdle() const;
@@ -54,9 +57,12 @@ private Q_SLOTS:
     void slotStrokeEndRequested();
     void slotStrokeCancelRequested();
 
+    //! Clean up after filter dialog has been accepted / rejected / closed
+    void filterDialogHasFinished(int);
+
 private:
     struct Private;
-    Private * const d;
+    QScopedPointer<Private> d;
 };
 
 #endif

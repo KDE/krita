@@ -30,25 +30,6 @@ KisBrushSP KisBrushOptionWidget::brush() const
     return m_brushSelectionWidget->brush();
 }
 
-void KisBrushOptionWidget::setAutoBrush(bool on)
-{
-    m_brushSelectionWidget->setAutoBrush(on);
-}
-
-void KisBrushOptionWidget::setPredefinedBrushes(bool on)
-{
-    m_brushSelectionWidget->setPredefinedBrushes(on);
-}
-
-void KisBrushOptionWidget::setCustomBrush(bool on)
-{
-    m_brushSelectionWidget->setCustomBrush(on);
-}
-
-void KisBrushOptionWidget::setTextBrush(bool on)
-{
-    m_brushSelectionWidget->setTextBrush(on);
-}
 
 void KisBrushOptionWidget::setImage(KisImageWSP image)
 {
@@ -88,11 +69,6 @@ void KisBrushOptionWidget::brushChanged()
 {
     m_brushOption.setBrush(brush());
     emitSettingChanged();
-}
-
-bool KisBrushOptionWidget::presetIsValid()
-{
-    return m_brushSelectionWidget->presetIsValid();
 }
 
 void KisBrushOptionWidget::hideOptions(const QStringList &options)

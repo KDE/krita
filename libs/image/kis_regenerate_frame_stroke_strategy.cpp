@@ -69,6 +69,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
                                                                    const KisRegion &dirtyRegion,
+                                                                   bool isCancellable,
                                                                    KisImageAnimationInterface *interface)
     : KisSimpleStrokeStrategy(QLatin1String("regenerate_external_frame_stroke")),
       m_d(new Private)
@@ -90,7 +91,7 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
 
     setRequestsOtherStrokesToEnd(false);
     setClearsRedoOnStart(false);
-    setCanForgetAboutMe(true);
+    setCanForgetAboutMe(isCancellable);
 }
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface)
@@ -143,7 +144,8 @@ void KisRegenerateFrameStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     KIS_ASSERT(!m_d->dirtyRegion.isEmpty());
     KIS_ASSERT(m_d->type == EXTERNAL_FRAME);
 
-    KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(d->cropRect);
+    const bool skipNonRenderableNodes = m_d->type == EXTERNAL_FRAME;
+    KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(d->cropRect, skipNonRenderableNodes);
     walker->collectRects(d->root, d->rect);
 
     KisAsyncMerger merger;

@@ -1,0 +1,113 @@
+From d0d7a5d198438fb9d1982c6284818f44a860ae8e Mon Sep 17 00:00:00 2001
+From: Ramin Raeisi <rr@epen.io>
+Date: Fri, 9 Apr 2021 17:30:44 +0000
+Subject: [PATCH 2/2] Add MSVC call convention
+
+---
+ Vc/avx/detail.h       | 4 ++--
+ Vc/cpuid.h            | 2 +-
+ Vc/sse/detail.h       | 4 ++--
+ Vc/support.h          | 2 +-
+ src/cpuid.cpp         | 2 +-
+ src/support_dummy.cpp | 2 +-
+ src/support_x86.cpp   | 2 +-
+ 7 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Vc/avx/detail.h b/Vc/avx/detail.h
+index d2c7259..0e2b816 100644
+--- a/Vc/avx/detail.h
++++ b/Vc/avx/detail.h
+@@ -937,8 +937,8 @@ Vc_INTRINSIC __m256i avx_broadcast( uchar x) { return _mm256_set1_epi8(x); }
+ // sorted{{{1
+ template <Vc::Implementation Impl, typename T,
+           typename = enable_if<(Impl >= AVXImpl && Impl <= AVX2Impl)>>
+-Vc_CONST_L AVX2::Vector<T> sorted(AVX2::Vector<T> x) Vc_CONST_R;
+-template <typename T> Vc_INTRINSIC Vc_CONST AVX2::Vector<T> sorted(AVX2::Vector<T> x)
++Vc_CONST_L AVX2::Vector<T> Vc_CDECL sorted(AVX2::Vector<T> x) Vc_CONST_R;
++template <typename T> Vc_INTRINSIC Vc_CONST AVX2::Vector<T> Vc_CDECL sorted(AVX2::Vector<T> x)
+ {
+     return sorted<CurrentImplementation::current()>(x);
+ }
+diff --git a/Vc/cpuid.h b/Vc/cpuid.h
+index 9d78acb..17cb7d7 100644
+--- a/Vc/cpuid.h
++++ b/Vc/cpuid.h
+@@ -67,7 +67,7 @@ class CpuId
+          * Will be executed automatically before main, but not necessarily before other functions
+          * executing before main.
+          */
+-        static void init();
++        static void Vc_CDECL init();
+ 
+         //! Return the cache line size in bits.
+         static inline ushort cacheLineSize() { return static_cast<ushort>(s_cacheLineSize) * 8u; }
+diff --git a/Vc/sse/detail.h b/Vc/sse/detail.h
+index 086a00c..87991a5 100644
+--- a/Vc/sse/detail.h
++++ b/Vc/sse/detail.h
+@@ -772,8 +772,8 @@ Vc_INTRINSIC  uchar max(__m128i a,  uchar) {
+ 
+ // sorted{{{1
+ template <Vc::Implementation, typename T>
+-Vc_CONST_L SSE::Vector<T> sorted(SSE::Vector<T> x) Vc_CONST_R;
+-template <typename T> Vc_INTRINSIC Vc_CONST SSE::Vector<T> sorted(SSE::Vector<T> x)
++Vc_CONST_L SSE::Vector<T> Vc_CDECL sorted(SSE::Vector<T> x) Vc_CONST_R;
++template <typename T> Vc_INTRINSIC Vc_CONST SSE::Vector<T> Vc_CDECL sorted(SSE::Vector<T> x)
+ {
+     static_assert(!CurrentImplementation::is(ScalarImpl),
+                   "Detail::sorted can only be instantiated if a non-Scalar "
+diff --git a/Vc/support.h b/Vc/support.h
+index adda84f..c1e14b5 100644
+--- a/Vc/support.h
++++ b/Vc/support.h
+@@ -73,7 +73,7 @@ unsigned int extraInstructionsSupported();
+  * \param impl The SIMD target to test for.
+  */
+ Vc_TARGET_NO_SIMD
+-bool isImplementationSupported(Vc::Implementation impl);
++bool Vc_CDECL isImplementationSupported(Vc::Implementation impl);
+ 
+ /**
+  * \internal
+diff --git a/src/cpuid.cpp b/src/cpuid.cpp
+index e93a1cb..808a40c 100644
+--- a/src/cpuid.cpp
++++ b/src/cpuid.cpp
+@@ -128,7 +128,7 @@ static unsigned int CpuIdAmdAssociativityTable(int bits)
+     return 0xffffffffu;
+ }
+ 
+-void CpuId::init()
++void Vc_CDECL CpuId::init()
+ {
+     {
+         static bool done = false;
+diff --git a/src/support_dummy.cpp b/src/support_dummy.cpp
+index 6a9a08d..0583332 100644
+--- a/src/support_dummy.cpp
++++ b/src/support_dummy.cpp
+@@ -30,7 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ namespace Vc_VERSIONED_NAMESPACE
+ {
+-bool isImplementationSupported(Implementation impl) { return impl == ScalarImpl; }
++bool Vc_CDECL isImplementationSupported(Implementation impl) { return impl == ScalarImpl; }
+ 
+ Vc::Implementation bestImplementationSupported() { return Vc::ScalarImpl; }
+ 
+diff --git a/src/support_x86.cpp b/src/support_x86.cpp
+index 0ab9669..0f6a24a 100644
+--- a/src/support_x86.cpp
++++ b/src/support_x86.cpp
+@@ -59,7 +59,7 @@ static inline bool xgetbvCheck(unsigned int bits)
+ }
+ 
+ Vc_TARGET_NO_SIMD
+-bool isImplementationSupported(Implementation impl)
++bool Vc_CDECL isImplementationSupported(Implementation impl)
+ {
+     CpuId::init();
+ 
+-- 
+2.31.1.windows.1
+

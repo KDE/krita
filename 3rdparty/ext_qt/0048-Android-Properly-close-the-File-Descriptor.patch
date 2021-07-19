@@ -1,7 +1,7 @@
-From b81df3e65808409e6840198a744d7053a463e251 Mon Sep 17 00:00:00 2001
+From 7f2a2f720428e404543150f2610a7a10e39b2997 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 21 Sep 2020 11:06:37 +0000
-Subject: [PATCH] Android: Properly close the File Descriptor
+Subject: [PATCH 28/43] Android: Properly close the File Descriptor
 
 In some we are not supposed to detach the file
 descriptor from the original object that created it.
@@ -19,7 +19,7 @@ FD.
  3 files changed, 47 insertions(+), 5 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 688c8146bf..0ae113d1a5 100644
+index ead3fb7ec0..b54204f401 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -43,6 +43,7 @@ package org.qtproject.qt5.android;
@@ -51,7 +51,7 @@ index 688c8146bf..0ae113d1a5 100644
              }
  
              return null;
-@@ -230,7 +235,8 @@ public class QtNative
+@@ -234,7 +239,8 @@ public class QtNative
          try {
              ContentResolver resolver = context.getContentResolver();
              ParcelFileDescriptor fdDesc = resolver.openFileDescriptor(uri, openMode);
@@ -61,7 +61,7 @@ index 688c8146bf..0ae113d1a5 100644
          } catch (FileNotFoundException e) {
              return error;
          } catch (IllegalArgumentException e) {
-@@ -239,6 +245,23 @@ public class QtNative
+@@ -243,6 +249,23 @@ public class QtNative
          }
      }
  
@@ -85,7 +85,7 @@ index 688c8146bf..0ae113d1a5 100644
      public static long getSize(Context context, String contentUrl)
      {
          Uri uri = getUriWithValidPermission(context, contentUrl, "r");
-@@ -299,7 +322,7 @@ public class QtNative
+@@ -303,7 +326,7 @@ public class QtNative
      {
          Uri uri = getUriWithValidPermission(context, contentUrl, "r");
          if (uri == null) {
@@ -95,7 +95,7 @@ index 688c8146bf..0ae113d1a5 100644
          }
  
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
-index 31f68780df..cdefacfaf9 100644
+index c15352d60e..2c11f5f14a 100644
 --- a/src/plugins/platforms/android/androidcontentfileengine.cpp
 +++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
 @@ -45,7 +45,7 @@
@@ -161,5 +161,5 @@ index bb97bd6975..abf969ba20 100644
      QString m_resolvedName;
  };
 -- 
-2.28.0
+2.20.1.windows.1
 

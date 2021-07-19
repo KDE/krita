@@ -52,7 +52,7 @@ DlgLayerSplit::DlgLayerSplit()
     connect(m_page->cmbMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotChangeMode(int)));
 
     KisConfig cfg(true);
-    QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", i18n("Default"));
+    QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", "Default"); // resource names are not translatable by design
     KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer();
     KoColorSetSP pal = pserver->resourceByName(paletteName);
     m_modeToMask = m_page->cmbMode->currentIndex();

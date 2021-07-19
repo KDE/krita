@@ -26,6 +26,10 @@ public:
     KoClipMask();
     ~KoClipMask();
 
+    // Work around MSVC inability to generate copy ops with QSharedDataPointer.
+    KoClipMask(const KoClipMask &);
+    KoClipMask &operator=(const KoClipMask &);
+
     KoClipMask *clone() const;
 
     KoFlake::CoordinateSystem coordinates() const;

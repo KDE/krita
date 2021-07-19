@@ -612,17 +612,17 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
 
 void KisToolTransform::setRotateX( double rotation )
 {
-    m_currentArgs.setAX( normalizeAngle(rotation) );
+    m_currentArgs.setAX( rotation );
 }
 
 void KisToolTransform::setRotateY( double rotation )
 {
-    m_currentArgs.setAY( normalizeAngle(rotation) );
+    m_currentArgs.setAY( rotation );
 }
 
 void KisToolTransform::setRotateZ( double rotation )
 {
-    m_currentArgs.setAZ( normalizeAngle(rotation) );
+    m_currentArgs.setAZ( rotation );
 }
 
 void KisToolTransform::setWarpType( KisToolTransform::WarpType type )

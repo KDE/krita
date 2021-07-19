@@ -208,7 +208,7 @@ struct KisAnimationCachePopulator::Private
 
         // if we ever decide to add ROI to background cache
         // regeneration, it should be added here :)
-        regenerator.startFrameRegeneration(cache->image(), frame);
+        regenerator.startFrameRegeneration(cache->image(), frame, KisAsyncAnimationRendererBase::Cancellable);
 
         return true;
     }
@@ -272,7 +272,7 @@ KisAnimationCachePopulator::KisAnimationCachePopulator(KisPart *part)
 {
     connect(&m_d->timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
 
-    connect(&m_d->regenerator, SIGNAL(sigFrameCancelled(int)), SLOT(slotRegeneratorFrameCancelled()));
+    connect(&m_d->regenerator, SIGNAL(sigFrameCancelled(int, KisAsyncAnimationRendererBase::CancelReason)), SLOT(slotRegeneratorFrameCancelled()));
     connect(&m_d->regenerator, SIGNAL(sigFrameCompleted(int)), SLOT(slotRegeneratorFrameReady()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));

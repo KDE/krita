@@ -9,10 +9,10 @@ project (krita-and-all-its-deps)
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
 
-iF(APPLE)
+if(APPLE)
         execute_process(COMMAND sysctl -n hw.optional.arm64 OUTPUT_VARIABLE apple_has_arm64_optional)
         if(apple_has_arm64_optional)
-                message(NOTICE "Building on macos arm")
+                message(STATUS "Building on macos arm")
                 cmake_minimum_required(VERSION 3.19.3)
 	else()
         cmake_minimum_required(VERSION 3.7.2)
@@ -61,7 +61,7 @@ message( STATUS "CMAKE_CL_64: ${CMAKE_CL_64}")
 set(GLOBAL_BUILD_TYPE RelWithDebInfo)
 set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
 
-if (MINGW)
+if (WIN32)
 	option(QT_ENABLE_DEBUG_INFO "Build Qt with debug info included" OFF)
 	option(QT_ENABLE_DYNAMIC_OPENGL "Build Qt with dynamic ANGLE support '-opengl dynamic -angle' (needs env var 'WindowsSdkDir' set to path of Windows 10 SDK)" ON)
     if (QT_ENABLE_DYNAMIC_OPENGL)
@@ -71,7 +71,7 @@ if (MINGW)
 			message(FATAL_ERROR "Environment variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK or disable QT_ENABLE_DYNAMIC_OPENGL")
 		endif ()
     endif ()
-endif (MINGW)
+endif (WIN32)
 
 if (WIN32)
     option(USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt." ON)
@@ -102,17 +102,35 @@ if (MINGW)
 	else ()
 		message(WARNING "Linker Security Flags not enabled!")
 	endif ()
+elseif (MSVC)
+	set(SECURITY_C_FLAGS ${CMAKE_C_FLAGS})
+	set(SECURITY_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+	# Increase the stack size to match MinGW's. Prevents crashes with GMic.
+	set(SECURITY_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:4194304")
+	set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /STACK:4194304")
+	set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /STACK:4194304")
+	option(USE_CONTROL_FLOW_GUARD "Enable Control Flow Guard hardening (MSVC)" ON)
+	if (USE_CONTROL_FLOW_GUARD)
+		set(SECURITY_C_FLAGS "${SECURITY_C_FLAGS} /guard:cf")
+		set(SECURITY_CXX_FLAGS "${SECURITY_CXX_FLAGS} /guard:cf")
+		set(SECURITY_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /GUARD:CF")
+		set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /GUARD:CF")
+		set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /GUARD:CF")
+	endif (USE_CONTROL_FLOW_GUARD)
+	set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
+		-DCMAKE_C_FLAGS=${SECURITY_C_FLAGS}
+		-DCMAKE_CXX_FLAGS=${SECURITY_CXX_FLAGS}
+		-DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
+		-DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
+		-DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
+	)
 endif ()
 
 if (DEFINED EP_PREFIX)
 	set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX})
 endif ()
 
-if (MSVC)
-    message(FATAL_ERROR "Krita cannot be built with MSVC. See the README.md file!")
-endif()
-
-if (MINGW)
+if (WIN32)
    set(PATCH_COMMAND myptch)
 endif()
 
@@ -170,6 +188,12 @@ function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
 	endif ()
 	unset(${OUTPUT_VARNAME} CACHE)
 	CHECK_CXX_SOURCE_COMPILES("
+// https://bugs.python.org/issue22411
+#if defined(_MSC_VER)
+#  ifdef _DEBUG
+#    undef _DEBUG
+#  endif /* _DEBUG */
+#endif /* _MSC_VER */
 #include <Python.h>
 int main(int argc, char *argv[]) {
 	Py_InitializeEx(0);
@@ -236,9 +260,6 @@ if (ENABLE_PYTHON_DEPS OR NOT MINGW)
 endif ()
 if (WIN32)
     add_subdirectory( ext_patch )
-    if (NOT MINGW)
-        add_subdirectory( ext_png2ico )
-    endif ()
 endif ()
 add_subdirectory( ext_lzma )
 add_subdirectory( ext_iconv )
@@ -248,7 +269,7 @@ add_subdirectory( ext_boost )
 add_subdirectory( ext_jpeg )
 add_subdirectory( ext_tiff )
 add_subdirectory( ext_png )
-if (MINGW)
+if (WIN32)
     add_subdirectory( ext_icoutils )
 endif ()
 add_subdirectory( ext_eigen3 )
@@ -261,10 +282,6 @@ add_subdirectory( ext_gsl )
 add_subdirectory( ext_fftw3 )
 add_subdirectory( ext_ocio )
 add_subdirectory( ext_openjpeg )
-
-if (MSVC)
-    add_subdirectory( ext_pthreads )
-endif (MSVC)
 add_subdirectory( ext_fontconfig)
 add_subdirectory( ext_freetype)
 add_subdirectory( ext_qt )
@@ -276,7 +293,7 @@ if (ENABLE_PYTHON_DEPS OR NOT MINGW)
     add_subdirectory( ext_pyqt )
 endif ()
 
-if (MINGW)
+if (WIN32)
     add_subdirectory( ext_drmingw )
 #    add_subdirectory( ext_ffmpeg )
 endif ()
@@ -304,3 +321,10 @@ add_subdirectory(ext_mypaint)
 if (UNIX AND NOT APLE)
     add_subdirectory(ext_fcitx-qt)
 endif()
+
+# Print all current cmake variables.
+get_cmake_property(CURRENT_CMAKE_VARIABLES VARIABLES)
+list (SORT CURRENT_CMAKE_VARIABLES)
+foreach (VARIABLE_SET ${CURRENT_CMAKE_VARIABLES})
+    message(STATUS "${VARIABLE_SET} = ${${VARIABLE_SET}}")
+endforeach()

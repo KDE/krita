@@ -55,6 +55,14 @@ void KisGridConfig::transform(const QTransform &transform)
     m_offset = KisAlgebra2D::wrapValue(transform.map(m_offset), m_spacing);
 }
 
+bool KisGridConfig::isSameIgnoringSnapping(const KisGridConfig &rhs) const
+{
+    KisGridConfig tmp(rhs);
+    tmp.setSnapToGrid(snapToGrid());
+
+    return *this == tmp;
+}
+
 void KisGridConfig::loadStaticData()
 {
     KisConfig cfg(true);

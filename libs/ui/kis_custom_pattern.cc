@@ -105,6 +105,7 @@ void KisCustomPattern::slotAddPredefined()
         file.setAutoRemove(false);
         file.open();
         tempFileName = file.fileName().split("/").last();
+        QDir(dir).remove(file.fileName());
     }
 
     // Save it to that file

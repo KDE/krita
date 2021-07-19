@@ -242,12 +242,14 @@ KisView::~KisView()
 {
     if (d->viewManager) {
         if (d->viewManager->filterManager()->isStrokeRunning()) {
-            d->viewManager->filterManager()->cancel();
+            d->viewManager->filterManager()->cancelDialog();
         }
 
         d->viewManager->mainWindow()->notifyChildViewDestroyed(this);
         d->viewManager->inputManager()->registerPopupWidget(nullptr);
     }
+
+    image()->requestStrokeCancellation();
 
     /**
      * KisCanvas2 maintains direct connections to the image, so we should

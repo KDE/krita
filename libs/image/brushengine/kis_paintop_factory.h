@@ -14,6 +14,7 @@
 #include <QIcon>
 #include <QStringList>
 #include <kis_threaded_text_rendering_workaround.h>
+#include <brushengine/kis_paintop_settings.h>
 
 class KisPainter;
 class KisPaintOp;

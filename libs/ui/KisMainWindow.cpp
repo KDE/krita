@@ -580,9 +580,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
         if (toolBar) {
             toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
-            if (toolBar->objectName() == "BrushesAndStuff") {
-                toolBar->setEnabled(false);
-            }
 
             KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
             actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
@@ -2444,11 +2441,6 @@ void KisMainWindow::subWindowActivated()
     d->closeAll->setEnabled(enabled);
 
     setActiveSubWindow(d->mdiArea->activeSubWindow());
-    Q_FOREACH (QToolBar *tb, toolBars()) {
-        if (tb->objectName() == "BrushesAndStuff") {
-            tb->setEnabled(enabled);
-        }
-    }
 
     /**
      * Qt has a weirdness, it has hardcoded shortcuts added to an action

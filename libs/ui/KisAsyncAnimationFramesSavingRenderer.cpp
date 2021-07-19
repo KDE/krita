@@ -73,7 +73,7 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
     m_d->outputMimeType = outputMimeType;
 
     connect(this, SIGNAL(sigCompleteRegenerationInternal(int)), SLOT(notifyFrameCompleted(int)));
-    connect(this, SIGNAL(sigCancelRegenerationInternal(int)), SLOT(notifyFrameCancelled(int)));
+    connect(this, SIGNAL(sigCancelRegenerationInternal(int, KisAsyncAnimationRendererBase::CancelReason)), SLOT(notifyFrameCancelled(int, KisAsyncAnimationRendererBase::CancelReason)));
 }
 
 
@@ -89,7 +89,7 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     if (!image) return;
 
     KIS_SAFE_ASSERT_RECOVER (requestedRegion == image->bounds()) {
-        emit sigCancelRegenerationInternal(frame);
+        emit sigCancelRegenerationInternal(frame, KisAsyncAnimationRendererBase::RenderingFailed);
         return;
     }
 
@@ -129,12 +129,12 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     if (status.isOk()) {
         emit sigCompleteRegenerationInternal(frame);
     } else {
-        emit sigCancelRegenerationInternal(frame);
+        emit sigCancelRegenerationInternal(frame, KisAsyncAnimationRendererBase::RenderingFailed);
     }
 }
 
-void KisAsyncAnimationFramesSavingRenderer::frameCancelledCallback(int frame)
+void KisAsyncAnimationFramesSavingRenderer::frameCancelledCallback(int frame, CancelReason cancelReason)
 {
-    notifyFrameCancelled(frame);
+    notifyFrameCancelled(frame, cancelReason);
 }
 

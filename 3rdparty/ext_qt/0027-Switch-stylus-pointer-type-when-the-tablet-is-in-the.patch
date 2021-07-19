@@ -1,7 +1,7 @@
-From 0f1a6e30bda0c21858a74504f7ac2d0b13ee0550 Mon Sep 17 00:00:00 2001
+From d413135bb1663e904d32481a0977e9d63b7fc129 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 17 Apr 2019 17:39:10 +0300
-Subject: [PATCH 08/22] Switch stylus pointer type when the tablet is in the
+Subject: [PATCH 08/47] Switch stylus pointer type when the tablet is in the
  tablet proximity
 
 Some convertible tablet devices have a special stylus button that
@@ -21,7 +21,7 @@ https://bugs.kde.org/show_bug.cgi?id=408454
  1 file changed, 25 insertions(+), 4 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index bfd0a9640b..02455536fe 100644
+index 15820533c4..f013efaa15 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -606,7 +606,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()

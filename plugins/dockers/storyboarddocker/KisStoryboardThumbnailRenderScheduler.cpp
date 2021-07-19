@@ -15,7 +15,7 @@ KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler(QOb
 {
     //connect signals to the renderer.
     connect(m_renderer, SIGNAL(sigNotifyFrameCompleted(int,KisPaintDeviceSP)), this, SLOT(slotFrameRegenerationCompleted(int, KisPaintDeviceSP)));
-    connect(m_renderer, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRegenerationCancelled(int)));
+    connect(m_renderer, SIGNAL(sigFrameCancelled(int, KisAsyncAnimationRendererBase::CancelReason)), this, SLOT(slotFrameRegenerationCancelled(int)));
 }
 
 KisStoryboardThumbnailRenderScheduler::~KisStoryboardThumbnailRenderScheduler()
@@ -60,7 +60,7 @@ void KisStoryboardThumbnailRenderScheduler::cancelAllFrameRendering()
     m_affectedFramesQueue.empty();
     m_changedFramesQueue.empty();
     if (m_renderer->isActive()) {
-        m_renderer->cancelCurrentFrameRendering();
+        m_renderer->cancelCurrentFrameRendering(KisAsyncAnimationRendererBase::UserCancelled);
     }
     m_currentFrame = -1;
 }
@@ -71,7 +71,7 @@ void KisStoryboardThumbnailRenderScheduler::cancelFrameRendering(int frame)
         return;
     }
     if (m_renderer->isActive() && frame == m_currentFrame) {
-        m_renderer->cancelCurrentFrameRendering();
+        m_renderer->cancelCurrentFrameRendering(KisAsyncAnimationRendererBase::UserCancelled);
         m_currentFrame = -1;
     }
     else if (m_changedFramesQueue.contains(frame)) {

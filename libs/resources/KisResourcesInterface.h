@@ -21,7 +21,7 @@ class KisResourcesInterfacePrivate;
  *
  * Main differences to KoResourceServer and KisResourceModel:
  *
- *  1) It is apolymorphic class. Therefore, we are not obliged to pass
+ *  1) It is a polymorphic class. Therefore, we are not obliged to pass
        a pointer to the global gui-only resource storage everywhere. Instead,
        we can create temporary storages and pass them to the strokes, when needed.
 

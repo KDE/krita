@@ -155,6 +155,12 @@ KisMemoryStatisticsServer::fetchMemoryStatistics(KisImageSP image) const
     return stats;
 }
 
+void KisMemoryStatisticsServer::tryForceUpdateMemoryStatisticsWhileIdle()
+{
+    KisTileDataStore::instance()->tryForceUpdateMemoryStatisticsWhileIdle();
+    notifyImageChanged();
+}
+
 void KisMemoryStatisticsServer::notifyImageChanged()
 {
     m_d->updateCompressor.start();

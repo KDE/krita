@@ -1,14 +1,14 @@
-From 83c8de29d911807d025a7f657b511e04ebed9fab Mon Sep 17 00:00:00 2001
+From 08e7bacd758d0f9dfd81d48e3d0d2c4b0107078c Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 8 Nov 2020 15:39:36 +0000
-Subject: [PATCH 1/5] First working version of the GMic-Qt Krita native plugin
+Subject: [PATCH 1/9] First working version of the GMic-Qt Krita native plugin
 
 ---
  CMakeLists.txt                            |  33 +++
- src/Host/KritaPlugin/gmicqttoolplugin.cpp | 134 +++++++++++
+ src/Host/KritaPlugin/gmicqttoolplugin.cpp | 121 ++++++++++
  src/Host/KritaPlugin/gmicqttoolplugin.h   |  50 ++++
  src/Host/KritaPlugin/host.cpp             | 265 ++++++++++++++++++++++
- 4 files changed, 482 insertions(+)
+ 4 files changed, 469 insertions(+)
  create mode 100644 src/Host/KritaPlugin/gmicqttoolplugin.cpp
  create mode 100644 src/Host/KritaPlugin/gmicqttoolplugin.h
  create mode 100644 src/Host/KritaPlugin/host.cpp
@@ -59,10 +59,10 @@ index 3b61d54..ce0ccff 100644
      set (gmic_qt_SRCS ${gmic_qt_SRCS} src/Host/None/host_none.cpp src/Host/None/ImageDialog.h src/Host/None/ImageDialog.cpp)
 diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.cpp b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
 new file mode 100644
-index 0000000..1402f82
+index 0000000..f5fbef9
 --- /dev/null
 +++ b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
-@@ -0,0 +1,134 @@
+@@ -0,0 +1,121 @@
 +/*
 + *  This file is part of G'MIC-Qt, a generic plug-in for raster graphics
 + *  editors, offering hundreds of filters thanks to the underlying G'MIC
@@ -153,19 +153,6 @@ index 0000000..1402f82
 +      translator->load(QString(":/translations/%1.qm").arg(lang));
 +      QApplication::installTranslator(translator);
 +    }
-+
-+    disableInputMode(GmicQt::NoInput);
-+    // disableInputMode(GmicQt::Active);
-+    disableInputMode(GmicQt::All);
-+    disableInputMode(GmicQt::ActiveAndBelow);
-+    disableInputMode(GmicQt::ActiveAndAbove);
-+    disableInputMode(GmicQt::AllVisible);
-+    disableInputMode(GmicQt::AllInvisible);
-+
-+    // disableOutputMode(GmicQt::InPlace);
-+    disableOutputMode(GmicQt::NewImage);
-+    disableOutputMode(GmicQt::NewLayers);
-+    disableOutputMode(GmicQt::NewActiveLayers);
 +
 +    QPointer<MainWindow> mainWindow = new MainWindow(0);
 +    // We want a non modal dialog here.
@@ -525,5 +512,5 @@ index 0000000..e814385
 +#endif // DRMINGW
 +#endif // Q_OS_WIN
 -- 
-2.30.0
+2.32.0
 

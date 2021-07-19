@@ -350,7 +350,7 @@ protected:
             }
         }
 
-        if (!leaf->visible()) {
+        if (!leaf->shouldBeRendered()) {
             if (!m_lastNeedRect.isEmpty()) {
                 // push a dumb job to fit state machine requirements
                 pushJob(leaf, position, m_lastNeedRect);

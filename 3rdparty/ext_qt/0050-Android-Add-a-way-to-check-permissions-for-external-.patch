@@ -1,7 +1,8 @@
-From bad889501293fbde61371c0335c904e86bae0086 Mon Sep 17 00:00:00 2001
+From 811973783f997baf7b668844395e703ad0bcad6c Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Tue, 6 Oct 2020 17:24:15 +0000
-Subject: [PATCH] Android: Add a way to check permissions for external URIs
+Subject: [PATCH 30/43] Android: Add a way to check permissions for external
+ URIs
 
 Prior to this we could only open those files which we had
 previously persisted permission to or the files that've
@@ -13,7 +14,7 @@ source like an Intent.
  1 file changed, 27 insertions(+)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 0ae113d1a5..3ad14c5f47 100644
+index b54204f401..d817e23f6c 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -114,6 +114,8 @@ public class QtNative
@@ -65,5 +66,5 @@ index 0ae113d1a5..3ad14c5f47 100644
          } catch (SecurityException e) {
              e.printStackTrace();
 -- 
-2.28.0
+2.20.1.windows.1
 

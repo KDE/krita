@@ -80,7 +80,7 @@ private:
     KisClipboardBrushWidget* m_clipboardBrushWidget;
 
     bool m_hslBrushTipEnabled = false;
-    bool m_autoMidpointAdjustmentIsDefault = false;
+    bool m_autoMidpointAdjustmentIsDefault = true;
 };
 
 #endif // KIS_PREDEFINED_BRUSH_CHOOSER_H_

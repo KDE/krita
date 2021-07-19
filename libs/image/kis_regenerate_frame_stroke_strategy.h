@@ -31,7 +31,7 @@ public:
      * background without ending/cancelling any running actions
      */
     KisRegenerateFrameStrokeStrategy(int frameId,
-                                     const KisRegion &dirtyRegion,
+                                     const KisRegion &dirtyRegion, bool isCancellable,
                                      KisImageAnimationInterface *interface);
 
     /**

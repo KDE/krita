@@ -1,7 +1,7 @@
-From 8c3da665b4b10bae49ee4e0eabd2b0d9b39bb9f8 Mon Sep 17 00:00:00 2001
+From d27aa35ac1cf870157e957eae4c58ab69662b665 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 15 May 2019 19:54:52 +0300
-Subject: [PATCH 10/22] Add workaround for handling table press correctly in
+Subject: [PATCH 12/47] Add workaround for handling table press correctly in
  WinInk mode
 
 Original problem: widgets do not get synthesized mouse-down and
@@ -41,10 +41,10 @@ See bug: https://bugs.kde.org/show_bug.cgi?id=406668
  4 files changed, 99 insertions(+), 18 deletions(-)
 
 diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
-index 0e8abe76ce..1000404c30 100644
+index 0f574ff526..a86bd22588 100644
 --- a/src/gui/kernel/qguiapplication.cpp
 +++ b/src/gui/kernel/qguiapplication.cpp
-@@ -2537,6 +2537,7 @@ void QGuiApplicationPrivate::processTabletEvent(QWindowSystemInterfacePrivate::T
+@@ -2593,6 +2593,7 @@ void QGuiApplicationPrivate::processTabletEvent(QWindowSystemInterfacePrivate::T
      tabletEvent.setTimestamp(e->timestamp);
      QGuiApplication::sendSpontaneousEvent(window, &tabletEvent);
      pointData.state = e->buttons;
@@ -53,10 +53,10 @@ index 0e8abe76ce..1000404c30 100644
          && !QWindowSystemInterfacePrivate::TabletEvent::platformSynthesizesMouse
          && qApp->testAttribute(Qt::AA_SynthesizeMouseForUnhandledTabletEvents)) {
 diff --git a/src/gui/kernel/qwindowsysteminterface.cpp b/src/gui/kernel/qwindowsysteminterface.cpp
-index b0f2869128..b3b6167c9d 100644
+index 2900cb40ea..62f309a1da 100644
 --- a/src/gui/kernel/qwindowsysteminterface.cpp
 +++ b/src/gui/kernel/qwindowsysteminterface.cpp
-@@ -949,7 +949,7 @@ void QWindowSystemInterfacePrivate::TabletEvent::setPlatformSynthesizesMouse(boo
+@@ -954,7 +954,7 @@ void QWindowSystemInterfacePrivate::TabletEvent::setPlatformSynthesizesMouse(boo
      platformSynthesizesMouse = v;
  }
  
@@ -65,7 +65,7 @@ index b0f2869128..b3b6167c9d 100644
                                                 int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
                                                 qreal tangentialPressure, qreal rotation, int z, qint64 uid,
                                                 Qt::KeyboardModifiers modifiers)
-@@ -960,36 +960,36 @@ void QWindowSystemInterface::handleTabletEvent(QWindow *window, ulong timestamp,
+@@ -965,36 +965,36 @@ void QWindowSystemInterface::handleTabletEvent(QWindow *window, ulong timestamp,
                                                         QHighDpi::fromNativePixels(global, window),
                                                         device, pointerType, buttons, pressure,
                                                         xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
@@ -112,7 +112,7 @@ index b0f2869128..b3b6167c9d 100644
  #endif // QT_DEPRECATED_SINCE(5, 10)
  
 diff --git a/src/gui/kernel/qwindowsysteminterface.h b/src/gui/kernel/qwindowsysteminterface.h
-index bf98c33a1a..fdc5a2fb50 100644
+index 66af163f05..8d1e7597a1 100644
 --- a/src/gui/kernel/qwindowsysteminterface.h
 +++ b/src/gui/kernel/qwindowsysteminterface.h
 @@ -247,20 +247,20 @@ public:

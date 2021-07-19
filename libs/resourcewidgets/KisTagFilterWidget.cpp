@@ -100,6 +100,11 @@ void KisTagFilterWidget::clear()
     d->tagSearchLineEdit->clear();
 }
 
+bool KisTagFilterWidget::isFilterByTagChecked()
+{
+    return d->filterByTagCheckbox->isChecked();
+}
+
 
 void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 {

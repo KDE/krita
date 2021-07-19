@@ -8,6 +8,7 @@
 #define KISINPUTACTIONGROUP_H
 
 #include <QFlags>
+#include <QSharedPointer>
 
 enum KisInputActionGroup {
     NoActionGroup = 0x0,
@@ -19,6 +20,7 @@ enum KisInputActionGroup {
 Q_DECLARE_FLAGS(KisInputActionGroupsMask, KisInputActionGroup)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisInputActionGroupsMask)
 
+class KisInputActionGroupsMaskGuard;
 
 /**
  * A special interface class for accessing masking properties using
@@ -26,6 +28,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KisInputActionGroupsMask)
  */
 struct KisInputActionGroupsMaskInterface
 {
+    /**
+     * Unregister ourselves from all KisInputActionGroupsMaskGuard
+     */
     virtual ~KisInputActionGroupsMaskInterface();
 
     /**
@@ -37,6 +42,8 @@ struct KisInputActionGroupsMaskInterface
      * Set the mask of currently available action groups
      */
     virtual void setInputActionGroupsMask(KisInputActionGroupsMask mask) = 0;
+
+    using SharedInterface=QSharedPointer<KisInputActionGroupsMaskInterface>;
 };
 
 /**
@@ -52,15 +59,18 @@ public:
      * Create a guard and set a new mask \p mask onto \p object. The old mask value is
      * saved in the guard itself.
      */
-    KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface *object, KisInputActionGroupsMask mask);
+    KisInputActionGroupsMaskGuard(KisInputActionGroupsMaskInterface::SharedInterface sharedInterface, KisInputActionGroupsMask mask);
 
     /**
-     * Destroy the guard and reset the mask value to the old value
+     * Destroy the guard and reset the mask value to the old value (if masking interface wasn't deleted)
      */
     ~KisInputActionGroupsMaskGuard();
 
 private:
-    KisInputActionGroupsMaskInterface *m_object;
+    /**
+     * Pointer to the interface to be updated on delete
+     */
+    KisInputActionGroupsMaskInterface::SharedInterface m_sharedInterface;
     KisInputActionGroupsMask m_oldMask;
 };
 

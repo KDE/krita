@@ -11,7 +11,9 @@
 #if defined _MSC_VER
 // Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
 #pragma warning ( push )
+#pragma warning ( disable : 4146 ) // avx/detail.h
 #pragma warning ( disable : 4244 )
+#pragma warning ( disable : 4267 ) // interleavedmemory
 #pragma warning ( disable : 4800 )
 #endif
 #include <Vc/Vc>
@@ -21,9 +23,10 @@
 #pragma warning ( pop )
 #endif
 
-#include <stdint.h>
-#include <KoAlwaysInline.h>
+#include <cstdint>
 #include <iostream>
+#include <type_traits>
+#include <KoAlwaysInline.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceMaths.h>
 
@@ -51,7 +54,7 @@ struct OptiRound {
 
         return result;
 #else
-        return value + 0.5;
+        return value + 0.5f;
 #endif
 
     }
@@ -80,7 +83,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     const quint8* srcRowStart  = params.srcRowStart;
     typename Compositor::ParamsWrapper paramsWrapper(params);
 
-    for(quint32 r=params.rows; r>0; --r) {
+    for(qint32 r = params.rows; r > 0; --r) {
         const quint8 *mask = maskRowStart;
         const quint8 *src  = srcRowStart;
         quint8       *dst  = dstRowStart;
@@ -133,6 +136,54 @@ static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
 }
 
 /**
+ * Round a vector of floats to the next corresponding integers.
+ */
+static inline int_v iRound(Vc::float_v::AsArg a)
+{
+#if defined(Vc_IMPL_AVX2)
+    return Vc::simd_cast<int_v>(Vc::int_v(_mm256_cvtps_epi32(a.data())));
+#elif defined(Vc_IMPL_AVX)
+    /**
+     * WARNING: Vc, on AVX, supplies 256-bit floating point vectors but stays
+     * in SSE land for integers. It is not possible to cast between Vc::int_v
+     * and uint_v without a custom SIMD type, because otherwise we lose the
+     * XMM1 register. By using such a type:
+     *    using avx_int_v = Vc::Vector<Vc::int_v::EntryType, Vc::float_v::abi>;
+     *    static_assert(int_v::size() == avx_int_v::size(),
+     *                  "uint_v must match the AVX placeholder");
+     * and copying the entries manually, a smart compiler can do a single move
+     * to memory (Clang 12):
+     *    mov     rax, rdi
+     *    vcvtps2dq       ymm0, ymm0
+     *    vmovapd ymmword ptr [rdi], ymm0
+     *    vzeroupper // useless since it's already stored in [rdi]
+     *    ret
+     * GCC 5.5 and 7.3, as well as MSVC, do not optimize such manual copying;
+     * but by handling the internal registers themselves (as done below),
+     * we achieve the following while still preserving Clang 12's optimization:
+     *    mov     rax, rdi
+     *    vcvtps2dq       ymm0, ymm0
+     *    vextractf128    XMMWORD PTR [rdi+16], ymm0, 0x1
+     *    vmovaps XMMWORD PTR [rdi], xmm0 // vmovdqu with MSVC
+     *    vzeroupper // same as above
+     *    ret
+     */
+
+    __m256i temp(_mm256_cvtps_epi32(a.data()));
+    int_v res;
+
+    internal_data(internal_data1(res)) = Vc_1::AVX::hi128(temp);
+    internal_data(internal_data0(res)) = Vc_1::AVX::lo128(temp);
+
+    return res;
+#elif defined(Vc_IMPL_SSE2)
+    return Vc::simd_cast<int_v>(Vc::int_v(_mm_cvtps_epi32(a.data())));
+#else
+    return Vc::simd_cast<int_v>(Vc::round(a));
+#endif
+}
+
+/**
  * Get a vector containing first Vc::float_v::size() values of mask.
  * Each source mask element is considered to be a 8-bit integer
  */
@@ -154,12 +205,12 @@ static inline Vc::float_v fetch_mask_8(const quint8 *data) {
  *               causes \#GP (General Protection Exception)
  */
 template <bool aligned>
-static inline Vc::float_v fetch_alpha_32(const quint8 *data) {
+static inline Vc::float_v fetch_alpha_32(const void *data) {
     uint_v data_i;
     if (aligned) {
-        data_i.load((const quint32*)data, Vc::Aligned);
+        data_i.load(static_cast<const quint32*>(data), Vc::Aligned);
     } else {
-        data_i.load((const quint32*)data, Vc::Unaligned);
+        data_i.load(static_cast<const quint32 *>(data), Vc::Unaligned);
     }
 
     return Vc::simd_cast<Vc::float_v>(int_v(data_i >> 24));
@@ -178,15 +229,15 @@ static inline Vc::float_v fetch_alpha_32(const quint8 *data) {
  *               causes \#GP (General Protection Exception)
  */
 template <bool aligned>
-static inline void fetch_colors_32(const quint8 *data,
+static inline void fetch_colors_32(const void *data,
                             Vc::float_v &c1,
                             Vc::float_v &c2,
                             Vc::float_v &c3) {
     int_v data_i;
     if (aligned) {
-        data_i.load((const quint32*)data, Vc::Aligned);
+        data_i.load(static_cast<const quint32*>(data), Vc::Aligned);
     } else {
-        data_i.load((const quint32*)data, Vc::Unaligned);
+        data_i.load(static_cast<const quint32*>(data), Vc::Unaligned);
     }
 
     const quint32 lowByteMask = 0xFF;
@@ -205,54 +256,38 @@ static inline void fetch_colors_32(const quint8 *data,
  *
  * NOTE: \p data must be aligned pointer!
  */
-static inline void write_channels_32(quint8 *data,
+static inline void write_channels_32(void *data,
                                      Vc::float_v::AsArg alpha,
                                      Vc::float_v::AsArg c1,
                                      Vc::float_v::AsArg c2,
                                      Vc::float_v::AsArg c3) {
-    /**
-     * FIXME: make conversion float->int
-     * use mathematical rounding
-     */
-
     const quint32 lowByteMask = 0xFF;
 
-    // FIXME: Use single-instruction rounding + conversion
-    //        The achieve that we need to implement Vc::iRound()
-
     uint_v mask(lowByteMask);
-    uint_v v1 = uint_v(int_v(Vc::round(alpha))) << 24;
-    uint_v v2 = (uint_v(int_v(Vc::round(c1))) & mask) << 16;
-    uint_v v3 = (uint_v(int_v(Vc::round(c2))) & mask) <<  8;
-    uint_v v4 = uint_v(int_v(Vc::round(c3))) & mask;
+    uint_v v1 = uint_v(iRound(alpha)) << 24;
+    uint_v v2 = (uint_v(iRound(c1)) & mask) << 16;
+    uint_v v3 = (uint_v(iRound(c2)) & mask) <<  8;
+    uint_v v4 = uint_v(iRound(c3)) & mask;
     v1 = v1 | v2;
     v3 = v3 | v4;
-    (v1 | v3).store((quint32*)data, Vc::Aligned);
+    (v1 | v3).store(static_cast<quint32*>(data), Vc::Aligned);
 }
 
-static inline void write_channels_32_unaligned(quint8 *data,
+static inline void write_channels_32_unaligned(void *data,
                                                Vc::float_v::AsArg alpha,
                                                Vc::float_v::AsArg c1,
                                                Vc::float_v::AsArg c2,
                                                Vc::float_v::AsArg c3) {
-    /**
-     * FIXME: make conversion float->int
-     * use mathematical rounding
-     */
-
     const quint32 lowByteMask = 0xFF;
 
-    // FIXME: Use single-instruction rounding + conversion
-    //        The achieve that we need to implement Vc::iRound()
-
     uint_v mask(lowByteMask);
-    uint_v v1 = uint_v(int_v(Vc::round(alpha))) << 24;
-    uint_v v2 = (uint_v(int_v(Vc::round(c1))) & mask) << 16;
-    uint_v v3 = (uint_v(int_v(Vc::round(c2))) & mask) <<  8;
-    uint_v v4 = uint_v(int_v(Vc::round(c3))) & mask;
+    uint_v v1 = uint_v(iRound(alpha)) << 24;
+    uint_v v2 = (uint_v(iRound(c1)) & mask) << 16;
+    uint_v v3 = (uint_v(iRound(c2)) & mask) << 8;
+    uint_v v4 = uint_v(iRound(c3)) & mask;
     v1 = v1 | v2;
     v3 = v3 | v4;
-    (v1 | v3).store((quint32*)data, Vc::Unaligned);
+    (v1 | v3).store(static_cast<quint32*>(data), Vc::Unaligned);
 }
 
 /**
@@ -265,21 +300,21 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
 {
     using namespace Arithmetic;
 
-    const int vectorSize = Vc::float_v::size();
+    const int vectorSize = static_cast<int>(Vc::float_v::size());
     const qint32 vectorInc = pixelSize * vectorSize;
     const qint32 linearInc = pixelSize;
     qint32 srcVectorInc = vectorInc;
     qint32 srcLinearInc = pixelSize;
 
-    quint8*       dstRowStart  = params.dstRowStart;
-    const quint8* maskRowStart = params.maskRowStart;
+    quint8 *dstRowStart = params.dstRowStart;
+    const quint8 *maskRowStart = params.maskRowStart;
     const quint8* srcRowStart  = params.srcRowStart;
     typename Compositor::ParamsWrapper paramsWrapper(params);
 
     if (!params.srcRowStride) {
         if (pixelSize == 4) {
-            quint32 *buf = Vc::malloc<quint32, Vc::AlignOnVector>(vectorSize);
-            *((uint_v*)buf) = uint_v(*((const quint32*)params.srcRowStart));
+            KoStreamedMath::uint_v *buf = reinterpret_cast<KoStreamedMath::uint_v*>(Vc::malloc<quint32, Vc::AlignOnVector>(vectorSize));
+            *buf = uint_v(*(reinterpret_cast<const quint32 *>(srcRowStart)));
             srcRowStart = reinterpret_cast<quint8*>(buf);
             srcLinearInc = 0;
             srcVectorInc = 0;
@@ -287,7 +322,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
             quint8 *buf = Vc::malloc<quint8, Vc::AlignOnVector>(vectorInc);
             quint8 *ptr = buf;
 
-            for (int i = 0; i < vectorSize; i++) {
+            for (size_t i = 0; i < vectorSize; i++) {
                 memcpy(ptr, params.srcRowStart, pixelSize);
                 ptr += pixelSize;
             }
@@ -304,12 +339,12 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     int totalBlockRest = 0;
 #endif
 
-    for(quint32 r=params.rows; r>0; --r) {
+    for (qint32 r = params.rows; r > 0; --r) {
         // Hint: Mask is allowed to be unaligned
         const quint8 *mask = maskRowStart;
 
-        const quint8 *src  = srcRowStart;
-        quint8       *dst  = dstRowStart;
+        const quint8 *src = srcRowStart;
+        quint8 *dst = dstRowStart;
 
         const int pixelsAlignmentMask = vectorSize * sizeof(float) - 1;
         uintptr_t srcPtrValue = reinterpret_cast<uintptr_t>(src);

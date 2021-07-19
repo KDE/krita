@@ -1,7 +1,7 @@
-From cb50a72309837b831a58809b8fc83299392c3307 Mon Sep 17 00:00:00 2001
+From b212e0e6a52aeb790e872662ce1fd7fcb1f3c49c Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 15 Apr 2021 21:35:50 +0000
-Subject: [PATCH] Android: Add window manager for raster based QWidgets
+Subject: [PATCH 38/43] Android: Add window manager for raster based QWidgets
 
 The way this works is for window types: (Qt::Dialog || Qt::Tool (without
 Qt::FramelessWindowHint)) which on other platforms are typically
@@ -54,10 +54,10 @@ index 78632a9bea..8f62cb4c1e 100644
  qtConfig(android-style-assets): SOURCES += $$PWD/extract.cpp
  else: SOURCES += $$PWD/extract-dummy.cpp
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 81075e7f94..f0a0ddfec7 100644
+index fec394f95e..257d013fa8 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
-@@ -352,7 +352,10 @@ namespace QtAndroidInput
+@@ -355,7 +355,10 @@ namespace QtAndroidInput
  #if QT_CONFIG(tabletevent)
          QPointF globalPosF(x, y);
          QPoint globalPos((int)x, (int)y);
@@ -69,7 +69,7 @@ index 81075e7f94..f0a0ddfec7 100644
  
          QPointF localPos = globalPosF;
          if (tlw) {
-@@ -378,10 +381,13 @@ namespace QtAndroidInput
+@@ -381,10 +384,13 @@ namespace QtAndroidInput
          Qt::MouseButtons buttons = Qt::NoButton;
          switch (action) {
          case AMOTION_EVENT_ACTION_UP:
@@ -613,5 +613,5 @@ index 0000000000..b12eb949f4
 +
 +#endif // __QANDROIDPLATFORMWINDOWMANAGER_H_
 -- 
-2.31.1
+2.20.1.windows.1
 

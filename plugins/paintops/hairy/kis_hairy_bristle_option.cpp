@@ -18,12 +18,15 @@ public:
         setupUi(this);
 
         rndBox->setRange(-10.0, 10.0, 2);
+        rndBox->setSingleStep(0.01);
         rndBox->setValue(2.0);
 
         scaleBox->setRange(-10.0, 10.0, 2);
+        scaleBox->setSingleStep(0.01);
         scaleBox->setValue(2.0);
 
         shearBox->setRange(-2.0, 2.0, 2);
+        shearBox->setSingleStep(0.01);
         shearBox->setValue(0.0);
 
         densityBox->setRange(0.0, 100.0, 0);

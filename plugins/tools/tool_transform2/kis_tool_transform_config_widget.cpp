@@ -190,17 +190,19 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Init Liquify Transform Values
     liquifySizeSlider->setRange(KisLiquifyProperties::minSize(),
                                 KisLiquifyProperties::maxSize(), 2);
-    liquifySizeSlider->setExponentRatio(4);
+    liquifySizeSlider->setExponentRatio(3);
     liquifySizeSlider->setValue(60.0);
     connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifySizeChanged(qreal)));
     liquifySizeSlider->setToolTip(i18nc("@info:tooltip", "Size of the deformation brush"));
 
     liquifyAmountSlider->setRange(0.0, 1.0, 2);
+    liquifyAmountSlider->setSingleStep(0.01);
     liquifyAmountSlider->setValue(0.05);
     connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyAmountChanged(qreal)));
     liquifyAmountSlider->setToolTip(i18nc("@info:tooltip", "Amount of the deformation you get"));
 
     liquifyFlowSlider->setRange(0.0, 1.0, 2);
+    liquifyFlowSlider->setSingleStep(0.01);
     liquifyFlowSlider->setValue(1.0);
     connect(liquifyFlowSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyFlowChanged(qreal)));
     liquifyFlowSlider->setToolTip(i18nc("@info:tooltip", "When in non-buildup mode, shows how fast the deformation limit is reached."));
@@ -210,7 +212,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     buidupModeComboBox->setToolTip("<p>" + i18nc("@info:tooltip", "Switch between Build Up and Wash mode of painting. Build Up mode adds deformations one on top of the other without any limits. Wash mode gradually deforms the piece to the selected deformation level.") + "</p>");
 
     liquifySpacingSlider->setRange(0.0, 3.0, 2);
-    liquifySizeSlider->setExponentRatio(3);
+    liquifySpacingSlider->setExponentRatio(3);
     liquifySpacingSlider->setSingleStep(0.01);
     liquifySpacingSlider->setValue(0.2);
     connect(liquifySpacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifySpacingChanged(qreal)));

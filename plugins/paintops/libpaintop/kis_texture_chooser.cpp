@@ -19,19 +19,23 @@ KisTextureChooser::KisTextureChooser(KisBrushTextureFlags flags, QWidget *parent
     textureSelectorWidget->setCurrentItem(0);
 
     scaleSlider->setRange(0.0, 2.0, 2);
+    scaleSlider->setSingleStep(0.01);
     scaleSlider->setValue(1.0);
     scaleSlider->addMultiplier(0.1);
     scaleSlider->addMultiplier(2);
     scaleSlider->addMultiplier(10);
 
     brightnessSlider->setRange(-1.0, 1.0, 2);
+    brightnessSlider->setSingleStep(0.01);
     brightnessSlider->setValue(0.0);
     brightnessSlider->setToolTip(i18n("Makes texture lighter or darker"));
 
     contrastSlider->setRange(0.0, 2.0, 2);
+    contrastSlider->setSingleStep(0.01);
     contrastSlider->setValue(1.0);
 
     neutralPointSlider->setRange(0.0, 1.0, 2);
+    neutralPointSlider->setSingleStep(0.01);
     neutralPointSlider->setValue(0.5);
     neutralPointSlider->setToolTip(i18n("Set gray value to be considered neutral for lightness mode"));
 

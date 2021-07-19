@@ -38,14 +38,17 @@ KisBrushSizeOption::KisBrushSizeOption()
     m_options->diameter->setSuffix(i18n(" px"));
 
     m_options->aspectBox->setRange(0.01, 2.0, 2);
+    m_options->aspectBox->setSingleStep(0.01);
     m_options->aspectBox->setValue(1.0);
     m_options->aspectBox->setExponentRatio(1.0);
 
 
     m_options->scale->setRange(0.01, 10.0, 2);
+    m_options->scale->setSingleStep(0.01);
     m_options->scale->setValue(1.0);
 
     m_options->spacing->setRange(0.01, 5.0, 2);
+    m_options->spacing->setSingleStep(0.01);
     m_options->spacing->setValue(0.3);
 
 
@@ -58,6 +61,7 @@ KisBrushSizeOption::KisBrushSizeOption()
 
 
     m_options->jitterMove->setRange(0.0, 5.0, 2);
+    m_options->jitterMove->setSingleStep(0.01);
     m_options->jitterMove->setValue(0.0);
 
     connect(m_options->diameter, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));

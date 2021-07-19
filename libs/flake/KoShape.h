@@ -1024,6 +1024,8 @@ public:
      */
     void setHyperLink(const QString &hyperLink);
 
+    void setAbsolute(bool);
+
 public:
 
     struct KRITAFLAKE_EXPORT ShapeChangeListener {
@@ -1070,6 +1072,7 @@ private:
     class SharedData;
     QSharedDataPointer<SharedData> s;
 
+    bool absolute;
 
 protected:
     /**

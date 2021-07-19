@@ -159,7 +159,8 @@ const qint16 KoShape::minZIndex = std::numeric_limits<qint16>::min();
 
 KoShape::KoShape()
     : d(new Private()),
-      s(new SharedData)
+      s(new SharedData),
+      absolute(true)
 {
     notifyChanged();
 }
@@ -358,15 +359,17 @@ QRectF KoShape::absoluteOutlineRect(const QList<KoShape *> &shapes)
 QTransform KoShape::absoluteTransformation() const
 {
     QTransform matrix;
-    // apply parents matrix to inherit any transformations done there.
-    KoShapeContainer * container = d->parent;
-    if (container) {
-        if (container->inheritsTransform(this)) {
-            matrix = container->absoluteTransformation();
-        } else {
-            QSizeF containerSize = container->size();
-            QPointF containerPos = container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
-            matrix.translate(containerPos.x(), containerPos.y());
+    if(absolute) {
+        // apply parents matrix to inherit any transformations done there.
+        KoShapeContainer * container = d->parent;
+        if (container) {
+            if (container->inheritsTransform(this)) {
+                matrix = container->absoluteTransformation();
+            } else {
+                QSizeF containerSize = container->size();
+                QPointF containerPos = container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
+                matrix.translate(containerPos.x(), containerPos.y());
+            }
         }
     }
 
@@ -1337,4 +1340,9 @@ QList<KoShape *> KoShape::linearizeSubtreeSorted(const QList<KoShape *> &shapes)
     }
 
     return result;
+}
+
+void KoShape::setAbsolute(bool value)
+{
+    absolute = value;
 }

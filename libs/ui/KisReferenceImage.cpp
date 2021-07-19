@@ -190,6 +190,7 @@ KisReferenceImage::KisReferenceImage()
 {
     setKeepAspectRatio(true);
     d->cropRect.setSize(size());
+    setAbsolute(false);
 }
 
 KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)

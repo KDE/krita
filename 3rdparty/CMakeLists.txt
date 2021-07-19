@@ -287,6 +287,10 @@ add_subdirectory( ext_freetype)
 add_subdirectory( ext_qt )
 add_subdirectory( ext_poppler )
 add_subdirectory( ext_libraw )
+if (ANDROID)
+  # gettext replacement
+  add_subdirectory(ext_libintl-lite)
+endif()
 add_subdirectory( ext_frameworks )
 if (ENABLE_PYTHON_DEPS OR NOT MINGW)
     add_subdirectory( ext_sip )
@@ -304,11 +308,6 @@ endif ()
 
 if(UNIX)
     add_subdirectory( ext_pkgconfig )
-endif()
-
-if (ANDROID)
-  # gettext replacement
-  add_subdirectory(ext_libintl-lite)
 endif()
 
 add_subdirectory( ext_heif )

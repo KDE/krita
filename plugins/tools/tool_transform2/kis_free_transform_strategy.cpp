@@ -214,6 +214,11 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     }
 }
 
+bool KisFreeTransformStrategy::shiftModifierIsUsed() const
+{
+    return true;
+}
+
 QCursor KisFreeTransformStrategy::Private::getScaleCursor(const QPointF &handlePt)
 {
     QPointF handlePtInWidget = converter->imageToWidget(handlePt);

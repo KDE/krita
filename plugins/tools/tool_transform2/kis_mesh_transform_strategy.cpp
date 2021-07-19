@@ -68,6 +68,7 @@ struct KisMeshTransformStrategy::Private
     boost::optional<KisBezierTransformMesh::PatchIndex> hoveredPatch;
     qreal localSegmentPosition = 0.0;
     QPointF localPatchPosition;
+    QPointF hoveredHandleOffset;
 
     QPointF mouseClickPos;
 
@@ -91,9 +92,10 @@ struct KisMeshTransformStrategy::Private
 
 
 KisMeshTransformStrategy::KisMeshTransformStrategy(const KisCoordinatesConverter *converter,
+                                                   KoSnapGuide *snapGuide,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : KisSimplifiedActionPolicyStrategy(converter),
+    : KisSimplifiedActionPolicyStrategy(converter, snapGuide),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
 
@@ -219,7 +221,27 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     m_d->localPatchPosition = localPatchPos;
     m_d->localSegmentPosition = localSegmentPos;
 
+    if (hoveredControl) {
+        m_d->hoveredHandleOffset = *controlIt - mousePos;
+    } else if (hoveredSegment) {
+        KisBezierTransformMesh::segment_iterator segmentIt =
+            m_d->currentArgs.meshTransform()->find(*hoveredSegment);
+        m_d->hoveredHandleOffset = segmentIt.pointAtParam(m_d->localSegmentPosition) - mousePos;
+    } else {
+        m_d->hoveredHandleOffset = QPointF();
+    }
+
     verifyExpectedMeshSize();
+}
+
+QPointF KisMeshTransformStrategy::handleSnapPoint(const QPointF &imagePos)
+{
+    return imagePos + m_d->hoveredHandleOffset;
+}
+
+bool KisMeshTransformStrategy::shiftModifierIsUsed() const
+{
+    return true;
 }
 
 void KisMeshTransformStrategy::verifyExpectedMeshSize()

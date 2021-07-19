@@ -86,10 +86,12 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     , m_warpStrategy(
         new KisWarpTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
     , m_cageStrategy(
         new KisCageTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
     , m_liquifyStrategy(
         new KisLiquifyTransformStrategy(
@@ -98,6 +100,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     , m_meshStrategy(
         new KisMeshTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
     , m_freeStrategy(
         new KisFreeTransformStrategy(

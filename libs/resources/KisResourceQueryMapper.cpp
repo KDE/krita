@@ -191,6 +191,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQueryById(int resourceId, in
                    ",      storages\n"
                    ",      versioned_resources\n"
                    "WHERE  resources.id = :resource_id\n"
+                   "AND    storages.id = resources.storage_id\n"
                    "AND    versioned_resources.resource_id = resources.id\n"
                    "AND    versioned_resources.version = (SELECT MAX(version) FROM versioned_resources WHERE versioned_resources.resource_id = resources.id)"
                    "AND    resource_types.id = resources.resource_type_id"))

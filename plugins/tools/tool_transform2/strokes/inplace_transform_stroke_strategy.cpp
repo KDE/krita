@@ -860,7 +860,16 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
          * purposes)
          */
         for (auto it = updateData->begin(); it != updateData->end(); ++it) {
-            m_d->updatesFacade->refreshGraphAsync(it->first, it->second);
+            KisTransformMask *transformMask = dynamic_cast<KisTransformMask*>(it->first.data());
+
+            if (transformMask &&
+                    ((levelOfDetail <= 0 && !transformMask->transformParams()->isAffine()) ||
+                     (levelOfDetail <= 0 && m_d->previewLevelOfDetail > 0))) {
+                transformMask->threadSafeForceStaticImageUpdate();
+            } else {
+                m_d->updatesFacade->refreshGraphAsync(it->first, it->second);
+            }
+
         }
     });
 }

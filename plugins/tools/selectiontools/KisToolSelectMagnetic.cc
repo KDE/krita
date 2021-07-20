@@ -361,76 +361,74 @@ void KisToolSelectMagnetic::deleteSelectedAnchor()
     if (m_anchorPoints.isEmpty())
         return;
 
-    // if it is the initial anchor
-    if (m_selectedAnchor == 0) {
-        m_anchorPoints.pop_front();
-        if (m_anchorPoints.isEmpty()) {
-            // it was the only point lol
-            resetVariables();
-            reEvaluatePoints();
-            return;
-        }
-        m_pointCollection.pop_front();
-        if (m_complete) {
-            m_pointCollection[0] = computeEdgeWrapper(m_anchorPoints.first(), m_anchorPoints.last());
-        }
-        reEvaluatePoints();
-        return;
-    }
+    if (m_anchorPoints.size() <= 1) {
+        resetVariables();
 
-    // if it is the last anchor
-    if (m_selectedAnchor == m_anchorPoints.count() - 1) {
+    } else if (m_selectedAnchor == 0) { // if it is the initial anchor
+        m_anchorPoints.pop_front();
+        m_pointCollection.pop_front();
+
+        if (m_complete) {
+            m_pointCollection[m_pointCollection.size() - 1] = computeEdgeWrapper(m_anchorPoints.last(), m_anchorPoints.first());
+        }
+
+    } else if (m_selectedAnchor == m_anchorPoints.count() - 1) { // if it is the last anchor
         m_anchorPoints.pop_back();
         m_pointCollection.pop_back();
+
         if (m_complete) {
-            m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints.last(), m_anchorPoints.first());
+            m_pointCollection[m_pointCollection.size() - 1] = computeEdgeWrapper(m_anchorPoints.last(), m_anchorPoints.first());
         }
-        reEvaluatePoints();
-        return;
+
+    } else { // it is in the middle
+        m_anchorPoints.remove(m_selectedAnchor);
+        m_pointCollection.remove(m_selectedAnchor);
+        m_pointCollection[m_selectedAnchor - 1] =
+            computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1],
+                               m_anchorPoints[m_selectedAnchor]);
     }
 
-    // it is in the middle
-    m_anchorPoints.remove(m_selectedAnchor);
-    m_pointCollection.remove(m_selectedAnchor);
-    m_pointCollection[m_selectedAnchor - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1],
-                                                                 m_anchorPoints[m_selectedAnchor]);
+    if (m_complete && m_anchorPoints.size() < 3) {
+        m_complete = false;
+        m_pointCollection.pop_back();
+    }
+
     reEvaluatePoints();
+
 } // KisToolSelectMagnetic::deleteSelectedAnchor
 
 void KisToolSelectMagnetic::updateSelectedAnchor()
 {
     //the only anchor
-    if (m_anchorPoints.count() == 1) {
+    if (m_anchorPoints.count() <= 1) {
         return;
     }
 
-    // initial
-    if (m_selectedAnchor == 0 && m_anchorPoints.count() > 1) {
+    if (m_selectedAnchor == 0) {
         m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints[0], m_anchorPoints[1]);
         if (m_complete) {
-            m_pointCollection[m_anchorPoints.count() - 1] = computeEdgeWrapper(m_anchorPoints.last(),
-                                                                               m_anchorPoints.first());
+            m_pointCollection[m_pointCollection.count() - 1] =
+                computeEdgeWrapper(m_anchorPoints.last(),
+                                   m_anchorPoints.first());
         }
-        reEvaluatePoints();
-        return;
-    }
-
-    // last
-    if (m_selectedAnchor == m_anchorPoints.count() - 1) {
-        m_pointCollection[m_selectedAnchor - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1],
-                                                                     m_anchorPoints.last());
+    } else if (m_selectedAnchor == m_anchorPoints.count() - 1) {
+        m_pointCollection[m_selectedAnchor - 1] =
+            computeEdgeWrapper(m_anchorPoints[m_anchorPoints.count() - 2],
+                               m_anchorPoints[m_anchorPoints.count() - 1]);
         if (m_complete) {
-            m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints.last(), m_anchorPoints.first());
+            m_pointCollection[m_selectedAnchor] =
+                computeEdgeWrapper(m_anchorPoints.last(), m_anchorPoints.first());
         }
-        reEvaluatePoints();
-        return;
+    } else {
+        m_pointCollection[m_selectedAnchor - 1] =
+            computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1],
+                               m_anchorPoints[m_selectedAnchor]);
+
+        m_pointCollection[m_selectedAnchor] =
+            computeEdgeWrapper(m_anchorPoints[m_selectedAnchor],
+                               m_anchorPoints[m_selectedAnchor + 1]);
     }
 
-    // middle
-    m_pointCollection[m_selectedAnchor - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1],
-                                                                 m_anchorPoints[m_selectedAnchor]);
-    m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor],
-                                                             m_anchorPoints[m_selectedAnchor + 1]);
     reEvaluatePoints();
 }
 
@@ -521,6 +519,7 @@ void KisToolSelectMagnetic::resetVariables()
     m_anchorPoints.clear();
     m_pointCollection.clear();
     m_paintPath = QPainterPath();
+    m_complete = false;
 }
 
 void KisToolSelectMagnetic::updatePaintPath()

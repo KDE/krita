@@ -11,13 +11,15 @@
 
 QByteArray KoMD5Generator::generateHash(const QByteArray &array)
 {
+    QByteArray result;
+
     if (!array.isEmpty()) {
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(array);
-        return md5.result();
+        result = md5.result();
     }
 
-    return array;
+    return result;
 }
 
 QByteArray KoMD5Generator::generateHash(const QString &filename)

@@ -169,10 +169,8 @@ void KisTagFilterResourceProxyModel::setMetaDataFilter(QMap<QString, QVariant> m
 
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
-    emit beforeFilterChanges();;
     d->currentTagFilter = tag;
     updateTagFilter();
-    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setStorageFilter(bool useFilter, int storageId)

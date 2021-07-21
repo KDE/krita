@@ -22,125 +22,9 @@
 #include "kis_signal_compressor.h"
 #include "KisPart.h"
 #include "KisUsageLogger.h"
+#include "KisFileSystemWatcherWrapper.h"
 
-class FileSystemWatcherWrapper : public QObject
-{
-    Q_OBJECT
-public:
-    FileSystemWatcherWrapper()
-        : m_reattachmentCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
-    {
-        connect(&m_watcher, SIGNAL(fileChanged(QString)), SLOT(slotFileChanged(QString)));
-        connect(&m_reattachmentCompressor, SIGNAL(timeout()), SLOT(slotReattachLostFiles()));
-    }
-
-    bool addPath(const QString &file) {
-        bool result = true;
-        const QString ufile = unifyFilePath(file);
-
-        if (m_pathCount.contains(ufile)) {
-            m_pathCount[ufile]++;
-        } else {
-            m_pathCount.insert(ufile, 1);
-            result = m_watcher.addPath(ufile);
-        }
-
-        return result;
-    }
-
-    bool removePath(const QString &file) {
-        bool result = true;
-        const QString ufile = unifyFilePath(file);
-
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_pathCount.contains(ufile), false);
-
-        if (m_pathCount[ufile] == 1) {
-            m_pathCount.remove(ufile);
-            result = m_watcher.removePath(ufile);
-        } else {
-            m_pathCount[ufile]--;
-        }
-        return result;
-    }
-
-    QStringList files() const {
-        return m_watcher.files();
-    }
-
-private Q_SLOTS:
-    void slotFileChanged(const QString &path) {
-        // re-add the file after QSaveFile optimization
-        if (!m_watcher.files().contains(path)) {
-
-            if (QFileInfo(path).exists()) {
-                m_watcher.addPath(path);
-                m_lostFilesAbsenceCounter.remove(path);
-                emit fileChanged(path);
-            } else {
-                if (m_lostFilesAbsenceCounter.contains(path)) {
-                    m_lostFilesAbsenceCounter[path]++;
-                } else {
-                    m_lostFilesAbsenceCounter[path] = 0;
-                }
-
-                const int absenceTimeMSec =
-                    m_reattachmentCompressor.delay() * m_lostFilesAbsenceCounter[path];
-
-                const bool shouldSpitWarning =
-                    absenceTimeMSec <= 600000 &&
-                        ((absenceTimeMSec >= 60000 && (absenceTimeMSec % 60000 == 0)) ||
-                         (absenceTimeMSec >= 10000 && (absenceTimeMSec % 10000 == 0)));
-
-                if (shouldSpitWarning) {
-                    QString message;
-                    QTextStream log(&message);
-
-                    log << "WARNING: couldn't reconnect to a removed file layer's file (" << path << "). File is not available for " << absenceTimeMSec / 1000 << " seconds";
-
-                    qWarning() << message;
-                    KisUsageLogger::log(message);
-
-                    if (absenceTimeMSec == 600000) {
-                        message.clear();
-                        log.reset();
-
-                        log << "Giving up... :( No more reports about " << path;
-
-                        qWarning() << message;
-                        KisUsageLogger::log(message);
-                    }
-                }
-
-                m_reattachmentCompressor.start();
-            }
-        } else {
-            emit fileChanged(path);
-        }
-    }
-
-    void slotReattachLostFiles() {
-        const QList<QString> lostFiles = m_lostFilesAbsenceCounter.keys();
-        Q_FOREACH (const QString &path, lostFiles) {
-            slotFileChanged(path);
-        }
-    }
-
-Q_SIGNALS:
-    void fileChanged(const QString &path);
-
-public:
-    static QString unifyFilePath(const QString &path) {
-        return QFileInfo(path).absoluteFilePath();
-    }
-
-private:
-    QFileSystemWatcher m_watcher;
-    QHash<QString, int> m_pathCount;
-    KisSignalCompressor m_reattachmentCompressor;
-    QHash<QString, int> m_lostFilesAbsenceCounter;
-};
-
-Q_GLOBAL_STATIC(FileSystemWatcherWrapper, s_fileSystemWatcher)
+Q_GLOBAL_STATIC(KisFileSystemWatcherWrapper, s_fileSystemWatcher)
 
 
 struct KisSafeDocumentLoader::Private
@@ -204,7 +88,7 @@ void KisSafeDocumentLoader::reloadImage()
 
 void KisSafeDocumentLoader::fileChanged(QString path)
 {
-    if (FileSystemWatcherWrapper::unifyFilePath(m_d->path) == path) {
+    if (KisFileSystemWatcherWrapper::unifyFilePath(m_d->path) == path) {
         m_d->fileChangedFlag = true;
         m_d->fileChangedSignalCompressor.start();
     }

@@ -442,6 +442,8 @@ set(kritaui_LIB_SRCS
     StoryboardItem.cpp
 
     KisNodeActivationActionCreatorVisitor.cpp
+
+    KisFileSystemWatcherWrapper.cpp
 )
 
 if (KSeExpr_FOUND)

@@ -164,7 +164,6 @@ namespace KisLayerUtils {
             : storage(new SwitchFrameCommand::SharedStorage())
             , m_sourceNode(node)
             , m_image(image)
-            , m_putBehind(false)
             , m_pinnedToTimeline(false)
         {
             m_frames = fetchLayerFramesRecursive(node);
@@ -179,10 +178,20 @@ namespace KisLayerUtils {
             KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(m_sourceNode.data());
             if (colorizeMask) {
                 m_sourcePaintDevice = colorizeMask->coloringProjection();
-                m_putBehind = colorizeMask->compositeOpId() == COMPOSITE_BEHIND;
-                if (m_putBehind) {
+                const bool putBehind = colorizeMask->compositeOpId() == COMPOSITE_BEHIND;
+                if (putBehind) {
                     m_compositeOp = COMPOSITE_OVER;
                 }
+
+                m_insertionParent = m_sourceNode->parent()->parent();
+                m_insertionPutAfter = putBehind ? m_sourceNode->parent()->prevSibling() : m_sourceNode->parent();
+
+            } else if (dynamic_cast<KisMask*>(m_sourceNode.data())) {
+                m_insertionParent = m_sourceNode->parent()->parent();
+                m_insertionPutAfter = m_sourceNode->parent()->prevSibling();
+            } else {
+                m_insertionParent = m_sourceNode->parent();
+                m_insertionPutAfter = m_sourceNode;
             }
 
             if (m_sourcePaintDevice) {
@@ -272,6 +281,14 @@ namespace KisLayerUtils {
             return lst;
         }
 
+        KisNodeSP insertionPutAfter() const {
+            return m_insertionPutAfter;
+        }
+
+        KisNodeSP insertionParent() const {
+            return m_insertionParent;
+        }
+
         SwitchFrameCommand::SharedStorageSP storage;
 
     private:
@@ -280,9 +297,11 @@ namespace KisLayerUtils {
         KisImageWSP m_image;
         KisPaintDeviceSP m_sourcePaintDevice;
         QSet<int> m_frames;
-        bool m_putBehind;
         QString m_compositeOp;
         bool m_pinnedToTimeline;
+
+        KisNodeSP m_insertionParent;
+        KisNodeSP m_insertionPutAfter;
     };
 
     struct MergeMultipleInfo : public MergeDownInfoBase {
@@ -2148,7 +2167,7 @@ namespace KisLayerUtils {
         KisImageSignalVector emitSignals;
         KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, emitSignals, kundo2_i18n("Convert to a Paint Layer"));
 
-        applicator.applyCommand(new SimpleAddNode(info->image(), info->targetNode(), info->sourceNode()->parent(), info->sourceNode()), KisStrokeJobData::BARRIER);
+        applicator.applyCommand(new SimpleAddNode(info->image(), info->targetNode(), info->insertionParent(), info->insertionPutAfter()), KisStrokeJobData::BARRIER);
 
         if (info->frames().count() > 0) {
             Q_FOREACH(const int& frame, info->frames()) {

@@ -118,6 +118,7 @@ QToolButton* KisCollapsibleButtonGroup::addAction(QAction *action)
 
 void KisCollapsibleButtonGroup::resizeEvent(QResizeEvent *event)
 {
+    Q_UNUSED(event);
     if (m_d->autoCollapse) {
         if (size().width() < sizeHint().width()) {
             setCollapsed(true);

@@ -48,6 +48,7 @@ public:
 
     KisCollapsibleButtonGroup *btnGroupInterpolation;
     KisCollapsibleButtonGroup *btnGroupTangents;
+    KisCollapsibleButtonGroup *btnGroupZoomFit;
 
     KisDoubleParseSpinBox *sbValueRegister;
 
@@ -62,8 +63,6 @@ public:
 
     QToolButton *btnDropFrames;
 
-    QToolButton *btnZoomFitRange;
-    QToolButton *btnZoomFitCurve;
     KisZoomButton *btnZoomHori;
     KisZoomButton *btnZoomVert;
 

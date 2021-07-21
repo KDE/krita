@@ -128,13 +128,10 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     // Zoom buttons..
-    btnZoomFitRange = new QToolButton(this);
-    btnZoomFitRange->setAutoRaise(true);
-    widgetAreaLayout->addWidget(btnZoomFitRange);
-
-    btnZoomFitCurve = new QToolButton(this);
-    btnZoomFitCurve->setAutoRaise(true);
-    widgetAreaLayout->addWidget(btnZoomFitCurve);
+    btnGroupZoomFit = new KisCollapsibleButtonGroup(this);
+    btnGroupZoomFit->setAutoRaise(true);
+    btnGroupZoomFit->setIconSize(QSize(22,22));
+    widgetAreaLayout->addWidget(btnGroupZoomFit);
 
     btnZoomHori = new KisZoomButton(this);
     btnZoomHori->setAutoRaise(true);
@@ -499,16 +496,14 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     action->setToolTip(i18n("Zoom view to fit channel range."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::zoomToFitChannel);
-    m_d->titlebar->btnZoomFitRange->setDefaultAction(action);
-    m_d->titlebar->btnZoomFitRange->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupZoomFit->addAction(action);
 
     action = actionManager->createAction("zoom_to_fit_curve");
     action->setIcon(KisIconUtils::loadIcon("zoom-fit-curve"));
     action->setToolTip(i18n("Zoom view to fit curve."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::zoomToFitCurve);
-    m_d->titlebar->btnZoomFitCurve->setDefaultAction(action);
-    m_d->titlebar->btnZoomFitCurve->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupZoomFit->addAction(action);
 
     {
         action = actionManager->createAction("drop_frames");

@@ -4,8 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H
-#define __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H
+#ifndef __KIS_LINKED_PATTERN_MANAGER_TEST_H
+#define __KIS_LINKED_PATTERN_MANAGER_TEST_H
 
 #include <simpletest.h>
 
@@ -13,7 +13,7 @@
 
 #include <KoPattern.h>
 
-class KisEmbeddedPatternManagerTest : public QObject
+class KisLinkedPatternManagerTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
@@ -45,4 +45,4 @@ private:
     KoPatternSP createPattern();
 };
 
-#endif /* __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H */
+#endif /* __KIS_LINKED_PATTERN_MANAGER_TEST_H */

@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_embedded_pattern_manager.h"
+#include "kis_linked_pattern_manager.h"
 
 #include <QBuffer>
 #include <QByteArray>
@@ -16,7 +16,7 @@
 #include <KisResourcesInterface.h>
 
 
-struct KisEmbeddedPatternManager::Private {
+struct KisLinkedPatternManager::Private {
 
     /// For legacy presets: we now load and save all embedded/linked resources in the kpp file.
     static KoPatternSP tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
@@ -42,14 +42,14 @@ struct KisEmbeddedPatternManager::Private {
     }
 };
 
-void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPatternSP pattern)
+void KisLinkedPatternManager::saveLinkedPattern(KisPropertiesConfigurationSP setting, const KoPatternSP pattern)
 {
     setting->setProperty("Texture/Pattern/PatternMD5", pattern->md5Sum());
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
 }
 
-KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     KoPatternSP pattern;
     auto resourceSourceAdapter = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
@@ -62,7 +62,7 @@ KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfig
     return pattern;
 }
 
-KoPatternSP KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     KoPatternSP pattern = tryFetchPattern(setting, resourcesInterface);
     if (pattern) return pattern;

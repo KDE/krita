@@ -8,7 +8,7 @@
 
 #include <kis_paintop_settings.h>
 #include <resources/KoPattern.h>
-#include "kis_embedded_pattern_manager.h"
+#include "kis_linked_pattern_manager.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -108,7 +108,7 @@ bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setti
         return false;
     }
 
-    m_pattern = KisEmbeddedPatternManager::tryFetchPattern(setting, resourcesInterface);
+    m_pattern = KisLinkedPatternManager::tryFetchPattern(setting, resourcesInterface);
 
     if (!m_pattern) {
         warnKrita << "WARNING: Couldn't load the pattern for a stroke";

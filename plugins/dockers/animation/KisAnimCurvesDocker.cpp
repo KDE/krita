@@ -14,6 +14,7 @@
 #include <QPushButton>
 #include <QMenu>
 #include <QToolButton>
+#include <QSizePolicy>
 
 #include "KisAnimCurvesDocker.h"
 #include "KisAnimCurvesModel.h"
@@ -44,6 +45,7 @@
 #include "kis_slider_spin_box.h"
 #include "kis_double_parse_spin_box.h"
 #include "kis_zoom_button.h"
+#include "kis_collapsible_button_group.h"
 #include "kis_signals_blocker.h"
 #include "kis_time_span.h"
 #include "kis_processing_applicator.h"
@@ -100,15 +102,10 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
         layout->addSpacing(SPACING_UNIT);
 
         // Interpolation Modes..
-        btnInterpConstant = new QToolButton(this);
-        btnInterpConstant->setAutoRaise(true);
-        layout->addWidget(btnInterpConstant);
-        btnInterpLinear = new QToolButton(this);
-        btnInterpLinear->setAutoRaise(true);
-        layout->addWidget(btnInterpLinear);
-        btnInterpBezier = new QToolButton(this);
-        btnInterpBezier->setAutoRaise(true);
-        layout->addWidget(btnInterpBezier);
+        btnGroupInterpolation = new KisCollapsibleButtonGroup(this);
+        btnGroupInterpolation->setAutoRaise(true);
+        btnGroupInterpolation->setIconSize(QSize(22, 22));
+        layout->addWidget(btnGroupInterpolation);
 
         layout->addSpacing(SPACING_UNIT);
 
@@ -469,24 +466,21 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     action->setToolTip(i18n("Hold constant value. No interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyConstantMode);
-    m_d->titlebar->btnInterpConstant->setDefaultAction(action);
-    m_d->titlebar->btnInterpConstant->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("interpolation_linear");
     action->setIcon(KisIconUtils::loadIcon("interpolation_linear"));
     action->setToolTip(i18n("Linear interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyLinearMode);
-    m_d->titlebar->btnInterpLinear->setDefaultAction(action);
-    m_d->titlebar->btnInterpLinear->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("interpolation_bezier");
     action->setIcon(KisIconUtils::loadIcon("interpolation_bezier"));
     action->setToolTip(i18n("Bezier curve interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyBezierMode);
-    m_d->titlebar->btnInterpBezier->setDefaultAction(action);
-    m_d->titlebar->btnInterpBezier->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("tangents_sharp");
     action->setIcon(KisIconUtils::loadIcon("interpolation_sharp"));

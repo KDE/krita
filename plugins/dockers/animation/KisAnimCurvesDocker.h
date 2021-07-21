@@ -23,6 +23,7 @@ class KisIntParseSpinBox;
 class KisDoubleParseSpinBox;
 class KisSliderSpinBox;
 class KisZoomButton;
+class KisCollapsibleButtonGroup;
 
 /** @brief A customized titlebar for the Animation Curves Docker that's
  * packed with useful widgets and menus.
@@ -45,9 +46,7 @@ public:
     QToolButton *btnAddKey;
     QToolButton *btnRemoveKey;
 
-    QToolButton *btnInterpConstant;
-    QToolButton *btnInterpLinear;
-    QToolButton *btnInterpBezier;
+    KisCollapsibleButtonGroup *btnGroupInterpolation;
 
     QToolButton *btnTangentSharp;
     QToolButton *btnTangentSmooth;

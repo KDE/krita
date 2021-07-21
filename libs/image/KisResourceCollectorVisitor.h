@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
-    SPDX-FileCopyrightText: 2021 Halla Rempt <halla@valdyas.org>
+/*
+ *  SPDX-FileCopyrightText: 2021 Halla Rempt <halla@valdyas.org>
+ *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 #ifndef KISRESOURCECOLLECTORVISITOR_H
 #define KISRESOURCECOLLECTORVISITOR_H

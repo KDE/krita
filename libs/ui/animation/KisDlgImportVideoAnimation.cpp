@@ -345,6 +345,8 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
     m_ui.fileLocationLabel->setText(elidedFileString);
     m_videoInfo = loadVideoInfo(filename);
 
+    if ( m_videoInfo.file.isEmpty() ) return;
+
     QStringList textInfo;
 
     textInfo.append(i18nc("video importer: video file statistics", "Width: %1 px", QString::number(m_videoInfo.width)));

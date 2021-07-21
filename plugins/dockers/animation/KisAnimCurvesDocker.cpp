@@ -110,12 +110,10 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
         layout->addSpacing(SPACING_UNIT);
 
         // Tangent Modes..
-        btnTangentSharp = new QToolButton(this);
-        btnTangentSharp->setAutoRaise(true);
-        layout->addWidget(btnTangentSharp);
-        btnTangentSmooth = new QToolButton(this);
-        btnTangentSmooth->setAutoRaise(true);
-        layout->addWidget(btnTangentSmooth);
+        btnGroupTangents = new KisCollapsibleButtonGroup(this);
+        btnGroupTangents->setAutoRaise(true);
+        btnGroupTangents->setIconSize(QSize(22, 22));
+        layout->addWidget(btnGroupTangents);
 
         widgetAreaLayout->addWidget(widget);
     }
@@ -487,16 +485,14 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     action->setToolTip(i18n("Sharp interpolation tangents."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applySharpMode);
-    m_d->titlebar->btnTangentSharp->setDefaultAction(action);
-    m_d->titlebar->btnTangentSharp->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupTangents->addAction(action);
 
     action = actionManager->createAction("tangents_smooth");
     action->setIcon(KisIconUtils::loadIcon("interpolation_smooth"));
     action->setToolTip(i18n("Smooth interpolation tangents."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applySmoothMode);
-    m_d->titlebar->btnTangentSmooth->setDefaultAction(action);
-    m_d->titlebar->btnTangentSmooth->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupTangents->addAction(action);
 
     action = actionManager->createAction("zoom_to_fit_range");
     action->setIcon(KisIconUtils::loadIcon("zoom-fit"));

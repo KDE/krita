@@ -47,9 +47,7 @@ public:
     QToolButton *btnRemoveKey;
 
     KisCollapsibleButtonGroup *btnGroupInterpolation;
-
-    QToolButton *btnTangentSharp;
-    QToolButton *btnTangentSmooth;
+    KisCollapsibleButtonGroup *btnGroupTangents;
 
     KisDoubleParseSpinBox *sbValueRegister;
 
@@ -63,10 +61,6 @@ public:
     KisSliderSpinBox *sbSpeed;
 
     QToolButton *btnDropFrames;
-
-    QToolButton *btnAutoKey;
-    QAction *autoKeyBlank;
-    QAction *autoKeyDuplicate;
 
     QToolButton *btnZoomFitRange;
     QToolButton *btnZoomFitCurve;

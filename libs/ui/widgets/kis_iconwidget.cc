@@ -68,6 +68,8 @@ QSize KisIconWidget::preferredIconSize() const
 
 void KisIconWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     const qint32 border = 3;
     const qint32 iconWidth = width() - (border*2);
     const qint32 iconHeight = height() - (border*2);

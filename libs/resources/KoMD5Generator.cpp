@@ -9,28 +9,28 @@
 #include <QFile>
 #include <QCryptographicHash>
 
-QByteArray KoMD5Generator::generateHash(const QByteArray &array)
+QString KoMD5Generator::generateHash(const QByteArray &array)
 {
-    QByteArray result;
+    QString result;
 
     if (!array.isEmpty()) {
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(array);
-        result = md5.result();
+        result = md5.result().toHex();
     }
 
     return result;
 }
 
-QByteArray KoMD5Generator::generateHash(const QString &filename)
+QString KoMD5Generator::generateHash(const QString &filename)
 {
-    QByteArray result;
+    QString result;
 
     QFile f(filename);
     if (f.exists() && f.open(QIODevice::ReadOnly)) {
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(&f);
-        result = md5.result();
+        result = md5.result().toHex();
     }
 
     return result;

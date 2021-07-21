@@ -39,13 +39,13 @@ void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration
         setting->setProperty(KisPaintOpUtils::RequiredBrushFilesListTag, requiredFiles);
     }
 
-    QByteArray md5sum = m_brush->md5();
-    setting->setProperty(KisPaintOpUtils::RequiredBrushMD5Tag, QString::fromLatin1(md5sum.toHex()));
+    QString md5sum = m_brush->md5Sum();
+    setting->setProperty(KisPaintOpUtils::RequiredBrushMD5Tag, md5sum);
 
     {
         QStringList requiredMD5s =
             setting->getStringList(KisPaintOpUtils::RequiredBrushMD5ListTag);
-        requiredMD5s << QString::fromLatin1(md5sum.toHex());
+        requiredMD5s << md5sum;
         setting->setProperty(KisPaintOpUtils::RequiredBrushMD5ListTag, requiredMD5s);
     }
 

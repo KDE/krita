@@ -52,7 +52,6 @@ KoStopGradient::KoStopGradient(const KoStopGradient &rhs)
     , m_stop(rhs.m_stop)
     , m_focalPoint(rhs.m_focalPoint)
 {
-    setMD5(rhs.md5());
 }
 
 bool KoStopGradient::operator==(const KoStopGradient& rhs) const

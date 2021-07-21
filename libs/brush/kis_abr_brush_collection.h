@@ -85,10 +85,6 @@ public:
         return m_filename;
     }
 
-    QByteArray md5() const {
-        return m_md5;
-    }
-
 protected:
     KisAbrBrushCollection(const KisAbrBrushCollection& rhs);
 
@@ -104,8 +100,6 @@ private:
     QDateTime m_lastModified;
     QString m_filename;
     QSharedPointer<QMap<QString, KisAbrBrushSP>> m_abrBrushes;
-    QByteArray m_md5;
-
 };
 
 typedef QSharedPointer<KisAbrBrushCollection> KisAbrBrushCollectionSP;

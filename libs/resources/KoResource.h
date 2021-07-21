@@ -108,9 +108,18 @@ public:
      */
     virtual QString thumbnailPath() const;
 
-    /// @return the md5sum calculated over the contents of the resource.
-    QByteArray md5(bool generateIfEmpty = true) const;
-    void setMD5(const QByteArray &md5);
+    /**
+     * @param generateIfEmpty: if the resource does not have an md5sum set,
+     * if this is true, the resource saves itself into a buffer and calculates
+     * the md5sum over that. This may be different from the actual md5sum you
+     * would get calculated over the actual resource file.
+     * @return the md5sum calculated over the contents of the resource. This
+     * is in hex-encoded string format.
+     */
+    QString md5Sum(bool generateIfEmpty = true) const;
+
+    /// Set the md5sum of this resource. It must be in hex-encoded string format
+    void setMD5Sum(const QString &md5sum);
 
     /// @return the filename of this resource within the container (folder, bundle, ...)
     QString filename() const;
@@ -200,12 +209,12 @@ private:
 
 static inline bool operator==(const KoResource &resource1, const KoResource &resource2)
 {
-    return (resource1.md5() == resource2.md5());
+    return (resource1.md5Sum() == resource2.md5Sum());
 }
 
 static inline uint qHash(const KoResource &resource)
 {
-    return qHash(resource.md5());
+    return qHash(resource.md5Sum());
 }
 
 Q_DECLARE_METATYPE(QSharedPointer<KoResource>)

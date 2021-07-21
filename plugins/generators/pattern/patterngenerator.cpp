@@ -136,7 +136,7 @@ KisFilterConfigurationSP PatternGenerator::defaultConfiguration(KisResourcesInte
         return config;
     }
 
-    config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->md5()));
+    config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->md5Sum()));
     config->setProperty("pattern/md5", QVariant::fromValue(source.fallbackResource()->name()));
 
     config->setProperty("transform_shear_x", QVariant::fromValue(0.0));

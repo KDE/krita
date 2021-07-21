@@ -443,8 +443,8 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
     q.bindValue(":version", resource->version());
     q.bindValue(":filename", resource->filename());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
-    q.bindValue(":md5sum", resource->md5().toHex());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5Sum().isEmpty());
+    q.bindValue(":md5sum", resource->md5Sum());
     r = q.exec();
     if (!r) {
 
@@ -576,7 +576,7 @@ bool KisResourceCacheDb::updateResourceTableForResourceIfNeeded(int resourceId, 
         KoResourceSP resource = storage->resource(url);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resource, false);
         resource->setVersion(maxVersion);
-        resource->setMD5(storage->resourceMd5(url));
+        resource->setMD5Sum(storage->resourceMd5(url));
         r = makeResourceTheCurrentVersion(resourceId, resource);
     }
 
@@ -715,7 +715,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
             qWarning() << "Could not prepare select count from versioned_resources query" << q.lastError();
             return false;
         }
-        q.bindValue(":md5sum", resource->md5().toHex());
+        q.bindValue(":md5sum", resource->md5Sum());
         if (!q.exec()) {
             qWarning() << "Could not execute select from resource_types query" << q.lastError();
             return false;
@@ -781,7 +781,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     q.bindValue(":status", active);
     q.bindValue(":temporary", (temporary ? 1 : 0));
-    q.bindValue(":md5sum", resource->md5().toHex());
+    q.bindValue(":md5sum", resource->md5Sum());
 
     r = q.exec();
     if (!r) {
@@ -830,7 +830,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
             KoResourceSP resource = verIt->resource();
             if (resource && resource->valid()) {
                 resource->setVersion(verIt->guessedVersion());
-                resource->setMD5(storage->resourceMd5(verIt->url()));
+                resource->setMD5Sum(storage->resourceMd5(verIt->url()));
 
                 if (resourceId < 0) {
                     if (addResource(storage, iter->lastModified(), resource, iter->type())) {
@@ -1448,7 +1448,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
 
             res->setVersion(itA->version);
-            res->setMD5(storage->resourceMd5(itA->url));
+            res->setMD5Sum(storage->resourceMd5(itA->url));
             if (!res->valid()) {
                 KisUsageLogger::log("Could not retrieve md5 for resource" + itA->url);
                 ++itA;
@@ -1473,7 +1473,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             for (auto it = std::next(itA); it != nextResource; ++it) {
                 KoResourceSP res = storage->resource(it->url);
                 res->setVersion(it->version);
-                res->setMD5(storage->resourceMd5(it->url));
+                res->setMD5Sum(storage->resourceMd5(it->url));
                 if (!res->valid()) {
                     continue;
                 }
@@ -1505,7 +1505,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 KoResourceSP res = storage->resource(itA->url);
                 if (res) {
                     res->setVersion(itA->version);
-                    res->setMD5(storage->resourceMd5(itA->url));
+                    res->setMD5Sum(storage->resourceMd5(itA->url));
 
                     const bool result = addResourceVersionImpl(itA->resourceId, itA->timestamp, storage, res);
                     KIS_SAFE_ASSERT_RECOVER_NOOP(result);

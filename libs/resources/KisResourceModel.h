@@ -201,8 +201,8 @@ public:
      *
      * @return a resource if one is found, or 0 if none are found
      */
-    KoResourceSP resourceForName(QString name) const;
-    KoResourceSP resourceForMD5(const QByteArray md5sum) const;
+    KoResourceSP resourceForName(const QString &name) const;
+    KoResourceSP resourceForMD5(const QString &md5sum) const;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
 
 private:
@@ -279,7 +279,7 @@ public:
      * @return a resource if one is found, or 0 if none are found
      */
     QVector<KoResourceSP> resourcesForName(QString name) const;
-    QVector<KoResourceSP> resourcesForMD5(const QByteArray md5sum) const;
+    QVector<KoResourceSP> resourcesForMD5(const QString md5sum) const;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
 
 protected:

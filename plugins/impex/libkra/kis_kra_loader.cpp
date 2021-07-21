@@ -120,7 +120,7 @@ using namespace KRA;
 
 struct Resource {
     QString filename;
-    QByteArray md5sum;
+    QString md5sum;
     QString resourceType;
     QString name;
 };
@@ -391,7 +391,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             {
                 Resource resourceItem;
                 resourceItem.filename = resourceElement.attribute("filename");
-                resourceItem.md5sum = QByteArray::fromHex(resourceElement.attribute("md5sum").toLatin1());
+                resourceItem.md5sum = resourceElement.attribute("md5sum");
                 resourceItem.resourceType = resourceElement.attribute("type");
                 resourceItem.name = resourceElement.attribute("name");
                 m_d->resources.append(resourceItem);

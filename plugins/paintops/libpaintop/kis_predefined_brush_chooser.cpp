@@ -230,7 +230,7 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
      */
 
     KoResourceServer<KisBrush>* server = KisBrushServerProvider::instance()->brushServer();
-    KoResourceSP resource = server->resource(brush->md5(), "", brush->name());
+    KoResourceSP resource = server->resource(brush->md5Sum(), "", brush->name());
 
     if (!resource) {
         resource = brush;

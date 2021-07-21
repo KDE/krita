@@ -157,7 +157,7 @@ KisPropertiesConfigurationSP KisPalettizeWidget::configuration() const
     KisFilterConfigurationSP config = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
 
     if (m_paletteWidget->currentResource()) {
-        config->setProperty("md5sum", QVariant(m_paletteWidget->currentResource()->md5()));
+        config->setProperty("md5sum", QVariant(m_paletteWidget->currentResource()->md5Sum()));
         config->setProperty("palette", QVariant(m_paletteWidget->currentResource()->name()));
     }
     config->setProperty("colorspace", colorspaceComboBox->currentIndex());

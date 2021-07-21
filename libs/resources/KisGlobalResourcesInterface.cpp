@@ -26,16 +26,16 @@ public:
     {
     }
 protected:
-    KoResourceSP resourceForFilename(const QString& filename) const override {
+    KoResourceSP resourceForFilename(const QString &filename) const override {
         return m_model->resourceForFilename(filename);
     }
 
-    KoResourceSP resourceForName(const QString& name) const override {
+    KoResourceSP resourceForName(const QString &name) const override {
         KoResourceSP res = m_model->resourceForName(name);
         return res;
     }
 
-    KoResourceSP resourceForMD5(const QByteArray& md5) const override {
+    KoResourceSP resourceForMD5(const QString &md5) const override {
         return m_model->resourceForMD5(md5);
     }
 public:

@@ -52,7 +52,7 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
             setting->setProperty(KisPaintOpUtils::RequiredBrushFilesListTag, requiredFiles);
         }
 
-        const QString brushMD5 = brush->md5();
+        const QString brushMD5 = brush->md5Sum();
 
         if (!brushMD5.isEmpty()) {
             QStringList requiredFiles =

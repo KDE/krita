@@ -352,7 +352,7 @@ void KisDlgInternalColorSelector::slotFinishUp()
     KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     if (m_d->paletteModel) {
         if (m_d->paletteModel->colorSet()) {
-            cfg.writeEntry("internal_selector_active_color_set_md5", m_d->paletteModel->colorSet()->md5());
+            cfg.writeEntry("internal_selector_active_color_set_md5", m_d->paletteModel->colorSet()->md5Sum());
             cfg.writeEntry("internal_selector_active_color_set", m_d->paletteModel->colorSet()->name());
         }
     }

@@ -633,7 +633,7 @@ const KoColorProfile *KisKraLoadVisitor::loadProfile(const QString &location, co
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
 
-        QByteArray hash = KoMD5Generator::generateHash(data);
+        QString hash = KoMD5Generator::generateHash(data);
 
         if (m_profileCache.contains(hash)) {
             result = m_profileCache[hash];

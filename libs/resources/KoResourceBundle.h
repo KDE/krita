@@ -75,7 +75,7 @@ public:
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addResource(QString fileType, QString filePath, QVector<KisTagSP> fileTagList, const QByteArray md5sum);
+    void addResource(QString fileType, QString filePath, QVector<KisTagSP> fileTagList, const QString md5sum);
 
     QList<QString> getTagsList();
 
@@ -105,7 +105,7 @@ public:
 
     QString filename() const;
 
-    QByteArray resourceMd5(const QString &url);
+    QString resourceMd5(const QString &url);
 private:
 
     void writeMeta(const QString &metaTag, KoXmlWriter *writer);

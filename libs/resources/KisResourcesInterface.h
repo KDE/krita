@@ -49,7 +49,7 @@ public:
         friend class KisResourcesInterface;
         virtual KoResourceSP resourceForFilename(const QString& filename) const = 0;
         virtual KoResourceSP resourceForName(const QString& name) const = 0;
-        virtual KoResourceSP resourceForMD5(const QByteArray& md5) const = 0;
+        virtual KoResourceSP resourceForMD5(const QString& md5) const = 0;
 public:
         /**
          * @brief resource retrieves a resource, prefarably by md5, but with filename and name
@@ -60,7 +60,7 @@ public:
         KoResourceSP resource(const QString md5, const QString filename, const QString name) {
 
             if (!md5.isEmpty()) {
-                return resourceForMD5(QByteArray::fromHex(md5.toLatin1()));
+                return resourceForMD5(md5);
             }
 
             if (!filename.isEmpty()) {
@@ -98,7 +98,7 @@ private:
             return m_source->resourceForName(name).dynamicCast<T>();
         }
 
-        QSharedPointer<T> resourceForMD5(const QByteArray& md5) const
+        QSharedPointer<T> resourceForMD5(const QString& md5) const
         {
             return m_source->resourceForMD5(md5).dynamicCast<T>();
         }
@@ -112,7 +112,7 @@ public:
         QSharedPointer<T> resource(const QString md5, const QString filename, const QString name) {
 
             if (!md5.isEmpty()) {
-                return resourceForMD5(QByteArray::fromHex(md5.toLatin1()));
+                return resourceForMD5(md5);
             }
 
             if (!filename.isEmpty()) {

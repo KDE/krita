@@ -191,7 +191,7 @@ KoResourceSP KisResourceStorage::resource(const QString &url)
     return d->storagePlugin->resource(url);
 }
 
-QByteArray KisResourceStorage::resourceMd5(const QString &url)
+QString KisResourceStorage::resourceMd5(const QString &url)
 {
     return d->storagePlugin->resourceMd5(url);
 }

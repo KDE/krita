@@ -193,7 +193,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
                         KisResourceModel model(resourceType);
 
-                        QVector<KoResourceSP> existingResources = model.resourcesForMD5(QByteArray::fromHex(md5sum.toLatin1()));
+                        QVector<KoResourceSP> existingResources = model.resourcesForMD5(md5sum);
 
                         if (existingResources.isEmpty()) {
                              QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
@@ -252,7 +252,7 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
                 QDomText text = doc.createCDATASection(QString::fromLatin1(ba.toBase64()));
                 QDomElement e = doc.createElement("resource");
                 e.setAttribute("type", resource->resourceType().first);
-                e.setAttribute("md5sum", QString::fromLatin1(resource->md5().toHex()));
+                e.setAttribute("md5sum", resource->md5Sum());
                 e.setAttribute("name", resource->name());
                 e.appendChild(text);
                 resourcesElement.appendChild(e);
@@ -458,8 +458,6 @@ QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP gl
         resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
     }
 
-    qDebug() << "preset linked resources" << resources;
-
     return resources;
 }
 
@@ -480,9 +478,6 @@ QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP 
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
         resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
     }
-
-    qDebug() << "preset embeddede resources" << resources;
-
     return resources;
 }
 

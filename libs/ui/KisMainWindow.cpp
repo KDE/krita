@@ -1858,14 +1858,14 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 
 void KisMainWindow::restoreWorkspace()
 {
-    QByteArray md5 = sender()->property("md5").toByteArray();
+    QString md5 = sender()->property("md5").toString();
     KoResourceServer<KisWorkspaceResource> *rserver = KisResourceServerProvider::instance()->workspaceServer();
     KoResourceSP resource = rserver->resource(md5, "", "");
     if (resource) {
         restoreWorkspace(resource);
     }
     else {
-        qWarning() << "Could not retrieve resource for" << QString::fromLatin1(md5.toHex());
+        qWarning() << "Could not retrieve resource for" << md5;
     }
 }
 
@@ -2546,7 +2546,7 @@ void KisMainWindow::updateWindowMenu()
     while (resourceIterator.hasNext()) {
         KisResourceItemSP resource = resourceIterator.next();
         QAction *action = workspaceMenu->addAction(resource->name());
-        action->setProperty("md5", QVariant::fromValue<QByteArray>(resource->md5()));
+        action->setProperty("md5", QVariant::fromValue<QString>(resource->md5sum()));
         connect(action, SIGNAL(triggered()), this, SLOT(restoreWorkspace()));
     }
     workspaceMenu->addSeparator();

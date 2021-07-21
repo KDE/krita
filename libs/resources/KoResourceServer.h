@@ -269,15 +269,12 @@ private:
 
     }
 
-    QSharedPointer<T> resourceByMD5(const QByteArray& md5) const
+    QSharedPointer<T> resourceByMD5(const QString& md5) const
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
-
-
-        //qDebug() << "resourceByMD5" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {
             return nullptr;
         }
@@ -303,7 +300,7 @@ public:
     QSharedPointer<T> resource(const QString &md5, const QString &fileName, const QString &name)
     {
         if (!md5.isEmpty()) {
-            return resourceByMD5(QByteArray::fromHex(md5.toLatin1()));
+            return resourceByMD5(md5);
         }
         else {
             return nullptr;

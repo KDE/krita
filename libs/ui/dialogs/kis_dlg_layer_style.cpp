@@ -1047,7 +1047,7 @@ public:
         if (!gradient) return 0;
 
         KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
-        KoAbstractGradientSP resource = server->resource(QString::fromLatin1(gradient->md5().toHex()), "", "");
+        KoAbstractGradientSP resource = server->resource(gradient->md5Sum(), "", "");
 
         if (!resource) {
             KoAbstractGradientSP clone = gradient->clone().dynamicCast<KoAbstractGradient>();

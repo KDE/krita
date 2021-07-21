@@ -252,8 +252,8 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         resource->setVersion(q.value(1).toInt());
         Q_ASSERT(resource->version() >= 0);
 
-        resource->setMD5(QByteArray::fromHex(q.value(2).toByteArray()));
-        Q_ASSERT(!resource->md5().isEmpty());
+        resource->setMD5Sum(q.value(2).toString());
+        Q_ASSERT(!resource->md5Sum().isEmpty());
 
         // To override resources that use the filename for the name, which is versioned, and we don't want the version number in the name
         resource->setName(q.value(3).toString());;
@@ -306,12 +306,12 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
         return nullptr;
     }
 
-    const QByteArray md5 = resource->md5();
+    const QString md5 = resource->md5Sum();
 
     const KoResourceSP existingResource = storage->resource(resourceType + "/" + resource->filename());
 
     if (existingResource) {
-        if (existingResource->md5() == md5) {
+        if (existingResource->md5Sum() == md5) {
             return existingResource;
         } else {
             qWarning() << "A resource with the same filename but a different MD5 already exists in the storage" << resourceType << fileName << storageLocation;
@@ -328,7 +328,7 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
             return nullptr;
         }
 
-        Q_ASSERT(resource->md5() == md5);
+        Q_ASSERT(resource->md5Sum() == md5);
         resource->setVersion(0);
 
         // Insert into the database
@@ -371,7 +371,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     }
 
     resource->setStorageLocation(storageLocation);
-    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
+    resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
@@ -406,7 +406,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
         return false;
     }
 
-    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
+    resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     // The version needs already to have been incremented
@@ -438,7 +438,7 @@ bool KisResourceLocator::reloadResource(const QString &resourceType, const KoRes
         return false;
     }
 
-    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
+    resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     // We haven't changed the version of the resource, so the cache must be still valid

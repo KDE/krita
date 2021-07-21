@@ -256,7 +256,7 @@ const QString KoResourceBundle::metaData(const QString &key, const QString &defa
     }
 }
 
-void KoResourceBundle::addResource(QString resourceType, QString filePath, QVector<KisTagSP> fileTagList, const QByteArray md5sum)
+void KoResourceBundle::addResource(QString resourceType, QString filePath, QVector<KisTagSP> fileTagList, const QString md5sum)
 {
     QStringList tags;
     Q_FOREACH(KisTagSP tag, fileTagList) {
@@ -505,9 +505,9 @@ bool KoResourceBundle::loadResource(KoResourceSP resource)
     return true;
 }
 
-QByteArray KoResourceBundle::resourceMd5(const QString &url)
+QString KoResourceBundle::resourceMd5(const QString &url)
 {
-    QByteArray result;
+    QString result;
 
     if (m_filename.isEmpty()) return result;
 

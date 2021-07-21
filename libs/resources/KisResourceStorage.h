@@ -198,7 +198,7 @@ public:
     KoResourceSP resource(const QString &url);
 
     /// The MD5 checksum of the resource in the storage
-    QByteArray resourceMd5(const QString &url);
+    QString resourceMd5(const QString &url);
 
     /// An iterator over all the resources in the storage
     QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;

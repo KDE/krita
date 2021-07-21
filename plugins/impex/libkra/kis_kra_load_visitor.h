@@ -95,7 +95,7 @@ private:
     QStringList m_errorMessages;
     QStringList m_warningMessages;
     KoShapeControllerBase *m_shapeController;
-    QMap<QByteArray, const KoColorProfile *> m_profileCache;
+    QMap<QString, const KoColorProfile *> m_profileCache;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

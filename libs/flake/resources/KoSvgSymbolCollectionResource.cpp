@@ -109,7 +109,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
     }
 
     d->data = dev->readAll();
-    setMD5(KoMD5Generator::generateHash(d->data));
+    setMD5Sum(KoMD5Generator::generateHash(d->data));
 
     dev->seek(0);
 

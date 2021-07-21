@@ -116,7 +116,7 @@ void KisGradientMapFilterConfiguration::setGradient(KoAbstractGradientSP newGrad
     QDomDocument document;
     QDomElement gradientElement = document.createElement("gradient");
     gradientElement.setAttribute("name", newGradient->name());
-    gradientElement.setAttribute("md5sum", QString::fromLatin1(newGradient->md5().toHex()));
+    gradientElement.setAttribute("md5sum", newGradient->md5Sum());
 
     if (newGradient.dynamicCast<KoStopGradient>()) {
         KoStopGradient *gradient = static_cast<KoStopGradient*>(newGradient.data());

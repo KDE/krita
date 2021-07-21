@@ -44,11 +44,9 @@ struct KisEmbeddedPatternManager::Private {
 
 void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPatternSP pattern)
 {
-    QByteArray patternMD5 = pattern->md5();
-    setting->setProperty("Texture/Pattern/PatternMD5", patternMD5.toBase64());
+    setting->setProperty("Texture/Pattern/PatternMD5", pattern->md5Sum());
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
-
 }
 
 KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)

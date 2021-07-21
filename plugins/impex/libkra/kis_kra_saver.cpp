@@ -310,7 +310,7 @@ void KisKraSaver::saveResourcesToXML(QDomDocument &doc, QDomElement &element)
         eResource.setAttribute("type", resource->resourceType().first);
         eResource.setAttribute("name", resource->name());
         eResource.setAttribute("filename", resource->filename());
-        eResource.setAttribute("md5sum", QString::fromLatin1(resource->md5().toHex()));
+        eResource.setAttribute("md5sum", resource->md5Sum());
 
         if (resource->resourceType().first == ResourceType::Palettes) {
             ePalette.appendChild(eResource);

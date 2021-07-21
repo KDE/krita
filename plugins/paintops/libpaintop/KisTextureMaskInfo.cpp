@@ -56,7 +56,7 @@ bool operator==(const KisTextureMaskInfo &lhs, const KisTextureMaskInfo &rhs) {
             (lhs.m_pattern == rhs.m_pattern ||
              (lhs.m_pattern &&
               rhs.m_pattern &&
-              lhs.m_pattern->md5() == rhs.m_pattern->md5())) &&
+              lhs.m_pattern->md5Sum() == rhs.m_pattern->md5Sum())) &&
             qFuzzyCompare(lhs.m_scale, rhs.m_scale) &&
             qFuzzyCompare(lhs.m_brightness, rhs.m_brightness) &&
             qFuzzyCompare(lhs.m_contrast, rhs.m_contrast) &&

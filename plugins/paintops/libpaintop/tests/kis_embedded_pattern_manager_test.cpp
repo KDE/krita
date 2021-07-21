@@ -98,9 +98,9 @@ KisPropertiesConfigurationSP KisEmbeddedPatternManagerTest::createXML(NameStatus
         KoPatternSP pattern = createPattern();
 
         if (hasMd5) {
-            QByteArray patternMD5 = pattern->md5();
+            QString patternMD5 = pattern->md5Sum();
             Q_ASSERT(!patternMD5.isEmpty());
-            setting->setProperty("Texture/Pattern/PatternMD5", patternMD5.toBase64());
+            setting->setProperty("Texture/Pattern/PatternMD5", patternMD5);
         }
 
         QByteArray ba;
@@ -114,7 +114,7 @@ KisPropertiesConfigurationSP KisEmbeddedPatternManagerTest::createXML(NameStatus
     return setting;
 }
 
-KoPatternSP findOnServer(QByteArray md5)
+KoPatternSP findOnServer(const QString &md5)
 {
     KoPatternSP pattern;
 
@@ -129,7 +129,7 @@ void KisEmbeddedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool h
 {
     QSharedPointer<KoPattern> basePattern(createPattern());
 
-    KoPatternSP initialPattern = findOnServer(basePattern->md5());
+    KoPatternSP initialPattern = findOnServer(basePattern->md5Sum());
     QCOMPARE((bool)initialPattern, isOnServer);
 
     KisPropertiesConfigurationSP setting = createXML(nameStatus, hasMd5);

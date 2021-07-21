@@ -33,54 +33,46 @@ KisNodeListSP KisInputOutputMapper::inputNodes(InputLayerMode inputMode)
     KisNodeListSP result(new QList< KisNodeSP >());
     switch (inputMode)
     {
-        case ACTIVE_LAYER:
-        {
-            result->append(m_activeNode);
-            break;// drop down in case of one more layer modes
-        }
-        case ACTIVE_LAYER_BELOW_LAYER:
-        {
-            result->append(m_activeNode);
-            result->append(m_activeNode->prevSibling());
-            break;
-        }
-        case ACTIVE_LAYER_ABOVE_LAYER:
-        {
-            result->append(m_activeNode);
-            result->append(m_activeNode->nextSibling());
-            break;
-        }
-        case NONE:
-        {
-            break;
-        }
-        case ALL_VISIBLE_LAYERS:
-        {
-            allLayers(result, true);
-            break;
-        }
-        case ALL_INVISIBLE_LAYERS:
-        {
-            allLayers(result, false);
-            break;
-        }
-        case ALL_LAYERS:
-        {
-            allLayers(result);
-            break;
-        }
-        case ALL_VISIBLE_LAYERS_DECR_UNUSED:
-        case ALL_INVISIBLE_DECR_UNUSED:
-        case ALL_DECR_UNUSED:
-        {
-            qWarning() << "Inputmode" << inputMode << "is not supported by GMic anymore";
-            break;
-        }
-        default:
-        {
-            Q_ASSERT(false); // why here??
-            break;
-        }
+    case InputLayerMode::Active: {
+        result->append(m_activeNode);
+        break; // drop down in case of one more layer modes
+    }
+    case InputLayerMode::ActiveAndBelow: {
+        result->append(m_activeNode);
+        result->append(m_activeNode->prevSibling());
+        break;
+    }
+    case InputLayerMode::ActiveAndAbove: {
+        result->append(m_activeNode);
+        result->append(m_activeNode->nextSibling());
+        break;
+    }
+    case InputLayerMode::NoInput: {
+        break;
+    }
+    case InputLayerMode::AllVisible: {
+        allLayers(result, true);
+        break;
+    }
+    case InputLayerMode::AllInvisible: {
+        allLayers(result, false);
+        break;
+    }
+    case InputLayerMode::All: {
+        allLayers(result);
+        break;
+    }
+    case InputLayerMode::AllVisiblesDesc_DEPRECATED:
+    case InputLayerMode::AllInvisiblesDesc_DEPRECATED:
+    case InputLayerMode::AllDesc_DEPRECATED: {
+        qWarning() << "Inputmode" << static_cast<int>(inputMode) << "is not supported by GMic anymore";
+        break;
+    }
+    case InputLayerMode::Unspecified:
+    default: {
+        qWarning() << "Inputmode" << static_cast<int>(inputMode) << "must be specified by GMic or is not implemented in Krita";
+        break;
+    }
     }
     return result;
 }

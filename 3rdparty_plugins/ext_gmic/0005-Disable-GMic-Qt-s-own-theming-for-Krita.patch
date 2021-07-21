@@ -1,32 +1,32 @@
-From c54806fafbc1503bc44fec193e154460c90166b4 Mon Sep 17 00:00:00 2001
+From 99ac9d471f920850e181c402ee175cc9c98f66c9 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 27 Jun 2021 00:14:25 +0000
-Subject: [PATCH 7/9] Disable GMic-Qt's own theming for Krita
+Subject: [PATCH 05/10] Disable GMic-Qt's own theming for Krita
 
 ---
- CMakeLists.txt         |  1 +
- src/DialogSettings.cpp | 11 ++++++++++-
- ui/dialogsettings.ui   |  2 +-
+ gmic-qt/CMakeLists.txt         |  1 +
+ gmic-qt/src/DialogSettings.cpp | 11 ++++++++++-
+ gmic-qt/ui/dialogsettings.ui   |  2 +-
  3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 74110c5..14463d7 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -629,6 +629,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
-     set (gmic_qt_SRCS ${gmic_qt_SRCS} src/Host/KritaPlugin/host.cpp src/Host/KritaPlugin/gmicqttoolplugin.cpp)
+diff --git a/gmic-qt/CMakeLists.txt b/gmic-qt/CMakeLists.txt
+index 6fd4d65..f7be908 100644
+--- a/gmic-qt/CMakeLists.txt
++++ b/gmic-qt/CMakeLists.txt
+@@ -645,6 +645,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
      set (gmic_qt_SRCS ${gmic_qt_SRCS} )
+     qt5_wrap_ui(gmic_qt_SRCS ${gmic_qt_FORMS})
      add_definitions(-DGMIC_HOST=krita-plugin)
 +    add_definitions(-D_GMIC_QT_DISABLE_THEMING_)
      add_library(krita_gmic_qt MODULE ${gmic_qt_SRCS} ${gmic_qt_QRC} ${qmic_qt_QM})
      target_include_directories(
        krita_gmic_qt
-diff --git a/src/DialogSettings.cpp b/src/DialogSettings.cpp
-index 7b8d62c..7531762 100644
---- a/src/DialogSettings.cpp
-+++ b/src/DialogSettings.cpp
-@@ -103,6 +103,9 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
-   const bool savedDarkTheme = QSettings().value(DARK_THEME_KEY, GmicQt::DarkThemeIsDefault).toBool();
+diff --git a/gmic-qt/src/DialogSettings.cpp b/gmic-qt/src/DialogSettings.cpp
+index 49a3d57..e0540d7 100644
+--- a/gmic-qt/src/DialogSettings.cpp
++++ b/gmic-qt/src/DialogSettings.cpp
+@@ -121,6 +121,9 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
+   const bool savedDarkTheme = QSettings().value(DARK_THEME_KEY, GmicQtHost::DarkThemeIsDefault).toBool();
    ui->rbDarkTheme->setChecked(savedDarkTheme);
    ui->rbDefaultTheme->setChecked(!savedDarkTheme);
 +#ifdef _GMIC_QT_DISABLE_THEMING_
@@ -35,7 +35,7 @@ index 7b8d62c..7531762 100644
    ui->cbNativeColorDialogs->setChecked(_nativeColorDialogs);
    ui->cbNativeColorDialogs->setToolTip(tr("Check to use Native/OS color dialog, uncheck to use Qt's"));
    ui->cbShowLogos->setChecked(_logosAreVisible);
-@@ -123,7 +126,9 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
+@@ -141,7 +144,9 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
  
    connect(Updater::getInstance(), SIGNAL(updateIsDone(int)), this, SLOT(enableUpdateButton()));
  
@@ -45,7 +45,7 @@ index 7b8d62c..7531762 100644
  
    connect(ui->cbShowLogos, SIGNAL(toggled(bool)), this, SLOT(onLogosVisibleToggled(bool)));
  
-@@ -136,7 +141,7 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
+@@ -154,7 +159,7 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
    connect(ui->cbNotifyFailedUpdate, SIGNAL(toggled(bool)), this, SLOT(onNotifyStartupUpdateFailedToggle(bool)));
  
    ui->languageSelector->selectLanguage(_languageCode);
@@ -54,22 +54,22 @@ index 7b8d62c..7531762 100644
      QPalette p = ui->cbNativeColorDialogs->palette();
      p.setColor(QPalette::Text, DialogSettings::CheckBoxTextColor);
      p.setColor(QPalette::Base, DialogSettings::CheckBoxBaseColor);
-@@ -310,7 +315,11 @@ void DialogSettings::onColorDialogsToggled(bool on)
+@@ -341,7 +346,11 @@ void DialogSettings::onColorDialogsToggled(bool on)
  
  bool DialogSettings::darkThemeEnabled()
  {
 +#ifdef _GMIC_QT_DISABLE_THEMING_
-+  return GmicQt::DarkThemeIsDefault;
++  return GmicQtHost::DarkThemeIsDefault;
 +#else
    return _darkThemeEnabled;
 +#endif
  }
  
  QString DialogSettings::languageCode()
-diff --git a/ui/dialogsettings.ui b/ui/dialogsettings.ui
-index 293a578..f178d30 100644
---- a/ui/dialogsettings.ui
-+++ b/ui/dialogsettings.ui
+diff --git a/gmic-qt/ui/dialogsettings.ui b/gmic-qt/ui/dialogsettings.ui
+index 30bbc95..bb8763a 100644
+--- a/gmic-qt/ui/dialogsettings.ui
++++ b/gmic-qt/ui/dialogsettings.ui
 @@ -108,7 +108,7 @@
          </widget>
         </item>

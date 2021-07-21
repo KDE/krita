@@ -1,17 +1,17 @@
-From 4127ea5fdd9b8f058f49539c097c98735806c281 Mon Sep 17 00:00:00 2001
+From 652a3375ff8014c92773862aea70a54cd12c4a36 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 27 Jun 2021 02:08:49 +0000
-Subject: [PATCH 9/9] Increase on-launch update timeout to 60s
+Subject: [PATCH 07/10] Increase on-launch update timeout to 60s
 
 ---
- src/MainWindow.cpp | 2 +-
+ gmic-qt/src/MainWindow.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/MainWindow.cpp b/src/MainWindow.cpp
-index af2a8ff..d214d5f 100644
---- a/src/MainWindow.cpp
-+++ b/src/MainWindow.cpp
-@@ -1153,7 +1153,7 @@ void MainWindow::showEvent(QShowEvent * event)
+diff --git a/gmic-qt/src/MainWindow.cpp b/gmic-qt/src/MainWindow.cpp
+index 77faba9..241b9a5 100644
+--- a/gmic-qt/src/MainWindow.cpp
++++ b/gmic-qt/src/MainWindow.cpp
+@@ -1247,7 +1247,7 @@ void MainWindow::showEvent(QShowEvent * event)
    }
    const bool useNetwork = (ageLimit != INTERNET_NEVER_UPDATE_PERIODICITY);
    ui->progressInfoWidget->startFiltersUpdateAnimationAndShow();

@@ -31,10 +31,10 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     const QString brushMD5Sum = brushDefinition.attribute("md5sum", "");
 
     KisBrushSP brush = resourceSourceAdapter.resource(brushMD5Sum, brushFileName, "");
-    bool brushtipFound = true;
 
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
+    if (!brush) {
+        return nullptr;
+    }
 
     // we always return a copy of the brush!
     brush = brush->clone().dynamicCast<KisBrush>();
@@ -108,10 +108,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     };
 
 
-    if (!brushtipFound) {
-        brush->setBrushApplication(ALPHAMASK);
-    } 
-    else if (brushDefinition.hasAttribute("preserveLightness")) {
+    if (brushDefinition.hasAttribute("preserveLightness")) {
         const int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
         brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : legacyBrushApplication(colorfulBrush, useColorAsMask));
@@ -125,7 +122,8 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
 
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
         brush->setBrushApplication(legacyBrushApplication(colorfulBrush, useColorAsMask));
-    } else {
+    }
+    else {
         /**
          * In Krita versions before 4.4 series we used to automatrically select
          * the brush application depending on the presence of the color in the

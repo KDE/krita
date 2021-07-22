@@ -8,14 +8,14 @@
 #include "kis_global.h"
 
 struct Q_DECL_HIDDEN KisDefaultBoundsNodeWrapper::Private {
-    KisNodeWSP node;
+    KisBaseNodeWSP node;
 };
 
 const QRect KisDefaultBoundsNodeWrapper::infiniteRect =
     QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
 
-KisDefaultBoundsNodeWrapper::KisDefaultBoundsNodeWrapper(KisNodeWSP node):
-    m_d(new Private())
+KisDefaultBoundsNodeWrapper::KisDefaultBoundsNodeWrapper(KisBaseNodeWSP node)
+    : m_d(new Private())
 {
     m_d->node = node;
 }

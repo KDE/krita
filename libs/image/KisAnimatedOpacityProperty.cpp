@@ -71,12 +71,13 @@ void KisAnimatedOpacityProperty::makeAnimated(KisNode *parentNode) {
     connect(m_channel.data(), SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), this, SLOT(slotKeyRemoval(const KisKeyframeChannel*,int)));
 }
 
-void KisAnimatedOpacityProperty::transferKeyframeData(const KisAnimatedOpacityProperty &rhs){
+void KisAnimatedOpacityProperty::transferKeyframeData(const KisAnimatedOpacityProperty &rhs, KisBaseNode* node){
     KisScalarKeyframeChannel* channel = rhs.channel();
     KIS_ASSERT_RECOVER(channel) {}
     KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*channel);
     KIS_ASSERT(channelNew);
     m_channel.reset(channelNew);
+    m_channel->setDefaultBounds(new KisDefaultBoundsNodeWrapper(node));
 
     connect(m_channel.data(), SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)), this, SLOT(slotKeyChanged(const KisKeyframeChannel*,int)));
     connect(m_channel.data(), SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), this, SLOT(slotKeyRemoval(const KisKeyframeChannel*,int)));

@@ -16,7 +16,7 @@
 #include "kis_painting_assistant.h"
 #include <kis_icon.h>
 #include <kis_canvas2.h>
-#include "kisreferenceimagecropdecorator.h"
+#include "KisReferenceImageCropDecorator.h"
 
 #include <defaulttool/DefaultTool.h>
 #include <defaulttool/DefaultToolFactory.h>

@@ -20,7 +20,7 @@ set ( defaulttools_SRCS
     referenceimagestool/ToolReferenceImages.cpp
     referenceimagestool/ToolReferenceImagesWidget.cpp
     referenceimagestool/KisReferenceImageCollection.cpp
-    referenceimagestool/kisreferenceimagecropdecorator.cpp
+    referenceimagestool/KisReferenceImageCropDecorator.cpp
     referenceimagestool/KisReferenceImageCropStrategy.cpp
 )
 

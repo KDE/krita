@@ -35,7 +35,7 @@
 #include "ToolReferenceImagesWidget.h"
 #include "KisReferenceImageCollection.h"
 #include "KisReferenceImage.h"
-#include "kisreferenceimagecropdecorator.h"
+#include "KisReferenceImageCropDecorator.h"
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImageCropStrategy.h"
 

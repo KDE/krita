@@ -1,6 +1,6 @@
 #include <QPainter>
 
-#include "kisreferenceimagecropdecorator.h"
+#include "KisReferenceImageCropDecorator.h"
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include "kis_canvas2.h"

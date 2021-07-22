@@ -230,8 +230,10 @@ inline QDebug operator<<(QDebug dbg, const KoResourceSP res)
         dbg.nospace() << "[RESOURCE] Name: " << res->name()
                       << " Version: " << res->version()
                       << " Filename: " << res->filename()
+                      << " MD5: " << res->md5Sum(false)
+                      << " Type: " << res->resourceType()
                       << " Valid: " << res->valid()
-                    << " Storage: " << res->storageLocation();
+                      << " Storage: " << res->storageLocation();
     }
     return dbg.space();
 }

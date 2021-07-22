@@ -63,7 +63,7 @@
 
 namespace ActionHelper {
 
-    void copyFromDevice(KisViewManager *view,
+    void trimDevice(KisViewManager *view,
                         KisPaintDeviceSP device,
                         bool makeSharpClip = false,
                         const KisTimeSpan &range = KisTimeSpan())
@@ -75,7 +75,6 @@ namespace ActionHelper {
 
         QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
 
-        //KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
         KisPaintDeviceSP clip = new KisPaintDevice(*device.data());
         Q_CHECK_PTR(clip);
         device->clear();
@@ -123,10 +122,23 @@ namespace ActionHelper {
             }
         }
 
-        KisClipboard::instance()->setClip(device, rc.topLeft(), range);
         device->moveTo(rc.topLeft());
     }
 
+    KisImageSP makeImage(KisViewManager *view, KisNodeList nodes)
+    {
+        KisImageWSP image = view->image();
+
+        KisImageSP clipImage = new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
+        Q_FOREACH (KisNodeSP node, nodes) {
+            clipImage->addNode(node, clipImage->root());
+        }
+
+        clipImage->refreshGraphAsync();
+        clipImage->waitForDone();
+
+        return clipImage;
+    }
 }
 
 void KisSelectAllActionFactory::run(KisViewManager *view)
@@ -289,19 +301,16 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         selectedNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(selectedNodes);
 
         KisNodeList nodes;
-        //KisGroupLayerSP group = new KisGroupLayer(image.data(), "Clipboard", OPACITY_OPAQUE_U8);
-        KisImageSP tempImage = new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
         Q_FOREACH (KisNodeSP node, selectedNodes) {
             KisNodeSP dupNode;
             if (node->inherits("KisShapeLayer")) {
                 KisPaintDeviceSP dev = new KisPaintDevice(*node->projection());
                 // might have to change node's name (vector to paint layer)
-                dupNode = new KisPaintLayer(tempImage, node->name(), node->opacity(), dev);
+                dupNode = new KisPaintLayer(image, node->name(), node->opacity(), dev);
             } else {
                 dupNode = node->clone();
             }
             nodes.append(dupNode);
-            tempImage->addNode(dupNode, tempImage->root());
         }
 
         {
@@ -318,17 +327,14 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                         range = channel->affectedFrames(currentTime);
                     }
 
-                    qDebug() << node->name();
-                    if (dev && !node->inherits("KisMask"))
-                        ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
+                    if (dev && !node->inherits("KisMask")) {
+                        ActionHelper::trimDevice(view, dev, makeSharpClip, range);
+                    }
                 });
             }
         }
-        //tempImage->addNode(group, image->root(), node);
-        tempImage->refreshGraphAsync();
-        tempImage->waitForDone();
+        KisImageSP tempImage = ActionHelper::makeImage(view, nodes);
         KisClipboard::instance()->setLayers(nodes, tempImage);
-        qDebug() << "Successfully copied to clipboard";
 
 /*        {
             KisImageBarrierLocker locker(image);
@@ -443,8 +449,14 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
     if (!view->blockUntilOperationsFinished(image)) return;
 
     image->barrierLock();
-    KisPaintDeviceSP dev = image->root()->projection();
-    ActionHelper::copyFromDevice(view, dev);
+    KisPaintDeviceSP dev = new KisPaintDevice(*image->root()->projection());
+    ActionHelper::trimDevice(view, dev);
+
+    KisNodeSP node = new KisPaintLayer(image, "Projection", OPACITY_OPAQUE_U8, dev);
+    KisNodeList nodes{node};
+
+    KisImageSP tempImage = ActionHelper::makeImage(view, nodes);
+    KisClipboard::instance()->setLayers(nodes, tempImage);
     image->unlock();
 
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Copy Merged"));

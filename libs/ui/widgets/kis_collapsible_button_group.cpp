@@ -107,6 +107,14 @@ QToolButton* KisCollapsibleButtonGroup::addAction(QAction *action)
 
     m_d->allButtons.append(button);
     m_d->layout->insertWidget(1, button);
+
+    action->setIconVisibleInMenu(true);
+    if (action->text().isEmpty()) {
+        // TODO: Once we're out of string freeze, we should try to use a shorter string here.
+        // Tooltip is too long, but at least we know it's localized!
+        action->setText(action->toolTip());
+    }
+
     m_d->collapsedButton->addAction(action);
     m_d->collapsedButton->setDefaultAction(action);
 

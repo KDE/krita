@@ -89,6 +89,7 @@ public:
 
     QImage image();
     void setImage(QImage);
+    void reloadImage();
 
     bool cropEnabled();
     QRectF cropRect();

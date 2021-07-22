@@ -448,6 +448,13 @@ void KisReferenceImage::setImage(QImage image)
     d->cachedImage = QImage();
 }
 
+
+void KisReferenceImage::reloadImage()
+{
+    d->loadFromFile();
+    d->cachedImage = QImage();
+}
+
 KoShape *KisReferenceImage::cloneShape() const
 {
     return new KisReferenceImage(*this);

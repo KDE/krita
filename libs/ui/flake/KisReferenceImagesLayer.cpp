@@ -17,6 +17,8 @@
 #include "KisDocument.h"
 #include "kis_canvas2.h"
 #include "KisHandlePainterHelper.h"
+#include "KisFileSystemWatcherWrapper.h"
+#include "KoStore.h"
 
 struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
@@ -122,10 +124,15 @@ private:
     KisReferenceImagesLayer *m_layer;
 };
 
+Q_GLOBAL_STATIC(KisFileSystemWatcherWrapper, m_fileSystemWatcher)
+
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
     , m_lock(false)
-{}
+{
+    //use signal compressor here
+    connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), SLOT(fileChanged(QString)));
+}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
     : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
@@ -146,11 +153,19 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *documen
     parentCommand->setText(cmd->text());
     new KoKeepShapesSelectedCommand({}, referenceImages, layer->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
 
+    Q_FOREACH(KoShape *shape, referenceImages) {
+        KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
+        m_fileSystemWatcher->addPath(ref->filename());
+    }
     return parentCommand;
 }
 
 KUndo2Command * KisReferenceImagesLayer::removeReferenceImages(KisDocument *document, QList<KoShape*> referenceImages)
 {
+    Q_FOREACH(KoShape *shape, referenceImages) {
+        KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
+        m_fileSystemWatcher->removePath(ref->filename());
+    }
     return new RemoveReferenceImagesCommand(document, this, referenceImages);
 }
 
@@ -252,6 +267,15 @@ KisHandlePainterHelper KisReferenceImagesLayer::createHandlePainterHelperView(QP
 
     // move c-tor
     return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);
+}
+
+void KisReferenceImagesLayer::fileChanged(QString path)
+{
+    Q_FOREACH(KisReferenceImage *ref, referenceImages()) {
+        if(ref->filename() == path) {
+            ref->reloadImage();
+        }
+    }
 }
 
 bool KisReferenceImagesLayer::lock()

@@ -11,6 +11,7 @@
 
 #include <kis_types.h>
 #include <KisView.h>
+#include "KisFileSystemWatcherWrapper.h"
 
 class KisDocument;
 class KoCanvasBase;
@@ -64,6 +65,8 @@ Q_SIGNALS:
      */
     void sigUpdateCanvas(const QRectF &rect);
 
+public Q_SLOTS:
+    void fileChanged(QString);
 private:
     void signalUpdate(const QRectF &rect);
     friend struct AddReferenceImagesCommand;

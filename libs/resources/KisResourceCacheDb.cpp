@@ -690,7 +690,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     if (!resource || !resource->valid()) {
-        qWarning() << "KisResourceCacheDb::addResource: The resource is not valid";
+        qWarning() << "KisResourceCacheDb::addResource: The resource is not valid:" << resource->filename();
         // We don't care about invalid resources and will just ignore them.
         return true;
     }

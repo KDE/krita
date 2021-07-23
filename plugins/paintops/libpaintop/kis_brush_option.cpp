@@ -72,7 +72,7 @@ void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisProperties
     if (!element.isNull()) {
         m_brush = KisBrush::fromXML(element, resourcesInterface);
 
-        if (m_brush->applyingGradient() && canvasResourcesInterface) {
+        if (m_brush && m_brush->applyingGradient() && canvasResourcesInterface) {
             KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()->cloneAndBakeVariableColors(canvasResourcesInterface);
             m_brush->setGradient(gradient);
         }

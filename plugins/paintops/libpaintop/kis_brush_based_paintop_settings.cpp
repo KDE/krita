@@ -134,33 +134,43 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformatio
     return brushOutlineImpl(info, mode, alignForZoom, 1.0);
 }
 
-bool KisBrushBasedPaintOpSettings::isValid() const
-{
-    QStringList md5sums = getStringList(KisPaintOpUtils::RequiredBrushMD5ListTag);
-    md5sums << getString(KisPaintOpUtils::RequiredBrushMD5Tag);
-    if (!md5sums.isEmpty()) {
-        Q_FOREACH (const QString &md5sum, md5sums) {
-            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resource(md5sum, "", "");
-            if (!brush) {
-                return false;
-            }
-        }
-        return true;
-    }
+//bool KisBrushBasedPaintOpSettings::isValid() const
+//{
+//    QStringList md5sums = getStringList(KisPaintOpUtils::RequiredBrushMD5ListTag);
+//    QString md5sum = getString(KisPaintOpUtils::RequiredBrushMD5Tag);
+//    if (!md5sum.isEmpty()) {
+//        md5sums << md5sum;
+//    }
 
-    QStringList files = getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
-    files << getString(KisPaintOpUtils::RequiredBrushFileTag);
-    if (!files.isEmpty()) {
-        Q_FOREACH (const QString &file, files) {
-            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resource("", file, "");
-            if (!brush) {
-                return false;
-            }
-        }
-    }
+//    if (!md5sums.isEmpty()) {
+//        Q_FOREACH (const QString &md5sum, md5sums) {
+//            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resource(md5sum, "", "");
+//            if (!brush) {
+//                qWarning() << "could not find brush by md5" << md5sum;
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
-    return true;
-}
+//    QStringList files = getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
+//    QString file = getString(KisPaintOpUtils::RequiredBrushFileTag);
+//    if (!file.isEmpty()) {
+//        files << file;
+//    }
+//    if (!files.isEmpty()) {
+//        Q_FOREACH (const QString &file, files) {
+//            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resource("", file, "");
+//            if (!brush) {
+//                qWarning() << "could not find brush by filename" << file;
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+
+//    return false;
+//}
 
 void KisBrushBasedPaintOpSettings::setAngle(qreal value)
 {

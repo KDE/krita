@@ -40,7 +40,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 {
 
     setupUi(this);
-    setWindowIcon(KisIconUtils::loadIcon("krita"));
+    setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 
     m_loadingTextLabel = new QLabel(lblSplash);
     m_loadingTextLabel->setTextFormat(Qt::RichText);

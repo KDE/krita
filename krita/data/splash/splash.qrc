@@ -1,0 +1,12 @@
+<!DOCTYPE RCC>
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
+<RCC version="1.0">
+    <qresource prefix="/splash">
+        <file>banner.svg</file>
+        <file alias="0.png">electrichearts_20201224A_kiki_c_small_oxipng.png</file>
+        <file alias="1.png">splash_holidays_dummy.png</file>
+    </qresource>
+</RCC>

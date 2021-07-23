@@ -12,6 +12,7 @@
 #include "ui_wdgsplash.h"
 
 class QPixmap;
+class QSvgWidget;
 
 #include "kritaui_export.h"
 
@@ -19,7 +20,7 @@ class KRITAUI_EXPORT KisSplashScreen : public QWidget, public Ui::WdgSplash
 {
     Q_OBJECT
 public:
-    explicit KisSplashScreen(const QString &m_version, const QPixmap &m_pixmap, const QPixmap &pixmap_x2, bool themed = false, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit KisSplashScreen(bool themed = false, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     void repaint();
 
@@ -46,9 +47,9 @@ private:
 
     QTimer m_timer;
     bool m_themed;
-    QPixmap m_splashPixmap;
-    QPixmap m_splashPixmap_x2;
-    qreal m_scaleFactor;
+    bool m_displayLinks { false };
+    QSvgWidget *m_brandingSvg;
+    QSvgWidget *m_bannerSvg;
     QLabel *m_loadingTextLabel;
     QString m_versionHtml;
 };

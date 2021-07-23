@@ -241,8 +241,7 @@ void KisSplashScreen::displayRecentFiles(bool show) {
 
 void KisSplashScreen::setLoadingText(QString text)
 {
-    qreal defaultSize = font().pointSizeF();
-    int larger = qMin(static_cast<int>(defaultSize * 1.2), 16);
+    int larger = 12;
     int notAsLarge = larger - 1;
     QString htmlText = QStringLiteral("<span style='font: %3pt;'><span style='font: bold %4pt;'>%1</span><br><i>%2</i></span>")
             .arg(m_versionHtml, text.toHtmlEscaped(), QString::number(notAsLarge), QString::number(larger));

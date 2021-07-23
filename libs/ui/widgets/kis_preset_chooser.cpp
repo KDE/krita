@@ -93,7 +93,6 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
-
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
@@ -116,12 +115,13 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         }
 
 //        qreal brushSize = metaData["paintopSize"].toReal();
+//        qDebug() << "brushsize" << brushSize;
 //        QString brushSizeText;
-
 //        // Disable displayed decimal precision beyond a certain brush size
 //        if (brushSize < 100) {
 //            brushSizeText = QString::number(brushSize, 'g', 3);
-//        } else {
+//        }
+//        else {
 //            brushSizeText = QString::number(brushSize, 'f', 0);
 //        }
 
@@ -138,10 +138,12 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
-//    if (!preset->settings() || !preset->settings()->isValid()) {
-//        const QIcon icon = KisIconUtils::loadIcon("broken-preset");
-//        icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
-//    }
+    bool broken = metaData["broken"].toBool();
+
+    if (broken) {
+        const QIcon icon = KisIconUtils::loadIcon("broken-preset");
+        icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
+    }
 
     if (option.state & QStyle::State_Selected) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);

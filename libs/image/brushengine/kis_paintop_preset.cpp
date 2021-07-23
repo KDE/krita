@@ -28,6 +28,8 @@
 #include <KoLocalStrokeCanvasResources.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
+#include "KisPaintopSettingsIds.h"
+#include <KisResourceTypes.h>
 
 #include <KoStore.h>
 
@@ -131,8 +133,6 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         }
     }
 
-    setValid(d->settings);
-
     if (d->updateProxy) {
         d->updateProxy->notifyUniformPropertiesChanged();
         d->updateProxy->notifySettingsChanged();
@@ -175,7 +175,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     if (!doc.setContent(preset)) {
         return false;
     }
-
     if (version == "5.0" && resourceCount > 0) {
         // Load the embedded resources
         QDomNode n = doc.firstChild();
@@ -196,16 +195,16 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
                         QVector<KoResourceSP> existingResources = model.resourcesForMD5(md5sum);
 
                         if (existingResources.isEmpty()) {
-                             QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
-                             QVector<KisResourceLoaderBase*> resourceLoaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceType);
-                             Q_FOREACH(KisResourceLoaderBase *loader, resourceLoaders) {
-                                 QBuffer buf(&ba);
-                                 buf.open(QBuffer::ReadOnly);
-                                 KoResourceSP res = loader->load(name, buf, resourcesInterface);
-                                 if (res) {
-                                     model.addResource(res, "memory");
-                                 }
-                             }
+                            QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
+                            QVector<KisResourceLoaderBase*> resourceLoaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceType);
+                            Q_FOREACH(KisResourceLoaderBase *loader, resourceLoaders) {
+                                QBuffer buf(&ba);
+                                buf.open(QBuffer::ReadOnly);
+                                KoResourceSP res = loader->load(name, buf, resourcesInterface);
+                                if (res) {
+                                    model.addResource(res, "memory");
+                                }
+                            }
                         }
                     }
                     break;
@@ -215,12 +214,29 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         }
     }
 
+
     fromXML(doc.documentElement(), resourcesInterface);
 
     if (!d->settings) {
         return false;
     }
-    setValid(true);
+
+    setValid(d->settings->isValid());
+
+    QStringList requiredBrushes = d->settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
+    requiredBrushes << d->settings->getString(KisPaintOpUtils::RequiredBrushFileTag);
+    addMetaData("broken", false);
+    Q_FOREACH(const QString brushFile, requiredBrushes) {
+        if (brushFile.isEmpty()) {
+            continue;
+        }
+        if (!resourcesInterface->source(ResourceType::Brushes).resource("", brushFile, "")) {
+            qWarning() << filename() << "is invalid, dependent resource" << brushFile << "misses.";
+            addMetaData("broken", true);
+            break;
+        }
+    }
+
     setImage(img);
 
     return true;
@@ -314,6 +330,8 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt, KisResourcesInterfa
             }
         }
     }
+
+
     setSettings(settings);
 
 }
@@ -426,7 +444,7 @@ bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
 KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
 {
     KisPaintOpPresetSP result =
-        KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisPaintOpPresetSP>(this, globalResourcesInterface);
+            KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisPaintOpPresetSP>(this, globalResourcesInterface);
 
     const QList<int> canvasResources = result->requiredCanvasResources();
     if (!canvasResources.isEmpty()) {
@@ -452,10 +470,11 @@ QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP gl
 
     if (hasMaskingPreset()) {
         KisPaintOpPresetSP maskingPreset = createMaskingPreset();
-
-        KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
-        resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
+        if (maskingPreset) {
+            KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+            resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
+        }
     }
 
     return resources;
@@ -473,10 +492,11 @@ QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP 
 
     if (hasMaskingPreset()) {
         KisPaintOpPresetSP maskingPreset = createMaskingPreset();
-
-        KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
-        resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
+        if (maskingPreset) {
+            KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+            resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
+        }
     }
     return resources;
 }

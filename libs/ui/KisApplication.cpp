@@ -166,7 +166,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     QString version = KritaVersionWrapper::versionString(true);
     setApplicationVersion(version);
-    setWindowIcon(KisIconUtils::loadIcon("krita"));
+    setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
         QStringList styles = QStringList() << "breeze" << "fusion";

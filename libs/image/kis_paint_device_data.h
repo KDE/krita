@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,10 +8,11 @@
 #ifndef __KIS_PAINT_DEVICE_DATA_H
 #define __KIS_PAINT_DEVICE_DATA_H
 
-#include "KoAlwaysInline.h"
-#include "kundo2command.h"
-#include "kis_command_utils.h"
 #include "KisInterstrokeData.h"
+#include "KisSequentialIteratorProgress.h"
+#include "KoAlwaysInline.h"
+#include "kis_command_utils.h"
+#include "kundo2command.h"
 
 struct DirectDataAccessPolicy {
     DirectDataAccessPolicy(KisDataManager *dataManager, KisIteratorCompleteListener *completionListener)
@@ -156,9 +158,16 @@ public:
         }
     }
 
-    void convertDataColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand) {
-        typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<DirectDataAccessPolicy>, DirectDataAccessPolicy> InternalSequentialConstIterator;
-        typedef KisSequentialIteratorBase<WritableIteratorPolicy<DirectDataAccessPolicy>, DirectDataAccessPolicy> InternalSequentialIterator;
+    void convertDataColorSpace(const KoColorSpace *dstColorSpace,
+                               KoColorConversionTransformation::Intent renderingIntent,
+                               KoColorConversionTransformation::ConversionFlags conversionFlags,
+                               KUndo2Command *parentCommand,
+                               KoUpdater *updater = nullptr)
+    {
+        using InternalSequentialConstIterator =
+            KisSequentialIteratorBase<ReadOnlyIteratorPolicy<DirectDataAccessPolicy>, DirectDataAccessPolicy, ProxyBasedProgressPolicy>;
+        using InternalSequentialIterator =
+            KisSequentialIteratorBase<WritableIteratorPolicy<DirectDataAccessPolicy>, DirectDataAccessPolicy, ProxyBasedProgressPolicy>;
 
         if (m_colorSpace == dstColorSpace || *m_colorSpace == *dstColorSpace) {
             return;
@@ -175,8 +184,8 @@ public:
 
 
         if (!rc.isEmpty()) {
-            InternalSequentialConstIterator srcIt(DirectDataAccessPolicy(m_dataManager.data(), cacheInvalidator()), rc);
-            InternalSequentialIterator dstIt(DirectDataAccessPolicy(dstDataManager.data(), cacheInvalidator()), rc);
+            InternalSequentialConstIterator srcIt(DirectDataAccessPolicy(m_dataManager.data(), cacheInvalidator()), rc, updater);
+            InternalSequentialIterator dstIt(DirectDataAccessPolicy(dstDataManager.data(), cacheInvalidator()), rc, updater);
 
             int nConseqPixels = srcIt.nConseqPixels();
 

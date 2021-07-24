@@ -51,6 +51,7 @@ private:
     QSvgWidget *m_brandingSvg;
     QSvgWidget *m_bannerSvg;
     QLabel *m_loadingTextLabel;
+    QLabel *m_artCreditsLabel;
     QString m_versionHtml;
 };
 

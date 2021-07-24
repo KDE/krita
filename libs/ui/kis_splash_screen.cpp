@@ -151,7 +151,7 @@ void KisSplashScreen::updateSplashImage()
     if (splashArtist.isEmpty()) {
         m_artCreditsLabel->setText(QString());
     } else {
-        m_artCreditsLabel->setText(QStringLiteral("Artwork by: %1").arg(splashArtist));
+        m_artCreditsLabel->setText(i18nc("splash image credit", "Artwork by: %1").arg(splashArtist));
     }
     m_artCreditsLabel->setFixedWidth(m_loadingTextLabel->width());
     m_artCreditsLabel->setFixedHeight(20);

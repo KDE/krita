@@ -27,7 +27,10 @@ public:
     }
 protected:
     KoResourceSP resourceForFilename(const QString &filename) const override {
-        return m_model->resourceForFilename(filename);
+        qDebug() << "global for filename" << filename << "rowcount" << m_model->rowCount();
+        KoResourceSP res = m_model->resourceForFilename(filename);
+        qDebug() << "\t" << res;
+        return res;
     }
 
     KoResourceSP resourceForName(const QString &name) const override {

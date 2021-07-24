@@ -225,18 +225,11 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     setValid(d->settings->isValid());
 
     QStringList requiredBrushes = d->settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
-    requiredBrushes << d->settings->getString(KisPaintOpUtils::RequiredBrushFileTag);
-    addMetaData("broken", false);
-    Q_FOREACH(const QString brushFile, requiredBrushes) {
-        if (brushFile.isEmpty()) {
-            continue;
-        }
-        if (!resourcesInterface->source(ResourceType::Brushes).resource("", brushFile, "")) {
-            qWarning() << filename() << "is invalid, dependent resource" << brushFile << "misses.";
-            addMetaData("broken", true);
-            break;
-        }
+    QString requiredBrush = d->settings->getString(KisPaintOpUtils::RequiredBrushFileTag);
+    if (!requiredBrush.isEmpty()) {
+        requiredBrushes << requiredBrush;
     }
+    addMetaData("dependent_resources_filenames", requiredBrushes);
 
     setImage(img);
 

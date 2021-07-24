@@ -77,7 +77,7 @@ bool KoResourceBundle::load()
 
             Q_FOREACH (KoResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
                 if (!resourceStore->open(ref.resourcePath)) {
-                    qWarning() << "Bundle is broken. File" << ref.resourcePath << "is missing";
+                    qWarning() << "Bundle" << filename() <<  "is broken. File" << ref.resourcePath << "is missing";
                 }
                 else {
                     resourceStore->close();

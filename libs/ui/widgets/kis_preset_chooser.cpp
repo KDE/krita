@@ -27,6 +27,7 @@
 #include <KisResourceItemChooserSync.h>
 #include <KisResourceItemListView.h>
 #include <KisResourceLocator.h>
+#include <KisResourceTypes.h>
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -35,7 +36,9 @@
 #include "kis_slider_spin_box.h"
 #include "kis_config_notifier.h"
 #include <kis_icon.h>
+#include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
+
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
@@ -138,7 +141,17 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
-    bool broken = metaData["broken"].toBool();
+    bool broken = false;
+    QStringList requiredBrushes = metaData["dependent_resources_filenames"].toStringList();
+    if (!requiredBrushes.isEmpty()) {
+        KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
+        Q_FOREACH(const QString brushFile, requiredBrushes) {
+            if (!model->resourceForFilename(brushFile)) {
+                qWarning() << "dependent resource" << brushFile << "misses.";
+                broken = true;
+            }
+        }
+    }
 
     if (broken) {
         const QIcon icon = KisIconUtils::loadIcon("broken-preset");

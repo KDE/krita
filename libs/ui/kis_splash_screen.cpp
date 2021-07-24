@@ -28,6 +28,15 @@
 #include <kconfiggroup.h>
 #include <QIcon>
 
+void addDropShadow(QWidget *widget)
+{
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(widget);
+    effect->setBlurRadius(4);
+    effect->setOffset(0.5);
+    effect->setColor(QColor(0, 0, 0, 255));
+    widget->setGraphicsEffect(effect);
+}
+
 KisSplashScreen::KisSplashScreen(bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint
 #ifdef Q_OS_LINUX
@@ -45,20 +54,17 @@ KisSplashScreen::KisSplashScreen(bool themed, QWidget *parent, Qt::WindowFlags f
     m_loadingTextLabel->setTextFormat(Qt::RichText);
     m_loadingTextLabel->setStyleSheet(QStringLiteral("QLabel { color: #fff; background-color: transparent; }"));
     m_loadingTextLabel->setAlignment(Qt::AlignRight | Qt::AlignTop);
-
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(m_loadingTextLabel);
-    effect->setBlurRadius(4);
-    effect->setOffset(0.5);
-    effect->setColor(QColor(0, 0, 0, 255));
-    m_loadingTextLabel->setGraphicsEffect(effect);
+    addDropShadow(m_loadingTextLabel);
 
     m_brandingSvg = new QSvgWidget(QStringLiteral(":/krita-branding.svgz"), lblSplash);
     m_bannerSvg = new QSvgWidget(QStringLiteral(":/splash/banner.svg"), lblSplash);
-    effect = new QGraphicsDropShadowEffect(m_bannerSvg);
-    effect->setBlurRadius(4);
-    effect->setOffset(0.5);
-    effect->setColor(QColor(0, 0, 0, 255));
-    m_bannerSvg->setGraphicsEffect(effect);
+    addDropShadow(m_bannerSvg);
+
+    m_artCreditsLabel = new QLabel(lblSplash);
+    m_artCreditsLabel->setTextFormat(Qt::PlainText);
+    m_artCreditsLabel->setStyleSheet(QStringLiteral("QLabel { color: #fff; background-color: transparent; font: 10pt; }"));
+    m_artCreditsLabel->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+    addDropShadow(m_artCreditsLabel);
 
     updateSplashImage();
     setLoadingText(QString());
@@ -99,12 +105,14 @@ void KisSplashScreen::updateSplashImage()
     const int marginRight = splashHeight * 0.1;
 
     QString splashName = QStringLiteral(":/splash/0.png");
+    QString splashArtist = QStringLiteral("Tyson Tan");
     // TODO: Re-add the holiday splash...
 #if 0
     QDate currentDate = QDate::currentDate();
     if (currentDate > QDate(currentDate.year(), 12, 4) ||
             currentDate < QDate(currentDate.year(), 1, 9)) {
         splashName = QStringLiteral(":/splash/1.png");
+        splashArtist = QStringLiteral("???");
     }
 #endif
 
@@ -138,6 +146,16 @@ void KisSplashScreen::updateSplashImage()
     // Place loading text immediately below.
     m_loadingTextLabel->move(marginRight, m_brandingSvg->geometry().bottom());
     m_loadingTextLabel->setFixedWidth(m_bannerSvg->geometry().right() - marginRight);
+
+    // Place credits text on bottom right with similar margins.
+    if (splashArtist.isEmpty()) {
+        m_artCreditsLabel->setText(QString());
+    } else {
+        m_artCreditsLabel->setText(QStringLiteral("Artwork by: %1").arg(splashArtist));
+    }
+    m_artCreditsLabel->setFixedWidth(m_loadingTextLabel->width());
+    m_artCreditsLabel->setFixedHeight(20);
+    m_artCreditsLabel->move(m_loadingTextLabel->x(), height - marginTop - m_artCreditsLabel->height());
 
     if (m_displayLinks) {
         setFixedSize(sizeHint());

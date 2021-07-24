@@ -30,6 +30,8 @@ public:
     ~KisFreeTransformStrategy() override;
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive) override;
+    bool shiftModifierIsUsed() const;
+
     void paint(QPainter &gc) override;
     QCursor getCurrentCursor() const override;
 

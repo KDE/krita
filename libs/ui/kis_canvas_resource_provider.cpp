@@ -17,6 +17,7 @@
 #include <KoResourceServerProvider.h>
 #include <resources/KoStopGradient.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoResource.h>
 
 #include <resources/KoPattern.h>
 #include <kis_paint_device.h>
@@ -176,11 +177,6 @@ KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
 void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset)
 {
     if (!preset) return;
-
-    Q_ASSERT(preset->valid());
-    Q_ASSERT(!preset->paintOp().id().isEmpty());
-    Q_ASSERT(preset->settings());
-
     QVariant v;
     v.setValue(preset);
     m_resourceManager->setResource(KoCanvasResource::CurrentPaintOpPreset, v);
@@ -194,9 +190,6 @@ KisPaintOpPresetSP KisCanvasResourceProvider::previousPreset() const
 
 void KisCanvasResourceProvider::setPreviousPaintOpPreset(const KisPaintOpPresetSP preset)
 {
-    Q_ASSERT(preset->valid());
-    Q_ASSERT(!preset->paintOp().id().isEmpty());
-    Q_ASSERT(preset->settings());
     if (!preset) return;
 
     dbgUI << "setPreviousPaintOpPreset" << preset->paintOp();

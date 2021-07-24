@@ -38,6 +38,7 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
     connect(m_curveOptionWidget->yMaxBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
 
     m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
+    m_curveOptionWidget->strengthSlider->setSingleStep(0.01);
     m_curveOptionWidget->strengthSlider->setValue(curveOption->value());
     m_curveOptionWidget->strengthSlider->setPrefix(i18n("Base Value: "));
     m_curveOptionWidget->strengthSlider->setSuffix("");

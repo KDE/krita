@@ -86,11 +86,8 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisNodeSP node, KisImageSP image) const
 {
-    Q_ASSERT(preset);
-    Q_ASSERT(painter);
-
     if (!preset) return 0;
-
+    if (!painter) return 0;
     return paintOp(preset->paintOp().id(), preset->settings(), painter, node, image);
 }
 

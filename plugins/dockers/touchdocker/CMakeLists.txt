@@ -3,6 +3,12 @@ set(KRITA_TOUCHDOCKER_SOURCES
     TouchDockerDock.cpp 
 )
 
+if(WIN32)
+set(KRITA_TOUCHDOCKER_SOURCES ${KRITA_TOUCHDOCKER_SOURCES} 
+    TouchDockerQQuickWidget.cpp
+)
+endif(WIN32)
+
 qt5_add_resources(KRITA_TOUCHDOCKER_SOURCES touchdocker.qrc)
 
 add_library(kritatouchdocker MODULE ${KRITA_TOUCHDOCKER_SOURCES})

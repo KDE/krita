@@ -27,9 +27,6 @@ public:
     using KisPaintOpSettings::brushOutline;
     QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
-    ///Reimplemented
-    bool isValid() const override;
-
     KisBrushSP brush() const;
 
     KisPaintOpSettingsSP clone() const override;

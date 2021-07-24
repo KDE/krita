@@ -493,8 +493,7 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
     KoPatternSP pattern(new KoPattern(fileName));
     QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
-    Q_ASSERT(!pattern->md5().isEmpty());
-    qDebug() << ">>>>>>>>>>>" << pattern->md5().toHex();
+    Q_ASSERT(!pattern->md5Sum().isEmpty());
     QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources({}));
     resourcesInterface->addResource(pattern);
 

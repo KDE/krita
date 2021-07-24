@@ -188,9 +188,11 @@ public:
 
     KoID     getDefaultCompositeOp() const;
     KoID     getKoID(const QString& compositeOpID) const;
+    QString  getCompositeOpDisplayName(const QString& compositeOpID) const;
     KoIDMap  getCompositeOps() const;
     KoIDMap  getLayerStylesCompositeOps() const;
     KoIDList getCategories() const;
+    QString  getCategoryDisplayName(const QString& categoryID) const;
     KoIDList getCompositeOps(const KoColorSpace* colorSpace) const;
     KoIDList getCompositeOps(const KoID& category, const KoColorSpace* colorSpace=0) const;
     bool     colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const;

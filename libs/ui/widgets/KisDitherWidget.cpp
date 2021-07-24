@@ -25,11 +25,9 @@ KisDitherWidget::KisDitherWidget(QWidget* parent)
 
     QObject::connect(thresholdModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisDitherWidget::sigConfigurationItemChanged);
 
-    patternIconWidget->setFixedSize(32, 32);
-    
-    // FIXME: the patterns are not rendered correctly in the dialog!
+    patternIconWidget->setFixedSize(64, 64);
+    patternIconWidget->setBackgroundColor(Qt::white);
     m_ditherPatternWidget = new KisResourceItemChooser(ResourceType::Patterns, false, this);
-
     patternIconWidget->setPopupWidget(m_ditherPatternWidget);
     QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, patternIconWidget, &KisIconWidget::setResource);
     QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, this, &KisDitherWidget::sigConfigurationItemChanged);
@@ -54,7 +52,7 @@ void KisDitherWidget::setConfiguration(const KisFilterConfiguration &config, con
     thresholdModeComboBox->setCurrentIndex(config.getInt(prefix + "thresholdMode"));
 
     auto source = config.resourcesInterface()->source<KoPattern>(ResourceType::Patterns);
-    KoPatternSP pattern = source.resourceForName(config.getString(prefix + "pattern"));
+    KoPatternSP pattern = source.resource(config.getString(prefix + "md5sum"), "", config.getString(prefix + "pattern"));
 
     if (pattern) m_ditherPatternWidget->setCurrentResource(pattern);
     patternValueModeComboBox->setCurrentIndex(config.getInt(prefix + "patternValueMode"));
@@ -83,7 +81,7 @@ void KisDitherWidget::factoryConfiguration(KisPropertiesConfiguration &config, c
 QList<KoResourceSP> KisDitherWidget::prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface)
 {
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-    KoPatternSP pattern = source.resourceForName(config.getString(prefix + "pattern"));
+    KoPatternSP pattern = source.resource(config.getString(prefix + "md5sum"), "", config.getString(prefix + "pattern"));
 
     QList<KoResourceSP> resources;
     if (pattern) {

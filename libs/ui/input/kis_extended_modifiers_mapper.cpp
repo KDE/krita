@@ -38,7 +38,7 @@ QVector<Qt::Key> queryPressedKeysWin()
                 } else if (i == VK_CONTROL) {
                     result << Qt::Key_Control;
                 } else if (i == VK_MENU) {
-                    result << Qt::Key_Menu;
+                    result << Qt::Key_Alt;
                 } else if (i == VK_LWIN || i == VK_RWIN) {
                     result << Qt::Key_Meta;
                 } else if (i == VK_SPACE) {

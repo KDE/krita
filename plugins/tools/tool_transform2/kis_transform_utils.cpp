@@ -504,13 +504,15 @@ void KisTransformUtils::setDefaultWarpPoints(int pointsPerLine,
 
 ToolTransformArgs KisTransformUtils::resetArgsForMode(ToolTransformArgs::TransformMode mode,
                                                       const QString &filterId,
-                                                      const TransformTransactionProperties &transaction)
+                                                      const TransformTransactionProperties &transaction,
+                                                      KisPaintDeviceSP externalSource)
 {
     ToolTransformArgs args;
 
     args.setOriginalCenter(transaction.originalCenterGeometric());
     args.setTransformedCenter(transaction.originalCenterGeometric());
     args.setFilterId(filterId);
+    args.setExternalSource(externalSource);
 
     if (mode == ToolTransformArgs::FREE_TRANSFORM) {
         args.setMode(ToolTransformArgs::FREE_TRANSFORM);
@@ -623,9 +625,20 @@ bool KisTransformUtils::fetchArgsFromCommand(const KUndo2Command *command, ToolT
 
 KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
 {
-    if (root->childCount() == 1 && root->firstChild()->inherits("KisTransformMask")) {
-        return root->firstChild();
+    // we search for masks only at the first level of hierarchy,
+    // all other masks are just ignored.
+
+    KisNodeSP node = root->firstChild();
+
+    while (node) {
+        if (node->inherits("KisTransformMask") && node->isEditable()) {
+            root = node;
+            break;
+        }
+
+        node = node->nextSibling();
     }
+
     return root;
 }
 
@@ -638,16 +651,18 @@ QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformM
             return node != root && node->visible() && node->inherits("KisTransformMask");
         });
 
-    if (hasTransformMaskDescendant) {
-        // cannot transform nodes with visible transform masks inside
-        return result;
-    }
+    /// Cannot transform nodes with visible transform masks inside,
+    /// this situation should have been caught either in
+    /// tryOverrideRootToTransformMask or in the transform tool
+    /// stroke initialization routine.
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!hasTransformMaskDescendant);
 
     auto fetchFunc =
         [&result, mode, root] (KisNodeSP node) {
         if (node->isEditable(node == root) &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
                 !node->inherits("KisFileLayer") &&
+                !node->inherits("KisColorizeMask") &&
                 (!node->inherits("KisTransformMask") || node == root)) {
 
                 result << node;

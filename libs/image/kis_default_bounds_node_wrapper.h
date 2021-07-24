@@ -15,7 +15,7 @@ typedef KisSharedPtr<KisDefaultBoundsNodeWrapper> KisDefaultBoundsNodeWrapperSP;
 
 class KRITAIMAGE_EXPORT KisDefaultBoundsNodeWrapper : public KisDefaultBoundsBase {
 public:
-    KisDefaultBoundsNodeWrapper(KisNodeWSP node = 0);
+    KisDefaultBoundsNodeWrapper(KisBaseNodeWSP node = 0);
     KisDefaultBoundsNodeWrapper(KisDefaultBoundsNodeWrapper& rhs);
     ~KisDefaultBoundsNodeWrapper() override;
 

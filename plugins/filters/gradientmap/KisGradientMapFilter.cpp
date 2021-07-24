@@ -129,11 +129,13 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
         KoCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         BlendColorModePolicy colorModePolicy(&cachedGradient);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
-    } else if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Nearest) {
+    }
+    else if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Nearest) {
         KisGradientMapFilterNearestCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         NearestColorModePolicy colorModePolicy(&cachedGradient);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
-    } else /* if colorMode == KisGradientMapFilterConfiguration::ColorMode_Dither */ {
+    }
+    else /* if colorMode == KisGradientMapFilterConfiguration::ColorMode_Dither */ {
         KisDitherUtil ditherUtil;
         KisGradientMapFilterDitherCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         ditherUtil.setConfiguration(*filterConfig, "dither/");

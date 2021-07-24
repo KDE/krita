@@ -172,8 +172,8 @@ QUuid KisPSDLayerStyle::uuid() const
 void KisPSDLayerStyle::setUuid(const QUuid &value) const
 {
     d->uuid = value;
-    if (md5(false).isEmpty()) {
-        const_cast<KisPSDLayerStyle*>(this)->setMD5(KoMD5Generator::generateHash(value.toByteArray()));
+    if (md5Sum(false).isEmpty()) {
+        const_cast<KisPSDLayerStyle*>(this)->setMD5Sum(KoMD5Generator::generateHash(value.toByteArray()));
     }
 }
 

@@ -95,9 +95,10 @@ struct KisWarpTransformStrategy::Private
 };
 
 KisWarpTransformStrategy::KisWarpTransformStrategy(const KisCoordinatesConverter *converter,
+                                                   KoSnapGuide *snapGuide,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : KisSimplifiedActionPolicyStrategy(converter),
+    : KisSimplifiedActionPolicyStrategy(converter, snapGuide),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
     connect(&m_d->recalculateSignalCompressor, SIGNAL(timeout()),

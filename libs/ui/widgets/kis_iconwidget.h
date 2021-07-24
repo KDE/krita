@@ -27,7 +27,7 @@ public:
     ~KisIconWidget() override;
     void setThumbnail(const QImage &thumbnail);
     void setResource(KoResourceSP resource);
-
+    void setBackgroundColor(const QColor &color);
     QSize preferredIconSize() const;
 
 protected:

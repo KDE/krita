@@ -135,6 +135,15 @@ QWidget *SvgTextTool::createOptionWidget()
         m_defPointSize->addItem(QString::number(size)+" pt");
     }
     int storedSize = m_configGroup.readEntry<int>("defaultSize", QApplication::font().pointSize());
+#ifdef Q_OS_ANDROID
+    // HACK: on some devices where android.R.styleable exists, Qt's platform
+    // plugin sets the pixelSize of a font, which returns -1 when asked for pointSize.
+    //
+    // The way to fetch font in Qt from SDK is deprecated in newer Android versions.
+    if (storedSize <= 0) {
+        storedSize = 12;  // being one of the standardSizes
+    }
+#endif
     int sizeIndex = 0;
     if (QFontDatabase::standardSizes().contains(storedSize)) {
         sizeIndex = QFontDatabase::standardSizes().indexOf(storedSize);
@@ -245,7 +254,7 @@ void SvgTextTool::showEditor()
         m_editor->setInitialShape(shape);
 #ifdef Q_OS_ANDROID
         // for window manager
-        m_editor->setWindowFlags(Qt::Tool);
+        m_editor->setWindowFlags(Qt::Dialog);
         m_editor->menuBar()->setNativeMenuBar(false);
 #endif
         m_editor->show();

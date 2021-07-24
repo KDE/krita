@@ -228,10 +228,10 @@ void TestResourceModel::testResourceForMD5()
 
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(!resource.isNull());
-    QVector<KoResourceSP> v = resourceModel.resourcesForMD5(resource->md5());
+    QVector<KoResourceSP> v = resourceModel.resourcesForMD5(resource->md5Sum());
     KoResourceSP resource2 = v.first();
     QVERIFY(!resource2.isNull());
-    QCOMPARE(resource->md5(), resource2->md5());
+    QCOMPARE(resource->md5Sum(), resource2->md5Sum());
 }
 
 void TestResourceModel::testRenameResource()

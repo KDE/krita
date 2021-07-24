@@ -98,6 +98,9 @@ KisMemoryStorage::KisMemoryStorage(const KisMemoryStorage &rhs)
     , d(new Private)
 {
     *this = rhs;
+    d->resourcesNew = rhs.d->resourcesNew;
+    d->tags = rhs.d->tags;
+    d->metadata = rhs.d->metadata;
 }
 
 KisMemoryStorage &KisMemoryStorage::operator=(const KisMemoryStorage &rhs)
@@ -251,7 +254,7 @@ bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP re
     return true;
 }
 
-QByteArray KisMemoryStorage::resourceMd5(const QString &url)
+QString KisMemoryStorage::resourceMd5(const QString &url)
 {
     QStringList parts = url.split('/', QString::SkipEmptyParts);
     Q_ASSERT(parts.size() == 2);
@@ -259,7 +262,7 @@ QByteArray KisMemoryStorage::resourceMd5(const QString &url)
     const QString resourceType = parts[0];
     const QString resourceFilename = parts[1];
 
-    QByteArray result;
+    QString result;
 
     if (d->resourcesNew.contains(resourceType) &&
         d->resourcesNew[resourceType].contains(resourceFilename)) {
@@ -270,7 +273,7 @@ QByteArray KisMemoryStorage::resourceMd5(const QString &url)
         if (storedResource.data->size() > 0 || storedResource.resource.isNull()) {
             result = KoMD5Generator::generateHash(*storedResource.data);
         } else {
-            result = storedResource.resource->md5();
+            result = storedResource.resource->md5Sum();
         }
     }
 

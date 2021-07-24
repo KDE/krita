@@ -208,7 +208,7 @@ KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename) const
     return resource;
 }
 
-KoResourceSP KisAllResourcesModel::resourceForName(QString name) const
+KoResourceSP KisAllResourcesModel::resourceForName(const QString &name) const
 {
     Q_ASSERT(!name.isEmpty());
 
@@ -242,7 +242,7 @@ KoResourceSP KisAllResourcesModel::resourceForName(QString name) const
 }
 
 
-KoResourceSP KisAllResourcesModel::resourceForMD5(const QByteArray md5sum) const
+KoResourceSP KisAllResourcesModel::resourceForMD5(const QString &md5sum) const
 {
     KoResourceSP resource = 0;
 
@@ -253,7 +253,7 @@ KoResourceSP KisAllResourcesModel::resourceForMD5(const QByteArray md5sum) const
     if (!r) {
         qWarning() << "Could not prepare KisAllResourcesModel query for resource md5" << q.lastError();
     }
-    q.bindValue(":md5sum", md5sum.toHex());
+    q.bindValue(":md5sum", md5sum);
 
     r = q.exec();
     if (!r) {
@@ -752,9 +752,9 @@ QVector<KoResourceSP> KisResourceModel::resourcesForName(QString name) const
     return filterByColumn(name, KisAllResourcesModel::Name);
 }
 
-QVector<KoResourceSP> KisResourceModel::resourcesForMD5(const QByteArray md5sum) const
+QVector<KoResourceSP> KisResourceModel::resourcesForMD5(const QString md5sum) const
 {
-    return filterByColumn(md5sum.toHex(), KisAllResourcesModel::MD5);
+    return filterByColumn(md5sum, KisAllResourcesModel::MD5);
 }
 
 QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const

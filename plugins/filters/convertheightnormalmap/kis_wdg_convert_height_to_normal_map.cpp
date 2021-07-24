@@ -33,10 +33,12 @@ KisWdgConvertHeightToNormalMap::KisWdgConvertHeightToNormalMap(QWidget *parent, 
 
     ui->btnAspect->setKeepAspectRatio(false);
     ui->sldHorizontalRadius->setRange(1.0, 100.0, 2);
+    ui->sldHorizontalRadius->setSingleStep(0.01);
     ui->sldHorizontalRadius->setPrefix(i18n("Horizontal Radius:"));
     connect(ui->sldHorizontalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(horizontalRadiusChanged(qreal)));
 
     ui->sldVerticalRadius->setRange(1.0, 100.0, 2);
+    ui->sldVerticalRadius->setSingleStep(0.01);
     ui->sldVerticalRadius->setPrefix(i18n("Vertical Radius:"));
     connect(ui->sldVerticalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(verticalRadiusChanged(qreal)));
 

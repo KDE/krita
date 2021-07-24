@@ -31,7 +31,7 @@ public:
     /// Retrieve the given resource. The url is the unique identifier of the resource,
     /// for instance resourcetype plus filename.
     virtual KoResourceSP resource(const QString &url);
-    virtual QByteArray resourceMd5(const QString &url);
+    virtual QString resourceMd5(const QString &url);
     virtual bool loadVersionedResource(KoResourceSP resource) = 0;
     virtual bool supportsVersioning() const;
     virtual QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) = 0;

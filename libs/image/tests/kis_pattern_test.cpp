@@ -28,7 +28,7 @@ void KoPatternTest::testRoundTripMd5()
 
     KoPattern pngPattern(filename);
     QVERIFY(pngPattern.load(KisGlobalResourcesInterface::instance()));
-    pngPattern.setMD5(KoMD5Generator::generateHash(filename));
+    pngPattern.setMD5Sum(KoMD5Generator::generateHash(filename));
 
     dbgKrita << "PNG Name:" << pngPattern.name();
     dbgKrita << "PNG Filename:" << pngPattern.filename();
@@ -38,7 +38,7 @@ void KoPatternTest::testRoundTripMd5()
 
     KoPattern patPattern(patFilename);
     QVERIFY(patPattern.load(KisGlobalResourcesInterface::instance()));
-    patPattern.setMD5(KoMD5Generator::generateHash(patFilename));
+    patPattern.setMD5Sum(KoMD5Generator::generateHash(patFilename));
 
     dbgKrita << "PAT Name:" << patPattern.name();
     dbgKrita << "PAT Filename:" << patPattern.filename();
@@ -68,7 +68,7 @@ void KoPatternTest::testRoundTripMd5()
     QCOMPARE(h1.result(), h2.result());
     QCOMPARE(im1, im2);
     // Compares the md5sum taken from the file: they should be different
-    QVERIFY(pngPattern.md5() != patPattern.md5());
+    QVERIFY(pngPattern.md5Sum() != patPattern.md5Sum());
 }
 
 

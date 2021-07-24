@@ -30,6 +30,7 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
     connect(pipeModeChbox, SIGNAL(toggled(bool)), this, SLOT(rebuildTextBrush()));
     m_font = font();
     inputSpacing->setRange(0.0, 10, 2);
+    inputSpacing->setSingleStep(0.01);
     inputSpacing->setValue(0.1);
     rebuildTextBrush();
     connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(rebuildTextBrush()));

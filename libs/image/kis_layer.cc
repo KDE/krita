@@ -970,7 +970,8 @@ QRect KisLayer::layerExtentImpl(bool needExactBounds) const
     }
 
     QRect additionalCompositeOpExtent;
-    if (compositeOpId() == COMPOSITE_DESTINATION_IN ||
+    if (compositeOpId() == COMPOSITE_COPY ||
+        compositeOpId() == COMPOSITE_DESTINATION_IN ||
         compositeOpId() == COMPOSITE_DESTINATION_ATOP) {
 
         additionalCompositeOpExtent = originalDevice->defaultBounds()->bounds();

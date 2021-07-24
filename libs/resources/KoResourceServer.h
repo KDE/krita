@@ -227,6 +227,8 @@ public:
         m_observers.removeAt( index );
     }
 
+private:
+
     QSharedPointer<T> resourceByFilename(const QString& filename) const
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
@@ -267,15 +269,12 @@ public:
 
     }
 
-    QSharedPointer<T> resourceByMD5(const QByteArray& md5) const
+    QSharedPointer<T> resourceByMD5(const QString& md5) const
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
-
-
-        //qDebug() << "resourceByMD5" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {
             return nullptr;
         }
@@ -286,6 +285,40 @@ public:
         }
         return nullptr;
     }
+
+public:
+
+    /**
+     * @brief resource retrieves a resource. If the md5sum is not empty, the resource
+     * will only be retrieved if a resource with that md5sum exists. If it is empty,
+     * a fallback to filename or name is possible.
+     * @param md5 This is the hex-encoded md5sum as stored in e.g. configuration objects
+     * @param fileName A filename without the path
+     * @param name The name of the resource
+     * @return a resource, or nullptr
+     */
+    QSharedPointer<T> resource(const QString &md5, const QString &fileName, const QString &name)
+    {
+        if (!md5.isEmpty()) {
+            return resourceByMD5(md5);
+        }
+        else {
+            return nullptr;
+        }
+
+        if (!fileName.isEmpty()) {
+            return resourceByFilename(fileName);
+        }
+
+        if (!name.isEmpty()) {
+            return resourceByName(name);
+        }
+
+        return nullptr;
+
+    }
+
+
 
     /**
      * Call after changing the content of a resource and saving it;

@@ -313,14 +313,10 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
 void KisPaintOpPresetsEditor::slotBlackListCurrentPreset()
 {
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
-
-    if (rServer->resourceByName(curPreset->name())) {
-        rServer->removeResourceFromServer(curPreset);
-    }
+    rServer->removeResourceFromServer(curPreset);
 }
-
 
 void KisPaintOpPresetsEditor::slotRenameBrushActivated()
 {

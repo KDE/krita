@@ -84,7 +84,7 @@ namespace KisAnimUtils {
                     } else { // Make new...
                         KisKeyframeSP previousKey = channel->activeKeyframeAt(time);
 
-                        if (isScalar) {
+                        if (isScalar && previousKey) {
                             KisScalarKeyframeChannel* scalarChannel = static_cast<KisScalarKeyframeChannel*>(channel);
                             const qreal value = scalarChannel->valueAt(time); //Get interpolated value.
                             scalarChannel->addScalarKeyframe(time, value, cmd.data());

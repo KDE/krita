@@ -1,0 +1,15 @@
+variables:
+  DEBIAN_FRONTEND: "noninteractive"
+
+clang_format:
+  stage: build
+  image: debian:testing
+  only:
+    - merge_requests
+    - master
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends wget ca-certificates git clang-format-11
+    - update-ca-certificates
+  script:
+    - ./.gitlab-ci.script

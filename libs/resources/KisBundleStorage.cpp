@@ -150,9 +150,9 @@ bool KisBundleStorage::loadVersionedResource(KoResourceSP resource)
     return true;
 }
 
-QByteArray KisBundleStorage::resourceMd5(const QString &url)
+QString KisBundleStorage::resourceMd5(const QString &url)
 {
-    QByteArray result;
+    QString result;
 
     QFile modifiedFile(location() + "_modified" + "/" + url);
     if (modifiedFile.exists() && modifiedFile.open(QIODevice::ReadOnly)) {

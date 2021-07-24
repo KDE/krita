@@ -93,17 +93,20 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data)
             if (action != 0 && action != cancel) {
                 for (QUrl url : urls) {
 
+                    QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
+                    tmp->setAutoRemove(true);
+
                     if (!url.isLocalFile()) {
                         // download the file and substitute the url
                         KisRemoteFileFetcher fetcher;
-                        QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
-                        tmp->setAutoRemove(true);
+
                         if (!fetcher.fetchFile(url, tmp.data())) {
                             qWarning() << "Fetching" << url << "failed";
                             continue;
                         }
                         url = url.fromLocalFile(tmp->fileName());
                     }
+
                     if (url.isLocalFile()) {
                         if (action == insertAsNewLayer || action == insertManyLayers) {
                             kisview->mainWindow()->viewManager()->imageManager()->importImage(url);

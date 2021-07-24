@@ -119,16 +119,6 @@ void KisGuidesConfig::addGuideLine(Qt::Orientation o, qreal pos)
     }
 }
 
-bool KisGuidesConfig::showGuideLines() const
-{
-    return d->showGuides;
-}
-
-void KisGuidesConfig::setShowGuideLines(bool show)
-{
-    d->showGuides = show;
-}
-
 bool KisGuidesConfig::showGuides() const
 {
     return d->showGuides;

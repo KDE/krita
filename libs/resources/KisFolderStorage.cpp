@@ -134,9 +134,9 @@ bool KisFolderStorage::loadVersionedResource(KoResourceSP resource)
     return r;
 }
 
-QByteArray KisFolderStorage::resourceMd5(const QString &url)
+QString KisFolderStorage::resourceMd5(const QString &url)
 {
-    QByteArray result;
+    QString result;
 
     QFile file(location() + "/" + url);
     if (file.exists() && file.open(QIODevice::ReadOnly)) {

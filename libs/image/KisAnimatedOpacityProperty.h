@@ -31,7 +31,7 @@ public:
     KisScalarKeyframeChannel* channel() const { return m_channel.data(); }
 
     void makeAnimated(KisNode* parentNode);
-    void transferKeyframeData(const KisAnimatedOpacityProperty &rhs);
+    void transferKeyframeData(const KisAnimatedOpacityProperty &rhs, KisBaseNode* node);
 
 Q_SIGNALS:
     void changed(quint8 value);

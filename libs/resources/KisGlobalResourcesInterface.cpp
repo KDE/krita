@@ -25,20 +25,23 @@ public:
     ~GlobalResourcesSource() override
     {
     }
-
-    KoResourceSP resourceForFilename(const QString& filename) const override {
-        return m_model->resourceForFilename(filename);
+protected:
+    KoResourceSP resourceForFilename(const QString &filename) const override {
+        qDebug() << "global for filename" << filename << "rowcount" << m_model->rowCount();
+        KoResourceSP res = m_model->resourceForFilename(filename);
+        qDebug() << "\t" << res;
+        return res;
     }
 
-    KoResourceSP resourceForName(const QString& name) const override {
+    KoResourceSP resourceForName(const QString &name) const override {
         KoResourceSP res = m_model->resourceForName(name);
         return res;
     }
 
-    KoResourceSP resourceForMD5(const QByteArray& md5) const override {
+    KoResourceSP resourceForMD5(const QString &md5) const override {
         return m_model->resourceForMD5(md5);
     }
-
+public:
     KoResourceSP fallbackResource() const override {
         return m_model->rowCount() > 0 ? m_model->resourceForIndex(m_model->index(0, 0)) : KoResourceSP();
     }

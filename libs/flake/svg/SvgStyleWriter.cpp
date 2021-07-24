@@ -127,7 +127,9 @@ void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
         QString gradientId = saveSvgGradient(lineBorder->lineBrush().gradient(), lineBorder->lineBrush().transform(), context);
         strokeStr = "url(#" + gradientId + ")";
     } else {
-        strokeStr = lineBorder->color().name();
+        if (lineBorder->color().isValid()) {
+            strokeStr = lineBorder->color().name();
+        }
         if (lineBorder->color().alphaF() < 1.0) {
             context.shapeWriter().addAttribute("stroke-opacity", lineBorder->color().alphaF());
         }

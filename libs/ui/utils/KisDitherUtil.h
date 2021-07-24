@@ -31,15 +31,16 @@ public:
     };
 
     KisDitherUtil();
+    void setConfiguration(const KisFilterConfiguration &config, const QString &prefix = "");
+    qreal threshold(const QPoint &pos);
+
+private:
 
     void setThresholdMode(const ThresholdMode thresholdMode);
-    void setPattern(const QString &name, const PatternValueMode valueMode, KisResourcesInterfaceSP resourcesInterface);
+    void setPattern(const QString &md5sum, const QString &patternName, const PatternValueMode valueMode, KisResourcesInterfaceSP resourcesInterface);
     void setNoiseSeed(const quint64 &noiseSeed);
     void setSpread(const qreal &spread);
 
-    qreal threshold(const QPoint &pos);
-
-    void setConfiguration(const KisFilterConfiguration &config, const QString &prefix = "");
 
 private:
     ThresholdMode m_thresholdMode;

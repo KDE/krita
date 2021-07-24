@@ -22,6 +22,7 @@
 
 KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
 {
+    m_halfSizeLink = true;
     m_widget = new Ui_WdgBlur();
     m_widget->setupUi(this);
     linkSpacingToggled(true);
@@ -31,6 +32,8 @@ KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
     connect(widget()->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkSpacingToggled(bool)));
     connect(widget()->intHalfWidth, SIGNAL(valueChanged(int)), this, SLOT(sldHalfWidthChanged(int)));
     connect(widget()->intHalfHeight, SIGNAL(valueChanged(int)), this, SLOT(sldHalfHeightChanged(int)));
+
+    widget()->aspectButton->setKeepAspectRatio(m_halfSizeLink);
 
     connect(widget()->intStrength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(widget()->angleSelector, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));

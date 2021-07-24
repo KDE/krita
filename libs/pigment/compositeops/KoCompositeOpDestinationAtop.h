@@ -26,7 +26,7 @@ class KoCompositeOpDestinationAtop : public KoCompositeOpBase<CS_Traits, KoCompo
 
 public:
     KoCompositeOpDestinationAtop(const KoColorSpace * cs)
-        : base_class(cs, COMPOSITE_DESTINATION_ATOP, i18n("Destination Atop"), KoCompositeOp::categoryMix()) { }
+        : base_class(cs, COMPOSITE_DESTINATION_ATOP, KoCompositeOp::categoryMix()) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>

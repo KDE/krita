@@ -10,5 +10,5 @@
         "Krita/FileFilter"
     ],
     "X-KDE-Weight": "1",
-    "X-KDE-Extensions" : "jpeg,jpg,jfif"
+    "X-KDE-Extensions" : "jpeg,jpg"
 }

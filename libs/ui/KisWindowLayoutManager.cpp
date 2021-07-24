@@ -219,7 +219,7 @@ void KisWindowLayoutManager::slotScreensChanged()
     Q_FOREACH(const DisplayLayout *displayLayout, d->displayLayouts) {
         if (displayLayout->matches(screens)) {
             KoResourceServer<KisWindowLayoutResource> *windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer();
-            KisWindowLayoutResourceSP layout = windowLayoutServer->resourceByName(displayLayout->preferredWindowLayout);
+            KisWindowLayoutResourceSP layout = windowLayoutServer->resource("", "", displayLayout->preferredWindowLayout);
 
             if (layout) {
                 setLastUsedLayout(layout.data());

@@ -229,7 +229,7 @@ class KoOptimizedCompositeOpAlphaDarken32Impl : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpAlphaDarken32Impl(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 

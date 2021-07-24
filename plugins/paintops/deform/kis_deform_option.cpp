@@ -17,6 +17,7 @@ public:
         setupUi(this);
 
         deformAmount->setRange(0.0, 1.0, 2);
+        deformAmount->setSingleStep(0.01);
         deformAmount->setValue(0.20);
     }
 };

@@ -179,6 +179,7 @@ void KisToolBrush::updateSmoothnessDistanceLabel()
     if (smoothingType() == KisSmoothingOptions::STABILIZER) {
         m_lblSmoothnessDistance->setText(i18n("Sample count:"));
         m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 0);
+        m_sliderSmoothnessDistance->setSingleStep(1);
         m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
 
         if (!qFuzzyCompare(m_sliderSmoothnessDistance->value(), oldValue)) {
@@ -189,6 +190,7 @@ void KisToolBrush::updateSmoothnessDistanceLabel()
     } else {
         m_lblSmoothnessDistance->setText(i18nc("Label of Distance value in Freehand brush tool's Weighted Smoothing mode", "Distance:"));
         m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+        m_sliderSmoothnessDistance->setSingleStep(0.1);
         m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
 
         if (!qFuzzyCompare(m_sliderSmoothnessDistance->value(), oldValue)) {
@@ -405,6 +407,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
+    m_sliderTailAggressiveness->setSingleStep(0.01);
     m_sliderTailAggressiveness->setEnabled(true);
     connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
     m_sliderTailAggressiveness->setValue(smoothingOptions()->tailAggressiveness());

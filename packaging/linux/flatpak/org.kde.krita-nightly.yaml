@@ -303,45 +303,105 @@ modules:
         url: https://download.kde.org/stable/frameworks/5.74/kimageformats-5.74.0.tar.xz
         sha256: 732c94512a26ff4c4fcdea46ce26fcd7c700c129188c181115fbb0facac937fe
        
-  - name: sip
+  - name: python-toml
     buildsystem: simple
     build-commands:
-      - python3 configure.py
-        --bindir=/app/bin
-        --destdir=/app/lib/python3/dist-packages
-        --incdir=/app/include/python3
-        --sipdir=/app/share/sip
-        --stubsdir=/app/lib/python3/dist-packages
-        --sip-module=PyQt5.sip
-      - make -j $FLATPAK_BUILDER_N_JOBS
-      - make install
+      - python setup.py install --prefix=/app
     cleanup:
       - /bin
     sources:
-      - type: archive
-        url: https://www.riverbankcomputing.com/static/Downloads/sip/4.19.24/sip-4.19.24.tar.gz
-        sha256: edcd3790bb01938191eef0f6117de0bf56d1136626c0ddb678f3a558d62e41e5
+      - type : archive
+        url: https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c/toml-0.10.2.tar.gz
+        sha256: b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f
 
-  - name: pyqt
+  - name: python-pyparsing
+    ensure-writable: 
+      - /lib/python3.8/site-packages/easy-install.pth
     buildsystem: simple
     build-commands:
-      - python3 configure.py
-        --confirm-license
-        --sip-incdir=/app/include/python3
-        --bindir=/app/bin
-        --destdir=/app/lib/python3/dist-packages
-        --designer-plugindir=/app/lib/plugins/designer
-        --qml-plugindir=/app/lib/plugins/PyQt5
-        --sipdir=/app/share/sip
-        --stubsdir=/app/lib/python3/dist-packages/PyQt5
-      - make -j $FLATPAK_BUILDER_N_JOBS
-      - make install
+      - python setup.py install --prefix=/app
+    cleanup:
+      - /bin
+    sources:
+      - type : archive
+        url: https://files.pythonhosted.org/packages/2a/55/640c081b8b9d974665aa991be7b55ac75faa0e608a4125e03a96c253c1a1/pyparsing-3.0.0b2.tar.gz
+        sha256: 1c6409312ce2ce2997896af5756753778d5f1603666dba5587804f09ad82ed27
+        
+  - name: python-packaging
+    ensure-writable: 
+      - /lib/python3.8/site-packages/easy-install.pth
+    buildsystem: simple
+    build-commands:
+      - python setup.py install --prefix=/app
+    cleanup:
+      - /bin
+    sources:
+      - type : archive
+        url: https://files.pythonhosted.org/packages/df/86/aef78bab3afd461faecf9955a6501c4999933a48394e90f03cd512aad844/packaging-21.0.tar.gz
+        sha256: 7dc96269f53a4ccec5c0670940a4281106dd0bb343f47b7471f779df49c2fbe7
+
+  - name: sip
+    ensure-writable: 
+      - /lib/python3.8/site-packages/easy-install.pth
+    buildsystem: simple
+    build-options:
+      env:
+        PYTHONPATH: /app/lib/python3.8/site-packages
+    build-commands:
+      - python setup.py build -j $FLATPAK_BUILDER_N_JOBS 
+      - python setup.py install --prefix=/app --skip-build --optimize=1
     cleanup:
       - /bin
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/1d/31/896dc3dfb6c81c70164019a6cbba6ab037e3af7653d9ca60ccc874ee4c27/PyQt5-5.15.1.tar.gz
-        sha256: d9a76b850246d08da9863189ecb98f6c2aa9b4d97a3e85e29330a264aed0f9a1
+        url: https://pypi.python.org/packages/source/s/sip/sip-6.1.1.tar.gz
+        sha256: 52d25af2fcd764c4e15cc9cd1350bdb0e63f52dfa2aa3c5e7679af7fde9f7e20
+
+  - name: pyqt-builder
+    ensure-writable: 
+      - /lib/python3.8/site-packages/easy-install.pth
+    buildsystem: simple
+    build-options:
+      env:
+        PYTHONPATH: /app/lib/python3.8/site-packages
+    build-commands:
+      - python setup.py build -j $FLATPAK_BUILDER_N_JOBS 
+      - python setup.py install  --prefix=/app --skip-build  --optimize=1
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.10.0.tar.gz
+        sha256: 86bd19fde83d92beaefacdeac1e26c6e1918c300ff78d7ec2a19973bf2cf21b5
+        
+  - name: pyqt5
+    ensure-writable: 
+      - /lib/python3.8/site-packages/PyQt5
+    buildsystem: simple
+    build-options:
+      env:
+        PYTHONPATH: /app/lib/python3.8/site-packages
+    build-commands:
+      - sip-build --confirm-license --no-designer-plugin --target-dir /app/lib/python3.8/site-packages --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs $FLATPAK_BUILDER_N_JOBS
+      - make -C build -j $FLATPAK_BUILDER_N_JOBS
+      - make -C build -j 1 install
+    sources:
+      - type: archive
+        url: https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.4.tar.gz
+        sha256: 2a69597e0dd11caabe75fae133feca66387819fc9bc050f547e5551bce97e5be
+  
+  - name: pyqt5_sip
+    buildsystem: simple
+    build-options:
+      env:
+        PYTHONPATH: /app/lib/python3.8/site-packages
+    build-commands:
+      - python setup.py build -j $FLATPAK_BUILDER_N_JOBS 
+      - python setup.py install --prefix "." --root=/app --optimize=1
+    sources: 
+    - type: archive
+      url: https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.9.0.tar.gz
+      sha256: d3e4489d7c2b0ece9d203ae66e573939f7f60d4d29e089c9f11daa17cfeaae32
 
   - name: boost
     buildsystem: simple
@@ -590,6 +650,20 @@ modules:
       - type: archive
         url: https://github.com/mypaint/libmypaint/releases/download/v1.6.1/libmypaint-1.6.1.tar.xz
         sha256: 741754f293f6b7668f941506da07cd7725629a793108bb31633fb6c3eae5315f
+  
+  - name: webp
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_SHARED_LIBS=OFF
+    sources:
+      - type: archive
+        url: https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.0.tar.gz
+        sha512: c46b41899a543cc80914c89646dd607dbb5d025a9727dd83ef70994b9310eedc697666bd812141a90aa16632a9a354a031d9360a9ee1112295c7e154e69f0b74
+      - type: patch
+        paths:
+          - ../../../3rdparty/ext_webp/0001-Fix-CMake-targets-install-directory.patch
         
   - name: libheif
     buildsystem: cmake-ninja

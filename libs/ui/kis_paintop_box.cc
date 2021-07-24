@@ -606,7 +606,6 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop)
 {
     KisPaintOpPresetSP preset = activePreset(paintop);
-    Q_ASSERT(preset && preset->settings());
     setCurrentPaintop(preset);
 }
 

@@ -137,6 +137,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         d->updateProxy->notifyUniformPropertiesChanged();
         d->updateProxy->notifySettingsChanged();
     }
+    setValid(true);
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
@@ -470,11 +471,12 @@ QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP gl
 
     if (hasMaskingPreset()) {
         KisPaintOpPresetSP maskingPreset = createMaskingPreset();
-        if (maskingPreset) {
-            KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
-            resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
-        }
+        Q_ASSERT(maskingPreset);
+
+        KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+        resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
+
     }
 
     return resources;
@@ -492,12 +494,13 @@ QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP 
 
     if (hasMaskingPreset()) {
         KisPaintOpPresetSP maskingPreset = createMaskingPreset();
-        if (maskingPreset) {
-            KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
-            resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
-        }
+        Q_ASSERT(maskingPreset);
+        KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+        resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
+
     }
+
     return resources;
 }
 

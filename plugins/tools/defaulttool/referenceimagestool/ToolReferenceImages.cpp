@@ -276,8 +276,13 @@ KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event
     if(activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
         bool insideSelection = false;
         KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
-        return new KisReferenceImageCropStrategy(this, activeReferenceImage(), event->point, handle);
-    }
+        if(insideSelection) {
+            return new KisReferenceImageCropStrategy(this, activeReferenceImage(), event->point, handle);
+        }
+        else {
+            return 0;
+        }
+     }
     return DefaultTool::createStrategy(event);
 }
 

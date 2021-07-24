@@ -24,7 +24,7 @@ private:
     bool m_top, m_left, m_bottom, m_right, m_move;
     QRectF m_initialCropRect;
     QTransform m_unwindMatrix;
-    QPointF offset;
+    QPointF m_offset;
 };
 
 #endif // KISREFERENCEIMAGECROPSTRATEGY_H

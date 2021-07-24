@@ -11,7 +11,7 @@ KisReferenceImageCropStrategy::KisReferenceImageCropStrategy(KoToolBase *tool, K
 
     switch (direction) {
     case KoFlake::TopMiddleHandle:
-        m_start = 0.5 * (cropRect.value(0) + cropRect.value(1)) / 2;
+        m_start = 0.5 * (cropRect.value(0) + cropRect.value(1));
         m_top = true; m_bottom = false; m_left = false; m_right = false;
         break;
     case KoFlake::TopRightHandle:
@@ -19,7 +19,7 @@ KisReferenceImageCropStrategy::KisReferenceImageCropStrategy(KoToolBase *tool, K
         m_top = true; m_bottom = false; m_left = false; m_right = true;
         break;
     case KoFlake::RightMiddleHandle:
-        m_start = 0.5 * (cropRect.value(1) + cropRect.value(2)) / 2;
+        m_start = 0.5 * (cropRect.value(1) + cropRect.value(2));
         m_top = false; m_bottom = false; m_left = false; m_right = true;
         break;
     case KoFlake::BottomRightHandle:
@@ -27,7 +27,7 @@ KisReferenceImageCropStrategy::KisReferenceImageCropStrategy(KoToolBase *tool, K
         m_top = false; m_bottom = true; m_left = false; m_right = true;
         break;
     case KoFlake::BottomMiddleHandle:
-        m_start = 0.5 * (cropRect.value(2) + cropRect.value(3)) / 2;
+        m_start = 0.5 * (cropRect.value(2) + cropRect.value(3));
         m_top = false; m_bottom = true; m_left = false; m_right = false;
         break;
     case KoFlake::BottomLeftHandle:
@@ -35,7 +35,7 @@ KisReferenceImageCropStrategy::KisReferenceImageCropStrategy(KoToolBase *tool, K
         m_top = false; m_bottom = true; m_left = true; m_right = false;
         break;
     case KoFlake::LeftMiddleHandle:
-        m_start = 0.5 * (cropRect.value(3) + cropRect.value(0)) / 2;
+        m_start = 0.5 * (cropRect.value(3) + cropRect.value(0));
         m_top = false; m_bottom = false; m_left = true; m_right = false;
         break;
     case KoFlake::TopLeftHandle:
@@ -45,18 +45,15 @@ KisReferenceImageCropStrategy::KisReferenceImageCropStrategy(KoToolBase *tool, K
     case KoFlake::NoHandle:
         m_start = clicked;
         m_move = true;
-    //handle illegal corner
     }
 
     m_initialCropRect = referenceImage->cropRect();
     m_referenceImage = referenceImage;
     m_unwindMatrix = referenceImage->absoluteTransformation().inverted();
-    offset = m_referenceImage->cropRect().topLeft();
 }
 
 KisReferenceImageCropStrategy::~KisReferenceImageCropStrategy()
 {
-
 }
 
 
@@ -65,34 +62,74 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
     QRectF finalRect = m_initialCropRect;
     if(m_move) {
         QPointF newPos = point - m_start;
-        finalRect.moveTo(newPos);
+
+        QPointF offset = finalRect.topLeft() + newPos;
+        if(offset.x() < 0) {
+            offset.setX(0);
+        }
+        if(offset.y() < 0) {
+            offset.setY(0);
+        }
+
+        qreal maxX = m_referenceImage->size().width() - finalRect.width();
+        if(offset.x() > maxX) {
+            offset.setX(maxX);
+        }
+        qreal maxY = m_referenceImage->size().height() - finalRect.height();
+        if(offset.y() > maxY) {
+            offset.setY(maxY);
+        }
+        finalRect.moveTo(offset);
     }
     else {
         QPointF newPos = tool()->canvas()->snapGuide()->snap(point, modifiers);
         QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map(m_start);
 
-        qreal startWidth = m_initialCropRect.width();
-        qreal startHeight = m_initialCropRect.height();
-        qreal newWidth = startWidth;
-        qreal newHeight = startHeight;
+        qreal newWidth = m_initialCropRect.width();
+        qreal newHeight = m_initialCropRect.height();
         QPointF pos;
 
         if (m_left) {
             pos.setX(newPos.x() - m_start.x());
-            newWidth = startWidth - distance.x();
+            newWidth = m_initialCropRect.width() - distance.x();
+
+            qreal maxWidth = finalRect.bottomRight().x();
+            if(newWidth > maxWidth) {
+                newWidth = maxWidth;
+            }
         } else if (m_right) {
-            newWidth = startWidth + distance.x();
+            newWidth = m_initialCropRect.width() + distance.x();
+
+            qreal maxWidth = m_referenceImage->size().width() - finalRect.topLeft().x();
+            if(newWidth > maxWidth) {
+                newWidth = maxWidth;
+            }
         }
 
         if (m_top) {
             pos.setY(newPos.y() - m_start.y());
-            newHeight = startHeight - distance.y();
+            newHeight = m_initialCropRect.height() - distance.y();
 
+            qreal maxHeight = finalRect.bottomRight().y();
+            if(newHeight > maxHeight) {
+                newHeight = maxHeight;
+            }
         } else if (m_bottom) {
-            newHeight = startHeight + distance.y();
-        }
+            newHeight = m_initialCropRect.height() + distance.y();
 
-        finalRect.moveTo(offset + pos);
+            qreal maxHeight = m_referenceImage->size().height() - finalRect.topLeft().y();
+            if(newHeight > maxHeight) {
+                newHeight = maxHeight;
+            }
+        }
+        QPointF offset = m_initialCropRect.topLeft() + pos;
+        if(offset.x() < 0 ) {
+            offset.setX(0);
+        }
+        if(offset.y() < 0) {
+            offset.setY(0);
+        }
+        finalRect.moveTo(offset);
         finalRect.setWidth(newWidth);
         finalRect.setHeight(newHeight);
     }
@@ -100,9 +137,7 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
     m_referenceImage->update();
     ToolReferenceImages *t = dynamic_cast<ToolReferenceImages*>(tool());
     emit t->cropRectChanged();
-
 }
-
 
 KUndo2Command *KisReferenceImageCropStrategy::createCommand()
 {

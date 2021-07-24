@@ -346,8 +346,8 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
     }
     else {
         KUndo2Command *cmd =
-                 new KisReferenceImage::CropReferenceImage(ref, cropRect());
-         d->tool->canvas()->addCommand(cmd);
+                     new KisReferenceImage::CropReferenceImage(ref, cropRect());
+        d->tool->canvas()->addCommand(cmd);
     }
 }
 
@@ -447,11 +447,11 @@ void ToolReferenceImagesWidget::slotCropRectChanged()
     d->ui->sldOffsetY->blockSignals(false);
 
     d->ui->sldWidth->blockSignals(true);
-    d->ui->sldWidth->setValue(rect.width() - rect.topLeft().x());
+    d->ui->sldWidth->setValue(rect.width());
     d->ui->sldWidth->blockSignals(false);
 
     d->ui->sldHeight->blockSignals(true);
-    d->ui->sldHeight->setValue(rect.height() - rect.topLeft().y());
+    d->ui->sldHeight->setValue(rect.height());
     d->ui->sldHeight->blockSignals(false);
 }
 

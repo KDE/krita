@@ -63,9 +63,13 @@ public:
     /// Sets a custom delegate for the view
     void setItemDelegate(QAbstractItemDelegate *delegate);
 
-    /// Gets the currently selected resource
-    /// @returns the selected resource, 0 is no resource is selected
-    KoResourceSP currentResource() const;
+    /**
+     * @brief Gets the currently selected resource
+     * @param includeHidden If true, return the remembered resource even if
+     *        it is currently not visible in the item view
+     * @return The selected resource, 0 is no resource is selected
+     */
+    KoResourceSP currentResource(bool includeHidden = false) const;
 
     /// Sets the item representing the resource as selected
     void setCurrentResource(KoResourceSP resource);
@@ -124,7 +128,6 @@ private Q_SLOTS:
     void clicked(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
-    void beforeFilterChanges();
     void afterFilterChanged();
 
 protected:

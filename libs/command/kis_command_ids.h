@@ -32,7 +32,8 @@ enum CommandId {
     EmitImageSignalsCommandId,
     NodePropertyListCommandId,
     ChangeStoryboardChild,
-    ChangeTransformMaskCommand
+    ChangeTransformMaskCommand,
+    CropReferenceImageId
 };
 
 }

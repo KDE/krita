@@ -36,6 +36,7 @@
 #include <KisDocument.h>
 #include <KisPart.h>
 #include <KoClipPath.h>
+#include <kis_command_ids.h>
 
 struct KisReferenceImage::Private : public QSharedData
 {
@@ -183,6 +184,24 @@ void KisReferenceImage::CropReferenceImage::redo()
     referenceImage->setAbsolutePosition(oldPos + newRect.topLeft(), KoFlake::TopLeft);
     referenceImage->setImage(newImage);
     referenceImage->updateAbsolute(QRectF(QPointF(), oldShapeSize));
+}
+
+int KisReferenceImage::CropReferenceImage::id() const
+{
+    return KisCommandUtils::CropReferenceImageId;
+}
+
+bool KisReferenceImage::CropReferenceImage::mergeWith(const KUndo2Command *command)
+{
+    const CropReferenceImage *other = dynamic_cast<const CropReferenceImage*>(command);
+
+    if (other->referenceImage != referenceImage) {
+        return false;
+    }
+
+    newRect = other->newRect;
+    imageRect = other->imageRect;
+    return true;
 }
 
 KisReferenceImage::KisReferenceImage()

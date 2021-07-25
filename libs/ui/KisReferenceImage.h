@@ -48,8 +48,10 @@ public:
         QPointF oldPos;
 
         explicit CropReferenceImage(KoShape *image, QRectF rect, KUndo2Command *parent = 0);
+        int id() const override;
         void undo() override;
         void redo() override;
+        bool mergeWith(const KUndo2Command *command) override;
     };
 
     KisReferenceImage();

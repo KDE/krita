@@ -474,7 +474,7 @@ KisTagSP KisAllTagsModel::tagForUrl(const QString& tagUrl) const
     tag->setActive(query.value("active").toBool());
     tag->setValid(true);
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tagUrl == tag->url(), KisTagSP());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tagUrl.toLower() == tag->url().toLower(), KisTagSP());
 
     return tag;
 

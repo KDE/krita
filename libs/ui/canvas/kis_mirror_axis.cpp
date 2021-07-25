@@ -158,7 +158,8 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
     float halfHandleSize = d->config.handleSize() / 2;
 
-    d->recomputeVisibleAxes(gc.viewport());
+    const qreal dpr = canvas->canvasWidget()->devicePixelRatioF();
+    d->recomputeVisibleAxes(QRect(gc.viewport().topLeft() / dpr, gc.viewport().size() / dpr));
 
     if(d->config.mirrorHorizontal() && !d->config.hideHorizontalDecoration()) {
         if (!d->horizontalAxis.isNull()) {
@@ -453,13 +454,14 @@ void KisMirrorAxis::Private::recomputeVisibleAxes(QRect viewport)
 
     config.setAxisPosition(KisAlgebra2D::relativeToAbsolute(image->mirrorAxesCenter(), image->bounds()));
 
-    QPointF samplePt1 = converter->imageToWidget<QPointF>(config.axisPosition());
-    QPointF samplePt2 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x(), config.axisPosition().y() - 100));
+    QPointF samplePt1 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x(), 0));
+    QPointF samplePt2 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x(), 100));
 
     horizontalAxis = QLineF(samplePt1, samplePt2);
     if (!KisAlgebra2D::intersectLineRect(horizontalAxis, viewport, true)) horizontalAxis = QLineF();
 
-    samplePt2 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x() - 100, config.axisPosition().y()));
+    samplePt1 = converter->imageToWidget<QPointF>(QPointF(0, config.axisPosition().y()));
+    samplePt2 = converter->imageToWidget<QPointF>(QPointF(100, config.axisPosition().y()));
     verticalAxis = QLineF(samplePt1, samplePt2);
     if (!KisAlgebra2D::intersectLineRect(verticalAxis, viewport, true)) verticalAxis = QLineF();
 }

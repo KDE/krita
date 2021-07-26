@@ -9,10 +9,12 @@
 #include <KoColor.h>
 #include <filter/kis_filter_configuration.h>
 #include <KisGlobalResourcesInterface.h>
+#include <kis_signals_blocker.h>
+#include <kis_generator_registry.h>
 
 #include "KisScreentoneConfigWidget.h"
 #include "KisScreentoneScreentoneFunctions.h"
-#include "KisScreentoneConfigDefaults.h"
+#include "KisScreentoneGeneratorConfiguration.h"
 
 KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoColorSpace *cs)
         : KisConfigWidget(parent)
@@ -93,75 +95,87 @@ KisScreentoneConfigWidget::~KisScreentoneConfigWidget()
 
 void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
+    const KisScreentoneGeneratorConfiguration *generatorConfig =
+        dynamic_cast<const KisScreentoneGeneratorConfiguration*>(config.data());
+        
     // The double slider spin boxes and the color buttons emit signals
     // when their value is set via code so we block signals here to 
     // prevent multiple sigConfigurationUpdated being called.
     // After the widgets are set up, unblock and emit sigConfigurationUpdated
     // just once 
-    blockSignals(true);
+    {
+        KisSignalsBlocker blocker1(m_ui.comboBoxPattern, m_ui.comboBoxShape,
+                                   m_ui.comboBoxInterpolation);
+        KisSignalsBlocker blocker2(m_ui.buttonForegroundColor, m_ui.sliderForegroundOpacity,
+                                   m_ui.buttonBackgroundColor, m_ui.sliderBackgroundOpacity,
+                                   m_ui.sliderBrightness, m_ui.sliderContrast);
+        KisSignalsBlocker blocker3(m_ui.checkBoxInvert);
+        KisSignalsBlocker blocker4(m_ui.sliderPositionX, m_ui.sliderPositionY,
+                                   m_ui.sliderSizeX, m_ui.sliderSizeY,
+                                   m_ui.sliderShearX, m_ui.sliderShearY);
+        KisSignalsBlocker blocker5(m_ui.buttonKeepSizeSquare, m_ui.angleSelectorRotation);
+        KisSignalsBlocker blocker6(this);
 
-    KoColor c;
-    m_ui.comboBoxPattern->setCurrentIndex(config->getInt("pattern", KisScreentoneConfigDefaults::pattern()));
-    m_ui.comboBoxShape->setCurrentIndex(config->getInt("shape", KisScreentoneConfigDefaults::shape()));
-    m_ui.comboBoxInterpolation->setCurrentIndex(config->getInt("interpolation", KisScreentoneConfigDefaults::interpolation()));
-    c = config->getColor("foreground_color", KisScreentoneConfigDefaults::foregroundColor());
-    c.convertTo(m_colorSpace);
-    c.setOpacity(1.0);
-    m_ui.buttonForegroundColor->setColor(c);
-    m_ui.sliderForegroundOpacity->setValue(config->getInt("foreground_opacity", KisScreentoneConfigDefaults::foregroundOpacity()));
-    c = config->getColor("background_color", KisScreentoneConfigDefaults::backgroundColor());
-    c.convertTo(m_colorSpace);
-    c.setOpacity(1.0);
-    m_ui.buttonBackgroundColor->setColor(c);
-    m_ui.sliderBackgroundOpacity->setValue(config->getInt("background_opacity", KisScreentoneConfigDefaults::backgroundOpacity()));
-    m_ui.checkBoxInvert->setChecked(config->getBool("invert", KisScreentoneConfigDefaults::invert()));
-    m_ui.sliderBrightness->setValue(config->getDouble("brightness", KisScreentoneConfigDefaults::brightness()));
-    m_ui.sliderContrast->setValue(config->getDouble("contrast", KisScreentoneConfigDefaults::contrast()));
-    m_ui.sliderPositionX->setValue(config->getDouble("position_x", KisScreentoneConfigDefaults::positionX()));
-    m_ui.sliderPositionY->setValue(config->getDouble("position_y", KisScreentoneConfigDefaults::positionY()));
-    m_ui.buttonKeepSizeSquare->setKeepAspectRatio(config->getBool("keep_size_square", KisScreentoneConfigDefaults::keepSizeSquare()));
-    m_ui.sliderSizeX->setValue(config->getDouble("size_x", KisScreentoneConfigDefaults::sizeX()));
-    // Set the size y slider to the sithe y value only if the size must not be squared
-    if (m_ui.buttonKeepSizeSquare->keepAspectRatio()) {
-        m_ui.sliderSizeY->setValue(config->getDouble("size_x", KisScreentoneConfigDefaults::sizeX()));
-    } else {
-        m_ui.sliderSizeY->setValue(config->getDouble("size_y", KisScreentoneConfigDefaults::sizeY()));
+        KoColor c;
+        m_ui.comboBoxPattern->setCurrentIndex(generatorConfig->pattern());
+        m_ui.comboBoxShape->setCurrentIndex(generatorConfig->shape());
+        m_ui.comboBoxInterpolation->setCurrentIndex(generatorConfig->interpolation());
+        c = generatorConfig->foregroundColor();
+        c.convertTo(m_colorSpace);
+        c.setOpacity(1.0);
+        m_ui.buttonForegroundColor->setColor(c);
+        m_ui.sliderForegroundOpacity->setValue(generatorConfig->foregroundOpacity());
+        c = generatorConfig->backgroundColor();
+        c.convertTo(m_colorSpace);
+        c.setOpacity(1.0);
+        m_ui.buttonBackgroundColor->setColor(c);
+        m_ui.sliderBackgroundOpacity->setValue(generatorConfig->backgroundOpacity());
+        m_ui.checkBoxInvert->setChecked(generatorConfig->invert());
+        m_ui.sliderBrightness->setValue(generatorConfig->brightness());
+        m_ui.sliderContrast->setValue(generatorConfig->contrast());
+        m_ui.sliderPositionX->setValue(generatorConfig->positionX());
+        m_ui.sliderPositionY->setValue(generatorConfig->positionY());
+        m_ui.buttonKeepSizeSquare->setKeepAspectRatio(generatorConfig->constrainSize());
+        m_ui.sliderSizeX->setValue(generatorConfig->sizeX());
+        // Set the size y slider to the sithe y value only if the size must not be squared
+        if (m_ui.buttonKeepSizeSquare->keepAspectRatio()) {
+            m_ui.sliderSizeY->setValue(generatorConfig->sizeX());
+        } else {
+            m_ui.sliderSizeY->setValue(generatorConfig->sizeY());
+        }
+        m_ui.sliderShearX->setValue(generatorConfig->shearX());
+        m_ui.sliderShearY->setValue(generatorConfig->shearY());
+        m_ui.angleSelectorRotation->setAngle(generatorConfig->rotation());
     }
-    m_ui.sliderShearX->setValue(config->getDouble("shear_x", KisScreentoneConfigDefaults::shearX()));
-    m_ui.sliderShearY->setValue(config->getDouble("shear_y", KisScreentoneConfigDefaults::shearY()));
-    m_ui.angleSelectorRotation->setAngle(config->getDouble("rotation", KisScreentoneConfigDefaults::rotation()));
-
-    blockSignals(false);
     emit sigConfigurationUpdated();
 }
 
 KisPropertiesConfigurationSP KisScreentoneConfigWidget::configuration() const
 {
-    QVariant v;
-    KoColor c;
-    KisFilterConfigurationSP config = new KisFilterConfiguration("screentone", 1, KisGlobalResourcesInterface::instance());
-    config->setProperty("pattern",  m_ui.comboBoxPattern->currentIndex());
-    config->setProperty("shape",  m_ui.comboBoxShape->currentIndex());
-    config->setProperty("interpolation",  m_ui.comboBoxInterpolation->currentIndex());
-    c.fromKoColor(m_ui.buttonForegroundColor->color());
-    v.setValue(c);
-    config->setProperty("foreground_color", v);
-    config->setProperty("foreground_opacity", m_ui.sliderForegroundOpacity->value());
-    c.fromKoColor(m_ui.buttonBackgroundColor->color());
-    v.setValue(c);
-    config->setProperty("background_color", v);
-    config->setProperty("background_opacity", m_ui.sliderBackgroundOpacity->value());
-    config->setProperty("invert", m_ui.checkBoxInvert->isChecked());
-    config->setProperty("brightness", m_ui.sliderBrightness->value());
-    config->setProperty("contrast", m_ui.sliderContrast->value());
-    config->setProperty("position_x", m_ui.sliderPositionX->value());
-    config->setProperty("position_y", m_ui.sliderPositionY->value());
-    config->setProperty("size_x", m_ui.sliderSizeX->value());
-    config->setProperty("size_y", m_ui.sliderSizeY->value());
-    config->setProperty("keep_size_square", m_ui.buttonKeepSizeSquare->keepAspectRatio());
-    config->setProperty("shear_x", m_ui.sliderShearX->value());
-    config->setProperty("shear_y", m_ui.sliderShearY->value());
-    config->setProperty("rotation", m_ui.angleSelectorRotation->angle());
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->get(KisScreentoneGeneratorConfiguration::defaultName());
+    KisScreentoneGeneratorConfigurationSP config =
+        dynamic_cast<KisScreentoneGeneratorConfiguration*>(
+            generator->factoryConfiguration(KisGlobalResourcesInterface::instance()).data()
+        );
+        
+    config->setPattern(m_ui.comboBoxPattern->currentIndex());
+    config->setShape(m_ui.comboBoxShape->currentIndex());
+    config->setInterpolation(m_ui.comboBoxInterpolation->currentIndex());
+    config->setForegroundColor(m_ui.buttonForegroundColor->color());
+    config->setForegroundOpacity(m_ui.sliderForegroundOpacity->value());
+    config->setBackgroundColor(m_ui.buttonBackgroundColor->color());
+    config->setBackgroundOpacity(m_ui.sliderBackgroundOpacity->value());
+    config->setInvert(m_ui.checkBoxInvert->isChecked());
+    config->setBrightness(m_ui.sliderBrightness->value());
+    config->setContrast(m_ui.sliderContrast->value());
+    config->setPositionX(m_ui.sliderPositionX->value());
+    config->setPositionY(m_ui.sliderPositionY->value());
+    config->setSizeX(m_ui.sliderSizeX->value());
+    config->setSizeY(m_ui.sliderSizeY->value());
+    config->setConstrainSize(m_ui.buttonKeepSizeSquare->keepAspectRatio());
+    config->setShearX(m_ui.sliderShearX->value());
+    config->setShearY(m_ui.sliderShearY->value());
+    config->setRotation(m_ui.angleSelectorRotation->angle());
     return config;
 }
 
@@ -189,7 +203,10 @@ void KisScreentoneConfigWidget::setupInterpolationComboBox()
 {
     m_ui.comboBoxInterpolation->clear();
     QStringList names =
-        screentoneInterpolationNames(m_ui.comboBoxPattern->currentIndex(), m_ui.comboBoxShape->currentIndex());
+        screentoneInterpolationNames(
+            m_ui.comboBoxPattern->currentIndex(),
+            m_ui.comboBoxShape->currentIndex()
+        );
     if (names.isEmpty()) {
         m_ui.labelInterpolation->hide();
         m_ui.comboBoxInterpolation->hide();
@@ -202,29 +219,24 @@ void KisScreentoneConfigWidget::setupInterpolationComboBox()
 
 void KisScreentoneConfigWidget::slot_comboBoxPattern_currentIndexChanged(int)
 {
-    m_ui.comboBoxShape->blockSignals(true);
-    m_ui.comboBoxInterpolation->blockSignals(true);
+    KisSignalsBlocker blocker(m_ui.comboBoxShape, m_ui.comboBoxInterpolation);
     setupShapeComboBox();
     setupInterpolationComboBox();
-    m_ui.comboBoxShape->blockSignals(false);
-    m_ui.comboBoxInterpolation->blockSignals(false);
     emit sigConfigurationUpdated();
 }
 
 void KisScreentoneConfigWidget::slot_comboBoxShape_currentIndexChanged(int)
 {
-    m_ui.comboBoxInterpolation->blockSignals(true);
+    KisSignalsBlocker blocker(m_ui.comboBoxInterpolation);
     setupInterpolationComboBox();
-    m_ui.comboBoxInterpolation->blockSignals(false);
     emit sigConfigurationUpdated();
 }
 
 void KisScreentoneConfigWidget::slot_sliderSizeX_valueChanged(qreal value)
 {
     if (m_ui.buttonKeepSizeSquare->keepAspectRatio()) {
-        m_ui.sliderSizeY->blockSignals(true);
+        KisSignalsBlocker blocker(m_ui.sliderSizeY);
         m_ui.sliderSizeY->setValue(value);
-        m_ui.sliderSizeY->blockSignals(false);
     }
     emit sigConfigurationUpdated();
 }
@@ -232,9 +244,8 @@ void KisScreentoneConfigWidget::slot_sliderSizeX_valueChanged(qreal value)
 void KisScreentoneConfigWidget::slot_sliderSizeY_valueChanged(qreal value)
 {
     if (m_ui.buttonKeepSizeSquare->keepAspectRatio()) {
-        m_ui.sliderSizeX->blockSignals(true);
+        KisSignalsBlocker blocker(m_ui.sliderSizeX);
         m_ui.sliderSizeX->setValue(value);
-        m_ui.sliderSizeX->blockSignals(false);
     }
     emit sigConfigurationUpdated();
 }

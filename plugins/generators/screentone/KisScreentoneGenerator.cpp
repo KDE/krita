@@ -24,20 +24,6 @@
 #include "KisScreentoneConfigWidget.h"
 #include "KisScreentoneBrightnessContrastFunctions.h"
 #include "KisScreentoneScreentoneFunctions.h"
-#include "KisScreentoneConfigDefaults.h"
-
-K_PLUGIN_FACTORY_WITH_JSON(KritaScreentoneGeneratorFactory, "KritaScreentoneGenerator.json", registerPlugin<KisScreentoneGeneratorHandle>();)
-
-KisScreentoneGeneratorHandle::KisScreentoneGeneratorHandle(QObject *parent, const QVariantList &)
-        : QObject(parent)
-{
-    KisGeneratorRegistry::instance()->add(new KisScreentoneGenerator());
-
-}
-
-KisScreentoneGeneratorHandle::~KisScreentoneGeneratorHandle()
-{
-}
 
 KisScreentoneGenerator::KisScreentoneGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Screentone..."))
 {
@@ -49,18 +35,24 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
                                       const KisFilterConfigurationSP config,
                                       KoUpdater *progressUpdater) const
 {
-    const KisScreentonePatternType pattern =
-        static_cast<KisScreentonePatternType>(
-            config->getInt("pattern", KisScreentoneConfigDefaults::pattern())
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
+
+    const KisScreentoneGeneratorConfigurationSP generatorConfiguration =
+        dynamic_cast<KisScreentoneGeneratorConfiguration*>(
+            const_cast<KisFilterConfiguration*>(config.data())
         );
-    const KisScreentoneShapeType shape =
-        static_cast<KisScreentoneShapeType>(
-            config->getInt("shape", KisScreentoneConfigDefaults::shape())
-        );
-    const KisScreentoneInterpolationType interpolation =
-        static_cast<KisScreentoneInterpolationType>(
-            config->getInt("interpolation", KisScreentoneConfigDefaults::interpolation())
-        );
+
+    return generate(dst, size, generatorConfiguration, progressUpdater);
+}
+
+void KisScreentoneGenerator::generate(KisProcessingInformation dst,
+                                      const QSize &size,
+                                      const KisScreentoneGeneratorConfigurationSP config,
+                                      KoUpdater *progressUpdater) const
+{
+    const int pattern = config->pattern();
+    const int shape = config->shape();
+    const int interpolation = config->interpolation();
 
     if (pattern == KisScreentonePatternType_Dots) {
         if (shape == KisScreentoneShapeType_RoundDots) {
@@ -134,12 +126,12 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
 template <class ScreentoneFunction>
 void KisScreentoneGenerator::generate(KisProcessingInformation dst,
                                       const QSize &size,
-                                      const KisFilterConfigurationSP config,
+                                      const KisScreentoneGeneratorConfigurationSP config,
                                       KoUpdater *progressUpdater,
                                       const ScreentoneFunction &screentoneFunction) const
 {
-    const qreal brightness = config->getDouble("brightness", KisScreentoneConfigDefaults::brightness()) / 50. - 1.0;
-    const qreal contrast = config->getDouble("contrast", KisScreentoneConfigDefaults::contrast()) / 50. - 1.0;
+    const qreal brightness = config->brightness() / 50. - 1.0;
+    const qreal contrast = config->contrast() / 50. - 1.0;
 
     const bool bypassBrightnessContrast = qFuzzyIsNull(brightness) && qFuzzyIsNull(contrast);
 
@@ -171,7 +163,7 @@ bool KisScreentoneGenerator::checkUpdaterInterruptedAndSetPercent(KoUpdater *pro
 template <class ScreentoneFunction, class BrightnessContrastFunction>
 void KisScreentoneGenerator::generate(KisProcessingInformation dst,
                                       const QSize &size,
-                                      const KisFilterConfigurationSP config,
+                                      const KisScreentoneGeneratorConfigurationSP config,
                                       KoUpdater *progressUpdater,
                                       const ScreentoneFunction &screentoneFunction,
                                       const BrightnessContrastFunction &brightnessContrastFunction) const
@@ -190,25 +182,25 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
         colorSpace = device->colorSpace();
     }
     
-    const qreal positionX = config->getDouble("position_x", KisScreentoneConfigDefaults::positionX());
-    const qreal positionY = config->getDouble("position_y", KisScreentoneConfigDefaults::positionY());
-    const bool kepSizeSquare = config->getBool("keep_size_square", KisScreentoneConfigDefaults::keepSizeSquare());
-    const qreal sizeX = config->getDouble("size_x", KisScreentoneConfigDefaults::sizeX());
+    const qreal positionX = config->positionX();
+    const qreal positionY = config->positionY();
+    const bool kepSizeSquare = config->constrainSize();
+    const qreal sizeX = config->sizeX();
     // Ensure that the size y component is equal to the x component if keepSizeSquare is true
-    const qreal sizeY = kepSizeSquare ? sizeX : config->getDouble("size_y", KisScreentoneConfigDefaults::sizeY());
-    const qreal shearX = config->getDouble("shear_x", KisScreentoneConfigDefaults::shearX());
-    const qreal shearY = config->getDouble("shear_y", KisScreentoneConfigDefaults::shearY());
-    const qreal rotation = config->getDouble("rotation", KisScreentoneConfigDefaults::rotation());
+    const qreal sizeY = kepSizeSquare ? sizeX : config->sizeY();
+    const qreal shearX = config->shearX();
+    const qreal shearY = config->shearY();
+    const qreal rotation = config->rotation();
     QTransform t;
     t.shear(shearX, shearY);
     t.scale(qIsNull(sizeX) ? 0.0 : 1.0 / sizeX, qIsNull(sizeY) ? 0.0 : 1.0 / sizeY);
     t.rotate(rotation);
     t.translate(positionX, positionY);
 
-    KoColor foregroundColor = config->getColor("foreground_color", KisScreentoneConfigDefaults::foregroundColor());
-    KoColor backgroundColor = config->getColor("background_color", KisScreentoneConfigDefaults::backgroundColor());
-    qreal foregroundOpacity = config->getInt("foreground_opacity", KisScreentoneConfigDefaults::foregroundOpacity()) / 100.0;
-    qreal backgroundOpacity = config->getInt("background_opacity", KisScreentoneConfigDefaults::backgroundOpacity()) / 100.0;
+    KoColor foregroundColor = config->foregroundColor();
+    KoColor backgroundColor = config->backgroundColor();
+    qreal foregroundOpacity = config->foregroundOpacity() / 100.0;
+    qreal backgroundOpacity = config->backgroundOpacity() / 100.0;
     foregroundColor.convertTo(colorSpace);
     backgroundColor.convertTo(colorSpace);
     foregroundColor.setOpacity(foregroundOpacity);
@@ -230,7 +222,7 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
     KisSelectionSP selection = new KisSelection(device->defaultBounds());
     KisSequentialIterator it(selection->pixelSelection(), bounds);
 
-    if (!config->getBool("invert", KisScreentoneConfigDefaults::invert())) {
+    if (!config->invert()) {
         while (it.nextPixel()) {
             qreal x, y;
             t.map(it.x(), it.y(), &x, &y);
@@ -262,30 +254,16 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
     checkUpdaterInterruptedAndSetPercent(progressUpdater, 100);
 }
 
+KisFilterConfigurationSP KisScreentoneGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+{
+    return new KisScreentoneGeneratorConfiguration(resourcesInterface);
+}
+
 KisFilterConfigurationSP KisScreentoneGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
-    QVariant v;
-    config->setProperty("pattern", KisScreentoneConfigDefaults::pattern());
-    config->setProperty("shape", KisScreentoneConfigDefaults::shape());
-    config->setProperty("interpolation", KisScreentoneConfigDefaults::interpolation());
-    v.setValue(KisScreentoneConfigDefaults::foregroundColor());
-    config->setProperty("foreground_color", v);
-    config->setProperty("foreground_opacity", KisScreentoneConfigDefaults::foregroundOpacity());
-    v.setValue(KisScreentoneConfigDefaults::backgroundColor());
-    config->setProperty("background_color", v);
-    config->setProperty("background_opacity", KisScreentoneConfigDefaults::backgroundOpacity());
-    config->setProperty("invert", KisScreentoneConfigDefaults::invert());
-    config->setProperty("brightness", KisScreentoneConfigDefaults::brightness());
-    config->setProperty("contrast", KisScreentoneConfigDefaults::contrast());
-    config->setProperty("position_x", KisScreentoneConfigDefaults::positionX());
-    config->setProperty("position_y", KisScreentoneConfigDefaults::positionY());
-    config->setProperty("size_x", KisScreentoneConfigDefaults::sizeX());
-    config->setProperty("size_y", KisScreentoneConfigDefaults::sizeY());
-    config->setProperty("keep_size_square", KisScreentoneConfigDefaults::keepSizeSquare());
-    config->setProperty("shear_x", KisScreentoneConfigDefaults::shearX());
-    config->setProperty("shear_y", KisScreentoneConfigDefaults::shearY());
-    config->setProperty("rotation", KisScreentoneConfigDefaults::rotation());
+    KisScreentoneGeneratorConfigurationSP config = 
+        dynamic_cast<KisScreentoneGeneratorConfiguration*>(factoryConfiguration(resourcesInterface).data());
+    config->setDefaults();
     return config;
 }
 
@@ -294,6 +272,3 @@ KisConfigWidget * KisScreentoneGenerator::createConfigurationWidget(QWidget* par
     Q_UNUSED(dev);
     return new KisScreentoneConfigWidget(parent);
 }
-
-#include "KisScreentoneGenerator.moc"
-

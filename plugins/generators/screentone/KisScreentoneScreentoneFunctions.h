@@ -11,40 +11,6 @@
 
 #include <QtGlobal>
 
-class QStringList;
-
-enum KisScreentonePatternType
-{
-    KisScreentonePatternType_Dots,
-    KisScreentonePatternType_Lines
-};
-
-enum KisScreentoneShapeType
-{
-    // Dots
-    KisScreentoneShapeType_RoundDots,
-    KisScreentoneShapeType_EllipseDots,
-    KisScreentoneShapeType_DiamondDots,
-    KisScreentoneShapeType_SquareDots,
-
-    // Lines
-    KisScreentoneShapeType_StraightLines = 0,
-    KisScreentoneShapeType_SineWaveLines,
-    KisScreentoneShapeType_TriangularWaveLines,
-    KisScreentoneShapeType_SawtoothWaveLines,
-    KisScreentoneShapeType_CurtainsLines
-};
-
-enum KisScreentoneInterpolationType
-{
-    KisScreentoneInterpolationType_Linear,
-    KisScreentoneInterpolationType_Sinusoidal
-};
-
-QStringList screentonePatternNames();
-QStringList screentoneShapeNames(int pattern);
-QStringList screentoneInterpolationNames(int pattern, int shape);
-
 namespace KisScreentoneScreentoneFunctions {
 
 // Screentone functions must return a value between 0.0 and 1.0

@@ -10,53 +10,6 @@
 
 #include <cmath>
 
-#include <QStringList>
-#include <klocalizedstring.h>
-
-QStringList screentonePatternNames()
-{
-    return QStringList()
-        << i18nc("Screentone Pattern Type - Dots", "Dots")
-        << i18nc("Screentone Pattern Type - Lines", "Lines");
-}
-
-QStringList screentoneShapeNames(int pattern)
-{
-    if (pattern == KisScreentonePatternType_Dots) {
-        return QStringList()
-            << i18nc("Screentone Pattern - Round Dots", "Round")
-            << i18nc("Screentone Pattern - Ellipse Dots", "Ellipse")
-            << i18nc("Screentone Pattern - Diamond Dots", "Diamond")
-            << i18nc("Screentone Pattern - Square Dots", "Square");
-    } else if (pattern == KisScreentonePatternType_Lines) {
-        return QStringList()
-            << i18nc("Screentone Pattern - Straight Lines", "Straight")
-            << i18nc("Screentone Pattern - Sine Wave Lines", "Sine Wave")
-            << i18nc("Screentone Pattern - Trianular Wave Lines", "Triangular Wave")
-            << i18nc("Screentone Pattern - Sawtooth Wave Lines", "Sawtooth Wave")
-            << i18nc("Screentone Pattern - Curtains Lines", "Curtains");
-    }
-    
-    return QStringList();
-}
-
-QStringList screentoneInterpolationNames(int pattern, int shape)
-{
-    if (pattern == KisScreentonePatternType_Dots) {
-        if (shape == KisScreentoneShapeType_RoundDots || shape == KisScreentoneShapeType_EllipseDots) {
-            return QStringList()
-                << i18nc("Screentone Interpolation Method - Linear", "Linear")
-                << i18nc("Screentone Interpolation Method - Sinusoidal", "Sinusoidal");
-        }
-    } else if (pattern == KisScreentonePatternType_Lines) {
-        return QStringList()
-            << i18nc("Screentone Interpolation Method - Linear", "Linear")
-            << i18nc("Screentone Interpolation Method - Sinusoidal", "Sinusoidal");
-    }
-
-    return QStringList();
-}
-
 namespace KisScreentoneScreentoneFunctions {
 
 qreal sin(qreal x)

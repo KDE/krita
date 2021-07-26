@@ -821,13 +821,14 @@ void LayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
     m_blockOpacityUpdate = true;
-    m_nodeManager->nodeOpacityChanged(m_newOpacity);
+    m_nodeManager->setNodeOpacity(m_changedOpacityNode, m_newOpacity);
     m_blockOpacityUpdate = false;
 }
 
 void LayerBox::slotOpacitySliderMoved(qreal opacity)
 {
     m_newOpacity = opacity;
+    m_changedOpacityNode = m_activeNode;
     m_opacityDelayTimer.start(200);
 }
 

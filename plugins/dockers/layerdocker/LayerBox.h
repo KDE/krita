@@ -148,6 +148,7 @@ private:
     Ui_WdgLayerBox* m_wdgLayerBox;
     QTimer m_opacityDelayTimer;
     int m_newOpacity;
+    KisNodeSP m_changedOpacityNode;
 
     QVector<KisAction*> m_actions;
     KisAction* m_removeAction;

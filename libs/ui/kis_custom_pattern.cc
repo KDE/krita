@@ -113,6 +113,10 @@ void KisCustomPattern::slotAddPredefined()
         fi.setFile(fi.fileName() + m_pattern->defaultFileExtension());
     }
 
+    if (fi.baseName() != m_pattern->name()) {
+        m_pattern->setName(fi.baseName());
+    }
+
     bool overwrite = false;
     if (fi.exists()) {
         if (QMessageBox::warning(this,  i18nc("@title:window", "Krita"), i18n("This pattern already exists. Do you want to overwrite it?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
@@ -126,10 +130,16 @@ void KisCustomPattern::slotAddPredefined()
             if (!m_rServer->addResource(m_pattern->clone().dynamicCast<KoPattern>())) {
                 qWarning() << "Could not add pattern with filename" << filename;
             }
+            else {
+                emit patternAdded(m_pattern);
+            }
         }
         else if (overwrite) {
             if (!m_rServer->updateResource(m_pattern->clone().dynamicCast<KoPattern>())) {
                 qWarning() << "Could not add pattern with filename" << filename;
+            }
+            else {
+                emit patternUpdated(m_pattern);
             }
         }
     }

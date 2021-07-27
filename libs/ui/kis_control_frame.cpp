@@ -185,6 +185,9 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     connect(customPatterns, SIGNAL(activatedResource(KoResourceSP )),
             view->canvasResourceProvider(), SLOT(slotPatternActivated(KoResourceSP )));
 
+    connect(customPatterns, SIGNAL(patternAdded(KoResourceSP)), m_patternChooser, SLOT(setCurrentPattern(KoResourceSP)));
+    connect(customPatterns, SIGNAL(patternUpdated(KoResourceSP)), m_patternChooser, SLOT(setCurrentPattern(KoResourceSP)));
+
     connect(view->canvasResourceProvider(), SIGNAL(sigPatternChanged(KoPatternSP)),
             this, SLOT(slotSetPattern(KoPatternSP)));
 

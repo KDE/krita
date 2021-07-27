@@ -563,6 +563,7 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
     Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
         KoColorSetSP newPalette(new KoColorSet(filename));
         store->open(m_d->imageName + PALETTE_PATH + filename);
+
         QByteArray data = store->read(store->size());
         if (data.size() > 0) {
             newPalette->fromByteArray(data, KisGlobalResourcesInterface::instance());

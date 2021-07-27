@@ -49,6 +49,14 @@ public:
     qreal operator()(qreal x, qreal y) const;
 };
 
+class DotsEllipseLinear_Legacy
+{
+public:
+    qreal operator()(qreal x, qreal y) const;
+};
+
+using DotsEllipseSinusoidal_Legacy = DotsEllipseSinusoidal;
+
 class DotsDiamond
 {
 public:

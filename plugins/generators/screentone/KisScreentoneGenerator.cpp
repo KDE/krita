@@ -63,6 +63,14 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
                 KisScreentoneScreentoneFunctions::DotsRoundSinusoidal screentoneFunction;
                 generate(dst, size, config, progressUpdater, screentoneFunction);
             }
+        } else if (shape == KisScreentoneShapeType_EllipseDotsLegacy) {
+            if (interpolation == KisScreentoneInterpolationType_Linear) {
+                KisScreentoneScreentoneFunctions::DotsEllipseLinear_Legacy screentoneFunction;
+                generate(dst, size, config, progressUpdater, screentoneFunction);
+            } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                KisScreentoneScreentoneFunctions::DotsEllipseSinusoidal_Legacy screentoneFunction;
+                generate(dst, size, config, progressUpdater, screentoneFunction);
+            }
         } else if (shape == KisScreentoneShapeType_EllipseDots) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
                 KisScreentoneScreentoneFunctions::DotsEllipseLinear screentoneFunction;

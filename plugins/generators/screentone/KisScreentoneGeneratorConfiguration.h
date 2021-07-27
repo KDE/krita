@@ -26,9 +26,10 @@ enum KisScreentoneShapeType
 {
     // Dots
     KisScreentoneShapeType_RoundDots,
-    KisScreentoneShapeType_EllipseDots,
+    KisScreentoneShapeType_EllipseDotsLegacy,
     KisScreentoneShapeType_DiamondDots,
     KisScreentoneShapeType_SquareDots,
+    KisScreentoneShapeType_EllipseDots,
     // Lines
     KisScreentoneShapeType_StraightLines = 0,
     KisScreentoneShapeType_SineWaveLines,

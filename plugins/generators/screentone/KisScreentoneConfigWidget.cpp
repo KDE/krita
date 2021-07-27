@@ -104,21 +104,19 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
     // After the widgets are set up, unblock and emit sigConfigurationUpdated
     // just once 
     {
-        KisSignalsBlocker blocker1(m_ui.comboBoxPattern, m_ui.comboBoxShape,
-                                   m_ui.comboBoxInterpolation);
-        KisSignalsBlocker blocker2(m_ui.buttonForegroundColor, m_ui.sliderForegroundOpacity,
+        KisSignalsBlocker blocker1(m_ui.buttonForegroundColor, m_ui.sliderForegroundOpacity,
                                    m_ui.buttonBackgroundColor, m_ui.sliderBackgroundOpacity,
                                    m_ui.sliderBrightness, m_ui.sliderContrast);
-        KisSignalsBlocker blocker3(m_ui.checkBoxInvert);
-        KisSignalsBlocker blocker4(m_ui.sliderPositionX, m_ui.sliderPositionY,
+        KisSignalsBlocker blocker2(m_ui.checkBoxInvert);
+        KisSignalsBlocker blocker3(m_ui.sliderPositionX, m_ui.sliderPositionY,
                                    m_ui.sliderSizeX, m_ui.sliderSizeY,
                                    m_ui.sliderShearX, m_ui.sliderShearY);
-        KisSignalsBlocker blocker5(m_ui.buttonKeepSizeSquare, m_ui.angleSelectorRotation);
-        KisSignalsBlocker blocker6(this);
+        KisSignalsBlocker blocker4(m_ui.buttonKeepSizeSquare, m_ui.angleSelectorRotation);
+        KisSignalsBlocker blocker5(this);
 
         KoColor c;
         m_ui.comboBoxPattern->setCurrentIndex(generatorConfig->pattern());
-        m_ui.comboBoxShape->setCurrentIndex(generatorConfig->shape());
+        m_ui.comboBoxShape->setCurrentIndex(shapeToComboIndex(generatorConfig->pattern(), generatorConfig->shape()));
         m_ui.comboBoxInterpolation->setCurrentIndex(generatorConfig->interpolation());
         c = generatorConfig->foregroundColor();
         c.convertTo(m_colorSpace);
@@ -159,7 +157,7 @@ KisPropertiesConfigurationSP KisScreentoneConfigWidget::configuration() const
         );
         
     config->setPattern(m_ui.comboBoxPattern->currentIndex());
-    config->setShape(m_ui.comboBoxShape->currentIndex());
+    config->setShape(comboIndexToShape(m_ui.comboBoxPattern->currentIndex(), m_ui.comboBoxShape->currentIndex()));
     config->setInterpolation(m_ui.comboBoxInterpolation->currentIndex());
     config->setForegroundColor(m_ui.buttonForegroundColor->color());
     config->setForegroundOpacity(m_ui.sliderForegroundOpacity->value());
@@ -205,7 +203,7 @@ void KisScreentoneConfigWidget::setupInterpolationComboBox()
     QStringList names =
         screentoneInterpolationNames(
             m_ui.comboBoxPattern->currentIndex(),
-            m_ui.comboBoxShape->currentIndex()
+            comboIndexToShape(m_ui.comboBoxPattern->currentIndex(), m_ui.comboBoxShape->currentIndex())
         );
     if (names.isEmpty()) {
         m_ui.labelInterpolation->hide();
@@ -215,6 +213,40 @@ void KisScreentoneConfigWidget::setupInterpolationComboBox()
         m_ui.labelInterpolation->show();
         m_ui.comboBoxInterpolation->show();
     }
+}
+
+int KisScreentoneConfigWidget::shapeToComboIndex(int pattern, int shape) const
+{
+    if (pattern == KisScreentonePatternType_Lines) {
+        return shape;
+    }
+    if (shape == KisScreentoneShapeType_RoundDots) {
+        return 0;
+    } else if (shape == KisScreentoneShapeType_EllipseDotsLegacy) {
+        return 1;
+    } else if (shape == KisScreentoneShapeType_EllipseDots) {
+        return 2;
+    } else if (shape == KisScreentoneShapeType_DiamondDots) {
+        return 3;
+    } else if (shape == KisScreentoneShapeType_SquareDots) {
+        return 4;
+    }
+    return -1;
+}
+
+int KisScreentoneConfigWidget::comboIndexToShape(int patternIndex, int shapeIndex) const
+{
+    if (patternIndex == KisScreentonePatternType_Lines) {
+        return shapeIndex;
+    }
+    switch (shapeIndex) {
+        case 0: return KisScreentoneShapeType_RoundDots;
+        case 1: return KisScreentoneShapeType_EllipseDotsLegacy;
+        case 2: return KisScreentoneShapeType_EllipseDots;
+        case 3: return KisScreentoneShapeType_DiamondDots;
+        case 4: return KisScreentoneShapeType_SquareDots;
+    }
+    return -1;
 }
 
 void KisScreentoneConfigWidget::slot_comboBoxPattern_currentIndexChanged(int)

@@ -35,13 +35,15 @@ private:
     void setupShapeComboBox();
     void setupInterpolationComboBox();
 
+    int shapeToComboIndex(int pattern, int shape) const;
+    int comboIndexToShape(int patterIndex, int shapeIndex) const;
+
 private Q_SLOTS:
     void slot_comboBoxPattern_currentIndexChanged(int);
     void slot_comboBoxShape_currentIndexChanged(int);
     void slot_sliderSizeX_valueChanged(qreal value);
     void slot_sliderSizeY_valueChanged(qreal value);
     void slot_buttonKeepSizeSquare_keepAspectRatioChanged(bool keep);
-
 };
 
 #endif

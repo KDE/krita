@@ -330,6 +330,7 @@ void KisStopGradientEditor::nameChanged()
     if (!m_gradient) return;
 
     m_gradient->setName(nameedit->text());
+    m_gradient->setFilename(nameedit->text() + m_gradient->defaultFileExtension());
     emit sigGradientChanged();
 }
 

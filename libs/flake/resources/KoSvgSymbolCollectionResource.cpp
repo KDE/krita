@@ -143,6 +143,9 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
 //             << d->symbols[0]->shape->size();
 
     d->title = parser.documentTitle();
+    if (d->title.isEmpty()) {
+        d->title = filename();
+    }
     setName(d->title);
     d->description = parser.documentDescription();
 

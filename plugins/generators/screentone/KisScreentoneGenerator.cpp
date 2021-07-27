@@ -225,17 +225,19 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
     if (!config->invert()) {
         while (it.nextPixel()) {
             qreal x, y;
-            t.map(it.x(), it.y(), &x, &y);
+            t.map(it.x() + 0.5, it.y() + 0.5, &x, &y);
 
-            qreal v = qBound(0.0, brightnessContrastFunction(screentoneFunction(x, y)), 1.0);
+            qreal v = KisScreentoneScreentoneFunctions::roundValue(screentoneFunction(x, y));
+            v = qBound(0.0, brightnessContrastFunction(v), 1.0);
             *it.rawData() = 255 - static_cast<quint8>(qRound(v * 255.0));
         }
     } else {
         while (it.nextPixel()) {
             qreal x, y;
-            t.map(it.x(), it.y(), &x, &y);
+            t.map(it.x() + 0.5, it.y() + 0.5, &x, &y);
 
-            qreal v = qBound(0.0, brightnessContrastFunction(screentoneFunction(x, y)), 1.0);
+            qreal v = KisScreentoneScreentoneFunctions::roundValue(screentoneFunction(x, y));
+            v = qBound(0.0, brightnessContrastFunction(v), 1.0);
             *it.rawData() = static_cast<quint8>(qRound(v * 255.0));
         }
     }

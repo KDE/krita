@@ -12,6 +12,11 @@
 
 namespace KisScreentoneScreentoneFunctions {
 
+qreal roundValue(qreal v)
+{
+    return std::round(v * 10000.0) / 10000.0;
+}
+
 qreal sin(qreal x)
 {
     x = std::cos(x * M_PI);

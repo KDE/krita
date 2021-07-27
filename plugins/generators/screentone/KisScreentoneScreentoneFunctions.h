@@ -19,6 +19,8 @@ namespace KisScreentoneScreentoneFunctions {
 // One cycle of the pattern in each direction should expand 1px. The size (scaling)
 // in the transformations dictates the final scaling of the pattern (dots, lines, etc.)
 
+qreal roundValue(qreal v);
+
 qreal sin(qreal x);
 qreal triangle(qreal x);
 qreal sawTooth(qreal x);

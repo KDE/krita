@@ -1,0 +1,47 @@
+From c0ad80529016ce89a8e9e2a0b474dd07e8064ca2 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Fri, 16 Jul 2021 17:03:08 +0000
+Subject: [PATCH] Enable writing Photoshop blobs
+
+---
+ libtiff/tif_dirinfo.c | 3 ++-
+ libtiff/tiffvers.h    | 5 +++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/libtiff/tif_dirinfo.c b/libtiff/tif_dirinfo.c
+index 8565dfb..3dbb830 100644
+--- a/libtiff/tif_dirinfo.c
++++ b/libtiff/tif_dirinfo.c
+@@ -149,7 +149,7 @@ tiffFields[] = {
+ 	{ TIFFTAG_COPYRIGHT, -1, -1, TIFF_ASCII, 0, TIFF_SETGET_ASCII, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 1, 0, "Copyright", NULL },
+ 	/* end Pixar tags */
+ 	{ TIFFTAG_RICHTIFFIPTC, -3, -3, TIFF_UNDEFINED, 0, TIFF_SETGET_C32_UINT8, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 0, 1, "RichTIFFIPTC", NULL },
+-	{ TIFFTAG_PHOTOSHOP, -3, -3, TIFF_BYTE, 0, TIFF_SETGET_C32_UINT8, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 0, 1, "Photoshop", NULL },
++	{ TIFFTAG_PHOTOSHOP, -3, -3, TIFF_BYTE, 0, TIFF_SETGET_C32_UINT8, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 1, 1, "Photoshop", NULL },
+ 	/*--: EXIFIFD and GPSIFD specified as TIFF_LONG by Aware-Systems and not TIFF_IFD8 as in original LibTiff.
+ 	 *    However, for IFD-like tags, libtiff uses the data type TIFF_IFD8 in tiffFields[]-tag definition combined with
+ 	 *    a special handling procedure in order to write either a 32-bit value and the TIFF_IFD type-id into ClassicTIFF files 
+@@ -162,6 +162,7 @@ tiffFields[] = {
+ 	{ TIFFTAG_FAXRECVTIME, 1, 1, TIFF_LONG, 0, TIFF_SETGET_UINT32, TIFF_SETGET_UINT32, FIELD_CUSTOM, TRUE, FALSE, "FaxRecvTime", NULL },
+ 	{ TIFFTAG_FAXDCS, -1, -1, TIFF_ASCII, 0, TIFF_SETGET_ASCII, TIFF_SETGET_ASCII, FIELD_CUSTOM, TRUE, FALSE, "FaxDcs", NULL },
+ 	{ TIFFTAG_STONITS, 1, 1, TIFF_DOUBLE, 0, TIFF_SETGET_DOUBLE, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 0, 0, "StoNits", NULL },
++	{ TIFFTAG_IMAGESOURCEDATA, -3, -3, TIFF_UNDEFINED, 0, TIFF_SETGET_C32_UINT8, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 1, 1, "Adobe Photoshop Document Data Block", NULL },
+ 	{ TIFFTAG_INTEROPERABILITYIFD, 1, 1, TIFF_IFD8, 0, TIFF_SETGET_UNDEFINED, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 0, 0, "InteroperabilityIFDOffset", NULL },
+ 	/* begin DNG tags */
+ 	{ TIFFTAG_DNGVERSION, 4, 4, TIFF_BYTE, 0, TIFF_SETGET_C0_UINT8, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 0, 0, "DNGVersion", NULL },
+diff --git a/libtiff/tiffvers.h b/libtiff/tiffvers.h
+index dbe5596..44a6483 100644
+--- a/libtiff/tiffvers.h
++++ b/libtiff/tiffvers.h
+@@ -7,3 +7,8 @@
+  * string returned by TIFFGetVersion.
+  */
+ #define TIFFLIB_VERSION 20210416
++
++/**
++ * This define signals Krita's patch for supporting write of PSD blobs.
++ */
++#define TIFFLIB_KRITA_CAN_WRITE_PSD 1
+-- 
+2.31.1.windows.1
+

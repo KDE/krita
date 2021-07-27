@@ -63,9 +63,6 @@ KisPreviewFileDialog::KisPreviewFileDialog(QWidget *parent, const QString &capti
 
 void KisPreviewFileDialog::resetIconProvider()
 {
-
-    qDebug() << mimeTypeFilters();
-
     QSplitter *splitter = findChild<QSplitter*>();
     if (splitter) {
         splitter->addWidget(m_preview);

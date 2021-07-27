@@ -198,7 +198,7 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
         }
 
         if (!store->open(path + resource->resourceType().first + '/' + resource->filename())) {
-            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could open resource for writing.");
+            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not open resource for writing.");
             continue;
         }
 

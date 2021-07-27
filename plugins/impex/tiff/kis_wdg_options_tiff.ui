@@ -356,7 +356,7 @@ You can uncheck the box if you are not using transparency and you want to make t
              <widget class="QLabel" name="lblFast">
               <property name="whatsThis">
                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-                &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
               </property>
               <property name="text">
                <string comment="save the file quickly, but do not compress very well">Fast</string>
@@ -389,7 +389,8 @@ You can uncheck the box if you are not using transparency and you want to make t
                <string>Note: the compression level does not change the quality of the result</string>
               </property>
               <property name="whatsThis">
-               <string>&lt;p&gt;Adjust the compression time. Better compression takes longer. &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+               <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
               </property>
               <property name="minimum">
                <number>1</number>

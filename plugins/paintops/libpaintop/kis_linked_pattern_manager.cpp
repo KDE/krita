@@ -44,7 +44,8 @@ struct KisLinkedPatternManager::Private {
 
 void KisLinkedPatternManager::saveLinkedPattern(KisPropertiesConfigurationSP setting, const KoPatternSP pattern)
 {
-    setting->setProperty("Texture/Pattern/PatternMD5", pattern->md5Sum());
+    setting->setProperty("Texture/Pattern/PatternMD5", QByteArray::fromHex(pattern->md5Sum().toLatin1()));
+    setting->setProperty("Texture/Pattern/PatternMD5Sum", pattern->md5Sum());
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
 }
@@ -55,9 +56,16 @@ KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigur
     auto resourceSourceAdapter = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
+    QString md5sum = setting->getString("Texture/Pattern/PatternMD5Sum");
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");
     QString name = setting->getString("Texture/Pattern/Name");
-    pattern = resourceSourceAdapter.resource(md5, QFileInfo(fileName).fileName(), name);
+
+    if (md5sum.isEmpty()) {
+        // Old style preset...
+        md5sum = md5.toHex();
+    }
+
+    pattern = resourceSourceAdapter.resource(md5sum, QFileInfo(fileName).fileName(), name);
 
     return pattern;
 }

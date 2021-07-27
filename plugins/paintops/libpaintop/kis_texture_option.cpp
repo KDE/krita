@@ -231,7 +231,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
 
     m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail, preserveAlpha));
     if (!m_maskInfo->fillProperties(setting, resourcesInterface)) {
-        warnKrita << "WARNING: Couldn't load the pattern for a stroke";
+        warnKrita << "WARNING: Couldn't load the pattern for a stroke (KisTextureProperties)";
         m_enabled = false;
         return;
     }

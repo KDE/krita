@@ -631,6 +631,7 @@ void KisGenericGradientEditor::on_buttonUpdateGradient_clicked()
     KoResourceServer<KoAbstractGradient> *gradientServer =
         KoResourceServerProvider::instance()->gradientServer();
 
+    m_d->gradient->updatePreview();
     gradientServer->updateResource(m_d->gradient);
 }
 
@@ -645,6 +646,7 @@ void KisGenericGradientEditor::on_buttonAddGradient_clicked()
     KoResourceServer<KoAbstractGradient> *gradientServer =
         KoResourceServerProvider::instance()->gradientServer();
     
+    m_d->gradient->updatePreview();
     gradientServer->addResource(m_d->gradient);
 }
 

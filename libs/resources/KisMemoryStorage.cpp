@@ -51,6 +51,7 @@ public:
     QString url() const override { return tag() ? tag()->url() : QString(); }
     QString name() const override { return tag() ? tag()->name() : QString(); }
     QString comment() const override {return tag() ? tag()->comment() : QString(); }
+    QString filename() const override {return tag() ? tag()->filename() : QString(); }
     QString resourceType() const override { return  tag() ? tag()->resourceType() : resourceType(); }
 
     KisTagSP tag() const override

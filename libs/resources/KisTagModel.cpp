@@ -322,7 +322,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
 
     if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
-        if (!KisResourceCacheDb::addTag(d->resourceType, "", tag->url(), tag->name(), tag->comment())) {
+        if (!KisResourceCacheDb::addTag(d->resourceType, "", tag->url(), tag->name(), tag->comment(), tag->filename())) {
             qWarning() << "Could not add tag" << tag;
             return false;
         }

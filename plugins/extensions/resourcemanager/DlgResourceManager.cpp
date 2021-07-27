@@ -25,6 +25,7 @@
 #include <kis_paintop_registry.h>
 #include <dlg_create_bundle.h>
 #include <ResourceImporter.h>
+#include <KisResourceLocator.h>
 
 DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *parent)
     : KoDialog(parent)
@@ -92,7 +93,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     connect(m_ui->btnCreateBundle, SIGNAL(clicked(bool)), SLOT(slotCreateBundle()));
     connect(m_ui->btnOpenResourceFolder, SIGNAL(clicked(bool)), SLOT(slotOpenResourceFolder()));
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
-    connect(m_ui->btnExtractTagsToResourceFolder, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
+    connect(m_ui->btnExtractTagsToResourceFolder, SIGNAL(clicked(bool)), SLOT(slotSaveTags()));
 
     connect(m_ui->lneFilterText, SIGNAL(textChanged(const QString&)), SLOT(slotFilterTextChanged(const QString&)));
     connect(m_ui->chkShowDeleted, SIGNAL(stateChanged(int)), SLOT(slotShowDeletedChanged(int)));
@@ -329,9 +330,10 @@ void DlgResourceManager::slotCreateBundle()
     dlg->exec();
 }
 
-void DlgResourceManager::slotDeleteBackupFiles()
-{
 
+void DlgResourceManager::slotSaveTags()
+{
+    KisResourceLocator::instance()->saveTags();
 }
 
 QString DlgResourceManager::getCurrentResourceType()

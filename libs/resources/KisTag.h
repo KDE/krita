@@ -44,6 +44,9 @@ public:
     int id() const;
     bool active() const;
 
+    QString filename();
+    void setFilename(const QString &fileName);
+
     /// The unique identifier for the tag. Since tag urls are compared COLLATE NOCASE, tag urls must be ASCII only.
     QString url() const;
     void setUrl(const QString &url);
@@ -74,6 +77,7 @@ private:
     friend class KisResourceModel;
     friend class KisTagChooserWidget;
     friend class TestTagModel;
+    friend class KisResourceLocator;
 
     void setId(int id);
     void setActive(bool active);

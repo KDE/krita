@@ -47,6 +47,7 @@ public:
     QString name() const override { return m_tag ? m_tag->name() : QString(); }
     QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
     QString resourceType() const override { return  m_tag ? m_tag->resourceType() : resourceType(); }
+    QString filename() const override { return  m_tag ? m_tag->filename() : QString(); }
     KisTagSP tag() const override
     {
         return m_tag;
@@ -57,12 +58,14 @@ private:
     bool load(KisTagSP tag) const
     {
         QFile f(m_dirIterator->filePath());
+        QString filename = m_dirIterator->fileName();
         if (f.exists()) {
             f.open(QFile::ReadOnly);
             if (!tag->load(f)) {
                 qWarning() << m_dirIterator << "is not a valid tag desktop file";
                 return false;
             }
+            tag->setFilename(filename);
         }
         return true;
     }

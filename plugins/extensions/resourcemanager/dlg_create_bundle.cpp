@@ -282,7 +282,7 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
             continue;
         }
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
-        bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum());
+        bundle->addResource(res->resourceType().first, res->name().replace(' ', '_') + res->defaultFileExtension(), tags, res->md5Sum());
 
         QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
         if (!linkedResources.isEmpty()) {

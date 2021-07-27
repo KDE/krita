@@ -175,7 +175,7 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     patternChooserPageLayout->addWidget(m_patternChooser);
     m_patternsTab->addTab(patternChooserPage, i18n("Patterns"));
 
-    KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
+    KisCustomPattern *customPatterns = new KisCustomPattern(0, "custompatterns",
                                                             i18n("Custom Pattern"), m_viewManager);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 

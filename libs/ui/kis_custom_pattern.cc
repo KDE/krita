@@ -16,8 +16,9 @@
 #include <QPixmap>
 #include <QShowEvent>
 #include <QSharedPointer>
-
-#include <QTemporaryFile>
+#include <QFileInfo>
+#include <KoFileDialog.h>
+#include <QMessageBox>
 
 #include "KisDocument.h"
 #include "KisViewManager.h"
@@ -29,7 +30,9 @@
 
 #include <kis_debug.h>
 #include "KisResourceServerProvider.h"
+#include <KisResourceLoaderRegistry.h>
 #include "kis_paint_layer.h"
+
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view)
     : KisWdgCustomPattern(parent, name)
@@ -50,6 +53,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
     connect(cmbSource, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateCurrentPattern()));
 
     lblWarning->setVisible(false);
+    slotUpdateCurrentPattern();
 }
 
 KisCustomPattern::~KisCustomPattern()
@@ -86,34 +90,49 @@ void KisCustomPattern::slotUpdateCurrentPattern()
             }
         }
     }
+
 }
 
 void KisCustomPattern::slotAddPredefined()
 {
-    if (!m_pattern)
-        return;
+    if (!m_pattern) return;
 
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/patterns
     // a unique file with this pattern name
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
 
-    QString tempFileName;
+    KoFileDialog dlg(this, KoFileDialog::SaveFile, "KisCustomPattern::slotAddPredefined");
+    dlg.setDefaultDir(dir + "/" + m_pattern->name() + ".pat");
+    dlg.setMimeTypeFilters(KisResourceLoaderRegistry::instance()->mimeTypes(ResourceType::Patterns));
+    dlg.setCaption(i18n("Add to Predefined Patterns"));
 
+    QString filename = dlg.filename();
 
-    {
-        QTemporaryFile file(dir +  QLatin1String("/krita_XXXXXX") + m_pattern->defaultFileExtension() );
-        file.setAutoRemove(false);
-        file.open();
-        tempFileName = file.fileName().split("/").last();
-        QDir(dir).remove(file.fileName());
+    QFileInfo fi(filename);
+    if (fi.suffix().isEmpty()) {
+        fi.setFile(fi.fileName() + m_pattern->defaultFileExtension());
     }
 
-    // Save it to that file
-    m_pattern->setFilename(tempFileName);
+    bool overwrite = false;
+    if (fi.exists()) {
+        if (QMessageBox::warning(this,  i18nc("@title:window", "Krita"), i18n("This pattern already exists. Do you want to overwrite it?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+            overwrite = true;
+        }
+    }
 
-    // Add it to the pattern server, so that it automatically gets to the mediators, and
-    // so to the other pattern choosers can pick it up, if they want to
-    m_rServer->addResource(m_pattern->clone().dynamicCast<KoPattern>());
+    if (!filename.isEmpty()) {
+        m_pattern->setFilename(QFileInfo(filename).fileName());
+        if (!fi.exists()) {
+            if (!m_rServer->addResource(m_pattern->clone().dynamicCast<KoPattern>())) {
+                qWarning() << "Could not add pattern with filename" << filename;
+            }
+        }
+        else if (overwrite) {
+            if (!m_rServer->updateResource(m_pattern->clone().dynamicCast<KoPattern>())) {
+                qWarning() << "Could not add pattern with filename" << filename;
+            }
+        }
+    }
 }
 
 void KisCustomPattern::slotUsePattern()

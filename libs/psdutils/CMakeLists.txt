@@ -4,7 +4,6 @@ include_directories( ${CMAKE_BINARY_DIR}/libs/psdutils  #For kispsd_include.h
 set(kritapsdutils_LIB_SRCS
     psd.cpp
     compression.cpp
-    psd_pattern.cpp
 
     asl/kis_asl_reader.cpp
     asl/kis_asl_xml_parser.cpp

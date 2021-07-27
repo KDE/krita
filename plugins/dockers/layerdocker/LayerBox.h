@@ -132,6 +132,8 @@ Q_SIGNALS:
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
+    // reimp from KisNodeManager
+    qint32 convertOpacityToInt(qreal opacity);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:

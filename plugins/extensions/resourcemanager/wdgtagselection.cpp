@@ -108,8 +108,21 @@ void KisWdgTagSelectionControllerOneResource::slotCreateNewTag(QString tag)
         QVector<KoResourceSP> vec;
         m_tagModel->addTag(tag, false, vec);
         tagsp = m_tagModel->tagForUrl(tag);
-    } else if (!tagsp->active()) {
-        m_tagModel->setTagActive(tagsp);
+    } else if (!tagsp->active()) { // if tag is active, simply use that tag
+        // if you use this simple cast, the order of buttons must match order of options in the enum
+        int response = QMessageBox::question(0, i18nc("Dialog title", "Overwrite tag?"), i18nc("Question to the user in a dialog about creating a tag",
+                                                                                          "A tag with this unique name already exists. Do you want to replace it?"),
+                                           i18nc("Option in a dialog to discard the previously existing tag and creating a new one in its place", "Replace (overwrite) tag"),
+                                           i18nc("Option in a dialog to undelete (reactivate) existing tag with its old assigned resources", "Restore previous tag"), i18n("Cancel"));
+        if (response == 0) { // Overwrite
+            m_tagModel->addTag(tag, true, QVector<KoResourceSP>()); // will overwrite the tag
+            tagsp = m_tagModel->tagForUrl(tag);
+        } else if (response == 1) { // Restore/use previously existing one
+            m_tagModel->setTagActive(tagsp);
+        } else {
+            updateView();
+            return;
+        }
     }
 
     KIS_ASSERT_RECOVER_RETURN(tagsp);

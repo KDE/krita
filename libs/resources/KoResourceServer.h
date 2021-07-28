@@ -292,9 +292,6 @@ public:
         if (!md5.isEmpty()) {
             return resourceByMD5(md5);
         }
-        else {
-            return nullptr;
-        }
 
         if (!fileName.isEmpty()) {
             return resourceByFilename(fileName);

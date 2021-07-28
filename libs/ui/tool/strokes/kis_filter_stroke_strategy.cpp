@@ -126,8 +126,10 @@ private:
 
 
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter, KisFilterConfigurationSP filterConfig, KisResourcesSnapshotSP resources)
-    : KisFilterStrokeStrategy(filter, filterConfig, resources, ExternalCancelUpdatesStorageSP())
+    : KisFilterStrokeStrategy(filter, filterConfig, resources, toQShared(new ExternalCancelUpdatesStorage()))
 {
+    // by default, cancellation updates are disabled, so we should enable them
+    m_d->cancelledUpdates->shouldIssueCancellationUpdates.ref();
 }
 
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,

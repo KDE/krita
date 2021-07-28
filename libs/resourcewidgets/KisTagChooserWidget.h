@@ -114,6 +114,14 @@ private:
     /// \param index index is the index of the tag in the combobox
     void setCurrentIndex(int index);
 
+    enum OverwriteDialogOptions {
+        Replace,
+        Undelete,
+        Cancel
+    };
+
+    OverwriteDialogOptions overwriteTagDialog(KisTagChooserWidget* parent, bool undelete);
+
 private:
     class Private;
     Private* const d;

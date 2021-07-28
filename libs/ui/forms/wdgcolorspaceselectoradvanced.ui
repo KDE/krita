@@ -224,7 +224,7 @@
         <item column="1" row="1">
          <widget class="QLabel" name="lblXYZ_W">
           <property name="text">
-           <string>xyz</string>
+           <string notr="true">xyz</string>
           </property>
          </widget>
         </item>

@@ -162,7 +162,7 @@ void TestTagModel::testAddEmptyTag()
     QString tagName("A Brand New Tag");
 
     int rowCount = tagModel.rowCount();
-    tagModel.addTag(tagName, {});
+    tagModel.addTag(tagName, false, {});
 
     QCOMPARE(tagModel.rowCount(), rowCount + 1);
     QModelIndex idx = tagModel.index(3, 0);
@@ -187,7 +187,7 @@ void TestTagModel::testAddTag()
     tag->setActive(true);
 
     int rowCount = tagModel.rowCount();
-    tagModel.addTag(tag, {});
+    tagModel.addTag(tag, false, {});
     QCOMPARE(tagModel.rowCount(), rowCount + 1);
     QVERIFY(tag->id() >= 0);
 
@@ -289,7 +289,7 @@ void TestTagModel::testAddEmptyTagWithResources()
         resources << resourceModel.resourceForIndex(resourceModel.index(i, 0));
     }
 
-    tagModel.addTag(tagName, resources);
+    tagModel.addTag(tagName, false, resources);
 
     // XXX: check KisTagResourceModel
 }
@@ -311,7 +311,7 @@ void TestTagModel::testAddTagWithResources()
     tag->setActive(true);
     tag->setResourceType("paintoppresets");
 
-    tagModel.addTag(tag, {resource});
+    tagModel.addTag(tag, false, {resource});
     QVERIFY(tag->id() >= 0);
 
     // XXX: check KisTagResourceModel

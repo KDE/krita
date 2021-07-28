@@ -106,7 +106,7 @@ void KisWdgTagSelectionControllerOneResource::slotCreateNewTag(QString tag)
     KisTagSP tagsp = m_tagModel->tagForUrl(tag);
     if (tagsp.isNull()) {
         QVector<KoResourceSP> vec;
-        m_tagModel->addTag(tag, vec);
+        m_tagModel->addTag(tag, false, vec);
         tagsp = m_tagModel->tagForUrl(tag);
     } else if (!tagsp->active()) {
         m_tagModel->setTagActive(tagsp);

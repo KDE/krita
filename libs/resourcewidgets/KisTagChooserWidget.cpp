@@ -184,13 +184,13 @@ void KisTagChooserWidget::addTag(const QString &tag)
 
 void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
 {
-    d->model->addTag(tagName, {resource});
+    d->model->addTag(tagName, false, {resource});
     d->model->sort(KisAllTagsModel::Name);
 }
 
 void KisTagChooserWidget::addTag(KisTagSP tag, KoResourceSP resource)
 {
-    d->model->addTag(tag, {resource});
+    d->model->addTag(tag, false, {resource});
     d->model->sort(KisAllTagsModel::Name);
 }
 

@@ -50,6 +50,23 @@ KisAllTagsModel::KisAllTagsModel(const QString &resourceType, QObject *parent)
 
 }
 
+void KisAllTagsModel::untagAllResources(KisTagSP tag)
+{
+    KisTagResourceModel model(d->resourceType);
+    model.setTagsFilter(QVector<int>() << tag->id());
+    QList<int> taggedResources;
+    for (int i = 0; i < model.rowCount(); i++) {
+        QModelIndex idx = model.index(i, 0);
+        taggedResources.append(model.data(idx, Qt::UserRole + KisTagResourceModel::Id).toInt());
+    }
+
+    for (int i = 0; i < taggedResources.size(); i++) {
+        model.untagResource(tag, taggedResources[i]);
+    }
+
+
+}
+
 KisAllTagsModel::~KisAllTagsModel()
 {
     delete d;
@@ -295,7 +312,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     return tag;
 }
 
-KisTagSP KisAllTagsModel::addTag(const QString& tagName, QVector<KoResourceSP> taggedResources)
+KisTagSP KisAllTagsModel::addTag(const QString& tagName, const bool allowOverwrite, QVector<KoResourceSP> taggedResources)
 {
     KisTagSP tag = KisTagSP(new KisTag());
     tag->setName(tagName);
@@ -304,7 +321,7 @@ KisTagSP KisAllTagsModel::addTag(const QString& tagName, QVector<KoResourceSP> t
     tag->setActive(true);
     tag->setResourceType(d->resourceType);
 
-    if (addTag(tag, taggedResources)) {
+    if (addTag(tag, allowOverwrite, taggedResources)) {
         return tag;
     }
     else {
@@ -313,7 +330,7 @@ KisTagSP KisAllTagsModel::addTag(const QString& tagName, QVector<KoResourceSP> t
 }
 
 
-bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
+bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
@@ -329,11 +346,19 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
         resetQuery();
         endInsertRows();
 
+    } else if (allowOverwrite) {
+        KisTagSP trueTag = tagForUrl(tag->url());
+        r = setData(indexForTag(trueTag), QVariant::fromValue(true), Qt::CheckStateRole);
+        untagAllResources(trueTag);
+        tag->setComment(trueTag->comment()); // id will be set later, comment and filename are the only thing left
+        tag->setFilename(trueTag->filename());
     } else {
-        r = setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
+        return false;
     }
 
     tag->setId(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Id).toInt());
+    tag->setValid(true);
+    tag->setActive(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Active).toInt());
 
     if (!taggedResouces.isEmpty()) {
         KisTagSP tagFromDb = tagForUrl(tag->url());
@@ -584,11 +609,11 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
 }
 
 
-KisTagSP KisTagModel::addTag(const QString &tagName, QVector<KoResourceSP> taggedResources)
+KisTagSP KisTagModel::addTag(const QString &tagName, const bool allowOverwrite, QVector<KoResourceSP> taggedResources)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->addTag(tagName, taggedResources);
+        return source->addTag(tagName, allowOverwrite, taggedResources);
     }
     return 0;
 }
@@ -603,11 +628,11 @@ KisTagSP KisTagModel::tagForUrl(const QString& url) const
 }
 
 
-bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
+bool KisTagModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->addTag(tag, taggedResouces) ;
+        return source->addTag(tag, allowOverwrite, taggedResouces) ;
     }
     return false;
 }

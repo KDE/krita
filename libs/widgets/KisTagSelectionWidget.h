@@ -91,8 +91,6 @@ private:
 
     UserInputTagAction* m_createNewTagAction {0};
 
-    KisSignalCompressor m_compressor;
-
     friend class TestKisTagSelectionWidget;
 
 };

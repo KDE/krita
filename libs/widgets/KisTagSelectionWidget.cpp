@@ -132,7 +132,6 @@ void WdgCloseableLabel::mousePressEvent(QMouseEvent *event)
 
 WdgAddTagButton::WdgAddTagButton(QWidget *parent)
     : QToolButton(parent)
-    , m_compressor(10, KisSignalCompressor::FIRST_ACTIVE)
 {
     setPopupMode(QToolButton::InstantPopup);
     setContentsMargins(0, 0, 0, 0);
@@ -140,7 +139,7 @@ WdgAddTagButton::WdgAddTagButton(QWidget *parent)
     setMinimumSize(defaultSize);
     setMaximumSize(defaultSize);
 
-    connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotFinishLastAction()), Qt::UniqueConnection);
+
     connect(this, SIGNAL(triggered(QAction*)), SLOT(slotAddNewTag(QAction*)));
 
     UserInputTagAction *newTag = new UserInputTagAction(this);
@@ -191,13 +190,13 @@ void WdgAddTagButton::slotAddNewTag(QAction *action)
     if (action == m_createNewTagAction) {
         m_lastTagToCreate = action->data().toString();
         m_lastAction = CreateNewTag;
-        m_compressor.start();
+        slotFinishLastAction();
         KisSignalsBlocker b(m_createNewTagAction);
         m_createNewTagAction->setText("");
     } else if (!action->data().isNull() && action->data().canConvert<KoID>()) {
         m_lastTagToAdd = action->data().value<KoID>();
         m_lastAction = AddNewTag;
-        m_compressor.start();
+        slotFinishLastAction();
     }
 
 
@@ -210,7 +209,7 @@ void WdgAddTagButton::slotCreateNewTag(QString tagName)
 {
     m_lastTagToCreate = tagName;
     m_lastAction = CreateNewTag;
-    m_compressor.start();
+    slotFinishLastAction();
     KisSignalsBlocker b(m_createNewTagAction);
     m_createNewTagAction->setText("");
 

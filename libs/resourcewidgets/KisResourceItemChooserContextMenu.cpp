@@ -140,7 +140,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
         SimpleExistingTagAction * addTagAction = new SimpleExistingTagAction(resource, tag, this);
 
         connect(addTagAction, SIGNAL(triggered(const KisTagSP, KoResourceSP)),
-                m_tagChooserWidget, SLOT(addTag(const KisTagSP, KoResourceSP)));
+                this, SLOT(addResourceExistingTag(const KisTagSP, KoResourceSP)));
 
         assignableTagsMenu->addAction(addTagAction);
     }
@@ -165,3 +165,8 @@ void KisResourceItemChooserContextMenu::removeResourceExistingTag(const KisTagSP
     tagResourceModel.untagResource(tag, resource->resourceId());
 }
 
+void KisResourceItemChooserContextMenu::addResourceExistingTag(const KisTagSP tag, KoResourceSP resource)
+{
+    KisTagResourceModel tagResourceModel(resource->resourceType().first);
+    tagResourceModel.tagResource(tag, resource->resourceId());
+}

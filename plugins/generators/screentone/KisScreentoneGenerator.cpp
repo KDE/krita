@@ -138,17 +138,23 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
                                       KoUpdater *progressUpdater,
                                       const ScreentoneFunction &screentoneFunction) const
 {
-    const qreal brightness = config->brightness() / 50. - 1.0;
-    const qreal contrast = config->contrast() / 50. - 1.0;
+    const qreal contrast = config->contrast() / 50.0 - 1.0;
+    const bool useThresholdFunction = qFuzzyCompare(contrast, 1.0);
 
-    const bool bypassBrightnessContrast = qFuzzyIsNull(brightness) && qFuzzyIsNull(contrast);
-
-    if (bypassBrightnessContrast) {
-        KisScreentoneBrightnessContrastFunctions::Identity brightnessContrastFunction;
-        generate(dst, size, config, progressUpdater, screentoneFunction, brightnessContrastFunction);
+    if (useThresholdFunction) {
+        const qreal brightness = config->brightness() / 100.0;
+        KisScreentoneBrightnessContrastFunctions::Threshold thresholdFunction(1.0 - brightness);
+        generate(dst, size, config, progressUpdater, screentoneFunction, thresholdFunction);
     } else {
-        KisScreentoneBrightnessContrastFunctions::BrightnessContrast brightnessContrastFunction(brightness, contrast);
-        generate(dst, size, config, progressUpdater, screentoneFunction, brightnessContrastFunction);
+        const qreal brightness = config->brightness() / 50.0 - 1.0;
+        const bool bypassBrightnessContrast = qFuzzyIsNull(brightness) && qFuzzyIsNull(contrast);
+        if (bypassBrightnessContrast) {
+            KisScreentoneBrightnessContrastFunctions::Identity brightnessContrastFunction;
+            generate(dst, size, config, progressUpdater, screentoneFunction, brightnessContrastFunction);
+        } else {
+            KisScreentoneBrightnessContrastFunctions::BrightnessContrast brightnessContrastFunction(brightness, contrast);
+            generate(dst, size, config, progressUpdater, screentoneFunction, brightnessContrastFunction);
+        }
     }
 }
 

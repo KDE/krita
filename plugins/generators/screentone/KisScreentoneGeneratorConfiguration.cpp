@@ -327,7 +327,7 @@ void KisScreentoneGeneratorConfiguration::setSizeY(qreal newSizeY)
 
 void KisScreentoneGeneratorConfiguration::setConstrainSize(bool newConstrainSize)
 {
-    setProperty("constrain_size", newConstrainSize);
+    setProperty("keep_size_square", newConstrainSize);
 }
 
 void KisScreentoneGeneratorConfiguration::setShearX(qreal newShearX)

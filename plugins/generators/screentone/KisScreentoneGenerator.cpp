@@ -196,15 +196,29 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
         colorSpace = device->colorSpace();
     }
     
-    const qreal positionX = config->positionX();
-    const qreal positionY = config->positionY();
-    const bool kepSizeSquare = config->constrainSize();
-    const qreal sizeX = config->sizeX();
-    // Ensure that the size y component is equal to the x component if keepSizeSquare is true
-    const qreal sizeY = kepSizeSquare ? sizeX : config->sizeY();
-    const qreal shearX = config->shearX();
-    const qreal shearY = config->shearY();
+    qreal positionX, positionY, sizeX, sizeY, shearX, shearY;
+    if (config->transformationMode() == KisScreentoneTransformationMode_Advanced) {
+        positionX = config->positionX();
+        positionY = config->positionY();
+        const bool constrainSize = config->constrainSize();
+        sizeX = config->sizeX();
+        // Ensure that the size y component is equal to the x component if keepSizeSquare is true
+        sizeY = constrainSize ? sizeX : config->sizeY();
+        shearX = config->shearX();
+        shearY = config->shearY();
+    } else {
+        const qreal resolution = config->resolution();
+        const bool constrainFrequency = config->constrainFrequency();
+        const qreal frequencyX = config->frequencyX();
+        // Ensure that the frequency y component is equal to the x component if constrainFrequency is true
+        const qreal frequencyY = constrainFrequency ? frequencyX : config->frequencyY();
+        positionX = positionY = 0.0;
+        sizeX = resolution / frequencyX;
+        sizeY = resolution / frequencyY;
+        shearX = shearY = 0.0;
+    }
     const qreal rotation = config->rotation();
+    
     QTransform t;
     t.shear(shearX, shearY);
     t.scale(qIsNull(sizeX) ? 0.0 : 1.0 / sizeX, qIsNull(sizeY) ? 0.0 : 1.0 / sizeY);

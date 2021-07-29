@@ -256,6 +256,8 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
     QVector<QByteArray> dataPlanes;
     dataPlanes.resize(3);
 
+    quint32 pixelDepth1 = GARBAGE_VALUE_MARK;
+
     for (int i = 0; i < numPlanes; i++) {
         quint32 arrayWritten = GARBAGE_VALUE_MARK;
         if (!psdread<byteOrder>(device, arrayWritten) || !arrayWritten) {
@@ -270,7 +272,6 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
         SETUP_OFFSET_VERIFIER(planeEndVerifier, device, arrayPlaneLength, 0);
         qint64 nextPos = device.pos() + arrayPlaneLength;
 
-        quint32 pixelDepth1 = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, pixelDepth1);
 
         quint32 x0, y0, x1, y1;
@@ -302,11 +303,13 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
             throw ASLParseException("VAList: two pixel depths of the plane are not equal (it is not documented)!");
         }
 
-        if (pixelDepth1 != 8) {
-            throw ASLParseException("VAList: supported pixel depth of the plane in 8 only!");
+        if (pixelDepth1 != 8 && pixelDepth1 != 16) {
+            throw ASLParseException(QString("VAList: unsupported pixel depth: %1!").arg(pixelDepth1));
         }
 
-        const int dataLength = planeRect.width() * planeRect.height();
+        const int channelSize = pixelDepth1 == 8 ? 1 : 2;
+
+        const int dataLength = planeRect.width() * planeRect.height() * channelSize;
 
         if (useCompression == Compression::Uncompressed) {
             dataPlanes[i] = device.read(dataLength);
@@ -332,7 +335,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
                     throw ASLParseException("VAList: failed to read compressed data!");
                 }
 
-                QByteArray uncompressedData = Compression::uncompress(planeRect.width(), compressedData, Compression::RLE);
+                QByteArray uncompressedData = Compression::uncompress(planeRect.width() * channelSize, compressedData, Compression::RLE);
 
                 if (uncompressedData.size() != planeRect.width()) {
                     throw ASLParseException("VAList: failed to decompress data!");
@@ -351,27 +354,41 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
         device.seek(nextPos);
     }
 
-    QImage image(arrayRect.size(), QImage::Format_ARGB32);
+    const auto format = pixelDepth1 == 8 ? QImage::Format_ARGB32 : QImage::Format_RGBA64;
+
+    QImage image(arrayRect.size(), format);
 
     const int dataLength = arrayRect.width() * arrayRect.height();
-    quint8 *dstPtr = image.bits();
 
-    for (int i = 0; i < dataLength; i++) {
-        for (int j = 2; j >= 0; j--) {
-            int plane = qMin(numPlanes, j);
-            *dstPtr++ = dataPlanes[plane][i];
+    if (format == QImage::Format_ARGB32) {
+        quint8 *dstPtr = image.bits();
+
+        for (int i = 0; i < dataLength; i++) {
+            for (int j = 2; j >= 0; j--) {
+                const int plane = qMin(numPlanes, j);
+                *dstPtr++ = dataPlanes[plane][i];
+            }
+            *dstPtr++ = 0xFF;
         }
-        *dstPtr++ = 0xFF;
+    } else {
+        quint16 *dstPtr = reinterpret_cast<quint16 *>(image.bits());
+
+        for (int i = 0; i < dataLength; i++) {
+            for (int j = 0; j <= 2; j++) {
+                const int plane = qMin(numPlanes, j);
+                const quint16 *dataPlane = reinterpret_cast<const quint16 *>(dataPlanes[plane].constData());
+                *dstPtr++ = qFromBigEndian(dataPlane[i]);
+            }
+            *dstPtr++ = 0xFFFF;
+        }
     }
 
-#if 0
-     static int i = -1; i++;
-     QString filename = QString("pattern_image_%1.png").arg(i);
-     dbgKrita << "### dumping pattern image" << ppVar(filename);
-     image.save(filename);
-#endif
+    // static int i = -1; i++;
+    // QString filename = QString("pattern_image_%1.png").arg(i);
+    // dbgKrita << "### dumping pattern image" << ppVar(filename);
+    // image.save(filename);
 
-    return image;
+    return image.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor | Qt::PreferDither);
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
@@ -447,7 +464,7 @@ qint64 readPattern(QIODevice &device, QDomElement *parent, QDomDocument *doc)
     patternBuf.open(QIODevice::WriteOnly);
 
     { // ensure we don't keep resources for too long
-      // XXX: this appears to not need endianness handling...?
+        // XXX: this QImage should tolerate 16-bit and higher
         QString fileName = QString("%1.pat").arg(patternUuid);
         QImage patternImage = readVirtualArrayList<byteOrder>(device, numPlanes);
         KoPattern realPattern(patternImage, patternName, fileName);

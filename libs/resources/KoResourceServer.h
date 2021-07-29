@@ -29,6 +29,7 @@
 #include "KoResourcePaths.h"
 #include "ksharedconfig.h"
 
+#include <KisGlobalResourcesInterface.h>
 #include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisTagModel.h>
@@ -86,7 +87,8 @@ public:
         , m_type(type)
     {
         Q_ASSERT(!type.isEmpty());
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
 
@@ -104,7 +106,8 @@ public:
     /// @return the active resource model
     KisResourceModel *resourceModel() const
     {
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
 
@@ -115,7 +118,8 @@ public:
     QSharedPointer<T> firstResource() const
     {
 
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
 
@@ -131,7 +135,8 @@ public:
     /// Adds an already loaded resource to the server
     bool addResource(QSharedPointer<T> resource, bool save = true) {
 
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
 
@@ -151,7 +156,8 @@ public:
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(QSharedPointer<T> resource){
 
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
 
@@ -175,7 +181,9 @@ public:
      */
     KoResourceSP importResourceFile(const QString &filename)
     {
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
 
@@ -224,9 +232,11 @@ private:
 
     QSharedPointer<T> resourceByFilename(const QString& filename) const
     {
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
+
 
         //qDebug() << "resourceByFilename" << filename;
         if (filename.isEmpty() || filename.isNull()) {
@@ -242,7 +252,8 @@ private:
 
     QSharedPointer<T> resourceByName(const QString& name) const
     {
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
 
@@ -261,10 +272,10 @@ private:
 
     QSharedPointer<T> resourceByMD5(const QString& md5) const
     {
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
-
         if (md5.isEmpty() || md5.isNull()) {
             return nullptr;
         }
@@ -289,20 +300,8 @@ public:
      */
     QSharedPointer<T> resource(const QString &md5, const QString &fileName, const QString &name)
     {
-        if (!md5.isEmpty()) {
-            return resourceByMD5(md5);
-        }
-
-        if (!fileName.isEmpty()) {
-            return resourceByFilename(fileName);
-        }
-
-        if (!name.isEmpty()) {
-            return resourceByName(name);
-        }
-
-        return nullptr;
-
+        KoResourceSP res = KisGlobalResourcesInterface::instance()->source(m_type).resource(md5, fileName, name);
+        return res.dynamicCast<T>();
     }
 
 
@@ -313,10 +312,10 @@ public:
      */
     bool updateResource(QSharedPointer<T> resource)
     {
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
-
         bool result = m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
         return result;
@@ -327,10 +326,10 @@ public:
      */
     bool reloadResource(QSharedPointer<T> resource)
     {
-        KIS_SAFE_ASSERT_RECOVER(QThread::currentThread() == qApp->thread()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
-
         bool result = m_resourceModel->reloadResource(resource);
         notifyResourceChanged(resource);
 

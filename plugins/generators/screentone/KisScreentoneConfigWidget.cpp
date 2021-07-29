@@ -18,10 +18,10 @@
 #include "KisScreentoneScreentoneFunctions.h"
 #include "KisScreentoneGeneratorConfiguration.h"
 
-static const QString pixelsInchSuffix(i18n(" pixels/inch"));
-static const QString pixelsCentimeterSuffix(i18n(" pixels/cm"));
-static const QString linesInchSuffix(i18n(" lines/inch"));
-static const QString linesCentimeterSuffix(i18n(" lines/cm"));
+static const QString pixelsInchSuffix(i18nc("Screentone generator resolution units - pixels/inch", " pixels/inch"));
+static const QString pixelsCentimeterSuffix(i18nc("Screentone generator resolution units - pixels/cm", " pixels/cm"));
+static const QString linesInchSuffix(i18nc("Screentone generator line units - lines/inch", " lines/inch"));
+static const QString linesCentimeterSuffix(i18nc("Screentone generator line units - lines/cm", " lines/cm"));
 
 KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoColorSpace *cs)
     : KisConfigWidget(parent)
@@ -90,6 +90,12 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderShearY->setSoftRange(-2.0, 2.0);
     m_ui.sliderShearY->setPrefix(i18n("Y: "));
     m_ui.sliderShearY->setSingleStep(0.1);
+    m_ui.sliderAlignToPixelGridX->setRange(1, 20);
+    m_ui.sliderAlignToPixelGridX->setPrefix(i18nc("Prefix. Part of 'Every # cell/s horizontally", "Every "));
+    m_ui.sliderAlignToPixelGridX->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cell horizontally"));
+    m_ui.sliderAlignToPixelGridY->setRange(1, 20);
+    m_ui.sliderAlignToPixelGridY->setPrefix(i18nc("Prefix. Part of 'Every # cell/s vertically", "Every "));
+    m_ui.sliderAlignToPixelGridY->setSuffix(i18nc("Suffix. Part of 'Every # cell/s vertically", " cell vertically"));
     slot_buttonSimpleTransformation_toggled(true);
 
     connect(m_ui.comboBoxPattern, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxPattern_currentIndexChanged(int)));
@@ -121,6 +127,9 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     connect(m_ui.sliderShearX, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderShearY, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.angleSelectorRotation, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.checkBoxAlignToPixelGrid, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.sliderAlignToPixelGridX, SIGNAL(valueChanged(int)), this, SLOT(slot_sliderAlignToPixelGridX_valueChanged(int)));
+    connect(m_ui.sliderAlignToPixelGridY, SIGNAL(valueChanged(int)), this, SLOT(slot_sliderAlignToPixelGridY_valueChanged(int)));
 }
 
 KisScreentoneConfigWidget::~KisScreentoneConfigWidget()
@@ -148,7 +157,9 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
                                    m_ui.sliderShearX, m_ui.sliderShearY);
         KisSignalsBlocker blocker4(m_ui.buttonConstrainSize, m_ui.angleSelectorRotation,
                                    m_ui.buttonSimpleTransformation, m_ui.buttonAdvancedTransformation);
-        KisSignalsBlocker blocker5(this);
+        KisSignalsBlocker blocker5(m_ui.checkBoxAlignToPixelGrid, m_ui.sliderAlignToPixelGridX,
+                                   m_ui.sliderAlignToPixelGridY);
+        KisSignalsBlocker blocker6(this);
 
         m_ui.comboBoxPattern->setCurrentIndex(generatorConfig->pattern());
         m_ui.comboBoxShape->setCurrentIndex(shapeToComboIndex(generatorConfig->pattern(), generatorConfig->shape()));
@@ -192,6 +203,9 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
         m_ui.sliderShearX->setValue(generatorConfig->shearX());
         m_ui.sliderShearY->setValue(generatorConfig->shearY());
         m_ui.angleSelectorRotation->setAngle(generatorConfig->rotation());
+        m_ui.checkBoxAlignToPixelGrid->setChecked(generatorConfig->alignToPixelGrid());
+        m_ui.sliderAlignToPixelGridX->setValue(generatorConfig->alignToPixelGridX());
+        m_ui.sliderAlignToPixelGridY->setValue(generatorConfig->alignToPixelGridY());
         // We set here the fallback value to "advanced" if the "transformation_mode"
         // property is not present, which means the screentone was made with
         // previous versions of krita
@@ -242,6 +256,9 @@ KisPropertiesConfigurationSP KisScreentoneConfigWidget::configuration() const
     config->setShearX(m_ui.sliderShearX->value());
     config->setShearY(m_ui.sliderShearY->value());
     config->setRotation(m_ui.angleSelectorRotation->angle());
+    config->setAlignToPixelGrid(m_ui.checkBoxAlignToPixelGrid->isChecked());
+    config->setAlignToPixelGridX(m_ui.sliderAlignToPixelGridX->value());
+    config->setAlignToPixelGridY(m_ui.sliderAlignToPixelGridY->value());
 
     return config;
 }
@@ -498,6 +515,30 @@ void KisScreentoneConfigWidget::slot_buttonConstrainSize_keepAspectRatioChanged(
     slot_setSimpleFromAdvancedTransformation();
     if (keep) {
         slot_sliderSizeX_valueChanged(m_ui.sliderSizeX->value());
+    }
+}
+
+void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridX_valueChanged(int value)
+{
+    if (value == 1) {
+        m_ui.sliderAlignToPixelGridX->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cell horizontally"));
+    } else {
+        m_ui.sliderAlignToPixelGridX->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cells horizontally"));
+    }
+    if (m_ui.checkBoxAlignToPixelGrid->isChecked()) {
+        emit sigConfigurationUpdated();
+    }
+}
+
+void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridY_valueChanged(int value)
+{
+    if (value == 1) {
+        m_ui.sliderAlignToPixelGridY->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cell vertically"));
+    } else {
+        m_ui.sliderAlignToPixelGridY->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cells vertically"));
+    }
+    if (m_ui.checkBoxAlignToPixelGrid->isChecked()) {
+        emit sigConfigurationUpdated();
     }
 }
 

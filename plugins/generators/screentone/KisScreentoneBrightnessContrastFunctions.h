@@ -40,6 +40,7 @@ public:
     qreal operator()(qreal x) const;
 private:
     const qreal m_threshold;
+    const bool m_thresholdIsOne;
 };
 
 }

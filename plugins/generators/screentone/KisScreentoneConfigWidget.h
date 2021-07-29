@@ -56,6 +56,8 @@ private Q_SLOTS:
     void slot_sliderSizeX_valueChanged(qreal value);
     void slot_sliderSizeY_valueChanged(qreal value);
     void slot_buttonConstrainSize_keepAspectRatioChanged(bool keep);
+    void slot_sliderAlignToPixelGridX_valueChanged(int value);
+    void slot_sliderAlignToPixelGridY_valueChanged(int value);
 
     void slot_setAdvancedFromSimpleTransformation();
     void slot_setSimpleFromAdvancedTransformation();

@@ -196,6 +196,7 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
         colorSpace = device->colorSpace();
     }
     
+    // Get transformation parameters
     qreal positionX, positionY, sizeX, sizeY, shearX, shearY;
     if (config->transformationMode() == KisScreentoneTransformationMode_Advanced) {
         positionX = config->positionX();
@@ -219,11 +220,31 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
     }
     const qreal rotation = config->rotation();
     
+    // Get final transformation
     QTransform t;
-    t.shear(shearX, shearY);
-    t.scale(qIsNull(sizeX) ? 0.0 : 1.0 / sizeX, qIsNull(sizeY) ? 0.0 : 1.0 / sizeY);
-    t.rotate(rotation);
-    t.translate(positionX, positionY);
+    if (config->alignToPixelGrid()) {
+        t.rotate(-rotation);
+        t.scale(sizeX, sizeY);
+        t.shear(-shearX, -shearY);
+        const qreal alignX = static_cast<qreal>(config->alignToPixelGridX());
+        const qreal alignY = static_cast<qreal>(config->alignToPixelGridY());
+        const QPointF u1 = t.map(QPointF(alignX, 0.0));
+        const QPointF u2 = t.map(QPointF(0.0, alignY));
+        const QPointF v1(qRound(u1.x()), qRound(u1.y()));
+        const QPointF v2(qRound(u2.x()), qRound(u2.y()));
+        QPolygonF quad;
+        quad.append(QPointF(0, 0));
+        quad.append(v1 / alignX);
+        quad.append(v1 / alignX + v2 / alignY);
+        quad.append(v2 / alignY);
+        QTransform::quadToSquare(quad, t);
+        t.translate(positionX, positionY);
+    } else {
+        t.shear(shearX, shearY);
+        t.scale(qIsNull(sizeX) ? 0.0 : 1.0 / sizeX, qIsNull(sizeY) ? 0.0 : 1.0 / sizeY);
+        t.rotate(rotation);
+        t.translate(positionX, positionY);
+    }
 
     KoColor foregroundColor = config->foregroundColor();
     KoColor backgroundColor = config->backgroundColor();

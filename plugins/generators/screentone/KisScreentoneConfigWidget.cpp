@@ -33,6 +33,8 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     setupPatternComboBox();
     setupShapeComboBox();
     setupInterpolationComboBox();
+    m_ui.buttonEqualizationNone->setGroupPosition(KoGroupButton::GroupLeft);
+    m_ui.buttonEqualizationFunctionBased->setGroupPosition(KoGroupButton::GroupRight);
 
     m_ui.sliderForegroundOpacity->setRange(0, 100);
     m_ui.sliderForegroundOpacity->setPrefix(i18n("Opacity: "));
@@ -101,6 +103,8 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     connect(m_ui.comboBoxPattern, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxPattern_currentIndexChanged(int)));
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxShape_currentIndexChanged(int)));
     connect(m_ui.comboBoxInterpolation, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.buttonEqualizationNone, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.buttonEqualizationFunctionBased, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
     
     connect(m_ui.buttonForegroundColor, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderForegroundOpacity, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
@@ -146,25 +150,32 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
     // After the widgets are set up, unblock and emit sigConfigurationUpdated
     // just once 
     {
-        KisSignalsBlocker blocker1(m_ui.buttonForegroundColor, m_ui.sliderForegroundOpacity,
+        KisSignalsBlocker blocker1(m_ui.buttonEqualizationNone, m_ui.buttonEqualizationFunctionBased);
+        KisSignalsBlocker blocker2(m_ui.buttonForegroundColor, m_ui.sliderForegroundOpacity,
                                    m_ui.buttonBackgroundColor, m_ui.sliderBackgroundOpacity,
                                    m_ui.sliderBrightness, m_ui.sliderContrast);
-        KisSignalsBlocker blocker2(m_ui.checkBoxInvert, m_ui.comboBoxUnits,
+        KisSignalsBlocker blocker3(m_ui.checkBoxInvert, m_ui.comboBoxUnits,
                                    m_ui.sliderResolution, m_ui.buttonConstrainFrequency,
                                    m_ui.sliderFrequencyX, m_ui.sliderFrequencyY);
-        KisSignalsBlocker blocker3(m_ui.sliderPositionX, m_ui.sliderPositionY,
+        KisSignalsBlocker blocker4(m_ui.sliderPositionX, m_ui.sliderPositionY,
                                    m_ui.sliderSizeX, m_ui.sliderSizeY,
                                    m_ui.sliderShearX, m_ui.sliderShearY);
-        KisSignalsBlocker blocker4(m_ui.buttonConstrainSize, m_ui.angleSelectorRotation,
+        KisSignalsBlocker blocker5(m_ui.buttonConstrainSize, m_ui.angleSelectorRotation,
                                    m_ui.buttonSimpleTransformation, m_ui.buttonAdvancedTransformation);
-        KisSignalsBlocker blocker5(m_ui.checkBoxAlignToPixelGrid, m_ui.sliderAlignToPixelGridX,
+        KisSignalsBlocker blocker6(m_ui.checkBoxAlignToPixelGrid, m_ui.sliderAlignToPixelGridX,
                                    m_ui.sliderAlignToPixelGridY);
-        KisSignalsBlocker blocker6(this);
+        KisSignalsBlocker blocker7(this);
 
         m_ui.comboBoxPattern->setCurrentIndex(generatorConfig->pattern());
         m_ui.comboBoxShape->setCurrentIndex(shapeToComboIndex(generatorConfig->pattern(), generatorConfig->shape()));
         m_ui.comboBoxInterpolation->setCurrentIndex(generatorConfig->interpolation());
-        
+        const int equalizationMode = generatorConfig->equalizationMode();
+        if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+            m_ui.buttonEqualizationFunctionBased->setChecked(true);
+        } else {
+            m_ui.buttonEqualizationNone->setChecked(true);
+        }
+
         KoColor c;
         c = generatorConfig->foregroundColor();
         c.convertTo(m_colorSpace);
@@ -232,7 +243,12 @@ KisPropertiesConfigurationSP KisScreentoneConfigWidget::configuration() const
     config->setPattern(m_ui.comboBoxPattern->currentIndex());
     config->setShape(comboIndexToShape(m_ui.comboBoxPattern->currentIndex(), m_ui.comboBoxShape->currentIndex()));
     config->setInterpolation(m_ui.comboBoxInterpolation->currentIndex());
-    
+    if (m_ui.buttonEqualizationFunctionBased->isChecked()) {
+        config->setEqualizationMode(KisScreentoneEqualizationMode_FunctionBased);
+    } else {
+        config->setEqualizationMode(KisScreentoneEqualizationMode_None);
+    }
+
     config->setForegroundColor(m_ui.buttonForegroundColor->color());
     config->setForegroundOpacity(m_ui.sliderForegroundOpacity->value());
     config->setBackgroundColor(m_ui.buttonBackgroundColor->color());

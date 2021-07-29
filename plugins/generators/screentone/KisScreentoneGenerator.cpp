@@ -53,79 +53,170 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
     const int pattern = config->pattern();
     const int shape = config->shape();
     const int interpolation = config->interpolation();
+    const int equalizationMode = config->equalizationMode();
 
     if (pattern == KisScreentonePatternType_Dots) {
         if (shape == KisScreentoneShapeType_RoundDots) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::DotsRoundLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::DotsRoundLinearEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::DotsRoundLinear screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::DotsRoundSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::DotsRoundSinusoidalEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::DotsRoundSinusoidal screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             }
         } else if (shape == KisScreentoneShapeType_EllipseDotsLegacy) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::DotsEllipseLinear_Legacy screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::DotsEllipseLinearEqualized_Legacy screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::DotsEllipseLinear_Legacy screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::DotsEllipseSinusoidal_Legacy screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::DotsEllipseSinusoidalEqualized_Legacy screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::DotsEllipseSinusoidal_Legacy screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             }
         } else if (shape == KisScreentoneShapeType_EllipseDots) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::DotsEllipseLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::DotsEllipseLinearEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::DotsEllipseLinear screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::DotsEllipseSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::DotsEllipseSinusoidalEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::DotsEllipseSinusoidal screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             }
         } else if (shape == KisScreentoneShapeType_DiamondDots) {
-            KisScreentoneScreentoneFunctions::DotsDiamond screentoneFunction;
-            generate(dst, size, config, progressUpdater, screentoneFunction);
+            if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                KisScreentoneScreentoneFunctions::DotsDiamondEqualized screentoneFunction;
+                generate(dst, size, config, progressUpdater, screentoneFunction);
+            } else {
+                KisScreentoneScreentoneFunctions::DotsDiamond screentoneFunction;
+                generate(dst, size, config, progressUpdater, screentoneFunction);
+            }
         } else if (shape == KisScreentoneShapeType_SquareDots) {
-            KisScreentoneScreentoneFunctions::DotsSquare screentoneFunction;
-            generate(dst, size, config, progressUpdater, screentoneFunction);
+            if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                KisScreentoneScreentoneFunctions::DotsSquareEqualized screentoneFunction;
+                generate(dst, size, config, progressUpdater, screentoneFunction);
+            } else {
+                KisScreentoneScreentoneFunctions::DotsSquare screentoneFunction;
+                generate(dst, size, config, progressUpdater, screentoneFunction);
+            }
         }
     } else if (pattern == KisScreentonePatternType_Lines) {
         if (shape == KisScreentoneShapeType_StraightLines) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesStraightLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesStraightLinearEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesStraightLinear screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesStraightSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesStraightSinusoidalEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesStraightSinusoidal screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             }
         } else if (shape == KisScreentoneShapeType_SineWaveLines) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesSineWaveLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesSineWaveLinearEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesSineWaveLinear screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesSineWaveSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesSineWaveSinusoidalEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesSineWaveSinusoidal screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             }
         } else if (shape == KisScreentoneShapeType_TriangularWaveLines) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesTriangularWaveLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesTriangularWaveLinearEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesTriangularWaveLinear screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesTriangularWaveSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesTriangularWaveSinusoidalEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesTriangularWaveSinusoidal screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             }
         } else if (shape == KisScreentoneShapeType_SawtoothWaveLines) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesSawToothWaveLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesSawToothWaveLinearEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesSawToothWaveLinear screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesSawToothWaveSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesSawToothWaveSinusoidalEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesSawToothWaveSinusoidal screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             }
         } else if (shape == KisScreentoneShapeType_CurtainsLines) {
             if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesCurtainsLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesCurtainsLinearEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesCurtainsLinear screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesCurtainsSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneScreentoneFunctions::LinesCurtainsSinusoidalEqualized screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                } else {
+                    KisScreentoneScreentoneFunctions::LinesCurtainsSinusoidal screentoneFunction;
+                    generate(dst, size, config, progressUpdater, screentoneFunction);
+                }
             }
         }
     }

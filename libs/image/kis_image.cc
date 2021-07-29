@@ -905,7 +905,7 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect, const bool activeF
 
 void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy)
 {
-    bool resolutionChanged = xres != xRes() && yres != yRes();
+    bool resolutionChanged = !qFuzzyCompare(xRes(), xres) || !qFuzzyCompare(yRes(), yres);
     bool sizeChanged = size != this->size();
 
     if (!resolutionChanged && !sizeChanged) return;

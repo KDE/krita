@@ -26,6 +26,7 @@
 #include "kis_layer.h"
 #include "kis_shape_layer.h"
 #include "kis_paint_layer.h"
+#include "kis_clone_layer.h"
 #include "KisDocument.h"
 #include "kis_shape_controller.h"
 #include "KisPart.h"
@@ -50,6 +51,15 @@
 #include <QDesktopWidget>
 #include <QDir>
 
+namespace {
+KisNodeSP safeCopyNode(KisNodeSP node, bool detachClones = true) {
+    KisCloneLayerSP cloneLayer = dynamic_cast<KisCloneLayer*>(node.data());
+    return cloneLayer && detachClones ?
+        KisNodeSP(cloneLayer->reincarnateAsPaintLayer()) : node->clone();
+}
+}
+
+
 KisMimeData::KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, bool forceCopy)
     : QMimeData()
     , m_nodes(nodes)
@@ -66,7 +76,7 @@ void KisMimeData::deepCopyNodes()
     {
         KisImageBarrierLockerWithFeedbackAllowNull locker(m_image);
         Q_FOREACH (KisNodeSP node, m_nodes) {
-            newNodes << node->clone();
+            newNodes << safeCopyNode(node);
         }
     }
 
@@ -115,7 +125,7 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
     {
         KisImageBarrierLockerWithFeedbackAllowNull locker(srcImage);
         Q_FOREACH (KisNodeSP node, nodes) {
-            image->addNode(node->clone());
+            image->addNode(safeCopyNode(node));
         }
     }
 
@@ -274,7 +284,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
 
         QList<KisNodeSP> clones;
         Q_FOREACH (KisNodeSP node, nodes) {
-            node = node->clone();
+            node = safeCopyNode(node, sourceImage != image);
             if ((forceCopy || copyNode) && sourceImage == image) {
                 KisLayerUtils::addCopyOfNameTag(node);
             }

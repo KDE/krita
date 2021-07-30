@@ -12,6 +12,7 @@
 #include <KisResourceQueryMapper.h>
 #include <KisStorageModel.h>
 
+
 struct KisAllTagResourceModel::Private {
     QString resourceType;
     QSqlQuery query;
@@ -273,6 +274,7 @@ bool KisAllTagResourceModel::isResourceTagged(const KisTagSP tag, const int reso
 
 void KisAllTagResourceModel::addStorage(const QString &location)
 {
+    Q_UNUSED(location);
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     resetQuery();
     endInsertRows();
@@ -280,6 +282,7 @@ void KisAllTagResourceModel::addStorage(const QString &location)
 
 void KisAllTagResourceModel::removeStorage(const QString &location)
 {
+    Q_UNUSED(location);
     beginRemoveRows(QModelIndex(), rowCount(), rowCount());
     resetQuery();
     endRemoveRows();
@@ -348,6 +351,11 @@ KisTagResourceModel::KisTagResourceModel(const QString &resourceType, QObject *p
     d->resourceType = resourceType;
     d->sourceModel = KisResourceModelProvider::tagResourceModel(resourceType);
     setSourceModel(d->sourceModel);
+
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(storageChanged(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(storageChanged(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(storageChanged(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(storageChanged(const QString&)));
 }
 
 KisTagResourceModel::~KisTagResourceModel()
@@ -463,6 +471,11 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
     return nameLeft.toLower() < nameRight.toLower();
+}
+
+void KisTagResourceModel::storageChanged(const QString &location) {
+    Q_UNUSED(location);
+    invalidateFilter();
 }
 
 KoResourceSP KisTagResourceModel::resourceForIndex(QModelIndex index) const

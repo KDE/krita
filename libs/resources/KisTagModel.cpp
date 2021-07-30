@@ -514,9 +514,9 @@ bool KisAllTagsModel::resetQuery()
 void KisAllTagsModel::addStorage(const QString &location)
 {
     Q_UNUSED(location)
-    beginResetModel();
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
     resetQuery();
-    endResetModel();
+    endInsertRows();
 }
 
 
@@ -524,9 +524,9 @@ void KisAllTagsModel::addStorage(const QString &location)
 void KisAllTagsModel::removeStorage(const QString &location)
 {
     Q_UNUSED(location)
-    beginResetModel();
+    beginRemoveRows(QModelIndex(), rowCount(), rowCount());
     resetQuery();
-    endResetModel();
+    endRemoveRows();
 }
 
 

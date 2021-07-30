@@ -14,7 +14,7 @@ if (APPLE)
         TestNode.cpp
         TestFilter.cpp
         TestManagedColor.cpp
-        TestNotifier
+        TestNotifier.cpp
         NAME_PREFIX "libs-libkis-"
         LINK_LIBRARIES kritalibkis Qt5::Test
         TARGET_NAMES_VAR OK_TESTS
@@ -30,7 +30,7 @@ else (APPLE)
         TestNode.cpp
         TestFilter.cpp
         TestManagedColor.cpp
-        TestNotifier
+        TestNotifier.cpp
         NAME_PREFIX "libs-libkis-"
         LINK_LIBRARIES kritalibkis Qt5::Test)
 

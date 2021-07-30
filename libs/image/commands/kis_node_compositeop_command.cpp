@@ -11,11 +11,9 @@
 #include "commands/kis_node_commands.h"
 #include "kis_command_ids.h"
 
-KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp,
-        const QString& newCompositeOp) :
+KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QString& newCompositeOp) :
         KisNodeCommand(kundo2_i18n("Composition Mode Change"), node)
 {
-    m_oldCompositeOp = oldCompositeOp;
     m_newCompositeOp = newCompositeOp;
 }
 
@@ -32,12 +30,16 @@ void KisNodeCompositeOpCommand::setCompositeOpImpl(const QString &compositeOp)
 
 void KisNodeCompositeOpCommand::redo()
 {
+    if (!m_oldCompositeOp) {
+        m_oldCompositeOp = m_node->compositeOpId();
+    }
     setCompositeOpImpl(m_newCompositeOp);
 }
 
 void KisNodeCompositeOpCommand::undo()
 {
-    setCompositeOpImpl(m_oldCompositeOp);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_oldCompositeOp);
+    setCompositeOpImpl(*m_oldCompositeOp);
 }
 
 int KisNodeCompositeOpCommand::id() const
@@ -51,7 +53,11 @@ bool KisNodeCompositeOpCommand::mergeWith(const KUndo2Command *command)
         dynamic_cast<const KisNodeCompositeOpCommand*>(command);
 
     if (other && other->m_node == m_node) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_newCompositeOp == other->m_oldCompositeOp);
+        // verify both commands have been executed and they are consecutive
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_oldCompositeOp);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(other->m_oldCompositeOp);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(other->m_oldCompositeOp && m_newCompositeOp == other->m_oldCompositeOp);
+
         m_newCompositeOp = other->m_newCompositeOp;
         return true;
     }

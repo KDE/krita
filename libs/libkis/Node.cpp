@@ -165,7 +165,6 @@ void Node::setBlendingMode(QString value)
     if (!d->node) return;
 
     KUndo2Command *cmd = new KisNodeCompositeOpCommand(d->node,
-                                                       d->node->compositeOpId(),
                                                        value);
 
     KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);

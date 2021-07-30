@@ -9,6 +9,7 @@
 
 #include "kis_node_command.h"
 #include "commands_new/KisAsynchronouslyMergeableCommandInterface.h"
+#include "boost/optional.hpp"
 
 /// The command for setting the node opacity
 class KRITAIMAGE_EXPORT KisNodeOpacityCommand : public KisNodeCommand, public KisAsynchronouslyMergeableCommandInterface
@@ -21,7 +22,7 @@ public:
      * @param oldOpacity the old node opacity
      * @param newOpacity the new node opacity
      */
-    KisNodeOpacityCommand(KisNodeSP node, quint8 oldOpacity, quint8 newOpacity);
+    KisNodeOpacityCommand(KisNodeSP node, quint8 newOpacity);
 
     void redo() override;
     void undo() override;
@@ -31,7 +32,7 @@ public:
     bool canMergeWith(const KUndo2Command *command) const override;
 
 private:
-    quint8 m_oldOpacity;
+    boost::optional<quint8> m_oldOpacity;
     quint8 m_newOpacity;
 };
 

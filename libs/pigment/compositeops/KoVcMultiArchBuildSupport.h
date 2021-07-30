@@ -94,6 +94,7 @@ createOptimizedClass(typename FactoryType::ParamType param)
         return FactoryType::template create<Vc::SSE2Impl>(param);
     } else {
 #endif
+        (void)disableAVXOptimizations;
         return FactoryType::template create<Vc::ScalarImpl>(param);
 #ifdef HAVE_VC
     }

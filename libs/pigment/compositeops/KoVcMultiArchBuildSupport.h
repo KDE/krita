@@ -60,19 +60,12 @@ typename FactoryType::ReturnType
 createOptimizedClass(typename FactoryType::ParamType param)
 {
     static bool isConfigInitialized = false;
-    static bool useVectorization = true;
     static bool disableAVXOptimizations = false;
 
     if (!isConfigInitialized) {
         KConfigGroup cfg = KSharedConfig::openConfig()->group("");
-        useVectorization = !cfg.readEntry("amdDisableVectorWorkaround", false);
         disableAVXOptimizations = cfg.readEntry("disableAVXOptimizations", false);
         isConfigInitialized = true;
-    }
-
-    if (!useVectorization) {
-        qWarning() << "WARNING: vector instructions disabled by \'amdDisableVectorWorkaround\' option!";
-        return FactoryType::template create<Vc::ScalarImpl>(param);
     }
 
 #ifdef HAVE_VC

@@ -236,9 +236,7 @@ void ResourceImporter::importResources(QString startPath)
         }
     }
 
-
-
-
+    QString resourceLocationBase = KisResourceLocator::instance()->resourceLocationBase();
 
     QStringList resourceFiles = resourceTypePerFile.keys();
     for (int i = 0; i < resourceFiles.count(); i++) {
@@ -247,6 +245,18 @@ void ResourceImporter::importResources(QString startPath)
         if (m_resourceModelsForResourceType.contains(resourceType)) {
             if (debug) qCritical() << "We do have a resource model for that!";
             KisResourceModel* model = m_resourceModelsForResourceType[resourceType];
+            // check if the file already exists there
+            QString filepath = resourceLocationBase + "/" + resourceType + "/" + QFileInfo(resourceFiles[i]).fileName();
+            QFileInfo fi(filepath);
+            qCritical() << "Checking if the file: " << filepath << "exists: " << fi.exists();
+            if (fi.exists()) {
+                if(QMessageBox::question(m_widgetParent, i18nc("Dialog title", "Overwrite the file?"),
+                                      i18nc("Question in a dialog/messagebox", "This resource file already exists in the resource folder. Do you want to overwrite it?"),
+                                         QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel) {
+                    continue;
+                }
+            }
+
             KoResourceSP res = model->importResourceFile(resourceFiles[i]);
             if (res.isNull()) {
                 if (debug) qCritical() << "But the resource is null :( ";

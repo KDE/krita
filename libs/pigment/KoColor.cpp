@@ -69,9 +69,11 @@ Q_GLOBAL_STATIC(DefaultKoColorInitializer, s_defaultKoColor)
 
 }
 
-
-KoColor::KoColor() {
-    *this = *s_defaultKoColor->value;
+KoColor::KoColor()
+    : m_colorSpace(s_defaultKoColor->value->m_colorSpace)
+    , m_size(s_defaultKoColor->value->m_size)
+{
+    memcpy(m_data, s_defaultKoColor->value->m_data, m_size);
 }
 
 KoColor::KoColor(const KoColorSpace * colorSpace)

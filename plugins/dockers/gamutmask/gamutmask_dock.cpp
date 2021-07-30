@@ -397,8 +397,17 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
 
 void GamutMaskDock::closeMaskDocument()
 {
-    if (!m_externalTemplateClose) {
-        if (m_maskDocument) {
+    if (m_maskDocument) {
+
+        disconnect(m_view->viewManager(), SIGNAL(viewChanged()), this, SLOT(slotViewChanged()));
+        disconnect(m_maskDocument, SIGNAL(completed()), this, SLOT(slotDocumentSaved()));
+
+        // the template file is meant as temporary, if the user saved it, delete now
+        if (QFile::exists(m_maskDocument->localFilePath())) {
+            QFile::remove(m_maskDocument->localFilePath());
+        }
+
+        if (!m_externalTemplateClose) {
             // set the document to not modified to bypass confirmation dialog
             // the close is already confirmed
             m_maskDocument->setModified(false);
@@ -419,14 +428,6 @@ void GamutMaskDock::closeMaskDocument()
     m_dockerUI->maskPropertiesBox->setVisible(false);
     m_dockerUI->editControlsBox->setVisible(true);
     m_dockerUI->editControlsBox->setEnabled(true);
-
-    disconnect(m_view->viewManager(), SIGNAL(viewChanged()), this, SLOT(slotViewChanged()));
-    disconnect(m_maskDocument, SIGNAL(completed()), this, SLOT(slotDocumentSaved()));
-
-    // the template file is meant as temporary, if the user saved it, delete now
-    if (QFile::exists(m_maskDocument->localFilePath())) {
-        QFile::remove(m_maskDocument->localFilePath());
-    }
 
     m_maskDocument = nullptr;
     m_view = nullptr;

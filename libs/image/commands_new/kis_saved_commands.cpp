@@ -90,6 +90,18 @@ bool KisSavedCommand::mergeWith(const KUndo2Command* command)
     return m_command->mergeWith(command);
 }
 
+bool KisSavedCommand::canAnnihilateWith(const KUndo2Command *command) const
+{
+    const KisSavedCommand *other =
+        dynamic_cast<const KisSavedCommand*>(command);
+
+    if (other) {
+        command = other->m_command.data();
+    }
+
+    return m_command->canAnnihilateWith(command);
+}
+
 void KisSavedCommand::addCommands(KisStrokeId id, bool undo)
 {
     strokesFacade()->
@@ -245,6 +257,45 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
     } else {
         setExtraData(0);
     }
+
+    return true;
+}
+
+bool KisSavedMacroCommand::canAnnihilateWith(const KUndo2Command* command) const
+{
+    const KisSavedMacroCommand *other =
+        dynamic_cast<const KisSavedMacroCommand*>(command);
+
+    if (!other || other->id() != id() || id() < 0 || other->id() < 0) return false;
+
+    QVector<Private::SavedCommand> &otherCommands = other->m_d->commands;
+
+    if (other->m_d->overriddenCommand) return false;
+    if (m_d->commands.size() != otherCommands.size()) return false;
+
+    auto it = m_d->commands.constBegin();
+    auto end = m_d->commands.constEnd();
+
+    auto otherIt = otherCommands.constBegin();
+    auto otherEnd = otherCommands.constEnd();
+
+    bool sameCommands = true;
+    while (it != end && otherIt != otherEnd) {
+
+        if (!it->command->canAnnihilateWith(otherIt->command.data()) ||
+            it->command->id() < 0 || otherIt->command->id() < 0 ||
+            it->command->id() != otherIt->command->id() ||
+            it->sequentiality != otherIt->sequentiality ||
+            it->exclusivity != otherIt->exclusivity) {
+
+            sameCommands = false;
+            break;
+        }
+        ++it;
+        ++otherIt;
+    }
+
+    if (!sameCommands) return false;
 
     return true;
 }

@@ -30,6 +30,7 @@ public:
     int id() const override;
     bool mergeWith(const KUndo2Command *command) override;
     bool canMergeWith(const KUndo2Command *command) const override;
+    bool canAnnihilateWith(const KUndo2Command *command) const override;
 
 private:
     boost::optional<quint8> m_oldOpacity;

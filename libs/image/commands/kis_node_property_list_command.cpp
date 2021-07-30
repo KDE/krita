@@ -117,7 +117,7 @@ bool KisNodePropertyListCommand::canMergeWith(const KUndo2Command *command) cons
              changedProperties(other->m_oldPropertyList, other->m_newPropertyList));
 }
 
-bool KisNodePropertyListCommand::annihilateWith(const KUndo2Command *command)
+bool KisNodePropertyListCommand::canAnnihilateWith(const KUndo2Command *command) const
 {
     const KisNodePropertyListCommand *other =
         dynamic_cast<const KisNodePropertyListCommand*>(command);

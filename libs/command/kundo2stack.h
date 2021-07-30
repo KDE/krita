@@ -104,7 +104,7 @@ public:
     virtual bool mergeWith(const KUndo2Command *other);
     virtual bool timedMergeWith(KUndo2Command *other);
 
-    virtual bool annihilateWith(const KUndo2Command *other);
+    virtual bool canAnnihilateWith(const KUndo2Command *other) const;
 
     int childCount() const;
     const KUndo2Command *child(int index) const;

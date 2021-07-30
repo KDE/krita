@@ -31,6 +31,8 @@ public:
     bool mergeWith(const KUndo2Command *command) override;
     bool canMergeWith(const KUndo2Command *command) const override;
 
+    bool canAnnihilateWith(const KUndo2Command *command) const override;
+
 private:
     void setCompositeOpImpl(const QString &compositeOp);
 

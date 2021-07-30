@@ -72,3 +72,16 @@ bool KisNodeCompositeOpCommand::canMergeWith(const KUndo2Command *command) const
 
     return other && other->m_node == m_node;
 }
+
+bool KisNodeCompositeOpCommand::canAnnihilateWith(const KUndo2Command *command) const
+{
+    const KisNodeCompositeOpCommand *other =
+        dynamic_cast<const KisNodeCompositeOpCommand*>(command);
+
+    if (!other || other->m_node != m_node) {
+        return false;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_oldCompositeOp, false);
+    return *m_oldCompositeOp == other->m_newCompositeOp;
+}

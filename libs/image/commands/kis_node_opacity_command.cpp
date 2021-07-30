@@ -64,3 +64,16 @@ bool KisNodeOpacityCommand::canMergeWith(const KUndo2Command *command) const
 
     return other && other->m_node == m_node;
 }
+
+bool KisNodeOpacityCommand::canAnnihilateWith(const KUndo2Command *command) const
+{
+    const KisNodeOpacityCommand *other =
+        dynamic_cast<const KisNodeOpacityCommand*>(command);
+
+    if (!other || other->m_node != m_node) {
+        return false;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_oldOpacity, false);
+    return *m_oldOpacity == other->m_newOpacity;
+}

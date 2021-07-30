@@ -70,7 +70,7 @@ if (PYTHONINTERP_FOUND)
         foreach(__p ${_python_prefix_path})
             set(KRITA_PYTHONPATH_V4 "${__p}/lib/krita-python-libs:${KRITA_PYTHONPATH_V4}")
             set(KRITA_PYTHONPATH_V5 "${__p}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages:${KRITA_PYTHONPATH_V5}")
-        endforeach(p)
+        endforeach()
     endif()
 
     message(STATUS "Krita site-packages directories for SIP v4: ${KRITA_PYTHONPATH_V4}")

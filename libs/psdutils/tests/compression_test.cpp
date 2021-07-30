@@ -20,10 +20,12 @@
 void CompressionTest::testCompressionRLE()
 {
     QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
-    QByteArray compressed = Compression::compress(ba, Compression::RLE);
+    QByteArray compressed = Compression::compress(ba, psd_compression_type::RLE);
+    QVERIFY(compressed.size() > 0);
     dbgKrita << compressed.size() << "uncompressed" << ba.size();
 
-    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::RLE);
+    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, psd_compression_type::RLE);
+    QVERIFY(uncompressed.size() > 0);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 
     ba.clear();
@@ -31,19 +33,23 @@ void CompressionTest::testCompressionRLE()
     for (int i = 0; i < 500; ++i) {
         ds << rand();
     }
-    compressed = Compression::compress(ba, Compression::RLE);
+    compressed = Compression::compress(ba, psd_compression_type::RLE);
     dbgKrita << compressed.size() << "uncompressed" << ba.size();
-    uncompressed = Compression::uncompress(ba.size(), compressed, Compression::RLE);
+    QVERIFY(compressed.size() > 0);
+    uncompressed = Compression::uncompress(ba.size(), compressed, psd_compression_type::RLE);
+    QVERIFY(uncompressed.size() > 0);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 }
 
 void CompressionTest::testCompressionZIP()
 {
     QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
-    QByteArray compressed = Compression::compress(ba, Compression::ZIP);
+    QByteArray compressed = Compression::compress(ba, psd_compression_type::ZIP);
+    QVERIFY(compressed.size() > 0);
     dbgKrita << compressed.size() << "uncompressed" << ba.size();
 
-    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::ZIP);
+    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, psd_compression_type::ZIP);
+    QVERIFY(uncompressed.size() > 0);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 
     ba.clear();
@@ -51,19 +57,23 @@ void CompressionTest::testCompressionZIP()
     for (int i = 0; i < 500; ++i) {
         ds << rand();
     }
-    compressed = Compression::compress(ba, Compression::ZIP);
+    compressed = Compression::compress(ba, psd_compression_type::ZIP);
+    QVERIFY(compressed.size() > 0);
     dbgKrita << compressed.size() << "uncompressed" << ba.size();
-    uncompressed = Compression::uncompress(ba.size(), compressed, Compression::ZIP);
+    uncompressed = Compression::uncompress(ba.size(), compressed, psd_compression_type::ZIP);
+    QVERIFY(uncompressed.size() > 0);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 }
 
 void CompressionTest::testCompressionUncompressed()
 {
     QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
-    QByteArray compressed = Compression::compress(ba, Compression::Uncompressed);
+    QByteArray compressed = Compression::compress(ba, psd_compression_type::Uncompressed);
+    QVERIFY(compressed.size() > 0);
     dbgKrita << compressed.size() << "uncompressed" << ba.size();
 
-    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::Uncompressed);
+    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, psd_compression_type::Uncompressed);
+    QVERIFY(uncompressed.size() > 0);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 
     ba.clear();
@@ -71,9 +81,11 @@ void CompressionTest::testCompressionUncompressed()
     for (int i = 0; i < 500; ++i) {
         ds << rand();
     }
-    compressed = Compression::compress(ba, Compression::Uncompressed);
+    compressed = Compression::compress(ba, psd_compression_type::Uncompressed);
     dbgKrita << compressed.size() << "uncompressed" << ba.size();
-    uncompressed = Compression::uncompress(ba.size(), compressed, Compression::Uncompressed);
+    QVERIFY(compressed.size() > 0);
+    uncompressed = Compression::uncompress(ba.size(), compressed, psd_compression_type::Uncompressed);
+    QVERIFY(uncompressed.size() > 0);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 }
 

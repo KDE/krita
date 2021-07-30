@@ -36,6 +36,14 @@ enum class psd_byte_order : std::uint_least8_t {
     psdInvalidByteOrder = 255,
 };
 
+enum psd_compression_type : std::uint16_t {
+    Uncompressed = 0,
+    RLE,
+    ZIP,
+    ZIPWithPrediction,
+    Unknown = 255,
+};
+
 /**
  * Image color/depth modes
  */

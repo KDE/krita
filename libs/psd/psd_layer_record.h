@@ -14,7 +14,6 @@
 #include <QString>
 #include <QVector>
 
-#include <compression.h>
 #include <kis_node.h>
 #include <kis_paint_device.h>
 #include <kis_types.h>
@@ -49,7 +48,7 @@ enum psd_layer_type {
 struct KRITAPSD_EXPORT ChannelInfo {
     ChannelInfo()
         : channelId(0)
-        , compressionType(Compression::Unknown)
+        , compressionType(psd_compression_type::Unknown)
         , channelDataStart(0)
         , channelDataLength(0)
         , channelOffset(0)
@@ -58,7 +57,7 @@ struct KRITAPSD_EXPORT ChannelInfo {
     }
 
     qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
-    Compression::CompressionType compressionType;
+    psd_compression_type compressionType;
     quint64 channelDataStart;
     quint64 channelDataLength;
     QVector<quint32> rleRowLengths;

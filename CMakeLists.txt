@@ -727,12 +727,12 @@ if(KSeExpr_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${KSeExpr_LIBRARY} ${KSeExprUI_LIBRARY})
 endif()
 
-find_package(ZLIB)
+find_package(ZLIB REQUIRED)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "Compression library"
     URL "https://www.zlib.net/"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic and the PSD plugins")
+    TYPE REQUIRED
+    PURPOSE "Required by Krita's PNG and PSD support")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 
 find_package(OpenEXR 3.0 CONFIG QUIET)

@@ -8,14 +8,14 @@
 #include "kis_asl_patterns_writer.h"
 
 #include <functional>
+
+#include <compression.h>
+#include <kis_debug.h>
 #include <resources/KoPattern.h>
 
-#include "compression.h"
 #include "kis_asl_callback_object_catcher.h"
-#include "kis_asl_xml_parser.h"
-#include "kis_debug.h"
-
 #include "kis_asl_writer_utils.h"
+#include "kis_asl_xml_parser.h"
 
 KisAslPatternsWriter::KisAslPatternsWriter(const QDomDocument &doc, QIODevice &device, psd_byte_order byteOrder)
     : m_doc(doc)
@@ -65,7 +65,7 @@ void sliceQImage(const QImage &image, QVector<QVector<QByteArray>> *dstPlanes, b
                 dstPtr += dstStep;
             }
 
-            compressedRows[i].append(Compression::compress(uncompressedRows[i].last(), Compression::RLE));
+            compressedRows[i].append(Compression::compress(uncompressedRows[i].last(), psd_compression_type::RLE));
             if (compressedRows[i].last().isEmpty()) {
                 throw KisAslWriterUtils::ASLWriteException("Failed to compress pattern plane");
             }

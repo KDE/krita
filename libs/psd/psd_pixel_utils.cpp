@@ -9,28 +9,22 @@
 
 #include <QIODevice>
 #include <QMap>
+#include <QtEndian>
 #include <QtGlobal>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
 #include <colorspaces/KoAlphaColorSpace.h>
+#include <kis_global.h>
+#include <kis_iterator_ng.h>
 
-#include <QtEndian>
-
-#include "kis_global.h"
 #include <asl/kis_asl_reader_utils.h>
 #include <asl/kis_asl_writer_utils.h>
-
-#include "kis_iterator_ng.h"
-#include "psd.h"
-#include "psd_layer_record.h"
 #include <asl/kis_offset_keeper.h>
-
-#include "config_psd.h"
-#ifdef HAVE_ZLIB
-#include "zlib.h"
-#endif
+#include <compression.h>
+#include <psd.h>
+#include <psd_layer_record.h>
 
 namespace PsdPixelUtils
 {
@@ -304,91 +298,6 @@ void readAlphaMaskPixelCommon(int channelSize, const QMap<quint16, QByteArray> &
     }
 }
 
-/**********************************************************************/
-/* Two functions copied from the abandoned PSDParse library (GPL)     */
-/* See: http://www.telegraphics.com.au/svn/psdparse/trunk/psd_zip.c   */
-/* Created by Patrick in 2007.02.02, libpsd@graphest.com              */
-/* Modifications by Toby Thain <toby@telegraphics.com.au>             */
-/**********************************************************************/
-
-typedef bool psd_status;
-typedef quint8 psd_uchar;
-typedef int psd_int;
-typedef quint8 Bytef;
-
-psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len, psd_uchar *dst_buf, psd_int dst_len)
-{
-#ifdef HAVE_ZLIB
-    z_stream stream;
-    psd_int state;
-
-    memset(&stream, 0, sizeof(z_stream));
-    stream.data_type = Z_BINARY;
-
-    stream.next_in = (Bytef *)src_buf;
-    stream.avail_in = src_len;
-    stream.next_out = (Bytef *)dst_buf;
-    stream.avail_out = dst_len;
-
-    if (inflateInit(&stream) != Z_OK)
-        return 0;
-
-    do {
-        state = inflate(&stream, Z_PARTIAL_FLUSH);
-        if (state == Z_STREAM_END)
-            break;
-        if (state != Z_OK)
-            break;
-    } while (stream.avail_out > 0);
-
-    if (state != Z_STREAM_END && state != Z_OK)
-        return 0;
-
-    return 1;
-
-#endif /* HAVE_ZLIB */
-
-    return 0;
-}
-
-psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len, psd_uchar *dst_buf, psd_int dst_len, psd_int row_size, psd_int color_depth)
-{
-    psd_status status;
-    int len;
-    psd_uchar *buf;
-
-    status = psd_unzip_without_prediction(src_buf, src_len, dst_buf, dst_len);
-    if (!status)
-        return status;
-
-    buf = dst_buf;
-    do {
-        len = row_size;
-        if (color_depth == 16) {
-            while (--len) {
-                buf[2] += buf[0] + ((buf[1] + buf[3]) >> 8);
-                buf[3] += buf[1];
-                buf += 2;
-            }
-            buf += 2;
-            dst_len -= row_size * 2;
-        } else {
-            while (--len) {
-                *(buf + 1) += *buf;
-                buf++;
-            }
-            buf++;
-            dst_len -= row_size;
-        }
-    } while (dst_len > 0);
-
-    return 1;
-}
-
-/**********************************************************************/
-/* End of third party block                                           */
-/**********************************************************************/
-
 QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice &io, QVector<ChannelInfo *> channelInfoRecords, int row, int width, int channelSize, bool processMasks)
 {
     const int uncompressedLength = width * channelSize;
@@ -402,10 +311,10 @@ QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice &io, QVector<ChannelInfo 
 
         io.seek(channelInfo->channelDataStart + channelInfo->channelOffset);
 
-        if (channelInfo->compressionType == Compression::Uncompressed) {
+        if (channelInfo->compressionType == psd_compression_type::Uncompressed) {
             channelBytes[channelInfo->channelId] = io.read(uncompressedLength);
             channelInfo->channelOffset += uncompressedLength;
-        } else if (channelInfo->compressionType == Compression::RLE) {
+        } else if (channelInfo->compressionType == psd_compression_type::RLE) {
             int rleLength = channelInfo->rleRowLengths[row];
             QByteArray compressedBytes = io.read(rleLength);
             QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
@@ -438,7 +347,7 @@ void readCommon(KisPaintDeviceSP dev,
         return;
     }
 
-    if (infoRecords.first()->compressionType == Compression::ZIP || infoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
+    if (infoRecords.first()->compressionType == psd_compression_type::ZIP || infoRecords.first()->compressionType == psd_compression_type::ZIPWithPrediction) {
         const int numPixels = channelSize * layerRect.width() * layerRect.height();
 
         QMap<quint16, QByteArray> channelBytes;
@@ -446,24 +355,11 @@ void readCommon(KisPaintDeviceSP dev,
         Q_FOREACH (ChannelInfo *info, infoRecords) {
             io.seek(info->channelDataStart);
             QByteArray compressedBytes = io.read(info->channelDataLength);
-            QByteArray uncompressedBytes(numPixels, 0);
+            QByteArray uncompressedBytes;
 
-            bool status = false;
-            if (infoRecords.first()->compressionType == Compression::ZIP) {
-                status = psd_unzip_without_prediction((quint8 *)compressedBytes.data(),
-                                                      compressedBytes.size(),
-                                                      (quint8 *)uncompressedBytes.data(),
-                                                      uncompressedBytes.size());
-            } else {
-                status = psd_unzip_with_prediction((quint8 *)compressedBytes.data(),
-                                                   compressedBytes.size(),
-                                                   (quint8 *)uncompressedBytes.data(),
-                                                   uncompressedBytes.size(),
-                                                   layerRect.width(),
-                                                   channelSize * 8);
-            }
+            uncompressedBytes = Compression::uncompress(numPixels, compressedBytes, infoRecords.first()->compressionType, layerRect.width(), channelSize * 8);
 
-            if (!status) {
+            if (uncompressedBytes.size() != numPixels) {
                 QString error = QString("Failed to unzip channel data: id = %1, compression = %2").arg(info->channelId).arg(info->compressionType);
                 dbgFile << "ERROR:" << error;
                 dbgFile << "      " << ppVar(info->channelId);
@@ -585,7 +481,7 @@ void writeChannelDataRLEImpl(QIODevice &io,
     }
 
     if (writeCompressionType) {
-        SAFE_WRITE_EX(byteOrder, io, (quint16)Compression::RLE);
+        SAFE_WRITE_EX(byteOrder, io, static_cast<quint16>(psd_compression_type::RLE));
     }
 
     const bool externalRleBlock = rleBlockOffset >= 0;
@@ -612,7 +508,7 @@ void writeChannelDataRLEImpl(QIODevice &io,
     const int stride = channelSize * rc.width();
     for (qint32 row = 0; row < rc.height(); ++row) {
         QByteArray uncompressed = QByteArray::fromRawData((const char *)plane + row * stride, stride);
-        QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
+        QByteArray compressed = Compression::compress(uncompressed, psd_compression_type::RLE);
 
         KisAslWriterUtils::OffsetStreamPusher<quint16, byteOrder> rleExternalTag(io, 0, channelRLESizePos + row * static_cast<qint64>(sizeof(quint16)));
 

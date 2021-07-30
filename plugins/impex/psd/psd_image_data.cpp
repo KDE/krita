@@ -18,17 +18,13 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
-
-#include "psd_utils.h"
-#include "compression.h"
-
-#include "kis_iterator_ng.h"
-#include "kis_paint_device.h"
+#include <kis_iterator_ng.h>
+#include <kis_paint_device.h>
 
 #include <asl/kis_asl_reader_utils.h>
-
-#include "psd_pixel_utils.h"
-
+#include <compression.h>
+#include <psd_pixel_utils.h>
+#include <psd_utils.h>
 
 PSDImageData::PSDImageData(PSDHeader *header)
 {
@@ -56,7 +52,7 @@ bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
             m_channelOffsets << 0;
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
-            channelInfo.compressionType = Compression::Uncompressed;
+            channelInfo.compressionType = psd_compression_type::Uncompressed;
             channelInfo.channelDataStart = start;
             channelInfo.channelDataLength = quint64(m_header->width) * m_header->height * m_channelSize;
             start += channelInfo.channelDataLength;
@@ -84,7 +80,7 @@ bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
             channelInfo.channelDataStart = start;
-            channelInfo.compressionType = Compression::RLE;
+            channelInfo.compressionType = psd_compression_type::RLE;
             for (quint32 row = 0; row < m_header->height; row++ ) {
                 if (m_header->version == 1) {
                     quint16 rlelength16; // use temporary variable to not cast pointers and not rely on endianness
@@ -140,7 +136,7 @@ bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
 bool PSDImageData::write(QIODevice &io, KisPaintDeviceSP dev, bool hasAlpha)
 {
     // XXX: make the compression setting configurable. For now, always use RLE.
-    psdwrite(io, (quint16)Compression::RLE);
+    psdwrite(io, static_cast<quint16>(psd_compression_type::RLE));
 
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.

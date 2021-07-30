@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,15 +8,15 @@
 #define COMPRESSION_H
 
 #include "kritapsdutils_export.h"
+
 #include <QByteArray>
+#include <psd.h>
 
 class KRITAPSDUTILS_EXPORT Compression
 {
 public:
-    enum CompressionType { Uncompressed = 0, RLE, ZIP, ZIPWithPrediction, Unknown };
-
-    static QByteArray uncompress(quint32 unpacked_len, QByteArray bytes, CompressionType compressionType);
-    static QByteArray compress(QByteArray bytes, CompressionType compressionType);
+    static QByteArray uncompress(int unpacked_len, QByteArray bytes, psd_compression_type compressionType, int row_size = 0, int color_depth = 0);
+    static QByteArray compress(QByteArray bytes, psd_compression_type compressionType, int row_size = 0, int color_depth = 0);
 };
 
 #endif // PSD_COMPRESSION_H

@@ -1,5 +1,3 @@
-configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
-
 set(kritapsd_SRCS
     psd_additional_layer_info_block.cpp
     psd_header.cpp
@@ -13,16 +11,10 @@ set(kritapsd_SRCS
 add_library(kritapsd SHARED ${kritapsd_SRCS})
 generate_export_header(kritapsd)
 
-target_include_directories(kritapsd
-    PUBLIC
-        ${ZLIB_INCLUDE_DIR}
-)
-
 target_link_libraries(kritapsd
     PUBLIC
         kritaimage
         kritapsdutils
-        ${ZLIB_LIBRARIES}
 )
 
 set_target_properties(kritapsd PROPERTIES

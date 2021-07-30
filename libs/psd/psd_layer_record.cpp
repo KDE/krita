@@ -649,7 +649,7 @@ void PSDLayerRecord::writePixelDataImpl(QIODevice &io)
         for (int i = 0; i < nChannels; i++) {
             const ChannelInfo *channelInfo = channelInfoRecords[i];
             KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> channelBlockSizeExternalTag(io, 0, channelInfo->channelInfoPosition);
-            SAFE_WRITE_EX(byteOrder, io, (quint16)Compression::Uncompressed);
+            SAFE_WRITE_EX(byteOrder, io, static_cast<quint16>(psd_compression_type::Uncompressed));
         }
 
         writeTransparencyMaskPixelData<byteOrder>(io);

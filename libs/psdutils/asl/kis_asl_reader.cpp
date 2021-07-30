@@ -311,10 +311,10 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
 
         const int dataLength = planeRect.width() * planeRect.height() * channelSize;
 
-        if (useCompression == Compression::Uncompressed) {
+        if (useCompression == psd_compression_type::Uncompressed) {
             dataPlanes[i] = device.read(dataLength);
 
-        } else if (useCompression == Compression::RLE) {
+        } else if (useCompression == psd_compression_type::RLE) {
             const int numRows = planeRect.height();
 
             QVector<quint16> rowSizes;
@@ -335,7 +335,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
                     throw ASLParseException("VAList: failed to read compressed data!");
                 }
 
-                QByteArray uncompressedData = Compression::uncompress(planeRect.width() * channelSize, compressedData, Compression::RLE);
+                QByteArray uncompressedData = Compression::uncompress(planeRect.width() * channelSize, compressedData, psd_compression_type::RLE);
 
                 if (uncompressedData.size() != planeRect.width()) {
                     throw ASLParseException("VAList: failed to decompress data!");

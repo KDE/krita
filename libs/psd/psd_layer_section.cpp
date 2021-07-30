@@ -139,13 +139,13 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
                     error = "Could not read compression type for channel";
                     return false;
                 }
-                channelInfo->compressionType = (Compression::CompressionType)compressionType;
+                channelInfo->compressionType = static_cast<psd_compression_type>(compressionType);
                 dbgFile << "\t\tChannel" << j << "has compression type" << compressionType;
 
                 QRect channelRect = layerRecord->channelRect(channelInfo);
 
                 // read the rle row lengths;
-                if (channelInfo->compressionType == Compression::RLE) {
+                if (channelInfo->compressionType == psd_compression_type::RLE) {
                     for (qint64 row = 0; row < channelRect.height(); ++row) {
                         // dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io.pos();
 

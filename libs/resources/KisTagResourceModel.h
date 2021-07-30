@@ -69,6 +69,10 @@ public:
     bool untagResource(const KisTagSP tag, const int resourceId) override;
     bool isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
+private Q_SLOTS:
+    void addStorage(const QString &location);
+    void removeStorage(const QString &location);
+
 private:
 
     bool resetQuery();

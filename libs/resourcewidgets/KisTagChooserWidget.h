@@ -16,7 +16,7 @@
 
 /**
  * \brief The KisTagChooserWidget class is responsible for all the logic
- *        that thr tags combobox has in various resource choosers.
+ *        that the tags combobox has in various resource choosers.
  *
  * It uses KisTagModel as a model for items in the combobox.
  * It is also responsible for the popup for tag removal, renaming and creation

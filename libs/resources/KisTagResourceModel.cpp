@@ -10,6 +10,7 @@
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceQueryMapper.h>
+#include <KisStorageModel.h>
 
 struct KisAllTagResourceModel::Private {
     QString resourceType;
@@ -25,6 +26,11 @@ KisAllTagResourceModel::KisAllTagResourceModel(const QString &resourceType, QObj
 {
     d->resourceType = resourceType;
     resetQuery();
+
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
 }
 
 KisAllTagResourceModel::~KisAllTagResourceModel()
@@ -263,6 +269,20 @@ bool KisAllTagResourceModel::isResourceTagged(const KisTagSP tag, const int reso
 
     return query.value(0).toInt() > 0;
 
+}
+
+void KisAllTagResourceModel::addStorage(const QString &location)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    resetQuery();
+    endInsertRows();
+}
+
+void KisAllTagResourceModel::removeStorage(const QString &location)
+{
+    beginRemoveRows(QModelIndex(), rowCount(), rowCount());
+    resetQuery();
+    endRemoveRows();
 }
 
 bool KisAllTagResourceModel::resetQuery()

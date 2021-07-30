@@ -853,6 +853,10 @@ void KisImage::purgeUnusedData(bool isCancellable)
                    deviceList << node->getLodCapableDevices();
                  });
 
+            /// make sure we deduplicate the list to avoid
+            /// concurrent write access to the devices
+            KritaUtils::makeContainerUnique(deviceList);
+
             Q_FOREACH (KisPaintDeviceSP device, deviceList) {
                 if (!device) continue;
 

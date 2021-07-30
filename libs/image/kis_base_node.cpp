@@ -463,3 +463,16 @@ bool KisBaseNode::supportsKeyframeChannel(const QString &id)
 
     return false;
 }
+
+QDebug operator<<(QDebug dbg, const KisBaseNode::Property &prop)
+{
+    dbg.nospace() << "Property(" << prop.id << ", " << prop.state;
+
+    if (prop.isInStasis) {
+        dbg.nospace() << ", in-stasis";
+    }
+
+    dbg.nospace() << ")";
+
+    return dbg.space();
+}

@@ -605,9 +605,9 @@ private:
 
 };
 
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisBaseNode::Property &prop);
 
 Q_DECLARE_METATYPE( KisBaseNode::PropertyList )
-
 
 
 #endif

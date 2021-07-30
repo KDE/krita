@@ -193,7 +193,9 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
 
 void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
-    const bool undo = !changedProperties(node->sectionModelProperties(), proplist).isEmpty();
+    const QSet<QString> properties = changedProperties(node->sectionModelProperties(), proplist);
+
+    const bool undo = !properties.isEmpty() && properties != QSet<QString>{KisLayerPropertiesIcons::colorizeNeedsUpdate.id()};
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 

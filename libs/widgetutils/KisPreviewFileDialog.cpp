@@ -63,13 +63,13 @@ KisPreviewFileDialog::KisPreviewFileDialog(QWidget *parent, const QString &capti
 
 void KisPreviewFileDialog::resetIconProvider()
 {
-    QSplitter *splitter = findChild<QSplitter*>();
+    QSplitter *splitter = findChild<QSplitter *>();
     if (splitter) {
         splitter->addWidget(m_preview);
         resize(width() + m_preview->width(), height());
     }
 
-    QHBoxLayout *layout = findChild<QHBoxLayout*>();
+    QHBoxLayout *layout = findChild<QHBoxLayout *>();
     if (layout) {
         layout->addWidget(m_previewToggle);
     }
@@ -82,7 +82,8 @@ void KisPreviewFileDialog::resetIconProvider()
 
 void KisPreviewFileDialog::onCurrentChanged(const QString &path)
 {
-    if (m_preview) {
+    // Generate the preview only if we're not using the native dialog.
+    if (testOption(QFileDialog::DontUseNativeDialog) && m_preview) {
         QIcon icon;
         if (s_iconCreator && s_iconCreator->createFileIcon(path, icon, devicePixelRatioF(), QSize(512, 512), true)) {
             m_preview->setPixmap(icon.pixmap(m_preview->width(), m_preview->height()));

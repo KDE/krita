@@ -25,7 +25,6 @@
 #include "kis_processing_applicator.h"
 #include "kis_node_manager.h"
 
-#include "kis_mimedata.h"
 #include <KoDocumentInfo.h>
 #include <KoSvgPaste.h>
 #include <KoShapeController.h>
@@ -191,27 +190,6 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
     return result;
 }
 
-KisPaintDeviceSP getClip(KisImageSP image, KisTimeSpan *range = 0) {
-    if (KisClipboard::instance()->hasLayers()) {
-
-        const QMimeData *data = KisClipboard::instance()->layersMimeData();
-        const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
-        KisNodeList nodes = mimedata->nodes();
-
-        KisImageSP tempImage =  new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
-        Q_FOREACH (KisNodeSP node, nodes) {
-            tempImage->addNode(node, tempImage->root());
-        }
-        tempImage->refreshGraphAsync();
-        tempImage->waitForDone();
-
-        return tempImage->projection();
-
-    } else {
-        return KisClipboard::instance()->clip(QRect(), true, range);
-    }
-}
-
 }
 
 void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view)
@@ -230,8 +208,8 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     }
 
     KisTimeSpan range;
-
-    KisPaintDeviceSP clip = getClip(image, &range);
+    const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, &range);
 
     if (clip) {
         if (pasteAtCursorPosition) {
@@ -291,7 +269,7 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-    KisPaintDeviceSP clip = getClip(image);
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
     if (!clip) return;
 
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);

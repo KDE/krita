@@ -104,6 +104,9 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
         }
     }
 
+    QRect offset(0, 0, rc.width(), rc.height());
+    rc |= offset;
+
     if (rc.isEmpty() && srcImage) {
         rc = srcImage->bounds();
     }

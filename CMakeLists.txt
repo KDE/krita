@@ -698,7 +698,7 @@ endif()
 ###########################
 
 
-find_package(WebP 0.6.1)
+find_package(WebP 1.2.0)
 set_package_properties(WebP PROPERTIES
     URL "https://developers.google.com/speed/webp"
     TYPE OPTIONAL

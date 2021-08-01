@@ -12,7 +12,6 @@
 #include <KisResourceQueryMapper.h>
 #include <KisStorageModel.h>
 
-
 struct KisAllTagResourceModel::Private {
     QString resourceType;
     QSqlQuery query;
@@ -352,10 +351,10 @@ KisTagResourceModel::KisTagResourceModel(const QString &resourceType, QObject *p
     d->sourceModel = KisResourceModelProvider::tagResourceModel(resourceType);
     setSourceModel(d->sourceModel);
 
-    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(storageChanged(const QString&)));
-    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(storageChanged(const QString&)));
-    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(storageChanged(const QString&)));
-    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(storageChanged(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString &)), this, SLOT(storageChanged(const QString &)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString &)), this, SLOT(storageChanged(const QString &)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString &)), this, SLOT(storageChanged(const QString &)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString &)), this, SLOT(storageChanged(const QString &)));
 }
 
 KisTagResourceModel::~KisTagResourceModel()
@@ -473,7 +472,8 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
     return nameLeft.toLower() < nameRight.toLower();
 }
 
-void KisTagResourceModel::storageChanged(const QString &location) {
+void KisTagResourceModel::storageChanged(const QString &location)
+{
     Q_UNUSED(location);
     invalidateFilter();
 }

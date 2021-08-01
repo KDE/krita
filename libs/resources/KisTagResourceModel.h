@@ -153,8 +153,7 @@ protected:
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
 protected Q_SLOTS:
-    void storageChanged(const QString& location);
-
+    void storageChanged(const QString &location);
 
 private:
     struct Private;

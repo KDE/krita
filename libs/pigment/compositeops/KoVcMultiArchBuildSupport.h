@@ -80,7 +80,6 @@ createOptimizedClass(typename FactoryType::ParamType param)
     if (disableAVXOptimizations &&
         (Vc::isImplementationSupported(Vc::AVXImpl) ||
          Vc::isImplementationSupported(Vc::AVX2Impl))) {
-
         qWarning() << "WARNING: AVX and AVX2 optimizations are disabled by the \'disableAVXOptimizations\' option!";
     }
 

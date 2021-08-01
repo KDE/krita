@@ -547,6 +547,9 @@ public:
     void setEnableBrushSpeedLogging(bool value) const;
     bool enableBrushSpeedLogging(bool defaultValue = false) const;
 
+    void setEnableAmdVectorizationWorkaround(bool value);
+    bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;
+
     void setDisableAVXOptimizations(bool value);
     bool disableAVXOptimizations(bool defaultValue = false) const;
 

@@ -384,6 +384,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="chkDisableVectorOptimizations">
+         <property name="text">
+          <string>Disable all vector optimizations (for AMD CPUs)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="chkProgressReporting">
          <property name="text">
           <string>Progress reporting (might affect performance)</string>

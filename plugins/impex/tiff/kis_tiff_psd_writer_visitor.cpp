@@ -310,7 +310,7 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
                                                color_type,
                                                true);
 
-            if (!layerSection.write(buf, layer)) {
+            if (!layerSection.write(buf, layer, static_cast<psd_compression_type>(m_options->psdCompressionType))) {
                 dbgFile << "failed to write layer section. Error:" << layerSection.record()->error << buf.pos();
                 return ImportExportCodes::ErrorWhileWriting;
             }

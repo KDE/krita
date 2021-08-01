@@ -88,7 +88,7 @@ public:
                psd_section_type sectionType,
                const QDomDocument &stylesXmlDoc,
                bool useLfxsLayerStyleFormat);
-    void writePixelData(QIODevice &io);
+    void writePixelData(QIODevice &io, psd_compression_type compressionType);
 
     bool valid();
 
@@ -164,7 +164,7 @@ private:
     void writeTransparencyMaskPixelData(QIODevice &io);
 
     template<psd_byte_order = psd_byte_order::psdBigEndian>
-    void writePixelDataImpl(QIODevice &io);
+    void writePixelDataImpl(QIODevice &io, psd_compression_type compressionType);
 
     KisPaintDeviceSP convertMaskDeviceIfNeeded(KisPaintDeviceSP dev);
 

@@ -30,6 +30,7 @@ struct KisTIFFOptions {
     quint16 predictor = 1;
     bool alpha = true;
     bool saveAsPhotoshop = true;
+    quint16 psdCompressionType = 0;
     bool flatten = true;
     quint16 jpegQuality = 80;
     quint16 deflateCompress = 6;

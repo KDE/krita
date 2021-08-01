@@ -27,7 +27,7 @@ public:
 
     bool read(QIODevice &io);
 
-    bool write(QIODevice &io, KisNodeSP rootLayer);
+    bool write(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType);
 
     std::shared_ptr<PSDLayerMaskSection> record() const;
 
@@ -59,7 +59,7 @@ private:
     bool readImpl(QIODevice &device);
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
-    bool writeImpl(QIODevice &device, KisNodeSP rootLayer);
+    bool writeImpl(QIODevice &device, KisNodeSP rootLayer, psd_compression_type compressionType);
 };
 
 #endif // _KIS_TIFF_PSD_LAYER_RECORD_H

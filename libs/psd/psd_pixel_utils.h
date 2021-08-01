@@ -79,6 +79,7 @@ void KRITAPSD_EXPORT writePixelDataCommon(QIODevice &io,
                                           bool alphaFirst,
                                           const bool writeCompressionType,
                                           QVector<ChannelWritingInfo> &writingInfoList,
+                                          psd_compression_type compressionType,
                                           psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
 }
 

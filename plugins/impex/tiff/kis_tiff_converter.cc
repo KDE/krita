@@ -286,6 +286,11 @@ KisPropertiesConfigurationSP KisTIFFOptions::toProperties() const
     compToIndex[COMPRESSION_LZW] = 3;
     compToIndex[COMPRESSION_PIXARLOG] = 8;
 
+    const QHash<quint16, int> psdCompToIndex = {
+        {psd_compression_type::RLE, 0},
+        {psd_compression_type::ZIP, 1},
+    };
+
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
 
     cfg->setProperty("compressiontype", compToIndex.value(compressionType, 0));
@@ -294,6 +299,7 @@ KisPropertiesConfigurationSP KisTIFFOptions::toProperties() const
 #ifdef TIFFLIB_KRITA_CAN_WRITE_PSD
     cfg->setProperty("canWritePhotoshop", true);
 #endif
+    cfg->setProperty("psdCompressionType", psdCompToIndex.value(psdCompressionType, 0));
     cfg->setProperty("saveAsPhotoshop", saveAsPhotoshop);
     cfg->setProperty("flatten", flatten);
     cfg->setProperty("quality", jpegQuality);
@@ -316,11 +322,17 @@ void KisTIFFOptions::fromProperties(KisPropertiesConfigurationSP cfg)
     // old value that might be still stored in a config (remove after Krita 5.0 :) )
     indexToComp[8] = COMPRESSION_PIXARLOG;
 
+    const QHash<int, quint16> psdIndexToComp = {
+        {0, psd_compression_type::RLE},
+        {1, psd_compression_type::ZIP},
+    };
+
     compressionType = static_cast<quint16>(indexToComp.value(cfg->getInt("compressiontype", 0), COMPRESSION_NONE));
 
     predictor = static_cast<quint16>(cfg->getInt("predictor", 0)) + 1;
     alpha = cfg->getBool("alpha", true);
     saveAsPhotoshop = cfg->getBool("saveAsPhotoshop", false);
+    psdCompressionType = psdIndexToComp.value(cfg->getInt("psdCompressionType", 0), psd_compression_type::RLE);
     flatten = cfg->getBool("flatten", true);
     jpegQuality = static_cast<quint16>(cfg->getInt("quality", 80));
     deflateCompress = static_cast<quint16>(cfg->getInt("deflate", 6));

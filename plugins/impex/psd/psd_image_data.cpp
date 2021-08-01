@@ -1,5 +1,6 @@
 /*
  *   SPDX-FileCopyrightText: 2011 Siddharth Sharma <siddharth.kde@gmail.com>
+ *   SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *   SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -133,10 +134,9 @@ bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
     return true;
 }
 
-bool PSDImageData::write(QIODevice &io, KisPaintDeviceSP dev, bool hasAlpha)
+bool PSDImageData::write(QIODevice &io, KisPaintDeviceSP dev, bool hasAlpha, psd_compression_type compressionType)
 {
-    // XXX: make the compression setting configurable. For now, always use RLE.
-    psdwrite(io, static_cast<quint16>(psd_compression_type::RLE));
+    psdwrite(io, static_cast<quint16>(compressionType));
 
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.
@@ -166,8 +166,6 @@ bool PSDImageData::write(QIODevice &io, KisPaintDeviceSP dev, bool hasAlpha)
         io.seek(io.pos() + rc.height() * sizeof(quint16));
     }
 
-    PsdPixelUtils::writePixelDataCommon(io, dev, rc,
-                                        colorMode, channelSize,
-                                        false, false, writingInfoList);
+    PsdPixelUtils::writePixelDataCommon(io, dev, rc, colorMode, channelSize, false, false, writingInfoList, compressionType);
     return true;
 }

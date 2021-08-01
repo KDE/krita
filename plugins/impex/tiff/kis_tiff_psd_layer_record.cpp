@@ -61,13 +61,13 @@ bool KisTiffPsdLayerRecord::read(QIODevice &io)
     }
 }
 
-bool KisTiffPsdLayerRecord::write(QIODevice &io, KisNodeSP rootLayer)
+bool KisTiffPsdLayerRecord::write(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType)
 {
     switch (m_byteOrder) {
     case psd_byte_order::psdLittleEndian:
-        return writeImpl<psd_byte_order::psdLittleEndian>(io, rootLayer);
+        return writeImpl<psd_byte_order::psdLittleEndian>(io, rootLayer, compressionType);
     default:
-        return writeImpl(io, rootLayer);
+        return writeImpl(io, rootLayer, compressionType);
     }
 }
 
@@ -105,7 +105,7 @@ bool KisTiffPsdLayerRecord::readImpl(QIODevice &device)
 }
 
 template<psd_byte_order byteOrder>
-bool KisTiffPsdLayerRecord::writeImpl(QIODevice &device, KisNodeSP rootLayer)
+bool KisTiffPsdLayerRecord::writeImpl(QIODevice &device, KisNodeSP rootLayer, psd_compression_type compressionType)
 {
     PSDHeader header;
     header.version = 1;
@@ -125,7 +125,7 @@ bool KisTiffPsdLayerRecord::writeImpl(QIODevice &device, KisNodeSP rootLayer)
     psdwrite(buf, "Adobe Photoshop Document Data Block");
     psdpad(buf, 1);
 
-    if (!m_record->write(buf, rootLayer)) {
+    if (!m_record->write(buf, rootLayer, compressionType)) {
         dbgFile << "failed writing PSD section: " << m_record->error;
         return false;
     }

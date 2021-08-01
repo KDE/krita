@@ -46,6 +46,7 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
     } else {
         chkPhotoshop->setEnabled(true);
         chkPhotoshop->setChecked(cfg->getBool("saveAsPhotoshop", false));
+        kComboBoxPSDCompressionType->setCurrentIndex(cfg->getInt("psdCompressionType", 0));
     }
     flatten->setChecked(cfg->getBool("flatten", true));
     flattenToggled(flatten->isChecked());
@@ -75,6 +76,7 @@ KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
     cfg->setProperty("predictor", kComboBoxPredictor->currentIndex());
     cfg->setProperty("alpha", alpha->isChecked());
     cfg->setProperty("saveAsPhotoshop", chkPhotoshop->isChecked());
+    cfg->setProperty("psdCompressionType", kComboBoxPSDCompressionType->currentIndex());
     cfg->setProperty("flatten", flatten->isChecked());
     cfg->setProperty("quality", qualityLevel->value());
     cfg->setProperty("deflate", compressionLevelDeflate->value());

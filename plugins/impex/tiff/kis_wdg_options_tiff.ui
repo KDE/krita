@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>411</width>
-    <height>322</height>
+    <height>366</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,7 +23,7 @@
   <property name="minimumSize">
    <size>
     <width>411</width>
-    <height>322</height>
+    <height>366</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -110,7 +110,43 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="2" column="0" colspan="2">
+       <widget class="QGroupBox" name="chkPhotoshop">
+        <property name="title">
+         <string>Save layers as Photoshop</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <layout class="QFormLayout" name="formLayout_5">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Layer compression</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="KComboBox" name="kComboBoxPSDCompressionType">
+           <property name="currentItem" stdset="0">
+            <number>0</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>RLE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>ZIP</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="3" column="1">
        <widget class="QCheckBox" name="alpha">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -136,13 +172,6 @@ You can uncheck the box if you are not using transparency and you want to make t
         </property>
         <property name="checked">
          <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="chkPhotoshop">
-        <property name="text">
-         <string>Save layers as Photoshop</string>
         </property>
        </widget>
       </item>

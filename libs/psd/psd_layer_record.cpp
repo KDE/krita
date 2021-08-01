@@ -619,15 +619,15 @@ void PSDLayerRecord::writeTransparencyMaskPixelData(QIODevice &io)
     }
 }
 
-void PSDLayerRecord::writePixelData(QIODevice &io)
+void PSDLayerRecord::writePixelData(QIODevice &io, psd_compression_type compressionType)
 {
     try {
         switch (m_header.byteOrder) {
         case psd_byte_order::psdLittleEndian:
-            writePixelDataImpl<psd_byte_order::psdLittleEndian>(io);
+            writePixelDataImpl<psd_byte_order::psdLittleEndian>(io, compressionType);
             break;
         default:
-            writePixelDataImpl(io);
+            writePixelDataImpl(io, compressionType);
             break;
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
@@ -636,7 +636,7 @@ void PSDLayerRecord::writePixelData(QIODevice &io)
 }
 
 template<psd_byte_order byteOrder>
-void PSDLayerRecord::writePixelDataImpl(QIODevice &io)
+void PSDLayerRecord::writePixelDataImpl(QIODevice &io, psd_compression_type compressionType)
 {
     dbgFile << "writing pixel data for layer" << layerName << "at" << io.pos();
 
@@ -668,7 +668,7 @@ void PSDLayerRecord::writePixelDataImpl(QIODevice &io)
         writingInfoList << PsdPixelUtils::ChannelWritingInfo(channelInfo->channelId, channelInfo->channelInfoPosition);
     }
 
-    PsdPixelUtils::writePixelDataCommon(io, dev, rc, colorMode, channelSize, true, true, writingInfoList, byteOrder);
+    PsdPixelUtils::writePixelDataCommon(io, dev, rc, colorMode, channelSize, true, true, writingInfoList, compressionType, byteOrder);
     writeTransparencyMaskPixelData<byteOrder>(io);
 }
 

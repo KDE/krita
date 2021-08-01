@@ -483,7 +483,7 @@ void mergePatternsXMLSection(const QDomDocument &src, QDomDocument &dst)
     }
 }
 
-bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer)
+bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType)
 {
     bool retval = true;
 
@@ -491,14 +491,14 @@ bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer)
         if (m_header.tiffStyleLayerBlock) {
             switch (m_header.byteOrder) {
             case psd_byte_order::psdLittleEndian:
-                writeTiffImpl<psd_byte_order::psdLittleEndian>(io, rootLayer);
+                writeTiffImpl<psd_byte_order::psdLittleEndian>(io, rootLayer, compressionType);
                 break;
             default:
-                writeTiffImpl(io, rootLayer);
+                writeTiffImpl(io, rootLayer, compressionType);
                 break;
             }
         } else {
-            writePsdImpl(io, rootLayer);
+            writePsdImpl(io, rootLayer, compressionType);
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         error = PREPEND_METHOD(e.what());
@@ -508,7 +508,7 @@ bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer)
     return retval;
 }
 
-void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer)
+void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType)
 {
     dbgFile << "Writing layer layer section";
 
@@ -639,7 +639,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer)
 
             // Now save the pixel data
             for (PSDLayerRecord *layerRecord : layers) {
-                layerRecord->writePixelData(io);
+                layerRecord->writePixelData(io, compressionType);
             }
         }
 
@@ -654,7 +654,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer)
 }
 
 template<psd_byte_order byteOrder>
-void PSDLayerMaskSection::writeTiffImpl(QIODevice &io, KisNodeSP rootLayer)
+void PSDLayerMaskSection::writeTiffImpl(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType)
 {
     dbgFile << "(TIFF) Writing layer section";
 
@@ -784,7 +784,7 @@ void PSDLayerMaskSection::writeTiffImpl(QIODevice &io, KisNodeSP rootLayer)
 
             // Now save the pixel data
             for (PSDLayerRecord *layerRecord : layers) {
-                layerRecord->writePixelData(io);
+                layerRecord->writePixelData(io, compressionType);
             }
         }
 

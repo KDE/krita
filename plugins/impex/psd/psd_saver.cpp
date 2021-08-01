@@ -208,7 +208,7 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice &io)
         PSDLayerMaskSection layerSection(header);
         layerSection.hasTransparency = true;
 
-        if (!layerSection.write(io, m_image->rootLayer())) {
+        if (!layerSection.write(io, m_image->rootLayer(), psd_compression_type::RLE)) {
             dbgFile << "failed to write layer section. Error:" << layerSection.error << io.pos();
             return ImportExportCodes::ErrorWhileWriting;
         }
@@ -222,7 +222,8 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice &io)
     // IMAGE DATA
     dbgFile << "Saving composited image" << io.pos();
     PSDImageData imagedata(&header);
-    if (!imagedata.write(io, m_image->projection(), haveLayers)) {
+    // Photoshop compresses layer data by default with RLE.
+    if (!imagedata.write(io, m_image->projection(), haveLayers, psd_compression_type::RLE)) {
         dbgFile << "Failed to write image data. Error:"  << imagedata.error;
         return ImportExportCodes::ErrorWhileWriting;
     }

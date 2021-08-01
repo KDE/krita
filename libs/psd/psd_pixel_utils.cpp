@@ -518,6 +518,32 @@ void writeChannelDataRLEImpl(QIODevice &io,
     }
 }
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+void writeChannelDataZIPImpl(QIODevice &io,
+                             const quint8 *plane,
+                             const int channelSize,
+                             const QRect &rc,
+                             const qint64 sizeFieldOffset,
+                             const bool writeCompressionType)
+{
+    using Pusher = KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder>;
+    QScopedPointer<Pusher> channelBlockSizeExternalTag;
+    if (sizeFieldOffset >= 0) {
+        channelBlockSizeExternalTag.reset(new Pusher(io, 0, sizeFieldOffset));
+    }
+
+    if (writeCompressionType) {
+        SAFE_WRITE_EX(byteOrder, io, static_cast<quint16>(psd_compression_type::ZIP));
+    }
+
+    QByteArray uncompressed(reinterpret_cast<const char *>(plane), rc.width() * rc.height() * channelSize);
+    QByteArray compressed(Compression::compress(uncompressed, psd_compression_type::ZIP));
+
+    if (compressed.size() == 0 || io.write(compressed) != compressed.size()) {
+        throw KisAslWriterUtils::ASLWriteException("Failed to write image data");
+    }
+}
+
 void writeChannelDataRLE(QIODevice &io,
                          const quint8 *plane,
                          const int channelSize,
@@ -583,7 +609,8 @@ void writePixelDataCommonImpl(QIODevice &io,
                               int channelSize,
                               bool alphaFirst,
                               const bool writeCompressionType,
-                              QVector<ChannelWritingInfo> &writingInfoList)
+                              QVector<ChannelWritingInfo> &writingInfoList,
+                              psd_compression_type compressionType)
 {
     // Empty rects must be processed separately on a higher level!
     KIS_ASSERT_RECOVER_RETURN(!rc.isEmpty());
@@ -640,9 +667,20 @@ void writePixelDataCommonImpl(QIODevice &io,
             // WARNING: Pixel data is ALWAYS in big endian!!!
             preparePixelForWrite<psd_byte_order::psdBigEndian>(planes[i], numPixels, channelSize, info.channelId, colorMode);
 
-            dbgFile << "\t\tchannel start" << ppVar(io.pos());
+            dbgFile << "\t\tchannel start" << ppVar(io.pos()) << ", compression type" << compressionType;
 
-            writeChannelDataRLEImpl<byteOrder>(io, planes[i], channelSize, rc, info.sizeFieldOffset, info.rleBlockOffset, writeCompressionType);
+            switch (compressionType) {
+            case psd_compression_type::ZIP:
+            case psd_compression_type::ZIPWithPrediction: {
+                writeChannelDataZIPImpl<byteOrder>(io, planes[i], channelSize, rc, info.sizeFieldOffset, writeCompressionType);
+                break;
+            }
+            case psd_compression_type::RLE:
+            default: {
+                writeChannelDataRLEImpl<byteOrder>(io, planes[i], channelSize, rc, info.sizeFieldOffset, info.rleBlockOffset, writeCompressionType);
+                break;
+            }
+            }
         }
 
     } catch (KisAslWriterUtils::ASLWriteException &e) {
@@ -668,6 +706,7 @@ void writePixelDataCommon(QIODevice &io,
                           bool alphaFirst,
                           const bool writeCompressionType,
                           QVector<ChannelWritingInfo> &writingInfoList,
+                          psd_compression_type compressionType,
                           psd_byte_order byteOrder)
 {
     switch (byteOrder) {
@@ -679,9 +718,10 @@ void writePixelDataCommon(QIODevice &io,
                                                                          channelSize,
                                                                          alphaFirst,
                                                                          writeCompressionType,
-                                                                         writingInfoList);
+                                                                         writingInfoList,
+                                                                         compressionType);
     default:
-        return writePixelDataCommonImpl(io, dev, rc, colorMode, channelSize, alphaFirst, writeCompressionType, writingInfoList);
+        return writePixelDataCommonImpl(io, dev, rc, colorMode, channelSize, alphaFirst, writeCompressionType, writingInfoList, compressionType);
     }
 }
 }

@@ -1,5 +1,6 @@
 /*
  *   SPDX-FileCopyrightText: 2011 Siddharth Sharma <siddharth.kde@gmail.com>
+ *   SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *   SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -27,7 +28,7 @@ public:
     virtual ~PSDImageData();
 
     bool read(QIODevice &io, KisPaintDeviceSP dev);
-    bool write(QIODevice &io, KisPaintDeviceSP dev, bool hasAlpha);
+    bool write(QIODevice &io, KisPaintDeviceSP dev, bool hasAlpha, psd_compression_type compressionType);
 
     QString error;
 

@@ -65,13 +65,14 @@ createOptimizedClass(typename FactoryType::ParamType param)
 
     if (!isConfigInitialized) {
         KConfigGroup cfg = KSharedConfig::openConfig()->group("");
+        // use the old key name for compatibility
         useVectorization = !cfg.readEntry("amdDisableVectorWorkaround", false);
         disableAVXOptimizations = cfg.readEntry("disableAVXOptimizations", false);
         isConfigInitialized = true;
     }
 
     if (!useVectorization) {
-        qWarning() << "WARNING: vector instructions disabled by \'amdDisableVectorWorkaround\' option!";
+        qWarning() << "WARNING: vector instructions disabled by the \'amdDisableVectorWorkaround\' option!";
         return FactoryType::template create<Vc::ScalarImpl>(param);
     }
 
@@ -80,7 +81,7 @@ createOptimizedClass(typename FactoryType::ParamType param)
         (Vc::isImplementationSupported(Vc::AVXImpl) ||
          Vc::isImplementationSupported(Vc::AVX2Impl))) {
 
-        qWarning() << "WARNING: AVX and AVX2 optimizations are disabled by \'disableAVXOptimizations\' option!";
+        qWarning() << "WARNING: AVX and AVX2 optimizations are disabled by the \'disableAVXOptimizations\' option!";
     }
 
     /**

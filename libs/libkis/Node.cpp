@@ -37,7 +37,9 @@
 #include <commands/kis_node_compositeop_command.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <commands/kis_image_layer_remove_command.h>
+#include <commands_new/kis_set_layer_style_command.h>
 #include <kis_processing_applicator.h>
+#include <kis_asl_layer_style_serializer.h>
 
 #include <kis_raster_keyframe_channel.h>
 #include <kis_keyframe.h>
@@ -679,6 +681,56 @@ QImage Node::thumbnail(int w, int h)
 {
     if (!d->node) return QImage();
     return d->node->createThumbnail(w, h);
+}
+
+QString Node::layerStyleToAsl()
+{
+    if (!d->node) return QString();
+
+    KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
+
+    if (!layer) return QString();
+
+    KisPSDLayerStyleSP layerStyle = layer->layerStyle();
+
+    if (!layerStyle) return QString();
+
+    KisAslLayerStyleSerializer serializer;
+
+    serializer.setStyles(QVector<KisPSDLayerStyleSP>() << layerStyle);
+
+    return serializer.formPsdXmlDocument().toString();
+}
+
+bool Node::setLayerStyleFromAsl(const QString &asl)
+{
+    if (!d->node) return false;
+
+    KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
+
+    if (!layer) return false;
+
+    QDomDocument aslDoc;
+
+    if (!aslDoc.setContent(asl)) {
+        qWarning() << "ASL string format is invalid!";
+        return false;
+    }
+
+    KisAslLayerStyleSerializer serializer;
+
+    serializer.registerPSDPattern(aslDoc);
+    serializer.readFromPSDXML(aslDoc);
+
+    if (serializer.styles().size() != 1) return false;
+
+    KisPSDLayerStyleSP newStyle = serializer.styles().first();
+    KUndo2Command *cmd = new KisSetLayerStyleCommand(layer, layer->layerStyle(), newStyle);
+
+    KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+    d->image->waitForDone();
+
+    return true;
 }
 
 int Node::index() const

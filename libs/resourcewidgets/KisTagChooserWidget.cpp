@@ -33,7 +33,7 @@ public:
     QComboBox *comboBox;
     KisTagToolButton *tagToolButton;
     KisTagModel *model;
-    KisTagSP rememberedTag;
+    KisTagSP cachedTag;
 };
 
 KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
@@ -81,6 +81,12 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
 
     connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
             this, SLOT(tagToolUndeleteLastTag(KisTagSP)));
+
+
+    // Workaround for handling tag selection deselection when model resets.
+    // Occurs when model changes under the user e.g. +/- a resource storage.
+    connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(cacheSelectedTag()));
+    connect(d->model, SIGNAL(modelReset()), this, SLOT(restoreTagFromCache()));
 
 }
 
@@ -133,6 +139,20 @@ void KisTagChooserWidget::tagToolUndeleteLastTag(KisTagSP tag)
         d->tagToolButton->setUndeletionCandidate(KisTagSP());
         setCurrentItem(tag->name());
         d->model->sort(KisAllTagsModel::Name);
+    }
+}
+
+void KisTagChooserWidget::cacheSelectedTag()
+{
+    d->cachedTag = currentlySelectedTag();
+}
+
+void KisTagChooserWidget::restoreTagFromCache()
+{
+    if (d->cachedTag) {
+        QModelIndex cachedIndex = d->model->indexForTag(d->cachedTag);
+        setCurrentIndex(cachedIndex.row());
+        d->cachedTag = nullptr;
     }
 }
 

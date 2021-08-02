@@ -96,6 +96,17 @@ private Q_SLOTS:
     ///  sets the correct mode on the KisTagToolButton popup.
     void tagToolContextMenuAboutToShow();
 
+    /// \brief cacheSelectedTag slot that stores current tag selection.
+    ///
+    /// Used to allow restoration of tag even after a model reset. Will store
+    /// the tag just before model resets.
+    void cacheSelectedTag();
+
+    /// \brief restoreTagFromCache slot designed to restore a selected tag from previously cached selection.
+    ///
+    /// Companion to `cacheSelectedTag`, this method restore the selection after model reset.
+    void restoreTagFromCache();
+
 private:
 
 

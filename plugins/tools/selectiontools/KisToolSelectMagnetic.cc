@@ -201,6 +201,12 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 // press primary mouse button
 void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 {
+    KisToolSelectBase::beginPrimaryAction(event);
+    if (selectionDragInProgress()) {
+        return;
+    }
+
+
     setMode(KisTool::PAINT_MODE);
     QPointF temp(convertToPixelCoord(event));
 
@@ -298,6 +304,11 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 // drag while primary mouse button is pressed
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
+    if (selectionDragInProgress()) {
+        KisToolSelectBase::continuePrimaryAction(event);
+        return;
+    }
+
     if (m_selected) {
         m_anchorPoints[m_selectedAnchor] = convertToPixelCoord(event).toPoint();
     } else if (!m_complete) {
@@ -305,7 +316,6 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
         if(kisDistance(m_lastCursorPos, m_cursorOnPress) >= m_anchorGap)
             m_mouseHoverCompressor.start();
     }
-    KisToolSelectBase::continuePrimaryAction(event);
 }
 
 void KisToolSelectMagnetic::slotCalculateEdge()
@@ -324,6 +334,11 @@ void KisToolSelectMagnetic::slotCalculateEdge()
 // release primary mouse button
 void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 {
+    if (selectionDragInProgress()) {
+        KisToolSelectBase::endPrimaryAction(event);
+        return;
+    }
+
     if (m_selected && convertToPixelCoord(event) != m_cursorOnPress) {
         if (!image()->bounds().contains(m_anchorPoints[m_selectedAnchor])) {
             deleteSelectedAnchor();
@@ -353,7 +368,6 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
         slotCalculateEdge();
     }
     m_selected = false;
-    KisToolSelectBase::endPrimaryAction(event);
 } // KisToolSelectMagnetic::endPrimaryAction
 
 void KisToolSelectMagnetic::deleteSelectedAnchor()

@@ -127,7 +127,7 @@ void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
 
     if (canRenameCurrentTag && !tagName.isEmpty()) {
         tag->setName(tagName);
-        bool result = d->model->renameTag(tag);
+        bool result = d->model->renameTag(tag, false);
         Q_ASSERT(result);
         d->model->sort(KisAllTagsModel::Name);
     }

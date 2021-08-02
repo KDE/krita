@@ -245,7 +245,7 @@ void TestTagModel::testRenameTag()
     QCOMPARE(tag->name(), m_tag->name());
 
     tag->setName("Another name altogether");
-    QVERIFY(tagModel.renameTag(tag));
+    QVERIFY(tagModel.renameTag(tag, true));
 
     tag = tagModel.tagForIndex(tagModel.index(2,0));
     QCOMPARE(tag->url(), m_tag->url());

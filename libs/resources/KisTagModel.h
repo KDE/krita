@@ -36,7 +36,7 @@ public:
 
     virtual bool setTagActive(const KisTagSP tag) = 0;
     virtual bool setTagInactive(const KisTagSP tag) = 0;
-    virtual bool renameTag(const KisTagSP tag) = 0;
+    virtual bool renameTag(const KisTagSP tag, const bool allowOverwrite) = 0;
     virtual bool changeTagActive(const KisTagSP tag, bool active) = 0;
 };
 
@@ -85,7 +85,7 @@ public:
     bool setTagActive(const KisTagSP tag) override;
     bool setTagInactive(const KisTagSP tag) override;
 
-    bool renameTag(const KisTagSP tag) override;
+    bool renameTag(const KisTagSP tag, const bool allowOverwrite) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
 
     // TODO: they can be static const variables, too, if it's better than functions
@@ -154,7 +154,7 @@ public:
     bool addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
     bool setTagInactive(const KisTagSP tag) override;
     bool setTagActive(const KisTagSP tag) override;
-    bool renameTag(const KisTagSP tag) override;
+    bool renameTag(const KisTagSP tag, const bool allowOverwrite) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
 
 protected:

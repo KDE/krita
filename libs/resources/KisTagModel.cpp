@@ -396,7 +396,7 @@ bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
     return setData(indexForTag(tag), QVariant::fromValue(false), Qt::CheckStateRole);
 }
 
-bool KisAllTagsModel::renameTag(const KisTagSP tag)
+bool KisAllTagsModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
@@ -408,6 +408,48 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag)
     if (tag->id() < 0) return false;
 
     if (name.isEmpty()) return false;
+
+    KisTagSP tagWithTheSameUrl = tagForUrl(url);
+
+    if (!tagWithTheSameUrl.isNull()) {
+        if (!allowOverwrite) {
+            // there is already a tag with this url
+            return false;
+        } else { // allowOverwrite = true
+            // untag everything and remove the tag from the database
+            this->untagAllResources(tagWithTheSameUrl);
+
+            QModelIndex idxRemove = indexForTag(tagWithTheSameUrl);
+            beginRemoveRows(QModelIndex(), idxRemove.row(), idxRemove.row());
+
+            QSqlQuery qRemove;
+            if (!qRemove.prepare("DELETE FROM tags\n"
+                           "WHERE  id = :id\n"
+                           "AND    url = :url\n"
+                           "AND    resource_type_id = (SELECT id\n"
+                           "                           FROM   resource_types\n"
+                           "                           WHERE  name = :resource_type\n)")) {
+                qWarning() << "Couild not prepare make query to remove a different tag with the same url" << tag << qRemove.lastError();
+                endRemoveRows();
+                return false;
+            }
+
+            qRemove.bindValue(":id", tagWithTheSameUrl->id());
+            qRemove.bindValue(":url", tagWithTheSameUrl->url());
+            qRemove.bindValue(":resource_type", d->resourceType);
+
+            if (!qRemove.exec()) {
+                qWarning() << "Couild not execute query to remove a different tag with the same url" << qRemove.boundValues(), qRemove.lastError();
+                endRemoveRows();
+                return false;
+            }
+
+
+            resetQuery();
+            endRemoveRows();
+
+        }
+    }
 
     QSqlQuery q;
     if (!q.prepare("UPDATE tags\n"
@@ -661,11 +703,11 @@ bool KisTagModel::setTagActive(const KisTagSP tag)
 
 }
 
-bool KisTagModel::renameTag(const KisTagSP tag)
+bool KisTagModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->renameTag(tag);
+        return source->renameTag(tag, allowOverwrite);
     }
     return false;
 }

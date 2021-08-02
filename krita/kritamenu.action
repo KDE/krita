@@ -290,7 +290,7 @@
       <whatsThis></whatsThis>
       <toolTip>Cut selection to clipboard</toolTip>
       <iconText>Cut</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+X</shortcut>
       <isCheckable>false</isCheckable>
@@ -302,7 +302,7 @@
       <whatsThis></whatsThis>
       <toolTip>Copy selection to clipboard</toolTip>
       <iconText>Copy</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+C</shortcut>
       <isCheckable>false</isCheckable>
@@ -350,7 +350,7 @@
       <whatsThis></whatsThis>
       <toolTip>Paste clipboard content</toolTip>
       <iconText>Paste</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+V</shortcut>
       <isCheckable>false</isCheckable>
@@ -362,7 +362,7 @@
       <whatsThis></whatsThis>
       <toolTip>Paste at cursor</toolTip>
       <iconText>Paste at cursor</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>1100000000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Alt+V</shortcut>
       <isCheckable>false</isCheckable>

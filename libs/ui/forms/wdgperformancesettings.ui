@@ -386,7 +386,7 @@
        <item>
         <widget class="QCheckBox" name="chkDisableVectorOptimizations">
          <property name="text">
-          <string>Disable all vector optimizations (for AMD CPUs)</string>
+          <string>Disable all vector optimizations</string>
          </property>
         </widget>
        </item>

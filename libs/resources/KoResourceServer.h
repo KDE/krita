@@ -29,6 +29,7 @@
 #include "KoResourcePaths.h"
 #include "ksharedconfig.h"
 
+#include <KisGlobalResourcesInterface.h>
 #include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisTagModel.h>
@@ -299,23 +300,8 @@ public:
      */
     QSharedPointer<T> resource(const QString &md5, const QString &fileName, const QString &name)
     {
-        if (!md5.isEmpty()) {
-            return resourceByMD5(md5);
-        }
-        else {
-            return nullptr;
-        }
-
-        if (!fileName.isEmpty()) {
-            return resourceByFilename(fileName);
-        }
-
-        if (!name.isEmpty()) {
-            return resourceByName(name);
-        }
-
-        return nullptr;
-
+        KoResourceSP res = KisGlobalResourcesInterface::instance()->source(m_type).resource(md5, fileName, name);
+        return res.dynamicCast<T>();
     }
 
 

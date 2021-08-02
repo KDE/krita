@@ -69,6 +69,10 @@ public:
     bool untagResource(const KisTagSP tag, const int resourceId) override;
     bool isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
+private Q_SLOTS:
+    void addStorage(const QString &location);
+    void removeStorage(const QString &location);
+
 private:
 
     bool resetQuery();
@@ -145,9 +149,11 @@ public:
 
 
 protected:
-
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+
+protected Q_SLOTS:
+    void storageChanged(const QString &location);
 
 private:
     struct Private;

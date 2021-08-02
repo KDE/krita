@@ -531,7 +531,7 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
         const QFileInfo fileInfo(saveLocation + '/' + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
 
         if (fileInfo.exists()) {
-            int res = QMessageBox::warning(q, i18nc("@title:window", "Name Already Exists")
+            int res = QMessageBox::warning(q, i18nc("@title:window", "Krita")
                                            , i18n("The name '%1' already exists, do you wish to overwrite it?", gradient->name())
                                            , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             if (res == QMessageBox::Yes) {

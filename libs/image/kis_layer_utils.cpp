@@ -412,7 +412,7 @@ namespace KisLayerUtils {
 
             Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
                 if (node->compositeOpId() != COMPOSITE_OVER) {
-                    addCommand(new KisNodeCompositeOpCommand(node, node->compositeOpId(), COMPOSITE_OVER));
+                    addCommand(new KisNodeCompositeOpCommand(node, COMPOSITE_OVER));
                 }
 
                 if (KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::inheritAlpha, false).toBool()) {

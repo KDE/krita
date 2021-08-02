@@ -181,8 +181,7 @@ void PaletteDockerDock::removingResource(QSharedPointer<KoColorSet> resource)
 
 void PaletteDockerDock::resourceChanged(QSharedPointer<KoColorSet> resource)
 {
-    Q_UNUSED(resource);
-    m_model->sigPaletteModified();
+    m_model->slotExternalPaletteModified(resource);
 }
 
 void PaletteDockerDock::slotContextMenu(const QModelIndex &)

@@ -111,7 +111,7 @@ bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setti
     m_pattern = KisLinkedPatternManager::tryFetchPattern(setting, resourcesInterface);
 
     if (!m_pattern) {
-        warnKrita << "WARNING: Couldn't load the pattern for a stroke";
+        warnKrita << "WARNING: Couldn't load the pattern for a stroke (KisTextureMaskInfo)";
         return false;
     }
 

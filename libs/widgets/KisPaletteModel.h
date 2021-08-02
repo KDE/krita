@@ -137,6 +137,8 @@ public /* methods */:
 
 public Q_SLOTS:
 
+    void slotExternalPaletteModified(QSharedPointer<KoColorSet> resource);
+
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();
     void slotPaletteModified();

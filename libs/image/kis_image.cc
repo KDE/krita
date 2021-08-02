@@ -853,6 +853,10 @@ void KisImage::purgeUnusedData(bool isCancellable)
                    deviceList << node->getLodCapableDevices();
                  });
 
+            /// make sure we deduplicate the list to avoid
+            /// concurrent write access to the devices
+            KritaUtils::makeContainerUnique(deviceList);
+
             Q_FOREACH (KisPaintDeviceSP device, deviceList) {
                 if (!device) continue;
 
@@ -905,7 +909,7 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect, const bool activeF
 
 void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy)
 {
-    bool resolutionChanged = xres != xRes() && yres != yRes();
+    bool resolutionChanged = !qFuzzyCompare(xRes(), xres) || !qFuzzyCompare(yRes(), yres);
     bool sizeChanged = size != this->size();
 
     if (!resolutionChanged && !sizeChanged) return;

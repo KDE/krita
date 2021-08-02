@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -100,7 +101,11 @@ public:
     KisPaintDeviceStrategy* currentStrategy();
 
     void init(const KoColorSpace *cs, const quint8 *defaultPixel);
-    void convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand);
+    void convertColorSpace(const KoColorSpace *dstColorSpace,
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags,
+                           KUndo2Command *parentCommand,
+                           KoUpdater *progressUpdater);
     bool assignProfile(const KoColorProfile * profile, KUndo2Command *parentCommand);
 
     KUndo2Command* reincarnateWithDetachedHistory(bool copyContent);
@@ -985,7 +990,11 @@ public:
     }
 };
 
-void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand)
+void KisPaintDevice::Private::convertColorSpace(const KoColorSpace *dstColorSpace,
+                                                KoColorConversionTransformation::Intent renderingIntent,
+                                                KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                KUndo2Command *parentCommand,
+                                                KoUpdater *progressUpdater)
 {
     QList<Data*> dataObjects = allDataObjects();
     if (dataObjects.isEmpty()) return;
@@ -996,7 +1005,7 @@ void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpa
     Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
 
-        data->convertDataColorSpace(dstColorSpace, renderingIntent, conversionFlags, mainCommand);
+        data->convertDataColorSpace(dstColorSpace, renderingIntent, conversionFlags, mainCommand, progressUpdater);
     }
 
     q->emitColorSpaceChanged();
@@ -1570,9 +1579,13 @@ void KisPaintDevice::emitProfileChanged()
     emit profileChanged(m_d->colorSpace()->profile());
 }
 
-void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand)
+void KisPaintDevice::convertTo(const KoColorSpace *dstColorSpace,
+                               KoColorConversionTransformation::Intent renderingIntent,
+                               KoColorConversionTransformation::ConversionFlags conversionFlags,
+                               KUndo2Command *parentCommand,
+                               KoUpdater *progressUpdater)
 {
-    m_d->convertColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
+    m_d->convertColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand, progressUpdater);
 }
 
 bool KisPaintDevice::setProfile(const KoColorProfile * profile, KUndo2Command *parentCommand)

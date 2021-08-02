@@ -17,6 +17,7 @@
 #include <klocalizedstring.h>
 #include <KisResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
+#include <KisTagFilterResourceProxyModel.h>
 
 #include "kis_signals_blocker.h"
 
@@ -70,7 +71,9 @@ KoResourceSP  KisPatternChooser::currentResource()
 
 void KisPatternChooser::setCurrentPattern(KoResourceSP resource)
 {
+    m_itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
     m_itemChooser->setCurrentResource(resource);
+    update(currentResource());
 }
 
 void KisPatternChooser::setCurrentItem(int row)

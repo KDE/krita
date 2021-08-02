@@ -2,7 +2,7 @@ project(krita)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
@@ -698,7 +698,7 @@ endif()
 ###########################
 
 
-find_package(WebP 0.6.1)
+find_package(WebP 1.2.0)
 set_package_properties(WebP PROPERTIES
     URL "https://developers.google.com/speed/webp"
     TYPE OPTIONAL

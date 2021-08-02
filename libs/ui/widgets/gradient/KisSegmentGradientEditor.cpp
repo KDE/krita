@@ -775,7 +775,9 @@ void KisSegmentGradientEditor::on_midPointPositionSlider_valueChanged(double pos
 
 void KisSegmentGradientEditor::on_nameedit_editingFinished()
 {
+    qDebug() << "on_nameedit_editingfinished" << m_gradient->name() << nameedit->text();
     m_gradient->setName(nameedit->text());
+    m_gradient->setFilename(nameedit->text() + m_gradient->defaultFileExtension());
     emit sigGradientChanged();
 }
 

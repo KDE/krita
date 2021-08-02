@@ -35,8 +35,7 @@ void KisToolPath::requestStrokeCancellation()
 
 void KisToolPath::mousePressEvent(KoPointerEvent *event)
 {
-    if (!nodeEditable()) return;
-    DelegatedPathTool::mousePressEvent(event);
+    Q_UNUSED(event)
 }
 
 // Install an event filter to catch right-click events.
@@ -63,8 +62,7 @@ bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
 }
 
 void KisToolPath::beginAlternateAction(KoPointerEvent *event, AlternateAction action) {
-    Q_UNUSED(action);
-
+    DelegatedPathTool::beginAlternateAction(event, action);
     if (!nodeEditable()) return;
 
     if (nodePaintAbility() == KisToolPath::MYPAINTBRUSH_UNPAINTABLE) {
@@ -74,17 +72,27 @@ void KisToolPath::beginAlternateAction(KoPointerEvent *event, AlternateAction ac
         event->ignore();
         return;
     }
-    mousePressEvent(event);
 }
 
-void KisToolPath::continueAlternateAction(KoPointerEvent *event, AlternateAction action){
-    Q_UNUSED(action);
+void KisToolPath::beginPrimaryAction(KoPointerEvent* event)
+{
+    if (!nodeEditable()) return;
+    DelegatedPathTool::mousePressEvent(event);
+}
+
+void KisToolPath::continuePrimaryAction(KoPointerEvent *event)
+{
     mouseMoveEvent(event);
 }
 
-void KisToolPath::endAlternateAction(KoPointerEvent *event, AlternateAction action) {
-    Q_UNUSED(action);
+void KisToolPath::endPrimaryAction(KoPointerEvent *event)
+{
     mouseReleaseEvent(event);
+}
+
+void KisToolPath::beginPrimaryDoubleClickAction(KoPointerEvent *event)
+{
+    DelegatedPathTool::mouseDoubleClickEvent(event);
 }
 
 QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()

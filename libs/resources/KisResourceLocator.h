@@ -102,6 +102,12 @@ public:
      */
     bool hasStorage(const QString &storageLocation);
 
+
+    /**
+     * @brief saveTags saves all tags to .tag files in the resource folder
+     */
+    void saveTags();
+
 Q_SIGNALS:
 
     void progressMessage(const QString&);

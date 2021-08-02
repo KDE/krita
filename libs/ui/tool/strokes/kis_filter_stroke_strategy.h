@@ -68,36 +68,23 @@ public:
         QSharedPointer<std::tuple<>> m_idleBarrierCookie;
     };
 
-    class ExtraCleanUpUpdates : public KisStrokeJobData {
-    public:
-        ExtraCleanUpUpdates(const QVector<QRect> &_rects)
-            : KisStrokeJobData(SEQUENTIAL),
-              rects(_rects)
-        {}
-
-        ExtraCleanUpUpdates(const ExtraCleanUpUpdates &rhs, int levelOfDetail)
-            : KisStrokeJobData(rhs)
-        {
-            KisLodTransform t(levelOfDetail);
-
-            Q_FOREACH (const QRect &rc, rhs.rects) {
-                rects << t.map(rc);
-            }
-        }
-
-        KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new ExtraCleanUpUpdates(*this, levelOfDetail);
-        }
-
-        QVector<QRect> rects;
+    struct ExternalCancelUpdatesStorage {
+        QRect updateRect;
+        QRect cancelledLod0UpdateRect;
+        QAtomicInt shouldIssueCancellationUpdates;
     };
 
-
+    using ExternalCancelUpdatesStorageSP = QSharedPointer<ExternalCancelUpdatesStorage>;
 
 public:
     KisFilterStrokeStrategy(KisFilterSP filter,
                             KisFilterConfigurationSP filterConfig,
                             KisResourcesSnapshotSP resources);
+
+    KisFilterStrokeStrategy(KisFilterSP filter,
+                            KisFilterConfigurationSP filterConfig,
+                            KisResourcesSnapshotSP resources,
+                            ExternalCancelUpdatesStorageSP externalCancelUpdatesStorage);
     KisFilterStrokeStrategy(const KisFilterStrokeStrategy &rhs, int levelOfDetail);
 
     ~KisFilterStrokeStrategy() override;
@@ -109,8 +96,6 @@ public:
     void finishStrokeCallback() override;
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
-
-    QSharedPointer<QAtomicInt> cancelSilentlyHandle() const;
 
 private:
     struct Private;

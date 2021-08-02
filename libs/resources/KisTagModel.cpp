@@ -322,7 +322,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
 
     if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
-        if (!KisResourceCacheDb::addTag(d->resourceType, "", tag->url(), tag->name(), tag->comment())) {
+        if (!KisResourceCacheDb::addTag(d->resourceType, "", tag->url(), tag->name(), tag->comment(), tag->filename())) {
             qWarning() << "Could not add tag" << tag;
             return false;
         }
@@ -474,7 +474,7 @@ KisTagSP KisAllTagsModel::tagForUrl(const QString& tagUrl) const
     tag->setActive(query.value("active").toBool());
     tag->setValid(true);
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tagUrl == tag->url(), KisTagSP());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tagUrl.toLower() == tag->url().toLower(), KisTagSP());
 
     return tag;
 
@@ -514,9 +514,9 @@ bool KisAllTagsModel::resetQuery()
 void KisAllTagsModel::addStorage(const QString &location)
 {
     Q_UNUSED(location)
-    beginResetModel();
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
     resetQuery();
-    endResetModel();
+    endInsertRows();
 }
 
 
@@ -524,9 +524,9 @@ void KisAllTagsModel::addStorage(const QString &location)
 void KisAllTagsModel::removeStorage(const QString &location)
 {
     Q_UNUSED(location)
-    beginResetModel();
+    beginRemoveRows(QModelIndex(), rowCount(), rowCount());
     resetQuery();
-    endResetModel();
+    endRemoveRows();
 }
 
 

@@ -38,6 +38,7 @@ public:
 
 private Q_SLOTS:
     void slotNodeAdded(KisNodeSP);
+    void slotNodeRemoved(KisNodeSP);
     void slotReferenceImagesChanged(const QRectF &dirtyRect);
 
 protected:

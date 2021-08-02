@@ -357,7 +357,7 @@ bool KUndo2Command::timedMergeWith(KUndo2Command *other)
 
     \sa id() KUndo2QStack::push()
 */
-bool KUndo2Command::annihilateWith(const KUndo2Command *other)
+bool KUndo2Command::canAnnihilateWith(const KUndo2Command *other) const
 {
     Q_UNUSED(other)
     return false;
@@ -848,7 +848,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
         m_index = m_command_list.size();
     }
 
-    if (try_merge && !macro && cur->annihilateWith(cmd)) {
+    if (try_merge && !macro && cur->canAnnihilateWith(cmd)) {
         delete cmd;
         if (!macro) {
             // this condition must be ruled out by try_merge check

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>255</width>
-    <height>232</height>
+    <height>252</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -31,6 +31,12 @@
       <widget class="QComboBox" name="cmbSource">
        <property name="enabled">
         <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <item>
         <property name="text">

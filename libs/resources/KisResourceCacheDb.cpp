@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.10" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.12" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -133,7 +133,8 @@ QSqlError createDatabase(const QString &location)
             if (QVersionNumber::compare(schemaVersionNumber, currentSchemaVersionNumber) != 0) {
                 // XXX: Implement migration
                 schemaIsOutDated = true;
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database. Your local tags will be lost."));
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database."));
+                KisResourceLocator::instance()->saveTags();
                 db.close();
                 KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
                 QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
@@ -770,7 +771,19 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         translationContext = "./krita/data/" + resourceType + "/" + resource->filename();
     }
 
-    q.bindValue(":tooltip", i18nc(translationContext.toUtf8(), resource->name().toUtf8()));
+    {
+        QByteArray ctx = translationContext.toUtf8();
+        QString translatedName = i18nc(ctx, resource->name().toUtf8());
+        if (translatedName == resource->name()) {
+            // Try using the file name without the file extension, and replaces '_' with spaces.
+            QString altName = QFileInfo(resource->filename()).completeBaseName().replace('_', ' ');
+            QString altTranslatedName = i18nc(ctx, altName.toUtf8());
+            if (altName != altTranslatedName) {
+                translatedName = altTranslatedName;
+            }
+        }
+        q.bindValue(":tooltip", translatedName);
+    }
 
     QByteArray ba;
     QBuffer buf(&ba);
@@ -982,7 +995,7 @@ bool KisResourceCacheDb::linkTagToStorage(const QString &url, const QString &res
 }
 
 
-bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment)
+bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment, const QString &filename)
 {
 
     if (hasTag(url, resourceType)) {
@@ -1021,7 +1034,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
     {
         QSqlQuery q;
         if (!q.prepare("INSERT INTO tags\n"
-                       "(url, name, comment, resource_type_id, active)\n"
+                       "(url, name, comment, resource_type_id, active, filename)\n"
                        "VALUES\n"
                        "( :url\n"
                        ", :name\n"
@@ -1029,7 +1042,8 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
                        ", (SELECT id\n"
                        "   FROM   resource_types\n"
                        "   WHERE  name = :resource_type)\n"
-                       ", 1"
+                       ", 1\n"
+                       ", :filename"
                        ");")) {
             qWarning() << "Could not prepare insert tag statement" << q.lastError();
             return false;
@@ -1041,6 +1055,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
         q.bindValue(":name", name);
         q.bindValue(":comment", comment);
         q.bindValue(":resource_type", resourceType);
+        q.bindValue(":filename", filename);
 
 
         if (!q.exec()) {
@@ -1059,7 +1074,7 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
     QSharedPointer<KisResourceStorage::TagIterator> iter = storage->tags(resourceType);
     while(iter->hasNext()) {
         iter->next();
-        if (!addTag(resourceType, storage->location(), iter->url(), iter->name(), iter->comment())) {
+        if (!addTag(resourceType, storage->location(), iter->url(), iter->name(), iter->comment(), iter->filename())) {
             qWarning() << "Could not add tag" << iter->url() << "to the database";
         }
         if (!iter->tag()->defaultResources().isEmpty()) {

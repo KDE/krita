@@ -196,9 +196,8 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
             resource.dynamicCast<KoColorSet>()->setPaletteType(KoColorSet::KPL);
             path = m_d->imageName + PALETTE_PATH;
         }
-
-        if (!store->open(path + resource->resourceType().first + '/' + resource->filename())) {
-            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could open resource for writing.");
+        if (!store->open(path  + '/' + resource->filename())) {
+            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not open resource for writing.");
             continue;
         }
 

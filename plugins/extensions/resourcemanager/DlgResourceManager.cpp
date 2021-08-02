@@ -25,6 +25,7 @@
 #include <kis_paintop_registry.h>
 #include <dlg_create_bundle.h>
 #include <ResourceImporter.h>
+#include <KisResourceLocator.h>
 
 DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *parent)
     : KoDialog(parent)
@@ -92,7 +93,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     connect(m_ui->btnCreateBundle, SIGNAL(clicked(bool)), SLOT(slotCreateBundle()));
     connect(m_ui->btnOpenResourceFolder, SIGNAL(clicked(bool)), SLOT(slotOpenResourceFolder()));
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
-    connect(m_ui->btnExtractTagsToResourceFolder, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
+    connect(m_ui->btnExtractTagsToResourceFolder, SIGNAL(clicked(bool)), SLOT(slotSaveTags()));
 
     connect(m_ui->lneFilterText, SIGNAL(textChanged(const QString&)), SLOT(slotFilterTextChanged(const QString&)));
     connect(m_ui->chkShowDeleted, SIGNAL(stateChanged(int)), SLOT(slotShowDeletedChanged(int)));
@@ -284,12 +285,21 @@ void DlgResourceManager::slotDeleteResources()
         return;
     }
 
-    Q_FOREACH(QModelIndex index, list) {
+    // deleting a resource with "Show deleted resources" disabled will update the proxy model
+    // and next index in selection now points at wrong item.
+    QList<int> resourceIds;
+    Q_FOREACH (QModelIndex index, list) {
+        int resourceId = model->data(index, Qt::UserRole + KisResourceModel::Id).toInt();
+        resourceIds.append(resourceId);
+    }
+
+    Q_FOREACH (int resourceId, resourceIds) {
         if (m_undeleteMode) {
             // FIXME: There is currently no nicer way to set an inactive resource active again...
-            KoResourceSP resource = model->resourceForIndex(index);
-            allModel->setData(allModel->indexForResource(resource), true, Qt::CheckStateRole);
+            QModelIndex index = allModel->indexForResourceId(resourceId);
+            allModel->setData(index, true, Qt::CheckStateRole);
         } else {
+            QModelIndex index = model->indexForResourceId(resourceId);
             model->setResourceInactive(index);
         }
     }
@@ -320,9 +330,10 @@ void DlgResourceManager::slotCreateBundle()
     dlg->exec();
 }
 
-void DlgResourceManager::slotDeleteBackupFiles()
-{
 
+void DlgResourceManager::slotSaveTags()
+{
+    KisResourceLocator::instance()->saveTags();
 }
 
 QString DlgResourceManager::getCurrentResourceType()

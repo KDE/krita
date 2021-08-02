@@ -140,7 +140,7 @@ protected:
 
 protected:
     void executeCommand(KUndo2CommandSP command, bool undo);
-
+    void cancelStrokeCallbackImpl(QVector<KisStrokeJobData*> &mutatedJobs);
 private:
     bool m_undo;
     KUndo2CommandSP m_initCommand;

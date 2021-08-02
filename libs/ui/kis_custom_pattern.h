@@ -38,7 +38,8 @@ public:
 
 Q_SIGNALS:
     void activatedResource(KoResourceSP);
-    void addPattern(KoPatternSP);
+    void patternAdded(KoResourceSP);
+    void patternUpdated(KoResourceSP);
 
 private Q_SLOTS:
     void slotAddPredefined();

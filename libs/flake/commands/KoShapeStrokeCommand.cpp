@@ -94,7 +94,6 @@ void KoShapeStrokeCommand::redo()
     KUndo2Command::redo();
     QList<KoShapeStrokeModelSP>::iterator strokeIt = d->newStrokes.begin();
     Q_FOREACH (KoShape *shape, d->shapes) {
-        shape->update();
         shape->setStroke(*strokeIt);
         shape->update();
         ++strokeIt;
@@ -106,7 +105,6 @@ void KoShapeStrokeCommand::undo()
     KUndo2Command::undo();
     QList<KoShapeStrokeModelSP>::iterator strokeIt = d->oldStrokes.begin();
     Q_FOREACH (KoShape *shape, d->shapes) {
-        shape->update();
         shape->setStroke(*strokeIt);
         shape->update();
         ++strokeIt;

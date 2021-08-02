@@ -14,13 +14,13 @@
 #include "kis_transform_mask.h"
 #include "lazybrush/kis_colorize_mask.h"
 
-#include <KoColorConversionTransformation.h>
-#include "kis_projection_leaf.h"
 #include "kis_paint_layer.h"
+#include "kis_projection_leaf.h"
 #include "kis_time_span.h"
+#include <KoColorConversionTransformation.h>
+#include <KoUpdater.h>
 #include <commands_new/KisChangeChannelFlagsCommand.h>
 #include <commands_new/KisChangeChannelLockFlagsCommand.h>
-
 
 KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(const KoColorSpace *srcColorSpace,
                                                                              const KoColorSpace *dstColorSpace,
@@ -36,7 +36,10 @@ KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(con
 
 void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
+    KisProcessingVisitor::ProgressHelper helper(layer);
+    KoUpdater *updater = helper.updater();
     undoAdapter->addCommand(layer->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags));
+    updater->setProgress(100);
 }
 
 void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
@@ -49,6 +52,8 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
 
     KisLayer *layer = dynamic_cast<KisLayer*>(node);
     KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
+
+    KisProcessingVisitor::ProgressHelper helper(layer);
 
     KisPaintLayer *paintLayer = 0;
 
@@ -63,17 +68,16 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
         }
     }
 
-
     if (layer->original()) {
-        layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand);
+        layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
     if (layer->paintDevice()) {
-        layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand);
+        layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
     if (layer->projection()) {
-        layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand);
+        layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
     if (layer && alphaDisabled) {
@@ -98,6 +102,8 @@ void KisConvertColorSpaceProcessingVisitor::visit(KisTransformMask *node, KisUnd
 
 void KisConvertColorSpaceProcessingVisitor::visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter)
 {
-    undoAdapter->addCommand(node->setColorSpace(m_dstColorSpace, m_renderingIntent, m_conversionFlags));
+    KisProcessingVisitor::ProgressHelper helper(dynamic_cast<KisNode *>(node));
+    KoUpdater *updater = helper.updater();
+    undoAdapter->addCommand(node->setColorSpace(m_dstColorSpace, m_renderingIntent, m_conversionFlags, updater));
     node->invalidateFrames(KisTimeSpan::infinite(0), node->extent());
 }

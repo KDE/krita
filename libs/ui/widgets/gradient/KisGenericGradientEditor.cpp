@@ -599,7 +599,8 @@ void KisGenericGradientEditor::updateGradientEditor()
 {
     if (dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)) {
         dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientEditorMode);
-    } else if (dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)) {
+    }
+    else if (dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)) {
         dynamic_cast<KisSegmentGradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientEditorMode);
     }
 }
@@ -608,7 +609,8 @@ void KisGenericGradientEditor::on_buttonConvertGradient_clicked()
 {
     if (m_d->gradient.dynamicCast<KoStopGradient>()) {
         setGradient(KisGradientConversion::toSegmentGradient(m_d->gradient));
-    } else if (m_d->gradient.dynamicCast<KoSegmentGradient>()) {
+    }
+    else if (m_d->gradient.dynamicCast<KoSegmentGradient>()) {
         setGradient(KisGradientConversion::toStopGradient(m_d->gradient));
     }
 }
@@ -629,11 +631,14 @@ void KisGenericGradientEditor::on_buttonUpdateGradient_clicked()
     KoResourceServer<KoAbstractGradient> *gradientServer =
         KoResourceServerProvider::instance()->gradientServer();
 
+    m_d->gradient->updatePreview();
     gradientServer->updateResource(m_d->gradient);
 }
 
 void KisGenericGradientEditor::on_buttonAddGradient_clicked()
 {
+    qDebug() << m_d->gradient << m_d->gradient->valid() << m_d->gradient->name();
+
     if (!m_d->gradient || !m_d->gradient->valid() || m_d->gradient->name().isEmpty()) {
         return;
     }
@@ -641,6 +646,7 @@ void KisGenericGradientEditor::on_buttonAddGradient_clicked()
     KoResourceServer<KoAbstractGradient> *gradientServer =
         KoResourceServerProvider::instance()->gradientServer();
     
+    m_d->gradient->updatePreview();
     gradientServer->addResource(m_d->gradient);
 }
 

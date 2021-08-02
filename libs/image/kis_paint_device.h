@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2002 patrick julien <freak@codepimps.org>
  *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -475,10 +476,11 @@ public:
     /**
      * Converts the paint device to a different colorspace
      */
-    void convertTo(const KoColorSpace * dstColorSpace,
+    void convertTo(const KoColorSpace *dstColorSpace,
                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags(),
-                   KUndo2Command *parentCommand = 0);
+                   KUndo2Command *parentCommand = nullptr,
+                   KoUpdater *progressUpdater = nullptr);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given

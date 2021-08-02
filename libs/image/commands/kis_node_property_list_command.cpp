@@ -117,7 +117,7 @@ bool KisNodePropertyListCommand::canMergeWith(const KUndo2Command *command) cons
              changedProperties(other->m_oldPropertyList, other->m_newPropertyList));
 }
 
-bool KisNodePropertyListCommand::annihilateWith(const KUndo2Command *command)
+bool KisNodePropertyListCommand::canAnnihilateWith(const KUndo2Command *command) const
 {
     const KisNodePropertyListCommand *other =
         dynamic_cast<const KisNodePropertyListCommand*>(command);
@@ -193,7 +193,11 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
 
 void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
-    const bool undo = !changedProperties(node->sectionModelProperties(), proplist).isEmpty();
+    const QSet<QString> properties = changedProperties(node->sectionModelProperties(), proplist);
+
+    const bool undo = !properties.isEmpty() &&
+            properties != QSet<QString>{KisLayerPropertiesIcons::colorizeNeedsUpdate.id()} &&
+            properties != QSet<QString>{KisLayerPropertiesIcons::openFileLayerFile.id()};
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 

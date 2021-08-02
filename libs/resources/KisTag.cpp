@@ -37,6 +37,7 @@ public:
     QStringList defaultResources; // The list of resources as defined in the tag file
     QString resourceType; // The resource type this tag can be applied to
     KEntryMap map;
+    QString filename; // the original filename for the tag
     int id {-1};
     bool active{true};
 };
@@ -66,6 +67,7 @@ KisTag &KisTag::operator=(const KisTag &rhs)
         d->comment = rhs.d->comment;
         d->defaultResources = rhs.d->defaultResources;
         d->map = rhs.d->map;
+        d->filename = rhs.d->filename;
     }
     return *this;
 }
@@ -88,6 +90,16 @@ int KisTag::id() const
 bool KisTag::active() const
 {
     return d->active;
+}
+
+QString KisTag::filename()
+{
+    return d->filename;
+}
+
+void KisTag::setFilename(const QString &filename)
+{
+    d->filename = filename;
 }
 
 QString KisTag::name() const

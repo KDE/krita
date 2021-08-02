@@ -105,14 +105,14 @@ void KisNodeCommandsAdapter::removeNode(KisNodeSP node)
 
 void KisNodeCommandsAdapter::setOpacity(KisNodeSP node, qint32 opacity)
 {
-    KUndo2Command *cmd = new KisNodeOpacityCommand(node, node->opacity(), opacity);
+    KUndo2Command *cmd = new KisNodeOpacityCommand(node, opacity);
     applyOneCommandAsync(cmd);
 }
 
 void KisNodeCommandsAdapter::setCompositeOp(KisNodeSP node,
                                             const KoCompositeOp* compositeOp)
 {
-    KUndo2Command *cmd = new KisNodeCompositeOpCommand(node, node->compositeOpId(),
+    KUndo2Command *cmd = new KisNodeCompositeOpCommand(node,
                                                        compositeOp->id());
     applyOneCommandAsync(cmd);
 }

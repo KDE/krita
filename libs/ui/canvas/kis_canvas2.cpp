@@ -624,7 +624,7 @@ void KisCanvas2::disconnectImage()
      * while we are being destroyed.
      */
 
-    image->lock();
+    image->immediateLockForReadOnly();
     disconnect(image.data(), 0, this, 0);
     image->unlock();
 }

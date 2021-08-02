@@ -740,16 +740,16 @@ bool KisImage::isIdle(bool allowLocked)
     return (allowLocked || !locked()) && m_d->scheduler.isIdle();
 }
 
-void KisImage::lock()
+void KisImage::immediateLockForReadOnly()
 {
     if (!locked()) {
         requestStrokeEnd();
         KisBusyWaitBroker::instance()->notifyWaitOnImageStarted(this);
-        m_d->scheduler.lock();
+        m_d->scheduler.immediateLockForReadOnly();
         KisBusyWaitBroker::instance()->notifyWaitOnImageEnded(this);
     }
     m_d->lockCount++;
-    m_d->lockedForReadOnly = false;
+    m_d->lockedForReadOnly = true;
 }
 
 void KisImage::unlock()

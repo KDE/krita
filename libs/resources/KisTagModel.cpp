@@ -402,14 +402,18 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag)
     if (!tag->valid()) return false;
 
     QString name = tag->name();
-    QString url = tag->url();
+    QString url = tag->name(); // let's set the url to be the same as the name
+    int id = tag->id();
+
+    if (tag->id() < 0) return false;
 
     if (name.isEmpty()) return false;
 
     QSqlQuery q;
     if (!q.prepare("UPDATE tags\n"
                    "SET    name = :name\n"
-                   "WHERE  url = :url\n"
+                   ",      url = :url\n"
+                   "WHERE  id = :id\n"
                    "AND    resource_type_id = (SELECT id\n"
                    "                           FROM   resource_types\n"
                    "                           WHERE  name = :resource_type\n)")) {
@@ -419,6 +423,7 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag)
 
     q.bindValue(":name", name);
     q.bindValue(":url", url);
+    q.bindValue(":id", id);
     q.bindValue(":resource_type", d->resourceType);
 
     if (!q.exec()) {

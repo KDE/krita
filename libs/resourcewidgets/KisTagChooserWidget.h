@@ -28,7 +28,7 @@ class KRITARESOURCEWIDGETS_EXPORT KisTagChooserWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KisTagChooserWidget(KisTagModel* model, QWidget* parent);
+    explicit KisTagChooserWidget(KisTagModel* model, QString resourceType, QWidget* parent);
     ~KisTagChooserWidget() override;
 
 

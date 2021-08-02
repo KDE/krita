@@ -34,12 +34,14 @@ public:
     KisTagToolButton *tagToolButton;
     KisTagModel *model;
     KisTagSP cachedTag;
+    QString resourceType;
 };
 
-KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
+KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceType, QWidget* parent)
     : QWidget(parent)
     , d(new Private)
 {
+    d->resourceType = resourceType;
 
     d->comboBox = new QComboBox(this);
 

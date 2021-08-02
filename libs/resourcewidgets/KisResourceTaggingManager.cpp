@@ -59,7 +59,7 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
     d->model = model;
 
     d->tagModel = new KisTagModel(resourceType);
-    d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
+    d->tagChooser = new KisTagChooserWidget(d->tagModel, resourceType, parent);
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
     d->model->setFilterInCurrentTag(d->tagFilter->isFilterByTagChecked());

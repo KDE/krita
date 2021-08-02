@@ -58,6 +58,7 @@
 #include "VectorLayer.h"
 #include "FilterMask.h"
 #include "SelectionMask.h"
+#include "TransformMask.h"
 
 #include "LibKisUtils.h"
 
@@ -103,6 +104,9 @@ Node *Node::createNode(KisImageSP image, KisNodeSP node, QObject *parent)
     }
     else if (node->inherits("KisSelectionMask")) {
         return new SelectionMask(image, dynamic_cast<KisSelectionMask*>(node.data()));
+    }
+    else if (node->inherits("KisTransformMask")) {
+        return new TransformMask(image, dynamic_cast<KisTransformMask*>(node.data()));
     }
     else {
         return new Node(image, node, parent);
@@ -675,6 +679,14 @@ QImage Node::thumbnail(int w, int h)
 {
     if (!d->node) return QImage();
     return d->node->createThumbnail(w, h);
+}
+
+int Node::index() const
+{
+    if (!d->node) return -1;
+    if (!d->node->parent()) return -1;
+
+    return d->node->parent()->index(d->node);
 }
 
 QUuid Node::uniqueId() const

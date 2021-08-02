@@ -28,6 +28,7 @@ set(kritalibkis_LIB_SRCS
     VectorLayer.cpp
     FilterMask.cpp
     SelectionMask.cpp
+    TransformMask.cpp
 
     Shape.cpp
     GroupShape.cpp

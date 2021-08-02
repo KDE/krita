@@ -532,6 +532,16 @@ public Q_SLOTS:
      */
     QImage thumbnail(int w, int h);
 
+    /**
+     * @brief index the index of the node inside the parent
+     * @return an integer representing the node's index inside the parent
+     */
+    int index() const;
+
+    /**
+     * @brief uniqueId uniqueId of the node
+     * @return a QUuid representing a unique id to identify the node
+     */
     QUuid uniqueId() const;
 
 
@@ -547,6 +557,7 @@ private:
     friend class VectorLayer;
     friend class FilterMask;
     friend class SelectionMask;
+    friend class TransformMask;
     friend class CloneLayer;
 
     explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);

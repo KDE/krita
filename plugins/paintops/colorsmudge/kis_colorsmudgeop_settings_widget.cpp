@@ -32,6 +32,7 @@
 #include "kis_pressure_texture_strength_option.h"
 #include "kis_pressure_hsv_option.h"
 #include "kis_colorsmudgeop_settings.h"
+#include "kis_signals_blocker.h"
 
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
@@ -97,18 +98,36 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
     //If brush is a mask, it can use either engine, but if its not, it must use the new engine
     if (brush) {
         m_smudgeOptionWidget->setUseNewEngineCheckboxEnabled(brush->brushApplication() == ALPHAMASK);
-        if (brush->brushApplication() != ALPHAMASK) {
-            m_smudgeOptionWidget->setUseNewEngine(true);
-        }
         m_paintThicknessOptionWidget->setEnabled(brush->preserveLightness());
-
-
         m_overlayOptionWidget->setEnabled(brush->brushApplication() != LIGHTNESSMAP);
-
         m_radiusStrengthOptionWidget->updateRange(0.0, m_smudgeOptionWidget->useNewEngine() ? 1.0 : 3.0);
     }
 }
 
 void KisColorSmudgeOpSettingsWidget::slotBrushOptionChanged() {
     notifyPageChanged();
+}
+
+void KisColorSmudgeOpSettingsWidget::fixNewEngineOption() const
+{
+    KisBrushSP brush = const_cast<KisColorSmudgeOpSettingsWidget*>(this)->brush();
+
+    if (brush) {
+        if (brush->brushApplication() != ALPHAMASK) {
+            KisSignalsBlocker b(m_smudgeOptionWidget);
+            m_smudgeOptionWidget->setUseNewEngine(true);
+        }
+    }
+}
+
+void KisColorSmudgeOpSettingsWidget::setConfiguration(const KisPropertiesConfigurationSP config)
+{
+    KisBrushBasedPaintopOptionWidget::setConfiguration(config);
+    fixNewEngineOption();
+}
+
+void KisColorSmudgeOpSettingsWidget::writeConfiguration(KisPropertiesConfigurationSP config) const
+{
+    fixNewEngineOption();
+    KisBrushBasedPaintopOptionWidget::writeConfiguration(config);
 }

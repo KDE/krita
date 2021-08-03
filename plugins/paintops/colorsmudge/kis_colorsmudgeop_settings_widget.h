@@ -23,8 +23,12 @@ public:
 
     KisPropertiesConfigurationSP configuration() const override;
 
+    void setConfiguration(const KisPropertiesConfigurationSP config) override;
+    void writeConfiguration(KisPropertiesConfigurationSP config) const override;
+
 protected:
     void notifyPageChanged() override;
+    void fixNewEngineOption() const;
 
 private Q_SLOTS:
     void slotBrushOptionChanged();

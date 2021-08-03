@@ -469,6 +469,10 @@ Function .onInit
 	${DetectKritaNsis} $KritaNsisVersion $KritaNsisBitness $KritaNsisInstallLocation
 	${If} $KritaNsisVersion != ""
 		push $R0
+		${If} $KritaNsisVersion == "4.5.4.0"
+			# HACK: 4.4.5 has incorrect version number.
+			StrCpy $KritaNsisVersion "4.4.5.0"
+		${EndIf}
 		${VersionCompare} "${KRITA_VERSION}" "$KritaNsisVersion" $R0
 		${If} $R0 == 0
 			# Same version installed... probably

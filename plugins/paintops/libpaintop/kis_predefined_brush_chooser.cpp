@@ -137,8 +137,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
     deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
 
-
-
     connect(addPresetButton, SIGNAL(clicked(bool)), this, SLOT(slotImportNewBrushResource()));
     connect(deleteBrushTipButton, SIGNAL(clicked(bool)), this, SLOT(slotDeleteBrushResource()));
 

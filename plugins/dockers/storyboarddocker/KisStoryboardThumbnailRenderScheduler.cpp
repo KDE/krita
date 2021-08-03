@@ -117,33 +117,22 @@ void KisStoryboardThumbnailRenderScheduler::sortAffectedFrameQueue()
 
 void KisStoryboardThumbnailRenderScheduler::renderNextFrame()
 {
-    if (!m_image) {
-        return;
-    }
-    if(!m_image->isIdle()) {
+    if (!m_image || !m_image->isIdle()) {
         return;
     }
 
-    // don't clone the image until inside the if when it's needed
-    if (!m_changedFramesQueue.isEmpty()) {
-        KisImageSP image = m_image->clone(false);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-        int frame = m_changedFramesQueue.at(0);
-        image->requestTimeSwitch(frame);
-        m_renderer->startFrameRegeneration(image, frame);
-        m_currentFrame = frame;
-        m_changedFramesQueue.removeFirst();
+    if (m_changedFramesQueue.isEmpty() && m_affectedFramesQueue.isEmpty()) {
+        return;
     }
-    else if (!m_affectedFramesQueue.isEmpty()) {
-        KisImageSP image = m_image->clone(false);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-        int frame = m_affectedFramesQueue.at(0);
-        image->requestTimeSwitch(frame);
-        m_renderer->startFrameRegeneration(image, frame);
-        m_currentFrame = frame;
-        m_affectedFramesQueue.removeFirst();
-    }
-    else {
-        m_currentFrame = -1;
-    }
+
+    KisImageSP image = m_image->clone(false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+    int frame = !m_changedFramesQueue.isEmpty() ? m_changedFramesQueue.takeFirst() : m_affectedFramesQueue.takeFirst();;
+    image->requestTimeSwitch(frame);
+
+    ENTER_FUNCTION() << ppVar(frame);
+
+    m_renderer->startFrameRegeneration(image, frame);
+    m_currentFrame = frame;
 }

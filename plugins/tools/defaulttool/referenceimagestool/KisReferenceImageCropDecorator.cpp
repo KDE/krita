@@ -24,8 +24,8 @@ void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &
 
     gc.save();
 
-    QTransform transform = m_referenceImage->absoluteTransformation() * converter.documentToView();
-    QRectF shapeRect = converter.documentToView(m_referenceImage->boundingRect());
+    QTransform transform = m_referenceImage->absoluteTransformation();
+    QRectF shapeRect = m_referenceImage->boundingRect();
     m_cropBorderRect = transform.mapRect(m_cropBorderRect);
 
     QPainterPath path;
@@ -37,7 +37,7 @@ void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &
     gc.drawPath(path);
 
     KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&gc, m_referenceImage, converter, 5);
+            KoShape::createHandlePainterHelperDocument(&gc, m_referenceImage, 5);
     helper.setHandleStyle(KisHandleStyle::primarySelection());
 
     QPolygonF outline = m_referenceImage->cropRect();

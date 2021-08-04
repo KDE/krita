@@ -78,49 +78,55 @@ void ToolReferenceImages::mousePressEvent(KoPointerEvent *event)
     if(m_layer) {
         QPointF newPos = m_layer->transform(dynamic_cast<KisCanvas2*>(canvas())).inverted().map(event->pos());
         KoPointerEvent *newEvent = new KoPointerEvent(event, newPos);
+
+        if (activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
+            KoInteractionTool::mousePressEvent(newEvent);
+            updateCursor();
+            return;
+        }
         DefaultTool::mousePressEvent(newEvent);
         return;
     }
-    if (activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
-        KoInteractionTool::mousePressEvent(event);
-        updateCursor();
-        return;
-    }
+
     DefaultTool::mousePressEvent(event);
 }
 
 void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
 {
+    KisReferenceImage *referenceImage = activeReferenceImage();
+
     if(m_layer) {
         QPointF newPos = m_layer->transform(dynamic_cast<KisCanvas2*>(canvas())).inverted().map(event->pos());
         KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
+
+        if(referenceImage && referenceImage->cropEnabled()) {
+            KoInteractionTool::mouseMoveEvent(newEvent);
+            if(currentStrategy() == 0) {
+            QRectF bounds = handlesSize();
+
+            if(bounds.contains(newEvent->point)) {
+                bool inside;
+                KoFlake::SelectionHandle newDirection = handleAt(newEvent->point, &inside);
+
+                if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
+                    m_lastHandle = newDirection;
+                    m_mouseWasInsideHandles = inside;
+                }
+            }
+            else {
+                m_lastHandle = KoFlake::NoHandle;
+                m_mouseWasInsideHandles = false;
+            }
+          }
+            updateCursor();
+            return;
+        }
+
         DefaultTool::mouseMoveEvent(newEvent);
         koSelection()->update();
         return;
     }
-    KisReferenceImage *referenceImage = activeReferenceImage();
-    if(referenceImage && referenceImage->cropEnabled()) {
-        KoInteractionTool::mouseMoveEvent(event);
-        if(currentStrategy() == 0) {
-        QRectF bounds = handlesSize();
 
-        if(bounds.contains(event->point)) {
-            bool inside;
-            KoFlake::SelectionHandle newDirection = handleAt(event->point, &inside);
-
-            if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
-                m_lastHandle = newDirection;
-                m_mouseWasInsideHandles = inside;
-            }
-        }
-        else {
-            m_lastHandle = KoFlake::NoHandle;
-            m_mouseWasInsideHandles = false;
-        }
-      }
-        updateCursor();
-        return;
-    }
     DefaultTool::mouseMoveEvent(event);
 }
 

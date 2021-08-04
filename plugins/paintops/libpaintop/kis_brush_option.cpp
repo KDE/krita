@@ -56,6 +56,7 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
     QDomElement element;
 
     QString brushDefinition = setting->getString("brush_definition");
+
     if (!brushDefinition.isEmpty()) {
         QDomDocument d;
         d.setContent(brushDefinition, false);
@@ -76,7 +77,6 @@ void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisProperties
             KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()->cloneAndBakeVariableColors(canvasResourcesInterface);
             m_brush->setGradient(gradient);
         }
-
     }
 }
 

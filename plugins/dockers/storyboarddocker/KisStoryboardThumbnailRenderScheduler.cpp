@@ -131,8 +131,6 @@ void KisStoryboardThumbnailRenderScheduler::renderNextFrame()
     int frame = !m_changedFramesQueue.isEmpty() ? m_changedFramesQueue.takeFirst() : m_affectedFramesQueue.takeFirst();;
     image->requestTimeSwitch(frame);
 
-    ENTER_FUNCTION() << ppVar(frame);
-
     m_renderer->startFrameRegeneration(image, frame);
     m_currentFrame = frame;
 }

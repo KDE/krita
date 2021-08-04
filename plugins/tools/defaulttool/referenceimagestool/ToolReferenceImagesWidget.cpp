@@ -118,9 +118,6 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste-16"));
     d->ui->bnPasteReferenceImage->setIconSize(QSize(16, 16));
 
-    d->ui->bnLock->setVisible(false);
-    d->ui->bnLock->setCheckable(true);
-
     d->ui->bnCrop->setVisible(false);
     d->ui->bnCrop->setCheckable(true);
     d->ui->bnCrop->setToolTip(i18n("Crop selected Reference Image"));
@@ -135,10 +132,12 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
-    connect(d->ui->bnLock, SIGNAL(toggled(bool)), this, SLOT(slotUpdateLock(bool)));
     connect(d->ui->bnCrop, SIGNAL(toggled(bool)), this, SLOT(slotUpdateCrop(bool)));
 
     connect(d->ui->chkKeepAspectRatio, SIGNAL(stateChanged(int)), this, SLOT(slotKeepAspectChanged()));
+    connect(d->ui->chkPinRotate, SIGNAL(stateChanged(int)), this, SLOT(slotRotateChanged()));
+    connect(d->ui->chkPinMirror, SIGNAL(stateChanged(int)), this, SLOT(slotMirrorChanged()));
+    connect(d->ui->chkPinPos, SIGNAL(stateChanged(int)), this, SLOT(slotPositionChanged()));
 
     KisSignalCompressor *compressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(compressor, SIGNAL(timeout()), this, SLOT(slotImageValuesChanged()));
@@ -169,9 +168,11 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     d->ui->opacitySlider->setSelection(shapes);
     d->ui->saturationSlider->setSelection(shapes);
 
-    KisReferenceImage *ref = d->tool->activeReferenceImage();
-    if(ref) {
+    if(d->tool->activeReferenceImage()) {
         updateCropSliders();
+    }
+    else {
+        d->ui->grpCrop->setVisible(false);
     }
 
 
@@ -197,13 +198,23 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
 
     KisSignalsBlocker blocker(
         d->ui->chkKeepAspectRatio,
-        d->ui->referenceImageLocationCombobox
+        d->ui->referenceImageLocationCombobox,
+        d->ui->chkPinPos,
+        d->ui->chkPinRotate,
+        d->ui->chkPinMirror
+
     );
 
     d->ui->chkKeepAspectRatio->setCheckState(
         (anyKeepingAspectRatio && anyNotKeepingAspectRatio) ? Qt::PartiallyChecked :
          anyKeepingAspectRatio ? Qt::Checked : Qt::Unchecked);
 
+    KisSharedPtr<KisReferenceImagesLayer> layer =  d->tool->document()->referenceImagesLayer();
+    if(layer) {
+       d->ui->chkPinPos->setCheckState(layer->pinPosition() ? Qt::Checked : Qt::Unchecked);
+       d->ui->chkPinRotate->setCheckState(layer->pinRotate() ? Qt::Checked : Qt::Unchecked);
+       d->ui->chkPinMirror->setCheckState(layer->pinMirror() ? Qt::Checked : Qt::Unchecked);
+    }
 
     // set save location combobox
     bool imagesEmbedded = anyEmbedded && !anyLinked;
@@ -270,19 +281,6 @@ void ToolReferenceImagesWidget::slotSaveLocationChanged(int index)
     }
 }
 
-void ToolReferenceImagesWidget::slotUpdateLock(bool value)
-{
-    d->ui->bnLock->setChecked(value);
-    bool locked = d->ui->bnLock->isChecked();
-    if(locked) {
-        d->ui->bnLock->setIcon(KisIconUtils::loadIcon("locked"));
-    }
-    else {
-        d->ui->bnLock->setIcon(KisIconUtils::loadIcon("unlocked"));
-    }
-    d->tool->document()->referenceImagesLayer()->setLock(locked, d->tool->canvas());
-}
-
 void ToolReferenceImagesWidget::slotImageValuesChanged()
 {
     slotSaturationSliderChanged(d->ui->saturationSlider->value());
@@ -297,17 +295,15 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->saveLocationLabel->setVisible(hasSelection);
     d->ui->opacitySlider->setVisible(hasSelection);
     d->ui->saturationSlider->setVisible(hasSelection);
-    d->ui->bnLock->setVisible(hasSelection);
+    d->ui->chkPinRotate->setVisible(hasSelection);
+    d->ui->chkPinPos->setVisible(hasSelection);
+    d->ui->chkPinMirror->setVisible(hasSelection);
+
     d->ui->bnCrop->setVisible(hasSelection);
 
     // show a label indicating that a selection is required to show options
     d->ui->referenceImageOptionsLabel->setVisible(!hasSelection);
 
-    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
-    if(layer) {
-        d->ui->bnLock->setChecked(layer->lock());
-        d->ui->bnLock->setIcon(d->ui->bnLock->isChecked() ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
-    }
     if (hasSelection) {
         KoSelection* selection = d->tool->koSelection();
         QList<KoShape*> shapes = selection->selectedEditableShapes();
@@ -467,4 +463,28 @@ QRectF ToolReferenceImagesWidget::cropRect()
 
     QRectF finalRect = converter->imageToDocument(QRectF(x, y, width, height));
     return finalRect;
+}
+
+void ToolReferenceImagesWidget::slotMirrorChanged()
+{
+    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
+    if(layer) {
+        layer->setPinMirror(d->ui->chkPinMirror->isChecked());
+    }
+}
+
+void ToolReferenceImagesWidget::slotPositionChanged()
+{
+    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
+    if(layer) {
+        layer->setPinPosition(d->ui->chkPinPos->isChecked());
+    }
+}
+
+void ToolReferenceImagesWidget::slotRotateChanged()
+{
+    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
+    if(layer) {
+        layer->setPinRotate(d->ui->chkPinRotate->isChecked());
+    }
 }

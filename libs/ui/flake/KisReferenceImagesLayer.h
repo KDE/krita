@@ -49,14 +49,13 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                  KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
 
-    KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
-
-    bool lock();
-    void setLock(bool, KoCanvasBase*);
-    QTransform lockedFlakeToWidgetTransform();
-    QTransform lockedDocToViewTransform();
-    QTransform lockedImageToWidgetTransform();
-    QTransform lockedDocToWidgetTransform();
+    bool pinRotate();
+    void setPinRotate(bool);
+    bool pinMirror();
+    void setPinMirror(bool);
+    bool pinPosition();
+    void setPinPosition(bool);
+    QTransform transform(KisCanvas2 *kisCanvas);
 
 Q_SIGNALS:
     /**
@@ -73,11 +72,12 @@ private:
     friend struct RemoveReferenceImagesCommand;
     friend class ReferenceImagesCanvas;
 
-    bool m_lock;
-    QTransform m_lockedFlakeToWidgetTransform;
-    QTransform m_lockedDocToViewTransform;
-    QTransform m_lockedImageToWidgetTransform;
-    QTransform m_lockedDocToWidgetTransform;
+    bool m_pinRotate, m_pinMirror, m_pinPosition;
+    bool m_mirrorX, m_mirrorY;
+    bool flag = false;
+    QPointF m_docOffset;
+    qreal m_previousAngle, m_previousPosition;
+    QTransform m_transform;
 };
 
 typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;

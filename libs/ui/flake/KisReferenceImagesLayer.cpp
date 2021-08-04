@@ -128,7 +128,14 @@ Q_GLOBAL_STATIC(KisFileSystemWatcherWrapper, m_fileSystemWatcher)
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
-    , m_lock(false)
+    , m_pinRotate(false)
+    , m_pinMirror(false)
+    , m_pinPosition(false)
+    , m_mirrorX(false)
+    , m_mirrorY(false)
+    , m_previousAngle(0)
+    , m_transform(QTransform())
+
 {
     //use signal compressor here
     connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), SLOT(fileChanged(QString)));
@@ -136,7 +143,13 @@ KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeCon
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
     : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
-    , m_lock(false)
+    , m_pinRotate(false)
+    , m_pinMirror(false)
+    , m_pinPosition(false)
+    , m_mirrorX(false)
+    , m_mirrorY(false)
+    , m_previousAngle(0)
+    , m_transform(QTransform())
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)
@@ -184,7 +197,7 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter)
 {
-    painter.setTransform(converter()->documentToView(), true);
+    //painter.setTransform(converter()->documentToView(), true);
     shapeManager()->paint(painter, false);
 }
 
@@ -250,25 +263,6 @@ QColor KisReferenceImagesLayer::getPixel(QPointF position) const
     return QColor();
 }
 
-KisHandlePainterHelper KisReferenceImagesLayer::createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius)
-{
-    const QTransform originalPainterTransform = painter->transform();
-
-    if(m_lock) {
-        painter->setTransform(shape->absoluteTransformation() *
-                              m_lockedDocToViewTransform *
-                              painter->transform());
-    }
-    else {
-        painter->setTransform(shape->absoluteTransformation() *
-                              converter.documentToView() *
-                              painter->transform());
-    }
-
-    // move c-tor
-    return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);
-}
-
 void KisReferenceImagesLayer::fileChanged(QString path)
 {
     Q_FOREACH(KisReferenceImage *ref, referenceImages()) {
@@ -278,40 +272,75 @@ void KisReferenceImagesLayer::fileChanged(QString path)
     }
 }
 
-bool KisReferenceImagesLayer::lock()
+bool KisReferenceImagesLayer::pinRotate()
 {
-     return m_lock;
+    return m_pinRotate;
 }
 
-void KisReferenceImagesLayer::setLock(bool val, KoCanvasBase* canvas)
+void KisReferenceImagesLayer::setPinRotate(bool value)
 {
-    m_lock = val;
-    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-    if(val) {
-        m_lockedDocToViewTransform = kisCanvas->viewConverter()->documentToView();
-        m_lockedImageToWidgetTransform = kisCanvas->coordinatesConverter()->imageToWidgetTransform();
-        m_lockedDocToWidgetTransform = kisCanvas->coordinatesConverter()->documentToWidgetTransform();
-        m_lockedFlakeToWidgetTransform = kisCanvas->coordinatesConverter()->flakeToWidgetTransform();
+    m_pinRotate = value;
+}
+
+bool KisReferenceImagesLayer::pinMirror()
+{
+    return m_pinMirror;
+}
+
+void KisReferenceImagesLayer::setPinMirror(bool value)
+{
+    m_pinMirror = value;
+}
+
+bool KisReferenceImagesLayer::pinPosition()
+{
+    return m_pinPosition;
+}
+
+void KisReferenceImagesLayer::setPinPosition(bool value)
+{
+    m_pinPosition = value;
+}
+
+QTransform KisReferenceImagesLayer::transform(KisCanvas2 *kisCanvas)
+ {
+
+    if(m_mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored()
+                || m_mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored()) {
+        if(!m_pinMirror) {
+            qreal scaleX = m_mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored() ? -1 : 1;
+            qreal scaleY = m_mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored() ? -1 : 1;
+            QPointF center = kisCanvas->coordinatesConverter()->widgetCenterPoint();
+
+            m_transform *= QTransform::fromTranslate(-center.x(),-center.y()) *
+                    QTransform::fromScale(scaleX, scaleY) * QTransform::fromTranslate(center.x(),center.y());
+        }
+        m_docOffset = kisCanvas->documentOffset();
+        m_previousAngle = kisCanvas->rotationAngle();
     }
-    canvas->updateCanvas(kisCanvas->imageView()->rect());
-}
 
-QTransform KisReferenceImagesLayer::lockedFlakeToWidgetTransform()
-{
-    return m_lockedFlakeToWidgetTransform;
-}
+    if(m_previousAngle != kisCanvas->rotationAngle())
+    {
+        if(!m_pinRotate) {
+            QPointF center = kisCanvas->coordinatesConverter()->widgetCenterPoint();
+            qreal diff = kisCanvas->rotationAngle() - m_previousAngle;
+            QTransform rot;
+            rot.rotate(diff);
+            m_transform *= QTransform::fromTranslate(-center.x(),-center.y()) * rot
+                    * QTransform::fromTranslate(center.x(),center.y());
+        }
+        m_docOffset = kisCanvas->documentOffset();
+    }
 
-QTransform KisReferenceImagesLayer::lockedDocToViewTransform()
-{
-    return m_lockedDocToViewTransform;
-}
+    if(flag && kisCanvas->documentOffset() != m_docOffset && !m_pinPosition) {
+      QPointF diff = kisCanvas->documentOffset() - m_docOffset;
+        m_transform *= QTransform::fromTranslate(-diff.x(), -diff.y());
+    }
 
-QTransform KisReferenceImagesLayer::lockedImageToWidgetTransform()
-{
-    return m_lockedImageToWidgetTransform;
-}
-
-QTransform KisReferenceImagesLayer::lockedDocToWidgetTransform()
-{
-    return m_lockedDocToWidgetTransform;
+    flag = true;
+    m_docOffset = kisCanvas->documentOffset();
+    m_mirrorX = kisCanvas->coordinatesConverter()->xAxisMirrored();
+    m_mirrorY = kisCanvas->coordinatesConverter()->yAxisMirrored();
+    m_previousAngle = kisCanvas->rotationAngle();
+    return m_transform;
 }

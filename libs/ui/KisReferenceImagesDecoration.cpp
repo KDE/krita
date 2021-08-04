@@ -52,17 +52,11 @@ private:
     void updateBuffer(QRectF widgetRect, QRectF imageRect)
     {
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
-        QTransform transform;
-        if(layer->lock()) {
-            transform = layer->lockedImageToWidgetTransform();
-        }
-        else {
-            transform = viewConverter->imageToWidgetTransform();
-        }
+        QTransform transform = layer->transform(q->view()->canvasBase());
 
         qreal devicePixelRatioF = q->view()->devicePixelRatioF();
         if (buffer.image.isNull() || !buffer.bounds().contains(widgetRect)) {
-            const QRectF boundingImageRect = layer->boundingImageRect();
+            const QRectF boundingImageRect = layer->boundingRect();
             const QRectF boundingWidgetRect = transform.mapRect(boundingImageRect);
             widgetRect = boundingWidgetRect.intersected(q->view()->rect());
 

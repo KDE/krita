@@ -36,7 +36,9 @@ private Q_SLOTS:
     void slotSaturationSliderChanged(qreal);
     void slotKeepAspectChanged();
     void slotSaveLocationChanged(int index);
-    void slotUpdateLock(bool);
+    void slotRotateChanged();
+    void slotMirrorChanged();
+    void slotPositionChanged();
     void slotUpdateCrop(bool);
 
     void slotImageValuesChanged();

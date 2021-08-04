@@ -75,9 +75,9 @@ void ToolReferenceImages::activate(const QSet<KoShape*> &shapes)
 
 void ToolReferenceImages::mousePressEvent(KoPointerEvent *event)
 {
-    if(m_layer && m_layer->lock()) {
-        QPointF newPos = m_layer->lockedDocToWidgetTransform().inverted().map(event->pos());
-        KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
+    if(m_layer) {
+        QPointF newPos = m_layer->transform(dynamic_cast<KisCanvas2*>(canvas())).inverted().map(event->pos());
+        KoPointerEvent *newEvent = new KoPointerEvent(event, newPos);
         DefaultTool::mousePressEvent(newEvent);
         return;
     }
@@ -91,9 +91,8 @@ void ToolReferenceImages::mousePressEvent(KoPointerEvent *event)
 
 void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
 {
-
-    if(m_layer && m_layer->lock()) {
-        QPointF newPos = m_layer->lockedDocToWidgetTransform().inverted().map(event->pos());
+    if(m_layer) {
+        QPointF newPos = m_layer->transform(dynamic_cast<KisCanvas2*>(canvas())).inverted().map(event->pos());
         KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
         DefaultTool::mouseMoveEvent(newEvent);
         koSelection()->update();
@@ -132,8 +131,8 @@ void ToolReferenceImages::deactivate()
 
 void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if(m_layer && m_layer->lock()) {
-        painter.setTransform(m_layer->lockedFlakeToWidgetTransform());
+    if(m_layer) {
+        painter.setTransform(m_layer->transform(dynamic_cast<KisCanvas2*>(canvas())));
     }
     KisReferenceImage* ref = activeReferenceImage();
 

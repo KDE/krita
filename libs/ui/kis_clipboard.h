@@ -12,6 +12,7 @@
 #include <QSize>
 #include "kis_types.h"
 #include <kritaui_export.h>
+#include <KoColorProfile.h>
 
 class QRect;
 class QMimeData;
@@ -55,7 +56,7 @@ public:
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange = 0);
+    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange = 0, const KoColorProfile *destProfile = 0);
 
     bool hasClip() const;
 

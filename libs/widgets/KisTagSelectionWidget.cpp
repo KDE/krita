@@ -184,8 +184,6 @@ void WdgAddTagButton::slotFinishLastAction()
     } else {
         emit sigAddNewTag(m_lastTagToAdd);
     }
-
-
 }
 
 void WdgAddTagButton::slotAddNewTag(QAction *action)
@@ -255,9 +253,7 @@ KisTagSelectionWidget::KisTagSelectionWidget(QWidget *parent)
     connect(m_addTagButton, SIGNAL(sigCreateNewTag(QString)), this, SIGNAL(sigCreateNewTag(QString)), Qt::UniqueConnection);
     connect(m_addTagButton, SIGNAL(sigAddNewTag(KoID)), this, SIGNAL(sigAddTagToSelection(KoID)), Qt::UniqueConnection);
 
-
     setLayout(m_layout);
-
 }
 
 KisTagSelectionWidget::~KisTagSelectionWidget()
@@ -322,8 +318,8 @@ void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QLi
 void KisTagSelectionWidget::slotAddTagToSelection(QAction *action)
 {
     if (!action) return;
-    if (action->data().isNull()) {
-    } else {
+
+    if (!action->data().isNull()) {
         KoID custom = action->data().value <KoID>();
         emit sigAddTagToSelection(custom);
     }

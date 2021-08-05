@@ -44,7 +44,6 @@ private:
     KoID m_tag;
 
     friend class TestKisTagSelectionWidget;
-
 };
 
 

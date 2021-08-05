@@ -224,14 +224,17 @@ void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
         int response = overwriteTagDialog(this, tagForUrl->active());
         if (response == Undelete) { // Undelete
             d->model->setTagActive(tagForUrl);
-            KisTagResourceModel(d->resourceType).tagResource(tagForUrl, resource->resourceId());
+            if (!resource.isNull()) {
+                KisTagResourceModel(d->resourceType).tagResource(tagForUrl, resource->resourceId());
+            }
             d->model->sort(KisAllTagsModel::Name);
             return;
         } else if (response == Cancel) { // Cancel
             return;
         }
     }
-    d->model->addTag(tagName, true, {resource}); // this will overwrite the tag
+    QVector<KoResourceSP> resources = (resource.isNull() ? QVector<KoResourceSP>() : (QVector<KoResourceSP>() << resource));
+    d->model->addTag(tagName, true, resources); // this will overwrite the tag
     d->model->sort(KisAllTagsModel::Name);
 }
 
@@ -247,14 +250,17 @@ void KisTagChooserWidget::addTag(KisTagSP tag, KoResourceSP resource)
         int response = overwriteTagDialog(this, tagForUrl->active());
         if (response == Undelete) { // Undelete
             d->model->setTagActive(tagForUrl);
-            KisTagResourceModel(d->resourceType).tagResource(tagForUrl, resource->resourceId());
+            if (!resource.isNull()) {
+                KisTagResourceModel(d->resourceType).tagResource(tagForUrl, resource->resourceId());
+            }
             d->model->sort(KisAllTagsModel::Name);
             return;
         } else if (response == Cancel) { // Cancel
             return;
         }
     }
-    d->model->addTag(tag, true, {resource}); // this will overwrite the tag
+    QVector<KoResourceSP> resources = (resource.isNull() ? QVector<KoResourceSP>() : (QVector<KoResourceSP>() << resource));
+    d->model->addTag(tag, true, resources); // this will overwrite the tag
     d->model->sort(KisAllTagsModel::Name);
 }
 

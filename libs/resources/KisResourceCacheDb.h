@@ -93,6 +93,8 @@ private:
     static bool makeResourceTheCurrentVersion(int resourceId, KoResourceSP resource);
     static bool removeResourceCompletely(int resourceId);
 
+    /// Note that here you can put even the original filename - any filename from the versioned_resources - and it will still find it
+    static bool getResourceIdFromVersionedFilename(QString filename, QString resourceType, int& outResourceId);
 
     static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
     static bool addResources(KisResourceStorageSP storage, QString resourceType);

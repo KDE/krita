@@ -681,6 +681,40 @@ bool KisResourceCacheDb::removeResourceCompletely(int resourceId)
     return r;
 }
 
+bool KisResourceCacheDb::getResourceIdFromVersionedFilename(QString filename, QString resourceType, int &outResourceId)
+{
+    QSqlQuery q;
+
+    bool r = q.prepare("SELECT resource_id FROM versioned_resources\n"
+                       ", resources\n"
+                       ", resource_types\n"
+                       "WHERE versioned_resources.filename = :filename\n" // bind to filename
+                       "AND resources.id = versioned_resources.resource_id\n" // join resources + versioned_resources
+                       "AND resource_types.id = resources.resource_type_id\n"  // join resources_types + resources
+                       "AND resource_types.name = :resourceType;");
+
+    if (!r) {
+        qWarning() << "Could not prepare getResourceIdFromVersionedFilename statement" << q.lastError() << q.executedQuery();
+        return r;
+    }
+
+    q.bindValue(":filename", filename);
+    q.bindValue(":resourceType", resourceType);
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not execute getResourceIdFromVersionedFilename statement" << q.lastError() << filename << resourceType;
+        return r;
+    }
+
+    r = q.first();
+    if (r) {
+        outResourceId = q.value("resource_id").toInt();
+    }
+
+    return r;
+}
+
 bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
 {
     bool r = false;

@@ -142,7 +142,7 @@ KoColorSetSP KisPaletteEditor::importPalette()
     if (messageBox.exec() == QMessageBox::Yes) {
         storageLocation = m_d->view->document()->uniqueID();
     }
-    KoColorSetSP palette = m_d->rServer->resourceModel()->importResourceFile(filename, storageLocation).dynamicCast<KoColorSet>();
+    KoColorSetSP palette = m_d->rServer->resourceModel()->importResourceFile(filename, false, storageLocation).dynamicCast<KoColorSet>();
     return palette;
 }
 

@@ -287,7 +287,7 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
     return KisResourceCacheDb::setResourceActive(resourceId, active);
 }
 
-KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation)
+KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const bool allowOverwrite, const QString &storageLocation)
 {
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
 
@@ -314,7 +314,45 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
             return existingResource;
         } else {
             qWarning() << "A resource with the same filename but a different MD5 already exists in the storage" << resourceType << fileName << storageLocation;
-            return nullptr;
+            if (allowOverwrite) {
+
+                // remove all versions of the resource from the resource folder
+                QStringList versionsLocations;
+
+                // this resource has id -1, we need correct id
+                int existingResourceId = -1;
+                bool r = KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resourceType, existingResourceId);
+                if (r && existingResourceId >= 0) {
+                    if (KisResourceCacheDb::getAllVersionsLocations(existingResourceId, versionsLocations)) {
+                        for (int i = 0; i < versionsLocations.size(); i++) {
+                            QFileInfo fi(this->resourceLocationBase() + "/" + resourceType + "/" + versionsLocations[i]);
+                            if (fi.exists()) {
+                                r = QFile::remove(fi.filePath());
+                                if (!r) {
+                                    qWarning() << "KisResourceLocator::importResourceFromFile: Removal of " << fi.filePath()
+                                               << "was requested, but it wasn't possible, something went wrong.";
+                                }
+                            } else {
+                                qWarning() << "KisResourceLocator::importResourceFromFile: Removal of " << fi.filePath()
+                                           << "was requested, but it doesn't exist.";
+                            }
+                        }
+                    } else {
+                        return nullptr;
+                    }
+                } else {
+                    return nullptr;
+                }
+
+                // remove everything related to this resource from the database (remember about tags and versions!!!)
+                r = KisResourceCacheDb::removeResourceCompletely(existingResourceId);
+                if (!r) {
+                    return nullptr;
+                }
+
+            } else {
+                return nullptr;
+            }
         }
     }
 

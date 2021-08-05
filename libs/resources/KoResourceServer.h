@@ -179,7 +179,7 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    KoResourceSP importResourceFile(const QString &filename)
+    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite)
     {
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
@@ -187,7 +187,7 @@ public:
             qDebug().noquote() << kisBacktrace();
         }
 
-        return m_resourceModel->importResourceFile(filename);
+        return m_resourceModel->importResourceFile(filename, allowOverwrite);
     }
 
     /// Removes the resource file from the resource server

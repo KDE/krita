@@ -1299,7 +1299,7 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
                 }
                 else {
                     if (exportDocumentSync(tempFileName, mimeType, exportConfiguration)) {
-                        if (model.importResourceFile(tempFileName)) {
+                        if (model.importResourceFile(tempFileName, false)) {
                             return true;
                         }
                     }

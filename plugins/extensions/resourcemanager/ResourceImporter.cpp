@@ -257,7 +257,7 @@ void ResourceImporter::importResources(QString startPath)
                 }
             }
 
-            KoResourceSP res = model->importResourceFile(resourceFiles[i]);
+            KoResourceSP res = model->importResourceFile(resourceFiles[i], true);
             if (res.isNull()) {
                 if (debug) qCritical() << "But the resource is null :( ";
                 failedFiles[ResourceCannotBeLoaded] << resourceFiles[i];

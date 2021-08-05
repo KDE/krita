@@ -227,7 +227,7 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
-                tagFilterModel()->importResourceFile(filename);
+                tagFilterModel()->importResourceFile(filename, false);
             }
         }
         tagFilterModel()->sort(Qt::DisplayRole);

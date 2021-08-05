@@ -565,7 +565,7 @@ void KisPredefinedBrushChooser::slotImportNewBrushResource() {
             if (KisMimeDatabase::mimeTypeForFile(filename).contains(abrMimeType)) {
                 KisStorageModel::instance()->importStorage(filename, KisStorageModel::None);
             } else {
-                m_itemChooser->tagFilterModel()->importResourceFile(filename);
+                m_itemChooser->tagFilterModel()->importResourceFile(filename, false);
             }
         }
     }

@@ -2561,7 +2561,7 @@ void KisMainWindow::updateWindowMenu()
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         QString filename = dialog.filename();
 
-        d->workspacemodel->importResourceFile(filename);
+        d->workspacemodel->importResourceFile(filename, false);
     });
 
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),

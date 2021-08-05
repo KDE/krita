@@ -715,6 +715,33 @@ bool KisResourceCacheDb::getResourceIdFromVersionedFilename(QString filename, QS
     return r;
 }
 
+bool KisResourceCacheDb::getAllVersionsLocations(int resourceId, QStringList &outVersionsLocationsList)
+{
+    QSqlQuery q;
+    bool r = q.prepare("SELECT filename FROM versioned_resources \n"
+                  "WHERE resource_id = :resource_id;");
+
+    if (!r) {
+        qWarning() << "Could not prepare getAllVersionsLocations statement" << q.lastError();
+        return r;
+    }
+
+    q.bindValue(":resource_id", resourceId);
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not execute getAllVersionsLocations statement" << q.lastError() << resourceId;
+        return r;
+    }
+
+    outVersionsLocationsList = QStringList();
+    while (q.next()) {
+        outVersionsLocationsList << q.value("filename").toString();
+    }
+
+    return r;
+
+}
+
 bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
 {
     bool r = false;

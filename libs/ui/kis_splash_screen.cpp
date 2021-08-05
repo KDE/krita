@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 Alvin Wong <alvin@alvinhc.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -28,7 +29,7 @@
 #include <kconfiggroup.h>
 #include <QIcon>
 
-void addDropShadow(QWidget *widget)
+static void addDropShadow(QWidget *widget)
 {
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(widget);
     effect->setBlurRadius(4);

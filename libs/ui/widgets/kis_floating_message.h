@@ -1,12 +1,13 @@
 /*
  *  This file is part of KimageShop^WKrayon^WKrita
  *
- *  SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
  *  SPDX-FileCopyrightText: 2004 Christian Muehlhaeuser <chris@chris.de>
  *  SPDX-FileCopyrightText: 2004-2006 Seb Ruiz <ruiz@kde.org>
  *  SPDX-FileCopyrightText: 2004, 2005 Max Howell <max.howell@methylblue.com>
  *  SPDX-FileCopyrightText: 2005 Gabor Lehel <illissius@gmail.com>
  *  SPDX-FileCopyrightText: 2008, 2009 Mark Kretschmann <kretschmann@kde.org>
+ *  SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 Alvin Wong <alvin@alvinhc.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -20,6 +21,8 @@
 #include <QTimeLine>
 
 #include <kritaui_export.h>
+
+class QLabel;
 
 /**
  * @brief The KisFloatingMessage class shows the given message in a semi-transparent
@@ -52,10 +55,6 @@ public:
                             KisFloatingMessage::Priority priority,
                             int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
-protected:
-
-    void paintEvent(QPaintEvent *e) override;
-
 public Q_SLOTS:
     void showMessage();
     void removeMessage();
@@ -79,6 +78,8 @@ private:
     Priority m_priority;
     int m_alignment;
     bool widgetQueuedForDeletion;
+    QLabel *m_messageLabel;
+    QLabel *m_iconLabel;
 };
 
 #endif // KIS_FLOATING_MESSAGE_H

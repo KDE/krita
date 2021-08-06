@@ -150,6 +150,7 @@
 #include <katecommandbar.h>
 #include "KisNodeActivationActionCreatorVisitor.h"
 #include "KisUiFont.h"
+#include <KisResourceOverwriteDialog.h>
 
 
 #include <mutex>
@@ -2561,7 +2562,13 @@ void KisMainWindow::updateWindowMenu()
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         QString filename = dialog.filename();
 
-        d->workspacemodel->importResourceFile(filename, false);
+        KoResourceSP resource = d->workspacemodel->importResourceFile(filename, false);
+        if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Workspaces, filename)) {
+            if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
+                KoResourceSP resource = d->workspacemodel->importResourceFile(filename, true);
+            }
+        }
+
     });
 
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),

@@ -45,7 +45,7 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
-
+#include <KisResourceOverwriteDialog.h>
 
 
 #include "KisStorageChooserWidget.h"
@@ -227,7 +227,12 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
-                tagFilterModel()->importResourceFile(filename, false);
+                KoResourceSP resource = tagFilterModel()->importResourceFile(filename, false);
+                if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(d->resourceType, filename)) {
+                    if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
+                        KoResourceSP resource = tagFilterModel()->importResourceFile(filename, false);
+                    }
+                }
             }
         }
         tagFilterModel()->sort(Qt::DisplayRole);

@@ -489,4 +489,49 @@ namespace KritaUtils
         return QTransform::fromScale(image->xRes(), image->yRes());
     }
 
+    void thresholdOpacity(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode)
+    {
+        const KoColorSpace *cs = device->colorSpace();
+
+        if (mode == ThresholdCeil) {
+            KisSequentialIterator it(device, rect);
+            while (it.nextPixel()) {
+                if (cs->opacityU8(it.rawDataConst()) > 0) {
+                    cs->setOpacity(it.rawData(), quint8(255), 1);
+                }
+            }
+        } else if (mode == ThresholdFloor) {
+            KisSequentialIterator it(device, rect);
+            while (it.nextPixel()) {
+                if (cs->opacityU8(it.rawDataConst()) < 255) {
+                    cs->setOpacity(it.rawData(), quint8(0), 1);
+                }
+            }
+        } else if (mode == ThresholdMaxOut) {
+            KisSequentialIterator it(device, rect);
+            int numConseqPixels = it.nConseqPixels();
+            while (it.nextPixels(numConseqPixels)) {
+                numConseqPixels = it.nConseqPixels();
+                cs->setOpacity(it.rawData(), quint8(255), numConseqPixels);
+            }
+        }
+    }
+
+    void thresholdOpacityAlpha8(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode)
+    {
+        if (mode == ThresholdCeil) {
+            filterAlpha8Device(device, rect,
+                [] (quint8 value) {
+                    return value > 0 ? 255 : value;
+                });
+        } else if (mode == ThresholdFloor) {
+            filterAlpha8Device(device, rect,
+                [] (quint8 value) {
+                    return value < 255 ? 0 : value;
+                });
+        } else if (mode == ThresholdMaxOut) {
+            device->fill(rect, KoColor(Qt::white, device->colorSpace()));
+        }
+    }
+
 }

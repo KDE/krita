@@ -110,6 +110,16 @@ KisLayerStyleKnockoutBlower *KisLayerStyleFilterProjectionPlane::knockoutBlower(
     return &m_d->knockoutBlower;
 }
 
+KisLayerStyleFilter *KisLayerStyleFilterProjectionPlane::filter() const
+{
+    return m_d->filter.data();
+}
+
+KisPSDLayerStyleSP KisLayerStyleFilterProjectionPlane::style() const
+{
+    return m_d->style;
+}
+
 QRect KisLayerStyleFilterProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     if (!m_d->sourceLayer || !m_d->filter) {

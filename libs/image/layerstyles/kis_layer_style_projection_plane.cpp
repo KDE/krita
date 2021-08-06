@@ -9,6 +9,7 @@
 #include "kis_global.h"
 #include "kis_layer_style_filter_projection_plane.h"
 #include "kis_layer_projection_plane.h"
+#include "KisStrokeLayerStyleFilterProjectionPlane.h"
 #include "kis_psd_layer_style.h"
 
 #include "kis_ls_drop_shadow_filter.h"
@@ -21,7 +22,7 @@
 #include "kis_painter.h"
 #include "kis_ls_utils.h"
 #include "KisLayerStyleKnockoutBlower.h"
-
+#include "krita_utils.h"
 
 struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
 {
@@ -30,6 +31,7 @@ struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
     QVector<KisLayerStyleFilterProjectionPlaneSP> stylesBefore;
     QVector<KisLayerStyleFilterProjectionPlaneSP> stylesAfter;
     QVector<KisLayerStyleFilterProjectionPlaneSP> stylesOverlay;
+    KisStrokeLayerStyleFilterProjectionPlaneSP strokeStyle;
 
     KisCachedPaintDevice cachedPaintDevice;
     KisCachedSelection cachedSelection;
@@ -49,7 +51,12 @@ struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
     }
 
     QVector<KisLayerStyleFilterProjectionPlaneSP> allStyles() const {
-        return stylesBefore + stylesOverlay + stylesAfter;
+        QVector<KisLayerStyleFilterProjectionPlaneSP> result;
+        result << stylesBefore;
+        result << stylesOverlay;
+        result << strokeStyle;
+        result << stylesAfter;
+        return result;
     }
 
     bool hasOverlayStyles() const {
@@ -68,6 +75,8 @@ struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
         Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, stylesAfter) {
             if (!plane->knockoutBlower()->isEmpty()) return true;
         }
+
+        if (!strokeStyle->knockoutBlower()->isEmpty()) return true;
 
         return false;
     }
@@ -111,6 +120,8 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(const KisLayerStylePr
     Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesOverlay) {
         m_d->stylesOverlay << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
     }
+
+    m_d->strokeStyle.reset(new KisStrokeLayerStyleFilterProjectionPlane(*rhs.m_d->strokeStyle, sourceLayer, m_d->style));
 }
 
 // for testing purposes only!
@@ -141,10 +152,10 @@ void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleS
     }
 
     {
-        KisLayerStyleFilterProjectionPlane *stroke =
-            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        KisStrokeLayerStyleFilterProjectionPlane *stroke =
+            new KisStrokeLayerStyleFilterProjectionPlane(sourceLayer);
         stroke->setStyle(new KisLsStrokeFilter(), style);
-        m_d->stylesAfter << toQShared(stroke);
+        m_d->strokeStyle.reset(stroke);
     }
 
     {
@@ -260,6 +271,11 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
                 m_d->applyComplexPlane(painter, plane, rect, originalClone);
             }
 
+            KritaUtils::ThresholdMode sourceThresholdMode =
+                !m_d->strokeStyle->isEmpty() ?
+                m_d->strokeStyle->sourcePlaneOpacityThresholdRequirement() :
+                KritaUtils::ThresholdNone;
+
             if (m_d->hasOverlayStyles()) {
                 KisCachedSelection::Guard s1(m_d->cachedSelection);
                 KisSelectionSP knockoutSelection = s1.selection();
@@ -271,12 +287,14 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 
                 {
                     KisPainter overlayPainter(sourceProjection);
-                    sourcePlane->applyMaxOutAlpha(&overlayPainter, rect);
+                    sourcePlane->applyMaxOutAlpha(&overlayPainter, rect, KritaUtils::ThresholdMaxOut);
 
                     Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesOverlay) {
                         plane->apply(&overlayPainter, rect);
                     }
                 }
+
+                KritaUtils::thresholdOpacityAlpha8(knockoutSelection->pixelSelection(), rect, sourceThresholdMode);
 
                 KisLayerStyleKnockoutBlower blower;
                 blower.setKnockoutSelection(knockoutSelection);
@@ -284,7 +302,11 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 
                 blower.resetKnockoutSelection();
             } else {
-                sourcePlane->apply(painter, rect);
+                sourcePlane->applyMaxOutAlpha(painter, rect, sourceThresholdMode);
+            }
+
+            if (!m_d->strokeStyle->isEmpty()) {
+                m_d->applyComplexPlane(painter, m_d->strokeStyle, rect, originalClone);
             }
 
             Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, m_d->stylesAfter) {

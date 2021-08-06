@@ -10,7 +10,7 @@
 #include "kis_abstract_projection_plane.h"
 
 #include <QScopedPointer>
-
+#include "krita_utils.h"
 
 /**
  * An implementation of the KisAbstractProjectionPlane interface for a
@@ -24,7 +24,7 @@ public:
 
     QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
     void apply(KisPainter *painter, const QRect &rect) override;
-    void applyMaxOutAlpha(KisPainter *painter, const QRect &rect);
+    void applyMaxOutAlpha(KisPainter *painter, const QRect &rect, KritaUtils::ThresholdMode thresholdMode);
 
     QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
@@ -35,7 +35,7 @@ public:
     KisPaintDeviceList getLodCapableDevices() const override;
 
 private:
-    void applyImpl(KisPainter *painter, const QRect &rect, bool maxOutAlpha);
+    void applyImpl(KisPainter *painter, const QRect &rect, KritaUtils::ThresholdMode thresholdMode);
 
 private:
     struct Private;

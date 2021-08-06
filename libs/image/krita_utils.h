@@ -108,6 +108,16 @@ namespace KritaUtils
      * See https://bugs.kde.org/show_bug.cgi?id=411056
      */
     QTransform KRITAIMAGE_EXPORT pathShapeBooleanSpaceWorkaround(KisImageSP image);
+
+    enum ThresholdMode {
+        ThresholdNone = 0,
+        ThresholdFloor,
+        ThresholdCeil,
+        ThresholdMaxOut
+    };
+
+    void thresholdOpacity(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode);
+    void thresholdOpacityAlpha8(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode);
 }
 
 #endif /* __KRITA_UTILS_H */

@@ -31,6 +31,7 @@ class KisWarpTransformStrategy : public KisSimplifiedActionPolicyStrategy
     Q_OBJECT
 public:
     KisWarpTransformStrategy(const KisCoordinatesConverter *converter,
+                             KoSnapGuide *snapGuide,
                              ToolTransformArgs &currentArgs,
                              TransformTransactionProperties &transaction);
     ~KisWarpTransformStrategy() override;

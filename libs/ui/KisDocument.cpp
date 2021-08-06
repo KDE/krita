@@ -444,6 +444,7 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
             setClearsRedoOnStart(false);
+            setRequestsOtherStrokesToEnd(false);
         }
 
         void initStrokeCallback() override {
@@ -2035,15 +2036,8 @@ KisGridConfig KisDocument::gridConfig() const
 void KisDocument::setGridConfig(const KisGridConfig &config)
 {
     if (d->gridConfig != config) {
-        const bool shouldSyncDecorations =
-            !d->gridConfig.isSameIgnoringSnapping(config);
-
         d->gridConfig = config;
-
-        if (shouldSyncDecorations) {
-            d->syncDecorationsWrapperLayerState();
-        }
-
+        d->syncDecorationsWrapperLayerState();
         emit sigGridConfigChanged(config);
     }
 }
@@ -2130,15 +2124,8 @@ void KisDocument::setGuidesConfig(const KisGuidesConfig &data)
 {
     if (d->guidesConfig == data) return;
 
-    const bool shouldSyncDecorations =
-        !d->guidesConfig.isSameIgnoringSnapping(data);
-
     d->guidesConfig = data;
-
-    if (shouldSyncDecorations) {
-        d->syncDecorationsWrapperLayerState();
-    }
-
+    d->syncDecorationsWrapperLayerState();
     emit sigGuidesConfigChanged(d->guidesConfig);
 }
 

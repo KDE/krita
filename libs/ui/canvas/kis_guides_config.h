@@ -61,16 +61,6 @@ public:
      */
     void addGuideLine(Qt::Orientation orientation, qreal position);
 
-    /**
-     * @brief Display or not guide lines
-     */
-    bool showGuideLines() const;
-
-    /**
-     * @param show display or not guide line
-     */
-    void setShowGuideLines(bool show);
-
     bool showGuides() const;
     void setShowGuides(bool value);
     bool lockGuides() const;
@@ -112,8 +102,6 @@ public:
     /// should be in 'document' coordinate system.
     /// Used with image-wide transformations.
     void transform(const QTransform &transform);
-
-    bool isSameIgnoringSnapping(const KisGuidesConfig &rhs) const;
 
 private:
     class Private;

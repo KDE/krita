@@ -8,9 +8,11 @@
 #define KISBATCHNODEUPDATE_H
 
 #include "kritaimage_export.h"
+
+#include <QRect>
 #include <QSharedPointer>
-#include <kis_types.h>
 #include <boost/operators.hpp>
+#include <kis_types.h>
 
 /**
  * A simple class for storing the updates of multiple nodes
@@ -68,9 +70,11 @@ public:
      * parent-child compression though. You need to call compress()
      * separately for that.
      */
-    KisBatchNodeUpdate& operator|(KisBatchNodeUpdate &rhs);
+    KisBatchNodeUpdate& operator|=(const KisBatchNodeUpdate &rhs);
 
 };
+
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisBatchNodeUpdate &update);
 
 using KisBatchNodeUpdateSP = QSharedPointer<KisBatchNodeUpdate>;
 using KisBatchNodeUpdateWSP = QWeakPointer<KisBatchNodeUpdate>;

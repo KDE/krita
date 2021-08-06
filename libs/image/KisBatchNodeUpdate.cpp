@@ -10,8 +10,9 @@
 #include "kis_layer_utils.h"
 
 KisBatchNodeUpdate::KisBatchNodeUpdate(const std::vector<std::pair<KisNodeSP, QRect>> &rhs)
+    : std::vector<std::pair<KisNodeSP, QRect>>(rhs)
 {
-    *this = rhs;
+
 }
 
 void KisBatchNodeUpdate::addUpdate(KisNodeSP node, const QRect &rc)
@@ -50,23 +51,20 @@ KisBatchNodeUpdate KisBatchNodeUpdate::compressed() const
     return newUpdateData;
 }
 
-KisBatchNodeUpdate &KisBatchNodeUpdate::operator|(KisBatchNodeUpdate &rhs)
+KisBatchNodeUpdate &KisBatchNodeUpdate::operator|=(const KisBatchNodeUpdate &rhs)
 {
+    if (this == &rhs)
+        return *this;
+
     reserve(size() + rhs.size());
 
     std::copy(rhs.begin(), rhs.end(), std::back_inserter(*this));
-    std::sort(begin(), end(),
-        [] (const std::pair<KisNodeSP, QRect> &lhs,
-            const std::pair<KisNodeSP, QRect> &rhs) {
+    std::sort(begin(), end(), [](const std::pair<KisNodeSP, QRect> &lhs, const std::pair<KisNodeSP, QRect> &rhs) { return lhs.first.data() < rhs.first.data(); });
 
-            return lhs.first.data() < rhs.first.data();
-        });
+    if (size() <= 1)
+        return *this;
 
-    if (size() <= 1) return *this;
-
-    for (auto prevIt = begin(), it = next(prevIt);
-         it != end();) {
-
+    for (auto prevIt = begin(), it = next(prevIt); it != end();) {
         if (prevIt->first == it->first) {
             prevIt->second |= it->second;
             it = erase(it);
@@ -77,4 +75,19 @@ KisBatchNodeUpdate &KisBatchNodeUpdate::operator|(KisBatchNodeUpdate &rhs)
     }
 
     return *this;
+}
+
+QDebug operator<<(QDebug dbg, const KisBatchNodeUpdate &update)
+{
+    dbg.nospace() << "KisBatchNodeUpdate (";
+
+    for (auto it = update.begin(); it != update.end(); ++it) {
+        dbg.nospace() << it->first << "->" << it->second;
+
+        if (next(it) != update.end()) {
+            dbg.nospace() << "; ";
+        }
+    }
+
+    return dbg;
 }

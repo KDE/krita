@@ -60,7 +60,7 @@ void MoveToolOptionsWidget::updateUIUnit(int newUnit)
     qreal valueForUI;
     if (selectedUnit != KoUnit(KoUnit::Pixel)) {
         spinMoveStep->setRange(0.0001, 10000.000);
-        spinMoveStep->setSingleStep(.1);
+        spinMoveStep->setSingleStep(0.1);
         spinMoveStep->setDecimals(4);
         valueForUI = selectedUnit.toUserValue((qreal)m_moveStep / (qreal)m_resolution);
     } else {

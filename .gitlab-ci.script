@@ -1,0 +1,25 @@
+#!/bin/bash -fxv
+
+# stop running script if a command fails
+set -e
+
+# ensure `clang-format` command points to `clang-format-11`
+update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-11 30
+update-alternatives --set clang-format /usr/bin/clang-format-11
+
+# download .clang-format into current directory
+wget -c --output-document=.clang-format https://invent.kde.org/frameworks/extra-cmake-modules/raw/master/kde-modules/clang-format.cmake
+
+# format source code inline
+git clang-format-11 $(git merge-base origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME $CI_COMMIT_SHA)
+
+# if files were modified, then print the diff modified that would make the proper format
+if ! git diff-index --quiet HEAD; then
+  echo '*** Suggested changes to comply with KDE code conventions are below'
+  echo 'You can copy below this empty line, save the content to a format.patch file, then do `patch < format.patch`'
+  echo ''
+  git --no-pager diff -U0
+  exit 1
+fi
+
+exit 0

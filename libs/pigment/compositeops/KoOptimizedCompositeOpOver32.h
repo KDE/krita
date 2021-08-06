@@ -232,7 +232,7 @@ class KoOptimizedCompositeOpOver32 : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpOver32(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_OVER, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 

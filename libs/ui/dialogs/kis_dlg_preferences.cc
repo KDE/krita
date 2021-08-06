@@ -979,11 +979,11 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     sliderPoolLimit->setSuffix(i18n(" %"));
     sliderPoolLimit->setRange(0, 20, 2);
-    sliderMemoryLimit->setSingleStep(0.01);
+    sliderPoolLimit->setSingleStep(0.01);
 
     sliderUndoLimit->setSuffix(i18n(" %"));
     sliderUndoLimit->setRange(0, 50, 2);
-    sliderMemoryLimit->setSingleStep(0.01);
+    sliderUndoLimit->setSingleStep(0.01);
 
     intMemoryLimit->setMinimumWidth(80);
     intPoolLimit->setMinimumWidth(80);

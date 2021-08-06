@@ -1,0 +1,12 @@
+{
+    "Id": "Krita WebP Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Import": "image/webp",
+    "X-KDE-Library": "kritawebpimport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "webp"
+}

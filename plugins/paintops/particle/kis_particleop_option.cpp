@@ -31,15 +31,19 @@ KisParticleOpOption::KisParticleOpOption()
     m_options = new KisParticleOpOptionsWidget();
 
     m_options->gravSPBox->setRange(-1.0, 1.0, 3);
+    m_options->gravSPBox->setSingleStep(0.001);
     m_options->gravSPBox->setValue(0.989);
 
     m_options->dySPBox->setRange(-10.0, 10.0, 2);
+    m_options->dySPBox->setSingleStep(0.01);
     m_options->dySPBox->setValue(0.3);
 
     m_options->dxSPBox->setRange(-10.0, 10.0, 2);
+    m_options->dxSPBox->setSingleStep(0.01);
     m_options->dxSPBox->setValue(0.3);
 
     m_options->weightSPBox->setRange(0.01, 1.0, 2);
+    m_options->weightSPBox->setSingleStep(0.01);
     m_options->weightSPBox->setValue(0.2);
 
     m_options->particleSpinBox->setRange(1.0, 500.0, 0);

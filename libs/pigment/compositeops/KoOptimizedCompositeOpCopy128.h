@@ -263,7 +263,7 @@ class KoOptimizedCompositeOpCopy128 : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpCopy128(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_COPY, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
@@ -307,7 +307,7 @@ class KoOptimizedCompositeOpCopyU64 : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpCopyU64(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_COPY, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
@@ -352,7 +352,7 @@ class KoOptimizedCompositeOpCopy32 : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpCopy32(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_COPY, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 

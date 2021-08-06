@@ -205,8 +205,6 @@ public:
     /// Used with image-wide transformations.
     void transform(const QTransform &transform);
 
-    bool isSameIgnoringSnapping(const KisGridConfig &rhs) const;
-
 private:
     static Qt::PenStyle toPenStyle(LineTypeInternal type) {
         return type == LINE_SOLID ? Qt::SolidLine :

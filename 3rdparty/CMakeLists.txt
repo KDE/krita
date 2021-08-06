@@ -287,6 +287,10 @@ add_subdirectory( ext_freetype)
 add_subdirectory( ext_qt )
 add_subdirectory( ext_poppler )
 add_subdirectory( ext_libraw )
+if (ANDROID)
+  # gettext replacement
+  add_subdirectory(ext_libintl-lite)
+endif()
 add_subdirectory( ext_frameworks )
 if (ENABLE_PYTHON_DEPS OR NOT MINGW)
     add_subdirectory( ext_sip )
@@ -306,11 +310,6 @@ if(UNIX)
     add_subdirectory( ext_pkgconfig )
 endif()
 
-if (ANDROID)
-  # gettext replacement
-  add_subdirectory(ext_libintl-lite)
-endif()
-
 add_subdirectory( ext_heif )
 add_subdirectory(ext_giflib)
 add_subdirectory(ext_quazip)
@@ -318,13 +317,8 @@ add_subdirectory(ext_seexpr)
 add_subdirectory(ext_json_c)
 add_subdirectory(ext_mypaint)
 
-if (UNIX AND NOT APLE)
+if (UNIX AND NOT APPLE)
     add_subdirectory(ext_fcitx-qt)
 endif()
 
-# Print all current cmake variables.
-get_cmake_property(CURRENT_CMAKE_VARIABLES VARIABLES)
-list (SORT CURRENT_CMAKE_VARIABLES)
-foreach (VARIABLE_SET ${CURRENT_CMAKE_VARIABLES})
-    message(STATUS "${VARIABLE_SET} = ${${VARIABLE_SET}}")
-endforeach()
+add_subdirectory(ext_webp)

@@ -47,6 +47,7 @@
 #include "kis_undo_stores.h"
 #include "kis_transparency_mask.h"
 #include "commands_new/KisDisableDirtyRequestsCommand.h"
+#include <kis_shape_layer.h>
 
 
 struct InplaceTransformStrokeStrategy::Private
@@ -318,7 +319,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
         Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-            m_d->prevDirtyRects.addUpdate(node, node->extent());
+            m_d->prevDirtyRects.addUpdate(node, node->projectionPlane()->tightUserVisibleBounds());
         }
 
         m_d->initialUpdatesBeforeClear = m_d->prevDirtyRects.compressed();
@@ -329,6 +330,25 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     });
 
     extraInitJobs << lastCommandUndoJobs;
+
+    if (!lastCommandUndoJobs.isEmpty()) {
+        KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+            /**
+             * In case we are doing a continued action, we need to
+             * set initial update to the "very initial" state that
+             * was present before the previous stroke. So here we
+             * just override the rect calculated before
+             */
+            KisBatchNodeUpdate updates;
+
+            Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
+                updates.addUpdate(node, node->projectionPlane()->tightUserVisibleBounds());
+            }
+
+            m_d->initialUpdatesBeforeClear = updates.compressed();
+            *m_d->updateDataForUndo = m_d->initialUpdatesBeforeClear;
+        });
+    }
 
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         // When dealing with animated transform mask layers, create keyframe and save the command for undo.
@@ -375,9 +395,14 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                               argsAreInitialized]() mutable {
         QRect srcRect;
 
-        if (m_d->externalSource) {
+        KisPaintDeviceSP externalSource =
+            m_d->externalSource ? m_d->externalSource :
+            (argsAreInitialized && m_d->initialTransformArgs.externalSource()) ?
+                m_d->initialTransformArgs.externalSource() : 0;
+
+        if (externalSource) {
             // Start the transformation around the visible pixels of the external image
-            srcRect = m_d->externalSource->exactBounds();
+            srcRect = externalSource->exactBounds();
         } else if (m_d->selection) {
             srcRect = m_d->selection->selectedExactRect();
         } else {
@@ -394,15 +419,16 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                 } else if (const KisTransparencyMask *mask = dynamic_cast<const KisTransparencyMask*>(node.data())) {
                     srcRect |= mask->selection()->selectedExactRect();
                 } else {
-                    srcRect |= node->exactBounds();
+                    /// We shouldn't include masks or layer styles into the handles rect,
+                    /// in the end, we process the paint device only
+                    srcRect |= node->paintDevice() ? node->paintDevice()->exactBounds() : node->exactBounds();
                 }
             }
         }
 
         TransformTransactionProperties transaction(srcRect, &m_d->initialTransformArgs, m_d->rootNode, m_d->processedNodes);
         if (!argsAreInitialized) {
-            m_d->initialTransformArgs = KisTransformUtils::resetArgsForMode(m_d->mode, m_d->filterId, transaction);
-            m_d->initialTransformArgs.setExternalSource(m_d->externalSource);
+            m_d->initialTransformArgs = KisTransformUtils::resetArgsForMode(m_d->mode, m_d->filterId, transaction, m_d->externalSource);
         }
         m_d->externalSource.clear();
 
@@ -568,10 +594,16 @@ void InplaceTransformStrokeStrategy::fetchAllUpdateRequests(int levelOfDetail, K
 
     *updateData = (prevDirtyRects | dirtyRects).compressed();
 
-    if (levelOfDetail <= 0) {
-        *m_d->updateDataForUndo = (m_d->initialUpdatesBeforeClear | dirtyRects).compressed();
+    KisBatchNodeUpdate savedUndoRects = dirtyRects;
+
+    if (levelOfDetail > 0) {
+
+        for (auto it = savedUndoRects.begin(); it != savedUndoRects.end(); ++it) {
+            it->second = KisLodTransform::upscaledRect(it->second, levelOfDetail);
+        }
     }
 
+    *m_d->updateDataForUndo = (m_d->initialUpdatesBeforeClear | savedUndoRects).compressed();
     prevDirtyRects.clear();
     dirtyRects.swap(prevDirtyRects);
 }
@@ -591,7 +623,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                      extLayer->supportsPerspectiveTransform())) {
 
                 if (levelOfDetail <= 0) {
-                    const QRect oldDirtyRect = extLayer->extent() | extLayer->theoreticalBoundingRect();
+                    const QRect oldDirtyRect = extLayer->projectionPlane()->tightUserVisibleBounds() | extLayer->theoreticalBoundingRect();
 
                     QVector3D transformedCenter;
                     KisTransformWorker w = KisTransformUtils::createTransformWorker(config, 0, 0, &transformedCenter);
@@ -599,6 +631,12 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                     KUndo2Command *cmd = extLayer->transform(t);
 
                     executeAndAddCommand(cmd, Transform, KisStrokeJobData::CONCURRENT);
+
+                    /// we should make sure that the asynchronous shape regeneration
+                    /// has completed before we issue the updates a bit later
+                    if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(extLayer)) {
+                        shapeLayer->forceUpdateTimedNode();
+                    }
 
                     /**
                      * Shape layer's projection may not be yet ready right
@@ -611,7 +649,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                     addDirtyRect(node,
                                  oldDirtyRect |
                                  theoreticalNewDirtyRect |
-                                 extLayer->extent() |
+                                 extLayer->projectionPlane()->tightUserVisibleBounds() |
                                  extLayer->theoreticalBoundingRect(), 0);
                     return;
                 } else {
@@ -641,7 +679,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                                                    device, &helper);
 
         executeAndAddCommand(transaction.endAndTake(), commandGroup, KisStrokeJobData::CONCURRENT);
-        addDirtyRect(node, cachedPortion->extent() | device->extent(), levelOfDetail);
+        addDirtyRect(node, cachedPortion->extent() | node->projectionPlane()->tightUserVisibleBounds(), levelOfDetail);
 
     } else if (KisTransformMask *transformMask =
                dynamic_cast<KisTransformMask*>(node.data())) {
@@ -810,7 +848,7 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
         fetchAllUpdateRequests(levelOfDetail, updateData);
 
         executeAndAddCommand(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisUpdateCommandEx::FINALIZING), commandGroup, KisStrokeJobData::BARRIER);
-        executeAndAddCommand(new KisUpdateCommandEx(updateData, m_d->updatesFacade, KisUpdateCommandEx::FINALIZING, m_d->commandUpdatesBlockerCookie), commandGroup, KisStrokeJobData::BARRIER);
+        executeAndAddCommand(new KisUpdateCommandEx(m_d->updateDataForUndo, m_d->updatesFacade, KisUpdateCommandEx::FINALIZING, m_d->commandUpdatesBlockerCookie), commandGroup, KisStrokeJobData::BARRIER);
 
         if (useHoldUI) {
             executeAndAddCommand(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING), commandGroup, KisStrokeJobData::BARRIER);
@@ -822,7 +860,16 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
          * purposes)
          */
         for (auto it = updateData->begin(); it != updateData->end(); ++it) {
-            m_d->updatesFacade->refreshGraphAsync(it->first, it->second);
+            KisTransformMask *transformMask = dynamic_cast<KisTransformMask*>(it->first.data());
+
+            if (transformMask &&
+                    ((levelOfDetail <= 0 && !transformMask->transformParams()->isAffine()) ||
+                     (levelOfDetail <= 0 && m_d->previewLevelOfDetail > 0))) {
+                transformMask->threadSafeForceStaticImageUpdate();
+            } else {
+                m_d->updatesFacade->refreshGraphAsync(it->first, it->second);
+            }
+
         }
     });
 }
@@ -936,6 +983,7 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
 
     if (m_d->initialTransformArgs.isIdentity()) {
         KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+            m_d->commandUpdatesBlockerCookie.reset();
             undoTransformCommands(0);
             undoAllCommands();
         });
@@ -961,6 +1009,10 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
         });
 
         reapplyTransform(m_d->initialTransformArgs, mutatedJobs, 0, true);
+
+        mutatedJobs << new UpdateTransformData(m_d->initialTransformArgs,
+                                               UpdateTransformData::SELECTION);
+
         finalizeStrokeImpl(mutatedJobs, bool(m_d->overriddenCommand));
 
         KritaUtils::addJobSequential(mutatedJobs, [this]() {

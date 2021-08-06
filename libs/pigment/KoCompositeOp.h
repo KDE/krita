@@ -26,8 +26,6 @@ class KoColorSpace;
 class KRITAPIGMENT_EXPORT KoCompositeOp
 {
 public:
-    static QString categoryColor();
-
     static QString categoryArithmetic();
     static QString categoryBinary();
     static QString categoryModulo();
@@ -74,12 +72,11 @@ public:
     /**
      * @param cs a pointer to the color space that can be used with this composite op
      * @param id the identifier for this composite op (not user visible)
-     * @param description a user visible string describing this composite operation
      * @param category the name of the category where to put that composite op when displayed
      * @param userVisible define whether or not that composite op should be visible in a user
      *                    interface
      */
-    KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString& description, const QString & category = KoCompositeOp::categoryMisc());
+    KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString & category = KoCompositeOp::categoryMisc());
     virtual ~KoCompositeOp();
 
     /**

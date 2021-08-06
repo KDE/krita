@@ -43,12 +43,15 @@ void KisSprayShapeDynamicsOption::setupBrushPreviewSignals()
 
 
     m_options->drawingAngleWeight->setRange(0.0, 1.0, 2);
+    m_options->drawingAngleWeight->setSingleStep(0.01);
     m_options->drawingAngleWeight->setDisabled(true);
 
     m_options->followCursorWeight->setRange(0.0, 1.0, 2);
+    m_options->followCursorWeight->setSingleStep(0.01);
     m_options->followCursorWeight->setDisabled(true);
 
     m_options->randomAngleWeight->setRange(0.0, 1.0, 2);
+    m_options->randomAngleWeight->setSingleStep(0.01);
     m_options->randomAngleWeight->setDisabled(true);
 
     m_options->fixedAngleBox->setDecimals(0);

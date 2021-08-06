@@ -289,7 +289,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slPatternSize->addMultiplier(2);
         slPatternSize->addMultiplier(10);
 
-        slPatternSize->setSingleStep(.01);
+        slPatternSize->setSingleStep(0.01);
         slPatternSize->setSuffix(i18n("x"));
         slPatternSize->setMinimumWidth(qMax(sliderWidth, slPatternSize->sizeHint().width()));
         slPatternSize->setFixedHeight(buttonsize);

@@ -37,8 +37,8 @@ class KoCompositeOpBase : public KoCompositeOp
     static const qint32 pixel_size   = _CSTraits::pixelSize;
 
 public:
-    KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
-        : KoCompositeOp(cs, id, description, category) { }
+    KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& category)
+        : KoCompositeOp(cs, id, category) { }
 
     using KoCompositeOp::composite;
 

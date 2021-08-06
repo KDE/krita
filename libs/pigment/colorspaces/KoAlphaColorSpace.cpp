@@ -44,7 +44,7 @@ class AlphaColorSpaceMultiplyOp : public KoCompositeOpBase< Traits, AlphaColorSp
 
 public:
     AlphaColorSpaceMultiplyOp(const KoColorSpace* cs)
-        : base_class(cs, COMPOSITE_MULT, i18n("Multiply"), KoCompositeOp::categoryArithmetic()) { }
+        : base_class(cs, COMPOSITE_MULT, KoCompositeOp::categoryArithmetic()) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>

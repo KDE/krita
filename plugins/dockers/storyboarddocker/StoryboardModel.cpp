@@ -187,23 +187,20 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
             }
             else if (index.row() == StoryboardItem::DurationSecond ||
                      index.row() == StoryboardItem::DurationFrame) {
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
-                QModelIndex secondIndex = index.row() == StoryboardItem::DurationSecond ? index : index.siblingAtRow(StoryboardItem::DurationSecond);
-#else
-                QModelIndex secondIndex = index.row() == StoryboardItem::DurationSecond ? index : index.sibling(StoryboardItem::DurationSecond, 0);
-#endif
-                const int secondCount = index.row() == StoryboardItem::DurationSecond ? value.toInt() : secondIndex.data().toInt();
+
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
                 QModelIndex frameIndex = index.row() == StoryboardItem::DurationFrame ? index : index.siblingAtRow(StoryboardItem::DurationFrame);
-#else
-                QModelIndex frameIndex = index.row() == StoryboardItem::DurationFrame ? index : index.sibling(StoryboardItem::DurationFrame, 0);
-#endif
-                const int frameCount = index.row() == StoryboardItem::DurationFrame ? value.toInt() : frameIndex.data().toInt();
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+                QModelIndex secondIndex = index.row() == StoryboardItem::DurationSecond ? index : index.siblingAtRow(StoryboardItem::DurationSecond);
                 const int sceneStartFrame = index.siblingAtRow(StoryboardItem::FrameNumber).data().toInt();
 #else
+                QModelIndex frameIndex = index.row() == StoryboardItem::DurationFrame ? index : index.sibling(StoryboardItem::DurationFrame, 0);
+                QModelIndex secondIndex = index.row() == StoryboardItem::DurationSecond ? index : index.sibling(StoryboardItem::DurationSecond, 0);
                 const int sceneStartFrame = index.sibling(StoryboardItem::FrameNumber, 0).data().toInt();
 #endif
+
+                const int secondCount = index.row() == StoryboardItem::DurationSecond ? value.toInt() : secondIndex.data().toInt();
+                const int frameCount = index.row() == StoryboardItem::DurationFrame ? value.toInt() : frameIndex.data().toInt();
+
                 // Do not allow desired scene length to be shorter than keyframes within
                 // the given scene. This prevents overwriting data that exists internal
                 // to a scene.
@@ -283,7 +280,6 @@ bool StoryboardModel::setCommentScrollData(const QModelIndex & index, const QVar
 
 bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & parentIndex, const KisPaintDeviceSP & dev)
 {
-
     QModelIndex index = this->index(0, 0, parentIndex);
     QRect thumbnailRect = m_view->visualRect(parentIndex);
     float scale = qMin(thumbnailRect.height() / (float)m_image->height(), (float)thumbnailRect.width() / m_image->width());
@@ -680,6 +676,7 @@ QModelIndex StoryboardModel::lastIndexBeforeFrame(int frame) const
 QModelIndexList StoryboardModel::affectedIndexes(KisTimeSpan range) const
 {
     QModelIndex firstIndex = indexFromFrame(range.start());
+
     if (firstIndex.isValid()) {
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
         firstIndex = firstIndex.siblingAtRow(firstIndex.row() + 1);
@@ -1156,6 +1153,7 @@ void StoryboardModel::slotFramerateChanged()
 
 void StoryboardModel::slotUpdateThumbnailForFrame(int frame, bool delay)
 {
+    Q_UNUSED(delay);
     if (!m_image) {
         return;
     }
@@ -1163,16 +1161,6 @@ void StoryboardModel::slotUpdateThumbnailForFrame(int frame, bool delay)
     QModelIndex index = indexFromFrame(frame);
     bool affected = true;
     if (index.isValid() && !isLocked()) {
-        if (frame == m_image->animationInterface()->currentUITime()) {
-            if(!delay) {
-                setThumbnailPixmapData(index, m_image->projection());
-                return;
-            }
-            else {
-                affected = false;
-            }
-        }
-
         m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
         m_renderScheduler->slotStartFrameRendering();
     }

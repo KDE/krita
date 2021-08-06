@@ -247,7 +247,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     }
     else if (td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
-            QRect oldExtent = td->node->extent();
+            QRect oldExtent = td->node->projectionPlane()->tightUserVisibleBounds();
             KisPaintDeviceSP device = td->node->paintDevice();
 
             if (device && !checkBelongsToSelection(device)) {
@@ -264,7 +264,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::CONCURRENT,
                                   KisStrokeJobData::NORMAL);
 
-                m_updateData->addUpdate(td->node, cachedPortion->extent() | oldExtent | td->node->extent());
+                m_updateData->addUpdate(td->node, cachedPortion->extent() | oldExtent | td->node->projectionPlane()->tightUserVisibleBounds());
             } else if (KisExternalLayer *extLayer =
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
@@ -290,7 +290,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                     const QRect theoreticalNewDirtyRect =
                         kisGrowRect(t.mapRect(oldDirtyRect), 1);
 
-                    m_updateData->addUpdate(td->node, oldDirtyRect | td->node->extent() | extLayer->theoreticalBoundingRect() | theoreticalNewDirtyRect);
+                    m_updateData->addUpdate(td->node, oldDirtyRect | td->node->projectionPlane()->tightUserVisibleBounds() | extLayer->theoreticalBoundingRect() | theoreticalNewDirtyRect);
                 }
 
             } else if (KisTransformMask *transformMask =
@@ -401,6 +401,8 @@ void TransformStrokeStrategy::initStrokeCallback()
         m_deactivatedOverlaySelectionMask = overlaySelectionMask;
     }
 
+    m_rootNode = KisTransformUtils::tryOverrideRootToTransformMask(m_rootNode);
+
     ToolTransformArgs initialTransformArgs;
     bool isExternalSourcePresent = false;
     m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, isExternalSourcePresent);
@@ -471,14 +473,16 @@ void TransformStrokeStrategy::initStrokeCallback()
                 } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
                     srcRect |= mask->selection()->selectedExactRect();
                 } else {
-                    srcRect |= node->exactBounds();
+                    /// We shouldn't include masks or layer styles into the handles rect,
+                    /// in the end, we process the paint device only
+                    srcRect |= node->paintDevice() ? node->paintDevice()->exactBounds() : node->exactBounds();
                 }
             }
         }
 
         TransformTransactionProperties transaction(srcRect, &initialTransformArgs, m_rootNode, m_processedNodes);
         if (!argsAreInitialized) {
-            initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction);
+            initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction, 0);
         }
 
         this->m_initialTransformArgs = initialTransformArgs;
@@ -492,7 +496,7 @@ void TransformStrokeStrategy::initStrokeCallback()
     KritaUtils::addJobBarrier(extraInitJobs, [this, sharedData]() {
         KisNodeList filteredRoots = KisLayerUtils::sortAndFilterMergableInternalNodes(m_processedNodes, true);
         Q_FOREACH (KisNodeSP root, filteredRoots) {
-            sharedData->addUpdate(root, root->extent());
+            sharedData->addUpdate(root, root->projectionPlane()->tightUserVisibleBounds());
         }
     });
 
@@ -542,19 +546,16 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
     QVector<KisStrokeJobData *> mutatedJobs;
 
-    /**
-     * We should make the shape layers visible **before** transforming them,
-     * otherwise the setDirty() call issued by KisShapeLayerCavas::repaint()
-     * may be lost.
-     */
-    KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {
+    auto restoreTemporaryHiddenNodes = [this] () {
         Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
             node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
-            if (!applyTransform) {
+            if (KisDelayedUpdateNodeInterface *delayedNode = dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data())) {
+                delayedNode->forceUpdateTimedNode();
+            } else {
                 node->setDirty();
             }
         }
-    });
+    };
 
     if (applyTransform) {
         m_savedTransformArgs = args;
@@ -576,6 +577,8 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
                                          args,
                                          m_rootNode);
 
+        KritaUtils::addJobBarrier(mutatedJobs, restoreTemporaryHiddenNodes);
+
         KritaUtils::addJobBarrier(mutatedJobs, [this] () {
             m_updatesFacade->enableDirtyRequests();
             m_updatesDisabled = false;
@@ -583,6 +586,8 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
             m_updateData->compress();
             runAndSaveCommand(toQShared(new KisUpdateCommandEx(m_updateData, m_updatesFacade, KisUpdateCommandEx::FINALIZING)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
         });
+    } else {
+        KritaUtils::addJobBarrier(mutatedJobs, restoreTemporaryHiddenNodes);
     }
 
     KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {

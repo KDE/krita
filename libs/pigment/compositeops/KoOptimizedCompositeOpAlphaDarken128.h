@@ -191,7 +191,7 @@ class KoOptimizedCompositeOpAlphaDarken128Impl : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpAlphaDarken128Impl(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
@@ -228,7 +228,7 @@ class KoOptimizedCompositeOpAlphaDarkenU64Impl : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpAlphaDarkenU64Impl(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 

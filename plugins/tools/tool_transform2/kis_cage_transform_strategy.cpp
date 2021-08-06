@@ -27,9 +27,10 @@ struct KisCageTransformStrategy::Private
 
 
 KisCageTransformStrategy::KisCageTransformStrategy(const KisCoordinatesConverter *converter,
+                                                   KoSnapGuide *snapGuide,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : KisWarpTransformStrategy(converter, currentArgs, transaction),
+    : KisWarpTransformStrategy(converter, snapGuide, currentArgs, transaction),
       m_d(new Private(this))
 {
     overrideDrawingItems(true, false, true);

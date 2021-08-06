@@ -29,12 +29,15 @@ KisMyPaintOpOption::KisMyPaintOpOption()
     m_options = new KisMyPaintOpOptionsWidget();
 
     m_options->radiusSPBox->setRange(0.01, 7.0, 2);
+    m_options->radiusSPBox->setSingleStep(0.01);
     m_options->radiusSPBox->setValue(radius());
 
     m_options->hardnessSPBox->setRange(0.02, 1.0, 2);
+    m_options->hardnessSPBox->setSingleStep(0.01);
     m_options->hardnessSPBox->setValue(hardness());
 
     m_options->opacitySPBox->setRange(0.0, 1.0, 2);
+    m_options->opacitySPBox->setSingleStep(0.01);
     m_options->opacitySPBox->setValue(opacity());
 
     m_options->eraserBox->setChecked(eraser());

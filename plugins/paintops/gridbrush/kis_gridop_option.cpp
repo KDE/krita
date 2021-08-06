@@ -58,15 +58,18 @@ KisGridOpOption::KisGridOpOption()
     m_options->divisionLevelSPBox->setValue(2);
 
     m_options->scaleDSPBox->setRange(0.1, 10.0, 2);
+    m_options->scaleDSPBox->setSingleStep(0.01);
     m_options->scaleDSPBox->setValue(1.0);
     m_options->scaleDSPBox->setExponentRatio(3.0);
 
     m_options->vertBorderDSPBox->setRange(0, 100, 2);
+    m_options->vertBorderDSPBox->setSingleStep(0.01);
     m_options->vertBorderDSPBox->setValue(0.0);
 
 
     m_options->horizBorderDSPBox->setRange(0, 100, 2);
-    m_options->vertBorderDSPBox->setValue(0.0);
+    m_options->horizBorderDSPBox->setSingleStep(0.01);
+    m_options->horizBorderDSPBox->setValue(0.0);
 
 
     connect(m_options->diameterSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));

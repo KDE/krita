@@ -119,16 +119,6 @@ void KisGuidesConfig::addGuideLine(Qt::Orientation o, qreal pos)
     }
 }
 
-bool KisGuidesConfig::showGuideLines() const
-{
-    return d->showGuides;
-}
-
-void KisGuidesConfig::setShowGuideLines(bool show)
-{
-    d->showGuides = show;
-}
-
 bool KisGuidesConfig::showGuides() const
 {
     return d->showGuides;
@@ -342,12 +332,4 @@ void KisGuidesConfig::transform(const QTransform &transform)
 
     d->horzGuideLines = newHorzGuideLines;
     d->vertGuideLines = newVertGuideLines;
-}
-
-bool KisGuidesConfig::isSameIgnoringSnapping(const KisGuidesConfig &rhs) const
-{
-    KisGuidesConfig tmp(rhs);
-    tmp.setSnapToGuides(snapToGuides());
-
-    return *this == tmp;
 }

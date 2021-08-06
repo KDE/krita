@@ -631,7 +631,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     if (m_showColorHistory) {
         // paint recent colors area.
         painter.setPen(Qt::NoPen);
-        float rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
+        qreal rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
 
         // there might be no recent colors at the start, so paint a placeholder
         if (m_resourceManager->recentColorsTotal() == 0) {
@@ -801,14 +801,14 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
                 // calculate the angle we are at first
                 QPoint widgetCenterPoint = QPoint(m_popupPaletteSize/2, m_popupPaletteSize/2);
 
-                float dX = point.x() - widgetCenterPoint.x();
-                float dY = point.y() - widgetCenterPoint.y();
+                qreal dX = point.x() - widgetCenterPoint.x();
+                qreal dY = point.y() - widgetCenterPoint.y();
 
 
                 finalAngle = qAtan2(dY,dX) * 180 / M_PI; // what we need if we have two points, but don't know the angle
                 finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
             }
-            float angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
+            qreal angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
 
             KisCanvasController *canvasController =
                 dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
@@ -894,7 +894,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
             }
 
             if (m_isOverResetCanvasRotationIndicator) {
-                float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs
+                qreal angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs
                 KisCanvasController *canvasController =
                         dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
                 canvasController->rotateCanvas(angleDifference);
@@ -964,7 +964,7 @@ void KisPopupPalette::popup(const QPoint &position) {
 
 void KisPopupPalette::ensureWithinParent(const QPoint& position, bool useUpperLeft) {
     if (isVisible() && parentWidget())  {
-        const float widgetMargin = -20.0f;
+        const qreal widgetMargin = -20.0;
         const QRect fitRect = kisGrowRect(parentWidget()->rect(), widgetMargin);
         const QPoint paletteCenterOffset(sizeHint().width() / 2, sizeHint().height() / 2);
 

@@ -55,6 +55,9 @@ public:
     void setPinMirror(bool);
     bool pinPosition();
     void setPinPosition(bool);
+    bool pinZoom();
+    void setPinZoom(bool);
+
     QTransform transform(KisCanvas2 *kisCanvas);
 
 Q_SIGNALS:
@@ -72,11 +75,12 @@ private:
     friend struct RemoveReferenceImagesCommand;
     friend class ReferenceImagesCanvas;
 
-    bool m_pinRotate, m_pinMirror, m_pinPosition;
+    bool m_pinRotate, m_pinMirror, m_pinPosition, m_pinZoom;
     bool m_mirrorX, m_mirrorY;
-    bool flag = false;
+    bool m_initialValues;
     QPointF m_docOffset;
     qreal m_previousAngle, m_previousPosition;
+    qreal m_zoom ;
     QTransform m_transform;
 };
 

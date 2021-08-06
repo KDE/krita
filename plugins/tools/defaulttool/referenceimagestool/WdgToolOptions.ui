@@ -29,14 +29,14 @@
    </property>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="4">
-      <widget class="QCheckBox" name="chkPinMirror">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="chkPinPos">
        <property name="text">
-        <string>Mirror</string>
+        <string>Position</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item row="2" column="1">
       <spacer name="horizontalSpacer_5">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -62,6 +62,13 @@
        </property>
       </spacer>
      </item>
+     <item row="2" column="2">
+      <widget class="QCheckBox" name="chkPinMirror">
+       <property name="text">
+        <string>Mirror</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="2">
       <widget class="QCheckBox" name="chkPinRotate">
        <property name="text">
@@ -69,10 +76,10 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QCheckBox" name="chkPinPos">
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="chkPinZoom">
        <property name="text">
-        <string>Position</string>
+        <string>Zoom</string>
        </property>
       </widget>
      </item>

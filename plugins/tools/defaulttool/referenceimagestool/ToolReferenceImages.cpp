@@ -123,7 +123,6 @@ void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
         }
 
         DefaultTool::mouseMoveEvent(newEvent);
-        koSelection()->update();
         return;
     }
 

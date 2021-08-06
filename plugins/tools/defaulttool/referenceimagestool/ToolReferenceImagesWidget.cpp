@@ -138,6 +138,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->chkPinRotate, SIGNAL(stateChanged(int)), this, SLOT(slotRotateChanged()));
     connect(d->ui->chkPinMirror, SIGNAL(stateChanged(int)), this, SLOT(slotMirrorChanged()));
     connect(d->ui->chkPinPos, SIGNAL(stateChanged(int)), this, SLOT(slotPositionChanged()));
+    connect(d->ui->chkPinZoom, SIGNAL(stateChanged(int)), this, SLOT(slotZoomChanged()));
 
     KisSignalCompressor *compressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(compressor, SIGNAL(timeout()), this, SLOT(slotImageValuesChanged()));
@@ -201,7 +202,8 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
         d->ui->referenceImageLocationCombobox,
         d->ui->chkPinPos,
         d->ui->chkPinRotate,
-        d->ui->chkPinMirror
+        d->ui->chkPinMirror,
+        d->ui->chkPinZoom
 
     );
 
@@ -214,6 +216,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
        d->ui->chkPinPos->setCheckState(layer->pinPosition() ? Qt::Checked : Qt::Unchecked);
        d->ui->chkPinRotate->setCheckState(layer->pinRotate() ? Qt::Checked : Qt::Unchecked);
        d->ui->chkPinMirror->setCheckState(layer->pinMirror() ? Qt::Checked : Qt::Unchecked);
+       d->ui->chkPinZoom->setCheckState(layer->pinZoom() ? Qt::Checked : Qt::Unchecked);
     }
 
     // set save location combobox
@@ -298,6 +301,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->chkPinRotate->setVisible(hasSelection);
     d->ui->chkPinPos->setVisible(hasSelection);
     d->ui->chkPinMirror->setVisible(hasSelection);
+    d->ui->chkPinZoom->setVisible(hasSelection);
 
     d->ui->bnCrop->setVisible(hasSelection);
 
@@ -486,5 +490,13 @@ void ToolReferenceImagesWidget::slotRotateChanged()
     KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
     if(layer) {
         layer->setPinRotate(d->ui->chkPinRotate->isChecked());
+    }
+}
+
+void ToolReferenceImagesWidget::slotZoomChanged()
+{
+    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
+    if(layer) {
+        layer->setPinZoom(d->ui->chkPinZoom->isChecked());
     }
 }

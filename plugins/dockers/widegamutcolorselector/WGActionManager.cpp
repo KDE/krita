@@ -38,9 +38,14 @@ WGActionManager::WGActionManager(WGColorSelectorDock *parentDock)
     connect(WGConfig::notifier(), SIGNAL(selectorConfigChanged()), SLOT(slotSelectorConfigChanged()));
 }
 
-/* void WGActionManager::setCanvas(KisCanvas2 *canvas, KisCanvas2 *oldCanvas)
+void WGActionManager::setCanvas(KisCanvas2 *canvas, KisCanvas2 *oldCanvas)
 {
-} */
+    Q_UNUSED(oldCanvas);
+    KisDisplayColorConverter *converter = canvas ? canvas->displayColorConverter() : 0;
+    if (m_myPaintSelector) {
+        m_myPaintSelector->setDisplayConverter(converter);
+    }
+}
 
 void WGActionManager::registerActions(KisViewManager *viewManager)
 {
@@ -176,6 +181,7 @@ void WGActionManager::slotShowShadeSelectorPopup()
         m_shadeSelectorPopup = new WGSelectorPopup();
         m_shadeSelector = new WGShadeSelector(m_colorModel, m_shadeSelectorPopup);
         m_shadeSelector->setFixedWidth(300);
+        m_shadeSelector->setDisplayConverter(m_docker->displayColorConverter(true));
         m_shadeSelectorPopup->setSelectorWidget(m_shadeSelector);
         connect(m_shadeSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
                 SLOT(slotPopupClosed(WGSelectorPopup*)));
@@ -191,8 +197,9 @@ void WGActionManager::slotShowMyPaintSelectorPopup()
         m_myPaintSelectorPopup = new WGSelectorPopup();
         m_myPaintSelector = new WGMyPaintShadeSelector(m_myPaintSelectorPopup, WGSelectorWidgetBase::PopupMode);
         m_myPaintSelector->setFixedSize(300, 300);
-        m_myPaintSelectorPopup->setSelectorWidget(m_myPaintSelector);
         m_myPaintSelector->setModel(m_colorModel);
+        m_myPaintSelector->setDisplayConverter(m_docker->displayColorConverter(true));
+        m_myPaintSelectorPopup->setSelectorWidget(m_myPaintSelector);
         connect(m_myPaintSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
                 SLOT(slotPopupClosed(WGSelectorPopup*)));
         connect(m_myPaintSelector, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));

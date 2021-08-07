@@ -6,6 +6,8 @@
 
 #include "WGSelectorWidgetBase.h"
 
+#include <kis_display_color_converter.h>
+
 WGSelectorWidgetBase::WGSelectorWidgetBase(QWidget *parent, WGSelectorWidgetBase::UiMode uiMode)
     : QWidget(parent)
     , m_uiMode(uiMode)
@@ -21,6 +23,16 @@ WGSelectorWidgetBase::UiMode WGSelectorWidgetBase::uiMode() const
 void WGSelectorWidgetBase::setUiMode(WGSelectorWidgetBase::UiMode mode)
 {
     m_uiMode = mode;
+}
+
+void WGSelectorWidgetBase::setDisplayConverter(const KisDisplayColorConverter *converter)
+{
+    m_converter = converter;
+}
+
+const KisDisplayColorConverter *WGSelectorWidgetBase::displayConverter() const
+{
+    return m_converter ? m_converter : KisDisplayColorConverter::dumbConverterInstance();
 }
 
 void WGSelectorWidgetBase::setModel(KisVisualColorModelSP model)

@@ -29,7 +29,7 @@ class WGActionManager : public QObject
 public:
     explicit WGActionManager(WGColorSelectorDock *parentDock = nullptr);
 
-    //void setCanvas(KisCanvas2* canvas, KisCanvas2* oldCanvas);
+    void setCanvas(KisCanvas2* canvas, KisCanvas2* oldCanvas);
     void registerActions(KisViewManager *viewManager);
     void setLastUsedColor(const KoColor &col);
 private:

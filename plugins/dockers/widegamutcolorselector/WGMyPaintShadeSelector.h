@@ -11,8 +11,6 @@
 
 #include <kis_types.h>
 
-class KisDisplayColorConverter;
-
 /**
  * @brief A port of MyPaint's "Crossed Bowl" color selector
  */
@@ -43,7 +41,6 @@ private:
     KisVisualColorModelSP m_model;
     KisPaintDeviceSP m_realPixelCache;
     KisPaintDeviceSP m_realCircleBorder;
-    KisDisplayColorConverter *m_converter;
     float m_colorH, m_colorS, m_colorV;
     int m_sizeHD;
     int m_widthHD;

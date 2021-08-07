@@ -11,7 +11,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-WGColorPatches::WGColorPatches(QWidget *parent) : QWidget(parent)
+WGColorPatches::WGColorPatches(QWidget *parent) : WGSelectorWidgetBase(parent)
 {
 
 }
@@ -44,11 +44,6 @@ void WGColorPatches::setColors(QList<KoColor> colors)
     m_colors = colors;
     m_scrollValue = qBound(0, m_scrollValue, maxScroll());
     update();
-}
-
-void WGColorPatches::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
-{
-    m_displayRenderer = displayRenderer ? displayRenderer : KoDumbColorDisplayRenderer::instance();
 }
 
 void WGColorPatches::mouseMoveEvent(QMouseEvent *event)
@@ -111,8 +106,9 @@ void WGColorPatches::paintEvent(QPaintEvent *event)
         }
     }
 
+    const KisDisplayColorConverter *converter = displayConverter();
     for (int i = scrollCount * m_numLines; i < qMin(m_patchCount, m_colors.size()); i++) {
-        QColor qcolor = m_displayRenderer->toQColor(m_colors[i]);
+        QColor qcolor = converter->toQColor(m_colors[i]);
 
         painter.fillRect(patchRect(i + m_buttonList.size()), qcolor);
     }

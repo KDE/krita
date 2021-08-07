@@ -16,6 +16,7 @@
 
 class KisCanvas2;
 class KisColorSourceToggle;
+class KisDisplayColorConverter;
 class KisSignalCompressor;
 class KisVisualColorSelector;
 class WGActionManager;
@@ -33,6 +34,7 @@ class WGColorSelectorDock : public QDockWidget, public KisMainwindowObserver
 public:
     WGColorSelectorDock();
     const KisVisualColorModel& colorModel() const;
+    KisDisplayColorConverter* displayColorConverter(bool rawPointer = false) const;
 
     bool selectingBackground() const;
     /**

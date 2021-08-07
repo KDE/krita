@@ -100,6 +100,15 @@ const KisVisualColorModel &WGColorSelectorDock::colorModel() const
     return *(m_colorModelFG);
 }
 
+KisDisplayColorConverter *WGColorSelectorDock::displayColorConverter(bool rawPointer) const
+{
+    KisDisplayColorConverter *converter = nullptr;
+    if (m_canvas) {
+        converter = m_canvas->displayColorConverter();
+    }
+    return (rawPointer || converter) ?  converter : KisDisplayColorConverter::dumbConverterInstance();
+}
+
 bool WGColorSelectorDock::selectingBackground() const
 {
     return m_toggle->isChecked();
@@ -137,14 +146,15 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     if (m_canvas) {
         disconnectFromCanvas();
     }
-    //m_actionManager->setCanvas(qobject_cast<KisCanvas2*>(canvas), m_canvas);
+    m_actionManager->setCanvas(qobject_cast<KisCanvas2*>(canvas), m_canvas);
     m_canvas = qobject_cast<KisCanvas2*>(canvas);
+    // TODO: unset display converters if canvas is null
     if (m_canvas) {
         KoColorDisplayRendererInterface *dri = m_canvas->displayColorConverter()->displayRendererInterface();
         KisCanvasResourceProvider *resourceProvider = m_canvas->imageView()->resourceProvider();
         m_colorModelFG->setDisplayRenderer(dri);
         m_colorModelBG->setDisplayRenderer(dri);
-        m_history->setDisplayRenderer(dri);
+        m_history->setDisplayConverter(m_canvas->displayColorConverter());
         //m_toggle->setBackgroundColor(dri->toQColor(color));
         connect(dri, SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
@@ -171,8 +181,9 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 void WGColorSelectorDock::unsetCanvas()
 {
     setEnabled(false);
+    m_actionManager->setCanvas(0, 0);
     m_selector->setDisplayRenderer(0);
-    m_history->setDisplayRenderer(0);
+    m_history->setDisplayConverter(0);
     m_canvas = 0;
 }
 
@@ -250,7 +261,7 @@ void WGColorSelectorDock::slotDisplayConfigurationChanged()
 
 void WGColorSelectorDock::slotColorSelected(const KoColor &color)
 {
-    QColor displayCol = m_canvas->displayColorConverter()->toQColor(color);
+    QColor displayCol = displayColorConverter()->toQColor(color);
     m_colorTooltip->setCurrentColor(displayCol);
     if (selectingBackground()) {
         m_toggle->setBackgroundColor(displayCol);
@@ -326,14 +337,14 @@ void WGColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant &val
     case KoCanvasResource::ForegroundColor:
         if (!m_pendingFgUpdate) {
             KoColor color = value.value<KoColor>();
-            m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(color));
+            m_toggle->setForegroundColor(displayColorConverter()->toQColor(color));
             m_colorModelFG->slotSetColor(color);
         }
         break;
     case KoCanvasResource::BackgroundColor:
         if (!m_pendingBgUpdate) {
             KoColor color = value.value<KoColor>();
-            m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(color));
+            m_toggle->setBackgroundColor(displayColorConverter()->toQColor(color));
             m_colorModelBG->slotSetColor(color);
         }
     default:

@@ -7,13 +7,13 @@
 #ifndef WGCOLORPATCHES_H
 #define WGCOLORPATCHES_H
 
-#include <KoColor.h>
+#include "WGSelectorWidgetBase.h"
 
-#include <QWidget>
+#include <kis_types.h>
 
 class KoColorDisplayRendererInterface;
 
-class WGColorPatches : public QWidget
+class WGColorPatches : public WGSelectorWidgetBase
 {
     Q_OBJECT
 public:
@@ -26,7 +26,6 @@ public:
      * they will be resized to the patchsize */
     void setAdditionalButtons(QList<QWidget*> buttonList);
     void setColors(QList<KoColor>colors);
-    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -45,7 +44,6 @@ private:
     QList<KoColor> m_colors;
     QList<QWidget*> m_buttonList;
     Qt::Orientation m_orientation {Qt::Horizontal};
-    const KoColorDisplayRendererInterface *m_displayRenderer;
     int m_numLines {1};
     int m_patchWidth {16};
     int m_patchHeight {16};

@@ -44,7 +44,17 @@ bool InfoObject::operator!=(const InfoObject &other) const
 
 QMap<QString, QVariant> InfoObject::properties() const
 {
-    return d->properties->getProperties();
+    QMap<QString, QVariant> map = d->properties->getProperties();
+
+    for (const QString &key : map.keys()) {
+        QVariant v = map.value(key);
+
+        if (v.isValid() && v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+            map[key] = QVariant::fromValue(v.value<KoColor>().toXML());
+        }
+    }
+
+    return map;
 }
 
 void InfoObject::setProperties(QMap<QString, QVariant> proprertyMap)
@@ -64,7 +74,12 @@ QVariant InfoObject::property(const QString &key)
     QVariant v;
     if (d->properties->hasProperty(key)) {
         d->properties->getProperty(key, v);
+
+        if (v.isValid() && v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+            return QVariant::fromValue(v.value<KoColor>().toXML());
+        }
     }
+
     return v;
 }
 

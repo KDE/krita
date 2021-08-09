@@ -32,12 +32,14 @@ public:
 
 private Q_SLOTS:
     void updateAction();
+    void slotSyncActionStates(bool val);
     void slotDocumentConfigChanged();
     void slotMirrorAxisConfigChanged();
 
 private:
     QPointer<KisView> m_imageView;
     QAction *m_mirrorCanvas;
+    QAction *m_mirrorCanvasAroundCursor;
     void setDecorationConfig();
     KisMirrorAxisSP decoration() const;
 };

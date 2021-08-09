@@ -676,6 +676,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="mirror_canvas_around_cursor">
+      <icon>mirror-view-around-cursor</icon>
+      <text>Mirror View Around Cursor</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror View Around Cursor</toolTip>
+      <iconText>Mirror View Around Cursor</iconText>
+      <shortcut>Alt+M</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="zoom_to_100pct">
       <icon>zoom-original</icon>
       <text>&amp;Reset zoom</text>

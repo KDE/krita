@@ -1622,6 +1622,17 @@ void SvgParser::applyViewBoxTransform(const QDomElement &element)
     }
 }
 
+QStringList SvgParser::warnings() const
+{
+    QStringList warnings;
+
+    Q_FOREACH (const KoID &id, m_warnings) {
+        warnings << id.name();
+    }
+
+    return warnings;
+}
+
 QList<QExplicitlySharedDataPointer<KoMarker> > SvgParser::knownMarkers() const
 {
     return m_markers.values();
@@ -1751,6 +1762,23 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     if (!mergeIntoShape) {
         textChunk->setZIndex(m_context.nextZIndex());
+    }
+
+
+    if (!m_context.currentGC()->textProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) ||
+         m_context.currentGC()->textProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
+
+        static const KoID warning("warn_text_version_1",
+                                  i18nc("warning while loading SVG text",
+                                        "The document has vector text created "
+                                        "in Krita 4.x. When you save the document, "
+                                        "the text object will be converted into "
+                                        "Krita 5 format that will no longer be "
+                                        "compatible with Krita 4.x"));
+
+        if (!m_warnings.contains(warning)) {
+            m_warnings << warning;
+        }
     }
 
     textChunk->loadSvg(e, m_context);

@@ -25,6 +25,7 @@
 #include "SvgStyleParser.h"
 #include "KoClipMask.h"
 #include <resources/KoSvgSymbolCollectionResource.h>
+#include <KoID.h>
 
 class KoShape;
 class KoShapeGroup;
@@ -75,6 +76,8 @@ public:
 
     void parseDefsElement(const QDomElement &e);
     KoShape* parseTextElement(const QDomElement &e, KoSvgTextShape *mergeIntoShape = 0);
+
+    QStringList warnings() const;
 
 protected:
 
@@ -211,6 +214,7 @@ private:
     bool m_isInsideTextSubtree = false;
     QString m_documentTitle;
     QString m_documentDescription;
+    QVector<KoID> m_warnings;
 };
 
 #endif

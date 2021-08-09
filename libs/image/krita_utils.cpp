@@ -464,6 +464,27 @@ namespace KritaUtils
         }
     }
 
+    void mirrorDab(Qt::Orientation dir, const QPointF &center, KisRenderedDab *dab, bool skipMirrorPixels)
+    {
+        const QRect rc = dab->realBounds();
+
+        if (dir == Qt::Horizontal) {
+            const int mirrorX = -((rc.x() + rc.width()) - center.x()) + center.x();
+
+            if (!skipMirrorPixels) {
+                dab->device->mirror(true, false);
+            }
+            dab->offset.rx() = mirrorX;
+        } else /* if (dir == Qt::Vertical) */ {
+            const int mirrorY = -((rc.y() + rc.height()) - center.y()) + center.y();
+
+            if (!skipMirrorPixels) {
+                dab->device->mirror(false, true);
+            }
+            dab->offset.ry() = mirrorY;
+        }
+    }
+
     void mirrorRect(Qt::Orientation dir, const QPoint &center, QRect *rc)
     {
         if (dir == Qt::Horizontal) {
@@ -475,7 +496,27 @@ namespace KritaUtils
         }
     }
 
+    void mirrorRect(Qt::Orientation dir, const QPointF &center, QRect *rc)
+    {
+        if (dir == Qt::Horizontal) {
+            const int mirrorX = -((rc->x() + rc->width()) - center.x()) + center.x();
+            rc->moveLeft(mirrorX);
+        } else /* if (dir == Qt::Vertical) */ {
+            const int mirrorY = -((rc->y() + rc->height()) - center.y()) + center.y();
+            rc->moveTop(mirrorY);
+        }
+    }
+
     void mirrorPoint(Qt::Orientation dir, const QPoint &center, QPointF *pt)
+    {
+        if (dir == Qt::Horizontal) {
+            pt->rx() = -(pt->x() - qreal(center.x())) + center.x();
+        } else /* if (dir == Qt::Vertical) */ {
+            pt->ry() = -(pt->y() - qreal(center.y())) + center.y();
+        }
+    }
+
+    void mirrorPoint(Qt::Orientation dir, const QPointF &center, QPointF *pt)
     {
         if (dir == Qt::Horizontal) {
             pt->rx() = -(pt->x() - qreal(center.x())) + center.x();

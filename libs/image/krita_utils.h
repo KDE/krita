@@ -89,8 +89,12 @@ namespace KritaUtils
     qreal KRITAIMAGE_EXPORT estimatePortionOfTransparentPixels(KisPaintDeviceSP dev, const QRect &rect, qreal samplePortion);
 
     void KRITAIMAGE_EXPORT mirrorDab(Qt::Orientation dir, const QPoint &center, KisRenderedDab *dab, bool skipMirrorPixels = false);
+    void KRITAIMAGE_EXPORT mirrorDab(Qt::Orientation dir, const QPointF &center, KisRenderedDab *dab, bool skipMirrorPixels = false);
+
     void KRITAIMAGE_EXPORT mirrorRect(Qt::Orientation dir, const QPoint &center, QRect *rc);
+    void KRITAIMAGE_EXPORT mirrorRect(Qt::Orientation dir, const QPointF &center, QRect *rc);
     void KRITAIMAGE_EXPORT mirrorPoint(Qt::Orientation dir, const QPoint &center, QPointF *pt);
+    void KRITAIMAGE_EXPORT mirrorPoint(Qt::Orientation dir, const QPointF &center, QPointF *pt);
 
 
     /**

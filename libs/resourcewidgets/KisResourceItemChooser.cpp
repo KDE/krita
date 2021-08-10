@@ -272,7 +272,6 @@ void KisResourceItemChooser::addCustomButton(QAbstractButton *button, int cell)
 void KisResourceItemChooser::showTaggingBar(bool show)
 {
     d->tagManager->showTaggingBar(show);
-
 }
 
 int KisResourceItemChooser::rowCount() const

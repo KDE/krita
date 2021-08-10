@@ -19,6 +19,9 @@
 #include <QComboBox>
 #include <QMessageBox>
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
 #include <KisSqueezedComboBox.h>
 
@@ -115,6 +118,8 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
     if (tagIndex >= 0) {
         KisTagSP tag = currentlySelectedTag();
         d->tagToolButton->setCurrentTag(tag);
+        KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
+        group.writeEntry(d->resourceType, currentlySelectedTag()->url());
         d->model->sort(KisAllTagsModel::Name);
         emit sigTagChosen(tag);
     }

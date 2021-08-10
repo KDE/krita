@@ -359,10 +359,12 @@ void KisResourceItemChooser::activate(const QModelIndex &index)
     KoResourceSP resource = resourceFromModelIndex(index);
 
     if (resource && resource->valid()) {
-        d->currentResource = resource;
-        d->updatesBlocked = true;
-        emit resourceSelected(resource);
-        d->updatesBlocked = false;
+        if (resource != d->currentResource) {
+            d->currentResource = resource;
+            d->updatesBlocked = true;
+            emit resourceSelected(resource);
+            d->updatesBlocked = false;
+        }
         updatePreview(index);
         updateButtonState();
     }

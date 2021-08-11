@@ -218,19 +218,18 @@ void KisSplashScreen::displayLinks(bool show) {
         lblLinks->setTextFormat(Qt::RichText);
         lblLinks->setText(i18n("<html>"
                                "<head/>"
-                               "<body>"
-                               "<p><span style=\" color:%1;\"><b>Links</b></span></p>"
-
-                               "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
-
+                               "<body><table width=\"100%\" cellpadding=\"30\"><tr><td>"
+                               "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+                               "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita's Development!</span></a></p>"
                                "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
                                "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
                                "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
-                               "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
-
-                               "<p><a href=\"https://phabricator.kde.org/source/krita/\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
-
-                               "</body>"
+                               "</td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+                               "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
+                               "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
+                               "<p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span style=\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+                               "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
+                               "</td></table></body>"
                                "</html>", color));
 
         filesLayout->setContentsMargins(10,10,10,10);

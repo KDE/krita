@@ -1,3 +1,8 @@
+/*
+ *  SPDX-FileCopyrightText: 2021 Sachin Jindal <jindalsachin01@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
 #include "KisReferenceImageCropStrategy.h"
 #include <KoFlake.h>
 #include <KoSnapGuide.h>

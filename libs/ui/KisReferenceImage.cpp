@@ -52,7 +52,7 @@ struct KisReferenceImage::Private : public QSharedData
     KisQImagePyramid mipmap;
 
     QRectF cropRect;
-    bool crop{false};
+    bool crop = false;
 
     qreal saturation{1.0};
     int id{-1};

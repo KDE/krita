@@ -409,7 +409,7 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
                                                       activeIndex.data(KisAnimCurvesModel::ScalarValueRole).toReal() : 0.0f);
         }
 
-        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->isPlaying());
+        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->playbackState() == KisAnimationPlayer::PLAYING);
         connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));
@@ -598,9 +598,7 @@ void KisAnimCurvesDocker::updateFrameRegister(){
         return;
     }
 
-    const int frame = m_d->canvas->animationPlayer()->isPlaying() ?
-                m_d->canvas->animationPlayer()->visibleFrame() :
-                m_d->canvas->image()->animationInterface()->currentUITime();
+    const int frame = m_d->canvas->animationPlayer()->visibleFrame();
 
     m_d->titlebar->sbFrameRegister->setValue(frame);
 }

@@ -1,5 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Emmet O'Neill <emmetoneill.pdx@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -32,6 +34,7 @@
 #include "kis_layer_utils.h"
 #include "KisDecoratedNodeInterface.h"
 #include "kis_keyframe_channel.h"
+#include "kis_algebra_2d.h"
 
 #include "kis_image_config.h"
 #include <limits>
@@ -44,130 +47,71 @@
 #include "KisRollingMeanAccumulatorWrapper.h"
 #include "kis_onion_skin_compositor.h"
 
+
+qint64 framesToMSec(qreal value, int fps) {
+    return qRound(value / fps * 1000.0);
+}
+
+qreal msecToFrames(qint64 value, int fps) {
+    return qreal(value) * fps / 1000.0;
+}
+
+int framesToScaledTimeMS(qreal frame, int fps, qreal playbackSpeed) {
+    return qRound(framesToMSec(frame, fps) / playbackSpeed);
+}
+
+qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
+    return msecToFrames(time, fps) * playbackSpeed;
+}
+
+
 struct KisAnimationPlayer::Private
 {
 public:
-    Private(KisAnimationPlayer *_q)
-        : q(_q),
-          playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE),
-          stopAudioOnScrubbingCompressor(100, KisSignalCompressor::POSTPONE)
+    Private()
+        : dropFramesMode(true),
+          playbackFrame(0),
+          visibleFrame(-1),
+          playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
           {}
 
-    KisAnimationPlayer *q {0};
+    KisCanvas2 *canvas;
+    QVector<KisNodeWSP> disabledDecoratedNodes;
 
-    KisAnimationPlayer::PlaybackState playbackState {KisAnimationPlayer::STOPPED};
-    QTimer *timer {0};
-
-    /// The frame user started playback from
-    int playbackOriginFrame {0};
-    int firstFrame {0};
-    int lastFrame {0};
-    qreal playbackSpeed {0.0};
-
-    KisCanvas2 *canvas {0};
+    KisAnimationPlayer::PlaybackState playbackState;
 
     KisSignalAutoConnectionsStore cancelStrokeConnections;
 
-    QElapsedTimer realFpsTimer;
-    KisRollingMeanAccumulatorWrapper realFpsAccumulator {24};
-    KisRollingMeanAccumulatorWrapper droppedFpsAccumulator {24};
-    KisRollingMeanAccumulatorWrapper droppedFramesPortion {24};
+    int playbackOriginFrame; //!< The frame user started playback from.
+    int initialFrame;     //TODO: Why need?
+    qreal playbackSpeed; //TODO: Should go in timing specific class?
 
-    bool dropFramesMode {true};
+    bool dropFramesMode;    //!< Whether we should be dropping frames to preserve playback timing.
+    bool useFastFrameUpload; //TODO: Figure this one out...
 
-    bool useFastFrameUpload {false};
-
-    /// Measures time since playback (re)started
-    QElapsedTimer playbackTime;
-    int nextFrameExpectedTime {0};
-    int expectedInterval {0};
-    /// The frame the current playback (re)started on
-    int initialFrame {0};
-    /// The frame currently displayed
-    int currentFrame {0};
-    int lastTimerInterval {0};
-    int lastPaintedFrame {0};
+    //There are two frames we need to keep track of...
+    int playbackFrame; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
+    int visibleFrame; //!< This the frame that is currently being displayed on the canvas. Can be different from the current frame.
 
     KisSignalCompressor playbackStatisticsCompressor;
-
-    QScopedPointer<KisSyncedAudioPlayback> syncedAudio;
-    QScopedPointer<KisSignalCompressorWithParam<int> > audioSyncScrubbingCompressor;
-    KisSignalCompressor stopAudioOnScrubbingCompressor;
-
-    int audioOffsetTolerance {-1};
-    QVector<KisNodeWSP> disabledDecoratedNodes;
-
-    void haltImpl();
-
-    int incFrame(int frame, int inc) {
-        frame += inc;
-        if (frame > lastFrame) {
-            const int framesFromFirst = frame - firstFrame;
-            const int rangeLength = lastFrame - firstFrame + 1;
-            frame = firstFrame + framesFromFirst % rangeLength;
-        }
-        return frame;
-    }
-
-    qint64 framesToMSec(qreal value, int fps) const {
-        return qRound(value / fps * 1000.0);
-    }
-    qreal msecToFrames(qint64 value, int fps) const {
-        return qreal(value) * fps / 1000.0;
-    }
-    int framesToWalltime(qreal frame, int fps) const {
-        return qRound(framesToMSec(frame, fps) / playbackSpeed);
-    }
-    qreal walltimeToFrames(qint64 time, int fps) const {
-        return msecToFrames(time, fps) * playbackSpeed;
-    }
-
-    qreal playbackTimeInFrames(int fps) const {
-        const qint64 cycleLength = lastFrame - firstFrame + 1;
-        const qreal framesPlayed = walltimeToFrames(playbackTime.elapsed(), fps);
-        const qreal framesSinceFirst = std::fmod(initialFrame + framesPlayed - firstFrame, cycleLength);
-        return firstFrame + framesSinceFirst;
-    }
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     : QObject(canvas)
-    , m_d(new Private(this))
+    , m_d(new Private())
 {
     m_d->useFastFrameUpload = false;
     m_d->playbackState = STOPPED;
     m_d->canvas = canvas;
     m_d->playbackSpeed = 1.0;
 
-    m_d->timer = new QTimer(this);
-    connect(m_d->timer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
-    m_d->timer->setSingleShot(true);
-
     connect(KisConfigNotifier::instance(),
             SIGNAL(dropFramesModeChanged()),
-            SLOT(slotUpdateDropFramesMode()));
-    slotUpdateDropFramesMode();
+            SLOT(updateDropFramesMode()));
+    updateDropFramesMode();
 
     connect(&m_d->playbackStatisticsCompressor, SIGNAL(timeout()),
             this, SIGNAL(sigPlaybackStatisticsUpdated()));
-
-    using namespace std::placeholders;
-    std::function<void (int)> callback(
-        std::bind(&KisAnimationPlayer::slotSyncScrubbingAudio, this, _1));
-
-    const int defaultScrubbingUdpatesDelay = 40; /* 40 ms == 25 fps */
-
-    m_d->audioSyncScrubbingCompressor.reset(
-        new KisSignalCompressorWithParam<int>(defaultScrubbingUdpatesDelay, callback, KisSignalCompressor::FIRST_ACTIVE));
-
-    m_d->stopAudioOnScrubbingCompressor.setDelay(defaultScrubbingUdpatesDelay);
-    connect(&m_d->stopAudioOnScrubbingCompressor, SIGNAL(timeout()), SLOT(slotTryStopScrubbingAudio()));
-
-    connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(slotUpdateAudioChunkLength()));
-    slotUpdateAudioChunkLength();
-
-    connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioChannelChanged()), SLOT(slotAudioChannelChanged()));
-    connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioVolumeChanged()), SLOT(slotAudioVolumeChanged()));
 
     // Grow to new playback range when new frames added (configurable)...
     connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigKeyframeAdded, m_d->canvas, [this](const KisKeyframeChannel*, int time){
@@ -181,71 +125,20 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
             }
         }
     });
-
-    slotAudioChannelChanged();
 }
 
 KisAnimationPlayer::~KisAnimationPlayer()
 {}
 
-void KisAnimationPlayer::slotUpdateDropFramesMode()
+KisAnimationPlayer::PlaybackState KisAnimationPlayer::playbackState()
+{
+    return m_d->playbackState;
+}
+
+void KisAnimationPlayer::updateDropFramesMode()
 {
     KisConfig cfg(true);
     m_d->dropFramesMode = cfg.animationDropFrames();
-}
-
-void KisAnimationPlayer::slotSyncScrubbingAudio(int msecTime)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->syncedAudio);
-
-    if (!m_d->syncedAudio->isPlaying()) {
-        m_d->syncedAudio->play(msecTime);
-    } else {
-        m_d->syncedAudio->syncWithVideo(msecTime);
-    }
-
-    if (!isPlaying()) {
-        m_d->stopAudioOnScrubbingCompressor.start();
-    }
-}
-
-void KisAnimationPlayer::slotTryStopScrubbingAudio()
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->syncedAudio);
-    if (m_d->syncedAudio && !isPlaying()) {
-        m_d->syncedAudio->stop();
-    }
-}
-
-void KisAnimationPlayer::slotAudioChannelChanged()
-{
-
-    KisImageAnimationInterface *interface = m_d->canvas->image()->animationInterface();
-    QString fileName = interface->audioChannelFileName();
-    QFileInfo info(fileName);
-    if (info.exists() && !interface->isAudioMuted()) {
-        m_d->syncedAudio.reset(new KisSyncedAudioPlayback(info.absoluteFilePath()));
-        m_d->syncedAudio->setVolume(interface->audioVolume());
-        m_d->syncedAudio->setSoundOffsetTolerance(m_d->audioOffsetTolerance);
-
-        connect(m_d->syncedAudio.data(), SIGNAL(error(QString,QString)), SLOT(slotOnAudioError(QString,QString)));
-    } else {
-        m_d->syncedAudio.reset();
-    }
-}
-
-void KisAnimationPlayer::slotAudioVolumeChanged()
-{
-    KisImageAnimationInterface *interface = m_d->canvas->image()->animationInterface();
-    if (m_d->syncedAudio) {
-        m_d->syncedAudio->setVolume(interface->audioVolume());
-    }
-}
-
-void KisAnimationPlayer::slotOnAudioError(const QString &fileName, const QString &message)
-{
-    QString errorMessage(i18nc("floating on-canvas message", "Cannot open audio: \"%1\"\nError: %2", fileName, message));
-    m_d->canvas->viewManager()->showFloatingMessage(errorMessage, KisIconUtils::loadIcon("warning"));
 }
 
 void KisAnimationPlayer::connectCancelSignals()
@@ -260,19 +153,7 @@ void KisAnimationPlayer::connectCancelSignals()
 
     m_d->cancelStrokeConnections.addConnection(
         m_d->canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
-        this, SLOT(slotCancelPlaybackSafe()));
-
-    m_d->cancelStrokeConnections.addConnection(
-        m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()),
-        this, SLOT(slotUpdatePlaybackTimer()));
-
-    m_d->cancelStrokeConnections.addConnection(
-        m_d->canvas->image()->animationInterface(), SIGNAL(sigFullClipRangeChanged()),
-        this, SLOT(slotUpdatePlaybackTimer()));
-
-    m_d->cancelStrokeConnections.addConnection(
-        m_d->canvas->image()->animationInterface(), SIGNAL(sigPlaybackRangeChanged()),
-        this, SLOT(slotUpdatePlaybackTimer()));
+        this, SLOT(slotCancelPlaybackSafe())); // See master @slotCancelPlaybackSafe, but short is keep in mind that devices without caching shouldn't cancel playback at end of stroke!
 }
 
 void KisAnimationPlayer::disconnectCancelSignals()
@@ -280,186 +161,27 @@ void KisAnimationPlayer::disconnectCancelSignals()
     m_d->cancelStrokeConnections.clear();
 }
 
-void KisAnimationPlayer::slotUpdateAudioChunkLength()
-{
-    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    const int animationFramePeriod = qMax(1, 1000 / animation->framerate());
-
-    KisConfig cfg(true);
-    int scrubbingAudioUdpatesDelay = cfg.scrubbingAudioUpdatesDelay();
-
-    if (scrubbingAudioUdpatesDelay < 0) {
-
-        scrubbingAudioUdpatesDelay = qMax(1, animationFramePeriod);
-    }
-
-    m_d->audioSyncScrubbingCompressor->setDelay(scrubbingAudioUdpatesDelay);
-    m_d->stopAudioOnScrubbingCompressor.setDelay(scrubbingAudioUdpatesDelay);
-
-    m_d->audioOffsetTolerance = cfg.audioOffsetTolerance();
-    if (m_d->audioOffsetTolerance < 0) {
-        m_d->audioOffsetTolerance = animationFramePeriod;
-    }
-
-    if (m_d->syncedAudio) {
-        m_d->syncedAudio->setSoundOffsetTolerance(m_d->audioOffsetTolerance);
-    }
-
-    if (isPlaying()) {
-        slotUpdatePlaybackTimer();
-    }
-}
-
-void KisAnimationPlayer::slotUpdatePlaybackTimer()
-{
-    m_d->timer->stop();
-
-    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    const KisTimeSpan &playBackRange = animation->playbackRange();
-    if (!playBackRange.isValid()) return;
-
-    const int fps = animation->framerate();
-
-    m_d->initialFrame = isPlaying() ? m_d->currentFrame : animation->currentUITime();
-    m_d->firstFrame = playBackRange.start();
-    m_d->lastFrame = playBackRange.end();
-    m_d->currentFrame = qBound(m_d->firstFrame, m_d->currentFrame, m_d->lastFrame);
-
-    m_d->expectedInterval = m_d->framesToWalltime(1, fps);
-    m_d->lastTimerInterval = m_d->expectedInterval;
-
-    if (m_d->syncedAudio) {
-        m_d->syncedAudio->setSpeed(m_d->playbackSpeed);
-        const qint64 expectedAudioTime = m_d->framesToMSec(m_d->currentFrame, fps);
-        if (qAbs(m_d->syncedAudio->position() - expectedAudioTime) > m_d->framesToMSec(1.5, fps)) {
-            m_d->syncedAudio->syncWithVideo(expectedAudioTime);
-        }
-    }
-
-    m_d->timer->start(m_d->expectedInterval);
-
-    if (m_d->playbackTime.isValid()) {
-        m_d->playbackTime.restart();
-    } else {
-        m_d->playbackTime.start();
-    }
-
-    m_d->nextFrameExpectedTime = m_d->playbackTime.elapsed() + m_d->expectedInterval;
-}
-
 void KisAnimationPlayer::play()
 {
     const KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    const KisTimeSpan range = activePlaybackRange();
 
-    {
-        const KisTimeSpan &range = animInterface->playbackRange();
-        if (!range.isValid()) return;
-
-        // when openGL is disabled, there is no animation cache
-        if (m_d->canvas->frameCache()) {
-            KisImageConfig cfg(true);
-
-            const int dimensionLimit =
-                cfg.useAnimationCacheFrameSizeLimit() ?
-                cfg.animationCacheFrameSizeLimit() :
-                std::numeric_limits<int>::max();
-
-            const int maxImageDimension = KisAlgebra2D::maxDimension(m_d->canvas->image()->bounds());
-
-            const QRect regionOfInterest =
-                cfg.useAnimationCacheRegionOfInterest() && maxImageDimension > dimensionLimit ?
-                m_d->canvas->regionOfInterest() :
-                m_d->canvas->coordinatesConverter()->imageRectInImagePixels();
-
-            const QRect minimalNeedRect =
-                m_d->canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &
-                m_d->canvas->coordinatesConverter()->imageRectInImagePixels();
-
-            m_d->canvas->frameCache()->dropLowQualityFrames(range, regionOfInterest, minimalNeedRect);
-
-            KisAsyncAnimationCacheRenderDialog dlg(m_d->canvas->frameCache(),
-                                                   range,
-                                                   200);
-
-            dlg.setRegionOfInterest(regionOfInterest);
-
-            KisAsyncAnimationCacheRenderDialog::Result result =
-                dlg.regenerateRange(m_d->canvas->viewManager());
-
-            if (result != KisAsyncAnimationCacheRenderDialog::RenderComplete) {
-                return;
-            }
-
-            m_d->canvas->setRenderingLimit(regionOfInterest);
-        } else {
-            KisImageBarrierLocker locker(m_d->canvas->image());
-            KisLayerUtils::recursiveApplyNodes(m_d->canvas->image()->root(),
-                [this] (KisNodeSP node) {
-                    KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
-                    if (decoratedNode && decoratedNode->decorationsVisible()) {
-                        decoratedNode->setDecorationsVisible(false, false);
-                        m_d->disabledDecoratedNodes.append(node);
-                    }
-                });
-        }
-    }
-
-    if (m_d->playbackState == STOPPED) {
-        m_d->playbackOriginFrame = animInterface->currentUITime();
-        m_d->currentFrame = m_d->playbackOriginFrame;
-    }
-
-    m_d->playbackState = PLAYING;
-
-    slotUpdatePlaybackTimer();
-    m_d->lastPaintedFrame = -1;
-
-    connectCancelSignals();
-
-    if (m_d->syncedAudio) {
-        KisImageAnimationInterface *animationInterface = m_d->canvas->image()->animationInterface();
-        m_d->syncedAudio->play(m_d->framesToMSec(m_d->currentFrame, animationInterface->framerate()));
-    }
-
-    emit sigPlaybackStateChanged(isPlaying());
-    emit sigPlaybackStarted();
+    setPlaybackState(PLAYING);
 }
 
 void KisAnimationPlayer::pause()
 {
-    m_d->haltImpl();
-
-    m_d->playbackState = PAUSED;
-
-    KisImageAnimationInterface *animationInterface = m_d->canvas->image()->animationInterface();
-    if(animationInterface) {
-        animationInterface->switchCurrentTimeAsync(m_d->currentFrame);
-    }
-
-    emit sigPlaybackStateChanged(isPlaying());
-    emit sigPlaybackStopped();
+    seek(m_d->playbackFrame);
+    setPlaybackState(PAUSED);
 }
 
 void KisAnimationPlayer::playPause()
 {
-    if (isPlaying()) {
+    if (m_d->playbackState == PLAYING) {
         pause();
     } else {
         play();
     }
-}
-
-/**
- * @brief Halts the playback.
- */
-void KisAnimationPlayer::halt()
-{
-    m_d->haltImpl();
-
-    m_d->playbackState = STOPPED;
-
-    emit sigPlaybackStateChanged(isPlaying());
-    emit sigPlaybackStopped();
 }
 
 /**
@@ -469,28 +191,32 @@ void KisAnimationPlayer::halt()
  */
 void KisAnimationPlayer::stop()
 {
-    if (!m_d->canvas) return;
-
-    if( m_d->canvas->animationPlayer()->isStopped()) {
-        m_d->canvas->animationPlayer()->goToStartFrame();
+    if(m_d->playbackSpeed == STOPPED) {
+        goToStartFrame();
     } else {
-        m_d->canvas->animationPlayer()->halt();
-        m_d->canvas->animationPlayer()->goToPlaybackOrigin();
+        goToPlaybackOrigin();
+        setPlaybackState(STOPPED);
     }
 }
 
-void KisAnimationPlayer::seek(int frameIndex)
+void KisAnimationPlayer::seek(int frameIndex, bool preferCachedFrames)
 {
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
-    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    if (m_d->playbackState == PLAYING || preferCachedFrames) {
+        if (m_d->playbackFrame != frameIndex) {
+            m_d->playbackFrame = frameIndex >= 0 ? frameIndex : m_d->playbackFrame;
+            displayFrame(m_d->playbackFrame);
+        }
+    } else {
+        KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    if (m_d->canvas->animationPlayer()->isPlaying() ||
-        frameIndex == animInterface->currentUITime()) {
-        return;
+        if (frameIndex == animInterface->currentUITime()) {
+            return;
+        }
+
+        animInterface->requestTimeSwitchWithUndo(frameIndex);
     }
-
-    animInterface->requestTimeSwitchWithUndo(frameIndex);
 }
 
 void KisAnimationPlayer::previousFrame()
@@ -501,14 +227,14 @@ void KisAnimationPlayer::previousFrame()
     const int startFrame = animInterface->playbackRange().start();
     const int endFrame = animInterface->playbackRange().end();
 
-    int frame = animInterface->currentUITime() - 1;
+    int frame = visibleFrame() - 1;
 
     if (frame < startFrame || frame >  endFrame) {
         frame = endFrame;
     }
 
     if (frame >= 0) {
-        animInterface->requestTimeSwitchWithUndo(frame);
+        seek(frame);
     }
 }
 
@@ -520,13 +246,15 @@ void KisAnimationPlayer::nextFrame()
     const int startFrame = animInterface->playbackRange().start();
     const int endFrame = animInterface->playbackRange().end();
 
-    int frame = animInterface->currentUITime() + 1;
+    int frame = visibleFrame() + 1;
 
     if (frame > endFrame || frame < startFrame ) {
         frame = startFrame;
     }
 
-    animInterface->requestTimeSwitchWithUndo(frame);
+    if (frame >= 0) {
+        seek(frame);
+    }
 }
 
 void KisAnimationPlayer::previousKeyframe()
@@ -540,8 +268,7 @@ void KisAnimationPlayer::previousKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-    int currentFrame = animInterface->currentUITime();
+    int currentFrame = visibleFrame();
 
     int destinationTime = -1;
     if (!keyframes->keyframeAt(currentFrame)) {
@@ -551,7 +278,7 @@ void KisAnimationPlayer::previousKeyframe()
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
-        animInterface->requestTimeSwitchWithUndo(destinationTime);
+        seek(destinationTime);
     }
 }
 
@@ -565,8 +292,7 @@ void KisAnimationPlayer::nextKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    int currentTime = animation->currentUITime();
+    int currentTime = visibleFrame();
 
     int destinationTime = -1;
     if (keyframes->activeKeyframeAt(currentTime)) {
@@ -575,7 +301,7 @@ void KisAnimationPlayer::nextKeyframe()
 
     if (keyframes->keyframeAt(destinationTime)) {
         // Jump to next key...
-        animation->requestTimeSwitchWithUndo(destinationTime);
+        seek(destinationTime);
     } else {
         // Jump ahead by estimated timing...
         const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
@@ -583,7 +309,7 @@ void KisAnimationPlayer::nextKeyframe()
 
         if (previousKeyTime != -1) {
             const int timing = activeKeyTime - previousKeyTime;
-            animation->requestTimeSwitchWithUndo(currentTime + timing);
+            seek(currentTime + timing);
         }
     }
 }
@@ -599,8 +325,7 @@ void KisAnimationPlayer::previousMatchingKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-    int time = animInterface->currentUITime();
+    int time = visibleFrame();
 
     KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
     int destinationTime = keyframes->activeKeyframeTime(time);
@@ -619,8 +344,7 @@ void KisAnimationPlayer::nextMatchingKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    int time = animation->currentUITime();
+    int time = visibleFrame();
 
     if (!keyframes->activeKeyframeAt(time)) {
         return;
@@ -660,175 +384,25 @@ void KisAnimationPlayer::goToStartFrame()
     animation->switchCurrentTimeAsync(startFrame);
 }
 
-void KisAnimationPlayer::goToEndFrame()
+
+void KisAnimationPlayer::displayFrame(int frameToDisplay)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas);
+    KisAnimationFrameCacheSP frameCache = m_d->canvas->frameCache();
+    if (frameCache
+        && frameCache->shouldUploadNewFrame(frameToDisplay, m_d->visibleFrame)
+        && frameCache->uploadFrame(frameToDisplay)) {
 
-    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    const int endFrame = animation->playbackRange().end();
+        m_d->canvas->updateCanvas();
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(endFrame >= 0);
-
-    animation->switchCurrentTimeAsync(endFrame);
-}
-
-void KisAnimationPlayer::forcedStopOnExit()
-{
-    m_d->haltImpl();
-}
-
-void KisAnimationPlayer::Private::haltImpl()
-{
-    if (syncedAudio) {
-        syncedAudio->stop();
-    }
-
-    q->disconnectCancelSignals();
-    timer->stop();
-    canvas->setRenderingLimit(QRect());
-
-    if (!canvas->frameCache()) {
-        KisImageBarrierLocker locker(canvas->image());
-
-        Q_FOREACH (KisNodeSP node, disabledDecoratedNodes) {
-            // we have just upgraded from a weak shared pointer
-            KIS_SAFE_ASSERT_RECOVER(node) { continue; }
-
-            KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
-            KIS_SAFE_ASSERT_RECOVER(decoratedNode) { continue; }
-
-            decoratedNode->setDecorationsVisible(true);
-        }
-    }
-}
-
-bool KisAnimationPlayer::isPlaying()
-{
-    return m_d->playbackState == PLAYING;
-}
-
-bool KisAnimationPlayer::isPaused()
-{
-    return m_d->playbackState == PAUSED;
-}
-
-bool KisAnimationPlayer::isStopped()
-{
-    return m_d->playbackState == STOPPED;
-}
-
-int KisAnimationPlayer::visibleFrame()
-{
-    return m_d->lastPaintedFrame;
-}
-
-void KisAnimationPlayer::displayFrame(int time)
-{
-    uploadFrame(time, true);
-}
-
-void KisAnimationPlayer::slotUpdate()
-{
-    uploadFrame(-1, false);
-}
-
-void KisAnimationPlayer::uploadFrame(int frame, bool forceSyncAudio)
-{
-    KisImageAnimationInterface *animationInterface = m_d->canvas->image()->animationInterface();
-    const int fps = animationInterface->framerate();
-    const bool syncToAudio = !forceSyncAudio && m_d->dropFramesMode && m_d->syncedAudio && m_d->syncedAudio->isPlaying();
-
-    if (frame < 0) {
-        if (m_d->dropFramesMode) {
-            const qreal currentTimeInFrames = syncToAudio ?
-                m_d->msecToFrames(m_d->syncedAudio->position(), fps) :
-                m_d->playbackTimeInFrames(fps);
-            frame = qFloor(currentTimeInFrames);
-
-            const int timeToNextFrame = m_d->framesToWalltime(frame + 1 - currentTimeInFrames, fps);
-            m_d->lastTimerInterval = qMax(0, timeToNextFrame);
-
-            if (frame < m_d->currentFrame) {
-                // Returned to beginning of animation. Restart audio playback.
-                forceSyncAudio = true;
-            }
-        } else {
-            const qint64 currentTime = m_d->playbackTime.elapsed();
-            const qint64 framesDiff = currentTime - m_d->nextFrameExpectedTime;
-
-            frame = m_d->incFrame(m_d->currentFrame, 1);
-            m_d->nextFrameExpectedTime = currentTime + m_d->expectedInterval;
-            m_d->lastTimerInterval = qMax(0.0, m_d->lastTimerInterval - 0.5 * framesDiff);
-        }
-
-        m_d->currentFrame = frame;
-        m_d->timer->start(m_d->lastTimerInterval);
-        m_d->playbackStatisticsCompressor.start();
-    }
-
-    if (m_d->syncedAudio && (!syncToAudio || forceSyncAudio)) {
-        const int msecTime = m_d->framesToMSec(frame, fps);
-        if (isPlaying()) {
-            slotSyncScrubbingAudio(msecTime);
-        } else {
-            m_d->audioSyncScrubbingCompressor->start(msecTime);
-        }
-    }
-
-
-    bool useFallbackUploadMethod = !m_d->canvas->frameCache();
-
-    if (m_d->canvas->frameCache() &&
-        m_d->canvas->frameCache()->shouldUploadNewFrame(frame, m_d->lastPaintedFrame)) {
-
-        if (m_d->canvas->frameCache()->uploadFrame(frame)) {
-            m_d->canvas->updateCanvas();
-
-            m_d->useFastFrameUpload = true;
-        } else {
-            useFallbackUploadMethod = true;
-        }
-    }
-
-    if (useFallbackUploadMethod &&
-        m_d->canvas->image()->animationInterface()->hasAnimation()) {
-
-        m_d->useFastFrameUpload = false;
+    } else if (m_d->canvas->image()->animationInterface()->hasAnimation()) {
 
         if (m_d->canvas->image()->tryBarrierLock(true)) {
             m_d->canvas->image()->unlock();
-
-            // no OpenGL cache or the frame just not cached yet
-            animationInterface->switchCurrentTimeAsync(frame);
+            m_d->canvas->image()->animationInterface()->switchCurrentTimeAsync(frameToDisplay);
         }
     }
 
-    if (!m_d->realFpsTimer.isValid()) {
-        m_d->realFpsTimer.start();
-    } else {
-        const int elapsed = m_d->realFpsTimer.restart();
-        m_d->realFpsAccumulator(elapsed);
-
-        if (m_d->lastPaintedFrame >= 0) {
-            int numFrames = frame - m_d->lastPaintedFrame;
-            if (numFrames < 0) {
-                numFrames += m_d->lastFrame - m_d->firstFrame + 1;
-            }
-
-            m_d->droppedFramesPortion(qreal(int(numFrames != 1)));
-
-            if (numFrames > 0) {
-                m_d->droppedFpsAccumulator(qreal(elapsed) / numFrames);
-            }
-
-#ifdef PLAYER_DEBUG_FRAMERATE
-            qDebug() << "    RFPS:" << 1000.0 / m_d->realFpsAccumulator.rollingMean()
-                     << "DFPS:" << 1000.0 / m_d->droppedFpsAccumulator.rollingMean() << ppVar(numFrames);
-#endif /* PLAYER_DEBUG_FRAMERATE */
-        }
-    }
-
-    m_d->lastPaintedFrame = frame;
+    m_d->visibleFrame = frameToDisplay;
     emit sigFrameChanged();
 }
 
@@ -850,8 +424,7 @@ void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    int time = animation->currentUITime();
+    int time = visibleFrame();
 
     if (!keyframes->activeKeyframeAt(time)) {
         return;
@@ -866,7 +439,7 @@ void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
-        animation->requestTimeSwitchWithUndo(destinationTime);
+        seek(destinationTime);
     }
 }
 
@@ -888,8 +461,7 @@ void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-    int time = animInterface->currentUITime();
+    int time = visibleFrame();
 
     int destinationTime = keyframes->activeKeyframeTime(time);
     while (keyframes->keyframeAt(destinationTime) &&
@@ -900,51 +472,18 @@ void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
-        animInterface->requestTimeSwitchWithUndo(destinationTime);
+        seek(destinationTime);
     }
 }
 
-qreal KisAnimationPlayer::effectiveFps() const
+KisTimeSpan KisAnimationPlayer::activePlaybackRange()
 {
-    return 1000.0 / m_d->droppedFpsAccumulator.rollingMean();
-}
-
-qreal KisAnimationPlayer::realFps() const
-{
-    return 1000.0 / m_d->realFpsAccumulator.rollingMean();
-}
-
-qreal KisAnimationPlayer::framesDroppedPortion() const
-{
-    return m_d->droppedFramesPortion.rollingMean();
-}
-
-void KisAnimationPlayer::slotCancelPlayback()
-{
-    halt();
-}
-
-void KisAnimationPlayer::slotCancelPlaybackSafe()
-{
-    /**
-     * If there is no openGL support, then we have no (!) cache at
-     * all. Therefore we should regenerate frame on every time switch,
-     * which, yeah, can be very slow.  What is more important, when
-     * regenerating a frame animation interface will emit a
-     * sigStrokeEndRequested() signal and we should ignore it. That is
-     * not an ideal solution, because the user will be able to paint
-     * on random frames while playing, but it lets users with faulty
-     * GPUs see at least some preview of their animation.
-     */
-
-    if (m_d->useFastFrameUpload) {
-        halt();
+    if (!m_d->canvas || !m_d->canvas->image()) {
+        return KisTimeSpan::infinite(0);
     }
-}
 
-void KisAnimationPlayer::setPlaybackSpeedPercent(int value) {
-    const float normalizedSpeed = value / 100.0;
-    setPlaybackSpeedNormalized(normalizedSpeed);
+    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    return animation->playbackRange();
 }
 
 qreal KisAnimationPlayer::playbackSpeed()
@@ -952,13 +491,37 @@ qreal KisAnimationPlayer::playbackSpeed()
     return m_d->playbackSpeed;
 }
 
+int KisAnimationPlayer::visibleFrame()
+{
+    if (m_d->playbackState != PLAYING) {
+        if (m_d->canvas && m_d->canvas->image()) {
+            return m_d->canvas->image()->animationInterface()->currentUITime();
+        } else {
+            return -1;
+        }
+    } else {
+        return m_d->visibleFrame;
+    }
+}
+
+void KisAnimationPlayer::setPlaybackSpeedPercent(int value)
+{
+    const float normalizedSpeed = value / 100.0;
+    setPlaybackSpeedNormalized(normalizedSpeed);
+}
+
 void KisAnimationPlayer::setPlaybackSpeedNormalized(double value)
 {
     if (m_d->playbackSpeed != value) {
         m_d->playbackSpeed = value;
-        if (isPlaying()) {
-            slotUpdatePlaybackTimer();
-        }
         emit sigPlaybackSpeedChanged(m_d->playbackSpeed);
+    }
+}
+
+void KisAnimationPlayer::setPlaybackState(PlaybackState state)
+{
+    if (m_d->playbackState != state) {
+        m_d->playbackState = state;
+        emit sigPlaybackStateChanged(m_d->playbackState);
     }
 }

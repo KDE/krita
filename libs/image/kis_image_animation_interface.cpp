@@ -65,6 +65,7 @@ struct KisImageAnimationInterface::Private
     KisTimeSpan playbackRange;
     int framerate;
     int cachedLastFrameValue;
+
     QString audioChannelFileName;
     bool audioChannelMuted;
     qreal audioChannelVolume;

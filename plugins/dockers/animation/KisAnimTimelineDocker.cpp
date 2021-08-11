@@ -362,7 +362,7 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
                     m_d->canvas, SIGNAL(sigCanvasEngineChanged()),
                     this, SLOT(updateFrameCache()));
 
-        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->isPlaying());
+        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->playbackState() == KisAnimationPlayer::PLAYING);
         connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));
@@ -379,8 +379,12 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
 
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->frameRegister, SLOT(setDisabled(bool)));
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->transport, SLOT(setPlaying(bool)));
+        connect(m_d->canvas->animationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, [this](KisAnimationPlayer::PlaybackState state){
+            m_d->titlebar->frameRegister->setDisabled(state == KisAnimationPlayer::PLAYING);
+        });
+        connect(m_d->canvas->animationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, [this](KisAnimationPlayer::PlaybackState state){
+            m_d->titlebar->transport->setPlaying(state == KisAnimationPlayer::PLAYING);
+        });
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStatisticsUpdated()), this, SLOT(updatePlaybackStatistics()));
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));
 
@@ -408,9 +412,7 @@ void KisAnimTimelineDocker::updateFrameRegister()
         return;
     }
 
-    const int frame = m_d->canvas->animationPlayer()->isPlaying() ?
-                      m_d->canvas->animationPlayer()->visibleFrame() :
-                      m_d->canvas->image()->animationInterface()->currentUITime();
+    const int frame = m_d->canvas->animationPlayer()->visibleFrame();
 
     m_d->titlebar->frameRegister->setValue(frame);
 }
@@ -424,10 +426,10 @@ void KisAnimTimelineDocker::updatePlaybackStatistics()
 
     KisAnimationPlayer *player = m_d->canvas &&  m_d->canvas->animationPlayer() ?  m_d->canvas->animationPlayer() : 0;
     if (player) {
-        effectiveFps = player->effectiveFps();
-        realFps = player->realFps();
-        framesDropped = player->framesDroppedPortion();
-        isPlaying = player->isPlaying();
+//        effectiveFps = player->effectiveFps();
+//        realFps = player->realFps();
+//        framesDropped = player->framesDroppedPortion();
+//        isPlaying = player->isPlaying();
     }
 
     KisConfig cfg(true);

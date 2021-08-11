@@ -1,5 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Emmet O'Neill <emmetoneill.pdx@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,6 +11,8 @@
 
 #include <QScopedPointer>
 #include <QObject>
+
+#include <kis_time_span.h>
 
 #include "kritaui_export.h"
 
@@ -29,41 +33,33 @@ public:
     KisAnimationPlayer(KisCanvas2 *canvas);
     ~KisAnimationPlayer() override;
 
+    enum PlaybackState {
+        STOPPED,
+        PAUSED,
+        PLAYING
+    };
+
+    PlaybackState playbackState();
+
     void goToPlaybackOrigin();
     void goToStartFrame();
-    void goToEndFrame();
-    void displayFrame(int time);
-
-    bool isPlaying();
-    bool isPaused();
-    bool isStopped();
-    int visibleFrame();
-
     qreal playbackSpeed();
 
-    void forcedStopOnExit();
-
-    qreal effectiveFps() const;
-    qreal realFps() const;
-    qreal framesDroppedPortion() const;
+    int visibleFrame();
 
 Q_SIGNALS:
+    void sigPlaybackStateChanged(PlaybackState state);
     void sigFrameChanged();
-    void sigPlaybackStarted();
-    void sigPlaybackStopped();
-    void sigPlaybackStateChanged(bool value);
-    void sigPlaybackStatisticsUpdated();
-    void sigFullClipRangeChanged();
     void sigPlaybackSpeedChanged(double normalizedSpeed);
+    void sigPlaybackStatisticsUpdated();
 
 public Q_SLOTS:
     void play();
     void pause();
     void playPause();
-    void halt();
     void stop();
 
-    void seek(int frameIndex);
+    void seek(int frameIndex, bool preferCachedFrames = false);
     void previousFrame();
     void nextFrame();
     void previousKeyframe();
@@ -76,7 +72,6 @@ public Q_SLOTS:
      * 'similar' keyframes. E.g. Contact points in an animation might have
      * a specific color to specify importance and be quickly swapped between.
      */
-
     void previousMatchingKeyframe();
     void nextMatchingKeyframe();
 
@@ -89,45 +84,28 @@ public Q_SLOTS:
     void previousUnfilteredKeyframe();
     void nextUnfilteredKeyframe();
 
-    void slotUpdate();
-    void slotCancelPlayback();
-    void slotCancelPlaybackSafe();
-
     void setPlaybackSpeedPercent(int value);
     void setPlaybackSpeedNormalized(double value);
-    void slotUpdatePlaybackTimer();
-
-    void slotUpdateDropFramesMode();
-
-private Q_SLOTS:
-    void slotSyncScrubbingAudio(int msecTime);
-    void slotTryStopScrubbingAudio();
-    void slotUpdateAudioChunkLength();
-    void slotAudioChannelChanged();
-    void slotAudioVolumeChanged();
-    void slotOnAudioError(const QString &fileName, const QString &message);
 
 private:
+    void setPlaybackState(PlaybackState state);
+
     void connectCancelSignals();
     void disconnectCancelSignals();
-    void uploadFrame(int time, bool forceSyncAudio);
+    void displayFrame(int time);
 
     void nextKeyframeWithColor(int color);
     void nextKeyframeWithColor(const QSet<int> &validColors);
     void previousKeyframeWithColor(int color);
     void previousKeyframeWithColor(const QSet<int> &validColors);
 
-    void refreshCanvas();
+    void updateDropFramesMode();
+    KisTimeSpan activePlaybackRange();
 
 private:
     struct Private;
     QScopedPointer<Private> m_d;
 
-    enum PlaybackState {
-        STOPPED,
-        PAUSED,
-        PLAYING
-    };
 };
 
 

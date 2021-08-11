@@ -169,7 +169,7 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisAnimationPlayer *player)
         connect(m_d->animationPlayer, SIGNAL(sigPlaybackStopped()), SLOT(slotPlaybackStopped()));
         connect(m_d->animationPlayer, SIGNAL(sigFrameChanged()), SLOT(slotPlaybackFrameChanged()));
 
-        const int frame = player && player->isPlaying() ? player->visibleFrame() : m_d->image->animationInterface()->currentUITime();
+        const int frame = player ? player->visibleFrame() : m_d->image->animationInterface()->currentUITime();
         setHeaderData(frame, Qt::Horizontal, true, ActiveFrameRole);
     }
 }
@@ -501,8 +501,8 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
 
 void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 {
-    if (m_d->animationPlayer && !m_d->animationPlayer->isPlaying()) {
-        m_d->animationPlayer->displayFrame(time);
+    if (m_d->animationPlayer && m_d->animationPlayer->playbackState() != KisAnimationPlayer::PLAYING ) {
+        m_d->animationPlayer->seek(time, true);
     }
 }
 
@@ -544,7 +544,7 @@ bool KisTimeBasedItemModel::isScrubbing()
 
 void KisTimeBasedItemModel::scrubTo(int time, bool preview)
 {
-    if (m_d->animationPlayer && m_d->animationPlayer->isPlaying()) return;
+    if (m_d->animationPlayer && m_d->animationPlayer->playbackState() == KisAnimationPlayer::PLAYING) return;
 
     KIS_ASSERT_RECOVER_RETURN(m_d->image);
 
@@ -600,7 +600,7 @@ void KisTimeBasedItemModel::slotCacheChanged()
 
 void KisTimeBasedItemModel::slotPlaybackFrameChanged()
 {
-    if (!m_d->animationPlayer->isPlaying()) return;
+    if (m_d->animationPlayer->playbackState() != KisAnimationPlayer::PLAYING) return;
     setHeaderData(m_d->animationPlayer->visibleFrame(), Qt::Horizontal, true, ActiveFrameRole);
 }
 
@@ -619,17 +619,17 @@ void KisTimeBasedItemModel::setPlaybackRange(const KisTimeSpan &range)
 
 bool KisTimeBasedItemModel::isPlaybackActive() const
 {
-    return m_d->animationPlayer && m_d->animationPlayer->isPlaying();
+    return m_d->animationPlayer && m_d->animationPlayer->playbackState() == KisAnimationPlayer::PLAYING;
 }
 
 bool KisTimeBasedItemModel::isPlaybackPaused() const
 {
-    return m_d->animationPlayer && m_d->animationPlayer->isPaused();
+    return m_d->animationPlayer && m_d->animationPlayer->playbackState() == KisAnimationPlayer::PAUSED;
 }
 
 void KisTimeBasedItemModel::stopPlayback() const {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->animationPlayer);
-    m_d->animationPlayer->halt();
+    m_d->animationPlayer->stop();
 }
 
 int KisTimeBasedItemModel::currentTime() const

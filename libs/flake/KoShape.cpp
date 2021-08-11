@@ -160,7 +160,8 @@ const qint16 KoShape::minZIndex = std::numeric_limits<qint16>::min();
 KoShape::KoShape()
     : d(new Private()),
       s(new SharedData),
-      absolute(true)
+      m_absolute(true),
+      m_extraTransform(QTransform())
 {
     notifyChanged();
 }
@@ -359,7 +360,7 @@ QRectF KoShape::absoluteOutlineRect(const QList<KoShape *> &shapes)
 QTransform KoShape::absoluteTransformation() const
 {
     QTransform matrix;
-    if(absolute) {
+    if(m_absolute) {
         // apply parents matrix to inherit any transformations done there.
         KoShapeContainer * container = d->parent;
         if (container) {
@@ -372,6 +373,7 @@ QTransform KoShape::absoluteTransformation() const
             }
         }
     }
+    matrix *= m_extraTransform;
 
     return s->localMatrix * matrix;
 }
@@ -1344,5 +1346,17 @@ QList<KoShape *> KoShape::linearizeSubtreeSorted(const QList<KoShape *> &shapes)
 
 void KoShape::setAbsolute(bool value)
 {
-    absolute = value;
+    m_absolute = value;
+}
+
+QTransform KoShape::extraTransform() const
+{
+    return m_extraTransform;
+}
+
+void KoShape::setExtraTransform(QTransform t)
+{
+    m_extraTransform = t;
+    notifyChanged();
+    shapeChangedPriv(GenericMatrixChange);
 }

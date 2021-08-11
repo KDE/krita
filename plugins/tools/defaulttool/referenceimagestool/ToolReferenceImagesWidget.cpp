@@ -199,11 +199,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
 
     KisSignalsBlocker blocker(
         d->ui->chkKeepAspectRatio,
-        d->ui->referenceImageLocationCombobox,
-        d->ui->chkPinPos,
-        d->ui->chkPinRotate,
-        d->ui->chkPinMirror,
-        d->ui->chkPinZoom
+        d->ui->referenceImageLocationCombobox
 
     );
 
@@ -211,13 +207,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
         (anyKeepingAspectRatio && anyNotKeepingAspectRatio) ? Qt::PartiallyChecked :
          anyKeepingAspectRatio ? Qt::Checked : Qt::Unchecked);
 
-    KisSharedPtr<KisReferenceImagesLayer> layer =  d->tool->document()->referenceImagesLayer();
-    if(layer) {
-       d->ui->chkPinPos->setCheckState(layer->pinPosition() ? Qt::Checked : Qt::Unchecked);
-       d->ui->chkPinRotate->setCheckState(layer->pinRotate() ? Qt::Checked : Qt::Unchecked);
-       d->ui->chkPinMirror->setCheckState(layer->pinMirror() ? Qt::Checked : Qt::Unchecked);
-       d->ui->chkPinZoom->setCheckState(layer->pinZoom() ? Qt::Checked : Qt::Unchecked);
-    }
+
 
     // set save location combobox
     bool imagesEmbedded = anyEmbedded && !anyLinked;
@@ -303,7 +293,15 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->chkPinMirror->setVisible(hasSelection);
     d->ui->chkPinZoom->setVisible(hasSelection);
 
+    KisReferenceImage *ref = d->tool->activeReferenceImage();
     d->ui->bnCrop->setVisible(hasSelection);
+        if(ref) {
+            d->ui->chkPinMirror->setChecked(ref->pinMirror());
+            d->ui->chkPinPos->setChecked(ref->pinPosition());
+            d->ui->chkPinRotate->setChecked(ref->pinRotate());
+            d->ui->chkPinZoom->setChecked(ref->pinZoom());
+        }
+
 
     // show a label indicating that a selection is required to show options
     d->ui->referenceImageOptionsLabel->setVisible(!hasSelection);
@@ -471,32 +469,32 @@ QRectF ToolReferenceImagesWidget::cropRect()
 
 void ToolReferenceImagesWidget::slotMirrorChanged()
 {
-    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
-    if(layer) {
-        layer->setPinMirror(d->ui->chkPinMirror->isChecked());
-    }
+    KisReferenceImage *ref= d->tool->activeReferenceImage();
+        if(ref) {
+            ref->setPinMirror(d->ui->chkPinMirror->isChecked());
+     }
 }
 
 void ToolReferenceImagesWidget::slotPositionChanged()
 {
-    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
-    if(layer) {
-        layer->setPinPosition(d->ui->chkPinPos->isChecked());
+    KisReferenceImage *ref= d->tool->activeReferenceImage();
+        if(ref) {
+            ref->setPinPosition(d->ui->chkPinPos->isChecked());
     }
 }
 
 void ToolReferenceImagesWidget::slotRotateChanged()
 {
-    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
-    if(layer) {
-        layer->setPinRotate(d->ui->chkPinRotate->isChecked());
-    }
+    KisReferenceImage *ref= d->tool->activeReferenceImage();
+        if(ref) {
+            ref->setPinRotate(d->ui->chkPinRotate->isChecked());
+        }
 }
 
 void ToolReferenceImagesWidget::slotZoomChanged()
 {
-    KisSharedPtr<KisReferenceImagesLayer> layer = d->tool->document()->referenceImagesLayer();
-    if(layer) {
-        layer->setPinZoom(d->ui->chkPinZoom->isChecked());
-    }
+    KisReferenceImage *ref= d->tool->activeReferenceImage();
+        if(ref) {
+            ref->setPinZoom(d->ui->chkPinZoom->isChecked());
+        }
 }

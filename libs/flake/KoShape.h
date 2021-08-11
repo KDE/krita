@@ -1024,8 +1024,6 @@ public:
      */
     void setHyperLink(const QString &hyperLink);
 
-    void setAbsolute(bool);
-
 public:
 
     struct KRITAFLAKE_EXPORT ShapeChangeListener {
@@ -1065,6 +1063,13 @@ protected:
     /// return the current matrix that contains the rotation/scale/position of this shape
     QTransform transform() const;
 
+    // This allows to not apply parent transformation to shapes in absoluteTransformation()
+    void setAbsolute(bool);
+
+    // Append any kind of extra transformation of individual shapes.
+    QTransform extraTransform() const;
+    void setExtraTransform(QTransform t);
+
 private:
     class Private;
     QScopedPointer<Private> d;
@@ -1072,7 +1077,8 @@ private:
     class SharedData;
     QSharedDataPointer<SharedData> s;
 
-    bool absolute;
+    bool m_absolute;
+    QTransform m_extraTransform;
 
 protected:
     /**

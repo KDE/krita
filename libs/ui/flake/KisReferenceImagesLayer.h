@@ -49,16 +49,7 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                  KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
 
-    bool pinRotate();
-    void setPinRotate(bool);
-    bool pinMirror();
-    void setPinMirror(bool);
-    bool pinPosition();
-    void setPinPosition(bool);
-    bool pinZoom();
-    void setPinZoom(bool);
-
-    QTransform transform(KisCanvas2 *kisCanvas);
+    void updateTransformations(KisCanvas2 *kisCanvas);
 
 Q_SIGNALS:
     /**
@@ -75,13 +66,7 @@ private:
     friend struct RemoveReferenceImagesCommand;
     friend class ReferenceImagesCanvas;
 
-    bool m_pinRotate, m_pinMirror, m_pinPosition, m_pinZoom;
-    bool m_mirrorX, m_mirrorY;
-    bool m_initialValues;
-    QPointF m_docOffset;
-    qreal m_previousAngle, m_previousPosition;
-    qreal m_zoom ;
-    QTransform m_transform;
+    QTransform m_docToWidget;
 };
 
 typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;

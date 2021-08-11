@@ -76,7 +76,7 @@ void ToolReferenceImages::activate(const QSet<KoShape*> &shapes)
 void ToolReferenceImages::mousePressEvent(KoPointerEvent *event)
 {
     if(m_layer) {
-        QPointF newPos = m_layer->transform(dynamic_cast<KisCanvas2*>(canvas())).inverted().map(event->pos());
+        QPointF newPos = event->pos();
         KoPointerEvent *newEvent = new KoPointerEvent(event, newPos);
 
         if (activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
@@ -96,7 +96,7 @@ void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
     KisReferenceImage *referenceImage = activeReferenceImage();
 
     if(m_layer) {
-        QPointF newPos = m_layer->transform(dynamic_cast<KisCanvas2*>(canvas())).inverted().map(event->pos());
+        QPointF newPos = event->pos();
         KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
 
         if(referenceImage && referenceImage->cropEnabled()) {
@@ -137,7 +137,7 @@ void ToolReferenceImages::deactivate()
 void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if(m_layer) {
-        painter.setTransform(m_layer->transform(dynamic_cast<KisCanvas2*>(canvas())));
+        painter.setTransform(QTransform());
     }
     KisReferenceImage* ref = activeReferenceImage();
 

@@ -51,13 +51,14 @@ struct KisReferenceImagesDecoration::Private {
 private:
     void updateBuffer(QRectF widgetRect, QRectF imageRect)
     {
+        //Might need this to fix clipping.
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
-        QTransform transform = layer->transform(q->view()->canvasBase());
+        layer->updateTransformations(q->view()->canvasBase());
 
         qreal devicePixelRatioF = q->view()->devicePixelRatioF();
         if (buffer.image.isNull() || !buffer.bounds().contains(widgetRect)) {
             const QRectF boundingImageRect = layer->boundingRect();
-            const QRectF boundingWidgetRect = transform.mapRect(boundingImageRect);
+            const QRectF boundingWidgetRect = boundingImageRect;
             widgetRect = boundingWidgetRect.intersected(q->view()->rect());
 
             if (widgetRect.isNull()) return;
@@ -68,14 +69,14 @@ private:
             buffer.image = QImage((widgetRect.size()*devicePixelRatioF).toSize(), QImage::Format_ARGB32);
             buffer.image.setDevicePixelRatio(devicePixelRatioF);
 
-            imageRect = transform.inverted().mapRect(widgetRect);
+            imageRect = widgetRect;
 
         }
 
         QPainter gc(&buffer.image);
 
         gc.translate(-buffer.position);
-        gc.setTransform(transform, true);
+        gc.setTransform(QTransform(), true);
 
         gc.save();
         gc.setCompositionMode(QPainter::CompositionMode_Source);

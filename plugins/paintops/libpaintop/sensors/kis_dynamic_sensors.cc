@@ -6,23 +6,19 @@
  */
 
 #include "kis_dynamic_sensors.h"
+#include "kis_config.h"
 
 
 KisDynamicSensorSpeed::KisDynamicSensorSpeed()
     : KisDynamicSensor(SPEED)
 {
+    KisConfig cfg(true);
+    m_maxAllowedSpeedValue = cfg.readEntry("maxAllowedSpeedValue", 30);
 }
 
 qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info)
 {
-    /**
-     * The value of maximum speed was measured empirically. This is
-     * the speed that is quite easy to get with an A6 tablet and quite
-     * a big image. If you need smaller speeds, just change the curve.
-     */
-    const qreal maxSpeed = 30.0; // px / ms
-    const qreal currentSpeed = qMin(1.0, info.drawingSpeed() / maxSpeed);
-
+    const qreal currentSpeed = qMin(1.0, info.drawingSpeed() / m_maxAllowedSpeedValue);
     return currentSpeed;
 }
 

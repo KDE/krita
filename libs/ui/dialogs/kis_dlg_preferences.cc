@@ -875,7 +875,9 @@ void TabletSettingsTab::setDefault()
         m_page->grpTabletApi->setVisible(false);
 #endif
 
-    m_page->chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
+    m_page->chkUseTimestampsForBrushSpeed->setChecked(false);
+    m_page->intMaxAllowedBrushSpeed->setValue(30);
+
 }
 
 TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
@@ -932,6 +934,11 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page->chkUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed"));
 #endif
     m_page->chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
+
+    m_page->intMaxAllowedBrushSpeed->setPrefix("Maximum stylus speed: ");
+    m_page->intMaxAllowedBrushSpeed->setSuffix(" px/ms");
+    m_page->intMaxAllowedBrushSpeed->setRange(1, 100);
+    m_page->intMaxAllowedBrushSpeed->setValue(cfg.readEntry("maxAllowedSpeedValue", 30));
 }
 
 void TabletSettingsTab::slotTabletTest()
@@ -1983,6 +1990,7 @@ bool KisDlgPreferences::editPreferences()
         }
 #endif
         cfg.writeEntry<bool>("useTimestampsForBrushSpeed", m_tabletSettings->m_page->chkUseTimestampsForBrushSpeed->isChecked());
+        cfg.writeEntry<int>("maxAllowedSpeedValue", m_tabletSettings->m_page->intMaxAllowedBrushSpeed->value());
 
         m_performanceSettings->save();
 

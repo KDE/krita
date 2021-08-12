@@ -29,6 +29,7 @@ struct Q_DECL_HIDDEN KoResource::Private {
     int version {-1};
     int resourceId {-1};
     bool valid {false};
+    bool active {true};
     bool permanent {false};
     bool dirty {false};
     QString name;
@@ -183,6 +184,16 @@ bool KoResource::valid() const
 void KoResource::setValid(bool valid)
 {
     d->valid = valid;
+}
+
+bool KoResource::active() const
+{
+    return d->active;
+}
+
+void KoResource::setActive(bool active)
+{
+    d->active = active;
 }
 
 

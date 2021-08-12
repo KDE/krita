@@ -218,6 +218,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
                        ",      versioned_resources.version as version\n"
                        ",      versioned_resources.md5sum as md5sum\n"
                        ",      resources.name\n"
+                       ",      resources.status\n"
                        "FROM   resources\n"
                        ",      storages\n"
                        ",      resource_types\n"
@@ -253,6 +254,8 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
 
         resource->setMD5Sum(q.value(2).toString());
         Q_ASSERT(!resource->md5Sum().isEmpty());
+
+        resource->setActive(q.value(3).toBool());
 
         // To override resources that use the filename for the name, which is versioned, and we don't want the version number in the name
         resource->setName(q.value(3).toString());;
@@ -440,6 +443,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     resource->updateThumbnail();
     resource->setVersion(resource->version() + 1);
+    resource->setActive(true);
 
     if (!storage->saveAsNewVersion(resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;

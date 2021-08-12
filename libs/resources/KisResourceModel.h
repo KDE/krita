@@ -89,7 +89,11 @@ public:
     virtual KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) = 0;
 
     /**
-     * @brief addResource adds the given resource to the database and storage
+     * @brief addResource adds the given resource to the database and storage. If the resource
+     * already exists in the given storage with md5, filename or name, the existing resource
+     * will be updated instead. If the existing resource was inactive, it will be actived
+     * (undeleted).
+     *
      * @param resource the resource itself
      * @param storageId the id of the storage (could be "memory" for temporary
      * resources, the document's storage id for document storages or empty to save
@@ -99,9 +103,13 @@ public:
     virtual bool addResource(KoResourceSP resource, const QString &storageId = QString()) = 0;
 
     /**
-     * @brief updateResource
+     * @brief updateResource creates a new version ofthe resource in the storage and
+     * in the database. This will also set the resource to active if it was inactive.
+     *
+     * Note: if the storage does not support versioning, updating the resource will fail.
+     *
      * @param resource
-     * @return
+     * @return true if the resource was succesfull updated,
      */
     virtual bool updateResource(KoResourceSP resource) = 0;
 

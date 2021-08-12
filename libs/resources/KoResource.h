@@ -133,6 +133,10 @@ public:
     bool valid() const;
     void setValid(bool valid);
 
+    /// @return true if the resource is marked as active in the database (inactive means "deleted")
+    bool active() const;
+    void setActive(bool active);
+
     /// @return the default file extension which should be used when saving the resource
     virtual QString defaultFileExtension() const;
 

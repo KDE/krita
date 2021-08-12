@@ -27,6 +27,7 @@
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
+#include <kis_transform_worker.h>
 
 #include "kis_assert.h"
 #include "kis_buffer_stream.h"
@@ -534,6 +535,13 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
         info->setAboutInfo("description", text);
     }
 
+    uint16_t orientation = ORIENTATION_TOPLEFT;
+    if (TIFFGetField(image, TIFFTAG_ORIENTATION, &orientation) == 0) {
+        dbgFile << "Orientation not defined, assuming top left";
+    }
+
+    dbgFile << "Orientation:" << orientation;
+
     // Get the planar configuration
     uint16_t planarconfig;
     if (TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0) {
@@ -848,6 +856,37 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
     }
 
     m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
+
+    // Process rotation before handing image over
+    // https://developer.apple.com/documentation/imageio/cgimagepropertyorientation
+    switch (orientation) {
+    case ORIENTATION_TOPRIGHT:
+        KisTransformWorker::mirrorX(layer->paintDevice());
+        break;
+    case ORIENTATION_BOTRIGHT:
+        m_image->rotateImage(M_PI);
+        break;
+    case ORIENTATION_BOTLEFT:
+        KisTransformWorker::mirrorY(layer->paintDevice());
+        break;
+    case ORIENTATION_LEFTTOP:
+        m_image->rotateImage(M_PI / 2);
+        KisTransformWorker::mirrorY(layer->paintDevice());
+        break;
+    case ORIENTATION_RIGHTTOP:
+        m_image->rotateImage(M_PI / 2);
+        break;
+    case ORIENTATION_RIGHTBOT:
+        m_image->rotateImage(M_PI / 2);
+        KisTransformWorker::mirrorX(layer->paintDevice());
+        break;
+    case ORIENTATION_LEFTBOT:
+        m_image->rotateImage(-M_PI / 2 + M_PI * 2);
+        break;
+    default:
+        break;
+    }
+
     return ImportExportCodes::OK;
 }
 

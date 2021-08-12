@@ -15,6 +15,7 @@
 #include <KoColor.h>
 
 class KisCanvas2;
+class KisUniqueColorSet;
 class KisColorSourceToggle;
 class KisDisplayColorConverter;
 class KisSignalCompressor;
@@ -68,6 +69,7 @@ private:
     KisVisualColorSelector *m_selector {0};
     KisColorSourceToggle *m_toggle {0};
     KisSignalCompressor *m_colorChangeCompressor;
+    KisUniqueColorSet *m_colorHistory;
     WGActionManager *m_actionManager {0};
     WGColorPreviewToolTip *m_colorTooltip {0};
     WGShadeSelector *m_shadeSelector {0};

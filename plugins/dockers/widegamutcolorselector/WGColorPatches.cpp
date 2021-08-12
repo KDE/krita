@@ -7,27 +7,20 @@
 #include "WGColorPatches.h"
 
 #include <kis_display_color_converter.h>
+#include <KisUniqueColorSet.h>
 
 #include <QMouseEvent>
 #include <QPainter>
 
-WGColorPatches::WGColorPatches(QWidget *parent) : WGSelectorWidgetBase(parent)
+WGColorPatches::WGColorPatches(KisUniqueColorSet *history, QWidget *parent)
+    : WGSelectorWidgetBase(parent)
 {
-
+    setColorHistory(history);
 }
 
-void WGColorPatches::addUniqueColor(const KoColor &color)
+KisUniqueColorSet *WGColorPatches::colorHistory() const
 {
-    int colIndex = m_colors.indexOf(color);
-    if (colIndex >= 0) {
-        m_colors.removeAt(colIndex);
-    }
-    m_colors.prepend(color);
-    // keep up to 200 colors
-    if (m_colors.size() > 200) {
-        m_colors.removeLast();
-    }
-    update();
+     return m_colors;
 }
 
 void WGColorPatches::setAdditionalButtons(QList<QWidget *> buttonList)
@@ -39,11 +32,19 @@ void WGColorPatches::setAdditionalButtons(QList<QWidget *> buttonList)
     m_buttonList = buttonList;
 }
 
-void WGColorPatches::setColors(QList<KoColor> colors)
+void WGColorPatches::setColorHistory(KisUniqueColorSet *history)
 {
-    m_colors = colors;
-    m_scrollValue = qBound(0, m_scrollValue, maxScroll());
-    update();
+    if (m_colors) {
+        m_colors->disconnect(this);
+    }
+    if (history) {
+        connect(history, SIGNAL(sigColorAdded(int)), SLOT(update()));
+        connect(history, SIGNAL(sigColorMoved(int,int)), SLOT(update()));
+        connect(history, SIGNAL(sigColorRemoved(int)), SLOT(update()));
+        connect(history, SIGNAL(sigReset()), SLOT(update()));
+        m_scrollValue = 0;
+    }
+    m_colors = history;
 }
 
 void WGColorPatches::mouseMoveEvent(QMouseEvent *event)
@@ -51,7 +52,7 @@ void WGColorPatches::mouseMoveEvent(QMouseEvent *event)
     if (event->buttons() & Qt::LeftButton) {
         int index = indexAt(event->pos());
         if (index >= 0 && index != m_mouseIndex) {
-            emit sigColorChanged(m_colors[index]);
+            emit sigColorChanged(m_colors->color(index));
             m_mouseIndex = index;
         }
     }
@@ -63,7 +64,7 @@ void WGColorPatches::mousePressEvent(QMouseEvent *event)
         emit sigInteraction(true);
         m_mouseIndex = indexAt(event->pos());
         if (m_mouseIndex >= 0) {
-            emit sigColorChanged(m_colors[m_mouseIndex]);
+            emit sigColorChanged(m_colors->color(m_mouseIndex));
         }
     }
 }
@@ -89,7 +90,7 @@ void WGColorPatches::wheelEvent(QWheelEvent *event)
 void WGColorPatches::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
-    int numColors = m_colors.size();
+    int numColors = m_colors ? m_colors->size() : 0;
     if (numColors <= 0) {
         return;
     }
@@ -107,8 +108,8 @@ void WGColorPatches::paintEvent(QPaintEvent *event)
     }
 
     const KisDisplayColorConverter *converter = displayConverter();
-    for (int i = scrollCount * m_numLines; i < qMin(m_patchCount, m_colors.size()); i++) {
-        QColor qcolor = converter->toQColor(m_colors[i]);
+    for (int i = scrollCount * m_numLines; i < qMin(m_patchCount, m_colors->size()); i++) {
+        QColor qcolor = converter->toQColor(m_colors->color(i));
 
         painter.fillRect(patchRect(i + m_buttonList.size()), qcolor);
     }
@@ -135,7 +136,7 @@ bool WGColorPatches::colorAt(const QPoint &pos, KoColor &result) const
     int patchNr = indexAt(pos);
 
     if (patchNr >= 0) {
-        result = m_colors[patchNr];
+        result = m_colors->color(patchNr);
         return true;
     }
     return false;
@@ -143,7 +144,7 @@ bool WGColorPatches::colorAt(const QPoint &pos, KoColor &result) const
 
 int WGColorPatches::indexAt(const QPoint &pos) const
 {
-    if(!rect().contains(pos))
+    if(!m_colors || !rect().contains(pos))
         return -1;
 
     int scrollX = m_orientation == Qt::Horizontal ? m_scrollValue : 0;
@@ -162,7 +163,7 @@ int WGColorPatches::indexAt(const QPoint &pos) const
 
     patchNr -= m_buttonList.size();
 
-    if (patchNr >= 0 && patchNr < qMin(m_patchCount, m_colors.size())) {
+    if (patchNr >= 0 && patchNr < qMin(m_patchCount, m_colors->size())) {
         return patchNr;
     }
     return -1;

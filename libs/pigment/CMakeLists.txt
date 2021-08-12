@@ -79,6 +79,7 @@ set(kritapigment_SRCS
     resources/KoSegmentGradient.cpp
     resources/KoCachedGradient.h
     resources/KisGradientConversion.cpp
+    resources/KisUniqueColorSet.cpp
 )
 
 set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} kritamultiarch)

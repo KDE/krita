@@ -11,21 +11,21 @@
 
 #include <kis_types.h>
 
+class KisUniqueColorSet;
 class KoColorDisplayRendererInterface;
 
 class WGColorPatches : public WGSelectorWidgetBase
 {
     Q_OBJECT
 public:
-    explicit WGColorPatches(QWidget *parent = nullptr);
+    explicit WGColorPatches(KisUniqueColorSet *history, QWidget *parent = nullptr);
 
-    void addUniqueColor(const KoColor& color);
-    QList<KoColor> colors() const { return m_colors; }
+    KisUniqueColorSet* colorHistory() const;
     /*! set buttons, that should be drawn additionally to the patches
      * this class takes ownership of them and will delete them
      * they will be resized to the patchsize */
     void setAdditionalButtons(QList<QWidget*> buttonList);
-    void setColors(QList<KoColor>colors);
+    void setColorHistory(KisUniqueColorSet *history);
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -41,7 +41,7 @@ protected:
     QRect patchRect(int gridIndex) const;
 
 private:
-    QList<KoColor> m_colors;
+    QPointer<KisUniqueColorSet> m_colors;
     QList<QWidget*> m_buttonList;
     Qt::Orientation m_orientation {Qt::Horizontal};
     int m_numLines {1};

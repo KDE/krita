@@ -24,6 +24,7 @@
 #include <kis_config_notifier.h>
 #include <kis_display_color_converter.h>
 #include <kis_signal_compressor.h>
+#include <KisUniqueColorSet.h>
 #include <KoCanvasResourceProvider.h>
 
 #include <QLabel>
@@ -78,7 +79,10 @@ WGColorSelectorDock::WGColorSelectorDock()
     mainWidget->layout()->addWidget(m_shadeSelector);
     connect(m_shadeSelector, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
 
-    m_history = new WGColorPatches(mainWidget);
+    // eventually it should made be a global history, not specific to any plugin
+    m_colorHistory = new KisUniqueColorSet(this);
+
+    m_history = new WGColorPatches(m_colorHistory, mainWidget);
     mainWidget->layout()->addWidget(m_history);
     connect(m_history, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_history, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
@@ -315,7 +319,7 @@ void WGColorSelectorDock::slotFGColorUsed(const KoColor &color)
     QColor lastCol = m_selector->selectorModel()->displayRenderer()->toQColor(color);
     m_colorTooltip->setLastUsedColor(lastCol);
     m_actionManager->setLastUsedColor(color);
-    m_history->addUniqueColor(color);
+    m_colorHistory->addColor(color);
 }
 
 void WGColorSelectorDock::slotSetNewColors()

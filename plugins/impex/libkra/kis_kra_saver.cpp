@@ -163,14 +163,14 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
-    bool res = false;
+    bool res = true;
     if (m_d->doc->paletteList().size() == 0) {
         return true;
     }
     for (const KoColorSet *palette : m_d->doc->paletteList()) {
         if (!palette->isGlobal()) {
             if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
-                m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save palettes.");
+                m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not open store for saving the document palette.");
                 return false;
             }
             QByteArray ba = palette->toByteArray();
@@ -178,15 +178,16 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
             if (!ba.isEmpty()) {
                 nwritten = store->write(ba);
             } else {
-                qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+                qWarning() << "Cannot save the palette to a byte array because it is empty:" << palette->name();
             }
             res = store->close();
+
             res = res && (nwritten == ba.size());
         }
     }
-
     if (!res) {
         m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save palettes.");
+        qWarning() << "Could not save palette";
     }
     return res;
 }

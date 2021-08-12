@@ -224,12 +224,17 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     setValid(d->settings->isValid());
 
-    QStringList requiredBrushes = d->settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
+    QStringList requiredBrushes;
+    Q_FOREACH(const QString str, d->settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag)) {
+        if (!str.isEmpty()) {
+            requiredBrushes << str;
+        }
+    }
     QString requiredBrush = d->settings->getString(KisPaintOpUtils::RequiredBrushFileTag);
     if (!requiredBrush.isEmpty()) {
         requiredBrushes << requiredBrush;
     }
-    addMetaData("dependent_resources_filenames", requiredBrushes);
+    requiredBrushes.addMetaData("dependent_resources_filenames", requiredBrushes);
 
     setImage(img);
 

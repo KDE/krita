@@ -387,6 +387,11 @@ void KisImageAnimationInterface::notifyFrameCancelled()
     emit sigFrameCancelled();
 }
 
+void KisImageAnimationInterface::notifyFrameRegenerated()
+{
+    emit sigFrameRegenerated(m_d->currentTime());
+}
+
 bool KisImageAnimationInterface::requiresOnionSkinRendering() {
     
     KisNodeSP onionskinned = KisLayerUtils::recursiveFindNode(m_d->image->root(), [](KisNodeSP p) {

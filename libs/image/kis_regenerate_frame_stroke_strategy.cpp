@@ -159,12 +159,15 @@ void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
     if (!image) {
         return;
     }
+
+
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->notifyFrameReady();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
         image->enableUIUpdates();
         m_d->restoreUpdatesFilter();
     } else if (m_d->type == CURRENT_FRAME) {
+        m_d->interface->notifyFrameRegenerated();
         m_d->interface->blockFrameInvalidation(false);
     }
 }

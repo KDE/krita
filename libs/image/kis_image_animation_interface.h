@@ -166,7 +166,26 @@ public Q_SLOTS:
     void setFramerate(int fps);
 
 Q_SIGNALS:
+    /**
+     * @brief sigFrameReady notifies when an External frame has been regenerated and is available.
+     * @param time -- frame index
+     *
+     * Used for background processing of frames where we want to ensure that an external frame has
+     * been fully processed before updating.
+     *
+     */
     void sigFrameReady(int time);
+
+    /**
+     * @brief sigFrameRegenerated notifies when internal frame has been fully regenerated.
+     * @param time
+     *
+     * Used to notify switchCurrentTimeAsync clients that the frame is visible to the user.
+     * Only notifies when internal frame regeneration occurs, not external.
+     * Currently used in AnimationPlayer to update what it considers to be the "visible" frame
+     */
+    void sigFrameRegenerated(int time);
+
     void sigFrameCancelled();
     void sigUiTimeChanged(int newTime);
     void sigFramesChanged(const KisTimeSpan &range, const QRect &rect);
@@ -202,6 +221,7 @@ private:
     void restoreCurrentTime(int *savedValue);
     void notifyFrameReady();
     void notifyFrameCancelled();
+    void notifyFrameRegenerated();
     bool requiresOnionSkinRendering();
 
     KisUpdatesFacade* updatesFacade() const;

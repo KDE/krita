@@ -109,4 +109,32 @@ private:
 };
 
 
+class KRITAUI_EXPORT SingleShotSignal : public QObject {
+    Q_OBJECT
+public:
+    SingleShotSignal(QObject* parent = nullptr)
+        : QObject(parent)
+        , lock(false)
+    {
+    }
+
+    ~SingleShotSignal() {}
+
+public Q_SLOTS:
+    void tryFire() {
+        if (!lock) {
+            lock = true;
+            emit output();
+        }
+    }
+
+Q_SIGNALS:
+    void output();
+
+private:
+    bool lock;
+
+};
+
+
 #endif

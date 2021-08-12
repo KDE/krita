@@ -70,28 +70,100 @@ struct KisAnimationPlayer::Private
 public:
     Private()
         : dropFramesMode(true),
-          playbackFrame(0),
           visibleFrame(-1),
           playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
           {}
 
     KisCanvas2 *canvas;
-    QVector<KisNodeWSP> disabledDecoratedNodes;
-
     KisAnimationPlayer::PlaybackState playbackState;
 
-    KisSignalAutoConnectionsStore cancelStrokeConnections;
-
-    int playbackOriginFrame; //!< The frame user started playback from.
-    int initialFrame;     //TODO: Why need?
-    qreal playbackSpeed; //TODO: Should go in timing specific class?
-
+    qreal playbackSpeed;
     bool dropFramesMode;    //!< Whether we should be dropping frames to preserve playback timing.
-    bool useFastFrameUpload; //TODO: Figure this one out...
 
-    //There are two frames we need to keep track of...
-    int playbackFrame; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
     int visibleFrame; //!< This the frame that is currently being displayed on the canvas. Can be different from the current frame.
+
+    struct Playback {
+    public:
+
+        Playback(KisAnimationPlayer& parent, KisCanvas2& canvas, int originFrame)
+            : playhead(originFrame)
+            , origin(originFrame)
+        {
+            const KisTimeSpan range = canvas.image()->animationInterface()->playbackRange();
+
+            // Initialize and optimize playback environment...
+            if (canvas.frameCache()) {
+                KisImageConfig cfg(true);
+
+                const int dimensionLimit = cfg.useAnimationCacheFrameSizeLimit() ?
+                            cfg.animationCacheFrameSizeLimit() : std::numeric_limits<int>::max();
+
+                const int largestDimension = KisAlgebra2D::maxDimension(canvas.image()->bounds());
+
+                const QRect regionOfInterest =
+                            cfg.useAnimationCacheRegionOfInterest() && largestDimension > dimensionLimit ?
+                                canvas.regionOfInterest() : canvas.coordinatesConverter()->imageRectInImagePixels();
+
+                const QRect minimalRect =
+                        canvas.coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &
+                        canvas.coordinatesConverter()->imageRectInImagePixels();
+
+                canvas.frameCache()->dropLowQualityFrames(range, regionOfInterest, minimalRect);
+                canvas.setRenderingLimit(regionOfInterest);
+
+                // Preemptively cache all frames...
+                KisAsyncAnimationCacheRenderDialog dlg(canvas.frameCache(), range);
+                dlg.setRegionOfInterest(regionOfInterest);
+                dlg.regenerateRange(canvas.viewManager());
+            } else {
+                KisImageBarrierLocker locker(canvas.image());
+                KisLayerUtils::recursiveApplyNodes(canvas.image()->root(), [this](KisNodeSP node){
+                    KisDecoratedNodeInterface* decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
+                    if (decoratedNode && decoratedNode->decorationsVisible()) {
+                        decoratedNode->setDecorationsVisible(false, false);
+                        disabledDecoratedNodes.append(node);
+                    }
+                });
+            }
+\
+            // Setup appropriate interrupt connections...
+            cancelStrokeConnections.addConnection(
+                    canvas.image().data(), SIGNAL(sigUndoDuringStrokeRequested()),
+                    &cancelTrigger, SLOT(tryFire()));
+
+            cancelStrokeConnections.addConnection(
+                    canvas.image().data(), SIGNAL(sigStrokeCancellationRequested()),
+                    &cancelTrigger, SLOT(tryFire()));
+
+            // We only want to stop on stroke end when running on a system
+            // without cache / opengl / graphics driver support!
+            if (canvas.frameCache()) {
+                cancelStrokeConnections.addConnection(
+                        canvas.image().data(), SIGNAL(sigStrokeEndRequested()),
+                        &cancelTrigger, SLOT(tryFire()));
+            }
+
+            connect(&cancelTrigger, SIGNAL(output()), &parent, SLOT(stop()));
+        }
+
+        ~Playback() {}
+
+        Playback() = delete;
+        Playback(const Playback&) = delete;
+        Playback& operator= (const Playback&) = delete;
+
+        int originFrame() { return origin; }
+
+        int playhead; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
+
+    private:
+        int origin; //!< The frame user started playback from.
+        KisSignalAutoConnectionsStore cancelStrokeConnections;
+        SingleShotSignal cancelTrigger;
+        QVector<KisNodeWSP> disabledDecoratedNodes;
+    };
+
+    QScopedPointer<Playback> playback;
 
     KisSignalCompressor playbackStatisticsCompressor;
 };
@@ -100,7 +172,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     : QObject(canvas)
     , m_d(new Private())
 {
-    m_d->useFastFrameUpload = false;
     m_d->playbackState = STOPPED;
     m_d->canvas = canvas;
     m_d->playbackSpeed = 1.0;
@@ -125,6 +196,12 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
             }
         }
     });
+
+    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFrameRegenerated, [this](int frame){
+        if (playbackState() != PLAYING) {
+            m_d->visibleFrame = frame;
+        }
+    });
 }
 
 KisAnimationPlayer::~KisAnimationPlayer()
@@ -141,37 +218,18 @@ void KisAnimationPlayer::updateDropFramesMode()
     m_d->dropFramesMode = cfg.animationDropFrames();
 }
 
-void KisAnimationPlayer::connectCancelSignals()
-{
-    m_d->cancelStrokeConnections.addConnection(
-        m_d->canvas->image().data(), SIGNAL(sigUndoDuringStrokeRequested()),
-        this, SLOT(slotCancelPlayback()));
-
-    m_d->cancelStrokeConnections.addConnection(
-        m_d->canvas->image().data(), SIGNAL(sigStrokeCancellationRequested()),
-        this, SLOT(slotCancelPlayback()));
-
-    m_d->cancelStrokeConnections.addConnection(
-        m_d->canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
-        this, SLOT(slotCancelPlaybackSafe())); // See master @slotCancelPlaybackSafe, but short is keep in mind that devices without caching shouldn't cancel playback at end of stroke!
-}
-
-void KisAnimationPlayer::disconnectCancelSignals()
-{
-    m_d->cancelStrokeConnections.clear();
-}
-
 void KisAnimationPlayer::play()
 {
-    const KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-    const KisTimeSpan range = activePlaybackRange();
-
+    KIS_ASSERT(m_d->canvas);
+    m_d->playback.reset(new Private::Playback(*this, *m_d->canvas, visibleFrame()));
     setPlaybackState(PLAYING);
 }
 
 void KisAnimationPlayer::pause()
 {
-    seek(m_d->playbackFrame);
+    if (m_d->playback) {
+        seek(m_d->playback->playhead);
+    }
     setPlaybackState(PAUSED);
 }
 
@@ -184,18 +242,14 @@ void KisAnimationPlayer::playPause()
     }
 }
 
-/**
- * @brief Higher level stop behavior.
- * When playing causes animation to halt and go to playback origin.
- * When stopped causes player to jump back to starting frame.
- */
 void KisAnimationPlayer::stop()
 {
-    if(m_d->playbackSpeed == STOPPED) {
+    if(m_d->playbackState == STOPPED) {
         goToStartFrame();
     } else {
         goToPlaybackOrigin();
         setPlaybackState(STOPPED);
+        m_d->playback.reset();
     }
 }
 
@@ -204,18 +258,20 @@ void KisAnimationPlayer::seek(int frameIndex, bool preferCachedFrames)
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
     if (m_d->playbackState == PLAYING || preferCachedFrames) {
-        if (m_d->playbackFrame != frameIndex) {
-            m_d->playbackFrame = frameIndex >= 0 ? frameIndex : m_d->playbackFrame;
-            displayFrame(m_d->playbackFrame);
+        if (m_d->playback && m_d->playback->playhead != frameIndex) {
+            m_d->playback->playhead = frameIndex >= 0 ? frameIndex : m_d->playback->playhead;
+            displayFrame(m_d->playback->playhead);
+        } else {
+            displayFrame(frameIndex);
         }
     } else {
         KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
         if (frameIndex == animInterface->currentUITime()) {
             return;
+        } else {
+            animInterface->requestTimeSwitchWithUndo(frameIndex);
         }
-
-        animInterface->requestTimeSwitchWithUndo(frameIndex);
     }
 }
 
@@ -367,21 +423,19 @@ void KisAnimationPlayer::nextUnfilteredKeyframe()
 void KisAnimationPlayer::goToPlaybackOrigin()
 {
     KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    if (animation->currentUITime() == m_d->playbackOriginFrame) {
+    if (animation->currentUITime() == m_d->playback->playhead) {
         m_d->canvas->refetchDataFromImage();
     } else {
-        animation->switchCurrentTimeAsync(m_d->playbackOriginFrame);
+        seek(m_d->playback->originFrame());
     }
 }
 
 void KisAnimationPlayer::goToStartFrame()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas);
-
     KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
     const int startFrame = animation->playbackRange().start();
-
-    animation->switchCurrentTimeAsync(startFrame);
+    seek(startFrame);
 }
 
 
@@ -394,7 +448,7 @@ void KisAnimationPlayer::displayFrame(int frameToDisplay)
 
         m_d->canvas->updateCanvas();
 
-    } else if (m_d->canvas->image()->animationInterface()->hasAnimation()) {
+    } else if (!frameCache && m_d->canvas->image()->animationInterface()->hasAnimation()) {
 
         if (m_d->canvas->image()->tryBarrierLock(true)) {
             m_d->canvas->image()->unlock();

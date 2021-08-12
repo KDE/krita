@@ -1756,10 +1756,12 @@ QMap<QString, QVariant> KisResourceCacheDb::metaDataForId(int id, const QString 
     while (q.next()) {
         QString key = q.value(0).toString();
         QByteArray ba = q.value(1).toByteArray();
-        QDataStream ds(QByteArray::fromBase64(ba));
-        QVariant value;
-        ds >> value;
-        map[key] = value;
+        if (!ba.isEmpty()) {
+            QDataStream ds(QByteArray::fromBase64(ba));
+            QVariant value;
+            ds >> value;
+            map[key] = value;
+        }
     }
 
     return map;
@@ -1818,17 +1820,18 @@ bool KisResourceCacheDb::addMetaDataForId(const QMap<QString, QVariant> map, int
         q.bindValue(":key", iter.key());
 
         QVariant v = iter.value();
-        QByteArray ba;
-        QDataStream ds(&ba, QIODevice::WriteOnly);
-        ds << v;
-        ba = ba.toBase64();
-        q.bindValue(":value", QString::fromLatin1(ba));
+        if (!v.isNull() && v.isValid()) {
+            QByteArray ba;
+            QDataStream ds(&ba, QIODevice::WriteOnly);
+            ds << v;
+            ba = ba.toBase64();
+            q.bindValue(":value", QString::fromLatin1(ba));
 
-        if (!q.exec()) {
-            qWarning() << "Could not insert metadata" << q.lastError();
-            return false;
+            if (!q.exec()) {
+                qWarning() << "Could not insert metadata" << q.lastError();
+                return false;
+            }
         }
-
         ++iter;
     }
     return true;

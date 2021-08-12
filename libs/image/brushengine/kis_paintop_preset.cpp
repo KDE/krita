@@ -234,7 +234,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     if (!requiredBrush.isEmpty()) {
         requiredBrushes << requiredBrush;
     }
-    requiredBrushes.addMetaData("dependent_resources_filenames", requiredBrushes);
+    addMetaData("dependent_resources_filenames", requiredBrushes);
 
     setImage(img);
 

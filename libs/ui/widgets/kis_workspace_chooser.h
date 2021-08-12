@@ -47,9 +47,6 @@ private:
     ChooserWidgets m_workspaceWidgets;
     ChooserWidgets m_windowLayoutWidgets;
 
-    QString m_workspaceSaveLocation;
-    QString m_windowLayoutSaveLocation;
-
     ChooserWidgets createChooserWidgets(const QString &resourceType, const QString &title);
 };
 

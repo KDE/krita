@@ -594,6 +594,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
                   ", filename  = :filename\n"
                   ", tooltip   = :tooltip\n"
                   ", thumbnail = :thumbnail\n"
+                  ", status    = 1\n"
                   "WHERE id    = :id");
     if (!r) {
         qWarning() << "Could not prepare updateResource statement" << q.lastError();

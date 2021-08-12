@@ -273,7 +273,7 @@ KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename) const
 
 KoResourceSP KisAllResourcesModel::resourceForName(const QString &name) const
 {
-    Q_ASSERT(!name.isEmpty());
+    if (name.isEmpty()) return 0;
 
     KoResourceSP resource = 0;
 
@@ -381,7 +381,6 @@ KoResourceSP KisAllResourcesModel::importResourceFile(const QString &filename, c
 
 bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &storageId)
 {
-
     if (!resource || !resource->valid()) {
         qWarning() << "Cannot add resource. Resource is null or not valid";
         return false;
@@ -642,7 +641,22 @@ KoResourceSP KisResourceModel::importResourceFile(const QString &filename, const
 
 bool KisResourceModel::addResource(KoResourceSP resource, const QString &storageId)
 {
-    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    KisAllResourcesModel *source = qobject_cast<KisAllResourcesModel*>(sourceModel());
+
+    KoResourceSP res = source->resourceForMD5(resource->md5Sum());
+    if (!res) {
+        res = source->resourceForFilename(resource->filename());
+    }
+    if (!res) {
+        res = source->resourceForName(resource->name());
+    }
+    if (res && storageId == res->storageLocation()) {
+        resource->setResourceId(res->resourceId());
+        resource->setVersion(res->version());
+        resource->setActive(res->active());
+        return updateResource(resource);
+    }
+
     if (source) {
         return source->addResource(resource, storageId);
     }

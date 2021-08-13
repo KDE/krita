@@ -40,6 +40,7 @@ private Q_SLOTS:
     void slotMirrorChanged();
     void slotPositionChanged();
     void slotZoomChanged();
+    void slotPinAllChanged();
     void slotUpdateCrop(bool);
 
     void slotImageValuesChanged();

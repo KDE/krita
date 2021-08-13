@@ -108,18 +108,12 @@ public:
     void setPinPosition(bool);
     bool pinZoom();
     void setPinZoom(bool);
+    bool pinAll();
+    void setPinAll(bool);
 
 private:
     struct Private;
     QSharedDataPointer<Private> d;
-
-    bool m_pinRotate, m_pinMirror, m_pinPosition, m_pinZoom;
-    bool m_mirrorX, m_mirrorY;
-    bool m_initialValues;
-    QPointF m_docOffset;
-    qreal m_previousAngle, m_previousPosition;
-    qreal m_zoom ;
-    QTransform m_transform;
 };
 
 #endif // KISREFERENCEIMAGE_H

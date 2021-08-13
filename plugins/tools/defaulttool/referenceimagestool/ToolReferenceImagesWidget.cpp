@@ -139,6 +139,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->chkPinMirror, SIGNAL(stateChanged(int)), this, SLOT(slotMirrorChanged()));
     connect(d->ui->chkPinPos, SIGNAL(stateChanged(int)), this, SLOT(slotPositionChanged()));
     connect(d->ui->chkPinZoom, SIGNAL(stateChanged(int)), this, SLOT(slotZoomChanged()));
+    connect(d->ui->chkPinAll, SIGNAL(stateChanged(int)), this, SLOT(slotPinAllChanged()));;
 
     KisSignalCompressor *compressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(compressor, SIGNAL(timeout()), this, SLOT(slotImageValuesChanged()));
@@ -292,6 +293,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->chkPinPos->setVisible(hasSelection);
     d->ui->chkPinMirror->setVisible(hasSelection);
     d->ui->chkPinZoom->setVisible(hasSelection);
+    d->ui->chkPinAll->setVisible(hasSelection);
 
     KisReferenceImage *ref = d->tool->activeReferenceImage();
     d->ui->bnCrop->setVisible(hasSelection);
@@ -300,6 +302,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
             d->ui->chkPinPos->setChecked(ref->pinPosition());
             d->ui->chkPinRotate->setChecked(ref->pinRotate());
             d->ui->chkPinZoom->setChecked(ref->pinZoom());
+            d->ui->chkPinAll->setChecked(ref->pinAll());
         }
 
 
@@ -496,5 +499,19 @@ void ToolReferenceImagesWidget::slotZoomChanged()
     KisReferenceImage *ref= d->tool->activeReferenceImage();
         if(ref) {
             ref->setPinZoom(d->ui->chkPinZoom->isChecked());
+        }
+}
+
+void ToolReferenceImagesWidget::slotPinAllChanged()
+{
+    KisReferenceImage *ref= d->tool->activeReferenceImage();
+        if(ref) {
+            bool pinAll = d->ui->chkPinAll->isChecked();
+            ref->setPinAll(pinAll);
+
+            d->ui->chkPinMirror->setChecked(pinAll);
+            d->ui->chkPinZoom->setChecked(pinAll);
+            d->ui->chkPinPos->setChecked(pinAll);
+            d->ui->chkPinRotate->setChecked(pinAll);
         }
 }

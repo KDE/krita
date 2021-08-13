@@ -58,6 +58,16 @@ struct KisReferenceImage::Private : public QSharedData
     int id{-1};
     bool embed{true};
 
+    bool m_pinRotate = false, m_pinMirror = false;
+    bool m_pinPosition = false, m_pinZoom = false;
+    bool m_mirrorX = false, m_mirrorY = false;
+    bool m_initialValues =false;
+    bool m_pinAll = false;
+    QPointF m_docOffset;
+    qreal m_previousAngle = 0, m_previousPosition;
+    qreal m_zoom;
+    QTransform m_transform = QTransform();
+
     bool loadFromFile() {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(QFileInfo(externalFilename).exists(), false);
@@ -207,15 +217,6 @@ bool KisReferenceImage::CropReferenceImage::mergeWith(const KUndo2Command *comma
 
 KisReferenceImage::KisReferenceImage()
     : d(new Private())
-    , m_pinRotate(false)
-    , m_pinMirror(false)
-    , m_pinPosition(false)
-    , m_pinZoom(false)
-    , m_mirrorX(false)
-    , m_mirrorY(false)
-    , m_initialValues(false)
-    , m_previousAngle(0)
-    , m_transform(QTransform())
 {
     setKeepAspectRatio(true);
     d->cropRect.setSize(size());
@@ -224,15 +225,6 @@ KisReferenceImage::KisReferenceImage()
 
 KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)
     : KoTosContainer(rhs)
-    , m_pinRotate(false)
-    , m_pinMirror(false)
-    , m_pinPosition(false)
-    , m_pinZoom(false)
-    , m_mirrorX(false)
-    , m_mirrorY(false)
-    , m_initialValues(false)
-    , m_previousAngle(0)
-    , m_transform(QTransform())
     , d(rhs.d)
 {}
 
@@ -526,101 +518,111 @@ void KisReferenceImage::setCropRect(QRectF rect)
 
 bool KisReferenceImage::pinRotate()
 {
-    return m_pinRotate;
+    return d->m_pinRotate;
 }
 
 void KisReferenceImage::setPinRotate(bool value)
 {
-    m_pinRotate = value;
+    d->m_pinRotate = value;
 }
 
 bool KisReferenceImage::pinMirror()
 {
-    return m_pinMirror;
+    return d->m_pinMirror;
 }
 
 void KisReferenceImage::setPinMirror(bool value)
 {
-    m_pinMirror = value;
+    d->m_pinMirror = value;
 }
 
 bool KisReferenceImage::pinPosition()
 {
-    return m_pinPosition;
+    return d->m_pinPosition;
 }
 
 void KisReferenceImage::setPinPosition(bool value)
 {
-    m_pinPosition = value;
+    d->m_pinPosition = value;
 }
 
 bool KisReferenceImage::pinZoom()
 {
-    return m_pinZoom;
+    return d->m_pinZoom;
 }
 
 void KisReferenceImage::setPinZoom(bool value)
 {
-    m_pinZoom = value;
+    d->m_pinZoom = value;
+}
+
+bool KisReferenceImage::pinAll()
+{
+    return d->m_pinAll;
+}
+
+void KisReferenceImage::setPinAll(bool value)
+{
+    d->m_pinAll = value;
 }
 
 void KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
 {
-    if(!m_initialValues) {
-        m_docOffset = kisCanvas->documentOffset();
-        m_zoom = kisCanvas->viewConverter()->zoom();
-        m_transform *= QTransform::fromScale(m_zoom,m_zoom);
-        m_initialValues = true;
+    if(!d->m_initialValues) {
+        d->m_docOffset = kisCanvas->documentOffset();
+        d->m_zoom = kisCanvas->viewConverter()->zoom();
+        //m_transform *= QTransform::fromScale(m_zoom,m_zoom);
+        d->m_initialValues = true;
     }
 
-    if(!qFuzzyCompare(kisCanvas->viewConverter()->zoom(), m_zoom)) {
-        if(!m_pinZoom) {
-            qreal diff = kisCanvas->viewConverter()->zoom()- m_zoom;
-            m_transform *= QTransform::fromScale((m_zoom + diff)/m_zoom,(m_zoom + diff)/m_zoom);
-            m_zoom = kisCanvas->viewConverter()->zoom();
+    if(!qFuzzyCompare(kisCanvas->viewConverter()->zoom(), d->m_zoom)) {
+        if(!d->m_pinZoom) {
+            qreal diff = kisCanvas->viewConverter()->zoom()- d->m_zoom;
+          //  m_transform *= QTransform::fromScale((m_zoom + diff)/m_zoom,(m_zoom + diff)/m_zoom);
+            d->m_zoom = kisCanvas->viewConverter()->zoom();
 
         }
-        m_docOffset = kisCanvas->documentOffset();
+        d->m_docOffset = kisCanvas->documentOffset();
     }
 
-    if(m_mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored()
-                || m_mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored()) {
-        if(!m_pinMirror) {
-            qreal scaleX = m_mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored() ? -1 : 1;
-            qreal scaleY = m_mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored() ? -1 : 1;
-            QPointF center = kisCanvas->coordinatesConverter()->widgetCenterPoint();
-            m_transform *= QTransform::fromTranslate(-center.x(),-center.y()) *
+    if(d->m_mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored()
+                || d->m_mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored()) {
+        if(!d->m_pinMirror) {
+            QPointF center = absolutePosition();
+            qreal scaleX = d->m_mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored() ? -1 : 1;
+            qreal scaleY = d->m_mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored() ? -1 : 1;
+            d->m_transform *= QTransform::fromTranslate(-center.x(),-center.y()) *
                     QTransform::fromScale(scaleX, scaleY) * QTransform::fromTranslate(center.x(),center.y());
         }
-        m_docOffset = kisCanvas->documentOffset();
-        m_previousAngle = kisCanvas->rotationAngle();
+        d->m_docOffset = kisCanvas->documentOffset();
+        d->m_previousAngle = kisCanvas->rotationAngle();
     }
 
-    if(m_previousAngle != kisCanvas->rotationAngle())
+    if(d->m_previousAngle != kisCanvas->rotationAngle())
     {
-        if(!m_pinRotate) {
-            QPointF center = kisCanvas->coordinatesConverter()->widgetCenterPoint();
-            qreal diff = kisCanvas->rotationAngle() - m_previousAngle;
+        if(!d->m_pinRotate) {
+            QPointF center = absolutePosition();
+            qreal diff = kisCanvas->rotationAngle() - d->m_previousAngle;
             QTransform rot;
             rot.rotate(diff);
-            m_transform *= QTransform::fromTranslate(-center.x(),-center.y()) * rot
+            d->m_transform *= QTransform::fromTranslate(-center.x(),-center.y()) * rot
                     * QTransform::fromTranslate(center.x(),center.y());
         }
-        m_docOffset = kisCanvas->documentOffset();
+        d->m_docOffset = kisCanvas->documentOffset();
     }
 
-    if(kisCanvas->documentOffset() != m_docOffset && !m_pinPosition) {
-      QPointF diff = kisCanvas->documentOffset() - m_docOffset;
-        m_transform *= QTransform::fromTranslate(-diff.x(), -diff.y());
+    if(kisCanvas->documentOffset() != d->m_docOffset && !d->m_pinPosition) {
+      QPointF diff = kisCanvas->documentOffset() - d->m_docOffset;
+        d->m_transform *= QTransform::fromTranslate(-diff.x(), -diff.y());
     }
 
-    m_zoom = kisCanvas->viewConverter()->zoom();
-    m_docOffset = kisCanvas->documentOffset();
-    m_mirrorX = kisCanvas->coordinatesConverter()->xAxisMirrored();
-    m_mirrorY = kisCanvas->coordinatesConverter()->yAxisMirrored();
-    m_previousAngle = kisCanvas->rotationAngle();
+    d->m_zoom = kisCanvas->viewConverter()->zoom();
+    d->m_docOffset = kisCanvas->documentOffset();
+    d->m_mirrorX = kisCanvas->coordinatesConverter()->xAxisMirrored();
+    d->m_mirrorY = kisCanvas->coordinatesConverter()->yAxisMirrored();
+    d->m_previousAngle = kisCanvas->rotationAngle();
 
-    if(!qFuzzyCompare(m_transform, extraTransform())) {
-        setExtraTransform(m_transform);
+    if(!qFuzzyCompare(d->m_transform, extraTransform())) {
+        setExtraTransform(d->m_transform);
     }
 }

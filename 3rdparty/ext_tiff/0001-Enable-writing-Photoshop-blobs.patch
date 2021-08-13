@@ -1,15 +1,14 @@
-From c0ad80529016ce89a8e9e2a0b474dd07e8064ca2 Mon Sep 17 00:00:00 2001
+From 86002666bcf247217571f5bb89edef75aabb4306 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Fri, 16 Jul 2021 17:03:08 +0000
 Subject: [PATCH] Enable writing Photoshop blobs
 
 ---
  libtiff/tif_dirinfo.c | 3 ++-
- libtiff/tiffvers.h    | 5 +++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/libtiff/tif_dirinfo.c b/libtiff/tif_dirinfo.c
-index 8565dfb..3dbb830 100644
+index 7217042c..b511a87b 100644
 --- a/libtiff/tif_dirinfo.c
 +++ b/libtiff/tif_dirinfo.c
 @@ -149,7 +149,7 @@ tiffFields[] = {
@@ -29,19 +28,6 @@ index 8565dfb..3dbb830 100644
  	{ TIFFTAG_INTEROPERABILITYIFD, 1, 1, TIFF_IFD8, 0, TIFF_SETGET_UNDEFINED, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 0, 0, "InteroperabilityIFDOffset", NULL },
  	/* begin DNG tags */
  	{ TIFFTAG_DNGVERSION, 4, 4, TIFF_BYTE, 0, TIFF_SETGET_C0_UINT8, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 0, 0, "DNGVersion", NULL },
-diff --git a/libtiff/tiffvers.h b/libtiff/tiffvers.h
-index dbe5596..44a6483 100644
---- a/libtiff/tiffvers.h
-+++ b/libtiff/tiffvers.h
-@@ -7,3 +7,8 @@
-  * string returned by TIFFGetVersion.
-  */
- #define TIFFLIB_VERSION 20210416
-+
-+/**
-+ * This define signals Krita's patch for supporting write of PSD blobs.
-+ */
-+#define TIFFLIB_KRITA_CAN_WRITE_PSD 1
 -- 
 2.31.1.windows.1
 

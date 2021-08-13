@@ -239,5 +239,12 @@ void KoSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
         // HACK ALERT: the caller will also remove the listener, which was
         // removed in deselect(), so re-add it here
         shape->addShapeChangeListener(this);
+    } else if (type == KoShape::GenericMatrixChange) {
+
+            if (d->selectedShapes.size() == 1) {
+                setTransformation(shape->absoluteTransformation());
+            } else {
+                setTransformation(QTransform());
+            }
     }
 }

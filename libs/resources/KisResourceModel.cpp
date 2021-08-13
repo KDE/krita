@@ -181,6 +181,8 @@ KoResourceSP KisAllResourcesModel::resourceForId(int id) const
 
 bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &filename, const QString &name)
 {
+    // md5
+
     QSqlQuery q;
     bool r = q.prepare("SELECT resources.id AS id\n"
                        "FROM   resources\n"
@@ -191,7 +193,6 @@ bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &fil
 
     q.bindValue(":mdsum", md5);
 
-
     r = q.exec();
     if (!r) {
         qWarning() << "Could not execute resourceExists by md5 query" << q.lastError();
@@ -201,17 +202,19 @@ bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &fil
         return true;
     }
 
+    // filename
+
     r = q.prepare("SELECT resources.id AS id\n"
-                       "FROM   resources\n"
-                       "WHERE  filename = :filenname");
+                  "FROM   resources\n"
+                  "WHERE  filename = :filename");
     if (!r) {
         qWarning() << "Could not prepare find resourceExists by filename query"  << q.lastError();
     }
 
     q.bindValue(":filename", filename);
 
-
     r = q.exec();
+
     if (!r) {
         qWarning() << "Could not execute resourceExists by filename query" << q.lastError();
     }
@@ -220,9 +223,11 @@ bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &fil
         return true;
     }
 
+    // name
+
     r = q.prepare("SELECT resources.id AS id\n"
-                       "FROM   resources\n"
-                       "WHERE  name = :name");
+                  "FROM   resources\n"
+                  "WHERE  name = :name");
     if (!r) {
         qWarning() << "Could not prepare find resourceExists by name query"  << q.lastError();
     }
@@ -238,6 +243,8 @@ bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &fil
     if (q.first()) {
         return true;
     }
+
+    // failure
 
     return false;
 }

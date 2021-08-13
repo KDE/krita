@@ -154,7 +154,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     QString version = reader.text("version");
     QString preset = reader.text("preset");
-    int resourceCount = reader.text("embbeded_resources").toInt();
+    int resourceCount = reader.text("embedded_resources").toInt();
     dbgImage << version;
 
     if (!(version == "2.2" || "5.0")) {

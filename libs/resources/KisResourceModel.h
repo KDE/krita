@@ -184,6 +184,12 @@ public:
     KoResourceSP resourceForId(int id) const;
 
     /**
+     * @brief resourceExists checks whether there is a resource with, in order,
+     * the given md5, the filename or the resource name.
+     */
+    bool resourceExists(const QString &md5, const QString &filename, const QString &name);
+
+    /**
      * resourceForFilename returns the first resource with the given filename that
      * is active and is in an active store. Note that the filename does not include
      * a path to the storage, and if there are resources with the same filename

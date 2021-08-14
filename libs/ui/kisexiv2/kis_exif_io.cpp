@@ -379,7 +379,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 exivKey = "Exif.Image." + entry.name();
             } else if (entry.schema()->uri() == KisMetaData::Schema::EXIFSchemaUri) { // Distinguish between exif and gps
                 if (entry.name().left(3) == "GPS") {
-                    exivKey = "Exif.GPS." + entry.name();
+                    exivKey = "Exif.GPSInfo." + entry.name();
                 } else {
                     exivKey = "Exif.Photo." + entry.name();
                 }
@@ -613,6 +613,8 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             }
         } else if (it.groupName() == "Thumbnail") {
             dbgMetaData << "Ignoring thumbnail tag :" << it.key().c_str();
+        } else if (it.groupName() == "GPSInfo") {
+            store->addEntry({exifSchema, it.tagName().c_str(), exivValueToKMDValue(it.getValue(), false)});
         } else {
             dbgMetaData << "Unknown exif tag, cannot load:" << it.key().c_str();
         }

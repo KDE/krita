@@ -65,10 +65,8 @@ KisMetaData::Value exifArrayToKMDIntOrderedArray(const Exiv2::Value::AutoPtr val
     QList<KisMetaData::Value> v;
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
     if (dvalue) {
-        QByteArray array(dvalue->count(), 0);
-        dvalue->copy((Exiv2::byte*)array.data());
-        for (const char &c : array) {
-            v.push_back(KisMetaData::Value(QString(c).toInt(0)));
+        for (long i = 0; i < dvalue->count(); i++) {
+            v.push_back({(int)dvalue->toLong(i)});
         }
     } else {
         Q_ASSERT(value->typeId() == Exiv2::asciiString);
@@ -81,13 +79,11 @@ KisMetaData::Value exifArrayToKMDIntOrderedArray(const Exiv2::Value::AutoPtr val
 // Convert a KisMetaData array of integer to an exif array of integer string
 Exiv2::Value* kmdIntOrderedArrayToExifArray(const KisMetaData::Value& value)
 {
-    QList<KisMetaData::Value> v = value.asArray();
-    QByteArray s;
-    for (const KisMetaData::Value &it : v) {
-        const int val = it.asVariant().toInt(0);
-        s += QByteArray::number(val);
+    std::vector<Exiv2::byte> v;
+    for (const KisMetaData::Value &it : value.asArray()) {
+        v.push_back(static_cast<uint8_t>(it.asVariant().toInt(0)));
     }
-    return new Exiv2::DataValue((const Exiv2::byte*)s.data(), s.size());
+    return new Exiv2::DataValue(v.data(), static_cast<long>(v.size()));
 }
 
 QDateTime exivValueToDateTime(const Exiv2::Value::AutoPtr value)

@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -94,15 +95,15 @@ Exiv2::Value* variantToExivValue(const QVariant& variant, Exiv2::TypeId type)
         return new Exiv2::DataValue((Exiv2::byte*)arr.data(), arr.size());
     }
     case Exiv2::unsignedByte:
-        return new Exiv2::ValueType<uint16_t>(variant.toUInt(0));
+        return new Exiv2::ValueType<uint16_t>((uint16_t)variant.toUInt());
     case Exiv2::unsignedShort:
-        return new Exiv2::ValueType<uint16_t>(variant.toUInt(0));
+        return new Exiv2::ValueType<uint16_t>((uint16_t)variant.toUInt());
     case Exiv2::unsignedLong:
-        return new Exiv2::ValueType<uint32_t>(variant.toUInt(0));
+        return new Exiv2::ValueType<uint32_t>((uint32_t)variant.toUInt());
     case Exiv2::signedShort:
-        return new Exiv2::ValueType<int16_t>(variant.toInt(0));
+        return new Exiv2::ValueType<int16_t>((int16_t)variant.toInt());
     case Exiv2::signedLong:
-        return new Exiv2::ValueType<int32_t>(variant.toInt(0));
+        return new Exiv2::ValueType<int32_t>((int32_t)variant.toInt());
     case Exiv2::date: {
         QDate date = variant.toDate();
         return new Exiv2::DateValue(date.year(), date.month(), date.day());
@@ -149,9 +150,9 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
     case KisMetaData::Value::Rational:
         //Q_ASSERT(type == Exiv2::signedRational || type == Exiv2::unsignedRational);
         if (type == Exiv2::signedRational) {
-            return new Exiv2::ValueType<Exiv2::Rational>(Exiv2::Rational(value.asRational().numerator, value.asRational().denominator));
+            return new Exiv2::RationalValue({value.asRational().numerator, value.asRational().denominator});
         } else {
-            return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asRational().numerator, value.asRational().denominator));
+            return new Exiv2::URationalValue({value.asRational().numerator, value.asRational().denominator});
         }
     case KisMetaData::Value::OrderedArray:
         Q_FALLTHROUGH();

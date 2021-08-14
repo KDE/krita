@@ -173,10 +173,11 @@ QWidget* KisCurveOptionWidget::curveWidget()
 
 void KisCurveOptionWidget::slotModified()
 {
-    if (!m_curveOption->isSameCurveUsed()) {
-        m_curveOptionWidget->sensorSelector->currentHighlighted()->setCurve(getWidgetCurve());
+    KisCubicCurve currentCurve = getWidgetCurve();
+    if (m_curveOption->isSameCurveUsed()) {
+        m_curveOption->setCommonCurve(currentCurve);
     } else {
-        m_curveOption->setCommonCurve(getWidgetCurve());
+        m_curveOptionWidget->sensorSelector->currentHighlighted()->setCurve(currentCurve);
     }
     emitSettingChanged();
 }
@@ -185,12 +186,15 @@ void KisCurveOptionWidget::slotUseSameCurveChanged()
 {
     // this is a slot that answers on "Share Curve across all settings" checkbox
     m_curveOption->setUseSameCurve(m_curveOptionWidget->checkBoxUseSameCurve->isChecked());
+    KisCubicCurve currentCurve = getWidgetCurve();
     if (m_curveOption->isSameCurveUsed()) {
-        // !(UseSameCurve) => UseSameCurve
-        // set the current curve to the common curve
-        m_curveOption->setCommonCurve(getWidgetCurve());
+        m_curveOption->setCommonCurve(currentCurve);
     } else {
-        updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
+        for (auto sensor : m_curveOption->activeSensors()) {
+            sensor->setCurve(currentCurve);
+        }
+        // set the current curve since it might be disabled
+        m_curveOptionWidget->sensorSelector->currentHighlighted()->setCurve(currentCurve);
     }
     emitSettingChanged();
 }

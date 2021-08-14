@@ -125,6 +125,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnCrop->setIconSize(QSize(16, 16));
 
     d->ui->grpCrop->setVisible(false);
+    d->ui->bnCancel->setVisible(false);
+    d->ui->lblPin->setVisible(false);
 
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
     connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));
@@ -133,6 +135,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
     connect(d->ui->bnCrop, SIGNAL(toggled(bool)), this, SLOT(slotUpdateCrop(bool)));
+    connect(d->ui->bnCancel, SIGNAL(clicked()), this, SLOT(slotCancelCrop()));
+
 
     connect(d->ui->chkKeepAspectRatio, SIGNAL(stateChanged(int)), this, SLOT(slotKeepAspectChanged()));
     connect(d->ui->chkPinRotate, SIGNAL(stateChanged(int)), this, SLOT(slotRotateChanged()));
@@ -175,6 +179,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     }
     else {
         d->ui->grpCrop->setVisible(false);
+        d->ui->bnCancel->setVisible(false);
     }
 
 
@@ -294,6 +299,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->chkPinMirror->setVisible(hasSelection);
     d->ui->chkPinZoom->setVisible(hasSelection);
     d->ui->chkPinAll->setVisible(hasSelection);
+    d->ui->lblPin->setVisible(hasSelection);
 
     KisReferenceImage *ref = d->tool->activeReferenceImage();
     d->ui->bnCrop->setVisible(hasSelection);
@@ -340,15 +346,21 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
     d->ui->bnCrop->setChecked(value);
     bool enable = d->ui->bnCrop->isChecked();
     d->ui->grpCrop->setVisible(enable);
-    ref->setCrop(enable);
+    d->ui->bnCancel->setVisible(enable);
+    ref->setCrop(enable, QRectF());
 
     if(enable) {
         updateCropSliders();
+        //ref->setCrop(enable, QRectF());
     }
     else {
-        KUndo2Command *cmd =
+        if(d->ui->sldOffsetX->value() > 0 || d->ui->sldOffsetY->value() > 0
+                || !d->ui->sldWidth->isMaximized() || !d->ui->sldHeight->isMaximized()) {
+            //ref->setCrop(enable, cropRect());
+            KUndo2Command *cmd =
                      new KisReferenceImage::CropReferenceImage(ref, cropRect());
-        d->tool->canvas()->addCommand(cmd);
+            d->tool->canvas()->addCommand(cmd);
+        }
     }
 }
 
@@ -514,4 +526,17 @@ void ToolReferenceImagesWidget::slotPinAllChanged()
             d->ui->chkPinPos->setChecked(pinAll);
             d->ui->chkPinRotate->setChecked(pinAll);
         }
+}
+
+void ToolReferenceImagesWidget::slotCancelCrop()
+{
+    KisReferenceImage* ref = d->tool->activeReferenceImage();
+    if(!ref) return;
+
+    d->ui->bnCrop->blockSignals(true);
+    d->ui->bnCrop->setChecked(false);
+    d->ui->bnCrop->blockSignals(false);
+    d->ui->grpCrop->setVisible(false);
+    d->ui->bnCancel->setVisible(false);
+    ref->setCrop(false, QRectF());
 }

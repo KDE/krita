@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>669</width>
-    <height>825</height>
+    <width>402</width>
+    <height>422</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,14 +29,21 @@
    </property>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QCheckBox" name="chkPinPos">
        <property name="text">
         <string>Position</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="4" column="2">
+      <widget class="QCheckBox" name="chkPinMirror">
+       <property name="text">
+        <string>Mirror</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
       <spacer name="horizontalSpacer_6">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -49,7 +56,27 @@
        </property>
       </spacer>
      </item>
-     <item row="3" column="1">
+     <item row="2" column="2">
+      <widget class="QCheckBox" name="chkPinRotate">
+       <property name="text">
+        <string>Rotate</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="4" column="1">
       <spacer name="horizontalSpacer_5">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -62,46 +89,26 @@
        </property>
       </spacer>
      </item>
-     <item row="3" column="0">
-      <widget class="QCheckBox" name="chkPinZoom">
-       <property name="text">
-        <string>Zoom</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QCheckBox" name="chkPinMirror">
-       <property name="text">
-        <string>Mirror</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QCheckBox" name="chkPinRotate">
-       <property name="text">
-        <string>Rotate</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QCheckBox" name="chkPinAll">
        <property name="text">
         <string>All</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="chkPinZoom">
+       <property name="text">
+        <string>Zoom</string>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblPin">
+       <property name="text">
+        <string>Pin to:</string>
        </property>
-      </spacer>
+      </widget>
      </item>
     </layout>
    </item>

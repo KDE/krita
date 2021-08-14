@@ -30,7 +30,7 @@ void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &
     gc.save();
 
     QTransform transform = m_referenceImage->absoluteTransformation();
-    QRectF shapeRect = m_referenceImage->boundingRect();
+    QRectF shapeRect =  m_referenceImage->boundingRect();
     m_cropBorderRect = transform.mapRect(m_cropBorderRect);
 
     QPainterPath path;

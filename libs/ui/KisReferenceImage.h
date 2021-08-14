@@ -96,7 +96,7 @@ public:
     bool cropEnabled();
     QRectF cropRect();
 
-    void setCrop(bool);
+    void setCrop(bool, QRectF);
     void setCropRect(QRectF);
     void addCanvasTransformation(KisCanvas2 *kisCanvas);
 

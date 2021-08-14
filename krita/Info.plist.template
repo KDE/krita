@@ -218,6 +218,21 @@
             <string>Editor</string>
         </dict>
         <dict>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                    <string>webp</string>
+                    <string>WEBP</string>
+            </array>
+            <key>CFBundleTypeMIMETypes</key>
+            <array>
+                    <string>image/webp</string>
+            </array>
+            <key>CFBundleTypeName</key>
+            <string>WebP Image</string>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+        </dict>
+        <dict>
             <key>CFBundleTypeMIMETypes</key>
             <array>
                     <string>image/x-r16</string>

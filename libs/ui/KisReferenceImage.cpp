@@ -510,23 +510,22 @@ void KisReferenceImage::setCrop(bool enable, QRectF rect)
 {
     d->crop = enable;
     if(enable) {
-       d->cropRect = outlineRect();
-/*
+
        if(!d->cropPosDiff.isNull() && !d->cropSizeDiff.isNull()) {
-           setAbsolutePosition(absolutePosition() - d->cropPosDiff);
+           setAbsolutePosition(absolutePosition(KoFlake::TopLeft) - d->cropPosDiff, KoFlake::TopLeft);
            setSize(size() + d->cropSizeDiff);
            setImage(d->originalCroppedImage);
            d->cachedImage = QImage();
        }
-
-       update();*/
+       d->cropRect = outlineRect();
+       update();
     }
-    /*else {
+    else {
         if(!rect.isNull()) {
-            d->cropPosDiff += rect.topLeft();
-            d->cropSizeDiff += size()- rect.size();
+            d->cropPosDiff = rect.topLeft();
+            d->cropSizeDiff = size() - rect.size();
         }
-    }*/
+    }
 }
 
 QRectF KisReferenceImage::cropRect()

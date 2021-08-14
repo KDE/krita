@@ -344,19 +344,18 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
     if(!ref) return;
 
     d->ui->bnCrop->setChecked(value);
-    bool enable = d->ui->bnCrop->isChecked();
-    d->ui->grpCrop->setVisible(enable);
-    d->ui->bnCancel->setVisible(enable);
-    ref->setCrop(enable, QRectF());
+    bool enabled = d->ui->bnCrop->isChecked();
+    d->ui->grpCrop->setVisible(enabled);
+    d->ui->bnCancel->setVisible(enabled);
 
-    if(enable) {
+    if(enabled) {
+        ref->setCrop(enabled, QRectF());
         updateCropSliders();
-        //ref->setCrop(enable, QRectF());
     }
     else {
         if(d->ui->sldOffsetX->value() > 0 || d->ui->sldOffsetY->value() > 0
                 || !d->ui->sldWidth->isMaximized() || !d->ui->sldHeight->isMaximized()) {
-            //ref->setCrop(enable, cropRect());
+            ref->setCrop(enabled, cropRect());
             KUndo2Command *cmd =
                      new KisReferenceImage::CropReferenceImage(ref, cropRect());
             d->tool->canvas()->addCommand(cmd);

@@ -13,3 +13,7 @@ clang_format:
     - update-ca-certificates
   script:
     - ./.gitlab-ci.script
+  rules:
+    - when: manual
+      allow_failure: true
+

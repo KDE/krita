@@ -476,6 +476,10 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
     bool r = resetQuery();
     QModelIndex idx = indexForTag(tag);
     emit dataChanged(idx, idx, {Qt::EditRole});
+
+    // set the url of the provided tag to the new one
+    tag->url() = name;
+
     return r;
 
 }

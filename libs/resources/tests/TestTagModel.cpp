@@ -66,6 +66,9 @@ void TestTagModel::initTestCase()
     QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.tag");
     f.open(QFile::ReadOnly);
     m_tag->load(f);
+
+    KisTagModel tagModel(resourceType);
+    m_tag = tagModel.tagForUrl(m_tag->url());
 }
 
 
@@ -248,7 +251,8 @@ void TestTagModel::testRenameTag()
     QVERIFY(tagModel.renameTag(tag, true));
 
     tag = tagModel.tagForIndex(tagModel.index(2,0));
-    QCOMPARE(tag->url(), m_tag->url());
+
+    QCOMPARE(tag->url(), "Another name altogether");
     QCOMPARE(tag->name(), "Another name altogether");
 }
 
@@ -258,20 +262,23 @@ void TestTagModel::testChangeTagActive()
 
     int rowCount = tagModel.rowCount();
 
-    tagModel.changeTagActive(m_tag, false);
-    QVERIFY(!m_tag->active());
+
+    KisTagSP tagToActivate = tagModel.tagForUrl("Another name altogether");
+
+    tagModel.changeTagActive(tagToActivate, false);
+    QVERIFY(!tagToActivate->active());
     QCOMPARE(tagModel.rowCount(), rowCount -1);
-    QModelIndex idx = tagModel.indexForTag(m_tag);
+    QModelIndex idx = tagModel.indexForTag(tagToActivate);
 
     QCOMPARE(tagModel.data(idx, Qt::UserRole + KisAllTagsModel::Active).toBool(), false);
 
-    tagModel.changeTagActive(m_tag, true);
-    QVERIFY(m_tag->active());
+    tagModel.changeTagActive(tagToActivate, true);
+    QVERIFY(tagToActivate->active());
     QCOMPARE(tagModel.rowCount(), rowCount);
 
-    idx = tagModel.indexForTag(m_tag);
+    idx = tagModel.indexForTag(tagToActivate);
 
-    QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Url).toString(), m_tag->url());
+    QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Url).toString(), tagToActivate->url());
     QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Name).toString(), "Another name altogether");
     QCOMPARE(tagModel.data(idx, Qt::UserRole + KisAllTagsModel::Active).toBool(), true);
 
@@ -311,7 +318,7 @@ void TestTagModel::testAddTagWithResources()
     tag->setActive(true);
     tag->setResourceType("paintoppresets");
 
-    tagModel.addTag(tag, false, {resource});
+    bool response = tagModel.addTag(tag, true, {resource});
     QVERIFY(tag->id() >= 0);
 
     // XXX: check KisTagResourceModel

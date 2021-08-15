@@ -44,6 +44,7 @@ elseif (WIN32)
 
 			PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Workaround-AVX-argument-failures.patch
 				  COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/relocatable-vc-1.3-install.patch
+                                  COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Vc-s-headers-to-support-GCC11.patch
 
 			INSTALL_DIR ${PREFIX_ext_vc}
 
@@ -57,6 +58,8 @@ else()
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://github.com/VcDevel/Vc/releases/download/1.4.1/Vc-1.4.1.tar.gz
         URL_HASH SHA1=46e852ab69192cf017a31d7c6d0b35d8aa8fea2d
+
+        PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Vc-s-headers-to-support-GCC11.patch
 
         INSTALL_DIR ${PREFIX_ext_vc}
 

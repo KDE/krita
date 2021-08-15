@@ -1,0 +1,24 @@
+From da29d271035858913c2f47aa33334c3ed98c8da3 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Fri, 13 Aug 2021 16:08:05 +0300
+Subject: [PATCH] Fix Vc's headers to support GCC11
+
+---
+ Vc/common/simdarray.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Vc/common/simdarray.h b/Vc/common/simdarray.h
+index 67d1c23..50f89cd 100644
+--- a/Vc/common/simdarray.h
++++ b/Vc/common/simdarray.h
+@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ //#include "../IO"
+ 
+ #include <array>
++#include <limits>
+ 
+ #include "writemaskedvector.h"
+ #include "simdarrayhelper.h"
+-- 
+2.25.1
+

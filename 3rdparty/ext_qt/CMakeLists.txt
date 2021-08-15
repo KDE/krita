@@ -42,6 +42,8 @@ if (WIN32)
         #
         -opensource -confirm-license
         -feature-relocatable
+        -no-feature-d3d12
+        -no-feature-wmf
         #
         -release -platform ${QT_CONFIG_PLATFORM} -prefix ${EXTPREFIX_qt}
         QMAKE_LFLAGS_APP+=${SECURITY_EXE_LINKER_FLAGS}

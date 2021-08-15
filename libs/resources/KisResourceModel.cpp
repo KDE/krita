@@ -181,67 +181,77 @@ KoResourceSP KisAllResourcesModel::resourceForId(int id) const
 
 bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &filename, const QString &name)
 {
+    QSqlQuery q;
+
     // md5
 
-    QSqlQuery q;
-    bool r = q.prepare("SELECT resources.id AS id\n"
-                       "FROM   resources\n"
-                       "WHERE  md5sum = :md5sum");
-    if (!r) {
-        qWarning() << "Could not prepare find resourceExists by md5 query"  << q.lastError();
-    }
+    if (!md5.isEmpty()) {
 
-    q.bindValue(":mdsum", md5);
+        bool r = q.prepare("SELECT resources.id AS id\n"
+                           "FROM   resources\n"
+                           "WHERE  md5sum = :md5sum");
+        if (!r) {
+            qWarning() << "Could not prepare find resourceExists by md5 query"  << q.lastError();
+        }
 
-    r = q.exec();
-    if (!r) {
-        qWarning() << "Could not execute resourceExists by md5 query" << q.lastError();
-    }
+        q.bindValue(":mdsum", md5);
 
-    if (q.first()) {
-        return true;
+        r = q.exec();
+
+        if (!r) {
+            qWarning() << "Could not execute resourceExists by md5 query" << q.lastError();
+        }
+
+        if (q.first()) {
+            return true;
+        }
     }
 
     // filename
 
-    r = q.prepare("SELECT resources.id AS id\n"
-                  "FROM   resources\n"
-                  "WHERE  filename = :filename");
-    if (!r) {
-        qWarning() << "Could not prepare find resourceExists by filename query"  << q.lastError();
-    }
+    if (!filename.isEmpty()) {
 
-    q.bindValue(":filename", filename);
+        bool r = q.prepare("SELECT resources.id AS id\n"
+                      "FROM   resources\n"
+                      "WHERE  filename = :filename");
+        if (!r) {
+            qWarning() << "Could not prepare find resourceExists by filename query"  << q.lastError();
+        }
 
-    r = q.exec();
+        q.bindValue(":filename", filename);
 
-    if (!r) {
-        qWarning() << "Could not execute resourceExists by filename query" << q.lastError();
-    }
+        r = q.exec();
 
-    if (q.first()) {
-        return true;
+        if (!r) {
+            qWarning() << "Could not execute resourceExists by filename query" << q.lastError();
+        }
+
+        if (q.first()) {
+            return true;
+        }
     }
 
     // name
 
-    r = q.prepare("SELECT resources.id AS id\n"
-                  "FROM   resources\n"
-                  "WHERE  name = :name");
-    if (!r) {
-        qWarning() << "Could not prepare find resourceExists by name query"  << q.lastError();
-    }
+    if (!name.isEmpty()) {
 
-    q.bindValue(":name", name);
+        bool r = q.prepare("SELECT resources.id AS id\n"
+                      "FROM   resources\n"
+                      "WHERE  name = :name");
+        if (!r) {
+            qWarning() << "Could not prepare find resourceExists by name query"  << q.lastError();
+        }
 
+        q.bindValue(":name", name);
 
-    r = q.exec();
-    if (!r) {
-        qWarning() << "Could not execute resourceExists by name query" << q.lastError();
-    }
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not execute resourceExists by name query" << q.lastError();
+        }
 
-    if (q.first()) {
-        return true;
+        if (q.first()) {
+            return true;
+        }
     }
 
     // failure

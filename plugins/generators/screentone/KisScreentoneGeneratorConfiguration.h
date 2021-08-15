@@ -11,10 +11,13 @@
 
 #include <QString>
 #include <QStringList>
+#include <QScopedPointer>
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_filter_configuration.h>
+
+class KisScreentoneGeneratorTemplate;
 
 enum KisScreentonePatternType
 {
@@ -76,6 +79,7 @@ public:
     KisScreentoneGeneratorConfiguration(qint32 version, KisResourcesInterfaceSP resourcesInterface);
     KisScreentoneGeneratorConfiguration(KisResourcesInterfaceSP resourcesInterface);
     KisScreentoneGeneratorConfiguration(const KisScreentoneGeneratorConfiguration &rhs);
+    ~KisScreentoneGeneratorConfiguration();
 
     virtual KisFilterConfigurationSP clone() const override;
 
@@ -85,7 +89,7 @@ public:
     static constexpr int defaultPattern() { return KisScreentonePatternType_Dots; }
     static constexpr int defaultShape() { return KisScreentoneShapeType_RoundDots; }
     static constexpr int defaultInterpolation() { return KisScreentoneInterpolationType_Linear; }
-    static constexpr int defaultEqualizationMode() { return KisScreentoneEqualizationMode_FunctionBased; }
+    static constexpr int defaultEqualizationMode() { return KisScreentoneEqualizationMode_TemplateBased; }
 
     static inline const KoColor& defaultForegroundColor()
     {
@@ -151,6 +155,7 @@ public:
     bool alignToPixelGrid() const;
     int alignToPixelGridX() const;
     int alignToPixelGridY() const;
+    const KisScreentoneGeneratorTemplate& getTemplate() const;
 
     void setPattern(int newPattern);
     void setShape(int newShape);
@@ -184,6 +189,10 @@ public:
     void setAlignToPixelGridY(int newAlignToPixelGridY);
 
     void setDefaults();
+
+private:
+    class Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif

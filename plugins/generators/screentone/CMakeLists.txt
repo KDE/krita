@@ -5,6 +5,7 @@ set(kritascreentonegenerator_SOURCES
     KisScreentoneBrightnessContrastFunctions.cpp
     KisScreentoneGeneratorPlugin.cpp
     KisScreentoneGeneratorConfiguration.cpp
+    KisScreentoneGeneratorTemplate.cpp
     )
 ki18n_wrap_ui(kritascreentonegenerator_SOURCES
     KisScreentoneConfigWidget.ui

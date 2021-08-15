@@ -11,6 +11,8 @@
 
 #include <QtGlobal>
 
+#include "KisScreentoneGeneratorTemplate.h"
+
 namespace KisScreentoneScreentoneFunctions {
 
 // NOTE: Screentone functions must return a value in the range [0.0, 1.0]
@@ -61,8 +63,6 @@ namespace KisScreentoneScreentoneFunctions {
 // original functions so a typedef is used. Also, the equalized sinusoidal
 // variants of line patterns give the same results as the un-equalized linear
 // variants, so a typedef is also used
-
-qreal roundValue(qreal v);
 
 qreal sin(qreal x);
 qreal triangle(qreal x);
@@ -231,6 +231,26 @@ public:
 };
 
 using LinesCurtainsSinusoidalEqualized = LinesCurtainsLinear;
+
+// The name "TemplateBasedFunction" has nothing to do with c++ templates even if
+// this class is templated. Here "Template" means that precomputed values are
+// used somehow. The class is templated to allow extensibility in the future
+template <typename T>
+class TemplateBasedFunction
+{
+public:
+    TemplateBasedFunction(const T &the_template)
+        : m_template(the_template)
+    {}
+
+    qreal operator()(qreal x, qreal y) const
+    {
+        return m_template(x, y);
+    }
+
+private:
+    const T& m_template;
+};
 
 }
 

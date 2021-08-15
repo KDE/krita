@@ -6,11 +6,14 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "KisScreentoneGeneratorConfiguration.h"
-
-
 #include <QStringList>
+#include <QMutex>
+#include <QMutexLocker>
+
 #include <klocalizedstring.h>
+
+#include "KisScreentoneGeneratorTemplate.h"
+#include "KisScreentoneGeneratorConfiguration.h"
 
 QStringList screentonePatternNames()
 {
@@ -59,16 +62,61 @@ QStringList screentoneInterpolationNames(int pattern, int shape)
     return QStringList();
 }
 
+class KisScreentoneGeneratorConfiguration::Private
+{
+public:
+    Private(KisScreentoneGeneratorConfiguration *q);
+    ~Private();
+
+    const KisScreentoneGeneratorTemplate& getTemplate() const;
+    void invalidateTemplate();
+
+public:
+    KisScreentoneGeneratorConfiguration *m_q{nullptr};
+    mutable QSharedPointer<KisScreentoneGeneratorTemplate> m_cachedTemplate{nullptr};
+    mutable QMutex m_templateMutex;
+};
+
+KisScreentoneGeneratorConfiguration::Private::Private(KisScreentoneGeneratorConfiguration *q)
+    : m_q(q)
+{}
+
+KisScreentoneGeneratorConfiguration::Private::~Private()
+{}
+
+const KisScreentoneGeneratorTemplate& KisScreentoneGeneratorConfiguration::Private::getTemplate() const
+{
+    QMutexLocker ml(&m_templateMutex);
+    if (!m_cachedTemplate) {
+        m_cachedTemplate.reset(new KisScreentoneGeneratorTemplate(m_q));
+    }
+    return *m_cachedTemplate;
+}
+
+void KisScreentoneGeneratorConfiguration::Private::invalidateTemplate()
+{
+    QMutexLocker ml(&m_templateMutex);
+    m_cachedTemplate.reset();
+}
+
 KisScreentoneGeneratorConfiguration::KisScreentoneGeneratorConfiguration(qint32 version, KisResourcesInterfaceSP resourcesInterface)
     : KisFilterConfiguration(defaultName(), version, resourcesInterface)
+    , m_d(new Private(this))
 {}
 
 KisScreentoneGeneratorConfiguration::KisScreentoneGeneratorConfiguration(KisResourcesInterfaceSP resourcesInterface)
     : KisFilterConfiguration(defaultName(), defaultVersion(), resourcesInterface)
+    , m_d(new Private(this))
 {}
 
 KisScreentoneGeneratorConfiguration::KisScreentoneGeneratorConfiguration(const KisScreentoneGeneratorConfiguration &rhs)
     : KisFilterConfiguration(rhs)
+    , m_d(new Private(this))
+{
+    m_d->m_cachedTemplate = rhs.m_d->m_cachedTemplate;
+}
+
+KisScreentoneGeneratorConfiguration::~KisScreentoneGeneratorConfiguration()
 {}
 
 KisFilterConfigurationSP KisScreentoneGeneratorConfiguration::clone() const
@@ -216,19 +264,27 @@ int KisScreentoneGeneratorConfiguration::alignToPixelGridY() const
     return getInt("align_to_pixel_grid_y", defaultAlignToPixelGridY());
 }
 
+const KisScreentoneGeneratorTemplate& KisScreentoneGeneratorConfiguration::getTemplate() const
+{
+    return m_d->getTemplate();
+}
+
 void KisScreentoneGeneratorConfiguration::setPattern(int newPattern)
 {
     setProperty("pattern", newPattern);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setShape(int newShape)
 {
     setProperty("shape", newShape);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setInterpolation(int newInterpolation)
 {
     setProperty("interpolation", newInterpolation);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setEqualizationMode(int newEqualizationMode)
@@ -278,6 +334,7 @@ void KisScreentoneGeneratorConfiguration::setContrast(qreal newContrast)
 void KisScreentoneGeneratorConfiguration::setTransformationMode(int newTransformationMode)
 {
     setProperty("transformation_mode", newTransformationMode);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setUnits(int newUnits)
@@ -288,76 +345,91 @@ void KisScreentoneGeneratorConfiguration::setUnits(int newUnits)
 void KisScreentoneGeneratorConfiguration::setResolution(qreal newResolution)
 {
     setProperty("resolution", newResolution);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setFrequencyX(qreal newFrequencyX)
 {
     setProperty("frequency_x", newFrequencyX);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setFrequencyY(qreal newFrequencyY)
 {
     setProperty("frequency_y", newFrequencyY);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setConstrainFrequency(bool newConstrainFrequency)
 {
     setProperty("constrain_frequency", newConstrainFrequency);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setPositionX(qreal newPositionX)
 {
     setProperty("position_x", newPositionX);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setPositionY(qreal newPositionY)
 {
     setProperty("position_y", newPositionY);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setSizeX(qreal newSizeX)
 {
     setProperty("size_x", newSizeX);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setSizeY(qreal newSizeY)
 {
     setProperty("size_y", newSizeY);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setConstrainSize(bool newConstrainSize)
 {
     setProperty("keep_size_square", newConstrainSize);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setShearX(qreal newShearX)
 {
     setProperty("shear_x", newShearX);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setShearY(qreal newShearY)
 {
     setProperty("shear_y", newShearY);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setRotation(qreal newRotation)
 {
     setProperty("rotation", newRotation);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setAlignToPixelGrid(bool newAlignToPixelGrid)
 {
     setProperty("align_to_pixel_grid", newAlignToPixelGrid);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setAlignToPixelGridX(int newAlignToPixelGridX)
 {
     setProperty("align_to_pixel_grid_x", newAlignToPixelGridX);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setAlignToPixelGridY(int newAlignToPixelGridY)
 {
     setProperty("align_to_pixel_grid_y", newAlignToPixelGridY);
+    m_d->invalidateTemplate();
 }
 
 void KisScreentoneGeneratorConfiguration::setDefaults()

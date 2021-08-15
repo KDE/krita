@@ -33,20 +33,20 @@ public:
                   const KisScreentoneGeneratorConfigurationSP config,
                   KoUpdater* progressUpdater) const;
     
-    template <class ScreentoneFunction>
+    template <class Sampler>
     void generate(KisProcessingInformation dst,
                   const QSize &size,
                   const KisScreentoneGeneratorConfigurationSP config,
                   KoUpdater *progressUpdater,
-                  const ScreentoneFunction &screentoneFunction) const;
+                  const Sampler &sampler) const;
     
-    template <class ScreentoneFunction, class BrightnessContrastFunction>
+    template <class Sampler, class PostprocessingFunction>
     void generate(KisProcessingInformation dst,
                   const QSize &size,
                   const KisScreentoneGeneratorConfigurationSP config,
                   KoUpdater *progressUpdater,
-                  const ScreentoneFunction &screentoneFunction,
-                  const BrightnessContrastFunction &brightnessContrastFunction) const;
+                  const Sampler &sampler,
+                  const PostprocessingFunction &postprocessingFunction) const;
 
     static inline KoID id() {
         return KoID(KisScreentoneGeneratorConfiguration::defaultName(), i18n("Screentone"));

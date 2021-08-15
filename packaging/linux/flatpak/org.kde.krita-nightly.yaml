@@ -824,16 +824,19 @@ modules:
 
     sources:
       - type: archive
-        url: https://gmic.eu/files/source/gmic_2.9.6.tar.gz
-        sha256: d22fe8515af16dcd050d09a0bc7127ec29f4795ce732a0c6c3eaf839356bc11a
+        url: https://gmic.eu/files/source/gmic_2.9.8.tar.gz
+        sha256: 18d6bbc731ae3b4da8a656ac189476793b111a9dd19f72db2312f074df7cdc82
         dest: gmic
       - type: archive
-        url: https://github.com/c-koi/gmic-qt/archive/v.2.9.6.tar.gz
-        sha256: 40712fb8b2e8d39a5a2c6349bc14277444db25c81b1cf51fde1c159ef622942b
+        url: https://github.com/c-koi/gmic-qt/archive/v.2.9.8.tar.gz
+        sha256: ba7d2dcc6463456f492b85b4ea14794bf080f423c57ff022567611daa47095a6
       - type: patch
         paths:
-          - ../../../3rdparty_plugins/ext_gmic/0001-First-working-version-of-the-GMic-Qt-Krita-native-pl.patch
-          - ../../../3rdparty_plugins/ext_gmic/0002-Remove-shared-segment-infrastructure.patch
-          - ../../../3rdparty_plugins/ext_gmic/0003-Refactor-into-a-completely-Krita-native-plugin.patch
-          - ../../../3rdparty_plugins/ext_gmic/0004-Enable-all-input-modes-for-Krita-plugin.patch
-          - ../../../3rdparty_plugins/ext_gmic/0005-Update-function-signatures-to-2.9.6.patch
+          - ../../../3rdparty_plugins/ext_gmic/0001-Add-Krita-native-plugin.patch
+          - ../../../3rdparty_plugins/ext_gmic/0004-Make-FFTW3-truly-optional.patch
+          - ../../../3rdparty_plugins/ext_gmic/0005-Disable-GMic-Qt-s-own-theming-for-Krita.patch
+          - ../../../3rdparty_plugins/ext_gmic/0006-Add-flag-to-disable-internet-access-by-default.patch
+          - ../../../3rdparty_plugins/ext_gmic/0007-Increase-on-launch-update-timeout-to-60s.patch
+          - ../../../3rdparty_plugins/ext_gmic/0008-Enable-respecting-host-application-language.patch
+          - ../../../3rdparty_plugins/ext_gmic/0009-Respect-settings-location-for-hosted-builds.patch
+          - ../../../3rdparty_plugins/ext_gmic/0010-Disable-Internet-updates-in-Krita.patch

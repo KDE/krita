@@ -14,6 +14,12 @@
     <height>483</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
@@ -24,255 +30,251 @@
       <attribute name="title">
        <string comment="EXIF">Exposure</string>
       </attribute>
-      <layout class="QHBoxLayout">
-       <item>
-        <layout class="QGridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string comment="EXIF: exposure">Brightness &amp;value:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editBrightnessValue</cstring>
-           </property>
-          </widget>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string comment="EXIF: exposure">Brightness &amp;value:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editBrightnessValue</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="editBrightnessValue"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string comment="EXIF: exposure">&amp;ISO:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editISO</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="KisIntParseSpinBox" name="editISO">
+         <property name="maximum">
+          <number>3600</number>
+         </property>
+         <property name="singleStep">
+          <number>100</number>
+         </property>
+         <property name="value">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string comment="EXIF: exposure">Exposure &amp;time:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editExposureTime</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="editExposureTime"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string comment="EXIF: exposure">E&amp;xposure mode:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editExposureMode</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="editExposureMode">
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure mode">Auto</string>
+          </property>
          </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="editBrightnessValue"/>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure mode">Manual</string>
+          </property>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string comment="EXIF: exposure">&amp;ISO:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editISO</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure mode">Auto bracket</string>
+          </property>
          </item>
-         <item row="1" column="1">
-          <widget class="KisIntParseSpinBox" name="editISO">
-           <property name="maximum">
-            <number>3600</number>
-           </property>
-           <property name="singleStep">
-            <number>100</number>
-           </property>
-           <property name="value">
-            <number>100</number>
-           </property>
-          </widget>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string comment="EXIF: exposure">Exposure pro&amp;gram:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editExposureProgram</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="editExposureProgram">
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Not defined</string>
+          </property>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_16">
-           <property name="text">
-            <string comment="EXIF: exposure">Exposure &amp;time:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editExposureTime</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Manual</string>
+          </property>
          </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="editExposureTime"/>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Normal program</string>
+          </property>
          </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string comment="EXIF: exposure">E&amp;xposure mode:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editExposureMode</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Aperture priority</string>
+          </property>
          </item>
-         <item row="3" column="1">
-          <widget class="QComboBox" name="editExposureMode">
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure mode">Auto</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure mode">Manual</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure mode">Auto bracket</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Shutter priority</string>
+          </property>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string comment="EXIF: exposure">Exposure pro&amp;gram:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editExposureProgram</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Creative program</string>
+          </property>
          </item>
-         <item row="4" column="1">
-          <widget class="QComboBox" name="editExposureProgram">
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Not defined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Manual</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Normal program</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Aperture priority</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Shutter priority</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Creative program</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Action program</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Portrait mode</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: exposure - exposure program">Landscape mode</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Action program</string>
+          </property>
          </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string comment="EXIF: exposure">Exposure index:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editExposureIndex</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Portrait mode</string>
+          </property>
          </item>
-         <item row="5" column="1">
-          <widget class="QLineEdit" name="editExposureIndex"/>
+         <item>
+          <property name="text">
+           <string comment="EXIF: exposure - exposure program">Landscape mode</string>
+          </property>
          </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_10">
-           <property name="text">
-            <string comment="EXIF: exposure">Exposure bias:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editExposureBiasValue</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QLineEdit" name="editExposureBiasValue"/>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string comment="EXIF: exposure">Ape&amp;rture:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editApertureValue</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QLineEdit" name="editApertureValue"/>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string comment="EXIF: exposure">Shutter speed:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editShutterSpeedValue</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="QLineEdit" name="editShutterSpeedValue"/>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_25">
-           <property name="text">
-            <string comment="EXIF: exposure">&amp;F Number:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editFNumber</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1">
-          <widget class="QLineEdit" name="editFNumber"/>
-         </item>
-         <item row="10" column="0" colspan="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>517</width>
-             <height>51</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string comment="EXIF: exposure">Exposure index:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editExposureIndex</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="editExposureIndex"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string comment="EXIF: exposure">Exposure bias:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editExposureBiasValue</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="editExposureBiasValue"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string comment="EXIF: exposure">Ape&amp;rture:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editApertureValue</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLineEdit" name="editApertureValue"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string comment="EXIF: exposure">Shutter speed:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editShutterSpeedValue</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLineEdit" name="editShutterSpeedValue"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_25">
+         <property name="text">
+          <string comment="EXIF: exposure">&amp;F Number:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editFNumber</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QLineEdit" name="editFNumber"/>
+       </item>
+       <item row="10" column="0" colspan="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -280,91 +282,74 @@
       <attribute name="title">
        <string comment="EXIF">Lens</string>
       </attribute>
-      <layout class="QHBoxLayout">
-       <item>
-        <layout class="QGridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string comment="EXIF: lens">&amp;Focal length:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editFocalLength</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="KisIntParseSpinBox" name="editFocalLength">
-           <property name="maximum">
-            <number>1000</number>
-           </property>
-           <property name="singleStep">
-            <number>1</number>
-           </property>
-           <property name="value">
-            <number>35</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string comment="EXIF: lens">Focal length (&amp;35mm equivalent):</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editFocalLengthIn35mmFilm</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="KisIntParseSpinBox" name="editFocalLengthIn35mmFilm">
-           <property name="maximum">
-            <number>1000</number>
-           </property>
-           <property name="singleStep">
-            <number>1</number>
-           </property>
-           <property name="value">
-            <number>35</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string comment="EXIF: lens">Max aperture:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editMaxApertureValue</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="editMaxApertureValue"/>
-         </item>
-         <item row="3" column="0" colspan="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>517</width>
-             <height>101</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string comment="EXIF: lens">&amp;Focal length:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editFocalLength</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="KisIntParseSpinBox" name="editFocalLength">
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+         <property name="singleStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>35</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string comment="EXIF: lens">Focal length (&amp;35mm equivalent):</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editFocalLengthIn35mmFilm</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="KisIntParseSpinBox" name="editFocalLengthIn35mmFilm">
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+         <property name="singleStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>35</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string comment="EXIF: lens">Max aperture:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editMaxApertureValue</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="editMaxApertureValue"/>
        </item>
       </layout>
      </widget>
@@ -372,133 +357,116 @@
       <attribute name="title">
        <string comment="EXIF">Autofocus</string>
       </attribute>
-      <layout class="QHBoxLayout">
-       <item>
-        <layout class="QGridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_17">
-           <property name="text">
-            <string comment="EXIF: autofocus">Sub&amp;ject distance:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editSubjectDistance</cstring>
-           </property>
-          </widget>
+      <layout class="QFormLayout" name="formLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="text">
+          <string comment="EXIF: autofocus">Sub&amp;ject distance:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editSubjectDistance</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="editSubjectDistance"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string comment="EXIF: autofocus">Meterin&amp;g mode:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editMeteringMode</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="editMeteringMode">
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - metering mode">Unknown</string>
+          </property>
          </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="editSubjectDistance"/>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - metering mode">Average</string>
+          </property>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string comment="EXIF: autofocus">Meterin&amp;g mode:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editMeteringMode</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - metering mode">Center weighted average</string>
+          </property>
          </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="editMeteringMode">
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - metering mode">Unknown</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - metering mode">Average</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - metering mode">Center weighted average</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - metering mode">Spot</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - metering mode">Multi spot</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - metering mode">Pattern</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - metering mode">Partial</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - metering mode">Other</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - metering mode">Spot</string>
+          </property>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_24">
-           <property name="text">
-            <string comment="EXIF: autofocus">D&amp;istance range:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editSubjectDistanceRange</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - metering mode">Multi spot</string>
+          </property>
          </item>
-         <item row="2" column="1">
-          <widget class="QComboBox" name="editSubjectDistanceRange">
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - distance range">Unknown</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - distance range">Macro</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - distance range">Close view</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: autofocus - distance range">Distant view</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - metering mode">Pattern</string>
+          </property>
          </item>
-         <item row="3" column="0" colspan="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>517</width>
-             <height>151</height>
-            </size>
-           </property>
-          </spacer>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - metering mode">Partial</string>
+          </property>
          </item>
-        </layout>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - metering mode">Other</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_24">
+         <property name="text">
+          <string comment="EXIF: autofocus">D&amp;istance range:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editSubjectDistanceRange</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="editSubjectDistanceRange">
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - distance range">Unknown</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - distance range">Macro</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - distance range">Close view</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: autofocus - distance range">Distant view</string>
+          </property>
+         </item>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -506,134 +474,117 @@
       <attribute name="title">
        <string comment="EXIF">Flash</string>
       </attribute>
-      <layout class="QHBoxLayout">
-       <item>
-        <layout class="QGridLayout">
-         <item row="0" column="0" colspan="2">
-          <widget class="QCheckBox" name="editFlashFired">
-           <property name="text">
-            <string comment="EXIF: flash">Fired</string>
-           </property>
-          </widget>
+      <layout class="QFormLayout" name="formLayout_4">
+       <item row="0" column="0" colspan="2">
+        <widget class="QCheckBox" name="editFlashFired">
+         <property name="text">
+          <string comment="EXIF: flash">Fired</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="text">
+          <string comment="EXIF: flash">Stro&amp;be return:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editStrobeReturn</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="editStrobeReturn">
+         <item>
+          <property name="text">
+           <string comment="EXIF: flash - strobe return">No strobe return detection</string>
+          </property>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_22">
-           <property name="text">
-            <string comment="EXIF: flash">Stro&amp;be return:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editStrobeReturn</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: flash - strobe return">Undefined</string>
+          </property>
          </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="editStrobeReturn">
-           <item>
-            <property name="text">
-             <string comment="EXIF: flash - strobe return">No strobe return detection</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: flash - strobe return">Undefined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: flash - strobe return">No strobe return light detected</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: flash - strobe return">Strobe return light detected</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: flash - strobe return">No strobe return light detected</string>
+          </property>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_21">
-           <property name="text">
-            <string comment="EXIF: flash">Mode:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editFlashMode</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: flash - strobe return">Strobe return light detected</string>
+          </property>
          </item>
-         <item row="2" column="1">
-          <widget class="QComboBox" name="editFlashMode">
-           <item>
-            <property name="text">
-             <string comment="EXIF: flash - mode">Unknown</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: flash - mode">Compulsory flash fired</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: flash - mode">Compulsory flash suppression</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: flash - mode">Auto mode</string>
-            </property>
-           </item>
-          </widget>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string comment="EXIF: flash">Mode:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editFlashMode</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="editFlashMode">
+         <item>
+          <property name="text">
+           <string comment="EXIF: flash - mode">Unknown</string>
+          </property>
          </item>
-         <item row="3" column="0" colspan="2">
-          <widget class="QCheckBox" name="editFlashFunction">
-           <property name="text">
-            <string comment="EXIF: flash">Function</string>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: flash - mode">Compulsory flash fired</string>
+          </property>
          </item>
-         <item row="4" column="0" colspan="2">
-          <widget class="QCheckBox" name="editFlashRedEyeMode">
-           <property name="text">
-            <string comment="EXIF: flash">Red-eye removal</string>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: flash - mode">Compulsory flash suppression</string>
+          </property>
          </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_23">
-           <property name="text">
-            <string comment="EXIF: flash">Flash ener&amp;gy:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editFlashEnergy</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: flash - mode">Auto mode</string>
+          </property>
          </item>
-         <item row="5" column="1">
-          <widget class="QLineEdit" name="editFlashEnergy"/>
-         </item>
-         <item row="6" column="0" colspan="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>517</width>
-             <height>91</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="editFlashFunction">
+         <property name="text">
+          <string comment="EXIF: flash">Function</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QCheckBox" name="editFlashRedEyeMode">
+         <property name="text">
+          <string comment="EXIF: flash">Red-eye removal</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string comment="EXIF: flash">Flash ener&amp;gy:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editFlashEnergy</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="editFlashEnergy"/>
        </item>
       </layout>
      </widget>
@@ -641,309 +592,292 @@
       <attribute name="title">
        <string comment="EXIF">Postprocessing</string>
       </attribute>
-      <layout class="QHBoxLayout">
-       <item>
-        <layout class="QGridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string comment="EXIF: postprocessing">&amp;Gain control:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editGainControl</cstring>
-           </property>
-          </widget>
+      <layout class="QFormLayout" name="formLayout_5">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string comment="EXIF: postprocessing">&amp;Gain control:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editGainControl</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="editGainControl">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - gain control">None</string>
+          </property>
          </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="editGainControl">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - gain control">None</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - gain control">Low gain up</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - gain control">High gain up</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - gain control">Low gain down</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - gain control">High gain down</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - gain control">Low gain up</string>
+          </property>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string comment="EXIF: postprocessing">L&amp;ight source:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editLightSource</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - gain control">High gain up</string>
+          </property>
          </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="editLightSource">
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Unknown</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Daylight</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Fluorescent</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Tungsten</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Flash</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Undefined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Undefined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Undefined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Undefined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Fine weather</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Cloudy weather</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Shade</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Daylight fluorescent (D5700 - 7100K)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Day white fluorescent (N4600 - 5400K)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Cool white fluorescent (W3900 - 4500K)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">White fluorescent (WW 3200 - 3700K)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Undefined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Standard light A</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Standard light B</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">Standard light C</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">D55</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">D65</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">D75</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">D50</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">ISO studio tungsten</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - light source">other</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - gain control">Low gain down</string>
+          </property>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string comment="EXIF: postprocessing">Sharpness:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editSharpness</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - gain control">High gain down</string>
+          </property>
          </item>
-         <item row="2" column="1">
-          <widget class="QComboBox" name="editSharpness">
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - sharpness">Normal</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - sharpness">Soft</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - sharpness">Hard</string>
-            </property>
-           </item>
-          </widget>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string comment="EXIF: postprocessing">L&amp;ight source:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editLightSource</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="editLightSource">
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Unknown</string>
+          </property>
          </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_20">
-           <property name="text">
-            <string comment="EXIF: postprocessing">Contrast:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editContrast</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Daylight</string>
+          </property>
          </item>
-         <item row="3" column="1">
-          <widget class="QComboBox" name="editContrast">
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - contrast">Normal</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - contrast">Soft</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - contrast">Hard</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Fluorescent</string>
+          </property>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_28">
-           <property name="text">
-            <string comment="EXIF: postprocessing">White &amp;balance:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editWhiteBalance</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Tungsten</string>
+          </property>
          </item>
-         <item row="4" column="1">
-          <widget class="QComboBox" name="editWhiteBalance">
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - whitebalance">Auto</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: postprocessing - whitebalance">Custom</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Flash</string>
+          </property>
          </item>
-         <item row="5" column="0" colspan="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>517</width>
-             <height>91</height>
-            </size>
-           </property>
-          </spacer>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Undefined</string>
+          </property>
          </item>
-        </layout>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Undefined</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Undefined</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Undefined</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Fine weather</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Cloudy weather</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Shade</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Daylight fluorescent (D5700 - 7100K)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Day white fluorescent (N4600 - 5400K)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Cool white fluorescent (W3900 - 4500K)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">White fluorescent (WW 3200 - 3700K)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Undefined</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Standard light A</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Standard light B</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">Standard light C</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">D55</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">D65</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">D75</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">D50</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">ISO studio tungsten</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - light source">other</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string comment="EXIF: postprocessing">Sharpness:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editSharpness</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="editSharpness">
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - sharpness">Normal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - sharpness">Soft</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - sharpness">Hard</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_20">
+         <property name="text">
+          <string comment="EXIF: postprocessing">Contrast:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editContrast</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="editContrast">
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - contrast">Normal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - contrast">Soft</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - contrast">Hard</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_28">
+         <property name="text">
+          <string comment="EXIF: postprocessing">White &amp;balance:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editWhiteBalance</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="editWhiteBalance">
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - whitebalance">Auto</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: postprocessing - whitebalance">Custom</string>
+          </property>
+         </item>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -951,149 +885,132 @@
       <attribute name="title">
        <string comment="EXIF">Misc</string>
       </attribute>
-      <layout class="QHBoxLayout">
-       <item>
-        <layout class="QGridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string comment="EXIF: misc">Scene capture t&amp;ype:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editSceneCaptureType</cstring>
-           </property>
-          </widget>
+      <layout class="QFormLayout" name="formLayout_6">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string comment="EXIF: misc">Scene capture t&amp;ype:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editSceneCaptureType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="editSceneCaptureType">
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - scene capture type">Standard</string>
+          </property>
          </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="editSceneCaptureType">
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - scene capture type">Standard</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - scene capture type (Photos of landscapes)">Landscape</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - scene capture type (Photos of people)">Portrait</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - scene capture type">Night scene</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - scene capture type (Photos of landscapes)">Landscape</string>
+          </property>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_19">
-           <property name="text">
-            <string comment="EXIF: misc">Ma&amp;ker:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editMake</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - scene capture type (Photos of people)">Portrait</string>
+          </property>
          </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="editMake"/>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - scene capture type">Night scene</string>
+          </property>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_26">
-           <property name="text">
-            <string comment="EXIF: misc (model name or model number)">Model:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editModel</cstring>
-           </property>
-          </widget>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string comment="EXIF: misc">Ma&amp;ker:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editMake</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="editMake"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string comment="EXIF: misc (model name or model number)">Model:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editModel</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="editModel"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string comment="EXIF: misc">Sens&amp;ing method type:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>editSensingMethod</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="editSensingMethod">
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - sensing method type">Not Defined</string>
+          </property>
          </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="editModel"/>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - sensing method type">Not Defined</string>
+          </property>
          </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_27">
-           <property name="text">
-            <string comment="EXIF: misc">Sens&amp;ing method type:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editSensingMethod</cstring>
-           </property>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - sensing method type">One-chip color area sensor</string>
+          </property>
          </item>
-         <item row="3" column="1">
-          <widget class="QComboBox" name="editSensingMethod">
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - sensing method type">Not Defined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - sensing method type">Not Defined</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - sensing method type">One-chip color area sensor</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - sensing method type">Two-chip color area sensor</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - sensing method type">Three-chip color area sensor</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - sensing method type">Color sequential area sensor</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - sensing method type">Trilinear sensor</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string comment="EXIF: misc - sensing method type">Color sequential linear sensor</string>
-            </property>
-           </item>
-          </widget>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - sensing method type">Two-chip color area sensor</string>
+          </property>
          </item>
-         <item row="4" column="0" colspan="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>517</width>
-             <height>71</height>
-            </size>
-           </property>
-          </spacer>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - sensing method type">Three-chip color area sensor</string>
+          </property>
          </item>
-        </layout>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - sensing method type">Color sequential area sensor</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - sensing method type">Trilinear sensor</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string comment="EXIF: misc - sensing method type">Color sequential linear sensor</string>
+          </property>
+         </item>
+        </widget>
        </item>
       </layout>
      </widget>

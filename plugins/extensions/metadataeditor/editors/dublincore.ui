@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -14,106 +14,106 @@
     <height>321</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout">
-   <item>
-    <layout class="QGridLayout">
-     <item column="0" row="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Creator name:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>editCreator</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="0">
-      <widget class="QLineEdit" name="editCreator"/>
-     </item>
-     <item column="0" row="1">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Publisher:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>editPublisher</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="1">
-      <widget class="QLineEdit" name="editPublisher"/>
-     </item>
-     <item column="0" row="2">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Rights:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>editRights</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="2">
-      <widget class="QLineEdit" name="editRights"/>
-     </item>
-     <item column="0" row="3">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Date:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>editDate</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="3">
-      <widget class="QDateTimeEdit" name="editDate"/>
-     </item>
-     <item column="0" row="4">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Title:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>editTitle</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="4">
-      <widget class="QLineEdit" name="editTitle"/>
-     </item>
-     <item column="0" row="5">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Description:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-       </property>
-       <property name="buddy">
-        <cstring>editDescription</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="5">
-      <widget class="QTextEdit" name="editDescription"/>
-     </item>
-    </layout>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Creator name:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>editCreator</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="editCreator"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Publisher:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>editPublisher</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="editPublisher"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Rights:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>editRights</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="editRights"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Date:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>editDate</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QDateTimeEdit" name="editDate">
+     <property name="calendarPopup">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Title:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>editTitle</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="editTitle"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Description:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+     </property>
+     <property name="buddy">
+      <cstring>editDescription</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QTextEdit" name="editDescription"/>
    </item>
   </layout>
  </widget>

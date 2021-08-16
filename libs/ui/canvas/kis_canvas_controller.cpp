@@ -182,9 +182,14 @@ void KisCanvasController::mirrorCanvas(bool enable)
 
 void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
 {
-    KoCanvasBase *canvas = m_d->view->canvasBase();
+    QVariant customPos = sender()->property("customPosition");
+    QPoint pos = customPos.isValid()
+        ? customPos.value<QPoint>()
+        : QCursor::pos();
+    KoCanvasBase* canvas = m_d->view->canvasBase();
     QWidget *canvasWidget = canvas->canvasWidget();
-    const QPointF cursorPosWidget = canvasWidget->mapFromGlobal(QCursor::pos());
+    const QPointF cursorPosWidget = canvasWidget->mapFromGlobal(pos);
+    
     if (!canvasWidget->rect().contains(cursorPosWidget.toPoint())) {
         m_d->view->viewManager()->
         showFloatingMessage(

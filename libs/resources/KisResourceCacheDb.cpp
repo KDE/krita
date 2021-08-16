@@ -1533,7 +1533,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
 
             const bool retval = addResource(storage, itA->timestamp, res, resourceType);
-            KIS_SAFE_ASSERT_RECOVER(retval) {
+            if (!retval) {
                 KisUsageLogger::log("Could not add resource" + itA->url);
                 ++itA;
                 continue;

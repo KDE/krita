@@ -258,7 +258,15 @@
  </customwidgets>
  <tabstops>
   <tabstop>cmbType</tabstop>
+  <tabstop>hueSlider</tabstop>
+  <tabstop>hueSpinBox</tabstop>
+  <tabstop>saturationSlider</tabstop>
+  <tabstop>saturationSpinBox</tabstop>
+  <tabstop>valueSlider</tabstop>
+  <tabstop>valueSpinBox</tabstop>
+  <tabstop>reset</tabstop>
   <tabstop>chkColorize</tabstop>
+  <tabstop>chkCompatibilityMode</tabstop>
  </tabstops>
  <resources/>
  <connections/>

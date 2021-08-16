@@ -614,7 +614,7 @@ bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir, QStrin
 bool KisShapeLayer::loadLayer(KoStore* store, QStringList *warnings)
 {
     if (!store) {
-        warnKrita << i18n("No store backend");
+        warnKrita << "No store backend";
         return false;
     }
 

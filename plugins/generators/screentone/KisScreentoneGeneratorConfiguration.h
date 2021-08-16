@@ -121,7 +121,7 @@ public:
     static constexpr qreal defaultShearX() { return 0.0; }
     static constexpr qreal defaultShearY() { return 0.0; }
     static constexpr qreal defaultRotation() { return 45.0; }
-    static constexpr bool defaultAlignToPixelGrid() { return false; }
+    static constexpr bool defaultAlignToPixelGrid() { return true; }
     static constexpr int defaultAlignToPixelGridX() { return 1; }
     static constexpr int defaultAlignToPixelGridY() { return 1; }
 

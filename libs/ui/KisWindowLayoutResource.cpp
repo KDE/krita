@@ -197,7 +197,7 @@ struct KisWindowLayoutResource::Private
             QRect bRect = b->geometry();
 
             if (aRect.y() == bRect.y()) return aRect.x() < bRect.x();
-            return (aRect.y() < aRect.y());
+            return (aRect.y() < bRect.y());
         });
 
         return screens;

@@ -305,10 +305,10 @@ void KisPopupPalette::reconfigure()
 
     // ellipse - to make sure the widget doesn't eat events meant for recent colors or brushes
     //         - needs to be +2 pixels on every side for anti-aliasing to look nice on high dpi displays
-    // rectange - to make sure the area doesn't extend outside of the widget
+    // rectangle - to make sure the area doesn't extend outside of the widget
     QRegion maskedEllipse(-2, -2, m_colorSelector->width() + 4, m_colorSelector->height() + 4, QRegion::Ellipse );
-    QRegion maskedRectange(0, 0, m_colorSelector->width(), m_colorSelector->height(), QRegion::Rectangle);
-    QRegion maskedRegion = maskedEllipse.intersected(maskedRectange);
+    QRegion maskedRectangle(0, 0, m_colorSelector->width(), m_colorSelector->height(), QRegion::Rectangle);
+    QRegion maskedRegion = maskedEllipse.intersected(maskedRectangle);
 
     m_colorSelector->setMask(maskedRegion);
 

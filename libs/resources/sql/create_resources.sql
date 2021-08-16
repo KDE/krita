@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS resources (
 ,   md5sum TEXT              /* the original md5sum of the first version of this resource */
 ,   FOREIGN KEY(resource_type_id) REFERENCES resource_types(id)
 ,   UNIQUE(storage_id, resource_type_id, filename)
-,   UNIQUE(storage_id, resource_type_id, md5sum)
+,   UNIQUE(storage_id, resource_type_id, md5sum, filename)
 );

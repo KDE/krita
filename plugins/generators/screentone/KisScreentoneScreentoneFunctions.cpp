@@ -110,13 +110,13 @@ qreal DotsEllipseLinearEqualized::operator()(qreal x, qreal y) const
     if (z > 0.625) {
         const qreal zOverFactorTimes2Squared = zOverFactorTimes2 * zOverFactorTimes2;
         result -= 2.0 * (zOverFactorTimes2Squared * std::acos(factor / z) -
-                         0.5 * std::sqrt(zOverFactorTimes2Squared - 0.25));
+                         0.5 * std::sqrt(zOverFactorTimes2Squared - 0.25)) * 0.8;
     }
     if (z > 0.78125) {
         const qreal zTimesPoint8OverFactorTimes2Squared =
             zTimesPoint8OverFactorTimes2 * zTimesPoint8OverFactorTimes2;
         result -= 2.0 * (zTimesPoint8OverFactorTimes2Squared * std::acos(factor / (0.8 * z)) -
-                         0.5 * std::sqrt(zTimesPoint8OverFactorTimes2Squared - 0.25));
+                         0.5 * std::sqrt(zTimesPoint8OverFactorTimes2Squared - 0.25)) / 0.8;
     }
     return result;
 }

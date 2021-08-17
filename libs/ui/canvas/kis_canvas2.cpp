@@ -323,7 +323,6 @@ void KisCanvas2::initializeFpsDecoration()
 
 KisCanvas2::~KisCanvas2()
 {
-    m_d->animationPlayer->stop();
     delete m_d;
 }
 

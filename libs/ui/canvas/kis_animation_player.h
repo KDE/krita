@@ -41,7 +41,6 @@ public:
 
     PlaybackState playbackState();
 
-    void goToPlaybackOrigin();
     void goToStartFrame();
     qreal playbackSpeed();
 

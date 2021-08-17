@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */

@@ -20,64 +20,52 @@
      <property name="text">
       <string>Creator name:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
      <property name="buddy">
-      <cstring>editCreator</cstring>
+      <cstring>creator</cstring>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLineEdit" name="editCreator"/>
+    <widget class="QLineEdit" name="creator"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>Publisher:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
      <property name="buddy">
-      <cstring>editPublisher</cstring>
+      <cstring>publisher</cstring>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="editPublisher"/>
+    <widget class="QLineEdit" name="publisher"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Rights:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
      <property name="buddy">
-      <cstring>editRights</cstring>
+      <cstring>rights</cstring>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLineEdit" name="editRights"/>
+    <widget class="QLineEdit" name="rights"/>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Date:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
      <property name="buddy">
-      <cstring>editDate</cstring>
+      <cstring>date</cstring>
      </property>
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QDateTimeEdit" name="editDate">
+    <widget class="QDateTimeEdit" name="date">
      <property name="calendarPopup">
       <bool>true</bool>
      </property>
@@ -88,32 +76,26 @@
      <property name="text">
       <string>Title:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
      <property name="buddy">
-      <cstring>editTitle</cstring>
+      <cstring>title</cstring>
      </property>
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QLineEdit" name="editTitle"/>
+    <widget class="QLineEdit" name="title"/>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Description:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-     </property>
      <property name="buddy">
-      <cstring>editDescription</cstring>
+      <cstring>description</cstring>
      </property>
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QTextEdit" name="editDescription"/>
+    <widget class="QTextEdit" name="description"/>
    </item>
   </layout>
  </widget>

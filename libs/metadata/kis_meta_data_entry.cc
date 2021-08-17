@@ -34,7 +34,7 @@ Entry::Entry(const Schema* schema, QString name, const Value& value) :
     Q_ASSERT(!name.isEmpty());
     if (!isValidName(name)) {
         errKrita << "Invalid metadata name:" << name;
-        d->name = QString("INVALID: %s").arg(name);
+        d->name = QString("INVALID: %1").arg(name);
     }
     else {
         d->name = name;

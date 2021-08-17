@@ -36,9 +36,6 @@
          <property name="text">
           <string comment="EXIF: exposure">Brightness &amp;value:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editBrightnessValue</cstring>
          </property>
@@ -52,16 +49,13 @@
          <property name="text">
           <string comment="EXIF: exposure">&amp;ISO:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
-          <cstring>editISO</cstring>
+          <cstring>editISOSpeedRatings</cstring>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="KisIntParseSpinBox" name="editISO">
+        <widget class="KisIntParseSpinBox" name="editISOSpeedRatings">
          <property name="maximum">
           <number>3600</number>
          </property>
@@ -78,9 +72,6 @@
          <property name="text">
           <string comment="EXIF: exposure">Exposure &amp;time:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editExposureTime</cstring>
          </property>
@@ -93,9 +84,6 @@
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string comment="EXIF: exposure">E&amp;xposure mode:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editExposureMode</cstring>
@@ -125,9 +113,6 @@
         <widget class="QLabel" name="label_14">
          <property name="text">
           <string comment="EXIF: exposure">Exposure pro&amp;gram:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editExposureProgram</cstring>
@@ -188,9 +173,6 @@
          <property name="text">
           <string comment="EXIF: exposure">Exposure index:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editExposureIndex</cstring>
          </property>
@@ -203,9 +185,6 @@
         <widget class="QLabel" name="label_10">
          <property name="text">
           <string comment="EXIF: exposure">Exposure bias:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editExposureBiasValue</cstring>
@@ -220,9 +199,6 @@
          <property name="text">
           <string comment="EXIF: exposure">Ape&amp;rture:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editApertureValue</cstring>
          </property>
@@ -235,9 +211,6 @@
         <widget class="QLabel" name="label_8">
          <property name="text">
           <string comment="EXIF: exposure">Shutter speed:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editShutterSpeedValue</cstring>
@@ -252,9 +225,6 @@
          <property name="text">
           <string comment="EXIF: exposure">&amp;F Number:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editFNumber</cstring>
          </property>
@@ -262,19 +232,6 @@
        </item>
        <item row="9" column="1">
         <widget class="QLineEdit" name="editFNumber"/>
-       </item>
-       <item row="10" column="0" colspan="2">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -287,9 +244,6 @@
         <widget class="QLabel" name="label_6">
          <property name="text">
           <string comment="EXIF: lens">&amp;Focal length:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editFocalLength</cstring>
@@ -314,9 +268,6 @@
          <property name="text">
           <string comment="EXIF: lens">Focal length (&amp;35mm equivalent):</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editFocalLengthIn35mmFilm</cstring>
          </property>
@@ -340,9 +291,6 @@
          <property name="text">
           <string comment="EXIF: lens">Max aperture:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editMaxApertureValue</cstring>
          </property>
@@ -363,9 +311,6 @@
          <property name="text">
           <string comment="EXIF: autofocus">Sub&amp;ject distance:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editSubjectDistance</cstring>
          </property>
@@ -378,9 +323,6 @@
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string comment="EXIF: autofocus">Meterin&amp;g mode:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editMeteringMode</cstring>
@@ -436,9 +378,6 @@
          <property name="text">
           <string comment="EXIF: autofocus">D&amp;istance range:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editSubjectDistanceRange</cstring>
          </property>
@@ -487,16 +426,13 @@
          <property name="text">
           <string comment="EXIF: flash">Stro&amp;be return:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
-          <cstring>editStrobeReturn</cstring>
+          <cstring>editFlashStrobeReturn</cstring>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="editStrobeReturn">
+        <widget class="QComboBox" name="editFlashStrobeReturn">
          <item>
           <property name="text">
            <string comment="EXIF: flash - strobe return">No strobe return detection</string>
@@ -523,9 +459,6 @@
         <widget class="QLabel" name="label_21">
          <property name="text">
           <string comment="EXIF: flash">Mode:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editFlashMode</cstring>
@@ -575,9 +508,6 @@
          <property name="text">
           <string comment="EXIF: flash">Flash ener&amp;gy:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editFlashEnergy</cstring>
          </property>
@@ -597,9 +527,6 @@
         <widget class="QLabel" name="label_13">
          <property name="text">
           <string comment="EXIF: postprocessing">&amp;Gain control:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editGainControl</cstring>
@@ -645,9 +572,6 @@
         <widget class="QLabel" name="label_15">
          <property name="text">
           <string comment="EXIF: postprocessing">L&amp;ight source:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editLightSource</cstring>
@@ -793,9 +717,6 @@
          <property name="text">
           <string comment="EXIF: postprocessing">Sharpness:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editSharpness</cstring>
          </property>
@@ -825,9 +746,6 @@
          <property name="text">
           <string comment="EXIF: postprocessing">Contrast:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editContrast</cstring>
          </property>
@@ -856,9 +774,6 @@
         <widget class="QLabel" name="label_28">
          <property name="text">
           <string comment="EXIF: postprocessing">White &amp;balance:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editWhiteBalance</cstring>
@@ -890,9 +805,6 @@
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string comment="EXIF: misc">Scene capture t&amp;ype:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editSceneCaptureType</cstring>
@@ -928,9 +840,6 @@
          <property name="text">
           <string comment="EXIF: misc">Ma&amp;ker:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editMake</cstring>
          </property>
@@ -944,9 +853,6 @@
          <property name="text">
           <string comment="EXIF: misc (model name or model number)">Model:</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="buddy">
           <cstring>editModel</cstring>
          </property>
@@ -959,9 +865,6 @@
         <widget class="QLabel" name="label_27">
          <property name="text">
           <string comment="EXIF: misc">Sens&amp;ing method type:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>editSensingMethod</cstring>

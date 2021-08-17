@@ -2,18 +2,8 @@ SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 
 ExternalProject_Add( ext_gmic
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://gmic.eu/files/source/gmic_2.9.8.tar.gz
-    URL_HASH SHA256=18d6bbc731ae3b4da8a656ac189476793b111a9dd19f72db2312f074df7cdc82
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-Krita-native-plugin.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Add-support-for-MSVC.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Add-Android-support.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Make-FFTW3-truly-optional.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Disable-GMic-Qt-s-own-theming-for-Krita.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Add-flag-to-disable-internet-access-by-default.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-Increase-on-launch-update-timeout-to-60s.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-Enable-respecting-host-application-language.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-Respect-settings-location-for-hosted-builds.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-Disable-Internet-updates-in-Krita.patch
+    URL https://files.kde.org/krita/build/dependencies/gmic-2.9.8-patched.tar.gz
+    URL_HASH SHA256=974f6db7eed1dd071407b28d40c24b0837ec38da85377f3a6f11bfb698b6288c
 
     SOURCE_SUBDIR gmic-qt
 

@@ -262,6 +262,7 @@ QWidget* KisToolGradient::createOptionWidget()
     m_slAntiAliasThreshold = new KisDoubleSliderSpinBox(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
     m_slAntiAliasThreshold->setRange(0, 1, 3);
+    m_slAntiAliasThreshold->setSingleStep(0.001);
     addOptionWidgetOption(m_slAntiAliasThreshold, m_lbAntiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAntiAliasThreshold(qreal)));
 

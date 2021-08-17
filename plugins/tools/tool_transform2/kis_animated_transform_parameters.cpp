@@ -106,6 +106,7 @@ KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(const Kis
     : KisTransformMaskAdapter(*staticTransform->transformArgs()),
       m_d(new Private())
 {
+    clearChangedFlag();
 }
 
 KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(const KisAnimatedTransformMaskParameters &rhs)
@@ -122,7 +123,7 @@ KisAnimatedTransformMaskParameters::~KisAnimatedTransformMaskParameters()
 
 const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::transformArgs() const
 {
-    QSharedPointer<ToolTransformArgs> args = KisTransformMaskAdapter::transformArgs();
+    QSharedPointer<ToolTransformArgs> args( new ToolTransformArgs(*KisTransformMaskAdapter::transformArgs()) );
 
     if (m_d->transformChannels[KisKeyframeChannel::PositionX.id()] || m_d->transformChannels[KisKeyframeChannel::PositionY.id()]) { // Position
 
@@ -191,11 +192,6 @@ void KisAnimatedTransformMaskParameters::toXML(QDomElement *e) const
     return KisTransformMaskAdapter::toXML(e);
 }
 
-void KisAnimatedTransformMaskParameters::translateSrcAndDst(const QPointF &offset)
-{
-    QSharedPointer<ToolTransformArgs> args = transformArgs();
-    args->translateSrcAndDst(offset);
-}
 
 KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(const QString &id, KisNodeWSP parent)
 {
@@ -315,9 +311,10 @@ KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::makeAnimat
         animMask = new KisAnimatedTransformMaskParameters(tma.data());
     } else {
         animMask = new KisAnimatedTransformMaskParameters();
-        animMask->transformArgs()->setOriginalCenter(mask->sourceDataBounds().center());
+        ToolTransformArgs args;
+        args.setOriginalCenter(mask->sourceDataBounds().center());
+        animMask->setBaseArgs(args);
     }
-
 
     animMask->clearChangedFlag();
 
@@ -341,6 +338,30 @@ void setScalarKeyframeOnMask(KisTransformMaskSP mask, const KoID &channelId, int
     }
 }
 
+ToolTransformArgs fetchToolTransformArgs(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP desiredParams) {
+    ToolTransformArgs desiredArgs;
+    KisTransformMaskParamsInterfaceSP currentParams = mask->transformParams();
+    KisTransformMaskAdapter* desiredParamsAdapter = dynamic_cast<KisTransformMaskAdapter*>(desiredParams.data());
+
+    if (desiredParamsAdapter) {
+        desiredArgs = *desiredParamsAdapter->transformArgs();
+    }
+
+    KisTransformMaskAdapter *tma = dynamic_cast<KisTransformMaskAdapter*>(mask->transformParams().data());
+    if (tma) {
+        tma->setBaseArgs(desiredArgs);
+    }
+
+    // Undo any translation offset intended for origin-offset based rotation.
+    KisAnimatedTransformMaskParameters* animatedTransformMask = dynamic_cast<KisAnimatedTransformMaskParameters*>(currentParams.data());
+    if (animatedTransformMask && desiredArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+        QPointF pos = desiredArgs.transformedCenter() - animatedTransformMask->getRotationalTranslationOffset(desiredArgs);
+        desiredArgs.setTransformedCenter(pos);
+    }
+
+    return desiredArgs;
+}
+
 
 void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, int currentTime, KisTransformMaskParamsInterfaceSP desiredParams, KUndo2Command *parentCommand)
 {
@@ -357,28 +378,7 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
         return;
     }
 
-    ToolTransformArgs desiredArgs;
-    KisTransformMaskAdapter* desiredParamsAdapter = dynamic_cast<KisTransformMaskAdapter*>(desiredParams.data());
-
-    if (desiredParamsAdapter) {
-        desiredArgs = *desiredParamsAdapter->transformArgs();
-    } else {
-        if (desiredParams->isHidden()) return;
-        desiredArgs.setOriginalCenter(mask->exactBounds().center());
-        desiredArgs.setTransformedCenter(desiredArgs.originalCenter());
-    }
-
-    KisTransformMaskAdapter *tma = dynamic_cast<KisTransformMaskAdapter*>(mask->transformParams().data());
-    if (tma) {
-        tma->setBaseArgs(desiredArgs);
-    }
-
-    // Undo any translation offset intended for origin-offset based rotation.
-    KisAnimatedTransformMaskParameters* animatedTransformMask = dynamic_cast<KisAnimatedTransformMaskParameters*>(currentParams.data());
-    if (animatedTransformMask && desiredArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-        QPointF pos = desiredArgs.transformedCenter() - animatedTransformMask->getRotationalTranslationOffset(desiredArgs);
-        desiredArgs.setTransformedCenter(pos);
-    }
+    ToolTransformArgs desiredArgs = fetchToolTransformArgs(mask, desiredParams);
 
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, currentTime, desiredArgs.transformedCenter().x(), parentCommand);
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionY, currentTime, desiredArgs.transformedCenter().y(), parentCommand);
@@ -409,28 +409,7 @@ void KisAnimatedTransformMaskParameters::setKeyframes(KisTransformMaskSP mask, i
         return;
     }
 
-    ToolTransformArgs desiredArgs;
-    KisTransformMaskAdapter* desiredParamsAdapter = dynamic_cast<KisTransformMaskAdapter*>(desiredParams.data());
-
-    if (desiredParamsAdapter) {
-        desiredArgs = *desiredParamsAdapter->transformArgs();
-    } else {
-        if (desiredParams->isHidden()) return;
-        desiredArgs.setOriginalCenter(mask->exactBounds().center());
-        desiredArgs.setTransformedCenter(desiredArgs.originalCenter());
-    }
-
-    KisTransformMaskAdapter *tma = dynamic_cast<KisTransformMaskAdapter*>(mask->transformParams().data());
-    if (tma) {
-        tma->setBaseArgs(desiredArgs);
-    }
-
-    // Undo any translation offset intended for origin-offset based rotation.
-    KisAnimatedTransformMaskParameters* animatedTransformMask = dynamic_cast<KisAnimatedTransformMaskParameters*>(currentParams.data());
-    if (animatedTransformMask && desiredArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-        QPointF pos = desiredArgs.transformedCenter() - animatedTransformMask->getRotationalTranslationOffset(desiredArgs);
-        desiredArgs.setTransformedCenter(pos);
-    }
+    ToolTransformArgs desiredArgs = fetchToolTransformArgs(mask, desiredParams);
 
     setScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, currentTime, desiredArgs.transformedCenter().x(), parentCommand);
     setScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionY, currentTime, desiredArgs.transformedCenter().y(), parentCommand);

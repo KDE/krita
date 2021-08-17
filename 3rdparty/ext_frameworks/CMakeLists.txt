@@ -182,6 +182,12 @@ set(ext_ki18n_PATCH_COMMAND ${_ki18n_patch}
 )
 endif()
 
+set (ext_ki18n_DEPENDENCY "ext_kguiaddons")
+if (ANDROID)
+    set (ext_ki18n_DEPENDENCY ${ext_ki18n_DEPENDENCY} ext_libintl-lite)
+endif()
+
+
 ExternalProject_Add(
     ext_ki18n
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -195,7 +201,7 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    DEPENDS ext_kguiaddons 
+    DEPENDS "${ext_ki18n_DEPENDENCY}"
 )
 endif()
 

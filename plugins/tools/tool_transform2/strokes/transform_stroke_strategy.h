@@ -116,7 +116,7 @@ private:
 
 private:
     KisUpdatesFacade *m_updatesFacade;
-    KisUpdateCommandEx::SharedDataSP m_updateData;
+    KisBatchNodeUpdateSP m_updateData;
     bool m_updatesDisabled = false;
     ToolTransformArgs::TransformMode m_mode;
     QString m_filterId;

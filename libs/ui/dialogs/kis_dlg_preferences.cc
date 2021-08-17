@@ -979,11 +979,11 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     sliderPoolLimit->setSuffix(i18n(" %"));
     sliderPoolLimit->setRange(0, 20, 2);
-    sliderMemoryLimit->setSingleStep(0.01);
+    sliderPoolLimit->setSingleStep(0.01);
 
     sliderUndoLimit->setSuffix(i18n(" %"));
     sliderUndoLimit->setRange(0, 50, 2);
-    sliderMemoryLimit->setSingleStep(0.01);
+    sliderUndoLimit->setSingleStep(0.01);
 
     intMemoryLimit->setMinimumWidth(80);
     intPoolLimit->setMinimumWidth(80);
@@ -1043,6 +1043,11 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
+
+    sliderFrameTimeout->setRange(5, 600);
+    sliderFrameTimeout->setSuffix(i18nc("suffix for \"seconds\"", " sec"));
+    sliderFrameTimeout->setValue(cfg.frameRenderingTimeout() / 1000);
+
     sliderFpsLimit->setRange(20, 300);
     sliderFpsLimit->setSuffix(i18n(" fps"));
 
@@ -1103,7 +1108,7 @@ void PerformanceTab::load(bool requestDefault)
         KisConfig cfg2(true);
         chkOpenGLFramerateLogging->setChecked(cfg2.enableOpenGLFramerateLogging(requestDefault));
         chkBrushSpeedLogging->setChecked(cfg2.enableBrushSpeedLogging(requestDefault));
-        chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
+        chkDisableVectorOptimizations->setChecked(cfg2.disableVectorOptimizations(requestDefault));
 #ifdef Q_OS_WIN
         chkDisableAVXOptimizations->setChecked(cfg2.disableAVXOptimizations(requestDefault));
 #endif
@@ -1159,13 +1164,14 @@ void PerformanceTab::save()
 
     cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
     cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
+    cfg.setFrameRenderingTimeout(sliderFrameTimeout->value() * 1000);
     cfg.setFpsLimit(sliderFpsLimit->value());
 
     {
         KisConfig cfg2(true);
         cfg2.setEnableOpenGLFramerateLogging(chkOpenGLFramerateLogging->isChecked());
         cfg2.setEnableBrushSpeedLogging(chkBrushSpeedLogging->isChecked());
-        cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
+        cfg2.setDisableVectorOptimizations(chkDisableVectorOptimizations->isChecked());
 #ifdef Q_OS_WIN
         cfg2.setDisableAVXOptimizations(chkDisableAVXOptimizations->isChecked());
 #endif
@@ -1614,6 +1620,10 @@ void PopupPaletteTab::load()
     sbNumPresets->setValue(config.favoritePresets());
     sbPaletteSize->setValue(config.readEntry("popuppalette/size", 385));
     sbSelectorSize->setValue(config.readEntry("popuppalette/selectorSize", 140));
+    cmbSelectorType->setCurrentIndex(config.readEntry<bool>("popuppalette/usevisualcolorselector", false) ? 1 : 0);
+    chkShowColorHistory->setChecked(config.readEntry("popuppalette/showColorHistory", true));
+    chkShowRotationTrack->setChecked(config.readEntry("popuppalette/showRotationTrack", true));
+    chkUseDynamicSlotCount->setChecked(config.readEntry("popuppalette/useDynamicSlotCount", true));
 }
 
 void PopupPaletteTab::save()
@@ -1623,9 +1633,9 @@ void PopupPaletteTab::save()
     config.writeEntry("popuppalette/size", sbPaletteSize->value());
     config.writeEntry("popuppalette/selectorSize", sbSelectorSize->value());
     config.writeEntry<bool>("popuppalette/usevisualcolorselector", cmbSelectorType->currentIndex() > 0);
-    config.writeEntry<bool>("popuppalette/showColorHistory", true);
-    config.writeEntry<bool>("popuppalette/showRotationTrack", true);
-    config.writeEntry<bool>("popuppalette/useDynamicSlotCount", true);
+    config.writeEntry<bool>("popuppalette/showColorHistory", chkShowColorHistory->isChecked());
+    config.writeEntry<bool>("popuppalette/showRotationTrack", chkShowRotationTrack->isChecked());
+    config.writeEntry<bool>("popuppalette/useDynamicSlotCount", chkUseDynamicSlotCount->isChecked());
 }
 
 void PopupPaletteTab::setDefault()
@@ -1635,6 +1645,9 @@ void PopupPaletteTab::setDefault()
     sbPaletteSize->setValue(385);
     sbSelectorSize->setValue(140);
     cmbSelectorType->setCurrentIndex(0);
+    chkShowColorHistory->setChecked(true);
+    chkShowRotationTrack->setChecked(true);
+    chkUseDynamicSlotCount->setChecked(true);
 }
 
 //---------------------------------------------------------------------------------------------------

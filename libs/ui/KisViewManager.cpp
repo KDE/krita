@@ -434,9 +434,9 @@ void KisViewManager::setCurrentView(KisView *view)
             KisConfig cfg(true);
             QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
 
-            KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
+            KisPaintOpPresetSP preset = rserver->resource("", "", lastPreset);
             if (!preset) {
-                preset = rserver->resourceByName(defaultPresetName);
+                preset = rserver->resource("", "", defaultPresetName);
             }
 
             if (!preset && rserver->resourceCount() > 0) {

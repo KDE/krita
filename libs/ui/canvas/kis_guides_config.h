@@ -61,16 +61,6 @@ public:
      */
     void addGuideLine(Qt::Orientation orientation, qreal position);
 
-    /**
-     * @brief Display or not guide lines
-     */
-    bool showGuideLines() const;
-
-    /**
-     * @param show display or not guide line
-     */
-    void setShowGuideLines(bool show);
-
     bool showGuides() const;
     void setShowGuides(bool value);
     bool lockGuides() const;

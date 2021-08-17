@@ -86,16 +86,16 @@ void TestResourceStorage::testImportResourceFile()
     QByteArray ba = f.readAll();
     f.close();
 
-    QByteArray md5 = KoMD5Generator::generateHash(ba);
+    QString md5 = KoMD5Generator::generateHash(ba);
 
     bool r = folderStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
     QVERIFY(r);
-    QCOMPARE(md5.toHex(), folderStorage.resourceMd5("patterns/testpattern.png").toHex());
+    QCOMPARE(md5, folderStorage.resourceMd5("patterns/testpattern.png"));
 
     KisResourceStorage memoryStorage("memory");
     r = memoryStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
     QVERIFY(r);
-    QCOMPARE(md5.toHex(), memoryStorage.resourceMd5("patterns/testpattern.png").toHex());
+    QCOMPARE(md5, memoryStorage.resourceMd5("patterns/testpattern.png"));
 
     KisResourceStorage bundleStorage(QString(FILES_DATA_DIR) + "/bundles/test1.bundle");
     r = bundleStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");

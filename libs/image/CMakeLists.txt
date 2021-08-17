@@ -157,6 +157,7 @@ set(kritaimage_LIB_SRCS
    kis_base_processor.cpp
    kis_bookmarked_configuration_manager.cc
    KisBusyWaitBroker.cpp
+   KisBatchNodeUpdate.cpp
    KisSafeBlockingQueueConnectionProxy.cpp
    kis_node_uuid_info.cpp
    kis_clone_layer.cpp
@@ -317,6 +318,7 @@ set(kritaimage_LIB_SRCS
    layerstyles/kis_layer_style_filter_environment.cpp
    layerstyles/kis_layer_style_filter_projection_plane.cpp
    layerstyles/kis_layer_style_projection_plane.cpp
+   layerstyles/KisStrokeLayerStyleFilterProjectionPlane.cpp
    layerstyles/kis_ls_drop_shadow_filter.cpp
    layerstyles/kis_ls_satin_filter.cpp
    layerstyles/kis_ls_stroke_filter.cpp

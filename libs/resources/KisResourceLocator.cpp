@@ -40,7 +40,6 @@
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
 
-
 class KisResourceLocator::Private {
 public:
     QString resourceLocation;
@@ -219,6 +218,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
                        ",      versioned_resources.version as version\n"
                        ",      versioned_resources.md5sum as md5sum\n"
                        ",      resources.name\n"
+                       ",      resources.status\n"
                        "FROM   resources\n"
                        ",      storages\n"
                        ",      resource_types\n"
@@ -252,8 +252,10 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         resource->setVersion(q.value(1).toInt());
         Q_ASSERT(resource->version() >= 0);
 
-        resource->setMD5(QByteArray::fromHex(q.value(2).toByteArray()));
-        Q_ASSERT(!resource->md5().isEmpty());
+        resource->setMD5Sum(q.value(2).toString());
+        Q_ASSERT(!resource->md5Sum().isEmpty());
+
+        resource->setActive(q.value(3).toBool());
 
         // To override resources that use the filename for the name, which is versioned, and we don't want the version number in the name
         resource->setName(q.value(3).toString());;
@@ -288,7 +290,7 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
     return KisResourceCacheDb::setResourceActive(resourceId, active);
 }
 
-KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation)
+KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const bool allowOverwrite, const QString &storageLocation)
 {
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
 
@@ -306,16 +308,54 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
         return nullptr;
     }
 
-    const QByteArray md5 = resource->md5();
+    const QString md5 = resource->md5Sum();
 
     const KoResourceSP existingResource = storage->resource(resourceType + "/" + resource->filename());
 
     if (existingResource) {
-        if (existingResource->md5() == md5) {
+        if (existingResource->md5Sum() == md5) {
             return existingResource;
         } else {
             qWarning() << "A resource with the same filename but a different MD5 already exists in the storage" << resourceType << fileName << storageLocation;
-            return nullptr;
+            if (allowOverwrite) {
+
+                // remove all versions of the resource from the resource folder
+                QStringList versionsLocations;
+
+                // this resource has id -1, we need correct id
+                int existingResourceId = -1;
+                bool r = KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resourceType, existingResourceId);
+                if (r && existingResourceId >= 0) {
+                    if (KisResourceCacheDb::getAllVersionsLocations(existingResourceId, versionsLocations)) {
+                        for (int i = 0; i < versionsLocations.size(); i++) {
+                            QFileInfo fi(this->resourceLocationBase() + "/" + resourceType + "/" + versionsLocations[i]);
+                            if (fi.exists()) {
+                                r = QFile::remove(fi.filePath());
+                                if (!r) {
+                                    qWarning() << "KisResourceLocator::importResourceFromFile: Removal of " << fi.filePath()
+                                               << "was requested, but it wasn't possible, something went wrong.";
+                                }
+                            } else {
+                                qWarning() << "KisResourceLocator::importResourceFromFile: Removal of " << fi.filePath()
+                                           << "was requested, but it doesn't exist.";
+                            }
+                        }
+                    } else {
+                        return nullptr;
+                    }
+                } else {
+                    return nullptr;
+                }
+
+                // remove everything related to this resource from the database (remember about tags and versions!!!)
+                r = KisResourceCacheDb::removeResourceCompletely(existingResourceId);
+                if (!r) {
+                    return nullptr;
+                }
+
+            } else {
+                return nullptr;
+            }
         }
     }
 
@@ -328,7 +368,7 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
             return nullptr;
         }
 
-        Q_ASSERT(resource->md5() == md5);
+        Q_ASSERT(resource->md5Sum() == md5);
         resource->setVersion(0);
 
         // Insert into the database
@@ -371,7 +411,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     }
 
     resource->setStorageLocation(storageLocation);
-    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
+    resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
@@ -389,7 +429,10 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
 
     Q_ASSERT(d->storages.contains(storageLocation));
-    Q_ASSERT(resource->resourceId() > -1);
+
+    if (resource->resourceId() < 0) {
+        return addResource(resourceType, resource);
+    }
 
     KisResourceStorageSP storage = d->storages[storageLocation];
 
@@ -400,13 +443,14 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     resource->updateThumbnail();
     resource->setVersion(resource->version() + 1);
+    resource->setActive(true);
 
     if (!storage->saveAsNewVersion(resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
         return false;
     }
 
-    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
+    resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     // The version needs already to have been incremented
@@ -438,7 +482,7 @@ bool KisResourceLocator::reloadResource(const QString &resourceType, const KoRes
         return false;
     }
 
-    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
+    resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     // We haven't changed the version of the resource, so the cache must be still valid
@@ -540,6 +584,104 @@ bool KisResourceLocator::removeStorage(const QString &storageLocation)
 bool KisResourceLocator::hasStorage(const QString &document)
 {
     return d->storages.contains(document);
+}
+
+void KisResourceLocator::saveTags()
+{
+    QSqlQuery query;
+
+    if (!query.prepare("SELECT tags.id\n"
+                       ",      tags.url \n"
+                       ",      tags.name \n"
+                       ",      tags.comment \n"
+                       ",      tags.active \n"
+                       ",      tags.filename \n"
+                       ",      resource_types.name \n"
+                       ",      resource_types.id "
+                       "FROM   tags\n"
+                       ",      resource_types\n"
+                       "WHERE  tags.resource_type_id = resource_types.id\n"))
+    {
+        qWarning() << "Could not prepare save tags query" << query.lastError();
+        return;
+    }
+
+    if (!query.exec()) {
+        qWarning() << "Could not execute save tags query" << query.lastError();
+        return;
+    }
+
+    query.first();
+
+    while (query.next()) {
+        // Save tag...
+        KisTag tag;
+        tag.setUrl(query.value("tags.url").toString());
+        tag.setName(query.value("tags.name").toString());
+        tag.setComment(query.value("tags.comment").toString());
+        tag.setActive(query.value("tags.active").toBool());
+        tag.setResourceType(query.value("resource_types.name").toString());
+        tag.setFilename(query.value("tags.filename").toString());
+
+        int tagId = query.value("tags.id").toInt();
+
+        int resourceTypeId = query.value("resource_types.id").toInt();
+
+        QSqlQuery r;
+
+        if (!r.prepare("SELECT resources.filename\n"
+                       "FROM   resources\n"
+                       ",      resource_tags\n"
+                       "WHERE  resource_tags.tag_id = :tag_id\n"
+                       "AND    resources.resource_type_id = :type_id\n"
+                       "AND    resource_tags.resource_id = resources.id\n")) {
+            qWarning() << "Could not prepare resource/tag query" << r.lastError();
+        }
+
+        r.bindValue(":tag_id", tagId);
+        r.bindValue(":type_id", resourceTypeId);
+
+        if (!r.exec()) {
+            qWarning() << "Could not execute resource/tag query" << r.lastError();
+            return;
+        }
+
+        QStringList resourceFileNames;
+
+        while (r.next()) {
+            resourceFileNames << r.value("resources.filename").toString();
+        }
+
+        tag.setDefaultResources(resourceFileNames);
+
+        QString filename = tag.filename();
+        if (filename.isEmpty()) {
+            filename = tag.url() + ".tag";
+        }
+        QFile f(d->resourceLocation + tag.resourceType() + '/' + filename);
+
+        if (QFileInfo(d->resourceLocation + tag.resourceType() + '/' + filename).exists()) {
+            if (!f.open(QFile::ReadOnly)) {
+                qWarning () << "Could not open existing tag file for reading";
+            }
+            tag.load(f);
+            f.close();
+            tag.setDefaultResources(resourceFileNames);
+        }
+        else {
+            if (!f.open(QFile::WriteOnly)) {
+                qWarning () << "Couild not open tag file for writing" << f.fileName();
+                return;
+            }
+        }
+        if (!tag.save(f)) {
+            qWarning() << "Could not save tag to" << f.fileName();
+            return;
+        }
+        f.close();
+
+        qDebug() << tag.name() << tag.url() << f.fileName() << tag.defaultResources().join(", ");
+    }
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation)

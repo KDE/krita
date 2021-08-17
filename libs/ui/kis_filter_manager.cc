@@ -56,11 +56,8 @@ struct KisFilterManager::Private {
     KisFilterConfigurationSP lastConfiguration;
     KisFilterConfigurationSP currentlyAppliedConfiguration;
     KisStrokeId currentStrokeId;
-    QSharedPointer<QAtomicInt> cancelSilentlyHandle;
+    KisFilterStrokeStrategy::ExternalCancelUpdatesStorageSP externalCancelUpdatesStorage;
     KisFilterStrokeStrategy::IdleBarrierData::IdleBarrierCookie idleBarrierCookie;
-    QRect initialApplyRect;
-    QRect lastProcessRect;
-    QRect lastExtendedUpdateRect;
 
     bool filterAllSelectedFrames = false;
 
@@ -276,28 +273,19 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     KisImageWSP image = d->view->image();
 
     if (d->currentStrokeId) {
-        if (isIdle()) {
-            d->lastExtendedUpdateRect = d->lastProcessRect;
-        }
-
-        d->cancelSilentlyHandle->ref();
         image->cancelStroke(d->currentStrokeId);
 
         d->currentStrokeId.clear();
-        d->cancelSilentlyHandle.clear();
         d->idleBarrierCookie.clear();
     } else {
         image->waitForDone();
-        d->initialApplyRect = d->view->activeNode()->exactBounds();
     }
 
-    QRect applyRect = d->initialApplyRect;
+    if (!d->externalCancelUpdatesStorage) {
+        // Lazily initialize the cancel updates storage, just in case
+        // if the stroke has been cancelled in the meantime.
 
-    KisPaintDeviceSP paintDevice = d->view->activeNode()->paintDevice();
-    if (paintDevice &&
-        filter->needsTransparentPixels(filterConfig.data(), paintDevice->colorSpace())) {
-
-        applyRect |= image->bounds();
+        d->externalCancelUpdatesStorage.reset(new KisFilterStrokeStrategy::ExternalCancelUpdatesStorage());
     }
 
     KoCanvasResourceProvider *resourceManager =
@@ -309,21 +297,19 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
                                  resourceManager);
 
     KisFilterStrokeStrategy *strategy = new KisFilterStrokeStrategy(filter,
-                                                              KisFilterConfigurationSP(filterConfig),
-                                                              resources);
+                                                                    KisFilterConfigurationSP(filterConfig),
+                                                                    resources,
+                                                                    d->externalCancelUpdatesStorage.toWeakRef());
     {
         KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
         strategy->setForceLodModeIfPossible(group.readEntry("forceLodMode", true));
     }
-    d->cancelSilentlyHandle = strategy->cancelSilentlyHandle();
 
     d->currentStrokeId =
         image->startStroke(strategy);
 
-
     // Apply filter preview to active, visible frame only.
     KisImageConfig imgConf(true);
-    const int activeFrame = (imgConf.autoKeyEnabled() && !imgConf.autoKeyModeDuplicate()) ? KisLayerUtils::fetchLayerActiveRasterFrameTime(d->view->activeNode()) : -1;
     image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData());
 
     {
@@ -331,16 +317,6 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
             new KisFilterStrokeStrategy::IdleBarrierData();
         d->idleBarrierCookie = data->idleBarrierCookie();
         image->addJob(d->currentStrokeId, data);
-    }
-
-    QRegion extraUpdateRegion(d->lastExtendedUpdateRect);
-
-    if (!extraUpdateRegion.isEmpty()) {
-        QVector<QRect> rects;
-        std::copy(extraUpdateRegion.begin(), extraUpdateRegion.end(), std::back_inserter(rects));
-
-        image->addJob(d->currentStrokeId,
-                      new KisFilterStrokeStrategy::ExtraCleanUpUpdates(rects));
     }
 
     d->currentlyAppliedConfiguration = filterConfig;
@@ -377,26 +353,22 @@ void KisFilterManager::finish()
     d->reapplyAction->setEnabled(true);
     d->reapplyAction->setText(i18n("Apply Filter Again: %1", filter->name()));
 
-    d->cancelSilentlyHandle.clear();
     d->idleBarrierCookie.clear();
     d->currentlyAppliedConfiguration.clear();
-    d->lastProcessRect = QRect();
-    d->lastExtendedUpdateRect = QRect();
 }
 
 void KisFilterManager::cancelRunningStroke()
 {
     Q_ASSERT(d->currentStrokeId);
 
+    // we should to notify the stroke that it should do the updates itself.
+    d->externalCancelUpdatesStorage->shouldIssueCancellationUpdates.ref();
     d->view->image()->cancelStroke(d->currentStrokeId);
 
     d->currentStrokeId.clear();
-    d->cancelSilentlyHandle.clear();
     d->idleBarrierCookie.clear();
     d->currentlyAppliedConfiguration.clear();
-    d->lastProcessRect = QRect();
-    d->lastExtendedUpdateRect = QRect();
-
+    d->externalCancelUpdatesStorage.clear();
 }
 
 void KisFilterManager::cancelDialog()

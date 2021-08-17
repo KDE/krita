@@ -346,7 +346,7 @@ public:
     /**
      * @brief paletteList returns all the palettes found in the document's local resource storage
      */
-    QList<KoColorSetSP> paletteList();
+    QList<KoResourceSP> documentResources();
 
     /**
      * @brief setPaletteList replaces the palettes in the document's local resource storage with the list

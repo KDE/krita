@@ -28,22 +28,13 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     auto resourceSourceAdapter = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
 
     const QString brushFileName = brushDefinition.attribute("filename", "");
-    KisBrushSP brush = resourceSourceAdapter.resourceForFilename(brushFileName);
+    const QString brushMD5Sum = brushDefinition.attribute("md5sum", "");
 
-    bool brushtipFound = true;
-    //Fallback for files that still use the old format
-    if (!brush) {
-        QFileInfo info(brushFileName);
-        brush = resourceSourceAdapter.resourceForFilename(info.fileName());
-    }
+    KisBrushSP brush = resourceSourceAdapter.resource(brushMD5Sum, brushFileName, "");
 
     if (!brush) {
-        qWarning() << "Using fallback brush" << ppVar(brushFileName);
-        brush = resourceSourceAdapter.fallbackResource();
-        brushtipFound = false;
+        return nullptr;
     }
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
 
     // we always return a copy of the brush!
     brush = brush->clone().dynamicCast<KisBrush>();
@@ -117,10 +108,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     };
 
 
-    if (!brushtipFound) {
-        brush->setBrushApplication(ALPHAMASK);
-    } 
-    else if (brushDefinition.hasAttribute("preserveLightness")) {
+    if (brushDefinition.hasAttribute("preserveLightness")) {
         const int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
         brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : legacyBrushApplication(colorfulBrush, useColorAsMask));
@@ -134,7 +122,8 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
 
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
         brush->setBrushApplication(legacyBrushApplication(colorfulBrush, useColorAsMask));
-    } else {
+    }
+    else {
         /**
          * In Krita versions before 4.4 series we used to automatrically select
          * the brush application depending on the presence of the color in the

@@ -23,12 +23,12 @@ void KisDitherUtil::setThresholdMode(const ThresholdMode thresholdMode)
     m_thresholdMode = thresholdMode;
 }
 
-void KisDitherUtil::setPattern(const QString &name, const PatternValueMode valueMode, KisResourcesInterfaceSP resourcesInterface)
+void KisDitherUtil::setPattern(const QString &md5sum, const QString &patternName, const PatternValueMode valueMode, KisResourcesInterfaceSP resourcesInterface)
 {
     m_patternValueMode = valueMode;
 
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-    m_pattern = source.resourceForName(name);
+    m_pattern = source.resource(md5sum, "", patternName);
     if (m_pattern && m_thresholdMode == ThresholdMode::Pattern && m_patternValueMode == PatternValueMode::Auto) {
         // Automatically pick between lightness-based and alpha-based patterns by whichever has maximum range
         qreal lightnessMin = 1.0, lightnessMax = 0.0;
@@ -80,7 +80,7 @@ qreal KisDitherUtil::threshold(const QPoint &pos)
 void KisDitherUtil::setConfiguration(const KisFilterConfiguration &config, const QString &prefix)
 {
     setThresholdMode(ThresholdMode(config.getInt(prefix + "thresholdMode")));
-    setPattern(config.getString(prefix + "pattern"), PatternValueMode(config.getInt(prefix + "patternValueMode")), config.resourcesInterface());
+    setPattern(config.getString(prefix + "md5sum"), config.getString(prefix + "pattern"), PatternValueMode(config.getInt(prefix + "patternValueMode")), config.resourcesInterface());
     setNoiseSeed(quint64(config.getInt(prefix + "noiseSeed")));
     setSpread(config.getDouble(prefix + "spread"));
 }

@@ -365,6 +365,7 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
 {
     e.setAttribute("type", type);
     e.setAttribute("filename", filename());
+    e.setAttribute("md5sum", md5Sum());
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
@@ -383,6 +384,10 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element, KisResourcesInterfaceSP
     KisBrushSP brush = KisBrushRegistry::instance()->createBrush(element, resourcesInterface);
     if (brush && element.attribute("BrushVersion", "1") == "1") {
         brush->setScale(brush->scale() * 2.0);
+    }
+    if (!brush) {
+        QDomElement el;
+        brush = KisBrushRegistry::instance()->get("auto_brush")->createBrush(el, resourcesInterface);
     }
     return brush;
 }

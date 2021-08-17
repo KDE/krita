@@ -38,9 +38,13 @@ public:
     void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
     bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;
 
+private:
+    QPointF snapDocPoint(const QPointF &point, Qt::KeyboardModifiers modifiers) const;
+
 protected:
 
     virtual void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive) = 0;
+    virtual bool shiftModifierIsUsed() const;
 
     virtual bool beginPrimaryAction(const QPointF &pt) = 0;
     virtual void continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive) = 0;

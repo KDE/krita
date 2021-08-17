@@ -31,7 +31,7 @@ public:
 
     bool saveBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external, bool addMergedImage);
 
-    bool savePalettes(KoStore *store, KisImageSP image, const QString &uri);
+    bool saveResources(KoStore *store, KisImageSP image, const QString &uri);
 
     bool saveStoryboard(KoStore *store, KisImageSP image, const QString &uri);
 
@@ -52,7 +52,7 @@ private:
     bool saveMirrorAxis(QDomDocument& doc, QDomElement& element);
     bool saveAudio(QDomDocument& doc, QDomElement& element);
     bool saveNodeKeyframes(KoStore *store, QString location, const KisNode *node);
-    void savePalettesToXML(QDomDocument& doc, QDomElement &element);
+    void saveResourcesToXML(QDomDocument& doc, QDomElement &element);
     void saveStoryboardToXML(QDomDocument& doc, QDomElement &element);
     void saveAnimationMetadataToXML(QDomDocument& doc, QDomElement &element, KisImageSP image);
 

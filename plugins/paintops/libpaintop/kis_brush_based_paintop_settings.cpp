@@ -134,23 +134,6 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformatio
     return brushOutlineImpl(info, mode, alignForZoom, 1.0);
 }
 
-bool KisBrushBasedPaintOpSettings::isValid() const
-{
-    QStringList files = getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
-    files << getString(KisPaintOpUtils::RequiredBrushFileTag);
-
-    Q_FOREACH (const QString &file, files) {
-        if (!file.isEmpty()) {
-            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resourceForFilename(file);
-            if (!brush) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
 void KisBrushBasedPaintOpSettings::setAngle(qreal value)
 {
     BrushWriter w(this);

@@ -1,4 +1,4 @@
-if(NOT APPLE)
+if(NOT MSVC AND NOT APPLE)
 add_subdirectory(brush/tests)
 endif()
 

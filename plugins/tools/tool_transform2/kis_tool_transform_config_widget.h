@@ -31,7 +31,7 @@ public Q_SLOTS:
     void slotUpdateIcons();
 
 Q_SIGNALS:
-    void sigConfigChanged();
+    void sigConfigChanged(bool needsPreviewRecalculation);
     void sigApplyTransform();
     void sigResetTransform(ToolTransformArgs::TransformMode mode);
     void sigCancelTransform();
@@ -114,7 +114,7 @@ private:
 
     void blockNotifications();
     void unblockNotifications();
-    void notifyConfigChanged();
+    void notifyConfigChanged(bool needsPreviewRecalculation = true);
 
     void blockUiSlots();
     void unblockUiSlots();

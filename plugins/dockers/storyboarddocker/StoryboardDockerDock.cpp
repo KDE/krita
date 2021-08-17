@@ -10,6 +10,7 @@
 #include "StoryboardModel.h"
 #include "StoryboardDelegate.h"
 #include "StoryboardView.h"
+#include "StoryboardUtils.h"
 #include "DlgExportStoryboard.h"
 
 #include <QMenu>
@@ -336,11 +337,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             firstIndex = m_storyboardModel->index(0,0);
         }
         else {
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
-            firstIndex = firstIndex.siblingAtRow(firstIndex.row() + 1);
-#else
-            firstIndex = firstIndex.sibling(firstIndex.row() + 1, 0);
-#endif
+            siblingAtRow(firstIndex, firstIndex.row() + 1);
         }
 
         int lastItemFrame = dlg.lastItem();

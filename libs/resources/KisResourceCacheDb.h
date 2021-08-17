@@ -93,6 +93,10 @@ private:
     static bool makeResourceTheCurrentVersion(int resourceId, KoResourceSP resource);
     static bool removeResourceCompletely(int resourceId);
 
+    /// Note that here you can put even the original filename - any filename from the versioned_resources - and it will still find it
+    static bool getResourceIdFromVersionedFilename(QString filename, QString resourceType, int& outResourceId);
+    static bool getAllVersionsLocations(int resourceId, QStringList &outVersionsLocationsList);
+
 
     static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
     static bool addResources(KisResourceStorageSP storage, QString resourceType);
@@ -103,7 +107,7 @@ private:
     static bool tagResource(KisResourceStorageSP storage, const QString &resourceName, const QString &resourceFileName, KisTagSP tag, const QString &resourceType);
     static bool hasTag(const QString &url, const QString &resourceType);
     static bool linkTagToStorage(const QString &url, const QString &resourceType, const QString &storageLocation);
-    static bool addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment);
+    static bool addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment, const QString &filename);
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);

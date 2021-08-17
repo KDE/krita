@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.10" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.13" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -133,7 +133,8 @@ QSqlError createDatabase(const QString &location)
             if (QVersionNumber::compare(schemaVersionNumber, currentSchemaVersionNumber) != 0) {
                 // XXX: Implement migration
                 schemaIsOutDated = true;
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database. Your local tags will be lost."));
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database."));
+                KisResourceLocator::instance()->saveTags();
                 db.close();
                 KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
                 QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
@@ -443,8 +444,8 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
     q.bindValue(":version", resource->version());
     q.bindValue(":filename", resource->filename());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
-    q.bindValue(":md5sum", resource->md5().toHex());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5Sum().isEmpty());
+    q.bindValue(":md5sum", resource->md5Sum());
     r = q.exec();
     if (!r) {
 
@@ -576,7 +577,7 @@ bool KisResourceCacheDb::updateResourceTableForResourceIfNeeded(int resourceId, 
         KoResourceSP resource = storage->resource(url);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resource, false);
         resource->setVersion(maxVersion);
-        resource->setMD5(storage->resourceMd5(url));
+        resource->setMD5Sum(storage->resourceMd5(url));
         r = makeResourceTheCurrentVersion(resourceId, resource);
     }
 
@@ -593,6 +594,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
                   ", filename  = :filename\n"
                   ", tooltip   = :tooltip\n"
                   ", thumbnail = :thumbnail\n"
+                  ", status    = 1\n"
                   "WHERE id    = :id");
     if (!r) {
         qWarning() << "Could not prepare updateResource statement" << q.lastError();
@@ -680,6 +682,67 @@ bool KisResourceCacheDb::removeResourceCompletely(int resourceId)
     return r;
 }
 
+bool KisResourceCacheDb::getResourceIdFromVersionedFilename(QString filename, QString resourceType, int &outResourceId)
+{
+    QSqlQuery q;
+
+    bool r = q.prepare("SELECT resource_id FROM versioned_resources\n"
+                       ", resources\n"
+                       ", resource_types\n"
+                       "WHERE versioned_resources.filename = :filename\n" // bind to filename
+                       "AND resources.id = versioned_resources.resource_id\n" // join resources + versioned_resources
+                       "AND resource_types.id = resources.resource_type_id\n"  // join resources_types + resources
+                       "AND resource_types.name = :resourceType;");
+
+    if (!r) {
+        qWarning() << "Could not prepare getResourceIdFromVersionedFilename statement" << q.lastError() << q.executedQuery();
+        return r;
+    }
+
+    q.bindValue(":filename", filename);
+    q.bindValue(":resourceType", resourceType);
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not execute getResourceIdFromVersionedFilename statement" << q.lastError() << filename << resourceType;
+        return r;
+    }
+
+    r = q.first();
+    if (r) {
+        outResourceId = q.value("resource_id").toInt();
+    }
+
+    return r;
+}
+
+bool KisResourceCacheDb::getAllVersionsLocations(int resourceId, QStringList &outVersionsLocationsList)
+{
+    QSqlQuery q;
+    bool r = q.prepare("SELECT filename FROM versioned_resources \n"
+                  "WHERE resource_id = :resource_id;");
+
+    if (!r) {
+        qWarning() << "Could not prepare getAllVersionsLocations statement" << q.lastError();
+        return r;
+    }
+
+    q.bindValue(":resource_id", resourceId);
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not execute getAllVersionsLocations statement" << q.lastError() << resourceId;
+        return r;
+    }
+
+    outVersionsLocationsList = QStringList();
+    while (q.next()) {
+        outVersionsLocationsList << q.value("filename").toString();
+    }
+
+    return r;
+
+}
+
 bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
 {
     bool r = false;
@@ -690,7 +753,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     if (!resource || !resource->valid()) {
-        qWarning() << "KisResourceCacheDb::addResource: The resource is not valid";
+        qWarning() << "KisResourceCacheDb::addResource: The resource is not valid:" << resource->filename();
         // We don't care about invalid resources and will just ignore them.
         return true;
     }
@@ -715,7 +778,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
             qWarning() << "Could not prepare select count from versioned_resources query" << q.lastError();
             return false;
         }
-        q.bindValue(":md5sum", resource->md5().toHex());
+        q.bindValue(":md5sum", resource->md5Sum());
         if (!q.exec()) {
             qWarning() << "Could not execute select from resource_types query" << q.lastError();
             return false;
@@ -793,7 +856,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     q.bindValue(":status", active);
     q.bindValue(":temporary", (temporary ? 1 : 0));
-    q.bindValue(":md5sum", resource->md5().toHex());
+    q.bindValue(":md5sum", resource->md5Sum());
 
     r = q.exec();
     if (!r) {
@@ -842,7 +905,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
             KoResourceSP resource = verIt->resource();
             if (resource && resource->valid()) {
                 resource->setVersion(verIt->guessedVersion());
-                resource->setMD5(storage->resourceMd5(verIt->url()));
+                resource->setMD5Sum(storage->resourceMd5(verIt->url()));
 
                 if (resourceId < 0) {
                     if (addResource(storage, iter->lastModified(), resource, iter->type())) {
@@ -994,7 +1057,7 @@ bool KisResourceCacheDb::linkTagToStorage(const QString &url, const QString &res
 }
 
 
-bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment)
+bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment, const QString &filename)
 {
 
     if (hasTag(url, resourceType)) {
@@ -1033,7 +1096,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
     {
         QSqlQuery q;
         if (!q.prepare("INSERT INTO tags\n"
-                       "(url, name, comment, resource_type_id, active)\n"
+                       "(url, name, comment, resource_type_id, active, filename)\n"
                        "VALUES\n"
                        "( :url\n"
                        ", :name\n"
@@ -1041,7 +1104,8 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
                        ", (SELECT id\n"
                        "   FROM   resource_types\n"
                        "   WHERE  name = :resource_type)\n"
-                       ", 1"
+                       ", 1\n"
+                       ", :filename"
                        ");")) {
             qWarning() << "Could not prepare insert tag statement" << q.lastError();
             return false;
@@ -1053,6 +1117,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
         q.bindValue(":name", name);
         q.bindValue(":comment", comment);
         q.bindValue(":resource_type", resourceType);
+        q.bindValue(":filename", filename);
 
 
         if (!q.exec()) {
@@ -1071,7 +1136,7 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
     QSharedPointer<KisResourceStorage::TagIterator> iter = storage->tags(resourceType);
     while(iter->hasNext()) {
         iter->next();
-        if (!addTag(resourceType, storage->location(), iter->url(), iter->name(), iter->comment())) {
+        if (!addTag(resourceType, storage->location(), iter->url(), iter->name(), iter->comment(), iter->filename())) {
             qWarning() << "Could not add tag" << iter->url() << "to the database";
         }
         if (!iter->tag()->defaultResources().isEmpty()) {
@@ -1460,7 +1525,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
 
             res->setVersion(itA->version);
-            res->setMD5(storage->resourceMd5(itA->url));
+            res->setMD5Sum(storage->resourceMd5(itA->url));
             if (!res->valid()) {
                 KisUsageLogger::log("Could not retrieve md5 for resource" + itA->url);
                 ++itA;
@@ -1468,7 +1533,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
 
             const bool retval = addResource(storage, itA->timestamp, res, resourceType);
-            KIS_SAFE_ASSERT_RECOVER(retval) {
+            if (!retval) {
                 KisUsageLogger::log("Could not add resource" + itA->url);
                 ++itA;
                 continue;
@@ -1485,7 +1550,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             for (auto it = std::next(itA); it != nextResource; ++it) {
                 KoResourceSP res = storage->resource(it->url);
                 res->setVersion(it->version);
-                res->setMD5(storage->resourceMd5(it->url));
+                res->setMD5Sum(storage->resourceMd5(it->url));
                 if (!res->valid()) {
                     continue;
                 }
@@ -1517,7 +1582,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 KoResourceSP res = storage->resource(itA->url);
                 if (res) {
                     res->setVersion(itA->version);
-                    res->setMD5(storage->resourceMd5(itA->url));
+                    res->setMD5Sum(storage->resourceMd5(itA->url));
 
                     const bool result = addResourceVersionImpl(itA->resourceId, itA->timestamp, storage, res);
                     KIS_SAFE_ASSERT_RECOVER_NOOP(result);
@@ -1692,10 +1757,12 @@ QMap<QString, QVariant> KisResourceCacheDb::metaDataForId(int id, const QString 
     while (q.next()) {
         QString key = q.value(0).toString();
         QByteArray ba = q.value(1).toByteArray();
-        QDataStream ds(QByteArray::fromBase64(ba));
-        QVariant value;
-        ds >> value;
-        map[key] = value;
+        if (!ba.isEmpty()) {
+            QDataStream ds(QByteArray::fromBase64(ba));
+            QVariant value;
+            ds >> value;
+            map[key] = value;
+        }
     }
 
     return map;
@@ -1754,17 +1821,18 @@ bool KisResourceCacheDb::addMetaDataForId(const QMap<QString, QVariant> map, int
         q.bindValue(":key", iter.key());
 
         QVariant v = iter.value();
-        QByteArray ba;
-        QDataStream ds(&ba, QIODevice::WriteOnly);
-        ds << v;
-        ba = ba.toBase64();
-        q.bindValue(":value", QString::fromLatin1(ba));
+        if (!v.isNull() && v.isValid()) {
+            QByteArray ba;
+            QDataStream ds(&ba, QIODevice::WriteOnly);
+            ds << v;
+            ba = ba.toBase64();
+            q.bindValue(":value", QString::fromLatin1(ba));
 
-        if (!q.exec()) {
-            qWarning() << "Could not insert metadata" << q.lastError();
-            return false;
+            if (!q.exec()) {
+                qWarning() << "Could not insert metadata" << q.lastError();
+                return false;
+            }
         }
-
         ++iter;
     }
     return true;

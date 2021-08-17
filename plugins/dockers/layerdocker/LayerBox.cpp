@@ -141,6 +141,16 @@ inline void LayerBox::addActionToMenu(QMenu *menu, const QString &id)
     }
 }
 
+qint32 LayerBox::convertOpacityToInt(qreal opacity)
+{
+    /**
+     * Scales opacity from the range 0...100
+     * to the integer range 0...255
+     */
+
+    return qMin(255, int(opacity * 2.55 + 0.5));
+}
+
 LayerBox::LayerBox()
     : QDockWidget(i18n("Layers"))
     , m_canvas(0)
@@ -821,13 +831,14 @@ void LayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
     m_blockOpacityUpdate = true;
-    m_nodeManager->nodeOpacityChanged(m_newOpacity);
+    m_nodeManager->setNodeOpacity(m_changedOpacityNode, convertOpacityToInt(m_newOpacity));
     m_blockOpacityUpdate = false;
 }
 
 void LayerBox::slotOpacitySliderMoved(qreal opacity)
 {
     m_newOpacity = opacity;
+    m_changedOpacityNode = m_activeNode;
     m_opacityDelayTimer.start(200);
 }
 

@@ -34,7 +34,7 @@ public:
     QString name();
     QString filename();
     QString tooltip();
-    QByteArray md5();
+    QString md5sum();
     QImage thumbnail();
     KoResourceSP resource();
 private:

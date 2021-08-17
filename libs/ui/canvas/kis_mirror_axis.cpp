@@ -260,6 +260,11 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 
         if(d->xActive) {
             float axisX = view()->viewConverter()->widgetToImage<QPoint>(pos).x();
+            // axisX should be either int or int + 0.5
+            axisX *= 2; // to be able to choose in the middle of the pixel
+            axisX = round(axisX); // find the closest acceptable point
+            axisX = axisX/2; // return to the original space
+
 
             d->setAxisPosition(axisX, d->config.axisPosition().y());
             d->config.setHorizontalHandlePosition(KisAlgebra2D::dotProduct<QPointF>(pos - d->horizontalAxis.p1(), d->horizontalAxis.unitVector().p2() - d->horizontalAxis.p1()));
@@ -272,6 +277,10 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
         }
         if(d->yActive) {
             float axisY = view()->viewConverter()->widgetToImage<QPoint>(pos).y();
+            // axisX should be either int or int + 0.5
+            axisY *= 2; // to be able to choose in the middle of the pixel
+            axisY = round(axisY); // find the closest acceptable point
+            axisY = axisY/2; // return to the original space
 
             d->setAxisPosition(d->config.axisPosition().x(), axisY);
             d->config.setVerticalHandlePosition(KisAlgebra2D::dotProduct<QPointF>(pos - d->verticalAxis.p1(), d->verticalAxis.unitVector().p2() - d->verticalAxis.p1()));

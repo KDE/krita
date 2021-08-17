@@ -67,10 +67,10 @@ private Q_SLOTS:
     void styleButtonPressed(int buttonId);
 
     void noColorSelected();
-     void shapeChanged();
+    void shapeChanged();
 
     /// apply color changes to the selected shape
-    void colorChanged();
+    void colorChanged(std::pair<QColor, KoFlake::FillVariant> resource);
 
     /// the pattern of the fill changed, apply the changes
     void patternChanged(QSharedPointer<KoShapeBackground> background);

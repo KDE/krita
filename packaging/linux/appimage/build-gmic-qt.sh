@@ -40,7 +40,7 @@ mkdir -p $BUILD_PREFIX/gmic_qt_krita.appdir/usr/share
 
 # Copy over the artifacts...
 cp $DEPS_INSTALL_PREFIX/bin/gmic_krita_qt* $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin
-cp $BUILD_PREFIX/deps-build/ext_gmic/gmic-qt/resources/gmic_hat.png $BUILD_PREFIX/gmic_qt_krita.appdir/gmic_krita_qt.png
+cp $BUILD_PREFIX/deps-build/ext_gmic/ext_gmic-prefix/src/ext_gmic/gmic-qt/resources/gmic_hat.png $BUILD_PREFIX/gmic_qt_krita.appdir/gmic_krita_qt.png
 
 # Now generate the Appimage for it
 linuxdeployqt $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin/gmic_krita_qt.desktop -verbose=2 -bundle-non-qt-libs -appimage

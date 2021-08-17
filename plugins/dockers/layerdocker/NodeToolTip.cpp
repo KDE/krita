@@ -34,7 +34,9 @@ QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
     QString name = index.data(Qt::DisplayRole).toString();
     KisBaseNode::PropertyList properties = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     QString rows;
-    const QString row = QString("<tr><td align=\"right\"><nobr>%1:</nobr></td><td align=\"left\">%2</td></tr>");
+    // Note: Can't use <nobr> due to https://bugreports.qt.io/browse/QTBUG-1135
+    // It breaks randomly with CJK. Works fine with `white-space:pre` though.
+    const QString row = QString("<tr><td align=\"right\"><p style=\"white-space:pre\">%1:</p></td><td align=\"left\">%2</td></tr>");
     QString value;
     for(int i = 0, n = properties.count(); i < n; ++i) {
         if (properties[i].isMutable)
@@ -62,7 +64,7 @@ QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
     doc->setHtml(html);
 
     const int margin = 16;
-    doc->setTextWidth(qMin(doc->size().width() + 2 * margin, qreal(500.0)));
+    doc->setTextWidth(qMin(doc->size().width() + 2 * margin, qreal(600.0)));
 
     doc->setDocumentMargin(margin);
     doc->setUseDesignMetrics(true);

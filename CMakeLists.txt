@@ -2,7 +2,7 @@ project(krita)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
@@ -697,6 +697,14 @@ endif()
 ############################
 ###########################
 
+
+find_package(WebP 1.2.0)
+set_package_properties(WebP PROPERTIES
+    URL "https://developers.google.com/speed/webp"
+    TYPE OPTIONAL
+    PURPOSE "Required by the WebP plugin"
+)
+
 ##
 ## Test for KSeExpr
 ##
@@ -1111,7 +1119,7 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..
-  set (ANDROID_SDK_COMPILE_API "29")
+  set (ANDROID_SDK_COMPILE_API "30")
   if ((${NDK_VERSION} GREATER_EQUAL 20))
     set (USE_LLVM ON)
   endif()

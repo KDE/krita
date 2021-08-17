@@ -51,10 +51,16 @@ public:
     QList< QPointer<QWidget> > createOptionWidgets() override;
 
     bool eventFilter(QObject *obj, QEvent *event) override;
-    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
-    void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
-    void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
 
+    void beginPrimaryAction(KoPointerEvent* event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+
+    // reimplementing KisTool's method because that method calls beginPrimaryAction
+    // which now is used to start the path tool.
+    void beginPrimaryDoubleClickAction(KoPointerEvent* event) override;
 protected:
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;

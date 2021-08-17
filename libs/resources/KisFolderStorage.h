@@ -40,7 +40,7 @@ public:
     QStringList metaDataKeys() const override;
     QVariant metaData(const QString &key) const override;
 
-    QByteArray resourceMd5(const QString &url) override;
+    QString resourceMd5(const QString &url) override;
 private:
     friend class FolderIterator;
 

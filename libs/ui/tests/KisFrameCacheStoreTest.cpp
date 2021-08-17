@@ -109,7 +109,7 @@ public:
         m_updateInfoBuilder.setEffectiveTextureSize(QSize(256 - 16, 256 - 16));
 
         connect(this, SIGNAL(sigCompleteRegenerationInternal(int)), SLOT(notifyFrameCompleted(int)));
-        connect(this, SIGNAL(sigCancelRegenerationInternal(int)), SLOT(notifyFrameCancelled(int)));
+        connect(this, SIGNAL(sigCancelRegenerationInternal(int, CancelReason)), SLOT(notifyFrameCancelled(int, CancelReason)));
     }
 
     void frameCompletedCallback(int frame, const KisRegion &requestedRegion) override {
@@ -139,13 +139,13 @@ public:
         emit sigCompleteRegenerationInternal(frame);
     }
 
-    void frameCancelledCallback(int frame) override {
-        emit sigCancelRegenerationInternal(frame);
+    void frameCancelledCallback(int frame, CancelReason cancelReason) override {
+        emit sigCancelRegenerationInternal(frame, cancelReason);
     }
 
 Q_SIGNALS:
     void sigCompleteRegenerationInternal(int frame);
-    void sigCancelRegenerationInternal(int frame);
+    void sigCancelRegenerationInternal(int frame, CancelReason cancelReason);
 
 private:
     KisOpenGLUpdateInfoBuilder m_updateInfoBuilder;

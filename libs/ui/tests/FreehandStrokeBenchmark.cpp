@@ -123,7 +123,7 @@ void FreehandStrokeBenchmark::initTestCase()
         KIS_ASSERT(QFileInfo(fullFileName).exists());
 
         KisResourceModel model(ResourceType::Brushes);
-        model.importResourceFile(fullFileName);
+        model.importResourceFile(fullFileName, false);
     }
 
     {
@@ -132,7 +132,7 @@ void FreehandStrokeBenchmark::initTestCase()
         KIS_ASSERT(QFileInfo(fullFileName).exists());
 
         KisResourceModel model(ResourceType::Brushes);
-        model.importResourceFile(fullFileName);
+        model.importResourceFile(fullFileName, false);
     }
 }
 

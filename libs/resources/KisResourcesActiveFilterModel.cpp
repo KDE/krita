@@ -61,11 +61,11 @@ bool KisResourceModel::setResourceInactive(const QModelIndex &index)
     return false;
 }
 
-bool KisResourceModel::importResourceFile(const QString &filename)
+bool KisResourceModel::importResourceFile(const QString &filename, const bool allowOverwrite)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->importResourceFile(filename);
+        return source->importResourceFile(filename, allowOverwrite);
     }
     return false;
 }

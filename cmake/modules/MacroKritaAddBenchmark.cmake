@@ -39,7 +39,7 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
                 string(REGEX MATCH "QTEST_(KDE)?MAIN" using_qtest "${file_CONTENT}")
             endif()
         endif()
-    endforeach(_filename)
+    endforeach()
 
     get_target_property( loc ${_test_NAME} LOCATION )
     if(WIN32)

@@ -21,7 +21,7 @@ Q_GLOBAL_STATIC(KisBusyWaitBroker, s_instance)
 struct KisBusyWaitBroker::Private
 {
     QMutex lock;
-    QSet<KisImage*> waitingOnImages;
+    QHash<KisImage*, int> waitingOnImages;
     int guiThreadLockCount = 0;
 
     std::function<void(KisImageSP)> feedbackCallback;
@@ -46,14 +46,18 @@ void KisBusyWaitBroker::notifyWaitOnImageStarted(KisImage* image)
 {
     if (QThread::currentThread() != qApp->thread()) return;
 
+    bool needsStartCallback = false;
+
     {
         QMutexLocker l(&m_d->lock);
+
         m_d->guiThreadLockCount++;
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->waitingOnImages.contains(image));
-        m_d->waitingOnImages.insert(image);
+        m_d->waitingOnImages[image]++;
+
+        needsStartCallback = m_d->waitingOnImages[image] == 1;
     }
 
-    if (m_d->feedbackCallback && image->refCount()) {
+    if (m_d->feedbackCallback && needsStartCallback && image->refCount()) {
         m_d->feedbackCallback(image);
     }
 }
@@ -65,8 +69,13 @@ void KisBusyWaitBroker::notifyWaitOnImageEnded(KisImage* image)
     {
         QMutexLocker l(&m_d->lock);
         m_d->guiThreadLockCount--;
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->waitingOnImages.contains(image));
-        m_d->waitingOnImages.remove(image);
+
+        m_d->waitingOnImages[image]--;
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->waitingOnImages[image] >= 0);
+
+        if (m_d->waitingOnImages[image] == 0) {
+            m_d->waitingOnImages.remove(image);
+        }
     }
 }
 

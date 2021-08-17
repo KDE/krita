@@ -4,8 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KIS_SHAPE_SELETION_TEST_H
-#define KIS_SHAPE_SELETION_TEST_H
+#ifndef KIS_SHAPE_SELECTION_TEST_H
+#define KIS_SHAPE_SELECTION_TEST_H
 
 #include <simpletest.h>
 

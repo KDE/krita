@@ -115,6 +115,10 @@ void Imagesplit::slotImagesplit()
     KisCoordinatesConverter converter;
     QList <qreal> xGuides = viewManager()->document()->guidesConfig().verticalGuideLines();
     QList <qreal> yGuides = viewManager()->document()->guidesConfig().horizontalGuideLines();
+
+    std::sort(xGuides.begin(), xGuides.end());
+    std::sort(yGuides.begin(), yGuides.end());
+
     KisImageWSP image = viewManager()->image();
 
     converter.setImage(image);

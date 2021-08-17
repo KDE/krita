@@ -85,7 +85,7 @@ void KisTIFFOptionsWidget::activated(int index)
         codecsOptionsStack->setCurrentIndex(2);
         break;
     case 4:
-        codecsOptionsStack->setCurrentIndex(4);
+        codecsOptionsStack->setCurrentIndex(3);
         break;
     default:
         codecsOptionsStack->setCurrentIndex(0);

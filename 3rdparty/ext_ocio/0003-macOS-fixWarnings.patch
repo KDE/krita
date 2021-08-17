@@ -1,0 +1,12 @@
+diff --git a/src/core/Config.cpp b/src/core/Config.cpp
+index f5cb379..cec39be 100644
+--- a/src/core/Config.cpp
++++ b/src/core/Config.cpp
+@@ -330,7 +330,6 @@ OCIO_NAMESPACE_ENTER
+                 sanitytext_ = rhs.sanitytext_;
+                 
+                 cacheids_ = rhs.cacheids_;
+-                cacheidnocontext_ = cacheidnocontext_;
+             }
+             return *this;
+         }

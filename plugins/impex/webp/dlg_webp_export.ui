@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>
+  SPDX-FileCopyrightText: 2021 L. E. Segovia &lt;amy@amyspark.me&gt;
+  SPDX-License-Identifier: GPL-3.0-or-later
+ </author>
+ <class>DlgWebPExport</class>
+ <widget class="QWidget" name="DlgWebPExport">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>557</width>
+    <height>529</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="general">
+      <attribute name="title">
+       <string>General</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout">
+       <property name="formAlignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblPreset">
+         <property name="text">
+          <string>Preset</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="preset"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblLossless">
+         <property name="text">
+          <string>Lossless compression</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="lossless">
+         <property name="text">
+          <string>Enabled</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lblQuality">
+         <property name="toolTip">
+          <string>If Lossless is enabled: 0 = fastest but larger files, 100 = slower but better.
+If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
+         </property>
+         <property name="text">
+          <string>Quality</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="KisDoubleSliderSpinBox" name="quality">
+         <property name="toolTip">
+          <string>If Lossless is enabled: 0 = fastest but larger files, 100 = slower but better.
+If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
+         </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="value">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lblTradeoff">
+         <property name="text">
+          <string>Tradeoff</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="lblFaster">
+           <property name="text">
+            <string>Faster</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="lblSlowerBetter">
+           <property name="text">
+            <string>Slower/Better</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="KisSliderSpinBox" name="tradeoff">
+           <property name="maximum">
+            <number>6</number>
+           </property>
+           <property name="value">
+            <number>3</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lblDithering">
+         <property name="text">
+          <string>Dithering</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="dithering">
+         <property name="text">
+          <string>Enabled</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="advanced">
+      <attribute name="title">
+       <string>Advanced</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>535</width>
+           <height>476</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignHCenter|Qt::AlignTop</set>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>521</width>
+            <height>858</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="formAlignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblTargetSize">
+             <property name="toolTip">
+              <string>If non-zero, sets the desired target size in bytes. Takes precedence over the compression parameters.</string>
+             </property>
+             <property name="text">
+              <string>Target Size</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="targetSize">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>If non-zero, sets the desired target size in bytes. Takes precedence over the compression parameters.</string>
+             </property>
+             <property name="suffix">
+              <string> kB</string>
+             </property>
+             <property name="maximum">
+              <number>1000000000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblTargetPSNR">
+             <property name="toolTip">
+              <string>If non-zero, specifies the minimal distortion to try to achieve. Takes precedence over Target Size.</string>
+             </property>
+             <property name="text">
+              <string>Target PSNR</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="KisDoubleParseUnitSpinBox" name="targetPSNR">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>If non-zero, specifies the minimal distortion to try to achieve. Takes precedence over Target Size.</string>
+             </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <double>100.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lblSegments">
+             <property name="toolTip">
+              <string>Maximum number of segments (1 to 4).</string>
+             </property>
+             <property name="text">
+              <string>Segments</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="KisSliderSpinBox" name="segments">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Maximum number of segments (1 to 4).</string>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>4</number>
+             </property>
+             <property name="pageStep" stdset="0">
+              <number>2</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="lblSNSStrength">
+             <property name="toolTip">
+              <string>Spatial Noise Shaping: 0 = off, 100 = maximum.</string>
+             </property>
+             <property name="text">
+              <string>SNS Strength</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="KisSliderSpinBox" name="snsStrength">
+             <property name="toolTip">
+              <string>Spatial Noise Shaping: 0 = off, 100 = maximum.</string>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="lblFilterStrength">
+             <property name="toolTip">
+              <string>Filter strength: 0 = off, 100 = strongest.</string>
+             </property>
+             <property name="text">
+              <string>Filter Strength</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="KisSliderSpinBox" name="filterStrength">
+             <property name="toolTip">
+              <string>Filter strength: 0 = off, 100 = strongest.</string>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="lblFilterSharpness">
+             <property name="toolTip">
+              <string>Filter sharpness: 0 = off, 7 = least sharp.</string>
+             </property>
+             <property name="text">
+              <string>Filter Sharpness</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="KisSliderSpinBox" name="filterSharpness">
+             <property name="toolTip">
+              <string>Filter sharpness: 0 = off, 7 = least sharp.</string>
+             </property>
+             <property name="maximum">
+              <number>7</number>
+             </property>
+             <property name="pageStep" stdset="0">
+              <number>2</number>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="lblFilterType">
+             <property name="toolTip">
+              <string>0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or Auto Adjust Filter is enabled.</string>
+             </property>
+             <property name="text">
+              <string>Filter Type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QComboBox" name="filterType">
+             <property name="toolTip">
+              <string>0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or Auto Adjust Filter is enabled.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="lblAutofilter">
+             <property name="text">
+              <string>Auto Adjust Filter Strength</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QCheckBox" name="autofilter">
+             <property name="text">
+              <string>Enabled</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="lblAlphaCompression">
+             <property name="toolTip">
+              <string>Algorithm for encoding the alpha plane (0 = None, 1 = compressed with WebP lossless). Default is 1.</string>
+             </property>
+             <property name="text">
+              <string>Alpha Plane Compression</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QComboBox" name="alphaCompression"/>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="lblAlphaFiltering">
+             <property name="text">
+              <string>Predictive Filtering for Alpha Plane</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="1">
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblFast">
+               <property name="text">
+                <string>Fast</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNone">
+               <property name="text">
+                <string>None</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="lblBest">
+               <property name="text">
+                <string>Best</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="3">
+              <widget class="KisSliderSpinBox" name="alphaFiltering">
+               <property name="maximum">
+                <number>2</number>
+               </property>
+               <property name="pageStep" stdset="0">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="lblAlphaQuality">
+             <property name="toolTip">
+              <string>0 = smallest size, 100 = lossless. Default is 100.</string>
+             </property>
+             <property name="text">
+              <string>Alpha Plane Quality</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1">
+            <widget class="KisSliderSpinBox" name="alphaQuality">
+             <property name="toolTip">
+              <string>0 = smallest size, 100 = lossless. Default is 100.</string>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="0">
+            <widget class="QLabel" name="lblPass">
+             <property name="toolTip">
+              <string>Number of entropy-analysis passes (1 to 10).</string>
+             </property>
+             <property name="text">
+              <string>Entropy Passes</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="1">
+            <widget class="KisSliderSpinBox" name="pass">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Number of entropy-analysis passes (1 to 10).</string>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>10</number>
+             </property>
+             <property name="singleStep">
+              <number>1</number>
+             </property>
+             <property name="pageStep" stdset="0">
+              <number>2</number>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="0">
+            <widget class="QLabel" name="lblShowCompressed">
+             <property name="toolTip">
+              <string>If enabled, export the compressed picture back. In-loop filtering is not applied.</string>
+             </property>
+             <property name="text">
+              <string>Show Compressed</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="1">
+            <widget class="QCheckBox" name="showCompressed">
+             <property name="toolTip">
+              <string>If enabled, export the compressed picture back. In-loop filtering is not applied.</string>
+             </property>
+             <property name="text">
+              <string>Enabled</string>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="0">
+            <widget class="QLabel" name="lblPreprocessing">
+             <property name="text">
+              <string>Preprocessing Filter</string>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="1">
+            <widget class="QComboBox" name="preprocessing"/>
+           </item>
+           <item row="14" column="0">
+            <widget class="QLabel" name="lblPartitions">
+             <property name="toolTip">
+              <string>log2(number of token partitions) between 0 and 3. Default is 0 for easier progressive decoding.</string>
+             </property>
+             <property name="text">
+              <string>Partitions</string>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="1">
+            <widget class="KisSliderSpinBox" name="partitions">
+             <property name="toolTip">
+              <string>log2(number of token partitions) between 0 and 3. Default is 0 for easier progressive decoding.</string>
+             </property>
+             <property name="maximum">
+              <number>3</number>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="0">
+            <widget class="QLabel" name="lblPartitionLimit">
+             <property name="toolTip">
+              <string>Quality degradation allowed to fit the 512KB limit on prediction modes coding (0 = no degradation, 100 = maximum possible degradation).</string>
+             </property>
+             <property name="text">
+              <string>Partition Limit</string>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="1">
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblMaximumDegradation">
+               <property name="text">
+                <string>Maximum degradation</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNoDegradation">
+               <property name="text">
+                <string>No degradation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <widget class="KisSliderSpinBox" name="partitionLimit">
+               <property name="toolTip">
+                <string>Quality degradation allowed to fit the 512KB limit on prediction modes coding (0 = no degradation, 100 = maximum possible degradation).</string>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>100</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="16" column="0">
+            <widget class="QLabel" name="lblEmulateJPEGSize">
+             <property name="toolTip">
+              <string>If enabled, compression parameters will be remapped to better match the expected output size from JPEG compression. Generally, the output size will be similar but the degradation will be lower.</string>
+             </property>
+             <property name="text">
+              <string>Emulate JPEG Size</string>
+             </property>
+            </widget>
+           </item>
+           <item row="16" column="1">
+            <widget class="QCheckBox" name="emulateJPEGSize">
+             <property name="toolTip">
+              <string>If enabled, compression parameters will be remapped to better match the expected output size from JPEG compression. Generally, the output size will be similar but the degradation will be lower.</string>
+             </property>
+             <property name="text">
+              <string>Enabled</string>
+             </property>
+            </widget>
+           </item>
+           <item row="17" column="0">
+            <widget class="QLabel" name="lblThreadLevel">
+             <property name="toolTip">
+              <string>If enabled, try and use multithreaded encoding.</string>
+             </property>
+             <property name="text">
+              <string>Multithreaded Encoding</string>
+             </property>
+            </widget>
+           </item>
+           <item row="17" column="1">
+            <widget class="QCheckBox" name="threadLevel">
+             <property name="toolTip">
+              <string>If enabled, try and use multithreaded encoding.</string>
+             </property>
+             <property name="text">
+              <string>Enabled</string>
+             </property>
+            </widget>
+           </item>
+           <item row="18" column="0">
+            <widget class="QLabel" name="lblLowMemory">
+             <property name="toolTip">
+              <string>If enabled, reduce memory usage (but increase CPU use).</string>
+             </property>
+             <property name="text">
+              <string>Reduce Memory Usage</string>
+             </property>
+            </widget>
+           </item>
+           <item row="18" column="1">
+            <widget class="QCheckBox" name="lowMemory">
+             <property name="toolTip">
+              <string>If enabled, reduce memory usage (but increase CPU use).</string>
+             </property>
+             <property name="text">
+              <string>Enabled</string>
+             </property>
+            </widget>
+           </item>
+           <item row="19" column="0">
+            <widget class="QLabel" name="lblNearLossless">
+             <property name="toolTip">
+              <string>Near lossless encoding: 0 = max loss, 100 = off. Default is 100.</string>
+             </property>
+             <property name="text">
+              <string>Near Lossless</string>
+             </property>
+            </widget>
+           </item>
+           <item row="19" column="1">
+            <widget class="KisSliderSpinBox" name="nearLossless">
+             <property name="toolTip">
+              <string>Near lossless encoding: 0 = max loss, 100 = off. Default is 100.</string>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="20" column="0">
+            <widget class="QLabel" name="lblExact">
+             <property name="toolTip">
+              <string>If enabled, preserve the exact RGB values under transparent areas. Otherwise, discard this invisible RGB information for better compression. The default is disabled.</string>
+             </property>
+             <property name="text">
+              <string>Exact</string>
+             </property>
+            </widget>
+           </item>
+           <item row="20" column="1">
+            <widget class="QCheckBox" name="exact">
+             <property name="toolTip">
+              <string>If enabled, preserve the exact RGB values under transparent areas. Otherwise, discard this invisible RGB information for better compression. The default is disabled.</string>
+             </property>
+             <property name="text">
+              <string>Enabled</string>
+             </property>
+            </widget>
+           </item>
+           <item row="21" column="0">
+            <widget class="QLabel" name="lblUseSharpYUV">
+             <property name="toolTip">
+              <string>If enabled, allows use of the sharp (and slow) RGB to YUV conversion.</string>
+             </property>
+             <property name="text">
+              <string>Use Sharp YUV</string>
+             </property>
+            </widget>
+           </item>
+           <item row="21" column="1">
+            <widget class="QCheckBox" name="useSharpYUV">
+             <property name="toolTip">
+              <string>If enabled, allows use of the sharp (and slow) RGB to YUV conversion.</string>
+             </property>
+             <property name="text">
+              <string>Enabled</string>
+             </property>
+            </widget>
+           </item>
+           <item row="22" column="0">
+            <widget class="QLabel" name="lblQMin">
+             <property name="toolTip">
+              <string>Minimum permissible quality factor. Default is 0.</string>
+             </property>
+             <property name="text">
+              <string>Minimum Quality</string>
+             </property>
+            </widget>
+           </item>
+           <item row="22" column="1">
+            <widget class="KisSliderSpinBox" name="qMin">
+             <property name="toolTip">
+              <string>Minimum permissible quality factor. Default is 0.</string>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="23" column="0">
+            <widget class="QLabel" name="lblQMax">
+             <property name="toolTip">
+              <string>Maximum permissible quality factor. Default is 100.</string>
+             </property>
+             <property name="text">
+              <string>Maximum Quality</string>
+             </property>
+            </widget>
+           </item>
+           <item row="23" column="1">
+            <widget class="KisSliderSpinBox" name="qMax">
+             <property name="toolTip">
+              <string>Maximum permissible quality factor. Default is 100.</string>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseUnitSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global">kis_double_parse_unit_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

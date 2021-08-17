@@ -89,8 +89,12 @@ namespace KritaUtils
     qreal KRITAIMAGE_EXPORT estimatePortionOfTransparentPixels(KisPaintDeviceSP dev, const QRect &rect, qreal samplePortion);
 
     void KRITAIMAGE_EXPORT mirrorDab(Qt::Orientation dir, const QPoint &center, KisRenderedDab *dab, bool skipMirrorPixels = false);
+    void KRITAIMAGE_EXPORT mirrorDab(Qt::Orientation dir, const QPointF &center, KisRenderedDab *dab, bool skipMirrorPixels = false);
+
     void KRITAIMAGE_EXPORT mirrorRect(Qt::Orientation dir, const QPoint &center, QRect *rc);
+    void KRITAIMAGE_EXPORT mirrorRect(Qt::Orientation dir, const QPointF &center, QRect *rc);
     void KRITAIMAGE_EXPORT mirrorPoint(Qt::Orientation dir, const QPoint &center, QPointF *pt);
+    void KRITAIMAGE_EXPORT mirrorPoint(Qt::Orientation dir, const QPointF &center, QPointF *pt);
 
 
     /**
@@ -108,6 +112,16 @@ namespace KritaUtils
      * See https://bugs.kde.org/show_bug.cgi?id=411056
      */
     QTransform KRITAIMAGE_EXPORT pathShapeBooleanSpaceWorkaround(KisImageSP image);
+
+    enum ThresholdMode {
+        ThresholdNone = 0,
+        ThresholdFloor,
+        ThresholdCeil,
+        ThresholdMaxOut
+    };
+
+    void thresholdOpacity(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode);
+    void thresholdOpacityAlpha8(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode);
 }
 
 #endif /* __KRITA_UTILS_H */

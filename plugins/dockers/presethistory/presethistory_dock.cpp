@@ -82,7 +82,7 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
         QStringList presetHistory = cfg.readEntry<QString>("presethistory", "").split(",", QString::SkipEmptyParts);
         KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         Q_FOREACH (const QString &p, presetHistory) {
-            KisPaintOpPresetSP preset = rserver->resourceByName(p);
+            KisPaintOpPresetSP preset = rserver->resource("", "", p);
             addPreset(preset);
         }
         int ordering = cfg.readEntry("presethistorySorting", int(DisplayOrder::Static));

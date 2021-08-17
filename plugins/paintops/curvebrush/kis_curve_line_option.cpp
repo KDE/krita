@@ -21,6 +21,7 @@ public:
         lineWidthSlider->setSuffix(i18n(" px"));
 
         curvesOpacitySlider->setRange(0.0, 1.0, 2);
+        curvesOpacitySlider->setSingleStep(0.01);
         curvesOpacitySlider->setValue(1.0);
     }
 };

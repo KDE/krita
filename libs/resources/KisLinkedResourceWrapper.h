@@ -26,17 +26,18 @@ public:
         if (!resource) return;
 
         m_type = resource->resourceType().first;
-        m_md5 = resource->md5();
+        m_md5 = resource->md5Sum();
         m_filename = resource->filename();
         m_name = resource->name();
     }
 
-    KisLinkedResourceWrapper(const QByteArray &md5, const QString &filename, const QString &name)
+    KisLinkedResourceWrapper(const QString &md5, const QString &filename, const QString &name)
         : m_md5(md5)
         , m_filename(filename)
         , m_name(name)
     {
     }
+
 
     ResourceTypeSP resource(KisResourcesInterfaceSP resourcesInterface) const
     {
@@ -45,23 +46,7 @@ public:
 
         auto source = resourcesInterface->source<ResourceType>(m_type);
 
-        if (!m_md5.isEmpty()) {
-            result = source.resourceForMD5(m_md5);
-        }
-
-        if (result) return result;
-
-        if (!m_filename.isEmpty()) {
-            result = source.resourceForFilename(m_filename);
-        }
-
-        if (result) return result;
-
-        if (!m_name.isEmpty()) {
-            result = source.resourceForName(m_name);
-        }
-
-        return result;
+        return source.resource(m_md5, m_filename, m_name);
     }
 
     bool isValid() const {
@@ -70,7 +55,7 @@ public:
 
 private:
     QString m_type;
-    QByteArray m_md5;
+    QString m_md5;
     QString m_filename;
     QString m_name;
 };

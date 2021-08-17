@@ -139,8 +139,8 @@ private:
     QSpacerItem *m_mainArea {0};
     KisBrushHud *m_brushHud {0};
     QWidget* m_bottomBarWidget {0};
-    float m_popupPaletteSize {385.0};
-    float m_colorHistoryInnerRadius {72.0};
+    qreal m_popupPaletteSize {385.0};
+    qreal m_colorHistoryInnerRadius {72.0};
     qreal m_colorHistoryOuterRadius {92.0};
     bool m_showColorHistory {true};
     qreal m_rotationTrackSize {18.0};

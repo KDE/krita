@@ -44,6 +44,12 @@ public:
     bool isEmpty() const;
 
     KisLayerStyleKnockoutBlower *knockoutBlower() const;
+
+protected:
+
+    KisLayerStyleFilter* filter() const;
+    KisPSDLayerStyleSP style() const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

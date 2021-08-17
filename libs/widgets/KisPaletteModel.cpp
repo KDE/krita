@@ -438,6 +438,13 @@ void KisPaletteModel::slotPaletteModified() {
     m_colorSet->setPaletteType(KoColorSet::KPL);
 }
 
+void KisPaletteModel::slotExternalPaletteModified(QSharedPointer<KoColorSet> resource)
+{
+    if (resource && resource == m_colorSet) {
+        slotPaletteModified();
+    }
+}
+
 QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
 {
     KisSwatchGroup::SwatchInfo info = colorSet()->getClosestColorInfo(compare);

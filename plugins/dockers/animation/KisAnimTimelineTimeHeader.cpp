@@ -582,9 +582,13 @@ int KisAnimTimelineTimeHeader::estimateFirstVisibleColumn()
 
 void KisAnimTimelineTimeHeader::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (!m_d->model)
+        return;
+
     if (e->button() == Qt::LeftButton) {
         m_d->model->setScrubState(false);
     }
+
     QHeaderView::mouseReleaseEvent(e);
 }
 

@@ -25,28 +25,28 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Mode</string>
+        <string comment="list view layout mode">Mode</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="btnColumnMode">
        <property name="text">
-        <string>Column</string>
+        <string comment="list view layout mode">Column</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="btnRowMode">
        <property name="text">
-        <string>Row</string>
+        <string comment="list view layout mode">Row</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="btnGridMode">
        <property name="text">
-        <string>Grid</string>
+        <string comment="list view layout mode">Grid</string>
        </property>
       </widget>
      </item>
@@ -60,28 +60,28 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>View</string>
+        <string comment="list view fields visibility">View</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="btnAllView">
        <property name="text">
-        <string>All</string>
+        <string comment="list view fields visibility">All</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="btnThumbnailsView">
        <property name="text">
-        <string>Thumbnails Only</string>
+        <string comment="list view fields visibility">Thumbnails Only</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="btnCommentsView">
        <property name="text">
-        <string>Comments Only</string>
+        <string comment="list view fields visibility">Comments Only</string>
        </property>
       </widget>
      </item>

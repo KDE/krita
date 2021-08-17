@@ -377,7 +377,7 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
             QBuffer buf;
             buf.open(QFile::ReadWrite);
             brushTipImage.save(&buf, "PNG");
-            abrBrush->setMD5(KoMD5Generator::generateHash(buf.data()));
+            abrBrush->setMD5Sum(KoMD5Generator::generateHash(buf.data()));
         }
 
         abrBrush->setBrushTipImage(brushTipImage);
@@ -480,7 +480,7 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
                 QBuffer buf;
                 buf.open(QFile::ReadWrite);
                 brushTipImage.save(&buf, "PNG");
-                abrBrush->setMD5(KoMD5Generator::generateHash(buf.data()));
+                abrBrush->setMD5Sum(KoMD5Generator::generateHash(buf.data()));
             }
 
             abrBrush->setBrushTipImage(brushTipImage);
@@ -567,9 +567,6 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
     qint32 layer_ID;
 
     QByteArray ba = dev->readAll();
-
-    m_md5 = KoMD5Generator::generateHash(ba);
-
     QBuffer buf(&ba);
     buf.open(QIODevice::ReadOnly);
     QDataStream abr(&buf);

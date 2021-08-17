@@ -86,10 +86,12 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     , m_warpStrategy(
         new KisWarpTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
     , m_cageStrategy(
         new KisCageTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
     , m_liquifyStrategy(
         new KisLiquifyTransformStrategy(
@@ -98,6 +100,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     , m_meshStrategy(
         new KisMeshTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
     , m_freeStrategy(
         new KisFreeTransformStrategy(
@@ -612,17 +615,17 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
 
 void KisToolTransform::setRotateX( double rotation )
 {
-    m_currentArgs.setAX( normalizeAngle(rotation) );
+    m_currentArgs.setAX( rotation );
 }
 
 void KisToolTransform::setRotateY( double rotation )
 {
-    m_currentArgs.setAY( normalizeAngle(rotation) );
+    m_currentArgs.setAY( rotation );
 }
 
 void KisToolTransform::setRotateZ( double rotation )
 {
-    m_currentArgs.setAZ( normalizeAngle(rotation) );
+    m_currentArgs.setAZ( rotation );
 }
 
 void KisToolTransform::setWarpType( KisToolTransform::WarpType type )
@@ -654,7 +657,7 @@ void KisToolTransform::setWarpPointDensity( int density )
 
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
-    m_currentArgs = KisTransformUtils::resetArgsForMode(mode, m_currentArgs.filterId(), m_transaction);
+    m_currentArgs = KisTransformUtils::resetArgsForMode(mode, m_currentArgs.filterId(), m_transaction, m_currentArgs.externalSource());
     initGuiAfterTransformMode();
 }
 
@@ -848,6 +851,26 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         return;
     }
 
+    KisNodeSP impossibleMask =
+        KisLayerUtils::recursiveFindNode(currentNode,
+        [currentNode] (KisNodeSP node) {
+            // we can process transform masks of the first level
+            if (node == currentNode || node->parent() == currentNode) return false;
+
+            return node->inherits("KisTransformMask") && node->visible(true);
+        });
+
+    if (impossibleMask) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Layer has children with transform masks. Please disable them before doing transformation."),
+                koIcon("object-locked"), 8000, KisFloatingMessage::High);
+        return;
+    }
+
+
     KisSelectionSP selection = resources->activeSelection();
 
     /**
@@ -1017,7 +1040,7 @@ void KisToolTransform::slotTrackerChangedConfig(KisToolChangesTrackerDataSP stat
 
     *m_transaction.currentConfig() = *newArgs;
 
-    slotUiChangedConfig();
+    slotUiChangedConfig(true);
     updateOptionWidget();
 }
 
@@ -1060,8 +1083,8 @@ QWidget* KisToolTransform::createOptionWidget()
     m_optionsWidget->layout()->addWidget(specialSpacer);
 
 
-    connect(m_optionsWidget, SIGNAL(sigConfigChanged()),
-            this, SLOT(slotUiChangedConfig()));
+    connect(m_optionsWidget, SIGNAL(sigConfigChanged(bool)),
+            this, SLOT(slotUiChangedConfig(bool)));
 
     connect(m_optionsWidget, SIGNAL(sigApplyTransform()),
             this, SLOT(slotApplyTransform()));
@@ -1122,11 +1145,13 @@ void KisToolTransform::updateApplyResetAvailability()
     }
 }
 
-void KisToolTransform::slotUiChangedConfig()
+void KisToolTransform::slotUiChangedConfig(bool needsPreviewRecalculation)
 {
     if (mode() == KisTool::PAINT_MODE) return;
 
-    currentStrategy()->externalConfigChanged();
+    if (needsPreviewRecalculation) {
+        currentStrategy()->externalConfigChanged();
+    }
 
     if (m_currentArgs.mode() == ToolTransformArgs::LIQUIFY) {
         m_currentArgs.saveLiquifyTransformMode();

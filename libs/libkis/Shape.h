@@ -166,6 +166,22 @@ public Q_SLOTS:
 
     QString toSvg(bool prependStyles = false, bool stripTextMode = true);
 
+    /**
+     * @brief select selects the shape.
+     */
+    void select();
+
+    /**
+     * @brief deselect deselects the shape.
+     */
+    void deselect();
+
+    /**
+     * @brief isSelected
+     * @return whether the shape is selected.
+     */
+    bool isSelected();
+
 private:
     friend class GroupShape;
     friend class VectorLayer;

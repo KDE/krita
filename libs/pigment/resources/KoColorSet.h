@@ -102,7 +102,6 @@ public:
     PaletteType paletteType() const;
     void setPaletteType(PaletteType paletteType);
 
-    QByteArray toByteArray() const;
     bool fromByteArray(QByteArray &data, KisResourcesInterfaceSP resourcesInterface);
 
     /**

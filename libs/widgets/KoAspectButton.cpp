@@ -30,6 +30,8 @@ KoAspectButton::KoAspectButton(QWidget *parent)
     setAutoRaise(true);
 
     connect(this, SIGNAL(released()), this, SLOT(buttonReleased()));
+
+    setKeepAspectRatio(false);
 }
 
 KoAspectButton::~KoAspectButton()
@@ -45,11 +47,12 @@ void KoAspectButton::buttonReleased() {
 
 void KoAspectButton::setKeepAspectRatio(bool on) {
     this->setIcon(on ? KisIconUtils::loadIcon("chain-icon") : KisIconUtils::loadIcon("chain-broken-icon"));
-    if(d->keepAspect == on)
-        return;
-    d->keepAspect = on;
     update();
-    emit keepAspectRatioChanged(d->keepAspect);
+
+    if(d->keepAspect != on) {
+        d->keepAspect = on;
+        emit keepAspectRatioChanged(d->keepAspect);
+    }
 }
 
 bool KoAspectButton::keepAspectRatio() const

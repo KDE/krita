@@ -45,10 +45,34 @@ public:
     public:
         ResourceSourceAdapter();
         virtual ~ResourceSourceAdapter();
-
+//protected:
+        friend class KisResourcesInterface;
         virtual KoResourceSP resourceForFilename(const QString& filename) const = 0;
         virtual KoResourceSP resourceForName(const QString& name) const = 0;
-        virtual KoResourceSP resourceForMD5(const QByteArray& md5) const = 0;
+        virtual KoResourceSP resourceForMD5(const QString& md5) const = 0;
+public:
+        /**
+         * @brief resource retrieves a resource, prefarably by md5, but with filename and name
+         * as fallback for older files that do not store the md5sum. Note that if the resource is
+         * not found by md5 if the md5 isn't empty, we do NOT then look by filename.
+         * @return a resource, or 0 of the resource doesn't exist.
+         */
+        KoResourceSP resource(const QString md5, const QString filename, const QString name) {
+
+            if (!md5.isEmpty()) {
+                return resourceForMD5(md5);
+            }
+
+            if (!filename.isEmpty()) {
+                return resourceForFilename(filename);
+            }
+
+            if (!name.isEmpty()) {
+                return resourceForName(name);
+            }
+
+            return nullptr;
+        }
         virtual KoResourceSP fallbackResource() const = 0;
 
     private:
@@ -63,7 +87,7 @@ public:
             : m_source(adapter)
         {
         }
-
+private:
         QSharedPointer<T> resourceForFilename(const QString& filename) const
         {
             return m_source->resourceForFilename(filename).dynamicCast<T>();
@@ -74,10 +98,34 @@ public:
             return m_source->resourceForName(name).dynamicCast<T>();
         }
 
-        QSharedPointer<T> resourceForMD5(const QByteArray& md5) const
+        QSharedPointer<T> resourceForMD5(const QString& md5) const
         {
             return m_source->resourceForMD5(md5).dynamicCast<T>();
         }
+public:
+        /**
+         * @brief resource retrieves a resource, prefarably by md5, but with filename and name
+         * as fallback for older files that do not store the md5sum. Note that if the resource is
+         * not found by md5 if the md5 isn't empty, we do NOT then look by filename.
+         * @return a resource, or 0 of the resource doesn't exist.
+         */
+        QSharedPointer<T> resource(const QString md5, const QString filename, const QString name) {
+
+            if (!md5.isEmpty()) {
+                return resourceForMD5(md5);
+            }
+
+            if (!filename.isEmpty()) {
+                return resourceForFilename(filename);
+            }
+
+            if (!name.isEmpty()) {
+                return resourceForName(name);
+            }
+
+            return nullptr;
+        }
+
 
         QSharedPointer<T> fallbackResource() const
         {

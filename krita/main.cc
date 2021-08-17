@@ -286,7 +286,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
 #endif
 
-        if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
+        if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
             enableOpenGLDebug = true;
         } else {
             enableOpenGLDebug = kritarc.value("EnableOpenGLDebug", false).toBool();

@@ -51,7 +51,7 @@ private Q_SLOTS:
     void slotImportResources();
     void slotOpenResourceFolder();
     void slotCreateBundle();
-    void slotDeleteBackupFiles();
+    void slotSaveTags();
 private:
     QString getCurrentResourceType();
     int getCurrentStorageId();

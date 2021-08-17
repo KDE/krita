@@ -19,6 +19,7 @@
 #include "VectorLayer.h"
 #include "FilterMask.h"
 #include "SelectionMask.h"
+#include "TransformMask.h"
 
 class KisDocument;
 
@@ -671,6 +672,13 @@ print(root.childNodes())
      */
     SelectionMask* createSelectionMask(const QString &name);
 
+    /**
+     * @brief createTransformMask
+     * Creates a transform mask, which can be used to apply a transformation non-destructively.
+     * @param name - the name of the layer mask.
+     * @return a TransformMask
+     */
+    TransformMask* createTransformMask(const QString &name);
 
     /**
      * @brief projection creates a QImage from the rendered image or

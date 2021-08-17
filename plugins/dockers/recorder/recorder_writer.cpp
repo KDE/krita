@@ -99,7 +99,7 @@ public:
         }
 
         // we don't want image->barrierLock() because it will wait until the full stroke is finished
-        image->lock();
+        image->immediateLockForReadOnly();
         device->readBytes(reinterpret_cast<quint8 *>(imageBuffer.data()), 0, 0, width, height);
         image->unlock();
 

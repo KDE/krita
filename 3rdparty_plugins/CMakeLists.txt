@@ -19,7 +19,7 @@ if(APPLE)
         cmake_minimum_required(VERSION 3.7.2)
     endif()
 else(APPLE)
-    cmake_minimum_required(VERSION 2.8.6)
+    cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
 endif()
 
 if(NOT SUBMAKE_JOBS)

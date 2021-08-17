@@ -1,0 +1,66 @@
+From f29f7d9db4040214d4926702131213f77dbcc11f Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 21 Jul 2021 01:07:38 +0000
+Subject: [PATCH 08/10] Enable respecting host application language
+
+---
+ gmic-qt/CMakeLists.txt           | 1 +
+ gmic-qt/src/DialogSettings.cpp   | 5 +++++
+ gmic-qt/src/LanguageSettings.cpp | 4 ++++
+ 3 files changed, 10 insertions(+)
+
+diff --git a/gmic-qt/CMakeLists.txt b/gmic-qt/CMakeLists.txt
+index 841d64d..bb0d2e4 100644
+--- a/gmic-qt/CMakeLists.txt
++++ b/gmic-qt/CMakeLists.txt
+@@ -647,6 +647,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
+     add_definitions(-DGMIC_HOST=krita-plugin)
+     add_definitions(-D_GMIC_QT_DISABLE_THEMING_)
+     add_definitions(-D_GMIC_QT_CONSENT_TO_UPDATE_FIRST_)
++    add_definitions(-D_GMIC_QT_DISABLE_TRANSLATION_)
+     add_library(krita_gmic_qt MODULE ${gmic_qt_SRCS} ${gmic_qt_QRC} ${qmic_qt_QM})
+     target_include_directories(
+       krita_gmic_qt
+diff --git a/gmic-qt/src/DialogSettings.cpp b/gmic-qt/src/DialogSettings.cpp
+index 624d3a8..a12b170 100644
+--- a/gmic-qt/src/DialogSettings.cpp
++++ b/gmic-qt/src/DialogSettings.cpp
+@@ -154,6 +154,9 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
+ 
+   connect(ui->cbNotifyFailedUpdate, SIGNAL(toggled(bool)), this, SLOT(onNotifyStartupUpdateFailedToggle(bool)));
+ 
++#ifdef _GMIC_QT_DISABLE_TRANSLATION_
++  ui->languageSelector->setEnabled(false);
++#endif
+   ui->languageSelector->selectLanguage(_languageCode);
+   if (DialogSettings::darkThemeEnabled()) {
+     QPalette p = ui->cbNativeColorDialogs->palette();
+@@ -267,7 +270,9 @@ void DialogSettings::done(int r)
+   QSettings settings;
+   saveSettings(settings);
+   settings.setValue(DARK_THEME_KEY, ui->rbDarkTheme->isChecked());
++#ifndef _GMIC_QT_DISABLE_TRANSLATION_
+   settings.setValue("Config/LanguageCode", ui->languageSelector->selectedLanguageCode());
++#endif
+   QDialog::done(r);
+ }
+ 
+diff --git a/gmic-qt/src/LanguageSettings.cpp b/gmic-qt/src/LanguageSettings.cpp
+index c2e71d7..8aae1d7 100644
+--- a/gmic-qt/src/LanguageSettings.cpp
++++ b/gmic-qt/src/LanguageSettings.cpp
+@@ -64,7 +64,11 @@ const QMap<QString, QString> & LanguageSettings::availableLanguages()
+ 
+ QString LanguageSettings::configuredTranslator()
+ {
++#ifndef _GMIC_QT_DISABLE_TRANSLATION_
+   QString code = QSettings().value("Config/LanguageCode", QString()).toString();
++#else
++  QString code;
++#endif
+   if (code.isEmpty()) {
+     code = systemDefaultAndAvailableLanguageCode();
+     if (code.isEmpty()) {
+-- 
+2.31.1.windows.1
+

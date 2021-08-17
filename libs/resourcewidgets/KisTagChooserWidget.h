@@ -16,7 +16,7 @@
 
 /**
  * \brief The KisTagChooserWidget class is responsible for all the logic
- *        that thr tags combobox has in various resource choosers.
+ *        that the tags combobox has in various resource choosers.
  *
  * It uses KisTagModel as a model for items in the combobox.
  * It is also responsible for the popup for tag removal, renaming and creation
@@ -28,7 +28,7 @@ class KRITARESOURCEWIDGETS_EXPORT KisTagChooserWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KisTagChooserWidget(KisTagModel* model, QWidget* parent);
+    explicit KisTagChooserWidget(KisTagModel* model, QString resourceType, QWidget* parent);
     ~KisTagChooserWidget() override;
 
 
@@ -96,12 +96,31 @@ private Q_SLOTS:
     ///  sets the correct mode on the KisTagToolButton popup.
     void tagToolContextMenuAboutToShow();
 
+    /// \brief cacheSelectedTag slot that stores current tag selection.
+    ///
+    /// Used to allow restoration of tag even after a model reset. Will store
+    /// the tag just before model resets.
+    void cacheSelectedTag();
+
+    /// \brief restoreTagFromCache slot designed to restore a selected tag from previously cached selection.
+    ///
+    /// Companion to `cacheSelectedTag`, this method restore the selection after model reset.
+    void restoreTagFromCache();
+
 private:
 
 
     /// \brief setCurrentIndex sets the current index in the combobox
     /// \param index index is the index of the tag in the combobox
     void setCurrentIndex(int index);
+
+    enum OverwriteDialogOptions {
+        Replace,
+        Undelete,
+        Cancel
+    };
+
+    OverwriteDialogOptions overwriteTagDialog(KisTagChooserWidget* parent, bool undelete);
 
 private:
     class Private;

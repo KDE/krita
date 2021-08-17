@@ -9,6 +9,7 @@
 
 #include "kis_node_command.h"
 #include "commands_new/KisAsynchronouslyMergeableCommandInterface.h"
+#include <boost/optional.hpp>
 
 /// The command for setting the composite op
 class KRITAIMAGE_EXPORT KisNodeCompositeOpCommand : public KisNodeCommand, public KisAsynchronouslyMergeableCommandInterface
@@ -21,7 +22,7 @@ public:
      * @param oldCompositeOp the old node composite op
      * @param newCompositeOp the new node composite op
      */
-    KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp, const QString& newCompositeOp);
+    KisNodeCompositeOpCommand(KisNodeSP node, const QString& newCompositeOp);
 
     void redo() override;
     void undo() override;
@@ -30,11 +31,13 @@ public:
     bool mergeWith(const KUndo2Command *command) override;
     bool canMergeWith(const KUndo2Command *command) const override;
 
+    bool canAnnihilateWith(const KUndo2Command *command) const override;
+
 private:
     void setCompositeOpImpl(const QString &compositeOp);
 
 private:
-    QString m_oldCompositeOp;
+    boost::optional<QString> m_oldCompositeOp;
     QString m_newCompositeOp;
 };
 

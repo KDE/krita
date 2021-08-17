@@ -79,3 +79,17 @@ Steps:
 
 TODO: Technically we can build the MSIX on the binary factory together with the
 rest of the build (excluding the MSIX signing step)...
+
+Self-signing the package for testing purposes
+---------------------------------------------
+
+1. Make a backup of the built pacakge if needed. You will **not** be able to remove the signature after it has been added.
+2. Generate a fake certificate for signing by running this command in PowerShell:
+   ```
+   New-SelfSignedCertificate -Type Custom -Subject "CN=03E730BB-6849-4762-9BDB-10CD7FFDB2C1" -KeyUsage DigitalSignature -FriendlyName "Fake Krita Foundation certificate for debugging only" -CertStoreLocation "Cert:\CurrentUser\My" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
+   ```
+   This command will add the certificate into your 'Personal' storage.
+3. Go to 'Manage User Certificates' Windows applet. Export the key into a .ppk file
+4. Go to 'Manage Computer Certificates' (needs Administrator rights)
+5. Import your .ppk file into "Trusted Root Certificates" storage.
+6. Copy the certificate (by Ctrl+D&D) into "Trusted Publishers" section.

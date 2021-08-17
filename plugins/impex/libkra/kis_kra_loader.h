@@ -37,11 +37,11 @@ public:
      * Loading is done in two steps: first all xml is loaded, then, in finishLoading,
      * the actual layer data is loaded.
      */
-    KisImageSP loadXML(const QDomElement& elem);
+    KisImageSP loadXML(const QDomElement& imageElement);
 
     void loadBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external);
 
-    void loadPalettes(KoStore *store, KisDocument *doc);
+    void loadResources(KoStore *store, KisDocument *doc);
     void loadStoryboards(KoStore *store, KisDocument *doc);
     void loadAnimationMetadata(KoStore *store, KisImageSP image);
 

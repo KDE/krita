@@ -26,11 +26,9 @@
 #include <KoColorProfile.h>
 #include <KoColor.h>
 #include <KoColorSet.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-
+#include <KisResourceTypes.h>
 #include <kis_annotation.h>
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
@@ -141,7 +139,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveGuides(doc, imageElement);
     saveMirrorAxis(doc, imageElement);
     saveAudio(doc, imageElement);
-    savePalettesToXML(doc, imageElement);
+    saveResourcesToXML(doc, imageElement);
 
     // Redundancy -- Save animation metadata in XML to prevent data loss for the time being...
     QDomElement animationElement = doc.createElement("animation");
@@ -180,38 +178,57 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     return imageElement;
 }
 
-bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &uri)
+bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString &uri)
 {
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
+    QList<KoResourceSP> resources = m_d->doc->documentResources();
     bool res = false;
-    if (m_d->doc->paletteList().size() == 0) {
+    if (resources.size() == 0) {
         return true;
     }
-    Q_FOREACH (const KoColorSetSP palette, m_d->doc->paletteList()) {
-        // Ensure stored palettes are KPL.
-        palette->setPaletteType(KoColorSet::KPL);
 
-        if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
-            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save palettes.");
-            return false;
+    QStringList brokenResources;
+
+    Q_FOREACH (const KoResourceSP resource, resources) {
+        QString path = RESOURCE_PATH;
+
+        if (resource->resourceType().first == ResourceType::Palettes) {
+            // Ensure stored palettes are KPL.
+            resource.dynamicCast<KoColorSet>()->setPaletteType(KoColorSet::KPL);
+            path = m_d->imageName + PALETTE_PATH;
+        }
+        if (!store->open(path  + '/' + resource->filename())) {
+            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not open resource for writing.");
+            brokenResources << resource->filename();
+            continue;
         }
 
-        QByteArray ba = palette->toByteArray();
+        QByteArray ba;
+        QBuffer buf(&ba);
+        buf.open(QBuffer::WriteOnly);
+        bool savingSucceeded = resource->saveToDevice(&buf);
+        if (!savingSucceeded) {
+            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save resource %1 to the kra file.", resource->name());
+            brokenResources << resource->filename();
+            continue;;
+        }
+        buf.close();
 
         qint64 nwritten = 0;
         if (!ba.isEmpty()) {
             nwritten = store->write(ba);
         } else {
-            qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+            qWarning() << "This resource is empty, so not saved:" << resource->name();
+            brokenResources << resource->name() + " (empty)";
         }
         res = store->close();
         res = res && (nwritten == ba.size());
     }
 
     if (!res) {
-        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save palettes.");
+        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save resources: %1.", brokenResources.join(','));
     }
 
     return res;
@@ -292,17 +309,40 @@ bool KisKraSaver::saveAnimationMetadata(KoStore *store, KisImageSP image, const 
     return true;
 }
 
-void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
+void KisKraSaver::saveResourcesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
-    Q_FOREACH (const KoColorSetSP palette, m_d->doc->paletteList()) {
-        // Ensure stored palettes are KPL.
-        palette->setPaletteType(KoColorSet::KPL);
-        QDomElement eFile =  doc.createElement("palette");
-        eFile.setAttribute("filename", palette->filename());
-        ePalette.appendChild(eFile);
+    QDomElement eResources = doc.createElement(RESOURCES);
+
+    Q_FOREACH (const KoResourceSP resource, m_d->doc->documentResources()) {
+
+        QByteArray ba;
+        QBuffer buf(&ba);
+        buf.open(QBuffer::WriteOnly);
+        bool r = resource->saveToDevice(&buf);
+        buf.close();
+
+        if (ba.isEmpty() || !r) {
+            dbgFile << "Could not save resource" << resource->name() << "so it will not be in the document." << ba.isEmpty() << r;
+            continue; // This resource is broken.
+        }
+
+        QDomElement eResource = doc.createElement("resource");
+        eResource.setAttribute("type", resource->resourceType().first);
+        eResource.setAttribute("name", resource->name());
+        eResource.setAttribute("filename", resource->filename());
+        eResource.setAttribute("md5sum", resource->md5Sum());
+
+        if (resource->resourceType().first == ResourceType::Palettes) {
+            ePalette.appendChild(eResource);
+        }
+        else {
+            eResources.appendChild(eResource);
+
+        }
     }
     element.appendChild(ePalette);
+    element.appendChild(eResources);
 }
 
 void KisKraSaver::saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
@@ -583,6 +623,8 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
 
     return success;
 }
+
+
 
 QStringList KisKraSaver::errorMessages() const
 {

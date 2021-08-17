@@ -38,7 +38,7 @@ QRect KisLayerProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNo
     return m_d->layer->updateProjection(rect, filthyNode);
 }
 
-void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, bool maxOutAlpha)
+void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, KritaUtils::ThresholdMode thresholdMode)
 {
     KisPaintDeviceSP device = m_d->layer->projection();
     if (!device) return;
@@ -84,17 +84,14 @@ void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, 
         }
     }
 
-    if (maxOutAlpha) {
-        KisPaintDeviceSP tmp = m_d->cachedDevice.getDevice(device);
-        tmp->makeCloneFromRough(device, needRect);
-        const KoColorSpace *cs = tmp->colorSpace();
+    QScopedPointer<KisCachedPaintDevice::Guard> d1;
 
-        KisSequentialIterator it(tmp, needRect);
-        int numConseqPixels = it.nConseqPixels();
-        while (it.nextPixels(numConseqPixels)) {
-            numConseqPixels = it.nConseqPixels();
-            cs->setOpacity(it.rawData(), quint8(255), numConseqPixels);
-        }
+    if (thresholdMode != KritaUtils::ThresholdNone) {
+        d1.reset(new KisCachedPaintDevice::Guard(device, m_d->cachedDevice));
+        KisPaintDeviceSP tmp = d1->device();
+        tmp->makeCloneFromRough(device, needRect);
+
+        KritaUtils::thresholdOpacity(tmp, needRect, thresholdMode);
 
         device = tmp;
     }
@@ -103,20 +100,16 @@ void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, 
     painter->setCompositeOp(m_d->layer->compositeOpId());
     painter->setOpacity(m_d->layer->projectionLeaf()->opacity());
     painter->bitBlt(needRect.topLeft(), device, needRect);
-
-    if (maxOutAlpha) {
-        m_d->cachedDevice.putDevice(device);
-    }
 }
 
 void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 {
-    applyImpl(painter, rect, false);
+    applyImpl(painter, rect, KritaUtils::ThresholdNone);
 }
 
-void KisLayerProjectionPlane::applyMaxOutAlpha(KisPainter *painter, const QRect &rect)
+void KisLayerProjectionPlane::applyMaxOutAlpha(KisPainter *painter, const QRect &rect, KritaUtils::ThresholdMode thresholdMode)
 {
-    applyImpl(painter, rect, true);
+    applyImpl(painter, rect, thresholdMode);
 }
 
 KisPaintDeviceList KisLayerProjectionPlane::getLodCapableDevices() const

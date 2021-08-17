@@ -1,19 +1,22 @@
 SET(EXTPREFIX_ocio "${EXTPREFIX}" )
 
-if(APPLE AND ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
-    set(SSE_OPTIMIZATIONS_STRING "-DCMAKE_OSX_ARCHITECTURES=arm64")
-else()
-    set(SSE_OPTIMIZATIONS_STRING "")
+set(ext_ocio_PATCH_COMMAND "")
+
+if(APPLE)
+    set(ext_ocio_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-macOS-fixWarnings.patch)
+    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+        set(SSE_OPTIMIZATIONS_STRING "-DCMAKE_OSX_ARCHITECTURES=arm64")
+    endif()
 endif()
 
 # OCIO tarball has files with CRLF, this confuses patch on POSIX.
 if (WIN32)
     set(ext_ocio_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-MinGW-and-MSVC-detection.patch)
-else()
-    set(ext_ocio_PATCH_COMMAND "")
 endif()
+
 set(ext_ocio_PATCH_COMMAND ${ext_ocio_PATCH_COMMAND}
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Auto-disable-SSE-if-the-compiler-target-doesn-t-supp.patch
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Remove-Werror-to-fix-build-on-GCC11.patch
 )
 
 ExternalProject_Add(

@@ -1,9 +1,10 @@
-if(NOT APPLE)
+if(NOT MSVC AND NOT APPLE)
 add_subdirectory(tests)
 endif()
 
 set(KRITA_STORYBOARDDOCKER_SOURCES
     CommentModel.cpp
+    StoryboardUtils.cpp
     StoryboardDocker.cpp
     StoryboardDockerDock.cpp
     CommentDelegate.cpp
@@ -18,6 +19,7 @@ set(KRITA_STORYBOARDDOCKER_SOURCES
 
 set(KRITA_STORYBOARDDOCKER_PART_HEADERS
     CommentModel.h
+    StoryboardUtils.h
     StoryboardDocker.h
     StoryboardDockerDock.h
     CommentDelegate.h

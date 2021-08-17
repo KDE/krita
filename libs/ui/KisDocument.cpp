@@ -51,6 +51,7 @@
 #include <kconfiggroup.h>
 #include <kbackup.h>
 #include <KisView.h>
+#include <KisResourceLoaderRegistry.h>
 
 #include <QTextBrowser>
 #include <QApplication>
@@ -92,6 +93,7 @@
 #include <kis_canvas_widget_base.h>
 #include "kis_layer_utils.h"
 #include "kis_selection_mask.h"
+#include <KisResourceCollectorVisitor.h>
 
 // Local
 #include "KisViewManager.h"
@@ -114,6 +116,7 @@
 #include "kis_image_barrier_lock_adapter.h"
 #include "KisReferenceImagesLayer.h"
 #include "dialogs/KisRecoverNamedAutosaveDialog.h"
+
 
 #include <mutex>
 #include "kis_config_notifier.h"
@@ -444,6 +447,7 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
             setClearsRedoOnStart(false);
+            setRequestsOtherStrokesToEnd(false);
         }
 
         void initStrokeCallback() override {
@@ -511,24 +515,9 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     globalAssistantsColor = rhs.globalAssistantsColor;
     batchMode = rhs.batchMode;
 
-    // CHECK THIS! This is what happened to the palette list -- but is it correct here as well? Ask Dmitry!!!
-    //    if (policy == REPLACE) {
-    //        QList<KoColorSetSP> newPaletteList = clonePaletteList(rhs.paletteList);
-    //        q->setPaletteList(newPaletteList, /* emitSignal = */ true);
-    //        // we still do not own palettes if we did not
-    //    } else {
-    //        paletteList = rhs.paletteList;
-    //    }
 
     if (rhs.documentResourceStorage) {
-        if (policy == REPLACE) {
-            // Clone the resources, but don't add them to the database, only the editable
-            // version of the document should have those resources in the database.
-            documentResourceStorage = rhs.documentResourceStorage->clone();
-        }
-        else {
-            documentResourceStorage = rhs.documentResourceStorage;
-        }
+        documentResourceStorage = rhs.documentResourceStorage->clone();
     }
 
 }
@@ -945,9 +934,19 @@ KisDocument *KisDocument::lockAndCreateSnapshot()
 {
     KisDocument *doc = lockAndCloneForSaving();
     if (doc) {
-        // clone the local resource storage and its contents -- that is, the old palette list
+
         if (doc->d->documentResourceStorage) {
-            doc->d->documentResourceStorage = doc->d->documentResourceStorage->clone();
+
+            // clone the local resource storage and its contents
+            doc->d->documentResourceStorage = d->documentResourceStorage->clone();
+
+            // And then add any resources used by filter layers or masks and fill layers
+            // Since this is a clone, this won't clutter
+            KisResourceCollectorVisitor v;
+            image()->rootLayer()->accept(v);
+            Q_FOREACH(const KoResourceSP resource, v.resources()) {
+                doc->d->documentResourceStorage->addResource(resource);
+            }
         }
     }
     return doc;
@@ -1125,8 +1124,19 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
         waitForImage(clonedDocument->image());
     }
 
+
     KIS_SAFE_ASSERT_RECOVER(clonedDocument->image()->isIdle()) {
         waitForImage(clonedDocument->image());
+    }
+
+
+    // And then add any resources used by filter layers or masks and fill layers
+    // Since this is a clone, this won't clutter
+    KisResourceCollectorVisitor v;
+    image()->rootLayer()->accept(v);
+
+    Q_FOREACH(const KoResourceSP resource, v.resources()) {
+        clonedDocument->d->documentResourceStorage->addResource(resource);
     }
 
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveDocument, false);
@@ -1202,8 +1212,7 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
                         .arg(job.filePath)
                         .arg(QString::fromLatin1(job.mimeType))
                         .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK")
-                        .arg(fi.size())
-                        .arg(fi.size() > 10000000 ? "FILE_BIGGER_10MB" : QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
+                        .arg(fi.size()));
 
     emit sigCompleteBackgroundSaving(job, status, errorMessage);
 }
@@ -1290,7 +1299,7 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
                 }
                 else {
                     if (exportDocumentSync(tempFileName, mimeType, exportConfiguration)) {
-                        if (model.importResourceFile(tempFileName)) {
+                        if (model.importResourceFile(tempFileName, false)) {
                             return true;
                         }
                     }
@@ -2041,23 +2050,25 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     }
 }
 
-QList<KoColorSetSP > KisDocument::paletteList()
+QList<KoResourceSP > KisDocument::documentResources()
 {
-    QList<KoColorSetSP> _paletteList;
+    QList<KoResourceSP> resources;
     if (d->documentResourceStorage.isNull()) {
         qWarning() << "No documentstorage for palettes";
-        return _paletteList;
+        return resources;
     }
 
-    QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
-    while (iter->hasNext()) {
-        iter->next();
-        KoResourceSP resource = iter->resource();
-        if (resource && resource->valid()) {
-            _paletteList << resource.dynamicCast<KoColorSet>();
+    Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(resourceType);
+        while (iter->hasNext()) {
+            iter->next();
+            KoResourceSP resource = iter->resource();
+            if (resource && resource->valid()) {
+                resources << resource;
+            }
         }
     }
-    return _paletteList;
+    return resources;
 }
 
 void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)
@@ -2078,7 +2089,6 @@ void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool e
                 resourceModel.setResourceInactive(resourceModel.indexForResource(palette));
             }
             Q_FOREACH(KoColorSetSP palette, paletteList) {
-                qDebug()<< "loading palette into document" << palette->filename();
                 resourceModel.addResource(palette, d->documentStorageID);
             }
             if (emitSignal) {

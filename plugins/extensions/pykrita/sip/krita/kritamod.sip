@@ -36,6 +36,7 @@
 %Include VectorLayer.sip
 %Include FilterMask.sip
 %Include SelectionMask.sip
+%Include TransformMask.sip
 
 %Include Notifier.sip
 %Include Resource.sip

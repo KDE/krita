@@ -17,7 +17,7 @@ struct KisIconWidget::Private
 {
     QImage thumbnail;
     KoResourceSP resource;
-
+    QColor backgroundColor;
     QPixmap cachedIconPixmap;
     qint64 cachedResourceImageKey;
 };
@@ -26,6 +26,7 @@ KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
     : KisPopupButton(parent)
     , m_d(new Private)
 {
+    m_d->backgroundColor = QColor(Qt::transparent);
     setObjectName(name);
     m_d->resource = nullptr;
 }
@@ -49,6 +50,11 @@ void KisIconWidget::setResource(KoResourceSP resource)
     update();
 }
 
+void KisIconWidget::setBackgroundColor(const QColor &color)
+{
+    m_d->backgroundColor = color;
+}
+
 QSize KisIconWidget::preferredIconSize() const
 {
     const qint32 cw = width();
@@ -62,6 +68,8 @@ QSize KisIconWidget::preferredIconSize() const
 
 void KisIconWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     const qint32 border = 3;
     const qint32 iconWidth = width() - (border*2);
     const qint32 iconHeight = height() - (border*2);
@@ -69,7 +77,7 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     auto makeIcon = [&](std::function<void (QPainter &)> paintFn) {
         QPixmap pixmap(iconWidth * devicePixelRatioF(), iconHeight * devicePixelRatioF());
         pixmap.setDevicePixelRatio(devicePixelRatioF());
-        pixmap.fill(Qt::transparent);
+        pixmap.fill(m_d->backgroundColor);
         QPainter p(&pixmap);
 
         // Round off the corners of the preview
@@ -88,7 +96,7 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     auto paintThumbnailIcon = [&](QPainter &p) {
         QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
         img.setDevicePixelRatio(devicePixelRatioF());
-        img.fill(Qt::transparent);
+        img.fill(m_d->backgroundColor);
         if (m_d->thumbnail.width() < iconWidth*devicePixelRatioF() || m_d->thumbnail.height() < iconHeight*devicePixelRatioF()) {
             QImage thumb = m_d->thumbnail.scaled(m_d->thumbnail.size()*devicePixelRatioF()); // first scale up to the high DPI so the pattern is visible
             thumb.setDevicePixelRatio(devicePixelRatioF());
@@ -107,7 +115,7 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
 
     auto paintResourceIcon = [&](QPainter &p) {
         QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
-        img.fill(Qt::transparent);
+        img.fill(m_d->backgroundColor);
         if (m_d->resource->image().width() < iconWidth*devicePixelRatioF() || m_d->resource->image().height() < iconHeight*devicePixelRatioF()) {
             QPainter paint2;
             paint2.begin(&img);

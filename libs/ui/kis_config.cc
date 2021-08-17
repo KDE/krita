@@ -75,7 +75,8 @@ void KisConfig::logImportantSettings() const
     KisUsageLogger::writeSysInfo(QString("  Undo Stack Limit: %1").arg(undoStackLimit()));
     KisUsageLogger::writeSysInfo(QString("  Use OpenGL: %1").arg(useOpenGL() ? "true" : "false"));
     KisUsageLogger::writeSysInfo(QString("  Use OpenGL Texture Buffer: %1").arg(useOpenGLTextureBuffer() ? "true" : "false"));
-    KisUsageLogger::writeSysInfo(QString("  Use AMD Vectorization Workaround: %1").arg(enableAmdVectorizationWorkaround() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Disable Vector Optimizations: %1").arg(disableVectorOptimizations() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Disable AVX Optimizations: %1").arg(disableAVXOptimizations() ? "true" : "false"));
     KisUsageLogger::writeSysInfo(QString("  Canvas State: %1").arg(canvasState()));
     KisUsageLogger::writeSysInfo(QString("  Autosave Interval: %1").arg(autoSaveInterval()));
     KisUsageLogger::writeSysInfo(QString("  Use Backup Files: %1").arg(backupFile() ? "true" : "false"));
@@ -1972,13 +1973,15 @@ void KisConfig::setEnableBrushSpeedLogging(bool value) const
     m_cfg.writeEntry("enableBrushSpeedLogging", value);
 }
 
-void KisConfig::setEnableAmdVectorizationWorkaround(bool value)
+void KisConfig::setDisableVectorOptimizations(bool value)
 {
+    // use the old key name for compatibility
     m_cfg.writeEntry("amdDisableVectorWorkaround", value);
 }
 
-bool KisConfig::enableAmdVectorizationWorkaround(bool defaultValue) const
+bool KisConfig::disableVectorOptimizations(bool defaultValue) const
 {
+    // use the old key name for compatibility
     return (defaultValue ? false : m_cfg.readEntry("amdDisableVectorWorkaround", false));
 }
 

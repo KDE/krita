@@ -32,6 +32,7 @@
 
 #include "KisPaletteEditor.h"
 #include <KisGlobalResourcesInterface.h>
+#include <KisResourceOverwriteDialog.h>
 
 struct KisPaletteEditor::PaletteInfo {
     QString name;
@@ -142,7 +143,13 @@ KoColorSetSP KisPaletteEditor::importPalette()
     if (messageBox.exec() == QMessageBox::Yes) {
         storageLocation = m_d->view->document()->uniqueID();
     }
-    KoColorSetSP palette = m_d->rServer->resourceModel()->importResourceFile(filename, storageLocation).dynamicCast<KoColorSet>();
+    KoColorSetSP palette = m_d->rServer->resourceModel()->importResourceFile(filename, false, storageLocation).dynamicCast<KoColorSet>();
+    if (palette.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Palettes, filename)) {
+        if (KisResourceOverwriteDialog::userAllowsOverwrite(m_d->view->mainWindow(), filename)) {
+            palette = m_d->rServer->resourceModel()->importResourceFile(filename, true, storageLocation).dynamicCast<KoColorSet>();
+        }
+    }
+
     return palette;
 }
 

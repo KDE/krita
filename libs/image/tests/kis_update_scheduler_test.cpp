@@ -176,7 +176,7 @@ void KisUpdateSchedulerTest::testLocking()
 
     context->clear();
 
-    scheduler.lock();
+    scheduler.immediateLockForReadOnly();
 
     scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);
     scheduler.updateProjection(paintLayer1, dirtyRect2, imageRect);

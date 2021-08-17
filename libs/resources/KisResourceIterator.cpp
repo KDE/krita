@@ -55,9 +55,9 @@ QString KisResourceItem::tooltip()
     return QString();
 }
 
-QByteArray KisResourceItem::md5()
+QString KisResourceItem::md5sum()
 {
-    return resource()->md5();
+    return resource()->md5Sum();
 }
 
 QImage KisResourceItem::thumbnail()

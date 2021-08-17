@@ -71,6 +71,7 @@ public Q_SLOTS:
     FilterMask *createFilterMask(const QString &name, Filter &filter, Selection &selection) /Factory/;
     FilterMask *createFilterMask(const QString &name, Filter &filter, const Node *selection_source) /Factory/;
     SelectionMask *createSelectionMask(const QString &name) /Factory/;
+    TransformMask *createTransformMask(const QString &name) /Factory/;
     QImage projection(int x = 0, int y = 0, int w = 0, int h = 0) const;
     QImage thumbnail(int w, int h) const;
     void lock();

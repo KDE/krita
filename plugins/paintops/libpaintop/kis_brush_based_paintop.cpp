@@ -13,8 +13,10 @@
 #include <kis_lod_transform.h>
 #include "kis_paintop_utils.h"
 #include "kis_paintop_plugin_utils.h"
-
+#include <KisResourceTypes.h>
 #include <QGlobalStatic>
+#include <kis_brush_registry.h>
+#include <KisUsageLogger.h>
 
 #include <QImage>
 #include <QPainter>
@@ -70,14 +72,22 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
     Q_ASSERT(settings);
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
-    m_brush =
-            TextBrushInitializationWorkaround::instance()->tryGetBrush(settings);
+    m_brush = TextBrushInitializationWorkaround::instance()->tryGetBrush(settings);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     if (!m_brush) {
         KisBrushOptionProperties brushOption;
         brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
         m_brush = brushOption.brush();
+        if (!m_brush) {
+            qWarning() << "Could not find brush tip " << settings->getString("brush_definition") << ", will use a default brush instead";
+            QString brushDefinition("<Brush useAutoSpacing=\"1\" angle=\"0\" spacing=\"0.1\" density=\"1\" BrushVersion=\"2\" type=\"auto_brush\" randomness=\"0\" autoSpacingCoeff=\"0.8\"> <MaskGenerator spikes=\"2\" hfade=\"1\" ratio=\"1\" diameter=\"40\" id=\"default\" type=\"circle\" antialiasEdges=\"1\" vfade=\"1\"/> </Brush> ");
+            QDomDocument d;
+            d.setContent(brushDefinition, false);
+            QDomElement element = d.firstChildElement("Brush");
+            m_brush = KisBrushRegistry::instance()->createBrush(element, settings->resourcesInterface());
+            Q_ASSERT(m_brush);
+        }
     }
 
     m_brush->notifyStrokeStarted();
@@ -93,8 +103,9 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
     m_dabCache->setTexturePostprocessing(&m_textureProperties);
 
     m_precisionOption.setHasImprecisePositionOptions(
-        m_precisionOption.hasImprecisePositionOptions() |
-        m_mirrorOption.isChecked() | m_textureProperties.m_enabled);
+                m_precisionOption.hasImprecisePositionOptions()
+                | m_mirrorOption.isChecked()
+                | m_textureProperties.m_enabled);
 }
 
 KisBrushBasedPaintOp::~KisBrushBasedPaintOp()

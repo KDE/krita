@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:4.1.0'
     }
 }
 
@@ -22,7 +22,9 @@ dependencies {
 
 ext {
     abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
+    ndkpath = System.getenv('ANDROID_NDK_HOME') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
     installPrefix = '../krita-android-build'
+    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? '../i/src/android/java' : ""
 }
 
 task configure() {
@@ -32,24 +34,21 @@ task configure() {
             abi = 'arm64-v8a'
         }
 
-        // if user specified the ABI through environment then overwrite the one in gradle.properties
-        if (System.getenv('ANDROID_ABI') != null) {
-            def f = file('gradle.properties')
-            def lines = f.readLines()
-            f.write("")
-            for (line in lines) {
-                if (line.matches('abi=.+'))
-                    continue
-                f.append("$line\n")
-            }
-            f.append("abi=${abi}\n")
-        }
-
         def libs = new File(installPrefix, 'lib')
         if (!libs.exists()) {
             throw new GradleException('Krita libraries not found, please check if -p=krita-bin finished without errors')
         }
     }
+}
+
+task writeConfig(type: WriteProperties) {
+    outputFile = file("gradle.properties")
+    def gradleProperties = new Properties()
+    outputFile.withInputStream { gradleProperties.load(it) }
+
+    properties gradleProperties
+    property 'abi', abi
+    property 'ndk.dir', ndkpath
 }
 
 // copy libs(plugins) which start with krita*.so and rename
@@ -79,17 +78,21 @@ task removeDuplicateAssets(type: Delete) {
     delete "assets/share"
 }
 
-copyLibs.dependsOn configure
+def isPackagingAPK() {
+    return gradle.taskGraph.hasTask(assembleRelease) || gradle.taskGraph.hasTask(assembleDebug)
+}
 
 android {
     compileSdkVersion androidCompileSdkVersion.toInteger()
 
+    ndkPath ndkpath
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
-            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
-            res.srcDirs = [qt5AndroidDir + '/res', 'res']
+            java.srcDirs = [qt5AndroidDir + '/src', qtResPath + '/src', 'src', 'java']
+            aidl.srcDirs = [qt5AndroidDir + '/src', qtResPath + '/src', 'src', 'aidl']
+            res.srcDirs = [qt5AndroidDir + '/res',  qtResPath + '/res', 'res']
             resources.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
@@ -106,7 +109,7 @@ android {
         abortOnError false
     }
 
-    project.ext.versionCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, 'x86': 3, 'x86_64': 4]
+    project.ext.constant = 5
 
     def versionMajor    = 4
     def versionMinor    = 3
@@ -119,20 +122,23 @@ android {
      */
     def versionRelease  = 0
 
-	defaultConfig {
-        targetSdkVersion 29
+    defaultConfig {
+        targetSdkVersion 30
         minSdkVersion 23
-        versionCode project.ext.versionCodes[abi] * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
+        versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
         versionName "4.3.0-beta"
         archivesBaseName = "krita-$abi-$versionName"
     }
 
-    preBuild.dependsOn(copyLibs)
-    preBuild.dependsOn(copyAssets)
-    preBuild.dependsOn(removeDuplicateAssets)
+    preBuild.dependsOn(configure)
+    configure.onlyIf { isPackagingAPK() }
+    configure.finalizedBy(writeConfig)
+    configure.finalizedBy(copyLibs)
+    configure.finalizedBy(copyAssets)
+    configure.finalizedBy(removeDuplicateAssets)
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:2.2.0'
+    implementation 'com.android.billingclient:billing:3.0.3'
 }
 

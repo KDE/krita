@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -261,16 +262,17 @@ void KisColorizeMask::setProfile(const KoColorProfile *profile, KUndo2Command *p
     }
 }
 
-KUndo2Command* KisColorizeMask::setColorSpace(const KoColorSpace * dstColorSpace,
+KUndo2Command *KisColorizeMask::setColorSpace(const KoColorSpace *dstColorSpace,
                                               KoColorConversionTransformation::Intent renderingIntent,
-                                              KoColorConversionTransformation::ConversionFlags conversionFlags)
+                                              KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                              KoUpdater *progressUpdater)
 {
     using namespace KisCommandUtils;
 
     CompositeCommand *composite = new CompositeCommand();
 
-    m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite);
-    m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite);
+    m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite, progressUpdater);
+    m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite, progressUpdater);
 
     KUndo2Command *strokesConversionCommand =
         new SetKeyStrokesColorSpaceCommand(

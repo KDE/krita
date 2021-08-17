@@ -15,7 +15,7 @@ KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler(QOb
 {
     //connect signals to the renderer.
     connect(m_renderer, SIGNAL(sigNotifyFrameCompleted(int,KisPaintDeviceSP)), this, SLOT(slotFrameRegenerationCompleted(int, KisPaintDeviceSP)));
-    connect(m_renderer, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRegenerationCancelled(int)));
+    connect(m_renderer, SIGNAL(sigFrameCancelled(int, KisAsyncAnimationRendererBase::CancelReason)), this, SLOT(slotFrameRegenerationCancelled(int)));
 }
 
 KisStoryboardThumbnailRenderScheduler::~KisStoryboardThumbnailRenderScheduler()
@@ -60,7 +60,7 @@ void KisStoryboardThumbnailRenderScheduler::cancelAllFrameRendering()
     m_affectedFramesQueue.empty();
     m_changedFramesQueue.empty();
     if (m_renderer->isActive()) {
-        m_renderer->cancelCurrentFrameRendering();
+        m_renderer->cancelCurrentFrameRendering(KisAsyncAnimationRendererBase::UserCancelled);
     }
     m_currentFrame = -1;
 }
@@ -71,7 +71,7 @@ void KisStoryboardThumbnailRenderScheduler::cancelFrameRendering(int frame)
         return;
     }
     if (m_renderer->isActive() && frame == m_currentFrame) {
-        m_renderer->cancelCurrentFrameRendering();
+        m_renderer->cancelCurrentFrameRendering(KisAsyncAnimationRendererBase::UserCancelled);
         m_currentFrame = -1;
     }
     else if (m_changedFramesQueue.contains(frame)) {
@@ -117,33 +117,20 @@ void KisStoryboardThumbnailRenderScheduler::sortAffectedFrameQueue()
 
 void KisStoryboardThumbnailRenderScheduler::renderNextFrame()
 {
-    if (!m_image) {
-        return;
-    }
-    if(!m_image->isIdle()) {
+    if (!m_image || !m_image->isIdle()) {
         return;
     }
 
-    // don't clone the image until inside the if when it's needed
-    if (!m_changedFramesQueue.isEmpty()) {
-        KisImageSP image = m_image->clone(false);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-        int frame = m_changedFramesQueue.at(0);
-        image->requestTimeSwitch(frame);
-        m_renderer->startFrameRegeneration(image, frame);
-        m_currentFrame = frame;
-        m_changedFramesQueue.removeFirst();
+    if (m_changedFramesQueue.isEmpty() && m_affectedFramesQueue.isEmpty()) {
+        return;
     }
-    else if (!m_affectedFramesQueue.isEmpty()) {
-        KisImageSP image = m_image->clone(false);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-        int frame = m_affectedFramesQueue.at(0);
-        image->requestTimeSwitch(frame);
-        m_renderer->startFrameRegeneration(image, frame);
-        m_currentFrame = frame;
-        m_affectedFramesQueue.removeFirst();
-    }
-    else {
-        m_currentFrame = -1;
-    }
+
+    KisImageSP image = m_image->clone(false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+    int frame = !m_changedFramesQueue.isEmpty() ? m_changedFramesQueue.takeFirst() : m_affectedFramesQueue.takeFirst();;
+    image->requestTimeSwitch(frame);
+
+    m_renderer->startFrameRegeneration(image, frame);
+    m_currentFrame = frame;
 }

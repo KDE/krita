@@ -26,6 +26,9 @@ public Q_SLOTS:
     void update();
     void updateAbsolute(QRectF box);
     QString toSvg(bool prependStyles = false, bool stripTextMode = true);
+    void select();
+    void deselect();
+    bool isSelected();
 Q_SIGNALS:
 private:
 };

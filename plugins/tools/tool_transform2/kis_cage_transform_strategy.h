@@ -24,7 +24,7 @@ class KisCageTransformStrategy : public KisWarpTransformStrategy
 {
     Q_OBJECT
 public:
-    KisCageTransformStrategy(const KisCoordinatesConverter *converter,
+    KisCageTransformStrategy(const KisCoordinatesConverter *converter, KoSnapGuide *snapGuide,
                              ToolTransformArgs &currentArgs,
                              TransformTransactionProperties &transaction);
     ~KisCageTransformStrategy() override;

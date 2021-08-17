@@ -92,7 +92,7 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     , m_d(new Private(*rhs.m_d))
 {
     if (rhs.m_d->opacityProperty.hasChannel()) {
-        m_d->opacityProperty.transferKeyframeData(rhs.m_d->opacityProperty);
+        m_d->opacityProperty.transferKeyframeData(rhs.m_d->opacityProperty, this);
         m_d->keyframeChannels.insert(m_d->opacityProperty.channel()->id(), m_d->opacityProperty.channel());
     }
 
@@ -462,4 +462,17 @@ bool KisBaseNode::supportsKeyframeChannel(const QString &id)
     }
 
     return false;
+}
+
+QDebug operator<<(QDebug dbg, const KisBaseNode::Property &prop)
+{
+    dbg.nospace() << "Property(" << prop.id << ", " << prop.state;
+
+    if (prop.isInStasis) {
+        dbg.nospace() << ", in-stasis";
+    }
+
+    dbg.nospace() << ")";
+
+    return dbg.space();
 }

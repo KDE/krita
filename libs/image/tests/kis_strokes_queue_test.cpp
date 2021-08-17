@@ -771,6 +771,106 @@ void KisStrokesQueueTest::testMultipleLevelOfDetailMixedLegacy()
     t.checkOnlyJob("resu_u_init");
 }
 
+void KisStrokesQueueTest::testCancelBewteenLodNStrokes()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setLodPreferences(KisLodPreferences(2));
+
+    KisStrokeId idneg1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("legneg1_"), false, true, false, false, true));
+    queue.addJob(idneg1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(idneg1);
+
+    KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod0_"), false, true));
+    queue.addJob(id0, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id0);
+
+    // cancelling the strokes should force synchronization of lod planes
+    queue.tryCancelCurrentStrokeAsync();
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod2_"), false, true));
+    queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("susp_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("resu_u_init");
+}
+
+void KisStrokesQueueTest::testUFOVisitBewteenLodNStrokes()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setLodPreferences(KisLodPreferences(2));
+
+    KisStrokeId idneg1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("legneg1_"), false, true, false, false, true));
+    queue.addJob(idneg1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(idneg1);
+
+    KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod0_"), false, true));
+    queue.addJob(id0, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id0);
+
+    // force synchronization of lod planes
+    queue.notifyUFOChangedImage();
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod2_"), false, true));
+    queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("legneg1_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod0_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("susp_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("lod0_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("resu_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("susp_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("resu_u_init");
+
+}
+
 #include <kundo2command.h>
 #include <kis_post_execution_undo_adapter.h>
 struct TestUndoCommand : public KUndo2Command

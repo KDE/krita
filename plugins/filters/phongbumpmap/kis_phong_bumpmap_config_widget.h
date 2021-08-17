@@ -26,6 +26,10 @@ public:
         diffuseReflectivityKisDoubleSliderSpinBox  -> setRange(0, 1, 2);
         specularReflectivityKisDoubleSliderSpinBox -> setRange(0, 1, 2);
         shinynessExponentKisSliderSpinBox          -> setRange(1, 200);
+
+        ambientReflectivityKisDoubleSliderSpinBox  -> setSingleStep(0.01);
+        diffuseReflectivityKisDoubleSliderSpinBox  -> setSingleStep(0.01);
+        specularReflectivityKisDoubleSliderSpinBox -> setSingleStep(0.01);
         
         ambientReflectivityKisDoubleSliderSpinBox  -> setValue(0.1);
         diffuseReflectivityKisDoubleSliderSpinBox  -> setValue(0.5);

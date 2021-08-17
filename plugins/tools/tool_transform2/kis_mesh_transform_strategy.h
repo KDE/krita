@@ -25,12 +25,16 @@ class KisMeshTransformStrategy : public KisSimplifiedActionPolicyStrategy
     Q_OBJECT
 public:
     KisMeshTransformStrategy(const KisCoordinatesConverter *converter,
+                             KoSnapGuide *snapGuide,
                              ToolTransformArgs &currentArgs,
                              TransformTransactionProperties &transaction);
     ~KisMeshTransformStrategy() override;
 
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive) override;
+    QPointF handleSnapPoint(const QPointF &imagePos);
+    bool shiftModifierIsUsed() const;
+
     void paint(QPainter &gc) override;
     QCursor getCurrentCursor() const override;
     void externalConfigChanged() override;
@@ -44,7 +48,6 @@ public:
     using KisSimplifiedActionPolicyStrategy::endPrimaryAction;
 
     bool acceptsClicks() const override;
-
 private:
     bool splitHoveredSegment(const QPointF &pt);
     bool shouldDeleteNode(qreal distance, qreal param);

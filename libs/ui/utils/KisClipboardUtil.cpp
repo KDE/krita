@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
+#include <QMessageBox>
 #include <QImage>
 #include <QUrl>
 #include <QTemporaryFile>
@@ -20,7 +21,9 @@
 #include <QFileInfo>
 
 #include <KisPart.h>
+#include <KisImportExportManager.h>
 #include <KisMainWindow.h>
+#include <KisMimeDatabase.h>
 #include <kis_canvas2.h>
 #include <KisViewManager.h>
 #include <kis_image_manager.h>
@@ -93,17 +96,20 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data)
             if (action != 0 && action != cancel) {
                 for (QUrl url : urls) {
 
+                    QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
+                    tmp->setAutoRemove(true);
+
                     if (!url.isLocalFile()) {
                         // download the file and substitute the url
                         KisRemoteFileFetcher fetcher;
-                        QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
-                        tmp->setAutoRemove(true);
+
                         if (!fetcher.fetchFile(url, tmp.data())) {
                             qWarning() << "Fetching" << url << "failed";
                             continue;
                         }
                         url = url.fromLocalFile(tmp->fileName());
                     }
+
                     if (url.isLocalFile()) {
                         if (action == insertAsNewLayer || action == insertManyLayers) {
                             kisview->mainWindow()->viewManager()->imageManager()->importImage(url);
@@ -112,6 +118,20 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data)
                         else if (action == insertAsNewFileLayer || action == insertManyFileLayers) {
                             KisNodeCommandsAdapter adapter(kisview->mainWindow()->viewManager());
                             QFileInfo fileInfo(url.toLocalFile());
+
+                            QString type = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+                            QStringList mimes =
+                                KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
+
+                            if (!mimes.contains(type)) {
+                                QString msg =
+                                    KisImportExportErrorCode(ImportExportCodes::FileFormatNotSupported).errorMessage();
+                                QMessageBox::warning(
+                                    kisview, i18nc("@title:window", "Krita"),
+                                    i18n("Could not open %2.\nReason: %1.", msg, url.toDisplayString()));
+                                continue;
+                            }
+
                             KisFileLayer *fileLayer = new KisFileLayer(kisview->image(), "", url.toLocalFile(),
                                                                        KisFileLayer::None, fileInfo.fileName(), OPACITY_OPAQUE_U8);
                             adapter.addNode(fileLayer, kisview->mainWindow()->viewManager()->activeNode()->parent(), kisview->mainWindow()->viewManager()->activeNode());

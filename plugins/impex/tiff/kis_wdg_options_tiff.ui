@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author>
-    SPDX-FileCopyrightText: none
-    SPDX-License-Identifier: GPL-3.0-or-later
-  </author>
+ <author><![CDATA[
+  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+  SPDX-License-Identifier: GPL-3.0-or-later
+ ]]></author>
  <class>KisWdgOptionsTIFF</class>
  <widget class="QWidget" name="KisWdgOptionsTIFF">
   <property name="geometry">
@@ -11,133 +11,119 @@
     <x>0</x>
     <y>0</y>
     <width>411</width>
-    <height>299</height>
+    <height>297</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>411</width>
+    <height>297</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>TIFF Options</string>
   </property>
-  <layout class="QVBoxLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="groupBox1">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QGroupBox" name="tiffOptions">
      <property name="title">
       <string>TIFF Options</string>
      </property>
-     <layout class="QVBoxLayout">
-      <item>
-       <layout class="QHBoxLayout">
-        <item>
-         <widget class="QLabel" name="textLabel1">
-          <property name="text">
-           <string>Compression type:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="wordWrap">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="KComboBox" name="kComboBoxCompressionType">
-          <item>
-           <property name="text">
-            <string>None</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>JPEG DCT Compression</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Deflate (ZIP)</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Lempel-Ziv &amp; Welch (LZW)</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Pixar Log</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblCompressionType">
+        <property name="text">
+         <string>Compression type</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
-      <item>
-       <layout class="QHBoxLayout">
+      <item row="0" column="1">
+       <widget class="KComboBox" name="kComboBoxCompressionType">
         <item>
-         <widget class="QLabel" name="textLabel1_3">
-          <property name="text">
-           <string>Predictor:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="wordWrap">
-           <bool>false</bool>
-          </property>
-         </widget>
+         <property name="text">
+          <string>None</string>
+         </property>
         </item>
         <item>
-         <widget class="KComboBox" name="kComboBoxPredictor">
-          <property name="toolTip">
-           <string>Using a predictor can improve the compression (mostly for LZW and deflate.)</string>
-          </property>
-          <property name="currentItem" stdset="0">
-           <number>0</number>
-          </property>
-          <item>
-           <property name="text">
-            <string>None</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Horizontal Differencing</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Floating Point Horizontal Differencing</string>
-           </property>
-          </item>
-         </widget>
+         <property name="text">
+          <string>JPEG DCT Compression</string>
+         </property>
         </item>
-       </layout>
+        <item>
+         <property name="text">
+          <string>Deflate (ZIP)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Lempel-Ziv &amp; Welch (LZW)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Pixar Log</string>
+         </property>
+        </item>
+       </widget>
       </item>
-      <item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblPredictor">
+        <property name="text">
+         <string>Predictor</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KComboBox" name="kComboBoxPredictor">
+        <property name="toolTip">
+         <string>Using a predictor can improve the compression (mostly for LZW and deflate.)</string>
+        </property>
+        <property name="currentItem" stdset="0">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Horizontal Differencing</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Floating Point Horizontal Differencing</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="1">
        <widget class="QCheckBox" name="alpha">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>277</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string>Disable to get smaller files if your image has no transparency</string>
         </property>
@@ -153,14 +139,8 @@ You can uncheck the box if you are not using transparency and you want to make t
         </property>
        </widget>
       </item>
-      <item>
+      <item row="3" column="1">
        <widget class="QCheckBox" name="flatten">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>This option will merge all layers. It is advisable to check this option, otherwise other applications might not be able to read your file correctly.</string>
         </property>
@@ -172,7 +152,7 @@ You can uncheck the box if you are not using transparency and you want to make t
         </property>
        </widget>
       </item>
-      <item>
+      <item row="4" column="1">
        <widget class="QCheckBox" name="chkSaveProfile">
         <property name="text">
          <string>Save ICC Profile</string>
@@ -250,11 +230,11 @@ You can uncheck the box if you are not using transparency and you want to make t
          <property name="title">
           <string>JPEG Compression Options</string>
          </property>
-         <layout class="QHBoxLayout">
-          <item>
-           <widget class="QLabel" name="textLabel1_2">
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
             <property name="text">
-             <string>Quality:</string>
+             <string>Quality</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignTop</set>
@@ -264,12 +244,38 @@ You can uncheck the box if you are not using transparency and you want to make t
             </property>
            </widget>
           </item>
-          <item>
-           <layout class="QVBoxLayout">
-            <item>
-             <widget class="QSlider" name="qualityLevel">
+          <item row="0" column="1">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblSmallest">
+              <property name="text">
+               <string>Smallest</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="lblBest">
+              <property name="text">
+               <string>Best</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="KisSliderSpinBox" name="qualityLevel">
               <property name="toolTip">
                <string>These settings determine how much information is lost during compression</string>
+              </property>
+              <property name="suffix">
+               <string>%</string>
               </property>
               <property name="minimum">
                <number>0</number>
@@ -280,49 +286,13 @@ You can uncheck the box if you are not using transparency and you want to make t
               <property name="singleStep">
                <number>1</number>
               </property>
-              <property name="pageStep">
-               <number>1</number>
-              </property>
               <property name="value">
                <number>80</number>
               </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::TicksBothSides</enum>
-              </property>
-              <property name="tickInterval">
-               <number>10</number>
+              <property name="pageStep" stdset="0">
+               <number>1</number>
               </property>
              </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout">
-              <item>
-               <widget class="QLabel" name="textLabel3">
-                <property name="text">
-                 <string>Smallest</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="textLabel4">
-                <property name="text">
-                 <string>Best</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </item>
            </layout>
           </item>
@@ -332,7 +302,7 @@ You can uncheck the box if you are not using transparency and you want to make t
       </layout>
      </widget>
      <widget class="QWidget" name="widget3">
-      <layout class="QHBoxLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -359,9 +329,9 @@ You can uncheck the box if you are not using transparency and you want to make t
          <property name="title">
           <string>Deflate Compression Options</string>
          </property>
-         <layout class="QHBoxLayout">
-          <item>
-           <widget class="QLabel" name="textLabel1_4">
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_2">
             <property name="toolTip">
              <string>Note: the compression level does not change the quality of the result</string>
             </property>
@@ -380,10 +350,41 @@ You can uncheck the box if you are not using transparency and you want to make t
             </property>
            </widget>
           </item>
-          <item>
-           <layout class="QVBoxLayout">
-            <item>
-             <widget class="QSlider" name="compressionLevelDeflate">
+          <item row="0" column="1">
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblFast">
+              <property name="whatsThis">
+               <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+              </property>
+              <property name="text">
+               <string comment="save the file quickly, but do not compress very well">Fast</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="lblSmall">
+              <property name="whatsThis">
+               <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+              </property>
+              <property name="text">
+               <string comment="make the file small, at the price of a longer saving time">Small</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="KisSliderSpinBox" name="compressionLevelDeflate">
               <property name="toolTip">
                <string>Note: the compression level does not change the quality of the result</string>
               </property>
@@ -397,54 +398,13 @@ You can uncheck the box if you are not using transparency and you want to make t
               <property name="maximum">
                <number>9</number>
               </property>
-              <property name="pageStep">
-               <number>1</number>
-              </property>
               <property name="value">
                <number>6</number>
               </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::TicksBothSides</enum>
+              <property name="pageStep" stdset="0">
+               <number>1</number>
               </property>
              </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout">
-              <item>
-               <widget class="QLabel" name="textLabel3_2">
-                <property name="whatsThis">
-                 <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
-                </property>
-                <property name="text">
-                 <string comment="save the file quickly, but do not compress very well">Fast</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="textLabel4_2">
-                <property name="whatsThis">
-                 <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
-                </property>
-                <property name="text">
-                 <string comment="make the file small, at the price of a longer saving time">Small</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </item>
            </layout>
           </item>
@@ -454,7 +414,7 @@ You can uncheck the box if you are not using transparency and you want to make t
       </layout>
      </widget>
      <widget class="QWidget" name="widget5">
-      <layout class="QHBoxLayout">
+      <layout class="QVBoxLayout">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -481,9 +441,9 @@ You can uncheck the box if you are not using transparency and you want to make t
          <property name="title">
           <string>Pixar Log Compression Options</string>
          </property>
-         <layout class="QHBoxLayout">
-          <item>
-           <widget class="QLabel" name="textLabel1_4_2">
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_3">
             <property name="toolTip">
              <string>Note: the compression level does not change the quality of the result</string>
             </property>
@@ -502,10 +462,41 @@ You can uncheck the box if you are not using transparency and you want to make t
             </property>
            </widget>
           </item>
-          <item>
-           <layout class="QVBoxLayout">
-            <item>
-             <widget class="QSlider" name="compressionLevelPixarLog">
+          <item row="0" column="1">
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblFast_2">
+              <property name="whatsThis">
+               <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+              </property>
+              <property name="text">
+               <string comment="save quickly, but do not compress a lot">Fast</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="lblSmall_2">
+              <property name="whatsThis">
+               <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+              </property>
+              <property name="text">
+               <string comment="make a very small file, but take a long time saving">Small</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="KisSliderSpinBox" name="compressionLevelPixarLog">
               <property name="toolTip">
                <string>Note: the compression level does not change the quality of the result</string>
               </property>
@@ -519,54 +510,13 @@ You can uncheck the box if you are not using transparency and you want to make t
               <property name="maximum">
                <number>9</number>
               </property>
-              <property name="pageStep">
-               <number>1</number>
-              </property>
               <property name="value">
                <number>6</number>
               </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::TicksBothSides</enum>
+              <property name="pageStep" stdset="0">
+               <number>1</number>
               </property>
              </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout">
-              <item>
-               <widget class="QLabel" name="textLabel3_2_2">
-                <property name="whatsThis">
-                 <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
-                </property>
-                <property name="text">
-                 <string comment="save quickly, but do not compress a lot">Fast</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="textLabel4_2_2">
-                <property name="whatsThis">
-                 <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
-                </property>
-                <property name="text">
-                 <string comment="make a very small file, but take a long time saving">Small</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-                <property name="wordWrap">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </item>
            </layout>
           </item>
@@ -578,7 +528,7 @@ You can uncheck the box if you are not using transparency and you want to make t
     </widget>
    </item>
    <item>
-    <spacer name="spacer3">
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -599,7 +549,12 @@ You can uncheck the box if you are not using transparency and you want to make t
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <header location="global">kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

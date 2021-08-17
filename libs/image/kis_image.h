@@ -169,7 +169,7 @@ public:
      *
      * In all other cases, please use barrierLock() instead!
      */
-    void lock();
+    void immediateLockForReadOnly();
 
     /**
      * Unlocks the image and starts/resumes all the pending internal jobs. If the image

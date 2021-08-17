@@ -53,6 +53,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisStorageModel.h>
+#include <KisResourceOverwriteDialog.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -137,8 +138,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
     deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
 
-
-
     connect(addPresetButton, SIGNAL(clicked(bool)), this, SLOT(slotImportNewBrushResource()));
     connect(deleteBrushTipButton, SIGNAL(clicked(bool)), this, SLOT(slotDeleteBrushResource()));
 
@@ -219,8 +218,8 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
     /**
      * Warning: since the brushes are always cloned after loading from XML or
      * fetching from the server, we cannot just ask for that brush explicitly.
-     * Instead, we should search for the brush with the same filename and/or name
-     * and load it. Please take it into account that after selecting the brush
+     * Instead, we should search for the brush with the same md5sum and choose that.
+     * Please take it into account that after selecting the brush
      * explicitly in the chooser, m_itemChooser->currentResource() might be
      * **not** the same as the value in m_brush.
      *
@@ -230,11 +229,7 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
      */
 
     KoResourceServer<KisBrush>* server = KisBrushServerProvider::instance()->brushServer();
-    KoResourceSP resource = server->resourceByMD5(brush->md5());
-
-    if (!resource) {
-        resource = server->resourceByName(brush->name());
-    }
+    KoResourceSP resource = server->resource(brush->md5Sum(), "", brush->name());
 
     if (!resource) {
         resource = brush;
@@ -571,7 +566,13 @@ void KisPredefinedBrushChooser::slotImportNewBrushResource() {
             if (KisMimeDatabase::mimeTypeForFile(filename).contains(abrMimeType)) {
                 KisStorageModel::instance()->importStorage(filename, KisStorageModel::None);
             } else {
-                m_itemChooser->tagFilterModel()->importResourceFile(filename);
+                KoResourceSP resource = m_itemChooser->tagFilterModel()->importResourceFile(filename, false);
+
+                if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Brushes, filename)) {
+                    if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
+                        resource = m_itemChooser->tagFilterModel()->importResourceFile(filename, true);
+                    }
+                }
             }
         }
     }

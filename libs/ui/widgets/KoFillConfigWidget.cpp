@@ -44,13 +44,14 @@
 #include "KoColorPopupButton.h"
 #include "ui_KoFillConfigWidget.h"
 #include <kis_signals_blocker.h>
-#include <kis_signal_compressor.h>
+#include <kis_signal_compressor_with_param.h>
 #include <kis_acyclic_signal_connector.h>
 #include <kis_assert.h>
 #include "kis_canvas_resource_provider.h"
 #include <KoStopGradient.h>
 #include <QInputDialog>
 #include <KoShapeFillWrapper.h>
+#include <functional>
 
 #include "kis_global.h"
 #include "kis_debug.h"
@@ -158,12 +159,15 @@ static const char* const buttonpattern[]={
     "#aaaaabbbbaaaaa#",
     "################"};
 
+using namespace std::placeholders;
+
+
 class Q_DECL_HIDDEN KoFillConfigWidget::Private
 {
 public:
-    Private(KoFlake::FillVariant _fillVariant)
+    Private(KoFlake::FillVariant _fillVariant, KoFillConfigWidget* q)
     : canvas(0),
-      colorChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
+      colorChangedCompressor(100, std::bind(&KoFillConfigWidget::colorChanged, q, _1)),
       gradientChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
       shapeChangedCompressor(200,KisSignalCompressor::FIRST_ACTIVE),
       fillVariant(_fillVariant),
@@ -178,7 +182,7 @@ public:
 
     KoCanvasBase *canvas;
 
-    KisSignalCompressor colorChangedCompressor;
+    KisSignalCompressorWithParam<std::pair<QColor, KoFlake::FillVariant>> colorChangedCompressor;
     KisAcyclicSignalConnector shapeChangedAcyclicConnector;
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
     KoFillConfigWidget::StyleButton selectedFillIndex {KoFillConfigWidget::None};
@@ -197,12 +201,12 @@ public:
 
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
 
-    boost::optional<KoColor> overriddenColorFromProvider;
+    std::array<boost::optional<KoColor>, 2> overriddenColorFromProvider;
 };
 
 KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, bool trackShapeSelection, QWidget *parent)
     :  QWidget(parent)
-    , d(new Private(fillVariant))
+    , d(new Private(fillVariant, this))
 {
     d->canvas = canvas;
 
@@ -274,8 +278,9 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     d->ui->btnSolidColorSample->setEnabled(false);
     d->ui->btnSolidColorSample->setVisible(false);
 
-    connect(d->colorAction, SIGNAL(colorChanged(KoColor)), &d->colorChangedCompressor, SLOT(start()));
-    connect(&d->colorChangedCompressor, SIGNAL(timeout()), SLOT(colorChanged()));
+    connect(d->colorAction, &KoColorPopupAction::colorChanged, [this](KoColor color) {
+        d->colorChangedCompressor.start({color.toQColor(), d->fillVariant});
+    });
 
     connect(d->ui->btnChooseSolidColor, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
 
@@ -355,8 +360,6 @@ void KoFillConfigWidget::activate()
 
 void KoFillConfigWidget::deactivate()
 {
-    // don't trigger shape update during deactivation
-    KisSignalsBlocker b(d->canvas->resourceManager());
     emit sigInternalRecoverColorInResourceManager();
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(d->deactivationLocks.empty());
@@ -392,10 +395,8 @@ void KoFillConfigWidget::slotUpdateFillTitle()
 
 void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &value)
 {
-    if ((key == KoCanvasResource::ForegroundColor && d->fillVariant == KoFlake::Fill) ||
-        (key == KoCanvasResource::BackgroundColor &&
-         d->fillVariant == KoFlake::StrokeFill && !d->noSelectionTrackingMode) ||
-        (key == KoCanvasResource::ForegroundColor && d->noSelectionTrackingMode)) {
+    if (key == KoCanvasResource::ForegroundColor
+        || key == KoCanvasResource::BackgroundColor) {
 
         KoColor color = value.value<KoColor>();
 
@@ -407,8 +408,12 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
             d->group->button(Solid)->setChecked(true);
             d->selectedFillIndex = Solid;
 
+            KoFlake::FillVariant colorSlot = (key == KoCanvasResource::ForegroundColor)
+                                               ? KoFlake::Fill
+                                               : KoFlake::StrokeFill;
+
             d->colorAction->setCurrentColor(color);
-            d->colorChangedCompressor.start();
+            d->colorChangedCompressor.start({color.toQColor(), colorSlot});
         } else if (checkedId == Gradient && key == KoCanvasResource::ForegroundColor) {
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
         }
@@ -441,7 +446,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
             noColorSelected();
             break;
         case KoFillConfigWidget::Solid:
-            colorChanged();
+            colorChanged({d->colorAction->currentColor(), d->fillVariant});
             break;
         case KoFillConfigWidget::Gradient:
             if (d->activeGradient) {
@@ -521,8 +526,13 @@ void KoFillConfigWidget::noColorSelected()
     emit sigFillChanged();
 }
 
-void KoFillConfigWidget::colorChanged()
+void KoFillConfigWidget::colorChanged(std::pair<QColor, KoFlake::FillVariant> resource)
 {
+    QColor color = resource.first;
+    KoFlake::FillVariant fillVariant = resource.second;
+    if (!color.isValid()) {
+        return;
+    }
     KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
 
     QList<KoShape*> selectedShapes = currentShapes();
@@ -532,12 +542,11 @@ void KoFillConfigWidget::colorChanged()
         return;
     }
 
-    d->overriddenColorFromProvider = boost::none;
+    d->overriddenColorFromProvider[fillVariant] = boost::none;
 
-    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+    KoShapeFillWrapper wrapper(selectedShapes, fillVariant);
 
-
-    KUndo2Command *command = wrapper.setColor(d->colorAction->currentColor());
+    KUndo2Command *command = wrapper.setColor(color);
     if (command) {
         d->canvas->addCommand(command);
     }
@@ -561,45 +570,19 @@ void KoFillConfigWidget::colorChanged()
 
     d->colorAction->setCurrentColor(wrapper.color());
 
-
     emit sigFillChanged();
     emit sigInternalRequestColorToResourceManager();
 }
 
 void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
 {
-    // NOTE: Even though this is guarded by KisAcyclicSignalConnector we need a
-    // KisSignalsBlocker as well. Reason being there are two instances of
-    // KoFillConfigWidget (KoFlake::Fill and KoFlake::StrokeFill). Both are
-    // connected to resourceManager(). Whenever this method is hit, it is hit
-    // only from one instance making the other instance respond to resource
-    // change.
-    KisSignalsBlocker b(d->canvas->resourceManager());
-
     const int checkedId = d->group->checkedId();
 
-    bool hasColor = false;
-    KoColor color;
-    KoCanvasResource::CanvasResourceId colorSlot = KoCanvasResource::ForegroundColor;
-
-
-    if (checkedId == Solid) {
-        if (d->fillVariant == KoFlake::StrokeFill) {
-            colorSlot = KoCanvasResource::BackgroundColor;
-        }
-        color = d->colorAction->currentKoColor();
-        hasColor = true;
-    } else if (checkedId == Gradient) {
-        if (boost::optional<KoColor> gradientColor = d->ui->wdgGradientEditor->currentActiveStopColor()) {
-            color = *gradientColor;
-            hasColor = true;
-        }
-    }
-
-    if (hasColor) {
-        if (!d->overriddenColorFromProvider) {
-            d->overriddenColorFromProvider =
-                d->canvas->resourceManager()->resource(colorSlot).value<KoColor>();
+    auto checkAndSet = [this](KoCanvasResource::CanvasResourceId res,
+                              KoFlake::FillVariant var, KoColor &color) {
+        if (!d->overriddenColorFromProvider[var]) {
+            d->overriddenColorFromProvider[var] =
+                d->canvas->resourceManager()->resource(res).value<KoColor>();
         }
 
         /**
@@ -609,29 +592,58 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
          * resource manager itself,
          */
         color.setOpacity(OPACITY_OPAQUE_U8);
-        d->canvas->resourceManager()->setResource(colorSlot, QVariant::fromValue(color));
+        d->canvas->resourceManager()->setResource(res, QVariant::fromValue(color));
+    };
+
+    if (checkedId == Solid) {
+        if (currentShapes().isEmpty()) {
+            KoCanvasResource::CanvasResourceId res =
+                (d->fillVariant == KoFlake::Fill) ? KoCanvasResource::ForegroundColor
+                                                  : KoCanvasResource::BackgroundColor;
+            KoColor color = d->colorAction->currentKoColor();
+            checkAndSet(res, d->fillVariant, color);
+
+        } else {
+            {
+                KoColor color;
+                KoShapeFillWrapper wrapper(currentShapes(), KoFlake::Fill);
+                color.fromQColor(wrapper.color());
+                checkAndSet(KoCanvasResource::ForegroundColor, KoFlake::Fill, color);
+            }
+
+            {
+                KoColor color;
+                KoShapeFillWrapper wrapper(currentShapes(), KoFlake::StrokeFill);
+                color.fromQColor(wrapper.color());
+                checkAndSet(KoCanvasResource::BackgroundColor, KoFlake::StrokeFill,
+                            color);
+            }
+        }
+    } else if (checkedId == Gradient) {
+        if (boost::optional<KoColor> gradientColor =
+                d->ui->wdgGradientEditor->currentActiveStopColor()) {
+            KoColor color = *gradientColor;
+            KoCanvasResource::CanvasResourceId res =
+                (d->fillVariant == KoFlake::Fill) ? KoCanvasResource::ForegroundColor
+                                                  : KoCanvasResource::BackgroundColor;
+            checkAndSet(res, d->fillVariant, color);
+        }
     }
 }
 
 void KoFillConfigWidget::slotRecoverColorInResourceManager()
 {
-    // NOTE: Even though this is guarded by KisAcyclicSignalConnector we need a
-    // KisSignalsBlocker as well. Reason being there are two instances of
-    // KoFillConfigWidget (KoFlake::Fill and KoFlake::StrokeFill). Both are
-    // connected to resourceManager(). Whenever this method is hit, it is hit
-    // only from one instance making the other instance respond to resource
-    // change.
-    KisSignalsBlocker b(d->canvas->resourceManager());
-
-    if (d->overriddenColorFromProvider) {
-        KoCanvasResource::CanvasResourceId colorSlot = KoCanvasResource::ForegroundColor;
-        if (d->fillVariant == KoFlake::StrokeFill) {
-            colorSlot = KoCanvasResource::BackgroundColor;
+    auto checkAndRecover = [this](KoCanvasResource::CanvasResourceId res,
+                               KoFlake::FillVariant var) {
+        if (d->overriddenColorFromProvider[var]) {
+            d->canvas->resourceManager()->setResource(
+                res, QVariant::fromValue(*d->overriddenColorFromProvider[var]));
+            d->overriddenColorFromProvider[var] = boost::none;
         }
+    };
 
-        d->canvas->resourceManager()->setResource(colorSlot, QVariant::fromValue(*d->overriddenColorFromProvider));
-        d->overriddenColorFromProvider = boost::none;
-    }
+    checkAndRecover(KoCanvasResource::ForegroundColor, KoFlake::Fill);
+    checkAndRecover(KoCanvasResource::BackgroundColor, KoFlake::StrokeFill);
 }
 
 void KoFillConfigWidget::slotSavePredefinedGradientClicked()
@@ -821,13 +833,12 @@ void KoFillConfigWidget::slotMeshHandleColorChanged(const KoColor &c)
 void KoFillConfigWidget::loadCurrentFillFromResourceServer()
 {
     {
-        KoColor color = d->canvas->resourceManager()->backgroundColor();
-        slotCanvasResourceChanged(KoCanvasResource::BackgroundColor, QVariant::fromValue(color));
-    }
-
-    {
         KoColor color = d->canvas->resourceManager()->foregroundColor();
-        slotCanvasResourceChanged(KoCanvasResource::ForegroundColor, QVariant::fromValue(color));
+        if (d->group->checkedId() == -1 || d->group->checkedId() == None) {
+            d->group->button(Solid)->setChecked(true);
+        }
+        d->selectedFillIndex = Solid;
+        d->colorAction->setCurrentColor(color);
     }
 
     Q_FOREACH (QAbstractButton *button, d->group->buttons()) {

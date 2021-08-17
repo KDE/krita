@@ -79,9 +79,9 @@ public:
 private:
     template<typename U = T, typename std::enable_if<!std::numeric_limits<U>::is_integer, void>::type * = nullptr> uint32_t copyDataToChannelsImpl(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
     {
-        size_t numcols = dataWidth / m_hsub;
-        size_t buffPos = y / m_vsub * m_bufferWidth + x / m_hsub;
-        for (size_t index = 0; index < numcols; index++) {
+        quint32 numcols = dataWidth / m_hsub;
+        quint32 buffPos = y / m_vsub * m_bufferWidth + x / m_hsub;
+        for (quint32 index = 0; index < numcols; index++) {
             KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x + m_hsub * index, y, m_hsub);
             for (int vindex = 0; vindex < m_vsub; vindex++) {
                 do {
@@ -106,12 +106,12 @@ private:
 
     template<typename U = T, typename std::enable_if<std::numeric_limits<U>::is_integer, void>::type * = nullptr> uint32_t copyDataToChannelsImpl(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
     {
-        size_t numcols = dataWidth / m_hsub;
+        quint32 numcols = dataWidth / m_hsub;
         double coeff = std::numeric_limits<T>::max() / (double)(std::pow(2.0, this->sourceDepth()) - 1);
         //     dbgFile <<" depth expension coefficient :" << coeff;
         //     dbgFile <<" y =" << y;
         size_t buffPos = y / m_vsub * m_bufferWidth + x / m_hsub;
-        for (size_t index = 0; index < numcols; index++) {
+        for (quint32 index = 0; index < numcols; index++) {
             KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x + m_hsub * index, y, m_hsub);
             for (int vindex = 0; vindex < m_vsub; vindex++) {
                 do {

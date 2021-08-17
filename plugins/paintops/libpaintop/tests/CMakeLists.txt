@@ -8,7 +8,7 @@ if (APPLE)
 
     krita_add_broken_unit_tests(
         kis_sensors_test.cpp
-        kis_embedded_pattern_manager_test.cpp
+        kis_linked_pattern_manager_test.cpp
 
         NAME_PREFIX "plugins-libpaintop-"
         LINK_LIBRARIES kritaimage kritalibpaintop Qt5::Test
@@ -23,7 +23,7 @@ else (APPLE)
         NAME_PREFIX "plugins-libpaintop-"
         LINK_LIBRARIES kritaimage kritalibpaintop Qt5::Test)
 
-    krita_add_broken_unit_test(kis_embedded_pattern_manager_test.cpp
+    krita_add_broken_unit_test(kis_linked_pattern_manager_test.cpp
         NAME_PREFIX "plugins-libpaintop-"
         LINK_LIBRARIES kritaimage kritalibpaintop Qt5::Test)
 

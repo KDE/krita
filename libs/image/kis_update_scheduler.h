@@ -59,7 +59,7 @@ public:
      *
      * \see unlock()
      */
-    void lock();
+    void immediateLockForReadOnly();
 
     /**
      * Unblocks the process and calls processQueues()

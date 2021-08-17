@@ -76,6 +76,7 @@ void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMaskSP mask)
 
 void KisGamutMaskToolbar::slotGamutMaskUnset()
 {
+    m_selectedMask = nullptr;
     m_ui->rotationAngleSelector->hide();
     m_ui->labelMaskName->show();
     m_ui->labelMaskName->setText(m_textNoMask);

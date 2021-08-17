@@ -329,10 +329,6 @@ void KisAnimationPlayer::previousFrame()
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    if (m_d->playbackState != STOPPED) {
-        stop();
-    }
-
     const int startFrame = animInterface->playbackRange().start();
     const int endFrame = animInterface->playbackRange().end();
 
@@ -343,6 +339,10 @@ void KisAnimationPlayer::previousFrame()
     }
 
     if (frame >= 0) {
+        if (m_d->playbackState != STOPPED) {
+            stop();
+        }
+
         seek(frame);
     }
 }
@@ -351,10 +351,6 @@ void KisAnimationPlayer::nextFrame()
 {
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-
-    if (m_d->playbackState != STOPPED) {
-        stop();
-    }
 
     const int startFrame = animInterface->playbackRange().start();
     const int endFrame = animInterface->playbackRange().end();
@@ -366,6 +362,10 @@ void KisAnimationPlayer::nextFrame()
     }
 
     if (frame >= 0) {
+        if (m_d->playbackState != STOPPED) {
+            stop();
+        }
+
         seek(frame);
     }
 }
@@ -391,6 +391,10 @@ void KisAnimationPlayer::previousKeyframe()
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
+        if (m_d->playbackState != STOPPED) {
+            stop();
+        }
+
         seek(destinationTime);
     }
 }
@@ -414,6 +418,10 @@ void KisAnimationPlayer::nextKeyframe()
 
     if (keyframes->keyframeAt(destinationTime)) {
         // Jump to next key...
+        if (m_d->playbackState != STOPPED) {
+            stop();
+        }
+
         seek(destinationTime);
     } else {
         // Jump ahead by estimated timing...
@@ -421,6 +429,10 @@ void KisAnimationPlayer::nextKeyframe()
         const int previousKeyTime = keyframes->previousKeyframeTime(activeKeyTime);
 
         if (previousKeyTime != -1) {
+            if (m_d->playbackState != STOPPED) {
+                stop();
+            }
+
             const int timing = activeKeyTime - previousKeyTime;
             seek(currentTime + timing);
         }
@@ -540,6 +552,10 @@ void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
+        if (m_d->playbackState != STOPPED) {
+            stop();
+        }
+
         seek(destinationTime);
     }
 }
@@ -573,6 +589,10 @@ void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
+        if (m_d->playbackState != STOPPED) {
+            stop();
+        }
+
         seek(destinationTime);
     }
 }

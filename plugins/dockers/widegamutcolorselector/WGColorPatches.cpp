@@ -20,7 +20,12 @@ WGColorPatches::WGColorPatches(KisUniqueColorSet *history, QWidget *parent)
 
 KisUniqueColorSet *WGColorPatches::colorHistory() const
 {
-     return m_colors;
+    return m_colors;
+}
+
+QPoint WGColorPatches::popupOffset() const
+{
+    return patchRect(m_buttonList.size()).center();
 }
 
 void WGColorPatches::setAdditionalButtons(QList<QWidget *> buttonList)

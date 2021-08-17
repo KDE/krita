@@ -27,6 +27,14 @@ public:
     void setUiMode(UiMode mode);
     void setDisplayConverter(const KisDisplayColorConverter *converter);
     const KisDisplayColorConverter *displayConverter() const;
+    /*!
+     * \brief The position, relative to the top left corner, where the cursor
+     *        of the cursor shall be when showing the popup.
+     *
+     * The default implementation returns the widget center.
+     * \return desired cursor position relative to the top left corner
+     */
+    virtual QPoint popupOffset() const;
     virtual void setModel(KisVisualColorModelSP model);
     virtual void updateSettings();
 

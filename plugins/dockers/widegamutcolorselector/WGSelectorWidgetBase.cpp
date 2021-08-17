@@ -35,6 +35,11 @@ const KisDisplayColorConverter *WGSelectorWidgetBase::displayConverter() const
     return m_converter ? m_converter : KisDisplayColorConverter::dumbConverterInstance();
 }
 
+QPoint WGSelectorWidgetBase::popupOffset() const
+{
+    return QPoint(width()/2, height()/2);
+}
+
 void WGSelectorWidgetBase::setModel(KisVisualColorModelSP model)
 {
 

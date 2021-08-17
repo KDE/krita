@@ -56,7 +56,10 @@ void WGSelectorPopup::slotShowPopup()
     const QRect availRect = (activeScreen)? activeScreen->availableGeometry() : QApplication::desktop()->availableGeometry(this);
 
     QRect popupRect(geometry());
-    popupRect.moveCenter(cursorPos);
+    QPoint offset = m_selectorWidget ? m_selectorWidget->pos() + m_selectorWidget->popupOffset()
+                                     : popupRect.center() - popupRect.topLeft();
+
+    popupRect.moveTopLeft(cursorPos - offset);
     popupRect = kisEnsureInRect(popupRect, availRect);
 
 

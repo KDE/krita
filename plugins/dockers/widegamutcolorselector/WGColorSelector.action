@@ -32,6 +32,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="show_wg_color_history">
+      <icon></icon>
+      <text>Show color history</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show color history</toolTip>
+      <iconText>Show color history</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="wgcs_lighten_color">
       <icon></icon>
       <text>Make color lighter</text>

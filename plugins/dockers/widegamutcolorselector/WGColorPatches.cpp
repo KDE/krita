@@ -61,7 +61,7 @@ void WGColorPatches::mouseMoveEvent(QMouseEvent *event)
 void WGColorPatches::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit sigInteraction(true);
+        emit sigColorInteraction(true);
         m_mouseIndex = indexAt(event->pos());
         if (m_mouseIndex >= 0) {
             emit sigColorChanged(m_colors->color(m_mouseIndex));
@@ -72,7 +72,7 @@ void WGColorPatches::mousePressEvent(QMouseEvent *event)
 void WGColorPatches::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit sigInteraction(false);
+        emit sigColorInteraction(false);
     }
 }
 

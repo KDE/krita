@@ -71,8 +71,8 @@ void WGMyPaintShadeSelector::setModel(KisVisualColorModelSP model)
 void WGMyPaintShadeSelector::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        pickColorAt(event->localPos());
         emit sigColorInteraction(true);
+        pickColorAt(event->localPos());
     } else {
         event->ignore();
     }

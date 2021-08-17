@@ -85,7 +85,7 @@ WGColorSelectorDock::WGColorSelectorDock()
     m_history = new WGColorPatches(m_colorHistory, mainWidget);
     mainWidget->layout()->addWidget(m_history);
     connect(m_history, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
-    connect(m_history, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
+    connect(m_history, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
 
     connect(WGConfig::notifier(), SIGNAL(configChanged()), SLOT(slotConfigurationChanged()));
 

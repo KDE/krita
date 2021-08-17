@@ -28,6 +28,7 @@ class WGActionManager : public QObject
     Q_OBJECT
 public:
     explicit WGActionManager(WGColorSelectorDock *parentDock = nullptr);
+    ~WGActionManager() override;
 
     void setCanvas(KisCanvas2* canvas, KisCanvas2* oldCanvas);
     void registerActions(KisViewManager *viewManager);
@@ -43,6 +44,7 @@ private Q_SLOTS:
     void slotShowColorSelectorPopup();
     void slotShowShadeSelectorPopup();
     void slotShowMyPaintSelectorPopup();
+    void slotShowColorHistoryPopup();
     void slotIncreaseLightness();
     void slotDecreaseLightness();
     void slotIncreaseSaturation();
@@ -52,6 +54,8 @@ private Q_SLOTS:
 
     void slotChannelValuesChanged();
     void slotColorInteraction(bool active);
+    void slotColorPatchInteraction(bool active);
+    void slotColorSelected(const KoColor &color);
     void slotUpdateDocker();
 Q_SIGNALS:
 private:
@@ -62,6 +66,7 @@ private:
     WGSelectorPopup *m_colorSelectorPopup {0};
     WGSelectorPopup *m_shadeSelectorPopup {0};
     WGSelectorPopup *m_myPaintSelectorPopup {0};
+    WGSelectorPopup *m_colorHistoryPopup {0};
     KisVisualColorSelector *m_colorSelector {0};
     WGShadeSelector *m_shadeSelector {0};
     WGMyPaintShadeSelector *m_myPaintSelector {0};

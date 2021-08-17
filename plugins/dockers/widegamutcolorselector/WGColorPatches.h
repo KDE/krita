@@ -54,7 +54,6 @@ private:
 
 Q_SIGNALS:
     void sigColorChanged(const KoColor &color);
-    void sigInteraction(bool active);
 
 };
 

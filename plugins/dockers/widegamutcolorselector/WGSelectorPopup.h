@@ -19,6 +19,7 @@ public:
     explicit WGSelectorPopup(QWidget *parent = nullptr);
     void setSelectorWidget(KisVisualColorSelector *selector);
     void setSelectorWidget(WGSelectorWidgetBase *selector);
+    WGSelectorWidgetBase* selectorWidget() const;
 public Q_SLOTS:
     void slotShowPopup();
 protected:
@@ -37,6 +38,7 @@ private:
 
     int m_margin {10};
     bool m_isInteracting {false};
+    WGSelectorWidgetBase *m_selectorWidget {0};
 };
 
 #endif // WGSELECTORPOPUP_H

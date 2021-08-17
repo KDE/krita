@@ -31,12 +31,19 @@ void WGSelectorPopup::setSelectorWidget(KisVisualColorSelector *selector)
 {
     replaceCentranWidget(selector);
     connect(selector, SIGNAL(sigInteraction(bool)), SLOT(slotInteraction(bool)));
+    m_selectorWidget = 0;
 }
 
 void WGSelectorPopup::setSelectorWidget(WGSelectorWidgetBase *selector)
 {
     replaceCentranWidget(selector);
     connect(selector, SIGNAL(sigColorInteraction(bool)), SLOT(slotInteraction(bool)));
+    m_selectorWidget = selector;
+}
+
+WGSelectorWidgetBase *WGSelectorPopup::selectorWidget() const
+{
+    return m_selectorWidget;
 }
 
 void WGSelectorPopup::slotShowPopup()

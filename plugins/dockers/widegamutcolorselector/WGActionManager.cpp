@@ -7,6 +7,7 @@
 #include "WGActionManager.h"
 
 #include "WGColorSelectorDock.h"
+#include "WGColorPatches.h"
 #include "WGColorPreviewToolTip.h"
 #include "WGConfig.h"
 #include "WGMyPaintShadeSelector.h"
@@ -38,12 +39,23 @@ WGActionManager::WGActionManager(WGColorSelectorDock *parentDock)
     connect(WGConfig::notifier(), SIGNAL(selectorConfigChanged()), SLOT(slotSelectorConfigChanged()));
 }
 
+WGActionManager::~WGActionManager()
+{
+    delete m_colorSelectorPopup;
+    delete m_shadeSelectorPopup;
+    delete m_myPaintSelectorPopup;
+    delete m_colorHistoryPopup;
+}
+
 void WGActionManager::setCanvas(KisCanvas2 *canvas, KisCanvas2 *oldCanvas)
 {
     Q_UNUSED(oldCanvas);
     KisDisplayColorConverter *converter = canvas ? canvas->displayColorConverter() : 0;
     if (m_myPaintSelector) {
         m_myPaintSelector->setDisplayConverter(converter);
+    }
+    if (m_colorHistoryPopup) {
+        m_colorHistoryPopup->selectorWidget()->setDisplayConverter(converter);
     }
 }
 
@@ -57,6 +69,8 @@ void WGActionManager::registerActions(KisViewManager *viewManager)
     connect(action, SIGNAL(triggered()), SLOT(slotShowShadeSelectorPopup()));
     action = actionManager->createAction("show_wg_mypaint_selector");
     connect(action, SIGNAL(triggered()), SLOT(slotShowMyPaintSelectorPopup()));
+    action = actionManager->createAction("show_wg_color_history");
+    connect(action, SIGNAL(triggered()), SLOT(slotShowColorHistoryPopup()));
     action = actionManager->createAction("wgcs_lighten_color");
     connect(action, SIGNAL(triggered(bool)), SLOT(slotIncreaseLightness()));
     action = actionManager->createAction("wgcs_darken_color");
@@ -208,6 +222,22 @@ void WGActionManager::slotShowMyPaintSelectorPopup()
     showPopup(m_myPaintSelectorPopup);
 }
 
+void WGActionManager::slotShowColorHistoryPopup()
+{
+    if (!m_colorHistoryPopup) {
+        m_colorHistoryPopup = new WGSelectorPopup;
+        WGColorPatches *history = new WGColorPatches(m_docker->colorHistory());
+        history->setFixedWidth(300);
+        history->setDisplayConverter(m_docker->displayColorConverter());
+        m_colorHistoryPopup->setSelectorWidget(history);
+        connect(m_colorHistoryPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
+                SLOT(slotPopupClosed(WGSelectorPopup*)));
+        connect(history, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorPatchInteraction(bool)));
+        connect(history, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
+    }
+    showPopup(m_colorHistoryPopup);
+}
+
 void WGActionManager::slotIncreaseLightness()
 {
     modifyHSX(2, 0.1f);
@@ -258,6 +288,31 @@ void WGActionManager::slotColorInteraction(bool active)
         m_colorTooltip->setCurrentColor(baseCol);
         m_colorTooltip->setPreviousColor(baseCol);
     }
+}
+
+void WGActionManager::slotColorPatchInteraction(bool active)
+{
+    KoCanvasBase *canvas = m_docker->observedCanvas();
+    if (active && canvas) {
+        KoColor fgColor = canvas->resourceManager()->foregroundColor();
+        QColor baseCol = m_docker->displayColorConverter()->toQColor(fgColor);
+        m_colorTooltip->setCurrentColor(baseCol);
+        m_colorTooltip->setPreviousColor(baseCol);
+    }
+}
+
+/* Directly set canvas resource for color history,
+ */
+void WGActionManager::slotColorSelected(const KoColor &color)
+{
+    // CAVEAT: currently, the color history does not allow background color setting
+    if (!m_docker->observedCanvas()) {
+        return;
+    }
+    m_docker->observedCanvas()->resourceManager()->setForegroundColor(color);
+    QColor previewCol = m_docker->displayColorConverter()->toQColor(color);
+    m_colorTooltip->setCurrentColor(previewCol);
+
 }
 
 void WGActionManager::slotUpdateDocker()

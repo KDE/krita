@@ -36,6 +36,7 @@ public:
     WGColorSelectorDock();
     const KisVisualColorModel& colorModel() const;
     KisDisplayColorConverter* displayColorConverter(bool rawPointer = false) const;
+    KisUniqueColorSet* colorHistory() const { return m_colorHistory; }
 
     bool selectingBackground() const;
     /**

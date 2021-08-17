@@ -22,6 +22,8 @@
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
 
+#include <config-tiff.h>
+
 KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
     : KisConfigWidget(parent)
 {
@@ -39,15 +41,14 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
     activated(kComboBoxCompressionType->currentIndex());
     kComboBoxPredictor->setCurrentIndex(cfg->getInt("predictor", 0));
     alpha->setChecked(cfg->getBool("alpha", true));
-    bool canSaveAsPhotoshop = cfg->getBool("canSaveAsPhotoshop", false);
-    if (canSaveAsPhotoshop) {
-        chkPhotoshop->setEnabled(false);
-        chkPhotoshop->setChecked(false);
-    } else {
-        chkPhotoshop->setEnabled(true);
-        chkPhotoshop->setChecked(cfg->getBool("saveAsPhotoshop", false));
-        kComboBoxPSDCompressionType->setCurrentIndex(cfg->getInt("psdCompressionType", 0));
-    }
+#ifdef TIFF_CAN_WRITE_PSD_TAGS
+    chkPhotoshop->setEnabled(true);
+    chkPhotoshop->setChecked(cfg->getBool("saveAsPhotoshop", false));
+    kComboBoxPSDCompressionType->setCurrentIndex(cfg->getInt("psdCompressionType", 0));
+#else
+    chkPhotoshop->setEnabled(false);
+    chkPhotoshop->setChecked(false);
+#endif
     flatten->setChecked(cfg->getBool("flatten", true));
     flattenToggled(flatten->isChecked());
     qualityLevel->setValue(cfg->getInt("quality", 80));

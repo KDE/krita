@@ -763,6 +763,8 @@ set_package_properties(TIFF PROPERTIES
     URL "http://www.libtiff.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita TIFF filter")
+include(CheckLibTIFFPSDSupport)
+configure_file(config-tiff.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-tiff.h)
 if (TIFF_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${TIFF_LIBRARY})
 endif()

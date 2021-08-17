@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2005-2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,6 +19,8 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
+#include <config-tiff.h>
+
 class KoColorSpace;
 class KoColorTransformation;
 class KisDocument;
@@ -29,7 +32,7 @@ struct KisTIFFOptions {
     quint16 compressionType = 0;
     quint16 predictor = 1;
     bool alpha = true;
-    bool saveAsPhotoshop = true;
+    bool saveAsPhotoshop = false;
     quint16 psdCompressionType = 0;
     bool flatten = true;
     quint16 jpegQuality = 80;
@@ -77,6 +80,7 @@ private:
 
     KisImportExportErrorCode readTIFFDirectory(TIFF* image);
 
+#ifdef TIFF_HAS_PSD_TAGS
     /**
      * Imports the image from the PSD descriptor attached.
      * If this function is invoked, readTIFFDirectory will only
@@ -86,6 +90,7 @@ private:
                                               KisTiffPsdResourceRecord &photoshopImageResourceRecord,
                                               QBuffer &photoshopLayerData,
                                               const KisTiffBasicInfo &basicInfo);
+#endif // TIFF_HAS_PSD_TAGS
 
     /**
      * Imports the image from the TIFF descriptor.

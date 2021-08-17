@@ -3,11 +3,25 @@ add_subdirectory(tests)
 set(libkritatiffconverter_LIB_SRCS
     kis_tiff_converter.cc
     kis_tiff_writer_visitor.cpp
-    kis_tiff_psd_writer_visitor.cpp
     kis_buffer_stream.cc
     kis_tiff_psd_layer_record.cpp
     kis_tiff_psd_resource_record.cpp
 )
+
+if(TIFF_HAS_PSD_TAGS)
+    set(libkritatiffconverter_LIB_SRCS
+        ${libkritatiffconverter_LIB_SRCS}
+        kis_tiff_psd_layer_record.cpp
+        kis_tiff_psd_resource_record.cpp
+    )
+endif()
+
+if(TIFF_CAN_WRITE_PSD_TAGS)
+    set(libkritatiffconverter_LIB_SRCS
+        ${libkritatiffconverter_LIB_SRCS}
+        kis_tiff_psd_writer_visitor.cpp
+    )
+endif()
 
 set(kritatiffimport_SOURCES
     ${libkritatiffconverter_LIB_SRCS}

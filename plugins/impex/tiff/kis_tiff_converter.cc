@@ -51,10 +51,6 @@
 typedef size_t tmsize_t;
 #endif
 
-#if TIFFLIB_VERSION < 20201219
-#define TIFFTAG_IMAGESOURCEDATA 37724 /* http://justsolve.archiveteam.org/wiki/PSD, http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/ */
-#endif
-
 namespace
 {
 QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype, uint16_t color_type, uint16_t color_nb_bits, TIFF *image, uint16_t &nbchannels, uint16_t &extrasamplescount, uint8_t &destDepth)
@@ -296,9 +292,6 @@ KisPropertiesConfigurationSP KisTIFFOptions::toProperties() const
     cfg->setProperty("compressiontype", compToIndex.value(compressionType, 0));
     cfg->setProperty("predictor", predictor - 1);
     cfg->setProperty("alpha", alpha);
-#ifdef TIFFLIB_KRITA_CAN_WRITE_PSD
-    cfg->setProperty("canWritePhotoshop", true);
-#endif
     cfg->setProperty("psdCompressionType", psdCompToIndex.value(psdCompressionType, 0));
     cfg->setProperty("saveAsPhotoshop", saveAsPhotoshop);
     cfg->setProperty("flatten", flatten);
@@ -528,6 +521,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
                                                          KoColorConversionTransformation::internalConversionFlags());
     }
 
+#ifdef TIFF_HAS_PSD_TAGS
     // Attempt to parse Photoshop metadata
     // if it succeeds, divert and load as PSD
 
@@ -595,6 +589,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
             }
         }
     }
+#endif
 
     return readImageFromTiff(image, basicInfo);
 }
@@ -1019,6 +1014,7 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromTiff(TIFF *image, KisTif
     return ImportExportCodes::OK;
 }
 
+#ifdef TIFF_HAS_PSD_TAGS
 KisImportExportErrorCode KisTIFFConverter::readImageFromPsd(const KisTiffPsdLayerRecord &photoshopLayerRecord,
                                                             KisTiffPsdResourceRecord &photoshopImageResourceRecord,
                                                             QBuffer &photoshopLayerData,
@@ -1208,6 +1204,7 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromPsd(const KisTiffPsdLaye
 
     return ImportExportCodes::OK;
 }
+#endif
 
 KisImportExportErrorCode KisTIFFConverter::buildImage(const QString &filename)
 {
@@ -1272,6 +1269,7 @@ KisImportExportErrorCode KisTIFFConverter::buildFile(const QString &filename, Ki
         return ImportExportCodes::InternalError;
     }
 
+#ifdef TIFF_CAN_WRITE_PSD_TAGS
     if (options.saveAsPhotoshop) {
         KisTiffPsdWriter writer(image, &options);
         KisImportExportErrorCode result = writer.writeImage(root);
@@ -1279,7 +1277,9 @@ KisImportExportErrorCode KisTIFFConverter::buildFile(const QString &filename, Ki
             TIFFClose(image);
             return result;
         }
-    } else {
+    } else
+#endif // TIFF_CAN_WRITE_PSD_TAGS
+    {
         KisTIFFWriterVisitor *visitor = new KisTIFFWriterVisitor(image, &options);
         if (!(visitor->visit(root))) {
             TIFFClose(image);

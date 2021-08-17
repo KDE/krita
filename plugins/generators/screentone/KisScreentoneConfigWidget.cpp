@@ -304,7 +304,10 @@ void KisScreentoneConfigWidget::setupShapeComboBox()
 
 void KisScreentoneConfigWidget::setupInterpolationComboBox()
 {
-    m_ui.comboBoxInterpolation->clear();
+    if (m_ui.comboBoxInterpolation->count() > 0) {
+        m_lastSelectedInterpolationText = m_ui.comboBoxInterpolation->currentText();
+        m_ui.comboBoxInterpolation->clear();
+    }
     QStringList names =
         screentoneInterpolationNames(
             m_ui.comboBoxPattern->currentIndex(),
@@ -315,6 +318,8 @@ void KisScreentoneConfigWidget::setupInterpolationComboBox()
         m_ui.comboBoxInterpolation->hide();
     } else {
         m_ui.comboBoxInterpolation->addItems(names);
+        int i = m_ui.comboBoxInterpolation->findText(m_lastSelectedInterpolationText);
+        m_ui.comboBoxInterpolation->setCurrentIndex(i != -1 ? i : KisScreentoneGeneratorConfiguration::defaultInterpolation());
         m_ui.labelInterpolation->show();
         m_ui.comboBoxInterpolation->show();
     }

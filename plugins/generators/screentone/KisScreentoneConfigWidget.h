@@ -34,6 +34,7 @@ private:
     Ui_ScreentoneConfigWidget m_ui;
     KisViewManager *m_view;
     const KoColorSpace *m_colorSpace;
+    QString m_lastSelectedInterpolationText;
 
     void setupPatternComboBox();
     void setupShapeComboBox();

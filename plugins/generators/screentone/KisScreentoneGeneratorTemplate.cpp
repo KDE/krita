@@ -103,13 +103,10 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     // NOTE: In the following, the word "screen" is used to mean the dot screen
     // of the screentone (the grid of dots/cells)
 
-    // Get size in cells of the macrocell
-    m_macrocellSize = QSize(
-        config->alignToPixelGrid() ? config->alignToPixelGridX() : 1,
-        config->alignToPixelGrid() ? config->alignToPixelGridY() : 1
-    );
     // Get transformation parameters
     qreal positionX, positionY, sizeX, sizeY, shearX, shearY;
+    const int alignX = config->alignToPixelGrid() ? config->alignToPixelGridX() : 1;
+    const int alignY = config->alignToPixelGrid() ? config->alignToPixelGridY() : 1;
     if (config->transformationMode() == KisScreentoneTransformationMode_Advanced) {
         positionX = config->positionX();
         positionY = config->positionY();
@@ -137,7 +134,7 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     }
     m_screenPosition = QPointF(positionX, positionY);
     const qreal rotation = config->rotation();
-    // Get transforms
+    // Construct image<->screen transforms
     m_imageToScreenTransform.shear(shearX, shearY);
     m_imageToScreenTransform.scale(qFuzzyIsNull(sizeX) ? 0.0 : 1.0 / sizeX, qFuzzyIsNull(sizeY) ? 0.0 : 1.0 / sizeY);
     m_imageToScreenTransform.rotate(rotation);
@@ -146,13 +143,14 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     screenToImage.rotate(-rotation);
     screenToImage.scale(sizeX, sizeY);
     screenToImage.shear(-shearX, -shearY);
-    const QSizeF macrocellSize = m_macrocellSize;
     // u1 is the unaligned vector that goes from the origin to the top-right
     // corner of the macrocell. v1 is the aligned version
     // u2 is the unaligned vector that goes from the origin to the bottom-left
-    // corner of the macrocell. v2 is the aligned version
-    const QPointF u1 = screenToImage.map(QPointF(macrocellSize.width(), 0.0));
-    const QPointF u2 = screenToImage.map(QPointF(0.0, macrocellSize.height()));
+    // corner of the macrocell. v2 is the aligned version.
+    // At this point we asume the macrocell will have a minimum size given by
+    // the alignment
+    const QPointF u1 = screenToImage.map(QPointF(static_cast<qreal>(alignX), 0.0));
+    const QPointF u2 = screenToImage.map(QPointF(0.0, static_cast<qreal>(alignY)));
     QPointF v1(qRound(u1.x()), qRound(u1.y()));
     QPointF v2(qRound(u2.x()), qRound(u2.y()));
     // If the following condition is met, that means that the screen is
@@ -192,19 +190,52 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
             p_v->setX(p_v->x() - 1.0);
         }
     }
+    qreal v1Length = std::sqrt(v1.x() * v1.x() + v1.y() * v1.y());
+    qreal v2Length = std::sqrt(v2.x() * v2.x() + v2.y() * v2.y());
+    // The macrocell will have a minimum size derived from the alignment but if
+    // its size doesn't contain enough pixels to cover all the range of
+    // intensities we expand it.
+    QSize macrocellTiles(1, 1);
+    while (macrocellTiles.width() * v1Length * macrocellTiles.height() * v2Length < 256) {
+        if (macrocellTiles.width() * v1Length > macrocellTiles.height() * v2Length) {
+            macrocellTiles.setHeight(macrocellTiles.height() + 1);
+        } else {
+            macrocellTiles.setWidth(macrocellTiles.width() + 1);
+        }
+    }
+    // Get size in cells of the macrocell
+    m_macrocellSize = QSize(alignX * macrocellTiles.width(), alignY * macrocellTiles.height());
+    const QSizeF macrocellSizeF = m_macrocellSize;
+    // Scale the top and left vectors and lengths to the final macrocell size
+    v1 *= macrocellTiles.width();
+    v2 *= macrocellTiles.height();
+    v1Length *= macrocellTiles.width();
+    v2Length *= macrocellTiles.height();
+    // Compute other useful quantities
+    const QPointF v3 = v1 + v2;
+    const QPointF l1 = v1;
+    const QPointF l2 = v2;
+    const QPointF l3 = -v1;
+    const QPointF l4 = -v2;
+    const qreal v1MicrocellLength = v1Length / macrocellSizeF.width();
+    const qreal v2MicrocellLength = v2Length / macrocellSizeF.height();
     m_v1 = v1;
     m_v2 = v2;
+    const int numberOfMicrocells = m_macrocellSize.width() * m_macrocellSize.height();
     // Construct template<->screen transforms
     const QPolygonF quad(
         {
             QPointF(0.0, 0.0),
-            v1 / macrocellSize.width(),
-            v1 / macrocellSize.width() + v2 / macrocellSize.height(),
-            v2 / macrocellSize.height()
+            v1 / macrocellSizeF.width(),
+            v1 / macrocellSizeF.width() + v2 / macrocellSizeF.height(),
+            v2 / macrocellSizeF.height()
         }
     );
     QTransform::quadToSquare(quad, m_templateToScreenTransform);
     m_screenToTemplateTransform = m_templateToScreenTransform.inverted();
+
+    // Construct the template
+
     // Compute template dimensions
     const QPoint topLeft(
         static_cast<int>(qMin(0.0, qMin(v1.x(), qMin(v2.x(), v1.x() + v2.x())))),
@@ -217,20 +248,6 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     // Add an 1 pixel border around the template, useful for bilinear interpolation
     m_templateSize = QSize(bottomRight.x() - topLeft.x() + 2, bottomRight.y() - topLeft.y() + 2);
     m_originOffset = -topLeft + QPoint(1, 1);
-
-    // Additional useful quantities
-    const int numberOfMicrocells = m_macrocellSize.width() * m_macrocellSize.height();
-    const QPointF v3 = v1 + v2;
-    const QPointF l1 = v1;
-    const QPointF l2 = v2;
-    const QPointF l3 = -v1;
-    const QPointF l4 = -v2;
-    const qreal v1Length = std::sqrt(v1.x() * v1.x() + v1.y() * v1.y());
-    const qreal v2Length = std::sqrt(v2.x() * v2.x() + v2.y() * v2.y());
-    const qreal v1MicrocellLength = v1Length / macrocellSize.width();
-    const qreal v2MicrocellLength = v2Length / macrocellSize.height();
-
-    // Construct the template
 
     // Convenience struct to store some info during the construction of the
     // template
@@ -334,8 +351,8 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
                 static_cast<qreal>(templateY - m_originOffset.y()) + 0.5
             );
             const QPointF screenPos = m_templateToScreenTransform.map(p);
-            const qreal a = -std::floor(screenPos.x() / macrocellSize.width());
-            const qreal b = -std::floor(screenPos.y() / macrocellSize.height());
+            const qreal a = -std::floor(screenPos.x() / macrocellSizeF.width());
+            const qreal b = -std::floor(screenPos.y() / macrocellSizeF.height());
             p += QPointF(a * v1.x() + b * v2.x(), a * v1.y() + b * v2.y());
 
             int x = static_cast<int>(std::floor(p.x())) + m_originOffset.x();

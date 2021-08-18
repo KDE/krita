@@ -76,7 +76,7 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
         sbSpeed->setRange(25, 200);
         sbSpeed->setSingleStep(5);
         sbSpeed->setValue(100);
-        sbSpeed->setPrefix("Speed: ");
+        sbSpeed->setPrefix(i18nc("preview playback speed percentage prefix", "Speed: "));
         sbSpeed->setSuffix(" %");
         sbSpeed->setToolTip(i18n("Preview playback speed"));
         widgetAreaLayout->addWidget(sbSpeed);

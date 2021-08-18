@@ -8,7 +8,7 @@
 
 #include "kis_animation_player.h"
 
-#include <QElapsedTimer>
+#include "KisElapsedTimer.h"
 #include <QTimer>
 #include <QtMath>
 
@@ -125,7 +125,8 @@ public:
         }
 
         int timeSinceLastFrameMS() { return m_timeSinceLastFrameRefresh.elapsed(); }
-        void resetTimeSinceLastFrame() { m_timeSinceLastFrameRefresh.restart(); }
+        void resetTimeSinceLastFrame(int carryOver) { m_timeSinceLastFrameRefresh.restart(carryOver); }
+
 
         void prepareEnvironment(KisCanvas2* canvas)
         {
@@ -217,7 +218,7 @@ public:
         int m_playheadFrame; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
         int m_originFrame; //!< The frame user started playback from.
         QTimer m_updateLoopTimer;
-        QElapsedTimer m_timeSinceLastFrameRefresh;
+        KisElapsedTimer m_timeSinceLastFrameRefresh;
         KisSignalAutoConnectionsStore m_cancelStrokeConnections;
         SingleShotSignal m_cancelTrigger;
         QVector<KisNodeWSP> m_disabledDecoratedNodes;
@@ -351,9 +352,10 @@ void KisAnimationPlayer::update()
         //              - Try to display the frame (Drop frames???)
         const int msecPerFrame = framesToScaledTimeMS(1, m_d->canvas->image()->animationInterface()->framerate(), m_d->playbackSpeed);
         if (m_d->playback->timeSinceLastFrameMS() > msecPerFrame) {
-            m_d->playback->advancePlayhead();
-            const int differentialMS = m_d->playback->timeSinceLastFrameMS() - msecPerFrame;
-            m_d->playback->resetTimeSinceLastFrame();
+            const int numFramesToAdvance = m_d->dropFramesMode ? m_d->playback->timeSinceLastFrameMS() / msecPerFrame : 1;
+            m_d->playback->advancePlayhead(numFramesToAdvance);
+            const int remainderMS = m_d->dropFramesMode ? m_d->playback->timeSinceLastFrameMS() - (msecPerFrame * numFramesToAdvance) : 0;
+            m_d->playback->resetTimeSinceLastFrame(remainderMS);
             displayFrame(m_d->playback->playheadFrame());
         }
     }

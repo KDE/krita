@@ -19,6 +19,13 @@ private Q_SLOTS:
     void initTestCase();
     void testGenerate01();
     void testGenerate02();
+    void testGenerate03();
+    void testGenerate04();
+    void testGenerate05();
+    void testGenerate06();
+    void testGenerate07();
+    void testGenerate08();
+    void testGenerate09();
 };
 
 #endif

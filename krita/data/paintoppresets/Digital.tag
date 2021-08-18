@@ -54,6 +54,6 @@ Comment[sv]=Penselförinställningar med digitalt utseende och känsla
 Comment[uk]=Набори пензлів із цифровим виглядом і поведінкою.
 Comment[x-test]=xxBrush presets with a digital look and feel.xx
 Comment[zh_CN]=具有数字绘画典型特征的笔刷预设
-Comment[zh_TW]=有數位化感覺的筆刷預設。
+Comment[zh_TW]=數位化質感的筆刷預設。
 URL=Digital
 Default Resources=a)_Eraser_Circle.kpp,b)_Basic-5_Size_default.kpp

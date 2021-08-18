@@ -38,6 +38,7 @@ Comment[ko]=내가 자주 사용하는 브러시 사전 설정
 Comment[nl]=Uw favorite voorinstellingen van penselen
 Comment[pl]=Twoje ulubione nastawy pędzli
 Comment[pt]=As suas predefinições de pincéis favoritas
+Comment[pt_BR]=Suas predefinições de pincel favoritas
 Comment[sv]=Dina favoritförinställningar
 Comment[uk]=Набори ваших улюблених пензлів
 Comment[x-test]=xxYour favorite brush presetsxx

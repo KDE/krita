@@ -123,7 +123,7 @@ THIS IS ALSO NEEDED IF YOU USE THE build.cmd script.
     On Windows:
     ```
     cmake --build . --config RelWithDebInfo --target ext_patch
-    cmake --build . --config RelWithDebInfo --target ext_png2ico
+    cmake --build . --config RelWithDebInfo --target ext_icoutils
     ```
 
     On OSX and Windows:

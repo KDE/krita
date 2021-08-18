@@ -1,0 +1,33 @@
+From db8f45eaae9de3451281f4e288d3d7bbb88497a0 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 18 Aug 2021 14:06:05 +0300
+Subject: [PATCH] Skip looking for Png2Ico when IcoTool is found
+
+This extra search of the package is listed in the build summary
+and makes developers confused, because the library is not actually
+needed anymore.
+---
+ modules/ECMAddAppIcon.cmake | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/modules/ECMAddAppIcon.cmake b/modules/ECMAddAppIcon.cmake
+index 294bd8b..fdebd1d 100644
+--- a/modules/ECMAddAppIcon.cmake
++++ b/modules/ECMAddAppIcon.cmake
+@@ -192,8 +192,12 @@ function(ecm_add_app_icon appsources)
+     if (WIN32 AND (windows_icons_modern OR windows_icons_classic))
+         set(saved_CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}")
+         set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_FIND_MODULE_DIR})
+-        find_package(Png2Ico)
+         find_package(IcoTool)
++
++        if (NOT IcoTool_FOUND)
++            find_package(Png2Ico)
++        endif()
++
+         set(CMAKE_MODULE_PATH "${saved_CMAKE_MODULE_PATH}")
+ 
+         function(create_windows_icon_and_rc command args deps)
+-- 
+2.20.1.windows.1
+

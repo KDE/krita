@@ -64,6 +64,8 @@ qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
     return msecToFrames(time, fps) * playbackSpeed;
 }
 
+const int AUDIO_BUFFER_SAMPLES = 512;
+const int AUDIO_SAMPLE_RATE = 44100; // TODO: Querry audio device.
 
 struct KisAnimationPlayer::Private
 {
@@ -88,8 +90,12 @@ public:
         Playback(KisAnimationPlayer& parent, int originFrame)
             : m_playheadFrame(originFrame)
             , m_originFrame(originFrame)
+            , m_updateLoopTimer()
         {
+            m_updateLoopTimer.setTimerType(Qt::PreciseTimer);
             connect(&m_cancelTrigger, SIGNAL(output()), &parent, SLOT(stop()));
+            connect(&m_updateLoopTimer, SIGNAL(timeout()), &parent, SLOT(update()));
+            m_timeSinceLastFrameRefresh.start();
         }
 
         ~Playback() {
@@ -101,6 +107,25 @@ public:
         Playback& operator= (const Playback&) = delete;
 
         int originFrame() { return m_originFrame; }
+
+        int playheadFrame() { return m_playheadFrame; }
+        void setPlayheadFrame(int value) { m_playheadFrame = value;}
+        void advancePlayhead(int increment = 1) {
+            if (m_canvas) {
+                KIS_ASSERT(m_canvas->image() && m_canvas->image()->animationInterface());
+                const KisImageAnimationInterface* const anim = m_canvas->image()->animationInterface();
+                const KisTimeSpan playbackSpan = anim->playbackRange();
+                m_playheadFrame = (m_playheadFrame - playbackSpan.start() + increment)
+                                  % (playbackSpan.end() + 1 - playbackSpan.start())
+                                  + playbackSpan.start();
+
+            } else {
+                m_playheadFrame += increment;
+            }
+        }
+
+        int timeSinceLastFrameMS() { return m_timeSinceLastFrameRefresh.elapsed(); }
+        void resetTimeSinceLastFrame() { m_timeSinceLastFrameRefresh.restart(); }
 
         void prepareEnvironment(KisCanvas2* canvas)
         {
@@ -160,9 +185,14 @@ public:
                         canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                         &m_cancelTrigger, SLOT(tryFire()));
             }
+
+            m_updateLoopTimer.start(((qreal)AUDIO_BUFFER_SAMPLES / (qreal)AUDIO_SAMPLE_RATE) * 1000);
+            m_timeSinceLastFrameRefresh.restart();
         }
 
         void restoreEnvironment() {
+            m_timeSinceLastFrameRefresh.restart();
+            m_updateLoopTimer.stop();
             m_cancelStrokeConnections.clear();
 
             if (m_canvas) {
@@ -183,10 +213,11 @@ public:
             }
         }
 
-        int m_playheadFrame; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
-
     private:
+        int m_playheadFrame; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
         int m_originFrame; //!< The frame user started playback from.
+        QTimer m_updateLoopTimer;
+        QElapsedTimer m_timeSinceLastFrameRefresh;
         KisSignalAutoConnectionsStore m_cancelStrokeConnections;
         SingleShotSignal m_cancelTrigger;
         QVector<KisNodeWSP> m_disabledDecoratedNodes;
@@ -267,7 +298,7 @@ void KisAnimationPlayer::pause()
         m_d->playback->restoreEnvironment();
         setPlaybackState(PAUSED);
         if (m_d->playback) {
-            seek(m_d->playback->m_playheadFrame);
+            seek(m_d->playback->playheadFrame());
         }
     }
 }
@@ -302,14 +333,40 @@ void KisAnimationPlayer::stop()
     }
 }
 
+void KisAnimationPlayer::update()
+{
+    KIS_ASSERT(m_d->playback);
+    KIS_ASSERT(playbackState() != STOPPED);
+
+    if (playbackState() == PLAYING) {
+        // AUDIO
+        // Every tick
+        //     - Pull and resample audio from via via decoder.
+        //     - Push buffer size audio to audio device.
+
+        // VISUAL
+        // Every tick
+        //     - Check time since last frame. If larger than seconds per frame:
+        //              - Advance playhead by one(?) frame
+        //              - Try to display the frame (Drop frames???)
+        const int msecPerFrame = framesToScaledTimeMS(1, m_d->canvas->image()->animationInterface()->framerate(), m_d->playbackSpeed);
+        if (m_d->playback->timeSinceLastFrameMS() > msecPerFrame) {
+            m_d->playback->advancePlayhead();
+            const int differentialMS = m_d->playback->timeSinceLastFrameMS() - msecPerFrame;
+            m_d->playback->resetTimeSinceLastFrame();
+            displayFrame(m_d->playback->playheadFrame());
+        }
+    }
+}
+
 void KisAnimationPlayer::seek(int frameIndex, bool preferCachedFrames)
 {
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
     if (m_d->playbackState == PLAYING || preferCachedFrames) {
-        if (m_d->playback && m_d->playback->m_playheadFrame != frameIndex) {
-            m_d->playback->m_playheadFrame = frameIndex >= 0 ? frameIndex : m_d->playback->m_playheadFrame;
-            displayFrame(m_d->playback->m_playheadFrame);
+        if (m_d->playback && m_d->playback->playheadFrame() != frameIndex) {
+            m_d->playback->setPlayheadFrame( frameIndex >= 0 ? frameIndex : m_d->playback->playheadFrame() );
+            displayFrame(m_d->playback->playheadFrame());
         } else {
             displayFrame(frameIndex);
         }
@@ -501,10 +558,12 @@ void KisAnimationPlayer::goToStartFrame()
 void KisAnimationPlayer::displayFrame(int frameToDisplay)
 {
     KisAnimationFrameCacheSP frameCache = m_d->canvas->frameCache();
+
+    //Q1: Does `uploadFrame` block program until frame is "updated"?
+    //Q2: updateCanvas has a signal compressor. What does this do in relation to frame updating?
     if (frameCache
         && frameCache->shouldUploadNewFrame(frameToDisplay, m_d->visibleFrame)
         && frameCache->uploadFrame(frameToDisplay)) {
-
         m_d->canvas->updateCanvas();
 
     } else if (!frameCache && m_d->canvas->image()->animationInterface()->hasAnimation()) {

@@ -58,6 +58,8 @@ public Q_SLOTS:
     void playPause();
     void stop();
 
+    void update();
+
     void seek(int frameIndex, bool preferCachedFrames = false);
     void previousFrame();
     void nextFrame();

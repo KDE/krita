@@ -14,6 +14,7 @@
 #include <QLoggingCategory>
 #include <QtTest/qtestsystem.h>
 #include <set>
+#include <QLocale>
 
 /**
  * There is a hierarchy of libraries built on the kritaresources library
@@ -271,6 +272,8 @@ void registerResources()
 #define KISTEST_MAIN(TestObject) \
 int main(int argc, char *argv[]) \
 { \
+    qputenv("LANGUAGE", "en"); \
+    QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     qputenv("QT_LOGGING_RULES", ""); \
     QStandardPaths::setTestModeEnabled(true); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
@@ -288,6 +291,8 @@ int main(int argc, char *argv[]) \
 #define KISTEST_MAIN(TestObject) \
 int main(int argc, char *argv[]) \
 { \
+    qputenv("LANGUAGE", "en"); \
+    QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     qputenv("QT_LOGGING_RULES", ""); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
     QStandardPaths::setTestModeEnabled(true); \

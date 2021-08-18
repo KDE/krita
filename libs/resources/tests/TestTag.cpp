@@ -13,6 +13,8 @@
 #include <KoResource.h>
 #include <KisResourceLoaderRegistry.h>
 
+#include <KLocalizedString>
+
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
@@ -36,8 +38,7 @@ void TestTag::testLoadTag()
     QVERIFY(tagLoader.comment() == "Your favorite brush presets");
     QVERIFY(tagLoader.url() == "* Favorites");
 
-    QLocale nl(QLocale::Dutch, QLocale::Netherlands);
-    QLocale::setDefault(nl);
+    KLocalizedString::setLanguages(QStringList() << QStringLiteral("nl"));
 
     f.open(QFile::ReadOnly);
     QVERIFY(f.isOpen());

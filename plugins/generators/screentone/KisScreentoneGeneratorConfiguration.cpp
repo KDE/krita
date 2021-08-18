@@ -251,7 +251,7 @@ qreal KisScreentoneGeneratorConfiguration::rotation() const
 
 bool KisScreentoneGeneratorConfiguration::alignToPixelGrid() const
 {
-    return getBool("align_to_pixel_grid", defaultAlignToPixelGrid());
+    return getBool("align_to_pixel_grid", version() == 1 ? false : defaultAlignToPixelGrid());
 }
 
 int KisScreentoneGeneratorConfiguration::alignToPixelGridX() const

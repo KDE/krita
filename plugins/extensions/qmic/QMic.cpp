@@ -46,6 +46,8 @@ void QMic::slotQMic(bool again)
     m_qmicAction->setEnabled(false);
     m_againAction->setEnabled(false);
 
+    KisQmicPluginInterface *plugin = nullptr;
+
     // find the krita-gmic-qt plugin
     const auto offers = KoJsonTrader::instance()->query("Krita/GMic", QString());
     if (offers.isEmpty()) {
@@ -61,7 +63,7 @@ void QMic::slotQMic(bool again)
             continue;
         }
 
-        auto *pluginBase = factory->create<QObject>(this);
+        auto *pluginBase = factory->create<QObject>();
 
         plugin = qobject_cast<KisQmicPluginInterface *>(pluginBase);
 

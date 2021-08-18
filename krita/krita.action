@@ -1855,10 +1855,9 @@
     </Action>
     <Action name="drop_frames">
       <icon>dropframe</icon>
-      <text>Drop Frames
-Enable to preserve playback timing.</text>
+      <text>Drop Frames</text>
       <whatsThis/>
-      <toolTip/>
+      <toolTip>Drop Frames, enable to preserve playback timing.</toolTip>
       <iconText/>
       <shortcut/>
       <isCheckable>true</isCheckable>

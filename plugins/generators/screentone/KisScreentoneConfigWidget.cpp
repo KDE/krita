@@ -50,8 +50,8 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderContrast->setSingleStep(1.0);
     m_ui.sliderContrast->setSuffix(i18n("%"));
 
-    m_ui.buttonSimpleTransformation->setGroupPosition(KoGroupButton::GroupLeft);
-    m_ui.buttonAdvancedTransformation->setGroupPosition(KoGroupButton::GroupRight);
+    m_ui.buttonSizeModeResolutionBased->setGroupPosition(KoGroupButton::GroupLeft);
+    m_ui.buttonSizeModePixelBased->setGroupPosition(KoGroupButton::GroupRight);
     m_ui.sliderResolution->setRange(1.0, 9999.0, 2);
     m_ui.sliderResolution->setSoftRange(72.0, 600.0);
     m_ui.sliderFrequencyX->setRange(0.01, 1000.0, 2);
@@ -99,7 +99,7 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderAlignToPixelGridY->setRange(1, 20);
     m_ui.sliderAlignToPixelGridY->setPrefix(i18nc("Prefix. Part of 'Every # cell/s vertically", "Every "));
     m_ui.sliderAlignToPixelGridY->setSuffix(i18nc("Suffix. Part of 'Every # cell/s vertically", " cell vertically"));
-    slot_buttonSimpleTransformation_toggled(true);
+    slot_buttonSizeModeResolutionBased_toggled(true);
 
     connect(m_ui.comboBoxPattern, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxPattern_currentIndexChanged(int)));
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxShape_currentIndexChanged(int)));
@@ -116,10 +116,10 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     connect(m_ui.sliderBrightness, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderContrast, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     
-    connect(m_ui.buttonSimpleTransformation, SIGNAL(toggled(bool)), this, SLOT(slot_buttonSimpleTransformation_toggled(bool)));
-    connect(m_ui.buttonAdvancedTransformation, SIGNAL(toggled(bool)), this, SLOT(slot_buttonAdvancedTransformation_toggled(bool)));
+    connect(m_ui.buttonSizeModeResolutionBased, SIGNAL(toggled(bool)), this, SLOT(slot_buttonSizeModeResolutionBased_toggled(bool)));
+    connect(m_ui.buttonSizeModePixelBased, SIGNAL(toggled(bool)), this, SLOT(slot_buttonSizeModePixelBased_toggled(bool)));
     connect(m_ui.comboBoxUnits, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxUnits_currentIndexChanged(int)));
-    connect(m_ui.sliderResolution, SIGNAL(valueChanged(qreal)), this, SLOT(slot_setAdvancedFromSimpleTransformation()));
+    connect(m_ui.sliderResolution, SIGNAL(valueChanged(qreal)), this, SLOT(slot_setSizeFromFrequenzy()));
     connect(m_ui.sliderResolution, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.buttonResolutionFromImage, SIGNAL(clicked()), this, SLOT(slot_buttonResolutionFromImage_clicked()));
     connect(m_ui.sliderFrequencyX, SIGNAL(valueChanged(qreal)), this, SLOT(slot_sliderFrequencyX_valueChanged(qreal)));
@@ -146,13 +146,8 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
     const KisScreentoneGeneratorConfiguration *generatorConfig =
         dynamic_cast<const KisScreentoneGeneratorConfiguration*>(config.data());
         
-    // The double slider spin boxes and the color buttons emit signals
-    // when their value is set via code so we block signals here to 
-    // prevent multiple sigConfigurationUpdated being called.
-    // After the widgets are set up, unblock and emit sigConfigurationUpdated
-    // just once 
     {
-        KisSignalsBlocker blocker1(m_ui.buttonSimpleTransformation, m_ui.buttonAdvancedTransformation,
+        KisSignalsBlocker blocker1(m_ui.buttonSizeModeResolutionBased, m_ui.buttonSizeModePixelBased,
                                    m_ui.sliderResolution, m_ui.buttonConstrainFrequency,
                                    m_ui.sliderFrequencyX, m_ui.sliderFrequencyY);
         KisSignalsBlocker blocker2(m_ui.sliderSizeX, m_ui.sliderSizeY,
@@ -212,16 +207,14 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
         m_ui.checkBoxAlignToPixelGrid->setChecked(generatorConfig->alignToPixelGrid());
         m_ui.sliderAlignToPixelGridX->setValue(generatorConfig->alignToPixelGridX());
         m_ui.sliderAlignToPixelGridY->setValue(generatorConfig->alignToPixelGridY());
-        // We set here the fallback value to "advanced" if the "transformation_mode"
-        // property is not present, which means the screentone was made with
-        // previous versions of krita
-        if (generatorConfig->transformationMode() == KisScreentoneTransformationMode_Advanced) {
-            m_ui.buttonAdvancedTransformation->setChecked(true);
-            slot_setSimpleFromAdvancedTransformation();
-            slot_buttonAdvancedTransformation_toggled(true);
+
+        if (generatorConfig->sizeMode() == KisScreentoneSizeMode_PixelBased) {
+            m_ui.buttonSizeModePixelBased->setChecked(true);
+            slot_setFrequenzyFromSize();
+            slot_buttonSizeModePixelBased_toggled(true);
         } else {
-            m_ui.buttonSimpleTransformation->setChecked(true);
-            slot_setAdvancedFromSimpleTransformation();
+            m_ui.buttonSizeModeResolutionBased->setChecked(true);
+            slot_setSizeFromFrequenzy();
         }
     }
     emit sigConfigurationUpdated();
@@ -254,8 +247,8 @@ KisPropertiesConfigurationSP KisScreentoneConfigWidget::configuration() const
     config->setBrightness(m_ui.sliderBrightness->value());
     config->setContrast(m_ui.sliderContrast->value());
 
-    config->setTransformationMode(m_ui.buttonAdvancedTransformation->isChecked() ? KisScreentoneTransformationMode_Advanced
-                                                                                 : KisScreentoneTransformationMode_Simple);
+    config->setSizeMode(m_ui.buttonSizeModePixelBased->isChecked() ? KisScreentoneSizeMode_PixelBased
+                                                                   : KisScreentoneSizeMode_ResolutionBased);
     config->setUnits(m_ui.comboBoxUnits->currentIndex());
     config->setResolution(m_ui.sliderResolution->value());
     config->setFrequencyX(m_ui.sliderFrequencyX->value());
@@ -374,7 +367,7 @@ void KisScreentoneConfigWidget::slot_comboBoxShape_currentIndexChanged(int)
     emit sigConfigurationUpdated();
 }
 
-void KisScreentoneConfigWidget::slot_buttonSimpleTransformation_toggled(bool checked)
+void KisScreentoneConfigWidget::slot_buttonSizeModeResolutionBased_toggled(bool checked)
 {
     if (!checked) {
         return;
@@ -382,17 +375,11 @@ void KisScreentoneConfigWidget::slot_buttonSimpleTransformation_toggled(bool che
 
     m_ui.tabTransformation->setUpdatesEnabled(false);
 
-    m_ui.containerPosition->hide();
     m_ui.containerSize->hide();
-    m_ui.containerShear->hide();
-    m_ui.labelPosition->hide();
     m_ui.labelSize->hide();
-    m_ui.labelShear->hide();
-    m_ui.layoutTransformation->takeRow(m_ui.containerPosition);
     m_ui.layoutTransformation->takeRow(m_ui.containerSize);
-    m_ui.layoutTransformation->takeRow(m_ui.containerShear);
 
-    // Prevent adding the widgets if thy are already in the layout
+    // Prevent adding the widgets if they are already in the layout
     if (!m_ui.containerResolution->isVisible()) {
         m_ui.layoutTransformation->insertRow(1, m_ui.labelResolution, m_ui.containerResolution);
         m_ui.layoutTransformation->insertRow(2, m_ui.labelFrequency, m_ui.containerFrequency);
@@ -402,12 +389,14 @@ void KisScreentoneConfigWidget::slot_buttonSimpleTransformation_toggled(bool che
         m_ui.labelFrequency->show();
     }
 
+    slot_setSizeFromFrequenzy();
+
     m_ui.tabTransformation->setUpdatesEnabled(true);
 
     emit sigConfigurationUpdated();
 }
 
-void KisScreentoneConfigWidget::slot_buttonAdvancedTransformation_toggled(bool checked)
+void KisScreentoneConfigWidget::slot_buttonSizeModePixelBased_toggled(bool checked)
 {
     if (!checked) {
         return;
@@ -422,18 +411,14 @@ void KisScreentoneConfigWidget::slot_buttonAdvancedTransformation_toggled(bool c
     m_ui.layoutTransformation->takeRow(m_ui.containerResolution);
     m_ui.layoutTransformation->takeRow(m_ui.containerFrequency);
 
-    // Prevent adding the widgets if thy are already in the layout
-    if (!m_ui.containerPosition->isVisible()) {
-        m_ui.layoutTransformation->insertRow(1, m_ui.labelPosition, m_ui.containerPosition);
-        m_ui.layoutTransformation->insertRow(2, m_ui.labelSize, m_ui.containerSize);
-        m_ui.layoutTransformation->insertRow(3, m_ui.labelShear, m_ui.containerShear);
-        m_ui.containerPosition->show();
+    // Prevent adding the widgets if they are already in the layout
+    if (!m_ui.containerSize->isVisible()) {
+        m_ui.layoutTransformation->insertRow(1, m_ui.labelSize, m_ui.containerSize);
         m_ui.containerSize->show();
-        m_ui.containerShear->show();
-        m_ui.labelPosition->show();
         m_ui.labelSize->show();
-        m_ui.labelShear->show();
     }
+
+    slot_setFrequenzyFromSize();
 
     m_ui.tabTransformation->setUpdatesEnabled(true);
 
@@ -486,7 +471,7 @@ void KisScreentoneConfigWidget::slot_sliderFrequencyX_valueChanged(qreal value)
         KisSignalsBlocker blocker(m_ui.sliderFrequencyY);
         m_ui.sliderFrequencyY->setValue(value);
     }
-    slot_setAdvancedFromSimpleTransformation();
+    slot_setSizeFromFrequenzy();
     emit sigConfigurationUpdated();
 }
 
@@ -496,7 +481,7 @@ void KisScreentoneConfigWidget::slot_sliderFrequencyY_valueChanged(qreal value)
         KisSignalsBlocker blocker(m_ui.sliderFrequencyX);
         m_ui.sliderFrequencyX->setValue(value);
     }
-    slot_setAdvancedFromSimpleTransformation();
+    slot_setSizeFromFrequenzy();
     emit sigConfigurationUpdated();
 }
 
@@ -505,7 +490,7 @@ void KisScreentoneConfigWidget::slot_buttonConstrainFrequency_keepAspectRatioCha
     if (keep) {
         slot_sliderFrequencyX_valueChanged(m_ui.sliderFrequencyX->value());
     }
-    slot_setAdvancedFromSimpleTransformation();
+    slot_setSizeFromFrequenzy();
 }
 
 void KisScreentoneConfigWidget::slot_sliderSizeX_valueChanged(qreal value)
@@ -514,7 +499,7 @@ void KisScreentoneConfigWidget::slot_sliderSizeX_valueChanged(qreal value)
         KisSignalsBlocker blocker(m_ui.sliderSizeY);
         m_ui.sliderSizeY->setValue(value);
     }
-    slot_setSimpleFromAdvancedTransformation();
+    slot_setFrequenzyFromSize();
     emit sigConfigurationUpdated();
 }
 
@@ -524,7 +509,7 @@ void KisScreentoneConfigWidget::slot_sliderSizeY_valueChanged(qreal value)
         KisSignalsBlocker blocker(m_ui.sliderSizeX);
         m_ui.sliderSizeX->setValue(value);
     }
-    slot_setSimpleFromAdvancedTransformation();
+    slot_setFrequenzyFromSize();
     emit sigConfigurationUpdated();
 }
 
@@ -533,7 +518,7 @@ void KisScreentoneConfigWidget::slot_buttonConstrainSize_keepAspectRatioChanged(
     if (keep) {
         slot_sliderSizeX_valueChanged(m_ui.sliderSizeX->value());
     }
-    slot_setSimpleFromAdvancedTransformation();
+    slot_setFrequenzyFromSize();
 }
 
 void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridX_valueChanged(int value)
@@ -560,21 +545,15 @@ void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridY_valueChanged(int va
     }
 }
 
-void KisScreentoneConfigWidget::slot_setAdvancedFromSimpleTransformation()
+void KisScreentoneConfigWidget::slot_setSizeFromFrequenzy()
 {
-    KisSignalsBlocker blocker1(m_ui.sliderPositionX, m_ui.sliderPositionY);
-    KisSignalsBlocker blocker2(m_ui.sliderSizeX, m_ui.sliderSizeY, m_ui.buttonConstrainSize);
-    KisSignalsBlocker blocker3(m_ui.sliderShearX, m_ui.sliderShearY);
-    m_ui.sliderPositionX->setValue(0.0);
-    m_ui.sliderPositionY->setValue(0.0);
+    KisSignalsBlocker blocker(m_ui.sliderSizeX, m_ui.sliderSizeY, m_ui.buttonConstrainSize);
     m_ui.sliderSizeX->setValue(m_ui.sliderResolution->value() / m_ui.sliderFrequencyX->value());
     m_ui.sliderSizeY->setValue(m_ui.sliderResolution->value() / m_ui.sliderFrequencyY->value());
     m_ui.buttonConstrainSize->setKeepAspectRatio(m_ui.buttonConstrainFrequency->keepAspectRatio());
-    m_ui.sliderShearX->setValue(0.0);
-    m_ui.sliderShearY->setValue(0.0);
 }
 
-void KisScreentoneConfigWidget::slot_setSimpleFromAdvancedTransformation()
+void KisScreentoneConfigWidget::slot_setFrequenzyFromSize()
 {
     KisSignalsBlocker blocker(m_ui.sliderFrequencyX, m_ui.sliderFrequencyY, m_ui.buttonConstrainFrequency);
     m_ui.sliderFrequencyX->setValue(m_ui.sliderResolution->value() / m_ui.sliderSizeX->value());

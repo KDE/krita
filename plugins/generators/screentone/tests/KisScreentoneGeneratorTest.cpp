@@ -134,7 +134,7 @@ void KisScreentoneGeneratorTest::testGenerate07()
     properties.insert("shape", 1);
     properties.insert("equalization_mode", 0);
 
-    properties.insert("transformation_mode", 1);
+    properties.insert("size_mode", 1);
     properties.insert("keep_size_square", false);
     properties.insert("size_x", 100.0);
     properties.insert("rotation", 15.0);
@@ -157,7 +157,7 @@ void KisScreentoneGeneratorTest::testGenerate08()
     properties.insert("shape", 1);
     properties.insert("equalization_mode", 1);
 
-    properties.insert("transformation_mode", 1);
+    properties.insert("size_mode", 1);
     properties.insert("keep_size_square", false);
     properties.insert("size_x", 100.0);
     properties.insert("rotation", 15.0);
@@ -180,7 +180,7 @@ void KisScreentoneGeneratorTest::testGenerate09()
     properties.insert("shape", 1);
     properties.insert("equalization_mode", 2);
 
-    properties.insert("transformation_mode", 1);
+    properties.insert("size_mode", 1);
     properties.insert("keep_size_square", false);
     properties.insert("size_x", 100.0);
     properties.insert("rotation", 15.0);

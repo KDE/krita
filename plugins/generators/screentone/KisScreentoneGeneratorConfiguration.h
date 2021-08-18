@@ -54,10 +54,10 @@ enum KisScreentoneEqualizationMode
     KisScreentoneEqualizationMode_TemplateBased
 };
 
-enum KisScreentoneTransformationMode
+enum KisScreentoneSizeMode
 {
-    KisScreentoneTransformationMode_Simple,
-    KisScreentoneTransformationMode_Advanced
+    KisScreentoneSizeMode_ResolutionBased,
+    KisScreentoneSizeMode_PixelBased
 };
 
 enum KisScreentoneUnits
@@ -107,7 +107,7 @@ public:
     static constexpr qreal defaultBrightness() { return 50.0; }
     static constexpr qreal defaultContrast() { return 95.0; }
 
-    static constexpr int defaultTransformationMode() { return KisScreentoneTransformationMode_Simple; }
+    static constexpr int defaultSizeMode() { return KisScreentoneSizeMode_ResolutionBased; }
     static constexpr int defaultUnits() { return KisScreentoneUnits_Inches; }
     static constexpr qreal defaultResolution() { return 300.0; }
     static constexpr qreal defaultFrequencyX() { return 30.0; }
@@ -138,7 +138,7 @@ public:
     qreal brightness() const;
     qreal contrast() const;
 
-    int transformationMode() const;
+    int sizeMode() const;
     int units() const;
     qreal resolution() const;
     qreal frequencyX() const;
@@ -170,7 +170,7 @@ public:
     void setBrightness(qreal newBrightness);
     void setContrast(qreal newContrast);
 
-    void setTransformationMode(int newTransformationMode);
+    void setSizeMode(int newSizeMode);
     void setUnits(int newUnits);
     void setResolution(qreal newResolution);
     void setFrequencyX(qreal newFrequencyX);

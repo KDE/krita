@@ -47,8 +47,8 @@ private Q_SLOTS:
     void slot_comboBoxPattern_currentIndexChanged(int);
     void slot_comboBoxShape_currentIndexChanged(int);
     
-    void slot_buttonSimpleTransformation_toggled(bool checked);
-    void slot_buttonAdvancedTransformation_toggled(bool checked);
+    void slot_buttonSizeModeResolutionBased_toggled(bool checked);
+    void slot_buttonSizeModePixelBased_toggled(bool checked);
     void slot_comboBoxUnits_currentIndexChanged(int index);
     void slot_buttonResolutionFromImage_clicked();
     void slot_sliderFrequencyX_valueChanged(qreal value);
@@ -60,8 +60,8 @@ private Q_SLOTS:
     void slot_sliderAlignToPixelGridX_valueChanged(int value);
     void slot_sliderAlignToPixelGridY_valueChanged(int value);
 
-    void slot_setAdvancedFromSimpleTransformation();
-    void slot_setSimpleFromAdvancedTransformation();
+    void slot_setSizeFromFrequenzy();
+    void slot_setFrequenzyFromSize();
 };
 
 #endif

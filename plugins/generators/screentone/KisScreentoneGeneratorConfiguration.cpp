@@ -179,9 +179,9 @@ qreal KisScreentoneGeneratorConfiguration::contrast() const
     return getDouble("contrast", defaultContrast());
 }
 
-int KisScreentoneGeneratorConfiguration::transformationMode() const
+int KisScreentoneGeneratorConfiguration::sizeMode() const
 {
-    return getInt("transformation_mode", version() == 1 ? KisScreentoneTransformationMode_Advanced : defaultTransformationMode());
+    return getInt("size_mode", version() == 1 ? KisScreentoneSizeMode_PixelBased : defaultSizeMode());
 }
 
 int KisScreentoneGeneratorConfiguration::units() const
@@ -331,9 +331,9 @@ void KisScreentoneGeneratorConfiguration::setContrast(qreal newContrast)
     setProperty("contrast", newContrast);
 }
 
-void KisScreentoneGeneratorConfiguration::setTransformationMode(int newTransformationMode)
+void KisScreentoneGeneratorConfiguration::setSizeMode(int newSizeMode)
 {
-    setProperty("transformation_mode", newTransformationMode);
+    setProperty("size_mode", newSizeMode);
     m_d->invalidateTemplate();
 }
 
@@ -445,7 +445,7 @@ void KisScreentoneGeneratorConfiguration::setDefaults()
     setInvert(defaultInvert());
     setBrightness(defaultBrightness());
     setContrast(defaultContrast());
-    setTransformationMode(defaultTransformationMode());
+    setSizeMode(defaultSizeMode());
     setUnits(defaultUnits());
     setResolution(defaultResolution());
     setFrequencyX(defaultFrequencyX());

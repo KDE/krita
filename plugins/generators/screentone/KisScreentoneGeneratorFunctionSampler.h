@@ -27,27 +27,25 @@ public:
         : m_function(the_function)
     {
         // Get transformation parameters
-        qreal positionX, positionY, sizeX, sizeY, shearX, shearY;
-        if (config->transformationMode() == KisScreentoneTransformationMode_Advanced) {
-            positionX = config->positionX();
-            positionY = config->positionY();
+        qreal sizeX, sizeY;
+        if (config->sizeMode() == KisScreentoneSizeMode_PixelBased) {
             const bool constrainSize = config->constrainSize();
             sizeX = config->sizeX();
             // Ensure that the size y component is equal to the x component if keepSizeSquare is true
             sizeY = constrainSize ? sizeX : config->sizeY();
-            shearX = config->shearX();
-            shearY = config->shearY();
         } else {
             const qreal resolution = config->resolution();
             const bool constrainFrequency = config->constrainFrequency();
             const qreal frequencyX = config->frequencyX();
             // Ensure that the frequency y component is equal to the x component if constrainFrequency is true
             const qreal frequencyY = constrainFrequency ? frequencyX : config->frequencyY();
-            positionX = positionY = 0.0;
             sizeX = qMax(1.0, resolution / frequencyX);
             sizeY = qMax(1.0, resolution / frequencyY);
-            shearX = shearY = 0.0;
         }
+        const qreal positionX = config->positionX();
+        const qreal positionY = config->positionY();
+        const qreal shearX = config->shearX();
+        const qreal shearY = config->shearY();
         const qreal rotation = config->rotation();
         
         // Get final transformation

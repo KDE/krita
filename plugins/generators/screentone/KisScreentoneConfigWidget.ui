@@ -240,9 +240,9 @@
           <number>0</number>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="labelTransformationMode">
+          <widget class="QLabel" name="labelSizeMode">
            <property name="text">
-            <string>Mode:</string>
+            <string>Size Mode:</string>
            </property>
           </widget>
          </item>
@@ -252,9 +252,9 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="KoGroupButton" name="buttonSimpleTransformation">
+            <widget class="KoGroupButton" name="buttonSizeModeResolutionBased">
              <property name="text">
-              <string>Simple</string>
+              <string>Resolution based</string>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -268,9 +268,9 @@
             </widget>
            </item>
            <item>
-            <widget class="KoGroupButton" name="buttonAdvancedTransformation">
+            <widget class="KoGroupButton" name="buttonSizeModePixelBased">
              <property name="text">
-              <string>Advanced</string>
+              <string>Pilxel based</string>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -408,60 +408,6 @@
            </layout>
           </widget>
          </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="labelPosition">
-           <property name="text">
-            <string comment="Geometric Position">Position:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QWidget" name="containerPosition" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_11">
-            <property name="spacing">
-             <number>5</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="KisDoubleSliderSpinBox" name="sliderPositionX" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::WheelFocus</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KisDoubleSliderSpinBox" name="sliderPositionY" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::WheelFocus</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
          <item row="4" column="0">
           <widget class="QLabel" name="labelSize">
            <property name="text">
@@ -523,14 +469,14 @@
            </layout>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="labelShear">
            <property name="text">
             <string>Shear:</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="6" column="1">
           <widget class="QWidget" name="containerShear" native="true">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <property name="spacing">
@@ -577,14 +523,14 @@
            </layout>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item row="7" column="0">
           <widget class="QLabel" name="labelRotationSimple">
            <property name="text">
             <string>Rotation:</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item row="7" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <property name="spacing">
             <number>0</number>
@@ -611,14 +557,14 @@
            </item>
           </layout>
          </item>
-         <item row="7" column="0">
+         <item row="8" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
             <string>Align to Pixel Grid:</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
+         <item row="8" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,1">
            <property name="spacing">
             <number>5</number>
@@ -633,6 +579,60 @@
             <widget class="KisSliderSpinBox" name="sliderAlignToPixelGridY" native="true"/>
            </item>
           </layout>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="labelPosition">
+           <property name="text">
+            <string comment="Geometric Position">Position:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QWidget" name="containerPosition" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <property name="spacing">
+             <number>5</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="KisDoubleSliderSpinBox" name="sliderPositionX" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::WheelFocus</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KisDoubleSliderSpinBox" name="sliderPositionY" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::WheelFocus</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </item>

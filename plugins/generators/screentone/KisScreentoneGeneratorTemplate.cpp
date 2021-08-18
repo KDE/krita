@@ -104,35 +104,29 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     // of the screentone (the grid of dots/cells)
 
     // Get transformation parameters
-    qreal positionX, positionY, sizeX, sizeY, shearX, shearY;
+    qreal sizeX, sizeY;
     const int alignX = config->alignToPixelGrid() ? config->alignToPixelGridX() : 1;
     const int alignY = config->alignToPixelGrid() ? config->alignToPixelGridY() : 1;
-    if (config->transformationMode() == KisScreentoneTransformationMode_Advanced) {
-        positionX = config->positionX();
-        positionY = config->positionY();
+    if (config->sizeMode() == KisScreentoneSizeMode_PixelBased) {
         const bool constrainSize = config->constrainSize();
         sizeX = config->sizeX();
         // Ensure that the size y component is equal to the x component
         // if keepSizeSquare is true
         sizeY = constrainSize ? sizeX : config->sizeY();
-        shearX = config->shearX();
-        shearY = config->shearY();
     } else {
         const qreal resolution = config->resolution();
         const bool constrainFrequency = config->constrainFrequency();
         const qreal frequencyX = config->frequencyX();
         // Ensure that the frequency y component is equal to the x component if constrainFrequency is true
         const qreal frequencyY = constrainFrequency ? frequencyX : config->frequencyY();
-        positionX = positionY = 0.0;
         sizeX = qMax(1.0, resolution / frequencyX);
         sizeY = qMax(1.0, resolution / frequencyY);
-        shearX = shearY = 0.0;
     }
-    if (config->alignToPixelGrid()) {
-        positionX = qRound(positionX);
-        positionY = qRound(positionY);
-    }
+    const qreal positionX = config->alignToPixelGrid() ? qRound(config->positionX()) : config->positionX();
+    const qreal positionY = config->alignToPixelGrid() ? qRound(config->positionY()) : config->positionY();
     m_screenPosition = QPointF(positionX, positionY);
+    const qreal shearX = config->shearX();
+    const qreal shearY = config->shearY();
     const qreal rotation = config->rotation();
     // Construct image<->screen transforms
     m_imageToScreenTransform.shear(shearX, shearY);

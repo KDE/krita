@@ -17,7 +17,7 @@
   <developer_name xml:lang="fr">La fondation Krita</developer_name>
   <developer_name xml:lang="gl">Fundación Krita</developer_name>
   <developer_name xml:lang="hi">क्रिता संस्थान</developer_name>
-  <developer_name xml:lang="ia">Krita Foundation (Fundation Krita)</developer_name>
+  <developer_name xml:lang="ia">Krita Foundation (Fundatiomn de Krita)</developer_name>
   <developer_name xml:lang="id">Asas Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
   <developer_name xml:lang="ko">Krita Foundation</developer_name>
@@ -27,6 +27,7 @@
   <developer_name xml:lang="pt">Fundação do Krita</developer_name>
   <developer_name xml:lang="pt-BR">Krita Foundation</developer_name>
   <developer_name xml:lang="sk">Nadácia Krita</developer_name>
+  <developer_name xml:lang="sl">Fundacija Krita</developer_name>
   <developer_name xml:lang="sv">Krita-stiftelsen</developer_name>
   <developer_name xml:lang="tr">Krita Vakfı</developer_name>
   <developer_name xml:lang="uk">Фундація Krita</developer_name>
@@ -35,10 +36,12 @@
   <developer_name xml:lang="zh-TW">Krita 基金會</developer_name>
   <update_contact>foundation@krita.org</update_contact>
   <name>Krita</name>
+  <name xml:lang="ar">كريتا</name>
   <name xml:lang="ca">Krita</name>
   <name xml:lang="ca-valencia">Krita</name>
   <name xml:lang="cs">Krita</name>
   <name xml:lang="de">Krita</name>
+  <name xml:lang="el">Krita</name>
   <name xml:lang="en-GB">Krita</name>
   <name xml:lang="es">Krita</name>
   <name xml:lang="et">Krita</name>
@@ -58,6 +61,7 @@
   <name xml:lang="pt-BR">Krita</name>
   <name xml:lang="ru">Krita</name>
   <name xml:lang="sk">Krita</name>
+  <name xml:lang="sl">Krita</name>
   <name xml:lang="sv">Krita</name>
   <name xml:lang="tr">Krita</name>
   <name xml:lang="uk">Krita</name>
@@ -65,6 +69,7 @@
   <name xml:lang="zh-CN">Krita</name>
   <name xml:lang="zh-TW">Krita</name>
   <summary>Digital Painting, Creative Freedom</summary>
+  <summary xml:lang="ar">رسم رقميّ، حريّة إبداعيّة</summary>
   <summary xml:lang="ast">Pintura dixital, llibertá creativa</summary>
   <summary xml:lang="bs">Digitalno crtanje, kreativna sloboda</summary>
   <summary xml:lang="ca">Dibuix digital, Llibertat creativa</summary>
@@ -72,6 +77,7 @@
   <summary xml:lang="cs">Digitální malování, svoboda tvorby</summary>
   <summary xml:lang="da">Digital tegning, kunstnerisk frihed</summary>
   <summary xml:lang="de">Digitales Malen, kreative Freiheit</summary>
+  <summary xml:lang="el">Ψηφιακή ζωγραφική, δημιουργική ελευθερία</summary>
   <summary xml:lang="en-GB">Digital Painting, Creative Freedom</summary>
   <summary xml:lang="es">Pintura digital, libertad creativa</summary>
   <summary xml:lang="et">Digitaalne joonistamine, loominguline vabadus</summary>
@@ -91,6 +97,7 @@
   <summary xml:lang="pt-BR">Pintura digital, liberdade criativa</summary>
   <summary xml:lang="ru">Цифровое рисование. Творческая свобода</summary>
   <summary xml:lang="sk">Digitálne maľovanie, kreatívna sloboda</summary>
+  <summary xml:lang="sl">Digitalno slikarstvo, ustvarjalna svoboda</summary>
   <summary xml:lang="sv">Digital målning, kreativ frihet</summary>
   <summary xml:lang="tr">Sayısal Boyama, Yaratıcı Özgürlük</summary>
   <summary xml:lang="uk">Цифрове малювання, творча свобода</summary>
@@ -104,6 +111,7 @@
     <p xml:lang="ca">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="ca-valencia">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="de">Krita ist ein digitales Designstudio mit umfangreichen Funktionen.</p>
+    <p xml:lang="el">Το Krita είναι ένα πλήρες χαρακτηριστικών ψηφιακό ατελιέ.</p>
     <p xml:lang="en-GB">Krita is the full-featured digital art studio.</p>
     <p xml:lang="es">Krita es un estudio de arte digital completo</p>
     <p xml:lang="et">Krita on rohkete võimalustega digitaalkunstistuudio.</p>
@@ -124,6 +132,7 @@
     <p xml:lang="pt-BR">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="ru">Krita — полнофункциональный инструмент для создания цифровой графики.</p>
     <p xml:lang="sk">Krita je plne vybavené digitálne umelecké štúdio.</p>
+    <p xml:lang="sl">Krita je celovit digitalni umetniški studio.</p>
     <p xml:lang="sv">Krita är den fullfjädrade digitala konststudion.</p>
     <p xml:lang="tr">Krita, tam özellikli dijital sanat stüdyosudur.</p>
     <p xml:lang="uk">Krita — повноцінний комплекс для створення цифрових художніх творів.</p>
@@ -135,6 +144,7 @@
     <p xml:lang="ca">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fitxers de dibuix digital des de zero per a mestres.</p>
     <p xml:lang="ca-valencia">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fitxers de dibuix digital des de zero per a mestres.</p>
     <p xml:lang="de">Krita ist perfekt zum Zeichnen oder Malen und stellt eine umfängliche Lösung für die Erstellung digitaler Bilder dar.</p>
+    <p xml:lang="el">Είναι ιδανικό για σκιτσογραφία και ζωγραφική, και παρουσιάζει μια από άκρη σε άκρη λύση για τη δημιουργία από το μηδέν αρχείων ψηφιακης ζωγραφικής από τους δασκάλους της τέχνης.</p>
     <p xml:lang="en-GB">It is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.</p>
     <p xml:lang="es">Es perfecto para diseñar y pintar, y ofrece una solución completa para crear desde cero archivos de pintura digital apta para profesionales.</p>
     <p xml:lang="et">See on suurepärane töövahend visandite ja joonistuste valmistamiseks ning annab andekatele kunstnikele võimaluse luua digitaalpilt algusest lõpuni just oma käe järgi.</p>
@@ -154,6 +164,7 @@
     <p xml:lang="pt-BR">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar arquivos de desenho digital feitos a partir do zero por mestres.</p>
     <p xml:lang="ru">Она превосходно подходит для набросков и рисования, предоставляя мастерам самодостаточный инструмент для создания цифровой живописи с нуля.</p>
     <p xml:lang="sk">Je ideálna na skicovanie a maľovanie a poskytuje end-to-end riešenie na vytváranie súborov digitálneho maľovania od základu od profesionálov.</p>
+    <p xml:lang="sl">Idealen je za skiciranje in slikanje ter predstavlja rešitev od začetka do konca za ustvarjanje mojstrskih datotek digitalne slike iz nič.</p>
     <p xml:lang="sv">Den är perfekt för att skissa och måla, samt erbjuder en helomfattande lösning för att skapa digitala målningsfiler från grunden av mästare.</p>
     <p xml:lang="tr">Eskiz ve boyama için mükemmeldir ve ustaların sıfırdan dijital boyama dosyaları oluşturmak için uçtan-uca bir çözüm sunar.</p>
     <p xml:lang="uk">Цей комплекс чудово пасує для створення ескізів та художніх зображень і є самодостатнім набором для створення файлів цифрових полотен «з нуля» для справжніх художників.</p>
@@ -168,6 +179,7 @@
     <p xml:lang="ca">El Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="ca-valencia">El Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="de">Krita ist eine großartige Wahl zur Erstellung von Concept Art, Comics, Rendertexturen und Vorsatzmalerei. Krita unterstützt viele Farbräume, wie RGB und CMYK mit 8 oder 16 Bit Integerkanälen, sowie 16 und 32 Bit Fließkomma-Kanälen.</p>
+    <p xml:lang="el">Το Krita είναι μια εξαιρετική επιλογή για τη δημιουργία αφηρημένης τέχνης, ιστοριών με εικόνες, υφής για ζωγραφική αποτύπωσης και διάχυσης φωτός. Το Krita υποστηρίζει πολλούς χρωματικούς χώρους όπως τα RGB και CMYK σε 8 και 16 bit κανάλια ακεραίων καθώς επίσης και σε 16 και 32 bit κανάλια κινητής υποδιαστολής,</p>
     <p xml:lang="en-GB">Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colourspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
     <p xml:lang="es">Krita es una gran elección para crear arte conceptual, cómics, texturas para renderizar y «matte paintings». Krita permite el uso de muchos espacios de color, como, por ejemplo, RGB y CMYK, tanto en canales de enteros de 8 y 16 bits, así como en canales de coma flotante de 16 y 32 bits.</p>
     <p xml:lang="et">Krita on üks paremaid valikuid kontseptuaalkunsti, koomiksite, tekstuuride ja digitaalmaalide loomiseks. Krita toetab paljusid värviruume, näiteks RGB ja CMYK 8 ja 16 täisarvulise bitiga kanali kohta, samuti 16 ja 32 ujukomabitiga kanali kohta.</p>
@@ -188,6 +200,7 @@
     <p xml:lang="pt-BR">O Krita é uma ótima escolha para criação de arte conceitual, histórias em quadrinhos, texturas para desenhos e pinturas. O Krita tem suporte a diversos espaços de cores como RGB e CMYK com canais de cores inteiros de 8 e 16 bits, assim como canais de ponto flutuante de 16 e 32 bits.</p>
     <p xml:lang="ru">Krita — отличный выбор для создания концепт-артов, комиксов, текстур для рендеринга и рисования. Она поддерживает множество цветовых пространств включая RGB и CMYK с 8 и 16 целыми битами на канал, а также 16 и 32 битами с плавающей запятой на канал.</p>
     <p xml:lang="sk">Krita je výborná voľba pre vytváranie konceptového umenia, textúr na renderovanie a matné kresby. Krita podporuje mnoho farebných priestorov ako RGB a CMYK na 8 a 16 bitových celočíselných kanáloch ako aj 16 a 32 bitových reálnych kanáloch.</p>
+    <p xml:lang="sl">Krita je odlična izbira za ustvarjanje konceptualne umetnosti, stripov, tekstur za upodabljanje in mat slike. Krita podpira številne barvne prostore, kot sta RGB in CMYK na 8 in 16 bitne celoštevilske kanale, kot tudi 16 in 32 bitne kanale števil v plavajočih vejicah.</p>
     <p xml:lang="sv">Krita är ett utmärkt val för att skapa concept art, serier, strukturer för återgivning och bakgrundsmålningar. Krita stöder många färgrymder som RGB och CMYK med 8- och 16-bitars heltal, samt 16- och 32-bitars flyttal.</p>
     <p xml:lang="tr">Krita, konsept sanat, çizgi roman, kaplama ve mat resimler için dokular oluşturmak için mükemmel bir seçimdir. Krita, 8 ve 16 bit tamsayı kanallarında RGB ve CMYK gibi birçok renk alanını ve 16 ve 32 bit kayan nokta kanallarını desteklemektedir.</p>
     <p xml:lang="uk">Krita — чудовий інструмент для створення концептуального живопису, коміксів, текстур для моделей та декорацій. У Krita передбачено підтримку багатьох просторів кольорів, зокрема RGB та CMYK з 8-бітовими та 16-бітовими цілими значеннями, а також 16-бітовими та 32-бітовими значеннями з рухомою крапкою для каналів кольорів.</p>
@@ -199,6 +212,7 @@
     <p xml:lang="ca">Gaudiu pintant amb els motors avançats de pinzell, filtres impressionants i moltes característiques útils que fan el Krita molt productiu.</p>
     <p xml:lang="ca-valencia">Gaudiu pintant amb els motors avançats de pinzell, filtres impressionants i moltes característiques útils que fan el Krita molt productiu.</p>
     <p xml:lang="de">Viel Spaß beim Malen mit den fortschrittlichen Pinsel-Engines, verblüffenden Filtern und vielen praktischen Features, die Krita eine enorme Produktivität verleihen.</p>
+    <p xml:lang="el">Διασκεδάστε ζωγραφίζοντας με τις προηγμένες μηχανές πινέλων, με εκπληκτικά φίλτρα και πολλά εύκολης χρήσης χαρακτηριστικά που παρέχουν στο Krita εξαιρετικά αυξημένη παραγωγικότητα.</p>
     <p xml:lang="en-GB">Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
     <p xml:lang="es">Diviértase pintando con los avanzados motores de pinceles, los espectaculares filtros y muchas funcionalidades prácticas que hacen que Krita sea enormemente productivo.</p>
     <p xml:lang="et">Joonistamise muudavad tunduvalt lõbusamaks võimsad pintslimootorid, imetabased filtrid ja veel paljud käepärased võimalused, mis muudavad Krita kasutaja tohutult tootlikuks.</p>
@@ -219,6 +233,7 @@
     <p xml:lang="pt-BR">Divirta-se pintando com os mecanismos de pincéis avançados, filtros maravilhosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>
     <p xml:lang="ru">Получайте удовольствие от использования особых кистевых движков, впечатляющих фильтров и множества других функций, делающих Krita сверхпродуктивной.</p>
     <p xml:lang="sk">Užívajte si maľovanie s pokročilými kresliacimi enginmi, úžasnými filtrami a mnohými užitočnými funkciami, ktoré robia Kritu veľmi produktívnu.</p>
+    <p xml:lang="sl">Zabavajte se s slikanjem z naprednimi čopiči, neverjetnimi filtri in številnimi priročnimi funkcijami, zaradi katerih je Krita izjemno produktivna.</p>
     <p xml:lang="sv">Ha det så kul vid målning med de avancerade penselfunktionerna, fantastiska filtren och många praktiska funktioner som gör Krita så enormt produktiv.</p>
     <p xml:lang="tr">Gelişmiş fırça motorları, şaşırtıcı filtreler ve Krita'yı son derece üretken yapan bir çok kullanışlı özellikli boya ile iyi eğlenceler.</p>
     <p xml:lang="uk">Отримуйте задоволення від малювання за допомогою пензлів з найширшими можливостями, чудових фільтрів та багатьох зручних можливостей, які роблять Krita надзвичайно продуктивним засобом малювання.</p>
@@ -254,6 +269,7 @@
       <caption xml:lang="pt">O Krita é um estúdio de arte digital completo</caption>
       <caption xml:lang="pt-BR">O Krita é um estúdio de pintura digital completo</caption>
       <caption xml:lang="sk">Krita je plnohodnotné digitálne maliarske štúdio</caption>
+      <caption xml:lang="sl">Krita je celovit digitalni umetniški studio.</caption>
       <caption xml:lang="sv">Krita är en fullfjädrad digital konststudio</caption>
       <caption xml:lang="uk">Krita — повноцінний комплекс для цифрового малювання</caption>
       <caption xml:lang="x-test">xxKrita is a full-featured digital painting studioxx</caption>
@@ -282,6 +298,7 @@
       <caption xml:lang="pt">A janela inicial agora também lhe dá as últimas notícias sobre o Krita</caption>
       <caption xml:lang="pt-BR">A janela de inicialização agora também mostra as últimas notícias sobre o Krita</caption>
       <caption xml:lang="sk">V úvodnom okne sa tiež nachádzajú najnovšie správy o Krita</caption>
+      <caption xml:lang="sl">Začetno okno vam zdaj ponuja tudi najnovejše novice o Kriti</caption>
       <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita</caption>
       <caption xml:lang="uk">У початковому вікні програми ви можете бачити найсвіжіші новини щодо Krita</caption>
       <caption xml:lang="x-test">xxThe startup window now also gives you the latest news about Kritaxx</caption>
@@ -310,6 +327,7 @@
       <caption xml:lang="pt">Existem mais de dez motores de pincéis extremamente poderosos</caption>
       <caption xml:lang="pt-BR">Mais de dez engines de pincéis incrivelmente poderosos disponíveis</caption>
       <caption xml:lang="sk">Existuje viac ako desať nesmierne výkonných štetcových enginov</caption>
+      <caption xml:lang="sl">Obstaja več kot deset izjemno močnih načinov podpor čopičev</caption>
       <caption xml:lang="sv">Det finns mer än tio enormt kraftfulla penselgränssnitt</caption>
       <caption xml:lang="uk">У програмі передбачено понад десяток надзвичайно потужних рушіїв пензлів</caption>
       <caption xml:lang="x-test">xxThere are over ten immensely powerful brush enginesxx</caption>
@@ -337,6 +355,7 @@
       <caption xml:lang="pt">Crie e use máscaras de gamute para dar às suas imagens uma aparência coerente</caption>
       <caption xml:lang="pt-BR">Crie e use máscaras de gama para dar um senso de coerência às suas imagens</caption>
       <caption xml:lang="sk">Vytvorte a používajte gamutové masky, aby vašim obrázkom poskytli ucelený pocit</caption>
+      <caption xml:lang="sl">Ustvarite in uporabite maske gamut, da boste svojim slikam dali usklajeni občutek</caption>
       <caption xml:lang="sv">Att skapa och använda färgomfångsmasker ger bilder en sammanhängande känsla</caption>
       <caption xml:lang="uk">Створюйте маски палітри і користуйтеся ними для надання вашим малюнкам однорідного вигляду</caption>
       <caption xml:lang="x-test">xxCreate and use gamut masks to give your images a coherent feelxx</caption>
@@ -364,6 +383,7 @@
       <caption xml:lang="pt">Gosta de animação? O Krita oferece tudo o que precisa para o desenho animado tradicional e desenhado à mão</caption>
       <caption xml:lang="pt-BR">Curte animação? O Krita fornece tudo necessário para você poder trabalhar com animação tradicional ou feita à mão</caption>
       <caption xml:lang="sk">Ste do animácie? Krita poskytuje všetko, čo potrebujete pre tradičné ručne kreslené animácie</caption>
+      <caption xml:lang="sl">Za animacijo? Krita ponuja vse, kar potrebujete za tradicionalno, ročno narisano animacijo</caption>
       <caption xml:lang="sv">Gillar du animering? Krita tillhandahåller allt som behövs för traditionella, handritade animeringar</caption>
       <caption xml:lang="uk">Працюєте із анімацією? У Krita ви знайдете усе, що потрібно для створення традиційної, намальованої вручну анімації</caption>
       <caption xml:lang="x-test">xxInto animation? Krita provides everything you need for traditional, hand-drawn animationxx</caption>
@@ -392,7 +412,8 @@
       <caption xml:lang="pt">Se é novo na pintura digital, ou deseja saber mais sobre as possibilidades do Krita, existe um manual extenso e actualizado</caption>
       <caption xml:lang="pt-BR">Se você for iniciante em pintura digital, há um extenso e atualizado manual</caption>
       <caption xml:lang="sk">Ak ste v oblasti digitálnej maľby nováčikom alebo sa chcete dozvedieť viac o možnostiach programu Krita, existuje o tom rozsiahla a aktuálna príručka</caption>
-      <caption xml:lang="sv">Om digital målning är nytt för dig, eller om du vill veta mer om Kritas möjligheter, finns en omfattande, aktuell handbok</caption>
+      <caption xml:lang="sl">Če ste novi v digitalnem slikanju, obstaja obsežen, posodobljen priročnik</caption>
+      <caption xml:lang="sv">Om digital målning är nytt för dig, finns en omfattande, aktuell handbok</caption>
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні, скористайтеся нашим докладним і актуальним підручником</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, there's an extensive, up-to-date manualxx</caption>
       <caption xml:lang="zh-CN">如果您是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册。</caption>

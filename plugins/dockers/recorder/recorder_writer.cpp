@@ -176,10 +176,9 @@ public:
         if (!outputDir.exists() && !outputDir.mkpath(settings.outputDirectory))
             return false;
 
-        const QString &fileName = QString("%1%2.%3")
-                                  .arg(settings.outputDirectory)
-                                  .arg(partIndex, 7, 10, QLatin1Char('0'))
-                                  .arg(RecorderFormatInfo::fileExtension(settings.format));
+        const QString fileName = QString("%1").arg(partIndex, 7, 10, QLatin1Char('0'));
+        const QString &filePath = QString("%1%2.%3").arg(settings.outputDirectory, fileName,
+                                                         RecorderFormatInfo::fileExtension(settings.format));
 
         int factor = -1; // default value
         switch (settings.format) {
@@ -191,9 +190,9 @@ public:
                 break;
         }
 
-        bool result = frame.save(fileName, RecorderFormatInfo::fileFormat(settings.format).data(), factor);
+        bool result = frame.save(filePath, RecorderFormatInfo::fileFormat(settings.format).data(), factor);
         if (!result)
-            QFile(fileName).remove(); // remove corrupted frame
+            QFile(filePath).remove(); // remove corrupted frame
         return result;
     }
 

@@ -41,7 +41,7 @@ public class MainActivity extends QtActivity {
         }
 
 		super.onCreate(savedInstanceState);
-        Log.d("KritaActivity", "LibsLoaded");
+        Log.i(TAG, "LibsLoaded");
 		new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();

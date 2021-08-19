@@ -34,7 +34,7 @@ public class MainActivity extends QtActivity {
 
         // we have to do this before loading main()
         Intent i = getIntent();
-        String uri = addToKnownUris(i);
+        String uri = getUri(i);
         if (uri != null) {
             // this will be passed as a command line argument to main()
             i.putExtra("applicationArguments", uri);
@@ -49,7 +49,7 @@ public class MainActivity extends QtActivity {
 
     @Override
     protected void onNewIntent (Intent intent) {
-        String uri = addToKnownUris(intent);
+        String uri = getUri(intent);
         if (uri != null) {
             JNIWrappers.openFileFromIntent(uri);
         }
@@ -57,13 +57,10 @@ public class MainActivity extends QtActivity {
         super.onNewIntent(intent);
     }
 
-    private String addToKnownUris(Intent intent) {
+    private String getUri(Intent intent) {
         if (intent != null) {
             Uri fileUri = intent.getData();
             if (fileUri != null) {
-                int modeFlags = (intent.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                modeFlags    |= (intent.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                QtNative.addToKnownUri(fileUri, modeFlags);
                 return fileUri.toString();
             }
         }

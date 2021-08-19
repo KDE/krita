@@ -67,6 +67,7 @@ qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
 const int AUDIO_BUFFER_SAMPLES = 512;
 const int AUDIO_SAMPLE_RATE = 44100; // TODO: Querry audio device.
 
+
 struct KisAnimationPlayer::Private
 {
 public:
@@ -356,7 +357,7 @@ void KisAnimationPlayer::update()
             m_d->playback->advancePlayhead(numFramesToAdvance);
             const int remainderMS = m_d->dropFramesMode ? m_d->playback->timeSinceLastFrameMS() - (msecPerFrame * numFramesToAdvance) : 0;
             m_d->playback->resetTimeSinceLastFrame(remainderMS);
-            displayFrame(m_d->playback->playheadFrame());
+            seek(m_d->playback->playheadFrame());
         }
     }
 }
@@ -366,8 +367,10 @@ void KisAnimationPlayer::seek(int frameIndex, bool preferCachedFrames)
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
     if (m_d->playbackState == PLAYING || preferCachedFrames) {
-        if (m_d->playback && m_d->playback->playheadFrame() != frameIndex) {
-            m_d->playback->setPlayheadFrame( frameIndex >= 0 ? frameIndex : m_d->playback->playheadFrame() );
+        if (m_d->playback) {
+            if (m_d->playback->playheadFrame() != frameIndex) {
+                m_d->playback->setPlayheadFrame( frameIndex >= 0 ? frameIndex : m_d->playback->playheadFrame() );
+            }
             displayFrame(m_d->playback->playheadFrame());
         } else {
             displayFrame(frameIndex);

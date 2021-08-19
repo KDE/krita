@@ -58,7 +58,7 @@ class ConfigsManager {
 			return;
 		}
 
-		Log.d(LOG_TAG, getStorageDir());
+		Log.i(LOG_TAG, getStorageDir());
 		copyAssets();
 		updateLastUpdateTime();
 	}

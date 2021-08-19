@@ -37,7 +37,7 @@ public class DocumentSaverService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "Creating");
+        Log.i(TAG, "Creating");
 
         Intent intent = new Intent(this, DocumentSaverService.class);
         intent.putExtra(CANCEL_SAVING, true);
@@ -80,10 +80,10 @@ public class DocumentSaverService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "Starting");
+        Log.i(TAG, "Starting");
 
         if (intent.getBooleanExtra(START_SAVING, false)) {
-            Log.d(TAG, "Starting Auto Save");
+            Log.i(TAG, "Starting Auto Save");
             // let's not block the Android UI thread if we return to the app quickly
             mDocSaverThread = new Thread(new Runnable() {
                 @Override
@@ -115,7 +115,7 @@ public class DocumentSaverService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "Destroying: Kill Process = " + mKillProcess);
+        Log.i(TAG, "Destroying: Kill Process = " + mKillProcess);
         waitForSaving();
 
         if (mKillProcess) {

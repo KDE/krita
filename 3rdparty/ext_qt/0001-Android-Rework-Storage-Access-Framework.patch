@@ -1,0 +1,1561 @@
+From 3bda80dcc89a0ef8668f37e6a52871da11bde9c7 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Thu, 19 Aug 2021 12:01:16 +0000
+Subject: [PATCH] Android: Rework Storage Access Framework
+
+With this commit we introduce creation of directories, files, and files
+inside directories. We also changed the permission model of accessing
+the files.
+---
+ mkspecs/features/java.prf                     |   2 +-
+ src/android/jar/AndroidManifest.xml           |   1 -
+ src/android/jar/jar.pro                       |   3 +
+ .../qt5/android/CachedDocumentFile.java       | 187 +++++
+ .../org/qtproject/qt5/android/QtNative.java   | 256 +-----
+ .../org/qtproject/qt5/android/SAFFile.java    |  23 +
+ .../qtproject/qt5/android/SAFFileManager.java | 738 ++++++++++++++++++
+ .../android/androidcontentfileengine.cpp      |  91 ++-
+ .../android/androidcontentfileengine.h        |   6 +
+ .../qandroidplatformfiledialoghelper.cpp      |   6 +
+ .../android/qandroidplatformservices.cpp      |   6 +-
+ 11 files changed, 1040 insertions(+), 279 deletions(-)
+ create mode 100644 src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
+ create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFile.java
+ create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
+
+diff --git a/mkspecs/features/java.prf b/mkspecs/features/java.prf
+index f1f5e4c10c..1d52f05e52 100644
+--- a/mkspecs/features/java.prf
++++ b/mkspecs/features/java.prf
+@@ -20,7 +20,7 @@ CONFIG += plugin no_plugin_name_prefix
+ javac.input = JAVASOURCES
+ javac.output = $$CLASS_DIR
+ javac.CONFIG += combine
+-javac.commands = javac -source 6 -target 6 -Xlint:unchecked -bootclasspath $$ANDROID_JAR_FILE -cp $$shell_quote($$system_path($$join(JAVACLASSPATH, $$DIRLIST_SEPARATOR))) -d $$shell_quote($$CLASS_DIR) ${QMAKE_FILE_IN}
++javac.commands = javac -source 7 -target 7 -Xlint:unchecked -bootclasspath $$ANDROID_JAR_FILE -cp $$shell_quote($$system_path($$join(JAVACLASSPATH, $$DIRLIST_SEPARATOR))) -d $$shell_quote($$CLASS_DIR) ${QMAKE_FILE_IN}
+ # Force rebuild every time, because we don't know the paths of the destination files
+ # as they depend on the code.
+ javac.depends = FORCE
+diff --git a/src/android/jar/AndroidManifest.xml b/src/android/jar/AndroidManifest.xml
+index cef88f7f19..ebc6fcfea7 100644
+--- a/src/android/jar/AndroidManifest.xml
++++ b/src/android/jar/AndroidManifest.xml
+@@ -1,5 +1,4 @@
+ <?xml version='1.0' encoding='utf-8'?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="org.qtproject.qt5.android">
+     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
+-    <uses-sdk android:minSdkVersion="9" />
+ </manifest>
+diff --git a/src/android/jar/jar.pro b/src/android/jar/jar.pro
+index bda15a0a00..6a610c511d 100644
+--- a/src/android/jar/jar.pro
++++ b/src/android/jar/jar.pro
+@@ -16,6 +16,9 @@ JAVASOURCES += \
+     $$PATHPREFIX/QtLayout.java \
+     $$PATHPREFIX/QtMessageDialogHelper.java \
+     $$PATHPREFIX/QtNative.java \
++    $$PATHPREFIX/SAFFileManager.java \
++    $$PATHPREFIX/SAFFile.java \
++    $$PATHPREFIX/CachedDocumentFile.java \
+     $$PATHPREFIX/QtNativeLibrariesDir.java \
+     $$PATHPREFIX/QtSurface.java \
+     $$PATHPREFIX/ExtractStyle.java \
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java b/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
+new file mode 100644
+index 0000000000..2658f4c25d
+--- /dev/null
++++ b/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
+@@ -0,0 +1,187 @@
++package org.qtproject.qt5.android;
++
++import android.content.ContentResolver;
++import android.content.Context;
++import android.database.Cursor;
++import android.net.Uri;
++import android.provider.DocumentsContract;
++import android.text.TextUtils;
++import android.util.Log;
++
++public class CachedDocumentFile {
++
++    private static final String TAG = "CachedDocumentFile";
++    private final String name;
++    private final String mimeType;
++    private final String documentId;
++    // TODO(sh_zam): do something
++    private long size;
++    private final Uri uri;
++    private final Context ctx;
++    private Boolean exists = null;
++    private Boolean writable = null;
++
++    public CachedDocumentFile(Context context, String name, String documentId, String mimeType, long size, Uri uri) {
++        this.name = name;
++        this.documentId = documentId;
++        this.mimeType = mimeType;
++        this.size = size;
++        this.uri = uri;
++        this.ctx = context;
++    }
++
++    public CachedDocumentFile(Context context, String name, String documentId, String mimeType, Uri uri) {
++        this(context, name, documentId, mimeType, -1, uri);
++    }
++
++    public static CachedDocumentFile fromFileUri(Context context, Uri uri) {
++        final String[] columns = new String[]{
++                DocumentsContract.Document.COLUMN_DISPLAY_NAME,
++                DocumentsContract.Document.COLUMN_DOCUMENT_ID,
++                DocumentsContract.Document.COLUMN_MIME_TYPE,
++                DocumentsContract.Document.COLUMN_SIZE,
++        };
++
++        Cursor cursor = null;
++        try {
++            final ContentResolver resolver = context.getContentResolver();
++            cursor = resolver.query(uri, columns, null, null, null);
++
++            if (cursor.moveToFirst()) {
++                return new CachedDocumentFile(
++                        context,
++                        cursor.getString(0),  // display name
++                        cursor.getString(1),  // document_id
++                        cursor.getString(2),  // mimetype
++                        cursor.getLong(3),    // size
++                        uri);
++            }
++        } catch (Exception e) {
++            Log.e(TAG, "fromFileUri(): " + uri);
++        } finally {
++            if (cursor != null)
++                cursor.close();
++        }
++        return null;
++    }
++
++    public String getName() {
++        return name;
++    }
++
++    public String getMimeType() {
++        return mimeType;
++    }
++
++    public String getDocumentId() {
++        return documentId;
++    }
++
++    public Uri getUri() {
++        return uri;
++    }
++
++    public boolean isFile() {
++        return !isDirectory() && !TextUtils.isEmpty(mimeType);
++    }
++
++    public boolean isDirectory() {
++        return DocumentsContract.Document.MIME_TYPE_DIR.equals(mimeType);
++    }
++
++    public long getSize() {
++        return queryForLong(DocumentsContract.Document.COLUMN_SIZE, 0);
++    }
++
++    public boolean canWrite() {
++        if (writable != null) {
++            return writable;
++        }
++        Cursor cursor = null;
++        try {
++            final ContentResolver resolver = ctx.getContentResolver();
++            final String[] columns = {DocumentsContract.Document.COLUMN_FLAGS,
++                    DocumentsContract.Document.COLUMN_MIME_TYPE};
++            cursor = resolver.query(uri, columns, null, null, null);
++            int flags = 0;
++            String mimeType = null;
++            if (cursor != null) {
++                if (cursor.moveToFirst()) {
++                    flags = cursor.getInt(0);
++                    mimeType = cursor.getString(1);
++                } else {
++                    writable = false;
++                }
++            }
++
++            if (DocumentsContract.Document.MIME_TYPE_DIR.equals(mimeType) &&
++                    (flags & DocumentsContract.Document.FLAG_DIR_SUPPORTS_CREATE) != 0) {
++                writable = true;
++            } else if ((flags & DocumentsContract.Document.FLAG_SUPPORTS_WRITE) != 0) {
++                writable = true;
++            }
++
++        } catch (Exception e) {
++            Log.e(TAG, "canWrite(): Failed query: " + e);
++            writable = false;
++        } finally {
++            if (cursor != null) {
++                cursor.close();
++            }
++        }
++        return writable;
++    }
++
++    public boolean exists() {
++        if (exists != null) {
++            return exists;
++        }
++
++        Cursor cursor = null;
++        try {
++            final ContentResolver resolver = ctx.getContentResolver();
++            final String[] columns = {DocumentsContract.Document.COLUMN_DOCUMENT_ID};
++            cursor = resolver.query(uri, columns, null, null, null);
++            exists = cursor.getCount() > 0;
++        } catch (Exception e) {
++            Log.e(TAG, "exists(): Failed query: " + e);
++            exists = false;
++        } finally {
++            if (cursor != null) {
++                cursor.close();
++            }
++        }
++
++        return exists;
++    }
++
++    private long queryForLong(String column, long defaultValue) {
++        Cursor cursor = null;
++        try {
++            final ContentResolver resolver = ctx.getContentResolver();
++            final String[] columns = {column};
++            cursor = resolver.query(uri, columns, null, null, null);
++            if (cursor.moveToFirst() && !cursor.isNull(0)) {
++                return cursor.getLong(0);
++            } else {
++                return defaultValue;
++            }
++        } catch (Exception e) {
++            Log.e(TAG, "queryForLong(): Failed query: " + e);
++            return defaultValue;
++        } finally {
++            if (cursor != null) {
++                cursor.close();
++            }
++        }
++    }
++
++    @Override
++    public boolean equals(Object other) {
++        if (other instanceof CachedDocumentFile) {
++            return ((CachedDocumentFile) other).getUri().equals(this.getUri());
++        }
++        return false;
++    }
++
++}
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index 2ed56e992f..75cb37f47d 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -40,50 +40,41 @@
+ 
+ package org.qtproject.qt5.android;
+ 
+-import java.io.File;
+-import java.io.FileNotFoundException;
+-import java.util.ArrayList;
+-import java.util.HashMap;
+-import java.util.concurrent.Semaphore;
+-import java.io.IOException;
+-
+ import android.app.Activity;
+ import android.app.Service;
+-import android.content.ActivityNotFoundException;
+-import android.content.Context;
++import android.content.ClipData;
++import android.content.ClipboardManager;
+ import android.content.ContentResolver;
++import android.content.Context;
+ import android.content.Intent;
+-import android.content.pm.PackageManager;
+ import android.content.pm.ActivityInfo;
+-import android.content.UriPermission;
++import android.content.pm.PackageManager;
+ import android.net.Uri;
+ import android.os.Build;
+ import android.os.Handler;
+ import android.os.IBinder;
+ import android.os.Looper;
+-import android.content.ClipboardManager;
+-import android.content.ClipboardManager.OnPrimaryClipChangedListener;
+-import android.content.ClipData;
+-import android.os.ParcelFileDescriptor;
+ import android.util.Log;
+ import android.view.ContextMenu;
++import android.view.InputDevice;
+ import android.view.KeyEvent;
+ import android.view.Menu;
+ import android.view.MotionEvent;
+ import android.view.View;
+-import android.view.InputDevice;
+-import android.database.Cursor;
+-import android.provider.OpenableColumns;
+ 
++import java.io.File;
+ import java.lang.reflect.Method;
+ import java.security.KeyStore;
+ import java.security.cert.X509Certificate;
++import java.util.ArrayList;
+ import java.util.Iterator;
+-import java.util.List;
+-import javax.net.ssl.TrustManagerFactory;
++import java.util.concurrent.Semaphore;
++
+ import javax.net.ssl.TrustManager;
++import javax.net.ssl.TrustManagerFactory;
+ import javax.net.ssl.X509TrustManager;
+ 
++@SuppressWarnings("unused")
+ public class QtNative
+ {
+     private static Activity m_activity = null;
+@@ -113,9 +104,6 @@ public class QtNative
+     public static QtThread m_qtThread = new QtThread();
+     private static Method m_addItemMethod = null;
+ 
+-    private static HashMap<Integer, ParcelFileDescriptor> m_parcelFileDescriptors = new HashMap<Integer, ParcelFileDescriptor>();
+-    private static HashMap<Uri, Integer> m_uriPermissions = new HashMap<Uri, Integer>(); // for URIs which were not accessed through SAF e.g through an Intent
+-
+ 
+     private static final Runnable runPendingCppRunnablesRunnable = new Runnable() {
+         @Override
+@@ -169,228 +157,6 @@ public class QtNative
+         return joinedString.split(",");
+     }
+ 
+-    public static void addToKnownUri(Uri uri, int modeFlags) {
+-        m_uriPermissions.put(uri, modeFlags);
+-    }
+-
+-    public static boolean checkKnownUriPermission(Uri uri, String openMode) {
+-        if (!m_uriPermissions.containsKey(uri)) {
+-            return false;
+-        }
+-
+-        int modeFlags = 0;
+-        if (openMode.startsWith("r")) {
+-            modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+-        }
+-
+-        if (!"r".equals(openMode)) {
+-            modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+-        }
+-
+-        return (m_uriPermissions.get(uri) & modeFlags) == modeFlags;
+-    }
+-
+-    private static Uri getUriWithValidPermission(Context context, String uri, String openMode)
+-    {
+-        try {
+-            List<UriPermission> permissions = context.getContentResolver().getPersistedUriPermissions();
+-            String uriStr = Uri.parse(uri).getPath();
+-
+-            for (int i = 0; i < permissions.size(); ++i) {
+-                Uri iterUri = permissions.get(i).getUri();
+-                boolean isRightPermission = permissions.get(i).isReadPermission();
+-
+-                if (!openMode.equals("r"))
+-                   isRightPermission = permissions.get(i).isWritePermission();
+-
+-                if (iterUri.getPath().equals(uriStr) && isRightPermission) {
+-                    return iterUri;
+-                }
+-            }
+-
+-            Uri uriParsed = Uri.parse(uri);
+-
+-            // give known URIs a try, perhaps we got it in a way we couldn't persist the permissions (say Intent)
+-            if (checkKnownUriPermission(uriParsed, openMode)) {
+-                return uriParsed;
+-            }
+-
+-            return null;
+-        } catch (SecurityException e) {
+-            e.printStackTrace();
+-            return null;
+-        }
+-    }
+-
+-    public static boolean openURL(Context context, String url, String mime)
+-    {
+-        Uri uri;
+-        if (url.startsWith("content:")) {
+-            uri = getUriWithValidPermission(context, url, "r");
+-            if (uri == null) {
+-                Log.e(QtTAG, "openURL(): No permissions to open Uri");
+-                return false;
+-            }
+-        } else {
+-            uri = Uri.parse(url);
+-        }
+-
+-        try {
+-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+-            if (!mime.isEmpty())
+-                intent.setDataAndType(uri, mime);
+-
+-            activity().startActivity(intent);
+-
+-            return true;
+-        } catch (IllegalArgumentException e) {
+-            Log.e(QtTAG, "openURL(): Invalid Uri");
+-            return false;
+-        } catch (UnsupportedOperationException e) {
+-            Log.e(QtTAG, "openURL(): Unsupported operation for given Uri");
+-            return false;
+-        } catch (ActivityNotFoundException e) {
+-            e.printStackTrace();
+-            return false;
+-        }
+-    }
+-
+-    public static int openFdForContentUrl(Context context, String contentUrl, String openMode)
+-    {
+-        Uri uri = getUriWithValidPermission(context, contentUrl, openMode);
+-        int error = -1;
+-
+-        if (uri == null) {
+-            Log.e(QtTAG, "openFdForContentUrl(): No permissions to open Uri");
+-            return error;
+-        }
+-
+-        try {
+-            ContentResolver resolver = context.getContentResolver();
+-            ParcelFileDescriptor fdDesc = resolver.openFileDescriptor(uri, openMode);
+-            m_parcelFileDescriptors.put(fdDesc.getFd(), fdDesc);
+-            return fdDesc.getFd();
+-        } catch (FileNotFoundException e) {
+-            e.printStackTrace();
+-            return error;
+-        } catch (IllegalArgumentException e) {
+-            Log.e(QtTAG, "openFdForContentUrl(): Invalid Uri: " + e);
+-            return error;
+-        }
+-    }
+-
+-    public static boolean closeFd(int fd)
+-    {
+-        ParcelFileDescriptor pfd = m_parcelFileDescriptors.get(fd);
+-        if (pfd == null) {
+-            Log.wtf(QtTAG, "File descriptor doesn't exist in cache");
+-            return false;
+-        }
+-
+-        try {
+-            pfd.close();
+-            return true;
+-        } catch (IOException e) {
+-            Log.e(QtTAG, "closeFd(): Failed to close the FD", e);
+-            return false;
+-        }
+-    }
+-
+-    public static long getSize(Context context, String contentUrl)
+-    {
+-        Uri uri = getUriWithValidPermission(context, contentUrl, "r");
+-        long size = -1;
+-
+-        if (uri == null) {
+-            Log.e(QtTAG, "getSize(): No permissions to open Uri");
+-            return size;
+-        }
+-
+-        try {
+-            ContentResolver resolver = context.getContentResolver();
+-            Cursor cur = resolver.query(uri, null, null, null, null);
+-
+-            if (cur != null) {
+-                if (cur.moveToFirst())
+-                    size = cur.getLong(cur.getColumnIndex(OpenableColumns.SIZE)); // size column
+-                cur.close();
+-            }
+-            return size;
+-        } catch (IllegalArgumentException e) {
+-            Log.e(QtTAG, "getSize(): Invalid Uri");
+-            return size;
+-        }  catch (UnsupportedOperationException e) {
+-            Log.e(QtTAG, "getSize(): Unsupported operation for given Uri");
+-            return size;
+-        }
+-    }
+-
+-    public static boolean checkFileExists(Context context, String contentUrl)
+-    {
+-        Uri uri = getUriWithValidPermission(context, contentUrl, "r");
+-        boolean exists = false;
+-
+-        if (uri == null) {
+-            Log.e(QtTAG, "checkFileExists(): No permissions to open Uri");
+-            return exists;
+-        }
+-
+-        try {
+-            ContentResolver resolver = context.getContentResolver();
+-            Cursor cur = resolver.query(uri, null, null, null, null);
+-            if (cur != null) {
+-                exists = true;
+-                cur.close();
+-            }
+-            return exists;
+-        } catch (IllegalArgumentException e) {
+-            Log.e(QtTAG, "checkFileExists(): Invalid Uri");
+-            return exists;
+-        } catch (UnsupportedOperationException e) {
+-            Log.e(QtTAG, "checkFileExists(): Unsupported operation for given Uri");
+-            return false;
+-        }
+-    }
+-
+-    public static boolean canWriteToUri(Context context, String contentUrl)
+-    {
+-        Uri uri = getUriWithValidPermission(context, contentUrl, "w");
+-
+-        if (uri == null) {
+-            Log.e(QtTAG, "canWriteToUri(): No permissions to open Uri in \"w\" mode");
+-            return false;
+-        } else {
+-            return true;
+-        }
+-    }
+-
+-    public static String getFileNameFromUri(Context context, String contentUrl)
+-    {
+-        Uri uri = getUriWithValidPermission(context, contentUrl, "r");
+-        if (uri == null) {
+-            Log.e(QtTAG, "getFileNameFromUri(): No permissions to open Uri:" + contentUrl);
+-            return null;
+-        }
+-
+-        String filename = null;
+-        try {
+-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+-            if (cursor != null) {
+-                if (cursor.moveToFirst()) {
+-                    filename = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
+-                }
+-                cursor.close();
+-            }
+-        } catch (IllegalArgumentException e) {
+-            Log.e(QtTAG, "getFileNameFromUri(): Couldn't get filename: " + e.getMessage());
+-        } catch (UnsupportedOperationException e) {
+-            Log.e(QtTAG, "getFileNameFromUri(): UnsupportedOperation on the Uri: " + e.getMessage());
+-        }
+-
+-        return filename;
+-    }
+-
+     // this method loads full path libs
+     public static void loadQtLibraries(final ArrayList<String> libraries)
+     {
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/SAFFile.java b/src/android/jar/src/org/qtproject/qt5/android/SAFFile.java
+new file mode 100644
+index 0000000000..fd371bebc2
+--- /dev/null
++++ b/src/android/jar/src/org/qtproject/qt5/android/SAFFile.java
+@@ -0,0 +1,23 @@
++package org.qtproject.qt5.android;
++
++import android.net.Uri;
++
++import java.util.List;
++
++public class SAFFile {
++    private Uri baseUri;
++    private List<String> segments;
++
++    SAFFile(Uri baseUri, List<String> segments) {
++        this.baseUri = baseUri;
++        this.segments = segments;
++    }
++
++    List<String> getSegments() {
++        return segments;
++    }
++
++    public Uri getBaseUri() {
++        return baseUri;
++    }
++}
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
+new file mode 100644
+index 0000000000..432a49065e
+--- /dev/null
++++ b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
+@@ -0,0 +1,738 @@
++package org.qtproject.qt5.android;
++
++import android.annotation.SuppressLint;
++import android.content.ActivityNotFoundException;
++import android.content.ContentResolver;
++import android.content.Context;
++import android.content.Intent;
++import android.content.UriPermission;
++import android.content.pm.PackageManager;
++import android.database.Cursor;
++import android.net.Uri;
++import android.os.Build;
++import android.os.ParcelFileDescriptor;
++import android.provider.DocumentsContract;
++import android.util.Log;
++import android.webkit.MimeTypeMap;
++
++import java.io.File;
++import java.io.FileNotFoundException;
++import java.io.IOException;
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.Iterator;
++import java.util.List;
++import java.util.Map;
++
++@SuppressWarnings("unused")
++class FileError {
++    public static final int NO_ERROR = 0;
++    public static final int READ_ERROR = 1;
++    public static final int WRITE_ERROR = 2;
++    public static final int FATAL_ERROR = 3;
++    public static final int RESOURCE_ERROR = 4;
++    public static final int OPEN_ERROR = 5;
++    public static final int ABORT_ERROR = 6;
++    public static final int TIME_OUT_ERROR = 7;
++    public static final int UNSPECIFIED_ERROR = 8;
++    public static final int REMOVE_ERROR = 9;
++    public static final int RENAME_ERROR = 10;
++    public static final int POSITION_ERROR = 11;
++    public static final int RESIZE_ERROR = 12;
++    public static final int PERMISSIONS_ERROR = 13;
++    public static final int COPY_ERROR = 14;
++
++    private String errorString;
++    private int error;
++
++    public String getErrorString() {
++        return errorString;
++    }
++
++    public void setErrorString(String errorString) {
++        this.errorString = errorString;
++    }
++
++    public int getError() {
++        return error;
++    }
++
++    public void setError(int error) {
++        this.error = error;
++    }
++
++    public void setUnknownError() {
++        setError(FileError.UNSPECIFIED_ERROR);
++        setErrorString("Unknown Error");
++    }
++
++    public void unsetError() {
++        setError(NO_ERROR);
++        setErrorString("No error");
++    }
++}
++
++// Native usage
++@SuppressWarnings("UnusedDeclaration")
++public class SAFFileManager {
++
++    private static final String TAG = "SAFFileManager";
++    private static final String PATH_TREE = "tree";
++
++    @SuppressLint("StaticFieldLeak") // TODO(sh_zam): we only have one activity!
++    private static SAFFileManager sSafFileManager;
++
++    private final Context mCtx;
++    private final HashMap<Uri, CachedDocumentFile> mCachedDocumentFiles = new HashMap<>();
++    private final HashMap<Integer, ParcelFileDescriptor> m_parcelFileDescriptors = new HashMap<>();
++
++    private final FileError mError = new FileError();
++    private List<UriPermission> mCachedPermissions;
++
++    SAFFileManager(Context ctx) {
++        mCtx = ctx;
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public static SAFFileManager instance() {
++        if (sSafFileManager == null) {
++            sSafFileManager = new SAFFileManager(QtNative.getContext());
++        }
++        return sSafFileManager;
++    }
++
++    public static SAFFileManager instance(Context context) {
++        if (sSafFileManager == null) {
++            sSafFileManager = new SAFFileManager(context);
++        }
++        return sSafFileManager;
++    }
++
++    private boolean checkImplicitUriPermission(Uri uri, String openMode) {
++        int modeFlags = 0;
++        if (openMode.startsWith("r")) {
++            modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
++        }
++
++        if (!"r".equals(openMode)) {
++            modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
++        }
++
++        return mCtx.checkCallingOrSelfUriPermission(uri, modeFlags) ==
++                PackageManager.PERMISSION_GRANTED;
++    }
++
++    void resetCachedPermission() {
++        mCachedPermissions = mCtx.getContentResolver().getPersistedUriPermissions();
++    }
++
++    /**
++     * The encoding of Path segments is somewhat arbitrary and something which doesn't
++     * seem very safe to rely on. So if we find a matching path we just return
++     * the persisted Uri.<br>
++     * <p>
++     * This function also handles the permission check of implicitly sent Uris.
++     *
++     * @param uri      content Uri, can be Tree Uri or a Single file Uri
++     * @param openMode mode to open the file in
++     * @return The persisted Uri opened through ACTION_OPEN_DOCUMENT,
++     * ACTION_OPEN_DOCUMENT_TREE i.e only if we have permission to the Uri.
++     */
++    Uri getProperlyEncodedUriWithPermissions(Uri uri, String openMode) {
++        if (mCachedPermissions == null) {
++            resetCachedPermission();
++        }
++        final String uriPath = uri.getPath();
++
++        for (int i = 0; i < mCachedPermissions.size(); ++i) {
++            Uri iterUri = mCachedPermissions.get(i).getUri();
++            boolean isRightPermission = mCachedPermissions.get(i).isReadPermission();
++
++            if (!openMode.equals("r"))
++                isRightPermission = mCachedPermissions.get(i).isWritePermission();
++
++            if (iterUri.getPath().equals(uriPath) && isRightPermission) {
++                return iterUri;
++            }
++        }
++
++        // TODO(sh_zam): check encoding
++        // TODO(sh_zam): verify if intent has to exist
++        // check if we received permission from an Intent
++        return (QtNative.activity() != null &&
++                QtNative.activity().getIntent() != null &&
++                checkImplicitUriPermission(uri, openMode)) ? uri : null;
++    }
++
++    /**
++     * Check if we have permission to the Uri. This method also handles tree Uris.
++     * If a Tree Uri is passed in {@code openMode} including write permissions
++     * we create the file under the tree if we have permissions to it.<br>
++     * <p>
++     * Note: The results are undefined for Uris of all types other than:
++     * {@code tree/*} and {@code document/*}.
++     *
++     * @param url      content Uri, can be Tree Uri or a Single file Uri
++     * @param openMode mode to open the file in
++     * @return Uri of the newly created file or passed in url if we have
++     * permission to access the document, otherwise null.
++     */
++    private CachedDocumentFile getDocumentFileWithValidPermissions(String url,
++                                                                   String openMode,
++                                                                   boolean dontCreateDoc) {
++        final Uri uri = Uri.parse(url);
++
++        // it is a file in tree, so we create a new file if "w"
++        if (isTreeUri(uri)) {
++            SAFFile rawSafFile = nearestTreeUri(uri);
++            if (rawSafFile == null) {
++                mError.setError(FileError.PERMISSIONS_ERROR);
++                mError.setErrorString("No permission to access the Document Tree");
++                return null;
++            }
++
++            CachedDocumentFile foundFile = findFileInTree(rawSafFile);
++
++            if (foundFile != null) {
++                return foundFile;
++            }
++
++            // we shouldn't create a file here
++            if ("r".equals(openMode) || dontCreateDoc) {
++                return null;
++            }
++
++            return createFile(rawSafFile, false);
++        } else {
++            Uri resultUri = getProperlyEncodedUriWithPermissions(uri, openMode);
++            if (resultUri != null) {
++                return CachedDocumentFile.fromFileUri(mCtx, resultUri);
++            }
++        }
++
++        mError.setError(FileError.PERMISSIONS_ERROR);
++        mError.setErrorString("No permission to access the Uri");
++        return null;
++    }
++
++    private CachedDocumentFile getDocumentFileWithValidPermissions(String url,
++                                                                   String openMode) {
++        return getDocumentFileWithValidPermissions(url, openMode, false);
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    private boolean launchUri(String url, String mime) {
++        Uri uri;
++        if (url.startsWith("content:")) {
++            uri = getDocumentFileWithValidPermissions(url, "r").getUri();
++            if (uri == null) {
++                Log.e(TAG, "launchUri(): No permissions to open Uri");
++                return false;
++            }
++        } else {
++            uri = Uri.parse(url);
++        }
++
++        try {
++            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
++            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
++            if (!mime.isEmpty())
++                intent.setDataAndType(uri, mime);
++
++            QtNative.activity().startActivity(intent);
++
++            return true;
++        } catch (IllegalArgumentException e) {
++            Log.e(TAG, "launchUri(): Invalid Uri");
++            return false;
++        } catch (UnsupportedOperationException e) {
++            Log.e(TAG, "launchUri(): Unsupported operation for given Uri");
++            return false;
++        } catch (ActivityNotFoundException e) {
++            e.printStackTrace();
++            return false;
++        }
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public int openFileDescriptor(String contentUrl, String openMode) {
++        final int error = -1;
++
++        CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, openMode);
++
++        if (file == null) {
++            return error;
++        }
++
++        // take this out
++        try {
++            ContentResolver resolver = mCtx.getContentResolver();
++            ParcelFileDescriptor fdDesc =
++                    resolver.openFileDescriptor(file.getUri(), openMode);
++            m_parcelFileDescriptors.put(fdDesc.getFd(), fdDesc);
++
++            mError.unsetError();
++            return fdDesc.getFd();
++        } catch (Exception e) {
++            Log.e(TAG, "openFileDescriptor(): Failed query: " + e);
++            mCachedDocumentFiles.remove(file.getUri());
++        }
++
++        mError.setError(FileError.WRITE_ERROR);
++        mError.setErrorString("Couldn't open file for writing");
++        return error;
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public boolean closeFileDescriptor(int fd) {
++        ParcelFileDescriptor pfd = m_parcelFileDescriptors.get(fd);
++        if (pfd == null) {
++            Log.wtf(TAG, "File descriptor doesn't exist in cache");
++            return false;
++        }
++
++        try {
++            mError.unsetError();
++            pfd.close();
++            return true;
++        } catch (IOException e) {
++            Log.e(TAG, "closeFileDescriptor(): Failed to close the FD", e);
++        }
++        mError.setUnknownError();
++        return false;
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public long getSize(String contentUrl) {
++        CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, "r");
++
++        if (file != null) {
++            return file.getSize();
++        } else {
++            mError.setUnknownError();
++            return 0;
++        }
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public boolean exists(String contentUrl) {
++        final CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, "r");
++
++        if (file != null && file.exists()) {
++            mError.unsetError();
++            return true;
++        } else {
++            mError.setUnknownError();
++            return false;
++        }
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public boolean canWrite(String contentUrl) {
++        final CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, "w");
++
++        if (file != null && file.canWrite()) {
++            mError.unsetError();
++            return true;
++        } else {
++            return false;
++        }
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public String getFileName(String contentUrl) {
++        final CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, "r");
++
++        if (file != null) {
++            mError.unsetError();
++            return file.getName();
++        }
++
++        return null;
++    }
++
++    private String stringJoin(String delimiter, List<String> list) {
++        if (list.size() < 1) {
++            return "";
++        }
++        final StringBuilder builder = new StringBuilder();
++        for (int i = 0; i < list.size(); ++i) {
++            builder.append(list.get(i))
++                    .append(delimiter);
++        }
++
++        // remove trailing
++        builder.delete(builder.length() - delimiter.length(), builder.length());
++        return builder.toString();
++    }
++
++    private Uri uriAppend(Uri uri, List<String> items) {
++        final StringBuilder builder = new StringBuilder(uri.toString());
++        for (String item : items) {
++            builder.append(Uri.encode(File.separator)).append(item);
++        }
++        return Uri.parse(builder.toString());
++    }
++
++    /**
++     * Splits the tree uri:
++     * <p>
++     * {@code "content://com.externalstorage.documents/tree/Primary%3AExample/path1/path2"}
++     * into: <br>
++     * First  = {@code "content://com.externalstorage.documents/tree/Primary%3AExample"},
++     * <br>
++     * Second = {@code "path1/path2"}
++     *
++     * @param treeUri The Tree Uri with a path appended - which may or may not exist
++     * @return a {@link SAFFile} through which we can get the base Uri and path segments
++     * which are to be created or tested
++     */
++    private SAFFile nearestTreeUri(Uri treeUri) {
++        final List<String> paths = treeUri.getPathSegments()
++                .subList(1, treeUri.getPathSegments().size());
++
++        // Test each subtree, going from right to left
++        for (int i = paths.size(); i > 0; --i) {
++            final Uri baseUri =
++                    new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
++                            .authority(treeUri.getAuthority()).appendPath(PATH_TREE)
++                            .appendPath(paths.get(0)).build();
++
++            // we can't use appendPath, because of the weird encoding rules that SAF follows
++            final Uri testUri = getProperlyEncodedUriWithPermissions(
++                    uriAppend(baseUri, paths.subList(1, i)), "rw");
++
++            // we check the permission of the subtree
++            if (testUri != null) {
++                if (i < paths.size()) {
++                    return new SAFFile(testUri, paths.subList(i, paths.size()));
++                } else {
++                    return new SAFFile(testUri, new ArrayList<String>());
++                }
++            }
++        }
++
++        Log.d(TAG, "nearestTreeUri(): No permissions to Uri: " + treeUri);
++        return null;
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public boolean delete(String contentUrl) {
++        final CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, "rw", true);
++        if (file == null) {
++            return false;
++        }
++
++        mCachedDocumentFiles.remove(file.getUri());
++        if (file.isDirectory()) {
++            invalidateCachedDocuments(file.getUri());
++        }
++        return deleteFile(file.getUri());
++    }
++
++    /**
++     * A dumb heuristic method to remove the subdirectories if the parent directory
++     * is removed.
++     *
++     * @param removedUri The document to be deleted
++     */
++    private void invalidateCachedDocuments(Uri removedUri) {
++        String dirname = removedUri.getLastPathSegment();
++        Iterator<Map.Entry<Uri, CachedDocumentFile>> iterator =
++                mCachedDocumentFiles.entrySet().iterator();
++        while (iterator.hasNext()) {
++            Map.Entry<Uri, CachedDocumentFile> entry = iterator.next();
++            if (entry.getKey().getPath().contains(dirname)) {
++                iterator.remove();
++            }
++        }
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public boolean isDir(String contentUrl) {
++        final CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, "rw", true);
++        if (file == null) {
++            return false;
++        }
++
++        mError.unsetError();
++        return file.isDirectory();
++    }
++
++    private boolean isTreeUri(Uri uri) {
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
++            return DocumentsContract.isTreeUri(uri);
++        } else {
++            final List<String> paths = uri.getPathSegments();
++            return (paths.size() >= 2 && PATH_TREE.equals(paths.get(0)));
++        }
++    }
++
++    // Native usage
++    @SuppressWarnings("UnusedDeclaration")
++    public boolean mkdir(String contentUrl, boolean createParentDirectories) {
++        if (isDir(contentUrl)) {
++            return true;
++        }
++
++        final Uri uri = Uri.parse(contentUrl);
++        // "tree" and document id make the first two parts of the path
++        if (uri.getPathSegments().size() > 3 && !createParentDirectories) {
++            return false;
++        }
++        final SAFFile rawSafFile = nearestTreeUri(uri);
++        if (rawSafFile == null) {
++            mError.setError(FileError.PERMISSIONS_ERROR);
++            mError.setErrorString("No permission to access the Document Tree");
++            return false;
++        }
++
++        if (createDirectories(rawSafFile) != null) {
++            mError.unsetError();
++            return true;
++        } else {
++            return false;
++        }
++    }
++
++    Uri createDirectories(SAFFile file) {
++        final Uri treeUri = file.getBaseUri();
++        List<String> pathSegments = file.getSegments();
++
++        Log.d(TAG, "Creating directory: " + treeUri.toString() +
++                ", segments = " + stringJoin("/", pathSegments));
++
++        Uri parent = DocumentsContract.buildDocumentUriUsingTree(treeUri,
++                DocumentsContract.getTreeDocumentId(treeUri));
++        for (String segment : pathSegments) {
++            final CachedDocumentFile existingFile = findFile(parent, segment);
++
++            if (existingFile != null) {
++                Log.d(TAG, "File exists: " + existingFile.getUri().toString());
++                if (existingFile.isFile()) {
++                    mError.setError(FileError.UNSPECIFIED_ERROR);
++                    mError.setErrorString("Couldn't create a directory at the specified path");
++                    return null;
++                }
++
++                parent = existingFile.getUri();
++                continue;
++            }
++
++            final CachedDocumentFile newFile = createDirectory(parent, segment);
++            if (newFile == null) {
++                return null;
++            }
++            parent = newFile.getUri();
++            mCachedDocumentFiles.put(newFile.getUri(), newFile);
++        }
++
++        mError.unsetError();
++        return parent;
++    }
++
++    private CachedDocumentFile createFile(SAFFile file, boolean force) {
++
++        List<String> pathSegments = file.getSegments();
++
++        Log.d(TAG, "Creating new file: " + file.getBaseUri() + ", filename = "
++                + stringJoin(File.separator, pathSegments));
++
++        final Uri parent = createDirectories(
++                new SAFFile(file.getBaseUri(),
++                        pathSegments.subList(0, pathSegments.size() - 1)));
++        if (parent == null) {
++            return null;
++        }
++
++        final String filename = pathSegments.get(pathSegments.size() - 1);
++        final String mimeType = getMimeTypeFromFilename(filename);
++
++        final CachedDocumentFile foundFile = findFile(parent, filename);
++        if (foundFile != null && foundFile.isFile() && !force) {
++            return foundFile;
++        }
++
++        final CachedDocumentFile newFile = createFile(parent, filename, mimeType);
++        if (newFile == null) {
++            return null;
++        }
++        mCachedDocumentFiles.put(newFile.getUri(), newFile);
++        return newFile;
++    }
++
++    private String getMimeTypeFromFilename(String filename) {
++        final int index = filename.lastIndexOf(".");
++        String extension;
++        if (index == -1 || index == filename.length() - 1) {
++            extension = "";
++        } else {
++            extension = filename.substring(index + 1);
++        }
++
++        if (extension.isEmpty()) {
++            return "application/octet-stream";
++        }
++        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
++    }
++
++
++    private List<CachedDocumentFile> listFiles(Uri documentTreeUri) {
++        Log.d(TAG, "listFiles(): Uri = " + documentTreeUri);
++        final List<CachedDocumentFile> cachedDocumentFiles = new ArrayList<>();
++        // order matters!
++        final String[] columns = new String[]{
++                DocumentsContract.Document.COLUMN_DISPLAY_NAME,
++                DocumentsContract.Document.COLUMN_DOCUMENT_ID,
++                DocumentsContract.Document.COLUMN_MIME_TYPE,
++                DocumentsContract.Document.COLUMN_SIZE
++        };
++
++        Cursor cursor = null;
++        try {
++            final ContentResolver resolver = mCtx.getContentResolver();
++            final Uri childrenTreeUri = DocumentsContract.buildChildDocumentsUriUsingTree(documentTreeUri,
++                    DocumentsContract.getDocumentId(documentTreeUri));
++            cursor = resolver.query(childrenTreeUri, columns, null, null, null);
++            if (cursor == null) {
++                return cachedDocumentFiles;
++            }
++
++            while (cursor.moveToNext()) {
++                final String docId = cursor.getString(1);
++                final Uri fileUri = DocumentsContract.buildDocumentUriUsingTree(documentTreeUri, docId);
++                cachedDocumentFiles.add(new CachedDocumentFile(
++                        mCtx,
++                        cursor.getString(0),  // name
++                        docId,
++                        cursor.getString(2),  // mimetype
++                        cursor.getLong(3),    // size
++                        fileUri));
++            }
++        } catch (Exception e) {
++            Log.e(TAG, "Invalid document Uri: " + documentTreeUri);
++        } finally {
++            if (cursor != null)
++                cursor.close();
++        }
++
++        return cachedDocumentFiles;
++    }
++
++    /**
++     * Find the file under the tree. This function can take pathSegments which
++     * allow looking recursively in the document's subtree.
++     *
++     * @param safFile {@link SAFFile}
++     * @return {@link CachedDocumentFile} if the document is found, null otherwise.
++     */
++    private CachedDocumentFile findFileInTree(SAFFile safFile) {
++        List<String> pathSegments = safFile.getSegments();
++        Uri parent = DocumentsContract.buildDocumentUriUsingTree(safFile.getBaseUri(),
++                DocumentsContract.getTreeDocumentId(safFile.getBaseUri()));
++
++        CachedDocumentFile documentFile;
++        if (mCachedDocumentFiles.containsKey(parent)) {
++            documentFile = mCachedDocumentFiles.get(parent);
++        } else {
++            documentFile = CachedDocumentFile.fromFileUri(mCtx, parent);
++            mCachedDocumentFiles.put(documentFile.getUri(), documentFile);
++        }
++
++        for (int i = 0; i < pathSegments.size(); ++i) {
++            documentFile = findFile(parent, pathSegments.get(i));
++            if (documentFile == null) {
++                return null;
++            }
++
++            if (documentFile.isFile()) {
++                if (i == pathSegments.size() - 1) {
++                    return documentFile;
++                } else {
++                    return null;
++                }
++            }
++            parent = documentFile.getUri();
++        }
++
++        return documentFile;
++    }
++
++    /**
++     * Find the file under subtree
++     *
++     * @param documentTreeUri a Uri with both "tree" and "document".
++     * @param filename        name of the file or directory.
++     * @return {@link CachedDocumentFile} if the document is found in cache or under
++     * the tree, null otherwise.
++     */
++    private CachedDocumentFile findFile(Uri documentTreeUri, String filename) {
++        {
++            final Uri expectedUri = DocumentsContract.buildDocumentUriUsingTree(documentTreeUri,
++                    DocumentsContract.getDocumentId(documentTreeUri) + "/" + filename);
++            // check in the cached documents first
++            if (mCachedDocumentFiles.containsKey(expectedUri)) {
++                return mCachedDocumentFiles.get(expectedUri);
++            }
++        }
++
++        // check the tree now
++        List<CachedDocumentFile> cachedDocumentFiles = listFiles(documentTreeUri);
++        for (CachedDocumentFile file : cachedDocumentFiles) {
++            if (filename.equals(file.getName())) {
++                mCachedDocumentFiles.put(file.getUri(), file);
++                return file;
++            }
++        }
++
++        return null;
++    }
++
++    private CachedDocumentFile createFile(Uri parent, String displayName, String mimeType) {
++        try {
++            final Uri fileUri = DocumentsContract.createDocument(mCtx.getContentResolver(),
++                    parent, mimeType, displayName);
++            return new CachedDocumentFile(mCtx, displayName,
++                    DocumentsContract.getDocumentId(fileUri),
++                    mimeType,
++                    fileUri);
++        } catch (Exception e) {
++            mError.setUnknownError();
++            Log.e(TAG, "Error creating a file: uri = " + parent +
++                    ", displayName = " + displayName + ", mimeType = " + mimeType);
++            return null;
++        }
++    }
++
++    private boolean deleteFile(Uri documentUri) {
++        try {
++            return DocumentsContract.deleteDocument(mCtx.getContentResolver(),
++                    documentUri);
++        } catch (Exception e) {
++            mError.setUnknownError();
++            Log.e(TAG, "Error creating a file: uri = " + documentUri);
++            return false;
++        }
++    }
++
++    private CachedDocumentFile createDirectory(Uri parent, String displayName) {
++        return createFile(parent, displayName, DocumentsContract.Document.MIME_TYPE_DIR);
++    }
++}
+diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
+index ba11a50e85..f3fa90431a 100644
+--- a/src/plugins/platforms/android/androidcontentfileengine.cpp
++++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
+@@ -45,7 +45,14 @@
+ #include <QDebug>
+ 
+ AndroidContentFileEngine::AndroidContentFileEngine(const QString &f)
+-    : m_fd(-1), m_file(f), m_resolvedName(QString())
++    : m_fd(-1)
++    , m_file(f)
++    , m_resolvedName(QString())
++    , m_safFileManager(QJNIObjectPrivate::callStaticObjectMethod(
++          "org/qtproject/qt5/android/SAFFileManager", "instance",
++          "()Lorg/qtproject/qt5/android/SAFFileManager;"))
++    , m_safError(m_safFileManager.getObjectField("mError",
++                                                 "Lorg/qtproject/qt5/android/FileError;"))
+ {
+     setFileName(f);
+     setResolvedFileName(f);
+@@ -74,15 +81,13 @@ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
+         openModeStr += QLatin1Char('a');
+     }
+ 
+-    const auto fd = QJNIObjectPrivate::callStaticMethod<jint>("org/qtproject/qt5/android/QtNative",
+-        "openFdForContentUrl",
+-        "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)I",
+-        QtAndroidPrivate::context(),
++    const auto fd = m_safFileManager.callMethod<jint>(
++        "openFileDescriptor", "(Ljava/lang/String;Ljava/lang/String;)I",
+         QJNIObjectPrivate::fromString(m_file).object(),
+         QJNIObjectPrivate::fromString(openModeStr).object());
+ 
+     if (fd < 0) {
+-        setError(QFileDevice::OpenError, QLatin1String("The file could not be opened."));
++        setErrorFromSAF();
+         return false;
+     }
+ 
+@@ -92,17 +97,34 @@ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
+ 
+ bool AndroidContentFileEngine::close()
+ {
+-    return QJNIObjectPrivate::callStaticMethod<jboolean>(
+-        "org/qtproject/qt5/android/QtNative", "closeFd",
+-        "(I)Z", m_fd);
++    setErrorFromSAF();
++    return m_safFileManager.callMethod<jboolean>("closeFileDescriptor", "(I)Z", m_fd);
++}
++
++QJNIObjectPrivate toJavaUri(const QString &stringUri)
++{
++    const auto uri = QJNIObjectPrivate::callStaticObjectMethod(
++        "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
++        QJNIObjectPrivate::fromString(stringUri).object());
++
++    if (!uri.isValid()) {
++        qWarning("Invalid Uri returned");
++    }
++    return uri;
++}
++
++bool AndroidContentFileEngine::mkdir(const QString &dirName, bool createParentDirectories) const
++{
++    return m_safFileManager.callMethod<jboolean>(
++        "mkdir", "(Ljava/lang/String;Z)Z",
++        QJNIObjectPrivate::fromString(dirName).object(), createParentDirectories);
+ }
+ 
+ qint64 AndroidContentFileEngine::size() const
+ {
+-    const jlong size = QJNIObjectPrivate::callStaticMethod<jlong>(
+-            "org/qtproject/qt5/android/QtNative", "getSize",
+-            "(Landroid/content/Context;Ljava/lang/String;)J", QtAndroidPrivate::context(),
+-            QJNIObjectPrivate::fromString(m_file).object());
++    const jlong size = m_safFileManager.callMethod<jlong>(
++        "getSize", "(Ljava/lang/String;)J",
++        QJNIObjectPrivate::fromString(m_file).object());
+     return (qint64)size;
+ }
+ 
+@@ -110,22 +132,28 @@ AndroidContentFileEngine::FileFlags AndroidContentFileEngine::fileFlags(FileFlag
+ {
+     const FileFlags commonFlags(ReadOwnerPerm|ReadUserPerm|ReadGroupPerm|ReadOtherPerm|ExistsFlag);
+     FileFlags flags;
+-    const bool exists = QJNIObjectPrivate::callStaticMethod<jboolean>(
+-            "org/qtproject/qt5/android/QtNative", "checkFileExists",
+-            "(Landroid/content/Context;Ljava/lang/String;)Z", QtAndroidPrivate::context(),
+-            QJNIObjectPrivate::fromString(m_file).object());
++    const bool exists =
++        m_safFileManager.callMethod<jboolean>("exists", "(Ljava/lang/String;)Z",
++                                          QJNIObjectPrivate::fromString(m_file).object());
+     if (!exists)
+         return flags;
+ 
+-    flags = FileType | commonFlags;
++    flags = commonFlags;
+ 
+-    const bool canWrite = QJNIObjectPrivate::callStaticMethod<jboolean>(
+-            "org/qtproject/qt5/android/QtNative", "canWriteToUri",
+-            "(Landroid/content/Context;Ljava/lang/String;)Z", QtAndroidPrivate::context(),
+-            QJNIObjectPrivate::fromString(m_file).object());
++    const bool canWrite =
++        m_safFileManager.callMethod<jboolean>("canWrite", "(Ljava/lang/String;)Z",
++                                          QJNIObjectPrivate::fromString(m_file).object());
+     if (canWrite) {
+         flags |= (WriteOwnerPerm|WriteUserPerm|WriteGroupPerm|WriteOtherPerm);
+     }
++
++    const bool isDir = m_safFileManager.callMethod<jboolean>(
++        "isDir", "(Ljava/lang/String;)Z", QJNIObjectPrivate::fromString(m_file).object());
++    if (isDir) {
++        flags = DirectoryType | flags;
++    } else {
++        flags = FileType | flags;
++    }
+     return type & flags;
+ }
+ 
+@@ -163,17 +191,14 @@ bool AndroidContentFileEngine::isRelativePath() const
+ 
+ void AndroidContentFileEngine::setResolvedFileName(const QString& uri)
+ {
+-    QJNIObjectPrivate resolvedName = QJNIObjectPrivate::callStaticObjectMethod(
+-        "org/qtproject/qt5/android/QtNative",
+-        "getFileNameFromUri",
+-        "(Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;",
+-        QtAndroidPrivate::context(),
++    QJNIObjectPrivate resolvedName = m_safFileManager.callObjectMethod(
++        "getFileName", "(Ljava/lang/String;)Ljava/lang/String;",
+         QJNIObjectPrivate::fromString(uri).object());
+ 
++    setErrorFromSAF();
++
+     if (resolvedName.isValid()) {
+         m_resolvedName = resolvedName.toString();
+-    } else {
+-        qWarning("setResolvedFileName: Couldn't resolve the URI");
+     }
+ }
+ 
+@@ -182,6 +207,14 @@ void AndroidContentFileEngine::setFileDescriptor(const int fd)
+     m_fd = fd;
+ }
+ 
++void AndroidContentFileEngine::setErrorFromSAF()
++{
++    auto error = m_safError.callMethod<jint>("getError");
++    auto errorString = m_safError.callObjectMethod("getErrorString", "()Ljava/lang/String;");
++    if (errorString.isValid()) {
++        setError(static_cast<QFileDevice::FileError>(error), errorString.toString());
++    }
++}
+ 
+ AndroidContentFileEngineHandler::AndroidContentFileEngineHandler() = default;
+ AndroidContentFileEngineHandler::~AndroidContentFileEngineHandler() = default;
+diff --git a/src/plugins/platforms/android/androidcontentfileengine.h b/src/plugins/platforms/android/androidcontentfileengine.h
+index 6769352ffd..8309c14430 100644
+--- a/src/plugins/platforms/android/androidcontentfileengine.h
++++ b/src/plugins/platforms/android/androidcontentfileengine.h
+@@ -41,6 +41,7 @@
+ #define ANDROIDCONTENTFILEENGINE_H
+ 
+ #include <private/qfsfileengine_p.h>
++#include <private/qjni_p.h>
+ 
+ class AndroidContentFileEngine : public QFSFileEngine
+ {
+@@ -48,6 +49,7 @@ public:
+     AndroidContentFileEngine(const QString &fileName);
+     bool open(QIODevice::OpenMode openMode) override;
+     bool close() override;
++    bool mkdir(const QString &dirName, bool createParentDirectories) const override;
+     qint64 size() const override;
+     FileFlags fileFlags(FileFlags type = FileInfoAll) const override;
+     QString fileName(FileName file = DefaultName) const override;
+@@ -59,10 +61,14 @@ public:
+ private:
+     void setFileDescriptor(const int fd);
+ 
++    void setErrorFromSAF();
++
+ private:
+     int m_fd;
+     QString m_file;
+     QString m_resolvedName;
++    QJNIObjectPrivate m_safFileManager;
++    QJNIObjectPrivate m_safError;
+ };
+ 
+ class AndroidContentFileEngineHandler : public QAbstractFileEngineHandler
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+index 00b5b0887c..e7068d369a 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -119,6 +119,12 @@ void QAndroidPlatformFileDialogHelper::takePersistableUriPermission(const QJNIOb
+             "getContentResolver", "()Landroid/content/ContentResolver;");
+     contentResolver.callMethod<void>("takePersistableUriPermission", "(Landroid/net/Uri;I)V",
+                                      uri.object(), modeFlags);
++
++    QJNIObjectPrivate safFileManager = QJNIObjectPrivate::callStaticObjectMethod(
++          "org/qtproject/qt5/android/SAFFileManager", "instance",
++          "()Lorg/qtproject/qt5/android/SAFFileManager;");
++
++    safFileManager.callMethod<void>("resetCachedPermission");
+ }
+ 
+ void QAndroidPlatformFileDialogHelper::setIntentTitle(const QString &title)
+diff --git a/src/plugins/platforms/android/qandroidplatformservices.cpp b/src/plugins/platforms/android/qandroidplatformservices.cpp
+index c095613ce7..d9e4ab99e2 100644
+--- a/src/plugins/platforms/android/qandroidplatformservices.cpp
++++ b/src/plugins/platforms/android/qandroidplatformservices.cpp
+@@ -69,9 +69,9 @@ bool QAndroidPlatformServices::openUrl(const QUrl &theUrl)
+     QJNIObjectPrivate urlString = QJNIObjectPrivate::fromString(url.toString());
+     QJNIObjectPrivate mimeString = QJNIObjectPrivate::fromString(mime);
+     return QJNIObjectPrivate::callStaticMethod<jboolean>(
+-            QtAndroid::applicationClass(), "openURL",
+-            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z",
+-            QtAndroidPrivate::context(), urlString.object(), mimeString.object());
++        "org/qtproject/qt5/android/SAFFileManager", "launchUri",
++        "(Ljava/lang/String;Ljava/lang/String;)Z", urlString.object(),
++        mimeString.object());
+ }
+ 
+ bool QAndroidPlatformServices::openDocument(const QUrl &url)
+-- 
+2.32.0
+

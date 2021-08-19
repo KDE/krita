@@ -513,14 +513,15 @@ QString getAutoNewsLang()
     const QStringList uiLangs = KLocalizedString::languages();
 
     QString autoNewsLang;
-    // Iterate UI languages including fallback languages.
+    // Iterate UI languages including fallback languages for the first
+    // available news language.
     Q_FOREACH(const auto &uiLang, uiLangs) {
         autoNewsLang = mapKi18nLangToNewsLang(uiLang);
-        if (autoNewsLang.size() <= 0) {
+        if (!autoNewsLang.isEmpty()) {
             break;
         }
     }
-    if (autoNewsLang.size() == 0) {
+    if (autoNewsLang.isEmpty()) {
         // If nothing else, use English.
         autoNewsLang = QString("en");
     }

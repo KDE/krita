@@ -242,9 +242,9 @@ void KoSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
     } else if (type == KoShape::GenericMatrixChange) {
 
             if (d->selectedShapes.size() == 1) {
-                setTransformation(shape->absoluteTransformation());
+           //     setTransformation(shape->absoluteTransformation());
             } else {
-                setTransformation(QTransform());
+//                setTransformation(QTransform());
             }
     }
 }

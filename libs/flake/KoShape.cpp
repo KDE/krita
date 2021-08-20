@@ -1344,6 +1344,11 @@ QList<KoShape *> KoShape::linearizeSubtreeSorted(const QList<KoShape *> &shapes)
     return result;
 }
 
+bool KoShape::absolute()
+{
+    return m_absolute;
+}
+
 void KoShape::setAbsolute(bool value)
 {
     m_absolute = value;

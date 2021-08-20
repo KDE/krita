@@ -264,12 +264,38 @@ void KisReferenceImagesLayer::fileChanged(QString path)
 
 void KisReferenceImagesLayer::updateTransformations(KisCanvas2 *kisCanvas)
 {
+    bool rotateSelection = true; // modify selection also if all ref's pinned
+    bool mirrorSelection = true;
+    qreal angle ;
     m_docToWidget = kisCanvas->coordinatesConverter()->documentToWidgetTransform();
+
     Q_FOREACH(KoShape *shape, shapes()) {
         KisReferenceImage *referenceImage = dynamic_cast<KisReferenceImage*>(shape);
         if(referenceImage) {
-            referenceImage->addCanvasTransformation(kisCanvas);
+            rotateSelection &= (!referenceImage->pinRotate());
+            mirrorSelection &= (!referenceImage->pinMirror());
+            angle =  referenceImage->addCanvasTransformation(kisCanvas);
             }
+    }
+
+    if(shapeManager()) {
+        KoSelection *selection = shapeManager()->selection();
+        if(selection) {
+            QList<KoShape*> shapes = selection->selectedShapes();
+            if(!shapes.isEmpty()) {
+                if(shapes.count() > 1) {
+                    if(rotateSelection || mirrorSelection) {
+                        selection->rotate(angle);
+                    }
+                }
+                else {
+                    if(shapes.count() == 1) {
+                        KoShape *shape = shapes.at(0);
+                        selection->setTransformation(shape->absoluteTransformation());
+                    }
+                }
+            }
+        }
     }
     emit sigCropChanged();
 }

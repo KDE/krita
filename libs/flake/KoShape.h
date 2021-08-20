@@ -204,7 +204,7 @@ public:
 
     /**
      * @brief Shear the shape
-     * The shape will be sheared using the zero-point which is the top-left corner.
+     * The shape will be shearedShapeRota using the zero-point which is the top-left corner.
      * @see position()
      *
      * @param sx shear in x direction
@@ -1023,6 +1023,9 @@ public:
      * @param hyperLink name.
      */
     void setHyperLink(const QString &hyperLink);
+
+    // Return wheter the shape uses absolute or not.
+    bool absolute();
 
 public:
 

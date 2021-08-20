@@ -595,8 +595,9 @@ void KisReferenceImage::setPinAll(bool value)
     d->pinAll = value;
 }
 
-void KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
+qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
 {
+    qreal diffRotate = 0;
     if(!d->initialValues) {
         d->docOffset = kisCanvas->documentOffset();
         d->zoom = kisCanvas->viewConverter()->zoom();
@@ -631,6 +632,7 @@ void KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
                     QTransform::fromScale(scaleX, scaleY) * QTransform::fromTranslate(center.x(),center.y());
         }
         d->docOffset = kisCanvas->documentOffset();
+        diffRotate = kisCanvas->rotationAngle() - d->previousAngle;
         d->previousAngle = kisCanvas->rotationAngle();
     }
 
@@ -639,9 +641,9 @@ void KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
         if(!d->pinRotate) {
 
             QPointF center = absolutePosition();
-            qreal diff = kisCanvas->rotationAngle() - d->previousAngle;
+            diffRotate = kisCanvas->rotationAngle() - d->previousAngle;
             QTransform rot;
-            rot.rotate(diff);
+            rot.rotate(diffRotate);
             d->transform *= QTransform::fromTranslate(-center.x(),-center.y()) * rot
                     * QTransform::fromTranslate(center.x(),center.y());
         }
@@ -664,4 +666,5 @@ void KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
     if(!qFuzzyCompare(d->transform, extraTransform())) {
         setExtraTransform(d->transform);
     }
+    return diffRotate;
 }

@@ -51,8 +51,7 @@ struct KisReferenceImagesDecoration::Private {
 private:
     void updateBuffer(QRectF widgetRect, QRectF imageRect)
     {
-
-        KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
+        //KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         layer->updateTransformations(q->view()->canvasBase());
 
         qreal devicePixelRatioF = q->view()->devicePixelRatioF();

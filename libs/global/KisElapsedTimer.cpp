@@ -1,6 +1,7 @@
 #include "KisElapsedTimer.h"
 
 KisElapsedTimer::KisElapsedTimer()
+    : m_carryover(0)
 {
 
 }

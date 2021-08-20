@@ -58,8 +58,6 @@ public Q_SLOTS:
     void playPause();
     void stop();
 
-    void update();
-
     void seek(int frameIndex, bool preferCachedFrames = false);
     void previousFrame();
     void nextFrame();
@@ -90,9 +88,6 @@ public Q_SLOTS:
 
 private:
     void setPlaybackState(PlaybackState state);
-
-    void connectCancelSignals();
-    void disconnectCancelSignals();
     void displayFrame(int time);
 
     void nextKeyframeWithColor(int color);

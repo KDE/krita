@@ -58,6 +58,8 @@ Q_SIGNALS:
      */
     void sigUpdateCanvas(const QRectF &rect);
 
+    void sigCropChanged();
+
 public Q_SLOTS:
     void fileChanged(QString);
 private:

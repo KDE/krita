@@ -51,7 +51,7 @@ struct KisReferenceImagesDecoration::Private {
 private:
     void updateBuffer(QRectF widgetRect, QRectF imageRect)
     {
-        //Might need this to fix clipping.
+
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         layer->updateTransformations(q->view()->canvasBase());
 

@@ -1066,7 +1066,7 @@ protected:
     // This allows to not apply parent transformation to shapes in absoluteTransformation()
     void setAbsolute(bool);
 
-    // Append any kind of extra transformation of individual shapes.
+    // Append any kind of extra transformation to the shapes.
     QTransform extraTransform() const;
     void setExtraTransform(QTransform t);
 

@@ -305,6 +305,7 @@ void ToolReferenceImages::setReferenceImageLayer(KisSharedPtr<KisReferenceImages
     connect(layer.data(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
     connect(layer->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(repaintDecorations()));
     connect(layer->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
+    connect(m_layer, SIGNAL(sigCropChanged()), this, SIGNAL(cropRectChanged()));
 }
 
 void ToolReferenceImages::addReferenceImage()

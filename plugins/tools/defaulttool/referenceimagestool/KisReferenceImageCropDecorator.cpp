@@ -30,13 +30,13 @@ void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &
     gc.save();
 
     QTransform transform = m_referenceImage->absoluteTransformation();
-    QRectF shapeRect =  m_referenceImage->boundingRect();
-    m_cropBorderRect = transform.mapRect(m_cropBorderRect);
+    QPolygonF shapeBounds = transform.map(QPolygonF(m_referenceImage->outlineRect()));
+    QPolygonF m_cropBorder = transform.map(QPolygonF(m_cropBorderRect));
 
     QPainterPath path;
 
-    path.addRect(shapeRect);
-    path.addRect(m_cropBorderRect);
+    path.addPolygon(shapeBounds);
+    path.addPolygon(m_cropBorder);
     gc.setPen(Qt::NoPen);
     gc.setBrush(QColor(0, 0, 0, 200));
     gc.drawPath(path);

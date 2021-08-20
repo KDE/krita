@@ -42,8 +42,8 @@ public:
     struct KRITAUI_EXPORT CropReferenceImage : public KUndo2Command {
         KisReferenceImage *referenceImage;
         QImage oldImage;
-        QRect imageRect;
-        QRect newRect;
+        QRectF imageRect;
+        QRectF newRect;
         QSizeF oldShapeSize;
         QPointF oldPos;
 

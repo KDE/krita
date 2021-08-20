@@ -449,20 +449,25 @@ void ToolReferenceImagesWidget::slotCropRectChanged()
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
     const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
     QRectF rect = converter->documentToImage(ref->cropRect());
+    QRectF shapeRect = converter->documentToImage(ref->outlineRect());
 
     d->ui->sldOffsetX->blockSignals(true);
+    d->ui->sldOffsetX->setRange(0, shapeRect.width());
     d->ui->sldOffsetX->setValue(rect.topLeft().x());
     d->ui->sldOffsetX->blockSignals(false);
 
     d->ui->sldOffsetY->blockSignals(true);
+    d->ui->sldOffsetY->setRange(0,shapeRect.height());
     d->ui->sldOffsetY->setValue(rect.topLeft().y());
     d->ui->sldOffsetY->blockSignals(false);
 
     d->ui->sldWidth->blockSignals(true);
+    d->ui->sldWidth->setRange(0, shapeRect.width());
     d->ui->sldWidth->setValue(rect.width());
     d->ui->sldWidth->blockSignals(false);
 
     d->ui->sldHeight->blockSignals(true);
+    d->ui->sldHeight->setRange(0, shapeRect.height());
     d->ui->sldHeight->setValue(rect.height());
     d->ui->sldHeight->blockSignals(false);
 }

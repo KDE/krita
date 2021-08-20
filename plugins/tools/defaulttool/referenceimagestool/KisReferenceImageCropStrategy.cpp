@@ -61,14 +61,12 @@ KisReferenceImageCropStrategy::~KisReferenceImageCropStrategy()
 {
 }
 
-
 void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     QRectF finalRect = m_initialCropRect;
+    QPointF distance = m_unwindMatrix.map(point) - m_unwindMatrix.map(m_start);
     if(m_move) {
-        QPointF newPos = point - m_start;
-
-        QPointF offset = finalRect.topLeft() + newPos;
+        QPointF offset = finalRect.topLeft() + distance;
         if(offset.x() < 0) {
             offset.setX(0);
         }
@@ -87,17 +85,15 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
         finalRect.moveTo(offset);
     }
     else {
-        QPointF newPos = tool()->canvas()->snapGuide()->snap(point, modifiers);
-        QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map(m_start);
-
         qreal newWidth = m_initialCropRect.width();
         qreal newHeight = m_initialCropRect.height();
         QPointF pos;
 
         if (m_left) {
-            pos.setX(newPos.x() - m_start.x());
             newWidth = m_initialCropRect.width() - distance.x();
-
+            if(newWidth > 1) {
+                pos.setX(distance.x());
+            }
             qreal maxWidth = finalRect.bottomRight().x();
             if(newWidth > maxWidth) {
                 newWidth = maxWidth;
@@ -112,9 +108,11 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
         }
 
         if (m_top) {
-            pos.setY(newPos.y() - m_start.y());
             newHeight = m_initialCropRect.height() - distance.y();
 
+            if(newHeight > 1) {
+                pos.setY(distance.y());
+            }
             qreal maxHeight = finalRect.bottomRight().y();
             if(newHeight > maxHeight) {
                 newHeight = maxHeight;
@@ -133,6 +131,12 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
         }
         if(offset.y() < 0) {
             offset.setY(0);
+        }
+        if(newWidth < 1) {
+            newWidth = 1;
+        }
+        if(newHeight < 1) {
+            newHeight = 1;
         }
         finalRect.moveTo(offset);
         finalRect.setWidth(newWidth);

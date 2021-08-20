@@ -156,7 +156,9 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *documen
 
     Q_FOREACH(KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
-        m_fileSystemWatcher->addPath(ref->filename());
+        if(ref) {
+            m_fileSystemWatcher->addPath(ref->filename());
+        }
     }
     return parentCommand;
 }
@@ -269,4 +271,5 @@ void KisReferenceImagesLayer::updateTransformations(KisCanvas2 *kisCanvas)
             referenceImage->addCanvasTransformation(kisCanvas);
             }
     }
+    emit sigCropChanged();
 }

@@ -53,8 +53,8 @@ struct KisReferenceImage::Private : public QSharedData
 
     QRectF cropRect;
     bool crop = false;
-    QPointF cropPosDiff = QPointF(0,0);
     QSizeF cropSizeDiff = QSizeF(0,0);
+    QSizeF prevCropSize = QSizeF(0,0);
     QImage originalCroppedImage;
 
     qreal saturation{1.0};
@@ -175,7 +175,7 @@ void KisReferenceImage::SetSaturationCommand::redo()
 
 KisReferenceImage::CropReferenceImage::CropReferenceImage(KoShape *shape, QRectF rect, KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Crop Reference Image"), parent)
-    , newRect(rect.toRect())
+    , newRect(rect)
 {
     referenceImage  = dynamic_cast<KisReferenceImage*>(shape);
     KIS_SAFE_ASSERT_RECOVER_BREAK(referenceImage);
@@ -188,7 +188,7 @@ KisReferenceImage::CropReferenceImage::CropReferenceImage(KoShape *shape, QRectF
     qreal scaleY = referenceImage->image().height() / referenceImage->size().height();
     QTransform transform = QTransform::fromScale(scaleX, scaleY);
 
-    imageRect = transform.mapRect(rect.toRect());
+    imageRect = transform.mapRect(rect);
 }
 
 void KisReferenceImage::CropReferenceImage::undo()
@@ -201,9 +201,10 @@ void KisReferenceImage::CropReferenceImage::undo()
 
 void KisReferenceImage::CropReferenceImage::redo()
 {
-    QImage newImage = referenceImage->image().copy(imageRect);
+    QImage newImage = referenceImage->image().copy(imageRect.toRect());
     referenceImage->setSize(newRect.size());
-    referenceImage->setAbsolutePosition(oldPos + newRect.topLeft(), KoFlake::TopLeft);
+    QPolygonF poly = referenceImage->absoluteTransformation().map(QPolygonF(newRect));
+    referenceImage->setAbsolutePosition(poly.value(0), KoFlake::TopLeft);
     referenceImage->setImage(newImage);
     referenceImage->updateAbsolute(QRectF(QPointF(), oldShapeSize));
 }
@@ -509,10 +510,14 @@ bool KisReferenceImage::cropEnabled()
 void KisReferenceImage::setCrop(bool enable, QRectF rect)
 {
     d->crop = enable;
-    if(enable) {
+    if (enable) {
 
-       if(!d->cropPosDiff.isNull() && !d->cropSizeDiff.isNull()) {
-           setAbsolutePosition(absolutePosition(KoFlake::TopLeft) - d->cropPosDiff, KoFlake::TopLeft);
+       if (!d->cropSizeDiff.isNull()) {
+           // ToDo calculate the topLeft position
+           qreal scaleX = size().width()/d->prevCropSize.width();
+           qreal scaleY = size().height()/d->prevCropSize.height();
+           d->cropSizeDiff.setWidth(scaleX * d->cropSizeDiff.width());
+           d->cropSizeDiff.setHeight(scaleY * d->cropSizeDiff.height());
            setSize(size() + d->cropSizeDiff);
            setImage(d->originalCroppedImage);
            d->cachedImage = QImage();
@@ -521,8 +526,8 @@ void KisReferenceImage::setCrop(bool enable, QRectF rect)
        update();
     }
     else {
-        if(!rect.isNull()) {
-            d->cropPosDiff = rect.topLeft();
+        if (!rect.isNull()) {
+            d->prevCropSize = size();
             d->cropSizeDiff = size() - rect.size();
         }
     }
@@ -605,6 +610,9 @@ void KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
 
             qreal diff = kisCanvas->viewConverter()->zoom()- d->zoom;
             qreal scale = (d->zoom + diff)/d->zoom;
+            if(d->crop) {
+                setCropRect(QTransform::fromScale(scale, scale).mapRect(d->cropRect));
+            }
             KoFlake::resizeShapeCommon(this, scale , scale,
                                        absolutePosition(KoFlake::TopLeft), false ,false ,this->transformation());
             d->zoom = kisCanvas->viewConverter()->zoom();

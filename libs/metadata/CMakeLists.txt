@@ -1,5 +1,4 @@
 set(kritametadata_LIB_SRCS
-    kis_legacy_importer.cc
     kis_meta_data_entry.cc
     kis_meta_data_filter.cc
     kis_meta_data_filter_p.cc

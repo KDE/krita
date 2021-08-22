@@ -112,16 +112,16 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     if (!m_smudgeMode) {
         p.setCompositeOp(COMPOSITE_COPY);
     }
-    p.bitBltOldData(neededRect.topLeft() - dstRect.topLeft(), source(), neededRect);
+    p.bitBltOldData(neededRect.topLeft(), source(), neededRect);
 
     KisTransaction transaction(m_tmpDevice);
-    m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
+    m_filter->process(m_tmpDevice, dstRect, m_filterConfiguration, 0);
     transaction.end();
 
     painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
                                         m_tmpDevice, dab,
                                         0, 0,
-                                        dabRect.x(), dabRect.y(),
+                                        dstRect.x(), dstRect.y(),
                                         dabRect.width(), dabRect.height());
 
     painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab,

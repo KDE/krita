@@ -27,8 +27,6 @@
 class KisTagFilterWidget::Private
 {
 public:
-    QString tagSearchBarTooltip_saving_disabled;
-    QString tagSearchBarTooltip_saving_enabled;
     QLineEdit *tagSearchLineEdit;
     QGridLayout *filterBarLayout;
     QCompleter *completer;
@@ -47,23 +45,13 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
             "@info:tooltip",
             "<p>Enter search terms to filter by name</p>");
 
-    d->tagSearchBarTooltip_saving_disabled = searchTooltipMaintext + i18nc(
-            "@info:tooltip",
-            "<p>Filter results cannot be saved for the <b>All Presets</b> view. "
-            "In this view, pressing <b>Enter</b> or clearing the filter box will restore all items. "
-            "Create and/or switch to a different tag if you want to save filtered resources into named sets.</p>");
-
-    d->tagSearchBarTooltip_saving_enabled = searchTooltipMaintext + i18nc(
-            "@info:tooltip",
-            "<p>Pressing <b>Enter</b> or clicking the <b>Save</b> button will save the changes.</p>");
-
     QGridLayout* filterBarLayout = new QGridLayout(this);
 
 
     d->tagSearchLineEdit = new QLineEdit(this);
     d->tagSearchLineEdit->setClearButtonEnabled(true);
     d->tagSearchLineEdit->setPlaceholderText(i18n("Search"));
-    d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_saving_disabled);
+    d->tagSearchLineEdit->setToolTip(searchTooltipMaintext);
     d->tagSearchLineEdit->setEnabled(true);
 
     d->completer = new QCompleter(model, this);

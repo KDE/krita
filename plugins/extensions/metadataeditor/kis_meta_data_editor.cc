@@ -92,6 +92,8 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget *parent, KisMetaData::Store *store)
             GET_DC_VALUE(description, plainText, &QTextEdit::textChanged);
         }
 
+        wdg->date->setDisplayFormat(QLocale().dateFormat());
+
         KPageWidgetItem *page = new KPageWidgetItem(wdg, i18n("Dublin Core"));
         page->setIcon(KisIconUtils::loadIcon("user-identity"));
         addPage(page);

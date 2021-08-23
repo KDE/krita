@@ -85,6 +85,11 @@ KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
     return *this;
 }
 
+bool KisTextureMaskInfo::isValid() const
+{
+    return (m_mask && m_maskBounds.isValid());
+}
+
 int KisTextureMaskInfo::levelOfDetail() const {
     return m_levelOfDetail;
 }

@@ -167,8 +167,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     mirrorMode->setFixedSize(35, 35);
 
     mirrorMode->setToolTip(i18n("Mirror Canvas"));
-    mirrorMode->setDefaultAction(m_actionCollection->action("mirror_canvas"));
+    mirrorMode->setDefaultAction(m_actionCollection->action("mirror_canvas_around_cursor"));
     connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotUpdate()));
+    connect(mirrorMode, SIGNAL(pressed()), this, SLOT(slotSetMirrorPos()));
+    connect(mirrorMode, SIGNAL(clicked()), this, SLOT(slotRemoveMirrorPos()));
 
     canvasOnlyButton = new KisHighlightedToolButton(this);
     canvasOnlyButton->setFixedSize(35, 35);
@@ -957,9 +959,17 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event) {
     event->ignore();
 }
 
+void KisPopupPalette::slotSetMirrorPos() {
+    m_actionCollection->action("mirror_canvas_around_cursor")->setProperty("customPosition", QVariant(m_mirrorPos));
+}
+void KisPopupPalette::slotRemoveMirrorPos() {
+    m_actionCollection->action("mirror_canvas_around_cursor")->setProperty("customPosition", QVariant());
+}
+
 void KisPopupPalette::popup(const QPoint &position) {
     setVisible(!isVisible());
     ensureWithinParent(position, false);
+    m_mirrorPos = QCursor::pos();
 }
 
 void KisPopupPalette::ensureWithinParent(const QPoint& position, bool useUpperLeft) {

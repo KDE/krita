@@ -9,10 +9,10 @@
 #include <simpletest.h>
 #include <QCoreApplication>
 
-#include "kisexiv2/kis_exiv2.h"
 #include "filestest.h"
 #include "jpeglib.h"
-#include  <sdk/tests/testui.h>
+#include <kis_meta_data_backend_registry.h>
+#include <sdk/tests/testui.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -26,7 +26,7 @@ const QString JpegMimetype = "image/jpeg";
 
 void KisJpegTest::testFiles()
 {
-    KisExiv2::initialize();
+    KisMetadataBackendRegistry::instance();
     /**
      * Different versions of JPEG library may produce a bit different
      * result, so just compare in a weak way, i.e, only the size for real

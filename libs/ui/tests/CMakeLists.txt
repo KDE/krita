@@ -272,13 +272,6 @@ endif()
         NAME_PREFIX "libs-ui-"
         ${MACOS_GUI_TEST})
 
-
-    krita_add_broken_unit_test( kis_exiv2_test.cpp
-        TEST_NAME KisExiv2Test
-        LINK_LIBRARIES kritaui Qt5::Test
-        NAME_PREFIX "libs-ui-"
-        ${MACOS_GUI_TEST})
-
     krita_add_broken_unit_test( kis_clipboard_test.cpp
         TEST_NAME KisClipboardTest
         LINK_LIBRARIES kritaui Qt5::Test
@@ -349,7 +342,6 @@ endif()
 
     macos_test_fixrpath(
         ${BROKEN_TESTS}
-        KisExiv2Test
         KisClipboardTest
         KisSelectionManagerTest
         KisNodeManagerTest

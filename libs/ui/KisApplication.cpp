@@ -63,7 +63,7 @@
 #include <generator/kis_generator.h>
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_meta_data_io_backend.h>
-#include "kisexiv2/kis_exiv2.h"
+#include <kis_meta_data_backend_registry.h>
 #include "KisApplicationArguments.h"
 #include <kis_debug.h>
 #include "kis_action_registry.h"
@@ -347,15 +347,7 @@ void KisApplication::loadPlugins()
     KisPaintOpRegistry::instance();
     KoToolRegistry::instance();
     KoDockRegistry::instance();
-}
-
-void KisApplication::loadGuiPlugins()
-{
-    // XXX_EXIV: make the exiv io backends real plugins
-    setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
-    processEvents();
-    //    qDebug() << "loading exiv2";
-    KisExiv2::initialize();
+    KisMetadataBackendRegistry::instance();
 }
 
 bool KisApplication::start(const KisApplicationArguments &args)
@@ -427,9 +419,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (!registerResources()) {
         return false;
     }
-
-    // Load the gui plugins
-    loadGuiPlugins();
 
     KisPart *kisPart = KisPart::instance();
     if (needsMainWindow) {

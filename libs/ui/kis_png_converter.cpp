@@ -37,23 +37,23 @@
 #include <KoColor.h>
 #include <KoUnit.h>
 
-#include <kis_config.h>
-#include <kis_painter.h>
+#include "dialogs/kis_dlg_png_import.h"
+#include "kis_clipboard.h"
+#include "kis_undo_stores.h"
 #include <KisDocument.h>
+#include <KoColorModelStandardIds.h>
+#include <kis_config.h>
+#include <kis_cursor_override_hijacker.h>
+#include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
 #include <kis_layer.h>
-#include <kis_paint_device.h>
-#include <kis_transaction.h>
-#include <kis_paint_layer.h>
-#include <kis_group_layer.h>
-#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_backend_registry.h>
 #include <kis_meta_data_store.h>
-#include <KoColorModelStandardIds.h>
-#include "dialogs/kis_dlg_png_import.h"
-#include "kis_clipboard.h"
-#include <kis_cursor_override_hijacker.h>
-#include "kis_undo_stores.h"
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_painter.h>
+#include <kis_transaction.h>
 
 #include <kis_assert.h>
 
@@ -240,7 +240,7 @@ QByteArray png_read_raw_profile(png_textp text)
 void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, int headerSize)
 {
     dbgFile << "Decoding " << type << " " << text[0].key;
-    KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value(type);
+    KisMetaData::IOBackend *exifIO = KisMetadataBackendRegistry::instance()->value(type);
     Q_ASSERT(exifIO);
 
     QByteArray rawProfile = png_read_raw_profile(text);
@@ -1244,7 +1244,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         if (options.exif) {
             dbgFile << "Trying to save exif information";
 
-            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            KisMetaData::IOBackend *exifIO = KisMetadataBackendRegistry::instance()->value("exif");
             Q_ASSERT(exifIO);
 
             QBuffer buffer;
@@ -1254,7 +1254,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         // Save IPTC
         if (options.iptc) {
             dbgFile << "Trying to save exif information";
-            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+            KisMetaData::IOBackend *iptcIO = KisMetadataBackendRegistry::instance()->value("iptc");
             Q_ASSERT(iptcIO);
 
             QBuffer buffer;
@@ -1266,7 +1266,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         // Save XMP
         if (options.xmp) {
             dbgFile << "Trying to save XMP information";
-            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            KisMetaData::IOBackend *xmpIO = KisMetadataBackendRegistry::instance()->value("xmp");
             Q_ASSERT(xmpIO);
 
             QBuffer buffer;

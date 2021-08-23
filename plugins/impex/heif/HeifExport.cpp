@@ -37,14 +37,14 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 
-#include <kis_meta_data_store.h>
+#include <kis_exif_info_visitor.h>
+#include <kis_meta_data_backend_registry.h>
 #include <kis_meta_data_entry.h>
-#include <kis_meta_data_value.h>
+#include <kis_meta_data_filter_registry_model.h>
 #include <kis_meta_data_schema.h>
 #include <kis_meta_data_schema_registry.h>
-#include <kis_meta_data_filter_registry_model.h>
-#include <kis_exif_info_visitor.h>
-#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_value.h>
 
 #include "kis_iterator_ng.h"
 
@@ -479,7 +479,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         if (!metaDataStore->empty()) {
             {
-                KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+                KisMetaData::IOBackend *exifIO = KisMetadataBackendRegistry::instance()->value("exif");
                 QBuffer buffer;
                 exifIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
                 QByteArray data = buffer.data();
@@ -490,7 +490,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 }
             }
             {
-                KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+                KisMetaData::IOBackend *xmpIO = KisMetadataBackendRegistry::instance()->value("xmp");
                 QBuffer buffer;
                 xmpIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
                 QByteArray data = buffer.data();

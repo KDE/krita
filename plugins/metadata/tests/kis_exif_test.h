@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,7 +10,7 @@
 
 #include <QObject>
 
-class KisExiv2Test : public QObject
+class KisExifTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

@@ -28,37 +28,36 @@
 #include <KisGlobalResourcesInterface.h>
 
 // kritaimage
-#include <kis_meta_data_io_backend.h>
-#include <kis_meta_data_store.h>
-#include <kis_types.h>
-#include <kis_node_visitor.h>
-#include <kis_image.h>
-#include <kis_selection.h>
-#include <kis_layer.h>
-#include <kis_paint_layer.h>
-#include <kis_group_layer.h>
-#include <kis_adjustment_layer.h>
-#include <filter/kis_filter_configuration.h>
-#include <kis_datamanager.h>
-#include <generator/kis_generator_layer.h>
-#include <kis_pixel_selection.h>
-#include <kis_clone_layer.h>
-#include <kis_filter_mask.h>
-#include <kis_transform_mask.h>
-#include <kis_transform_mask_params_interface.h>
-#include "kis_transform_mask_params_factory_registry.h"
-#include <kis_transparency_mask.h>
-#include <kis_selection_mask.h>
-#include <lazybrush/kis_colorize_mask.h>
-#include <lazybrush/kis_lazy_fill_tools.h>
-#include "kis_shape_selection.h"
 #include "kis_colorize_dom_utils.h"
 #include "kis_dom_utils.h"
-#include "kis_raster_keyframe_channel.h"
-#include "kis_paint_device_frames_interface.h"
 #include "kis_filter_registry.h"
 #include "kis_generator_registry.h"
-
+#include "kis_paint_device_frames_interface.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_shape_selection.h"
+#include "kis_transform_mask_params_factory_registry.h"
+#include <filter/kis_filter_configuration.h>
+#include <generator/kis_generator_layer.h>
+#include <kis_adjustment_layer.h>
+#include <kis_clone_layer.h>
+#include <kis_datamanager.h>
+#include <kis_filter_mask.h>
+#include <kis_group_layer.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_meta_data_backend_registry.h>
+#include <kis_meta_data_store.h>
+#include <kis_node_visitor.h>
+#include <kis_paint_layer.h>
+#include <kis_pixel_selection.h>
+#include <kis_selection.h>
+#include <kis_selection_mask.h>
+#include <kis_transform_mask.h>
+#include <kis_transform_mask_params_interface.h>
+#include <kis_transparency_mask.h>
+#include <kis_types.h>
+#include <lazybrush/kis_colorize_mask.h>
+#include <lazybrush/kis_lazy_fill_tools.h>
 
 using namespace KRA;
 
@@ -693,7 +692,7 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
     KisLayer* layer = qobject_cast<KisLayer*>(node);
     if (!layer) return true;
 
-    KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
+    KisMetaData::IOBackend *backend = KisMetadataBackendRegistry::instance()->get("xmp");
 
     if (!backend || !backend->supportLoading()) {
         if (backend)

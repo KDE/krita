@@ -119,10 +119,12 @@ void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
             }
           }
             updateCursor();
+            updateReferenceImages();
             return;
         }
 
         DefaultTool::mouseMoveEvent(newEvent);
+        updateReferenceImages();
         return;
     }
 
@@ -153,10 +155,10 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
 QRectF ToolReferenceImages::handlesSize()
 {
     KisReferenceImage *referenceImage = activeReferenceImage();
-    if(referenceImage && referenceImage->cropEnabled()) {
+    if(referenceImage) {
         recalcCropHandles(activeReferenceImage());
-        QRectF bounds = m_cropRect.boundingRect();
-        QPointF border = canvas()->viewConverter()->viewToDocument(QPointF(5, 5));// HandleSize = 5
+        QRectF bounds = m_outline.boundingRect();
+        QPointF border = QPointF(5, 5);        // HandleSize = 5
         bounds.adjust(-border.x(), -border.y(), border.x(), border.y());
         return bounds;
     }
@@ -178,16 +180,14 @@ KoFlake::SelectionHandle ToolReferenceImages::handleAt(const QPointF &point, boo
         KoFlake::NoHandle
     };
 
-    const KoViewConverter *converter = canvas()->viewConverter();
-
-    if (!activeReferenceImage() || !converter) {
+    if (!activeReferenceImage()) {
         return KoFlake::NoHandle;
     }
 
     recalcCropHandles(activeReferenceImage());
     if (innerHandleMeaning) {
         QPainterPath path;
-        path.addPolygon(m_cropRect);
+        path.addPolygon(m_outline);
         *innerHandleMeaning = path.contains(point) || path.intersects(handlePaintRect(point));
     }
 
@@ -219,16 +219,24 @@ void ToolReferenceImages::recalcCropHandles(KisReferenceImage *referenceImage)
     if(!referenceImage) return;
 
     QTransform matrix = activeReferenceImage()->absoluteTransformation();
-    m_cropRect = matrix.map(QPolygonF(referenceImage->cropRect()));
 
-    m_cropHandles[KoFlake::TopMiddleHandle] = (m_cropRect.value(0) + m_cropRect.value(1)) / 2;
-    m_cropHandles[KoFlake::TopRightHandle] = m_cropRect.value(1);
-    m_cropHandles[KoFlake::RightMiddleHandle] = (m_cropRect.value(1) + m_cropRect.value(2)) / 2;
-    m_cropHandles[KoFlake::BottomRightHandle] = m_cropRect.value(2);
-    m_cropHandles[KoFlake::BottomMiddleHandle] = (m_cropRect.value(2) + m_cropRect.value(3)) / 2;
-    m_cropHandles[KoFlake::BottomLeftHandle] = m_cropRect.value(3);
-    m_cropHandles[KoFlake::LeftMiddleHandle] = (m_cropRect.value(3) + m_cropRect.value(0)) / 2;
-    m_cropHandles[KoFlake::TopLeftHandle] = m_cropRect.value(0);
+    QPolygonF poly;
+    if(referenceImage->cropEnabled()) {
+        poly = QPolygonF(referenceImage->cropRect());
+    }
+    else {
+        poly = koSelection()->outlineRect();
+    }
+    m_outline = matrix.map(poly);
+
+    m_cropHandles[KoFlake::TopMiddleHandle] = (m_outline.value(0) + m_outline.value(1)) / 2;
+    m_cropHandles[KoFlake::TopRightHandle] = m_outline.value(1);
+    m_cropHandles[KoFlake::RightMiddleHandle] = (m_outline.value(1) + m_outline.value(2)) / 2;
+    m_cropHandles[KoFlake::BottomRightHandle] = m_outline.value(2);
+    m_cropHandles[KoFlake::BottomMiddleHandle] = (m_outline.value(2) + m_outline.value(3)) / 2;
+    m_cropHandles[KoFlake::BottomLeftHandle] = m_outline.value(3);
+    m_cropHandles[KoFlake::LeftMiddleHandle] = (m_outline.value(3) + m_outline.value(0)) / 2;
+    m_cropHandles[KoFlake::TopLeftHandle] = m_outline.value(0);
 
 }
 
@@ -495,6 +503,18 @@ KoSelection *ToolReferenceImages::koSelection() const
 {
     auto manager = shapeManager();
     return manager ? manager->selection() : nullptr;
+}
+
+void ToolReferenceImages::updateReferenceImages()
+{
+    if(!koSelection()) return;
+
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    QList<KoShape *> selectedShapes = koSelection()->selectedEditableShapes();
+
+    Q_FOREACH (KoShape *shape, selectedShapes) {
+        shape->updateAbsolute(kisCanvas->coordinatesConverter()->widgetToDocument(shape->boundingRect()));
+    }
 }
 
 void ToolReferenceImages::updateDistinctiveActions(const QList<KoShape*> &)

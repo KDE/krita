@@ -599,6 +599,7 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
     qreal diffRotate = 0;
     if(!d->initialValues) {
         d->docOffset = kisCanvas->documentOffset();
+        d->previousAngle = kisCanvas->rotationAngle();
         d->zoom = kisCanvas->viewConverter()->zoom();
         KoFlake::resizeShapeCommon(this, d->zoom , d->zoom,
                                    absolutePosition(KoFlake::TopLeft), false ,false ,this->transformation());

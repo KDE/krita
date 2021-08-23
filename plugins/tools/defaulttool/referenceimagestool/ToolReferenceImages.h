@@ -88,17 +88,19 @@ private:
     KisReferenceImageCropDecorator* m_cropDecorator;
     KoFlake::SelectionHandle m_lastHandle;
     bool m_mouseWasInsideHandles;
-    QPolygonF m_cropRect;
+    QPolygonF m_outline;
     QPointF m_cropHandles[8];
     QCursor m_sizeCursors[8];
 
     KisDocument *document() const;
     void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
 
-    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
+    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0) override;
     void recalcCropHandles(KisReferenceImage *referenceImage);
     void updateCursor();
-    QRectF handlesSize();
+    QRectF handlesSize() override;
+
+    void updateReferenceImages();
 };
 
 

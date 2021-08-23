@@ -82,21 +82,11 @@ void ShapeMoveStrategy::moveSelection(const QPointF &diff)
         QPointF newPos(shape->absolutePosition(KoFlake::Center) + delta);
         m_newPositions[i] = newPos;
 
-        const QRectF oldDirtyRect = updateRect(shape);
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setAbsolutePosition(newPos, KoFlake::Center);
         shape->updateAbsolute(oldDirtyRect | oldDirtyRect.translated(delta));
         i++;
     }
-}
-
-QRectF ShapeMoveStrategy::updateRect(KoShape *shape)
-{
-    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
-    if(kisCanvas && !shape->absolute()) {
-        QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(shape->boundingRect());
-        return rect;
-    }
-    return shape->boundingRect();
 }
 
 KUndo2Command *ShapeMoveStrategy::createCommand()

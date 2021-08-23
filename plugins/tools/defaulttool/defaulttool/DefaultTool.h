@@ -78,8 +78,10 @@ public:
      *   is inside the selection rectangle and false if it is just outside.
      *   The value of innerHandleMeaning is undefined if the handle location is NoHandle
      */
-    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
+    virtual KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
+    /// Returns selection rectangle adjusted by handle proximity threshold
+    virtual QRectF handlesSize();
 
 public Q_SLOTS:
     void activate(const QSet<KoShape *> &shapes) override;
@@ -158,9 +160,6 @@ private:
 
     void selectionReorder(KoShapeReorderCommand::MoveShapeType order);
     bool moveSelection(int direction, Qt::KeyboardModifiers modifiers);
-
-    /// Returns selection rectangle adjusted by handle proximity threshold
-    QRectF handlesSize();
 
 
     void canvasResourceChanged(int key, const QVariant &res) override;

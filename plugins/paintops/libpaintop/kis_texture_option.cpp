@@ -278,14 +278,13 @@ bool KisTextureProperties::applyingGradient(const KisPropertiesConfiguration *se
 
 void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;
+    if (!m_maskInfo->isValid()) return;
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
     const QRect maskBounds = m_maskInfo->maskBounds();
 
     KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     const QRect rect = dab->bounds();
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;
@@ -307,6 +306,7 @@ void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoin
 
 void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;
+    if (!m_maskInfo->isValid()) return;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_gradient && m_gradient->valid());
 
@@ -315,8 +315,6 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
     const QRect maskBounds = m_maskInfo->maskBounds();
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;
@@ -362,6 +360,7 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
 void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)
 {
     if (!m_enabled) return;
+    if (!m_maskInfo->isValid()) return;
 
     if (m_texturingMode == LIGHTNESS) {
         applyLightness(dab, offset, info);
@@ -378,8 +377,6 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
     const QRect maskBounds = m_maskInfo->maskBounds();
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;

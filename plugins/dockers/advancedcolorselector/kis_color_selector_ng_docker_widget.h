@@ -52,6 +52,9 @@ private:
     QHBoxLayout* m_horizontalPatchesContainer;
     QVBoxLayout* m_sidebarLayout;
 
+    QHBoxLayout* m_colorHistoryWidgetsBottomLayout;
+    QVBoxLayout* m_colorHistoryWidgetsSideLayout;
+
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
     QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------
     QToolButton* m_fallbackSettingsButton;

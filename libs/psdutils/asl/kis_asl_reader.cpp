@@ -354,7 +354,15 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes)
         device.seek(nextPos);
     }
 
-    const auto format = pixelDepth1 == 8 ? QImage::Format_ARGB32 : QImage::Format_RGBA64;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+    const QImage::Format format = pixelDepth1 == 8 ? QImage::Format_ARGB32 : QImage::Format_RGBA64;
+#else
+    if (pixelDepth1 != 8) {
+        throw ASLParseException("Qt does not support RGBA64!");
+    }
+
+    const QImage::Format format = QImage::Format_ARGB32;
+#endif
 
     QImage image(arrayRect.size(), format);
 

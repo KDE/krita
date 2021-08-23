@@ -27,6 +27,8 @@
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
 
+#include <KisMimeDatabase.h>
+
 namespace
 {
 struct GimpPatternHeader {
@@ -141,21 +143,20 @@ bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resources
     if (index != -1)
         fileExtension = filename().mid(index + 1).toLower();
 
-    bool result;
+    QByteArray ba = dev->readAll();
+    QBuffer buf(&ba);
+    buf.open(QBuffer::ReadOnly);
+    bool result = false;
 
-    if (fileExtension == "pat") {
-        result = loadPatFromDevice(dev);
+    QString mimeForData = KisMimeDatabase::mimeTypeForData(ba);
+    if (mimeForData == "application/x-gimp-pattern") {
+        result = loadPatFromDevice(&buf);
     }
     else {
         QImage image;
-        // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
-        // fails with "libpng error: IDAT: CRC error"
-        QByteArray data = dev->readAll();
-        QBuffer buffer(&data);
-        result = image.load(&buffer, fileExtension.toUpper().toLatin1());
+        result = image.load(&buf, fileExtension.toUpper().toLatin1());
         setPatternImage(image);
     }
-
     return result;
 
 }

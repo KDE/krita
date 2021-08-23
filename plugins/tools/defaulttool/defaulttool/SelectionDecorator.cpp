@@ -265,8 +265,3 @@ void SelectionDecorator::setForceShapeOutlines(bool value)
 {
     m_forceShapeOutlines = value;
 }
-
-void SelectionDecorator::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
-{
-    m_referenceImagesLayer = layer;
-}

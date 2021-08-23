@@ -146,6 +146,7 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
     m_referenceImage->setCropRect(finalRect);
 
     ToolReferenceImages *refTool = dynamic_cast<ToolReferenceImages*>(tool());
+    KIS_ASSERT(refTool);
     emit refTool->cropRectChanged();
 
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(tool()->canvas());

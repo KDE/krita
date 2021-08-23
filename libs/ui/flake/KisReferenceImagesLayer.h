@@ -68,7 +68,7 @@ private:
     friend struct RemoveReferenceImagesCommand;
     friend class ReferenceImagesCanvas;
 
-    QTransform m_docToWidget;
+    QTransform m_docToWidget = QTransform();
 };
 
 typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;

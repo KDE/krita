@@ -13,7 +13,6 @@
 #include <KoFlake.h>
 
 #include "KoShapeMeshGradientHandles.h"
-#include "KisReferenceImagesLayer.h"
 
 #include <QPainter>
 #include <QPointer>
@@ -79,8 +78,6 @@ public:
 
     void setForceShapeOutlines(bool value);
 
-    void setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
-
 private:
     void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
 
@@ -91,7 +88,6 @@ private:
     KoSelection *m_selection;
     KoShapeMeshGradientHandles::Handle m_currentHoveredMeshHandle;
     KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
-    KisSharedPtr<KisReferenceImagesLayer> m_referenceImagesLayer;
     int m_handleRadius;
     int m_lineWidth;
     bool m_showFillGradientHandles;

@@ -34,6 +34,7 @@ struct ToolReferenceImagesWidget::Private {
 
     Ui_WdgToolOptions *ui;
     ToolReferenceImages *tool;
+    KisReferenceImage *prevActiveReferenceImage = nullptr;
 };
 
 ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, KisCanvasResourceProvider */*provider*/, QWidget *parent)
@@ -44,14 +45,16 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->setupUi(this);
 
     d->ui->opacitySlider->setRange(0, 100);
-    d->ui->opacitySlider->setPrefixes(i18n("Opacity: "), i18n("Opacity [*varies*]: "));
+    d->ui->opacitySlider->setPrefixes(i18nc("Opacity setting which allows to adjust the transparency. It allows to see through an image if opacity is 0 it means it is completely transparent otherwise opaque", "Opacity: "),
+                                   i18nc("Opacity settings which allows to adjust the transparency too. This one appears if more than one image are selected and the opacity varies between them", "Opacity [*varies*]: "));
     d->ui->opacitySlider->setSuffix(i18n(" %"));
     d->ui->opacitySlider->setValueGetter(
         [](KoShape *s){ return 100.0 * (1.0 - s->transparency()); }
     );
 
     d->ui->saturationSlider->setRange(0, 100);
-    d->ui->saturationSlider->setPrefixes(i18n("Saturation: "), i18n("Saturation [*varies*]: "));
+    d->ui->saturationSlider->setPrefixes(i18nc("Saturation setting which allows to adjust the intensity of colors. High saturation means brighter colors otherwise a shade of grey", "Saturation: "),
+                                   i18nc("Saturation setting which allows to adjust the intensity of colors too. This one appears if more than one image are selected and the opacity varies between them", "Saturation [*varies*]: "));
     d->ui->saturationSlider->setSuffix(i18n(" %"));
     d->ui->saturationSlider->setValueGetter(
         [](KoShape *s){
@@ -61,7 +64,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
         }
     );
 
-    d->ui->sldOffsetX->setPrefixes(i18n("X: "), i18n("X [*varies*]: "));
+    d->ui->sldOffsetX->setPrefixes(i18nc("Offset of the cropped reference image, horizontal axis, prefix in the slider (must be short)", "X: "),
+                                   i18nc("Offset of the cropped reference image, horizontal axis, prefix in the slider (must be short)", "X [*varies*]: "));
     d->ui->sldOffsetX->setValueGetter(
         [](KoShape *s){
             KisReferenceImage *r = dynamic_cast<KisReferenceImage*>(s);
@@ -70,7 +74,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
         }
     );
 
-    d->ui->sldOffsetY->setPrefixes(i18n("Y: "), i18n("Y [*varies*]: "));
+    d->ui->sldOffsetY->setPrefixes(i18nc("Offset of the cropped reference image, vertical axis, prefix in the slider (must be short)", "Y: "),
+                                   i18nc("Offset of the cropped reference image, vertical axis, prefix in the slider (must be short)", "Y [*varies*]: "));
     d->ui->sldOffsetY->setValueGetter(
         [](KoShape *s){
             KisReferenceImage *r = dynamic_cast<KisReferenceImage*>(s);
@@ -79,7 +84,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
         }
     );
 
-    d->ui->sldWidth->setPrefixes(i18n("W: "), i18n("W [*varies*]: "));
+    d->ui->sldWidth->setPrefixes(i18nc("Width of the cropped reference image, prefix in the slider (must be short)", "W: "),
+                                   i18nc("Width of the cropped reference image, prefix in the slider (must be short)", "W [*varies*]: "));
     d->ui->sldWidth->setValueGetter(
         [](KoShape *s){
             KisReferenceImage *r = dynamic_cast<KisReferenceImage*>(s);
@@ -88,7 +94,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
         }
     );
 
-    d->ui->sldHeight->setPrefixes(i18n("H: "), i18n("H [*varies*]: "));
+    d->ui->sldHeight->setPrefixes(i18nc("Height of the cropped reference image, prefix in the slider (must be short)", "H: "),
+                                   i18nc("Height of the cropped reference image, prefix in the slider (must be short)", "H [*varies*]: "));
     d->ui->sldHeight->setValueGetter(
         [](KoShape *s){
             KisReferenceImage *r = dynamic_cast<KisReferenceImage*>(s);
@@ -156,8 +163,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->sldWidth, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
     connect(d->ui->sldHeight, SIGNAL(valueChanged(qreal)), this, SLOT(slotCropValuesChanged()));
 
-    d->ui->referenceImageLocationCombobox->addItem(i18n("Embed to .KRA"));
-    d->ui->referenceImageLocationCombobox->addItem(i18n("Link to Image"));
+    d->ui->referenceImageLocationCombobox->addItem(i18nc("Storage setting option allows to store this reference image into the KRA file.", "Embed to .KRA"));
+    d->ui->referenceImageLocationCombobox->addItem(i18nc("Storage setting option allows to link to the reference image, krita will open it from the disk everytime it loads this file.", "Link to Image"));
     connect(d->ui->referenceImageLocationCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSaveLocationChanged(int)));
 
     updateVisibility(false); // no selection when we start
@@ -174,14 +181,12 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     d->ui->opacitySlider->setSelection(shapes);
     d->ui->saturationSlider->setSelection(shapes);
 
-    if(d->tool->activeReferenceImage()) {
-        updateCropSliders();
+    if(d->ui->bnCrop->isChecked()) {
+        slotCancelCrop();
+        if(d->prevActiveReferenceImage) {
+            d->prevActiveReferenceImage->setCrop(false, QRectF());
+        }
     }
-    else {
-        d->ui->grpCrop->setVisible(false);
-        d->ui->bnCancel->setVisible(false);
-    }
-
 
     bool anyKeepingAspectRatio = false;
     bool anyNotKeepingAspectRatio = false;
@@ -351,6 +356,7 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
     if(enabled) {
         ref->setCrop(enabled, QRectF());
         updateCropSliders();
+        d->prevActiveReferenceImage = ref;
     }
     else {
         if(d->ui->sldOffsetX->value() > 0 || d->ui->sldOffsetY->value() > 0

@@ -218,14 +218,15 @@ void ToolReferenceImages::recalcCropHandles(KisReferenceImage *referenceImage)
 {
     if(!referenceImage) return;
 
-    QTransform matrix = activeReferenceImage()->absoluteTransformation();
-
+    QTransform matrix;
     QPolygonF poly;
     if(referenceImage->cropEnabled()) {
         poly = QPolygonF(referenceImage->cropRect());
+        matrix = activeReferenceImage()->absoluteTransformation();
     }
     else {
         poly = koSelection()->outlineRect();
+        matrix = koSelection()->absoluteTransformation();
     }
     m_outline = matrix.map(poly);
 
@@ -513,8 +514,11 @@ void ToolReferenceImages::updateReferenceImages()
     QList<KoShape *> selectedShapes = koSelection()->selectedEditableShapes();
 
     Q_FOREACH (KoShape *shape, selectedShapes) {
-        shape->updateAbsolute(kisCanvas->coordinatesConverter()->widgetToDocument(shape->boundingRect()));
+        QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(shape->boundingRect());
+        shape->updateAbsolute(rect);
     }
+    QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(koSelection()->boundingRect());
+    koSelection()->updateAbsolute(rect);
 }
 
 void ToolReferenceImages::updateDistinctiveActions(const QList<KoShape*> &)

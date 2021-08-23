@@ -19,6 +19,7 @@
 #include "KisHandlePainterHelper.h"
 #include "KisFileSystemWatcherWrapper.h"
 #include "KoStore.h"
+#include "kis_assert.h"
 
 struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
@@ -128,16 +129,13 @@ Q_GLOBAL_STATIC(KisFileSystemWatcherWrapper, m_fileSystemWatcher)
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
-    , m_docToWidget(QTransform())
 
 {
-    //use signal compressor here
     connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), SLOT(fileChanged(QString)));
 }
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
     : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
-    , m_docToWidget(QTransform())
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)
@@ -167,7 +165,9 @@ KUndo2Command * KisReferenceImagesLayer::removeReferenceImages(KisDocument *docu
 {
     Q_FOREACH(KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
-        m_fileSystemWatcher->removePath(ref->filename());
+        if(ref) {
+            m_fileSystemWatcher->removePath(ref->filename());
+        }
     }
     return new RemoveReferenceImagesCommand(document, this, referenceImages);
 }
@@ -187,7 +187,6 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter)
 {
-    //painter.setTransform(converter()->documentToView(), true);
     shapeManager()->paint(painter, false);
 }
 

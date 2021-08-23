@@ -178,7 +178,7 @@ KisReferenceImage::CropReferenceImage::CropReferenceImage(KoShape *shape, QRectF
     , newRect(rect)
 {
     referenceImage  = dynamic_cast<KisReferenceImage*>(shape);
-    KIS_SAFE_ASSERT_RECOVER_BREAK(referenceImage);
+    KIS_ASSERT(referenceImage);
 
     oldImage = referenceImage->image();
     oldPos = shape->absolutePosition(KoFlake::TopLeft);

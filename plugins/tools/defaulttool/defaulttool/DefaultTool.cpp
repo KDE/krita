@@ -823,7 +823,6 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         }
 
         m_decorator->setSelection(selection);
-        m_decorator->setReferenceImagesLayer(kisCanvas->imageView()->document()->referenceImagesLayer());
         m_decorator->setHandleRadius(handleRadius());
         m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
         m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));

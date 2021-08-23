@@ -13,6 +13,7 @@ KisReferenceImageCropStrategy::KisReferenceImageCropStrategy(KoToolBase *tool, K
 {
     QTransform matrix = referenceImage->absoluteTransformation();
     QPolygonF cropRect = matrix.map(QPolygonF(referenceImage->cropRect()));
+    m_move = false;
 
     switch (direction) {
     case KoFlake::TopMiddleHandle:
@@ -143,9 +144,15 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
         finalRect.setHeight(newHeight);
     }
     m_referenceImage->setCropRect(finalRect);
-    m_referenceImage->update();
-    ToolReferenceImages *t = dynamic_cast<ToolReferenceImages*>(tool());
-    emit t->cropRectChanged();
+
+    ToolReferenceImages *refTool = dynamic_cast<ToolReferenceImages*>(tool());
+    emit refTool->cropRectChanged();
+
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
+    if(kisCanvas) {
+        QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(m_referenceImage->boundingRect());
+        m_referenceImage->updateAbsolute(rect);
+    }
 }
 
 KUndo2Command *KisReferenceImageCropStrategy::createCommand()

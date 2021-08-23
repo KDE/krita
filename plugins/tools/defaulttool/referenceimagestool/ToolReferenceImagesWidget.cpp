@@ -395,6 +395,12 @@ void ToolReferenceImagesWidget::slotCropValuesChanged()
 
         QRectF finalRect = converter->imageToDocument(QRectF(x, y, width, height));
         ref->setCropRect(finalRect);
+
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
+        if(kisCanvas) {
+            QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(ref->boundingRect());
+            ref->updateAbsolute(rect);
+        }
     }
 }
 
@@ -439,6 +445,12 @@ void ToolReferenceImagesWidget::updateCropSliders()
 
     QRectF finalRect = converter->imageToDocument(QRectF(0, 0, width, height));
     ref->setCropRect(finalRect);
+
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
+    if(kisCanvas) {
+        QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(ref->boundingRect());
+        ref->updateAbsolute(rect);
+    }
 }
 
 void ToolReferenceImagesWidget::slotCropRectChanged()

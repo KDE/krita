@@ -191,12 +191,12 @@ KoFlake::SelectionHandle ToolReferenceImages::handleAt(const QPointF &point, boo
         *innerHandleMeaning = path.contains(point) || path.intersects(handlePaintRect(point));
     }
 
-    const QPointF viewPoint = converter->documentToView(point);
+    const QPointF viewPoint = point;
 
     for (int i = 0; i < KoFlake::NoHandle; ++i) {
         KoFlake::SelectionHandle handle = handleOrder[i];
 
-        const QPointF handlePoint = converter->documentToView(m_cropHandles[handle]);
+        const QPointF handlePoint = m_cropHandles[handle];
         const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
 
         // if just inside the outline

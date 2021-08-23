@@ -204,7 +204,7 @@ public:
 
     /**
      * @brief Shear the shape
-     * The shape will be shearedShapeRota using the zero-point which is the top-left corner.
+     * The shape will be sheared using the zero-point which is the top-left corner.
      * @see position()
      *
      * @param sx shear in x direction
@@ -1066,7 +1066,7 @@ protected:
     /// return the current matrix that contains the rotation/scale/position of this shape
     QTransform transform() const;
 
-    // This allows to not apply parent transformation to shapes in absoluteTransformation()
+    // This allows to not apply parent transformation to shapes in absoluteTransformation().
     void setAbsolute(bool);
 
     // Append any kind of extra transformation to the shapes.

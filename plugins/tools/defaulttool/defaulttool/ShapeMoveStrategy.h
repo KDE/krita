@@ -40,6 +40,9 @@ public:
     KUndo2Command *createCommand() override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
     void paint(QPainter &painter, const KoViewConverter &converter) override;
+
+    //When the shape is not absolute ,the boundingRect() should be in absolute coordinates for shapeManager
+    QRectF updateRect(KoShape *shape);
 private:
     void moveSelection(const QPointF &diff);
     QList<QPointF> m_previousPositions;

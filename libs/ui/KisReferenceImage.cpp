@@ -541,7 +541,6 @@ QRectF KisReferenceImage::cropRect()
 void KisReferenceImage::setCropRect(QRectF rect)
 {
    d->cropRect = rect;
-   update();
 }
 
 

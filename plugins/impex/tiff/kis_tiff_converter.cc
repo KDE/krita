@@ -46,6 +46,7 @@
 #include "kis_transparency_mask.h"
 
 #include <KisImportExportAdditionalChecks.h>
+#include <kis_meta_data_backend_registry.h>
 
 #if TIFFLIB_VERSION < 20111221
 typedef size_t tmsize_t;
@@ -663,6 +664,13 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromTiff(TIFF *image, KisTif
 
     dbgFile << "Orientation:" << orientation;
 
+    // Try to get IPTC metadata
+    uint32_t iptc_profile_size = 0;
+    uint32_t *iptc_profile_data = nullptr;
+    if (TIFFGetField(image, TIFFTAG_RICHTIFFIPTC, &iptc_profile_size, &iptc_profile_data) == 0) {
+        dbgFile << "IPTC metadata not found!";
+    }
+
     // Get the planar configuration
     uint16_t planarconfig;
     if (TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0) {
@@ -1006,6 +1014,22 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromTiff(TIFF *image, KisTif
         break;
     default:
         break;
+    }
+
+    // Process IPTC metadata
+    if (iptc_profile_size > 0 && iptc_profile_data != nullptr) {
+        // warning: profile is an array of uint32_t's
+        if (TIFFIsByteSwapped(image) != 0) {
+            TIFFSwabArrayOfLong(iptc_profile_data, iptc_profile_size);
+        }
+
+        KisMetaData::IOBackend *iptcIO = KisMetadataBackendRegistry::instance()->value("iptc");
+
+        // Copy the xmp data into the byte array
+        QByteArray ba(reinterpret_cast<char *>(iptc_profile_data),
+                      static_cast<int>(sizeof(uint32_t) * iptc_profile_size));
+        QBuffer buf(&ba);
+        iptcIO->loadFrom(layer->metaData(), &buf);
     }
 
     return ImportExportCodes::OK;

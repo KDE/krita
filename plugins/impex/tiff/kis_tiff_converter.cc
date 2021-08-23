@@ -671,6 +671,13 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromTiff(TIFF *image, KisTif
         dbgFile << "IPTC metadata not found!";
     }
 
+    // Try to get XMP metadata
+    uint32_t xmp_size = 0;
+    uint8_t *xmp_data = nullptr;
+    if (TIFFGetField(image, TIFFTAG_XMLPACKET, &xmp_size, &xmp_data) == 0) {
+        dbgFile << "XML metadata not found!";
+    }
+
     // Get the planar configuration
     uint16_t planarconfig;
     if (TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0) {
@@ -1018,6 +1025,8 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromTiff(TIFF *image, KisTif
 
     // Process IPTC metadata
     if (iptc_profile_size > 0 && iptc_profile_data != nullptr) {
+        dbgFile << "Loading IPTC profile. Size: " << sizeof(uint32_t) * iptc_profile_size;
+
         // warning: profile is an array of uint32_t's
         if (TIFFIsByteSwapped(image) != 0) {
             TIFFSwabArrayOfLong(iptc_profile_data, iptc_profile_size);
@@ -1030,6 +1039,18 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromTiff(TIFF *image, KisTif
                       static_cast<int>(sizeof(uint32_t) * iptc_profile_size));
         QBuffer buf(&ba);
         iptcIO->loadFrom(layer->metaData(), &buf);
+    }
+
+    // Process XMP metadata
+    if (xmp_size > 0 && xmp_data != nullptr) {
+        dbgFile << "Loading XMP data. Size: " << xmp_size;
+
+        KisMetaData::IOBackend *xmpIO = KisMetadataBackendRegistry::instance()->value("xmp");
+
+        // Copy the xmp data into the byte array
+        QByteArray ba(reinterpret_cast<char *>(xmp_data), static_cast<int>(xmp_size));
+        QBuffer buf(&ba);
+        xmpIO->loadFrom(layer->metaData(), &buf);
     }
 
     return ImportExportCodes::OK;

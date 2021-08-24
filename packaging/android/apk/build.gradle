@@ -117,13 +117,13 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 7
+    def versionRelease  = 8
 
 	defaultConfig {
         targetSdkVersion 29
         minSdkVersion 23
         versionCode project.ext.versionCodes[abi] * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "4.4.7"
+        versionName "4.4.8"
         archivesBaseName = "krita-$abi-$versionName"
     }
 

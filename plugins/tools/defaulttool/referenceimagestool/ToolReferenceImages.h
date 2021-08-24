@@ -82,6 +82,15 @@ public Q_SLOTS:
 
 
 private:
+    KisDocument *document() const;
+    void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
+
+    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0) override;
+    void recalcCropHandles(KisReferenceImage *referenceImage);
+    void updateCursor();
+    QRectF handlesSize() override;
+    void updateReferenceImages();
+
     friend class ToolReferenceImagesWidget;
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
     KisWeakSharedPtr<KisReferenceImagesLayer> m_layer;
@@ -91,16 +100,6 @@ private:
     QPolygonF m_outline;
     QPointF m_cropHandles[8];
     QCursor m_sizeCursors[8];
-
-    KisDocument *document() const;
-    void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
-
-    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0) override;
-    void recalcCropHandles(KisReferenceImage *referenceImage);
-    void updateCursor();
-    QRectF handlesSize() override;
-
-    void updateReferenceImages();
 };
 
 

@@ -93,7 +93,6 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
-
             KisHandlePainterHelper helper =
                     createHandle(&painter, shape, converter);
 
@@ -179,12 +178,12 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 KisHandlePainterHelper SelectionDecorator::createHandle(QPainter *painter, KoShape *shape, const KoViewConverter &converter)
 {
     KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
-    if(reference)
+    if (reference)
     {
         m_applyScaling = false;
     }
 
-    if(!m_applyScaling) {
+    if (!m_applyScaling) {
         return KoShape::createHandlePainterHelperDocument(painter, shape, m_handleRadius);
     }
 

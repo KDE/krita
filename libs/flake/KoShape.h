@@ -1080,7 +1080,12 @@ private:
     class SharedData;
     QSharedDataPointer<SharedData> s;
 
+    // Shapes are usually painted and manipulated in pt coordinates (document) but in some case we might need widget system
+    // so it is not manipulated with document / KoShapeContainer .
     bool m_absolute;
+
+    // This extra transform can be used to add to the shape without modifying its localMatrix too often.
+    // @see KisReferenceImage::addCanvasTransformation() for e.g
     QTransform m_extraTransform;
 
 protected:

@@ -360,7 +360,7 @@ QRectF KoShape::absoluteOutlineRect(const QList<KoShape *> &shapes)
 QTransform KoShape::absoluteTransformation() const
 {
     QTransform matrix;
-    if(m_absolute) {
+    if (m_absolute) {
         // apply parents matrix to inherit any transformations done there.
         KoShapeContainer * container = d->parent;
         if (container) {

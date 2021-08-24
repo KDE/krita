@@ -48,11 +48,17 @@ private Q_SLOTS:
     void slotCropValuesChanged();
 
 private:
-    struct Private;
-    const QScopedPointer<Private> d;
     void updateVisibility(bool hasSelection);
     void updateCropSliders();
+
     QRectF cropRect();
+    void setCropOffsetX(qreal range, qreal val);
+    void setCropOffsetY(qreal range, qreal val);
+    void setCropWidth(qreal range, qreal val);
+    void setCropHeight(qreal range, qreal val);
+
+    struct Private;
+    const QScopedPointer<Private> d;
 };
 
 #endif

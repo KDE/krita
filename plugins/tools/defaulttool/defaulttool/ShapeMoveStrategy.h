@@ -40,7 +40,6 @@ public:
     KUndo2Command *createCommand() override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-
 private:
     void moveSelection(const QPointF &diff);
     QList<QPointF> m_previousPositions;

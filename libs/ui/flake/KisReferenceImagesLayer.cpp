@@ -154,7 +154,7 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *documen
 
     Q_FOREACH(KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
-        if(ref) {
+        if (ref) {
             m_fileSystemWatcher->addPath(ref->filename());
         }
     }
@@ -165,7 +165,7 @@ KUndo2Command * KisReferenceImagesLayer::removeReferenceImages(KisDocument *docu
 {
     Q_FOREACH(KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
-        if(ref) {
+        if (ref) {
             m_fileSystemWatcher->removePath(ref->filename());
         }
     }
@@ -255,7 +255,7 @@ QColor KisReferenceImagesLayer::getPixel(QPointF position) const
 void KisReferenceImagesLayer::fileChanged(QString path)
 {
     Q_FOREACH(KisReferenceImage *ref, referenceImages()) {
-        if(ref->filename() == path) {
+        if (ref->filename() == path) {
             ref->reloadImage();
         }
     }
@@ -270,25 +270,24 @@ void KisReferenceImagesLayer::updateTransformations(KisCanvas2 *kisCanvas)
 
     Q_FOREACH(KoShape *shape, shapes()) {
         KisReferenceImage *referenceImage = dynamic_cast<KisReferenceImage*>(shape);
-        if(referenceImage) {
+        if (referenceImage) {
             rotateSelection &= (!referenceImage->pinRotate());
             mirrorSelection &= (!referenceImage->pinMirror());
             angle =  referenceImage->addCanvasTransformation(kisCanvas);
-            }
+        }
     }
 
-    if(shapeManager()) {
+    if (shapeManager()) {
         KoSelection *selection = shapeManager()->selection();
-        if(selection) {
+        if (selection) {
             QList<KoShape*> shapes = selection->selectedShapes();
-            if(!shapes.isEmpty()) {
-                if(shapes.count() > 1) {
-                    if(rotateSelection || mirrorSelection) {
+            if (!shapes.isEmpty()) {
+                if (shapes.count() > 1 && (rotateSelection || mirrorSelection)) {
                         selection->rotate(angle);
-                    }
                 }
+
                 else {
-                    if(shapes.count() == 1) {
+                    if (shapes.count() == 1) {
                         KoShape *shape = shapes.at(0);
                         selection->setTransformation(shape->absoluteTransformation());
                     }

@@ -181,9 +181,9 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     d->ui->opacitySlider->setSelection(shapes);
     d->ui->saturationSlider->setSelection(shapes);
 
-    if(d->ui->bnCrop->isChecked()) {
+    if (d->ui->bnCrop->isChecked()) {
         slotCancelCrop();
-        if(d->prevActiveReferenceImage) {
+        if (d->prevActiveReferenceImage) {
             d->prevActiveReferenceImage->setCrop(false, QRectF());
         }
     }
@@ -308,14 +308,13 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
 
     KisReferenceImage *ref = d->tool->activeReferenceImage();
     d->ui->bnCrop->setVisible(hasSelection);
-        if(ref) {
-            d->ui->chkPinMirror->setChecked(ref->pinMirror());
-            d->ui->chkPinPos->setChecked(ref->pinPosition());
-            d->ui->chkPinRotate->setChecked(ref->pinRotate());
-            d->ui->chkPinZoom->setChecked(ref->pinZoom());
-            d->ui->chkPinAll->setChecked(ref->pinAll());
-        }
-
+    if (ref) {
+        d->ui->chkPinMirror->setChecked(ref->pinMirror());
+        d->ui->chkPinPos->setChecked(ref->pinPosition());
+        d->ui->chkPinRotate->setChecked(ref->pinRotate());
+        d->ui->chkPinZoom->setChecked(ref->pinZoom());
+        d->ui->chkPinAll->setChecked(ref->pinAll());
+    }
 
     // show a label indicating that a selection is required to show options
     d->ui->referenceImageOptionsLabel->setVisible(!hasSelection);
@@ -346,20 +345,20 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
 void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
 {
     KisReferenceImage* ref = d->tool->activeReferenceImage();
-    if(!ref) return;
+    if (!ref) return;
 
     d->ui->bnCrop->setChecked(value);
     bool enabled = d->ui->bnCrop->isChecked();
     d->ui->grpCrop->setVisible(enabled);
     d->ui->bnCancel->setVisible(enabled);
 
-    if(enabled) {
+    if (enabled) {
         ref->setCrop(enabled, QRectF());
         updateCropSliders();
         d->prevActiveReferenceImage = ref;
     }
     else {
-        if(d->ui->sldOffsetX->value() > 0 || d->ui->sldOffsetY->value() > 0
+        if (d->ui->sldOffsetX->value() > 0 || d->ui->sldOffsetY->value() > 0
                 || !d->ui->sldWidth->isMaximized() || !d->ui->sldHeight->isMaximized()) {
             ref->setCrop(enabled, cropRect());
             KUndo2Command *cmd =
@@ -372,18 +371,15 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
 void ToolReferenceImagesWidget::slotCropValuesChanged()
 {
     KisReferenceImage *ref = d->tool->activeReferenceImage();
-    if(ref) {
-
+    if (ref) {
         KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
         const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
-
         QRectF rect = converter->documentToImage(ref->outlineRect());
 
         qreal x = d->ui->sldOffsetX->value();
         qreal y = d->ui->sldOffsetY->value();
         qreal width = d->ui->sldWidth->value();
         qreal height = d->ui->sldHeight->value();
-
 
         if(x + width > rect.width()) {
             width = rect.width() - x;
@@ -403,7 +399,7 @@ void ToolReferenceImagesWidget::slotCropValuesChanged()
         ref->setCropRect(finalRect);
 
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
-        if(kisCanvas) {
+        if (kisCanvas) {
             QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(ref->boundingRect());
             ref->updateAbsolute(rect);
         }
@@ -413,7 +409,7 @@ void ToolReferenceImagesWidget::slotCropValuesChanged()
 void ToolReferenceImagesWidget::updateCropSliders()
 {
     KisReferenceImage* ref = d->tool->activeReferenceImage();
-    if(!ref) return;
+    if (!ref) return;
 
     QList<KoShape*> shape;
     shape.append(ref);
@@ -426,34 +422,19 @@ void ToolReferenceImagesWidget::updateCropSliders()
     qreal height = rect.height() - d->ui->sldOffsetY->value();
 
     d->ui->sldOffsetX->setSelection(shape);
-    d->ui->sldOffsetX->setRange(0,rect.width());
-    d->ui->sldOffsetX->blockSignals(true);
-    d->ui->sldOffsetX->setValue(0);
-    d->ui->sldOffsetX->blockSignals(false);
-
+    setCropOffsetX(rect.width(), 0);
     d->ui->sldOffsetY->setSelection(shape);
-    d->ui->sldOffsetY->setRange(0,rect.height());
-    d->ui->sldOffsetY->blockSignals(true);
-    d->ui->sldOffsetY->setValue(0);
-    d->ui->sldOffsetY->blockSignals(false);
-
+    setCropOffsetY(rect.height(), 0);
     d->ui->sldWidth->setSelection(shape);
-    d->ui->sldWidth->setRange(0,rect.width());
-    d->ui->sldWidth->blockSignals(true);
-    d->ui->sldWidth->setValue(width);
-    d->ui->sldWidth->blockSignals(false);
-
+    setCropWidth(rect.width(), width);
     d->ui->sldHeight->setSelection(shape);
-    d->ui->sldHeight->setRange(0,rect.height());
-    d->ui->sldHeight->blockSignals(true);
-    d->ui->sldHeight->setValue(height);
-    d->ui->sldHeight->blockSignals(false);
+    setCropHeight(rect.height(), height);
 
     QRectF finalRect = converter->imageToDocument(QRectF(0, 0, width, height));
     ref->setCropRect(finalRect);
 
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
-    if(kisCanvas) {
+    if (kisCanvas) {
         QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(ref->boundingRect());
         ref->updateAbsolute(rect);
     }
@@ -462,32 +443,17 @@ void ToolReferenceImagesWidget::updateCropSliders()
 void ToolReferenceImagesWidget::slotCropRectChanged()
 {
     KisReferenceImage *ref = d->tool->activeReferenceImage();
-    if(!ref) return;
+    if (!ref) return;
 
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(d->tool->canvas());
     const KisCoordinatesConverter *converter = kiscanvas->coordinatesConverter();
     QRectF rect = converter->documentToImage(ref->cropRect());
     QRectF shapeRect = converter->documentToImage(ref->outlineRect());
 
-    d->ui->sldOffsetX->blockSignals(true);
-    d->ui->sldOffsetX->setRange(0, shapeRect.width());
-    d->ui->sldOffsetX->setValue(rect.topLeft().x());
-    d->ui->sldOffsetX->blockSignals(false);
-
-    d->ui->sldOffsetY->blockSignals(true);
-    d->ui->sldOffsetY->setRange(0,shapeRect.height());
-    d->ui->sldOffsetY->setValue(rect.topLeft().y());
-    d->ui->sldOffsetY->blockSignals(false);
-
-    d->ui->sldWidth->blockSignals(true);
-    d->ui->sldWidth->setRange(0, shapeRect.width());
-    d->ui->sldWidth->setValue(rect.width());
-    d->ui->sldWidth->blockSignals(false);
-
-    d->ui->sldHeight->blockSignals(true);
-    d->ui->sldHeight->setRange(0, shapeRect.height());
-    d->ui->sldHeight->setValue(rect.height());
-    d->ui->sldHeight->blockSignals(false);
+    setCropOffsetX(shapeRect.width(), rect.topLeft().x());
+    setCropOffsetY(shapeRect.height(), rect.topLeft().y());
+    setCropWidth(shapeRect.width(), rect.width());
+    setCropHeight(shapeRect.height(), rect.height());
 }
 
 QRectF ToolReferenceImagesWidget::cropRect()
@@ -507,53 +473,53 @@ QRectF ToolReferenceImagesWidget::cropRect()
 void ToolReferenceImagesWidget::slotMirrorChanged()
 {
     KisReferenceImage *ref= d->tool->activeReferenceImage();
-        if(ref) {
-            ref->setPinMirror(d->ui->chkPinMirror->isChecked());
-     }
+    if (ref) {
+        ref->setPinMirror(d->ui->chkPinMirror->isChecked());
+    }
 }
 
 void ToolReferenceImagesWidget::slotPositionChanged()
 {
     KisReferenceImage *ref= d->tool->activeReferenceImage();
-        if(ref) {
-            ref->setPinPosition(d->ui->chkPinPos->isChecked());
+    if (ref) {
+        ref->setPinPosition(d->ui->chkPinPos->isChecked());
     }
 }
 
 void ToolReferenceImagesWidget::slotRotateChanged()
 {
     KisReferenceImage *ref= d->tool->activeReferenceImage();
-        if(ref) {
-            ref->setPinRotate(d->ui->chkPinRotate->isChecked());
-        }
+    if (ref) {
+        ref->setPinRotate(d->ui->chkPinRotate->isChecked());
+    }
 }
 
 void ToolReferenceImagesWidget::slotZoomChanged()
 {
     KisReferenceImage *ref= d->tool->activeReferenceImage();
-        if(ref) {
-            ref->setPinZoom(d->ui->chkPinZoom->isChecked());
-        }
+    if (ref) {
+        ref->setPinZoom(d->ui->chkPinZoom->isChecked());
+    }
 }
 
 void ToolReferenceImagesWidget::slotPinAllChanged()
 {
     KisReferenceImage *ref= d->tool->activeReferenceImage();
-        if(ref) {
-            bool pinAll = d->ui->chkPinAll->isChecked();
-            ref->setPinAll(pinAll);
+    if (ref) {
+        bool pinAll = d->ui->chkPinAll->isChecked();
+        ref->setPinAll(pinAll);
 
-            d->ui->chkPinMirror->setChecked(pinAll);
-            d->ui->chkPinZoom->setChecked(pinAll);
-            d->ui->chkPinPos->setChecked(pinAll);
-            d->ui->chkPinRotate->setChecked(pinAll);
-        }
+        d->ui->chkPinMirror->setChecked(pinAll);
+        d->ui->chkPinZoom->setChecked(pinAll);
+        d->ui->chkPinPos->setChecked(pinAll);
+        d->ui->chkPinRotate->setChecked(pinAll);
+    }
 }
 
 void ToolReferenceImagesWidget::slotCancelCrop()
 {
     KisReferenceImage* ref = d->tool->activeReferenceImage();
-    if(!ref) return;
+    if (!ref) return;
 
     d->ui->bnCrop->blockSignals(true);
     d->ui->bnCrop->setChecked(false);
@@ -561,4 +527,37 @@ void ToolReferenceImagesWidget::slotCancelCrop()
     d->ui->grpCrop->setVisible(false);
     d->ui->bnCancel->setVisible(false);
     ref->setCrop(false, QRectF());
+}
+
+void ToolReferenceImagesWidget::setCropOffsetX(qreal range, qreal val)
+{
+    d->ui->sldOffsetX->blockSignals(true);
+    d->ui->sldOffsetX->setRange(0, range);
+    d->ui->sldOffsetX->setValue(val);
+    d->ui->sldOffsetX->blockSignals(false);
+}
+
+void ToolReferenceImagesWidget::setCropOffsetY(qreal range, qreal val)
+{
+    d->ui->sldOffsetY->blockSignals(true);
+    d->ui->sldOffsetY->setRange(0,range);
+    d->ui->sldOffsetY->setValue(val);
+    d->ui->sldOffsetY->blockSignals(false);
+
+}
+
+void ToolReferenceImagesWidget::setCropWidth(qreal range, qreal val)
+{
+    d->ui->sldWidth->blockSignals(true);
+    d->ui->sldWidth->setRange(0, range);
+    d->ui->sldWidth->setValue(val);
+    d->ui->sldWidth->blockSignals(false);
+}
+
+void ToolReferenceImagesWidget::setCropHeight(qreal range, qreal val)
+{
+    d->ui->sldHeight->blockSignals(true);
+    d->ui->sldHeight->setRange(0, range);
+    d->ui->sldHeight->setValue(val);
+    d->ui->sldHeight->blockSignals(false);
 }

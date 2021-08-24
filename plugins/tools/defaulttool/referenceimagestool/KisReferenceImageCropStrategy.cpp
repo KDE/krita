@@ -68,19 +68,19 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
     QPointF distance = m_unwindMatrix.map(point) - m_unwindMatrix.map(m_start);
     if(m_move) {
         QPointF offset = finalRect.topLeft() + distance;
-        if(offset.x() < 0) {
+        if (offset.x() < 0) {
             offset.setX(0);
         }
-        if(offset.y() < 0) {
+        if (offset.y() < 0) {
             offset.setY(0);
         }
 
         qreal maxX = m_referenceImage->size().width() - finalRect.width();
-        if(offset.x() > maxX) {
+        if (offset.x() > maxX) {
             offset.setX(maxX);
         }
         qreal maxY = m_referenceImage->size().height() - finalRect.height();
-        if(offset.y() > maxY) {
+        if (offset.y() > maxY) {
             offset.setY(maxY);
         }
         finalRect.moveTo(offset);
@@ -92,11 +92,11 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
 
         if (m_left) {
             newWidth = m_initialCropRect.width() - distance.x();
-            if(newWidth > 1) {
+            if (newWidth > 1) {
                 pos.setX(distance.x());
             }
             qreal maxWidth = finalRect.bottomRight().x();
-            if(newWidth > maxWidth) {
+            if (newWidth > maxWidth) {
                 newWidth = maxWidth;
             }
         } else if (m_right) {
@@ -127,16 +127,16 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
             }
         }
         QPointF offset = m_initialCropRect.topLeft() + pos;
-        if(offset.x() < 0 ) {
+        if (offset.x() < 0 ) {
             offset.setX(0);
         }
-        if(offset.y() < 0) {
+        if (offset.y() < 0) {
             offset.setY(0);
         }
-        if(newWidth < 1) {
+        if (newWidth < 1) {
             newWidth = 1;
         }
-        if(newHeight < 1) {
+        if (newHeight < 1) {
             newHeight = 1;
         }
         finalRect.moveTo(offset);
@@ -150,7 +150,7 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
     emit refTool->cropRectChanged();
 
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
-    if(kisCanvas) {
+    if (kisCanvas) {
         QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(m_referenceImage->boundingRect());
         m_referenceImage->updateAbsolute(rect);
     }

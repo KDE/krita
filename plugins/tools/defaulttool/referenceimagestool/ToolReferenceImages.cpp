@@ -75,7 +75,7 @@ void ToolReferenceImages::activate(const QSet<KoShape*> &shapes)
 
 void ToolReferenceImages::mousePressEvent(KoPointerEvent *event)
 {
-    if(m_layer) {
+    if (m_layer) {
         QPointF newPos = event->pos();
         KoPointerEvent *newEvent = new KoPointerEvent(event, newPos);
 
@@ -95,16 +95,16 @@ void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
 {
     KisReferenceImage *referenceImage = activeReferenceImage();
 
-    if(m_layer) {
+    if (m_layer) {
         QPointF newPos = event->pos();
         KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
 
-        if(referenceImage && referenceImage->cropEnabled()) {
+        if (referenceImage && referenceImage->cropEnabled()) {
             KoInteractionTool::mouseMoveEvent(newEvent);
             if(currentStrategy() == 0) {
             QRectF bounds = handlesSize();
 
-            if(bounds.contains(newEvent->point)) {
+            if (bounds.contains(newEvent->point)) {
                 bool inside;
                 KoFlake::SelectionHandle newDirection = handleAt(newEvent->point, &inside);
 
@@ -138,12 +138,12 @@ void ToolReferenceImages::deactivate()
 
 void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if(m_layer) {
+    if (m_layer) {
         painter.setTransform(QTransform());
     }
     KisReferenceImage* ref = activeReferenceImage();
 
-    if(ref && ref->cropEnabled()) {
+    if (ref && ref->cropEnabled()) {
       m_cropDecorator->setReferenceImage(ref);
       m_cropDecorator->paint(painter, converter);
     }
@@ -155,7 +155,7 @@ void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &conver
 QRectF ToolReferenceImages::handlesSize()
 {
     KisReferenceImage *referenceImage = activeReferenceImage();
-    if(referenceImage) {
+    if (referenceImage) {
         recalcCropHandles(activeReferenceImage());
         QRectF bounds = m_outline.boundingRect();
         QPointF border = QPointF(5, 5);        // HandleSize = 5
@@ -216,11 +216,11 @@ KoFlake::SelectionHandle ToolReferenceImages::handleAt(const QPointF &point, boo
 
 void ToolReferenceImages::recalcCropHandles(KisReferenceImage *referenceImage)
 {
-    if(!referenceImage) return;
+    if (!referenceImage) return;
 
     QTransform matrix;
     QPolygonF poly;
-    if(referenceImage->cropEnabled()) {
+    if (referenceImage->cropEnabled()) {
         poly = QPolygonF(referenceImage->cropRect());
         matrix = activeReferenceImage()->absoluteTransformation();
     }
@@ -286,7 +286,7 @@ void ToolReferenceImages::updateCursor()
 }
 KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event)
 {
-    if(activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
+    if (activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
         bool insideSelection = false;
         KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
         if(insideSelection) {
@@ -508,7 +508,7 @@ KoSelection *ToolReferenceImages::koSelection() const
 
 void ToolReferenceImages::updateReferenceImages()
 {
-    if(!koSelection()) return;
+    if (!koSelection()) return;
 
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     QList<KoShape *> selectedShapes = koSelection()->selectedEditableShapes();
@@ -517,8 +517,11 @@ void ToolReferenceImages::updateReferenceImages()
         QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(shape->boundingRect());
         shape->updateAbsolute(rect);
     }
+
     QRectF rect = kisCanvas->coordinatesConverter()->widgetToDocument(koSelection()->boundingRect());
-    koSelection()->updateAbsolute(rect);
+    QPointF border = QPointF(5, 5);
+    rect.adjust(-border.x(), -border.y(), border.x(), border.y());
+    shapeManager()->update(rect, koSelection(), true);
 }
 
 void ToolReferenceImages::updateDistinctiveActions(const QList<KoShape*> &)
@@ -613,9 +616,9 @@ bool ToolReferenceImages::paste()
 KisReferenceImage *ToolReferenceImages::activeReferenceImage()
 {
     KisReferenceImage *ref;
-    if(koSelection()) {
+    if (koSelection()) {
         QList<KoShape*> shapes = koSelection()->selectedVisibleShapes();
-        if(!shapes.isEmpty()) {
+        if (!shapes.isEmpty()) {
             ref = dynamic_cast<KisReferenceImage*>(shapes.at(0));
             return ref;
         }

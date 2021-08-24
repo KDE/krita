@@ -23,7 +23,7 @@ void KisReferenceImageCropDecorator::setReferenceImage(KisReferenceImage *refere
 
 void KisReferenceImageCropDecorator::paint(QPainter &gc, const KoViewConverter &converter)
 {
-    if(!m_referenceImage) {
+    if (!m_referenceImage) {
         return;
     }
 

@@ -64,7 +64,6 @@ QRectF KoSelection::outlineRect() const
     Q_FOREACH (KoShape *shape, selectedVisibleShapes()) {
         // it is cheaper to invert-transform each outline, than
         // to group 300+ rotated rectangles into a polygon
-
         boundingRect |=
             invertedTransform.map(
                 shape->absoluteTransformation().map(

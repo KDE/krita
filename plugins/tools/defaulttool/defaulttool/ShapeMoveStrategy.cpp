@@ -21,7 +21,6 @@
 #include <KoSelection.h>
 #include <klocalizedstring.h>
 #include <kis_global.h>
-#include <kis_canvas2.h>
 
 #include "kis_debug.h"
 

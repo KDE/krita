@@ -51,13 +51,11 @@ struct KisReferenceImagesDecoration::Private {
 private:
     void updateBuffer(QRectF widgetRect, QRectF imageRect)
     {
-        //KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         layer->updateTransformations(q->view()->canvasBase());
 
         qreal devicePixelRatioF = q->view()->devicePixelRatioF();
         if (buffer.image.isNull() || !buffer.bounds().contains(widgetRect)) {
-            const QRectF boundingImageRect = layer->boundingRect();
-            const QRectF boundingWidgetRect = boundingImageRect;
+            const QRectF boundingWidgetRect = layer->boundingRect();
             widgetRect = boundingWidgetRect.intersected(q->view()->rect());
 
             if (widgetRect.isNull()) return;

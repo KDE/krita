@@ -39,11 +39,7 @@ static void addDropShadow(QWidget *widget)
 }
 
 KisSplashScreen::KisSplashScreen(bool themed, QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint
-#ifdef Q_OS_LINUX
-              | Qt::WindowStaysOnTopHint
-#endif
-              | f)
+    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
       , m_themed(themed)
       , m_versionHtml(qApp->applicationVersion().toHtmlEscaped())
 {

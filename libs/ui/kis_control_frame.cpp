@@ -175,7 +175,7 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     patternChooserPageLayout->addWidget(m_patternChooser);
     m_patternsTab->addTab(patternChooserPage, i18n("Patterns"));
 
-    KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
+    KisCustomPattern *customPatterns = new KisCustomPattern(0, "custompatterns",
                                                             i18n("Custom Pattern"), m_viewManager);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 
@@ -184,6 +184,9 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
 
     connect(customPatterns, SIGNAL(activatedResource(KoResourceSP )),
             view->canvasResourceProvider(), SLOT(slotPatternActivated(KoResourceSP )));
+
+    connect(customPatterns, SIGNAL(patternAdded(KoResourceSP)), m_patternChooser, SLOT(setCurrentPattern(KoResourceSP)));
+    connect(customPatterns, SIGNAL(patternUpdated(KoResourceSP)), m_patternChooser, SLOT(setCurrentPattern(KoResourceSP)));
 
     connect(view->canvasResourceProvider(), SIGNAL(sigPatternChanged(KoPatternSP)),
             this, SLOT(slotSetPattern(KoPatternSP)));
@@ -229,6 +232,8 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
             this, SLOT(slotSetGradient(KoAbstractGradientSP)));
 
     m_gradientChooser->setCurrentItem(0);
+
+    qDebug() << m_gradientChooser->currentResource();
 
     if (m_gradientChooser->currentResource() && view->canvasResourceProvider())
         view->canvasResourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());

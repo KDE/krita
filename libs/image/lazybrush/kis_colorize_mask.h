@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -43,9 +44,10 @@ public:
     // assign color profile without conversion of pixel data
     void setProfile(const KoColorProfile *profile, KUndo2Command *parentCommand);
 
-    KUndo2Command* setColorSpace(const KoColorSpace * dstColorSpace,
+    KUndo2Command *setColorSpace(const KoColorSpace *dstColorSpace,
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags(),
+                                 KoUpdater *progressUpdater = nullptr);
 
     KisPaintDeviceSP paintDevice() const override;
     KisPaintDeviceSP coloringProjection() const;

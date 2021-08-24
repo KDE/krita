@@ -240,13 +240,9 @@ bool checkCustomNameAvailable(const QString &name)
 {
     Q_UNUSED(name);
     const QString customName = "CustomStyles.asl";
-
     KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
-
-    KoResourceSP resource = server->resourceByName(customName);
-
+    KoResourceSP resource = server->resource("", "", customName);
     return !resource;
-
 }
 
 QString selectAvailableStyleName(const QString &name)
@@ -318,6 +314,9 @@ void KisDlgLayerStyle::slotLoadStyle()
     dialog.setCaption(i18n("Select ASL file"));
     dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
+
+    if (filename.isEmpty()) return;
+
     QFileInfo oldFileInfo(filename);
 
     KisConfig cfg(true);
@@ -335,6 +334,8 @@ void KisDlgLayerStyle::slotLoadStyle()
             bool ok;
             newName = QInputDialog::getText(this, i18n("New name for ASL storage"), i18n("The old filename is taken.\nNew name:"),
                                                     QLineEdit::Normal, newName, &ok);
+            if (!ok) return;
+
             newLocation = createNewAslPath(newDir, newName);
             newFileInfo.setFile(newLocation);
             done = !newFileInfo.exists();
@@ -1051,7 +1052,7 @@ public:
         if (!gradient) return 0;
 
         KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
-        KoAbstractGradientSP resource = server->resourceByMD5(gradient->md5());
+        KoAbstractGradientSP resource = server->resource(gradient->md5Sum(), "", "");
 
         if (!resource) {
             KoAbstractGradientSP clone = gradient->clone().dynamicCast<KoAbstractGradient>();
@@ -1069,7 +1070,7 @@ private:
         QString newName = name;
         int i = 0;
 
-        while (server->resourceByName(newName)) {
+        while (server->resource("", "", newName)) {
             newName = QString("%1%2").arg(name).arg(i++);
         }
 

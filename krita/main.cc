@@ -42,10 +42,6 @@
 #include <KoResourcePaths.h>
 #include <kis_config.h>
 
-#include "data/splash/splash_screen.xpm"
-#include "data/splash/splash_holidays.xpm"
-#include "data/splash/splash_screen_x2.xpm"
-#include "data/splash/splash_holidays_x2.xpm"
 #include "KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"
@@ -290,7 +286,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
 #endif
 
-        if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
+        if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
             enableOpenGLDebug = true;
         } else {
             enableOpenGLDebug = kritarc.value("EnableOpenGLDebug", false).toBool();
@@ -574,19 +570,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
     if (!args.noSplash()) {
-        // then create the pixmap from an xpm: we cannot get the
-        // location of our datadir before we've started our components,
-        // so use an xpm.
-        QDate currentDate = QDate::currentDate();
-        QWidget *splash = 0;
-        if (currentDate > QDate(currentDate.year(), 12, 4) ||
-                currentDate < QDate(currentDate.year(), 1, 9)) {
-            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm), QPixmap(splash_holidays_x2_xpm));
-        }
-        else {
-            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm));
-        }
-
+        QWidget *splash = new KisSplashScreen();
         app.setSplashScreen(splash);
     }
 

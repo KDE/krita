@@ -58,7 +58,7 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
     KisTIFFOptions options;
     options.fromProperties(configuration);
 
-    if (!options.flatten) {
+    if (!options.flatten && !options.saveAsPhotoshop) {
         const bool hasGroupLayers =
             KisLayerUtils::recursiveFindNode(document->savingImage()->root(),
                 [] (KisNodeSP node) {

@@ -13,6 +13,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
+include(UsePkgConfig)
 
 if(OCIO_PATH)
     message(STATUS "OCIO path explicitly specified: ${OCIO_PATH}")
@@ -51,19 +52,28 @@ find_library(OCIO_LIBRARIES OpenColorIO
         DOC "The OCIO library"
 )
 
+
 if(OCIO_INCLUDE_DIR AND OCIO_LIBRARIES)
-   set(OCIO_FOUND TRUE)
+    set(OCIO_FOUND TRUE)
+    file(STRINGS ${OCIO_INCLUDE_DIR}/OpenColorABI.h ocio_version REGEX "^#define OCIO_VERSION[ \t\r\n]*\"(.+)\"$")
+    string(REGEX REPLACE "^#define OCIO_VERSION[ \t\r\n]*\"(.+)\"$" "\\1" ocio_version "${ocio_version}")
+    SET (OCIO_VERSION ${ocio_version})
 else()
    set(OCIO_FOUND FALSE)
 endif()
 
+if ( OCIO_VERSION STREQUAL ${OCIO_FIND_VERSION})
+    message(STATUS "OCIO version ${OCIO_VERSION} found")
+else()
+    set(OCIO_FOUND FALSE)
+endif()
 
 if (NOT OCIO_FOUND)
     if(NOT OCIO_FIND_QUIETLY)
         if(OCIO_FIND_REQUIRED)
            message(FATAL_ERROR "Required package OpenColorIO NOT found")
         else()
-           message(STATUS "OpenColorIO NOT found")
+           message(STATUS "OpenColorIO version ${OCIO_FIND_VERSION} NOT found")
         endif()
     endif()
 endif ()

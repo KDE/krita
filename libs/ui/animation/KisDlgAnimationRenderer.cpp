@@ -463,9 +463,6 @@ void KisDlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
     }
 }
 
-inline int roundByTwo(int value) {
-    return value + (value & 0x1);
-}
 
 KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
 {
@@ -494,8 +491,8 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
         options.frameRate = 50;
     }
 
-    options.width = roundByTwo(m_page->intWidth->value());
-    options.height = roundByTwo(m_page->intHeight->value());
+    options.width = m_page->intWidth->value();
+    options.height = m_page->intHeight->value();
     options.videoFileName = m_page->videoFilename->fileName();
 
     options.customFFMpegOptions = m_customFFMpegOptionsString;

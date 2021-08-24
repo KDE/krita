@@ -109,7 +109,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
     }
 
     d->data = dev->readAll();
-    setMD5(KoMD5Generator::generateHash(d->data));
+    setMD5Sum(KoMD5Generator::generateHash(d->data));
 
     dev->seek(0);
 
@@ -143,6 +143,9 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
 //             << d->symbols[0]->shape->size();
 
     d->title = parser.documentTitle();
+    if (d->title.isEmpty()) {
+        d->title = filename();
+    }
     setName(d->title);
     d->description = parser.documentDescription();
 

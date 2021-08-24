@@ -114,7 +114,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)), SLOT(slotNameListSelection(KoColor)));
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
-    KoColorSetSP defaultColorSet = d->rServer->resourceByName("Default");
+    KoColorSetSP defaultColorSet = d->rServer->resource("", "", "Default");
     if (!defaultColorSet && d->rServer->resourceCount() > 0) {
         defaultColorSet = d->rServer->firstResource();
     }

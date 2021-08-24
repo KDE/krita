@@ -14,8 +14,20 @@
 class KRITARESOURCES_EXPORT KoMD5Generator
 {
 public:
-    static QByteArray generateHash(const QString &filename);
-    static QByteArray generateHash(const QByteArray &array);
+    /**
+     * @brief generateHash reads the given file and generates
+     * a hex-encoded md5sum for the file.
+     * @param filename the file to open
+     * @return a hex-encoded string representation of the md5sum
+     */
+    static QString generateHash(const QString &filename);
+
+    /**
+     * @brief generateHash calculates the md5sum of the given bytes
+     * @param QByteArray the contents to be calculated
+     * @return a hex-encoded string representation of the md5sum
+     */
+    static QString generateHash(const QByteArray &array);
 };
 
 #endif

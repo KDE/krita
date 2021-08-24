@@ -67,6 +67,14 @@ public Q_SLOTS:
     ///
     void removeResourceExistingTag(const KisTagSP tag, KoResourceSP resource);
 
+    ///
+    /// \brief addResourceExistingTag slot for a signal from the action to add the tag to the resource
+    /// \param resource resource that the tag needs to be add to
+    /// \param tag tag that needs to be add to the resource
+    ///
+    void addResourceExistingTag(const KisTagSP tag, KoResourceSP resource);
+
+
 private:
     ///
     /// \brief m_tagModel data model for tags (for tagging and untagging resources and create lists of tags)

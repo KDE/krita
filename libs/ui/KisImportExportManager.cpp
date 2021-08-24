@@ -52,6 +52,7 @@
 #include "kis_async_action_feedback.h"
 #include "KisReferenceImagesLayer.h"
 #include "imagesize/dlg_imagesize.h"
+#include "kis_layer_utils.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -633,11 +634,12 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             *alsoAsKra = chkAlsoAsKra->isChecked();
         }
 
-        if(isAdvancedExporting)
-        {
+        if(isAdvancedExporting) {
             const QSize desiredSize(dlgImageSize->desiredWidth(), dlgImageSize->desiredHeight());
             double res = dlgImageSize->desiredResolution();
             m_document->savingImage()->scaleImage(desiredSize,res,res,dlgImageSize->filterType());
+            m_document->savingImage()->waitForDone();
+            KisLayerUtils::forceAllDelayedNodesUpdate(m_document->savingImage()->root());
             m_document->savingImage()->waitForDone();
         }
 

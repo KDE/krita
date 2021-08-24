@@ -56,12 +56,20 @@ void PanelConfiguration::classBegin()
 
 QQmlListProperty< QQuickItem > PanelConfiguration::panels()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    return QQmlListProperty<QQuickItem>(this, &d->panels);
+#else
     return QQmlListProperty<QQuickItem>(this, d->panels);
+#endif
 }
 
 QQmlListProperty< QQuickItem > PanelConfiguration::panelAreas()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    return QQmlListProperty<QQuickItem>(this, &d->panelAreas);
+#else
     return QQmlListProperty<QQuickItem>(this, d->panelAreas);
+#endif
 }
 
 void PanelConfiguration::restore()
@@ -100,6 +108,3 @@ void PanelConfiguration::save()
     }
     panelConfig.endArray();
 }
-
-
-

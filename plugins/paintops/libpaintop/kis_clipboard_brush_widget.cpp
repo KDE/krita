@@ -14,6 +14,7 @@
 #include <QShowEvent>
 #include <QPushButton>
 #include <QDialogButtonBox>
+#include <QUuid>
 
 #include <KoResourcePaths.h>
 
@@ -137,7 +138,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
         KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
 
         if (nameEdit->text().isEmpty()) {
-            resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
+            resource->setName(QUuid::createUuid().toByteArray().toHex());
         }
         else {
             resource->setName(name);

@@ -18,7 +18,9 @@ KRITAIMAGE_EXPORT extern const char MaskingBrushUseMasterSizeTag[];
 KRITAIMAGE_EXPORT extern const char MaskingBrushMasterSizeCoeffTag[];
 KRITAIMAGE_EXPORT extern const char MaskingBrushPresetPrefix[];
 KRITAIMAGE_EXPORT extern const char RequiredBrushFileTag[];
+KRITAIMAGE_EXPORT extern const char RequiredBrushMD5Tag[];
 KRITAIMAGE_EXPORT extern const char RequiredBrushFilesListTag[];
+KRITAIMAGE_EXPORT extern const char RequiredBrushMD5ListTag[];
 
 }
 

@@ -22,6 +22,7 @@
 #include <kis_wrapped_rect.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceTypes.h>
+#include <kis_image_barrier_lock_adapter.h>
 
 #include "kis_tool_utils.h"
 
@@ -79,7 +80,8 @@ bool KisToolColorSampler::sampleColor(const QPointF &pos)
         m_colorSamplerDelayTimer.start(100);
     }
 
-    QScopedPointer<boost::lock_guard<KisImage>> imageLocker;
+    KisImageBarrierLockAdapter imageLockAdapter(currentImage(), true);
+    QScopedPointer<boost::lock_guard<KisImageBarrierLockAdapter>> imageLocker;
 
     m_sampledColor.setOpacity(0.0);
 
@@ -111,7 +113,7 @@ bool KisToolColorSampler::sampleColor(const QPointF &pos)
             dev = currentNode()->colorSampleSourceDevice();
         }
         else {
-            imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
+            imageLocker.reset(new boost::lock_guard<KisImageBarrierLockAdapter>(imageLockAdapter));
             dev = currentImage()->projection();
         }
 

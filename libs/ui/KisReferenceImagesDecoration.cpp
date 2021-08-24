@@ -92,6 +92,7 @@ KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> par
     , d(new Private(this))
 {
     connect(document->image().data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+    connect(document->image().data(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), this, SLOT(slotNodeRemoved(KisNodeSP)));
     connect(document, &KisDocument::sigReferenceImagesLayerChanged, this, &KisReferenceImagesDecoration::slotNodeAdded);
 
     auto referenceImageLayer = document->referenceImagesLayer();
@@ -140,10 +141,21 @@ void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &/*
 
 void KisReferenceImagesDecoration::slotNodeAdded(KisNodeSP node)
 {
-    auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());
+    KisReferenceImagesLayer *referenceImagesLayer =
+        dynamic_cast<KisReferenceImagesLayer*>(node.data());
 
     if (referenceImagesLayer) {
         setReferenceImageLayer(referenceImagesLayer, /* updateCanvas = */ true);
+    }
+}
+
+void KisReferenceImagesDecoration::slotNodeRemoved(KisNodeSP node)
+{
+    KisReferenceImagesLayer *referenceImagesLayer =
+        dynamic_cast<KisReferenceImagesLayer*>(node.data());
+
+    if (referenceImagesLayer && referenceImagesLayer == d->layer) {
+        setReferenceImageLayer(0, true);
     }
 }
 
@@ -158,8 +170,9 @@ void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirt
 void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateCanvas)
 {
     if (d->layer != layer.data()) {
-        if (d->layer) {
-            d->layer.toStrongRef()->disconnect(this);
+        KisSharedPtr<KisReferenceImagesLayer> oldLayer = d->layer.toStrongRef();
+        if (oldLayer) {
+            oldLayer->disconnect(this);
         }
 
         d->layer = layer;

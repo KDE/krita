@@ -23,6 +23,16 @@
 #include <KisTemplateGroup.h>
 #include <KisTemplates.h>
 
+static QString currentLocale()
+{
+    const QStringList languages = KLocalizedString::languages();
+    if (languages.isEmpty()) {
+        return QLocale().name();
+    } else {
+        return languages.first();
+    }
+}
+
 KisTemplateTree::KisTemplateTree(const QString &templatesResourcePath,
                                  bool readTree)
     :  m_templatesResourcePath(templatesResourcePath)
@@ -143,6 +153,7 @@ void KisTemplateTree::readGroups()
             int sortingWeight = 1000;
             if (templateDir.exists(".directory")) {
                 KDesktopFile config(templateDir.absoluteFilePath(".directory"));
+                config.setLocale(currentLocale());
                 KConfigGroup dg = config.desktopGroup();
                 name = dg.readEntry("Name");
                 defaultTab = dg.readEntry("X-KDE-DefaultTab");
@@ -188,6 +199,7 @@ void KisTemplateTree::readTemplates()
                 // Otherwise (or if no name in it?) use file name
                 if (KDesktopFile::isDesktopFile(filePath)) {
                     KConfig _config(filePath, KConfig::SimpleConfig);
+                    _config.setLocale(currentLocale());
                     KConfigGroup config(&_config, "Desktop Entry");
                     if (config.readEntry("Type") == "Link") {
                         text = config.readEntry("Name");
@@ -271,6 +283,7 @@ void KisTemplateTree::writeTemplate(KisTemplate *t, KisTemplateGroup *group,
     }
 
     KConfig _config(fileName, KConfig::SimpleConfig);
+    _config.setLocale(currentLocale());
     KConfigGroup config(&_config, "Desktop Entry");
     config.writeEntry("Type", "Link");
     config.writePathEntry("URL", t->file());

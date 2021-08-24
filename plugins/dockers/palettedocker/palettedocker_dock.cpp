@@ -125,7 +125,7 @@ PaletteDockerDock::PaletteDockerDock( )
 
     KisConfig cfg(true);
     QString defaultPaletteName = cfg.defaultPalette();
-    KoColorSetSP defaultPalette = m_rServer->resourceByName(defaultPaletteName);
+    KoColorSetSP defaultPalette = m_rServer->resource("", "", defaultPaletteName);
     if (defaultPalette) {
         slotSetColorSet(defaultPalette);
     } else {
@@ -181,8 +181,7 @@ void PaletteDockerDock::removingResource(QSharedPointer<KoColorSet> resource)
 
 void PaletteDockerDock::resourceChanged(QSharedPointer<KoColorSet> resource)
 {
-    Q_UNUSED(resource);
-    m_model->sigPaletteModified();
+    m_model->slotExternalPaletteModified(resource);
 }
 
 void PaletteDockerDock::slotContextMenu(const QModelIndex &)
@@ -391,7 +390,7 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResourceSP workspace)
 {
     if (workspace->hasProperty("palette")) {
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSetSP colorSet = rServer->resourceByName(workspace->getString("palette"));
+        KoColorSetSP colorSet = rServer->resource("", "", workspace->getString("palette"));
         if (colorSet) {
             slotSetColorSet(colorSet);
         }
@@ -412,7 +411,7 @@ void PaletteDockerDock::slotStoragesChanged(const QString &/*location*/)
         slotSetColorSet(0);
     }
     if (m_currentColorSet) {
-        if (!m_rServer->resourceByMD5(m_currentColorSet->md5())) {
+        if (!m_rServer->resource(m_currentColorSet->md5Sum(), "", "")) {
             slotSetColorSet(0);
         }
     }

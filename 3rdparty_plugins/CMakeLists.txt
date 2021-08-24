@@ -19,7 +19,7 @@ if(APPLE)
         cmake_minimum_required(VERSION 3.7.2)
     endif()
 else(APPLE)
-    cmake_minimum_required(VERSION 2.8.6)
+    cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
 endif()
 
 if(NOT SUBMAKE_JOBS)
@@ -119,11 +119,21 @@ if (APPLE)
 endif ()
 
 if (ANDROID)
+ # Increase the stack size to match MinGW's. Prevents crashes with GMic.
+  set(SECURITY_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
+  set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
+  set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
+
+  string(REPLACE ";" "|" _escape_find_root_path "${CMAKE_FIND_ROOT_PATH}")
   set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
                      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                      -DANDROID_PLATFORM=${ANDROID_PLATFORM}
                      -DANDROID_ABI=${ANDROID_ABI}
-                     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH})
+                     -DCMAKE_FIND_ROOT_PATH="${_escape_find_root_path}"
+                     -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
+                     -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
+                     -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
+                     )
 
   # see: https://github.com/android/ndk/issues/929
   unset (CMAKE_SYSROOT)

@@ -345,6 +345,8 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
     m_ui.fileLocationLabel->setText(elidedFileString);
     m_videoInfo = loadVideoInfo(filename);
 
+    if ( m_videoInfo.file.isEmpty() ) return;
+
     QStringList textInfo;
 
     textInfo.append(i18nc("video importer: video file statistics", "Width: %1 px", QString::number(m_videoInfo.width)));
@@ -367,7 +369,7 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
         textInfo.append(i18nc("video importer: video file statistics", "*<font size='0.5em'><em>*FPS not right in file. Modified to see full duration</em></font>"));
     }
 
-    m_ui.fpsSpinbox->setValue( m_videoInfo.fps );
+    m_ui.fpsSpinbox->setValue( qCeil(m_videoInfo.fps) );
     m_ui.fileLoadedDetails->setText(textInfo.join("\n"));
 
 
@@ -400,7 +402,7 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
 
 void KisDlgImportVideoAnimation::updateVideoPreview() 
 {
-    int currentDurration = ( m_videoInfo.stream != -1 ) ?  (m_currentFrame / m_videoInfo.fps):0;
+    float currentDurration = ( m_videoInfo.stream != -1 ) ?  (m_currentFrame / m_videoInfo.fps):0;
     QStringList args;
 
     args << "-ss" << QString::number(currentDurration)
@@ -709,10 +711,11 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
         }
 
         dbgFile << "Initial video info from probe: "
-                 << "frames:" << videoInfoData.frames 
-                 << "duration:" << videoInfoData.duration 
-                 << "fps:" << videoInfoData.fps
-                 << "encoding:" << videoInfoData.encoding;
+                << "stream:" << videoInfoData.stream
+                << "frames:" << videoInfoData.frames 
+                << "duration:" << videoInfoData.duration 
+                << "fps:" << videoInfoData.fps
+                << "encoding:" << videoInfoData.encoding;
 
         if ( !videoInfoData.frames && !videoInfoData.duration ) {
             KisFFMpegWrapper *ffmpeg = new KisFFMpegWrapper(this);
@@ -727,12 +730,16 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
             }
 
             QJsonObject ffmpegProgressJsonObj = ffmpegJsonObj["progress"].toObject();
+            float ffmpegFPS = ffmpegProgressJsonObj["ffmpeg_fps"].toString().toFloat();
 
             videoInfoData.frames = ffmpegProgressJsonObj["frame"].toString().toInt();
-            if (videoInfoData.fps && videoInfoData.frames) {
-                videoInfoData.duration = videoInfoData.frames / videoInfoData.fps;
+
+            if (ffmpegFPS > 0 && videoInfoData.frames) {
+                videoInfoData.duration = videoInfoData.frames / ffmpegFPS;
+                videoInfoData.fps = ffmpegFPS;
             } else {
-                videoInfoData.duration = ffmpegProgressJsonObj["out_time_ms"].toString().toInt() / 1000000;
+                videoInfoData.duration = ffmpegProgressJsonObj["out_time_ms"].toString().toFloat() / 1000000;
+                if (videoInfoData.frames) videoInfoData.fps =  videoInfoData.frames / videoInfoData.duration;
             }
 
         }
@@ -754,10 +761,11 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
     }
 
     dbgFile << "Final video info from probe: "
-             << "frames:" << videoInfoData.frames 
-             << "duration:" << videoInfoData.duration 
-             << "fps:" << videoInfoData.fps
-             << "encoding:" << videoInfoData.encoding;
+            << "stream:" << videoInfoData.stream
+            << "frames:" << videoInfoData.frames 
+            << "duration:" << videoInfoData.duration 
+            << "fps:" << videoInfoData.fps
+            << "encoding:" << videoInfoData.encoding;
 
     const float calculatedFrameRateByDuration = videoInfoData.frames / videoInfoData.duration;
     const int frameRateDifference = qAbs(videoInfoData.fps - calculatedFrameRateByDuration);

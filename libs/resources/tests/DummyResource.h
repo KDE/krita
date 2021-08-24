@@ -27,8 +27,7 @@ public:
 
         m_something = QString::fromUtf8(ba);
 
-        QByteArray hash = KoMD5Generator::generateHash(ba);
-        setMD5(hash);
+        setMD5Sum(KoMD5Generator::generateHash(ba));
 
         QImage img(512, 512, QImage::Format_RGB32);
         img.fill(Qt::blue);

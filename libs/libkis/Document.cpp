@@ -745,6 +745,15 @@ SelectionMask *Document::createSelectionMask(const QString &name)
     return new SelectionMask(image, name);
 }
 
+TransformMask *Document::createTransformMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new TransformMask(image, name);
+}
+
 QImage Document::projection(int x, int y, int w, int h) const
 {
     if (!d->document || !d->document->image()) return QImage();

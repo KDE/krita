@@ -166,7 +166,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     QString version = KritaVersionWrapper::versionString(true);
     setApplicationVersion(version);
-    setWindowIcon(KisIconUtils::loadIcon("krita"));
+    setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
         QStringList styles = QStringList() << "breeze" << "fusion";
@@ -307,16 +307,8 @@ bool KisApplication::registerResources()
                                                << KisMimeDatabase::mimeTypeForSuffix("xml")
                                                << KisMimeDatabase::mimeTypeForSuffix("sbz")));
 
-    QList<QByteArray> src = QImageReader::supportedMimeTypes();
-    QStringList allImageMimes;
-    Q_FOREACH(const QByteArray ba, src) {
-        if (QImageWriter::supportedMimeTypes().contains(ba)) {
-            allImageMimes << QString::fromUtf8(ba);
-        }
-    }
-    allImageMimes << KisMimeDatabase::mimeTypeForSuffix("pat");
 
-    reg->add(new KisResourceLoader<KoPattern>(ResourceType::Patterns, ResourceType::Patterns, i18n("Patterns"), allImageMimes));
+    reg->add(new KisResourceLoader<KoPattern>(ResourceType::Patterns, ResourceType::Patterns, i18n("Patterns"), {"application/x-gimp-pattern", "image/bmp", "image/jpeg", "image/png", "image/tiff"}));
     reg->add(new KisResourceLoader<KisWorkspaceResource>(ResourceType::Workspaces, ResourceType::Workspaces, i18n("Workspaces"), QStringList() << "application/x-krita-workspace"));
     reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>(ResourceType::Symbols, ResourceType::Symbols, i18n("SVG symbol libraries"), QStringList() << "image/svg+xml"));
     reg->add(new KisResourceLoader<KisWindowLayoutResource>(ResourceType::WindowLayouts, ResourceType::WindowLayouts, i18n("Window layouts"), QStringList() << "application/x-krita-windowlayout"));
@@ -472,7 +464,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (!args.windowLayout().isEmpty()) {
             KoResourceServer<KisWindowLayoutResource> * rserver = KisResourceServerProvider::instance()->windowLayoutServer();
-            KisWindowLayoutResourceSP windowLayout = rserver->resourceByName(args.windowLayout());
+            KisWindowLayoutResourceSP windowLayout = rserver->resource("", "", args.windowLayout());
             if (windowLayout) {
                 windowLayout->applyLayout();
             }
@@ -483,7 +475,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
             if (!args.workspace().isEmpty()) {
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-                KisWorkspaceResourceSP workspace = rserver->resourceByName(args.workspace());
+                KisWorkspaceResourceSP workspace = rserver->resource("", "", args.workspace());
                 if (workspace) {
                     d->mainWindow->restoreWorkspace(workspace);
                 }
@@ -976,7 +968,7 @@ void KisApplication::resetConfig()
 
     QString currentWorkspace = cfg.readEntry<QString>("CurrentWorkspace", "Default");
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-    KisWorkspaceResourceSP workspace = rserver->resourceByName(currentWorkspace);
+    KisWorkspaceResourceSP workspace = rserver->resource("", "", currentWorkspace);
 
     if (workspace) {
         d->mainWindow->restoreWorkspace(workspace);

@@ -150,6 +150,7 @@
 #include <katecommandbar.h>
 #include "KisNodeActivationActionCreatorVisitor.h"
 #include "KisUiFont.h"
+#include <KisResourceOverwriteDialog.h>
 
 
 #include <mutex>
@@ -616,7 +617,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (cfg.readEntry("CanvasOnlyActive", false)) {
         QString currentWorkspace = cfg.readEntry<QString>("CurrentWorkspace", "Default");
         KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-        KisWorkspaceResourceSP workspace = rserver->resourceByName(currentWorkspace);
+        KisWorkspaceResourceSP workspace = rserver->resource("", "", currentWorkspace);
         if (workspace) {
             restoreWorkspace(workspace);
         }
@@ -1858,14 +1859,14 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 
 void KisMainWindow::restoreWorkspace()
 {
-    QByteArray md5 = sender()->property("md5").toByteArray();
+    QString md5 = sender()->property("md5").toString();
     KoResourceServer<KisWorkspaceResource> *rserver = KisResourceServerProvider::instance()->workspaceServer();
-    KoResourceSP resource = rserver->resourceByMD5(md5);
+    KoResourceSP resource = rserver->resource(md5, "", "");
     if (resource) {
         restoreWorkspace(resource);
     }
     else {
-        qWarning() << "Could not retrieve resource for" << QString::fromLatin1(md5.toHex());
+        qWarning() << "Could not retrieve resource for" << md5;
     }
 }
 
@@ -2546,7 +2547,7 @@ void KisMainWindow::updateWindowMenu()
     while (resourceIterator.hasNext()) {
         KisResourceItemSP resource = resourceIterator.next();
         QAction *action = workspaceMenu->addAction(resource->name());
-        action->setProperty("md5", QVariant::fromValue<QByteArray>(resource->md5()));
+        action->setProperty("md5", QVariant::fromValue<QString>(resource->md5sum()));
         connect(action, SIGNAL(triggered()), this, SLOT(restoreWorkspace()));
     }
     workspaceMenu->addSeparator();
@@ -2561,7 +2562,13 @@ void KisMainWindow::updateWindowMenu()
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         QString filename = dialog.filename();
 
-        d->workspacemodel->importResourceFile(filename);
+        KoResourceSP resource = d->workspacemodel->importResourceFile(filename, false);
+        if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Workspaces, filename)) {
+            if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
+                KoResourceSP resource = d->workspacemodel->importResourceFile(filename, true);
+            }
+        }
+
     });
 
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),

@@ -103,15 +103,20 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
 
     m_curveOption->readOptionSetting(setting);
 
-    // Signals needs to be blocked, otherwise checking the checkbox will trigger
-    //   setting the common curve to the widget curve, which is incorrect in this case.
-    bool blockedBefore = m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(true);
-    m_curveOptionWidget->checkBoxUseSameCurve->setChecked(m_curveOption->isSameCurveUsed());
-    m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(blockedBefore);
+    {
+        // Signals needs to be blocked, otherwise checking the checkbox will trigger
+        //   setting the common curve to the widget curve, which is incorrect in this case.
+        KisSignalsBlocker b(m_curveOptionWidget->checkBoxUseSameCurve,
+                            m_curveOptionWidget->checkBoxUseCurve,
+                            m_curveOptionWidget->strengthSlider,
+                            m_curveOptionWidget->curveMode);
 
-    m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
-    m_curveOptionWidget->strengthSlider->setValue(m_curveOption->value()*100);
-    m_curveOptionWidget->curveMode->setCurrentIndex(m_curveOption->getCurveMode());
+
+        m_curveOptionWidget->checkBoxUseSameCurve->setChecked(m_curveOption->isSameCurveUsed());
+        m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
+        m_curveOptionWidget->strengthSlider->setValue(m_curveOption->value()*100);
+        m_curveOptionWidget->curveMode->setCurrentIndex(m_curveOption->getCurveMode());
+    }
 
     disableWidgets(!m_curveOption->isCurveUsed());
 

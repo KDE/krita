@@ -41,6 +41,7 @@ KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, cons
 KisFilterConfigurationSP KisBlurFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
     KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    config->setProperty("lockAspect", true);
     config->setProperty("halfWidth", 5);
     config->setProperty("halfHeight", 5);
     config->setProperty("rotate", 0);

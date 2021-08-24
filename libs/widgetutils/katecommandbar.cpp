@@ -56,10 +56,18 @@ protected:
 
         int score = 0;
         const auto idx = sourceModel()->index(sourceRow, 0, sourceParent);
-        const auto actionName = idx.data().toString().splitRef(QLatin1Char(':')).at(1);
-        const bool res = kfts::fuzzy_match_sequential(m_pattern, actionName.toString(), score);
-        sourceModel()->setData(idx, score, CommandModel::Score);
-        return res;
+        if (idx.isValid()){
+            const QString row = idx.data(Qt::DisplayRole).toString();
+            int pos = row.indexOf(QLatin1Char(':'));
+            if (pos < 0) {
+                return false;
+            }
+            const QString actionName = row.mid(pos + 2);
+            const bool res = kfts::fuzzy_match_sequential(m_pattern, actionName, score);
+            sourceModel()->setData(idx, score, CommandModel::Score);
+            return res;
+        }
+        return false;
     }
 
 private:

@@ -69,7 +69,7 @@
          <item>
           <widget class="QLabel" name="lblThumbnail">
            <property name="text">
-            <string>lblThumbnail</string>
+            <string notr="true">lblThumbnail</string>
            </property>
           </widget>
          </item>

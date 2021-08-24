@@ -32,8 +32,7 @@ public:
     ~PSDSaver() override;
 
 public:
-
-    KisImportExportErrorCode buildFile(QIODevice *io);
+    KisImportExportErrorCode buildFile(QIODevice &io);
 
     KisImageSP image();
 

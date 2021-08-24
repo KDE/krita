@@ -14,6 +14,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -57,7 +58,7 @@ class ConfigsManager {
 			return;
 		}
 
-		Log.d(LOG_TAG, mActivity.getFilesDir().getPath());
+		Log.d(LOG_TAG, getStorageDir());
 		copyAssets();
 		updateLastUpdateTime();
 	}
@@ -119,6 +120,7 @@ class ConfigsManager {
 		if (result.length() != 0 && result.charAt(result.length() - 1) == '/') {
 			result.deleteCharAt(result.length() - 1);
 		}
+
 		return result.toString();
 	}
 
@@ -128,7 +130,7 @@ class ConfigsManager {
 		try {
 			in = mActivity.getAssets().open(name);
 
-			String fileSavePath = toPath(mActivity.getFilesDir().getPath(), "/share/", name);
+			String fileSavePath = toPath(getStorageDir(), "/share/", name);
 
 			// use the same directory structure
 			File base = new File(basePath(fileSavePath));
@@ -169,6 +171,14 @@ class ConfigsManager {
 			}
 		}
 		return "";
+	}
+
+	private String getStorageDir() {
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			return mActivity.getExternalFilesDir(null).getAbsolutePath();
+		} else {
+			return mActivity.getFilesDir().getAbsolutePath();
+		}
 	}
 }
 

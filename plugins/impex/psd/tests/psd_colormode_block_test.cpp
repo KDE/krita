@@ -34,12 +34,12 @@ void PSDColorModeBlockTest::testLoadingRGB()
     QFile f(filename);
     f.open(QIODevice::ReadOnly);
     PSDHeader header;
-    header.read(&f);
+    header.read(f);
 
     QVERIFY(header.colormode == RGB);
 
     PSDColorModeBlock colorModeBlock(header.colormode);
-    bool retval = colorModeBlock.read(&f);
+    bool retval = colorModeBlock.read(f);
     Q_ASSERT(retval); Q_UNUSED(retval);
     Q_ASSERT(colorModeBlock.valid());
 
@@ -51,12 +51,12 @@ void PSDColorModeBlockTest::testLoadingIndexed()
     QFile f(filename);
     f.open(QIODevice::ReadOnly);
     PSDHeader header;
-    header.read(&f);
+    header.read(f);
 
     QVERIFY(header.colormode == Indexed);
 
     PSDColorModeBlock colorModeBlock(header.colormode);
-    bool retval = colorModeBlock.read(&f);
+    bool retval = colorModeBlock.read(f);
     Q_ASSERT(retval); Q_UNUSED(retval);
     Q_ASSERT(colorModeBlock.valid());
 

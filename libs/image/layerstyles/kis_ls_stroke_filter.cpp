@@ -161,3 +161,14 @@ QRect KisLsStrokeFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style
 {
     return neededRect(rect, style, env);
 }
+
+KritaUtils::ThresholdMode KisLsStrokeFilter::sourcePlaneOpacityThresholdRequirement(KisPSDLayerStyleSP style) const
+{
+    const psd_layer_effects_stroke *config = style->stroke();
+
+    if (!config->effectEnabled()) return KritaUtils::ThresholdNone;
+
+    return !config->effectEnabled() || config->position() == psd_stroke_center ? KritaUtils::ThresholdNone :
+        config->position() == psd_stroke_inside ? KritaUtils::ThresholdFloor :
+        KritaUtils::ThresholdCeil;
+}

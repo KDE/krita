@@ -41,7 +41,7 @@ psdExport::~psdExport()
 KisImportExportErrorCode psdExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     PSDSaver psdSaver(document);
-    return psdSaver.buildFile(io);
+    return psdSaver.buildFile(*io);
 }
 
 void psdExport::initializeCapabilities()

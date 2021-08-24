@@ -10,6 +10,7 @@
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceQueryMapper.h>
+#include <KisStorageModel.h>
 
 struct KisAllTagResourceModel::Private {
     QString resourceType;
@@ -25,6 +26,11 @@ KisAllTagResourceModel::KisAllTagResourceModel(const QString &resourceType, QObj
 {
     d->resourceType = resourceType;
     resetQuery();
+
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
 }
 
 KisAllTagResourceModel::~KisAllTagResourceModel()
@@ -265,6 +271,22 @@ bool KisAllTagResourceModel::isResourceTagged(const KisTagSP tag, const int reso
 
 }
 
+void KisAllTagResourceModel::addStorage(const QString &location)
+{
+    Q_UNUSED(location);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    resetQuery();
+    endInsertRows();
+}
+
+void KisAllTagResourceModel::removeStorage(const QString &location)
+{
+    Q_UNUSED(location);
+    beginRemoveRows(QModelIndex(), rowCount(), rowCount());
+    resetQuery();
+    endRemoveRows();
+}
+
 bool KisAllTagResourceModel::resetQuery()
 {
     bool r = d->query.prepare("SELECT tags.id                as tag_id\n"
@@ -328,6 +350,11 @@ KisTagResourceModel::KisTagResourceModel(const QString &resourceType, QObject *p
     d->resourceType = resourceType;
     d->sourceModel = KisResourceModelProvider::tagResourceModel(resourceType);
     setSourceModel(d->sourceModel);
+
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString &)), this, SLOT(storageChanged(const QString &)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString &)), this, SLOT(storageChanged(const QString &)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString &)), this, SLOT(storageChanged(const QString &)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString &)), this, SLOT(storageChanged(const QString &)));
 }
 
 KisTagResourceModel::~KisTagResourceModel()
@@ -445,6 +472,12 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
     return nameLeft.toLower() < nameRight.toLower();
 }
 
+void KisTagResourceModel::storageChanged(const QString &location)
+{
+    Q_UNUSED(location);
+    invalidateFilter();
+}
+
 KoResourceSP KisTagResourceModel::resourceForIndex(QModelIndex index) const
 {
     int id = data(index, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt();
@@ -487,12 +520,12 @@ bool KisTagResourceModel::setResourceInactive(const QModelIndex &index)
     return resourceModel.setResourceInactive(idx);
 }
 
-KoResourceSP KisTagResourceModel::importResourceFile(const QString &filename, const QString &storageId)
+KoResourceSP KisTagResourceModel::importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId)
 {
     // Since we're importing the resource, there's no reason to add rows to the tags::resources table,
     // because the resource is untagged.
     KisResourceModel resourceModel(d->resourceType);
-    return resourceModel.importResourceFile(filename, storageId);
+    return resourceModel.importResourceFile(filename, allowOverwrite, storageId);
 }
 
 bool KisTagResourceModel::addResource(KoResourceSP resource, const QString &storageId)

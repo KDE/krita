@@ -29,7 +29,7 @@ void KisAslParserTest::test()
     aslFile.open(QIODevice::ReadOnly);
 
     KisAslReader reader;
-    QDomDocument doc = reader.readFile(&aslFile);
+    QDomDocument doc = reader.readFile(aslFile);
 
     dbgKrita << ppVar(doc.toString());
 
@@ -93,7 +93,7 @@ void KisAslParserTest::testWithCallbacks()
 
 
     KisAslReader reader;
-    QDomDocument doc = reader.readFile(&aslFile);
+    QDomDocument doc = reader.readFile(aslFile);
 
     KisAslCallbackObjectCatcher c;
 
@@ -234,8 +234,7 @@ void KisAslParserTest::testASLWriter()
         srcAslFile.open(QIODevice::ReadOnly);
 
         KisAslReader reader;
-        srcDoc = reader.readFile(&srcAslFile);
-
+        srcDoc = reader.readFile(srcAslFile);
 
         QFile tfile("src_parsed.xml");
         tfile.open(QIODevice::WriteOnly);
@@ -250,7 +249,7 @@ void KisAslParserTest::testASLWriter()
         dstAslFile.open(QIODevice::WriteOnly);
 
         KisAslWriter writer;
-        writer.writeFile(&dstAslFile, srcDoc);
+        writer.writeFile(dstAslFile, srcDoc);
 
         dstAslFile.flush();
         dstAslFile.close();
@@ -263,7 +262,7 @@ void KisAslParserTest::testASLWriter()
         roundTripAslFile.open(QIODevice::ReadOnly);
 
         KisAslReader reader;
-        dstDoc = reader.readFile(&roundTripAslFile);
+        dstDoc = reader.readFile(roundTripAslFile);
 
         QFile tfile("dst_parsed.xml");
         tfile.open(QIODevice::WriteOnly);
@@ -294,7 +293,7 @@ void KisAslParserTest::testParserWithPatterns()
         aslFile.open(QIODevice::ReadOnly);
 
         KisAslReader reader;
-        QDomDocument doc = reader.readFile(&aslFile);
+        QDomDocument doc = reader.readFile(aslFile);
 
         QFile xmlFile("mydata.xml");
         xmlFile.open(QIODevice::WriteOnly);

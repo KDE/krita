@@ -54,7 +54,7 @@ KisBrushSP KisBrushRegistry::createBrush(const QDomElement& element, KisResource
 
     if (brushType.isEmpty()) return 0;
 
-    KisBrushFactory* factory = get(brushType);
+    KisBrushFactory *factory = get(brushType);
     if (!factory) return 0;
 
     return factory->createBrush(element, resourcesInterface);

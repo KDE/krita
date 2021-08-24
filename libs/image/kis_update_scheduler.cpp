@@ -90,7 +90,7 @@ void KisUpdateScheduler::setThreadsLimit(int value)
      * lock, we can avoid waiting for all the jobs to complete. We
      * should just ensure there is no more jobs in the updater context.
      */
-    lock();
+    immediateLockForReadOnly();
     m_d->updaterContext.lock();
     m_d->updaterContext.setThreadsLimit(value);
     m_d->updaterContext.unlock();
@@ -182,7 +182,7 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
         needLock = false;
     }
 
-    if(needLock) lock();
+    if(needLock) immediateLockForReadOnly();
     m_d->updaterContext.lock();
 
     Q_ASSERT(m_d->updaterContext.isJobAllowed(walker));
@@ -309,7 +309,7 @@ void KisUpdateScheduler::updateSettings()
     setThreadsLimit(config.maxNumberOfThreads());
 }
 
-void KisUpdateScheduler::lock()
+void KisUpdateScheduler::immediateLockForReadOnly()
 {
     m_d->processingBlocked = true;
     m_d->updaterContext.waitForDone();

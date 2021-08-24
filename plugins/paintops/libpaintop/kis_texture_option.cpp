@@ -34,7 +34,7 @@
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
 #include <KisGradientSlider.h>
-#include "kis_embedded_pattern_manager.h"
+#include "kis_linked_pattern_manager.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include "kis_texture_chooser.h"
 #include "KoMixColorsOp.h"
@@ -150,17 +150,16 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     setting->setProperty("Texture/Pattern/isRandomOffsetX",m_textureOptions ->randomOffsetX ->isChecked());
     setting->setProperty("Texture/Pattern/isRandomOffsetY",m_textureOptions ->randomOffsetY ->isChecked());
 
-    KisEmbeddedPatternManager::saveEmbeddedPattern(setting, pattern);
+    KisLinkedPatternManager::saveLinkedPattern(setting, pattern);
 }
 
 void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-
     setChecked(setting->getBool("Texture/Pattern/Enabled"));
     if (!isChecked()) {
         return;
     }
-    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, resourcesInterface());
+    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface());
 
     if (!pattern) {
         pattern =m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
@@ -232,7 +231,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
 
     m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail, preserveAlpha));
     if (!m_maskInfo->fillProperties(setting, resourcesInterface)) {
-        warnKrita << "WARNING: Couldn't load the pattern for a stroke";
+        warnKrita << "WARNING: Couldn't load the pattern for a stroke (KisTextureProperties)";
         m_enabled = false;
         return;
     }
@@ -259,7 +258,7 @@ QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisProp
 {
     QList<KoResourceSP> resources;
 
-    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, resourcesInterface);
+    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
     if (pattern) {
         resources << pattern;
     }
@@ -279,14 +278,13 @@ bool KisTextureProperties::applyingGradient(const KisPropertiesConfiguration *se
 
 void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;
+    if (!m_maskInfo->isValid()) return;
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
     const QRect maskBounds = m_maskInfo->maskBounds();
 
     KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     const QRect rect = dab->bounds();
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;
@@ -308,6 +306,7 @@ void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoin
 
 void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;
+    if (!m_maskInfo->isValid()) return;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_gradient && m_gradient->valid());
 
@@ -316,8 +315,6 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
     const QRect maskBounds = m_maskInfo->maskBounds();
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;
@@ -363,6 +360,7 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
 void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)
 {
     if (!m_enabled) return;
+    if (!m_maskInfo->isValid()) return;
 
     if (m_texturingMode == LIGHTNESS) {
         applyLightness(dab, offset, info);
@@ -379,8 +377,6 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
     const QRect maskBounds = m_maskInfo->maskBounds();
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;

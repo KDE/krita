@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>411</width>
-    <height>297</height>
+    <height>366</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,7 +23,7 @@
   <property name="minimumSize">
    <size>
     <width>411</width>
-    <height>297</height>
+    <height>366</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -110,7 +110,43 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="2" column="0" colspan="2">
+       <widget class="QGroupBox" name="chkPhotoshop">
+        <property name="title">
+         <string>Save layers as Photoshop</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <layout class="QFormLayout" name="formLayout_5">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Layer compression</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="KComboBox" name="kComboBoxPSDCompressionType">
+           <property name="currentItem" stdset="0">
+            <number>0</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>RLE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>ZIP</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="3" column="1">
        <widget class="QCheckBox" name="alpha">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -139,7 +175,7 @@ You can uncheck the box if you are not using transparency and you want to make t
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="QCheckBox" name="flatten">
         <property name="toolTip">
          <string>This option will merge all layers. It is advisable to check this option, otherwise other applications might not be able to read your file correctly.</string>
@@ -152,7 +188,7 @@ You can uncheck the box if you are not using transparency and you want to make t
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <widget class="QCheckBox" name="chkSaveProfile">
         <property name="text">
          <string>Save ICC Profile</string>
@@ -356,7 +392,7 @@ You can uncheck the box if you are not using transparency and you want to make t
              <widget class="QLabel" name="lblFast">
               <property name="whatsThis">
                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-                &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
               </property>
               <property name="text">
                <string comment="save the file quickly, but do not compress very well">Fast</string>
@@ -389,7 +425,8 @@ You can uncheck the box if you are not using transparency and you want to make t
                <string>Note: the compression level does not change the quality of the result</string>
               </property>
               <property name="whatsThis">
-               <string>&lt;p&gt;Adjust the compression time. Better compression takes longer. &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+               <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
               </property>
               <property name="minimum">
                <number>1</number>

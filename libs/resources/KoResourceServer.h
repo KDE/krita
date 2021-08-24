@@ -29,6 +29,7 @@
 #include "KoResourcePaths.h"
 #include "ksharedconfig.h"
 
+#include <KisGlobalResourcesInterface.h>
 #include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisTagModel.h>
@@ -178,7 +179,7 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    KoResourceSP importResourceFile(const QString &filename)
+    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite)
     {
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
@@ -186,7 +187,7 @@ public:
             qDebug().noquote() << kisBacktrace();
         }
 
-        return m_resourceModel->importResourceFile(filename);
+        return m_resourceModel->importResourceFile(filename, allowOverwrite);
     }
 
     /// Removes the resource file from the resource server
@@ -226,6 +227,8 @@ public:
         }
         m_observers.removeAt( index );
     }
+
+private:
 
     QSharedPointer<T> resourceByFilename(const QString& filename) const
     {
@@ -267,15 +270,12 @@ public:
 
     }
 
-    QSharedPointer<T> resourceByMD5(const QByteArray& md5) const
+    QSharedPointer<T> resourceByMD5(const QString& md5) const
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
-
-
-        //qDebug() << "resourceByMD5" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {
             return nullptr;
         }
@@ -286,6 +286,25 @@ public:
         }
         return nullptr;
     }
+
+public:
+
+    /**
+     * @brief resource retrieves a resource. If the md5sum is not empty, the resource
+     * will only be retrieved if a resource with that md5sum exists. If it is empty,
+     * a fallback to filename or name is possible.
+     * @param md5 This is the hex-encoded md5sum as stored in e.g. configuration objects
+     * @param fileName A filename without the path
+     * @param name The name of the resource
+     * @return a resource, or nullptr
+     */
+    QSharedPointer<T> resource(const QString &md5, const QString &fileName, const QString &name)
+    {
+        KoResourceSP res = KisGlobalResourcesInterface::instance()->source(m_type).resource(md5, fileName, name);
+        return res.dynamicCast<T>();
+    }
+
+
 
     /**
      * Call after changing the content of a resource and saving it;

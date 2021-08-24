@@ -557,7 +557,7 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
                 QString("Stream #(\\d+):(\\d+)(?:[ ]*?\\((\\w+)\\)|): Video: (\\w+?)(?:[ ]*?\\((.+?)\\)|),[ ]*?")
                         .append("(\\w+?)(?:[ ]*?\\((.+?)\\)|),[ ]*?")
                         .append("(\\d+)x(\\d+)([ ]*?\\[.+?\\]|.*?),[ ]*?")
-                        .append("([\\d\\.]+) fps, (.+?) tbr, (.+?) tbn, (.+?) tbc")
+                        .append("(?:([\\d\\.]+) fps,|) (\\S+?) tbr, (.+?) tbn, (.+?) tbc")
             );
             
             QRegularExpressionMatch streamMatch = videoInfoStreamRX.match(line);
@@ -575,8 +575,14 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
                 
                 ffmpegJsonOnStreamObj["codec_type"] = "video";
                 
-                if (streamMatch.captured(11).toFloat() > 0)
-                    ffmpegJsonOnStreamObj["r_frame_rate"] = QString::number(streamMatch.captured(11).toFloat() * 10000).append(QString("/10000"));
+                if (streamMatch.captured(11).toFloat() > 0) {
+                    float fps = streamMatch.captured(11).toFloat();
+
+                    ffmpegProgressJsonObj["ffmpeg_fps"] = QString::number(fps);
+                    ffmpegJsonOnStreamObj["r_frame_rate"] = QString::number( fps * 10000 ).append(QString("/10000"));
+                } else {
+                    ffmpegProgressJsonObj["ffmpeg_fps"] = 0;
+                }
 
                 ffmpegJsonObj["error"] = 0;
                 

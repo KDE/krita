@@ -14,6 +14,7 @@
 #include <QPushButton>
 #include <QMenu>
 #include <QToolButton>
+#include <QSizePolicy>
 
 #include "KisAnimCurvesDocker.h"
 #include "KisAnimCurvesModel.h"
@@ -44,6 +45,7 @@
 #include "kis_slider_spin_box.h"
 #include "kis_double_parse_spin_box.h"
 #include "kis_zoom_button.h"
+#include "kis_collapsible_button_group.h"
 #include "kis_signals_blocker.h"
 #include "kis_time_span.h"
 #include "kis_processing_applicator.h"
@@ -74,7 +76,7 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
         sbSpeed->setRange(25, 200);
         sbSpeed->setSingleStep(5);
         sbSpeed->setValue(100);
-        sbSpeed->setPrefix("Speed: ");
+        sbSpeed->setPrefix(i18nc("preview playback speed percentage prefix", "Speed: "));
         sbSpeed->setSuffix(" %");
         sbSpeed->setToolTip(i18n("Preview playback speed"));
         widgetAreaLayout->addWidget(sbSpeed);
@@ -100,25 +102,18 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
         layout->addSpacing(SPACING_UNIT);
 
         // Interpolation Modes..
-        btnInterpConstant = new QToolButton(this);
-        btnInterpConstant->setAutoRaise(true);
-        layout->addWidget(btnInterpConstant);
-        btnInterpLinear = new QToolButton(this);
-        btnInterpLinear->setAutoRaise(true);
-        layout->addWidget(btnInterpLinear);
-        btnInterpBezier = new QToolButton(this);
-        btnInterpBezier->setAutoRaise(true);
-        layout->addWidget(btnInterpBezier);
+        btnGroupInterpolation = new KisCollapsibleButtonGroup(this);
+        btnGroupInterpolation->setAutoRaise(true);
+        btnGroupInterpolation->setIconSize(QSize(22, 22));
+        layout->addWidget(btnGroupInterpolation);
 
         layout->addSpacing(SPACING_UNIT);
 
         // Tangent Modes..
-        btnTangentSharp = new QToolButton(this);
-        btnTangentSharp->setAutoRaise(true);
-        layout->addWidget(btnTangentSharp);
-        btnTangentSmooth = new QToolButton(this);
-        btnTangentSmooth->setAutoRaise(true);
-        layout->addWidget(btnTangentSmooth);
+        btnGroupTangents = new KisCollapsibleButtonGroup(this);
+        btnGroupTangents->setAutoRaise(true);
+        btnGroupTangents->setIconSize(QSize(22, 22));
+        layout->addWidget(btnGroupTangents);
 
         widgetAreaLayout->addWidget(widget);
     }
@@ -133,13 +128,10 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     // Zoom buttons..
-    btnZoomFitRange = new QToolButton(this);
-    btnZoomFitRange->setAutoRaise(true);
-    widgetAreaLayout->addWidget(btnZoomFitRange);
-
-    btnZoomFitCurve = new QToolButton(this);
-    btnZoomFitCurve->setAutoRaise(true);
-    widgetAreaLayout->addWidget(btnZoomFitCurve);
+    btnGroupZoomFit = new KisCollapsibleButtonGroup(this);
+    btnGroupZoomFit->setAutoRaise(true);
+    btnGroupZoomFit->setIconSize(QSize(22,22));
+    widgetAreaLayout->addWidget(btnGroupZoomFit);
 
     btnZoomHori = new KisZoomButton(this);
     btnZoomHori->setAutoRaise(true);
@@ -469,56 +461,49 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     action->setToolTip(i18n("Hold constant value. No interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyConstantMode);
-    m_d->titlebar->btnInterpConstant->setDefaultAction(action);
-    m_d->titlebar->btnInterpConstant->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("interpolation_linear");
     action->setIcon(KisIconUtils::loadIcon("interpolation_linear"));
     action->setToolTip(i18n("Linear interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyLinearMode);
-    m_d->titlebar->btnInterpLinear->setDefaultAction(action);
-    m_d->titlebar->btnInterpLinear->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("interpolation_bezier");
     action->setIcon(KisIconUtils::loadIcon("interpolation_bezier"));
     action->setToolTip(i18n("Bezier curve interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyBezierMode);
-    m_d->titlebar->btnInterpBezier->setDefaultAction(action);
-    m_d->titlebar->btnInterpBezier->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("tangents_sharp");
     action->setIcon(KisIconUtils::loadIcon("interpolation_sharp"));
     action->setToolTip(i18n("Sharp interpolation tangents."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applySharpMode);
-    m_d->titlebar->btnTangentSharp->setDefaultAction(action);
-    m_d->titlebar->btnTangentSharp->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupTangents->addAction(action);
 
     action = actionManager->createAction("tangents_smooth");
     action->setIcon(KisIconUtils::loadIcon("interpolation_smooth"));
     action->setToolTip(i18n("Smooth interpolation tangents."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applySmoothMode);
-    m_d->titlebar->btnTangentSmooth->setDefaultAction(action);
-    m_d->titlebar->btnTangentSmooth->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupTangents->addAction(action);
 
     action = actionManager->createAction("zoom_to_fit_range");
     action->setIcon(KisIconUtils::loadIcon("zoom-fit"));
     action->setToolTip(i18n("Zoom view to fit channel range."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::zoomToFitChannel);
-    m_d->titlebar->btnZoomFitRange->setDefaultAction(action);
-    m_d->titlebar->btnZoomFitRange->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupZoomFit->addAction(action);
 
     action = actionManager->createAction("zoom_to_fit_curve");
     action->setIcon(KisIconUtils::loadIcon("zoom-fit-curve"));
     action->setToolTip(i18n("Zoom view to fit curve."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::zoomToFitCurve);
-    m_d->titlebar->btnZoomFitCurve->setDefaultAction(action);
-    m_d->titlebar->btnZoomFitCurve->setIconSize(QSize(22, 22));
+    m_d->titlebar->btnGroupZoomFit->addAction(action);
 
     {
         action = actionManager->createAction("drop_frames");

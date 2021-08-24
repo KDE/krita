@@ -138,8 +138,8 @@ KisSessionResourceSP KisSessionManagerDialog::getSelectedSession() const
     QModelIndex idx = lstSessions->currentIndex();
     if (idx.isValid()) {
         KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
-        QString name = m_model->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-        return server->resourceByName(name);
+        QString md5 = m_model->data(idx, Qt::UserRole + KisAbstractResourceModel::MD5).toString();
+        return server->resource(md5, "", "");
     }
     return nullptr;
 }

@@ -45,7 +45,7 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
-
+#include <KisResourceOverwriteDialog.h>
 
 
 #include "KisStorageChooserWidget.h"
@@ -98,6 +98,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
+    d->view->setStrictSelectionMode(true);
 
     if (d->resourceType == ResourceType::Gradients) {
         d->view->setFixedToolTipThumbnailSize(QSize(256, 64));
@@ -118,7 +119,6 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->view->setModel(d->tagFilterProxyModel);
     d->tagFilterProxyModel->sort(Qt::DisplayRole);
 
-    connect(d->tagFilterProxyModel, SIGNAL(beforeFilterChanges()), this, SLOT(beforeFilterChanges()));
     connect(d->tagFilterProxyModel, SIGNAL(afterFilterChanged()), this, SLOT(afterFilterChanged()));
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activate(QModelIndex)));
@@ -205,7 +205,6 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     updateButtonState();
     showTaggingBar(false);
-    activate(d->view->model()->index(0, 0));
 }
 
 KisResourceItemChooser::~KisResourceItemChooser()
@@ -228,7 +227,12 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
-                tagFilterModel()->importResourceFile(filename);
+                KoResourceSP resource = tagFilterModel()->importResourceFile(filename, false);
+                if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(d->resourceType, filename)) {
+                    if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
+                        KoResourceSP resource = tagFilterModel()->importResourceFile(filename, false);
+                    }
+                }
             }
         }
         tagFilterModel()->sort(Qt::DisplayRole);
@@ -268,7 +272,6 @@ void KisResourceItemChooser::addCustomButton(QAbstractButton *button, int cell)
 void KisResourceItemChooser::showTaggingBar(bool show)
 {
     d->tagManager->showTaggingBar(show);
-
 }
 
 int KisResourceItemChooser::rowCount() const
@@ -291,13 +294,13 @@ void KisResourceItemChooser::setItemDelegate(QAbstractItemDelegate *delegate)
     d->view->setItemDelegate(delegate);
 }
 
-KoResourceSP KisResourceItemChooser::currentResource() const
+KoResourceSP KisResourceItemChooser::currentResource(bool includeHidden) const
 {
-    QModelIndex index = d->view->currentIndex();
-    if (index.isValid()) {
-        return resourceFromModelIndex(index);
+    if (includeHidden || d->view->selectionModel()->isSelected(d->view->currentIndex())) {
+        return d->currentResource;
     }
-    return 0;
+
+    return nullptr;
 }
 
 void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
@@ -308,6 +311,13 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
     }
     QModelIndex index = d->tagFilterProxyModel->indexForResource(resource);
     d->view->setCurrentIndex(index);
+
+    // The resource may currently be filtered out, but we want to be able
+    // to select it if the filter changes and includes the resource.
+    // Otherwise, activate() already took care of setting the current resource.
+    if (!index.isValid()) {
+        d->currentResource = resource;
+    }
     updatePreview(index);
 }
 
@@ -340,18 +350,21 @@ void KisResourceItemChooser::setCurrentItem(int row)
 
 void KisResourceItemChooser::activate(const QModelIndex &index)
 {
-    if (!index.isValid()) return;
-
-    KoResourceSP resource = 0;
-
-    if (index.isValid()) {
-        resource = resourceFromModelIndex(index);
+    if (!index.isValid())
+    {
+        updateButtonState();
+        return;
     }
 
+    KoResourceSP resource = resourceFromModelIndex(index);
+
     if (resource && resource->valid()) {
-        d->updatesBlocked = true;
-        emit resourceSelected(resource);
-        d->updatesBlocked = false;
+        if (resource != d->currentResource) {
+            d->currentResource = resource;
+            d->updatesBlocked = true;
+            emit resourceSelected(resource);
+            d->updatesBlocked = false;
+        }
         updatePreview(index);
         updateButtonState();
     }
@@ -449,9 +462,7 @@ KisResourceItemListView *KisResourceItemChooser::itemView() const
 
 void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
 {
-    KoResourceSP current = currentResource();
     d->tagManager->contextMenuRequested(currentResource(), pos);
-    this->setCurrentResource(current);
 }
 
 void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)
@@ -491,17 +502,17 @@ void KisResourceItemChooser::baseLengthChanged(int length)
     }
 }
 
-void KisResourceItemChooser::beforeFilterChanges()
-{
-    d->currentResource = d->tagFilterProxyModel->resourceForIndex(d->view->currentIndex());
-}
-
 void KisResourceItemChooser::afterFilterChanged()
 {
+    // Note: Item model reset events silently reset the view's selection model too.
+    // This currently only covers models resets as part of filter changes.
     QModelIndex idx = d->tagFilterProxyModel->indexForResource(d->currentResource);
+
     if (idx.isValid()) {
         d->view->setCurrentIndex(idx);
     }
+
+    updateButtonState();
 }
 
 bool KisResourceItemChooser::eventFilter(QObject *object, QEvent *event)

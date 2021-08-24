@@ -22,6 +22,8 @@
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
 
+#include <config-tiff.h>
+
 KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
     : KisConfigWidget(parent)
 {
@@ -39,6 +41,14 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
     activated(kComboBoxCompressionType->currentIndex());
     kComboBoxPredictor->setCurrentIndex(cfg->getInt("predictor", 0));
     alpha->setChecked(cfg->getBool("alpha", true));
+#ifdef TIFF_CAN_WRITE_PSD_TAGS
+    chkPhotoshop->setEnabled(true);
+    chkPhotoshop->setChecked(cfg->getBool("saveAsPhotoshop", false));
+    kComboBoxPSDCompressionType->setCurrentIndex(cfg->getInt("psdCompressionType", 0));
+#else
+    chkPhotoshop->setEnabled(false);
+    chkPhotoshop->setChecked(false);
+#endif
     flatten->setChecked(cfg->getBool("flatten", true));
     flattenToggled(flatten->isChecked());
     qualityLevel->setValue(cfg->getInt("quality", 80));
@@ -66,6 +76,8 @@ KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
     cfg->setProperty("compressiontype", kComboBoxCompressionType->currentIndex());
     cfg->setProperty("predictor", kComboBoxPredictor->currentIndex());
     cfg->setProperty("alpha", alpha->isChecked());
+    cfg->setProperty("saveAsPhotoshop", chkPhotoshop->isChecked());
+    cfg->setProperty("psdCompressionType", kComboBoxPSDCompressionType->currentIndex());
     cfg->setProperty("flatten", flatten->isChecked());
     cfg->setProperty("quality", qualityLevel->value());
     cfg->setProperty("deflate", compressionLevelDeflate->value());
@@ -97,6 +109,10 @@ void KisTIFFOptionsWidget::flattenToggled(bool t)
     alpha->setEnabled(t);
     if (!t) {
         alpha->setChecked(true);
+    }
+    chkPhotoshop->setEnabled(!t);
+    if (t) {
+        chkPhotoshop->setChecked(false);
     }
 }
 

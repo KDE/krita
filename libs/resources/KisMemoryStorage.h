@@ -37,7 +37,7 @@ public:
     bool importResourceFile(const QString &resourceType, const QString &resourceFile) override;
     bool addResource(const QString &resourceType,  KoResourceSP resource) override;
 
-    QByteArray resourceMd5(const QString &url) override;
+    QString resourceMd5(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
 

@@ -264,7 +264,7 @@ void ResourceManager::slotImportBrushes()
                                    << "image/png"
                                    << "image/svg+xml");
     Q_FOREACH (const QString &res, resources) {
-        d->brushServer->importResourceFile(res);
+        d->brushServer->importResourceFile(res, false);
     }
 }
 
@@ -272,7 +272,7 @@ void ResourceManager::slotImportPresets()
 {
     QStringList resources = importResources(i18n("Import Presets"), QStringList() << "application/x-krita-paintoppreset");
     Q_FOREACH (const QString &res, resources) {
-        d->paintopServer->importResourceFile(res);
+        d->paintopServer->importResourceFile(res, false);
     }
 }
 
@@ -281,7 +281,7 @@ void ResourceManager::slotImportGradients()
     QStringList resources = importResources(i18n("Import Gradients"), QStringList() << "image/svg+xml"
                                    << "application/x-gimp-gradient");
     Q_FOREACH (const QString &res, resources) {
-        d->gradientServer->importResourceFile(res);
+        d->gradientServer->importResourceFile(res, false);
     }
 }
 
@@ -325,7 +325,7 @@ void ResourceManager::slotImportPatterns()
                                    << "image/bmp"
                                    << "image/xpg");
     Q_FOREACH (const QString &res, resources) {
-        d->patternServer->importResourceFile(res);
+        d->patternServer->importResourceFile(res, false);
     }
 }
 
@@ -333,7 +333,7 @@ void ResourceManager::slotImportPalettes()
 {
     QStringList resources = importResources(i18n("Import Palettes"), QStringList() << "image/x-gimp-color-palette");
     Q_FOREACH (const QString &res, resources) {
-        d->paletteServer->importResourceFile(res);
+        d->paletteServer->importResourceFile(res, false);
     }
 }
 
@@ -341,7 +341,7 @@ void ResourceManager::slotImportWorkspaces()
 {
     QStringList resources = importResources(i18n("Import Workspaces"), QStringList() << "application/x-krita-workspace");
     Q_FOREACH (const QString &res, resources) {
-        d->workspaceServer->importResourceFile(res);
+        d->workspaceServer->importResourceFile(res, false);
     }
 }
 

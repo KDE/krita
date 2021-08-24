@@ -16,6 +16,7 @@
 #include <KisDocument.h>
 #include <kis_canvas2.h>
 #include <KoShapeController.h>
+#include <KoSelection.h>
 
 #include "Krita.h"
 #include "Document.h"
@@ -170,6 +171,36 @@ QString Shape::toSvg(bool prependStyles, bool stripTextMode)
     stylesBuffer.close();
 
     return (prependStyles ? QString::fromUtf8(stylesBuffer.data()):"") + QString::fromUtf8(shapesBuffer.data());
+}
+
+void Shape::select()
+{
+    if (!d->shape) return;
+
+    KisView *activeView = KisPart::instance()->currentMainwindow()->activeView();
+    KoSelection *selection = activeView->canvasBase()->shapeManager()->selection();
+
+    selection->select(d->shape);
+}
+
+void Shape::deselect()
+{
+    if (!d->shape) return;
+
+    KisView *activeView = KisPart::instance()->currentMainwindow()->activeView();
+    KoSelection *selection = activeView->canvasBase()->shapeManager()->selection();
+
+    selection->deselect(d->shape);
+}
+
+bool Shape::isSelected()
+{
+    if (!d->shape) return false;
+
+    KisView *activeView = KisPart::instance()->currentMainwindow()->activeView();
+    KoSelection *selection = activeView->canvasBase()->shapeManager()->selection();
+
+    return selection->isSelected(d->shape);
 }
 
 KoShape *Shape::shape()

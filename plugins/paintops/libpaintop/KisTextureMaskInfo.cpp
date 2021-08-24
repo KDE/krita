@@ -8,7 +8,7 @@
 
 #include <kis_paintop_settings.h>
 #include <resources/KoPattern.h>
-#include "kis_embedded_pattern_manager.h"
+#include "kis_linked_pattern_manager.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -56,7 +56,7 @@ bool operator==(const KisTextureMaskInfo &lhs, const KisTextureMaskInfo &rhs) {
             (lhs.m_pattern == rhs.m_pattern ||
              (lhs.m_pattern &&
               rhs.m_pattern &&
-              lhs.m_pattern->md5() == rhs.m_pattern->md5())) &&
+              lhs.m_pattern->md5Sum() == rhs.m_pattern->md5Sum())) &&
             qFuzzyCompare(lhs.m_scale, rhs.m_scale) &&
             qFuzzyCompare(lhs.m_brightness, rhs.m_brightness) &&
             qFuzzyCompare(lhs.m_contrast, rhs.m_contrast) &&
@@ -85,6 +85,11 @@ KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
     return *this;
 }
 
+bool KisTextureMaskInfo::isValid() const
+{
+    return (m_mask && m_maskBounds.isValid());
+}
+
 int KisTextureMaskInfo::levelOfDetail() const {
     return m_levelOfDetail;
 }
@@ -108,10 +113,10 @@ bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setti
         return false;
     }
 
-    m_pattern = KisEmbeddedPatternManager::tryFetchPattern(setting, resourcesInterface);
+    m_pattern = KisLinkedPatternManager::tryFetchPattern(setting, resourcesInterface);
 
     if (!m_pattern) {
-        warnKrita << "WARNING: Couldn't load the pattern for a stroke";
+        warnKrita << "WARNING: Couldn't load the pattern for a stroke (KisTextureMaskInfo)";
         return false;
     }
 

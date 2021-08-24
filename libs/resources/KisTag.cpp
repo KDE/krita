@@ -13,6 +13,8 @@
 #include <QStandardPaths>
 #include <QFile>
 
+#include <KLocalizedString>
+
 #include "kconfigini_p.h"
 #include "kconfigbackend_p.h"
 #include "kconfigdata.h"
@@ -28,6 +30,16 @@ const QByteArray KisTag::s_url {"URL"};
 const QByteArray KisTag::s_comment {"Comment"};
 const QByteArray KisTag::s_defaultResources {"Default Resources"};
 
+static QString currentLocale()
+{
+    const QStringList languages = KLocalizedString::languages();
+    if (languages.isEmpty()) {
+        return QLocale().name();
+    } else {
+        return languages.first();
+    }
+}
+
 class KisTag::Private {
 public:
     bool valid {false};
@@ -37,6 +49,7 @@ public:
     QStringList defaultResources; // The list of resources as defined in the tag file
     QString resourceType; // The resource type this tag can be applied to
     KEntryMap map;
+    QString filename; // the original filename for the tag
     int id {-1};
     bool active{true};
 };
@@ -66,6 +79,7 @@ KisTag &KisTag::operator=(const KisTag &rhs)
         d->comment = rhs.d->comment;
         d->defaultResources = rhs.d->defaultResources;
         d->map = rhs.d->map;
+        d->filename = rhs.d->filename;
     }
     return *this;
 }
@@ -88,6 +102,16 @@ int KisTag::id() const
 bool KisTag::active() const
 {
     return d->active;
+}
+
+QString KisTag::filename()
+{
+    return d->filename;
+}
+
+void KisTag::setFilename(const QString &filename)
+{
+    d->filename = filename;
 }
 
 QString KisTag::name() const
@@ -151,7 +175,7 @@ bool KisTag::load(QIODevice &io)
     KIS_ASSERT(io.isOpen());
 
     KConfigIniBackend ini;
-    KConfigBackend::ParseInfo r = ini.parseConfigIO(io, QLocale().name().toUtf8(), d->map, KConfigBackend::ParseOption::ParseGlobal, false);
+    KConfigBackend::ParseInfo r = ini.parseConfigIO(io, currentLocale().toUtf8(), d->map, KConfigBackend::ParseOption::ParseGlobal, false);
     if (r != KConfigBackend::ParseInfo::ParseOk) {
         qWarning() << "Could not load this tag file" << r;
         return false;
@@ -183,7 +207,7 @@ bool KisTag::save(QIODevice &io)
     d->map.setEntry(s_group, s_comment, d->comment, KEntryMap::EntryDirty);
     d->map.setEntry(s_group, s_defaultResources, d->defaultResources.join(','), KEntryMap::EntryDirty);
 
-    ini.writeEntries(QLocale().name().toUtf8(), io, d->map);
+    ini.writeEntries(currentLocale().toUtf8(), io, d->map);
     return true;
 }
 

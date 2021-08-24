@@ -24,6 +24,7 @@ ext {
     abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
     ndkpath = System.getenv('ANDROID_NDK_HOME') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
     installPrefix = '../krita-android-build'
+    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? '../i/src/android/java' : ""
 }
 
 task configure() {
@@ -89,9 +90,9 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
-            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
-            res.srcDirs = [qt5AndroidDir + '/res', 'res']
+            java.srcDirs = [qt5AndroidDir + '/src', qtResPath + '/src', 'src', 'java']
+            aidl.srcDirs = [qt5AndroidDir + '/src', qtResPath + '/src', 'src', 'aidl']
+            res.srcDirs = [qt5AndroidDir + '/res',  qtResPath + '/res', 'res']
             resources.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']

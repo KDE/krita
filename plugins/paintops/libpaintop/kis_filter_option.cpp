@@ -149,6 +149,7 @@ void KisFilterOption::updateFilterConfigWidget()
             m_currentFilter->createConfigurationWidget(m_filterOptionWidget->grpFilterOptions, m_paintDevice, true);
 
         if (m_currentFilterConfigWidget) {
+            m_currentFilterConfigWidget->setConfiguration(m_currentFilter->defaultConfiguration(resourcesInterface()));
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_filterOptionWidget->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();

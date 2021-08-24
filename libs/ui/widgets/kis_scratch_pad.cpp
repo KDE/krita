@@ -378,7 +378,14 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
     QPainter gc(this);
     gc.fillRect(event->rect(), m_checkBrush);
 
-    gc.setRenderHints(QPainter::SmoothPixmapTransform);
+    // if we scale down, it should use Smooth
+    // if we scale up, it should use Fast (nearest Neighbour) to show pixels
+    if (event->rect().width() < image.rect().width()) {
+        gc.setRenderHints(QPainter::SmoothPixmapTransform);
+    } else {
+        gc.setRenderHints(0); // that will use NN
+    }
+
     gc.drawImage(QRectF(event->rect()), image, imageRect.translated(-offset));
 
     QBrush brush(Qt::lightGray);

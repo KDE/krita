@@ -115,12 +115,11 @@ public:
                                                 qreal resolutionPPI,
                                                 KoDocumentResourceManager *resourceManager,
                                                 bool loadingFromKra,
-                                                QSizeF *fragmentSize);
-
-
+                                                QSizeF *fragmentSize,
+                                                QStringList *warnings = 0);
 
     bool saveLayer(KoStore * store) const;
-    bool loadLayer(KoStore* store);
+    bool loadLayer(KoStore* store, QStringList *warnings = 0);
 
     KUndo2Command* crop(const QRect & rect) override;
     KUndo2Command* transform(const QTransform &transform) override;
@@ -167,7 +166,8 @@ public:
 protected:
     using KoShape::isVisible;
 
-    bool loadSvg(QIODevice *device, const QString &baseXmlDir);
+    bool loadSvg(QIODevice *device, const QString &baseXmlDir, QStringList *warnings = 0);
+
 
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;

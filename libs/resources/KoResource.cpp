@@ -29,12 +29,13 @@ struct Q_DECL_HIDDEN KoResource::Private {
     int version {-1};
     int resourceId {-1};
     bool valid {false};
+    bool active {true};
     bool permanent {false};
     bool dirty {false};
     QString name;
     QString filename;
     QString storageLocation;
-    QByteArray md5;
+    QString md5sum;
     QImage image;
     QMap<QString, QVariant> metadata;
 };
@@ -60,8 +61,6 @@ KoResource::KoResource(const KoResource &rhs)
     : d(new Private(*rhs.d))
 {
 }
-
-
 
 bool KoResource::load(KisResourcesInterfaceSP resourcesInterface)
 {
@@ -135,24 +134,26 @@ void KoResource::setImage(const QImage &image)
     d->image = image;
 }
 
-QByteArray KoResource::md5(bool generateIfEmpty) const
+QString KoResource::md5Sum(bool generateIfEmpty) const
 {
-    if (d->md5.isEmpty() && generateIfEmpty) {
+    if (d->md5sum.isEmpty() && generateIfEmpty) {
         dbgResources << "No MD5 for" << this << this->name();
         QByteArray ba;
         QBuffer buf(&ba);
         buf.open(QFile::WriteOnly);
         saveToDevice(&buf);
         buf.close();
-        const_cast<KoResource*>(this)->setMD5(KoMD5Generator::generateHash(ba));
+        const_cast<KoResource*>(this)->setMD5Sum(KoMD5Generator::generateHash(ba));
     }
-    return d->md5;
+    return d->md5sum;
 }
 
-void KoResource::setMD5(const QByteArray &md5)
+void KoResource::setMD5Sum(const QString &md5sum)
 {
-    Q_ASSERT(!md5.isEmpty());
-    d->md5 = md5;
+    if (valid()) {
+        Q_ASSERT(!md5sum.isEmpty());
+    }
+    d->md5sum = md5sum;
 }
 
 QString KoResource::filename() const
@@ -183,6 +184,16 @@ bool KoResource::valid() const
 void KoResource::setValid(bool valid)
 {
     d->valid = valid;
+}
+
+bool KoResource::active() const
+{
+    return d->active;
+}
+
+void KoResource::setActive(bool active)
+{
+    d->active = active;
 }
 
 

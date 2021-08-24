@@ -322,13 +322,13 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
                 if (entry.value().type() == KisMetaData::Value::Variant) {
                     switch (entry.value().asVariant().toInt()) {
                     case 2:
-                        KisTransformWorker::mirrorY(layer->paintDevice());
+                        KisTransformWorker::mirrorX(layer->paintDevice());
                         break;
                     case 3:
                         image()->rotateImage(M_PI);
                         break;
                     case 4:
-                        KisTransformWorker::mirrorX(layer->paintDevice());
+                        KisTransformWorker::mirrorY(layer->paintDevice());
                         break;
                     case 5:
                         image()->rotateImage(M_PI / 2);

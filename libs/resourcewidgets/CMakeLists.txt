@@ -15,6 +15,7 @@ set(kritaresourcewidgets_LIB_SRCS
     KisResourceTaggingManager.cpp
     KisStorageChooserWidget.cpp
     TagActions.cpp
+    KisResourceOverwriteDialog.cpp
 )
 
 add_library(kritaresourcewidgets SHARED ${kritaresourcewidgets_LIB_SRCS})

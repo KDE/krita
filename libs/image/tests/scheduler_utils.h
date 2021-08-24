@@ -213,6 +213,7 @@ public:
           m_prefix(rhs.m_prefix),
           m_inhibitServiceJobs(rhs.m_inhibitServiceJobs),
           m_forceAllowInitJob(rhs.m_forceAllowInitJob),
+          m_forceAllowCancelJob(rhs.m_forceAllowCancelJob),
           m_cancelSeqNo(rhs.m_cancelSeqNo),
           m_isLegacyStroke(rhs.m_isLegacyStroke)
     {

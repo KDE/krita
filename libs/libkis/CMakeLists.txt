@@ -10,7 +10,7 @@ set(kritalibkis_LIB_SRCS
     ManagedColor.cpp
     Node.cpp
     Notifier.cpp
-    PresetChooser
+    PresetChooser.cpp
     Palette.cpp
     PaletteView.cpp
     Scratchpad.cpp
@@ -28,6 +28,7 @@ set(kritalibkis_LIB_SRCS
     VectorLayer.cpp
     FilterMask.cpp
     SelectionMask.cpp
+    TransformMask.cpp
 
     Shape.cpp
     GroupShape.cpp

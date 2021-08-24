@@ -72,6 +72,7 @@ public:
     QString name() const override { return m_tag ? m_tag->name() : QString(); }
     QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
     KisTagSP tag() const override { return m_tag; }
+    QString filename() const override {return QString(); }
     QString resourceType() const override { return m_resourceType; } // Tags in bundles are still lists, not KisTag files.
 
 private:
@@ -150,9 +151,9 @@ bool KisBundleStorage::loadVersionedResource(KoResourceSP resource)
     return true;
 }
 
-QByteArray KisBundleStorage::resourceMd5(const QString &url)
+QString KisBundleStorage::resourceMd5(const QString &url)
 {
-    QByteArray result;
+    QString result;
 
     QFile modifiedFile(location() + "_modified" + "/" + url);
     if (modifiedFile.exists() && modifiedFile.open(QIODevice::ReadOnly)) {

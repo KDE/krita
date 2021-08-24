@@ -36,7 +36,6 @@ private Q_SLOTS:
     void slotQMic(bool again = false);
 
 private:
-    KisQmicPluginInterface *plugin {nullptr};
     QString m_key;
     KisAction *m_qmicAction {0};
     KisAction *m_againAction {0};

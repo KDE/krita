@@ -24,7 +24,7 @@ public:
 
         ResourceReference() {}
 
-        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QString &_fileTypeName, const QByteArray &_md5) {
+        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QString &_fileTypeName, const QString &_md5) {
             resourcePath = _resourcePath;
             tagList = _tagList;
             fileTypeName = _fileTypeName;
@@ -34,7 +34,7 @@ public:
         QString resourcePath;
         QList<QString> tagList;
         QString fileTypeName;
-        QByteArray md5sum;
+        QString md5sum;
     };
 
     /**
@@ -66,7 +66,7 @@ public:
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
-    void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QByteArray &md5);
+    void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QString &md5);
 
 
     QStringList types() const;

@@ -25,6 +25,7 @@ public:
     KisSegmentGradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     void setGradient(KoSegmentGradientSP gradient);
+    void gradient() const;
 
     void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
     KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;

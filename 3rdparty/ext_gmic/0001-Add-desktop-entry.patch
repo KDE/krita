@@ -1,19 +1,19 @@
-From 9de5fddef1dc023e7cd76c2240dc0008fcb9a76c Mon Sep 17 00:00:00 2001
+From 831e5ae3dbb066ef81eff145f8c06c6ebfd38735 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
-Date: Thu, 22 Oct 2020 22:11:08 +0000
-Subject: [PATCH] Add desktop entry
+Date: Wed, 21 Jul 2021 18:38:58 +0000
+Subject: [PATCH 1/6] Add desktop entry
 
 ---
- CMakeLists.txt        | 1 +
- gmic_krita_qt.desktop | 9 +++++++++
+ gmic-qt/CMakeLists.txt        | 1 +
+ gmic-qt/gmic_krita_qt.desktop | 9 +++++++++
  2 files changed, 10 insertions(+)
- create mode 100644 gmic_krita_qt.desktop
+ create mode 100644 gmic-qt/gmic_krita_qt.desktop
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 32506b7..60c5123 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -532,6 +532,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+diff --git a/gmic-qt/CMakeLists.txt b/gmic-qt/CMakeLists.txt
+index 93119fa..95c7604 100644
+--- a/gmic-qt/CMakeLists.txt
++++ b/gmic-qt/CMakeLists.txt
+@@ -552,6 +552,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
        ${gmic_qt_LIBRARIES}
        )
      install(TARGETS gmic_krita_qt RUNTIME DESTINATION bin)
@@ -21,11 +21,11 @@ index 32506b7..60c5123 100644
  
  elseif (${GMIC_QT_HOST} STREQUAL "none")
  
-diff --git a/gmic_krita_qt.desktop b/gmic_krita_qt.desktop
+diff --git a/gmic-qt/gmic_krita_qt.desktop b/gmic-qt/gmic_krita_qt.desktop
 new file mode 100644
 index 0000000..579d427
 --- /dev/null
-+++ b/gmic_krita_qt.desktop
++++ b/gmic-qt/gmic_krita_qt.desktop
 @@ -0,0 +1,9 @@
 +[Desktop Entry]
 +Name=gmic_krita_qt
@@ -37,5 +37,5 @@ index 0000000..579d427
 +Categories=Qt;KDE;Graphics;
 +StartupNotify=false
 -- 
-2.28.0
+2.32.0
 

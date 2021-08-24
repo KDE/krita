@@ -21,8 +21,7 @@
 
 void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
-    if (!m_brush)
-        return;
+    if (!m_brush) return;
 
     QDomDocument d;
     QDomElement e = d.createElement("Brush");
@@ -30,19 +29,24 @@ void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration
     d.appendChild(e);
     setting->setProperty("brush_definition", d.toString());
 
-    QString brushFileName  = !m_brush->filename().isEmpty() ?
-                            m_brush->filename() : QString();
-
+    QString brushFileName = !m_brush->filename().isEmpty() ? m_brush->filename() : QString();
     setting->setProperty(KisPaintOpUtils::RequiredBrushFileTag, brushFileName);
 
     {
         QStringList requiredFiles =
             setting->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
-
-
-
         requiredFiles << brushFileName;
         setting->setProperty(KisPaintOpUtils::RequiredBrushFilesListTag, requiredFiles);
+    }
+
+    QString md5sum = m_brush->md5Sum();
+    setting->setProperty(KisPaintOpUtils::RequiredBrushMD5Tag, md5sum);
+
+    {
+        QStringList requiredMD5s =
+            setting->getStringList(KisPaintOpUtils::RequiredBrushMD5ListTag);
+        requiredMD5s << md5sum;
+        setting->setProperty(KisPaintOpUtils::RequiredBrushMD5ListTag, requiredMD5s);
     }
 
 }
@@ -52,6 +56,7 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
     QDomElement element;
 
     QString brushDefinition = setting->getString("brush_definition");
+
     if (!brushDefinition.isEmpty()) {
         QDomDocument d;
         d.setContent(brushDefinition, false);
@@ -68,11 +73,10 @@ void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisProperties
     if (!element.isNull()) {
         m_brush = KisBrush::fromXML(element, resourcesInterface);
 
-        if (m_brush->applyingGradient() && canvasResourcesInterface) {
+        if (m_brush && m_brush->applyingGradient() && canvasResourcesInterface) {
             KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()->cloneAndBakeVariableColors(canvasResourcesInterface);
             m_brush->setGradient(gradient);
         }
-
     }
 }
 

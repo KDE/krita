@@ -636,7 +636,7 @@ bool KisPart::restoreSession(const QString &sessionName)
     if (sessionName.isNull()) return false;
 
     KoResourceServer<KisSessionResource> *rserver = KisResourceServerProvider::instance()->sessionServer();
-    KisSessionResourceSP session = rserver->resourceByName(sessionName);
+    KisSessionResourceSP session = rserver->resource("", "", sessionName);
     if (!session || !session->valid()) return false;
 
     return restoreSession(session);

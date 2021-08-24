@@ -102,6 +102,12 @@ public:
      */
     bool hasStorage(const QString &storageLocation);
 
+
+    /**
+     * @brief saveTags saves all tags to .tag files in the resource folder
+     */
+    void saveTags();
+
 Q_SIGNALS:
 
     void progressMessage(const QString&);
@@ -171,7 +177,7 @@ private:
      * @param storageLocation: optional, the storage where the resource will be stored. Empty means in the default Folder storage.
      * @return the imported resource, which has been added to the database and the cache
      */
-    KoResourceSP importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation = QString());
+    KoResourceSP importResourceFromFile(const QString &resourceType, const QString &fileName, const bool allowOverwrite, const QString &storageLocation = QString());
 
     /**
      * @brief addResource adds the given resource to the database and potentially a storage

@@ -28,7 +28,7 @@ struct KisTagFilterResourceProxyModel::Private
     KisTagResourceModel *tagResourceModel {0}; // This is the source model if we are filtering by tag
 
     QScopedPointer<KisResourceSearchBoxFilter> filter;
-    bool filterInCurrentTag {false};
+    bool filteringWithinCurrentTag {false};
 
     QMap<QString, QVariant> metaDataMapFilter;
     KisTagSP currentTagFilter;
@@ -104,12 +104,12 @@ bool KisTagFilterResourceProxyModel::setResourceInactive(const QModelIndex &inde
     return false;
 }
 
-KoResourceSP KisTagFilterResourceProxyModel::importResourceFile(const QString &filename, const QString &storageId)
+KoResourceSP KisTagFilterResourceProxyModel::importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     KoResourceSP res;
     if (source) {
-        res = source->importResourceFile(filename, storageId);
+        res = source->importResourceFile(filename, allowOverwrite, storageId);
     }
     return res;
 }
@@ -169,10 +169,8 @@ void KisTagFilterResourceProxyModel::setMetaDataFilter(QMap<QString, QVariant> m
 
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
-    emit beforeFilterChanges();;
     d->currentTagFilter = tag;
     updateTagFilter();
-    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setStorageFilter(bool useFilter, int storageId)
@@ -190,12 +188,13 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
 {
     emit beforeFilterChanges();
     const bool ignoreTagFiltering =
-        !d->filterInCurrentTag && !d->filter->isEmpty();
+        !d->filteringWithinCurrentTag && !d->filter->isEmpty();
 
     QAbstractItemModel *desiredModel = 0;
 
     if (d->currentResourceFilter) {
         QVector<KisTagSP> filter;
+
         if (d->currentTagFilter &&
             !ignoreTagFiltering &&
             d->currentTagFilter->url() != KisAllTagsModel::urlAll() &&
@@ -208,12 +207,13 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
             KIS_SAFE_ASSERT_RECOVER_NOOP(!d->currentTagFilter ||
                                          d->currentTagFilter->url() != KisAllTagsModel::urlAllUntagged());
         }
+
         d->tagResourceModel->setTagsFilter(filter);
         d->tagResourceModel->setResourcesFilter({d->currentResourceFilter});
         desiredModel = d->tagResourceModel;
+
     } else {
         d->tagResourceModel->setResourcesFilter(QVector<KoResourceSP>());
-
         if (ignoreTagFiltering ||
                 !d->currentTagFilter ||
                 d->currentTagFilter->url() == KisAllTagsModel::urlAll()) {
@@ -258,7 +258,7 @@ void KisTagFilterResourceProxyModel::setSearchText(const QString& searchText)
 
 void KisTagFilterResourceProxyModel::setFilterInCurrentTag(bool filterInCurrentTag)
 {
-    d->filterInCurrentTag = filterInCurrentTag;
+    d->filteringWithinCurrentTag = filterInCurrentTag;
     updateTagFilter();
 }
 

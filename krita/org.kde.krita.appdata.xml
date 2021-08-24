@@ -110,6 +110,7 @@
     <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
     <p xml:lang="ca">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="ca-valencia">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
+    <p xml:lang="cs">Krita je plnohodnotné studio digitálního umění.</p>
     <p xml:lang="de">Krita ist ein digitales Designstudio mit umfangreichen Funktionen.</p>
     <p xml:lang="el">Το Krita είναι ένα πλήρες χαρακτηριστικών ψηφιακό ατελιέ.</p>
     <p xml:lang="en-GB">Krita is the full-featured digital art studio.</p>
@@ -417,7 +418,7 @@
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні, скористайтеся нашим докладним і актуальним підручником</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, there's an extensive, up-to-date manualxx</caption>
       <caption xml:lang="zh-CN">如果您是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册。</caption>
-      <caption xml:lang="zh-TW">如果你是數位繪圖的新手，我們提供廣範而且不斷更新的說明手冊</caption>
+      <caption xml:lang="zh-TW">如果您是數位繪圖的新手，我們提供廣範而且不斷更新的說明手冊</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>

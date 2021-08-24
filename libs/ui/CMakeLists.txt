@@ -227,6 +227,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
+    widgets/kis_collapsible_button_group.cpp
     widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc
     widgets/kis_color_space_selector.cc

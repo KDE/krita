@@ -532,6 +532,29 @@ public Q_SLOTS:
      */
     QImage thumbnail(int w, int h);
 
+    /**
+     * @brief layerStyleToAsl retreive the current layer's style in ASL format.
+     * @return a QString in ASL format representing the layer style.
+     */
+    QString layerStyleToAsl();
+
+    /**
+     * @brief setLayerStyleFromAsl set a new layer style for this node.
+     * @param aslContent a string formatted in ASL format containing the layer style
+     * @return true if layer style was set, false if failed.
+     */
+    bool setLayerStyleFromAsl(const QString &asl);
+
+    /**
+     * @brief index the index of the node inside the parent
+     * @return an integer representing the node's index inside the parent
+     */
+    int index() const;
+
+    /**
+     * @brief uniqueId uniqueId of the node
+     * @return a QUuid representing a unique id to identify the node
+     */
     QUuid uniqueId() const;
 
 
@@ -547,6 +570,7 @@ private:
     friend class VectorLayer;
     friend class FilterMask;
     friend class SelectionMask;
+    friend class TransformMask;
     friend class CloneLayer;
 
     explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);

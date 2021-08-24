@@ -529,8 +529,14 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         shortcut->setMaximumTouchPoints(2);
         break;
     case KisShortcutConfiguration::PanGesture:
-        shortcut->setMinimumTouchPoints(3);
-        shortcut->setMaximumTouchPoints(3);
+        // Allow single finger panning if touch drawing is disabled
+        if (KisConfig(true).disableTouchOnCanvas()) { 
+            shortcut->setMinimumTouchPoints(1);
+            shortcut->setMaximumTouchPoints(1);
+        } else {
+            shortcut->setMinimumTouchPoints(3);
+            shortcut->setMaximumTouchPoints(3);
+        }
         break;
     case KisShortcutConfiguration::ToggleCanvasOnlyGesture:
         shortcut->setMinimumTouchPoints(4);

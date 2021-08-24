@@ -170,11 +170,14 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
             return false;
         }
 
+        QStringList vectorWarnings;
+
         m_store->pushDirectory();
         m_store->enterDirectory(getLocation(layer, DOT_SHAPE_LAYER)) ;
-        result =  shapeLayer->loadLayer(m_store);
+        result =  shapeLayer->loadLayer(m_store, &vectorWarnings);
         m_store->popDirectory();
 
+        m_warningMessages << vectorWarnings;
     }
 
     result = visitAll(layer) && result;
@@ -633,7 +636,7 @@ const KoColorProfile *KisKraLoadVisitor::loadProfile(const QString &location, co
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
 
-        QByteArray hash = KoMD5Generator::generateHash(data);
+        QString hash = KoMD5Generator::generateHash(data);
 
         if (m_profileCache.contains(hash)) {
             result = m_profileCache[hash];

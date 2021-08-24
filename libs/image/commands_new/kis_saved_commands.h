@@ -45,6 +45,7 @@ public:
 
     int id() const override;
     bool mergeWith(const KUndo2Command* command) override;
+    bool canAnnihilateWith(const KUndo2Command *command) const override;
 
     bool timedMergeWith(KUndo2Command *other) override;
     QVector<KUndo2Command*> mergeCommandsVector() override;
@@ -69,6 +70,7 @@ public:
 
     int id() const override;
     bool mergeWith(const KUndo2Command* command) override;
+    bool canAnnihilateWith(const KUndo2Command *command) const override;
 
     void setMacroId(int value);
 
@@ -79,7 +81,6 @@ public:
     void getCommandExecutionJobs(QVector<KisStrokeJobData*> *jobs, bool undo, bool shouldGoToHistory = true) const;
 
     void setOverrideInfo(const KisSavedMacroCommand *overriddenCommand, const QVector<const KUndo2Command *> &skipWhileOverride);
-
 protected:
     void addCommands(KisStrokeId id, bool undo) override;
 

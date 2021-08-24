@@ -78,6 +78,8 @@ public:
         virtual QString comment() const = 0;
         /// The resource type as defined in the tag file
         virtual QString resourceType() const = 0;
+        /// The filename of the tag
+        virtual QString filename() const = 0;
 
 
         /// A tag object on which we can set properties and which we can save
@@ -198,7 +200,7 @@ public:
     KoResourceSP resource(const QString &url);
 
     /// The MD5 checksum of the resource in the storage
-    QByteArray resourceMd5(const QString &url);
+    QString resourceMd5(const QString &url);
 
     /// An iterator over all the resources in the storage
     QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;
@@ -276,7 +278,8 @@ inline QDebug operator<<(QDebug dbg, const KisResourceStorageSP storage)
                       << " Version: " << storage->location()
                       << " Valid: " << storage->valid()
                       << " Storage: " << KisResourceStorage::storageTypeToString(storage->type())
-                      << " Timestamp: " << storage->timestamp();
+                      << " Timestamp: " << storage->timestamp()
+                      << " Pointer: " << storage.data();
     }
     return dbg.space();
 }

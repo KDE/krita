@@ -32,6 +32,8 @@ public:
 
     KisTextureMaskInfo& operator=(const KisTextureMaskInfo &rhs);
 
+    bool isValid() const;
+
     int levelOfDetail() const;
 
     bool hasMask() const;

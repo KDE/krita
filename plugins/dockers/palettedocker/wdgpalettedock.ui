@@ -155,7 +155,7 @@
      <item row="2" column="1">
       <widget class="KSqueezedTextLabel" name="lblPaletteName">
        <property name="text">
-        <string>KSqueezedTextLabel</string>
+        <string notr="true">KSqueezedTextLabel</string>
        </property>
       </widget>
      </item>

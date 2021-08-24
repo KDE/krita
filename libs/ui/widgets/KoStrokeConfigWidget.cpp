@@ -657,8 +657,6 @@ void KoStrokeConfigWidget::selectionChanged()
 
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
-    d->fillConfigWidget->forceUpdateOnSelectionChanged(); // calls shapeChanged() logic
-
     KoShape *shape = !shapes.isEmpty() ? shapes.first() : 0;
 
     const KoShapeStrokeSP stroke = shape ? qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) : KoShapeStrokeSP();

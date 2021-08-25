@@ -49,6 +49,8 @@
 #include "KisRollingMeanAccumulatorWrapper.h"
 #include "kis_onion_skin_compositor.h"
 
+#include <atomic>
+
 qint64 framesToMSec(qreal value, int fps) {
     return qRound(value / fps * 1000.0);
 }
@@ -76,17 +78,12 @@ public:
 
     ~PlaybackData() = default;
 
-    int playheadFrame() {
-        m_lock.lockForRead();
-        const int toReturn = m_playheadFrame;
-        m_lock.unlock();
-        return toReturn;
+    int playheadFrame() const {
+        return m_playheadFrame;
     }
 
     void setPlayheadFrame(int frame) {
-        m_lock.lockForWrite();
         m_playheadFrame = frame;
-        m_lock.unlock();
     }
 
     void advancePlayhead(int increment = 1) { //TODO check if necessary here or should only be in worker thread?
@@ -95,53 +92,37 @@ public:
                           + playbackRange().start() );
     }
 
-    qreal playbackSpeed() {
-        m_lock.lockForRead();
-        const qreal speed = m_playbackSpeed;
-        m_lock.unlock();
-        return speed;
+    qreal playbackSpeed() const {
+        return m_playbackSpeed;
     }
 
     void setPlaybackSpeed(qreal p_playbackSpeed) {
-        m_lock.lockForWrite();
         m_playbackSpeed = p_playbackSpeed;
-        m_lock.unlock();
     }
 
-    KisTimeSpan playbackRange() {
-        m_lock.lockForRead();
-        const KisTimeSpan toReturn = m_playbackRange;
-        m_lock.unlock();
-        return toReturn;
+    KisTimeSpan playbackRange() const {
+        return m_playbackRange;
     }
 
     void setPlaybackRange(KisTimeSpan p_playbackRange) {
-        m_lock.lockForWrite();
         m_playbackRange = p_playbackRange;
-        m_lock.unlock();
+    }
+
+    bool dropFrames() const {
+        return m_dropFrames;
     }
 
     void setDropFrames(bool value) {
-        m_lock.lockForWrite();
         m_dropFrames = value;
-        m_lock.unlock();
     }
 
-    bool dropFrames() {
-        m_lock.lockForRead();
-        bool toReturn = m_dropFrames;
-        m_lock.unlock();
-        return toReturn;
-    }
-
-    QAtomicInt m_frameRate;
+    std::atomic<int> m_frameRate;
 
 private:
-    QReadWriteLock m_lock;
-    int m_playheadFrame; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
-    qreal m_playbackSpeed;
-    KisTimeSpan m_playbackRange;
-    bool m_dropFrames; //!< Whether we should be dropping frames to preserve playback timing.
+    std::atomic<int> m_playheadFrame; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
+    std::atomic<qreal> m_playbackSpeed;
+    std::atomic<KisTimeSpan> m_playbackRange;
+    std::atomic<bool> m_dropFrames; //!< Whether we should be dropping frames to preserve playback timing.
 };
 
 class PlaybackWorker : public QObject {
@@ -177,8 +158,6 @@ public:
         //     - Check time since last frame. If larger than seconds per frame:
         //              - Advance playhead by one(?) frame
         //              - Try to display the frame (Drop frames???)
-
-
         const int msecPerFrame = framesToScaledTimeMS(1, m_sharedData->m_frameRate, m_sharedData->playbackSpeed());
         if ( m_readyToPostFrame && m_timeSinceLastPlayheadChange.elapsed() > msecPerFrame) {
             const int numFramesToAdvance = m_timeSinceLastPlayheadChange.elapsed() / msecPerFrame;

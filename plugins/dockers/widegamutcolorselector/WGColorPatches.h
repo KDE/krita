@@ -37,7 +37,7 @@ protected:
     QSize sizeHint() const override;
 
     bool colorAt(const QPoint &pos, KoColor &result) const;
-    int indexAt(const QPoint &pos) const;
+    int indexAt(const QPoint &widgetPos) const;
     int maxScroll() const;
     QRect patchRect(int gridIndex) const;
 

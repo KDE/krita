@@ -12,9 +12,19 @@
 #include <QMouseEvent>
 #include <QPainter>
 
+namespace {
+    inline QPoint transposed(QPoint point) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        return point.transposed();
+#else
+        return QPoint(point.y(), point.x());
+#endif
+    }
+}
 WGColorPatches::WGColorPatches(KisUniqueColorSet *history, QWidget *parent)
     : WGSelectorWidgetBase(parent)
 {
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     setColorHistory(history);
 }
 
@@ -85,7 +95,7 @@ void WGColorPatches::wheelEvent(QWheelEvent *event)
 {
     if (m_allowScrolling) {
         // scroll two patches per "tick"
-        int scrollAmount = 2 * (m_orientation == Qt::Vertical ? m_patchHeight : m_patchWidth);
+        int scrollAmount = 2 * m_patchWidth;
         scrollAmount = (event->angleDelta().y() * scrollAmount) / QWheelEvent::DefaultDeltasPerStep;
         m_scrollValue = qBound(0, m_scrollValue - scrollAmount, maxScroll());
         update();
@@ -101,13 +111,11 @@ void WGColorPatches::paintEvent(QPaintEvent *event)
     }
 
     QPainter painter(this);
-    int scrollCount = 0;
+    int scrollCount = m_scrollValue / m_patchWidth;
     if (m_allowScrolling) {
         if (m_orientation == Qt::Vertical) {
-            scrollCount = m_scrollValue / m_patchHeight;
             painter.translate(0, -m_scrollValue);
         } else {
-            scrollCount = m_scrollValue / m_patchWidth;
             painter.translate(-m_scrollValue, 0);
         }
     }
@@ -130,7 +138,7 @@ QSize WGColorPatches::sizeHint() const
 {
     int lineLen = (m_patchCount + m_buttonList.size() + m_numLines - 1) / m_numLines;
     if (m_orientation == Qt::Vertical) {
-        return QSize(m_numLines * m_patchWidth, lineLen * m_patchHeight);
+        return QSize(m_numLines * m_patchHeight, lineLen * m_patchWidth);
     } else {
         return QSize(lineLen * m_patchWidth, m_numLines * m_patchHeight);
     }
@@ -147,24 +155,17 @@ bool WGColorPatches::colorAt(const QPoint &pos, KoColor &result) const
     return false;
 }
 
-int WGColorPatches::indexAt(const QPoint &pos) const
+int WGColorPatches::indexAt(const QPoint &widgetPos) const
 {
-    if(!m_colors || !rect().contains(pos))
+    if(!m_colors || !rect().contains(widgetPos))
         return -1;
 
-    int scrollX = m_orientation == Qt::Horizontal ? m_scrollValue : 0;
-    int scrollY = m_orientation == Qt::Vertical ? m_scrollValue : 0;
-    int column = (pos.x() - scrollX) / m_patchWidth;
-    int row = (pos.y() - scrollY) / m_patchHeight;
+    QPoint pos = (m_orientation == Qt::Horizontal) ? widgetPos : transposed(widgetPos);
 
-    int patchNr;
-    if (m_orientation == Qt::Vertical) {
-        patchNr = row * m_numLines + column;
-    }
-    else {
-        // Horizontal
-        patchNr = column * m_numLines + row;
-    }
+    int column = (pos.x() + m_scrollValue) / m_patchWidth;
+    int row = pos.y() / m_patchHeight;
+
+    int patchNr = row * m_numLines + column;
 
     patchNr -= m_buttonList.size();
 
@@ -193,14 +194,12 @@ int WGColorPatches::maxScroll() const
 
 QRect WGColorPatches::patchRect(int gridIndex) const
 {
-    int row, col;
+    int row = gridIndex % m_numLines;
+    int col = gridIndex / m_numLines;
 
-    if (m_orientation == Qt::Vertical) {
-        row =  gridIndex / m_numLines;
-        col = gridIndex % m_numLines;
-    } else {
-        row = gridIndex % m_numLines;
-        col = gridIndex / m_numLines;
-    }
-    return QRect(col * m_patchWidth, row * m_patchHeight, m_patchWidth, m_patchHeight);
+    QSize patchSize(m_patchWidth, m_patchHeight);
+    QPoint pos(col * m_patchWidth, row * m_patchHeight);
+
+    return (m_orientation == Qt::Horizontal) ? QRect(pos, patchSize)
+                                             : QRect(transposed(pos), patchSize.transposed());
 }

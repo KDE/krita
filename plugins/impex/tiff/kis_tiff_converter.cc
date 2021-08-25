@@ -7,7 +7,12 @@
 
 #include "kis_tiff_converter.h"
 
-#include <stdio.h>
+#include <cstdio>
+#include <exiv2/exif.hpp>
+#include <exiv2/exiv2.hpp>
+#include <exiv2/metadatum.hpp>
+#include <exiv2/tags.hpp>
+#include <map>
 
 #include <QApplication>
 #include <QBuffer>
@@ -15,38 +20,36 @@
 #include <QFileInfo>
 #include <QStack>
 
+#include <KisDocument.h>
+#include <KisImportExportAdditionalChecks.h>
+#include <KoColorModelStandardIds.h>
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceConstants.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
-
-#include <KoColorModelStandardIds.h>
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-
-#include <KisDocument.h>
-#include <KoColorProfile.h>
+#include <kis_assert.h>
+#include <kis_buffer_stream.h>
+#include <kis_debug.h>
+#include <kis_global.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
+#include <kis_meta_data_backend_registry.h>
+#include <kis_meta_data_tags.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include <kis_transform_worker.h>
-
+#include <kis_transparency_mask.h>
 #include <psd_resource_block.h>
 
-#include "KoColorSpaceConstants.h"
-#include "kis_assert.h"
-#include "kis_buffer_stream.h"
-#include "kis_global.h"
 #include "kis_tiff_psd_layer_record.h"
 #include "kis_tiff_psd_resource_record.h"
 #include "kis_tiff_psd_writer_visitor.h"
 #include "kis_tiff_reader.h"
 #include "kis_tiff_writer_visitor.h"
 #include "kis_tiff_ycbcr_reader.h"
-#include "kis_transparency_mask.h"
-
-#include <KisImportExportAdditionalChecks.h>
-#include <kis_meta_data_backend_registry.h>
 
 #if TIFFLIB_VERSION < 20111221
 typedef size_t tmsize_t;
@@ -385,6 +388,85 @@ KisImportExportErrorCode KisTIFFConverter::decode(const QString &filename)
     }
     // Freeing memory
     TIFFClose(image);
+
+    {
+        // HACK!! Externally parse the Exif metadata
+        // libtiff has no way to access the fields wholesale
+        try {
+            Exiv2::BasicIo::AutoPtr fileIo(new Exiv2::FileIo(QFile::encodeName(filename).toStdString()));
+
+            Exiv2::Image::AutoPtr readImg(Exiv2::ImageFactory::open(fileIo));
+
+            readImg->readMetadata();
+
+            std::multimap<int, Exiv2::Exifdatum> sortedExifMetadata;
+
+            // We need to classify the EXIF data by IFD
+            for (const auto &i : readImg->exifData()) {
+                // Discard TIFF-specific metadata
+                const uint16_t tag = i.tag();
+                if (tag == Exif::Image::ImageWidth || tag == Exif::Image::ImageLength
+                    || tag == Exif::Image::BitsPerSample || tag == Exif::Image::Compression
+                    || tag == Exif::Image::PhotometricInterpretation || tag == Exif::Image::Orientation
+                    || tag == Exif::Image::SamplesPerPixel || tag == Exif::Image::PlanarConfiguration
+                    || tag == Exif::Image::YCbCrSubSampling || tag == Exif::Image::YCbCrPositioning
+                    || tag == Exif::Image::XResolution || tag == Exif::Image::YResolution
+                    || tag == Exif::Image::ResolutionUnit || tag == Exif::Image::TransferFunction
+                    || tag == Exif::Image::WhitePoint || tag == Exif::Image::PrimaryChromaticities
+                    || tag == Exif::Image::YCbCrCoefficients || tag == Exif::Image::ReferenceBlackWhite
+                    || tag == Exif::Image::InterColorProfile) {
+                    dbgMetaData << "Ignoring TIFF-specific" << i.key().c_str();
+                    continue;
+                }
+
+                dbgMetaData << i.ifdId() << i.ifdName() << i.key().c_str();
+
+                // Synthesize keys because IFD#2 is taken as Thumbnail
+                sortedExifMetadata.insert(
+                    {i.ifdId(), Exiv2::Exifdatum({i.tag(), std::string("Image")}, i.getValue().get())});
+            }
+
+            const KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("exif");
+
+            // All IFDs are paint layer children of root
+            KisNodeSP node = m_image->rootLayer()->firstChild();
+
+            for (int i = 0; node; i++) {
+                QBuffer ioDevice;
+
+                {
+                    // Synthesize the Exif blob
+                    Exiv2::ExifData tempData;
+                    Exiv2::Blob tempBlob;
+
+                    // Select only current IFD
+                    const auto range = sortedExifMetadata.equal_range(i);
+                    for (auto i = range.first; i != range.second; ++i) {
+                        tempData.add(i->second);
+                    }
+
+                    // Encode into temporary blob
+                    Exiv2::ExifParser::encode(tempBlob, Exiv2::littleEndian, tempData);
+
+                    // Reencode into Qt land
+                    ioDevice.setData(reinterpret_cast<char *>(tempBlob.data()), static_cast<int>(tempBlob.size()));
+                }
+
+                // Get layer
+                KisLayer *layer = qobject_cast<KisLayer *>(node.data());
+                Q_ASSERT(layer);
+
+                // Inject the data as any other IOBackend
+                io->loadFrom(layer->metaData(), &ioDevice);
+
+                // Continue
+                node = node->nextSibling();
+            }
+        } catch (Exiv2::AnyError &e) {
+            errFile << "Failed metadata import:" << e.code() << e.what();
+        }
+    }
+
     return ImportExportCodes::OK;
 }
 
@@ -1332,6 +1414,73 @@ KisImportExportErrorCode KisTIFFConverter::buildFile(const QString &filename, Ki
     }
 
     TIFFClose(image);
+
+    if (!options.flatten && !options.saveAsPhotoshop) {
+        // HACK!! Externally inject the Exif metadata
+        // libtiff has no way to access the fields wholesale
+        try {
+            Exiv2::BasicIo::AutoPtr fileIo(new Exiv2::FileIo(QFile::encodeName(filename).toStdString()));
+
+            Exiv2::Image::AutoPtr img(Exiv2::ImageFactory::open(fileIo));
+
+            img->readMetadata();
+
+            auto &data = img->exifData();
+
+            const KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("exif");
+
+            // All IFDs are paint layer children of root
+            KisNodeSP node = root->firstChild();
+
+            auto groupName = [](int ifdIdx) -> const char * {
+                const Exiv2::GroupInfo *groups = Exiv2::ExifTags::groupList();
+
+                while (groups && groups->ifdId_ != ifdIdx) {
+                    groups++;
+                }
+
+                if (groups) {
+                    return groups->groupName_;
+                } else {
+                    return nullptr;
+                }
+            };
+
+            for (int i = 0; node; i++) {
+                QBuffer ioDevice;
+
+                // Get layer
+                KisLayer *layer = qobject_cast<KisLayer *>(node.data());
+                Q_ASSERT(layer);
+
+                // Inject the data as any other IOBackend
+                io->saveTo(layer->metaData(), &ioDevice);
+
+                Exiv2::ExifData dataToInject;
+
+                // Reinterpret the blob we just got and inject its contents into tempData
+                Exiv2::ExifParser::decode(dataToInject,
+                                          reinterpret_cast<const Exiv2::byte *>(ioDevice.data().data()),
+                                          static_cast<uint32_t>(ioDevice.size()));
+
+                for (const auto &v : dataToInject) {
+                    // Synthesize its key
+                    // If it is unable to inject the tag, it will throw here
+                    // See https://github.com/Exiv2/exiv2/issues/1879
+                    // See https://dev.exiv2.org/issues/0000762
+                    data[Exiv2::ExifKey(v.tag(), groupName(i)).key()] = v.value();
+                }
+
+                // Continue
+                node = node->nextSibling();
+            }
+
+            // Write metadata
+            img->writeMetadata();
+        } catch (Exiv2::AnyError &e) {
+            errFile << "Failed injecting TIFF metadata:" << e.code() << e.what();
+        }
+    }
     return ImportExportCodes::OK;
 }
 

@@ -562,10 +562,6 @@ void KisAnimTimelineFramesView::slotSelectionChanged()
         range = KisTimeSpan::fromTimeWithDuration(minColumn, maxColumn - minColumn + 1);
     }
 
-    if (m_d->model->isPlaybackPaused()) {
-        m_d->model->stopPlayback();
-    }
-
     m_d->model->setPlaybackRange(range);
 }
 

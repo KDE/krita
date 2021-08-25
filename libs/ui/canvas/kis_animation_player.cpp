@@ -160,7 +160,6 @@ public:
         connect(timer, &QTimer::timeout, this, &PlaybackWorker::process);
         timer->start(((qreal)AUDIO_BUFFER_SAMPLES / (qreal)AUDIO_SAMPLE_RATE) * 1000);
         m_timeSinceLastPlayheadChange.start();
-        temp_timeSinceLastResample.start();
         m_readyToPostFrame = true;
     }
 
@@ -172,8 +171,6 @@ public:
         //     - Push buffer size audio to audio device.
         qDebug() << "Decode & resample source audio";
         qDebug() << "Push 512 samples to audio device";
-        qDebug() << "Time between sending samples to audio device: " << ppVar(temp_timeSinceLastResample.elapsed());
-        temp_timeSinceLastResample.restart();
 
         // VISUAL
         // Every tick
@@ -206,7 +203,6 @@ private:
     bool m_readyToPostFrame;
     QSharedPointer<PlaybackData> m_sharedData;
     KisElapsedTimer m_timeSinceLastPlayheadChange;
-    KisElapsedTimer temp_timeSinceLastResample;
 };
 
 //Setup environment for playback.
@@ -502,6 +498,10 @@ void KisAnimationPlayer::seek(int frameIndex, bool preferCachedFrames)
         if (frameIndex == m_d->visibleFrame) {
             return;
         } else {
+            if (m_d->playback) {
+                m_d->playback->setPlayheadFrame(frameIndex > 0 ? frameIndex : m_d->playback->playheadFrame());
+            }
+
             animInterface->requestTimeSwitchWithUndo(frameIndex);
         }
     }

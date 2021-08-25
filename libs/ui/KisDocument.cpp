@@ -677,7 +677,6 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     if (filePathInfo.exists() && !filePathInfo.isWritable()) {
         slotCompleteSavingDocument(job, ImportExportCodes::NoAccessToWrite,
                                    i18n("%1 cannot be written to. Please save under a different name.", job.filePath));
-        //return ImportExportCodes::NoAccessToWrite;
         return false;
     }
 
@@ -852,7 +851,8 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
             const QString filePath = job.filePath;
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
         }
-    } else {
+    }
+    else {
         if (!(job.flags & KritaUtils::SaveIsExporting)) {
             const QString existingAutoSaveBaseName = localFilePath();
             const bool wasRecovered = isRecovered();
@@ -1180,7 +1180,7 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 }
 
 
-void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage)
+void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode status, QString &errorMessage)
 {
     KIS_ASSERT_RECOVER_RETURN(isSaving());
 
@@ -1191,6 +1191,10 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
 
     if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
         d->backgroundSaveDocument->d->isAutosaving = false;
+    }
+
+    if (!d->backgroundSaveDocument->errorMessage().isEmpty()) {
+        errorMessage = errorMessage + "\n" + d->backgroundSaveDocument->errorMessage();
     }
 
     d->backgroundSaveDocument.take()->deleteLater();
@@ -1205,7 +1209,6 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
 
     // unlock at the very end
     d->savingMutex.unlock();
-
 
     QFileInfo fi(job.filePath);
     KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3. Size: %4. MD5 Hash: %5")
@@ -1412,8 +1415,7 @@ void KisDocument::finishExportInBackground()
         return;
     }
 
-    KisImportExportErrorCode status =
-            d->childSavingFuture.result();
+    KisImportExportErrorCode status = d->childSavingFuture.result();
     const QString errorMessage = status.errorMessage();
 
     d->savingImage.clear();

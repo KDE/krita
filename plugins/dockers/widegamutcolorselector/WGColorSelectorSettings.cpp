@@ -90,6 +90,10 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.setColorSelectorConfiguration(m_selectorConfigGrid->currentConfiguration());
     cfg.setQuickSettingsEnabled(m_ui->grpQuickSettingsMenu->isChecked());
     cfg.setFavoriteConfigurations(m_favoriteConfigGrid->selectedConfigurations());
+    // Pop-ups
+    cfg.setPopupSize(m_ui->sbPopupSize->value());
+    cfg.setPopupColorPatchOrientation(m_ui->rbPopupHorizontal->isChecked() ? Qt::Horizontal : Qt::Vertical);
+    cfg.setPopupColorPatchSize(QSize(m_ui->sbPatchWidth->value(), m_ui->sbPatchHeight->value()));
     // Shade Selector
     cfg.setShadeSelectorUpdateOnExternalChanges(m_ui->chkShadeSelUpdateExternal->isChecked());
     cfg.setShadeSelectorUpdateOnInteractionEnd(m_ui->chkShadeSelUpdateInteraction->isChecked());
@@ -117,6 +121,17 @@ void WGColorSelectorSettings::loadPreferences()
     for (const KisColorSelectorConfiguration &fav: favoriteConfigs) {
         m_favoriteConfigGrid->setChecked(fav);
     }
+    // Pop-ups
+    m_ui->sbPopupSize->setValue(cfg.popupSize());
+    Qt::Orientation patchOrientation = cfg.popupColorPatchOrientation();
+    if (patchOrientation == Qt::Horizontal) {
+        m_ui->rbPopupHorizontal->setChecked(true);
+    } else {
+        m_ui->rbPopupVertical->setChecked(true);
+    }
+    QSize colorPatchSize = cfg.popupColorPatchSize();
+    m_ui->sbPatchWidth->setValue(colorPatchSize.width());
+    m_ui->sbPatchHeight->setValue(colorPatchSize.height());
     // Shade Selector
     m_ui->chkShadeSelUpdateExternal->setChecked(cfg.shadeSelectorUpdateOnExternalChanges());
     m_ui->chkShadeSelUpdateInteraction->setChecked(cfg.shadeSelectorUpdateOnInteractionEnd());

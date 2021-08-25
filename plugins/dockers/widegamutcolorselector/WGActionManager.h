@@ -34,6 +34,7 @@ public:
     void registerActions(KisViewManager *viewManager);
     void setLastUsedColor(const KoColor &col);
 private:
+    void updateWidgetSize(QWidget *widget, int size);
     void showPopup(WGSelectorPopup *popup);
     void loadColorSelectorSettings(WGConfig &cfg);
     void modifyHSX(int channel, float amount);

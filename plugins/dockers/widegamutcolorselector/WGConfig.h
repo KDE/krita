@@ -43,6 +43,17 @@ public:
     static QVector<KisColorSelectorConfiguration> defaultFavoriteConfigurations();
     void setFavoriteConfigurations(const QVector<KisColorSelectorConfiguration> &favoriteConfigs);
 
+    // popups
+    int popupSize() const;
+    void setPopupSize(int size);
+
+    Qt::Orientation popupColorPatchOrientation() const;
+    void setPopupColorPatchOrientation(Qt::Orientation orientation);
+
+    QSize popupColorPatchSize() const;
+    void setPopupColorPatchSize(QSize size);
+
+    // shade selector
     static QVector<ShadeLine> defaultShadeSelectorLines();
     QVector<ShadeLine> shadeSelectorLines() const;
     void setShadeSelectorLines(const QVector<ShadeLine> &shadeLines);

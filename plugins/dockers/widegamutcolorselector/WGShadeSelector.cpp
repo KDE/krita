@@ -19,6 +19,7 @@ WGShadeSelector::WGShadeSelector(KisVisualColorModelSP colorModel, QWidget *pare
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setSpacing(1);
     l->setMargin(0);
+    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
     connectToModel();
     updateSettings();

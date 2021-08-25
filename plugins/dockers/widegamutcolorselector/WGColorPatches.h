@@ -21,6 +21,7 @@ public:
     explicit WGColorPatches(KisUniqueColorSet *history, QWidget *parent = nullptr);
 
     KisUniqueColorSet* colorHistory() const;
+    void updateSettings() override;
     QPoint popupOffset() const override;
     /*! set buttons, that should be drawn additionally to the patches
      * this class takes ownership of them and will delete them

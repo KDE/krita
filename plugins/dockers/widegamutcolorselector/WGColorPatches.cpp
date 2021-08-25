@@ -5,6 +5,7 @@
  */
 
 #include "WGColorPatches.h"
+#include "WGConfig.h"
 
 #include <kis_display_color_converter.h>
 #include <KisUniqueColorSet.h>
@@ -31,6 +32,26 @@ WGColorPatches::WGColorPatches(KisUniqueColorSet *history, QWidget *parent)
 KisUniqueColorSet *WGColorPatches::colorHistory() const
 {
     return m_colors;
+}
+
+void WGColorPatches::updateSettings()
+{
+    WGConfig cfg;
+    m_orientation = Qt::Horizontal;
+    if (uiMode() == PopupMode) {
+        QSize patchSize = cfg.popupColorPatchSize();
+        m_patchWidth = patchSize.width();
+        m_patchHeight = patchSize.height();
+        m_orientation = cfg.popupColorPatchOrientation();
+    }
+
+    if (m_orientation == Qt::Vertical) {
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    } else {
+        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    }
+
+    updateGeometry();
 }
 
 QPoint WGColorPatches::popupOffset() const

@@ -12,6 +12,7 @@
 #include "WGConfig.h"
 #include "WGMyPaintShadeSelector.h"
 #include "WGSelectorPopup.h"
+#include "WGSelectorWidgetBase.h"
 #include "WGShadeSelector.h"
 
 #include <kis_action.h>
@@ -90,6 +91,21 @@ void WGActionManager::setLastUsedColor(const KoColor &col)
     m_lastUsedColor = col;
 }
 
+void WGActionManager::updateWidgetSize(QWidget *widget, int size)
+{
+    QSizePolicy hsp = widget->sizePolicy();
+    if (hsp.horizontalPolicy() != QSizePolicy::Fixed) {
+        widget->setFixedWidth(size);
+    } else {
+        widget->setFixedWidth(QWIDGETSIZE_MAX); // looks weird, but that really resets min size to 0...
+    }
+    if (hsp.verticalPolicy() != QSizePolicy::Fixed) {
+        widget->setFixedHeight(size);
+    } else {
+        widget->setFixedHeight(QWIDGETSIZE_MAX);
+    }
+}
+
 void WGActionManager::showPopup(WGSelectorPopup *popup)
 {
     // preparations
@@ -134,12 +150,25 @@ void WGActionManager::modifyHSX(int channel, float amount)
 void WGActionManager::slotConfigChanged()
 {
     WGConfig cfg;
+    int popupSize = cfg.popupSize();
 
     if (m_colorSelector) {
         loadColorSelectorSettings(cfg);
+        updateWidgetSize(m_colorSelector, popupSize);
     }
     if (m_shadeSelector) {
         m_shadeSelector->updateSettings();
+        updateWidgetSize(m_shadeSelector, popupSize);
+    }
+    if (m_myPaintSelector) {
+        m_myPaintSelector->updateSettings();
+        updateWidgetSize(m_myPaintSelector, popupSize);
+    }
+    if (m_colorHistoryPopup) {
+        WGSelectorWidgetBase *selector = m_colorHistoryPopup->selectorWidget();
+        KIS_ASSERT(selector);
+        selector->updateSettings();
+        updateWidgetSize(selector, popupSize);
     }
 }
 
@@ -165,7 +194,7 @@ void WGActionManager::slotShowColorSelectorPopup()
     if (!m_colorSelectorPopup) {
         m_colorSelectorPopup = new WGSelectorPopup();
         m_colorSelector = new KisVisualColorSelector(m_colorSelectorPopup, m_colorModel);
-        m_colorSelector->setFixedSize(300, 300);
+        updateWidgetSize(m_colorSelector, WGConfig().popupSize());
         m_colorSelectorPopup->setSelectorWidget(m_colorSelector);
         connect(m_colorSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
                 SLOT(slotPopupClosed(WGSelectorPopup*)));
@@ -194,7 +223,7 @@ void WGActionManager::slotShowShadeSelectorPopup()
     if (!m_shadeSelectorPopup) {
         m_shadeSelectorPopup = new WGSelectorPopup();
         m_shadeSelector = new WGShadeSelector(m_colorModel, m_shadeSelectorPopup);
-        m_shadeSelector->setFixedWidth(300);
+        updateWidgetSize(m_shadeSelector, WGConfig().popupSize());
         m_shadeSelector->setDisplayConverter(m_docker->displayColorConverter(true));
         m_shadeSelectorPopup->setSelectorWidget(m_shadeSelector);
         connect(m_shadeSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
@@ -210,7 +239,7 @@ void WGActionManager::slotShowMyPaintSelectorPopup()
     if (!m_myPaintSelectorPopup) {
         m_myPaintSelectorPopup = new WGSelectorPopup();
         m_myPaintSelector = new WGMyPaintShadeSelector(m_myPaintSelectorPopup, WGSelectorWidgetBase::PopupMode);
-        m_myPaintSelector->setFixedSize(300, 300);
+        updateWidgetSize(m_myPaintSelector, WGConfig().popupSize());
         m_myPaintSelector->setModel(m_colorModel);
         m_myPaintSelector->setDisplayConverter(m_docker->displayColorConverter(true));
         m_myPaintSelectorPopup->setSelectorWidget(m_myPaintSelector);
@@ -227,7 +256,9 @@ void WGActionManager::slotShowColorHistoryPopup()
     if (!m_colorHistoryPopup) {
         m_colorHistoryPopup = new WGSelectorPopup;
         WGColorPatches *history = new WGColorPatches(m_docker->colorHistory());
-        history->setFixedWidth(300);
+        history->setUiMode(WGSelectorWidgetBase::PopupMode);
+        history->updateSettings();
+        updateWidgetSize(history, WGConfig().popupSize());
         history->setDisplayConverter(m_docker->displayColorConverter());
         m_colorHistoryPopup->setSelectorWidget(history);
         connect(m_colorHistoryPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),

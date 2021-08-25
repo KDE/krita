@@ -97,6 +97,36 @@ void WGConfig::setFavoriteConfigurations(const QVector<KisColorSelectorConfigura
     m_cfg.writeEntry("favoriteSelectorConfigurations", favoriteList.join(';'));
 }
 
+int WGConfig::popupSize() const
+{
+    return m_cfg.readEntry("popupSize", 300);
+}
+
+void WGConfig::setPopupSize(int size)
+{
+    m_cfg.writeEntry("popupSize", size);
+}
+
+Qt::Orientation WGConfig::popupColorPatchOrientation() const
+{
+    return m_cfg.readEntry("popupColorPatchOrientation", 0) == Qt::Vertical ? Qt::Vertical : Qt::Horizontal;
+}
+
+void WGConfig::setPopupColorPatchOrientation(Qt::Orientation orientation)
+{
+    m_cfg.writeEntry("popupColorPatchOrientation", static_cast<int>(orientation));
+}
+
+QSize WGConfig::popupColorPatchSize() const
+{
+    return m_cfg.readEntry("popupColorPatchSize", QSize(24, 24));
+}
+
+void WGConfig::setPopupColorPatchSize(QSize size)
+{
+    m_cfg.writeEntry("popupColorPatchSize", size);
+}
+
 QVector<WGConfig::ShadeLine> WGConfig::defaultShadeSelectorLines()
 {
     QVector<ShadeLine> defaultLines;

@@ -21,11 +21,11 @@
 
 #include <kis_debug.h>
 #include <kis_exiv2_common.h>
-#include <kis_exiv2_constants.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_schema.h>
 #include <kis_meta_data_schema_registry.h>
 #include <kis_meta_data_store.h>
+#include <kis_meta_data_tags.h>
 #include <kis_meta_data_value.h>
 
 // ---- Exception conversion functions ---- //

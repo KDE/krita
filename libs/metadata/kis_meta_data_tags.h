@@ -4,7 +4,6 @@
 // SPDX-LicenseIdentifier: GPL-2.0-or-later
 
 #include <cstdint>
-#include <exiv2/exiv2.hpp>
 
 namespace Exif
 {

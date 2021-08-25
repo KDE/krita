@@ -23,6 +23,7 @@
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceTypes.h>
 #include <kis_image_barrier_lock_adapter.h>
+#include <QPainter>
 
 #include "kis_tool_utils.h"
 
@@ -47,16 +48,28 @@ KisToolColorSampler::~KisToolColorSampler()
     }
 }
 
+
 void KisToolColorSampler::paint(QPainter &gc, const KoViewConverter &converter)
 {
-    Q_UNUSED(gc);
-    Q_UNUSED(converter);
+    //Show sampled color preview
+    const QRectF sampledRect = converter.documentToView(m_sampledColorPreviewUpdateRect);
+    gc.fillRect(sampledRect,  m_sampledColor.toQColor() );
+
+
+    //Show old color preview
+    const QRectF baseColorRect = converter.documentToView(m_oldColorPreviewBaseColorRect);
+    gc.fillRect(baseColorRect, m_oldColorPreviewBaseColor);
+
+
+    //canvas()->updateCanvas(baseColorRect);
 }
 
 void KisToolColorSampler::activate(const QSet<KoShape*> &shapes)
 {
     m_isActivated = true;
     m_config->load();
+    m_oldColorPreviewBaseColor = canvas()->resourceManager()->foregroundColor().toQColor();
+
     updateOptionWidget();
 
     KisTool::activate(shapes);
@@ -122,6 +135,7 @@ bool KisToolColorSampler::sampleColor(const QPointF &pos)
         KisToolUtils::sampleColor(m_sampledColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend);
     }
 
+
     if (m_config->updateColor &&
         m_sampledColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
 
@@ -141,6 +155,7 @@ bool KisToolColorSampler::sampleColor(const QPointF &pos)
 
 void KisToolColorSampler::beginPrimaryAction(KoPointerEvent *event)
 {
+    m_oldColorPreviewBaseColor = canvas()->resourceManager()->foregroundColor().toQColor();
     bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
     if (!sampleMerged) {
         if (!currentNode()) {
@@ -166,23 +181,35 @@ void KisToolColorSampler::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
+    m_colorPreviewShowComparePlate = true;
     displaySampledColor();
+    requestUpdateOutline(event->point, event);
+
+}
+
+void KisToolColorSampler::mouseMoveEvent(KoPointerEvent *event){
+    KisTool::mouseMoveEvent(event);
+    requestUpdateOutline(event->point, event);
+
 }
 
 void KisToolColorSampler::continuePrimaryAction(KoPointerEvent *event)
 {
+
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPoint pos = convertToImagePixelCoordFloored(event);
     sampleColor(pos);
     displaySampledColor();
+
+    requestUpdateOutline(event->point, event);
+
 }
 
 #include "kis_display_color_converter.h"
 
 void KisToolColorSampler::endPrimaryAction(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     if (m_config->addColorToCurrentPalette) {
@@ -200,8 +227,51 @@ void KisToolColorSampler::endPrimaryAction(KoPointerEvent *event)
             }
         }
     }
+    m_oldColorPreviewBaseColorRect = QRect();
+    m_sampledColorPreviewUpdateRect = QRect();
+    m_colorPreviewShowComparePlate = false;
+    m_oldColorPreviewBaseColor = canvas()->resourceManager()->foregroundColor().toQColor();
 
+    requestUpdateOutline(event->point, event);
+    
 }
+
+void KisToolColorSampler::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+    KisConfig cfg(true);
+
+    QRectF colorPreviewDocRect;
+    QRectF colorPreviewBaseColorDocRect;
+    QRectF colorPreviewDocUpdateRect;
+    colorPreviewDocRect = cfg.colorPreviewRect();
+
+    qreal zoomX;
+    qreal zoomY;
+    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+    qreal xoffset = 2.0/zoomX;
+    qreal yoffset = 2.0/zoomY;
+
+
+    colorPreviewBaseColorDocRect = canvas()->viewConverter()->viewToDocument(colorPreviewDocRect);
+    colorPreviewDocUpdateRect = colorPreviewBaseColorDocRect.translated(outlineDocPoint).adjusted(-xoffset,-yoffset,xoffset,yoffset);
+
+    const QRectF sampledColorPreviewColorRect =
+        m_colorPreviewShowComparePlate ?
+            colorPreviewBaseColorDocRect.translated(outlineDocPoint):
+            QRectF();
+
+    const QRectF oldColorPreviewBaseColorViewRect =
+        m_colorPreviewShowComparePlate ?
+            colorPreviewBaseColorDocRect.translated(outlineDocPoint).translated(colorPreviewBaseColorDocRect.width(), 0):
+            colorPreviewBaseColorDocRect.translated(outlineDocPoint);
+
+    canvas()->updateCanvas(oldColorPreviewBaseColorViewRect);
+
+    m_oldColorPreviewBaseColorRect = oldColorPreviewBaseColorViewRect;
+    m_sampledColorPreviewUpdateRect = sampledColorPreviewColorRect;
+}
+
 
 struct SampledChannel {
     QString name;

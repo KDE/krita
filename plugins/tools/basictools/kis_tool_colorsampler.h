@@ -16,6 +16,7 @@
 #include "kis_tool.h"
 #include <kis_icon.h>
 #include <KoColorSet.h>
+#include <QPainter>
 
 class KisTagFilterResourceProxyModel;
 
@@ -63,7 +64,9 @@ public:
 
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
+    void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
     void paint(QPainter &gc, const KoViewConverter &converter) override;
 
@@ -97,6 +100,12 @@ private:
     QScopedPointer<KisToolUtils::ColorSamplerConfig> m_config;
 
     bool m_isActivated {false};
+    bool m_colorPreviewShowComparePlate {false};
+
+    QRectF m_oldColorPreviewBaseColorRect;
+    QColor m_oldColorPreviewBaseColor;
+
+    QRectF m_sampledColorPreviewUpdateRect;
 
     KoColor m_sampledColor;
 

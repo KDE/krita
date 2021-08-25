@@ -240,6 +240,8 @@ private:
     void createActions();
     void setupManagers();
 
+    QString canonicalPath();
+
     /// The zoommanager handles everything action-related to zooming
     KisZoomManager * zoomManager();
 

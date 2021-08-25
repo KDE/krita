@@ -31,7 +31,7 @@ public:
 
     void setDetached(bool detach)
     {
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS
         // for some reason when calling destroy() the platform window isn't
         // hidden first, this corrupts state of the window stack
         hide();

@@ -9,7 +9,7 @@ ExternalProject_Add( ext_openexr
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_openexr} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DNAMESPACE_VERSIONING=OFF
 
         UPDATE_COMMAND ""
-        DEPENDS ext_zlib
+        DEPENDS ${ZLIB_DEP}
 )
 else()
 ExternalProject_Add(ext_openexr

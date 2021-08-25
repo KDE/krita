@@ -10,6 +10,6 @@ ExternalProject_Add( ext_quazip
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_quazip} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_zlib
+    DEPENDS ${ZLIB_DEP}
 )
 

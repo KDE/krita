@@ -95,6 +95,19 @@ endlocal & set "%1=%RESULT%"
 goto :EOF
 
 
+:has_target out_variable folder folder2
+setlocal
+set RESULT=
+if exist "%~2" (
+    set RESULT=1
+) else (
+    if exist "%~3" (
+        set RESULT=1
+    )
+)
+endlocal & set "%1=%RESULT%"
+goto :EOF
+
 :usage
 echo Usage:
 echo %~n0 [--no-interactive] [ OPTIONS ... ]
@@ -894,12 +907,19 @@ set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp
 
 for %%a in (%EXT_TARGETS%) do (
-    echo Building ext_%%a...
-    "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
-    if errorlevel 1 (
-        echo ERROR: Building of ext_%%a failed! 1>&2
-        exit /b 105
+    setlocal
+    call :has_target TEST "ext_%%a\" "ext_frameworks\ext_%%a-prefix\"
+    if "!TEST!" == "1" (
+        echo Building ext_%%a...
+        "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
+        if errorlevel 1 (
+            echo ERROR: Building of ext_%%a failed! 1>&2
+            exit /b 105
+        )
+    ) else (
+        echo Skipping ext_%%a, using OS package...
     )
+    endlocal
 )
 echo.
 

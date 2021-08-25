@@ -161,7 +161,7 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_patch ext_openssl ${QT_EXTRA_DEPS}
+      DEPENDS ext_patch ${OPENSSL_DEP} ${QT_EXTRA_DEPS}
   )
 elseif (ANDROID)
   ExternalProject_Add(

@@ -40,7 +40,7 @@ if (WIN32)
         INSTALL_DIR ${PREFIX_ext_gettext}
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gettext} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
         UPDATE_COMMAND ""
-        DEPENDS ext_patch ext_iconv
+        DEPENDS ext_patch DEPENDS ${ICONV_DEP}
     )
     add_custom_target(ext_gettext)
     add_dependencies(ext_gettext ext_gettext_bin ext_gettext_lib)

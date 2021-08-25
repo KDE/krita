@@ -71,6 +71,33 @@ if (WIN32)
 			message(FATAL_ERROR "Environment variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK or disable QT_ENABLE_DYNAMIC_OPENGL")
 		endif ()
     endif ()
+    
+    find_package(ZLIB)
+    find_package(Iconv)
+    find_package(EXPAT)
+    find_package(Gettext)
+    find_package(OpenSSL)
+
+    if (NOT ZLIB_FOUND)
+        set (ZLIB_DEP ext_zlib)
+    endif()
+    
+    if (NOT Iconv_FOUND)
+        set (ICONV_DEP ext_iconv)
+    endif()
+    
+    if (NOT EXPAT_FOUND)
+        set (EXPAT_DEP ext_expat)
+    endif()
+    
+    if (NOT Gettext_FOUND)
+        set (GETTEXT_DEP ext_gettext)
+    endif()
+    
+    if (NOT OpenSSL_FOUND)
+        set (OPENSSL_DEP ext_openssl)
+    endif()
+          
 endif (WIN32)
 
 if (WIN32)
@@ -263,7 +290,10 @@ elseif(UNIX)
 endif ()
 
 # this list must be dependency-ordered
-add_subdirectory( ext_openssl )
+if (NOT WIN32 OR OPENSSL_DEP)
+    add_subdirectory( ext_openssl )
+endif()
+
 if (ENABLE_PYTHON_DEPS OR NOT MINGW)
 	add_subdirectory( ext_python )
 endif ()
@@ -271,9 +301,19 @@ if (WIN32)
     add_subdirectory( ext_patch )
 endif ()
 add_subdirectory( ext_lzma )
-add_subdirectory( ext_iconv )
-add_subdirectory( ext_gettext )
-add_subdirectory( ext_zlib )
+
+if (NOT WIN32 OR ICONV_DEP)
+    add_subdirectory( ext_iconv )
+endif()
+
+if (NOT WIN32 OR GETTEXT_DEP)
+    add_subdirectory( ext_gettext )
+endif()
+
+if (NOT WIN32 OR ZLIB_DEP)
+    add_subdirectory( ext_zlib )
+endif()
+
 add_subdirectory( ext_boost )
 add_subdirectory( ext_jpeg )
 add_subdirectory( ext_tiff )
@@ -282,7 +322,11 @@ if (WIN32)
     add_subdirectory( ext_icoutils )
 endif ()
 add_subdirectory( ext_eigen3 )
-add_subdirectory( ext_expat ) # for exiv2
+
+if (NOT WIN32 OR EXPAT_DEP)
+    add_subdirectory( ext_expat ) # for exiv2
+endif()
+
 add_subdirectory( ext_exiv2 )
 add_subdirectory( ext_lcms2 )
 add_subdirectory( ext_openexr )

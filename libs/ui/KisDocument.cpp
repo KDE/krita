@@ -842,14 +842,27 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (!status.isOk()) {
+        QString errorFromStatus = exportErrorToUserMessage(status, "");
+        QString errorFromError = exportErrorToUserMessage(status, errorMessage);
+
+        if (!errorFromError.contains(errorFromStatus)) {
+            errorFromError = errorFromStatus + "\n" + errorFromError;
+        }
+
+
         emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during saving %1: %2",
                                     fileName,
-                                    exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
+                                    errorFromError), errorMessageTimeout);
 
         if (!fileBatchMode()) {
             const QString filePath = job.filePath;
-            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
+            if (errorFromError.isEmpty()) {
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1", filePath));
+            }
+            else {
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, errorFromError));
+            }
         }
     }
     else {

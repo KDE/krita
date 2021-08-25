@@ -1,4 +1,4 @@
-From 3bda80dcc89a0ef8668f37e6a52871da11bde9c7 Mon Sep 17 00:00:00 2001
+From bf5ca4d3bb2a00a185b4698d0f8e8cafb24ac567 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Thu, 19 Aug 2021 12:01:16 +0000
 Subject: [PATCH] Android: Rework Storage Access Framework
@@ -13,12 +13,12 @@ the files.
  .../qt5/android/CachedDocumentFile.java       | 187 +++++
  .../org/qtproject/qt5/android/QtNative.java   | 256 +-----
  .../org/qtproject/qt5/android/SAFFile.java    |  23 +
- .../qtproject/qt5/android/SAFFileManager.java | 738 ++++++++++++++++++
- .../android/androidcontentfileengine.cpp      |  91 ++-
+ .../qtproject/qt5/android/SAFFileManager.java | 743 ++++++++++++++++++
+ .../android/androidcontentfileengine.cpp      | 104 ++-
  .../android/androidcontentfileengine.h        |   6 +
  .../qandroidplatformfiledialoghelper.cpp      |   6 +
  .../android/qandroidplatformservices.cpp      |   6 +-
- 11 files changed, 1040 insertions(+), 279 deletions(-)
+ 11 files changed, 1056 insertions(+), 281 deletions(-)
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
@@ -589,10 +589,10 @@ index 0000000000..fd371bebc2
 +}
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
 new file mode 100644
-index 0000000000..432a49065e
+index 0000000000..a6cbb717f8
 --- /dev/null
 +++ b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
-@@ -0,0 +1,738 @@
+@@ -0,0 +1,743 @@
 +package org.qtproject.qt5.android;
 +
 +import android.annotation.SuppressLint;
@@ -1081,6 +1081,11 @@ index 0000000000..432a49065e
 +    }
 +
 +    // Native usage
++    public boolean isTreeUri(String contentUrl) {
++        return isTreeUri(Uri.parse(contentUrl));
++    }
++
++    // Native usage
 +    @SuppressWarnings("UnusedDeclaration")
 +    public boolean mkdir(String contentUrl, boolean createParentDirectories) {
 +        if (isDir(contentUrl)) {
@@ -1332,7 +1337,7 @@ index 0000000000..432a49065e
 +    }
 +}
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
-index ba11a50e85..f3fa90431a 100644
+index ba11a50e85..a64360c44f 100644
 --- a/src/plugins/platforms/android/androidcontentfileengine.cpp
 +++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
 @@ -45,7 +45,14 @@
@@ -1450,7 +1455,28 @@ index ba11a50e85..f3fa90431a 100644
      return type & flags;
  }
  
-@@ -163,17 +191,14 @@ bool AndroidContentFileEngine::isRelativePath() const
+@@ -139,9 +167,18 @@ QString AndroidContentFileEngine::fileName(FileName f) const
+         case AbsoluteName:
+         case AbsolutePathName:
+         case CanonicalName:
+-        case CanonicalPathName:
+             return m_file;
+-
++        case CanonicalPathName: {
++            const bool isTree = m_safFileManager.callMethod<jboolean>(
++                "isTreeUri", "(Ljava/lang/String;)Z",
++                QJNIObjectPrivate::fromString(m_file).object());
++
++            if (isTree) {
++                const int pos = m_file.lastIndexOf(QChar(QLatin1Char('/')));
++                return m_file.left(pos);
++            }
++            return m_file;
++        }
+         case BaseName: {
+             const int pos = m_resolvedName.lastIndexOf(QChar(QLatin1Char('/')));
+             return m_resolvedName.mid(pos);
+@@ -163,17 +200,14 @@ bool AndroidContentFileEngine::isRelativePath() const
  
  void AndroidContentFileEngine::setResolvedFileName(const QString& uri)
  {
@@ -1472,7 +1498,7 @@ index ba11a50e85..f3fa90431a 100644
      }
  }
  
-@@ -182,6 +207,14 @@ void AndroidContentFileEngine::setFileDescriptor(const int fd)
+@@ -182,6 +216,14 @@ void AndroidContentFileEngine::setFileDescriptor(const int fd)
      m_fd = fd;
  }
  

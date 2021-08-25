@@ -49,6 +49,7 @@
 #include <KoCompositeOp.h>
 #include <KoDockRegistry.h>
 #include <KoDockWidgetTitleBar.h>
+#include <KoFileDialog.h>
 #include <KoProperties.h>
 #include <KisResourceItemChooserSync.h>
 #include <KoSelection.h>
@@ -898,6 +899,24 @@ void KisViewManager::slotDocumentSaved()
     d->saveIncrementalBackup->setEnabled(true);
 }
 
+QString KisViewManager::canonicalPath()
+{
+#ifdef Q_OS_ANDROID
+    QString path = QFileInfo(document()->localFilePath()).canonicalPath();
+    // if the path is based on a document tree then a directory would be returned. So check if it exists and more
+    // importantly check if we have permissions
+    if (QDir(path).exists()) {
+        return path;
+    } else {
+        KoFileDialog dialog(nullptr, KoFileDialog::ImportDirectory, "OpenDirectory");
+        dialog.setDirectoryUrl(QUrl(document()->localFilePath()));
+        return dialog.filename();
+    }
+#else
+    return QFileInfo(document()->localFilePath()).canonicalPath();
+#endif
+}
+
 void KisViewManager::slotSaveIncremental()
 {
     if (!document()) return;
@@ -914,7 +933,8 @@ void KisViewManager::slotSaveIncremental()
     QString version = "000";
     QString newVersion;
     QString letter;
-    QString path = QFileInfo(document()->localFilePath()).canonicalPath();
+    QString path = canonicalPath();
+
     QString fileName = QFileInfo(document()->localFilePath()).fileName();
 
     // Find current version filenames
@@ -1019,7 +1039,7 @@ void KisViewManager::slotSaveIncrementalBackup()
     QString version = "000";
     QString newVersion;
     QString letter;
-    QString path = QFileInfo(document()->localFilePath()).canonicalPath();
+    QString path = canonicalPath();
     QString fileName = QFileInfo(document()->localFilePath()).fileName();
 
     // First, discover if working on a backup file, or a normal file

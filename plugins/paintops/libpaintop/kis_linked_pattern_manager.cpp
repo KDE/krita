@@ -31,6 +31,7 @@ struct KisLinkedPatternManager::Private {
         }
 
         QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
+
         QImage img;
         img.loadFromData(ba, "PNG");
 
@@ -65,6 +66,7 @@ KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigur
         md5sum = md5.toHex();
     }
 
+
     pattern = resourceSourceAdapter.resource(md5sum, QFileInfo(fileName).fileName(), name);
 
     return pattern;
@@ -73,7 +75,9 @@ KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigur
 KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     KoPatternSP pattern = tryFetchPattern(setting, resourcesInterface);
-    if (pattern) return pattern;
+    if (pattern) {
+        return pattern;
+    }
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
     // this resource will be added to the memory storage by KisResourceLocator

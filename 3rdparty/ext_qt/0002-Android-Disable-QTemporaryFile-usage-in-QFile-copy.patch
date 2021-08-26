@@ -1,0 +1,36 @@
+From 97865f2b7aeeb8c7734a58a36e1aa3aa20a937c9 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Thu, 26 Aug 2021 12:13:16 +0000
+Subject: [PATCH 2/2] Android: Disable QTemporaryFile usage in QFile::copy
+
+QTemporaryFile only works with certain types of file engine and
+Android's Content File engine is not one of them.
+---
+ src/corelib/io/qfile.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/corelib/io/qfile.cpp b/src/corelib/io/qfile.cpp
+index 1fb9af576c..1fe3be8b29 100644
+--- a/src/corelib/io/qfile.cpp
++++ b/src/corelib/io/qfile.cpp
+@@ -793,7 +793,7 @@ QFile::copy(const QString &newName)
+                 d->setError(QFile::CopyError, tr("Cannot open %1 for input").arg(d->fileName));
+             } else {
+                 QString fileTemplate = QLatin1String("%1/qt_temp.XXXXXX");
+-#ifdef QT_NO_TEMPORARYFILE
++#if defined(QT_NO_TEMPORARYFILE) || defined(Q_OS_ANDROID)
+                 QFile out(fileTemplate.arg(QFileInfo(newName).path()));
+                 if (!out.open(QIODevice::ReadWrite))
+                     error = true;
+@@ -843,7 +843,7 @@ QFile::copy(const QString &newName)
+                             d->setError(QFile::CopyError, tr("Cannot create %1 for output").arg(newName));
+                         }
+                     }
+-#ifdef QT_NO_TEMPORARYFILE
++#if defined(QT_NO_TEMPORARYFILE) || defined(Q_OS_ANDROID)
+                     if (error)
+                         out.remove();
+ #else
+-- 
+2.32.0
+

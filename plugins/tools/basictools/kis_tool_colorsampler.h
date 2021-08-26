@@ -68,6 +68,9 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
     void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
+    void activatePrimaryAction() override;
+    void deactivatePrimaryAction() override;
+
     void paint(QPainter &gc, const KoViewConverter &converter) override;
 
     bool toForeground() const;
@@ -76,6 +79,9 @@ Q_SIGNALS:
     void toForegroundChanged();
 
 protected:
+    bool isOutlineEnabled() const;
+    void setOutlineEnabled(bool enabled);
+
     void activate(const QSet<KoShape*> &) override;
     void deactivate() override;
 
@@ -101,6 +107,10 @@ private:
 
     bool m_isActivated {false};
     bool m_colorPreviewShowComparePlate {false};
+
+    bool m_isOutlineEnabled;
+    QPointF m_outlineDocPoint;
+
 
     QRectF m_oldColorPreviewBaseColorRect;
     QColor m_oldColorPreviewBaseColor;

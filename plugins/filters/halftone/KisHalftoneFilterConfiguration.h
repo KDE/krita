@@ -30,6 +30,7 @@ public:
     ~KisHalftoneFilterConfiguration() override;
 
     KisFilterConfigurationSP clone() const override;
+    KisFilterConfigurationSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const override;
 
     QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
     QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
@@ -101,6 +102,9 @@ public:
     void setForegroundOpacity(const QString &prefix, int newOpacity);
     void setBackgroundColor(const QString &prefix, const KoColor &newBackgroundColor);
     void setBackgroundOpacity(const QString &prefix, int newBackgroundOpacity);
+
+private:
+    mutable QHash<QString, KisFilterConfigurationSP> m_generatorConfigurationsCache;
 };
 
 #endif

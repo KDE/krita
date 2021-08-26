@@ -496,7 +496,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void finishExportInBackground();
-    void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, QString &errorMessage);
+    void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage);
     void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
     void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);

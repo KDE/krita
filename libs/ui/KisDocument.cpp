@@ -1193,7 +1193,7 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 }
 
 
-void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode status, QString &errorMessage)
+void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage)
 {
     KIS_ASSERT_RECOVER_RETURN(isSaving());
 
@@ -1202,12 +1202,14 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
         return;
     }
 
+    QString composedErrorMessage;
+
     if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
         d->backgroundSaveDocument->d->isAutosaving = false;
     }
 
     if (!d->backgroundSaveDocument->errorMessage().isEmpty()) {
-        errorMessage = errorMessage + "\n" + d->backgroundSaveDocument->errorMessage();
+        composedErrorMessage = errorMessage + "\n" + d->backgroundSaveDocument->errorMessage();
     }
 
     d->backgroundSaveDocument.take()->deleteLater();
@@ -1227,10 +1229,10 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
     KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3. Size: %4. MD5 Hash: %5")
                         .arg(job.filePath)
                         .arg(QString::fromLatin1(job.mimeType))
-                        .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK")
+                        .arg(!status.isOk() ? exportErrorToUserMessage(status, composedErrorMessage) : "OK")
                         .arg(fi.size()));
 
-    emit sigCompleteBackgroundSaving(job, status, errorMessage);
+    emit sigCompleteBackgroundSaving(job, status, composedErrorMessage);
 }
 
 void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument)

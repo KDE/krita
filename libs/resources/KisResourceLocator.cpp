@@ -179,7 +179,6 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 
 KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceType, const QString &filename)
 {
-
     storageLocation = makeStorageLocationAbsolute(storageLocation);
 
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);
@@ -418,9 +417,9 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     // And the database
     const bool result = KisResourceCacheDb::addResource(storage,
-                                           storage->timeStampForResource(resourceType, resource->filename()),
-                                           resource,
-                                           resourceType);
+                                                        storage->timeStampForResource(resourceType, resource->filename()),
+                                                        resource,
+                                                        resourceType);
     return result;
 }
 

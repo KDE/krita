@@ -84,6 +84,7 @@ bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName, c
 {
     // exact matches
     QString resourceName = _resourceName.toLower();
+
     if (m_d->resourceExactMatchesIncluded.count() > 0
             && !m_d->resourceExactMatchesIncluded.contains(resourceName)) {
         return false;

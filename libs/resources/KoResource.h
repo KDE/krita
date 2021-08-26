@@ -126,7 +126,7 @@ public:
     void setFilename(const QString& filename);
 
     /// @return the user-visible name of the resource
-    QString name() const;
+    virtual QString name() const;
     void setName(const QString& name);
 
     /// @return true if the resource is ready for use

@@ -1,4 +1,4 @@
-From bf5ca4d3bb2a00a185b4698d0f8e8cafb24ac567 Mon Sep 17 00:00:00 2001
+From 56f311cbafced6d96a5633aa40de2cb534a2c4af Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Thu, 19 Aug 2021 12:01:16 +0000
 Subject: [PATCH] Android: Rework Storage Access Framework
@@ -10,15 +10,15 @@ the files.
  mkspecs/features/java.prf                     |   2 +-
  src/android/jar/AndroidManifest.xml           |   1 -
  src/android/jar/jar.pro                       |   3 +
- .../qt5/android/CachedDocumentFile.java       | 187 +++++
+ .../qt5/android/CachedDocumentFile.java       | 206 +++++
  .../org/qtproject/qt5/android/QtNative.java   | 256 +-----
  .../org/qtproject/qt5/android/SAFFile.java    |  23 +
- .../qtproject/qt5/android/SAFFileManager.java | 743 ++++++++++++++++++
- .../android/androidcontentfileengine.cpp      | 104 ++-
- .../android/androidcontentfileengine.h        |   6 +
+ .../qtproject/qt5/android/SAFFileManager.java | 791 ++++++++++++++++++
+ .../android/androidcontentfileengine.cpp      | 256 ++++--
+ .../android/androidcontentfileengine.h        |  38 +-
  .../qandroidplatformfiledialoghelper.cpp      |   6 +
  .../android/qandroidplatformservices.cpp      |   6 +-
- 11 files changed, 1056 insertions(+), 281 deletions(-)
+ 11 files changed, 1287 insertions(+), 301 deletions(-)
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
@@ -62,10 +62,10 @@ index bda15a0a00..6a610c511d 100644
      $$PATHPREFIX/ExtractStyle.java \
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java b/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
 new file mode 100644
-index 0000000000..2658f4c25d
+index 0000000000..6210d856a0
 --- /dev/null
 +++ b/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
-@@ -0,0 +1,187 @@
+@@ -0,0 +1,206 @@
 +package org.qtproject.qt5.android;
 +
 +import android.content.ContentResolver;
@@ -79,12 +79,12 @@ index 0000000000..2658f4c25d
 +public class CachedDocumentFile {
 +
 +    private static final String TAG = "CachedDocumentFile";
-+    private final String name;
++    private String name;
 +    private final String mimeType;
 +    private final String documentId;
 +    // TODO(sh_zam): do something
 +    private long size;
-+    private final Uri uri;
++    private Uri uri;
 +    private final Context ctx;
 +    private Boolean exists = null;
 +    private Boolean writable = null;
@@ -125,7 +125,7 @@ index 0000000000..2658f4c25d
 +                        uri);
 +            }
 +        } catch (Exception e) {
-+            Log.e(TAG, "fromFileUri(): " + uri);
++            Log.e(TAG, "fromFileUri(): " + e);
 +        } finally {
 +            if (cursor != null)
 +                cursor.close();
@@ -145,6 +145,9 @@ index 0000000000..2658f4c25d
 +        return documentId;
 +    }
 +
++    /**
++     * @return document uri
++     */
 +    public Uri getUri() {
 +        return uri;
 +    }
@@ -159,6 +162,22 @@ index 0000000000..2658f4c25d
 +
 +    public long getSize() {
 +        return queryForLong(DocumentsContract.Document.COLUMN_SIZE, 0);
++    }
++
++    public boolean rename(String displayName) {
++        try {
++            final Uri newUri = DocumentsContract.renameDocument(
++                    ctx.getContentResolver(), uri, displayName);
++            if (newUri == null || newUri == uri) {
++                return false;
++            }
++            this.name = displayName;
++            this.uri = newUri;
++            return true;
++        } catch (Exception e) {
++            Log.e(TAG, "rename(): Rename failed: " + e);
++            return false;
++        }
 +    }
 +
 +    public boolean canWrite() {
@@ -589,10 +608,10 @@ index 0000000000..fd371bebc2
 +}
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
 new file mode 100644
-index 0000000000..a6cbb717f8
+index 0000000000..01570a6a1a
 --- /dev/null
 +++ b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
-@@ -0,0 +1,743 @@
+@@ -0,0 +1,791 @@
 +package org.qtproject.qt5.android;
 +
 +import android.annotation.SuppressLint;
@@ -611,7 +630,6 @@ index 0000000000..a6cbb717f8
 +import android.webkit.MimeTypeMap;
 +
 +import java.io.File;
-+import java.io.FileNotFoundException;
 +import java.io.IOException;
 +import java.util.ArrayList;
 +import java.util.HashMap;
@@ -683,6 +701,7 @@ index 0000000000..a6cbb717f8
 +
 +    private final FileError mError = new FileError();
 +    private List<UriPermission> mCachedPermissions;
++    private final ArrayList<Uri> mCachedListDocumentFiles = new ArrayList<>();
 +
 +    SAFFileManager(Context ctx) {
 +        mCtx = ctx;
@@ -935,7 +954,7 @@ index 0000000000..a6cbb717f8
 +    @SuppressWarnings("UnusedDeclaration")
 +    public boolean canWrite(String contentUrl) {
 +        final CachedDocumentFile file =
-+                getDocumentFileWithValidPermissions(contentUrl, "w");
++                getDocumentFileWithValidPermissions(contentUrl, "w", true);
 +
 +        if (file != null && file.canWrite()) {
 +            mError.unsetError();
@@ -1040,6 +1059,35 @@ index 0000000000..a6cbb717f8
 +        return deleteFile(file.getUri());
 +    }
 +
++    // Native usage
++    public String[] listFileNames(String contentUrl) {
++        final CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, "r");
++
++        if (file == null || !file.isDirectory()) {
++            return null;
++        }
++
++        List<CachedDocumentFile> files = listFiles(file.getUri());
++        String[] result = new String[files.size()];
++        for (int i = 0; i < files.size(); ++i) {
++            CachedDocumentFile docFile = files.get(i);
++            result[i] = docFile.getName();
++            mCachedDocumentFiles.put(docFile.getUri(), docFile);
++            mCachedListDocumentFiles.add(docFile.getUri());
++        }
++
++        return result;
++    }
++
++    // Native usage
++    void resetListCache() {
++        for (Uri uri : mCachedListDocumentFiles) {
++            mCachedDocumentFiles.remove(uri);
++        }
++        mCachedListDocumentFiles.clear();
++    }
++
 +    /**
 +     * A dumb heuristic method to remove the subdirectories if the parent directory
 +     * is removed.
@@ -1083,6 +1131,25 @@ index 0000000000..a6cbb717f8
 +    // Native usage
 +    public boolean isTreeUri(String contentUrl) {
 +        return isTreeUri(Uri.parse(contentUrl));
++    }
++
++    public boolean rename(String contentUrl, String displayName) {
++        final CachedDocumentFile file =
++                getDocumentFileWithValidPermissions(contentUrl, "rw", true);
++        if (file == null) {
++            return false;
++        }
++
++        final Uri oldUri = file.getUri();
++        if (file.rename(displayName)) {
++            mCachedDocumentFiles.remove(oldUri);
++            invalidateCachedDocuments(oldUri);
++            mCachedDocumentFiles.put(file.getUri(), file);
++            resetCachedPermission();
++            return true;
++        } else {
++            return false;
++        }
 +    }
 +
 +    // Native usage
@@ -1327,7 +1394,7 @@ index 0000000000..a6cbb717f8
 +                    documentUri);
 +        } catch (Exception e) {
 +            mError.setUnknownError();
-+            Log.e(TAG, "Error creating a file: uri = " + documentUri);
++            Log.e(TAG, "Error deleting a file: uri = " + documentUri);
 +            return false;
 +        }
 +    }
@@ -1337,10 +1404,10 @@ index 0000000000..a6cbb717f8
 +    }
 +}
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
-index ba11a50e85..a64360c44f 100644
+index ba11a50e85..7e5ba02a43 100644
 --- a/src/plugins/platforms/android/androidcontentfileengine.cpp
 +++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
-@@ -45,7 +45,14 @@
+@@ -45,10 +45,17 @@
  #include <QDebug>
  
  AndroidContentFileEngine::AndroidContentFileEngine(const QString &f)
@@ -1354,8 +1421,12 @@ index ba11a50e85..a64360c44f 100644
 +    , m_safError(m_safFileManager.getObjectField("mError",
 +                                                 "Lorg/qtproject/qt5/android/FileError;"))
  {
++    m_resolvedName = getResolvedFileName(f);
      setFileName(f);
-     setResolvedFileName(f);
+-    setResolvedFileName(f);
+ }
+ 
+ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
 @@ -74,15 +81,13 @@ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
          openModeStr += QLatin1Char('a');
      }
@@ -1417,7 +1488,7 @@ index ba11a50e85..a64360c44f 100644
      return (qint64)size;
  }
  
-@@ -110,22 +132,28 @@ AndroidContentFileEngine::FileFlags AndroidContentFileEngine::fileFlags(FileFlag
+@@ -110,44 +132,65 @@ AndroidContentFileEngine::FileFlags AndroidContentFileEngine::fileFlags(FileFlag
  {
      const FileFlags commonFlags(ReadOwnerPerm|ReadUserPerm|ReadGroupPerm|ReadOtherPerm|ExistsFlag);
      FileFlags flags;
@@ -1455,57 +1526,143 @@ index ba11a50e85..a64360c44f 100644
      return type & flags;
  }
  
-@@ -139,9 +167,18 @@ QString AndroidContentFileEngine::fileName(FileName f) const
-         case AbsoluteName:
-         case AbsolutePathName:
-         case CanonicalName:
+ QString AndroidContentFileEngine::fileName(FileName f) const
+ {
+     switch (f) {
+-        case DefaultName: {
++    case DefaultName: {
++        // the file isn't created here, so the resolved filename is empty
++        if (m_resolvedName.isEmpty()) {
++            const int pos = m_file.lastIndexOf(QChar(QLatin1Char('/')));
++            return m_file.mid(pos + 1);
++        } else {
+             return m_resolvedName;
+         }
+-        case PathName:
+-        case AbsoluteName:
+-        case AbsolutePathName:
+-        case CanonicalName:
 -        case CanonicalPathName:
-             return m_file;
+-            return m_file;
 -
-+        case CanonicalPathName: {
-+            const bool isTree = m_safFileManager.callMethod<jboolean>(
-+                "isTreeUri", "(Ljava/lang/String;)Z",
-+                QJNIObjectPrivate::fromString(m_file).object());
+-        case BaseName: {
+-            const int pos = m_resolvedName.lastIndexOf(QChar(QLatin1Char('/')));
+-            return m_resolvedName.mid(pos);
++    }
++    case PathName:
++    case AbsoluteName:
++    case AbsolutePathName:
++    case CanonicalName:
++        return m_file;
++    case CanonicalPathName: {
++        const bool isTree = m_safFileManager.callMethod<jboolean>(
++            "isTreeUri", "(Ljava/lang/String;)Z",
++            QJNIObjectPrivate::fromString(m_file).object());
 +
-+            if (isTree) {
-+                const int pos = m_file.lastIndexOf(QChar(QLatin1Char('/')));
-+                return m_file.left(pos);
-+            }
-+            return m_file;
-+        }
-         case BaseName: {
-             const int pos = m_resolvedName.lastIndexOf(QChar(QLatin1Char('/')));
-             return m_resolvedName.mid(pos);
-@@ -163,17 +200,14 @@ bool AndroidContentFileEngine::isRelativePath() const
++        if (isTree) {
++            const int pos = m_file.lastIndexOf(QChar(QLatin1Char('/')));
++            return m_file.left(pos);
+         }
+-        default:
+-            return QString();
++        return m_file;
++    }
++    case BaseName: {
++        const int pos = m_resolvedName.lastIndexOf(QChar(QLatin1Char('/')));
++        return m_resolvedName.mid(pos);
++    }
++    default:
++        return QString();
+     }
+ }
  
- void AndroidContentFileEngine::setResolvedFileName(const QString& uri)
+@@ -161,32 +204,87 @@ bool AndroidContentFileEngine::isRelativePath() const
+     }
+ }
+ 
+-void AndroidContentFileEngine::setResolvedFileName(const QString& uri)
++bool AndroidContentFileEngine::rename(const QString &newName)
  {
 -    QJNIObjectPrivate resolvedName = QJNIObjectPrivate::callStaticObjectMethod(
 -        "org/qtproject/qt5/android/QtNative",
 -        "getFileNameFromUri",
 -        "(Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;",
 -        QtAndroidPrivate::context(),
+-        QJNIObjectPrivate::fromString(uri).object());
++    auto renameSaf = [this](QString newName) -> bool {
++        return m_safFileManager.callMethod<jboolean>(
++            "rename", "(Ljava/lang/String;Ljava/lang/String;)Z",
++            QJNIObjectPrivate::fromString(m_file).object(),
++            QJNIObjectPrivate::fromString(newName).object());
++    };
++
++    // if the file doesn't have scheme it means the newName is only the fileName part
++    if (!newName.startsWith("content://")) {
++        return renameSaf(newName);
++    }
++
++    auto getPos = [](QString file) {
++        int posDecoded = file.lastIndexOf(QLatin1String("/"));
++        int posEncoded = file.lastIndexOf(QLatin1String("%2F"));
++        return posEncoded > posDecoded ? posEncoded : posDecoded;
++    };
++
++    const QString parent = m_file.left(getPos(m_file));
++
++    if (newName.contains(parent)) {
++        const int pos = getPos(newName);
++        const QString displayName = newName.mid(pos + 1);
++
++        return renameSaf(displayName);
++    }
++
++    m_resolvedName = getResolvedFileName(m_file);
++    return false;
++}
++
++bool AndroidContentFileEngine::remove()
++{
++    return m_safFileManager.callMethod<jboolean>(
++        "delete", "(Ljava/lang/String;)Z",
++        QJNIObjectPrivate::fromString(m_file).object());
++}
++
++QString AndroidContentFileEngine::getResolvedFileName(const QString &path) const
++{
 +    QJNIObjectPrivate resolvedName = m_safFileManager.callObjectMethod(
 +        "getFileName", "(Ljava/lang/String;)Ljava/lang/String;",
-         QJNIObjectPrivate::fromString(uri).object());
++        QJNIObjectPrivate::fromString(path).object());
  
-+    setErrorFromSAF();
-+
      if (resolvedName.isValid()) {
-         m_resolvedName = resolvedName.toString();
+-        m_resolvedName = resolvedName.toString();
 -    } else {
 -        qWarning("setResolvedFileName: Couldn't resolve the URI");
++        return resolvedName.toString();
      }
++    return QString();
  }
  
-@@ -182,6 +216,14 @@ void AndroidContentFileEngine::setFileDescriptor(const int fd)
-     m_fd = fd;
+-void AndroidContentFileEngine::setFileDescriptor(const int fd)
++QAbstractFileEngine::Iterator *
++AndroidContentFileEngine::beginEntryList(QDir::Filters filters,
++                                         const QStringList &filterNames)
+ {
+-    m_fd = fd;
++    return new AndroidContentFileEngineIterator(m_safFileManager, filters, filterNames);
  }
  
++QAbstractFileEngine::Iterator *AndroidContentFileEngine::endEntryList()
++{
++    return nullptr;
++}
++
++void AndroidContentFileEngine::setFileDescriptor(const int fd) { m_fd = fd; }
++
 +void AndroidContentFileEngine::setErrorFromSAF()
 +{
 +    auto error = m_safError.callMethod<jint>("getError");
-+    auto errorString = m_safError.callObjectMethod("getErrorString", "()Ljava/lang/String;");
++    auto errorString =
++        m_safError.callObjectMethod("getErrorString", "()Ljava/lang/String;");
 +    if (errorString.isValid()) {
 +        setError(static_cast<QFileDevice::FileError>(error), errorString.toString());
 +    }
@@ -1513,19 +1670,92 @@ index ba11a50e85..a64360c44f 100644
  
  AndroidContentFileEngineHandler::AndroidContentFileEngineHandler() = default;
  AndroidContentFileEngineHandler::~AndroidContentFileEngineHandler() = default;
+ 
+-QAbstractFileEngine* AndroidContentFileEngineHandler::create(const QString &fileName) const
++QAbstractFileEngine *
++AndroidContentFileEngineHandler::create(const QString &fileName) const
+ {
+     if (!fileName.startsWith(QLatin1String("content"))) {
+         return nullptr;
+@@ -194,3 +292,63 @@ QAbstractFileEngine* AndroidContentFileEngineHandler::create(const QString &file
+ 
+     return new AndroidContentFileEngine(fileName);
+ }
++
++AndroidContentFileEngineIterator::AndroidContentFileEngineIterator(
++    QJNIObjectPrivate safFileManager, QDir::Filters filters,
++    const QStringList &filterNames)
++    : QAbstractFileEngineIterator(filters, filterNames)
++    , m_safFileManager(safFileManager)
++{
++}
++
++AndroidContentFileEngineIterator::~AndroidContentFileEngineIterator()
++{
++    m_safFileManager.callMethod<void>("resetListCache");
++}
++
++QString AndroidContentFileEngineIterator::next()
++{
++    if (!hasNext()) {
++        return QString();
++    }
++    m_index++;
++
++    // just like it is in QFSFileEngineIterator
++    return currentFilePath();
++}
++
++bool AndroidContentFileEngineIterator::hasNext() const
++{
++    if (m_index == -1) {
++        fetchEntries();
++        m_index = 0;
++    }
++    return m_index < m_entries.size();
++}
++
++QString AndroidContentFileEngineIterator::currentFileName() const
++{
++    if (!hasNext()) {
++        return QString();
++    }
++    return m_entries.at(m_index);
++}
++
++void AndroidContentFileEngineIterator::fetchEntries() const
++{
++    QJNIObjectPrivate fileNames = m_safFileManager.callObjectMethod(
++        "listFileNames", "(Ljava/lang/String;)[Ljava/lang/String;",
++        QJNIObjectPrivate::fromString(path()).object());
++
++    if (!fileNames.isValid()) {
++        return;
++    }
++
++    QJNIEnvironmentPrivate env;
++    const jsize length = env->GetArrayLength(static_cast<jarray>(fileNames.object()));
++    for (int i = 0; i != length; ++i) {
++        QJNIObjectPrivate elem(
++            env->GetObjectArrayElement(static_cast<jobjectArray>(fileNames.object()), i));
++        m_entries << elem.toString();
++    }
++}
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.h b/src/plugins/platforms/android/androidcontentfileengine.h
-index 6769352ffd..8309c14430 100644
+index 6769352ffd..52585e3bf9 100644
 --- a/src/plugins/platforms/android/androidcontentfileengine.h
 +++ b/src/plugins/platforms/android/androidcontentfileengine.h
-@@ -41,6 +41,7 @@
+@@ -41,6 +41,9 @@
  #define ANDROIDCONTENTFILEENGINE_H
  
  #include <private/qfsfileengine_p.h>
 +#include <private/qjni_p.h>
++
++class AndroidContentFileEngineIterator;
  
  class AndroidContentFileEngine : public QFSFileEngine
  {
-@@ -48,6 +49,7 @@ public:
+@@ -48,21 +51,31 @@ public:
      AndroidContentFileEngine(const QString &fileName);
      bool open(QIODevice::OpenMode openMode) override;
      bool close() override;
@@ -1533,7 +1763,18 @@ index 6769352ffd..8309c14430 100644
      qint64 size() const override;
      FileFlags fileFlags(FileFlags type = FileInfoAll) const override;
      QString fileName(FileName file = DefaultName) const override;
-@@ -59,10 +61,14 @@ public:
+     bool isRelativePath() const override;
++    bool rename(const QString &newName) override;
++    bool remove() override;
++
++    QString getResolvedFileName(const QString &file) const;
+ 
+-    /// Resolves the URI to the actual filename
+-    void setResolvedFileName(const QString& uri);
++    QAbstractFileEngine::Iterator *
++    beginEntryList(QDir::Filters filters, const QStringList &filterNames) override;
++    QAbstractFileEngine::Iterator *endEntryList() override;
+ 
  private:
      void setFileDescriptor(const int fd);
  
@@ -1548,6 +1789,32 @@ index 6769352ffd..8309c14430 100644
  };
  
  class AndroidContentFileEngineHandler : public QAbstractFileEngineHandler
+@@ -73,4 +86,25 @@ public:
+     QAbstractFileEngine *create(const QString &fileName) const override;
+ };
+ 
++class AndroidContentFileEngineIterator : public QAbstractFileEngineIterator {
++public:
++    AndroidContentFileEngineIterator(QJNIObjectPrivate safFileManager,
++                                     QDir::Filters filters,
++                                     const QStringList &filterNames);
++    ~AndroidContentFileEngineIterator();
++
++    QString next() override;
++    bool hasNext() const override;
++    QString currentFileName() const override;
++
++private:
++    void fetchEntries() const;
++
++private:
++
++    mutable QStringList m_entries;
++    mutable int m_index = -1;
++    QJNIObjectPrivate m_safFileManager;
++};
++
+ #endif // ANDROIDCONTENTFILEENGINE_H
 diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
 index 00b5b0887c..e7068d369a 100644
 --- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp

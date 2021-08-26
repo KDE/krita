@@ -55,6 +55,7 @@ KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
     : KoResource(fileName)
     , d(new Private(this))
 {
+    setName(name().replace("_", " "));
 }
 
 KisPaintOpPreset::~KisPaintOpPreset()
@@ -93,6 +94,11 @@ KoID KisPaintOpPreset::paintOp() const
 {
     Q_ASSERT(d->settings);
     return KoID(d->settings->getString("paintop"));
+}
+
+QString KisPaintOpPreset::name() const
+{
+    return KoResource::name().replace("_", " ");
 }
 
 void KisPaintOpPreset::setOptionsWidget(KisPaintOpConfigWidget* widget)
@@ -224,7 +230,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     setValid(d->settings->isValid());
 
-    QStringList requiredBrushes;
+    QSet<QString> requiredBrushes;
     Q_FOREACH(const QString str, d->settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag)) {
         if (!str.isEmpty()) {
             requiredBrushes << str;
@@ -234,7 +240,16 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     if (!requiredBrush.isEmpty()) {
         requiredBrushes << requiredBrush;
     }
-    addMetaData("dependent_resources_filenames", requiredBrushes);
+    if (!requiredBrushes.isEmpty()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        QStringList resources(requiredBrushes.constBegin(), requiredBrushes.constEnd());
+#else
+        QStringList resources = requiredBrushes.toList();
+#endif
+        addMetaData("dependent_resources_filenames", resources);
+
+    }
+
 
     setImage(img);
 
@@ -476,7 +491,6 @@ QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP gl
         resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
 
     }
-
     return resources;
 }
 
@@ -498,7 +512,6 @@ QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP 
         resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
 
     }
-
     return resources;
 }
 

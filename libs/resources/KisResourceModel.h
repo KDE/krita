@@ -203,9 +203,12 @@ public:
      * a path to the storage, and if there are resources with the same filename
      * in several active storages, only one resource is returned.
      *
+     * @param fileName the filename we're looking for
+     * @param checkDependentResources: check whether we should try to find a resource embedded
+     * in a resource that's not been loaded yet in the metadata table.
      * @return a resource if one is found, or 0 if none are found
      */
-    KoResourceSP resourceForFilename(QString fileName) const;
+    KoResourceSP resourceForFilename(QString fileName, bool checkDependentResources = false) const;
 
     /**
      * resourceForName returns the first resource with the given name that

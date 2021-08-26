@@ -143,7 +143,7 @@ public:
     /**
      * \see KisRequiredResourcesOperators::cloneWithResourcesSnapshot
      */
-    KisFilterConfigurationSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
+    virtual KisFilterConfigurationSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
 
     /**
      * Loads all the required resources either from \p globalResourcesInterface or

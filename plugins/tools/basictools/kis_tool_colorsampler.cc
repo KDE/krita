@@ -61,14 +61,14 @@ void KisToolColorSampler::paint(QPainter &gc, const KoViewConverter &converter)
     gc.fillRect(baseColorRect, m_oldColorPreviewBaseColor);
 
 
-    //canvas()->updateCanvas(baseColorRect);
+    canvas()->updateCanvas(baseColorRect);
 }
 
 void KisToolColorSampler::activate(const QSet<KoShape*> &shapes)
 {
     m_isActivated = true;
     m_config->load();
-    m_oldColorPreviewBaseColor = canvas()->resourceManager()->foregroundColor().toQColor();
+
 
     updateOptionWidget();
 
@@ -190,7 +190,6 @@ void KisToolColorSampler::beginPrimaryAction(KoPointerEvent *event)
 void KisToolColorSampler::mouseMoveEvent(KoPointerEvent *event){
     KisTool::mouseMoveEvent(event);
     requestUpdateOutline(event->point, event);
-
 }
 
 void KisToolColorSampler::continuePrimaryAction(KoPointerEvent *event)
@@ -233,43 +232,74 @@ void KisToolColorSampler::endPrimaryAction(KoPointerEvent *event)
     m_oldColorPreviewBaseColor = canvas()->resourceManager()->foregroundColor().toQColor();
 
     requestUpdateOutline(event->point, event);
-    
+
+}
+void KisToolColorSampler::activatePrimaryAction()
+{
+    setOutlineEnabled(true);
+    m_oldColorPreviewBaseColor = canvas()->resourceManager()->foregroundColor().toQColor();
+
+    KisTool::activatePrimaryAction();
+}
+
+void KisToolColorSampler::deactivatePrimaryAction()
+{
+    setOutlineEnabled(false);
+    KisTool::deactivatePrimaryAction();
+
+}
+
+bool KisToolColorSampler::isOutlineEnabled() const
+{
+    return m_isOutlineEnabled;
+}
+
+void KisToolColorSampler::setOutlineEnabled(bool value)
+{
+    m_isOutlineEnabled = value;
+    requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 void KisToolColorSampler::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    KisConfig cfg(true);
+    if (isOutlineEnabled()){
+        KisConfig cfg(true);
+        QRectF colorPreviewDocRect;
+        QRectF colorPreviewBaseColorDocRect;
+        QRectF colorPreviewDocUpdateRect;
+        colorPreviewDocRect = cfg.colorPreviewRect();
 
-    QRectF colorPreviewDocRect;
-    QRectF colorPreviewBaseColorDocRect;
-    QRectF colorPreviewDocUpdateRect;
-    colorPreviewDocRect = cfg.colorPreviewRect();
+        qreal zoomX;
+        qreal zoomY;
+        canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+        qreal xoffset = 2.0/zoomX;
+        qreal yoffset = 2.0/zoomY;
 
-    qreal zoomX;
-    qreal zoomY;
-    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
-    qreal xoffset = 2.0/zoomX;
-    qreal yoffset = 2.0/zoomY;
+        m_outlineDocPoint = outlineDocPoint;
 
+        colorPreviewBaseColorDocRect = canvas()->viewConverter()->viewToDocument(colorPreviewDocRect);
+        colorPreviewDocUpdateRect = colorPreviewBaseColorDocRect.translated(outlineDocPoint).adjusted(-xoffset,-yoffset,xoffset,yoffset);
 
-    colorPreviewBaseColorDocRect = canvas()->viewConverter()->viewToDocument(colorPreviewDocRect);
-    colorPreviewDocUpdateRect = colorPreviewBaseColorDocRect.translated(outlineDocPoint).adjusted(-xoffset,-yoffset,xoffset,yoffset);
+        const QRectF sampledColorPreviewColorRect =
+            m_colorPreviewShowComparePlate ?
+                colorPreviewBaseColorDocRect.translated(outlineDocPoint):
+                QRectF();
 
-    const QRectF sampledColorPreviewColorRect =
-        m_colorPreviewShowComparePlate ?
-            colorPreviewBaseColorDocRect.translated(outlineDocPoint):
-            QRectF();
+        const QRectF oldColorPreviewBaseColorViewRect =
+            m_colorPreviewShowComparePlate ?
+                colorPreviewBaseColorDocRect.translated(outlineDocPoint).translated(colorPreviewBaseColorDocRect.width(), 0):
+                colorPreviewBaseColorDocRect.translated(outlineDocPoint);
 
-    const QRectF oldColorPreviewBaseColorViewRect =
-        m_colorPreviewShowComparePlate ?
-            colorPreviewBaseColorDocRect.translated(outlineDocPoint).translated(colorPreviewBaseColorDocRect.width(), 0):
-            colorPreviewBaseColorDocRect.translated(outlineDocPoint);
+        canvas()->updateCanvas(oldColorPreviewBaseColorViewRect);
 
-    canvas()->updateCanvas(oldColorPreviewBaseColorViewRect);
+        m_oldColorPreviewBaseColorRect = oldColorPreviewBaseColorViewRect;
+        m_sampledColorPreviewUpdateRect = sampledColorPreviewColorRect;
+    } else {
+        m_oldColorPreviewBaseColorRect = QRect();
+        m_sampledColorPreviewUpdateRect = QRect();
+    }
 
-    m_oldColorPreviewBaseColorRect = oldColorPreviewBaseColorViewRect;
-    m_sampledColorPreviewUpdateRect = sampledColorPreviewColorRect;
 }
 
 

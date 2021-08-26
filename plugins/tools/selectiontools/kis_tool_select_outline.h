@@ -31,8 +31,8 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    bool primaryActionSupportsHiResEvents() const;
-    bool alternateActionSupportsHiResEvents(KisTool::AlternateAction action) const;
+    bool primaryActionSupportsHiResEvents() const override;
+    bool alternateActionSupportsHiResEvents(KisTool::AlternateAction action) const override;
 
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;

@@ -41,7 +41,7 @@ public:
 
     void clear();
 
-    QString name() const;
+    QString name() const override;
     void setName(const QString &value);
 
     QUuid uuid() const;

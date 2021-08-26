@@ -12,6 +12,7 @@ Name[eu]=Zirriborroa
 Name[fi]=Luonnostelu
 Name[fr]=Croquis
 Name[hi]=रेखा-चित्र
+Name[ia]=Sketch
 Name[it]=Schizzo
 Name[ko]=스케치
 Name[nl]=Schets

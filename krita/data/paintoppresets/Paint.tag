@@ -12,6 +12,7 @@ Name[eu]=Pintura
 Name[fi]=Maalaus
 Name[fr]=Peinture
 Name[hi]=पेंट
+Name[ia]=Pictura
 Name[it]=Pittura
 Name[ko]=페인트
 Name[nl]=Verf

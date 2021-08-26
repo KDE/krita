@@ -12,6 +12,7 @@ Name[eu]=FX
 Name[fi]=Tehosteet
 Name[fr]=FX
 Name[hi]=एफएक्स
+Name[ia]=FX
 Name[it]=FX
 Name[ko]=FX
 Name[nl]=FX

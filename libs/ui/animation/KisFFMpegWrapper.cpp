@@ -405,8 +405,9 @@ QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const 
     if (!QFile::exists(processPath)) return ffmpegInfo;
     
     dbgFile << "Found process at:" << processPath;
+    const int ffmpegQueryTimeout = 5000;
     
-    QString processVersion = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-version",1000);
+    QString processVersion = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-version", ffmpegQueryTimeout);
 
     if (!processVersion.isEmpty()) {
         
@@ -420,7 +421,7 @@ QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const 
         
         if (!includeProcessInfo || !ffmpegInfo["enabled"].toBool()) return ffmpegInfo;
         
-        QString processCodecs = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-codecs",1000);
+        QString processCodecs = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-codecs", ffmpegQueryTimeout);
 
         QRegularExpression ffmpegCodecsRX("(D|\\.)(E|\\.)....\\s+(.+?)\\s+");
         QRegularExpressionMatchIterator codecsMatchList = ffmpegCodecsRX.globalMatch(processCodecs);

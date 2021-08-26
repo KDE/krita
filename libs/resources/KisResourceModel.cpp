@@ -18,8 +18,9 @@
 #include <KisResourceModelProvider.h>
 #include <KisStorageModel.h>
 #include <KisTagModel.h>
-
+#include <KisResourceTypes.h>
 #include <kis_debug.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "KisResourceQueryMapper.h"
 
@@ -259,10 +260,8 @@ bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &fil
     return false;
 }
 
-KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename) const
+KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename, bool checkDependentResources) const
 {
-    KoResourceSP resource = 0;
-
     QSqlQuery q;
     bool r = q.prepare("SELECT resources.id AS id\n"
                        "FROM   resources\n"
@@ -283,9 +282,44 @@ KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename) const
 
     if (q.first()) {
         int id = q.value("id").toInt();
-        resource = KisResourceLocator::instance()->resourceForId(id);
+        return KisResourceLocator::instance()->resourceForId(id);
+
     }
-    return resource;
+    else if (checkDependentResources) {
+        // Check whether the requested resource was embedded in another resource, which has not been loaded so the embedded resource is not available.
+        r = q.prepare("SELECT value"
+                      ",      foreign_id\n"
+                      "FROM   metadata\n"
+                      "WHERE  key = \"dependent_resources_filenames\"\n"
+                      "AND    table_name = \"resources\"\n");
+
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not execute metadata query" << q.lastError();
+        }
+
+        while (q.next()) {
+            QByteArray ba = q.value(0).toByteArray();
+            int id = q.value(1).toInt();
+            if (!ba.isEmpty()) {
+                QDataStream ds(QByteArray::fromBase64(ba));
+                QVariant value;
+                ds >> value;
+                QStringList l = value.toStringList();
+                if (l.contains(filename)) {
+                    // This will load the embedded resource and make it available
+                    KoResourceSP res = KisResourceLocator::instance()->resourceForId(id);
+                    Q_FOREACH(KoResourceSP embeddedRes, res->embeddedResources(KisGlobalResourcesInterface::instance())) {
+                        // This is the best we can do because Krita4 only checked filename and resource type, too.
+                        if (embeddedRes->filename() == filename && embeddedRes->resourceType().first == d->resourceType) {
+                            return embeddedRes;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return nullptr;
 }
 
 KoResourceSP KisAllResourcesModel::resourceForName(const QString &name) const
@@ -662,7 +696,7 @@ bool KisResourceModel::addResource(KoResourceSP resource, const QString &storage
 
     KoResourceSP res = source->resourceForMD5(resource->md5Sum());
     if (!res) {
-        res = source->resourceForFilename(resource->filename());
+        res = source->resourceForFilename(resource->filename(), false);
     }
     if (!res) {
         res = source->resourceForName(resource->name());

@@ -94,7 +94,7 @@ void LogDockerDock::clearLog()
 void LogDockerDock::saveLog()
 {
     KoFileDialog fileDialog(this, KoFileDialog::SaveFile, "logfile");
-    fileDialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "/" + QString("krita_%1.log").arg(QDateTime::currentDateTime().toString()));
+    fileDialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "/" + QString("krita_%1.log").arg(QDateTime::currentDateTime().toString("yyyy-MM-ddThh")));
     QString filename = fileDialog.filename();
     if (!filename.isEmpty()) {
         QFile f(filename);

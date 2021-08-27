@@ -309,10 +309,8 @@ void KisZoomManager::setRulersPixelMultiple2(bool enabled)
 
 void KisZoomManager::slotUpdateGuiAfterZoomChange()
 {
-    const qreal effectiveZoom =
-        m_view->canvasBase()->coordinatesConverter()->effectiveZoom();
-
-    const qreal humanZoom = effectiveZoom * 100.0;
+    const qreal zoomValue = m_view->canvasBase()->coordinatesConverter()->zoom();
+    const qreal humanZoom = zoomValue * 100.0;
 
     // XXX: KOMVC -- this is very irritating in MDI mode
 
@@ -325,8 +323,6 @@ void KisZoomManager::slotUpdateGuiAfterZoomChange()
     }
 
     updateCurrentZoomResource();
-
-    m_view->canvasBase()->resourceManager()->setResource(KoCanvasResource::EffectiveZoom, effectiveZoom);
 }
 
 void KisZoomManager::setMinMaxZoom()

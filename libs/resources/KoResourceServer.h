@@ -140,7 +140,7 @@ public:
             qDebug().noquote() << kisBacktrace();
         }
 
-        if (!resource->valid()) {
+        if (!resource || !resource->valid()) {
             warnResource << "Tried to add an invalid resource!";
             return false;
         }

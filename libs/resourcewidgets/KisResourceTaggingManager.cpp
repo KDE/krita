@@ -73,6 +73,8 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 
     connect(d->tagFilter, SIGNAL(filterByTagChanged(bool)), this, SLOT(slotFilterByTagChanged(bool)));
     connect(d->tagFilter, SIGNAL(filterTextChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
+
+    connect(d->tagChooser, SIGNAL(sigTagChosen(KisTagSP)), d->tagFilter, SLOT(clear()));
 }
 
 KisResourceTaggingManager::~KisResourceTaggingManager()

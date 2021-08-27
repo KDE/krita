@@ -113,6 +113,7 @@ private:
 
     void calculateRotationSnapAreas();
 
+    QPoint m_mirrorPos {};
     int m_maxPresetSlotCount {10};
     int m_presetSlotCount {10};
     int m_hoveredPreset {0};
@@ -183,6 +184,8 @@ public Q_SLOTS:
     void slotUpdateIcons();
 
 private Q_SLOTS:
+    void slotSetMirrorPos();
+    void slotRemoveMirrorPos();
     void slotDisplayConfigurationChanged();
     void slotConfigurationChanged();
     void slotExternalFgColorChanged(const KoColor &color);

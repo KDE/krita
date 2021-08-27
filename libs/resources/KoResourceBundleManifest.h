@@ -67,7 +67,7 @@ public:
      * @return the element corresponding to the created tag.
      */
     void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QString &md5);
-
+    void removeResource(ResourceReference &resource);
 
     QStringList types() const;
 

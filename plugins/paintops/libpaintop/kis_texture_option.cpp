@@ -162,7 +162,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface());
 
     if (!pattern) {
-        pattern =m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
+        pattern = m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
     }
 
     m_textureOptions->textureSelectorWidget->setCurrentPattern(pattern);

@@ -372,12 +372,14 @@ KisImportExportErrorCode KisTIFFConverter::decode(const QString &filename)
     }
 
     if (!m_photoshopBlockParsed) {
+        // Photoshop images only have one IFD plus the layer blob
+        // Ward off inconsistencies by blocking future attempts to parse them
+        m_photoshopBlockParsed = true;
         while (TIFFReadDirectory(image)) {
             result = readTIFFDirectory(image);
             if (!result.isOk()) {
                 return result;
             }
-            m_photoshopBlockParsed = true;
         }
     }
     // Freeing memory
@@ -526,11 +528,6 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
     // if it succeeds, divert and load as PSD
 
     if (!m_photoshopBlockParsed) {
-        // Photoshop images only have one IFD plus the layer blob
-        // Ward off inconsistencies by blocking future attempts to parse them
-
-        m_photoshopBlockParsed = true;
-
         QBuffer photoshopLayerData;
 
         KisTiffPsdLayerRecord photoshopLayerRecord(TIFFIsBigEndian(image),
@@ -685,7 +682,7 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromTiff(TIFF *image, KisTif
             m_image->resizeImage(QRect(0, 0, newwidth, newheight));
         }
     }
-    KisPaintLayer *layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), quint8_MAX);
+    KisPaintLayer *layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), quint8_MAX, cs);
     tdata_t buf = 0;
     tdata_t *ps_buf = 0; // used only for planar configuration separated
     KisBufferStreamBase *tiffstream;
@@ -1200,6 +1197,8 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromPsd(const KisTiffPsdLaye
 
     // Only assign the image if the parsing was successful (for fallback purposes)
     this->m_image = m_image;
+    // Photoshop images only have one IFD plus the layer blob
+    // Ward off inconsistencies by blocking future attempts to parse them
     this->m_photoshopBlockParsed = true;
 
     return ImportExportCodes::OK;

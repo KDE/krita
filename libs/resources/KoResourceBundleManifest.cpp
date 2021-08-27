@@ -175,6 +175,15 @@ void KoResourceBundleManifest::addResource(const QString &fileTypeName, const QS
     m_resources[fileTypeName].insert(fileName, ref);
 }
 
+void KoResourceBundleManifest::removeResource(KoResourceBundleManifest::ResourceReference &resource)
+{
+    if (m_resources.contains(resource.fileTypeName)) {
+        if (m_resources[resource.fileTypeName].contains(resource.resourcePath)) {
+            m_resources[resource.fileTypeName].take(resource.resourcePath);
+        }
+    }
+}
+
 QStringList KoResourceBundleManifest::types() const
 {
     return m_resources.keys();

@@ -37,9 +37,13 @@ void KisMirrorManager::setup(KActionCollection * collection)
     m_mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_mirrorCanvas->setChecked(false);
     m_mirrorCanvas->setIcon(KisIconUtils::loadIcon("mirror-view"));
-
     collection->addAction("mirror_canvas", m_mirrorCanvas);
     collection->setDefaultShortcut(m_mirrorCanvas, QKeySequence(Qt::Key_M));
+    
+    m_mirrorCanvasAroundCursor = new KToggleAction(i18n("Mirror View Around Cursor"), this);
+    m_mirrorCanvasAroundCursor->setChecked(false);
+    m_mirrorCanvasAroundCursor->setIcon(KisIconUtils::loadIcon("mirror-view-around-cursor"));
+    collection->addAction("mirror_canvas_around_cursor", m_mirrorCanvasAroundCursor);
 
     updateAction();
 }
@@ -48,6 +52,7 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
 {
     if (m_imageView) {
         m_mirrorCanvas->disconnect();
+        m_mirrorCanvasAroundCursor->disconnect();
         m_imageView->document()->disconnect(this);
 
         KisMirrorAxisSP canvasDecoration = this->decoration();
@@ -60,6 +65,11 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
 
     if (m_imageView)  {
         connect(m_mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvas(bool)));
+        connect(m_mirrorCanvasAroundCursor, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvasAroundCursor(bool)));
+        
+        connect(m_mirrorCanvas, SIGNAL(toggled(bool)), this, SLOT(slotSyncActionStates(bool)));
+        connect(m_mirrorCanvasAroundCursor, SIGNAL(toggled(bool)), this, SLOT(slotSyncActionStates(bool)));
+        
         connect(m_imageView->document(), SIGNAL(sigMirrorAxisConfigChanged()), this, SLOT(slotDocumentConfigChanged()), Qt::UniqueConnection);
 
         KisMirrorAxisSP canvasDecoration = this->decoration();
@@ -77,15 +87,26 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
     updateAction();
 }
 
+void KisMirrorManager::slotSyncActionStates(bool val) {
+    KisSignalsBlocker blocker(m_mirrorCanvasAroundCursor);
+    KisSignalsBlocker blocker2(m_mirrorCanvas);
+    m_mirrorCanvasAroundCursor->setChecked(val);
+    m_mirrorCanvas->setChecked(val);
+}
+
 void KisMirrorManager::updateAction()
 {
     if (m_imageView) {
         m_mirrorCanvas->setEnabled(true);
         m_mirrorCanvas->setChecked(m_imageView->canvasIsMirrored());
+        m_mirrorCanvasAroundCursor->setEnabled(true);
+        m_mirrorCanvasAroundCursor->setChecked(m_imageView->canvasIsMirrored());
     }
     else {
         m_mirrorCanvas->setEnabled(false);
         m_mirrorCanvas->setChecked(false);
+        m_mirrorCanvasAroundCursor->setEnabled(false);
+        m_mirrorCanvasAroundCursor->setChecked(false);
     }
 }
 

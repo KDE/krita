@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="500"
+version="501"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -87,6 +87,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Menu name="Canvas">
           <text>&amp;Canvas</text>
           <Action name="mirror_canvas"/>
+          <Action name="mirror_canvas_around_cursor"/>
           <Separator/>
           <Action name="zoom_to_100pct" />
           <Action name="rotate_canvas_right" />

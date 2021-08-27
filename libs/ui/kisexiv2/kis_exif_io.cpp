@@ -543,7 +543,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             store->addEntry({dcSchema, "rights", exivValueToKMDValue(it.getValue(), false)});
         } else if (it.groupName() == "Image") {
             // Tiff tags
-            const QLatin1String fixedTN(it.tagName().c_str());
+            const QString fixedTN(it.tagName().c_str());
             if (tag == Exif::Image::ExifTag || tag == Exif::Image::GPSTag) {
                 dbgMetaData << "Ignoring " << it.key().c_str();
             } else if (KisMetaData::Entry::isValidName(fixedTN)) {

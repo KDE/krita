@@ -677,7 +677,6 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     if (filePathInfo.exists() && !filePathInfo.isWritable()) {
         slotCompleteSavingDocument(job, ImportExportCodes::NoAccessToWrite,
                                    i18n("%1 cannot be written to. Please save under a different name.", job.filePath));
-        //return ImportExportCodes::NoAccessToWrite;
         return false;
     }
 
@@ -843,16 +842,30 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (!status.isOk()) {
+        QString errorFromStatus = exportErrorToUserMessage(status, "");
+        QString errorFromError = exportErrorToUserMessage(status, errorMessage);
+
+        if (!errorFromError.contains(errorFromStatus)) {
+            errorFromError = errorFromStatus + "\n" + errorFromError;
+        }
+
+
         emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during saving %1: %2",
                                     fileName,
-                                    exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
+                                    errorFromError), errorMessageTimeout);
 
         if (!fileBatchMode()) {
             const QString filePath = job.filePath;
-            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
+            if (errorFromError.isEmpty()) {
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1", filePath));
+            }
+            else {
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, errorFromError));
+            }
         }
-    } else {
+    }
+    else {
         if (!(job.flags & KritaUtils::SaveIsExporting)) {
             const QString existingAutoSaveBaseName = localFilePath();
             const bool wasRecovered = isRecovered();
@@ -1189,8 +1202,14 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
         return;
     }
 
+    QString composedErrorMessage;
+
     if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
         d->backgroundSaveDocument->d->isAutosaving = false;
+    }
+
+    if (!d->backgroundSaveDocument->errorMessage().isEmpty()) {
+        composedErrorMessage = errorMessage + "\n" + d->backgroundSaveDocument->errorMessage();
     }
 
     d->backgroundSaveDocument.take()->deleteLater();
@@ -1206,15 +1225,14 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
     // unlock at the very end
     d->savingMutex.unlock();
 
-
     QFileInfo fi(job.filePath);
     KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3. Size: %4. MD5 Hash: %5")
                         .arg(job.filePath)
                         .arg(QString::fromLatin1(job.mimeType))
-                        .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK")
+                        .arg(!status.isOk() ? exportErrorToUserMessage(status, composedErrorMessage) : "OK")
                         .arg(fi.size()));
 
-    emit sigCompleteBackgroundSaving(job, status, errorMessage);
+    emit sigCompleteBackgroundSaving(job, status, composedErrorMessage);
 }
 
 void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument)
@@ -1412,8 +1430,7 @@ void KisDocument::finishExportInBackground()
         return;
     }
 
-    KisImportExportErrorCode status =
-            d->childSavingFuture.result();
+    KisImportExportErrorCode status = d->childSavingFuture.result();
     const QString errorMessage = status.errorMessage();
 
     d->savingImage.clear();

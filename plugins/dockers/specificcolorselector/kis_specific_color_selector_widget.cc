@@ -206,7 +206,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
         }
     }
     if (allChannels8Bit) {
-        KisColorInput* input = new KisHexColorInput(this, &m_color, displayRenderer);
+        KisColorInput* input = new KisHexColorInput(this, &m_color, displayRenderer, false, true);
         m_inputs.append(input);
         m_ui->slidersLayout->addWidget(input);
         connect(input, SIGNAL(updated()), this,  SLOT(update()));

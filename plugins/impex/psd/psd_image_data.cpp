@@ -84,7 +84,7 @@ bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
             channelInfo.compressionType = psd_compression_type::RLE;
             for (quint32 row = 0; row < m_header->height; row++ ) {
                 if (m_header->version == 1) {
-                    quint16 rlelength16; // use temporary variable to not cast pointers and not rely on endianness
+                    quint16 rlelength16 = 0; // use temporary variable to not cast pointers and not rely on endianness
                     psdread(io, rlelength16);
                     rlelength = rlelength16;
                 }

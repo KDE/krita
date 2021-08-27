@@ -766,7 +766,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     // Check whether another resource with this MD5 already exists: then we set the resource status to hidden
-    int active = 1;
+    int active = resource->active();
     {
         QSqlQuery q;
         if (!q.prepare("SELECT count(*)\n"
@@ -877,13 +877,17 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     resource->setResourceId(resourceId);
 
-
     if (!addResourceVersionImpl(resourceId, timestamp, storage, resource)) {
         qWarning() << "Could not add resource version" << resource;
         return false;
     }
 
-    return addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
+    if (!resource->metadata().isEmpty()) {
+        return addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
+    }
+
+    return true;
+
 
 }
 

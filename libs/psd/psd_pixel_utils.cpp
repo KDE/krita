@@ -321,7 +321,8 @@ QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice &io, QVector<ChannelInfo 
             channelBytes.insert(channelInfo->channelId, uncompressedBytes);
             channelInfo->channelOffset += rleLength;
         } else {
-            QString error = QString("Unsupported Compression mode: %1").arg(channelInfo->compressionType);
+            QString error = QString("Unsupported Compression mode: %1")
+                                .arg(static_cast<std::uint16_t>(channelInfo->compressionType));
             dbgFile << "ERROR: fetchChannelsBytes:" << error;
             throw KisAslReaderUtils::ASLParseException(error);
         }
@@ -360,7 +361,9 @@ void readCommon(KisPaintDeviceSP dev,
             uncompressedBytes = Compression::uncompress(numPixels, compressedBytes, infoRecords.first()->compressionType, layerRect.width(), channelSize * 8);
 
             if (uncompressedBytes.size() != numPixels) {
-                QString error = QString("Failed to unzip channel data: id = %1, compression = %2").arg(info->channelId).arg(info->compressionType);
+                QString error = QString("Failed to unzip channel data: id = %1, compression = %2")
+                                    .arg(info->channelId)
+                                    .arg(static_cast<std::uint16_t>(info->compressionType));
                 dbgFile << "ERROR:" << error;
                 dbgFile << "      " << ppVar(info->channelId);
                 dbgFile << "      " << ppVar(info->channelDataStart);

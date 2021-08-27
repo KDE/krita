@@ -149,7 +149,8 @@ bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resources
     bool result = false;
 
     QString mimeForData = KisMimeDatabase::mimeTypeForData(ba);
-    if (mimeForData == "application/x-gimp-pattern") {
+
+    if (mimeForData == "image/x-gimp-pat") {
         result = loadPatFromDevice(&buf);
     }
     else {

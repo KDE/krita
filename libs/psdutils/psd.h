@@ -1278,4 +1278,13 @@ QPair<QString, QString> KRITAPSDUTILS_EXPORT psd_colormode_to_colormodelid(psd_c
 QString KRITAPSDUTILS_EXPORT psd_blendmode_to_composite_op(const QString &blendmode);
 QString KRITAPSDUTILS_EXPORT composite_op_to_psd_blendmode(const QString &compositeOp);
 
+
+#if __clang_major__ < 10
+inline QDebug &operator<<(QDebug &self, psd_compression_type type)
+{
+    self << static_cast<std::uint16_t>(type);
+    return self;
+};
+#endif
+
 #endif // PSD_H

@@ -237,7 +237,7 @@ bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP re
     QHash<QString, StoredResource> &typedResources = d->resourcesNew[resourceType];
 
     if (typedResources.contains(resource->filename())) {
-        return false;
+        return true;
     };
 
     StoredResource storedResource;

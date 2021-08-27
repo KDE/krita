@@ -91,6 +91,8 @@ void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
 
 void KisPatternChooser::update(KoResourceSP resource)
 {
+    if (!resource) return;
+
     KoPatternSP pattern = resource.staticCast<KoPattern>();
     m_lblName->setText(QString("%1 (%2 x %3)").arg(i18n(pattern->name().toUtf8().data())).arg(pattern->width()).arg(pattern->height()));
 }

@@ -95,8 +95,7 @@ private:
     GLuint m_textureId;
 
 #ifdef USE_PIXEL_BUFFERS
-    void createTextureBuffer(const char*data, int size);
-    QOpenGLBuffer *m_glBuffer;
+    QScopedPointer<QOpenGLBuffer> m_glBuffer;
 #endif
 
     QRect m_tileRectInImagePixels;

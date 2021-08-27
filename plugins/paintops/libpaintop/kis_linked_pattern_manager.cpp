@@ -23,7 +23,7 @@ struct KisLinkedPatternManager::Private {
         KoPatternSP pattern;
 
         QString name = setting->getString("Texture/Pattern/Name");
-        QString filename = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName(); // For broken embedded patters like in "i)_Wet_Paint"
+        QString filename = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName(); // For broken embedded patterns like in "i)_Wet_Paint"
 
         if (name.isEmpty() || name != QFileInfo(name).fileName()) {
             QFileInfo info(filename);
@@ -65,8 +65,6 @@ KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigur
         // Old style preset...
         md5sum = md5.toHex();
     }
-
-
     pattern = resourceSourceAdapter.resource(md5sum, QFileInfo(fileName).fileName(), name);
 
     return pattern;
@@ -80,7 +78,10 @@ KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfig
     }
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
-    // this resource will be added to the memory storage by KisResourceLocator
+    if (pattern) {
+        auto resourceServer = KoResourceServerProvider::patternServer();
+        resourceServer->addResource(pattern, false);
+    }
 
     return pattern;
 }

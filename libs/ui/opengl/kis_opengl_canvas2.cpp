@@ -53,6 +53,8 @@
 
 static bool OPENGL_SUCCESS = false;
 
+static constexpr int NumberOfBuffers = 6;
+
 struct KisOpenGLCanvas2::Private
 {
 public:
@@ -91,7 +93,7 @@ public:
 
     // Stores a quad for drawing the canvas
     QOpenGLVertexArrayObject quadVAO;
-    QOpenGLBuffer quadBuffers[2];
+    std::array<QOpenGLBuffer, NumberOfBuffers * 2> quadBuffers;
 
     // Stores data for drawing tool outlines
     QOpenGLVertexArrayObject outlineVAO;
@@ -317,19 +319,20 @@ void KisOpenGLCanvas2::initializeGL()
         glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
         glEnableVertexAttribArray(PROGRAM_TEXCOORD_ATTRIBUTE);
 
-        // Create the vertex buffer object, it has 6 vertices with 3 components
-        d->quadBuffers[0].create();
-        d->quadBuffers[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
-        d->quadBuffers[0].bind();
-        d->quadBuffers[0].allocate(d->vertices, 6 * 3 * sizeof(float));
-        glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        for (int i = 0; i < NumberOfBuffers; i++) {
 
-        // Create the texture buffer object, it has 6 texture coordinates with 2 components
-        d->quadBuffers[1].create();
-        d->quadBuffers[1].setUsagePattern(QOpenGLBuffer::StaticDraw);
-        d->quadBuffers[1].bind();
-        d->quadBuffers[1].allocate(d->texCoords, 6 * 2 * sizeof(float));
-        glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0, 0);
+            // Create the vertex buffer object, it has 6 vertices with 3 components
+            d->quadBuffers[2 * i + 0].create();
+            d->quadBuffers[2 * i + 0].setUsagePattern(QOpenGLBuffer::DynamicDraw);
+            d->quadBuffers[2 * i + 0].bind();
+            d->quadBuffers[2 * i + 0].allocate(d->vertices, 6 * 3 * sizeof(float));
+
+            // Create the texture buffer object, it has 6 texture coordinates with 2 components
+            d->quadBuffers[2 * i + 1].create();
+            d->quadBuffers[2 * i + 1].setUsagePattern(QOpenGLBuffer::DynamicDraw);
+            d->quadBuffers[2 * i + 1].bind();
+            d->quadBuffers[2 * i + 1].allocate(d->texCoords, 6 * 2 * sizeof(float));
+        }
 
         // Create the outline buffer, this buffer will store the outlines of
         // tools and will frequently change data
@@ -867,6 +870,8 @@ void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
     int imageColumns = maxColumn - minColumn + 1;
     int imageRows = maxRow - minRow + 1;
 
+    int tileIndex = 0;
+
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
@@ -917,12 +922,14 @@ void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
             //Setup the geometry for rendering
             if (KisOpenGL::hasOpenGL3()) {
                 rectToVertices(d->vertices, modelRect);
-                d->quadBuffers[0].bind();
-                d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
+                d->quadBuffers[2 * (tileIndex % NumberOfBuffers) + 0].bind();
+                d->quadBuffers[2 * (tileIndex % NumberOfBuffers) + 0].write(0, d->vertices, 3 * 6 * sizeof(float));
+                glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
                 rectToTexCoords(d->texCoords, textureRect);
-                d->quadBuffers[1].bind();
-                d->quadBuffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+                d->quadBuffers[2 * (tileIndex % NumberOfBuffers) + 1].bind();
+                d->quadBuffers[2 * (tileIndex % NumberOfBuffers) + 1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+                glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0, 0);
             }
             else {
                 rectToVertices(d->vertices, modelRect);
@@ -979,6 +986,7 @@ void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
             }
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
+            tileIndex++;
         }
     }
 

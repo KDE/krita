@@ -40,17 +40,8 @@ public:
     };
 
     PlaybackState playbackState();
-
-    void goToStartFrame();
     qreal playbackSpeed();
-
     int visibleFrame();
-
-Q_SIGNALS:
-    void sigPlaybackStateChanged(PlaybackState state);
-    void sigFrameChanged();
-    void sigPlaybackSpeedChanged(double normalizedSpeed);
-    void sigPlaybackStatisticsUpdated();
 
 public Q_SLOTS:
     void play();
@@ -85,6 +76,12 @@ public Q_SLOTS:
 
     void setPlaybackSpeedPercent(int value);
     void setPlaybackSpeedNormalized(double value);
+
+Q_SIGNALS:
+    void sigPlaybackStateChanged(PlaybackState state);
+    void sigFrameChanged();
+    void sigPlaybackSpeedChanged(double normalizedSpeed);
+    void sigPlaybackStatisticsUpdated();
 
 private:
     void setPlaybackState(PlaybackState state);

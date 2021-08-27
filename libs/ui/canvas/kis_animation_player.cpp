@@ -28,7 +28,7 @@
 #include "kis_signal_compressor.h"
 #include <KisDocument.h>
 #include <QFileInfo>
-#include <QReadWriteLock>
+#include <QAudioDecoder>
 #include <QThread>
 #include "KisSyncedAudioPlayback.h"
 #include "kis_signal_compressor_with_param.h"
@@ -142,6 +142,10 @@ public:
         timer->start(((qreal)AUDIO_BUFFER_SAMPLES / (qreal)AUDIO_SAMPLE_RATE) * 1000);
         m_timeSinceLastPlayheadChange.start();
         m_readyToPostFrame = true;
+
+        //if audio needed
+        m_audioDecoder.reset(new QAudioDecoder(this));
+        m_audioDecoder->setSourceFilename("/home/eoin/Sync/krita/test_sequence_2hz_32sec.wav");
     }
 
     //Where the loop happens...
@@ -181,6 +185,7 @@ Q_SIGNALS:
 private:
     bool m_readyToPostFrame;
     QSharedPointer<PlaybackData> m_sharedData;
+    QScopedPointer<QAudioDecoder> m_audioDecoder;
     KisElapsedTimer m_timeSinceLastPlayheadChange;
 };
 
@@ -651,21 +656,10 @@ void KisAnimationPlayer::nextUnfilteredKeyframe()
     nextKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
 }
 
-void KisAnimationPlayer::goToStartFrame()
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas);
-    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    const int startFrame = animation->playbackRange().start();
-    seek(startFrame);
-}
-
-
 void KisAnimationPlayer::displayFrame(int frameToDisplay)
 {
     KisAnimationFrameCacheSP frameCache = m_d->canvas->frameCache();
 
-    //Q1: Does `uploadFrame` block program until frame is "updated"?
-    //Q2: updateCanvas has a signal compressor. What does this do in relation to frame updating?
     if (frameCache
         && frameCache->shouldUploadNewFrame(frameToDisplay, m_d->visibleFrame)
         && frameCache->uploadFrame(frameToDisplay)) {

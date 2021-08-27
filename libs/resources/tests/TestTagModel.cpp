@@ -318,7 +318,7 @@ void TestTagModel::testAddTagWithResources()
     tag->setActive(true);
     tag->setResourceType("paintoppresets");
 
-    bool response = tagModel.addTag(tag, true, {resource});
+    tagModel.addTag(tag, true, {resource});
     QVERIFY(tag->id() >= 0);
 
     // XXX: check KisTagResourceModel

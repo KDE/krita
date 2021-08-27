@@ -5,19 +5,18 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later */
 
-#ifndef LEVEL_H
-#define LEVEL_H
+#ifndef KIS_LEVEL_FILTER_PLUGIN_H
+#define KIS_LEVEL_FILTER_PLUGIN_H
 
 #include <QObject>
 #include <QVariant>
 
-
-class LevelFilter : public QObject
+class KisLevelFilterPlugin : public QObject
 {
     Q_OBJECT
 public:
-    LevelFilter(QObject *parent, const QVariantList &);
-    ~LevelFilter() override;
+    KisLevelFilterPlugin(QObject *parent, const QVariantList &);
+    ~KisLevelFilterPlugin() override;
 };
 
 #endif

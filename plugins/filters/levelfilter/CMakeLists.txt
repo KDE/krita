@@ -1,6 +1,7 @@
 set(kritalevelfilter_SOURCES
-    levelfilter.cpp
-    kis_level_filter.cpp
+    KisLevelFilterPlugin.cpp
+    KisLevelFilter.cpp
+    KisLevelConfigWidget.cpp
     )
 ki18n_wrap_ui(kritalevelfilter_SOURCES
     wdg_level.ui

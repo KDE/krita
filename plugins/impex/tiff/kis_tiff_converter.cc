@@ -682,7 +682,7 @@ KisImportExportErrorCode KisTIFFConverter::readImageFromTiff(TIFF *image, KisTif
             m_image->resizeImage(QRect(0, 0, newwidth, newheight));
         }
     }
-    KisPaintLayer *layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), quint8_MAX);
+    KisPaintLayer *layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), quint8_MAX, cs);
     tdata_t buf = 0;
     tdata_t *ps_buf = 0; // used only for planar configuration separated
     KisBufferStreamBase *tiffstream;

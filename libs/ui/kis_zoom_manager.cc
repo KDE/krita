@@ -21,7 +21,6 @@
 #include <KoZoomController.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoUnit.h>
-#include <KoDpi.h>
 
 #include "KisDocument.h"
 #include "KisViewManager.h"

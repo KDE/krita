@@ -18,7 +18,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentInfo.h>
-#include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoID.h>
 #include <KoProgressProxy.h>

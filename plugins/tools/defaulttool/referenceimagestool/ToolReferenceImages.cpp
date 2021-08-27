@@ -100,6 +100,7 @@ void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
         KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
 
         if (referenceImage && referenceImage->cropEnabled()) {
+
             KoInteractionTool::mouseMoveEvent(newEvent);
             if(currentStrategy() == 0) {
             QRectF bounds = handlesSize();

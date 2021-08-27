@@ -390,6 +390,9 @@ void KisReferenceImage::saveXml(QDomDocument &document, QDomElement &parentEleme
 
     if (d->embed) {
         d->internalFilename = QString("reference_images/%1.png").arg(id);
+        if (hasLocalFile()) {
+            element.setAttribute("externalFilename", QString("file://") + d->externalFilename);
+        }
     }
     
     const QString src = d->embed ? d->internalFilename : (QString("file://") + d->externalFilename);
@@ -419,6 +422,10 @@ KisReferenceImage * KisReferenceImage::fromXml(const QDomElement &elem)
     } else {
         reference->d->internalFilename = src;
         reference->d->embed = true;
+        const QString &src = elem.attribute("externalFilename", "");
+        if(src.startsWith("file://")) {
+            reference->d->externalFilename = src.mid(7);
+        }
     }
 
     qreal width = KisDomUtils::toDouble(elem.attribute("width", "100"));
@@ -541,8 +548,16 @@ QRectF KisReferenceImage::cropRect()
 void KisReferenceImage::setCropRect(QRectF rect)
 {
    d->cropRect = rect;
+   update();
 }
 
+void KisReferenceImage::scaleCropRect(qreal scaleX, qreal scaleY)
+{
+    if (d->crop) {
+        QRectF rect = QTransform::fromScale(scaleX, scaleY).mapRect(d->cropRect);
+        setCropRect(rect);
+    }
+}
 bool KisReferenceImage::pinRotate()
 {
     return d->pinRotate;
@@ -610,9 +625,7 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
 
             qreal diff = kisCanvas->viewConverter()->zoom()- d->zoom;
             qreal scale = (d->zoom + diff)/d->zoom;
-            if (d->crop) {
-                setCropRect(QTransform::fromScale(scale, scale).mapRect(d->cropRect));
-            }
+            scaleCropRect(scale, scale);
             KoFlake::resizeShapeCommon(this, scale , scale,
                                        absolutePosition(KoFlake::TopLeft), false ,false ,this->transformation());
             d->zoom = kisCanvas->viewConverter()->zoom();

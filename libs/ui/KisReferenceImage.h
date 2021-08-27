@@ -95,6 +95,7 @@ public:
 
     bool cropEnabled();
     QRectF cropRect();
+    void scaleCropRect(qreal scaleX, qreal scaleY);
 
     void setCrop(bool, QRectF);
     void setCropRect(QRectF);

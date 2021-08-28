@@ -12,7 +12,6 @@
 #include <WidgetsDebug.h>
 
 #include "KoZoomHandler.h"
-#include "KoDpi.h"
 #include "KoUnit.h"
 
 
@@ -23,10 +22,10 @@ void zoomhandler_test::testConstruction()
 
     QCOMPARE( zoomHandler->zoomFactorX(), 1. );
     QCOMPARE( zoomHandler->zoomFactorY(), 1. );
-    QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->resolutionX() ), ( int )KoDpi::dpiX() );
-    QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->resolutionY() ), ( int )KoDpi::dpiY() );
-    QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->zoomedResolutionX() ), ( int )KoDpi::dpiX() );
-    QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->zoomedResolutionY() ), ( int )KoDpi::dpiY() );
+    QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->resolutionX() ), ( int )72 );
+    QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->resolutionY() ), ( int )72 );
+    QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->zoomedResolutionX() ), ( int )72 );
+    QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->zoomedResolutionY() ), ( int )72 );
     QCOMPARE( zoomHandler->zoomMode(), KoZoomMode::ZOOM_CONSTANT );
     QCOMPARE( zoomHandler->zoomInPercent(), 100 );
 }

@@ -9,7 +9,6 @@
 #include "KoZoomHandler.h"
 #include <WidgetsDebug.h>
 #include <KoUnit.h> // for POINT_TO_INCH
-#include <KoDpi.h>
 #include <QPointF>
 #include <QRectF>
 
@@ -23,16 +22,14 @@ KoZoomHandler::KoZoomHandler()
 {
     setZoom(1.0);
     setZoomMode( KoZoomMode::ZOOM_CONSTANT );
-    setDpi(KoDpi::dpiX(), KoDpi::dpiY());
+    // Use 72 dpi as a placeholder. KisView will immediately update the
+    // screen resolution correctly after this, using the values initialized
+    // by KisZoomManager::updateScreenResolution().
+    setDpi(72, 72);
 }
 
 KoZoomHandler::~KoZoomHandler()
 {
-}
-
-void KoZoomHandler::setResolutionToStandard()
-{
-    setDpi(KoDpi::dpiX(), KoDpi::dpiY());
 }
 
 void KoZoomHandler::setDpi(int dpiX, int dpiY)

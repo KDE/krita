@@ -69,12 +69,6 @@ public:
     void setResolution(qreal resolutionX, qreal resolutionY);
 
     /**
-     * Set the resolution for X and Y to the display values reported by KGlobal.
-     * The zoom factor is not changed.
-     */
-    void setResolutionToStandard( );
-
-    /**
      * Set the zoomed resolution for X and Y.
      * Compared to the setZoom... methods, this allows to set a different
      * zoom factor for X and for Y.

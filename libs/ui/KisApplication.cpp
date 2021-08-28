@@ -44,7 +44,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
-#include <KoDpi.h>
 #include "KoConfig.h"
 #include <KoResourcePaths.h>
 #include <KisMimeDatabase.h>
@@ -230,7 +229,7 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
     int dpiX = args.dpiX();
     int dpiY = args.dpiY();
     if (dpiX > 0 && dpiY > 0) {
-        KoDpi::setDPI(dpiX, dpiY);
+        qWarning() << "The `dpi` argument does nothing!";
     }
 }
 

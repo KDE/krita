@@ -270,7 +270,7 @@
            <item>
             <widget class="KoGroupButton" name="buttonSizeModePixelBased">
              <property name="text">
-              <string>Pilxel based</string>
+              <string>Pixel based</string>
              </property>
              <property name="checkable">
               <bool>true</bool>

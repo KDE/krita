@@ -208,6 +208,7 @@ public:
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
         mdiArea->setDocumentMode(true);
+        mdiArea->setOption(QMdiArea::DontMaximizeSubWindowOnActivation);
 
         commandBar = new KateCommandBar(parent);
     }

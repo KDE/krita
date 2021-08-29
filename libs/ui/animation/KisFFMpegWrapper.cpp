@@ -439,6 +439,10 @@ QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const 
             }
         }
         
+        if (processVersion.contains("--disable-libx264") || processVersion.contains("--disable-encoder=h264")) {
+            encoderJsonObj["h264"]=false;
+        }
+
         ffmpegInfo.insert("encoder",encoderJsonObj);
         ffmpegInfo.insert("decoder",decoderJsonObj);
             

@@ -287,11 +287,11 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(ffmpegPath.isEmpty() ? lastUsedOptions.ffmpegPath:ffmpegPath);
 
     ffmpegPath = ffmpegJsonObj["path"].toString();
-    ffmpegVersion = ffmpegJsonObj["version"].toString();
+    ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString():"None";
 
     m_page->ffmpegLocation->setFileName(ffmpegPath);
     cfg.setFFMpegLocation(ffmpegPath);
-    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion);
+    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion + (ffmpegJsonObj["encoder"].toObject()["h264"].toBool() ? "":" (MP4/MKV UNSUPPORTED)"));
     
     ffmpegWarningCheck();
 
@@ -322,10 +322,10 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
     KisConfig cfg(false);
     QJsonObject ffmpegChangeJsonObj = KisFFMpegWrapper::findFFMpeg(path);
-    ffmpegVersion = ffmpegChangeJsonObj["version"].toString();
+    ffmpegVersion = ffmpegChangeJsonObj["enabled"].toBool() ? ffmpegChangeJsonObj["version"].toString():"None";
 
     cfg.setFFMpegLocation(ffmpegChangeJsonObj["path"].toString());
-    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion);
+    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion + (ffmpegChangeJsonObj["encoder"].toObject()["h264"].toBool() ? "":" (MP4/MKV UNSUPPORTED)"));
 
     ffmpegWarningCheck();
 }

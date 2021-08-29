@@ -1203,11 +1203,7 @@ void KisMainWindow::slotLoadCompleted()
 
 void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 {
-    KisUsageLogger::log(QString("Loading canceled. Error:").arg(errMsg));
-    if (!errMsg.isEmpty())   // empty when canceled by user
-        QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
-    // ... can't delete the document, it's the one who emitted the signal...
-
+    KisUsageLogger::log(QString("Loading canceled."));
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));

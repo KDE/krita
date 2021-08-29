@@ -1740,6 +1740,8 @@ bool KisDocument::openFile()
             updater->cancel();
         }
         QString msg = status.errorMessage();
+        KisUsageLogger::log(QString("Loading %1 failed: %2").arg(prettyPath()).arg(msg));
+
         if (!msg.isEmpty() && !fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                                 i18n("Could not open %2.\nReason: %1", msg, prettyPath()),
@@ -2264,7 +2266,8 @@ bool KisDocument::openPathInternal(const QString &path)
 
     if (ret) {
         emit completed();
-    } else {
+    }
+    else {
         emit canceled(QString());
     }
     return ret;

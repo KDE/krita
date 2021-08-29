@@ -7,7 +7,7 @@
 
 #include "KoJsonTrader.h"
 
-#include "KritaPluginDebug.h"
+#include "kis_debug.h"
 
 #include <QCoreApplication>
 #include <QPluginLoader>
@@ -107,7 +107,7 @@ KoJsonTrader::KoJsonTrader()
                 break;
             }
         }
-        debugPlugin << "KoJsonTrader will load its plugins from" << m_pluginPath;
+        dbgPlugins << "KoJsonTrader will load its plugins from" << m_pluginPath;
     }
 }
 
@@ -134,11 +134,11 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 #else
         if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita") && !dirIter.fileName().endsWith(".debug")) {
 #endif
-            debugPlugin << dirIter.fileName();
+            dbgPlugins << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
-            debugPlugin << mimetype << json << json.value("X-KDE-ServiceTypes");
+            dbgPlugins << mimetype << json << json.value("X-KDE-ServiceTypes");
 
             if (json.isEmpty()) {
                 delete loader;

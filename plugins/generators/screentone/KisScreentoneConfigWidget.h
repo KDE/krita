@@ -31,6 +31,9 @@ public:
     void setView(KisViewManager *view) override;
 
 private:
+    constexpr static qreal minimumCellSize{1.0};
+    constexpr static qreal maximumCellSize{1000.0};
+
     Ui_ScreentoneConfigWidget m_ui;
     KisViewManager *m_view;
     const KoColorSpace *m_colorSpace;
@@ -51,6 +54,7 @@ private Q_SLOTS:
     void slot_buttonSizeModePixelBased_toggled(bool checked);
     void slot_comboBoxUnits_currentIndexChanged(int index);
     void slot_buttonResolutionFromImage_clicked();
+    void slot_sliderResolution_valueChanged(qreal value);
     void slot_sliderFrequencyX_valueChanged(qreal value);
     void slot_sliderFrequencyY_valueChanged(qreal value);
     void slot_buttonConstrainFrequency_keepAspectRatioChanged(bool keep);
@@ -60,8 +64,9 @@ private Q_SLOTS:
     void slot_sliderAlignToPixelGridX_valueChanged(int value);
     void slot_sliderAlignToPixelGridY_valueChanged(int value);
 
-    void slot_setSizeFromFrequenzy();
-    void slot_setFrequenzyFromSize();
+    void slot_setFrequencySlidersRanges();
+    void slot_setSizeFromFrequency();
+    void slot_setFrequencyFromSize();
 };
 
 #endif

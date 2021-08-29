@@ -20,7 +20,6 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QFileDialog>
-#include <QProcess>
 #include <QUrl>
 #include <QDebug>
 #include <QCloseEvent>
@@ -75,17 +74,12 @@ public:
 
     void checkFfmpeg()
     {
-        QProcess process;
-        process.start(ffmpegPath, {"-version"});
-        bool success = process.waitForStarted(1000) && process.waitForFinished(1000);
-        if (!success)
-            process.kill();
-        const QByteArray &out = process.readAllStandardOutput();
-        success &= out.contains("ffmpeg");
-
+        const QJsonObject ffmpegJson = KisFFMpegWrapper::findFFMpeg(ffmpegPath);
+        const bool success = ffmpegJson["enabled"].toBool();
         const QIcon &icon = KisIconUtils::loadIcon(success ? "dialog-ok" : "window-close");
         const QList<QAction *> &actions = ui->editFfmpegPath->actions();
         QAction *action;
+
         if (!actions.isEmpty()) {
             action = actions.first();
             action->setIcon(icon);
@@ -93,8 +87,10 @@ public:
             action = ui->editFfmpegPath->addAction(icon, QLineEdit::TrailingPosition);
         }
         if (success) {
+            ffmpegPath = ffmpegJson["path"].toString();
             ui->editFfmpegPath->setText(ffmpegPath);
-            action->setToolTip(out);
+            action->setToolTip("Version: "+ffmpegJson["version"].toString()
+            );
         } else {
             ui->editFfmpegPath->setText(i18nc("This text is displayed instead of path to external tool in case of external tool is not found", "[NOT FOUND]"));
             action->setToolTip(i18n("FFMpeg executable location couldn't be detected, please install it or select its location manually"));
@@ -357,7 +353,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     d->resize = config.resize();
     d->size = config.size();
     d->lockRatio = config.lockRatio();
-    d->ffmpegPath = KisFFMpegWrapper::findFFMpeg(config.ffmpegPath())["path"].toString();
+    d->ffmpegPath = config.ffmpegPath();
     d->profiles = config.profiles();
     d->defaultProfiles = config.defaultProfiles();
     d->profileIndex = config.profileIndex();
@@ -370,7 +366,6 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     d->ui->spinScaleHeight->setValue(d->size.height());
     d->ui->buttonLockRatio->setChecked(d->lockRatio);
     d->ui->buttonLockRatio->setIcon(d->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
-    d->ui->editFfmpegPath->setText(d->ffmpegPath);
     d->fillComboProfiles();
     d->checkFfmpeg();
     d->updateVideoFilePath();

@@ -75,7 +75,7 @@ QScroller* KisKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *
         if (hideScrollBars) {
             scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
             scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
-        } else {
+        } else if (gestureType != QScroller::TouchGesture) {
             auto *filter = new KisKineticScrollerEventFilter(gestureType, scrollArea);
             scrollArea->horizontalScrollBar()->installEventFilter(filter);
             scrollArea->verticalScrollBar()->installEventFilter(filter);

@@ -2717,6 +2717,9 @@ void KisMainWindow::configChanged()
     Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
+        if (viewMode == QMdiArea::TabbedView) {
+            subwin->setWindowState(Qt::WindowMaximized);
+        }
 
         /**
          * Dirty workaround for a bug in Qt (checked on Qt 5.6.1):

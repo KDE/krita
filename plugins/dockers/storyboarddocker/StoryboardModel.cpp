@@ -881,31 +881,32 @@ void StoryboardModel::shiftKeyframes(KisTimeSpan affected, int offset, KUndo2Com
         KisLayerUtils::recursiveApplyNodes (node, [affected, offset, cmd] (KisNodeSP node) {
                 const int startFrame = affected.start();
                 if (node->isAnimated()) {
-                    KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
-                    if (keyframeChannel) {
-                        if (offset > 0) {
-                            int timeIter = affected.isInfinite() ?
-                                                    keyframeChannel->lastKeyframeTime()
-                                                  : keyframeChannel->activeKeyframeTime(affected.end());
+                    Q_FOREACH(KisKeyframeChannel* keyframeChannel, node->keyframeChannels()) {
+                        if (keyframeChannel) {
+                            if (offset > 0) {
+                                int timeIter = affected.isInfinite() ?
+                                                        keyframeChannel->lastKeyframeTime()
+                                                      : keyframeChannel->activeKeyframeTime(affected.end());
 
-                            KisKeyframeSP iterEnd = keyframeChannel->keyframeAt(keyframeChannel->previousKeyframeTime(startFrame));
+                                KisKeyframeSP iterEnd = keyframeChannel->keyframeAt(keyframeChannel->previousKeyframeTime(startFrame));
 
-                            while (keyframeChannel->keyframeAt(timeIter) &&
-                                   keyframeChannel->keyframeAt(timeIter) != iterEnd) {
-                                keyframeChannel->moveKeyframe(timeIter, timeIter + offset, cmd);
-                                timeIter = keyframeChannel->previousKeyframeTime(timeIter);
-                            }
+                                while (keyframeChannel->keyframeAt(timeIter) &&
+                                       keyframeChannel->keyframeAt(timeIter) != iterEnd) {
+                                    keyframeChannel->moveKeyframe(timeIter, timeIter + offset, cmd);
+                                    timeIter = keyframeChannel->previousKeyframeTime(timeIter);
+                                }
 
-                        } else {
-                            int timeIter = keyframeChannel->keyframeAt(startFrame) ? startFrame : keyframeChannel->nextKeyframeTime(startFrame);
+                            } else {
+                                int timeIter = keyframeChannel->keyframeAt(startFrame) ? startFrame : keyframeChannel->nextKeyframeTime(startFrame);
 
-                            KisKeyframeSP iterEnd = affected.isInfinite() ?
-                                                        nullptr
-                                                      : keyframeChannel->keyframeAt(keyframeChannel->nextKeyframeTime(affected.end()));
+                                KisKeyframeSP iterEnd = affected.isInfinite() ?
+                                                            nullptr
+                                                          : keyframeChannel->keyframeAt(keyframeChannel->nextKeyframeTime(affected.end()));
 
-                            while (keyframeChannel->keyframeAt(timeIter) != iterEnd) {
-                                keyframeChannel->moveKeyframe(timeIter, timeIter + offset, cmd);
-                                timeIter = keyframeChannel->nextKeyframeTime(timeIter);
+                                while (keyframeChannel->keyframeAt(timeIter) != iterEnd) {
+                                    keyframeChannel->moveKeyframe(timeIter, timeIter + offset, cmd);
+                                    timeIter = keyframeChannel->nextKeyframeTime(timeIter);
+                                }
                             }
                         }
                     }
@@ -964,25 +965,25 @@ bool StoryboardModel::removeItem(QModelIndex index, KUndo2Command *command)
     //remove all keyframes within the scene with command as parent
     KisNodeSP node = m_image->rootLayer();
     const int firstFrameOfScene = data(this->index(StoryboardItem::FrameNumber, 0, index)).toInt();
-    const int lastFrameOfScene = lastKeyframeWithin(index);
+    const int timeOfNextScene = firstFrameOfScene + durationDeletedScene;
     if (command) {
         if (node) {
-        KisLayerUtils::recursiveApplyNodes (node, [firstFrameOfScene, lastFrameOfScene, command] (KisNodeSP node){
-            if (node->isAnimated()) {
-                KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
+            KisLayerUtils::recursiveApplyNodes (node, [firstFrameOfScene, timeOfNextScene, command] (KisNodeSP node){
+                if (node->isAnimated()) {
+                    Q_FOREACH(KisKeyframeChannel* keyframeChannel, node->keyframeChannels()) {
+                        int timeIter = keyframeChannel->keyframeAt(firstFrameOfScene)
+                                                                    ? firstFrameOfScene
+                                                                    : keyframeChannel->nextKeyframeTime(firstFrameOfScene);
 
-                int timeIter = keyframeChannel->keyframeAt(firstFrameOfScene)
-                                                            ? firstFrameOfScene
-                                                            : keyframeChannel->nextKeyframeTime(firstFrameOfScene);
-
-                while (keyframeChannel->keyframeAt(timeIter) && timeIter <= lastFrameOfScene) {
-                    keyframeChannel->removeKeyframe(timeIter, command);
-                    timeIter = keyframeChannel->nextKeyframeTime(timeIter);
+                        while (keyframeChannel->keyframeAt(timeIter) && timeIter < timeOfNextScene) {
+                            keyframeChannel->removeKeyframe(timeIter, command);
+                            timeIter = keyframeChannel->nextKeyframeTime(timeIter);
+                        }
+                    }
                 }
-            }
-        });
+            });
         }
-        shiftKeyframes(KisTimeSpan::infinite(lastFrameOfScene), -durationDeletedScene, command);
+        shiftKeyframes(KisTimeSpan::infinite(timeOfNextScene - 1), -durationDeletedScene, command);
 
         //If we're viewing the scene we're about the remove, let's jump back to the last valid scene.
         if (row > 0 && row <= rowCount()) {

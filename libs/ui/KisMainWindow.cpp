@@ -739,7 +739,12 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
         imageView->slotLoadingFinished();
 
         if (!subwin) {
+            QMdiSubWindow *currentSubWin = d->mdiArea->currentSubWindow();
+            bool shouldMaximize = currentSubWin ? currentSubWin->isMaximized() : true;
             subwin = d->mdiArea->addSubWindow(imageView);
+            if (shouldMaximize) {
+                subwin->setWindowState(Qt::WindowMaximized);
+            }
         } else {
             subwin->setWidget(imageView);
         }

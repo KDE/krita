@@ -47,6 +47,7 @@ public:
     void allocate(int numBuffers, int bufferSize);
     QOpenGLBuffer* getNextBuffer();
     bool isValid() const;
+    int size() const;
 
     void reset();
 

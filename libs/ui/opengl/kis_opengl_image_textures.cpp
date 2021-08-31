@@ -28,6 +28,8 @@
 #include "KisPart.h"
 #include "KisOpenGLModeProber.h"
 #include "kis_fixed_paint_device.h"
+#include "KisOpenGLSync.h"
+
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -284,12 +286,26 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
     KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if(!glInfo) return;
 
+    QScopedPointer<KisOpenGLSync> sync;
+    int numProcessedTiles = 0;
+
     KisTextureTileUpdateInfoSP tileInfo;
     Q_FOREACH (tileInfo, glInfo->tileList) {
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
         tile->update(*tileInfo, blockMipmapRegeneration);
+
+        if (numProcessedTiles == 0) {
+            sync.reset(new KisOpenGLSync());
+        } else if (sync && sync->isSignaled()) {
+            sync.reset();
+        }
+        numProcessedTiles++;
+    }
+
+    if (sync && !sync->isSignaled() && numProcessedTiles > m_bufferStorage.size()) {
+        qDebug() << "Exited unsignalled after tiles" << numProcessedTiles;
     }
 }
 

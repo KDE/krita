@@ -9,6 +9,7 @@
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_canvas2_p.h"
+#include "opengl/KisOpenGLSync.h"
 
 #include "kis_algebra_2d.h"
 #include "opengl/kis_opengl_shader_loader.h"
@@ -64,7 +65,6 @@ public:
         delete checkerShader;
         delete solidColorShader;
         delete overlayInvertedShader;
-        Sync::deleteSync(glSyncObject);
     }
 
     bool canvasInitialized{false};
@@ -88,7 +88,7 @@ public:
     KisOpenGL::FilterMode filterMode;
     bool proofingConfigIsUpdated=false;
 
-    GLsync glSyncObject{0};
+    QScopedPointer<KisOpenGLSync> glSyncObject;
 
     bool wrapAroundMode{false};
 
@@ -345,7 +345,7 @@ void KisOpenGLCanvas2::initializeGL()
         glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0 ,0);
     }
 
-    Sync::init(context());
+    KisOpenGLSync::init(context());
 
     d->canvasInitialized = true;
 }
@@ -449,10 +449,7 @@ void KisOpenGLCanvas2::paintGL()
 
     renderDecorations(updateRect);
 
-    if (d->glSyncObject) {
-        Sync::deleteSync(d->glSyncObject);
-    }
-    d->glSyncObject = Sync::getSync();
+    d->glSyncObject.reset(new KisOpenGLSync());
 
     if (!OPENGL_SUCCESS) {
         KisConfig cfg(false);
@@ -595,7 +592,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
 bool KisOpenGLCanvas2::isBusy() const
 {
-    const bool isBusyStatus = Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
+    const bool isBusyStatus = d->glSyncObject && !d->glSyncObject->isSignaled();
     KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
     return isBusyStatus;
 }

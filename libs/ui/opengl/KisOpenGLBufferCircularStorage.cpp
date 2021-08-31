@@ -79,6 +79,11 @@ bool KisOpenGLBufferCircularStorage::isValid() const
     return !m_d->buffers.empty();
 }
 
+int KisOpenGLBufferCircularStorage::size() const
+{
+    return m_d->buffers.size();
+}
+
 void KisOpenGLBufferCircularStorage::reset()
 {
     m_d->buffers.clear();

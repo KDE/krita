@@ -193,10 +193,10 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_modeGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotModeChanged(QAbstractButton*)));
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
 
-    m_storyboardDelegate->setView(m_ui->listView);
-    m_storyboardModel->setView(m_ui->listView);
-    m_ui->listView->setModel(m_storyboardModel);
-    m_ui->listView->setItemDelegate(m_storyboardDelegate);
+    m_storyboardDelegate->setView(m_ui->sceneView);
+    m_storyboardModel->setView(m_ui->sceneView);
+    m_ui->sceneView->setModel(m_storyboardModel);
+    m_ui->sceneView->setItemDelegate(m_storyboardDelegate);
 
     m_storyboardModel->setCommentModel(m_commentModel);
 
@@ -559,21 +559,21 @@ void StoryboardDockerDock::slotModeChanged(QAbstractButton* button)
 {
     int mode = m_modeGroup->id(button);
     if (mode == Mode::Column) {
-        m_ui->listView->setFlow(QListView::LeftToRight);
-        m_ui->listView->setWrapping(false);
-        m_ui->listView->setItemOrientation(Qt::Vertical);
+        m_ui->sceneView->setFlow(QListView::LeftToRight);
+        m_ui->sceneView->setWrapping(false);
+        m_ui->sceneView->setItemOrientation(Qt::Vertical);
         m_viewGroup->button(View::CommentsOnly)->setEnabled(true);
     }
     else if (mode == Mode::Row) {
-        m_ui->listView->setFlow(QListView::TopToBottom);
-        m_ui->listView->setWrapping(false);
-        m_ui->listView->setItemOrientation(Qt::Horizontal);
+        m_ui->sceneView->setFlow(QListView::TopToBottom);
+        m_ui->sceneView->setWrapping(false);
+        m_ui->sceneView->setItemOrientation(Qt::Horizontal);
         m_viewGroup->button(View::CommentsOnly)->setEnabled(false);           //disable the comments only view
     }
     else if (mode == Mode::Grid) {
-        m_ui->listView->setFlow(QListView::LeftToRight);
-        m_ui->listView->setWrapping(true);
-        m_ui->listView->setItemOrientation(Qt::Vertical);
+        m_ui->sceneView->setFlow(QListView::LeftToRight);
+        m_ui->sceneView->setWrapping(true);
+        m_ui->sceneView->setItemOrientation(Qt::Vertical);
         m_viewGroup->button(View::CommentsOnly)->setEnabled(true);
     }
     m_storyboardModel->layoutChanged();
@@ -583,19 +583,19 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
 {
     int view = m_viewGroup->id(button);
     if (view == View::All) {
-        m_ui->listView->setCommentVisibility(true);
-        m_ui->listView->setThumbnailVisibility(true);
+        m_ui->sceneView->setCommentVisibility(true);
+        m_ui->sceneView->setThumbnailVisibility(true);
         m_modeGroup->button(Mode::Row)->setEnabled(true);
     }
     else if (view == View::ThumbnailsOnly) {
-        m_ui->listView->setCommentVisibility(false);
-        m_ui->listView->setThumbnailVisibility(true);
+        m_ui->sceneView->setCommentVisibility(false);
+        m_ui->sceneView->setThumbnailVisibility(true);
         m_modeGroup->button(Mode::Row)->setEnabled(true);
     }
 
     else if (view == View::CommentsOnly) {
-        m_ui->listView->setCommentVisibility(true);
-        m_ui->listView->setThumbnailVisibility(false);
+        m_ui->sceneView->setCommentVisibility(true);
+        m_ui->sceneView->setThumbnailVisibility(false);
         m_modeGroup->button(Mode::Row)->setEnabled(false);               //disable the row mode
     }
     m_storyboardModel->layoutChanged();

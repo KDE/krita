@@ -44,6 +44,6 @@ Comment[pt_BR]=Special Effects.kpp
 Comment[sv]=Specialeffekter.kpp
 Comment[uk]=Спеціальні ефекти
 Comment[x-test]=xxSpecial Effects.kppxx
-Comment[zh_CN]=用于制作特效的笔刷预设
+Comment[zh_CN]=用于应用特效的笔刷预设
 Comment[zh_TW]=Special Effects.kpp
 URL=FX

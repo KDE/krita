@@ -491,7 +491,7 @@ if errorlevel 1 (
 	echo ERROR: objdump is not working.
 	exit /B 1
 )
-for /f "delims=, tokens=1" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "architecture"') do set TARGET_ARCH_LINE=%%a
+for /f "delims=, tokens=1" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "i386"') do set TARGET_ARCH_LINE=%%a
 echo -- %TARGET_ARCH_LINE%
 if "%TARGET_ARCH_LINE:x86-64=%" == "%TARGET_ARCH_LINE%" (
 	echo Target looks like x86

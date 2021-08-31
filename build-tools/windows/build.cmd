@@ -715,7 +715,7 @@ if not "%ARG_NO_INTERACTIVE%" == "1" (
 
 :: Initialize clean PATH
 set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
-set PATH=%MINGW_BIN_DIR%;%PYTHON_BIN_DIR%;%PATH%
+set PATH=%PYTHON_BIN_DIR%;%MINGW_BIN_DIR%;%PATH%
 if NOT "%KRITA_GIT_DIR%" == "" (
     set PATH=%PATH%;%KRITA_GIT_DIR%
 )

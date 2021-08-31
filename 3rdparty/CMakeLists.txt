@@ -217,8 +217,8 @@ endif ()
 
 function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
 	include(CheckCXXSourceCompiles)
-	set(CMAKE_REQUIRED_INCLUDES ${PYTHON_INCLUDE_PATH})
-	set(CMAKE_REQUIRED_LIBRARIES ${PYTHON_LIBRARIES})
+	set(CMAKE_REQUIRED_INCLUDES ${Python_INCLUDE_DIRS})
+	set(CMAKE_REQUIRED_LIBRARIES ${Python_LIBRARIES})
 	if (MINGW)
 		set(CMAKE_REQUIRED_DEFINITIONS -D_hypot=hypot)
 	endif ()
@@ -246,12 +246,12 @@ function(DumpSitePackages PYTHONPATH)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND}
         -E env PYTHONPATH=${_krita_pythonpath}
-        ${PYTHON_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_paths());"
+        ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_paths());"
         OUTPUT_VARIABLE __sysconfig)
     message(STATUS "Python's system directories: ${__sysconfig}")
     execute_process(COMMAND ${CMAKE_COMMAND}
         -E env PYTHONPATH=${_krita_pythonpath}
-        ${PYTHON_EXECUTABLE} -c "from setuptools.command import easy_install; print(easy_install.get_site_dirs())"
+        ${Python_EXECUTABLE} -c "from setuptools.command import easy_install; print(easy_install.get_site_dirs())"
         OUTPUT_VARIABLE __setuptools)
     message(STATUS "Python's setuptools directories: ${__setuptools}")
 endfunction()
@@ -264,17 +264,16 @@ if (WIN32)
         if (ENABLE_PYTHON_2)
             message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
         else(ENABLE_PYTHON_2)
-            find_package(PythonInterp 3.8 EXACT)
-            find_package(PythonLibs 3.8 EXACT)
+            find_package(Python 3.8 EXACT COMPONENTS Development Interpreter)
         endif()
-        if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+        if (Python_FOUND)
             message(STATUS "Python requirements met.")
             TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
             DumpSitePackages(KRITA_PYTHONPATH)
             if (NOT CAN_USE_PYTHON_LIBS)
                 message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct!")
             endif ()
-        else (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+        else ()
             message(FATAL_ERROR "Python requirements not met. To disable Python deps, set ENABLE_PYTHON_DEPS to OFF.")
         endif ()
     endif ()

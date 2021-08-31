@@ -1,10 +1,10 @@
 SET(PREFIX_ext_pyqt "${EXTPREFIX}" )
 
 if (APPLE)
-    SET(PYTHON_EXECUTABLE_PATH ${PREFIX_ext_pyqt}/bin/python3)
-    if(NOT EXISTS ${PYTHON_EXECUTABLE_PATH})
-      message("WARNING: using system python3!")
-      SET(PYTHON_EXECUTABLE_PATH python3)
+    SET(Python_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
+    if(NOT EXISTS "${Python_EXECUTABLE}")
+        message("WARNING: using system python3!")
+        SET(Python_EXECUTABLE python3)
     endif()
 
     list(APPEND _PYQT_conf
@@ -19,7 +19,7 @@ if (APPLE)
         URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.13.1.tar.gz
         URL_MD5 c77af2f4e230b0053fd22bc2ece2e6c0
 
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py ${_PYQT_conf}
+        CONFIGURE_COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND make
 
         # force single-threaded installation to avoid
@@ -32,10 +32,10 @@ if (APPLE)
     )
 
 elseif(UNIX)
-    SET(PYTHON_EXECUTABLE_PATH ${PREFIX_ext_pyqt}/bin/python3)
-    if(NOT EXISTS ${PYTHON_EXECUTABLE_PATH})
+    SET(Python_EXECUTABLE ${PREFIX_ext_pyqt}/bin/python3)
+    if(NOT EXISTS ${Python_EXECUTABLE})
       message("WARNING: using system python3!")
-      SET(PYTHON_EXECUTABLE_PATH python3)
+      SET(Python_EXECUTABLE python3)
     endif()
 
     ExternalProject_Add(ext_pyqtbuilder
@@ -138,14 +138,14 @@ elseif(WIN32)
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${_krita_pythonpath}"
-            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # HACK: Create lib\site-packages before installing
         # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
         INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_pyqt_prefix}\\lib\\site-packages
             COMMAND ${CMAKE_COMMAND} -E env 
                 "PYTHONPATH=${_krita_pythonpath}"
-                ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
+                ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 
@@ -191,7 +191,7 @@ elseif(WIN32)
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${_krita_pythonpath}"
-            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # Here we need a flat-egg installation, otherwise the egg is deployed
         # inside its own directory in site-packages.
@@ -199,7 +199,7 @@ elseif(WIN32)
         # See https://github.com/msys2/MINGW-packages/blob/8a4066591cf1e023971526c55bf2d5fe0c7aa84a/mingw-w64-pyqt5-sip/PKGBUILD
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${_krita_pythonpath}"
-            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix "." --root=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix "." --root=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 

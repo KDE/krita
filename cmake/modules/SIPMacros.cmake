@@ -204,7 +204,7 @@ else()
             COMMAND
                 ${CMAKE_COMMAND} -E env
                 "PYTHONPATH=${_krita_python_path}"
-                ${PYTHON_EXECUTABLE}
+                ${Python_EXECUTABLE}
                 ${sip_generate}
                 --build-dir ${CMAKE_CURRENT_SIP_OUTPUT_DIR}
                 --target-dir ${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}

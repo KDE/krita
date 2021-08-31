@@ -180,6 +180,7 @@ set(kritaui_LIB_SRCS
     opengl/KisOpenGLUpdateInfoBuilder.cpp
     opengl/KisOpenGLModeProber.cpp
     opengl/KisScreenInformationAdapter.cpp
+    opengl/KisOpenGLBufferCircularStorage.cpp
     kis_fps_decoration.cpp
 
     tool/KisToolChangesTracker.cpp

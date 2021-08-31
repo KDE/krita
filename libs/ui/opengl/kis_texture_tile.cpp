@@ -7,6 +7,7 @@
 #define GL_GLEXT_PROTOTYPES
 #include "kis_texture_tile.h"
 #include "kis_texture_tile_update_info.h"
+#include "KisOpenGLBufferCircularStorage.h"
 
 #include <kis_debug.h>
 #if !defined(QT_OPENGL_ES)
@@ -16,6 +17,7 @@
 #ifndef GL_BGRA
 #define GL_BGRA 0x814F
 #endif
+
 
 void KisTextureTile::setTextureParameters()
 {
@@ -49,10 +51,11 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
     return QRectF(x, y, w, h);
 }
 
+#include "kis_debug.h"
 
 KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *texturesInfo,
                                const QByteArray &fillData, KisOpenGL::FilterMode filter,
-                               bool useBuffer, int numMipmapLevels, QOpenGLFunctions *fcn)
+                               KisOpenGLBufferCircularStorage *bufferStorage, int numMipmapLevels, QOpenGLFunctions *fcn)
 
     : m_textureId(0)
     , m_tileRectInImagePixels(imageRect)
@@ -60,9 +63,9 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
     , m_texturesInfo(texturesInfo)
     , m_needsMipmapRegeneration(false)
     , m_preparedLodPlane(0)
-    , m_useBuffer(useBuffer)
     , m_numMipmapLevels(numMipmapLevels)
     , f(fcn)
+    , m_bufferStorage(bufferStorage)
 {
     const GLvoid *fd = fillData.constData();
 
@@ -78,19 +81,8 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
 
     setTextureParameters();
 
-#ifdef USE_PIXEL_BUFFERS
-    if (m_useBuffer) {
-        m_glBuffer.reset(new QOpenGLBuffer(QOpenGLBuffer::PixelUnpackBuffer));
-        m_glBuffer->setUsagePattern(QOpenGLBuffer::DynamicDraw);
-        m_glBuffer->create();
-        m_glBuffer->bind();
-        m_glBuffer->allocate(4 * m_texturesInfo->width * m_texturesInfo->height);
-
-        m_glBuffer->write(0, fillData.constData(), fillData.size());
-        // we set fill data to 0 so the next glTexImage2D call uses our buffer
-        fd = 0;
-    }
-#endif
+    KisOpenGLBufferCircularStorage::BufferBinder binder(
+        m_bufferStorage, &fd, fillData.size());
 
     f->glTexImage2D(GL_TEXTURE_2D, 0,
                  m_texturesInfo->internalFormat,
@@ -98,12 +90,6 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
                  m_texturesInfo->height, 0,
                  m_texturesInfo->format,
                  m_texturesInfo->type, fd);
-
-#ifdef USE_PIXEL_BUFFERS
-    if (m_useBuffer) {
-        m_glBuffer->release();
-    }
-#endif
 
     setNeedsMipmapRegeneration();
 }
@@ -184,17 +170,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
 
 
     if (updateInfo.isEntireTileUpdated()) {
-
-#ifdef USE_PIXEL_BUFFERS
-        if (m_useBuffer) {
-
-            m_glBuffer->bind();
-            m_glBuffer->write(0, fd, updateInfo.patchPixelsLength());
-
-            // we set fill data to 0 so the next glTexImage2D call uses our buffer
-            fd = 0;
-        }
-#endif
+        KisOpenGLBufferCircularStorage::BufferBinder b(
+            m_bufferStorage, &fd, updateInfo.patchPixelsLength());
 
         f->glTexImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                      m_texturesInfo->internalFormat,
@@ -203,24 +180,11 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
                      m_texturesInfo->format,
                      m_texturesInfo->type,
                      fd);
-
-#ifdef USE_PIXEL_BUFFERS
-        if (m_useBuffer) {
-            m_glBuffer->release();
-        }
-#endif
-
     }
     else {
-#ifdef USE_PIXEL_BUFFERS
-        if (m_useBuffer) {
-            m_glBuffer->bind();
-            const int size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
-            m_glBuffer->write(0, fd, size);
-            // we set fill data to 0 so the next glTexImage2D call uses our buffer
-            fd = 0;
-        }
-#endif
+        const int size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
+        KisOpenGLBufferCircularStorage::BufferBinder b(
+            m_bufferStorage, &fd, size);
 
         f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                         patchOffset.x(), patchOffset.y(),
@@ -228,12 +192,6 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
                         m_texturesInfo->format,
                         m_texturesInfo->type,
                         fd);
-
-#ifdef USE_PIXEL_BUFFERS
-        if (m_useBuffer) {
-            m_glBuffer->release();
-        }
-#endif
 
     }
 
@@ -254,13 +212,19 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
     if(updateInfo.isTopmost()) {
         int start = 0;
         int end = patchOffset.y() - 1;
+
+        const GLvoid *fd = updateInfo.data();
+        const int size = patchSize.width() * pixelSize;
+        KisOpenGLBufferCircularStorage::BufferBinder g(
+            m_bufferStorage, &fd, size);
+
         for (int i = start; i <= end; i++) {
             f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
-                            patchOffset.x(), i,
-                            patchSize.width(), 1,
-                            m_texturesInfo->format,
-                            m_texturesInfo->type,
-                            updateInfo.data());
+                               patchOffset.x(), i,
+                               patchSize.width(), 1,
+                               m_texturesInfo->format,
+                               m_texturesInfo->type,
+                               fd);
         }
     }
 
@@ -270,13 +234,19 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
 
         int start = patchOffset.y() + patchSize.height();
         int end = tileSize.height() - 1;
+
+        const GLvoid *fd = updateInfo.data() + shift;
+        const int size = patchSize.width() * pixelSize;
+        KisOpenGLBufferCircularStorage::BufferBinder g(
+            m_bufferStorage, &fd, size);
+
         for (int i = start; i < end; i++) {
             f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                             patchOffset.x(), i,
                             patchSize.width(), 1,
                             m_texturesInfo->format,
                             m_texturesInfo->type,
-                            updateInfo.data() + shift);
+                            fd);
         }
     }
 
@@ -295,13 +265,19 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
 
         int start = 0;
         int end = patchOffset.x() - 1;
+
+        const GLvoid *fd = columnBuffer.constData();
+        const int size = columnBuffer.size();
+        KisOpenGLBufferCircularStorage::BufferBinder g(
+            m_bufferStorage, &fd, size);
+
         for (int i = start; i <= end; i++) {
             f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                             i, patchOffset.y(),
                             1, patchSize.height(),
                             m_texturesInfo->format,
                             m_texturesInfo->type,
-                            columnBuffer.constData());
+                            fd);
         }
     }
 
@@ -320,13 +296,19 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
 
         int start = patchOffset.x() + patchSize.width();
         int end = tileSize.width() - 1;
+
+        const GLvoid *fd = columnBuffer.constData();
+        const int size = columnBuffer.size();
+        KisOpenGLBufferCircularStorage::BufferBinder g(
+            m_bufferStorage, &fd, size);
+
         for (int i = start; i <= end; i++) {
             f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
                             i, patchOffset.y(),
                             1, patchSize.height(),
                             m_texturesInfo->format,
                             m_texturesInfo->type,
-                            columnBuffer.constData());
+                            fd);
         }
     }
 

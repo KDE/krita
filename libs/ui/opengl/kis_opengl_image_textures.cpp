@@ -56,6 +56,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
     , m_internalColorManagementActive(true)
+    , m_bufferStorage(QOpenGLBuffer::PixelUnpackBuffer)
     , m_glFuncs(0)
     , m_useOcio(false)
     , m_initialized(false)
@@ -78,6 +79,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
     , m_internalColorManagementActive(true)
+    , m_bufferStorage(QOpenGLBuffer::PixelUnpackBuffer)
     , m_glFuncs(0)
     , m_useOcio(false)
     , m_initialized(false)
@@ -144,6 +146,22 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
     return true;
 }
 
+void KisOpenGLImageTextures::initBufferStorage(bool useBuffer)
+{
+    if (useBuffer) {
+        const int numTextureBuffers = 32;
+
+        const KoColorSpace *tilesDestinationColorSpace =
+            m_updateInfoBuilder.destinationColorSpace();
+        const int pixelSize = tilesDestinationColorSpace->pixelSize();
+        const int tileSize = m_texturesInfo.width * m_texturesInfo.height * pixelSize;
+
+        m_bufferStorage.allocate(numTextureBuffers, tileSize);
+    } else {
+        m_bufferStorage.reset();
+    }
+}
+
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
                                                                   const KoColorProfile *monitorProfile,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
@@ -198,6 +216,8 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
     KisConfig config(true);
     KisOpenGL::FilterMode mode = (KisOpenGL::FilterMode)config.openGLFilteringMode();
 
+    initBufferStorage(config.useOpenGLTextureBuffer());
+
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (ctx) {
         QOpenGLFunctions *f = ctx->functions();
@@ -214,7 +234,7 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
                                                           &m_texturesInfo,
                                                           emptyTileData,
                                                           mode,
-                                                          config.useOpenGLTextureBuffer(),
+                                                          config.useOpenGLTextureBuffer() ? &m_bufferStorage : 0,
                                                           config.numMipmapLevels(),
                                                           f);
                 m_textureTiles.append(tile);
@@ -343,8 +363,10 @@ void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 {
     if(m_textureTiles.isEmpty()) return;
 
+    initBufferStorage(useBuffer);
+
     Q_FOREACH (KisTextureTile *tile, m_textureTiles) {
-        tile->setUseBuffer(useBuffer);
+        tile->setBufferStorage(useBuffer ? &m_bufferStorage : 0);
         tile->setNumMipmapLevels(NumMipmapLevels);
     }
 }

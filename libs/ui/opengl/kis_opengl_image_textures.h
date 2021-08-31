@@ -17,6 +17,7 @@
 #include "canvas/kis_update_info.h"
 #include "opengl/kis_texture_tile.h"
 #include "KisOpenGLUpdateInfoBuilder.h"
+#include "KisOpenGLBufferCircularStorage.h"
 
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
@@ -159,6 +160,8 @@ protected:
 
     static bool imageCanShareTextures();
 
+    void initBufferStorage(bool useBuffer);
+
 private:
 
     void getTextureSize(KisGLTexturesInfo *texturesInfo);
@@ -185,6 +188,9 @@ private:
 
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;
+
+    // buffers are used by texture tiles, so they must come first
+    KisOpenGLBufferCircularStorage m_bufferStorage;
     QVector<KisTextureTile*> m_textureTiles;
 
     QOpenGLFunctions *m_glFuncs;

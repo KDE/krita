@@ -36,6 +36,7 @@
 #include <QMessageBox>
 #include "KisOpenGLModeProber.h"
 #include <KoColorModelStandardIds.h>
+#include "KisOpenGLBufferCircularStorage.h"
 
 #if !defined(Q_OS_MACOS) && !defined(QT_OPENGL_ES_2)
 #include <QOpenGLFunctions_2_1>
@@ -93,7 +94,9 @@ public:
 
     // Stores a quad for drawing the canvas
     QOpenGLVertexArrayObject quadVAO;
-    std::array<QOpenGLBuffer, NumberOfBuffers * 2> quadBuffers;
+
+    KisOpenGLBufferCircularStorage tileVertexBuffer;
+    KisOpenGLBufferCircularStorage tileTextureVertexBuffer;
 
     // Stores data for drawing tool outlines
     QOpenGLVertexArrayObject outlineVAO;
@@ -319,20 +322,8 @@ void KisOpenGLCanvas2::initializeGL()
         glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
         glEnableVertexAttribArray(PROGRAM_TEXCOORD_ATTRIBUTE);
 
-        for (int i = 0; i < NumberOfBuffers; i++) {
-
-            // Create the vertex buffer object, it has 6 vertices with 3 components
-            d->quadBuffers[2 * i + 0].create();
-            d->quadBuffers[2 * i + 0].setUsagePattern(QOpenGLBuffer::DynamicDraw);
-            d->quadBuffers[2 * i + 0].bind();
-            d->quadBuffers[2 * i + 0].allocate(d->vertices, 6 * 3 * sizeof(float));
-
-            // Create the texture buffer object, it has 6 texture coordinates with 2 components
-            d->quadBuffers[2 * i + 1].create();
-            d->quadBuffers[2 * i + 1].setUsagePattern(QOpenGLBuffer::DynamicDraw);
-            d->quadBuffers[2 * i + 1].bind();
-            d->quadBuffers[2 * i + 1].allocate(d->texCoords, 6 * 2 * sizeof(float));
-        }
+        d->tileVertexBuffer.allocate(NumberOfBuffers, 3 * sizeof(float));
+        d->tileTextureVertexBuffer.allocate(NumberOfBuffers, 2 * sizeof(float));
 
         // Create the outline buffer, this buffer will store the outlines of
         // tools and will frequently change data
@@ -692,12 +683,19 @@ void KisOpenGLCanvas2::drawCheckers(const QRect &updateRect)
     //Setup the geometry for rendering
     if (KisOpenGL::hasOpenGL3()) {
         rectToVertices(d->vertices, modelRect);
-        d->quadBuffers[0].bind();
-        d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
+        QOpenGLBuffer *vertexBuf = d->tileVertexBuffer.getNextBuffer();
+
+        vertexBuf->bind();
+        vertexBuf->write(0, d->vertices, 3 * 6 * sizeof(float));
+        glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
 
         rectToTexCoords(d->texCoords, textureRect);
-        d->quadBuffers[1].bind();
-        d->quadBuffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+        QOpenGLBuffer *vertexTextureBuf = d->tileTextureVertexBuffer.getNextBuffer();
+
+        vertexTextureBuf->bind();
+        vertexTextureBuf->write(0, d->texCoords, 2 * 6 * sizeof(float));
+        glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
     else {
         rectToVertices(d->vertices, modelRect);
@@ -921,15 +919,19 @@ void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
 
             //Setup the geometry for rendering
             if (KisOpenGL::hasOpenGL3()) {
+
                 rectToVertices(d->vertices, modelRect);
-                d->quadBuffers[2 * (tileIndex % NumberOfBuffers) + 0].bind();
-                d->quadBuffers[2 * (tileIndex % NumberOfBuffers) + 0].write(0, d->vertices, 3 * 6 * sizeof(float));
+                QOpenGLBuffer *vertexBuf = d->tileVertexBuffer.getNextBuffer();
+                vertexBuf->bind();
+                vertexBuf->write(0, d->vertices, 3 * 6 * sizeof(float));
                 glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
                 rectToTexCoords(d->texCoords, textureRect);
-                d->quadBuffers[2 * (tileIndex % NumberOfBuffers) + 1].bind();
-                d->quadBuffers[2 * (tileIndex % NumberOfBuffers) + 1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+                QOpenGLBuffer *vertexTextureBuf = d->tileTextureVertexBuffer.getNextBuffer();
+                vertexTextureBuf->bind();
+                vertexTextureBuf->write(0, d->texCoords, 2 * 6 * sizeof(float));
                 glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
             }
             else {
                 rectToVertices(d->vertices, modelRect);

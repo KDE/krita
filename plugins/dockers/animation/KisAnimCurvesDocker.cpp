@@ -121,7 +121,7 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     sbValueRegister = new KisDoubleParseSpinBox(this);
-    sbValueRegister->setPrefix("Val: ");
+    sbValueRegister->setPrefix(i18nc("Value (Keep short!)", "Val:"));
     sbValueRegister->setRange(-99000.f, 99000.f);
     widgetAreaLayout->addWidget(sbValueRegister);
 

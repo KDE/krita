@@ -1,0 +1,28 @@
+From f59ac3f15ea14ddf254d2264b9cfbd3d2c544ef0 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Wed, 1 Sep 2021 11:33:47 +0000
+Subject: [PATCH] Android: Don't use QDir::cleanPath() for content Uri
+
+---
+ src/corelib/io/qdir.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/corelib/io/qdir.cpp b/src/corelib/io/qdir.cpp
+index 5c14d8ffb3..28c220014d 100644
+--- a/src/corelib/io/qdir.cpp
++++ b/src/corelib/io/qdir.cpp
+@@ -2370,6 +2370,11 @@ static QString qt_cleanPath(const QString &path, bool *ok)
+ */
+ QString QDir::cleanPath(const QString &path)
+ {
++#ifdef Q_OS_ANDROID
++    if (path.startsWith(QLatin1String("content://"))) {
++        return path;
++    }
++#endif
+     return qt_cleanPath(path);
+ }
+ 
+-- 
+2.32.0
+

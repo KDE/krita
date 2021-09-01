@@ -2285,7 +2285,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
 
         // Check if the dock widget is supposed to be collapsible
-        if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+        if (!dockWidget->titleBarWidget() || !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);
         }

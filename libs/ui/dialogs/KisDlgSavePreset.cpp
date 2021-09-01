@@ -183,7 +183,7 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         newPreset->setValid(true);
-
+        newPreset->setStorageLocation("");
         rServer->addResource(newPreset);
 
         // trying to get brush preset to load after it is created

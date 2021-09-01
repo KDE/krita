@@ -162,7 +162,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_ui->setupUi(mainWidget);
 
     m_ui->btnExport->setMenu(m_exportMenu);
-    m_ui->btnExport->setPopupMode(QToolButton::MenuButtonPopup);
+    m_ui->btnExport->setPopupMode(QToolButton::InstantPopup);
 
     m_exportAsPdfAction = new KisAction(i18nc("Export storyboard as PDF", "Export as PDF"), m_exportMenu);
     m_exportMenu->addAction(m_exportAsPdfAction);
@@ -173,7 +173,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
 
     m_ui->btnComment->setMenu(m_commentMenu);
-    m_ui->btnComment->setPopupMode(QToolButton::MenuButtonPopup);
+    m_ui->btnComment->setPopupMode(QToolButton::InstantPopup);
 
     m_lockAction = new KisAction(KisIconUtils::loadIcon("unlocked"),
                                 i18nc("Freeze keyframe positions and ignore storyboard adjustments", "Freeze Keyframe Data"), m_ui->btnLock);

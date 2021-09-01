@@ -78,6 +78,9 @@ public:
 
     bool isOverlappingActionIcons(const QRect& rect, const QMouseEvent *event);
 
+protected:
+    bool eventFilter(QObject* editor, QEvent* event) override;
+
 private Q_SLOTS:
 
     /**

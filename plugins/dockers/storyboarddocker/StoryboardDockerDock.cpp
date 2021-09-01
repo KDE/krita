@@ -217,8 +217,9 @@ StoryboardDockerDock::StoryboardDockerDock( )
             m_storyboardModel->insertItem(currentSelection, true);
         });
         action->setIcon(KisIconUtils::loadIcon("list-add"));
-        m_ui->btnCreateScene->setDefaultAction(action);
+        m_ui->btnCreateScene->setAutoRaise(true);
         m_ui->btnCreateScene->setIconSize(QSize(22,22));
+        m_ui->btnCreateScene->setDefaultAction(action);
 
         action = new QAction(i18nc("Remove current scene from storyboards", "Remove Scene"), this);
         connect(action, &QAction::triggered, this, [this](bool){
@@ -238,9 +239,9 @@ StoryboardDockerDock::StoryboardDockerDock( )
             }
         });
         action->setIcon(KisIconUtils::loadIcon("edit-delete"));
-        m_ui->btnDeleteScene->setDefaultAction(action);
+        m_ui->btnDeleteScene->setAutoRaise(true);
         m_ui->btnDeleteScene->setIconSize(QSize(22,22));
-
+        m_ui->btnDeleteScene->setDefaultAction(action);
     }
 
     setEnabled(false);

@@ -635,3 +635,18 @@ bool StoryboardDelegate::isOverlappingActionIcons(const QRect &rect, const QMous
 
     return addItemButtonHover || deleteItemButtonHover;
 }
+
+bool StoryboardDelegate::eventFilter(QObject *editor, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent* kEvent = static_cast<QKeyEvent*>(event);
+        QTextEdit* textEditor = qobject_cast<QTextEdit*>(editor);
+        if (textEditor && kEvent->key() == Qt::Key_Escape) {
+            emit commitData(textEditor);
+            emit closeEditor(textEditor, QAbstractItemDelegate::SubmitModelCache);
+            return true;
+        }
+    }
+    QStyledItemDelegate::eventFilter(editor, event);
+    return false;
+}

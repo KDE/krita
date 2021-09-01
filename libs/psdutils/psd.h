@@ -1279,7 +1279,7 @@ QString KRITAPSDUTILS_EXPORT psd_blendmode_to_composite_op(const QString &blendm
 QString KRITAPSDUTILS_EXPORT composite_op_to_psd_blendmode(const QString &compositeOp);
 
 
-#if __clang_major__ < 10
+#if defined(__clang__) && __clang_major__ < 10
 inline QDebug &operator<<(QDebug &self, psd_compression_type type)
 {
     self << static_cast<std::uint16_t>(type);

@@ -8,7 +8,7 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QFileInfo>
-#include <KritaPluginDebug.h>
+#include <kis_debug.h>
 
 #include <klocalizedstring.h>
 
@@ -38,7 +38,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
 
     Q_FOREACH(const KisMimeDatabase::KisMimeType &mimeType, s_mimeDatabase) {
         if (mimeType.suffixes.contains(suffix)) {
-            debugPlugin << "mimeTypeForFile(). KisMimeDatabase returned" << mimeType.mimeType << "for" << file;
+            dbgPlugins << "mimeTypeForFile(). KisMimeDatabase returned" << mimeType.mimeType << "for" << file;
             return mimeType.mimeType;
         }
     }
@@ -48,7 +48,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
     if (checkExistingFiles && fi.size() > 0) {
         mime = db.mimeTypeForFile(file, QMimeDatabase::MatchContent);
         if (mime.name() != "application/octet-stream" && mime.name() != "application/zip") {
-            debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
+            dbgPlugins << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
             return mime.name();
         }
     }
@@ -61,7 +61,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
     mime = db.mimeTypeForFile(file);
 #endif
     if (mime.name() != "application/octet-stream") {
-        debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
+        dbgPlugins << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
         return mime.name();
     }
     return "";
@@ -76,7 +76,7 @@ QString KisMimeDatabase::mimeTypeForSuffix(const QString &suffix)
 
     Q_FOREACH(const KisMimeDatabase::KisMimeType &mimeType, s_mimeDatabase) {
         if (mimeType.suffixes.contains(s)) {
-            debugPlugin << "mimeTypeForSuffix(). KisMimeDatabase returned" << mimeType.mimeType << "for" << s;
+            dbgPlugins << "mimeTypeForSuffix(). KisMimeDatabase returned" << mimeType.mimeType << "for" << s;
             return mimeType.mimeType;
         }
     }
@@ -92,7 +92,7 @@ QString KisMimeDatabase::mimeTypeForData(const QByteArray ba)
 {
     QMimeDatabase db;
     QMimeType mtp = db.mimeTypeForData(ba);
-    debugPlugin << "mimeTypeForData(). QMimeDatabase returned" << mtp.name();
+    dbgPlugins << "mimeTypeForData(). QMimeDatabase returned" << mtp.name();
     return mtp.name();
 }
 
@@ -102,7 +102,7 @@ QString KisMimeDatabase::descriptionForMimeType(const QString &mimeType)
 
     Q_FOREACH(const KisMimeDatabase::KisMimeType &m, s_mimeDatabase) {
         if (m.mimeType == mimeType) {
-            debugPlugin << "descriptionForMimeType. KisMimeDatabase returned" << m.description << "for" << mimeType;
+            dbgPlugins << "descriptionForMimeType. KisMimeDatabase returned" << m.description << "for" << mimeType;
             return m.description;
         }
     }
@@ -110,7 +110,7 @@ QString KisMimeDatabase::descriptionForMimeType(const QString &mimeType)
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForName(mimeType);
     if (mime.name() != "application/octet-stream") {
-        debugPlugin  << "descriptionForMimeType. QMimeDatabase returned" << mime.comment() << "for" << mimeType;
+        dbgPlugins  << "descriptionForMimeType. QMimeDatabase returned" << mime.comment() << "for" << mimeType;
         return mime.comment();
     }
 
@@ -122,7 +122,7 @@ QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
     fillMimeData();
     Q_FOREACH(const KisMimeDatabase::KisMimeType &m, s_mimeDatabase) {
         if (m.mimeType == mimeType) {
-            debugPlugin << "suffixesForMimeType. KisMimeDatabase returned" << m.suffixes;
+            dbgPlugins << "suffixesForMimeType. KisMimeDatabase returned" << m.suffixes;
             return m.suffixes;
         }
     }
@@ -143,7 +143,7 @@ QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
             suffixes.prepend(preferredSuffix);
 
         }
-        debugPlugin << "suffixesForMimeType. QMimeDatabase returned" << suffixes;
+        dbgPlugins << "suffixesForMimeType. QMimeDatabase returned" << suffixes;
         return suffixes;
     }
     return QStringList();
@@ -153,7 +153,7 @@ QString KisMimeDatabase::iconNameForMimeType(const QString &mimeType)
 {
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForName(mimeType);
-    debugPlugin << "iconNameForMimeType" << mime.iconName();
+    dbgPlugins << "iconNameForMimeType" << mime.iconName();
     return mime.iconName();
 }
 
@@ -320,10 +320,10 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "avif";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "image/jp2";
-        mimeType.description = i18nc("description of a file type", "JP2 Image");
-        mimeType.suffixes = QStringList() << "jp2" << "j2k";
-        s_mimeDatabase << mimeType;
+//        mimeType.mimeType = "image/jp2";
+//        mimeType.description = i18nc("description of a file type", "JP2 Image");
+//        mimeType.suffixes = QStringList() << "jp2" << "j2k";
+//        s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-seexpr-script";
         mimeType.description = i18nc("description of a file type", "SeExpr script package");
@@ -340,6 +340,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "apng";
         s_mimeDatabase << mimeType;
 
-        debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
+        dbgPlugins << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
     }
 }

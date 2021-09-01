@@ -12,6 +12,7 @@
 #include "StoryboardView.h"
 #include "StoryboardUtils.h"
 #include "DlgExportStoryboard.h"
+#include "KisAddRemoveStoryboardCommand.h"
 
 #include <QMenu>
 #include <QButtonGroup>
@@ -161,7 +162,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_ui->setupUi(mainWidget);
 
     m_ui->btnExport->setMenu(m_exportMenu);
-    m_ui->btnExport->setPopupMode(QToolButton::MenuButtonPopup);
+    m_ui->btnExport->setPopupMode(QToolButton::InstantPopup);
 
     m_exportAsPdfAction = new KisAction(i18nc("Export storyboard as PDF", "Export as PDF"), m_exportMenu);
     m_exportMenu->addAction(m_exportAsPdfAction);
@@ -172,7 +173,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
 
     m_ui->btnComment->setMenu(m_commentMenu);
-    m_ui->btnComment->setPopupMode(QToolButton::MenuButtonPopup);
+    m_ui->btnComment->setPopupMode(QToolButton::InstantPopup);
 
     m_lockAction = new KisAction(KisIconUtils::loadIcon("unlocked"),
                                 i18nc("Freeze keyframe positions and ignore storyboard adjustments", "Freeze Keyframe Data"), m_ui->btnLock);
@@ -193,15 +194,55 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_modeGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotModeChanged(QAbstractButton*)));
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
 
-    m_storyboardDelegate->setView(m_ui->listView);
-    m_storyboardModel->setView(m_ui->listView);
-    m_ui->listView->setModel(m_storyboardModel);
-    m_ui->listView->setItemDelegate(m_storyboardDelegate);
+    m_storyboardDelegate->setView(m_ui->sceneView);
+    m_storyboardModel->setView(m_ui->sceneView);
+    m_ui->sceneView->setModel(m_storyboardModel);
+    m_ui->sceneView->setItemDelegate(m_storyboardDelegate);
 
     m_storyboardModel->setCommentModel(m_commentModel);
 
-    m_modeGroup->button(Mode::Grid)->click();
+    m_modeGroup->button(Mode::Row)->click();
     m_viewGroup->button(View::All)->click();
+
+    {   // Footer section...
+        QAction* action = new QAction(i18nc("Add new scene as the last storyboard", "Add Scene"), this);
+        connect(action, &QAction::triggered, this, [this](bool){
+            if (!m_canvas) return;
+
+            QModelIndex currentSelection = m_ui->sceneView->currentIndex();
+            if (currentSelection.parent().isValid()) {
+                currentSelection = currentSelection.parent();
+            }
+
+            m_storyboardModel->insertItem(currentSelection, true);
+        });
+        action->setIcon(KisIconUtils::loadIcon("list-add"));
+        m_ui->btnCreateScene->setAutoRaise(true);
+        m_ui->btnCreateScene->setIconSize(QSize(22,22));
+        m_ui->btnCreateScene->setDefaultAction(action);
+
+        action = new QAction(i18nc("Remove current scene from storyboards", "Remove Scene"), this);
+        connect(action, &QAction::triggered, this, [this](bool){
+            if (!m_canvas) return;
+
+            QModelIndex currentSelection = m_ui->sceneView->currentIndex();
+            if (currentSelection.parent().isValid()) {
+                currentSelection = currentSelection.parent();
+            }
+
+            if (currentSelection.isValid()) {
+                int row = currentSelection.row();
+                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, m_storyboardModel->getData().at(row), m_storyboardModel);
+
+                m_storyboardModel->removeItem(currentSelection, command);
+                m_storyboardModel->pushUndoCommand(command);
+            }
+        });
+        action->setIcon(KisIconUtils::loadIcon("edit-delete"));
+        m_ui->btnDeleteScene->setAutoRaise(true);
+        m_ui->btnDeleteScene->setIconSize(QSize(22,22));
+        m_ui->btnDeleteScene->setDefaultAction(action);
+    }
 
     setEnabled(false);
 }
@@ -559,21 +600,21 @@ void StoryboardDockerDock::slotModeChanged(QAbstractButton* button)
 {
     int mode = m_modeGroup->id(button);
     if (mode == Mode::Column) {
-        m_ui->listView->setFlow(QListView::LeftToRight);
-        m_ui->listView->setWrapping(false);
-        m_ui->listView->setItemOrientation(Qt::Vertical);
+        m_ui->sceneView->setFlow(QListView::LeftToRight);
+        m_ui->sceneView->setWrapping(false);
+        m_ui->sceneView->setItemOrientation(Qt::Vertical);
         m_viewGroup->button(View::CommentsOnly)->setEnabled(true);
     }
     else if (mode == Mode::Row) {
-        m_ui->listView->setFlow(QListView::TopToBottom);
-        m_ui->listView->setWrapping(false);
-        m_ui->listView->setItemOrientation(Qt::Horizontal);
+        m_ui->sceneView->setFlow(QListView::TopToBottom);
+        m_ui->sceneView->setWrapping(false);
+        m_ui->sceneView->setItemOrientation(Qt::Horizontal);
         m_viewGroup->button(View::CommentsOnly)->setEnabled(false);           //disable the comments only view
     }
     else if (mode == Mode::Grid) {
-        m_ui->listView->setFlow(QListView::LeftToRight);
-        m_ui->listView->setWrapping(true);
-        m_ui->listView->setItemOrientation(Qt::Vertical);
+        m_ui->sceneView->setFlow(QListView::LeftToRight);
+        m_ui->sceneView->setWrapping(true);
+        m_ui->sceneView->setItemOrientation(Qt::Vertical);
         m_viewGroup->button(View::CommentsOnly)->setEnabled(true);
     }
     m_storyboardModel->layoutChanged();
@@ -583,19 +624,19 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
 {
     int view = m_viewGroup->id(button);
     if (view == View::All) {
-        m_ui->listView->setCommentVisibility(true);
-        m_ui->listView->setThumbnailVisibility(true);
+        m_ui->sceneView->setCommentVisibility(true);
+        m_ui->sceneView->setThumbnailVisibility(true);
         m_modeGroup->button(Mode::Row)->setEnabled(true);
     }
     else if (view == View::ThumbnailsOnly) {
-        m_ui->listView->setCommentVisibility(false);
-        m_ui->listView->setThumbnailVisibility(true);
+        m_ui->sceneView->setCommentVisibility(false);
+        m_ui->sceneView->setThumbnailVisibility(true);
         m_modeGroup->button(Mode::Row)->setEnabled(true);
     }
 
     else if (view == View::CommentsOnly) {
-        m_ui->listView->setCommentVisibility(true);
-        m_ui->listView->setThumbnailVisibility(false);
+        m_ui->sceneView->setCommentVisibility(true);
+        m_ui->sceneView->setThumbnailVisibility(false);
         m_modeGroup->button(Mode::Row)->setEnabled(false);               //disable the row mode
     }
     m_storyboardModel->layoutChanged();

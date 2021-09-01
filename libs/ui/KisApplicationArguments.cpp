@@ -85,7 +85,11 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("canvasonly"), i18n("Start Krita in canvas-only mode")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("nosplash"), i18n("Do not show the splash screen")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("fullscreen"), i18n("Start Krita in full-screen mode")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("dpi"), i18n("Override display DPI"), QLatin1String("dpiX,dpiY")));
+    {
+        QCommandLineOption opt(QStringList() << QLatin1String("dpi"), i18n("Override display DPI"), QLatin1String("dpiX,dpiY"));
+        opt.setFlags(QCommandLineOption::HiddenFromHelp);
+        parser.addOption(opt);
+    }
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export"), i18n("Export to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-sequence"), i18n("Export animation to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-filename"), i18n("Filename for export"), QLatin1String("filename")));

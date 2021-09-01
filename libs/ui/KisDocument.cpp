@@ -18,7 +18,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentInfo.h>
-#include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoID.h>
 #include <KoProgressProxy.h>
@@ -1680,15 +1679,7 @@ public:
         hlayout->addWidget(new QLabel(message));
         layout->addLayout(hlayout);
         QTextBrowser *browser = new QTextBrowser();
-        QString warning = "<html><body><p><b>";
-        if (warnings.size() == 1) {
-            warning += "</b> Reason:</p>";
-        }
-        else {
-            warning += "</b> Reasons:</p>";
-        }
-        warning += "<p/><ul>";
-
+        QString warning = "<html><body><ul>";
         Q_FOREACH(const QString &w, warnings) {
             warning += "\n<li>" + w + "</li>";
         }
@@ -1696,7 +1687,9 @@ public:
         browser->setHtml(warning);
         browser->setMinimumHeight(200);
         browser->setMinimumWidth(400);
-        layout->addWidget(browser);
+        if (!warnings.join("").isEmpty()) {
+            layout->addWidget(browser);
+        }
         setMainWidget(page);
         setButtons(KoDialog::Ok);
         resize(minimumSize());
@@ -1747,9 +1740,11 @@ bool KisDocument::openFile()
             updater->cancel();
         }
         QString msg = status.errorMessage();
+        KisUsageLogger::log(QString("Loading %1 failed: %2").arg(prettyPath()).arg(msg));
+
         if (!msg.isEmpty() && !fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                                i18n("Could not open %2.\nReason: %1.", msg, prettyPath()),
+                                i18n("Could not open %2.\nReason: %1", msg, prettyPath()),
                                 errorMessage().split("\n") + warningMessage().split("\n"));
             dlg.exec();
         }
@@ -1757,7 +1752,7 @@ bool KisDocument::openFile()
     }
     else if (!warningMessage().isEmpty() && !fileBatchMode()) {
         DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                            i18n("There were problems opening %1.", prettyPath()),
+                            i18n("There were problems opening %1", prettyPath()),
                             warningMessage().split("\n"));
         dlg.exec();
         setPath(QString());
@@ -2271,7 +2266,8 @@ bool KisDocument::openPathInternal(const QString &path)
 
     if (ret) {
         emit completed();
-    } else {
+    }
+    else {
         emit canceled(QString());
     }
     return ret;

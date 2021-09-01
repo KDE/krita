@@ -1335,9 +1335,18 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice &device)
     KisAslXmlParser parser;
     parser.parseXML(doc, m_catcher);
 
+    QSet<QString> allPsdUuids;
+
     // correct all the layer styles
     Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         FillStylesCorrector::correct(style.data());
+
+        if (allPsdUuids.contains(style->psdUuid())) {
+            qWarning() << "Layer style" << style->name() << "has non-unique uuid and will be ignored";
+            continue;
+        }
+
+        allPsdUuids << style->psdUuid();
         style->setValid(!style->isEmpty());
 
         style->setFilename(style->psdUuid() + QString("_style"));

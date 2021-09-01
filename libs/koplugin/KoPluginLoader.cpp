@@ -11,7 +11,7 @@
 #include <QJsonObject>
 #include <QPluginLoader>
 
-#include "KritaPluginDebug.h"
+#include "kis_debug.h"
 
 #include <kis_debug.h>
 
@@ -63,7 +63,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
-        debugPlugin << "Loading" << serviceType << "with checking the config";
+        dbgPlugins << "Loading" << serviceType << "with checking the config";
         KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
@@ -120,7 +120,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
 
     QList<QString> whiteList;
     Q_FOREACH (const QString &serviceName, serviceNames.keys()) {
-        debugPlugin << "loading" << serviceName;
+        dbgPlugins << "loading" << serviceName;
         QPluginLoader *loader = serviceNames[serviceName];
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
         QObject *plugin = 0;
@@ -132,7 +132,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             json = json.value("KPlugin").toObject();
             const QString pluginName = json.value("Id").toString();
             whiteList << pluginName;
-            debugPlugin << "\tLoaded plugin" << loader->fileName() << owner;
+            dbgPlugins << "\tLoaded plugin" << loader->fileName() << owner;
             if (!owner) {
                 delete plugin;
             }

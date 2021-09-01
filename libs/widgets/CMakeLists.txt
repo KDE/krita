@@ -16,7 +16,6 @@ set(kritawidgets_LIB_SRCS
     KoZoomInput.cpp
     KoZoomHandler.cpp
     KoZoomMode.cpp
-    KoDpi.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp

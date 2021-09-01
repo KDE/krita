@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
       <text>Tool Shortcuts</text>
     <Action name="KisToolSelectMagnetic">
-      <icon></icon>
+      <icon>tool_magnetic_selection</icon>
       <text>Magnetic Selection Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Magnetic Curve Selection Tool</toolTip>

@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
 <text>Tool Shortcuts</text>
 <Action name="KisToolSelectOutline">
-      <icon></icon>
+      <icon>tool_outline_selection</icon>
       <text>Freehand Selection Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Freehand Selection Tool</toolTip>

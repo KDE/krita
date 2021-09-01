@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
       <text>Tool Shortcuts</text>
     <Action name="KisToolSelectPath">
-      <icon></icon>
+      <icon>tool_path_selection</icon>
       <text>Bezier Curve Selection Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Bezier Curve Selection Tool</toolTip>

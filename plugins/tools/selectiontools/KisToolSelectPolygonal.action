@@ -3,6 +3,7 @@
   <Actions category="tool-shortcuts">
 <text>Tool Shortcuts</text>
 <Action name="KisToolSelectPolygonal">
+      <icon>tool_polygonal_selection</icon>
       <whatsThis></whatsThis>
       <toolTip>Polygonal Selection Tool</toolTip>
       <iconText>Polygonal Selection Tool</iconText>

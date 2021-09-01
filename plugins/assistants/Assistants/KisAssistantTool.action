@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
     <text>Tool Shortcuts</text>
         <Action name="KisAssistantTool">
-      <icon></icon>
+      <icon>krita_tool_assistant</icon>
       <text>Assistant Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Assistant Tool</toolTip>

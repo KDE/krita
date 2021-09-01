@@ -1836,7 +1836,9 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
         dock->setProperty("Locked", false); // Unlock invisible dockers
         dock->toggleViewAction()->setEnabled(true);
         dock->hide();
-        dock->titleBarWidget()->setVisible(showTitlebars);
+        if (!dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+            dock->titleBarWidget()->setVisible(showTitlebars);
+        }
     }
 
     bool success = KXmlGuiWindow::restoreState(state);
@@ -1844,7 +1846,7 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
     if (!success) {
         KXmlGuiWindow::restoreState(oldState);
         Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-            if (dock->titleBarWidget()) {
+            if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
                 dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
             }
         }
@@ -2269,6 +2271,10 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget = factory->createDockWidget();
         KAcceleratorManager::setNoAccel(dockWidget->titleBarWidget());
 
+        if (!dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+            dockWidget->titleBarWidget()->setVisible(KisConfig(true).showDockerTitleBars());
+        }
+
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) {
@@ -2279,7 +2285,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
 
         // Check if the dock widget is supposed to be collapsible
-        if (!dockWidget->titleBarWidget() && factory->id() != "TimelineDocker") {
+        if (!dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);
         }
@@ -3048,7 +3054,7 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
 void KisMainWindow::showDockerTitleBars(bool show)
 {
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        if (dock->titleBarWidget()) {
+        if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
             dock->titleBarWidget()->setVisible(show || dock->isFloating());
         }
     }

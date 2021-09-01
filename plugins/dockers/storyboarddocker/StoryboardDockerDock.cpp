@@ -216,6 +216,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
             m_storyboardModel->insertItem(currentSelection, true);
         });
+        action->setIcon(KisIconUtils::loadIcon("list-add"));
         m_ui->btnCreateScene->setDefaultAction(action);
         m_ui->btnCreateScene->setIconSize(QSize(22,22));
 
@@ -236,8 +237,10 @@ StoryboardDockerDock::StoryboardDockerDock( )
                 m_storyboardModel->pushUndoCommand(command);
             }
         });
+        action->setIcon(KisIconUtils::loadIcon("edit-delete"));
         m_ui->btnDeleteScene->setDefaultAction(action);
         m_ui->btnDeleteScene->setIconSize(QSize(22,22));
+
     }
 
     setEnabled(false);

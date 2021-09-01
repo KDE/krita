@@ -57,18 +57,17 @@ struct KisReferenceImage::Private : public QSharedData
     QSizeF prevCropSize = QSizeF(0,0);
     QImage originalCroppedImage;
 
-    qreal saturation{1.0};
-    int id{-1};
-    bool embed{true};
+    qreal saturation = 1.0;
+    int id = -1;
+    bool embed = true;
 
     bool pinRotate = false, pinMirror = false;
     bool pinPosition = false, pinZoom = false;
     bool mirrorX = false, mirrorY = false;
-    bool initialValues =false;
     bool pinAll = false;
     QPointF docOffset;
     qreal previousAngle = 0, previousPosition;
-    qreal zoom;
+    qreal zoom = 0.33;
     QTransform transform = QTransform();
 
     bool loadFromFile() {
@@ -247,6 +246,9 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
 {
     KisReferenceImage *reference = new KisReferenceImage();
     reference->d->externalFilename = filename;
+    reference->d->docOffset = converter.documentOffset();
+    reference->d->zoom = converter.zoom();
+    reference->d->previousAngle = converter.rotationAngle();
     bool ok = reference->d->loadFromFile();
 
     if (ok) {
@@ -269,6 +271,9 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
 KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverter &converter)
 {
     KisReferenceImage *reference = new KisReferenceImage();
+    reference->d->docOffset = converter.documentOffset();
+    reference->d->zoom = converter.zoom();
+    reference->d->previousAngle = converter.rotationAngle();
     bool ok = reference->d->loadFromClipboard();
 
     if (ok) {
@@ -423,7 +428,7 @@ KisReferenceImage * KisReferenceImage::fromXml(const QDomElement &elem)
         reference->d->internalFilename = src;
         reference->d->embed = true;
         const QString &src = elem.attribute("externalFilename", "");
-        if(src.startsWith("file://")) {
+        if (src.startsWith("file://")) {
             reference->d->externalFilename = src.mid(7);
         }
     }
@@ -611,15 +616,6 @@ void KisReferenceImage::setPinAll(bool value)
 qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
 {
     qreal diffRotate = 0;
-    if (!d->initialValues) {
-        d->docOffset = kisCanvas->documentOffset();
-        d->previousAngle = kisCanvas->rotationAngle();
-        d->zoom = kisCanvas->viewConverter()->zoom();
-        KoFlake::resizeShapeCommon(this, d->zoom , d->zoom,
-                                   absolutePosition(KoFlake::TopLeft), false ,false ,this->transformation());
-        d->initialValues = true;
-    }
-
     if (!qFuzzyCompare(kisCanvas->viewConverter()->zoom(), d->zoom)) {
         if (!d->pinZoom) {
 

@@ -100,7 +100,6 @@ void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
         KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
 
         if (referenceImage && referenceImage->cropEnabled()) {
-
             KoInteractionTool::mouseMoveEvent(newEvent);
             if(currentStrategy() == 0) {
             QRectF bounds = handlesSize();
@@ -159,7 +158,7 @@ QRectF ToolReferenceImages::handlesSize()
     if (referenceImage) {
         recalcCropHandles(activeReferenceImage());
         QRectF bounds = m_outline.boundingRect();
-        QPointF border = QPointF(5, 5);        // HandleSize = 5
+        QPointF border = QPointF(10, 10);
         bounds.adjust(-border.x(), -border.y(), border.x(), border.y());
         return bounds;
     }
@@ -201,7 +200,7 @@ KoFlake::SelectionHandle ToolReferenceImages::handleAt(const QPointF &point, boo
         const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
 
         // if just inside the outline
-        if (distanceSq < 25) {
+        if (distanceSq < 125) {
 
             if (innerHandleMeaning) {
                 if (distanceSq < 16) {

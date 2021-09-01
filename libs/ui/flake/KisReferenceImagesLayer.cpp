@@ -155,7 +155,7 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *documen
     Q_FOREACH(KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
         if (ref && ref->hasLocalFile()) {
-            if(!m_fileSystemWatcher->files().contains(ref->filename())) {
+            if (!m_fileSystemWatcher->files().contains(ref->filename())) {
                 m_fileSystemWatcher->addPath(ref->filename());
             }
         }

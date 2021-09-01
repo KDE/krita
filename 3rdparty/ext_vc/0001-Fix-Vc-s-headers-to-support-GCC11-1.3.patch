@@ -9,8 +9,8 @@ Subject: [PATCH] Fix Vc's headers to support GCC11
 
 diff --git a/common/simdarray.h b/common/simdarray.h
 index 67d1c23..50f89cd 100644
---- a/Vc/common/simdarray.h
-+++ b/Vc/common/simdarray.h
+--- a/common/simdarray.h
++++ b/common/simdarray.h
 @@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  //#include "../IO"
  

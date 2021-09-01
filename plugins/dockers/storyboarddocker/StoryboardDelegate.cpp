@@ -145,7 +145,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
                 if (m_view->commentIsVisible() && model->getComment(index.row() - 4).visibility) {
                     p->setPen(QPen(option.palette.dark(), 2));
-                    drawComment(p, option, index);
+                    drawCommentHeader(p, option, index);
                 }
                 break;
             }
@@ -173,7 +173,7 @@ void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &op
     p->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, data + suffix);
 }
 
-QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QStyleOptionSlider StoryboardDelegate::drawCommentHeader(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
     const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
@@ -357,7 +357,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             }
         }
         else if (index.parent().isValid() && index.row() >= StoryboardItem::Comments) {
-            QStyleOptionSlider scrollBarOption = drawComment(nullptr, option, index);
+            QStyleOptionSlider scrollBarOption = drawCommentHeader(nullptr, option, index);
             QRect upButton = scrollUpButton(option, scrollBarOption);
             QRect downButton = scrollDownButton(option, scrollBarOption);
 
@@ -410,7 +410,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
-        QStyleOptionSlider scrollBarOption = drawComment(nullptr, option, index);
+        QStyleOptionSlider scrollBarOption = drawCommentHeader(nullptr, option, index);
         QRect scrollBarRect = scrollBar(option, scrollBarOption);
 
         bool lastClickPosInScroll = scrollBarRect.isValid() && scrollBarRect.contains(m_lastDragPos);

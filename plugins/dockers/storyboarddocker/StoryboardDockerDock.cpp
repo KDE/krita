@@ -201,7 +201,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     m_storyboardModel->setCommentModel(m_commentModel);
 
-    m_modeGroup->button(Mode::Grid)->click();
+    m_modeGroup->button(Mode::Row)->click();
     m_viewGroup->button(View::All)->click();
 
     {   // Footer section...

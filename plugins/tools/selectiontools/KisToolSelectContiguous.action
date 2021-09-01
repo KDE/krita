@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
       <text>Tool Shortcuts</text>
         <Action name="KisToolSelectContiguous">
-      <icon></icon>
+      <icon>tool_contiguous_selection</icon>
       <text>Contiguous Selection Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Contiguous Selection Tool</toolTip>

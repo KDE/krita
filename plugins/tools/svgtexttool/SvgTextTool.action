@@ -3,7 +3,7 @@
   <Actions category="Text Tool">
     <text>SVG Text Tool</text>
     <Action name="SvgTextTool">
-      <icon></icon>
+      <icon>draw-text</icon>
       <text>Text Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Text Tool</toolTip>

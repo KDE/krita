@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
     <text>Tool Shortcuts</text>
    <Action name="KisToolPolygon">
-      <icon></icon>
+      <icon>krita_tool_polygon</icon>
       <text>Polygon Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Polygon Tool. Shift-mouseclick ends the polygon.</toolTip>

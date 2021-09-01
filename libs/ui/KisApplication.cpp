@@ -321,10 +321,8 @@ bool KisApplication::registerResources()
                                                      ResourceType::LayerStyles,
                                                      i18nc("Resource type name", "Layer styles"),
                                                      QStringList() << "application/x-photoshop-style"));
-
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.", KisResourceCacheDb::lastError()));
-        //return false;
     }
 
     KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
@@ -333,7 +331,6 @@ bool KisApplication::registerResources()
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
         return false;
     }
-
     return true;
 }
 
@@ -671,7 +668,9 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
 KisApplication::~KisApplication()
 {
-    KisResourceCacheDb::deleteTemporaryResources();
+    if (!isRunning()) {
+        KisResourceCacheDb::deleteTemporaryResources();
+    }
 }
 
 void KisApplication::setSplashScreen(QWidget *splashScreen)

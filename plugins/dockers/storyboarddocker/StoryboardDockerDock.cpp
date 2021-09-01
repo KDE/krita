@@ -12,6 +12,7 @@
 #include "StoryboardView.h"
 #include "StoryboardUtils.h"
 #include "DlgExportStoryboard.h"
+#include "KisAddRemoveStoryboardCommand.h"
 
 #include <QMenu>
 #include <QButtonGroup>
@@ -202,6 +203,42 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     m_modeGroup->button(Mode::Grid)->click();
     m_viewGroup->button(View::All)->click();
+
+    {   // Footer section...
+        QAction* action = new QAction(i18nc("Add new scene as the last storyboard", "Add Scene"), this);
+        connect(action, &QAction::triggered, this, [this](bool){
+            if (!m_canvas) return;
+
+            QModelIndex currentSelection = m_ui->sceneView->currentIndex();
+            if (currentSelection.parent().isValid()) {
+                currentSelection = currentSelection.parent();
+            }
+
+            m_storyboardModel->insertItem(currentSelection, true);
+        });
+        m_ui->btnCreateScene->setDefaultAction(action);
+        m_ui->btnCreateScene->setIconSize(QSize(22,22));
+
+        action = new QAction(i18nc("Remove current scene from storyboards", "Remove Scene"), this);
+        connect(action, &QAction::triggered, this, [this](bool){
+            if (!m_canvas) return;
+
+            QModelIndex currentSelection = m_ui->sceneView->currentIndex();
+            if (currentSelection.parent().isValid()) {
+                currentSelection = currentSelection.parent();
+            }
+
+            if (currentSelection.isValid()) {
+                int row = currentSelection.row();
+                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, m_storyboardModel->getData().at(row), m_storyboardModel);
+
+                m_storyboardModel->removeItem(currentSelection, command);
+                m_storyboardModel->pushUndoCommand(command);
+            }
+        });
+        m_ui->btnDeleteScene->setDefaultAction(action);
+        m_ui->btnDeleteScene->setIconSize(QSize(22,22));
+    }
 
     setEnabled(false);
 }

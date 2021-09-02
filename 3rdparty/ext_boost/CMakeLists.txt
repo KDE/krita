@@ -1,20 +1,28 @@
 SET(PREFIX_ext_boost "${EXTPREFIX}" )
 if(WIN32)
    if(MINGW)
-   string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1\\2"
-      KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+      string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1"
+        KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+    else()
+      string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1\\2"
+        KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+    endif()
+
    ExternalProject_Add(
        ext_boost
 
        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-       
-       URL http://files.kde.org/krita/build/dependencies/boost_1_61_0.zip
-       URL_MD5 015ae4afa6f3e597232bfe1dab949ace
-       
+
+       URL https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_77_0.tar.bz2
+        URL_HASH SHA256=fc9f85fc030e233142908241af7a846e60630aa7388de9a5fafb1f3a26840854
+
+       PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Krita-builds-with-Clang.patch
+
        CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat gcc --prefix=${PREFIX_ext_boost}
-       BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} linkflags=${SECURITY_SHARED_LINKER_FLAGS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared threading=multi architecture=x86 install
+       BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} linkflags=${SECURITY_SHARED_LINKER_FLAGS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared threading=multi architecture=x86 address-model=64 install
        INSTALL_COMMAND ""
-       INSTALL_DIR ${EXTPREFIX_boost}
+       INSTALL_DIR ${PREFIX_ext_boost}
 
        UPDATE_COMMAND ""
        BUILD_IN_SOURCE 1
@@ -22,7 +30,7 @@ if(WIN32)
    ExternalProject_Add_Step(
        ext_boost
        post_install
-       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-1_61.dll ${PREFIX_ext_boost}/bin/
+       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-x64-1_77.dll ${PREFIX_ext_boost}/bin/
        DEPENDEES install
    )
    else()

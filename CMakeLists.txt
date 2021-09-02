@@ -677,6 +677,11 @@ add_definitions(-DBOOST_ALL_NO_LIB)
 if (MSVC)
     set(Boost_USE_STATIC_LIBS OFF)
 endif()
+if (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1"
+        KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+    set(Boost_COMPILER "mgw${KRITA_boost_COMPILER_VERSION}")
+endif()
 find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##

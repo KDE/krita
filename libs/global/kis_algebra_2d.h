@@ -374,6 +374,9 @@ bool KRITAGLOBAL_EXPORT intersectLineRect(QLineF &line, const QRect rect, bool e
  */
 bool KRITAGLOBAL_EXPORT intersectLineRect(QLineF &line, const QRect rect, bool extendFirst, bool extendSecond);
 
+// the same but with a convex polygon; uses Cyrus-Beck algorithm
+bool KRITAGLOBAL_EXPORT intersectLineConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendFirst, bool extendSecond);
+
 /**
  * Crop line to rect; if it doesn't intersect, just return an empty line (QLineF()).
  *
@@ -394,6 +397,7 @@ bool KRITAGLOBAL_EXPORT intersectLineRect(QLineF &line, const QRect rect, bool e
  */
 void KRITAGLOBAL_EXPORT cropLineToRect(QLineF &line, const QRect rect, bool extendFirst, bool extendSecond);
 
+void KRITAGLOBAL_EXPORT cropLineToConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendFirst, bool extendSecond);
 
 
 

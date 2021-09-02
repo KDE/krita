@@ -245,6 +245,241 @@ bool intersectLineRect(QLineF &line, const QRect rect, bool extendFirst, bool ex
 
 }
 
+bool intersectLineConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendFirst, bool extendSecond)
+{
+    qreal epsilon = 1e-07;
+
+    if (polygon.size() == 0) {
+        return false;
+    }
+
+    // trivial case: no extends, all points inside the polygon
+    if (!extendFirst && !extendSecond && polygon.containsPoint(line.p1(), Qt::WindingFill) && polygon.containsPoint(line.p2(), Qt::WindingFill)) {
+        return true;
+    }
+
+    // Cyrus-Beck algorithm: https://en.wikipedia.org/wiki/Cyrus%E2%80%93Beck_algorithm
+
+    // parametric equaltion for the line:
+    // p(t) = t*P1 + (1-t)*P2
+
+    // we can't use infinity here, because the points would all end up as (+/- inf, +/- inf)
+    // which would be useless if we have a very specific direction
+    // hence we use just "a big number"
+    float aBigNumber = 100000; // that will keep t*Px still on the line // this is LIMITATION of the algorithm
+    float tmin = extendFirst ? -aBigNumber : 0; // line.p1() - first point, or infinity
+    float tmax = extendSecond ? aBigNumber : 1; // line.p2() - second point, or infinity
+
+
+
+    QList<QLineF> clippingLines;
+    QList<QPointF> normals;
+
+    bool clockwise = false;
+    {
+        // only temporary values to check whether the polygon is clockwise or counterclockwise
+        QPointF vec1 = polygon[1] - polygon[0];
+        QPointF vec2 = polygon[2] - polygon[0];
+
+        QLineF line1(QPointF(0, 0), vec1);
+        QLineF line2(QPointF(0, 0), vec2);
+
+        qreal angle = line1.angleTo(line2); // range: <0, 360) // <0, 180) means counter-clockwise
+        if (angle >= 180) {
+            clockwise = true;
+        }
+    }
+
+
+    for (int i = 0; i < polygon.size() - 1; i++) {
+        clippingLines.append(QLineF(polygon[i], polygon[i + 1]));
+        float xdiff = polygon[i].x() - polygon[i + 1].x();
+        float ydiff = polygon[i].y() - polygon[i + 1].y();
+
+        if (!clockwise) {
+            normals.append(QPointF(ydiff, -xdiff));
+        } else {
+            normals.append(QPointF(-ydiff, xdiff));
+        }
+
+    }
+
+    if (!polygon.isClosed()) {
+        int i = polygon.size() - 1;
+        clippingLines.append(QLineF(polygon[i], polygon[0]));
+        float xdiff = polygon[i].x() - polygon[0].x();
+        float ydiff = polygon[i].y() - polygon[0].y();
+
+        if (!clockwise) {
+            normals.append(QPointF(ydiff, -xdiff));
+        } else {
+            normals.append(QPointF(-ydiff, xdiff));
+        }
+
+    }
+
+    QPointF lineVec = line.p2() - line.p1();
+    // ax + by + c = 0
+    // c = -ax - by
+    qreal cFromStandardEquation = -lineVec.x()*line.p1().x() - lineVec.y()*line.p1().y();
+
+
+    QPointF p1 = line.p1();
+    QPointF p2 = line.p2();
+
+    qreal pA, pB, pC; // standard equation for the line: ax + by + c = 0
+    if (qAbs(lineVec.x()) < epsilon) {
+        // x1 ~= x2, line looks like: x = -pC
+        pB = 0;
+        pA = 1;
+        pC = -p1.x();
+    } else {
+        pB = 1; // let b = 1 to simplify
+        qreal tmp = (p1.y() - p2.y())/(p1.x() - p2.x());
+        pA = -tmp;
+        pC = tmp * p1.x() - p1.y();
+    }
+
+
+    int pEFound = 0;
+
+
+    for (int i = 0; i < clippingLines.size(); i++) {
+
+        // is the clipping line parallel to the line?
+        QPointF clipVec = clippingLines[i].p2() - clippingLines[i].p1();
+
+        if (qFuzzyCompare(clipVec.x()*lineVec.y(), clipVec.y()*lineVec.x())) {
+
+            // vectors are parallel
+            // let's check if one of the clipping points is on the line (extended) to see if it's the same line; if not, proceed normally
+
+            qreal distanceBetweenLines = qAbs(pA*clippingLines[i].p1().x() + pB*clippingLines[i].p1().y() + pC)
+                    /(sqrt(pA*pA + pB*pB));
+
+
+            if (qAbs(distanceBetweenLines) < epsilon) {
+                // they are the same line
+
+                qreal t1;
+                qreal t2;
+
+                if (qAbs(p2.x() - p1.x()) > epsilon) {
+                    t1 = (clippingLines[i].p1().x() - p1.x())/(p2.x() - p1.x());
+                    t2 = (clippingLines[i].p2().x() - p1.x())/(p2.x() - p1.x());
+                } else {
+                    t1 = (clippingLines[i].p1().y() - p1.y())/(p2.y() - p1.y());
+                    t2 = (clippingLines[i].p2().y() - p1.y())/(p2.y() - p1.y());
+                }
+
+                qreal tmin1 = qMin(t1, t2);
+                qreal tmax2 = qMax(t1, t2);
+
+
+
+                if (tmin < tmin1) {
+                    tmin = tmin1;
+                }
+                if (tmax > tmax2) {
+                    tmax = tmax2;
+                }
+                continue;
+            }
+            else {
+                // if clipping line points are P1 and P2, and some other point is P(t) (given by parametric equation),
+                // and N is the normal vector
+                // and one of the points of the line we're intersecting is K,
+                // then we have a following equation:
+                // K = P(t) + a * N
+                // where t and a are unknown.
+                // after simplifying we get:
+                // t*(p2 - p1) + a*(n) = k - p1
+                // and since we have two axis, we get a linear system of two equations
+                // A * [t; a] = B
+
+                Eigen::Matrix2f A;
+                Eigen::Vector2f b;
+                A << p2.x() - p1.x(), normals[i].x(),
+                     p2.y() - p1.y(), normals[i].y();
+                b << clippingLines[i].p1().x() - p1.x(),
+                     clippingLines[i].p1().y() - p1.y();
+
+                Eigen::Vector2f ta = A.colPivHouseholderQr().solve(b);
+
+                qreal tt = ta(1);
+                if (tt < 0) {
+                    return false;
+                }
+            }
+
+        }
+
+
+        boost::optional<QPointF> pEOptional = intersectLines(clippingLines[i], line); // bounded, unbounded
+
+
+        if (pEOptional) {
+            pEFound++;
+
+            QPointF pE = pEOptional.value();
+            QPointF n = normals[i];
+
+            QPointF A = line.p2() - line.p1();
+            QPointF B = line.p1() - pE;
+
+            qreal over = (n.x()*B.x() + n.y()*B.y());
+            qreal under = (n.x()*A.x() + n.y()*A.y());
+            qreal t = -over/under;
+
+            if (pE.x() != p2.x()) {
+                qreal maybet = (pE.x() - p1.x())/(p2.x() - p1.x());
+            }
+
+            qreal tminvalue = tmin * under + over;
+            qreal tmaxvalue = tmax * under + over;
+
+            if (tminvalue > 0 && tmaxvalue > 0) {
+                // both outside of the edge
+                return false;
+            }
+            if (tminvalue <= 0 && tmaxvalue <= 0) {
+                // noop, both inside
+            }
+            if (tminvalue*tmaxvalue < 0) {
+
+                // on two different sides
+                if (tminvalue > 0) {
+                    // tmin outside, tmax inside
+                    if (t > tmin) {
+                        tmin = t;
+                    }
+                } else {
+                    if (t < tmax) {
+                        tmax = t;
+                    }
+                }
+            }
+
+
+
+            if (tmax < tmin) {
+                return false;
+            }
+        }
+        else {
+        }
+
+    }
+
+    if (pEFound == 0) {
+        return false;
+    }
+
+    QLineF response = QLineF(tmin*line.p2() + (1-tmin)*line.p1(), tmax*line.p2() + (1-tmax)*line.p1());
+    line = response;
+    return true;
+}
+
     template <class Rect, class Point>
     QVector<Point> sampleRectWithPoints(const Rect &rect)
     {
@@ -1022,6 +1257,14 @@ QPointF moveElasticPoint(const QPointF &pt,
 void cropLineToRect(QLineF &line, const QRect rect, bool extendFirst, bool extendSecond)
 {
     bool intersects = intersectLineRect(line, rect, extendFirst, extendSecond);
+    if (!intersects) {
+        line = QLineF(); // empty line to help with drawing
+    }
+}
+
+void cropLineToConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendFirst, bool extendSecond)
+{
+    bool intersects = intersectLineConvexPolygon(line, polygon, extendFirst, extendSecond);
     if (!intersects) {
         line = QLineF(); // empty line to help with drawing
     }

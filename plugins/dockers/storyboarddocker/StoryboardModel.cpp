@@ -695,11 +695,15 @@ int StoryboardModel::nextKeyframeGlobal(int keyframeTime) const
     if (node) {
     KisLayerUtils::recursiveApplyNodes (node, [keyframeTime, &nextKeyframeTime] (KisNodeSP node)
     {
-        if (node->isAnimated()) {
-            KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
+        if (node->isAnimated() && node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+            KisKeyframeChannel* channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), false);
 
-            int nextKeyframeTimeQuery = keyframeChannel->nextKeyframeTime(keyframeTime);
-            if (keyframeChannel->keyframeAt(nextKeyframeTimeQuery)) {
+            if (!channel) {
+                return;
+            }
+
+            int nextKeyframeTimeQuery = channel->nextKeyframeTime(keyframeTime);
+            if (channel->keyframeAt(nextKeyframeTimeQuery)) {
                 if (nextKeyframeTime == INT_MAX) {
                     nextKeyframeTime = nextKeyframeTimeQuery;
                 } else {
@@ -723,13 +727,14 @@ int StoryboardModel::lastKeyframeGlobal() const
     if (node) {
     KisLayerUtils::recursiveApplyNodes (node, [&lastKeyframeTime] (KisNodeSP node)
     {
-        if (node->isAnimated()) {
-            KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
+        if (node->isAnimated() && node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+            KisKeyframeChannel* channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), false);
 
-            if (!keyframeChannel)
+            if (!channel) {
                 return;
+            }
 
-            lastKeyframeTime = qMax(keyframeChannel->lastKeyframeTime(), lastKeyframeTime);
+            lastKeyframeTime = qMax(channel->lastKeyframeTime(), lastKeyframeTime);
         }
     });
     }

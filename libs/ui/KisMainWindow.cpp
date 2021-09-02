@@ -1836,7 +1836,7 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
         dock->setProperty("Locked", false); // Unlock invisible dockers
         dock->toggleViewAction()->setEnabled(true);
         dock->hide();
-        if (!dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+        if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
             dock->titleBarWidget()->setVisible(showTitlebars);
         }
     }
@@ -2296,8 +2296,8 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        if (lockAllDockers && factory->id() != "TimelineDocker") {
-            if (dockWidget->titleBarWidget()) {
+        if (lockAllDockers) {
+            if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
                 dockWidget->titleBarWidget()->setVisible(false);
             }
             dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);

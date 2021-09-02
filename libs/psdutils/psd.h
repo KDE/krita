@@ -353,7 +353,7 @@ public:
 
     KoAbstractGradientSP gradient(KisResourcesInterfaceSP resourcesInterface) const
     {
-        return m_gradientWrapper.isValid() ? m_gradientWrapper.resource(resourcesInterface) : KoAbstractGradientSP();
+        return m_gradientWrapper.isValid() ? m_gradientWrapper.resources(resourcesInterface).first() : KoAbstractGradientSP();
     }
 
 public:
@@ -865,7 +865,7 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base {
 
     KoPatternSP texturePattern(KisResourcesInterfaceSP interface) const
     {
-        return m_texturePatternLink.isValid() ? m_texturePatternLink.resource(interface) : KoPatternSP();
+        return m_texturePatternLink.isValid() ? m_texturePatternLink.resources(interface).first() : KoPatternSP();
     }
 
     void setTexturePattern(KoPatternSP value)
@@ -1038,7 +1038,7 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base {
 
     KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const
     {
-        return m_patternLink.isValid() ? m_patternLink.resource(resourcesInterface) : KoPatternSP();
+        return m_patternLink.isValid() ? m_patternLink.resources(resourcesInterface).first() : KoPatternSP();
     }
 
     int horizontalPhase() const

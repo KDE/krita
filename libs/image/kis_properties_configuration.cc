@@ -105,7 +105,7 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
 {
     QMap<QString, QVariant>::ConstIterator it;
     for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
-        if(d->notSavedProperties.contains(it.key())) {
+        if (d->notSavedProperties.contains(it.key())) {
             continue;
         }
 

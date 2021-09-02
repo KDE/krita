@@ -208,7 +208,7 @@ public:
      * in a resource that's not been loaded yet in the metadata table.
      * @return a resource if one is found, or 0 if none are found
      */
-    KoResourceSP resourceForFilename(QString fileName, bool checkDependentResources = false) const;
+    QVector<KoResourceSP> resourcesForFilename(QString fileName, bool checkDependentResources = false) const;
 
     /**
      * resourceForName returns the first resource with the given name that
@@ -218,8 +218,8 @@ public:
      *
      * @return a resource if one is found, or 0 if none are found
      */
-    KoResourceSP resourceForName(const QString &name) const;
-    KoResourceSP resourceForMD5(const QString &md5sum) const;
+    QVector<KoResourceSP> resourcesForName(const QString &name) const;
+    QVector<KoResourceSP> resourcesForMD5(const QString &md5sum) const;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
 
 private:

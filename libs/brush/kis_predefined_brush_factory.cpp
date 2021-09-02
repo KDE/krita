@@ -6,6 +6,8 @@
 
 #include "kis_predefined_brush_factory.h"
 
+#include <QApplication>
+#include <QThread>
 #include <QDomDocument>
 #include <QFileInfo>
 #include "kis_gbr_brush.h"
@@ -26,18 +28,27 @@ QString KisPredefinedBrushFactory::id() const
 KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
 {
     auto resourceSourceAdapter = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
-
     const QString brushFileName = brushDefinition.attribute("filename", "");
     const QString brushMD5Sum = brushDefinition.attribute("md5sum", "");
-
-    KisBrushSP brush = resourceSourceAdapter.resource(brushMD5Sum, brushFileName, "");
-
-    if (!brush) {
+    QVector<KisBrushSP> brushes = resourceSourceAdapter.resources(brushMD5Sum, brushFileName, "");
+    if (brushes.isEmpty()) {
         return nullptr;
     }
 
     // we always return a copy of the brush!
-    brush = brush->clone().dynamicCast<KisBrush>();
+    KisBrushSP brush = brushes.first()->clone().dynamicCast<KisBrush>();
+    if (!brushFileName.isEmpty()) {
+        Q_FOREACH(KisBrushSP b, brushes) {
+            if (b->filename() == brushFileName) {
+                if (brushMD5Sum.isEmpty() || b->md5Sum() == brushMD5Sum) {
+                    brush = b->clone().dynamicCast<KisBrush>();;
+                    break;
+                }
+            }
+        }
+
+    }
+
 
     double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "0.25"));
     brush->setSpacing(spacing);

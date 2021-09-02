@@ -135,7 +135,11 @@ void KisWorkspaceChooser::slotSaveWorkspace()
     QString name = m_workspaceWidgets.nameEdit->text();
 
     KisAllResourcesModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
-    workspace = resourceModel->resourceForName(name).dynamicCast<KisWorkspaceResource>();
+    QVector<KoResourceSP> resources = resourceModel->resourcesForName(name);
+
+    if (!resources.isEmpty()) {
+        workspace = resources.first().dynamicCast<KisWorkspaceResource>();
+    }
 
     if (workspace.isNull()) {
         workspace.reset(new KisWorkspaceResource(name));
@@ -158,7 +162,8 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
 {
     KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
-    KoResourceSP res = model->resourceForName(m_windowLayoutWidgets.nameEdit->text());
+    QVector<KoResourceSP> resources = model->resourcesForName(m_windowLayoutWidgets.nameEdit->text());
+    KoResourceSP res = resources.first();
     if (res && res->active()) {
         m_workspaceWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
         m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original Workspace."));
@@ -216,7 +221,11 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()
 {
     KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
-    KoResourceSP res = model->resourceForName(m_windowLayoutWidgets.nameEdit->text());
+    QVector<KoResourceSP> resources = model->resourcesForName(m_windowLayoutWidgets.nameEdit->text());
+    if (resources.isEmpty()) return;
+
+    KoResourceSP res = resources.first();
+
     if (res && res->active()) {
         m_windowLayoutWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
         m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original window layout."));

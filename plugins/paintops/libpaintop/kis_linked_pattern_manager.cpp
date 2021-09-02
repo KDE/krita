@@ -21,7 +21,6 @@ struct KisLinkedPatternManager::Private {
     /// For legacy presets: we now load and save all embedded/linked resources in the kpp file.
     static KoPatternSP tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
         KoPatternSP pattern;
-
         QString name = setting->getString("Texture/Pattern/Name");
         QString filename = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName(); // For broken embedded patterns like in "i)_Wet_Paint"
 
@@ -62,10 +61,23 @@ KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigur
     QString name = setting->getString("Texture/Pattern/Name");
 
     if (md5sum.isEmpty()) {
-        // Old style preset...
         md5sum = md5.toHex();
     }
-    pattern = resourceSourceAdapter.resource(md5sum, QFileInfo(fileName).fileName(), name);
+
+    QVector<KoPatternSP> patterns = resourceSourceAdapter.resources(md5sum, QFileInfo(fileName).fileName(), name);
+
+    if (!patterns.isEmpty()) {
+        pattern = patterns.first();
+        Q_FOREACH(KoPatternSP p, patterns) {
+            if (p->filename() == fileName) {
+                if (md5sum.isEmpty() || md5sum == p->md5Sum()) {
+                    pattern = p;
+                    break;
+                }
+            }
+        }
+
+    }
 
     return pattern;
 }
@@ -82,6 +94,5 @@ KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfig
         auto resourceServer = KoResourceServerProvider::patternServer();
         resourceServer->addResource(pattern, false);
     }
-
     return pattern;
 }

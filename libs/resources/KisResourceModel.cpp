@@ -260,8 +260,12 @@ bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &fil
     return false;
 }
 
-KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename, bool checkDependentResources) const
+QVector<KoResourceSP> KisAllResourcesModel::resourcesForFilename(QString filename, bool checkDependentResources) const
 {
+    QVector<KoResourceSP> resources;
+
+    if (filename.isEmpty()) return resources;
+
     QSqlQuery q;
     bool r = q.prepare("SELECT resources.id AS id\n"
                        "FROM   resources\n"
@@ -280,12 +284,16 @@ KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename, bool ch
         qWarning() << "Could not select" << d->resourceType << "resources by filename" << q.lastError() << q.boundValues();
     }
 
-    if (q.first()) {
+    while (q.next()) {
         int id = q.value("id").toInt();
-        return KisResourceLocator::instance()->resourceForId(id);
+        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(id);
+        if (resource) {
+            resources << resource;
+        }
 
     }
-    else if (checkDependentResources) {
+
+    if (resources.isEmpty() && checkDependentResources) {
         // Check whether the requested resource was embedded in another resource, which has not been loaded so the embedded resource is not available.
         r = q.prepare("SELECT value"
                       ",      foreign_id\n"
@@ -312,19 +320,21 @@ KoResourceSP KisAllResourcesModel::resourceForFilename(QString filename, bool ch
                     Q_FOREACH(KoResourceSP embeddedRes, res->embeddedResources(KisGlobalResourcesInterface::instance())) {
                         // This is the best we can do because Krita4 only checked filename and resource type, too.
                         if (embeddedRes->filename() == filename && embeddedRes->resourceType().first == d->resourceType) {
-                            return embeddedRes;
+                            resources << embeddedRes;
                         }
                     }
                 }
             }
         }
     }
-    return nullptr;
+    return resources;
 }
 
-KoResourceSP KisAllResourcesModel::resourceForName(const QString &name) const
+QVector<KoResourceSP> KisAllResourcesModel::resourcesForName(const QString &name) const
 {
-    if (name.isEmpty()) return 0;
+    QVector<KoResourceSP> resources;
+
+    if (name.isEmpty()) return resources;
 
     KoResourceSP resource = 0;
 
@@ -347,17 +357,24 @@ KoResourceSP KisAllResourcesModel::resourceForName(const QString &name) const
         qWarning() << "Could not select" << d->resourceType << "resources by name" << q.lastError() << q.boundValues();
     }
 
-    if (q.first()) {
+    while (q.next()) {
         int id = q.value("id").toInt();
         resource = KisResourceLocator::instance()->resourceForId(id);
+        if (resource) {
+            resources << resource;
+        }
     }
 
-    return resource;
+    return resources;
 }
 
 
-KoResourceSP KisAllResourcesModel::resourceForMD5(const QString &md5sum) const
+QVector<KoResourceSP> KisAllResourcesModel::resourcesForMD5(const QString &md5sum) const
 {
+    QVector<KoResourceSP> resources;
+
+    if (md5sum.isEmpty()) return resources;
+
     KoResourceSP resource = 0;
 
     QSqlQuery q;
@@ -374,11 +391,14 @@ KoResourceSP KisAllResourcesModel::resourceForMD5(const QString &md5sum) const
         qWarning() << "Could not select" << d->resourceType << "resources by md5" << q.lastError() << q.boundValues();
     }
 
-    if (q.first()) {
+    while (q.next()) {
         int id = q.value("id").toInt();
         resource = KisResourceLocator::instance()->resourceForId(id);
+        if (resource) {
+            resources << resource;
+        }
     }
-    return resource;
+    return resources;
 }
 
 QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const

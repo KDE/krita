@@ -22,6 +22,7 @@
 #include "KisMaskingBrushOptionProperties.h"
 #include <strokes/KisMaskingBrushCompositeOpFactory.h>
 #include <KoCompositeOpRegistry.h>
+#include <brushengine/KisPaintopSettingsIds.h>
 
 struct KisMaskingBrushOption::Private
 {

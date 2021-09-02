@@ -58,7 +58,15 @@ public:
     KoColorSetSP palette(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoColorSet>(ResourceType::Palettes);
-        return source.resource(this->getString("md5sum"), "", this->getString("palette"));
+        const QString md5sum = this->getString("md5sum");
+        const QString name = this->getString("palette");
+        QVector<KoColorSetSP> palettes = source.resources(md5sum, "", name);
+        KoColorSetSP palette;
+        if (!palettes.isEmpty()) {
+            palette = palettes.first();
+        }
+
+        return palette;
     }
 
     KoColorSetSP palette() const

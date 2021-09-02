@@ -68,8 +68,17 @@ QList<KoResourceSP> KisGradientMapFilterConfiguration::embeddedResources(KisReso
 KoAbstractGradientSP KisGradientMapFilterConfiguration::gradient(KoAbstractGradientSP fallbackGradient) const
 {
     if (version() == 1) {
-        KoAbstractGradientSP resourceGradient = 
-            resourcesInterface()->source<KoAbstractGradient>(ResourceType::Gradients).resource(this->getString("md5sum"), "", this->getString("gradientName"));
+
+        QString md5sum = this->getString("md5sum");
+        QString gradientName = this->getString("gradientName");
+        auto source = resourcesInterface()->source<KoAbstractGradient>(ResourceType::Gradients);
+        QVector<KoAbstractGradientSP> gradients = source.resources(md5sum, "", gradientName);
+
+        KoAbstractGradientSP resourceGradient;
+
+        if (!gradients.isEmpty()) {
+            resourceGradient = gradients.first();
+        }
 
         if (resourceGradient) {
             KoStopGradientSP gradient = KisGradientConversion::toStopGradient(resourceGradient);

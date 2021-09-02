@@ -323,7 +323,7 @@ private:
     StoryboardItemList m_items;
     QVector<StoryboardComment> m_commentList;
     StoryboardCommentModel *m_commentModel {0};
-    bool m_freezeKeyframePosition {false};
+    bool m_freezeKeyframePositions {false};
     bool m_lockBoards {false};
     bool m_reorderingKeyframes {false};
     int m_lastScene {0};

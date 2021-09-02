@@ -110,7 +110,6 @@ void LineEditAction::setPlaceholderText(const QString& clickMessage)
 
 void LineEditAction::setText(const QString& text)
 {
-    ENTER_FUNCTION();
     m_editBox->setText(text);
 }
 

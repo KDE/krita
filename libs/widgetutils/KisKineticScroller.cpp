@@ -1,14 +1,58 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2018 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
  * SPDX-FileCopyrightText: 2018 Eoin O 'Neill <eoinoneill1991@gmail.com>
+ * SPDX-FileCopyrightText: 2021 Alvin Wong <alvin@alvinhc.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include <KisKineticScroller.h>
+
 #include <QAbstractItemView>
+#include <QEvent>
+#include <QScrollBar>
+
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+
+namespace {
+    /**
+     * Event filter to be installed on the scroll bars of QAbstractScrollArea,
+     * used to detect cursor entering/leaving the scrollbars in order to
+     * temporarily disable/re-enable the QScroller. This allows the scroll bars
+     * to be dragged normally even when kinetic scrolling is enabled.
+     */
+    class KisKineticScrollerEventFilter : public QObject
+    {
+        Q_OBJECT
+
+        QAbstractScrollArea *m_scrollArea;
+        QScroller::ScrollerGestureType m_gestureType;
+
+    public:
+        KisKineticScrollerEventFilter(QScroller::ScrollerGestureType gestureType, QAbstractScrollArea *parent)
+            : QObject(parent)
+            , m_scrollArea(parent)
+            , m_gestureType(gestureType)
+        {
+        }
+
+    protected:
+        bool eventFilter(QObject *watched, QEvent *event) override {
+            switch (event->type()) {
+            case QEvent::Enter:
+                QScroller::ungrabGesture(m_scrollArea);
+                break;
+            case QEvent::Leave:
+                QScroller::grabGesture(m_scrollArea, m_gestureType);
+                break;
+            default:
+                break;
+            }
+            return QObject::eventFilter(watched, event);
+        }
+    };
+} /* namespace */
 
 QScroller* KisKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *scrollArea) {
     KConfigGroup config = KSharedConfig::openConfig()->group("");
@@ -31,6 +75,10 @@ QScroller* KisKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *
         if (hideScrollBars) {
             scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
             scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+        } else if (gestureType != QScroller::TouchGesture) {
+            auto *filter = new KisKineticScrollerEventFilter(gestureType, scrollArea);
+            scrollArea->horizontalScrollBar()->installEventFilter(filter);
+            scrollArea->verticalScrollBar()->installEventFilter(filter);
         }
 
         QAbstractItemView *itemView = qobject_cast<QAbstractItemView *>(scrollArea);
@@ -39,7 +87,7 @@ QScroller* KisKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *
         }
 
         QScroller *scroller = QScroller::scroller(scrollArea);
-        scroller->grabGesture(scrollArea, gestureType);
+        QScroller::grabGesture(scrollArea, gestureType);
 
         QScrollerProperties properties;
 
@@ -109,3 +157,5 @@ void KisKineticScroller::updateCursor(QWidget *source, QScroller::State state) {
         source->setCursor(Qt::ArrowCursor);
     }
 }
+
+#include "KisKineticScroller.moc"

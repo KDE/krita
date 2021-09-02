@@ -40,6 +40,7 @@ Comment[ko]=지우개 브러시 사전 설정
 Comment[nl]=Wisser van voorinstellingen van penselen
 Comment[pl]=Nastawy pędzli wymazujących
 Comment[pt]=Predefinições de Pincéis Apagadores
+Comment[pt_BR]=Predefinições de pincel de borracha
 Comment[sv]=Förinställningar av raderingspenslar
 Comment[uk]=Набори пензлів-гумок
 Comment[x-test]=xxEraser Brush Presetsxx

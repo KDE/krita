@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.12" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.13" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -594,6 +594,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
                   ", filename  = :filename\n"
                   ", tooltip   = :tooltip\n"
                   ", thumbnail = :thumbnail\n"
+                  ", status    = 1\n"
                   "WHERE id    = :id");
     if (!r) {
         qWarning() << "Could not prepare updateResource statement" << q.lastError();
@@ -681,6 +682,67 @@ bool KisResourceCacheDb::removeResourceCompletely(int resourceId)
     return r;
 }
 
+bool KisResourceCacheDb::getResourceIdFromVersionedFilename(QString filename, QString resourceType, int &outResourceId)
+{
+    QSqlQuery q;
+
+    bool r = q.prepare("SELECT resource_id FROM versioned_resources\n"
+                       ", resources\n"
+                       ", resource_types\n"
+                       "WHERE versioned_resources.filename = :filename\n" // bind to filename
+                       "AND resources.id = versioned_resources.resource_id\n" // join resources + versioned_resources
+                       "AND resource_types.id = resources.resource_type_id\n"  // join resources_types + resources
+                       "AND resource_types.name = :resourceType;");
+
+    if (!r) {
+        qWarning() << "Could not prepare getResourceIdFromVersionedFilename statement" << q.lastError() << q.executedQuery();
+        return r;
+    }
+
+    q.bindValue(":filename", filename);
+    q.bindValue(":resourceType", resourceType);
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not execute getResourceIdFromVersionedFilename statement" << q.lastError() << filename << resourceType;
+        return r;
+    }
+
+    r = q.first();
+    if (r) {
+        outResourceId = q.value("resource_id").toInt();
+    }
+
+    return r;
+}
+
+bool KisResourceCacheDb::getAllVersionsLocations(int resourceId, QStringList &outVersionsLocationsList)
+{
+    QSqlQuery q;
+    bool r = q.prepare("SELECT filename FROM versioned_resources \n"
+                  "WHERE resource_id = :resource_id;");
+
+    if (!r) {
+        qWarning() << "Could not prepare getAllVersionsLocations statement" << q.lastError();
+        return r;
+    }
+
+    q.bindValue(":resource_id", resourceId);
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not execute getAllVersionsLocations statement" << q.lastError() << resourceId;
+        return r;
+    }
+
+    outVersionsLocationsList = QStringList();
+    while (q.next()) {
+        outVersionsLocationsList << q.value("filename").toString();
+    }
+
+    return r;
+
+}
+
 bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
 {
     bool r = false;
@@ -704,7 +766,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     // Check whether another resource with this MD5 already exists: then we set the resource status to hidden
-    int active = 1;
+    int active = resource->active();
     {
         QSqlQuery q;
         if (!q.prepare("SELECT count(*)\n"
@@ -815,13 +877,17 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     resource->setResourceId(resourceId);
 
-
     if (!addResourceVersionImpl(resourceId, timestamp, storage, resource)) {
         qWarning() << "Could not add resource version" << resource;
         return false;
     }
 
-    return addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
+    if (!resource->metadata().isEmpty()) {
+        return addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
+    }
+
+    return true;
+
 
 }
 
@@ -1471,7 +1537,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
 
             const bool retval = addResource(storage, itA->timestamp, res, resourceType);
-            KIS_SAFE_ASSERT_RECOVER(retval) {
+            if (!retval) {
                 KisUsageLogger::log("Could not add resource" + itA->url);
                 ++itA;
                 continue;
@@ -1695,10 +1761,12 @@ QMap<QString, QVariant> KisResourceCacheDb::metaDataForId(int id, const QString 
     while (q.next()) {
         QString key = q.value(0).toString();
         QByteArray ba = q.value(1).toByteArray();
-        QDataStream ds(QByteArray::fromBase64(ba));
-        QVariant value;
-        ds >> value;
-        map[key] = value;
+        if (!ba.isEmpty()) {
+            QDataStream ds(QByteArray::fromBase64(ba));
+            QVariant value;
+            ds >> value;
+            map[key] = value;
+        }
     }
 
     return map;
@@ -1757,17 +1825,18 @@ bool KisResourceCacheDb::addMetaDataForId(const QMap<QString, QVariant> map, int
         q.bindValue(":key", iter.key());
 
         QVariant v = iter.value();
-        QByteArray ba;
-        QDataStream ds(&ba, QIODevice::WriteOnly);
-        ds << v;
-        ba = ba.toBase64();
-        q.bindValue(":value", QString::fromLatin1(ba));
+        if (!v.isNull() && v.isValid()) {
+            QByteArray ba;
+            QDataStream ds(&ba, QIODevice::WriteOnly);
+            ds << v;
+            ba = ba.toBase64();
+            q.bindValue(":value", QString::fromLatin1(ba));
 
-        if (!q.exec()) {
-            qWarning() << "Could not insert metadata" << q.lastError();
-            return false;
+            if (!q.exec()) {
+                qWarning() << "Could not insert metadata" << q.lastError();
+                return false;
+            }
         }
-
         ++iter;
     }
     return true;

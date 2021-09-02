@@ -71,9 +71,11 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
     if (KisPaintOpUtils::checkSizeTooSmall(scale, diameter, diameter)) return KisSpacingInformation();
     KisDabShape shape(scale, 1.0, rotation);
 
-    // Subtracting .5 from both dimensions, because the final dab tends to exaggerate towards the lower right.
-    // This aligns it with the brush cursor.
-    QPointF pos = info.pos() - QPointF(0.5, 0.5);
+    // The position will need subtracting 0.5, but you cannot do this here
+    // because then the mirroring tools get wrong position to mirror
+    // and the mirroring doesn't work well.
+    // Subtracting must happen just before the painting.
+    QPointF pos = info.pos();
 
     KisMarkerPainter gc(painter()->device(), painter()->paintColor());
 
@@ -82,15 +84,19 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
             painter()->calculateAllMirroredPoints(pos);
 
         Q_FOREACH(const QPointF &pt, points) {
-            gc.fillFullCircle(pt, radius);
+            // Subtracting .5 from both dimensions, because the final dab tends to exaggerate towards the lower right.
+            // This aligns it with the brush cursor.
+            gc.fillFullCircle(pt - QPointF(0.5, 0.5), radius);
         }
     } else {
         const QVector<QPair<QPointF, QPointF>> pairs =
             painter()->calculateAllMirroredPoints(qMakePair(m_lastPaintPos, pos));
 
         Q_FOREACH(const auto &pair, pairs) {
-            gc.fillCirclesDiff(pair.first, m_lastRadius,
-                               pair.second, radius);
+            // Subtracting .5 from both dimensions, because the final dab tends to exaggerate towards the lower right.
+            // This aligns it with the brush cursor.
+            gc.fillCirclesDiff(pair.first - QPointF(0.5, 0.5), m_lastRadius,
+                               pair.second - QPointF(0.5, 0.5), radius);
         }
     }
 

@@ -67,13 +67,15 @@ void KisGradientMapFilterConfigWidget::setConfiguration(const KisPropertiesConfi
         KisSignalsBlocker signalsBlocker(this);
 
         KoAbstractGradientSP fallbackGradient = nullptr;
-        KoCanvasResourcesInterfaceSP canvasResourcesInterface =
-            m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
-        if (canvasResourcesInterface) {
-            KoAbstractGradientSP currentGradient =
-                canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
-            if (currentGradient) {
-                fallbackGradient = currentGradient->clone().dynamicCast<KoAbstractGradient>();
+        if (m_view) {
+            KoCanvasResourcesInterfaceSP canvasResourcesInterface =
+                m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
+            if (canvasResourcesInterface) {
+                KoAbstractGradientSP currentGradient =
+                    canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+                if (currentGradient) {
+                    fallbackGradient = currentGradient->clone().dynamicCast<KoAbstractGradient>();
+                }
             }
         }
         m_ui.widgetGradientEditor->setGradient(filterConfig->gradient(fallbackGradient));

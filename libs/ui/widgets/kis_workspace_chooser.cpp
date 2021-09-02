@@ -23,7 +23,7 @@
 #include <KisResourceItemListView.h>
 #include <KoResource.h>
 #include <KisResourceModel.h>
-#include <KisResourceServerProvider.h>
+#include <KisResourceModelProvider.h>
 #include <KoDockWidgetTitleBar.h>
 #include <KisMainWindow.h>
 #include <KisTagFilterResourceProxyModel.h>
@@ -99,9 +99,6 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(co
     titleLabel->setFont(titleFont);
     titleLabel->setText(title);
 
-    m_workspaceSaveLocation = KisResourceServerProvider::instance()->workspaceServer()->saveLocation();
-    m_windowLayoutSaveLocation = KisResourceServerProvider::instance()->windowLayoutServer()->saveLocation();
-
     widgets.itemChooser = new KisResourceItemChooser(resourceType, false, this);
     widgets.itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
     widgets.itemChooser->setFixedSize(250, 250);
@@ -137,14 +134,11 @@ void KisWorkspaceChooser::slotSaveWorkspace()
     KisWorkspaceResourceSP workspace;
     QString name = m_workspaceWidgets.nameEdit->text();
 
-    KisTagFilterResourceProxyModel *model = m_workspaceWidgets.itemChooser->tagFilterModel();
+    KisAllResourcesModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
+    QVector<KoResourceSP> resources = resourceModel->resourcesForName(name);
 
-    for (int i = 0; i < model->rowCount(); ++ i) {
-        if (model->data(model->index(i, 0), Qt::UserRole + KisTagFilterResourceProxyModel::Name).toString() == name.replace(" ", "_")) {
-            KoResourceSP res = model->resourceForIndex(model->index(i, 0));
-            workspace = res.dynamicCast<KisWorkspaceResource>();
-            break;
-        }
+    if (!resources.isEmpty()) {
+        workspace = resources.first().dynamicCast<KisWorkspaceResource>();
     }
 
     if (workspace.isNull()) {
@@ -156,28 +150,26 @@ void KisWorkspaceChooser::slotSaveWorkspace()
         workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
         KisResourceModel(ResourceType::Workspaces).addResource(workspace);
     }
+    else {
+        workspace->setDockerState(m_view->qtMainWindow()->saveState());
+        workspace->setImage(m_view->mainWindow()->layoutThumbnail());
+        KisResourceModel(ResourceType::Workspaces).updateResource(workspace);
+    }
 
     m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
 }
 
 void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
 {
-    QString name = m_workspaceWidgets.nameEdit->text();
-
-    KisTagFilterResourceProxyModel *model = m_workspaceWidgets.itemChooser->tagFilterModel();
-    bool exists = false;
-    for (int i = 0; i < model->rowCount(); ++ i) {
-        if (model->data(model->index(i, 0), Qt::UserRole + KisTagFilterResourceProxyModel::Name).toString() == name.replace(" ", "_")) {
-            exists = true;
-            break;
-        }
-    }
-
-    if (exists) {
+    KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
+    QVector<KoResourceSP> resources = model->resourcesForName(m_windowLayoutWidgets.nameEdit->text());
+    KoResourceSP res = resources.first();
+    if (res && res->active()) {
         m_workspaceWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
         m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original Workspace."));
         m_workspaceWidgets.saveButton->setText(i18n("Overwrite"));
-    } else {
+    }
+    else {
         m_workspaceWidgets.saveButton->setIcon(QIcon());
         m_workspaceWidgets.saveButton->setToolTip(i18n("Save current workspace."));
         m_workspaceWidgets.saveButton->setText(i18n("Save"));
@@ -228,7 +220,13 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()
 {
-    if (QFileInfo(m_windowLayoutSaveLocation + m_windowLayoutWidgets.nameEdit->text().split(" ").join("_") + ".kwl").exists()) {
+    KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
+    QVector<KoResourceSP> resources = model->resourcesForName(m_windowLayoutWidgets.nameEdit->text());
+    if (resources.isEmpty()) return;
+
+    KoResourceSP res = resources.first();
+
+    if (res && res->active()) {
         m_windowLayoutWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
         m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original window layout."));
     } else {

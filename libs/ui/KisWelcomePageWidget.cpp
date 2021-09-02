@@ -147,18 +147,24 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
 #ifdef Q_OS_ANDROID
 
+    dragImageHereLabel->hide();
+    newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
     donationLink = new QPushButton(dropFrameBorder);
     donationLink->setFlat(true);
     QFont f = font();
     f.setPointSize(15);
     f.setUnderline(true);
     donationLink->setFont(f);
+    donationLink->setStyleSheet("padding-left: 5px; padding-right: 5px;");
 
     connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
 
-    verticalLayout->addWidget(donationLink);
-    verticalLayout->setAlignment(donationLink, Qt::AlignTop);
-    verticalLayout->setSpacing(20);
+    horizontalSpacer_19->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    horizontalSpacer_20->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    horizontalLayout_9->addWidget(donationLink);
 
     donationBannerImage = new QLabel(dropFrameBorder);
     QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
@@ -323,6 +329,10 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     clearRecentFilesLink->setStyleSheet(blendedStyle);
     recentDocumentsListView->setStyleSheet(blendedStyle);
     newsWidget->setStyleSheet(blendedStyle);
+
+#ifdef Q_OS_ANDROID
+    blendedStyle = blendedStyle + "\nQPushButton { padding: 10px }";
+#endif
 
     newFileLink->setStyleSheet(blendedStyle);
     openFileLink->setStyleSheet(blendedStyle);
@@ -513,14 +523,15 @@ QString getAutoNewsLang()
     const QStringList uiLangs = KLocalizedString::languages();
 
     QString autoNewsLang;
-    // Iterate UI languages including fallback languages.
+    // Iterate UI languages including fallback languages for the first
+    // available news language.
     Q_FOREACH(const auto &uiLang, uiLangs) {
         autoNewsLang = mapKi18nLangToNewsLang(uiLang);
-        if (autoNewsLang.size() <= 0) {
+        if (!autoNewsLang.isEmpty()) {
             break;
         }
     }
-    if (autoNewsLang.size() == 0) {
+    if (autoNewsLang.isEmpty()) {
         // If nothing else, use English.
         autoNewsLang = QString("en");
     }

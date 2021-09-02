@@ -81,7 +81,6 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     if (!index.isValid()) {
-        qDebug() << "KisPresetDelegate::paint: index is invalid";
         painter->restore();
         return;
     }
@@ -146,7 +145,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if (!requiredBrushes.isEmpty()) {
         KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
         Q_FOREACH(const QString brushFile, requiredBrushes) {
-            if (!model->resourceForFilename(brushFile)) {
+            if (!model->resourceExists("", brushFile, "")) {
                 qWarning() << "dependent resource" << brushFile << "misses.";
                 broken = true;
             }

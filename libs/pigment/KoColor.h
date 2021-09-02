@@ -48,8 +48,11 @@ public:
     KoColor(const KoColor &src, const KoColorSpace * colorSpace);
 
     /// Copy constructor -- deep copies the colors.
-    KoColor(const KoColor & rhs) {
-        *this = rhs;
+    KoColor(const KoColor &rhs)
+        : m_colorSpace(rhs.m_colorSpace)
+        , m_size(rhs.m_size)
+    {
+        memcpy(m_data, rhs.m_data, m_size);
     }
 
     /**

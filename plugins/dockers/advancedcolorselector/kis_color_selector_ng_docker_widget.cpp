@@ -97,7 +97,21 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     m_horizontalColorPatchesLayout->setSpacing(0);
     m_horizontalColorPatchesLayout->setMargin(0);
 
+
+    // layouts just for color history and clear color history buttons
+    // need two for two different directions
+    m_colorHistoryWidgetsBottomLayout = new QHBoxLayout();
+    m_colorHistoryWidgetsBottomLayout->setSpacing(0);
+    m_colorHistoryWidgetsBottomLayout->setMargin(0);
+
+    m_colorHistoryWidgetsSideLayout = new QVBoxLayout();
+    m_colorHistoryWidgetsSideLayout->setSpacing(0);
+    m_colorHistoryWidgetsSideLayout->setMargin(0);
+
     m_horizontalPatchesContainer->addLayout(m_horizontalColorPatchesLayout);
+
+    m_horizontalColorPatchesLayout->addLayout(m_colorHistoryWidgetsBottomLayout);
+    m_verticalColorPatchesLayout->addLayout(m_colorHistoryWidgetsSideLayout);
 
     m_mainLayout->addWidget(m_colorSelectorContainer);
     m_mainLayout->addLayout(m_horizontalPatchesContainer);
@@ -204,18 +218,23 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     else
         m_commonColorsDirection=KisColorPatches::Horizontal;
 
-    m_verticalColorPatchesLayout->removeWidget(m_colorHistoryWidget);
     m_verticalColorPatchesLayout->removeWidget(m_commonColorsWidget);
-    m_horizontalColorPatchesLayout->removeWidget(m_colorHistoryWidget);
     m_horizontalColorPatchesLayout->removeWidget(m_commonColorsWidget);
+    m_colorHistoryWidgetsBottomLayout->removeWidget(m_colorHistoryWidget);
+    m_colorHistoryWidgetsBottomLayout->removeWidget(m_clearColorHistoryButton);
+    m_colorHistoryWidgetsSideLayout->removeWidget(m_colorHistoryWidget);
+    m_colorHistoryWidgetsSideLayout->removeWidget(m_clearColorHistoryButton);
 
     m_sidebarLayout->removeWidget(m_fallbackSettingsButton);
     m_mainLayout->removeWidget(m_fallbackSettingsButton);
 
-    if(m_lastColorsShow==false)
+    if (m_lastColorsShow == false) {
         m_colorHistoryWidget->hide();
-    else
+        m_clearColorHistoryButton->hide();
+    } else {
         m_colorHistoryWidget->show();
+        m_clearColorHistoryButton->show();
+    }
 
     if(m_commonColorsShow==false) {
         m_commonColorsWidget->hide();
@@ -228,7 +247,8 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     bool fallbackSettingsButtonVertical = true;
 
     if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Vertical) {
-        m_verticalColorPatchesLayout->addWidget(m_colorHistoryWidget);
+        m_colorHistoryWidgetsSideLayout->addWidget(m_colorHistoryWidget);
+        m_colorHistoryWidgetsSideLayout->addWidget(m_clearColorHistoryButton, 0, Qt::AlignHCenter);
     }
 
     if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Vertical) {
@@ -236,7 +256,8 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     }
 
     if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Horizontal) {
-        m_horizontalColorPatchesLayout->addWidget(m_colorHistoryWidget);
+        m_colorHistoryWidgetsBottomLayout->addWidget(m_colorHistoryWidget);
+        m_colorHistoryWidgetsBottomLayout->addWidget(m_clearColorHistoryButton, 0, Qt::AlignVCenter);
         fallbackSettingsButtonVertical = false;
     }
 

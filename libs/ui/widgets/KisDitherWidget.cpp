@@ -52,7 +52,14 @@ void KisDitherWidget::setConfiguration(const KisFilterConfiguration &config, con
     thresholdModeComboBox->setCurrentIndex(config.getInt(prefix + "thresholdMode"));
 
     auto source = config.resourcesInterface()->source<KoPattern>(ResourceType::Patterns);
-    KoPatternSP pattern = source.resource(config.getString(prefix + "md5sum"), "", config.getString(prefix + "pattern"));
+    QString patternMD5 = config.getString(prefix + "md5sum");
+    QString patternName = config.getString(prefix + "pattern");
+    QVector<KoPatternSP> resources = source.resources(patternMD5, "", patternName);
+
+    KoPatternSP pattern;
+    if (!resources.isEmpty()) {
+        pattern = resources.first();
+    }
 
     if (pattern) m_ditherPatternWidget->setCurrentResource(pattern);
     patternValueModeComboBox->setCurrentIndex(config.getInt(prefix + "patternValueMode"));
@@ -81,12 +88,13 @@ void KisDitherWidget::factoryConfiguration(KisPropertiesConfiguration &config, c
 QList<KoResourceSP> KisDitherWidget::prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface)
 {
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-    KoPatternSP pattern = source.resource(config.getString(prefix + "md5sum"), "", config.getString(prefix + "pattern"));
 
+    QString patternMD5 = config.getString(prefix + "md5sum");
+    QString patternName = config.getString(prefix + "pattern");
+    QVector<KoPatternSP> patterns = source.resources(patternMD5, "", patternName);
     QList<KoResourceSP> resources;
-    if (pattern) {
+    Q_FOREACH(const KoPatternSP pattern, patterns) {
         resources << pattern;
     }
-
     return resources;
 }

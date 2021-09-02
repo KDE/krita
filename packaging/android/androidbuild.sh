@@ -5,11 +5,14 @@
 
 # Example: androidbuild.sh -p=all --src=/home/sh_zam/workspace/krita --build-type=Release --build-root=/home/sh_zam/workspace/test-kreeta --ndk-path=/home/sh_zam/Android/Sdk/ndk-bundle --sdk-path=/home/sh_zam/Android/Sdk --api-level=21 --android-abi=armeabi-v7a --qt-path=/home/sh_zam/Qt/5.12.1/android_armv7
 
+set -e
+set -x
+
 echoerr() { printf "ERROR: %s\n" "$*" >&2;  }
 
 print_usage() {
     printf "\nUsage: "$0" [-p=PACKAGE] [ARGUMENTS..]\n"
-    printf "Packages: [all|krita-bin|apk|qt|3rdparty|boost|kf5]\n"
+    printf "Packages: [all|krita-bin|apk|qt|3rdparty|plugins|boost|kf5]\n"
     printf "Arguments: \n"
     printf  "\t--src=PATH                  Source files\n"
     printf  "\t--build-type=TYPE          TYPE=[Debug|RelWithDebInfo|Release]\n"
@@ -33,6 +36,7 @@ check_exists() {
 setup_directories() {
     export DOWNLOADS_DIR=$BUILD_ROOT/d
     export DEPS_BUILD=$BUILD_ROOT/b
+    export PLUGINS_BUILD=$BUILD_ROOT/p
     export THIRDPARTY_INSTALL=$BUILD_ROOT/i
 
     if [[ ! -d $DOWNLOADS_DIR ]]; then
@@ -41,6 +45,10 @@ setup_directories() {
 
     if [[ ! -d $DEPS_BUILD ]]; then
         mkdir $DEPS_BUILD -p
+    fi
+
+    if [[ ! -d $PLUGINS_BUILD ]]; then
+        mkdir $PLUGINS_BUILD -p
     fi
 
     if [[ ! -d $THIRDPARTY_INSTALL ]]; then
@@ -59,6 +67,20 @@ configure_ext() {
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"
+    cd $BUILD_ROOT
+}
+
+configure_plugins() {
+    cd $PLUGINS_BUILD
+    cmake $KRITA_ROOT/3rdparty_plugins \
+        -DINSTALL_ROOT=$INSTALL_PREFIX                                                  \
+        -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR                                         \
+        -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX                                          \
+        -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake   \
+        -DANDROID_ABI=$ANDROID_ABI                                                      \
+        -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
+        -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
+        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i;$INSTALL_PREFIX"
     cd $BUILD_ROOT
 }
 
@@ -100,6 +122,21 @@ build_ext() {
     cmake --build . --config $BUILD_TYPE --target ext_seexpr -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_mypaint -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_webp -- -j$PROC_COUNT
+
+    cd $BUILD_ROOT
+}
+
+build_plugins() {
+    if [[ ! -d $QT_ANDROID ]]; then
+        echoerr "qt libs not found"
+        echo "Please run -p=qt prior to this"
+        exit
+    fi
+
+    configure_plugins
+    cd $PLUGINS_BUILD
+    # Please do not change the order
+    cmake --build . --config $BUILD_TYPE --target ext_gmic -- -j$PROC_COUNT
 
     cd $BUILD_ROOT
 }
@@ -263,12 +300,14 @@ case $PACKAGE in
         build_ext
         build_boost
         build_krita
+        # build_plugins
         build_apk
         ;;
     krita-bin)
         build_krita
         ;;
     apk)
+        # build_plugins
         build_apk
         ;;
     qt)
@@ -276,6 +315,9 @@ case $PACKAGE in
         ;;
     3rdparty)
         build_ext
+        ;;
+    plugins)
+        build_plugins
         ;;
     boost)
         build_boost

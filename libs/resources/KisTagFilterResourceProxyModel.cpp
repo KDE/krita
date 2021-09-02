@@ -104,12 +104,12 @@ bool KisTagFilterResourceProxyModel::setResourceInactive(const QModelIndex &inde
     return false;
 }
 
-KoResourceSP KisTagFilterResourceProxyModel::importResourceFile(const QString &filename, const QString &storageId)
+KoResourceSP KisTagFilterResourceProxyModel::importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     KoResourceSP res;
     if (source) {
-        res = source->importResourceFile(filename, storageId);
+        res = source->importResourceFile(filename, allowOverwrite, storageId);
     }
     return res;
 }
@@ -317,6 +317,9 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     }
 
     QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    if (sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::ResourceType).toString() == ResourceType::PaintOpPresets) {
+        resourceName == resourceName.replace("_", " ");
+    }
     QStringList resourceTags = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Tags).toStringList();
     bool resourceNameMatches = d->filter->matchesResource(resourceName, resourceTags);
 

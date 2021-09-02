@@ -41,9 +41,9 @@ public:
     void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data, QString suffix) const;
 
     /**
-     * @brief Draw the spin box.
+     * @brief Draw the comment header.
      */
-    QStyleOptionSlider drawComment(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QStyleOptionSlider drawCommentHeader(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     
     /**
      * @return rectangle for Spinbox Up button for spin box at @c option.rect
@@ -77,6 +77,9 @@ public:
     void setImageSize(QSize imageSize);
 
     bool isOverlappingActionIcons(const QRect& rect, const QMouseEvent *event);
+
+protected:
+    bool eventFilter(QObject* editor, QEvent* event) override;
 
 private Q_SLOTS:
 

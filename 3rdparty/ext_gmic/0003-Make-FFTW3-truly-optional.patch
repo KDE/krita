@@ -1,0 +1,42 @@
+From b2587e46a9e00a123a2598ea872cef08a8e9c08d Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 19 May 2021 18:25:28 +0000
+Subject: [PATCH 3/6] Make FFTW3 truly optional
+
+(cherry picked from commit 011cdf6a3c3d9f21780c5b6e4364ed64d2ecb675)
+---
+ gmic-qt/CMakeLists.txt | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/gmic-qt/CMakeLists.txt b/gmic-qt/CMakeLists.txt
+index b2fe4d8..c181569 100644
+--- a/gmic-qt/CMakeLists.txt
++++ b/gmic-qt/CMakeLists.txt
+@@ -171,14 +171,16 @@ include_directories(SYSTEM ${ZLIB_INCLUDE_DIRS} )
+ #
+ # FFTW3
+ #
+-find_package(FFTW3 REQUIRED)
+-add_definitions(-Dcimg_use_fftw3 )
+-include_directories(${FFTW3_INCLUDE_DIR})
+-find_library(FFTW3_THREADS_LIB fftw3_threads PATHS ${FFTW3_LIBRARY_DIRS})
+-if(FFTW3_THREADS_LIB STREQUAL "FFTW3_THREADS_LIB-NOTFOUND")
+-    add_definitions(-Dcimg_use_fftw3_singlethread)
+-else()
+-    list(APPEND EXTRA_LIBRARIES ${FFTW3_LIBRARIES})
++if (ENABLE_FFTW3)
++  find_package(FFTW3 REQUIRED)
++  add_definitions(-Dcimg_use_fftw3 )
++  include_directories(${FFTW3_INCLUDE_DIR})
++  find_library(FFTW3_THREADS_LIB fftw3_threads PATHS ${FFTW3_LIBRARY_DIRS})
++  if(FFTW3_THREADS_LIB STREQUAL "FFTW3_THREADS_LIB-NOTFOUND")
++      add_definitions(-Dcimg_use_fftw3_singlethread)
++  else()
++      list(APPEND EXTRA_LIBRARIES ${FFTW3_LIBRARIES})
++  endif()
+ endif()
+ 
+ #
+-- 
+2.32.0
+

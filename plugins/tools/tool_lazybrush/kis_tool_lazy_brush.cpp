@@ -36,6 +36,7 @@ struct KisToolLazyBrush::Private
     bool activateMaskMode = false;
     bool oldShowKeyStrokesValue = false;
     bool oldShowColoringValue = false;
+    bool activatedActionLock{false};
 
     KisNodeWSP manuallyActivatedNode;
     KisSignalAutoConnectionsStore toolConnections;
@@ -226,10 +227,11 @@ void KisToolLazyBrush::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolLazyBrush::activateAlternateAction(KisTool::AlternateAction action)
 {
-    if (action == KisTool::Secondary && !m_d->activateMaskMode) {
+    if (action == KisTool::Secondary && !m_d->activateMaskMode && !m_d->activatedActionLock) {
         KisNodeSP node = currentNode();
         if (!node) return;
 
+        m_d->activatedActionLock = true;
         m_d->oldShowKeyStrokesValue =
             KisLayerPropertiesIcons::nodeProperty(node,
                                                   KisLayerPropertiesIcons::colorizeEditKeyStrokes,
@@ -241,10 +243,11 @@ void KisToolLazyBrush::activateAlternateAction(KisTool::AlternateAction action)
 
         KisToolFreehand::activatePrimaryAction();
 
-    } else if (action == KisTool::Third && !m_d->activateMaskMode) {
+    } else if (action == KisTool::Third && !m_d->activateMaskMode && !m_d->activatedActionLock) {
         KisNodeSP node = currentNode();
         if (!node) return;
 
+        m_d->activatedActionLock = true;
         m_d->oldShowColoringValue =
                 KisLayerPropertiesIcons::nodeProperty(node,
                                                       KisLayerPropertiesIcons::colorizeShowColoring,
@@ -267,9 +270,17 @@ void KisToolLazyBrush::deactivateAlternateAction(KisTool::AlternateAction action
         KisNodeSP node = currentNode();
         if (!node) return;
 
+        bool showKeyStrokes =
+            KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool();
+
         KisLayerPropertiesIcons::setNodePropertyAutoUndo(node,
                                                          KisLayerPropertiesIcons::colorizeEditKeyStrokes,
                                                          m_d->oldShowKeyStrokesValue, image());
+
+        // if the values are same, means the property update hasn't finished. So, we should hold on to the lock
+        if (m_d->oldShowKeyStrokesValue != showKeyStrokes) {
+            m_d->activatedActionLock = false;
+        }
 
         KisToolFreehand::deactivatePrimaryAction();
 
@@ -277,9 +288,17 @@ void KisToolLazyBrush::deactivateAlternateAction(KisTool::AlternateAction action
         KisNodeSP node = currentNode();
         if (!node) return;
 
+        bool colorizeShowColoring =
+            KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::colorizeShowColoring, true).toBool();
+
         KisLayerPropertiesIcons::setNodePropertyAutoUndo(node,
                                                          KisLayerPropertiesIcons::colorizeShowColoring,
                                                          m_d->oldShowColoringValue, image());
+
+        // if the values are same, means the property update hasn't finished. So, we should hold on to the lock
+        if (m_d->oldShowColoringValue != colorizeShowColoring) {
+            m_d->activatedActionLock = false;
+        }
 
         KisToolFreehand::deactivatePrimaryAction();
 

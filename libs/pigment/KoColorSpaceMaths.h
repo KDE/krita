@@ -157,44 +157,21 @@ public:
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
-#ifdef Q_CC_MSVC
-// MSVC do not have lrint
-
-const double _double2fixmagic = 68719476736.0*1.5;
-const qint32 _shiftamt        = 16;                    //16.16 fixed point representation,
-
-#if Q_BYTE_ORDER == Q_BIG_ENDIAN
-        #define iexp_                           0
-        #define iman_                           1
-#else
-        #define iexp_                           1
-        #define iman_                           0
-#endif //BigEndian_
-
-inline int float2int(double val)
-{
-    val = val + _double2fixmagic;
-    return ((int*)&val)[iman_] >> _shiftamt; 
-}
-
-inline int float2int(float val)
-{
-    return float2int((double)val);
-}
-
-#else
-
 inline int float2int(float x)
 {
-    return lrintf(x);
+    // NOTE: we don't use rint() here, because on Windows
+    //       it falls back to x87 instructions on Intel CPUs,
+    //       which are executed extremely slowly
+    return int(x + 0.5f);
 }
 
 inline int float2int(double x)
 {
-    return lrint(x);
+    // NOTE: we don't use rint() here, because on Windows
+    //       it falls back to x87 instructions on Intel CPUs,
+    //       which are executed extremely slowly
+    return int(x + 0.5);
 }
-
-#endif
 
 template<typename _T_>
 struct KoIntegerToFloat {

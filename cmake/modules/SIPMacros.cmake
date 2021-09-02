@@ -136,8 +136,8 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
 ENDMACRO(ADD_SIP_PYTHON_MODULE)
 
 else()
-    find_file(sip_generate "sip-generate.py" PATHS ${CMAKE_MODULE_PATH})
-    find_file(pyproject_toml "pyproject.toml.in" PATHS ${CMAKE_MODULE_PATH})
+    find_file(sip_generate "sip-generate.py" PATHS ${CMAKE_MODULE_PATH} NO_CMAKE_FIND_ROOT_PATH)
+    find_file(pyproject_toml "pyproject.toml.in" PATHS ${CMAKE_MODULE_PATH} NO_CMAKE_FIND_ROOT_PATH)
 
     macro(add_sip_python_module_v5 MODULE_NAME MODULE_SIP)        
         get_filename_component(module_name_toml ${MODULE_SIP} NAME_WE)

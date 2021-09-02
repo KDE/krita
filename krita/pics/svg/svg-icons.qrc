@@ -86,6 +86,7 @@
         <file>dark_media-playback-stop.svg</file>
         <file>dark_media-record.svg</file>
         <file>dark_mirror-view-16.svg</file>
+        <file>dark_mirror-view-around-cursor-16.svg</file>
         <file>dark_nextframe.svg</file>
         <file>dark_nextkeyframe.svg</file>
         <file>dark_lastframe.svg</file>
@@ -205,6 +206,7 @@
         <file>light_media-playback-stop.svg</file>
         <file>light_media-record.svg</file>
         <file>light_mirror-view-16.svg</file>
+        <file>light_mirror-view-around-cursor-16.svg</file>
         <file>light_nextframe.svg</file>
         <file>light_palette-edit.svg</file>
         <file>light_palette-library.svg</file>
@@ -254,6 +256,8 @@
         <file>transparency-unlocked.svg</file>
         <file>dark_mirror-view.svg</file>
         <file>light_mirror-view.svg</file>
+        <file>dark_mirror-view-around-cursor.svg</file>
+        <file>light_mirror-view-around-cursor.svg</file>
         <file>dark_rotation-reset.svg</file>
         <file alias="dark_reset_canvas_rotation.svg">dark_rotation-reset.svg</file>
         <file>light_rotation-reset.svg</file>

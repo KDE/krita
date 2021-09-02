@@ -21,9 +21,8 @@ struct KisLinkedPatternManager::Private {
     /// For legacy presets: we now load and save all embedded/linked resources in the kpp file.
     static KoPatternSP tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
         KoPatternSP pattern;
-
         QString name = setting->getString("Texture/Pattern/Name");
-        QString filename = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName(); // For broken embedded patters like in "i)_Wet_Paint"
+        QString filename = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName(); // For broken embedded patterns like in "i)_Wet_Paint"
 
         if (name.isEmpty() || name != QFileInfo(name).fileName()) {
             QFileInfo info(filename);
@@ -31,6 +30,7 @@ struct KisLinkedPatternManager::Private {
         }
 
         QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
+
         QImage img;
         img.loadFromData(ba, "PNG");
 
@@ -61,11 +61,23 @@ KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigur
     QString name = setting->getString("Texture/Pattern/Name");
 
     if (md5sum.isEmpty()) {
-        // Old style preset...
         md5sum = md5.toHex();
     }
 
-    pattern = resourceSourceAdapter.resource(md5sum, QFileInfo(fileName).fileName(), name);
+    QVector<KoPatternSP> patterns = resourceSourceAdapter.resources(md5sum, QFileInfo(fileName).fileName(), name);
+
+    if (!patterns.isEmpty()) {
+        pattern = patterns.first();
+        Q_FOREACH(KoPatternSP p, patterns) {
+            if (p->filename() == fileName) {
+                if (md5sum.isEmpty() || md5sum == p->md5Sum()) {
+                    pattern = p;
+                    break;
+                }
+            }
+        }
+
+    }
 
     return pattern;
 }
@@ -73,10 +85,14 @@ KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigur
 KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     KoPatternSP pattern = tryFetchPattern(setting, resourcesInterface);
-    if (pattern) return pattern;
+    if (pattern) {
+        return pattern;
+    }
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
-    // this resource will be added to the memory storage by KisResourceLocator
-
+    if (pattern) {
+        auto resourceServer = KoResourceServerProvider::patternServer();
+        resourceServer->addResource(pattern, false);
+    }
     return pattern;
 }

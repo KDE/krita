@@ -154,7 +154,7 @@ void TestResourceModel::testImportResourceFile()
     f.close();
 
     int resourceCount = resourceModel.rowCount();
-    bool r = resourceModel.importResourceFile(f.fileName());
+    bool r = resourceModel.importResourceFile(f.fileName(), false);
     QVERIFY(r);
     QCOMPARE(resourceCount + 1, resourceModel.rowCount());
 }

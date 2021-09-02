@@ -104,6 +104,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     void switchDesiredLevelOfDetail(bool forced);
     bool hasUnfinishedStrokes() const;
     void tryClearUndoOnStrokeCompletion(KisStrokeSP finishingStroke);
+    void forceResetLodAndCloseCurrentLodRange();
 };
 
 
@@ -423,6 +424,8 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
 
         anythingCanceled = true;
 
+        bool needsLodNSynchronization = false;
+
         Q_FOREACH (KisStrokeSP currentStroke, m_d->strokesQueue) {
             KIS_ASSERT_RECOVER_NOOP(currentStroke->isEnded());
 
@@ -435,9 +438,13 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
                  * it doesn't store any undo data. Therefore we just regenerate
                  * the LOD caches.
                  */
-                m_d->lodNNeedsSynchronization = true;
+                needsLodNSynchronization = true;
             }
 
+        }
+
+        if (needsLodNSynchronization) {
+            m_d->forceResetLodAndCloseCurrentLodRange();
         }
     }
 
@@ -549,6 +556,19 @@ void KisStrokesQueue::Private::tryClearUndoOnStrokeCompletion(KisStrokeSP finish
     }
 }
 
+void KisStrokesQueue::Private::forceResetLodAndCloseCurrentLodRange()
+{
+    lodNNeedsSynchronization = true;
+
+    if (!strokesQueue.isEmpty() && strokesQueue.last()->type() != KisStroke::LEGACY) {
+
+        std::pair<KisStrokeStrategy*, QList<KisStrokeJobData*>> fakeStrokePair
+                (new KisStrokeStrategy(QLatin1String("fake_sync")), {});
+
+        executeStrokePair(fakeStrokePair, this->strokesQueue, this->strokesQueue.end(),  KisStroke::LEGACY, 0, q);
+    }
+}
+
 void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
                                    bool externalJobsPending)
 {
@@ -649,7 +669,7 @@ void KisStrokesQueue::notifyUFOChangedImage()
 {
     QMutexLocker locker(&m_d->mutex);
 
-    m_d->lodNNeedsSynchronization = true;
+    m_d->forceResetLodAndCloseCurrentLodRange();
 }
 
 void KisStrokesQueue::debugDumpAllStrokes()

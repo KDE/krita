@@ -3036,22 +3036,22 @@ void KisPainter::mirrorRect(Qt::Orientation direction, QRect *rc) const
 void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab, bool skipMirrorPixels) const
 {
     KisLodTransform t(d->device);
-    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+    QPointF effectiveAxesCenter = t.map(d->axesCenter);
 
     KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab, skipMirrorPixels);
 }
 
 namespace {
 
-inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QRect *rc) {
+inline void mirrorOneObject(Qt::Orientation dir, const QPointF &center, QRect *rc) {
     KritaUtils::mirrorRect(dir, center, rc);
 }
 
-inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QPointF *pt) {
+inline void mirrorOneObject(Qt::Orientation dir, const QPointF &center, QPointF *pt) {
     KritaUtils::mirrorPoint(dir, center, pt);
 }
 
-inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QPair<QPointF, QPointF> *pair) {
+inline void mirrorOneObject(Qt::Orientation dir, const QPointF &center, QPair<QPointF, QPointF> *pair) {
     KritaUtils::mirrorPoint(dir, center, &pair->first);
     KritaUtils::mirrorPoint(dir, center, &pair->second);
 }
@@ -3062,7 +3062,7 @@ template<class T> QVector<T> KisPainter::Private::calculateMirroredObjects(const
     QVector<T> result;
 
     KisLodTransform t(this->device);
-    const QPoint effectiveAxesCenter = t.map(this->axesCenter).toPoint();
+    const QPointF effectiveAxesCenter = t.map(this->axesCenter);
 
     T baseObject = object;
     result << baseObject;

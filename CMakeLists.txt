@@ -89,11 +89,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "5.0.0-prealpha")
+set(KRITA_VERSION_STRING "5.1.0-prealpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 5)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 0)
+set(KRITA_STABLE_VERSION_MINOR 1)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -195,6 +195,11 @@ add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
             add_link_options(/GUARD:CF)
         endif (USE_CONTROL_FLOW_GUARD)
     endif (MINGW)
+elseif(ANDROID)
+    # Increase the stack size to match MinGW's. Prevents crashes with GMic.
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
@@ -722,12 +727,12 @@ if(KSeExpr_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${KSeExpr_LIBRARY} ${KSeExprUI_LIBRARY})
 endif()
 
-find_package(ZLIB)
+find_package(ZLIB REQUIRED)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "Compression library"
     URL "https://www.zlib.net/"
-    TYPE OPTIONAL
-    PURPOSE "Optionally used by the G'Mic and the PSD plugins")
+    TYPE REQUIRED
+    PURPOSE "Required by Krita's PNG and PSD support")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 
 find_package(OpenEXR 3.0 CONFIG QUIET)
@@ -758,6 +763,8 @@ set_package_properties(TIFF PROPERTIES
     URL "http://www.libtiff.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita TIFF filter")
+include(CheckLibTIFFPSDSupport)
+configure_file(config-tiff.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-tiff.h)
 if (TIFF_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${TIFF_LIBRARY})
 endif()
@@ -814,6 +821,12 @@ set_package_properties(FFTW3 PROPERTIES
 macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 if (FFTW3_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${FFTW3_LIBRARY})
+
+    # GMic uses the Threads library if available.
+    find_library(FFTW3_THREADS_LIB fftw3_threads PATHS ${FFTW3_LIBRARY_DIRS})
+    if(FFTW3_THREADS_LIB)
+        list(APPEND ANDROID_EXTRA_LIBS ${FFTW3_THREADS_LIB})
+    endif()
 endif()
 
 find_package(OCIO 1.1.1 EXACT)

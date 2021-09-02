@@ -11,6 +11,7 @@
 #include <kritaimage_export.h>
 
 #include "kis_layer_style_filter.h"
+#include "krita_utils.h"
 
 struct psd_layer_effects_stroke;
 
@@ -31,6 +32,8 @@ public:
 
     QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
+
+    KritaUtils::ThresholdMode sourcePlaneOpacityThresholdRequirement(KisPSDLayerStyleSP style) const;
 
 private:
     KisLsStrokeFilter(const KisLsStrokeFilter &rhs);

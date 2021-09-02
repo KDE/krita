@@ -1,0 +1,133 @@
+From 64001b686a6803567e890b276380aab2a2b82584 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 21 Jul 2021 16:18:13 +0000
+Subject: [PATCH 6/6] Disable Internet updates in Krita
+
+(cherry picked from commit b8ca951240ccd6326dc63413a60c4c31071f48ba)
+---
+ gmic-qt/CMakeLists.txt         |  1 +
+ gmic-qt/src/DialogSettings.cpp | 12 ++++++++++++
+ gmic-qt/src/MainWindow.cpp     | 18 ++++++++++++++++++
+ 3 files changed, 31 insertions(+)
+
+diff --git a/gmic-qt/CMakeLists.txt b/gmic-qt/CMakeLists.txt
+index 556bf2b..085c182 100644
+--- a/gmic-qt/CMakeLists.txt
++++ b/gmic-qt/CMakeLists.txt
+@@ -596,6 +596,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+     qt5_wrap_ui(gmic_qt_SRCS ${gmic_qt_FORMS})
+     add_definitions(-DGMIC_HOST=krita)
+     add_definitions(-D_GMIC_QT_CONSENT_TO_UPDATE_FIRST_)
++    add_definitions(-D_GMIC_QT_DISABLE_UPDATES_)
+     add_executable(gmic_krita_qt ${gmic_qt_SRCS} ${gmic_qt_QRC} ${qmic_qt_QM})
+     target_link_libraries(
+       gmic_krita_qt
+diff --git a/gmic-qt/src/DialogSettings.cpp b/gmic-qt/src/DialogSettings.cpp
+index ceb0618..6729afd 100644
+--- a/gmic-qt/src/DialogSettings.cpp
++++ b/gmic-qt/src/DialogSettings.cpp
+@@ -126,9 +126,17 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
+ 
+   connect(ui->pbOk, SIGNAL(clicked()), this, SLOT(onOk()));
+   connect(ui->rbLeftPreview, SIGNAL(toggled(bool)), this, SLOT(onRadioLeftPreviewToggled(bool)));
++#ifdef _GMIC_QT_DISABLE_UPDATES_
++  ui->pbUpdate->setEnabled(false);
++#else
+   connect(ui->pbUpdate, SIGNAL(clicked(bool)), this, SLOT(onUpdateClicked()));
++#endif
+ 
++#ifdef _GMIC_QT_DISABLE_UPDATES_
++  ui->cbUpdatePeriodicity->setEnabled(false);
++#else
+   connect(ui->cbUpdatePeriodicity, SIGNAL(currentIndexChanged(int)), this, SLOT(onUpdatePeriodicityChanged(int)));
++#endif
+ 
+   connect(ui->labelPreviewLeft, SIGNAL(clicked()), ui->rbLeftPreview, SLOT(click()));
+   connect(ui->labelPreviewRight, SIGNAL(clicked()), ui->rbRightPreview, SLOT(click()));
+@@ -147,7 +155,11 @@ DialogSettings::DialogSettings(QWidget * parent) : QDialog(parent), ui(new Ui::D
+ 
+   connect(ui->outputMessages, SIGNAL(currentIndexChanged(int)), this, SLOT(onOutputMessageModeChanged(int)));
+ 
++#ifdef _GMIC_QT_DISABLE_UPDATES_
++  ui->cbNotifyFailedUpdate->setEnabled(false);
++#else
+   connect(ui->cbNotifyFailedUpdate, SIGNAL(toggled(bool)), this, SLOT(onNotifyStartupUpdateFailedToggle(bool)));
++#endif
+ 
+   ui->languageSelector->selectLanguage(_languageCode);
+   if (_darkThemeEnabled) {
+diff --git a/gmic-qt/src/MainWindow.cpp b/gmic-qt/src/MainWindow.cpp
+index 241b9a5..baae0df 100644
+--- a/gmic-qt/src/MainWindow.cpp
++++ b/gmic-qt/src/MainWindow.cpp
+@@ -182,8 +182,12 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
+     updateShortcutF5->setContext(Qt::ApplicationShortcut);
+     QShortcut * updateShortcutCtrlR = new QShortcut(QKeySequence("Ctrl+R"), this);
+     updateShortcutCtrlR->setContext(Qt::ApplicationShortcut);
++#ifdef _GMIC_QT_DISABLE_UPDATES_
++    ui->tbUpdateFilters->setEnabled(false);
++#else
+     connect(updateShortcutF5, &QShortcut::activated, [this]() { ui->tbUpdateFilters->animateClick(); });
+     connect(updateShortcutCtrlR, &QShortcut::activated, [this]() { ui->tbUpdateFilters->animateClick(); });
++#endif
+     ui->tbUpdateFilters->setToolTip(updateText);
+   }
+ 
+@@ -550,7 +554,9 @@ void MainWindow::onEscapeKeyPressed()
+     } else {
+       _processor.cancel();
+       ui->previewWidget->displayOriginalImage();
++#ifndef _GMIC_QT_DISABLE_UPDATES_
+       ui->tbUpdateFilters->setEnabled(true);
++#endif
+     }
+   }
+ }
+@@ -662,7 +668,9 @@ void MainWindow::onPreviewUpdateRequested(bool synchronous)
+     ui->previewWidget->displayOriginalImage();
+     return;
+   }
++#ifndef _GMIC_QT_DISABLE_UPDATES_
+   ui->tbUpdateFilters->setEnabled(false);
++#endif
+ 
+   const FiltersPresenter::Filter currentFilter = _filtersPresenter->currentFilter();
+   GmicProcessor::FilterContext context;
+@@ -724,7 +732,9 @@ void MainWindow::onPreviewImageAvailable()
+   }
+   ui->previewWidget->setPreviewImage(_processor.previewImage());
+   ui->previewWidget->enableRightClick();
++#ifndef _GMIC_QT_DISABLE_UPDATES_
+   ui->tbUpdateFilters->setEnabled(true);
++#endif
+   if (_pendingActionAfterCurrentProcessing == ProcessingAction::Close) {
+     close();
+   }
+@@ -734,7 +744,9 @@ void MainWindow::onPreviewError(const QString & message)
+ {
+   ui->previewWidget->setPreviewErrorMessage(message);
+   ui->previewWidget->enableRightClick();
++#ifndef _GMIC_QT_DISABLE_UPDATES_
+   ui->tbUpdateFilters->setEnabled(true);
++#endif
+   if (_pendingActionAfterCurrentProcessing == ProcessingAction::Close) {
+     close();
+   }
+@@ -1245,8 +1257,14 @@ void MainWindow::showEvent(QShowEvent * event)
+     QSettings settings;
+     ageLimit = settings.value(INTERNET_UPDATE_PERIODICITY_KEY, INTERNET_DEFAULT_PERIODICITY).toInt();
+   }
++#ifndef _GMIC_QT_DISABLE_UPDATES_
+   const bool useNetwork = (ageLimit != INTERNET_NEVER_UPDATE_PERIODICITY);
++#else
++  const bool useNetwork = false;
++#endif
+   ui->progressInfoWidget->startFiltersUpdateAnimationAndShow();
++  // GMic-Qt only loads the stdlib (whether bundled or updated)
++  // with an update trigger.
+   Updater::getInstance()->startUpdate(ageLimit, 60, useNetwork);
+ }
+ 
+-- 
+2.32.0
+

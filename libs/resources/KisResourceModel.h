@@ -86,10 +86,14 @@ public:
      * @param filename
      * @return
      */
-    virtual KoResourceSP importResourceFile(const QString &filename, const QString &storageId = QString()) = 0;
+    virtual KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) = 0;
 
     /**
-     * @brief addResource adds the given resource to the database and storage
+     * @brief addResource adds the given resource to the database and storage. If the resource
+     * already exists in the given storage with md5, filename or name, the existing resource
+     * will be updated instead. If the existing resource was inactive, it will be actived
+     * (undeleted).
+     *
      * @param resource the resource itself
      * @param storageId the id of the storage (could be "memory" for temporary
      * resources, the document's storage id for document storages or empty to save
@@ -99,9 +103,13 @@ public:
     virtual bool addResource(KoResourceSP resource, const QString &storageId = QString()) = 0;
 
     /**
-     * @brief updateResource
+     * @brief updateResource creates a new version ofthe resource in the storage and
+     * in the database. This will also set the resource to active if it was inactive.
+     *
+     * Note: if the storage does not support versioning, updating the resource will fail.
+     *
      * @param resource
-     * @return
+     * @return true if the resource was succesfull updated,
      */
     virtual bool updateResource(KoResourceSP resource) = 0;
 
@@ -167,7 +175,7 @@ public:
     QModelIndex indexForResource(KoResourceSP resource) const override;
     QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
-    KoResourceSP importResourceFile(const QString &filename, const QString &storageId = QString()) override;
+    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
@@ -184,14 +192,23 @@ public:
     KoResourceSP resourceForId(int id) const;
 
     /**
+     * @brief resourceExists checks whether there is a resource with, in order,
+     * the given md5, the filename or the resource name.
+     */
+    bool resourceExists(const QString &md5, const QString &filename, const QString &name);
+
+    /**
      * resourceForFilename returns the first resource with the given filename that
      * is active and is in an active store. Note that the filename does not include
      * a path to the storage, and if there are resources with the same filename
      * in several active storages, only one resource is returned.
      *
+     * @param fileName the filename we're looking for
+     * @param checkDependentResources: check whether we should try to find a resource embedded
+     * in a resource that's not been loaded yet in the metadata table.
      * @return a resource if one is found, or 0 if none are found
      */
-    KoResourceSP resourceForFilename(QString fileName) const;
+    QVector<KoResourceSP> resourcesForFilename(QString fileName, bool checkDependentResources = false) const;
 
     /**
      * resourceForName returns the first resource with the given name that
@@ -201,8 +218,8 @@ public:
      *
      * @return a resource if one is found, or 0 if none are found
      */
-    KoResourceSP resourceForName(const QString &name) const;
-    KoResourceSP resourceForMD5(const QString &md5sum) const;
+    QVector<KoResourceSP> resourcesForName(const QString &name) const;
+    QVector<KoResourceSP> resourcesForMD5(const QString &md5sum) const;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
 
 private:
@@ -252,7 +269,7 @@ public:
     QModelIndex indexForResource(KoResourceSP resource) const override;
     QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
-    KoResourceSP importResourceFile(const QString &filename, const QString &storageId = QString()) override;
+    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;

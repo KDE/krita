@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
       <text>Tool Shortcuts</text>
     <Action name="KisToolSelectSimilar">
-      <icon></icon>
+      <icon>tool_similar_selection</icon>
       <text>Similar Color Selection Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Similar Color Selection Tool</toolTip>

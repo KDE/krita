@@ -35,7 +35,6 @@
 
 
 
-const int MAX_PSD_SIZE = 30000;
 
 
 QPair<psd_color_mode, quint16> colormodelid_to_psd_colormode(const QString &colorSpaceId, const QString &colorDepthId)
@@ -90,7 +89,7 @@ KisImageSP PSDSaver::image()
     return m_image;
 }
 
-KisImportExportErrorCode PSDSaver::buildFile(QIODevice *io)
+KisImportExportErrorCode PSDSaver::buildFile(QIODevice &io)
 {
     KIS_ASSERT_RECOVER_RETURN_VALUE(m_image, ImportExportCodes::InternalError);
 
@@ -124,10 +123,10 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice *io)
     header.colormode = colordef.first;
     header.channelDepth = colordef.second;
 
-    dbgFile << "header" << header << io->pos();
+    dbgFile << "header" << header << io.pos();
 
     if (!header.write(io)) {
-        dbgFile << "Failed to write header. Error:" << header.error << io->pos();
+        dbgFile << "Failed to write header. Error:" << header.error << io.pos();
         return ImportExportCodes::ErrorWhileWriting;
     }
 
@@ -140,9 +139,9 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice *io)
         colorModeBlock.duotoneSpecification = annotation->annotation();
     }
 
-    dbgFile << "colormode block" << io->pos();
+    dbgFile << "colormode block" << io.pos();
     if (!colorModeBlock.write(io)) {
-        dbgFile << "Failed to write colormode block. Error:" << colorModeBlock.error << io->pos();
+        dbgFile << "Failed to write colormode block. Error:" << colorModeBlock.error << io.pos();
         return ImportExportCodes::ErrorWhileWriting;
     }
 
@@ -194,37 +193,37 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice *io)
 
     }
 
-
-    dbgFile << "resource section" << io->pos();
+    dbgFile << "resource section" << io.pos();
     if (!resourceSection.write(io)) {
-        dbgFile << "Failed to write resource section. Error:" << resourceSection.error << io->pos();
+        dbgFile << "Failed to write resource section. Error:" << resourceSection.error << io.pos();
         return ImportExportCodes::ErrorWhileWriting;
     }
 
     // LAYER AND MASK DATA
     // Only save layers and masks if there is more than one layer
-    dbgFile << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount() << io->pos();
+    dbgFile << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount() << io.pos();
 
     if (haveLayers) {
 
         PSDLayerMaskSection layerSection(header);
         layerSection.hasTransparency = true;
 
-        if (!layerSection.write(io, m_image->rootLayer())) {
-            dbgFile << "failed to write layer section. Error:" << layerSection.error << io->pos();
+        if (!layerSection.write(io, m_image->rootLayer(), psd_compression_type::RLE)) {
+            dbgFile << "failed to write layer section. Error:" << layerSection.error << io.pos();
             return ImportExportCodes::ErrorWhileWriting;
         }
     }
     else {
         // else write a zero length block
-        dbgFile << "No layers, saving empty layers/mask block" << io->pos();
+        dbgFile << "No layers, saving empty layers/mask block" << io.pos();
         psdwrite(io, (quint32)0);
     }
 
     // IMAGE DATA
-    dbgFile << "Saving composited image" << io->pos();
+    dbgFile << "Saving composited image" << io.pos();
     PSDImageData imagedata(&header);
-    if (!imagedata.write(io, m_image->projection(), haveLayers)) {
+    // Photoshop compresses layer data by default with RLE.
+    if (!imagedata.write(io, m_image->projection(), haveLayers, psd_compression_type::RLE)) {
         dbgFile << "Failed to write image data. Error:"  << imagedata.error;
         return ImportExportCodes::ErrorWhileWriting;
     }

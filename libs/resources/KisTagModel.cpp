@@ -50,6 +50,23 @@ KisAllTagsModel::KisAllTagsModel(const QString &resourceType, QObject *parent)
 
 }
 
+void KisAllTagsModel::untagAllResources(KisTagSP tag)
+{
+    KisTagResourceModel model(d->resourceType);
+    model.setTagsFilter(QVector<int>() << tag->id());
+    QList<int> taggedResources;
+    for (int i = 0; i < model.rowCount(); i++) {
+        QModelIndex idx = model.index(i, 0);
+        taggedResources.append(model.data(idx, Qt::UserRole + KisTagResourceModel::Id).toInt());
+    }
+
+    for (int i = 0; i < taggedResources.size(); i++) {
+        model.untagResource(tag, taggedResources[i]);
+    }
+
+
+}
+
 KisAllTagsModel::~KisAllTagsModel()
 {
     delete d;
@@ -295,7 +312,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     return tag;
 }
 
-KisTagSP KisAllTagsModel::addTag(const QString& tagName, QVector<KoResourceSP> taggedResources)
+KisTagSP KisAllTagsModel::addTag(const QString& tagName, const bool allowOverwrite, QVector<KoResourceSP> taggedResources)
 {
     KisTagSP tag = KisTagSP(new KisTag());
     tag->setName(tagName);
@@ -304,7 +321,7 @@ KisTagSP KisAllTagsModel::addTag(const QString& tagName, QVector<KoResourceSP> t
     tag->setActive(true);
     tag->setResourceType(d->resourceType);
 
-    if (addTag(tag, taggedResources)) {
+    if (addTag(tag, allowOverwrite, taggedResources)) {
         return tag;
     }
     else {
@@ -313,7 +330,7 @@ KisTagSP KisAllTagsModel::addTag(const QString& tagName, QVector<KoResourceSP> t
 }
 
 
-bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
+bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
@@ -329,11 +346,19 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
         resetQuery();
         endInsertRows();
 
+    } else if (allowOverwrite) {
+        KisTagSP trueTag = tagForUrl(tag->url());
+        r = setData(indexForTag(trueTag), QVariant::fromValue(true), Qt::CheckStateRole);
+        untagAllResources(trueTag);
+        tag->setComment(trueTag->comment()); // id will be set later, comment and filename are the only thing left
+        tag->setFilename(trueTag->filename());
     } else {
-        r = setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
+        return false;
     }
 
     tag->setId(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Id).toInt());
+    tag->setValid(true);
+    tag->setActive(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Active).toInt());
 
     if (!taggedResouces.isEmpty()) {
         KisTagSP tagFromDb = tagForUrl(tag->url());
@@ -371,20 +396,66 @@ bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
     return setData(indexForTag(tag), QVariant::fromValue(false), Qt::CheckStateRole);
 }
 
-bool KisAllTagsModel::renameTag(const KisTagSP tag)
+bool KisAllTagsModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
 
     QString name = tag->name();
-    QString url = tag->url();
+    QString url = tag->name(); // let's set the url to be the same as the name
+    int id = tag->id();
+
+    if (tag->id() < 0) return false;
 
     if (name.isEmpty()) return false;
+
+    KisTagSP tagWithTheSameUrl = tagForUrl(url);
+
+    if (!tagWithTheSameUrl.isNull()) {
+        if (!allowOverwrite) {
+            // there is already a tag with this url
+            return false;
+        } else { // allowOverwrite = true
+            // untag everything and remove the tag from the database
+            this->untagAllResources(tagWithTheSameUrl);
+
+            QModelIndex idxRemove = indexForTag(tagWithTheSameUrl);
+            beginRemoveRows(QModelIndex(), idxRemove.row(), idxRemove.row());
+
+            QSqlQuery qRemove;
+            if (!qRemove.prepare("DELETE FROM tags\n"
+                           "WHERE  id = :id\n"
+                           "AND    url = :url\n"
+                           "AND    resource_type_id = (SELECT id\n"
+                           "                           FROM   resource_types\n"
+                           "                           WHERE  name = :resource_type\n)")) {
+                qWarning() << "Couild not prepare make query to remove a different tag with the same url" << tag << qRemove.lastError();
+                endRemoveRows();
+                return false;
+            }
+
+            qRemove.bindValue(":id", tagWithTheSameUrl->id());
+            qRemove.bindValue(":url", tagWithTheSameUrl->url());
+            qRemove.bindValue(":resource_type", d->resourceType);
+
+            if (!qRemove.exec()) {
+                qWarning() << "Couild not execute query to remove a different tag with the same url" << qRemove.boundValues(), qRemove.lastError();
+                endRemoveRows();
+                return false;
+            }
+
+
+            resetQuery();
+            endRemoveRows();
+
+        }
+    }
 
     QSqlQuery q;
     if (!q.prepare("UPDATE tags\n"
                    "SET    name = :name\n"
-                   "WHERE  url = :url\n"
+                   ",      url = :url\n"
+                   "WHERE  id = :id\n"
                    "AND    resource_type_id = (SELECT id\n"
                    "                           FROM   resource_types\n"
                    "                           WHERE  name = :resource_type\n)")) {
@@ -394,6 +465,7 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag)
 
     q.bindValue(":name", name);
     q.bindValue(":url", url);
+    q.bindValue(":id", id);
     q.bindValue(":resource_type", d->resourceType);
 
     if (!q.exec()) {
@@ -404,6 +476,10 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag)
     bool r = resetQuery();
     QModelIndex idx = indexForTag(tag);
     emit dataChanged(idx, idx, {Qt::EditRole});
+
+    // set the url of the provided tag to the new one
+    tag->setUrl(name);
+
     return r;
 
 }
@@ -514,9 +590,9 @@ bool KisAllTagsModel::resetQuery()
 void KisAllTagsModel::addStorage(const QString &location)
 {
     Q_UNUSED(location)
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    beginResetModel();
     resetQuery();
-    endInsertRows();
+    endResetModel();
 }
 
 
@@ -524,9 +600,9 @@ void KisAllTagsModel::addStorage(const QString &location)
 void KisAllTagsModel::removeStorage(const QString &location)
 {
     Q_UNUSED(location)
-    beginRemoveRows(QModelIndex(), rowCount(), rowCount());
+    beginResetModel();
     resetQuery();
-    endRemoveRows();
+    endResetModel();
 }
 
 
@@ -584,11 +660,11 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
 }
 
 
-KisTagSP KisTagModel::addTag(const QString &tagName, QVector<KoResourceSP> taggedResources)
+KisTagSP KisTagModel::addTag(const QString &tagName, const bool allowOverwrite, QVector<KoResourceSP> taggedResources)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->addTag(tagName, taggedResources);
+        return source->addTag(tagName, allowOverwrite, taggedResources);
     }
     return 0;
 }
@@ -603,11 +679,11 @@ KisTagSP KisTagModel::tagForUrl(const QString& url) const
 }
 
 
-bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
+bool KisTagModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->addTag(tag, taggedResouces) ;
+        return source->addTag(tag, allowOverwrite, taggedResouces) ;
     }
     return false;
 }
@@ -631,11 +707,11 @@ bool KisTagModel::setTagActive(const KisTagSP tag)
 
 }
 
-bool KisTagModel::renameTag(const KisTagSP tag)
+bool KisTagModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->renameTag(tag);
+        return source->renameTag(tag, allowOverwrite);
     }
     return false;
 }

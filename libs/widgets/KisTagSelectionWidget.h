@@ -44,7 +44,6 @@ private:
     KoID m_tag;
 
     friend class TestKisTagSelectionWidget;
-
 };
 
 
@@ -91,8 +90,6 @@ private:
     QString m_lastTagToCreate {""};
 
     UserInputTagAction* m_createNewTagAction {0};
-
-    KisSignalCompressor m_compressor;
 
     friend class TestKisTagSelectionWidget;
 

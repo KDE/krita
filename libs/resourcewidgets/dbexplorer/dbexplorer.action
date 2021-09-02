@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ActionCollection version="2" name="DbExplorer">
-  <Actions category="DbExplorer">
-      <text>Database Explorer</text>
+<ActionCollection version="2" name="Krita">
+  <Actions category="General">
+      <text>General</text>
       <Action name="dbexplorer">
       <icon></icon>
       <text>&amp;Explore Resources Cache Database...</text>

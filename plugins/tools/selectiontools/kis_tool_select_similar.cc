@@ -337,7 +337,6 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
-
     selectionWidget->attachToImage(image(), dynamic_cast<KisCanvas2*>(canvas()));
     m_widgetHelper.setConfigGroupForExactTool(toolId());
 
@@ -346,7 +345,8 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     l->insertLayout(1, fl);
 
     // load setting from config
-    input->setValue(m_configGroup.readEntry("fuzziness", 20));
+    m_fuzziness = m_configGroup.readEntry("fuzziness", 20);
+    input->setValue(m_fuzziness);
     return selectionWidget;
 }
 

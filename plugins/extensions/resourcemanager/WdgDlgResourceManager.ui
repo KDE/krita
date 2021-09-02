@@ -159,7 +159,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="lneName"/>
+          <widget class="KSqueezedTextLabel" name="lneName"/>
          </item>
          <item row="2" column="1">
           <widget class="KSqueezedTextLabel" name="lblLocation">

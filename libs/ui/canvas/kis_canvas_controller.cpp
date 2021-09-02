@@ -180,6 +180,29 @@ void KisCanvasController::mirrorCanvas(bool enable)
     m_d->showMirrorStateOnCanvas();
 }
 
+void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
+{
+    QVariant customPos = sender()->property("customPosition");
+    QPoint pos = customPos.isValid()
+        ? customPos.value<QPoint>()
+        : QCursor::pos();
+    KoCanvasBase* canvas = m_d->view->canvasBase();
+    QWidget *canvasWidget = canvas->canvasWidget();
+    const QPointF cursorPosWidget = canvasWidget->mapFromGlobal(pos);
+    
+    if (!canvasWidget->rect().contains(cursorPosWidget.toPoint())) {
+        m_d->view->viewManager()->
+        showFloatingMessage(
+            i18n("\"Mirror View Around Cursor\" only works while hovering over the viewport."),
+            QIcon(), 1500, KisFloatingMessage::Low);
+        return;
+    }
+    QPoint newOffset = m_d->coordinatesConverter->mirror(cursorPosWidget, enable, false);
+    m_d->updateDocumentSizeAfterTransform();
+    setScrollBarValue(newOffset);
+    m_d->showMirrorStateOnCanvas();
+}
+
 void KisCanvasController::Private::showRotationValueOnCanvas()
 {
     qreal rotationAngle = coordinatesConverter->rotationAngle();

@@ -13,6 +13,8 @@
 #include <QStandardPaths>
 #include <QFile>
 
+#include <KLocalizedString>
+
 #include "kconfigini_p.h"
 #include "kconfigbackend_p.h"
 #include "kconfigdata.h"
@@ -27,6 +29,16 @@ const QByteArray KisTag::s_resourceType {"ResourceType"};
 const QByteArray KisTag::s_url {"URL"};
 const QByteArray KisTag::s_comment {"Comment"};
 const QByteArray KisTag::s_defaultResources {"Default Resources"};
+
+static QString currentLocale()
+{
+    const QStringList languages = KLocalizedString::languages();
+    if (languages.isEmpty()) {
+        return QLocale().name();
+    } else {
+        return languages.first();
+    }
+}
 
 class KisTag::Private {
 public:
@@ -163,7 +175,7 @@ bool KisTag::load(QIODevice &io)
     KIS_ASSERT(io.isOpen());
 
     KConfigIniBackend ini;
-    KConfigBackend::ParseInfo r = ini.parseConfigIO(io, QLocale().name().toUtf8(), d->map, KConfigBackend::ParseOption::ParseGlobal, false);
+    KConfigBackend::ParseInfo r = ini.parseConfigIO(io, currentLocale().toUtf8(), d->map, KConfigBackend::ParseOption::ParseGlobal, false);
     if (r != KConfigBackend::ParseInfo::ParseOk) {
         qWarning() << "Could not load this tag file" << r;
         return false;
@@ -195,7 +207,7 @@ bool KisTag::save(QIODevice &io)
     d->map.setEntry(s_group, s_comment, d->comment, KEntryMap::EntryDirty);
     d->map.setEntry(s_group, s_defaultResources, d->defaultResources.join(','), KEntryMap::EntryDirty);
 
-    ini.writeEntries(QLocale().name().toUtf8(), io, d->map);
+    ini.writeEntries(currentLocale().toUtf8(), io, d->map);
     return true;
 }
 

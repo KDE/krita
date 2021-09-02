@@ -464,7 +464,39 @@ namespace KritaUtils
         }
     }
 
+    void mirrorDab(Qt::Orientation dir, const QPointF &center, KisRenderedDab *dab, bool skipMirrorPixels)
+    {
+        const QRect rc = dab->realBounds();
+
+        if (dir == Qt::Horizontal) {
+            const int mirrorX = -((rc.x() + rc.width()) - center.x()) + center.x();
+
+            if (!skipMirrorPixels) {
+                dab->device->mirror(true, false);
+            }
+            dab->offset.rx() = mirrorX;
+        } else /* if (dir == Qt::Vertical) */ {
+            const int mirrorY = -((rc.y() + rc.height()) - center.y()) + center.y();
+
+            if (!skipMirrorPixels) {
+                dab->device->mirror(false, true);
+            }
+            dab->offset.ry() = mirrorY;
+        }
+    }
+
     void mirrorRect(Qt::Orientation dir, const QPoint &center, QRect *rc)
+    {
+        if (dir == Qt::Horizontal) {
+            const int mirrorX = -((rc->x() + rc->width()) - center.x()) + center.x();
+            rc->moveLeft(mirrorX);
+        } else /* if (dir == Qt::Vertical) */ {
+            const int mirrorY = -((rc->y() + rc->height()) - center.y()) + center.y();
+            rc->moveTop(mirrorY);
+        }
+    }
+
+    void mirrorRect(Qt::Orientation dir, const QPointF &center, QRect *rc)
     {
         if (dir == Qt::Horizontal) {
             const int mirrorX = -((rc->x() + rc->width()) - center.x()) + center.x();
@@ -484,9 +516,63 @@ namespace KritaUtils
         }
     }
 
+    void mirrorPoint(Qt::Orientation dir, const QPointF &center, QPointF *pt)
+    {
+        if (dir == Qt::Horizontal) {
+            pt->rx() = -(pt->x() - qreal(center.x())) + center.x();
+        } else /* if (dir == Qt::Vertical) */ {
+            pt->ry() = -(pt->y() - qreal(center.y())) + center.y();
+        }
+    }
+
     QTransform pathShapeBooleanSpaceWorkaround(KisImageSP image)
     {
         return QTransform::fromScale(image->xRes(), image->yRes());
+    }
+
+    void thresholdOpacity(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode)
+    {
+        const KoColorSpace *cs = device->colorSpace();
+
+        if (mode == ThresholdCeil) {
+            KisSequentialIterator it(device, rect);
+            while (it.nextPixel()) {
+                if (cs->opacityU8(it.rawDataConst()) > 0) {
+                    cs->setOpacity(it.rawData(), quint8(255), 1);
+                }
+            }
+        } else if (mode == ThresholdFloor) {
+            KisSequentialIterator it(device, rect);
+            while (it.nextPixel()) {
+                if (cs->opacityU8(it.rawDataConst()) < 255) {
+                    cs->setOpacity(it.rawData(), quint8(0), 1);
+                }
+            }
+        } else if (mode == ThresholdMaxOut) {
+            KisSequentialIterator it(device, rect);
+            int numConseqPixels = it.nConseqPixels();
+            while (it.nextPixels(numConseqPixels)) {
+                numConseqPixels = it.nConseqPixels();
+                cs->setOpacity(it.rawData(), quint8(255), numConseqPixels);
+            }
+        }
+    }
+
+    void thresholdOpacityAlpha8(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode)
+    {
+        if (mode == ThresholdCeil) {
+            filterAlpha8Device(device, rect,
+                [] (quint8 value) {
+                    return value > 0 ? 255 : value;
+                });
+        } else if (mode == ThresholdFloor) {
+            filterAlpha8Device(device, rect,
+                [] (quint8 value) {
+                    return value < 255 ? 0 : value;
+                });
+        } else if (mode == ThresholdMaxOut) {
+            device->fill(rect, KoColor(Qt::white, device->colorSpace()));
+        }
     }
 
 }

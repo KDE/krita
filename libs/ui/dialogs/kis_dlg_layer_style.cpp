@@ -314,6 +314,9 @@ void KisDlgLayerStyle::slotLoadStyle()
     dialog.setCaption(i18n("Select ASL file"));
     dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
+
+    if (filename.isEmpty()) return;
+
     QFileInfo oldFileInfo(filename);
 
     KisConfig cfg(true);
@@ -331,6 +334,8 @@ void KisDlgLayerStyle::slotLoadStyle()
             bool ok;
             newName = QInputDialog::getText(this, i18n("New name for ASL storage"), i18n("The old filename is taken.\nNew name:"),
                                                     QLineEdit::Normal, newName, &ok);
+            if (!ok) return;
+
             newLocation = createNewAslPath(newDir, newName);
             newFileInfo.setFile(newLocation);
             done = !newFileInfo.exists();

@@ -1,0 +1,25 @@
+From 676a717734dbfe888016aaffcda492148978e1cd Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sun, 15 Aug 2021 15:30:29 +0300
+Subject: [PATCH] Fix building exiv2 with TDMGCC 10.3.0
+
+---
+ xmpsdk/include/XMP_Environment.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xmpsdk/include/XMP_Environment.h b/xmpsdk/include/XMP_Environment.h
+index 2d04a5c..404640f 100644
+--- a/xmpsdk/include/XMP_Environment.h
++++ b/xmpsdk/include/XMP_Environment.h
+@@ -38,7 +38,7 @@
+ # define _WIN64 1
+ #endif
+ 
+-#if defined WIN32
++#if defined WIN32 | defined _WIN32
+ # define WIN_ENV 1
+ /* Todo: How to correctly recognize a Mac platform? */
+ #elif defined macintosh || defined MACOS_CLASSIC || defined MACOS_X_UNIX || defined MACOS_X || defined MACOS || defined(__APPLE__)
+-- 
+2.20.1.windows.1
+

@@ -762,7 +762,7 @@ QVector<KoResourceSP> KisAslLayerStyleSerializer::fetchEmbeddedResources(const K
     return embeddedResources;
 }
 
-void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
+void KisAslLayerStyleSerializer::saveToDevice(QIODevice &device)
 {
     QDomDocument doc = formXmlDocument();
     if (doc.isNull()) return ;
@@ -779,14 +779,13 @@ bool KisAslLayerStyleSerializer::saveToFile(const QString& filename)
         dbgKrita << "Can't open file " << filename;
         return false;
     }
-    saveToDevice(&file);
+    saveToDevice(file);
     file.close();
 
     return true;
 }
 
-void convertAndSetBlendMode(const QString &mode,
-                            boost::function<void (const QString &)> setBlendMode)
+void convertAndSetBlendMode(const QString &mode, std::function<void(const QString &)> setBlendMode)
 {
     QString compositeOp = COMPOSITE_OVER;
 
@@ -851,9 +850,7 @@ void convertAndSetBlendMode(const QString &mode,
     setBlendMode(compositeOp);
 }
 
-void convertAndSetCurve(const QString &name,
-                        const QVector<QPointF> &points,
-                        boost::function<void (const quint8*)> setCurveLookupTable)
+void convertAndSetCurve(const QString &name, const QVector<QPointF> &points, std::function<void(const quint8 *)> setCurveLookupTable)
 {
     Q_UNUSED(name);
     Q_UNUSED(points);
@@ -862,10 +859,8 @@ void convertAndSetCurve(const QString &name,
     warnKrita << "convertAndSetBlendMode:" << "Curve conversion is not implemented yet";
 }
 
-template <typename T>
-void convertAndSetEnum(const QString &value,
-                       const QMap<QString, T> map,
-                       boost::function<void (T)> setMappedValue)
+template<typename T>
+void convertAndSetEnum(const QString &value, const QMap<QString, T> map, std::function<void(T)> setMappedValue)
 {
     setMappedValue(map[value]);
 }
@@ -881,39 +876,34 @@ inline QString _prepaddr(const QString &pref, const QString &addr) {
 
 #define CONN_POINT(addr, method, object, type, prefix) m_catcher.subscribePoint(_prepaddr(prefix, addr), std::bind(&type::method, object, _1))
 
-#define CONN_COMPOSITE_OP(addr, method, object, type, prefix)                   \
-    {                                                                   \
-        boost::function<void (const QString&)> setter =                 \
-            std::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeEnum(_prepaddr(prefix, addr), "BlnM", std::bind(convertAndSetBlendMode, _1, setter)); \
+#define CONN_COMPOSITE_OP(addr, method, object, type, prefix)                                                                                                  \
+    {                                                                                                                                                          \
+        std::function<void(const QString &)> setter = std::bind(&type::method, object, _1);                                                                    \
+        m_catcher.subscribeEnum(_prepaddr(prefix, addr), "BlnM", std::bind(convertAndSetBlendMode, _1, setter));                                               \
     }
 
-#define CONN_CURVE(addr, method, object, type, prefix)                          \
-    {                                                                   \
-        boost::function<void (const quint8*)> setter =                  \
-            std::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeCurve(_prepaddr(prefix, addr), std::bind(convertAndSetCurve, _1, _2, setter)); \
+#define CONN_CURVE(addr, method, object, type, prefix)                                                                                                         \
+    {                                                                                                                                                          \
+        std::function<void(const quint8 *)> setter = std::bind(&type::method, object, _1);                                                                     \
+        m_catcher.subscribeCurve(_prepaddr(prefix, addr), std::bind(convertAndSetCurve, _1, _2, setter));                                                      \
     }
 
-#define CONN_ENUM(addr, tag, method, map, mapped_type, object, type, prefix)                       \
-    {                                                                   \
-        boost::function<void (mapped_type)> setter =                  \
-            std::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeEnum(_prepaddr(prefix, addr), tag, std::bind(convertAndSetEnum<mapped_type>, _1, map, setter)); \
+#define CONN_ENUM(addr, tag, method, map, mapped_type, object, type, prefix)                                                                                   \
+    {                                                                                                                                                          \
+        std::function<void(mapped_type)> setter = std::bind(&type::method, object, _1);                                                                        \
+        m_catcher.subscribeEnum(_prepaddr(prefix, addr), tag, std::bind(convertAndSetEnum<mapped_type>, _1, map, setter));                                     \
     }
 
-#define CONN_GRADIENT(addr, method, object, type, prefix)                      \
-    {   \
-        boost::function<void (KoAbstractGradientSP)> setter =    \
-            std::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeGradient(_prepaddr(prefix, addr), std::bind(&KisAslLayerStyleSerializer::assignGradientObject, this, _1, setter)); \
+#define CONN_GRADIENT(addr, method, object, type, prefix)                                                                                                      \
+    {                                                                                                                                                          \
+        std::function<void(KoAbstractGradientSP)> setter = std::bind(&type::method, object, _1);                                                               \
+        m_catcher.subscribeGradient(_prepaddr(prefix, addr), std::bind(&KisAslLayerStyleSerializer::assignGradientObject, this, _1, setter));                  \
     }
 
-#define CONN_PATTERN(addr, method, object, type, prefix)                       \
-    {                                                                  \
-        boost::function<void (KoPatternSP)> setter =    \
-            std::bind(&type::method, object, _1);                     \
-        m_catcher.subscribePatternRef(_prepaddr(prefix, addr), std::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter)); \
+#define CONN_PATTERN(addr, method, object, type, prefix)                                                                                                       \
+    {                                                                                                                                                          \
+        std::function<void(KoPatternSP)> setter = std::bind(&type::method, object, _1);                                                                        \
+        m_catcher.subscribePatternRef(_prepaddr(prefix, addr), std::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter));             \
     }
 
 void KisAslLayerStyleSerializer::registerPatternObject(const KoPatternSP pattern, const QString& patternUuid) {
@@ -927,9 +917,7 @@ void KisAslLayerStyleSerializer::registerPatternObject(const KoPatternSP pattern
     }
 }
 
-void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
-                                                     const QString &patternName,
-                                                     boost::function<void (KoPatternSP )> setPattern)
+void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid, const QString &patternName, std::function<void(KoPatternSP)> setPattern)
 {
     Q_UNUSED(patternName);
 
@@ -950,7 +938,7 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
     setPattern(pattern);
 }
 
-void KisAslLayerStyleSerializer::assignGradientObject(KoAbstractGradientSP gradient, boost::function<void (KoAbstractGradientSP)> setGradient)
+void KisAslLayerStyleSerializer::assignGradientObject(KoAbstractGradientSP gradient, std::function<void(KoAbstractGradientSP)> setGradient)
 {
     m_gradientsStore.append(gradient);
     m_localResourcesInterface->addResource(gradient);
@@ -1255,7 +1243,7 @@ bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
         dbgKrita << "Can't open file " << filename;
         return false;
     }
-    readFromDevice(&file);
+    readFromDevice(file);
     m_initialized = true;
     file.close();
 
@@ -1330,7 +1318,7 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
     });
 }
 
-void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
+void KisAslLayerStyleSerializer::readFromDevice(QIODevice &device)
 {
     m_stylesVector.clear();
 
@@ -1347,9 +1335,18 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     KisAslXmlParser parser;
     parser.parseXML(doc, m_catcher);
 
+    QSet<QString> allPsdUuids;
+
     // correct all the layer styles
     Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         FillStylesCorrector::correct(style.data());
+
+        if (allPsdUuids.contains(style->psdUuid())) {
+            qWarning() << "Layer style" << style->name() << "has non-unique uuid and will be ignored";
+            continue;
+        }
+
+        allPsdUuids << style->psdUuid();
         style->setValid(!style->isEmpty());
 
         style->setFilename(style->psdUuid() + QString("_style"));

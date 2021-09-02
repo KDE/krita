@@ -18,7 +18,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentInfo.h>
-#include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoID.h>
 #include <KoProgressProxy.h>
@@ -677,7 +676,6 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     if (filePathInfo.exists() && !filePathInfo.isWritable()) {
         slotCompleteSavingDocument(job, ImportExportCodes::NoAccessToWrite,
                                    i18n("%1 cannot be written to. Please save under a different name.", job.filePath));
-        //return ImportExportCodes::NoAccessToWrite;
         return false;
     }
 
@@ -843,16 +841,30 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (!status.isOk()) {
+        QString errorFromStatus = exportErrorToUserMessage(status, "");
+        QString errorFromError = exportErrorToUserMessage(status, errorMessage);
+
+        if (!errorFromError.contains(errorFromStatus)) {
+            errorFromError = errorFromStatus + "\n" + errorFromError;
+        }
+
+
         emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during saving %1: %2",
                                     fileName,
-                                    exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
+                                    errorFromError), errorMessageTimeout);
 
         if (!fileBatchMode()) {
             const QString filePath = job.filePath;
-            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
+            if (errorFromError.isEmpty()) {
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1", filePath));
+            }
+            else {
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, errorFromError));
+            }
         }
-    } else {
+    }
+    else {
         if (!(job.flags & KritaUtils::SaveIsExporting)) {
             const QString existingAutoSaveBaseName = localFilePath();
             const bool wasRecovered = isRecovered();
@@ -1189,8 +1201,14 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
         return;
     }
 
+    QString composedErrorMessage;
+
     if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
         d->backgroundSaveDocument->d->isAutosaving = false;
+    }
+
+    if (!d->backgroundSaveDocument->errorMessage().isEmpty()) {
+        composedErrorMessage = errorMessage + "\n" + d->backgroundSaveDocument->errorMessage();
     }
 
     d->backgroundSaveDocument.take()->deleteLater();
@@ -1206,15 +1224,14 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
     // unlock at the very end
     d->savingMutex.unlock();
 
-
     QFileInfo fi(job.filePath);
     KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3. Size: %4. MD5 Hash: %5")
                         .arg(job.filePath)
                         .arg(QString::fromLatin1(job.mimeType))
-                        .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK")
+                        .arg(!status.isOk() ? exportErrorToUserMessage(status, composedErrorMessage) : "OK")
                         .arg(fi.size()));
 
-    emit sigCompleteBackgroundSaving(job, status, errorMessage);
+    emit sigCompleteBackgroundSaving(job, status, composedErrorMessage);
 }
 
 void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument)
@@ -1299,7 +1316,7 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
                 }
                 else {
                     if (exportDocumentSync(tempFileName, mimeType, exportConfiguration)) {
-                        if (model.importResourceFile(tempFileName)) {
+                        if (model.importResourceFile(tempFileName, false)) {
                             return true;
                         }
                     }
@@ -1412,8 +1429,7 @@ void KisDocument::finishExportInBackground()
         return;
     }
 
-    KisImportExportErrorCode status =
-            d->childSavingFuture.result();
+    KisImportExportErrorCode status = d->childSavingFuture.result();
     const QString errorMessage = status.errorMessage();
 
     d->savingImage.clear();
@@ -1663,15 +1679,7 @@ public:
         hlayout->addWidget(new QLabel(message));
         layout->addLayout(hlayout);
         QTextBrowser *browser = new QTextBrowser();
-        QString warning = "<html><body><p><b>";
-        if (warnings.size() == 1) {
-            warning += "</b> Reason:</p>";
-        }
-        else {
-            warning += "</b> Reasons:</p>";
-        }
-        warning += "<p/><ul>";
-
+        QString warning = "<html><body><ul>";
         Q_FOREACH(const QString &w, warnings) {
             warning += "\n<li>" + w + "</li>";
         }
@@ -1679,7 +1687,9 @@ public:
         browser->setHtml(warning);
         browser->setMinimumHeight(200);
         browser->setMinimumWidth(400);
-        layout->addWidget(browser);
+        if (!warnings.join("").isEmpty()) {
+            layout->addWidget(browser);
+        }
         setMainWidget(page);
         setButtons(KoDialog::Ok);
         resize(minimumSize());
@@ -1730,9 +1740,11 @@ bool KisDocument::openFile()
             updater->cancel();
         }
         QString msg = status.errorMessage();
+        KisUsageLogger::log(QString("Loading %1 failed: %2").arg(prettyPath()).arg(msg));
+
         if (!msg.isEmpty() && !fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                                i18n("Could not open %2.\nReason: %1.", msg, prettyPath()),
+                                i18n("Could not open %2.\nReason: %1", msg, prettyPath()),
                                 errorMessage().split("\n") + warningMessage().split("\n"));
             dlg.exec();
         }
@@ -1740,7 +1752,7 @@ bool KisDocument::openFile()
     }
     else if (!warningMessage().isEmpty() && !fileBatchMode()) {
         DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                            i18n("There were problems opening %1.", prettyPath()),
+                            i18n("There were problems opening %1", prettyPath()),
                             warningMessage().split("\n"));
         dlg.exec();
         setPath(QString());
@@ -2254,7 +2266,8 @@ bool KisDocument::openPathInternal(const QString &path)
 
     if (ret) {
         emit completed();
-    } else {
+    }
+    else {
         emit canceled(QString());
     }
     return ret;

@@ -167,8 +167,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     mirrorMode->setFixedSize(35, 35);
 
     mirrorMode->setToolTip(i18n("Mirror Canvas"));
-    mirrorMode->setDefaultAction(m_actionCollection->action("mirror_canvas"));
+    mirrorMode->setDefaultAction(m_actionCollection->action("mirror_canvas_around_cursor"));
     connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotUpdate()));
+    connect(mirrorMode, SIGNAL(pressed()), this, SLOT(slotSetMirrorPos()));
+    connect(mirrorMode, SIGNAL(clicked()), this, SLOT(slotRemoveMirrorPos()));
 
     canvasOnlyButton = new KisHighlightedToolButton(this);
     canvasOnlyButton->setFixedSize(35, 35);
@@ -305,10 +307,10 @@ void KisPopupPalette::reconfigure()
 
     // ellipse - to make sure the widget doesn't eat events meant for recent colors or brushes
     //         - needs to be +2 pixels on every side for anti-aliasing to look nice on high dpi displays
-    // rectange - to make sure the area doesn't extend outside of the widget
+    // rectangle - to make sure the area doesn't extend outside of the widget
     QRegion maskedEllipse(-2, -2, m_colorSelector->width() + 4, m_colorSelector->height() + 4, QRegion::Ellipse );
-    QRegion maskedRectange(0, 0, m_colorSelector->width(), m_colorSelector->height(), QRegion::Rectangle);
-    QRegion maskedRegion = maskedEllipse.intersected(maskedRectange);
+    QRegion maskedRectangle(0, 0, m_colorSelector->width(), m_colorSelector->height(), QRegion::Rectangle);
+    QRegion maskedRegion = maskedEllipse.intersected(maskedRectangle);
 
     m_colorSelector->setMask(maskedRegion);
 
@@ -957,9 +959,17 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event) {
     event->ignore();
 }
 
+void KisPopupPalette::slotSetMirrorPos() {
+    m_actionCollection->action("mirror_canvas_around_cursor")->setProperty("customPosition", QVariant(m_mirrorPos));
+}
+void KisPopupPalette::slotRemoveMirrorPos() {
+    m_actionCollection->action("mirror_canvas_around_cursor")->setProperty("customPosition", QVariant());
+}
+
 void KisPopupPalette::popup(const QPoint &position) {
     setVisible(!isVisible());
     ensureWithinParent(position, false);
+    m_mirrorPos = QCursor::pos();
 }
 
 void KisPopupPalette::ensureWithinParent(const QPoint& position, bool useUpperLeft) {

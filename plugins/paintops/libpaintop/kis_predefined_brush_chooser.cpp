@@ -53,6 +53,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisStorageModel.h>
+#include <KisResourceOverwriteDialog.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -136,8 +137,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
     deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
-
-
 
     connect(addPresetButton, SIGNAL(clicked(bool)), this, SLOT(slotImportNewBrushResource()));
     connect(deleteBrushTipButton, SIGNAL(clicked(bool)), this, SLOT(slotDeleteBrushResource()));
@@ -567,7 +566,13 @@ void KisPredefinedBrushChooser::slotImportNewBrushResource() {
             if (KisMimeDatabase::mimeTypeForFile(filename).contains(abrMimeType)) {
                 KisStorageModel::instance()->importStorage(filename, KisStorageModel::None);
             } else {
-                m_itemChooser->tagFilterModel()->importResourceFile(filename);
+                KoResourceSP resource = m_itemChooser->tagFilterModel()->importResourceFile(filename, false);
+
+                if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Brushes, filename)) {
+                    if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
+                        resource = m_itemChooser->tagFilterModel()->importResourceFile(filename, true);
+                    }
+                }
             }
         }
     }

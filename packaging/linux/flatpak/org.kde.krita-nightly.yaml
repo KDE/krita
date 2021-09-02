@@ -802,11 +802,12 @@ modules:
 
   - name: gmic-qt
     buildsystem: cmake-ninja
+    subdir: gmic-qt
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DGMIC_QT_HOST=krita-plugin
       - -DCMAKE_CXX_FLAGS=-lfftw3_threads
-      - -DGMIC_PATH=gmic/src
+      
     modules: 
       - name: fftw3
         buildsystem: cmake
@@ -824,16 +825,5 @@ modules:
 
     sources:
       - type: archive
-        url: https://gmic.eu/files/source/gmic_2.9.6.tar.gz
-        sha256: d22fe8515af16dcd050d09a0bc7127ec29f4795ce732a0c6c3eaf839356bc11a
-        dest: gmic
-      - type: archive
-        url: https://github.com/c-koi/gmic-qt/archive/v.2.9.6.tar.gz
-        sha256: 40712fb8b2e8d39a5a2c6349bc14277444db25c81b1cf51fde1c159ef622942b
-      - type: patch
-        paths:
-          - ../../../3rdparty_plugins/ext_gmic/0001-First-working-version-of-the-GMic-Qt-Krita-native-pl.patch
-          - ../../../3rdparty_plugins/ext_gmic/0002-Remove-shared-segment-infrastructure.patch
-          - ../../../3rdparty_plugins/ext_gmic/0003-Refactor-into-a-completely-Krita-native-plugin.patch
-          - ../../../3rdparty_plugins/ext_gmic/0004-Enable-all-input-modes-for-Krita-plugin.patch
-          - ../../../3rdparty_plugins/ext_gmic/0005-Update-function-signatures-to-2.9.6.patch
+        url: https://files.kde.org/krita/build/dependencies/gmic-2.9.8.1-patched.tar.gz
+        sha256: 9e37aa7e359710080617810b3a9b2e3e4f79a4b188b96ee737f9fb9e73314299

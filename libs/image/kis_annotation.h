@@ -22,6 +22,8 @@
 #include <QByteArray>
 #include <QString>
 
+#include "kritaimage_export.h"
+
 /**
  * @class KisAnnotation
  * @brief A data extension mechanism for Krita.
@@ -36,7 +38,7 @@
  *
  * Examples of annotations are EXIF data and ICC profiles.
  */
-class KisAnnotation : public KisShared
+class KRITAIMAGE_EXPORT KisAnnotation : public KisShared
 {
 
 public:

@@ -166,6 +166,7 @@ manage_bundles=none
 merge_layer=Ctrl+E
 mirror_actions=none
 mirror_canvas=M
+mirror_canvas_around_cursor=Alt+M
 mirrorImageHorizontal=none
 mirrorImageVertical=none
 mirrorNodeX=none

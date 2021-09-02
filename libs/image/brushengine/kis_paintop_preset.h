@@ -78,6 +78,8 @@ public:
     /// return the id of the paintop plugin
     KoID paintOp() const;
 
+    QString name() const override;
+
     /// replace the current settings object with the specified settings
     void setSettings(KisPaintOpSettingsSP settings);
     void setOriginalSettings(KisPaintOpSettingsSP originalSettings);

@@ -157,9 +157,12 @@ public:
      * @brief Returns the index of the item corresponding the frame,
      * if there is an item with that frame
      * @param frame The frame whose index is needed.
+     * @param framePefect Whether query will return a valid scene
+     * even when a scene contains the frame, not just if it starts
+     * on said frame. Default == true
      * @return The index corresponding to frame, if exists.
      */
-    QModelIndex indexFromFrame(int frame) const;
+    QModelIndex indexFromFrame(int frame, bool framePerfect = true) const;
 
     /**
      * @brief Returns the index of the item with largest frame smaller
@@ -320,7 +323,7 @@ private:
     StoryboardItemList m_items;
     QVector<StoryboardComment> m_commentList;
     StoryboardCommentModel *m_commentModel {0};
-    bool m_freezeKeyframePosition {false};
+    bool m_freezeKeyframePositions {false};
     bool m_lockBoards {false};
     bool m_reorderingKeyframes {false};
     int m_lastScene {0};

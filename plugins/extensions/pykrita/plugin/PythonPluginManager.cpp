@@ -22,6 +22,16 @@
 #include "config.h"
 #include "version_checker.h"
 
+static QString currentLocale()
+{
+    const QStringList languages = KLocalizedString::languages();
+    if (languages.isEmpty()) {
+        return QLocale().name();
+    } else {
+        return languages.first();
+    }
+}
+
 PythonPluginManager* instance = 0;
 
 // PythonPlugin implementation
@@ -261,7 +271,8 @@ void PythonPluginManager::scanPlugins()
 
     Q_FOREACH(const QString &desktopFile, desktopFiles) {
 
-        const KDesktopFile df(desktopFile);
+        KDesktopFile df(desktopFile);
+        df.setLocale(currentLocale());
         const KConfigGroup dg = df.desktopGroup();
         if (dg.readEntry("ServiceTypes") == "Krita/PythonPlugin") {
             PythonPlugin plugin;

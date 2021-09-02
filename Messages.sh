@@ -7,8 +7,6 @@ source kundo2_aware_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui | grep -v '/tests/'` >> rc.cpp
 RCFILES=`find . -name \*.xmlgui                                               \
-	| grep -v plugins/extensions/metadataeditor/editors/dublincore.xmlgui \
-	| grep -v plugins/extensions/metadataeditor/editors/exif.xmlgui       \
 	| grep -v krita/sketch/KritaSketchWin.xmlgui                          \
 	| grep -v krita/gemini/KritaGeminiWin.xmlgui
          `
@@ -19,10 +17,6 @@ ACTIONFILES=`find . -name \*.action | grep -v '/tests/'`
 
 # extracti18n.pl extracts additional data from brushes, palettes etc.
 perl extracti18n.pl >> rc.cpp
-
-# Extract the name of configuration pages in the metadata editor plugin.
-$EXTRACTATTR --attr=MetaDataEditor,name --context='metadata editor page' \
-  plugins/extensions/metadataeditor/editors/*.xmlgui >> rc.cpp
 
 # Ignore sdk/templates which contains templates for writing future plugins.
 # Also ignore crashreporter, it has it's own catalog

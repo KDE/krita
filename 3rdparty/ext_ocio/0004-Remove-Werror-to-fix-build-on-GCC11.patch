@@ -1,0 +1,26 @@
+diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
+index 1eb691b..222fe2e 100644
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -24,7 +24,7 @@ if(WIN32)
+         set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} /WX")
+     endif()
+ else()
+-    set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} -Werror")
++#    set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} -Werror")
+ endif()
+ 
+ # SHARED
+diff --git a/src/pyglue/CMakeLists.txt b/src/pyglue/CMakeLists.txt
+index a90ca1c..a873f44 100644
+--- a/src/pyglue/CMakeLists.txt
++++ b/src/pyglue/CMakeLists.txt
+@@ -23,7 +23,7 @@ endif()
+ # Process all warnings as errors
+ # Unfortunately Windows still has a warning
+ if(UNIX)
+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
++#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+ endif()
+ 
+ find_package(PythonLibs)

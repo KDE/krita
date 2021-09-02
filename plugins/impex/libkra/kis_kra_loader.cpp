@@ -518,7 +518,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
             QByteArray buf = device.readAll();
             QBuffer raDevice(&buf);
             raDevice.open(QIODevice::ReadOnly);
-            serializer.readFromDevice(&raDevice);
+            serializer.readFromDevice(raDevice);
         }
         store->close();
 

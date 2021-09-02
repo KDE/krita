@@ -535,7 +535,7 @@ bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, c
     return true;
 }
 
-QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, bool loadingFromKra, QSizeF *fragmentSize)
+QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, bool loadingFromKra, QSizeF *fragmentSize, QStringList *warnings)
 {
 
     QString errorMsg;
@@ -567,7 +567,13 @@ QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QSt
         parser.setDefaultKraTextVersion(1);
     }
 
-    return parser.parseSvg(doc.documentElement(), fragmentSize);
+    QList<KoShape *> result = parser.parseSvg(doc.documentElement(), fragmentSize);
+
+    if (warnings) {
+        *warnings = parser.warnings();
+    }
+
+    return result;
 }
 
 
@@ -581,7 +587,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     return saveShapesToStore(store, this->shapes(), sizeInPt);
 }
 
-bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
+bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir, QStringList *warnings)
 {
     QSizeF fragmentSize; // unused!
     KisImageSP image = this->image();
@@ -595,7 +601,8 @@ bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
                             image->bounds(), resolutionPPI,
                             m_d->controller->resourceManager(),
                             true,
-                            &fragmentSize);
+                            &fragmentSize,
+                            warnings);
 
     Q_FOREACH (KoShape *shape, shapes) {
         addShape(shape);
@@ -604,10 +611,10 @@ bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
     return true;
 }
 
-bool KisShapeLayer::loadLayer(KoStore* store)
+bool KisShapeLayer::loadLayer(KoStore* store, QStringList *warnings)
 {
     if (!store) {
-        warnKrita << i18n("No store backend");
+        warnKrita << "No store backend";
         return false;
     }
 
@@ -615,7 +622,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
         KoStoreDevice storeDev(store);
         storeDev.open(QIODevice::ReadOnly);
 
-        loadSvg(&storeDev, "");
+        loadSvg(&storeDev, "", warnings);
 
         store->close();
 

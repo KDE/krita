@@ -26,8 +26,8 @@ struct KisImageInterface::Private {
     Private() = default;
 
     KisViewManager *m_viewManager {nullptr};
-    InputLayerMode m_inputMode {ACTIVE_LAYER};
-    OutputMode m_outputMode {IN_PLACE};
+    InputLayerMode m_inputMode{InputLayerMode::Active};
+    OutputMode m_outputMode{OutputMode::InPlace};
     QVector<KisQMicImageSP> m_sharedMemorySegments {};
     KisQmicApplicator *m_gmicApplicator {nullptr};
 };
@@ -69,7 +69,7 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
 
     KisImageBarrierLocker locker(p->m_viewManager->image());
 
-    p->m_inputMode = (InputLayerMode)inputMode;
+    p->m_inputMode = static_cast<InputLayerMode>(inputMode);
 
     dbgPlugins << "prepareCroppedImages()" << message << rc << inputMode;
 
@@ -133,9 +133,9 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
     // Parse the message. read the shared memory segments, fix up the current image and send an ack
     dbgPlugins << "gmic_qt_output_images";
     p->m_outputMode = (OutputMode)mode;
-    if (p->m_outputMode != IN_PLACE) {
+    if (p->m_outputMode != OutputMode::InPlace) {
         QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Sorry, this output mode is not implemented yet."));
-        p->m_outputMode = IN_PLACE;
+        p->m_outputMode = OutputMode::InPlace;
     }
     slotStartApplicator(layers);
 }

@@ -56,6 +56,7 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
     QDomElement element;
 
     QString brushDefinition = setting->getString("brush_definition");
+
     if (!brushDefinition.isEmpty()) {
         QDomDocument d;
         d.setContent(brushDefinition, false);
@@ -68,15 +69,12 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
 void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     QDomElement element = getBrushXMLElement(setting);
-
     if (!element.isNull()) {
         m_brush = KisBrush::fromXML(element, resourcesInterface);
-
         if (m_brush && m_brush->applyingGradient() && canvasResourcesInterface) {
             KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()->cloneAndBakeVariableColors(canvasResourcesInterface);
             m_brush->setGradient(gradient);
         }
-
     }
 }
 

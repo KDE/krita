@@ -20,9 +20,11 @@ class KisTagFilterWidget : public QWidget
 public:
     explicit KisTagFilterWidget(KisTagModel* model, QWidget* parent);
     ~KisTagFilterWidget() override;
-    void clear();
 
     bool isFilterByTagChecked();
+
+public Q_SLOTS:
+    void clear();
 
 Q_SIGNALS:
     void filterTextChanged(const QString &filterText);

@@ -44,7 +44,7 @@ if [ -n "${CHANNEL}" ]; then
     mkdir -p $DOWNLOADS_DIR
     cd $DOWNLOADS_DIR
     wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
-    echo -n "ebc4763e8eac6aa7b9dfcbea77ec07d2e01fa1b9f10a38d4af0fc040bc965c1f AppImageUpdate" | sha256sum -c -
+    echo -n "414f10d9ab2dc72dc6874dbdb99454227124473a7ae691db2288d60f14f810fe AppImageUpdate" | sha256sum -c -
 fi
 
 # Switch over to our build prefix

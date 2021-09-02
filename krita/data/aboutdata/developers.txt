@@ -12,6 +12,7 @@ Alexander Potashev
 Alexis Ménard
 Alfredo Beaumont Sainz
 Allen Winter
+Alvin Wong
 Ana Beatriz Guerrero López
 Andras Mantia
 Andreas Hartmetz

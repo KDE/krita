@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
       <text>Tool Shortcuts</text>
     <Action name="KisToolPolyline">
-      <icon></icon>
+      <icon>polyline</icon>
       <text>Polyline Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Polyline Tool. Shift-mouseclick ends the polyline.</toolTip>

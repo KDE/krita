@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
       <text>Tool Shortcuts</text>
     <Action name="KisToolSelectElliptical">
-      <icon></icon>
+      <icon>tool_elliptical_selection</icon>
       <text>Elliptical Selection Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Elliptical Selection Tool</toolTip>

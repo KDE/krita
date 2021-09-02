@@ -318,6 +318,7 @@ set(kritaimage_LIB_SRCS
    layerstyles/kis_layer_style_filter_environment.cpp
    layerstyles/kis_layer_style_filter_projection_plane.cpp
    layerstyles/kis_layer_style_projection_plane.cpp
+   layerstyles/KisStrokeLayerStyleFilterProjectionPlane.cpp
    layerstyles/kis_ls_drop_shadow_filter.cpp
    layerstyles/kis_ls_satin_filter.cpp
    layerstyles/kis_ls_stroke_filter.cpp
@@ -357,7 +358,7 @@ target_link_libraries(kritaimage
         kritaversion 
         kritawidgets 
         kritaglobal 
-        kritapsd 
+        kritapsdutils 
          
         kritapigment 
         kritacommand

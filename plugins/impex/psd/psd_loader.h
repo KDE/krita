@@ -25,7 +25,7 @@ public:
     PSDLoader(KisDocument *doc);
     ~PSDLoader() override;
 
-    KisImportExportErrorCode buildImage(QIODevice *io);
+    KisImportExportErrorCode buildImage(QIODevice &io);
 
     KisImageSP image();
 
@@ -34,8 +34,7 @@ public Q_SLOTS:
     virtual void cancel();
 
 private:
-
-    KisImportExportErrorCode decode(QIODevice *io);
+    KisImportExportErrorCode decode(QIODevice &io);
 
 private:
 

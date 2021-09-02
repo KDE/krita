@@ -30,6 +30,7 @@
 #include "VectorLayer.h"
 #include "FilterMask.h"
 #include "SelectionMask.h"
+#include "TransformMask.h"
 
 QList<Node *> LibKisUtils::createNodeList(KisNodeList kisnodes, KisImageWSP image)
 {

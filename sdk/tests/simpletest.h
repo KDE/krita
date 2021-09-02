@@ -4,10 +4,16 @@
 #include <QtTest>
 #include <QTest>
 #include <QStandardPaths>
+#include <QLocale>
+// #include <KLocalizedString>
 
 #define SIMPLE_MAIN_IMPL(TestObject) \
+    qputenv("LANGUAGE", "en"); \
+    QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
+    /*QLocale en_US(QLocale::English, QLocale::UnitedStates); \
+    KLocalizedString::setLanguages(QStringList() << QStringLiteral("en_US"));*/ \
     QTEST_DISABLE_KEYPAD_NAVIGATION \
     TestObject tc; \
     QTEST_SET_MAIN_SOURCE_PATH \

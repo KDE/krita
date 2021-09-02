@@ -163,7 +163,7 @@ KisSizeResourceConverter::KisSizeResourceConverter()
 QVariant KisSizeResourceConverter::fromSource(const QVariant &value)
 {
     KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
-    return preset ? preset->settings()->paintOpSize() : QVariant();
+    return (preset && preset->settings()) ? preset->settings()->paintOpSize() : QVariant();
 }
 
 QVariant KisSizeResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)

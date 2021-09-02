@@ -188,6 +188,9 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
     if (resources.size() == 0) {
         return true;
     }
+
+    QStringList brokenResources;
+
     Q_FOREACH (const KoResourceSP resource, resources) {
         QString path = RESOURCE_PATH;
 
@@ -198,27 +201,34 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
         }
         if (!store->open(path  + '/' + resource->filename())) {
             m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not open resource for writing.");
+            brokenResources << resource->filename();
             continue;
         }
 
         QByteArray ba;
         QBuffer buf(&ba);
         buf.open(QBuffer::WriteOnly);
-        resource->saveToDevice(&buf);
+        bool savingSucceeded = resource->saveToDevice(&buf);
+        if (!savingSucceeded) {
+            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save resource %1 to the kra file.", resource->name());
+            brokenResources << resource->filename();
+            continue;;
+        }
         buf.close();
 
         qint64 nwritten = 0;
         if (!ba.isEmpty()) {
             nwritten = store->write(ba);
         } else {
-            qWarning() << "Cannot save the resource to a byte array:" << resource->name();
+            qWarning() << "This resource is empty, so not saved:" << resource->name();
+            brokenResources << resource->name() + " (empty)";
         }
         res = store->close();
         res = res && (nwritten == ba.size());
     }
 
     if (!res) {
-        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save resources.");
+        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save resources: %1.", brokenResources.join(','));
     }
 
     return res;
@@ -305,6 +315,18 @@ void KisKraSaver::saveResourcesToXML(QDomDocument &doc, QDomElement &element)
     QDomElement eResources = doc.createElement(RESOURCES);
 
     Q_FOREACH (const KoResourceSP resource, m_d->doc->documentResources()) {
+
+        QByteArray ba;
+        QBuffer buf(&ba);
+        buf.open(QBuffer::WriteOnly);
+        bool r = resource->saveToDevice(&buf);
+        buf.close();
+
+        if (ba.isEmpty() || !r) {
+            dbgFile << "Could not save resource" << resource->name() << "so it will not be in the document." << ba.isEmpty() << r;
+            continue; // This resource is broken.
+        }
+
         QDomElement eResource = doc.createElement("resource");
         eResource.setAttribute("type", resource->resourceType().first);
         eResource.setAttribute("name", resource->name());
@@ -560,7 +582,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
                 QBuffer aslBuffer;
                 if (aslBuffer.open(QIODevice::WriteOnly)) {
                     serializer.setStyles(stylesClones);
-                    serializer.saveToDevice(&aslBuffer);
+                    serializer.saveToDevice(aslBuffer);
                     aslBuffer.close();
                     nwritten = store->write(aslBuffer.buffer());
                     savingLayerStylesSuccess = savingLayerStylesSuccess && (nwritten == aslBuffer.buffer().size());

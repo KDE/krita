@@ -140,8 +140,8 @@ public:
             qDebug().noquote() << kisBacktrace();
         }
 
-        if (!resource->valid()) {
-            warnResource << "Tried to add an invalid resource!";
+        if (!resource || !resource->valid()) {
+            warnResource << "Tried to add an invalid resource!" << resource;
             return false;
         }
 
@@ -179,7 +179,7 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    KoResourceSP importResourceFile(const QString &filename)
+    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite)
     {
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
@@ -187,7 +187,7 @@ public:
             qDebug().noquote() << kisBacktrace();
         }
 
-        return m_resourceModel->importResourceFile(filename);
+        return m_resourceModel->importResourceFile(filename, allowOverwrite);
     }
 
     /// Removes the resource file from the resource server
@@ -238,14 +238,15 @@ private:
         }
 
 
-        //qDebug() << "resourceByFilename" << filename;
         if (filename.isEmpty() || filename.isNull()) {
             return nullptr;
         }
         QVector<KoResourceSP> resources = m_resourceModel->resourcesForFilename(filename);
+
         if (resources.size() > 0) {
             return resources.first().dynamicCast<T>();
         }
+
         return nullptr;
     }
 
@@ -262,6 +263,7 @@ private:
         }
 
         QVector<KoResourceSP> resources = m_resourceModel->resourcesForName(name);
+
         if (resources.size() > 0) {
             return resources.first().dynamicCast<T>();
         }
@@ -284,6 +286,7 @@ private:
         if (resources.size() > 0) {
             return resources.first().dynamicCast<T>();
         }
+
         return nullptr;
     }
 
@@ -300,11 +303,22 @@ public:
      */
     QSharedPointer<T> resource(const QString &md5, const QString &fileName, const QString &name)
     {
-        KoResourceSP res = KisGlobalResourcesInterface::instance()->source(m_type).resource(md5, fileName, name);
-        return res.dynamicCast<T>();
+        QVector<KoResourceSP> resources = KisGlobalResourcesInterface::instance()->source(m_type).resources(md5, fileName, name);
+
+        QSharedPointer<T> resource;
+        if (resources.size() > 0) {
+            Q_FOREACH(KoResourceSP r, resources) {
+                if (r->filename() == fileName) {
+                    if (md5.isEmpty() || md5 == r->md5Sum()) {
+                        resource = r.dynamicCast<T>();;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return resource;
     }
-
-
 
     /**
      * Call after changing the content of a resource and saving it;

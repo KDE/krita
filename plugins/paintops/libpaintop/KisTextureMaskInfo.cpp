@@ -85,6 +85,11 @@ KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
     return *this;
 }
 
+bool KisTextureMaskInfo::isValid() const
+{
+    return (m_mask && m_maskBounds.isValid());
+}
+
 int KisTextureMaskInfo::levelOfDetail() const {
     return m_levelOfDetail;
 }
@@ -103,15 +108,14 @@ QRect KisTextureMaskInfo::maskBounds() const {
 
 bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
-
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
         return false;
     }
 
-    m_pattern = KisLinkedPatternManager::tryFetchPattern(setting, resourcesInterface);
+    m_pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
 
     if (!m_pattern) {
-        warnKrita << "WARNING: Couldn't load the pattern for a stroke (KisTextureMaskInfo)";
+        qWarning() << "WARNING: Couldn't load the pattern for a stroke (KisTextureMaskInfo)";
         return false;
     }
 

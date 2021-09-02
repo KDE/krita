@@ -18,6 +18,7 @@ class KisIntParseSpinBox;
 class KisDoubleParseSpinBox;
 class KoColorSlider;
 class QLineEdit;
+class QLabel;
 
 #include <KoColorDisplayRendererInterface.h>
 #include "kritawidgets_export.h"
@@ -87,7 +88,7 @@ class KRITAWIDGETS_EXPORT KisHexColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), bool usePercentage = false);
+    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), bool usePercentage = false, bool usePreview = false);
 protected:
     QWidget* createInput() override;
 public Q_SLOTS:
@@ -95,6 +96,7 @@ public Q_SLOTS:
     void update();
 private:
     QLineEdit* m_hexInput;
+    QLabel* m_colorPreview=nullptr;
 };
 
 #endif

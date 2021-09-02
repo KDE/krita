@@ -386,6 +386,7 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
     if (!directory.isEmpty()) {
         d->ui->editDirectory->setText(directory);
         RecorderConfig(false).setSnapshotDirectory(directory);
+        d->loadSettings();
     }
 }
 
@@ -393,18 +394,21 @@ void RecorderDockerDock::onRecordIsolateLayerModeToggled(bool checked)
 {
     d->recordIsolateLayerMode = checked;
     RecorderConfig(false).setRecordIsolateLayerMode(checked);
+    d->loadSettings();
 }
 
 void RecorderDockerDock::onAutoRecordToggled(bool checked)
 {
     d->recordAutomatically = checked;
     RecorderConfig(false).setRecordAutomatically(checked);
+    d->loadSettings();
 }
 
 void RecorderDockerDock::onCaptureIntervalChanged(int interval)
 {
     d->captureInterval = interval;
     RecorderConfig(false).setCaptureInterval(interval);
+    d->loadSettings();
 }
 
 void RecorderDockerDock::onQualityChanged(int value)
@@ -413,10 +417,12 @@ void RecorderDockerDock::onQualityChanged(int value)
     case RecorderFormat::JPEG:
         d->quality = value;
         RecorderConfig(false).setQuality(value);
+        d->loadSettings();
         break;
     case RecorderFormat::PNG:
         d->compression = value;
         RecorderConfig(false).setCompression(value);
+        d->loadSettings();
         break;
     }
 }
@@ -427,12 +433,14 @@ void RecorderDockerDock::onFormatChanged(int format)
     d->updateUiFormat();
 
     RecorderConfig(false).setFormat(d->format);
+    d->loadSettings();
 }
 
 void RecorderDockerDock::onResolutionChanged(int resolution)
 {
     d->resolution = resolution;
     RecorderConfig(false).setResolution(resolution);
+    d->loadSettings();
 }
 
 void RecorderDockerDock::onWriterStarted()

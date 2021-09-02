@@ -1,5 +1,6 @@
 /*
  *   SPDX-FileCopyrightText: 2011 Siddharth Sharma <siddharth.kde@gmail.com>
+ *   SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *   SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,17 +19,13 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
-
-#include "psd_utils.h"
-#include "compression.h"
-
-#include "kis_iterator_ng.h"
-#include "kis_paint_device.h"
+#include <kis_iterator_ng.h>
+#include <kis_paint_device.h>
 
 #include <asl/kis_asl_reader_utils.h>
-
-#include "psd_pixel_utils.h"
-
+#include <compression.h>
+#include <psd_pixel_utils.h>
+#include <psd_utils.h>
 
 PSDImageData::PSDImageData(PSDHeader *header)
 {
@@ -39,12 +36,10 @@ PSDImageData::~PSDImageData() {
 
 }
 
-bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
-
-
-
-    psdread(io, &m_compression);
-    quint64 start = io->pos();
+bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
+{
+    psdread(io, m_compression);
+    quint64 start = io.pos();
     m_channelSize = m_header->channelDepth/8;
     m_channelDataLength = quint64(m_header->height) * m_header->width * m_channelSize;
 
@@ -58,7 +53,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
             m_channelOffsets << 0;
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
-            channelInfo.compressionType = Compression::Uncompressed;
+            channelInfo.compressionType = psd_compression_type::Uncompressed;
             channelInfo.channelDataStart = start;
             channelInfo.channelDataLength = quint64(m_header->width) * m_header->height * m_channelSize;
             start += channelInfo.channelDataLength;
@@ -86,15 +81,15 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
             channelInfo.channelDataStart = start;
-            channelInfo.compressionType = Compression::RLE;
+            channelInfo.compressionType = psd_compression_type::RLE;
             for (quint32 row = 0; row < m_header->height; row++ ) {
                 if (m_header->version == 1) {
-                    quint16 rlelength16; // use temporary variable to not cast pointers and not rely on endianness
-                    psdread(io,&rlelength16);
+                    quint16 rlelength16 = 0; // use temporary variable to not cast pointers and not rely on endianness
+                    psdread(io, rlelength16);
                     rlelength = rlelength16;
                 }
                 else if (m_header->version == 2) {
-                    psdread(io,&rlelength);
+                    psdread(io, rlelength);
                 }
                 channelInfo.rleRowLengths.append(rlelength);
                 sumrlelength += rlelength;
@@ -130,20 +125,18 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
                                         m_channelSize,
                                         imageRect,
                                         infoRecords);
-        } catch (KisAslReaderUtils::ASLParseException &e) {
+        } catch (KisAslReaderUtils::ASLParseException &) {
             dev->clear();
             return true;
         }
-
     }
 
     return true;
 }
 
-bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev, bool hasAlpha)
+bool PSDImageData::write(QIODevice &io, KisPaintDeviceSP dev, bool hasAlpha, psd_compression_type compressionType)
 {
-    // XXX: make the compression setting configurable. For now, always use RLE.
-    psdwrite(io, (quint16)Compression::RLE);
+    psdwrite(io, static_cast<quint16>(compressionType));
 
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.
@@ -163,18 +156,16 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev, bool hasAlpha)
         dev->colorSpace()->colorChannelCount();
 
     for (int i = 0; i < numChannels; i++) {
-        const int rleOffset = io->pos();
+        const int rleOffset = io.pos();
 
         int channelId = writeAlpha && i == numChannels - 1 ? -1 : i;
 
         writingInfoList <<
             PsdPixelUtils::ChannelWritingInfo(channelId, -1, rleOffset);
 
-        io->seek(io->pos() + rc.height() * sizeof(quint16));
+        io.seek(io.pos() + rc.height() * sizeof(quint16));
     }
 
-    PsdPixelUtils::writePixelDataCommon(io, dev, rc,
-                                        colorMode, channelSize,
-                                        false, false, writingInfoList);
+    PsdPixelUtils::writePixelDataCommon(io, dev, rc, colorMode, channelSize, false, false, writingInfoList, compressionType);
     return true;
 }

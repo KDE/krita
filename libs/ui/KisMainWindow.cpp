@@ -150,6 +150,7 @@
 #include <katecommandbar.h>
 #include "KisNodeActivationActionCreatorVisitor.h"
 #include "KisUiFont.h"
+#include <KisResourceOverwriteDialog.h>
 
 
 #include <mutex>
@@ -1202,11 +1203,7 @@ void KisMainWindow::slotLoadCompleted()
 
 void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 {
-    KisUsageLogger::log(QString("Loading canceled. Error:").arg(errMsg));
-    if (!errMsg.isEmpty())   // empty when canceled by user
-        QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
-    // ... can't delete the document, it's the one who emitted the signal...
-
+    KisUsageLogger::log(QString("Loading canceled."));
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
@@ -1839,7 +1836,9 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
         dock->setProperty("Locked", false); // Unlock invisible dockers
         dock->toggleViewAction()->setEnabled(true);
         dock->hide();
-        dock->titleBarWidget()->setVisible(showTitlebars);
+        if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+            dock->titleBarWidget()->setVisible(showTitlebars);
+        }
     }
 
     bool success = KXmlGuiWindow::restoreState(state);
@@ -1847,7 +1846,7 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
     if (!success) {
         KXmlGuiWindow::restoreState(oldState);
         Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-            if (dock->titleBarWidget()) {
+            if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
                 dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
             }
         }
@@ -2282,7 +2281,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
 
         // Check if the dock widget is supposed to be collapsible
-        if (!dockWidget->titleBarWidget() && factory->id() != "TimelineDocker") {
+        if (!dockWidget->titleBarWidget()) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);
         }
@@ -2290,11 +2289,14 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             titleBar->setFont(KisUiFont::dockFont());
         }
 
+        if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+            dockWidget->titleBarWidget()->setVisible(KisConfig(true).showDockerTitleBars());
+        }
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        if (lockAllDockers && factory->id() != "TimelineDocker") {
-            if (dockWidget->titleBarWidget()) {
+        if (lockAllDockers) {
+            if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
                 dockWidget->titleBarWidget()->setVisible(false);
             }
             dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
@@ -2561,7 +2563,13 @@ void KisMainWindow::updateWindowMenu()
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         QString filename = dialog.filename();
 
-        d->workspacemodel->importResourceFile(filename);
+        KoResourceSP resource = d->workspacemodel->importResourceFile(filename, false);
+        if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Workspaces, filename)) {
+            if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
+                KoResourceSP resource = d->workspacemodel->importResourceFile(filename, true);
+            }
+        }
+
     });
 
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),
@@ -3045,7 +3053,7 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
 void KisMainWindow::showDockerTitleBars(bool show)
 {
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        if (dock->titleBarWidget()) {
+        if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
             dock->titleBarWidget()->setVisible(show || dock->isFloating());
         }
     }

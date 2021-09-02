@@ -13,8 +13,7 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QCheckBox>
-
-#include <QDateTime>
+#include <QUuid>
 
 #include <QPixmap>
 #include <QShowEvent>
@@ -148,7 +147,7 @@ void KisCustomBrushWidget::slotAddPredefined()
     QString name = nameLineEdit->text();
 
     if (nameLineEdit->text().isEmpty()) {
-        name = (QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
+        name = QUuid::createUuid().toByteArray().toHex();
     }
 
     // Add it to the brush server, so that it automatically gets to the mediators, and

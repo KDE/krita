@@ -45,10 +45,15 @@ public:
     /// \brief model main data model for resources in the item chooser that the Tagging Manager is taking care of
     QPointer<KisTagFilterResourceProxyModel> model;
 
-
     /// \brief tagModel main tag model for tags in the tags combobox
     KisTagModel *tagModel;
+
+    QString resourceType;
+
 };
+
+
+
 
 
 KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTagFilterResourceProxyModel *model, QWidget *parent)
@@ -57,9 +62,9 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
     , d(new Private())
 {
     d->model = model;
-
+    d->resourceType = resourceType;
     d->tagModel = new KisTagModel(resourceType);
-    d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
+    d->tagChooser = new KisTagChooserWidget(d->tagModel, resourceType, parent);
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
     d->model->setFilterInCurrentTag(d->tagFilter->isFilterByTagChecked());
@@ -68,6 +73,8 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 
     connect(d->tagFilter, SIGNAL(filterByTagChanged(bool)), this, SLOT(slotFilterByTagChanged(bool)));
     connect(d->tagFilter, SIGNAL(filterTextChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
+
+    connect(d->tagChooser, SIGNAL(sigTagChosen(KisTagSP)), d->tagFilter, SLOT(clear()));
 }
 
 KisResourceTaggingManager::~KisResourceTaggingManager()
@@ -80,6 +87,10 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
 {
     show ? d->tagFilter->show() : d->tagFilter->hide();
     show ? d->tagChooser->show() : d->tagChooser->hide();
+
+    KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
+    QString tag = group.readEntry<QString>(d->resourceType, "All");
+    d->tagChooser->setCurrentItem(tag);
 }
 
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)

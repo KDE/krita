@@ -185,6 +185,8 @@ Section "-Thing"
 	                 "DisplayName" "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KRITA_UNINSTALL_REGKEY}" \
 	                 "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KRITA_UNINSTALL_REGKEY}" \
+	                 "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
 	WriteUninstaller $INSTDIR\uninstall.exe
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KRITA_UNINSTALL_REGKEY}" \
 	                 "DisplayVersion" "${KRITA_VERSION}"
@@ -483,6 +485,10 @@ Function .onInit
 	${DetectKritaNsis} $KritaNsisVersion $KritaNsisBitness $KritaNsisInstallLocation
 	${If} $KritaNsisVersion != ""
 		push $R0
+		${If} $KritaNsisVersion == "4.5.4.0"
+			# HACK: 4.4.5 has incorrect version number.
+			StrCpy $KritaNsisVersion "4.4.5.0"
+		${EndIf}
 		${VersionCompare} "${KRITA_VERSION}" "$KritaNsisVersion" $R0
 		${If} $R0 == 0
 			# Same version installed... probably

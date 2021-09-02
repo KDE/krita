@@ -53,6 +53,7 @@ void createLocalResourcesSnapshot(T *object, KisResourcesInterfaceSP globalResou
         object->requiredResources(globalResourcesInterface ?
                                       globalResourcesInterface :
                                       object->resourcesInterface());
+
     object->setResourcesInterface(detail::createLocalResourcesStorage(resources));
 }
 

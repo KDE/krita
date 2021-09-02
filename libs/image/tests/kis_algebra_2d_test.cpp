@@ -318,7 +318,7 @@ void KisAlgebra2DTest::testNullRectProcessing()
 void KisAlgebra2DTest::testLineIntersections()
 {
     using KisAlgebra2D::intersectLines;
-
+    double epsilon = 1e-06;
 
     {
         boost::optional<QPointF> p =
@@ -702,6 +702,266 @@ void KisAlgebra2DTest::testLineRectIntersectionsRandom()
             testLineRectIntersection(testRect, testLine, QLineF(expectedLine.p1(), points[1]), false, true, true);
             testLineRectIntersection(testRect, testLine, QLineF(points[0], points[1]), true, true, true);
         }
+    }
+
+}
+
+
+void testLinePolygonIntersectionImpl(QPolygonF poly, QLineF line, QLineF expected, bool extendFirst, bool extendSecond, bool intersectsExpected)
+{
+    QLineF result = line;
+    bool intersects = KisAlgebra2D::intersectLineConvexPolygon(result, poly, extendFirst, extendSecond);
+
+    float epsilon = 1e-4; // good enough for most usecases // I don't use qFuzzyCompare because it has too small epsilon
+
+    auto fuzzyCompare = [epsilon] (float a, float b) -> bool {
+            return (qAbs(a - b) < epsilon); };
+    auto fuzzyComparePoint = [&] (QPointF a, QPointF b) -> bool {
+            return fuzzyCompare(a.x(), b.x()) && fuzzyCompare(a.y(), b.y()); };
+    auto fuzzyCompareLine = [&] (QLineF a, QLineF b) -> bool {
+            return fuzzyComparePoint(a.p1(), b.p1()) && fuzzyComparePoint(a.p2(), b.p2()); };
+
+
+    bool success;
+    if (!intersectsExpected) {
+        qCritical() << "Checking the first case";
+        success = intersectsExpected == intersects;
+    } else {
+        qCritical() << "Checking the second case, with comparing the line";
+        success = fuzzyCompareLine(result, expected) && intersectsExpected == intersects;
+    }
+
+
+    if (!success) {
+        qCritical() << "FAILURE";
+        qCritical() << "intersects: " << intersects;
+        qCritical() << "intersects expected: " << intersectsExpected;
+        qCritical() << "Extend: " << extendFirst << extendSecond;
+        qCritical();
+
+        qCritical() << "original: " << line;
+        //qCritical() << "rectangle was: " << ;
+        qCritical() << "expected: " << expected;
+        qCritical() << "result: " << result;
+    }
+
+    QVERIFY(success);
+
+}
+
+void testLinePolygonIntersection(QRect poly, QLineF line, QLineF expected, bool extendFirst, bool extendSecond, bool intersectsExpected)
+{
+    QPolygonF polygon = QRectF(poly);
+    testLinePolygonIntersectionImpl(polygon, line, expected, extendFirst, extendSecond, intersectsExpected);
+}
+
+void KisAlgebra2DTest::testLinePolygonIntersectionsManual()
+{
+    int x1 = 100, x2 = 400; // for x values
+    int y1 = 130, y2 = 430; // for y values
+
+
+    QRect rect1(x1, y1, x2 - x1, y2 - y1);
+    QLineF line1original(x1, y1, x2, y2);
+    QLineF line1expected = line1original;
+
+    testLinePolygonIntersection(rect1, line1original, line1expected, false, false, true);
+
+    //return;
+
+    QRect rect2(x1, y1, x2, y2);
+    QLineF line2original(x1, y1, x2, y2);
+    QLineF line2expected = line2original;
+
+    testLinePolygonIntersection(rect2, line2original, line2expected, false, false, true);
+
+    QRect rect3 = QRect(0,0, 2616, 1748);
+    QLineF line3original = QLineF(QPointF(1110.74,398.93), QPointF(0,394.068));
+    QLineF line3expected = line3original;
+
+    testLinePolygonIntersection(rect3, line3original, line3expected, false, false, true);
+
+    QRect rect4 = rect1;
+    QLineF line4 = QLineF(x2, y1, x1, y2);
+    testLinePolygonIntersection(rect4, line4, line4, false, false, true);
+
+
+    QRect rect5 = rect1;
+    QLineF line5 = QLineF(x2, y2, x1, y1);
+    testLinePolygonIntersection(rect5, line5, line5, false, false, true);
+
+    QRect rect6 = rect1;
+    QLineF line6 = QLineF(x2, y1, x2, y2);
+    testLinePolygonIntersection(rect6, line6, line6, false, false, true);
+
+    QRect rect7 = rect3;
+    QLineF line7 = QLineF(QPointF(338.69,421.014),QPointF(983.456,421.014));
+    testLinePolygonIntersection(rect7, line7, line7, false, false, true);
+
+    QRect rect8 = rect3;
+    QLineF line8 = QLineF(QPointF(-3545.25,618.966),QPointF(102.104,618.966));
+    QLineF line8expected = QLineF(QPointF(0,618.966),QPointF(102.104,618.966));
+    testLinePolygonIntersection(rect8, line8, line8expected, false, false, true);
+
+
+
+    // vertical
+    //   inside the line
+    testLinePolygonIntersection(QRect(0, 0, 20, 20), QLineF(0, 5, 0, 15), QLineF(0, 5, 0, 15), false, false, true);
+    //   exactly the line
+    testLinePolygonIntersection(QRect(0, 0, 20, 20), QLineF(0, 0, 0, 20), QLineF(0, 0, 0, 20), false, false, true);
+    //   extending the line
+    testLinePolygonIntersection(QRect(0, 0, 20, 20), QLineF(0, -5, 0, 25), QLineF(0, 0, 0, 20), false, false, true);
+
+    // diagonal
+    //   exactly
+    testLinePolygonIntersection(QRect(0, 0, 20, 20), QLineF(0, 0, 20, 20), QLineF(0, 0, 20, 20), false, false, true);
+    //   inside
+    testLinePolygonIntersection(QRect(0, 0, 20, 20), QLineF(5, 5, 15, 15), QLineF(5, 5, 15, 15), false, false, true);
+    //   extending
+    testLinePolygonIntersection(QRect(0, 0, 20, 20), QLineF(-5, -5, 30, 30), QLineF(0, 0, 20, 20), false, false, true);
+
+
+
+    testLinePolygonIntersection(QRect(0, 0, 20, 20), QLineF(-5, -100, -5, 100), QLineF(), false, false, false);
+
+    testLinePolygonIntersection(QRect(0, 0, 20, 20), QLineF(-5, -100, -3, 100), QLineF(), false, false, false);
+
+
+
+    // start: (-1, -2)
+    // end: (4, 5);
+    // width, height: 5, 7
+    QRect testRect = QRect(-1, -2, 5, 7);
+
+    // first item: line, second item: result after cropping
+    QList<QLineF> linesListIntersecting = QList<QLineF>({
+                                                            // horizontal
+                                                            QLineF(-1, -2, 4, -2), QLineF(-1, -2, 4, -2), // on the edge, exact
+                                                            QLineF(-1, 0, 4, 0), QLineF(-1, 0, 4, 0), // below the edge, exact
+                                                            QLineF(-10, -2, 10, -2), QLineF(-1, -2, 4, -2), // on the edge, longer
+                                                            QLineF(-10, 0, 10, 0), QLineF(-1, 0, 4, 0), // below the edge, longer
+                                                            QLineF(0, -2, 3, -2), QLineF(0, -2, 3, -2), // on the edge, shorter
+                                                            QLineF(0, 0, 3, -2), QLineF(0, 0, 3, -2), // below the edge, shorter
+
+                                                            // vertical
+                                                            QLineF(-1, -2, -1, 5), QLineF(-1, -2, -1, 5), // on the edge, exact
+                                                            QLineF(0, -2, 0, 5), QLineF(0, -2, 0, 5), // below the edge, exact
+                                                            QLineF(-1, -10, -1, 10), QLineF(-1, -2, -1, 5), // on the edge, longer
+                                                            QLineF(0, -10, 0, 10), QLineF(0, -2, 0, 5), // below the edge, longer
+                                                            QLineF(-1, 0, -1, 3), QLineF(-1, 0, -1, 3), // on the edge, shorter
+                                                            QLineF(0, 0, 0, 3), QLineF(0, 0, 0, 3), // below the edge, shorter
+
+
+                                                            // skewed
+                                                            QLineF(-6, 0, 9, 3), QLineF(-1, 1, 4, 2), // very horizontal-like
+                                                            QLineF(-1, 1, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, exact
+                                                            QLineF(-6, 0, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, half-exact
+
+                                                            QLineF(-6, -9, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal
+                                                            QLineF(-1, -2, 4, 5), QLineF(-1, -2, 4, 5), // perfectly diagonal, exact
+                                                            QLineF(-1, -2, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal, half-exact
+
+                                                            QLineF(9, 12, -6, -9), QLineF(4, 5, -1, -2), // perfectly diagonal, p1 and p2 reversed
+
+                                                            QLineF(1, 3, 3, 4), QLineF(1, 3, 3, 4), // skewed, fully inside
+                                                            QLineF(2, 2, 6, 4), QLineF(2, 2, 4, 3), // skewed, partially inside
+
+
+                                                        });
+
+    for (int i = 0; i < linesListIntersecting.size()/2; i++)
+    {
+        testLinePolygonIntersection(testRect, linesListIntersecting[2*i], linesListIntersecting[2*i + 1], false, false, true);
+    }
+
+    // now with extend = true
+
+    // first item: line, second item: result after cropping
+    QList<QLineF> linesListIntersectingExtend = QList<QLineF>({
+                                                            // horizontal
+                                                            QLineF(-1, -2, 4, -2), QLineF(-1, -2, 4, -2), // on the edge, exact
+                                                            QLineF(-1, 0, 4, 0), QLineF(-1, 0, 4, 0), // below the edge, exact
+                                                            QLineF(-10, -2, 10, -2), QLineF(-1, -2, 4, -2), // on the edge, longer
+                                                            QLineF(-10, 0, 10, 0), QLineF(-1, 0, 4, 0), // below the edge, longer
+                                                            QLineF(0, -2, 3, -2), QLineF(-1, -2, 4, -2), // on the edge, shorter
+                                                            QLineF(0, 0, 3, 0), QLineF(-1, 0, 4, 0), // below the edge, shorter
+
+                                                            // vertical
+                                                            QLineF(-1, -2, -1, 5), QLineF(-1, -2, -1, 5), // on the edge, exact
+                                                            QLineF(0, -2, 0, 5), QLineF(0, -2, 0, 5), // below the edge, exact
+                                                            QLineF(-1, -10, -1, 10), QLineF(-1, -2, -1, 5), // on the edge, longer
+                                                            QLineF(0, -10, 0, 10), QLineF(0, -2, 0, 5), // below the edge, longer
+                                                            QLineF(-1, 0, -1, 3), QLineF(-1, -2, -1, 5), // on the edge, shorter
+                                                            QLineF(0, 0, 0, 3), QLineF(0, -2, 0, 5), // below the edge, shorter
+
+
+                                                            // skewed
+                                                            QLineF(-6, 0, 9, 3), QLineF(-1, 1, 4, 2), // very horizontal-like
+                                                            QLineF(-1, 1, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, exact
+                                                            QLineF(-6, 0, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, half-exact
+
+                                                            QLineF(-6, -9, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal
+                                                            QLineF(-1, -2, 4, 5), QLineF(-1, -2, 4, 5), // perfectly diagonal, exact
+                                                            QLineF(-1, -2, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal, half-exact
+
+                                                            QLineF(9, 12, -6, -9), QLineF(4, 5, -1, -2), // perfectly diagonal, p1 and p2 reversed
+
+                                                            QLineF(1, 3, 3, 4), QLineF(-1, 2, 4, 4.5), // skewed, fully inside
+                                                            QLineF(2, 2, 6, 4), QLineF(-1, 0.5, 4, 3), // skewed, partially inside
+
+                                                        });
+
+    for (int i = 0; i < linesListIntersectingExtend.size()/2; i++)
+    {
+        testLinePolygonIntersection(testRect, linesListIntersectingExtend[2*i], linesListIntersectingExtend[2*i + 1], true, true, true);
+    }
+
+    QList<QLineF> linesListIntersectingExtendOneSide = QList<QLineF>({
+                                                            // horizontal
+
+                                                            QLineF(-1, -2, 4, -2), QLineF(-1, -2, 4, -2), // on the edge, exact
+                                                            QLineF(-1, 0, 4, 0), QLineF(-1, 0, 4, 0), // below the edge, exact
+                                                            QLineF(-10, -2, 10, -2), QLineF(-1, -2, 4, -2), // on the edge, longer
+                                                            QLineF(-10, 0, 10, 0), QLineF(-1, 0, 4, 0), // below the edge, longer
+                                                            QLineF(0, -2, 3, -2), QLineF(-1, -2, 3, -2), // on the edge, shorter
+                                                            QLineF(0, 0, 3, 0), QLineF(-1, 0, 3, 0), // below the edge, shorter
+
+                                                            // vertical
+                                                            QLineF(-1, -2, -1, 5), QLineF(-1, -2, -1, 5), // on the edge, exact
+                                                            QLineF(0, -2, 0, 5), QLineF(0, -2, 0, 5), // below the edge, exact
+                                                            QLineF(-1, -10, -1, 10), QLineF(-1, -2, -1, 5), // on the edge, longer
+                                                            QLineF(0, -10, 0, 10), QLineF(0, -2, 0, 5), // below the edge, longer
+                                                            QLineF(-1, 0, -1, 3), QLineF(-1, -2, -1, 3), // on the edge, shorter
+                                                            QLineF(0, 0, 0, 3), QLineF(0, -2, 0, 3), // below the edge, shorter
+
+
+                                                            // skewed
+                                                            QLineF(-6, 0, 9, 3), QLineF(-1, 1, 4, 2), // very horizontal-like
+                                                            QLineF(-1, 1, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, exact
+                                                            QLineF(-6, 0, 4, 2), QLineF(-1, 1, 4, 2), // very horizontal-like, half-exact
+
+                                                            QLineF(-6, -9, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal
+                                                            QLineF(-1, -2, 4, 5), QLineF(-1, -2, 4, 5), // perfectly diagonal, exact
+                                                            QLineF(-1, -2, 9, 12), QLineF(-1, -2, 4, 5), // perfectly diagonal, half-exact
+
+                                                            QLineF(9, 12, -6, -9), QLineF(4, 5, -1, -2), // perfectly diagonal, p1 and p2 reversed
+
+                                                            QLineF(1, 3, 3, 4), QLineF(-1, 2, 3, 4), // skewed, fully inside
+                                                            QLineF(2, 2, 6, 4), QLineF(-1, 0.5, 4, 3), // skewed, partially inside
+
+
+                                                        });
+
+    for (int i = 0; i < linesListIntersectingExtend.size()/2; i++)
+    {
+        // first from one side
+        testLinePolygonIntersection(testRect, linesListIntersectingExtendOneSide[2*i], linesListIntersectingExtendOneSide[2*i + 1], true, false, true);
+
+        // and then reversed
+        QLineF l = QLineF(linesListIntersectingExtendOneSide[2*i].p2(), linesListIntersectingExtendOneSide[2*i].p1());
+        QLineF lexp = QLineF(linesListIntersectingExtendOneSide[2*i + 1].p2(), linesListIntersectingExtendOneSide[2*i + 1].p1());
+        testLinePolygonIntersection(testRect, l, lexp, false, true, true);
     }
 
 }

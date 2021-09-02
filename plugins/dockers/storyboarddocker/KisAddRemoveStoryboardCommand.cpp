@@ -30,26 +30,26 @@ KisAddStoryboardCommand::~KisAddStoryboardCommand()
 
 void KisAddStoryboardCommand::redo()
 {
-    QModelIndex nextIndex = m_model->index(m_position, 0);
-    if (nextIndex.isValid()){
-        const int firstFrameOfScene = m_model->data(m_model->index(StoryboardItem::FrameNumber, 0, nextIndex)).toInt();
+    QModelIndex existingEntry = m_model->index(m_position, 0);
+    if (existingEntry.isValid()){
+        const int firstFrameOfScene = m_model->data(m_model->index(StoryboardItem::FrameNumber, 0, existingEntry)).toInt();
         int durationDeletedScene = m_item->child(StoryboardItem::DurationSecond)->data().toInt() * m_model->getFramesPerSecond()
                                 + m_item->child(StoryboardItem::DurationFrame)->data().toInt();
         m_model->shiftKeyframes(KisTimeSpan::infinite(firstFrameOfScene), durationDeletedScene);
     }
-    KUndo2Command::redo();
     m_model->insertRow(m_position);
     m_model->insertChildRows(m_position, m_item);
+    KUndo2Command::redo();
 }
 
 void KisAddStoryboardCommand::undo()
 {
-    updateItem();
     KUndo2Command::undo();
+    updateItem();
 
-    QModelIndex nextIndex = m_model->index(m_position, 0);
-    if (nextIndex.isValid()){
-        const int firstFrameOfScene = m_model->data(m_model->index(StoryboardItem::FrameNumber, 0, nextIndex)).toInt();
+    QModelIndex nextEntry = m_model->index(m_position + 1, 0);
+    if (nextEntry.isValid()){
+        const int firstFrameOfScene = m_model->data(m_model->index(StoryboardItem::FrameNumber, 0, nextEntry)).toInt();
         int durationDeletedScene = m_item->child(StoryboardItem::DurationSecond)->data().toInt() * m_model->getFramesPerSecond()
                                 + m_item->child(StoryboardItem::DurationFrame)->data().toInt();
         m_model->shiftKeyframes(KisTimeSpan::infinite(firstFrameOfScene), -durationDeletedScene);

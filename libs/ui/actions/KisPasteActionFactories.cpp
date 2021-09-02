@@ -217,6 +217,12 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
             const QPointF imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos);
 
             const QPointF offset = (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
+            const QPointF offsetTopLeft = (offset + QRectF(clip->exactBounds()).topLeft()).toPoint();
+
+            if (KisClipboard::instance()->hasLayers()) {
+                view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition, offsetTopLeft);
+                return;
+            }
 
             clip->setX(clip->x() + offset.x());
             clip->setY(clip->y() + offset.y());

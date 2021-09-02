@@ -90,7 +90,9 @@ public:
                                  KisNodeDummy *parentDummy,
                                  KisNodeDummy *aboveThisDummy,
                                  bool copyNode,
-                                 KisNodeInsertionAdapter *nodeInsertionAdapter);
+                                 KisNodeInsertionAdapter *nodeInsertionAdapter,
+                                 bool changeOffset = false,
+                                 QPointF offset = QPointF());
 
 protected:
 

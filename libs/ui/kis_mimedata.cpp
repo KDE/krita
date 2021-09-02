@@ -477,9 +477,22 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
                                    KisNodeDummy *parentDummy,
                                    KisNodeDummy *aboveThisDummy,
                                    bool copyNode,
-                                   KisNodeInsertionAdapter *nodeInsertionAdapter)
+                                   KisNodeInsertionAdapter *nodeInsertionAdapter,
+                                   bool changeOffset,
+                                   QPointF offset)
 {
     QList<KisNodeSP> nodes = loadNodesFast(data, image, shapeController, copyNode /* IN-OUT */);
+
+    if (changeOffset) {
+        Q_FOREACH (KisNodeSP node, nodes) {
+            KisLayerUtils::recursiveApplyNodes(node, [offset] (KisNodeSP node){
+                if (node->hasEditablePaintDevice()) {
+                    KisPaintDeviceSP dev = node->paintDevice();
+                    dev->moveTo(offset.x(), offset.y());
+                }
+            });
+        }
+    }
 
     if (nodes.isEmpty()) return false;
 
@@ -515,6 +528,7 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
          */
         image->requestStrokeEnd();
     }
+    image->refreshGraphAsync();
 
     return result;
 }

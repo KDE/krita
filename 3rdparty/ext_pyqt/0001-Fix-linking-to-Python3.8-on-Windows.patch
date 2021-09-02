@@ -1,7 +1,7 @@
 From 441196634657f8e6970139c913c14c5963765b4c Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 18 May 2021 11:14:44 +0300
-Subject: [PATCH] Fix linking to Python3.8 on Windows
+Subject: [PATCH 1/2] Fix linking to Python3.8 on Windows
 
 ---
  pyqtbuild/builder.py | 2 +-

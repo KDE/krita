@@ -2,7 +2,11 @@ SET(EXTPREFIX_qt  "${EXTPREFIX}")
 if (WIN32)
 
     if(MINGW)
-      set(QT_CONFIG_PLATFORM win32-g++)
+      if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set(QT_CONFIG_PLATFORM win32-clang-g++)
+      else()
+        set(QT_CONFIG_PLATFORM win32-g++)
+      endif()
       set(QT_BUILD_COMMAND   mingw32-make -j${SUBMAKE_JOBS})
       set(QT_INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install)
       set(QT_EXTRA_DEPS "")
@@ -44,6 +48,7 @@ if (WIN32)
         -feature-relocatable
         -no-feature-d3d12
         -no-feature-wmf
+        -no-feature-qdoc
         #
         -release -platform ${QT_CONFIG_PLATFORM} -prefix ${EXTPREFIX_qt}
         QMAKE_LFLAGS_APP+=${SECURITY_EXE_LINKER_FLAGS}

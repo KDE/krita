@@ -1,0 +1,34 @@
+From ddd12d8caf45b399d57c9594c7ca0d43d3ee3d1f Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 2 Sep 2021 01:02:57 +0000
+Subject: [PATCH 2/2] Add additional flavor of MinGW
+
+---
+ pyqtbuild/builder.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index 418d794..18a493c 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -328,7 +328,7 @@ class QmakeBuilder(Builder):
+         """ Return the name of a valid make program. """
+ 
+         if self.project.py_platform == 'win32':
+-            if self.spec == 'win32-g++':
++            if self.spec == 'win32-g++' or self.spec == 'win32-clang-g++':
+                 make = 'mingw32-make'
+             else:
+                 make = 'nmake'
+@@ -385,7 +385,7 @@ class QmakeBuilder(Builder):
+         # aligned because it uses SSE.  However the Python Windows installers
+         # are built with 4 byte aligned stack frames.  We therefore need to
+         # tweak the g++ flags to deal with it.
+-        if self.spec == 'win32-g++':
++        if self.spec == 'win32-g++' or self.spec == 'win32-clang-g++':
+             pro_lines.append('QMAKE_CFLAGS += -mstackrealign')
+             pro_lines.append('QMAKE_CXXFLAGS += -mstackrealign')
+ 
+-- 
+2.32.0.windows.2
+

@@ -133,6 +133,7 @@ elseif(WIN32)
         URL_HASH SHA256=86bd19fde83d92beaefacdeac1e26c6e1918c300ff78d7ec2a19973bf2cf21b5
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-linking-to-Python3.8-on-Windows.patch
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Add-additional-flavor-of-MinGW.patch
 
         CONFIGURE_COMMAND ""
 

@@ -2271,10 +2271,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget = factory->createDockWidget();
         KAcceleratorManager::setNoAccel(dockWidget->titleBarWidget());
 
-        if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
-            dockWidget->titleBarWidget()->setVisible(KisConfig(true).showDockerTitleBars());
-        }
-
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) {
@@ -2285,7 +2281,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
 
         // Check if the dock widget is supposed to be collapsible
-        if (!dockWidget->titleBarWidget() || !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+        if (!dockWidget->titleBarWidget()) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);
         }
@@ -2293,6 +2289,9 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             titleBar->setFont(KisUiFont::dockFont());
         }
 
+        if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+            dockWidget->titleBarWidget()->setVisible(KisConfig(true).showDockerTitleBars());
+        }
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);

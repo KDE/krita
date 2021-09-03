@@ -607,10 +607,11 @@ bool KisExifIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                 }
                 metaDataValue = exivValueToKMDValue(it.getValue(), forceSeq, arrayType);
             }
-            if (tag == Exif::Photo::InteroperabilityTag
+            if (tag == Exif::Photo::InteroperabilityTag || tag == 0xea1d
                 || metaDataValue.type() == KisMetaData::Value::Invalid) { // InteroperabilityTag isn't useful for XMP,
-                                                                          // 0xea1d isn't a valid Exif tag
+                // 0xea1d isn't a valid Exif tag
                 warnMetaData << "Ignoring " << it.key().c_str();
+
             } else {
                 store->addEntry({exifSchema, it.tagName().c_str(), metaDataValue});
             }

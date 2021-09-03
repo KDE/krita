@@ -59,6 +59,11 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     chkFactory = new ExifCheckFactory();
     add(chkFactory->id(), chkFactory);
 
+    // Check for saving exiv info in multi layered images.
+    // This is specific to TIFF, which treats Exif as part of the file format itself.
+    chkFactory = new TiffExifCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
     // Check whether the image is sRGB
     chkFactory = new sRGBProfileCheckFactory();
     add(chkFactory->id(), chkFactory);

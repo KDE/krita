@@ -399,69 +399,52 @@ KisImportExportErrorCode KisTIFFConverter::decode(const QString &filename)
 
             readImg->readMetadata();
 
-            std::multimap<int, Exiv2::Exifdatum> sortedExifMetadata;
-
-            // We need to classify the EXIF data by IFD
-            for (const auto &i : readImg->exifData()) {
-                // Discard TIFF-specific metadata
-                const uint16_t tag = i.tag();
-                if (tag == Exif::Image::ImageWidth || tag == Exif::Image::ImageLength
-                    || tag == Exif::Image::BitsPerSample || tag == Exif::Image::Compression
-                    || tag == Exif::Image::PhotometricInterpretation || tag == Exif::Image::Orientation
-                    || tag == Exif::Image::SamplesPerPixel || tag == Exif::Image::PlanarConfiguration
-                    || tag == Exif::Image::YCbCrSubSampling || tag == Exif::Image::YCbCrPositioning
-                    || tag == Exif::Image::XResolution || tag == Exif::Image::YResolution
-                    || tag == Exif::Image::ResolutionUnit || tag == Exif::Image::TransferFunction
-                    || tag == Exif::Image::WhitePoint || tag == Exif::Image::PrimaryChromaticities
-                    || tag == Exif::Image::YCbCrCoefficients || tag == Exif::Image::ReferenceBlackWhite
-                    || tag == Exif::Image::InterColorProfile) {
-                    dbgMetaData << "Ignoring TIFF-specific" << i.key().c_str();
-                    continue;
-                }
-
-                dbgMetaData << i.ifdId() << i.ifdName() << i.key().c_str();
-
-                // Synthesize keys because IFD#2 is taken as Thumbnail
-                sortedExifMetadata.insert(
-                    {i.ifdId(), Exiv2::Exifdatum({i.tag(), std::string("Image")}, i.getValue().get())});
-            }
-
             const KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("exif");
 
             // All IFDs are paint layer children of root
             KisNodeSP node = m_image->rootLayer()->firstChild();
 
-            for (int i = 0; node; i++) {
-                QBuffer ioDevice;
+            QBuffer ioDevice;
 
-                {
-                    // Synthesize the Exif blob
-                    Exiv2::ExifData tempData;
-                    Exiv2::Blob tempBlob;
+            {
+                // Synthesize the Exif blob
+                Exiv2::ExifData tempData;
+                Exiv2::Blob tempBlob;
 
-                    // Select only current IFD
-                    const auto range = sortedExifMetadata.equal_range(i);
-                    for (auto i = range.first; i != range.second; ++i) {
-                        tempData.add(i->second);
+                // NOTE: do not use std::copy_if, auto_ptrs beware
+                for(const Exiv2::Exifdatum &i : readImg->exifData()) {
+                    const uint16_t tag = i.tag();
+
+                    if (tag == Exif::Image::ImageWidth || tag == Exif::Image::ImageLength
+                        || tag == Exif::Image::BitsPerSample || tag == Exif::Image::Compression
+                        || tag == Exif::Image::PhotometricInterpretation || tag == Exif::Image::Orientation
+                        || tag == Exif::Image::SamplesPerPixel || tag == Exif::Image::PlanarConfiguration
+                        || tag == Exif::Image::YCbCrSubSampling || tag == Exif::Image::YCbCrPositioning
+                        || tag == Exif::Image::XResolution || tag == Exif::Image::YResolution
+                        || tag == Exif::Image::ResolutionUnit || tag == Exif::Image::TransferFunction
+                        || tag == Exif::Image::WhitePoint || tag == Exif::Image::PrimaryChromaticities
+                        || tag == Exif::Image::YCbCrCoefficients || tag == Exif::Image::ReferenceBlackWhite
+                        || tag == Exif::Image::InterColorProfile) {
+                        dbgMetaData << "Ignoring TIFF-specific" << i.key().c_str();
+                        continue;
                     }
 
-                    // Encode into temporary blob
-                    Exiv2::ExifParser::encode(tempBlob, Exiv2::littleEndian, tempData);
-
-                    // Reencode into Qt land
-                    ioDevice.setData(reinterpret_cast<char *>(tempBlob.data()), static_cast<int>(tempBlob.size()));
+                    tempData.add(i);
                 }
 
-                // Get layer
-                KisLayer *layer = qobject_cast<KisLayer *>(node.data());
-                Q_ASSERT(layer);
+                // Encode into temporary blob
+                Exiv2::ExifParser::encode(tempBlob, Exiv2::littleEndian, tempData);
 
-                // Inject the data as any other IOBackend
-                io->loadFrom(layer->metaData(), &ioDevice);
-
-                // Continue
-                node = node->nextSibling();
+                // Reencode into Qt land
+                ioDevice.setData(reinterpret_cast<char *>(tempBlob.data()), static_cast<int>(tempBlob.size()));
             }
+
+            // Get layer
+            KisLayer *layer = qobject_cast<KisLayer *>(node.data());
+            Q_ASSERT(layer);
+
+            // Inject the data as any other IOBackend
+            io->loadFrom(layer->metaData(), &ioDevice);
         } catch (Exiv2::AnyError &e) {
             errFile << "Failed metadata import:" << e.code() << e.what();
         }
@@ -1432,49 +1415,25 @@ KisImportExportErrorCode KisTIFFConverter::buildFile(const QString &filename, Ki
             // All IFDs are paint layer children of root
             KisNodeSP node = root->firstChild();
 
-            auto groupName = [](int ifdIdx) -> const char * {
-                const Exiv2::GroupInfo *groups = Exiv2::ExifTags::groupList();
+            QBuffer ioDevice;
 
-                while (groups && groups->ifdId_ != ifdIdx) {
-                    groups++;
-                }
+            // Get layer
+            KisLayer *layer = qobject_cast<KisLayer *>(node.data());
+            Q_ASSERT(layer);
 
-                if (groups) {
-                    return groups->groupName_;
-                } else {
-                    return nullptr;
-                }
-            };
+            // Inject the data as any other IOBackend
+            io->saveTo(layer->metaData(), &ioDevice);
 
-            for (int i = 0; node; i++) {
-                QBuffer ioDevice;
+            Exiv2::ExifData dataToInject;
 
-                // Get layer
-                KisLayer *layer = qobject_cast<KisLayer *>(node.data());
-                Q_ASSERT(layer);
+            // Reinterpret the blob we just got and inject its contents into tempData
+            Exiv2::ExifParser::decode(dataToInject,
+                                        reinterpret_cast<const Exiv2::byte *>(ioDevice.data().data()),
+                                        static_cast<uint32_t>(ioDevice.size()));
 
-                // Inject the data as any other IOBackend
-                io->saveTo(layer->metaData(), &ioDevice);
-
-                Exiv2::ExifData dataToInject;
-
-                // Reinterpret the blob we just got and inject its contents into tempData
-                Exiv2::ExifParser::decode(dataToInject,
-                                          reinterpret_cast<const Exiv2::byte *>(ioDevice.data().data()),
-                                          static_cast<uint32_t>(ioDevice.size()));
-
-                for (const auto &v : dataToInject) {
-                    // Synthesize its key
-                    // If it is unable to inject the tag, it will throw here
-                    // See https://github.com/Exiv2/exiv2/issues/1879
-                    // See https://dev.exiv2.org/issues/0000762
-                    data[Exiv2::ExifKey(v.tag(), groupName(i)).key()] = v.value();
-                }
-
-                // Continue
-                node = node->nextSibling();
+            for (const auto &v : dataToInject) {
+                data[v.key()] = v.value();
             }
-
             // Write metadata
             img->writeMetadata();
         } catch (Exiv2::AnyError &e) {

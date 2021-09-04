@@ -1,9 +1,5 @@
 add_subdirectory(tests)
 
-include_directories(SYSTEM
-    ${OCIO_INCLUDE_DIR}
-)
-
 set(KRITA_LUTDOCKER_SOURCES
   lutdocker.cpp
   lutdocker_dock.cpp

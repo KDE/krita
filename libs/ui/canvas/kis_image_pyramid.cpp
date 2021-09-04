@@ -24,10 +24,6 @@
 //#define DEBUG_PYRAMID
 
 #include <config-ocio.h>
-#ifdef HAVE_OCIO
-#include <OpenColorIO.h>
-#include <OpenColorTransforms.h>
-#endif
 
 #define ORIGINAL_INDEX           0
 #define FIRST_NOT_ORIGINAL_INDEX 1

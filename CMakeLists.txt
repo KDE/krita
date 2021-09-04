@@ -821,13 +821,13 @@ if (FFTW3_FOUND)
     endif()
 endif()
 
-find_package(OCIO 1.1.1 EXACT)
-set_package_properties(OCIO PROPERTIES
+find_package(OpenColorIO)
+set_package_properties(OpenColorIO PROPERTIES
     DESCRIPTION "The OpenColorIO Library"
     URL "https://www.opencolorio.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita LUT docker")
-macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
+macro_bool_to_01(OpenColorIO_FOUND HAVE_OCIO)
 
 set_package_properties(PythonLibrary PROPERTIES
     DESCRIPTION "Python Library"

@@ -6,12 +6,6 @@ include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
 )
 
-if(HAVE_OCIO)
-include_directories(SYSTEM
-    ${OCIO_INCLUDE_DIR}
-)
-endif()
-
 if (ANDROID)
     # We explicitly set QT_OPENGL_ES_3 here because Qt for some reason does
     # not enable this for Android.

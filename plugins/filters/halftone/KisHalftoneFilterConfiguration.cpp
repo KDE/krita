@@ -20,22 +20,20 @@ KisHalftoneFilterConfiguration::KisHalftoneFilterConfiguration(const QString & n
 KisHalftoneFilterConfiguration::KisHalftoneFilterConfiguration(const KisHalftoneFilterConfiguration &rhs)
     : KisFilterConfiguration(rhs)
     , m_generatorConfigurationsCache(rhs.m_generatorConfigurationsCache)
-{}
+{
+    QHashIterator<QString, KisFilterConfigurationSP> it(m_generatorConfigurationsCache);
+    while (it.hasNext()) {
+        it.next();
+        m_generatorConfigurationsCache[it.key()] = it.value()->clone();
+    }
+}
 
 KisHalftoneFilterConfiguration::~KisHalftoneFilterConfiguration()
 {}
 
 KisFilterConfigurationSP KisHalftoneFilterConfiguration::clone() const
 {
-    KisHalftoneFilterConfiguration *filterConfig = new KisHalftoneFilterConfiguration(*this);
-
-    QHashIterator<QString, KisFilterConfigurationSP> it(m_generatorConfigurationsCache);
-    while (it.hasNext()) {
-        it.next();
-        filterConfig->m_generatorConfigurationsCache[it.key()] = it.value()->clone();
-    }
-
-    return filterConfig;
+    return new KisHalftoneFilterConfiguration(*this);
 }
 
 void KisHalftoneFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)

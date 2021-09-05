@@ -31,7 +31,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Stroke</string>
+       <string comment="Draws a line around an area">Stroke</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item column="0" row="0">

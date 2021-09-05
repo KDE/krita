@@ -30,8 +30,8 @@ public:
     ~KisHalftoneFilterConfiguration() override;
 
     KisFilterConfigurationSP clone() const override;
-    KisFilterConfigurationSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const override;
 
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface) override;
     QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
     QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 

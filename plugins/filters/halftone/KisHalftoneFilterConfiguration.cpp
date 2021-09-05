@@ -38,10 +38,9 @@ KisFilterConfigurationSP KisHalftoneFilterConfiguration::clone() const
     return filterConfig;
 }
 
-KisFilterConfigurationSP KisHalftoneFilterConfiguration::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
+void KisHalftoneFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
 {
-    KisFilterConfigurationSP filterConfigSP = KisFilterConfiguration::cloneWithResourcesSnapshot(globalResourcesInterface);
-    KisHalftoneFilterConfiguration *filterConfig = static_cast<KisHalftoneFilterConfiguration *>(filterConfigSP.data());
+    KisFilterConfiguration::setResourcesInterface(resourcesInterface);
 
     // Here we just clone the required generator configurations
     if (mode() == HalftoneMode_IndependentChannels) {
@@ -50,18 +49,16 @@ KisFilterConfigurationSP KisHalftoneFilterConfiguration::cloneWithResourcesSnaps
             const QString fullPrefix = prefix + QString::number(i) + "_";
             KisFilterConfigurationSP generatorConfig = generatorConfiguration(fullPrefix);
             if (generatorConfig) {
-                filterConfig->m_generatorConfigurationsCache[fullPrefix] = generatorConfig->cloneWithResourcesSnapshot(globalResourcesInterface);
+                m_generatorConfigurationsCache[fullPrefix]->setResourcesInterface(resourcesInterface);
             }
         }
     } else {
         const QString prefix = mode() + "_";
         KisFilterConfigurationSP generatorConfig = generatorConfiguration(prefix);
         if (generatorConfig) {
-            filterConfig->m_generatorConfigurationsCache[prefix] = generatorConfig->cloneWithResourcesSnapshot(globalResourcesInterface);
+            m_generatorConfigurationsCache[prefix]->setResourcesInterface(resourcesInterface);
         }
     }
-
-    return filterConfig;
 }
 
 QList<KoResourceSP> KisHalftoneFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const

@@ -1,16 +1,20 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef OCIO_DISPLAY_FILTER_H
 #define OCIO_DISPLAY_FILTER_H
 
-#include <kis_display_filter.h>
+#include <QOpenGLShaderProgram>
+
 #include <OpenColorIO.h>
 #include <OpenColorTransforms.h>
-#include <QVector>
-#include "kis_exposure_gamma_correction_interface.h"
+#include <OpenColorTypes.h>
+
+#include <kis_display_filter.h>
+#include <kis_exposure_gamma_correction_interface.h>
 
 namespace OCIO = OCIO_NAMESPACE;
 
@@ -30,21 +34,22 @@ public:
     explicit OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent = 0);
     ~OcioDisplayFilter();
 
-    void filter(quint8 *pixels, quint32 numPixels);
-    void approximateInverseTransformation(quint8 *pixels, quint32 numPixels);
-    void approximateForwardTransformation(quint8 *pixels, quint32 numPixels);
-    bool useInternalColorManagement() const;
-    bool lockCurrentColorVisualRepresentation() const;
+    void filter(quint8 *pixels, quint32 numPixels) override;
+    void approximateInverseTransformation(quint8 *pixels, quint32 numPixels) override;
+    void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) override;
+    bool useInternalColorManagement() const override;
+    bool lockCurrentColorVisualRepresentation() const override;
     void setLockCurrentColorVisualRepresentation(bool value);
 
-    bool updateShader();
+    bool updateShader() override;
     template <class F>
     bool updateShaderImpl(F *f);
 
-    KisExposureGammaCorrectionInterface *correctionInterface() const;
+    void setupTextures(QOpenGLFunctions *f, QOpenGLShaderProgram *program) const override;
 
-    virtual QString program() const;
-    GLuint lutTexture() const;
+    KisExposureGammaCorrectionInterface *correctionInterface() const override;
+
+    virtual QString program() const override;
 
     void updateProcessor();
 

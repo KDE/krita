@@ -14,6 +14,9 @@
 
 struct KisExposureGammaCorrectionInterface;
 
+class QOpenGLFunctions;
+class QOpenGLShaderProgram;
+
 /**
  * @brief The KisDisplayFilter class is the base class for filters that
  * are applied by the canvas to the projection before displaying.
@@ -25,7 +28,7 @@ public:
     explicit KisDisplayFilter(QObject *parent = 0);
 
     virtual QString program() const = 0;
-    virtual GLuint lutTexture() const = 0;
+    virtual void setupTextures(QOpenGLFunctions *f, QOpenGLShaderProgram *program) const = 0;
     virtual void filter(quint8 *pixels, quint32 numPixels) = 0;
     virtual void approximateInverseTransformation(quint8 *pixels, quint32 numPixels) = 0;
     virtual void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) = 0;

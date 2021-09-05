@@ -49,12 +49,14 @@ enum CanvasResourceId {
     Opacity,
     Flow,
     Size,
+    Fade,
+    Scatter,
+    PatternSize,
     HdrGamma,
     GlobalAlphaLock,
     DisablePressure,
     PreviousPaintOpPreset,
-    EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
-    PatternSize
+    EffectiveZoom ///<-Used only by painting tools for non-displaying purposes
 };
 
 }

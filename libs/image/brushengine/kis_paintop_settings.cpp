@@ -9,6 +9,8 @@
 
 #include <QImage>
 #include <QColor>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QPainterPath>
 #include <QPointer>
 
@@ -347,6 +349,32 @@ void KisPaintOpSettings::setPaintOpFlow(qreal value)
     proxy->setProperty("FlowValue", value);
 }
 
+void KisPaintOpSettings::setPaintOpFade(qreal value)
+{
+    KisLockedPropertiesProxySP proxy(
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    // Setting the Fade value is a bit more complex.
+    QDomDocument doc;
+    doc.setContent(proxy->getString("brush_definition"));
+
+    QDomElement element = doc.documentElement();
+    QDomElement elementChild = element.elementsByTagName("MaskGenerator").item(0).toElement();
+
+    elementChild.attributeNode("hfade").setValue(QString::number(value,'f', 2));
+    elementChild.attributeNode("vfade").setValue(QString::number(value,'f', 2));
+
+    proxy->setProperty("brush_definition", doc.toString());
+}
+
+void KisPaintOpSettings::setPaintOpScatter(qreal value)
+{
+    KisLockedPropertiesProxySP proxy(
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("ScatterValue", value);
+}
+
 void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
 {
     KisLockedPropertiesProxySP proxy(
@@ -369,6 +397,29 @@ qreal KisPaintOpSettings::paintOpFlow()
 
     return proxy->getDouble("FlowValue", 1.0);
 }
+
+qreal KisPaintOpSettings::paintOpFade()
+{
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    QDomDocument doc;
+    doc.setContent(proxy->getString("brush_definition"));
+
+    QDomElement element = doc.documentElement();
+    QDomElement elementChild = element.elementsByTagName("MaskGenerator").item(0).toElement();
+
+    return elementChild.attributeNode("hfade").value().toDouble();
+}
+
+qreal KisPaintOpSettings::paintOpScatter()
+{
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("ScatterValue", 0.5);
+}
+
 
 qreal KisPaintOpSettings::paintOpPatternSize()
 {

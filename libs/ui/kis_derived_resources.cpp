@@ -151,6 +151,56 @@ QVariant KisFlowResourceConverter::toSource(const QVariant &value, const QVarian
 }
 
 /*********************************************************************/
+/*          KisFadeResourceConverter                                 */
+/*********************************************************************/
+
+KisFadeResourceConverter::KisFadeResourceConverter()
+    : KoDerivedResourceConverter(KoCanvasResource::Fade,
+                                 KoCanvasResource::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisFadeResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->settings()->paintOpFade() : QVariant();
+}
+
+QVariant KisFadeResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->settings()->setPaintOpFade(value.toReal());
+    return QVariant::fromValue(preset);
+}
+
+/*********************************************************************/
+/*          KisScatterResourceConverter                                 */
+/*********************************************************************/
+
+KisScatterResourceConverter::KisScatterResourceConverter()
+    : KoDerivedResourceConverter(KoCanvasResource::Scatter,
+                                 KoCanvasResource::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisScatterResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->settings()->paintOpScatter() : QVariant();
+}
+
+QVariant KisScatterResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->settings()->setPaintOpScatter(value.toReal());
+    return QVariant::fromValue(preset);
+}
+
+/*********************************************************************/
 /*          KisSizeResourceConverter                                 */
 /*********************************************************************/
 

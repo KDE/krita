@@ -417,6 +417,78 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="increase_flow">
+      <icon></icon>
+      <text>Increase flow</text>
+      <whatsThis/>
+      <toolTip>Increase flow</toolTip>
+      <iconText>Increase flow</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="decrease_flow">
+      <icon></icon>
+      <text>Decrease flow</text>
+      <whatsThis/>
+      <toolTip>Decrease flow</toolTip>
+      <iconText>Decrease flow</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="increase_fade">
+      <icon></icon>
+      <text>Increase fade</text>
+      <whatsThis/>
+      <toolTip>Increase fade</toolTip>
+      <iconText>Increase fade</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="decrease_fade">
+      <icon></icon>
+      <text>Decrease fade</text>
+      <whatsThis/>
+      <toolTip>Decrease fade</toolTip>
+      <iconText>Decrease fade</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="increase_scatter">
+      <icon></icon>
+      <text>Increase scatter</text>
+      <whatsThis/>
+      <toolTip>Increase scatter</toolTip>
+      <iconText>Increase scatter</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="decrease_scatter">
+      <icon></icon>
+      <text>Decrease scatter</text>
+      <whatsThis/>
+      <toolTip>Decrease scatter</toolTip>
+      <iconText>Decrease scatter</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
     <Action name="erase_action">
       <icon>draw-eraser</icon>
       <text>Set eraser mode</text>

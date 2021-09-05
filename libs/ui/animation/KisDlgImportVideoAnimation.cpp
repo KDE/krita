@@ -117,11 +117,11 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     m_ui.videoWidthSpinbox->setRange(1,100000);
     m_ui.videoHeightSpinbox->setRange(1,100000);
     
-    m_ui.cmbVideoScaleFilter->addItem(i18n("bicubic"), "bicubic");
-    m_ui.cmbVideoScaleFilter->addItem(i18n("bilinear"), "bilinear");
-    m_ui.cmbVideoScaleFilter->addItem(i18n("lanczos3"), "lanczos");
-    m_ui.cmbVideoScaleFilter->addItem(i18n("neighbor"), "neighbor");
-    m_ui.cmbVideoScaleFilter->addItem(i18n("spline"), "spline");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Bicubic"), "bicubic");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Bilinear"), "bilinear");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Lanczos3"), "lanczos");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Nearest Neighbor"), "neighbor");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Spline"), "spline");
   
     m_ui.tabWidget->setCurrentIndex(0);
 

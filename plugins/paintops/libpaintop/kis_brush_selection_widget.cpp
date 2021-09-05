@@ -42,15 +42,15 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget *parent)
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18nc("Autobrush Label", "Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
+    addChooser(i18nc("Autobrush Brush tip mode", "Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 
     m_predefinedBrushWidget = new KisPredefinedBrushChooser(this);
     connect(m_predefinedBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Predefined"), m_predefinedBrushWidget, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
+    addChooser(i18nc("Predefined Brush tip mode", "Predefined"), m_predefinedBrushWidget, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
-    m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text"));
+    m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18nc("Text Brush tip mode", "Text"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Text"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
+    addChooser(i18nc("Text Brush tip mode", "Text"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
 

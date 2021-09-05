@@ -673,7 +673,7 @@ void KisToolPaint::showBrushSize()
 {
      KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
      kisCanvas->viewManager()->showFloatingMessage(i18n("%1 %2 px", QString("Brush Size:"), currentPaintOpPreset()->settings()->paintOpSize())
-                                                                   , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+                                                   , QIcon(), 1000, KisFloatingMessage::Medium,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 std::pair<QRectF,QRectF> KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)

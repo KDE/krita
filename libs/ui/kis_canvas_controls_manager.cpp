@@ -285,6 +285,9 @@ void KisCanvasControlsManager::stepAlpha(float step)
     alpha = qBound<qreal>(0.0, alpha, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Opacity, alpha);
 
+    m_view->showFloatingMessage(i18n("%1 %2", QString("Brush Opacity:"), alpha * 100), QIcon(), 1000, KisFloatingMessage::Medium,
+                                Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+
     // FIXME: DK: should we uncomment it back?
     //KisLockedPropertiesProxySP p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_view->resourceProvider()->currentPreset()->settings());
     //p->setProperty("OpacityValue", alpha);
@@ -310,6 +313,9 @@ void KisCanvasControlsManager::stepFlow(float step)
     flow += step;
     flow = qBound<qreal>(0.0, flow, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Flow, flow);
+
+    m_view->showFloatingMessage(i18n("%1 %2", QString("Flow:"), flow * 100), QIcon(), 1000, KisFloatingMessage::Medium,
+                                Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisCanvasControlsManager::increaseFlow()
@@ -332,6 +338,9 @@ void KisCanvasControlsManager::stepFade(float step)
     fade += step;
     fade = qBound<qreal>(0.0, fade, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Fade, fade);
+
+    m_view->showFloatingMessage(i18n("%1 %2", QString("Fade:"), fade), QIcon(), 1000, KisFloatingMessage::Medium,
+                                Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisCanvasControlsManager::increaseFade()
@@ -354,6 +363,9 @@ void KisCanvasControlsManager::stepScatter(float step)
     scatter += step;
     scatter = qBound<qreal>(0.0, scatter, 5.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Scatter, scatter);
+
+    m_view->showFloatingMessage(i18n("%1 %2", QString("Scatter:"), scatter * 100), QIcon(), 1000, KisFloatingMessage::Medium,
+                                Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisCanvasControlsManager::increaseScatter()

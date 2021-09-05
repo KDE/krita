@@ -96,10 +96,10 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
 
     connect(m_ui.cmbDocumentHandler, SIGNAL(currentIndexChanged(int)), SLOT(slotDocumentHandlerChanged(int)));    
 
-    m_ui.cmbDocumentHandler->addItem(i18n("New Document"), "0");
+    m_ui.cmbDocumentHandler->addItem(i18nc("Import video to New Document", "New Document"), "0");
     
     if (m_activeView && m_activeView->document()) {
-        m_ui.cmbDocumentHandler->addItem(i18n("Current Document"), "1");
+        m_ui.cmbDocumentHandler->addItem(i18nc("Import video to Current Document", "Current Document"), "1");
         m_ui.cmbDocumentHandler->setCurrentIndex(1);
         m_ui.fpsDocumentLabel->setText(i18nc("Video importer: fps of the document you're importing into"
                                              , "<small>Document:\n %1 FPS</small>"

@@ -26,7 +26,7 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
     addTab(m_geometryWidget, KisIconUtils::loadIcon("geometry"), QString());
 
     m_strokeWidget = new KoStrokeConfigWidget(tool->canvas(), this);
-    m_strokeWidget->setWindowTitle(i18n("Stroke"));
+    m_strokeWidget->setWindowTitle(i18nc("Draws a line around an area", "Stroke"));
 
     KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(m_strokeWidget);
     KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(m_strokeWidget);

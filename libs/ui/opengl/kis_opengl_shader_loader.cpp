@@ -9,6 +9,8 @@
 #include "opengl/kis_opengl.h"
 #include "kis_config.h"
 
+#include <config-ocio.h>
+
 #include <QFile>
 #include <QMessageBox>
 #include <KLocalizedString>
@@ -51,7 +53,6 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
 // XXX Check can be removed and set to the MAC version after we move to Qt5.7
 #ifdef Q_OS_MACOS
     vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
-    // OpenColorIO doesn't support the new GLSL version yet.
     vertSource.append("#define texture2D texture\n");
     vertSource.append("#define texture3D texture\n");
 #else
@@ -76,7 +77,6 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
 // XXX Check can be removed and set to the MAC version after we move to Qt5.7
 #ifdef Q_OS_MACOS
     fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
-    // OpenColorIO doesn't support the new GLSL version yet.
     fragSource.append("#define texture2D texture\n");
     fragSource.append("#define texture3D texture\n");
 #else
@@ -86,7 +86,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
                     "precision mediump float;\n"
                     "precision mediump sampler3D;\n");
 
-        // OpenColorIO doesn't support the new GLSL version yet.
+        // OpenColorIO doesn't support OpenGL ES.
         fragSource.append("#define texture2D texture\n");
         fragSource.append("#define texture3D texture\n");
     } else {
@@ -138,6 +138,9 @@ KisShaderProgram *KisOpenGLShaderLoader::loadDisplayShader(QSharedPointer<KisDis
     bool haveDisplayFilter = displayFilter && !displayFilter->program().isEmpty();
     if (haveDisplayFilter) {
         fragHeader.append("#define USE_OCIO\n");
+#ifdef HAVE_OCIO_V2
+        fragHeader.append("#define USE_OCIO_V2\n");
+#endif
         fragHeader.append(displayFilter->program().toLatin1());
     }
 

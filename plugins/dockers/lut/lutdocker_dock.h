@@ -7,6 +7,8 @@
 #ifndef LUT_DOCKER_DOCK_H
 #define LUT_DOCKER_DOCK_H
 
+#include "ui_wdglut.h"
+
 #include <QWidget>
 #include <QLabel>
 #include <QPointer>
@@ -17,18 +19,28 @@
 
 #include <kis_types.h>
 #include <kis_canvas2.h>
-
-#include "ui_wdglut.h"
+#include <kis_signal_compressor_with_param.h>
 
 #include <OpenColorIO.h>
-#include "kis_signal_compressor_with_param.h"
 
+#include <config-ocio.h>
+
+#ifndef HAVE_OCIO_V2
+#define OCIO_VERSION_FULL_STR OCIO_VERSION
+#endif
 
 namespace OCIO = OCIO_NAMESPACE;
 
 class BlackWhitePointChooser;
 
-#include "ocio_display_filter.h"
+#include <config-ocio.h>
+
+#ifdef HAVE_OCIO_V2
+#include "ocio_display_filter_vfx2021.h"
+#else
+#include "ocio_display_filter_vfx2020.h"
+#endif
+
 #include "kis_exposure_gamma_correction_interface.h"
 
 

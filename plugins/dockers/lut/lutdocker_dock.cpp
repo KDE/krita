@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -44,11 +45,11 @@
 #include <KisSqueezedComboBox.h>
 #include "kis_signals_blocker.h"
 #include "krita_utils.h"
+#include <KisOcioConfiguration.h>
 
-#include "ocio_display_filter.h"
-#include "black_white_point_chooser.h"
-#include "KisOcioConfiguration.h"
 #include <opengl/KisOpenGLModeProber.h>
+
+#include "black_white_point_chooser.h"
 
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
@@ -219,6 +220,8 @@ void LutDockerDock::slotUpdateIcons()
 {
     m_btnConvertCurrentColor->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
     m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("settings-button"));
+    m_lblOcioVersion->setText(OCIO_VERSION_FULL_STR);
+    m_lblOcioVersion->setEnabled(false);
 }
 
 void LutDockerDock::slotShowBWConfiguration()

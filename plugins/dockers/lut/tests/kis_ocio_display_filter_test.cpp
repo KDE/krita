@@ -7,21 +7,24 @@
 #include "kis_ocio_display_filter_test.h"
 
 #include <simpletest.h>
-
-#include <QFile>
-
-#include "KoColorModelStandardIds.h"
-
 #include <stroke_testing_utils.h>
 #include <testutil.h>
 
-#include "kis_exposure_gamma_correction_interface.h"
-#include <ocio_display_filter.h>
-#include "kis_display_color_converter.h"
-#include "kis_canvas_resource_provider.h"
+#include <QFile>
 
 #include <KoChannelInfo.h>
+#include <KoColorModelStandardIds.h>
 
+#include <kis_exposure_gamma_correction_interface.h>
+#include <kis_display_color_converter.h>
+#include <kis_canvas_resource_provider.h>
+
+#include <config-ocio.h>
+#ifdef HAVE_OCIO_V2
+#include <ocio_display_filter_vfx2021.h>
+#else
+#include <ocio_display_filter_vfx2020.h>
+#endif
 
 void KisOcioDisplayFilterTest::test()
 {

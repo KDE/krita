@@ -821,13 +821,17 @@ if (FFTW3_FOUND)
     endif()
 endif()
 
-find_package(OpenColorIO)
+find_package(OpenColorIO 1.1.1)
 set_package_properties(OpenColorIO PROPERTIES
     DESCRIPTION "The OpenColorIO Library"
     URL "https://www.opencolorio.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita LUT docker")
 macro_bool_to_01(OpenColorIO_FOUND HAVE_OCIO)
+if (OPENCOLORIO_VERSION VERSION_GREATER_EQUAL "2.0.0")
+    set(HAVE_OCIO_V2 TRUE)
+endif()
+configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h)
 
 set_package_properties(PythonLibrary PROPERTIES
     DESCRIPTION "Python Library"
@@ -1107,7 +1111,6 @@ add_subdirectory(krita)
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
-configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)

@@ -44,6 +44,8 @@
 #include <QOpenGLFunctions_2_1>
 #endif
 
+#include <config-ocio.h>
+
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
 
@@ -833,9 +835,7 @@ void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
     const int imageRows = maxRow - minRow + 1;
 
     if (d->displayFilter) {
-        glActiveTexture(GL_TEXTURE0 + 1);
-        glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
-        d->displayShader->setUniformValue(d->displayShader->location(Uniform::Texture1), 1);
+        d->displayFilter->setupTextures(this, d->displayShader);
     }
 
     const int firstCloneX = qFloor(qreal(firstColumn) / imageColumns);

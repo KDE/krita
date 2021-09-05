@@ -1,10 +1,11 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "ocio_display_filter.h"
-#include <math.h>
+#include "ocio_display_filter_vfx2020.h"
+
 #include <cstdlib>
 #include <cmath>
 #include <cstdio>
@@ -23,8 +24,8 @@
 #include <QOpenGLExtraFunctions>
 
 #if defined(QT_OPENGL_ES_2)
-#define GL_RGBA16F_ARB 0x881A
-#define GL_RGB16F_ARB 0x881B
+#define GL_RGBA16F_ARB GL_RGBA16F_EXT
+#define GL_RGB16F_ARB GL_RGB16F_EXT
 #endif
 
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
@@ -94,11 +95,6 @@ void OcioDisplayFilter::setLockCurrentColorVisualRepresentation(bool value)
 QString OcioDisplayFilter::program() const
 {
     return m_program;
-}
-
-GLuint OcioDisplayFilter::lutTexture() const
-{
-    return m_lut3dTexID;
 }
 
 void OcioDisplayFilter::updateProcessor()
@@ -244,7 +240,14 @@ void OcioDisplayFilter::updateProcessor()
         approximateTransform->push_back(expTransform);
     }
 
-    m_processor = config->getProcessor(transform);
+    try {
+        m_processor = config->getProcessor(transform);
+    } catch (OCIO::Exception &e) {
+        // XXX: How to not break the OCIO shader now?
+        errKrita << "OCIO exception while parsing the current context:" << e.what();
+        m_shaderDirty = false;
+        return;
+    }
 
     m_forwardApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_FORWARD);
 
@@ -382,4 +385,11 @@ bool OcioDisplayFilter::updateShaderImpl(F *f) {
 
     m_shaderDirty = false;
     return shouldRecompileShader;
+}
+
+void OcioDisplayFilter::setupTextures(QOpenGLFunctions *f, QOpenGLShaderProgram *program) const
+{
+    f->glActiveTexture(GL_TEXTURE0 + 1);
+    f->glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
+    program->setUniformValue(program->uniformLocation("texture1"), 1);
 }

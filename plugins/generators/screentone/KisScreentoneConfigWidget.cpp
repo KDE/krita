@@ -6,6 +6,8 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QRegularExpression>
+
 #include <KoColor.h>
 #include <filter/kis_filter_configuration.h>
 #include <KisGlobalResourcesInterface.h>
@@ -17,11 +19,6 @@
 #include "KisScreentoneConfigWidget.h"
 #include "KisScreentoneScreentoneFunctions.h"
 #include "KisScreentoneGeneratorConfiguration.h"
-
-static const QString pixelsInchSuffix(i18nc("Screentone generator resolution units - pixels/inch", " pixels/inch"));
-static const QString pixelsCentimeterSuffix(i18nc("Screentone generator resolution units - pixels/cm", " pixels/cm"));
-static const QString linesInchSuffix(i18nc("Screentone generator line units - lines/inch", " lines/inch"));
-static const QString linesCentimeterSuffix(i18nc("Screentone generator line units - lines/cm", " lines/cm"));
 
 KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoColorSpace *cs)
     : KisConfigWidget(parent)
@@ -91,11 +88,9 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderShearY->setPrefix(i18n("Y: "));
     m_ui.sliderShearY->setSingleStep(0.1);
     m_ui.sliderAlignToPixelGridX->setRange(1, 20);
-    m_ui.sliderAlignToPixelGridX->setPrefix(i18nc("Prefix. Part of 'Every # cell/s horizontally", "Every "));
-    m_ui.sliderAlignToPixelGridX->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cell horizontally"));
     m_ui.sliderAlignToPixelGridY->setRange(1, 20);
-    m_ui.sliderAlignToPixelGridY->setPrefix(i18nc("Prefix. Part of 'Every # cell/s vertically", "Every "));
-    m_ui.sliderAlignToPixelGridY->setSuffix(i18nc("Suffix. Part of 'Every # cell/s vertically", " cell vertically"));
+    setSliderAlignToPixelGridXText();
+    setSliderAlignToPixelGridYText();
     slot_buttonSizeModeResolutionBased_toggled(true);
 
     connect(m_ui.comboBoxPattern, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxPattern_currentIndexChanged(int)));
@@ -205,6 +200,8 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
         m_ui.checkBoxAlignToPixelGrid->setChecked(generatorConfig->alignToPixelGrid());
         m_ui.sliderAlignToPixelGridX->setValue(generatorConfig->alignToPixelGridX());
         m_ui.sliderAlignToPixelGridY->setValue(generatorConfig->alignToPixelGridY());
+        setSliderAlignToPixelGridXText();
+        setSliderAlignToPixelGridYText();
 
         if (generatorConfig->sizeMode() == KisScreentoneSizeMode_PixelBased) {
             m_ui.buttonSizeModePixelBased->setChecked(true);
@@ -351,6 +348,38 @@ int KisScreentoneConfigWidget::comboIndexToShape(int patternIndex, int shapeInde
     return -1;
 }
 
+void KisScreentoneConfigWidget::setSliderAlignToPixelGridXText()
+{
+    // i18n: This is meant to be used in a spinbox so keep the {n} in the text
+    //       and it will be substituted by the number. The text before will be
+    //       used as the prefix and the text arfet as the suffix
+    const QString txt = i18ncp("Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell horizontally", "Every {n} cells horizontally", m_ui.sliderAlignToPixelGridX->value());
+    const QRegularExpressionMatch match = QRegularExpression("(.*){n}(.*)").match(txt);
+    if (match.hasMatch()) {
+        m_ui.sliderAlignToPixelGridX->setPrefix(match.captured(1));
+        m_ui.sliderAlignToPixelGridX->setSuffix(match.captured(2));
+    } else {
+        m_ui.sliderAlignToPixelGridX->setPrefix(QString());
+        m_ui.sliderAlignToPixelGridX->setSuffix(txt);
+    }
+}
+
+void KisScreentoneConfigWidget::setSliderAlignToPixelGridYText()
+{
+    // i18n: This is meant to be used in a spinbox so keep the {n} in the text
+    //       and it will be substituted by the number. The text before will be
+    //       used as the prefix and the text arfet as the suffix
+    const QString txt = i18ncp("Vertical pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell vertically", "Every {n} cells vertically", m_ui.sliderAlignToPixelGridY->value());
+    const QRegularExpressionMatch match = QRegularExpression("(.*){n}(.*)").match(txt);
+    if (match.hasMatch()) {
+        m_ui.sliderAlignToPixelGridY->setPrefix(match.captured(1));
+        m_ui.sliderAlignToPixelGridY->setSuffix(match.captured(2));
+    } else {
+        m_ui.sliderAlignToPixelGridY->setPrefix(QString());
+        m_ui.sliderAlignToPixelGridY->setSuffix(txt);
+    }
+}
+
 void KisScreentoneConfigWidget::slot_comboBoxPattern_currentIndexChanged(int)
 {
     KisSignalsBlocker blocker(m_ui.comboBoxShape, m_ui.comboBoxInterpolation);
@@ -426,8 +455,14 @@ void KisScreentoneConfigWidget::slot_buttonSizeModePixelBased_toggled(bool check
 
 void KisScreentoneConfigWidget::slot_comboBoxUnits_currentIndexChanged(int index)
 {
-    const QString resSuffix = index == 0 ? pixelsInchSuffix : pixelsCentimeterSuffix;
-    const QString freqSuffix = index == 0 ? linesInchSuffix : linesCentimeterSuffix;
+    const QString resSuffix =
+        index == 0
+        ? i18nc("Screentone generator resolution units - pixels/inch", " pixels/inch")
+        : i18nc("Screentone generator resolution units - pixels/cm", " pixels/cm");
+    const QString freqSuffix =
+        index == 0
+        ? i18nc("Screentone generator line units - lines/inch", " lines/inch")
+        : i18nc("Screentone generator line units - lines/cm", " lines/cm");
     m_ui.sliderResolution->setSuffix(resSuffix);
     m_ui.sliderFrequencyX->setSuffix(freqSuffix);
     m_ui.sliderFrequencyY->setSuffix(freqSuffix);
@@ -530,11 +565,8 @@ void KisScreentoneConfigWidget::slot_buttonConstrainSize_keepAspectRatioChanged(
 
 void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridX_valueChanged(int value)
 {
-    if (value == 1) {
-        m_ui.sliderAlignToPixelGridX->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cell horizontally"));
-    } else {
-        m_ui.sliderAlignToPixelGridX->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cells horizontally"));
-    }
+    Q_UNUSED(value);
+    setSliderAlignToPixelGridXText();
     if (m_ui.checkBoxAlignToPixelGrid->isChecked()) {
         emit sigConfigurationUpdated();
     }
@@ -542,11 +574,8 @@ void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridX_valueChanged(int va
 
 void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridY_valueChanged(int value)
 {
-    if (value == 1) {
-        m_ui.sliderAlignToPixelGridY->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cell vertically"));
-    } else {
-        m_ui.sliderAlignToPixelGridY->setSuffix(i18nc("Suffix. Part of 'Every # cell/s horizontally", " cells vertically"));
-    }
+    Q_UNUSED(value);
+    setSliderAlignToPixelGridYText();
     if (m_ui.checkBoxAlignToPixelGrid->isChecked()) {
         emit sigConfigurationUpdated();
     }

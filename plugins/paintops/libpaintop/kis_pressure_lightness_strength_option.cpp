@@ -6,7 +6,7 @@
 #include "kis_pressure_lightness_strength_option.h"
 
 KisPressureLightnessStrengthOption::KisPressureLightnessStrengthOption()
-    : KisCurveOption(i18nc("Lightness Strength Parameter", "LightnessStrength"), KisPaintOpOption::GENERAL, false)
+    : KisCurveOption("LightnessStrength", KisPaintOpOption::GENERAL, false)
 {
 }
 

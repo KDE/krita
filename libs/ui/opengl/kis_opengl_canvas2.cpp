@@ -322,8 +322,8 @@ void KisOpenGLCanvas2::initializeGL()
         glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
         glEnableVertexAttribArray(PROGRAM_TEXCOORD_ATTRIBUTE);
 
-        d->tileVertexBuffer.allocate(NumberOfBuffers, 3 * sizeof(float));
-        d->tileTextureVertexBuffer.allocate(NumberOfBuffers, 2 * sizeof(float));
+        d->tileVertexBuffer.allocate(NumberOfBuffers, 6 * 3 * sizeof(float));
+        d->tileTextureVertexBuffer.allocate(NumberOfBuffers, 6 * 2 * sizeof(float));
 
         // Create the outline buffer, this buffer will store the outlines of
         // tools and will frequently change data

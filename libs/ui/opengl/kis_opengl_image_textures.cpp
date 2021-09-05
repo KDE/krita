@@ -294,18 +294,24 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
+        if (m_bufferStorage.isValid() && numProcessedTiles > m_bufferStorage.size() &&
+            sync && !sync->isSignaled()) {
+
+            qDebug() << "Still unsignalled after processed" << numProcessedTiles << "tiles";
+        }
+
+
         tile->update(*tileInfo, blockMipmapRegeneration);
 
-        if (numProcessedTiles == 0) {
-            sync.reset(new KisOpenGLSync());
-        } else if (sync && sync->isSignaled()) {
-            sync.reset();
+        if (m_bufferStorage.isValid()) {
+            if (!sync) {
+                sync.reset(new KisOpenGLSync());
+                numProcessedTiles = 0;
+            } else if (sync && sync->isSignaled()) {
+                sync.reset();
+            }
+            numProcessedTiles++;
         }
-        numProcessedTiles++;
-    }
-
-    if (sync && !sync->isSignaled() && numProcessedTiles > m_bufferStorage.size()) {
-        qDebug() << "Exited unsignalled after tiles" << numProcessedTiles;
     }
 }
 

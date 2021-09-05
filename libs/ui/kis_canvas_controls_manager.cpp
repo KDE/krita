@@ -27,7 +27,6 @@
 #include <ksharedconfig.h>
 
 #include <math.h>
-#include <QtDebug>
 
 const int STEP = 25;
 
@@ -285,7 +284,7 @@ void KisCanvasControlsManager::stepAlpha(float step)
     alpha = qBound<qreal>(0.0, alpha, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Opacity, alpha);
 
-    m_view->showFloatingMessage(i18n("%1 %2", QString("Brush Opacity:"), alpha * 100), QIcon(), 1000, KisFloatingMessage::Medium,
+    m_view->showFloatingMessage(i18n("%1 %2\%", QString("Brush Opacity:"), alpha * 100), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 
     // FIXME: DK: should we uncomment it back?
@@ -314,18 +313,30 @@ void KisCanvasControlsManager::stepFlow(float step)
     flow = qBound<qreal>(0.0, flow, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Flow, flow);
 
-    m_view->showFloatingMessage(i18n("%1 %2", QString("Flow:"), flow * 100), QIcon(), 1000, KisFloatingMessage::Medium,
+    m_view->showFloatingMessage(i18n("%1 %2\%", QString("Flow:"), flow * 100), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisCanvasControlsManager::increaseFlow()
 {
-    stepFlow(0.1f);
+    qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
+
+    if (flow >= 0.40) {
+        stepFlow(0.1f);
+    } else {
+        stepFlow(0.05f);
+    }
 }
 
 void KisCanvasControlsManager::decreaseFlow()
 {
-    stepFlow(-0.1f);
+    qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
+
+    if (flow > 0.40) {
+        stepFlow(-0.1f);
+    } else {
+        stepFlow(-0.05f);
+    }
 }
 
 void KisCanvasControlsManager::stepFade(float step)
@@ -339,18 +350,18 @@ void KisCanvasControlsManager::stepFade(float step)
     fade = qBound<qreal>(0.0, fade, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Fade, fade);
 
-    m_view->showFloatingMessage(i18n("%1 %2", QString("Fade:"), fade), QIcon(), 1000, KisFloatingMessage::Medium,
+    m_view->showFloatingMessage(i18n("%1 %2", QString("Fade:"), QString::number(fade, 'f', 2)), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisCanvasControlsManager::increaseFade()
 {
-    stepFade(0.1f);
+    stepFade(0.25f);
 }
 
 void KisCanvasControlsManager::decreaseFade()
 {
-    stepFade(-0.1f);
+    stepFade(-0.25f);
 }
 
 void KisCanvasControlsManager::stepScatter(float step)
@@ -364,16 +375,16 @@ void KisCanvasControlsManager::stepScatter(float step)
     scatter = qBound<qreal>(0.0, scatter, 5.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Scatter, scatter);
 
-    m_view->showFloatingMessage(i18n("%1 %2", QString("Scatter:"), scatter * 100), QIcon(), 1000, KisFloatingMessage::Medium,
+    m_view->showFloatingMessage(i18n("%1 %2\%", QString("Scatter:"), scatter * 100), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisCanvasControlsManager::increaseScatter()
 {
-    stepScatter(0.1f);
+    stepScatter(0.2f);
 }
 
 void KisCanvasControlsManager::decreaseScatter()
 {
-    stepScatter(-0.1f);
+    stepScatter(-0.2f);
 }

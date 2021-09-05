@@ -31,7 +31,6 @@
 #include "kis_config.h"
 #include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
-#include <QtDebug>
 
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)

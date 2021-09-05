@@ -409,7 +409,12 @@ qreal KisPaintOpSettings::paintOpFade()
     QDomElement element = doc.documentElement();
     QDomElement elementChild = element.elementsByTagName("MaskGenerator").item(0).toElement();
 
-    return elementChild.attributeNode("hfade").value().toDouble();
+    if (elementChild.attributeNode("hfade").value().toDouble() >= elementChild.attributeNode("vfade").value().toDouble()) {
+        return elementChild.attributeNode("hfade").value().toDouble();
+    } else {
+        return elementChild.attributeNode("vfade").value().toDouble();
+    }
+
 }
 
 qreal KisPaintOpSettings::paintOpScatter()

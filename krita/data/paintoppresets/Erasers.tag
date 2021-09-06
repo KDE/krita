@@ -38,6 +38,7 @@ Comment[hi]=रबड ब्रश नमूने
 Comment[it]=Preimpostazioni del pennello delle gomme per cancellare
 Comment[ko]=지우개 브러시 사전 설정
 Comment[nl]=Wisser van voorinstellingen van penselen
+Comment[nn]=Ferdigpenslar for visking
 Comment[pl]=Nastawy pędzli wymazujących
 Comment[pt]=Predefinições de Pincéis Apagadores
 Comment[pt_BR]=Predefinições de pincel de borracha

@@ -467,6 +467,8 @@ void KisAlgebra2DTest::testLineRectIntersectionsManual()
     testLineRectIntersection(QRect(0, 0, 20, 20), QLineF(-5, -5, 30, 30), QLineF(0, 0, 20, 20), false, false, true);
 
 
+    testLineRectIntersection(QRect(0, 0, 20, 20), QLineF(-5, -100, -5, 100), QLineF(-5, -100, -5, 100), false, false, true);
+
     // start: (-1, -2)
     // end: (4, 5);
     // width, height: 5, 7

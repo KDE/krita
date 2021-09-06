@@ -25,6 +25,8 @@
 #define GL_RGB32F_ARB GL_RGB32F_EXT
 #endif
 
+#include "kis_context_thread_locale.h"
+
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
     , inputColorSpaceName(0)
@@ -244,6 +246,7 @@ void OcioDisplayFilter::updateProcessor()
     }
 
     try {
+        AutoSetAndRestoreThreadLocale l;
         m_processor = vpt->getProcessor(config, config->getCurrentContext());
     } catch (OCIO::Exception &e) {
         // XXX: How to not break the OCIO shader now?

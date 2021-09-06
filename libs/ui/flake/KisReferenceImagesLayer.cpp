@@ -265,6 +265,15 @@ void KisReferenceImagesLayer::fileChanged(QString path)
     }
 }
 
+void KisReferenceImagesLayer::addFilesPath(QString path)
+{
+    if (!path.isEmpty()) {
+        if (!m_fileSystemWatcher->files().contains(path)) {
+            m_fileSystemWatcher->addPath(path);
+        }
+    }
+}
+
 void KisReferenceImagesLayer::updateTransformations(KisCanvas2 *kisCanvas)
 {
     bool rotateSelection = true; // modify selection also if all ref's pinned

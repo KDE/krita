@@ -49,6 +49,8 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                  KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
 
+    void addFilesPath(QString);
+
     void updateTransformations(KisCanvas2 *kisCanvas);
 
 Q_SIGNALS:

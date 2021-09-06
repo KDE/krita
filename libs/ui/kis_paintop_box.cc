@@ -75,6 +75,7 @@
 #include <KisGlobalResourcesInterface.h>
 #include "KisResourceLoader.h"
 #include "KisResourceLoaderRegistry.h"
+#include "kis_statusbar.h"
 
 
 KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const char *name)
@@ -617,6 +618,9 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
         }
     }
     Q_ASSERT(preset);
+
+    m_viewManager->statusBar()->setStatusBarStatusLabelText(preset->name());
+
     const KoID& paintop = preset->paintOp();
     m_presetConnections.clear();
 

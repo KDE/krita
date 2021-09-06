@@ -27,7 +27,6 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_image.h"
-#include "kis_statusbar.h"
 #include "kis_config.h"
 #include "krita_utils.h"
 #include "kis_canvas_resource_provider.h"

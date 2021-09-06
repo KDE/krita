@@ -136,6 +136,7 @@ void KisFloatingMessage::showMessage()
     m_messageLabel->move(rect.topLeft());
 
     QWidget::setVisible(true);
+    m_fadeTimeLine.stop();
     m_timer.start(m_timeout);
 }
 

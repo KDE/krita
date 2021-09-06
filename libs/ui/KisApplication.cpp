@@ -226,11 +226,8 @@ BOOL isWow64()
 
 void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 {
-    int dpiX = args.dpiX();
-    int dpiY = args.dpiY();
-    if (dpiX > 0 && dpiY > 0) {
-        qWarning() << "The `dpi` argument does nothing!";
-    }
+    // There are no globals to initialize from the arguments now. There used
+    // to be the `dpi` argument, but it doesn't do anything anymore.
 }
 
 void KisApplication::addResourceTypes()

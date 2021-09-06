@@ -48,6 +48,7 @@ Comment[hi]=एक डिजिटल रंगरूप के साथ ब्
 Comment[it]=Preimpostazioni del pennello dall'aspetto digitale.
 Comment[ko]=디지털 모습과 느낌의 브러시 사전 설정입니다.
 Comment[nl]=Voorinstellingen van penselen met een digitaal uiterlijk en gedrag.
+Comment[nn]=Ferdigpenslar for ein digital teiknestil
 Comment[pl]=Nastawy pędzli dające wrażenie cyfrowości.
 Comment[pt]=Predefinições de pincéis com uma aparência e comportamento digitais.
 Comment[pt_BR]=Predefinições de pincel com uma aparência digital.

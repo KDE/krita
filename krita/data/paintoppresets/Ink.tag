@@ -38,6 +38,7 @@ Comment[hi]=इंकिंग ब्रश के नमूने
 Comment[it]=Preimpostazioni del pennello con effetto inchiostro
 Comment[ko]=잉크 브러시 사전 설정
 Comment[nl]=Voorinstellingen van penselen voor inkten
+Comment[nn]=Ferdigpenslar for innfarging
 Comment[pl]=Nastawy pędzli tuszujących
 Comment[pt]=Predefinições de Pincéis de Tinta
 Comment[pt_BR]=Predefinições de pincel de tinta

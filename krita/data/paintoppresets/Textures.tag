@@ -38,6 +38,7 @@ Comment[hi]=टेक्श्चर ब्रश ब्रश के नमू�
 Comment[it]=Preimpostazioni del pennello per trame
 Comment[ko]=텍스처 브러시 사전 설정
 Comment[nl]=Voorinstellingen van penselen voor textuur
+Comment[nn]=Ferdigpenslar for tekstur
 Comment[pl]=Nastawy pędzli teksturujących
 Comment[pt]=Predefinições de Pincéis com Texturas
 Comment[pt_BR]=Predefinições de pincel texturizado

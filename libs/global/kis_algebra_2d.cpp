@@ -965,9 +965,12 @@ boost::optional<QPointF> intersectLines(const QLineF &boundedLine, const QLineF 
     T = A.inverse() * B;
 
     const qreal t2 = T(1,0);
+    double epsilon = 1e-06; // to avoid precision issues
 
-    if (t2 < 0 || t2 > 1.0) {
-        return boost::none;
+    if (t2 < 0.0 || t2 > 1.0) {
+        if (qAbs(t2) > epsilon && qAbs(t2 - 1.0) > epsilon) {
+            return boost::none;
+        }
     }
 
     return t2 * A2 + B2;

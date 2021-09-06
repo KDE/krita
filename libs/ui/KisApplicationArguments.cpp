@@ -156,19 +156,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
 
     QString dpiValues = parser.value("dpi");
     if (!dpiValues.isEmpty()) {
-        int sep = dpiValues.indexOf(QRegExp("[x, ]"));
-        bool ok = true;
-        if (sep != -1) {
-            d->dpiY = dpiValues.mid(sep + 1).toInt(&ok);
-            dpiValues.truncate(sep);
-        }
-        if (ok) {
-            d->dpiX = dpiValues.toInt(&ok);
-            if (ok) {
-                if (!d->dpiY)
-                    d->dpiY = d->dpiX;
-            }
-        }
+        qWarning() << "The `dpi` argument does nothing!";
     }
 
     QString newImageValues = parser.value("new-image");
@@ -207,8 +195,8 @@ KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &
     : d(new Private)
 {
     d->filenames = rhs.filenames();
-    d->dpiX = rhs.dpiX();
-    d->dpiY = rhs.dpiY();
+    d->dpiX = rhs.d->dpiX;
+    d->dpiY = rhs.d->dpiY;
     d->doTemplate = rhs.doTemplate();
     d->exportAs = rhs.exportAs();
     d->exportFileName = rhs.exportFileName();
@@ -223,8 +211,8 @@ KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &
 void KisApplicationArguments::operator=(const KisApplicationArguments &rhs)
 {
     d->filenames = rhs.filenames();
-    d->dpiX = rhs.dpiX();
-    d->dpiY = rhs.dpiY();
+    d->dpiX = rhs.d->dpiX;
+    d->dpiY = rhs.d->dpiY;
     d->doTemplate = rhs.doTemplate();
     d->exportAs = rhs.exportAs();
     d->exportFileName = rhs.exportFileName();
@@ -313,16 +301,6 @@ KisApplicationArguments KisApplicationArguments::deserialize(QByteArray &seriali
 QStringList KisApplicationArguments::filenames() const
 {
     return d->filenames;
-}
-
-int KisApplicationArguments::dpiX() const
-{
-    return d->dpiX;
-}
-
-int KisApplicationArguments::dpiY() const
-{
-    return d->dpiY;
 }
 
 bool KisApplicationArguments::doTemplate() const

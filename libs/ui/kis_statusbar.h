@@ -80,6 +80,8 @@ public:
     void addExtraWidget(QWidget *widget);
     void removeExtraWidget(QWidget *widget);
 
+    void setStatusBarStatusLabelText(const QString &text);
+
 public Q_SLOTS:
 
     void documentMousePositionChanged(const QPointF &p);

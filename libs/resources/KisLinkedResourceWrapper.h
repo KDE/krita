@@ -38,15 +38,14 @@ public:
     {
     }
 
-
-    ResourceTypeSP resource(KisResourcesInterfaceSP resourcesInterface) const
+    QVector<ResourceTypeSP> resources(KisResourcesInterfaceSP resourcesInterface) const
     {
-        ResourceTypeSP result;
+        QVector<ResourceTypeSP> result;
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_type.isEmpty(), result);
 
         auto source = resourcesInterface->source<ResourceType>(m_type);
 
-        return source.resource(m_md5, m_filename, m_name);
+        return source.resources(m_md5, m_filename, m_name);
     }
 
     bool isValid() const {

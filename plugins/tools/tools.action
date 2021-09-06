@@ -160,7 +160,7 @@
       <statusTip/>
     </Action>
     <Action name="PathTool">
-      <icon>krita_draw_path</icon>
+      <icon>shape_handling</icon>
       <text>Edit Shapes Tool</text>
       <whatsThis/>
       <toolTip>Edit Shapes Tool</toolTip>

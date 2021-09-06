@@ -30,6 +30,7 @@
 #include <KisResourceModel.h>
 #include "KisPaintopSettingsIds.h"
 #include <KisResourceTypes.h>
+#include <KisResourceModelProvider.h>
 
 #include <KoStore.h>
 
@@ -161,7 +162,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     QString version = reader.text("version");
     QString preset = reader.text("preset");
     int resourceCount = reader.text("embedded_resources").toInt();
-    dbgImage << version;
 
     if (!(version == "2.2" || "5.0")) {
         return false;
@@ -182,6 +182,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     if (!doc.setContent(preset)) {
         return false;
     }
+
     if (version == "5.0" && resourceCount > 0) {
         // Load the embedded resources
         QDomNode n = doc.firstChild();
@@ -196,10 +197,9 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
                         QString resourceType = e2.attribute("type");
                         QString md5sum = e2.attribute("md5sum");
                         QString name = e2.attribute("name");
+                        QString filename = e2.attribute("filename");
 
-                        KisResourceModel model(resourceType);
-
-                        QVector<KoResourceSP> existingResources = model.resourcesForMD5(md5sum);
+                        QVector<KoResourceSP> existingResources = resourcesInterface->source(resourceType).resources(md5sum, filename, name);
 
                         if (existingResources.isEmpty()) {
                             QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
@@ -209,6 +209,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
                                 buf.open(QBuffer::ReadOnly);
                                 KoResourceSP res = loader->load(name, buf, resourcesInterface);
                                 if (res) {
+                                    KisResourceModel model(resourceType);
                                     model.addResource(res, "memory");
                                 }
                             }
@@ -221,7 +222,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         }
     }
 
-
     fromXML(doc.documentElement(), resourcesInterface);
 
     if (!d->settings) {
@@ -230,26 +230,27 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     setValid(d->settings->isValid());
 
-    QSet<QString> requiredBrushes;
-    Q_FOREACH(const QString str, d->settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag)) {
-        if (!str.isEmpty()) {
-            requiredBrushes << str;
+
+    if (version == "2.2") {
+        QSet<QString> requiredBrushes;
+        Q_FOREACH(const QString str, d->settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag)) {
+            if (!str.isEmpty()) {
+                requiredBrushes << str;
+            }
+        }
+        QString requiredBrush = d->settings->getString(KisPaintOpUtils::RequiredBrushFileTag);
+        if (!requiredBrush.isEmpty()) {
+            requiredBrushes << requiredBrush;
+        }
+        if (!requiredBrushes.isEmpty()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+            QStringList resourceFileNames(requiredBrushes.constBegin(), requiredBrushes.constEnd());
+#else
+            QStringList resourceFileNames = requiredBrushes.toList();
+#endif
+            addMetaData("dependent_resources_filenames", resourceFileNames);
         }
     }
-    QString requiredBrush = d->settings->getString(KisPaintOpUtils::RequiredBrushFileTag);
-    if (!requiredBrush.isEmpty()) {
-        requiredBrushes << requiredBrush;
-    }
-    if (!requiredBrushes.isEmpty()) {
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-        QStringList resources(requiredBrushes.constBegin(), requiredBrushes.constEnd());
-#else
-        QStringList resources = requiredBrushes.toList();
-#endif
-        addMetaData("dependent_resources_filenames", resources);
-
-    }
-
 
     setImage(img);
 
@@ -284,6 +285,7 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
                 e.setAttribute("type", resource->resourceType().first);
                 e.setAttribute("md5sum", resource->md5Sum());
                 e.setAttribute("name", resource->name());
+                e.setAttribute("filename", resource->filename());
                 e.appendChild(text);
                 resourcesElement.appendChild(e);
 
@@ -335,6 +337,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt, KisResourcesInterfa
     }
 
     settings->fromXML(presetElt);
+
     // sanitize the settings
     bool hasTexture = settings->getBool("Texture/Pattern/Enabled");
     if (!hasTexture) {
@@ -344,8 +347,6 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt, KisResourcesInterfa
             }
         }
     }
-
-
     setSettings(settings);
 
 }
@@ -491,6 +492,7 @@ QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP gl
         resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
 
     }
+
     return resources;
 }
 
@@ -512,6 +514,7 @@ QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP 
         resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
 
     }
+
     return resources;
 }
 

@@ -148,7 +148,6 @@ void DlgDbExplorer::slotTbResourceTypeSelected(int index)
 {
     QModelIndex idx = m_page->cmbRvResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
     QString resourceType = idx.data(Qt::DisplayRole).toString();
-    qDebug() << resourceType;
 
     m_tagModel = new KisTagModel(resourceType, this);
 

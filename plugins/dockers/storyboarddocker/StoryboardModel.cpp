@@ -31,7 +31,7 @@
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
-        , m_freezeKeyframePosition(false)
+        , m_freezeKeyframePositions(false)
         , m_lockBoards(false)
         , m_reorderingKeyframes(false)
         , m_imageIdleWatcher(10)
@@ -555,12 +555,12 @@ StoryboardComment StoryboardModel::getComment(int row) const
 
 void StoryboardModel::setFreeze(bool value)
 {
-    m_freezeKeyframePosition = value;
+    m_freezeKeyframePositions = value;
 }
 
 bool StoryboardModel::isFrozen() const
 {
-    return m_freezeKeyframePosition;
+    return m_freezeKeyframePositions;
 }
 
 void StoryboardModel::setLocked(bool value)
@@ -794,7 +794,7 @@ void StoryboardModel::reorderKeyframes()
     m_renderScheduler->cancelAllFrameRendering();
 
     KisNodeSP root = m_image->root();
-    if (root && !m_freezeKeyframePosition) {
+    if (root && !m_freezeKeyframePositions) {
         KisLayerUtils::recursiveApplyNodes(root, [this, earliestFrame, frameAssociates](KisNodeSP node) {
             if (!node->isAnimated() || !node->paintDevice())
                 return;
@@ -877,7 +877,7 @@ void StoryboardModel::shiftKeyframes(KisTimeSpan affected, int offset, KUndo2Com
     //Will unlock when scope exits.
     QScopedPointer<KeyframeReorderLock> lock(new KeyframeReorderLock(this));
 
-    if (node && !m_freezeKeyframePosition) {
+    if (node && !m_freezeKeyframePositions) {
         KisLayerUtils::recursiveApplyNodes (node, [affected, offset, cmd] (KisNodeSP node) {
                 const int startFrame = affected.start();
                 if (node->isAnimated()) {
@@ -1251,24 +1251,42 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
 
     m_lastScene++;
     QString sceneName = i18nc("default name for storyboard item", "scene ") + QString::number(m_lastScene);
-    setData (index (StoryboardItem::ItemName, 0, parentIndex), sceneName);
+    setData(index(StoryboardItem::ItemName, 0, parentIndex), sceneName);
 
     if (position == 0) {
-        setData (index (StoryboardItem::FrameNumber, 0, index(position, 0)), 0);
-        setData( index(StoryboardItem::DurationFrame, 0, index(position, 0)), lastKeyframeGlobal() - 0 + 1);
+        setData(index(StoryboardItem::FrameNumber, 0, index(position, 0)), 0);
+        setData(index(StoryboardItem::DurationFrame, 0, index(position, 0)), lastKeyframeGlobal() - 0 + 1);
+
+        if (!m_freezeKeyframePositions) {
+            KisLayerUtils::recursiveApplyNodes(m_image->root(), [cmd](KisNodeSP node){
+                if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+                    KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+
+                    if (chan->keyframeAt(0)) {
+                        return;
+                    }
+
+                    chan->addKeyframe(0, cmd);
+                }
+            });
+        }
     } else {
         const int targetFrame = index(StoryboardItem::FrameNumber, 0, index(position - 1,0)).data().toInt()
                                 + data(index(position - 1, 0), TotalSceneDurationInFrames).toInt();
-        setData (index (StoryboardItem::FrameNumber, 0, index(position, 0)), targetFrame);
+        setData(index(StoryboardItem::FrameNumber, 0, index(position, 0)), targetFrame);
 
-        if (!m_freezeKeyframePosition && m_activeNode) {
-            KisKeyframeChannel* chan = m_activeNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-            chan->addKeyframe(targetFrame, cmd);
+        if (!m_freezeKeyframePositions) {
+            KisLayerUtils::recursiveApplyNodes(m_image->root(), [targetFrame, cmd](KisNodeSP node){
+                if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+                    KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+                    chan->addKeyframe(targetFrame, cmd);
+                }
+            });
         }
     }
 
-    setData (index (StoryboardItem::DurationFrame, 0, parentIndex), 1);
-    setData (index (StoryboardItem::DurationSecond, 0, parentIndex), 0);
+    setData(index(StoryboardItem::DurationFrame, 0, parentIndex), 1);
+    setData(index(StoryboardItem::DurationSecond, 0, parentIndex), 0);
 
     const int frameToSwitch = index(StoryboardItem::FrameNumber, 0, index(position, 0)).data().toInt();
     if (m_image) {

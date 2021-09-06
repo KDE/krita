@@ -100,11 +100,9 @@ void WdgCloseableLabel::paintEvent(QPaintEvent *event)
 
         QPen penwt = QPen(outlineColor, 1);
         penwt.setStyle(Qt::DashLine);
-        QPen penw = QPen(windowB, 1);
 
         QPainterPath outlinePath;
-        //outlinePath.addRoundedRect(this->rect().adjusted(2, 2, -2, -2), 4, 4); // for pen width == 2
-        outlinePath.addRoundedRect(this->rect().adjusted(1, 1, -1, -1), 4, 4); // for pen width == 1
+        outlinePath.addRoundedRect(this->rect().adjusted(1, 1, -1, -1), 4, 4);
 
         painter.setPen(penwt);
         painter.drawPath(outlinePath);

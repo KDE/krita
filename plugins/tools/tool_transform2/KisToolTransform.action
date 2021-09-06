@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
   <text>Tool Shortcuts</text>
     <Action name="KisToolTransform">
-      <icon></icon>
+      <icon>krita_tool_transform</icon>
       <text>Transform Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Transform a layer or a selection</toolTip>

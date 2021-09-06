@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
       <text>Tool Shortcuts</text>
     <Action name="KisToolPencil">
-      <icon></icon>
+      <icon>krita_tool_freehandvector</icon>
       <text>Freehand Path Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Freehand Path Tool</toolTip>

@@ -156,15 +156,16 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
 void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     setChecked(setting->getBool("Texture/Pattern/Enabled"));
+
     if (!isChecked()) {
         return;
     }
     KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface());
 
-    if (!pattern) {
+    if (!pattern ){
+        qWarning() << "Could not get linked pattern";
         pattern = m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
     }
-
     m_textureOptions->textureSelectorWidget->setCurrentPattern(pattern);
 
     m_textureOptions->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
@@ -212,7 +213,7 @@ KisTextureProperties::KisTextureProperties(int levelOfDetail, KisBrushTextureFla
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
-    if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
+    if (setting->getString("Texture/Pattern/PatternMD5").isEmpty()) {
         m_enabled = false;
         return;
     }
@@ -258,9 +259,11 @@ QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisProp
 {
     QList<KoResourceSP> resources;
 
-    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
-    if (pattern) {
-        resources << pattern;
+    if (m_enabled) {
+        KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
+        if (pattern) {
+            resources << pattern;
+        }
     }
 
     return resources;

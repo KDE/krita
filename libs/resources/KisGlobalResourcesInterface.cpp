@@ -26,18 +26,19 @@ public:
     {
     }
 protected:
-    KoResourceSP resourceForFilename(const QString &filename) const override {
-        KoResourceSP res = m_model->resourceForFilename(filename);
+    QVector<KoResourceSP> resourcesForFilename(const QString &filename) const override {
+        QVector<KoResourceSP> res = m_model->resourcesForFilename(filename);
         return res;
     }
 
-    KoResourceSP resourceForName(const QString &name) const override {
-        KoResourceSP res = m_model->resourceForName(name);
+    QVector<KoResourceSP> resourcesForName(const QString &name) const override {
+        QVector<KoResourceSP> res = m_model->resourcesForName(name);
         return res;
     }
 
-    KoResourceSP resourceForMD5(const QString &md5) const override {
-        return m_model->resourceForMD5(md5);
+    QVector<KoResourceSP> resourcesForMD5(const QString &md5) const override {
+        QVector<KoResourceSP> res = m_model->resourcesForMD5(md5);
+        return res;
     }
 public:
     KoResourceSP fallbackResource() const override {

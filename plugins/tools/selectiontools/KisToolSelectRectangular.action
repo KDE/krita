@@ -3,7 +3,7 @@
     <Actions category="Rectangular Selection Tool">
         <text>Tool Shortcuts</text>
     <Action name="KisToolSelectRectangular">
-      <icon></icon>
+      <icon>tool_rect_selection</icon>
       <text>Rectangular Selection Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Rectangular Selection Tool</toolTip>

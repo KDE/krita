@@ -11,7 +11,7 @@
 #include <QTime>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
-
+#include <QMessageBox>
 
 #include <KoFileDialog.h>
 #include "KisImportExportManager.h"
@@ -174,6 +174,8 @@ void KisPresetSaveWidget::savePreset()
         presetFileName += ".kpp";
     }
 
+    bool success = true;
+
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
         if (!presetFileName.endsWith(extension)) {
@@ -184,31 +186,39 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         newPreset->setValid(true);
         newPreset->setStorageLocation("");
-        rServer->addResource(newPreset);
+        if (!rServer->addResource(newPreset)) {
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"),
+                                 i18n("Could not save preset under name %1, it already exists.", presetFileName));
+            success = false;
+
+        }
 
         // trying to get brush preset to load after it is created
-        emit resourceSelected(newPreset);
+        if (success) emit resourceSelected(newPreset);
 
     }
     else { // saving a preset that is replacing an existing one
         curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
 
-        rServer->updateResource(curPreset);
+        if (!rServer->updateResource(curPreset)) {
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"),
+                                 i18n("Could not update preset %1.", presetFileName));
+            success = false;
+        }
 
         // this helps updating the thumbnail in the big label in the editor
-        emit resourceSelected(curPreset);
+        if (success) emit resourceSelected(curPreset);
     }
 
 
     //    // HACK ALERT! the server does not notify the observers
     //    // automatically, so we need to call theupdate manually!
     //    rServer->tagCategoryMembersChanged();
-
-    m_favoriteResourceManager->updateFavoritePresets();
-
-
-    close(); // we are done... so close the save brush dialog
+    if (success) {
+        m_favoriteResourceManager->updateFavoritePresets();
+        close(); // we are done... so close the save brush dialog
+    }
 
 }
 

@@ -8,46 +8,47 @@
 
 #include <QFileInfo>
 #include "kis_assert.h"
+#include "kis_debug.h"
 
 namespace {
 class LocalResourcesSource : public KisResourcesInterface::ResourceSourceAdapter
 {
 public:
-    LocalResourcesSource(const QString &resourceType, const QList<KoResourceSP> &cachedResources)
-        : m_resourceType(resourceType),
-          m_cachedResources(cachedResources)
+    LocalResourcesSource(const KisLocalStrokeResources *parent, const QString &resourceType, const QList<KoResourceSP> &cachedResources)
+        : m_resourceType(resourceType)
+        , m_cachedResources(cachedResources)
+        , m_parent(const_cast<KisLocalStrokeResources*>(parent))
     {
     }
 protected:
-    KoResourceSP resourceForFilename(const QString &filename) const override {
-        auto it = std::find_if(m_cachedResources.begin(),
-                               m_cachedResources.end(),
-                               [this, filename] (KoResourceSP res) {
-                                   return res->resourceType().first == this->m_resourceType &&
-                                       (res->filename() == filename ||
-                                        QFileInfo(res->filename()).fileName() == filename);
-                               });
-        return it != m_cachedResources.end() ? *it : KoResourceSP();
+    QVector<KoResourceSP> resourcesForFilename(const QString &filename) const override {
+        QVector<KoResourceSP> resources;
+        Q_FOREACH(KoResourceSP res, m_cachedResources) {
+            if (res->filename() == filename && res->resourceType().first == m_resourceType) {
+                resources << res;
+            }
+        }
+        return resources;
     }
 
-    KoResourceSP resourceForName(const QString &name) const override {
-        auto it = std::find_if(m_cachedResources.begin(),
-                               m_cachedResources.end(),
-                               [this, name] (KoResourceSP res) {
-                                   return res->resourceType().first == this->m_resourceType &&
-                                       res->name() == name;
-                               });
-        return it != m_cachedResources.end() ? *it : KoResourceSP();
+    QVector<KoResourceSP> resourcesForName(const QString &name) const override {
+        QVector<KoResourceSP> resources;
+        Q_FOREACH(KoResourceSP res, m_cachedResources) {
+            if (res->name() == name && res->resourceType().first == m_resourceType) {
+                resources << res;
+            }
+        }
+        return resources;
     }
 
-    KoResourceSP resourceForMD5(const QString &md5) const override {
-        auto it = std::find_if(m_cachedResources.begin(),
-                               m_cachedResources.end(),
-                               [this, md5] (KoResourceSP res) {
-                                   return res->resourceType().first == this->m_resourceType &&
-                                       res->md5Sum() == md5;
-                               });
-        return it != m_cachedResources.end() ? *it : KoResourceSP();
+    QVector<KoResourceSP> resourcesForMD5(const QString &md5) const override {
+        QVector<KoResourceSP> resources;
+        Q_FOREACH(KoResourceSP res, m_cachedResources) {
+            if (res->md5Sum() == md5 && res->resourceType().first == m_resourceType) {
+                resources << res;
+            }
+        }
+        return resources;
     }
 
 public:
@@ -56,14 +57,15 @@ public:
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),
                                [this] (KoResourceSP res) {
-                                   return res->resourceType().first == this->m_resourceType;
-                               });
+                return res->resourceType().first == this->m_resourceType;
+    });
         return it != m_cachedResources.end() ? *it : KoResourceSP();
     }
 
 private:
     const QString m_resourceType;
     const QList<KoResourceSP> &m_cachedResources;
+    KisLocalStrokeResources *m_parent;
 };
 }
 
@@ -73,12 +75,14 @@ public:
     KisLocalStrokeResourcesPrivate(const QList<KoResourceSP> &_localResources)
         : localResources(_localResources)
     {
+
         // sanity check that we don't have any null resources
         KIS_SAFE_ASSERT_RECOVER(!localResources.contains(KoResourceSP())) {
             localResources.removeAll(KoResourceSP());
         }
-    }
 
+
+    }
     QList<KoResourceSP> localResources;
 };
 
@@ -97,5 +101,5 @@ void KisLocalStrokeResources::addResource(KoResourceSP resource)
 KisResourcesInterface::ResourceSourceAdapter *KisLocalStrokeResources::createSourceImpl(const QString &type) const
 {
     Q_D(const KisLocalStrokeResources);
-    return new LocalResourcesSource(type, d->localResources);
+    return new LocalResourcesSource(this, type, d->localResources);
 }

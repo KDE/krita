@@ -264,28 +264,30 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
     if (handles().size() >= 2) {
         const QPointF p1 = *handles()[0];
         const QPointF p2 = *handles()[1];
-        const QRect localRect = (isLocal() && handles().size() == 5) ? initialTransform.mapRect(getLocalRect()).toRect() : QRect();
         const QRect viewport= gc.viewport();
-        const QRect viewportAndLocal = !localRect.isEmpty() ? viewport.intersected(localRect) : viewport;
+
+        const QPolygonF localPoly = (isLocal() && handles().size() == 5) ? initialTransform.map(QPolygonF(getLocalRect())) : QPolygonF();
+        const QPolygonF viewportAndLocalPoly = !localPoly.isEmpty() ? QPolygonF(QRectF(viewport)).intersected(localPoly) : QRectF(viewport);
+
 
         QPainterPath path;
 
         // draw the horizon
         if (assistantVisible == true || isEditing == true) {
             QLineF horizonLine = initialTransform.map(QLineF(p1,p2));
-            KisAlgebra2D::cropLineToRect(horizonLine, viewportAndLocal, true, true);
+            KisAlgebra2D::cropLineToConvexPolygon(horizonLine, viewportAndLocalPoly, true, true);
             path.moveTo(horizonLine.p1());
             path.lineTo(horizonLine.p2());
         }
 
         // draw the VP-->mousePos lines
-        if (isEditing == false && previewVisible == true && isSnappingActive() == true && viewportAndLocal.contains(mousePos.toPoint())) {
+        if (isEditing == false && previewVisible == true && isSnappingActive() == true) {
             // draw the line vp <-> mouse even outside of the local rectangle
             // but only if the mouse pos is inside the rectangle
             QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
             QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
-            KisAlgebra2D::cropLineToRect(snapMouse1, viewportAndLocal, false, true);
-            KisAlgebra2D::cropLineToRect(snapMouse2, viewportAndLocal, false, true);
+            KisAlgebra2D::cropLineToConvexPolygon(snapMouse1, viewportAndLocalPoly, false, true);
+            KisAlgebra2D::cropLineToConvexPolygon(snapMouse2, viewportAndLocalPoly, false, true);
             path.moveTo(initialTransform.map(p1));
             path.lineTo(snapMouse1.p2());
             path.moveTo(initialTransform.map(p2));
@@ -342,7 +344,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                     // Draw vertical line, but only if the center is between both VPs
                     QLineF vertical = initialTransform.map(inv.map(QLineF::fromPolar(1,90)));
                     if (!isEditing) vertical.translate(mousePos - vertical.p1());
-                    KisAlgebra2D::cropLineToRect(vertical, viewportAndLocal, true, true);
+                    KisAlgebra2D::cropLineToConvexPolygon(vertical, viewportAndLocalPoly, true, true);
                     if (previewVisible) {
                         path.moveTo(vertical.p1());
                         path.lineTo(vertical.p2());
@@ -403,7 +405,8 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                             }
 
                             QLineF drawn_gridline = initialTransform.map(inv.map(gridline));
-                            KisAlgebra2D::cropLineToRect(drawn_gridline, viewportAndLocal, true, false);
+                            KisAlgebra2D::cropLineToConvexPolygon(drawn_gridline, viewportAndLocalPoly, true, false);
+
                             if (previewVisible || isEditing == true) {
                                 path.moveTo(drawn_gridline.p2());
                                 path.lineTo(drawn_gridline.p1());

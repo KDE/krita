@@ -135,8 +135,9 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
     }
 
     QRect viewport= gc.viewport();
-    QRect viewportAndLocal = (isLocal() && isAssistantComplete()) ?
-                QRectF(viewport).intersected(converter->documentToWidgetTransform().mapRect(getLocalRect())).toRect() : viewport;
+
+    QPolygonF viewportAndLocalPoly = (isLocal() && isAssistantComplete()) ?
+                QPolygonF(QRectF(viewport)).intersected(converter->documentToWidgetTransform().map(QPolygonF(QRectF(getLocalRect())))) : QPolygonF(QRectF(viewport));
 
     // draw controls when we are not editing
     if (canvas && canvas->paintingAssistantsDecoration()->isEditingAssistants() == false && isAssistantComplete()) {
@@ -144,26 +145,24 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         if (isSnappingActive() && previewVisible == true) {
             //don't draw if invalid.
 
-            if (!isLocal() || getLocalRect().contains(m_adjustedBrushPosition)) {
+            QTransform initialTransform = converter->documentToWidgetTransform();
+            QPointF startPoint = initialTransform.map(*handles()[0]);
 
-                QTransform initialTransform = converter->documentToWidgetTransform();
-                QPointF startPoint = initialTransform.map(*handles()[0]);
-
-                if (m_followBrushPosition && m_adjustedPositionValid) {
-                    mousePos = initialTransform.map(m_adjustedBrushPosition);
-                }
-
-                QLineF snapLine= QLineF(startPoint, mousePos);
-
-                KisAlgebra2D::intersectLineRect(snapLine, viewport, false, true);
-
-                QPainterPath path;
-
-                path.moveTo(snapLine.p2());
-                path.lineTo(snapLine.p1());
-
-                drawPreview(gc, path);//and we draw the preview.
+            if (m_followBrushPosition && m_adjustedPositionValid) {
+                mousePos = initialTransform.map(m_adjustedBrushPosition);
             }
+
+            QLineF snapLine= QLineF(startPoint, mousePos);
+
+            KisAlgebra2D::intersectLineConvexPolygon(snapLine, viewportAndLocalPoly, false, true);
+
+            QPainterPath path;
+
+            path.moveTo(snapLine.p2());
+            path.lineTo(snapLine.p1());
+
+            drawPreview(gc, path);//and we draw the preview.
+
         }
     }
 
@@ -246,7 +245,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
             // find point
             QLineF snapLine= QLineF(p0, unitAngle);
-            KisAlgebra2D::intersectLineRect(snapLine, viewportAndLocal, true);
+            KisAlgebra2D::intersectLineConvexPolygon(snapLine, viewportAndLocalPoly, true, true);
 
             // make a line from VP center to edge of canvas with that angle
             QPainterPath path;

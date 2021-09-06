@@ -355,6 +355,17 @@ void KisAlgebra2DTest::testLineIntersections()
                                QLineF(QPointF(51,50), QPointF(52,51)));
         QVERIFY(!p);
     }
+
+    {
+        // first bounded, then unbounded
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(4,5),QPointF(-1,5)),
+                               QLineF(QPointF(-1,0),QPointF(-1,3)));
+        QVERIFY(p);
+        qCritical() << "What I've got is" << *p << qAbs(p.value().x() + 1) << qAbs(p.value().y() - 5);
+        QVERIFY(qAbs(p.value().x() + 1) < epsilon);
+        QVERIFY(qAbs(p.value().y() - 5) < epsilon);
+    }
 }
 
 void testLineRectIntersection(QRect rect, QLineF line, QLineF expected, bool extendFirst, bool extendSecond, bool intersectsExpected)

@@ -39,6 +39,7 @@
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 #include "KisSwatch.h"
+#include "kis_dom_utils.h"
 
 #include "KoColorSet.h"
 #include "KoColorSet_p.h"
@@ -1572,22 +1573,23 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
         if (version == "1.0" && swatchEle.firstChildElement().tagName() == "Lab") {
             // previous version of krita had the values wrong, and scaled everything between 0 to 1,
             // but lab requires L = 0-100 and AB = -128-127.
+            // TODO: write unittest for this.
             QDomElement el = swatchEle.firstChildElement();
-            double L = swatchEle.attribute("L").toDouble();
+            double L = KisDomUtils::toDouble(el.attribute("L"));
             el.setAttribute("L", L*100.0);
-            double ab = swatchEle.attribute("a").toDouble();
-            if (ab< .5) {
-                ab = (ab - 1.0) * 1280.0;
+            double ab = KisDomUtils::toDouble(el.attribute("a"));
+            if (ab <= .5) {
+                ab = (0.5 - ab) * 2 * -128.0;
             } else {
-                ab = (ab - 1.0) * 1270.0;
+                ab = (ab - 0.5) * 2 * 127.0;
             }
             el.setAttribute("a", ab);
 
-            ab = swatchEle.attribute("b").toDouble();
-            if (ab< .5) {
-                ab = (ab - 1.0) * 1280.0;
+            ab = KisDomUtils::toDouble(el.attribute("b"));
+            if (ab <= .5) {
+                ab = (0.5 - ab) * 2 * -128.0;
             } else {
-                ab = (ab - 1.0) * 1270.0;
+                ab = (ab - 0.5) * 2 * 127.0;
             }
             el.setAttribute("b", ab);
             entry.setColor(KoColor::fromXML(el, colorDepthId));

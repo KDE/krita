@@ -151,7 +151,9 @@ void TasksetDockerDock::activated(const QModelIndex& index)
 {
     QAction* action = m_model->actionFromIndex(index);
     m_blocked = true;
-    action->trigger();
+    if (action && action->isEnabled()) {
+        action->trigger();
+    }
     m_blocked = false;
 }
 

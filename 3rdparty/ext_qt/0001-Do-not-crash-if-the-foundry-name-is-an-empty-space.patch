@@ -1,0 +1,26 @@
+From 426b95f45b868984290d8d3805ccebee6f29cfac Mon Sep 17 00:00:00 2001
+From: Halla Rempt <halla@valdyas.org>
+Date: Tue, 7 Sep 2021 14:49:16 +0200
+Subject: [PATCH] Do not crash if the foundry name is an empty space
+
+See https://bugs.kde.org/show_bug.cgi?id=430220
+---
+ src/gui/text/qfontdatabase.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gui/text/qfontdatabase.cpp b/src/gui/text/qfontdatabase.cpp
+index b09891bc..d80cdefe 100644
+--- a/src/gui/text/qfontdatabase.cpp
++++ b/src/gui/text/qfontdatabase.cpp
+@@ -614,7 +614,7 @@ static void parseFontName(const QString &name, QString &foundry, QString &family
+ {
+     int i = name.indexOf(QLatin1Char('['));
+     int li = name.lastIndexOf(QLatin1Char(']'));
+-    if (i >= 0 && li >= 0 && i < li) {
++    if (i >= 0 && li >= 0 && i < li && li - i > 1) {
+         foundry = name.mid(i + 1, li - i - 1);
+         if (i > 0 && name[i - 1] == QLatin1Char(' '))
+             i--;
+-- 
+2.25.1
+

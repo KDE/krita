@@ -19,9 +19,9 @@
 #include <KoCompositeOpRegistry.h>
 #include <resources/KoAbstractGradient.h>
 #include <KoPattern.h>
-#include "kritapsd_export.h"
-#include <KisLinkedResourceWrapper.h>
+#include <KisResourcesInterface.h>
 
+#include "kritapsd_export.h"
 
 const int MAX_CHANNELS = 56;
 
@@ -48,6 +48,13 @@ enum psd_color_mode {
     COLORMODE_UNKNOWN = 9000
  };
 
+
+struct PsdResource {
+    QString type;
+    QString md5;
+    QString filename;
+    QString name;
+};
 
 /**
  * Color samplers, apparently distict from PSDColormode
@@ -331,8 +338,15 @@ public:
         return m_jitter;
     }
 
-    KoAbstractGradientSP gradient(KisResourcesInterfaceSP resourcesInterface) const {
-        return m_gradientWrapper.isValid() ? m_gradientWrapper.resources(resourcesInterface).first() : KoAbstractGradientSP();
+    KoAbstractGradientSP gradient(KisResourcesInterfaceSP resourcesInterface) const
+    {
+        auto source = resourcesInterface->source<KoAbstractGradient>(m_gradientLink.type);
+        auto resources = source.resources(m_gradientLink.md5, m_gradientLink.filename, m_gradientLink.name);
+        KoAbstractGradientSP gradient;
+        if (resources.size() > 0) {
+            gradient = resources.first();
+        }
+        return gradient;
     }
 
 public:
@@ -413,8 +427,12 @@ public:
         m_jitter = value;
     }
 
-    void setGradient(KoAbstractGradientSP value) {
-        m_gradientWrapper = value;
+    void setGradient(KoAbstractGradientSP value)
+    {
+        m_gradientLink.type = value->resourceType().first;
+        m_gradientLink.md5 = value->md5Sum();
+        m_gradientLink.filename = value->filename();
+        m_gradientLink.name = value->name();
     }
 
     virtual void scaleLinearSizes(qreal scale);
@@ -448,7 +466,7 @@ private:
     psd_technique_type m_technique;
     qint32 m_range;
     qint32 m_jitter;
-    KisLinkedResourceWrapper<KoAbstractGradient> m_gradientWrapper;
+    PsdResource m_gradientLink;
 };
 
 class KRITAPSD_EXPORT psd_layer_effects_shadow_common : public psd_layer_effects_shadow_base
@@ -783,12 +801,23 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_textureEnabled = value;
     }
 
-    KoPatternSP texturePattern(KisResourcesInterfaceSP interface) const {
-        return m_texturePatternLink.isValid() ? m_texturePatternLink.resource(interface).first() : KoPatternSP();
+    KoPatternSP texturePattern(KisResourcesInterfaceSP resourcesInterface) const
+    {
+        auto source = resourcesInterface->source<KoPattern>(m_texturePatternLink.type);
+        auto resources = source.resources(m_texturePatternLink.md5, m_texturePatternLink.filename, m_texturePatternLink.name);
+        KoPatternSP pattern;
+        if (resources.size() > 0) {
+            pattern = resources.first();
+        }
+        return pattern;
     }
 
-    void setTexturePattern(KoPatternSP value) {
-        m_texturePatternLink = value;
+    void setTexturePattern(KoPatternSP value)
+    {
+        m_texturePatternLink.type = value->resourceType().first;
+        m_texturePatternLink.md5 = value->md5Sum();
+        m_texturePatternLink.filename = value->filename();
+        m_texturePatternLink.name = value->name();
     }
 
     int textureScale() const {
@@ -873,7 +902,7 @@ private:
     int m_contourRange;
 
     bool m_textureEnabled;
-    KisLinkedResourceWrapper<KoPattern> m_texturePatternLink;
+    PsdResource m_texturePatternLink;
     int m_textureScale;
     int m_textureDepth;
     bool m_textureInvert;
@@ -934,8 +963,15 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
         return m_gradientYOffset;
     }
 
-    KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const {
-        return m_patternLink.isValid() ? m_patternLink.resource(resourcesInterface).first() : KoPatternSP();
+    KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const
+    {
+        auto source = resourcesInterface->source<KoPattern>(m_patternLink.type);
+        auto resources = source.resources(m_patternLink.md5, m_patternLink.filename, m_patternLink.name);
+        KoPatternSP pattern;
+        if (resources.size() > 0) {
+            pattern = resources.first();
+        }
+        return pattern;
     }
 
     int horizontalPhase() const {
@@ -978,8 +1014,12 @@ public:
         return QPointF(m_gradientXOffset, m_gradientYOffset);
     }
 
-    void setPattern(KoPatternSP value) {
-        m_patternLink = KisLinkedResourceWrapper<KoPattern>(value);
+    void setPattern(KoPatternSP value)
+    {
+        m_patternLink.type = value->resourceType().first;
+        m_patternLink.md5 = value->md5Sum();
+        m_patternLink.filename = value->filename();
+        m_patternLink.name = value->name();
     }
 
     void setPatternPhase(const QPointF &phase) {
@@ -1010,7 +1050,7 @@ private:
     int m_gradientYOffset; // 0..100%
 
     // Pattern
-    KisLinkedResourceWrapper<KoPattern> m_patternLink;
+    PsdResource m_patternLink;
     int m_horizontalPhase; // 0..100%
     int m_verticalPhase; // 0..100%
 

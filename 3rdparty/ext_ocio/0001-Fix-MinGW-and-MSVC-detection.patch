@@ -246,6 +246,15 @@ index a90ca1c..eda8ead 100644
      # Mute a design issue where the Exception public class inherits 
      # from a STL Exception. STL classes are never supposed to
      # be exported among different dynamic libraries.
+@@ -23,7 +23,7 @@ endif()
+ # Process all warnings as errors
+ # Unfortunately Windows still has a warning
+ if(UNIX)
+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
++#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+ endif()
+ 
+ find_package(PythonLibs)
 -- 
 2.30.1.windows.1
 

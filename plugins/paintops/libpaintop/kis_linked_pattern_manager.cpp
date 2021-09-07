@@ -92,7 +92,7 @@ KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfig
     }
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
-    if (pattern && QThread::currentThread() != qApp->thread()) {
+    if (pattern && QThread::currentThread() == qApp->thread()) {
         auto resourceServer = KoResourceServerProvider::patternServer();
         resourceServer->addResource(pattern, false);
     }

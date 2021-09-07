@@ -53,7 +53,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
     if (m_canvas) {
         m_imageIdleWatcher.setTrackedImage(m_canvas->image());
 
-        connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &OverviewWidget::generateThumbnail);
+        connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &OverviewWidget::generateThumbnail, Qt::UniqueConnection);
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)),SLOT(startUpdateCanvasProjection()));
         connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),SLOT(startUpdateCanvasProjection()));

@@ -8,6 +8,8 @@
 
 #include <QBuffer>
 #include <QByteArray>
+#include <QApplication>
+#include <QThread>
 
 #include <KoResourceServerProvider.h>
 #include <resources/KoPattern.h>
@@ -90,7 +92,7 @@ KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfig
     }
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
-    if (pattern) {
+    if (pattern && QThread::currentThread() == qApp->thread()) {
         auto resourceServer = KoResourceServerProvider::patternServer();
         resourceServer->addResource(pattern, false);
     }

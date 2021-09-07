@@ -87,7 +87,7 @@ void WGShadeSelector::connectToModel()
 {
     connect(m_model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotReset()));
     connect(m_model.data(), SIGNAL(sigColorSpaceChanged()), SLOT(slotReset()));
-    connect(m_model.data(), SIGNAL(sigChannelValuesChanged(QVector4D)),
+    connect(m_model.data(), SIGNAL(sigChannelValuesChanged(QVector4D,quint32)),
             SLOT(slotChannelValuesChanged(QVector4D)));
     connect(this, SIGNAL(sigChannelValuesChanged(QVector4D)),
             m_model.data(), SLOT(slotSetChannelValues(QVector4D)));

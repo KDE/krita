@@ -35,7 +35,7 @@ WGActionManager::WGActionManager(WGColorSelectorDock *parentDock)
 {
     m_lastUsedColor.setOpacity(quint8(0));
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotUpdateDocker()));
-    connect(m_colorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D)), SLOT(slotChannelValuesChanged()));
+    connect(m_colorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D,quint32)), SLOT(slotChannelValuesChanged()));
     connect(WGConfig::notifier(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(WGConfig::notifier(), SIGNAL(selectorConfigChanged()), SLOT(slotSelectorConfigChanged()));
 }

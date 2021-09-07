@@ -61,7 +61,7 @@ void WGMyPaintShadeSelector::setModel(KisVisualColorModelSP model)
     m_model = model;
     connect(this, SIGNAL(sigChannelValuesChanged(QVector4D)),
             m_model.data(), SLOT(slotSetChannelValues(QVector4D)));
-    connect(m_model.data(), SIGNAL(sigChannelValuesChanged(QVector4D)),
+    connect(m_model.data(), SIGNAL(sigChannelValuesChanged(QVector4D,quint32)),
             this, SLOT(slotSetChannelValues(QVector4D)));
     if (m_model->isHSXModel()) {
         slotSetChannelValues(m_model->channelValues());

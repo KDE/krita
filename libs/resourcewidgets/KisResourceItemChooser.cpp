@@ -26,6 +26,7 @@
 #include <QWheelEvent>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QStandardPaths>
 
 #include <klocalizedstring.h>
 
@@ -224,6 +225,7 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         QStringList mimeTypes = KisResourceLoaderRegistry::instance()->mimeTypes(d->resourceType);
         KoFileDialog dialog(0, KoFileDialog::OpenFiles, "OpenDocument");
         dialog.setMimeTypeFilters(mimeTypes);
+        dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {

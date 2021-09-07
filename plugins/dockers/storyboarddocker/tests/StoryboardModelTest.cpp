@@ -13,6 +13,10 @@
 
 void StoryboardModelTest::init()
 {
+    /* TODO: Seems like it's wrong to be testing the storyboard model without image data.
+     * We should reconsider this later down the line. The model should depend on having an image
+     * to be valid! */
+
     m_commentModel = new StoryboardCommentModel(this);
     m_storyboardModel = new StoryboardModel(this);
     m_storyboardModel->setCommentModel(m_commentModel);

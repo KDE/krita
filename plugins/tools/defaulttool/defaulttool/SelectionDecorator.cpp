@@ -26,7 +26,6 @@
 #include "kis_painting_tweaks.h"
 #include "kis_coordinates_converter.h"
 #include "kis_icon_utils.h"
-#include "KisReferenceImage.h"
 
 
 
@@ -39,7 +38,6 @@ SelectionDecorator::SelectionDecorator(KoCanvasResourceProvider *resourceManager
     , m_showFillGradientHandles(false)
     , m_showStrokeFillGradientHandles(false)
     , m_forceShapeOutlines(false)
-    , m_applyScaling(true)
 {
     m_hotPosition =
         KoFlake::AnchorPosition(
@@ -94,7 +92,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
             KisHandlePainterHelper helper =
-                    createHandle(&painter, shape, converter);
+                    KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
 
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
@@ -127,7 +125,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // draw extra rubber line around all the shapes
     if (selectedShapes.size() > 1 || forceBoundngRubberLine) {
         KisHandlePainterHelper helper =
-            createHandle(&painter, m_selection, converter);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         helper.drawRubberLine(handleArea);
@@ -137,7 +135,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // is no need drawing the selection handles
     if (editable) {
         KisHandlePainterHelper helper =
-            createHandle(&painter, m_selection, converter);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         QPolygonF outline = handleArea;
@@ -173,21 +171,6 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-}
-
-KisHandlePainterHelper SelectionDecorator::createHandle(QPainter *painter, KoShape *shape, const KoViewConverter &converter)
-{
-    KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
-    if (reference)
-    {
-        m_applyScaling = false;
-    }
-
-    if (!m_applyScaling) {
-        return KoShape::createHandlePainterHelperDocument(painter, shape, m_handleRadius);
-    }
-
-    return KoShape::createHandlePainterHelperView(painter, shape, converter, m_handleRadius);
 }
 
 void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter)

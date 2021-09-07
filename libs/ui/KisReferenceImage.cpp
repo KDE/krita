@@ -486,6 +486,9 @@ bool KisReferenceImage::loadImage(KoStore *store)
     if (!d->image.load(&storeDev, "PNG")) {
         return false;
     }
+    else {
+        d->originalCroppedImage = d->image;
+    }
 
     return store->close();
 }

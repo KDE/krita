@@ -35,13 +35,13 @@
 #include "ToolReferenceImagesWidget.h"
 #include "KisReferenceImageCollection.h"
 #include "KisReferenceImage.h"
-#include "KisReferenceImageCropDecorator.h"
+#include "KisReferenceImageSelectionDecorator.h"
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImageCropStrategy.h"
 
 ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
     : DefaultTool(canvas, false)
-    , m_cropDecorator(new KisReferenceImageCropDecorator)
+    , m_cropDecorator(new KisReferenceImageSelectionDecorator)
 {
     setObjectName("ToolReferenceImages");
 
@@ -136,20 +136,18 @@ void ToolReferenceImages::deactivate()
     DefaultTool::deactivate();
 }
 
-void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &converter)
+void ToolReferenceImages::paint(QPainter &painter, const KoViewConverter &/*converter*/)
 {
+    painter.save();
     if (m_layer) {
         painter.setTransform(QTransform());
     }
-    KisReferenceImage* ref = activeReferenceImage();
 
-    if (ref && ref->cropEnabled()) {
-      m_cropDecorator->setReferenceImage(ref);
-      m_cropDecorator->paint(painter, converter);
+    if (koSelection()) {
+      m_cropDecorator->setSelection(koSelection());
+      m_cropDecorator->paint(painter);
     }
-    else {
-        DefaultTool::paint(painter,converter);
-    }
+    painter.restore();
 }
 
 QRectF ToolReferenceImages::handlesSize()

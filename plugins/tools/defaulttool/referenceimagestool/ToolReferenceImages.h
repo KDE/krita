@@ -16,7 +16,7 @@
 #include "kis_painting_assistant.h"
 #include <kis_icon.h>
 #include <kis_canvas2.h>
-#include "KisReferenceImageCropDecorator.h"
+#include "KisReferenceImageSelectionDecorator.h"
 
 #include <defaulttool/DefaultTool.h>
 #include <defaulttool/DefaultToolFactory.h>
@@ -36,7 +36,7 @@ public:
         return 3;
     }
 
-    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void paint(QPainter &painter, const KoViewConverter &/*converter*/) override;
 
     void mouseDoubleClickEvent(KoPointerEvent */*event*/) override {}
     void mousePressEvent(KoPointerEvent *event) override;
@@ -94,7 +94,7 @@ private:
     friend class ToolReferenceImagesWidget;
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
     KisWeakSharedPtr<KisReferenceImagesLayer> m_layer;
-    KisReferenceImageCropDecorator* m_cropDecorator;
+    KisReferenceImageSelectionDecorator* m_cropDecorator;
     KoFlake::SelectionHandle m_lastHandle;
     bool m_mouseWasInsideHandles;
     QPolygonF m_outline;

@@ -151,7 +151,9 @@ void KisWdgSeExprPresetsSave::savePreset()
         }
         newPreset->setFilename(presetFileName);
         newPreset->setName(presetName);
-        newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
+        if (presetThumbnailWidget->pixmap()) {
+            newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
+        }
         newPreset->setScript(m_currentConfiguration->getString("script"));
         newPreset->setDirty(false);
         newPreset->setValid(true);
@@ -163,7 +165,7 @@ void KisWdgSeExprPresetsSave::savePreset()
     } else { // saving a preset that is replacing an existing one
         curPreset->setName(presetName);
 
-        if (curPreset->image().isNull()) {
+        if (curPreset->image().isNull() && presetThumbnailWidget->pixmap()) {
             curPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
         }
 

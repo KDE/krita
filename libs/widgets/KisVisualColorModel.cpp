@@ -107,15 +107,17 @@ void KisVisualColorModel::slotSetChannelValues(const QVector4D &values)
         return;
     }
 
+    quint32 changeFlags = 0;
     QVector4D newValues(0, 0, 0, 0);
     for (int i = 0; i < m_d->colorChannelCount; i++) {
         newValues[i] = values[i];
+        changeFlags |= quint32(values[i] != m_d->channelValues[i]) << i;
     }
-    if (newValues != m_d->channelValues) {
+    if (changeFlags != 0) {
         m_d->allowUpdates = false;
         m_d->channelValues = newValues;
         m_d->currentcolor = convertChannelValuesToKoColor(newValues);
-        emit sigChannelValuesChanged(m_d->channelValues);
+        emit sigChannelValuesChanged(m_d->channelValues, changeFlags);
         emit sigNewColor(m_d->currentcolor);
         m_d->allowUpdates = true;
     }
@@ -446,7 +448,7 @@ void KisVisualColorModel::emitChannelValues()
 {
     bool updatesAllowed = m_d->allowUpdates;
     m_d->allowUpdates = false;
-    emit sigChannelValuesChanged(m_d->channelValues);
+    emit sigChannelValuesChanged(m_d->channelValues, (1u << m_d->colorChannelCount) - 1);
     m_d->allowUpdates = updatesAllowed;
 }
 

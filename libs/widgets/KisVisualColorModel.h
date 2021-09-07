@@ -98,7 +98,7 @@ Q_SIGNALS:
      *        channel values are derived changed, and thus invalidating the current ones.
      */
     void sigColorSpaceChanged();
-    void sigChannelValuesChanged(const QVector4D &values);
+    void sigChannelValuesChanged(const QVector4D &values, quint32 channelFlags);
     void sigNewColor(const KoColor &c);
 
 private:

@@ -85,7 +85,7 @@ public Q_SLOTS:
     void slotGamutMaskPreviewUpdate();
 
 private Q_SLOTS:
-    void slotChannelValuesChanged(const QVector4D &values);
+    void slotChannelValuesChanged(const QVector4D &values, quint32 channelFlags);
     void slotColorModelChanged();
     void slotCursorMoved(QPointF pos);
     void slotDisplayConfigurationChanged();

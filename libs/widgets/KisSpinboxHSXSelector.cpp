@@ -85,12 +85,12 @@ void KisSpinboxHSXSelector::slotColorModelChanged()
         default:
             break;
         }
-        connect(m_d->selectorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D)),
+        connect(m_d->selectorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D,quint32)),
                 this, SLOT(slotChannelValuesChanged(QVector4D)), Qt::UniqueConnection);
         connect(this, SIGNAL(sigChannelValuesChanged(QVector4D)),
                 m_d->selectorModel.data(), SLOT(slotSetChannelValues(QVector4D)), Qt::UniqueConnection);
     } else {
-        m_d->selectorModel->disconnect(SIGNAL(sigChannelValuesChanged(QVector4D)), this);
+        m_d->selectorModel->disconnect(SIGNAL(sigChannelValuesChanged(QVector4D,quint32)), this);
         disconnect(SIGNAL(sigChannelValuesChanged(QVector4D)));
     }
 }

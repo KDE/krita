@@ -37,6 +37,7 @@ struct KisVisualColorSelectorShape::Private
     Dimensions dimension;
     int channel1;
     int channel2;
+    quint32 channelMask;
 };
 
 KisVisualColorSelectorShape::KisVisualColorSelectorShape(KisVisualColorSelector *parent,
@@ -48,6 +49,10 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(KisVisualColorSelector 
     int maxchannel = parent->selectorModel()->colorSpace()->colorChannelCount()-1;
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
+    m_d->channelMask = 1 << channel1;
+    if (dimension == Dimensions::twodimensional) {
+        m_d->channelMask |= 1 << channel2;
+    }
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
@@ -77,10 +82,11 @@ void KisVisualColorSelectorShape::setCursorPosition(QPointF position, bool signa
     }
 }
 
-void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, bool setCursor)
+void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, quint32 channelFlags)
 {
     //qDebug() << this  << "setChannelValues";
     m_d->currentChannelValues = channelValues;
+    bool setCursor = channelFlags & m_d->channelMask;
     if (setCursor) {
         m_d->currentCoordinates = QPointF(qBound(0.f, channelValues[m_d->channel1], 1.f),
                                           qBound(0.f, channelValues[m_d->channel2], 1.f));
@@ -92,7 +98,7 @@ void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, bool
             m_d->currentChannelValues[m_d->channel2] = m_d->currentCoordinates.y();
         }
     }
-    m_d->imagesNeedUpdate = true;
+    m_d->imagesNeedUpdate = m_d->imagesNeedUpdate || channelFlags & ~m_d->channelMask;
     update();
 }
 
@@ -401,10 +407,18 @@ KoColor KisVisualColorSelectorShape::getCurrentColor()
     return KoColor();
 }
 
-QVector <int> KisVisualColorSelectorShape::getChannels() const
+int KisVisualColorSelectorShape::channel(int dimension) const
 {
-    QVector <int> channels(2);
-    channels[0] = m_d->channel1;
-    channels[1] = m_d->channel2;
-    return channels;
+    if (dimension == 0) {
+        return m_d->channel1;
+    }
+    if (dimension == 1 && getDimensions() == twodimensional) {
+        return m_d->channel2;
+    }
+    return -1;
+}
+
+quint32 KisVisualColorSelectorShape::channelMask() const
+{
+    return m_d->channelMask;
 }

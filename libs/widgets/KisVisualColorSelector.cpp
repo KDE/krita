@@ -80,7 +80,8 @@ void KisVisualColorSelector::setSelectorModel(KisVisualColorModelSP model)
     if (m_d->selectorModel) {
         m_d->selectorModel->disconnect(this);
     }
-    connect(model.data(), SIGNAL(sigChannelValuesChanged(QVector4D)), SLOT(slotChannelValuesChanged(QVector4D)));
+    connect(model.data(), SIGNAL(sigChannelValuesChanged(QVector4D,quint32)),
+                          SLOT(slotChannelValuesChanged(QVector4D,quint32)));
     connect(model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotColorModelChanged()));
     // to keep the KisColorSelectorInterface API functional:
     connect(model.data(), SIGNAL(sigNewColor(KoColor)), this, SIGNAL(sigNewColor(KoColor)));
@@ -232,7 +233,7 @@ void KisVisualColorSelector::slotGamutMaskPreviewUpdate()
     }
 }
 
-void KisVisualColorSelector::slotChannelValuesChanged(const QVector4D &values)
+void KisVisualColorSelector::slotChannelValuesChanged(const QVector4D &values, quint32 channelFlags)
 {
     // about to (re-)build selector, values will be fetched when done
     if (!m_d->initialized) {
@@ -240,7 +241,7 @@ void KisVisualColorSelector::slotChannelValuesChanged(const QVector4D &values)
     }
     m_d->channelValues = values;
     for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
-        shape->setChannelValues(m_d->channelValues, true);
+        shape->setChannelValues(m_d->channelValues, channelFlags);
     }
 }
 
@@ -262,15 +263,14 @@ void KisVisualColorSelector::slotCursorMoved(QPointF pos)
     const KisVisualColorSelectorShape *shape = qobject_cast<KisVisualColorSelectorShape *>(sender());
     KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
 
-    QVector<int> channels = shape->getChannels();
-    m_d->channelValues[channels.at(0)] = pos.x();
+    m_d->channelValues[shape->channel(0)] = pos.x();
     if (shape->getDimensions() == KisVisualColorSelectorShape::twodimensional) {
-        m_d->channelValues[channels.at(1)] = pos.y();
+        m_d->channelValues[shape->channel(1)] = pos.y();
     }
 
     for (KisVisualColorSelectorShape *widget: m_d->widgetlist) {
         if (widget != shape){
-            widget->setChannelValues(m_d->channelValues, false);
+            widget->setChannelValues(m_d->channelValues, shape->channelMask());
         }
     }
     m_d->selectorModel->slotSetChannelValues(m_d->channelValues);
@@ -433,7 +433,7 @@ void KisVisualColorSelector::rebuildSelector()
     }
 
     // finally update widgets with new channel values
-    slotChannelValuesChanged(m_d->selectorModel->channelValues());
+    slotChannelValuesChanged(m_d->selectorModel->channelValues(), (1u << m_d->colorChannelCount) - 1);
 }
 
 void KisVisualColorSelector::resizeEvent(QResizeEvent *)

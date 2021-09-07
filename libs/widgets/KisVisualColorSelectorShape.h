@@ -107,11 +107,14 @@ public:
     virtual void setBorderWidth(int width) = 0;
 
     /**
-     * @brief getChannels
-     * get used channels
+     * @brief channel
+     * Get the channel index associated with a selector shape dimension
+     * @param dimension A shape dimension that can be controlled by the cursor
      * @return
      */
-    QVector <int> getChannels() const;
+    int channel(int dimension) const;
+
+    quint32 channelMask() const;
 
     /**
       * @brief setCursorPosition
@@ -130,7 +133,7 @@ public:
       * these are not yet transformed to color space specific ranges!
       * @param setCursor if true, sets the cursor too, otherwise the shape-controlled channels are not set
       */
-    void setChannelValues(QVector4D channelValues, bool setCursor);
+    void setChannelValues(QVector4D channelValues, quint32 channelFlags);
 
     void setAcceptTabletEvents(bool on);
 

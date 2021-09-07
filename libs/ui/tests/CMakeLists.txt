@@ -128,7 +128,6 @@ if (APPLE)
         kis_derived_resources_test.cpp
         kis_animation_frame_cache_test.cpp
         kis_shape_layer_test.cpp
-        kis_exiv2_test.cpp
         kis_clipboard_test.cpp
         kis_selection_manager_test.cpp
         kis_node_manager_test.cpp

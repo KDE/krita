@@ -1,0 +1,27 @@
+From 95ebe17126cdfd50e8bf149d0f1e541414b2f8e3 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 8 Sep 2021 18:24:24 +0000
+Subject: [PATCH 4/4] Linear RGB also comes in 32-bit and floating point
+
+BUG: 442004
+BUG: 437429
+---
+ src/cmsxform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cmsxform.c b/src/cmsxform.c
+index 640382c..455fdfa 100644
+--- a/src/cmsxform.c
++++ b/src/cmsxform.c
+@@ -1082,7 +1082,7 @@ cmsHTRANSFORM CMSEXPORT cmsCreateExtendedTransform(cmsContext ContextID,
+     }
+ 
+     // Check whatever the transform is 16 bits and involves linear RGB in first profile. If so, disable optimizations
+-    if (EntryColorSpace == cmsSigRgbData && T_BYTES(InputFormat) == 2 && !(dwFlags & cmsFLAGS_NOOPTIMIZE))
++    if (EntryColorSpace == cmsSigRgbData && (T_BYTES(InputFormat) >= 2 || T_FLOAT(InputFormat)) && !(dwFlags & cmsFLAGS_NOOPTIMIZE))
+     {
+         cmsFloat64Number gamma = cmsDetectRGBProfileGamma(hProfiles[0], 0.1);
+ 
+-- 
+2.32.0.windows.2
+

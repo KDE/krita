@@ -79,6 +79,8 @@ public:
     void eatOneMousePress();
     void setMaskSyntheticEvents(bool value);
     void resetCompressor();
+    void startBlockingTouch();
+    void stopBlockingTouch();
 
     template <class Event, bool useBlocking>
     void debugEvent(QEvent *event)
@@ -133,10 +135,16 @@ public:
         // On Windows, we sometimes receive mouse events very late, so watch & wait.
         void eatOneMousePress();
 
+        // This should be called after the tablet is pressed,
+        void startBlockingTouch();
+        // This should be called after the tablet is released.
+        void stopBlockingTouch();
+
         bool hungry{false};   // Continue eating mouse strokes
         bool peckish{false};  // Eat a single mouse press event
         bool eatSyntheticEvents{false}; // Mask all synthetic events
         bool activateSecondaryButtonsWorkaround{false}; // Use mouse events for right- and middle-clicks
+        bool eatTouchEvents{false}; // Eat touch interactions
     };
     EventEater eventEater;
 

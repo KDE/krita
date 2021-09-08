@@ -89,6 +89,14 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         }
     };
 
+    auto debugTouchEvent = [&](int i) {
+        if (KisTabletDebugger::instance()->debugEnabled()) {
+            QString pre = QString("[BLOCKED %1:]").arg(i);
+            QTouchEvent *ev = static_cast<QTouchEvent*>(event);
+            dbgTablet << KisTabletDebugger::instance()->eventToString(*ev, pre);
+        }
+    };
+
     if (peckish && event->type() == QEvent::MouseButtonPress
         // Drop one mouse press following tabletPress or touchBegin
         && (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)) {
@@ -129,6 +137,15 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         debugEvent(2);
         return true;
     }
+
+    if (eatTouchEvents && event->type() == QEvent::TouchBegin) {
+        // Drop touch events. If QEvent::TouchBegin is ignored, we won't
+        // receive further touch events until the next TouchBegin.
+        debugTouchEvent(3);
+        event->ignore();
+        return true;
+    }
+
     return false; // All clear - let this one through!
 }
 
@@ -153,6 +170,16 @@ void KisInputManager::Private::EventEater::eatOneMousePress()
 {
     // Enable on other platforms if getting full-pressure splotches
     peckish = true;
+}
+
+void KisInputManager::Private::EventEater::startBlockingTouch()
+{
+    eatTouchEvents = true;
+}
+
+void KisInputManager::Private::EventEater::stopBlockingTouch()
+{
+    eatTouchEvents = false;
 }
 
 bool KisInputManager::Private::ignoringQtCursorEvents()
@@ -658,6 +685,16 @@ void KisInputManager::Private::eatOneMousePress()
 void KisInputManager::Private::resetCompressor() {
     compressedMoveEvent.reset();
     moveEventCompressor.stop();
+}
+
+void KisInputManager::Private::startBlockingTouch()
+{
+    eventEater.startBlockingTouch();
+}
+
+void KisInputManager::Private::stopBlockingTouch()
+{
+    eventEater.stopBlockingTouch();
 }
 
 bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)

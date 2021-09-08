@@ -1257,7 +1257,7 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
         setData(index(StoryboardItem::FrameNumber, 0, index(position, 0)), 0);
         setData(index(StoryboardItem::DurationFrame, 0, index(position, 0)), lastKeyframeGlobal() - 0 + 1);
 
-        if (!m_freezeKeyframePositions) {
+        if (!m_freezeKeyframePositions && m_image) {
             KisLayerUtils::recursiveApplyNodes(m_image->root(), [cmd](KisNodeSP node){
                 if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
                     KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
@@ -1275,7 +1275,7 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
                                 + data(index(position - 1, 0), TotalSceneDurationInFrames).toInt();
         setData(index(StoryboardItem::FrameNumber, 0, index(position, 0)), targetFrame);
 
-        if (!m_freezeKeyframePositions) {
+        if (!m_freezeKeyframePositions && m_image) {
             KisLayerUtils::recursiveApplyNodes(m_image->root(), [targetFrame, cmd](KisNodeSP node){
                 if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
                     KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);

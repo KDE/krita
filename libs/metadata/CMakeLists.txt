@@ -1,11 +1,9 @@
 set(kritametadata_LIB_SRCS
-    kis_legacy_importer.cc
     kis_meta_data_entry.cc
     kis_meta_data_filter.cc
     kis_meta_data_filter_p.cc
     kis_meta_data_filter_registry.cc
     kis_meta_data_filter_registry_model.cc
-    kis_meta_data_io_backend.cc
     kis_meta_data_merge_strategy.cc
     kis_meta_data_merge_strategy_p.cc
     kis_meta_data_merge_strategy_registry.cc
@@ -16,6 +14,8 @@ set(kritametadata_LIB_SRCS
     kis_meta_data_type_info.cc
     kis_meta_data_validator.cc
     kis_meta_data_value.cc
+
+    kis_meta_data_backend_registry.cpp
 )
 
 add_library(kritametadata SHARED ${kritametadata_LIB_SRCS} )

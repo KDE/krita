@@ -104,6 +104,7 @@ void StoryboardTimelineSyncTest::testAddKeyframeExtendsDuration()
     m_storyboardModel->insertItem(item1Index, true);
     QCOMPARE(m_storyboardModel->rowCount(), 2);
     QVERIFY(m_channel1->keyframeAt(26));
+    QVERIFY(m_channel2->keyframeAt(26));
     QModelIndex item2Index = m_storyboardModel->index(1,0);
 
     {
@@ -125,13 +126,13 @@ void StoryboardTimelineSyncTest::testAddKeyframeExtendsDuration()
     }
 
 
-    //Cleanup, finishing test..
     m_channel2->removeKeyframe(28);
+    m_channel2->removeKeyframe(26);
     m_channel1->removeKeyframe(26);
     m_channel1->removeKeyframe(25);
 
-    QVERIFY(m_channel2->keyframeCount() == 1);
-    QVERIFY(m_channel1->keyframeCount() == 1);
+    QCOMPARE(m_channel2->keyframeCount(), 1);
+    QCOMPARE(m_channel1->keyframeCount(), 1);
 
     m_storyboardModel->removeRows(0, 2);
 
@@ -142,7 +143,7 @@ void StoryboardTimelineSyncTest::testStoryboardTimelineTimeSyncronization()
 {
     //             0  1  2  3  4  5  6  7  8  9
     //  channel1  [|  .  |] [| .] .  .  .  .  .
-    //  channel2  [|  .  |] [. |] .  .  .  .  .
+    //  channel2  [|  .  |] [| |] .  .  .  .  .
 
     { //SETUP
         m_storyboardModel->insertItem(m_storyboardModel->index(0,0), true);
@@ -153,6 +154,9 @@ void StoryboardTimelineSyncTest::testStoryboardTimelineTimeSyncronization()
         m_storyboardModel->insertItem(m_storyboardModel->index(0,0), true);
         m_channel2->addKeyframe(4);
         QCOMPARE(m_storyboardModel->rowCount(), 2);
+
+        QCOMPARE(m_channel1->keyframeCount(), 3);
+        QCOMPARE(m_channel2->keyframeCount(), 4);
     }
 
 
@@ -179,6 +183,7 @@ void StoryboardTimelineSyncTest::testStoryboardTimelineTimeSyncronization()
         QCOMPARE(m_storyboardModel->rowCount(), 0);
 
         m_channel2->removeKeyframe(4);
+        m_channel2->removeKeyframe(3);
         m_channel2->removeKeyframe(2);
         m_channel1->removeKeyframe(3);
         m_channel1->removeKeyframe(2);
@@ -269,6 +274,14 @@ void StoryboardTimelineSyncTest::testDurationChange()
             }
 
             m_channel1->removeKeyframe(keyframeTime);
+        }
+
+        Q_FOREACH( const int& keyframeTime, m_channel2->allKeyframeTimes()) {
+            if (keyframeTime == 0) {
+                continue;
+            }
+
+            m_channel2->removeKeyframe(keyframeTime);
         }
 
         QCOMPARE(m_storyboardModel->rowCount(), 0);

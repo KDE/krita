@@ -32,6 +32,17 @@ private:
     qreal m_m, m_b;
 };
 
+class Threshold
+{
+public:
+    // threshold value expected to be in the range [0, 1]
+    Threshold(qreal threshold);
+    qreal operator()(qreal x) const;
+private:
+    const qreal m_threshold;
+    const bool m_thresholdIsOne;
+};
+
 }
 
 #endif

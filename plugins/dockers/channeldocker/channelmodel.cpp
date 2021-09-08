@@ -39,30 +39,33 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const
 
         int channelIndex = index.row();
 
-        switch (role) {
-        case Qt::DisplayRole: {
-            if (index.column() == 2) {
-                return channels.at(channelIndex)->name();
-            }
-            return QVariant();
-        }
-        case Qt::DecorationRole: {
-            if (index.column() == 1) {
-                Q_ASSERT(m_thumbnails.count() > index.row());
-                return QVariant(m_thumbnails.at(index.row()));
-            }
-            return QVariant();
-        }
-        case Qt::CheckStateRole: {
-            Q_ASSERT(index.row() < rowCount());
-            Q_ASSERT(index.column() < columnCount());
+        if (index.row() < m_channelCount) {
 
-            if (index.column() == 0) {
-                QBitArray flags = rootLayer->channelFlags();
-                return (flags.isEmpty() || flags.testBit(channelIndex)) ? Qt::Checked : Qt::Unchecked;
+            switch (role) {
+            case Qt::DisplayRole: {
+                if (index.column() == 2) {
+                    return channels.at(channelIndex)->name();
+                }
+                return QVariant();
             }
-            return QVariant();
-        }
+            case Qt::DecorationRole: {
+                if (index.column() == 1) {
+                    Q_ASSERT(m_thumbnails.count() > index.row());
+                    return QVariant(m_thumbnails.at(index.row()));
+                }
+                return QVariant();
+            }
+            case Qt::CheckStateRole: {
+                Q_ASSERT(index.row() < rowCount());
+                Q_ASSERT(index.column() < columnCount());
+
+                if (index.column() == 0) {
+                    QBitArray flags = rootLayer->channelFlags();
+                    return (flags.isEmpty() || flags.testBit(channelIndex)) ? Qt::Checked : Qt::Unchecked;
+                }
+                return QVariant();
+            }
+            }
         }
     }
     return QVariant();

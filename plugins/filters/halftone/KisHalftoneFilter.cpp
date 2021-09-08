@@ -641,11 +641,8 @@ KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration(KisResourcesInt
         KisFilterConfigurationSP defaultGeneratorConfiguration =
             defaultGenerator->defaultConfiguration(resourcesInterface);
         if (defaultGeneratorId == "screentone") {
-            // interpolation = 1 means "sinusoidal"
-            defaultGeneratorConfiguration->setProperty("interpolation", 0);
             defaultGeneratorConfiguration->setProperty("rotation", 45.0);
             defaultGeneratorConfiguration->setProperty("contrast", 50.0);
-            defaultGeneratorConfiguration->setProperty("shape", 0);
         }
         filterConfig->setGeneratorConfiguration("intensity_", defaultGeneratorConfiguration);
     }
@@ -679,11 +676,8 @@ KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration(KisResourcesInt
             filterConfig->setGeneratorId(i.key(), "screentone");
             KisFilterConfigurationSP defaultGeneratorConfiguration =
                 defaultGenerator->defaultConfiguration(resourcesInterface);
-            // interpolation = 1 means "sinusoidal"
-            defaultGeneratorConfiguration->setProperty("interpolation", 0);
             defaultGeneratorConfiguration->setProperty("rotation", i.value());
             defaultGeneratorConfiguration->setProperty("contrast", 50.0);
-            defaultGeneratorConfiguration->setProperty("shape", 0);
             filterConfig->setGeneratorConfiguration(i.key(), defaultGeneratorConfiguration);
         } else {
             filterConfig->setGeneratorId(i.key(), "");

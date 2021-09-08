@@ -29,8 +29,6 @@ public:
 
     QStringList filenames() const;
 
-    int dpiX() const;
-    int dpiY() const;
     bool doTemplate() const;
     bool exportAs() const;
     bool exportSequence() const;

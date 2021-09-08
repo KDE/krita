@@ -44,7 +44,7 @@ KisPropertiesConfigurationSP KisGradientMapFilterConfigWidget::configuration() c
     KisGradientMapFilterConfiguration *config = new KisGradientMapFilterConfiguration(KisGlobalResourcesInterface::instance());
     
     KoAbstractGradientSP gradient = m_ui.widgetGradientEditor->gradient();
-    if (gradient && m_view) {
+    if (gradient && m_view && m_view->canvasResourceProvider() && m_view->canvasResourceProvider()->resourceManager()) {
         KoCanvasResourcesInterfaceSP canvasResourcesInterface =
             m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
         gradient->bakeVariableColors(canvasResourcesInterface);

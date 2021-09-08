@@ -9,12 +9,13 @@
 
 #include <QPointer>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QScreen>
 #include <QStyleOption>
 #include <QStylePainter>
+#include <QWindow>
 
 #include "kis_global.h"
 #include <kis_debug.h>
@@ -195,12 +196,34 @@ void KisPopupButton::paintPopupArrow()
 
 void KisPopupButton::adjustPosition()
 {
+    // If popup is not detached, or if its detached geometry hasn't been set,
+    // we first move the popup to the "current" screen.
+    if (!m_d->isPopupDetached || !m_d->isDetachedGeometrySet) {
+        QScreen *currentScreen = [this]() {
+            QWindow *mainWinHandle = this->window()->windowHandle();
+            if (mainWinHandle) {
+                return mainWinHandle->screen();
+            }
+            return QApplication::primaryScreen();
+        }();
+        QWindow *winHandle = m_d->frame->windowHandle();
+        if (winHandle) {
+            winHandle->setScreen(currentScreen);
+        }
+    }
+
     QSize popSize = m_d->popupWidget->size();
     QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
-    // Get the available geometry of the screen which contains this KisPopupButton
-    QDesktopWidget* desktopWidget = QApplication::desktop();
-    QRect screenRect = desktopWidget->availableGeometry(this);
+    // Get the available geometry of the screen which contains the popup.
+    QScreen *screen = [this]() {
+        QWindow *winHandle = m_d->frame->windowHandle();
+        if (winHandle && winHandle->screen()) {
+            return winHandle->screen();
+        }
+        return QApplication::primaryScreen();
+    }();
+    QRect screenRect = screen->availableGeometry();
     if (m_d->isPopupDetached) {
         if (m_d->isDetachedGeometrySet) {
             popupRect.moveTo(m_d->frame->geometry().topLeft());

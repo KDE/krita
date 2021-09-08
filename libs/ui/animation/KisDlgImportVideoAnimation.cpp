@@ -77,29 +77,29 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     m_ui.prevFrameButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
     
     m_ui.fpsSpinbox->setValue(24.0);
-    m_ui.fpsSpinbox->setSuffix(" FPS");
+    m_ui.fpsSpinbox->setSuffix(i18nc("FPS as a unit following a value, like 60 FPS", " FPS"));
 
     m_ui.frameSkipSpinbox->setValue(1);
     m_ui.frameSkipSpinbox->setRange(1,20);
     
     m_ui.startExportingAtSpinbox->setValue(0.0);
     m_ui.startExportingAtSpinbox->setRange(0.0, 9999.0);
-    m_ui.startExportingAtSpinbox->setSuffix(" s");
+    m_ui.startExportingAtSpinbox->setSuffix(i18nc("Second as a unit following a value, like 60 s", " s"));
     
     m_ui.videoPreviewSlider->setTickInterval(1);
     m_ui.videoPreviewSlider->setValue(0);
     
     m_ui.exportDurationSpinbox->setValue(3.0);
-    m_ui.exportDurationSpinbox->setSuffix(" s");
+    m_ui.exportDurationSpinbox->setSuffix(i18nc("Second as a unit following a value, like 60 s", " s"));
     
     m_ui.lblWarning->hide();
 
     connect(m_ui.cmbDocumentHandler, SIGNAL(currentIndexChanged(int)), SLOT(slotDocumentHandlerChanged(int)));    
 
-    m_ui.cmbDocumentHandler->addItem("New Document", "0");
+    m_ui.cmbDocumentHandler->addItem(i18nc("Import video to New Document", "New Document"), "0");
     
     if (m_activeView && m_activeView->document()) {
-        m_ui.cmbDocumentHandler->addItem("Current Document", "1");
+        m_ui.cmbDocumentHandler->addItem(i18nc("Import video to Current Document", "Current Document"), "1");
         m_ui.cmbDocumentHandler->setCurrentIndex(1);
         m_ui.fpsDocumentLabel->setText(i18nc("Video importer: fps of the document you're importing into"
                                              , "<small>Document:\n %1 FPS</small>"
@@ -117,11 +117,11 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     m_ui.videoWidthSpinbox->setRange(1,100000);
     m_ui.videoHeightSpinbox->setRange(1,100000);
     
-    m_ui.cmbVideoScaleFilter->addItem("bicubic", "bicubic");
-    m_ui.cmbVideoScaleFilter->addItem("bilinear", "bilinear");
-    m_ui.cmbVideoScaleFilter->addItem("lanczos3", "lanczos");
-    m_ui.cmbVideoScaleFilter->addItem("neighbor", "neighbor");
-    m_ui.cmbVideoScaleFilter->addItem("spline", "spline");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Bicubic"), "bicubic");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Bilinear"), "bilinear");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Lanczos3"), "lanczos");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Nearest Neighbor"), "neighbor");
+    m_ui.cmbVideoScaleFilter->addItem(i18n("Spline"), "spline");
   
     m_ui.tabWidget->setCurrentIndex(0);
 
@@ -622,7 +622,7 @@ void KisDlgImportVideoAnimation::CurrentFrameChanged(int frame)
     if (m_currentFrame != m_ui.videoPreviewSlider->value())
         m_ui.videoPreviewSlider->setValue(m_currentFrame);
             
-    m_ui.videoPreviewSliderValueLabel->setText( QString::number(currentSeconds, 'f', 2).append(" s") );
+    m_ui.videoPreviewSliderValueLabel->setText( QString::number(currentSeconds, 'f', 2).append(i18nc("Second as a unit following a value, like 60 s", " s")) );
 }
 
 KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &inputFile)

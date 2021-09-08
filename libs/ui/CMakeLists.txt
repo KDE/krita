@@ -167,11 +167,6 @@ set(kritaui_LIB_SRCS
     KisChangeCloneLayersCommand.cpp
     KisUiFont.cpp
 
-    kisexiv2/kis_exif_io.cpp
-    kisexiv2/kis_exiv2.cpp
-    kisexiv2/kis_iptc_io.cpp
-    kisexiv2/kis_xmp_io.cpp
-
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_canvas_debugger.cpp
@@ -650,7 +645,7 @@ add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaversion kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES} LibExiv2::LibExiv2
+                      kritaversion kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES}
 )
 
 if (ANDROID)

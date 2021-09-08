@@ -31,4 +31,18 @@ qreal BrightnessContrast::operator()(qreal x) const
     return m_m * x + m_b;
 }
 
+Threshold::Threshold(qreal threshold)
+    : m_threshold(threshold)
+    , m_thresholdIsOne(qFuzzyCompare(threshold, 1.0))
+{}
+
+qreal Threshold::operator()(qreal x) const
+{
+    // In the extreme case where the threshold value is 1.0, we need to compare
+    // the value with 1.0, otherwise a value of 1.0 with a threshold of 1.0 will
+    // produce 1.0 as an output. The effect would be some white dots in an all
+    // black image, something not desirable.
+    return m_thresholdIsOne || x < m_threshold ? 0.0 : 1.0;
+}
+
 }

@@ -56,7 +56,7 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, KisTimeSpan span)
     }
     else {
         m_page->exportFileName->setMode(KoFileDialog::OpenDirectory);
-        m_page->lblExportFileName->setText("Export Directory : ");
+        m_page->lblExportFileName->setText(i18n("Export Directory: "));
     }
 
     QStringList mimeTypes;

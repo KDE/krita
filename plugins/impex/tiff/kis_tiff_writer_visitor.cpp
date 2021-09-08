@@ -6,10 +6,15 @@
 
 #include "kis_tiff_writer_visitor.h"
 
+#include <QBuffer>
+
+#include <tiff.h>
+
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
-#include <KoID.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoID.h>
+#include <kis_meta_data_backend_registry.h>
 
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR
@@ -246,6 +251,28 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         TIFFWriteScanline(image(), buff, y, (tsample_t) - 1);
     }
     _TIFFfree(buff);
+
+    {
+        // IPTC
+        KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("iptc");
+        QBuffer buf;
+        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
+
+        if (!TIFFSetField(image(), TIFFTAG_RICHTIFFIPTC, static_cast<uint32_t>(buf.size()), buf.data().data())) {
+            dbgFile << "Failed to write the IPTC metadata to the TIFF field";
+        }
+    }
+
+    {
+        // XMP
+        KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("xmp");
+        QBuffer buf;
+        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
+
+        if (!TIFFSetField(image(), TIFFTAG_XMLPACKET, static_cast<uint32_t>(buf.size()), buf.data().data())) {
+            dbgFile << "Failed to write the XMP metadata to the TIFF field";
+        }
+    }
     TIFFWriteDirectory(image());
     return true;
 }

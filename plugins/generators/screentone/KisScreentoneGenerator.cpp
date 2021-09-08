@@ -6,8 +6,6 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <utility>
-
 #include <kpluginfactory.h>
 #include <KoUpdater.h>
 #include <kis_processing_information.h>
@@ -24,20 +22,9 @@
 #include "KisScreentoneConfigWidget.h"
 #include "KisScreentoneBrightnessContrastFunctions.h"
 #include "KisScreentoneScreentoneFunctions.h"
-#include "KisScreentoneConfigDefaults.h"
-
-K_PLUGIN_FACTORY_WITH_JSON(KritaScreentoneGeneratorFactory, "KritaScreentoneGenerator.json", registerPlugin<KisScreentoneGeneratorHandle>();)
-
-KisScreentoneGeneratorHandle::KisScreentoneGeneratorHandle(QObject *parent, const QVariantList &)
-        : QObject(parent)
-{
-    KisGeneratorRegistry::instance()->add(new KisScreentoneGenerator());
-
-}
-
-KisScreentoneGeneratorHandle::~KisScreentoneGeneratorHandle()
-{
-}
+#include "KisScreentoneGeneratorFunctionSampler.h"
+#include "KisScreentoneGeneratorTemplate.h"
+#include "KisScreentoneGeneratorTemplateSampler.h"
 
 KisScreentoneGenerator::KisScreentoneGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Screentone..."))
 {
@@ -49,106 +36,234 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
                                       const KisFilterConfigurationSP config,
                                       KoUpdater *progressUpdater) const
 {
-    const KisScreentonePatternType pattern =
-        static_cast<KisScreentonePatternType>(
-            config->getInt("pattern", KisScreentoneConfigDefaults::pattern())
-        );
-    const KisScreentoneShapeType shape =
-        static_cast<KisScreentoneShapeType>(
-            config->getInt("shape", KisScreentoneConfigDefaults::shape())
-        );
-    const KisScreentoneInterpolationType interpolation =
-        static_cast<KisScreentoneInterpolationType>(
-            config->getInt("interpolation", KisScreentoneConfigDefaults::interpolation())
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
+
+    const KisScreentoneGeneratorConfigurationSP generatorConfiguration =
+        dynamic_cast<KisScreentoneGeneratorConfiguration*>(
+            const_cast<KisFilterConfiguration*>(config.data())
         );
 
-    if (pattern == KisScreentonePatternType_Dots) {
-        if (shape == KisScreentoneShapeType_RoundDots) {
-            if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::DotsRoundLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::DotsRoundSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            }
-        } else if (shape == KisScreentoneShapeType_EllipseDots) {
-            if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::DotsEllipseLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::DotsEllipseSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            }
-        } else if (shape == KisScreentoneShapeType_DiamondDots) {
-            KisScreentoneScreentoneFunctions::DotsDiamond screentoneFunction;
-            generate(dst, size, config, progressUpdater, screentoneFunction);
-        } else if (shape == KisScreentoneShapeType_SquareDots) {
-            KisScreentoneScreentoneFunctions::DotsSquare screentoneFunction;
-            generate(dst, size, config, progressUpdater, screentoneFunction);
+    return generate(dst, size, generatorConfiguration, progressUpdater);
+}
+
+void KisScreentoneGenerator::generate(KisProcessingInformation dst,
+                                      const QSize &size,
+                                      const KisScreentoneGeneratorConfigurationSP config,
+                                      KoUpdater *progressUpdater) const
+{
+    const int equalizationMode = config->equalizationMode();
+
+    if (equalizationMode == KisScreentoneEqualizationMode_TemplateBased) {
+        const KisScreentoneGeneratorTemplate &t = config->getTemplate();
+        if (config->alignToPixelGrid()) {
+            KisScreentoneGeneratorAlignedTemplateSampler<KisScreentoneGeneratorTemplate> sampler(t);
+            generate(dst, size, config, progressUpdater, sampler);
+        } else {
+            KisScreentoneGeneratorUnAlignedTemplateSampler<KisScreentoneGeneratorTemplate> sampler(t);
+            generate(dst, size, config, progressUpdater, sampler);
         }
-    } else if (pattern == KisScreentonePatternType_Lines) {
-        if (shape == KisScreentoneShapeType_StraightLines) {
-            if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesStraightLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesStraightSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+        return;
+    }
+
+    const int pattern = config->pattern();
+    const int shape = config->shape();
+    const int interpolation = config->interpolation();
+
+    {
+        using namespace KisScreentoneScreentoneFunctions;
+
+        if (pattern == KisScreentonePatternType_Dots) {
+            if (shape == KisScreentoneShapeType_RoundDots) {
+                if (interpolation == KisScreentoneInterpolationType_Linear) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<DotsRoundLinearEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<DotsRoundLinear> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<DotsRoundSinusoidalEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<DotsRoundSinusoidal> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                }
+            } else if (shape == KisScreentoneShapeType_EllipseDotsLegacy) {
+                if (interpolation == KisScreentoneInterpolationType_Linear) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<DotsEllipseLinearEqualized_Legacy> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<DotsEllipseLinear_Legacy> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<DotsEllipseSinusoidalEqualized_Legacy> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<DotsEllipseSinusoidal_Legacy> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                }
+            } else if (shape == KisScreentoneShapeType_EllipseDots) {
+                if (interpolation == KisScreentoneInterpolationType_Linear) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<DotsEllipseLinearEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<DotsEllipseLinear> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<DotsEllipseSinusoidalEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<DotsEllipseSinusoidal> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                }
+            } else if (shape == KisScreentoneShapeType_DiamondDots) {
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneGeneratorFunctionSampler<DotsDiamondEqualized> sampler(config);
+                    generate(dst, size, config, progressUpdater, sampler);
+                } else {
+                    KisScreentoneGeneratorFunctionSampler<DotsDiamond> sampler(config);
+                    generate(dst, size, config, progressUpdater, sampler);
+                }
+            } else if (shape == KisScreentoneShapeType_SquareDots) {
+                if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                    KisScreentoneGeneratorFunctionSampler<DotsSquareEqualized> sampler(config);
+                    generate(dst, size, config, progressUpdater, sampler);
+                } else {
+                    KisScreentoneGeneratorFunctionSampler<DotsSquare> sampler(config);
+                    generate(dst, size, config, progressUpdater, sampler);
+                }
             }
-        } else if (shape == KisScreentoneShapeType_SineWaveLines) {
-            if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesSineWaveLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesSineWaveSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            }
-        } else if (shape == KisScreentoneShapeType_TriangularWaveLines) {
-            if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesTriangularWaveLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesTriangularWaveSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            }
-        } else if (shape == KisScreentoneShapeType_SawtoothWaveLines) {
-            if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesSawToothWaveLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesSawToothWaveSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            }
-        } else if (shape == KisScreentoneShapeType_CurtainsLines) {
-            if (interpolation == KisScreentoneInterpolationType_Linear) {
-                KisScreentoneScreentoneFunctions::LinesCurtainsLinear screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
-            } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
-                KisScreentoneScreentoneFunctions::LinesCurtainsSinusoidal screentoneFunction;
-                generate(dst, size, config, progressUpdater, screentoneFunction);
+        } else if (pattern == KisScreentonePatternType_Lines) {
+            if (shape == KisScreentoneShapeType_StraightLines) {
+                if (interpolation == KisScreentoneInterpolationType_Linear) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesStraightLinearEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesStraightLinear> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesStraightSinusoidalEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesStraightSinusoidal> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                }
+            } else if (shape == KisScreentoneShapeType_SineWaveLines) {
+                if (interpolation == KisScreentoneInterpolationType_Linear) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesSineWaveLinearEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesSineWaveLinear> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesSineWaveSinusoidalEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesSineWaveSinusoidal> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                }
+            } else if (shape == KisScreentoneShapeType_TriangularWaveLines) {
+                if (interpolation == KisScreentoneInterpolationType_Linear) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesTriangularWaveLinearEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesTriangularWaveLinear> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesTriangularWaveSinusoidalEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesTriangularWaveSinusoidal> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                }
+            } else if (shape == KisScreentoneShapeType_SawtoothWaveLines) {
+                if (interpolation == KisScreentoneInterpolationType_Linear) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesSawToothWaveLinearEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesSawToothWaveLinear> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesSawToothWaveSinusoidalEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesSawToothWaveSinusoidal> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                }
+            } else if (shape == KisScreentoneShapeType_CurtainsLines) {
+                if (interpolation == KisScreentoneInterpolationType_Linear) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesCurtainsLinearEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesCurtainsLinear> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                } else if (interpolation == KisScreentoneInterpolationType_Sinusoidal) {
+                    if (equalizationMode == KisScreentoneEqualizationMode_FunctionBased) {
+                        KisScreentoneGeneratorFunctionSampler<LinesCurtainsSinusoidalEqualized> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    } else {
+                        KisScreentoneGeneratorFunctionSampler<LinesCurtainsSinusoidal> sampler(config);
+                        generate(dst, size, config, progressUpdater, sampler);
+                    }
+                }
             }
         }
     }
 }
 
-template <class ScreentoneFunction>
+template <class Sampler>
 void KisScreentoneGenerator::generate(KisProcessingInformation dst,
                                       const QSize &size,
-                                      const KisFilterConfigurationSP config,
+                                      const KisScreentoneGeneratorConfigurationSP config,
                                       KoUpdater *progressUpdater,
-                                      const ScreentoneFunction &screentoneFunction) const
+                                      const Sampler &sampler) const
 {
-    const qreal brightness = config->getDouble("brightness", KisScreentoneConfigDefaults::brightness()) / 50. - 1.0;
-    const qreal contrast = config->getDouble("contrast", KisScreentoneConfigDefaults::contrast()) / 50. - 1.0;
+    const qreal contrast = config->contrast() / 50.0 - 1.0;
+    const bool useThresholdFunction = qFuzzyCompare(contrast, 1.0);
 
-    const bool bypassBrightnessContrast = qFuzzyIsNull(brightness) && qFuzzyIsNull(contrast);
-
-    if (bypassBrightnessContrast) {
-        KisScreentoneBrightnessContrastFunctions::Identity brightnessContrastFunction;
-        generate(dst, size, config, progressUpdater, screentoneFunction, brightnessContrastFunction);
+    if (useThresholdFunction) {
+        const qreal brightness = config->brightness() / 100.0;
+        KisScreentoneBrightnessContrastFunctions::Threshold thresholdFunction(1.0 - brightness);
+        generate(dst, size, config, progressUpdater, sampler, thresholdFunction);
     } else {
-        KisScreentoneBrightnessContrastFunctions::BrightnessContrast brightnessContrastFunction(brightness, contrast);
-        generate(dst, size, config, progressUpdater, screentoneFunction, brightnessContrastFunction);
+        const qreal brightness = config->brightness() / 50.0 - 1.0;
+        const bool bypassBrightnessContrast = qFuzzyIsNull(brightness) && qFuzzyIsNull(contrast);
+        if (bypassBrightnessContrast) {
+            KisScreentoneBrightnessContrastFunctions::Identity brightnessContrastFunction;
+            generate(dst, size, config, progressUpdater, sampler, brightnessContrastFunction);
+        } else {
+            KisScreentoneBrightnessContrastFunctions::BrightnessContrast brightnessContrastFunction(brightness, contrast);
+            generate(dst, size, config, progressUpdater, sampler, brightnessContrastFunction);
+        }
     }
 }
 
@@ -168,13 +283,13 @@ bool KisScreentoneGenerator::checkUpdaterInterruptedAndSetPercent(KoUpdater *pro
     return false;
 }
 
-template <class ScreentoneFunction, class BrightnessContrastFunction>
+template <class Sampler, class PostprocessingFunction>
 void KisScreentoneGenerator::generate(KisProcessingInformation dst,
                                       const QSize &size,
-                                      const KisFilterConfigurationSP config,
+                                      const KisScreentoneGeneratorConfigurationSP config,
                                       KoUpdater *progressUpdater,
-                                      const ScreentoneFunction &screentoneFunction,
-                                      const BrightnessContrastFunction &brightnessContrastFunction) const
+                                      const Sampler &sampler,
+                                      const PostprocessingFunction &postprocessingFunction) const
 {
     KisPaintDeviceSP device = dst.paintDevice();
     Q_ASSERT(!device.isNull());
@@ -190,25 +305,10 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
         colorSpace = device->colorSpace();
     }
     
-    const qreal positionX = config->getDouble("position_x", KisScreentoneConfigDefaults::positionX());
-    const qreal positionY = config->getDouble("position_y", KisScreentoneConfigDefaults::positionY());
-    const bool kepSizeSquare = config->getBool("keep_size_square", KisScreentoneConfigDefaults::keepSizeSquare());
-    const qreal sizeX = config->getDouble("size_x", KisScreentoneConfigDefaults::sizeX());
-    // Ensure that the size y component is equal to the x component if keepSizeSquare is true
-    const qreal sizeY = kepSizeSquare ? sizeX : config->getDouble("size_y", KisScreentoneConfigDefaults::sizeY());
-    const qreal shearX = config->getDouble("shear_x", KisScreentoneConfigDefaults::shearX());
-    const qreal shearY = config->getDouble("shear_y", KisScreentoneConfigDefaults::shearY());
-    const qreal rotation = config->getDouble("rotation", KisScreentoneConfigDefaults::rotation());
-    QTransform t;
-    t.shear(shearX, shearY);
-    t.scale(qIsNull(sizeX) ? 0.0 : 1.0 / sizeX, qIsNull(sizeY) ? 0.0 : 1.0 / sizeY);
-    t.rotate(rotation);
-    t.translate(positionX, positionY);
-
-    KoColor foregroundColor = config->getColor("foreground_color", KisScreentoneConfigDefaults::foregroundColor());
-    KoColor backgroundColor = config->getColor("background_color", KisScreentoneConfigDefaults::backgroundColor());
-    qreal foregroundOpacity = config->getInt("foreground_opacity", KisScreentoneConfigDefaults::foregroundOpacity()) / 100.0;
-    qreal backgroundOpacity = config->getInt("background_opacity", KisScreentoneConfigDefaults::backgroundOpacity()) / 100.0;
+    KoColor foregroundColor = config->foregroundColor();
+    KoColor backgroundColor = config->backgroundColor();
+    qreal foregroundOpacity = config->foregroundOpacity() / 100.0;
+    qreal backgroundOpacity = config->backgroundOpacity() / 100.0;
     foregroundColor.convertTo(colorSpace);
     backgroundColor.convertTo(colorSpace);
     foregroundColor.setOpacity(foregroundOpacity);
@@ -230,20 +330,16 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
     KisSelectionSP selection = new KisSelection(device->defaultBounds());
     KisSequentialIterator it(selection->pixelSelection(), bounds);
 
-    if (!config->getBool("invert", KisScreentoneConfigDefaults::invert())) {
+    if (!config->invert()) {
         while (it.nextPixel()) {
-            qreal x, y;
-            t.map(it.x(), it.y(), &x, &y);
-
-            qreal v = qBound(0.0, brightnessContrastFunction(screentoneFunction(x, y)), 1.0);
+            qreal v = std::round(sampler(it.x(), it.y()) * 10000.0) / 10000.0;
+            v = qBound(0.0, postprocessingFunction(v), 1.0);
             *it.rawData() = 255 - static_cast<quint8>(qRound(v * 255.0));
         }
     } else {
         while (it.nextPixel()) {
-            qreal x, y;
-            t.map(it.x(), it.y(), &x, &y);
-
-            qreal v = qBound(0.0, brightnessContrastFunction(screentoneFunction(x, y)), 1.0);
+            qreal v = std::round(sampler(it.x(), it.y()) * 10000.0) / 10000.0;
+            v = qBound(0.0, postprocessingFunction(v), 1.0);
             *it.rawData() = static_cast<quint8>(qRound(v * 255.0));
         }
     }
@@ -262,30 +358,16 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
     checkUpdaterInterruptedAndSetPercent(progressUpdater, 100);
 }
 
+KisFilterConfigurationSP KisScreentoneGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+{
+    return new KisScreentoneGeneratorConfiguration(resourcesInterface);
+}
+
 KisFilterConfigurationSP KisScreentoneGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
-    QVariant v;
-    config->setProperty("pattern", KisScreentoneConfigDefaults::pattern());
-    config->setProperty("shape", KisScreentoneConfigDefaults::shape());
-    config->setProperty("interpolation", KisScreentoneConfigDefaults::interpolation());
-    v.setValue(KisScreentoneConfigDefaults::foregroundColor());
-    config->setProperty("foreground_color", v);
-    config->setProperty("foreground_opacity", KisScreentoneConfigDefaults::foregroundOpacity());
-    v.setValue(KisScreentoneConfigDefaults::backgroundColor());
-    config->setProperty("background_color", v);
-    config->setProperty("background_opacity", KisScreentoneConfigDefaults::backgroundOpacity());
-    config->setProperty("invert", KisScreentoneConfigDefaults::invert());
-    config->setProperty("brightness", KisScreentoneConfigDefaults::brightness());
-    config->setProperty("contrast", KisScreentoneConfigDefaults::contrast());
-    config->setProperty("position_x", KisScreentoneConfigDefaults::positionX());
-    config->setProperty("position_y", KisScreentoneConfigDefaults::positionY());
-    config->setProperty("size_x", KisScreentoneConfigDefaults::sizeX());
-    config->setProperty("size_y", KisScreentoneConfigDefaults::sizeY());
-    config->setProperty("keep_size_square", KisScreentoneConfigDefaults::keepSizeSquare());
-    config->setProperty("shear_x", KisScreentoneConfigDefaults::shearX());
-    config->setProperty("shear_y", KisScreentoneConfigDefaults::shearY());
-    config->setProperty("rotation", KisScreentoneConfigDefaults::rotation());
+    KisScreentoneGeneratorConfigurationSP config = 
+        dynamic_cast<KisScreentoneGeneratorConfiguration*>(factoryConfiguration(resourcesInterface).data());
+    config->setDefaults();
     return config;
 }
 
@@ -294,6 +376,3 @@ KisConfigWidget * KisScreentoneGenerator::createConfigurationWidget(QWidget* par
     Q_UNUSED(dev);
     return new KisScreentoneConfigWidget(parent);
 }
-
-#include "KisScreentoneGenerator.moc"
-

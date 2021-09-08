@@ -30,10 +30,10 @@
 #include <kis_node.h>
 #include <kis_group_layer.h>
 
+#include <kis_meta_data_backend_registry.h>
 #include <kis_meta_data_entry.h>
-#include <kis_meta_data_value.h>
 #include <kis_meta_data_store.h>
-#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_value.h>
 
 #include "kis_iterator_ng.h"
 
@@ -458,12 +458,13 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
               size_t skip = ((exif_data[0]<<24) | (exif_data[1]<<16) | (exif_data[2]<<8) | exif_data[3]) + 4;
 
               if (exif_data.size()>skip) {
-                KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+                  KisMetaData::IOBackend *exifIO = KisMetadataBackendRegistry::instance()->value("exif");
 
-                // Copy the exif data into the byte array
-                QByteArray ba(reinterpret_cast<char *>(exif_data.data()+skip), static_cast<int>(exif_data.size()-skip));
-                QBuffer buf(&ba);
-                exifIO->loadFrom(layer->metaData(), &buf);
+                  // Copy the exif data into the byte array
+                  QByteArray ba(reinterpret_cast<char *>(exif_data.data() + skip),
+                                static_cast<int>(exif_data.size() - skip));
+                  QBuffer buf(&ba);
+                  exifIO->loadFrom(layer->metaData(), &buf);
               }
             }
           }
@@ -474,7 +475,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
             std::vector<uint8_t> xmp_data = handle.get_metadata(id);
 
-            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            KisMetaData::IOBackend *xmpIO = KisMetadataBackendRegistry::instance()->value("xmp");
 
             // Copy the xmp data into the byte array
             QByteArray ba(reinterpret_cast<char *>(xmp_data.data()), static_cast<int>(xmp_data.size()));

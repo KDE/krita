@@ -1,0 +1,7 @@
+{
+    "Id" : "IPTC",
+    "Type" : "Service",
+    "X-KDE-Library" : "kritaiptc",
+    "X-KDE-ServiceTypes" : ["Krita/Metadata"],
+    "X-Krita-Version" : "28"
+}

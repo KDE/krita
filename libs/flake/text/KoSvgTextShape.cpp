@@ -569,7 +569,7 @@ bool KoSvgTextShape::isRootTextNode() const
 }
 
 KoSvgTextShapeFactory::KoSvgTextShapeFactory()
-    : KoShapeFactoryBase(KoSvgTextShape_SHAPEID, i18n("Text"))
+    : KoShapeFactoryBase(KoSvgTextShape_SHAPEID, i18nc("Text label in SVG Text Tool", "Text"))
 {
     setToolTip(i18n("SVG Text Shape"));
     setIconName(koIconNameCStr("x-shape-text"));

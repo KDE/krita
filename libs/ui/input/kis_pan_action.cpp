@@ -24,12 +24,13 @@ class KisPanAction::Private
 public:
     Private() : panDistance(10) { }
 
-        QPointF averagePoint( QTouchEvent* event );
+    QPointF averagePoint( QTouchEvent* event, int *outCount = nullptr );
 
     const int panDistance;
 
     QPointF lastPosition;
     QPointF originalPreferredCenter;
+    int touchPointsCount { 0 };
 };
 
 KisPanAction::KisPanAction()
@@ -80,7 +81,7 @@ void KisPanAction::begin(int shortcut, QEvent *event)
         case PanModeShortcut: {
             QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
             if (tevent) {
-                d->lastPosition = d->averagePoint(tevent);
+                d->lastPosition = d->averagePoint(tevent, &d->touchPointsCount);
                 break;
             }
 
@@ -135,15 +136,19 @@ void KisPanAction::inputEvent(QEvent *event)
         }
         case QEvent::TouchUpdate: {
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-            QPointF newPos = d->averagePoint(tevent);
-            QPointF delta = newPos - d->lastPosition;
-            // If this is enormously large, then we are likely in the process of ending the gesture,
-            // with fingers being lifted one by one from the perspective of our very speedy operations,
-            // and as such, ignore those big jumps.
-            if(delta.manhattanLength() < 50) {
+            int newTouchPointsCount;
+            QPointF newPos = d->averagePoint(tevent, &newTouchPointsCount);
+            // When the number of touch points have changed, the average point
+            // of the touch points will produce a huge jump which we don't want
+            // to happen when panning. This can happen when ending a 3-finger
+            // pan gesture. So we only pan the canvas if the number of touch
+            // points have not changed.
+            if (newTouchPointsCount == d->touchPointsCount) {
+                QPointF delta = newPos - d->lastPosition;
                 inputManager()->canvas()->canvasController()->pan(-delta.toPoint());
-                d->lastPosition = newPos;
             }
+            d->lastPosition = newPos;
+            d->touchPointsCount = newTouchPointsCount;
             return;
         }
         default:
@@ -157,7 +162,7 @@ void KisPanAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &p
     inputManager()->canvas()->canvasController()->setPreferredCenter(-pos + startPos + d->originalPreferredCenter);
 }
 
-QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
+QPointF KisPanAction::Private::averagePoint( QTouchEvent* event, int *outCount )
 {
     QPointF result;
     int count = 0;
@@ -167,6 +172,10 @@ QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
             result += point.screenPos();
             count++;
         }
+    }
+
+    if (outCount) {
+        *outCount = count;
     }
 
     if( count > 0 ) {

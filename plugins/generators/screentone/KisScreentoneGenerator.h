@@ -12,15 +12,9 @@
 #include <QObject>
 #include "generator/kis_generator.h"
 
-class KisConfigWidget;
+#include "KisScreentoneGeneratorConfiguration.h"
 
-class KisScreentoneGeneratorHandle : public QObject
-{
-    Q_OBJECT
-public:
-    KisScreentoneGeneratorHandle(QObject *parent, const QVariantList &);
-    ~KisScreentoneGeneratorHandle() override;
-};
+class KisConfigWidget;
 
 class KisScreentoneGenerator : public KisGenerator
 {
@@ -33,26 +27,32 @@ public:
                           const QSize& size,
                           const KisFilterConfigurationSP config,
                           KoUpdater* progressUpdater) const override;
+
+    void generate(KisProcessingInformation dst,
+                  const QSize& size,
+                  const KisScreentoneGeneratorConfigurationSP config,
+                  KoUpdater* progressUpdater) const;
     
-    template <class ScreentoneFunction>
+    template <class Sampler>
     void generate(KisProcessingInformation dst,
                   const QSize &size,
-                  const KisFilterConfigurationSP config,
+                  const KisScreentoneGeneratorConfigurationSP config,
                   KoUpdater *progressUpdater,
-                  const ScreentoneFunction &screentoneFunction) const;
+                  const Sampler &sampler) const;
     
-    template <class ScreentoneFunction, class BrightnessContrastFunction>
+    template <class Sampler, class PostprocessingFunction>
     void generate(KisProcessingInformation dst,
                   const QSize &size,
-                  const KisFilterConfigurationSP config,
+                  const KisScreentoneGeneratorConfigurationSP config,
                   KoUpdater *progressUpdater,
-                  const ScreentoneFunction &screentoneFunction,
-                  const BrightnessContrastFunction &brightnessContrastFunction) const;
+                  const Sampler &sampler,
+                  const PostprocessingFunction &postprocessingFunction) const;
 
     static inline KoID id() {
-        return KoID("screentone", i18n("Screentone"));
+        return KoID(KisScreentoneGeneratorConfiguration::defaultName(), i18n("Screentone"));
     }
 
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
     KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 

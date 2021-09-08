@@ -15,6 +15,7 @@
 
 #include "ui_KisScreentoneConfigWidget.h"
 
+class KisViewManager;
 class Ui_WdgScreentoneOptions;
 
 class KisScreentoneConfigWidget : public KisConfigWidget
@@ -23,25 +24,52 @@ class KisScreentoneConfigWidget : public KisConfigWidget
 public:
     KisScreentoneConfigWidget(QWidget* parent = 0, const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8());
     ~KisScreentoneConfigWidget() override;
-public:
+
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
 
+    void setView(KisViewManager *view) override;
+
 private:
+    constexpr static qreal minimumCellSize{1.0};
+    constexpr static qreal maximumCellSize{1000.0};
+
     Ui_ScreentoneConfigWidget m_ui;
+    KisViewManager *m_view;
     const KoColorSpace *m_colorSpace;
+    QString m_lastSelectedInterpolationText;
 
     void setupPatternComboBox();
     void setupShapeComboBox();
     void setupInterpolationComboBox();
 
+    int shapeToComboIndex(int pattern, int shape) const;
+    int comboIndexToShape(int patterIndex, int shapeIndex) const;
+
+    void setSliderAlignToPixelGridXText();
+    void setSliderAlignToPixelGridYText();
+
 private Q_SLOTS:
     void slot_comboBoxPattern_currentIndexChanged(int);
     void slot_comboBoxShape_currentIndexChanged(int);
+    
+    void slot_buttonSizeModeResolutionBased_toggled(bool checked);
+    void slot_buttonSizeModePixelBased_toggled(bool checked);
+    void slot_comboBoxUnits_currentIndexChanged(int index);
+    void slot_buttonResolutionFromImage_clicked();
+    void slot_sliderResolution_valueChanged(qreal value);
+    void slot_sliderFrequencyX_valueChanged(qreal value);
+    void slot_sliderFrequencyY_valueChanged(qreal value);
+    void slot_buttonConstrainFrequency_keepAspectRatioChanged(bool keep);
     void slot_sliderSizeX_valueChanged(qreal value);
     void slot_sliderSizeY_valueChanged(qreal value);
-    void slot_buttonKeepSizeSquare_keepAspectRatioChanged(bool keep);
+    void slot_buttonConstrainSize_keepAspectRatioChanged(bool keep);
+    void slot_sliderAlignToPixelGridX_valueChanged(int value);
+    void slot_sliderAlignToPixelGridY_valueChanged(int value);
 
+    void slot_setFrequencySlidersRanges();
+    void slot_setSizeFromFrequency();
+    void slot_setFrequencyFromSize();
 };
 
 #endif

@@ -124,13 +124,17 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
 
-    QRectF local = getLocalRect();
 
     QTransform initialTransform = converter->documentToWidgetTransform();
+    QRectF local = getLocalRect();
+    QRectF localTransformed = initialTransform.mapRect(local);
+    const QRect viewport= gc.viewport();
+    QPolygonF viewportAndLocal = !localTransformed.isEmpty() ? QPolygonF(QRectF(viewport)).intersected(localTransformed) : QRectF(viewport);
+
+
 
     if (isLocal() && isAssistantComplete()) {
         QPainterPath path;
-        QRectF local = getLocalRect();
         // note: be careful; bottom and right only work with RectF, not Rect
         path.moveTo(initialTransform.map(local.topLeft()));
 
@@ -144,28 +148,23 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 
     if (isAssistantComplete() && isSnappingActive() && previewVisible==true) {
         //don't draw if invalid.
+        QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
 
-        if (!isLocal() || local.contains(mousePos)) {
-
-            QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
-
-            if (m_followBrushPosition && m_adjustedPositionValid) {
-                mousePos = initialTransform.map(m_adjustedBrushPosition);
-            }
-
-            QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
-            snapLine= snapLine.translated(translation);
-
-            QRect viewport= gc.viewport();
-            KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
-
-
-            QPainterPath path;
-            path.moveTo(snapLine.p1());
-            path.lineTo(snapLine.p2());
-
-            drawPreview(gc, path);//and we draw the preview.
+        if (m_followBrushPosition && m_adjustedPositionValid) {
+            mousePos = initialTransform.map(m_adjustedBrushPosition);
         }
+
+        QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
+        snapLine= snapLine.translated(translation);
+
+        KisAlgebra2D::cropLineToConvexPolygon(snapLine, viewportAndLocal, true, true);
+
+
+        QPainterPath path;
+        path.moveTo(snapLine.p1());
+        path.lineTo(snapLine.p2());
+
+        drawPreview(gc, path);//and we draw the preview.
     }
     gc.restore();
 

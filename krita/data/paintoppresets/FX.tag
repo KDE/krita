@@ -37,6 +37,7 @@ Comment[hi]=विशेष इफेक्ट.kpp
 Comment[it]=Effetti speciali .kpp
 Comment[ko]=특수 효과.kpp
 Comment[nl]=Speciale Effects.kpp
+Comment[nn]=Spesialeffektar
 Comment[pl]=Efekty specjalne.kpp
 Comment[pt]=Efeitos Especiais.kpp
 Comment[pt_BR]=Special Effects.kpp

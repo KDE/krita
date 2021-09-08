@@ -36,21 +36,21 @@ extern "C" {
 #include <KoUnit.h>
 #include "KoColorModelStandardIds.h"
 
-#include <kis_painter.h>
 #include <KisDocument.h>
-#include <kis_image.h>
-#include <kis_paint_layer.h>
-#include <kis_transaction.h>
 #include <kis_group_layer.h>
-#include <kis_meta_data_entry.h>
-#include <kis_meta_data_value.h>
-#include <kis_meta_data_store.h>
-#include <kis_meta_data_io_backend.h>
-#include <kis_paint_device.h>
-#include <kis_transform_worker.h>
-#include <kis_jpeg_source.h>
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
 #include <kis_jpeg_destination.h>
-#include "kis_iterator_ng.h"
+#include <kis_jpeg_source.h>
+#include <kis_meta_data_backend_registry.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_value.h>
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_painter.h>
+#include <kis_transaction.h>
+#include <kis_transform_worker.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
@@ -311,7 +311,7 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
                 continue; /* no Exif header */
 
             dbgFile << "Found exif information of length :" << marker->data_length;
-            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            KisMetaData::IOBackend *exifIO = KisMetadataBackendRegistry::instance()->value("exif");
             Q_ASSERT(exifIO);
             QByteArray byteArray((const char*)marker->data + 6, marker->data_length - 6);
             QBuffer buf(&byteArray);
@@ -369,7 +369,7 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
             }
 
             dbgFile << "Found Photoshop information of length :" << marker->data_length;
-            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+            KisMetaData::IOBackend *iptcIO = KisMetadataBackendRegistry::instance()->value("iptc");
             Q_ASSERT(iptcIO);
             const Exiv2::byte *record = 0;
             uint32_t sizeIptc = 0;
@@ -402,7 +402,7 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
             }
             dbgFile << "Found XMP Marker of length " << marker->data_length;
             QByteArray byteArray((const char*)marker->data + 29, marker->data_length - 29);
-            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            KisMetaData::IOBackend *xmpIO = KisMetadataBackendRegistry::instance()->value("xmp");
             Q_ASSERT(xmpIO);
             xmpIO->loadFrom(layer->metaData(), new QBuffer(&byteArray));
             break;
@@ -562,7 +562,7 @@ KisImportExportErrorCode KisJPEGConverter::buildFile(QIODevice *io, KisPaintLaye
             if (options.exif) {
                 dbgFile << "Trying to save exif information";
 
-                KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+                KisMetaData::IOBackend *exifIO = KisMetadataBackendRegistry::instance()->value("exif");
                 Q_ASSERT(exifIO);
 
                 QBuffer buffer;
@@ -579,7 +579,7 @@ KisImportExportErrorCode KisJPEGConverter::buildFile(QIODevice *io, KisPaintLaye
             // Save IPTC
             if (options.iptc) {
                 dbgFile << "Trying to save exif information";
-                KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+                KisMetaData::IOBackend *iptcIO = KisMetadataBackendRegistry::instance()->value("iptc");
                 Q_ASSERT(iptcIO);
 
                 QBuffer buffer;
@@ -596,7 +596,7 @@ KisImportExportErrorCode KisJPEGConverter::buildFile(QIODevice *io, KisPaintLaye
             // Save XMP
             if (options.xmp) {
                 dbgFile << "Trying to save XMP information";
-                KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+                KisMetaData::IOBackend *xmpIO = KisMetadataBackendRegistry::instance()->value("xmp");
                 Q_ASSERT(xmpIO);
 
                 QBuffer buffer;

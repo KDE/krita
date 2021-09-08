@@ -208,6 +208,7 @@ public:
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
         mdiArea->setDocumentMode(true);
+        mdiArea->setOption(QMdiArea::DontMaximizeSubWindowOnActivation);
 
         commandBar = new KateCommandBar(parent);
     }
@@ -738,7 +739,12 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
         imageView->slotLoadingFinished();
 
         if (!subwin) {
+            QMdiSubWindow *currentSubWin = d->mdiArea->currentSubWindow();
+            bool shouldMaximize = currentSubWin ? currentSubWin->isMaximized() : true;
             subwin = d->mdiArea->addSubWindow(imageView);
+            if (shouldMaximize) {
+                subwin->setWindowState(Qt::WindowMaximized);
+            }
         } else {
             subwin->setWidget(imageView);
         }
@@ -2711,6 +2717,9 @@ void KisMainWindow::configChanged()
     Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
+        if (viewMode == QMdiArea::TabbedView) {
+            subwin->setWindowState(Qt::WindowMaximized);
+        }
 
         /**
          * Dirty workaround for a bug in Qt (checked on Qt 5.6.1):

@@ -1,0 +1,9 @@
+{
+    "Id": "EXIF",
+    "Type": "Service",
+    "X-KDE-Library": "kritaexif",
+    "X-KDE-ServiceTypes": [
+        "Krita/Metadata"
+    ],
+    "X-Krita-Version": "28"
+}

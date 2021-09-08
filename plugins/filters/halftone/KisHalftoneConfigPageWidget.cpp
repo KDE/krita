@@ -162,6 +162,10 @@ void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisF
             } else {
                 KisFilterConfigurationSP generatorConfig =
                     generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
+                if (generatorId == "screentone") {
+                    generatorConfig->setProperty("rotation", 45.0);
+                    generatorConfig->setProperty("contrast", 50.0);
+                }
                 generatorWidget->setConfiguration(generatorConfig);
             }
             m_generatorWidget = generatorWidget;

@@ -344,7 +344,6 @@ void StoryboardDockerDock::slotExportAsSvg()
 
 void StoryboardDockerDock::slotExport(ExportFormat format)
 {
-    KisTimeSpan span = m_canvas->image()->animationInterface()->fullClipRange();
     QFileInfo fileInfo(m_canvas->imageView()->document()->path());
     const QString imageFileName = fileInfo.baseName();
     DlgExportStoryboard dlg(format);
@@ -408,14 +407,15 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 generator.setSize(sz);
                 generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
                 generator.setResolution(printer.resolution());
-
                 p.begin(&generator);
+                p.setBrush(QBrush(QColorConstants::White));
+                p.drawRect(QRect(0,0, sz.width(), sz.height()));
             }
             else {
                 printer.setOutputFileName(dlg.saveFileName());
                 printer.setOutputFormat(QPrinter::PdfFormat);
-
                 p.begin(&printer);
+                p.setBackgroundMode(Qt::BGMode::OpaqueMode);
             }
 
             QFont font = p.font();

@@ -6,11 +6,11 @@
 
 #include "opengl/kis_opengl_image_textures.h"
 
-#ifdef HAS_ONLY_OPENGL_ES
+#ifdef QT_OPENGL_ES_2
 #include <qopengl.h>
 #endif
 
-#ifndef HAS_ONLY_OPENGL_ES
+#ifndef QT_OPENGL_ES_2
 #include <QOpenGLFunctions>
 #endif
 #include <QOpenGLContext>
@@ -489,7 +489,7 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         texturesInfo.internalFormat = GL_RGBA16F;
         dbgUI << "Using half (GLES or GL3)";
     } else if (ctx->hasExtension("GL_ARB_texture_float")) {
-#ifndef HAS_ONLY_OPENGL_ES
+#ifndef QT_OPENGL_ES_2
         texturesInfo.internalFormat = GL_RGBA16F_ARB;
         dbgUI << "Using ARB half";
     }
@@ -513,7 +513,7 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half (GLES or GL3)";
     } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
-#ifndef HAS_ONLY_OPENGL_ES
+#ifndef QT_OPENGL_ES_2
         texturesInfo.type = GL_HALF_FLOAT_ARB;
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half";
@@ -537,7 +537,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (!(m_image && ctx)) return;
 
     if (!KisOpenGL::hasOpenGLES()) {
-#ifndef HAS_ONLY_OPENGL_ES
+#ifndef QT_OPENGL_ES_2
         m_texturesInfo.internalFormat = GL_RGBA8;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA;
@@ -546,7 +546,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
     } else {
-#ifdef HAS_ONLY_OPENGL_ES
+#ifdef QT_OPENGL_ES_2
         m_texturesInfo.internalFormat = GL_RGBA8;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_RGBA;
@@ -582,7 +582,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 m_texturesInfo.internalFormat = GL_RGBA32F;
                 dbgUI << "Using float (GLES or GL3)";
             } else if (ctx->hasExtension("GL_ARB_texture_float")) {
-#ifndef HAS_ONLY_OPENGL_ES
+#ifndef QT_OPENGL_ES_2
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
             } else if (ctx->hasExtension("GL_ATI_texture_float")) {
@@ -600,7 +600,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             destinationColorDepthId = Float32BitsColorDepthID;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
-#ifndef HAS_ONLY_OPENGL_ES
+#ifndef QT_OPENGL_ES_2
             if (!KisOpenGL::hasOpenGLES()) {
                 m_texturesInfo.internalFormat = GL_RGBA16;
                 m_texturesInfo.type = GL_UNSIGNED_SHORT;
@@ -615,7 +615,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
     else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
         if (colorDepthId == Integer16BitsColorDepthID && !KisOpenGL::hasOpenGLES()) {
-#ifndef HAS_ONLY_OPENGL_ES
+#ifndef QT_OPENGL_ES_2
             m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
             m_texturesInfo.format = GL_BGRA;

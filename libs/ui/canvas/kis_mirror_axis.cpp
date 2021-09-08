@@ -9,7 +9,8 @@
 
 #include "KoConfig.h"
 
-#ifdef HAS_ONLY_OPENGL_ES
+#ifdef QT_OPENGL_ES_2
+// FIXME: Do we need to check for GL_EXT_multisample_compatibility when using this?
 #define GL_MULTISAMPLE 0x809D
 #endif
 

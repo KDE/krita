@@ -297,12 +297,12 @@ DlgImageSize::~DlgImageSize()
 
 qint32 DlgImageSize::desiredWidth()
 {
-    return int(m_page->pixelWidthDouble->value());
+    return qRound(m_page->pixelWidthDouble->value());
 }
 
 qint32 DlgImageSize::desiredHeight()
 {
-    return int(m_page->pixelHeightDouble->value());
+    return qRound(m_page->pixelHeightDouble->value());
 }
 
 double DlgImageSize::desiredResolution()

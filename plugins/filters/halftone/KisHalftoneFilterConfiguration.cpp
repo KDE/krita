@@ -19,9 +19,8 @@ KisHalftoneFilterConfiguration::KisHalftoneFilterConfiguration(const QString & n
 
 KisHalftoneFilterConfiguration::KisHalftoneFilterConfiguration(const KisHalftoneFilterConfiguration &rhs)
     : KisFilterConfiguration(rhs)
-    , m_generatorConfigurationsCache(rhs.m_generatorConfigurationsCache)
 {
-    QHashIterator<QString, KisFilterConfigurationSP> it(m_generatorConfigurationsCache);
+    QHashIterator<QString, KisFilterConfigurationSP> it(rhs.m_generatorConfigurationsCache);
     while (it.hasNext()) {
         it.next();
         m_generatorConfigurationsCache[it.key()] = it.value()->clone();
@@ -40,7 +39,6 @@ void KisHalftoneFilterConfiguration::setResourcesInterface(KisResourcesInterface
 {
     KisFilterConfiguration::setResourcesInterface(resourcesInterface);
 
-    // Here we just clone the required generator configurations
     if (mode() == HalftoneMode_IndependentChannels) {
         const QString prefix = colorModelId() + "_channel";
         for (int i = 0; i < 4; ++i) {

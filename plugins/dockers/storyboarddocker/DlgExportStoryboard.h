@@ -58,11 +58,14 @@ public:
     QString layoutSvgFile() const;
     QString saveFileName() const;
     ExportFormat format() const;
+    ExportLayout exportLayout() const;
     int fontSize() const;
+    void setUsableMaximums(QPageSize pPageSize, QPageLayout::Orientation pOrientation, ExportLayout pLayout );
 
 private Q_SLOTS:
     void slotExportClicked();
     void slotLayoutChanged(int state);
+    void slotPageSettingsChanged(int);
 
 private:
     WdgExportStoryboard *m_page {0};

@@ -14,6 +14,7 @@
 #include <kis_mainwindow_observer.h>
 #include <kis_canvas2.h>
 #include <kis_action.h>
+#include "DlgExportStoryboard.h"
 
 class Ui_WdgStoryboardDock;
 class CommentMenu;
@@ -22,9 +23,7 @@ class StoryboardCommentModel;
 class StoryboardModel;
 class StoryboardDelegate;
 class KisNodeManager;
-class DlgExportStoryboard;
 class QPrinter;
-enum ExportFormat : unsigned int;
 
 class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
     Q_OBJECT

@@ -13,7 +13,7 @@
 #include <QSpinBox>
 #include <QMessageBox>
 
-DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, KisTimeSpan span)
+DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
         : KoDialog()
         , m_format(format)
 {
@@ -28,112 +28,104 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, KisTimeSpan span)
     setDefaultButton(Apply);
 
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotExportClicked()));
-    connect(m_page->chkUseSVGLayout, SIGNAL(stateChanged(int)), this, SLOT(slotChkUseSvgLayoutChanged(int)));
-
-    m_page->spinboxRow->setMinimum(1);
-    m_page->spinboxColumn->setMinimum(1);
+    connect(m_page->boardLayoutComboBox, SIGNAL(activated(int)), this, SLOT(slotLayoutChanged(int)));
 
     KisConfig cfg(true);
-    m_page->spinboxFirstItem->setValue(span.start());
-    m_page->spinboxLastItem->setValue(span.end());
-    m_page->spinboxRow->setValue(cfg.readEntry<int>("storyboard/rows", 3));
-    m_page->spinboxColumn->setValue(cfg.readEntry<int>("storyboard/columns", 3));
-    m_page->spinboxFontSize->setValue(cfg.readEntry<int>("storyboard/fontSize", 15));
-    m_page->svgLayoutFileName->setFileName(cfg.readEntry<QString>("storyboard/svgLayoutFileName", ""));
-    m_page->svgFileBaseName->setText(cfg.readEntry<QString>("storyboard/svgFileBaseName", ""));
-    m_page->chkUseSVGLayout->setChecked(cfg.readEntry<bool>("storyboard/chkUseSVGLayout", false));
-    m_page->exportFileName->setFileName(cfg.readEntry<QString>("storyboard/exportFileName", ""));
+    m_page->boardLayoutComboBox->setCurrentIndex(cfg.readEntry<int>("storyboard/layoutType", ExportLayout::ROWS));
+    m_page->pageOrientationComboBox->setCurrentIndex(cfg.readEntry<int>("storyboard/pageOrientation", 0));
+    m_page->rowsSpinBox->setValue(cfg.readEntry<int>("storyboard/rows", 3));
+    m_page->columnsSpinBox->setValue(cfg.readEntry<int>("storyboard/columns", 3));
+    m_page->fontSizeSpinBox->setValue(cfg.readEntry<int>("storyboard/fontSize", 15));
+    m_page->svgTemplatePathFileRequester->setFileName(cfg.readEntry<QString>("storyboard/svgLayoutFileName", ""));
+    m_page->exportPathFileRequester->setFileName(cfg.readEntry<QString>("storyboard/exportFilePath"));
 
     if (format == ExportFormat::PDF) {
-        m_page->svgFileBaseName->hide();
-        m_page->lblSvgFileBaseName->hide();
-
         QStringList mimeTypes;
         mimeTypes << "application/pdf";
-        m_page->exportFileName->setMimeTypeFilters(mimeTypes);
-
-        m_page->exportFileName->setMode(KoFileDialog::SaveFile);
+        m_page->exportPathFileRequester->setMimeTypeFilters(mimeTypes);
+        m_page->exportPathFileRequester->setMode(KoFileDialog::SaveFile);
     }
     else {
-        m_page->exportFileName->setMode(KoFileDialog::OpenDirectory);
-        m_page->lblExportFileName->setText(i18n("Export Directory: "));
+        m_page->exportPathFileRequester->setMode(KoFileDialog::OpenDirectory);
     }
 
     QStringList mimeTypes;
     mimeTypes << "image/svg+xml";
-    m_page->svgLayoutFileName->setMimeTypeFilters(mimeTypes);
-    m_page->svgLayoutFileName->setMode(KoFileDialog::OpenFile);
+    m_page->svgTemplatePathFileRequester->setMimeTypeFilters(mimeTypes);
+    m_page->svgTemplatePathFileRequester->setMode(KoFileDialog::OpenFile);
 
     setMainWidget(m_page);
-    slotChkUseSvgLayoutChanged(m_page->chkUseSVGLayout->checkState());
+    slotLayoutChanged(m_page->boardLayoutComboBox->currentIndex());
 }
 
 DlgExportStoryboard::~DlgExportStoryboard()
 {
 }
 
-int DlgExportStoryboard::firstItem() const
-{
-    return m_page->spinboxFirstItem->value();
-}
-
-int DlgExportStoryboard::lastItem() const
-{
-    return m_page->spinboxLastItem->value();
-}
 
 int DlgExportStoryboard::rows() const
 {
-    return m_page->spinboxRow->value();
+    const int layoutIndex = m_page->boardLayoutComboBox->currentIndex();
+    if (layoutIndex == ExportLayout::COLUMNS || layoutIndex == ExportLayout::SVG_TEMPLATE) {
+        return 1;
+    }
+    else {
+        return m_page->rowsSpinBox->value();
+    }
 }
 
 int DlgExportStoryboard::columns() const
 {
-    return m_page->spinboxColumn->value();
+    const int layoutIndex = m_page->boardLayoutComboBox->currentIndex();
+    if (layoutIndex == ExportLayout::ROWS || layoutIndex == ExportLayout::SVG_TEMPLATE) {
+        return 1;
+    }
+    else {
+        return m_page->columnsSpinBox->value();
+    }
 }
 
 QPageSize DlgExportStoryboard::pageSize() const
 {
-    int index = m_page->cmbPageSize->currentIndex();
+    int index = m_page->pageSizeComboBox->currentIndex();
     switch (index) {
         case 0:
-            return QPageSize(QPageSize::PageSizeId::A4);
-        case 1:
             return QPageSize(QPageSize::PageSizeId::A0);
-        case 2:
+        case 1:
             return QPageSize(QPageSize::PageSizeId::A1);
-        case 3:
+        case 2:
             return QPageSize(QPageSize::PageSizeId::A2);
-        case 4:
+        case 3:
             return QPageSize(QPageSize::PageSizeId::A3);
-        default:
+        case 4:
+            return QPageSize(QPageSize::PageSizeId::A4);
+        case 5:
             return QPageSize(QPageSize::PageSizeId::A5);
+        case 6:
+        default:
+            return QPageSize(QPageSize::PageSizeId::Letter);
     }
 }
 
 QPageLayout::Orientation DlgExportStoryboard::pageOrientation() const
 {
-    return (QPageLayout::Orientation)m_page->cmbPageOrient->currentIndex();
+    return (QPageLayout::Orientation)m_page->pageOrientationComboBox->currentIndex();
 }
 
 bool DlgExportStoryboard::layoutSpecifiedBySvgFile() const
 {
-    return m_page->chkUseSVGLayout->isChecked();
+    const int layoutIndex = m_page->boardLayoutComboBox->currentIndex();
+    return layoutIndex == ExportLayout::SVG_TEMPLATE;
 }
 
 QString DlgExportStoryboard::layoutSvgFile() const
 {
-    return m_page->svgLayoutFileName->fileName();
+    return m_page->svgTemplatePathFileRequester->fileName();
 }
 
 QString DlgExportStoryboard::saveFileName() const
 {
-    return m_page->exportFileName->fileName();
-}
-
-QString DlgExportStoryboard::svgFileBaseName() const
-{
-    return m_page->svgFileBaseName->text();
+    return m_page->exportPathFileRequester->fileName();
 }
 
 ExportFormat DlgExportStoryboard::format() const
@@ -143,17 +135,12 @@ ExportFormat DlgExportStoryboard::format() const
 
 int DlgExportStoryboard::fontSize() const
 {
-    return m_page->spinboxFontSize->value();
+    return m_page->fontSizeSpinBox->value();
 }
 
 void DlgExportStoryboard::slotExportClicked()
 {
-    if (firstItem() > lastItem()) {
-        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter correct range. The first frame should be less than or equal to the last frame."));
-        return;
-    }
-
-    if (m_page->exportFileName->fileName().isEmpty()) {
+    if (m_page->exportPathFileRequester->fileName().isEmpty()) {
         if (m_format == ExportFormat::PDF) {
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter a file name to export to."));
         }
@@ -165,13 +152,13 @@ void DlgExportStoryboard::slotExportClicked()
 
     if (m_format == ExportFormat::SVG) {
 
-        QDir dir(m_page->exportFileName->fileName());
+        QDir dir(m_page->exportPathFileRequester->fileName());
         if (!dir.exists()) {
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter an existing directory."));
             return;
         }
 
-        QFileInfo info(svgFileBaseName() + "[0-9]*.svg");
+        QFileInfo info("[0-9]*.svg");
         QStringList filesList = dir.entryList({ info.fileName() });
 
         if (!filesList.isEmpty()) {
@@ -193,35 +180,66 @@ void DlgExportStoryboard::slotExportClicked()
         }
     }
 
-    if (m_page->chkUseSVGLayout->isChecked() && m_page->svgLayoutFileName->fileName().isEmpty()) {
+    if (layoutSpecifiedBySvgFile() && m_page->svgTemplatePathFileRequester->fileName().isEmpty()) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please choose svg file to specify the layout for exporting."));
         return;
     }
-    QFileInfo fi(m_page->svgLayoutFileName->fileName());
-    if (m_page->chkUseSVGLayout->isChecked() && !fi.exists()) {
+    QFileInfo fi(m_page->svgTemplatePathFileRequester->fileName());
+    if (layoutSpecifiedBySvgFile() && !fi.exists()) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The SVG file to specify layout doesn't exist. Please choose an existing SVG file."));
         return;
     }
 
     KisConfig cfg(false);
-    cfg.writeEntry("storyboard/firstItem", m_page->spinboxFirstItem->value());
-    cfg.writeEntry("storyboard/lastItem", m_page->spinboxLastItem->value());
-    cfg.writeEntry("storyboard/rows", m_page->spinboxRow->value());
-    cfg.writeEntry("storyboard/columns", m_page->spinboxColumn->value());
-    cfg.writeEntry("storyboard/fontSize", m_page->spinboxFontSize->value());
-    cfg.writeEntry("storyboard/svgLayoutFileName", m_page->svgLayoutFileName->fileName());
-    cfg.writeEntry("storyboard/svgFileBaseName", m_page->svgFileBaseName->text());
-    cfg.writeEntry("storyboard/chkUseSVGLayout", m_page->chkUseSVGLayout->isChecked());
-    cfg.writeEntry("storyboard/exportFileName", m_page->exportFileName->fileName());
+    cfg.writeEntry("storyboard/layoutType", m_page->boardLayoutComboBox->currentIndex());
+    cfg.writeEntry("storyboard/pageOrientation", m_page->pageOrientationComboBox->currentIndex());
+    cfg.writeEntry("storyboard/rows", m_page->rowsSpinBox->value());
+    cfg.writeEntry("storyboard/columns", m_page->columnsSpinBox->value());
+    cfg.writeEntry("storyboard/svgLayoutFileName", m_page->svgTemplatePathFileRequester->fileName());
+    cfg.writeEntry("storyboard/exportFilePath", m_page->exportPathFileRequester->fileName());
+    cfg.writeEntry("storyboard/fontSize", m_page->fontSizeSpinBox->value());
 
     accept();
 }
 
-void DlgExportStoryboard::slotChkUseSvgLayoutChanged(int state)
+void DlgExportStoryboard::slotLayoutChanged(int state)
 {
-    m_page->spinboxRow->setEnabled(state != Qt::Checked);
-    m_page->spinboxColumn->setEnabled(state != Qt::Checked);
-    m_page->cmbPageSize->setEnabled(state != Qt::Checked);
-    m_page->cmbPageOrient->setEnabled(state != Qt::Checked);
-    m_page->svgLayoutFileName->setEnabled(state == Qt::Checked);
+    switch (state) {
+    case ExportLayout::COLUMNS:
+        m_page->rowsLabel->hide();
+        m_page->rowsSpinBox->hide();
+        m_page->svgTemplatePathFileRequester->hide();
+        m_page->svgTemplatePathLabel->hide();
+
+        m_page->columnsSpinBox->show();
+        m_page->columnsLabel->show();
+        break;
+    case ExportLayout::ROWS:
+        m_page->columnsLabel->hide();
+        m_page->columnsSpinBox->hide();
+        m_page->svgTemplatePathFileRequester->hide();
+        m_page->svgTemplatePathLabel->hide();
+
+        m_page->rowsSpinBox->show();
+        m_page->rowsLabel->show();
+        break;
+    case ExportLayout::GRID:
+        m_page->svgTemplatePathFileRequester->hide();
+        m_page->svgTemplatePathLabel->hide();
+
+        m_page->columnsLabel->show();
+        m_page->columnsSpinBox->show();
+        m_page->rowsSpinBox->show();
+        m_page->rowsLabel->show();
+        break;
+    case ExportLayout::SVG_TEMPLATE:
+        m_page->columnsLabel->hide();
+        m_page->columnsSpinBox->hide();
+        m_page->rowsSpinBox->hide();
+        m_page->rowsLabel->hide();
+
+        m_page->svgTemplatePathFileRequester->show();
+        m_page->svgTemplatePathLabel->show();
+        break;
+    }
 }

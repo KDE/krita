@@ -345,7 +345,9 @@ void StoryboardDockerDock::slotExportAsSvg()
 void StoryboardDockerDock::slotExport(ExportFormat format)
 {
     KisTimeSpan span = m_canvas->image()->animationInterface()->fullClipRange();
-    DlgExportStoryboard dlg(format, span);
+    QFileInfo fileInfo(m_canvas->imageView()->document()->path());
+    const QString imageFileName = fileInfo.baseName();
+    DlgExportStoryboard dlg(format);
 
     if (dlg.exec() == QDialog::Accepted) {
         dlg.hide();
@@ -372,23 +374,8 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
 
         //getting the range of items to render
-        int firstItemFrame = dlg.firstItem();
-        QModelIndex firstIndex = m_storyboardModel->lastIndexBeforeFrame(firstItemFrame);
-        if (!firstIndex.isValid()) {
-            firstIndex = m_storyboardModel->index(0,0);
-        }
-        else {
-            siblingAtRow(firstIndex, firstIndex.row() + 1);
-        }
-
-        int lastItemFrame = dlg.lastItem();
-        QModelIndex lastIndex  = m_storyboardModel->indexFromFrame(lastItemFrame);
-        if (!lastIndex.isValid()) {
-            lastIndex = m_storyboardModel->lastIndexBeforeFrame(lastItemFrame);
-        }
-        if (!lastIndex.isValid()) {
-            lastIndex = m_storyboardModel->index(0, 0);
-        }
+        QModelIndex firstIndex = m_storyboardModel->index(0,0);
+        QModelIndex lastIndex  = m_storyboardModel->index(m_storyboardModel->rowCount() - 1, 0);
 
         if (!firstIndex.isValid() || !lastIndex.isValid()) {
             QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
@@ -416,7 +403,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             QSvgGenerator generator;
 
             if (dlg.format() == ExportFormat::SVG) {
-                generator.setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + "0.svg");
+                generator.setFileName(dlg.saveFileName() + "/" + imageFileName + "0.svg");
                 QSize sz = printer.pageRect().size();
                 generator.setSize(sz);
                 generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
@@ -441,7 +428,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     if (dlg.format() == ExportFormat::SVG) {
                         p.end();
                         p.eraseRect(printer.pageRect());
-                        generator.setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + QString::number(i / layoutCellRects.size()) + ".svg");
+                        generator.setFileName(dlg.saveFileName() + "/" + imageFileName + QString::number(i / layoutCellRects.size()) + ".svg");
                         QSize sz = printer.pageRect().size();
                         generator.setSize(sz);
                         generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));

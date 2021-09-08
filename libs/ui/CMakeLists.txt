@@ -12,9 +12,12 @@ include_directories(SYSTEM
 )
 endif()
 
-if (ANDROID OR (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)" AND NOT APPLE))
+if (ANDROID)
+    # We explicitly set QT_OPENGL_ES_3 here because Qt for some reason does
+    # not enable this for Android.
+    # See also: https://bugreports.qt.io/browse/QTBUG-64703
+    # This is not needed for ARM GNU/Linux environments.
     add_definitions(-DQT_OPENGL_ES_3)
-    add_definitions(-DHAS_ONLY_OPENGL_ES)
     include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
 endif()
 

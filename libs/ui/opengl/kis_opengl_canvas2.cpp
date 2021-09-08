@@ -37,7 +37,7 @@
 #include "KisOpenGLModeProber.h"
 #include <KoColorModelStandardIds.h>
 
-#if !defined(Q_OS_MACOS) && !defined(HAS_ONLY_OPENGL_ES)
+#if !defined(Q_OS_MACOS) && !defined(QT_OPENGL_ES_2)
 #include <QOpenGLFunctions_2_1>
 #endif
 
@@ -101,7 +101,7 @@ public:
     QVector3D vertices[6];
     QVector2D texCoords[6];
 
-#if !defined(Q_OS_MACOS) && !defined(HAS_ONLY_OPENGL_ES)
+#if !defined(Q_OS_MACOS) && !defined(QT_OPENGL_ES_2)
     QOpenGLFunctions_2_1 *glFn201;
 #endif
 
@@ -291,7 +291,7 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
-#if !defined(Q_OS_MACOS) && !defined(HAS_ONLY_OPENGL_ES)
+#if !defined(Q_OS_MACOS) && !defined(QT_OPENGL_ES_2)
     if (!KisOpenGL::hasOpenGLES()) {
         d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
         if (!d->glFn201) {
@@ -514,7 +514,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     // For the legacy shader, we should use old fixed function
     // blending operations if available.
     if (!d->canvasFBO && !KisOpenGL::supportsLoD() && !KisOpenGL::hasOpenGLES()) {
-        #ifndef HAS_ONLY_OPENGL_ES
+        #ifndef QT_OPENGL_ES_2
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         glEnable(GL_COLOR_LOGIC_OP);
 
@@ -528,10 +528,10 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
         shouldRestoreLogicOp = true;
 
-        #else   // HAS_ONLY_OPENGL_ES
+        #else   // QT_OPENGL_ES_2
         KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
                         "Unexpected KisOpenGL::hasOpenGLES returned false");
-        #endif  // HAS_ONLY_OPENGL_ES
+        #endif  // QT_OPENGL_ES_2
     }
 
     // Paint the tool outline
@@ -588,7 +588,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     }
 
     if (shouldRestoreLogicOp) {
-#ifndef HAS_ONLY_OPENGL_ES
+#ifndef QT_OPENGL_ES_2
         glDisable(GL_COLOR_LOGIC_OP);
 #else
         KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",

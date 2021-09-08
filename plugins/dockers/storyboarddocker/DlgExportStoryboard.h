@@ -16,10 +16,19 @@
 
 class QPageSize;
 class KisTimeSpan;
-enum ExportFormat : unsigned int
+
+enum ExportFormat
 {
-    PDF,
+    PDF = 0,
     SVG
+};
+
+enum ExportLayout
+{
+    ROWS = 0,
+    COLUMNS = 1,
+    GRID = 2,
+    SVG_TEMPLATE = 3
 };
 
 class WdgExportStoryboard : public QWidget, public Ui::WdgExportStoryboard
@@ -39,10 +48,8 @@ class DlgExportStoryboard: public KoDialog
 {
     Q_OBJECT
 public:
-    DlgExportStoryboard(ExportFormat format, KisTimeSpan span);
+    DlgExportStoryboard(ExportFormat format);
     ~DlgExportStoryboard() override;
-    int firstItem() const;
-    int lastItem() const;
     int rows() const;
     int columns() const;
     QPageSize pageSize() const;
@@ -50,13 +57,12 @@ public:
     bool layoutSpecifiedBySvgFile() const;
     QString layoutSvgFile() const;
     QString saveFileName() const;
-    QString svgFileBaseName() const;
     ExportFormat format() const;
     int fontSize() const;
 
 private Q_SLOTS:
     void slotExportClicked();
-    void slotChkUseSvgLayoutChanged(int state);
+    void slotLayoutChanged(int state);
 
 private:
     WdgExportStoryboard *m_page {0};

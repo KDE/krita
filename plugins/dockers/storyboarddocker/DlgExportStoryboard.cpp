@@ -29,6 +29,10 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
 
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotExportClicked()));
     connect(m_page->boardLayoutComboBox, SIGNAL(activated(int)), this, SLOT(slotLayoutChanged(int)));
+    connect(m_page->pageSizeComboBox, SIGNAL(activated(int)), this, SLOT(slotPageSettingsChanged(int)));
+    connect(m_page->pageOrientationComboBox, SIGNAL(activated(int)), this, SLOT(slotPageSettingsChanged(int)));
+    connect(m_page->rowsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(slotPageSettingsChanged(int)));
+    connect(m_page->columnsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(slotPageSettingsChanged(int)));
 
     KisConfig cfg(true);
     m_page->boardLayoutComboBox->setCurrentIndex(cfg.readEntry<int>("storyboard/layoutType", ExportLayout::ROWS));
@@ -56,6 +60,7 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
 
     setMainWidget(m_page);
     slotLayoutChanged(m_page->boardLayoutComboBox->currentIndex());
+    setUsableMaximums(pageSize(), pageOrientation(), exportLayout());
 }
 
 DlgExportStoryboard::~DlgExportStoryboard()
@@ -133,9 +138,23 @@ ExportFormat DlgExportStoryboard::format() const
     return m_format;
 }
 
+ExportLayout DlgExportStoryboard::exportLayout() const
+{
+    return static_cast<ExportLayout>(m_page->boardLayoutComboBox->currentIndex());
+}
+
 int DlgExportStoryboard::fontSize() const
 {
     return m_page->fontSizeSpinBox->value();
+}
+
+void DlgExportStoryboard::setUsableMaximums(QPageSize pPageSize, QPageLayout::Orientation pOrientation, ExportLayout pLayout)
+{
+    const QSize pointSize = pPageSize.sizePoints();
+    const QSize orientedPointSize = pOrientation == QPageLayout::Landscape ? QSize(pointSize.height(), pointSize.width()) : pointSize;
+    const QSize sizeInPointsPerBoard = QSize(orientedPointSize.width() / columns(), orientedPointSize.height() / rows());
+    const QSize usableMaximumFontSize = sizeInPointsPerBoard / 12;
+    m_page->fontSizeSpinBox->setMaximum(qMin(usableMaximumFontSize.width(), usableMaximumFontSize.height()));
 }
 
 void DlgExportStoryboard::slotExportClicked()
@@ -242,4 +261,9 @@ void DlgExportStoryboard::slotLayoutChanged(int state)
         m_page->svgTemplatePathLabel->show();
         break;
     }
+}
+
+void DlgExportStoryboard::slotPageSettingsChanged(int)
+{
+    setUsableMaximums(pageSize(), pageOrientation(), exportLayout());
 }

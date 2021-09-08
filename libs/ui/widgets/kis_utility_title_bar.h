@@ -35,7 +35,8 @@ public:
     KisUtilityTitleBar(QWidget *parent = nullptr);
     KisUtilityTitleBar(QLabel *title, QWidget *parent = nullptr);
 
-    virtual QSize sizeHint() const {return QSize(32,32);}
+    QSize sizeHint() const override { return QSize(32, 32); }
+    QSize minimumSizeHint() const override;
 
 protected:
     QHBoxLayout *widgetAreaLayout;

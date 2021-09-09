@@ -35,7 +35,6 @@ public:
         , defaultDirectory(defaultDir_)
         , filterList(QStringList())
         , defaultFilter(QString())
-        , swapExtensionOrder(false)
     {
     }
 
@@ -54,7 +53,6 @@ public:
     QString defaultFilter;
     QScopedPointer<KisPreviewFileDialog> fileDialog;
     QString mimeType;
-    bool swapExtensionOrder;
 };
 
 KoFileDialog::KoFileDialog(QWidget *parent,
@@ -366,6 +364,7 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
     QStringList ret;
     QStringList mimeList = _mimeList;
     mimeList.sort();
+
     Q_FOREACH(const QString &mimeType, mimeList) {
         if (!mimeSeen.contains(mimeType)) {
             QString description = KisMimeDatabase::descriptionForMimeType(mimeType);
@@ -393,22 +392,6 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
             }
 
             Q_FOREACH(const QString &glob, globPatterns) {
-                if (d->swapExtensionOrder) {
-                    oneFilter.prepend(glob + " ");
-                    if (withAllSupportedEntry) {
-                        allSupported.prepend(glob + " ");
-                    }
-#ifdef Q_OS_LINUX
-                    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-                        oneFilter.prepend(glob.toUpper() + " ");
-                        if (withAllSupportedEntry) {
-                            allSupported.prepend(glob.toUpper() + " ");
-                        }
-                    }
-#endif
-
-                }
-                else {
                     oneFilter.append(glob + " ");
                     if (withAllSupportedEntry) {
                         allSupported.append(glob + " ");
@@ -421,7 +404,6 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
                         }
                     }
 #endif
-                }
             }
 
             Q_ASSERT(!description.isEmpty());
@@ -447,6 +429,10 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
     ret.sort();
     ret.removeDuplicates();
 
+    if (allSupported.contains("*.kra")) {
+        allSupported.remove("*.kra ");
+        allSupported.prepend("*.kra ");
+    }
     if (!ora.isEmpty()) ret.prepend(ora);
     if (!kritaNative.isEmpty())  ret.prepend(kritaNative);
     if (!allSupported.isEmpty()) ret.prepend(i18n("All supported formats") + " ( " + allSupported + (")"));

@@ -1,0 +1,87 @@
+From c27f07dbca61e292639b4806d168de26daf44a5b Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvin@alvinhc.com>
+Date: Thu, 9 Sep 2021 21:23:52 +0800
+Subject: [PATCH] WinInk: Synthesize mouse events for full pen stroke
+
+When synthesizing mouse events for handled WM_POINTERDOWN, keep track of
+the pointer so that we also synthesize mouse events for the subsequent
+WM_POINTERUPDATE and WM_POINTERUP to complete the full stroke.
+
+See bug: https://bugs.kde.org/show_bug.cgi?id=439774
+---
+ .../windows/qwindowspointerhandler.cpp        | 38 ++++++++++++++++---
+ 1 file changed, 33 insertions(+), 5 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+index 07a5722de9..9e518a262f 100644
+--- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
++++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+@@ -60,6 +60,7 @@
+ #include <QtCore/qloggingcategory.h>
+ #include <QtCore/qoperatingsystemversion.h>
+ #include <QtCore/qqueue.h>
++#include <QtCore/qset.h>
+ 
+ #include <algorithm>
+ 
+@@ -602,6 +603,10 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+     if (et & QtWindows::NonClientEventFlag)
+         return false; // Let DefWindowProc() handle Non Client messages.
+ 
++    // Used to track whether a particular pointer is being handled so we can synthesize the mouse events.
++    // Stores the pointerId of pointers that are being handled.
++    static QSet<int> penPointersBeingHandled;
++
+     POINTER_PEN_INFO *penInfo = static_cast<POINTER_PEN_INFO *>(vPenInfo);
+ 
+     RECT pRect, dRect;
+@@ -687,7 +692,7 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+ 
+         const Qt::MouseButtons oldButtons = QGuiApplicationPrivate::tabletDevicePoint(sourceDevice).state;
+ 
+-        const bool accepted =
++        bool accepted =
+             QWindowSystemInterface::handleTabletEvent(target, localPos, hiResGlobalPos, device, type, mouseButtons,
+                                                       pressure, xTilt, yTilt, tangentialPressure, rotation, z,
+                                                       sourceDevice, keyModifiers);
+@@ -707,10 +712,33 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+             }
+         }
+ 
+-        if (accepted && pressedButton != Qt::NoButton &&
+-            (msg.message == WM_POINTERDOWN || msg.message == WM_POINTERUP)) {
+-
+-            QEvent::Type type = (msg.message == WM_POINTERDOWN) ? QEvent::TabletPress : QEvent::TabletRelease;
++        if (msg.message == WM_POINTERDOWN) {
++            if (accepted) {
++                penPointersBeingHandled.insert(penInfo->pointerInfo.pointerId);
++            } else {
++                penPointersBeingHandled.remove(penInfo->pointerInfo.pointerId);
++            }
++        } else if (msg.message == WM_POINTERUPDATE) {
++            accepted = penPointersBeingHandled.contains(penInfo->pointerInfo.pointerId);
++        } else if (msg.message == WM_POINTERUP) {
++            accepted = penPointersBeingHandled.remove(penInfo->pointerInfo.pointerId);
++        }
++        if (accepted && (
++            msg.message == WM_POINTERUPDATE ||
++            (
++                pressedButton != Qt::NoButton &&
++                (msg.message == WM_POINTERDOWN || msg.message == WM_POINTERUP)
++            )
++        )) {
++
++            QEvent::Type type;
++            if (msg.message == WM_POINTERDOWN) {
++                type = QEvent::TabletPress;
++            } else if (msg.message == WM_POINTERUP) {
++                type = QEvent::TabletRelease;
++            } else {
++                type = QEvent::TabletMove;
++            }
+ 
+             synthesizeMouseEvent(type, pressedButton, *penInfo);
+             return true;
+-- 
+2.24.1.windows.2
+

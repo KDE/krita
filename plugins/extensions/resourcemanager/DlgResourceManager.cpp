@@ -41,6 +41,8 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     setButtons(Close);
     setDefaultButton(Close);
 
+    m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(128, 128));
+
     m_resourceTypeModel = new KisResourceTypeModel(this);
 
     m_ui->cmbResourceType->setModel(m_resourceTypeModel);
@@ -255,7 +257,6 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         resourceIds << resourceId;
     }
     updateDeleteButtonState(list);
-    qCritical() << "setting the list of " << resourceIds;
     m_tagsController->setResourceIds(getCurrentResourceType(), resourceIds);
 }
 

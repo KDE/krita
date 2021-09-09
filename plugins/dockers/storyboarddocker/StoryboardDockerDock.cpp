@@ -551,7 +551,9 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                         doc.setDefaultFont(p.font());
                         QString comment;
                         comment += "<p><b>" + comments.at(commentIndex).name + "</b></p>"; // if arrange options are used check for visibility
-                        comment += "<p>&nbsp;" + qvariant_cast<CommentBox>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString() + "</p>";
+                        QString originalCommentText = qvariant_cast<CommentBox>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString();
+                        originalCommentText = originalCommentText.replace('\n', "</p><p>");
+                        comment += "<p>&nbsp;" + originalCommentText + "</p>";
                         const int MARGIN = p.fontMetrics().averageCharWidth() / 2;
 
                         doc.setHtml(comment);

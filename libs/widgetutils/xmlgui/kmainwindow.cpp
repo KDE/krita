@@ -495,6 +495,12 @@ void KMainWindow::saveMainWindowSettings(KConfigGroup &cg)
         if (!cg.hasDefault("MenuBar") && !mb->isHidden()) {
             cg.revertToDefault("MenuBar");
         } else {
+            // with native Menu Bar we don't have an easy way of knowing if it
+            // is Enabled or not, so we assume it is to prevent any mishap if
+            // the flag is toggled
+            if (!QCoreApplication::testAttribute(Qt::AA_DontUseNativeMenuBar)) {
+                cg.writeEntry("MenuBar", "Enabled");
+            }
             cg.writeEntry("MenuBar", mb->isHidden() ? "Disabled" : "Enabled");
         }
     }
@@ -581,6 +587,12 @@ void KMainWindow::applyMainWindowSettings(const KConfigGroup &cg)
     QMenuBar *mb = internalMenuBar(this);
     if (mb) {
         QString entry = cg.readEntry("MenuBar", "Enabled");
+#ifdef Q_OS_ANDROID
+        // HACK: Previously, since the native menubar was enabled, this made the
+        // value in Config = "Disabled". This makes the menubar not show up on
+        // devices.
+        entry = QLatin1String("Enabled");
+#endif
         mb->setVisible( entry != QLatin1String("Disabled") );
     }
 

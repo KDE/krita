@@ -556,7 +556,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
                         doc.setHtml(comment);
                         doc.setTextWidth(layout->commentRects[commentIndex].width() - MARGIN * 2);
-                        p.drawRect(layout->commentRects[commentIndex]);
 
                         QAbstractTextDocumentLayout::PaintContext ctx;
                         ctx.palette.setColor(QPalette::Text, p.pen().color());
@@ -566,6 +565,9 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                         p.translate(layout->commentRects[commentIndex].topLeft() + QPoint(MARGIN, MARGIN));
                         doc.documentLayout()->draw(&p, ctx);
                         p.restore();
+
+                        p.drawRect(layout->commentRects[commentIndex]);
+
 
                         if (layout->commentRects[commentIndex].height() < doc.size().height()) {
                             QRectF eRect(QPointF(layout->commentRects[commentIndex].topLeft()), doc.size());

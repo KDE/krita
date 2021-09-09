@@ -826,20 +826,6 @@ void KisPaintopBox::setWidgetState(int flags)
         m_presetSelectorPopupButton->setEnabled(flags & ENABLE_PRESETS);
         m_brushEditorPopupButton->setEnabled(flags & ENABLE_PRESETS);
     }
-
-    for (int i = 0; i < 4; ++i) {
-        if (flags & (ENABLE_OPACITY | DISABLE_OPACITY))
-            m_sliderChooser[i]->getWidget("opacity")->setEnabled(flags & ENABLE_OPACITY);
-
-        if (flags & (ENABLE_FLOW | DISABLE_FLOW))
-            m_sliderChooser[i]->getWidget("flow")->setEnabled(flags & ENABLE_FLOW);
-
-        if (flags & (ENABLE_SIZE | DISABLE_SIZE))
-            m_sliderChooser[i]->getWidget("size")->setEnabled(flags & ENABLE_SIZE);
-
-        if (flags & (ENABLE_PATTERNSIZE | DISABLE_PATTERNSIZE))
-            m_sliderChooser[i]->getWidget("patternsize")->setEnabled(flags & ENABLE_PATTERNSIZE);
-    }
 }
 
 void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)

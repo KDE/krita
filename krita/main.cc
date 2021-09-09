@@ -421,6 +421,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
                 }
             }
         }
+        KisApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 #endif
         if (locale.name() != QStringLiteral("en")) {
             QStringList uiLanguages = locale.uiLanguages();

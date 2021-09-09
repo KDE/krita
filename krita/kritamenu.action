@@ -101,7 +101,7 @@
     </Action>
     <Action name="file_export_advanced">
       <icon>document-export</icon>
-      <text>E&amp;xport Advanced...</text>
+      <text>Export Advanced...</text>
       <whatsThis></whatsThis>
       <toolTip>Advanced Export</toolTip>
       <iconText>Export</iconText>

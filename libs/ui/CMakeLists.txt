@@ -534,10 +534,6 @@ if(APPLE)
     )
 endif()
 
-if (ANDROID)
-    set (kritaui_LIB_SRCS ${kritaui_LIB_SRCS} KisAndroidFileManager.cpp)
-endif()
-
 ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.ui
     widgets/KoStrokeConfigWidget.ui

@@ -1,0 +1,7 @@
+# Ignore commits from git-blame, if your editor doesn't already, use:
+#
+# $ git config --add 'blame.ignoreRevsFile' '.git-blame-ignore-revs'
+#
+
+# Fix indentation of java files
+539702e3f911fe5cd3657138d3f9bbcc8720e473

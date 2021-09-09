@@ -70,6 +70,8 @@ public:
 
     void mouseReleaseEvent(QMouseEvent *event) override;
 
+    QSize sizeHint() const override;
+
 private Q_SLOTS:
     void slotContextMenuRequested(const QPoint &);
 

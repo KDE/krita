@@ -26,6 +26,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QSvgGenerator>
 #include <QMessageBox>
+#include <QSizePolicy>
 
 #include <klocalizedstring.h>
 
@@ -146,6 +147,7 @@ private:
     QButtonGroup *viewGroup;
 };
 
+
 StoryboardDockerDock::StoryboardDockerDock( )
     : QDockWidget(i18nc("Storyboard Docker", "Storyboard"))
     , m_canvas(0)
@@ -172,6 +174,10 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_exportAsPdfAction, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
 
+    //Setup dynamic QListView Width Based on Comment Model Columns...
+    connect(m_commentModel, &StoryboardCommentModel::sigCommentListChanged, this, &StoryboardDockerDock::slotUpdateMinimumWidth);
+    connect(m_storyboardModel.data(), &StoryboardModel::rowsInserted, this, &StoryboardDockerDock::slotUpdateMinimumWidth);
+
     m_ui->btnComment->setMenu(m_commentMenu);
     m_ui->btnComment->setPopupMode(QToolButton::InstantPopup);
 
@@ -196,7 +202,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     m_storyboardDelegate->setView(m_ui->sceneView);
     m_storyboardModel->setView(m_ui->sceneView);
-    m_ui->sceneView->setModel(m_storyboardModel);
+    m_ui->sceneView->setModel(m_storyboardModel.data());
     m_ui->sceneView->setItemDelegate(m_storyboardDelegate);
 
     m_storyboardModel->setCommentModel(m_commentModel);
@@ -232,7 +238,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
             if (currentSelection.isValid()) {
                 int row = currentSelection.row();
-                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, m_storyboardModel->getData().at(row), m_storyboardModel);
+                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, m_storyboardModel->getData().at(row), m_storyboardModel.data());
 
                 m_storyboardModel->removeItem(currentSelection, command);
                 m_storyboardModel->pushUndoCommand(command);
@@ -250,7 +256,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 StoryboardDockerDock::~StoryboardDockerDock()
 {
     delete m_commentModel;
-    delete m_storyboardModel;
+    m_storyboardModel.reset();
     delete m_storyboardDelegate;
 }
 
@@ -261,7 +267,7 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_canvas) {
-        disconnect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateDocumentList()));
+        disconnect(m_storyboardModel.data(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateDocumentList()));
         disconnect(m_commentModel, SIGNAL(sigCommentListChanged()), this, SLOT(slotUpdateDocumentList()));
         disconnect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateStoryboardModelList()));
         disconnect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateCommentModelList()));
@@ -280,7 +286,7 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
         slotUpdateStoryboardModelList();
         slotUpdateCommentModelList();
 
-        connect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
+        connect(m_storyboardModel.data(), SIGNAL(sigStoryboardItemListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
         connect(m_commentModel, SIGNAL(sigCommentListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
         connect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateStoryboardModelList()), Qt::UniqueConnection);
         connect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardCommentListChanged()), this, SLOT(slotUpdateCommentModelList()), Qt::UniqueConnection);
@@ -293,6 +299,8 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
             m_storyboardModel->slotSetActiveNode(m_nodeManager->activeNode());
         }
     }
+
+    slotUpdateMinimumWidth();
 }
 
 void StoryboardDockerDock::unsetCanvas()
@@ -304,9 +312,10 @@ void StoryboardDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
     if (m_nodeManager) {
-        connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), m_storyboardModel, SLOT(slotSetActiveNode(KisNodeSP)));
+        connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), m_storyboardModel.data(), SLOT(slotSetActiveNode(KisNodeSP)));
     }
 }
+
 
 void StoryboardDockerDock::notifyImageDeleted()
 {
@@ -627,6 +636,11 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
         m_modeGroup->button(Mode::Row)->setEnabled(false);               //disable the row mode
     }
     m_storyboardModel->layoutChanged();
+}
+
+void StoryboardDockerDock::slotUpdateMinimumWidth()
+{
+    m_ui->sceneView->setMinimumSize(m_ui->sceneView->sizeHint());
 }
 
 QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(int rows, int columns, QRectF pageRect)

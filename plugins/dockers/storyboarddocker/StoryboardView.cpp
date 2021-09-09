@@ -79,7 +79,6 @@ StoryboardView::StoryboardView(QWidget *parent)
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
     setStyle(new StoryboardStyle(this->style()));
-
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
                 this, SLOT(slotContextMenuRequested(const QPoint &)));
 
@@ -332,4 +331,21 @@ void StoryboardView::mouseReleaseEvent(QMouseEvent *event) {
     }
 
     QListView::mouseReleaseEvent(event);
+}
+
+QSize StoryboardView::sizeHint() const {
+    if (model()) {
+        StoryboardModel* m_storyboardModel = static_cast<StoryboardModel*>(model());
+        const bool hasContent = m_storyboardModel->hasIndex(0,0);
+        if (hasContent) {
+            const bool hasComments = m_storyboardModel->visibleCommentCount() > 0;
+            const bool hasMoreThanOneComment = m_storyboardModel->visibleCommentCount() > 1;
+            const float commentPadding = hasComments ? 1.0f + (0.1f * hasMoreThanOneComment) : 0.0f;
+            const int thumbnailWidth = 286;
+            const int commentWidth = 200 * commentPadding;
+            return QSize(thumbnailWidth + commentWidth, 128);
+        }
+    }
+
+    return QSize(250, 128);
 }

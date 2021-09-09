@@ -516,7 +516,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 p.setPen(pen);
 
                 {
-                    p.drawRect(layout->imageAreaRect);
                     QRect imgRect = layout->imageAreaRect;
                     QSize resizedImage = pxmp.size().scaled(layout->imageAreaRect.size(), Qt::KeepAspectRatio);
                     const int MARGIN = -2;
@@ -524,6 +523,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     imgRect.setSize(resizedImage);
                     imgRect.translate((layout->imageAreaRect.width() - imgRect.size().width()) / 2 - MARGIN, (layout->imageAreaRect.height() - imgRect.size().height()) / 2 - MARGIN);
                     p.drawPixmap(imgRect, pxmp, pxmp.rect());
+                    p.drawRect(layout->imageAreaRect);
                 }
 
                 //Draw panel name

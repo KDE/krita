@@ -9,11 +9,6 @@
 
 #include "KoConfig.h"
 
-#ifdef QT_OPENGL_ES_2
-// FIXME: Do we need to check for GL_EXT_multisample_compatibility when using this?
-#define GL_MULTISAMPLE 0x809D
-#endif
-
 #include <QPainter>
 #include <QToolButton>
 #include <QApplication>
@@ -145,14 +140,14 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     bool hasMultisample = false;
     if (ctx) {
-        hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2) &&
-                               (ctx->hasExtension("GL_ARB_multisample")));
+        hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2)
+                          && (ctx->hasExtension("GL_ARB_multisample") || ctx->hasExtension("GL_EXT_multisample_compatibility")));
 
         // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
         // So instead, use native OpenGL anti-aliasing when available.
         if (hasMultisample) {
             gc.beginNativePainting();
-            ctx->functions()->glEnable(GL_MULTISAMPLE);
+            ctx->functions()->glEnable(GL_MULTISAMPLE_EXT);
             gc.endNativePainting();
         }
     }
@@ -217,7 +212,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
     if (hasMultisample) {
         gc.beginNativePainting();
-        ctx->functions()->glDisable(GL_MULTISAMPLE);
+        ctx->functions()->glDisable(GL_MULTISAMPLE_EXT);
         gc.endNativePainting();
     }
 

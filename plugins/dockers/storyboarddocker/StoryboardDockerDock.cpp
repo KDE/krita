@@ -355,7 +355,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 {
     QFileInfo fileInfo(m_canvas->imageView()->document()->path());
     const QString imageFileName = fileInfo.baseName();
-    DlgExportStoryboard dlg(format);
+    DlgExportStoryboard dlg(format, m_storyboardModel);
 
     if (dlg.exec() == QDialog::Accepted) {
         dlg.hide();

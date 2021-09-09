@@ -24,6 +24,7 @@
 #include <commands_new/kis_switch_current_time_command.h>
 #include "KisAddRemoveStoryboardCommand.h"
 
+
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
     , m_imageSize(QSize())
@@ -308,7 +309,7 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
         }
         default:              //for comments
         {
-            QTextEdit *editor = new QTextEdit(parent);
+            QTextEdit *editor = new LimitedTextEditor(280, parent);
             return editor;
         }
         }

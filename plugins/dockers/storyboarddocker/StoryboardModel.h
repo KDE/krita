@@ -120,6 +120,12 @@ public:
     int visibleCommentCount() const;
 
     /**
+     * @brief Get total number of comments.
+     * @return Number of total comments.
+     */
+    int totalCommentCount();
+
+    /**
      * @brief Used in @c StoryboardView to design the layout of storyboard item.
      * @return Number of visible comments upto index.
      * @sa StoryboardView::visualRect(QModelIndex)

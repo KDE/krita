@@ -8,8 +8,11 @@
 #define __STORYBOARD_DELEGATE_H
 
 #include <QStyledItemDelegate>
+#include <QTextEdit>
+
 #include "StoryboardView.h"
 #include <kis_types.h>
+#include <kis_debug.h>
 #include <kis_image.h>
 
 class QListView;
@@ -93,6 +96,31 @@ private:
     StoryboardView *m_view;
     QPoint m_lastDragPos = QPoint(0, 0);
     QSize m_imageSize;
+};
+
+class LimitedTextEditor : public QTextEdit {
+    Q_OBJECT
+public:
+    LimitedTextEditor(int limit, QWidget* parent = nullptr)
+        : QTextEdit(parent)
+        , m_charLimit(limit){
+        connect(this, SIGNAL(textChanged()), this, SLOT(restrictText()));
+    }
+
+    ~LimitedTextEditor(){}
+
+public Q_SLOTS:
+    void restrictText() {
+        if (toPlainText().length() > m_charLimit) {
+            setText(toPlainText().left(m_charLimit));
+            QTextCursor c = textCursor();
+            c.setPosition(m_charLimit);
+            setTextCursor(c);
+        }
+    }
+
+private:
+    const int m_charLimit;
 };
 
 #endif

@@ -44,11 +44,13 @@ public:
     }
 };
 
+class StoryboardModel;
+
 class DlgExportStoryboard: public KoDialog
 {
     Q_OBJECT
 public:
-    DlgExportStoryboard(ExportFormat format);
+    DlgExportStoryboard(ExportFormat format, QSharedPointer<StoryboardModel> model);
     ~DlgExportStoryboard() override;
     int rows() const;
     int columns() const;
@@ -71,6 +73,7 @@ private:
     WdgExportStoryboard *m_page {0};
     QString m_exportFileName;
     ExportFormat m_format;
+    QSharedPointer<StoryboardModel> m_model;
 };
 
 #endif

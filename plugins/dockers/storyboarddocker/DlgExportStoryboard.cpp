@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "DlgExportStoryboard.h"
+#include "StoryboardModel.h"
 
 #include "KoFileDialog.h"
 #include <kis_config.h>
@@ -13,9 +14,10 @@
 #include <QSpinBox>
 #include <QMessageBox>
 
-DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
+DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, QSharedPointer<StoryboardModel> model)
         : KoDialog()
         , m_format(format)
+        , m_model(model)
 {
     m_page = new WdgExportStoryboard(this);
 
@@ -150,10 +152,16 @@ int DlgExportStoryboard::fontSize() const
 
 void DlgExportStoryboard::setUsableMaximums(QPageSize pPageSize, QPageLayout::Orientation pOrientation, ExportLayout pLayout)
 {
+    Q_UNUSED(pLayout);
     const QSize pointSize = pPageSize.sizePoints();
     const QSize orientedPointSize = pOrientation == QPageLayout::Landscape ? QSize(pointSize.height(), pointSize.width()) : pointSize;
     const QSize sizeInPointsPerBoard = QSize(orientedPointSize.width() / columns(), orientedPointSize.height() / rows());
-    const QSize usableMaximumFontSize = sizeInPointsPerBoard / 12;
+
+    const int commentCount = m_model ? m_model->totalCommentCount() : 1;
+    const bool stacked = sizeInPointsPerBoard.width() < sizeInPointsPerBoard.height();
+    const QSize sizeInPointsPerComment = stacked ? QSize(sizeInPointsPerBoard.width(), sizeInPointsPerBoard.height() / commentCount)
+                                                 : QSize(sizeInPointsPerBoard.width() / commentCount, sizeInPointsPerBoard.height());
+    const QSize usableMaximumFontSize = sizeInPointsPerComment / 12;
     m_page->fontSizeSpinBox->setMaximum(qMin(usableMaximumFontSize.width(), usableMaximumFontSize.height()));
 }
 

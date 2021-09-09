@@ -523,6 +523,13 @@ int StoryboardModel::visibleCommentCount() const
     return visibleComments;
 }
 
+int StoryboardModel::totalCommentCount()
+{
+    return m_commentList.count();
+}
+
+
+
 int StoryboardModel::visibleCommentsUpto(QModelIndex index) const
 {
     int commentRow = index.row() - 4;

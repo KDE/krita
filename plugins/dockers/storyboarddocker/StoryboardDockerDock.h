@@ -93,6 +93,12 @@ private Q_SLOTS:
      */
     void slotViewChanged(QAbstractButton*);
 
+    /**
+     * @brief called to update minimum width on reaction to model changes.
+     * Should change based on available content.
+     */
+    void slotUpdateMinimumWidth();
+
 private:
     KisCanvas2* m_canvas;
     KisNodeManager* m_nodeManager;
@@ -112,7 +118,7 @@ private:
     QButtonGroup *m_modeGroup;
     QButtonGroup *m_viewGroup;
 
-    QPointer<StoryboardModel> m_storyboardModel;
+    QSharedPointer<StoryboardModel> m_storyboardModel;
     QPointer<StoryboardDelegate> m_storyboardDelegate;
 };
 

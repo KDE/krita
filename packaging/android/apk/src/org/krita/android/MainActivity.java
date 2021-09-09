@@ -9,26 +9,26 @@ package org.krita.android;
 
 import android.os.Build;
 import android.util.Log;
- import android.os.Bundle;
- import android.content.Intent;
- import android.net.Uri;
- import android.view.InputDevice;
- import android.view.KeyEvent;
- import android.view.MotionEvent;
- import android.view.WindowManager;
+import android.os.Bundle;
+import android.content.Intent;
+import android.net.Uri;
+import android.view.InputDevice;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.WindowManager;
 
- import org.qtproject.qt5.android.QtNative;
- import org.qtproject.qt5.android.bindings.QtActivity;
+import org.qtproject.qt5.android.QtNative;
+import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class MainActivity extends QtActivity {
 
     private boolean isStartup = true;
     private final String TAG = "MainActivity";
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-		                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.QT_ANDROID_DEFAULT_THEME = "DefaultTheme";
 
@@ -40,12 +40,12 @@ public class MainActivity extends QtActivity {
             i.putExtra("applicationArguments", uri);
         }
 
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         Log.i(TAG, "LibsLoaded");
-		new ConfigsManager().handleAssets(this);
+        new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();
-	}
+    }
 
     @Override
     protected void onNewIntent (Intent intent) {
@@ -67,12 +67,12 @@ public class MainActivity extends QtActivity {
         return null;
     }
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		// onPause() _is_ called when the app starts. If the native lib
-		// isn't loaded, it crashes.
-		if (!isStartup) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        // onPause() _is_ called when the app starts. If the native lib
+        // isn't loaded, it crashes.
+        if (!isStartup) {
             synchronized(this) {
                 Intent intent = new Intent(this, DocumentSaverService.class);
                 intent.putExtra(DocumentSaverService.START_SAVING, true);
@@ -82,11 +82,11 @@ public class MainActivity extends QtActivity {
                     startService(intent);
                 }
             }
-		}
-		else {
-			isStartup = false;
-		}
-	}
+        }
+        else {
+            isStartup = false;
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -104,10 +104,10 @@ public class MainActivity extends QtActivity {
         super.onDestroy();
     }
 
-	@Override
-	public boolean onKeyUp(final int keyCode, final KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && getActionBar() != null &&
-		    !getActionBar().isShowing()) {
+    @Override
+    public boolean onKeyUp(final int keyCode, final KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && getActionBar() != null &&
+            !getActionBar().isShowing()) {
             if (JNIWrappers.exitFullScreen()) {
                 return true;
             } else {
@@ -116,20 +116,20 @@ public class MainActivity extends QtActivity {
                 // best we finish the activity here.
                 finish();
             }
-		}
+        }
 
-		return super.onKeyUp(keyCode, event);
-	}
+        return super.onKeyUp(keyCode, event);
+    }
 
-	@Override
-	public boolean onGenericMotionEvent(MotionEvent event) {
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
         // We manually pass these events to the QPA Android because,
         // android doesn't send events of type other than SOURCE_CLASS_POINTER
         // to the view which was just tapped. So, this view will never get to
         // QtSurface, because it doesn't claim focus.
-		if (event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
-			return QtNative.sendGenericMotionEvent(event, event.getDeviceId());
-		}
-		return super.onGenericMotionEvent(event);
-	}
-}
+        if (event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
+            return QtNative.sendGenericMotionEvent(event, event.getDeviceId());
+        }
+        return super.onGenericMotionEvent(event);
+    }
+    }

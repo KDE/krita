@@ -90,6 +90,7 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0029-Add-a-workaround-for-button-mapping-on-Lenovo-Yoga-C.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0030-Make-sure-if-WinInk-is-correctly-initialized-if-wint.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0051-Add-workaround-for-handling-table-press-correctly-in.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0052-WinInk-Synthesize-mouse-events-for-full-pen-stroke.patch
             )
     endif()
 

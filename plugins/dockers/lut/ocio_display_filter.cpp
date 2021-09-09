@@ -274,9 +274,9 @@ bool OcioDisplayFilter::updateShader()
 #endif
     }
 
-#if defined(QT_OPENGL_3)
     // XXX This option can be removed once we move to Qt 5.7+
     if (KisOpenGL::supportsLoD()) {
+#if defined(QT_OPENGL_3)
 #if defined(Q_OS_MAC) && defined(QT_OPENGL_3_2)
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
 #else
@@ -285,9 +285,10 @@ bool OcioDisplayFilter::updateShader()
         if (f) {
             return updateShaderImpl(f);
         }
+#endif
     }
-#else
-    QOpenGLExtraFunctions *f = QOpenGLContext::currentContext()->extraFunctions();
+#if !defined(QT_OPENGL_ES_2)
+    QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();
     if (f) {
         return updateShaderImpl(f);
     }

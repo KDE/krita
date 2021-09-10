@@ -37,7 +37,6 @@ struct KisUsageLogger::Private {
 KisUsageLogger::KisUsageLogger()
     : d(new Private)
 {
-
     if (!QFileInfo(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)).exists()) {
         QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation));
     }
@@ -232,18 +231,23 @@ void KisUsageLogger::rotateLog()
             // Rotate
             d->logFile.open(QFile::ReadOnly);
             QString log = QString::fromUtf8(d->logFile.readAll());
-            int sectionCount = log.count(s_sectionHeader);
-            int nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
-            while(sectionCount >= s_maxLogs) {
-                log = log.remove(0, log.indexOf(s_sectionHeader, nextSectionIndex));
-                nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
-                sectionCount = log.count(s_sectionHeader);
+            d->logFile.close();
+            QStringList logItems = log.split("SESSION:");
+            QStringList keptItems;
+            int sectionCount = logItems.size();
+            if (sectionCount > s_maxLogs) {
+                for (int i = sectionCount - s_maxLogs; i < sectionCount; ++i) {
+                    qDebug() << "section" << i << "logItems.size" << logItems.size();
+                    if (logItems.size() > i ) {
+                        keptItems.append(logItems[i]);
+                    }
+                }
+
+                d->logFile.open(QFile::WriteOnly);
+                int bytes = d->logFile.write(keptItems.join("\nSESSION:").toUtf8());
+                d->logFile.flush();
+                d->logFile.close();
             }
-            d->logFile.close();
-            d->logFile.open(QFile::WriteOnly);
-            d->logFile.write(log.toUtf8());
-            d->logFile.flush();
-            d->logFile.close();
         }
 
 

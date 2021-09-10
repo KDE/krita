@@ -1,8 +1,5 @@
 add_subdirectory(tests)
 
-if(OpenEXR_FOUND)
-	include_directories(${OPENEXR_INCLUDE_DIRS})
-endif()
 include_directories(${LibRaw_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libkdcraw/src)
 

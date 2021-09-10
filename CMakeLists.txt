@@ -735,23 +735,15 @@ set_package_properties(ZLIB PROPERTIES
     PURPOSE "Required by Krita's PNG and PSD support")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 
-find_package(OpenEXR 3.0 CONFIG QUIET)
-if(TARGET OpenEXR::OpenEXR)
-    set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
-else()
-    find_package(OpenEXR)
-endif()
-set_package_properties(OpenEXR PROPERTIES
-    DESCRIPTION "High dynamic-range (HDR) image file format"
-    URL "https://www.openexr.com"
-    TYPE OPTIONAL
-    PURPOSE "Required by the Krita OpenEXR filter")
+find_package(OpenEXR)
 macro_bool_to_01(OpenEXR_FOUND HAVE_OPENEXR)
-set(LINK_OPENEXR_LIB)
 if(OpenEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
+    if(TARGET OpenEXR::OpenEXR)
+        set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
+    else()
+        set(OPENEXR_LIBRARIES OpenEXR::IlmImf)
+    endif()
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-    add_definitions(${OPENEXR_DEFINITIONS})
     if(MSVC)
         add_compile_definitions(OPENEXR_DLL) 
     endif()

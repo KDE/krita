@@ -36,12 +36,9 @@ include_directories(
 )
 endif ()
 
-set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OpenEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-    add_definitions(${OPENEXR_DEFINITIONS})
 endif()
 
 

@@ -76,14 +76,9 @@ public:
     }
 
     bool isSupportedVersion() const {
-        return
-#ifdef Q_OS_MACOS
-                ((m_glMajorVersion * 100 + m_glMinorVersion) >= 302)
-#else
-                (m_glMajorVersion >= 3 && (m_supportsDeprecatedFunctions || m_isOpenGLES)) ||
-                ((m_glMajorVersion * 100 + m_glMinorVersion) == 201)
-#endif
-                ;
+        return (m_isOpenGLES && m_glMajorVersion >= 200)
+            || (!m_isOpenGLES && m_glMajorVersion * 100 + m_glMinorVersion == 201)
+            || ((m_glMajorVersion * 100 + m_glMinorVersion) >= 300);
     }
 
     bool supportsLoD() const {

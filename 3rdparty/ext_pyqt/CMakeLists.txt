@@ -121,11 +121,11 @@ elseif(WIN32)
         set(_compiler -c msvc)
         set(_make_command jom)
     endif()
-    string(REPLACE "//" "/" __pyqt_prefix ${PREFIX_ext_pyqt})
-    string(REPLACE "/" "\\" _pyqt_prefix ${__pyqt_prefix})
-    string(REPLACE "//" "/" ___krita_pythonpath "${KRITA_PYTHONPATH}")
-    string(REPLACE "/" "\\" __krita_pythonpath "${___krita_pythonpath}")
-    string(TOLOWER ${__krita_pythonpath} _krita_pythonpath)
+
+    krita_to_native_path("${PREFIX_ext_pyqt}" _pyqt_prefix)
+    krita_to_native_path("${KRITA_PYTHONPATH}" _krita_pythonpath)
+    string(TOLOWER ${_krita_pythonpath} _krita_pythonpath)
+    krita_to_native_environment_path_list("${_krita_pythonpath}" _krita_pythonpath)
 
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -137,14 +137,14 @@ elseif(WIN32)
         CONFIGURE_COMMAND ""
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
+            PYTHONPATH=${_krita_pythonpath}
             ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # HACK: Create lib\site-packages before installing
         # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
         INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_pyqt_prefix}\\lib\\site-packages
             COMMAND ${CMAKE_COMMAND} -E env 
-                "PYTHONPATH=${_krita_pythonpath}"
+                PYTHONPATH=${_krita_pythonpath}
                 ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
 
         BUILD_IN_SOURCE 1
@@ -158,19 +158,19 @@ elseif(WIN32)
         URL_HASH SHA256=2a69597e0dd11caabe75fae133feca66387819fc9bc050f547e5551bce97e5be
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
+            PYTHONPATH=${_krita_pythonpath}
             ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\lib\\site-packages --jobs ${SUBMAKE_JOBS}
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
+            PYTHONPATH=${_krita_pythonpath}
             ${_make_command} -j${SUBMAKE_JOBS}
 
         # force single-threaded installation to avoid
         # race conditions in post-install .py script
         INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
+            PYTHONPATH=${_krita_pythonpath}
             ${_make_command} -j1 install
 
         BUILD_IN_SOURCE 1
@@ -190,7 +190,7 @@ elseif(WIN32)
         CONFIGURE_COMMAND ""
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
+            PYTHONPATH=${_krita_pythonpath}
             ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # Here we need a flat-egg installation, otherwise the egg is deployed
@@ -198,7 +198,7 @@ elseif(WIN32)
         # So we set as root our 3rdparty layout, and a sufficiently dud prefix.
         # See https://github.com/msys2/MINGW-packages/blob/8a4066591cf1e023971526c55bf2d5fe0c7aa84a/mingw-w64-pyqt5-sip/PKGBUILD
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
+            PYTHONPATH=${_krita_pythonpath}
             ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix "." --root=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
 
         BUILD_IN_SOURCE 1

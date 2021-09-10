@@ -63,8 +63,11 @@ elseif (WIN32)
         set(_compiler -c msvc)
     endif()
 
-    string(REPLACE "/" "\\" _sip_prefix ${PREFIX_ext_sip})
-    string(REPLACE "/" "\\" _krita_pythonpath ${KRITA_PYTHONPATH})
+    krita_to_native_path("${PREFIX_ext_sip}" _sip_prefix)
+    krita_to_native_path("${KRITA_PYTHONPATH}" _krita_pythonpath)
+    string(TOLOWER ${_krita_pythonpath} _krita_pythonpath)
+    krita_to_native_environment_path_list("${_krita_pythonpath}" _krita_pythonpath)
+
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.python.org/packages/source/s/sip/sip-6.1.0.tar.gz
@@ -75,15 +78,15 @@ elseif (WIN32)
         CONFIGURE_COMMAND ""
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
+            PYTHONPATH=${_krita_pythonpath}
             ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS} ${_compiler}
 
         # HACK: Create lib\site-packages before installing
         # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
         INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_sip_prefix}\\lib\\site-packages
             COMMAND ${CMAKE_COMMAND} -E env 
-                "PYTHONPATH=${_krita_pythonpath}"
-                ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix ${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
+                PYTHONPATH=${_krita_pythonpath}
+                ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 

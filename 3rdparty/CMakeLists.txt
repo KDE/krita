@@ -32,6 +32,9 @@ endif (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 # Tools must be obtained to work with:
 include (ExternalProject)
 
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/kde_macro")
+include (KritaToNativePath)
+
 # allow specification of a directory with pre-downloaded
 # requirements
 if(NOT IS_DIRECTORY ${EXTERNALS_DOWNLOAD_DIR})
@@ -238,9 +241,8 @@ endfunction()
 
 function(DumpSitePackages PYTHONPATH)
     if (WIN32)
-        string(REPLACE "//" "/" ___krita_pythonpath "${${PYTHONPATH}}")
-        string(REPLACE "/" "\\" __krita_pythonpath "${___krita_pythonpath}")
-        string(TOLOWER "${__krita_pythonpath}" _krita_pythonpath)
+        krita_to_native_path("${${PYTHONPATH}}" _krita_pythonpath)
+        string(TOLOWER "${_krita_pythonpath}" _krita_pythonpath)
     else()
         set(_krita_pythonpath ${${PYTHONPATH}})
     endif()

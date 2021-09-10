@@ -4,9 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <config-hdr.h>
-#include "opengl/kis_opengl.h"
-#include "opengl/kis_opengl_p.h"
+#include <boost/optional.hpp>
 
 #include <QOpenGLContext>
 #include <QOpenGLDebugLogger>
@@ -21,20 +19,22 @@
 #include <QStandardPaths>
 #include <QVector>
 #include <QWindow>
-
-#include <klocalizedstring.h>
-
-#include <kis_debug.h>
-#include <kis_config.h>
-#include "KisOpenGLModeProber.h"
-#include <KisRepaintDebugger.h>
-
-#include <KisUsageLogger.h>
-#include <boost/optional.hpp>
-#include "kis_assert.h"
 #include <QRegularExpression>
 #include <QSettings>
 #include <QScreen>
+
+#include <klocalizedstring.h>
+
+#include <KisRepaintDebugger.h>
+#include <KisUsageLogger.h>
+#include <kis_assert.h>
+#include <kis_config.h>
+#include <kis_debug.h>
+
+#include "KisOpenGLModeProber.h"
+#include "opengl/kis_opengl.h"
+
+#include <config-hdr.h>
 
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
@@ -47,8 +47,6 @@
 #endif
 
 typedef void (APIENTRYP PFNGLINVALIDATEBUFFERDATAPROC) (GLuint buffer);
-
-using namespace KisOpenGLPrivate;
 
 namespace
 {
@@ -79,6 +77,16 @@ namespace
         g_rendererPreferredByQt = preferredByQt;
     }
 
+    void appendOpenGLWarningString(KLocalizedString warning)
+    {
+        g_openglWarningStrings << warning;
+    }
+
+    void overrideOpenGLWarningString(QVector<KLocalizedString> warnings)
+    {
+        g_openglWarningStrings = warnings;
+    }
+
     void openglOnMessageLogged(const QOpenGLDebugMessage& debugMessage) {
         qDebug() << "OpenGL:" << debugMessage;
     }
@@ -102,32 +110,6 @@ namespace
         return result;
     }
 }
-
-KisOpenGLPrivate::OpenGLCheckResult::OpenGLCheckResult(QOpenGLContext &context) {
-    if (!context.isValid()) {
-        return;
-    }
-
-    QOpenGLFunctions *funcs = context.functions(); // funcs is ready to be used
-
-    m_rendererString = QString(reinterpret_cast<const char *>(funcs->glGetString(GL_RENDERER)));
-    m_driverVersionString = QString(reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION)));
-    m_glMajorVersion = context.format().majorVersion();
-    m_glMinorVersion = context.format().minorVersion();
-    m_supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
-    m_isOpenGLES = context.isOpenGLES();
-}
-
-void KisOpenGLPrivate::appendOpenGLWarningString(KLocalizedString warning)
-{
-    g_openglWarningStrings << warning;
-}
-
-void KisOpenGLPrivate::overrideOpenGLWarningString(QVector<KLocalizedString> warnings)
-{
-    g_openglWarningStrings = warnings;
-}
-
 
 void KisOpenGL::initialize()
 {

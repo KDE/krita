@@ -417,7 +417,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
                 generator.setResolution(printer.resolution());
                 p.begin(&generator);
-                p.setBrush(QBrush(QColorConstants::White));
+                p.setBrush(QBrush(QColor(255,255,255)));
                 p.drawRect(QRect(0,0, sz.width(), sz.height()));
             }
             else {

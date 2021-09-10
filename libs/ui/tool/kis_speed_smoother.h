@@ -24,6 +24,8 @@ public:
     void clear();
 
 private:
+    qreal getNextSpeedImpl(const QPointF &pt, qreal time);
+private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };

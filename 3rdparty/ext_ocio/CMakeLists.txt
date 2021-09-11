@@ -10,7 +10,7 @@ if(APPLE)
 endif()
 
 # we apply MinGW and MSVC patch on all the systems because it also removes -Werror switch
-set(ext_ocio_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-MinGW-and-MSVC-detection.patch
+set(ext_ocio_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-MinGW-and-MSVC-detection.patch)
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Auto-disable-SSE-if-the-compiler-target-doesn-t-supp.patch
 )
 

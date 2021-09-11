@@ -7,7 +7,10 @@
 #define COMMENT_MODEL
 
 #include "StoryboardItem.h"
+
 #include <QAbstractListModel>
+#include <QAbstractButton>
+
 #include <kritastoryboarddocker_export.h>
 
 class StoryboardModel;

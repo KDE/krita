@@ -35,7 +35,7 @@ KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
     m_opacitySlider = ui.opacitySlider;
     m_opacitySlider->setRange(0.0, 100.0, 0);
     m_opacitySlider->setValue(100);
-    m_opacitySlider->setPrefix("Opacity: ");
+    m_opacitySlider->setPrefix(i18n("Opacity: "));
     m_opacitySlider->setSuffix(i18n("%"));
 
     setConfigurationPage(widget);

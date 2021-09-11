@@ -933,7 +933,8 @@ list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
-if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+if (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)" 
+    OR CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)"))
     find_package(Vc 1.1.0)
     set_package_properties(Vc PROPERTIES
         DESCRIPTION "Portable, zero-overhead SIMD library for C++"

@@ -149,6 +149,28 @@ else()
     set(x265_12bit_LIBRARY libx265_main12.a)
     set(x265_EXTRA_LINK_FLAGS -L${EXTPREFIX_heif}/lib)
 endif()
+if ((CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)" 
+    OR CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)")
+    AND NOT APPLE)
+    # x265 in 32-bit platforms cannot support 10-bit and 12-bit images
+    # because they either crash on malloc or require SSE4.1+ extensions
+    # Support for 10-bit and 12-bit also requires NEON extensions
+    # and these are broken since 3.3
+    ExternalProject_Add(
+        ext_libx265
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/videolan/x265/archive/3.4.tar.gz
+        URL_HASH SHA512=17639324c9428087cda9cfa5b57bcb82403226ec5b4fc0da46028e0700452f7bb12df0f4f3a8fd5d70ebdd912ba7589bd99b01c9b7e0d4fa00424e1502580090
+
+        SOURCE_SUBDIR source/
+
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE
+
+        UPDATE_COMMAND ""
+
+        DEPENDS ext_nasm
+    )
+else()
 ExternalProject_Add(ext_libx265_10bit
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20210203-12666.tar.gz
@@ -205,6 +227,7 @@ ExternalProject_Add(
 
     DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
 )
+endif()
 
 ExternalProject_Add(
     ext_libheif

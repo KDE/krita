@@ -47,7 +47,7 @@ void KisPaintingInformationBuilder::updateSettings()
     KisCubicCurve curve;
     curve.fromString(cfg.pressureTabletCurve());
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
-    m_useTimestamps = cfg.readEntry("useTimestampsForBrushSpeed", false);
+    m_speedSmoother->updateSettings();
 }
 
 KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,
@@ -112,12 +112,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
     QPointF adjusted = adjustDocumentPoint(event->point, m_startPoint);
     QPointF imagePoint = documentToImage(adjusted);
     qreal perspective = calculatePerspective(adjusted);
-    qreal speed;
-    if (m_useTimestamps) {
-        speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint), event->time());
-    } else {
-        speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
-    }
+    const qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint), event->time());
 
     KisPaintInformation pi(imagePoint,
                            !m_pressureDisabled ? 1.0 : pressureToCurve(event->pressure()),
@@ -140,17 +135,10 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
                                                          bool isStrokeStarted)
 {
     qreal perspective = calculatePerspective(imagePoint);
-    qreal speed;
-    if (m_useTimestamps) {
-        speed = !isStrokeStarted && event ?
-                m_speedSmoother->getNextSpeed(imageToView(imagePoint), event->time()) :
-                m_speedSmoother->lastSpeed();
-    } else {
-        speed = !isStrokeStarted ?
-                m_speedSmoother->getNextSpeed(imageToView(imagePoint)) :
-                m_speedSmoother->lastSpeed();
-    }
 
+    const qreal speed = !isStrokeStarted && event ?
+        m_speedSmoother->getNextSpeed(imageToView(imagePoint), event->time()) :
+        m_speedSmoother->lastSpeed();
 
     if (event) {
         return KisPaintInformation::createHoveringModeInfo(imagePoint,

@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
-    <height>564</height>
+    <width>648</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -230,6 +230,19 @@
      </property>
      <property name="toolTip">
       <string>Maximum speed of the stylus that would be mapped to 1.0 in the sesor</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KisSliderSpinBox" name="intBrushSpeedSmoothing" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Amount of smoothing Krita should do to speed sensor. This value is very hardware-dependent.</string>
      </property>
     </widget>
    </item>

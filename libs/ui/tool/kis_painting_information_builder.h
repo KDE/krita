@@ -70,7 +70,6 @@ private:
     QPointF m_startPoint;
     QScopedPointer<KisSpeedSmoother> m_speedSmoother;
     bool m_pressureDisabled;
-    bool m_useTimestamps;
 };
 
 class KRITAUI_EXPORT KisConverterPaintingInformationBuilder : public KisPaintingInformationBuilder

@@ -59,6 +59,9 @@ struct KisSpeedSmoother::Private
     qreal lastTime;
     qreal lastSpeed;
 
+    bool useTimestamps = false;
+    int numSmoothingSamples = 3;
+
     accumulator_set<qreal, stats<tag::rolling_mean>> timeDiffAccumulator;
 
 };
@@ -67,6 +70,7 @@ struct KisSpeedSmoother::Private
 KisSpeedSmoother::KisSpeedSmoother()
     : m_d(new Private(MAX_SMOOTH_HISTORY))
 {
+    updateSettings();
 }
 
 KisSpeedSmoother::~KisSpeedSmoother()
@@ -80,12 +84,10 @@ qreal KisSpeedSmoother::lastSpeed() const
 
 qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt, ulong timestamp)
 {
-    return getNextSpeedImpl(pt, timestamp);
-}
+    const qreal time = m_d->useTimestamps ?
+        qreal(timestamp) :
+        qreal(m_d->timer.nsecsElapsed()) / 1000000;
 
-qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt)
-{
-    const qreal time = qreal(m_d->timer.nsecsElapsed()) / 1000000;
     return getNextSpeedImpl(pt, time);
 }
 
@@ -96,6 +98,14 @@ void KisSpeedSmoother::clear()
     m_d->distances.push_back(Private::DistancePoint(0.0, 0.0));
     m_d->lastPoint = QPointF();
     m_d->lastSpeed = 0.0;
+}
+
+void KisSpeedSmoother::updateSettings()
+{
+
+    KisConfig cfg(true);
+    m_d->useTimestamps = cfg.readEntry("useTimestampsForBrushSpeed", false);
+    m_d->numSmoothingSamples = cfg.readEntry("speedValueSmoothing", 3);
 }
 
 qreal KisSpeedSmoother::getNextSpeedImpl(const QPointF &pt, qreal time)
@@ -138,7 +148,7 @@ qreal KisSpeedSmoother::getNextSpeedImpl(const QPointF &pt, qreal time)
         totalDistance += it->distance;
         totalTime += avgTimeDiff;
 
-        if (itemsSearched > NUM_SMOOTHING_SAMPLES &&
+        if (itemsSearched > m_d->numSmoothingSamples &&
             totalDistance > MIN_TRACKING_DISTANCE) {
 
             break;

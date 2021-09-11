@@ -18,10 +18,9 @@ class KisDynamicSensorSpeed : public KisDynamicSensor
 public:
     KisDynamicSensorSpeed();
     ~KisDynamicSensorSpeed() override { }
-    qreal value(const KisPaintInformation& info) override;
-
-private:
-    int m_maxAllowedSpeedValue = 30; // px/ms
+    qreal value(const KisPaintInformation& info) override {
+        return info.drawingSpeed();
+    }
 };
 
 class KisDynamicSensorRotation : public KisDynamicSensor

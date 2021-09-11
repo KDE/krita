@@ -47,6 +47,7 @@ void KisPaintingInformationBuilder::updateSettings()
     KisCubicCurve curve;
     curve.fromString(cfg.pressureTabletCurve());
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
+    m_maxAllowedSpeedValue = cfg.readEntry("maxAllowedSpeedValue", 30);
     m_speedSmoother->updateSettings();
 }
 
@@ -121,7 +122,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
                            event->tangentialPressure(),
                            perspective,
                            timeElapsed,
-                           speed);
+                           qMin(1.0, speed / qreal(m_maxAllowedSpeedValue)));
 
     pi.setCanvasRotation(canvasRotation());
     pi.setCanvasMirroredH(canvasMirroredX());
@@ -147,7 +148,7 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
                                                            event->rotation(),
                                                            event->tangentialPressure(),
                                                            perspective,
-                                                           speed,
+                                                           qMin(1.0, speed / qreal(m_maxAllowedSpeedValue)),
                                                            canvasRotation(),
                                                            canvasMirroredX(),
                                                            canvasMirroredY());

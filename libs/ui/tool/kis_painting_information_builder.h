@@ -70,6 +70,7 @@ private:
     QPointF m_startPoint;
     QScopedPointer<KisSpeedSmoother> m_speedSmoother;
     bool m_pressureDisabled;
+    int m_maxAllowedSpeedValue = 30;
 };
 
 class KRITAUI_EXPORT KisConverterPaintingInformationBuilder : public KisPaintingInformationBuilder

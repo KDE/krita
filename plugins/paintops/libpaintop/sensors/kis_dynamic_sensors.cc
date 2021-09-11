@@ -12,14 +12,6 @@
 KisDynamicSensorSpeed::KisDynamicSensorSpeed()
     : KisDynamicSensor(SPEED)
 {
-    KisConfig cfg(true);
-    m_maxAllowedSpeedValue = cfg.readEntry("maxAllowedSpeedValue", 30);
-}
-
-qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info)
-{
-    const qreal currentSpeed = qMin(1.0, info.drawingSpeed() / m_maxAllowedSpeedValue);
-    return currentSpeed;
 }
 
 KisDynamicSensorRotation::KisDynamicSensorRotation()

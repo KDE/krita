@@ -34,6 +34,7 @@ struct KisVisualColorSelector::Private
     bool useACSConfig {true};
     int colorChannelCount {0};
     int minimumSliderWidth {16};
+    Qt::Edge sliderPosition {Qt::LeftEdge};
     qreal stretchLimit {1.5};
     QVector4D channelValues;
     KisVisualColorSelector::RenderMode renderMode {RenderMode::DynamicBackground};
@@ -167,6 +168,18 @@ void KisVisualColorSelector::setRenderMode(KisVisualColorSelector::RenderMode mo
             shape->forceImageUpdate();
             shape->update();
         }
+    }
+}
+
+void KisVisualColorSelector::setSliderPosition(Qt::Edge edge)
+{
+    if (edge != Qt::TopEdge || edge != Qt::LeftEdge) {
+        return;
+    }
+
+    if (edge != m_d->sliderPosition) {
+        m_d->sliderPosition = edge;
+        rebuildSelector();
     }
 }
 
@@ -371,9 +384,12 @@ void KisVisualColorSelector::rebuildSelector()
                                                        KisVisualEllipticalSelectorShape::border);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == false) {
+            KisVisualRectangleSelectorShape::singelDTypes orientation = useHorizontalSlider() ?
+                        KisVisualRectangleSelectorShape::horizontal : KisVisualRectangleSelectorShape::vertical;
+
             bar = new KisVisualRectangleSelectorShape(this,
                                                       KisVisualColorSelectorShape::onedimensional,
-                                                      channel1, channel1, 20);
+                                                      channel1, channel1, 20, orientation);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == true) {
             bar = new KisVisualEllipticalSelectorShape(this,
@@ -475,18 +491,29 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
     }
     else if (m_d->colorChannelCount == 3) {
         m_d->widgetlist.at(0)->setBorderWidth(borderWidth);
+        // Ring
         if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring ||
             (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular)) {
 
             m_d->widgetlist.at(0)->setGeometry((width() - sizeValue)/2, (height() - sizeValue)/2,
                                                sizeValue, sizeValue);
         }
+        // Slider Bar
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider) {
             // limit stretch; only vertical slider currently
-            newrect.setWidth(qMin(newrect.width(), qRound(sizeValue * m_d->stretchLimit + borderWidth)));
-            newrect.setHeight(qMin(newrect.height(), qRound((newrect.width() - borderWidth) * m_d->stretchLimit)));
+            if (useHorizontalSlider()) {
+                newrect.setWidth(qMin(newrect.width(), qRound((newrect.height() - borderWidth) * m_d->stretchLimit)));
+                newrect.setHeight(qMin(newrect.height(), qRound(sizeValue * m_d->stretchLimit + borderWidth)));
 
-            m_d->widgetlist.at(0)->setGeometry(0, 0, borderWidth, newrect.height());
+                m_d->widgetlist.at(0)->setGeometry(0, 0, newrect.width(), borderWidth);
+            }
+            else {
+                newrect.setWidth(qMin(newrect.width(), qRound(sizeValue * m_d->stretchLimit + borderWidth)));
+                newrect.setHeight(qMin(newrect.height(), qRound((newrect.width() - borderWidth) * m_d->stretchLimit)));
+
+                m_d->widgetlist.at(0)->setGeometry(0, 0, borderWidth, newrect.height());
+            }
+
         }
 
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
@@ -517,8 +544,12 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
 
 bool KisVisualColorSelector::useHorizontalSlider()
 {
-    // TODO: configurable logic
-    return width() > height();
+    if (m_d->colorChannelCount == 1) {
+        return width() > height();
+    }
+    else {
+        return m_d->sliderPosition == Qt::TopEdge;
+    }
 }
 
 void KisVisualColorSelector::loadACSConfig()

@@ -73,6 +73,11 @@ public:
     void setMinimumSliderWidth(int width);
     RenderMode renderMode() const;
     void setRenderMode(RenderMode mode);
+    /**
+     * @brief Set the slider position for slider + square and slider + wheel configurations.
+     * @param edge Edge to position the slider; currently only supports LeftEdge and TopEdge
+     */
+    void setSliderPosition(Qt::Edge edge);
     KoGamutMask* activeGamutMask() const;
 
 public Q_SLOTS:

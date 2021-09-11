@@ -60,6 +60,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
          <property name="iconSize">
           <size>
            <width>48</width>

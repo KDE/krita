@@ -942,9 +942,8 @@ set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp
 
 for %%a in (%EXT_TARGETS%) do (
-    setlocal
-    call :has_target TEST "ext_%%a\" "ext_frameworks\ext_%%a-prefix\"
-    if "!TEST!" == "1" (
+    call :has_target TEST_HAS_TARGET "ext_%%a\" "ext_frameworks\ext_%%a-prefix\"
+    if "!TEST_HAS_TARGET!" == "1" (
         echo Building ext_%%a...
         "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
         if errorlevel 1 (
@@ -954,7 +953,6 @@ for %%a in (%EXT_TARGETS%) do (
     ) else (
         echo Skipping ext_%%a, using OS package...
     )
-    endlocal
 )
 echo.
 

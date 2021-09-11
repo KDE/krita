@@ -1,13 +1,9 @@
 SET(PREFIX_ext_boost "${EXTPREFIX}" )
 if(WIN32)
    if(MINGW)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-      string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1"
-        KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
-    else()
-      string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1\\2"
-        KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
-    endif()
+
+    string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1"
+           KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
 
    ExternalProject_Add(
        ext_boost

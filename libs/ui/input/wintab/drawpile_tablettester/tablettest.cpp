@@ -14,6 +14,9 @@
 TabletTester::TabletTester(QWidget *parent)
     : QWidget(parent), m_mouseDown(false), m_tabletDown(false)
 {
+    // we don't explicitly update settings inside KisSpeedSmoother
+    // here because the tablet tester is created every time anew.
+
 }
 
 QSize TabletTester::sizeHint() const
@@ -89,11 +92,13 @@ void TabletTester::tabletEvent(QTabletEvent *e)
     switch(e->type()) {
         case QEvent::TabletMove:
             msg += " move";
+
             break;
         case QEvent::TabletPress:
             msg += " press";
             m_tabletPath.clear();
             m_tabletDown = true;
+            m_speedSmoother.clear();
             break;
         case QEvent::TabletRelease:
             msg += " release";
@@ -104,11 +109,14 @@ void TabletTester::tabletEvent(QTabletEvent *e)
             break;
     }
 
-    msg += QString(" X=%1 Y=%2 B=%3 P=%4%")
+    const qreal speed = m_speedSmoother.getNextSpeed(e->posF(), e->timestamp());
+
+    msg += QString(" X=%1 Y=%2 B=%3 P=%4% S=%5")
         .arg(e->posF().x(), 0, 'f', 2)
         .arg(e->posF().y(), 0, 'f', 2)
         .arg(e->buttons())
         .arg(e->pressure()*100, 0, 'f', 1)
+        .arg(speed, 0, 'f', 1)
         ;
 
     if(e->type() == QEvent::TabletMove) {

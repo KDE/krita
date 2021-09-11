@@ -46,14 +46,14 @@ ELSE(EXISTS PYQT5_VERSION)
     EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env
       "PYTHONPATH=${_pyqt5_python_path}"
       "PYTHONDLLPATH=${LIBQT5CORE_PATH};${MINGW_PATH};"
-      ${PYTHON_EXECUTABLE} ${_find_pyqt5_py}
+      ${Python_EXECUTABLE} ${_find_pyqt5_py}
       OUTPUT_VARIABLE pyqt5_config)
   else (WIN32)
     set(_pyqt5_python_path "${KRITA_PYTHONPATH_V4}:${KRITA_PYTHONPATH_V5}:$ENV{PYTHONPATH}")
 
     EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env 
       "PYTHONPATH=${_pyqt5_python_path}"
-      ${PYTHON_EXECUTABLE} ${_find_pyqt5_py}
+      ${Python_EXECUTABLE} ${_find_pyqt5_py}
       OUTPUT_VARIABLE pyqt5_config)
   endif (WIN32)
 

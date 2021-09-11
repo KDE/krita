@@ -5,6 +5,10 @@ ExternalProject_Add( ext_gmic
     URL https://files.kde.org/krita/build/dependencies/gmic-2.9.8.1-patched.tar.gz
     URL_HASH SHA256=9e37aa7e359710080617810b3a9b2e3e4f79a4b188b96ee737f9fb9e73314299
 
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-QSettings-instancing-without-_GMIC_USE_HOSTED_SE.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Add-desktop-entry.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Use-gmic_parallel-WINAPI-signature-on-all-Windows.patch
+
     SOURCE_SUBDIR gmic-qt
 
     INSTALL_DIR ${PREFIX_ext_gmic}

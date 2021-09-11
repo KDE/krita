@@ -18,7 +18,7 @@ class VcExtraMath
 {
 public:
     // vectorized erf function, precision 1e-5
-    static inline Vc::float_v erf(Vc::float_v x) {
+    static Vc_ALWAYS_INLINE Vc::float_v erf(Vc::float_v::AsArg x) {
         Vc::float_v xa = abs(x);
         Vc::float_m precisionLimit(xa >= 9.3f); // wrong result for any number beyond this
         xa(precisionLimit) = 0;

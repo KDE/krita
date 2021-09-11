@@ -1,0 +1,25 @@
+From 0e1f85074329d70ac0c4f0ed175fbf74b1ff504e Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 1 Sep 2021 23:39:49 +0000
+Subject: [PATCH 3/3] Use gmic_parallel WINAPI signature on all Windows
+
+---
+ src/gmic.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gmic.cpp b/src/gmic.cpp
+index 6aa87f2..53155fe 100644
+--- a/src/gmic.cpp
++++ b/src/gmic.cpp
+@@ -2510,7 +2510,7 @@ struct _gmic_parallel {
+ };
+ 
+ template<typename T>
+-#if cimg_OS==2 && defined(_MSC_VER)
++#if cimg_OS==2 && !defined(PTHREAD_CANCEL_ENABLE)
+ DWORD WINAPI gmic_parallel(LPVOID arg) {
+ #else
+ static void *gmic_parallel(void *arg) {
+-- 
+2.32.0.windows.2
+

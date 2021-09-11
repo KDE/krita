@@ -1,0 +1,39 @@
+From 7c3b5db6bdb31ad65b8c9cd36169de55c83e1422 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 1 Sep 2021 22:08:21 +0000
+Subject: [PATCH] Allow build with llvm-dlltool
+
+---
+ src/exchndl/CMakeLists.txt | 2 +-
+ src/mgwhelp/CMakeLists.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/exchndl/CMakeLists.txt b/src/exchndl/CMakeLists.txt
+index 93cfef9..1b51df1 100644
+--- a/src/exchndl/CMakeLists.txt
++++ b/src/exchndl/CMakeLists.txt
+@@ -28,7 +28,7 @@ install (TARGETS exchndl LIBRARY DESTINATION bin)
+ 
+ add_custom_command (
+     OUTPUT ${EXCHNDL_IMPLIB}
+-    COMMAND ${CMAKE_DLLTOOL} --output-lib ${EXCHNDL_IMPLIB} --kill-at --input-def=${CMAKE_CURRENT_SOURCE_DIR}/${EXCHNDL_IMP_DEF}
++    COMMAND ${CMAKE_DLLTOOL} --output-lib ${EXCHNDL_IMPLIB} --kill-at --input-def ${CMAKE_CURRENT_SOURCE_DIR}/${EXCHNDL_IMP_DEF}
+     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${EXCHNDL_IMP_DEF}
+ )
+ add_custom_target (exchndl_implib ALL DEPENDS exchndl ${EXCHNDL_IMPLIB})
+diff --git a/src/mgwhelp/CMakeLists.txt b/src/mgwhelp/CMakeLists.txt
+index c612c16..c37deb7 100644
+--- a/src/mgwhelp/CMakeLists.txt
++++ b/src/mgwhelp/CMakeLists.txt
+@@ -29,7 +29,7 @@ install (TARGETS mgwhelp LIBRARY DESTINATION bin)
+ 
+ add_custom_command (
+     OUTPUT ${MGWHELP_IMPLIB}
+-    COMMAND ${CMAKE_DLLTOOL} --output-lib ${MGWHELP_IMPLIB} --dllname mgwhelp.dll --kill-at --input-def=${CMAKE_CURRENT_SOURCE_DIR}/${MGWHELP_IMP_DEF}
++    COMMAND ${CMAKE_DLLTOOL} --output-lib ${MGWHELP_IMPLIB} --dllname mgwhelp.dll --kill-at --input-def ${CMAKE_CURRENT_SOURCE_DIR}/${MGWHELP_IMP_DEF}
+     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${MGWHELP_IMP_DEF}
+ )
+ add_custom_target (mgwhelp_implib DEPENDS mgwhelp ${MGWHELP_IMPLIB})
+-- 
+2.20.1.windows.1
+

@@ -54,7 +54,7 @@ private:
     const QScopedPointer<Private> d;
 
     static const QString s_sectionHeader;
-    static const int s_maxLogs {10};
+    static const int s_maxLogs {20};
 
 };
 

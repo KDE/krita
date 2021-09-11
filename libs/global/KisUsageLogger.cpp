@@ -244,7 +244,7 @@ void KisUsageLogger::rotateLog()
                 }
 
                 d->logFile.open(QFile::WriteOnly);
-                int bytes = d->logFile.write(keptItems.join("\nSESSION:").toUtf8());
+                d->logFile.write(keptItems.join("\nSESSION:").toUtf8());
                 d->logFile.flush();
                 d->logFile.close();
             }

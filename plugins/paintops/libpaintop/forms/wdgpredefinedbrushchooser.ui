@@ -223,7 +223,7 @@
        <item row="3" column="0" colspan="2">
         <widget class="QGroupBox" name="grpBrushMode">
          <property name="title">
-          <string>Brush mode</string>
+          <string comment="Predefined Brush tip mode">Brush mode</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>

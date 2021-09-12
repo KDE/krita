@@ -40,7 +40,7 @@ if (WIN32)
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard -qt-sqlite
         #
-        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -openssl-linked
+        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -openssl-linked -qt-freetype -qt-harfbuzz
         -I ${EXTPREFIX_qt}/include
         -L ${EXTPREFIX_qt}/lib
         #

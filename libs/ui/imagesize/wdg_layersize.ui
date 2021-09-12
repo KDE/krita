@@ -116,7 +116,7 @@
       <item column="1" row="2">
        <widget class="QLabel" name="lblFilter">
         <property name="text">
-         <string>Filter:</string>
+         <string comment="Resize intepolation method list label">Filter:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

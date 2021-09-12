@@ -176,7 +176,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Cutoff</string>
+              <string comment="Texture lightness range cutoff range slider">Cutoff:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

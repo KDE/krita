@@ -227,7 +227,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the tilt of the tablet to determine the normals.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>Tilt</string>
+           <string comment="Tilt elevation">Tilt</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -240,7 +240,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the drawing direction to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>Direction</string>
+           <string comment="Drawing Angle">Direction</string>
           </property>
          </widget>
         </item>
@@ -250,7 +250,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the rotation sensor available in certain pens to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>Rotation</string>
+           <string comment="Pen Rotation">Rotation</string>
           </property>
          </widget>
         </item>

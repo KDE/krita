@@ -40,7 +40,7 @@ class ScaleTool(QWidget):
         self.layout.addRow(i18n("Width:"), self.widthSpinBox)
         self.layout.addRow(i18n("Height:"), self.heightSpinBox)
         self.layout.addRow(i18n("Resolution:"), self.resolutionLayout)
-        self.layout.addRow(i18n("Filter:"), self.strategyComboBox)
+        self.layout.addRow(i18nc("Resize intepolation method list label", "Filter:"), self.strategyComboBox)
 
     def adjust(self, documents):
         for document in documents:

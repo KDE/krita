@@ -131,14 +131,14 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                     settings, 0);
 
             QList<QString> modes;
-            modes << i18n("Grow");
-            modes << i18n("Shrink");
+            modes << i18nc("Grow as in deform brush engine", "Grow");
+            modes << i18nc("Shrink as in deform brush engine", "Shrink");
             modes << i18n("Swirl CW");
             modes << i18n("Swirl CCW");
             modes << i18n("Move");
             modes << i18n("Lens Zoom In");
             modes << i18n("Lens Zoom Out");
-            modes << i18n("Color Deformation");
+            modes << i18nc("Rearrange the positions of the pixels under the cursor", "Color Deformation");
 
             prop->setItems(modes);
 

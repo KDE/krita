@@ -788,7 +788,7 @@
     </Action>
   </Actions>
   <Actions category="Filters">
-    <text>Filters</text>
+    <text comment="Filter as an effect">Filters</text>
     <Action name="krita_filter_colortoalpha">
       <icon>color-to-alpha</icon>
       <text>&amp;Color to Alpha...</text>

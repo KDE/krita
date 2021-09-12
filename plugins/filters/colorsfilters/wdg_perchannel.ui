@@ -356,7 +356,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Channel:</string>
+        <string comment="Channel as in Color Channels">Channel:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

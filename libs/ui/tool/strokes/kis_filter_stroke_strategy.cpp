@@ -136,7 +136,7 @@ KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
                                                  KisFilterConfigurationSP filterConfig,
                                                  KisResourcesSnapshotSP resources,
                                                  ExternalCancelUpdatesStorageSP externalCancelUpdatesStorage)
-    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Filter \"%1\"", filter->name()),
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18nc("Filter as an effect", "Filter \"%1\"", filter->name()),
                                         false,
                                         resources->image().data())
     , m_d(new Private())

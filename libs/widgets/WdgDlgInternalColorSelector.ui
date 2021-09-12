@@ -54,7 +54,7 @@
          </property>
          <widget class="QWidget" name="tab_channel">
           <attribute name="title">
-           <string>Channels</string>
+           <string comment="Channel as in Color Channels">Channels</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <property name="spacing">

@@ -152,7 +152,7 @@
             <string>Allow growing the image by dragging outside bounds of the image</string>
            </property>
            <property name="text">
-            <string>Grow</string>
+            <string comment="Grow as in crop tool">Grow</string>
            </property>
           </widget>
          </item>

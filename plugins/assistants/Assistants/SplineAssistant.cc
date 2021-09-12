@@ -219,7 +219,7 @@ QString SplineAssistantFactory::id() const
 
 QString SplineAssistantFactory::name() const
 {
-    return i18n("Spline");
+    return i18nc("A type of drawing assistants", "Spline");
 }
 
 KisPaintingAssistant* SplineAssistantFactory::createPaintingAssistant() const

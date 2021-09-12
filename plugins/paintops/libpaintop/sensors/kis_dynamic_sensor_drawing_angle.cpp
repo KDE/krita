@@ -63,13 +63,13 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
 {
     QWidget *widget = new QWidget(parent);
 
-    m_chkLockedMode = new QCheckBox(i18n("Lock"), widget);
+    m_chkLockedMode = new QCheckBox(i18nc("Lock Drawing angle at start of each stroke", "Lock"), widget);
     m_chkLockedMode->setChecked(m_lockedAngleMode);
 
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(setLockedAngleMode(int)));
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(updateGUI()));
 
-    m_chkFanCorners = new QCheckBox(i18n("Fan Corners"), widget);
+    m_chkFanCorners = new QCheckBox(i18nc("Smoothing Drawing angle when a stroke is making a sharp turn", "Fan Corners"), widget);
 
     connect(m_chkFanCorners, SIGNAL(stateChanged(int)), SLOT(setFanCornersEnabled(int)));
 

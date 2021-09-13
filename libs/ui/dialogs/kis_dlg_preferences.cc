@@ -362,7 +362,12 @@ void GeneralTab::setDefault()
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline(true));
 
+#ifdef Q_OS_ANDROID
+    m_chkNativeFileDialog->setChecked(true);
+#else
     m_chkNativeFileDialog->setChecked(false);
+#endif
+
     intMaxBrushSize->setValue(1000);
 
     chkUseCustomFont->setChecked(false);

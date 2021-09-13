@@ -160,7 +160,7 @@ void KisFileLayer::openFile() const
             fileAlreadyOpen = true;
         }
     }
-    if (!fileAlreadyOpen) {
+    if (!fileAlreadyOpen && QFile::exists(QFileInfo(path()).absoluteFilePath())) {
         KisPart::instance()->openExistingFile(QFileInfo(path()).absoluteFilePath());
     }
 }

@@ -32,7 +32,7 @@ else(ENABLE_PYTHON_2)
     if (MINGW)
         find_package(Python 3.8 REQUIRED COMPONENTS Development Interpreter)
     else()
-        find_package(Python 3.0 REQUIRED COMPONENTS Development Interpreter)
+        find_package(Python 3.0 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)
     endif()
 endif(ENABLE_PYTHON_2)
 

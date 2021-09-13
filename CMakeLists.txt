@@ -998,8 +998,8 @@ set_package_properties(Poppler PROPERTIES
 ##
 ## Test for quazip
 ##
-find_package(QuaZip 0.6)
-set_package_properties(QuaZip PROPERTIES
+find_package(QUAZIP 0.6)
+set_package_properties(QUAZIP PROPERTIES
     DESCRIPTION "A library for reading and writing zip files"
     URL "https://stachenov.github.io/quazip/"
     TYPE REQUIRED

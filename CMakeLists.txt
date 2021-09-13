@@ -19,7 +19,7 @@ if (POLICY CMP0017)
 endif ()
 
 if (POLICY CMP0022)
-    cmake_policy(SET CMP0022 OLD)
+    cmake_policy(SET CMP0022 NEW)
 endif ()
 
 if (POLICY CMP0026)

@@ -240,6 +240,18 @@ QList<KisKeyframeChannel *> KisAnimatedTransformMaskParameters::copyChannelsFrom
     return chans;
 }
 
+void KisAnimatedTransformMaskParameters::initializeKeyframes(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command *cmnd)
+{
+    int time = mask->parent()->original()->defaultBounds()->currentTime();
+    KisAnimatedTransformMaskParameters::addKeyframes(mask, time, params, cmnd );
+}
+
+void KisAnimatedTransformMaskParameters::setKeyframeData(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command *cmnd)
+{
+    int time = mask->parent()->original()->defaultBounds()->currentTime();
+    KisAnimatedTransformMaskParameters::setKeyframes(mask, time, params, cmnd );
+}
+
 qreal KisAnimatedTransformMaskParameters::defaultValueForScalarChannel(QString name)
 {
     KoID channelID = chanNameToKoID(name);

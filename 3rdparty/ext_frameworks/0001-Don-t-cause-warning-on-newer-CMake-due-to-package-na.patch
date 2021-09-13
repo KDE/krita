@@ -1,0 +1,55 @@
+From 7999118db61a29b5a4a6db07f957e94c8ffd361e Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 13 Sep 2021 15:27:50 +0300
+Subject: [PATCH] Don't cause warning on newer CMake due to package name
+ mismatch
+
+---
+ find-modules/FindKF5.cmake         | 7 ++++++-
+ modules/ECMFindModuleHelpers.cmake | 5 +++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/find-modules/FindKF5.cmake b/find-modules/FindKF5.cmake
+index b0ba9f6..267fed8 100644
+--- a/find-modules/FindKF5.cmake
++++ b/find-modules/FindKF5.cmake
+@@ -75,7 +75,12 @@ foreach(_module ${KF5_FIND_COMPONENTS})
+         ${_exact_arg} ${_quiet_arg}
+         CONFIG
+     )
+-    find_package_handle_standard_args(KF5${_module} CONFIG_MODE)
++    if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.17.0")
++       set(_ecm_mismatched_tag NAME_MISMATCHED)
++    endif ()
++
++    find_package_handle_standard_args(KF5${_module} CONFIG_MODE ${_ecm_mismatched_tag})
++
+     if (KF5_FIND_REQUIRED AND KF5_FIND_REQUIRED_${_module})
+         # If the component was required, we tell FeatureSummary so that it
+         # will be displayed in the correct list. We do not use the REQUIRED
+diff --git a/modules/ECMFindModuleHelpers.cmake b/modules/ECMFindModuleHelpers.cmake
+index f2e32f9..8f32dd0 100644
+--- a/modules/ECMFindModuleHelpers.cmake
++++ b/modules/ECMFindModuleHelpers.cmake
+@@ -245,6 +245,10 @@ macro(ecm_find_package_handle_library_components module_name)
+             set(${module_name}_VERSION ${${module_name}_${ecm_fpwc_comp}_VERSION})
+         endif()
+ 
++        if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.17.0")
++            set(_ecm_mismatched_tag NAME_MISMATCHED)
++        endif ()
++
+         find_package_handle_standard_args(${module_name}_${ecm_fpwc_comp}
+             FOUND_VAR
+                 ${module_name}_${ecm_fpwc_comp}_FOUND
+@@ -254,6 +258,7 @@ macro(ecm_find_package_handle_library_components module_name)
+                 ${ecm_fpwc_dep_vars}
+             VERSION_VAR
+                 ${module_name}_${ecm_fpwc_comp}_VERSION
++            ${_ecm_mismatched_tag}
+             )
+ 
+         mark_as_advanced(
+-- 
+2.20.1.windows.1
+

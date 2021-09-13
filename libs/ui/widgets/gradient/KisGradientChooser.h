@@ -14,6 +14,7 @@
 #include <KoResource.h>
 #include <kritaui_export.h>
 #include <KoCanvasResourcesInterface.h>
+#include <KoAbstractGradient.h>
 
 class KisResourceItemChooser;
 
@@ -193,6 +194,8 @@ Q_SIGNALS:
     void resourceSelected(KoResourceSP resource);
     /// Emitted when a resource was clicked
     void resourceClicked(KoResourceSP resource);
+    /// Emitted when a resource was changed or added
+    void gradientEdited(KoAbstractGradientSP resource);
 
 private:
     class Private;

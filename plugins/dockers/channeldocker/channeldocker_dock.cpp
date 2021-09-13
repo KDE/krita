@@ -25,7 +25,7 @@
 #include <kis_idle_watcher.h>
 
 ChannelDockerDock::ChannelDockerDock( ) :
-    QDockWidget(i18n("Channels")),
+    QDockWidget(i18nc("Channel as in Color Channels", "Channels")),
     m_imageIdleWatcher(new KisIdleWatcher(250, this)),
     m_canvas(0)
 {

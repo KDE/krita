@@ -327,7 +327,7 @@ If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
               <string>Filter strength: 0 = off, 100 = strongest.</string>
              </property>
              <property name="text">
-              <string>Filter Strength</string>
+              <string comment="Filter options specifically for WebP">Filter Strength</string>
              </property>
             </widget>
            </item>
@@ -350,7 +350,7 @@ If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
               <string>Filter sharpness: 0 = off, 7 = least sharp.</string>
              </property>
              <property name="text">
-              <string>Filter Sharpness</string>
+              <string comment="Filter options specifically for WebP">Filter Sharpness</string>
              </property>
             </widget>
            </item>
@@ -373,7 +373,7 @@ If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
               <string>0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or Auto Adjust Filter is enabled.</string>
              </property>
              <property name="text">
-              <string>Filter Type</string>
+              <string comment="Filter options specifically for WebP">Filter Type</string>
              </property>
             </widget>
            </item>
@@ -543,7 +543,7 @@ If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
            <item row="13" column="0">
             <widget class="QLabel" name="lblPreprocessing">
              <property name="text">
-              <string>Preprocessing Filter</string>
+              <string comment="Filter options specifically for WebP">Preprocessing Filter</string>
              </property>
             </widget>
            </item>

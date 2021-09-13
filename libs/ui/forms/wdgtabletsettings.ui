@@ -207,7 +207,7 @@
         <item>
          <widget class="QPushButton" name="btnResolutionSettings">
           <property name="text">
-           <string>Advanced...</string>
+           <string comment="Tablet mapping settings">Advanced...</string>
           </property>
          </widget>
         </item>

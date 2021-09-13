@@ -116,7 +116,7 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     centerToggleOption = new KisAction(i18n("Center"));
     centerToggleOption->setCheckable(true);
     
-    growToggleOption = new KisAction(i18n("Grow"));
+    growToggleOption = new KisAction(i18nc("Grow as in crop tool", "Grow"));
     growToggleOption->setCheckable(true);
     
     lockWidthToggleOption = new KisAction(i18n("Lock Width"));

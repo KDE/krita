@@ -1357,7 +1357,7 @@
          <item>
           <widget class="QCheckBox" name="csl_hsiI">
            <property name="text">
-            <string>Intensity</string>
+            <string comment="Brightness in HSI color model">Intensity</string>
            </property>
           </widget>
          </item>

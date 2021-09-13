@@ -139,7 +139,7 @@ void LogDockerDock::settings()
     chkTiles->setChecked(cfg.readEntry("tiles_41004", false));
     layout->addWidget(chkTiles);
 
-    QCheckBox *chkFilters = new QCheckBox(i18n("Filters"), page);
+    QCheckBox *chkFilters = new QCheckBox(i18nc("Filter as an effect", "Filters"), page);
     chkFilters->setChecked(cfg.readEntry("filters_41005", false));
     layout->addWidget(chkFilters);
 

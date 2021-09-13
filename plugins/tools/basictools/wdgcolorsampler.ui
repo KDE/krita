@@ -26,7 +26,7 @@
      <item>
       <widget class="QLabel" name="blendLabel">
        <property name="text">
-        <string>Blend: </string>
+        <string comment="The color rate of sampled color setting slider">Blend: </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

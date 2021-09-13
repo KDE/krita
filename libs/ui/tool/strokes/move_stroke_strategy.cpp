@@ -22,6 +22,9 @@
 
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_params_interface.h"
+#include "kis_keyframe_channel.h"
+#include "kis_scalar_keyframe_channel.h"
+#include "kis_image_animation_interface.h"
 #include "commands_new/KisSimpleModifyTransformMaskCommand.h"
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
@@ -278,12 +281,24 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 
             TransformMaskData &data = m_transformMaskData[node];
 
+            std::unique_ptr<KUndo2Command> cmd;
+
             KisTransformMaskParamsInterfaceSP oldParams = mask->transformParams();
             KisTransformMaskParamsInterfaceSP params = oldParams->clone();
             params->translateDstSpace(offset - data.currentOffset);
-            mask->setTransformParams(params);
 
-            std::unique_ptr<KUndo2Command> cmd(new KisSimpleModifyTransformMaskCommand(mask, oldParams, params));
+            if (mask->isAnimated()) {
+                KUndo2Command* parent = new KUndo2Command();
+                KisAnimatedTransformParamsInterface* animInterface = dynamic_cast<KisAnimatedTransformParamsInterface*>(mask->transformParams().data());
+                KIS_ASSERT(animInterface);
+                animInterface->initializeKeyframes(mask, params, parent);
+                cmd.reset(parent);
+            } else {
+                mask->setTransformParams(params);
+                cmd.reset(new KisSimpleModifyTransformMaskCommand(mask, oldParams, params));
+            }
+
+            KIS_ASSERT(cmd);
 
             if (data.undoCommand) {
                 const bool mergeResult = data.undoCommand->mergeWith(cmd.get());

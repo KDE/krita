@@ -546,6 +546,7 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
         if (shouldSaveResource) {
             gradient->setFilename(gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
             gradient->setValid(true);
+            gradient->updatePreview();
 
             if (fileOverwriteAccepted) {
                 if (!editGradient) {
@@ -581,11 +582,13 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
             }
             itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
             itemChooser->setCurrentResource(gradient);
+            emit q->gradientEdited(gradient);
         }
         else {
 
             buf.open(QFile::ReadOnly);
             gradient->loadFromDevice(&buf, KisGlobalResourcesInterface::instance());
+            emit q->gradientEdited(gradient);
         }
     }
 }

@@ -2,7 +2,7 @@ SET(PREFIX_ext_vc "${EXTPREFIX}" )
 
 if(APPLE)
     if(MACOS_UNIVERSAL OR apple_has_arm64_optional)
-        set(EXTRA_X86_ON_ARM_PATCHES ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macos_VcOnARM.patch)
+        set(EXTRA_X86_ON_ARM_PATCHES COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macos_VcOnARM.patch)
     endif()
 
     ExternalProject_Add( ext_vc
@@ -10,7 +10,8 @@ if(APPLE)
         URL https://github.com/VcDevel/Vc/releases/download/1.4.1/Vc-1.4.1.tar.gz
         URL_HASH SHA1=46e852ab69192cf017a31d7c6d0b35d8aa8fea2d
 
-        PATCH_COMMAND ${EXTRA_X86_ON_ARM_PATCHES}
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Remove-cmake_minimum_required-from-VcMacro.patch
+                ${EXTRA_X86_ON_ARM_PATCHES}
 
         INSTALL_DIR ${PREFIX_ext_vc}
 
@@ -29,6 +30,7 @@ elseif (WIN32)
 			PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-missing-MSVC-detection-artifact.patch
 				COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Add-MSVC-call-convention.patch
 				COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Define-architectures-only-for-each-target.patch
+                                COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Remove-cmake_minimum_required-from-VcMacro.patch
 
 			INSTALL_DIR ${PREFIX_ext_vc}
 
@@ -48,6 +50,7 @@ elseif (WIN32)
                 URL_HASH SHA1=46e852ab69192cf017a31d7c6d0b35d8aa8fea2d
 
                 PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Vc-s-headers-to-support-GCC11.patch
+                      COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Remove-cmake_minimum_required-from-VcMacro.patch
 
                 INSTALL_DIR ${PREFIX_ext_vc}
 
@@ -64,6 +67,7 @@ elseif (WIN32)
                 PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Workaround-AVX-argument-failures.patch
                     COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/relocatable-vc-1.3-install.patch
                     COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Vc-s-headers-to-support-GCC11-1.3.patch
+                    COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Remove-cmake_minimum_required-from-VcMacro.patch
 
                 INSTALL_DIR ${PREFIX_ext_vc}
 
@@ -80,6 +84,7 @@ else()
         URL_HASH SHA1=46e852ab69192cf017a31d7c6d0b35d8aa8fea2d
 
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Vc-s-headers-to-support-GCC11.patch
+              COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Remove-cmake_minimum_required-from-VcMacro.patch
 
         INSTALL_DIR ${PREFIX_ext_vc}
 

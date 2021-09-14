@@ -9,7 +9,6 @@
  */
 
 #include <kis_slider_spin_box_p.h>
-
 #include "kis_slider_spin_box.h"
 
 KisSliderSpinBox::KisSliderSpinBox(QWidget * parent)

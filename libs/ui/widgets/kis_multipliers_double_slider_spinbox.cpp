@@ -6,30 +6,39 @@
 
 #include "kis_multipliers_double_slider_spinbox.h"
 #include "kis_multipliers_double_slider_spinbox_p.h"
-
-#include "ui_wdgmultipliersdoublesliderspinbox.h"
-
-#include "kis_debug.h"
+#include <QHBoxLayout>
+#include <kis_debug.h>
+#include <klocalizedstring.h>
 
 qreal KisMultipliersDoubleSliderSpinBox::Private::currentMultiplier()
 {
-    return form.comboBox->itemData(form.comboBox->currentIndex()).toDouble();
+    return cmbMultiplier->itemData(cmbMultiplier->currentIndex()).toDouble();
 }
 
 void KisMultipliersDoubleSliderSpinBox::Private::updateRange()
 {
     qreal m = currentMultiplier();
-    form.sliderSpinBox->setRange(m * min, m * max, decimals);
+    slider->setRange(m * min, m * max, decimals);
 }
 
 KisMultipliersDoubleSliderSpinBox::KisMultipliersDoubleSliderSpinBox(QWidget* _parent)
     : QWidget(_parent)
     , d(new Private)
 {
-    d->form.setupUi(this);
+    QHBoxLayout *l = new QHBoxLayout(this);
+    l->setContentsMargins(0, 0, 0, 0);
+
+    d->slider = new KisDoubleSliderSpinBox(this);
+    d->slider->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    l->addWidget(d->slider);
+
+    d->cmbMultiplier = new QComboBox(this);
+    d->cmbMultiplier->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    l->addWidget(d->cmbMultiplier);
+
     addMultiplier(1.0);
-    connect(d->form.sliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(valueChanged(qreal)));
-    connect(d->form.comboBox, SIGNAL(activated(int)), SLOT(updateRange()));
+    connect(d->slider, SIGNAL(valueChanged(qreal)), SIGNAL(valueChanged(qreal)));
+    connect(d->cmbMultiplier, SIGNAL(activated(int)), SLOT(updateRange()));
 }
 
 KisMultipliersDoubleSliderSpinBox::~KisMultipliersDoubleSliderSpinBox()
@@ -39,7 +48,7 @@ KisMultipliersDoubleSliderSpinBox::~KisMultipliersDoubleSliderSpinBox()
 
 void KisMultipliersDoubleSliderSpinBox::addMultiplier(double v)
 {
-  d->form.comboBox->addItem(i18n("x%1", v), v);
+  d->cmbMultiplier->addItem(i18n("x%1", v), v);
 }
 
 void KisMultipliersDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
@@ -52,7 +61,7 @@ void KisMultipliersDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, i
 
 qreal KisMultipliersDoubleSliderSpinBox::value()
 {
-    return d->form.sliderSpinBox->value();
+    return d->slider->value();
 }
 
 void KisMultipliersDoubleSliderSpinBox::setValue(qreal value)
@@ -60,48 +69,48 @@ void KisMultipliersDoubleSliderSpinBox::setValue(qreal value)
     qreal m = d->currentMultiplier();
 
     if (value < m * d->min || value > m * d->max) {
-        for(int i = 0; i < d->form.comboBox->count(); ++i) {
-            qreal m = d->form.comboBox->itemData(i).toDouble();
+        for(int i = 0; i < d->cmbMultiplier->count(); ++i) {
+            qreal m = d->cmbMultiplier->itemData(i).toDouble();
             if (value >= m * d->min && value <= m * d->max) {
-                d->form.comboBox->setCurrentIndex(i);
+                d->cmbMultiplier->setCurrentIndex(i);
                 d->updateRange();
                 break;
             }
         }
     }
 
-    d->form.sliderSpinBox->setValue(value);
+    d->slider->setValue(value);
 }
 
 void KisMultipliersDoubleSliderSpinBox::setExponentRatio(qreal dbl)
 {
-    d->form.sliderSpinBox->setExponentRatio(dbl);
+    d->slider->setExponentRatio(dbl);
 }
 
 void KisMultipliersDoubleSliderSpinBox::setPrefix(const QString& prefix)
 {
-    d->form.sliderSpinBox->setPrefix(prefix);
+    d->slider->setPrefix(prefix);
 }
 
 void KisMultipliersDoubleSliderSpinBox::setSuffix(const QString& suffix)
 {
-    d->form.sliderSpinBox->setSuffix(suffix);
+    d->slider->setSuffix(suffix);
 }
 
 void KisMultipliersDoubleSliderSpinBox::setBlockUpdateSignalOnDrag(bool block)
 {
-    d->form.sliderSpinBox->setBlockUpdateSignalOnDrag(block);
+    d->slider->setBlockUpdateSignalOnDrag(block);
 }
 
 void KisMultipliersDoubleSliderSpinBox::setSingleStep(qreal value)
 {
-    d->form.sliderSpinBox->setSingleStep(value);
+    d->slider->setSingleStep(value);
 }
 
 QSize KisMultipliersDoubleSliderSpinBox::sizeHint() const
 {
-    QSize sliderhint = d->form.sliderSpinBox->sizeHint();
-    QSize comboboxhint = d->form.comboBox->sizeHint();
+    QSize sliderhint = d->slider->sizeHint();
+    QSize comboboxhint = d->cmbMultiplier->sizeHint();
     sliderhint.setWidth(sliderhint.width() + comboboxhint.width() + 10);
     sliderhint.setHeight(qMax(sliderhint.height(), comboboxhint.height()));
     return sliderhint;

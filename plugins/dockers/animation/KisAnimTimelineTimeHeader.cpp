@@ -1,5 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Eoin O'Neil <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Emmet O'Neill <emmetoneill.pdx@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -30,7 +32,7 @@ struct KisAnimTimelineTimeHeader::Private
         , lastPressSectionIndex(-1)
     {
         // Compressed configuration writing..
-        const int compressorDelayMS = 5000;
+        const int compressorDelayMS = 100;
         zoomSaveCompressor.reset(
                     new KisSignalCompressorWithParam<qreal>(compressorDelayMS,
                                                             [](qreal zoomValue){
@@ -67,13 +69,6 @@ KisAnimTimelineTimeHeader::KisAnimTimelineTimeHeader(QWidget *parent)
     setSectionResizeMode(QHeaderView::Fixed);
     setDefaultSectionSize(18);
     setMinimumSectionSize(8);
-
-    KisConfig cfg(true);
-    setZoom(cfg.timelineZoom());
-
-    connect(this, &KisAnimTimelineTimeHeader::sigZoomChanged, [this](qreal zoomValue){
-        m_d->zoomSaveCompressor->start(zoomValue);
-    });
 }
 
 KisAnimTimelineTimeHeader::~KisAnimTimelineTimeHeader()
@@ -90,6 +85,8 @@ void KisAnimTimelineTimeHeader::setPixelOffset(qreal offset)
 void KisAnimTimelineTimeHeader::setActionManager(KisActionManager *actionManager)
 {
     m_d->actionMan = actionManager;
+
+    disconnect(this, &KisAnimTimelineTimeHeader::sigZoomChanged, this, &KisAnimTimelineTimeHeader::slotSaveThrottle);
 
     if (actionManager) {
         KisAction *action;
@@ -135,6 +132,10 @@ void KisAnimTimelineTimeHeader::setActionManager(KisActionManager *actionManager
 
         action = actionManager->createAction("paste_columns_from_clipboard");
         connect(action, SIGNAL(triggered()), SIGNAL(sigPasteColumns()));
+
+        KisConfig cfg(true);
+        setZoom(cfg.timelineZoom());
+        connect(this, &KisAnimTimelineTimeHeader::sigZoomChanged, this, &KisAnimTimelineTimeHeader::slotSaveThrottle);
     }
 }
 
@@ -269,6 +270,11 @@ void KisAnimTimelineTimeHeader::paintSpan(QPainter *painter, int userFrameId,
     opt.rect = textRect;
     opt.text = frameIdText;
     style->drawControl(QStyle::CE_HeaderLabel, &opt, painter, this);
+}
+
+void KisAnimTimelineTimeHeader::slotSaveThrottle(qreal value)
+{
+    m_d->zoomSaveCompressor->start(value);
 }
 
 int KisAnimTimelineTimeHeader::Private::calcSpanWidth(const int sectionWidth) {

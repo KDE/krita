@@ -1,5 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Eoin O'Neil <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Emmet O'Neill <emmetoneill.pdx@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -55,6 +57,9 @@ private:
                    QStyle *style,
                    const QPalette &palette,
                    const QPen &gridPen) const;
+
+public Q_SLOTS:
+    void slotSaveThrottle(qreal value);
 
 Q_SIGNALS:
     void sigInsertColumnLeft();

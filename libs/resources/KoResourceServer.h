@@ -308,9 +308,9 @@ public:
         QSharedPointer<T> resource;
         if (resources.size() > 0) {
             Q_FOREACH(KoResourceSP r, resources) {
-                if (r->filename() == fileName) {
+                if (fileName.isEmpty() || r->filename() == fileName) {
                     if (md5.isEmpty() || md5 == r->md5Sum()) {
-                        resource = r.dynamicCast<T>();;
+                        resource = r.dynamicCast<T>();
                         break;
                     }
                 }

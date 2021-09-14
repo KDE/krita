@@ -147,6 +147,11 @@ public:
         return m_format;
     }
 
+    QSet<QByteArray> extensions() const
+    {
+        return m_extensions;
+    }
+
 private:
     int m_glMajorVersion = 0;
     int m_glMinorVersion = 0;
@@ -160,6 +165,7 @@ private:
     QString m_vendorString;
     QString m_shadingLanguageString;
     QSurfaceFormat m_format;
+    QSet<QByteArray> m_extensions;
 };
 
 #endif // KISOPENGLMODEPROBER_H

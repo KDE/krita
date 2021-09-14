@@ -148,7 +148,7 @@ void KisOpenGL::initialize()
         debugOut << "\n  Version: " << openGLCheckResult->driverVersionString();
         debugOut << "\n  Shading language: " << openGLCheckResult->shadingLanguageString();
         debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
-        debugOut << "\n  Current format:   " << openGLCheckResult->format();
+        debugOut << "\n  Current format: " << openGLCheckResult->format();
         debugOut.nospace();
         debugOut << "\n     Version: " << openGLCheckResult->glMajorVersion() << "." << openGLCheckResult->glMinorVersion();
         debugOut.resetFormat();
@@ -156,6 +156,10 @@ void KisOpenGL::initialize()
         debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
         debugOut << "\n  supportsBufferMapping:" << openGLCheckResult->supportsBufferMapping();
         debugOut << "\n  supportsBufferInvalidation:" << openGLCheckResult->supportsBufferInvalidation();
+        debugOut << "\n  Extensions:";
+        for (const auto &i: openGLCheckResult->extensions()) {
+            debugOut << "\n    " << QString::fromLatin1(i);
+        }
     }
 
     debugOut << "\n\nQPA OpenGL Detection Info";

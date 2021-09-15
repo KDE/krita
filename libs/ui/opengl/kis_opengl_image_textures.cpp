@@ -575,20 +575,34 @@ namespace {
 void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesInfo, KoID &destinationColorDepthId)
 {
     if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
+#ifndef QT_OPENGL_ES_2
         texturesInfo.internalFormat = GL_RGBA16F;
         dbgUI << "Using half (GLES or GL3)";
     } else if (ctx->hasExtension("GL_ARB_texture_float")) {
-#ifndef QT_OPENGL_ES_2
         texturesInfo.internalFormat = GL_RGBA16F_ARB;
         dbgUI << "Using ARB half";
-    }
-    else if (ctx->hasExtension("GL_ATI_texture_float")) {
+    } else if (ctx->hasExtension("GL_ATI_texture_float")) {
         texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
         dbgUI << "Using ATI half";
 #else
-        KIS_ASSERT_X(false, "initializeRGBA16FTextures",
-                "Unexpected KisOpenGL::hasOpenGLES and \
-                 KisOpenGL::hasOpenGL3 returned false");
+        if (ctx->hasExtension("GL_EXT_texture_storage")) {
+            if (ctx->hasExtension("GL_OES_texture_half_float") && ctx->hasExtension("GL_EXT_color_buffer_half_float")
+                && ctx->hasExtension("GL_OES_texture_half_float_linear")) {
+                texturesInfo.internalFormat = GL_RGBA16F_EXT;
+                dbgUI << "Using half (GLES v2)";
+            } else if (ctx->hasExtension("GL_OES_texture_float") && ctx->hasExtension("GL_OES_texture_float_linear")) {
+                texturesInfo.internalFormat = GL_RGBA32F_EXT;
+                destinationColorDepthId = Float32BitsColorDepthID;
+                dbgUI << "Using float (GLES v2)";
+            } else {
+                KIS_ASSERT_X(false,
+                             "initializeRGBA16FTextures",
+                             "OpenGL ES v2+ support detected but no OES_texture_half_float"
+                             " or GL_EXT_color_buffer_half_float were found");
+            }
+        } else {
+            KIS_ASSERT_X(false, "initializeRGBA16FTextures", "OpenGL ES v2 support detected but GL_EXT_texture_storage was not found");
+        }
 #endif
     }
 
@@ -598,11 +612,11 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
 #endif
 
     if (haveBuiltInOpenExr && (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3())) {
+#ifndef QT_OPENGL_ES_2
         texturesInfo.type = GL_HALF_FLOAT;
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half (GLES or GL3)";
     } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
-#ifndef QT_OPENGL_ES_2
         texturesInfo.type = GL_HALF_FLOAT_ARB;
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half";
@@ -611,9 +625,25 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         destinationColorDepthId = Float32BitsColorDepthID;
         dbgUI << "Pixel type float";
 #else
-        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
-                "Unexpected KisOpenGL::hasOpenGLES and \
-                 KisOpenGL::hasOpenGL3 returned false");
+        if (ctx->hasExtension("GL_EXT_texture_storage")) {
+            if (ctx->hasExtension("GL_OES_texture_half_float") && ctx->hasExtension("GL_EXT_color_buffer_half_float")
+                && ctx->hasExtension("GL_OES_texture_half_float_linear")) {
+                texturesInfo.type = GL_HALF_FLOAT_OES;
+                destinationColorDepthId = Float16BitsColorDepthID;
+                dbgUI << "Pixel type half (GLES v2)";
+            } else if (ctx->hasExtension("GL_OES_texture_float") && ctx->hasExtension("GL_OES_texture_float_linear")) {
+                texturesInfo.type = GL_FLOAT;
+                destinationColorDepthId = Float32BitsColorDepthID;
+                dbgUI << "Pixel type float (GLES v2)";
+            } else {
+                KIS_ASSERT_X(false,
+                             "initializeRGBA16FTextures",
+                             "OpenGL ES v2 support detected but GL_OES_texture_*_float or "
+                             "GL_OES_texture_*_float_linear were not found");
+            }
+        } else {
+            KIS_ASSERT_X(false, "initializeRGBA16FTextures", "OpenGL ES v2 support detected but GL_EXT_texture_storage was not found");
+        }
 #endif
     }
     texturesInfo.format = GL_RGBA;
@@ -668,19 +698,33 @@ void KisOpenGLImageTextures::updateTextureFormat()
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
             if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
+#ifndef QT_OPENGL_ES_2
                 m_texturesInfo.internalFormat = GL_RGBA32F;
                 dbgUI << "Using float (GLES or GL3)";
             } else if (ctx->hasExtension("GL_ARB_texture_float")) {
-#ifndef QT_OPENGL_ES_2
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
             } else if (ctx->hasExtension("GL_ATI_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
 #else
-        KIS_ASSERT_X(false, "KisOpenGLCanvas2::updateTextureFormat",
-                "Unexpected KisOpenGL::hasOpenGLES and \
-                 KisOpenGL::hasOpenGL3 returned false");
+                if (ctx->hasExtension("GL_EXT_texture_storage")) {
+                    if (ctx->hasExtension("GL_OES_texture_float") && ctx->hasExtension("GL_OES_texture_float_linear")) {
+                        m_texturesInfo.internalFormat = GL_FLOAT;
+                        destinationColorDepthId = Float32BitsColorDepthID;
+                        dbgUI << "Using float (GLES v2)";
+                    } else {
+                        KIS_ASSERT_X(false,
+                                     "KisOpenGLImageTextures::updateTextureFormat",
+                                     "OpenGL ES v2 support detected but GL_OES_texture_float or GL_OES_texture_float_linear "
+                                     "were not found");
+                    }
+                } else {
+                    KIS_ASSERT_X(
+                        false,
+                        "KisOpenGLImageTextures::updateTextureFormat",
+                        "OpenGL ES v2 support detected but GL_EXT_texture_storage was not found");
+                }
 #endif
             }
 

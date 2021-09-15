@@ -81,14 +81,24 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     fragSource.append("#define texture3D texture\n");
 #else
     if (KisOpenGL::hasOpenGLES()) {
+        fragSource.append("#version 300 es\n");
+        if (KisOpenGL::supportsLoD()) {
+            fragSource.append("#extension GL_EXT_shader_texture_lod : enable\n");
+        }
         fragSource.append(
-                    "#version 300 es\n"
-                    "precision mediump float;\n"
-                    "precision mediump sampler3D;\n");
+            "precision mediump float;\n"
+            "precision mediump sampler3D;\n");
 
         // OpenColorIO doesn't support OpenGL ES.
         fragSource.append("#define texture2D texture\n");
         fragSource.append("#define texture3D texture\n");
+        if (KisOpenGL::supportsLoD()) {
+            fragSource.append(
+                "#if __VERSION__ < 300\n"
+                "#define textureLod texture2DLodEXT\n"
+                "#endif\n"
+            );
+        }
     } else {
         fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
     }

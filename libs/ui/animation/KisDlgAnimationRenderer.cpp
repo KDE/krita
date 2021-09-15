@@ -98,11 +98,11 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     }
     
     
-    m_page->cmbScaleFilter->addItem("bicubic", "bicubic");
-    m_page->cmbScaleFilter->addItem("bilinear", "bilinear");
-    m_page->cmbScaleFilter->addItem("lanczos3", "lanczos");
-    m_page->cmbScaleFilter->addItem("neighbor", "neighbor");
-    m_page->cmbScaleFilter->addItem("spline", "spline");
+    m_page->cmbScaleFilter->addItem(i18nc("bicubic filtering", "bicubic"), "bicubic");
+    m_page->cmbScaleFilter->addItem(i18nc("bilinear filtering", "bilinear"), "bilinear");
+    m_page->cmbScaleFilter->addItem(i18nc("lanczos3 filtering", "lanczos3"), "lanczos");
+    m_page->cmbScaleFilter->addItem(i18nc("nearest neighbor filtering", "neighbor"), "neighbor");
+    m_page->cmbScaleFilter->addItem(i18nc("spline filtering", "spline"), "spline");
     
     m_page->videoFilename->setMode(KoFileDialog::SaveFile);
 

@@ -733,36 +733,47 @@ void KisOpenGLImageTextures::updateTextureFormat()
             destinationColorDepthId = Float32BitsColorDepthID;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
-#ifndef QT_OPENGL_ES_2
             if (!KisOpenGL::hasOpenGLES()) {
+#ifndef QT_OPENGL_ES_2
                 m_texturesInfo.internalFormat = GL_RGBA16;
                 m_texturesInfo.type = GL_UNSIGNED_SHORT;
                 m_texturesInfo.format = GL_BGRA;
                 destinationColorDepthId = Integer16BitsColorDepthID;
                 dbgUI << "Using 16 bits rgba";
-            }
+#else
+                KIS_ASSERT_X(false,
+                             "KisOpenGLCanvas2::updateTextureFormat",
+                             "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
-            // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
+            } else {
+                // If OpenGL ES, fall back to 16-bit float -- supports HDR
+                // Angle does ship GL_EXT_texture_norm16 but it doesn't seem
+                // to be renderable by DXGI - it returns a pixel size of 0
+                initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);
+            }
         }
     }
     else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
-        if (colorDepthId == Integer16BitsColorDepthID && !KisOpenGL::hasOpenGLES()) {
+        if (colorDepthId == Integer16BitsColorDepthID) {
+            if (!KisOpenGL::hasOpenGLES()) {
 #ifndef QT_OPENGL_ES_2
-            m_texturesInfo.internalFormat = GL_RGBA16;
-            m_texturesInfo.type = GL_UNSIGNED_SHORT;
-            m_texturesInfo.format = GL_BGRA;
-            destinationColorDepthId = Integer16BitsColorDepthID;
-            dbgUI << "Using conversion to 16 bits rgba";
+                m_texturesInfo.internalFormat = GL_RGBA16;
+                m_texturesInfo.type = GL_UNSIGNED_SHORT;
+                m_texturesInfo.format = GL_BGRA;
+                destinationColorDepthId = Integer16BitsColorDepthID;
+                dbgUI << "Using conversion to 16 bits rgba";
 #else
-            KIS_ASSERT_X(false, "KisOpenGLCanvas2::updateTextureFormat",
+                KIS_ASSERT_X(false, "KisOpenGLCanvas2::updateTextureFormat",
                     "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
-        } else if (colorDepthId == Float16BitsColorDepthID && KisOpenGL::hasOpenGLES()) {
-            // TODO: try removing opengl es limit
+            } else {
+                // See the fallback above
+                initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);
+            }
+        } else if (colorDepthId == Float16BitsColorDepthID) {
             initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);
         }
-        // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
     }
 
     if (!m_internalColorManagementActive &&

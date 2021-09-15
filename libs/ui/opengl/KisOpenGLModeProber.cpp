@@ -329,6 +329,7 @@ KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {
     m_supportsBufferInvalidation = !m_isOpenGLES &&
             ((m_glMajorVersion >= 4 && m_glMinorVersion >= 3) ||
              context.hasExtension("GL_ARB_invalidate_subdata"));
+    m_supportsLod = context.format().majorVersion() >= 3 || (m_isOpenGLES && context.hasExtension("GL_EXT_shader_texture_lod"));
 
     m_extensions = context.extensions();
 }

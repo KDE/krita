@@ -87,7 +87,7 @@ public:
     }
 
     bool supportsLoD() const {
-        return (m_glMajorVersion * 100 + m_glMinorVersion) >= 300;
+        return m_supportsLod;
     }
 
     bool supportsVAO() const {
@@ -160,6 +160,7 @@ private:
     bool m_supportsFBO = false;
     bool m_supportsBufferMapping = false;
     bool m_supportsBufferInvalidation = false;
+    bool m_supportsLod = false;
     QString m_rendererString;
     QString m_driverVersionString;
     QString m_vendorString;

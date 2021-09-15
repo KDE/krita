@@ -249,7 +249,7 @@ bool KisAnimTimelineLayersHeader::viewportEvent(QEvent *event)
 
                 QString text = QString("%1 (%2)")
                     .arg(p->name)
-                    .arg(p->state.toBool() ? "on" : "off");
+                    .arg(p->state.toBool() ? i18n("on") : i18n("off"));
 
                 QToolTip::showText(he->globalPos(), text, this);
                 return true;

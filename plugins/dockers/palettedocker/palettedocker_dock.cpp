@@ -120,7 +120,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_paletteChooser, SIGNAL(sigExportPalette(KoColorSetSP)), SLOT(slotExportPalette(KoColorSetSP)));
 
     m_ui->bnColorSets->setIcon(KisIconUtils::loadIcon("palette-library"));
-    m_ui->bnColorSets->setToolTip(i18n("Choose palette"));
+    m_ui->bnColorSets->setToolTip(i18n("Load a palette"));
     m_ui->bnColorSets->setPopupWidget(m_paletteChooser);
 
     KisConfig cfg(true);

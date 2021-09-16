@@ -55,8 +55,10 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
     if (NOT MSVC_IDE)   #not needed for the ide
         # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests
         if (NOT BUILD_TESTING)
-           if(NOT TARGET buildtests)
+           get_directory_property(_buildtestsAdded BUILDTESTS_ADDED)
+           if(NOT _buildtestsAdded)
               add_custom_target(buildtests)
+              set_directory_properties(PROPERTIES BUILDTESTS_ADDED TRUE)
            endif()
            add_dependencies(buildtests ${_test_NAME})
         endif ()

@@ -38,7 +38,8 @@ private:
 
     bool m_mouseDown;
     bool m_tabletDown;
-    KisSpeedSmoother m_speedSmoother;
+    KisSpeedSmoother m_tabletSpeedSmoother;
+    KisSpeedSmoother m_mouseSpeedSmoother;
 };
 
 #endif

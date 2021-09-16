@@ -19,6 +19,16 @@ public:
     };
     using SharedDataSP = QSharedPointer<SharedData>;
 
+    struct SuspendFrameInvalidationHandle {
+    public:
+        SuspendFrameInvalidationHandle(class KisImageAnimationInterface* interface);
+        ~SuspendFrameInvalidationHandle();
+
+    private:
+        KisImageAnimationInterface* m_interface;
+    };
+
+
 public:
     KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend, SharedDataSP sharedData);
     ~KisSuspendProjectionUpdatesStrokeStrategy() override;
@@ -26,6 +36,7 @@ public:
     static QList<KisStrokeJobData*> createSuspendJobsData(KisImageWSP image);
     static QList<KisStrokeJobData*> createResumeJobsData(KisImageWSP image);
     static SharedDataSP createSharedData();
+
 private:
     void initStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;

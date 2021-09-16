@@ -103,7 +103,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
             this, SLOT(slotNameChanged(QString)));
     namefield->addWidget(d->m_name);
 
-    label=new QLabel(i18n("Group:"), mainwidget);
+    label=new QLabel(i18nc("Group as in Template Group", "Group:"), mainwidget);
     leftbox->addWidget(label);
     d->m_groups = new QTreeWidget(mainwidget);
     leftbox->addWidget(d->m_groups);
@@ -117,7 +117,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
 
     QHBoxLayout *bbox=new QHBoxLayout();
     leftbox->addLayout( bbox );
-    d->m_add=new QPushButton(i18n("&Add Group..."), mainwidget);
+    d->m_add=new QPushButton(i18nc("Group as in Template Group", "&Add Group..."), mainwidget);
     connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
     bbox->addWidget(d->m_add);
     d->m_remove=new QPushButton(i18n("&Remove"), mainwidget);
@@ -404,10 +404,10 @@ void KisTemplateCreateDia::slotNameChanged(const QString &name) {
 
 void KisTemplateCreateDia::slotAddGroup() {
 
-    const QString name = QInputDialog::getText(this, i18n("Add Group"), i18n("Enter group name:"));
+    const QString name = QInputDialog::getText(this, i18nc("Group as in Template Group", "Add Group"), i18nc("Group as in Template Group", "Enter group name:"));
     KisTemplateGroup *group = d->m_tree.find(name);
     if (group && !group->isHidden()) {
-        QMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
+        QMessageBox::information( this, i18n("This name is already used."), i18nc("Group as in Template Group", "Add Group") );
         return;
     }
     QString dir = KoResourcePaths::saveLocation("data", d->m_tree.templatesResourcePath());
@@ -431,7 +431,7 @@ void KisTemplateCreateDia::slotRemove() {
     QString what;
     QString removed;
     if (item->parent() == 0) {
-        what =  i18n("Do you really want to remove that group?");
+        what =  i18nc("Group as in Template Group", "Do you really want to remove that group?");
         removed = i18nc("@title:window", "Remove Group");
     } else {
         what =  i18n("Do you really want to remove that template?");

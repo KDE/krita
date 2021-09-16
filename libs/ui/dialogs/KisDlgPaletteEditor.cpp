@@ -36,7 +36,7 @@
 
 KisDlgPaletteEditor::KisDlgPaletteEditor()
     : m_ui(new Ui_WdgDlgPaletteEditor)
-    , m_actAddGroup(new QAction(i18n("Add a color group")))
+    , m_actAddGroup(new QAction(i18n("Add a swatch group")))
     , m_actDelGroup(new QAction(i18nc("Group as Color Group in a Palette", "Remove selected group")))
     , m_actRenGroup(new QAction(i18nc("Group as Color Group in a Palette", "Rename selected group")))
     , m_paletteEditor(new KisPaletteEditor(this))
@@ -49,7 +49,7 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     m_ui->labelName->setText(i18n("Palette name:"));
     m_ui->bnAddGroup->setDefaultAction(m_actAddGroup.data());
 
-    m_ui->gbxGroup->setTitle(i18n("Color Group options"));
+    m_ui->gbxGroup->setTitle(i18n("Swatch Group options"));
     m_ui->labelColCount->setText(i18n("Columns of swatches:"));
     m_ui->labelRowCount->setText(i18n("Rows of swatches in group:"));
     m_ui->bnDelGroup->setDefaultAction(m_actDelGroup.data());

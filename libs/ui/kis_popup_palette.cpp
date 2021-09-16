@@ -612,9 +612,11 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.setClipPath(presetPath);
 
             QRect bounds = presetPath.boundingRect().toAlignedRect();
-            QImage previewHighDPI = images.at(pos).scaled(bounds.size()*devicePixelRatioF() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-            previewHighDPI.setDevicePixelRatio(devicePixelRatioF());
-            painter.drawImage(bounds.topLeft(), previewHighDPI);
+            if (!images.at(pos).isNull()) {
+                QImage previewHighDPI = images.at(pos).scaled(bounds.size()*devicePixelRatioF() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+                previewHighDPI.setDevicePixelRatio(devicePixelRatioF());
+                painter.drawImage(bounds.topLeft(), previewHighDPI);
+            }
         } else {
             painter.fillPath(presetPath, palette().brush(QPalette::Window));  // brush slot that has no brush in it
         }

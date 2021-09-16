@@ -79,7 +79,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Add a color group</string>
+            <string>Add a swatch group</string>
            </property>
           </widget>
          </item>
@@ -89,13 +89,13 @@
       <item>
        <widget class="QGroupBox" name="gbxGroup">
         <property name="title">
-         <string>Color Group options</string>
+         <string>Swatch Group options</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QLabel" name="labelColorGroupList">
            <property name="text">
-            <string>Color group:</string>
+            <string>Swatch group:</string>
            </property>
           </widget>
          </item>

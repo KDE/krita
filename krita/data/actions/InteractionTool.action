@@ -65,12 +65,12 @@
     <Action name="object_group">
       <iconText>Group</iconText>
       <shortcut></shortcut>
-      <toolTip>Group</toolTip>
+      <toolTip comment="Group in the context of Vector Interaction Tool">Group</toolTip>
       <icon>object-group-calligra</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
-      <text>Group</text>
+      <text comment="Group in the context of Vector Interaction Tool">Group</text>
     </Action>
     <Action name="object_align_horizontal_left">
       <iconText>Align Left</iconText>

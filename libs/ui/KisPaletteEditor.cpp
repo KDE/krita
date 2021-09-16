@@ -418,7 +418,7 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     editableItems->addRow(i18n("Swatch ID:"), lnIDName);
     editableItems->addRow(i18n("Color swatch name:"), lnName);
     editableItems->addRow(i18nc("Color as the Color of a Swatch in a Palette", "Color:"), bnColor);
-    editableItems->addRow((i18n("Spot color:"), chkSpot);
+    editableItems->addRow(i18n("Spot color:"), chkSpot);
 
     if (dialog.exec() != KoDialog::Accepted) { return; }
 

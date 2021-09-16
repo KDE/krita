@@ -29,7 +29,9 @@
 #include "KisOpenGLModeProber.h"
 #include "kis_fixed_paint_device.h"
 #include "KisOpenGLSync.h"
-
+#include <QVector3D>
+#include "kis_painting_tweaks.h"
+#include "KisOpenGLBufferCreationGuard.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -151,7 +153,7 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
 void KisOpenGLImageTextures::initBufferStorage(bool useBuffer)
 {
     if (useBuffer) {
-        const int numTextureBuffers = 32;
+        const int numTextureBuffers = 256;
 
         const KoColorSpace *tilesDestinationColorSpace =
             m_updateInfoBuilder.destinationColorSpace();
@@ -227,7 +229,14 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
         m_initialized = true;
         dbgUI  << "OpenGL: creating texture tiles of size" << m_texturesInfo.height << "x" << m_texturesInfo.width;
 
+        QVector<QRectF> tileImageRect;
+        QVector<QRectF> tileTextureRect;
+
         m_textureTiles.reserve((lastRow+1)*m_numCols);
+
+        tileImageRect.reserve(m_textureTiles.size());
+        tileTextureRect.reserve(m_textureTiles.size());
+
         for (int row = 0; row <= lastRow; row++) {
             for (int col = 0; col <= lastCol; col++) {
                 QRect tileRect = m_updateInfoBuilder.calculateEffectiveTileRect(col, row, m_image->bounds());
@@ -240,6 +249,36 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
                                                           config.numMipmapLevels(),
                                                           f);
                 m_textureTiles.append(tile);
+                tileImageRect.append(tile->tileRectInImagePixels());
+                tileTextureRect.append(tile->tileRectInTexturePixels());
+            }
+        }
+
+
+
+        {
+            KisOpenGLBufferCreationGuard bufferGuard(&m_tileVertexBuffer,
+                                                     tileImageRect.size() * 6 * 3 * sizeof(float),
+                                                     QOpenGLBuffer::StaticDraw);
+
+            QVector3D* mappedPtr = reinterpret_cast<QVector3D*>(bufferGuard.data());
+
+            Q_FOREACH (const QRectF &rc, tileImageRect) {
+                KisPaintingTweaks::rectToVertices(mappedPtr, rc);
+                mappedPtr += 6;
+            }
+        }
+
+        {
+            KisOpenGLBufferCreationGuard bufferGuard(&m_tileTexCoordBuffer,
+                                                     tileImageRect.size() * 6 * 2 * sizeof(float),
+                                                     QOpenGLBuffer::StaticDraw);
+
+            QVector2D* mappedPtr = reinterpret_cast<QVector2D*>(bufferGuard.data());
+
+            Q_FOREACH (const QRectF &rc, tileTextureRect) {
+                KisPaintingTweaks::rectToTexCoords(mappedPtr, rc);
+                mappedPtr += 6;
             }
         }
     }
@@ -256,6 +295,8 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
         delete tile;
     }
     m_textureTiles.clear();
+    m_tileVertexBuffer.destroy();
+    m_tileTexCoordBuffer.destroy();
     m_storedImageBounds = QRect();
 }
 

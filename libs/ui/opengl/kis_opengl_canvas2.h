@@ -113,6 +113,7 @@ private:
     void reportFailedShaderCompilation(const QString &context);
     void drawBackground(const QRect &updateRect);
     void drawImage(const QRect &updateRect);
+    void drawImageTiles(int firstCol, int lastCol, int firstRow, int lastRow, qreal scaleX, qreal scaleY, const QPoint &wrapAroundOffset);
     void drawCheckers(const QRect &updateRect);
     void drawGrid(const QRect &updateRect);
     QSize viewportDevicePixelSize() const;

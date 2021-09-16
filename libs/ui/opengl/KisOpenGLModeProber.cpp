@@ -319,4 +319,10 @@ KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {
     m_isOpenGLES = context.isOpenGLES();
     m_format = context.format();
     m_supportsFBO = context.functions()->hasOpenGLFeature(QOpenGLFunctions::Framebuffers);
+
+    m_supportsBufferMapping = !m_isOpenGLES ||
+            m_glMajorVersion >= 3 ||
+            context.hasExtension("GL_OES_mapbuffer") ||
+            context.hasExtension("GL_EXT_map_buffer_range");
+
 }

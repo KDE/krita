@@ -229,7 +229,7 @@
       </sizepolicy>
      </property>
      <property name="toolTip">
-      <string>Maximum speed of the stylus that would be mapped to 1.0 in the sesor</string>
+      <string>Maximum speed mapped to 1.0 for the speed sensor curve. Should be set to the maximum speed you can reach using Tablet Tester</string>
      </property>
     </widget>
    </item>
@@ -242,7 +242,7 @@
       </sizepolicy>
      </property>
      <property name="toolTip">
-      <string>Amount of smoothing Krita should do to speed sensor. This value is very hardware-dependent.</string>
+      <string>Amount of smoothing Krita should do to speed sensor. This value is very hardware-dependent</string>
      </property>
     </widget>
    </item>

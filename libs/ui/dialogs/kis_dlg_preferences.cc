@@ -936,12 +936,12 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 #endif
     m_page->chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 
-    m_page->intMaxAllowedBrushSpeed->setPrefix("Maximum stylus speed: ");
+    m_page->intMaxAllowedBrushSpeed->setPrefix("Maximum brush speed: ");
     m_page->intMaxAllowedBrushSpeed->setSuffix(" px/ms");
     m_page->intMaxAllowedBrushSpeed->setRange(1, 100);
     m_page->intMaxAllowedBrushSpeed->setValue(cfg.readEntry("maxAllowedSpeedValue", 30));
 
-    m_page->intBrushSpeedSmoothing->setPrefix("Stylus speed smoothing: ");
+    m_page->intBrushSpeedSmoothing->setPrefix("Brush speed smoothing: ");
     m_page->intBrushSpeedSmoothing->setSuffix(" samples");
     m_page->intBrushSpeedSmoothing->setRange(3, 100);
     m_page->intBrushSpeedSmoothing->setValue(cfg.readEntry("speedValueSmoothing", 3));

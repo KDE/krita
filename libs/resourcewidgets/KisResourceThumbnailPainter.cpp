@@ -55,12 +55,14 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QSt
 
     if (resourceType == ResourceType::Gradients) {
         m_checkerPainter.paint(*painter, innerRect, innerRect.topLeft());
-        thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        painter->drawImage(innerRect.topLeft(), thumbnail);
+        if (!thumbnail.isNull()) {
+            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            painter->drawImage(innerRect.topLeft(), thumbnail);
+        }
     }
     else if (resourceType == ResourceType::Patterns) {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
-        if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
+        if (!thumbnail.isNull() && (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width())) {
             thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         QBrush patternBrush(thumbnail);
@@ -77,10 +79,12 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QSt
     }
     else {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
-        if (imageSize.height() > innerRect.height()*devicePixelRatioF || imageSize.width() > innerRect.width()*devicePixelRatioF) {
-            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        } else if(imageSize.height() < innerRect.height()*devicePixelRatioF || imageSize.width() < innerRect.width()*devicePixelRatioF) {
-            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::FastTransformation);
+        if (!thumbnail.isNull()) {
+            if (imageSize.height() > innerRect.height()*devicePixelRatioF || imageSize.width() > innerRect.width()*devicePixelRatioF) {
+                thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            } else if(imageSize.height() < innerRect.height()*devicePixelRatioF || imageSize.width() < innerRect.width()*devicePixelRatioF) {
+                thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::FastTransformation);
+            }
         }
         QPoint topleft(innerRect.topLeft());
 

@@ -1286,7 +1286,7 @@ namespace KisLayerUtils {
 
             KisRasterKeyframeChannel *rasterChan = dynamic_cast<KisRasterKeyframeChannel*>(channel);
             if (rasterChan) {
-                frames.unite(channel->allKeyframeTimes());
+                frames.unite(rasterChan->allKeyframeTimes());
                 continue;
             }
 
@@ -1329,6 +1329,7 @@ namespace KisLayerUtils {
 
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node) {
         QSet<int> frames = fetchLayerFrames(node);
+        frames = fetchUniqueFrameTimes(node, frames, false);
 
         if (frames.isEmpty()) {
             (*jobs)[0].insert(node);
@@ -2303,15 +2304,20 @@ namespace KisLayerUtils {
         return uniqueTimes;
     }
 
-    QSet<int> fetchUniqueFrameTimes(KisNodeSP node, QSet<int> selectedTimes)
+    QSet<int> fetchUniqueFrameTimes(KisNodeSP node, QSet<int> selectedTimes, bool filterActiveFrameID)
     {
+        if (selectedTimes.isEmpty() || !node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id()))
+            return selectedTimes;
+
         // Convert a set of selected keyframe times into set of selected "frameIDs"...
         QSet<int> selectedFrameIDs = KisLayerUtils::fetchLayerRasterIDsAtTimes(node, selectedTimes);
 
-        // Current frame was already filtered during filter preview in `KisFilterManager::apply`...
-        // So let's remove it...
-        const int currentActiveFrameID = KisLayerUtils::fetchLayerActiveRasterFrameID(node);
-        selectedFrameIDs.remove(currentActiveFrameID);
+        if (filterActiveFrameID) {
+            // Current frame was already filtered e.g. during filter preview in `KisFilterManager::apply`...
+            // So let's remove it...
+            const int currentActiveFrameID = KisLayerUtils::fetchLayerActiveRasterFrameID(node);
+            selectedFrameIDs.remove(currentActiveFrameID);
+        }
 
         // Convert frameIDs to any arbitrary frame time associated with the frameID...
         QSet<int> uniqueFrameTimes = node->paintDevice()->framesInterface() ? KisLayerUtils::fetchLayerUniqueRasterTimesMatchingIDs(node, selectedFrameIDs) : QSet<int>();

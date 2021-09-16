@@ -334,7 +334,7 @@ void KisFilterManager::finish()
 
         // Filter selected times to only those with keyframes...
         selectedTimes = KisLayerUtils::filterTimesForOnlyRasterKeyedTimes(node, selectedTimes);
-        QSet<int> uniqueFrames = KisLayerUtils::fetchUniqueFrameTimes(node, selectedTimes);
+        QSet<int> uniqueFrames = KisLayerUtils::fetchUniqueFrameTimes(node, selectedTimes, true);
 
         Q_FOREACH(const int& frameTime, uniqueFrames) {
             image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData(frameTime));

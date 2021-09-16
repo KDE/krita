@@ -37,8 +37,8 @@
 KisDlgPaletteEditor::KisDlgPaletteEditor()
     : m_ui(new Ui_WdgDlgPaletteEditor)
     , m_actAddGroup(new QAction(i18n("Add a color group")))
-    , m_actDelGroup(new QAction(i18n("Remove selected group")))
-    , m_actRenGroup(new QAction(i18n("Rename selected group")))
+    , m_actDelGroup(new QAction(i18nc("Group as Color Group in a Palette", "Remove selected group")))
+    , m_actRenGroup(new QAction(i18nc("Group as Color Group in a Palette", "Rename selected group")))
     , m_paletteEditor(new KisPaletteEditor(this))
     , m_currentGroupOriginalName(KoColorSet::GLOBAL_GROUP_NAME)
 {

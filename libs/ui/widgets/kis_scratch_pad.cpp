@@ -87,6 +87,25 @@ private:
     KisScratchPad *m_scratchPad;
 };
 
+class KisScratchPadPaintingInformationBuilder : public KisPaintingInformationBuilder
+{
+    Q_OBJECT
+
+public:
+    KisScratchPadPaintingInformationBuilder(KisScratchPad *scratchPad)
+        : m_scratchPad(scratchPad)
+    {
+    }
+
+protected:
+    QPointF imageToView(const QPointF &point) override {
+        return m_scratchPad->documentToWidget().map(point);
+    }
+
+private:
+    const KisScratchPad *m_scratchPad;
+};
+
 
 KisScratchPad::KisScratchPad(QWidget *parent)
     : QWidget(parent)
@@ -123,7 +142,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     // filter will be deleted by the QObject hierarchy
     m_eventFilter = new KisScratchPadEventFilter(this);
 
-    m_infoBuilder = new KisPaintingInformationBuilder();
+    m_infoBuilder = new KisScratchPadPaintingInformationBuilder(this);
 
     m_scaleBorderWidth = 1;
 }
@@ -664,3 +683,5 @@ void KisScratchPad::fillLayer()
     painter.deleteTransaction();
     update();
 }
+
+#include "kis_scratch_pad.moc"

@@ -154,6 +154,8 @@ private:
     QTransform documentToWidget() const;
     QTransform widgetToDocument() const;
 
+    friend class KisScratchPadPaintingInformationBuilder;
+
 private:
     enum Mode {
         PAINTING,

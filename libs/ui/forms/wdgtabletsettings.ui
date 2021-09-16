@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
-    <height>552</height>
+    <width>648</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,21 +23,15 @@
   <property name="windowTitle">
    <string>Color Settings</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="6" column="0">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Input Pressure Global Curve</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
-   <item row="1" column="1">
+   <item>
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -50,7 +44,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
+   <item>
     <layout class="QGridLayout" name="gridLayout">
      <property name="leftMargin">
       <number>10</number>
@@ -162,21 +156,7 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QPushButton" name="btnTabletTest">
-     <property name="text">
-      <string>Open Tablet Tester...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Input Pressure Global Curve</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
+   <item>
     <widget class="QGroupBox" name="grpTabletApi">
      <property name="title">
       <string>Tablet Input API (changing this requires restarting Krita)</string>
@@ -223,7 +203,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item>
     <widget class="QCheckBox" name="chkUseRightMiddleClickWorkaround">
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Some tablet devices don't pass barrel-button clicks via tablet API. If you have such a device, you can try activate this workaround. Krita will try to read right- and middle-button clicks from the mouse events stream. It may or may not work on your device (depends on the tablet driver implementation).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;After changing this option Krita should be restarted.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -233,12 +213,58 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item>
     <widget class="QCheckBox" name="chkUseTimestampsForBrushSpeed">
      <property name="text">
       <string notr="true">Use tablet driver timestamps for brush speed</string>
      </property>
     </widget>
+   </item>
+   <item>
+    <widget class="KisSliderSpinBox" name="intMaxAllowedBrushSpeed" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Maximum speed mapped to 1.0 for the speed sensor curve. Should be set to the maximum speed you can reach using Tablet Tester</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KisSliderSpinBox" name="intBrushSpeedSmoothing" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Amount of smoothing Krita should do to speed sensor. This value is very hardware-dependent</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnTabletTest">
+     <property name="text">
+      <string>Open Tablet Tester...</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -247,6 +273,12 @@
    <class>KisCurveWidget</class>
    <extends>QWidget</extends>
    <header>widgets/kis_curve_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -14,6 +14,9 @@
 TabletTester::TabletTester(QWidget *parent)
     : QWidget(parent), m_mouseDown(false), m_tabletDown(false)
 {
+    // we don't explicitly update settings inside KisSpeedSmoother
+    // here because the tablet tester is created every time anew.
+
 }
 
 QSize TabletTester::sizeHint() const
@@ -56,15 +59,20 @@ void TabletTester::paintEvent(QPaintEvent *e)
 
 void TabletTester::mousePressEvent(QMouseEvent *e)
 {
-    Q_EMIT eventReport(QString("Mouse press X=%1 Y=%2 B=%3").arg(e->x()).arg(e->y()).arg(e->button()));
     m_mouseDown = true;
     m_mousePath.clear();
+    m_mouseSpeedSmoother.clear();
+
+    const qreal speed = m_tabletSpeedSmoother.getNextSpeed(e->pos(), e->timestamp());
+    Q_EMIT eventReport(QString("Mouse press X=%1 Y=%2 B=%3 S=%4").arg(e->x()).arg(e->y()).arg(e->button()).arg(speed));
+
     update();
 }
 
 void TabletTester::mouseMoveEvent(QMouseEvent *e)
 {
-    Q_EMIT eventReport(QString("Mouse move X=%1 Y=%2 B=%3").arg(e->x()).arg(e->y()).arg(e->buttons()));
+    const qreal speed = m_tabletSpeedSmoother.getNextSpeed(e->pos(), e->timestamp());
+    Q_EMIT eventReport(QString("Mouse move X=%1 Y=%2 B=%3 S=%4").arg(e->x()).arg(e->y()).arg(e->buttons()).arg(speed));
     m_mousePath << e->pos();
     update();
 }
@@ -89,11 +97,13 @@ void TabletTester::tabletEvent(QTabletEvent *e)
     switch(e->type()) {
         case QEvent::TabletMove:
             msg += " move";
+
             break;
         case QEvent::TabletPress:
             msg += " press";
             m_tabletPath.clear();
             m_tabletDown = true;
+            m_tabletSpeedSmoother.clear();
             break;
         case QEvent::TabletRelease:
             msg += " release";
@@ -104,11 +114,14 @@ void TabletTester::tabletEvent(QTabletEvent *e)
             break;
     }
 
-    msg += QString(" X=%1 Y=%2 B=%3 P=%4%")
+    const qreal speed = m_tabletSpeedSmoother.getNextSpeed(e->posF(), e->timestamp());
+
+    msg += QString(" X=%1 Y=%2 B=%3 P=%4% S=%5")
         .arg(e->posF().x(), 0, 'f', 2)
         .arg(e->posF().y(), 0, 'f', 2)
         .arg(e->buttons())
         .arg(e->pressure()*100, 0, 'f', 1)
+        .arg(speed, 0, 'f', 1)
         ;
 
     if(e->type() == QEvent::TabletMove) {

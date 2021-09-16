@@ -715,7 +715,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
             addActionToMenu(selectMenu, "select_invisible_layers");
             addActionToMenu(selectMenu, "select_locked_layers");
             addActionToMenu(selectMenu, "select_unlocked_layers");
-            QMenu *groupMenu = menu.addMenu(i18n("&Group"));
+            QMenu *groupMenu = menu.addMenu(i18nc("A group of layers", "&Group"));
             addActionToMenu(groupMenu, "create_quick_group");
             addActionToMenu(groupMenu, "create_quick_clipping_group");
             addActionToMenu(groupMenu, "quick_ungroup");

@@ -47,6 +47,7 @@ ChannelDockerDock::ChannelDockerDock( ) :
     setWidget(m_channelTable);
 
     connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);
+    connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &ChannelDockerDock::updateChannelTable);
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -73,7 +74,6 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
         KisPaintDeviceSP dev = m_canvas->image()->projection();
 
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());
-        connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &ChannelDockerDock::updateChannelTable);
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(startUpdateCanvasProjection()), Qt::UniqueConnection);
 

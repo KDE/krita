@@ -12,6 +12,9 @@
 #include <QPen>
 #include <QBrush>
 
+#include <QVector3D>
+#include <QVector2D>
+
 class QPainter;
 class QRegion;
 class QRect;
@@ -95,6 +98,26 @@ namespace KisPaintingTweaks {
      * Make the color \p color differ from \p baseColor for at least \p threshold value
      */
     void KRITAGLOBAL_EXPORT dragColor(QColor *color, const QColor &baseColor, qreal threshold);
+
+    inline void rectToVertices(QVector3D* vertices, const QRectF &rc)
+    {
+        vertices[0] = QVector3D(rc.left(),  rc.bottom(), 0.f);
+        vertices[1] = QVector3D(rc.left(),  rc.top(),    0.f);
+        vertices[2] = QVector3D(rc.right(), rc.bottom(), 0.f);
+        vertices[3] = QVector3D(rc.left(),  rc.top(), 0.f);
+        vertices[4] = QVector3D(rc.right(), rc.top(), 0.f);
+        vertices[5] = QVector3D(rc.right(), rc.bottom(),    0.f);
+    }
+
+    inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
+    {
+        texCoords[0] = QVector2D(rc.left(), rc.bottom());
+        texCoords[1] = QVector2D(rc.left(), rc.top());
+        texCoords[2] = QVector2D(rc.right(), rc.bottom());
+        texCoords[3] = QVector2D(rc.left(), rc.top());
+        texCoords[4] = QVector2D(rc.right(), rc.top());
+        texCoords[5] = QVector2D(rc.right(), rc.bottom());
+    }
 }
 
 #endif /* __KIS_PAINTING_TWEAKS_H */

@@ -86,6 +86,7 @@ public:
     static bool supportsLoD();
     static bool hasOpenGL3();
     static bool hasOpenGLES();
+    static bool supportsVAO();
 
     /// Check for OpenGL
     static bool hasOpenGL();
@@ -96,6 +97,8 @@ public:
      */
     static bool supportsFenceSync();
 
+    static bool supportsBufferMapping();
+
     /**
      * @brief supportsRenderToFBO
      * @return True if OpenGL can render to FBO, used
@@ -103,7 +106,6 @@ public:
      * fx.
      */
     static bool useFBOForToolOutlineRendering();
-
 
     /**
      * Returns true if we have a driver that has bugged support to sync objects (a fence)

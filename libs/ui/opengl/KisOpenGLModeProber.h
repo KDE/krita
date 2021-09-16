@@ -90,6 +90,10 @@ public:
         return (m_glMajorVersion * 100 + m_glMinorVersion) >= 300;
     }
 
+    bool supportsVAO() const {
+        return (m_glMajorVersion * 100 + m_glMinorVersion) >= 300;
+    }
+
     bool hasOpenGL3() const {
         return (m_glMajorVersion * 100 + m_glMinorVersion) >= 302;
     }
@@ -100,6 +104,10 @@ public:
 
     bool supportsFBO() const {
         return m_supportsFBO;
+    }
+
+    bool supportsBufferMapping() const {
+        return m_supportsBufferMapping;
     }
 
 #ifdef Q_OS_WIN
@@ -131,6 +139,7 @@ private:
     bool m_supportsDeprecatedFunctions = false;
     bool m_isOpenGLES = false;
     bool m_supportsFBO = false;
+    bool m_supportsBufferMapping = false;
     QString m_rendererString;
     QString m_driverVersionString;
     QString m_vendorString;

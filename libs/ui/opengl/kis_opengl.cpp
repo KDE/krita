@@ -274,8 +274,16 @@ bool KisOpenGL::supportsLoD()
 
 bool KisOpenGL::hasOpenGL3()
 {
+    return true;
+
     initialize();
     return openGLCheckResult && openGLCheckResult->hasOpenGL3();
+}
+
+bool KisOpenGL::supportsVAO()
+{
+    initialize();
+    return openGLCheckResult && openGLCheckResult->supportsVAO();
 }
 
 bool KisOpenGL::hasOpenGLES()
@@ -288,6 +296,12 @@ bool KisOpenGL::supportsFenceSync()
 {
     initialize();
     return openGLCheckResult && openGLCheckResult->supportsFenceSync();
+}
+
+bool KisOpenGL::supportsBufferMapping()
+{
+    initialize();
+    return openGLCheckResult && openGLCheckResult->supportsBufferMapping();
 }
 
 bool KisOpenGL::useFBOForToolOutlineRendering()

@@ -33,6 +33,12 @@
 #include <kactioncollection.h>
 #include "kis_floating_message.h"
 
+#ifdef Q_OS_MACOS
+    // HACK alert
+    // macOS.SDK openGL does not define GL_MULTISAMPLE_EXT
+    #define GL_MULTISAMPLE_EXT GL_MULTISAMPLE
+#endif
+
 class KisMirrorAxis::Private
 {
 public:

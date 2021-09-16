@@ -407,7 +407,7 @@ void KisTemplateCreateDia::slotAddGroup() {
     const QString name = QInputDialog::getText(this, i18nc("Group as in Template Group", "Add Group"), i18nc("Group as in Template Group", "Enter group name:"));
     KisTemplateGroup *group = d->m_tree.find(name);
     if (group && !group->isHidden()) {
-        QMessageBox::information( this, i18n("This name is already used."), i18nc("Group as in Template Group", "Add Group") );
+        QMessageBox::information( this, i18n("This name has already been used."), i18nc("Group as in Template Group", "Add Group") );
         return;
     }
     QString dir = KoResourcePaths::saveLocation("data", d->m_tree.templatesResourcePath());

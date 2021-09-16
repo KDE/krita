@@ -134,7 +134,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string comment="Group as Color Group in a Palette">Rename selected group</string>
+            <string comment="Group as Swatch Group in a Palette">Rename selected group</string>
            </property>
           </widget>
          </item>
@@ -147,7 +147,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string comment="Group as Color Group in a Palette">Remove selected group</string>
+            <string comment="Group as Swatch Group in a Palette">Remove selected group</string>
            </property>
           </widget>
          </item>

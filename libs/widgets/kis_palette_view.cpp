@@ -99,7 +99,7 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
 bool KisPaletteView::addEntryWithDialog(KoColor color)
 {
     KoDialog dialog;
-    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Colorset Entry"));
+    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Color Swatch"));
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
 
     QComboBox *cmbGroups = new QComboBox;
@@ -111,11 +111,11 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     KisColorButton *bnColor = new KisColorButton;
     QCheckBox *chkSpot = new QCheckBox;
     chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
-    editableItems->addRow(i18n("Group"), cmbGroups);
-    editableItems->addRow(i18n("ID"), lnIDName);
-    editableItems->addRow(i18n("Name"), lnName);
-    editableItems->addRow(i18n("Color"), bnColor);
-    editableItems->addRow(i18nc("Spot color", "Spot"), chkSpot);
+    editableItems->addRow(i18nc("Group as Color Group in a Palette", "Group:"), cmbGroups);
+    editableItems->addRow(i18nc("ID as Color ID in a Palette", "ID:"), lnIDName);
+    editableItems->addRow(i18nc("Name as Color Swatch Name in a Palette", "Name:"), lnName);
+    editableItems->addRow(i18nc("Color as the Color of a Swatch in a Palette", "Color:"), bnColor);
+    editableItems->addRow(i18nc("Spot color", "Spot:"), chkSpot);
     cmbGroups->setCurrentIndex(0);
     lnName->setText(i18nc("Part of a default name for a color","Color")+" " + QString::number(m_d->model->colorSet()->colorCount()+1));
     lnIDName->setText(QString::number(m_d->model->colorSet()->colorCount() + 1));

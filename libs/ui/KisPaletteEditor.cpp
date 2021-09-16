@@ -393,7 +393,7 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     if (!m_d->view->document()) { return; }
 
     KoDialog dialog;
-    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Colorset Entry"));
+    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Color Swatch"));
 
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
 

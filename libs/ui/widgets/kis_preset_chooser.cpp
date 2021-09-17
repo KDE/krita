@@ -38,6 +38,7 @@
 #include <kis_icon.h>
 #include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
+#include <KisResourceThumbnailPainter.h>
 
 
 /// The resource item delegate for rendering the resource preview
@@ -70,12 +71,15 @@ public:
 private:
     bool m_showText;
     bool m_useDirtyPresets;
+    KisResourceThumbnailPainter m_thumbnailPainter;
 };
 
 void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
     painter->save();
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+
     if (!(option.state & QStyle::State_Enabled)) {
         painter->setOpacity(0.2);
     }
@@ -87,60 +91,66 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
     bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
 
-    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
-    if (preview.isNull()) {
-        preview = QImage(512, 512, QImage::Format_RGB32);
-        preview.fill(Qt::red);
-    }
-
-    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
-    QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
-    if (!m_showText) {
-        QImage previewHighDpi = preview.scaled(paintRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
-        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
+    // get original thumbnail image (which also has style if selected)
+    QSize originalImageSize(256,256);
+    bool generateSelection = false; //this chooser also has a list view, so we are doing the selection logic here instead of the thumbnail
+    QImage preview = m_thumbnailPainter.getReadyThumbnail(index, originalImageSize*devicePixelRatioF, qApp->palette(), generateSelection, true );
+    preview.setDevicePixelRatio(devicePixelRatioF);
+
+
+    // if we are showing text with the brush preset, we only want the thumbnail to take up a small portion...not the whole rectangle
+    QImage previewHighDpi = preview.scaled(option.rect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+    if( m_showText) {
+         QSize pixSize(option.rect.height(), option.rect.height());
+         previewHighDpi = preview.scaled(pixSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
-    else {
-        QSize pixSize(paintRect.height(), paintRect.height());
-        QImage previewHighDpi = preview.scaled(pixSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
-        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
+    painter->drawImage(option.rect.x(), option.rect.y(), previewHighDpi);
 
-        // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
 
-        QString dirtyPresetIndicator = QString("");
-        if (m_useDirtyPresets && dirty) {
-            dirtyPresetIndicator = QString("*");
-        }
+    // // if we are showing showing the brush size next to the thumbnail
+    //  qreal brushSize = metaData["paintopSize"].toReal();
+    //  qDebug() << "brushsize" << brushSize;
+    //  QString brushSizeText;
+    //  // Disable displayed decimal precision beyond a certain brush size
+    //  if (brushSize < 100) {
+    //    brushSizeText = QString::number(brushSize, 'g', 3);
+    //  }
+    //  else {
+    //     brushSizeText = QString::number(brushSize, 'f', 0);
+    //  }
+    //  painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
 
-//        qreal brushSize = metaData["paintopSize"].toReal();
-//        qDebug() << "brushsize" << brushSize;
-//        QString brushSizeText;
-//        // Disable displayed decimal precision beyond a certain brush size
-//        if (brushSize < 100) {
-//            brushSizeText = QString::number(brushSize, 'g', 3);
-//        }
-//        else {
-//            brushSizeText = QString::number(brushSize, 'f', 0);
-//        }
 
-//        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
-
+    // show name of brush and if it has changed from default (dirtyIndicator)
+    QString dirtyPresetIndicator = QString("");
+    if (m_useDirtyPresets && dirty) {
+        dirtyPresetIndicator = QString("*");
+    }
+    if( m_showText) {
+        QSize pixSize(option.rect.height(), option.rect.height());
+        int textYPosition = option.rect.height() * 0.5 + (qApp->font().pixelSize() *0.5); // vertically center text
+        int textMargin = 15;
         QString presetDisplayName = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
-        painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
-
+        painter->drawText(pixSize.width() + textMargin, option.rect.y() +
+                          option.rect.height() - textYPosition, presetDisplayName.append(dirtyPresetIndicator));
     }
 
+
+    // if our brush preset has been changed from the default (dirty), show indicator
     if (m_useDirtyPresets && dirty) {
         const QIcon icon = KisIconUtils::loadIcon("dirty-preset");
         QPixmap pixmap = icon.pixmap(QSize(16,16));
-        painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
+        painter->drawPixmap(option.rect.x() + 3, option.rect.y() + 3, pixmap);
     }
 
+
+    // do we have a missing/broken brush tip image? Add an icon if we do
     bool broken = false;
+    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
     QStringList requiredBrushes = metaData["dependent_resources_filenames"].toStringList();
     if (!requiredBrushes.isEmpty()) {
         KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
@@ -151,13 +161,16 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
             }
         }
     }
-
     if (broken) {
         const QIcon icon = KisIconUtils::loadIcon("broken-preset");
-        icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
+        icon.paint(painter, QRect(option.rect.x() + option.rect.height() - 25, option.rect.y() + option.rect.height() - 25, 25, 25));
     }
 
-    if (option.state & QStyle::State_Selected) {
+
+    // have a small highlight if we are selected
+    // the thumbnail mode already does this...but if we are in list view we  need to highlight the whole row
+    bool isOptionSelected = option.state & QStyle::State_Selected;
+    if (isOptionSelected) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
         painter->setOpacity(1.0);
         painter->fillRect(option.rect, option.palette.highlight());
@@ -168,6 +181,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         QRect selectedBorder = option.rect.adjusted(2 , 2, -2, -2); // constrict the rectangle so it doesn't bleed into other presets
         painter->drawRect(selectedBorder);
     }
+
 
     painter->restore();
 

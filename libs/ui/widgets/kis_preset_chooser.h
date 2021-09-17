@@ -12,9 +12,11 @@
 #include <QScroller>
 #include <QPointer>
 
+
 #include <KoResource.h>
 #include <KoID.h>
 #include "kis_signal_auto_connection.h"
+
 
 class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
@@ -84,6 +86,7 @@ private:
     KisResourceItemChooser *m_chooser {0};
     KisPresetDelegate* m_delegate {0};
     ViewMode m_mode;
+
 
     class PaintOpFilterModel;
     QPointer<PaintOpFilterModel> m_paintOpFilterModel;

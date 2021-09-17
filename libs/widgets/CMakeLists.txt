@@ -51,7 +51,7 @@ set(kritawidgets_LIB_SRCS
     KisColorSelectorInterface.cpp
     KoAnchorSelectionWidget.cpp
 
-    KisGradientSlider.cpp
+    KisLevelsSlider.cpp
 
     kis_color_input.cpp
 

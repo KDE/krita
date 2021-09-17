@@ -1,4 +1,4 @@
-<!--
+ <!--
   SPDX-FileCopyrightText: none
   SPDX-License-Identifier: CC0-1.0
 -->
@@ -383,5 +383,19 @@
         <file>light_sort-by-hue.svg</file>
         <file>dark_cut-item.svg</file>
         <file>light_cut-item.svg</file>
+        <file>dark_color-adjustement-mode-lightness.svg</file>
+        <file>light_color-adjustement-mode-lightness.svg</file>
+        <file>dark_color-adjustement-mode-channels.svg</file>
+        <file>light_color-adjustement-mode-channels.svg</file>
+        <file>dark_autolevels.svg</file>
+        <file>light_autolevels.svg</file>
+        <file>dark_histogram-linear.svg</file>
+        <file>light_histogram-linear.svg</file>
+        <file>dark_histogram-logarithmic.svg</file>
+        <file>light_histogram-logarithmic.svg</file>
+        <file>dark_histogram-show-all.svg</file>
+        <file>light_histogram-show-all.svg</file>
+        <file>dark_histogram-show-best.svg</file>
+        <file>light_histogram-show-best.svg</file>
     </qresource>
 </RCC>

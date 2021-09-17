@@ -282,6 +282,9 @@ set(kritaui_LIB_SRCS
     widgets/KisMemoryReportButton.cpp
     widgets/KisDitherWidget.cpp
     widgets/KisWarningWidget.cpp
+    widgets/KisAutoLevelsWidget.cpp
+    widgets/KisHistogramPainter.cpp
+    widgets/KisHistogramView.cpp
 
     # Gradient related widgets
     widgets/gradient/KisStopGradientEditor.cpp
@@ -533,6 +536,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.ui
     widgets/KoStrokeConfigWidget.ui
     widgets/KisDitherWidget.ui
+    widgets/KisAutoLevelsWidget.ui
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgsegmentgradienteditor.ui

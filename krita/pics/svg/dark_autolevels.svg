@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" data-name="Layer 2" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style>.cls-1,.cls-2{fill:none;stroke:#cacaca;stroke-miterlimit:10;stroke-width:4px;}.cls-2{stroke-linecap:round;}.cls-3{fill:#cacaca;}</style>
+ </defs>
+ <g fill="#373737" stroke-width="3.7795">
+  <path d="m7.9998 13-1.5 2.9999h2.9999z"/>
+  <path d="m14.5 13-1.5 2.9999h2.9999z"/>
+  <path d="m1.5 13-1.5 2.9999h2.9999z"/>
+  <path d="m1e-7 12v0.99998h16v-0.99998z" color="#000000" stroke-dashoffset="3.2" style="-inkscape-stroke:none"/>
+ </g>
+ <g fill="none" stroke="#373737" stroke-width=".99999px">
+  <path d="m9.0668 8.0667-1.4323-1.4323"/>
+  <path d="m6.5003 8.9997-1.55e-5 -1.9989"/>
+  <path d="m15 5.5001-8.9989-3.6e-5"/>
+  <path d="m4.0565 8.0639 1.4308-1.4308"/>
+  <path d="m5.0005 5.4998-1.9994-1.57e-5"/>
+  <path d="m6.5004 3.9993-1.55e-5 -1.9989"/>
+  <path d="m7.5778 4.5426 1.4308-1.4308"/>
+  <path d="m5.486 4.4859-1.4323-1.4323"/>
+  <path d="m3 1.5005-0.99893-3e-7"/>
+  <path d="m6.5005 0.99926-7.5e-6 -0.99892"/>
+  <path d="m10.5 1.9995v-0.99893"/>
+  <path d="m10.001 9.5001 0.99893 3e-7"/>
+  <path d="m6.5006 10 7.5e-6 0.99892"/>
+  <path d="m2.5006 9.0005 3e-7 0.99893"/>
+  <path d="m1.9994 5.5004-0.99892-7.5e-6"/>
+ </g>
+</svg>

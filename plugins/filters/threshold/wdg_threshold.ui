@@ -110,7 +110,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisGradientSlider" name="thresholdGradient" native="true">
+    <widget class="KisThresholdSlider" name="thresholdGradient" native="true">
      <property name="minimumSize">
       <size>
        <width>256</width>
@@ -176,15 +176,11 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisGradientSlider</class>
+   <class>KisThresholdSlider</class>
    <extends>QWidget</extends>
-   <header>KisGradientSlider.h</header>
+   <header>KisLevelsSlider.h</header>
   </customwidget>
  </customwidgets>
- <includes>
-  <include location="local">KisGradientSlider.h</include>
-  <include location="local">KisGradientSlider.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

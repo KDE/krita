@@ -33,7 +33,7 @@
 #include <kis_painter.h>
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
-#include <KisGradientSlider.h>
+#include <KisLevelsSlider.h>
 #include "kis_linked_pattern_manager.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include "kis_texture_chooser.h"
@@ -68,8 +68,8 @@ KisTextureOption::KisTextureOption(KisBrushTextureFlags flags)
     connect(m_textureOptions->offsetSliderY, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->cmbTexturingMode, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
-    connect(m_textureOptions->cutoffSlider, SIGNAL(sigModifiedBlack(int)), SLOT(emitSettingChanged()));
-    connect(m_textureOptions->cutoffSlider, SIGNAL(sigModifiedWhite(int)), SLOT(emitSettingChanged()));
+    connect(m_textureOptions->cutoffSlider, SIGNAL(blackPointChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_textureOptions->cutoffSlider, SIGNAL(whitePointChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->chkInvert, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     resetGUI(m_textureOptions->textureSelectorWidget->currentResource());
 
@@ -140,8 +140,8 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/TexturingMode", texturingMode);
-    setting->setProperty("Texture/Pattern/CutoffLeft", m_textureOptions->cutoffSlider->black());
-    setting->setProperty("Texture/Pattern/CutoffRight", m_textureOptions->cutoffSlider->white());
+    setting->setProperty("Texture/Pattern/CutoffLeft", static_cast<int>(m_textureOptions->cutoffSlider->blackPoint() * 255.0));
+    setting->setProperty("Texture/Pattern/CutoffRight", static_cast<int>(m_textureOptions->cutoffSlider->whitePoint() * 255.0));
     setting->setProperty("Texture/Pattern/CutoffPolicy", m_textureOptions->cmbCutoffPolicy->currentIndex());
     setting->setProperty("Texture/Pattern/Invert", invert);
 
@@ -178,8 +178,8 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_textureOptions->randomOffsetY->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetY"));
     m_textureOptions->selectTexturingMode(KisTextureProperties::TexturingMode(setting->getInt("Texture/Pattern/TexturingMode", KisTextureProperties::MULTIPLY)));
     m_textureOptions->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
-    m_textureOptions->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
-    m_textureOptions->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
+    m_textureOptions->cutoffSlider->reset(static_cast<qreal>(setting->getInt("Texture/Pattern/CutoffLeft", 0)) / 255.0,
+                                          static_cast<qreal>(setting->getInt("Texture/Pattern/CutoffRight", 255)) / 255.0);
     m_textureOptions->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
 
 }

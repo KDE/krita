@@ -21,7 +21,7 @@
 #include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
-#include "KisGradientSlider.h"
+#include "KisLevelsSlider.h"
 #include "kis_histogram.h"
 #include <kis_layer.h>
 #include "kis_paint_device.h"
@@ -30,6 +30,7 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <KisSequentialIteratorProgress.h>
+#include <kis_signals_blocker.h>
 
 #include <KoBasicHistogramProducers.h>
 #include "KoColorModelStandardIds.h"
@@ -109,16 +110,25 @@ KisThresholdConfigWidget::KisThresholdConfigWidget(QWidget * parent, KisPaintDev
     Q_ASSERT(dev);
     m_page.setupUi(this);
 
-    m_page.thresholdGradient->enableGamma(false);
-    m_page.thresholdGradient->enableWhite(false);
+    m_page.thresholdGradient->setThreshold(0.5);
     m_page.intThreshold->setValue(128);
 
     connect(m_page.intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page.thresholdGradient, SIGNAL(sigModifiedGamma(double)), SIGNAL(sigConfigurationItemChanged()));
-
-    connect(m_page.intThreshold, SIGNAL(valueChanged(int)), m_page.thresholdGradient, SLOT(slotModifyBlack(int)));
-
-    connect(m_page.thresholdGradient, SIGNAL(sigModifiedBlack(int)), m_page.intThreshold, SLOT(setValue(int)));
+    connect(m_page.intThreshold, QOverload<int>::of(&QSpinBox::valueChanged),
+        [this](int value)
+        {
+            KisSignalsBlocker blocker(m_page.thresholdGradient);
+            m_page.thresholdGradient->setThreshold(static_cast<qreal>(value) / 255.0);
+        }
+    );
+    connect(m_page.thresholdGradient, SIGNAL(thresholdChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page.thresholdGradient, &KisThresholdSlider::thresholdChanged,
+        [this](qreal value)
+        {
+            KisSignalsBlocker blocker(m_page.intThreshold);
+            m_page.intThreshold->setValue(static_cast<int>(qRound(value * 255.0)));
+        }
+    );
 
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
@@ -196,9 +206,11 @@ void KisThresholdConfigWidget::setConfiguration(const KisPropertiesConfiguration
 {
     QVariant value;
     if (config->getProperty("threshold", value)) {
+        KisSignalsBlocker blocker(m_page.intThreshold, m_page.thresholdGradient);
         m_page.intThreshold->setValue(value.toUInt());
-        m_page.thresholdGradient->slotModifyBlack(value.toUInt());
+        m_page.thresholdGradient->setThreshold(static_cast<qreal>(value.toUInt()) / 255.0);
     }
+    emit sigConfigurationUpdated();
 }
 
 

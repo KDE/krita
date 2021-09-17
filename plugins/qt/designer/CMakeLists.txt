@@ -7,7 +7,6 @@ include_directories(${Qt5Designer_INCLUDE_DIRS})
 
 set(KritaDesignerPlugin_SOURCES
     KisColorSpaceSelectorPlugin.cpp
-    KisGradientSliderPlugin.cpp
     KritaDesignerPluginCollection.cpp
 )
 

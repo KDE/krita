@@ -184,7 +184,7 @@
             </widget>
            </item>
            <item row="6" column="1">
-            <widget class="KisGradientSlider" name="cutoffSlider" native="true">
+            <widget class="KisInputLevelsSlider" name="cutoffSlider" native="true">
              <property name="text" stdset="0">
               <string>PushButton</string>
              </property>
@@ -321,9 +321,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisGradientSlider</class>
+   <class>KisInputLevelsSlider</class>
    <extends>QWidget</extends>
-   <header>KisGradientSlider.h</header>
+   <header>KisLevelsSlider.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

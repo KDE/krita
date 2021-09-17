@@ -320,7 +320,7 @@
           </layout>
          </item>
          <item>
-          <widget class="KisGradientSlider" name="sliderThis_2" native="true"/>
+          <widget class="KisOutputLevelsSlider" name="sliderThis_2" native="true"/>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -348,7 +348,7 @@
           </layout>
          </item>
          <item>
-          <widget class="KisGradientSlider" name="sliderUnderlying_2" native="true"/>
+          <widget class="KisOutputLevelsSlider" name="sliderUnderlying_2" native="true"/>
          </item>
          <item>
           <spacer name="verticalSpacer">
@@ -384,9 +384,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisGradientSlider</class>
+   <class>KisOutputLevelsSlider</class>
    <extends>QWidget</extends>
-   <header>KisGradientSlider.h</header>
+   <header>KisLevelsSlider.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

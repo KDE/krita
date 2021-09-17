@@ -41,6 +41,8 @@
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
 
+#include "kis_multichannel_utils.h"
+
 KisMultiChannelFilter::KisMultiChannelFilter(const KoID& id, const QString &entry)
         : KisColorTransformationFilter(id, FiltersCategoryAdjustId, entry)
 {
@@ -56,57 +58,13 @@ bool KisMultiChannelFilter::needsTransparentPixels(const KisFilterConfigurationS
 
 QVector<VirtualChannelInfo> KisMultiChannelFilter::getVirtualChannels(const KoColorSpace *cs, int maxChannels)
 {
-    const bool supportsLightness =
-        cs->colorModelId() != LABAColorModelID &&
-        cs->colorModelId() != GrayAColorModelID &&
-        cs->colorModelId() != GrayColorModelID &&
-        cs->colorModelId() != AlphaColorModelID;
-
-    const bool supportsHue = supportsLightness;
-    const bool supportSaturation = supportsLightness;
-
-    QVector<VirtualChannelInfo> vchannels;
-
-    QList<KoChannelInfo *> sortedChannels =
-        KoChannelInfo::displayOrderSorted(cs->channels());
-
-    if (supportsLightness) {
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::ALL_COLORS, -1, 0, cs);
-    }
-
-    Q_FOREACH (KoChannelInfo *channel, sortedChannels) {
-        int pixelIndex = KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), sortedChannels);
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::REAL, pixelIndex, channel, cs);
-    }
-
-    if (supportsHue) {
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::HUE, -1, 0, cs);
-    }
-
-    if (supportSaturation) {
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::SATURATION, -1, 0, cs);
-    }
-
-    if (supportsLightness) {
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::LIGHTNESS, -1, 0, cs);
-    }
-
-    if (maxChannels >= 0 && vchannels.size() > maxChannels) {
-        vchannels.resize(maxChannels);
-    }
-
-    return vchannels;
+    return KisMultiChannelUtils::getVirtualChannels(cs, maxChannels);
 }
 
 int KisMultiChannelFilter::findChannel(const QVector<VirtualChannelInfo> &virtualChannels,
                                        const VirtualChannelInfo::Type &channelType)
 {
-    for (int i = 0; i < virtualChannels.size(); i++) {
-        if (virtualChannels[i].type() == channelType) {
-            return i;
-        }
-    }
-    return -1;
+    return KisMultiChannelUtils::findChannel(virtualChannels, channelType);
 }
 
 

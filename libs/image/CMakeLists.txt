@@ -167,6 +167,8 @@ set(kritaimage_LIB_SRCS
    kis_gaussian_kernel.cpp
    kis_edge_detection_kernel.cpp
    kis_cubic_curve.cpp
+   KisLevelsCurve.cpp
+   KisAutoLevels.cpp
    kis_default_bounds.cpp
    kis_default_bounds_node_wrapper.cpp
    kis_default_bounds_base.cpp

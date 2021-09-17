@@ -1,10 +1,13 @@
 set(kritalevelfilter_SOURCES
-    KisLevelFilterPlugin.cpp
-    KisLevelFilter.cpp
-    KisLevelConfigWidget.cpp
+    KisLevelsFilterPlugin.cpp
+    KisLevelsFilter.cpp
+    KisLevelsConfigWidget.cpp
+    KisLevelsFilterConfiguration.cpp
+    ../colorsfilters/kis_multichannel_utils.cpp
+    ../colorsfilters/virtual_channel_info.cpp
     )
 ki18n_wrap_ui(kritalevelfilter_SOURCES
-    wdg_level.ui
+    KisLevelsConfigWidget.ui
     )
 add_library(kritalevelfilter MODULE ${kritalevelfilter_SOURCES})
 target_link_libraries(kritalevelfilter kritaui)

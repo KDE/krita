@@ -7,13 +7,11 @@
 #include "KritaDesignerPluginCollection.h"
 
 #include "KisColorSpaceSelectorPlugin.h"
-#include "KisGradientSliderPlugin.h"
 
 KritaDesignerPluginCollection::KritaDesignerPluginCollection(QObject *parent)
     : QObject(parent)
 {
     m_widgets.append(new KisColorSpaceSelectorPlugin(this));
-    m_widgets.append(new KisGradientSliderPlugin(this));
 }
 
 QList<QDesignerCustomWidgetInterface*> KritaDesignerPluginCollection::customWidgets() const

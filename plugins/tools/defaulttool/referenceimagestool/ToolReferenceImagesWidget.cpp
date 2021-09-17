@@ -249,6 +249,7 @@ void ToolReferenceImagesWidget::slotOpacitySliderChanged(qreal newOpacity)
         new KoShapeTransparencyCommand(shapes, 1.0 - newOpacity / 100.0);
 
     d->tool->canvas()->addCommand(cmd);
+    d->tool->updateReferenceImages();
 }
 
 void ToolReferenceImagesWidget::slotSaturationSliderChanged(qreal newSaturation)
@@ -260,6 +261,7 @@ void ToolReferenceImagesWidget::slotSaturationSliderChanged(qreal newSaturation)
             new KisReferenceImage::SetSaturationCommand(shapes, newSaturation / 100.0);
 
     d->tool->canvas()->addCommand(cmd);
+    d->tool->updateReferenceImages();
 }
 
 void ToolReferenceImagesWidget::slotSaveLocationChanged(int index)
@@ -366,6 +368,7 @@ void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
             d->tool->canvas()->addCommand(cmd);
         }
     }
+    d->tool->updateReferenceImages();
 }
 
 void ToolReferenceImagesWidget::slotCropValuesChanged()

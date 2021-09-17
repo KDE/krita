@@ -138,7 +138,7 @@ KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &
     : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
 {}
 
-KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)
+KUndo2Command * KisReferenceImagesLayer::addReferenceImagesCommand(KisDocument *document, const QList<KoShape*> referenceImages)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer = document->referenceImagesLayer();
     if (!layer) {
@@ -163,7 +163,7 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *documen
     return parentCommand;
 }
 
-KUndo2Command * KisReferenceImagesLayer::removeReferenceImages(KisDocument *document, QList<KoShape*> referenceImages)
+KUndo2Command * KisReferenceImagesLayer::removeReferenceImagesCommand(KisDocument *document, QList<KoShape*> referenceImages)
 {
     Q_FOREACH(KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
@@ -256,6 +256,12 @@ QColor KisReferenceImagesLayer::getPixel(QPointF position) const
     return QColor();
 }
 
+void KisReferenceImagesLayer::addReferenceImages(KisReferenceImage *reference)
+{
+    KoShapeContainer::addShape(reference);
+    addFilesPath(reference->filename());
+}
+
 void KisReferenceImagesLayer::fileChanged(QString path)
 {
     Q_FOREACH(KisReferenceImage *ref, referenceImages()) {
@@ -278,7 +284,7 @@ void KisReferenceImagesLayer::updateTransformations(KisCanvas2 *kisCanvas)
 {
     bool rotateSelection = true; // modify selection also if all ref's pinned
     bool mirrorSelection = true;
-    qreal angle ;
+    qreal angle = 0;
     m_docToWidget = kisCanvas->coordinatesConverter()->documentToWidgetTransform();
 
     Q_FOREACH(KoShape *shape, shapes()) {

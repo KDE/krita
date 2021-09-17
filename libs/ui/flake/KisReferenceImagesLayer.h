@@ -24,8 +24,8 @@ public:
     KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image);
     KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs);
 
-    static KUndo2Command * addReferenceImages(KisDocument *document, QList<KoShape*> referenceImages);
-    KUndo2Command * removeReferenceImages(KisDocument *document, QList<KoShape*> referenceImages);
+    static KUndo2Command * addReferenceImagesCommand(KisDocument *document, QList<KoShape*> referenceImages);
+    KUndo2Command * removeReferenceImagesCommand(KisDocument *document, QList<KoShape*> referenceImages);
     QVector<KisReferenceImage*> referenceImages() const;
 
     QRectF boundingImageRect() const;
@@ -49,6 +49,7 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                  KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
 
+    void addReferenceImages(KisReferenceImage *reference);
     void addFilesPath(QString);
 
     void updateTransformations(KisCanvas2 *kisCanvas);

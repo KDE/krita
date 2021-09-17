@@ -65,10 +65,11 @@ struct KisReferenceImage::Private : public QSharedData
     bool pinPosition = false, pinZoom = false;
     bool mirrorX = false, mirrorY = false;
     bool pinAll = false;
-    QPointF docOffset;
-    qreal previousAngle = 0, previousPosition;
+    QPointF docOffset, absPos;
+    qreal previousAngle = 0;
     qreal zoom = 0.33;
     QTransform transform = QTransform();
+    QTransform widgetToDoc = QTransform();
 
     bool loadFromFile() {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
@@ -628,6 +629,11 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
             KoFlake::resizeShapeCommon(this, scale , scale,
                                        absolutePosition(KoFlake::TopLeft), false ,false ,this->transformation());
             d->zoom = kisCanvas->viewConverter()->zoom();
+
+            setPosition(kisCanvas->coordinatesConverter()->documentToWidget(d->absPos));
+            qreal dx = -d->transform.m31();
+            qreal dy = -d->transform.m32();
+            d->transform.translate(dx, dy);
         }
         d->docOffset = kisCanvas->documentOffset();
     }
@@ -635,7 +641,6 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
     if (d->mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored()
                 || d->mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored()) {
         if (!d->pinMirror) {
-
             QPointF center = absolutePosition();
             qreal scaleX = d->mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored() ? -1 : 1;
             qreal scaleY = d->mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored() ? -1 : 1;
@@ -647,10 +652,8 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
         d->previousAngle = kisCanvas->rotationAngle();
     }
 
-    if (d->previousAngle != kisCanvas->rotationAngle())
-    {
+    if (d->previousAngle != kisCanvas->rotationAngle()) {
         if (!d->pinRotate) {
-
             QPointF center = absolutePosition();
             diffRotate = kisCanvas->rotationAngle() - d->previousAngle;
             QTransform rot;
@@ -673,9 +676,20 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
     d->mirrorX = kisCanvas->coordinatesConverter()->xAxisMirrored();
     d->mirrorY = kisCanvas->coordinatesConverter()->yAxisMirrored();
     d->previousAngle = kisCanvas->rotationAngle();
+    d->widgetToDoc = kisCanvas->coordinatesConverter()->documentToWidgetTransform().inverted();
 
     if (!qFuzzyCompare(d->transform, extraTransform())) {
         setExtraTransform(d->transform);
     }
     return diffRotate;
 }
+
+void KisReferenceImage::shapeChanged(ChangeType type, KoShape *shape)
+{
+    KoTosContainer::shapeChanged(type,shape);
+    if (type == SizeChanged || type == PositionChanged || type == GenericMatrixChange ) {
+        QPointF pos = absolutePosition(KoFlake::TopLeft);
+        d->absPos = d->widgetToDoc.map(pos);
+    }
+}
+

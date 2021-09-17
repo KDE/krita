@@ -338,7 +338,7 @@ void ToolReferenceImages::addReferenceImage()
             reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
         }
         KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+        doc->addCommand(KisReferenceImagesLayer::addReferenceImagesCommand(doc, {reference}));
     }
 }
 
@@ -353,7 +353,7 @@ void ToolReferenceImages::pasteReferenceImage()
             reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
         }
         KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+        doc->addCommand(KisReferenceImagesLayer::addReferenceImagesCommand(doc, {reference}));
     } else {
         if (canvas()->canvasWidget()) {
             QMessageBox::critical(canvas()->canvasWidget(), i18nc("@title:window", "Krita"), i18n("Could not load reference image from clipboard"));
@@ -368,7 +368,7 @@ void ToolReferenceImages::removeAllReferenceImages()
     auto layer = m_layer.toStrongRef();
     if (!layer) return;
 
-    canvas()->addCommand(layer->removeReferenceImages(document(), layer->shapes()));
+    canvas()->addCommand(layer->removeReferenceImagesCommand(document(), layer->shapes()));
 }
 
 void ToolReferenceImages::loadReferenceImages()
@@ -411,7 +411,7 @@ void ToolReferenceImages::loadReferenceImages()
         }
 
         KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, shapes));
+        doc->addCommand(KisReferenceImagesLayer::addReferenceImagesCommand(doc, shapes));
     } else {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not load reference images from '%1'.", filename));
     }
@@ -540,7 +540,7 @@ void ToolReferenceImages::deleteSelection()
     QList<KoShape *> shapes = koSelection()->selectedShapes();
 
     if (!shapes.empty()) {
-        canvas()->addCommand(layer->removeReferenceImages(document(), shapes));
+        canvas()->addCommand(layer->removeReferenceImagesCommand(document(), shapes));
     }
 }
 

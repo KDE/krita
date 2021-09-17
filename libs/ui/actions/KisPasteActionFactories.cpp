@@ -317,7 +317,7 @@ void KisPasteReferenceActionFactory::run(KisViewManager *viewManager)
     if (!reference) return;
 
     KisDocument *doc = viewManager->document();
-    doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+    doc->addCommand(KisReferenceImagesLayer::addReferenceImagesCommand(doc, {reference}));
 
     KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
 }

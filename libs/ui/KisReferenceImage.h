@@ -68,6 +68,8 @@ public:
     static KisReferenceImage * fromFile(const QString &filename, const KisCoordinatesConverter &converter, QWidget *parent /*= nullptr*/);
     static KisReferenceImage * fromClipboard(const KisCoordinatesConverter &converter);
 
+    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
+
     void setSaturation(qreal saturation);
     qreal saturation() const;
 

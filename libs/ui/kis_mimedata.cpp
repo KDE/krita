@@ -432,7 +432,8 @@ bool correctNewNodeLocation(KisNodeList nodes,
     KisNodeSP parentNode = parentDummy->node();
     bool result = true;
 
-    if(!nodeAllowsAsChild(parentDummy->node(), nodes)) {
+    if(!nodeAllowsAsChild(parentDummy->node(), nodes) ||
+            (parentDummy->node()->inherits("KisGroupLayer") && parentDummy->node()->collapsed())) {
         aboveThisDummy = parentDummy;
         parentDummy = parentDummy->parent();
 

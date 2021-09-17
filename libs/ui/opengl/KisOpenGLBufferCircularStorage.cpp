@@ -53,16 +53,7 @@ KisOpenGLBufferCircularStorage::~KisOpenGLBufferCircularStorage()
 void KisOpenGLBufferCircularStorage::allocate(int numBuffers, int bufferSize)
 {
     m_d->buffers.clear();
-    m_d->buffers.reserve(numBuffers);
-
-    for (int i = 0; i < numBuffers; i++) {
-        m_d->buffers.emplace_back(m_d->type);
-        m_d->buffers[i].create();
-        m_d->buffers[i].setUsagePattern(QOpenGLBuffer::DynamicDraw);
-        m_d->buffers[i].bind();
-        m_d->buffers[i].allocate(bufferSize);
-        m_d->buffers[i].release();
-    }
+    addBuffersImpl(numBuffers, bufferSize);
 }
 
 QOpenGLBuffer *KisOpenGLBufferCircularStorage::getNextBuffer()
@@ -87,4 +78,29 @@ int KisOpenGLBufferCircularStorage::size() const
 void KisOpenGLBufferCircularStorage::reset()
 {
     m_d->buffers.clear();
+}
+
+void KisOpenGLBufferCircularStorage::allocateMoreBuffers(int numBuffers)
+{
+    if (numBuffers <= m_d->buffers.size()) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->buffers.empty());
+
+    std::rotate(m_d->buffers.begin(), m_d->buffers.begin() + m_d->nextBuffer, m_d->buffers.end());
+
+    m_d->nextBuffer = m_d->buffers.size();
+    addBuffersImpl(numBuffers - m_d->buffers.size(), m_d->buffers[0].size());
+}
+
+void KisOpenGLBufferCircularStorage::addBuffersImpl(int buffersToAdd, int bufferSize)
+{
+    m_d->buffers.reserve(m_d->buffers.size() + buffersToAdd);
+
+    for (int i = 0; i < buffersToAdd; i++) {
+        m_d->buffers.emplace_back(m_d->type);
+        m_d->buffers[i].create();
+        m_d->buffers[i].setUsagePattern(QOpenGLBuffer::DynamicDraw);
+        m_d->buffers[i].bind();
+        m_d->buffers[i].allocate(bufferSize);
+        m_d->buffers[i].release();
+    }
 }

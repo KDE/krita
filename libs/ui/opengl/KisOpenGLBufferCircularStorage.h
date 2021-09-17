@@ -51,6 +51,11 @@ public:
 
     void reset();
 
+    void allocateMoreBuffers(int numBuffers);
+
+private:
+    void addBuffersImpl(int buffersToAdd, int bufferSize);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

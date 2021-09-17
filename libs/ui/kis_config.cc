@@ -148,7 +148,7 @@ void KisConfig::setUndoEnabled(bool undo) const
 
 int KisConfig::undoStackLimit(bool defaultValue) const
 {
-    return (defaultValue ? 30 : m_cfg.readEntry("undoStackLimit", 30));
+    return (defaultValue ? 200 : m_cfg.readEntry("undoStackLimit", 200));
 }
 
 void KisConfig::setUndoStackLimit(int limit) const

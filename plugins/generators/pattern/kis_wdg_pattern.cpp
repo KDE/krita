@@ -83,8 +83,8 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
     m_widget->spbOffsetX->setValue(config->getInt("transform_offset_x", 0));
     m_widget->spbOffsetY->setValue(config->getInt("transform_offset_y", 0));
 
-    m_widget->spbScaleWidth->setValue(config->getInt("transform_scale_x", 1.0) * 100);
-    m_widget->spbScaleHeight->setValue(config->getInt("transform_scale_y", 1.0) * 100);
+    m_widget->spbScaleWidth->setValue(config->getDouble("transform_scale_x", 1.0) * 100);
+    m_widget->spbScaleHeight->setValue(config->getDouble("transform_scale_y", 1.0) * 100);
     m_widget->btnLockAspectRatio->setKeepAspectRatio(config->getBool("transform_keep_scale_aspect", true));
 
     m_widget->sldShearX->setValue(config->getDouble("transform_shear_x", 0.0) * 100);

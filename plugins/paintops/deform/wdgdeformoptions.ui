@@ -45,14 +45,14 @@
      <item column="0" row="0">
       <widget class="QRadioButton" name="growBtn">
        <property name="text">
-        <string>Grow</string>
+        <string comment="Grow as in deform brush engine">Grow</string>
        </property>
       </widget>
      </item>
      <item column="1" row="0">
       <widget class="QRadioButton" name="shrinkBtn">
        <property name="text">
-        <string>Shrink</string>
+        <string comment="Shrink as in deform brush engine">Shrink</string>
        </property>
       </widget>
      </item>
@@ -83,7 +83,7 @@
      <item column="1" row="2">
       <widget class="QRadioButton" name="colorBtn">
        <property name="text">
-        <string>Color deformation</string>
+        <string comment="Rearrange the pixels positions under the cursor">Color deformation</string>
        </property>
       </widget>
      </item>

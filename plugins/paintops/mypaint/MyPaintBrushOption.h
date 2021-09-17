@@ -32,7 +32,7 @@ const KoID FineSpeed("speed1", ki18n("Fine Speed"));
 const KoID GrossSpeed("speed2", ki18n("Gross Speed"));
 const KoID Random("random", ki18n("Random"));
 const KoID Stroke("stroke", ki18nc("The duration of a brush stroke", "Stroke"));
-const KoID Direction("direction", ki18n("Direction"));
+const KoID Direction("direction", ki18nc("Drawing Angle", "Direction"));
 const KoID Declination("tilt_declination", ki18nc("Pen tilt declination", "Declination"));
 const KoID Ascension("tilt_ascension", ki18nc("Pen tilt ascension", "Ascension"));
 const KoID Custom("custom", ki18n("Custom"));

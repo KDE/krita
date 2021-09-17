@@ -581,6 +581,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         event->setAccepted(true);
         retval = true;
         d->blockMouseEvents();
+        d->startBlockingTouch();
         //Reset signal compressor to prevent processing events before press late
         d->resetCompressor();
 
@@ -631,6 +632,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 #if defined(Q_OS_MAC) || defined(Q_OS_ANDROID)
         d->allowMouseEvents();
 #endif
+        d->stopBlockingTouch();
         d->debugEvent<QTabletEvent, false>(event);
 
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);

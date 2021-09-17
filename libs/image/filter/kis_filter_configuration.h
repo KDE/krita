@@ -128,7 +128,7 @@ public:
      * Set resource interface that will be used by KisFilterConfiguration object for
      * loading linked resources
      */
-    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+    virtual void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
     /**
      * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot

@@ -194,6 +194,7 @@ Q_SIGNALS:
 private:
     // interface for:
     friend class KisRegenerateFrameStrokeStrategy;
+    friend class KisSuspendProjectionUpdatesStrokeStrategy; //TODO These friend classes are ugly. Let's refactor after Krita 5 release.
     friend class KisAnimationFrameCacheTest;
     friend struct KisLayerUtils::SwitchFrameCommand;
     friend class KisImageTest;

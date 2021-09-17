@@ -32,6 +32,9 @@ endif (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 # Tools must be obtained to work with:
 include (ExternalProject)
 
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/kde_macro")
+include (KritaToNativePath)
+
 # allow specification of a directory with pre-downloaded
 # requirements
 if(NOT IS_DIRECTORY ${EXTERNALS_DOWNLOAD_DIR})
@@ -62,6 +65,7 @@ set(GLOBAL_BUILD_TYPE RelWithDebInfo)
 set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
 
 if (WIN32)
+        option(ENABLE_MSYS2_FIXES "Enable patches that are needed for MSYS2+Clang Krita build" OFF)
 	option(QT_ENABLE_DEBUG_INFO "Build Qt with debug info included" OFF)
 	option(QT_ENABLE_DYNAMIC_OPENGL "Build Qt with dynamic ANGLE support '-opengl dynamic -angle' (needs env var 'WindowsSdkDir' set to path of Windows 10 SDK)" ON)
     if (QT_ENABLE_DYNAMIC_OPENGL)
@@ -71,6 +75,35 @@ if (WIN32)
 			message(FATAL_ERROR "Environment variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK or disable QT_ENABLE_DYNAMIC_OPENGL")
 		endif ()
     endif ()
+
+    if(ENABLE_MSYS2_FIXES)
+        find_package(ZLIB)
+        find_package(Iconv)
+        find_package(EXPAT)
+        find_package(Gettext)
+        find_package(OpenSSL)
+    endif()
+
+    if (NOT ZLIB_FOUND)
+        set (ZLIB_DEP ext_zlib)
+    endif()
+    
+    if (NOT Iconv_FOUND)
+        set (ICONV_DEP ext_iconv)
+    endif()
+    
+    if (NOT EXPAT_FOUND)
+        set (EXPAT_DEP ext_expat)
+    endif()
+    
+    if (NOT Gettext_FOUND)
+        set (GETTEXT_DEP ext_gettext)
+    endif()
+    
+    if (NOT OpenSSL_FOUND)
+        set (OPENSSL_DEP ext_openssl)
+    endif()
+          
 endif (WIN32)
 
 if (WIN32)
@@ -190,8 +223,8 @@ endif ()
 
 function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
 	include(CheckCXXSourceCompiles)
-	set(CMAKE_REQUIRED_INCLUDES ${PYTHON_INCLUDE_PATH})
-	set(CMAKE_REQUIRED_LIBRARIES ${PYTHON_LIBRARIES})
+	set(CMAKE_REQUIRED_INCLUDES ${Python_INCLUDE_DIRS})
+	set(CMAKE_REQUIRED_LIBRARIES ${Python_LIBRARIES})
 	if (MINGW)
 		set(CMAKE_REQUIRED_DEFINITIONS -D_hypot=hypot)
 	endif ()
@@ -211,20 +244,19 @@ endfunction()
 
 function(DumpSitePackages PYTHONPATH)
     if (WIN32)
-        string(REPLACE "//" "/" ___krita_pythonpath "${${PYTHONPATH}}")
-        string(REPLACE "/" "\\" __krita_pythonpath "${___krita_pythonpath}")
-        string(TOLOWER "${__krita_pythonpath}" _krita_pythonpath)
+        krita_to_native_path("${${PYTHONPATH}}" _krita_pythonpath)
+        string(TOLOWER "${_krita_pythonpath}" _krita_pythonpath)
     else()
         set(_krita_pythonpath ${${PYTHONPATH}})
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND}
         -E env PYTHONPATH=${_krita_pythonpath}
-        ${PYTHON_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_paths());"
+        ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_paths());"
         OUTPUT_VARIABLE __sysconfig)
     message(STATUS "Python's system directories: ${__sysconfig}")
     execute_process(COMMAND ${CMAKE_COMMAND}
         -E env PYTHONPATH=${_krita_pythonpath}
-        ${PYTHON_EXECUTABLE} -c "from setuptools.command import easy_install; print(easy_install.get_site_dirs())"
+        ${Python_EXECUTABLE} -c "from setuptools.command import easy_install; print(easy_install.get_site_dirs())"
         OUTPUT_VARIABLE __setuptools)
     message(STATUS "Python's setuptools directories: ${__setuptools}")
 endfunction()
@@ -237,17 +269,16 @@ if (WIN32)
         if (ENABLE_PYTHON_2)
             message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
         else(ENABLE_PYTHON_2)
-            find_package(PythonInterp 3.8 EXACT)
-            find_package(PythonLibs 3.8 EXACT)
+            find_package(Python 3.8 EXACT COMPONENTS Development Interpreter)
         endif()
-        if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+        if (Python_FOUND)
             message(STATUS "Python requirements met.")
             TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
             DumpSitePackages(KRITA_PYTHONPATH)
             if (NOT CAN_USE_PYTHON_LIBS)
                 message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct!")
             endif ()
-        else (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+        else ()
             message(FATAL_ERROR "Python requirements not met. To disable Python deps, set ENABLE_PYTHON_DEPS to OFF.")
         endif ()
     endif ()
@@ -263,7 +294,10 @@ elseif(UNIX)
 endif ()
 
 # this list must be dependency-ordered
-add_subdirectory( ext_openssl )
+if (NOT WIN32 OR OPENSSL_DEP)
+    add_subdirectory( ext_openssl )
+endif()
+
 if (ENABLE_PYTHON_DEPS OR NOT MINGW)
 	add_subdirectory( ext_python )
 endif ()
@@ -271,9 +305,19 @@ if (WIN32)
     add_subdirectory( ext_patch )
 endif ()
 add_subdirectory( ext_lzma )
-add_subdirectory( ext_iconv )
-add_subdirectory( ext_gettext )
-add_subdirectory( ext_zlib )
+
+if (NOT WIN32 OR ICONV_DEP)
+    add_subdirectory( ext_iconv )
+endif()
+
+if (NOT WIN32 OR GETTEXT_DEP)
+    add_subdirectory( ext_gettext )
+endif()
+
+if (NOT WIN32 OR ZLIB_DEP)
+    add_subdirectory( ext_zlib )
+endif()
+
 add_subdirectory( ext_boost )
 add_subdirectory( ext_jpeg )
 add_subdirectory( ext_tiff )
@@ -282,7 +326,11 @@ if (WIN32)
     add_subdirectory( ext_icoutils )
 endif ()
 add_subdirectory( ext_eigen3 )
-add_subdirectory( ext_expat ) # for exiv2
+
+if (NOT WIN32 OR EXPAT_DEP)
+    add_subdirectory( ext_expat ) # for exiv2
+endif()
+
 add_subdirectory( ext_exiv2 )
 add_subdirectory( ext_lcms2 )
 add_subdirectory( ext_openexr )

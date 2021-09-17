@@ -10,6 +10,7 @@
 #include <krita_utils.h>
 #include <kis_projection_updates_filter.h>
 #include "kis_image_signal_router.h"
+#include "kis_image_animation_interface.h"
 
 #include "kundo2command.h"
 #include "KisRunnableStrokeJobDataBase.h"
@@ -156,6 +157,8 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                     for (; reqIt != fullRefreshRequests.end(); ++reqIt) {
                         const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(reqIt.value(), step).rects();
 
+                        //Block frame cache drop here. We handle this manually later anyway, so we should just block invalidation.
+                        SuspendFrameInvalidationHandle handle(image->animationInterface());
                         image->refreshGraphAsync(node, simplifiedRects, reqIt.key());
                     }
                 }
@@ -656,4 +659,16 @@ void KisSuspendProjectionUpdatesStrokeStrategy::resumeStrokeCallback()
     m_d->executedCommands.clear();
 
     runnableJobsInterface()->addRunnableJobs(jobs);
+}
+
+KisSuspendProjectionUpdatesStrokeStrategy::SuspendFrameInvalidationHandle::SuspendFrameInvalidationHandle(KisImageAnimationInterface *interface)
+    : m_interface(interface)
+{
+    KIS_ASSERT(m_interface);
+    m_interface->blockFrameInvalidation(true);
+}
+
+KisSuspendProjectionUpdatesStrokeStrategy::SuspendFrameInvalidationHandle::~SuspendFrameInvalidationHandle()
+{
+    m_interface->blockFrameInvalidation(false);
 }

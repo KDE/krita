@@ -325,7 +325,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     // load configuration options
     m_checkUseFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
-    m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 80));
+    m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 8));
     m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
 
     m_featherWidget->setValue(m_configGroup.readEntry("featherAmount", 0));

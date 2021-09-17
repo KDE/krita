@@ -25,16 +25,14 @@ KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
     : QFrame(parent)
     , m_chooserid(id)
 {
-//     QFrame::setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
-
     m_acceptIcon  = KisIconUtils::loadIcon("list-add");
     m_buttons     = new QButtonGroup();
     m_popup       = new QFrame(0, Qt::Popup);
     m_arrowButton = new QToolButton();
 
     m_popup->setFrameStyle(QFrame::Panel|QFrame::Raised);
-    m_arrowButton->setFixedWidth(m_arrowButton->sizeHint().height()/2);
-    m_arrowButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    m_arrowButton->setFixedWidth(m_arrowButton->sizeHint().height());
+    m_arrowButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_arrowButton->setAutoRaise(true);
     updateArrowIcon();
 
@@ -92,6 +90,7 @@ QLayout* KisWidgetChooser::createLayout()
     QHBoxLayout* layout = new QHBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+    layout->addWidget(m_arrowButton);
 
     for(Iterator i=m_widgets.begin(); i!=m_widgets.end(); ++i) {
         if(i->chosen) {
@@ -102,8 +101,6 @@ QLayout* KisWidgetChooser::createLayout()
             break;
         }
     }
-
-    layout->addWidget(m_arrowButton);
     return layout;
 }
 

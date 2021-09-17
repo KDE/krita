@@ -1,8 +1,9 @@
-From 831e5ae3dbb066ef81eff145f8c06c6ebfd38735 Mon Sep 17 00:00:00 2001
+From a1c13b6eaef98b5a29c2ae142ba2ada160431623 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
-Date: Wed, 21 Jul 2021 18:38:58 +0000
-Subject: [PATCH 1/6] Add desktop entry
+Date: Wed, 1 Sep 2021 22:38:43 +0000
+Subject: [PATCH 2/3] Add desktop entry
 
+Co-Authored-By: Halla Rempt <halla@valdyas.org>
 ---
  gmic-qt/CMakeLists.txt        | 1 +
  gmic-qt/gmic_krita_qt.desktop | 9 +++++++++
@@ -10,17 +11,17 @@ Subject: [PATCH 1/6] Add desktop entry
  create mode 100644 gmic-qt/gmic_krita_qt.desktop
 
 diff --git a/gmic-qt/CMakeLists.txt b/gmic-qt/CMakeLists.txt
-index 93119fa..95c7604 100644
+index 4da395b..c362091 100644
 --- a/gmic-qt/CMakeLists.txt
 +++ b/gmic-qt/CMakeLists.txt
-@@ -552,6 +552,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+@@ -605,6 +605,7 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
        ${gmic_qt_LIBRARIES}
        )
      install(TARGETS gmic_krita_qt RUNTIME DESTINATION bin)
 +    install(FILES gmic_krita_qt.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/bin OPTIONAL)
  
- elseif (${GMIC_QT_HOST} STREQUAL "none")
- 
+ elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
+     set(MIN_FRAMEWORKS_VERSION 5.44.0)
 diff --git a/gmic-qt/gmic_krita_qt.desktop b/gmic-qt/gmic_krita_qt.desktop
 new file mode 100644
 index 0000000..579d427
@@ -37,5 +38,5 @@ index 0000000..579d427
 +Categories=Qt;KDE;Graphics;
 +StartupNotify=false
 -- 
-2.32.0
+2.32.0.windows.2
 

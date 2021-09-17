@@ -111,6 +111,7 @@ private:
     };
 
     std::unordered_map<KisNodeSP, TransformMaskData> m_transformMaskData;
+    KUndo2Command* keyframeCommand;
 
     QElapsedTimer m_updateTimer;
     bool m_hasPostponedJob = false;

@@ -1,11 +1,11 @@
 SET(PREFIX_ext_sip "${EXTPREFIX}" )
 
 if(APPLE)
-    if(NOT PYTHONINTERP_FOUND)
-        SET(PYTHON_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
-        if(NOT EXISTS "${PYTHON_EXECUTABLE}")
+    if(NOT Python_FOUND)
+        SET(Python_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
+        if(NOT EXISTS "${Python_EXECUTABLE}")
             message("WARNING: using system python3!")
-            SET(PYTHON_EXECUTABLE python3)
+            SET(Python_EXECUTABLE python3)
         endif()
     endif()
 
@@ -15,7 +15,7 @@ if(APPLE)
         URL_MD5 98111479309dc472410f26080d6d4a88
 
         CMAKE_ARGS -DPYTHON_INCLUDE_DIR=${PREFIX_ext_sip}/lib/Python.framework/Headers
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py --deployment-target=10.11
+        CONFIGURE_COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py --deployment-target=10.11
             -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/ 
             -e ${PREFIX_ext_sip}/include --sipdir ${PREFIX_ext_sip}/share/sip --target-py-version 3.8 --sip-module PyQt5.sip
         BUILD_COMMAND make
@@ -31,10 +31,10 @@ if(APPLE)
         UPDATE_COMMAND ""
     )
 elseif(UNIX)
-    set(PYTHON_EXECUTABLE_PATH ${PREFIX_ext_sip}/bin/python3)
-    if(NOT EXISTS ${PYTHON_EXECUTABLE_PATH})
+    set(Python_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
+    if(NOT EXISTS ${Python_EXECUTABLE})
       message("WARNING: using system python3!")
-      set(PYTHON_EXECUTABLE_PATH python3)
+      set(Python_EXECUTABLE python3)
     endif()
 
     ExternalProject_Add( ext_sip
@@ -46,11 +46,11 @@ elseif(UNIX)
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
-            ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS}
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS}
 
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
-            ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_sip} --optimize=1
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${PREFIX_ext_sip} --optimize=1
 
         BUILD_IN_SOURCE 1
 
@@ -63,8 +63,11 @@ elseif (WIN32)
         set(_compiler -c msvc)
     endif()
 
-    string(REPLACE "/" "\\" _sip_prefix ${PREFIX_ext_sip})
-    string(REPLACE "/" "\\" _krita_pythonpath ${KRITA_PYTHONPATH})
+    krita_to_native_path("${PREFIX_ext_sip}" _sip_prefix)
+    krita_to_native_path("${KRITA_PYTHONPATH}" _krita_pythonpath)
+    string(TOLOWER ${_krita_pythonpath} _krita_pythonpath)
+    krita_to_native_environment_path_list("${_krita_pythonpath}" _krita_pythonpath)
+
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.python.org/packages/source/s/sip/sip-6.1.0.tar.gz
@@ -75,15 +78,15 @@ elseif (WIN32)
         CONFIGURE_COMMAND ""
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
-            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS} ${_compiler}
+            PYTHONPATH=${_krita_pythonpath}
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS} ${_compiler}
 
         # HACK: Create lib\site-packages before installing
         # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
         INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_sip_prefix}\\lib\\site-packages
             COMMAND ${CMAKE_COMMAND} -E env 
-                "PYTHONPATH=${_krita_pythonpath}"
-                ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix ${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
+                PYTHONPATH=${_krita_pythonpath}
+                ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 

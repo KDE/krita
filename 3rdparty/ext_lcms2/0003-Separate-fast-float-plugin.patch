@@ -1,7 +1,7 @@
-From 139e236c6b458934a801cfc7920f71c9ddd90101 Mon Sep 17 00:00:00 2001
+From 1d27c212c29efcec41f16842b0c214ee2107612b Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Thu, 25 Feb 2021 00:21:50 +0000
-Subject: [PATCH 3/3] Separate fast float plugin
+Subject: [PATCH 3/4] Separate fast float plugin
 
 ---
  CMakeLists.txt                    | 37 ++++++++++++++++++--
@@ -75,7 +75,7 @@ index 213c808..421837b 100644
 +)
 diff --git a/plugins/fast_float/CMakeLists.txt b/plugins/fast_float/CMakeLists.txt
 new file mode 100644
-index 0000000..1c1739b
+index 0000000..2976ed1
 --- /dev/null
 +++ b/plugins/fast_float/CMakeLists.txt
 @@ -0,0 +1,58 @@
@@ -223,5 +223,5 @@ index 9bccbc6..9103bc0 100644
 +    DESTINATION include
 +)
 -- 
-2.30.1
+2.32.0.windows.2
 

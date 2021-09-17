@@ -41,6 +41,7 @@ StoryboardModel::StoryboardModel(QObject *parent)
     connect(m_renderScheduler, SIGNAL(sigFrameCompleted(int, KisPaintDeviceSP)), this, SLOT(slotFrameRenderCompleted(int, KisPaintDeviceSP)));
     connect(m_renderScheduler, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRenderCancelled(int)));
     connect(&m_renderSchedulingCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateThumbnails()));
+    connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), m_renderScheduler, SLOT(slotStartFrameRendering()));
 }
 
 StoryboardModel::~StoryboardModel()
@@ -523,6 +524,13 @@ int StoryboardModel::visibleCommentCount() const
     return visibleComments;
 }
 
+int StoryboardModel::totalCommentCount()
+{
+    return m_commentList.count();
+}
+
+
+
 int StoryboardModel::visibleCommentsUpto(QModelIndex index) const
 {
     int commentRow = index.row() - 4;
@@ -606,7 +614,6 @@ void StoryboardModel::setImage(KisImageWSP image)
     m_lastScene = m_items.size();
 
     m_imageIdleWatcher.startCountdown();
-    connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), m_renderScheduler, SLOT(slotStartFrameRendering()));
 
     connect(m_image, SIGNAL(sigImageUpdated(const QRect &)), &m_renderSchedulingCompressor, SLOT(start()));
 
@@ -688,11 +695,15 @@ int StoryboardModel::nextKeyframeGlobal(int keyframeTime) const
     if (node) {
     KisLayerUtils::recursiveApplyNodes (node, [keyframeTime, &nextKeyframeTime] (KisNodeSP node)
     {
-        if (node->isAnimated()) {
-            KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
+        if (node->isAnimated() && node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+            KisKeyframeChannel* channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), false);
 
-            int nextKeyframeTimeQuery = keyframeChannel->nextKeyframeTime(keyframeTime);
-            if (keyframeChannel->keyframeAt(nextKeyframeTimeQuery)) {
+            if (!channel) {
+                return;
+            }
+
+            int nextKeyframeTimeQuery = channel->nextKeyframeTime(keyframeTime);
+            if (channel->keyframeAt(nextKeyframeTimeQuery)) {
                 if (nextKeyframeTime == INT_MAX) {
                     nextKeyframeTime = nextKeyframeTimeQuery;
                 } else {
@@ -716,13 +727,14 @@ int StoryboardModel::lastKeyframeGlobal() const
     if (node) {
     KisLayerUtils::recursiveApplyNodes (node, [&lastKeyframeTime] (KisNodeSP node)
     {
-        if (node->isAnimated()) {
-            KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
+        if (node->isAnimated() && node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+            KisKeyframeChannel* channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), false);
 
-            if (!keyframeChannel)
+            if (!channel) {
                 return;
+            }
 
-            lastKeyframeTime = qMax(keyframeChannel->lastKeyframeTime(), lastKeyframeTime);
+            lastKeyframeTime = qMax(channel->lastKeyframeTime(), lastKeyframeTime);
         }
     });
     }

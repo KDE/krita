@@ -254,7 +254,7 @@ index 0000000..84e426e
 +
 +/* Define to 1 if printf and friends should be labeled with attribute
 +   "__gnu_printf__" instead of "__printf__" */
-+#define GNULIB_PRINTF_ATTRIBUTE_FLAVOR_GNU 1
++//#define GNULIB_PRINTF_ATTRIBUTE_FLAVOR_GNU 1
 +
 +/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
 +   whether the gnulib module scanf shall be considered present. */

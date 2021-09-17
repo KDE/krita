@@ -2,7 +2,11 @@ SET(EXTPREFIX_qt  "${EXTPREFIX}")
 if (WIN32)
 
     if(MINGW)
-      set(QT_CONFIG_PLATFORM win32-g++)
+      if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set(QT_CONFIG_PLATFORM win32-clang-g++)
+      else()
+        set(QT_CONFIG_PLATFORM win32-g++)
+      endif()
       set(QT_BUILD_COMMAND   mingw32-make -j${SUBMAKE_JOBS})
       set(QT_INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install)
       set(QT_EXTRA_DEPS "")
@@ -36,7 +40,7 @@ if (WIN32)
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard -qt-sqlite
         #
-        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -openssl-linked
+        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -openssl-linked -qt-freetype -qt-harfbuzz
         -I ${EXTPREFIX_qt}/include
         -L ${EXTPREFIX_qt}/lib
         #
@@ -44,6 +48,7 @@ if (WIN32)
         -feature-relocatable
         -no-feature-d3d12
         -no-feature-wmf
+        -no-feature-qdoc
         #
         -release -platform ${QT_CONFIG_PLATFORM} -prefix ${EXTPREFIX_qt}
         QMAKE_LFLAGS_APP+=${SECURITY_EXE_LINKER_FLAGS}
@@ -90,6 +95,7 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0029-Add-a-workaround-for-button-mapping-on-Lenovo-Yoga-C.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0030-Make-sure-if-WinInk-is-correctly-initialized-if-wint.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0051-Add-workaround-for-handling-table-press-correctly-in.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0052-WinInk-Synthesize-mouse-events-for-full-pen-stroke.patch
             )
     endif()
 
@@ -160,7 +166,7 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_patch ext_openssl ${QT_EXTRA_DEPS}
+      DEPENDS ext_patch ${OPENSSL_DEP} ${QT_EXTRA_DEPS}
   )
 elseif (ANDROID)
   ExternalProject_Add(
@@ -215,6 +221,9 @@ elseif (ANDROID)
 
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0105-Android-Don-t-hide-Menubar-even-if-MenuKey-is-presen.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0107-Android-Use-External-Storage-for-some-Standard-Paths.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Rework-Storage-Access-Framework.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Android-Disable-QTemporaryFile-usage-in-QFile-copy.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Android-Don-t-use-QDir-cleanPath-for-content-Uri.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Remove-chunk-size-limits.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Check-if-we-reached-the-end-of-Iterator.patch
             

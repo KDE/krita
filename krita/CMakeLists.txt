@@ -1,5 +1,3 @@
-project(krita)
-
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${Vc_INCLUDE_DIR}

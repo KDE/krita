@@ -12,6 +12,8 @@ endif()
 # OCIO tarball has files with CRLF, this confuses patch on POSIX.
 if (WIN32)
     set(ext_ocio_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-MinGW-and-MSVC-detection.patch)
+else()
+    set(ext_ocio_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Remove-Werror-to-fix-build-on-GCC11.patch)
 endif()
 
 set(ext_ocio_PATCH_COMMAND ${ext_ocio_PATCH_COMMAND}

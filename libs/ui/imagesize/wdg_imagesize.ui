@@ -78,7 +78,7 @@
       <item column="1" row="2">
        <widget class="QLabel" name="lblPixelFilter">
         <property name="text">
-         <string>&amp;Filter:</string>
+         <string comment="Resize intepolation method list label">&amp;Filter:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -242,6 +242,9 @@
        <widget class="QLabel" name="lblResolution">
         <property name="text">
          <string>Resolution:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>

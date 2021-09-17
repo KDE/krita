@@ -22,6 +22,11 @@
 #include <QOpenGLFunctions_2_0>
 #include <QOpenGLExtraFunctions>
 
+#if defined(QT_OPENGL_ES_2)
+#define GL_RGBA16F_ARB 0x881A
+#define GL_RGB16F_ARB 0x881B
+#endif
+
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
     , inputColorSpaceName(0)
@@ -260,16 +265,19 @@ bool OcioDisplayFilter::updateShader()
         if (f) {
             return updateShaderImpl(f);
         }
+#if defined(QT_OPENGL_3)
     } else if (KisOpenGL::hasOpenGL3()) {
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
         if (f) {
             return updateShaderImpl(f);
         }
+#endif
     }
 
     // XXX This option can be removed once we move to Qt 5.7+
     if (KisOpenGL::supportsLoD()) {
-#ifdef Q_OS_MAC
+#if defined(QT_OPENGL_3)
+#if defined(Q_OS_MAC) && defined(QT_OPENGL_3_2)
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
 #else
         QOpenGLFunctions_3_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_0>();
@@ -277,11 +285,14 @@ bool OcioDisplayFilter::updateShader()
         if (f) {
             return updateShaderImpl(f);
         }
+#endif
     }
-    QOpenGLExtraFunctions *f = QOpenGLContext::currentContext()->extraFunctions();
+#if !defined(QT_OPENGL_ES_2)
+    QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();
     if (f) {
         return updateShaderImpl(f);
     }
+#endif
 
     return false;
 }

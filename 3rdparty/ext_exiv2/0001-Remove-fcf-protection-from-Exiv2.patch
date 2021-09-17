@@ -1,0 +1,28 @@
+From 3ea604a33186eacb9355637a90b7e38b474b9644 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 11 Sep 2021 16:06:52 +0300
+Subject: [PATCH] Remove -fcf-protection from Exiv2
+
+This flag, which activates Intel CET technology, is supported
+since GCC 8, Binutils 2.32, and Glibc 2.28. But in our AppImage
+builds we use Binutils 2.26.1, which doesn't support that.
+---
+ cmake/compilerFlags.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
+index 0418aa6..257eb98 100644
+--- a/cmake/compilerFlags.cmake
++++ b/cmake/compilerFlags.cmake
+@@ -26,7 +26,7 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
+         # This fails under Fedora, MinGW GCC 8.3.0 and CYGWIN/MSYS 9.3.0
+         if (NOT (MINGW OR CMAKE_HOST_SOLARIS OR CYGWIN OR MSYS) )
+             if (COMPILER_IS_GCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 8.0)
+-                add_compile_options(-fstack-clash-protection -fcf-protection)
++                add_compile_options(-fstack-clash-protection)
+             endif()
+ 
+             if( (COMPILER_IS_GCC   AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 5.0) # Not in GCC 4.8
+-- 
+2.17.1
+

@@ -95,6 +95,19 @@ endlocal & set "%1=%RESULT%"
 goto :EOF
 
 
+:has_target out_variable folder folder2
+setlocal
+set RESULT=
+if exist "%~2" (
+    set RESULT=1
+) else (
+    if exist "%~3" (
+        set RESULT=1
+    )
+)
+endlocal & set "%1=%RESULT%"
+goto :EOF
+
 :usage
 echo Usage:
 echo %~n0 [--no-interactive] [ OPTIONS ... ]
@@ -110,6 +123,8 @@ echo --skip-krita                    Skips (re)building of Krita
 echo --cmd                           Launch a cmd prompt instead of building.
 echo                                 The environment is set up like the build
 echo                                 environment with some helper command macros.
+echo --dev                           Activate developer options, like 'CodeBlocks'
+echo                                 generator and BUILD_TESTING
 echo.
 echo Path options:
 echo --src-dir ^<dir_path^>            Specify Krita source dir
@@ -154,6 +169,7 @@ set ARG_KRITA_BUILD_DIR=
 set ARG_KRITA_INSTALL_DIR=
 set ARG_PLUGINS_BUILD_DIR=
 set ARG_CMD=
+set ARG_DEV=
 :args_parsing_loop
 set CURRENT_MATCHED=
 if not "%1" == "" (
@@ -182,6 +198,10 @@ if not "%1" == "" (
     )
     if "%1" == "--skip-krita" (
         set ARG_SKIP_KRITA=1
+        set CURRENT_MATCHED=1
+    )
+    if "%1" == "--dev" (
+        set ARG_DEV=1
         set CURRENT_MATCHED=1
     )
     if "%1" == "--src-dir" (
@@ -448,6 +468,14 @@ if "%KRITA_GIT_DIR%" == "" (
     )
 ) else echo Git found on %KRITA_GIT_DIR%
 
+if "%KRITA_NINJA_DIR%" == "" (
+    call :find_on_path KRITA_NINJA_EXE_DIR ninja.exe
+    if NOT "!KRITA_NINJA_EXE_DIR!" == "" (
+        call :get_dir_path KRITA_NINJA_DIR "!KRITA_NINJA_EXE_DIR!"
+        echo Found Ninja on PATH: !KRITA_NINJA_DIR!
+    )
+) else echo Git found on %KRITA_NINJA_DIR%
+
 if "%SVN_DIR%" == "" (
     call :find_on_path SVN_EXE_DIR svn.exe
     if NOT "!SVN_EXE_DIR!" == "" (
@@ -702,9 +730,14 @@ if not "%ARG_NO_INTERACTIVE%" == "1" (
 
 :: Initialize clean PATH
 set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
-set PATH=%MINGW_BIN_DIR%;%PYTHON_BIN_DIR%;%PATH%
+set PATH=%PYTHON_BIN_DIR%;%MINGW_BIN_DIR%;%PATH%
 if NOT "%KRITA_GIT_DIR%" == "" (
     set PATH=%PATH%;%KRITA_GIT_DIR%
+)
+if NOT "%KRITA_NINJA_DIR%" == "" (
+    if NOT "%KRITA_NINJA_DIR%" == "%MINGW_BIN_DIR%" (
+        set PATH=%PATH%;%KRITA_NINJA_DIR%
+    )
 )
 if NOT "%SVN_DIR%" == "" (
     set PATH=%PATH%;%SVN_DIR%
@@ -771,6 +804,20 @@ echo.
 set CMAKE_BUILD_TYPE=RelWithDebInfo
 set QT_ENABLE_DEBUG_INFO=OFF
 
+set KRITA_GENERATOR=MinGW Makefiles
+set KRITA_BUILD_TESTING=OFF
+set KRITA_INSTALL_BENCHMARKS=OFF
+
+if NOT "%KRITA_NINJA_DIR%" == "" (
+    set KRITA_GENERATOR=Ninja
+)
+
+if "%ARG_DEV%" == "1" (
+    set KRITA_GENERATOR=CodeBlocks - %KRITA_GENERATOR%
+    set KRITA_BUILD_TESTING=ON
+    set KRITA_INSTALL_BENCHMARKS=ON
+)
+
 if "%KRITA_BRANDING%" == "" (
     rem Check Jenkins job name
     if "%JOB_NAME%" == "Krita_Nightly_Windows_Build" (
@@ -817,7 +864,8 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBOOST_LIBRARYDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/lib ^
     -DCMAKE_PREFIX_PATH=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
     -DCMAKE_INSTALL_PREFIX=%BUILDDIR_KRITA_INSTALL_CMAKE% ^
-    -DBUILD_TESTING=OFF ^
+    -DBUILD_TESTING=%KRITA_BUILD_TESTING% ^
+    -DINSTALL_BENCHMARKS=%KRITA_INSTALL_BENCHMARKS% ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
@@ -825,7 +873,7 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DFETCH_TRANSLATIONS=ON ^
     -DBRANDING=%KRITA_BRANDING% ^
     -Wno-dev ^
-    -G "MinGW Makefiles" ^
+    -G "%KRITA_GENERATOR%" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 
 set CMDLINE_CMAKE_PLUGINS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty_plugins" ^
@@ -834,7 +882,7 @@ set CMDLINE_CMAKE_PLUGINS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty_plugins" ^
     -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_PLUGINS_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_PLUGINS_INSTALL_CMAKE% ^
-    -G "MinGW Makefiles" ^
+    -G "%KRITA_GENERATOR%" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 
 :: Launch CMD prompt if requested
@@ -894,11 +942,16 @@ set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp
 
 for %%a in (%EXT_TARGETS%) do (
-    echo Building ext_%%a...
-    "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
-    if errorlevel 1 (
-        echo ERROR: Building of ext_%%a failed! 1>&2
-        exit /b 105
+    call :has_target TEST_HAS_TARGET "ext_%%a\" "ext_frameworks\ext_%%a-prefix\"
+    if "!TEST_HAS_TARGET!" == "1" (
+        echo Building ext_%%a...
+        "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
+        if errorlevel 1 (
+            echo ERROR: Building of ext_%%a failed! 1>&2
+            exit /b 105
+        )
+    ) else (
+        echo Skipping ext_%%a, using OS package...
     )
 )
 echo.

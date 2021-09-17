@@ -1,8 +1,7 @@
-project(krita)
-
-message(STATUS "Using CMake version: ${CMAKE_VERSION}")
-
 cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
+
+project(krita)
+message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 set(MIN_QT_VERSION 5.9.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
@@ -19,12 +18,16 @@ if (POLICY CMP0017)
     cmake_policy(SET CMP0017 NEW)
 endif ()
 
+if (POLICY CMP0020)
+    cmake_policy(SET CMP0020 NEW)
+endif ()
+
 if (POLICY CMP0022)
-    cmake_policy(SET CMP0022 OLD)
+    cmake_policy(SET CMP0022 NEW)
 endif ()
 
 if (POLICY CMP0026)
-    cmake_policy(SET CMP0026 OLD)
+    cmake_policy(SET CMP0026 NEW)
 endif()
 
 if (POLICY CMP0042)
@@ -32,27 +35,27 @@ if (POLICY CMP0042)
 endif()
 
 if (POLICY CMP0046)
-    cmake_policy(SET CMP0046 OLD)
+    cmake_policy(SET CMP0046 NEW)
 endif ()
 
 if (POLICY CMP0059)
-    cmake_policy(SET CMP0059 OLD)
+    cmake_policy(SET CMP0059 NEW)
 endif()
 
 if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 OLD)
+    cmake_policy(SET CMP0063 NEW)
 endif()
 
 if (POLICY CMP0054)
-    cmake_policy(SET CMP0054 OLD)
+    cmake_policy(SET CMP0054 NEW)
 endif()
 
 if (POLICY CMP0064)
-    cmake_policy(SET CMP0064 OLD)
+    cmake_policy(SET CMP0064 NEW)
 endif()
 
 if (POLICY CMP0071)
-    cmake_policy(SET CMP0071 OLD)
+    cmake_policy(SET CMP0071 NEW)
 endif()
 
 if (APPLE)
@@ -261,8 +264,8 @@ include(MacroJPEG)
 
 function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
     include(CheckCXXSourceCompiles)
-    set(CMAKE_REQUIRED_INCLUDES ${PYTHON_INCLUDE_PATH})
-    set(CMAKE_REQUIRED_LIBRARIES ${PYTHON_LIBRARIES})
+    set(CMAKE_REQUIRED_INCLUDES ${Python_INCLUDE_DIRS})
+    set(CMAKE_REQUIRED_LIBRARIES ${Python_LIBRARIES})
     if (MINGW)
         set(CMAKE_REQUIRED_DEFINITIONS -D_hypot=hypot)
     endif (MINGW)
@@ -278,10 +281,9 @@ if(MINGW)
     if(ENABLE_PYTHON_2)
         message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
     else(ENABLE_PYTHON_2)
-        find_package(PythonInterp 3.8 EXACT)
-        find_package(PythonLibs 3.8 EXACT)
+        find_package(Python 3.8 EXACT COMPONENTS Development Interpreter)
     endif(ENABLE_PYTHON_2)
-    if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+    if (Python_FOUND)
         if(ENABLE_PYTHON_2)
             find_package(PythonLibrary 2.7)
         else(ENABLE_PYTHON_2)
@@ -291,13 +293,11 @@ if(MINGW)
         if (NOT CAN_USE_PYTHON_LIBS)
             message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct. Python will be disabled.")
         endif (NOT CAN_USE_PYTHON_LIBS)
-    endif (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+    endif (Python_FOUND)
 else(MINGW)
     if(ENABLE_PYTHON_2)
-        find_package(PythonInterp 2.7)
         find_package(PythonLibrary 2.7)
     else(ENABLE_PYTHON_2)
-        find_package(PythonInterp 3.0)
         find_package(PythonLibrary 3.0)
     endif(ENABLE_PYTHON_2)
 endif(MINGW)
@@ -461,11 +461,8 @@ set_package_properties(Qt5Quick PROPERTIES
 
 macro_bool_to_01(Qt5Quick_FOUND HAVE_QT_QUICK)
 if (Qt5Quick_FOUND)
-    get_target_property(Qt5Quick_LIBRARY Qt5::Quick "LOCATION")
-    list (APPEND ANDROID_EXTRA_LIBS ${Qt5Quick_LIBRARY})
-
-    get_target_property(Qt5Qml_LIBRARY Qt5::Qml "LOCATION")
-    list (APPEND ANDROID_EXTRA_LIBS ${Qt5Qml_LIBRARY})
+    list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt5::Quick>)
+    list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt5::Qml>)
 endif()
 
 
@@ -478,8 +475,7 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
 endif()
 
 if (Qt5QuickWidgets_FOUND)
-    get_target_property(Qt5QuickWidgets_LIBRARY Qt5::QuickWidgets "LOCATION")
-    list (APPEND ANDROID_EXTRA_LIBS ${Qt5QuickWidgets_LIBRARY})
+    list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt5::QuickWidgets>)
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
@@ -680,6 +676,11 @@ add_definitions(-DBOOST_ALL_NO_LIB)
 if (MSVC)
     set(Boost_USE_STATIC_LIBS OFF)
 endif()
+if (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1"
+        KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+    set(Boost_COMPILER "mgw${KRITA_boost_COMPILER_VERSION}")
+endif()
 find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
@@ -842,7 +843,7 @@ set_package_properties(PythonLibrary PROPERTIES
     URL "https://www.python.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PyQt plugin")
-macro_bool_to_01(PYTHONLIBS_FOUND HAVE_PYTHONLIBS)
+macro_bool_to_01(Python_Development_FOUND HAVE_PYTHONLIBS)
 
 find_package(SIP "4.19.13")
 set_package_properties(SIP PROPERTIES
@@ -941,7 +942,8 @@ list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
-if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+if (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)" 
+    OR CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)"))
     find_package(Vc 1.1.0)
     set_package_properties(Vc PROPERTIES
         DESCRIPTION "Portable, zero-overhead SIMD library for C++"
@@ -1001,8 +1003,8 @@ set_package_properties(Poppler PROPERTIES
 ##
 ## Test for quazip
 ##
-find_package(QuaZip 0.6)
-set_package_properties(QuaZip PROPERTIES
+find_package(QUAZIP 0.6)
+set_package_properties(QUAZIP PROPERTIES
     DESCRIPTION "A library for reading and writing zip files"
     URL "https://stachenov.github.io/quazip/"
     TYPE REQUIRED

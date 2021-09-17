@@ -49,7 +49,7 @@ class HighpassExtension(Extension):
         self.keepOriginal = QCheckBox(i18n("Keep original layer"))
         self.keepOriginal.setChecked(True)
         form = QFormLayout()
-        form.addRow(i18n("Filter radius:"), self.intRadius)
+        form.addRow(i18nc("Filter radius in Highpass filter settings", "Filter radius:"), self.intRadius)
         form.addRow(i18n("Mode:"), self.cmbMode)
         form.addRow("", self.keepOriginal)
 

@@ -39,6 +39,8 @@ public:
 
     qreal pressureToCurve(qreal pressure);
 
+    void reset();
+
 protected Q_SLOTS:
     void updateSettings();
 
@@ -68,7 +70,7 @@ private:
     QPointF m_startPoint;
     QScopedPointer<KisSpeedSmoother> m_speedSmoother;
     bool m_pressureDisabled;
-    bool m_useTimestamps;
+    int m_maxAllowedSpeedValue = 30;
 };
 
 class KRITAUI_EXPORT KisConverterPaintingInformationBuilder : public KisPaintingInformationBuilder

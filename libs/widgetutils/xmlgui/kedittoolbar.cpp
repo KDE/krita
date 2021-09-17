@@ -1023,7 +1023,7 @@ void KEditToolBarWidgetPrivate::setupLayout()
                      m_widget,       SLOT(slotDropped(ToolBarListWidget*,int,ToolBarItem*,bool)));
 
     KListWidgetSearchLine *inactiveListSearchLine = new KListWidgetSearchLine(m_widget, m_inactiveList);
-    inactiveListSearchLine->setPlaceholderText(i18n("Filter"));
+    inactiveListSearchLine->setPlaceholderText(i18nc("Filter as in showing only matching items", "Filter"));
 
     // our list of active actions
     QLabel *active_label = new QLabel(i18n("Curr&ent actions:"), m_widget);

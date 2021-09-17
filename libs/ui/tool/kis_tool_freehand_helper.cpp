@@ -638,6 +638,7 @@ void KisToolFreehandHelper::endPaint()
 
     m_d->strokesFacade->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
+    m_d->infoBuilder->reset();
 }
 
 void KisToolFreehandHelper::cancelPaint()

@@ -53,6 +53,9 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanv
     QWidgetAction *wdgAction = new QWidgetAction(this);
 
     d->resourceList = new KisResourceItemListView(widget);
+    if (resourceType == ResourceType::PaintOpPresets) {
+        d->resourceList->setFixedToolTipThumbnailSize(QSize(128, 128));
+    }
 
     d->model = new KisResourceModel(resourceType, this);
     d->resourceList->setModel(d->model);

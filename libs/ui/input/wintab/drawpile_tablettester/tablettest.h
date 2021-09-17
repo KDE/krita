@@ -10,6 +10,7 @@
 #define TABLETTEST_WIDGET_H
 
 #include <QWidget>
+#include <kis_speed_smoother.h>
 
 class TabletTester : public QWidget {
     Q_OBJECT
@@ -37,6 +38,8 @@ private:
 
     bool m_mouseDown;
     bool m_tabletDown;
+    KisSpeedSmoother m_tabletSpeedSmoother;
+    KisSpeedSmoother m_mouseSpeedSmoother;
 };
 
 #endif

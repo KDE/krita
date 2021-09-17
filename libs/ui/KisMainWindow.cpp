@@ -98,7 +98,7 @@
 #include <KisStorageFilterProxyModel.h>
 
 #ifdef Q_OS_ANDROID
-#include <KisAndroidFileManager.h>
+#include <QtAndroid>
 #endif
 
 #include <KisUsageLogger.h>
@@ -190,10 +190,6 @@ public:
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new KisSignalMapper(parent))
         , documentMapper(new KisSignalMapper(parent))
-    #ifdef Q_OS_ANDROID
-        , fileManager(new KisAndroidFileManager(parent))
-    #endif
-
     {
         if (id.isNull()) this->id = QUuid::createUuid();
 
@@ -307,10 +303,6 @@ public:
     KisSignalAutoConnectionsStore screenConnectionsStore;
 
     KateCommandBar *commandBar {0};
-
-#ifdef Q_OS_ANDROID
-    KisAndroidFileManager *fileManager;
-#endif
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();

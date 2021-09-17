@@ -475,13 +475,31 @@ if errorlevel 1 (
 	exit /B 1
 )
 for /f "delims=" %%a in ('g++ --version ^| find "g++"') do set GCC_VERSION_LINE=%%a
+if "%GCC_VERSION_LINE%" == "" (
+    echo "Possible Clang compiler, trying to detect target triplet..."
+    for /f "delims=" %%a in ('g++ --version ^| find "windows"') do set GCC_VERSION_LINE=%%a
+)
 echo -- %GCC_VERSION_LINE%
-if "%GCC_VERSION_LINE:tdm64=%" == "%GCC_VERSION_LINE%" (
-	echo Compiler doesn't look like TDM64-GCC, assuming simple mingw-w64
-	set IS_TDM=
-) else (
+if not "%GCC_VERSION_LINE:tdm64=%" == "%GCC_VERSION_LINE%" (
 	echo Compiler looks like TDM64-GCC
 	set IS_TDM=1
+    set IS_MSYS=
+    set IS_MSYS_CLANG=
+) else if not "%GCC_VERSION_LINE:MSYS=%" == "%GCC_VERSION_LINE%" (
+    echo Compiler looks like MSYS GCC
+	set IS_TDM=
+    set IS_MSYS=1
+    set IS_MSYS_CLANG=
+) else if not "%GCC_VERSION_LINE:windows-gnu=%" == "%GCC_VERSION_LINE%" (
+    echo Compiler looks like MSYS Clang
+    set IS_TDM=
+    set IS_MSYS=
+    set IS_MSYS_CLANG=1
+) else (
+    echo Compiler looks like plain old MinGW64
+    set IS_TDM=
+    set IS_MSYS=
+    set IS_MSYS_CLANG=
 )
 
 echo.
@@ -491,7 +509,11 @@ if errorlevel 1 (
 	echo ERROR: objdump is not working.
 	exit /B 1
 )
-for /f "delims=, tokens=1" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "architecture"') do set TARGET_ARCH_LINE=%%a
+for /f "delims=, tokens=1" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "i386"') do set TARGET_ARCH_LINE=%%a
+if "%TARGET_ARCH_LINE%" == "" (
+    echo "Possible LLVM objdump, trying to detect architecture..."
+    for /f "delims=" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "coff"') do set TARGET_ARCH_LINE=%%a
+)
 echo -- %TARGET_ARCH_LINE%
 if "%TARGET_ARCH_LINE:x86-64=%" == "%TARGET_ARCH_LINE%" (
 	echo Target looks like x86
@@ -531,24 +553,41 @@ if errorlevel 1 (
 
 echo.
 echo Copying GCC libraries...
-if x%IS_TDM% == x (
-	if x%is_x64% == x (
-		:: mingw-w64 x86
-		set "STDLIBS=gcc_s_dw2-1 gomp-1 stdc++-6 winpthread-1"
-	) else (
-		:: mingw-w64 x64
-		set "STDLIBS=gcc_s_seh-1 gomp-1 stdc++-6 winpthread-1"
-	)
-) else (
+if not x%IS_TDM% == x (
 	if x%is_x64% == x (
 		:: TDM-GCC x86
-		set "STDLIBS=gomp-1"
+		set "STDLIBS=libgomp-1"
 	) else (
 		:: TDM-GCC x64
-		set "STDLIBS=gomp_64-1"
+		set "STDLIBS=libgomp_64-1"
+	)
+) else if not x%IS_MSYS% == x (
+	if x%is_x64% == x (
+		:: msys-mingw-w64 x86
+		set "STDLIBS=libgcc_s_dw2-1 libgomp-1 libstdc++-6 libwinpthread-1 libatomic-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1 libcrypto-1_1"
+	) else (
+		:: msys-mingw-w64 x64
+		set "STDLIBS=libgcc_s_seh-1 libgomp-1 libstdc++-6 libwinpthread-1 libatomic-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1-x64 libcrypto-1_1-x64"
+	)
+) else if not x%IS_MSYS_CLANG% == x (
+	if x%is_x64% == x (
+		:: msys-mingw-w64-clang64 x86
+		set "STDLIBS=libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1 libcrypto-1_1"
+	) else (
+		:: msys-mingw-w64-clang64 x64
+		set "STDLIBS=libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1-x64 libcrypto-1_1-x64"
+	)
+) else (    
+    if x%is_x64% == x (
+		:: mingw-w64 x86
+		set "STDLIBS=libgcc_s_dw2-1 libgomp-1 libstdc++-6 libwinpthread-1"
+	) else (
+		:: mingw-w64 x64
+		set "STDLIBS=libgcc_s_seh-1 libgomp-1 libstdc++-6 libwinpthread-1"
 	)
 )
-for %%L in (%STDLIBS%) do copy "%MINGW_BIN_DIR%\lib%%L.dll" %pkg_root%\bin
+
+for %%L in (%STDLIBS%) do copy "%MINGW_BIN_DIR%\%%L.dll" %pkg_root%\bin
 
 echo.
 echo Copying files...

@@ -1,0 +1,25 @@
+From 04b48150c267d8e80fca508e9d49276f048c1c65 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 13 Sep 2021 15:10:24 +0300
+Subject: [PATCH] Remove cmake_minimum_required from VcMacro
+
+---
+ cmake/VcMacros.cmake | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/cmake/VcMacros.cmake b/cmake/VcMacros.cmake
+index 684b4ac..c611578 100644
+--- a/cmake/VcMacros.cmake
++++ b/cmake/VcMacros.cmake
+@@ -32,8 +32,6 @@
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #=============================================================================
+ 
+-cmake_minimum_required(VERSION 2.8.3)
+-
+ get_filename_component(_currentDir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ include ("${_currentDir}/UserWarning.cmake")
+ include ("${_currentDir}/AddCompilerFlag.cmake")
+-- 
+2.20.1.windows.1
+

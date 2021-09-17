@@ -114,7 +114,8 @@ private:
     QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterStringListFromMime(const QStringList &mimeList);
+    const QStringList getFilterStringListFromMime(const QStringList &mimeList,
+                                                  bool withAllSupportedEntry = false);
 
 
 

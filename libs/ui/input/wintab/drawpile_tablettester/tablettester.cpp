@@ -20,6 +20,13 @@ TabletTestDialog::TabletTestDialog(QWidget *parent)
     setMainWidget(page);
     setButtons(KoDialog::Close);
     qApp->installEventFilter(this);
+
+    m_ui->logView->appendPlainText(
+                "## Legend:\n"
+                "# X,Y - event coordinate\n"
+                "# B - buttons pressed\n"
+                "# S - speed\n"
+                "\n");
 }
 
 TabletTestDialog::~TabletTestDialog()

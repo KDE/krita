@@ -23,7 +23,7 @@
 
 
 PresetDockerDock::PresetDockerDock( )
-    : QDockWidget(i18n("Brush Presets"))
+    : QDockWidget(i18nc("@title:window Brush presets chooser docker", "Brush Presets"))
     , m_canvas(0)
 {
     m_presetChooser = new KisPaintOpPresetsChooserPopup(this);

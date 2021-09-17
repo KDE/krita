@@ -18,7 +18,9 @@ class KisDynamicSensorSpeed : public KisDynamicSensor
 public:
     KisDynamicSensorSpeed();
     ~KisDynamicSensorSpeed() override { }
-    qreal value(const KisPaintInformation& info) override;
+    qreal value(const KisPaintInformation& info) override {
+        return info.drawingSpeed();
+    }
 };
 
 class KisDynamicSensorRotation : public KisDynamicSensor

@@ -275,7 +275,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         m_widgetHelper.setConfigGroupForExactTool(toolId());
 
         // load configuration settings into tool options
-        input->setValue(m_configGroup.readEntry("fuzziness", 20)); // fuzziness
+        input->setValue(m_configGroup.readEntry("fuzziness", 8)); // fuzziness
         sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
         sizemod->setSuffix(i18n(" px"));
 

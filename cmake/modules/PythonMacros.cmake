@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
 # SPDX-FileCopyrightText: 2012 Luca Beltrame <lbeltrame@kde.org>
 # SPDX-FileCopyrightText: 2012 Rolf Eike Beer <eike@sf-mail.de>
+# SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
@@ -59,7 +60,7 @@ macro(PYTHON_INSTALL SOURCE_FILE DESTINATION_DIR)
       add_custom_command(
         TARGET "${_rule_name}"
         COMMAND "${CMAKE_COMMAND}" -E echo "${_message}"
-        COMMAND "${PYTHON_EXECUTABLE}" "${_python_compile_py}" "${_bin_py}"
+        COMMAND "${Python_EXECUTABLE}" "${_python_compile_py}" "${_bin_py}"
         DEPENDS "${_absfilename}"
       )
     else()
@@ -67,7 +68,7 @@ macro(PYTHON_INSTALL SOURCE_FILE DESTINATION_DIR)
         TARGET "${_rule_name}"
         COMMAND "${CMAKE_COMMAND}" -E echo "${_message}"
         COMMAND "${CMAKE_COMMAND}" -E copy "${_absfilename}" "${_bin_py}"
-        COMMAND "${PYTHON_EXECUTABLE}" "${_python_compile_py}" "${_bin_py}"
+        COMMAND "${Python_EXECUTABLE}" "${_python_compile_py}" "${_bin_py}"
         DEPENDS "${_absfilename}"
       )
     endif()

@@ -21,6 +21,7 @@
 #     into.
 
 # SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
+# SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
@@ -37,14 +38,14 @@ ELSE(SIP_VERSION)
 
     EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env
       "PYTHONPATH=${_sip_python_path}"
-      ${PYTHON_EXECUTABLE} ${_find_sip_py}
+      ${Python_EXECUTABLE} ${_find_sip_py}
       OUTPUT_VARIABLE sip_config)
   else (WIN32)
     set(_pyqt5_python_path "${KRITA_PYTHONPATH_V4}:${KRITA_PYTHONPATH_V5}:$ENV{PYTHONPATH}")
 
     EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env 
       "PYTHONPATH=${_sip_python_path}"
-      ${PYTHON_EXECUTABLE} ${_find_sip_py}
+      ${Python_EXECUTABLE} ${_find_sip_py}
       OUTPUT_VARIABLE sip_config)
   endif (WIN32)
 

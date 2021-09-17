@@ -54,6 +54,9 @@ public:
     virtual KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const = 0;
     virtual void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) = 0;
     virtual QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface* other) = 0;
+
+    virtual void initializeKeyframes(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command* cmnd = nullptr) = 0;
+    virtual void setKeyframeData(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command* cmnd = nullptr) = 0;
 };
 
 class QDomElement;

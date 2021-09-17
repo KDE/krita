@@ -26,6 +26,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QSvgGenerator>
 #include <QMessageBox>
+#include <QSizePolicy>
 
 #include <klocalizedstring.h>
 
@@ -146,6 +147,7 @@ private:
     QButtonGroup *viewGroup;
 };
 
+
 StoryboardDockerDock::StoryboardDockerDock( )
     : QDockWidget(i18nc("Storyboard Docker", "Storyboard"))
     , m_canvas(0)
@@ -172,6 +174,10 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_exportAsPdfAction, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
 
+    //Setup dynamic QListView Width Based on Comment Model Columns...
+    connect(m_commentModel, &StoryboardCommentModel::sigCommentListChanged, this, &StoryboardDockerDock::slotUpdateMinimumWidth);
+    connect(m_storyboardModel.data(), &StoryboardModel::rowsInserted, this, &StoryboardDockerDock::slotUpdateMinimumWidth);
+
     m_ui->btnComment->setMenu(m_commentMenu);
     m_ui->btnComment->setPopupMode(QToolButton::InstantPopup);
 
@@ -196,7 +202,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     m_storyboardDelegate->setView(m_ui->sceneView);
     m_storyboardModel->setView(m_ui->sceneView);
-    m_ui->sceneView->setModel(m_storyboardModel);
+    m_ui->sceneView->setModel(m_storyboardModel.data());
     m_ui->sceneView->setItemDelegate(m_storyboardDelegate);
 
     m_storyboardModel->setCommentModel(m_commentModel);
@@ -232,7 +238,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
             if (currentSelection.isValid()) {
                 int row = currentSelection.row();
-                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, m_storyboardModel->getData().at(row), m_storyboardModel);
+                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, m_storyboardModel->getData().at(row), m_storyboardModel.data());
 
                 m_storyboardModel->removeItem(currentSelection, command);
                 m_storyboardModel->pushUndoCommand(command);
@@ -250,7 +256,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 StoryboardDockerDock::~StoryboardDockerDock()
 {
     delete m_commentModel;
-    delete m_storyboardModel;
+    m_storyboardModel.reset();
     delete m_storyboardDelegate;
 }
 
@@ -261,7 +267,7 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_canvas) {
-        disconnect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateDocumentList()));
+        disconnect(m_storyboardModel.data(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateDocumentList()));
         disconnect(m_commentModel, SIGNAL(sigCommentListChanged()), this, SLOT(slotUpdateDocumentList()));
         disconnect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateStoryboardModelList()));
         disconnect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateCommentModelList()));
@@ -280,7 +286,7 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
         slotUpdateStoryboardModelList();
         slotUpdateCommentModelList();
 
-        connect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
+        connect(m_storyboardModel.data(), SIGNAL(sigStoryboardItemListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
         connect(m_commentModel, SIGNAL(sigCommentListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
         connect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateStoryboardModelList()), Qt::UniqueConnection);
         connect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardCommentListChanged()), this, SLOT(slotUpdateCommentModelList()), Qt::UniqueConnection);
@@ -293,6 +299,8 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
             m_storyboardModel->slotSetActiveNode(m_nodeManager->activeNode());
         }
     }
+
+    slotUpdateMinimumWidth();
 }
 
 void StoryboardDockerDock::unsetCanvas()
@@ -304,9 +312,10 @@ void StoryboardDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
     if (m_nodeManager) {
-        connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), m_storyboardModel, SLOT(slotSetActiveNode(KisNodeSP)));
+        connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), m_storyboardModel.data(), SLOT(slotSetActiveNode(KisNodeSP)));
     }
 }
+
 
 void StoryboardDockerDock::notifyImageDeleted()
 {
@@ -344,8 +353,9 @@ void StoryboardDockerDock::slotExportAsSvg()
 
 void StoryboardDockerDock::slotExport(ExportFormat format)
 {
-    KisTimeSpan span = m_canvas->image()->animationInterface()->fullClipRange();
-    DlgExportStoryboard dlg(format, span);
+    QFileInfo fileInfo(m_canvas->imageView()->document()->path());
+    const QString imageFileName = fileInfo.baseName();
+    DlgExportStoryboard dlg(format, m_storyboardModel);
 
     if (dlg.exec() == QDialog::Accepted) {
         dlg.hide();
@@ -372,23 +382,8 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
 
         //getting the range of items to render
-        int firstItemFrame = dlg.firstItem();
-        QModelIndex firstIndex = m_storyboardModel->lastIndexBeforeFrame(firstItemFrame);
-        if (!firstIndex.isValid()) {
-            firstIndex = m_storyboardModel->index(0,0);
-        }
-        else {
-            siblingAtRow(firstIndex, firstIndex.row() + 1);
-        }
-
-        int lastItemFrame = dlg.lastItem();
-        QModelIndex lastIndex  = m_storyboardModel->indexFromFrame(lastItemFrame);
-        if (!lastIndex.isValid()) {
-            lastIndex = m_storyboardModel->lastIndexBeforeFrame(lastItemFrame);
-        }
-        if (!lastIndex.isValid()) {
-            lastIndex = m_storyboardModel->index(0, 0);
-        }
+        QModelIndex firstIndex = m_storyboardModel->index(0,0);
+        QModelIndex lastIndex  = m_storyboardModel->index(m_storyboardModel->rowCount() - 1, 0);
 
         if (!firstIndex.isValid() || !lastIndex.isValid()) {
             QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
@@ -416,19 +411,20 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             QSvgGenerator generator;
 
             if (dlg.format() == ExportFormat::SVG) {
-                generator.setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + "0.svg");
+                generator.setFileName(dlg.saveFileName() + "/" + imageFileName + "0.svg");
                 QSize sz = printer.pageRect().size();
                 generator.setSize(sz);
                 generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
                 generator.setResolution(printer.resolution());
-
                 p.begin(&generator);
+                p.setBrush(QBrush(QColor(255,255,255)));
+                p.drawRect(QRect(0,0, sz.width(), sz.height()));
             }
             else {
                 printer.setOutputFileName(dlg.saveFileName());
                 printer.setOutputFormat(QPrinter::PdfFormat);
-
                 p.begin(&printer);
+                p.setBackgroundMode(Qt::BGMode::OpaqueMode);
             }
 
             QFont font = p.font();
@@ -441,7 +437,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     if (dlg.format() == ExportFormat::SVG) {
                         p.end();
                         p.eraseRect(printer.pageRect());
-                        generator.setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + QString::number(i / layoutCellRects.size()) + ".svg");
+                        generator.setFileName(dlg.saveFileName() + "/" + imageFileName + QString::number(i / layoutCellRects.size()) + ".svg");
                         QSize sz = printer.pageRect().size();
                         generator.setSize(sz);
                         generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
@@ -520,7 +516,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 p.setPen(pen);
 
                 {
-                    p.drawRect(layout->imageAreaRect);
                     QRect imgRect = layout->imageAreaRect;
                     QSize resizedImage = pxmp.size().scaled(layout->imageAreaRect.size(), Qt::KeepAspectRatio);
                     const int MARGIN = -2;
@@ -528,6 +523,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     imgRect.setSize(resizedImage);
                     imgRect.translate((layout->imageAreaRect.width() - imgRect.size().width()) / 2 - MARGIN, (layout->imageAreaRect.height() - imgRect.size().height()) / 2 - MARGIN);
                     p.drawPixmap(imgRect, pxmp, pxmp.rect());
+                    p.drawRect(layout->imageAreaRect);
                 }
 
                 //Draw panel name
@@ -555,12 +551,13 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                         doc.setDefaultFont(p.font());
                         QString comment;
                         comment += "<p><b>" + comments.at(commentIndex).name + "</b></p>"; // if arrange options are used check for visibility
-                        comment += "<p>&nbsp;" + qvariant_cast<CommentBox>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString() + "</p>";
+                        QString originalCommentText = qvariant_cast<CommentBox>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString();
+                        originalCommentText = originalCommentText.replace('\n', "</p><p>");
+                        comment += "<p>&nbsp;" + originalCommentText + "</p>";
                         const int MARGIN = p.fontMetrics().averageCharWidth() / 2;
 
                         doc.setHtml(comment);
                         doc.setTextWidth(layout->commentRects[commentIndex].width() - MARGIN * 2);
-                        p.drawRect(layout->commentRects[commentIndex]);
 
                         QAbstractTextDocumentLayout::PaintContext ctx;
                         ctx.palette.setColor(QPalette::Text, p.pen().color());
@@ -570,6 +567,9 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                         p.translate(layout->commentRects[commentIndex].topLeft() + QPoint(MARGIN, MARGIN));
                         doc.documentLayout()->draw(&p, ctx);
                         p.restore();
+
+                        p.drawRect(layout->commentRects[commentIndex]);
+
 
                         if (layout->commentRects[commentIndex].height() < doc.size().height()) {
                             QRectF eRect(QPointF(layout->commentRects[commentIndex].topLeft()), doc.size());
@@ -640,6 +640,11 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
         m_modeGroup->button(Mode::Row)->setEnabled(false);               //disable the row mode
     }
     m_storyboardModel->layoutChanged();
+}
+
+void StoryboardDockerDock::slotUpdateMinimumWidth()
+{
+    m_ui->sceneView->setMinimumSize(m_ui->sceneView->sizeHint());
 }
 
 QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(int rows, int columns, QRectF pageRect)

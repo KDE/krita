@@ -121,7 +121,7 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     m_ui.cmbVideoScaleFilter->addItem(i18n("Bilinear"), "bilinear");
     m_ui.cmbVideoScaleFilter->addItem(i18n("Lanczos3"), "lanczos");
     m_ui.cmbVideoScaleFilter->addItem(i18n("Nearest Neighbor"), "neighbor");
-    m_ui.cmbVideoScaleFilter->addItem(i18n("Spline"), "spline");
+    m_ui.cmbVideoScaleFilter->addItem(i18nc("An interpolation method", "Spline"), "spline");
   
     m_ui.tabWidget->setCurrentIndex(0);
 

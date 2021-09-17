@@ -14,6 +14,7 @@
 #include <kis_mainwindow_observer.h>
 #include <kis_canvas2.h>
 #include <kis_action.h>
+#include "DlgExportStoryboard.h"
 
 class Ui_WdgStoryboardDock;
 class CommentMenu;
@@ -22,9 +23,7 @@ class StoryboardCommentModel;
 class StoryboardModel;
 class StoryboardDelegate;
 class KisNodeManager;
-class DlgExportStoryboard;
 class QPrinter;
-enum ExportFormat : unsigned int;
 
 class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
     Q_OBJECT
@@ -94,6 +93,12 @@ private Q_SLOTS:
      */
     void slotViewChanged(QAbstractButton*);
 
+    /**
+     * @brief called to update minimum width on reaction to model changes.
+     * Should change based on available content.
+     */
+    void slotUpdateMinimumWidth();
+
 private:
     KisCanvas2* m_canvas;
     KisNodeManager* m_nodeManager;
@@ -113,7 +118,7 @@ private:
     QButtonGroup *m_modeGroup;
     QButtonGroup *m_viewGroup;
 
-    QPointer<StoryboardModel> m_storyboardModel;
+    QSharedPointer<StoryboardModel> m_storyboardModel;
     QPointer<StoryboardDelegate> m_storyboardDelegate;
 };
 

@@ -1,7 +1,7 @@
-From 15abb1344882d96479b2bc2889664b6e256069e3 Mon Sep 17 00:00:00 2001
+From f7c103e5c21a750c8560d7bc6fddb89d66a1188d Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Fri, 19 Feb 2021 11:27:33 +0000
-Subject: [PATCH 2/3] Quick check for SSE support
+Subject: [PATCH 2/4] Quick check for SSE support
 
 ---
  src/CMakeLists.txt | 19 +++++++++++++++++++
@@ -38,5 +38,5 @@ index b83ea07..9bccbc6 100644
      cmscnvrt.c
      cmserr.c
 -- 
-2.30.1
+2.32.0.windows.2
 

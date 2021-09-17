@@ -656,7 +656,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
     QHBoxLayout *f1 = new QHBoxLayout();
-    QLabel *filterRadiusLabel = new QLabel(i18n("Filter Radius: "), selectionWidget);
+    QLabel *filterRadiusLabel = new QLabel(i18nc("Filter radius in Magnetic Select Tool settings", "Filter Radius: "), selectionWidget);
     f1->addWidget(filterRadiusLabel);
 
     KisDoubleSliderSpinBox *filterRadiusInput = new KisDoubleSliderSpinBox(selectionWidget);

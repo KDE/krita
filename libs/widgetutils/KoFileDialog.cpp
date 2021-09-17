@@ -35,7 +35,6 @@ public:
         , defaultDirectory(defaultDir_)
         , filterList(QStringList())
         , defaultFilter(QString())
-        , swapExtensionOrder(false)
     {
     }
 
@@ -54,7 +53,6 @@ public:
     QString defaultFilter;
     QScopedPointer<KisPreviewFileDialog> fileDialog;
     QString mimeType;
-    bool swapExtensionOrder;
 };
 
 KoFileDialog::KoFileDialog(QWidget *parent,
@@ -109,7 +107,7 @@ void KoFileDialog::setImageFilters()
 
 void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString defaultMimeType)
 {
-    d->filterList = getFilterStringListFromMime(mimeTypeList);
+    d->filterList = getFilterStringListFromMime(mimeTypeList, true);
 
     QString defaultFilter;
 
@@ -120,7 +118,7 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
             d->proposedFileName = QFileInfo(d->proposedFileName).completeBaseName() + "." + suffix;
         }
 
-        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultMimeType);
+        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultMimeType, false);
         if (defaultFilters.size() > 0) {
             defaultFilter = defaultFilters.first();
         }
@@ -351,10 +349,13 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
     return filters;
 }
 
-const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_mimeList)
+const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_mimeList,
+                                                            bool withAllSupportedEntry)
 {
     QStringList mimeSeen;
 
+    // 1
+    QString allSupported;
     // 2
     QString kritaNative;
     // 3
@@ -363,6 +364,7 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
     QStringList ret;
     QStringList mimeList = _mimeList;
     mimeList.sort();
+
     Q_FOREACH(const QString &mimeType, mimeList) {
         if (!mimeSeen.contains(mimeType)) {
             QString description = KisMimeDatabase::descriptionForMimeType(mimeType);
@@ -390,23 +392,18 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
             }
 
             Q_FOREACH(const QString &glob, globPatterns) {
-                if (d->swapExtensionOrder) {
-                    oneFilter.prepend(glob + " ");
-#ifdef Q_OS_LINUX
-                    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-                        oneFilter.prepend(glob.toUpper() + " ");
-                    }
-#endif
-
-                }
-                else {
                     oneFilter.append(glob + " ");
+                    if (withAllSupportedEntry) {
+                        allSupported.append(glob + " ");
+                    }
 #ifdef Q_OS_LINUX
                     if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
                         oneFilter.append(glob.toUpper() + " ");
+                        if (withAllSupportedEntry) {
+                            allSupported.append(glob.toUpper() + " ");
+                        }
                     }
 #endif
-                }
             }
 
             Q_ASSERT(!description.isEmpty());
@@ -429,10 +426,16 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
         }
     }
 
+    ret.sort();
     ret.removeDuplicates();
 
+    if (allSupported.contains("*.kra")) {
+        allSupported.remove("*.kra ");
+        allSupported.prepend("*.kra ");
+    }
     if (!ora.isEmpty()) ret.prepend(ora);
     if (!kritaNative.isEmpty())  ret.prepend(kritaNative);
+    if (!allSupported.isEmpty()) ret.prepend(i18n("All supported formats") + " ( " + allSupported + (")"));
 
     return ret;
 

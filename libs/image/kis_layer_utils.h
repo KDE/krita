@@ -242,7 +242,7 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT QSet<int> filterTimesForOnlyRasterKeyedTimes(KisNodeSP node, const QSet<int> &times);
 
     /* Returns a set of times associated with every unique frame from a selection. */
-    KRITAIMAGE_EXPORT QSet<int> fetchUniqueFrameTimes(KisNodeSP node, QSet<int> selectedTimes);
+    KRITAIMAGE_EXPORT QSet<int> fetchUniqueFrameTimes(KisNodeSP node, QSet<int> selectedTimes, bool filterActiveFrameID);
 }
 
 #endif /* __KIS_LAYER_UTILS_H */

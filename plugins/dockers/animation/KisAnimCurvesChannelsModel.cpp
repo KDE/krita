@@ -99,9 +99,13 @@ void KisAnimCurvesChannelsModel::selectedNodesChanged(const KisNodeList &nodes)
 
                 Q_FOREACH(KisAnimationCurve *curve, item->curves) {
                     m_d->curvesModel->removeCurve(curve);
+
                 }
 
-                item->dummy->node()->disconnect(this);
+                if (!item->dummy->node().isNull()) {
+                    item->dummy->node()->disconnect(this);
+                }
+
                 delete item;
             }
         }

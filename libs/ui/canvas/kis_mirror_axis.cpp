@@ -9,10 +9,6 @@
 
 #include "KoConfig.h"
 
-#ifdef HAS_ONLY_OPENGL_ES
-#define GL_MULTISAMPLE 0x809D
-#endif
-
 #include <QPainter>
 #include <QToolButton>
 #include <QApplication>
@@ -36,6 +32,12 @@
 #include <kis_signals_blocker.h>
 #include <kactioncollection.h>
 #include "kis_floating_message.h"
+
+#ifdef Q_OS_MACOS
+    // HACK alert
+    // macOS.SDK openGL does not define GL_MULTISAMPLE_EXT
+    #define GL_MULTISAMPLE_EXT GL_MULTISAMPLE
+#endif
 
 class KisMirrorAxis::Private
 {
@@ -144,14 +146,14 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     bool hasMultisample = false;
     if (ctx) {
-        hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2) &&
-                               (ctx->hasExtension("GL_ARB_multisample")));
+        hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2)
+                          && (ctx->hasExtension("GL_ARB_multisample") || ctx->hasExtension("GL_EXT_multisample_compatibility")));
 
         // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
         // So instead, use native OpenGL anti-aliasing when available.
         if (hasMultisample) {
             gc.beginNativePainting();
-            ctx->functions()->glEnable(GL_MULTISAMPLE);
+            ctx->functions()->glEnable(GL_MULTISAMPLE_EXT);
             gc.endNativePainting();
         }
     }
@@ -216,7 +218,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
     if (hasMultisample) {
         gc.beginNativePainting();
-        ctx->functions()->glDisable(GL_MULTISAMPLE);
+        ctx->functions()->glDisable(GL_MULTISAMPLE_EXT);
         gc.endNativePainting();
     }
 

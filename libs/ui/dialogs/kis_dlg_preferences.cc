@@ -1143,7 +1143,7 @@ void PerformanceTab::load(bool requestDefault)
 
     {
         KConfigGroup group = KSharedConfig::openConfig()->group("KritaTransform/KisToolMove");
-        chkMoveToolForceLodMode->setChecked(group.readEntry("forceLodMode", true));
+        chkMoveToolForceLodMode->setChecked(group.readEntry("forceLodMode", false));
     }
 
     {

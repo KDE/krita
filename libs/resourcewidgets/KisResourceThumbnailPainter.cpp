@@ -39,6 +39,11 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QSt
 {
     painter->save();
 
+    if(addMargin) {
+        // margin has empty space...which we want to be the color palette backround
+        painter->fillRect(rect, palette.background());
+    }
+
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
     QRect innerRect = addMargin ? rect.adjusted(2, 2, -2, -2) : rect;
     thumbnail.setDevicePixelRatio(devicePixelRatioF);

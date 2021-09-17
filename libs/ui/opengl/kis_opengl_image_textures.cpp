@@ -153,7 +153,7 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
 void KisOpenGLImageTextures::initBufferStorage(bool useBuffer)
 {
     if (useBuffer) {
-        const int numTextureBuffers = 256;
+        const int numTextureBuffers = 16;
 
         const KoColorSpace *tilesDestinationColorSpace =
             m_updateInfoBuilder.destinationColorSpace();
@@ -339,6 +339,10 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
             sync && !sync->isSignaled()) {
 
             qDebug() << "Still unsignalled after processed" << numProcessedTiles << "tiles";
+
+            const int nextSize = qNextPowerOfTwo(m_bufferStorage.size()) << 1;
+            m_bufferStorage.allocateMoreBuffers(nextSize);
+            qDebug() << "    increased number of buffers to" << nextSize;
         }
 
 

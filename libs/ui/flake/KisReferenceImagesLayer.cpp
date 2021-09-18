@@ -168,7 +168,13 @@ KUndo2Command * KisReferenceImagesLayer::removeReferenceImagesCommand(KisDocumen
     Q_FOREACH(KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
         if (ref && ref->hasLocalFile()) {
-           if (m_fileSystemWatcher->files().contains(ref->filename())) {
+            bool unique = true;
+            Q_FOREACH (KisReferenceImage *reference , this->referenceImages()) {
+                if (ref != reference && ref->filename().compare(reference->filename()) == 0) {
+                    unique = false;
+                }
+            }
+           if (unique && m_fileSystemWatcher->files().contains(ref->filename())) {
                 m_fileSystemWatcher->removePath(ref->filename());
             }
         }

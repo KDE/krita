@@ -630,10 +630,17 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
                                        absolutePosition(KoFlake::TopLeft), false ,false ,this->transformation());
             d->zoom = kisCanvas->viewConverter()->zoom();
 
-            setPosition(kisCanvas->coordinatesConverter()->documentToWidget(d->absPos));
+            QPointF newPos = kisCanvas->coordinatesConverter()->documentToWidget(d->absPos);
+            setAbsolutePosition(newPos, KoFlake::TopLeft);
+
+            //This is required to make rotating or mirroring single ref image works
+            //but due to this the ref's sometime jumps undesirable on zooming too. So this shall be removed
+            //This can fix resizing multiple shapes problem too but needs to added somewhere inside resizing heirarchy.
             qreal dx = -d->transform.m31();
             qreal dy = -d->transform.m32();
             d->transform.translate(dx, dy);
+
+
         }
         d->docOffset = kisCanvas->documentOffset();
     }
@@ -692,4 +699,3 @@ void KisReferenceImage::shapeChanged(ChangeType type, KoShape *shape)
         d->absPos = d->widgetToDoc.map(pos);
     }
 }
-

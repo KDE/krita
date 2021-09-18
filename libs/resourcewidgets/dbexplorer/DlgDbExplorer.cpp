@@ -170,7 +170,11 @@ void DlgDbExplorer::slotTbResourceItemSelected()
         mode = Qt::FastTransformation;
     }
 
-    m_page->lblThumbnail->setPixmap(QPixmap::fromImage(thumb.scaled(100, 100, Qt::KeepAspectRatio, mode)));
+    if (!thumb.isNull()) {
+        m_page->lblThumbnail->setPixmap(QPixmap::fromImage(thumb.scaled(100, 100, Qt::KeepAspectRatio, mode)));
+    } else {
+        m_page->lblThumbnail->setPixmap(QPixmap());
+    }
     //If we could get a list of versions for a given resource, this would be the moment to add them...
 }
 

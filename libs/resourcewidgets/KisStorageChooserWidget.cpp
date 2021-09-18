@@ -48,7 +48,9 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
         }
         else if (storageType == "Adobe Style Library") {
             thumbnail = koIcon("layer-style-enabled").pixmap(option.decorationSize).toImage();
-            thumbnail = thumbnail.scaled(option.decorationSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+            if (!thumbnail.isNull()) {
+                thumbnail = thumbnail.scaled(option.decorationSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+            }
         }
         else if (storageType == "Adobe Brush Library") {
             thumbnail = koIcon("select-all").pixmap(option.decorationSize).toImage();
@@ -66,7 +68,9 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
         }
 
     } else {
-        thumbnail = thumbnail.scaled(option.decorationSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        if (!thumbnail.isNull()) {
+            thumbnail = thumbnail.scaled(option.decorationSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
         thumbnail.setDevicePixelRatio(devicePixelRatioF);
     }
 

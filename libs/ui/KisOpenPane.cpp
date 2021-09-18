@@ -306,7 +306,7 @@ QTreeWidgetItem* KisOpenPane::addPane(const QString &title, const QString &untra
     if (!icon.isNull()) {
         QImage image = icon.toImage();
 
-        if ((image.width() > iconSize) || (image.height() > iconSize)) {
+        if (!image.isNull() && ((image.width() > iconSize) || (image.height() > iconSize))) {
             image = image.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 

@@ -2376,7 +2376,7 @@
       <iconText>Vector Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut/>
+      <shortcut>Shift+Insert</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>

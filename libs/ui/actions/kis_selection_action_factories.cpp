@@ -75,21 +75,12 @@ namespace ActionHelper {
 
         QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
 
-        KisPaintDeviceSP clip = new KisPaintDevice(*device.data());
-        Q_CHECK_PTR(clip);
-        device->clear();
-
-        const KoColorSpace *cs = clip->colorSpace();
-
-        // TODO if the source is linked... copy from all linked layers?!?
-
-        // Copy image data
-        KisPainter::copyAreaOptimized(QPoint(), clip, device, rc);
+        const KoColorSpace *cs = device->colorSpace();
 
         if (selection) {
             // Apply selection mask.
             KisPaintDeviceSP selectionProjection = selection->projection();
-            KisHLineIteratorSP layerIt = device->createHLineIteratorNG(0, 0, rc.width());
+            KisHLineIteratorSP layerIt = device->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
             KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
 
             const KoColorSpace *selCs = selection->projection()->colorSpace();
@@ -121,8 +112,7 @@ namespace ActionHelper {
                 selectionIt->nextRow();
             }
         }
-
-        device->moveTo(rc.topLeft());
+        device->crop(rc);
     }
 
     KisImageSP makeImage(KisViewManager *view, KisNodeList nodes)

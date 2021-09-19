@@ -239,7 +239,7 @@ public Q_SLOTS:
 
     void cutLayersToClipboard();
     void copyLayersToClipboard();
-    void pasteLayersFromClipboard();
+    void pasteLayersFromClipboard(bool changeOffset = false, QPointF offset = QPointF());
 
     void createQuickGroup();
     void createQuickClippingGroup();

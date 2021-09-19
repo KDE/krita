@@ -109,7 +109,8 @@ protected:
     void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) override {
         ENTER_FUNCTION() << ppVar(image) << ppVar(activeNode);
 
-        KisToolUtils::clearImage(image, activeNode, 0);
+        KisNodeList nodes = {activeNode};
+        KisToolUtils::clearImage(image, nodes, 0);
         image->waitForDone();
 
         checkDeviceIsEmpty(m_mask->paintDevice(), "mask");

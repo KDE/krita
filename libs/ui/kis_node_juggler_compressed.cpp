@@ -90,16 +90,6 @@ struct MoveNodeStruct {
         }
     }
 
-    void resolveParentCollisions(MoveNodeStruct *rhs) const {
-        if (rhs->newParent == newParent) {
-            rhs->suppressNewParentRefresh = true;
-        }
-
-        if (rhs->oldParent == oldParent) {
-            rhs->suppressOldParentRefresh = true;
-        }
-    }
-
     KisImageSP image;
     KisNodeSP node;
     KisNodeSP newParent;
@@ -140,18 +130,54 @@ public:
 
 private:
 
+    struct NewParentCollistionPolicy {
+        static void setSuppressRefresh(MoveNodeStructSP update, bool value) {
+            update->suppressNewParentRefresh = value;
+        }
+        static bool compare(MoveNodeStructSP lhs, MoveNodeStructSP rhs) {
+            return lhs->newParent < rhs->newParent;
+        }
+    };
+
+    struct OldParentCollistionPolicy {
+        static void setSuppressRefresh(MoveNodeStructSP update, bool value) {
+            update->suppressOldParentRefresh = value;
+        }
+        static bool compare(MoveNodeStructSP lhs, MoveNodeStructSP rhs) {
+            return lhs->oldParent < rhs->oldParent;
+        }
+    };
+
+    template <typename CollisionPolicy>
+    static void resolveParentCollisionsImpl(MovedNodesHash *hash) {
+        QVector<MoveNodeStructSP> updates;
+        std::copy(hash->begin(), hash->end(), std::back_inserter(updates));
+        std::sort(updates.begin(), updates.end(), CollisionPolicy::compare);
+
+        auto rangeBegin = updates.begin();
+
+        while (rangeBegin != updates.end()) {
+            auto rangeEnd = std::upper_bound(rangeBegin, updates.end(), *rangeBegin, CollisionPolicy::compare);
+
+            for (auto it = rangeBegin; it != std::prev(rangeEnd); ++it) {
+                CollisionPolicy::setSuppressRefresh(*it, true);
+            }
+            CollisionPolicy::setSuppressRefresh(*std::prev(rangeEnd), false);
+
+            rangeBegin = rangeEnd;
+        }
+    }
+
+    static void resolveParentCollisions(MovedNodesHash *hash) {
+        resolveParentCollisionsImpl<NewParentCollistionPolicy>(hash);
+        resolveParentCollisionsImpl<OldParentCollistionPolicy>(hash);
+    }
+
     static void addToHashLazy(MovedNodesHash *hash, MoveNodeStructSP moveStruct) {
         if (hash->contains(moveStruct->node)) {
             bool result = hash->value(moveStruct->node)->tryMerge(*moveStruct);
             KIS_ASSERT_RECOVER_NOOP(result);
         } else {
-            MovedNodesHash::const_iterator it = hash->constBegin();
-            MovedNodesHash::const_iterator end = hash->constEnd();
-
-            for (; it != end; ++it) {
-                it.value()->resolveParentCollisions(moveStruct.data());
-            }
-
             hash->insert(moveStruct->node, moveStruct);
         }
     }
@@ -171,6 +197,8 @@ public:
             addToHashLazy(&m_movedNodesUpdated, it.value());
         }
 
+        resolveParentCollisions(&m_movedNodesUpdated);
+
         m_movedNodesInitial.clear();
     }
 
@@ -178,6 +206,7 @@ public:
         {
             QMutexLocker l(&m_mutex);
             addToHashLazy(&m_movedNodesInitial, moveStruct);
+            resolveParentCollisions(&m_movedNodesInitial);
 
             // the juggler might directly forward the signal to processUnhandledUpdates,
             // which would also like to get a lock, so we should release it beforehand

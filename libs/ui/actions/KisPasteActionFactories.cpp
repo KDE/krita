@@ -197,10 +197,11 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     KisImageSP image = view->image();
     if (!image) return;
 
-    if (KisClipboard::instance()->hasLayers()) {
+    if (KisClipboard::instance()->hasLayers() && !pasteAtCursorPosition) {
         view->nodeManager()->pasteLayersFromClipboard();
         return;
     }
+
 
     if (tryPasteShapes(pasteAtCursorPosition, view)) {
         return;
@@ -208,7 +209,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
 
     KisTimeSpan range;
     const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, &range);
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, false, &range, image->profile());
 
     if (clip) {
         if (pasteAtCursorPosition) {
@@ -216,6 +217,12 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
             const QPointF imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos);
 
             const QPointF offset = (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
+            const QPointF offsetTopLeft = (offset + QRectF(clip->exactBounds()).topLeft()).toPoint();
+
+            if (KisClipboard::instance()->hasLayers()) {
+                view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition, offsetTopLeft);
+                return;
+            }
 
             clip->setX(clip->x() + offset.x());
             clip->setY(clip->y() + offset.y());
@@ -268,7 +275,7 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), false, 0, image->profile());
     if (!clip) return;
 
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);

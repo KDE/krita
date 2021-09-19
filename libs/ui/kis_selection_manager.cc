@@ -287,10 +287,7 @@ void KisSelectionManager::updateGUI()
     Q_ASSERT(m_clipboard);
     if (!m_view || !m_clipboard) return;
 
-    bool havePixelsSelected = this->havePixelsSelected();
     bool havePixelsInClipboard = this->havePixelsInClipboard();
-    bool haveShapesSelected = this->haveShapesSelected();
-    bool haveShapesInClipboard = this->haveShapesInClipboard();
     bool haveDevice = m_view->activeDevice();
 
     KisLayerSP activeLayer = m_view->activeLayer();
@@ -298,11 +295,6 @@ void KisSelectionManager::updateGUI()
     bool canReselect = image && image->canReselectGlobalSelection();
     bool canDeselect =  image && image->globalSelection();
 
-    m_clear->setEnabled(haveDevice || havePixelsSelected || haveShapesSelected);
-    m_cut->setEnabled(havePixelsSelected || haveShapesSelected);
-    m_copy->setEnabled(havePixelsSelected || haveShapesSelected);
-    m_paste->setEnabled(havePixelsInClipboard || haveShapesInClipboard);
-    m_pasteAt->setEnabled(havePixelsInClipboard || haveShapesInClipboard);
     // FIXME: how about pasting shapes?
     m_pasteNew->setEnabled(havePixelsInClipboard);
     m_pasteAsReference->setEnabled(haveDevice);

@@ -22,7 +22,6 @@
 #include "KoColorSpace.h"
 #include "KoStore.h"
 #include <KoColorSpaceRegistry.h>
-#include <KoColorProfile.h>
 
 #include <KisMimeDatabase.h>
 
@@ -166,7 +165,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     setClip(dev, topLeft, KisTimeSpan());
 }
 
-KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange)
+KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange, const KoColorProfile *destProfile)
 {
     QByteArray mimeType("application/x-krita-selection");
 
@@ -314,8 +313,8 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
             }
 
             const KoColorSpace * cs;
-            const KoColorProfile *profile = 0;
-            if (behaviour == PASTE_ASSUME_MONITOR)
+            const KoColorProfile *profile = destProfile;
+            if (!profile && behaviour == PASTE_ASSUME_MONITOR)
                 profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
 
             cs = KoColorSpaceRegistry::instance()->rgb8(profile);

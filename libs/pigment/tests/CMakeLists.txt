@@ -43,8 +43,6 @@ if (APPLE)
         TestKoColorSpaceRegistry.cpp
         TestColorConversionSystem.cpp
         TestKoColor.cpp
-        TestColorConversionSystem.cpp
-        TestKoColor.cpp
         KoRgbU8ColorSpaceTester.cpp
         TestKoColorSpaceSanity.cpp
         TestFallBackColorTransformation.cpp

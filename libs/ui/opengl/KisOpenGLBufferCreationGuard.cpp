@@ -34,6 +34,7 @@ KisOpenGLBufferCreationGuard::~KisOpenGLBufferCreationGuard()
     if (m_bufferIsMapped) {
         m_buffer->unmap();
     } else {
+        m_buffer->write(0, m_bufferPtr, m_buffer->size());
         delete[] m_bufferPtr;
     }
     m_buffer->release();

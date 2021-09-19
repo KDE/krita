@@ -529,7 +529,6 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
          */
         image->requestStrokeEnd();
     }
-    image->refreshGraphAsync();
 
     return result;
 }

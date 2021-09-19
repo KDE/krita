@@ -80,36 +80,28 @@ namespace ActionHelper {
         if (selection) {
             // Apply selection mask.
             KisPaintDeviceSP selectionProjection = selection->projection();
-            KisHLineIteratorSP layerIt = device->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
-            KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
-
             const KoColorSpace *selCs = selection->projection()->colorSpace();
 
-            for (qint32 y = 0; y < rc.height(); y++) {
+            KisSequentialIterator layerIt(device, rc);
+            KisSequentialConstIterator selectionIt(selectionProjection, rc);
 
-                for (qint32 x = 0; x < rc.width(); x++) {
+            while (layerIt.nextPixel() && selectionIt.nextPixel()) {
 
-                    /**
-                     * Sharp method is an exact reverse of COMPOSITE_OVER
-                     * so if you cover the cut/copied piece over its source
-                     * you get an exactly the same image without any seams
-                     */
-                    if (makeSharpClip) {
-                        qreal dstAlpha = cs->opacityF(layerIt->rawData());
-                        qreal sel = selCs->opacityF(selectionIt->oldRawData());
-                        qreal newAlpha = sel * dstAlpha / (1.0 - dstAlpha + sel * dstAlpha);
-                        float mask = newAlpha / dstAlpha;
+                /**
+                 * Sharp method is an exact reverse of COMPOSITE_OVER
+                 * so if you cover the cut/copied piece over its source
+                 * you get an exactly the same image without any seams
+                 */
+                if (makeSharpClip) {
+                    qreal dstAlpha = cs->opacityF(layerIt.rawData());
+                    qreal sel = selCs->opacityF(selectionIt.oldRawData());
+                    qreal newAlpha = sel * dstAlpha / (1.0 - dstAlpha + sel * dstAlpha);
+                    float mask = newAlpha / dstAlpha;
 
-                        cs->applyAlphaNormedFloatMask(layerIt->rawData(), &mask, 1);
-                    } else {
-                        cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
-                    }
-
-                    layerIt->nextPixel();
-                    selectionIt->nextPixel();
+                    cs->applyAlphaNormedFloatMask(layerIt.rawData(), &mask, 1);
+                } else {
+                    cs->applyAlphaU8Mask(layerIt.rawData(), selectionIt.oldRawData(), 1);
                 }
-                layerIt->nextRow();
-                selectionIt->nextRow();
             }
         }
         device->crop(rc);

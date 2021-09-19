@@ -68,6 +68,7 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
     const KoColorSpace *colorSpace = 0;
     if (brush->isImageType()) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        brush->setBrushApplication(IMAGESTAMP);
     }
     else {
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");
@@ -82,8 +83,9 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
         for(int i = brushes.size(); i > 0; i--) {
             KisGbrBrushSP subbrush = brushes.at(i - 1);
             const KoColorSpace *subColorSpace = 0;
-            if (brush->isImageType()) {
+            if (subbrush->isImageType()) {
                 subColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+                subbrush->setBrushApplication(IMAGESTAMP);
             }
             else {
                 subColorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");

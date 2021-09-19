@@ -1,8 +1,8 @@
 SET(PREFIX_ext_lcms2 "${EXTPREFIX}" )
 ExternalProject_Add( ext_lcms2
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/mm2/Little-CMS/archive/c07b7e363cd4ea188876b6aa8f0357c0f0b8d0cb.zip
-    URL_HASH SHA256=e34204d8492a174efc106b25e9c8bfa9f6f3d1f54090bb8504a2fe7f185d3a63
+    URL https://github.com/mm2/Little-CMS/archive/67d6968f8ff00e9134a574ae919b7360f1d8ec94.zip
+    URL_HASH SHA256=a76bf163044d80a7800087356f94815a29dcad1056cd4d74bcbb8f84c993b01e
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-cmake-build-system.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Quick-check-for-SSE-support.patch

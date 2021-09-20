@@ -632,15 +632,6 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
 
             QPointF newPos = kisCanvas->coordinatesConverter()->documentToWidget(d->absPos);
             setAbsolutePosition(newPos, KoFlake::TopLeft);
-
-            //This is required to make rotating or mirroring single ref image works
-            //but due to this the ref's sometime jumps undesirable on zooming too. So this shall be removed
-            //This can fix resizing multiple shapes problem too but needs to added somewhere inside resizing heirarchy.
-            qreal dx = -d->transform.m31();
-            qreal dy = -d->transform.m32();
-            d->transform.translate(dx, dy);
-
-
         }
         d->docOffset = kisCanvas->documentOffset();
     }
@@ -648,11 +639,9 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
     if (d->mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored()
                 || d->mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored()) {
         if (!d->pinMirror) {
-            QPointF center = absolutePosition();
             qreal scaleX = d->mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored() ? -1 : 1;
             qreal scaleY = d->mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored() ? -1 : 1;
-            d->transform *= QTransform::fromTranslate(-center.x(),-center.y()) *
-                    QTransform::fromScale(scaleX, scaleY) * QTransform::fromTranslate(center.x(),center.y());
+            scale(scaleX, scaleY);
         }
         d->docOffset = kisCanvas->documentOffset();
         diffRotate = kisCanvas->rotationAngle() - d->previousAngle;
@@ -661,12 +650,8 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
 
     if (d->previousAngle != kisCanvas->rotationAngle()) {
         if (!d->pinRotate) {
-            QPointF center = absolutePosition();
             diffRotate = kisCanvas->rotationAngle() - d->previousAngle;
-            QTransform rot;
-            rot.rotate(diffRotate);
-            d->transform *= QTransform::fromTranslate(-center.x(),-center.y()) * rot
-                    * QTransform::fromTranslate(center.x(),center.y());
+            rotate(diffRotate);
         }
         d->docOffset = kisCanvas->documentOffset();
     }
@@ -674,7 +659,8 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
     if (kisCanvas->documentOffset() != d->docOffset) {
         if (!d->pinPosition) {
             QPointF diff = kisCanvas->documentOffset() - d->docOffset;
-            d->transform *= QTransform::fromTranslate(-diff.x(), -diff.y());
+            QPointF pos = absolutePosition(KoFlake::TopLeft) - diff;
+            setAbsolutePosition(pos, KoFlake::TopLeft);
         }
     }
 
@@ -685,9 +671,6 @@ qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
     d->previousAngle = kisCanvas->rotationAngle();
     d->widgetToDoc = kisCanvas->coordinatesConverter()->documentToWidgetTransform().inverted();
 
-    if (!qFuzzyCompare(d->transform, extraTransform())) {
-        setExtraTransform(d->transform);
-    }
     return diffRotate;
 }
 

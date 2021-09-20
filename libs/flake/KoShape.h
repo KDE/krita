@@ -18,7 +18,6 @@
 #include <QMap>
 #include <QMetaType>
 #include <QSharedDataPointer>
-#include <QTransform>
 
 #include <QDomDocument>
 
@@ -1069,10 +1068,6 @@ protected:
     // This allows to not apply parent transformation to shapes in absoluteTransformation().
     void setAbsolute(bool);
 
-    // Append any kind of extra transformation to the shapes.
-    QTransform extraTransform() const;
-    void setExtraTransform(QTransform t);
-
 private:
     class Private;
     QScopedPointer<Private> d;
@@ -1083,10 +1078,6 @@ private:
     // Shapes are usually painted and manipulated in pt coordinates (document) but in some case we might need widget system
     // so it is not manipulated with document / KoShapeContainer .
     bool m_absolute;
-
-    // This extra transform can be used to add to the shape without modifying its localMatrix too often.
-    // @see KisReferenceImage::addCanvasTransformation() for e.g
-    QTransform m_extraTransform;
 
 protected:
     /**

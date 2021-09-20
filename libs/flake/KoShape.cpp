@@ -160,8 +160,7 @@ const qint16 KoShape::minZIndex = std::numeric_limits<qint16>::min();
 KoShape::KoShape()
     : d(new Private()),
       s(new SharedData),
-      m_absolute(true),
-      m_extraTransform(QTransform())
+      m_absolute(true)
 {
     notifyChanged();
 }
@@ -214,7 +213,7 @@ void KoShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintcontex
 
 void KoShape::scale(qreal sx, qreal sy)
 {
-    QPointF pos = position();
+    QPointF pos = s->localMatrix.map(QPointF(0.5 * size().width(), 0.5 * size().height()));
     QTransform scaleMatrix;
     scaleMatrix.translate(pos.x(), pos.y());
     scaleMatrix.scale(sx, sy);
@@ -373,7 +372,6 @@ QTransform KoShape::absoluteTransformation() const
             }
         }
     }
-    matrix *= m_extraTransform;
 
     return s->localMatrix * matrix;
 }
@@ -1352,16 +1350,4 @@ bool KoShape::absolute()
 void KoShape::setAbsolute(bool value)
 {
     m_absolute = value;
-}
-
-QTransform KoShape::extraTransform() const
-{
-    return m_extraTransform;
-}
-
-void KoShape::setExtraTransform(QTransform t)
-{
-    m_extraTransform = t;
-    notifyChanged();
-    shapeChangedPriv(GenericMatrixChange);
 }

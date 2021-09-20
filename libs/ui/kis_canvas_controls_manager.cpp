@@ -321,7 +321,7 @@ void KisCanvasControlsManager::increaseFlow()
 {
     qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
 
-    if (flow >= 0.40) {
+    if (qRound(flow * 100) >= 40) {
         stepFlow(0.1f);
     } else {
         stepFlow(0.05f);
@@ -332,7 +332,7 @@ void KisCanvasControlsManager::decreaseFlow()
 {
     qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
 
-    if (flow > 0.40) {
+    if (qRound(flow * 100) > 40) {
         stepFlow(-0.1f);
     } else {
         stepFlow(-0.05f);
@@ -350,8 +350,8 @@ void KisCanvasControlsManager::stepFade(float step)
     fade = qBound<qreal>(0.0, fade, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Fade, fade);
 
-    m_view->showFloatingMessage(i18nc("Brush Option Fade", "%1 %2", QString("Fade:"), QString::number(fade, 'f', 2)), QIcon(), 1000, KisFloatingMessage::High,
-                                Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+    m_view->showFloatingMessage(i18nc("Edge softness, Brush Option Fade", "%1 %2", QString("Fade:"), QString::number(fade, 'f', 2)),
+                                QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 void KisCanvasControlsManager::increaseFade()

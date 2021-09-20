@@ -397,8 +397,8 @@
       <icon>opacity-increase</icon>
       <text>Increase Opacity</text>
       <whatsThis/>
-      <toolTip>Increase brush Opacity setting</toolTip>
-      <iconText>Increase opacity</iconText>
+      <toolTip>Increase brush Opacity</toolTip>
+      <iconText>Increase Opacity</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>O</shortcut>
@@ -409,8 +409,8 @@
       <icon>opacity-decrease</icon>
       <text>Decrease Opacity</text>
       <whatsThis/>
-      <toolTip>Decrease brush Opacity setting</toolTip>
-      <iconText>Decrease opacity</iconText>
+      <toolTip>Decrease brush Opacity</toolTip>
+      <iconText>Decrease Opacity</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>I</shortcut>
@@ -421,8 +421,8 @@
       <icon></icon>
       <text>Increase Flow</text>
       <whatsThis/>
-      <toolTip>Increase brush Flow setting</toolTip>
-      <iconText>Increase flow</iconText>
+      <toolTip>Increase brush Flow</toolTip>
+      <iconText>Increase Flow</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -433,8 +433,8 @@
       <icon></icon>
       <text>Decrease Flow</text>
       <whatsThis/>
-      <toolTip>Decrease brush Flow setting</toolTip>
-      <iconText>Decrease flow</iconText>
+      <toolTip>Decrease brush Flow</toolTip>
+      <iconText>Decrease Flow</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -445,8 +445,8 @@
       <icon></icon>
       <text>Increase Fade</text>
       <whatsThis/>
-      <toolTip>Increase brush Fade setting</toolTip>
-      <iconText>Increase fade</iconText>
+      <toolTip>Increase brush Fade</toolTip>
+      <iconText>Increase Fade</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -457,8 +457,8 @@
       <icon></icon>
       <text>Decrease Fade</text>
       <whatsThis/>
-      <toolTip>Decrease brush Fade setting</toolTip>
-      <iconText>Decrease fade</iconText>
+      <toolTip>Decrease brush Fade</toolTip>
+      <iconText>Decrease Fade</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -467,10 +467,10 @@
     </Action>
     <Action name="increase_scatter">
       <icon></icon>
-      <text>Increase scatter</text>
+      <text>Increase Scatter</text>
       <whatsThis/>
-      <toolTip>Increase brush Scatter Strength setting</toolTip>
-      <iconText>Increase scatter</iconText>
+      <toolTip>Increase brush Scatter strength</toolTip>
+      <iconText>Increase Scatter</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -481,8 +481,8 @@
       <icon></icon>
       <text>Decrease Scatter</text>
       <whatsThis/>
-      <toolTip>Decrease brush Scatter Strength setting</toolTip>
-      <iconText>Decrease scatter</iconText>
+      <toolTip>Decrease brush Scatter strength</toolTip>
+      <iconText>Decrease Scatter</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

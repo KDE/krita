@@ -19,6 +19,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
+#include "kis_dom_utils.h"
 #include "kis_paintop_preset.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
@@ -361,8 +362,8 @@ void KisPaintOpSettings::setPaintOpFade(qreal value)
     QDomElement element = doc.documentElement();
     QDomElement elementChild = element.elementsByTagName("MaskGenerator").item(0).toElement();
 
-    elementChild.attributeNode("hfade").setValue(QString::number(value,'f', 2));
-    elementChild.attributeNode("vfade").setValue(QString::number(value,'f', 2));
+    elementChild.attributeNode("hfade").setValue(KisDomUtils::toString(value));
+    elementChild.attributeNode("vfade").setValue(KisDomUtils::toString(value));
 
     proxy->setProperty("brush_definition", doc.toString());
 }

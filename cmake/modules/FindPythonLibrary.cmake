@@ -42,9 +42,9 @@ if (Python_Interpreter_FOUND)
     set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
     # Set the Python libraries to what we actually found for interpreters
-    set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+    set(Python_ADDITIONAL_VERSIONS "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
     # These are kept for compatibility
-    set(PYTHON_SHORT_VERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+    set(PYTHON_SHORT_VERSION "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
     set(PYTHON_LONG_VERSION ${PYTHON_VERSION_STRING})
 
     if(Python_Development_FOUND)
@@ -72,7 +72,7 @@ if (Python_Interpreter_FOUND)
     else()
         foreach(__p ${_python_prefix_path})
             set(KRITA_PYTHONPATH_V4 "${__p}/lib/krita-python-libs:${KRITA_PYTHONPATH_V4}")
-            set(KRITA_PYTHONPATH_V5 "${__p}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages:${KRITA_PYTHONPATH_V5}")
+            set(KRITA_PYTHONPATH_V5 "${__p}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages:${KRITA_PYTHONPATH_V5}")
         endforeach()
     endif()
 

@@ -9,7 +9,7 @@ if (UNIX)
             
             PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/osx_fixappinstall.diff
 
-            # Setuptools needs OpenSSL 1.1, the stock libssl isn't enough
+            # Setuptools needs OpenSSL 1.1, the stock libssl isn't enough
             CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.13 --prefix=${PREFIX_ext_python} ${GLOBAL_AUTOMAKE_PROFILE} --with-openssl=${PREFIX_ext_python}
                 --enable-framework=${PREFIX_ext_python}/lib --enable-optimizations
             BUILD_COMMAND make
@@ -17,6 +17,7 @@ if (UNIX)
                 COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python
                 COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sitecustomize.py ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib/python${PYTHON_VERSION}/
                 COMMAND ${CMAKE_COMMAND} -E create_symlink ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib/python${PYTHON_VERSION} ${PREFIX_ext_python}/lib/python${PYTHON_VERSION}
+                COMMAND ${CMAKE_COMMAND} -E create_symlink ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/include/python${PYTHON_VERSION} ${PREFIX_ext_python}/include/python${PYTHON_VERSION}
                 COMMAND ${CMAKE_COMMAND} -E create_symlink ./lib/python${PYTHON_VERSION}/site-packages ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/site-packages
                 # CMake FindPythonLib can't find framework libraries, lack of maintainer for Python
                 COMMAND find ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib -type l -d 1

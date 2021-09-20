@@ -9,6 +9,7 @@
 #include <QHash>
 #include <QGlobalStatic>
 #include <QFile>
+#include <QFileInfo>
 #include <QDomElement>
 #include <KSharedConfig>
 #include <klocalizedstring.h>
@@ -188,6 +189,10 @@ KisActionRegistry::KisActionRegistry()
 {
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     QString schemeName = cg.readEntry("Current Scheme", "Default");
+    QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
+    if (!QFileInfo(schemeFileName).exists()) {
+        schemeName = "Default";
+    }
     loadShortcutScheme(schemeName);
     loadCustomShortcuts();
 }
@@ -219,7 +224,8 @@ void KisActionRegistry::loadShortcutScheme(const QString &schemeName)
     // Load scheme file
     if (schemeName != QStringLiteral("Default")) {
         QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
-        if (schemeFileName.isEmpty()) {
+        if (schemeFileName.isEmpty() || !QFileInfo(schemeFileName).exists()) {
+            applyShortcutScheme();
             return;
         }
         KConfig schemeConfig(schemeFileName, KConfig::SimpleConfig);

@@ -45,6 +45,10 @@ void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfigurati
 
 void KisPressureRotationOption::applyFanCornersInfo(KisPaintOp *op)
 {
+    if (!this->isChecked()) {
+        return;
+    }
+
     KisDynamicSensorDrawingAngle *sensor = dynamic_cast<KisDynamicSensorDrawingAngle*>(this->sensor(ANGLE, true).data());
 
     /**

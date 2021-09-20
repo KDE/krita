@@ -14,6 +14,7 @@
 #include <kis_properties_configuration.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include "kis_layer_utils.h"
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
 
@@ -124,32 +125,63 @@ namespace KisToolUtils {
         return foundNode;
     }
 
-    bool clearImage(KisImageSP image, KisNodeSP node, KisSelectionSP selection)
+    bool clearImage(KisImageSP image, KisNodeList nodes, KisSelectionSP selection)
     {
-        if(node && node->hasEditablePaintDevice()) {
-            KUndo2Command *cmd =
-                new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
-                    [node, selection] () {
-                        KisPaintDeviceSP device = node->paintDevice();
+        KisNodeList masks;
 
-                        KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
-
-                        QRect dirtyRect;
-                        if (selection) {
-                            dirtyRect = selection->selectedRect();
-                            device->clearSelection(selection);
-                        } else {
-                            dirtyRect = device->extent();
-                            device->clear();
-                        }
-
-                        device->setDirty(dirtyRect);
-                        return transaction.endAndTake();
-                    });
-            KisProcessingApplicator::runSingleCommandStroke(image, cmd);
-            return true;
+        Q_FOREACH (KisNodeSP node, nodes) {
+            if (node->inherits("KisMask")) {
+                masks.append(node);
+            }
         }
-        return false;
+
+        // To prevent deleting same layer multiple times
+        KisLayerUtils::filterMergableNodes(nodes);
+        nodes.append(masks);
+
+        if (nodes.isEmpty()) {
+            return false;
+        }
+
+        KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE,
+                                           KisImageSignalVector(), kundo2_i18n("Clear"));
+
+        Q_FOREACH (KisNodeSP node, nodes) {
+            KisLayerUtils::recursiveApplyNodes(node, [&applicator, selection, masks] (KisNodeSP node) {
+
+                // applied on masks if selected explicitly
+                if (node->inherits("KisMask") && !masks.contains(node)) {
+                    return;
+                }
+
+                if(node->hasEditablePaintDevice()) {
+                    KUndo2Command *cmd =
+                        new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
+                            [node, selection] () {
+                                KisPaintDeviceSP device = node->paintDevice();
+
+                                KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
+
+                                QRect dirtyRect;
+                                if (selection) {
+                                    dirtyRect = selection->selectedRect();
+                                    device->clearSelection(selection);
+                                } else {
+                                    dirtyRect = device->extent();
+                                    device->clear();
+                                }
+
+                                device->setDirty(dirtyRect);
+                                return transaction.endAndTake();
+                            });
+                    applicator.applyCommand(cmd, KisStrokeJobData::CONCURRENT);
+                }
+            });
+        }
+
+        applicator.end();
+
+        return true;
     }
 
     const QString ColorSamplerConfig::CONFIG_GROUP_NAME = "tool_color_sampler";

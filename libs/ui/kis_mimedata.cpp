@@ -104,6 +104,9 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
         }
     }
 
+    QRect offset(0, 0, rc.width(), rc.height());
+    rc |= offset;
+
     if (rc.isEmpty() && srcImage) {
         rc = srcImage->bounds();
     }
@@ -429,7 +432,8 @@ bool correctNewNodeLocation(KisNodeList nodes,
     KisNodeSP parentNode = parentDummy->node();
     bool result = true;
 
-    if(!nodeAllowsAsChild(parentDummy->node(), nodes)) {
+    if(!nodeAllowsAsChild(parentDummy->node(), nodes) ||
+            (parentDummy->node()->inherits("KisGroupLayer") && parentDummy->node()->collapsed())) {
         aboveThisDummy = parentDummy;
         parentDummy = parentDummy->parent();
 
@@ -474,9 +478,22 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
                                    KisNodeDummy *parentDummy,
                                    KisNodeDummy *aboveThisDummy,
                                    bool copyNode,
-                                   KisNodeInsertionAdapter *nodeInsertionAdapter)
+                                   KisNodeInsertionAdapter *nodeInsertionAdapter,
+                                   bool changeOffset,
+                                   QPointF offset)
 {
     QList<KisNodeSP> nodes = loadNodesFast(data, image, shapeController, copyNode /* IN-OUT */);
+
+    if (changeOffset) {
+        Q_FOREACH (KisNodeSP node, nodes) {
+            KisLayerUtils::recursiveApplyNodes(node, [offset] (KisNodeSP node){
+                if (node->hasEditablePaintDevice()) {
+                    KisPaintDeviceSP dev = node->paintDevice();
+                    dev->moveTo(offset.x(), offset.y());
+                }
+            });
+        }
+    }
 
     if (nodes.isEmpty()) return false;
 

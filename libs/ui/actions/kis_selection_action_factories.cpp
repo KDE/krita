@@ -52,6 +52,7 @@
 #include "kis_time_span.h"
 #include "kis_keyframe_channel.h"
 #include "kis_node_manager.h"
+#include "kis_layer_utils.h"
 #include <kis_selection_mask.h>
 
 #include <processing/fill_processing_visitor.h>
@@ -62,7 +63,7 @@
 
 namespace ActionHelper {
 
-    void copyFromDevice(KisViewManager *view,
+    void trimDevice(KisViewManager *view,
                         KisPaintDeviceSP device,
                         bool makeSharpClip = false,
                         const KisTimeSpan &range = KisTimeSpan())
@@ -74,55 +75,52 @@ namespace ActionHelper {
 
         QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
 
-        KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
-        Q_CHECK_PTR(clip);
-
-        const KoColorSpace *cs = clip->colorSpace();
-
-        // TODO if the source is linked... copy from all linked layers?!?
-
-        // Copy image data
-        KisPainter::copyAreaOptimized(QPoint(), device, clip, rc);
+        const KoColorSpace *cs = device->colorSpace();
 
         if (selection) {
             // Apply selection mask.
             KisPaintDeviceSP selectionProjection = selection->projection();
-            KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, rc.width());
-            KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
-
             const KoColorSpace *selCs = selection->projection()->colorSpace();
 
-            for (qint32 y = 0; y < rc.height(); y++) {
+            KisSequentialIterator layerIt(device, rc);
+            KisSequentialConstIterator selectionIt(selectionProjection, rc);
 
-                for (qint32 x = 0; x < rc.width(); x++) {
+            while (layerIt.nextPixel() && selectionIt.nextPixel()) {
 
-                    /**
-                     * Sharp method is an exact reverse of COMPOSITE_OVER
-                     * so if you cover the cut/copied piece over its source
-                     * you get an exactly the same image without any seams
-                     */
-                    if (makeSharpClip) {
-                        qreal dstAlpha = cs->opacityF(layerIt->rawData());
-                        qreal sel = selCs->opacityF(selectionIt->oldRawData());
-                        qreal newAlpha = sel * dstAlpha / (1.0 - dstAlpha + sel * dstAlpha);
-                        float mask = newAlpha / dstAlpha;
+                /**
+                 * Sharp method is an exact reverse of COMPOSITE_OVER
+                 * so if you cover the cut/copied piece over its source
+                 * you get an exactly the same image without any seams
+                 */
+                if (makeSharpClip) {
+                    qreal dstAlpha = cs->opacityF(layerIt.rawData());
+                    qreal sel = selCs->opacityF(selectionIt.oldRawData());
+                    qreal newAlpha = sel * dstAlpha / (1.0 - dstAlpha + sel * dstAlpha);
+                    float mask = newAlpha / dstAlpha;
 
-                        cs->applyAlphaNormedFloatMask(layerIt->rawData(), &mask, 1);
-                    } else {
-                        cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
-                    }
-
-                    layerIt->nextPixel();
-                    selectionIt->nextPixel();
+                    cs->applyAlphaNormedFloatMask(layerIt.rawData(), &mask, 1);
+                } else {
+                    cs->applyAlphaU8Mask(layerIt.rawData(), selectionIt.oldRawData(), 1);
                 }
-                layerIt->nextRow();
-                selectionIt->nextRow();
             }
         }
-
-        KisClipboard::instance()->setClip(clip, rc.topLeft(), range);
+        device->crop(rc);
     }
 
+    KisImageSP makeImage(KisViewManager *view, KisNodeList nodes)
+    {
+        KisImageWSP image = view->image();
+
+        KisImageSP clipImage = new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
+        Q_FOREACH (KisNodeSP node, nodes) {
+            clipImage->addNode(node, clipImage->root());
+        }
+
+        clipImage->refreshGraphAsync();
+        clipImage->waitForDone();
+
+        return clipImage;
+    }
 }
 
 void KisSelectAllActionFactory::run(KisViewManager *view)
@@ -272,8 +270,55 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         } else {
             view->canvasBase()->toolProxy()->copy();
         }
-    } else if (node && selection) {
+    } else if (selection) {
+        KisNodeList selectedNodes = view->nodeManager()->selectedNodes();
+
+        KisNodeList masks;
+        Q_FOREACH (KisNodeSP node, selectedNodes) {
+            if (node->inherits("KisMask")) {
+                masks.append(node);
+            }
+        }
+
+        selectedNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(selectedNodes);
+
+        KisNodeList nodes;
+        Q_FOREACH (KisNodeSP node, selectedNodes) {
+            KisNodeSP dupNode;
+            if (node->inherits("KisShapeLayer")) {
+                KisPaintDeviceSP dev = new KisPaintDevice(*node->projection());
+                // might have to change node's name (vector to paint layer)
+                dupNode = new KisPaintLayer(image, node->name(), node->opacity(), dev);
+            } else {
+                dupNode = node->clone();
+            }
+            nodes.append(dupNode);
+        }
+
         {
+            //KisImageBarrierLocker locker(image);  not needed as these nodes do not belong to 'image'
+            Q_FOREACH (KisNodeSP node, nodes) {
+                KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
+                    KisPaintDeviceSP dev = node->paintDevice();
+
+                    KisTimeSpan range;
+
+                    KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+                    if (channel) {
+                        const int currentTime = image->animationInterface()->currentTime();
+                        range = channel->affectedFrames(currentTime);
+                    }
+
+                    if (dev && !node->inherits("KisMask")) {
+                        ActionHelper::trimDevice(view, dev, makeSharpClip, range);
+                    }
+                });
+            }
+        }
+        KisImageSP tempImage = ActionHelper::makeImage(view, nodes);
+        KisClipboard::instance()->setLayers(nodes, tempImage);
+
+/*        {
             KisImageBarrierLocker locker(image);
             KisPaintDeviceSP dev = node->paintDevice();
             if (!dev) {
@@ -307,55 +352,64 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             }
 
             ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
-        }
-
-        KUndo2Command *command = 0;
-
-        if (willCut && node->hasEditablePaintDevice()) {
-            struct ClearSelection : public KisTransactionBasedCommand {
-                ClearSelection(KisNodeSP node, KisSelectionSP sel)
-                    : m_node(node), m_sel(sel) {}
-                KisNodeSP m_node;
-                KisSelectionSP m_sel;
-
-                KUndo2Command* paint() override {
-                    KisSelectionSP cutSelection = m_sel;
-                    // Shrinking the cutting area was previously used
-                    // for getting seamless cut-paste. Now we use makeSharpClip
-                    // instead.
-                    // QRect originalRect = cutSelection->selectedExactRect();
-                    // static const int preciseSelectionThreshold = 16;
-                    //
-                    // if (originalRect.width() > preciseSelectionThreshold ||
-                    //     originalRect.height() > preciseSelectionThreshold) {
-                    //     cutSelection = new KisSelection(*m_sel);
-                    //     delete cutSelection->flatten();
-                    //
-                    //     KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
-                    //
-                    //     QRect processingRect = filter->changeRect(originalRect);
-                    //     filter->process(cutSelection->pixelSelection(), processingRect);
-                    // }
-
-                    KisTransaction transaction(m_node->paintDevice());
-                    m_node->paintDevice()->clearSelection(cutSelection);
-                    m_node->setDirty(cutSelection->selectedRect());
-                    return transaction.endAndTake();
-                }
-            };
-
-            command = new ClearSelection(node, selection);
-        }
+        }*/
 
         KUndo2MagicString actionName = willCut ?
                     kundo2_i18n("Cut") :
                     kundo2_i18n("Copy");
         KisProcessingApplicator *ap = beginAction(view, actionName);
 
-        if (command) {
-            ap->applyCommand(command,
-                             KisStrokeJobData::SEQUENTIAL,
-                             KisStrokeJobData::NORMAL);
+        if (willCut) {
+            selectedNodes.append(masks);
+            Q_FOREACH (KisNodeSP node, selectedNodes) {
+                KisLayerUtils::recursiveApplyNodes(node, [selection, masks, ap] (KisNodeSP node){
+
+                    if (!node->hasEditablePaintDevice()) {
+                        return;
+                    }
+
+                    // applied on masks if selected explicitly (when CTRL-X(cut) is used for deletion)
+                    if (node->inherits("KisMask") && !masks.contains(node)) {
+                        return;
+                    }
+
+                    struct ClearSelection : public KisTransactionBasedCommand {
+                        ClearSelection(KisNodeSP node, KisSelectionSP sel)
+                            : m_node(node), m_sel(sel) {}
+                        KisNodeSP m_node;
+                        KisSelectionSP m_sel;
+
+                        KUndo2Command* paint() override {
+                            KisSelectionSP cutSelection = m_sel;
+                            // Shrinking the cutting area was previously used
+                            // for getting seamless cut-paste. Now we use makeSharpClip
+                            // instead.
+                            // QRect originalRect = cutSelection->selectedExactRect();
+                            // static const int preciseSelectionThreshold = 16;
+                            //
+                            // if (originalRect.width() > preciseSelectionThreshold ||
+                            //     originalRect.height() > preciseSelectionThreshold) {
+                            //     cutSelection = new KisSelection(*m_sel);
+                            //     delete cutSelection->flatten();
+                            //
+                            //     KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
+                            //
+                            //     QRect processingRect = filter->changeRect(originalRect);
+                            //     filter->process(cutSelection->pixelSelection(), processingRect);
+                            // }
+
+                            KisTransaction transaction(m_node->paintDevice());
+                            m_node->paintDevice()->clearSelection(cutSelection);
+                            m_node->setDirty(cutSelection->selectedRect());
+                            return transaction.endAndTake();
+                        }
+                    };
+
+                    KUndo2Command *command = new ClearSelection(node, selection);
+                    ap->applyCommand(command, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+
+                });
+            }
         }
 
         KisOperationConfiguration config(id());
@@ -377,8 +431,14 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
     if (!view->blockUntilOperationsFinished(image)) return;
 
     image->barrierLock();
-    KisPaintDeviceSP dev = image->root()->projection();
-    ActionHelper::copyFromDevice(view, dev);
+    KisPaintDeviceSP dev = new KisPaintDevice(*image->root()->projection());
+    ActionHelper::trimDevice(view, dev);
+
+    KisNodeSP node = new KisPaintLayer(image, "Projection", OPACITY_OPAQUE_U8, dev);
+    KisNodeList nodes{node};
+
+    KisImageSP tempImage = ActionHelper::makeImage(view, nodes);
+    KisClipboard::instance()->setLayers(nodes, tempImage);
     image->unlock();
 
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Copy Merged"));

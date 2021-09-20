@@ -12,12 +12,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/compositeops)
 
-set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OpenEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-    add_definitions(${OPENEXR_DEFINITIONS})
 endif()
 
 set(LINK_VC_LIB)

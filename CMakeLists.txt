@@ -9,9 +9,8 @@ set(MIN_FRAMEWORKS_VERSION 5.44.0)
 set( CMAKE_CXX_STANDARD 14 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
-
 if (POLICY CMP0002)
-    cmake_policy(SET CMP0002 OLD)
+    cmake_policy(SET CMP0002 NEW)
 endif()
 
 if (POLICY CMP0017)
@@ -736,23 +735,15 @@ set_package_properties(ZLIB PROPERTIES
     PURPOSE "Required by Krita's PNG and PSD support")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 
-find_package(OpenEXR 3.0 CONFIG QUIET)
-if(TARGET OpenEXR::OpenEXR)
-    set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
-else()
-    find_package(OpenEXR)
-endif()
-set_package_properties(OpenEXR PROPERTIES
-    DESCRIPTION "High dynamic-range (HDR) image file format"
-    URL "https://www.openexr.com"
-    TYPE OPTIONAL
-    PURPOSE "Required by the Krita OpenEXR filter")
+find_package(OpenEXR)
 macro_bool_to_01(OpenEXR_FOUND HAVE_OPENEXR)
-set(LINK_OPENEXR_LIB)
 if(OpenEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
+    if(TARGET OpenEXR::OpenEXR)
+        set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
+    else()
+        set(OPENEXR_LIBRARIES OpenEXR::IlmImf)
+    endif()
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-    add_definitions(${OPENEXR_DEFINITIONS})
     if(MSVC)
         add_compile_definitions(OPENEXR_DLL) 
     endif()

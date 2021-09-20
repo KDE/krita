@@ -97,9 +97,9 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         }
         return QVariant();
     }
-    case Qt::ToolTipRole:
-        Q_FALLTHROUGH();
     case Qt::StatusTipRole:
+        return QVariant();
+    case Qt::ToolTipRole:
         Q_FALLTHROUGH();
     case Qt::WhatsThisRole:
         return query.value("tooltip");

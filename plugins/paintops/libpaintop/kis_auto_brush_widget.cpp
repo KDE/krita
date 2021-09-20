@@ -203,6 +203,12 @@ void KisAutoBrushWidget::drawBrushPreviewArea() {
     brushPreview->setIcon(QIcon(p));
 }
 
+void KisAutoBrushWidget::reset()
+{
+    KisMaskGenerator* mask = new KisCircleMaskGenerator(5,  1.0, 0.5, 0.5, 2, true);
+    this->setBrush(KisBrushSP(new KisAutoBrush(mask, 0, 0, 100)));
+}
+
 void KisAutoBrushWidget::setStackedWidget(int index)
 {
     if (index == 1) {
@@ -259,6 +265,11 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
         KisCubicCurve curve;
         curve.fromString(aBrush->maskGenerator()->curveString());
         softnessCurve->setCurve(curve);
+    } else {
+        KisCubicCurve topLeftBottomRightLinearCurve;
+        topLeftBottomRightLinearCurve.setPoint(0, QPointF(0.0, 1.0));
+        topLeftBottomRightLinearCurve.setPoint(1, QPointF(1.0, 0.0));
+        softnessCurve->setCurve(topLeftBottomRightLinearCurve);
     }
 
     btnAntialiasing->setChecked(aBrush->maskGenerator()->antialiasEdges());

@@ -209,30 +209,33 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         gc.restore();
     }
 
+    QTransform initialTransform = converter->documentToWidgetTransform();
+
+    // draw the local rectangle
+    if (assistantVisible && isLocal() && isAssistantComplete()) {
+        // limited area rectangle
+        QPainterPath path;
+        QPointF p1 = *handles()[(int)LocalFirstHandle];
+        QPointF p3 = *handles()[(int)LocalSecondHandle];
+        QPointF p2 = QPointF(p1.x(), p3.y());
+        QPointF p4 = QPointF(p3.x(), p1.y());
+
+        path.moveTo(initialTransform.map(p1));
+
+        path.lineTo(initialTransform.map(p2));
+        path.lineTo(initialTransform.map(p3));
+        path.lineTo(initialTransform.map(p4));
+        path.lineTo(initialTransform.map(p1));
+        drawPath(gc, path, isSnappingActive());//and we draw the rectangle
+    }
+
 
     // draw references guide for vanishing points at specified density
     // this is shown as part of the preview, so don't show if preview is off
     if ( (assistantVisible && canvas->paintingAssistantsDecoration()->outlineVisibility()) && this->isSnappingActive() ) {
 
         // cycle through degrees from 0 to 180. We are doing an infinite line, so we don't need to go 360
-        QTransform initialTransform = converter->documentToWidgetTransform();
         QPointF p0 = initialTransform.map(*handles()[0]); // main vanishing point
-
-        if (isLocal() && isAssistantComplete()) {
-            QPainterPath path;
-            QPointF p1 = *handles()[(int)LocalFirstHandle];
-            QPointF p3 = *handles()[(int)LocalSecondHandle];
-            QPointF p2 = QPointF(p1.x(), p3.y());
-            QPointF p4 = QPointF(p3.x(), p1.y());
-
-            path.moveTo(initialTransform.map(p1));
-
-            path.lineTo(initialTransform.map(p2));
-            path.lineTo(initialTransform.map(p3));
-            path.lineTo(initialTransform.map(p4));
-            path.lineTo(initialTransform.map(p1));
-            drawPreview(gc, path);//and we draw the preview.
-        }
 
         for (int currentAngle=0; currentAngle <= 180; currentAngle = currentAngle + m_referenceLineDensity ) {
 

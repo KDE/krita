@@ -133,7 +133,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 
 
 
-    if (isLocal() && isAssistantComplete()) {
+    if (assistantVisible && isLocal() && isAssistantComplete()) {
         QPainterPath path;
         // note: be careful; bottom and right only work with RectF, not Rect
         path.moveTo(initialTransform.map(local.topLeft()));
@@ -142,7 +142,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         path.lineTo(initialTransform.map(local.bottomRight()));
         path.lineTo(initialTransform.map(local.bottomLeft()));
         path.lineTo(initialTransform.map(local.topLeft()));
-        drawPreview(gc, path);//and we draw the preview.
+        drawPath(gc, path, isSnappingActive());//and we draw the preview.
     }
 
 

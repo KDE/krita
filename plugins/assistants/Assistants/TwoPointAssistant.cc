@@ -271,6 +271,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 
 
         QPainterPath path;
+        QPainterPath previewPath; // part of the preview, instead of the assistant itself
 
         // draw the horizon
         if (assistantVisible == true || isEditing == true) {
@@ -288,10 +289,10 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
             KisAlgebra2D::cropLineToConvexPolygon(snapMouse1, viewportAndLocalPoly, false, true);
             KisAlgebra2D::cropLineToConvexPolygon(snapMouse2, viewportAndLocalPoly, false, true);
-            path.moveTo(snapMouse1.p1());
-            path.lineTo(snapMouse1.p2());
-            path.moveTo(snapMouse2.p1());
-            path.lineTo(snapMouse2.p2());
+            previewPath.moveTo(snapMouse1.p1());
+            previewPath.lineTo(snapMouse1.p2());
+            previewPath.moveTo(snapMouse2.p1());
+            previewPath.lineTo(snapMouse2.p2());
         }
 
         // draw the side handle bars
@@ -311,7 +312,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
         }
 
         // draw the local rectangle
-        if (showLocal) {
+        if (showLocal && assistantVisible) {
             QPointF p1 = *handles()[(int)LocalFirstHandle];
             QPointF p3 = *handles()[(int)LocalSecondHandle];
             QPointF p2 = QPointF(p1.x(), p3.y());
@@ -326,7 +327,8 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
         }
 
 
-        drawPreview(gc,path);
+        drawPreview(gc,previewPath);
+        drawPath(gc, path, isSnappingActive());
 
         if (handles().size() >= 3 && isSnappingActive()) {
             path = QPainterPath(); // clear
@@ -407,7 +409,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
                             QLineF drawn_gridline = initialTransform.map(inv.map(gridline));
                             KisAlgebra2D::cropLineToConvexPolygon(drawn_gridline, viewportAndLocalPoly, true, false);
 
-                            if (previewVisible || isEditing == true) {
+                            if (assistantVisible || isEditing == true) {
                                 path.moveTo(drawn_gridline.p2());
                                 path.lineTo(drawn_gridline.p1());
                             }

@@ -92,7 +92,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
             KisHandlePainterHelper helper =
-                    KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
 
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 

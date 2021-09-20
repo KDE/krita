@@ -95,7 +95,7 @@ public:
     void setImage(QImage);
     void reloadImage();
 
-    bool cropEnabled();
+    bool crop();
     QRectF cropRect();
     void scaleCropRect(qreal scaleX, qreal scaleY);
 

@@ -475,48 +475,71 @@ QRectF ToolReferenceImagesWidget::cropRect()
 
 void ToolReferenceImagesWidget::slotMirrorChanged()
 {
-    KisReferenceImage *ref= d->tool->activeReferenceImage();
-    if (ref) {
-        ref->setPinMirror(d->ui->chkPinMirror->isChecked());
+    KoSelection *selection = d->tool->koSelection();
+    if (!selection) return;
+
+    Q_FOREACH (KoShape *shape , selection->selectedShapes()) {
+        KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
+        if (ref) {
+            ref->setPinMirror(d->ui->chkPinMirror->isChecked());
+        }
     }
 }
 
 void ToolReferenceImagesWidget::slotPositionChanged()
 {
-    KisReferenceImage *ref= d->tool->activeReferenceImage();
-    if (ref) {
-        ref->setPinPosition(d->ui->chkPinPos->isChecked());
-    }
-}
+    KoSelection *selection = d->tool->koSelection();
+    if (!selection) return;
+
+    Q_FOREACH (KoShape *shape , selection->selectedShapes()) {
+        KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
+        if (ref) {
+            ref->setPinPosition(d->ui->chkPinPos->isChecked());
+        }
+    }}
 
 void ToolReferenceImagesWidget::slotRotateChanged()
 {
-    KisReferenceImage *ref= d->tool->activeReferenceImage();
-    if (ref) {
-        ref->setPinRotate(d->ui->chkPinRotate->isChecked());
+    KoSelection *selection = d->tool->koSelection();
+    if (!selection) return;
+
+    Q_FOREACH (KoShape *shape , selection->selectedShapes()) {
+        KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
+        if (ref) {
+            ref->setPinRotate(d->ui->chkPinRotate->isChecked());
+        }
     }
 }
 
 void ToolReferenceImagesWidget::slotZoomChanged()
 {
-    KisReferenceImage *ref= d->tool->activeReferenceImage();
-    if (ref) {
-        ref->setPinZoom(d->ui->chkPinZoom->isChecked());
+    KoSelection *selection = d->tool->koSelection();
+    if (!selection) return;
+
+    Q_FOREACH (KoShape *shape , selection->selectedShapes()) {
+        KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
+        if (ref) {
+            ref->setPinZoom(d->ui->chkPinZoom->isChecked());
+        }
     }
 }
 
 void ToolReferenceImagesWidget::slotPinAllChanged()
 {
-    KisReferenceImage *ref= d->tool->activeReferenceImage();
-    if (ref) {
-        bool pinAll = d->ui->chkPinAll->isChecked();
-        ref->setPinAll(pinAll);
+    KoSelection *selection = d->tool->koSelection();
+    if (!selection) return;
 
-        d->ui->chkPinMirror->setChecked(pinAll);
-        d->ui->chkPinZoom->setChecked(pinAll);
-        d->ui->chkPinPos->setChecked(pinAll);
-        d->ui->chkPinRotate->setChecked(pinAll);
+    Q_FOREACH (KoShape *shape , selection->selectedShapes()) {
+        KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
+        if (ref) {
+            ref->setPinAll(d->ui->chkPinAll->isChecked());
+        }
     }
+
+    d->ui->chkPinMirror->setChecked(d->ui->chkPinAll->isChecked());
+    d->ui->chkPinZoom->setChecked(d->ui->chkPinAll->isChecked());
+    d->ui->chkPinPos->setChecked(d->ui->chkPinAll->isChecked());
+    d->ui->chkPinRotate->setChecked(d->ui->chkPinAll->isChecked());
 }
 
 void ToolReferenceImagesWidget::slotCancelCrop()

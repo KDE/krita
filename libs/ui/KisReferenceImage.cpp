@@ -516,7 +516,7 @@ KoShape *KisReferenceImage::cloneShape() const
     return new KisReferenceImage(*this);
 }
 
-bool KisReferenceImage::cropEnabled()
+bool KisReferenceImage::crop()
 {
     return d->crop;
 }

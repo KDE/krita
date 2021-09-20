@@ -56,7 +56,7 @@ void KisReferenceImageSelectionDecorator::paint(QPainter &gc)
     if (selectedShapes.size() == 1) {
         referenceImage = dynamic_cast<KisReferenceImage*>(selectedShapes.at(0));
     }
-    if (referenceImage && referenceImage->cropEnabled()) {
+    if (referenceImage && referenceImage->crop()) {
         QRectF cropBorderRect = referenceImage->cropRect();
         QTransform transform = referenceImage->absoluteTransformation();
         QPolygonF shapeBounds = transform.map(QPolygonF(referenceImage->outlineRect()));

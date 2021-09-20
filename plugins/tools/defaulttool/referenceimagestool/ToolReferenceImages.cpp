@@ -79,7 +79,7 @@ void ToolReferenceImages::mousePressEvent(KoPointerEvent *event)
         QPointF newPos = event->pos();
         KoPointerEvent *newEvent = new KoPointerEvent(event, newPos);
 
-        if (activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
+        if (activeReferenceImage() && activeReferenceImage()->crop()) {
             KoInteractionTool::mousePressEvent(newEvent);
             updateCursor();
             return;
@@ -99,7 +99,7 @@ void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
         QPointF newPos = event->pos();
         KoPointerEvent *newEvent = new KoPointerEvent(event, QPointF(newPos));
 
-        if (referenceImage && referenceImage->cropEnabled()) {
+        if (referenceImage && referenceImage->crop()) {
             KoInteractionTool::mouseMoveEvent(newEvent);
             if(currentStrategy() == 0) {
             QRectF bounds = handlesSize();
@@ -218,7 +218,7 @@ void ToolReferenceImages::recalcCropHandles(KisReferenceImage *referenceImage)
 
     QTransform matrix;
     QPolygonF poly;
-    if (referenceImage->cropEnabled()) {
+    if (referenceImage->crop()) {
         poly = QPolygonF(referenceImage->cropRect());
         matrix = activeReferenceImage()->absoluteTransformation();
     }
@@ -245,7 +245,7 @@ void ToolReferenceImages::updateCursor()
 
     QCursor cursor = Qt::ArrowCursor;
 
-    if(!activeReferenceImage() && activeReferenceImage()->cropEnabled()) return;
+    if(!activeReferenceImage() && activeReferenceImage()->crop()) return;
     if (m_mouseWasInsideHandles) {
 
             switch (m_lastHandle) {
@@ -284,7 +284,7 @@ void ToolReferenceImages::updateCursor()
 }
 KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event)
 {
-    if (activeReferenceImage() && activeReferenceImage()->cropEnabled()) {
+    if (activeReferenceImage() && activeReferenceImage()->crop()) {
         bool insideSelection = false;
         KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
         if(insideSelection) {

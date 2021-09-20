@@ -933,27 +933,39 @@ void KisCanvas2::slotDoCanvasUpdate()
         emit updateCanvasRequested(m_d->savedUpdateRect);
 
         if (wrapAroundViewingMode()) {
-            const QRectF rc = m_d->savedUpdateRect;
             const QRectF widgetRect = m_d->canvasWidget->widget()->rect();
-            const QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
+            const QRectF imageRect = m_d->coordinatesConverter->imageRectInImagePixels();
 
-            const qreal relX = KisAlgebra2D::wrapValue(rc.x() - imageRect.x(), imageRect.width());
-            const qreal relY = KisAlgebra2D::wrapValue(rc.y() - imageRect.y(), imageRect.height());
+            QVector<QRect> updateRects;
+            QRectF rc = m_d->coordinatesConverter->widgetToImage(m_d->savedUpdateRect);
 
-            const qreal baseX = std::fmod(imageRect.right(), imageRect.width()) - imageRect.width();
-            const qreal baseY = std::fmod(imageRect.bottom(), imageRect.height()) - imageRect.height();
+            auto iterateThroughRects =
+                [&] (const QPointF &offset) {
 
-            for (qreal y = baseY; y < widgetRect.bottom(); y += imageRect.height()) {
-                for (qreal x = baseX; x < widgetRect.right(); x += imageRect.width()) {
-                    const QRectF proposedUpdateRect(x + relX, y + relY,
-                                                    rc.width(), rc.height());
+                    while (1) {
+                        rc.translate(offset);
+                        QRectF widgetRc = m_d->coordinatesConverter->imageToWidget(rc);
 
-                    const QRect updateRect = (proposedUpdateRect & widgetRect).toAlignedRect();
-                    if (!updateRect.isEmpty()) {
-                        m_d->canvasWidget->widget()->update(updateRect);
+                        widgetRc &= widgetRect;
+
+                        if (widgetRc.isEmpty()) {
+                            break;
+                        } else {
+                            updateRects.append(widgetRc.toAlignedRect());
+                        }
                     }
-                }
+                };
+
+            updateRects << m_d->savedUpdateRect;
+            iterateThroughRects(QPointF(imageRect.width(), 0));
+            iterateThroughRects(QPointF(-imageRect.width(), 0));
+            iterateThroughRects(QPointF(0, imageRect.height()));
+            iterateThroughRects(QPointF(0, -imageRect.height()));
+
+            Q_FOREACH(const QRect &rc, updateRects) {
+                m_d->canvasWidget->widget()->update(rc);
             }
+
         } else {
             m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
         }

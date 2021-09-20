@@ -43,7 +43,11 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     auto schemeFileLocations = KShortcutSchemesHelper::schemeFileLocations();
     schemes << schemeFileLocations.keys();
 
-    const QString currentScheme = group.readEntry("Current Scheme", "Default");
+    QString currentScheme = group.readEntry("Current Scheme", "Default");
+    QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(currentScheme);
+    if (!QFileInfo(schemeFileName).exists()) {
+        currentScheme = "Default";
+    }
     setMargin(0);
 
     QLabel *schemesLabel = new QLabel(i18n("Shortcut Schemes:"), m_dialog);

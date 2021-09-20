@@ -99,6 +99,8 @@ public:
 
     static bool supportsBufferMapping();
 
+    static bool useTextureBufferInvalidation();
+
     /**
      * @brief supportsRenderToFBO
      * @return True if OpenGL can render to FBO, used
@@ -120,6 +122,8 @@ public:
 
     static void testingInitializeDefaultSurfaceFormat();
     static void setDebugSynchronous(bool value);
+
+    static void glInvalidateBufferData(uint buffer);
 
 private:
     static void fakeInitWindowsOpenGL(KisOpenGL::OpenGLRenderers supportedRenderers, KisOpenGL::OpenGLRenderer preferredByQt);

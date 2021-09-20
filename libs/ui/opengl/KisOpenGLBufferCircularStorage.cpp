@@ -7,7 +7,7 @@
 #include "KisOpenGLBufferCircularStorage.h"
 
 #include "kis_assert.h"
-#include <QVector>
+#include "kis_opengl.h"
 
 
 KisOpenGLBufferCircularStorage::BufferBinder::BufferBinder(KisOpenGLBufferCircularStorage *bufferStorage, const void **dataPtr, int dataSize) {
@@ -23,6 +23,10 @@ KisOpenGLBufferCircularStorage::BufferBinder::BufferBinder(KisOpenGLBufferCircul
 KisOpenGLBufferCircularStorage::BufferBinder::~BufferBinder() {
     if (m_buffer) {
         m_buffer->release();
+
+        if (KisOpenGL::useTextureBufferInvalidation()) {
+            KisOpenGL::glInvalidateBufferData(m_buffer->bufferId());
+        }
     }
 }
 

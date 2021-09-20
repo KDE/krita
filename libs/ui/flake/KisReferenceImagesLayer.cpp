@@ -298,9 +298,10 @@ void KisReferenceImagesLayer::updateTransformations(KisCanvas2 *kisCanvas)
         if (referenceImage) {
             rotateSelection &= (!referenceImage->pinRotate());
             mirrorSelection &= (!referenceImage->pinMirror());
-            angle =  referenceImage->addCanvasTransformation(kisCanvas);
+            angle =  referenceImage->addCanvasTransformation(kisCanvas, m_blockUpdate);
         }
     }
+    m_blockUpdate = false;
 
     if (shapeManager()) {
         KoSelection *selection = shapeManager()->selection();
@@ -321,4 +322,11 @@ void KisReferenceImagesLayer::updateTransformations(KisCanvas2 *kisCanvas)
         }
     }
     emit sigCropChanged();
+}
+
+void KisReferenceImagesLayer::shapeChanged(ChangeType type, KoShape *shape)
+{
+    if (type == GenericMatrixChange) {
+        m_blockUpdate = true;
+    }
 }

@@ -28,6 +28,8 @@ public:
     KUndo2Command * removeReferenceImagesCommand(KisDocument *document, QList<KoShape*> referenceImages);
     QVector<KisReferenceImage*> referenceImages() const;
 
+    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
+
     QRectF boundingImageRect() const;
     QColor getPixel(QPointF position) const;
 
@@ -72,6 +74,7 @@ private:
     friend class ReferenceImagesCanvas;
 
     QTransform m_docToWidget = QTransform();
+    bool m_blockUpdate = false;
 };
 
 typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;

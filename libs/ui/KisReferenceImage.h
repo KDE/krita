@@ -101,7 +101,7 @@ public:
 
     void setCrop(bool, QRectF);
     void setCropRect(QRectF);
-    qreal addCanvasTransformation(KisCanvas2 *kisCanvas);
+    qreal addCanvasTransformation(KisCanvas2 *kisCanvas, bool block = false);
 
     bool pinRotate();
     void setPinRotate(bool);

@@ -617,50 +617,52 @@ void KisReferenceImage::setPinAll(bool value)
     d->pinAll = value;
 }
 
-qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas)
+qreal KisReferenceImage::addCanvasTransformation(KisCanvas2 *kisCanvas, bool block)
 {
     qreal diffRotate = 0;
-    if (!qFuzzyCompare(kisCanvas->viewConverter()->zoom(), d->zoom)) {
-        if (!d->pinZoom) {
+    if (!block) {
+        if (!qFuzzyCompare(kisCanvas->viewConverter()->zoom(), d->zoom)) {
+            if (!d->pinZoom) {
 
-            qreal diff = kisCanvas->viewConverter()->zoom()- d->zoom;
-            qreal scale = (d->zoom + diff)/d->zoom;
-            scaleCropRect(scale, scale);
-            KoFlake::resizeShapeCommon(this, scale , scale,
-                                       absolutePosition(KoFlake::TopLeft), false ,false ,this->transformation());
-            d->zoom = kisCanvas->viewConverter()->zoom();
+                qreal diff = kisCanvas->viewConverter()->zoom()- d->zoom;
+                qreal scale = (d->zoom + diff)/d->zoom;
+                scaleCropRect(scale, scale);
+                KoFlake::resizeShapeCommon(this, scale , scale,
+                                           absolutePosition(KoFlake::TopLeft), false ,false ,this->transformation());
+                d->zoom = kisCanvas->viewConverter()->zoom();
 
-            QPointF newPos = kisCanvas->coordinatesConverter()->documentToWidget(d->absPos);
-            setAbsolutePosition(newPos, KoFlake::TopLeft);
+                QPointF newPos = kisCanvas->coordinatesConverter()->documentToWidget(d->absPos);
+                setAbsolutePosition(newPos, KoFlake::TopLeft);
+            }
+            d->docOffset = kisCanvas->documentOffset();
         }
-        d->docOffset = kisCanvas->documentOffset();
-    }
 
-    if (d->mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored()
-                || d->mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored()) {
-        if (!d->pinMirror) {
-            qreal scaleX = d->mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored() ? -1 : 1;
-            qreal scaleY = d->mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored() ? -1 : 1;
-            scale(scaleX, scaleY);
-        }
-        d->docOffset = kisCanvas->documentOffset();
-        diffRotate = kisCanvas->rotationAngle() - d->previousAngle;
-        d->previousAngle = kisCanvas->rotationAngle();
-    }
-
-    if (d->previousAngle != kisCanvas->rotationAngle()) {
-        if (!d->pinRotate) {
+        if (d->mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored()
+                    || d->mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored()) {
+            if (!d->pinMirror) {
+                qreal scaleX = d->mirrorX != kisCanvas->coordinatesConverter()->xAxisMirrored() ? -1 : 1;
+                qreal scaleY = d->mirrorY != kisCanvas->coordinatesConverter()->yAxisMirrored() ? -1 : 1;
+                scale(scaleX, scaleY);
+            }
+            d->docOffset = kisCanvas->documentOffset();
             diffRotate = kisCanvas->rotationAngle() - d->previousAngle;
-            rotate(diffRotate);
+            d->previousAngle = kisCanvas->rotationAngle();
         }
-        d->docOffset = kisCanvas->documentOffset();
-    }
 
-    if (kisCanvas->documentOffset() != d->docOffset) {
-        if (!d->pinPosition) {
-            QPointF diff = kisCanvas->documentOffset() - d->docOffset;
-            QPointF pos = absolutePosition(KoFlake::TopLeft) - diff;
-            setAbsolutePosition(pos, KoFlake::TopLeft);
+        if (d->previousAngle != kisCanvas->rotationAngle()) {
+            if (!d->pinRotate) {
+                diffRotate = kisCanvas->rotationAngle() - d->previousAngle;
+                rotate(diffRotate);
+            }
+            d->docOffset = kisCanvas->documentOffset();
+        }
+
+        if (kisCanvas->documentOffset() != d->docOffset) {
+            if (!d->pinPosition) {
+                QPointF diff = kisCanvas->documentOffset() - d->docOffset;
+                QPointF pos = absolutePosition(KoFlake::TopLeft) - diff;
+                setAbsolutePosition(pos, KoFlake::TopLeft);
+            }
         }
     }
 

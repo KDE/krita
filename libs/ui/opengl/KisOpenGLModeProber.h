@@ -110,6 +110,10 @@ public:
         return m_supportsBufferMapping;
     }
 
+    bool supportsBufferInvalidation() const {
+        return m_supportsBufferInvalidation;
+    }
+
 #ifdef Q_OS_WIN
     // This is only for detecting whether ANGLE is being used.
     // For detecting generic OpenGL ES please check isOpenGLES
@@ -140,6 +144,7 @@ private:
     bool m_isOpenGLES = false;
     bool m_supportsFBO = false;
     bool m_supportsBufferMapping = false;
+    bool m_supportsBufferInvalidation = false;
     QString m_rendererString;
     QString m_driverVersionString;
     QString m_vendorString;

@@ -325,4 +325,7 @@ KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {
             context.hasExtension("GL_OES_mapbuffer") ||
             context.hasExtension("GL_EXT_map_buffer_range");
 
+    m_supportsBufferInvalidation = !m_isOpenGLES &&
+            ((m_glMajorVersion >= 4 && m_glMinorVersion >= 3) ||
+             context.hasExtension("GL_ARB_invalidate_subdata"));
 }

@@ -39,6 +39,8 @@
 #  define GL_RENDERER 0x1F01
 #endif
 
+typedef void (APIENTRYP PFNGLINVALIDATEBUFFERDATAPROC) (GLuint buffer);
+
 using namespace KisOpenGLPrivate;
 
 namespace
@@ -59,6 +61,9 @@ namespace
     QVector<KLocalizedString> g_openglWarningStrings;
     KisOpenGL::OpenGLRenderers g_supportedRenderers;
     KisOpenGL::OpenGLRenderer g_rendererPreferredByQt;
+
+    bool g_useBufferInvalidation = false;
+    PFNGLINVALIDATEBUFFERDATAPROC g_glInvalidateBufferData = nullptr;
 
     void overrideSupportedRenderers(KisOpenGL::OpenGLRenderers supportedRenderers, KisOpenGL::OpenGLRenderer preferredByQt) {
         g_supportedRenderers = supportedRenderers;
@@ -143,6 +148,8 @@ void KisOpenGL::initialize()
         debugOut.resetFormat();
         debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
         debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
+        debugOut << "\n  supportsBufferMapping:" << openGLCheckResult->supportsBufferMapping();
+        debugOut << "\n  supportsBufferInvalidation:" << openGLCheckResult->supportsBufferInvalidation();
     }
 
     debugOut << "\n\nQPA OpenGL Detection Info";
@@ -154,6 +161,8 @@ void KisOpenGL::initialize()
     debugOut << "\n  supportsOpenGLES:" << bool(g_supportedRenderers & RendererOpenGLES);
     debugOut << "\n  isQtPreferOpenGLES:" << bool(g_rendererPreferredByQt == RendererOpenGLES);
 #endif
+
+
 //    debugOut << "\n== log ==\n";
 //    debugOut.noquote();
 //    debugOut << g_surfaceFormatDetectionLog;
@@ -175,6 +184,10 @@ void KisOpenGL::initialize()
 #endif
 
     KisConfig cfg(true);
+
+    g_useBufferInvalidation = cfg.readEntry("useBufferInvalidation", false);
+    KisUsageLogger::writeSysInfo(QString("\nuseBufferInvalidation (config option): %1\n").arg(g_useBufferInvalidation ? "true" : "false"));
+
     if ((isOnX11 && openGLCheckResult->rendererString().startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         g_needsFenceWorkaround = true;
     }
@@ -237,6 +250,11 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     QSurfaceFormat format = ctx->format();
     QOpenGLFunctions *f = ctx->functions();
     f->initializeOpenGLFunctions();
+
+    if (openGLCheckResult->supportsBufferInvalidation()) {
+        QOpenGLContext *ctx = QOpenGLContext::currentContext();
+        g_glInvalidateBufferData = (PFNGLINVALIDATEBUFFERDATAPROC)ctx->getProcAddress("glInvalidateBufferData");
+    }
 
     QFile log(QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/krita-opengl.txt");
     log.open(QFile::WriteOnly);
@@ -304,6 +322,13 @@ bool KisOpenGL::supportsBufferMapping()
     return openGLCheckResult && openGLCheckResult->supportsBufferMapping();
 }
 
+bool KisOpenGL::useTextureBufferInvalidation()
+{
+    initialize();
+    return g_useBufferInvalidation &&
+        openGLCheckResult && openGLCheckResult->supportsBufferInvalidation();
+}
+
 bool KisOpenGL::useFBOForToolOutlineRendering()
 {
     initialize();
@@ -330,6 +355,11 @@ void KisOpenGL::testingInitializeDefaultSurfaceFormat()
 void KisOpenGL::setDebugSynchronous(bool value)
 {
     g_isDebugSynchronous = value;
+}
+
+void KisOpenGL::glInvalidateBufferData(uint buffer)
+{
+    g_glInvalidateBufferData(buffer);
 }
 
 KisOpenGL::OpenGLRenderer KisOpenGL::getCurrentOpenGLRenderer()

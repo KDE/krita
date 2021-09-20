@@ -350,7 +350,7 @@ void KisCanvasControlsManager::stepFade(float step)
     fade = qBound<qreal>(0.0, fade, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Fade, fade);
 
-    m_view->showFloatingMessage(i18nc("Edge softness, Brush Option Fade", "%1 %2", QString("Fade:"), QString::number(fade, 'f', 2)),
+    m_view->showFloatingMessage(i18nc("Edge softness, Brush Option Fade", "%1 %2", QString("Fade:"), fade),
                                 QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 

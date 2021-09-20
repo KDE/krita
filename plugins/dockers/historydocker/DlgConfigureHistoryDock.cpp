@@ -55,7 +55,7 @@ DlgConfigureHistoryDock::DlgConfigureHistoryDock(KisUndoView *view, KUndo2QStack
     form->addRow(l2, s2);
     s2->setEnabled(chkCumulative->isChecked());
     connect(chkCumulative, SIGNAL(toggled(bool)), s2, SLOT(setEnabled(bool)));
-    connect(s2,SIGNAL(valueChanged(int)),SLOT(view(int)));
+    connect(s2, SIGNAL(valueChanged(int)), view, SLOT(setStackN(int)));
 
     setMainWidget(page);
 }

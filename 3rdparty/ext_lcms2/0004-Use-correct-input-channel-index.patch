@@ -1,0 +1,50 @@
+From 489a804e649600577ca7c16c9e488ea8c7b25731 Mon Sep 17 00:00:00 2001
+From: Lynx3d <151539+Lynx3d@users.noreply.github.com>
+Date: Mon, 20 Sep 2021 16:01:19 +0200
+Subject: [PATCH] Use correct input channel index
+
+---
+ plugins/fast_float/src/fast_16_tethra.c    | 2 +-
+ plugins/fast_float/src/fast_8_tethra.c     | 2 +-
+ plugins/fast_float/src/fast_float_tethra.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/plugins/fast_float/src/fast_16_tethra.c b/plugins/fast_float/src/fast_16_tethra.c
+index 846eaf6..9fa7af4 100644
+--- a/plugins/fast_float/src/fast_16_tethra.c
++++ b/plugins/fast_float/src/fast_16_tethra.c
+@@ -293,7 +293,7 @@ void PerformanceEval16(struct _cmstransform_struct *CMMcargo,
+                   {
+                       res16 = *(const cmsUInt16Number*)ain;
+                       TO_OUTPUT(out[OutChan], res16);
+-                      ain += SourceIncrements[TotalOut];
++                      ain += SourceIncrements[3];
+                       out[TotalOut] += DestIncrements[TotalOut];
+                   }
+ 
+diff --git a/plugins/fast_float/src/fast_8_tethra.c b/plugins/fast_float/src/fast_8_tethra.c
+index 76091d4..3302e01 100644
+--- a/plugins/fast_float/src/fast_8_tethra.c
++++ b/plugins/fast_float/src/fast_8_tethra.c
+@@ -253,7 +253,7 @@ void PerformanceEval8(struct _cmstransform_struct *CMMcargo,
+ 
+                      if (ain) {
+                          *out[TotalOut] = *ain;
+-                         ain += SourceIncrements[TotalOut];
++                         ain += SourceIncrements[3];
+                          out[TotalOut] += DestIncrements[TotalOut];
+                      }
+ 
+diff --git a/plugins/fast_float/src/fast_float_tethra.c b/plugins/fast_float/src/fast_float_tethra.c
+index d57eedd..8f95a6d 100644
+--- a/plugins/fast_float/src/fast_float_tethra.c
++++ b/plugins/fast_float/src/fast_float_tethra.c
+@@ -212,7 +212,7 @@ void FloatCLUTEval(struct _cmstransform_struct* CMMcargo,
+ 
+             if (ain) {
+                 *(cmsFloat32Number*)(out[TotalOut]) = *(cmsFloat32Number*)ain;
+-                ain += SourceIncrements[TotalOut];
++                ain += SourceIncrements[3];
+                 out[TotalOut] += DestIncrements[TotalOut];
+             }
+         }

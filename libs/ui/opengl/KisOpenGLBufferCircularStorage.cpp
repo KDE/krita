@@ -30,6 +30,7 @@ KisOpenGLBufferCircularStorage::BufferBinder::~BufferBinder() {
 struct KisOpenGLBufferCircularStorage::Private
 {
     int nextBuffer = 0;
+    int bufferSize = 0;
     QOpenGLBuffer::Type type = QOpenGLBuffer::QOpenGLBuffer::VertexBuffer;
     std::vector<QOpenGLBuffer> buffers;
 };
@@ -88,19 +89,23 @@ void KisOpenGLBufferCircularStorage::allocateMoreBuffers(int numBuffers)
     std::rotate(m_d->buffers.begin(), m_d->buffers.begin() + m_d->nextBuffer, m_d->buffers.end());
 
     m_d->nextBuffer = m_d->buffers.size();
-    addBuffersImpl(numBuffers - m_d->buffers.size(), m_d->buffers[0].size());
+    addBuffersImpl(numBuffers - m_d->buffers.size(), m_d->bufferSize);
 }
 
 void KisOpenGLBufferCircularStorage::addBuffersImpl(int buffersToAdd, int bufferSize)
 {
+    m_d->bufferSize = bufferSize;
     m_d->buffers.reserve(m_d->buffers.size() + buffersToAdd);
 
     for (int i = 0; i < buffersToAdd; i++) {
         m_d->buffers.emplace_back(m_d->type);
-        m_d->buffers[i].create();
-        m_d->buffers[i].setUsagePattern(QOpenGLBuffer::DynamicDraw);
-        m_d->buffers[i].bind();
-        m_d->buffers[i].allocate(bufferSize);
-        m_d->buffers[i].release();
+
+        QOpenGLBuffer &buf = m_d->buffers.back();
+
+        buf.create();
+        buf.setUsagePattern(QOpenGLBuffer::DynamicDraw);
+        buf.bind();
+        buf.allocate(bufferSize);
+        buf.release();
     }
 }

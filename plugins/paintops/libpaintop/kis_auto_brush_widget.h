@@ -48,6 +48,8 @@ public:
 
     void drawBrushPreviewArea();
 
+    void reset();
+
 private Q_SLOTS:
     void paramChanged();
     void setStackedWidget(int);

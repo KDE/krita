@@ -118,10 +118,12 @@ void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
     else if (dynamic_cast<KisTextBrush*>(brush.data())) {
         setCurrentWidget(m_textBrushWidget);
         m_textBrushWidget->setBrush(brush);
+        m_autoBrushWidget->reset();
     }
     else {
         setCurrentWidget(m_predefinedBrushWidget);
         m_predefinedBrushWidget->setBrush(brush);
+        m_autoBrushWidget->reset();
     }
 
 }

@@ -154,7 +154,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
             QLineF snapLine= QLineF(startPoint, mousePos);
 
-            KisAlgebra2D::intersectLineConvexPolygon(snapLine, viewportAndLocalPoly, false, true);
+            KisAlgebra2D::cropLineToConvexPolygon(snapLine, viewportAndLocalPoly, false, true);
 
             QPainterPath path;
 

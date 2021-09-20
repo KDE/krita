@@ -288,9 +288,9 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
             KisAlgebra2D::cropLineToConvexPolygon(snapMouse1, viewportAndLocalPoly, false, true);
             KisAlgebra2D::cropLineToConvexPolygon(snapMouse2, viewportAndLocalPoly, false, true);
-            path.moveTo(initialTransform.map(p1));
+            path.moveTo(snapMouse1.p1());
             path.lineTo(snapMouse1.p2());
-            path.moveTo(initialTransform.map(p2));
+            path.moveTo(snapMouse2.p1());
             path.lineTo(snapMouse2.p2());
         }
 

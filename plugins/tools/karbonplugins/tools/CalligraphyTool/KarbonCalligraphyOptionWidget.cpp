@@ -325,9 +325,6 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect(m_thinningBox, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
 
-    connect(m_angleBox, SIGNAL(valueChanged(int)),
-            SLOT(updateCurrentProfile()));
-
     connect(m_fixationBox, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
 

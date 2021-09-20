@@ -224,7 +224,8 @@ void KisActionRegistry::loadShortcutScheme(const QString &schemeName)
     // Load scheme file
     if (schemeName != QStringLiteral("Default")) {
         QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
-        if (schemeFileName.isEmpty()) {
+        if (schemeFileName.isEmpty() || !QFileInfo(schemeFileName).exists()) {
+            applyShortcutScheme();
             return;
         }
         KConfig schemeConfig(schemeFileName, KConfig::SimpleConfig);

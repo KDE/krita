@@ -15,7 +15,7 @@
 #include "KisMainWindow.h"
 #include "KisViewManager.h"
 #include "kis_transform_utils.h"
-
+#include "kis_config_notifier.h"
 #include <kstandardguiitem.h>
 
 
@@ -34,6 +34,23 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
       m_configChanged(false)
 {
     setupUi(this);
+
+    KConfigGroup group = KSharedConfig::openConfig()->group("KisToolTransform");
+    bool useInStackPreview = !group.readEntry("useOverlayPreviewStyle", false);
+    bool forceLodMode = group.readEntry("forceLodMode", true);
+
+    if (useInStackPreview && !forceLodMode) {
+       cmbPreviewMode->setCurrentIndex(0);
+    }
+    else if (useInStackPreview && forceLodMode) {
+        cmbPreviewMode->setCurrentIndex(1);
+    }
+    else {
+        cmbPreviewMode->setCurrentIndex(2);
+    }
+
+    connect(cmbPreviewMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPreviewChanged(int)));
+
     flipXButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
     flipYButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_y"));
     rotateCWButton->setIcon(KisIconUtils::loadIcon("transform_icons_rotate_cw"));
@@ -1320,4 +1337,22 @@ void KisToolTransformConfigWidget::slotMeshScaleHandlesChanged()
     config->setMeshScaleHandles(this->chkScaleHandles->isChecked());
     notifyConfigChanged();
     notifyEditingFinished();
+}
+
+void KisToolTransformConfigWidget::slotPreviewChanged(int index)
+{
+    KConfigGroup group = KSharedConfig::openConfig()->group("KisToolTransform");
+    switch(index) {
+    case 0:
+        group.writeEntry("useOverlayPreviewStyle", false);
+        group.writeEntry("forceLodMode", false);
+        break;
+    case 1:
+        group.writeEntry("useOverlayPreviewStyle", false);
+        group.writeEntry("forceLodMode", true);
+        break;
+    default:
+        group.writeEntry("useOverlayPreviewStyle", true);
+    }
+    KisConfigNotifier::instance()->notifyConfigChanged();
 }

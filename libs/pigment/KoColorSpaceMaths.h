@@ -162,6 +162,9 @@ inline int float2int(float x)
     // NOTE: we don't use rint() here, because on Windows
     //       it falls back to x87 instructions on Intel CPUs,
     //       which are executed extremely slowly
+    // NOTE2: we do always clamp value to 0...0xff range
+    //        before calling this function, so `x` cannot be
+    //        negative.
     return int(x + 0.5f);
 }
 
@@ -170,6 +173,9 @@ inline int float2int(double x)
     // NOTE: we don't use rint() here, because on Windows
     //       it falls back to x87 instructions on Intel CPUs,
     //       which are executed extremely slowly
+    // NOTE2: we do always clamp value to 0...0xff range
+    //        before calling this function, so `x` cannot be
+    //        negative.
     return int(x + 0.5);
 }
 

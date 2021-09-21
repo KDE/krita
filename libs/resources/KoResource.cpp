@@ -67,21 +67,26 @@ bool KoResource::load(KisResourcesInterfaceSP resourcesInterface)
     QFile file(filename());
 
     if (!file.exists()) {
-        warnKrita << "File doesn't exist: " << filename();
+        qWarning() << "Resource file doesn't exist: " << filename();
         return false;
     }
 
     if (file.size() == 0) {
-        warnKrita << "File is empty: " << filename();
+        qWarning() << "Resource file is empty: " << filename();
         return false;
     }
 
     if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file for reading" << filename();
+        qWarning() << "Cannot open resource file for reading" << filename();
         return false;
     }
 
     const bool res = loadFromDevice(&file, resourcesInterface);
+
+    if (!res) {
+        qWarning() << "Could not load resource file" << filename();
+    }
+
     file.close();
 
     return res;

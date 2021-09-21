@@ -1,8 +1,11 @@
-From 489a804e649600577ca7c16c9e488ea8c7b25731 Mon Sep 17 00:00:00 2001
+From 31ae54372927543017ea75b4e7cc9ba4a6d95876 Mon Sep 17 00:00:00 2001
 From: Lynx3d <151539+Lynx3d@users.noreply.github.com>
 Date: Mon, 20 Sep 2021 16:01:19 +0200
-Subject: [PATCH] Use correct input channel index
+Subject: [PATCH 4/5] Use correct input channel index
 
+This fixes a crash introduced with 83a7ba5584be3a5c526602005de0880feda23bcb
+
+Input channel count is always 3 here, while output channel count varies.
 ---
  plugins/fast_float/src/fast_16_tethra.c    | 2 +-
  plugins/fast_float/src/fast_8_tethra.c     | 2 +-
@@ -48,3 +51,6 @@ index d57eedd..8f95a6d 100644
                  out[TotalOut] += DestIncrements[TotalOut];
              }
          }
+-- 
+2.32.0.windows.2
+

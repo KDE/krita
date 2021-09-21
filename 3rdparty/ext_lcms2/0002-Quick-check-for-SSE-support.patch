@@ -1,7 +1,7 @@
-From f7c103e5c21a750c8560d7bc6fddb89d66a1188d Mon Sep 17 00:00:00 2001
+From 4b599afb9e8a880c5399f0a4d9581cf0eb66f391 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Fri, 19 Feb 2021 11:27:33 +0000
-Subject: [PATCH 2/4] Quick check for SSE support
+Subject: [PATCH 2/5] Quick check for SSE support
 
 ---
  src/CMakeLists.txt | 19 +++++++++++++++++++

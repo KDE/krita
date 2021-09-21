@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>505</width>
-    <height>446</height>
+    <width>509</width>
+    <height>490</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -632,14 +632,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -647,6 +642,11 @@
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -1,0 +1,120 @@
+From 1bac06d0ee5c12a53dc9191b91e56207e089f8ea Mon Sep 17 00:00:00 2001
+From: Joni Poikelin <joni.poikelin@qt.io>
+Date: Thu, 3 Jan 2019 11:52:15 +0200
+Subject: [PATCH 1/3] Add faster path for scaling QRegion with multiple regions
+
+Fixes: QTBUG-72821
+Change-Id: Ic4fa349087239337a77b0e280be551b46c75af71
+Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
+(cherry picked from commit 64fab8f7e2d225e37aa731db7501b5d5b82eab64)
+---
+ src/gui/painting/qtransform.cpp               | 19 ++++++-
+ .../auto/gui/painting/qregion/tst_qregion.cpp | 55 +++++++++++++++++++
+ 2 files changed, 72 insertions(+), 2 deletions(-)
+
+diff --git a/src/gui/painting/qtransform.cpp b/src/gui/painting/qtransform.cpp
+index 040d33fc2a..6354b154c5 100644
+--- a/src/gui/painting/qtransform.cpp
++++ b/src/gui/painting/qtransform.cpp
+@@ -1517,8 +1517,23 @@ QRegion QTransform::map(const QRegion &r) const
+         return copy;
+     }
+ 
+-    if (t == TxScale && r.rectCount() == 1)
+-        return QRegion(mapRect(r.boundingRect()));
++    if (t == TxScale) {
++        QRegion res;
++        if (m11() < 0 || m22() < 0) {
++            for (const QRect &rect : r)
++                res += mapRect(rect);
++        } else {
++            QVarLengthArray<QRect, 32> rects;
++            rects.reserve(r.rectCount());
++            for (const QRect &rect : r) {
++                QRect nr = mapRect(rect);
++                if (!nr.isEmpty())
++                    rects.append(nr);
++            }
++            res.setRects(rects.constData(), rects.count());
++        }
++        return res;
++    }
+ 
+     QPainterPath p = map(qt_regionToPath(r));
+     return p.toFillPolygon(QTransform()).toPolygon();
+diff --git a/tests/auto/gui/painting/qregion/tst_qregion.cpp b/tests/auto/gui/painting/qregion/tst_qregion.cpp
+index 5256fbd1dc..24c4583819 100644
+--- a/tests/auto/gui/painting/qregion/tst_qregion.cpp
++++ b/tests/auto/gui/painting/qregion/tst_qregion.cpp
+@@ -84,6 +84,8 @@ private slots:
+ #endif
+ 
+     void regionFromPath();
++    void scaleRegions_data();
++    void scaleRegions();
+ 
+ #ifdef QT_BUILD_INTERNAL
+     void regionToPath_data();
+@@ -973,6 +975,59 @@ void tst_QRegion::regionFromPath()
+     }
+ }
+ 
++void tst_QRegion::scaleRegions_data()
++{
++    QTest::addColumn<qreal>("scale");
++    QTest::addColumn<QVector<QRect>>("inputRects");
++    QTest::addColumn<QVector<QRect>>("expectedRects");
++
++    QTest::newRow("1.0 single")  << 1.0
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20) }
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20) };
++    QTest::newRow("1.0 multi")   << 1.0
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20), QRect(40, 10, 20, 20) }
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20), QRect(40, 10, 20, 20) };
++    QTest::newRow("2.0 single")  << 2.0
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20) }
++                                 << QVector<QRect>{ QRect(20, 20, 40, 40) };
++    QTest::newRow("2.0 multi")   << 2.0
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20), QRect(40, 10, 20, 20) }
++                                 << QVector<QRect>{ QRect(20, 20, 40, 40), QRect(80, 20, 40, 40) };
++    QTest::newRow("-1.0 single") << -1.0
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20) }
++                                 << QVector<QRect>{ QRect(-30, -30, 20, 20) };
++    QTest::newRow("-1.0 multi")  << -1.0
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20), QRect(40, 10, 20, 20) }
++                                 << QVector<QRect>{ QRect(-60, -30, 20, 20), QRect(-30, -30, 20, 20) };
++    QTest::newRow("-2.0 single") << -2.0
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20) }
++                                 << QVector<QRect>{ QRect(-60, -60, 40, 40) };
++    QTest::newRow("-2.0 multi")  << -2.0
++                                 << QVector<QRect>{ QRect(10, 10, 20, 20), QRect(40, 10, 20, 20) }
++                                 << QVector<QRect>{ QRect(-120, -60, 40, 40), QRect(-60, -60, 40, 40) };
++}
++
++void tst_QRegion::scaleRegions()
++{
++    QFETCH(qreal, scale);
++    QFETCH(QVector<QRect>, inputRects);
++    QFETCH(QVector<QRect>, expectedRects);
++
++    QRegion region;
++    region.setRects(inputRects.constData(), inputRects.size());
++
++    QRegion expected(expectedRects.first());
++    expected.setRects(expectedRects.constData(), expectedRects.size());
++
++    QTransform t;
++    t.scale(scale, scale);
++
++    auto result = t.map(region);
++
++    QCOMPARE(result.rectCount(), expectedRects.size());
++    QCOMPARE(result, expected);
++}
++
+ Q_DECLARE_METATYPE(QPainterPath)
+ 
+ #ifdef QT_BUILD_INTERNAL
+-- 
+2.24.1.windows.2
+

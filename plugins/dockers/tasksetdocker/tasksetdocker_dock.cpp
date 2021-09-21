@@ -62,13 +62,14 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
-        painter->setBrush(option.palette.highlightedText());
+        painter->setPen(option.palette.highlightedText().color());
     }
     else {
-        painter->setBrush(option.palette.text());
+        painter->setPen(option.palette.text().color());
     }
-
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, name);
+    int margin = option.rect.height() - painter->fontMetrics().height();
+    margin = floor(margin/2);
+    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + margin, name);
 }
 
 TasksetDockerDock::TasksetDockerDock( )

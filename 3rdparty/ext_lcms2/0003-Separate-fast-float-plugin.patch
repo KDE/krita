@@ -1,7 +1,7 @@
-From 1d27c212c29efcec41f16842b0c214ee2107612b Mon Sep 17 00:00:00 2001
+From eee8fdc9ac9469a10d5a24eab194ae89819323e9 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Thu, 25 Feb 2021 00:21:50 +0000
-Subject: [PATCH 3/4] Separate fast float plugin
+Subject: [PATCH 3/5] Separate fast float plugin
 
 ---
  CMakeLists.txt                    | 37 ++++++++++++++++++--

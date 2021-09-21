@@ -1,0 +1,43 @@
+From 699a72eaf47bfee522adc31e88f081e689729cdb Mon Sep 17 00:00:00 2001
+From: Lynx3d <151539+Lynx3d@users.noreply.github.com>
+Date: Tue, 21 Sep 2021 03:37:10 +0200
+Subject: [PATCH 5/5] Fix copy alpha for float CMYK and L*a*b*
+
+---
+ plugins/fast_float/src/fast_float_cmyk.c | 5 +++--
+ plugins/fast_float/src/fast_float_lab.c  | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/plugins/fast_float/src/fast_float_cmyk.c b/plugins/fast_float/src/fast_float_cmyk.c
+index a0a23de..0b68fad 100644
+--- a/plugins/fast_float/src/fast_float_cmyk.c
++++ b/plugins/fast_float/src/fast_float_cmyk.c
+@@ -304,8 +304,9 @@ void FloatCMYKCLUTEval(struct _cmstransform_struct *CMMcargo,
+             }
+ 
+             if (ain)
+-                *out[TotalOut] = *ain;
+-
++                *(cmsFloat32Number*)(out[TotalOut]) = *(cmsFloat32Number*)ain;
++                ain += SourceIncrements[4];
++                out[TotalOut] += DestIncrements[TotalOut];
+         }
+ 
+         strideIn += Stride->BytesPerLineIn;
+diff --git a/plugins/fast_float/src/fast_float_lab.c b/plugins/fast_float/src/fast_float_lab.c
+index 2f31d7d..376e93d 100644
+--- a/plugins/fast_float/src/fast_float_lab.c
++++ b/plugins/fast_float/src/fast_float_lab.c
+@@ -317,7 +317,8 @@ void LabCLUTEval(struct _cmstransform_struct* CMMcargo,
+ 
+             if (xin)
+             {
+-                *(cmsFloat32Number*) (out[TotalOut]) = *xin;
++                *(cmsFloat32Number*) (out[TotalOut]) = *(cmsFloat32Number*)xin;
++                xin += SourceIncrements[3];
+                 out[TotalOut] += DestIncrements[TotalOut];
+             }
+         }
+-- 
+2.32.0.windows.2
+

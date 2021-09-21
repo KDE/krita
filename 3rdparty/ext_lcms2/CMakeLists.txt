@@ -8,6 +8,7 @@ ExternalProject_Add( ext_lcms2
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Quick-check-for-SSE-support.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Separate-fast-float-plugin.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Use-correct-input-channel-index.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Fix-copy-alpha-for-float-CMYK-and-L-a-b.patch
 
     INSTALL_DIR ${PREFIX_ext_lcms2}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_lcms2} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DBUILD_TESTS=FALSE -DBUILD_UTILS=FALSE -DBUILD_STATIC=FALSE -DBUILD_PLUGINS=TRUE

@@ -99,6 +99,10 @@ private Q_SLOTS:
 
     void changeCloneSource();
 
+    void copyLayerStyle();
+
+    void pasteLayerStyle();
+
 private:
     void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
     void addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool updateImage = true, KisProcessingApplicator *applicator = 0);
@@ -118,6 +122,8 @@ private:
     KisNodeCommandsAdapter* m_commandsAdapter;
 
     KisAction *m_layerStyle {0};
+    KisAction *m_copyLayerStyle {0};
+    KisAction *m_pasteLayerStyle {0};
 };
 
 #endif

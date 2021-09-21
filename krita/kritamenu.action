@@ -344,6 +344,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="copy_layer_style">
+      <icon></icon>
+      <text>Copy Layer Style</text>
+      <whatsThis></whatsThis>
+      <toolTip>Copy Layer Style from the Current Node</toolTip>
+      <iconText>Copy Layer Style</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="edit_paste">
       <icon>edit-paste</icon>
       <text>&amp;Paste</text>
@@ -416,6 +428,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="paste_layer_style">
+      <icon></icon>
+      <text>Paste Layer Style</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste Layer Style into the Current Node</toolTip>
+      <iconText>Paste Layer Style</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="clear">
       <icon>edit-clear</icon>
       <text>C&amp;lear</text>

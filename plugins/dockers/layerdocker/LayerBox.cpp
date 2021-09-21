@@ -673,6 +673,8 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
 
             if (singleLayer) {
                 addActionToMenu(&menu, "layer_style");
+                addActionToMenu(&menu, "copy_layer_style");
+                addActionToMenu(&menu, "paste_layer_style");
             }
 
             Q_FOREACH(KisNodeSP node, nodes) {

@@ -406,6 +406,8 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
     el.setAttribute(UUID, mask->uuid().toString());
+    el.setAttribute(COLOR_LABEL, mask->colorLabelIndex());
+    el.setAttribute(VISIBLE_IN_TIMELINE, mask->isPinnedToTimeline());
 
     if (maskType == SELECTION_MASK) {
         el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("active"));

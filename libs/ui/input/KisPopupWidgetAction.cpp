@@ -75,7 +75,6 @@ void KisPopupWidgetAction::begin(int, QEvent *event)
         });
     } else if (KisPopupWidgetInterface *popupWidget = inputManager()->toolProxy()->popupWidget()) { // Handle other popup widgets...
         QPoint pos = eventPos(event);
-
         if (pos.isNull()) {
             pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
         }

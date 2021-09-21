@@ -246,7 +246,6 @@ KisView::~KisView()
         }
 
         d->viewManager->mainWindow()->notifyChildViewDestroyed(this);
-        d->viewManager->inputManager()->registerPopupWidget(nullptr);
     }
 
     image()->requestStrokeCancellation();

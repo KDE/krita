@@ -47,7 +47,6 @@ public:
     ~PopupColorTriangle() override {}
 
     void tabletEvent(QTabletEvent* event) override {
-        event->accept();
         QMouseEvent* mouseEvent = 0;
 
         // ignore any tablet events that are done with the right click
@@ -60,12 +59,14 @@ public:
                                                  Qt::LeftButton, Qt::LeftButton, event->modifiers());
                     m_dragging = true;
                     mousePressEvent(mouseEvent);
+                    event->accept();
                     break;
                 case QEvent::TabletMove:
                     mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
                                                  (m_dragging) ? Qt::LeftButton : Qt::NoButton,
                                                  (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
                     mouseMoveEvent(mouseEvent);
+                    event->accept();
                     break;
                 case QEvent::TabletRelease:
                     mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
@@ -74,6 +75,7 @@ public:
                                                  event->modifiers());
                     m_dragging = false;
                     mouseReleaseEvent(mouseEvent);
+                    event->accept();
                     break;
                 default: break;
             }
@@ -114,9 +116,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
 
-    connect(m_resourceManager, SIGNAL(setSelectedColor(int)), SLOT(slotSetSelectedColor(int)));
-    connect(m_resourceManager, SIGNAL(updatePalettes()), SLOT(slotUpdate()));
-    connect(m_resourceManager, SIGNAL(hidePalettes()), SLOT(slotHide()));
+    connect(m_resourceManager, SIGNAL(setSelectedColor(int)), this, SLOT(slotSetSelectedColor(int)));
+    connect(m_resourceManager, SIGNAL(updatePalettes()), this, SLOT(slotUpdate()));
+    connect(m_resourceManager, SIGNAL(hidePalettes()), this, SIGNAL(finished()));
 
     setCursor(Qt::ArrowCursor);
     setMouseTracking(true);
@@ -209,7 +211,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     hLayout->addWidget(zoomCanvasSlider);
     hLayout->addWidget(zoomToOneHundredPercentButton);
     
-    setVisible(true);
     setVisible(false);
     reconfigure();
 
@@ -231,6 +232,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     KisConfig cfg(true);
     m_brushHudButton->setChecked(cfg.showBrushHud());
     m_bottomBarButton->setChecked(cfg.showPaletteBottomBar());
+}
+
+KisPopupPalette::~KisPopupPalette()
+{
 }
 
 void KisPopupPalette::slotConfigurationChanged()
@@ -957,10 +962,6 @@ void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
     zoomCanvasSlider->setValue(100);
 }
 
-void KisPopupPalette::tabletEvent(QTabletEvent *event) {
-    event->ignore();
-}
-
 void KisPopupPalette::slotSetMirrorPos() {
     m_actionCollection->action("mirror_canvas_around_cursor")->setProperty("customPosition", QVariant(m_mirrorPos));
 }
@@ -969,9 +970,19 @@ void KisPopupPalette::slotRemoveMirrorPos() {
 }
 
 void KisPopupPalette::popup(const QPoint &position) {
-    setVisible(!isVisible());
+    setVisible(true);
     ensureWithinParent(position, false);
     m_mirrorPos = QCursor::pos();
+}
+
+void KisPopupPalette::dismiss()
+{
+    setVisible(false);
+}
+
+bool KisPopupPalette::onScreen()
+{
+    return isVisible();
 }
 
 void KisPopupPalette::ensureWithinParent(const QPoint& position, bool useUpperLeft) {
@@ -1011,20 +1022,19 @@ void KisPopupPalette::showEvent(QShowEvent *event)
     QWidget::showEvent(event);
 }
 
+void KisPopupPalette::tabletEvent(QTabletEvent *event)
+{
+    if (event->button() == Qt::RightButton && event->type() == QEvent::TabletPress) {
+        m_tabletRightClickPressed = true;
+    }
+
+    event->ignore();
+}
+
 void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
 {
     QPointF point = event->localPos();
     event->accept();
-
-    if (event->buttons() == Qt::NoButton &&
-        event->button() == Qt::RightButton) {
-        if (m_isOverFgBgColors) {
-            m_viewManager->slotResetFgBg();
-        } else {
-            setVisible(false);
-        }
-        return;
-    }
 
     if (m_isRotatingCanvasIndicator) {
         update();
@@ -1053,6 +1063,8 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
                 }
             }
         }
+    } else if (event->button() == Qt::RightButton) {
+        emit finished();
     }
 }
 
@@ -1080,10 +1092,6 @@ bool KisPopupPalette::isPointInPixmap(QPointF &point, int pos)
         return true;
     }
     return false;
-}
-
-KisPopupPalette::~KisPopupPalette()
-{
 }
 
 QPointF KisPopupPalette::drawPointOnAngle(qreal angle, qreal radius) const

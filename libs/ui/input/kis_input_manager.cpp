@@ -98,6 +98,25 @@ void KisInputManager::removeTrackedCanvas(KisCanvas2 *canvas)
 void KisInputManager::registerPopupWidget(KisPopupWidgetInterface *popupWidget)
 {
     d->popupWidget = popupWidget;
+
+    // FUNKY!
+    auto popupObject = dynamic_cast<QObject*>(d->popupWidget);
+    KIS_ASSERT(popupObject);
+    connect(popupObject, SIGNAL(finished()), this, SLOT(deregisterPopupWidget()));
+}
+
+void KisInputManager::deregisterPopupWidget()
+{
+    if (d->popupWidget->onScreen()) {
+        d->popupWidget->dismiss();
+    }
+
+    // FUNKY!
+    auto popupObject = dynamic_cast<QObject*>(d->popupWidget);
+    KIS_ASSERT(popupObject);
+    disconnect(popupObject, nullptr, this, nullptr); // Disconnect all.
+
+    d->popupWidget = nullptr;
 }
 
 void KisInputManager::toggleTabletLogger()
@@ -338,33 +357,22 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     // Try closing any open popup widget and
     // consume input if possible.
     if (d->popupWidget) {
+        QEvent::Type type = event->type();
 
-        //TEMP WORKAROUND TEMP WORKAROUND TEMP WORKAROUND//
-        QWidget* popup = dynamic_cast<QWidget*>(d->popupWidget);
-        // KisPopupWidgetInterface will need additional features to eliminate this.
-        //TEMP WORKAROUND TEMP WORKAROUND TEMP WORKAROUND//
+        if (type == QEvent::MouseButtonPress
+         || type == QEvent::MouseButtonDblClick
+         || type == QEvent::TabletPress
+         || type == QEvent::TouchBegin
+         || type == QEvent::NativeGesture) {
+            bool wasVisible = d->popupWidget->onScreen();
 
-        if (popup) {
+            deregisterPopupWidget();
 
-            QEvent::Type type = event->type();
-            bool wasVisible = popup->isVisible();
-
-            if (type == QEvent::MouseButtonPress
-             || type == QEvent::MouseButtonDblClick
-             || type == QEvent::TabletPress
-             || type == QEvent::TouchBegin
-             || type == QEvent::NativeGesture) {
-                popup->setVisible(false);
-                d->popupWidget = nullptr;
-
-                if (wasVisible) {
-                    return true;
-                }
+            if (wasVisible) {
+                return true; // Event consumed.
             }
-
         }
     }
-
 
     if (shouldResetWheelDelta(event)) {
         d->accumulatedScrollDelta = 0;

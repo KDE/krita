@@ -44,6 +44,7 @@ struct CachedPresetLayout {
 class KisPopupPalette : public QWidget, public KisPopupWidgetInterface
 {
     Q_OBJECT
+    Q_INTERFACES(KisPopupWidgetInterface)
 
     Q_PROPERTY(int hoveredPreset READ hoveredPreset WRITE setHoveredPreset)
     Q_PROPERTY(int hoveredColor READ hoveredColor WRITE setHoveredColor)
@@ -60,9 +61,10 @@ public:
     int selectedColor() const;
     void setParent(QWidget *parent);
 
-    void tabletEvent(QTabletEvent *event) override;
 
     void popup(const QPoint& position) override;
+    void dismiss() override;
+    bool onScreen() override;
     
     void ensureWithinParent(const QPoint& position, bool useUpperLeft);
 
@@ -70,6 +72,7 @@ protected:
     void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
+    void tabletEvent(QTabletEvent *event) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mousePressEvent(QMouseEvent*) override;
@@ -120,6 +123,7 @@ private:
     bool m_useDynamicSlotCount {true};
     int m_hoveredColor {0};
     int m_selectedColor {0};
+    bool m_tabletRightClickPressed {false};
     bool m_isOverFgBgColors {false};
     bool m_snapRotation {false};
     qreal m_rotationSnapAngle {0};
@@ -179,6 +183,7 @@ Q_SIGNALS:
     void sigChangefGColor(const KoColor&);
     void sigUpdateCanvas();
     void zoomLevelChanged(int);
+    void finished(); // KisPopupWidgetInterface.
 
 public Q_SLOTS:
     void slotUpdateIcons();
@@ -192,7 +197,6 @@ private Q_SLOTS:
     void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
     void slotUpdate();
-    void slotHide() { setVisible(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
     void showBottomBarWidget(bool visible);

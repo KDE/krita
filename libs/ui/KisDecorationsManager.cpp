@@ -89,7 +89,7 @@ void KisDecorationsManager::updateAction()
 {
     if (assistantsDecoration()) {
         bool enabled = !assistantsDecoration()->assistants().isEmpty();
-        m_toggleAssistant->setChecked(assistantsDecoration()->visible());
+        m_toggleAssistant->setChecked(assistantsDecoration()->assistantVisibility());
         m_toggleAssistant->setEnabled(enabled);
         m_togglePreview->setChecked(assistantsDecoration()->outlineVisibility());
         m_togglePreview->setEnabled(enabled);

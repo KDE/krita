@@ -2,14 +2,8 @@ SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 
 ExternalProject_Add( ext_gmic
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://gmic.eu/files/source/gmic_2.9.8.tar.gz
-    URL_HASH SHA256=18d6bbc731ae3b4da8a656ac189476793b111a9dd19f72db2312f074df7cdc82
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-desktop-entry.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Add-support-for-MSVC.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Make-FFTW3-truly-optional.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Add-flag-to-disable-internet-access-by-default.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Increase-on-launch-update-timeout-to-60s.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Disable-Internet-updates-in-Krita.patch
+    URL https://files.kde.org/krita/build/dependencies/gmic-2.9.9.1-patched.tar.gz
+    URL_HASH SHA256=904c1011bcac5584e32a3bfdf21f46b22525e2297097704aa2deff3cce43e91c
 
     SOURCE_SUBDIR gmic-qt
 

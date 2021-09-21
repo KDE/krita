@@ -11,7 +11,7 @@ if (UNIX)
 
             # Setuptools needs OpenSSL 1.1, the stock libssl isn't enough
             CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.13 --prefix=${PREFIX_ext_python} ${GLOBAL_AUTOMAKE_PROFILE} --with-openssl=${PREFIX_ext_python}
-                --enable-framework=${PREFIX_ext_python}/lib --enable-optimizations
+                --enable-framework=${PREFIX_ext_python}/lib --enable-optimizations --without-sufix
             BUILD_COMMAND make
             INSTALL_COMMAND make -j1 install
                 COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python

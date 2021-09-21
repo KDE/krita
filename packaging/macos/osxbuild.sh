@@ -93,7 +93,7 @@ export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 # export LDFLAGS=-L${KIS_INSTALL_DIR}/lib
 export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 
-export PYTHONHOME=${KIS_INSTALL_DIR}
+# export PYTHONHOME=${KIS_INSTALL_DIR}
 # export PYTHONPATH=${PYTHONPATH}:${KIS_INSTALL_DIR}/lib/Python.framework/Versions/Current/lib/python3.9/site-packages
 
 # This will make the debug output prettier

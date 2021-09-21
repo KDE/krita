@@ -24,12 +24,17 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
+if(APPLE)
+    set(CMAKE_FRAMEWORK_PATH_OLD ${CMAKE_FRAMEWORK_PATH})
+    set(CMAKE_FRAMEWORK_PATH "${CMAKE_INSTALL_PREFIX}/lib" ${CMAKE_SYSTEM_FRAMEWORK_PATH})
+endif(APPLE)
+
 include(FindPackageHandleStandardArgs)
 
 if (ENABLE_PYTHON_2)
     find_package(Python 2.7 REQUIRED COMPONENTS Development Interpreter)
 else(ENABLE_PYTHON_2)
-    if (MINGW)
+    if (MINGW OR APPLE)
         find_package(Python 3.8 REQUIRED COMPONENTS Development Interpreter)
     else()
         find_package(Python 3.0 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)
@@ -81,3 +86,7 @@ if (Python_Interpreter_FOUND)
 endif()
 
 find_package_handle_standard_args(PythonLibrary DEFAULT_MSG PYTHON_LIBRARY PYTHON_INCLUDE_DIRS PYTHON_INCLUDE_PATH)
+
+if(APPLE)
+    set(CMAKE_FRAMEWORK_PATH ${CMAKE_FRAMEWORK_PATH_OLD})
+endif(APPLE)

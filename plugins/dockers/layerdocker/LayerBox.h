@@ -152,11 +152,11 @@ private:
     int m_newOpacity;
     KisNodeSP m_changedOpacityNode;
 
-    QVector<KisAction*> m_actions;
-    KisAction* m_removeAction;
-    KisAction* m_propertiesAction;
-    KisAction* m_changeCloneSourceAction;
-    KisAction* m_layerToggleSolo;
+    KisAction *m_removeAction;
+    KisAction *m_propertiesAction;
+    KisAction *m_changeCloneSourceAction;
+    KisAction *m_layerToggleSolo;
+    KisAction *m_showGlobalSelectionMask;
     KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;

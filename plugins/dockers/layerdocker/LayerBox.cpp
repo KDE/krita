@@ -232,15 +232,14 @@ LayerBox::LayerBox()
     connect(m_nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotNodeCollapsedChanged()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotNodeCollapsedChanged()));
 
-    KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
-    showGlobalSelectionMask->setObjectName("show-global-selection-mask");
-    showGlobalSelectionMask->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    showGlobalSelectionMask->setToolTip(i18nc("@info:tooltip", "Shows global selection as a usual selection mask in <b>Layers</b> docker"));
-    showGlobalSelectionMask->setCheckable(true);
-    connect(showGlobalSelectionMask, SIGNAL(triggered(bool)), SLOT(slotEditGlobalSelection(bool)));
-    m_actions.append(showGlobalSelectionMask);
+    m_showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
+    m_showGlobalSelectionMask->setObjectName("show-global-selection-mask");
+    m_showGlobalSelectionMask->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    m_showGlobalSelectionMask->setToolTip(i18nc("@info:tooltip", "Shows global selection as a usual selection mask in <b>Layers</b> docker"));
+    m_showGlobalSelectionMask->setCheckable(true);
+    connect(m_showGlobalSelectionMask, SIGNAL(triggered(bool)), SLOT(slotEditGlobalSelection(bool)));
 
-    showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
+    m_showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
     m_colorSelector = new KisColorLabelSelectorWidget(this);
     MouseClickIgnore* mouseEater = new MouseClickIgnore(this);
@@ -381,11 +380,9 @@ void LayerBox::setViewManager(KisViewManager* kisview)
         connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
     }
 
-    Q_FOREACH (KisAction *action, m_actions) {
-        kisview->actionManager()->
-                addAction(action->objectName(),
-                          action);
-    }
+    kisview->actionManager()->
+            addAction(m_showGlobalSelectionMask->objectName(),
+                      m_showGlobalSelectionMask);
 
     connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), this, SLOT(slotAddLayerBnClicked()));
     connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");

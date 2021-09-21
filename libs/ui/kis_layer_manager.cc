@@ -15,6 +15,7 @@
 #include <QVBoxLayout>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QClipboard>
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
@@ -95,6 +96,7 @@
 #include "KisGlobalResourcesInterface.h"
 
 #include "KisSaveGroupVisitor.h"
+#include <kis_asl_layer_style_serializer.h>
 
 KisLayerManager::KisLayerManager(KisViewManager * view)
     : m_view(view)
@@ -166,6 +168,11 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_layerStyle  = actionManager->createAction("layer_style");
     connect(m_layerStyle, SIGNAL(triggered()), this, SLOT(layerStyle()));
 
+    m_copyLayerStyle = actionManager->createAction("copy_layer_style");
+    connect(m_copyLayerStyle, SIGNAL(triggered()), this, SLOT(copyLayerStyle()));
+
+    m_pasteLayerStyle = actionManager->createAction("paste_layer_style");
+    connect(m_pasteLayerStyle, SIGNAL(triggered()), this, SLOT(pasteLayerStyle()));
 }
 
 void KisLayerManager::updateGUI()
@@ -365,6 +372,53 @@ void KisLayerManager::changeCloneSource()
     dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
     dialog->show();
     dialog->activateWindow();
+}
+
+void KisLayerManager::copyLayerStyle()
+{
+    KisImageSP image = m_view->image();
+    if (!image) return;
+
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
+
+    KisPSDLayerStyleSP layerStyle = layer->layerStyle();
+    if (!layerStyle) return;
+
+    KisAslLayerStyleSerializer serializer;
+    serializer.setStyles(QVector<KisPSDLayerStyleSP>() << layerStyle);
+    QString psdxml = serializer.formPsdXmlDocument().toString();
+
+    if (!psdxml.isEmpty()) {
+        QGuiApplication::clipboard()->setText(psdxml);
+    }
+}
+
+void KisLayerManager::pasteLayerStyle()
+{
+    KisImageSP image = m_view->image();
+    if (!image) return;
+
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
+
+    QString aslXml = QGuiApplication::clipboard()->text();
+    if (aslXml.isEmpty()) return;
+
+    QDomDocument aslDoc;
+    if (!aslDoc.setContent(aslXml)) return;
+
+    KisAslLayerStyleSerializer serializer;
+    serializer.registerPSDPattern(aslDoc);
+    serializer.readFromPSDXML(aslDoc);
+
+    if (serializer.styles().size() != 1) return;
+
+    KisPSDLayerStyleSP newStyle = serializer.styles().first();
+    KUndo2Command *cmd = new KisSetLayerStyleCommand(layer, layer->layerStyle(), newStyle);
+
+    KisProcessingApplicator::runSingleCommandStroke(image, cmd);
+    image->waitForDone();
 }
 
 void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)

@@ -24,14 +24,14 @@ void KoPatternTest::testCreation()
 void KoPatternTest::testRoundTripMd5()
 {
     QString filename(QString(FILES_DATA_DIR) + '/' + "test_pattern.png");
-    QString patFilename("test_pattern.pat");
+    QString patFilename(QString(FILES_DATA_DIR) + '/' + "test_pattern.pat");
 
     KoPattern pngPattern(filename);
     QVERIFY(pngPattern.load(KisGlobalResourcesInterface::instance()));
     pngPattern.setMD5Sum(KoMD5Generator::generateHash(filename));
 
-    dbgKrita << "PNG Name:" << pngPattern.name();
-    dbgKrita << "PNG Filename:" << pngPattern.filename();
+    qDebug() << "PNG Name:" << pngPattern.name();
+    qDebug() << "PNG Filename:" << pngPattern.filename();
 
     pngPattern.setFilename(patFilename);
     pngPattern.save();
@@ -40,8 +40,8 @@ void KoPatternTest::testRoundTripMd5()
     QVERIFY(patPattern.load(KisGlobalResourcesInterface::instance()));
     patPattern.setMD5Sum(KoMD5Generator::generateHash(patFilename));
 
-    dbgKrita << "PAT Name:" << patPattern.name();
-    dbgKrita << "PAT Filename:" << patPattern.filename();
+    qDebug() << "PAT Name:" << patPattern.name();
+    qDebug() << "PAT Filename:" << patPattern.filename();
 
     dbgKrita << pngPattern.pattern().format();
     dbgKrita << patPattern.pattern().format();

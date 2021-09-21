@@ -20,13 +20,39 @@
 /**
  * @brief The PopupWidgetInterface abstract class defines
  * the basic interface that will be used by all popup widgets.
+ *
+ * Classes that implement this interface should use `Q_INTERFACES(KisPopupWidgetInterface)`!
+ * This is needed in order to include signals in the interface.
  */
 class KisPopupWidgetInterface {
 public:
     virtual ~KisPopupWidgetInterface() {}
+
+    /**
+     * @brief Called when and where you want a widget to popup.
+     */
     virtual void popup(const QPoint& position) = 0;
+
+    /**
+     * @brief Returns whether the widget is active (on screen) or not.
+     */
+    virtual bool onScreen() = 0;
+
+    /**
+     * @brief Called when you want to dismiss a popup widget.
+     */
+    virtual void dismiss() = 0;
+
+Q_SIGNALS:
+    /**
+     * @brief Emitted when a popup widget believes that its job is finished.
+     */
+    virtual void finished() = 0;
 };
 
+Q_DECLARE_INTERFACE(KisPopupWidgetInterface, "KisPopupWidgetInterface")
+
+//===================================================================================
 
 /**
  * @brief The KisPopupWidget class is a simple wrapper that
@@ -35,6 +61,9 @@ public:
  */
 class KisPopupWidget : public QWidget, public KisPopupWidgetInterface
 {
+    Q_OBJECT
+    Q_INTERFACES(KisPopupWidgetInterface)
+
 public:
     KisPopupWidget(QWidget* toPopup, KoCanvasBase* canvas)
         : QWidget(canvas->canvasWidget())
@@ -53,6 +82,14 @@ public:
     void popup(const QPoint& position) override {
         setVisible(true);
         adjustPopupLayout(position);
+    }
+
+    void dismiss() override {
+        setVisible(false);
+    }
+
+    bool onScreen() override {
+        return isVisible();
     }
 
     void adjustPopupLayout(const QPoint& position) {

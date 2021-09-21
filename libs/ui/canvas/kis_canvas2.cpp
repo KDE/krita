@@ -1210,8 +1210,6 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
     connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotPopupPaletteRequestedZoomChange(int)));
     connect(m_d->popupPalette, SIGNAL(sigUpdateCanvas()), this, SLOT(updateCanvas()));
     connect(m_d->view->mainWindow(), SIGNAL(themeChanged()), m_d->popupPalette, SLOT(slotUpdateIcons()));
-
-    m_d->popupPalette->setVisible(false);
 }
 
 void KisCanvas2::slotPopupPaletteRequestedZoomChange(int zoom ) {

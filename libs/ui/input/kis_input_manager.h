@@ -99,6 +99,7 @@ private Q_SLOTS:
     void slotToolChanged();
     void profileChanged();
     void slotCompressedMoveEvent();
+    void deregisterPopupWidget();
 
 private:
     bool startTouch(bool &retval);

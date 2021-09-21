@@ -35,7 +35,7 @@ bool KisMouseClickEater::eventFilter(QObject *watched, QEvent *event)
 #ifdef Q_OS_WIN
     const int tabletMouseEventsFlowDelay = 500;
 #else
-    const int tabletMouseEventsFlowDelay = 100;
+    const int tabletMouseEventsFlowDelay = 256;
 #endif
 
     if (event->type() == QEvent::TabletMove) {
@@ -44,7 +44,6 @@ bool KisMouseClickEater::eventFilter(QObject *watched, QEvent *event)
 
     if (!m_blockTimedRelease &&
         m_timeSinceReset.elapsed() > tabletMouseEventsFlowDelay) {
-
         return QObject::eventFilter(watched, event);
     }
 

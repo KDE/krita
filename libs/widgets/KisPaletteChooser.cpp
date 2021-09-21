@@ -151,7 +151,7 @@ void KisPaletteChooserPrivate::Delegate::paint(QPainter *painter,
         painter->drawImage(previewRect, preview);
         painter->setPen(option.palette.highlightedText().color());
     } else {
-        painter->setBrush(option.palette.text().color());
+        painter->setPen(option.palette.text().color());
     }
 
     painter->drawText(option.rect.x() + previewRect.width() + 10,

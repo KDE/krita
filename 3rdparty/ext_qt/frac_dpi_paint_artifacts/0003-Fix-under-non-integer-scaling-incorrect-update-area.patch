@@ -1,0 +1,35 @@
+From b9570898b780f9981010fb07f49875ad55467e4a Mon Sep 17 00:00:00 2001
+From: Tang HaiXiang <tanghaixiang@uniontech.com>
+Date: Fri, 24 Jul 2020 16:48:36 +0800
+Subject: [PATCH 3/3] Fix under non-integer scaling incorrect update area
+
+Given some decimal scaling, the clipping of the QRegion/QRect passed to the QRegion/QRect done inside paintEvent cannot handle the decimal scaling.
+Solved by only converting QRect to a certain QRectF and calling QRectF overload instead of QRect.
+
+Fixes: QTBUG-82601
+Fixes: QTBUG-64854
+Change-Id: I0d8f4193aabfc0d917612db68d2a39ebb726fa2f
+Reviewed-by: Eirik Aavitsland <eirik.aavitsland@qt.io>
+(cherry picked from commit b4aee30692c166025b4e2283c19dbc1247bcce54)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+(cherry picked from commit 5de4b9b1e5eb1ae8d922ee96d88eb6bba05b2b45)
+---
+ src/gui/kernel/qhighdpiscaling_p.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
+index f58944a7d2..dd30b1e758 100644
+--- a/src/gui/kernel/qhighdpiscaling_p.h
++++ b/src/gui/kernel/qhighdpiscaling_p.h
+@@ -204,7 +204,7 @@ inline QRegion scale(const QRegion &region, qreal scaleFactor, QPoint origin = Q
+ 
+     QRegion scaled;
+     for (const QRect &rect : region)
+-        scaled += scale(rect, scaleFactor, origin);
++        scaled += scale(QRectF(rect), scaleFactor, origin).toRect();
+     return scaled;
+ }
+ 
+-- 
+2.24.1.windows.2
+

@@ -1,0 +1,128 @@
+From 038da48a6c2279f4964e8f82635bd2ae606ce518 Mon Sep 17 00:00:00 2001
+From: Eirik Aavitsland <eirik.aavitsland@qt.io>
+Date: Thu, 17 Oct 2019 13:25:06 +0200
+Subject: [PATCH 2/3] Fix: QPainter off-by-one clipping for some non-integer
+ scalings
+
+For some scalings, setClipRect(QRect) would produce a clip one pixel
+different from setClipRect(QRectF) because of different
+rounding. Ditto for setClipRegion. Fix by making sure to transform
+QRectFs instead of QRects.
+
+Fixes: QTBUG-78962
+Fixes: QTBUG-78963
+Change-Id: I0be721133858c30769ec6d81e978962a3d6b70cf
+Reviewed-by: Christoph Cullmann <cullmann@kde.org>
+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
+(cherry picked from commit 19f29802bf7daafacd0fd824c2a1349e80eac536)
+---
+ src/gui/painting/qpaintengine_raster.cpp      |  2 +-
+ src/gui/painting/qtransform.cpp               |  4 +-
+ .../gui/painting/qpainter/tst_qpainter.cpp    | 49 ++++++++++++++++++-
+ 3 files changed, 51 insertions(+), 4 deletions(-)
+
+diff --git a/src/gui/painting/qpaintengine_raster.cpp b/src/gui/painting/qpaintengine_raster.cpp
+index 4dfdf20bf0..99ed691135 100644
+--- a/src/gui/painting/qpaintengine_raster.cpp
++++ b/src/gui/painting/qpaintengine_raster.cpp
+@@ -1341,7 +1341,7 @@ void QRasterPaintEngine::clip(const QRect &rect, Qt::ClipOperation op)
+         QPaintEngineEx::clip(rect, op);
+         return;
+ 
+-    } else if (!setClipRectInDeviceCoords(s->matrix.mapRect(rect), op)) {
++    } else if (!setClipRectInDeviceCoords(s->matrix.mapRect(QRectF(rect)).toRect(), op)) {
+         QPaintEngineEx::clip(rect, op);
+         return;
+     }
+diff --git a/src/gui/painting/qtransform.cpp b/src/gui/painting/qtransform.cpp
+index 6354b154c5..336493d7c5 100644
+--- a/src/gui/painting/qtransform.cpp
++++ b/src/gui/painting/qtransform.cpp
+@@ -1521,12 +1521,12 @@ QRegion QTransform::map(const QRegion &r) const
+         QRegion res;
+         if (m11() < 0 || m22() < 0) {
+             for (const QRect &rect : r)
+-                res += mapRect(rect);
++                res += mapRect(QRectF(rect)).toRect();
+         } else {
+             QVarLengthArray<QRect, 32> rects;
+             rects.reserve(r.rectCount());
+             for (const QRect &rect : r) {
+-                QRect nr = mapRect(rect);
++                QRect nr = mapRect(QRectF(rect)).toRect();
+                 if (!nr.isEmpty())
+                     rects.append(nr);
+             }
+diff --git a/tests/auto/gui/painting/qpainter/tst_qpainter.cpp b/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
+index bc0baed15c..bdac1c2430 100644
+--- a/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
++++ b/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
+@@ -153,10 +153,10 @@ private slots:
+     void clippedLines();
+     void clippedPolygon_data();
+     void clippedPolygon();
+-
+     void clippedText();
+ 
+     void clipBoundingRect();
++    void transformedClip();
+ 
+     void setOpacity_data();
+     void setOpacity();
+@@ -4533,6 +4533,53 @@ void tst_QPainter::clipBoundingRect()
+ 
+ }
+ 
++void tst_QPainter::transformedClip()
++{
++    QImage img(8, 4, QImage::Format_ARGB32_Premultiplied);
++    QImage img2(img.size(), img.format());
++    QRect clip(0, 0, 2, 1);
++    QTransform xf;
++    xf.translate(0.2, 0);
++    xf.scale(2.2, 1);
++    // setClipRect(QRectF)
++    {
++        img.fill(Qt::green);
++        QPainter p(&img);
++        p.setTransform(xf);
++        p.setClipRect(QRectF(clip));
++        p.fillRect(img.rect(), Qt::white);
++    }
++    // setClipRect(QRect)
++    {
++        img2.fill(Qt::green);
++        QPainter p(&img2);
++        p.setTransform(xf);
++        p.setClipRect(clip);
++        p.fillRect(img2.rect(), Qt::white);
++        QCOMPARE(img, img2);
++    }
++    // setClipRegion
++    {
++        img2.fill(Qt::green);
++        QPainter p(&img2);
++        p.setTransform(xf);
++        p.setClipRegion(QRegion(clip) + QRect(0, 3, 1, 1));  // dummy extra rect to avoid single-rect codepath
++        p.fillRect(img2.rect(), Qt::white);
++        QCOMPARE(img.copy(0, 0, 8, 2), img2.copy(0, 0, 8, 2));
++    }
++    // setClipPath
++    {
++        img2.fill(Qt::green);
++        QPainter p(&img2);
++        p.setTransform(xf);
++        QPainterPath path;
++        path.addRect(clip);
++        p.setClipPath(path);
++        p.fillRect(img2.rect(), Qt::white);
++        QCOMPARE(img, img2);
++    }
++}
++
+ #if defined(Q_OS_MAC)
+ // Only Mac supports sub pixel positions in raster engine currently
+ void tst_QPainter::drawText_subPixelPositionsInRaster_qtbug5053()
+-- 
+2.24.1.windows.2
+

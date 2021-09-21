@@ -74,8 +74,3 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
         mainLayout->addWidget(widget);
     }
 }
-
-QSize KisUtilityTitleBar::minimumSizeHint() const
-{
-    return sizeHint();
-}

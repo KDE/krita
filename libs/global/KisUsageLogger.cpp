@@ -237,7 +237,6 @@ void KisUsageLogger::rotateLog()
             int sectionCount = logItems.size();
             if (sectionCount > s_maxLogs) {
                 for (int i = sectionCount - s_maxLogs; i < sectionCount; ++i) {
-                    qDebug() << "section" << i << "logItems.size" << logItems.size();
                     if (logItems.size() > i ) {
                         keptItems.append(logItems[i]);
                     }

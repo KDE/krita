@@ -355,6 +355,8 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 {
     QFileInfo fileInfo(m_canvas->imageView()->document()->path());
     const QString imageFileName = fileInfo.baseName();
+    const int storyboardCount = m_storyboardModel->rowCount();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(storyboardCount > 0);
     DlgExportStoryboard dlg(format, m_storyboardModel);
 
     if (dlg.exec() == QDialog::Accepted) {

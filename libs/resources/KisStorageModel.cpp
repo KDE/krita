@@ -60,14 +60,22 @@ KisStorageModel::~KisStorageModel()
 {
 }
 
-int KisStorageModel::rowCount(const QModelIndex & /*parent*/) const
+int KisStorageModel::rowCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
     return d->storages.size();
+
 }
 
-int KisStorageModel::columnCount(const QModelIndex &/*parent*/) const
+int KisStorageModel::columnCount(const QModelIndex &parent) const
 {
-    return 8;
+    if (parent.isValid()) {
+        return 0;
+    }
+
+    return (int)MetaData;
 }
 
 QVariant KisStorageModel::data(const QModelIndex &index, int role) const
@@ -255,7 +263,7 @@ Qt::ItemFlags KisStorageModel::flags(const QModelIndex &index) const
     if (!index.isValid()) {
         return Qt::NoItemFlags;
     }
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemNeverHasChildren;
 }
 
 KisResourceStorageSP KisStorageModel::storageForIndex(const QModelIndex &index) const

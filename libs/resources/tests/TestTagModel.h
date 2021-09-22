@@ -19,6 +19,8 @@ class TestTagModel : public QObject
 private Q_SLOTS:
     void initTestCase();
 
+    void testWithTagModelTester();
+
     void testRowCount();
     void testData();
     void testIndexForTag();
@@ -43,7 +45,7 @@ private:
     KisTagSP m_tag;
 
     KisResourceLocator *m_locator;
-    const QString resourceType = ResourceType::PaintOpPresets;
+    const QString m_resourceType = ResourceType::PaintOpPresets;
 
 };
 

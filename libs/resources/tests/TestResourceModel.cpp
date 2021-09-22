@@ -66,6 +66,13 @@ void TestResourceModel::initTestCase()
     QVERIFY(QDir(m_dstLocation).exists());
 }
 
+void TestResourceModel::testWithTagModelTester()
+{
+    KisResourceModel model(m_resourceType);
+    auto tester = new QAbstractItemModelTester(&model);
+    Q_UNUSED(tester);
+}
+
 
 void TestResourceModel::testRowCount()
 {

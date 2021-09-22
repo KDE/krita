@@ -75,8 +75,12 @@ KisAllResourcesModel::~KisAllResourcesModel()
     delete d;
 }
 
-int KisAllResourcesModel::columnCount(const QModelIndex &/*parent*/) const
+int KisAllResourcesModel::columnCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
+
     return d->columnCount;
 }
 
@@ -156,7 +160,7 @@ Qt::ItemFlags KisAllResourcesModel::flags(const QModelIndex &index) const
     if (!index.isValid()) {
         return Qt::NoItemFlags;
     }
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemNeverHasChildren;
 }
 
 KoResourceSP KisAllResourcesModel::resourceForIndex(QModelIndex index) const
@@ -583,8 +587,12 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
 }
 
 
-int KisAllResourcesModel::rowCount(const QModelIndex &) const
+int KisAllResourcesModel::rowCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
+
     if (d->cachedRowCount < 0) {
         QSqlQuery q;
         q.prepare("SELECT count(*)\n"

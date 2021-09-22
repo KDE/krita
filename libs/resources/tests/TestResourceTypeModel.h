@@ -14,6 +14,7 @@ class TestResourceTypeModel : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
+    void testWithTagModelTester();
     void testRowCount();
     void testData();
     void cleanupTestCase();

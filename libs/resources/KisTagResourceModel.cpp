@@ -38,8 +38,12 @@ KisAllTagResourceModel::~KisAllTagResourceModel()
     delete d;
 }
 
-int KisAllTagResourceModel::rowCount(const QModelIndex &/*parent*/) const
+int KisAllTagResourceModel::rowCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
+
     if (d->cachedRowCount < 0) {
         QSqlQuery q;
         q.prepare("SELECT count(*)\n"
@@ -63,8 +67,12 @@ int KisAllTagResourceModel::rowCount(const QModelIndex &/*parent*/) const
     return d->cachedRowCount;
 }
 
-int KisAllTagResourceModel::columnCount(const QModelIndex &/*parent*/) const
+int KisAllTagResourceModel::columnCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
+
     return d->columnCount;
 }
 

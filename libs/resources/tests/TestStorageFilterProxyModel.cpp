@@ -12,6 +12,7 @@
 #include <QDirIterator>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QAbstractItemModelTester>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -63,6 +64,14 @@ void TestStorageFilterProxyModel::initTestCase()
 
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
+}
+
+void TestStorageFilterProxyModel::testWithTagModelTester()
+{
+    KisStorageFilterProxyModel model;
+    model.setSourceModel(KisStorageModel::instance());
+    auto tester = new QAbstractItemModelTester(&model);
+    Q_UNUSED(tester);
 }
 
 

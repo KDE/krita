@@ -16,6 +16,7 @@ class TestStorageFilterProxyModel : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
+    void testWithTagModelTester();
     void testFilterByName();
     void testFilterByType();
     void testFilterByActive();

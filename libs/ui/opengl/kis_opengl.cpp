@@ -288,6 +288,15 @@ QStringList KisOpenGL::getOpenGLWarnings() {
     return strings;
 }
 
+QString KisOpenGL::currentDriver()
+{
+    initialize();
+    if (openGLCheckResult) {
+        return openGLCheckResult->driverVersionString();
+    }
+    return QString();
+}
+
 // XXX Temporary function to allow LoD on OpenGL3 without triggering
 // all of the other 3.2 functionality, can be removed once we move to Qt5.7
 bool KisOpenGL::supportsLoD()

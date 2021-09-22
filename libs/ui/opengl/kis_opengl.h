@@ -83,6 +83,7 @@ public:
 
     static QStringList getOpenGLWarnings();
 
+    static QString currentDriver();
     static bool supportsLoD();
     static bool hasOpenGL3();
     static bool hasOpenGLES();

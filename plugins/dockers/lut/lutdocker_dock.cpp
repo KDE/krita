@@ -220,7 +220,7 @@ void LutDockerDock::slotUpdateIcons()
 {
     m_btnConvertCurrentColor->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
     m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("settings-button"));
-    m_lblOcioVersion->setText(OCIO_VERSION_FULL_STR);
+    m_lblOcioVersion->setText(QString("%1 (%2)").arg(OCIO_VERSION_FULL_STR, KisOpenGL::currentDriver()));
     m_lblOcioVersion->setEnabled(false);
 }
 

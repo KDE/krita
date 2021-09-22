@@ -99,6 +99,11 @@ private Q_SLOTS:
      */
     void slotUpdateMinimumWidth();
 
+    /**
+     * @brief called to reflect changes to the model.
+     */
+    void slotModelChanged();
+
 private:
     KisCanvas2* m_canvas;
     KisNodeManager* m_nodeManager;

@@ -178,6 +178,9 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_commentModel, &StoryboardCommentModel::sigCommentListChanged, this, &StoryboardDockerDock::slotUpdateMinimumWidth);
     connect(m_storyboardModel.data(), &StoryboardModel::rowsInserted, this, &StoryboardDockerDock::slotUpdateMinimumWidth);
 
+    connect(m_storyboardModel.data(), &StoryboardModel::rowsInserted, this, &StoryboardDockerDock::slotModelChanged);
+    connect(m_storyboardModel.data(), &StoryboardModel::rowsRemoved, this, &StoryboardDockerDock::slotModelChanged);
+
     m_ui->btnComment->setMenu(m_commentMenu);
     m_ui->btnComment->setPopupMode(QToolButton::InstantPopup);
 
@@ -301,6 +304,7 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     slotUpdateMinimumWidth();
+    slotModelChanged();
 }
 
 void StoryboardDockerDock::unsetCanvas()
@@ -647,6 +651,13 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
 void StoryboardDockerDock::slotUpdateMinimumWidth()
 {
     m_ui->sceneView->setMinimumSize(m_ui->sceneView->sizeHint());
+}
+
+void StoryboardDockerDock::slotModelChanged()
+{
+    if (m_storyboardModel) {
+        m_ui->btnExport->setDisabled(m_storyboardModel->rowCount() == 0);
+    }
 }
 
 QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(int rows, int columns, QRectF pageRect)

@@ -793,7 +793,10 @@ void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
     QRectF widgetRect(0,0, widgetSize.width(), widgetSize.height());
 
     if (!updateRect.isEmpty()) {
-        widgetRect &= updateRect;
+        const QRect alignedUpdateRect =
+            surfaceToWidget(widgetToSurface(updateRect).toAlignedRect()).toAlignedRect();
+
+        widgetRect &= alignedUpdateRect;
     }
 
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
@@ -1036,6 +1039,27 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
+QRectF KisOpenGLCanvas2::widgetToSurface(const QRectF &rc)
+{
+    const qreal ratio = devicePixelRatioF();
+
+    return QRectF(rc.x() * ratio,
+                  (height() - rc.y() - rc.height()) * ratio,
+                  rc.width() * ratio,
+                  rc.height() * ratio);
+}
+
+QRectF KisOpenGLCanvas2::surfaceToWidget(const QRectF &rc)
+{
+    const qreal ratio = devicePixelRatioF();
+
+    return QRectF(rc.x() / ratio,
+                  height() - (rc.y() + rc.height()) / ratio,
+                  rc.width() / ratio,
+                  rc.height() / ratio);
+}
+
+
 void KisOpenGLCanvas2::renderCanvasGL(const QRect &updateRect)
 {
     if ((d->displayFilter && d->displayFilter->updateShader()) ||
@@ -1053,11 +1077,7 @@ void KisOpenGLCanvas2::renderCanvasGL(const QRect &updateRect)
     }
 
     if (!updateRect.isEmpty()) {
-        const qreal ratio = devicePixelRatioF();
-        const QRect deviceUpdateRect = QRectF(updateRect.x() * ratio,
-                                              (height() - updateRect.y() - updateRect.height()) * ratio,
-                                              updateRect.width() * ratio,
-                                              updateRect.height() * ratio).toAlignedRect();
+        const QRect deviceUpdateRect = widgetToSurface(updateRect).toAlignedRect();
 
         glScissor(deviceUpdateRect.x(), deviceUpdateRect.y(), deviceUpdateRect.width(), deviceUpdateRect.height());
         glEnable(GL_SCISSOR_TEST);

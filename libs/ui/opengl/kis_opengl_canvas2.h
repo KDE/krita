@@ -118,11 +118,12 @@ private:
     QSize viewportDevicePixelSize() const;
     QSizeF widgetSizeAlignedToDevicePixel() const;
 
-private:
+    QRectF widgetToSurface(const QRectF &rc);
+    QRectF surfaceToWidget(const QRectF &rc);
 
+private:
     struct Private;
     Private * const d;
-
 };
 
 #endif // KIS_OPENGL_CANVAS_2_H

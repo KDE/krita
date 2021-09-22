@@ -31,11 +31,9 @@ KisTagModelProvider::~KisTagModelProvider()
 
 KisTagModel *KisTagModelProvider::tagModel(const QString& resourceType)
 {
-
     std::map<QString, std::unique_ptr<KisTagModel> >::const_iterator found = s_instance->d->tagModelsMap.find(resourceType);
 
-    if (found == s_instance->d->tagModelsMap.end())
-    {
+    if (found == s_instance->d->tagModelsMap.end()) {
         std::unique_ptr<KisTagModel> modelStorage(new KisTagModel(resourceType));
         KisTagModel *model = modelStorage.get();
         s_instance->d->tagModelsMap.insert(std::make_pair(resourceType, std::move(modelStorage)));

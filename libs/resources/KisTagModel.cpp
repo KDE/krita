@@ -72,8 +72,12 @@ KisAllTagsModel::~KisAllTagsModel()
     delete d;
 }
 
-int KisAllTagsModel::rowCount(const QModelIndex &/*parent*/) const
+int KisAllTagsModel::rowCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
+
     if (d->cachedRowCount < 0) {
         QSqlQuery q;
         q.prepare("SELECT count(*)\n"
@@ -93,8 +97,12 @@ int KisAllTagsModel::rowCount(const QModelIndex &/*parent*/) const
     return d->cachedRowCount;
 }
 
-int KisAllTagsModel::columnCount(const QModelIndex &/*parent*/) const
+int KisAllTagsModel::columnCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
+
     return d->columnCount;
 }
 
@@ -228,7 +236,7 @@ Qt::ItemFlags KisAllTagsModel::flags(const QModelIndex &index) const
     if (!index.isValid()) {
         return Qt::NoItemFlags;
     }
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemNeverHasChildren;
 }
 
 QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const

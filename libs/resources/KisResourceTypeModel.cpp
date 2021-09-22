@@ -27,8 +27,12 @@ KisResourceTypeModel::~KisResourceTypeModel()
     delete d;
 }
 
-int KisResourceTypeModel::rowCount(const QModelIndex &/*parent*/) const
+int KisResourceTypeModel::rowCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
+
     if (d->cachedRowCount < 0) {
         QSqlQuery q;
         q.prepare("SELECT count(*)\n"
@@ -41,8 +45,12 @@ int KisResourceTypeModel::rowCount(const QModelIndex &/*parent*/) const
     return d->cachedRowCount;
 }
 
-int KisResourceTypeModel::columnCount(const QModelIndex &/*parent*/) const
+int KisResourceTypeModel::columnCount(const QModelIndex &parent) const
 {
+    if (parent.isValid()) {
+        return 0;
+    }
+
     return 3;
 }
 

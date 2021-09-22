@@ -14,7 +14,7 @@
 #include <QSqlQuery>
 #include <QtSql>
 #include <QModelIndex>
-
+#include <QAbstractItemModelTester>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -63,6 +63,13 @@ void TestResourceTypeModel::initTestCase()
 
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
+}
+
+void TestResourceTypeModel::testWithTagModelTester()
+{
+    KisResourceTypeModel model;
+    auto tester = new QAbstractItemModelTester(&model);
+    Q_UNUSED(tester);
 }
 
 

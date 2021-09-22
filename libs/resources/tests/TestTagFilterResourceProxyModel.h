@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: 2019 boud <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,6 +15,8 @@ class TestTagFilterResourceProxyModel : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
+
+    void testWithTagModelTester();
 
     void testRowCount();
     void testData();
@@ -36,7 +38,7 @@ private:
     QString m_dstLocation;
 
     KisResourceLocator *m_locator;
-    const QString resourceType = ResourceType::PaintOpPresets;
+    const QString m_resourceType = ResourceType::PaintOpPresets;
 
 };
 

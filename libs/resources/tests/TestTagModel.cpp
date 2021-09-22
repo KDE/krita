@@ -12,6 +12,7 @@
 #include <QDirIterator>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QAbstractItemModelTester>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -67,8 +68,15 @@ void TestTagModel::initTestCase()
     f.open(QFile::ReadOnly);
     m_tag->load(f);
 
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
     m_tag = tagModel.tagForUrl(m_tag->url());
+}
+
+void TestTagModel::testWithTagModelTester()
+{
+    KisTagModel model(m_resourceType);
+    auto tester = new QAbstractItemModelTester(&model);
+    Q_UNUSED(tester);
 }
 
 
@@ -80,20 +88,24 @@ void TestTagModel::testRowCount()
                       ",      resource_types\n"
                       "WHERE  tags.resource_type_id = resource_types.id\n"
                       "AND    resource_types.name = :resource_type"));
-    q.bindValue(":resource_type", resourceType);
+    q.bindValue(":resource_type", m_resourceType);
     QVERIFY(q.exec());
     q.first();
     int rowCount = q.value(0).toInt();
     QCOMPARE(rowCount, 1);
 
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
+    auto tester = new QAbstractItemModelTester(&tagModel);
+    Q_UNUSED(tester);
     // There is always an "All" tag in the first row
     QCOMPARE(tagModel.rowCount(), rowCount + 2);
 }
 
 void TestTagModel::testData()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
+    auto tester = new QAbstractItemModelTester(&tagModel);
+    Q_UNUSED(tester);
 
     QVariant v = tagModel.data(tagModel.index(0, 0), Qt::DisplayRole);
     QCOMPARE(v.toString(), "All");
@@ -117,7 +129,7 @@ void TestTagModel::testData()
 
 void TestTagModel::testIndexForTag()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
     QModelIndex idx = tagModel.indexForTag(m_tag);
     QVERIFY(idx.isValid());
     QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Url).toString(), m_tag->url());
@@ -126,7 +138,7 @@ void TestTagModel::testIndexForTag()
 
 void TestTagModel::testTagForIndex()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
 
     QModelIndex idx = tagModel.index(0, 0);
     KisTagSP tag = tagModel.tagForIndex(idx);
@@ -143,7 +155,7 @@ void TestTagModel::testTagForIndex()
 
 void TestTagModel::testTagForUrl()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
 
     KisTagSP tag = tagModel.tagForUrl("All");
     QVERIFY(tag);
@@ -160,7 +172,7 @@ void TestTagModel::testTagForUrl()
 
 void TestTagModel::testAddEmptyTag()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
 
     QString tagName("A Brand New Tag");
 
@@ -178,7 +190,7 @@ void TestTagModel::testAddEmptyTag()
 
 void TestTagModel::testAddTag()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
 
     QString tagName("test1");
 
@@ -217,7 +229,7 @@ void TestTagModel::testAddTag()
 
 void TestTagModel::testSetTagActiveInactive()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
 
     int rowCount = tagModel.rowCount();
 
@@ -242,7 +254,7 @@ void TestTagModel::testSetTagActiveInactive()
 
 void TestTagModel::testRenameTag()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2,0));
     QCOMPARE(tag->url(), m_tag->url());
     QCOMPARE(tag->name(), m_tag->name());
@@ -258,7 +270,7 @@ void TestTagModel::testRenameTag()
 
 void TestTagModel::testChangeTagActive()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
 
     int rowCount = tagModel.rowCount();
 
@@ -286,7 +298,7 @@ void TestTagModel::testChangeTagActive()
 
 void TestTagModel::testAddEmptyTagWithResources()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
     KisResourceModel resourceModel("paintoppresets");
 
     QString tagName("A Brand New Tag");
@@ -303,7 +315,7 @@ void TestTagModel::testAddEmptyTagWithResources()
 
 void TestTagModel::testAddTagWithResources()
 {
-    KisTagModel tagModel(resourceType);
+    KisTagModel tagModel(m_resourceType);
     KisResourceModel resourceModel("paintoppresets");
 
     QString tagName("test1");

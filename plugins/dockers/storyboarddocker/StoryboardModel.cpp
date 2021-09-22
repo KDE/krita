@@ -909,6 +909,7 @@ void StoryboardModel::shiftKeyframes(KisTimeSpan affected, int offset, KUndo2Com
                                 }
 
                             } else {
+                                ENTER_FUNCTION() << ppVar(startFrame);
                                 int timeIter = keyframeChannel->keyframeAt(startFrame) ? startFrame : keyframeChannel->nextKeyframeTime(startFrame);
 
                                 KisKeyframeSP iterEnd = affected.isInfinite() ?
@@ -995,7 +996,7 @@ bool StoryboardModel::removeItem(QModelIndex index, KUndo2Command *command)
                 }
             });
         }
-        shiftKeyframes(KisTimeSpan::infinite(timeOfNextScene - 1), -durationDeletedScene, command);
+        shiftKeyframes(KisTimeSpan::infinite(timeOfNextScene), -durationDeletedScene, command);
 
         //If we're viewing the scene we're about the remove, let's jump back to the last valid scene.
         if (row > 0 && row <= rowCount()) {

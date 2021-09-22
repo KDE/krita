@@ -883,6 +883,13 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
 bool KisResourceLocator::synchronizeDb()
 {
     d->errorMessages.clear();
+
+    // Add resource types that have been added since first-time installation.
+    Q_FOREACH(auto loader, KisResourceLoaderRegistry::instance()->values()) {
+        KisResourceCacheDb::registerResourceType(loader->resourceType());
+    }
+
+
     findStorages();
     Q_FOREACH(const KisResourceStorageSP storage, d->storages) {
         if (!KisResourceCacheDb::synchronizeStorage(storage)) {

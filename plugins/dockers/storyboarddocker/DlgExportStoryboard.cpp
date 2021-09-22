@@ -77,7 +77,7 @@ int DlgExportStoryboard::rows() const
         return 1;
     }
     else {
-        return m_page->rowsSpinBox->value();
+        return qMax(m_page->rowsSpinBox->value(), 1);
     }
 }
 
@@ -88,7 +88,7 @@ int DlgExportStoryboard::columns() const
         return 1;
     }
     else {
-        return m_page->columnsSpinBox->value();
+        return qMax(m_page->columnsSpinBox->value(), 1);
     }
 }
 
@@ -157,7 +157,7 @@ void DlgExportStoryboard::setUsableMaximums(QPageSize pPageSize, QPageLayout::Or
     const QSize orientedPointSize = pOrientation == QPageLayout::Landscape ? QSize(pointSize.height(), pointSize.width()) : pointSize;
     const QSize sizeInPointsPerBoard = QSize(orientedPointSize.width() / columns(), orientedPointSize.height() / rows());
 
-    const int commentCount = m_model ? m_model->totalCommentCount() : 1;
+    const int commentCount = m_model ? qMax(m_model->totalCommentCount(), 1) : 1;
     const bool stacked = sizeInPointsPerBoard.width() < sizeInPointsPerBoard.height();
     const QSize sizeInPointsPerComment = stacked ? QSize(sizeInPointsPerBoard.width(), sizeInPointsPerBoard.height() / commentCount)
                                                  : QSize(sizeInPointsPerBoard.width() / commentCount, sizeInPointsPerBoard.height());

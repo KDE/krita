@@ -1,28 +1,37 @@
-From 1a0c8356ded43b6ed0bd80122c65125b8d1a4714 Mon Sep 17 00:00:00 2001
+From 6d2cf2088def49d553e6c2ed3898ac3284d7b60d Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Wed, 6 Jan 2021 12:12:09 +0000
-Subject: [PATCH 35/43] Android: prevent out-of-order events
+Subject: [PATCH] Android: prevent out-of-order events
 
 QPlatformWindow::setVisible() flushes internal event queue which then
 sends events to widgets out-of-order fashion, which can make some
-widgets hidden thus freezing the entire app.
+widgets hidden thus freezing the entire app. We need event flushing for
+widget to be rendered properly, but we don't have to send user input
+events.
 ---
- src/plugins/platforms/android/qandroidplatformwindow.cpp | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ src/plugins/platforms/android/qandroidplatformwindow.cpp | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/src/plugins/platforms/android/qandroidplatformwindow.cpp b/src/plugins/platforms/android/qandroidplatformwindow.cpp
-index c095f51fa3..f9972ee4e1 100644
+index c095f51fa3..61e6f360de 100644
 --- a/src/plugins/platforms/android/qandroidplatformwindow.cpp
 +++ b/src/plugins/platforms/android/qandroidplatformwindow.cpp
-@@ -94,7 +94,7 @@ void QAndroidPlatformWindow::setVisible(bool visible)
+@@ -93,8 +93,13 @@ void QAndroidPlatformWindow::setVisible(bool visible)
+         platformScreen()->removeWindow(this);
  
      QRect availableGeometry = screen()->availableGeometry();
-     if (geometry().width() > 0 && geometry().height() > 0 && availableGeometry.width() > 0 && availableGeometry.height() > 0)
+-    if (geometry().width() > 0 && geometry().height() > 0 && availableGeometry.width() > 0 && availableGeometry.height() > 0)
 -        QPlatformWindow::setVisible(visible);
-+        QWindowSystemInterface::handleExposeEvent(window(), QRect(QPoint(), geometry().size()));
++    if (geometry().width() > 0 && geometry().height() > 0 && availableGeometry.width() > 0
++        && availableGeometry.height() > 0) {
++        QWindowSystemInterface::handleExposeEvent(window(),
++                                                  QRect(QPoint(), geometry().size()));
++        QWindowSystemInterface::flushWindowSystemEvents(
++            QEventLoop::ExcludeUserInputEvents);
++    }
  }
  
  void QAndroidPlatformWindow::setWindowState(Qt::WindowStates state)
 -- 
-2.20.1.windows.1
+2.33.0
 

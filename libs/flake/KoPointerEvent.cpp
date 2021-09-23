@@ -110,6 +110,8 @@ Qt::MouseButton KoPointerEvent::button() const
         return d->mouseEvent->button();
     else if (d->tabletEvent)
         return d->tabletButton;
+    else if (d->touchEvent)
+        return Qt::LeftButton;
     else if (d->deviceEvent)
         return d->deviceEvent->button();
     else
@@ -122,6 +124,8 @@ Qt::MouseButtons KoPointerEvent::buttons() const
         return d->mouseEvent->buttons();
     else if (d->tabletEvent)
         return d->tabletButton;
+    else if (d->touchEvent)
+        return Qt::LeftButton;
     else if (d->deviceEvent)
         return d->deviceEvent->buttons();
     return Qt::NoButton;
@@ -253,6 +257,8 @@ Qt::KeyboardModifiers KoPointerEvent::modifiers() const
         return d->tabletEvent->modifiers();
     else if (d->mouseEvent)
         return d->mouseEvent->modifiers();
+    else if (d->touchEvent)
+        return d->touchEvent->modifiers();
     else if (d->deviceEvent)
         return d->deviceEvent->modifiers();
     else

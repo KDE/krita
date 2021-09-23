@@ -101,6 +101,7 @@ private:
     void displaySampledColor();
     bool sampleColor(const QPointF& pos);
     void updateOptionWidget();
+    std::pair<QRectF, QRectF> colorPreviewDocRect(const QPointF &outlineDocPoint);
 
     // Configuration
     QScopedPointer<KisToolUtils::ColorSamplerConfig> m_config;
@@ -114,8 +115,10 @@ private:
 
     QRectF m_oldColorPreviewBaseColorRect;
     QColor m_oldColorPreviewBaseColor;
+    QColor m_currentColor;
 
-    QRectF m_sampledColorPreviewUpdateRect;
+    QRectF m_oldColorPreviewUpdateRect;
+    QRectF m_oldColorPreviewRect;
 
     KoColor m_sampledColor;
 

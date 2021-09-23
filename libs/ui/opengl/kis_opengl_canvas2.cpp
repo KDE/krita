@@ -793,10 +793,7 @@ void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
     QRectF widgetRect(0,0, widgetSize.width(), widgetSize.height());
 
     if (!updateRect.isEmpty()) {
-        const QRect alignedUpdateRect =
-            surfaceToWidget(widgetToSurface(updateRect).toAlignedRect()).toAlignedRect();
-
-        widgetRect &= alignedUpdateRect;
+        widgetRect &= updateRect;
     }
 
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
@@ -1076,19 +1073,22 @@ void KisOpenGLCanvas2::renderCanvasGL(const QRect &updateRect)
         d->quadVAO.bind();
     }
 
+    QRect alignedUpdateRect = updateRect;
+
     if (!updateRect.isEmpty()) {
         const QRect deviceUpdateRect = widgetToSurface(updateRect).toAlignedRect();
+        alignedUpdateRect = surfaceToWidget(deviceUpdateRect).toAlignedRect();
 
         glScissor(deviceUpdateRect.x(), deviceUpdateRect.y(), deviceUpdateRect.width(), deviceUpdateRect.height());
         glEnable(GL_SCISSOR_TEST);
     }
 
-    drawBackground(updateRect);
-    drawCheckers(updateRect);
-    drawImage(updateRect);
+    drawBackground(alignedUpdateRect);
+    drawCheckers(alignedUpdateRect);
+    drawImage(alignedUpdateRect);
 
     if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
-        drawGrid(updateRect);
+        drawGrid(alignedUpdateRect);
     }
 
     if (!updateRect.isEmpty()) {

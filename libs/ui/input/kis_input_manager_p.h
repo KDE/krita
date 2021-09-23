@@ -70,6 +70,7 @@ public:
     bool touchStrokeStarted = false;
 
     QPointF previousPos;
+    QScopedPointer<QEvent> originatingTouchBeginEvent;
     bool buttonPressed = false;
 
     KisPopupWidgetInterface* popupWidget;

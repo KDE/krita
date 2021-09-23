@@ -668,6 +668,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 && touchEvent->touchPoints().count() == 1)
             {
                 d->previousPos = touchEvent->touchPoints().at(0).pos();
+                // we don't want to lose this event
+                copyEventHack(touchEvent, d->originatingTouchBeginEvent);
                 d->buttonPressed = false;
                 d->resetCompressor();
             }
@@ -713,7 +715,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 if (!d->buttonPressed)
                 {
                     // we start it here not in TouchBegin, because Qt::TouchPointStationary doesn't work with hpdi devices.
-                    retval = d->matcher.buttonPressed(Qt::LeftButton, touchEvent);
+                    retval = d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
                     d->buttonPressed = true;
                     break;
                 }

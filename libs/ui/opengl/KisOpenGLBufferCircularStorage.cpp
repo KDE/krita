@@ -57,7 +57,7 @@ KisOpenGLBufferCircularStorage::~KisOpenGLBufferCircularStorage()
 
 void KisOpenGLBufferCircularStorage::allocate(int numBuffers, int bufferSize)
 {
-    m_d->buffers.clear();
+    reset();
     addBuffersImpl(numBuffers, bufferSize);
 }
 
@@ -83,6 +83,8 @@ int KisOpenGLBufferCircularStorage::size() const
 void KisOpenGLBufferCircularStorage::reset()
 {
     m_d->buffers.clear();
+    m_d->nextBuffer = 0;
+    m_d->bufferSize = 0;
 }
 
 void KisOpenGLBufferCircularStorage::allocateMoreBuffers(int numBuffers)

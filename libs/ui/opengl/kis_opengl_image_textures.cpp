@@ -245,7 +245,7 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
                                                           &m_texturesInfo,
                                                           emptyTileData,
                                                           mode,
-                                                          config.useOpenGLTextureBuffer() ? &m_bufferStorage : 0,
+                                                          m_bufferStorage.isValid() ? &m_bufferStorage : 0,
                                                           config.numMipmapLevels(),
                                                           f);
                 m_textureTiles.append(tile);

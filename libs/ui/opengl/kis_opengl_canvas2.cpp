@@ -724,11 +724,6 @@ void KisOpenGLCanvas2::drawGrid(const QRect &updateRect)
                 d->solidColorShader->location(Uniform::FragmentColor),
                 QVector4D(d->gridColor.redF(), d->gridColor.greenF(), d->gridColor.blueF(), 0.5f));
 
-    if (KisOpenGL::supportsVAO()) {
-        d->outlineVAO.bind();
-        d->lineVertexBuffer.bind();
-    }
-
     QRectF widgetRect(0,0, widgetSize.width(), widgetSize.height());
     QRectF widgetRectInImagePixels = coordinatesConverter()->documentToImage(coordinatesConverter()->widgetToDocument(widgetRect));
     QRect wr = widgetRectInImagePixels.toAlignedRect();
@@ -756,6 +751,8 @@ void KisOpenGLCanvas2::drawGrid(const QRect &updateRect)
     }
 
     if (KisOpenGL::supportsVAO()) {
+        d->outlineVAO.bind();
+        d->lineVertexBuffer.bind();
         d->lineVertexBuffer.allocate(grid.constData(), 3 * grid.size() * sizeof(float));
     }
     else {

@@ -340,7 +340,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
 
             qDebug() << "Still unsignalled after processed" << numProcessedTiles << "tiles";
 
-            const int nextSize = qNextPowerOfTwo(m_bufferStorage.size()) << 1;
+            const int nextSize = qNextPowerOfTwo(m_bufferStorage.size());
             m_bufferStorage.allocateMoreBuffers(nextSize);
             qDebug() << "    increased number of buffers to" << nextSize;
         }

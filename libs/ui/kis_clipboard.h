@@ -64,6 +64,8 @@ public:
 
     void setLayers(KisNodeList nodes, KisImageSP image, bool forceCopy = false);
     bool hasLayers() const;
+    bool hasLayerStyles() const;
+
     const QMimeData* layersMimeData() const;
 
 Q_SIGNALS:

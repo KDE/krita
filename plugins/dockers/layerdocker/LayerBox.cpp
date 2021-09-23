@@ -63,6 +63,7 @@
 #include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
+#include <kis_clipboard.h>
 
 #include "canvas/kis_canvas2.h"
 #include "kis_dummies_facade_base.h"
@@ -666,15 +667,23 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
     if (m_canvas) {
         QMenu menu;
 
-        const bool singleLayer = nodes.size() == 1;
+        const bool singleNode = nodes.size() == 1;
 
         if (index.isValid()) {
             menu.addAction(m_propertiesAction);
 
+            KisLayerSP singleLayer = dynamic_cast<KisLayer*>(activeNode.data());
+
             if (singleLayer) {
                 addActionToMenu(&menu, "layer_style");
-                addActionToMenu(&menu, "copy_layer_style");
-                addActionToMenu(&menu, "paste_layer_style");
+
+                if (singleLayer->layerStyle()) {
+                    addActionToMenu(&menu, "copy_layer_style");
+                }
+
+                if (KisClipboard::instance()->hasLayerStyles()) {
+                    addActionToMenu(&menu, "paste_layer_style");
+                }
             }
 
             Q_FOREACH(KisNodeSP node, nodes) {
@@ -686,7 +695,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
 
             {
                 KisSignalsBlocker b(m_colorSelector);
-                m_colorSelector->setCurrentIndex(singleLayer ? activeNode->colorLabelIndex() : -1);
+                m_colorSelector->setCurrentIndex(singleNode ? activeNode->colorLabelIndex() : -1);
             }
 
             menu.addAction(m_colorSelectorAction);
@@ -702,7 +711,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
             addActionToMenu(&menu, "new_from_visible");
 
 
-            if (singleLayer) {
+            if (singleNode) {
                 addActionToMenu(&menu, "flatten_image");
                 addActionToMenu(&menu, "flatten_layer");
             }
@@ -724,7 +733,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
             addActionToMenu(locksMenu, "toggle_layer_inherit_alpha");
             addActionToMenu(locksMenu, "toggle_layer_alpha_lock");
 
-            if (singleLayer) {
+            if (singleNode) {
                 QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));
                 addActionToMenu(addLayerMenu, "add_new_transparency_mask");
                 addActionToMenu(addLayerMenu, "add_new_filter_mask");
@@ -755,7 +764,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
 
             addActionToMenu(&menu, "pin_to_timeline");
 
-            if (singleLayer) {
+            if (singleNode) {
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
                     addActionToMenu(&menu, "isolate_active_layer");

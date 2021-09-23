@@ -16,6 +16,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QClipboard>
+#include <QMimeData>
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
@@ -54,6 +55,7 @@
 #include <kis_meta_data_merge_strategy_registry.h>
 #include <kis_psd_layer_style.h>
 #include <KisMimeDatabase.h>
+#include <kis_clipboard.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -97,6 +99,7 @@
 
 #include "KisSaveGroupVisitor.h"
 #include <kis_asl_layer_style_serializer.h>
+
 
 KisLayerManager::KisLayerManager(KisViewManager * view)
     : m_view(view)
@@ -390,7 +393,12 @@ void KisLayerManager::copyLayerStyle()
     QString psdxml = serializer.formPsdXmlDocument().toString();
 
     if (!psdxml.isEmpty()) {
-        QGuiApplication::clipboard()->setText(psdxml);
+        QMimeData *mimeData = new QMimeData;
+
+        mimeData->setText(psdxml);
+        mimeData->setData("application/x-krita-layer-style", psdxml.toUtf8());
+
+        QGuiApplication::clipboard()->setMimeData(mimeData);
     }
 }
 
@@ -402,7 +410,14 @@ void KisLayerManager::pasteLayerStyle()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    QString aslXml = QGuiApplication::clipboard()->text();
+    QString aslXml;
+
+    if (KisClipboard::instance()->hasLayerStyles()) {
+        aslXml = QString::fromUtf8(QGuiApplication::clipboard()->mimeData()->data("application/x-krita-layer-style"));
+    } else {
+        aslXml = QGuiApplication::clipboard()->text();
+    }
+
     if (aslXml.isEmpty()) return;
 
     QDomDocument aslDoc;

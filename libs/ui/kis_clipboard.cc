@@ -452,6 +452,17 @@ bool KisClipboard::hasLayers() const
     return cbData->hasFormat("application/x-krita-node");
 }
 
+bool KisClipboard::hasLayerStyles() const
+{
+    // NOTE: please don't disable the pacte action based on the
+    //       result of this function, because we allow pasting
+    //       of the layer styles as 'text/plain'
+
+    QClipboard *cb = QApplication::clipboard();
+    const QMimeData *cbData = cb->mimeData();
+    return cbData->hasFormat("application/x-krita-layer-style");
+}
+
 const QMimeData* KisClipboard::layersMimeData() const
 {
     QClipboard *cb = QApplication::clipboard();

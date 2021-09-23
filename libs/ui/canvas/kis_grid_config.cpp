@@ -107,6 +107,7 @@ bool KisGridConfig::loadDynamicDataFromXml(const QDomElement &gridElement)
     result &= KisDomUtils::loadValue(gridElement, "subdivision", &m_subdivision);
     result &= KisDomUtils::loadValue(gridElement, "angleLeft", &m_angleLeft);
     result &= KisDomUtils::loadValue(gridElement, "angleRight", &m_angleRight);
+    result &= KisDomUtils::loadValue(gridElement, "cellSpacing", &m_cellSpacing);
     result &= KisDomUtils::loadValue(gridElement, "gridType", (int*)(&m_gridType));
 
     return result;

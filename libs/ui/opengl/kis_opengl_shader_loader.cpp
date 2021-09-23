@@ -186,10 +186,10 @@ KisShaderProgram *KisOpenGLShaderLoader::loadSolidColorShader()
     QString vertPath, fragPath;
     // Select appropriate shader files
     if (KisOpenGL::supportsLoD()) {
-        vertPath = "matrix_transform.vert";
+        vertPath = "solid_color.vert";
         fragPath = "solid_color.frag";
     } else {
-        vertPath = "matrix_transform_legacy.vert";
+        vertPath = "solid_color_legacy.vert";
         fragPath = "solid_color_legacy.frag";
     }
 

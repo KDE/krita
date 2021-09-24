@@ -762,6 +762,8 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
     QStack<BlockFormatRecord> formatStack;
     formatStack.push(BlockFormatRecord(QTextBlockFormat(), QTextCharFormat()));
+    cursor.setCharFormat(formatStack.top().charFormat);
+    cursor.setBlockFormat(formatStack.top().blockFormat);
 
     qreal currBlockAbsoluteLineOffset = 0.0;
     int prevBlockCursorPosition = -1;
@@ -780,9 +782,9 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
             qreal absoluteLineOffset = 1.0;
 
             // fetch format of the parent block and make it default
-            if (formatStack.size() >= 2) {
-                newBlockFormat = formatStack[formatStack.size() - 2].blockFormat;
-                newCharFormat = formatStack[formatStack.size() - 2].charFormat;
+            if (!formatStack.empty()) {
+                newBlockFormat = formatStack.top().blockFormat;
+                newCharFormat = formatStack.top().charFormat;
             }
 
             {
@@ -849,8 +851,6 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                 cursor.setBlockFormat(formatStack.top().blockFormat);
             }
 
-
-
             cursor.mergeCharFormat(newCharFormat);
             cursor.mergeBlockFormat(newBlockFormat);
 
@@ -871,10 +871,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
         }
         case QXmlStreamReader::Characters:
         {
-            if (!svgReader.isWhitespace()) {
-                cursor.insertText(svgReader.text().toString());
-            }
-
+            cursor.insertText(svgReader.text().toString());
             break;
         }
         default:

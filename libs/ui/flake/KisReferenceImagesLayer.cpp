@@ -152,7 +152,7 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImagesCommand(KisDocument *
     parentCommand->setText(cmd->text());
     new KoKeepShapesSelectedCommand({}, referenceImages, layer->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
 
-    Q_FOREACH(KoShape *shape, referenceImages) {
+    Q_FOREACH (KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
         if (ref && ref->hasLocalFile()) {
             if (!m_fileSystemWatcher->files().contains(ref->filename())) {
@@ -165,7 +165,7 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImagesCommand(KisDocument *
 
 KUndo2Command * KisReferenceImagesLayer::removeReferenceImagesCommand(KisDocument *document, QList<KoShape*> referenceImages)
 {
-    Q_FOREACH(KoShape *shape, referenceImages) {
+    Q_FOREACH (KoShape *shape, referenceImages) {
         KisReferenceImage *ref = dynamic_cast<KisReferenceImage*>(shape);
         if (ref && ref->hasLocalFile()) {
             bool unique = true;
@@ -270,7 +270,7 @@ void KisReferenceImagesLayer::addReferenceImages(KisReferenceImage *reference)
 
 void KisReferenceImagesLayer::fileChanged(QString path)
 {
-    Q_FOREACH(KisReferenceImage *ref, referenceImages()) {
+    Q_FOREACH (KisReferenceImage *ref, referenceImages()) {
         if (ref->filename() == path) {
             ref->reloadImage();
         }
@@ -293,7 +293,7 @@ void KisReferenceImagesLayer::updateTransformations(KisCanvas2 *kisCanvas)
     qreal angle = 0;
     m_docToWidget = kisCanvas->coordinatesConverter()->documentToWidgetTransform();
 
-    Q_FOREACH(KoShape *shape, shapes()) {
+    Q_FOREACH (KoShape *shape, shapes()) {
         KisReferenceImage *referenceImage = dynamic_cast<KisReferenceImage*>(shape);
         if (referenceImage) {
             rotateSelection &= (!referenceImage->pinRotate());

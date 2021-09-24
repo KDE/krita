@@ -101,7 +101,7 @@ void ToolReferenceImages::mouseMoveEvent(KoPointerEvent *event)
 
         if (referenceImage && referenceImage->crop()) {
             KoInteractionTool::mouseMoveEvent(newEvent);
-            if(currentStrategy() == 0) {
+            if (currentStrategy() == 0) {
             QRectF bounds = handlesSize();
 
             if (bounds.contains(newEvent->point)) {
@@ -245,7 +245,7 @@ void ToolReferenceImages::updateCursor()
 
     QCursor cursor = Qt::ArrowCursor;
 
-    if(!activeReferenceImage() && activeReferenceImage()->crop()) return;
+    if (!activeReferenceImage() && activeReferenceImage()->crop()) return;
     if (m_mouseWasInsideHandles) {
 
             switch (m_lastHandle) {
@@ -287,7 +287,7 @@ KoInteractionStrategy *ToolReferenceImages::createStrategy(KoPointerEvent *event
     if (activeReferenceImage() && activeReferenceImage()->crop()) {
         bool insideSelection = false;
         KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
-        if(insideSelection) {
+        if (insideSelection) {
             return new KisReferenceImageCropStrategy(this, activeReferenceImage(), event->point, handle);
         }
         else {

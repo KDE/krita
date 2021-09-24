@@ -66,7 +66,7 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
 {
     QRectF finalRect = m_initialCropRect;
     QPointF distance = m_unwindMatrix.map(point) - m_unwindMatrix.map(m_start);
-    if(m_move) {
+    if (m_move) {
         QPointF offset = finalRect.topLeft() + distance;
         if (offset.x() < 0) {
             offset.setX(0);
@@ -103,7 +103,7 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
             newWidth = m_initialCropRect.width() + distance.x();
 
             qreal maxWidth = m_referenceImage->size().width() - finalRect.topLeft().x();
-            if(newWidth > maxWidth) {
+            if (newWidth > maxWidth) {
                 newWidth = maxWidth;
             }
         }
@@ -111,18 +111,18 @@ void KisReferenceImageCropStrategy::handleMouseMove(const QPointF &point, Qt::Ke
         if (m_top) {
             newHeight = m_initialCropRect.height() - distance.y();
 
-            if(newHeight > 1) {
+            if (newHeight > 1) {
                 pos.setY(distance.y());
             }
             qreal maxHeight = finalRect.bottomRight().y();
-            if(newHeight > maxHeight) {
+            if (newHeight > maxHeight) {
                 newHeight = maxHeight;
             }
         } else if (m_bottom) {
             newHeight = m_initialCropRect.height() + distance.y();
 
             qreal maxHeight = m_referenceImage->size().height() - finalRect.topLeft().y();
-            if(newHeight > maxHeight) {
+            if (newHeight > maxHeight) {
                 newHeight = maxHeight;
             }
         }

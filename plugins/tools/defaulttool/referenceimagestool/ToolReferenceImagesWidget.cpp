@@ -125,13 +125,14 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste-16"));
     d->ui->bnPasteReferenceImage->setIconSize(QSize(16, 16));
 
-    d->ui->bnCrop->setVisible(false);
-    d->ui->bnCrop->setCheckable(true);
-    d->ui->bnCrop->setToolTip(i18n("Crop selected Reference Image"));
-    d->ui->bnCrop->setIcon(KisIconUtils::loadIcon("tool_crop"));
-    d->ui->bnCrop->setIconSize(QSize(16, 16));
+    d->ui->bnActivateCrop->setVisible(false);
+    d->ui->bnActivateCrop->setCheckable(true);
+    d->ui->bnActivateCrop->setToolTip(i18n("Crop selected Reference Image"));
+    d->ui->bnActivateCrop->setIcon(KisIconUtils::loadIcon("tool_crop"));
+    d->ui->bnActivateCrop->setIconSize(QSize(16, 16));
 
     d->ui->grpCrop->setVisible(false);
+    d->ui->bnCrop->setVisible(false);
     d->ui->bnCancel->setVisible(false);
     d->ui->lblPin->setVisible(false);
 
@@ -141,7 +142,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
-    connect(d->ui->bnCrop, SIGNAL(toggled(bool)), this, SLOT(slotUpdateCrop(bool)));
+    connect(d->ui->bnActivateCrop, SIGNAL(clicked()), this, SLOT(slotActivateCrop()));
+    connect(d->ui->bnCrop, SIGNAL(clicked()), this, SLOT(slotAddCropCommand()));
     connect(d->ui->bnCancel, SIGNAL(clicked()), this, SLOT(slotCancelCrop()));
 
 
@@ -181,7 +183,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     d->ui->opacitySlider->setSelection(shapes);
     d->ui->saturationSlider->setSelection(shapes);
 
-    if (d->ui->bnCrop->isChecked()) {
+    if (d->ui->bnActivateCrop->isChecked()) {
         slotCancelCrop();
         if (d->prevActiveReferenceImage) {
             d->prevActiveReferenceImage->setCrop(false, QRectF());
@@ -309,7 +311,7 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     d->ui->lblPin->setVisible(hasSelection);
 
     KisReferenceImage *ref = d->tool->activeReferenceImage();
-    d->ui->bnCrop->setVisible(hasSelection);
+    d->ui->bnActivateCrop->setVisible(hasSelection);
     if (ref) {
         d->ui->chkPinMirror->setChecked(ref->pinMirror());
         d->ui->chkPinPos->setChecked(ref->pinPosition());
@@ -344,31 +346,19 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     }
 }
 
-void ToolReferenceImagesWidget::slotUpdateCrop(bool value)
+void ToolReferenceImagesWidget::slotActivateCrop()
 {
     KisReferenceImage* ref = d->tool->activeReferenceImage();
     if (!ref) return;
 
-    d->ui->bnCrop->setChecked(value);
-    bool enabled = d->ui->bnCrop->isChecked();
-    d->ui->grpCrop->setVisible(enabled);
-    d->ui->bnCancel->setVisible(enabled);
+    if (!ref->crop()) {
+        showCropWidgets(true);
 
-    if (enabled) {
-        ref->setCrop(enabled, QRectF());
+        ref->setCrop(true, QRectF());
         updateCropSliders();
         d->prevActiveReferenceImage = ref;
+        d->tool->updateReferenceImages();
     }
-    else {
-        if (d->ui->sldOffsetX->value() > 0 || d->ui->sldOffsetY->value() > 0
-                || !d->ui->sldWidth->isMaximized() || !d->ui->sldHeight->isMaximized()) {
-            ref->setCrop(enabled, cropRect());
-            KUndo2Command *cmd =
-                     new KisReferenceImage::CropReferenceImage(ref, cropRect());
-            d->tool->canvas()->addCommand(cmd);
-        }
-    }
-    d->tool->updateReferenceImages();
 }
 
 void ToolReferenceImagesWidget::slotCropValuesChanged()
@@ -384,13 +374,13 @@ void ToolReferenceImagesWidget::slotCropValuesChanged()
         qreal width = d->ui->sldWidth->value();
         qreal height = d->ui->sldHeight->value();
 
-        if(x + width > rect.width()) {
+        if (x + width > rect.width()) {
             width = rect.width() - x;
             d->ui->sldWidth->blockSignals(true);
             d->ui->sldWidth->setValue(width);
             d->ui->sldWidth->blockSignals(false);
         }
-        if(y + height > rect.height())
+        if (y + height > rect.height())
         {
             height = rect.height() - y;
             d->ui->sldHeight->blockSignals(true);
@@ -547,11 +537,7 @@ void ToolReferenceImagesWidget::slotCancelCrop()
     KisReferenceImage* ref = d->tool->activeReferenceImage();
     if (!ref) return;
 
-    d->ui->bnCrop->blockSignals(true);
-    d->ui->bnCrop->setChecked(false);
-    d->ui->bnCrop->blockSignals(false);
-    d->ui->grpCrop->setVisible(false);
-    d->ui->bnCancel->setVisible(false);
+    showCropWidgets(false);
     ref->setCrop(false, QRectF());
 }
 
@@ -569,7 +555,6 @@ void ToolReferenceImagesWidget::setCropOffsetY(qreal range, qreal val)
     d->ui->sldOffsetY->setRange(0,range);
     d->ui->sldOffsetY->setValue(val);
     d->ui->sldOffsetY->blockSignals(false);
-
 }
 
 void ToolReferenceImagesWidget::setCropWidth(qreal range, qreal val)
@@ -586,4 +571,31 @@ void ToolReferenceImagesWidget::setCropHeight(qreal range, qreal val)
     d->ui->sldHeight->setRange(0, range);
     d->ui->sldHeight->setValue(val);
     d->ui->sldHeight->blockSignals(false);
+}
+
+void ToolReferenceImagesWidget::slotAddCropCommand()
+{
+    KisReferenceImage* ref = d->tool->activeReferenceImage();
+    if (!ref) return;
+
+    if (d->ui->sldOffsetX->value() > 0 || d->ui->sldOffsetY->value() > 0
+            || !d->ui->sldWidth->isMaximized() || !d->ui->sldHeight->isMaximized()) {
+
+        ref->setCrop(false, cropRect());
+        KUndo2Command *cmd =
+                 new KisReferenceImage::CropReferenceImage(ref, cropRect());
+        d->tool->canvas()->addCommand(cmd);
+        showCropWidgets(false);
+    }
+    d->tool->updateReferenceImages();
+}
+
+void ToolReferenceImagesWidget::showCropWidgets(bool show)
+{
+    d->ui->bnActivateCrop->blockSignals(true);
+    d->ui->bnActivateCrop->setChecked(show);
+    d->ui->bnActivateCrop->blockSignals(false);
+    d->ui->grpCrop->setVisible(show);
+    d->ui->bnCancel->setVisible(show);
+    d->ui->bnCrop->setVisible(show);
 }

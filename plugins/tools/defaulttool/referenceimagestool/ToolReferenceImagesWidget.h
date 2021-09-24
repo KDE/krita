@@ -41,7 +41,8 @@ private Q_SLOTS:
     void slotPositionChanged();
     void slotZoomChanged();
     void slotPinAllChanged();
-    void slotUpdateCrop(bool);
+    void slotActivateCrop();
+    void slotAddCropCommand();
     void slotCancelCrop();
 
     void slotImageValuesChanged();
@@ -52,6 +53,7 @@ private:
     void updateCropSliders();
 
     QRectF cropRect();
+    void showCropWidgets(bool);
     void setCropOffsetX(qreal range, qreal val);
     void setCropOffsetY(qreal range, qreal val);
     void setCropWidth(qreal range, qreal val);

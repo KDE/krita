@@ -1402,7 +1402,7 @@ void KisConfig::setHideToolbarFullscreen(const bool value) const
 
 bool KisConfig::fullscreenMode(bool defaultValue) const
 {
-    return (defaultValue ? true : m_cfg.readEntry("fullscreenMode", true));
+    return (defaultValue ? true : m_cfg.readEntry("fullscreenMode", false));
 }
 
 void KisConfig::setFullscreenMode(const bool value) const

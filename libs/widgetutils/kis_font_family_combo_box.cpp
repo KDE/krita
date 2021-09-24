@@ -224,18 +224,19 @@ void KisFontComboBoxes::setCurrentFamily(const QString family)
 
 void KisFontComboBoxes::setCurrentStyle(QString style)
 {
-    QString properStyle = QString();
-    for (int i = 0; i < m_styles->count(); i++) {
-        QString item = m_styles->itemText(i);
-        if (item == style) {
-            properStyle = style;
-        } else if (item.contains(style, Qt::CaseInsensitive)) {
-            properStyle = item;
-        } else if (item.contains("regular", Qt::CaseInsensitive)) {
-            properStyle = item;
-        }
+    int index = m_styles->findText(style, Qt::MatchFixedString);
+
+    if (index < 0) {
+        index = m_styles->findText(style, Qt::MatchContains);
     }
-    m_styles->setCurrentText(properStyle);
+
+    if (index < 0) {
+        index = m_styles->findText("regular", Qt::MatchContains);
+    }
+
+    if (index >= 0) {
+        m_styles->setCurrentIndex(index);
+    }
 }
 
 QString KisFontComboBoxes::currentFamily() const

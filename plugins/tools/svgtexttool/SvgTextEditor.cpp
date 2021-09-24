@@ -689,6 +689,8 @@ void SvgTextEditor::setTextBold(QFont::Weight weight)
         }
     }
     d->bold = weight == QFont::Bold;
+
+    checkFormat();
 }
 
 void SvgTextEditor::setTextWeightLight()
@@ -752,6 +754,8 @@ void SvgTextEditor::setTextItalic(QFont::Style style)
             cursor.insertText(selectionModified);
         }
     }
+
+    checkFormat();
 }
 
 void SvgTextEditor::setTextDecoration(KoSvgText::TextDecoration decor)
@@ -1121,23 +1125,33 @@ void SvgTextEditor::setFont(const QString &fontName)
     QTextCharFormat curFormat = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     font.setPointSize(curFormat.font().pointSize());
 
-    QTextCharFormat format;
-    //This disables the style being set from the font-comboboxes too, so we need to rethink how we use that.
-    format.setFontFamily(font.family());
+    QFontDatabase fontDatabase;
+    const bool italic = fontDatabase.italic(font.family(), font.styleName());
+    const int fontWeight = fontDatabase.weight(font.family(), font.styleName());
     if (isRichTextEditorTabActive()) {
+        QTextCharFormat format;
+        format.setFontFamily(font.family());
+        format.setFontItalic(italic);
+        format.setFontWeight(fontWeight);
+
         QTextCursor oldCursor = setTextSelection();
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
         m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
     } else if (isSvgSourceEditorTabActive()) {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
-            QString selectionModified = "<tspan style=\"font-family:"+font.family()+" "+font.styleName()+";\">" + cursor.selectedText() + "</tspan>";
+            QString selectionModified = "<tspan style=\"font-family:" + font.family() + ";" +
+                                        "font-weight:" + QString::number(fontWeight) + ";"
+                                        "font-style:" + (italic ? "italic" : "normal") + ";\">" +
+                                        cursor.selectedText() + "</tspan>";
             cursor.removeSelectedText();
             cursor.insertText(selectionModified);
         }
     }
     // save last used font to be used when the editor is cleared
     d->font = font;
+
+    checkFormat();
 }
 
 void SvgTextEditor::setFontSize(qreal fontSize)

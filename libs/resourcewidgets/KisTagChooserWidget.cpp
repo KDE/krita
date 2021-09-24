@@ -149,8 +149,10 @@ void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
                 KIS_SAFE_ASSERT_RECOVER_RETURN(result);
             }
         }
-        d->model->sort(KisAllTagsModel::Name);
     }
+    // apparently after a name change it doesn't figure out that the model should be resorted even if we explicitely ask it to...
+    d->model->sort(KisAllTagsModel::Active);
+    d->model->sort(KisAllTagsModel::Name);
 }
 
 void KisTagChooserWidget::tagToolUndeleteLastTag(KisTagSP tag)

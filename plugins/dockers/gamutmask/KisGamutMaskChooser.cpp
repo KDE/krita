@@ -211,6 +211,9 @@ void KisGamutMaskChooser::updateViewSettings()
 
     if (m_mode == KisGamutMaskChooser::THUMBNAIL) {
         m_itemChooser->setSynced(true);
+        m_itemChooser->itemView()->setViewMode(QListView::IconMode);
+        m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
+        m_itemChooser->setColumnWidth(this->fontMetrics().lineSpacing()*4);
         m_delegate->setViewMode(m_mode);
     } else if (m_mode == KisGamutMaskChooser::DETAIL) {
         m_itemChooser->setSynced(false);

@@ -425,10 +425,10 @@ void DlgCreateBundle::removeSelected()
     m_ui->tableSelected->setCurrentRow(row);
 }
 
-QPixmap imageToIcon(const QImage &img) {
+QPixmap imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode) {
     QPixmap pixmap(ICON_SIZE, ICON_SIZE);
     pixmap.fill();
-    QImage scaled = img.scaled(ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QImage scaled = img.scaled(ICON_SIZE, ICON_SIZE, aspectRatioMode, Qt::SmoothTransformation);
     int x = (ICON_SIZE - scaled.width()) / 2;
     int y = (ICON_SIZE - scaled.height()) / 2;
     QPainter gc(&pixmap);
@@ -466,7 +466,11 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         // The difference between them is relevant in case of Workspaces which has no images.
         // Using QPixmap() makes them appear in a dense list without icons, while imageToIcon(QImage())
         //  would give a list with big white rectangles and names of the workspaces.
-        QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image), name);
+        Qt::AspectRatioMode scalingAspectRatioMode = Qt::KeepAspectRatio;
+        if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
+            scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+        }
+        QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
         item->setData(Qt::UserRole, id);
 
         if (m_selectedResourcesIds.contains(id)) {

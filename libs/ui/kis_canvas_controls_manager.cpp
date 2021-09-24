@@ -313,6 +313,9 @@ void KisCanvasControlsManager::stepFlow(float step)
     flow = qBound<qreal>(0.0, flow, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Flow, flow);
 
+    // verify if the brush does actually support this change
+    flow = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Flow).toReal();
+
     m_view->showFloatingMessage(i18nc("Brush Option Flow", "%1 %2\%", QString("Flow:"), flow * 100), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
@@ -350,6 +353,9 @@ void KisCanvasControlsManager::stepFade(float step)
     fade = qBound<qreal>(0.0, fade, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Fade, fade);
 
+    // verify if the brush does actually support this change
+    fade = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Fade).toReal();
+
     m_view->showFloatingMessage(i18nc("Edge softness, Brush Option Fade", "%1 %2", QString("Fade:"), fade),
                                 QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
@@ -374,6 +380,9 @@ void KisCanvasControlsManager::stepScatter(float step)
     scatter += step;
     scatter = qBound<qreal>(0.0, scatter, 5.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Scatter, scatter);
+
+    // verify if the brush does actually support this change
+    scatter = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Scatter).toReal();
 
     m_view->showFloatingMessage(i18nc("Brush Option Scatter", "%1 %2\%", QString("Scatter:"), scatter * 100), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);

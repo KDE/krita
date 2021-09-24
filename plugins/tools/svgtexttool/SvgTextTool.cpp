@@ -141,7 +141,7 @@ QWidget *SvgTextTool::createOptionWidget()
     //
     // The way to fetch font in Qt from SDK is deprecated in newer Android versions.
     if (storedSize <= 0) {
-        storedSize = 12;  // being one of the standardSizes
+        storedSize = 18;  // being one of the standardSizes
     }
 #endif
     int sizeIndex = 0;

@@ -78,10 +78,7 @@ public:
             return false;
         }
 
-
-        QMap<QString, KisAbrBrushSP>::const_iterator nextIteration = m_brushCollectionIterator;
-        nextIteration++;
-        bool hasNext = (nextIteration != m_brushesMap->constEnd());
+        bool hasNext = (m_brushCollectionIterator != m_brushesMap->constEnd());
         return hasNext;
     }
 
@@ -90,9 +87,10 @@ public:
         if (m_resourceType != ResourceType::Brushes) {
             return;
         }
-        m_brushCollectionIterator++;
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_brushCollectionIterator != m_brushesMap->constEnd());
         m_currentResource = m_brushCollectionIterator.value();
         m_currentUrl = m_brushCollectionIterator.key();
+        m_brushCollectionIterator++;
     }
 
     QString url() const override { return m_currentUrl; }

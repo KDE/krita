@@ -802,8 +802,8 @@ bool KisTagModel::lessThan(const QModelIndex &source_left, const QModelIndex &so
     } else if (rightIsFakeRow) {
         return false;
     } else {
-        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagsModel::Name).toString();
-        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagsModel::Name).toString();
+        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagsModel::Name).toString().toLower();
+        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagsModel::Name).toString().toLower();
         return (nameLeft < nameRight);
     }
 }

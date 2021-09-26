@@ -179,6 +179,7 @@ void KisToolCrop::activate(const QSet<KoShape*> &shapes)
 void KisToolCrop::cancelStroke()
 {
     m_haveCropSelection = false;
+    useCursor(cursor());
     doCanvasUpdate(image()->bounds());
 }
 
@@ -853,33 +854,37 @@ qint32 KisToolCrop::mouseOnHandle(QPointF currentViewPoint)
 
 void KisToolCrop::setMoveResizeCursor(qint32 handle)
 {
-    QCursor cursor;
+    QCursor cursorType;
 
     switch (handle) {
     case(UpperLeft):
     case(LowerRight):
-        cursor = KisCursor::sizeFDiagCursor();
+        cursorType = KisCursor::sizeFDiagCursor();
         break;
     case(LowerLeft):
     case(UpperRight):
-        cursor = KisCursor::sizeBDiagCursor();
+        cursorType = KisCursor::sizeBDiagCursor();
         break;
     case(Upper):
     case(Lower):
-        cursor = KisCursor::sizeVerCursor();
+        cursorType = KisCursor::sizeVerCursor();
         break;
     case(Left):
     case(Right):
-        cursor = KisCursor::sizeHorCursor();
+        cursorType = KisCursor::sizeHorCursor();
         break;
     case(Inside):
-        cursor = KisCursor::sizeAllCursor();
+        cursorType = KisCursor::sizeAllCursor();
         break;
     default:
-        cursor = KisCursor::arrowCursor();
+        if (m_haveCropSelection) {
+            cursorType = KisCursor::arrowCursor();
+        } else {
+            cursorType = cursor();
+        }
         break;
     }
-    useCursor(cursor);
+    useCursor(cursorType);
 }
 
 QRectF KisToolCrop::boundingRect()

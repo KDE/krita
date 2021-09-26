@@ -151,7 +151,7 @@ void KisToolCrop::activate(const QSet<KoShape*> &shapes)
     setDecoration(configGroup.readEntry("decoration", 1));
 
     // Default: crop the entire image
-    setCropType(configGroup.readEntry("cropType", 1) == 0 ? LayerCropType : ImageCropType);
+    setCropType(CropToolType(configGroup.readEntry("cropType", 0)));
 
     m_finalRect.setCropRect(image()->bounds());
 

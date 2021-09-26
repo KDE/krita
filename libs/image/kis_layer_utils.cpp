@@ -194,7 +194,10 @@ namespace KisLayerUtils {
                 m_insertionPutAfter = m_sourceNode;
             }
 
-            if (m_sourcePaintDevice) {
+            KisCloneLayer *cloneLayer = dynamic_cast<KisCloneLayer*>(m_sourceNode.data());
+            if (cloneLayer) {
+                m_targetNode = cloneLayer->reincarnateAsPaintLayer();
+            } else if (m_sourcePaintDevice) {
                 KisPaintDeviceSP clone;
 
                 if (*m_sourcePaintDevice->colorSpace() !=

@@ -96,7 +96,10 @@ void KisSessionManagerDialog::slotNewSession()
     session->setName(name);
     session->storeCurrentWindows();
 
-    server->addResource(session);
+    bool r = server->addResource(session);
+    if (!r) {
+        QMessageBox::warning(this, i18nc("@title:window", "Couldn't add the session"), i18nc("Warning message", "Adding the session to the database failed."));
+    }
 
     KisPart::instance()->setCurrentSession(session);
 }
@@ -112,7 +115,11 @@ void KisSessionManagerDialog::slotRenameSession()
     KisSessionResourceSP session = getSelectedSession();
     if (!session) return;
 
-    m_model->renameResource(session, name);
+    bool r = m_model->renameResource(session, name);
+    if (!r) {
+        QMessageBox::warning(this, i18nc("@title:window", "Couldn't rename the session"),
+                             i18nc("Warning about not being able to rename a session", "Renaming the session failed."));
+    }
 }
 
 void KisSessionManagerDialog::slotSessionDoubleClicked(QModelIndex /*item*/)

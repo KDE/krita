@@ -33,7 +33,7 @@ class PAINTOP_EXPORT KisBrushSelectionWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisBrushSelectionWidget(QWidget *parent = 0);
+    KisBrushSelectionWidget(int maxBrushSize, QWidget *parent = 0);
 
     ~KisBrushSelectionWidget() override;
 

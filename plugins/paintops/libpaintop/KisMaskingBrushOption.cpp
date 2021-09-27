@@ -17,6 +17,7 @@
 #include <QDomDocument>
 #include "kis_brush.h"
 #include "kis_image.h"
+#include "kis_image_config.h"
 #include "kis_brush_option.h"
 
 #include "KisMaskingBrushOptionProperties.h"
@@ -47,7 +48,7 @@ struct KisMaskingBrushOption::Private
         brushSizeWarningLabel->setVisible(false);
         brushSizeWarningLabel->setWordWrap(true);
 
-        brushChooser = new KisBrushSelectionWidget(ui.data());
+        brushChooser = new KisBrushSelectionWidget(KisImageConfig(true).maxMaskingBrushSize(), ui.data());
 
         QVBoxLayout *layout  = new QVBoxLayout(ui.data());
         layout->addLayout(compositeOpLayout, 0);

@@ -291,7 +291,7 @@ void KisPopupPalette::reconfigure()
         }
         else {
             m_colorSelector  = new PopupColorTriangle(m_displayRenderer, this);
-            connect(m_colorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
+            connect(m_colorSelector, SIGNAL(requestCloseContainer()), this, SIGNAL(finished()));
         }
         m_colorSelector->setDisplayRenderer(m_displayRenderer);
         m_colorSelector->setConfig(true,false);

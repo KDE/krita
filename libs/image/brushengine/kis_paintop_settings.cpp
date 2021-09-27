@@ -183,10 +183,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
          *    correct limits (right now they are limited by usual
          *    maximumBrushSize)
          */
-
-        const qreal maxBrushSize = KisImageConfig(true).readEntry("maximumBrushSize", 1000);
-        const qreal maxMaskingBrushSize = qMin(15000.0, 3.0 * maxBrushSize);
-
+        const qreal maxMaskingBrushSize = KisImageConfig(true).maxMaskingBrushSize();
         const qreal masterSizeCoeff = getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
         maskingSettings->setPaintOpSize(qMin(maxMaskingBrushSize, masterSizeCoeff * paintOpSize()));
     }

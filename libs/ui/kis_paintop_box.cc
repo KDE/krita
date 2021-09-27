@@ -56,6 +56,7 @@
 #include "KisResourceServerProvider.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_config.h"
+#include "kis_image_config.h"
 
 #include "KisPopupButton.h"
 #include "widgets/kis_iconwidget.h"
@@ -274,7 +275,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slFlow->setFixedHeight(buttonsize);
         slFlow->setBlockUpdateSignalOnDrag(true);
 
-        slSize->setRange(0.01, cfg.readEntry("maximumBrushSize", 1000), 2);
+        slSize->setRange(0.01, KisImageConfig(true).maxBrushSize(), 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);

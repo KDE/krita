@@ -14,7 +14,7 @@
 
 #include <kis_canvas_resource_provider.h>
 #include <kis_slider_spin_box.h>
-#include "kis_config.h"
+#include "kis_image_config.h"
 #include <QWidgetAction>
 #include <QMenu>
 
@@ -65,10 +65,10 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
         connect(m_d->btnLod, SIGNAL(customContextMenuRequested(QPoint)),
                 this, SLOT(showLodThresholdWidget(QPoint)));
 
-        KisConfig cfg(true);
+        KisImageConfig cfg(true);
         m_d->thresholdSlider = new KisDoubleSliderSpinBox(m_d->thresholdMenu.data());
 
-        m_d->thresholdSlider->setRange(0, cfg.readEntry("maximumBrushSize", 1000), 2);
+        m_d->thresholdSlider->setRange(0, cfg.maxBrushSize(), 2);
         m_d->thresholdSlider->setValue(100);
         m_d->thresholdSlider->setSingleStep(1);
         m_d->thresholdSlider->setExponentRatio(3.0);

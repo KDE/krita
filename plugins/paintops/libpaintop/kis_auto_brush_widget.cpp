@@ -9,10 +9,7 @@
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_auto_brush_widget.h"
 
-#include <kconfig.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
-
+#include "kis_image_config.h"
 #include <math.h>
 #include <kis_debug.h>
 #include <QSpinBox>
@@ -45,7 +42,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), m_updateCompressor.data(), SLOT(start()));
 
-    inputRadius->setRange(0.01, KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000), 2);
+    inputRadius->setRange(0.01, KisImageConfig(true).maxBrushSize(), 2);
     inputRadius->setExponentRatio(3.0);
     inputRadius->setSingleStep(1);
     inputRadius->setValue(5);

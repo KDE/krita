@@ -648,6 +648,21 @@ void KisImageConfig::setSelectionOverlayMaskColor(const QColor &color)
     m_config.writeEntry("selectionOverlayMaskColor", color);
 }
 
+int KisImageConfig::maxBrushSize(bool defaultValue) const
+{
+    return !defaultValue ? m_config.readEntry("maximumBrushSize", 1000) : 1000;
+}
+
+void KisImageConfig::setMaxBrushSize(int value)
+{
+    m_config.writeEntry("maximumBrushSize", value);
+}
+
+int KisImageConfig::maxMaskingBrushSize() const
+{
+    return qMin(15000, 3 * maxBrushSize());
+}
+
 QString KisImageConfig::exportConfigurationXML(const QString &exportConfigId, bool defaultValue) const
 {
     return (defaultValue ? QString() : m_config.readEntry("ExportConfiguration-" + exportConfigId, QString()));

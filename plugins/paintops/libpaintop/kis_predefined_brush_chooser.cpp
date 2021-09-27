@@ -21,9 +21,6 @@
 #include <QAbstractItemDelegate>
 #include <klocalizedstring.h>
 
-#include <kconfig.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
 #include <KoFileDialog.h>
 #include <KisKineticScroller.h>
 
@@ -41,7 +38,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_custom_brush_widget.h"
 #include "kis_clipboard_brush_widget.h"
-#include <kis_config.h>
+#include <kis_image_config.h>
 #include <KisMimeDatabase.h>
 
 #include "kis_global.h"
@@ -108,7 +105,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     setupUi(this);
 
-    brushSizeSpinBox->setRange(0, KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000), 2);
+    brushSizeSpinBox->setRange(0, KisImageConfig(true).maxBrushSize(), 2);
     brushSizeSpinBox->setValue(5);
     brushSizeSpinBox->setExponentRatio(3.0);
     brushSizeSpinBox->setSuffix(i18n(" px"));

@@ -319,7 +319,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 #endif
     m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", dontUseNative));
 
-    intMaxBrushSize->setValue(cfg.readEntry("maximumBrushSize", 1000));
+    intMaxBrushSize->setValue(KisImageConfig(true).maxBrushSize());
 
     //
     // Resources
@@ -1879,6 +1879,8 @@ bool KisDlgPreferences::editPreferences()
     if (!m_cancelClicked) {
         // General settings
         KisConfig cfg(false);
+        KisImageConfig cfgImage(false);
+
         cfg.setNewCursorStyle(m_general->cursorStyle());
         cfg.setNewOutlineStyle(m_general->outlineStyle());
         cfg.setShowRootLayer(m_general->showRootLayer());
@@ -1890,7 +1892,7 @@ bool KisDlgPreferences::editPreferences()
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
         group.writeEntry("DontUseNativeFileDialog", !m_general->m_chkNativeFileDialog->isChecked());
 
-        cfg.writeEntry<int>("maximumBrushSize", m_general->intMaxBrushSize->value());
+        cfgImage.setMaxBrushSize(m_general->intMaxBrushSize->value());
 
         cfg.writeEntry<bool>("use_custom_system_font", m_general->chkUseCustomFont->isChecked());
         if (m_general->chkUseCustomFont->isChecked()) {
@@ -1972,7 +1974,6 @@ bool KisDlgPreferences::editPreferences()
             cfg.setDefaultColorDepth(KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(currentWorkingColorSpace.id()).id());
         }
 
-        KisImageConfig cfgImage(false);
         cfgImage.setDefaultProofingConfig(m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
                                           m_colorSettings->m_page->cmbProofingIntent->currentIndex(),
                                           m_colorSettings->m_page->ckbProofBlackPoint->isChecked(),

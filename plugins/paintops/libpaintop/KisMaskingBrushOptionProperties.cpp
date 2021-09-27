@@ -93,8 +93,7 @@ void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *set
         const qreal masterSizeCoeff = setting->getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
         qreal size = masterSizeCoeff * masterBrushSize;
 
-        const qreal maxBrushSize = KisImageConfig(true).readEntry("maximumBrushSize", 1000);
-        const qreal maxMaskingBrushSize = qMin(15000.0, 3.0 * maxBrushSize);
+        const qreal maxMaskingBrushSize = KisImageConfig(true).maxMaskingBrushSize();
 
         if (size > maxMaskingBrushSize) {
             theoreticalMaskingBrushSize = size;

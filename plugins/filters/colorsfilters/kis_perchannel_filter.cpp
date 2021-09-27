@@ -256,6 +256,15 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     KoColorTransformation *allColorsTransform = 0;
     KoColorTransformation *colorTransform = 0;
 
+    /**
+     * Sometimes the realTransfers are too low, this often happens with faulty config,
+     * which in turn leads to trouble when creating a transfrom.
+     */
+    int missingTransfers = qMax(0, int(cs->channelCount()-realTransfers.size()));
+    for (int i=0; i < missingTransfers; i++) {
+        realTransfers.append(KisCubicCurve().uint16Transfer());
+    }
+
     if (!colorsNull) {
         const quint16** transfers = new const quint16*[realTransfers.size()];
         for(int i = 0; i < realTransfers.size(); ++i) {
@@ -314,7 +323,6 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
             KIS_ASSERT_RECOVER_NOOP(i != alphaIndexInReal ||
                                     alphaIndexInReal == (realTransfers.size() - 1));
         }
-
         allColorsTransform = cs->createPerChannelAdjustment(allColorsTransfers);
         delete[] allColorsTransfers;
     }

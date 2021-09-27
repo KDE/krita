@@ -135,6 +135,11 @@ public:
     QColor selectionOverlayMaskColor(bool defaultValue = false) const;
     void setSelectionOverlayMaskColor(const QColor &color);
 
+    int maxBrushSize(bool defaultValue = false) const;
+    void setMaxBrushSize(int value);
+
+    int maxMaskingBrushSize() const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_config.writeEntry(name, value);

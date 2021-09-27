@@ -9,9 +9,7 @@
 #include "kis_slider_based_paintop_property.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include <kconfig.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include "kis_image_config.h"
 
 namespace KisStandardUniformPropertiesFactory {
 
@@ -41,7 +39,7 @@ KisUniformPaintOpPropertySP createProperty(const QString &id,
 
 
 
-        prop->setRange(0, KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000));
+        prop->setRange(0, KisImageConfig(true).maxBrushSize());
         prop->setDecimals(2);
         prop->setSingleStep(1);
         prop->setExponentRatio(3.0);

@@ -39,6 +39,7 @@
 // Krita/ui
 #include "kis_abstract_perspective_grid.h"
 #include "kis_config.h"
+#include "kis_image_config.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
 #include <KisViewManager.h>
@@ -344,7 +345,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     qreal scaleY = 0;
     canvas2->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
-    const qreal maxBrushSize = KisConfig(true).readEntry("maximumBrushSize", 1000);
+    const qreal maxBrushSize = KisImageConfig(true).maxBrushSize();
     const qreal effectiveMaxDragSize = 0.5 * screenRect.width();
     const qreal effectiveMaxBrushSize = qMin(maxBrushSize, effectiveMaxDragSize / scaleX);
 

@@ -53,6 +53,7 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
+#include "kis_image_config.h"
 #include "widgets/kis_cmb_composite.h"
 #include "kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
@@ -80,7 +81,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     m_supportOutline = false;
 
     {
-        int maxSize = KisConfig(true).readEntry("maximumBrushSize", 1000);
+        const int maxSize = KisImageConfig(true).maxBrushSize();
 
         int brushSize = 1;
         do {

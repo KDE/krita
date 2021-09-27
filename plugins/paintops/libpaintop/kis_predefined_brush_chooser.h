@@ -34,7 +34,7 @@ class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, public Ui::WdgP
     Q_OBJECT
 
 public:
-    KisPredefinedBrushChooser(QWidget *parent = 0, const char *name = 0);
+    KisPredefinedBrushChooser(int maxBrushSize, QWidget *parent = 0, const char *name = 0);
     ~KisPredefinedBrushChooser() override;
 
     KisBrushSP brush() {

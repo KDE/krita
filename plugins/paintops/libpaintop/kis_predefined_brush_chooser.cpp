@@ -96,7 +96,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 }
 
 
-KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char *name)
+KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize, QWidget *parent, const char *name)
     : QWidget(parent),
       m_stampBrushWidget(0),
       m_clipboardBrushWidget(0)
@@ -105,7 +105,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     setupUi(this);
 
-    brushSizeSpinBox->setRange(0, KisImageConfig(true).maxBrushSize(), 2);
+    brushSizeSpinBox->setRange(0, maxBrushSize, 2);
     brushSizeSpinBox->setValue(5);
     brushSizeSpinBox->setExponentRatio(3.0);
     brushSizeSpinBox->setSuffix(i18n(" px"));

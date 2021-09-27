@@ -34,7 +34,7 @@ class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutoBrush
 
 public:
 
-    KisAutoBrushWidget(QWidget *parent, const char* name);
+    KisAutoBrushWidget(int maxBrushSize, QWidget *parent, const char* name);
     ~KisAutoBrushWidget() override;
 
     void activate();

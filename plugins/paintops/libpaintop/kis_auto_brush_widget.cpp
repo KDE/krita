@@ -32,7 +32,7 @@
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
 #include <kis_cubic_curve.h>
 
-KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
+KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize, QWidget *parent, const char* name)
     : KisWdgAutoBrush(parent, name)
     , m_autoBrush(0)
     , m_updateCompressor(new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE))
@@ -42,7 +42,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), m_updateCompressor.data(), SLOT(start()));
 
-    inputRadius->setRange(0.01, KisImageConfig(true).maxBrushSize(), 2);
+    inputRadius->setRange(0.01, maxBrushSize, 2);
     inputRadius->setExponentRatio(3.0);
     inputRadius->setSingleStep(1);
     inputRadius->setValue(5);

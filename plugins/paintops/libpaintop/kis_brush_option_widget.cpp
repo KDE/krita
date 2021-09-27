@@ -7,6 +7,7 @@
 #include <klocalizedstring.h>
 
 #include <kis_image.h>
+#include <kis_image_config.h>
 
 #include "kis_brush_selection_widget.h"
 #include "kis_brush.h"
@@ -15,7 +16,7 @@ KisBrushOptionWidget::KisBrushOptionWidget()
     : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
 {
     m_checkable = false;
-    m_brushSelectionWidget = new KisBrushSelectionWidget();
+    m_brushSelectionWidget = new KisBrushSelectionWidget(KisImageConfig(true).maxBrushSize());
     connect(m_brushSelectionWidget, SIGNAL(sigPrecisionChanged()), SLOT(emitSettingChanged()));
     connect(m_brushSelectionWidget, SIGNAL(sigBrushChanged()), SLOT(brushChanged()));
     m_brushSelectionWidget->hide();

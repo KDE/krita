@@ -595,6 +595,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
                   ", tooltip   = :tooltip\n"
                   ", thumbnail = :thumbnail\n"
                   ", status    = 1\n"
+                  ", md5sum    = :md5sum\n"
                   "WHERE id    = :id");
     if (!r) {
         qWarning() << "Could not prepare updateResource statement" << q.lastError();
@@ -604,6 +605,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", resource->filename());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
+    q.bindValue(":md5sum", resource->md5Sum());
 
     QByteArray ba;
     QBuffer buf(&ba);

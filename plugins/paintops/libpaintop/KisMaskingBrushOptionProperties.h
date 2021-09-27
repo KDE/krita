@@ -27,6 +27,8 @@ struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
     QString compositeOpId;
     bool useMasterSize = true;
 
+    boost::optional<qreal> theoreticalMaskingBrushSize;
+
     void write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const;
     void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
     QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface);

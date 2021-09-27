@@ -43,17 +43,25 @@ struct KisMaskingBrushOption::Private
         compositeOpLayout->addWidget(new QLabel(i18n("Blending Mode:")), 0);
         compositeOpLayout->addWidget(compositeSelector, 1);
 
+        brushSizeWarningLabel = new QLabel(ui.data());
+        brushSizeWarningLabel->setVisible(false);
+        brushSizeWarningLabel->setWordWrap(true);
+
         brushChooser = new KisBrushSelectionWidget(ui.data());
 
         QVBoxLayout *layout  = new QVBoxLayout(ui.data());
         layout->addLayout(compositeOpLayout, 0);
+        layout->addWidget(brushSizeWarningLabel, 0);
         layout->addWidget(brushChooser, 1);
     }
 
     QScopedPointer<QWidget> ui;
     KisBrushSelectionWidget *brushChooser = 0;
     QComboBox *compositeSelector = 0;
+    QLabel *brushSizeWarningLabel = 0;
     MasterBrushSizeAdapter masterBrushSizeAdapter;
+
+    boost::optional<qreal> theoreticalMaskingBrushSize;
 };
 
 KisMaskingBrushOption::KisMaskingBrushOption(MasterBrushSizeAdapter masterBrushSizeAdapter)
@@ -65,7 +73,7 @@ KisMaskingBrushOption::KisMaskingBrushOption(MasterBrushSizeAdapter masterBrushS
     setObjectName("KisMaskingBrushOption");
     setConfigurationPage(m_d->ui.data());
 
-    connect(m_d->brushChooser, SIGNAL(sigBrushChanged()), SLOT(emitSettingChanged()));
+    connect(m_d->brushChooser, SIGNAL(sigBrushChanged()), SLOT(slotMaskingBrushChanged()));
     connect(m_d->compositeSelector, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
 }
 
@@ -81,6 +89,7 @@ void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     props.isEnabled = isChecked();
     props.brush = m_d->brushChooser->brush();
     props.compositeOpId = m_d->compositeSelector->currentData().toString();
+    props.theoreticalMaskingBrushSize = m_d->theoreticalMaskingBrushSize;
 
     props.write(setting.data(), m_d->masterBrushSizeAdapter());
 }
@@ -94,6 +103,9 @@ void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP
 
     const int selectedIndex = qMax(0, m_d->compositeSelector->findData(props.compositeOpId));
     m_d->compositeSelector->setCurrentIndex(selectedIndex);
+    m_d->theoreticalMaskingBrushSize = props.theoreticalMaskingBrushSize;
+
+    updateWarningLabelStatus();
 
     if (props.brush) {
         m_d->brushChooser->setCurrentBrush(props.brush);
@@ -111,6 +123,30 @@ void KisMaskingBrushOption::lodLimitations(KisPaintopLodLimitations *l) const
 
     if (brush) {
         brush->lodLimitations(l);
+    }
+}
+
+void KisMaskingBrushOption::slotMaskingBrushChanged()
+{
+    m_d->theoreticalMaskingBrushSize = boost::none;
+    updateWarningLabelStatus();
+    emitSettingChanged();
+}
+
+void KisMaskingBrushOption::updateWarningLabelStatus()
+{
+    if (m_d->theoreticalMaskingBrushSize) {
+        KisBrushSP brush = m_d->brushChooser->brush();
+        const qreal realBrushSize = brush ? brush->userEffectiveSize() : 1.0;
+
+        m_d->brushSizeWarningLabel->setVisible(true);
+        m_d->brushSizeWarningLabel->setText(
+            i18nc("warning about too big size of the masking brush",
+                  "WARNING: Dependent size of the masking brush grew too big (%1 pixels). Its value has been cropped to %2 pixels.",
+                  *m_d->theoreticalMaskingBrushSize,
+                  realBrushSize));
+    } else {
+        m_d->brushSizeWarningLabel->setVisible(false);
     }
 }
 

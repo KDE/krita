@@ -13,9 +13,11 @@
 #include <kis_types.h>
 #include "kis_paintop_option.h"
 
+class KisMaskingBrushOptionProperties;
 
 class PAINTOP_EXPORT KisMaskingBrushOption : public KisPaintOpOption
 {
+    Q_OBJECT
 public:
     typedef std::function<qreal()> MasterBrushSizeAdapter;
 
@@ -29,6 +31,12 @@ public:
     void setImage(KisImageWSP image) override;
 
     void lodLimitations(KisPaintopLodLimitations *l) const override;
+
+private Q_SLOTS:
+    void slotMaskingBrushChanged();
+
+private:
+    void updateWarningLabelStatus();
 
 private:
     struct Private;

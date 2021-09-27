@@ -10,7 +10,7 @@
 #include <brushengine/KisPaintopSettingsIds.h>
 
 #include <KoCompositeOpRegistry.h>
-
+#include <kis_image_config.h>
 
 KisMaskingBrushOptionProperties::KisMaskingBrushOptionProperties()
     : compositeOpId(COMPOSITE_MULT)
@@ -24,8 +24,13 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
     setting->setProperty(KisPaintOpUtils::MaskingBrushCompositeOpTag, compositeOpId);
     setting->setProperty(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, useMasterSize);
 
+    const qreal currentSize =
+        theoreticalMaskingBrushSize ?
+        *theoreticalMaskingBrushSize :
+        brush ? brush->userEffectiveSize() : 1.0;
+
     const qreal masterSizeCoeff =
-        brush && masterBrushSize > 0 ? brush->userEffectiveSize() / masterBrushSize : 1.0;
+        masterBrushSize > 0 ? currentSize / masterBrushSize : 1.0;
 
     setting->setProperty(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, masterSizeCoeff);
 
@@ -60,7 +65,6 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
             requiredFiles << brushMD5;
             setting->setProperty(KisPaintOpUtils::RequiredBrushMD5ListTag, requiredFiles);
         }
-
     }
 }
 
@@ -83,9 +87,20 @@ void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *set
     option.readOptionSetting(embeddedConfig, resourcesInterface, canvasResourcesInterface);
 
     brush = option.brush();
+    theoreticalMaskingBrushSize = boost::none;
 
     if (brush && useMasterSize) {
         const qreal masterSizeCoeff = setting->getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
-        brush->setUserEffectiveSize(masterSizeCoeff * masterBrushSize);
+        qreal size = masterSizeCoeff * masterBrushSize;
+
+        const qreal maxBrushSize = KisImageConfig(true).readEntry("maximumBrushSize", 1000);
+        const qreal maxMaskingBrushSize = qMin(15000.0, 3.0 * maxBrushSize);
+
+        if (size > maxMaskingBrushSize) {
+            theoreticalMaskingBrushSize = size;
+            size = maxMaskingBrushSize;
+        }
+
+        brush->setUserEffectiveSize(size);
     }
 }

@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>390</width>
-    <height>305</height>
+    <width>395</width>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -558,19 +558,9 @@ For example to make your speedpaint twice faster it should be twice larger of th
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="buttonClose">
-           <property name="text">
-            <string>Close</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttonExport">
-           <property name="text">
-            <string>Export</string>
-           </property>
-           <property name="default">
-            <bool>true</bool>
+          <widget class="QDialogButtonBox" name="buttonBox">
+           <property name="standardButtons">
+            <set>QDialogButtonBox::Close|QDialogButtonBox::Save</set>
            </property>
           </widget>
          </item>
@@ -975,8 +965,6 @@ For example to make your speedpaint twice faster it should be twice larger of th
   </layout>
  </widget>
  <tabstops>
-  <tabstop>buttonExport</tabstop>
-  <tabstop>buttonClose</tabstop>
   <tabstop>buttonBrowseDirectory</tabstop>
   <tabstop>spinInputFps</tabstop>
   <tabstop>spinFps</tabstop>
@@ -998,22 +986,6 @@ For example to make your speedpaint twice faster it should be twice larger of th
  </tabstops>
  <resources/>
  <connections>
-  <connection>
-   <sender>buttonClose</sender>
-   <signal>clicked()</signal>
-   <receiver>RecorderExport</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>293</x>
-     <y>294</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>236</x>
-     <y>257</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>checkResize</sender>
    <signal>toggled(bool)</signal>

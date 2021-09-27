@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -30,7 +30,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item column="0" row="0">
+   <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
       <number>1</number>
@@ -274,19 +274,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="buttonClose">
-           <property name="text">
-            <string>Close</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttonCleanUp">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Clean Up</string>
+          <widget class="QDialogButtonBox" name="buttonBox">
+           <property name="standardButtons">
+            <set>QDialogButtonBox::Close|QDialogButtonBox::Discard</set>
            </property>
           </widget>
          </item>
@@ -301,27 +291,8 @@
  <tabstops>
   <tabstop>treeDirectories</tabstop>
   <tabstop>buttonSelectAll</tabstop>
-  <tabstop>buttonCleanUp</tabstop>
-  <tabstop>buttonClose</tabstop>
   <tabstop>buttonCancel</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonClose</sender>
-   <signal>clicked()</signal>
-   <receiver>RecorderSnapshotsManager</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>459</x>
-     <y>449</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>432</x>
-     <y>459</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

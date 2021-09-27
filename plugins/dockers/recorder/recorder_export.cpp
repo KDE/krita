@@ -96,7 +96,7 @@ public:
             ui->editFfmpegPath->setText(i18nc("This text is displayed instead of path to external tool in case of external tool is not found", "[NOT FOUND]"));
             action->setToolTip(i18n("FFMpeg executable location couldn't be detected, please install it or select its location manually"));
         }
-        ui->buttonExport->setEnabled(success);
+        ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(success);
     }
 
     void fillComboProfiles()
@@ -311,7 +311,9 @@ RecorderExport::RecorderExport(QWidget *parent)
     connect(d->ui->buttonEditProfile, SIGNAL(clicked()), SLOT(onButtonEditProfileClicked()));
     connect(d->ui->editVideoFilePath, SIGNAL(textChanged(QString)), SLOT(onEditVideoPathChanged(QString)));
     connect(d->ui->buttonBrowseExport, SIGNAL(clicked()), SLOT(onButtonBrowseExportClicked()));
-    connect(d->ui->buttonExport, SIGNAL(clicked()), SLOT(onButtonExportClicked()));
+    d->ui->buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Export"));
+    connect(d->ui->buttonBox->button(QDialogButtonBox::Save), SIGNAL(clicked()), this, SLOT(onButtonExportClicked()));
+    connect(d->ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(d->ui->buttonCancelExport, SIGNAL(clicked()), SLOT(onButtonCancelClicked()));
     connect(d->ui->buttonWatchIt, SIGNAL(clicked()), SLOT(onButtonWatchItClicked()));
     connect(d->ui->buttonShowInFolder, SIGNAL(clicked()), SLOT(onButtonShowInFolderClicked()));
@@ -335,7 +337,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
 
     if (d->framesCount == 0) {
         d->ui->labelRecordInfo->setText(i18nc("Can't export recording because nothing to export", "No frames to export"));
-        d->ui->buttonExport->setEnabled(false);
+        d->ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
     } else {
         d->ui->labelRecordInfo->setText(QString("%1: %2x%3 %4, %5 %6")
                                         .arg(i18nc("General information about recording", "Recording info"))

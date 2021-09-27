@@ -18,6 +18,7 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QStandardItemModel>
+#include <QDialogButtonBox>
 
 namespace
 {
@@ -103,7 +104,8 @@ RecorderSnapshotsManager::RecorderSnapshotsManager(QWidget *parent)
     connect(scanner, SIGNAL(scanningFinished(SnapshotDirInfoList)),
             this, SLOT(onScanningFinished(SnapshotDirInfoList)));
     connect(ui->buttonSelectAll, SIGNAL(clicked()), this, SLOT(onButtonSelectAllClicked()));
-    connect(ui->buttonCleanUp, SIGNAL(clicked()), this, SLOT(onButtonCleanUpClicked()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Discard), SIGNAL(clicked()), this, SLOT(onButtonCleanUpClicked()));
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 RecorderSnapshotsManager::~RecorderSnapshotsManager()
@@ -170,7 +172,7 @@ void RecorderSnapshotsManager::onScanningFinished(SnapshotDirInfoList snapshots)
     if (oldSelectionModel != nullptr)
         oldSelectionModel->deleteLater();
 
-    ui->buttonCleanUp->setEnabled(false);
+    ui->buttonBox->button(QDialogButtonBox::Discard)->setEnabled(false);
     ui->stackedWidget->setCurrentIndex(PageSelection);
 
      for(int col = 0; col < (ColumnCount - 1); ++col) {
@@ -191,7 +193,7 @@ void RecorderSnapshotsManager::onSelectionChanged(const QItemSelection &selected
     for (const QModelIndex &index : deselected.indexes())
         model->setData(index.sibling(index.row(), ColumnCheck), Qt::Unchecked, Qt::CheckStateRole);
 
-    ui->buttonCleanUp->setEnabled(!ui->treeDirectories->selectionModel()->selectedIndexes().isEmpty());
+    ui->buttonBox->button(QDialogButtonBox::Discard)->setEnabled(!ui->treeDirectories->selectionModel()->selectedIndexes().isEmpty());
 
     updateSpaceToBeFreed();
 }

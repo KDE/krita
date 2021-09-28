@@ -390,6 +390,11 @@ void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceS
     d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
 }
 
+void KisImagePipeBrush::notifyBrushIsGoingToBeClonedForStroke()
+{
+    d->brushesPipe.notifyBrushIsGoingToBeClonedForStroke();
+}
+
 QVector<KisGbrBrushSP> KisImagePipeBrush::brushes() const
 {
     return d->brushesPipe.brushes();

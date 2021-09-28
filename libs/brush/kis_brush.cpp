@@ -467,6 +467,13 @@ void KisBrush::notifyStrokeStarted()
 {
 }
 
+void KisBrush::notifyBrushIsGoingToBeClonedForStroke()
+{
+    /// Default implementation for all image-based brushes:
+    /// just recreate the shared pyramid
+    d->brushPyramid->pyramid(this);
+}
+
 void KisBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
 {
     Q_UNUSED(info);

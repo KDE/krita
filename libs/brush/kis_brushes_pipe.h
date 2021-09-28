@@ -132,6 +132,12 @@ public:
         return device;
     }
 
+    void notifyBrushIsGoingToBeClonedForStroke() {
+        Q_FOREACH(QSharedPointer<BrushType> brush, m_brushes) {
+            brush->notifyBrushIsGoingToBeClonedForStroke();
+        }
+    }
+
     QVector<QSharedPointer<BrushType>> brushes() {
         return m_brushes;
     }

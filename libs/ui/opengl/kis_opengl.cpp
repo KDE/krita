@@ -39,6 +39,12 @@
 #  define GL_RENDERER 0x1F01
 #endif
 
+/// openGL ES headers use a bit different names in prototypes,
+/// add a workaround for it
+#if !defined APIENTRYP && defined GL_APIENTRYP
+#define APIENTRYP GL_APIENTRYP
+#endif
+
 typedef void (APIENTRYP PFNGLINVALIDATEBUFFERDATAPROC) (GLuint buffer);
 
 using namespace KisOpenGLPrivate;

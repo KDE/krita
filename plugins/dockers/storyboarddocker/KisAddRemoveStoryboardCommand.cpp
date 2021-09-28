@@ -11,6 +11,7 @@
 #include "KisAddRemoveStoryboardCommand.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
+#include "kis_layer_utils.h"
 
 KisAddStoryboardCommand::KisAddStoryboardCommand(int position,
                                                  StoryboardItemSP item,
@@ -184,3 +185,46 @@ bool KisStoryboardChildEditCommand::mergeWith(const KUndo2Command *other)
     return false;
 }
 
+
+KisDuplicateStoryboardCommand::KisDuplicateStoryboardCommand(int position, StoryboardModel *model, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_position(position + 1)
+    , m_duplicate(new StoryboardItem(*model->getData().at(position)))
+    , m_model(model)
+{
+    StoryboardItemSP original = model->getData().at(position);
+    QVariant sceneLength = model->data(model->index(position, 0), StoryboardModel::TotalSceneDurationInFrames);
+    m_duplicate->cloneChildrenFrom(*original);
+
+    ThumbnailData m_frameThumbnail = qvariant_cast<ThumbnailData>(m_duplicate->child(StoryboardItem::FrameNumber)->data());
+    m_frameThumbnail.frameNum = m_frameThumbnail.frameNum.toInt() + sceneLength.toInt();
+    m_duplicate->child(StoryboardItem::FrameNumber)->setData(QVariant::fromValue<ThumbnailData>(m_frameThumbnail));
+
+    m_addCommand.reset(new KisAddStoryboardCommand(m_position, m_duplicate, m_model));
+}
+
+KisDuplicateStoryboardCommand::~KisDuplicateStoryboardCommand()
+{
+}
+
+void KisDuplicateStoryboardCommand::redo()
+{
+    KUndo2Command::redo();
+    m_addCommand->redo();
+
+    if (!m_keyframeCommands) {
+        m_keyframeCommands.reset(new KUndo2Command);
+        m_model->createDuplicateKeyframes(m_model->index(m_position, 0), m_keyframeCommands.data());
+    } else {
+        m_keyframeCommands->redo();
+    }
+}
+
+void KisDuplicateStoryboardCommand::undo()
+{
+    if (m_keyframeCommands)
+        m_keyframeCommands->undo();
+
+    m_addCommand->undo();
+    KUndo2Command::undo();
+}

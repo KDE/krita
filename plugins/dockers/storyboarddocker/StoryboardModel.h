@@ -232,6 +232,7 @@ public:
      */
     bool removeItem(QModelIndex index, KUndo2Command *command = nullptr);
 
+
     /**
      * @brief resets @c m_items to @c list
      * @param list The new list of StoryboardItem*
@@ -264,6 +265,9 @@ public:
     void insertChildRows(int position, StoryboardItemSP item);
 
     void visualizeScene(const QModelIndex& index, bool useUndo = true);
+
+    void createDuplicateKeyframes(const QModelIndex& index, KUndo2Command* cmd = nullptr);
+    void createBlankKeyframes(const QModelIndex& index, KUndo2Command* cmd = nullptr);
 
 private:
     bool moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,

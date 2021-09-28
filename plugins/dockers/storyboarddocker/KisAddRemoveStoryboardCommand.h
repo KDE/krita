@@ -46,6 +46,23 @@ private:
     StoryboardModel *m_model;
 };
 
+class KisDuplicateStoryboardCommand : public KUndo2Command
+{
+public:
+    KisDuplicateStoryboardCommand(int position, StoryboardModel *model, KUndo2Command *parent = 0);
+    ~KisDuplicateStoryboardCommand();
+
+    void redo() override;
+    void undo() override;
+
+private:
+    int m_position;
+    StoryboardItemSP m_duplicate;
+    StoryboardModel *m_model;
+    QScopedPointer<KUndo2Command> m_addCommand;
+    QScopedPointer<KUndo2Command> m_keyframeCommands;
+};
+
 //For moving of Storyboardds.
 class KisMoveStoryboardCommand : public KUndo2Command
 {

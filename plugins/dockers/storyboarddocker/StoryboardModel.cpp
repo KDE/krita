@@ -1023,7 +1023,7 @@ bool StoryboardModel::removeItem(QModelIndex index, KUndo2Command *command)
     m_renderScheduler->slotStartFrameRendering();
 
     return true;
- }
+}
 
 void StoryboardModel::resetData(StoryboardItemList list)
 {
@@ -1269,37 +1269,16 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
     if (position == 0) {
         setData(index(StoryboardItem::FrameNumber, 0, index(position, 0)), 0);
         setData(index(StoryboardItem::DurationFrame, 0, index(position, 0)), lastKeyframeGlobal() - 0 + 1);
-
-        if (!m_freezeKeyframePositions && m_image) {
-            KisLayerUtils::recursiveApplyNodes(m_image->root(), [cmd](KisNodeSP node){
-                if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
-                    KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-
-                    if (chan->keyframeAt(0)) {
-                        return;
-                    }
-
-                    chan->addKeyframe(0, cmd);
-                }
-            });
-        }
     } else {
         const int targetFrame = index(StoryboardItem::FrameNumber, 0, index(position - 1,0)).data().toInt()
                                 + data(index(position - 1, 0), TotalSceneDurationInFrames).toInt();
-        setData(index(StoryboardItem::FrameNumber, 0, index(position, 0)), targetFrame);
 
-        if (!m_freezeKeyframePositions && m_image) {
-            KisLayerUtils::recursiveApplyNodes(m_image->root(), [targetFrame, cmd](KisNodeSP node){
-                if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
-                    KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-                    chan->addKeyframe(targetFrame, cmd);
-                }
-            });
-        }
+        setData(index(StoryboardItem::FrameNumber, 0, index(position, 0)), targetFrame);
+        setData(index(StoryboardItem::DurationFrame, 0, parentIndex), 1);
+        setData(index(StoryboardItem::DurationSecond, 0, parentIndex), 0);
     }
 
-    setData(index(StoryboardItem::DurationFrame, 0, parentIndex), 1);
-    setData(index(StoryboardItem::DurationSecond, 0, parentIndex), 0);
+    createBlankKeyframes(index(position, 0), cmd);
 
     const int frameToSwitch = index(StoryboardItem::FrameNumber, 0, index(position, 0)).data().toInt();
     if (m_image) {
@@ -1318,6 +1297,35 @@ void StoryboardModel::visualizeScene(const QModelIndex &scene, bool useUndo)
 
     if (frameTime != m_image->animationInterface()->currentTime()) {
         m_image->animationInterface()->switchCurrentTimeAsync(frameTime, useUndo);
+    }
+}
+
+void StoryboardModel::createDuplicateKeyframes(const QModelIndex &pIndex, KUndo2Command *cmd)
+{
+    if (!m_freezeKeyframePositions && m_image) {
+        const int targetFrame = index(StoryboardItem::FrameNumber, 0, pIndex).data().toInt();
+
+        KisLayerUtils::recursiveApplyNodes(m_image->root(), [targetFrame, cmd](KisNodeSP node){
+            if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+                KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+                const int activeFrameTime = chan->activeKeyframeTime(targetFrame);
+                chan->copyKeyframe(activeFrameTime, targetFrame, cmd);
+            }
+        });
+    }
+}
+
+void StoryboardModel::createBlankKeyframes(const QModelIndex &pIndex, KUndo2Command *cmd)
+{
+    if (!m_freezeKeyframePositions && m_image) {
+        const int targetFrame = index(StoryboardItem::FrameNumber, 0, pIndex).data().toInt();
+
+        KisLayerUtils::recursiveApplyNodes(m_image->root(), [targetFrame, cmd](KisNodeSP node){
+            if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+                KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+                chan->addKeyframe(targetFrame, cmd);
+            }
+        });
     }
 }
 

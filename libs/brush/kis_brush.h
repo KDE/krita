@@ -216,6 +216,14 @@ public:
     virtual void notifyStrokeStarted();
 
     /**
+     * Is called by the paint op before it is going to clone the brush into
+     * multiple instances to pass to different threads. During this call the
+     * brush is free to prepare some structures that may be shared by all the
+     * clones without excessive recalculation.
+     */
+    virtual void notifyBrushIsGoingToBeClonedForStroke();
+
+    /**
      * Is called by the multithreaded queue to prepare a specific brush
      * tip for the particular seqNo.
      *

@@ -6,6 +6,7 @@
 #include "kis_brush_based_paintop.h"
 #include "kis_properties_configuration.h"
 #include <brushengine/kis_paintop_settings.h>
+#include "kis_brush_based_paintop_settings.h"
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rate_option.h>
@@ -76,9 +77,15 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     if (!m_brush) {
-        KisBrushOptionProperties brushOption;
-        brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
-        m_brush = brushOption.brush();
+        const KisBrushBasedPaintOpSettings *brushBasedSettings =
+            dynamic_cast<const KisBrushBasedPaintOpSettings*>(settings.data());
+
+        if (brushBasedSettings) {
+            // we don't use KisBrushOptionProperties manually here because
+            // we want the properties to cache this brush in m_savedBrush
+            m_brush = brushBasedSettings->brush();
+        }
+
         if (!m_brush) {
             qWarning() << "Could not find brush tip " << settings->getString("brush_definition") << ", will use a default brush instead";
             QString brushDefinition("<Brush useAutoSpacing=\"1\" angle=\"0\" spacing=\"0.1\" density=\"1\" BrushVersion=\"2\" type=\"auto_brush\" randomness=\"0\" autoSpacingCoeff=\"0.8\"> <MaskGenerator spikes=\"2\" hfade=\"1\" ratio=\"1\" diameter=\"40\" id=\"default\" type=\"circle\" antialiasEdges=\"1\" vfade=\"1\"/> </Brush> ");

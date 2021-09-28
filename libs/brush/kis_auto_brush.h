@@ -61,6 +61,8 @@ public:
 
     QPainterPath outline() const override;
 
+    void notifyBrushIsGoingToBeClonedForStroke() override;
+
 public:
 
     void toXML(QDomDocument& , QDomElement&) const override;
@@ -71,7 +73,6 @@ public:
     void lodLimitations(KisPaintopLodLimitations *l) const override;
 
     bool supportsCaching() const override;
-
 private:
 
     QImage createBrushPreview();

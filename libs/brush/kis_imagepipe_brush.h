@@ -100,6 +100,7 @@ public:
             double subPixelX = 0, double subPixelY = 0, 
             qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const override;
 
+    void notifyBrushIsGoingToBeClonedForStroke() override;
 
     QVector<KisGbrBrushSP> brushes() const;
 

@@ -97,6 +97,8 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
         m_rotationOption.isChecked() |
         m_airbrushOption.enabled);
 
+    m_brush->notifyBrushIsGoingToBeClonedForStroke();
+
     KisBrushSP baseBrush = m_brush;
     auto resourcesFactory =
         [baseBrush, settings, painter] () {

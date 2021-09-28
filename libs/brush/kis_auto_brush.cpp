@@ -305,6 +305,10 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     }
 }
 
+void KisAutoBrush::notifyBrushIsGoingToBeClonedForStroke()
+{
+    // do nothing, since we don't use the pyramid!
+}
 
 void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 {

@@ -21,6 +21,7 @@ struct KisSessionResource::Private
     struct View
     {
         QUuid windowId;
+        // NOTE: path of the file without scheme
         QString file;
         KisPropertiesConfiguration viewConfig;
 
@@ -145,7 +146,8 @@ void KisSessionResource::saveXml(QDomDocument &doc, QDomElement &root) const
         QDomElement elem = doc.createElement("view");
 
         elem.setAttribute("window", view.windowId.toString());
-        elem.setAttribute("src", view.file);
+        // we convert to QUrl to maintain compatibilty with Krita 4.4
+        elem.setAttribute("src", QUrl::fromLocalFile(view.file).toString());
         view.viewConfig.toXML(doc, elem);
 
         root.appendChild(elem);
@@ -172,7 +174,7 @@ void KisSessionResource::loadXml(const QDomElement &root) const
          viewElement = viewElement.nextSiblingElement("view")) {
         Private::View view;
 
-        view.file = viewElement.attribute("src");
+        view.file = QUrl(viewElement.attribute("src")).toLocalFile();
         view.windowId = QUuid(viewElement.attribute("window"));
         view.viewConfig.fromXML(viewElement);
 

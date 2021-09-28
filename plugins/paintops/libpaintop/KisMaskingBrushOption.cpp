@@ -140,12 +140,17 @@ void KisMaskingBrushOption::updateWarningLabelStatus()
         KisBrushSP brush = m_d->brushChooser->brush();
         const qreal realBrushSize = brush ? brush->userEffectiveSize() : 1.0;
 
-        m_d->brushSizeWarningLabel->setVisible(true);
-        m_d->brushSizeWarningLabel->setText(
-            i18nc("warning about too big size of the masking brush",
-                  "WARNING: Dependent size of the masking brush grew too big (%1 pixels). Its value has been cropped to %2 pixels.",
-                  *m_d->theoreticalMaskingBrushSize,
-                  realBrushSize));
+        // WARNING: the label adds new string, so it should
+        //          be hidden in Krita 5.0 until we get
+        //          translator's approval for it
+        m_d->brushSizeWarningLabel->setVisible(false);
+
+//        m_d->brushSizeWarningLabel->setVisible(true);
+//        m_d->brushSizeWarningLabel->setText(
+//            i18nc("warning about too big size of the masking brush",
+//                  "WARNING: Dependent size of the masking brush grew too big (%1 pixels). Its value has been cropped to %2 pixels.",
+//                  *m_d->theoreticalMaskingBrushSize,
+//                  realBrushSize));
     } else {
         m_d->brushSizeWarningLabel->setVisible(false);
     }

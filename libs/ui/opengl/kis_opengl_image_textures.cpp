@@ -28,6 +28,10 @@
 #include "KisPart.h"
 #include "KisOpenGLModeProber.h"
 #include "kis_fixed_paint_device.h"
+#include "KisOpenGLSync.h"
+#include <QVector3D>
+#include "kis_painting_tweaks.h"
+#include "KisOpenGLBufferCreationGuard.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -56,6 +60,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
     , m_internalColorManagementActive(true)
+    , m_bufferStorage(QOpenGLBuffer::PixelUnpackBuffer)
     , m_glFuncs(0)
     , m_useOcio(false)
     , m_initialized(false)
@@ -78,6 +83,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
     , m_internalColorManagementActive(true)
+    , m_bufferStorage(QOpenGLBuffer::PixelUnpackBuffer)
     , m_glFuncs(0)
     , m_useOcio(false)
     , m_initialized(false)
@@ -144,6 +150,22 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
     return true;
 }
 
+void KisOpenGLImageTextures::initBufferStorage(bool useBuffer)
+{
+    if (useBuffer) {
+        const int numTextureBuffers = 16;
+
+        const KoColorSpace *tilesDestinationColorSpace =
+            m_updateInfoBuilder.destinationColorSpace();
+        const int pixelSize = tilesDestinationColorSpace->pixelSize();
+        const int tileSize = m_texturesInfo.width * m_texturesInfo.height * pixelSize;
+
+        m_bufferStorage.allocate(numTextureBuffers, tileSize);
+    } else {
+        m_bufferStorage.reset();
+    }
+}
+
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
                                                                   const KoColorProfile *monitorProfile,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
@@ -198,6 +220,8 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
     KisConfig config(true);
     KisOpenGL::FilterMode mode = (KisOpenGL::FilterMode)config.openGLFilteringMode();
 
+    initBufferStorage(config.useOpenGLTextureBuffer());
+
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (ctx) {
         QOpenGLFunctions *f = ctx->functions();
@@ -205,7 +229,14 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
         m_initialized = true;
         dbgUI  << "OpenGL: creating texture tiles of size" << m_texturesInfo.height << "x" << m_texturesInfo.width;
 
+        QVector<QRectF> tileImageRect;
+        QVector<QRectF> tileTextureRect;
+
         m_textureTiles.reserve((lastRow+1)*m_numCols);
+
+        tileImageRect.reserve(m_textureTiles.size());
+        tileTextureRect.reserve(m_textureTiles.size());
+
         for (int row = 0; row <= lastRow; row++) {
             for (int col = 0; col <= lastCol; col++) {
                 QRect tileRect = m_updateInfoBuilder.calculateEffectiveTileRect(col, row, m_image->bounds());
@@ -214,10 +245,40 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
                                                           &m_texturesInfo,
                                                           emptyTileData,
                                                           mode,
-                                                          config.useOpenGLTextureBuffer(),
+                                                          m_bufferStorage.isValid() ? &m_bufferStorage : 0,
                                                           config.numMipmapLevels(),
                                                           f);
                 m_textureTiles.append(tile);
+                tileImageRect.append(tile->tileRectInImagePixels());
+                tileTextureRect.append(tile->tileRectInTexturePixels());
+            }
+        }
+
+
+
+        {
+            KisOpenGLBufferCreationGuard bufferGuard(&m_tileVertexBuffer,
+                                                     tileImageRect.size() * 6 * 3 * sizeof(float),
+                                                     QOpenGLBuffer::StaticDraw);
+
+            QVector3D* mappedPtr = reinterpret_cast<QVector3D*>(bufferGuard.data());
+
+            Q_FOREACH (const QRectF &rc, tileImageRect) {
+                KisPaintingTweaks::rectToVertices(mappedPtr, rc);
+                mappedPtr += 6;
+            }
+        }
+
+        {
+            KisOpenGLBufferCreationGuard bufferGuard(&m_tileTexCoordBuffer,
+                                                     tileImageRect.size() * 6 * 2 * sizeof(float),
+                                                     QOpenGLBuffer::StaticDraw);
+
+            QVector2D* mappedPtr = reinterpret_cast<QVector2D*>(bufferGuard.data());
+
+            Q_FOREACH (const QRectF &rc, tileTextureRect) {
+                KisPaintingTweaks::rectToTexCoords(mappedPtr, rc);
+                mappedPtr += 6;
             }
         }
     }
@@ -234,6 +295,8 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
         delete tile;
     }
     m_textureTiles.clear();
+    m_tileVertexBuffer.destroy();
+    m_tileTexCoordBuffer.destroy();
     m_storedImageBounds = QRect();
 }
 
@@ -264,12 +327,36 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
     KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if(!glInfo) return;
 
+    QScopedPointer<KisOpenGLSync> sync;
+    int numProcessedTiles = 0;
+
     KisTextureTileUpdateInfoSP tileInfo;
     Q_FOREACH (tileInfo, glInfo->tileList) {
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
+        if (m_bufferStorage.isValid() && numProcessedTiles > m_bufferStorage.size() &&
+            sync && !sync->isSignaled()) {
+
+            qDebug() << "Still unsignalled after processed" << numProcessedTiles << "tiles";
+
+            const int nextSize = qNextPowerOfTwo(m_bufferStorage.size());
+            m_bufferStorage.allocateMoreBuffers(nextSize);
+            qDebug() << "    increased number of buffers to" << nextSize;
+        }
+
+
         tile->update(*tileInfo, blockMipmapRegeneration);
+
+        if (m_bufferStorage.isValid()) {
+            if (!sync) {
+                sync.reset(new KisOpenGLSync());
+                numProcessedTiles = 0;
+            } else if (sync && sync->isSignaled()) {
+                sync.reset();
+            }
+            numProcessedTiles++;
+        }
     }
 }
 
@@ -343,8 +430,10 @@ void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 {
     if(m_textureTiles.isEmpty()) return;
 
+    initBufferStorage(useBuffer);
+
     Q_FOREACH (KisTextureTile *tile, m_textureTiles) {
-        tile->setUseBuffer(useBuffer);
+        tile->setBufferStorage(useBuffer ? &m_bufferStorage : 0);
         tile->setNumMipmapLevels(NumMipmapLevels);
     }
 }

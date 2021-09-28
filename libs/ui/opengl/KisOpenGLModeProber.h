@@ -90,6 +90,20 @@ public:
         return (m_glMajorVersion * 100 + m_glMinorVersion) >= 300;
     }
 
+    bool supportsVAO() const {
+        /**
+         * Theoretically, we could also test for ARB_vertex_array_object on
+         * openGL and OES_vertex_array_object on openGLES and enable this
+         * feature for openGL 2.1 as well. But we have no hardware to test if
+         * it really works in our code (our VAO code also uses buffers
+         * extensively), so we limit this feature to openGL/GLES 3.0 only.
+         *
+         * Feel free to test it on the relavant hardware and enable it if
+         * needed.
+         */
+        return (m_glMajorVersion * 100 + m_glMinorVersion) >= 300;
+    }
+
     bool hasOpenGL3() const {
         return (m_glMajorVersion * 100 + m_glMinorVersion) >= 302;
     }
@@ -100,6 +114,14 @@ public:
 
     bool supportsFBO() const {
         return m_supportsFBO;
+    }
+
+    bool supportsBufferMapping() const {
+        return m_supportsBufferMapping;
+    }
+
+    bool supportsBufferInvalidation() const {
+        return m_supportsBufferInvalidation;
     }
 
 #ifdef Q_OS_WIN
@@ -131,6 +153,8 @@ private:
     bool m_supportsDeprecatedFunctions = false;
     bool m_isOpenGLES = false;
     bool m_supportsFBO = false;
+    bool m_supportsBufferMapping = false;
+    bool m_supportsBufferInvalidation = false;
     QString m_rendererString;
     QString m_driverVersionString;
     QString m_vendorString;

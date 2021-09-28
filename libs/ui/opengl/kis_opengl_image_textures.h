@@ -17,6 +17,7 @@
 #include "canvas/kis_update_info.h"
 #include "opengl/kis_texture_tile.h"
 #include "KisOpenGLUpdateInfoBuilder.h"
+#include "KisOpenGLBufferCircularStorage.h"
 
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
@@ -129,6 +130,23 @@ public:
         return 0;
     }
 
+    inline int getTextureBufferIndexCR(int col, int row) {
+        if (m_initialized) {
+            int tile = row * m_numCols + col;
+            KIS_ASSERT_RECOVER_RETURN_VALUE(m_textureTiles.size() > tile, 0);
+            return tile;
+        }
+        return -1;
+    }
+
+    QOpenGLBuffer* tileVertexBuffer() {
+        return &m_tileVertexBuffer;
+    }
+
+    QOpenGLBuffer* tileTexCoordBuffer() {
+        return &m_tileTexCoordBuffer;
+    }
+
     inline qreal texelSize() const {
         Q_ASSERT(m_texturesInfo.width == m_texturesInfo.height);
         return 1.0 / m_texturesInfo.width;
@@ -159,6 +177,8 @@ protected:
 
     static bool imageCanShareTextures();
 
+    void initBufferStorage(bool useBuffer);
+
 private:
 
     void getTextureSize(KisGLTexturesInfo *texturesInfo);
@@ -185,7 +205,12 @@ private:
 
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;
+
+    // buffers are used by texture tiles, so they must come first
+    KisOpenGLBufferCircularStorage m_bufferStorage;
     QVector<KisTextureTile*> m_textureTiles;
+    QOpenGLBuffer m_tileVertexBuffer;
+    QOpenGLBuffer m_tileTexCoordBuffer;
 
     QOpenGLFunctions *m_glFuncs;
 

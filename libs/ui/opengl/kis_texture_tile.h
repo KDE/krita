@@ -13,10 +13,8 @@
 
 #include "kis_opengl.h"
 
-#if !defined(QT_OPENGL_ES)
-#define USE_PIXEL_BUFFERS
-#endif
 
+class KisOpenGLBufferCircularStorage;
 class KisTextureTileUpdateInfo;
 class QOpenGLBuffer;
 
@@ -52,11 +50,11 @@ class KisTextureTile
 public:
     KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *texturesInfo,
                    const QByteArray &fillData, KisOpenGL::FilterMode mode,
-                   bool useBuffer, int numMipmapLevels, QOpenGLFunctions *f);
+                   KisOpenGLBufferCircularStorage *bufferStorage, int numMipmapLevels, QOpenGLFunctions *f);
     ~KisTextureTile();
 
-    void setUseBuffer(bool useBuffer) {
-        m_useBuffer = useBuffer;
+    void setBufferStorage(KisOpenGLBufferCircularStorage *bufferStorage) {
+        m_bufferStorage = bufferStorage;
     }
 
     void setNumMipmapLevels(int num) {
@@ -94,11 +92,6 @@ private:
 
     GLuint m_textureId;
 
-#ifdef USE_PIXEL_BUFFERS
-    void createTextureBuffer(const char*data, int size);
-    QOpenGLBuffer *m_glBuffer;
-#endif
-
     QRect m_tileRectInImagePixels;
     QRectF m_tileRectInTexturePixels;
     QRect m_textureRectInImagePixels;
@@ -106,9 +99,9 @@ private:
     const KisGLTexturesInfo *m_texturesInfo;
     bool m_needsMipmapRegeneration;
     int m_preparedLodPlane;
-    bool m_useBuffer;
     int m_numMipmapLevels;
     QOpenGLFunctions *f;
+    KisOpenGLBufferCircularStorage *m_bufferStorage;
     Q_DISABLE_COPY(KisTextureTile)
 };
 

@@ -328,11 +328,14 @@ void KisWdgSeExpr::isValid()
         emit sigConfigurationUpdated();
 
         if (m_currentPreset) {
+            m_widget->saveBrushPresetButton->setEnabled(true);
             if (m_currentPreset->script() != m_widget->txtEditor->getExpr()) {
                 m_currentPreset->setScript(m_widget->txtEditor->getExpr());
                 m_currentPreset->setDirty(true);
             }
             slotUpdatePresetSettings();
+        } else {
+            m_widget->saveNewBrushPresetButton->setEnabled(true);
         }
     }
 }

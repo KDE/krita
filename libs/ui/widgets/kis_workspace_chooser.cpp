@@ -37,6 +37,7 @@
 #include "dialogs/KisNewWindowLayoutDialog.h"
 #include "kis_config.h"
 #include <kis_icon.h>
+#include <KisResourceOverwriteDialog.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -148,7 +149,9 @@ void KisWorkspaceChooser::slotSaveWorkspace()
         workspace->setImage(m_view->mainWindow()->layoutThumbnail());
         workspace->setValid(true);
         workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
-        KisResourceModel(ResourceType::Workspaces).addResource(workspace);
+        KisResourceModel resModel(ResourceType::WindowLayouts);
+        KisResourceOverwriteDialog::addResourceWithUserInput(this, &resModel, workspace);
+
     }
     else {
         workspace->setDockerState(m_view->qtMainWindow()->saveState());
@@ -215,7 +218,8 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 
     layout->setName(name);
     layout->setFilename(name.split(" ").join("_") + layout->defaultFileExtension());
-    KisResourceModel(ResourceType::WindowLayouts).addResource(layout);
+    KisResourceModel resModel(ResourceType::WindowLayouts);
+    KisResourceOverwriteDialog::addResourceWithUserInput(this, &resModel, layout);
 }
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()

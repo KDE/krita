@@ -267,9 +267,23 @@ void OcioDisplayFilter::updateProcessor()
 bool OcioDisplayFilter::updateShader()
 {
     if (KisOpenGL::hasOpenGLES()) {
-        QOpenGLExtraFunctions *f = QOpenGLContext::currentContext()->extraFunctions();
-        if (f) {
-            return updateShaderImpl(f);
+        QOpenGLContext *ctx = QOpenGLContext::currentContext();
+
+        KIS_ASSERT_RECOVER_RETURN_VALUE(ctx, false);
+        if (ctx->hasExtension("GL_EXT_texture_storage")) {
+            if (ctx->hasExtension("GL_OES_texture_half_float") && ctx->hasExtension("GL_OES_texture_half_float_linear")) {
+                QOpenGLExtraFunctions *f = ctx->extraFunctions();
+                if (f) {
+                    return updateShaderImpl(f);
+                }
+            } else {
+                dbgKrita << "OcioDisplayFilter::updateShader (2020)" << "OpenGL ES v2+ support detected but no OES_texture_float"
+                             " or GL_EXT_color_buffer_float were found";
+                return false;
+            }
+        } else {
+            dbgKrita << "OcioDisplayFilter::updateShader (2020)" << "OpenGL ES v2 support detected but GL_EXT_texture_storage was not found";
+            return false;
         }
 #if defined(QT_OPENGL_3)
     } else if (KisOpenGL::hasOpenGL3()) {

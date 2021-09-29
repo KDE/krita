@@ -21,6 +21,7 @@
 #include <KoAbstractGradient.h>
 #include <resources/KoGamutMask.h>
 #include <kis_workspace_resource.h>
+#include "KisPresetShadowUpdater.h"
 
 class KoColorProfile;
 class KoAbstractGradient;
@@ -189,6 +190,7 @@ private:
     KoCanvasResourceProvider *m_resourceManager;
     bool m_fGChanged;
     QList<QPointer<KisAbstractPerspectiveGrid> > m_perspectiveGrids;
+    KisPresetShadowUpdater m_presetShadowUpdater;
 };
 
 #endif

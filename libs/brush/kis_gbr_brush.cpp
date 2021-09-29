@@ -408,7 +408,7 @@ void KisGbrBrush::makeMaskImage(bool preserveAlpha)
     }
 
     setBrushApplication(ALPHAMASK);
-    resetBoundary();
+    resetOutlineCache();
     clearBrushPyramid();
 }
 

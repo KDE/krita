@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  SPDX-FileCopyrightText: 2010 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
@@ -76,7 +76,7 @@ KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
     KisBrushBasedPaintOpSettingsSP settings = dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
-    settings->m_savedBrush = 0;
+    settings->m_savedBrush = m_savedBrush ? m_savedBrush->clone().dynamicCast<KisBrush>() : nullptr;
 
     return settings;
 }
@@ -324,6 +324,26 @@ QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
         result << KoCanvasResource::CurrentGradient;
         result << KoCanvasResource::ForegroundColor;
         result << KoCanvasResource::BackgroundColor;
+    }
+
+    return result;
+}
+
+void KisBrushBasedPaintOpSettings::coldInitInBackground()
+{
+    KisBrushSP brush = this->brush();
+    if (brush) {
+        brush->coldInitInBackground();
+    }
+}
+
+bool KisBrushBasedPaintOpSettings::needsColdInitInBackground() const
+{
+    bool result = false;
+
+    KisBrushSP brush = this->brush();
+    if (brush) {
+        result = brush->needsColdInitInBackground();
     }
 
     return result;

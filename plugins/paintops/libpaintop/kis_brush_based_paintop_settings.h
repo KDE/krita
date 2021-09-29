@@ -51,6 +51,9 @@ public:
 
     QList<int> requiredCanvasResources() const override;
 
+    void coldInitInBackground() override;
+    bool needsColdInitInBackground() const override;
+
 protected:
 
     void onPropertyChanged() override;

@@ -310,6 +310,17 @@ void KisAutoBrush::notifyBrushIsGoingToBeClonedForStroke()
     // do nothing, since we don't use the pyramid!
 }
 
+void KisAutoBrush::coldInitInBackground()
+{
+    generateOutlineCache();
+}
+
+bool KisAutoBrush::needsColdInitInBackground() const
+{
+    const bool complexOutline = (d->density < 1.0);
+    return complexOutline && !outlineCacheIsValid();
+}
+
 void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 {
     QDomElement shapeElt = doc.createElement("MaskGenerator");
@@ -358,8 +369,8 @@ qreal KisAutoBrush::randomness() const
 
 QPainterPath KisAutoBrush::outline() const
 {
-    bool simpleOutline = (d->density < 1.0);
-    if (simpleOutline) {
+    const bool complexOutline = (d->density < 1.0);
+    if (!complexOutline) {
         QPainterPath path;
         QRectF brushBoundingbox(0, 0, width(), height());
         if (maskGenerator()->type() == KisMaskGenerator::CIRCLE) {
@@ -372,7 +383,7 @@ QPainterPath KisAutoBrush::outline() const
         return path;
     }
 
-    return KisBrush::boundary()->path();
+    return KisBrush::outline();
 }
 
 void KisAutoBrush::lodLimitations(KisPaintopLodLimitations *l) const

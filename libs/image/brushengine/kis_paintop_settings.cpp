@@ -211,6 +211,16 @@ void KisPaintOpSettings::setCanvasResourcesInterface(KoCanvasResourcesInterfaceS
     d->canvasResourcesInterface = canvasResourcesInterface;
 }
 
+void KisPaintOpSettings::coldInitInBackground()
+{
+    // noop by default
+}
+
+bool KisPaintOpSettings::needsColdInitInBackground() const
+{
+    return false;
+}
+
 QString KisPaintOpSettings::maskingBrushCompositeOp() const
 {
     return getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);

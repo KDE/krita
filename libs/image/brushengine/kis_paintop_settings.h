@@ -342,6 +342,11 @@ public:
     void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 
+    // \see KisPaintOpPreset::coldInitInBackground
+    virtual void coldInitInBackground();
+
+    // \see KisPaintOpPreset::needsColdInitInBackground
+    virtual bool needsColdInitInBackground() const;
 protected:
 
     /**

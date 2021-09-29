@@ -7,7 +7,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_pipebrush_parasite.h"
 #include "kis_brushes_pipe.h"
-
+#include <QPainterPath>
 
 class KisImageBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {

@@ -13,6 +13,8 @@
 #include <klocalizedstring.h>
 
 #include <KisResourceLocator.h>
+#include <KisResourceModel.h>
+#include <KisResourceCacheDb.h>
 
 bool KisResourceOverwriteDialog::userAllowsOverwrite(QWidget* widgetParent, QString resourceFilepath)
 {
@@ -27,4 +29,69 @@ bool KisResourceOverwriteDialog::resourceExistsInResourceFolder(QString resource
     QString newFilepath = resourceLocationBase + "/" + resourceType + "/" + QFileInfo(filepath).fileName();
     QFileInfo fi(newFilepath);
     return fi.exists();
+}
+
+KoResourceSP KisResourceOverwriteDialog::importResourceFileWithUserInput(QWidget *widgetParent, KisResourceModel* resourceModel, QString storageLocation, QString resourceType, QString resourceFilepath)
+{
+    if (!resourceModel) return KoResourceSP();
+
+    KoResourceSP resource = resourceModel->importResourceFile(resourceFilepath, false, storageLocation);
+    if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(resourceType, resourceFilepath)) {
+        if (KisResourceOverwriteDialog::userAllowsOverwrite(widgetParent, resourceFilepath)) {
+            resource = resourceModel->importResourceFile(resourceFilepath, true, storageLocation);
+        } else {
+            return nullptr; // the user doesn't want to import the file anymore because they don't want to overwrite it
+        }
+    }
+    if (!resource) {
+        QMessageBox::warning(widgetParent, i18nc("@title:window", "Failed to import the resource"), i18nc("Warning message", "Failed to import the resource."));
+    }
+    return resource;
+}
+
+bool KisResourceOverwriteDialog::renameResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource, QString resourceName)
+{
+    if (!resourceModel) return KoResourceSP();
+    QVector<KoResourceSP> resources = resourceModel->resourcesForName(resourceName);
+    if (resources.size() > 0) {
+        if (resources.size() == 1 && resources[0]->resourceId() == resource->resourceId() && resource->name() == resourceName) {
+            return true; // no rename needed
+        }
+        bool userWantsRename = QMessageBox::question(widgetParent, i18nc("@title:window", "Rename the resource?"),
+                              i18nc("Question in a dialog/messagebox", "This name is already used for another resource. Do you want to use the same name for multiple resources?"),
+                                     QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Cancel;
+        if (!userWantsRename) {
+            return false;
+        }
+    }
+    bool res = resourceModel->renameResource(resource, resourceName);
+    if (!res) {
+        QMessageBox::warning(widgetParent, i18nc("@title:window", "Failed to rename the resource"), i18nc("Warning message", "Failed to rename the resource."));
+    }
+    return res;
+}
+
+bool KisResourceOverwriteDialog::addResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource, QString storageLocation)
+{
+    if (!resourceModel) return false;
+    if (resourceExistsInResourceFolder(resource->resourceType().first, resource->filename())) {
+        // TODO: potentially, ask the user to rename the resource etc.
+        int resourceWithThatFilenameId;
+        if (KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first, storageLocation, resourceWithThatFilenameId)) {
+            KoResourceSP resourceWithThatFilename = resourceModel->resourceForId(resourceWithThatFilenameId);
+            QMessageBox::warning(widgetParent, i18nc("@title:window", "Cannot add the resource"),
+                                 i18nc("Warning message", "The filename %1 is already used for a resource %2, so adding a resource with name %3 failed.",
+                                       resource->filename(), resourceWithThatFilename->name(), resource->name()));
+            return false;
+        }
+        QMessageBox::warning(widgetParent, i18nc("@title:window", "Cannot add the resource"),
+                             i18nc("Warning message", "The filename %1 is already in use, so adding a resource with name %2 failed.",
+                                   resource->filename(), resource->name()));
+        return false;
+    }
+    bool res = resourceModel->addResource(resource, storageLocation);
+    if (!res) {
+        QMessageBox::warning(widgetParent, i18nc("@title:window", "Failed to add resource"), i18nc("Warning message", "Failed to add the resource."));
+    }
+    return res;
 }

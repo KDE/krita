@@ -60,6 +60,7 @@ private:
     friend class TestResourceCacheDb;
     friend class KisAllTagsModel;
     friend class KisResourceLoaderRegistry;
+    friend class KisResourceOverwriteDialog;
 
     explicit KisResourceCacheDb(); // Deleted
     ~KisResourceCacheDb(); // Deleted

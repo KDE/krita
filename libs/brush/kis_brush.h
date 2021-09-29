@@ -328,7 +328,6 @@ public:
 
     static KisBrushSP fromXML(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
-    virtual const KisBoundary* boundary() const;
     virtual QPainterPath outline() const;
 
     virtual void setScale(qreal _scale);
@@ -341,6 +340,11 @@ public:
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
     virtual bool supportsCaching() const;
+
+    virtual void coldInitInBackground();
+
+    virtual bool needsColdInitInBackground() const;
+
 
 protected:
 
@@ -375,14 +379,13 @@ public:
 
 protected:
 
-    void resetBoundary();
+    void resetOutlineCache();
+    void generateOutlineCache();
+    bool outlineCacheIsValid() const;
 
     void predefinedBrushToXML(const QString &type, QDomElement& e) const;
 
 private:
-
-    // Initialize our boundary
-    void generateBoundary() const;
 
     struct Private;
     Private* const d;

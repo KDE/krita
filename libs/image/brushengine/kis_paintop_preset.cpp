@@ -75,7 +75,6 @@ KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
     // only valid if we could clone the settings
     setValid(rhs.settings());
 
-    setPaintOp(rhs.paintOp());
     setName(rhs.name());
     setImage(rhs.image());
 }
@@ -521,6 +520,18 @@ QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP 
 QList<int> KisPaintOpPreset::requiredCanvasResources() const
 {
     return d->settings ? d->settings->requiredCanvasResources() : QList<int>();
+}
+
+void KisPaintOpPreset::coldInitInBackground()
+{
+    if (d->settings) {
+        d->settings->coldInitInBackground();
+    }
+}
+
+bool KisPaintOpPreset::needsColdInitInBackground() const
+{
+    return d->settings ? d->settings->needsColdInitInBackground() : false;
 }
 
 KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPresetSP preset)

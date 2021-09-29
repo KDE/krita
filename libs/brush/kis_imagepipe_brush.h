@@ -75,7 +75,7 @@ public:
 
     QString parasiteSelection(); // returns random, constant, etc
 
-    const KisBoundary* boundary() const override;
+    QPainterPath outline() const override;
 
     bool canPaintFor(const KisPaintInformation& info) override;
 
@@ -108,6 +108,9 @@ public:
 
     void setParasite(const KisPipeBrushParasite& parasite);
     void setDevices(QVector< QVector<KisPaintDevice*> > devices, int w, int h);
+
+    void coldInitInBackground() override;
+    bool needsColdInitInBackground() const override;
 
 protected:
     virtual void setBrushApplication(enumBrushApplication brushApplication) override;

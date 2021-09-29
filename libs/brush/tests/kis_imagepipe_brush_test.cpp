@@ -44,7 +44,7 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrushSP brush)
      */
     QCOMPARE(brush->width(), firstBrush->width());
     QCOMPARE(brush->height(), firstBrush->height());
-    QCOMPARE(brush->boundary(), firstBrush->boundary());
+    QCOMPARE(brush->outline(), firstBrush->outline());
 
     /**
      * These values should be spread over the children brushes

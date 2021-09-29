@@ -35,13 +35,12 @@
 #include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_qimage_pyramid.h>
-#include <KisSharedQImagePyramid.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoCachedGradient.h>
 #include <KoResource.h>
 #include <KoResourceServerProvider.h>
-
+#include <KisLazySharedCacheStorage.h>
 
 KisBrush::ColoringInformation::~ColoringInformation()
 {
@@ -93,6 +92,27 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 }
 
 
+namespace {
+QPainterPath* outlineFactory(const KisBrush *brush) {
+    KisFixedPaintDeviceSP dev;
+    KisDabShape inverseTransform(1.0 / brush->scale(), 1.0, -brush->angle());
+
+    if (brush->brushApplication() == IMAGESTAMP) {
+        dev = brush->paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
+                          inverseTransform, KisPaintInformation());
+    }
+    else {
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        dev = new KisFixedPaintDevice(cs);
+        brush->mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
+    }
+
+    KisBoundary boundary(dev);
+    boundary.generateBoundary();
+    return new QPainterPath(boundary.path());
+}
+}
+
 struct KisBrush::Private {
     Private()
         : brushType(INVALID)
@@ -107,6 +127,11 @@ struct KisBrush::Private {
         , autoSpacingActive(false)
         , autoSpacingCoeff(1.0)
         , threadingAllowed(true)
+        , brushPyramid([] (const KisBrush* brush)
+                       {
+                           return new KisQImagePyramid(brush->brushTipImage());
+                       })
+        , brushOutline(outlineFactory)
     {
     }
 
@@ -130,22 +155,18 @@ struct KisBrush::Private {
            * therefore you cannot change it, only recreate! That is the
            * reason why it is defined as const!
            */
-          brushPyramid(rhs.brushPyramid)
-
+          brushPyramid(rhs.brushPyramid),
+          brushOutline(rhs.brushOutline)
     {
         gradient = rhs.gradient;
         if (rhs.cachedGradient) {
             cachedGradient = rhs.cachedGradient->clone().staticCast<KoCachedGradient>();
         }
-
-
-        // don't copy the boundary, it will be regenerated -- see bug 291910
     }
 
     ~Private() {
     }
 
-    mutable QScopedPointer<KisBoundary> boundary;
     enumBrushType brushType;
     enumBrushApplication brushApplication;
 
@@ -166,7 +187,8 @@ struct KisBrush::Private {
     bool threadingAllowed;
 
     QImage brushTipImage;
-    mutable QSharedPointer<KisSharedQImagePyramid> brushPyramid;
+    mutable KisLazySharedCacheStorage<KisQImagePyramid, const KisBrush*> brushPyramid;
+    mutable KisLazySharedCacheStorage<QPainterPath, const KisBrush*> brushOutline;
 };
 
 KisBrush::KisBrush()
@@ -471,7 +493,7 @@ void KisBrush::notifyBrushIsGoingToBeClonedForStroke()
 {
     /// Default implementation for all image-based brushes:
     /// just recreate the shared pyramid
-    d->brushPyramid->pyramid(this);
+    d->brushPyramid.initialize(this);
 }
 
 void KisBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
@@ -492,7 +514,7 @@ bool KisBrush::threadingAllowed() const
 
 void KisBrush::clearBrushPyramid()
 {
-    d->brushPyramid.reset(new KisSharedQImagePyramid());
+    d->brushPyramid.reset();
 }
 
 void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
@@ -537,7 +559,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     Q_UNUSED(info_);
     Q_UNUSED(softnessFactor);
 
-    QImage outputImage = d->brushPyramid->pyramid(this)->createImage(KisDabShape(
+    QImage outputImage = d->brushPyramid.value(this)->createImage(KisDabShape(
                                                                          shape.scale() * d->scale, shape.ratio(),
                                                                          -normalizeAngle(shape.rotation() + d->angle)),
                                                                      subPixelX, subPixelY);
@@ -639,7 +661,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     double angle = normalizeAngle(shape.rotation() + d->angle);
     double scale = shape.scale() * d->scale;
 
-    QImage outputImage = d->brushPyramid->pyramid(this)->createImage(
+    QImage outputImage = d->brushPyramid.value(this)->createImage(
                 KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
 
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(colorSpace);
@@ -649,35 +671,19 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     return dab;
 }
 
-void KisBrush::resetBoundary()
+void KisBrush::resetOutlineCache()
 {
-    d->boundary.reset();
+    d->brushOutline.reset();
 }
 
-void KisBrush::generateBoundary() const
+void KisBrush::generateOutlineCache()
 {
-    KisFixedPaintDeviceSP dev;
-    KisDabShape inverseTransform(1.0 / scale(), 1.0, -angle());
-
-    if (brushApplication() == IMAGESTAMP) {
-        dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
-                          inverseTransform, KisPaintInformation());
-    }
-    else {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-        dev = new KisFixedPaintDevice(cs);
-        mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
-    }
-
-    d->boundary.reset(new KisBoundary(dev));
-    d->boundary->generateBoundary();
+    d->brushOutline.initialize(this);
 }
 
-const KisBoundary* KisBrush::boundary() const
+bool KisBrush::outlineCacheIsValid() const
 {
-    if (!d->boundary)
-        generateBoundary();
-    return d->boundary.data();
+    return !d->brushOutline.isNull();
 }
 
 void KisBrush::setScale(qreal _scale)
@@ -702,7 +708,7 @@ qreal KisBrush::angle() const
 
 QPainterPath KisBrush::outline() const
 {
-    return boundary()->path();
+    return *d->brushOutline.value(this);
 }
 
 void KisBrush::lodLimitations(KisPaintopLodLimitations *l) const
@@ -715,4 +721,15 @@ void KisBrush::lodLimitations(KisPaintopLodLimitations *l) const
 bool KisBrush::supportsCaching() const
 {
     return true;
+}
+
+void KisBrush::coldInitInBackground()
+{
+    d->brushPyramid.initialize(this);
+    generateOutlineCache();
+}
+
+bool KisBrush::needsColdInitInBackground() const
+{
+    return d->brushPyramid.isNull() || !outlineCacheIsValid();
 }

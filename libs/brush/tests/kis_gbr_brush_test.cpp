@@ -115,7 +115,7 @@ void KisGbrBrushTest::testImageGeneration()
     }
 }
 
-#include "KisSharedQImagePyramid.h"
+#include "kis_qimage_pyramid.h"
 
 void KisGbrBrushTest::benchmarkPyramidCreation()
 {
@@ -124,8 +124,9 @@ void KisGbrBrushTest::benchmarkPyramidCreation()
     QVERIFY(!brush->brushTipImage().isNull());
 
     QBENCHMARK {
-        KisSharedQImagePyramid sharedPyramid;
-        QVERIFY(sharedPyramid.pyramid(brush.data())); // avoid compiler elimination of unused code!
+        KisQImagePyramid pyramid(brush->brushTipImage());
+        qreal temp = 0.0;
+        QVERIFY(!pyramid.getClosest(QTransform(), &temp).isNull()); // avoid compiler elimination of unused code!
     }
 }
 

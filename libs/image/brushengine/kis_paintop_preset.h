@@ -82,11 +82,9 @@ public:
 
     /// replace the current settings object with the specified settings
     void setSettings(KisPaintOpSettingsSP settings);
-    void setOriginalSettings(KisPaintOpSettingsSP originalSettings);
 
     /// return the settings that define this paintop preset
     KisPaintOpSettingsSP settings() const;
-    KisPaintOpSettingsSP originalSettings() const;
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
 
@@ -183,6 +181,23 @@ public:
     QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 
     QList<int> requiredCanvasResources() const override;
+
+
+    /**
+     * The method is called by Krita in the background (in non-gui
+     * thread) when the preset becomes active. It lets the preset
+     * to prepare/load some data that needs heavy calclulations in
+     * the background before the user starts painting with it.
+     */
+    void coldInitInBackground();
+
+    /**
+     * \return true if Krita should call prepareInBackgroud() to
+     * prepare this preset for painting. It is needed for preset
+     * that need some extensive calculations for e.g. outline or
+     * brush pyramid.
+     */
+    bool needsColdInitInBackground() const;
 
 private:
 

@@ -32,8 +32,10 @@
 #include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 
+
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
-    : m_view(view)
+    : m_view(view),
+      m_presetShadowUpdater(view)
 {
     m_fGChanged = true;
 }
@@ -72,6 +74,9 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceProvider *res
             this, SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     m_resourceManager->setResource(KoCanvasResource::GamutMaskActive, false);
+
+    connect(m_resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)),
+            &m_presetShadowUpdater, SLOT(slotCanvasResourceChanged(int,QVariant)));
 }
 
 

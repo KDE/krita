@@ -283,7 +283,7 @@ void KisTextBrush::updateBrush()
         setBrushTipImage(KisTextBrushesPipe::renderChar(m_text, m_font));
     }
 
-    resetBoundary();
+    resetOutlineCache();
     setValid(true);
 }
 

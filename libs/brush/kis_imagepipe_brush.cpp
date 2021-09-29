@@ -197,6 +197,23 @@ public:
         return true;
     }
 
+    void coldInitInBackground() {
+        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
+            if (brush->needsColdInitInBackground()) {
+                brush->coldInitInBackground();
+            }
+        }
+    }
+
+    bool needsColdInitInBackground() const {
+        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
+            if (brush->needsColdInitInBackground()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void notifyStrokeStarted() override {
         m_isInitialized = false;
     }
@@ -445,12 +462,12 @@ void KisImagePipeBrush::setAutoAdjustMidPoint(bool value)
     d->brushesPipe.setAutoAdjustMidPoint(value);
 }
 
-const KisBoundary* KisImagePipeBrush::boundary() const
+QPainterPath KisImagePipeBrush::outline() const
 {
     KisGbrBrushSP brush = d->brushesPipe.firstBrush();
     Q_ASSERT(brush);
 
-    return brush->boundary();
+    return brush->outline();
 }
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)
@@ -535,4 +552,14 @@ void KisImagePipeBrush::setDevices(QVector<QVector<KisPaintDevice *> > devices, 
     for (int i = 0; i < devices.at(0).count(); i++) {
         d->brushesPipe.addBrush(KisGbrBrushSP(new KisGbrBrush(devices.at(0).at(i), 0, 0, w, h)));
     }
+}
+
+void KisImagePipeBrush::coldInitInBackground()
+{
+    d->brushesPipe.coldInitInBackground();
+}
+
+bool KisImagePipeBrush::needsColdInitInBackground() const
+{
+    return d->brushesPipe.needsColdInitInBackground();
 }

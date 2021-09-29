@@ -63,6 +63,9 @@ public:
 
     void notifyBrushIsGoingToBeClonedForStroke() override;
 
+    void coldInitInBackground() override;
+    bool needsColdInitInBackground() const override;
+
 public:
 
     void toXML(QDomDocument& , QDomElement&) const override;

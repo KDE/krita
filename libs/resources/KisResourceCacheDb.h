@@ -94,7 +94,7 @@ private:
     static bool removeResourceCompletely(int resourceId);
 
     /// Note that here you can put even the original filename - any filename from the versioned_resources - and it will still find it
-    static bool getResourceIdFromVersionedFilename(QString filename, QString resourceType, int& outResourceId);
+    static bool getResourceIdFromVersionedFilename(QString filename, QString resourceType, QString storageLocation, int& outResourceId);
     static bool getAllVersionsLocations(int resourceId, QStringList &outVersionsLocationsList);
 
 

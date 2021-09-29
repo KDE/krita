@@ -684,17 +684,20 @@ bool KisResourceCacheDb::removeResourceCompletely(int resourceId)
     return r;
 }
 
-bool KisResourceCacheDb::getResourceIdFromVersionedFilename(QString filename, QString resourceType, int &outResourceId)
+bool KisResourceCacheDb::getResourceIdFromVersionedFilename(QString filename, QString resourceType, QString storageLocation, int &outResourceId)
 {
     QSqlQuery q;
 
     bool r = q.prepare("SELECT resource_id FROM versioned_resources\n"
                        ", resources\n"
                        ", resource_types\n"
+                       ", storages\n"
                        "WHERE versioned_resources.filename = :filename\n" // bind to filename
                        "AND resources.id = versioned_resources.resource_id\n" // join resources + versioned_resources
                        "AND resource_types.id = resources.resource_type_id\n"  // join resources_types + resources
-                       "AND resource_types.name = :resourceType;");
+                       "AND resource_types.name = :resourceType\n" // bind to resource type
+                       "AND resources.storage_id = storages.id\n" // join resources + storages
+                       "AND storages.location = :storageLocation"); // bind to storage location
 
     if (!r) {
         qWarning() << "Could not prepare getResourceIdFromVersionedFilename statement" << q.lastError() << q.executedQuery();
@@ -703,6 +706,7 @@ bool KisResourceCacheDb::getResourceIdFromVersionedFilename(QString filename, QS
 
     q.bindValue(":filename", filename);
     q.bindValue(":resourceType", resourceType);
+    q.bindValue(":storageLocation", storageLocation);
 
     r = q.exec();
     if (!r) {

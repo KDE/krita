@@ -9,6 +9,8 @@ import os
 import re
 import shutil
 import subprocess
+import sys
+from datetime import datetime
 
 parser = argparse.ArgumentParser()
 
@@ -39,6 +41,24 @@ if os.name == 'nt':
 else:
     env["LANG"] = "en_US.UTF-8"
     env["LANGUAGE"] = "en_US.UTF-8"
+
+
+last_update_date_filename = "po/last_update_date.txt"
+should_update = True
+update_time_format = "%Y/%m/%d %H:%M"
+if os.path.exists(last_update_date_filename):
+    with open(last_update_date_filename, "r", encoding="utf-8") as f:
+        last_update_string = f.read()
+        try:
+            last_update_time = datetime.strptime(last_update_string, update_time_format)
+        except ValueError:
+            last_update_time = datetime.min
+        current_time = datetime.utcnow()
+        time_delta = current_time - last_update_time
+        should_update = time_delta.days >= 1
+
+if not should_update:
+    sys.exit()
 
 subdirs = subprocess.run(["svn", "cat", svn_command], stdout=subprocess.PIPE)
 for subdir in subdirs.stdout.decode('utf-8').strip().split('\n'):
@@ -86,3 +106,6 @@ for subdir in subdirs.stdout.decode('utf-8').strip().split('\n'):
                 pofile, current.groups()[0], len(po_contents)))
             r.write(current.groups()[0])
         f.write(po_contents)
+
+with open(last_update_date_filename, "w", encoding="utf-8") as f:
+    f.write(datetime.utcnow().strftime(update_time_format))

@@ -9,6 +9,8 @@
 #include <QMessageBox>
 #include <KisPart.h>
 #include "KisSessionManagerDialog.h"
+#include <KisResourceOverwriteDialog.h>
+#include <KisResourceModel.h>
 
 int KisSessionManagerDialog::refreshEventType = -1;
 
@@ -64,44 +66,23 @@ void KisSessionManagerDialog::slotNewSession()
 {
     QString name;
 
-    KisSessionResourceSP session(new KisSessionResource(QString()));
+    name = QInputDialog::getText(this,
+                                 i18n("Create session"),
+                                 i18n("Session name:"), QLineEdit::Normal,
+                                 name);
 
-    KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
-    QString saveLocation = server->saveLocation();
-    QFileInfo fileInfo(saveLocation + name.split(" ").join("_") + session->defaultFileExtension());
+    KisSessionResourceSP session(new KisSessionResource(QString(name)));
 
-    bool fileOverwriteAccepted = false;
-
-    while(!fileOverwriteAccepted) {
-        name = QInputDialog::getText(this,
-                                     i18n("Create session"),
-                                     i18n("Session name:"), QLineEdit::Normal,
-                                     name);
-        if (name.isNull() || name.isEmpty()) {
-            return;
-        } else {
-            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + session->defaultFileExtension());
-            if (fileInfo.exists()) {
-                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
-                                                        , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
-                                                        , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                if (res == QMessageBox::Yes) fileOverwriteAccepted = true;
-            } else {
-                fileOverwriteAccepted = true;
-            }
-        }
-    }
-
-    session->setFilename(fileInfo.fileName());
+    QString filename = name.split(" ").join("_") + session->defaultFileExtension();
+    session->setFilename(filename);
     session->setName(name);
     session->storeCurrentWindows();
 
-    bool r = server->addResource(session);
-    if (!r) {
-        QMessageBox::warning(this, i18nc("@title:window", "Couldn't add the session"), i18nc("Warning message", "Adding the session to the database failed."));
-    }
+    KisResourceModel resourceModel(ResourceType::Sessions);
+    KisResourceOverwriteDialog::addResourceWithUserInput(this, &resourceModel, session);
 
     KisPart::instance()->setCurrentSession(session);
+
 }
 
 void KisSessionManagerDialog::slotRenameSession()
@@ -115,11 +96,8 @@ void KisSessionManagerDialog::slotRenameSession()
     KisSessionResourceSP session = getSelectedSession();
     if (!session) return;
 
-    bool r = m_model->renameResource(session, name);
-    if (!r) {
-        QMessageBox::warning(this, i18nc("@title:window", "Couldn't rename the session"),
-                             i18nc("Warning about not being able to rename a session", "Renaming the session failed."));
-    }
+    KisResourceModel resourceModel(ResourceType::Sessions);
+    KisResourceOverwriteDialog::renameResourceWithUserInput(this, &resourceModel, session, name);
 }
 
 void KisSessionManagerDialog::slotSessionDoubleClicked(QModelIndex /*item*/)

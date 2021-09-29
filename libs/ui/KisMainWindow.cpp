@@ -2543,18 +2543,14 @@ void KisMainWindow::updateWindowMenu()
             [&]()
     {
         QStringList mimeTypes = KisResourceLoaderRegistry::instance()->mimeTypes(ResourceType::Workspaces);
+
         KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setMimeTypeFilters(mimeTypes);
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         QString filename = dialog.filename();
 
-        KoResourceSP resource = d->workspacemodel->importResourceFile(filename, false);
-        if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Workspaces, filename)) {
-            if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
-                KoResourceSP resource = d->workspacemodel->importResourceFile(filename, true);
-            }
-        }
-
+        KisResourceModel resourceModel(ResourceType::Workspaces);
+        KisResourceOverwriteDialog::importResourceFileWithUserInput(this, &resourceModel, "", ResourceType::Workspaces, filename);
     });
 
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),
@@ -2569,30 +2565,14 @@ void KisMainWindow::updateWindowMenu()
         workspace->setValid(true);
         QString saveLocation = rserver->saveLocation();
 
-        QFileInfo fileInfo(saveLocation + name + workspace->defaultFileExtension());
-        bool fileOverWriteAccepted = false;
+        QFileInfo fileInfo(saveLocation + "/" + name + workspace->defaultFileExtension());
 
-        while(!fileOverWriteAccepted) {
-            name = QInputDialog::getText(this, i18nc("@title:window", "New Workspace..."),
-                                                        i18nc("@label:textbox", "Name:"));
-            if (name.isNull() || name.isEmpty()) {
-                return;
-            } else {
-                fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + workspace->defaultFileExtension());
-                if (fileInfo.exists()) {
-                    int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
-                                                                , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
-                                                                , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                    if (res == QMessageBox::Yes) fileOverWriteAccepted = true;
-                } else {
-                    fileOverWriteAccepted = true;
-                }
-            }
-        }
+        KisResourceModel resourceModel(ResourceType::Workspaces);
 
         workspace->setFilename(fileInfo.fileName());
         workspace->setName(name);
-        rserver->addResource(workspace);
+
+        KisResourceOverwriteDialog::addResourceWithUserInput(this, &resourceModel, workspace);
     });
 
     // TODO: What to do about delete?

@@ -119,7 +119,9 @@ KoColorSetSP KisPaletteEditor::addPalette()
     if (chkSaveInDocument->isChecked()) {
         resourceLocation = m_d->view->document()->uniqueID();
     }
-    m_d->rServer->resourceModel()->addResource(colorSet, resourceLocation);
+    KisResourceModel resourceModel(ResourceType::Palettes);
+    KisResourceOverwriteDialog::addResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, colorSet, resourceLocation);
+
     return colorSet;
 }
 
@@ -143,11 +145,12 @@ KoColorSetSP KisPaletteEditor::importPalette()
     if (messageBox.exec() == QMessageBox::Yes) {
         storageLocation = m_d->view->document()->uniqueID();
     }
-    KoColorSetSP palette = m_d->rServer->resourceModel()->importResourceFile(filename, false, storageLocation).dynamicCast<KoColorSet>();
-    if (palette.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Palettes, filename)) {
-        if (KisResourceOverwriteDialog::userAllowsOverwrite(m_d->view->mainWindow(), filename)) {
-            palette = m_d->rServer->resourceModel()->importResourceFile(filename, true, storageLocation).dynamicCast<KoColorSet>();
-        }
+    KisResourceModel resourceModel(ResourceType::Palettes);
+    KoResourceSP resource = KisResourceOverwriteDialog::importResourceFileWithUserInput(m_d->view->mainWindow(), &resourceModel, storageLocation, ResourceType::Palettes, filename);
+
+    KoColorSetSP palette;
+    if (resource) {
+        palette = resource.dynamicCast<KoColorSet>();
     }
 
     return palette;
@@ -453,7 +456,8 @@ void KisPaletteEditor::updatePalette()
         palette->setColumnCount(modified.columnCount);
     }
     if (m_d->isNameModified) {
-        m_d->rServer->resourceModel()->renameResource(palette, modified.name);
+        KisResourceModel resourceModel(ResourceType::Palettes);
+        KisResourceOverwriteDialog::renameResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, palette, m_d->modified.name);
     }
     QString resourceLocation = m_d->model->colorSet()->storageLocation();
     if (resourceLocation != m_d->modified.storageLocation) {

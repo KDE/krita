@@ -9,6 +9,7 @@
 #include <sdk/tests/testbrush.h>
 #include <simpletest.h>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

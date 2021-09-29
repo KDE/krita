@@ -55,6 +55,11 @@ if(MSVC)
         ${kconfig_patches}
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Work-around-CMake-multi-config-generators.patch
     )
+elseif (ANDROID)
+    set(kconfig_patches
+        ${kconfig_patches}
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Fix-writing-to-config-if-path-is-a-content-U.patch
+    )
 endif()
 ExternalProject_Add(
     ext_kconfig

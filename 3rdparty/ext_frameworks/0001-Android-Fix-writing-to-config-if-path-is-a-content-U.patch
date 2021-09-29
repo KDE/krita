@@ -1,0 +1,45 @@
+From 7db56e71e2595f04f9b103a7bb9a41d17003a1de Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Wed, 29 Sep 2021 05:58:12 +0000
+Subject: [PATCH] Android: Fix writing to config if path is a content:// Uri
+
+---
+ src/core/kconfigini.cpp | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/src/core/kconfigini.cpp b/src/core/kconfigini.cpp
+index 798ce57..5a25e0f 100644
+--- a/src/core/kconfigini.cpp
++++ b/src/core/kconfigini.cpp
+@@ -517,7 +517,7 @@ bool KConfigIniBackend::writeConfig(const QByteArray &locale, KEntryMap &entryMa
+         }
+     } else {
+         // Open existing file. *DON'T* create it if it suddenly does not exist!
+-#ifdef Q_OS_UNIX
++#if defined(Q_OS_UNIX) && !defined(Q_OS_ANDROID)
+         int fd = QT_OPEN(QFile::encodeName(filePath()).constData(), O_WRONLY | O_TRUNC);
+         if (fd < 0) {
+             return false;
+@@ -629,7 +629,18 @@ bool KConfigIniBackend::lock()
+     Q_ASSERT(!filePath().isEmpty());
+ 
+     if (!lockFile) {
+-        lockFile = new QLockFile(filePath() + QLatin1String(".lock"));
++#ifdef Q_OS_ANDROID
++        // handle content Uris properly
++        if (filePath().startsWith(QLatin1String("content://"))) {
++            // we can't create file at an arbitrary location, so use internal storage to create one
++            lockFile = new QLockFile(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation)
++                                     + QLatin1String("/") + QFileInfo(filePath()).fileName() + QLatin1String(".lock"));
++        } else {
++#endif
++            lockFile = new QLockFile(filePath() + QLatin1String(".lock"));
++#ifdef Q_OS_ANDROID
++        }
++#endif
+     }
+ 
+     lockFile->lock();
+-- 
+2.33.0
+

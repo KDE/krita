@@ -200,7 +200,7 @@ bool KisTag::load(QIODevice &io)
 bool KisTag::save(QIODevice &io)
 {
     KConfigIniBackend ini;
-
+    d->map.setEntry(s_group, s_type, s_tag, KEntryMap::EntryDirty);
     d->map.setEntry(s_group, s_url, d->url, KEntryMap::EntryDirty);
     d->map.setEntry(s_group, s_name, d->name, KEntryMap::EntryDirty);
     d->map.setEntry(s_group, s_resourceType, d->resourceType, KEntryMap::EntryDirty);

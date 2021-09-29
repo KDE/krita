@@ -58,14 +58,14 @@ private:
     bool load(KisTagSP tag) const
     {
         QFile f(m_dirIterator->filePath());
-        QString filename = m_dirIterator->fileName();
+        tag->setFilename(m_dirIterator->fileName());
         if (f.exists()) {
             f.open(QFile::ReadOnly);
             if (!tag->load(f)) {
-                qWarning() << m_dirIterator << "is not a valid tag desktop file";
+                qWarning() << m_dirIterator->filePath() << "is not a valid tag desktop file";
                 return false;
             }
-            tag->setFilename(filename);
+
         }
         return true;
     }

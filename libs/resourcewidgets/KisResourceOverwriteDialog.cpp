@@ -95,3 +95,30 @@ bool KisResourceOverwriteDialog::addResourceWithUserInput(QWidget *widgetParent,
     }
     return res;
 }
+
+bool KisResourceOverwriteDialog::updateResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource)
+{
+    if (!resourceModel) return false;
+
+    QString oldName = resourceModel->data(resourceModel->indexForResourceId(resource->resourceId()), Qt::UserRole + KisAllResourcesModel::Name).toString();
+    if (resource->name() != oldName) {
+        // rename in action
+        QVector<KoResourceSP> resources = resourceModel->resourcesForName(resource->name());
+        if (resources.size() > 0) {
+            bool userWantsRename = QMessageBox::question(widgetParent, i18nc("@title:window", "Rename the resource?"),
+                                  i18nc("Question in a dialog/messagebox", "This name is already used for another resource. Do you want to overwrite "
+                                                                           "and use the same name for multiple resources?"
+                                                                           "\nIf you cancel, your changes won't be saved."),
+                                         QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Cancel;
+            if (!userWantsRename) {
+                return false;
+            }
+        }
+    }
+
+    bool res = resourceModel->updateResource(resource);
+    if (!res) {
+        QMessageBox::warning(widgetParent, i18nc("@title:window", "Failed to overwrite the resource"), i18nc("Warning message", "Failed to overwrite the resource."));
+    }
+    return res;
+}

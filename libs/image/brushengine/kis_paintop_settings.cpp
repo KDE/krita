@@ -162,8 +162,6 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
 
     KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->createSettings(pixelBrushId, resourcesInterface());
 
-    maskingSettings->dump();
-
     this->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSettings);
 
     const bool useMasterSize = this->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);

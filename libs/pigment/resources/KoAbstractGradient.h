@@ -71,5 +71,22 @@ private:
 Q_DECLARE_METATYPE(KoAbstractGradient*)
 Q_DECLARE_METATYPE(QSharedPointer<KoAbstractGradient>)
 
+inline QDebug operator<<(QDebug dbg, const KoAbstractGradientSP res)
+{
+    if (!res) {
+        dbg.noquote() << "NULL Gradient";
+    }
+    else {
+        dbg.nospace() << "[Gradient] Name: " << res->name()
+                      << " Version: " << res->version()
+                      << " Filename: " << res->filename()
+                      << " MD5: " << res->md5Sum(false)
+                      << " Type: " << res->resourceType()
+                      << " Valid: " << res->valid()
+                      << " Storage: " << res->storageLocation();
+    }
+    return dbg.space();
+}
+
 
 #endif // KOABSTRACTGRADIENT_H

@@ -644,10 +644,12 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     KisSignalsBlocker b(m_optionWidget);
 
-    preset->setOptionsWidget(m_optionWidget);
-
     m_optionWidget->setImage(m_viewManager->image());
     m_optionWidget->setNode(m_viewManager->activeNode());
+
+    if (m_optionWidget) {
+        m_optionWidget->setConfigurationSafe(preset->settings());
+    }
 
     m_presetsEditor->setPaintOpSettingsWidget(m_optionWidget);
 
@@ -921,7 +923,9 @@ void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
         preset = m_resourceProvider->currentPreset();
     } else {
         m_resourceProvider->setPaintOpPreset(preset);
-        preset->setOptionsWidget(m_optionWidget);
+        if (m_optionWidget) {
+            m_optionWidget->setConfigurationSafe(preset->settings());
+        }
     }
     m_presetsEditor->resourceSelected(preset);  // this helps update the UI on the brush editor
 }
@@ -999,7 +1003,9 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 void KisPaintopBox::slotSetupDefaultPreset()
 {
     KisPaintOpPresetSP preset = defaultPreset(m_resourceProvider->currentPreset()->paintOp());
-    preset->setOptionsWidget(m_optionWidget);
+    if (m_optionWidget) {
+        m_optionWidget->setConfigurationSafe(preset->settings());
+    }
     m_resourceProvider->setPaintOpPreset(preset);
 
     // tell the brush editor that the resource has changed

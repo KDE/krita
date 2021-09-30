@@ -402,10 +402,6 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
                 d->settingsWidgets[preset.data()]->setConfiguration(preset->settings());
             }
 
-            if (d->settingsWidgets[preset.data()]) {
-                preset->settings()->setOptionsWidget(d->settingsWidgets[preset.data()]);
-            }
-
             d->size = preset->settings()->paintOpSize();
             emit sizeChanged();
 

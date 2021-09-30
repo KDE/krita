@@ -32,7 +32,6 @@ KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
 KisPropertiesConfigurationSP  KisExperimentPaintOpSettingsWidget::configuration() const
 {
     KisExperimentPaintOpSettings* config = new KisExperimentPaintOpSettings(resourcesInterface());
-    config->setOptionsWidget(const_cast<KisExperimentPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "experimentbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

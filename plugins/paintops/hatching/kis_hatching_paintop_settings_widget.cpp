@@ -119,7 +119,6 @@ KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
 KisPropertiesConfigurationSP  KisHatchingPaintOpSettingsWidget::configuration() const
 {
     KisHatchingPaintOpSettingsSP config = new KisHatchingPaintOpSettings(resourcesInterface());
-    config->setOptionsWidget(const_cast<KisHatchingPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "hatchingbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

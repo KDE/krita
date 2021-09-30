@@ -95,8 +95,6 @@ public:
         return ".kpp";
     }
 
-    void setOptionsWidget(KisPaintOpConfigWidget *widget);
-
     QPointer<KisPaintOpPresetUpdateProxy> updateProxy() const;
     QPointer<KisPaintOpPresetUpdateProxy> updateProxyNoCreate() const;
 

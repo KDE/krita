@@ -137,25 +137,19 @@ bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resources
 {
     Q_UNUSED(resourcesInterface);
 
-    QString fileExtension;
-    int index = filename().lastIndexOf('.');
-
-    if (index != -1)
-        fileExtension = filename().mid(index + 1).toLower();
-
     QByteArray ba = dev->readAll();
     QBuffer buf(&ba);
     buf.open(QBuffer::ReadOnly);
     bool result = false;
 
     QString mimeForData = KisMimeDatabase::mimeTypeForData(ba);
-
-    if (mimeForData == "image/x-gimp-pat") {
+    if (mimeForData == "image/x-gimp-pat" || mimeForData == "image/x-gimp-pattern" || mimeForData == "application/x-gimp-pattern") {
         result = loadPatFromDevice(&buf);
     }
     else {
+        QFileInfo fi(filename());
         QImage image;
-        result = image.load(&buf, fileExtension.toUpper().toLatin1());
+        result = image.load(&buf, fi.suffix().toUpper().toLatin1());
         setPatternImage(image);
     }
     return result;
@@ -165,19 +159,18 @@ bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resources
 bool KoPattern::saveToDevice(QIODevice *dev) const
 {
     QFileInfo fi(filename());
-    QString fileExtension = fi.suffix();
+    QString fileExtension = fi.suffix().toUpper();
 
     bool result = false;
 
-    if (fileExtension == "pat") {
+    if (fileExtension == "PAT") {
         result = savePatToDevice(dev);
     }
     else {
         if (fileExtension.isEmpty()) {
             fileExtension = "PNG";
         }
-        result = m_pattern.save(dev, fileExtension.toUpper().toLatin1());
-        Q_ASSERT(result);
+        result = m_pattern.save(dev, fileExtension.toLatin1());
     }
 
     return result;

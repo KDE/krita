@@ -10,7 +10,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 
 struct KisPresetUpdateMediator::Private
 {

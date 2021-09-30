@@ -14,7 +14,7 @@
 #include <QDomDocument>
 #include <QBuffer>
 
-#include <KisResourceDirtyStateSaver.h>
+#include <KisDirtyStateSaver.h>
 
 #include <brushengine/kis_paintop_settings.h>
 #include "kis_paintop_registry.h"
@@ -22,7 +22,7 @@
 #include <brushengine/kis_paint_information.h>
 #include "kis_paint_device.h"
 #include "kis_image.h"
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 #include <brushengine/kis_paintop_config_widget.h>
 #include <KisRequiredResourcesOperators.h>
 #include <KoLocalStrokeCanvasResources.h>
@@ -35,14 +35,41 @@
 #include <KoStore.h>
 
 struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
+
+    struct UpdateListener : public KisPaintOpSettings::UpdateListener {
+        UpdateListener(KisPaintOpPreset *parentPreset)
+            : m_parentPreset(parentPreset)
+        {
+        }
+
+        void setDirty(bool value) override {
+            m_parentPreset->setDirty(value);
+        }
+
+        bool isDirty() const override {
+            return m_parentPreset->isDirty();
+        }
+
+        void notifySettingsChanged() override {
+            KisPaintOpPresetUpdateProxy* proxy = m_parentPreset->updateProxyNoCreate();
+            if (proxy) {
+                proxy->notifySettingsChanged();
+            }
+        }
+
+    private:
+        KisPaintOpPreset *m_parentPreset;
+    };
+
+public:
     Private(KisPaintOpPreset *q)
+        : settingsUpdateListener(new UpdateListener(q))
     {
-        proxyParent = new ProxyParent(q);
     }
 
-    QPointer<ProxyParent> proxyParent{0};
     KisPaintOpSettingsSP settings {0};
-    QPointer<KisPaintopSettingsUpdateProxy> updateProxy {0};
+    QScopedPointer<KisPaintOpPresetUpdateProxy> updateProxy;
+    KisPaintOpSettings::UpdateListenerSP settingsUpdateListener;
 };
 
 
@@ -117,21 +144,20 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", QString()).isEmpty());
 
-    KisResourceDirtyStateSaver dirtyStateSaver(this);
-    Q_UNUSED(dirtyStateSaver);
+    KisDirtyStateSaver<KisPaintOpPreset*> dirtyStateSaver(this);
 
     KisPaintOpConfigWidget *oldOptionsWidget = 0;
 
     if (d->settings) {
         oldOptionsWidget = d->settings->optionsWidget();
         d->settings->setOptionsWidget(0);
-        d->settings->setUpdateProxy(0);
+        d->settings->setUpdateListener(KisPaintOpSettings::UpdateListenerWSP());
         d->settings = 0;
     }
 
     if (settings) {
         d->settings = settings->clone();
-        d->settings->setUpdateProxy(updateProxy());
+        d->settings->setUpdateListener(d->settingsUpdateListener);
 
         if (oldOptionsWidget) {
             oldOptionsWidget->setConfigurationSafe(d->settings);
@@ -376,22 +402,25 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
 }
 
-QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxy() const
+QPointer<KisPaintOpPresetUpdateProxy> KisPaintOpPreset::updateProxy() const
 {
     if (!d->updateProxy) {
-        d->updateProxy = new KisPaintopSettingsUpdateProxy(d->proxyParent);
+        d->updateProxy.reset(new KisPaintOpPresetUpdateProxy());
     }
-    return d->updateProxy;
+    return d->updateProxy.data();
 }
 
-QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxyNoCreate() const
+QPointer<KisPaintOpPresetUpdateProxy> KisPaintOpPreset::updateProxyNoCreate() const
 {
-    return d->updateProxy;
+    return d->updateProxy.data();
 }
 
 QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()
 {
-    return d->settings->uniformProperties(d->settings);
+    /// we pass a shared pointer to settings explicitly,
+    /// because the settings will not be able to wrap
+    /// itself into a shared pointer
+    return d->settings->uniformProperties(d->settings, updateProxy());
 }
 
 bool KisPaintOpPreset::hasMaskingPreset() const

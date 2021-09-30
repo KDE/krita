@@ -9,7 +9,7 @@
 #include "kis_curve_option.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 
 
 KisCurveOptionUniformProperty::KisCurveOptionUniformProperty(const QString &name,
@@ -25,7 +25,6 @@ KisCurveOptionUniformProperty::KisCurveOptionUniformProperty(const QString &name
 {
     setRange(option->minValue(), option->maxValue());
     setSingleStep(0.01);
-    connect(settings->updateProxy(), SIGNAL(sigSettingsChanged()), this, SLOT(requestReadValue()));
     requestReadValue();
 }
 

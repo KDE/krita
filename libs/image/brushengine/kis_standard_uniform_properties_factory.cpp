@@ -8,7 +8,7 @@
 
 #include "kis_slider_based_paintop_property.h"
 #include "kis_paintop_settings.h"
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 #include "kis_image_config.h"
 
 namespace KisStandardUniformPropertiesFactory {
@@ -17,14 +17,14 @@ namespace KisStandardUniformPropertiesFactory {
 
 KisUniformPaintOpPropertySP createProperty(const KoID &id,
                                            KisPaintOpSettingsRestrictedSP settings,
-                                           KisPaintopSettingsUpdateProxy *updateProxy)
+                                           KisPaintOpPresetUpdateProxy *updateProxy)
 {
     return createProperty(id.id(), settings, updateProxy);
 }
 
 KisUniformPaintOpPropertySP createProperty(const QString &id,
                                            KisPaintOpSettingsRestrictedSP settings,
-                                           KisPaintopSettingsUpdateProxy *updateProxy)
+                                           KisPaintOpPresetUpdateProxy *updateProxy)
 {
     KisUniformPaintOpPropertySP result;
 

@@ -54,7 +54,7 @@ public:
 
     KisNodeWSP sourceNode() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;
 
 public:
 

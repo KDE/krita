@@ -7,6 +7,8 @@
 #include "kis_roundmarkerop_settings.h"
 #include "kis_roundmarker_option.h"
 
+#include <QPointer>
+
 
 struct KisRoundMarkerOpSettings::Private
 {
@@ -75,14 +77,14 @@ QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &i
 
 #include "kis_standard_uniform_properties_factory.h"
 
-QList<KisUniformPaintOpPropertySP> KisRoundMarkerOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
+QList<KisUniformPaintOpPropertySP> KisRoundMarkerOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
 {
     QList<KisUniformPaintOpPropertySP> props;
 
     {
         using namespace KisStandardUniformPropertiesFactory;
 
-        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings)) {
+        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings, updateProxy)) {
             if (prop->id() != flow.id()) {
                 props.prepend(prop);
             }

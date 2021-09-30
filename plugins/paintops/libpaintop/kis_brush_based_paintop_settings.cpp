@@ -193,9 +193,9 @@ qreal KisBrushBasedPaintOpSettings::paintOpSize() const
 
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 
-QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
+QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_uniformProperties);
@@ -228,7 +228,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     s->setAngle(kisDegreesToRadians(prop->value().toReal()));
                 });
 
-            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -255,7 +255,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     s->setAutoSpacing(prop->value().toBool(), s->autoSpacingCoeff());
                 });
 
-            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -296,13 +296,13 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     }
                 });
 
-            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
     }
 
-    return KisPaintOpSettings::uniformProperties(settings) + props;
+    return KisPaintOpSettings::uniformProperties(settings, updateProxy) + props;
 }
 
 void KisBrushBasedPaintOpSettings::onPropertyChanged()

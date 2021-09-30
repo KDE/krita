@@ -15,25 +15,13 @@
 #include "kis_shared.h"
 #include "kritaimage_export.h"
 #include <brushengine/kis_uniform_paintop_property.h>
-#include <kis_paintop_settings_update_proxy.h>
+#include <KisPaintOpPresetUpdateProxy.h>
 
 class KisPaintOpConfigWidget;
 
 class KoCanvasResourcesInterface;
 using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
-
-class ProxyParent : public QObject
-{
-    Q_OBJECT
-public:
-    ProxyParent(KisPaintOpPreset *preset)
-    {
-        m_preset = preset;
-    }
-
-    KisPaintOpPreset *m_preset {0};
-};
 
 /**
  * A KisPaintOpPreset contains a particular set of settings
@@ -48,7 +36,7 @@ public:
 
     /**
      * @brief The UpdatedPostponer class
-     * @see KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
+     * @see KisPaintOpPresetUpdateProxy::postponeSettingsChanges()
      */
     class KRITAIMAGE_EXPORT UpdatedPostponer{
     public:
@@ -57,7 +45,7 @@ public:
         ~UpdatedPostponer();
 
     private:
-        QPointer<KisPaintopSettingsUpdateProxy> m_updateProxy;
+        QPointer<KisPaintOpPresetUpdateProxy> m_updateProxy;
     };
 
 public:
@@ -109,8 +97,8 @@ public:
 
     void setOptionsWidget(KisPaintOpConfigWidget *widget);
 
-    QPointer<KisPaintopSettingsUpdateProxy> updateProxy() const;
-    QPointer<KisPaintopSettingsUpdateProxy> updateProxyNoCreate() const;
+    QPointer<KisPaintOpPresetUpdateProxy> updateProxy() const;
+    QPointer<KisPaintOpPresetUpdateProxy> updateProxyNoCreate() const;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 

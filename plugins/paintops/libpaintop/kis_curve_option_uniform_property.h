@@ -12,7 +12,7 @@
 #include <kritapaintop_export.h>
 
 class KisCurveOption;
-
+class KisPaintOpPresetUpdateProxy;
 
 class PAINTOP_EXPORT KisCurveOptionUniformProperty : public KisDoubleSliderBasedPaintOpProperty
 {

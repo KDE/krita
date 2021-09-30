@@ -27,7 +27,7 @@
 #include <brushengine/kis_paint_information.h>
 #include "kis_paintop_config_widget.h"
 #include <brushengine/kis_paintop_preset.h>
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 #include <time.h>
 #include <kis_types.h>
 #include <kis_signals_blocker.h>
@@ -49,16 +49,18 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private(const Private &rhs)
         : settingsWidget(0),
           modelName(rhs.modelName),
-          updateProxy(rhs.updateProxy),
           resourcesInterface(rhs.resourcesInterface),
           canvasResourcesInterface(rhs.canvasResourcesInterface),
           disableDirtyNotifications(false)
     {
+        /// NOTE: we don't copy updateListener intentionally, it is
+        ///       a job of the cloned preset to set the new listener
+        ///       properly
     }
 
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
-    QPointer<KisPaintopSettingsUpdateProxy> updateProxy;
+    UpdateListenerWSP updateListener;
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
     KisResourcesInterfaceSP resourcesInterface;
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
@@ -85,11 +87,13 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     };
 };
 
+KisPaintOpSettings::UpdateListener::~UpdateListener()
+{
+}
 
 KisPaintOpSettings::KisPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : d(new Private)
 {
-    d->updateProxy = 0;
     d->resourcesInterface = resourcesInterface;
 }
 
@@ -108,14 +112,14 @@ void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
     d->settingsWidget = widget;
 }
 
-void KisPaintOpSettings::setUpdateProxy(const QPointer<KisPaintopSettingsUpdateProxy> proxy)
+void KisPaintOpSettings::setUpdateListener(UpdateListenerWSP listener)
 {
-    d->updateProxy = proxy;
+    d->updateListener = listener;
 }
 
-QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpSettings::updateProxy() const
+KisPaintOpSettings::UpdateListenerWSP KisPaintOpSettings::updateListener() const
 {
-    return d->updateProxy;
+    return d->updateListener;
 }
 
 bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &paintInformation, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
@@ -246,7 +250,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
         i.next();
         settings->setProperty(i.key(), QVariant(i.value()));
     }
-    settings->setUpdateProxy(this->updateProxy());
+
     settings->setCanvasResourcesInterface(this->canvasResourcesInterface());
     return settings;
 }
@@ -500,8 +504,10 @@ QPainterPath KisPaintOpSettings::makeTiltIndicator(KisPaintInformation const& in
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
     if (value != KisPropertiesConfiguration::getProperty(name) && !d->disableDirtyNotifications) {
-        if (d->updateProxy) {
-            d->updateProxy->setDirty(true);
+        UpdateListenerSP updateListener = d->updateListener.toStrongRef();
+
+        if (updateListener) {
+            updateListener->setDirty(true);
         }
     }
 
@@ -512,8 +518,10 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
-    if (d->updateProxy) {
-        d->updateProxy->notifySettingsChanged();
+    UpdateListenerSP updateListener = d->updateListener.toStrongRef();
+
+    if (updateListener) {
+        updateListener->notifySettingsChanged();
     }
 }
 
@@ -544,7 +552,7 @@ void KisPaintOpSettings::setLodSizeThreshold(qreal value)
 
 #include "kis_standard_uniform_properties_factory.h"
 
-QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
+QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
 {
     QList<KisUniformPaintOpPropertySP> props =
             listWeakToStrong(d->uniformProperties);
@@ -553,9 +561,9 @@ QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPain
     if (props.isEmpty()) {
         using namespace KisStandardUniformPropertiesFactory;
 
-        props.append(createProperty(opacity, settings, d->updateProxy));
-        props.append(createProperty(size, settings, d->updateProxy));
-        props.append(createProperty(flow, settings, d->updateProxy));
+        props.append(createProperty(opacity, settings, updateProxy));
+        props.append(createProperty(size, settings, updateProxy));
+        props.append(createProperty(flow, settings, updateProxy));
 
         d->uniformProperties = listStrongToWeak(props);
     }

@@ -7,7 +7,7 @@
 #include <brushengine/kis_locked_properties_proxy.h>
 
 #include <KoResource.h>
-#include <KisResourceDirtyStateSaver.h>
+#include <KisDirtyStateSaver.h>
 
 #include <brushengine/kis_locked_properties.h>
 #include <brushengine/kis_locked_properties_server.h>
@@ -28,12 +28,11 @@ KisLockedPropertiesProxy::~KisLockedPropertiesProxy()
 QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 {
     KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
-    if (!t->updateProxy()) return m_parent->getProperty(name);
+    if (!t->updateListener()) return m_parent->getProperty(name);
 
     // restores the dirty state on returns automagically
-    // XXX: This is extremely dirty
-    KisResourceDirtyStateSaver dirtyStateSaver(qobject_cast<ProxyParent*>(t->updateProxy()->parent())->m_preset);
-    Q_UNUSED(dirtyStateSaver);
+    KisPaintOpSettings::UpdateListenerSP updateProxy = t->updateListener().toStrongRef();
+    KisDirtyStateSaver<KisPaintOpSettings::UpdateListenerSP> dirtyStateSaver(updateProxy);
 
     if (m_lockedProperties->lockedProperties()) {
         if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
@@ -58,7 +57,7 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant & value)
 {
     KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
-    if (!t->updateProxy()) return;
+    if (!t->updateListener()) return;
 
     if (m_lockedProperties->lockedProperties()) {
         if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
@@ -67,8 +66,8 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
 
             if (!m_parent->hasProperty(name + "_previous")) {
                 // restores the dirty state on returns automagically
-                // XXX: This is extremely dirty
-                KisResourceDirtyStateSaver dirtyStateSaver(qobject_cast<ProxyParent*>(t->updateProxy()->parent())->m_preset);
+                KisPaintOpSettings::UpdateListenerSP updateProxy = t->updateListener().toStrongRef();
+                KisDirtyStateSaver<KisPaintOpSettings::UpdateListenerSP> dirtyStateSaver(updateProxy);
                 m_parent->setProperty(name + "_previous", m_parent->getProperty(name));
             }
             return;
@@ -81,7 +80,7 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
 bool KisLockedPropertiesProxy::hasProperty(const QString &name) const
 {
     KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
-    if (!t->updateProxy()) return m_parent->hasProperty(name);
+    if (!t->updateListener()) return m_parent->hasProperty(name);
 
     return (m_lockedProperties->lockedProperties() &&
             m_lockedProperties->lockedProperties()->hasProperty(name)) ||
@@ -92,7 +91,7 @@ bool KisLockedPropertiesProxy::hasProperty(const QString &name) const
 QList<QString> KisLockedPropertiesProxy::getPropertiesKeys() const
 {
     KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
-    if (!t->updateProxy()) return m_parent->getPropertiesKeys();
+    if (!t->updateListener()) return m_parent->getPropertiesKeys();
 
     QList<QString> result = m_parent->getPropertiesKeys();
 

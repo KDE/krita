@@ -4,24 +4,23 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef __KIS_PAINTOP_SETTINGS_UPDATE_PROXY_H
-#define __KIS_PAINTOP_SETTINGS_UPDATE_PROXY_H
+#ifndef __KIS_PAINTOP_PRESET_UPDATE_PROXY_H
+#define __KIS_PAINTOP_PRESET_UPDATE_PROXY_H
 
 #include <QScopedPointer>
 #include <QObject>
 
+
 /**
- * @brief The KisPaintopSettingsUpdateProxy class
+ * @brief The KisPaintOpPresetUpdateProxy class
  */
-class KisPaintopSettingsUpdateProxy : public QObject
+class KisPaintOpPresetUpdateProxy : public QObject
 {
     Q_OBJECT
 
 public:
-    KisPaintopSettingsUpdateProxy(QObject *parent = 0);
-    ~KisPaintopSettingsUpdateProxy() override;
-
-    void setDirty(bool dirty);
+    KisPaintOpPresetUpdateProxy();
+    ~KisPaintOpPresetUpdateProxy() override;
 
     void notifySettingsChanged();
     void notifyUniformPropertiesChanged();
@@ -52,4 +51,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_PAINTOP_SETTINGS_UPDATE_PROXY_H */
+#endif /* __KIS_PAINTOP_PRESET_UPDATE_PROXY_H */

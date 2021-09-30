@@ -45,7 +45,7 @@ public:
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;
 
     virtual bool hasPatternSettings() const override;
 

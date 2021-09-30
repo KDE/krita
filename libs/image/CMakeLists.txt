@@ -68,7 +68,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_preset.cpp
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
-   brushengine/kis_paintop_settings_update_proxy.cpp
+   brushengine/KisPaintOpPresetUpdateProxy.cpp
    brushengine/kis_paintop_utils.cpp
    brushengine/kis_no_size_paintop_settings.cpp
    brushengine/kis_locked_properties.cc

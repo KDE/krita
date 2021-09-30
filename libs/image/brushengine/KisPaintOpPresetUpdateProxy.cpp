@@ -4,13 +4,13 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 
 #include "kis_signal_compressor.h"
 
 #include <kis_paintop_preset.h>
 
-struct KisPaintopSettingsUpdateProxy::Private
+struct KisPaintOpPresetUpdateProxy::Private
 {
     Private()
         : updatesCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
@@ -24,44 +24,32 @@ struct KisPaintopSettingsUpdateProxy::Private
     int numUpdatesWhileBlocked;
 };
 
-KisPaintopSettingsUpdateProxy::KisPaintopSettingsUpdateProxy(QObject *parent)
-    : QObject(parent),
-      m_d(new Private)
+KisPaintOpPresetUpdateProxy::KisPaintOpPresetUpdateProxy()
+    : m_d(new Private)
 {
     connect(&m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotDeliverSettingsChanged()));
 }
 
-KisPaintopSettingsUpdateProxy::~KisPaintopSettingsUpdateProxy()
+KisPaintOpPresetUpdateProxy::~KisPaintOpPresetUpdateProxy()
 {
 }
 
-void KisPaintopSettingsUpdateProxy::setDirty(bool dirty)
-{
-    ProxyParent *proxyParent = qobject_cast<ProxyParent*>(parent());
-    if (proxyParent){
-        KisPaintOpPreset *preset = proxyParent->m_preset;
-        if (preset) {
-            preset->setDirty(dirty);
-        }
-    }
-}
-
-void KisPaintopSettingsUpdateProxy::notifySettingsChanged()
+void KisPaintOpPresetUpdateProxy::notifySettingsChanged()
 {
     m_d->updatesCompressor.start();
 }
 
-void KisPaintopSettingsUpdateProxy::notifyUniformPropertiesChanged()
+void KisPaintOpPresetUpdateProxy::notifyUniformPropertiesChanged()
 {
     emit sigUniformPropertiesChanged();
 }
 
-void KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
+void KisPaintOpPresetUpdateProxy::postponeSettingsChanges()
 {
     m_d->updatesBlocked++;
 }
 
-void KisPaintopSettingsUpdateProxy::unpostponeSettingsChanges()
+void KisPaintOpPresetUpdateProxy::unpostponeSettingsChanges()
 {
     m_d->updatesBlocked--;
 
@@ -71,7 +59,7 @@ void KisPaintopSettingsUpdateProxy::unpostponeSettingsChanges()
     }
 }
 
-void KisPaintopSettingsUpdateProxy::slotDeliverSettingsChanged()
+void KisPaintOpPresetUpdateProxy::slotDeliverSettingsChanged()
 {
     if (m_d->updatesBlocked) {
         m_d->numUpdatesWhileBlocked++;

@@ -82,11 +82,11 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &i
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include <brushengine/kis_combo_based_paintop_property.h>
 #include "kis_paintop_preset.h"
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 #include "kis_standard_uniform_properties_factory.h"
 
 
-QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
+QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_d->uniformProperties);
@@ -118,7 +118,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -156,7 +156,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -191,7 +191,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -200,7 +200,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
     {
         using namespace KisStandardUniformPropertiesFactory;
 
-        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings)) {
+        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings, updateProxy)) {
             if (prop->id() == opacity.id() ||
                 prop->id() == size.id()) {
                 props.prepend(prop);

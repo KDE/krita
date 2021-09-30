@@ -36,13 +36,13 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <KoResource.h>
-#include <KisResourceDirtyStateSaver.h>
+#include <KisDirtyStateSaver.h>
 
 #include <kis_paint_device.h>
 #include <brushengine/kis_paintop_registry.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_settings.h>
-#include <brushengine/kis_paintop_settings_update_proxy.h>
+#include <brushengine/KisPaintOpPresetUpdateProxy.h>
 #include <kis_config_widget.h>
 #include <kis_image.h>
 #include <kis_node.h>
@@ -1381,7 +1381,7 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
 
     {
-        KisResourceDirtyStateSaver dirtySaver(preset);
+        KisDirtyStateSaver<KisPaintOpPresetSP> dirtySaver(preset);
 
         QMapIterator<QString, QVariant> i(p->getProperties());
         while (i.hasNext()) {

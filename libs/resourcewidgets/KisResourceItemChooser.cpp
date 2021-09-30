@@ -229,12 +229,8 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
-                KoResourceSP resource = tagFilterModel()->importResourceFile(filename, false);
-                if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(d->resourceType, filename)) {
-                    if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
-                        KoResourceSP resource = tagFilterModel()->importResourceFile(filename, false);
-                    }
-                }
+                KisResourceModel resModel(d->resourceType);
+                KisResourceOverwriteDialog::importResourceFileWithUserInput(this, &resModel, "", d->resourceType, filename);
             }
         }
         tagFilterModel()->sort(Qt::DisplayRole);

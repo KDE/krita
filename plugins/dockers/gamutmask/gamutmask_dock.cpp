@@ -22,6 +22,7 @@
 #include <kis_group_layer.h>
 #include <KisView.h>
 #include <KisResourceItemChooser.h>
+#include <KisResourceOverwriteDialog.h>
 
 #include <QWidget>
 #include <QMenu>
@@ -257,14 +258,15 @@ bool GamutMaskDock::saveSelectedMaskResource()
             m_selectedMask->clearPreview();
             KisResourceModel model(ResourceType::GamutMasks);
             QModelIndex idx = model.indexForResourceId(m_selectedMask->resourceId());
+            bool r = true;
             if (idx.isValid()) {
                 // don't add, only update
-                model.updateResource(m_selectedMask);
+                r = KisResourceOverwriteDialog::updateResourceWithUserInput(this, &model, m_selectedMask);
             } else {
-                model.addResource(m_selectedMask);
+                r = KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, m_selectedMask);
             }
 
-            maskSaved = true;
+            maskSaved = r;
         } else {
             getUserFeedback(i18n("Saving of gamut mask '%1' was aborted.", m_selectedMask->title()),
                             i18n("<p>The mask template is invalid.</p>"

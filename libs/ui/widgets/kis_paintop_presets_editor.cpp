@@ -32,6 +32,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <widgets/kis_preset_chooser.h>
 #include <widgets/kis_preset_selector_strip.h>
+#include <KisResourceOverwriteDialog.h>
 
 #include <ui_wdgpaintopsettings.h>
 #include <kis_node.h>
@@ -388,7 +389,7 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
     // create a new brush preset with the name specified and add to resource provider
     KisResourceModel model(ResourceType::PaintOpPresets);
     KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
-    model.renameResource(properCleanResource, renamedPresetName);
+    KisResourceOverwriteDialog::renameResourceWithUserInput(this, &model, properCleanResource, renamedPresetName);
 
     resourceSelected(curPreset); // refresh and select our freshly renamed resource
     if (isDirty) {

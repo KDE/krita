@@ -326,6 +326,13 @@ void DlgCreateBundle::accept()
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The resource bundle name cannot be empty."));
         return;
     }
+    m_ui->editBundleName->setStyleSheet(QString(""));
+
+    if (m_ui->lblSaveLocation->text().isEmpty() ){
+        m_ui->lblSaveLocation->setStyleSheet(QString(" border: 1px solid red"));
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The save location cannot be empty."));
+        return;
+    }
     else {
         QFileInfo fileInfo(filename);
 

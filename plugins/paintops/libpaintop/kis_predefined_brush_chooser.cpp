@@ -253,7 +253,11 @@ void KisPredefinedBrushChooser::slotResetBrush()
         brush->setAngle(0.0);
 
         if (KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data())) {
-            colorfulBrush->setBrushApplication(LIGHTNESSMAP);
+            if (m_hslBrushTipEnabled) {
+                colorfulBrush->setBrushApplication(LIGHTNESSMAP);
+            } else{
+                colorfulBrush->setBrushApplication(ALPHAMASK);
+            }
             colorfulBrush->setAdjustmentMidPoint(127);
             colorfulBrush->setBrightnessAdjustment(0.0);
             colorfulBrush->setContrastAdjustment(0.0);
@@ -341,6 +345,12 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
     }
 
     if (m_brush) {
+        if (!m_hslBrushTipEnabled) {
+            // in case the brush is used in the masking option we should reset its
+            // painting mode to Alpha Mask
+            m_brush->setBrushApplication(ALPHAMASK);
+        }
+
         brushTipNameLabel->setText(i18n(m_brush->name().toUtf8().data()));
 
         QString brushTypeString = "";

@@ -515,12 +515,11 @@ void KoShape::setParent(KoShapeContainer *parent)
         return;
     }
 
-    KoShapeContainer *oldParent = d->parent;
-    d->parent = 0; // avoids recursive removing
-
-    if (oldParent) {
-        oldParent->shapeInterface()->removeShape(this);
+    if (d->parent) {
+        d->parent->shapeInterface()->removeShape(this);
+        d->parent = 0;
     }
+
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(parent != this);
 

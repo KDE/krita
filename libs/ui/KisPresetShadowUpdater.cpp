@@ -108,14 +108,18 @@ void KisPresetShadowUpdater::slotPresetChanged()
 
 void KisPresetShadowUpdater::slotStartPresetPreparation()
 {
-    if (m_d->currentPreset && m_d->currentPreset->needsColdInitInBackground()) {
-        KisImageSP image = m_d->view->image();
-        if (image) {
-            image->addSpontaneousJob(new ShadowUpdatePresetJob(m_d->currentPreset));
-        } else {
-            /// a fallback solution when a preset is selected on
-            /// Krita loading, when there is no image present
-            m_d->currentPreset->coldInitInBackground();
+    if (m_d->currentPreset) {
+        m_d->currentPreset->coldInitInForeground();
+
+        if (m_d->currentPreset->needsColdInitInBackground()) {
+            KisImageSP image = m_d->view->image();
+            if (image) {
+                image->addSpontaneousJob(new ShadowUpdatePresetJob(m_d->currentPreset));
+            } else {
+                /// a fallback solution when a preset is selected on
+                /// Krita loading, when there is no image present
+                m_d->currentPreset->coldInitInBackground();
+            }
         }
     }
 }

@@ -168,6 +168,12 @@ public:
 
     QList<int> requiredCanvasResources() const override;
 
+    /**
+     * The method is called by Krita in the GUI thread when the preset becomes
+     * active. It lets the preset to prepare/load some data that needs heavy
+     * calclulations in the background before the user starts painting with it.
+     */
+    void coldInitInForeground();
 
     /**
      * The method is called by Krita in the background (in non-gui

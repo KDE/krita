@@ -39,7 +39,6 @@ KisRoundMarkerOpSettingsWidget::~KisRoundMarkerOpSettingsWidget() { }
 KisPropertiesConfigurationSP KisRoundMarkerOpSettingsWidget::configuration() const
 {
     KisRoundMarkerOpSettings *config = new KisRoundMarkerOpSettings(resourcesInterface());
-    config->setOptionsWidget(const_cast<KisRoundMarkerOpSettingsWidget*>(this));
     config->setProperty("paintop", "roundmarker");
     writeConfiguration(config);
     return config;

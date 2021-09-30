@@ -128,17 +128,6 @@ QString KisPaintOpPreset::name() const
     return KoResource::name().replace("_", " ");
 }
 
-void KisPaintOpPreset::setOptionsWidget(KisPaintOpConfigWidget* widget)
-{
-    if (d->settings) {
-        d->settings->setOptionsWidget(widget);
-
-        if (widget) {
-            widget->setConfigurationSafe(d->settings);
-        }
-    }
-}
-
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
     Q_ASSERT(settings);
@@ -146,11 +135,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 
     KisDirtyStateSaver<KisPaintOpPreset*> dirtyStateSaver(this);
 
-    KisPaintOpConfigWidget *oldOptionsWidget = 0;
-
     if (d->settings) {
-        oldOptionsWidget = d->settings->optionsWidget();
-        d->settings->setOptionsWidget(0);
         d->settings->setUpdateListener(KisPaintOpSettings::UpdateListenerWSP());
         d->settings = 0;
     }
@@ -158,11 +143,6 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     if (settings) {
         d->settings = settings->clone();
         d->settings->setUpdateListener(d->settingsUpdateListener);
-
-        if (oldOptionsWidget) {
-            oldOptionsWidget->setConfigurationSafe(d->settings);
-            d->settings->setOptionsWidget(oldOptionsWidget);
-        }
     }
 
     if (d->updateProxy) {

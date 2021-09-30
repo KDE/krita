@@ -107,11 +107,6 @@ KisPaintOpSettings::KisPaintOpSettings(const KisPaintOpSettings &rhs)
 {
 }
 
-void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
-{
-    d->settingsWidget = widget;
-}
-
 void KisPaintOpSettings::setUpdateListener(UpdateListenerWSP listener)
 {
     d->updateListener = listener;
@@ -406,14 +401,6 @@ QString KisPaintOpSettings::modelName() const
 void KisPaintOpSettings::setModelName(const QString & modelName)
 {
     d->modelName = modelName;
-}
-
-KisPaintOpConfigWidget* KisPaintOpSettings::optionsWidget() const
-{
-    if (d->settingsWidget.isNull())
-        return 0;
-
-    return d->settingsWidget.data();
 }
 
 bool KisPaintOpSettings::isValid() const

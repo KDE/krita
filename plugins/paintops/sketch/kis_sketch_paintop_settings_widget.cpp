@@ -68,7 +68,6 @@ KisSketchPaintOpSettingsWidget::~ KisSketchPaintOpSettingsWidget()
 KisPropertiesConfigurationSP  KisSketchPaintOpSettingsWidget::configuration() const
 {
     KisSketchPaintOpSettingsSP config = new KisSketchPaintOpSettings(resourcesInterface());
-    config->setOptionsWidget(const_cast<KisSketchPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "sketchbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

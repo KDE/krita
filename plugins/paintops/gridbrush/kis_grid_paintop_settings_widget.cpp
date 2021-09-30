@@ -37,7 +37,6 @@ KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()
 KisPropertiesConfigurationSP  KisGridPaintOpSettingsWidget::configuration() const
 {
     KisGridPaintOpSettings* config = new KisGridPaintOpSettings(resourcesInterface());
-    config->setOptionsWidget(const_cast<KisGridPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "gridbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

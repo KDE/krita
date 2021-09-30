@@ -54,7 +54,6 @@ KisHairyPaintOpSettingsWidget::~ KisHairyPaintOpSettingsWidget()
 KisPropertiesConfigurationSP  KisHairyPaintOpSettingsWidget::configuration() const
 {
     KisHairyPaintOpSettings* config = new KisHairyPaintOpSettings(resourcesInterface());
-    config->setOptionsWidget(const_cast<KisHairyPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "hairybrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

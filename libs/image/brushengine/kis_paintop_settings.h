@@ -81,11 +81,6 @@ public:
     KisPaintOpSettings(const KisPaintOpSettings &rhs);
 
     /**
-     *
-     */
-    void setOptionsWidget(KisPaintOpConfigWidget* widget);
-
-    /**
      * This function is called by a tool when the mouse is pressed. It's useful if
      * the paintop needs mouse interaction for instance in the case of the clone op.
      * If the tool is supposed to ignore the event, the paint op should return true
@@ -299,12 +294,6 @@ public:
 
     qreal lodSizeThreshold() const;
     void setLodSizeThreshold(qreal value);
-
-    /**
-    * @return the option widget of the paintop (can be 0 is no option widgets is set)
-    */
-    KisPaintOpConfigWidget* optionsWidget() const;
-
 
     /**
      * This function is called to set random offsets to the brush whenever the mouse is clicked. It is

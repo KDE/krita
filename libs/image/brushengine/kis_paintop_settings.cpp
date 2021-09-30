@@ -160,6 +160,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
     const KoID pixelBrushId(KisPaintOpUtils::MaskingBrushPaintOpId, QString());
 
     KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->createSettings(pixelBrushId, resourcesInterface());
+    maskingSettings->setCanvasResourcesInterface(canvasResourcesInterface());
 
     this->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSettings);
 

@@ -142,8 +142,8 @@ void KisMaskingBrushOption::updateWarningLabelStatus()
 
         m_d->brushSizeWarningLabel->setVisible(true);
         m_d->brushSizeWarningLabel->setText(
-            i18nc("warning about too big size of the masking brush",
-                  "WARNING: Dependent size of the masking brush grew too big (%1 pixels). Its value has been cropped to %2 pixels.",
+            i18nc("warning about too big size of the masked brush",
+                  "WARNING: Dependent size of the masked brush grew too big (%1 pixels). Its value has been cropped to %2 pixels.",
                   *m_d->theoreticalMaskingBrushSize,
                   realBrushSize));
     } else {

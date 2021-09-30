@@ -35,10 +35,6 @@ public:
     void unsetCanvas() override;
     void setViewManager(KisViewManager* kisview) override;
 
-private:
-    QVector<QRectF> getLayoutCellRects(int rows, int columns, QRectF pageRect);
-    QVector<QRectF> getLayoutCellRects(QString layoutSvgFileName, QPrinter *printer);
-
 private Q_SLOTS:
     /**
      * @brief sets the image in Model to nullptr if there is no canvas set or no KisImage
@@ -103,6 +99,26 @@ private Q_SLOTS:
      * @brief called to reflect changes to the model.
      */
     void slotModelChanged();
+
+private:
+    struct ElementLayout {
+        QRect panelNameRect;
+        QRect panelDurationRect;
+        QRect imageAreaRect;
+        QList<QRect> commentRects;
+        bool renderComments;
+
+        ElementLayout()
+            : panelNameRect(0,0,-1,-1)
+            , panelDurationRect(0,0,-1,-1)
+            , imageAreaRect(0,0, -1, -1)
+            , commentRects()
+            , renderComments(false) {
+        }
+    };
+
+    QVector<ElementLayout> getLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
+    QVector<ElementLayout> getLayout(QString layoutSvgFileName, QPrinter *printer);
 
 private:
     KisCanvas2* m_canvas;

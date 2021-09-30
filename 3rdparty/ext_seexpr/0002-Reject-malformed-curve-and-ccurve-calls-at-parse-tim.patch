@@ -1,0 +1,152 @@
+From 26a3186baa97d6a9a8e65e9c7284b9493d7f86df Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 30 Sep 2021 16:03:30 +0000
+Subject: [PATCH 2/2] Reject malformed curve and ccurve calls at parse time
+
+---
+ generated/KSeExprUI/ExprSpecParser.cpp | 26 +++++++++++++++++--------
+ src/KSeExpr/ExprBuiltins.cpp           | 25 ++++++++++++++++++++++--
+ src/KSeExprUI/ExprSpecParser.y         | 27 +++++++++++++++++---------
+ 3 files changed, 59 insertions(+), 19 deletions(-)
+
+diff --git a/generated/KSeExprUI/ExprSpecParser.cpp b/generated/KSeExprUI/ExprSpecParser.cpp
+index c810bbb..2981ab3 100644
+--- a/generated/KSeExprUI/ExprSpecParser.cpp
++++ b/generated/KSeExprUI/ExprSpecParser.cpp
+@@ -174,10 +174,15 @@ static void specRegisterEditable(const char* var,ExprSpecNode* node)
+                     ExprSpecScalarNode* xnode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i]);
+                     ExprSpecVectorNode* ynode=dynamic_cast<ExprSpecVectorNode*>(args->nodes[i+1]);
+                     ExprSpecScalarNode* interpnode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i+2]);
+-                    if(xnode && ynode && interpnode){
+-                        ccurve->add(xnode->v,ynode->v,interpnode->v);
+-                    }else{
+-                        valid=false;
++                    if (xnode && ynode && interpnode) {
++                        if (interpnode->v >= 0 && interpnode->v <= 4) {
++                            ccurve->add(xnode->v, ynode->v, interpnode->v);
++                        } else {
++                            // invalid interpolant type -- Amyspark
++                            valid = false;
++                        }
++                    } else {
++                        valid = false;
+                     }
+                 }
+                 if(valid) editables->push_back(ccurve);
+@@ -195,10 +200,15 @@ static void specRegisterEditable(const char* var,ExprSpecNode* node)
+                     ExprSpecScalarNode* xnode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i]);
+                     ExprSpecScalarNode* ynode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i+1]);
+                     ExprSpecScalarNode* interpnode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i+2]);
+-                    if(xnode && ynode && interpnode){
+-                        ccurve->add(xnode->v,ynode->v,interpnode->v);
+-                    }else{
+-                        valid=false;
++                    if (xnode && ynode && interpnode) {
++                        if (interpnode->v >= 0 && interpnode->v <= 4) {
++                            ccurve->add(xnode->v, ynode->v, interpnode->v);
++                        } else {
++                            // invalid interpolant type -- Amyspark
++                            valid = false;
++                        }
++                    } else {
++                        valid = false;
+                     }
+                 }
+                 if(valid) editables->push_back(ccurve);
+diff --git a/src/KSeExpr/ExprBuiltins.cpp b/src/KSeExpr/ExprBuiltins.cpp
+index a198196..5b5f71e 100644
+--- a/src/KSeExpr/ExprBuiltins.cpp
++++ b/src/KSeExpr/ExprBuiltins.cpp
+@@ -1540,10 +1540,21 @@ public:
+ 
+         bool valid = true;
+         valid &= node->checkArg(0, ExprType().FP(1).Varying(), envBuilder);
+-        for (int i = 1; i < nargs; i += 3) {
++        for (int i = 1; i < nargs && valid; i += 3) {
+             valid &= node->checkArg(i, ExprType().FP(1).Constant(), envBuilder);
+             valid &= node->checkArg(i + 1, ExprType().FP(1).Constant(), envBuilder);
+             valid &= node->checkArg(i + 2, ExprType().FP(1).Constant(), envBuilder);
++            if (valid) {
++                const auto *value = dynamic_cast<ExprNumNode *>(node->child(i + 2));
++                if (!value) {
++                    node->addError(ErrorCode::Unknown, {QT_TRANSLATE_NOOP_UTF8("builtin", "Unable to validate the interpolant type")});
++                    return ExprType().Error().Varying();
++                }
++                else if (!Curve<Vec3d>::interpTypeValid(static_cast<Curve<Vec3d>::InterpType>((int)value->value()))){
++                    node->addError(ErrorCode::Unknown, {QT_TRANSLATE_NOOP_UTF8("builtin", "Invalid interpolant type")});
++                    return ExprType().Error().Varying();
++                }
++            }
+         }
+         return valid ? ExprType().FP(1).Varying() : ExprType().Error();
+     }
+@@ -1594,10 +1605,20 @@ class CCurveFuncX : public ExprFuncSimple
+ 
+         bool valid = true;
+         valid &= node->checkArg(0, ExprType().FP(1).Varying(), envBuilder);
+-        for (int i = 1; i < nargs; i += 3) {
++        for (int i = 1; i < nargs && valid; i += 3) {
+             valid &= node->checkArg(i, ExprType().FP(1).Constant(), envBuilder);
+             valid &= node->checkArg(i + 1, ExprType().FP(3).Constant(), envBuilder);
+             valid &= node->checkArg(i + 2, ExprType().FP(1).Constant(), envBuilder);
++            if (valid) {
++                const auto *value = dynamic_cast<ExprNumNode *>(node->child(i + 2));
++                if (!value) {
++                    node->addError(ErrorCode::Unknown, {QT_TRANSLATE_NOOP_UTF8("builtin", "Unable to validate the interpolant type")});
++                    return ExprType().Error().Varying();
++                } else if (!Curve<Vec3d>::interpTypeValid(static_cast<Curve<Vec3d>::InterpType>((int)value->value()))) {
++                    node->addError(ErrorCode::Unknown, {QT_TRANSLATE_NOOP_UTF8("builtin", "Invalid interpolant type")});
++                    return ExprType().Error().Varying();
++                }
++            }
+         }
+         return valid ? ExprType().FP(3).Varying() : ExprType().Error();
+     }
+diff --git a/src/KSeExprUI/ExprSpecParser.y b/src/KSeExprUI/ExprSpecParser.y
+index 2a09c95..6b1f9b7 100644
+--- a/src/KSeExprUI/ExprSpecParser.y
++++ b/src/KSeExprUI/ExprSpecParser.y
+@@ -103,10 +103,15 @@ static void specRegisterEditable(const char* var,ExprSpecNode* node)
+                     ExprSpecScalarNode* xnode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i]);
+                     ExprSpecVectorNode* ynode=dynamic_cast<ExprSpecVectorNode*>(args->nodes[i+1]);
+                     ExprSpecScalarNode* interpnode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i+2]);
+-                    if(xnode && ynode && interpnode){
+-                        ccurve->add(xnode->v,ynode->v,interpnode->v);
+-                    }else{
+-                        valid=false;
++                    if (xnode && ynode && interpnode) {
++                        if (interpnode->v >= 0 && interpnode->v <= 4) {
++                            ccurve->add(xnode->v, ynode->v, interpnode->v);
++                        } else {
++                            // invalid interpolant type -- Amyspark
++                            valid = false;
++                        }
++                    } else {
++                        valid = false;
+                     }
+                 }
+                 if(valid) editables->push_back(ccurve);
+@@ -123,11 +128,15 @@ static void specRegisterEditable(const char* var,ExprSpecNode* node)
+                 for(size_t i=0;i<args->nodes.size();i+=3){
+                     ExprSpecScalarNode* xnode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i]);
+                     ExprSpecScalarNode* ynode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i+1]);
+-                    ExprSpecScalarNode* interpnode=dynamic_cast<ExprSpecScalarNode*>(args->nodes[i+2]);
+-                    if(xnode && ynode && interpnode){
+-                        ccurve->add(xnode->v,ynode->v,interpnode->v);
+-                    }else{
+-                        valid=false;
++                    if (xnode && ynode && interpnode) {
++                        if (interpnode->v >= 0 && interpnode->v <= 4) {
++                            ccurve->add(xnode->v, ynode->v, interpnode->v);
++                        } else {
++                            // invalid interpolant type -- Amyspark
++                            valid = false;
++                        }
++                    } else {
++                        valid = false;
+                     }
+                 }
+                 if(valid) editables->push_back(ccurve);
+-- 
+2.32.0.windows.2
+

@@ -1,4 +1,4 @@
-From d4b1096e8559c35b477eae09b9cc155ba3e84cd4 Mon Sep 17 00:00:00 2001
+From 6d9d64faec76639508aa06377c4ed7515fd206ff Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Tue, 21 Sep 2021 10:14:23 +0000
 Subject: [PATCH] Android: Add support for changing cursor
@@ -9,11 +9,11 @@ Subject: [PATCH] Android: Add support for changing cursor
  .../org/qtproject/qt5/android/QtSurface.java  |  11 +-
  .../qtproject/qt5/android/SAFFileManager.java |   4 +-
  src/plugins/platforms/android/android.pro     |   6 +-
- .../android/qandroidplatformcursor.cpp        |  59 ++++++++
- .../android/qandroidplatformcursor.h          |  18 +++
+ .../android/qandroidplatformcursor.cpp        |  70 ++++++++++
+ .../android/qandroidplatformcursor.h          |  22 +++
  .../android/qandroidplatformscreen.cpp        |   5 +-
  .../android/qandroidplatformscreen.h          |   3 +
- 9 files changed, 227 insertions(+), 9 deletions(-)
+ 9 files changed, 242 insertions(+), 9 deletions(-)
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/QtPointerIcon.java
  create mode 100644 src/plugins/platforms/android/qandroidplatformcursor.cpp
  create mode 100644 src/plugins/platforms/android/qandroidplatformcursor.h
@@ -241,23 +241,27 @@ index 8f62cb4c1e..92a7572563 100644
  else: SOURCES += $$PWD/extract-dummy.cpp
 diff --git a/src/plugins/platforms/android/qandroidplatformcursor.cpp b/src/plugins/platforms/android/qandroidplatformcursor.cpp
 new file mode 100644
-index 0000000000..b054accdee
+index 0000000000..025093066e
 --- /dev/null
 +++ b/src/plugins/platforms/android/qandroidplatformcursor.cpp
-@@ -0,0 +1,59 @@
+@@ -0,0 +1,70 @@
 +#include "qandroidplatformcursor.h"
++#include "qandroidplatformscreen.h"
 +#include <QBitmap>
 +#include <QBuffer>
 +#include <QPixmap>
 +#include <QtCore/private/qjnihelpers_p.h>
 +#include <androidjnimain.h>
++#include <private/qguiapplication_p.h>
++#include <private/qhighdpiscaling_p.h>
 +#include <private/qjni_p.h>
 +#include <qpa/qplatformwindow.h>
 +
-+QAndroidPlatformCursor::QAndroidPlatformCursor()
++QAndroidPlatformCursor::QAndroidPlatformCursor(QAndroidPlatformScreen *screen)
 +    : m_qtPointer(QJNIObjectPrivate::callStaticObjectMethod(
 +        "org/qtproject/qt5/android/QtPointerIcon", "instance",
 +        "()Lorg/qtproject/qt5/android/QtPointerIcon;"))
++    , m_screen(screen)
 +{
 +}
 +
@@ -293,43 +297,54 @@ index 0000000000..b054accdee
 +            jbyteArray array = env->NewByteArray(bytes.size());
 +            env->SetByteArrayRegion(array, 0, bytes.size(), pixels);
 +
-+            m_qtPointer.callMethod<void>("setBitmapIcon", "([BIIIIJ)V", array,
-+                                       bitmap.width(), bitmap.height(),
-+                                       cursor->hotSpot().x(), cursor->hotSpot().y(), key);
++            m_qtPointer.callMethod<void>(
++                "setBitmapIcon", "([BIIIIJ)V", array, bitmap.width(), bitmap.height(),
++                cursor->hotSpot().x(), cursor->hotSpot().y(), key);
 +        } else {
 +            m_qtPointer.callMethod<void>("setIcon", "(I)V",
-+                                       static_cast<int>(cursor->shape()));
++                                         static_cast<int>(cursor->shape()));
 +        }
 +    } else {
-+        m_qtPointer.callMethod<void>("setIcon", "(I)V", static_cast<int>(Qt::BlankCursor));
++        m_qtPointer.callMethod<void>("setIcon", "(I)V",
++                                     static_cast<int>(Qt::BlankCursor));
 +    }
++}
++
++QPoint QAndroidPlatformCursor::pos() const
++{
++    return QHighDpi::toNativePixels(QGuiApplicationPrivate::lastCursorPosition.toPoint(),
++                                    m_screen->screen());
 +}
 diff --git a/src/plugins/platforms/android/qandroidplatformcursor.h b/src/plugins/platforms/android/qandroidplatformcursor.h
 new file mode 100644
-index 0000000000..a8fbd3eba9
+index 0000000000..81a3225f32
 --- /dev/null
 +++ b/src/plugins/platforms/android/qandroidplatformcursor.h
-@@ -0,0 +1,18 @@
+@@ -0,0 +1,22 @@
 +#ifndef __QANDROIDPLATFORMCURSOR_H_
 +#define __QANDROIDPLATFORMCURSOR_H_
 +
 +#include <private/qjni_p.h>
 +#include <qpa/qplatformcursor.h>
 +
++class QAndroidPlatformScreen;
++
 +class QAndroidPlatformCursor : public QPlatformCursor
 +{
 +public:
-+    explicit QAndroidPlatformCursor();
++    explicit QAndroidPlatformCursor(QAndroidPlatformScreen *screen);
 +
 +    void changeCursor(QCursor *windowCursor, QWindow *window) override;
++    QPoint pos() const override;
 +
 +private:
 +    QJNIObjectPrivate m_qtPointer;
++    QAndroidPlatformScreen *m_screen;
 +};
 +
 +#endif // __QANDROIDPLATFORMCURSOR_H_
 diff --git a/src/plugins/platforms/android/qandroidplatformscreen.cpp b/src/plugins/platforms/android/qandroidplatformscreen.cpp
-index 61ab6f58c7..2bd000d2a2 100644
+index 61ab6f58c7..891c2c372b 100644
 --- a/src/plugins/platforms/android/qandroidplatformscreen.cpp
 +++ b/src/plugins/platforms/android/qandroidplatformscreen.cpp
 @@ -51,6 +51,7 @@
@@ -347,7 +362,7 @@ index 61ab6f58c7..2bd000d2a2 100644
 -    : QObject(), QPlatformScreen()
 +    : QObject()
 +    , QPlatformScreen()
-+    , m_cursor(new QAndroidPlatformCursor)
++    , m_cursor(new QAndroidPlatformCursor(this))
  {
      m_availableGeometry = QRect(0, 0, QAndroidPlatformIntegration::m_defaultGeometryWidth, QAndroidPlatformIntegration::m_defaultGeometryHeight);
      m_size = QSize(QAndroidPlatformIntegration::m_defaultScreenWidth, QAndroidPlatformIntegration::m_defaultScreenHeight);

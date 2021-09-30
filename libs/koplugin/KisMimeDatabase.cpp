@@ -250,7 +250,7 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "ggr";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "application/x-gimp-pattern";
+        mimeType.mimeType = "image/x-gimp-pat";
         mimeType.description = i18nc("description of a file type", "GIMP Patterns");
         mimeType.suffixes = QStringList() << "pat";
         s_mimeDatabase << mimeType;

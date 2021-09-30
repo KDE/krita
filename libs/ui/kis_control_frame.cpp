@@ -234,7 +234,12 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
             this, SLOT(slotSetGradient(KoAbstractGradientSP)));
 
 
-    m_gradientChooser->setCurrentItem(0);
+    // set the Foreground to Transparent gradient as default on startup
+    KisResourceModel resModel(ResourceType::Gradients);
+    QVector<KoResourceSP> resources = resModel.resourcesForFilename("Foreground to Transparent.svg");
+    if (resources.size() > 0) {
+        m_gradientChooser->setCurrentResource(resources[0]);
+    }
 
     qDebug() << m_gradientChooser->currentResource();
 

@@ -32,7 +32,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Shadows and Highlights</string>
+      <string comment="Contrast enhancement section in auto levels">Shadows and Highlights</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
@@ -59,7 +59,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Method:</string>
+         <string comment="Contrast enhancement method used in auto levels">Method:</string>
         </property>
        </widget>
       </item>
@@ -67,12 +67,12 @@
        <widget class="QComboBox" name="comboBoxShadowsAndLightsMethod">
         <item>
          <property name="text">
-          <string>Adjust monochromatic contrast</string>
+          <string comment="Use same black and white points for all the channels in auto levels">Adjust monochromatic contrast</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Adjust per channel contrast</string>
+          <string comment="Use different black and white points for each channel in auto levels">Adjust per channel contrast</string>
          </property>
         </item>
        </widget>
@@ -80,21 +80,21 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Shadows clipping:</string>
+         <string comment="Percentage of the histogram to clip in the shadous side in auto levels">Shadows clipping:</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Highlights clipping:</string>
+         <string comment="Percentage of the histogram to clip in the highlights side in auto levels">Highlights clipping:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Maximum offset:</string>
+         <string comment="Maximum distance the black/white points can be moved from their relative extremes in auto levels">Maximum offset:</string>
         </property>
        </widget>
       </item>
@@ -104,14 +104,14 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Shadows color:</string>
+         <string comment="Output color used for the shadows in auto levels">Shadows color:</string>
         </property>
        </widget>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Highlights color:</string>
+         <string comment="Output color used for the highlights in auto levels">Highlights color:</string>
         </property>
        </widget>
       </item>
@@ -133,7 +133,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Midtones</string>
+      <string comment="Midtones enhancement section in auto levels">Midtones</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <property name="fieldGrowthPolicy">
@@ -160,7 +160,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Method:</string>
+         <string comment="Midtones enhancement method used in auto levels">Method:</string>
         </property>
        </widget>
       </item>
@@ -168,17 +168,17 @@
        <widget class="QComboBox" name="comboBoxMidtonesMethod">
         <item>
          <property name="text">
-          <string>Don't adjust the midtones</string>
+          <string comment="Do not perform midtones enhancement in auto levels">Don't adjust the midtones</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Use the median to adjust the midtones</string>
+          <string comment="Use the median point of the histogram as midtone point in auto levels">Use the median to adjust the midtones</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Use the mean value to adjust the midtones</string>
+          <string comment="Use the mean value of the histogram as midtone point in auto levels">Use the mean value to adjust the midtones</string>
          </property>
         </item>
        </widget>
@@ -186,7 +186,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Color:</string>
+         <string comment="Output color used for the midtones in auto levels">Color:</string>
         </property>
        </widget>
       </item>
@@ -199,7 +199,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>Amount:</string>
+         <string comment="How much the midtone point used in auto levels is close to the center of the histogram (0%) or to the point selected in the method (100%)">Amount:</string>
         </property>
        </widget>
       </item>

@@ -18,7 +18,7 @@
 #include <brushengine/kis_uniform_paintop_property.h>
 
 class KisPaintOpConfigWidget;
-class KisPaintopSettingsUpdateProxy;
+class KisPaintOpPresetUpdateProxy;
 
 class KisResourcesInterface;
 using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
@@ -63,6 +63,16 @@ const QString SPACING_USE_UPDATES = "PaintOpSettings/updateSpacingBetweenDabs";
  */
 class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration
 {
+public:
+    struct UpdateListener {
+        virtual ~UpdateListener();
+        virtual void setDirty(bool value) = 0;
+        virtual bool isDirty() const = 0;
+        virtual void notifySettingsChanged() = 0;
+    };
+
+    using UpdateListenerSP = QSharedPointer<UpdateListener>;
+    using UpdateListenerWSP = QWeakPointer<UpdateListener>;
 
 public:
 
@@ -255,9 +265,9 @@ public:
 
     QString effectivePaintOpCompositeOp();
 
-    void setUpdateProxy(const QPointer<KisPaintopSettingsUpdateProxy> proxy);
+    void setUpdateListener(UpdateListenerWSP listener);
 
-    QPointer<KisPaintopSettingsUpdateProxy> updateProxy() const;
+    UpdateListenerWSP updateListener() const;
 
     /**
      * @return filename of the 3D brush model, empty if no brush is set
@@ -280,7 +290,7 @@ public:
      */
     void setProperty(const QString & name, const QVariant & value) override;
 
-    virtual QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    virtual QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy);
 
     static bool isLodUserAllowed(const KisPropertiesConfigurationSP config);
     static void setLodUserAllowed(KisPropertiesConfigurationSP config, bool value);

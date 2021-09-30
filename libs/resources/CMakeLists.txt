@@ -19,7 +19,6 @@ set(kritaresources_LIB_SRCS
     KisResourceQueryMapper.cpp
     KisResourceTypes.cpp
 
-    KisResourceDirtyStateSaver.cpp
     KisStoragePlugin.cpp
     KisBundleStorage.cpp
     KisFolderStorage.cpp

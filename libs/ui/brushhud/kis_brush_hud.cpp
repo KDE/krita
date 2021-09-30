@@ -25,7 +25,7 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 #include "kis_signal_auto_connection.h"
-#include "kis_paintop_settings_update_proxy.h"
+#include "KisPaintOpPresetUpdateProxy.h"
 #include "kis_icon_utils.h"
 #include "kis_dlg_brush_hud_config.h"
 #include "kis_brush_hud_properties_config.h"

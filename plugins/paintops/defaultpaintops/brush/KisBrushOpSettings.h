@@ -17,7 +17,7 @@ public:
     ~KisBrushOpSettings();
 
     bool needsAsynchronousUpdates() const override;
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;
 
 private:
     struct Private;

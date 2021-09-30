@@ -11,7 +11,7 @@
 
 #include "kis_uniform_paintop_property.h"
 
-class KisPaintopSettingsUpdateProxy;
+class KisPaintOpPresetUpdateProxy;
 
 namespace KisStandardUniformPropertiesFactory
 {
@@ -27,7 +27,7 @@ static const KoID spacing("spacing", ki18n("Spacing"));
      */
 KisUniformPaintOpPropertySP createProperty(const KoID &id,
                                            KisPaintOpSettingsRestrictedSP settings,
-                                           KisPaintopSettingsUpdateProxy *updateProxy);
+                                           KisPaintOpPresetUpdateProxy *updateProxy);
 
 /**
      * Factory for creating standard uniform properties. Right now
@@ -35,7 +35,7 @@ KisUniformPaintOpPropertySP createProperty(const KoID &id,
      */
 KisUniformPaintOpPropertySP createProperty(const QString &id,
                                            KisPaintOpSettingsRestrictedSP settings,
-                                           KisPaintopSettingsUpdateProxy *updateProxy);
+                                           KisPaintOpPresetUpdateProxy *updateProxy);
 }
 
 #endif /* __KIS_STANDARD_UNIFORM_PROPERTIES_FACTORY_H */

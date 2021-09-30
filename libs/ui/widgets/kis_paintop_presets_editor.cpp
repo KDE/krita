@@ -43,7 +43,7 @@
 
 #include "kis_signal_auto_connection.h"
 #include <kis_paintop_settings.h>
-#include <kis_paintop_settings_update_proxy.h>
+#include <KisPaintOpPresetUpdateProxy.h>
 
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>

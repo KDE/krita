@@ -11,7 +11,7 @@
 #include <KoCanvasResourcesIds.h>
 
 #include <kis_paintop_preset.h>
-#include <kis_paintop_settings_update_proxy.h>
+#include <KisPaintOpPresetUpdateProxy.h>
 #include <kis_signal_auto_connection.h>
 #include <kis_signal_compressor.h>
 
@@ -65,7 +65,7 @@ struct KisPresetShadowUpdater::Private
     KisViewManager *view;
 
     KisPaintOpPresetSP currentPreset;
-    QPointer<KisPaintopSettingsUpdateProxy> currentUpdateProxy;
+    QPointer<KisPaintOpPresetUpdateProxy> currentUpdateProxy;
 
     KisSignalAutoConnectionsStore proxyConnections;
     KisSignalCompressor updateStartCompressor;

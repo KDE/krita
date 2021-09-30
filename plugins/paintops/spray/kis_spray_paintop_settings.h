@@ -35,7 +35,7 @@ public:
 
 protected:
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;
 
 private:
     Q_DISABLE_COPY(KisSprayPaintOpSettings)

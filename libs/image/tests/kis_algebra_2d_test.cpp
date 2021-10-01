@@ -1054,4 +1054,172 @@ void KisAlgebra2DTest::testHaltonSequence()
     }
 }
 
+#include "kis_wrapped_rect.h"
+
+void KisAlgebra2DTest::testMultiplyWrappedRect_data()
+{
+    QTest::addColumn<QRect>("rc");
+    QTest::addColumn<QRect>("wrapRect");
+    QTest::addColumn<QRect>("limitRect");
+    QTest::addColumn<QVector<QRect>>("expected");
+
+    QTest::newRow("simple")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(-90, -90, 30, 30),
+                QRect(10, -90, 30, 30),
+                QRect(110, -90, 30, 30),
+                QRect(-90, 10, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(110, 10, 30, 30),
+                QRect(-90, 110, 30, 30),
+                QRect(10, 110, 30, 30),
+                QRect(110, 110, 30, 30)});
+
+    QTest::newRow("non-full-rect")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-150, -150), QPoint(249, 249))
+        << QVector<QRect>(
+               {QRect(-90, -90, 30, 30),
+                QRect(10, -90, 30, 30),
+                QRect(110, -90, 30, 30),
+                QRect(210, -90, 30, 30),
+                QRect(-90, 10, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(110, 10, 30, 30),
+                QRect(210, 10, 30, 30),
+                QRect(-90, 110, 30, 30),
+                QRect(10, 110, 30, 30),
+                QRect(110, 110, 30, 30),
+                QRect(210, 110, 30, 30),
+                QRect(-90, 210, 30, 30),
+                QRect(10, 210, 30, 30),
+                QRect(110, 210, 30, 30),
+                QRect(210, 210, 30, 30)});
+
+    QTest::newRow("minus-one")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-99, -99), QPoint(199, 199))
+        << QVector<QRect>(
+               {QRect(-90, -90, 30, 30),
+                QRect(10, -90, 30, 30),
+                QRect(110, -90, 30, 30),
+                QRect(-90, 10, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(110, 10, 30, 30),
+                QRect(-90, 110, 30, 30),
+                QRect(10, 110, 30, 30),
+                QRect(110, 110, 30, 30)});
+
+    QTest::newRow("simple-neg-rect")
+        << QRect(-10,-10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(-10, -10, 10, 10),
+                QRect(90, -10, 10, 10),
+                QRect(190, -10, 10, 10),
+                QRect(-10, 90, 10, 10),
+                QRect(90, 90, 10, 10),
+                QRect(190, 90, 10, 10),
+                QRect(-10, 190, 10, 10),
+                QRect(90, 190, 10, 10),
+                QRect(190, 190, 10, 10),
+                QRect(-100, -10, 20, 10),
+                QRect(0, -10, 20, 10),
+                QRect(100, -10, 20, 10),
+                QRect(-100, 90, 20, 10),
+                QRect(0, 90, 20, 10),
+                QRect(100, 90, 20, 10),
+                QRect(-100, 190, 20, 10),
+                QRect(0, 190, 20, 10),
+                QRect(100, 190, 20, 10),
+                QRect(-10, -100, 10, 20),
+                QRect(90, -100, 10, 20),
+                QRect(190, -100, 10, 20),
+                QRect(-10, 0, 10, 20),
+                QRect(90, 0, 10, 20),
+                QRect(190, 0, 10, 20),
+                QRect(-10, 100, 10, 20),
+                QRect(90, 100, 10, 20),
+                QRect(190, 100, 10, 20),
+                QRect(-100, -100, 20, 20),
+                QRect(0, -100, 20, 20),
+                QRect(100, -100, 20, 20),
+                QRect(-100, 0, 20, 20),
+                QRect(0, 0, 20, 20),
+                QRect(100, 0, 20, 20),
+                QRect(-100, 100, 20, 20),
+                QRect(0, 100, 20, 20),
+                QRect(100, 100, 20, 20)});
+
+    QTest::newRow("simple-neg-long-rect")
+        << QRect(-10,-10,130,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(-10, -10, 10, 10),
+                QRect(90, -10, 10, 10),
+                QRect(190, -10, 10, 10),
+                QRect(-10, 90, 10, 10),
+                QRect(90, 90, 10, 10),
+                QRect(190, 90, 10, 10),
+                QRect(-10, 190, 10, 10),
+                QRect(90, 190, 10, 10),
+                QRect(190, 190, 10, 10),
+                QRect(-100, -10, 90, 10),
+                QRect(0, -10, 90, 10),
+                QRect(100, -10, 90, 10),
+                QRect(-100, 90, 90, 10),
+                QRect(0, 90, 90, 10),
+                QRect(100, 90, 90, 10),
+                QRect(-100, 190, 90, 10),
+                QRect(0, 190, 90, 10),
+                QRect(100, 190, 90, 10),
+                QRect(-10, -100, 10, 20),
+                QRect(90, -100, 10, 20),
+                QRect(190, -100, 10, 20),
+                QRect(-10, 0, 10, 20),
+                QRect(90, 0, 10, 20),
+                QRect(190, 0, 10, 20),
+                QRect(-10, 100, 10, 20),
+                QRect(90, 100, 10, 20),
+                QRect(190, 100, 10, 20),
+                QRect(-100, -100, 90, 20),
+                QRect(0, -100, 90, 20),
+                QRect(100, -100, 90, 20),
+                QRect(-100, 0, 90, 20),
+                QRect(0, 0, 90, 20),
+                QRect(100, 0, 90, 20),
+                QRect(-100, 100, 90, 20),
+                QRect(0, 100, 90, 20),
+                QRect(100, 100, 90, 20)});
+}
+
+void KisAlgebra2DTest::testMultiplyWrappedRect()
+{
+    QFETCH(QRect, rc);
+    QFETCH(QRect, wrapRect);
+    QFETCH(QRect, limitRect);
+    QFETCH(QVector<QRect>, expected);
+
+    QVector<QRect> result =
+        KisWrappedRect::multiplyWrappedRect(rc, wrapRect, limitRect);
+
+#if 1
+    QCOMPARE(result, expected);
+#else
+    /// use this code to dump reference values
+    QString res;
+    Q_FOREACH (const QRect &rc, result) {
+        res += QString("QRect(%1, %2, %3, %4), ").arg(rc.x()).arg(rc.y()).arg(rc.width()).arg(rc.height());
+    }
+    qDebug() << res;
+#endif
+}
+
 SIMPLE_TEST_MAIN(KisAlgebra2DTest)

@@ -41,6 +41,9 @@ private Q_SLOTS:
     void testElasticMotion();
 
     void testHaltonSequence();
+
+    void testMultiplyWrappedRect_data();
+    void testMultiplyWrappedRect();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

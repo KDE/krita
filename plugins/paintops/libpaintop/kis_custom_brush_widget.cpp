@@ -34,6 +34,7 @@
 #include <KoProperties.h>
 #include "kis_iterator_ng.h"
 #include "kis_image_barrier_locker.h"
+#include <KisResourceOverwriteDialog.h>
 
 #include <kstandardguiitem.h>
 
@@ -159,14 +160,16 @@ void KisCustomBrushWidget::slotAddPredefined()
             KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
-            m_rServer->addResource(resource.dynamicCast<KisBrush>());
+            KisResourceModel model(ResourceType::Brushes);
+            KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, resource);
             emit sigNewPredefinedBrush(resource);
         }
         else {
             KisImagePipeBrushSP resource = m_brush->clone().dynamicCast<KisImagePipeBrush>();
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
-            m_rServer->addResource(resource.dynamicCast<KisBrush>());
+            KisResourceModel model(ResourceType::Brushes);
+            KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, resource);
             emit sigNewPredefinedBrush(resource);
         }
     }

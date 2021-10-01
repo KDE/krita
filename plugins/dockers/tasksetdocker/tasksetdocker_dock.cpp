@@ -28,6 +28,8 @@
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
+#include <KisResourceOverwriteDialog.h>
+
 #include "tasksetmodel.h"
 
 
@@ -214,7 +216,8 @@ void TasksetDockerDock::saveClicked()
 
     taskset->setName(name);
     taskset->setFilename(fileInfo.fileName());
-    m_rserver->addResource(taskset);
+    KisResourceModel model(ResourceType::TaskSets);
+    KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, taskset);
 }
 
 void TasksetDockerDock::clearClicked()

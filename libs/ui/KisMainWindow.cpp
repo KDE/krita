@@ -1700,15 +1700,11 @@ void KisMainWindow::slotFileNew()
 
     startupWidget->addCustomDocumentWidget(item.widget, item.title, "Create from ClipBoard", item.icon);
 
-    // calls deleteLater
     connect(startupWidget, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));
-    // calls deleteLater
     connect(startupWidget, SIGNAL(openTemplate(QUrl)), KisPart::instance(), SLOT(openTemplate(QUrl)));
 
     startupWidget->exec();
-
-    // Cancel calls deleteLater...
-
+    startupWidget->deleteLater();
 }
 
 void KisMainWindow::slotImportFile()

@@ -90,6 +90,7 @@ void KisImageFromClipboard::createImage()
     }
     doc->setModified(true);
     emit m_openPane->documentSelected(doc);
+    m_openPane->accept();
 }
 
 

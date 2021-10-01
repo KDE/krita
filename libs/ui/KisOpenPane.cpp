@@ -176,6 +176,12 @@ void KisOpenPane::openFileDialog()
     }
 }
 
+void KisOpenPane::slotOpenTemplate(const QUrl &url)
+{
+    accept();
+    emit openTemplate(url);
+}
+
 void KisOpenPane::initTemplates(const QString& templatesResourcePath)
 {
     QTreeWidgetItem* selectItem = 0;
@@ -196,7 +202,7 @@ void KisOpenPane::initTemplates(const QString& templatesResourcePath)
 
             KisTemplatesPane* pane = new KisTemplatesPane(this, group->name(),
                                                           group, templateTree.defaultTemplate());
-            connect(pane, SIGNAL(openUrl(QUrl)), this, SIGNAL(openTemplate(QUrl)));
+            connect(pane, SIGNAL(openUrl(QUrl)), this, SLOT(slotOpenTemplate(QUrl)));
             connect(pane, SIGNAL(alwaysUseChanged(KisTemplatesPane*,QString)),
                     this, SIGNAL(alwaysUseChanged(KisTemplatesPane*,QString)));
             connect(this, SIGNAL(alwaysUseChanged(KisTemplatesPane*,QString)),

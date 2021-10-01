@@ -64,6 +64,7 @@ protected Q_SLOTS:
 private Q_SLOTS:
     /// when clicked "Open Existing Document" button
     void openFileDialog();
+    void slotOpenTemplate(const QUrl &url);
     
 Q_SIGNALS:
     void openExistingFile(const QUrl&);

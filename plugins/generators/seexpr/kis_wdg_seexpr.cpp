@@ -51,6 +51,8 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
     m_widget->txtEditor->updateCompleter();
 
     m_widget->txtEditor->exprTe->setFont(QFontDatabase().systemFont(QFontDatabase::FixedFont));
+    const QFontMetricsF fntTe(m_widget->txtEditor->exprTe->fontMetrics());
+    m_widget->txtEditor->exprTe->setTabStopDistance(fntTe.horizontalAdvance("    "));
 
     connect(m_widget->scriptSelectorWidget, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slotResourceSelected(KoResourceSP)));
     connect(m_saveDialog, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slotResourceSaved(KoResourceSP)));

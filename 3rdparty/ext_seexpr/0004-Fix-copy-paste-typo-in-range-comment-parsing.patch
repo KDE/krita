@@ -1,0 +1,87 @@
+From a8422e3757d3a1e53ac300b1ad7f5dcf8efd1a2e Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Fri, 1 Oct 2021 14:35:36 +0000
+Subject: [PATCH 4/4] Fix copy-paste typo in range comment parsing
+
+CCBUG: 442853
+---
+ src/KSeExprUI/ControlSpec.cpp |  4 ++--
+ src/KSeExprUI/Editable.cpp    | 15 ++++++++-------
+ src/KSeExprUI/Utils.cpp       |  6 +++---
+ 3 files changed, 13 insertions(+), 12 deletions(-)
+
+diff --git a/src/KSeExprUI/ControlSpec.cpp b/src/KSeExprUI/ControlSpec.cpp
+index c1e683b..78a2eab 100644
+--- a/src/KSeExprUI/ControlSpec.cpp
++++ b/src/KSeExprUI/ControlSpec.cpp
+@@ -92,8 +92,8 @@ ExprScalarAssignSpec::ExprScalarAssignSpec(const ExprAssignNode &node)
+             return;
+         }
+     } else {
+-        int imin = 0;
+-        int imax = 0;
++        int32_t imin = 0;
++        int32_t imax = 0;
+         if (KSeExpr::Utils::parseRangeComment(comment, imin, imax)) {
+             _min = imin;
+             _max = imax;
+diff --git a/src/KSeExprUI/Editable.cpp b/src/KSeExprUI/Editable.cpp
+index bdf923d..d6592de 100644
+--- a/src/KSeExprUI/Editable.cpp
++++ b/src/KSeExprUI/Editable.cpp
+@@ -53,13 +53,14 @@ bool NumberEditable::parseComment(const std::string &comment)
+             max = fmax;
+             isInt = false;
+         }
+-    }
+-    int imin = 0;
+-    int imax = 0;
+-    if (KSeExpr::Utils::parseRangeComment(comment, imin, imax)) {
+-        min = imin;
+-        max = imax;
+-        isInt = true;
++    } else {
++        int32_t imin = 0;
++        int32_t imax = 0;
++        if (KSeExpr::Utils::parseRangeComment(comment, imin, imax)) {
++            min = imin;
++            max = imax;
++            isInt = true;
++        }
+     }
+     return true;
+ }
+diff --git a/src/KSeExprUI/Utils.cpp b/src/KSeExprUI/Utils.cpp
+index 39ff9d9..489c785 100644
+--- a/src/KSeExprUI/Utils.cpp
++++ b/src/KSeExprUI/Utils.cpp
+@@ -12,7 +12,7 @@ bool KSeExpr::Utils::parseRangeComment(const std::string &comment, double &from,
+ 
+     auto trimmed_comment = trim(comment.substr(1, std::string::npos));
+ 
+-    auto div = trimmed_comment.find_first_of(' ');
++    auto div = trimmed_comment.find_first_of(',');
+ 
+     if (div == std::string::npos) {
+         return false;
+@@ -42,7 +42,7 @@ bool KSeExpr::Utils::parseRangeComment(const std::string &comment, float &from,
+ 
+     auto trimmed_comment = trim(comment.substr(1, std::string::npos));
+ 
+-    auto div = trimmed_comment.find_first_of(' ');
++    auto div = trimmed_comment.find_first_of(',');
+ 
+     if (div == std::string::npos) {
+         return false;
+@@ -72,7 +72,7 @@ bool KSeExpr::Utils::parseRangeComment(const std::string &comment, int32_t &from
+ 
+     auto trimmed_comment = trim(comment.substr(1, std::string::npos));
+ 
+-    auto div = trimmed_comment.find_first_of(' ');
++    auto div = trimmed_comment.find_first_of(',');
+ 
+     if (div == std::string::npos) {
+         return false;
+-- 
+2.32.0.windows.2
+

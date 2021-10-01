@@ -1,7 +1,7 @@
 From c8cbb1119bbd9749b44aafda40f50082951d098d Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Fri, 1 Oct 2021 03:05:18 +0000
-Subject: [PATCH 3/3] ExprEditor: replace index for line/column when reporting
+Subject: [PATCH 3/4] ExprEditor: replace index for line/column when reporting
  errors
 
 ---
@@ -28,7 +28,7 @@ index d5810b3..f90c7f6 100644
      cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
      cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, startPos);
 +    startLine = cursor.blockNumber();
-+    startCol = cursor.columnNumber() + 1;
++    startCol = cursor.columnNumber();
      cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, endPos - startPos + 1);
      QList<QTextEdit::ExtraSelection> extraSelections = exprTe->extraSelections();
      QTextEdit::ExtraSelection selection;

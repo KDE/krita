@@ -1,7 +1,7 @@
 From 26a3186baa97d6a9a8e65e9c7284b9493d7f86df Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Thu, 30 Sep 2021 16:03:30 +0000
-Subject: [PATCH 2/3] Reject malformed curve and ccurve calls at parse time
+Subject: [PATCH 2/4] Reject malformed curve and ccurve calls at parse time
 
 ---
  generated/KSeExprUI/ExprSpecParser.cpp | 26 +++++++++++++++++--------

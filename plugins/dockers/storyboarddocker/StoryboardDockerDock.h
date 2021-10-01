@@ -14,6 +14,7 @@
 #include <kis_mainwindow_observer.h>
 #include <kis_canvas2.h>
 #include <kis_action.h>
+#include <boost/optional.hpp>
 #include "DlgExportStoryboard.h"
 
 class Ui_WdgStoryboardDock;
@@ -34,6 +35,28 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setViewManager(KisViewManager* kisview) override;
+
+    struct ElementLayout {
+        boost::optional<QRect> cutNameRect;
+        boost::optional<QRect> cutNumberRect;
+        boost::optional<QRect> cutDurationRect;
+        boost::optional<QRect> cutImageRect;
+        QMap<QString, QRect> commentRects;
+
+        ElementLayout()
+            : commentRects() {
+        }
+
+        ElementLayout(const ElementLayout& other)
+            : cutNameRect(other.cutNameRect)
+            , cutNumberRect(other.cutNumberRect)
+            , cutDurationRect(other.cutDurationRect)
+            , cutImageRect(other.cutImageRect) {
+            Q_FOREACH(const QString& key, other.commentRects.keys()) {
+                commentRects.insert(key, other.commentRects[key]);
+            }
+        }
+    };
 
 private Q_SLOTS:
     /**
@@ -101,24 +124,9 @@ private Q_SLOTS:
     void slotModelChanged();
 
 private:
-    struct ElementLayout {
-        QRect panelNameRect;
-        QRect panelDurationRect;
-        QRect imageAreaRect;
-        QList<QRect> commentRects;
-        bool renderComments;
 
-        ElementLayout()
-            : panelNameRect(0,0,-1,-1)
-            , panelDurationRect(0,0,-1,-1)
-            , imageAreaRect(0,0, -1, -1)
-            , commentRects()
-            , renderComments(false) {
-        }
-    };
-
-    QVector<ElementLayout> getLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
-    QVector<ElementLayout> getLayout(QString layoutSvgFileName, QPrinter *printer);
+    QVector<ElementLayout> getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
+    QVector<ElementLayout> getPageLayout(QString layoutSvgFileName, QPrinter *printer);
 
 private:
     KisCanvas2* m_canvas;

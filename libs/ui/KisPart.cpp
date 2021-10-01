@@ -59,7 +59,6 @@
 #include "kis_time_span.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
-#include "KisOpenPane.h"
 #include "KisTranslateLayerNamesVisitor.h"
 #include "kis_color_manager.h"
 
@@ -570,13 +569,6 @@ void KisPart::openTemplate(const QUrl &url)
     KisMainWindow *mw = currentMainwindow();
     mw->addViewAndNotifyLoadingCompleted(document);
 
-    KisOpenPane *pane = qobject_cast<KisOpenPane*>(sender());
-    if (pane) {
-        pane->hide();
-        pane->deleteLater();
-
-    }
-
     qApp->restoreOverrideCursor();
 }
 
@@ -597,11 +589,6 @@ void KisPart::startCustomDocument(KisDocument* doc)
 {
     addDocument(doc);
     KisMainWindow *mw = currentMainwindow();
-    KisOpenPane *pane = qobject_cast<KisOpenPane*>(sender());
-    if (pane) {
-        pane->hide();
-        pane->deleteLater();
-    }
     mw->addViewAndNotifyLoadingCompleted(doc);
 
 }

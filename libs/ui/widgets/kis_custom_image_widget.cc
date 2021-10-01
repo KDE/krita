@@ -122,8 +122,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
 
     // Cancel Create image button
-    connect(newDialogConfirmationButtonBox, SIGNAL(rejected()), this->parentWidget(), SLOT(close()));
-    connect(newDialogConfirmationButtonBox, SIGNAL(rejected()), this->parentWidget(), SLOT(deleteLater()));
+    connect(newDialogConfirmationButtonBox, SIGNAL(rejected()), m_openPane, SLOT(reject()));
 
 
 
@@ -276,6 +275,7 @@ void KisCustomImageWidget::createImage()
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);
+        m_openPane->accept();
         emit m_openPane->documentSelected(doc);
     }
 }

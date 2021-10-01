@@ -18,6 +18,7 @@
 #include "QDesktopServices"
 #include "KisResourceServerProvider.h"
 #include <kis_paintop_preset_icon_library.h>
+#include <KisResourceOverwriteDialog.h>
 
 #include <kstandardguiitem.h>
 
@@ -161,8 +162,6 @@ void KisPresetSaveWidget::savePreset()
         return;
     }
 
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-
     // if we are saving a new brush, use what we type in for the input
     QString presetFileName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
     // We don't want dots or spaces in the filenames
@@ -186,11 +185,9 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         newPreset->setValid(true);
         newPreset->setStorageLocation("");
-        if (!rServer->addResource(newPreset)) {
-            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"),
-                                 i18n("Could not save preset under name %1, it already exists.", presetFileName));
+        KisResourceModel model(ResourceType::PaintOpPresets);
+        if (!KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, newPreset)) {
             success = false;
-
         }
 
         // trying to get brush preset to load after it is created
@@ -201,9 +198,8 @@ void KisPresetSaveWidget::savePreset()
         curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
 
-        if (!rServer->updateResource(curPreset)) {
-            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"),
-                                 i18n("Could not update preset %1.", presetFileName));
+        KisResourceModel model(ResourceType::PaintOpPresets);
+        if (!KisResourceOverwriteDialog::updateResourceWithUserInput(this, &model, curPreset)) {
             success = false;
         }
 

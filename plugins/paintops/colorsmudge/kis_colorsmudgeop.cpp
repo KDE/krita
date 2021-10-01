@@ -93,17 +93,6 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     const bool useDullingMode = m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE;
     const bool useOverlayMode = m_overlayModeOption.isChecked();
 
-    m_hsvOptions.append(KisPressureHSVOption::createHueOption());
-    m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
-    m_hsvOptions.append(KisPressureHSVOption::createValueOption());
-
-    Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
-        option->readOptionSetting(settings);
-        option->resetAllSensors();
-        if (option->isChecked() && !m_hsvTransform) {
-            m_hsvTransform = m_paintColor.colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
-        }
-    }
     m_rotationOption.applyFanCornersInfo(this);
 
     bool usesNewEngine = true;
@@ -153,6 +142,20 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
 
     m_strategy->initializePainting();
     m_paintColor = painter->paintColor().convertedTo(m_strategy->preciseColorSpace());
+
+    m_hsvOptions.append(KisPressureHSVOption::createHueOption());
+    m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
+    m_hsvOptions.append(KisPressureHSVOption::createValueOption());
+
+    /// color transformation must be created **after** the color
+    /// space of m_paintColor has been set up
+    Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
+        option->readOptionSetting(settings);
+        option->resetAllSensors();
+        if (option->isChecked() && !m_hsvTransform) {
+            m_hsvTransform = m_paintColor.colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+        }
+    }
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()

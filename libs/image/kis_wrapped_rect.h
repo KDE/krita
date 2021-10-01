@@ -9,7 +9,7 @@
 
 #include <QVector>
 #include <QRect>
-
+#include <QtMath>
 
 struct KisWrappedRect : public QVector<QRect> {
     static inline int xToWrappedX(int x, const QRect &wrapRect) {
@@ -66,6 +66,39 @@ struct KisWrappedRect : public QVector<QRect> {
 
             if (!(newRect.translated(-wrapRect.width(), -wrapRect.height()) & wrapRect).isEmpty()) { // br
                 result.append(QPoint(x - wrapRect.width(), y - wrapRect.height()));
+            }
+        }
+
+        return result;
+    }
+
+    static QVector<QRect> multiplyWrappedRect(const QRect &rc,
+                                              const QRect &wrapRect,
+                                              const QRect &limitRect) {
+
+        QVector<QRect> result;
+
+        const int firstCol = qFloor(qreal(limitRect.x() - wrapRect.x()) / wrapRect.width());
+        const int firstRow = qFloor(qreal(limitRect.y() - wrapRect.y()) / wrapRect.height());
+
+        const int lastCol = qFloor(qreal(limitRect.right() - wrapRect.x()) / wrapRect.width());
+        const int lastRow = qFloor(qreal(limitRect.bottom() - wrapRect.y()) / wrapRect.height());
+
+        KisWrappedRect wrappedRect(rc, wrapRect);
+
+        Q_FOREACH (const QRect &rect,  wrappedRect) {
+            if (rect.isEmpty()) continue;
+
+            for (int y = firstRow; y <= lastRow; y++) {
+                for (int x = firstCol; x <= lastCol; x++) {
+                    const QPoint offset(x * wrapRect.width(), y * wrapRect.height());
+                    const QRect currentRect =
+                            rect.translated(offset + wrapRect.topLeft()) & limitRect;
+
+                    if (!currentRect.isEmpty()) {
+                        result << currentRect;
+                    }
+                }
             }
         }
 

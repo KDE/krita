@@ -86,6 +86,7 @@
 #include <KisStrokeSpeedMonitor.h>
 #include "opengl/kis_opengl_canvas_debugger.h"
 
+#include "kis_wrapped_rect.h"
 #include "kis_algebra_2d.h"
 #include "kis_image_signal_router.h"
 
@@ -933,37 +934,21 @@ void KisCanvas2::slotDoCanvasUpdate()
         emit updateCanvasRequested(m_d->savedUpdateRect);
 
         if (wrapAroundViewingMode()) {
-            const QRectF widgetRect = m_d->canvasWidget->widget()->rect();
-            const QRectF imageRect = m_d->coordinatesConverter->imageRectInImagePixels();
+            const QRect widgetRect = m_d->canvasWidget->widget()->rect();
+            const QRect imageRect = m_d->coordinatesConverter->imageRectInImagePixels();
 
-            QVector<QRect> updateRects;
-            QRectF rc = m_d->coordinatesConverter->widgetToImage(m_d->savedUpdateRect);
+            const QRect widgetRectInImagePixels =
+                m_d->coordinatesConverter->widgetToImage(widgetRect).toAlignedRect();
 
-            auto iterateThroughRects =
-                [&] (const QPointF &offset) {
+            const QRect rc = m_d->coordinatesConverter->widgetToImage(m_d->savedUpdateRect).toAlignedRect();
 
-                    while (1) {
-                        rc.translate(offset);
-                        QRectF widgetRc = m_d->coordinatesConverter->imageToWidget(rc);
-
-                        widgetRc &= widgetRect;
-
-                        if (widgetRc.isEmpty()) {
-                            break;
-                        } else {
-                            updateRects.append(widgetRc.toAlignedRect());
-                        }
-                    }
-                };
-
-            updateRects << m_d->savedUpdateRect;
-            iterateThroughRects(QPointF(imageRect.width(), 0));
-            iterateThroughRects(QPointF(-imageRect.width(), 0));
-            iterateThroughRects(QPointF(0, imageRect.height()));
-            iterateThroughRects(QPointF(0, -imageRect.height()));
+            const QVector<QRect> updateRects =
+                KisWrappedRect::multiplyWrappedRect(rc, imageRect, widgetRectInImagePixels);
 
             Q_FOREACH(const QRect &rc, updateRects) {
-                m_d->canvasWidget->widget()->update(rc);
+                const QRect widgetUpdateRect =
+                    m_d->coordinatesConverter->imageToWidget(rc).toAlignedRect() & widgetRect;
+                m_d->canvasWidget->widget()->update(widgetUpdateRect);
             }
 
         } else {

@@ -152,17 +152,20 @@ int DlgExportStoryboard::fontSize() const
 
 void DlgExportStoryboard::setUsableMaximums(QPageSize pPageSize, QPageLayout::Orientation pOrientation, ExportLayout pLayout)
 {
-    Q_UNUSED(pLayout);
-    const QSize pointSize = pPageSize.sizePoints();
-    const QSize orientedPointSize = pOrientation == QPageLayout::Landscape ? QSize(pointSize.height(), pointSize.width()) : pointSize;
-    const QSize sizeInPointsPerBoard = QSize(orientedPointSize.width() / columns(), orientedPointSize.height() / rows());
+    if (pLayout == ExportLayout::SVG_TEMPLATE) { // Bypass estimates -- We can't really make any educated guess here!
+        m_page->fontSizeSpinBox->setMaximum(50);
+    } else {
+        const QSize pointSize = pPageSize.sizePoints();
+        const QSize orientedPointSize = pOrientation == QPageLayout::Landscape ? QSize(pointSize.height(), pointSize.width()) : pointSize;
+        const QSize sizeInPointsPerBoard = QSize(orientedPointSize.width() / columns(), orientedPointSize.height() / rows());
 
-    const int commentCount = m_model ? qMax(m_model->totalCommentCount(), 1) : 1;
-    const bool stacked = sizeInPointsPerBoard.width() < sizeInPointsPerBoard.height();
-    const QSize sizeInPointsPerComment = stacked ? QSize(sizeInPointsPerBoard.width(), sizeInPointsPerBoard.height() / commentCount)
-                                                 : QSize(sizeInPointsPerBoard.width() / commentCount, sizeInPointsPerBoard.height());
-    const QSize usableMaximumFontSize = sizeInPointsPerComment / 12;
-    m_page->fontSizeSpinBox->setMaximum(qMin(usableMaximumFontSize.width(), usableMaximumFontSize.height()));
+        const int commentCount = m_model ? qMax(m_model->totalCommentCount(), 1) : 1;
+        const bool stacked = sizeInPointsPerBoard.width() < sizeInPointsPerBoard.height();
+        const QSize sizeInPointsPerComment = stacked ? QSize(sizeInPointsPerBoard.width(), sizeInPointsPerBoard.height() / commentCount)
+                                                     : QSize(sizeInPointsPerBoard.width() / commentCount, sizeInPointsPerBoard.height());
+        const QSize usableMaximumFontSize = sizeInPointsPerComment / 12;
+        m_page->fontSizeSpinBox->setMaximum(qMin(usableMaximumFontSize.width(), usableMaximumFontSize.height()));
+    }
 }
 
 void DlgExportStoryboard::slotExportClicked()

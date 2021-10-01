@@ -376,7 +376,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
         QFont font = painter.font();
         font.setPointSize(dlg.fontSize());
-        painter.setFont(font);
+
 
         StoryboardItemList storyboardList = m_storyboardModel->getData();
 
@@ -384,7 +384,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         bool layoutSpecifiedBySvg = dlg.layoutSpecifiedBySvgFile();
         if (layoutSpecifiedBySvg) {
             QString svgFileName = dlg.layoutSvgFile();
-            //layoutElements = getLayout(svgFileName, &printer);
+            layoutElements = getPageLayout(svgFileName, &printer);
         }
         else {
             int rows = dlg.rows();
@@ -392,7 +392,10 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             printer.setOutputFileName(dlg.saveFileName());
             printer.setPageSize(dlg.pageSize());
             printer.setPageOrientation(dlg.pageOrientation());
-            layoutElements = getLayout(rows, columns, QRect(0, 0, m_canvas->image()->width(), m_canvas->image()->height()), printer.pageRect(), painter.fontMetrics());
+            painter.begin(&printer); // We need to begin the painter temporarily for font metrics.
+            painter.setFont(font);
+            layoutElements = getPageLayout(rows, columns, QRect(0, 0, m_canvas->image()->width(), m_canvas->image()->height()), printer.pageRect(), painter.fontMetrics());
+            painter.end(); // End temporary painter begin.
         }
 
         KIS_SAFE_ASSERT_RECOVER_RETURN(layoutElements.length() > 0);
@@ -431,6 +434,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             printer.setOutputFileName(dlg.saveFileName());
             printer.setOutputFormat(QPrinter::PdfFormat);
             painter.begin(&printer);
+            painter.setFont(font);
             painter.setBackgroundMode(Qt::BGMode::OpaqueMode);
         }
 
@@ -458,73 +462,80 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
             const ElementLayout* const layout = &layoutElements[i % layoutElements.length()];
 
-            //draw the cell rectangle
             QPen pen(QColor(1, 0, 0));
             pen.setWidth(5);
             painter.setPen(pen);
 
-            {
-                QRect imgRect = layout->imageAreaRect;
-                QSize resizedImage = pxmp.size().scaled(layout->imageAreaRect.size(), Qt::KeepAspectRatio);
+            // Draw image
+            if (layout->cutImageRect.has_value()) {
+                QRect imgRect = layout->cutImageRect.value();
+                QSize resizedImage = pxmp.size().scaled(layout->cutImageRect->size(), Qt::KeepAspectRatio);
                 const int MARGIN = -2;
                 resizedImage = QSize(resizedImage.width() + MARGIN * 2, resizedImage.height() + MARGIN * 2);
                 imgRect.setSize(resizedImage);
-                imgRect.translate((layout->imageAreaRect.width() - imgRect.size().width()) / 2 - MARGIN, (layout->imageAreaRect.height() - imgRect.size().height()) / 2 - MARGIN);
+                imgRect.translate((layout->cutImageRect.value().width() - imgRect.size().width()) / 2 - MARGIN, (layout->cutImageRect->height() - imgRect.size().height()) / 2 - MARGIN);
                 painter.drawPixmap(imgRect, pxmp, pxmp.rect());
-                painter.drawRect(layout->imageAreaRect);
+                painter.drawRect(layout->cutImageRect.value());
             }
 
-            //Draw panel name
-            QString str = storyboardList.at(i + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
-            painter.drawRect(layout->panelNameRect);
-            painter.drawText(layout->panelNameRect.translated(painter.fontMetrics().averageCharWidth() / 2, 0), Qt::AlignLeft | Qt::AlignVCenter, str);
+            // Draw panel name
+            if (layout->cutNameRect.has_value()) {
+                QString str = storyboardList.at(i + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
+                painter.drawText(layout->cutNameRect.value().translated(painter.fontMetrics().averageCharWidth() / 2, 0), Qt::AlignLeft | Qt::AlignVCenter, str);
+                painter.drawRect(layout->cutNameRect.value());
+            }
 
-            //Draw duration
-            QString duration = QString::number(storyboardList.at(i + firstItemRow)->child(StoryboardItem::DurationSecond)->data().toInt());
-            duration += i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
-            duration += "+";
-            duration += QString::number(storyboardList.at(i + firstItemRow)->child(StoryboardItem::DurationFrame)->data().toInt());
-            duration += i18nc("suffix in spin box in storyboard that means 'frames'", "f");
+            // Draw panel index
+            if (layout->cutNumberRect.has_value()) {
+                painter.drawText(layout->cutNumberRect.value(), QString::number(i + firstItemRow));
+                painter.drawRect(layout->cutNumberRect.value());
+            }
 
-            painter.drawRect(layout->panelDurationRect);
-            painter.drawText(layout->panelDurationRect, Qt::AlignCenter, duration);
+            // Draw duration
+            if (layout->cutDurationRect.has_value()) {
+                QString duration = QString::number(storyboardList.at(i + firstItemRow)->child(StoryboardItem::DurationSecond)->data().toInt());
+                duration += i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
+                duration += "+";
+                duration += QString::number(storyboardList.at(i + firstItemRow)->child(StoryboardItem::DurationFrame)->data().toInt());
+                duration += i18nc("suffix in spin box in storyboard that means 'frames'", "f");
 
-            if (layout->renderComments) {
-                for (int commentIndex = 0; commentIndex < numComments; commentIndex++) {
-                    if (commentIndex >= layout->commentRects.size())
-                        break;
-
-                    QTextDocument doc;
-                    doc.setDocumentMargin(0);
-                    doc.setDefaultFont(painter.font());
-                    QString comment;
-                    comment += "<p><b>" + comments.at(commentIndex).name + "</b></p>"; // if arrange options are used check for visibility
-                    QString originalCommentText = qvariant_cast<CommentBox>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString();
-                    originalCommentText = originalCommentText.replace('\n', "</p><p>");
-                    comment += "<p>&nbsp;" + originalCommentText + "</p>";
-                    const int MARGIN = painter.fontMetrics().averageCharWidth() / 2;
-
-                    doc.setHtml(comment);
-                    doc.setTextWidth(layout->commentRects[commentIndex].width() - MARGIN * 2);
-
-                    QAbstractTextDocumentLayout::PaintContext ctx;
-                    ctx.palette.setColor(QPalette::Text, painter.pen().color());
-
-                    //draw the comments
-                    painter.save();
-                    painter.translate(layout->commentRects[commentIndex].topLeft() + QPoint(MARGIN, MARGIN));
-                    doc.documentLayout()->draw(&painter, ctx);
-                    painter.restore();
-
-                    painter.drawRect(layout->commentRects[commentIndex]);
+                painter.drawRect(layout->cutDurationRect.value());
+                painter.drawText(layout->cutDurationRect.value(), Qt::AlignCenter, duration);
+            }
 
 
-                    if (layout->commentRects[commentIndex].height() < doc.size().height()) {
-                        QRectF eRect(QPointF(layout->commentRects[commentIndex].topLeft()), doc.size());
-                        eRect.setTop(layout->commentRects[commentIndex].bottom() + 20);
-                        painter.eraseRect(eRect);
-                    }
-                }
+            // Draw comments
+            for (int commentIndex = 0; commentIndex < numComments; commentIndex++) {
+                if (!layout->commentRects.contains(comments[commentIndex].name))
+                    continue;
+
+                const QString& commentName = comments[commentIndex].name;
+
+                QTextDocument doc;
+                doc.setDocumentMargin(0);
+                doc.setDefaultFont(painter.font());
+                QString comment;
+                comment += "<p><b>" + commentName + "</b></p>"; // if arrange options are used check for visibility
+                QString originalCommentText = qvariant_cast<CommentBox>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString();
+                originalCommentText = originalCommentText.replace('\n', "</p><p>");
+                comment += "<p>&nbsp;" + originalCommentText + "</p>";
+                const int MARGIN = painter.fontMetrics().averageCharWidth() / 2;
+
+                doc.setHtml(comment);
+                doc.setTextWidth(layout->commentRects[commentName].width() - MARGIN * 2);
+
+                QAbstractTextDocumentLayout::PaintContext ctx;
+                ctx.palette.setColor(QPalette::Text, painter.pen().color());
+
+                //draw the comments
+                painter.save();
+                painter.translate(layout->commentRects[commentName].topLeft() + QPoint(MARGIN, MARGIN));
+                painter.setClipRegion(QRegion(0,0,layout->commentRects[commentName].width(), layout->commentRects[commentName].height() - painter.fontMetrics().height()));
+                doc.documentLayout()->draw(&painter, ctx);
+                painter.restore();
+
+                painter.drawRect(layout->commentRects[commentName]);
+
             }
         }
         painter.end();
@@ -602,7 +613,7 @@ void StoryboardDockerDock::slotModelChanged()
     }
 }
 
-QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& fontMetrics)
+QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& fontMetrics)
 {
     QSizeF pageSize = pageRect.size();
     QRectF border = pageRect;
@@ -640,29 +651,31 @@ QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getLayout(int
 
         if (horizontal) {
             QRect sourceRect = cellRect.toAlignedRect();
-            layout.panelDurationRect = kisTrimTop(fontMetrics.height() * 1.5, sourceRect);
-            layout.panelNameRect = kisTrimLeft(layout.panelDurationRect.width() - numericFontWidth * 6, layout.panelDurationRect);
+            layout.cutDurationRect = kisTrimTop(fontMetrics.height() * 1.5, sourceRect);
+            layout.cutNameRect = kisTrimLeft(layout.cutDurationRect.value().width() - numericFontWidth * 6, layout.cutDurationRect.value());
 
             const int imageWidth = sourceRect.height() * static_cast<qreal>(imageSize.width()) / static_cast<qreal>(imageSize.height());
-            layout.imageAreaRect = kisTrimLeft(imageWidth, sourceRect);
+            layout.cutImageRect = kisTrimLeft(imageWidth, sourceRect);
             const float commentWidth = sourceRect.width() / numComments;
-            layout.renderComments = commentWidth > 100;
-            for (int i = 0; i < numComments; i++) {
-                QRect rest = kisTrimLeft(commentWidth, sourceRect);
-                layout.commentRects.push_back(rest);
+            if (commentWidth > 100) {
+                for (int i = 0; i < numComments; i++) {
+                    QRect rect = kisTrimLeft(commentWidth, sourceRect);
+                    layout.commentRects.insert(comments[i].name, rect);
+                }
             }
         } else {
             QRect sourceRect = cellRect.toAlignedRect();
-            layout.panelDurationRect = kisTrimTop(fontMetrics.height() * 1.5, sourceRect);
-            layout.panelNameRect = kisTrimLeft(layout.panelDurationRect.width() - numericFontWidth * 6, layout.panelDurationRect);
+            layout.cutDurationRect = kisTrimTop(fontMetrics.height() * 1.5, sourceRect);
+            layout.cutNameRect = kisTrimLeft(layout.cutDurationRect.value().width() - numericFontWidth * 6, layout.cutDurationRect.value());
 
             const int imageHeight = sourceRect.width() * static_cast<qreal>(imageSize.height()) / static_cast<qreal>(imageSize.width());
-            layout.imageAreaRect = kisTrimTop(imageHeight, sourceRect);
+            layout.cutImageRect = kisTrimTop(imageHeight, sourceRect);
             const float commentHeight = sourceRect.height() / numComments;
-            layout.renderComments = commentHeight > 200;
-            for (int i = 0; i < numComments; i++) {
-                QRect rest = kisTrimTop(commentHeight, sourceRect);
-                layout.commentRects.push_back(rest);
+            if (commentHeight > 200) {
+                for (int i = 0; i < numComments; i++) {
+                    QRect rect = kisTrimTop(commentHeight, sourceRect);
+                    layout.commentRects.insert(comments[i].name, rect);
+                }
             }
         }
 
@@ -672,11 +685,11 @@ QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getLayout(int
     return elements;
 }
 
-QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getLayout(QString layoutSvgFileName, QPrinter *printer)
+QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getPageLayout(QString layoutSvgFileName, QPrinter *printer)
 {
-    QVector<QRectF> rectVec;
-    QVector<ElementLayout> elements;
     QDomDocument svgDoc;
+    QVector<ElementLayout> elements;
+
 
     // Load DOM from file...
     QFile f(layoutSvgFileName);
@@ -689,7 +702,6 @@ QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getLayout(QSt
     f.close();
 
     QDomElement eroot = svgDoc.documentElement();
-    QString Type = eroot.tagName();
 
     QStringList lst = eroot.attribute("viewBox").split(" ");
     QSizeF sizeMM(lst.at(2).toDouble(), lst.at(3).toDouble());
@@ -697,26 +709,112 @@ QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getLayout(QSt
     QSizeF size = printer->pageRect().size();
     double scaleFac = size.width() / sizeMM.width();
 
+    QVector<QString> commentLayers;
+    Q_FOREACH( StoryboardComment channel, m_commentModel->getData()) {
+        commentLayers.push_back(channel.name);
+    }
+
+    QMap<int, ElementLayout> elementMap;
+
     QDomNodeList  nodeList = svgDoc.elementsByTagName("rect");
     for(int i = 0; i < nodeList.size(); i++) {
         QDomNode node = nodeList.at(i);
         QDomNamedNodeMap attrMap = node.attributes();
 
-        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-        rectVec.append(QRectF(x, y, width, height));
+        for (int i = 0; i < attrMap.length(); i++) {
+            QDomAttr attribute = attrMap.item(i).toAttr();
+            QString afterNamespace = attribute.name().split(":").last();
+
+            if (afterNamespace == "label") {
+                if (attribute.value().startsWith("image")) {
+                    QString indexString = attribute.value().remove(0, 5);
+                    bool ok = false;
+                    int index = indexString.toInt(&ok);
+                    if (ok) {
+                        if (!elementMap.contains(index))
+                            elementMap.insert(index, ElementLayout());
+
+                        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                        elementMap[index].cutImageRect = QRect(x,y, width, height);
+                    }
+                } else if (attribute.value().startsWith("time")) {
+                    QString indexString = attribute.value().remove(0, 4);
+                    bool ok = false;
+                    int index = indexString.toInt(&ok);
+                    if (ok) {
+                        if (!elementMap.contains(index))
+                            elementMap.insert(index, ElementLayout());
+
+                        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                        elementMap[index].cutDurationRect = QRect(x,y, width, height);
+                    }
+                } else if (attribute.value().startsWith("name")) {
+                    QString indexString = attribute.value().remove(0, 4);
+                    bool ok = false;
+                    int index = indexString.toInt(&ok);
+                    if (ok) {
+                        if (!elementMap.contains(index))
+                            elementMap.insert(index, ElementLayout());
+
+                        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                        elementMap[index].cutNameRect = QRect(x,y, width, height);
+                    }
+                } else if (attribute.value().startsWith("shot")) {
+                    QString indexString = attribute.value().remove(0, 4);
+                    bool ok = false;
+                    int index = indexString.toInt(&ok);
+                    if (ok) {
+                        if (!elementMap.contains(index))
+                            elementMap.insert(index, ElementLayout());
+
+                        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                        elementMap[index].cutNumberRect = QRect(x,y, width, height);
+                    }
+                } else {
+                    for(int commentIndex = 0; commentIndex < commentLayers.length(); commentIndex++) {
+                        const QString& comment = commentLayers[commentIndex];
+                        if (attribute.value().startsWith(comment.toLower())) {
+                            QString indexString = attribute.value().remove(0, comment.length());
+                            bool ok = false;
+                            int index = indexString.toInt(&ok);
+                            if (ok) {
+                                if (!elementMap.contains(index))
+                                    elementMap.insert(index, ElementLayout());
+
+                                double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                                double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                                double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                                double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                                elementMap[index].commentRects.insert(comment, QRect(x,y, width, height));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
-    std::sort(rectVec.begin(), rectVec.end(),
-                    [](const QRectF & a, const QRectF & b) -> bool
-                    {
-                        if (a.x() == b.x()) {
-                            return a.x() < b.x();
-                        }
-                        return a.y() < b.y();
-                    });
+    QList<int> indices = elementMap.keys();
+    std::sort(indices.begin(), indices.end(), [](const int& a, const int& b){
+        return a < b;
+    });
+
+    Q_FOREACH(const int& index, indices){
+        elements.push_back(elementMap[index]);
+    }
 
     return elements;
 }

@@ -64,6 +64,9 @@ public:
     QPainterPath path() const;
     QVector<QPainterPath> getConnectedPath(const Handle &handle) const;
 
+    /// get the attached corner node of the bezierHandle
+    QPointF getAttachedCorner(const Handle &bezierHandle) const;
+
 private:
     const SvgMeshGradient* gradient() const;
 

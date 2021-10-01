@@ -40,6 +40,7 @@ private Q_SLOTS:
     void slotSaveBrushPreset();
     void slotSaveNewBrushPreset();
     void slotReloadPresetClicked();
+    void slotHideCheckboxes();
 
 private:
     Ui_WdgSeExpr *m_widget;

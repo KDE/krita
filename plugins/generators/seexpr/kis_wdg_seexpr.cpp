@@ -6,15 +6,20 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QCheckBox>
+
+#include <KSeExprUI/ErrorMessages.h>
 #include <KisDialogStateSaver.h>
 #include <KisGlobalResourcesInterface.h>
 #include <KoColor.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <KSeExprUI/ErrorMessages.h>
+
 #include <filter/kis_filter_configuration.h>
-#include <kis_icon.h>
 #include <kis_config.h>
+#include <kis_debug.h>
+#include <kis_icon.h>
+#include <kis_signals_blocker.h>
 
 #include "SeExprExpressionContext.h"
 #include "generator.h"
@@ -78,6 +83,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
             &updateCompressor, SLOT(start()));
     connect(m_widget->txtEditor, SIGNAL(preview()),
             &updateCompressor, SLOT(start()));
+    connect(m_widget->txtEditor, &ExprEditor::preview, this, &KisWdgSeExpr::slotHideCheckboxes); // HACK: hide disney checkboxes
 
     connect(&updateCompressor, SIGNAL(timeout()), this, SLOT(isValid()));
 
@@ -290,6 +296,16 @@ void KisWdgSeExpr::slotReloadPresetClicked()
     }
 }
 
+void KisWdgSeExpr::slotHideCheckboxes()
+{
+    for (auto controls : m_widget->wdgControls->findChildren<ExprControl *>()) {
+        for (auto wdg : controls->findChildren<QCheckBox *>(QString(), Qt::FindDirectChildrenOnly)) {
+            wdg->setCheckState(Qt::Unchecked);
+            wdg->setVisible(false);
+        }
+    }
+}
+
 void KisWdgSeExpr::isValid()
 {
     QString script = m_widget->txtEditor->getExpr();
@@ -335,6 +351,7 @@ void KisWdgSeExpr::isValid()
                 m_currentPreset->setScript(m_widget->txtEditor->getExpr());
                 m_currentPreset->setDirty(true);
             }
+            
             slotUpdatePresetSettings();
         } else {
             m_widget->saveNewBrushPresetButton->setEnabled(true);

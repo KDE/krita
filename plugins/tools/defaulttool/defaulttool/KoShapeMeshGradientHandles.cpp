@@ -147,6 +147,20 @@ QVector<QPainterPath> KoShapeMeshGradientHandles::getConnectedPath(const Handle 
     return result;
 }
 
+QPointF KoShapeMeshGradientHandles::getAttachedCorner(const Handle &bezierHandle) const
+{
+    KIS_ASSERT(bezierHandle.type == Handle::BezierHandle);
+
+    const SvgMeshArray *mesharray = gradient()->getMeshArray().data();
+    const SvgMeshPath path = mesharray->getPath(bezierHandle.getPosition());
+    const QTransform t = abosoluteTransformation(gradient()->gradientUnits());
+    if (bezierHandle.index == Handle::First) {
+        return t.map(path[bezierHandle.index - 1]);
+    } else {
+        return t.map(path[bezierHandle.index + 1]);
+    }
+}
+
 const SvgMeshGradient* KoShapeMeshGradientHandles::gradient() const
 {
     KoShapeFillWrapper wrapper(m_shape, m_fillVariant);

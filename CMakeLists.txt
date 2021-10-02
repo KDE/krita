@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 project(krita)
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-set(MIN_QT_VERSION 5.9.0)
+set(MIN_QT_VERSION 5.12.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
 set( CMAKE_CXX_STANDARD 14 )

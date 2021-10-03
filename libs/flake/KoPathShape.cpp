@@ -539,7 +539,7 @@ void KoPathShape::updateLastPriv(KoPathPoint **lastPoint)
     (*lastPoint)->unsetProperty(KoPathPoint::CloseSubpath);
 }
 
-QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r) const
+QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r, const bool useControlPoints) const
 {
     QList<KoPathPoint*> result;
 
@@ -549,10 +549,12 @@ QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r) const
         for (; it != (*pathIt)->constEnd(); ++it) {
             if (r.contains((*it)->point()))
                 result.append(*it);
-            else if ((*it)->activeControlPoint1() && r.contains((*it)->controlPoint1()))
-                result.append(*it);
-            else if ((*it)->activeControlPoint2() && r.contains((*it)->controlPoint2()))
-                result.append(*it);
+            else if (useControlPoints) {
+                if ((*it)->activeControlPoint1() && r.contains((*it)->controlPoint1()))
+                    result.append(*it);
+                else if ((*it)->activeControlPoint2() && r.contains((*it)->controlPoint2()))
+                    result.append(*it);
+            }
         }
     }
     return result;

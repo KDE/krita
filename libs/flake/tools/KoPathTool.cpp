@@ -640,7 +640,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                 return;
             }
         } else {
-            QList<KoPathPoint*> points = shape->pointsAt(roi);
+            QList<KoPathPoint*> points = shape->pointsAt(roi, true);
             if (! points.empty()) {
                 // find the nearest control point from all points within the roi
                 KoPathPoint * bestPoint = 0;

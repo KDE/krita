@@ -197,9 +197,10 @@ public:
     /**
      * @brief Returns the path points within the given rectangle.
      * @param rect the rectangle the requested points are in
+     * @param useControlPoints wether to add control points to result or not
      * @return list of points within the rectangle
      */
-    QList<KoPathPoint*> pointsAt(const QRectF &rect) const;
+    QList<KoPathPoint*> pointsAt(const QRectF &rect, const bool useControlPoints = false) const;
 
     /**
      * @brief Returns the list of path segments within the given rectangle.

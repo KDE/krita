@@ -24,7 +24,7 @@ QPair<qreal, qreal> getMeanAndMedian(ChannelHistogram histogram, qreal begin, qr
 
     const int numberOfBins = histogram.histogram->producer()->numberOfBins();
     const int beginBin = static_cast<int>(begin * static_cast<qreal>(numberOfBins));
-    const int endBin = static_cast<int>(end * static_cast<qreal>(numberOfBins));
+    const int endBin = static_cast<int>(end * static_cast<qreal>(numberOfBins)) + 1;
 
     qreal numberOfSamples = 0.0;
     qreal meanSum = 0.0;
@@ -119,7 +119,7 @@ QPair<KoColor, KoColor> getDarkestAndWhitestColors(const KisPaintDeviceSP device
 qreal getGamma(qreal blackPoint, qreal whitePoint, qreal inputIntensity, qreal outputIntensity)
 {
     Q_ASSERT(blackPoint < whitePoint);
-    Q_ASSERT(inputIntensity > blackPoint && inputIntensity < whitePoint);
+    Q_ASSERT(inputIntensity >= blackPoint && inputIntensity <= whitePoint);
     
     if (qFuzzyIsNull(outputIntensity)) {
         return 0.01;

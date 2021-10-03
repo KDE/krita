@@ -5,7 +5,7 @@
  *    SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include "KisResourceOverwriteDialog.h"
+#include "KisResourceUserOperations.h"
 
 #include <QMessageBox>
 #include <QFileInfo>
@@ -16,14 +16,14 @@
 #include <KisResourceModel.h>
 #include <KisResourceCacheDb.h>
 
-bool KisResourceOverwriteDialog::userAllowsOverwrite(QWidget* widgetParent, QString resourceFilepath)
+bool KisResourceUserOperations::userAllowsOverwrite(QWidget* widgetParent, QString resourceFilepath)
 {
     return QMessageBox::question(widgetParent, i18nc("Dialog title", "Overwrite the file?"),
                           i18nc("Question in a dialog/messagebox", "This resource file already exists in the resource folder. Do you want to overwrite it?\nResource filename: %1", QFileInfo(resourceFilepath).fileName()),
                                  QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Cancel;
 }
 
-bool KisResourceOverwriteDialog::resourceExistsInResourceFolder(QString resourceType, QString filepath)
+bool KisResourceUserOperations::resourceExistsInResourceFolder(QString resourceType, QString filepath)
 {
     QString resourceLocationBase = KisResourceLocator::instance()->resourceLocationBase();
     QString newFilepath = resourceLocationBase + "/" + resourceType + "/" + QFileInfo(filepath).fileName();
@@ -31,13 +31,13 @@ bool KisResourceOverwriteDialog::resourceExistsInResourceFolder(QString resource
     return fi.exists();
 }
 
-KoResourceSP KisResourceOverwriteDialog::importResourceFileWithUserInput(QWidget *widgetParent, KisResourceModel* resourceModel, QString storageLocation, QString resourceType, QString resourceFilepath)
+KoResourceSP KisResourceUserOperations::importResourceFileWithUserInput(QWidget *widgetParent, KisResourceModel* resourceModel, QString storageLocation, QString resourceType, QString resourceFilepath)
 {
     if (!resourceModel) return KoResourceSP();
 
     KoResourceSP resource = resourceModel->importResourceFile(resourceFilepath, false, storageLocation);
-    if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(resourceType, resourceFilepath)) {
-        if (KisResourceOverwriteDialog::userAllowsOverwrite(widgetParent, resourceFilepath)) {
+    if (resource.isNull() && KisResourceUserOperations::resourceExistsInResourceFolder(resourceType, resourceFilepath)) {
+        if (KisResourceUserOperations::userAllowsOverwrite(widgetParent, resourceFilepath)) {
             resource = resourceModel->importResourceFile(resourceFilepath, true, storageLocation);
         } else {
             return nullptr; // the user doesn't want to import the file anymore because they don't want to overwrite it
@@ -49,7 +49,7 @@ KoResourceSP KisResourceOverwriteDialog::importResourceFileWithUserInput(QWidget
     return resource;
 }
 
-bool KisResourceOverwriteDialog::renameResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource, QString resourceName)
+bool KisResourceUserOperations::renameResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource, QString resourceName)
 {
     if (!resourceModel) return KoResourceSP();
     QVector<KoResourceSP> resources = resourceModel->resourcesForName(resourceName);
@@ -71,7 +71,7 @@ bool KisResourceOverwriteDialog::renameResourceWithUserInput(QWidget *widgetPare
     return res;
 }
 
-bool KisResourceOverwriteDialog::addResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource, QString storageLocation)
+bool KisResourceUserOperations::addResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource, QString storageLocation)
 {
     if (!resourceModel) return false;
     if (resourceExistsInResourceFolder(resource->resourceType().first, resource->filename())) {
@@ -96,7 +96,7 @@ bool KisResourceOverwriteDialog::addResourceWithUserInput(QWidget *widgetParent,
     return res;
 }
 
-bool KisResourceOverwriteDialog::updateResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource)
+bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParent, KisResourceModel *resourceModel, KoResourceSP resource)
 {
     if (!resourceModel) return false;
 

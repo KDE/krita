@@ -31,7 +31,7 @@
 #include <KisAslStorage.h>
 #include <KisResourceLocator.h>
 #include <KisStorageModel.h>
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
@@ -288,7 +288,7 @@ void KisDlgLayerStyle::slotNewStyle()
 
     if (KisResourceLocator::instance()->hasStorage(storagePath)) {
         KisResourceModel model(ResourceType::LayerStyles);
-        KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, clone, storagePath);
+        KisResourceUserOperations::addResourceWithUserInput(this, &model, clone, storagePath);
     } else {
         KisAslLayerStyleSerializer serializer;
         serializer.setStyles(QVector<KisPSDLayerStyleSP>() << clone);

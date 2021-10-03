@@ -18,7 +18,7 @@
 #include "QDesktopServices"
 #include "KisResourceServerProvider.h"
 #include <kis_paintop_preset_icon_library.h>
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 #include <kstandardguiitem.h>
 
@@ -186,7 +186,7 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setValid(true);
         newPreset->setStorageLocation("");
         KisResourceModel model(ResourceType::PaintOpPresets);
-        if (!KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, newPreset)) {
+        if (!KisResourceUserOperations::addResourceWithUserInput(this, &model, newPreset)) {
             success = false;
         }
 
@@ -199,7 +199,7 @@ void KisPresetSaveWidget::savePreset()
         curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
 
         KisResourceModel model(ResourceType::PaintOpPresets);
-        if (!KisResourceOverwriteDialog::updateResourceWithUserInput(this, &model, curPreset)) {
+        if (!KisResourceUserOperations::updateResourceWithUserInput(this, &model, curPreset)) {
             success = false;
         }
 

@@ -32,7 +32,7 @@
 
 #include "KisPaletteEditor.h"
 #include <KisGlobalResourcesInterface.h>
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 struct KisPaletteEditor::PaletteInfo {
     QString name;
@@ -120,7 +120,7 @@ KoColorSetSP KisPaletteEditor::addPalette()
         resourceLocation = m_d->view->document()->uniqueID();
     }
     KisResourceModel resourceModel(ResourceType::Palettes);
-    KisResourceOverwriteDialog::addResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, colorSet, resourceLocation);
+    KisResourceUserOperations::addResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, colorSet, resourceLocation);
 
     return colorSet;
 }
@@ -146,7 +146,7 @@ KoColorSetSP KisPaletteEditor::importPalette()
         storageLocation = m_d->view->document()->uniqueID();
     }
     KisResourceModel resourceModel(ResourceType::Palettes);
-    KoResourceSP resource = KisResourceOverwriteDialog::importResourceFileWithUserInput(m_d->view->mainWindow(), &resourceModel, storageLocation, ResourceType::Palettes, filename);
+    KoResourceSP resource = KisResourceUserOperations::importResourceFileWithUserInput(m_d->view->mainWindow(), &resourceModel, storageLocation, ResourceType::Palettes, filename);
 
     KoColorSetSP palette;
     if (resource) {
@@ -457,7 +457,7 @@ void KisPaletteEditor::updatePalette()
     }
     if (m_d->isNameModified) {
         KisResourceModel resourceModel(ResourceType::Palettes);
-        KisResourceOverwriteDialog::renameResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, palette, m_d->modified.name);
+        KisResourceUserOperations::renameResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, palette, m_d->modified.name);
     }
     QString resourceLocation = m_d->model->colorSet()->storageLocation();
     if (resourceLocation != m_d->modified.storageLocation) {

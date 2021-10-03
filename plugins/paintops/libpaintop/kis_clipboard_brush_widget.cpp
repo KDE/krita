@@ -25,7 +25,7 @@
 #include "kis_gbr_brush.h"
 #include "KisBrushServerProvider.h"
 #include "kis_icon.h"
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 #include <kstandardguiitem.h>
 
@@ -148,7 +148,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
         resource->setFilename(resource->name().split(" ").join("_") + extension);
 
         KisResourceModel model(ResourceType::Brushes);
-        KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, resource);
+        KisResourceUserOperations::addResourceWithUserInput(this, &model, resource);
 
         emit sigNewPredefinedBrush(resource);
     }

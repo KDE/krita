@@ -37,7 +37,7 @@
 #include "dialogs/KisNewWindowLayoutDialog.h"
 #include "kis_config.h"
 #include <kis_icon.h>
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -150,12 +150,12 @@ void KisWorkspaceChooser::slotSaveWorkspace()
         workspace->setImage(m_view->mainWindow()->layoutThumbnail());
         workspace->setValid(true);
         workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
-        KisResourceOverwriteDialog::addResourceWithUserInput(this, &resModel, workspace);
+        KisResourceUserOperations::addResourceWithUserInput(this, &resModel, workspace);
     }
     else {
         workspace->setDockerState(m_view->qtMainWindow()->saveState());
         workspace->setImage(m_view->mainWindow()->layoutThumbnail());
-        KisResourceOverwriteDialog::updateResourceWithUserInput(this, &resModel, workspace);
+        KisResourceUserOperations::updateResourceWithUserInput(this, &resModel, workspace);
     }
 
     m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
@@ -218,7 +218,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     layout->setName(name);
     layout->setFilename(name.split(" ").join("_") + layout->defaultFileExtension());
     KisResourceModel resModel(ResourceType::WindowLayouts);
-    KisResourceOverwriteDialog::addResourceWithUserInput(this, &resModel, layout);
+    KisResourceUserOperations::addResourceWithUserInput(this, &resModel, layout);
 }
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()

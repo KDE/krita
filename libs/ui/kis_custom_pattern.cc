@@ -32,7 +32,7 @@
 #include "KisResourceServerProvider.h"
 #include <KisResourceLoaderRegistry.h>
 #include "kis_paint_layer.h"
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view)
@@ -129,7 +129,7 @@ void KisCustomPattern::slotAddPredefined()
         m_pattern->setFilename(QFileInfo(filename).fileName());
         KisResourceModel model(ResourceType::Patterns);
         if (!fi.exists()) {
-            if (!KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, m_pattern->clone().dynamicCast<KoPattern>())) {
+            if (!KisResourceUserOperations::addResourceWithUserInput(this, &model, m_pattern->clone().dynamicCast<KoPattern>())) {
                 qWarning() << "Could not add pattern with filename" << filename;
             }
             else {
@@ -137,7 +137,7 @@ void KisCustomPattern::slotAddPredefined()
             }
         }
         else if (overwrite) {
-            if (!KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, m_pattern->clone().dynamicCast<KoPattern>())) {
+            if (!KisResourceUserOperations::addResourceWithUserInput(this, &model, m_pattern->clone().dynamicCast<KoPattern>())) {
                 qWarning() << "Could not add pattern with filename" << filename;
             }
             else {

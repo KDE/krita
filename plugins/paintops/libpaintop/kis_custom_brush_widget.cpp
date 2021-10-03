@@ -34,7 +34,7 @@
 #include <KoProperties.h>
 #include "kis_iterator_ng.h"
 #include "kis_image_barrier_locker.h"
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 #include <kstandardguiitem.h>
 
@@ -161,7 +161,7 @@ void KisCustomBrushWidget::slotAddPredefined()
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
             KisResourceModel model(ResourceType::Brushes);
-            KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, resource);
+            KisResourceUserOperations::addResourceWithUserInput(this, &model, resource);
             emit sigNewPredefinedBrush(resource);
         }
         else {
@@ -169,7 +169,7 @@ void KisCustomBrushWidget::slotAddPredefined()
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
             KisResourceModel model(ResourceType::Brushes);
-            KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, resource);
+            KisResourceUserOperations::addResourceWithUserInput(this, &model, resource);
             emit sigNewPredefinedBrush(resource);
         }
     }

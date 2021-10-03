@@ -23,7 +23,7 @@
 #include <KisStorageModel.h>
 #include <KisResourceLocator.h>
 #include <kis_config.h>
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 #include "DlgResourceTypeForFile.h"
 
@@ -248,8 +248,8 @@ void ResourceImporter::importResources(QString startPath)
             KisResourceModel* model = m_resourceModelsForResourceType[resourceType];
             // check if the file already exists there
             bool allowOverwrite = false;
-            if (KisResourceOverwriteDialog::resourceExistsInResourceFolder(resourceType, resourceFiles[i])) {
-                if(!KisResourceOverwriteDialog::userAllowsOverwrite(m_widgetParent, resourceFiles[i])) {
+            if (KisResourceUserOperations::resourceExistsInResourceFolder(resourceType, resourceFiles[i])) {
+                if(!KisResourceUserOperations::userAllowsOverwrite(m_widgetParent, resourceFiles[i])) {
                     continue;
                 } else {
                     allowOverwrite = true;

@@ -9,7 +9,7 @@
 #include <QMessageBox>
 #include <KisPart.h>
 #include "KisSessionManagerDialog.h"
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 #include <KisResourceModel.h>
 
 int KisSessionManagerDialog::refreshEventType = -1;
@@ -79,7 +79,7 @@ void KisSessionManagerDialog::slotNewSession()
     session->storeCurrentWindows();
 
     KisResourceModel resourceModel(ResourceType::Sessions);
-    KisResourceOverwriteDialog::addResourceWithUserInput(this, &resourceModel, session);
+    KisResourceUserOperations::addResourceWithUserInput(this, &resourceModel, session);
 
     KisPart::instance()->setCurrentSession(session);
 
@@ -97,7 +97,7 @@ void KisSessionManagerDialog::slotRenameSession()
     if (!session) return;
 
     KisResourceModel resourceModel(ResourceType::Sessions);
-    KisResourceOverwriteDialog::renameResourceWithUserInput(this, &resourceModel, session, name);
+    KisResourceUserOperations::renameResourceWithUserInput(this, &resourceModel, session, name);
 }
 
 void KisSessionManagerDialog::slotSessionDoubleClicked(QModelIndex /*item*/)

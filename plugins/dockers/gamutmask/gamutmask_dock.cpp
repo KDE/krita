@@ -22,7 +22,7 @@
 #include <kis_group_layer.h>
 #include <KisView.h>
 #include <KisResourceItemChooser.h>
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 #include <QWidget>
 #include <QMenu>
@@ -261,9 +261,9 @@ bool GamutMaskDock::saveSelectedMaskResource()
             bool r = true;
             if (idx.isValid()) {
                 // don't add, only update
-                r = KisResourceOverwriteDialog::updateResourceWithUserInput(this, &model, m_selectedMask);
+                r = KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_selectedMask);
             } else {
-                r = KisResourceOverwriteDialog::addResourceWithUserInput(this, &model, m_selectedMask);
+                r = KisResourceUserOperations::addResourceWithUserInput(this, &model, m_selectedMask);
             }
 
             maskSaved = r;

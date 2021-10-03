@@ -50,7 +50,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisStorageModel.h>
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -575,8 +575,8 @@ void KisPredefinedBrushChooser::slotImportNewBrushResource() {
             } else {
                 KoResourceSP resource = m_itemChooser->tagFilterModel()->importResourceFile(filename, false);
 
-                if (resource.isNull() && KisResourceOverwriteDialog::resourceExistsInResourceFolder(ResourceType::Brushes, filename)) {
-                    if (KisResourceOverwriteDialog::userAllowsOverwrite(this, filename)) {
+                if (resource.isNull() && KisResourceUserOperations::resourceExistsInResourceFolder(ResourceType::Brushes, filename)) {
+                    if (KisResourceUserOperations::userAllowsOverwrite(this, filename)) {
                         resource = m_itemChooser->tagFilterModel()->importResourceFile(filename, true);
                     }
                 }

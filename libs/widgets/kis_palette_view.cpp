@@ -32,7 +32,7 @@
 #include <KisSwatch.h>
 #include <KisResourceModel.h>
 #include <kis_debug.h>
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 
@@ -249,7 +249,7 @@ void KisPaletteView::saveModification()
 {
     qDebug() << "saving modification in palette view" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
     KisResourceModel model(m_d->model->colorSet()->resourceType().first);
-    KisResourceOverwriteDialog::updateResourceWithUserInput(this, &model, m_d->model->colorSet());
+    KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_d->model->colorSet());
 }
 
 void KisPaletteView::removeSelectedEntry()

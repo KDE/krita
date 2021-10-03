@@ -46,7 +46,7 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 
 #include "KisStorageChooserWidget.h"
@@ -230,7 +230,7 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
                 KisResourceModel resModel(d->resourceType);
-                KisResourceOverwriteDialog::importResourceFileWithUserInput(this, &resModel, "", d->resourceType, filename);
+                KisResourceUserOperations::importResourceFileWithUserInput(this, &resModel, "", d->resourceType, filename);
             }
         }
         tagFilterModel()->sort(Qt::DisplayRole);

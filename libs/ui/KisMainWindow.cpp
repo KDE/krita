@@ -150,7 +150,7 @@
 #include <katecommandbar.h>
 #include "KisNodeActivationActionCreatorVisitor.h"
 #include "KisUiFont.h"
-#include <KisResourceOverwriteDialog.h>
+#include <KisResourceUserOperations.h>
 
 
 #include <mutex>
@@ -2550,7 +2550,7 @@ void KisMainWindow::updateWindowMenu()
         QString filename = dialog.filename();
 
         KisResourceModel resourceModel(ResourceType::Workspaces);
-        KisResourceOverwriteDialog::importResourceFileWithUserInput(this, &resourceModel, "", ResourceType::Workspaces, filename);
+        KisResourceUserOperations::importResourceFileWithUserInput(this, &resourceModel, "", ResourceType::Workspaces, filename);
     });
 
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),
@@ -2572,7 +2572,7 @@ void KisMainWindow::updateWindowMenu()
         workspace->setFilename(fileInfo.fileName());
         workspace->setName(name);
 
-        KisResourceOverwriteDialog::addResourceWithUserInput(this, &resourceModel, workspace);
+        KisResourceUserOperations::addResourceWithUserInput(this, &resourceModel, workspace);
     });
 
     // TODO: What to do about delete?

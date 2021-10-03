@@ -13,7 +13,7 @@
 #include <KisResourceModel.h>
 
 
-class KRITARESOURCEWIDGETS_EXPORT KisResourceOverwriteDialog
+class KRITARESOURCEWIDGETS_EXPORT KisResourceUserOperations
 {
 
 public:

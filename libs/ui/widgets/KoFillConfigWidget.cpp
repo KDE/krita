@@ -53,6 +53,8 @@
 #include <KoShapeFillWrapper.h>
 #include <functional>
 
+#include <KisResourceUserOperations.h>
+
 #include "kis_global.h"
 #include "kis_debug.h"
 
@@ -682,7 +684,9 @@ void KoFillConfigWidget::slotSavePredefinedGradientClicked()
     d->activeGradient->setFilename(name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
 
     KoAbstractGradientSP newGradient = d->activeGradient->clone().dynamicCast<KoAbstractGradient>();
-    server->addResource(newGradient);
+    KisResourceModel model(ResourceType::Gradients);
+
+    KisResourceUserOperations::addResourceWithUserInput(this, &model, newGradient);
 
     d->gradientAction->setCurrentResource(newGradient);
 }

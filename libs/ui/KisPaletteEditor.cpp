@@ -326,7 +326,8 @@ void KisPaletteEditor::slotSetDocumentModified()
 {
     if (m_d->modified.storageLocation == m_d->view->document()->uniqueID()) {
         updatePalette();
-        m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
+        KisResourceModel model(ResourceType::Palettes);
+        KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), &model, m_d->model->colorSet());
         m_d->view->document()->setModified(true);
     }
     m_d->isModified = true;
@@ -503,7 +504,8 @@ void KisPaletteEditor::saveNewPaletteVersion()
         }
     }
     if (isGlobal) {
-        m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
+        KisResourceModel model(ResourceType::Palettes);
+        KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), &model, m_d->model->colorSet());
     }
 
     m_d->isModified = false;

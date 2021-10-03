@@ -34,6 +34,7 @@
 #include "KisPopupButton.h"
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KisResourceUserOperations.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
@@ -548,10 +549,11 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
             gradient->setValid(true);
             gradient->updatePreview();
 
+            KisResourceModel model(ResourceType::Gradients);
             if (fileOverwriteAccepted) {
                 if (!editGradient) {
                     // Find the gradient we're overwriting with our new gradient that only matches in name...
-                    QVector<KoResourceSP> resources = KisResourceModel(ResourceType::Gradients).resourcesForName(gradient->name());
+                    QVector<KoResourceSP> resources = model.resourcesForName(gradient->name());
                     KoResourceSP res;
                     Q_FOREACH(res, resources) {
                         if (res->storageLocation() + ResourceType::Gradients == saveLocation) {
@@ -570,15 +572,15 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
                         }
                     }
                     if (res) {
-                        rserver->updateResource(res.dynamicCast<KoAbstractGradient>());
+                        KisResourceUserOperations::updateResourceWithUserInput(q, &model, res);
                     }
                 }
                 else {
-                    rserver->updateResource(gradient);
+                    KisResourceUserOperations::updateResourceWithUserInput(q, &model, gradient);
                 }
             }
             else {
-                rserver->addResource(gradient);
+                KisResourceUserOperations::addResourceWithUserInput(q, &model, gradient);
             }
             itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
             itemChooser->setCurrentResource(gradient);

@@ -568,18 +568,13 @@ void KisPredefinedBrushChooser::slotImportNewBrushResource() {
     KoFileDialog dialog(0, KoFileDialog::OpenFiles, "OpenDocument");
     dialog.setMimeTypeFilters(mimeTypes);
     dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
+    KisResourceModel model(ResourceType::Brushes);
     Q_FOREACH(const QString &filename, dialog.filenames()) {
         if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
             if (KisMimeDatabase::mimeTypeForFile(filename).contains(abrMimeType)) {
                 KisStorageModel::instance()->importStorage(filename, KisStorageModel::None);
             } else {
-                KoResourceSP resource = m_itemChooser->tagFilterModel()->importResourceFile(filename, false);
-
-                if (resource.isNull() && KisResourceUserOperations::resourceExistsInResourceFolder(ResourceType::Brushes, filename)) {
-                    if (KisResourceUserOperations::userAllowsOverwrite(this, filename)) {
-                        resource = m_itemChooser->tagFilterModel()->importResourceFile(filename, true);
-                    }
-                }
+                KisResourceUserOperations::importResourceFileWithUserInput(this, &model, "", ResourceType::Brushes, filename);
             }
         }
     }

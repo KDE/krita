@@ -24,6 +24,7 @@
 #include <kis_signals_blocker.h>
 #include <KoResourceServerProvider.h>
 #include <KisResourceItemChooser.h>
+#include <KisResourceUserOperations.h>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -632,7 +633,8 @@ void KisGenericGradientEditor::on_buttonUpdateGradient_clicked()
         KoResourceServerProvider::instance()->gradientServer();
 
     m_d->gradient->updatePreview();
-    gradientServer->updateResource(m_d->gradient);
+    KisResourceModel model(ResourceType::Gradients);
+    KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_d->gradient);
 }
 
 void KisGenericGradientEditor::on_buttonAddGradient_clicked()
@@ -642,12 +644,10 @@ void KisGenericGradientEditor::on_buttonAddGradient_clicked()
     if (!m_d->gradient || !m_d->gradient->valid() || m_d->gradient->name().isEmpty()) {
         return;
     }
-
-    KoResourceServer<KoAbstractGradient> *gradientServer =
-        KoResourceServerProvider::instance()->gradientServer();
     
     m_d->gradient->updatePreview();
-    gradientServer->addResource(m_d->gradient);
+    KisResourceModel model(ResourceType::Gradients);
+    KisResourceUserOperations::addResourceWithUserInput(this, &model, m_d->gradient);
 }
 
 void KisGenericGradientEditor::on_widgetGradientPresetChooser_resourceClicked(KoResourceSP resource)

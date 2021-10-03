@@ -13,7 +13,7 @@
 
 struct Notifier::Private {
     Private() {}
-    bool active {false};
+    bool active {true};
 };
 
 Notifier::Notifier(QObject *parent)
@@ -34,6 +34,8 @@ Notifier::Notifier(QObject *parent)
     connect(KisPart::instance(), SIGNAL(sigMainWindowCreated()), SIGNAL(windowCreated()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SIGNAL(configurationChanged()));
+
+    blockSignals(false);
 }
 
 

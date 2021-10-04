@@ -95,15 +95,11 @@ endlocal & set "%1=%RESULT%"
 goto :EOF
 
 
-:has_target out_variable folder folder2
+:has_target out_variable folder
 setlocal
 set RESULT=
 if exist "%~2" (
     set RESULT=1
-) else (
-    if exist "%~3" (
-        set RESULT=1
-    )
 )
 endlocal & set "%1=%RESULT%"
 goto :EOF
@@ -942,8 +938,15 @@ set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp
 
 for %%a in (%EXT_TARGETS%) do (
-    call :has_target TEST_HAS_TARGET "ext_%%a\" "ext_frameworks\ext_%%a-prefix\"
-    if "!TEST_HAS_TARGET!" == "1" (
+    set TEST_HAS_TARGET=
+    call :has_target TEST_HAS_TARGET_SELF "ext_%%a\"
+    call :has_target TEST_HAS_KF5_TARGET "ext_frameworks\ext_%%a-prefix\"
+    call :has_target TEST_HAS_HEIF_TARGET "ext_heif\ext_%%a-prefix\"
+    if "!TEST_HAS_TARGET_SELF!" == "1" set TEST_HAS_TARGET=1
+    if "!TEST_HAS_KF5_TARGET!" == "1" set TEST_HAS_TARGET=1
+    if "!TEST_HAS_HEIF_TARGET!" == "1" set TEST_HAS_TARGET=1
+
+    if defined TEST_HAS_TARGET (
         echo Building ext_%%a...
         "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
         if errorlevel 1 (

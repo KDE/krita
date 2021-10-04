@@ -81,9 +81,6 @@ public:
 
     KoResourceSP clone() const override;
 
-    bool isDirty() const;
-    void setDirty(bool value);
-
 private:
     struct Private;
     Private *const d;

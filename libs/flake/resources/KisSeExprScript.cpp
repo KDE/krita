@@ -20,7 +20,6 @@
 struct KisSeExprScript::Private {
     QString script;
     QByteArray data;
-    bool dirtyPreset = false;
 };
 
 KisSeExprScript::KisSeExprScript(const QString &filename)
@@ -57,12 +56,10 @@ KisSeExprScript::KisSeExprScript(const KisSeExprScript &rhs)
     : KoResource(rhs)
     , d(new Private)
 {
-    setFilename(rhs.filename());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(isDirty() == rhs.isDirty());
+    // only valid if we could clone the settings
     setScript(rhs.script());
-    setImage(rhs.image());
-    setName(rhs.name());
     setValid(rhs.valid());
-    setDirty(rhs.isDirty());
 }
 
 KisSeExprScript::~KisSeExprScript()
@@ -194,14 +191,4 @@ void KisSeExprScript::setScript(const QString &script)
 KoResourceSP KisSeExprScript::clone() const
 {
     return KoResourceSP(new KisSeExprScript(*this));
-}
-
-void KisSeExprScript::setDirty(bool value)
-{
-    d->dirtyPreset = value;
-}
-
-bool KisSeExprScript::isDirty() const
-{
-    return d->dirtyPreset;
 }

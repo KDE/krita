@@ -6,18 +6,23 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <KStandardGuiItem>
+#include <QDate>
+#include <QMessageBox>
+#include <QTime>
+
 #include <KisImportExportManager.h>
+#include <KisResourceUserOperations.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
 #include <KoResourceServerProvider.h>
-#include <QDate>
-#include <QTime>
+
 #include <kis_fill_painter.h>
 #include <kis_paint_device.h>
 
+#include "KisResourceTypes.h"
 #include "kis_wdg_seexpr_presets_save.h"
-
-#include <kstandardguiitem.h>
+#include "resources/KisSeExprScript.h"
 
 KisWdgSeExprPresetsSave::KisWdgSeExprPresetsSave(QWidget *parent)
     : KisWdgSeExprSavePreset(parent)
@@ -61,27 +66,27 @@ void KisWdgSeExprPresetsSave::showDialog()
     // UI will look a bit different if we are saving a new preset
     if (m_useNewPresetDialog) {
         setWindowTitle(i18n("Save New SeExpr Preset"));
+
+        if (preset) {
+            // If the id is -1, this is a new preset that has never been saved, so it cannot be a copy
+            QString name = preset->name().replace("_", " ");
+            if (preset->resourceId() > -1) {
+                name.append(" ").append(i18n("Copy"));
+            }
+            newPresetNameTextField->setText(name);
+        }
+
         newPresetNameTextField->setVisible(true);
         clearPresetThumbnailButton->setVisible(true);
         loadImageIntoThumbnailButton->setVisible(true);
-
-        if (preset) {
-            if (!preset->name().isEmpty()) {
-                // preset names have underscores as part of the file name (to help with building). We don't really need underscores
-                // when viewing the names, so replace them with spaces
-                newPresetNameTextField->setText(preset->name().replace("_", " ").append(" ").append(i18n("Copy")));
-            } else {
-                newPresetNameTextField->clear();
-            }
-        }
-
     } else {
         setWindowTitle(i18n("Save SeExpr Preset"));
-        newPresetNameTextField->setVisible(false);
 
         if (preset) {
-            newPresetNameTextField->setText(preset->name().replace("_", " "));
+            newPresetNameTextField->setText(preset->name());
         }
+
+        newPresetNameTextField->setVisible(false);
     }
 
     if (preset) {
@@ -130,53 +135,43 @@ void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
 
 void KisWdgSeExprPresetsSave::savePreset()
 {
-    KisSeExprScriptSP curPreset = m_currentPreset;
-    if (!curPreset) {
-        return;
-    }
+    KIS_ASSERT_RECOVER_RETURN(m_currentPreset);
 
-    auto *rServer = KoResourceServerProvider::instance()->seExprScriptServer();
-    QString saveLocation = rServer->saveLocation();
+    KisResourceModel model(ResourceType::SeExprScripts);
+    QModelIndex idx = model.indexForResourceId(m_currentPreset->resourceId());
+    bool r = true;
 
-    // if we are saving a new preset, use what we type in for the input
-    QString presetName = m_useNewPresetDialog ? newPresetNameTextField->text() : curPreset->name();
-    // We don't want dots or spaces in the filenames
-    QString presetFileName = presetName.replace(' ', '_').replace('.', '_');
-    QString extension = curPreset->defaultFileExtension();
-
-    if (m_useNewPresetDialog) {
-        KisSeExprScriptSP newPreset = curPreset->clone().staticCast<KisSeExprScript>();
-        if (!presetFileName.endsWith(extension)) {
-            presetFileName.append(extension);
-        }
-        newPreset->setFilename(presetFileName);
-        newPreset->setName(presetName);
+    if (idx.isValid() && !m_useNewPresetDialog) {
+        // saving a preset that is replacing an existing one
         if (presetThumbnailWidget->pixmap()) {
-            newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
+            m_currentPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
         }
-        newPreset->setScript(m_currentConfiguration->getString("script"));
-        newPreset->setDirty(false);
-        newPreset->setValid(true);
+        m_currentPreset->setScript(m_currentConfiguration->getString("script"));
+        m_currentPreset->setValid(true);
+        r = KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_currentPreset);
+    } else {
+        // Saving a completely new preset
+        // Clone the preset, otherwise the modifications will impact the existing resource
+        KisSeExprScriptSP newPreset = m_currentPreset->clone().dynamicCast<KisSeExprScript>();
 
-        rServer->addResource(newPreset);
+        if (newPreset) {
+            newPreset->setName(newPresetNameTextField->text());
+            newPreset->setFilename("");
+            if (presetThumbnailWidget->pixmap()) {
+                newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
+            }
+            newPreset->setScript(m_currentConfiguration->getString("script"));
+            newPreset->setValid(true);
 
-        // trying to get brush preset to load after it is created
-        emit resourceSelected(newPreset);
-    } else { // saving a preset that is replacing an existing one
-        curPreset->setName(presetName);
+            r = KisResourceUserOperations::addResourceWithUserInput(this, &model, newPreset);
 
-        if (curPreset->image().isNull() && presetThumbnailWidget->pixmap()) {
-            curPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
+            // trying to get brush preset to load after it is created
+            if (r) {
+                emit resourceSelected(newPreset);
+                m_currentPreset = newPreset;
+            }
         }
-
-        curPreset->setScript(m_currentConfiguration->getString("script"));
-
-        rServer->updateResource(curPreset);
     }
-
-    // HACK ALERT! the server does not notify the observers
-    // automatically, so we need to call theupdate manually!
-    // rServer->tagCategoryMembersChanged();
 
     close(); // we are done... so close the save brush dialog
 }

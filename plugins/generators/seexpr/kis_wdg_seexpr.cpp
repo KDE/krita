@@ -11,11 +11,13 @@
 #include <KSeExprUI/ErrorMessages.h>
 #include <KisDialogStateSaver.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KisResourceUserOperations.h>
 #include <KoColor.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
 #include <filter/kis_filter_configuration.h>
+#include <kis_assert.h>
 #include <kis_config.h>
 #include <kis_debug.h>
 #include <kis_icon.h>
@@ -149,10 +151,9 @@ void KisWdgSeExpr::slotResourceSaved(KoResourceSP resource)
 
 void KisWdgSeExpr::slotResourceSelected(KoResourceSP resource)
 {
-    if (resource) {
-        // ALWAYS have a manageable copy of the preset
-        // this is required for detecting dirty presets and reloading
-        m_currentPreset = resource->clone().staticCast<KisSeExprScript>();
+    KisSeExprScriptSP preset = resource.dynamicCast<KisSeExprScript>();
+    if (preset) {
+        m_currentPreset = preset;
 
         m_isCreatingPresetFromScratch = false;
 
@@ -202,31 +203,47 @@ void KisWdgSeExpr::togglePresetRenameUIActive(bool isRenaming)
 
 void KisWdgSeExpr::slotSaveRenameCurrentPreset()
 {
+    KIS_ASSERT_RECOVER_RETURN(m_currentPreset);
+
+    // if you are renaming a brush, that is different than updating the settings
+    // make sure we are in a clean state before renaming. This logic might change,
+    // but that is what we are going with for now
+    const auto prevScript = m_currentPreset->script();
+    bool isDirty = m_currentPreset->isDirty();
+
+    // this returns the UI to its original state after saving
+    togglePresetRenameUIActive(false);
+    slotUpdatePresetSettings(); // update visibility of dirty preset and icon
+
+    // in case the preset is dirty, we need an id to get the actual non-dirty preset to save just the name change
+    // into the database
+    int currentPresetResourceId = m_currentPreset->resourceId();
+
+    QString renamedPresetName = m_widget->renameBrushNameTextField->text();
+
+    // If the id < 0, this is a new preset that hasn't been added to the storage and the database yet.
+    if (currentPresetResourceId < 0) {
+        m_currentPreset->setName(renamedPresetName);
+        slotUpdatePresetSettings(); // update visibility of dirty preset and icon
+        return;
+    }
+
     slotReloadPresetClicked();
 
-    KisSeExprScriptSP curPreset = m_currentPreset;
+    // create a new brush preset with the name specified and add to resource provider
+    KisResourceModel model(ResourceType::SeExprScripts);
+    KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
+    const bool success = KisResourceUserOperations::renameResourceWithUserInput(this, &model, properCleanResource, renamedPresetName);
 
-    if (!curPreset)
-        return;
+    KIS_SAFE_ASSERT_RECOVER_NOOP(success && "couldn't rename preset");
 
-    KoResourceServer<KisSeExprScript> *rServer = KoResourceServerProvider::instance()->seExprScriptServer();
-    QString saveLocation = rServer->saveLocation();
+    // refresh and select our freshly renamed resource
+    if (success) slotResourceSelected(m_currentPreset);
 
-    QString originalPresetName = curPreset->name();
-    QString renamedPresetName = m_widget->renameBrushNameTextField->text();
-    QString originalPresetPathAndFile = saveLocation + originalPresetName + curPreset->defaultFileExtension();
-    QString renamedPresetPathAndFile = saveLocation + renamedPresetName + curPreset->defaultFileExtension();
-
-    KisSeExprScriptSP newPreset = curPreset->clone().staticCast<KisSeExprScript>();
-    newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
-    newPreset->setName(renamedPresetName);
-    newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)
-    newPreset->setDirty(false);
-    rServer->updateResource(newPreset);
-
-    slotResourceSelected(newPreset); // refresh and select our freshly renamed resource
-
-    togglePresetRenameUIActive(false); // this returns the UI to its original state after saving
+    if (isDirty) {
+        m_currentPreset->setScript(prevScript);
+        m_currentPreset->setDirty(isDirty);
+    }
 
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }
@@ -285,15 +302,20 @@ void KisWdgSeExpr::slotSaveNewBrushPreset()
 
 void KisWdgSeExpr::slotReloadPresetClicked()
 {
-    auto *rserver = KoResourceServerProvider::instance()->seExprScriptServer();
-    auto preset = rserver->resource("", "", m_currentPreset->name());
-    if (preset) {
-        preset->load(KisGlobalResourcesInterface::instance());
+    KisSignalsBlocker blocker(this);
 
-        KIS_ASSERT(!preset->isDirty());
+    KisResourceModel model(ResourceType::SeExprScripts);
+    const bool success = model.reloadResource(m_currentPreset);
 
-        slotResourceSelected(preset);
-    }
+    KIS_SAFE_ASSERT_RECOVER_NOOP(success && "couldn't reload preset");
+
+    warnPlugins << "resourceSelected: preset" << m_currentPreset
+                << (m_currentPreset ? QString("%1").arg(m_currentPreset->valid()) : "");
+
+    KIS_ASSERT(!m_currentPreset->isDirty());
+
+    // refresh and select our freshly renamed resource
+    if (success) slotResourceSelected(m_currentPreset);
 }
 
 void KisWdgSeExpr::slotHideCheckboxes()

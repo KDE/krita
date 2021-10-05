@@ -28,9 +28,6 @@ void KisUndoActionsUpdateManager::setCurrentDocument(KisDocument *document)
 
         KUndo2Stack *stack = document->undoStack();
 
-        m_documentConnections.addConnection(stack, SIGNAL(canUndoChanged(bool)), m_undoAction, SLOT(setEnabled(bool)));
-        m_documentConnections.addConnection(stack, SIGNAL(canRedoChanged(bool)), m_redoAction, SLOT(setEnabled(bool)));
-
         m_documentConnections.addConnection(stack, SIGNAL(undoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
         m_documentConnections.addConnection(stack, SIGNAL(redoTextChanged(QString)), this, SLOT(slotRedoTextChanged(QString)));
 

@@ -16,6 +16,7 @@
 #include <kis_action.h>
 #include <boost/optional.hpp>
 #include "DlgExportStoryboard.h"
+#include <QDomElement>
 
 class Ui_WdgStoryboardDock;
 class CommentMenu;
@@ -36,18 +37,18 @@ public:
     void unsetCanvas() override;
     void setViewManager(KisViewManager* kisview) override;
 
-    struct ElementLayout {
+    struct LayoutElement {
         boost::optional<QRect> cutNameRect;
         boost::optional<QRect> cutNumberRect;
         boost::optional<QRect> cutDurationRect;
         boost::optional<QRect> cutImageRect;
         QMap<QString, QRect> commentRects;
 
-        ElementLayout()
+        LayoutElement()
             : commentRects() {
         }
 
-        ElementLayout(const ElementLayout& other)
+        LayoutElement(const LayoutElement& other)
             : cutNameRect(other.cutNameRect)
             , cutNumberRect(other.cutNumberRect)
             , cutDurationRect(other.cutDurationRect)
@@ -55,6 +56,22 @@ public:
             Q_FOREACH(const QString& key, other.commentRects.keys()) {
                 commentRects.insert(key, other.commentRects[key]);
             }
+        }
+    };
+
+    struct LayoutPage {
+        QVector<LayoutElement> elements;
+        boost::optional<QDomDocument> underlaySVG;
+
+        LayoutPage()
+            : elements() {
+        }
+
+        LayoutPage(QVector<LayoutElement> &e)
+            : elements(e) {
+        }
+
+        ~LayoutPage() {
         }
     };
 
@@ -125,8 +142,8 @@ private Q_SLOTS:
 
 private:
 
-    QVector<ElementLayout> getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
-    QVector<ElementLayout> getPageLayout(QString layoutSvgFileName, QPrinter *printer);
+    LayoutPage getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
+    LayoutPage getPageLayout(QString layoutSvgFileName, QPrinter *printer);
 
 private:
     KisCanvas2* m_canvas;

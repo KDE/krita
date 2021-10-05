@@ -25,6 +25,7 @@
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
 #include <QSvgGenerator>
+#include <QSvgRenderer>
 #include <QMessageBox>
 #include <QSizePolicy>
 
@@ -367,7 +368,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         dlg.hide();
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        QVector<ElementLayout> layoutElements; //Per Page...
+        LayoutPage layoutPage;
         QPrinter printer(QPrinter::HighResolution);
 
         // Setup export parameters...
@@ -384,7 +385,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         bool layoutSpecifiedBySvg = dlg.layoutSpecifiedBySvgFile();
         if (layoutSpecifiedBySvg) {
             QString svgFileName = dlg.layoutSvgFile();
-            layoutElements = getPageLayout(svgFileName, &printer);
+            layoutPage = getPageLayout(svgFileName, &printer);
         }
         else {
             int rows = dlg.rows();
@@ -394,11 +395,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             printer.setPageOrientation(dlg.pageOrientation());
             painter.begin(&printer); // We need to begin the painter temporarily for font metrics.
             painter.setFont(font);
-            layoutElements = getPageLayout(rows, columns, QRect(0, 0, m_canvas->image()->width(), m_canvas->image()->height()), printer.pageRect(), painter.fontMetrics());
+            layoutPage = getPageLayout(rows, columns, QRect(0, 0, m_canvas->image()->width(), m_canvas->image()->height()), printer.pageRect(), painter.fontMetrics());
             painter.end(); // End temporary painter begin.
         }
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN(layoutElements.length() > 0);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(layoutPage.elements.length() > 0);
 
         // Get a range of items to render. Used to be configurable in an older version but now simplified...
         QModelIndex firstIndex = m_storyboardModel->index(0,0);
@@ -439,19 +440,28 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
 
         for (int i = 0; i < numItems; i++) {
-            if (i % layoutElements.size() == 0 && i != 0) {
+            if (i % layoutPage.elements.size() == 0) {
                 if (dlg.format() == ExportFormat::SVG) {
-                    painter.end();
-                    painter.eraseRect(printer.pageRect());
-                    generator.setFileName(dlg.saveFileName() + "/" + imageFileName + QString::number(i / layoutElements.size()) + ".svg");
-                    QSize sz = printer.pageRect().size();
-                    generator.setSize(sz);
-                    generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
-                    generator.setResolution(printer.resolution());
-                    painter.begin(&generator);
+                    if (i != 0) {
+                        painter.end();
+                        painter.eraseRect(printer.pageRect());
+                        generator.setFileName(dlg.saveFileName() + "/" + imageFileName + QString::number(i / layoutPage.elements.length()) + ".svg");
+                        QSize sz = printer.pageRect().size();
+                        generator.setSize(sz);
+                        generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
+                        generator.setResolution(printer.resolution());
+                        painter.begin(&generator);
+                    }
                 }
                 else {
-                    printer.newPage();
+                    if (i != 0 ) {
+                        printer.newPage();
+                    }
+
+                    if (layoutPage.underlaySVG) {
+                        QSvgRenderer renderer(layoutPage.underlaySVG.value().toByteArray());
+                        renderer.render(&painter);
+                    }
                 }
             }
 
@@ -460,7 +470,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             QVector<StoryboardComment> comments = m_commentModel->getData();
             const int numComments = comments.size();
 
-            const ElementLayout* const layout = &layoutElements[i % layoutElements.length()];
+            const LayoutElement* const layout = &layoutPage.elements[i % layoutPage.elements.length()];
 
             QPen pen(QColor(1, 0, 0));
             pen.setWidth(5);
@@ -613,7 +623,7 @@ void StoryboardDockerDock::slotModelChanged()
     }
 }
 
-QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& fontMetrics)
+StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& fontMetrics)
 {
     QSizeF pageSize = pageRect.size();
     QRectF border = pageRect;
@@ -638,13 +648,13 @@ QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getPageLayout
         }
     }
 
-    QVector<ElementLayout> elements;
+    QVector<LayoutElement> elements;
 
     for (int i = 0; i < rects.length(); i++) {
         QRectF& cellRect = rects[i];
 
         const bool horizontal = cellRect.width() > cellRect.height(); // Determine general image / text flow orientation.
-        ElementLayout layout;
+        LayoutElement layout;
 
         QVector<StoryboardComment> comments = m_commentModel->getData();
         const int numComments = comments.size();
@@ -685,18 +695,17 @@ QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getPageLayout
     return elements;
 }
 
-QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getPageLayout(QString layoutSvgFileName, QPrinter *printer)
+StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(QString layoutSvgFileName, QPrinter *printer)
 {
     QDomDocument svgDoc;
-    QVector<ElementLayout> elements;
-
+    QVector<LayoutElement> elements;
 
     // Load DOM from file...
     QFile f(layoutSvgFileName);
     if (!f.open(QIODevice::ReadOnly ))
     {
         qDebug()<<"svg layout file didn't open";
-        return elements;
+        return LayoutPage(elements);
     }
     svgDoc.setContent(&f);
     f.close();
@@ -714,99 +723,108 @@ QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getPageLayout
         commentLayers.push_back(channel.name);
     }
 
-    QMap<int, ElementLayout> elementMap;
+    QMap<int, LayoutElement> elementMap;
 
-    QDomNodeList  nodeList = svgDoc.elementsByTagName("rect");
-    for(int i = 0; i < nodeList.size(); i++) {
-        QDomNode node = nodeList.at(i);
-        QDomNamedNodeMap attrMap = node.attributes();
+    { // Go through all rectangles and filter out / store rectangle information by labels.
+        QDomNodeList  nodeList = svgDoc.elementsByTagName("rect");
+        for(int i = 0; i < nodeList.size(); i++) {
+            QDomNode node = nodeList.at(i);
+            QDomNamedNodeMap attrMap = node.attributes();
 
-        for (int i = 0; i < attrMap.length(); i++) {
-            QDomAttr attribute = attrMap.item(i).toAttr();
-            QString afterNamespace = attribute.name().split(":").last();
+            for (int j = 0; j < attrMap.length(); j++) {
+                QDomAttr attribute = attrMap.item(j).toAttr();
+                QString afterNamespace = attribute.name().split(":").last();
 
-            if (afterNamespace == "label") {
-                if (attribute.value().startsWith("image")) {
-                    QString indexString = attribute.value().remove(0, 5);
-                    bool ok = false;
-                    int index = indexString.toInt(&ok);
-                    if (ok) {
-                        if (!elementMap.contains(index))
-                            elementMap.insert(index, ElementLayout());
+                if (afterNamespace == "label") {
+                    if (attribute.value().startsWith("image")) {
+                        QString indexString = attribute.value().remove(0, 5);
+                        bool ok = false;
+                        int index = indexString.toInt(&ok);
+                        if (ok) {
+                            if (!elementMap.contains(index))
+                                elementMap.insert(index, LayoutElement());
 
-                        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                        elementMap[index].cutImageRect = QRect(x,y, width, height);
-                    }
-                } else if (attribute.value().startsWith("time")) {
-                    QString indexString = attribute.value().remove(0, 4);
-                    bool ok = false;
-                    int index = indexString.toInt(&ok);
-                    if (ok) {
-                        if (!elementMap.contains(index))
-                            elementMap.insert(index, ElementLayout());
+                            double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                            double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                            double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                            double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                            QDomNode attr;
+                            node.toElement().setAttribute("visibility", "hidden");
+                            elementMap[index].cutImageRect = QRect(x,y, width, height);
+                        }
+                    } else if (attribute.value().startsWith("time")) {
+                        QString indexString = attribute.value().remove(0, 4);
+                        bool ok = false;
+                        int index = indexString.toInt(&ok);
+                        if (ok) {
+                            if (!elementMap.contains(index))
+                                elementMap.insert(index, LayoutElement());
 
-                        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                        elementMap[index].cutDurationRect = QRect(x,y, width, height);
-                    }
-                } else if (attribute.value().startsWith("name")) {
-                    QString indexString = attribute.value().remove(0, 4);
-                    bool ok = false;
-                    int index = indexString.toInt(&ok);
-                    if (ok) {
-                        if (!elementMap.contains(index))
-                            elementMap.insert(index, ElementLayout());
+                            double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                            double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                            double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                            double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                            node.toElement().setAttribute("visibility", "hidden");
+                            elementMap[index].cutDurationRect = QRect(x,y, width, height);
+                        }
+                    } else if (attribute.value().startsWith("name")) {
+                        QString indexString = attribute.value().remove(0, 4);
+                        bool ok = false;
+                        int index = indexString.toInt(&ok);
+                        if (ok) {
+                            if (!elementMap.contains(index))
+                                elementMap.insert(index, LayoutElement());
 
-                        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                        elementMap[index].cutNameRect = QRect(x,y, width, height);
-                    }
-                } else if (attribute.value().startsWith("shot")) {
-                    QString indexString = attribute.value().remove(0, 4);
-                    bool ok = false;
-                    int index = indexString.toInt(&ok);
-                    if (ok) {
-                        if (!elementMap.contains(index))
-                            elementMap.insert(index, ElementLayout());
+                            double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                            double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                            double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                            double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                            node.toElement().setAttribute("visibility", "hidden");
+                            elementMap[index].cutNameRect = QRect(x,y, width, height);
+                        }
+                    } else if (attribute.value().startsWith("shot")) {
+                        QString indexString = attribute.value().remove(0, 4);
+                        bool ok = false;
+                        int index = indexString.toInt(&ok);
+                        if (ok) {
+                            if (!elementMap.contains(index))
+                                elementMap.insert(index, LayoutElement());
 
-                        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                        elementMap[index].cutNumberRect = QRect(x,y, width, height);
-                    }
-                } else {
-                    for(int commentIndex = 0; commentIndex < commentLayers.length(); commentIndex++) {
-                        const QString& comment = commentLayers[commentIndex];
-                        if (attribute.value().startsWith(comment.toLower())) {
-                            QString indexString = attribute.value().remove(0, comment.length());
-                            bool ok = false;
-                            int index = indexString.toInt(&ok);
-                            if (ok) {
-                                if (!elementMap.contains(index))
-                                    elementMap.insert(index, ElementLayout());
+                            double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                            double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                            double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                            double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                            node.toElement().setAttribute("visibility", "hidden");
+                            elementMap[index].cutNumberRect = QRect(x,y, width, height);
+                        }
+                    } else {
+                        for(int commentIndex = 0; commentIndex < commentLayers.length(); commentIndex++) {
+                            const QString& comment = commentLayers[commentIndex];
+                            if (attribute.value().startsWith(comment.toLower())) {
+                                QString indexString = attribute.value().remove(0, comment.length());
+                                bool ok = false;
+                                int index = indexString.toInt(&ok);
+                                if (ok) {
+                                    if (!elementMap.contains(index))
+                                        elementMap.insert(index, LayoutElement());
 
-                                double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                                double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                                double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                                double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                                elementMap[index].commentRects.insert(comment, QRect(x,y, width, height));
+                                    double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                                    double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                                    double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                                    double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                                    node.toElement().setAttribute("visibility", "hidden");
+                                    elementMap[index].commentRects.insert(comment, QRect(x,y, width, height));
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
+        }
     }
 
+    // Sort fetched elements and push to array to return...
     QList<int> indices = elementMap.keys();
     std::sort(indices.begin(), indices.end(), [](const int& a, const int& b){
         return a < b;
@@ -816,7 +834,10 @@ QVector<StoryboardDockerDock::ElementLayout> StoryboardDockerDock::getPageLayout
         elements.push_back(elementMap[index]);
     }
 
-    return elements;
+    // Make and return layout...
+    LayoutPage page(elements);
+    page.underlaySVG = svgDoc;
+    return page;
 }
 
 

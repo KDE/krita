@@ -735,85 +735,49 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(QString lay
                 QDomAttr attribute = attrMap.item(j).toAttr();
                 QString afterNamespace = attribute.name().split(":").last();
 
+                auto isValidLabel = [&](QString label, int& index) -> bool {
+                    if (attribute.value().startsWith(label)) {
+                        QString indexString = attribute.value().remove(0, label.length());
+                        bool ok = false;
+                        index = indexString.toInt(&ok);
+                        if (ok) {
+                            if (!elementMap.contains(index))
+                                elementMap.insert(index, LayoutElement());
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+
+                auto extractRect = [&](boost::optional<QRect>& to) {
+                    double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+                    double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+                    double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+                    double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+                    QDomNode attr;
+                    node.toElement().setAttribute("visibility", "hidden");
+                    to = QRect(x,y, width, height);
+                };
+
+
                 if (afterNamespace == "label") {
-                    if (attribute.value().startsWith("image")) {
-                        QString indexString = attribute.value().remove(0, 5);
-                        bool ok = false;
-                        int index = indexString.toInt(&ok);
-                        if (ok) {
-                            if (!elementMap.contains(index))
-                                elementMap.insert(index, LayoutElement());
-
-                            double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                            double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                            double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                            double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                            QDomNode attr;
-                            node.toElement().setAttribute("visibility", "hidden");
-                            elementMap[index].cutImageRect = QRect(x,y, width, height);
-                        }
-                    } else if (attribute.value().startsWith("time")) {
-                        QString indexString = attribute.value().remove(0, 4);
-                        bool ok = false;
-                        int index = indexString.toInt(&ok);
-                        if (ok) {
-                            if (!elementMap.contains(index))
-                                elementMap.insert(index, LayoutElement());
-
-                            double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                            double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                            double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                            double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                            node.toElement().setAttribute("visibility", "hidden");
-                            elementMap[index].cutDurationRect = QRect(x,y, width, height);
-                        }
-                    } else if (attribute.value().startsWith("name")) {
-                        QString indexString = attribute.value().remove(0, 4);
-                        bool ok = false;
-                        int index = indexString.toInt(&ok);
-                        if (ok) {
-                            if (!elementMap.contains(index))
-                                elementMap.insert(index, LayoutElement());
-
-                            double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                            double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                            double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                            double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                            node.toElement().setAttribute("visibility", "hidden");
-                            elementMap[index].cutNameRect = QRect(x,y, width, height);
-                        }
-                    } else if (attribute.value().startsWith("shot")) {
-                        QString indexString = attribute.value().remove(0, 4);
-                        bool ok = false;
-                        int index = indexString.toInt(&ok);
-                        if (ok) {
-                            if (!elementMap.contains(index))
-                                elementMap.insert(index, LayoutElement());
-
-                            double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                            double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                            double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                            double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                            node.toElement().setAttribute("visibility", "hidden");
-                            elementMap[index].cutNumberRect = QRect(x,y, width, height);
-                        }
+                    int index = 0;
+                    if (isValidLabel("image", index)) {
+                        extractRect(elementMap[index].cutImageRect);
+                    } else if (isValidLabel("time",index)) {
+                        extractRect(elementMap[index].cutDurationRect);
+                    } else if (isValidLabel("name", index)) {
+                        extractRect(elementMap[index].cutNameRect);
+                    } else if (isValidLabel("shot", index)) {
+                        extractRect(elementMap[index].cutNumberRect);
                     } else {
                         for(int commentIndex = 0; commentIndex < commentLayers.length(); commentIndex++) {
                             const QString& comment = commentLayers[commentIndex];
-                            if (attribute.value().startsWith(comment.toLower())) {
-                                QString indexString = attribute.value().remove(0, comment.length());
-                                bool ok = false;
-                                int index = indexString.toInt(&ok);
-                                if (ok) {
-                                    if (!elementMap.contains(index))
-                                        elementMap.insert(index, LayoutElement());
-
-                                    double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                                    double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                                    double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                                    double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                                    node.toElement().setAttribute("visibility", "hidden");
-                                    elementMap[index].commentRects.insert(comment, QRect(x,y, width, height));
+                            if (isValidLabel(comment.toLower(), index)) {
+                                boost::optional<QRect> rect;
+                                extractRect(rect);
+                                if (rect) {
+                                    elementMap[index].commentRects.insert(comment, rect.value());
                                 }
                             }
                         }

@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QScopedPointer>
+#include <KoResourceCacheInterface.h>
 
 class KisViewManager;
 
@@ -24,6 +25,10 @@ public Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant & value);
     void slotPresetChanged();
     void slotStartPresetPreparation();
+
+    void slotCacheGenerationFinished(int sequenceNumber,
+                                     KoResourceCacheInterfaceSP cacheInterface);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

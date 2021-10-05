@@ -18,18 +18,33 @@
 #include <kis_image.h>
 #include <kis_spontaneous_job.h>
 
-namespace {
-struct ShadowUpdatePresetJob : KisSpontaneousJob
+#include <KisGlobalResourcesInterface.h>
+#include <kis_canvas_resource_provider.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoCanvasResourcesInterface.h>
+#include <KoResourceCacheStorage.h>
+
+
+class ShadowUpdatePresetJob : public QObject, public KisSpontaneousJob
 {
-    ShadowUpdatePresetJob(KisPaintOpPresetSP preset)
-        : m_preset(preset)
+    Q_OBJECT
+public:
+
+    ShadowUpdatePresetJob(KisPaintOpPresetSP preset, int sequenceNumber)
+        : m_preset(preset),
+          m_sequenceNumber(sequenceNumber)
     {
     }
 
-
     void run() override {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_preset);
-        m_preset->coldInitInBackground();
+
+        KoResourceCacheInterfaceSP cacheInterface =
+            toQShared(new KoResourceCacheStorage());
+
+        m_preset->regenerateResourceCache(cacheInterface);
+
+        Q_EMIT sigCacheGenerationFinished(m_sequenceNumber, cacheInterface);
     }
 
     bool overrides(const KisSpontaneousJob *_otherJob) override {
@@ -50,10 +65,13 @@ struct ShadowUpdatePresetJob : KisSpontaneousJob
         return result;
     }
 
+Q_SIGNALS:
+    void sigCacheGenerationFinished(int sequenceNumber,
+                                    KoResourceCacheInterfaceSP cacheInterface);
 private:
     KisPaintOpPresetSP m_preset;
+    const int m_sequenceNumber;
 };
-}
 
 struct KisPresetShadowUpdater::Private
 {
@@ -69,6 +87,8 @@ struct KisPresetShadowUpdater::Private
 
     KisSignalAutoConnectionsStore proxyConnections;
     KisSignalCompressor updateStartCompressor;
+
+    int sequenceNumber = 0;
 
 };
 
@@ -98,28 +118,57 @@ void KisPresetShadowUpdater::slotCanvasResourceChanged(int key, const QVariant &
                 this, SLOT(slotPresetChanged()));
             slotPresetChanged();
         }
+    } else if (m_d->currentPreset) {
+        /// if the current preset depends on the canvas resources,
+        /// we should reset its cache and restart cache generation
+
+        if (m_d->currentPreset->requiredCanvasResources().contains(key)) {
+            m_d->currentPreset->setResourceCacheInterface(nullptr);
+            slotPresetChanged();
+        }
     }
 }
 
 void KisPresetShadowUpdater::slotPresetChanged()
 {
+    m_d->sequenceNumber++;
     m_d->updateStartCompressor.start();
 }
 
 void KisPresetShadowUpdater::slotStartPresetPreparation()
 {
     if (m_d->currentPreset) {
-        m_d->currentPreset->coldInitInForeground();
+        KisImageSP image = m_d->view->image();
+        if (image) {
+            KisPaintOpPresetSP preset =
+                    m_d->currentPreset->cloneWithResourcesSnapshot(
+                        KisGlobalResourcesInterface::instance(),
+                        m_d->view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
 
-        if (m_d->currentPreset->needsColdInitInBackground()) {
-            KisImageSP image = m_d->view->image();
-            if (image) {
-                image->addSpontaneousJob(new ShadowUpdatePresetJob(m_d->currentPreset));
-            } else {
-                /// a fallback solution when a preset is selected on
-                /// Krita loading, when there is no image present
-                m_d->currentPreset->coldInitInBackground();
-            }
+            ShadowUpdatePresetJob *job = new ShadowUpdatePresetJob(preset, m_d->sequenceNumber);
+
+            connect(job, SIGNAL(sigCacheGenerationFinished(int, KoResourceCacheInterfaceSP)),
+                    this, SLOT(slotCacheGenerationFinished(int, KoResourceCacheInterfaceSP)));
+
+            image->addSpontaneousJob(job);
+        } else {
+            /// a fallback solution when a preset is selected on
+            /// Krita loading, when there is no image present
+
+            KoResourceCacheInterfaceSP cacheInterface =
+                toQShared(new KoResourceCacheStorage());
+
+            m_d->currentPreset->regenerateResourceCache(cacheInterface);
+            slotCacheGenerationFinished(m_d->sequenceNumber, cacheInterface);
         }
     }
 }
+
+void KisPresetShadowUpdater::slotCacheGenerationFinished(int sequenceNumber, KoResourceCacheInterfaceSP cacheInterface)
+{
+    if (sequenceNumber == m_d->sequenceNumber) {
+        m_d->currentPreset->setResourceCacheInterface(cacheInterface);
+    }
+}
+
+#include "KisPresetShadowUpdater.moc"

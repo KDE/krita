@@ -63,8 +63,7 @@ public:
 
     void notifyBrushIsGoingToBeClonedForStroke() override;
 
-    void coldInitInBackground() override;
-    bool needsColdInitInBackground() const override;
+    void coldInitBrush() override;
 
 public:
 

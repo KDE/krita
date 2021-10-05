@@ -55,9 +55,6 @@ struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
             if (proxy) {
                 proxy->notifySettingsChanged();
             }
-
-            // reset the cached masking preset
-            m_parentPreset->d->cachedMaskingPreset.clear();
         }
 
     private:
@@ -73,7 +70,6 @@ public:
     KisPaintOpSettingsSP settings {0};
     QScopedPointer<KisPaintOpPresetUpdateProxy> updateProxy;
     KisPaintOpSettings::UpdateListenerSP settingsUpdateListener;
-    KisPaintOpPresetSP cachedMaskingPreset;
 };
 
 
@@ -108,10 +104,6 @@ KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
 
     setName(rhs.name());
     setImage(rhs.image());
-
-    if (rhs.d->cachedMaskingPreset) {
-        d->cachedMaskingPreset = rhs.d->cachedMaskingPreset->clone().dynamicCast<KisPaintOpPreset>();
-    }
 }
 
 KoResourceSP KisPaintOpPreset::clone() const
@@ -152,8 +144,6 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         d->settings = settings->clone();
         d->settings->setUpdateListener(d->settingsUpdateListener);
     }
-
-    d->cachedMaskingPreset.clear();
 
     if (d->updateProxy) {
         d->updateProxy->notifyUniformPropertiesChanged();
@@ -420,17 +410,14 @@ bool KisPaintOpPreset::hasMaskingPreset() const
 
 KisPaintOpPresetSP KisPaintOpPreset::createMaskingPreset() const
 {
-    KisPaintOpPresetSP result = d->cachedMaskingPreset;
+    KisPaintOpPresetSP result;
 
-    if (!result) {
-        if (d->settings && d->settings->hasMaskingSettings()) {
-            result.reset(new KisPaintOpPreset());
-            result->setSettings(d->settings->createMaskingSettings());
-            if (!result->valid()) {
-                result.clear();
-            }
+    if (d->settings && d->settings->hasMaskingSettings()) {
+        result.reset(new KisPaintOpPreset());
+        result->setSettings(d->settings->createMaskingSettings());
+        if (!result->valid()) {
+            result.clear();
         }
-        d->cachedMaskingPreset = result;
     }
 
     return result;
@@ -445,10 +432,6 @@ void KisPaintOpPreset::setResourcesInterface(KisResourcesInterfaceSP resourcesIn
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
     d->settings->setResourcesInterface(resourcesInterface);
-
-    if (d->cachedMaskingPreset) {
-        d->cachedMaskingPreset->setResourcesInterface(resourcesInterface);
-    }
 }
 
 KoCanvasResourcesInterfaceSP KisPaintOpPreset::canvasResourcesInterface() const
@@ -460,10 +443,6 @@ void KisPaintOpPreset::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP 
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
     d->settings->setCanvasResourcesInterface(canvasResourcesInterface);
-
-    if (d->cachedMaskingPreset) {
-        d->cachedMaskingPreset->setCanvasResourcesInterface(canvasResourcesInterface);
-    }
 }
 
 void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
@@ -552,32 +531,22 @@ QList<int> KisPaintOpPreset::requiredCanvasResources() const
     return d->settings ? d->settings->requiredCanvasResources() : QList<int>();
 }
 
-void KisPaintOpPreset::coldInitInForeground()
+void KisPaintOpPreset::setResourceCacheInterface(KoResourceCacheInterfaceSP cacheInterface)
 {
-    if (hasMaskingPreset() && !d->cachedMaskingPreset) {
-        /// We must create the masking preset in the GUI
-        /// thread to make sure it can fetch resources from
-        /// the database
-
-        (void) createMaskingPreset();
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
+    d->settings->setResourceCacheInterface(cacheInterface);
 }
 
-void KisPaintOpPreset::coldInitInBackground()
+KoResourceCacheInterfaceSP KisPaintOpPreset::resourceCacheInterface() const
 {
-    if (d->settings) {
-        d->settings->coldInitInBackground();
-    }
-
-    if (d->cachedMaskingPreset) {
-        d->cachedMaskingPreset->coldInitInBackground();
-    }
+    return d->settings ? d->settings->resourceCacheInterface() : KoResourceCacheInterfaceSP();
 }
 
-bool KisPaintOpPreset::needsColdInitInBackground() const
+void KisPaintOpPreset::regenerateResourceCache(KoResourceCacheInterfaceSP cacheInterface)
 {
-    return (d->settings && d->settings->needsColdInitInBackground()) ||
-        (d->cachedMaskingPreset && d->cachedMaskingPreset->needsColdInitInBackground());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
+
+    d->settings->regenerateResourceCache(cacheInterface);
 }
 
 KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPresetSP preset)

@@ -109,8 +109,7 @@ public:
     void setParasite(const KisPipeBrushParasite& parasite);
     void setDevices(QVector< QVector<KisPaintDevice*> > devices, int w, int h);
 
-    void coldInitInBackground() override;
-    bool needsColdInitInBackground() const override;
+    void coldInitBrush() override;
 
 protected:
     virtual void setBrushApplication(enumBrushApplication brushApplication) override;

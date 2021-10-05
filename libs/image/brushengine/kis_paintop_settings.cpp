@@ -39,7 +39,8 @@
 #include "kis_algebra_2d.h"
 #include "kis_image_config.h"
 #include <KoCanvasResourcesInterface.h>
-
+#include <KoResourceCacheInterface.h>
+#include <KoResourceCachePrefixedStorageWrapper.h>
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private()
@@ -51,6 +52,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
           modelName(rhs.modelName),
           resourcesInterface(rhs.resourcesInterface),
           canvasResourcesInterface(rhs.canvasResourcesInterface),
+          resourceCacheInterface(rhs.resourceCacheInterface),
           disableDirtyNotifications(false)
     {
         /// NOTE: we don't copy updateListener intentionally, it is
@@ -64,6 +66,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
     KisResourcesInterfaceSP resourcesInterface;
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
+    KoResourceCacheInterfaceSP resourceCacheInterface;
 
     bool disableDirtyNotifications;
 
@@ -186,6 +189,13 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
         maskingSettings->setPaintOpSize(qMin(maxMaskingBrushSize, masterSizeCoeff * paintOpSize()));
     }
 
+    if (d->resourceCacheInterface) {
+        maskingSettings->setResourceCacheInterface(
+                    toQShared(new KoResourceCachePrefixedStorageWrapper(
+                                  KisPaintOpUtils::MaskingBrushPresetPrefix,
+                                  d->resourceCacheInterface)));
+    }
+
     return maskingSettings;
 }
 
@@ -209,14 +219,28 @@ void KisPaintOpSettings::setCanvasResourcesInterface(KoCanvasResourcesInterfaceS
     d->canvasResourcesInterface = canvasResourcesInterface;
 }
 
-void KisPaintOpSettings::coldInitInBackground()
+void KisPaintOpSettings::setResourceCacheInterface(KoResourceCacheInterfaceSP cacheInterface)
 {
-    // noop by default
+    d->resourceCacheInterface = cacheInterface;
 }
 
-bool KisPaintOpSettings::needsColdInitInBackground() const
+KoResourceCacheInterfaceSP KisPaintOpSettings::resourceCacheInterface() const
 {
-    return false;
+    return d->resourceCacheInterface;
+}
+
+void KisPaintOpSettings::regenerateResourceCache(KoResourceCacheInterfaceSP cacheInterface)
+{
+    if (hasMaskingSettings()) {
+        KisPaintOpSettingsSP maskingSettings = createMaskingSettings();
+
+        KoResourceCacheInterfaceSP wrappedCacheInterface =
+            toQShared(new KoResourceCachePrefixedStorageWrapper(
+                          KisPaintOpUtils::MaskingBrushPresetPrefix,
+                          cacheInterface));
+
+        maskingSettings->regenerateResourceCache(wrappedCacheInterface);
+    }
 }
 
 QString KisPaintOpSettings::maskingBrushCompositeOp() const
@@ -506,6 +530,9 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
+    // clear cached data for the resource
+    d->resourceCacheInterface.clear();
+
     UpdateListenerSP updateListener = d->updateListener.toStrongRef();
 
     if (updateListener) {

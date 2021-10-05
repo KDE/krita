@@ -42,6 +42,15 @@
 #include <KoResourceServerProvider.h>
 #include <KisLazySharedCacheStorage.h>
 
+struct KisBrushSPStaticRegistrar {
+    KisBrushSPStaticRegistrar() {
+        qRegisterMetaType<KisBrushSP>("KisBrushSP");
+        QMetaType::registerEqualsComparator<KisBrushSP>();
+    }
+};
+static KisBrushSPStaticRegistrar __registrar1;
+
+
 KisBrush::ColoringInformation::~ColoringInformation()
 {
 }
@@ -723,13 +732,8 @@ bool KisBrush::supportsCaching() const
     return true;
 }
 
-void KisBrush::coldInitInBackground()
+void KisBrush::coldInitBrush()
 {
     d->brushPyramid.initialize(this);
     generateOutlineCache();
-}
-
-bool KisBrush::needsColdInitInBackground() const
-{
-    return d->brushPyramid.isNull() || !outlineCacheIsValid();
 }

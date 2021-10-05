@@ -341,10 +341,7 @@ public:
 
     virtual bool supportsCaching() const;
 
-    virtual void coldInitInBackground();
-
-    virtual bool needsColdInitInBackground() const;
-
+    virtual void coldInitBrush();
 
 protected:
 
@@ -392,6 +389,7 @@ private:
 
 };
 
+Q_DECLARE_METATYPE(KisBrushSP)
 
 #endif // KIS_BRUSH_
 

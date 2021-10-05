@@ -18,6 +18,7 @@
 #include <kis_paintop_preset.h>
 #include "KoCanvasResourcesIds.h"
 #include "kis_texture_option.h"
+#include <KoResourceCacheInterface.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
@@ -76,7 +77,15 @@ KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
     KisBrushBasedPaintOpSettingsSP settings = dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
-    settings->m_savedBrush = m_savedBrush ? m_savedBrush->clone().dynamicCast<KisBrush>() : nullptr;
+
+    /**
+     * We don't copy m_savedBrush directly because it can also
+     * depend on "canvas resources", which should be baked into
+     * the preset on cloning. This dependency is tracked by
+     * KisPresetShadowUpdater and reset when needed via
+     * resetting cache interface.
+     */
+    settings->setResourceCacheInterface(resourceCacheInterface());
 
     return settings;
 }
@@ -329,22 +338,32 @@ QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
     return result;
 }
 
-void KisBrushBasedPaintOpSettings::coldInitInBackground()
+void KisBrushBasedPaintOpSettings::setResourceCacheInterface(KoResourceCacheInterfaceSP cacheInterface)
 {
-    KisBrushSP brush = this->brush();
-    if (brush) {
-        brush->coldInitInBackground();
+    m_savedBrush.clear();
+
+    QVariant brush = cacheInterface ? cacheInterface->fetch("settings/brush") : QVariant();
+
+    if (brush.isValid()) {
+        KisBrushSP brushPointer = brush.value<KisBrushSP>();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(brushPointer);
+
+        if (brushPointer) {
+            m_savedBrush = brushPointer->clone().dynamicCast<KisBrush>();
+        }
     }
+
+    KisOutlineGenerationPolicy<KisPaintOpSettings>::setResourceCacheInterface(cacheInterface);
 }
 
-bool KisBrushBasedPaintOpSettings::needsColdInitInBackground() const
+void KisBrushBasedPaintOpSettings::regenerateResourceCache(KoResourceCacheInterfaceSP cacheInterface)
 {
-    bool result = false;
+    KisOutlineGenerationPolicy<KisPaintOpSettings>::regenerateResourceCache(cacheInterface);
 
     KisBrushSP brush = this->brush();
-    if (brush) {
-        result = brush->needsColdInitInBackground();
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(brush);
 
-    return result;
+    brush->coldInitBrush();
+
+    cacheInterface->put("settings/brush", QVariant::fromValue(brush->clone().dynamicCast<KisBrush>()));
 }

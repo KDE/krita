@@ -310,15 +310,9 @@ void KisAutoBrush::notifyBrushIsGoingToBeClonedForStroke()
     // do nothing, since we don't use the pyramid!
 }
 
-void KisAutoBrush::coldInitInBackground()
+void KisAutoBrush::coldInitBrush()
 {
     generateOutlineCache();
-}
-
-bool KisAutoBrush::needsColdInitInBackground() const
-{
-    const bool complexOutline = (d->density < 1.0);
-    return complexOutline && !outlineCacheIsValid();
 }
 
 void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const

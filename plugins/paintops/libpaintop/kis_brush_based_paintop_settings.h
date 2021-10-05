@@ -51,8 +51,8 @@ public:
 
     QList<int> requiredCanvasResources() const override;
 
-    void coldInitInBackground() override;
-    bool needsColdInitInBackground() const override;
+    void setResourceCacheInterface(KoResourceCacheInterfaceSP cacheInterface) override;
+    void regenerateResourceCache(KoResourceCacheInterfaceSP cacheInterface) override;
 
 protected:
 

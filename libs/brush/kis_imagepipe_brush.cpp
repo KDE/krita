@@ -197,21 +197,10 @@ public:
         return true;
     }
 
-    void coldInitInBackground() {
+    void coldInitBrush() {
         Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
-            if (brush->needsColdInitInBackground()) {
-                brush->coldInitInBackground();
-            }
+            brush->coldInitBrush();
         }
-    }
-
-    bool needsColdInitInBackground() const {
-        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
-            if (brush->needsColdInitInBackground()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     void notifyStrokeStarted() override {
@@ -554,12 +543,7 @@ void KisImagePipeBrush::setDevices(QVector<QVector<KisPaintDevice *> > devices, 
     }
 }
 
-void KisImagePipeBrush::coldInitInBackground()
+void KisImagePipeBrush::coldInitBrush()
 {
-    d->brushesPipe.coldInitInBackground();
-}
-
-bool KisImagePipeBrush::needsColdInitInBackground() const
-{
-    return d->brushesPipe.needsColdInitInBackground();
+    d->brushesPipe.coldInitBrush();
 }

@@ -45,6 +45,9 @@ set(kritaresources_LIB_SRCS
     KisResourcesInterface.cpp
     KisLocalStrokeResources.cpp
     KisGlobalResourcesInterface.cpp
+    KoResourceCacheInterface.cpp
+    KoResourceCacheStorage.cpp
+    KoResourceCachePrefixedStorageWrapper.cpp
 
     KoCanvasResourcesInterface.cpp
     KoLocalStrokeCanvasResources.cpp

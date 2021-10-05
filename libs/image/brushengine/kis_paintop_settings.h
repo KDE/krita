@@ -26,6 +26,10 @@ using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
 class KoCanvasResourcesInterface;
 using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
+class KoResourceCacheInterface;
+using KoResourceCacheInterfaceSP = QSharedPointer<KoResourceCacheInterface>;
+
+
 /**
  * Configuration property used to control whether airbrushing is enabled.
  */
@@ -340,12 +344,11 @@ public:
     KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
     void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
+    virtual void setResourceCacheInterface(KoResourceCacheInterfaceSP cacheInterface);
+    KoResourceCacheInterfaceSP resourceCacheInterface() const;
 
-    // \see KisPaintOpPreset::coldInitInBackground
-    virtual void coldInitInBackground();
+    virtual void regenerateResourceCache(KoResourceCacheInterfaceSP cacheInterface);
 
-    // \see KisPaintOpPreset::needsColdInitInBackground
-    virtual bool needsColdInitInBackground() const;
 protected:
 
     /**

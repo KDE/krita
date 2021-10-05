@@ -22,6 +22,8 @@ class KisPaintOpConfigWidget;
 class KoCanvasResourcesInterface;
 using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
+class KoResourceCacheInterface;
+using KoResourceCacheInterfaceSP = QSharedPointer<KoResourceCacheInterface>;
 
 /**
  * A KisPaintOpPreset contains a particular set of settings
@@ -169,27 +171,31 @@ public:
     QList<int> requiredCanvasResources() const override;
 
     /**
-     * The method is called by Krita in the GUI thread when the preset becomes
-     * active. It lets the preset to prepare/load some data that needs heavy
-     * calclulations in the background before the user starts painting with it.
+     * Set resource cache object generated for this preset (or its
+     * clone). After calling this method with non-null cache interface
+     * all the internal caches of this preset will be initialized.
+     * The cache interface itself will be stored inside the preset
+     * and will be preserved while cloning the preset.
+     *
+     * Changing any property of the preset will reset both, internal
+     * caches and cache interface to null.
+     *
+     * Calling this method with nullptr resets internal caches. It is
+     * needed, e.g. when some canvas resources have changed (\see
+     * requiredCanvasResources()).
      */
-    void coldInitInForeground();
+    void setResourceCacheInterface(KoResourceCacheInterfaceSP cacheInterface);
 
     /**
-     * The method is called by Krita in the background (in non-gui
-     * thread) when the preset becomes active. It lets the preset
-     * to prepare/load some data that needs heavy calclulations in
-     * the background before the user starts painting with it.
+     * Return the saved cache interface or null if not available
      */
-    void coldInitInBackground();
+    KoResourceCacheInterfaceSP resourceCacheInterface() const;
 
     /**
-     * \return true if Krita should call prepareInBackgroud() to
-     * prepare this preset for painting. It is needed for preset
-     * that need some extensive calculations for e.g. outline or
-     * brush pyramid.
+     * Recalculates all the internal caches and stores them in the cache
+     * interface.
      */
-    bool needsColdInitInBackground() const;
+    void regenerateResourceCache(KoResourceCacheInterfaceSP cacheInterface);
 
 private:
 

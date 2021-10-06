@@ -11,6 +11,7 @@
 #include <kritapaintop_export.h>
 
 #include <kis_paint_device.h>
+#include <kis_cached_paint_device.h>
 #include <kis_types.h>
 #include "kis_paintop_option.h"
 #include "kis_pressure_texture_strength_option.h"
@@ -119,6 +120,7 @@ private:
     KisPressureTextureStrengthOption m_strengthOption;
     KisTextureMaskInfoSP m_maskInfo;
     KisBrushTextureFlags m_flags;
+    KisCachedPaintDevice m_cachedPaintDevice;
 };
 
 #endif // KIS_TEXTURE_OPTION_H

@@ -26,6 +26,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QSvgGenerator>
 #include <QSvgRenderer>
+#include <QGraphicsSvgItem>
 #include <QMessageBox>
 #include <QSizePolicy>
 
@@ -146,6 +147,23 @@ private:
     QScopedPointer<Ui_WdgArrangeMenu> m_menuUI;
     QButtonGroup *modeGroup;
     QButtonGroup *viewGroup;
+};
+
+
+inline QMap<QString, QDomNode> rootItemsInSvg(const QDomDocument &d){
+    QMap<QString, QDomNode> nodeMap;
+    QDomNodeList svgs = d.elementsByTagName("svg");
+    KIS_ASSERT_RECOVER_RETURN_VALUE(svgs.size() > 0, nodeMap);
+    QDomNode svg = svgs.at(0);
+    QDomNodeList children = svg.toElement().childNodes();
+    for (int i = 0; i < children.count(); i++) {
+        QString id = children.at(i).toElement().attribute("id");
+        if (id.isEmpty())
+            continue;
+
+        nodeMap.insert(id, children.at(i));
+    }
+    return nodeMap;
 };
 
 
@@ -368,7 +386,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         dlg.hide();
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        LayoutPage layoutPage;
+        ExportLayout layoutPage;
         QPrinter printer(QPrinter::HighResolution);
 
         // Setup export parameters...
@@ -377,7 +395,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
         QFont font = painter.font();
         font.setPointSize(dlg.fontSize());
-
 
         StoryboardItemList storyboardList = m_storyboardModel->getData();
 
@@ -440,7 +457,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
 
         for (int i = 0; i < numItems; i++) {
-            if (i % layoutPage.elements.size() == 0) {
+            if (i % layoutPage.elements.length() == 0) {
                 if (dlg.format() == ExportFormat::SVG) {
                     if (i != 0) {
                         painter.end();
@@ -458,8 +475,20 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                         printer.newPage();
                     }
 
-                    if (layoutPage.underlaySVG) {
-                        QSvgRenderer renderer(layoutPage.underlaySVG.value().toByteArray());
+                    if(layoutPage.svg) {
+                        QMap<QString, QDomNode> groups = rootItemsInSvg(layoutPage.svg.value());
+                        if (groups.contains("overlay")) {
+                            QMapIterator<QString, QDomNode> iter(groups);
+                            while(iter.hasNext()) {
+                                iter.next();
+                                if (iter.key() == "overlay" || iter.key() == "layout") {
+                                    iter.value().toElement().setAttribute("display","none");
+                                } else {
+                                    iter.value().toElement().setAttribute("display","inline");
+                                }
+                            }
+                        }
+                        QSvgRenderer renderer(layoutPage.svg->toByteArray());
                         renderer.render(&painter);
                     }
                 }
@@ -470,7 +499,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             QVector<StoryboardComment> comments = m_commentModel->getData();
             const int numComments = comments.size();
 
-            const LayoutElement* const layout = &layoutPage.elements[i % layoutPage.elements.length()];
+            const ExportLayoutElement* const layout = &layoutPage.elements[i % layoutPage.elements.length()];
 
             QPen pen(QColor(1, 0, 0));
             pen.setWidth(5);
@@ -478,8 +507,8 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
             // Draw image
             if (layout->cutImageRect.has_value()) {
-                QRect imgRect = layout->cutImageRect.value();
-                QSize resizedImage = pxmp.size().scaled(layout->cutImageRect->size(), Qt::KeepAspectRatio);
+                QRectF imgRect = layout->cutImageRect.value();
+                QSizeF resizedImage = QSizeF(pxmp.size()).scaled(layout->cutImageRect->size(), Qt::KeepAspectRatio);
                 const int MARGIN = -2;
                 resizedImage = QSize(resizedImage.width() + MARGIN * 2, resizedImage.height() + MARGIN * 2);
                 imgRect.setSize(resizedImage);
@@ -541,11 +570,33 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 painter.save();
                 painter.translate(layout->commentRects[commentName].topLeft() + QPoint(MARGIN, MARGIN));
                 painter.setClipRegion(QRegion(0,0,layout->commentRects[commentName].width(), layout->commentRects[commentName].height() - painter.fontMetrics().height()));
+                painter.setBackgroundMode(Qt::TransparentMode);
                 doc.documentLayout()->draw(&painter, ctx);
                 painter.restore();
 
                 painter.drawRect(layout->commentRects[commentName]);
 
+            }
+
+            // Draw overlays after drawing last element on page or after drawing last element in general.
+            if ((i % layoutPage.elements.length()) == (layoutPage.elements.length() - 1)
+                || (i == numItems - 1)) {
+                if (layoutPage.svg) {
+                    QMap<QString, QDomNode> groups = rootItemsInSvg(layoutPage.svg.value());
+                    if (groups.contains("overlay")) {
+                        QMapIterator<QString, QDomNode> iter(groups);
+                        while(iter.hasNext()) {
+                            iter.next();
+                            if (iter.key() == "overlay") {
+                                iter.value().toElement().setAttribute("display","inline");
+                            } else {
+                                iter.value().toElement().setAttribute("display","none");
+                            }
+                        }
+                    }
+                    QSvgRenderer renderer(layoutPage.svg->toByteArray());
+                    renderer.render(&painter);
+                }
             }
         }
         painter.end();
@@ -623,7 +674,7 @@ void StoryboardDockerDock::slotModelChanged()
     }
 }
 
-StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& fontMetrics)
+StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& fontMetrics)
 {
     QSizeF pageSize = pageRect.size();
     QRectF border = pageRect;
@@ -648,19 +699,19 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(int rows, i
         }
     }
 
-    QVector<LayoutElement> elements;
+    QVector<ExportLayoutElement> elements;
 
     for (int i = 0; i < rects.length(); i++) {
         QRectF& cellRect = rects[i];
 
         const bool horizontal = cellRect.width() > cellRect.height(); // Determine general image / text flow orientation.
-        LayoutElement layout;
+        ExportLayoutElement layout;
 
         QVector<StoryboardComment> comments = m_commentModel->getData();
         const int numComments = comments.size();
 
         if (horizontal) {
-            QRect sourceRect = cellRect.toAlignedRect();
+            QRectF sourceRect = cellRect;
             layout.cutDurationRect = kisTrimTop(fontMetrics.height() * 1.5, sourceRect);
             layout.cutNameRect = kisTrimLeft(layout.cutDurationRect.value().width() - numericFontWidth * 6, layout.cutDurationRect.value());
 
@@ -669,12 +720,12 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(int rows, i
             const float commentWidth = sourceRect.width() / numComments;
             if (commentWidth > 100) {
                 for (int i = 0; i < numComments; i++) {
-                    QRect rect = kisTrimLeft(commentWidth, sourceRect);
+                    QRectF rect = kisTrimLeft(commentWidth, sourceRect);
                     layout.commentRects.insert(comments[i].name, rect);
                 }
             }
         } else {
-            QRect sourceRect = cellRect.toAlignedRect();
+            QRectF sourceRect = cellRect;
             layout.cutDurationRect = kisTrimTop(fontMetrics.height() * 1.5, sourceRect);
             layout.cutNameRect = kisTrimLeft(layout.cutDurationRect.value().width() - numericFontWidth * 6, layout.cutDurationRect.value());
 
@@ -683,7 +734,7 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(int rows, i
             const float commentHeight = sourceRect.height() / numComments;
             if (commentHeight > 200) {
                 for (int i = 0; i < numComments; i++) {
-                    QRect rect = kisTrimTop(commentHeight, sourceRect);
+                    QRectF rect = kisTrimTop(commentHeight, sourceRect);
                     layout.commentRects.insert(comments[i].name, rect);
                 }
             }
@@ -695,17 +746,17 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(int rows, i
     return elements;
 }
 
-StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(QString layoutSvgFileName, QPrinter *printer)
+StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(QString layoutSvgFileName, QPrinter *printer)
 {
     QDomDocument svgDoc;
-    QVector<LayoutElement> elements;
+    QVector<ExportLayoutElement> elements;
 
     // Load DOM from file...
     QFile f(layoutSvgFileName);
     if (!f.open(QIODevice::ReadOnly ))
     {
         qDebug()<<"svg layout file didn't open";
-        return LayoutPage(elements);
+        return ExportLayout(elements);
     }
     svgDoc.setContent(&f);
     f.close();
@@ -716,17 +767,26 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(QString lay
     QSizeF sizeMM(lst.at(2).toDouble(), lst.at(3).toDouble());
     printer->setPageSizeMM(sizeMM);
     QSizeF size = printer->pageRect().size();
-    double scaleFac = size.width() / sizeMM.width();
+    QSizeF scaling = QSizeF( size.width() / sizeMM.width(), size.height() / sizeMM.height());
 
     QVector<QString> commentLayers;
     Q_FOREACH( StoryboardComment channel, m_commentModel->getData()) {
         commentLayers.push_back(channel.name);
     }
 
-    QMap<int, LayoutElement> elementMap;
+    QMap<int, ExportLayoutElement> elementMap;
 
-    { // Go through all rectangles and filter out / store rectangle information by labels.
-        QDomNodeList  nodeList = svgDoc.elementsByTagName("rect");
+    { // Go through all root-level svg data and preconfigure...
+        QMap<QString, QDomNode> groupsMap = rootItemsInSvg(svgDoc);
+
+        KIS_ASSERT_RECOVER_RETURN_VALUE(groupsMap.contains("layout"), elements);
+
+        groupsMap["layout"].toElement().setAttribute("display", "none");
+        if (groupsMap.contains("overlay")) {
+            groupsMap["overlay"].toElement().setAttribute("display", "nonde");
+        }
+
+        QDomNodeList  nodeList = groupsMap["layout"].toElement().elementsByTagName("rect");
         for(int i = 0; i < nodeList.size(); i++) {
             QDomNode node = nodeList.at(i);
             QDomNamedNodeMap attrMap = node.attributes();
@@ -742,21 +802,19 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(QString lay
                         index = indexString.toInt(&ok);
                         if (ok) {
                             if (!elementMap.contains(index))
-                                elementMap.insert(index, LayoutElement());
+                                elementMap.insert(index, ExportLayoutElement());
                             return true;
                         }
                     }
                     return false;
                 };
 
-                auto extractRect = [&](boost::optional<QRect>& to) {
-                    double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
-                    double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
-                    double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
-                    double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
-                    QDomNode attr;
-                    node.toElement().setAttribute("visibility", "hidden");
-                    to = QRect(x,y, width, height);
+                auto extractRect = [&](boost::optional<QRectF>& to) {
+                    double x = scaling.width() * attrMap.namedItem("x").nodeValue().toDouble();
+                    double y = scaling.height() * attrMap.namedItem("y").nodeValue().toDouble();
+                    double width = scaling.width() * attrMap.namedItem("width").nodeValue().toDouble();
+                    double height = scaling.height() * attrMap.namedItem("height").nodeValue().toDouble();
+                    to = QRectF(x,y, width, height);
                 };
 
 
@@ -774,7 +832,7 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(QString lay
                         for(int commentIndex = 0; commentIndex < commentLayers.length(); commentIndex++) {
                             const QString& comment = commentLayers[commentIndex];
                             if (isValidLabel(comment.toLower(), index)) {
-                                boost::optional<QRect> rect;
+                                boost::optional<QRectF> rect;
                                 extractRect(rect);
                                 if (rect) {
                                     elementMap[index].commentRects.insert(comment, rect.value());
@@ -799,10 +857,11 @@ StoryboardDockerDock::LayoutPage StoryboardDockerDock::getPageLayout(QString lay
     }
 
     // Make and return layout...
-    LayoutPage page(elements);
-    page.underlaySVG = svgDoc;
+    ExportLayout page(elements);
+    page.svg = svgDoc;
     return page;
 }
 
 
 #include "StoryboardDockerDock.moc"
+

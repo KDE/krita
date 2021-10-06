@@ -629,9 +629,6 @@ void KisGenericGradientEditor::on_buttonUpdateGradient_clicked()
         return;
     }
 
-    KoResourceServer<KoAbstractGradient> *gradientServer =
-        KoResourceServerProvider::instance()->gradientServer();
-
     m_d->gradient->updatePreview();
     KisResourceModel model(ResourceType::Gradients);
     KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_d->gradient);

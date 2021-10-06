@@ -21,22 +21,40 @@ static KisAbrStorageStaticRegistrar s_registrar;
 class AbrTagIterator : public KisResourceStorage::TagIterator
 {
 public:
-    AbrTagIterator(const QString &location, const QString &resourceType)
-        : m_location(location)
+    AbrTagIterator(KisAbrBrushCollectionSP brushCollection, const QString &location, const QString &resourceType)
+        : m_brushCollection(brushCollection)
+        , m_location(location)
         , m_resourceType(resourceType)
     {}
 
-    bool hasNext() const override {return false; }
-    void next() override {}
+    bool hasNext() const override { return !m_taggingDone; }
+    void next() override { m_taggingDone; m_taggingDone = true; }
 
-    QString url() const override { return QString(); }
-    QString name() const override { return QString(); }
-    QString resourceType() const override { return QString(); }
+    QString url() const override { return m_location; }
+    QString name() const override { return QFileInfo(m_location).fileName(); }
+    QString resourceType() const override { return m_resourceType; }
     QString comment() const override {return QString(); }
     QString filename() const override {return QString(); }
-    KisTagSP tag() const override { return 0; }
+    KisTagSP tag() const override
+    {
+        KisTagSP abrTag(new KisTag());
+        abrTag->setUrl(url());
+        abrTag->setComment(comment());
+        abrTag->setName(name());
+        abrTag->setFilename(filename());
+        QStringList brushes;
+        Q_FOREACH(const KisAbrBrushSP brush, m_brushCollection->brushes()) {
+            brushes << brush->filename();
+        }
+        abrTag->setDefaultResources(brushes);
+
+        return abrTag;
+    }
+
 private:
 
+    bool m_taggingDone {false};
+    KisAbrBrushCollectionSP m_brushCollection;
     QString m_location;
     QString m_resourceType;
 };
@@ -155,7 +173,7 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisAbrStorage::resources(co
 
 QSharedPointer<KisResourceStorage::TagIterator> KisAbrStorage::tags(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::TagIterator>(new AbrTagIterator(location(), resourceType));
+    return QSharedPointer<KisResourceStorage::TagIterator>(new AbrTagIterator(m_brushCollection, location(), resourceType));
 }
 
 QImage KisAbrStorage::thumbnail() const

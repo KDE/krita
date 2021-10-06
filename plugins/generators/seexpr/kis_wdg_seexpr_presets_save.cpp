@@ -156,7 +156,7 @@ void KisWdgSeExprPresetsSave::savePreset()
 
         if (newPreset) {
             newPreset->setName(newPresetNameTextField->text());
-            newPreset->setFilename("");
+            newPreset->setFilename(newPreset->name() + newPreset->defaultFileExtension());
             if (presetThumbnailWidget->pixmap()) {
                 newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
             }

@@ -104,6 +104,11 @@ public:
     /**
      * Overloaded version of the above function.
      */
+    void fillRect(const QRect &rc, const KisPaintDeviceSP device, const QRect &deviceRect);
+
+    /**
+     * Overloaded version of the above function.
+     */
     void fillRect(const QRect& rc, const KoPatternSP pattern, const QPoint &offset = QPoint());
 
     /**

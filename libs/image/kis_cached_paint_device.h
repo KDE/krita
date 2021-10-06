@@ -61,6 +61,12 @@ public:
             m_device = m_parent.getDevice(prototype);
         }
 
+        Guard(KisPaintDeviceSP prototype, const KoColorSpace *cs, KisCachedPaintDevice &parent)
+            : m_parent(parent)
+        {
+            m_device = m_parent.getDevice(prototype, cs);
+        }
+
         ~Guard() {
             m_parent.putDevice(m_device);
         }

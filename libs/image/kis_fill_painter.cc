@@ -158,6 +158,11 @@ void KisFillPainter::fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h,
     wrapped->setDefaultBounds(oldBounds);
 }
 
+void KisFillPainter::fillRect(const QRect &rc, const KisPaintDeviceSP device, const QRect& deviceRect)
+{
+    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), device, deviceRect);
+}
+
 void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect)
 {
     const QRect &patternRect = deviceRect;

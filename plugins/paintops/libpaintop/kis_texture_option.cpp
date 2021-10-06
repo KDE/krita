@@ -291,16 +291,21 @@ void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoin
     if (!m_maskInfo->isValid()) return;
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
+
+    const QRect rect = dab->bounds();
     const QRect maskBounds = m_maskInfo->maskBounds();
 
-    KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    const QRect rect = dab->bounds();
+    KisCachedPaintDevice::Guard g(mask, KoColorSpaceRegistry::instance()->rgb8(), m_cachedPaintDevice);
+    KisPaintDeviceSP fillMaskDevice = g.device();
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;
 
+    const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
+
     KisFillPainter fillMaskPainter(fillMaskDevice);
-    fillMaskPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
+    fillMaskPainter.setCompositeOp(COMPOSITE_COPY);
+    fillMaskPainter.fillRect(kisGrowRect(maskPatchRect, 1), mask, maskBounds);
     fillMaskPainter.end();
 
     qreal pressure = m_strengthOption.apply(info);
@@ -320,18 +325,21 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_gradient && m_gradient->valid());
 
-    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    QRect rect = dab->bounds();
-
     KisPaintDeviceSP mask = m_maskInfo->mask();
     const QRect maskBounds = m_maskInfo->maskBounds();
+    QRect rect = dab->bounds();
+
+    KisCachedPaintDevice::Guard g(mask, KoColorSpaceRegistry::instance()->rgb8(), m_cachedPaintDevice);
+    KisPaintDeviceSP fillDevice = g.device();
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;
 
+    const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
 
     KisFillPainter fillPainter(fillDevice);
-    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
+    fillPainter.setCompositeOp(COMPOSITE_COPY);
+    fillPainter.fillRect(kisGrowRect(maskPatchRect, 1), mask, maskBounds);
     fillPainter.end();
 
     qreal pressure = m_strengthOption.apply(info);
@@ -381,18 +389,21 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
         return;
     }
 
-    // Create mask device
-    KisPaintDeviceSP maskPatch = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect rect = dab->bounds();
-
     KisPaintDeviceSP mask = m_maskInfo->mask();
     const QRect maskBounds = m_maskInfo->maskBounds();
+
+    KisCachedPaintDevice::Guard g(mask, KoColorSpaceRegistry::instance()->alpha8(), m_cachedPaintDevice);
+    KisPaintDeviceSP maskPatch = g.device();
 
     int x = offset.x() % maskBounds.width() - m_offsetX;
     int y = offset.y() % maskBounds.height() - m_offsetY;
 
+    const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
+
     KisFillPainter fillPainter(maskPatch);
-    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
+    fillPainter.setCompositeOp(COMPOSITE_COPY);
+    fillPainter.fillRect(kisGrowRect(maskPatchRect, 1), mask, maskBounds);
     fillPainter.end();
 
     // Compute final strength
@@ -470,13 +481,13 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
         KisRandomConstAccessorSP maskPatchIt = maskPatch->createRandomConstAccessorNG();
 
         qint32 dabY = dab->bounds().y();
-        qint32 maskPatchY = maskPatch->exactBounds().y() + 1;
+        qint32 maskPatchY = maskPatchRect.y();
         qint32 rowsRemaining = dab->bounds().height();
         const qint32 dabRowStride = dab->bounds().width() * dab->pixelSize();
 
         while (rowsRemaining > 0) {
             qint32 dabX = dab->bounds().x();
-            qint32 maskPatchX = maskPatch->exactBounds().x() + 1;
+            qint32 maskPatchX = maskPatchRect.x();
             const qint32 numContiguousMaskPatchRows = maskPatchIt->numContiguousRows(maskPatchY);
             const qint32 rows = std::min(rowsRemaining, numContiguousMaskPatchRows);
             qint32 columnsRemaining = dab->bounds().width();

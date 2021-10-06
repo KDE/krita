@@ -74,12 +74,7 @@ public:
         const QString patternMD5 = getString("pattern/md5");
         const QString patternName = getString("pattern", "Grid01.pat");
         auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-        QVector<KoPatternSP> patterns = source.resources(patternMD5, "", patternName);
-        KoPatternSP pattern;
-        if (!patterns.isEmpty()) {
-            pattern = patterns.first();
-        }
-        return pattern;
+        return source.bestMatch(patternMD5, "", patternName);
     }
 
     KoPatternSP pattern() const {

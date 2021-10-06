@@ -54,12 +54,7 @@ void KisDitherWidget::setConfiguration(const KisFilterConfiguration &config, con
     auto source = config.resourcesInterface()->source<KoPattern>(ResourceType::Patterns);
     QString patternMD5 = config.getString(prefix + "md5sum");
     QString patternName = config.getString(prefix + "pattern");
-    QVector<KoPatternSP> resources = source.resources(patternMD5, "", patternName);
-
-    KoPatternSP pattern;
-    if (!resources.isEmpty()) {
-        pattern = resources.first();
-    }
+    KoPatternSP pattern = source.bestMatch(patternMD5, "", patternName);
 
     if (pattern) m_ditherPatternWidget->setCurrentResource(pattern);
     patternValueModeComboBox->setCurrentIndex(config.getInt(prefix + "patternValueMode"));
@@ -91,10 +86,7 @@ QList<KoResourceSP> KisDitherWidget::prepareLinkedResources(const KisFilterConfi
 
     QString patternMD5 = config.getString(prefix + "md5sum");
     QString patternName = config.getString(prefix + "pattern");
-    QVector<KoPatternSP> patterns = source.resources(patternMD5, "", patternName);
-    QList<KoResourceSP> resources;
-    Q_FOREACH(const KoPatternSP pattern, patterns) {
-        resources << pattern;
-    }
-    return resources;
+    KoPatternSP pattern = source.bestMatch(patternMD5, "", patternName);
+
+    return {pattern};
 }

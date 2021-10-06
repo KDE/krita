@@ -361,12 +361,7 @@ public:
     KoAbstractGradientSP gradient(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoAbstractGradient>(m_gradientLink.type);
-        auto resources = source.resources(m_gradientLink.md5, m_gradientLink.filename, m_gradientLink.name);
-        KoAbstractGradientSP gradient;
-        if (resources.size() > 0) {
-            gradient = resources.first();
-        }
-        return gradient;
+        return source.bestMatch(m_gradientLink.md5, m_gradientLink.filename, m_gradientLink.name);
     }
 
 public:
@@ -882,12 +877,7 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base {
     KoPatternSP texturePattern(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoPattern>(m_texturePatternLink.type);
-        auto resources = source.resources(m_texturePatternLink.md5, m_texturePatternLink.filename, m_texturePatternLink.name);
-        KoPatternSP pattern;
-        if (resources.size() > 0) {
-            pattern = resources.first();
-        }
-        return pattern;
+        return source.bestMatch(m_texturePatternLink.md5, m_texturePatternLink.filename, m_texturePatternLink.name);
     }
 
     void setTexturePattern(KoPatternSP value)
@@ -1065,12 +1055,7 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base {
     KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoPattern>(m_patternLink.type);
-        auto resources = source.resources(m_patternLink.md5, m_patternLink.filename, m_patternLink.name);
-        KoPatternSP pattern;
-        if (resources.size() > 0) {
-            pattern = resources.first();
-        }
-        return pattern;
+        return source.bestMatch(m_patternLink.md5, m_patternLink.filename, m_patternLink.name);
     }
 
     int horizontalPhase() const

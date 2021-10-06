@@ -60,11 +60,8 @@ public:
         auto source = resourcesInterface->source<KoColorSet>(ResourceType::Palettes);
         const QString md5sum = this->getString("md5sum");
         const QString name = this->getString("palette");
-        QVector<KoColorSetSP> palettes = source.resources(md5sum, "", name);
-        KoColorSetSP palette;
-        if (!palettes.isEmpty()) {
-            palette = palettes.first();
-        }
+
+        KoColorSetSP palette = source.bestMatch(md5sum, "", name) ;
 
         return palette;
     }

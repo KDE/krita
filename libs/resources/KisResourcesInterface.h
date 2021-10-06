@@ -52,50 +52,60 @@ public:
         virtual QVector<KoResourceSP> resourcesForMD5(const QString& md5) const = 0;
 public:
         /**
-         * @brief resource retrieves a resource, prefarably by md5, but with filename and name
+         * @brief bestMatch retrieves a resource, prefarably by md5, but with filename and name
          * as fallback for older files that do not store the md5sum. Note that if the resource is
          * not found by md5 if the md5 isn't empty, we do NOT then look by filename.
+         *
+         * If multiple resources with the same md5 exist, then it prefers the one
+         * with the same filename and name.
+         *
          * @return a resource, or 0 of the resource doesn't exist.
          */
-        QVector<KoResourceSP> resources(const QString md5, const QString filename, const QString name) {
 
-            QVector<KoResourceSP> resourceSet;
+        KoResourceSP bestMatch(const QString md5, const QString filename, const QString name)
+        {
+            QVector<QPair<KoResourceSP, int>> foundResources;
 
             if (!md5.isEmpty()) {
-                resourceSet += resourcesForMD5(md5);
-            }
+                Q_FOREACH (KoResourceSP res, resourcesForMD5(md5)) {
+                    int penalty = 0;
 
-            if (!filename.isEmpty()) {
-                if (md5.isEmpty()) {
-                    resourceSet += resourcesForFilename(filename);
-                }
-                else {
-                    Q_FOREACH(KoResourceSP resource, resourcesForFilename(filename)) {
-                        if (resource->md5Sum() == md5) {
-                            resourceSet << resource;
-                        }
+                    if (!filename.isEmpty() && filename != res->filename()) {
+                        /// filename is more important than name, so it gives
+                        /// higher penalty
+                        penalty += 2;
                     }
-                }
-            }
 
-            if (!name.isEmpty()) {
-                if (md5.isEmpty()) {
-                    resourceSet += resourcesForName(name);
-                }
-                else {
-                    Q_FOREACH(KoResourceSP resource, resourcesForName(name)) {
-                        if (resource->md5Sum() == md5) {
-                            resourceSet << resource;
-                        }
+                    if (!name.isEmpty() && name != res->name()) {
+                        penalty++;
                     }
+
+                    foundResources.append(qMakePair(res, penalty));
+                }
+            } else if (!filename.isEmpty()) {
+                Q_FOREACH (KoResourceSP res, resourcesForFilename(filename)) {
+                    int penalty = 0;
+
+                    if (!name.isEmpty() && name != res->name()) {
+                        penalty++;
+                    }
+
+                    foundResources.append(qMakePair(res, penalty));
+                }
+            } else if (!name.isEmpty()) {
+                Q_FOREACH (KoResourceSP res, resourcesForName(name)) {
+                    int penalty = 0;
+                    foundResources.append(qMakePair(res, penalty));
                 }
             }
 
-            std::sort(resourceSet.begin(), resourceSet.end());
-            resourceSet.erase(std::unique(resourceSet.begin(), resourceSet.end()), resourceSet.end());
+            auto it = std::min_element(foundResources.begin(), foundResources.end(),
+                                       [] (const QPair<KoResourceSP, int> &lhs,
+                                           const QPair<KoResourceSP, int> &rhs) {return lhs.second < rhs.second;});
 
-            return resourceSet;
+            return it != foundResources.end() ? it->first : KoResourceSP();
         }
+
         virtual KoResourceSP fallbackResource() const = 0;
 
     private:
@@ -139,33 +149,19 @@ private:
         }
 public:
         /**
-         * @brief resource retrieves resources, prefarably by md5, but with filename and name
-         * as fallback for older files that do not store the md5sum.
-         * @return resources, or an empty list if none are found
+         * @brief resource retrieves a resource, prefarably by md5, but with filename and name
+         * as fallback for older files that do not store the md5sum. Note that if the resource is
+         * not found by md5 if the md5 isn't empty, we do NOT then look by filename.
+         *
+         * If multiple resources with the same md5 exist, then it prefers the one
+         * with the same filename and name.
+         *
+         * @return a resource, or 0 of the resource doesn't exist.
          */
-        QVector<QSharedPointer<T>> resources(const QString md5, const QString filename, const QString name)
-        {
-            QVector<QSharedPointer<T>> resourceSet;
 
-            if (!md5.isEmpty()) {
-                resourceSet << resourcesForMD5(md5);
-            }
-
-            if (!filename.isEmpty()) {
-                resourceSet << resourcesForFilename(filename);
-            }
-
-            if (!name.isEmpty()) {
-                resourceSet << resourcesForName(name);
-            }
-
-            std::sort(resourceSet.begin(), resourceSet.end());
-            resourceSet.erase(std::unique(resourceSet.begin(), resourceSet.end()), resourceSet.end());
-
-            return resourceSet;
-
+        QSharedPointer<T>  bestMatch(const QString md5, const QString filename, const QString name) {
+            return m_source->bestMatch(md5, filename, name).dynamicCast<T>();
         }
-
 
         QSharedPointer<T> fallbackResource() const
         {

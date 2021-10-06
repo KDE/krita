@@ -28,10 +28,8 @@ void KisDitherUtil::setPattern(const QString &md5sum, const QString &patternName
     m_patternValueMode = valueMode;
 
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-    QVector<KoPatternSP> patterns = source.resources(md5sum, "", patternName);
-    if (!patterns.isEmpty()) {
-        m_pattern = patterns.first();
-    }
+    m_pattern = source.bestMatch(md5sum, "", patternName);
+
     if (m_pattern && m_thresholdMode == ThresholdMode::Pattern && m_patternValueMode == PatternValueMode::Auto) {
         // Automatically pick between lightness-based and alpha-based patterns by whichever has maximum range
         qreal lightnessMin = 1.0, lightnessMax = 0.0;

@@ -19,7 +19,7 @@ class QVariant;
  * @brief a provider-like interface class for sharing caches between multiple resources
  *
  * Some resources, e.g. KisPaintOpPreset, may require some computational-
- * intesive work to be done to start being useful. This work is not
+ * intensive work to be done to start being useful. This work is not
  * serialized into the file format, so after we load the preset and
  * before we can start using it we need to spend some time on regenerating
  * some caches. For KisPaintOpPreset such caches are: KisQImagePyramid

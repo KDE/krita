@@ -112,6 +112,7 @@ bool KisResourceUserOperations::addResourceWithUserInput(QWidget *widgetParent, 
         if (!userWantsAdd) {
             return false;
         }
+    }
 
     bool res = resourceModel->addResource(resource, storageLocation);
     if (!res) {

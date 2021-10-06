@@ -35,6 +35,8 @@ fi
 BUILDROOT="${BUILDROOT%/}"
 echo "BUILDROOT set to ${BUILDROOT}"
 
+set -o pipefail
+
 # Check cmake in path.
 if test -z $(which cmake); then
     echo "WARNING: no cmake in PATH... adding default /Applications location"
@@ -130,7 +132,7 @@ log () {
 # print msg
 print_if_error() {
     if [ "${osxbuild_error}" -ne 0 ]; then
-        printf "\nERROR: Printing last lines of log output\n\n"
+        printf "\e[31m%s %s\e[0m\n" "Error:" "Printing last lines of log output"
         tail ${OUPUT_LOG}
         printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
     fi
@@ -207,9 +209,8 @@ cmake_3rdparty () {
         # fixes does not depend on failure
         if [[ ! ${nofix} ]]; then
             build_3rdparty_fixes ${package} ${error}
-
         elif [[ "${error}" = "true" ]]; then
-            log "ERROR: ${pkg} failed a second time, time to check the logs"
+            log "ERROR: ${pkg} failed a second time, please check pkg logs"
             log "stopping..."
         fi
     done

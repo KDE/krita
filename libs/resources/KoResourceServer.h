@@ -303,21 +303,7 @@ public:
      */
     QSharedPointer<T> resource(const QString &md5, const QString &fileName, const QString &name)
     {
-        QVector<KoResourceSP> resources = KisGlobalResourcesInterface::instance()->source(m_type).resources(md5, fileName, name);
-
-        QSharedPointer<T> resource;
-        if (resources.size() > 0) {
-            Q_FOREACH(KoResourceSP r, resources) {
-                if (fileName.isEmpty() || r->filename() == fileName) {
-                    if (md5.isEmpty() || md5 == r->md5Sum()) {
-                        resource = r.dynamicCast<T>();
-                        break;
-                    }
-                }
-            }
-        }
-
-        return resource;
+        return KisGlobalResourcesInterface::instance()->source<T>(m_type).bestMatch(md5, fileName, name);
     }
 
     /**

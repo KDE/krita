@@ -74,11 +74,7 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
 
     QString md5sum = config->getString("md5sum");
     QString patternName = config->getString("pattern", "Grid01.pat");
-    QVector<KoPatternSP> patterns = source.resources(md5sum, "", patternName);
-    KoPatternSP pattern;
-    if (!patterns.isEmpty()) {
-        pattern = patterns.first();
-    }
+    KoPatternSP pattern = source.bestMatch(md5sum, "", patternName);
     widget()->patternChooser->setCurrentPattern(pattern ? pattern : source.fallbackResource());
     m_widget->spbOffsetX->setValue(config->getInt("transform_offset_x", 0));
     m_widget->spbOffsetY->setValue(config->getInt("transform_offset_y", 0));

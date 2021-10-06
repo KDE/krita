@@ -72,13 +72,8 @@ KoAbstractGradientSP KisGradientMapFilterConfiguration::gradient(KoAbstractGradi
         QString md5sum = this->getString("md5sum");
         QString gradientName = this->getString("gradientName");
         auto source = resourcesInterface()->source<KoAbstractGradient>(ResourceType::Gradients);
-        QVector<KoAbstractGradientSP> gradients = source.resources(md5sum, "", gradientName);
 
-        KoAbstractGradientSP resourceGradient;
-
-        if (!gradients.isEmpty()) {
-            resourceGradient = gradients.first();
-        }
+        KoAbstractGradientSP resourceGradient = source.bestMatch(md5sum, "", gradientName);
 
         if (resourceGradient) {
             KoStopGradientSP gradient = KisGradientConversion::toStopGradient(resourceGradient);

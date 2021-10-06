@@ -54,7 +54,6 @@ void KisLinkedPatternManager::saveLinkedPattern(KisPropertiesConfigurationSP set
 
 KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
-    KoPatternSP pattern;
     auto resourceSourceAdapter = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
@@ -66,22 +65,7 @@ KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigur
         md5sum = md5.toHex();
     }
 
-    QVector<KoPatternSP> patterns = resourceSourceAdapter.resources(md5sum, QFileInfo(fileName).fileName(), name);
-
-    if (!patterns.isEmpty()) {
-        pattern = patterns.first();
-        Q_FOREACH(KoPatternSP p, patterns) {
-            if (p->filename() == fileName) {
-                if (md5sum.isEmpty() || md5sum == p->md5Sum()) {
-                    pattern = p;
-                    break;
-                }
-            }
-        }
-
-    }
-
-    return pattern;
+    return resourceSourceAdapter.bestMatch(md5sum, QFileInfo(fileName).fileName(), name);
 }
 
 KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)

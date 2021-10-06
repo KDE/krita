@@ -204,9 +204,9 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
                         QString name = e2.attribute("name");
                         QString filename = e2.attribute("filename");
 
-                        QVector<KoResourceSP> existingResources = resourcesInterface->source(resourceType).resources(md5sum, filename, name);
+                        KoResourceSP existingResource = resourcesInterface->source(resourceType).bestMatch(md5sum, filename, name);
 
-                        if (existingResources.isEmpty()) {
+                        if (!existingResource) {
                             QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
                             QVector<KisResourceLoaderBase*> resourceLoaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceType);
                             Q_FOREACH(KisResourceLoaderBase *loader, resourceLoaders) {

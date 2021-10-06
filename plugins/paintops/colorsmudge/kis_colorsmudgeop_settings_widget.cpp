@@ -56,7 +56,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     m_radiusStrengthOptionWidget = new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0"));
     addPaintOpOption(m_radiusStrengthOptionWidget, i18n("Smudge Radius"));
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18n("Color Rate"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18nc("Color rate of active Foreground color", "Color Rate"));
     m_paintThicknessOptionWidget = new KisPressurePaintThicknessOptionWidget();
     addPaintOpOption(m_paintThicknessOptionWidget, i18n("Paint Thickness"));
 

@@ -15,7 +15,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Palette Editor</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -24,13 +24,13 @@
       <item>
        <widget class="QGroupBox" name="gbxPalette">
         <property name="title">
-         <string>Palette settings</string>
+         <string>Palette options</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QLabel" name="labelName">
            <property name="text">
-            <string>Palette Name</string>
+            <string>Palette name:</string>
            </property>
           </widget>
          </item>
@@ -40,7 +40,7 @@
          <item>
           <widget class="QLabel" name="labelColCount">
            <property name="text">
-            <string>Column count</string>
+            <string>Columns of swatches:</string>
            </property>
           </widget>
          </item>
@@ -50,7 +50,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Storage Location</string>
+            <string>Storage location:</string>
            </property>
           </widget>
          </item>
@@ -79,7 +79,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Add a group</string>
+            <string>Add a swatch group</string>
            </property>
           </widget>
          </item>
@@ -89,16 +89,23 @@
       <item>
        <widget class="QGroupBox" name="gbxGroup">
         <property name="title">
-         <string>Group settings</string>
+         <string>Swatch Group options</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+          <widget class="QLabel" name="labelColorGroupList">
+           <property name="text">
+            <string>Swatch group:</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QComboBox" name="cbxGroup"/>
          </item>
          <item>
           <widget class="QLabel" name="labelRowCount">
            <property name="text">
-            <string>Row count</string>
+            <string>Rows of swatches in group:</string>
            </property>
           </widget>
          </item>
@@ -127,7 +134,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Rename this group</string>
+            <string comment="Group as Swatch Group in a Palette">Rename selected group</string>
            </property>
           </widget>
          </item>
@@ -140,7 +147,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Delete this group</string>
+            <string comment="Group as Swatch Group in a Palette">Remove selected group</string>
            </property>
           </widget>
          </item>

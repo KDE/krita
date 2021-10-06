@@ -556,7 +556,7 @@ KisLayerSP KisLayerManager::addPaintLayer(KisNodeSP activeNode)
 KisNodeSP KisLayerManager::addGroupLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
-    KisGroupLayerSP group = new KisGroupLayer(image.data(), image->nextLayerName( i18n("Group") ), OPACITY_OPAQUE_U8);
+    KisGroupLayerSP group = new KisGroupLayer(image.data(), image->nextLayerName( i18nc("A group of layers", "Group") ), OPACITY_OPAQUE_U8);
     addLayerCommon(activeNode, group, false, 0);
     return group;
 }

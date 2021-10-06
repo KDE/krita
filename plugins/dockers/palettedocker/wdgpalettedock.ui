@@ -118,7 +118,7 @@
      <item row="2" column="8">
       <widget class="QToolButton" name="bnRemove">
        <property name="toolTip">
-        <string>Delete color</string>
+        <string>Remove swatch or group</string>
        </property>
        <property name="text">
         <string>...</string>

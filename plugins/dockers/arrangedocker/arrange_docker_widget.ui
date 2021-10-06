@@ -335,7 +335,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Group</string>
+           <string comment="Group in the context of Vector Interaction Tool">Group</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>

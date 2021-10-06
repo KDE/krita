@@ -69,7 +69,7 @@ class PaletteDocker(DockWidget):
         self.addEntry.triggered.connect(self.slot_add_entry)
         self.addGroup = QAction(self)
         self.addGroup.triggered.connect(self.slot_add_group)
-        self.addGroup.setText(i18n("Add Group"))
+        self.addGroup.setText(i18nc("Group as Swatch Group in a Palette", "Add Group"))
         self.addGroup.setIconText(str("\U0001F4C2"))
         self.removeEntry = QAction(self)
         self.removeEntry.setText(i18n("Remove Entry"))

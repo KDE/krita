@@ -213,7 +213,7 @@
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="text">
-        <string>Origin:</string>
+        <string comment="Origin in Multihand Tool">Origin:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

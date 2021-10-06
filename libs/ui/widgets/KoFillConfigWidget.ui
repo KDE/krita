@@ -355,7 +355,7 @@
        <item>
         <widget class="QLabel" name="stopColorLabel">
          <property name="text">
-          <string>Stop:</string>
+          <string comment="Gradient stop color selector label">Stop:</string>
          </property>
         </widget>
        </item>

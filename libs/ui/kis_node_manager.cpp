@@ -1496,7 +1496,7 @@ bool KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
     if (!canMoveLayer(active)) return false;
 
     KisImageSP image = m_d->view->image();
-    QString groupName = !overrideGroupName.isEmpty() ? overrideGroupName : image->nextLayerName(i18n("Group"));
+    QString groupName = !overrideGroupName.isEmpty() ? overrideGroupName : image->nextLayerName(i18nc("A group of layers", "Group"));
     KisGroupLayerSP group = new KisGroupLayer(image.data(), groupName, OPACITY_OPAQUE_U8);
 
     KisNodeList nodes1;

@@ -240,7 +240,7 @@
       <whatsThis/>
       <statusTip/>
       <isCheckable>false</isCheckable>
-      <text>Settings...</text>
+      <text comment="Text Editor Settings label">Settings...</text>
     </Action>
     <Action name="svg_sample_color">
       <iconText>Colorsampler</iconText>

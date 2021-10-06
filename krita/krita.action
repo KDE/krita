@@ -2346,9 +2346,9 @@
     </Action>
     <Action name="add_new_group_layer">
       <icon>groupLayer</icon>
-      <text>&amp;Group Layer</text>
+      <text>Add a new &amp;Group Layer</text>
       <whatsThis/>
-      <toolTip>Group Layer</toolTip>
+      <toolTip>Add a Group Layer</toolTip>
       <iconText>Group Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2358,9 +2358,9 @@
     </Action>
     <Action name="add_new_clone_layer">
       <icon>cloneLayer</icon>
-      <text>&amp;Clone Layer</text>
+      <text>Add a new &amp;Clone Layer</text>
       <whatsThis/>
-      <toolTip>Clone Layer</toolTip>
+      <toolTip>Add a new Clone Layer</toolTip>
       <iconText>Clone Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2370,9 +2370,9 @@
     </Action>
     <Action name="add_new_shape_layer">
       <icon>vectorLayer</icon>
-      <text>&amp;Vector Layer</text>
+      <text>Add a new &amp;Vector Layer</text>
       <whatsThis/>
-      <toolTip>Vector Layer</toolTip>
+      <toolTip>Add a new Vector Layer</toolTip>
       <iconText>Vector Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2382,9 +2382,9 @@
     </Action>
     <Action name="add_new_adjustment_layer">
       <icon>filterLayer</icon>
-      <text>&amp;Filter Layer...</text>
+      <text>Add a new &amp;Filter Layer...</text>
       <whatsThis/>
-      <toolTip>Filter Layer</toolTip>
+      <toolTip>Add a new Filter Layer</toolTip>
       <iconText>Filter Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2394,9 +2394,9 @@
     </Action>
     <Action name="add_new_fill_layer">
       <icon>fillLayer</icon>
-      <text>&amp;Fill Layer...</text>
+      <text>Add a new &amp;Fill Layer...</text>
       <whatsThis/>
-      <toolTip>Fill Layer</toolTip>
+      <toolTip>Add a new Fill Layer</toolTip>
       <iconText>Fill Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2406,9 +2406,9 @@
     </Action>
     <Action name="add_new_file_layer">
       <icon>fileLayer</icon>
-      <text>&amp;File Layer...</text>
+      <text>Add a new &amp;File Layer...</text>
       <whatsThis/>
-      <toolTip>File Layer</toolTip>
+      <toolTip>Add a new File Layer</toolTip>
       <iconText>File Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2418,9 +2418,9 @@
     </Action>
     <Action name="add_new_transparency_mask">
       <icon>transparencyMask</icon>
-      <text>&amp;Transparency Mask</text>
+      <text>Add a new &amp;Transparency Mask</text>
       <whatsThis/>
-      <toolTip>Transparency Mask</toolTip>
+      <toolTip>Add a new Transparency Mask</toolTip>
       <iconText>Transparency Mask</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2430,9 +2430,9 @@
     </Action>
     <Action name="add_new_filter_mask">
       <icon>filterMask</icon>
-      <text>&amp;Filter Mask...</text>
+      <text>Add a new &amp;Filter Mask...</text>
       <whatsThis/>
-      <toolTip>Filter Mask</toolTip>
+      <toolTip>Add a new Filter Mask</toolTip>
       <iconText>Filter Mask</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2442,9 +2442,9 @@
     </Action>
     <Action name="add_new_colorize_mask">
       <icon>filterMask</icon>
-      <text>&amp;Colorize Mask</text>
+      <text>Add a new &amp;Colorize Mask</text>
       <whatsThis/>
-      <toolTip>Colorize Mask</toolTip>
+      <toolTip>Add a new Colorize Mask</toolTip>
       <iconText>Colorize Mask</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2454,9 +2454,9 @@
     </Action>
     <Action name="add_new_transform_mask">
       <icon>transformMask</icon>
-      <text>&amp;Transform Mask</text>
+      <text>Add a new &amp;Transform Mask</text>
       <whatsThis/>
-      <toolTip>Transform Mask</toolTip>
+      <toolTip>Add a new Transform Mask</toolTip>
       <iconText>Transform Mask</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2466,9 +2466,9 @@
     </Action>
     <Action name="add_new_selection_mask">
       <icon>selectionMask</icon>
-      <text>&amp;Local Selection</text>
+      <text>Add a new &amp;Local Selection</text>
       <whatsThis/>
-      <toolTip>Local Selection</toolTip>
+      <toolTip>Add a new Local Selection</toolTip>
       <iconText>Local Selection</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2562,9 +2562,9 @@
     </Action>
     <Action name="add_new_paint_layer">
       <icon>paintLayer</icon>
-      <text>&amp;Paint Layer</text>
+      <text>Add a new &amp;Paint Layer</text>
       <whatsThis/>
-      <toolTip>Paint Layer</toolTip>
+      <toolTip>Add a new Paint Layer</toolTip>
       <iconText>Paint Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>

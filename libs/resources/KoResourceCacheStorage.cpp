@@ -33,6 +33,9 @@ QVariant KoResourceCacheStorage::fetch(const QString &key) const
 
 void KoResourceCacheStorage::put(const QString &key, const QVariant &value)
 {
+    /// This assert here is intentional! It catches cache key
+    /// aliasing problems. See dox in KoResourceCacheInterface
     KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->map.contains(key));
+
     m_d->map.insert(key, value);
 }

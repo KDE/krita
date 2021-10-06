@@ -9,6 +9,15 @@
 #include <KoResourceCacheInterface.h>
 #include <QString>
 
+/**
+ * A simple wrapper class that converts all the passed cache keys
+ * into a prefixed notation: "key" -> "prefix/key".
+ *
+ * This wrapper is usually needed when handing embedded objects
+ * using the same cache storage, e.g. masking brush preset, which
+ * is stored inside a normal preset under a prefix
+ * ("MaskingBrush/Preset/")
+ */
 class KRITARESOURCES_EXPORT KoResourceCachePrefixedStorageWrapper : public KoResourceCacheInterface
 {
 public:

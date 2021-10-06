@@ -10,6 +10,10 @@
 #include <KoResourceCacheInterface.h>
 #include <QScopedPointer>
 
+/**
+ * A trivial implementation of KoResourceCacheInterface that just
+ * stores cached values.
+ */
 class KRITARESOURCES_EXPORT KoResourceCacheStorage : public KoResourceCacheInterface
 {
 public:

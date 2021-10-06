@@ -37,18 +37,18 @@ public:
     void unsetCanvas() override;
     void setViewManager(KisViewManager* kisview) override;
 
-    struct LayoutElement {
-        boost::optional<QRect> cutNameRect;
-        boost::optional<QRect> cutNumberRect;
-        boost::optional<QRect> cutDurationRect;
-        boost::optional<QRect> cutImageRect;
-        QMap<QString, QRect> commentRects;
+    struct ExportLayoutElement {
+        boost::optional<QRectF> cutNameRect;
+        boost::optional<QRectF> cutNumberRect;
+        boost::optional<QRectF> cutDurationRect;
+        boost::optional<QRectF> cutImageRect;
+        QMap<QString, QRectF> commentRects;
 
-        LayoutElement()
+        ExportLayoutElement()
             : commentRects() {
         }
 
-        LayoutElement(const LayoutElement& other)
+        ExportLayoutElement(const ExportLayoutElement& other)
             : cutNameRect(other.cutNameRect)
             , cutNumberRect(other.cutNumberRect)
             , cutDurationRect(other.cutDurationRect)
@@ -59,19 +59,19 @@ public:
         }
     };
 
-    struct LayoutPage {
-        QVector<LayoutElement> elements;
-        boost::optional<QDomDocument> underlaySVG;
+    struct ExportLayout {
+        QVector<ExportLayoutElement> elements;
+        boost::optional<QDomDocument> svg;
 
-        LayoutPage()
+        ExportLayout()
             : elements() {
         }
 
-        LayoutPage(QVector<LayoutElement> &e)
+        ExportLayout(QVector<ExportLayoutElement> &e)
             : elements(e) {
         }
 
-        ~LayoutPage() {
+        ~ExportLayout() {
         }
     };
 
@@ -142,8 +142,8 @@ private Q_SLOTS:
 
 private:
 
-    LayoutPage getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
-    LayoutPage getPageLayout(QString layoutSvgFileName, QPrinter *printer);
+    ExportLayout getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
+    ExportLayout getPageLayout(QString layoutSvgFileName, QPrinter *printer);
 
 private:
     KisCanvas2* m_canvas;

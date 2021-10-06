@@ -235,22 +235,38 @@ inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
     return rc;
 }
 
-inline QRect kisTrimLeft( int width, QRect &toTakeFrom)
+inline QRectF kisTrimLeft( int width, QRectF &toTakeFrom)
 {
-    QPoint trimmedOrigin = toTakeFrom.topLeft();
+    QPointF trimmedOrigin = toTakeFrom.topLeft();
     QSize trimmedSize = QSize(width, toTakeFrom.height());
     toTakeFrom.setWidth(toTakeFrom.width() - width);
     toTakeFrom.translate(width, 0);
-    return QRect(trimmedOrigin, trimmedSize);
+    return QRectF(trimmedOrigin, trimmedSize);
+}
+
+inline QRect kisTrimLeft( int width, QRect &toTakeFrom)
+{
+    QRectF converted = QRectF(toTakeFrom);
+    QRectF toReturn = kisTrimLeft(width, converted);
+    toTakeFrom = converted.toAlignedRect();
+    return toReturn.toAlignedRect();
+}
+
+inline QRectF kisTrimTop( int height, QRectF& toTakeFrom)
+{
+    QPointF trimmedOrigin = toTakeFrom.topLeft();
+    QSize trimmedSize = QSize(toTakeFrom.width(), height);
+    toTakeFrom.setHeight(toTakeFrom.height() - height);
+    toTakeFrom.translate(0, height);
+    return QRectF(trimmedOrigin, trimmedSize);
 }
 
 inline QRect kisTrimTop( int height, QRect& toTakeFrom)
 {
-    QPoint trimmedOrigin = toTakeFrom.topLeft();
-    QSize trimmedSize = QSize(toTakeFrom.width(), height);
-    toTakeFrom.setHeight(toTakeFrom.height() - height);
-    toTakeFrom.translate(0, height);
-    return QRect(trimmedOrigin, trimmedSize);
+    QRectF converted = QRectF(toTakeFrom);
+    QRectF toReturn = kisTrimTop(height, converted);
+    toTakeFrom = converted.toAlignedRect();
+    return toReturn.toAlignedRect();
 }
 
 #include "kis_pointer_utils.h"

@@ -208,6 +208,7 @@ KisTextureProperties::KisTextureProperties(int levelOfDetail, KisBrushTextureFla
     : m_gradient(0)
     , m_levelOfDetail(levelOfDetail)
     , m_flags(flags)
+    , m_enabled(false)
 {
 }
 
@@ -257,16 +258,22 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
 
 QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
-    QList<KoResourceSP> resources;
+    /**
+     * We cannot use m_enabled here because it is not initialized at this stage.
+     * fillProperties() is not necessary for this call, becasue it is extremely slow.
+     */
 
-    if (m_enabled) {
+    QList<KoResourceSP> patterns;
+
+    const bool enabled = setting->getBool("Texture/Pattern/Enabled", false);
+    if (enabled) {
         KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
         if (pattern) {
-            resources << pattern;
+            patterns << pattern;
         }
     }
 
-    return resources;
+    return patterns;
 }
 
 bool KisTextureProperties::applyingGradient() const

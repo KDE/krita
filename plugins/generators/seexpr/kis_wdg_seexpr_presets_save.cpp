@@ -143,10 +143,12 @@ void KisWdgSeExprPresetsSave::savePreset()
 
     if (idx.isValid() && !m_useNewPresetDialog) {
         // saving a preset that is replacing an existing one
+        const QString presetFileName = m_currentPreset->name().split(" ").join("_");
         if (presetThumbnailWidget->pixmap()) {
             m_currentPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
         }
         m_currentPreset->setScript(m_currentConfiguration->getString("script"));
+        m_currentPreset->setFilename(presetFileName + m_currentPreset->defaultFileExtension());
         m_currentPreset->setValid(true);
         r = KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_currentPreset);
     } else {
@@ -155,8 +157,9 @@ void KisWdgSeExprPresetsSave::savePreset()
         KisSeExprScriptSP newPreset = m_currentPreset->clone().dynamicCast<KisSeExprScript>();
 
         if (newPreset) {
+            const QString presetFileName = newPresetNameTextField->text().split(" ").join("_");
             newPreset->setName(newPresetNameTextField->text());
-            newPreset->setFilename(newPreset->name() + newPreset->defaultFileExtension());
+            newPreset->setFilename(presetFileName + newPreset->defaultFileExtension());
             if (presetThumbnailWidget->pixmap()) {
                 newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
             }

@@ -161,7 +161,7 @@ void KisWdgSeExpr::slotResourceSelected(KoResourceSP resource)
 
         QString formattedBrushName = m_currentPreset->name().replace("_", " ");
         m_widget->currentBrushNameLabel->setText(formattedBrushName);
-        m_widget->renameBrushNameTextField->setText(m_currentPreset->name());
+        m_widget->renameBrushNameTextField->setText(formattedBrushName);
         // get the preset image and pop it into the thumbnail area on the top of the brush editor
         QSize thumbSize = QSize(55, 55)*devicePixelRatioF();
         QPixmap thumbnail = QPixmap::fromImage(m_currentPreset->image().scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));

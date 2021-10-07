@@ -284,10 +284,7 @@ void KisWdgSeExpr::slotSaveBrushPreset()
     m_saveDialog->setCurrentPreset(m_currentPreset);
     m_saveDialog->setCurrentRenderConfiguration(currentConfiguration);
     m_saveDialog->loadExistingThumbnail(); // This makes sure we use the existing preset icon when updating the existing brush preset
-    m_saveDialog->savePreset();
-
-    // refresh the view settings so the brush doesn't appear dirty
-    slotUpdatePresetSettings();
+    m_saveDialog->showDialog(); // apply tiar's suggestion and let the user decide
 }
 
 void KisWdgSeExpr::slotSaveNewBrushPreset()

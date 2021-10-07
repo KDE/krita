@@ -68,7 +68,7 @@ void TestAbrStorage::testTagIterator()
         iter->next();
         count++;
     }
-    QVERIFY(count == 0);
+    QVERIFY(count == 1);
 }
 
 void TestAbrStorage::testResourceItem()

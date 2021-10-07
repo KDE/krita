@@ -120,6 +120,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(m_resourceManager, SIGNAL(updatePalettes()), this, SLOT(slotUpdate()));
     connect(m_resourceManager, SIGNAL(hidePalettes()), this, SIGNAL(finished()));
 
+    // Instances of `this` rely on finished() to be detached and its lifetime is associated with `parent`
+    connect(parent, SIGNAL(destroyed(QObject *)), this, SIGNAL(finished()), Qt::DirectConnection);
+
     setCursor(Qt::ArrowCursor);
     setMouseTracking(true);
     setHoveredPreset(-1);

@@ -10,7 +10,6 @@ class QIODevice;
 class QUuid;
 
 #include <QVector>
-#include <KoEphemeralResource.h>
 
 #include <psd.h>
 
@@ -28,7 +27,7 @@ typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
  * See https://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
  *
  */
-class KRITAIMAGE_EXPORT KisPSDLayerStyle : public KoEphemeralResource<KoResource>
+class KRITAIMAGE_EXPORT KisPSDLayerStyle : public KoResource
 {
 
 public:
@@ -38,6 +37,10 @@ public:
     KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs) = delete;
 
     KoResourceSP clone() const override;
+
+    bool isSerializable() const override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
+    bool saveToDevice(QIODevice *dev) const override;
 
     void clear();
 

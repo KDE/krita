@@ -174,7 +174,7 @@ KisTextBrush::KisTextBrush()
 }
 
 KisTextBrush::KisTextBrush(const KisTextBrush &rhs)
-    : KoEphemeralResource<KisScalingSizeBrush>(rhs),
+    : KisScalingSizeBrush(rhs),
       m_font(rhs.m_font),
       m_text(rhs.m_text),
       m_brushesPipe(new KisTextBrushesPipe(*rhs.m_brushesPipe))
@@ -191,6 +191,23 @@ KoResourceSP KisTextBrush::clone() const
     return KisBrushSP(new KisTextBrush(*this));
 }
 
+bool KisTextBrush::isEphemeral() const
+{
+    return true;
+}
+
+bool KisTextBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(dev);
+    Q_UNUSED(resourcesInterface);
+    return false;
+}
+
+bool KisTextBrush::saveToDevice(QIODevice *dev) const
+{
+    Q_UNUSED(dev);
+    return false;
+}
 
 void KisTextBrush::setPipeMode(bool pipe)
 {

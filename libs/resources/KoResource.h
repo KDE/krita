@@ -172,6 +172,32 @@ public:
     virtual QPair<QString, QString> resourceType() const = 0;
 
     /**
+     * Ephemeral resource is a type of resource that has no physical
+     * representation on disk. Therefore, its load()/save() calls do
+     * nothing. Such resources will always have empty md5Sum() and,
+     * therefore, will never be stored in the resources database.
+     *
+     * This type of resources is created directly by the corresponding
+     * factory or other object (e.g. KisAutoBrushFactory).
+     *
+     * Ephemeral resource cannot be serializable.
+     */
+    virtual bool isEphemeral() const;
+
+    /**
+     * Serializable resource is the one which can be saved/loaded into a
+     * specific storage via saveToDevice()/loadFromDevice() methods. Some
+     * resources, like KisAbrBrush or KisPsdLayerStyle, are stored in
+     * specific libraries in "batches". Such resources cannot be saved
+     * individually. They are created by the corresponding factories.
+     *
+     * In contrast to ephemeral resource, non-serializable resource
+     * will always have a correct md5Sum() and may be stored in the
+     * resources database.
+     */
+    virtual bool isSerializable() const;
+
+    /**
      * Loads all the required resources either from \p globalResourcesInterface or
      * from embedded data. The preset first tries to fetch the required resource
      * from the global source, and only if it fails, tries to load it from the

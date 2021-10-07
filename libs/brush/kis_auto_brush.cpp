@@ -67,7 +67,7 @@ struct KisAutoBrush::Private {
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density)
-    : KoEphemeralResource<KisBrush>(),
+    : KisBrush(),
       d(new Private)
 {
     d->shape.reset(as);
@@ -92,6 +92,24 @@ KisAutoBrush::~KisAutoBrush()
 {
 }
 
+bool KisAutoBrush::isEphemeral() const
+{
+    return true;
+}
+
+bool KisAutoBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(dev);
+    Q_UNUSED(resourcesInterface);
+    return false;
+}
+
+bool KisAutoBrush::saveToDevice(QIODevice *dev) const
+{
+    Q_UNUSED(dev);
+    return false;
+}
+
 qreal KisAutoBrush::userEffectiveSize() const
 {
     return d->shape->diameter();
@@ -103,7 +121,7 @@ void KisAutoBrush::setUserEffectiveSize(qreal value)
 }
 
 KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
-    : KoEphemeralResource<KisBrush>(rhs)
+    : KisBrush(rhs)
     , d(new Private(*rhs.d))
 {
 }

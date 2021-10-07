@@ -150,6 +150,10 @@ QString KoResource::md5Sum(bool generateIfEmpty) const
 
 void KoResource::setMD5Sum(const QString &md5sum)
 {
+    /// ephemeral resources have no md5, trying to assign
+    /// them one is considered an error
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!isEphemeral());
+
     if (valid()) {
         Q_ASSERT(!md5sum.isEmpty());
     }
@@ -277,6 +281,16 @@ void KoResource::setVersion(int version)
 void KoResource::setResourceId(int id)
 {
     d->resourceId = id;
+}
+
+bool KoResource::isEphemeral() const
+{
+    return false;
+}
+
+bool KoResource::isSerializable() const
+{
+    return !isEphemeral();
 }
 
 void KoResource::setStorageLocation(const QString &location)

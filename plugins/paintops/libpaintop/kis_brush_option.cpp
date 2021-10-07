@@ -13,7 +13,6 @@
 #include "kis_properties_configuration.h"
 #include <KisPaintopSettingsIds.h>
 #include <kis_brush.h>
-#include <KoEphemeralResource.h>
 
 #include <KoCanvasResourcesInterface.h>
 #include <KoCanvasResourcesIds.h>
@@ -28,27 +27,6 @@ void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration
     m_brush->toXML(d, e);
     d.appendChild(e);
     setting->setProperty("brush_definition", d.toString());
-
-    QString brushFileName = !m_brush->filename().isEmpty() ? m_brush->filename() : QString();
-    setting->setProperty(KisPaintOpUtils::RequiredBrushFileTag, brushFileName);
-
-    {
-        QStringList requiredFiles =
-            setting->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
-        requiredFiles << brushFileName;
-        setting->setProperty(KisPaintOpUtils::RequiredBrushFilesListTag, requiredFiles);
-    }
-
-    QString md5sum = m_brush->md5Sum();
-    setting->setProperty(KisPaintOpUtils::RequiredBrushMD5Tag, md5sum);
-
-    {
-        QStringList requiredMD5s =
-            setting->getStringList(KisPaintOpUtils::RequiredBrushMD5ListTag);
-        requiredMD5s << md5sum;
-        setting->setProperty(KisPaintOpUtils::RequiredBrushMD5ListTag, requiredMD5s);
-    }
-
 }
 
 QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
@@ -86,8 +64,7 @@ QList<KoResourceSP> KisBrushOptionProperties::prepareLinkedResourcesImpl(const K
     if (element.isNull()) return resources;
 
     KisBrushSP brush = KisBrush::fromXML(element, resourcesInterface);
-    // TODO: implement proper property for KoResource about ephemerality
-    if (brush && !dynamic_cast<KoEphemeralResource<KisBrush>*>(brush.data())) {
+    if (brush && !brush->isEphemeral()) {
         resources << brush;
     }
 

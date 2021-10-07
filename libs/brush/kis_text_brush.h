@@ -10,15 +10,13 @@
 
 #include <QFont>
 
-#include <KoEphemeralResource.h>
-
 #include "kis_scaling_size_brush.h"
 #include "kritabrush_export.h"
 
 class KisTextBrushesPipe;
 
 
-class BRUSH_EXPORT KisTextBrush : public KoEphemeralResource<KisScalingSizeBrush>
+class BRUSH_EXPORT KisTextBrush : public KisScalingSizeBrush
 {
 
 public:
@@ -30,6 +28,9 @@ public:
 
     KoResourceSP clone() const override;
 
+    bool isEphemeral() const override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
+    bool saveToDevice(QIODevice *dev) const override;
 
     void notifyStrokeStarted() override;
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) override;

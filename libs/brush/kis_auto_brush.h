@@ -10,7 +10,6 @@
 #include "kritabrush_export.h"
 
 #include <KoResource.h>
-#include <KoEphemeralResource.h>
 
 #include "kis_brush.h"
 
@@ -21,7 +20,7 @@ class KisMaskGenerator;
 /**
  * XXX: docs!
  */
-class BRUSH_EXPORT KisAutoBrush : public KoEphemeralResource<KisBrush>
+class BRUSH_EXPORT KisAutoBrush : public KisBrush
 {
 
 public:
@@ -32,6 +31,10 @@ public:
     KoResourceSP clone() const override;
 
     ~KisAutoBrush() override;
+
+    bool isEphemeral() const override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
+    bool saveToDevice(QIODevice *dev) const override;
 
 public:
 

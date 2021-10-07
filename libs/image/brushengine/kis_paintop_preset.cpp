@@ -31,6 +31,7 @@
 #include "KisPaintopSettingsIds.h"
 #include <KisResourceTypes.h>
 #include <KisResourceModelProvider.h>
+#include <krita_container_utils.h>
 
 #include <KoStore.h>
 
@@ -236,7 +237,9 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     setValid(d->settings->isValid());
 
     {
-        const QList<KoResourceSP> dependentResources = this->requiredResources(resourcesInterface);
+        QList<KoResourceSP> dependentResources = this->requiredResources(resourcesInterface);
+        KritaUtils::makeContainerUnique(dependentResources);
+
         QStringList resourceFileNames;
 
         Q_FOREACH (KoResourceSP resource, dependentResources) {

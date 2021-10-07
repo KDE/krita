@@ -141,6 +141,9 @@ void KoResource::setImage(const QImage &image)
 
 QString KoResource::md5Sum(bool generateIfEmpty) const
 {
+    // [this assert is disputable] ephemeral resources have no md5
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isEphemeral(), QString());
+
     if (d->md5sum.isEmpty() && generateIfEmpty) {
         dbgResources << "No MD5 for" << this << this->name();
         QByteArray ba;

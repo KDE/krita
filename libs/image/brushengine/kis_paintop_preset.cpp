@@ -235,24 +235,15 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     setValid(d->settings->isValid());
 
+    {
+        const QList<KoResourceSP> dependentResources = this->requiredResources(resourcesInterface);
+        QStringList resourceFileNames;
 
-    if (version == "2.2") {
-        QSet<QString> requiredBrushes;
-        Q_FOREACH(const QString str, d->settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag)) {
-            if (!str.isEmpty()) {
-                requiredBrushes << str;
-            }
+        Q_FOREACH (KoResourceSP resource, dependentResources) {
+            resourceFileNames.append(resource->filename());
         }
-        QString requiredBrush = d->settings->getString(KisPaintOpUtils::RequiredBrushFileTag);
-        if (!requiredBrush.isEmpty()) {
-            requiredBrushes << requiredBrush;
-        }
-        if (!requiredBrushes.isEmpty()) {
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-            QStringList resourceFileNames(requiredBrushes.constBegin(), requiredBrushes.constEnd());
-#else
-            QStringList resourceFileNames = requiredBrushes.toList();
-#endif
+
+        if (!resourceFileNames.isEmpty()) {
             addMetaData("dependent_resources_filenames", resourceFileNames);
         }
     }

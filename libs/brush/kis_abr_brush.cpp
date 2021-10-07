@@ -28,7 +28,7 @@
 #define DEFAULT_SPACING 0.25
 
 KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
-    : KoEphemeralResource<KisScalingSizeBrush>(filename)
+    : KisScalingSizeBrush(filename)
     , m_parent(parent)
 {
     setBrushType(INVALID);
@@ -36,14 +36,14 @@ KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
 }
 
 KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs)
-    : KoEphemeralResource<KisScalingSizeBrush>(rhs)
+    : KisScalingSizeBrush(rhs)
     , m_parent(0)
 {
     // Warning! The brush became detached from the parent collection!
 }
 
 KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent)
-    : KoEphemeralResource<KisScalingSizeBrush>(rhs)
+    : KisScalingSizeBrush(rhs)
     , m_parent(parent)
 {
 }
@@ -51,6 +51,24 @@ KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent)
 KoResourceSP KisAbrBrush::clone() const
 {
     return KoResourceSP(new KisAbrBrush(*this));
+}
+
+bool KisAbrBrush::isSerializable() const
+{
+    return false;
+}
+
+bool KisAbrBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(dev);
+    Q_UNUSED(resourcesInterface);
+    return false;
+}
+
+bool KisAbrBrush::saveToDevice(QIODevice *dev) const
+{
+    Q_UNUSED(dev);
+    return false;
 }
 
 void KisAbrBrush::setBrushTipImage(const QImage& image)

@@ -14,7 +14,6 @@
 #include <KoColorSpace.h>
 #include <resources/KoAbstractGradient.h>
 #include <KoUpdater.h>
-#include <KoEphemeralResource.h>
 
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>

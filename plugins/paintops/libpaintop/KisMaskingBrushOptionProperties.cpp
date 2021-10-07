@@ -47,24 +47,6 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
         }
 
         setting->setPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
-
-        const QString brushFileName = brush->filename();
-
-        if (!brushFileName.isEmpty()) {
-            QStringList requiredFiles =
-                setting->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
-            requiredFiles << brushFileName;
-            setting->setProperty(KisPaintOpUtils::RequiredBrushFilesListTag, requiredFiles);
-        }
-
-        const QString brushMD5 = brush->md5Sum();
-
-        if (!brushMD5.isEmpty()) {
-            QStringList requiredFiles =
-                setting->getStringList(KisPaintOpUtils::RequiredBrushMD5ListTag);
-            requiredFiles << brushMD5;
-            setting->setProperty(KisPaintOpUtils::RequiredBrushMD5ListTag, requiredFiles);
-        }
     }
 }
 

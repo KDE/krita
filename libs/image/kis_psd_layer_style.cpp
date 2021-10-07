@@ -96,7 +96,7 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
 };
 
 KisPSDLayerStyle::KisPSDLayerStyle(const QString &filename, KisResourcesInterfaceSP resourcesInterface)
-    : KoEphemeralResource<KoResource>(filename)
+    : KoResource(filename)
     , d(new Private(resourcesInterface))
 {
     d->name = i18n("Unnamed");
@@ -109,7 +109,7 @@ KisPSDLayerStyle::~KisPSDLayerStyle()
 }
 
 KisPSDLayerStyle::KisPSDLayerStyle(const KisPSDLayerStyle &rhs)
-    : KoEphemeralResource<KoResource>(rhs)
+    : KoResource(rhs)
     , d(new Private(*rhs.d))
 {
     setValid(valid());
@@ -128,6 +128,24 @@ void KisPSDLayerStyle::setEnabled(bool value)
 KoResourceSP KisPSDLayerStyle::clone() const
 {
     return toQShared(new KisPSDLayerStyle(*this)).dynamicCast<KoResource>();
+}
+
+bool KisPSDLayerStyle::isSerializable() const
+{
+    return false;
+}
+
+bool KisPSDLayerStyle::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(dev);
+    Q_UNUSED(resourcesInterface);
+    return false;
+}
+
+bool KisPSDLayerStyle::saveToDevice(QIODevice *dev) const
+{
+    Q_UNUSED(dev);
+    return false;
 }
 
 void KisPSDLayerStyle::clear()

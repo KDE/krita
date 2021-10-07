@@ -266,7 +266,31 @@ QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisProp
     QList<KoResourceSP> patterns;
 
     const bool enabled = setting->getBool("Texture/Pattern/Enabled", false);
-    if (enabled) {
+    const bool hasEmbeddedPattern = setting->hasProperty("Texture/Pattern/Pattern");
+
+    if (enabled && hasEmbeddedPattern) {
+        KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
+        if (pattern) {
+            patterns << pattern;
+        }
+    }
+
+    return patterns;
+}
+
+QList<KoResourceSP> KisTextureProperties::prepareLinkedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+{
+    /**
+     * We cannot use m_enabled here because it is not initialized at this stage.
+     * fillProperties() is not necessary for this call, becasue it is extremely slow.
+     */
+
+    QList<KoResourceSP> patterns;
+
+    const bool enabled = setting->getBool("Texture/Pattern/Enabled", false);
+    const bool hasEmbeddedPattern = setting->hasProperty("Texture/Pattern/Pattern");
+
+    if (enabled && !hasEmbeddedPattern) {
         KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
         if (pattern) {
             patterns << pattern;

@@ -215,6 +215,15 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
                                 buf.open(QBuffer::ReadOnly);
                                 KoResourceSP res = loader->load(name, buf, resourcesInterface);
                                 if (res) {
+                                    /// HACK ALERT: Calling addResource()
+                                    /// here is technically undefined
+                                    /// behavior, because this code is
+                                    /// called from inside the storage's
+                                    /// loadVersionedResource(). Basically
+                                    /// we change underlying storage's
+                                    /// storage while it is reading from
+                                    /// it.
+
                                     KisResourceModel model(resourceType);
                                     model.addResource(res, "memory");
                                 }
@@ -264,7 +273,6 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("name", name());
 
     QList<KoResourceSP> resources = linkedResources(resourcesInterface());
-    resources += embeddedResources(resourcesInterface());
 
     elt.setAttribute("embedded_resources", resources.count());
 
@@ -272,6 +280,7 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
         QDomElement resourcesElement = doc.createElement("resources");
         elt.appendChild(resourcesElement);
         Q_FOREACH(KoResourceSP resource, resources) {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(resource->isSerializable() && "embedding non-serializable resources is not yet implemented");
 
             QByteArray ba;
             QBuffer buf(&ba);

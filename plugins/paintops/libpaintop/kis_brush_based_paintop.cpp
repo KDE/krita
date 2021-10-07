@@ -127,6 +127,9 @@ QList<KoResourceSP> KisBrushBasedPaintOp::prepareLinkedResources(const KisPaintO
     KisBrushOptionProperties brushOption;
     resources << brushOption.prepareLinkedResources(settings, resourcesInterface);
 
+    KisTextureProperties textureProperties(0);
+    resources << textureProperties.prepareLinkedResources(settings, resourcesInterface);
+
     return resources;
 }
 

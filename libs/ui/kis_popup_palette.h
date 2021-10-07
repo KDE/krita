@@ -182,7 +182,7 @@ Q_SIGNALS:
     void sigChangefGColor(const KoColor&);
     void sigUpdateCanvas();
     void zoomLevelChanged(int);
-    void finished(); // KisPopupWidgetInterface.
+    void finished() override; // KisPopupWidgetInterface.
 
 public Q_SLOTS:
     void slotUpdateIcons();

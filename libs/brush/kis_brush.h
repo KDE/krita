@@ -16,18 +16,15 @@
 #include <kis_shared.h>
 #include <kis_dab_shape.h>
 #include <kritabrush_export.h>
-#include <resources/KoAbstractGradient.h>
-
-class KisQImagemask;
-typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class QString;
 class KoColor;
 class KoColorSpace;
 
 class KisPaintInformation;
-class KisBoundary;
 class KisPaintopLodLimitations;
+class KoAbstractGradient;
+typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
 enum enumBrushType {
     INVALID,

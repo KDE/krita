@@ -10,6 +10,7 @@
 #include "kritapaintop_export.h"
 #include <kis_types.h>
 #include <kis_brush.h>
+#include <boost/optional.hpp>
 
 class KisResourcesInterface;
 using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;

@@ -17,8 +17,6 @@
 #include <brushengine/kis_uniform_paintop_property.h>
 #include <KisPaintOpPresetUpdateProxy.h>
 
-class KisPaintOpConfigWidget;
-
 class KoCanvasResourcesInterface;
 using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 

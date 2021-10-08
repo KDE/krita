@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>395</width>
+    <width>405</width>
     <height>347</height>
    </rect>
   </property>
@@ -513,6 +513,9 @@ For example to make your speedpaint twice faster it should be twice larger of th
                <width>90</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="suffix">
+              <string comment="Contraction of &quot;second&quot; for interval"> sec.</string>
              </property>
              <property name="maximum">
               <number>120</number>

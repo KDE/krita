@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>617</width>
+    <width>638</width>
     <height>454</height>
    </rect>
   </property>
@@ -69,16 +69,6 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QPlainTextEdit" name="editFfmpegArguments">
-         <property name="documentTitle">
-          <string notr="true"/>
-         </property>
-         <property name="plainText">
-          <string notr="true"/>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
          <item>
@@ -99,6 +89,7 @@
 &lt;a href=&quot;$WIDTH&quot;&gt;$WIDTH&lt;/a&gt;
 &lt;a href=&quot;$HEIGHT&quot;&gt;$HEIGHT&lt;/a&gt;
 &lt;a href=&quot;$FRAMES&quot;&gt;$FRAMES&lt;/a&gt;
+&lt;a href=&quot;$LAST_FRAME_SEC&quot;&gt;$LAST_FRAME_SEC&lt;/a&gt;
 &lt;a href=&quot;$INPUT_DIR&quot;&gt;$INPUT_DIR&lt;/a&gt;
 &lt;a href=&quot;$EXT&quot;&gt;$EXT&lt;/a&gt;
 </string>
@@ -112,6 +103,16 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPlainTextEdit" name="editFfmpegArguments">
+         <property name="documentTitle">
+          <string notr="true"/>
+         </property>
+         <property name="plainText">
+          <string notr="true"/>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

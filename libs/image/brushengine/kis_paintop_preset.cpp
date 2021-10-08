@@ -64,13 +64,15 @@ struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
 
 public:
     Private(KisPaintOpPreset *q)
-        : settingsUpdateListener(new UpdateListener(q))
+        : settingsUpdateListener(new UpdateListener(q)),
+          version("5.0")
     {
     }
 
     KisPaintOpSettingsSP settings {0};
     QScopedPointer<KisPaintOpPresetUpdateProxy> updateProxy;
     KisPaintOpSettings::UpdateListenerSP settingsUpdateListener;
+    QString version;
 };
 
 
@@ -165,11 +167,11 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 {
     QImageReader reader(dev, "PNG");
 
-    QString version = reader.text("version");
+    d->version = reader.text("version");
     QString preset = reader.text("preset");
     int resourceCount = reader.text("embedded_resources").toInt();
 
-    if (!(version == "2.2" || "5.0")) {
+    if (!(d->version == "2.2" || "5.0")) {
         return false;
     }
 
@@ -189,7 +191,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         return false;
     }
 
-    if (version == "5.0" && resourceCount > 0) {
+    if (d->version == "5.0" && resourceCount > 0) {
         // Load the embedded resources
         QDomNode n = doc.firstChild();
         while (!n.isNull()) {
@@ -244,21 +246,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     }
 
     setValid(d->settings->isValid());
-
-    {
-        QList<KoResourceSP> dependentResources = this->requiredResources(resourcesInterface);
-        KritaUtils::makeContainerUnique(dependentResources);
-
-        QStringList resourceFileNames;
-
-        Q_FOREACH (KoResourceSP resource, dependentResources) {
-            resourceFileNames.append(resource->filename());
-        }
-
-        if (!resourceFileNames.isEmpty()) {
-            addMetaData("dependent_resources_filenames", resourceFileNames);
-        }
-    }
 
     setImage(img);
 
@@ -370,7 +357,22 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
     doc.appendChild(root);
 
-    writer.setText("version", "5.0");
+    /**
+     * HACK ALERT: We update the version of the resource format on
+     * the first save operation, even though there is no guarantee
+     * that it was "save" operation, but not "export" operation.
+     *
+     * The only point it affects now is whether we need to check
+     * for the presence of the linkedResources() in
+     * updateLinkedResourcesMetaData(). The new version of the
+     * preset format ("5.0") has all the linked resources embedded
+     * outside KisPaintOpSettings, which are automatically
+     * loaded on the the resource activation. We we shouldn't
+     * add them into metaData()["dependent_resources_filenames"].
+     */
+    d->version = "5.0";
+
+    writer.setText("version", d->version);
     writer.setText("preset", doc.toString());
 
     QImage img;
@@ -383,6 +385,30 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
     return writer.write(img);
 
+}
+
+void KisPaintOpPreset::updateLinkedResourcesMetaData(KisResourcesInterfaceSP resourcesInterface)
+{
+    /**
+     * The new preset format embeds all the linked resources outside
+     * KisPaintOpSettings and loads them on activation, therefore we
+     * shouldn't add them into "dependent_resources_filenames".
+     */
+
+    if (d->version == "2.2") {
+        QList<KoResourceSP> dependentResources = this->linkedResources(resourcesInterface);
+        KritaUtils::makeContainerUnique(dependentResources);
+
+        QStringList resourceFileNames;
+
+        Q_FOREACH (KoResourceSP resource, dependentResources) {
+            resourceFileNames.append(resource->filename());
+        }
+
+        if (!resourceFileNames.isEmpty()) {
+            addMetaData("dependent_resources_filenames", resourceFileNames);
+        }
+    }
 }
 
 QPointer<KisPaintOpPresetUpdateProxy> KisPaintOpPreset::updateProxy() const

@@ -411,6 +411,7 @@ void DlgCreateBundle::addSelected()
     }
 
     m_ui->tableAvailable->setCurrentRow(row);
+    m_ui->tableSelected->sortItems();
 }
 
 void DlgCreateBundle::removeSelected()
@@ -423,6 +424,7 @@ void DlgCreateBundle::removeSelected()
     }
 
     m_ui->tableSelected->setCurrentRow(row);
+    m_ui->tableAvailable->sortItems();
 }
 
 QPixmap imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode) {
@@ -481,6 +483,8 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         }
     }
 
+    m_ui->tableSelected->sortItems();
+    m_ui->tableAvailable->sortItems();
 }
 
 void DlgCreateBundle::getPreviewImage()

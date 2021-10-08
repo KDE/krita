@@ -251,7 +251,7 @@ public:
                .replace("$HEIGHT", QString::number(outSize.height()))
                .replace("$FRAMES", QString::number(framesCount))
                .replace("$INPUT_DIR", settings.inputDirectory)
-               .replace("$LAST_FRAME_SEC", QString::number(lastFrameSec * fps))
+               .replace("$LAST_FRAME_SEC", QString::number(lastFrameSec))
                .replace("$EXT", RecorderFormatInfo::fileExtension(settings.format));
     }
 

@@ -287,6 +287,8 @@ void KisColorSmudgeStrategyBase::blendInBackgroundWithDulling(KisFixedPaintDevic
                                                               const QRect &dstRect, const KoColor &preparedDullingColor,
                                                               const quint8 smudgeRateOpacity)
 {
+    Q_UNUSED(preparedDullingColor);
+
     if (m_smearOp->id() == COMPOSITE_COPY && smudgeRateOpacity == OPACITY_OPAQUE_U8) {
         dst->fill(dst->bounds(), m_preparedDullingColor);
     } else {

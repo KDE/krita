@@ -27,8 +27,11 @@ public:
         , m_resourceType(resourceType)
     {}
 
-    bool hasNext() const override { return !m_taggingDone; }
-    void next() override { m_taggingDone; m_taggingDone = true; }
+    bool hasNext() const override {
+        if (resourceType() != ResourceType::Brushes) return false;
+        return !m_taggingDone;
+    }
+    void next() override { m_taggingDone = true; }
 
     QString url() const override { return m_location; }
     QString name() const override { return QFileInfo(m_location).fileName(); }
@@ -42,6 +45,7 @@ public:
         abrTag->setComment(comment());
         abrTag->setName(name());
         abrTag->setFilename(filename());
+        abrTag->setResourceType(resourceType());
         QStringList brushes;
         Q_FOREACH(const KisAbrBrushSP brush, m_brushCollection->brushes()) {
             brushes << brush->filename();

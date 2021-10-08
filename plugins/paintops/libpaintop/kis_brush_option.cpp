@@ -16,6 +16,7 @@
 
 #include <KoCanvasResourcesInterface.h>
 #include <KoCanvasResourcesIds.h>
+#include <KoAbstractGradient.h>
 
 
 void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const

@@ -148,6 +148,8 @@ public:
         return QPair<QString, QString>(ResourceType::PaintOpPresets, "");
     }
 
+    void updateLinkedResourcesMetaData(KisResourcesInterfaceSP resourcesInterface) override;
+
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt, KisResourcesInterfaceSP resourcesInterface);

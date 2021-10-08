@@ -200,6 +200,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
             d->resourceCache[key] = resource;
             // load all the embedded resources into temporary "memory" storage
             loadRequiredResources(resource);
+            resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
         }
     }
 
@@ -369,6 +370,7 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
 
         Q_ASSERT(resource->md5Sum() == md5);
         resource->setVersion(0);
+        resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
         // Insert into the database
         const bool result = KisResourceCacheDb::addResource(storage,
@@ -412,6 +414,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     resource->setStorageLocation(storageLocation);
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
+    resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
 
@@ -451,6 +454,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
+    resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     // The version needs already to have been incremented
     if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {
@@ -483,6 +487,7 @@ bool KisResourceLocator::reloadResource(const QString &resourceType, const KoRes
 
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
+    resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     // We haven't changed the version of the resource, so the cache must be still valid
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + resource->filename());

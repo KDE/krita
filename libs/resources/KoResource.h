@@ -92,6 +92,15 @@ public:
     virtual void updateThumbnail();
 
     /**
+     * Requests the resource to update its linked-resources
+     * metadata stored in metaData()["dependent_resources_filenames"].
+     *
+     * This request comes from KisResourceLocator every time a
+     * new version of the resource is added to the database.
+     */
+    virtual void updateLinkedResourcesMetaData(KisResourcesInterfaceSP resourcesInterface);
+
+    /**
      * @brief thumbnail the thumbnail image to use in resource selectors
      * @return a valid qimage. All thumbnails for a given resource have the
      * same size (which is not true for image(), but that size need not

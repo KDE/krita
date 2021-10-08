@@ -124,6 +124,10 @@ void KoResource::updateThumbnail()
 {
 }
 
+void KoResource::updateLinkedResourcesMetaData(KisResourcesInterfaceSP resourcesInterface)
+{
+}
+
 QImage KoResource::thumbnail() const
 {
     return image();

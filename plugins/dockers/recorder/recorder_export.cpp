@@ -257,7 +257,7 @@ public:
 
     void updateVideoDuration()
     {
-        long ms = framesCount * 1000L / (inputFps ? inputFps : 30);
+        long ms = (framesCount * 1000L / (inputFps ? inputFps : 30)) + (lastFrameSec * 1000L);
         ui->labelVideoDuration->setText(formatDuration(ms));
     }
 
@@ -412,6 +412,7 @@ void RecorderExport::onLastFrameSecValueChanged(int value)
 {
     d->lastFrameSec = value;
     RecorderExportConfig(false).setLastFrameSec(value);
+    d->updateVideoDuration();
 }
 
 void RecorderExport::onCheckResizeToggled(bool checked)

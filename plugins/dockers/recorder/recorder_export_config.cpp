@@ -33,7 +33,7 @@ const QList<RecorderProfile> defaultProfiles = {
     { "GIF",        "gif",  profilePrefix % "-filter_complex \"fps=$OUT_FPS,loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\"\n-loop -1" },
     { "Matroska",   "mkv",  profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
     { "WebM",       "webm", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
-    { "MP4 x264 (+5s Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
+    { "MP4 x264 (Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
                                             " [0]scale=$WIDTH:$HEIGHT[q1];\n"
                                             " [q1]tpad=stop_mode=clone:stop_duration=1[v1];\n"
                                             " [0]trim=start_frame=$FRAMES-1[p1];\n"

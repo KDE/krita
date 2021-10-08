@@ -52,6 +52,8 @@ bool KisGridPaintOpSettings::paintIncremental()
 
 bool KisGridPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
 {
+    Q_UNUSED(currentNode);
+
     KisGridOpProperties option;
     option.readOptionSetting(this);
     bool eventIgnored = true;

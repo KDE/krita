@@ -55,6 +55,8 @@ quint8 KisColorSmudgeStrategyMaskLegacy::finalPainterOpacity(qreal opacity, qrea
 quint8 KisColorSmudgeStrategyMaskLegacy::colorRateOpacity(qreal opacity, qreal smudgeRateValue, qreal colorRateValue,
                                                           qreal maxPossibleSmudgeRateValue)
 {
+    Q_UNUSED(smudgeRateValue);
+
     const qreal maxColorRate = qMax<qreal>(1.0 - maxPossibleSmudgeRateValue, 0.2);
 
     // qFloor instead of qRound due to "historical reasons"

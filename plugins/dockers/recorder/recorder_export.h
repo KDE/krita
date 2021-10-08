@@ -38,6 +38,7 @@ private Q_SLOTS:
     void onButtonBrowseDirectoryClicked();
     void onSpinInputFpsValueChanged(int value);
     void onSpinFpsValueChanged(int value);
+    void onLastFrameSecValueChanged(int value);
     void onCheckResizeToggled(bool checked);
     void onSpinScaleWidthValueChanged(int value);
     void onSpinScaleHeightValueChanged(int value);

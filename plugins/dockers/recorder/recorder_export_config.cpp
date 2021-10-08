@@ -18,6 +18,7 @@ const QString keyFfmpegPath = "ffmpeg_path";
 const QString keyVideoDirectory = "recorder_export/videodirectory";
 const QString keyInputFps = "recorder_export/inputfps";
 const QString keyFps = "recorder_export/fps";
+const QString keyLastFrameSec = "recorder_export/lastframesec";
 const QString keyResize = "recorder_export/resize";
 const QString keySize = "recorder_export/size";
 const QString keyLockRatio = "recorder_export/lockratio";
@@ -83,6 +84,15 @@ void RecorderExportConfig::setFps(int value)
     config->writeEntry(keyFps, value);
 }
 
+int RecorderExportConfig::lastFrameSec() const
+{
+    return config->readEntry(keyLastFrameSec, 5);
+}
+
+void RecorderExportConfig::setLastFrameSec(int value)
+{
+    config->writeEntry(keyLastFrameSec, value);
+}
 
 bool RecorderExportConfig::resize() const
 {

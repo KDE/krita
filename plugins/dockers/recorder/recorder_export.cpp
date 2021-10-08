@@ -62,6 +62,7 @@ public:
     QString videoFileName;
     QString videoFilePath;
     int framesCount = 0;
+    int lastFrameSec = 5;
 
     QScopedPointer<KisFFMpegWrapper> ffmpeg;
     RecorderDirectoryCleaner *cleaner = nullptr;
@@ -250,6 +251,7 @@ public:
                .replace("$HEIGHT", QString::number(outSize.height()))
                .replace("$FRAMES", QString::number(framesCount))
                .replace("$INPUT_DIR", settings.inputDirectory)
+               .replace("$LAST_FRAME_SEC", QString::number(lastFrameSec * fps))
                .replace("$EXT", RecorderFormatInfo::fileExtension(settings.format));
     }
 
@@ -302,6 +304,7 @@ RecorderExport::RecorderExport(QWidget *parent)
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));
     connect(d->ui->spinInputFps, SIGNAL(valueChanged(int)), SLOT(onSpinInputFpsValueChanged(int)));
     connect(d->ui->spinFps, SIGNAL(valueChanged(int)), SLOT(onSpinFpsValueChanged(int)));
+    connect(d->ui->spinLastFrameSec, SIGNAL(valueChanged(int)), SLOT(onLastFrameSecValueChanged(int)));
     connect(d->ui->checkResize, SIGNAL(toggled(bool)), SLOT(onCheckResizeToggled(bool)));
     connect(d->ui->spinScaleWidth, SIGNAL(valueChanged(int)), SLOT(onSpinScaleWidthValueChanged(int)));
     connect(d->ui->spinScaleHeight, SIGNAL(valueChanged(int)), SLOT(onSpinScaleHeightValueChanged(int)));
@@ -403,6 +406,12 @@ void RecorderExport::onSpinFpsValueChanged(int value)
 {
     d->fps = value;
     RecorderExportConfig(false).setFps(value);
+}
+
+void RecorderExport::onLastFrameSecValueChanged(int value)
+{
+    d->lastFrameSec = value;
+    RecorderExportConfig(false).setLastFrameSec(value);
 }
 
 void RecorderExport::onCheckResizeToggled(bool checked)

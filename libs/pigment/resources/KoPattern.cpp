@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QBuffer>
 #include <QTextStream>
+#include <QFileInfo>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -143,10 +144,11 @@ bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resources
     bool result = false;
 
     QString mimeForData = KisMimeDatabase::mimeTypeForData(ba);
-    if (mimeForData == "image/x-gimp-pat" || mimeForData == "image/x-gimp-pattern" || mimeForData == "application/x-gimp-pattern") {
+    if (QFileInfo(filename()).suffix() == "pat" || mimeForData == "image/x-gimp-pat" || mimeForData == "image/x-gimp-pattern" || mimeForData == "application/x-gimp-pattern") {
         result = loadPatFromDevice(&buf);
     }
-    else {
+
+    if (!result) {
         QFileInfo fi(filename());
         QImage image;
         result = image.load(&buf, fi.suffix().toUpper().toLatin1());

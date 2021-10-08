@@ -14,10 +14,9 @@ namespace {
 class LocalResourcesSource : public KisResourcesInterface::ResourceSourceAdapter
 {
 public:
-    LocalResourcesSource(const KisLocalStrokeResources *parent, const QString &resourceType, const QList<KoResourceSP> &cachedResources)
+    LocalResourcesSource(const QString &resourceType, const QList<KoResourceSP> &cachedResources)
         : m_resourceType(resourceType)
         , m_cachedResources(cachedResources)
-        , m_parent(const_cast<KisLocalStrokeResources*>(parent))
     {
     }
 protected:
@@ -65,7 +64,6 @@ public:
 private:
     const QString m_resourceType;
     const QList<KoResourceSP> &m_cachedResources;
-    KisLocalStrokeResources *m_parent;
 };
 }
 
@@ -101,5 +99,5 @@ void KisLocalStrokeResources::addResource(KoResourceSP resource)
 KisResourcesInterface::ResourceSourceAdapter *KisLocalStrokeResources::createSourceImpl(const QString &type) const
 {
     Q_D(const KisLocalStrokeResources);
-    return new LocalResourcesSource(this, type, d->localResources);
+    return new LocalResourcesSource(type, d->localResources);
 }

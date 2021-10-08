@@ -36,22 +36,22 @@
 
 KisDlgPaletteEditor::KisDlgPaletteEditor()
     : m_ui(new Ui_WdgDlgPaletteEditor)
-    , m_actAddGroup(new QAction(i18n("Add a group")))
-    , m_actDelGroup(new QAction(i18n("Delete this group")))
-    , m_actRenGroup(new QAction(i18n("Rename this group")))
+    , m_actAddGroup(new QAction(i18n("Add a swatch group")))
+    , m_actDelGroup(new QAction(i18nc("Group as Swatch Group in a Palette", "Remove selected group")))
+    , m_actRenGroup(new QAction(i18nc("Group as Swatch Group in a Palette", "Rename selected group")))
     , m_paletteEditor(new KisPaletteEditor(this))
     , m_currentGroupOriginalName(KoColorSet::GLOBAL_GROUP_NAME)
 {
     setWindowTitle(i18n("Palette Editor"));
 
     m_ui->setupUi(this);
-    m_ui->gbxPalette->setTitle(i18n("Palette settings"));
-    m_ui->labelName->setText(i18n("Palette Name"));
+    m_ui->gbxPalette->setTitle(i18n("Palette options"));
+    m_ui->labelName->setText(i18n("Palette name:"));
     m_ui->bnAddGroup->setDefaultAction(m_actAddGroup.data());
 
-    m_ui->gbxGroup->setTitle(i18n("Group settings"));
-    m_ui->labelColCount->setText(i18n("Column count"));
-    m_ui->labelRowCount->setText(i18n("Row count"));
+    m_ui->gbxGroup->setTitle(i18n("Swatch Group options"));
+    m_ui->labelColCount->setText(i18n("Columns of swatches:"));
+    m_ui->labelRowCount->setText(i18n("Rows of swatches in group:"));
     m_ui->bnDelGroup->setDefaultAction(m_actDelGroup.data());
     m_ui->bnRenGroup->setDefaultAction(m_actRenGroup.data());
 

@@ -98,7 +98,7 @@ KoColorSetSP KisPaletteEditor::addPalette()
     KoDialog dialog;
     QFormLayout *layout = new QFormLayout(dialog.mainWidget());
     QLineEdit *le = new QLineEdit(i18nc("Default name for a new palette","New Palette"));
-    layout->addRow(i18nc("Label for line edit to set a palette name.","Name"), le);
+    layout->addRow(i18n("New palette name:"), le);
 
     QString saveLocation = m_d->rServer->saveLocation();
 
@@ -214,11 +214,11 @@ QString KisPaletteEditor::addGroup()
 
     QVBoxLayout *layout = new QVBoxLayout(dialog.mainWidget());
 
-    layout->addWidget(new QLabel(i18n("Name")));
+    layout->addWidget(new QLabel(i18n("New swatch group name:")));
     QLineEdit *leName = new QLineEdit(newGroupName());
     connect(leName, SIGNAL(textChanged(QString)), SLOT(slotGroupNameChanged(QString)));
     layout->addWidget(leName);
-    layout->addWidget(new QLabel(i18n("Row count")));
+    layout->addWidget(new QLabel(i18n("Rows of swatches in group:")));
     QSpinBox *spxRow = new QSpinBox();
     spxRow->setValue(20);
     layout->addWidget(spxRow);
@@ -242,7 +242,7 @@ QString KisPaletteEditor::addGroup()
 bool KisPaletteEditor::removeGroup(const QString &name)
 {
     KoDialog dialog;
-    dialog.setWindowTitle(i18nc("@title:dialog", "Removing Group"));
+    dialog.setWindowTitle(i18nc("@title:dialog", "Removing Swatch Group"));
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
     QCheckBox *chkKeep = new QCheckBox();
 
@@ -271,7 +271,7 @@ QString KisPaletteEditor::renameGroup(const QString &oldName)
     connect(leNewName, SIGNAL(textChanged(QString)), SLOT(slotGroupNameChanged(QString)));
     leNewName->setText(m_d->modified.groups[oldName].name());
 
-    form->addRow(i18nc("Renaming swatch group", "New name"), leNewName);
+    form->addRow(i18n("New swatch group name:"), leNewName);
 
     if (dialog.exec() != KoDialog::Accepted) { return QString(); }
     if (leNewName->text().isEmpty()) { return QString(); }
@@ -352,7 +352,7 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
     if (!m_d->view->document()) { return; }
 
     KoDialog dialog;
-    dialog.setCaption(i18nc("@title:dialog", "Add a Color"));
+    dialog.setCaption(i18nc("@title:dialog", "Add a new Color Swatch"));
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
 
     QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
@@ -370,10 +370,10 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
 
         KisSwatch entry = m_d->model->getEntry(index);
 
-        editableItems->addRow(i18n("ID"), lnIDName);
-        editableItems->addRow(i18nc("Name of the color swatch", "Color swatch name"), lnGroupName);
-        editableItems->addRow(i18n("Color"), bnColor);
-        editableItems->addRow(i18n("Spot color"), chkSpot);
+        editableItems->addRow(i18n("Swatch ID:"), lnIDName);
+        editableItems->addRow(i18n("Color swatch name:"), lnGroupName);
+        editableItems->addRow(i18nc("Color as the Color of a Swatch in a Palette", "Color:"), bnColor);
+        editableItems->addRow(i18n("Spot color:"), chkSpot);
 
         lnGroupName->setText(entry.name());
         lnIDName->setText(entry.id());
@@ -397,7 +397,7 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     if (!m_d->view->document()) { return; }
 
     KoDialog dialog;
-    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Colorset Entry"));
+    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Color Swatch"));
 
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
 
@@ -418,11 +418,11 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     chkSpot->setChecked(false);
     chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
 
-    editableItems->addRow(i18n("Group"), cmbGroups);
-    editableItems->addRow(i18n("ID"), lnIDName);
-    editableItems->addRow(i18n("Name"), lnName);
-    editableItems->addRow(i18n("Color"), bnColor);
-    editableItems->addRow(i18nc("Spot color", "Spot"), chkSpot);
+    editableItems->addRow(i18n("Swatch Group:"), cmbGroups);
+    editableItems->addRow(i18n("Swatch ID:"), lnIDName);
+    editableItems->addRow(i18n("Color swatch name:"), lnName);
+    editableItems->addRow(i18nc("Color as the Color of a Swatch in a Palette", "Color:"), bnColor);
+    editableItems->addRow(i18n("Spot color:"), chkSpot);
 
     if (dialog.exec() != KoDialog::Accepted) { return; }
 

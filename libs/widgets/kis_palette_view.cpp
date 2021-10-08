@@ -100,11 +100,11 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
 bool KisPaletteView::addEntryWithDialog(KoColor color)
 {
     KoDialog dialog;
-    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Colorset Entry"));
+    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Color Swatch"));
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
 
     QComboBox *cmbGroups = new QComboBox;
-    QString defaultGroupName = i18nc("Name for default group", "Default");
+    QString defaultGroupName = i18nc("Name for default swatch group", "Default");
     cmbGroups->addItem(defaultGroupName);
     cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
     QLineEdit *lnIDName = new QLineEdit;
@@ -112,13 +112,13 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     KisColorButton *bnColor = new KisColorButton;
     QCheckBox *chkSpot = new QCheckBox;
     chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
-    editableItems->addRow(i18n("Group"), cmbGroups);
-    editableItems->addRow(i18n("ID"), lnIDName);
-    editableItems->addRow(i18n("Name"), lnName);
-    editableItems->addRow(i18n("Color"), bnColor);
-    editableItems->addRow(i18nc("Spot color", "Spot"), chkSpot);
+    editableItems->addRow(i18n("Swatch Group:"), cmbGroups);
+    editableItems->addRow(i18n("Swatch ID:"), lnIDName);
+    editableItems->addRow(i18n("Color swatch name:"), lnName);
+    editableItems->addRow(i18nc("Color as the Color of a Swatch in a Palette", "Color:"), bnColor);
+    editableItems->addRow(i18n("Spot color:"), chkSpot);
     cmbGroups->setCurrentIndex(0);
-    lnName->setText(i18nc("Part of a default name for a color","Color")+" " + QString::number(m_d->model->colorSet()->colorCount()+1));
+    lnName->setText(i18nc("Prefix of a color swatch default name, as in Color 1","Color")+" " + QString::number(m_d->model->colorSet()->colorCount()+1));
     lnIDName->setText(QString::number(m_d->model->colorSet()->colorCount() + 1));
     bnColor->setColor(color);
     chkSpot->setChecked(false);

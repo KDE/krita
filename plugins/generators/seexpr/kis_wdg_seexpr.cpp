@@ -365,15 +365,15 @@ void KisWdgSeExpr::isValid()
         m_widget->txtEditor->clearErrors();
         emit sigConfigurationUpdated();
 
-        if (m_currentPreset) {
-            m_widget->saveBrushPresetButton->setEnabled(true);
-            if (m_currentPreset->script() != m_widget->txtEditor->getExpr()) {
-                m_currentPreset->setScript(m_widget->txtEditor->getExpr());
-                m_currentPreset->setDirty(true);
-            }
-            
-            slotUpdatePresetSettings();
-        } else {
+        if (m_currentPreset->script() != m_widget->txtEditor->getExpr()) {
+            m_currentPreset->setScript(m_widget->txtEditor->getExpr());
+            m_currentPreset->setDirty(true);
+        }
+
+        slotUpdatePresetSettings();
+
+        // Override preset settings with the following
+        if (m_isCreatingPresetFromScratch) {
             m_widget->saveNewBrushPresetButton->setEnabled(true);
         }
     }

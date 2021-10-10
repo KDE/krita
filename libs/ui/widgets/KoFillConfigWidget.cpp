@@ -684,9 +684,8 @@ void KoFillConfigWidget::slotSavePredefinedGradientClicked()
     d->activeGradient->setFilename(name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
 
     KoAbstractGradientSP newGradient = d->activeGradient->clone().dynamicCast<KoAbstractGradient>();
-    KisResourceModel model(ResourceType::Gradients);
 
-    KisResourceUserOperations::addResourceWithUserInput(this, &model, newGradient);
+    KisResourceUserOperations::addResourceWithUserInput(this, newGradient);
 
     d->gradientAction->setCurrentResource(newGradient);
 }

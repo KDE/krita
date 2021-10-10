@@ -142,7 +142,6 @@ void KisWorkspaceChooser::slotSaveWorkspace()
         workspace = resources.first().dynamicCast<KisWorkspaceResource>();
     }
 
-    KisResourceModel resModel(ResourceType::WindowLayouts);
     if (workspace.isNull()) {
         workspace.reset(new KisWorkspaceResource(name));
         workspace->setName(name);
@@ -150,12 +149,12 @@ void KisWorkspaceChooser::slotSaveWorkspace()
         workspace->setImage(m_view->mainWindow()->layoutThumbnail());
         workspace->setValid(true);
         workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
-        KisResourceUserOperations::addResourceWithUserInput(this, &resModel, workspace);
+        KisResourceUserOperations::addResourceWithUserInput(this, workspace);
     }
     else {
         workspace->setDockerState(m_view->qtMainWindow()->saveState());
         workspace->setImage(m_view->mainWindow()->layoutThumbnail());
-        KisResourceUserOperations::updateResourceWithUserInput(this, &resModel, workspace);
+        KisResourceUserOperations::updateResourceWithUserInput(this, workspace);
     }
 
     m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
@@ -217,8 +216,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 
     layout->setName(name);
     layout->setFilename(name.split(" ").join("_") + layout->defaultFileExtension());
-    KisResourceModel resModel(ResourceType::WindowLayouts);
-    KisResourceUserOperations::addResourceWithUserInput(this, &resModel, layout);
+    KisResourceUserOperations::addResourceWithUserInput(this, layout);
 }
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()

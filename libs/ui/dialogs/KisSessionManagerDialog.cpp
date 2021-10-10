@@ -78,8 +78,7 @@ void KisSessionManagerDialog::slotNewSession()
     session->setName(name);
     session->storeCurrentWindows();
 
-    KisResourceModel resourceModel(ResourceType::Sessions);
-    KisResourceUserOperations::addResourceWithUserInput(this, &resourceModel, session);
+    KisResourceUserOperations::addResourceWithUserInput(this, session);
 
     KisPart::instance()->setCurrentSession(session);
 
@@ -97,7 +96,7 @@ void KisSessionManagerDialog::slotRenameSession()
     if (!session) return;
 
     KisResourceModel resourceModel(ResourceType::Sessions);
-    KisResourceUserOperations::renameResourceWithUserInput(this, &resourceModel, session, name);
+    KisResourceUserOperations::renameResourceWithUserInput(this, session, name);
 }
 
 void KisSessionManagerDialog::slotSessionDoubleClicked(QModelIndex /*item*/)

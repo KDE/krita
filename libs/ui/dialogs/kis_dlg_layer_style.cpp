@@ -288,7 +288,7 @@ void KisDlgLayerStyle::slotNewStyle()
 
     if (KisResourceLocator::instance()->hasStorage(storagePath)) {
         KisResourceModel model(ResourceType::LayerStyles);
-        KisResourceUserOperations::addResourceWithUserInput(this, &model, clone, storagePath);
+        KisResourceUserOperations::addResourceWithUserInput(this, clone, storagePath);
     } else {
         KisAslLayerStyleSerializer serializer;
         serializer.setStyles(QVector<KisPSDLayerStyleSP>() << clone);

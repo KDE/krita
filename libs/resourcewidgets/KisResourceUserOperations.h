@@ -30,10 +30,10 @@ public:
 
 
 
-    static KoResourceSP importResourceFileWithUserInput(QWidget *widgetParent, KisResourceModel* resourceModel, QString storageLocation, QString resourceType, QString resourceFilepath);
-    static bool renameResourceWithUserInput(QWidget* widgetParent, KisResourceModel* resourceModel, KoResourceSP resource, QString resourceName);
-    static bool addResourceWithUserInput(QWidget* widgetParent, KisResourceModel* resourceModel, KoResourceSP resource, QString storageLocation = "");
-    static bool updateResourceWithUserInput(QWidget* widgetParent, KisResourceModel* resourceModel, KoResourceSP resource);
+    static KoResourceSP importResourceFileWithUserInput(QWidget *widgetParent, QString storageLocation, QString resourceType, QString resourceFilepath);
+    static bool renameResourceWithUserInput(QWidget* widgetParent, KoResourceSP resource, QString resourceName);
+    static bool addResourceWithUserInput(QWidget* widgetParent, KoResourceSP resource, QString storageLocation = "");
+    static bool updateResourceWithUserInput(QWidget* widgetParent, KoResourceSP resource);
 
 
 

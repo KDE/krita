@@ -120,7 +120,7 @@ KoColorSetSP KisPaletteEditor::addPalette()
         resourceLocation = m_d->view->document()->linkedResourcesStorageId();
     }
     KisResourceModel resourceModel(ResourceType::Palettes);
-    KisResourceUserOperations::addResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, colorSet, resourceLocation);
+    KisResourceUserOperations::addResourceWithUserInput(m_d->view->mainWindow(), colorSet, resourceLocation);
 
     return colorSet;
 }
@@ -145,8 +145,7 @@ KoColorSetSP KisPaletteEditor::importPalette()
     if (messageBox.exec() == QMessageBox::Yes) {
         storageLocation = m_d->view->document()->linkedResourcesStorageId();
     }
-    KisResourceModel resourceModel(ResourceType::Palettes);
-    KoResourceSP resource = KisResourceUserOperations::importResourceFileWithUserInput(m_d->view->mainWindow(), &resourceModel, storageLocation, ResourceType::Palettes, filename);
+    KoResourceSP resource = KisResourceUserOperations::importResourceFileWithUserInput(m_d->view->mainWindow(), storageLocation, ResourceType::Palettes, filename);
 
     KoColorSetSP palette;
     if (resource) {
@@ -326,8 +325,7 @@ void KisPaletteEditor::slotSetDocumentModified()
 {
     if (m_d->modified.storageLocation == m_d->view->document()->linkedResourcesStorageId()) {
         updatePalette();
-        KisResourceModel model(ResourceType::Palettes);
-        KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), &model, m_d->model->colorSet());
+        KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), m_d->model->colorSet());
         m_d->view->document()->setModified(true);
     }
     m_d->isModified = true;
@@ -457,8 +455,7 @@ void KisPaletteEditor::updatePalette()
         palette->setColumnCount(modified.columnCount);
     }
     if (m_d->isNameModified) {
-        KisResourceModel resourceModel(ResourceType::Palettes);
-        KisResourceUserOperations::renameResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, palette, m_d->modified.name);
+        KisResourceUserOperations::renameResourceWithUserInput(m_d->view->mainWindow(), palette, m_d->modified.name);
     }
     QString resourceLocation = m_d->model->colorSet()->storageLocation();
     if (resourceLocation != m_d->modified.storageLocation) {
@@ -504,8 +501,7 @@ void KisPaletteEditor::saveNewPaletteVersion()
         }
     }
     if (isGlobal) {
-        KisResourceModel model(ResourceType::Palettes);
-        KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), &model, m_d->model->colorSet());
+        KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), m_d->model->colorSet());
     }
 
     m_d->isModified = false;

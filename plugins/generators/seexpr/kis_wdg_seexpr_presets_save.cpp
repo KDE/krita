@@ -71,14 +71,10 @@ void KisWdgSeExprPresetsSave::showDialog()
             // If the id is -1, this is a new preset that has never been saved, so it cannot be a copy
             QString name = preset->name().replace("_", " ");
             if (preset->resourceId() > -1) {
-                name.append(" ").append(i18n("Copy"));
+                name = QString("%1 %2").arg(name, i18n("Copy"));
             }
             newPresetNameTextField->setText(name);
         }
-
-        newPresetNameTextField->setVisible(true);
-        clearPresetThumbnailButton->setVisible(true);
-        loadImageIntoThumbnailButton->setVisible(true);
     } else {
         setWindowTitle(i18n("Save SeExpr Preset"));
 
@@ -172,8 +168,8 @@ void KisWdgSeExprPresetsSave::savePreset()
 
             // trying to get brush preset to load after it is created
             if (r) {
-                emit resourceSelected(newPreset);
                 m_currentPreset = newPreset;
+                emit resourceSelected(m_currentPreset);
             }
         }
     }

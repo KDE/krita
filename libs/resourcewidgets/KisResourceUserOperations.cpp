@@ -90,10 +90,12 @@ bool KisResourceUserOperations::addResourceWithUserInput(QWidget *widgetParent, 
         int resourceWithThatFilenameId;
         if (KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first, storageLocation, resourceWithThatFilenameId)) {
             KoResourceSP resourceWithThatFilename = resourceModel->resourceForId(resourceWithThatFilenameId);
-            QMessageBox::warning(widgetParent, i18nc("@title:window", "Cannot add the resource"),
-                                 i18nc("Warning message", "The filename %1 is already used for a resource %2, so adding a resource with name %3 failed.",
-                                       resource->filename(), resourceWithThatFilename->name(), resource->name()));
-            return false;
+            if (resourceWithThatFilename) {
+                QMessageBox::warning(widgetParent, i18nc("@title:window", "Cannot add the resource"),
+                                     i18nc("Warning message", "The filename %1 is already used for a resource %2, so adding a resource with name %3 failed.",
+                                           resource->filename(), resourceWithThatFilename->name(), resource->name()));
+                return false;
+            }
         }
         QMessageBox::warning(widgetParent, i18nc("@title:window", "Cannot add the resource"),
                              i18nc("Warning message", "The filename %1 is already in use, so adding a resource with name %2 failed.",

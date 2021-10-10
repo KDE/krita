@@ -261,9 +261,9 @@ bool GamutMaskDock::saveSelectedMaskResource()
             bool r = true;
             if (idx.isValid()) {
                 // don't add, only update
-                r = KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_selectedMask);
+                r = KisResourceUserOperations::updateResourceWithUserInput(this, m_selectedMask);
             } else {
-                r = KisResourceUserOperations::addResourceWithUserInput(this, &model, m_selectedMask);
+                r = KisResourceUserOperations::addResourceWithUserInput(this, m_selectedMask);
             }
 
             maskSaved = r;

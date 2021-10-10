@@ -2549,8 +2549,7 @@ void KisMainWindow::updateWindowMenu()
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         QString filename = dialog.filename();
 
-        KisResourceModel resourceModel(ResourceType::Workspaces);
-        KisResourceUserOperations::importResourceFileWithUserInput(this, &resourceModel, "", ResourceType::Workspaces, filename);
+        KisResourceUserOperations::importResourceFileWithUserInput(this, "", ResourceType::Workspaces, filename);
     });
 
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),
@@ -2572,7 +2571,7 @@ void KisMainWindow::updateWindowMenu()
         workspace->setFilename(fileInfo.fileName());
         workspace->setName(name);
 
-        KisResourceUserOperations::addResourceWithUserInput(this, &resourceModel, workspace);
+        KisResourceUserOperations::addResourceWithUserInput(this, workspace);
     });
 
     // TODO: What to do about delete?

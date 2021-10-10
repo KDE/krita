@@ -572,15 +572,15 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
                         }
                     }
                     if (res) {
-                        KisResourceUserOperations::updateResourceWithUserInput(q, &model, res);
+                        KisResourceUserOperations::updateResourceWithUserInput(q, res);
                     }
                 }
                 else {
-                    KisResourceUserOperations::updateResourceWithUserInput(q, &model, gradient);
+                    KisResourceUserOperations::updateResourceWithUserInput(q, gradient);
                 }
             }
             else {
-                KisResourceUserOperations::addResourceWithUserInput(q, &model, gradient);
+                KisResourceUserOperations::addResourceWithUserInput(q, gradient);
             }
             itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
             itemChooser->setCurrentResource(gradient);

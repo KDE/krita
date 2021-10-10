@@ -389,7 +389,7 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
     // create a new brush preset with the name specified and add to resource provider
     KisResourceModel model(ResourceType::PaintOpPresets);
     KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
-    KisResourceUserOperations::renameResourceWithUserInput(this, &model, properCleanResource, renamedPresetName);
+    KisResourceUserOperations::renameResourceWithUserInput(this, properCleanResource, renamedPresetName);
 
     resourceSelected(curPreset); // refresh and select our freshly renamed resource
     if (isDirty) {

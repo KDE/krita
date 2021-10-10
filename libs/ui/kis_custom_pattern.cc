@@ -127,9 +127,8 @@ void KisCustomPattern::slotAddPredefined()
 
     if (!filename.isEmpty()) {
         m_pattern->setFilename(QFileInfo(filename).fileName());
-        KisResourceModel model(ResourceType::Patterns);
         if (!fi.exists()) {
-            if (!KisResourceUserOperations::addResourceWithUserInput(this, &model, m_pattern->clone().dynamicCast<KoPattern>())) {
+            if (!KisResourceUserOperations::addResourceWithUserInput(this, m_pattern->clone().dynamicCast<KoPattern>())) {
                 qWarning() << "Could not add pattern with filename" << filename;
             }
             else {
@@ -137,7 +136,7 @@ void KisCustomPattern::slotAddPredefined()
             }
         }
         else if (overwrite) {
-            if (!KisResourceUserOperations::addResourceWithUserInput(this, &model, m_pattern->clone().dynamicCast<KoPattern>())) {
+            if (!KisResourceUserOperations::addResourceWithUserInput(this, m_pattern->clone().dynamicCast<KoPattern>())) {
                 qWarning() << "Could not add pattern with filename" << filename;
             }
             else {

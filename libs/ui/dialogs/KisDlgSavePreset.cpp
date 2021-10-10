@@ -185,8 +185,7 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         newPreset->setValid(true);
         newPreset->setStorageLocation("");
-        KisResourceModel model(ResourceType::PaintOpPresets);
-        if (!KisResourceUserOperations::addResourceWithUserInput(this, &model, newPreset)) {
+        if (!KisResourceUserOperations::addResourceWithUserInput(this, newPreset)) {
             success = false;
         }
 
@@ -198,8 +197,7 @@ void KisPresetSaveWidget::savePreset()
         curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
 
-        KisResourceModel model(ResourceType::PaintOpPresets);
-        if (!KisResourceUserOperations::updateResourceWithUserInput(this, &model, curPreset)) {
+        if (!KisResourceUserOperations::updateResourceWithUserInput(this, curPreset)) {
             success = false;
         }
 

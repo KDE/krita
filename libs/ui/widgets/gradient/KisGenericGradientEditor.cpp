@@ -630,8 +630,7 @@ void KisGenericGradientEditor::on_buttonUpdateGradient_clicked()
     }
 
     m_d->gradient->updatePreview();
-    KisResourceModel model(ResourceType::Gradients);
-    KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_d->gradient);
+    KisResourceUserOperations::updateResourceWithUserInput(this, m_d->gradient);
 }
 
 void KisGenericGradientEditor::on_buttonAddGradient_clicked()
@@ -644,7 +643,7 @@ void KisGenericGradientEditor::on_buttonAddGradient_clicked()
     
     m_d->gradient->updatePreview();
     KisResourceModel model(ResourceType::Gradients);
-    KisResourceUserOperations::addResourceWithUserInput(this, &model, m_d->gradient);
+    KisResourceUserOperations::addResourceWithUserInput(this, m_d->gradient);
 }
 
 void KisGenericGradientEditor::on_widgetGradientPresetChooser_resourceClicked(KoResourceSP resource)

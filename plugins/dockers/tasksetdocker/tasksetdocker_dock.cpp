@@ -216,8 +216,7 @@ void TasksetDockerDock::saveClicked()
 
     taskset->setName(name);
     taskset->setFilename(fileInfo.fileName());
-    KisResourceModel model(ResourceType::TaskSets);
-    KisResourceUserOperations::addResourceWithUserInput(this, &model, taskset);
+    KisResourceUserOperations::addResourceWithUserInput(this, taskset);
 }
 
 void TasksetDockerDock::clearClicked()

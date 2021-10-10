@@ -83,10 +83,9 @@ void KisWdgSeExprPresetsSave::showDialog()
         setWindowTitle(i18n("Save SeExpr Preset"));
 
         if (preset) {
-            newPresetNameTextField->setText(preset->name());
+            const QString name(preset->name().replace("_", " "));
+            newPresetNameTextField->setText(name);
         }
-
-        newPresetNameTextField->setVisible(false);
     }
 
     if (preset) {

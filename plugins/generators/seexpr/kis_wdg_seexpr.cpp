@@ -294,6 +294,7 @@ void KisWdgSeExpr::slotSaveNewBrushPreset()
     m_saveDialog->useNewPresetDialog(true);
     m_saveDialog->setCurrentPreset(m_currentPreset);
     m_saveDialog->setCurrentRenderConfiguration(currentConfiguration);
+    m_saveDialog->loadExistingThumbnail();
     m_saveDialog->showDialog();
 }
 

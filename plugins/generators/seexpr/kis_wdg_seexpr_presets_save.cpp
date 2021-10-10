@@ -151,6 +151,9 @@ void KisWdgSeExprPresetsSave::savePreset()
         m_currentPreset->setFilename(presetFileName + m_currentPreset->defaultFileExtension());
         m_currentPreset->setValid(true);
         r = KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_currentPreset);
+        if (r) {
+            emit resourceSelected(m_currentPreset);
+        }
     } else {
         // Saving a completely new preset
         // Clone the preset, otherwise the modifications will impact the existing resource

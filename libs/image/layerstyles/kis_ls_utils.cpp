@@ -415,8 +415,14 @@ namespace KisLsUtils
             fillDevice->setDefaultPixel(color);
 
         } else if (config->fillType() == psd_fill_pattern) {
+            KoPatternSP pattern = config->pattern(resourcesInterface);
+
+            if (pattern->hasAlpha()) {
+                pattern = env->cachedFlattenedPattern(pattern);
+            }
+
             fillPattern(fillDevice, applyRect, env,
-                        config->scale(), config->pattern(resourcesInterface),
+                        config->scale(), pattern,
                         config->horizontalPhase(),
                         config->verticalPhase(),
                         config->alignWithLayer());

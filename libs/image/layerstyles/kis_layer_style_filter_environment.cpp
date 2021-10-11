@@ -22,6 +22,7 @@
 #include "kis_random_accessor_ng.h"
 #include "kis_iterator_ng.h"
 #include "kis_cached_paint_device.h"
+#include "KisLocalStrokeResources.h"
 
 
 struct Q_DECL_HIDDEN KisLayerStyleFilterEnvironment::Private
@@ -30,6 +31,7 @@ struct Q_DECL_HIDDEN KisLayerStyleFilterEnvironment::Private
     KisPixelSelectionSP cachedRandomSelection;
     KisCachedSelection globalCachedSelection;
     KisCachedPaintDevice globalCachedPaintDevice;
+    KisLocalStrokeResources cachedFlattenedPattern;
 
     static KisPixelSelectionSP generateRandomSelection(const QRect &rc);
 };
@@ -121,6 +123,22 @@ KisPixelSelectionSP KisLayerStyleFilterEnvironment::cachedRandomSelection(const 
     }
 
     return m_d->cachedRandomSelection;
+}
+
+KoPatternSP KisLayerStyleFilterEnvironment::cachedFlattenedPattern(KoPatternSP pattern) const
+{
+    if (!pattern->hasAlpha()) return pattern;
+
+    auto source = m_d->cachedFlattenedPattern.source<KoPattern>(ResourceType::Patterns);
+
+    KoPatternSP resultPattern = source.bestMatch("", pattern->filename(), pattern->name());
+    if (resultPattern) return resultPattern;
+
+    KoPatternSP flattenedPattern = pattern->cloneWithoutAlpha();
+
+    m_d->cachedFlattenedPattern.addResource(flattenedPattern);
+
+    return flattenedPattern;
 }
 
 KisCachedSelection *KisLayerStyleFilterEnvironment::cachedSelection()

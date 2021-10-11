@@ -12,6 +12,7 @@
 
 #include <kritaimage_export.h>
 #include "kis_types.h"
+#include <KoPattern.h>
 
 class KisPainter;
 class KisLayer;
@@ -36,6 +37,8 @@ public:
                            const QBitArray &channelFlags) const;
 
     KisPixelSelectionSP cachedRandomSelection(const QRect &requestedRect) const;
+
+    KoPatternSP cachedFlattenedPattern(KoPatternSP pattern) const;
 
     KisCachedSelection* cachedSelection();
     KisCachedPaintDevice* cachedPaintDevice();

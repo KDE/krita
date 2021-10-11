@@ -23,6 +23,7 @@ class KisLocalStrokeResourcesPrivate;
 class KRITARESOURCES_EXPORT KisLocalStrokeResources : public KisResourcesInterface
 {
 public:
+    KisLocalStrokeResources();
     KisLocalStrokeResources(const QList<KoResourceSP> &localResources);
 
     void addResource(KoResourceSP resource);

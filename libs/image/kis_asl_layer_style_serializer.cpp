@@ -39,7 +39,7 @@
 using namespace std::placeholders;
 
 KisAslLayerStyleSerializer::KisAslLayerStyleSerializer()
-    : m_localResourcesInterface(new KisLocalStrokeResources({}))
+    : m_localResourcesInterface(new KisLocalStrokeResources())
 {
 }
 

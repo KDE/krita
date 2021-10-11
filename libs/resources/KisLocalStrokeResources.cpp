@@ -85,6 +85,11 @@ public:
 };
 
 
+KisLocalStrokeResources::KisLocalStrokeResources()
+    : KisResourcesInterface(new KisLocalStrokeResourcesPrivate({}))
+{
+}
+
 KisLocalStrokeResources::KisLocalStrokeResources(const QList<KoResourceSP> &localResources)
     : KisResourcesInterface(new KisLocalStrokeResourcesPrivate(localResources))
 {

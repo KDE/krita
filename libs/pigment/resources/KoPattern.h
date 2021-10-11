@@ -67,7 +67,17 @@ public:
      */
     QImage pattern() const;
 
-    bool hasAlpha();
+    bool hasAlpha() const;
+
+    /**
+     * Create a copy of this pattern removing all the transparency from
+     * it. The fully transparent color becomes 100% black. The name and the
+     * filename of the new pattern are kept the same.
+     *
+     * If hasAlpha() is false, the function just returns a simple clone
+     * of this pattern.
+     */
+    KoPatternSP cloneWithoutAlpha() const;
 
 private:
 

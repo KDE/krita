@@ -29,7 +29,7 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
         , resourcesInterface(_resourcesInterface)
     {
         if (!resourcesInterface) {
-            resourcesInterface.reset(new KisLocalStrokeResources({}));
+            resourcesInterface.reset(new KisLocalStrokeResources());
         }
     }
 

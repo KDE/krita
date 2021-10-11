@@ -27,6 +27,7 @@
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
+#include <kis_pointer_utils.h>
 
 #include <KisMimeDatabase.h>
 
@@ -362,6 +363,29 @@ void KoPattern::checkForAlpha(const QImage& image) {
     }
 }
 
-bool KoPattern::hasAlpha() {
+bool KoPattern::hasAlpha() const
+{
     return m_hasAlpha;
+}
+
+KoPatternSP KoPattern::cloneWithoutAlpha() const
+{
+    if (!hasAlpha()) return clone().dynamicCast<KoPattern>();
+
+    QImage image = this->image();
+
+    for (int y = 0; y < image.height(); ++y) {
+        QRgb *ptr = reinterpret_cast<QRgb*>(image.scanLine(y));
+
+        for (int x = 0; x < image.width(); ++x) {
+            const qreal coeff = qAlpha(*ptr) / 255.0;
+            *ptr = qRgba(qRound(coeff * qRed(*ptr)), qRound(coeff * qGreen(*ptr)), qRound(coeff * qBlue(*ptr)), 255);
+            ptr++;
+        }
+    }
+
+    KoPatternSP flattenedPattern =
+        toQShared(new KoPattern(image, this->name(), this->filename()));
+
+    return flattenedPattern;
 }

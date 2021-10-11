@@ -85,6 +85,12 @@ void sliceQImage(const QImage &image, QVector<QVector<QByteArray>> *dstPlanes, b
 
 void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
 {
+    KoPatternSP effectivePattern = pattern;
+
+    if (effectivePattern->hasAlpha()) {
+        effectivePattern = pattern->cloneWithoutAlpha();
+    }
+
     switch (m_byteOrder) {
     case psd_byte_order::psdLittleEndian:
         addPatternImpl<psd_byte_order::psdLittleEndian>(pattern);

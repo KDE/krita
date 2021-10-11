@@ -254,7 +254,7 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
     dumbImage.fill(Qt::red);
     KoPatternSP pattern(new KoPattern(dumbImage, "test_pattern", ""));
 
-    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources({}));
+    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources());
     resourcesInterface->addResource(pattern);
     style->setResourcesInterface(resourcesInterface);
 

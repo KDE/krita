@@ -373,7 +373,7 @@ void KisLayerStyleProjectionPlaneTest::testPatternOverlay()
     QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
 
 
-    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources({}));
+    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources());
     resourcesInterface->addResource(pattern);
     style->setResourcesInterface(resourcesInterface);
 
@@ -408,7 +408,7 @@ void KisLayerStyleProjectionPlaneTest::testStroke()
     KoPatternSP pattern(new KoPattern(fileName));
     QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
 
-    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources({}));
+    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources());
     resourcesInterface->addResource(pattern);
     style->setResourcesInterface(resourcesInterface);
 
@@ -494,7 +494,7 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     KoPatternSP pattern(new KoPattern(fileName));
     QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
     Q_ASSERT(!pattern->md5Sum().isEmpty());
-    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources({}));
+    QSharedPointer<KisLocalStrokeResources> resourcesInterface(new KisLocalStrokeResources());
     resourcesInterface->addResource(pattern);
 
     style->setResourcesInterface(resourcesInterface);

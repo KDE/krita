@@ -70,7 +70,10 @@ KoQuaZipStore::~KoQuaZipStore()
     }
 
     delete dd->archive;
-    delete dd->currentFile;
+
+    if (dd->currentFile) {
+        delete dd->currentFile;
+    }
 }
 
 void KoQuaZipStore::setCompressionEnabled(bool enabled)

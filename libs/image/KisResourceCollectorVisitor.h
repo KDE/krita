@@ -54,7 +54,6 @@ public:
 
 
     bool visit(KisAdjustmentLayer *node) override {
-        m_resources << node->filter()->embeddedResources(KisGlobalResourcesInterface::instance());
         m_resources << node->filter()->linkedResources(KisGlobalResourcesInterface::instance());
         return visitAll(node);
 
@@ -72,7 +71,6 @@ public:
 
 
     bool visit(KisFilterMask *node) override {
-        m_resources << node->filter()->embeddedResources(KisGlobalResourcesInterface::instance());
         m_resources << node->filter()->linkedResources(KisGlobalResourcesInterface::instance());
         return visitAll(node);
     }
@@ -87,7 +85,6 @@ public:
 
 
     bool visit(KisGeneratorLayer *node) override {
-        m_resources << node->filter()->embeddedResources(KisGlobalResourcesInterface::instance());
         m_resources << node->filter()->linkedResources(KisGlobalResourcesInterface::instance());
         return visitAll(node);
     }

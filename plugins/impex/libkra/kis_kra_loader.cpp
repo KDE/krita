@@ -523,7 +523,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
         store->close();
 
         if (serializer.isValid()) {
-            const QString resourceLocation = m_d->document->uniqueID();
+            const QString resourceLocation = "memory";
             serializer.assignAllLayerStylesToLayers(image->root(), resourceLocation);
 
         } else {

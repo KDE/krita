@@ -202,16 +202,9 @@ public:
                                         false,
                                         AlphaColorModelID,
                                         colorDepthIdForChannelType<channels_type>(),
-                                        qMin(16, int(sizeof(channels_type) * 8)), // DIRTY HACK ALERT: see a comment below!
+                                        sizeof(channels_type) * 8,
                                         100000)
     {
-        /**
-         * Note about a hack with reference bit depth: right now all the color
-         * conversions to/from Alpha colorspace are done via LabAU16 16-bit color space,
-         * therefore, the conversions are lossy! Better conversions are yet to be implemented,
-         * but for now we just define this color space as having 16-bit reference depth
-         * (the problem arises with AlphaF32 only of course, which is hardly used anywhere).
-         */
     }
 
     KoColorSpace *createColorSpace(const KoColorProfile *) const override {

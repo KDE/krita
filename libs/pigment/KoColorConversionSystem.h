@@ -106,6 +106,18 @@ public:
      * @return true if there is a good path between two color spaces
      */
     bool existsGoodPath(const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName) const;
+
+    /**
+     * @return the best path for the specified color spaces. Used for
+     * testing purposes only
+     */
+    Path findBestPath(const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName) const;
+
+    /**
+     * @return the best path for the specified color spaces. Used for
+     * testing purposes only
+     */
+    Path findBestPath(const NodeKey &src, const NodeKey &dst) const;
 private:
     QString vertexToDot(Vertex* v, const QString &options) const;
 private:

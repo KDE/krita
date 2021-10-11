@@ -59,6 +59,164 @@ void TestColorConversionSystem::testGoodConnections()
 
 #include <KoColor.h>
 
+#include <KoColorConversionSystem_p.h>
+#include <kis_debug.h>
+
+namespace QTest {
+inline bool qCompare(const std::vector<KoColorConversionSystem::NodeKey> &t1,
+                     const std::vector<KoColorConversionSystem::NodeKey> &t2,
+                     const char *actual, const char *expected,
+                     const char *file, int line) {
+
+    bool result = t1 == t2;
+
+    if (!result) {
+        QString actualStr;
+        QDebug act(&actualStr);
+        act.nospace() << actual << ": " << t1;
+
+        QString expectedStr;
+        QDebug exp(&expectedStr);
+        exp.nospace() << expected << ": " << t2;
+
+        QString message = QString("Compared paths are not the same:\n Expected: %1\n Actual: %2").arg(expectedStr).arg(actualStr);
+        QTest::qFail(message.toLocal8Bit(), file, line);
+    }
+
+    return t1 == t2;
+}
+}
+
+void TestColorConversionSystem::testAlphaConnectionPaths()
+{
+    const KoColorSpace *alpha8 = KoColorSpaceRegistry::instance()->alpha8();
+
+    using Path = KoColorConversionSystem::Path;
+    using Vertex = KoColorConversionSystem::Vertex;
+    using Node = KoColorConversionSystem::Node;
+    using NodeKey = KoColorConversionSystem::NodeKey;
+
+    std::vector<NodeKey> expectedPath;
+
+    auto calcPath = [] (const std::vector<NodeKey> &expectedPath) {
+
+        const KoColorConversionSystem *system = KoColorSpaceRegistry::instance()->colorConversionSystem();
+
+        Path path =
+            system->findBestPath(expectedPath.front(), expectedPath.back());
+
+        std::vector<NodeKey> realPath;
+
+        Q_FOREACH (const Vertex *vertex, path.vertexes) {
+            if (!vertex->srcNode->isEngine) {
+                realPath.push_back(vertex->srcNode->key());
+            }
+        }
+        realPath.push_back(path.vertexes.last()->dstNode->key());
+
+        return realPath;
+    };
+
+    // to Alpha8 conversions. Everything should go via GrayA color space,
+    // we expect alpha colorspace be just a flattened of graya color space
+    // with srgb tone curve.
+
+    expectedPath =
+        {{GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+#ifdef HAVE_OPENEXR
+    expectedPath =
+        {{GrayAColorModelID.id(), Float16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+#endif
+
+    expectedPath =
+        {{GrayAColorModelID.id(), Float32BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()},
+         {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()},
+         {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()},
+         {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {AlphaColorModelID.id(), Integer16BitsColorDepthID.id(), alpha8->profile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()},
+         {GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {AlphaColorModelID.id(), Integer16BitsColorDepthID.id(), alpha8->profile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    // from Alpha8 conversions. Everything should go via GrayA color space
+
+    expectedPath =
+        {{alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()},
+         {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()},
+         {GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+#ifdef HAVE_OPENEXR
+    expectedPath =
+        {{alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()},
+         {GrayAColorModelID.id(), Float16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+#endif
+
+    expectedPath =
+        {{alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()},
+         {GrayAColorModelID.id(), Float32BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()},
+         {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+
+    expectedPath =
+        {{alpha8->colorModelId().id(), alpha8->colorDepthId().id(), alpha8->profile()->name()},
+         {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{AlphaColorModelID.id(), Integer16BitsColorDepthID.id(), alpha8->profile()->name()},
+         {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+        {{AlphaColorModelID.id(), Integer16BitsColorDepthID.id(), alpha8->profile()->name()},
+         {GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+         {RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+}
+
 void TestColorConversionSystem::testAlphaConversions()
 {
     const KoColorSpace *alpha8 = KoColorSpaceRegistry::instance()->alpha8();
@@ -87,7 +245,7 @@ void TestColorConversionSystem::testAlphaConversions()
         c.convertTo(rgb8);
         QCOMPARE(c.toQColor(), QColor(128,128,128,255));
         c.convertTo(alpha8);
-        QCOMPARE(c.opacityU8(), quint8(137)); // alpha is linear, so the value increases
+        QCOMPARE(c.opacityU8(), quint8(128));
     }
 
     {
@@ -112,7 +270,7 @@ void TestColorConversionSystem::testAlphaConversions()
         c.convertTo(rgb16);
         QCOMPARE(c.toQColor(), QColor(128,128,128,255));
         c.convertTo(alpha8);
-        QCOMPARE(c.opacityU8(), quint8(137));  // alpha is linear, so the value increases
+        QCOMPARE(c.opacityU8(), quint8(128));
     }
 }
 
@@ -145,14 +303,14 @@ void TestColorConversionSystem::testAlphaU16Conversions()
         c.convertTo(rgb8);
         QCOMPARE(c.toQColor(), QColor(128,128,128,255));
         c.convertTo(alpha16);
-        QCOMPARE(c.opacityU8(), quint8(137)); // alpha is linear, so the value increases
+        QCOMPARE(c.opacityU8(), quint8(128));
     }
 
     {
         KoColor c(QColor(255,255,255,255), alpha16);
         QCOMPARE(c.opacityU8(), quint8(255));
         c.convertTo(rgb16);
-        QCOMPARE(c.toQColor(), QColor(254,255,255));
+        QCOMPARE(c.toQColor(), QColor(255,255,255));
         c.convertTo(alpha16);
         QCOMPARE(c.opacityU8(), quint8(255));
     }
@@ -160,7 +318,7 @@ void TestColorConversionSystem::testAlphaU16Conversions()
     {
         KoColor c(QColor(255,255,255,0), alpha16);
         c.convertTo(rgb16);
-        QCOMPARE(c.toQColor(), QColor(0,0,1,255));
+        QCOMPARE(c.toQColor(), QColor(0,0,0,255));
         c.convertTo(alpha16);
         QCOMPARE(c.opacityU8(), quint8(0));
     }
@@ -168,7 +326,7 @@ void TestColorConversionSystem::testAlphaU16Conversions()
     {
         KoColor c(QColor(255,255,255,128), alpha16);
         c.convertTo(rgb16);
-        QCOMPARE(c.toQColor(), QColor(118,120,120,255));
+        QCOMPARE(c.toQColor(), QColor(128,128,128,255));
         c.convertTo(alpha16);
         QCOMPARE(c.opacityU8(), quint8(128));
     }

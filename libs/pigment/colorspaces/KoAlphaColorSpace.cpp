@@ -271,16 +271,24 @@ template class KoAlphaColorSpaceImpl<AlphaF32Traits>;
 template <class _CSTrait>
 QList<KoColorConversionTransformationFactory *> KoAlphaColorSpaceFactoryImpl<_CSTrait>::colorConversionLinks() const
 {
+    /**
+     * Out Alpha color space is defined as "a flattened representation of a GrayA color space with sRGB tone curve".
+     * Therefore we do **not** define direct conversions to/from LabA, because LabA has a linear tone curve.
+     */
+
     QList<KoColorConversionTransformationFactory*> factories;
 
     factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
     factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
 
-    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "default");
-    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "default");
+    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
+    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
 
-    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "Lab identity built-in");
-    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "Lab identity built-in");
+    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Float16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
+    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Float16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
+
+    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Float32BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
+    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Float32BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
 
     return factories;
 }

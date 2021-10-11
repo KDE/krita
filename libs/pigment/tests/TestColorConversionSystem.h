@@ -28,6 +28,7 @@ public:
 private Q_SLOTS:
     void testConnections();
     void testGoodConnections();
+    void testAlphaConnectionPaths();
     void testAlphaConversions();
     void testAlphaU16Conversions();
     void benchmarkAlphaToRgbConversion();

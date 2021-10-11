@@ -2074,6 +2074,9 @@ QList<KoResourceSP > KisDocument::documentResources()
         while (iter->hasNext()) {
             iter->next();
             KoResourceSP resource = iter->resource();
+
+            KIS_SAFE_ASSERT_RECOVER(resource->isSerializable()) {continue;}
+
             if (resource && resource->valid()) {
                 resources << resource;
             }

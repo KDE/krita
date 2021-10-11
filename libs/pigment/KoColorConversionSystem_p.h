@@ -12,10 +12,12 @@
 #include "KoColorModelStandardIds.h"
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorSpaceEngine.h"
+#include <boost/operators.hpp>
 
 #include <QList>
 
-struct KoColorConversionSystem::Node {
+struct KoColorConversionSystem::Node : boost::equality_comparable<KoColorConversionSystem::Node>
+{
 
     Node()
         : isHdr(false)
@@ -57,6 +59,14 @@ struct KoColorConversionSystem::Node {
         return modelId + " " + depthId + " " + profileName;
     }
 
+    NodeKey key() const;
+
+    friend bool operator==(const Node &lhs, const Node &rhs) {
+        return lhs.modelId == rhs.modelId &&
+            lhs.depthId == rhs.depthId &&
+            lhs.profileName == rhs.profileName;
+    }
+
     QString modelId;
     QString depthId;
     QString profileName;
@@ -70,7 +80,14 @@ struct KoColorConversionSystem::Node {
     bool isEngine;
     const KoColorSpaceEngine* engine;
 };
+
 Q_DECLARE_TYPEINFO(KoColorConversionSystem::Node, Q_MOVABLE_TYPE);
+
+QDebug operator<<(QDebug dbg, const KoColorConversionSystem::Node &node)
+{
+    dbg.nospace() << "Node(" << node.modelId << ", " << node.depthId << ", " << node.profileName << ")";
+    return dbg.space();
+}
 
 struct KoColorConversionSystem::Vertex {
 
@@ -123,7 +140,9 @@ private:
 
 };
 
-struct KoColorConversionSystem::NodeKey {
+struct KoColorConversionSystem::NodeKey
+        : public boost::equality_comparable<NodeKey>
+{
 
     NodeKey(const QString &_modelId, const QString &_depthId, const QString &_profileName)
         : modelId(_modelId)
@@ -139,6 +158,18 @@ struct KoColorConversionSystem::NodeKey {
     QString profileName;
 };
 Q_DECLARE_TYPEINFO(KoColorConversionSystem::NodeKey, Q_MOVABLE_TYPE);
+
+QDebug operator<<(QDebug dbg, const KoColorConversionSystem::NodeKey &key)
+{
+    dbg.nospace() << "NodeKey(" << key.modelId << ", " << key.depthId << ", " << key.profileName << ")";
+    return dbg.space();
+}
+
+
+inline KoColorConversionSystem::NodeKey KoColorConversionSystem::Node::key() const
+{
+    return NodeKey(modelId, depthId, profileName);
+}
 
 struct KoColorConversionSystem::Path {
 

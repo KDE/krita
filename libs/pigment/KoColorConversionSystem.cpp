@@ -375,6 +375,28 @@ bool KoColorConversionSystem::existsGoodPath(const QString& srcModelId, const QS
     return existAndGood;
 }
 
+KoColorConversionSystem::Path KoColorConversionSystem::findBestPath(const QString &srcModelId, const QString &srcDepthId, const QString &srcProfileName, const QString &dstModelId, const QString &dstDepthId, const QString &dstProfileName) const
+{
+    const Node *srcNode = nodeFor(srcModelId, srcDepthId, srcProfileName);
+    const Node *dstNode = nodeFor(dstModelId, dstDepthId, dstProfileName);
+
+    KIS_ASSERT(srcNode);
+    KIS_ASSERT(dstNode);
+
+    return findBestPath(srcNode, dstNode);
+}
+
+KoColorConversionSystem::Path KoColorConversionSystem::findBestPath(const KoColorConversionSystem::NodeKey &src, const KoColorConversionSystem::NodeKey &dst) const
+{
+    const Node *srcNode = nodeFor(src);
+    const Node *dstNode = nodeFor(dst);
+
+    KIS_ASSERT(srcNode);
+    KIS_ASSERT(dstNode);
+
+    return findBestPath(srcNode, dstNode);
+}
+
 
 QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QString& dstKey) const
 {

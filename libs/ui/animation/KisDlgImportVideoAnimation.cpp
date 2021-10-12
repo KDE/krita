@@ -171,8 +171,7 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
         return frameList;
     }
 
-    KisFFMpegWrapper *ffmpeg = nullptr;
-    ffmpeg = new KisFFMpegWrapper(this);
+    QScopedPointer<KisFFMpegWrapper> ffmpeg(new KisFFMpegWrapper(this));
 
     QStringList args;
     float exportDuration = m_ui.exportDurationSpinbox->value();
@@ -215,7 +214,7 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
 
     saveLastUsedConfiguration("ANIMATION_EXPORT", config);
 
-    struct KisFFMpegWrapperSettings ffmpegSettings;
+    KisFFMpegWrapperSettings ffmpegSettings;
 
     ffmpegSettings.processPath = ffmpegInfo["path"].toString();
     ffmpegSettings.args = args;
@@ -416,7 +415,7 @@ void KisDlgImportVideoAnimation::updateVideoPreview()
     struct KisFFMpegWrapperSettings ffmpegSettings;
 
     QJsonObject ffmpegInfo = m_ui.cmbFFMpegLocation->currentData().toJsonObject();
-    QByteArray byteImage = KisFFMpegWrapper::runProcessAndReturn(ffmpegInfo["path"].toString(), args, 3000);
+    QByteArray byteImage = KisFFMpegWrapper::runProcessAndReturn(ffmpegInfo["path"].toString(), args, FFMPEG_TIMEOUT);
 
     if ( byteImage.isEmpty() ) {
         m_ui.thumbnailImageHolder->setText( m_videoInfo.frames == m_currentFrame ? "End of Video":"No Preview" );

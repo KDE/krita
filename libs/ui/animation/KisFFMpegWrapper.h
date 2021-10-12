@@ -36,6 +36,8 @@ struct KRITAUI_EXPORT KisFFMpegWrapperSettings
 };
 
 
+const int FFMPEG_TIMEOUT = 600000;
+
 class KRITAUI_EXPORT  KisFFMpegWrapper : public QObject
 {
     Q_OBJECT
@@ -45,14 +47,14 @@ public:
 
     void startNonBlocking(const KisFFMpegWrapperSettings &settings);
     KisImportExportErrorCode start(const KisFFMpegWrapperSettings &settings);
-    void waitForFinished(int msecs = 600000);
+    void waitForFinished(int msecs = FFMPEG_TIMEOUT);
     void kill();
 
     static QJsonObject findProcessPath(const QString &processName, const QString &customLocation, bool processInfo);
     static QJsonObject findFFMpeg(const QString &customLocation);
     static QJsonObject findFFProbe(const QString &customLocation);
     static QJsonObject findProcessInfo(const QString &processName, const QString &processPath, bool includeProcessInfo);
-    static QByteArray runProcessAndReturn(const QString &processPath, const QStringList &args, int msecs = 5000);
+    static QByteArray runProcessAndReturn(const QString &processPath, const QStringList &args, int msecs = FFMPEG_TIMEOUT);
     static QString configuredFFMpegLocation();
     static void setConfiguredFFMpegLocation(QString& location);
     QJsonObject ffprobe(const QString &inputFile, const QString &ffprobePath);

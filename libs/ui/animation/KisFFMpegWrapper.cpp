@@ -153,7 +153,7 @@ KisImportExportErrorCode KisFFMpegWrapper::start(const KisFFMpegWrapperSettings 
     });
 
     startNonBlocking(settings);
-    waitForFinished();
+    waitForFinished(FFMPEG_TIMEOUT);
 
     if (processResults->finish == true) {
         if (processResults->error.isEmpty()) {
@@ -169,7 +169,7 @@ KisImportExportErrorCode KisFFMpegWrapper::start(const KisFFMpegWrapperSettings 
 
 void KisFFMpegWrapper::waitForFinished(int msecs)
 {
-    if (m_process == nullptr) return;
+    if (!m_process) return;
 
     if (m_process->waitForStarted(msecs)) m_process->waitForFinished(msecs);
 
@@ -303,10 +303,8 @@ void KisFFMpegWrapper::slotFinished(int exitCode)
             m_errorMessage = i18n("FFMpeg Crashed") % "\n" % m_errorMessage;
         }
 
-        m_process.reset();
         emit sigFinishedWithError(m_errorMessage);
     } else {
-        m_process.reset();
         emit sigFinished();
     }
 }
@@ -404,10 +402,8 @@ QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const 
                             
     if (!QFile::exists(processPath)) return ffmpegInfo;
     
-    dbgFile << "Found process at:" << processPath;
-    const int ffmpegQueryTimeout = 5000;
-    
-    QString processVersion = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-version", ffmpegQueryTimeout);
+    dbgFile << "Found process at:" << processPath;    
+    QString processVersion = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-version", FFMPEG_TIMEOUT);
 
     if (!processVersion.isEmpty()) {
         
@@ -421,7 +417,7 @@ QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const 
         
         if (!includeProcessInfo || !ffmpegInfo["enabled"].toBool()) return ffmpegInfo;
         
-        QString processCodecs = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-codecs", ffmpegQueryTimeout);
+        QString processCodecs = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-codecs", FFMPEG_TIMEOUT);
 
         QRegularExpression ffmpegCodecsRX("(D|\\.)(E|\\.)....\\s+(.+?)\\s+");
         QRegularExpressionMatchIterator codecsMatchList = ffmpegCodecsRX.globalMatch(processCodecs);
@@ -483,8 +479,8 @@ QJsonObject KisFFMpegWrapper::ffprobe(const QString &inputFile, const QString &f
                          << "-show_format" 
                          << "-show_streams" 
                          << "-i" << inputFile;
-    this->startNonBlocking(ffprobeSettings);
-    this->waitForFinished();
+    startNonBlocking(ffprobeSettings);
+    waitForFinished();
     
     QString ffprobeSTDOUT = m_processSTDOUT;
     QString ffprobeSTDERR = m_processSTDERR;

@@ -32,6 +32,7 @@
 #include "kis_file_layer.h"
 #include "KisReferenceImage.h"
 #include "kis_coordinates_converter.h"
+#include <KisDocument.h>
 
 namespace KisClipboardUtil {
 
@@ -200,4 +201,52 @@ QImage getImageFromClipboard()
     return image;
 }
 
+KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl)
+{
+    KisPaintDeviceSP result;
+    QUrl url = originalUrl;
+    QScopedPointer<QTemporaryFile> tmp;
+
+    if (!url.isLocalFile()) {
+        tmp.reset(new QTemporaryFile());
+        tmp->setAutoRemove(true);
+
+        // download the file and substitute the url
+        KisRemoteFileFetcher fetcher;
+
+        if (!fetcher.fetchFile(url, tmp.data())) {
+            qWarning() << "Fetching" << url << "failed";
+            return result;
+        }
+        url = url.fromLocalFile(tmp->fileName());
+    }
+
+    if (url.isLocalFile()) {
+
+        QFileInfo fileInfo(url.toLocalFile());
+
+        QString type = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+        QStringList mimes =
+            KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
+
+        if (!mimes.contains(type)) {
+            QString msg =
+                KisImportExportErrorCode(ImportExportCodes::FileFormatNotSupported).errorMessage();
+            QMessageBox::warning(
+                KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita"),
+                i18n("Could not open %2.\nReason: %1.", msg, url.toDisplayString()));
+            return result;
+        }
+
+        QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
+        if (doc->importDocument(url.toLocalFile())) {
+            result = new KisPaintDevice(*doc->image()->projection());
+        } else {
+            qWarning() << "Failed to import file" << url.toLocalFile();
+        }
+    }
+
+    return result;
+}
 }

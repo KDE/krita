@@ -265,12 +265,8 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
 
     if (!clip) {
 
-        KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
-
-        if (KisClipboardUtil::clipboardHasUrls()) {
-
-            KisClipboardUtil::clipboardHasUrlsAction(mainWin->activeView(), QApplication::clipboard()->mimeData());
-
+        if (cbData->hasUrls()) {
+            clip = KisClipboardUtil::fetchImageByURL(cbData->urls().first());
         }
         else {
 
@@ -374,7 +370,6 @@ bool KisClipboard::hasClip() const
 
 QSize KisClipboard::clipSize() const
 {
-
     QClipboard *cb = QApplication::clipboard();
     QByteArray mimeType("application/x-krita-selection");
     const QMimeData *cbData = cb->mimeData();

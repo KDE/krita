@@ -93,8 +93,13 @@ void KisTileCompressor2::prepareWorkBuffers(qint32 tileDataSize)
 {
     const qint32 bufferSize = m_compression->outputBufferSize(tileDataSize);
 
-    m_linearizationBuffer.resize(tileDataSize);
-    m_compressionBuffer.resize(bufferSize);
+    if (m_linearizationBuffer.size() < tileDataSize) {
+        m_linearizationBuffer.resize(tileDataSize);
+    }
+
+    if (m_compressionBuffer.size() < bufferSize) {
+        m_compressionBuffer.resize(bufferSize);
+    }
 }
 
 void KisTileCompressor2::compressTileData(KisTileData *tileData,

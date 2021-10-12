@@ -33,11 +33,33 @@ bool KisResourceUserOperations::resourceExistsInResourceFolder(QString resourceT
     return fi.exists();
 }
 
-bool KisResourceUserOperations::resourceNameIsAlreadyUsed(KisResourceModel *resourceModel, QString resourceName)
+bool KisResourceUserOperations::resourceNameIsAlreadyUsed(KisResourceModel *resourceModel, QString resourceName, int resourceIdToIgnore)
 {
+    auto sizeFilteredById = [resourceIdToIgnore] (QVector<KoResourceSP> list) {
+        int sumHere = 0;
+        if (resourceIdToIgnore < 0) {
+            return list.size();
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list[i]->resourceId() != resourceIdToIgnore) {
+                sumHere++;
+            }
+        }
+        return sumHere;
+    };
+
     QVector<KoResourceSP> resourcesWithTheSameExactName = resourceModel->resourcesForName(resourceName);
+    if (sizeFilteredById(resourcesWithTheSameExactName) > 0) {
+        return true;
+    }
+
     QVector<KoResourceSP> resourcesWithSpacesReplacedByUnderlines = resourceModel->resourcesForName(resourceName.replace(" ", "_"));
-    return resourcesWithTheSameExactName.size() > 0 || resourcesWithSpacesReplacedByUnderlines.size() > 0;
+    if (sizeFilteredById(resourcesWithSpacesReplacedByUnderlines) > 0) {
+        return true;
+    }
+
+    return false;
 }
 
 KoResourceSP KisResourceUserOperations::importResourceFileWithUserInput(QWidget *widgetParent, QString storageLocation, QString resourceType, QString resourceFilepath)
@@ -65,7 +87,7 @@ bool KisResourceUserOperations::renameResourceWithUserInput(QWidget *widgetParen
     KisResourceModel resourceModel(resource->resourceType().first);
     resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources); // inactive don't count here
 
-    if (resourceNameIsAlreadyUsed(&resourceModel, resourceName)) {
+    if (resourceNameIsAlreadyUsed(&resourceModel, resourceName, resource->resourceId())) {
         bool userWantsRename = QMessageBox::question(widgetParent, i18nc("@title:window", "Rename the resource?"),
                               i18nc("Question in a dialog/messagebox", "This name is already used for another resource. "
                                                                        "Do you want to use the same name for multiple resources?"
@@ -141,7 +163,7 @@ bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParen
     QString oldName = resourceModel.data(resourceModel.indexForResourceId(resource->resourceId()), Qt::UserRole + KisAllResourcesModel::Name).toString();
     if (resource->name() != oldName) {
         // rename in action
-        if (resourceNameIsAlreadyUsed(&resourceModel, resource->name()) > 0) {
+        if (resourceNameIsAlreadyUsed(&resourceModel, resource->name(), resource->resourceId())) {
             bool userWantsRename = QMessageBox::question(widgetParent, i18nc("@title:window", "Rename the resource?"),
                                   i18nc("Question in a dialog/messagebox", "This name is already used for another resource. Do you want to overwrite "
                                                                            "and use the same name for multiple resources?"

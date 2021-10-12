@@ -105,11 +105,15 @@ void KisImageFromClipboard::createClipboardPreview()
     QImage qimage;
     QClipboard *cb = QApplication::clipboard();
     const QMimeData *cbData = cb->mimeData();
+
     if (cbData->hasUrls()) {
         qimage = QImage(cb->mimeData()->urls().at(0).path());
-    } else if (cbData->hasImage()) {
+    }
+
+    if (qimage.isNull() && cbData->hasImage()) {
         qimage = cb->image();
     }
+
     if (!qimage.isNull()) {
         QByteArray mimeType("application/x-krita-selection");
 

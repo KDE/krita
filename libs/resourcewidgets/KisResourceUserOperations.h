@@ -22,7 +22,7 @@ public:
     // or when they try to create a new resource with the same name and filename
     static bool userAllowsOverwrite(QWidget* widgetParent, QString resourceFilepath);
     static bool resourceExistsInResourceFolder(QString resourceType, QString filepath);
-    static bool resourceNameIsAlreadyUsed(KisResourceModel* resourceModel, QString resourceName);
+    static bool resourceNameIsAlreadyUsed(KisResourceModel* resourceModel, QString resourceName, int resourceIdToIgnore = -1);
 
     // used when the user tries to rename a resource to a name that already exists
     // (it's permitted but can confuse the user later)

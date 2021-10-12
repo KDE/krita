@@ -136,7 +136,7 @@ void KisCustomPattern::slotAddPredefined()
             }
         }
         else if (overwrite) {
-            if (!KisResourceUserOperations::addResourceWithUserInput(this, m_pattern->clone().dynamicCast<KoPattern>())) {
+            if (!KisResourceUserOperations::updateResourceWithUserInput(this, m_pattern->clone().dynamicCast<KoPattern>())) {
                 qWarning() << "Could not add pattern with filename" << filename;
             }
             else {

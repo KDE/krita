@@ -108,10 +108,12 @@ void KisCustomPattern::slotAddPredefined()
     dlg.setCaption(i18n("Add to Predefined Patterns"));
 
     QString filename = dlg.filename();
+    bool hadToChangeFilename = false;
 
     QFileInfo fi(filename);
     if (fi.suffix().isEmpty()) {
-        fi.setFile(fi.fileName() + m_pattern->defaultFileExtension());
+        fi.setFile(fi.baseName() + m_pattern->defaultFileExtension());
+        hadToChangeFilename = true;
     }
 
     if (fi.baseName() != m_pattern->name()) {
@@ -120,13 +122,15 @@ void KisCustomPattern::slotAddPredefined()
 
     bool overwrite = false;
     if (fi.exists()) {
-        if (QMessageBox::warning(this,  i18nc("@title:window", "Krita"), i18n("This pattern already exists. Do you want to overwrite it?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-            overwrite = true;
+        if (hadToChangeFilename) { // if not, the File Dialog would show the warning
+            if (QMessageBox::warning(this,  i18nc("@title:window", "Krita"), i18n("This pattern already exists. Do you want to overwrite it?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+                overwrite = true;
+            }
         }
     }
 
     if (!filename.isEmpty()) {
-        m_pattern->setFilename(QFileInfo(filename).fileName());
+        m_pattern->setFilename(fi.fileName()); // to make sure we include the suffix added earlier
         if (!fi.exists()) {
             if (!KisResourceUserOperations::addResourceWithUserInput(this, m_pattern->clone().dynamicCast<KoPattern>())) {
                 qWarning() << "Could not add pattern with filename" << filename;

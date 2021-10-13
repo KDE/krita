@@ -525,16 +525,16 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 painter.drawRect(layout->cutImageRect.value());
             }
 
-            // Draw panel name
+            // Draw shot name
             if (layout->cutNameRect.has_value()) {
                 QString str = storyboardList.at(currentBoard + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
                 painter.drawText(layout->cutNameRect.value().translated(painter.fontMetrics().averageCharWidth() / 2, 0), Qt::AlignLeft | Qt::AlignVCenter, str);
                 painter.drawRect(layout->cutNameRect.value());
             }
 
-            // Draw panel index
+            // Draw shot number
             if (layout->cutNumberRect.has_value()) {
-                painter.drawText(layout->cutNumberRect.value(), QString::number(currentBoard + firstItemRow));
+                painter.drawText(layout->cutNumberRect.value(), Qt::AlignCenter, QString::number(currentBoard + firstItemRow));
                 painter.drawRect(layout->cutNumberRect.value());
             }
 
@@ -543,7 +543,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             const int boardDurationFrames = m_storyboardModel->data(boardIndex, StoryboardModel::TotalSceneDurationInFrames).toInt();
             pageDurationInFrames += boardDurationFrames;
 
-            // Draw duration
+            // Draw shot duration
             if (layout->cutDurationRect.has_value()) {
                 // Split shot duration into tuple of seconds + frames (remainder)..
                 int durationSecondsPart = boardDurationFrames / m_storyboardModel->getFramesPerSecond();
@@ -555,7 +555,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                                  buildDurationString(durationSecondsPart, durationFramesPart));
             }
 
-            // Draw comments
+            // Draw shot comments
             for (int commentIndex = 0; commentIndex < numComments; commentIndex++) {
                 if (!layout->commentRects.contains(comments[commentIndex].name))
                     continue;
@@ -592,14 +592,14 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             // Draw overlays after drawing last element on page or after drawing last element in general.
             if ((currentBoard % layoutPage.elements.length()) == (layoutPage.elements.length() - 1) || (currentBoard == numBoards - 1)) {
                 if (layoutPage.pageNumberRect) {
-                    painter.drawText(layoutPage.pageNumberRect.value(), QString::number(pageNumber));
+                    painter.drawText(layoutPage.pageNumberRect.value(), Qt::AlignCenter, QString::number(pageNumber));
                 }
 
                 if (layoutPage.pageTimeRect) {
                     int pageDurationSecondsPart = pageDurationInFrames / m_storyboardModel->getFramesPerSecond();
                     int pageDurationFramesPart = pageDurationInFrames % m_storyboardModel->getFramesPerSecond();
 
-                    painter.drawText(layoutPage.pageTimeRect.value(), buildDurationString(pageDurationSecondsPart, pageDurationFramesPart));
+                    painter.drawText(layoutPage.pageTimeRect.value(), Qt::AlignCenter, buildDurationString(pageDurationSecondsPart, pageDurationFramesPart));
                 }
 
                 if (layoutPage.svg) {

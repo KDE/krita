@@ -45,6 +45,9 @@
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeBackground.h>
 #include <KoShapeStroke.h>
+#include <KisClipboardUtil.h>
+#include <QApplication>
+#include <QClipboard>
 
 
 namespace {
@@ -197,12 +200,17 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     KisImageSP image = view->image();
     if (!image) return;
 
-    if (KisClipboard::instance()->hasLayers()) {
+    if (tryPasteShapes(pasteAtCursorPosition, view)) {
+        return;
+    }
+
+    if (KisClipboard::instance()->hasLayers() && !pasteAtCursorPosition) {
         view->nodeManager()->pasteLayersFromClipboard();
         return;
     }
 
-    if (tryPasteShapes(pasteAtCursorPosition, view)) {
+    if (KisClipboardUtil::clipboardHasUrls()) {
+        KisClipboardUtil::clipboardHasUrlsAction(view->canvasBase()->imageView(), QApplication::clipboard()->mimeData());
         return;
     }
 

@@ -8,6 +8,7 @@
 #define KIS_CLIPBOARD_UTIL_H
 
 #include <kritaui_export.h>
+#include <kis_types.h>
 
 class QImage;
 class QMimeData;
@@ -30,6 +31,8 @@ namespace KisClipboardUtil {
      * @return void
      */
     KRITAUI_EXPORT void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data);
+
+    KRITAUI_EXPORT KisPaintDeviceSP fetchImageByURL(const QUrl &url);
 
 }
 

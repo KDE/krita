@@ -36,7 +36,12 @@ KisPaintOpPresetUpdateProxy::~KisPaintOpPresetUpdateProxy()
 
 void KisPaintOpPresetUpdateProxy::notifySettingsChanged()
 {
-    m_d->updatesCompressor.start();
+    if (m_d->updatesBlocked) {
+        m_d->numUpdatesWhileBlocked++;
+    } else {
+        emit sigSettingsChangedUncompressed();
+        m_d->updatesCompressor.start();
+    }
 }
 
 void KisPaintOpPresetUpdateProxy::notifyUniformPropertiesChanged()
@@ -55,6 +60,7 @@ void KisPaintOpPresetUpdateProxy::unpostponeSettingsChanges()
 
     if (!m_d->updatesBlocked && m_d->numUpdatesWhileBlocked) {
         m_d->numUpdatesWhileBlocked = 0;
+        emit sigSettingsChangedUncompressed();
         emit sigSettingsChanged();
     }
 }

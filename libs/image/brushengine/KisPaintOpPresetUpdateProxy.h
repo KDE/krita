@@ -41,6 +41,7 @@ public:
 
 Q_SIGNALS:
     void sigSettingsChanged();
+    void sigSettingsChangedUncompressed();
     void sigUniformPropertiesChanged();
 
 private Q_SLOTS:

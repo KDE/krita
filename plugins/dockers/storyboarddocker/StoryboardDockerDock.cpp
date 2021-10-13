@@ -506,58 +506,74 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             QVector<StoryboardComment> comments = m_commentModel->getData();
             const int numComments = comments.size();
 
-            const ExportPageShot* const layout = &layoutPage.elements[currentBoard % layoutPage.elements.length()];
+            const ExportPageShot* const layoutShot = &layoutPage.elements[currentBoard % layoutPage.elements.length()];
 
             QPen pen(QColor(1, 0, 0));
             pen.setWidth(5);
             painter.setPen(pen);
 
             // Draw image
-            if (layout->cutImageRect.has_value()) {
-                QRectF imgRect = layout->cutImageRect.value();
-                QSizeF resizedImage = QSizeF(pxmp.size()).scaled(layout->cutImageRect->size(), Qt::KeepAspectRatio);
+            if (layoutShot->cutImageRect.has_value()) {
+                QRectF imgRect = layoutShot->cutImageRect.value();
+                QSizeF resizedImage = QSizeF(pxmp.size()).scaled(layoutShot->cutImageRect->size(), Qt::KeepAspectRatio);
                 const int MARGIN = -2;
                 resizedImage = QSize(resizedImage.width() + MARGIN * 2, resizedImage.height() + MARGIN * 2);
                 imgRect.setSize(resizedImage);
-                imgRect.translate((layout->cutImageRect.value().width() - imgRect.size().width()) / 2 - MARGIN,
-                                  (layout->cutImageRect->height() - imgRect.size().height()) / 2 - MARGIN);
+                imgRect.translate((layoutShot->cutImageRect.value().width() - imgRect.size().width()) / 2 - MARGIN,
+                                  (layoutShot->cutImageRect->height() - imgRect.size().height()) / 2 - MARGIN);
                 painter.drawPixmap(imgRect, pxmp, pxmp.rect());
-                painter.drawRect(layout->cutImageRect.value());
+                painter.drawRect(layoutShot->cutImageRect.value());
             }
 
-            // Draw shot name
-            if (layout->cutNameRect.has_value()) {
-                QString str = storyboardList.at(currentBoard + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
-                painter.drawText(layout->cutNameRect.value().translated(painter.fontMetrics().averageCharWidth() / 2, 0), Qt::AlignLeft | Qt::AlignVCenter, str);
-                painter.drawRect(layout->cutNameRect.value());
+            { // Insert shot text elements...
+                painter.save();
+                painter.setBackgroundMode(Qt::TransparentMode);
+
+                // Draw shot name
+                if (layoutShot->cutNameRect.has_value()) {
+                    QString str = storyboardList.at(currentBoard + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
+                    painter.drawText(layoutShot->cutNameRect.value().translated(painter.fontMetrics().averageCharWidth() / 2, 0), Qt::AlignLeft | Qt::AlignVCenter, str);
+
+                    if (!layoutPage.svg) {
+                        painter.drawRect(layoutShot->cutNameRect.value());
+                    }
+                }
+
+                // Draw shot number
+                if (layoutShot->cutNumberRect.has_value()) {
+                    painter.drawText(layoutShot->cutNumberRect.value(), Qt::AlignCenter, QString::number(currentBoard + firstItemRow));
+
+                    if (!layoutPage.svg) {
+                        painter.drawRect(layoutShot->cutNumberRect.value());
+                    }
+                }
+
+                QModelIndex boardIndex = m_storyboardModel->index(currentBoard + firstItemRow, 0);
+
+                const int boardDurationFrames = m_storyboardModel->data(boardIndex, StoryboardModel::TotalSceneDurationInFrames).toInt();
+                pageDurationInFrames += boardDurationFrames;
+
+                // Draw shot duration
+                if (layoutShot->cutDurationRect.has_value()) {
+                    // Split shot duration into tuple of seconds + frames (remainder)..
+                    int durationSecondsPart = boardDurationFrames / m_storyboardModel->getFramesPerSecond();
+                    int durationFramesPart = boardDurationFrames % m_storyboardModel->getFramesPerSecond();
+
+                    painter.drawText(layoutShot->cutDurationRect.value(), Qt::AlignCenter,
+                                     buildDurationString(durationSecondsPart, durationFramesPart));
+
+                    if (!layoutPage.svg) {
+                        painter.drawRect(layoutShot->cutDurationRect.value());
+                    }
+                }
+
+                painter.restore();
             }
 
-            // Draw shot number
-            if (layout->cutNumberRect.has_value()) {
-                painter.drawText(layout->cutNumberRect.value(), Qt::AlignCenter, QString::number(currentBoard + firstItemRow));
-                painter.drawRect(layout->cutNumberRect.value());
-            }
-
-            QModelIndex boardIndex = m_storyboardModel->index(currentBoard + firstItemRow, 0);
-
-            const int boardDurationFrames = m_storyboardModel->data(boardIndex, StoryboardModel::TotalSceneDurationInFrames).toInt();
-            pageDurationInFrames += boardDurationFrames;
-
-            // Draw shot duration
-            if (layout->cutDurationRect.has_value()) {
-                // Split shot duration into tuple of seconds + frames (remainder)..
-                int durationSecondsPart = boardDurationFrames / m_storyboardModel->getFramesPerSecond();
-                int durationFramesPart = boardDurationFrames % m_storyboardModel->getFramesPerSecond();
-
-                // Draw..
-                painter.drawRect(layout->cutDurationRect.value());
-                painter.drawText(layout->cutDurationRect.value(), Qt::AlignCenter,
-                                 buildDurationString(durationSecondsPart, durationFramesPart));
-            }
 
             // Draw shot comments
             for (int commentIndex = 0; commentIndex < numComments; commentIndex++) {
-                if (!layout->commentRects.contains(comments[commentIndex].name))
+                if (!layoutShot->commentRects.contains(comments[commentIndex].name))
                     continue;
 
                 const QString& commentName = comments[commentIndex].name;
@@ -573,24 +589,28 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 const int MARGIN = painter.fontMetrics().averageCharWidth() / 2;
 
                 doc.setHtml(comment);
-                doc.setTextWidth(layout->commentRects[commentName].width() - MARGIN * 2);
+                doc.setTextWidth(layoutShot->commentRects[commentName].width() - MARGIN * 2);
 
                 QAbstractTextDocumentLayout::PaintContext ctx;
                 ctx.palette.setColor(QPalette::Text, painter.pen().color());
 
                 //draw the comments
                 painter.save();
-                painter.translate(layout->commentRects[commentName].topLeft() + QPoint(MARGIN, MARGIN));
-                painter.setClipRegion(QRegion(0,0,layout->commentRects[commentName].width(), layout->commentRects[commentName].height() - painter.fontMetrics().height()));
+                painter.translate(layoutShot->commentRects[commentName].topLeft() + QPoint(MARGIN, MARGIN));
+                painter.setClipRegion(QRegion(0,0,layoutShot->commentRects[commentName].width(), layoutShot->commentRects[commentName].height() - painter.fontMetrics().height()));
                 painter.setBackgroundMode(Qt::TransparentMode);
                 doc.documentLayout()->draw(&painter, ctx);
                 painter.restore();
 
-                painter.drawRect(layout->commentRects[commentName]);
+                painter.drawRect(layoutShot->commentRects[commentName]);
             }
 
             // Draw overlays after drawing last element on page or after drawing last element in general.
             if ((currentBoard % layoutPage.elements.length()) == (layoutPage.elements.length() - 1) || (currentBoard == numBoards - 1)) {
+
+                painter.save();
+                painter.setBackgroundMode(Qt::TransparentMode);
+
                 if (layoutPage.pageNumberRect) {
                     painter.drawText(layoutPage.pageNumberRect.value(), Qt::AlignCenter, QString::number(pageNumber));
                 }
@@ -618,6 +638,8 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     QSvgRenderer renderer(layoutPage.svg->toByteArray());
                     renderer.render(&painter);
                 }
+
+                painter.restore();
             }
         }
         painter.end();

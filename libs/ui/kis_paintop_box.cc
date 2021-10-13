@@ -77,12 +77,14 @@
 #include "KisResourceLoader.h"
 #include "KisResourceLoaderRegistry.h"
 #include "kis_statusbar.h"
+#include "kis_acyclic_signal_connector.h"
 
 
 KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const char *name)
     : QWidget(parent)
     , m_resourceProvider(viewManager->canvasResourceProvider())
     , m_viewManager(viewManager)
+    , m_optionWidgetUpdateCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 {
     Q_ASSERT(viewManager != 0);
 
@@ -524,6 +526,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChangeAttempted(int,QVariant)),
             this, SLOT(slotCanvasResourceChangeAttempted(int,QVariant)));
 
+    connect(&m_optionWidgetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidgetPopup()));
+
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 
     findDefaultPresets();
@@ -657,10 +661,16 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
 
-    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
+    /// We must connect to the **uncompressed** version of the preset
+    /// update signal. That is the only way we can guarantee that
+    /// the signals will not form cycles. As a consequence, we should
+    /// compress this signal ourselves.
+    m_optionsWidgetConnections.reset(new KisAcyclicSignalConnector());
+    m_optionsWidgetConnections->connectForwardVoid(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
+    m_optionsWidgetConnections->connectBackwardVoid(preset->updateProxy(), SIGNAL(sigSettingsChangedUncompressed()), &m_optionWidgetUpdateCompressor, SLOT(start()));
+
     m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP)));
     m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotDropLockedOption(KisPropertiesConfigurationSP)));
-
 
     // load the current preset icon to the preset selector toolbar button
     m_presetSelectorPopupButton->setThumbnail(preset->image());
@@ -707,6 +717,10 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
 
     // This happens when we have a new brush engine for which no default preset exists yet.
     if (!preset) return;
+
+    // the connection to the preset is maintained even when the editor
+    // is hidden, so skip the updates
+    if (!m_presetsEditor->isVisible()) return;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(preset);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_optionWidget);
@@ -950,7 +964,11 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
             resourceSelected(preset);
         }
 
+        ENTER_FUNCTION() << "1" << key;
+
         if (key == KoCanvasResource::CurrentPaintOpPreset) {
+            ENTER_FUNCTION() << "2";
+
             /**
              * Update currently selected preset in both the popup widgets
              */
@@ -1334,6 +1352,8 @@ void KisPaintopBox::slotReloadPreset()
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed
 {
+    ENTER_FUNCTION();
+
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
 
     {

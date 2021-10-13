@@ -48,6 +48,7 @@ class KisWidgetChooser;
 class KisFavoriteResourceManager;
 class KisAction;
 class KisPresetSaveWidget;
+class KisAcyclicSignalConnector;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -255,6 +256,8 @@ private:
     bool             m_eraserBrushOpacityEnabled {false};
 
     KisSignalAutoConnectionsStore m_presetConnections;
+    QScopedPointer<KisAcyclicSignalConnector> m_optionsWidgetConnections;
+    KisSignalCompressor m_optionWidgetUpdateCompressor;
 
     QString m_eraserName;
     QString m_defaultPresetName;

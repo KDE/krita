@@ -17,6 +17,7 @@
 #include <QElapsedTimer>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QBuffer>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -617,7 +618,7 @@ void KisResourceLocator::saveTags()
 
     query.first();
 
-    while (query.next()) {
+    do {
         // Save tag...
         KisTag tag;
         tag.setUrl(query.value("tags.url").toString());
@@ -662,6 +663,9 @@ void KisResourceLocator::saveTags()
         if (filename.isEmpty()) {
             filename = tag.url() + ".tag";
         }
+
+        filename = makeStorageLocationRelative(filename);
+
         QFile f(d->resourceLocation + tag.resourceType() + '/' + filename);
 
         if (QFileInfo(d->resourceLocation + tag.resourceType() + '/' + filename).exists()) {
@@ -672,20 +676,30 @@ void KisResourceLocator::saveTags()
             f.close();
             tag.setDefaultResources(resourceFileNames);
         }
-        else {
-            if (!f.open(QFile::WriteOnly)) {
-                qWarning () << "Couild not open tag file for writing" << f.fileName();
-                return;
-            }
+
+        if (!f.open(QFile::WriteOnly)) {
+            qWarning () << "Couild not open tag file for writing" << f.fileName();
+            continue;
         }
-        if (!tag.save(f)) {
+
+        QByteArray ba;
+        QBuffer buf(&ba);
+        buf.open(QIODevice::WriteOnly);;
+
+        if (!tag.save(buf)) {
             qWarning() << "Could not save tag to" << f.fileName();
-            return;
+            buf.close();
+            f.close();
+            continue;
         }
+
+        f.write(ba);
+        f.flush();
+
         f.close();
 
-        qDebug() << tag.name() << tag.url() << f.fileName() << tag.defaultResources().join(", ");
-    }
+        qDebug() << tag.name() << tag.url() << f.fileName();
+    } while (query.next());
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation)

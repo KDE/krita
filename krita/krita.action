@@ -2886,7 +2886,7 @@
     </Action>
     <Action name="convert_to_paint_layer">
       <icon>convert-to-paintLayer</icon>
-      <text>to &amp;Paint Layer</text>
+      <text>Convert to &amp;Paint Layer</text>
       <whatsThis/>
       <toolTip>to Paint Layer</toolTip>
       <iconText>to Paint Layer</iconText>
@@ -2898,7 +2898,7 @@
     </Action>
     <Action name="convert_to_transparency_mask">
       <icon>convert-to-transparencyMask</icon>
-      <text>to &amp;Transparency Mask</text>
+      <text>Convert to &amp;Transparency Mask</text>
       <whatsThis/>
       <toolTip>to Transparency Mask</toolTip>
       <iconText>to Transparency Mask</iconText>
@@ -2910,7 +2910,7 @@
     </Action>
     <Action name="convert_to_filter_mask">
       <icon>convert-to-filterMask</icon>
-      <text>to &amp;Filter Mask...</text>
+      <text>Convert to &amp;Filter Mask...</text>
       <whatsThis/>
       <toolTip>to Filter Mask</toolTip>
       <iconText>to Filter Mask</iconText>
@@ -2922,7 +2922,7 @@
     </Action>
     <Action name="convert_to_selection_mask">
       <icon>convert-to-selectionMask</icon>
-      <text>to &amp;Selection Mask</text>
+      <text>Convert to &amp;Selection Mask</text>
       <whatsThis/>
       <toolTip>to Selection Mask</toolTip>
       <iconText>to Selection Mask</iconText>

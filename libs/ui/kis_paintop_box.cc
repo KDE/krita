@@ -964,11 +964,7 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
             resourceSelected(preset);
         }
 
-        ENTER_FUNCTION() << "1" << key;
-
         if (key == KoCanvasResource::CurrentPaintOpPreset) {
-            ENTER_FUNCTION() << "2";
-
             /**
              * Update currently selected preset in both the popup widgets
              */

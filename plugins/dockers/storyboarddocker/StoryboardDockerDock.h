@@ -37,18 +37,18 @@ public:
     void unsetCanvas() override;
     void setViewManager(KisViewManager* kisview) override;
 
-    struct ExportLayoutElement {
+    struct ExportPageShot {
         boost::optional<QRectF> cutNameRect;
         boost::optional<QRectF> cutNumberRect;
         boost::optional<QRectF> cutDurationRect;
         boost::optional<QRectF> cutImageRect;
         QMap<QString, QRectF> commentRects;
 
-        ExportLayoutElement()
+        ExportPageShot()
             : commentRects() {
         }
 
-        ExportLayoutElement(const ExportLayoutElement& other)
+        ExportPageShot(const ExportPageShot& other)
             : cutNameRect(other.cutNameRect)
             , cutNumberRect(other.cutNumberRect)
             , cutDurationRect(other.cutDurationRect)
@@ -59,20 +59,24 @@ public:
         }
     };
 
-    struct ExportLayout {
-        QVector<ExportLayoutElement> elements;
+    struct ExportPage {
+        QVector<ExportPageShot> elements;
+        boost::optional<QRectF> pageTimeRect;
+        boost::optional<QRectF> pageNumberRect;
         boost::optional<QDomDocument> svg;
 
-        ExportLayout()
-            : elements() {
-        }
+        ExportPage()
+            : elements()
+        {}
 
-        ExportLayout(QVector<ExportLayoutElement> &e)
-            : elements(e) {
-        }
+        ExportPage(const ExportPage& other)
+            : elements(other.elements)
+            , pageTimeRect(other.pageTimeRect)
+            , pageNumberRect(other.pageNumberRect)
+            , svg(other.svg)
+        {}
 
-        ~ExportLayout() {
-        }
+        ~ExportPage() {}
     };
 
 private Q_SLOTS:
@@ -141,9 +145,10 @@ private Q_SLOTS:
     void slotModelChanged();
 
 private:
+    ExportPage getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
+    ExportPage getPageLayout(QString layoutSvgFileName, QPrinter *printer);
 
-    ExportLayout getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& painter);
-    ExportLayout getPageLayout(QString layoutSvgFileName, QPrinter *printer);
+    QString buildDurationString(int seconds, int frames);
 
 private:
     KisCanvas2* m_canvas;
@@ -167,6 +172,5 @@ private:
     QSharedPointer<StoryboardModel> m_storyboardModel;
     QPointer<StoryboardDelegate> m_storyboardDelegate;
 };
-
 
 #endif

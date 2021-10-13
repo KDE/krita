@@ -2346,7 +2346,7 @@
     </Action>
     <Action name="add_new_group_layer">
       <icon>groupLayer</icon>
-      <text>Add a new &amp;Group Layer</text>
+      <text>Add &amp;Group Layer</text>
       <whatsThis/>
       <toolTip>Add a new Group Layer</toolTip>
       <iconText>Group Layer</iconText>
@@ -2358,7 +2358,7 @@
     </Action>
     <Action name="add_new_clone_layer">
       <icon>cloneLayer</icon>
-      <text>Add a new &amp;Clone Layer</text>
+      <text>Add &amp;Clone Layer</text>
       <whatsThis/>
       <toolTip>Add a new Clone Layer</toolTip>
       <iconText>Clone Layer</iconText>
@@ -2370,7 +2370,7 @@
     </Action>
     <Action name="add_new_shape_layer">
       <icon>vectorLayer</icon>
-      <text>Add a new &amp;Vector Layer</text>
+      <text>Add &amp;Vector Layer</text>
       <whatsThis/>
       <toolTip>Add a new Vector Layer</toolTip>
       <iconText>Vector Layer</iconText>
@@ -2382,7 +2382,7 @@
     </Action>
     <Action name="add_new_adjustment_layer">
       <icon>filterLayer</icon>
-      <text>Add a new &amp;Filter Layer...</text>
+      <text>Add &amp;Filter Layer...</text>
       <whatsThis/>
       <toolTip>Add a new Filter Layer</toolTip>
       <iconText>Filter Layer</iconText>
@@ -2394,7 +2394,7 @@
     </Action>
     <Action name="add_new_fill_layer">
       <icon>fillLayer</icon>
-      <text>Add a new &amp;Fill Layer...</text>
+      <text>Add &amp;Fill Layer...</text>
       <whatsThis/>
       <toolTip>Add a new Fill Layer</toolTip>
       <iconText>Fill Layer</iconText>
@@ -2406,7 +2406,7 @@
     </Action>
     <Action name="add_new_file_layer">
       <icon>fileLayer</icon>
-      <text>Add a new &amp;File Layer...</text>
+      <text>Add &amp;File Layer...</text>
       <whatsThis/>
       <toolTip>Add a new File Layer</toolTip>
       <iconText>File Layer</iconText>
@@ -2418,7 +2418,7 @@
     </Action>
     <Action name="add_new_transparency_mask">
       <icon>transparencyMask</icon>
-      <text>Add a new &amp;Transparency Mask</text>
+      <text>Add &amp;Transparency Mask</text>
       <whatsThis/>
       <toolTip>Add a new Transparency Mask</toolTip>
       <iconText>Transparency Mask</iconText>
@@ -2430,7 +2430,7 @@
     </Action>
     <Action name="add_new_filter_mask">
       <icon>filterMask</icon>
-      <text>Add a new &amp;Filter Mask...</text>
+      <text>Add &amp;Filter Mask...</text>
       <whatsThis/>
       <toolTip>Add a new Filter Mask</toolTip>
       <iconText>Filter Mask</iconText>
@@ -2442,7 +2442,7 @@
     </Action>
     <Action name="add_new_colorize_mask">
       <icon>filterMask</icon>
-      <text>Add a new &amp;Colorize Mask</text>
+      <text>Add &amp;Colorize Mask</text>
       <whatsThis/>
       <toolTip>Add a new Colorize Mask</toolTip>
       <iconText>Colorize Mask</iconText>
@@ -2454,7 +2454,7 @@
     </Action>
     <Action name="add_new_transform_mask">
       <icon>transformMask</icon>
-      <text>Add a new &amp;Transform Mask</text>
+      <text>Add &amp;Transform Mask</text>
       <whatsThis/>
       <toolTip>Add a new Transform Mask</toolTip>
       <iconText>Transform Mask</iconText>
@@ -2466,7 +2466,7 @@
     </Action>
     <Action name="add_new_selection_mask">
       <icon>selectionMask</icon>
-      <text>Add a new &amp;Local Selection</text>
+      <text>Add &amp;Local Selection</text>
       <whatsThis/>
       <toolTip>Add a new Local Selection</toolTip>
       <iconText>Local Selection</iconText>
@@ -2562,7 +2562,7 @@
     </Action>
     <Action name="add_new_paint_layer">
       <icon>paintLayer</icon>
-      <text>Add a new &amp;Paint Layer</text>
+      <text>Add &amp;Paint Layer</text>
       <whatsThis/>
       <toolTip>Add a new Paint Layer</toolTip>
       <iconText>Paint Layer</iconText>
@@ -2886,7 +2886,7 @@
     </Action>
     <Action name="convert_to_paint_layer">
       <icon>convert-to-paintLayer</icon>
-      <text>to &amp;Paint Layer</text>
+      <text>Convert to &amp;Paint Layer</text>
       <whatsThis/>
       <toolTip>to Paint Layer</toolTip>
       <iconText>to Paint Layer</iconText>
@@ -2898,7 +2898,7 @@
     </Action>
     <Action name="convert_to_transparency_mask">
       <icon>convert-to-transparencyMask</icon>
-      <text>to &amp;Transparency Mask</text>
+      <text>Convert to &amp;Transparency Mask</text>
       <whatsThis/>
       <toolTip>to Transparency Mask</toolTip>
       <iconText>to Transparency Mask</iconText>
@@ -2910,7 +2910,7 @@
     </Action>
     <Action name="convert_to_filter_mask">
       <icon>convert-to-filterMask</icon>
-      <text>to &amp;Filter Mask...</text>
+      <text>Convert to &amp;Filter Mask...</text>
       <whatsThis/>
       <toolTip>to Filter Mask</toolTip>
       <iconText>to Filter Mask</iconText>
@@ -2922,7 +2922,7 @@
     </Action>
     <Action name="convert_to_selection_mask">
       <icon>convert-to-selectionMask</icon>
-      <text>to &amp;Selection Mask</text>
+      <text>Convert to &amp;Selection Mask</text>
       <whatsThis/>
       <toolTip>to Selection Mask</toolTip>
       <iconText>to Selection Mask</iconText>

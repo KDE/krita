@@ -403,12 +403,14 @@ void KisScreentoneConfigWidget::slot_buttonSizeModeResolutionBased_toggled(bool 
 
     m_ui.tabTransformation->setUpdatesEnabled(false);
 
-    m_ui.containerSize->hide();
-    m_ui.labelSize->hide();
-    m_ui.layoutTransformation->takeRow(m_ui.containerSize);
+    if (m_ui.layoutTransformation->indexOf(m_ui.containerSize) != -1) {
+        m_ui.containerSize->hide();
+        m_ui.labelSize->hide();
+        m_ui.layoutTransformation->takeRow(m_ui.containerSize);
+    }
 
     // Prevent adding the widgets if they are already in the layout
-    if (!m_ui.containerResolution->isVisible()) {
+    if (m_ui.layoutTransformation->indexOf(m_ui.containerResolution) == -1) {
         m_ui.layoutTransformation->insertRow(1, m_ui.labelResolution, m_ui.containerResolution);
         m_ui.layoutTransformation->insertRow(2, m_ui.labelFrequency, m_ui.containerFrequency);
         m_ui.containerResolution->show();
@@ -432,15 +434,17 @@ void KisScreentoneConfigWidget::slot_buttonSizeModePixelBased_toggled(bool check
 
     m_ui.tabTransformation->setUpdatesEnabled(false);
 
-    m_ui.containerResolution->hide();
-    m_ui.containerFrequency->hide();
-    m_ui.labelResolution->hide();
-    m_ui.labelFrequency->hide();
-    m_ui.layoutTransformation->takeRow(m_ui.containerResolution);
-    m_ui.layoutTransformation->takeRow(m_ui.containerFrequency);
+    if (m_ui.layoutTransformation->indexOf(m_ui.containerResolution) != -1) {
+        m_ui.containerResolution->hide();
+        m_ui.containerFrequency->hide();
+        m_ui.labelResolution->hide();
+        m_ui.labelFrequency->hide();
+        m_ui.layoutTransformation->takeRow(m_ui.containerResolution);
+        m_ui.layoutTransformation->takeRow(m_ui.containerFrequency);
+    }
 
     // Prevent adding the widgets if they are already in the layout
-    if (!m_ui.containerSize->isVisible()) {
+    if (m_ui.layoutTransformation->indexOf(m_ui.containerSize) == -1) {
         m_ui.layoutTransformation->insertRow(1, m_ui.labelSize, m_ui.containerSize);
         m_ui.containerSize->show();
         m_ui.labelSize->show();

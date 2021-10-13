@@ -386,7 +386,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         dlg.hide();
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        ExportLayout layoutPage;
+        ExportPage layoutPage;
         QPrinter printer(QPrinter::HighResolution);
 
         // Setup export parameters...
@@ -431,8 +431,8 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         int firstItemRow = firstIndex.row();
         int lastItemRow = lastIndex.row();
 
-        int numItems = lastItemRow - firstItemRow + 1;
-        if (numItems <= 0) {
+        int numBoards = lastItemRow - firstItemRow + 1;
+        if (numBoards <= 0) {
             QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
             QApplication::restoreOverrideCursor();
             return;
@@ -456,13 +456,17 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             painter.setBackgroundMode(Qt::BGMode::OpaqueMode);
         }
 
-        for (int i = 0; i < numItems; i++) {
-            if (i % layoutPage.elements.length() == 0) {
+        // Paint boards
+        int pageNumber = 1;
+        int pageDurationInFrames = 0;
+
+        for (int currentBoard = 0; currentBoard < numBoards; currentBoard++) {
+            if (currentBoard % layoutPage.elements.length() == 0) {
                 if (dlg.format() == ExportFormat::SVG) {
-                    if (i != 0) {
+                    if (currentBoard != 0) {
                         painter.end();
                         painter.eraseRect(printer.pageRect());
-                        generator.setFileName(dlg.saveFileName() + "/" + imageFileName + QString::number(i / layoutPage.elements.length()) + ".svg");
+                        generator.setFileName(dlg.saveFileName() + "/" + imageFileName + QString::number(currentBoard / layoutPage.elements.length()) + ".svg");
                         QSize sz = printer.pageRect().size();
                         generator.setSize(sz);
                         generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
@@ -471,8 +475,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     }
                 }
                 else {
-                    if (i != 0 ) {
+                    if (currentBoard != 0 ) { // New page!
                         printer.newPage();
+
+                        pageNumber++;
+                        pageDurationInFrames = 0;
                     }
 
                     if(layoutPage.svg) {
@@ -494,12 +501,12 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 }
             }
 
-            ThumbnailData data = qvariant_cast<ThumbnailData>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::FrameNumber)->data());
+            ThumbnailData data = qvariant_cast<ThumbnailData>(storyboardList.at(currentBoard + firstItemRow)->child(StoryboardItem::FrameNumber)->data());
             QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);
             QVector<StoryboardComment> comments = m_commentModel->getData();
             const int numComments = comments.size();
 
-            const ExportLayoutElement* const layout = &layoutPage.elements[i % layoutPage.elements.length()];
+            const ExportPageShot* const layout = &layoutPage.elements[currentBoard % layoutPage.elements.length()];
 
             QPen pen(QColor(1, 0, 0));
             pen.setWidth(5);
@@ -512,36 +519,41 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 const int MARGIN = -2;
                 resizedImage = QSize(resizedImage.width() + MARGIN * 2, resizedImage.height() + MARGIN * 2);
                 imgRect.setSize(resizedImage);
-                imgRect.translate((layout->cutImageRect.value().width() - imgRect.size().width()) / 2 - MARGIN, (layout->cutImageRect->height() - imgRect.size().height()) / 2 - MARGIN);
+                imgRect.translate((layout->cutImageRect.value().width() - imgRect.size().width()) / 2 - MARGIN,
+                                  (layout->cutImageRect->height() - imgRect.size().height()) / 2 - MARGIN);
                 painter.drawPixmap(imgRect, pxmp, pxmp.rect());
                 painter.drawRect(layout->cutImageRect.value());
             }
 
             // Draw panel name
             if (layout->cutNameRect.has_value()) {
-                QString str = storyboardList.at(i + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
+                QString str = storyboardList.at(currentBoard + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
                 painter.drawText(layout->cutNameRect.value().translated(painter.fontMetrics().averageCharWidth() / 2, 0), Qt::AlignLeft | Qt::AlignVCenter, str);
                 painter.drawRect(layout->cutNameRect.value());
             }
 
             // Draw panel index
             if (layout->cutNumberRect.has_value()) {
-                painter.drawText(layout->cutNumberRect.value(), QString::number(i + firstItemRow));
+                painter.drawText(layout->cutNumberRect.value(), QString::number(currentBoard + firstItemRow));
                 painter.drawRect(layout->cutNumberRect.value());
             }
 
+            QModelIndex boardIndex = m_storyboardModel->index(currentBoard + firstItemRow, 0);
+
+            const int boardDurationFrames = m_storyboardModel->data(boardIndex, StoryboardModel::TotalSceneDurationInFrames).toInt();
+            pageDurationInFrames += boardDurationFrames;
+
             // Draw duration
             if (layout->cutDurationRect.has_value()) {
-                QString duration = QString::number(storyboardList.at(i + firstItemRow)->child(StoryboardItem::DurationSecond)->data().toInt());
-                duration += i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
-                duration += "+";
-                duration += QString::number(storyboardList.at(i + firstItemRow)->child(StoryboardItem::DurationFrame)->data().toInt());
-                duration += i18nc("suffix in spin box in storyboard that means 'frames'", "f");
+                // Split shot duration into tuple of seconds + frames (remainder)..
+                int durationSecondsPart = boardDurationFrames / m_storyboardModel->getFramesPerSecond();
+                int durationFramesPart = boardDurationFrames % m_storyboardModel->getFramesPerSecond();
 
+                // Draw..
                 painter.drawRect(layout->cutDurationRect.value());
-                painter.drawText(layout->cutDurationRect.value(), Qt::AlignCenter, duration);
+                painter.drawText(layout->cutDurationRect.value(), Qt::AlignCenter,
+                                 buildDurationString(durationSecondsPart, durationFramesPart));
             }
-
 
             // Draw comments
             for (int commentIndex = 0; commentIndex < numComments; commentIndex++) {
@@ -555,7 +567,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 doc.setDefaultFont(painter.font());
                 QString comment;
                 comment += "<p><b>" + commentName + "</b></p>"; // if arrange options are used check for visibility
-                QString originalCommentText = qvariant_cast<CommentBox>(storyboardList.at(i + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString();
+                QString originalCommentText = qvariant_cast<CommentBox>(storyboardList.at(currentBoard + firstItemRow)->child(StoryboardItem::Comments + commentIndex)->data()).content.toString();
                 originalCommentText = originalCommentText.replace('\n', "</p><p>");
                 comment += "<p>&nbsp;" + originalCommentText + "</p>";
                 const int MARGIN = painter.fontMetrics().averageCharWidth() / 2;
@@ -575,12 +587,21 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 painter.restore();
 
                 painter.drawRect(layout->commentRects[commentName]);
-
             }
 
             // Draw overlays after drawing last element on page or after drawing last element in general.
-            if ((i % layoutPage.elements.length()) == (layoutPage.elements.length() - 1)
-                || (i == numItems - 1)) {
+            if ((currentBoard % layoutPage.elements.length()) == (layoutPage.elements.length() - 1) || (currentBoard == numBoards - 1)) {
+                if (layoutPage.pageNumberRect) {
+                    painter.drawText(layoutPage.pageNumberRect.value(), QString::number(pageNumber));
+                }
+
+                if (layoutPage.pageTimeRect) {
+                    int pageDurationSecondsPart = pageDurationInFrames / m_storyboardModel->getFramesPerSecond();
+                    int pageDurationFramesPart = pageDurationInFrames % m_storyboardModel->getFramesPerSecond();
+
+                    painter.drawText(layoutPage.pageTimeRect.value(), buildDurationString(pageDurationSecondsPart, pageDurationFramesPart));
+                }
+
                 if (layoutPage.svg) {
                     QMap<QString, QDomNode> groups = rootItemsInSvg(layoutPage.svg.value());
                     if (groups.contains("overlay")) {
@@ -674,7 +695,7 @@ void StoryboardDockerDock::slotModelChanged()
     }
 }
 
-StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& fontMetrics)
+StoryboardDockerDock::ExportPage StoryboardDockerDock::getPageLayout(int rows, int columns, const QRect& imageSize, const QRect& pageRect, const QFontMetrics& fontMetrics)
 {
     QSizeF pageSize = pageRect.size();
     QRectF border = pageRect;
@@ -699,13 +720,13 @@ StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(int rows,
         }
     }
 
-    QVector<ExportLayoutElement> elements;
+    QVector<ExportPageShot> elements;
 
     for (int i = 0; i < rects.length(); i++) {
         QRectF& cellRect = rects[i];
 
         const bool horizontal = cellRect.width() > cellRect.height(); // Determine general image / text flow orientation.
-        ExportLayoutElement layout;
+        ExportPageShot layout;
 
         QVector<StoryboardComment> comments = m_commentModel->getData();
         const int numComments = comments.size();
@@ -743,20 +764,23 @@ StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(int rows,
         elements.push_back(layout);
     }
 
-    return elements;
+    ExportPage layout;
+    layout.elements = elements;
+    return layout;
 }
 
-StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(QString layoutSvgFileName, QPrinter *printer)
+StoryboardDockerDock::ExportPage StoryboardDockerDock::getPageLayout(QString layoutSvgFileName, QPrinter *printer)
 {
     QDomDocument svgDoc;
-    QVector<ExportLayoutElement> elements;
+    ExportPage page;
+    QVector<ExportPageShot> elements;
 
     // Load DOM from file...
     QFile f(layoutSvgFileName);
     if (!f.open(QIODevice::ReadOnly ))
     {
         qDebug()<<"svg layout file didn't open";
-        return ExportLayout(elements);
+        return page;
     }
     svgDoc.setContent(&f);
     f.close();
@@ -774,12 +798,12 @@ StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(QString l
         commentLayers.push_back(channel.name);
     }
 
-    QMap<int, ExportLayoutElement> elementMap;
+    QMap<int, ExportPageShot> elementMap;
 
     { // Go through all root-level svg data and preconfigure...
         QMap<QString, QDomNode> groupsMap = rootItemsInSvg(svgDoc);
 
-        KIS_ASSERT_RECOVER_RETURN_VALUE(groupsMap.contains("layout"), elements);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(groupsMap.contains("layout"), page);
 
         groupsMap["layout"].toElement().setAttribute("display", "none");
         if (groupsMap.contains("overlay")) {
@@ -796,13 +820,19 @@ StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(QString l
                 QString afterNamespace = attribute.name().split(":").last();
 
                 auto isValidLabel = [&](QString label, int& index) -> bool {
+                    ENTER_FUNCTION() << ppVar(label) << ppVar(attribute.value());
                     if (attribute.value().startsWith(label)) {
+                        if (attribute.value() == label) {
+                            index = 0;
+                            return true;
+                        }
+
                         QString indexString = attribute.value().remove(0, label.length());
                         bool ok = false;
                         index = indexString.toInt(&ok);
                         if (ok) {
                             if (!elementMap.contains(index))
-                                elementMap.insert(index, ExportLayoutElement());
+                                elementMap.insert(index, ExportPageShot());
                             return true;
                         }
                     }
@@ -817,7 +847,6 @@ StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(QString l
                     to = QRectF(x,y, width, height);
                 };
 
-
                 if (afterNamespace == "label") {
                     int index = 0;
                     if (isValidLabel("image", index)) {
@@ -828,6 +857,11 @@ StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(QString l
                         extractRect(elementMap[index].cutNameRect);
                     } else if (isValidLabel("shot", index)) {
                         extractRect(elementMap[index].cutNumberRect);
+                    } else if (isValidLabel("page-time", index)) {
+                        ENTER_FUNCTION();
+                        extractRect(page.pageTimeRect);
+                    } else if (isValidLabel("page-number", index)) {
+                        extractRect(page.pageNumberRect);
                     } else {
                         for(int commentIndex = 0; commentIndex < commentLayers.length(); commentIndex++) {
                             const QString& comment = commentLayers[commentIndex];
@@ -856,12 +890,20 @@ StoryboardDockerDock::ExportLayout StoryboardDockerDock::getPageLayout(QString l
         elements.push_back(elementMap[index]);
     }
 
-    // Make and return layout...
-    ExportLayout page(elements);
     page.svg = svgDoc;
+    page.elements = elements;
     return page;
 }
 
+QString StoryboardDockerDock::buildDurationString(int seconds, int frames)
+{
+    QString durationString = QString::number(seconds);
+    durationString += i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
+    durationString += "+";
+    durationString += QString::number(frames);
+    durationString += i18nc("suffix in spin box in storyboard that means 'frames'", "f");
+    return durationString;
+}
 
 #include "StoryboardDockerDock.moc"
 

@@ -165,7 +165,7 @@ void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
 {
     KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
     QVector<KoResourceSP> resources = model->resourcesForName(m_windowLayoutWidgets.nameEdit->text());
-    KoResourceSP res = resources.first();
+    KoResourceSP res = resources.count() > 0 ? resources.first() : nullptr;
     if (res && res->active()) {
         m_workspaceWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
         m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original Workspace."));

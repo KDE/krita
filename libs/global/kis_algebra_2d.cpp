@@ -321,7 +321,7 @@ bool intersectLineConvexPolygon(QLineF &line, const QPolygonF polygon, bool exte
     QPointF lineVec = line.p2() - line.p1();
     // ax + by + c = 0
     // c = -ax - by
-    qreal cFromStandardEquation = -lineVec.x()*line.p1().x() - lineVec.y()*line.p1().y();
+//    qreal cFromStandardEquation = -lineVec.x()*line.p1().x() - lineVec.y()*line.p1().y();
 
 
     QPointF p1 = line.p1();
@@ -431,9 +431,9 @@ bool intersectLineConvexPolygon(QLineF &line, const QPolygonF polygon, bool exte
             qreal under = (n.x()*A.x() + n.y()*A.y());
             qreal t = -over/under;
 
-            if (pE.x() != p2.x()) {
-                qreal maybet = (pE.x() - p1.x())/(p2.x() - p1.x());
-            }
+//            if (pE.x() != p2.x()) {
+//                qreal maybet = (pE.x() - p1.x())/(p2.x() - p1.x());
+//            }
 
             qreal tminvalue = tmin * under + over;
             qreal tmaxvalue = tmax * under + over;

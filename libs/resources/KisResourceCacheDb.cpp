@@ -595,7 +595,6 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
                   ", tooltip   = :tooltip\n"
                   ", thumbnail = :thumbnail\n"
                   ", status    = 1\n"
-                  ", md5sum    = :md5sum\n"
                   "WHERE id    = :id");
     if (!r) {
         qWarning() << "Could not prepare updateResource statement" << q.lastError();
@@ -605,7 +604,6 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", resource->filename());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
-    q.bindValue(":md5sum", resource->md5Sum());
 
     QByteArray ba;
     QBuffer buf(&ba);
@@ -1122,6 +1120,10 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
         }
 
 
+        // Note: we do never update the md5sum. We use the md5sum as a fake unique
+        // identifier, because there resource types that do not come with a uuid.
+        // So, to find the resource by md5, we need to keep it stable. The versions
+        // have the actual md5sum.
 
         q.bindValue(":url", url);
         q.bindValue(":name", name);

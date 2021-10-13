@@ -6,6 +6,7 @@
 #include <QStandardPaths>
 #include <QLocale>
 // #include <KLocalizedString>
+#include <KoConfig.h>
 
 #define SIMPLE_MAIN_IMPL(TestObject) \
     qputenv("LANGUAGE", "en"); \

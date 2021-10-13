@@ -33,7 +33,7 @@ public:
     }
     void next() override { m_taggingDone = true; }
 
-    QString url() const override { return m_location; }
+    QString url() const override { return QFileInfo(m_location).fileName(); }
     QString name() const override { return QFileInfo(m_location).fileName(); }
     QString resourceType() const override { return m_resourceType; }
     QString comment() const override {return QString(); }

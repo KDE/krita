@@ -23,12 +23,12 @@ public:
         : m_template(the_template)
     {}
 
-    qreal operator()(int x, int y) const
+    qreal operator()(qreal x, qreal y) const
     {
         // Get the coordinates in template space
         QPointF p(
-            static_cast<qreal>(x) + static_cast<int>(std::round(m_template.screenPosition().x())) + 0.5,
-            static_cast<qreal>(y) + static_cast<int>(std::round(m_template.screenPosition().y())) + 0.5
+            x + std::round(m_template.screenPosition().x()),
+            y + std::round(m_template.screenPosition().y())
         );
         // Get the coordinates in screen space
         const QPointF screenPos = m_template.templateToScreenTransform().map(p);
@@ -39,9 +39,9 @@ public:
         // Get the correspondent point in the (0, 0) macrocell tile
         p += QPointF(a * m_template.v1().x() + b * m_template.v2().x(), a * m_template.v1().y() + b * m_template.v2().y());
 
-        x = static_cast<int>(std::floor(p.x())) + m_template.originOffset().x();
-        y = static_cast<int>(std::floor(p.y())) + m_template.originOffset().y();
-        const int macrocellPointIndex = y * m_template.templateSize().width() + x;
+        const int i = static_cast<int>(std::floor(p.x())) + m_template.originOffset().x();
+        const int j = static_cast<int>(std::floor(p.y())) + m_template.originOffset().y();
+        const int macrocellPointIndex = j * m_template.templateSize().width() + i;
         return m_template.templateData()[macrocellPointIndex];
     }
 
@@ -57,17 +57,17 @@ public:
         : m_template(the_template)
     {}
 
-    qreal operator()(int x, int y) const
+    qreal operator()(qreal x, qreal y) const
     {
         // Get the coordinates in screen space
         qreal xx, yy;
-        m_template.imageToScreenTransform().map(static_cast<qreal>(x) + 0.5, static_cast<qreal>(y) + 0.5, &xx, &yy);
+        m_template.imageToScreenTransform().map(x, y, &xx, &yy);
         // Convert to coordinate inside the macrocell
         xx -= std::floor(xx / m_template.macrocellSize().width()) * m_template.macrocellSize().width();
         yy -= std::floor(yy / m_template.macrocellSize().height()) * m_template.macrocellSize().height();
         // Get template coordinates
         QPointF templatePoint = m_template.screenToTemplateTransform().map(QPointF(xx, yy)) +
-                                m_template.originOffset() - QPointF(0.5, 0.5);
+                                m_template.originOffset();
         
         // Bilinear interpolation
         // Get integer coordinates of the template points to use in the interpolation

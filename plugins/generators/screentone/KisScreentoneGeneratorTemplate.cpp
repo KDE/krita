@@ -96,6 +96,24 @@ KisScreentoneGeneratorTemplate::KisScreentoneGeneratorTemplate(const KisScreento
     }
 }
 
+// The following utility classes are used to get the preferred order in which
+// the pixels of a cell should be "turn on" based on the distance to the center
+// of the shape (center of the dot, center of the line, etc.). For simplicity
+// they just use the screentone function "as is" except for the round/ellipse
+// dot sinusoidal, which use the linear counterpart (to get an ordering that
+// seems to grow radially)
+template <typename ScreentoneFunction>
+struct LightUpOrderingFunction : public ScreentoneFunction
+{};
+template <>
+struct LightUpOrderingFunction<KisScreentoneScreentoneFunctions::DotsRoundSinusoidal>
+    : public KisScreentoneScreentoneFunctions::DotsRoundLinear
+{};
+template <>
+struct LightUpOrderingFunction<KisScreentoneScreentoneFunctions::DotsEllipseSinusoidal>
+    : public KisScreentoneScreentoneFunctions::DotsEllipseLinear
+{};
+
 template <typename ScreentoneFunction>
 void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorConfigurationSP config,
                                                   ScreentoneFunction screentoneFunction)
@@ -117,7 +135,8 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
         const qreal resolution = config->resolution();
         const bool constrainFrequency = config->constrainFrequency();
         const qreal frequencyX = config->frequencyX();
-        // Ensure that the frequency y component is equal to the x component if constrainFrequency is true
+        // Ensure that the frequency y component is equal to the x component
+        // if constrainFrequency is true
         const qreal frequencyY = constrainFrequency ? frequencyX : config->frequencyY();
         sizeX = qMax(1.0, resolution / frequencyX);
         sizeY = qMax(1.0, resolution / frequencyY);
@@ -215,7 +234,6 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     const qreal v2MicrocellLength = v2Length / macrocellSizeF.height();
     m_v1 = v1;
     m_v2 = v2;
-    const int numberOfMicrocells = m_macrocellSize.width() * m_macrocellSize.height();
     // Construct template<->screen transforms
     const QPolygonF quad(
         {
@@ -243,23 +261,48 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     m_templateSize = QSize(bottomRight.x() - topLeft.x() + 2, bottomRight.y() - topLeft.y() + 2);
     m_originOffset = -topLeft + QPoint(1, 1);
 
-    // Convenience struct to store some info during the construction of the
-    // template
+    m_templateData = QVector<qreal>(m_templateSize.width() * m_templateSize.height(), -1.0);
+
+    // Convenience struct to store some info for a single pixel during the
+    // construction of the template
     struct AuxiliaryPoint
     {
+        // Pixel index with respect to the template image
         int templatePixelIndex;
+        // An pseudo index that orders the pixel with respect to a cell from
+        // top-left to bottom right
         qreal microcellPixelIndex;
-        int microcellIndex;
-        qreal macrocellPixelIndex;
-        qreal value;
+        // Spot function value at the top-left corner of the pixel
+        qreal valueAtCorner;
+        // Spot function value at the center of the pixel
+        qreal valueAtCenter;
+        // Distance from the "center" of the shape to the top-left corner of the
+        // pixel
+        qreal distanceToCorner;
+        // Distance from the "center" of the shape to the center of the pixel
+        qreal distanceToCenter;
+    };
+    // Convenience struct to store some info for a single microcell during the
+    // construction of the template
+    struct AuxiliaryMicrocell
+    {
+        // The order in which this cell should light up pixels with respect to
+        // the other cells
+        int index;
+        // List of points in this cell
+        QVector<AuxiliaryPoint> auxiliaryPoints;
     };
 
-    QVector<AuxiliaryPoint> auxiliaryPoints;
-    m_templateData = QVector<qreal>(m_templateSize.width() * m_templateSize.height(), -1.0);
+    QVector<AuxiliaryMicrocell> auxiliaryMicrocells(m_macrocellSize.width() * m_macrocellSize.height());
+
+    // Set the ordered index for each auxiliary microcell
     // Use makeCellOrderList to shuffle the microcell activation order so that
     // they follow bayer matrix like patters. This allows to grow the
     // microcells in a way that they don't visually cluster
     QVector<int> microcellIndices = makeCellOrderList(m_macrocellSize.width(), m_macrocellSize.height());
+    for (int i = 0; i < auxiliaryMicrocells.size(); ++i) {
+        auxiliaryMicrocells[i].index = microcellIndices[i];
+    }
 
     // "Rasterize" the macrocell: get all the points of the template that lie
     // inside the macrocell and store them as auxiliary points that contain
@@ -268,70 +311,146 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     // macrocell, but also some other areas outside (parts of adjacent
     // macrocells) if, for example, the screen is rotated. To get later a value
     // from the template we only use the pixels inside the macrocell, but the
-    // pixels outside are usefull to perform bilinear interpolation 
+    // pixels outside are usefull to perform bilinear interpolation
+
+    // Get the horizontal and vertical points at cell corners
+    QVector<QPointF> horizontalCellPositions;
+    for (int i = -1; i <= m_macrocellSize.width() + 1; ++i) {
+        horizontalCellPositions.append(v1 / static_cast<qreal>(m_macrocellSize.width()) * static_cast<qreal>(i));
+    }
+    QVector<QPointF> verticalCellPositions;
+    for (int i = -1; i <= m_macrocellSize.height() + 1; ++i) {
+        verticalCellPositions.append(v2 / static_cast<qreal>(m_macrocellSize.height()) * static_cast<qreal>(i));
+    }
+
+    int totalNumberOfAuxiliaryPoints = 0;
+
+    // Convenience function that tells if a pixel should belong to the left or
+    // to the right side of an edge. Used only when the point lies exactly in
+    // the edge
+    auto pointBelongsToLeftSideOfEdge = [](const QPointF &point, const QPointF &edgeStart, const QPointF &edgeDirection) -> bool
+    {
+        const qreal r = (point.x() - edgeStart.x()) * edgeDirection.y() - (point.y() - edgeStart.y()) * edgeDirection.x();
+        return (r == 0.0) && ((edgeDirection.y() == 0.0 && edgeDirection.x() > 0.0) || (edgeDirection.y() > 0.0));
+    };
+
+    // This is used to get an estimate of how far a given point is from the
+    // "center" of the shape (center of dot, center of line, etc.)
+    LightUpOrderingFunction<ScreentoneFunction> lightUpOrderingFunction;
+
+    // Visit all the pixels on the template and add an auxiliary point for each
+    // one that falls inside the macrocell
     for (int i = 0; i < m_templateData.size(); ++i) {
-        // Transform the pixel position from template to screen coordinates
+        // Transform the pixel position from template to screen coordinates.
+        // We transform both the point at the pixel corner (used for sampling
+        // the screentone function) and the point at pixel center (used to
+        // compute to which cell the pixel belongs)
         const int templateY = i / m_templateSize.width();
         const int templateX = i - m_templateSize.width() * templateY;
-        const QPointF p(
-            static_cast<qreal>(templateX - m_originOffset.x()) + 0.5,
-            static_cast<qreal>(templateY - m_originOffset.y()) + 0.5
+        const QPointF pixelCornerPoint(
+            static_cast<qreal>(templateX - m_originOffset.x()),
+            static_cast<qreal>(templateY - m_originOffset.y())
         );
-        // Take into account only the pixels that lie inside the macrocell quad
-        // and collect some info about them
-        const qreal r1 = p.x() * l1.y() - p.y() * l1.x();
-        if (r1 > 0.0) continue;
-        const qreal r2 = (p.x() - v1.x()) * l2.y() - (p.y() - v1.y()) * l2.x();
-        if (r2 > 0.0) continue;
-        const qreal r3 = (p.x() - v3.x()) * l3.y() - (p.y() - v3.y()) * l3.x();
-        if (r3 > 0.0) continue;
-        const qreal r4 = (p.x() - v2.x()) * l4.y() - (p.y() - v2.y()) * l4.x();
-        if (r4 > 0.0) continue;
-        // If the pixel lies on a top or left edge it is not included
-        if ((r1 == 0.0 && ((l1.y() == 0 && l1.x() > 0) || (l1.y() < 0.0))) ||
-            (r2 == 0.0 && ((l2.y() == 0 && l2.x() > 0) || (l2.y() < 0.0))) ||
-            (r3 == 0.0 && ((l3.y() == 0 && l3.x() > 0) || (l3.y() < 0.0))) ||
-            (r4 == 0.0 && ((l4.y() == 0 && l4.x() > 0) || (l4.y() < 0.0)))) {
+        const QPointF pixelCenterPoint(pixelCornerPoint + QPointF(0.5, 0.5));
+        const QPointF pixelCenterScreenPoint = m_templateToScreenTransform.map(pixelCenterPoint);
+        const QPointF macrocellPos(pixelCenterScreenPoint.x() * v1MicrocellLength, pixelCenterScreenPoint.y() * v2MicrocellLength);
+        // Initial estimate for the microcell position
+        int microcellX = static_cast<int>(std::floor(macrocellPos.x() * static_cast<qreal>(m_macrocellSize.width()) / v1Length));
+        int microcellY = static_cast<int>(std::floor(macrocellPos.y() * static_cast<qreal>(m_macrocellSize.height()) / v2Length));
+        // Discard this pixel if it is clearly outside the macrocell
+        if (microcellX < -1 || microcellX > m_macrocellSize.width() ||
+            microcellY < -1 || microcellY > m_macrocellSize.height()) {
             continue;
         }
-
-        const QPointF screenPos = m_templateToScreenTransform.map(p);
-        const QPointF macrocellPos(screenPos.x() * v1MicrocellLength, screenPos.y() * v2MicrocellLength);
-        const int microcellX = qBound(0, static_cast<int>(std::floor(macrocellPos.x() * static_cast<qreal>(m_macrocellSize.width()) / v1Length)), m_macrocellSize.width() - 1);
-        const int microcellY = qBound(0, static_cast<int>(std::floor(macrocellPos.y() * static_cast<qreal>(m_macrocellSize.height()) / v2Length)), m_macrocellSize.height() - 1);
+        // If the pixel center lies exactly in a border between cells we must
+        // decide if it should belong to a neighbor cell. This is an usual
+        // problem in rasterization. Here we treat the pixel as if it belonged
+        const QPointF topLeftCorner(horizontalCellPositions[microcellX + 1] + verticalCellPositions[microcellY + 1]);
+        const QPointF topRightCorner(horizontalCellPositions[microcellX + 1 + 1] + verticalCellPositions[microcellY + 1]);
+        const QPointF bottomRightCorner(horizontalCellPositions[microcellX + 1 + 1] + verticalCellPositions[microcellY + 1 + 1]);
+        const QPointF bottomLeftCorner(horizontalCellPositions[microcellX + 1] + verticalCellPositions[microcellY + 1 + 1]);
+        if (pointBelongsToLeftSideOfEdge(pixelCenterPoint, topLeftCorner, l1)) {
+            --microcellY;
+        }
+        if (pointBelongsToLeftSideOfEdge(pixelCenterPoint, topRightCorner, l2)) {
+            ++microcellX;
+        }
+        if (pointBelongsToLeftSideOfEdge(pixelCenterPoint, bottomRightCorner, l3)) {
+            ++microcellY;
+        }
+        if (pointBelongsToLeftSideOfEdge(pixelCenterPoint, bottomLeftCorner, l4)) {
+            --microcellX;
+        }
+        // Discard the pixel since the modified microcell position is for a cell
+        // that belongs to another macrocell
+        if (microcellX < 0 || microcellX >= m_macrocellSize.width() ||
+            microcellY < 0 || microcellY >= m_macrocellSize.height()) {
+            continue;
+        }
+        // Add the pixel to the auxiliary points collection
         const int microcellIndex = microcellY * m_macrocellSize.width() + microcellX;
         const qreal microcellPixelIndexX = macrocellPos.x() - static_cast<qreal>(microcellX) * v1MicrocellLength;
         const qreal microcellPixelIndexY = macrocellPos.y() - static_cast<qreal>(microcellY) * v2MicrocellLength;
-        auxiliaryPoints.push_back(
+        const qreal microcellPixelIndex = microcellPixelIndexY * v1MicrocellLength + microcellPixelIndexX;
+        const QPointF pixelCornerScreenPoint = m_templateToScreenTransform.map(pixelCornerPoint);
+        auxiliaryMicrocells[microcellIndex].auxiliaryPoints.push_back(
             {
                 i,
-                microcellPixelIndexY * v1MicrocellLength + microcellPixelIndexX,
-                microcellIndices[microcellIndex],
-                0.0,
-                screentoneFunction(macrocellPos.x() / v1MicrocellLength, macrocellPos.y() / v2MicrocellLength)
+                microcellPixelIndex,
+                screentoneFunction(pixelCornerScreenPoint.x(), pixelCornerScreenPoint.y()),
+                screentoneFunction(pixelCenterScreenPoint.x(), pixelCenterScreenPoint.y()),
+                lightUpOrderingFunction(pixelCornerScreenPoint.x(), pixelCornerScreenPoint.y()),
+                lightUpOrderingFunction(pixelCenterScreenPoint.x(), pixelCenterScreenPoint.y()),
+            }
+        );
+        ++totalNumberOfAuxiliaryPoints;
+    }
+
+    // Sort the auxiliary points of each auxiliary microcell with respect to
+    // different criteria
+    for (int i = 0; i < auxiliaryMicrocells.size(); ++i) {
+        std::sort(auxiliaryMicrocells[i].auxiliaryPoints.begin(), auxiliaryMicrocells[i].auxiliaryPoints.end(),
+            [](const AuxiliaryPoint &a, const AuxiliaryPoint &b) {
+                if (qFuzzyCompare(a.valueAtCorner, b.valueAtCorner)) {
+                    if (qFuzzyCompare(a.valueAtCenter, b.valueAtCenter)) {
+                        if (qFuzzyCompare(a.distanceToCenter, b.distanceToCenter)) {
+                            if (qFuzzyCompare(a.distanceToCorner, b.distanceToCorner)) {
+                                return a.microcellPixelIndex < b.microcellPixelIndex;
+                            }
+                            return a.distanceToCorner < b.distanceToCorner;
+                        }
+                        return a.distanceToCenter < b.distanceToCenter;
+                    }
+                    return a.valueAtCenter < b.valueAtCenter;
+                }
+                return a.valueAtCorner < b.valueAtCorner;
             }
         );
     }
 
-    // Normalize the microcellPixelValues to use in sorting
-    for (AuxiliaryPoint &point : auxiliaryPoints) {
-        point.macrocellPixelIndex = point.microcellPixelIndex * numberOfMicrocells + point.microcellIndex;
-    }
-
-    // Sort the points
-    std::sort(auxiliaryPoints.begin(), auxiliaryPoints.end(),
-        [](const AuxiliaryPoint &a, const AuxiliaryPoint &b) {
-            if (qFuzzyCompare(a.value, b.value)) {
-                return a.macrocellPixelIndex < b.macrocellPixelIndex;
-            }
-            return a.value < b.value;
+    // Sort the auxiliary microcells themselves
+    std::sort(auxiliaryMicrocells.begin(), auxiliaryMicrocells.end(),
+        [](const AuxiliaryMicrocell &a, const AuxiliaryMicrocell &b) {
+            return a.index < b.index;
         }
     );
 
-    // Fill the template pixels inside the macrocell with the sorted values
-    for (int i = 0; i < auxiliaryPoints.size(); ++i) {
-        m_templateData[auxiliaryPoints[i].templatePixelIndex] =
-            (static_cast<qreal>(i) + 0.5) / static_cast<qreal>(auxiliaryPoints.size());
+    // Fill the template pixels inside the macrocell with the sorted auxiliary
+    // points
+    {
+        int macrocellPixelIndex = 0;
+        QVector<int> microcellPixelIndides(auxiliaryMicrocells.size());
+        while (macrocellPixelIndex < totalNumberOfAuxiliaryPoints) {
+            for (int i = 0; i < auxiliaryMicrocells.size(); ++i) {
+                if (microcellPixelIndides[i] == auxiliaryMicrocells[i].auxiliaryPoints.size()) {
+                    continue;
+                }
+                m_templateData[auxiliaryMicrocells[i].auxiliaryPoints[microcellPixelIndides[i]].templatePixelIndex] =
+                    static_cast<qreal>(macrocellPixelIndex) / static_cast<qreal>(totalNumberOfAuxiliaryPoints - 1);
+                ++microcellPixelIndides[i];
+                ++macrocellPixelIndex;
+            }
+        }
     }
 
     // Fill the rest of the template pixels by copying the values from the
@@ -340,37 +459,36 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
         if (m_templateData[i] < 0.0) {
             int templateY = i / m_templateSize.width();
             int templateX = i - m_templateSize.width() * templateY;
-            QPointF p(
+            QPointF pixelCenterPoint(
                 static_cast<qreal>(templateX - m_originOffset.x()) + 0.5,
                 static_cast<qreal>(templateY - m_originOffset.y()) + 0.5
             );
-            const QPointF screenPos = m_templateToScreenTransform.map(p);
-            const qreal a = -std::floor(screenPos.x() / macrocellSizeF.width());
-            const qreal b = -std::floor(screenPos.y() / macrocellSizeF.height());
-            p += QPointF(a * v1.x() + b * v2.x(), a * v1.y() + b * v2.y());
+            const QPointF pixelCenterScreenPoint = m_templateToScreenTransform.map(pixelCenterPoint);
+            const qreal a = -std::floor(pixelCenterScreenPoint.x() / macrocellSizeF.width());
+            const qreal b = -std::floor(pixelCenterScreenPoint.y() / macrocellSizeF.height());
+            pixelCenterPoint += QPointF(a * v1.x() + b * v2.x(), a * v1.y() + b * v2.y());
 
-            int x = static_cast<int>(std::floor(p.x())) + m_originOffset.x();
-            int y = static_cast<int>(std::floor(p.y())) + m_originOffset.y();
+            int x = static_cast<int>(std::floor(pixelCenterPoint.x())) + m_originOffset.x();
+            int y = static_cast<int>(std::floor(pixelCenterPoint.y())) + m_originOffset.y();
             int macrocellPointIndex = y * m_templateSize.width() + x;
 
             // if for some reason the target reference pixel is not set, we try
             // find another one just by wrapping around the macrocell
             if (m_templateData[macrocellPointIndex] < 0.0) {
-                const qreal r1 = p.x() * l1.y() - p.y() * l1.x();
-                const qreal r2 = (p.x() - v1.x()) * l2.y() - (p.y() - v1.y()) * l2.x();
-                const qreal r3 = (p.x() - v3.x()) * l3.y() - (p.y() - v3.y()) * l3.x();
-                const qreal r4 = (p.x() - v2.x()) * l4.y() - (p.y() - v2.y()) * l4.x();
-                if (r1 == 0.0 && ((l1.y() == 0.0 && l1.x() > 0.0) || (l1.y() < 0.0))) {
-                    p += v2;
-                }  if (r2 == 0.0 && ((l2.y() == 0.0 && l2.x() > 0.0) || (l2.y() < 0.0))) {
-                    p -= v1;
-                }  if (r3 == 0.0 && ((l3.y() == 0.0 && l3.x() > 0.0) || (l3.y() < 0.0))) {
-                    p -= v2;
-                }  if (r4 == 0.0 && ((l4.y() == 0.0 && l4.x() > 0.0) || (l4.y() < 0.0))) {
-                    p += v1;
+                if (pointBelongsToLeftSideOfEdge(pixelCenterPoint, QPointF(0.0, 0.0), l1)) {
+                    pixelCenterPoint += v2;
                 }
-                templateX = static_cast<int>(std::floor(p.x())) + m_originOffset.x();
-                templateY = static_cast<int>(std::floor(p.y())) + m_originOffset.y();
+                if (pointBelongsToLeftSideOfEdge(pixelCenterPoint, v1, l2)) {
+                    pixelCenterPoint -= v1;
+                }
+                if (pointBelongsToLeftSideOfEdge(pixelCenterPoint, v3, l3)) {
+                    pixelCenterPoint -= v2;
+                }
+                if (pointBelongsToLeftSideOfEdge(pixelCenterPoint, v2, l4)) {
+                    pixelCenterPoint += v1;
+                }
+                templateX = static_cast<int>(std::floor(pixelCenterPoint.x())) + m_originOffset.x();
+                templateY = static_cast<int>(std::floor(pixelCenterPoint.y())) + m_originOffset.y();
                 macrocellPointIndex = templateY * m_templateSize.width() + templateX;
             }
 

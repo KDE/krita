@@ -120,11 +120,11 @@ public:
         m_imageToScreenTransform = t;
     }
     
-    qreal operator()(int x, int y) const
+    qreal operator()(qreal x, qreal y) const
     {
         // Get the coordinates in screen
         qreal xx, yy;
-        m_imageToScreenTransform.map(static_cast<qreal>(x) + 0.5, static_cast<qreal>(y) + 0.5, &xx, &yy);
+        m_imageToScreenTransform.map(x, y, &xx, &yy);
         // Get the value
         return m_function(xx, yy);
     }

@@ -209,7 +209,12 @@ QStyleOptionSlider StoryboardDelegate::drawCommentHeader(QPainter *p, const QSty
     doc.setTextWidth(commentRect.width());
     doc.setDocumentMargin(0);
     doc.setDefaultFont(option.font);
-    doc.setPlainText(data.simplified());
+    QStringList lines = data.split('\n');
+    QString HTML;
+    Q_FOREACH( const QString& line, lines) {
+        HTML.append("<p>" + line + "</p>");
+    }
+    doc.setHtml(HTML);
     QRectF clipRect = commentRect;
     clipRect.moveTopLeft(QPoint(0, 0 + scrollValue));
     if (p) {

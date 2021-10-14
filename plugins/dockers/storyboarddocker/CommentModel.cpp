@@ -8,6 +8,7 @@
 
 #include <QDebug>
 #include <QMimeData>
+#include <QRegularExpression>
 
 #include <kis_icon.h>
 
@@ -50,7 +51,30 @@ QVariant StoryboardCommentModel::data(const QModelIndex &index, int role) const
 bool StoryboardCommentModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole)) {
-        m_commentList[index.row()].name = value.toString();
+        // POST KRITA/5.0 TODO -- we should be storing this as a map, not an array!
+        // We only want 1 comment field per comment track title. A data change would
+        // be appropriate here.
+        QStringList nameList;
+        Q_FOREACH(const StoryboardComment& comment, m_commentList) {
+            nameList << comment.name;
+        }
+
+
+        QString desiredName = value.toString();
+        int splitPoint = desiredName.length();
+        while (desiredName.at(splitPoint - 1).isDigit()) {
+            splitPoint--;
+        }
+
+        const QString prefix = desiredName.left(splitPoint);
+        int existingNames = prefix.mid(splitPoint).toInt();
+
+        while(nameList.contains(desiredName)) {
+            existingNames++;
+            desiredName = prefix + QString::number(existingNames);
+        }
+
+        m_commentList[index.row()].name = desiredName;
         emit dataChanged(index, index);
         emit sigCommentListChanged();
         return true;
@@ -79,8 +103,8 @@ bool StoryboardCommentModel::insertRows(int position, int rows, const QModelInde
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
-        StoryboardComment newcomment;                       //maybe set a default name like comment 1
-        newcomment.name = "";
+        StoryboardComment newcomment;
+        newcomment.name = "Comment";
         newcomment.visibility = true;
 
         if (position < 0 || position > m_commentList.size()) {

@@ -842,7 +842,6 @@ StoryboardDockerDock::ExportPage StoryboardDockerDock::getPageLayout(QString lay
                 QString afterNamespace = attribute.name().split(":").last();
 
                 auto isValidLabel = [&](QString label, int& index) -> bool {
-                    ENTER_FUNCTION() << ppVar(label) << ppVar(attribute.value());
                     if (attribute.value().startsWith(label)) {
                         if (attribute.value() == label) {
                             index = 0;
@@ -880,7 +879,6 @@ StoryboardDockerDock::ExportPage StoryboardDockerDock::getPageLayout(QString lay
                     } else if (isValidLabel("shot", index)) {
                         extractRect(elementMap[index].cutNumberRect);
                     } else if (isValidLabel("page-time", index)) {
-                        ENTER_FUNCTION();
                         extractRect(page.pageTimeRect);
                     } else if (isValidLabel("page-number", index)) {
                         extractRect(page.pageNumberRect);

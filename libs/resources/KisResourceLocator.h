@@ -130,6 +130,7 @@ private:
     friend class KisResourceCacheDb;
     friend class KisStorageFilterProxyModel;
     friend class KisResourceQueryMapper;
+    friend class KisResourceUserOperations;
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;

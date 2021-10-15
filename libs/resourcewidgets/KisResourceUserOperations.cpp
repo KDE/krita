@@ -9,6 +9,7 @@
 
 #include <QMessageBox>
 #include <QFileInfo>
+#include <QBuffer>
 
 #include <klocalizedstring.h>
 
@@ -16,6 +17,8 @@
 #include <KisResourceModel.h>
 #include <KisResourceCacheDb.h>
 #include <kis_assert.h>
+#include <KisGlobalResourcesInterface.h>
+
 
 bool KisResourceUserOperations::userAllowsOverwrite(QWidget* widgetParent, QString resourceFilepath)
 {
@@ -159,6 +162,40 @@ bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParen
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resource, false);
     KisResourceModel resourceModel(resource->resourceType().first);
     resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources); // inactive don't count here
+
+    if (resource->resourceId() < 0 && resource->isSerializable()) {
+        // that's a resource that didn't come from a database
+        // we assume that filename and storageLocation are correct, though
+        if (QFileInfo(resource->storageLocation()).isRelative()) {
+            QString storageLocation = resource->storageLocation();
+            resource->setStorageLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(storageLocation));
+        }
+
+        int outResourceId;
+        // note that we need to check for any file that exists so we can't use KisResourceModel here
+        // because the model only keeps the current resource filename
+        KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first,
+                                                               KisResourceLocator::instance()->makeStorageLocationRelative(resource->storageLocation()), outResourceId);
+        KoResourceSP cachedPointer;
+        if (outResourceId >= 0) {
+            cachedPointer = resourceModel.resourceForId(outResourceId);
+        }
+
+        if (!cachedPointer || !cachedPointer->isSerializable()) {
+            QMessageBox::warning(widgetParent, i18nc("@title:window", "Failed to overwrite the resource"), i18nc("Warning message", "Failed to overwrite the resource."));
+            return false;
+        }
+        // now we need to move data from the provided pointer to the pointer from the database
+        QBuffer buffer;
+        buffer.open(QIODevice::ReadWrite);
+
+        resource->saveToDevice(&buffer);
+        buffer.close();
+        buffer.open(QIODevice::ReadWrite);
+        cachedPointer->loadFromDevice(&buffer, KisGlobalResourcesInterface::instance());
+        buffer.close();
+        resource = cachedPointer;
+    }
 
     QString oldName = resourceModel.data(resourceModel.indexForResourceId(resource->resourceId()), Qt::UserRole + KisAllResourcesModel::Name).toString();
     if (resource->name() != oldName) {

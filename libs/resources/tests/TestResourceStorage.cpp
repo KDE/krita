@@ -71,35 +71,70 @@ void TestResourceStorage ::testStorage()
     }
 }
 
-void TestResourceStorage::testImportResourceFile()
+void TestResourceStorage::testImportExportResource()
 {
-    QDir().mkpath(m_dstLocation + "/" + ResourceType::Patterns);
-    KisResourceStorage folderStorage(m_dstLocation);
-
     QImage img(256, 256, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(0, 0, 256, 256, Qt::red);
     img.save("testpattern.png");
 
-    QFile f("testpattern.png");
-    f.open(QFile::ReadOnly);
-    QByteArray ba = f.readAll();
-    f.close();
+    QByteArray ba;
 
-    QString md5 = KoMD5Generator::generateHash(ba);
+    {
+        QFile f("testpattern.png");
+        f.open(QFile::ReadOnly);
+        ba = f.readAll();
+        f.close();
+    }
 
-    bool r = folderStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
-    QVERIFY(r);
-    QCOMPARE(md5, folderStorage.resourceMd5("patterns/testpattern.png"));
+    const QString md5 = KoMD5Generator::generateHash(ba);
 
-    KisResourceStorage memoryStorage("memory");
-    r = memoryStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
-    QVERIFY(r);
-    QCOMPARE(md5, memoryStorage.resourceMd5("patterns/testpattern.png"));
+    {
+        QDir().mkpath(m_dstLocation + "/" + ResourceType::Patterns);
+        KisResourceStorage folderStorage(m_dstLocation);
 
-    KisResourceStorage bundleStorage(QString(FILES_DATA_DIR) + "/bundles/test1.bundle");
-    r = bundleStorage.importResourceFile(ResourceType::Patterns, "testpattern.png");
-    QVERIFY(!r);
+        QFile f("testpattern.png");
+        f.open(QFile::ReadOnly);
+        bool r = folderStorage.importResource("patterns/testpattern.png", &f);
+        QVERIFY(r);
+        QCOMPARE(md5, folderStorage.resourceMd5("patterns/testpattern.png"));
+
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        r = folderStorage.exportResource("patterns/testpattern.png", &buffer);
+        QVERIFY(r);
+        buffer.close();
+        QCOMPARE(KoMD5Generator::generateHash(buffer.data()), md5);
+    }
+
+    {
+        QFile f("testpattern.png");
+        f.open(QFile::ReadOnly);
+        KisResourceStorage memoryStorage("memory");
+        bool r = memoryStorage.importResource("patterns/testpattern.png", &f);
+        QVERIFY(r);
+        QCOMPARE(md5, memoryStorage.resourceMd5("patterns/testpattern.png"));
+
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        r = memoryStorage.exportResource("patterns/testpattern.png", &buffer);
+        QVERIFY(r);
+        buffer.close();
+        QCOMPARE(KoMD5Generator::generateHash(buffer.data()), md5);
+    }
+
+    {
+        QFile f("testpattern.png");
+        f.open(QFile::ReadOnly);
+        KisResourceStorage bundleStorage(QString(FILES_DATA_DIR) + "/bundles/test1.bundle");
+        bool r = bundleStorage.importResource("patterns/testpattern.png", &f);
+        QVERIFY(!r);
+
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        r = bundleStorage.exportResource("patterns/testpattern.png", &buffer);
+        QVERIFY(!r);
+    }
 }
 
 void TestResourceStorage::testAddResource()

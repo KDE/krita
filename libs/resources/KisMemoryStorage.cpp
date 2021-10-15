@@ -202,33 +202,53 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
     return retval;
 }
 
-bool KisMemoryStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
+bool KisMemoryStorage::importResource(const QString &url, QIODevice *device)
 {
-    QFileInfo fi(resourceFile);
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+
+    const QString resourceType = parts[0];
+    const QString resourceFilename = parts[1];
+
+    // we cannot overwrite exising file by API convention
     if (d->resourcesNew.contains(resourceType) &&
-        d->resourcesNew[resourceType].contains(fi.fileName())) {
+        d->resourcesNew[resourceType].contains(resourceFilename)) {
         return false;
     }
 
     StoredResource storedResource;
     storedResource.timestamp = QDateTime::currentDateTime();
-    storedResource.data.reset(new QByteArray());
-    QBuffer buffer(storedResource.data.data());
-    buffer.open(QIODevice::WriteOnly);
-    QFile f(resourceFile);
-
-    if (!f.open(QFile::ReadOnly)) {
-        return false;
-    }
-
-    buffer.write(f.readAll());
-    f.close();
-    buffer.close();
+    storedResource.data.reset(new QByteArray(device->readAll()));
 
     QHash<QString, StoredResource> &typedResources =
         d->resourcesNew[resourceType];
-    typedResources.insert(fi.fileName(), storedResource);
+    typedResources.insert(resourceFilename, storedResource);
 
+    return true;
+}
+
+bool KisMemoryStorage::exportResource(const QString &url, QIODevice *device)
+{
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+
+    const QString resourceType = parts[0];
+    const QString resourceFilename = parts[1];
+
+    if (!d->resourcesNew.contains(resourceType) ||
+        !d->resourcesNew[resourceType].contains(resourceFilename)) {
+        return false;
+    }
+
+    const StoredResource &storedResource =
+        d->resourcesNew[resourceType][resourceFilename];
+
+    if (!storedResource.data) {
+        qWarning() << "Stored resource doesn't have a seriallized representation!";
+        return false;
+    }
+
+    device->write(*storedResource.data);
     return true;
 }
 

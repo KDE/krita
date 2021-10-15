@@ -42,6 +42,7 @@ set(kritaglobal_LIB_SRCS
     KisBezierPatch.cpp
     KisBezierMesh.cpp
     KisRectsGrid.cpp
+    KisIODeviceOffsetGuard.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

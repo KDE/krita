@@ -181,6 +181,24 @@ private:
     KoResourceSP importResourceFromFile(const QString &resourceType, const QString &fileName, const bool allowOverwrite, const QString &storageLocation = QString());
 
     /**
+     * @brief importResource
+     * @param resourceType
+     * @param fileName: filename that shoudl be assigned to the resource
+     * @param device: QIODevice where the resource should be loaded from
+     * @param storageLocation: optional, the storage where the resource will be stored. Empty means in the default Folder storage.
+     * @return the imported resource, which has been added to the database and the cache
+     */
+    KoResourceSP importResource(const QString &resourceType, const QString &fileName, QIODevice *device, const bool allowOverwrite, const QString &storageLocation = QString());
+
+    /**
+     * @brief exportResource
+     * @param resource resource to be exported
+     * @param device: QIODevice where the resource should be loaded to
+     * @return true if the resource has been exported successfully
+     */
+    bool exportResource(KoResourceSP resource, QIODevice *device);
+
+    /**
      * @brief addResource adds the given resource to the database and potentially a storage
      * @param resourceType the type of the resource
      * @param resource the actual resource object

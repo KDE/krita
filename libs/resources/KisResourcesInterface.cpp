@@ -12,6 +12,9 @@
 
 #include "kis_debug.h"
 
+//#define SANITY_CHECKS
+
+
 KisResourcesInterface::KisResourcesInterface()
     : d_ptr(new KisResourcesInterfacePrivate)
 {
@@ -86,6 +89,7 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
         }
     }
 
+#ifdef SANITY_CHECKS
     /**
      * When we request a resource using MD5, but it is found only via its
      * filename, it is, most probably, a problem with the preset. Namely,
@@ -94,6 +98,7 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
      */
     const bool warnAboutIncorrectMd5Fetch =
         foundResources.isEmpty() && !md5.isEmpty();
+#endif
 
     if (foundResources.isEmpty()) {
         if (!filename.isEmpty()) {
@@ -120,11 +125,13 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
 
     KoResourceSP result = it != foundResources.end() ? it->first : KoResourceSP();
 
+#ifdef SANITY_CHECKS
     if (warnAboutIncorrectMd5Fetch && result) {
         qWarning() << "KisResourcesInterface::ResourceSourceAdapter::bestMatch: failed to fetch a resource using md5; falling back for filename...";
         qWarning() << "    requested:" << ppVar(md5) << ppVar(filename) << ppVar(name);
         qWarning() << "    found:" << result;
     }
+#endif
 
     return result;
 }

@@ -62,49 +62,7 @@ public:
          * @return a resource, or 0 of the resource doesn't exist.
          */
 
-        KoResourceSP bestMatch(const QString md5, const QString filename, const QString name)
-        {
-            QVector<QPair<KoResourceSP, int>> foundResources;
-
-            if (!md5.isEmpty()) {
-                Q_FOREACH (KoResourceSP res, resourcesForMD5(md5)) {
-                    int penalty = 0;
-
-                    if (!filename.isEmpty() && filename != res->filename()) {
-                        /// filename is more important than name, so it gives
-                        /// higher penalty
-                        penalty += 2;
-                    }
-
-                    if (!name.isEmpty() && name != res->name()) {
-                        penalty++;
-                    }
-
-                    foundResources.append(qMakePair(res, penalty));
-                }
-            } else if (!filename.isEmpty()) {
-                Q_FOREACH (KoResourceSP res, resourcesForFilename(filename)) {
-                    int penalty = 0;
-
-                    if (!name.isEmpty() && name != res->name()) {
-                        penalty++;
-                    }
-
-                    foundResources.append(qMakePair(res, penalty));
-                }
-            } else if (!name.isEmpty()) {
-                Q_FOREACH (KoResourceSP res, resourcesForName(name)) {
-                    int penalty = 0;
-                    foundResources.append(qMakePair(res, penalty));
-                }
-            }
-
-            auto it = std::min_element(foundResources.begin(), foundResources.end(),
-                                       [] (const QPair<KoResourceSP, int> &lhs,
-                                           const QPair<KoResourceSP, int> &rhs) {return lhs.second < rhs.second;});
-
-            return it != foundResources.end() ? it->first : KoResourceSP();
-        }
+        KoResourceSP bestMatch(const QString md5, const QString filename, const QString name);
 
         virtual KoResourceSP fallbackResource() const = 0;
 

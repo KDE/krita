@@ -1,7 +1,7 @@
-From b212e0e6a52aeb790e872662ce1fd7fcb1f3c49c Mon Sep 17 00:00:00 2001
+From fd999bcb24a67a88a6a191f876aee271dfeadb37 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 15 Apr 2021 21:35:50 +0000
-Subject: [PATCH 38/43] Android: Add window manager for raster based QWidgets
+Subject: [PATCH] Android: Add window manager for raster based QWidgets
 
 The way this works is for window types: (Qt::Dialog || Qt::Tool (without
 Qt::FramelessWindowHint)) which on other platforms are typically
@@ -23,9 +23,9 @@ renderToTexture enabled.
  .../android/qandroidplatformscreen.h          |   4 +
  .../android/qandroidplatformwindow.cpp        |   1 +
  .../android/qandroidplatformwindow.h          |   1 -
- .../android/qandroidplatformwindowmanager.cpp | 209 ++++++++++++++++++
- .../android/qandroidplatformwindowmanager.h   |  58 +++++
- 11 files changed, 347 insertions(+), 18 deletions(-)
+ .../android/qandroidplatformwindowmanager.cpp | 214 ++++++++++++++++++
+ .../android/qandroidplatformwindowmanager.h   |  59 +++++
+ 11 files changed, 353 insertions(+), 18 deletions(-)
  create mode 100644 src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
  create mode 100644 src/plugins/platforms/android/qandroidplatformwindowmanager.h
 
@@ -310,7 +310,7 @@ index 2cb2002874..878e33546a 100644
  
  QT_END_NAMESPACE
 diff --git a/src/plugins/platforms/android/qandroidplatformwindow.cpp b/src/plugins/platforms/android/qandroidplatformwindow.cpp
-index f9972ee4e1..257afb67e6 100644
+index 61e6f360de..1574b8b013 100644
 --- a/src/plugins/platforms/android/qandroidplatformwindow.cpp
 +++ b/src/plugins/platforms/android/qandroidplatformwindow.cpp
 @@ -73,6 +73,7 @@ void QAndroidPlatformWindow::raise()
@@ -335,10 +335,10 @@ index f2e51bd3df..aad001c359 100644
  protected:
 diff --git a/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
 new file mode 100644
-index 0000000000..d72dc67561
+index 0000000000..15bdae76a5
 --- /dev/null
 +++ b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
-@@ -0,0 +1,209 @@
+@@ -0,0 +1,214 @@
 +#include "qandroidplatformwindowmanager.h"
 +
 +#include "qandroidplatformwindow.h"
@@ -362,6 +362,11 @@ index 0000000000..d72dc67561
 +    setFlags(Qt::Popup | Qt::FramelessWindowHint);
 +    setMinimumSize(window->window()->minimumSize());
 +    setMaximumSize(window->window()->maximumSize());
++}
++
++QAndroidPlatformWindowManager::~QAndroidPlatformWindowManager()
++{
++    delete m_backingStore;
 +}
 +
 +void QAndroidPlatformWindowManager::updateGeometry(const QRect &rect)
@@ -550,10 +555,10 @@ index 0000000000..d72dc67561
 +}
 diff --git a/src/plugins/platforms/android/qandroidplatformwindowmanager.h b/src/plugins/platforms/android/qandroidplatformwindowmanager.h
 new file mode 100644
-index 0000000000..b12eb949f4
+index 0000000000..0688a75794
 --- /dev/null
 +++ b/src/plugins/platforms/android/qandroidplatformwindowmanager.h
-@@ -0,0 +1,58 @@
+@@ -0,0 +1,59 @@
 +#ifndef __QANDROIDPLATFORMWINDOWMANAGER_H_
 +#define __QANDROIDPLATFORMWINDOWMANAGER_H_
 +
@@ -575,6 +580,7 @@ index 0000000000..b12eb949f4
 +    };
 +public:
 +    QAndroidPlatformWindowManager(QAndroidPlatformWindow *window = nullptr);
++    ~QAndroidPlatformWindowManager();
 +
 +    /*
 +     * Updates the geometry of the window manager as per its child
@@ -613,5 +619,5 @@ index 0000000000..b12eb949f4
 +
 +#endif // __QANDROIDPLATFORMWINDOWMANAGER_H_
 -- 
-2.20.1.windows.1
+2.33.0
 

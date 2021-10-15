@@ -47,19 +47,6 @@ if [ -n "${CHANNEL}" ]; then
     echo -n "414f10d9ab2dc72dc6874dbdb99454227124473a7ae691db2288d60f14f810fe AppImageUpdate" | sha256sum -c -
 fi
 
-# We need to embed libstdc++ into the appimage, which is blacklisted in the
-# official build of linuxdeployqt. Hence download a patched one...
-if [ ! -x $BUILD_PREFIX/linuxdeployqt-patched-libstdc++/linuxdeployqt ]; then
-    cd $BUILD_PREFIX
-    wget "https://files.kde.org/krita/build/linuxdeployqt-patched-libstdc++.tar.gz"
-    echo -n "efa1e19f69bdd3cfc4b259ec0551cc5ddfd9eae06d4ef22307f72dbcd151ccd7 linuxdeployqt-patched-libstdc++.tar.gz" | sha256sum -c -
-    tar xf linuxdeployqt-patched-libstdc++.tar.gz
-    rm linuxdeployqt-patched-libstdc++.tar.gz
-fi
-
-PATH=$BUILD_PREFIX/linuxdeployqt-patched-libstdc++:$PATH
-echo Using linuxdeployqt from location: `which linuxdeployqt`
-
 # Switch over to our build prefix
 cd $BUILD_PREFIX
 
@@ -78,7 +65,6 @@ cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/lib/python3.8 $APPDIR/usr/lib
-cp -L /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu
 if [ -d $DEPS_INSTALL_PREFIX/share/sip ] ; then
 cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
 fi

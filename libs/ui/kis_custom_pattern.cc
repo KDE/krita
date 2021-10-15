@@ -108,6 +108,11 @@ void KisCustomPattern::slotAddPredefined()
     dlg.setCaption(i18n("Add to Predefined Patterns"));
 
     QString filename = dlg.filename();
+
+    if (filename == "") {
+        // dialog was cancelled
+        return;
+    }
     bool hadToChangeFilename = false;
 
     QFileInfo fi(filename);
@@ -126,6 +131,8 @@ void KisCustomPattern::slotAddPredefined()
             if (QMessageBox::warning(this,  i18nc("@title:window", "Krita"), i18n("This pattern already exists. Do you want to overwrite it?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
                 overwrite = true;
             }
+        } else { // the File Dialog showed the warning and the user said "yeah fine"
+            overwrite = true;
         }
     }
 

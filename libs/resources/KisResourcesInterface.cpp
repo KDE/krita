@@ -84,20 +84,33 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
 
             foundResources.append(qMakePair(res, penalty));
         }
-    } else if (!filename.isEmpty()) {
-        Q_FOREACH (KoResourceSP res, resourcesForFilename(filename)) {
-            int penalty = 0;
+    }
 
-            if (!name.isEmpty() && name != res->name()) {
-                penalty++;
+    /**
+     * When we request a resource using MD5, but it is found only via its
+     * filename, it is, most probably, a problem with the preset. Namely,
+     * the MD5 tag saved into the preset is wrong. Let's just warn about
+     * that.
+     */
+    const bool warnAboutIncorrectMd5Fetch =
+        foundResources.isEmpty() && !md5.isEmpty();
+
+    if (foundResources.isEmpty()) {
+        if (!filename.isEmpty()) {
+            Q_FOREACH (KoResourceSP res, resourcesForFilename(filename)) {
+                int penalty = 0;
+
+                if (!name.isEmpty() && name != res->name()) {
+                    penalty++;
+                }
+
+                foundResources.append(qMakePair(res, penalty));
             }
-
-            foundResources.append(qMakePair(res, penalty));
-        }
-    } else if (!name.isEmpty()) {
-        Q_FOREACH (KoResourceSP res, resourcesForName(name)) {
-            int penalty = 0;
-            foundResources.append(qMakePair(res, penalty));
+        } else if (!name.isEmpty()) {
+            Q_FOREACH (KoResourceSP res, resourcesForName(name)) {
+                int penalty = 0;
+                foundResources.append(qMakePair(res, penalty));
+            }
         }
     }
 
@@ -105,5 +118,13 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
                                [] (const QPair<KoResourceSP, int> &lhs,
                                const QPair<KoResourceSP, int> &rhs) {return lhs.second < rhs.second;});
 
-    return it != foundResources.end() ? it->first : KoResourceSP();
+    KoResourceSP result = it != foundResources.end() ? it->first : KoResourceSP();
+
+    if (warnAboutIncorrectMd5Fetch && result) {
+        qWarning() << "KisResourcesInterface::ResourceSourceAdapter::bestMatch: failed to fetch a resource using md5; falling back for filename...";
+        qWarning() << "    requested:" << ppVar(md5) << ppVar(filename) << ppVar(name);
+        qWarning() << "    found:" << result;
+    }
+
+    return result;
 }

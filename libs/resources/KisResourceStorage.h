@@ -224,7 +224,12 @@ public:
      * Copies the given file into this storage. Implementations should not overwrite
      * an existing resource with the same filename, but return false.
      */
-    bool importResourceFile(const QString &resourceType, const QString &resourceFile);
+    bool importResource(const QString &url, QIODevice *device);
+
+    /**
+     * Copies the given given resource from the storage into \p device
+     */
+    bool exportResource(const QString &url, QIODevice *device);
 
     /// Returns true if the storage supports versioning of the resources.
     /// It enables loadVersionedResource() call.

@@ -30,6 +30,8 @@ private Q_SLOTS:
 
     void testSyncVersions();
 
+    void testImportExportResource();
+
 private:
 
     QString m_srcLocation;

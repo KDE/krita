@@ -53,8 +53,9 @@ public:
 public:
         /**
          * @brief bestMatch retrieves a resource, prefarably by md5, but with filename and name
-         * as fallback for older files that do not store the md5sum. Note that if the resource is
-         * not found by md5 if the md5 isn't empty, we do NOT then look by filename.
+         * as fallback for older files that do not store the md5sum. If the resource is
+         * not found by md5 and the md5 isn't empty, then it will try to fallback to searching
+         * by filename, but will show a warning in case sanity checks are enabled.
          *
          * If multiple resources with the same md5 exist, then it prefers the one
          * with the same filename and name.

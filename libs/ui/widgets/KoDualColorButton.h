@@ -129,6 +129,9 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
      */
     void setPopDialog( bool popDialog );
 
+    void openForegroundDialog();
+
+    void openBackgroundDialog();
   Q_SIGNALS:
     /**
      * Emitted when the foreground color is changed.

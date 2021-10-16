@@ -1860,6 +1860,26 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="chooseForegroundColor">
+      <icon></icon>
+      <text>&amp;Choose Foreground Color</text>
+      <whatsThis></whatsThis>
+      <toolTip>Choose Foreground Color</toolTip>
+      <iconText>Choose Foreground Color</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="chooseBackgroundColor">
+      <icon></icon>
+      <text>&amp;Choose Background Color</text>
+      <whatsThis></whatsThis>
+      <toolTip>Choose Background Color</toolTip>
+      <iconText>Choose Background Color</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="paintops">
       <icon></icon>
       <text>&amp;Painter's Tools</text>

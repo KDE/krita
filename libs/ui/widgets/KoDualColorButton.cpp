@@ -254,6 +254,20 @@ void KoDualColorButton::slotSetForeGroundColorFromDialog(const KoColor color)
     emit foregroundColorChanged(d->foregroundColor);
 }
 
+
+void KoDualColorButton::openForegroundDialog(){
+    d->colorSelectorDialog->setPreviousColor(d->foregroundColor);
+    d->colorSelectorDialog->show();
+    update();
+}
+
+void KoDualColorButton::openBackgroundDialog(){
+    KoColor c = d->backgroundColor;
+    c = KisDlgInternalColorSelector::getModalColorDialog(c, this, d->colorSelectorDialog->windowTitle());
+    d->backgroundColor = c;
+    emit backgroundColorChanged(d->backgroundColor);
+}
+
 void KoDualColorButton::mousePressEvent( QMouseEvent *event )
 {
     QRect foregroundRect;

@@ -115,6 +115,16 @@ void KisControlFrame::setup(QWidget *parent)
     action->setText(i18n("&Painter's Tools"));
     m_viewManager->actionCollection()->addAction("paintops", action);
     action->setDefaultWidget(m_paintopBox);
+
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Choose Foreground color"));
+    m_viewManager->actionCollection()->addAction("chooseForegroundColor", action);
+    connect(action, SIGNAL(triggered()), m_dual, SLOT(openForegroundDialog()));
+
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Choose Background color"));
+    m_viewManager->actionCollection()->addAction("chooseBackgroundColor", action);
+    connect(action, SIGNAL(triggered()), m_dual, SLOT(openBackgroundDialog()));
 }
 
 void KisControlFrame::slotUpdateDisplayRenderer()

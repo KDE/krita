@@ -117,12 +117,12 @@ void KisControlFrame::setup(QWidget *parent)
     action->setDefaultWidget(m_paintopBox);
 
     action = new QWidgetAction(this);
-    action->setText(i18n("&Choose Foreground color"));
+    action->setText(i18n("&Open Foreground color selector"));
     m_viewManager->actionCollection()->addAction("chooseForegroundColor", action);
     connect(action, SIGNAL(triggered()), m_dual, SLOT(openForegroundDialog()));
 
     action = new QWidgetAction(this);
-    action->setText(i18n("&Choose Background color"));
+    action->setText(i18n("&Open Background color selector"));
     m_viewManager->actionCollection()->addAction("chooseBackgroundColor", action);
     connect(action, SIGNAL(triggered()), m_dual, SLOT(openBackgroundDialog()));
 }

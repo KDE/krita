@@ -285,7 +285,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
         return;
 
     KisDocument *document = d->canvas->imageView()->document();
-    if (d->recordAutomatically && !d->enabledIds.contains(document->uniqueID()))
+    if (d->recordAutomatically && !d->enabledIds.contains(document->linkedResourcesStorageId()))
         onRecordButtonToggled(true);
 
     d->updateComboResolution(document->image()->width(), document->image()->height());
@@ -295,7 +295,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     d->updateWriterSettings();
     d->updateUiFormat();
 
-    bool enabled = d->enabledIds.value(document->uniqueID(), false);
+    bool enabled = d->enabledIds.value(document->linkedResourcesStorageId(), false);
     d->writer.setEnabled(enabled && d->isColorSpaceSupported);
     d->updateRecordStatus(enabled && d->isColorSpaceSupported);
 }
@@ -325,7 +325,7 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
     if (!d->canvas)
         return;
 
-    const QString &id = d->canvas->imageView()->document()->uniqueID();
+    const QString &id = d->canvas->imageView()->document()->linkedResourcesStorageId();
 
     bool wasEmpty = !d->enabledIds.values().contains(true);
 

@@ -92,7 +92,6 @@
 #include <kis_canvas_widget_base.h>
 #include "kis_layer_utils.h"
 #include "kis_selection_mask.h"
-#include <KisResourceCollectorVisitor.h>
 
 // Local
 #include "KisViewManager.h"
@@ -405,8 +404,16 @@ public:
     bool batchMode { false };
     bool decorationsSyncingDisabled = false;
 
-    QString documentStorageID {QUuid::createUuid().toString()};
-    KisResourceStorageSP documentResourceStorage;
+
+    // Resources saved in the .kra document
+    QString linkedResourcesStorageID {QUuid::createUuid().toString()};
+    KisResourceStorageSP linkedResourceStorage;
+
+    // Resources saved into other components of the kra file
+    QString embeddedResourcesStorageID {QUuid::createUuid().toString()};
+    KisResourceStorageSP embeddedResourceStorage;
+
+
 
     void syncDecorationsWrapperLayerState();
 
@@ -514,8 +521,12 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     batchMode = rhs.batchMode;
 
 
-    if (rhs.documentResourceStorage) {
-        documentResourceStorage = rhs.documentResourceStorage->clone();
+    if (rhs.linkedResourceStorage) {
+        linkedResourceStorage = rhs.linkedResourceStorage->clone();
+    }
+
+    if (rhs.embeddedResourceStorage) {
+        embeddedResourceStorage = rhs.embeddedResourceStorage->clone();
     }
 
 }
@@ -577,8 +588,11 @@ KisDocument::KisDocument(bool addStorage)
 
 
     if (addStorage) {
-        d->documentResourceStorage.reset(new KisResourceStorage(d->documentStorageID));
-        KisResourceLocator::instance()->addStorage(d->documentStorageID, d->documentResourceStorage);
+        d->linkedResourceStorage.reset(new KisResourceStorage(d->linkedResourcesStorageID));
+        KisResourceLocator::instance()->addStorage(d->linkedResourcesStorageID, d->linkedResourceStorage);
+
+        d->embeddedResourceStorage.reset(new KisResourceStorage(d->embeddedResourcesStorageID));
+        KisResourceLocator::instance()->addStorage(d->embeddedResourcesStorageID, d->embeddedResourceStorage);
     }
 
     // preload the krita resources
@@ -651,16 +665,24 @@ KisDocument::~KisDocument()
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
-    if (KisResourceLocator::instance()->hasStorage(d->documentStorageID)) {
-        KisResourceLocator::instance()->removeStorage(d->documentStorageID);
+    if (KisResourceLocator::instance()->hasStorage(d->linkedResourcesStorageID)) {
+        KisResourceLocator::instance()->removeStorage(d->linkedResourcesStorageID);
+    }
+    if (KisResourceLocator::instance()->hasStorage(d->embeddedResourcesStorageID)) {
+        KisResourceLocator::instance()->removeStorage(d->embeddedResourcesStorageID);
     }
 
     delete d;
 }
 
-QString KisDocument::uniqueID() const
+QString KisDocument::embeddedResourcesStorageId() const
 {
-    return d->documentStorageID;
+    return d->embeddedResourcesStorageID;
+}
+
+QString KisDocument::linkedResourcesStorageId() const
+{
+    return d->linkedResourcesStorageID;
 }
 
 KisDocument *KisDocument::clone()
@@ -945,19 +967,14 @@ KisDocument *KisDocument::lockAndCreateSnapshot()
 {
     KisDocument *doc = lockAndCloneForSaving();
     if (doc) {
-
-        if (doc->d->documentResourceStorage) {
-
+        if (doc->d->embeddedResourceStorage) {
             // clone the local resource storage and its contents
-            doc->d->documentResourceStorage = d->documentResourceStorage->clone();
+            doc->d->embeddedResourceStorage = d->embeddedResourceStorage->clone();
+        }
 
-            // And then add any resources used by filter layers or masks and fill layers
-            // Since this is a clone, this won't clutter
-            KisResourceCollectorVisitor v;
-            image()->rootLayer()->accept(v);
-            Q_FOREACH(const KoResourceSP resource, v.resources()) {
-                doc->d->documentResourceStorage->addResource(resource);
-            }
+        if (doc->d->linkedResourceStorage) {
+            // clone the local resource storage and its contents
+            doc->d->linkedResourceStorage = d->linkedResourceStorage->clone();
         }
     }
     return doc;
@@ -1135,19 +1152,8 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
         waitForImage(clonedDocument->image());
     }
 
-
     KIS_SAFE_ASSERT_RECOVER(clonedDocument->image()->isIdle()) {
         waitForImage(clonedDocument->image());
-    }
-
-
-    // And then add any resources used by filter layers or masks and fill layers
-    // Since this is a clone, this won't clutter
-    KisResourceCollectorVisitor v;
-    image()->rootLayer()->accept(v);
-
-    Q_FOREACH(const KoResourceSP resource, v.resources()) {
-        clonedDocument->d->documentResourceStorage->addResource(resource);
     }
 
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveDocument, false);
@@ -2061,16 +2067,15 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     }
 }
 
-QList<KoResourceSP > KisDocument::documentResources()
+QList<KoResourceSP> KisDocument::linkedDocumentResources()
 {
     QList<KoResourceSP> resources;
-    if (d->documentResourceStorage.isNull()) {
-        qWarning() << "No documentstorage for palettes";
+    if (d->linkedResourceStorage.isNull()) {
         return resources;
     }
 
     Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(resourceType);
+        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->linkedResourceStorage->resources(resourceType);
         while (iter->hasNext()) {
             iter->next();
             KoResourceSP resource = iter->resource();
@@ -2083,13 +2088,35 @@ QList<KoResourceSP > KisDocument::documentResources()
         }
     }
     return resources;
+
+}
+
+
+QList<KoResourceSP > KisDocument::embeddedDocumentResources()
+{
+    QList<KoResourceSP> resources;
+    if (d->linkedResourceStorage.isNull()) {
+        return resources;
+    }
+
+    Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->embeddedResourceStorage->resources(resourceType);
+        while (iter->hasNext()) {
+            iter->next();
+            KoResourceSP resource = iter->resource();
+            if (resource && resource->valid()) {
+                resources << resource;
+            }
+        }
+    }
+    return resources;
 }
 
 void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)
 {
     QList<KoColorSetSP> oldPaletteList;
-    if (d->documentResourceStorage) {
-        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
+    if (d->linkedResourceStorage) {
+        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->linkedResourceStorage->resources(ResourceType::Palettes);
         while (iter->hasNext()) {
             iter->next();
             KoResourceSP resource = iter->resource();
@@ -2100,10 +2127,18 @@ void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool e
         if (oldPaletteList != paletteList) {
             KisResourceModel resourceModel(ResourceType::Palettes);
             Q_FOREACH(KoColorSetSP palette, oldPaletteList) {
-                resourceModel.setResourceInactive(resourceModel.indexForResource(palette));
+                if (!paletteList.contains(palette)) {
+                    resourceModel.setResourceInactive(resourceModel.indexForResource(palette));
+                }
             }
             Q_FOREACH(KoColorSetSP palette, paletteList) {
-                resourceModel.addResource(palette, d->documentStorageID);
+                if (!oldPaletteList.contains(palette)) {
+                    resourceModel.addResource(palette, d->linkedResourcesStorageID);
+                }
+                else {
+                    palette->setStorageLocation(d->linkedResourcesStorageID);
+                    resourceModel.updateResource(palette);
+                }
             }
             if (emitSignal) {
                 emit sigPaletteListChanged(oldPaletteList, paletteList);
@@ -2151,6 +2186,7 @@ void KisDocument::setGuidesConfig(const KisGuidesConfig &data)
     d->syncDecorationsWrapperLayerState();
     emit sigGuidesConfigChanged(d->guidesConfig);
 }
+
 
 const KisMirrorAxisConfig& KisDocument::mirrorAxisConfig() const
 {
@@ -2489,8 +2525,8 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
 
     if (!image) return;
 
-    if (d->documentResourceStorage){
-        d->documentResourceStorage->setMetaData(KisResourceStorage::s_meta_name, image->objectName());
+    if (d->linkedResourceStorage){
+        d->linkedResourceStorage->setMetaData(KisResourceStorage::s_meta_name, image->objectName());
     }
 
     d->setImageAndInitIdleWatcher(image);

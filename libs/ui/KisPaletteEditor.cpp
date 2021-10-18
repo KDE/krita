@@ -117,7 +117,7 @@ KoColorSetSP KisPaletteEditor::addPalette()
 
     QString resourceLocation = "";
     if (chkSaveInDocument->isChecked()) {
-        resourceLocation = m_d->view->document()->uniqueID();
+        resourceLocation = m_d->view->document()->linkedResourcesStorageId();
     }
     KisResourceModel resourceModel(ResourceType::Palettes);
     KisResourceUserOperations::addResourceWithUserInput(m_d->view->mainWindow(), &resourceModel, colorSet, resourceLocation);
@@ -143,7 +143,7 @@ KoColorSetSP KisPaletteEditor::importPalette()
     messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     QString storageLocation = "";
     if (messageBox.exec() == QMessageBox::Yes) {
-        storageLocation = m_d->view->document()->uniqueID();
+        storageLocation = m_d->view->document()->linkedResourcesStorageId();
     }
     KisResourceModel resourceModel(ResourceType::Palettes);
     KoResourceSP resource = KisResourceUserOperations::importResourceFileWithUserInput(m_d->view->mainWindow(), &resourceModel, storageLocation, ResourceType::Palettes, filename);
@@ -324,7 +324,7 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 
 void KisPaletteEditor::slotSetDocumentModified()
 {
-    if (m_d->modified.storageLocation == m_d->view->document()->uniqueID()) {
+    if (m_d->modified.storageLocation == m_d->view->document()->linkedResourcesStorageId()) {
         updatePalette();
         KisResourceModel model(ResourceType::Palettes);
         KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), &model, m_d->model->colorSet());

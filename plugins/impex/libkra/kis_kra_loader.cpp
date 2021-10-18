@@ -523,7 +523,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
         store->close();
 
         if (serializer.isValid()) {
-            const QString resourceLocation = "memory";
+            const QString resourceLocation = m_d->document->embeddedResourcesStorageId();
             serializer.assignAllLayerStylesToLayers(image->root(), resourceLocation);
 
         } else {
@@ -587,7 +587,7 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
                     buf.open(QBuffer::ReadOnly);
                     KoResourceSP res = loader->load(resourceItem.name, buf, KisGlobalResourcesInterface::instance());
                     if (res) {
-                        model.addResource(res, doc->uniqueID());
+                        model.addResource(res, doc->linkedResourcesStorageId());
                     }
                 }
             }

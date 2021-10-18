@@ -97,13 +97,21 @@ public:
     ~KisDocument();
 
     /**
-     * @brief uniqueID is a temporary unique ID that identifies the document. It is
-     * generated on creation and can be used to uniquely associated temporary objects
-     * with this document.
-     *
-     * @return the temporary unique id for this document.
+     * Temporary storage for the resources that are embedded into other
+     * resources used by the document. E.g. patterns embedded into layer
+     * styles.
      */
-    QString uniqueID() const;
+    QString embeddedResourcesStorageId() const;
+
+    /**
+     * Persistent storage for the resources that are linked but the resources
+     * embedded in the document. These resources are not embedded into their own
+     * container resource, so they should be stored by the document
+     *
+     * All these resources are saved into the document itself and loaded
+     * alongside the document.
+     */
+    QString linkedResourcesStorageId() const;
 
     /**
      * @brief creates a clone of the document and returns it. Please make sure that you
@@ -344,9 +352,17 @@ public:
     void setGuidesConfig(const KisGuidesConfig &data);
 
     /**
-     * @brief paletteList returns all the palettes found in the document's local resource storage
+     * @brief linkedDocumentResources List returns all the resources
+     * linked to the document, such as palettes
      */
-    QList<KoResourceSP> documentResources();
+    QList<KoResourceSP> linkedDocumentResources();
+
+    /**
+     * @returns a list of resources embedded in the documents' resources
+     * or filter/fill layer configurations
+     */
+    QList<KoResourceSP> embeddedDocumentResources();
+
 
     /**
      * @brief setPaletteList replaces the palettes in the document's local resource storage with the list

@@ -31,12 +31,15 @@ class KRITARESOURCEWIDGETS_EXPORT KisStorageChooserWidget : public KisPopupButto
 {
     Q_OBJECT
 public:
-    KisStorageChooserWidget(QWidget *parent = 0);
+    KisStorageChooserWidget(const QString &resourceType, QWidget *parent = 0);
 
     ~KisStorageChooserWidget();
 
 private Q_SLOTS:
     void activated(const QModelIndex &index);
+
+private:
+    QString m_resourceType;
 
 };
 

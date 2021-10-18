@@ -188,7 +188,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->viewModeButton->setArrowVisible(false);
     d->tagManager = new KisResourceTaggingManager(resourceType, d->tagFilterProxyModel, this);
 
-    d->storagePopupButton = new KisStorageChooserWidget(this);
+    d->storagePopupButton = new KisStorageChooserWidget(resourceType, this);
     d->storagePopupButton->setToolTip(i18n("Storage Resources"));
     d->storagePopupButton->setAutoRaise(true);
     d->storagePopupButton->setArrowVisible(false);

@@ -108,7 +108,11 @@ void SPenSettings::slotTriggerPopupPalette()
         QPoint cursorPosition = KisPart::instance()->currentInputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
         KisPopupPalette *popupPalette = KisPart::instance()->currentInputManager()->canvas()->popupPalette();
         if (popupPalette) {
-            popupPalette->popup(cursorPosition);
+            if (popupPalette->isVisible()) {
+                popupPalette->dismiss();
+            } else {
+                popupPalette->popup(cursorPosition);
+            }
         }
     }
 }

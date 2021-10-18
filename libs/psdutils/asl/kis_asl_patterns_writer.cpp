@@ -93,10 +93,10 @@ void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
 
     switch (m_byteOrder) {
     case psd_byte_order::psdLittleEndian:
-        addPatternImpl<psd_byte_order::psdLittleEndian>(pattern);
+        addPatternImpl<psd_byte_order::psdLittleEndian>(effectivePattern);
         break;
     default:
-        addPatternImpl(pattern);
+        addPatternImpl(effectivePattern);
         break;
     }
 }

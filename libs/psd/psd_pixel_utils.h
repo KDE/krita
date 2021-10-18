@@ -81,8 +81,6 @@ void KRITAPSD_EXPORT writePixelDataCommon(QIODevice &io,
                                           QVector<ChannelWritingInfo> &writingInfoList,
                                           psd_compression_type compressionType,
                                           psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
-
-KoPatternSP KRITAPSD_EXPORT removeAlphaFromPattern(KoPatternSP pattern);
 }
 
 #endif /* __PSD_PIXEL_UTILS_H */

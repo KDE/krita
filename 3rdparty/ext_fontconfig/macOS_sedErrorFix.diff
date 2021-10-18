@@ -1,0 +1,31 @@
+diff --git a/Makefile.am b/Makefile.am
+index 1ef366971cdc7367cf97cf56b87a381de5b9f8b7..2f75fc937f4a0735a27f8fc4c7d0095c189bfd22 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -114,7 +114,7 @@ FC_CONFIGDIR = $(subst $(BASECONFIGDIR)/,,$(CONFIGDIR))
+ fonts.conf: fonts.conf.in Makefile
+ 	sed \
+ 		-e 's,@FC_CACHEDIR\@,$(FC_CACHEDIR),g' \
+-		-e 's,@FC_DEFAULT_FONTS\@,$(FC_DEFAULT_FONTS),g' \
++		-e 's,@FC_DEFAULT_FONTS\@,	$(FC_DEFAULT_FONTS),g' \
+ 		-e 's,@FC_FONTPATH\@,$(FC_FONTPATH),g' \
+ 		-e 's,@CONFIGDIR\@,$(FC_CONFIGDIR),g' \
+ 		-e 's,@PACKAGE\@,$(PACKAGE),g' \
+diff --git a/configure.ac b/configure.ac
+index 3bbd96958bd030479e46b57dd8952df1d0c7f7d7..af2fd44762dbb8755788003928ea2f5e2e2d7cdf 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -499,8 +499,11 @@ FC_DEFAULT_FONTS=""
+ if test x${default_fonts+set} = xset; then
+ 	fc_IFS=$IFS
+ 	IFS=","
+-	for p in "$default_fonts"; do
+-		FC_DEFAULT_FONTS="$FC_DEFAULT_FONTS\t<dir>$p</dir>\n"
++	for p in $default_fonts; do
++		if test x"$FC_DEFAULT_FONTS" != x; then
++			FC_DEFAULT_FONTS="$FC_DEFAULT_FONTS "
++		fi
++		FC_DEFAULT_FONTS="$FC_DEFAULT_FONTS<dir>$p</dir>"
+ 	done
+ 	IFS=$fc_IFS
+ fi

@@ -8,7 +8,6 @@
 #include <QIODevice>
 #include <QUuid>
 
-#include <psd.h>
 #include <psd_utils.h>
 
 #include <klocalizedstring.h>
@@ -142,9 +141,9 @@ bool KisPSDLayerStyle::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     return false;
 }
 
-bool KisPSDLayerStyle::saveToDevice(QIODevice *dev) const
+bool KisPSDLayerStyle::saveToDevice(QIODevice *) const
 {
-    Q_UNUSED(dev);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(false && "KisPSDLayerStyle is not meant to be serializable!");
     return false;
 }
 

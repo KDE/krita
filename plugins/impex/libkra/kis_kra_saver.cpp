@@ -183,7 +183,7 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
-    QList<KoResourceSP> resources = m_d->doc->documentResources();
+    QList<KoResourceSP> resources = m_d->doc->linkedDocumentResources();
     bool res = false;
     if (resources.size() == 0) {
         return true;
@@ -192,6 +192,11 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
     QStringList brokenResources;
 
     Q_FOREACH (const KoResourceSP resource, resources) {
+
+        if (!resource->active()) {
+            continue;
+        }
+
         QString path = RESOURCE_PATH;
 
         if (resource->resourceType().first == ResourceType::Palettes) {
@@ -314,8 +319,10 @@ void KisKraSaver::saveResourcesToXML(QDomDocument &doc, QDomElement &element)
     QDomElement ePalette = doc.createElement(PALETTES);
     QDomElement eResources = doc.createElement(RESOURCES);
 
-    Q_FOREACH (const KoResourceSP resource, m_d->doc->documentResources()) {
-
+    Q_FOREACH (const KoResourceSP resource, m_d->doc->linkedDocumentResources()) {
+        if (!resource->active()) {
+            continue;
+        }
         QByteArray ba;
         QBuffer buf(&ba);
         buf.open(QBuffer::WriteOnly);

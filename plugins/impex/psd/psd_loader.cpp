@@ -300,7 +300,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     const QVector<QDomDocument> &embeddedPatterns =
         layerSection.globalInfoSection.embeddedPatterns;
 
-    const QString storageLocation = "memory";
+    const QString storageLocation = m_doc->embeddedResourcesStorageId();
     KisResourceModel stylesModel(ResourceType::LayerStyles);
     KisResourceModel patternsModel(ResourceType::Patterns);
     KisResourceModel gradientsModel(ResourceType::Gradients);

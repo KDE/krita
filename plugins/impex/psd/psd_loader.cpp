@@ -331,6 +331,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
 
                 layerStyle->setName(layer->name());
                 layerStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
+                layerStyle->setValid(true);
 
                 stylesModel.addResource(layerStyle, storageLocation);
 

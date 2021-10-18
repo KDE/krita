@@ -71,7 +71,6 @@ public:
 
 private:
 
-    bool init(QByteArray& data);
     void setPatternImage(const QImage& image);
     void checkForAlpha(const QImage& image);
 

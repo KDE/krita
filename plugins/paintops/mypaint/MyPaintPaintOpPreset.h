@@ -35,6 +35,11 @@ public:
         return QPair<QString, QString>(ResourceType::PaintOpPresets, ResourceSubType::MyPaintPaintOpPresets);
     }
 
+    QString defaultFileExtension() const override
+    {
+        return ".myb";
+    }
+
     void updateThumbnail() override;
     QString thumbnailPath() const override;
 

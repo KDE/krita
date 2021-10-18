@@ -119,7 +119,7 @@ void KisStatusBar::setup()
     m_progressUpdater->setAutoNestNames(true);
 
     m_extraWidgetsParent = new QFrame;
-    m_extraWidgetsParent->setMinimumWidth(100);
+    m_extraWidgetsParent->setMinimumWidth(50);
     m_extraWidgetsParent->setObjectName("Extra Widgets Parent");
     m_extraWidgetsLayout = new QHBoxLayout;
     m_extraWidgetsLayout->setContentsMargins(0, 0, 0, 0);

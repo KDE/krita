@@ -102,15 +102,26 @@ QSize KisStorageChooserDelegate::sizeHint(const QStyleOptionViewItem &option, co
     return QSize(w, h);
 }
 
-KisStorageChooserWidget::KisStorageChooserWidget(QWidget *parent) : KisPopupButton(parent)
+KisStorageChooserWidget::KisStorageChooserWidget(const QString &resourceType, QWidget *parent)
+    : KisPopupButton(parent)
+    , m_resourceType(resourceType)
 {
     QListView *view = new QListView(this);
 
     KisStorageFilterProxyModel *proxyModel = new KisStorageFilterProxyModel(this);
+
     proxyModel->setSourceModel(KisStorageModel::instance());
-    proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
-                          QStringList()
-                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
+
+    QStringList filter;
+    filter << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle);
+    if (m_resourceType == ResourceType::Brushes) {
+        filter << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::AdobeBrushLibrary);
+    }
+    if (m_resourceType == ResourceType::LayerStyles) {
+        filter << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::AdobeStyleLibrary);
+    }
+
+    proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType, filter);
     view->setModel(proxyModel);
     view->setIconSize(QSize(64, 64));
     view->setItemDelegate(new KisStorageChooserDelegate(this));
@@ -128,21 +139,34 @@ void KisStorageChooserWidget::activated(const QModelIndex &index)
 
     KisStorageFilterProxyModel proxy;
     proxy.setSourceModel(KisStorageModel::instance());
-    proxy.setFilter(KisStorageFilterProxyModel::ByStorageType,
-                    QStringList()
-                    << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
+
+    QStringList filter;
+    filter << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle);
+    if (m_resourceType == ResourceType::Brushes) {
+        filter << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::AdobeBrushLibrary);
+    }
+    if (m_resourceType == ResourceType::LayerStyles) {
+        filter << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::AdobeStyleLibrary);
+    }
+
+    proxy.setFilter(KisStorageFilterProxyModel::ByStorageType, filter);
 
     QString warning;
     if (!proxy.rowCount()) {
         warning = i18n("All bundles have been deactivated.");
     }
 
-    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KisResourceModel resourceModel(m_resourceType);
     resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources);
     if (!resourceModel.rowCount()) {
-        warning += i18n("\nThere are no brush presets available. Please re-enable a bundle that provides brush presets.");
+        warning += i18n("\nThere are no resources of type %1 available. Please enable at least one bundle.", ResourceName::resourceTypeToName(m_resourceType));
+
+    }
+
+    if (!warning.isEmpty()) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), warning);
     }
+
 }
 
 KisStorageChooserWidget::~KisStorageChooserWidget()

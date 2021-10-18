@@ -92,6 +92,8 @@ bool KoPattern::savePatToDevice(QIODevice* dev) const
     // We only save RGBA at the moment
     // Version is 1 for now...
 
+
+
     GimpPatternHeader ph;
     QByteArray utf8Name = name().toUtf8();
     char const* name = utf8Name.data();
@@ -145,7 +147,11 @@ bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resources
     bool result = false;
 
     QString mimeForData = KisMimeDatabase::mimeTypeForData(ba);
-    if (QFileInfo(filename()).suffix() == "pat" || mimeForData == "image/x-gimp-pat" || mimeForData == "image/x-gimp-pattern" || mimeForData == "application/x-gimp-pattern") {
+
+    if (mimeForData == "image/x-gimp-pat"
+            || mimeForData == "image/x-gimp-pattern"
+            || mimeForData == "application/x-gimp-pattern"
+            ) {
         result = loadPatFromDevice(&buf);
     }
 
@@ -200,6 +206,11 @@ bool KoPattern::init(QByteArray& bytes)
     bh.height = qFromBigEndian(bh.height);
     bh.bytes = qFromBigEndian(bh.bytes);
     bh.magic_number = qFromBigEndian(bh.magic_number);
+
+    if (bh.magic_number != qToBigEndian((quint32)GimpPatternMagic)) {
+        qWarning() << filename() << "is not a .pat pattern file";
+        return false;
+    }
 
     if ((int)bh.header_size > dataSize || bh.header_size == 0) {
         return false;

@@ -1,19 +1,24 @@
 /*
  * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "MyPaintPaintOpPreset.h"
 
+#include <QFile>
+#include <QFileInfo>
+#include <array>
+#include <libmypaint/mypaint-brush.h>
+#include <png.h>
+
 #include <KisResourceLocator.h>
 #include <KisResourceServerProvider.h>
 #include <KoColorConversions.h>
 #include <KoColorModelStandardIds.h>
 #include <MyPaintPaintOpOption.h>
-#include <QFile>
-#include <QFileInfo>
-#include <libmypaint/mypaint-brush.h>
+#include <kis_debug.h>
 
 #include "MyPaintPaintOpSettings.h"
 
@@ -115,8 +120,32 @@ MyPaintBrush* KisMyPaintPaintOpPreset::brush() {
 
 bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    dev->seek(0); // ensure we do read *all* the bytes
-    QByteArray ba = dev->readAll();
+    if (!dev->isSequential())
+        dev->seek(0); // ensure we do read *all* the bytes
+
+    std::array<png_byte, 8> signature;
+    dev->peek(reinterpret_cast<char*>(signature.data()), 8);
+
+#if PNG_LIBPNG_VER < 10400
+    if (png_check_sig(signature, 8)) {
+#else
+    if (png_sig_cmp(signature.data(), 0, 8) == 0) {
+#endif
+        // this is a koresource
+        if (KisPaintOpPreset::loadFromDevice(dev, resourcesInterface)) {
+            apply(settings());
+            // correct filename
+            if (filename().endsWith(".myb")) {
+                setFilename(name().split(" ").join("_") + KisPaintOpPreset::defaultFileExtension());
+            }
+            return true;
+        } else {
+            warnPlugins << "Failed loading MyPaint preset from KoResource serialization";
+            return false;
+        }
+    }
+    
+    const QByteArray ba(dev->readAll());
     d->json = ba;
     // mypaint can handle invalid json files too, so this is the only way to find out if it was correct mypaint file or not...
     // if the json is incorrect, the brush will get the default mypaint brush settings

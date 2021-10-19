@@ -112,32 +112,31 @@ bool KisResourceUserOperations::addResourceWithUserInput(QWidget *widgetParent, 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resource, false);
     KisResourceModel resourceModel(resource->resourceType().first);
 
-    qCritical() << "(1)";
     resourceModel.setResourceFilter(KisResourceModel::ShowAllResources); // we want to consider all resources later when searching for the same name
 
     // check if adding the resource is possible: it is not if there is a resource with the same filename in the storage the user want to save the resource to
-    qCritical() << "(2)";
 
+    typedef enum {ADD, OVERWRITE, CANCEL} Action;
+    Action action = ADD;
 
-    if (storageLocation == "" && resourceExistsInResourceFolder(resource->resourceType().first, resource->filename())) {
-        // TODO: potentially, ask the user to rename the resource etc.
-        int resourceWithThatFilenameId;
-        if (KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first, storageLocation, resourceWithThatFilenameId)) {
-            KoResourceSP resourceWithThatFilename = resourceModel.resourceForId(resourceWithThatFilenameId);
-            if (resourceWithThatFilename) {
-                QMessageBox::warning(widgetParent, i18nc("@title:window", "Cannot add the resource"),
-                                 i18nc("Warning message", "The filename %1 is already used for a resource %2, so adding a resource with name %3 failed.",
-                                       resource->filename(), resourceWithThatFilename->name(), resource->name()));
-                return false;
-            }
+    int resourceWithThatFilenameId;
+
+    if (KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first, storageLocation, resourceWithThatFilenameId)) {
+
+        KoResourceSP resource = resourceModel.resourceForId(resourceWithThatFilenameId);
+        bool userWantsOverwrite = QMessageBox::question(widgetParent, i18nc("@title:window", "Overwrite the resource?"),
+                              i18nc("Question in a dialog/messagebox", "This filename is already used for another resource. "
+                                                                       "Do you want to overwrite that resource?\n"
+                                                                       "(If you decline now, nothing will be done)."),
+                                     QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Cancel;
+        if (userWantsOverwrite) {
+            action = OVERWRITE;
+        } else {
+            return false;
         }
-        QMessageBox::warning(widgetParent, i18nc("@title:window", "Cannot add the resource"),
-                             i18nc("Warning message", "The filename %1 is already in use, so adding a resource with name %2 failed.",
-                                   resource->filename(), resource->name()));
-        return false;
     }
     // check if there are any other resources with the same name, even in different storages or with different filenames
-    if (resourceNameIsAlreadyUsed(&resourceModel, resource->name()))
+    else if (resourceNameIsAlreadyUsed(&resourceModel, resource->name()))
     {
         bool userWantsAdd = QMessageBox::question(widgetParent, i18nc("@title:window", "Add the resource?"),
                               i18nc("Question in a dialog/messagebox", "This name is already used for another resource. "
@@ -146,15 +145,26 @@ bool KisResourceUserOperations::addResourceWithUserInput(QWidget *widgetParent, 
                                      QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Cancel;
 
         if (!userWantsAdd) {
+            action = CANCEL;
             return false;
+        } else {
+            action = ADD;
         }
     }
 
-    bool res = resourceModel.addResource(resource, storageLocation);
-    if (!res) {
-        QMessageBox::warning(widgetParent, i18nc("@title:window", "Failed to add resource"), i18nc("Warning message", "Failed to add the resource."));
+    if (action == ADD) {
+        bool res = resourceModel.addResource(resource, storageLocation);
+        if (!res) {
+            QMessageBox::warning(widgetParent, i18nc("@title:window", "Failed to add resource"), i18nc("Warning message", "Failed to add the resource."));
+        }
+        return res;
+    } else if (action == OVERWRITE) {
+        bool res = updateResourceWithUserInput(widgetParent, resource);
+        // no error message, because it's handled in that function
+        return res;
     }
-    return res;
+    // shouldn't get here
+    return false;
 }
 
 bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParent, KoResourceSP resource)
@@ -163,7 +173,7 @@ bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParen
     KisResourceModel resourceModel(resource->resourceType().first);
     resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources); // inactive don't count here
 
-    if (resource->resourceId() < 0 && resource->isSerializable()) {
+    if (resource->resourceId() < 0) {
         // that's a resource that didn't come from a database
         // we assume that filename and storageLocation are correct, though
         if (QFileInfo(resource->storageLocation()).isRelative()) {
@@ -174,14 +184,14 @@ bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParen
         int outResourceId;
         // note that we need to check for any file that exists so we can't use KisResourceModel here
         // because the model only keeps the current resource filename
-        KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first,
+        bool result = KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first,
                                                                KisResourceLocator::instance()->makeStorageLocationRelative(resource->storageLocation()), outResourceId);
         KoResourceSP cachedPointer;
         if (outResourceId >= 0) {
             cachedPointer = resourceModel.resourceForId(outResourceId);
         }
 
-        if (!cachedPointer || !cachedPointer->isSerializable()) {
+        if (!cachedPointer || !resource->isSerializable() || !cachedPointer->isSerializable()) {
             QMessageBox::warning(widgetParent, i18nc("@title:window", "Failed to overwrite the resource"), i18nc("Warning message", "Failed to overwrite the resource."));
             return false;
         }
@@ -192,6 +202,7 @@ bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParen
         resource->saveToDevice(&buffer);
         buffer.close();
         buffer.open(QIODevice::ReadWrite);
+
         cachedPointer->loadFromDevice(&buffer, KisGlobalResourcesInterface::instance());
         buffer.close();
         resource = cachedPointer;

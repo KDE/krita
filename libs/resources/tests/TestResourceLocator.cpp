@@ -130,7 +130,7 @@ void TestResourceLocator::testResource()
 void TestResourceLocator::testResourceForId()
 {
     KoResourceSP res = m_locator->resource("", ResourceType::PaintOpPresets, "test0.kpp");
-    int resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", "test0.kpp", ResourceType::PaintOpPresets, "");
+    int resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", ResourceType::PaintOpPresets, "");
     QVERIFY(resourceId > -1);
     KoResourceSP res2 = m_locator->resourceForId(resourceId);
     QCOMPARE(res, res2);
@@ -168,7 +168,7 @@ void TestResourceLocator::testSyncVersions()
         model.setResourceFilter(KisResourceModel::ShowAllResources);
 
         KoResourceSP res = m_locator->resource("", ResourceType::PaintOpPresets, "test0.kpp");
-        resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", "test0.kpp", ResourceType::PaintOpPresets, "");
+        resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", ResourceType::PaintOpPresets, "");
         storageLocation = res->storageLocation();
 
         // ENTER_FUNCTION() << ppVar(model.rowCount());

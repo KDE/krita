@@ -770,17 +770,16 @@ bool KisResourceLocator::initializeDb()
     }
 
     Q_FOREACH(KisResourceStorageSP storage, d->storages) {
-
-        QElapsedTimer t;
-        t.start();
-
         if (!KisResourceCacheDb::addStorage(storage, (storage->type() == KisResourceStorage::StorageType::Folder ? false : true))) {
-            d->errorMessages.append(i18n("Could not add storage %1 to the cache database", storage->location()));
+            d->errorMessages.append(QString("Could not add storage %1 to the cache database").arg(storage->location()));
         }
-
-        debugResource << "Adding storage" << storage->location() << "to the database took" << t.elapsed() << "ms";
     }
 
+    Q_FOREACH(KisResourceStorageSP storage, d->storages) {
+        if (!KisResourceCacheDb::addStorageTags(storage)) {
+            d->errorMessages.append(QString("Could not add tags for storage %1 to the cache database").arg(storage->location()));
+        }
+    }
     return (d->errorMessages.isEmpty());
 }
 
@@ -918,6 +917,13 @@ bool KisResourceLocator::synchronizeDb()
             d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
         }
     }
+
+    Q_FOREACH(const KisResourceStorageSP storage, d->storages) {
+        if (!KisResourceCacheDb::addStorageTags(storage)) {
+            d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
+        }
+    }
+
     // now remove the storages that no longer exists
     KisStorageModel model;
 

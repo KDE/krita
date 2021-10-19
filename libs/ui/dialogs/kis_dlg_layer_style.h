@@ -12,8 +12,6 @@
 
 #include "kis_types.h"
 
-#include <psd.h>
-
 #include "ui_wdglayerstyles.h"
 #include "ui_wdgBevelAndEmboss.h"
 #include "ui_wdgblendingoptions.h"

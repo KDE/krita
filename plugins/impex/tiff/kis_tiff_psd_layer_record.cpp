@@ -15,7 +15,6 @@
 #include <asl/kis_asl_writer_utils.h>
 #include <kis_debug.h>
 #include <memory>
-#include <psd.h>
 #include <psd_header.h>
 #include <tiff.h>
 

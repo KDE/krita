@@ -745,18 +745,22 @@ QVector<KoResourceSP> KisAslLayerStyleSerializer::fetchEmbeddedResources(const K
 
     if (style->gradientOverlay()->effectEnabled()) {
         embeddedResources << style->gradientOverlay()->gradient(style->resourcesInterface());
+        KIS_ASSERT(embeddedResources.last().data());
     }
 
     if (style->innerGlow()->effectEnabled() && style->innerGlow()->fillType() == psd_fill_gradient) {
         embeddedResources << style->innerGlow()->gradient(style->resourcesInterface());
+        KIS_ASSERT(embeddedResources.last().data());
     }
 
     if (style->outerGlow()->effectEnabled() && style->outerGlow()->fillType() == psd_fill_gradient) {
         embeddedResources << style->outerGlow()->gradient(style->resourcesInterface());
+        KIS_ASSERT(embeddedResources.last().data());
     }
 
     if (style->stroke()->effectEnabled() && style->stroke()->fillType() == psd_fill_gradient) {
         embeddedResources << style->stroke()->gradient(style->resourcesInterface());
+        KIS_ASSERT(embeddedResources.last().data());
     }
 
     return embeddedResources;

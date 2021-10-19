@@ -305,32 +305,36 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     KisResourceModel patternsModel(ResourceType::Patterns);
     KisResourceModel gradientsModel(ResourceType::Gradients);
 
-    KisAslLayerStyleSerializer serializer;
-
-    if (!embeddedPatterns.isEmpty()) {
-        Q_FOREACH (const QDomDocument &doc, embeddedPatterns) {
-            serializer.registerPSDPattern(doc);
-        }
-
-        Q_FOREACH(KoPatternSP pattern, serializer.patterns().values()) {
-            patternsModel.addResource(pattern, storageLocation);
-        }
-
-        Q_FOREACH(KoAbstractGradientSP gradient, serializer.gradients()) {
-            gradientsModel.addResource(gradient, storageLocation);
-        }
-    }
-
     if (!allStylesXml.isEmpty()) {
         Q_FOREACH (const LayerStyleMapping &mapping, allStylesXml) {
+            KisAslLayerStyleSerializer serializer;
+
+            if (!embeddedPatterns.isEmpty()) {
+                Q_FOREACH (const QDomDocument &doc, embeddedPatterns) {
+                    serializer.registerPSDPattern(doc);
+                }
+            }
+
             serializer.readFromPSDXML(mapping.first);
 
             if (serializer.styles().size() == 1) {
                 KisPSDLayerStyleSP layerStyle = serializer.styles().first();
                 KisLayerSP layer = mapping.second;
 
+                Q_FOREACH (KoPatternSP pattern, serializer.patterns()) {
+                    patternsModel.addResource(pattern, storageLocation);
+                }
+
+                Q_FOREACH (KoAbstractGradientSP gradient, serializer.gradients()) {
+                    gradientsModel.addResource(gradient, storageLocation);
+                }
+
                 layerStyle->setName(layer->name());
                 layerStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
+                if (!layerStyle->uuid().isNull()) {
+                    layerStyle->setUuid(QUuid::createUuid());
+                }
+                layerStyle->setValid(true);
 
                 stylesModel.addResource(layerStyle, storageLocation);
 

@@ -5,19 +5,19 @@
  */
 #include "kis_psd_layer_style.h"
 
+#include <QBuffer>
 #include <QIODevice>
 #include <QUuid>
+#include <KLocalizedString>
 
+#include <kis_assert.h>
+#include <kis_global.h>
 #include <psd_utils.h>
 
-#include <klocalizedstring.h>
+#include <KisRequiredResourcesOperators.h>
 #include <KoMD5Generator.h>
 
-#include "kis_global.h"
-
 #include "kis_asl_layer_style_serializer.h"
-#include <KisRequiredResourcesOperators.h>
-#include <QBuffer>
 
 
 struct Q_DECL_HIDDEN KisPSDLayerStyle::Private

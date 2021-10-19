@@ -1,4 +1,4 @@
-From c8cbb1119bbd9749b44aafda40f50082951d098d Mon Sep 17 00:00:00 2001
+From b693dc5dccbc5927a89d7c805bd45b723506cb2c Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Fri, 1 Oct 2021 03:05:18 +0000
 Subject: [PATCH 3/4] ExprEditor: replace index for line/column when reporting
@@ -45,5 +45,5 @@ index d5810b3..f90c7f6 100644
      // TODO: fix to not use count lines and compute heuristic of 25 pixels per line!
      // const char* c = error.c_str();
 -- 
-2.32.0.windows.2
+2.33.0
 

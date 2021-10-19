@@ -15,6 +15,8 @@
 #include <QPointer>
 #include <QDoubleSpinBox>
 
+#include "SvgTextEditor.h"
+
 class KoSelection;
 class SvgTextEditor;
 class KoSvgTextShape;
@@ -86,6 +88,7 @@ private:
     KConfigGroup m_configGroup;
 
     QRectF m_hoveredShapeHighlightRect;
+    boost::optional<KoColor> m_originalColor { boost::none };
 };
 
 #endif

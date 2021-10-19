@@ -41,9 +41,9 @@
 #include <KoProperties.h>
 #include <KoSelectedShapesProxy.h>
 #include "KoToolManager.h"
+#include <KoShapeFillWrapper.h>
 #include "KoCanvasResourceProvider.h"
 
-#include "SvgTextEditor.h"
 #include "KisHandlePainterHelper.h"
 #include <commands/KoKeepShapesSelectedCommand.h>
 
@@ -68,12 +68,20 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
     KoToolBase::activate(shapes);
     useCursor(Qt::ArrowCursor);
+    auto uploadColorToResourceManager = [this](KoShape *shape) {
+        m_originalColor = canvas()->resourceManager()->foregroundColor();
+        KoShapeFillWrapper wrapper(shape, KoFlake::Fill);
+        KoColor color;
+        color.fromQColor(wrapper.color());
+        canvas()->resourceManager()->setForegroundColor(color);
+    };
 
     if (shapes.size() == 1) {
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*shapes.constBegin());
         if (!textShape) {
             koSelection()->deselectAll();
         } else {
+            uploadColorToResourceManager(textShape);
             // if we are a text shape...and the proxy tells us we want to edit the shape. open the text editor
             if (canvas()->selectedShapesProxy()->isRequestingToBeEdited()) {
                 showEditor();
@@ -92,6 +100,7 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 
         koSelection()->deselectAll();
         if (foundTextShape) {
+            uploadColorToResourceManager(foundTextShape);
             koSelection()->select(foundTextShape);
         }
     }
@@ -100,6 +109,9 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 void SvgTextTool::deactivate()
 {
     KoToolBase::deactivate();
+    if (m_originalColor) {
+        canvas()->resourceManager()->setForegroundColor(*m_originalColor);
+    }
 
     QRectF updateRect = m_hoveredShapeHighlightRect;
 

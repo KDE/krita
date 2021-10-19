@@ -580,7 +580,7 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
 {
     const int checkedId = d->group->checkedId();
 
-    auto checkAndSet = [this](KoCanvasResource::CanvasResourceId res,
+    auto uploadColorToResourceManager = [this](KoCanvasResource::CanvasResourceId res,
                               KoFlake::FillVariant var, KoColor &color) {
         if (!d->overriddenColorFromProvider[var]) {
             d->overriddenColorFromProvider[var] =
@@ -597,29 +597,26 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
         d->canvas->resourceManager()->setResource(res, QVariant::fromValue(color));
     };
 
+    auto uploadColorFromShape = [&](KoCanvasResource::CanvasResourceId res, KoFlake::FillVariant fill) {
+        KoShapeFillWrapper wrapper(currentShapes(), fill);
+        if (!wrapper.color().isValid()) {
+            return;
+        }
+        KoColor color;
+        color.fromQColor(wrapper.color());
+        uploadColorToResourceManager(res, fill, color);
+    };
+
     if (checkedId == Solid) {
         if (currentShapes().isEmpty()) {
             KoCanvasResource::CanvasResourceId res =
                 (d->fillVariant == KoFlake::Fill) ? KoCanvasResource::ForegroundColor
                                                   : KoCanvasResource::BackgroundColor;
             KoColor color = d->colorAction->currentKoColor();
-            checkAndSet(res, d->fillVariant, color);
-
+            uploadColorToResourceManager(res, d->fillVariant, color);
         } else {
-            {
-                KoColor color;
-                KoShapeFillWrapper wrapper(currentShapes(), KoFlake::Fill);
-                color.fromQColor(wrapper.color());
-                checkAndSet(KoCanvasResource::ForegroundColor, KoFlake::Fill, color);
-            }
-
-            {
-                KoColor color;
-                KoShapeFillWrapper wrapper(currentShapes(), KoFlake::StrokeFill);
-                color.fromQColor(wrapper.color());
-                checkAndSet(KoCanvasResource::BackgroundColor, KoFlake::StrokeFill,
-                            color);
-            }
+            uploadColorFromShape(KoCanvasResource::BackgroundColor, KoFlake::StrokeFill);
+            uploadColorFromShape(KoCanvasResource::ForegroundColor, KoFlake::Fill);
         }
     } else if (checkedId == Gradient) {
         if (boost::optional<KoColor> gradientColor =
@@ -628,7 +625,7 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
             KoCanvasResource::CanvasResourceId res =
                 (d->fillVariant == KoFlake::Fill) ? KoCanvasResource::ForegroundColor
                                                   : KoCanvasResource::BackgroundColor;
-            checkAndSet(res, d->fillVariant, color);
+            uploadColorToResourceManager(res, d->fillVariant, color);
         }
     }
 }
@@ -644,8 +641,8 @@ void KoFillConfigWidget::slotRecoverColorInResourceManager()
         }
     };
 
-    checkAndRecover(KoCanvasResource::ForegroundColor, KoFlake::Fill);
     checkAndRecover(KoCanvasResource::BackgroundColor, KoFlake::StrokeFill);
+    checkAndRecover(KoCanvasResource::ForegroundColor, KoFlake::Fill);
 }
 
 void KoFillConfigWidget::slotSavePredefinedGradientClicked()

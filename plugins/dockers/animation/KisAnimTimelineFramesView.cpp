@@ -1333,8 +1333,9 @@ void KisAnimTimelineFramesView::dropEvent(QDropEvent *event)
 
 void KisAnimTimelineFramesView::wheelEvent(QWheelEvent *e)
 {
-    if (e->modifiers() & Qt::ShiftModifier)  {
-        
+    bool inLayerPanel = verticalHeader()->geometry().contains(verticalHeader()->mapFromGlobal(e->globalPos()));
+
+    if (!inLayerPanel)  {
         QModelIndex index = currentIndex();
         int column= -1;
 

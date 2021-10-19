@@ -2083,7 +2083,7 @@ QList<KoResourceSP> KisDocument::linkedDocumentResources()
 QList<KoResourceSP > KisDocument::embeddedDocumentResources()
 {
     QList<KoResourceSP> resources;
-    if (d->linkedResourceStorage.isNull()) {
+    if (d->embeddedResourceStorage.isNull()) {
         return resources;
     }
 

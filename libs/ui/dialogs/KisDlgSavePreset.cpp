@@ -177,6 +177,7 @@ void KisPresetSaveWidget::savePreset()
 
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
+        newPreset->setResourceId(-1); // so it won't confuse anything into overwriting
         if (!presetFileName.endsWith(extension)) {
             presetFileName.append(extension);
         }

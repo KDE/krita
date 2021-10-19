@@ -1,4 +1,4 @@
-From a8422e3757d3a1e53ac300b1ad7f5dcf8efd1a2e Mon Sep 17 00:00:00 2001
+From 9e803a664ff501d85d4de1fca042028ee5887b0e Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Fri, 1 Oct 2021 14:35:36 +0000
 Subject: [PATCH 4/4] Fix copy-paste typo in range comment parsing
@@ -83,5 +83,5 @@ index 39ff9d9..489c785 100644
      if (div == std::string::npos) {
          return false;
 -- 
-2.32.0.windows.2
+2.33.0
 

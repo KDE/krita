@@ -27,7 +27,6 @@ void KisMouseClickEater::reset()
 {
     m_clicksHappened = 0;
     m_timeSinceReset.start();
-    m_blockTimedRelease = false;
 }
 
 bool KisMouseClickEater::eventFilter(QObject *watched, QEvent *event)
@@ -38,11 +37,13 @@ bool KisMouseClickEater::eventFilter(QObject *watched, QEvent *event)
     const int tabletMouseEventsFlowDelay = 256;
 #endif
 
+    bool blockTimedRelease = false;
+
     if (event->type() == QEvent::TabletMove) {
-        m_blockTimedRelease = true;
+        blockTimedRelease = true;
     }
 
-    if (!m_blockTimedRelease &&
+    if (!blockTimedRelease &&
         m_timeSinceReset.elapsed() > tabletMouseEventsFlowDelay) {
         return QObject::eventFilter(watched, event);
     }

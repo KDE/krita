@@ -233,7 +233,7 @@ void KisWdgSeExpr::slotSaveRenameCurrentPreset()
     // create a new brush preset with the name specified and add to resource provider
     KisResourceModel model(ResourceType::SeExprScripts);
     KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
-    const bool success = KisResourceUserOperations::renameResourceWithUserInput(this, &model, properCleanResource, renamedPresetName);
+    const bool success = KisResourceUserOperations::renameResourceWithUserInput(this, properCleanResource, renamedPresetName);
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(success && "couldn't rename preset");
 

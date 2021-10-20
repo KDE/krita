@@ -223,8 +223,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
      * the window, so we should ignore it. Next right-click will be used for
      * closing the popup palette
      */
-    this->installEventFilter(m_clicksEater);
-    m_colorSelector->installEventFilter(m_clicksEater);
+    installEventFilter(m_clicksEater);
 
     // Prevent tablet events from being captured by the canvas
     setAttribute(Qt::WA_NoMousePropagation, true);

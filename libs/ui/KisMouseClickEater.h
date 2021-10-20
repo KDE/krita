@@ -28,7 +28,6 @@ private:
     Qt::MouseButtons m_buttons = Qt::NoButton;
     int m_clicksToEat = 1;
     int m_clicksHappened = 0;
-    bool m_blockTimedRelease = false;
     QElapsedTimer m_timeSinceReset;
 };
 

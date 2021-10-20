@@ -164,7 +164,7 @@ void KisWdgSeExprPresetsSave::savePreset()
             newPreset->setScript(m_currentConfiguration->getString("script"));
             newPreset->setValid(true);
 
-            r = KisResourceUserOperations::addResourceWithUserInput(this, &model, newPreset);
+            r = KisResourceUserOperations::addResourceWithUserInput(this, newPreset);
 
             // trying to get brush preset to load after it is created
             if (r) {

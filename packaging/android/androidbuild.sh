@@ -185,6 +185,8 @@ build_krita() {
          -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF                                         \
          -DBoost_NO_BOOST_CMAKE=TRUE                                                        \
          -DBoost_NO_SYSTEM_PATHS=TRUE                                                       \
+         -DTIFF_HAS_PSD_TAGS=TRUE \
+         -DTIFF_CAN_WRITE_PSD_TAGS=TRUE \
          -DQTANDROID_EXPORTED_TARGET=krita                                                  \
          -DANDROID_APK_DIR=$KRITA_ROOT/packaging/android/apk                                \
          -DANDROID_STL=c++_shared                                                           \

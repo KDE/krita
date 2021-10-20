@@ -145,7 +145,7 @@ void KisWdgSeExprPresetsSave::savePreset()
         m_currentPreset->setScript(m_currentConfiguration->getString("script"));
         m_currentPreset->setFilename(presetFileName + m_currentPreset->defaultFileExtension());
         m_currentPreset->setValid(true);
-        r = KisResourceUserOperations::updateResourceWithUserInput(this, &model, m_currentPreset);
+        r = KisResourceUserOperations::updateResourceWithUserInput(this, m_currentPreset);
         if (r) {
             emit resourceSelected(m_currentPreset);
         }

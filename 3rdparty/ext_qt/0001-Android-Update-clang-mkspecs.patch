@@ -1,0 +1,202 @@
+From 87bbbe14c7f94c94266a056a06da1d29152d9e81 Mon Sep 17 00:00:00 2001
+From: BogDan Vatra <bogdan@kde.org>
+Date: Tue, 9 Jul 2019 10:34:31 +0300
+Subject: [PATCH] Android: Update clang mkspecs
+
+Follow Google's BuildSystemMaintainers doc to simplify (a lot) the clang support
+It is needed to support future NDK releases painlessly.
+Also remove old workarounds.
+
+[ChangeLog][Android] Android depends on NDK r20+
+
+Change-Id: Ib4c07fc71e0f5a264d804b0b3baa18ff79d07630
+Reviewed-by: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@qt.io>
+---
+ mkspecs/android-clang/qmake.conf      | 40 ++++++++++-----------------
+ mkspecs/android-g++/qmake.conf        |  5 ++++
+ mkspecs/common/android-base-head.conf |  1 -
+ mkspecs/common/android-base-tail.conf | 16 +++--------
+ src/corelib/tools/qstring.h           |  9 ------
+ src/gui/text/qcssparser.cpp           |  4 ---
+ 6 files changed, 23 insertions(+), 52 deletions(-)
+
+diff --git a/mkspecs/android-clang/qmake.conf b/mkspecs/android-clang/qmake.conf
+index 975d43779d..4c231e74b3 100644
+--- a/mkspecs/android-clang/qmake.conf
++++ b/mkspecs/android-clang/qmake.conf
+@@ -14,42 +14,30 @@ NDK_LLVM_PATH = $$NDK_ROOT/toolchains/llvm/prebuilt/$$NDK_HOST
+ QMAKE_CC      = $$NDK_LLVM_PATH/bin/clang
+ QMAKE_CXX     = $$NDK_LLVM_PATH/bin/clang++
+ 
++# Follow https://android.googlesource.com/platform/ndk/+/ndk-release-r20/docs/BuildSystemMaintainers.md
++
+ equals(ANDROID_TARGET_ARCH, armeabi-v7a): \
+-    QMAKE_CFLAGS += -target armv7-none-linux-androideabi
+-else: equals(ANDROID_TARGET_ARCH, armeabi): \
+-    QMAKE_CFLAGS += -target armv5te-none-linux-androideabi
++    QMAKE_CFLAGS = -target armv7a-linux-androideabi$$replace(ANDROID_PLATFORM, "android-", "")
+ else: equals(ANDROID_TARGET_ARCH, arm64-v8a): \
+-    QMAKE_CFLAGS += -target aarch64-none-linux-android
++    QMAKE_CFLAGS = -target aarch64-linux-android$$replace(ANDROID_PLATFORM, "android-", "")
+ else: equals(ANDROID_TARGET_ARCH, x86): \
+-    QMAKE_CFLAGS += -target i686-none-linux-android -mstackrealign
++    QMAKE_CFLAGS = -target i686-linux-android$$replace(ANDROID_PLATFORM, "android-", "") -mstackrealign
+ else: equals(ANDROID_TARGET_ARCH, x86_64): \
+-    QMAKE_CFLAGS += -target x86_64-none-linux-android
+-else: equals(ANDROID_TARGET_ARCH, mips): \
+-    QMAKE_CFLAGS += -target mipsel-none-linux-android
+-else: equals(ANDROID_TARGET_ARCH, mips64): \
+-    QMAKE_CFLAGS += -target mips64el-none-linux-android
+-
+-QMAKE_CFLAGS += -gcc-toolchain $$NDK_TOOLCHAIN_PATH -fno-limit-debug-info
+-
+-QMAKE_LINK    = $$QMAKE_CXX $$QMAKE_CFLAGS -Wl,--exclude-libs,libgcc.a -Wl,--exclude-libs,libatomic.a -nostdlib++
+-equals(ANDROID_TARGET_ARCH, armeabi-v7a): QMAKE_LINK += -Wl,--exclude-libs,libunwind.a
++    QMAKE_CFLAGS = -target x86_64-linux-android$$replace(ANDROID_PLATFORM, "android-", "")
+ 
+-QMAKE_CFLAGS += -DANDROID_HAS_WSTRING --sysroot=$$NDK_ROOT/sysroot \
+-                -isystem $$NDK_ROOT/sysroot/usr/include/$$NDK_TOOLS_PREFIX \
+-                -isystem $$NDK_ROOT/sources/cxx-stl/llvm-libc++/include \
+-                -isystem $$NDK_ROOT/sources/android/support/include \
+-                -isystem $$NDK_ROOT/sources/cxx-stl/llvm-libc++abi/include
++QMAKE_CFLAGS += -fno-limit-debug-info
+ 
+-ANDROID_SOURCES_CXX_STL_LIBDIR = $$NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$$ANDROID_TARGET_ARCH
++QMAKE_LINK    = $$QMAKE_CXX $$QMAKE_CFLAGS
+ 
+-ANDROID_STDCPP_PATH = $$ANDROID_SOURCES_CXX_STL_LIBDIR/libc++_shared.so
++ANDROID_STDCPP_PATH = $$NDK_LLVM_PATH/sysroot/usr/lib/$$NDK_TOOLS_PREFIX/libc++_shared.so
+ 
+ ANDROID_USE_LLVM = true
+ 
+-exists($$ANDROID_SOURCES_CXX_STL_LIBDIR/libc++.so): \
+-    ANDROID_CXX_STL_LIBS = -lc++
+-else: \
+-    ANDROID_CXX_STL_LIBS = $$ANDROID_SOURCES_CXX_STL_LIBDIR/libc++.so.$$replace(ANDROID_PLATFORM, "android-", "")
++QMAKE_CFLAGS_OPTIMIZE_SIZE  = -Oz
++QMAKE_LIBDIR_POST           =
++QMAKE_LFLAGS                =
++QMAKE_LIBS_PRIVATE          =
++ANDROID_CXX_STL_LIBS        =
+ 
+ QMAKE_CFLAGS_OPTIMIZE_SIZE = -Oz
+ 
+diff --git a/mkspecs/android-g++/qmake.conf b/mkspecs/android-g++/qmake.conf
+index 0cb3558f96..451e12bc75 100644
+--- a/mkspecs/android-g++/qmake.conf
++++ b/mkspecs/android-g++/qmake.conf
+@@ -12,6 +12,7 @@ include(../common/android-base-head.conf)
+ QMAKE_CC                = $${CROSS_COMPILE}gcc
+ QMAKE_CXX               = $${CROSS_COMPILE}g++
+ QMAKE_LINK              = $$QMAKE_CXX
++QMAKE_CFLAGS            = -D__ANDROID_API__=$$replace(ANDROID_PLATFORM, "android-", "")
+ 
+ ANDROID_SOURCES_CXX_STL_LIBDIR = $$NDK_ROOT/sources/cxx-stl/gnu-libstdc++/$$NDK_TOOLCHAIN_VERSION/libs/$$ANDROID_TARGET_ARCH
+ ANDROID_STDCPP_PATH            = $$ANDROID_SOURCES_CXX_STL_LIBDIR/libgnustl_shared.so
+@@ -32,4 +33,8 @@ else: \
+     LIBGCC_PATH_FULL = $$system("$$QMAKE_CXX -print-libgcc-file-name")
+ ANDROID_SOURCES_CXX_STL_LIBDIR += $$dirname(LIBGCC_PATH_FULL)
+ 
++QMAKE_LIBDIR_POST       = $$ANDROID_SOURCES_CXX_STL_LIBDIR
++QMAKE_LFLAGS            = --sysroot=$$ANDROID_PLATFORM_ROOT_PATH
++equals(ANDROID_TARGET_ARCH, x86_64) QMAKE_LFLAGS += -L$$ANDROID_PLATFORM_ROOT_PATH/usr/lib64
++
+ include(../common/android-base-tail.conf)
+diff --git a/mkspecs/common/android-base-head.conf b/mkspecs/common/android-base-head.conf
+index a43fc7f23e..21847d0fb1 100644
+--- a/mkspecs/common/android-base-head.conf
++++ b/mkspecs/common/android-base-head.conf
+@@ -64,7 +64,6 @@ isEmpty(ANDROID_SDK_BUILD_TOOLS_REVISION) {
+ }
+ 
+ CONFIG += $$ANDROID_PLATFORM
+-QMAKE_CFLAGS = -D__ANDROID_API__=$$replace(ANDROID_PLATFORM, "android-", "")
+ 
+ ANDROID_PLATFORM_ROOT_PATH  = $$NDK_ROOT/platforms/$$ANDROID_PLATFORM/arch-$$ANDROID_ARCHITECTURE/
+ 
+diff --git a/mkspecs/common/android-base-tail.conf b/mkspecs/common/android-base-tail.conf
+index edc255d08e..c970379f28 100644
+--- a/mkspecs/common/android-base-tail.conf
++++ b/mkspecs/common/android-base-tail.conf
+@@ -6,22 +6,17 @@ isEmpty(DEFAULT_ANDROID_NDK_ROOT): return()
+ QMAKE_CFLAGS += -fstack-protector-strong -DANDROID
+ 
+ equals(ANDROID_TARGET_ARCH, armeabi-v7a): \
+-    QMAKE_CFLAGS += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -fno-builtin-memmove
++    QMAKE_CFLAGS += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp
+ else: equals(ANDROID_TARGET_ARCH, armeabi): \
+-    QMAKE_CFLAGS += -march=armv5te -mtune=xscale -msoft-float -fno-builtin-memmove
+-# -fno-builtin-memmove is used to workaround https://code.google.com/p/android/issues/detail?id=81692
++    QMAKE_CFLAGS += -march=armv5te -mtune=xscale -msoft-float
+ 
+ QMAKE_CFLAGS_WARN_ON    = -Wall -W
+ QMAKE_CFLAGS_WARN_OFF   =
+ equals(ANDROID_TARGET_ARCH, armeabi-v7a) | equals(ANDROID_TARGET_ARCH, armeabi) {
+     CONFIG += optimize_size
+     QMAKE_CFLAGS_DEBUG                     = -g -marm -O0
+-    equals(ANDROID_TARGET_ARCH, armeabi):if(equals(NDK_TOOLCHAIN_VERSION, 4.8)|equals(NDK_TOOLCHAIN_VERSION, 4.9)) {
+-        DEFINES += QT_OS_ANDROID_GCC_48_WORKAROUND
+-    } else {
+-        QMAKE_CFLAGS_RELEASE += -mthumb
+-        QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO += -mthumb
+-    }
++    QMAKE_CFLAGS_RELEASE += -mthumb
++    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO += -mthumb
+ }
+ 
+ QMAKE_CFLAGS_SHLIB      = -fPIC
+@@ -61,15 +56,12 @@ QMAKE_STRIP             =
+ QMAKE_RANLIB            = $${CROSS_COMPILE}ranlib
+ 
+ QMAKE_INCDIR_POST       =
+-QMAKE_LIBDIR_POST       = $$ANDROID_SOURCES_CXX_STL_LIBDIR
+ QMAKE_INCDIR_X11        =
+ QMAKE_LIBDIR_X11        =
+ QMAKE_INCDIR_OPENGL     =
+ QMAKE_LIBDIR_OPENGL     =
+ 
+ QMAKE_LINK_SHLIB        = $$QMAKE_LINK
+-QMAKE_LFLAGS            = --sysroot=$$ANDROID_PLATFORM_ROOT_PATH
+-equals(ANDROID_TARGET_ARCH, x86_64) QMAKE_LFLAGS += -L$$ANDROID_PLATFORM_ROOT_PATH/usr/lib64
+ QMAKE_LFLAGS_APP        = -Wl,--no-undefined -Wl,-z,noexecstack -shared
+ QMAKE_LFLAGS_SHLIB      = -Wl,--no-undefined -Wl,-z,noexecstack -shared
+ QMAKE_LFLAGS_PLUGIN     = $$QMAKE_LFLAGS_SHLIB
+diff --git a/src/corelib/tools/qstring.h b/src/corelib/tools/qstring.h
+index 6be3dcdbe1..7034b7ae71 100644
+--- a/src/corelib/tools/qstring.h
++++ b/src/corelib/tools/qstring.h
+@@ -56,15 +56,6 @@
+ #include <string>
+ #include <iterator>
+ 
+-#if defined(Q_OS_ANDROID) && !defined(ANDROID_HAS_WSTRING)
+-// std::wstring is disabled on android's glibc, as bionic lacks certain features
+-// that libstdc++ checks for (like mbcslen).
+-namespace std
+-{
+-    typedef basic_string<wchar_t> wstring;
+-}
+-#endif
+-
+ #include <stdarg.h>
+ 
+ #ifdef truncate
+diff --git a/src/gui/text/qcssparser.cpp b/src/gui/text/qcssparser.cpp
+index 7fc90156e5..797ad9cbd0 100644
+--- a/src/gui/text/qcssparser.cpp
++++ b/src/gui/text/qcssparser.cpp
+@@ -606,11 +606,7 @@ bool ValueExtractor::extractBorder(int *borders, QBrush *colors, BorderStyle *st
+         case BorderRightStyle: styles[RightEdge] = decl.styleValue(); break;
+         case BorderStyles:  decl.styleValues(styles); break;
+ 
+-#ifndef QT_OS_ANDROID_GCC_48_WORKAROUND
+         case BorderTopLeftRadius: radii[0] = sizeValue(decl); break;
+-#else
+-        case BorderTopLeftRadius: new(radii)QSize(sizeValue(decl)); break;
+-#endif
+         case BorderTopRightRadius: radii[1] = sizeValue(decl); break;
+         case BorderBottomLeftRadius: radii[2] = sizeValue(decl); break;
+         case BorderBottomRightRadius: radii[3] = sizeValue(decl); break;
+-- 
+2.33.0
+

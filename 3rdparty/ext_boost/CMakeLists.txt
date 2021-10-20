@@ -66,6 +66,7 @@ elseif(ANDROID)
         URL_HASH SHA256=a962e2572bd15b5b8fcf5a9331195ebd41954209b556766ae178bb82de5dd0d1
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Update-Boost-URLs-Bintray-shut-down.patch
+              COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Support-Android-NDK-r22b.patch
 
         CONFIGURE_COMMAND ""
         BUILD_COMMAND <SOURCE_DIR>/build-android.sh --prefix=${PREFIX_ext_boost} --with-libraries=system --boost=1.70.0 --arch=${ANDROID_ABI} ${CMAKE_ANDROID_NDK}

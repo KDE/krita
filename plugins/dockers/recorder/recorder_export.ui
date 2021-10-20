@@ -262,6 +262,9 @@
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="labelHoldLastFrameSec">
+           <property name="toolTip">
+            <string>The added duration for showing the last frame.</string>
+           </property>
            <property name="text">
             <string>Hold Last Frame for:</string>
            </property>
@@ -320,7 +323,7 @@
           <widget class="QLabel" name="labelFpsInput">
            <property name="toolTip">
             <string>The speed of reading the input stream.
-For example to make your speedpaint twice faster it should be twice larger of the Video FPS.</string>
+For example, to make your timelapse twice faster, the Input FPS should be twice larger of the Video FPS.</string>
            </property>
            <property name="text">
             <string comment="Input FPS of recorded timelapses.">Input FPS:</string>
@@ -441,7 +444,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          <item row="9" column="2">
           <widget class="QPushButton" name="buttonBrowseExport">
            <property name="toolTip">
-            <string>Select a file to export timelapse video</string>
+            <string>Select a file location for the exported timelapse video</string>
            </property>
            <property name="text">
             <string/>

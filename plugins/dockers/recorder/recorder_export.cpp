@@ -95,7 +95,7 @@ public:
             );
         } else {
             ui->editFfmpegPath->setText(i18nc("This text is displayed instead of path to external tool in case of external tool is not found", "[NOT FOUND]"));
-            action->setToolTip(i18n("FFMpeg executable location couldn't be detected, please install it or select its location manually"));
+            action->setToolTip(i18n("FFmpeg executable location couldn't be detected, please install it or select its location manually"));
         }
         ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(success);
     }
@@ -231,7 +231,7 @@ public:
         settings.batchMode = true; //TODO: Consider renaming to 'silent' mode, meaning no window for extra window handling...
 
         ffmpeg->startNonBlocking(settings);
-        ui->labelStatus->setText(i18nc("Status for the export of the video record", "Starting FFMpeg..."));
+        ui->labelStatus->setText(i18nc("Status for the export of the video record", "Starting FFmpeg..."));
         ui->buttonCancelExport->setEnabled(false);
         ui->progressExport->setValue(0);
     }
@@ -264,9 +264,10 @@ public:
     QString formatDuration(long durationMs)
     {
         QString result;
-        const long ms = (durationMs % 1000) / 100;
-        if (ms != 0)
-            result += "." % QString::number(ms);
+        const long ms = (durationMs % 1000) / 10;
+
+        result += QString(".%1").arg(ms, 2, 10, QLatin1Char('0'));
+
         long duration = durationMs / 1000;
         const long seconds = duration % 60;
         result = QString("%1%2").arg(seconds, 2, 10, QLatin1Char('0')).arg(result);
@@ -394,7 +395,12 @@ void RecorderExport::reject()
 
 void RecorderExport::onButtonBrowseDirectoryClicked()
 {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(d->settings.inputDirectory));
+    if (d->framesCount != 0) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(d->settings.inputDirectory));
+    } else {
+        QMessageBox::warning(this, windowTitle(), i18nc("Can't browse frames of recording because no frames have been recorded", "No frames to browse."));
+        return;
+    }
 }
 
 void RecorderExport::onSpinInputFpsValueChanged(int value)
@@ -459,7 +465,7 @@ void RecorderExport::onButtonBrowseFfmpegClicked()
     dialog.setFilter(QDir::Executable | QDir::Files);
 
     const QString &file = dialog.getOpenFileName(this,
-                          i18n("Select FFMpeg Executable File"),
+                          i18n("Select FFmpeg Executable File"),
                           d->ffmpegPath);
     if (!file.isEmpty()) {
         d->ffmpegPath = file;
@@ -519,12 +525,18 @@ void RecorderExport::onButtonBrowseExportClicked()
 void RecorderExport::onButtonExportClicked()
 {
     if (QFile::exists(d->videoFilePath)) {
-        if (QMessageBox::question(this, windowTitle(),
-                                  i18n("The video file is already exists. Do you wish to overwrite?"))
-            != QMessageBox::Yes) {
+        if (d->framesCount != 0) {
+            if (QMessageBox::question(this, windowTitle(),
+                                      i18n("The video file already exists. Do you wish to overwrite it?"))
+                != QMessageBox::Yes) {
+                return;
+            }
+        } else {
+            QMessageBox::warning(this, windowTitle(), i18n("No frames to export."));
             return;
         }
     }
+
 
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageProgress);
     d->startExport();
@@ -560,7 +572,7 @@ void RecorderExport::onFFMpegFinished()
 void RecorderExport::onFFMpegFinishedWithError(QString error)
 {
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
-    QMessageBox::critical(this, windowTitle(), i18n("Export failed. FFMpeg message:") % "\n\n" % error);
+    QMessageBox::critical(this, windowTitle(), i18n("Export failed. FFmpeg message:") % "\n\n" % error);
     d->cleanupFFMpeg();
 }
 
@@ -583,8 +595,8 @@ void RecorderExport::onButtonRemoveSnapshotsClicked()
 {
     const QString confirmation(i18n("The recordings for this document will be deleted"
                                     " and you will not be able to export a timelapse for it again"
-                                    " (the already exported timelapses will be preserved though)."
-                                    "\nDo you wish to continue?"));
+                                    ". Note that already exported timelapses will still be preserved."
+                                    "\n\nDo you wish to continue?"));
     if (QMessageBox::question(this, windowTitle(), confirmation) != QMessageBox::Yes)
         return;
 

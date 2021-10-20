@@ -296,7 +296,7 @@
            <widget class="QCheckBox" name="checkBoxRecordIsolateMode">
             <property name="toolTip">
              <string>Record frames when Isolate Layer or Isolate Group mode is active.
-Depending on timelapse speed this may cause flickering in resulting video.</string>
+Depending on timelapse speed, this may cause flickering in the resulting video.</string>
             </property>
             <property name="text">
              <string comment="Record when Isolate Layer mode is active">Record in isolate mode</string>
@@ -361,7 +361,7 @@ Depending on timelapse speed this may cause flickering in resulting video.</stri
         <widget class="QLabel" name="labelUnsupportedColorSpace">
          <property name="text">
           <string>⚠ Unsupported color space.
-&quot;RGB/Alpha 8-bit&quot; is only supported.</string>
+Only &quot;RGB/Alpha 8-bit&quot; is supported.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

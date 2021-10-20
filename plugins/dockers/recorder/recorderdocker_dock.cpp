@@ -461,7 +461,7 @@ void RecorderDockerDock::onWriterPausedChanged(bool paused)
 void RecorderDockerDock::onWriterFrameWriteFailed()
 {
     QMessageBox::warning(this, i18nc("@title:window", "Recorder"),
-        i18n("The recorder have been stopped due to failure while writing a frame. Please check free disk space and start recorder again."));
+        i18n("The recorder has been stopped due to failure while writing a frame. Please check free disk space and start the recorder again."));
 }
 
 void RecorderDockerDock::slotScrollerStateChanged(QScroller::State state)

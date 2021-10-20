@@ -1443,6 +1443,15 @@ void KisNodeManager::cutLayersToClipboard()
     KisNodeList nodes = this->selectedNodes();
     if (nodes.isEmpty()) return;
 
+    KisNodeList::Iterator it = nodes.begin();
+    while (it != nodes.end()) {
+        // make sure the deleted nodes aren't referenced here again
+        if (!it->data()->parent()) {
+            nodes.erase(it);
+        }
+        it++;
+    }
+
     KisClipboard::instance()->setLayers(nodes, m_d->view->image(), false);
 
     if (canModifyLayers(nodes)) {

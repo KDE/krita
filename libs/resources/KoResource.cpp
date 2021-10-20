@@ -15,6 +15,7 @@
 
 #include <kis_debug.h>
 #include "KoMD5Generator.h"
+#include "kis_assert.h"
 
 
 struct KoResourceSPStaticRegistrar {
@@ -141,6 +142,8 @@ void KoResource::setImage(const QImage &image)
 QString KoResource::md5Sum(bool generateIfEmpty) const
 {
     if (d->md5sum.isEmpty() && generateIfEmpty) {
+        // non-serializable resources should always have an externally generated md5
+        KIS_SAFE_ASSERT_RECOVER_NOOP(isSerializable());
         dbgResources << "No MD5 for" << this << this->name();
         QByteArray ba;
         QBuffer buf(&ba);

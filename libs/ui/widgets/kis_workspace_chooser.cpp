@@ -163,7 +163,7 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
 {
     KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
-    QVector<KoResourceSP> resources = model->resourcesForName(m_windowLayoutWidgets.nameEdit->text());
+    QVector<KoResourceSP> resources = model->resourcesForName(m_workspaceWidgets.nameEdit->text());
     KoResourceSP res = resources.count() > 0 ? resources.first() : nullptr;
     if (res && res->active()) {
         m_workspaceWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
@@ -221,7 +221,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()
 {
-    KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
+    KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::WindowLayouts);
     QVector<KoResourceSP> resources = model->resourcesForName(m_windowLayoutWidgets.nameEdit->text());
     if (resources.isEmpty()) return;
 
@@ -229,10 +229,10 @@ void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()
 
     if (res && res->active()) {
         m_windowLayoutWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
-        m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original window layout."));
+        m_windowLayoutWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original window layout."));
     } else {
         m_windowLayoutWidgets.saveButton->setIcon(QIcon());
-        m_workspaceWidgets.saveButton->setToolTip(i18n("Save current window layout."));
+        m_windowLayoutWidgets.saveButton->setToolTip(i18n("Save current window layout."));
     }
 }
 

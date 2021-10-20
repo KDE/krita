@@ -2555,17 +2555,21 @@ void KisMainWindow::updateWindowMenu()
             &QAction::triggered,
             [=]() {
         QString name;
+        name = QInputDialog::getText(this, i18nc("@title:window", "New Workspace..."),
+                                                                i18nc("@label:textbox", "Name:"));
+
         auto rserver = KisResourceServerProvider::instance()->workspaceServer();
 
         KisWorkspaceResourceSP workspace(new KisWorkspaceResource(""));
         workspace->setDockerState(m_this->saveState());
+
+        // this line must happen before we save the workspace to resource folder or other places
+        // because it mostly just triggers palettes to be saved into the workspace
         d->viewManager->canvasResourceProvider()->notifySavingWorkspace(workspace);
         workspace->setValid(true);
         QString saveLocation = rserver->saveLocation();
 
         QFileInfo fileInfo(saveLocation + "/" + name + workspace->defaultFileExtension());
-
-        KisResourceModel resourceModel(ResourceType::Workspaces);
 
         workspace->setFilename(fileInfo.fileName());
         workspace->setName(name);

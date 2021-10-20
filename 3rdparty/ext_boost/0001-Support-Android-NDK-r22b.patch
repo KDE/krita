@@ -1,0 +1,34 @@
+From 9b2c40819cfa8995c52401bdcccb249f26b9bdb1 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Tue, 19 Oct 2021 21:01:41 +0000
+Subject: [PATCH] Support Android NDK r22b
+
+---
+ build-android.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build-android.sh b/build-android.sh
+index 308a4eb..9bcb1f4 100755
+--- a/build-android.sh
++++ b/build-android.sh
+@@ -369,7 +369,7 @@ case "$NDK_RN" in
+ 		CXXPATH=$AndroidNDKRoot/toolchains/${TOOLCHAIN}/prebuilt/${PlatformOS}-x86_64/bin/clang++
+ 		TOOLSET=clang
+ 		;;
+-	"19.0"|"19.1"|"19.2"|"20.0"|"20.1"|"21.0"|"21.1"|"21.2"|"21.3")
++	"19.0"|"19.1"|"19.2"|"20.0"|"20.1"|"21.0"|"21.1"|"21.2"|"21.3"|"22.1")
+ 		TOOLCHAIN=${TOOLCHAIN:-llvm}
+ 		CXXPATH=$AndroidNDKRoot/toolchains/${TOOLCHAIN}/prebuilt/${PlatformOS}-x86_64/bin/clang++
+ 		TOOLSET=clang
+@@ -390,7 +390,7 @@ if [ -z "${ARCHLIST}" ]; then
+ 
+     case "$NDK_RN" in
+       # NDK 17+: Support for ARMv5 (armeabi), MIPS, and MIPS64 has been removed.
+-      "17.1"|"17.2"|"18.0"|"18.1"|"19.0"|"19.1"|"19.2"|"20.0"|"20.1"|"21.0"|"21.1"|"21.2"|"21.3")
++      "17.1"|"17.2"|"18.0"|"18.1"|"19.0"|"19.1"|"19.2"|"20.0"|"20.1"|"21.0"|"21.1"|"21.2"|"21.3"|"22.1")
+         ARCHLIST="arm64-v8a armeabi-v7a x86 x86_64"
+         ;;
+       *)
+-- 
+2.33.0
+

@@ -208,7 +208,6 @@ KisTextureProperties::KisTextureProperties(int levelOfDetail, KisBrushTextureFla
     : m_gradient(0)
     , m_levelOfDetail(levelOfDetail)
     , m_flags(flags)
-    , m_enabled(false)
 {
 }
 

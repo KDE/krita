@@ -87,7 +87,7 @@ public:
         LINEAR_HEIGHT_PHOTOSHOP
     };
 
-    bool m_enabled;
+    bool m_enabled {false};
 
     /**
      * @brief apply combine the texture map with the dab

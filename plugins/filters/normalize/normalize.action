@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Krita">
+  <Actions category="Filters">
+    <text comment="Filter as an effect">Filters</text>
+    <Action name="krita_filter_normalize">
+      <icon/>
+      <text>Normalize Filter</text>
+      <whatsThis></whatsThis>
+      <toolTip>Normalize Filter</toolTip>
+      <iconText>Normalize Filter</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

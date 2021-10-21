@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Krita">
+  <Actions category="Filters">
+    <text comment="Filter as an effect">Filters</text>
+    <Action name="krita_filter_asc-cdl">
+      <icon/>
+      <text>Slope, Offset, Power Filter</text>
+      <whatsThis></whatsThis>
+      <toolTip>Slope, Offset, Power Filter</toolTip>
+      <iconText>Slope, Offset, Power Filter</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

@@ -13,3 +13,6 @@ add_library(kritagaussianhighpassfilter MODULE ${kritahighpassfilter_SOURCES})
 target_link_libraries(kritagaussianhighpassfilter kritaui)
 
 install(TARGETS kritagaussianhighpassfilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
+install( FILES
+    gaussianhighpass.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

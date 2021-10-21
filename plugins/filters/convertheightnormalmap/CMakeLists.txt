@@ -9,3 +9,6 @@ ki18n_wrap_ui(kritaconvertheighttonormalmap_SOURCES
 add_library(kritaconvertheighttonormalmap MODULE ${kritaconvertheighttonormalmap_SOURCES})
 target_link_libraries(kritaconvertheighttonormalmap kritaui)
 install(TARGETS kritaconvertheighttonormalmap  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
+install( FILES
+    convertheightnormalmap.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

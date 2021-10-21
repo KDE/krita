@@ -20,10 +20,10 @@ void TestNotifier::testNotifier()
     Notifier *notifier = new Notifier();
     connect(notifier, SIGNAL(imageCreated(Document*)), SLOT(documentAdded(Document*)), Qt::DirectConnection);
 
+    QVERIFY(notifier->active());
+    notifier->setActive(false);
     QVERIFY(!notifier->active());
     notifier->setActive(true);
-    QVERIFY(notifier->active());
-
     KisDocument *doc = part->createDocument();
     part->addDocument(doc);
 

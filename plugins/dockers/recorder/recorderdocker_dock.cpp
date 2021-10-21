@@ -100,7 +100,7 @@ public:
             case RecorderFormat::JPEG:
                 index = 0;
                 title = i18nc("Title for label. JPEG Quality level", "Quality:");
-                hint = i18nc("@tooltip", "Greater value will produce a larger file and a better quality. Doesn't affect CPU consumption.\nValues lower than 50 are not recommended due to high artifacts");
+                hint = i18nc("@tooltip", "Greater value will produce a larger file and a better quality. Doesn't affect CPU consumption.\nValues lower than 50 are not recommended due to high artifacts.");
                 minValue = 1;
                 maxValue = 100;
                 suffix = "%";

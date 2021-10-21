@@ -89,7 +89,7 @@
          <item row="7" column="0">
           <widget class="QLabel" name="labelFfmpegLocation">
            <property name="text">
-            <string>FFMpeg:</string>
+            <string>FFmpeg:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

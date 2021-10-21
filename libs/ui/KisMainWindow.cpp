@@ -586,7 +586,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         }
     }
 
-    KToolBar::setToolBarsLocked(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
     plugActionList("toolbarlist", toolbarList);
     d->toolbarList = toolbarList;
 
@@ -2951,16 +2950,17 @@ void KisMainWindow::createActions()
 
 void KisMainWindow::applyToolBarLayout()
 {
+    KToolBar::setToolBarsLocked(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
 
     Q_FOREACH (KToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
         toolBar->setStyleSheet("QToolBar { border: none }"); // has a border in "Fusion" style that people don't like
 
-        //Hide text for buttons with an icon in the toolbar
+        // Hide text for buttons with an icon in the toolbar
         Q_FOREACH (QAction *ac, toolBar->actions()){
             if (ac->icon().pixmap(QSize(1,1)).isNull() == false){
                 ac->setPriority(QAction::LowPriority);
-            }else {
+            } else {
                 ac->setIcon(QIcon());
             }
         }

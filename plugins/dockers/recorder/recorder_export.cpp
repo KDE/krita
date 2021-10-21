@@ -356,6 +356,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     
     d->inputFps = config.inputFps();
     d->fps = config.fps();
+    d->lastFrameSec = config.lastFrameSec();
     d->resize = config.resize();
     d->size = config.size();
     d->lockRatio = config.lockRatio();
@@ -367,6 +368,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
 
     d->ui->spinInputFps->setValue(d->inputFps);
     d->ui->spinFps->setValue(d->fps);
+    d->ui->spinLastFrameSec->setValue(d->lastFrameSec);
     d->ui->checkResize->setChecked(d->resize);
     d->ui->spinScaleWidth->setValue(d->size.width());
     d->ui->spinScaleHeight->setValue(d->size.height());

@@ -16,6 +16,7 @@
 #include "KisInterstrokeDataTransactionWrapperFactory.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_image_config.h"
+#include <boost/optional.hpp>
 
 //#define DEBUG_TRANSACTIONS
 
@@ -58,6 +59,9 @@ public:
     KUndo2Command newFrameCommand;
     QScopedPointer<OptionalInterstrokeInfo> interstrokeInfo;
     AutoKeyMode autoKeyMode;
+    boost::optional<QRect> autoKeyCleanupRect; // Needed for bug 441588
+    // TODO Perhaps we can try to find the root cause of difference between
+    // instant preview windows and linux to see why this is needed?
 
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
@@ -105,6 +109,7 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
         if (autoKeyMode == AUTOKEY_DUPLICATE) {
             channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
         } else {
+            autoKeyCleanupRect = device->exactBounds();
             channel->addKeyframe(time, &newFrameCommand);
         }
 
@@ -208,6 +213,10 @@ void KisTransactionData::startUpdates()
 
         if (m_d->defaultPixelChanged) {
             rc |= m_d->device->defaultBounds()->bounds();
+        }
+
+        if (m_d->autoKeyCleanupRect) {
+            rc |= m_d->autoKeyCleanupRect.value();
         }
 
         m_d->device->setDirty(rc);

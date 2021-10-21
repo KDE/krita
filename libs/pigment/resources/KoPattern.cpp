@@ -24,6 +24,7 @@
 #include <QBuffer>
 #include <QTextStream>
 #include <QFileInfo>
+#include <QImageReader>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -99,7 +100,7 @@ bool KoPattern::loadPatFromDevice(QIODevice *dev)
     bh.bytes = qFromBigEndian(bh.bytes);
     bh.magic_number = qFromBigEndian(bh.magic_number);
 
-    if (bh.magic_number != qToBigEndian((quint32)GimpPatternMagic)) {
+    if (bytes.mid(20, 4) != "GPAT") {
         qWarning() << filename() << "is not a .pat pattern file";
         return false;
     }
@@ -285,25 +286,22 @@ bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resources
     Q_UNUSED(resourcesInterface);
 
     QByteArray ba = dev->readAll();
+
     QBuffer buf(&ba);
     buf.open(QBuffer::ReadOnly);
+
     bool result = false;
 
-    QString mimeForData = KisMimeDatabase::mimeTypeForData(ba);
-
-    if (mimeForData == "image/x-gimp-pat"
-            || mimeForData == "image/x-gimp-pattern"
-            || mimeForData == "application/x-gimp-pattern"
-            ) {
-        result = loadPatFromDevice(&buf);
-    }
-
-    if (!result) {
+    if (QImageReader::supportedMimeTypes().contains(KisMimeDatabase::mimeTypeForData(ba).toLatin1())) {
         QFileInfo fi(filename());
         QImage image;
         result = image.load(&buf, fi.suffix().toUpper().toLatin1());
         setPatternImage(image);
     }
+    else {
+        result = loadPatFromDevice(&buf);
+    }
+
     return result;
 
 }

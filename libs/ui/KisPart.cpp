@@ -399,7 +399,9 @@ bool KisPart::closeSession(bool keepWindows)
         if (kisCfg.saveSessionOnQuit(false)) {
 
             d->currentSession->storeCurrentWindows();
-            d->currentSession->save();
+            KisResourceModel model(ResourceType::Sessions);
+            bool result = model.updateResource(d->currentSession);
+            Q_UNUSED(result);
 
             KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
             cfg.writeEntry("previousSession", d->currentSession->name());

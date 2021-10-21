@@ -33,6 +33,8 @@
 #include <iostream>
 #include <sstream>
 #include <cstring>
+#include <list> 
+#include <utility>
 
 #define J2K_CFMT 0
 #define JP2_CFMT 1
@@ -70,18 +72,23 @@ static void info_callback(const char *msg, void *client_data) {
 }
 
 static int getFileFormat(const char *filename) {
-	unsigned int i;
-	static const char *extension[] = { "j2k", "jp2", "j2c", "jpc" };
-	static const int format[] = { J2K_CFMT, JP2_CFMT,  J2K_CFMT, J2K_CFMT };
+	static const std::list<std::pair<const char*, int>> formats= {
+		{"j2k", J2K_CFMT},
+		{"jp2", JP2_CFMT},
+		{"j2c", J2K_CFMT},
+		{"jpc", J2K_CFMT},
+		{"jpx", J2K_CFMT},
+		{"jpf", J2K_CFMT}
+	};
 	const char *ext = strrchr(filename, '.');
 	if (ext == NULL) {
 		return -1;
 	}
 	ext++;
 	if (*ext) {
-		for (i = 0; i < sizeof(format) / sizeof(*format); i++) {
-			if (strcasecmp(ext, extension[i]) == 0) {
-				return format[i];
+		for (const auto &format : formats) {
+			if (strcasecmp(ext, format.first) == 0) {
+				return format.second;
 			}
 		}
 	}
@@ -119,7 +126,7 @@ int JP2Converter::infile_format(const char *fname) {
 		magic_s = ".jp2";
 	} else if (memcmp(buf, J2K_CODESTREAM_MAGIC, 4) == 0) {
 		magic_format = J2K_CFMT;
-		magic_s = ".j2k or .jpc or .j2c";
+		magic_s = ".j2k, .j2c, .jpc, .jpx, or .jpf";
 	} else {
 		return -1;
 	}

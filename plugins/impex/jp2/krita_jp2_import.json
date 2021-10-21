@@ -3,11 +3,11 @@
     "Id": "Krita jpeg2000 Import Filter",
     "NoDisplay": "true",
     "Type": "Service",
-    "X-KDE-Import": "image/jp2,image/j2k,image/x-jp2,image/x-j2k",
+    "X-KDE-Import": "image/jp2,image/jpeg2000,image/jpx,image/jpeg2000-image,image/x-jpeg2000-image",
     "X-KDE-Library": "kritajp2import",
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"
     ],
     "X-KDE-Weight": "1",
-    "X-KDE-Extensions" : "jp2,j2k"
+    "X-KDE-Extensions" : "jp2,jpx,jpf"
 }

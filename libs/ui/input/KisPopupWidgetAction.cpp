@@ -74,12 +74,15 @@ void KisPopupWidgetAction::begin(int, QEvent *event)
             }
         });
     } else if (KisPopupWidgetInterface *popupWidget = inputManager()->toolProxy()->popupWidget()) { // Handle other popup widgets...
-        QPoint pos = eventPos(event);
-        if (pos.isNull()) {
-            pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+        if (!popupWidget->onScreen()) {
+            QPoint pos = eventPos(event);
+            if (pos.isNull()) {
+                pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+            }
+            inputManager()->registerPopupWidget(popupWidget);
+            popupWidget->popup(pos);
+        } else {
+            popupWidget->dismiss();
         }
-
-        inputManager()->registerPopupWidget(popupWidget);
-        popupWidget->popup(pos);
     }
 }

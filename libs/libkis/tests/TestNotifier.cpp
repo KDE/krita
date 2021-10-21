@@ -23,7 +23,7 @@ void TestNotifier::testNotifier()
     QVERIFY(notifier->active());
     notifier->setActive(false);
     QVERIFY(!notifier->active());
-
+    notifier->setActive(true);
     KisDocument *doc = part->createDocument();
     part->addDocument(doc);
 

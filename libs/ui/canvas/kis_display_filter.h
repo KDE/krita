@@ -14,7 +14,14 @@
 
 struct KisExposureGammaCorrectionInterface;
 
-class QOpenGLFunctions;
+#ifndef Q_MOC_RUN
+#ifndef Q_OS_MACOS
+#define GLFunctions QOpenGLFunctions
+#else
+#define GLFunctions QOpenGLFunctions_3_2_Core
+#endif
+#endif
+class GLFunctions;
 class QOpenGLShaderProgram;
 
 /**
@@ -28,7 +35,7 @@ public:
     explicit KisDisplayFilter(QObject *parent = 0);
 
     virtual QString program() const = 0;
-    virtual void setupTextures(QOpenGLFunctions *f, QOpenGLShaderProgram *program) const = 0;
+    virtual void setupTextures(GLFunctions *f, QOpenGLShaderProgram *program) const = 0;
     virtual void filter(quint8 *pixels, quint32 numPixels) = 0;
     virtual void approximateInverseTransformation(quint8 *pixels, quint32 numPixels) = 0;
     virtual void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) = 0;

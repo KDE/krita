@@ -72,7 +72,7 @@ public:
     template<class F>
     bool updateShaderImpl(F *f);
 
-    void setupTextures(QOpenGLFunctions *f, QOpenGLShaderProgram *program) const override;
+    void setupTextures(GLFunctions *f, QOpenGLShaderProgram *program) const override;
 
     KisExposureGammaCorrectionInterface *correctionInterface() const override;
 

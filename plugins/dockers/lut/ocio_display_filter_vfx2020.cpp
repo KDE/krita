@@ -404,7 +404,7 @@ bool OcioDisplayFilter::updateShaderImpl(F *f) {
     return shouldRecompileShader;
 }
 
-void OcioDisplayFilter::setupTextures(QOpenGLFunctions *f, QOpenGLShaderProgram *program) const
+void OcioDisplayFilter::setupTextures(GLFunctions *f, QOpenGLShaderProgram *program) const
 {
     f->glActiveTexture(GL_TEXTURE0 + 1);
     f->glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);

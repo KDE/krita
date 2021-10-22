@@ -575,7 +575,7 @@ bool OcioDisplayFilter::updateShaderImpl(F *f)
     return shouldRecompileShader;
 }
 
-void OcioDisplayFilter::setupTextures(QOpenGLFunctions *f, QOpenGLShaderProgram *program) const
+void OcioDisplayFilter::setupTextures(GLFunctions *f, QOpenGLShaderProgram *program) const
 {
     for (unsigned int idx = 0; idx < m_lut3dTexIDs.size(); ++idx) {
         const auto &data = m_lut3dTexIDs[idx];

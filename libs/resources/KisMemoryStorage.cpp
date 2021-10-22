@@ -243,12 +243,16 @@ bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP re
     StoredResource storedResource;
     storedResource.timestamp = QDateTime::currentDateTime();
     storedResource.data.reset(new QByteArray());
-    QBuffer buffer(storedResource.data.data());
-    buffer.open(QIODevice::WriteOnly);
-    if (!resource->saveToDevice(&buffer)) {
+    if (resource->isSerializable()) {
+        QBuffer buffer(storedResource.data.data());
+        buffer.open(QIODevice::WriteOnly);
+        if (!resource->saveToDevice(&buffer)) {
+            storedResource.resource = resource;
+        }
+        buffer.close();
+    } else {
         storedResource.resource = resource;
     }
-    buffer.close();
 
     typedResources.insert(resource->filename(), storedResource);
 

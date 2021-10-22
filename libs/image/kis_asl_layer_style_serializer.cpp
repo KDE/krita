@@ -9,6 +9,7 @@
 #include "kis_image.h"
 
 #include <QDomDocument>
+#include <QMultiHash>
 
 #include <KisResourceModel.h>
 #include <KisGlobalResourcesInterface.h>
@@ -36,6 +37,7 @@
 #include "asl/kis_asl_writer.h"
 
 #include <functional>
+
 using namespace std::placeholders;
 
 KisAslLayerStyleSerializer::KisAslLayerStyleSerializer()
@@ -1324,8 +1326,6 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
 
 void KisAslLayerStyleSerializer::readFromDevice(QIODevice &device)
 {
-    m_stylesVector.clear();
-
     m_catcher.subscribePattern("/patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1, _2));
     m_catcher.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1, _2));
     m_catcher.subscribeNewStyleStarted(std::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, false));
@@ -1339,22 +1339,40 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice &device)
     KisAslXmlParser parser;
     parser.parseXML(doc, m_catcher);
 
-    QSet<QString> allPsdUuids;
+    QMultiHash<QString, KisPSDLayerStyleSP> allStyles;
+    QHash<QString, KisPSDLayerStyleSP> cleanedStyles;
+
+    for(const auto &style : m_stylesVector)
+        allStyles.insert(style->psdUuid(), style);
 
     // correct all the layer styles
-    Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
+    for (const auto &style : allStyles) {
         FillStylesCorrector::correct(style.data());
 
-        if (allPsdUuids.contains(style->psdUuid())) {
-            qWarning() << "Layer style" << style->name() << "has non-unique uuid and will be ignored";
-            continue;
+        if (allStyles.count(style->psdUuid()) > 1) {
+            const auto &existingStyle = cleanedStyles.find(style->psdUuid());
+
+            if (existingStyle != cleanedStyles.end()) {
+                if (existingStyle.value()->name() != style->name()) {
+                    qWarning() << "Duplicated UUID" << style->psdUuid() << "for styles" << style->name() << "and"
+                               << existingStyle.value()->name();
+                    style->setMD5Sum("");
+                    style->setUuid(QUuid::createUuid());
+                } else {
+                    qWarning() << "Duplicated style" << style->name();
+                    continue;
+                }
+            }
         }
 
-        allPsdUuids << style->psdUuid();
         style->setValid(!style->isEmpty());
 
         style->setFilename(style->psdUuid() + QString("_style"));
+
+        cleanedStyles.insert(style->psdUuid(), style);
     }
+
+    m_stylesVector = cleanedStyles.values().toVector();
 
     m_initialized = true;
 }

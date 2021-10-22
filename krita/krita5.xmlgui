@@ -227,7 +227,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="select_unlocked_layers"/>
       </Menu>
       <Menu name="LayerGroup">
-         <text comment="A group of layers">&amp;Group</text>
+         <text context="A group of layers">&amp;Group</text>
          <Action name="create_quick_group"/>
          <Action name="create_quick_clipping_group"/>
          <Action name="quick_ungroup"/>

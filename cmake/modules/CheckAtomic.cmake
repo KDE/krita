@@ -55,9 +55,14 @@ endfunction()
 # Check for (non-64-bit) atomic operations.
 if(MSVC)
 	set(HAVE_CXX_ATOMICS_WITHOUT_LIB True)
-elseif(LLVM_COMPILER_IS_GCC_COMPATIBLE)
+else()
 	# First check if atomics work without the library.
-	check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITHOUT_LIB)
+	if (CMAKE_COMPILER_IS_GNUCXX
+		OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang"
+		OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"
+		OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
+		check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITHOUT_LIB)
+	endif()
 	# If not, check if the library exists, and atomics work with it.
 	if(NOT HAVE_CXX_ATOMICS_WITHOUT_LIB)
 		check_library_exists(atomic __atomic_fetch_add_4 "" HAVE_LIBATOMIC)
@@ -76,9 +81,14 @@ endif()
 # Check for 64 bit atomic operations.
 if(MSVC)
 	set(HAVE_CXX_ATOMICS64_WITHOUT_LIB True)
-elseif(LLVM_COMPILER_IS_GCC_COMPATIBLE)
+else()
 	# First check if atomics work without the library.
-	check_working_cxx_atomics64(HAVE_CXX_ATOMICS64_WITHOUT_LIB)
+	if (CMAKE_COMPILER_IS_GNUCXX
+		OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang"
+		OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"
+		OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
+		check_working_cxx_atomics64(HAVE_CXX_ATOMICS64_WITHOUT_LIB)
+	endif()
 	# If not, check if the library exists, and atomics work with it.
 	if(NOT HAVE_CXX_ATOMICS64_WITHOUT_LIB)
 		check_library_exists(atomic __atomic_load_8 "" HAVE_CXX_LIBATOMICS64)

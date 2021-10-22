@@ -1133,7 +1133,9 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
 {
     config->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     config->setOpacity(ui.intOpacity->value());
-    config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
+    if (ui.cmbGradient->gradient()) {
+        config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
+    }
     config->setReverse(ui.chkReverse->isChecked());
     config->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     config->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());

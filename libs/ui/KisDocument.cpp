@@ -40,6 +40,7 @@
 #include <KisGlobalResourcesInterface.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModelProvider.h>
+#include <KisResourceCacheDb.h>
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
 #include "kis_scratch_pad.h"
@@ -1277,16 +1278,15 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
             if (KisResourceLoaderRegistry::instance()->resourceTypes().contains(resourceType)) {
 
                 KisResourceModel model(resourceType);
+                model.setResourceFilter(KisResourceModel::ShowAllResources);
 
                 QString tempFileName = QDir::tempPath() + "/" + QFileInfo(path).fileName();
                 if (QFileInfo(path).exists()) {
-                    QVector<KoResourceSP> resources = model.resourcesForFilename(QFileInfo(path).fileName());
+
+                    int outResourceId;
                     KoResourceSP res;
-                    Q_FOREACH(res, resources) {
-                        if (res->storageLocation() == KisResourceLocator::instance()->resourceLocationBase()) {
-                            break;
-                        }
-                        res.reset(nullptr);
+                    if (KisResourceCacheDb::getResourceIdFromVersionedFilename(QFileInfo(path).fileName(), resourceType, "", outResourceId)) {
+                        res = model.resourceForId(outResourceId);
                     }
 
                     if (res) {

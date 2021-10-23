@@ -128,6 +128,7 @@ PaletteDockerDock::PaletteDockerDock( )
     KoColorSetSP defaultPalette = m_rServer->resource("", "", defaultPaletteName);
     if (defaultPalette) {
         slotSetColorSet(defaultPalette);
+        m_paletteChooser->setCurrentItem(defaultPalette);
     } else {
         m_ui->bnAdd->setEnabled(false);
         m_ui->bnRename->setEnabled(false);

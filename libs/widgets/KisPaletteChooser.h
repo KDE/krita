@@ -27,6 +27,7 @@ class KRITAWIDGETS_EXPORT KisPaletteChooser : public QWidget
 public:
     explicit KisPaletteChooser(QWidget *parent = nullptr);
     virtual ~KisPaletteChooser();
+    void setCurrentItem(KoResourceSP currentResource);
 
 Q_SIGNALS:
     void sigPaletteSelected(KoColorSetSP);

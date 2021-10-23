@@ -70,6 +70,11 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
 KisPaletteChooser::~KisPaletteChooser()
 { }
 
+void KisPaletteChooser::setCurrentItem(KoResourceSP currentResource)
+{
+    m_d->itemChooser->setCurrentResource(currentResource);
+}
+
 void KisPaletteChooser::paletteSelected(KoResourceSP r)
 {
     KoColorSetSP g = r.staticCast<KoColorSet>();

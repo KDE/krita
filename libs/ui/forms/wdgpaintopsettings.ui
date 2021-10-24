@@ -857,66 +857,96 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
         <item>
-         <widget class="QPushButton" name="paintPresetIcon">
+         <widget class="QToolButton" name="paintPresetIcon">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="toolTip">
            <string>Fill area with brush preset icon</string>
           </property>
           <property name="text">
            <string/>
           </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="fillLayer">
+         <widget class="QToolButton" name="fillLayer">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="toolTip">
            <string>Fill area with current image</string>
           </property>
           <property name="text">
            <string/>
           </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="fillGradient">
+         <widget class="QToolButton" name="fillGradient">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="toolTip">
            <string>Fill area with gradient</string>
           </property>
           <property name="text">
            <string/>
           </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="fillSolid">
+         <widget class="QToolButton" name="fillSolid">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="toolTip">
            <string>Fill area with background color</string>
           </property>
           <property name="text">
            <string/>
           </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="eraseScratchPad">
+         <widget class="QToolButton" name="eraseScratchPad">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="toolTip">
            <string>Reset area to white</string>
           </property>
           <property name="text">
            <string/>
           </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>

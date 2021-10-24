@@ -7,12 +7,12 @@
 #ifndef KIS_COMMON_COLORS_H
 #define KIS_COMMON_COLORS_H
 
+#include <QToolButton>
+
 #include <QMutex>
 #include <QTimer>
 #include "kis_color_patches.h"
 #include <kis_types.h>
-
-class QPushButton;
 
 class KisCommonColors : public KisColorPatches
 {
@@ -31,7 +31,7 @@ public Q_SLOTS:
 private:
     QMutex m_mutex;
     QTimer m_recalculationTimer;
-    QPushButton* m_reloadButton;
+    QToolButton* m_reloadButton;
     QList<KoColor> m_calculatedColors;
     KisImageWSP m_image;
 };

@@ -27,6 +27,7 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     buttonSkipBack->setToolTip(i18n("Skip Back"));
     buttonSkipBack->setIconSize(QSize(22, 22));
     buttonSkipBack->setFlat(true);
+    buttonSkipBack->setFocusPolicy(Qt::NoFocus);
     layout->addWidget(buttonSkipBack);
     connect(buttonSkipBack, SIGNAL(released()), this, SIGNAL(skipBack()));
 
@@ -34,6 +35,7 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     buttonBack->setToolTip(i18n("Back"));
     buttonBack->setIconSize(QSize(22, 22));
     buttonBack->setFlat(true);
+    buttonBack->setFocusPolicy(Qt::NoFocus);
     layout->addWidget(buttonBack);
     connect(buttonBack, SIGNAL(released()), this, SIGNAL(back()));
 
@@ -41,6 +43,7 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     buttonStop->setToolTip(i18n("Stop"));
     buttonStop->setIconSize(QSize(22, 22));
     buttonStop->setFlat(true);
+    buttonStop->setFocusPolicy(Qt::NoFocus);
     layout->addWidget(buttonStop);
     connect(buttonStop, SIGNAL(released()), this, SIGNAL(stop()));
 
@@ -48,6 +51,7 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     buttonPlayPause->setToolTip(i18n("Play/Pause"));
     buttonPlayPause->setIconSize(QSize(22, 22));
     buttonPlayPause->setFlat(true);
+    buttonPlayPause->setFocusPolicy(Qt::NoFocus);
     layout->addWidget(buttonPlayPause);
     connect(buttonPlayPause, SIGNAL(released()), this, SIGNAL(playPause()));
 
@@ -55,6 +59,7 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     buttonForward->setToolTip(i18n("Forward"));
     buttonForward->setIconSize(QSize(22, 22));
     buttonForward->setFlat(true);
+    buttonForward->setFocusPolicy(Qt::NoFocus);
     layout->addWidget(buttonForward);
     connect(buttonForward, SIGNAL(released()), this, SIGNAL(forward()));
 
@@ -62,6 +67,7 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     buttonSkipForward->setToolTip(i18n("Skip Forward"));
     buttonSkipForward->setIconSize(QSize(22, 22));
     buttonSkipForward->setFlat(true);
+    buttonSkipForward->setFocusPolicy(Qt::NoFocus);
     layout->addWidget(buttonSkipForward);
     connect(buttonSkipForward, SIGNAL(released()), this, SIGNAL(skipForward()));
 

@@ -241,8 +241,9 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
             m_longStrokeUpdateCompressor.stop();
             m_strokeUpdateCompressor.start();
             m_lastUpdatedPoint = pos;
-        } else if (updateDistance > 1) {
+        } else if (updateDistance > 1 &&  !m_strokeUpdateCompressor.isActive() && !m_longStrokeUpdateCompressor.isActive()) {
             m_longStrokeUpdateCompressor.start();
+            m_lastUpdatedPoint = pos;
         }
     }
 

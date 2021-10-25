@@ -133,7 +133,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     btnNewsOptions->setMenu(newsOptionsMenu);
 
     QFont largerFont = font();
-    largerFont.setPointSizeF(largerFont.pointSizeF() * (4.0 / 3.0));
+    largerFont.setPointSizeF(largerFont.pointSizeF() * 1.1f);
     labelSupportText->setFont(largerFont);
 
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
@@ -483,7 +483,7 @@ void KisWelcomePageWidget::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
         QFont largerFont = font();
-        largerFont.setPointSizeF(largerFont.pointSizeF() * (4.0 / 3.0));
+        largerFont.setPointSizeF(largerFont.pointSizeF() * 1.1f);
         labelSupportText->setFont(largerFont);
     }
 }

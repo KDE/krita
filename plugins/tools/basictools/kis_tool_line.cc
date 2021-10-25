@@ -50,8 +50,8 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
       m_helper(new KisToolLineHelper(m_infoBuilder.data(),
                                      canvas->resourceManager(),
                                      kundo2_i18n("Draw Line"))),
-      m_strokeUpdateCompressor(500, KisSignalCompressor::POSTPONE),
-      m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
+      m_strokeUpdateCompressor(200, KisSignalCompressor::POSTPONE),
+      m_longStrokeUpdateCompressor(750, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_line");
 

@@ -1070,7 +1070,7 @@ KisView *KisMainWindow::activeView() const
 
 bool KisMainWindow::openDocument(const QString &path, OpenFlags flags)
 {
-    ScopedWidgetDisabler disabler(d->welcomeScroller);
+    ScopedWidgetDisabler disabler(d->welcomePage->dropFrameBorder);
     QApplication::processEvents(); // make UI more responsive
 
     if (!QFile(path).exists()) {

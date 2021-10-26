@@ -159,6 +159,7 @@ bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &r
     buf.close();
     if (size != buf.size()) {
         qWarning() << "Cannot save resource to the store" << size << buf.size();
+        return false;
     }
 
     if (!resource->thumbnailPath().isEmpty()) {

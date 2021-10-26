@@ -203,6 +203,7 @@ bool KoResourceBundle::save()
 
     Q_FOREACH (const QString &resType, m_manifest.types()) {
         KisResourceModel model(resType);
+        model.setResourceFilter(KisResourceModel::ShowAllResources);
         Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
             KoResourceSP res = model.resourcesForMD5(ref.md5sum).first();
             if (!res) res = model.resourcesForFilename(QFileInfo(ref.resourcePath).fileName()).first();

@@ -282,7 +282,7 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
             continue;
         }
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
-        bundle->addResource(res->resourceType().first, res->name().replace(' ', '_') + res->defaultFileExtension(), tags, res->md5Sum());
+        bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), createPrettyFilenameFromName(res));
 
         QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
         if (!linkedResources.isEmpty()) {
@@ -314,6 +314,27 @@ void DlgCreateBundle::putMetaDataInTheBundle(KoResourceBundleSP bundle) const
     bundle->setMetaData("email", email());
     bundle->setMetaData("license", license());
     bundle->setMetaData("website", website());
+}
+
+QString DlgCreateBundle::createPrettyFilenameFromName(KoResourceSP resource) const
+{
+    QString resourceType = resource->resourceType().first;
+    if (resourceType == ResourceType::Patterns
+            || resourceType == ResourceType::Brushes) {
+        // don't change the filename, if the resource is likely to be linked
+        // by filename to another resource
+        return resource->filename();
+    }
+    QString name = resource->name();
+    // to make sure patterns are saved correctly
+    // note that for now (TM) there are no double-suffixes in resources (like '.tar.gz')
+    // otherwise this code should use completeSuffix() and remove the versioning number
+    // (since that's something we want to get rid of)
+    QString suffix = QFileInfo(resource->filename()).suffix();
+
+    // remove the suffix if the name has a suffix (happens for png patterns)
+    QString nameWithoutSuffix = QFileInfo(resource->name()).baseName();
+    return nameWithoutSuffix + "." + suffix;
 }
 
 void DlgCreateBundle::accept()

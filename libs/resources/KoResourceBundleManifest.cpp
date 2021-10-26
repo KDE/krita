@@ -118,7 +118,7 @@ bool KoResourceBundleManifest::load(QIODevice *device)
         // Only if fullPath is valid, should we store this entry.
         // If not, we don't bother to find out exactly what is wrong, we just skip it.
         if (!fullPath.isNull() && !mediaType.isEmpty() && !md5sum.isEmpty()) {
-            addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toLatin1()));
+            addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toLatin1()), -1);
         }
     }
 
@@ -145,7 +145,7 @@ bool KoResourceBundleManifest::save(QIODevice *device)
                manifestWriter.addAttribute("manifest:media-type", resourceTypeToManifestType(resourceType));
                // we cannot just use QFileInfo(resource.resourcePath).fileName() because it would cut off the subfolder
                // but the resourcePath is already correct, so let's just add the resourceType
-               manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + resource.resourcePath);
+               manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + resource.filenameInBundle);
                manifestWriter.addAttribute("manifest:md5sum", resource.md5sum);
                if (!resource.tagList.isEmpty()) {
                    manifestWriter.startElement("manifest:tags");
@@ -166,9 +166,9 @@ bool KoResourceBundleManifest::save(QIODevice *device)
        return true;
 }
 
-void KoResourceBundleManifest::addResource(const QString &fileTypeName, const QString &fileName, const QStringList &fileTagList, const QString &md5)
+void KoResourceBundleManifest::addResource(const QString &fileTypeName, const QString &fileName, const QStringList &fileTagList, const QString &md5, const int resourceId, const QString filenameInBundle)
 {
-    ResourceReference ref(fileName, fileTagList, fileTypeName, md5);
+    ResourceReference ref(fileName, fileTagList, fileTypeName, md5, resourceId, filenameInBundle);
     if (!m_resources.contains(fileTypeName)) {
         m_resources[fileTypeName] = QMap<QString, ResourceReference>();
     }

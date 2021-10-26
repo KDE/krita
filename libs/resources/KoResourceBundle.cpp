@@ -205,11 +205,20 @@ bool KoResourceBundle::save()
         KisResourceModel model(resType);
         model.setResourceFilter(KisResourceModel::ShowAllResources);
         Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-            KoResourceSP res = model.resourcesForMD5(ref.md5sum).first();
+            KoResourceSP res;
+            if (ref.resourceId >= 0) res = model.resourceForId(ref.resourceId);
+            if (!res) res = model.resourcesForMD5(ref.md5sum).first();
             if (!res) res = model.resourcesForFilename(QFileInfo(ref.resourcePath).fileName()).first();
-            if (!saveResourceToStore(res, store.data(), resType)) {
-                if (res) {
-                    qWarning() << "Could not save resource" << resType << res->name();
+            if (!res) {
+                qWarning() << "Could not find resource" << resType << ref.resourceId << ref.md5sum << ref.resourcePath;
+                continue;
+            }
+            KoResourceSP resCloned = res->clone();
+            resCloned->setFilename(ref.filenameInBundle); // remove the versioning, name change etc.
+
+            if (!saveResourceToStore(resCloned, store.data(), resType)) {
+                if (resCloned) {
+                    qWarning() << "Could not save resource" << resType << resCloned->name();
                 }
                 else {
                     qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
@@ -256,13 +265,13 @@ const QString KoResourceBundle::metaData(const QString &key, const QString &defa
     }
 }
 
-void KoResourceBundle::addResource(QString resourceType, QString filePath, QVector<KisTagSP> fileTagList, const QString md5sum)
+void KoResourceBundle::addResource(QString resourceType, QString filePath, QVector<KisTagSP> fileTagList, const QString md5sum, const int resourceId, const QString filenameInBundle)
 {
     QStringList tags;
     Q_FOREACH(KisTagSP tag, fileTagList) {
         tags << tag->url();
     }
-    m_manifest.addResource(resourceType, filePath, tags, md5sum);
+    m_manifest.addResource(resourceType, filePath, tags, md5sum, resourceId, filenameInBundle);
 }
 
 QList<QString> KoResourceBundle::getTagsList()

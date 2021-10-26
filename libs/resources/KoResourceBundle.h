@@ -75,7 +75,7 @@ public:
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addResource(QString fileType, QString filePath, QVector<KisTagSP> fileTagList, const QString md5sum);
+    void addResource(QString fileType, QString filePath, QVector<KisTagSP> fileTagList, const QString md5sum, const int resourceId = -1, const QString filenameInBundle = "");
 
     QList<QString> getTagsList();
 

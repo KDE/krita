@@ -24,17 +24,24 @@ public:
 
         ResourceReference() {}
 
-        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QString &_fileTypeName, const QString &_md5) {
+        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QString &_fileTypeName,
+                          const QString &_md5, const int _resourceId = -1, const QString _filenameInBundle = "") {
             resourcePath = _resourcePath;
             tagList = _tagList;
             fileTypeName = _fileTypeName;
             md5sum = _md5;
+            resourceId = _resourceId;
+            // only necessary to provide if filename in bundle is different from the filename on disk
+            // for example for versioned resources
+            filenameInBundle = _filenameInBundle.isEmpty() ? resourcePath : _filenameInBundle;
         }
 
         QString resourcePath;
         QList<QString> tagList;
         QString fileTypeName;
         QString md5sum;
+        int resourceId;
+        QString filenameInBundle;
     };
 
     /**
@@ -66,7 +73,7 @@ public:
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
-    void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QString &md5);
+    void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QString &md5, const int resourceId = -1, const QString filenameInBundle = "");
     void removeResource(ResourceReference &resource);
 
     QStringList types() const;

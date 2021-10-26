@@ -52,6 +52,8 @@ private:
 
     void putResourcesInTheBundle(KoResourceBundleSP bundle) const;
     void putMetaDataInTheBundle(KoResourceBundleSP bundle) const;
+    QString createPrettyFilenameFromName(KoResourceSP resource) const;
+
     QWidget *m_page;
     Ui::WdgDlgCreateBundle *m_ui;
 

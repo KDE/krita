@@ -752,13 +752,13 @@ void KUndo2QStack::push(KUndo2Command *cmd)
      * T1 : Time lapsed between current command and previously merged command
      *      -- signal to merge throughout the stack.
      *
-     * T2 : Time elapsed between two commands signaling both commands belong
-     *      of the same set
+     * T2 : Time elapsed between two commands (unmerged) signaling both commands
+     *      belong to the same set
      *
      * Whenever a KUndo2Command is initialized -- it consists of a start-time
      * and when it is pushed -- an end time. Every time a command is pushed --
      * it checks whether the command pushed was pushed after T1 seconds of the
-     * last merged command Then the merging begins with each group depending on
+     * last merged command. Then the merging begins with each group depending on
      * the time in between each command (T2).
      *
      * @TODO : Currently it is not able to merge two merged commands together.
@@ -783,26 +783,24 @@ void KUndo2QStack::push(KUndo2Command *cmd)
              * should stay separate in the Undo History
              */
 
-            const int mergeDestinationIndex = m_lastMergedIndex;
-            const int mergeSourceIndex = m_lastMergedIndex + 1;
+            const int mergeSourceIndex = m_lastMergedIndex;
+            const int mergeDestinationIndex = m_lastMergedIndex + 1;
 
-            if (m_lastMergedSetCount > m_strokesN &&
-                mergeDestinationIndex >= 0 &&
-                mergeSourceIndex < m_command_list.size()) {
+            if (m_lastMergedSetCount > m_strokesN && mergeSourceIndex >= 0
+                && mergeDestinationIndex < m_command_list.size()) {
 
-                KUndo2Command* mergeDestination = m_command_list.at(mergeDestinationIndex);
-                KUndo2Command* mergeSource = m_command_list.at(mergeSourceIndex);
+                KUndo2Command *mergeDestination = m_command_list.at(mergeDestinationIndex);
+                KUndo2Command *mergeSource = m_command_list.at(mergeSourceIndex);
 
                 if (mergeDestination && mergeSource) {
 
-                    if(mergeDestination->timedMergeWith(mergeSource)){
+                    if (mergeDestination->timedMergeWith(mergeSource)) {
                         m_command_list.removeAt(mergeSourceIndex);
                     }
 
                     m_lastMergedSetCount--;
                     m_lastMergedIndex = m_command_list.indexOf(mergeDestination);
                 }
-
             }
         }
 
@@ -813,6 +811,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
 
             if (qAbs(cmd->time().msecsTo(mergeDestination->endTime())) > m_timeT1 * 1000) { //T1 time elapsed
                 QListIterator<KUndo2Command*> it(m_command_list);
+
                 it.toBack();
                 m_lastMergedSetCount = 1;
 

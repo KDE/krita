@@ -13,7 +13,6 @@
 #include "QVBoxLayout"
 #include "QFormLayout"
 #include "QLabel"
-#include "QPushButton"
 #include "QToolButton"
 #include "QMenu"
 #include "QWidgetAction"
@@ -117,15 +116,18 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
         layout->setContentsMargins(SPACING_UNIT,0,0,0);
 
         // Onion skins menu.
-        btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
+        btnOnionSkinsMenu = new QToolButton(this);
+        btnOnionSkinsMenu->setIcon(KisIconUtils::loadIcon("onion_skin_options"));
         btnOnionSkinsMenu->setToolTip(i18n("Onion skins menu"));
         btnOnionSkinsMenu->setIconSize(QSize(22, 22));
-        btnOnionSkinsMenu->setFlat(true);
+        btnOnionSkinsMenu->setAutoRaise(true);
         layout->addWidget(btnOnionSkinsMenu);
 
         // Audio menu..
-        btnAudioMenu = new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this);
+        btnAudioMenu = new QToolButton(this);
+        btnAudioMenu->setIcon(KisIconUtils::loadIcon("audio-none"));
         btnAudioMenu->setToolTip(i18n("Audio menu"));
+        btnAudioMenu->setAutoRaise(true);
         btnAudioMenu->hide(); // (NOTE: Hidden for now while audio features develop.)
         layout->addWidget(btnAudioMenu);
 
@@ -240,7 +242,7 @@ KisAnimTimelineDocker::KisAnimTimelineDocker()
     // Titlebar Widget..
     setTitleBarWidget(m_d->titlebar);
 
-    connect(m_d->titlebar->btnOnionSkinsMenu, &QPushButton::released, [this](){
+    connect(m_d->titlebar->btnOnionSkinsMenu, &QToolButton::released, [this](){
         if (m_d->mainWindow) {
             QDockWidget *docker = m_d->mainWindow->dockWidget("OnionSkinsDocker");
             if (docker) {

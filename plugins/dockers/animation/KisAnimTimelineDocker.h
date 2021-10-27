@@ -21,7 +21,6 @@
 #include <sys/types.h>
 #endif
 
-class QPushButton;
 class QToolButton;
 class KisTransportControls;
 class KisIntParseSpinBox;
@@ -53,8 +52,8 @@ public:
     QToolButton *btnDuplicateKeyframe;
     QToolButton *btnRemoveKeyframe;
 
-    QPushButton *btnOnionSkinsMenu;
-    QPushButton *btnAudioMenu;
+    QToolButton *btnOnionSkinsMenu;
+    QToolButton *btnAudioMenu;
     QToolButton *btnSettingsMenu;
 
     KisIntParseSpinBox *sbStartFrame;

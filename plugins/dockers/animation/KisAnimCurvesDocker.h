@@ -14,7 +14,6 @@
 #include <KisKineticScroller.h>
 #include <kis_utility_title_bar.h>
 
-class QPushButton;
 class QToolButton;
 class KisCanvas2;
 class KisAction;
@@ -52,8 +51,8 @@ public:
 
     KisDoubleParseSpinBox *sbValueRegister;
 
-    QPushButton *btnOnionSkinsMenu;
-    QPushButton *btnAudioMenu;
+    QToolButton *btnOnionSkinsMenu;
+    QToolButton *btnAudioMenu;
     QToolButton *btnSettingsMenu;
 
     KisIntParseSpinBox *sbStartFrame;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -52,7 +52,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="chkUsePercentage">
+      <widget class="QToolButton" name="chkUsePercentage">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -81,6 +81,9 @@
         </size>
        </property>
        <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>

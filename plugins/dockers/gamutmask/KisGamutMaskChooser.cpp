@@ -11,7 +11,6 @@
 #include <QAbstractItemDelegate>
 #include <QMenu>
 #include <QActionGroup>
-#include <QToolButton>
 #include <QFontMetrics>
 #include <QTextDocument>
 #include <QTextLayout>

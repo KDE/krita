@@ -11,7 +11,6 @@
 #include <QFormLayout>
 #include <QCheckBox>
 #include <QLineEdit>
-#include <QPushButton>
 #include <QLabel>
 #include <QSpinBox>
 #include <QComboBox>

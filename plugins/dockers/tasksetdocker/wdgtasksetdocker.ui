@@ -31,45 +31,54 @@
      </property>
     </spacer>
    </item>
+   <item row="1" column="0">
+    <widget class="KisPopupButton" name="chooserButton"/>
+   </item>
    <item row="1" column="2">
-    <widget class="QPushButton" name="recordButton">
+    <widget class="QToolButton" name="recordButton">
      <property name="toolTip">
       <string>Start Recording</string>
      </property>
      <property name="text">
       <string/>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="4">
-    <widget class="QPushButton" name="clearButton">
-     <property name="toolTip">
-      <string>Delete the taskset</string>
-     </property>
-     <property name="text">
-      <string/>
+     <property name="autoRaise">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="1" column="3">
-    <widget class="QPushButton" name="saveButton">
+    <widget class="QToolButton" name="saveButton">
      <property name="toolTip">
       <string>Save the taskset</string>
      </property>
      <property name="text">
       <string/>
      </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="KisPopupButton" name="chooserButton" native="true"/>
+   <item row="1" column="4">
+    <widget class="QToolButton" name="clearButton">
+     <property name="toolTip">
+      <string>Delete the taskset</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
    <class>KisPopupButton</class>
-   <extends>QWidget</extends>
+   <extends>QToolButton</extends>
    <header>KisPopupButton.h</header>
    <container>1</container>
   </customwidget>

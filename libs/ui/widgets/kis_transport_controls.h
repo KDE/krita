@@ -11,7 +11,7 @@
 #include "kritaui_export.h"
 
 #include <QWidget>
-class QPushButton;
+class QToolButton;
 
 
 /**
@@ -51,12 +51,12 @@ Q_SIGNALS:
     void skipForward();
 
 private:
-    QPushButton* buttonSkipBack;
-    QPushButton* buttonBack;
-    QPushButton* buttonStop;
-    QPushButton* buttonPlayPause;
-    QPushButton* buttonForward;
-    QPushButton* buttonSkipForward;
+    QToolButton* buttonSkipBack;
+    QToolButton* buttonBack;
+    QToolButton* buttonStop;
+    QToolButton* buttonPlayPause;
+    QToolButton* buttonForward;
+    QToolButton* buttonSkipForward;
 };
 
 #endif // KISTRANSPORTCONTROLS_H

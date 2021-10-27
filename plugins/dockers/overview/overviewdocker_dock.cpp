@@ -151,6 +151,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
             }
         }
         m_mirrorCanvas->setIcon(KisIconUtils::loadIcon("mirror-view-16"));
+        m_mirrorCanvas->setAutoRaise(true);
         connect(m_mirrorCanvas, SIGNAL(toggled(bool)), this, SLOT(mirrorUpdateIcon()));
 
         m_pinControlsButton = new QToolButton;
@@ -160,6 +161,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
             i18nc("Make the controls in the overview docker auto-hide or always visible", "Pin navigation controls")
         );
         m_pinControlsButton->setIcon(KisIconUtils::loadIcon("krita_tool_reference_images"));
+        m_pinControlsButton->setAutoRaise(true);
         connect(m_pinControlsButton, SIGNAL(toggled(bool)), SLOT(setPinControls(bool)));
 
         m_controlsSecondRowLayout->addWidget(m_rotateAngleSelector);

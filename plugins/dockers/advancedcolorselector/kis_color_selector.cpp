@@ -13,7 +13,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QTimer>
-#include <QPushButton>
+#include <QToolButton>
 #include <QApplication>
 
 #include <kconfig.h>
@@ -400,9 +400,9 @@ void KisColorSelector::init()
     m_wheel = new KisColorSelectorWheel(this);
 
     if(displaySettingsButton()) {
-        m_button = new QPushButton(this);
+        m_button = new QToolButton(this);
         m_button->setIcon(KisIconUtils::loadIcon("configure-thicker"));
-        m_button->setFlat(true);
+        m_button->setAutoRaise(true);
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
     }
 

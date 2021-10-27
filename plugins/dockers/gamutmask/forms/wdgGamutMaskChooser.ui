@@ -47,40 +47,40 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="bnMaskNew">
+       <widget class="QToolButton" name="bnMaskNew">
         <property name="toolTip">
          <string>Create new mask</string>
         </property>
         <property name="text">
          <string/>
         </property>
-        <property name="flat">
+        <property name="autoRaise">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="bnMaskEditor">
+       <widget class="QToolButton" name="bnMaskEditor">
         <property name="toolTip">
          <string>Edit selected mask</string>
         </property>
         <property name="text">
          <string/>
         </property>
-        <property name="flat">
+        <property name="autoRaise">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="bnMaskDuplicate">
+       <widget class="QToolButton" name="bnMaskDuplicate">
         <property name="toolTip">
          <string>Duplicate selected mask</string>
         </property>
         <property name="text">
          <string/>
         </property>
-        <property name="flat">
+        <property name="autoRaise">
          <bool>true</bool>
         </property>
        </widget>
@@ -99,14 +99,14 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="bnMaskDelete">
+       <widget class="QToolButton" name="bnMaskDelete">
         <property name="toolTip">
          <string>Delete selected mask</string>
         </property>
         <property name="text">
          <string/>
         </property>
-        <property name="flat">
+        <property name="autoRaise">
          <bool>true</bool>
         </property>
        </widget>
@@ -185,14 +185,14 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QPushButton" name="bnCancelMaskEdit">
+         <widget class="QToolButton" name="bnCancelMaskEdit">
           <property name="toolTip">
            <string>Cancel</string>
           </property>
           <property name="text">
            <string/>
           </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
@@ -211,7 +211,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="bnPreviewMask">
+         <widget class="QToolButton" name="bnPreviewMask">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -221,20 +221,20 @@
           <property name="text">
            <string/>
           </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="bnSaveMask">
+         <widget class="QToolButton" name="bnSaveMask">
           <property name="toolTip">
            <string>Save</string>
           </property>
           <property name="text">
            <string/>
           </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>

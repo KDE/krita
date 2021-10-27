@@ -10,7 +10,6 @@
 #include <QActionGroup>
 #include <QMenu>
 #include <QHBoxLayout>
-#include <QPushButton>
 #include <QListWidget>
 #include <QImage>
 

@@ -16,7 +16,7 @@ class KisColorSelectorRing;
 class KisColorSelectorComponent;
 class KisColorSelectorSimple;
 class KisColorSelectorWheel;
-class QPushButton;
+class QToolButton;
 class KisSignalCompressor;
 
 class KisColorSelector : public KisColorSelectorBase
@@ -66,7 +66,7 @@ private:
     KisColorSelectorSimple* m_slider;
     KisColorSelectorSimple* m_square;
     KisColorSelectorWheel* m_wheel;
-    QPushButton* m_button;
+    QToolButton* m_button;
     KisColorSelectorComponent* m_mainComponent;
     KisColorSelectorComponent* m_subComponent;
     KisColorSelectorComponent* m_grabbingComponent;

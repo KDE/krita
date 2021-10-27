@@ -14,7 +14,6 @@
 #include <QWidgetAction>
 #include <QLabel>
 #include <QLineEdit>
-#include <QPushButton>
 
 #include <KoResource.h>
 #include <KisTag.h>

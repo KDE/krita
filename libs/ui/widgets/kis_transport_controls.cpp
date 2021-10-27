@@ -9,7 +9,7 @@
 
 #include <QKeyEvent>
 #include <QHBoxLayout>
-#include <QPushButton>
+#include <QToolButton>
 
 #include "kis_debug.h"
 #include "kis_icon.h"
@@ -23,51 +23,57 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
 
-    buttonSkipBack = new QPushButton(KisIconUtils::loadIcon("prevkeyframe"), "", this);
+    buttonSkipBack = new QToolButton(this);
+    buttonSkipBack->setIcon(KisIconUtils::loadIcon("prevkeyframe"));
     buttonSkipBack->setToolTip(i18n("Skip Back"));
     buttonSkipBack->setIconSize(QSize(22, 22));
-    buttonSkipBack->setFlat(true);
     buttonSkipBack->setFocusPolicy(Qt::NoFocus);
+    buttonSkipBack->setAutoRaise(true);
     layout->addWidget(buttonSkipBack);
     connect(buttonSkipBack, SIGNAL(released()), this, SIGNAL(skipBack()));
 
-    buttonBack = new QPushButton(KisIconUtils::loadIcon("prevframe"), "", this);
+    buttonBack = new QToolButton(this);
+    buttonBack->setIcon(KisIconUtils::loadIcon("prevframe"));
     buttonBack->setToolTip(i18n("Back"));
     buttonBack->setIconSize(QSize(22, 22));
-    buttonBack->setFlat(true);
     buttonBack->setFocusPolicy(Qt::NoFocus);
+    buttonBack->setAutoRaise(true);
     layout->addWidget(buttonBack);
     connect(buttonBack, SIGNAL(released()), this, SIGNAL(back()));
 
-    buttonStop = new QPushButton(KisIconUtils::loadIcon("animation_stop"), "", this);
+    buttonStop = new QToolButton(this);
+    buttonStop->setIcon(KisIconUtils::loadIcon("animation_stop"));
     buttonStop->setToolTip(i18n("Stop"));
     buttonStop->setIconSize(QSize(22, 22));
-    buttonStop->setFlat(true);
     buttonStop->setFocusPolicy(Qt::NoFocus);
+    buttonStop->setAutoRaise(true);
     layout->addWidget(buttonStop);
     connect(buttonStop, SIGNAL(released()), this, SIGNAL(stop()));
 
-    buttonPlayPause = new QPushButton(KisIconUtils::loadIcon("animation_play"), "", this);
+    buttonPlayPause = new QToolButton(this);
+    buttonPlayPause->setIcon(KisIconUtils::loadIcon("animation_play"));
     buttonPlayPause->setToolTip(i18n("Play/Pause"));
     buttonPlayPause->setIconSize(QSize(22, 22));
-    buttonPlayPause->setFlat(true);
     buttonPlayPause->setFocusPolicy(Qt::NoFocus);
+    buttonPlayPause->setAutoRaise(true);
     layout->addWidget(buttonPlayPause);
     connect(buttonPlayPause, SIGNAL(released()), this, SIGNAL(playPause()));
 
-    buttonForward = new QPushButton(KisIconUtils::loadIcon("nextframe"), "", this);
+    buttonForward = new QToolButton(this);
+    buttonForward->setIcon(KisIconUtils::loadIcon("nextframe"));
     buttonForward->setToolTip(i18n("Forward"));
     buttonForward->setIconSize(QSize(22, 22));
-    buttonForward->setFlat(true);
     buttonForward->setFocusPolicy(Qt::NoFocus);
+    buttonForward->setAutoRaise(true);
     layout->addWidget(buttonForward);
     connect(buttonForward, SIGNAL(released()), this, SIGNAL(forward()));
 
-    buttonSkipForward = new QPushButton(KisIconUtils::loadIcon("nextkeyframe"), "", this);
+    buttonSkipForward = new QToolButton(this);
+    buttonSkipForward->setIcon(KisIconUtils::loadIcon("nextkeyframe"));
     buttonSkipForward->setToolTip(i18n("Skip Forward"));
     buttonSkipForward->setIconSize(QSize(22, 22));
-    buttonSkipForward->setFlat(true);
     buttonSkipForward->setFocusPolicy(Qt::NoFocus);
+    buttonSkipForward->setAutoRaise(true);
     layout->addWidget(buttonSkipForward);
     connect(buttonSkipForward, SIGNAL(released()), this, SIGNAL(skipForward()));
 

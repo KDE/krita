@@ -16,7 +16,6 @@
 
 #include <QWidget>
 
-#include <QPushButton>
 #include <QModelIndex>
 
 #include <KoResource.h>

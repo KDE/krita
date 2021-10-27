@@ -86,14 +86,11 @@ TasksetDockerDock::TasksetDockerDock( )
     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
     recordButton->setIcon(KisIconUtils::loadIcon("media-record"));
     recordButton->setCheckable(true);
-    recordButton->setFlat(true);
 
     clearButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    clearButton->setFlat(true);
 
     saveButton->setIcon(KisIconUtils::loadIcon("document-save-16"));
     saveButton->setEnabled(false);
-    saveButton->setFlat(true);
 
     chooserButton->setIcon(KisIconUtils::loadIcon("folder"));
     chooserButton->setAutoRaise(true);

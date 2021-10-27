@@ -373,7 +373,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="m_btnConvertCurrentColor">
+         <widget class="QToolButton" name="m_btnConvertCurrentColor">
           <property name="maximumSize">
            <size>
             <width>32</width>
@@ -389,10 +389,13 @@
           <property name="checkable">
            <bool>true</bool>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="m_btmShowBWConfiguration">
+         <widget class="QToolButton" name="m_btmShowBWConfiguration">
           <property name="maximumSize">
            <size>
             <width>32</width>
@@ -404,6 +407,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

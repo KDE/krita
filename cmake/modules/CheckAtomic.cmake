@@ -46,6 +46,7 @@ function(check_working_cxx_atomics64 varname)
 	std::atomic<uint64_t> x (0);
 	int main() {
 		uint64_t i = x.load(std::memory_order_relaxed);
+		x.is_lock_free();
 		return 0;
 	}
 	" ${varname})

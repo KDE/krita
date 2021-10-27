@@ -372,10 +372,8 @@ target_link_libraries(kritaimage
 
 target_link_libraries(kritaimage PUBLIC ${Boost_SYSTEM_LIBRARY})
 
-if(NOT HAVE_CXX_ATOMICS_WITHOUT_LIB)
-    if(NOT HAVE_CXX_ATOMICS64_WITHOUT_LIB)
-        target_link_libraries(kritaimage PUBLIC atomic)
-    endif()
+if(HAVE_CXX_ATOMICS_WITH_LIB OR HAVE_CXX_ATOMICS64_WITH_LIB)
+   target_link_libraries(kritaimage PUBLIC atomic)
 endif()
 
 if(OpenEXR_FOUND)

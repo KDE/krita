@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -89,7 +89,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="bnAddReferenceImage">
+      <widget class="QToolButton" name="bnAddReferenceImage">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -105,13 +105,13 @@
          <height>18</height>
         </size>
        </property>
-       <property name="flat">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="bnPasteReferenceImage">
+      <widget class="QToolButton" name="bnPasteReferenceImage">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -127,7 +127,7 @@
          <height>18</height>
         </size>
        </property>
-       <property name="flat">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
@@ -146,7 +146,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="bnLoad">
+      <widget class="QToolButton" name="bnLoad">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -162,13 +162,13 @@
          <height>18</height>
         </size>
        </property>
-       <property name="flat">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="bnSave">
+      <widget class="QToolButton" name="bnSave">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -184,10 +184,23 @@
          <height>18</height>
         </size>
        </property>
-       <property name="flat">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="bnDelete">
@@ -213,7 +226,7 @@
         </size>
        </property>
        <property name="flat">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>

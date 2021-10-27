@@ -385,6 +385,9 @@
              <property name="autoExclusive">
               <bool>true</bool>
              </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -1245,7 +1248,7 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="QPushButton" name="flipXButton">
+           <widget class="QToolButton" name="flipXButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1267,10 +1270,13 @@
             <property name="text">
              <string/>
             </property>
+            <property name="autoRaise">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="flipYButton">
+           <widget class="QToolButton" name="flipYButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1288,6 +1294,9 @@
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="autoRaise">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -1308,7 +1317,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="rotateCCWButton">
+           <widget class="QToolButton" name="rotateCCWButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1327,10 +1336,13 @@
             <property name="text">
              <string/>
             </property>
+            <property name="autoRaise">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="rotateCWButton">
+           <widget class="QToolButton" name="rotateCWButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1348,6 +1360,9 @@
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="autoRaise">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -2252,6 +2267,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
@@ -2261,12 +2282,6 @@
    <class>KisCmbIDList</class>
    <extends></extends>
    <header>widgets/kis_cmb_idlist.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisIntParseSpinBox</class>

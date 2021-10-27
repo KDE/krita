@@ -170,6 +170,7 @@ QWidget *SvgTextTool::createOptionWidget()
     QToolButton *alignLeft = new QToolButton();
     alignLeft->setIcon(KisIconUtils::loadIcon("format-justify-left"));
     alignLeft->setCheckable(true);
+    alignLeft->setAutoRaise(true);
 
     alignLeft->setToolTip(i18n("Anchor text to the left."));
     m_defAlignment->addButton(alignLeft, 0);
@@ -178,6 +179,7 @@ QWidget *SvgTextTool::createOptionWidget()
     QToolButton *alignCenter = new QToolButton();
     alignCenter->setIcon(KisIconUtils::loadIcon("format-justify-center"));
     alignCenter->setCheckable(true);
+    alignCenter->setAutoRaise(true);
     m_defAlignment->addButton(alignCenter, 1);
     alignCenter->setToolTip(i18n("Anchor text to the middle."));
 
@@ -186,6 +188,7 @@ QWidget *SvgTextTool::createOptionWidget()
     QToolButton *alignRight = new QToolButton();
     alignRight->setIcon(KisIconUtils::loadIcon("format-justify-right"));
     alignRight->setCheckable(true);
+    alignRight->setAutoRaise(true);
     m_defAlignment->addButton(alignRight, 2);
     alignRight->setToolTip(i18n("Anchor text to the right."));
     alignButtons->addWidget(alignRight);

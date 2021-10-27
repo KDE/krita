@@ -58,11 +58,13 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     m_saveButton = new QToolButton(this);
     m_saveButton->setToolTip(i18n("Save profile as..."));
     m_saveButton->setIcon(koIcon("document-save-16"));
+    m_saveButton->setAutoRaise(true);
     layout->addWidget(m_saveButton, 0, 1);
 
     m_removeButton = new QToolButton(this);
     m_removeButton->setToolTip(i18n("Remove profile"));
     m_removeButton->setIcon(koIcon("edit-delete"));
+    m_removeButton->setAutoRaise(true);
     layout->addWidget(m_removeButton, 0, 2);
 
     QGridLayout *detailsLayout = new QGridLayout();

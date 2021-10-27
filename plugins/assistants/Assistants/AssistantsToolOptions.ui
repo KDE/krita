@@ -206,7 +206,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QPushButton" name="loadAssistantButton">
+      <widget class="QToolButton" name="loadAssistantButton">
        <property name="toolTip">
         <string>Load Assistant Set</string>
        </property>
@@ -219,13 +219,13 @@
          <height>18</height>
         </size>
        </property>
-       <property name="flat">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="saveAssistantButton">
+      <widget class="QToolButton" name="saveAssistantButton">
        <property name="toolTip">
         <string>Save Assistant Set</string>
        </property>
@@ -238,7 +238,7 @@
          <height>18</height>
         </size>
        </property>
-       <property name="flat">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
@@ -268,7 +268,7 @@
         </size>
        </property>
        <property name="flat">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -284,15 +284,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisSliderSpinBox</class>
+   <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

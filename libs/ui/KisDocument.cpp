@@ -2035,6 +2035,9 @@ void KisDocument::slotConfigChanged()
     if (d->undoStack->undoLimit() != cfg.undoStackLimit()) {
         if (!d->undoStack->isClean()) {
             d->undoStack->clear();
+            // we set this because the document *has* changed, even though the
+            // undo history was purged.
+            setImageModifiedWithoutUndo();
         }
         d->undoStack->setUndoLimit(cfg.undoStackLimit());
     }

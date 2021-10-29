@@ -318,6 +318,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     // only apply color to the widget itself, not to the tooltip or something
     blendedStyle = "QWidget{color: " + blendedColor.name() + "}";
 
+    QString darkBGStyle = "QWidget{color: " + blendedColor.name() + "; background: " + backgroundColor.darker(105).name() + ";}";
+
     // what labels to change the color...
     startTitleLabel->setStyleSheet(blendedStyle);
     recentDocumentsLabel->setStyleSheet(blendedStyle);
@@ -326,8 +328,9 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLinkShortcut->setStyleSheet(blendedStyle);
     openFileShortcut->setStyleSheet(blendedStyle);
     clearRecentFilesLink->setStyleSheet(blendedStyle);
-    recentDocumentsListView->setStyleSheet(blendedStyle);
-    newsWidget->setStyleSheet(blendedStyle);
+
+    recentDocumentsListView->setStyleSheet(darkBGStyle);
+    newsWidget->setStyleSheet(darkBGStyle);
 
 #ifdef Q_OS_ANDROID
     blendedStyle = blendedStyle + "\nQPushButton { padding: 10px }";

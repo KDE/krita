@@ -179,12 +179,28 @@ Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
     }
 
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-    if (mainWindow) {
-        mainWindow->viewFullscreen(false);
+    if (mainWindow && mainWindow->isFullScreen()) {
+        // since, this calls KisConfig, we need to make sure it happens on that
+        // thread (we get here from the Android Main thread)
+        QMetaObject::invokeMethod(mainWindow, "viewFullscreen",
+                                  Qt::QueuedConnection, Q_ARG(bool, false));
         return true;
     } else {
         return false;
     }
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_org_krita_android_JNIWrappers_hasMainWindowLoaded(JNIEnv * /*env*/,
+                                                       jobject /*obj*/,
+                                                       jint /*n*/)
+{
+    if (!KisPart::exists()) {
+        return false;
+    }
+
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    return (bool)mainWindow;
 }
 
 extern "C" JNIEXPORT void JNICALL

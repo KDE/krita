@@ -93,6 +93,7 @@ private:
     QColor textColor;
     QColor backgroundColor;
     QColor blendedColor;
+    QColor shadedBgColor;
     QString blendedStyle;
 
 #ifdef ENABLE_UPDATERS
@@ -129,6 +130,14 @@ private Q_SLOTS:
     bool isDevelopmentBuild();
 
     QFont largerFont();
+
+    /**
+     * @brief quickStyleSheet creates a simple QWidget stylesheet using colors and other optional styles.
+     * @param fg foreground color.
+     * @param bg background color.
+     * @param otherStyles [optional] any other ';' separated styles that you'd like to inject.
+     */
+    QString quickStyleSheet(QColor fg, QColor bg, QString otherStyles = nullptr);
 };
 
 #endif // KISWELCOMEPAGEWIDGET_H

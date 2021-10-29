@@ -66,7 +66,6 @@
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 
-
 QPushButton* KisWelcomePageWidget::donationLink;
 QLabel* KisWelcomePageWidget::donationBannerImage;
 #endif
@@ -77,6 +76,7 @@ void ShowNewsAction::enableFromLink(QString unused_url)
     Q_UNUSED(unused_url);
     emit setChecked(true);
 }
+
 
 // class to override item height for Breeze since qss seems to not work
 class RecentItemDelegate : public QStyledItemDelegate
@@ -104,13 +104,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
-    labelNoRecentDocs->setVisible(false);
-    recentDocumentsListView->setDragEnabled(false);
-    recentDocumentsListView->viewport()->setAutoFillBackground(false);
-    recentDocumentsListView->setSpacing(2);
-    recentDocumentsListView->installEventFilter(this);
 
-    // set up URLs that go to web browser
+    // URLs that go to web browser...
     devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
     devBuildLabel->setVisible(false);
     updaterFrame->setVisible(false);
@@ -118,6 +113,27 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     bnVersionUpdate->setVisible(false);
     bnErrorDetails->setVisible(false);
 
+    // Recent docs...
+    labelNoRecentDocs->setVisible(false);
+    recentDocumentsListView->setDragEnabled(false);
+    recentDocumentsListView->viewport()->setAutoFillBackground(false);
+    recentDocumentsListView->setSpacing(2);
+    recentDocumentsListView->installEventFilter(this);
+
+    recentItemDelegate.reset(new RecentItemDelegate(this));
+    recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
+    recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
+    recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
+    recentDocumentsListView->setVerticalScrollMode(QListView::ScrollPerPixel);
+    recentDocumentsListView->verticalScrollBar()->setSingleStep(50);
+    {
+        QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(recentDocumentsListView);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
+
+    // News widget...
     QMenu *newsOptionsMenu = new QMenu(this);
     newsOptionsMenu->setToolTipsVisible(true);
     ShowNewsAction *showNewsAction = new ShowNewsAction(i18n("Enable news and check for new releases"));
@@ -144,7 +160,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif
 
 #ifdef Q_OS_ANDROID
-
     dragImageHereLabel->hide();
     newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -179,8 +194,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
         donationLink->show();
         donationBannerImage->hide();
     }
-
 #endif
+
 
     // configure the News area
     KisConfig cfg(true);
@@ -214,12 +229,10 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     } else {
         KisUsageLogger::log("detected appx or steam package - not creating the updater");
     }
-
 #else
 	// always create updater for MacOS
     m_versionUpdater.reset(new KisManualUpdater());
 #endif // Q_OS_*
-
 	if (!m_versionUpdater.isNull()) {
 		connect(bnVersionUpdate, SIGNAL(clicked()), this, SLOT(slotRunVersionUpdate()));
 		connect(bnErrorDetails, SIGNAL(clicked()), this, SLOT(slotShowUpdaterErrorDetails()));
@@ -233,23 +246,12 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif // ifndef Q_OS_ANDROID
 #endif // ENABLE_UPDATERS
 
+
     showNewsAction->setChecked(m_checkUpdates);
     newsWidget->setVisible(m_checkUpdates);
 
+    // Drop area..
     setAcceptDrops(true);
-
-    recentItemDelegate.reset(new RecentItemDelegate(this));
-    recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
-    recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
-    recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
-    recentDocumentsListView->setVerticalScrollMode(QListView::ScrollPerPixel);
-    recentDocumentsListView->verticalScrollBar()->setSingleStep(50);
-    {
-        QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(recentDocumentsListView);
-        if (scroller) {
-            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
-        }
-    }
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -308,7 +310,6 @@ void KisWelcomePageWidget::showDropAreaIndicator(bool show)
 
 void KisWelcomePageWidget::slotUpdateThemeColors()
 {
-
     textColor = qApp->palette().color(QPalette::Text);
     backgroundColor = qApp->palette().color(QPalette::Background);
 
@@ -335,11 +336,9 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLink->setStyleSheet(blendedStyle);
     openFileLink->setStyleSheet(blendedStyle);
 
-
     // giving the drag area messaging a dotted border
     QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name()).append("; color:").append(blendedColor.name()).append( ";");
     dragImageHereLabel->setStyleSheet(dottedBorderStyle);
-
 
     // make drop area QFrame have a dotted line
     dropFrameBorder->setObjectName("dropAreaIndicator");
@@ -409,7 +408,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 #ifdef ENABLE_UPDATERS
     updateVersionUpdaterFrame(); // updater frame
 #endif
-
 
 #ifdef Q_OS_ANDROID
     donationLink->setStyleSheet(blendedStyle);
@@ -715,7 +713,6 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
 
         if (m_versionUpdater->hasUpdateCapability()) {
             bnVersionUpdate->setVisible(true);
-//            bnVersionUpdate->setEnabled(true);
         } else {
             // build URL for label
             QString downloadLink = QString(" <a style=\"color: %1; text-decoration: underline\" href=\"%2?%3\">Download Krita %4</a>")
@@ -743,9 +740,6 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
         versionNotificationLabel->setVisible(true);
         bnErrorDetails->setVisible(true);
         updateIcon->setIcon(KisIconUtils::loadIcon("warning"));
-
-//        bnErrorDetails->setEnabled(true);
-
     } else if (m_updaterStatus.status() == UpdaterStatus::StatusID::RESTART_REQUIRED) {
         updaterFrame->setVisible(true);
         versionLabelText = QString("<b>%1</b> %2").arg(i18n("Restart is required.")).arg(m_updaterStatus.details());

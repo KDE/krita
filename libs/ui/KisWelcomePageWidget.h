@@ -18,6 +18,7 @@
 #include "ui_KisWelcomePage.h"
 #include <QStandardItemModel>
 #include <QScopedPointer>
+#include <QFont>
 
 #include "config-updaters.h"
 class RecentItemDelegate;
@@ -126,6 +127,8 @@ private Q_SLOTS:
 #endif
 
     bool isDevelopmentBuild();
+
+    QFont largerFont();
 };
 
 #endif // KISWELCOMEPAGEWIDGET_H

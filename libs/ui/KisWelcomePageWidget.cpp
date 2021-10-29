@@ -132,9 +132,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     setupNewsLangSelection(newsOptionsMenu);
     btnNewsOptions->setMenu(newsOptionsMenu);
 
-    QFont largerFont = font();
-    largerFont.setPointSizeF(largerFont.pointSizeF() * 1.1f);
-    labelSupportText->setFont(largerFont);
+    labelSupportText->setFont(largerFont());
 
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
@@ -482,9 +480,7 @@ void KisWelcomePageWidget::dragLeaveEvent(QDragLeaveEvent */*event*/)
 void KisWelcomePageWidget::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
-        QFont largerFont = font();
-        largerFont.setPointSizeF(largerFont.pointSizeF() * 1.1f);
-        labelSupportText->setFont(largerFont);
+        labelSupportText->setFont(largerFont());
     }
 }
 
@@ -768,6 +764,7 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
     }
 }
 #endif
+
 #ifdef Q_OS_ANDROID
 extern "C" JNIEXPORT void JNICALL
 Java_org_krita_android_JNIWrappers_donationSuccessful(JNIEnv* /*env*/,
@@ -778,3 +775,10 @@ Java_org_krita_android_JNIWrappers_donationSuccessful(JNIEnv* /*env*/,
     KisWelcomePageWidget::donationBannerImage->show();
 }
 #endif
+
+QFont KisWelcomePageWidget::largerFont()
+{
+    QFont larger = font();
+    larger.setPointSizeF(larger.pointSizeF() * 1.1f);
+    return larger;
+}

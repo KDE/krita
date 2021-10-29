@@ -157,7 +157,7 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
 {
     switch (value.type()) {
     case KisMetaData::Value::Invalid:
-        return &*Exiv2::Value::create(Exiv2::invalidTypeId);
+        return Exiv2::Value::create(Exiv2::invalidTypeId).release();
     case KisMetaData::Value::Variant: {
         return variantToExivValue(value.asVariant(), type);
     }

@@ -426,7 +426,6 @@ void KisWelcomePageWidget::slotStartDonationFlow()
 
 void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    //qDebug() << "dragEnterEvent formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
     showDropAreaIndicator(true);
     if (event->mimeData()->hasUrls() ||
         event->mimeData()->hasFormat("application/x-krita-node") ||
@@ -438,8 +437,6 @@ void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void KisWelcomePageWidget::dropEvent(QDropEvent *event)
 {
-    //qDebug() << "KisWelcomePageWidget::dropEvent() formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
-
     showDropAreaIndicator(false);
 
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
@@ -459,7 +456,6 @@ void KisWelcomePageWidget::dropEvent(QDropEvent *event)
 
 void KisWelcomePageWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    //qDebug() << "dragMoveEvent";
     m_mainWindow->dragMoveEvent(event);
     if (event->mimeData()->hasUrls() ||
         event->mimeData()->hasFormat("application/x-krita-node") ||
@@ -472,7 +468,6 @@ void KisWelcomePageWidget::dragMoveEvent(QDragMoveEvent *event)
 
 void KisWelcomePageWidget::dragLeaveEvent(QDragLeaveEvent */*event*/)
 {
-    //qDebug() << "dragLeaveEvent";
     showDropAreaIndicator(false);
     m_mainWindow->dragLeave();
 }

@@ -143,7 +143,12 @@ bool KisXMPIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType
     }
     // Serialize data
     std::string xmpPacket_;
-    Exiv2::XmpParser::encode(xmpPacket_, xmpData_);
+    try {
+        Exiv2::XmpParser::encode(xmpPacket_, xmpData_);
+    } catch (std::exception &e) {
+        warnMetaData << "Couldn't encode the data, error =" << e.what();
+        return false;
+    }
     // Save data into the IO device
     ioDevice->open(QIODevice::WriteOnly);
     if (headerType == KisMetaData::IOBackend::JpegHeader) {

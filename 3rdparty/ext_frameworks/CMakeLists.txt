@@ -185,6 +185,7 @@ set(ext_ki18n_PATCH_COMMAND
 if (WIN32)
 set(ext_ki18n_PATCH_COMMAND ${_ki18n_patch}
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-ki18n-fix-loading-catalogs-with-patched-gettext.patch
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-ki18n-Ensure-langenv-string-is-null-terminated.patch
 )
 endif()
 

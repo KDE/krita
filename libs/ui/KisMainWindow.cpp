@@ -1021,8 +1021,7 @@ void KisMainWindow::updateCaption()
         if (d->mdiArea->activeSubWindow() && d->mdiArea->activeSubWindow()->isMaximized() && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
             caption = "";
         }
-
-        if (d->readOnly) {
+        if (!doc->isReadWrite()) {
             caption += " " + i18n("Write Protected") + " ";
         }
 

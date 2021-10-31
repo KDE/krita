@@ -518,45 +518,113 @@ void KisView::dropEvent(QDropEvent *event)
 
     }
     else if (event->mimeData()->hasColor() || event->mimeData()->hasFormat("krita/x-colorsetentry")) {
-        if (image() && d->viewManager->activeDevice()) {
-            KisProcessingApplicator applicator(image(), d->viewManager->activeNode(),
-                                               KisProcessingApplicator::NONE,
-                                               KisImageSignalVector(),
-                                               kundo2_i18n("Flood Fill Layer"));
 
-            KisResourcesSnapshotSP resources =
-                new KisResourcesSnapshot(image(), d->viewManager->activeNode(), d->viewManager->canvasResourceProvider()->resourceManager());
-
-            if (event->mimeData()->hasColor()) {
-                resources->setFGColorOverride(KoColor(event->mimeData()->colorData().value<QColor>(), image()->colorSpace()));
-            } else {
-                QByteArray byteData = event->mimeData()->data("krita/x-colorsetentry");
-                KisSwatch s = KisSwatch::fromByteArray(byteData);
-                resources->setFGColorOverride(s.color());
-            }
-
-            KisProcessingVisitorSP visitor =
-                new FillProcessingVisitor(resources->image()->projection(),
-                                          QPoint(0, 0), // start position
-                                          selection(),
-                                          resources,
-                                          false, // fast mode
-                                          false,
-                                          true, // fill only selection,
-                                          false,
-                                          0, // feathering radius
-                                          0, // sizemod
-                                          80, // threshold,
-                                          false, // use unmerged
-                                          false // use bg
-                                          );
-
-            applicator.applyVisitor(visitor,
-                                    KisStrokeJobData::SEQUENTIAL,
-                                    KisStrokeJobData::EXCLUSIVE);
-
-            applicator.end();
+        if (!image()) {
+            return;
         }
+
+        // Cannot fill on non-painting layers (vector layer, clone layer, file layer, group layer)
+        if (d->viewManager->activeNode().isNull() ||
+            d->viewManager->activeNode()->inherits("KisShapeLayer") ||
+            d->viewManager->activeNode()->inherits("KisCloneLayer") ||
+            !d->viewManager->activeDevice()) {
+            showFloatingMessage(i18n("You cannot drag and drop colors on the selected layer type."), QIcon());
+            return;
+        }
+
+        // Cannot fill if the layer is not editable
+        if (!d->viewManager->activeNode()->isEditable()) {
+            QString message;
+            if (!d->viewManager->activeNode()->visible() && d->viewManager->activeNode()->userLocked()) {
+                message = i18n("Layer is locked and invisible.");
+            } else if (d->viewManager->activeNode()->userLocked()) {
+                message = i18n("Layer is locked.");
+            } else if(!d->viewManager->activeNode()->visible()) {
+                message = i18n("Layer is invisible.");
+            }
+            showFloatingMessage(message, KisIconUtils::loadIcon("object-locked"));
+            return;
+        }
+
+        // The cursor is outside the image
+        if (!image()->wrapAroundModePermitted() && !image()->bounds().contains(cursorPos)) {
+            return;
+        }
+
+        KisProcessingApplicator applicator(image(), d->viewManager->activeNode(),
+                                            KisProcessingApplicator::NONE,
+                                            KisImageSignalVector(),
+                                            kundo2_i18n("Flood Fill Layer"));
+
+        KisResourcesSnapshotSP resources =
+            new KisResourcesSnapshot(image(), d->viewManager->activeNode(), d->viewManager->canvasResourceProvider()->resourceManager());
+
+        if (event->mimeData()->hasColor()) {
+            resources->setFGColorOverride(KoColor(event->mimeData()->colorData().value<QColor>(), image()->colorSpace()));
+        } else {
+            QByteArray byteData = event->mimeData()->data("krita/x-colorsetentry");
+            KisSwatch s = KisSwatch::fromByteArray(byteData);
+            resources->setFGColorOverride(s.color());
+        }
+
+        // Use same options as the fill tool
+        KConfigGroup configGroup = KSharedConfig::openConfig()->group("KritaFill/KisToolFill");
+        const bool useFastMode = configGroup.readEntry("useFastMode", false);
+        const int thresholdAmount = configGroup.readEntry("thresholdAmount", 8);
+        const int growSelection = configGroup.readEntry("growSelection", 0);
+        const int featherAmount = configGroup.readEntry("featherAmount", 0);
+        const bool fillSelectionOnly = configGroup.readEntry("fillSelection", false)
+                                       || (event->keyboardModifiers() & Qt::AltModifier);
+        const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
+        const QString SAMPLE_LAYERS_MODE_CURRENT = {"currentLayer"};
+        const QString SAMPLE_LAYERS_MODE_ALL = {"allLayers"};
+        const QString SAMPLE_LAYERS_MODE_COLOR_LABELED = {"colorLabeledLayers"};
+        QString sampleLayersMode;
+        if (configGroup.hasKey("sampleLayersMode")) {
+            sampleLayersMode = configGroup.readEntry("sampleLayersMode", SAMPLE_LAYERS_MODE_CURRENT);
+        } else { // if neither option is present in the configuration, it will fall back to CURRENT
+            bool sampleMerged = configGroup.readEntry("sampleMerged", false);
+            sampleLayersMode = sampleMerged ? SAMPLE_LAYERS_MODE_ALL : SAMPLE_LAYERS_MODE_CURRENT;
+        }
+        // If the sample layer mode is other than SAMPLE_LAYERS_MODE_ALL just
+        // default to SAMPLE_LAYERS_MODE_CURRENT. This means that
+        // SAMPLE_LAYERS_MODE_COLOR_LABELED is not supported yet since the color
+        // labels are not stored in the config
+        // TODO: make this work with color labels or reference layers in the future
+        if (sampleLayersMode != SAMPLE_LAYERS_MODE_ALL) {
+            sampleLayersMode = SAMPLE_LAYERS_MODE_CURRENT;
+        }
+
+        KisPaintDeviceSP referencePaintDevice = nullptr;
+        if (sampleLayersMode == SAMPLE_LAYERS_MODE_ALL) {
+            referencePaintDevice = image()->projection();
+        } else if (sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT) {
+            referencePaintDevice = d->viewManager->activeNode()->paintDevice();
+        }
+        KIS_ASSERT(referencePaintDevice);
+                                            
+        KisProcessingVisitorSP visitor =
+            new FillProcessingVisitor(
+                referencePaintDevice,
+                cursorPos, // start position
+                selection(),
+                resources,
+                useFastMode, // fast mode
+                false,
+                fillSelectionOnly, // fill only selection,
+                useSelectionAsBoundary,
+                featherAmount, // feathering radius
+                growSelection, // sizemod
+                thresholdAmount, // threshold,
+                false, // use unmerged
+                false // use bg
+            );
+
+        applicator.applyVisitor(visitor,
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
+        applicator.end();
     }
 }
 

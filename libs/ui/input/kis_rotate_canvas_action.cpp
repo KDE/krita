@@ -27,6 +27,7 @@ public:
     qreal previousAngle;
     qreal startRotation;
     qreal previousRotation;
+    bool updatedRotation;
 };
 
 
@@ -85,6 +86,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
             d->mode = (Shortcut)shortcut;
             d->startRotation = inputManager()->canvas()->rotationAngle();
             d->previousRotation = 0;
+            d->updatedRotation = false;
             break;
         case RotateLeftShortcut:
             canvasController->rotateCanvasLeft15();
@@ -114,7 +116,8 @@ void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const Q
         const qreal angleStep = 15;
 
         // avoid jumps at the beginning of the rotation action
-        if (qAbs(newRotation) > 0.5 * angleStep) {
+        if (qAbs(newRotation) > 0.5 * angleStep || d->updatedRotation) {
+            d->updatedRotation = true;
             const qreal currentCanvasRotation = converter->rotationAngle();
             const qreal desiredOffset = newRotation - d->previousRotation;
             newRotation = qRound((currentCanvasRotation + desiredOffset) / angleStep) * angleStep - currentCanvasRotation + d->previousRotation;

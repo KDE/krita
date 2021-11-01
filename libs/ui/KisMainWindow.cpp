@@ -224,7 +224,6 @@ public:
 
     bool firstTime {true};
     bool windowSizeDirty {false};
-    bool readOnly {false};
 
     KisAction *showDocumentInfo {0};
     KisAction *saveAction {0};
@@ -929,7 +928,6 @@ void KisMainWindow::setReadWrite(bool readwrite)
 {
     d->saveAction->setEnabled(readwrite);
     d->importFile->setEnabled(readwrite);
-    d->readOnly = !readwrite;
     updateCaption();
 }
 

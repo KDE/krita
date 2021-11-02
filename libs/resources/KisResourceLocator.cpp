@@ -568,7 +568,6 @@ bool KisResourceLocator::removeStorage(const QString &storageLocation)
 {
     // Cloned documents have a document storage, but that isn't in the locator.
     if (!d->storages.contains(storageLocation)) {
-        qDebug() << storageLocation << "does not exist";
         return true;
     }
 
@@ -698,7 +697,6 @@ void KisResourceLocator::saveTags()
 
         f.close();
 
-        qDebug() << tag.name() << tag.url() << f.fileName();
     } while (query.next());
 }
 

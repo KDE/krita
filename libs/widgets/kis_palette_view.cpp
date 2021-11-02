@@ -247,7 +247,7 @@ void KisPaletteView::resizeRows(int newSize)
 
 void KisPaletteView::saveModification()
 {
-    qDebug() << "saving modification in palette view" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
+    //qDebug() << "saving modification in palette view" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
     KisResourceUserOperations::updateResourceWithUserInput(this, m_d->model->colorSet());
 }
 

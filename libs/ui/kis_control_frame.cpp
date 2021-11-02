@@ -241,9 +241,9 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
         m_gradientChooser->setCurrentResource(resources[0]);
     }
 
-    if (m_gradientChooser->currentResource() && view->canvasResourceProvider())
+    if (m_gradientChooser->currentResource() && view->canvasResourceProvider()) {
         view->canvasResourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
-
+    }
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
 
 }

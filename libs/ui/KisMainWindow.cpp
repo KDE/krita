@@ -1020,7 +1020,7 @@ void KisMainWindow::updateCaption()
             caption = "";
         }
 
-        if (d->readOnly) {
+        if (!doc->isReadWrite()) {
             caption += " " + i18n("Write Protected") + " ";
         }
 

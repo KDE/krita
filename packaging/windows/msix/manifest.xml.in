@@ -3,7 +3,7 @@
   <!-- NOTE: The Publisher attr needs to match the code signing certificate. -->
   <Identity Name="49800KritaProject.Krita" Publisher="CN=03E730BB-6849-4762-9BDB-10CD7FFDB2C1" Version="@KRITA_STABLE_VERSION_MAJOR@.@KRITA_STABLE_VERSION_MINOR@.@KRITA_VERSION_RELEASE@.@KRITA_VERSION_REVISION@" ProcessorArchitecture="x64" />
   <Properties>
-    <DisplayName>Krita</DisplayName>
+    <DisplayName>Krita@MSIX_DISPLAY_NAME_SUFFIX@</DisplayName>
     <PublisherDisplayName>Krita</PublisherDisplayName>
     <Description>Digital Painting, Creative Freedom!</Description>
     <Logo>Assets\StoreLogo.png</Logo>

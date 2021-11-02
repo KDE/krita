@@ -325,6 +325,8 @@ public:
 
     static KisBrushSP fromXML(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
+    static KoResourceLoadResult fromXMLLoadResult(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
+
     virtual QPainterPath outline() const;
 
     virtual void setScale(qreal _scale);

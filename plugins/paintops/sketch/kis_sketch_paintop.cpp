@@ -29,6 +29,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_dab_cache.h>
 #include "kis_lod_transform.h"
+#include <KoResourceLoadResult.h>
 
 
 #include <QtGlobal>
@@ -86,7 +87,7 @@ KisSketchPaintOp::~KisSketchPaintOp()
     delete m_dabCache;
 }
 
-QList<KoResourceSP> KisSketchPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisSketchPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushOptionProperties brushOption;
     return brushOption.prepareLinkedResources(settings, resourcesInterface);

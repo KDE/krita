@@ -29,6 +29,7 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KisResourceTypes.h>
+#include <KisResourceModel.h>
 #include <kis_annotation.h>
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
@@ -200,26 +201,30 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
         QString path = RESOURCE_PATH;
 
         if (resource->resourceType().first == ResourceType::Palettes) {
-            // Ensure stored palettes are KPL.
-            resource.dynamicCast<KoColorSet>()->setPaletteType(KoColorSet::KPL);
             path = m_d->imageName + PALETTE_PATH;
         }
+
         if (!store->open(path  + '/' + resource->filename())) {
             m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not open resource for writing.");
             brokenResources << resource->filename();
             continue;
         }
 
+        // we first read into a buffer to make sure the save operation is transactional,
+        // that is, either resource is saves correctly, or the file is left empty.
         QByteArray ba;
         QBuffer buf(&ba);
         buf.open(QBuffer::WriteOnly);
-        bool savingSucceeded = resource->saveToDevice(&buf);
+
+        KisResourceModel model(resource->resourceType().first);
+        bool savingSucceeded = model.exportResource(resource, &buf);
+        buf.close();
+
         if (!savingSucceeded) {
             m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save resource %1 to the kra file.", resource->name());
             brokenResources << resource->filename();
             continue;;
         }
-        buf.close();
 
         qint64 nwritten = 0;
         if (!ba.isEmpty()) {
@@ -320,18 +325,10 @@ void KisKraSaver::saveResourcesToXML(QDomDocument &doc, QDomElement &element)
     QDomElement eResources = doc.createElement(RESOURCES);
 
     Q_FOREACH (const KoResourceSP resource, m_d->doc->linkedDocumentResources()) {
+        KIS_SAFE_ASSERT_RECOVER(resource->isSerializable()) {continue;}
+
         if (!resource->active()) {
             continue;
-        }
-        QByteArray ba;
-        QBuffer buf(&ba);
-        buf.open(QBuffer::WriteOnly);
-        bool r = resource->saveToDevice(&buf);
-        buf.close();
-
-        if (ba.isEmpty() || !r) {
-            dbgFile << "Could not save resource" << resource->name() << "so it will not be in the document." << ba.isEmpty() << r;
-            continue; // This resource is broken.
         }
 
         QDomElement eResource = doc.createElement("resource");

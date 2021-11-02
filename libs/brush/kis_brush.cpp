@@ -412,15 +412,26 @@ void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
 
 KisBrushSP KisBrush::fromXML(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
 {
-    KisBrushSP brush = KisBrushRegistry::instance()->createBrush(element, resourcesInterface);
+    KoResourceLoadResult result = fromXMLLoadResult(element, resourcesInterface);
+
+    KisBrushSP brush = result.resource().dynamicCast<KisBrush>();
+    if (!brush) {
+        QDomElement el;
+        brush = KisBrushRegistry::instance()->get("auto_brush")->createBrush(el, resourcesInterface).resource().dynamicCast<KisBrush>();
+    }
+    return brush;
+}
+
+KoResourceLoadResult KisBrush::fromXMLLoadResult(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
+{
+    KoResourceLoadResult result = KisBrushRegistry::instance()->createBrush(element, resourcesInterface);
+
+    KisBrushSP brush = result.resource().dynamicCast<KisBrush>();
     if (brush && element.attribute("BrushVersion", "1") == "1") {
         brush->setScale(brush->scale() * 2.0);
     }
-    if (!brush) {
-        QDomElement el;
-        brush = KisBrushRegistry::instance()->get("auto_brush")->createBrush(el, resourcesInterface);
-    }
-    return brush;
+
+    return result;
 }
 
 QSizeF KisBrush::characteristicSize(KisDabShape const& shape) const

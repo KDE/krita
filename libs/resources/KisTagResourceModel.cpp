@@ -536,6 +536,20 @@ KoResourceSP KisTagResourceModel::importResourceFile(const QString &filename, co
     return resourceModel.importResourceFile(filename, allowOverwrite, storageId);
 }
 
+KoResourceSP KisTagResourceModel::importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId)
+{
+    // Since we're importing the resource, there's no reason to add rows to the tags::resources table,
+    // because the resource is untagged.
+    KisResourceModel resourceModel(d->resourceType);
+    return resourceModel.importResource(filename, device, allowOverwrite, storageId);
+}
+
+bool KisTagResourceModel::exportResource(KoResourceSP resource, QIODevice *device)
+{
+    KisResourceModel resourceModel(d->resourceType);
+    return resourceModel.exportResource(resource, device);
+}
+
 bool KisTagResourceModel::addResource(KoResourceSP resource, const QString &storageId)
 {
     // Since we're importing the resource, there's no reason to add rows to the tags::resources table,

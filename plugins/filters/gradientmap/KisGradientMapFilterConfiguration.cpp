@@ -9,9 +9,12 @@
 
 #include <QDomDocument>
 
+#include <KoResourceLoadResult.h>
 #include <KoStopGradient.h>
 #include <KoAbstractGradient.h>
 #include <KisDitherWidget.h>
+#include <QBuffer>
+#include <KoMD5Generator.h>
 
 #include "KisGradientMapFilterConfiguration.h"
 
@@ -32,15 +35,20 @@ KisFilterConfigurationSP KisGradientMapFilterConfiguration::clone() const
     return new KisGradientMapFilterConfiguration(*this);
 }
 
-QList<KoResourceSP> KisGradientMapFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisGradientMapFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    QList<KoResourceSP> resources;
+    QList<KoResourceLoadResult> resources;
 
     // only the first version of the filter loaded the gradient by name
     if (version() == 1) {
         KoAbstractGradientSP gradient = this->gradient();
         if (gradient) {
             resources << gradient;
+        } else {
+            QString md5sum = this->getString("md5sum");
+            QString gradientName = this->getString("gradientName");
+
+            resources << KoResourceSignature(ResourceType::Gradients, md5sum, "", gradientName);
         }
     }
 
@@ -49,17 +57,18 @@ QList<KoResourceSP> KisGradientMapFilterConfiguration::linkedResources(KisResour
     return resources;
 }
 
-QList<KoResourceSP> KisGradientMapFilterConfiguration::embeddedResources(KisResourcesInterfaceSP) const
+QList<KoResourceLoadResult> KisGradientMapFilterConfiguration::embeddedResources(KisResourcesInterfaceSP) const
 {
-    QList<KoResourceSP> resources;
+    QList<KoResourceLoadResult> resources;
 
     // the second version of the filter embeds the gradient
     if (version() > 1) {
         KoAbstractGradientSP gradient = this->gradient();
 
-        if (gradient) {
-            resources << gradient;
-        }
+        // TODO: check if it is okay to resave the gradient on loading
+        QBuffer buffer;
+        gradient->saveToDevice(&buffer);
+        resources << KoEmbeddedResource(KoResourceSignature(ResourceType::Gradients, KoMD5Generator::generateHash(buffer.data()), gradient->filename(), gradient->name()), buffer.data());
     }
 
     return resources;

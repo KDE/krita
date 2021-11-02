@@ -284,12 +284,20 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
         bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), createPrettyFilenameFromName(res));
 
-        QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
-        if (!linkedResources.isEmpty()) {
-            Q_FOREACH(KoResourceSP resource, linkedResources) {
-                if (!allResourcesIds.contains(resource->resourceId())) {
-                    allResourcesIds.append(resource->resourceId());
-                }
+        QList<KoResourceLoadResult> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
+        Q_FOREACH(KoResourceLoadResult linkedResource, linkedResources) {
+            // we have requested linked resources, how can it be an embedded one?
+            KIS_SAFE_ASSERT_RECOVER(linkedResource.type() != KoResourceLoadResult::EmbeddedResource) { continue; }
+
+            KoResourceSP resource = linkedResource.resource();
+
+            if (!resource) {
+                qWarning() << "WARNING: DlgCreateBundle::putResourcesInTheBundle couldn't fetch a linked resource" << linkedResource.signature();
+                continue;
+            }
+
+            if (!allResourcesIds.contains(resource->resourceId())) {
+                allResourcesIds.append(resource->resourceId());
             }
         }
     }

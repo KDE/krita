@@ -170,18 +170,18 @@ KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisR
     return KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisFilterConfigurationSP>(this, globalResourcesInterface);
 }
 
-QList<KoResourceSP> KisFilterConfiguration::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisFilterConfiguration::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     return linkedResources(globalResourcesInterface) + embeddedResources(globalResourcesInterface);
 }
 
-QList<KoResourceSP> KisFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     Q_UNUSED(globalResourcesInterface);
     return {};
 }
 
-QList<KoResourceSP> KisFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     Q_UNUSED(globalResourcesInterface);
     return {};

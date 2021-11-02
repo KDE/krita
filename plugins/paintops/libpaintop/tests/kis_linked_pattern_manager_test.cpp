@@ -18,6 +18,7 @@
 #include <KisResourceServerProvider.h>
 #include <KisGlobalResourcesInterface.h>
 #include <KoResourceServerProvider.h>
+#include <KoResourceLoadResult.h>
 
 #include "sdk/tests/testresources.h"
 
@@ -46,7 +47,7 @@ void KisLinkedPatternManagerTest::testRoundTrip()
 
     KisLinkedPatternManager::saveLinkedPattern(config, pattern);
 
-    KoPatternSP newPattern = KisLinkedPatternManager::loadLinkedPattern(config, KisGlobalResourcesInterface::instance());
+    KoPatternSP newPattern = KisLinkedPatternManager::loadLinkedPattern(config, KisGlobalResourcesInterface::instance()).resource().dynamicCast<KoPattern>();
 
     QCOMPARE(newPattern->pattern(), pattern->pattern());
     QCOMPARE(newPattern->name(), pattern->name());
@@ -135,7 +136,7 @@ void KisLinkedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool has
     KisPropertiesConfigurationSP setting = createXML(nameStatus, hasMd5);
 
 
-    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, KisGlobalResourcesInterface::instance());
+    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, KisGlobalResourcesInterface::instance()).resource().dynamicCast<KoPattern>();
 
     QVERIFY(pattern);
     QCOMPARE(pattern->pattern(), basePattern->pattern());

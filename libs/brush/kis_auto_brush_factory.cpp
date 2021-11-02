@@ -13,8 +13,10 @@
 #include "kis_auto_brush.h"
 #include "kis_mask_generator.h"
 #include <kis_dom_utils.h>
+#include <KoResourceLoadResult.h>
 
-KisBrushSP KisAutoBrushFactory::createBrush(const QDomElement &brushDefinition, KisResourcesInterfaceSP resourcesInterface)
+
+KoResourceLoadResult KisAutoBrushFactory::createBrush(const QDomElement &brushDefinition, KisResourcesInterfaceSP resourcesInterface)
 {
     Q_UNUSED(resourcesInterface);
 

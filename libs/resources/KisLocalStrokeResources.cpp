@@ -15,7 +15,8 @@ class LocalResourcesSource : public KisResourcesInterface::ResourceSourceAdapter
 {
 public:
     LocalResourcesSource(const QString &resourceType, const QList<KoResourceSP> &cachedResources)
-        : m_resourceType(resourceType)
+        : KisResourcesInterface::ResourceSourceAdapter(resourceType)
+        , m_resourceType(resourceType)
         , m_cachedResources(cachedResources)
     {
     }

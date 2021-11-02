@@ -9,6 +9,7 @@
 #include "kritaresources_export.h"
 
 #include <KisResourcesInterface.h>
+#include <KoResourceLoadResult.h>
 #include "kis_assert.h"
 
 #include "kis_pointer_utils.h"
@@ -49,10 +50,27 @@ template <typename T>
 void createLocalResourcesSnapshot(T *object, KisResourcesInterfaceSP globalResourcesInterface = nullptr)
 {
     detail::assertInGuiThread();
-    QList<KoResourceSP> resources =
+    QList<KoResourceLoadResult> loadedResource =
         object->requiredResources(globalResourcesInterface ?
                                       globalResourcesInterface :
                                       object->resourcesInterface());
+
+    // TODO: move to .cpp file!
+    QList<KoResourceSP> resources;
+
+    Q_FOREACH(const KoResourceLoadResult &res, loadedResource) {
+        switch (res.type()) {
+        case KoResourceLoadResult::ExistingResource:
+            resources << res.resource();
+            break;
+        case KoResourceLoadResult::EmbeddedResource:
+            qWarning() << "createLocalResourcesSnapshot: resource is not present in the server:" << res.signature();
+            break;
+        case KoResourceLoadResult::FailedLink:
+            qWarning() << "createLocalResourcesSnapshot: failed to load a linked resource:" << res.signature();
+            break;
+        }
+    }
 
     object->setResourcesInterface(detail::createLocalResourcesStorage(resources));
 }

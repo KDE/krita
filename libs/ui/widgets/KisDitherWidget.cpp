@@ -17,6 +17,7 @@
 #include <KoPattern.h>
 #include <kis_properties_configuration.h>
 #include "KisDitherUtil.h"
+#include <KoResourceLoadResult.h>
 
 KisDitherWidget::KisDitherWidget(QWidget* parent)
     : QWidget(parent), Ui::KisDitherWidget()
@@ -80,13 +81,12 @@ void KisDitherWidget::factoryConfiguration(KisPropertiesConfiguration &config, c
     config.setProperty(prefix + "spread", 1.0);
 }
 
-QList<KoResourceSP> KisDitherWidget::prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisDitherWidget::prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface)
 {
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
 
     QString patternMD5 = config.getString(prefix + "md5sum");
     QString patternName = config.getString(prefix + "pattern");
-    KoPatternSP pattern = source.bestMatch(patternMD5, "", patternName);
 
-    return {pattern};
+    return {source.bestMatchLoadResult(patternMD5, "", patternName)};
 }

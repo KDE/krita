@@ -22,6 +22,7 @@
 #include <kis_random_generator.h>
 #include <KisDitherUtil.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KoResourceLoadResult.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PalettizeFactory, "kritapalettize.json", registerPlugin<Palettize>();)
 
@@ -55,7 +56,7 @@ public:
         return new KisFilterPalettizeConfiguration(*this);
     }
 
-    KoColorSetSP palette(KisResourcesInterfaceSP resourcesInterface) const
+    KoResourceLoadResult palette(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoColorSet>(ResourceType::Palettes);
         const QString md5sum = this->getString("md5sum");
@@ -68,17 +69,14 @@ public:
 
     KoColorSetSP palette() const
     {
-        return palette(resourcesInterface());
+        return palette(resourcesInterface()).resource().dynamicCast<KoColorSet>();
     }
 
-    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
-        KoColorSetSP palette = this->palette(globalResourcesInterface);
 
-        QList<KoResourceSP> resources;
-        if (palette) {
-            resources << palette;
-        }
+        QList<KoResourceLoadResult> resources;
+        resources << this->palette(globalResourcesInterface);
 
         resources << KisDitherWidget::prepareLinkedResources(*this, "dither/", globalResourcesInterface);
         resources << KisDitherWidget::prepareLinkedResources(*this, "alphaDither/", globalResourcesInterface);

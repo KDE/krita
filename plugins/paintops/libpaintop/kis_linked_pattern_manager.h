@@ -19,9 +19,9 @@ class PAINTOP_EXPORT KisLinkedPatternManager
 {
 public:
     static void saveLinkedPattern(KisPropertiesConfigurationSP setting, const KoPatternSP pattern);
-    static KoPatternSP loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    static KoResourceLoadResult loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 
-    static KoPatternSP tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    static KoResourceLoadResult tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 private:
     struct Private;
 };

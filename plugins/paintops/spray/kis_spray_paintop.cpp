@@ -27,6 +27,7 @@
 #include <kis_color_option.h>
 #include <kis_lod_transform.h>
 #include <kis_paintop_plugin_utils.h>
+#include <KoResourceLoadResult.h>
 
 
 KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
@@ -85,7 +86,7 @@ KisSprayPaintOp::~KisSprayPaintOp()
 {
 }
 
-QList<KoResourceSP> KisSprayPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisSprayPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushOptionProperties brushOption;
     return brushOption.prepareLinkedResources(settings, resourcesInterface);

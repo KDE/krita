@@ -123,7 +123,7 @@ bool KoResourceBundle::loadFromDevice(QIODevice *)
     return false;
 }
 
-bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &resType)
+bool saveResourceToStore(const QString &filename, KoResourceSP resource, KoStore *store, const QString &resType, KisResourceModel &model)
 {
     if (!resource) {
         qWarning() << "No Resource";
@@ -139,17 +139,16 @@ bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &r
         return false;
     }
 
-    QByteArray ba;
     QBuffer buf;
     buf.open(QFile::ReadWrite);
 
-    bool response = resource->saveToDevice(&buf);
+    bool response = model.exportResource(resource, &buf);
     if (!response) {
         ENTER_FUNCTION() << "Cannot save to device";
         return false;
     }
 
-    if (!store->open(resType + "/" + resource->filename())) {
+    if (!store->open(resType + "/" + filename)) {
         qWarning() << "Could not open file in store for resource";
         return false;
     }
@@ -161,6 +160,9 @@ bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &r
         qWarning() << "Cannot save resource to the store" << size << buf.size();
         return false;
     }
+
+    // TODO: we are exporting the resource with the original filename, so the
+    //       thumbnail path might be incorrect! It affects MyPaint brushes only.
 
     if (!resource->thumbnailPath().isEmpty()) {
         // hack for MyPaint brush presets previews
@@ -213,16 +215,9 @@ bool KoResourceBundle::save()
                 qWarning() << "Could not find resource" << resType << ref.resourceId << ref.md5sum << ref.resourcePath;
                 continue;
             }
-            KoResourceSP resCloned = res->clone();
-            resCloned->setFilename(ref.filenameInBundle); // remove the versioning, name change etc.
 
-            if (!saveResourceToStore(resCloned, store.data(), resType)) {
-                if (resCloned) {
-                    qWarning() << "Could not save resource" << resType << resCloned->name();
-                }
-                else {
-                    qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
-                }
+            if (!saveResourceToStore(ref.filenameInBundle, res, store.data(), resType, model)) {
+                qWarning() << "Could not save resource" << resType << res->name();
             }
         }
     }
@@ -531,7 +526,7 @@ QString KoResourceBundle::resourceMd5(const QString &url)
         return result;
     }
 
-    result = KoMD5Generator::generateHash(resourceStore->device()->readAll());
+    result = KoMD5Generator::generateHash(resourceStore->device());
     resourceStore->close();
 
     return result;

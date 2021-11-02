@@ -38,6 +38,7 @@
 #include <KisStorageModel.h>
 #include <KoMD5Generator.h>
 #include <KisIODeviceOffsetGuard.h>
+#include <KoResourceLoadResult.h>
 
 #include "ResourceDebug.h"
 
@@ -171,11 +172,24 @@ QImage KisResourceLocator::thumbnailCached(QString storageLocation, const QStrin
 
 void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 {
-    QList<KoResourceSP> requiredResources = resource->requiredResources(KisGlobalResourcesInterface::instance());
-    Q_FOREACH (KoResourceSP res, requiredResources) {
-        if (res->resourceId() < 0) {
-            // we put all the embedded resources into the global shared "memory" storage
-            this->addResource(res->resourceType().first, res, "memory");
+    QList<KoResourceLoadResult> requiredResources = resource->requiredResources(KisGlobalResourcesInterface::instance());
+
+    Q_FOREACH (KoResourceLoadResult res, requiredResources) {
+        switch (res.type())
+        {
+        case KoResourceLoadResult::ExistingResource:
+            KIS_SAFE_ASSERT_RECOVER_NOOP(res.resource()->resourceId() >= 0);
+            break;
+        case KoResourceLoadResult::EmbeddedResource: {
+            KoResourceSignature sig = res.embeddedResource().signature();
+            QByteArray data = res.embeddedResource().data();
+            QBuffer buffer(&data);
+            importResource(sig.type, sig.filename, &buffer, false, "memory");
+            break;
+        }
+        case KoResourceLoadResult::FailedLink:
+            qWarning() << "Failed to load linked resource:" << res.signature();
+            break;
         }
     }
 }

@@ -11,6 +11,7 @@
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_icon.h>
 #include <KisCppQuirks.h>
+#include <KoResourceLoadResult.h>
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
@@ -49,7 +50,7 @@ template< class T >
 struct has_prepare_linked_resources<T, std::void_t<decltype(std::declval<T>().prepareLinkedResources(KisPaintOpSettingsSP(),KisResourcesInterfaceSP()))>> : std::true_type { };
 
 template <typename T>
-QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings,
+QList<KoResourceLoadResult> prepareLinkedResources(const KisPaintOpSettingsSP settings,
                                            KisResourcesInterfaceSP resourcesInterface,
                                            std::enable_if_t<has_prepare_linked_resources<T>::value> * = 0)
 {
@@ -57,7 +58,7 @@ QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings,
 }
 
 template <typename T>
-QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings,
+QList<KoResourceLoadResult> prepareLinkedResources(const KisPaintOpSettingsSP settings,
                                            KisResourcesInterfaceSP resourcesInterface,
                                            std::enable_if_t<!has_prepare_linked_resources<T>::value> * = 0)
 {
@@ -75,17 +76,17 @@ template< class T >
 struct has_prepare_embedded_resources<T, std::void_t<decltype(std::declval<T>().prepareEmbeddedResources(KisPaintOpSettingsSP(),KisResourcesInterfaceSP()))>> : std::true_type { };
 
 template <typename T>
-QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,
-                                             KisResourcesInterfaceSP resourcesInterface,
-                                             std::enable_if_t<has_prepare_embedded_resources<T>::value> * = 0)
+QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,
+                                                     KisResourcesInterfaceSP resourcesInterface,
+                                                     std::enable_if_t<has_prepare_embedded_resources<T>::value> * = 0)
 {
     return T::prepareEmbeddedResources(settings, resourcesInterface);
 }
 
 template <typename T>
-QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,
-                                             KisResourcesInterfaceSP resourcesInterface,
-                                             std::enable_if_t<!has_prepare_embedded_resources<T>::value> * = 0)
+QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,
+                                                     KisResourcesInterfaceSP resourcesInterface,
+                                                     std::enable_if_t<!has_prepare_embedded_resources<T>::value> * = 0)
 {
     Q_UNUSED(settings);
     Q_UNUSED(resourcesInterface);
@@ -153,11 +154,11 @@ public:
         return op;
     }
 
-    QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override {
+    QList<KoResourceLoadResult> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override {
         return detail::prepareLinkedResources<Op>(settings, resourcesInterface);
     }
 
-    QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override {
+    QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override {
         return detail::prepareEmbeddedResources<Op>(settings, resourcesInterface);
     }
 

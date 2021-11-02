@@ -59,7 +59,8 @@ KisResourcesInterface::ResourceSourceAdapter &KisResourcesInterface::source(cons
     return *source;
 }
 
-KisResourcesInterface::ResourceSourceAdapter::ResourceSourceAdapter()
+KisResourcesInterface::ResourceSourceAdapter::ResourceSourceAdapter(const QString &type)
+    : m_type(type)
 {
 }
 
@@ -134,4 +135,13 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
 #endif
 
     return result;
+}
+
+KoResourceLoadResult KisResourcesInterface::ResourceSourceAdapter::bestMatchLoadResult(const QString md5, const QString filename, const QString name)
+{
+    KoResourceSP resource = bestMatch(md5, filename, name);
+    return
+        resource ?
+        KoResourceLoadResult(resource) :
+        KoResourceLoadResult(KoResourceSignature(m_type, md5, filename, name));
 }

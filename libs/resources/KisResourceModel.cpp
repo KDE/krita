@@ -321,10 +321,23 @@ QVector<KoResourceSP> KisAllResourcesModel::resourcesForFilename(QString filenam
                 if (l.contains(filename)) {
                     // This will load the embedded resource and make it available
                     KoResourceSP res = KisResourceLocator::instance()->resourceForId(id);
-                    Q_FOREACH(KoResourceSP embeddedRes, res->embeddedResources(KisGlobalResourcesInterface::instance())) {
+
+                    QList<KoResourceLoadResult> embeddedResources = res->embeddedResources(KisGlobalResourcesInterface::instance());
+                    Q_FOREACH(KoResourceLoadResult embeddedRes, embeddedResources) {
+
+                        /// We have just fetched the resource from the locator, it means
+                        /// that the locator should have uploaded all the embedded resources
+                        /// into the memory storage. Therefore, res->embeddedResources()
+                        /// should return either ExistingResource or FailedLink. Otherwise,
+                        /// there is a bug in KisResourceLocator.
+
+                        KIS_ASSERT_RECOVER(embeddedRes.type() != KoResourceLoadResult::EmbeddedResource) { continue; }
+
+                        KoResourceSP resource = embeddedRes.resource();
+
                         // This is the best we can do because Krita4 only checked filename and resource type, too.
-                        if (embeddedRes->filename() == filename && embeddedRes->resourceType().first == d->resourceType) {
-                            resources << embeddedRes;
+                        if (resource && resource->filename() == filename && resource->resourceType().first == d->resourceType) {
+                            resources << resource;
                         }
                     }
                 }
@@ -451,6 +464,28 @@ KoResourceSP KisAllResourcesModel::importResourceFile(const QString &filename, c
     resetQuery();
     endInsertRows();
 
+    return res;
+}
+
+KoResourceSP KisAllResourcesModel::importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    KoResourceSP res = KisResourceLocator::instance()->importResource(d->resourceType, filename, device, allowOverwrite, storageId);
+    if (!res) {
+        qWarning() << "Failed to import resource" << filename;
+    }
+    resetQuery();
+    endInsertRows();
+
+    return res;
+}
+
+bool KisAllResourcesModel::exportResource(KoResourceSP resource, QIODevice *device)
+{
+    bool res = KisResourceLocator::instance()->exportResource(resource, device);
+    if (!res) {
+        qWarning() << "Failed to export resource" << resource->signature();
+    }
     return res;
 }
 
@@ -715,6 +750,27 @@ KoResourceSP KisResourceModel::importResourceFile(const QString &filename, const
         res = source->importResourceFile(filename, allowOverwrite, storageId);
     }
     invalidate();
+    return res;
+}
+
+KoResourceSP KisResourceModel::importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    KoResourceSP res;
+    if (source) {
+        res = source->importResource(filename, device, allowOverwrite, storageId);
+    }
+    invalidate();
+    return res;
+}
+
+bool KisResourceModel::exportResource(KoResourceSP resource, QIODevice *device)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    bool res = false;
+    if (source) {
+        res = source->exportResource(resource, device);
+    }
     return res;
 }
 

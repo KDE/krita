@@ -48,14 +48,18 @@ KisBrushRegistry* KisBrushRegistry::instance()
 }
 
 
-KisBrushSP KisBrushRegistry::createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
+KoResourceLoadResult KisBrushRegistry::createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
 {
     QString brushType = element.attribute("type");
 
-    if (brushType.isEmpty()) return 0;
+    if (brushType.isEmpty()) {
+        return KoResourceSignature(ResourceType::Brushes, "", "unknown", "unknown");
+    }
 
     KisBrushFactory *factory = get(brushType);
-    if (!factory) return 0;
+    if (!factory) {
+        return KoResourceSignature(ResourceType::Brushes, "", "unknown", "unknown");
+    }
 
     return factory->createBrush(element, resourcesInterface);
 }

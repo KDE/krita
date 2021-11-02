@@ -38,7 +38,7 @@ public:
      * object. If this call leads to the creation of a resource, it should be
      * added to the resource provider, too.
      */
-    KisBrushSP createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface) override;
+    KoResourceLoadResult createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface) override;
 
 };
 

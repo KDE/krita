@@ -51,7 +51,6 @@
 #include <kconfiggroup.h>
 #include <kbackup.h>
 #include <KisView.h>
-#include <KisResourceLoaderRegistry.h>
 
 #include <QTextBrowser>
 #include <QApplication>

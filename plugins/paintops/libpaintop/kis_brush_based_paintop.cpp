@@ -18,6 +18,7 @@
 #include <QGlobalStatic>
 #include <kis_brush_registry.h>
 #include <KisUsageLogger.h>
+#include <KoResourceLoadResult.h>
 
 #include <QImage>
 #include <QPainter>
@@ -92,7 +93,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
             QDomDocument d;
             d.setContent(brushDefinition, false);
             QDomElement element = d.firstChildElement("Brush");
-            m_brush = KisBrushRegistry::instance()->createBrush(element, settings->resourcesInterface());
+            m_brush = KisBrushRegistry::instance()->createBrush(element, settings->resourcesInterface()).resource().dynamicCast<KisBrush>();
             Q_ASSERT(m_brush);
         }
     }
@@ -120,9 +121,9 @@ KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
     delete m_dabCache;
 }
 
-QList<KoResourceSP> KisBrushBasedPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisBrushBasedPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
-    QList<KoResourceSP> resources;
+    QList<KoResourceLoadResult> resources;
 
     KisBrushOptionProperties brushOption;
     resources << brushOption.prepareLinkedResources(settings, resourcesInterface);
@@ -133,9 +134,9 @@ QList<KoResourceSP> KisBrushBasedPaintOp::prepareLinkedResources(const KisPaintO
     return resources;
 }
 
-QList<KoResourceSP> KisBrushBasedPaintOp::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisBrushBasedPaintOp::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
-    QList<KoResourceSP> resources;
+    QList<KoResourceLoadResult> resources;
 
     KisTextureProperties textureProperties(0);
     resources << textureProperties.prepareEmbeddedResources(settings, resourcesInterface);

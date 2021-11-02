@@ -11,6 +11,7 @@
 #include <QScopedPointer>
 #include <KoResource.h>
 #include <QHash>
+#include <KoResourceLoadResult.h>
 
 class QString;
 class QByteArray;
@@ -43,7 +44,7 @@ public:
     class KRITARESOURCES_EXPORT ResourceSourceAdapter
     {
     public:
-        ResourceSourceAdapter();
+        ResourceSourceAdapter(const QString &type);
         virtual ~ResourceSourceAdapter();
 //protected:
         friend class KisResourcesInterface;
@@ -65,10 +66,19 @@ public:
 
         KoResourceSP bestMatch(const QString md5, const QString filename, const QString name);
 
+        /**
+         * Same as bestMatch(), but returns KoResourceLoadResult. In case the
+         * resource is not found in the backend storage, the load-result
+         * will be set in FailedLink state
+         *
+         */
+        KoResourceLoadResult bestMatchLoadResult(const QString md5, const QString filename, const QString name);
+
         virtual KoResourceSP fallbackResource() const = 0;
 
     private:
         Q_DISABLE_COPY(ResourceSourceAdapter);
+        const QString m_type;
     };
 
     template <typename T>
@@ -120,6 +130,16 @@ public:
 
         QSharedPointer<T>  bestMatch(const QString md5, const QString filename, const QString name) {
             return m_source->bestMatch(md5, filename, name).dynamicCast<T>();
+        }
+
+        /**
+         * Same as bestMatch(), but returns KoResourceLoadResult. In case the
+         * resource is not found in the backend storage, the load-result
+         * will be set in FailedLink state
+         *
+         */
+        KoResourceLoadResult bestMatchLoadResult(const QString md5, const QString filename, const QString name) {
+            return m_source->bestMatchLoadResult(md5, filename, name);
         }
 
         QSharedPointer<T> fallbackResource() const

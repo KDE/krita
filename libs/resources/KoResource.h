@@ -13,6 +13,8 @@
 #include <QSharedPointer>
 #include <QDebug>
 
+#include "KoResourceSignature.h"
+
 #include "KisResourceTypes.h"
 #include <boost/operators.hpp>
 
@@ -26,6 +28,8 @@ typedef QSharedPointer<KoResource> KoResourceSP;
 
 class KisResourcesInterface;
 typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
+
+class KoResourceLoadResult;
 
 namespace ResourceTestHelper {
 void overrideResourceVesion(KoResourceSP resource, int version);
@@ -181,6 +185,12 @@ public:
     virtual QPair<QString, QString> resourceType() const = 0;
 
     /**
+     * @return the signature of the resource which is enough for referencing
+     * the resource in somewhat unique way
+     */
+    KoResourceSignature signature() const;
+
+    /**
      * Ephemeral resource is a type of resource that has no physical
      * representation on disk. Therefore, its load()/save() calls do
      * nothing. Such resources will always have empty md5Sum() and,
@@ -215,7 +225,7 @@ public:
      *
      * The set of resources returned is basically: linkedResources() + embeddedResources()
      */
-    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+    QList<KoResourceLoadResult> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
     /**
      * @return all the resources that are needed but (*this) resource and
@@ -223,14 +233,14 @@ public:
      * \p globalResourcesInterface. If fetching of some resources is failed,
      * then (*this) resource is invalid.
      */
-    virtual QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+    virtual QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
     /**
      * @return all the resources that were embedded into (*this) resource.
      * If the resources were already added to the global database, then they
      * are fetched from \p globalResourcesInterface to save time/memory.
      */
-    virtual QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+    virtual QList<KoResourceLoadResult> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
     /**
      * A list of per-canvas active resources that are needed for this resource

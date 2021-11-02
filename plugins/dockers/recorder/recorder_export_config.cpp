@@ -18,6 +18,7 @@ const QString keyFfmpegPath = "ffmpeg_path";
 const QString keyVideoDirectory = "recorder_export/videodirectory";
 const QString keyInputFps = "recorder_export/inputfps";
 const QString keyFps = "recorder_export/fps";
+const QString keyLastFrameSec = "recorder_export/lastframesec";
 const QString keyResize = "recorder_export/resize";
 const QString keySize = "recorder_export/size";
 const QString keyLockRatio = "recorder_export/lockratio";
@@ -28,11 +29,11 @@ const QString keyEditedProfiles = "recorder_export/editedprofiles";
 const QString profilePrefix = "-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.$EXT\"\n";
 
 const QList<RecorderProfile> defaultProfiles = {
-    { "MP4 x264",   "mp4",  profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
-    { "GIF",        "gif",  profilePrefix % "-vf \"fps=$OUT_FPS,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\"\n-loop -1" },
-    { "Matroska",   "mkv",  profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
-    { "WebM",       "webm", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
-    { "MP4 x264 (+5s Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
+    { "MP4 x264",   "mp4",  profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+    { "GIF",        "gif",  profilePrefix % "-filter_complex \"fps=$OUT_FPS,loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\"\n-loop -1" },
+    { "Matroska",   "mkv",  profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "WebM",       "webm", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "MP4 x264 (Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
                                             " [0]scale=$WIDTH:$HEIGHT[q1];\n"
                                             " [q1]tpad=stop_mode=clone:stop_duration=1[v1];\n"
                                             " [0]trim=start_frame=$FRAMES-1[p1];\n"
@@ -40,14 +41,14 @@ const QList<RecorderProfile> defaultProfiles = {
                                             " [p2]fps=$OUT_FPS[p3];\n"
                                             " [p3]trim=start_frame=0:end_frame=1[p4];\n"
                                             " [p4]scale=$WIDTH:$HEIGHT[p5];\n"
-                                            " [p5]tpad=stop_mode=clone:stop_duration=4[p6];\n"
+                                            " [p5]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[p6];\n"
                                             " [p6]fade=type=in:color=white:start_time=0.7:duration=0.7[v2];\n"
                                             " [v1][v2]concat=n=2:v=1\n"
                                             "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
-    { "Custom1",  "editme", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
-    { "Custom2",  "editme", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
-    { "Custom3",  "editme", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
-    { "Custom4",  "editme", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" }
+    { "Custom1",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "Custom2",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "Custom3",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "Custom4",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" }
 };
 }
 
@@ -83,6 +84,15 @@ void RecorderExportConfig::setFps(int value)
     config->writeEntry(keyFps, value);
 }
 
+int RecorderExportConfig::lastFrameSec() const
+{
+    return config->readEntry(keyLastFrameSec, 5);
+}
+
+void RecorderExportConfig::setLastFrameSec(int value)
+{
+    config->writeEntry(keyLastFrameSec, value);
+}
 
 bool RecorderExportConfig::resize() const
 {

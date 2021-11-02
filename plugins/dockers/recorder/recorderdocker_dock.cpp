@@ -100,7 +100,7 @@ public:
             case RecorderFormat::JPEG:
                 index = 0;
                 title = i18nc("Title for label. JPEG Quality level", "Quality:");
-                hint = i18nc("@tooltip", "Greater value will produce a larger file and a better quality. Doesn't affect CPU consumption.\nValues lower than 50 are not recommended due to high artifacts");
+                hint = i18nc("@tooltip", "Greater value will produce a larger file and a better quality. Doesn't affect CPU consumption.\nValues lower than 50 are not recommended due to high artifacts.");
                 minValue = 1;
                 maxValue = 100;
                 suffix = "%";
@@ -461,7 +461,7 @@ void RecorderDockerDock::onWriterPausedChanged(bool paused)
 void RecorderDockerDock::onWriterFrameWriteFailed()
 {
     QMessageBox::warning(this, i18nc("@title:window", "Recorder"),
-        i18n("The recorder have been stopped due to failure while writing a frame. Please check free disk space and start recorder again."));
+        i18n("The recorder has been stopped due to failure while writing a frame. Please check free disk space and start the recorder again."));
 }
 
 void RecorderDockerDock::slotScrollerStateChanged(QScroller::State state)

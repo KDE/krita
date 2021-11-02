@@ -60,25 +60,28 @@ Needs:
 - 7-Zip
 - The cert to sign the package with
 
-Steps:
+Steps (if running manually):
 
 1. Extract the EXE installer to somewhere **outside of the source tree** using
    7-Zip (don't run the installer!)
-2. Remove `$PLUGINSDIR` and `uninstall.exe.nsis` inside
-3. Edit `02_gen_mapping.cmd` and point `KRITA_DIR` to it
-4. Make necessary amendments to `manifest.xml`
-5. Start a command prompt, then run `01_gen_resources_pri`, `02_gen_mapping`
-   and `03_build_msix` in order (don't run them from Explorer or you may miss
-   any error messages)
+2. Remove `$PLUGINSDIR` and `uninstall.exe.nsis`/`uninstall.exe` inside
+3. Copy `manifest.xml.in` into `manifest.xml` then make necessary amendments to
+   it, including replacing the `@`-substitutions.
+4. Start a command prompt in this dir, then run
+   `set KRITA_DIR=C:\path\where\you\extracted\the\Krita\files`, and then run
+   `build_msix.cmd`.
     - If you need to specify the keyfile and password used to sign the MSIX
       file, execute the following command before running the final script:
         ```
         set SIGNTOOL_SIGN_FLAGS=/f "absolute_path_to_keyfile.pfx" /p password
         ```
-6. Install and test `out\out.msix`
+5. Install and test `out\krita.msix`
 
-TODO: Technically we can build the MSIX on the binary factory together with the
-rest of the build (excluding the MSIX signing step)...
+The script and related resources are also configured and installed into
+`${CMAKE_INSTALL_PREFIX}/krita-msix`, which is then used by the Binary Factory
+pipeline. On the Binary Factory, `KRITA_INSTALLER` is set instead of
+`KRITA_DIR`. The script will then extract the files into a working directory.
+
 
 Self-signing the package for testing purposes
 ---------------------------------------------

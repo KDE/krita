@@ -31,10 +31,23 @@
 
 #define ICON_SIZE 48
 
+PresetHistoryList::PresetHistoryList(QWidget *parent)
+    : QListWidget(parent)
+{}
+
+void PresetHistoryList::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+    {
+        emit mouseReleased(currentItem());
+    }
+    QListWidget::mouseReleaseEvent(e); // forward the event to the QListWidget
+}
+
 PresetHistoryDock::PresetHistoryDock( )
     : QDockWidget(i18n("Brush Preset History"))
 {
-    m_presetHistory = new QListWidget(this);
+    m_presetHistory = new PresetHistoryList(this);
     m_presetHistory->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_presetHistory->setDragEnabled(false);
     m_presetHistory->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -56,7 +69,7 @@ PresetHistoryDock::PresetHistoryDock( )
         connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
     }
 
-    connect(m_presetHistory, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(presetSelected(QListWidgetItem*)));
+    connect(m_presetHistory, SIGNAL(mouseReleased(QListWidgetItem*)), SLOT(presetSelected(QListWidgetItem*)));
     connect(m_sortingModes, SIGNAL(triggered(QAction*)), SLOT(slotSortingModeChanged(QAction*)));
     connect(m_presetHistory, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequest(QPoint)));
 }

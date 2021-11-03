@@ -312,12 +312,11 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 {
     textColor = qApp->palette().color(QPalette::Text);
     backgroundColor = qApp->palette().color(QPalette::Background);
-    blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.8);
-    shadedBgColor = backgroundColor.darker(105);
 
+    // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
+    blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.8);
     // only apply color to the widget itself, not to the tooltip or something
-    blendedStyle = quickStyleSheet(blendedColor, backgroundColor);
-    QString shadedStyle = quickStyleSheet(blendedColor, shadedBgColor);
+    blendedStyle = "QWidget{color: " + blendedColor.name() + "}";
 
     // what labels to change the color...
     startTitleLabel->setStyleSheet(blendedStyle);
@@ -327,9 +326,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLinkShortcut->setStyleSheet(blendedStyle);
     openFileShortcut->setStyleSheet(blendedStyle);
     clearRecentFilesLink->setStyleSheet(blendedStyle);
-
-    recentDocumentsListView->setStyleSheet(shadedStyle);
-    newsWidget->setStyleSheet(shadedStyle);
+    recentDocumentsListView->setStyleSheet(blendedStyle);
+    newsWidget->setStyleSheet(blendedStyle);
 
 #ifdef Q_OS_ANDROID
     blendedStyle = blendedStyle + "\nQPushButton { padding: 10px }";
@@ -772,9 +770,4 @@ QFont KisWelcomePageWidget::largerFont()
     QFont larger = font();
     larger.setPointSizeF(larger.pointSizeF() * 1.1f);
     return larger;
-}
-
-QString KisWelcomePageWidget::quickStyleSheet(QColor fg, QColor bg, QString otherStyles)
-{
-    return "QWidget{color: " + fg.name() + "; background: " + bg.name() + "; " + otherStyles + "}";
 }

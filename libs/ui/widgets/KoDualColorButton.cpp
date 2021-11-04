@@ -21,6 +21,7 @@
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QPainter>
+#include <QPointer>
 #include <qdrawutil.h>
 #include <QApplication>
 
@@ -75,7 +76,7 @@ public:
     QPoint dragPosition;
     Selection tmpSelection;
     bool popDialog;
-    const KoColorDisplayRendererInterface *displayRenderer;
+    QPointer<const KoColorDisplayRendererInterface> displayRenderer;
 
     void init(KoDualColorButton *q);
 };
@@ -161,10 +162,14 @@ void KoDualColorButton::setBackgroundColor( const KoColor &color )
 
 void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
 {
+    if (d->displayRenderer && d->displayRenderer != KoDumbColorDisplayRenderer::instance()) {
+        d->displayRenderer->disconnect(this);
+    }
     if (displayRenderer) {
         d->displayRenderer = displayRenderer;
         d->colorSelectorDialog->setDisplayRenderer(displayRenderer);
         connect(d->displayRenderer, SIGNAL(destroyed()), this, SLOT(setDisplayRenderer()), Qt::UniqueConnection);
+        connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(update()));
     } else {
         d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }

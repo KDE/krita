@@ -84,7 +84,6 @@ public:
 
 public Q_SLOTS:
 
-    void documentMousePositionChanged(const QPointF &p);
     void imageSizeChanged();
     void setSelection(KisImageWSP image);
     void setProfile(KisImageWSP image);
@@ -121,7 +120,6 @@ private:
 
     QToolButton *m_selectionStatus;
     KisMemoryReportButton *m_memoryReportBox;
-    QLabel *m_pointerPositionLabel;
     QWidget *m_extraWidgetsParent;
     QBoxLayout *m_extraWidgetsLayout;
     KisAngleSelector *m_canvasAngleSelector;

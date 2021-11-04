@@ -137,14 +137,6 @@ void KisStatusBar::setup()
 
     connect(m_memoryReportBox, SIGNAL(clicked()), SLOT(showMemoryInfoToolTip()));
 
-    m_pointerPositionLabel = new QLabel(QString());
-    m_pointerPositionLabel->setObjectName("pointerPositionLabel");
-    m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_pointerPositionLabel->setMinimumWidth(100);
-    m_pointerPositionLabel->setContentsMargins(5,5, 5, 5);
-    addStatusBarItem(m_pointerPositionLabel);
-    m_pointerPositionLabel->setVisible(false);
-
     connect(KisMemoryStatisticsServer::instance(),
             SIGNAL(sigUpdateMemoryStatistics()),
             SLOT(imageSizeChanged()));
@@ -240,16 +232,6 @@ void KisStatusBar::showAllStatusBarItems()
     }
 }
 
-void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
-{
-    if (!m_imageView) return;
-
-    QPoint pixelPos = m_imageView->image()->documentToImagePixelFloored(pos);
-
-    pixelPos.setX(qBound(0, pixelPos.x(), m_viewManager->image()->width() - 1));
-    pixelPos.setY(qBound(0, pixelPos.y(), m_viewManager->image()->height() - 1));
-    m_pointerPositionLabel->setText(i18nc("@info mouse position (x, y)", "%1, %2", pixelPos.x(), pixelPos.y()));
-}
 
 void KisStatusBar::imageSizeChanged()
 {
@@ -459,5 +441,4 @@ void KisStatusBar::setStatusBarStatusLabelText(const QString &text)
 {
     m_statusBarStatusLabel->setText(text);
 }
-
 

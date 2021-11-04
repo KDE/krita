@@ -1186,9 +1186,9 @@ void KisMainWindow::slotLoadCompleted()
     }
 }
 
-void KisMainWindow::slotLoadCanceled(const QString & errMsg)
+void KisMainWindow::slotLoadCanceled(const QString &errMsg)
 {
-    KisUsageLogger::log(QString("Loading canceled."));
+    KisUsageLogger::log(QString("Loading canceled: %1.").arg(errMsg));
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));

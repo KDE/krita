@@ -17,12 +17,12 @@ KisResourceThumbnailPainter::KisResourceThumbnailPainter(QObject *parent)
 {
 }
 
-QImage KisResourceThumbnailPainter::getReadyThumbnail(const QModelIndex &index, QSize size, const QPalette& palette, const bool isSelected, bool addMargin) const
+QImage KisResourceThumbnailPainter::getReadyThumbnail(const QModelIndex &index, QSize size, const QPalette& palette) const
 {
     QImage thumbLabel = QImage(size, QImage::Format_ARGB32);
     thumbLabel.fill(Qt::white);
     QPainter painter(&thumbLabel);
-    paint(&painter, index, QRect(QPoint(0, 0), size), palette, isSelected, addMargin);
+    paint(&painter, index, QRect(QPoint(0, 0), size), palette, false, false);
     return thumbLabel;
 }
 
@@ -45,11 +45,17 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QSt
     }
 
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
+
+    if (selected) {
+        painter->fillRect(rect, palette.highlight());
+    }
+
     QRect innerRect = addMargin ? rect.adjusted(2, 2, -2, -2) : rect;
+
     thumbnail.setDevicePixelRatio(devicePixelRatioF);
 
-
     QSize imageSize = thumbnail.size();
+
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
     if (resourceType == ResourceType::Gradients) {
@@ -95,21 +101,6 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QSt
         }
         painter->drawImage(topleft, thumbnail);
     }
-
-
-    if(selected) {
-        // slight tint goes over the whole image if selected
-        painter->setCompositionMode(QPainter::CompositionMode_HardLight);
-        painter->setOpacity(1.0);
-        painter->fillRect(rect, palette.highlight());
-
-        // highlight is not strong enough to pick out preset. draw border around it.
-        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
-        painter->setPen(QPen(palette.highlight(), 4, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-        QRect selectedBorder = rect.adjusted(2 , 2, -2, -2); // constrict the rectangle so it doesn't bleed into other presets
-        painter->drawRect(selectedBorder);
-    }
-
 
 
     painter->restore();

@@ -158,6 +158,8 @@ void KisWorkspaceChooser::slotSaveWorkspace()
     }
 
     m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
+
+    slotUpdateWorkspaceSaveButton();
 }
 
 void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
@@ -217,6 +219,8 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     layout->setName(name);
     layout->setFilename(name.split(" ").join("_") + layout->defaultFileExtension());
     KisResourceUserOperations::addResourceWithUserInput(this, layout);
+
+    slotUpdateWindowLayoutSaveButton();
 }
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()

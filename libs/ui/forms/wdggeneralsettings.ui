@@ -474,6 +474,20 @@
         </widget>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayoutZoomScaling">
+         <item>
+          <widget class="QLabel" name="labelZoomScaling">
+           <property name="text">
+            <string>Zoom Interval Size:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KisSliderSpinBox" name="m_zoomScalingSlider" native="true"/>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
          <property name="title">
           <string>Kinetic Scrolling (needs restart)</string>
@@ -1022,6 +1036,12 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
@@ -1032,12 +1052,6 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
    <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
-   <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisFileNameRequester</class>
    <extends>QWidget</extends>
    <header>kis_file_name_requester.h</header>
@@ -1046,7 +1060,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
   <customwidget>
    <class>KisFontComboBoxes</class>
    <extends>QWidget</extends>
-   <header location="global">kis_font_family_combo_box.h</header>
+   <header>kis_font_family_combo_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

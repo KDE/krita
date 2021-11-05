@@ -362,6 +362,11 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     m_guiUpdateCompressor.start();
 }
 
+void KisZoomManager::slotZoomLevelsChanged()
+{
+    m_zoomAction->slotUpdateZoomLevels();
+}
+
 void KisZoomManager::slotScrollAreaSizeChanged()
 {
     pageOffsetChanged();

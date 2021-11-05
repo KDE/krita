@@ -12,7 +12,7 @@
 #include <QSlider>
 #include <QToolButton>
 #include <QBoxLayout>
-
+#include <QDebug>
 #include <klocalizedstring.h>
 
 #include "KoZoomInput.h"
@@ -83,6 +83,11 @@ bool KoZoomWidget::isZoomInputFlat() const
 void KoZoomWidget::setZoomInputFlat(bool flat)
 {
     d->input->setFlat(flat);
+}
+
+void KoZoomWidget::setSliderSize(int size)
+{
+    d->slider->setMaximum(size);
 }
 
 void KoZoomWidget::setZoomLevels(const QStringList &values)

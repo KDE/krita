@@ -1324,6 +1324,7 @@ void KisViewManager::guiUpdateTimeout()
     d->filterManager.updateGUI();
     if (zoomManager()) {
         zoomManager()->updateGuiAfterDocumentSize();
+        zoomManager()->slotZoomLevelsChanged();
     }
     d->gridManager.updateGUI();
     d->actionManager.updateGUI();

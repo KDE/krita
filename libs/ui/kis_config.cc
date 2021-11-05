@@ -1923,6 +1923,16 @@ void KisConfig::setKineticScrollingHideScrollbars(bool scrollbar)
     m_cfg.writeEntry("KineticScrollingHideScrollbar", scrollbar);
 }
 
+int KisConfig::zoomScaling(bool defaultValue) const
+{
+    return (defaultValue ? 5 : m_cfg.readEntry("ZoomScaling", 5));
+}
+
+void KisConfig::setZoomScaling(int scale)
+{
+    m_cfg.writeEntry("ZoomScaling", scale);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const
 {
     const KoColorSpace *cs = 0;

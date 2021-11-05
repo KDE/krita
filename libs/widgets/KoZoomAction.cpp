@@ -30,6 +30,8 @@
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
 #include <kis_signal_compressor.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include <math.h>
 
@@ -63,16 +65,58 @@ public:
 QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
 {
     QList<qreal> zoomLevels;
+    KConfigGroup config = KSharedConfig::openConfig()->group("");
+    int zoomScale = config.readEntry("ZoomScaling", 5);
+    qreal defaultZoomStep = sqrt(2);
 
-    qreal defaultZoomStep = sqrt(2.0);
+    switch (zoomScale) {
+    case 1:
+        defaultZoomStep = sqrt(1.15);
+        zoomLevels << 1.0;
+        break;
+    case 2:
+        defaultZoomStep = sqrt(1.25);
+        zoomLevels << 1.0;
+        break;
+    case 3:
+        defaultZoomStep = sqrt(1.5);
+        zoomLevels << 0.25 / 2.0;
+        zoomLevels << 0.25 / 1.75;
+        zoomLevels << 0.25 / 1.5;
+        zoomLevels << 0.25 / 1.25;
+        zoomLevels << 0.25;
+        zoomLevels << 1.0 / 3.0;
+        zoomLevels << 7.0 / 16.0;
+        zoomLevels << 0.5;
+        zoomLevels << 9.0 / 16.0;
+        zoomLevels << 2.0 / 3.0;
+        zoomLevels << 3.0 / 4.0;
+        zoomLevels << 1.0;
+        break;
+    case 4:
+        defaultZoomStep = sqrt(1.75);
+        zoomLevels << 1.0;
+        break;
+    case 5:
+        defaultZoomStep = sqrt(2);
+        zoomLevels << 0.25 / 2.0;
+        zoomLevels << 0.25 / 1.5;
+        zoomLevels << 0.25;
+        zoomLevels << 1.0 / 3.0;
+        zoomLevels << 0.5;
+        zoomLevels << 2.0 / 3.0;
+        zoomLevels << 1.0;
+        break;
+    case 6:
+        defaultZoomStep = sqrt(2.25);
+        zoomLevels << 1.0;
+        break;
+    default:
+        defaultZoomStep = sqrt(2);
+        zoomLevels << 1.0;
+        break;
+    }
 
-    zoomLevels << 0.25 / 2.0;
-    zoomLevels << 0.25 / 1.5;
-    zoomLevels << 0.25;
-    zoomLevels << 1.0 / 3.0;
-    zoomLevels << 0.5;
-    zoomLevels << 2.0 / 3.0;
-    zoomLevels << 1.0;
 
     for (qreal zoom = zoomLevels.first() / defaultZoomStep;
          zoom > parent->minimumZoom();
@@ -263,6 +307,7 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->sliderLookup.size() - 1);
 
     connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
+    connect(this, SIGNAL(sliderZoomLevelsChanged(int)), zoomWidget, SLOT(setSliderSize(int)));
     connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
     connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
     connect(this, SIGNAL(aspectModeChanged(bool)), zoomWidget, SLOT(setAspectMode(bool)));
@@ -293,6 +338,15 @@ void KoZoomAction::slotUpdateGuiAfterZoom()
 
     // TODO: don't regenerate when only mode changes
     regenerateItems(d->effectiveZoom);
+}
+
+void KoZoomAction::slotUpdateZoomLevels()
+{
+    d->generateSliderZoomLevels();
+    d->sliderLookup = d->generateSliderZoomLevels();
+    regenerateItems(d->effectiveZoom);
+    emit sliderZoomLevelsChanged(d->sliderLookup.size() - 1);
+    syncSliderWithZoom();
 }
 
 void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)

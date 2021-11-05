@@ -541,6 +541,9 @@ public:
     bool kineticScrollingHiddenScrollbars(bool defaultValue = false) const;
     void setKineticScrollingHideScrollbars(bool scrollbar);
 
+    int zoomScaling(bool defaultValue = false) const;
+    void setZoomScaling(int scale);
+
     void setEnableOpenGLFramerateLogging(bool value) const;
     bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
 

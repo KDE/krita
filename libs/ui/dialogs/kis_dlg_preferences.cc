@@ -260,6 +260,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbKineticScrollingGesture->addItem(i18n("On Middle-Click Drag"));
     //m_cmbKineticScrollingGesture->addItem(i18n("On Right Click Drag"));
 
+    m_zoomScalingSlider->setRange(1,6);
+    m_zoomScalingSlider->setValue(cfg.zoomScaling());
+
+
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
     m_kineticScrollingSensitivitySlider->setRange(0, 100);
     m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity());
@@ -395,6 +399,7 @@ void GeneralTab::setDefault()
     cmbFlowMode->setCurrentIndex(0);
     m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled(true));
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture(true));
+    m_zoomScalingSlider->setValue(cfg.zoomScaling(true));
     m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity(true));
     m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
@@ -487,6 +492,11 @@ bool GeneralTab::useZip64()
 bool GeneralTab::toolOptionsInDocker()
 {
     return m_radioToolOptionsInDocker->isChecked();
+}
+
+int GeneralTab::zoomScaling()
+{
+    return m_zoomScalingSlider->value();
 }
 
 bool GeneralTab::kineticScrollingEnabled()
@@ -1933,6 +1943,7 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.writeEntry<bool>("useCreamyAlphaDarken", (bool)!m_general->cmbFlowMode->currentIndex());
 
+        cfg.setZoomScaling(m_general->zoomScaling());
         cfg.setKineticScrollingEnabled(m_general->kineticScrollingEnabled());
         cfg.setKineticScrollingGesture(m_general->kineticScrollingGesture());
         cfg.setKineticScrollingSensitivity(m_general->kineticScrollingSensitivity());

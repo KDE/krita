@@ -68,6 +68,7 @@ public:
 public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
+    void slotZoomLevelsChanged();
     void slotScrollAreaSizeChanged();
     void setShowRulers(bool show);
     void setRulersTrackMouse(bool value);

@@ -105,6 +105,8 @@ public Q_SLOTS:
      */
     qreal prevZoomLevel() const;
 
+    void slotUpdateZoomLevels();
+
 protected Q_SLOTS:
 
     void triggered( const QString& text );
@@ -140,6 +142,7 @@ Q_SIGNALS:
      */
     void zoomedToAll();
 
+    void sliderZoomLevelsChanged(int value);
     void zoomLevelsChanged(const QStringList &values);
     void currentZoomLevelChanged(const QString &valueString);
     void sliderChanged(int value);

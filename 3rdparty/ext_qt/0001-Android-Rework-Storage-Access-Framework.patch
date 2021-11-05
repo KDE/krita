@@ -1,4 +1,4 @@
-From 60999a05b13a93cc7f8f9293a92ba2f6e82d6ed5 Mon Sep 17 00:00:00 2001
+From 3d9eec3b9fa2204ed70ad9571f911c1a994c3217 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Thu, 19 Aug 2021 12:01:16 +0000
 Subject: [PATCH] Android: Rework Storage Access Framework
@@ -15,11 +15,11 @@ the files.
  .../org/qtproject/qt5/android/SAFFile.java    |  23 +
  .../qtproject/qt5/android/SAFFileManager.java | 795 ++++++++++++++++++
  .../org/qtproject/qt5/android/SAFUtils.java   |  23 +
- .../android/androidcontentfileengine.cpp      | 266 ++++--
+ .../android/androidcontentfileengine.cpp      | 268 ++++--
  .../android/androidcontentfileengine.h        |  39 +-
  .../qandroidplatformfiledialoghelper.cpp      |   6 +
  .../android/qandroidplatformservices.cpp      |   6 +-
- 12 files changed, 1344 insertions(+), 301 deletions(-)
+ 12 files changed, 1345 insertions(+), 302 deletions(-)
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
@@ -1458,7 +1458,7 @@ index 0000000000..51f8f710df
 +
 +}
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
-index ba11a50e85..c58d3257ad 100644
+index ba11a50e85..b9ed95b768 100644
 --- a/src/plugins/platforms/android/androidcontentfileengine.cpp
 +++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
 @@ -45,10 +45,17 @@
@@ -1481,7 +1481,7 @@ index ba11a50e85..c58d3257ad 100644
  }
  
  bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
-@@ -74,15 +81,13 @@ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
+@@ -74,35 +81,60 @@ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
          openModeStr += QLatin1Char('a');
      }
  
@@ -1500,7 +1500,10 @@ index ba11a50e85..c58d3257ad 100644
          return false;
      }
  
-@@ -92,17 +97,44 @@ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
+     setFileDescriptor(fd);
+-    return QFSFileEngine::open(openMode, m_fd, QFile::AutoCloseHandle);
++    return QFSFileEngine::open(openMode, m_fd, QFile::DontCloseHandle);
+ }
  
  bool AndroidContentFileEngine::close()
  {
@@ -1915,5 +1918,5 @@ index c095613ce7..d9e4ab99e2 100644
  
  bool QAndroidPlatformServices::openDocument(const QUrl &url)
 -- 
-2.32.0
+2.33.0
 

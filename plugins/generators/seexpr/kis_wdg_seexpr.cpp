@@ -235,8 +235,6 @@ void KisWdgSeExpr::slotSaveRenameCurrentPreset()
     KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
     const bool success = KisResourceUserOperations::renameResourceWithUserInput(this, properCleanResource, renamedPresetName);
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(success && "couldn't rename preset");
-
     // refresh and select our freshly renamed resource
     if (success) slotResourceSelected(m_currentPreset);
 

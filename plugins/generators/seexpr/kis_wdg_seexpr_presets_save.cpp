@@ -74,6 +74,8 @@ void KisWdgSeExprPresetsSave::showDialog()
                 name = QString("%1 %2").arg(name, i18n("Copy"));
             }
             newPresetNameTextField->setText(name);
+            newPresetNameTextField->setReadOnly(false);
+            newPresetNameTextField->setEnabled(true);
         }
     } else {
         setWindowTitle(i18n("Save SeExpr Preset"));
@@ -81,6 +83,8 @@ void KisWdgSeExprPresetsSave::showDialog()
         if (preset) {
             const QString name(preset->name().replace("_", " "));
             newPresetNameTextField->setText(name);
+            newPresetNameTextField->setReadOnly(true);
+            newPresetNameTextField->setEnabled(false);
         }
     }
 

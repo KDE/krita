@@ -155,8 +155,6 @@ public:
 
     QBitArray channelFlags;
     KisProofingConfigurationSP proofingConfig;
-    bool softProofing = false;
-    bool gamutCheck = false;
     bool proofingConfigUpdated = false;
 
     KisPopupPalette *popupPalette = 0;
@@ -755,19 +753,17 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
 
 void KisCanvas2::slotSoftProofing(bool softProofing)
 {
-    m_d->softProofing = softProofing;
-    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+    setProofingOptions(softProofing, imageView()->gamutCheck());
 }
 
 void KisCanvas2::slotGamutCheck(bool gamutCheck)
 {
-    m_d->gamutCheck = gamutCheck;
-    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+    setProofingOptions(imageView()->softProofing(), gamutCheck);
 }
 
 void KisCanvas2::slotChangeProofingConfig()
 {
-    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+    setProofingOptions(imageView()->softProofing(), imageView()->gamutCheck());
 }
 
 void KisCanvas2::setProofingConfigUpdated(bool updated)

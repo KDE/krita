@@ -167,10 +167,12 @@ public: // KisCanvas2 methods
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
 
     /**
-     * @brief setProofingOptions
-     * set the options for softproofing, without affecting the proofing options as stored inside the image.
+     * @brief fetchProofingOptions
+     * Get the options for softproofing, and apply the view-specific state without affecting
+     * the proofing options as stored inside the image.
      */
-    void setProofingOptions(bool softProof, bool gamutCheck);
+    void fetchProofingOptions();
+    void updateProofingState();
     KisProofingConfigurationSP proofingConfiguration() const;
 
     /**
@@ -241,8 +243,8 @@ public Q_SLOTS:
     /// Bools indicating canvasmirroring.
     bool xAxisMirrored() const;
     bool yAxisMirrored() const;
-    void slotSoftProofing(bool softProofing);
-    void slotGamutCheck(bool gamutCheck);
+    void slotSoftProofing();
+    void slotGamutCheck();
     void slotChangeProofingConfig();
     void slotPopupPaletteRequestedZoomChange(int zoom);
 

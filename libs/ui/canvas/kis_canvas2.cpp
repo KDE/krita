@@ -127,6 +127,7 @@ public:
         , shapeManager(parent)
         , selectedShapesProxy(&shapeManager)
         , toolProxy(parent)
+        , proofingConfig(new KisProofingConfiguration)
         , displayColorConverter(resourceManager, view)
         , inputActionGroupsMaskInterface(new CanvasInputActionGroupsMaskInterface(this))
         , regionOfInterestUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
@@ -610,6 +611,7 @@ void KisCanvas2::initializeImage()
     connect(image, SIGNAL(sigProfileChanged(const KoColorProfile*)), SLOT(slotImageColorSpaceChanged()));
 
     connectCurrentCanvas();
+    fetchProofingOptions();
 }
 
 void KisCanvas2::disconnectImage()
@@ -730,40 +732,51 @@ KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterfac
         KisDumbExposureGammaCorrectionInterface::instance();
 }
 
-void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
+void KisCanvas2::fetchProofingOptions()
 {
-    m_d->proofingConfig = this->image()->proofingConfiguration();
-    if (!m_d->proofingConfig) {
-        KisImageConfig cfg(false);
-        m_d->proofingConfig = cfg.defaultProofingconfiguration();
+    KisProofingConfigurationSP baseConfig = image()->proofingConfiguration();
+    if (!baseConfig) {
+        baseConfig = KisImageConfig(true).defaultProofingconfiguration();
     }
+    *m_d->proofingConfig = *baseConfig;
+
+    updateProofingState();
+}
+
+void KisCanvas2::updateProofingState()
+{
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
-    if (this->image()->colorSpace()->colorDepthId().id().contains("U")) {
-        conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, softProof);
-        if (softProof) {
-            conversionFlags.setFlag(KoColorConversionTransformation::GamutCheck, gamutCheck);
-        }
+    conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, false);
+
+    if (image()->colorSpace()->colorDepthId().id().contains("U")) {
+        conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, imageView()->softProofing());
+        conversionFlags.setFlag(KoColorConversionTransformation::GamutCheck, imageView()->gamutCheck());
     }
     m_d->proofingConfig->conversionFlags = conversionFlags;
 
     m_d->proofingConfigUpdated = true;
+}
 
+void KisCanvas2::slotSoftProofing()
+{
+    updateProofingState();
     refetchDataFromImage();
 }
 
-void KisCanvas2::slotSoftProofing(bool softProofing)
+void KisCanvas2::slotGamutCheck()
 {
-    setProofingOptions(softProofing, imageView()->gamutCheck());
-}
-
-void KisCanvas2::slotGamutCheck(bool gamutCheck)
-{
-    setProofingOptions(imageView()->softProofing(), gamutCheck);
+    updateProofingState();
+    if (imageView()->softProofing()) {
+        refetchDataFromImage();
+    }
 }
 
 void KisCanvas2::slotChangeProofingConfig()
 {
-    setProofingOptions(imageView()->softProofing(), imageView()->gamutCheck());
+    fetchProofingOptions();
+    if (imageView()->softProofing()) {
+        refetchDataFromImage();
+    }
 }
 
 void KisCanvas2::setProofingConfigUpdated(bool updated)
@@ -778,12 +791,6 @@ bool KisCanvas2::proofingConfigUpdated()
 
 KisProofingConfigurationSP KisCanvas2::proofingConfiguration() const
 {
-    if (!m_d->proofingConfig) {
-        m_d->proofingConfig = this->image()->proofingConfiguration();
-        if (!m_d->proofingConfig) {
-            m_d->proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
-        }
-    }
     return m_d->proofingConfig;
 }
 

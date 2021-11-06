@@ -79,8 +79,8 @@ Steps (if running manually):
 
 The script and related resources are also configured and installed into
 `${CMAKE_INSTALL_PREFIX}/krita-msix`, which is then used by the Binary Factory
-pipeline. On the Binary Factory, `KRITA_INSTALLER` is set instead of
-`KRITA_DIR`. The script will then extract the files into a working directory.
+pipeline. On the Binary Factory, we also need to set `KRITA_SHELLEX` for it
+to copy the files required for the shell extension.
 
 
 Self-signing the package for testing purposes

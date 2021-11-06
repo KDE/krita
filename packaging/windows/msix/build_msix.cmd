@@ -9,6 +9,15 @@ if not defined KRITA_DIR (
         exit /b 1
     )
 )
+rem  For binary factory, define both KRITA_DIR and KRITA_SHELLEX.
+rem  Do not use KRITA_SHELLEX if building outside of binary factory, unless you
+rem  don't mind this script modifying the contents of KRITA_DIR.
+if defined KRITA_INSTALLER (
+    if defined KRITA_SHELLEX (
+        echo ERROR: KRITA_SHELLEX must not be set if using KRITA_INSTALLER.
+        exit /b 1
+    )
+)
 
 goto begin
 
@@ -145,6 +154,52 @@ echo === Step 0 done. ===
 
 
 :skip_extract_installer
+
+if not defined KRITA_SHELLEX goto skip_copy_shellex_files
+
+echo.
+echo === Step 0: Copy files for shell extension
+
+pushd "%KRITA_DIR%"
+if errorlevel 1 (
+    echo ERROR entering "%KRITA_DIR%" 1>&2
+    exit /B 1
+)
+mkdir shellex
+if errorlevel 1 (
+    echo ERROR mkdir shellex failed 1>&2
+    exit /B 1
+)
+copy "%KRITA_SHELLEX%\krita.ico" shellex
+if errorlevel 1 (
+    echo ERROR copying krita.ico failed 1>&2
+    exit /B 1
+)
+copy "%KRITA_SHELLEX%\kritafile.ico" shellex
+if errorlevel 1 (
+    echo ERROR copying kritafile.ico failed 1>&2
+    exit /B 1
+)
+copy "%KRITA_SHELLEX%\kritashellex32.dll" shellex
+if errorlevel 1 (
+    echo ERROR copying kritashellex32.dll failed 1>&2
+    exit /B 1
+)
+copy "%KRITA_SHELLEX%\kritashellex64.dll" shellex
+if errorlevel 1 (
+    echo ERROR copying kritashellex64.dll failed 1>&2
+    exit /B 1
+)
+:: Optional files:
+copy "%KRITA_SHELLEX%\kritashellex32.pdb" shellex
+copy "%KRITA_SHELLEX%\kritashellex64.pdb" shellex
+
+popd
+
+echo === Step 0 done. ===
+
+
+:skip_copy_shellex_files
 
 rem Sanity checks:
 if not exist "%KRITA_DIR%\bin\krita.exe" (

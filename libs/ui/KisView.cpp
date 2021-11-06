@@ -919,7 +919,7 @@ void KisView::slotSoftProofing(bool softProofing)
         message = i18n("Soft Proofing turned off.");
     }
     viewManager()->showFloatingMessage(message,QIcon());
-    canvasBase()->slotSoftProofing(softProofing);
+    canvasBase()->slotSoftProofing();
 }
 
 void KisView::slotGamutCheck(bool gamutCheck)
@@ -942,7 +942,7 @@ void KisView::slotGamutCheck(bool gamutCheck)
         message = i18n("Gamut Warnings turned off.");
     }
     viewManager()->showFloatingMessage(message,QIcon());
-    canvasBase()->slotGamutCheck(gamutCheck);
+    canvasBase()->slotGamutCheck();
 }
 
 bool KisView::softProofing()

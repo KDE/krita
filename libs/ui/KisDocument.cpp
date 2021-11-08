@@ -1814,11 +1814,6 @@ void KisDocument::setModified(bool mod)
     if (d->isAutosaving)   // ignore setModified calls due to autosaving
         return;
 
-    if ( !d->readwrite && mod ) {
-        errKrita << "Can't set a read-only document to 'modified' !" << endl;
-        return;
-    }
-
     //dbgUI<<" url:" << url.path();
     //dbgUI<<" mod="<<mod<<" MParts mod="<<KisParts::ReadWritePart::isModified()<<" isModified="<<isModified();
 

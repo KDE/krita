@@ -1039,12 +1039,18 @@ void KisMainWindow::updateCaption()
             caption += " *";
         }
 
+#ifdef Q_OS_ANDROID
+        // there's no way to view mainwindow title on Android, so we need to do with mdiArea title.
+        d->mdiArea->activeSubWindow()->setWindowTitle(caption);
+#else
         if (doc->isModified()) {
             d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption() + " *");
         }
         else {
             d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
         }
+#endif
+
 
         setWindowTitle(caption);
 

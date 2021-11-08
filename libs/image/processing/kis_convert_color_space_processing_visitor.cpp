@@ -8,12 +8,14 @@
 
 #include "kis_external_layer_iface.h"
 
+#include "kis_do_something_command.h"
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_transform_mask.h"
 #include "lazybrush/kis_colorize_mask.h"
 
+#include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_projection_leaf.h"
 #include "kis_time_span.h"
@@ -25,11 +27,14 @@
 KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(const KoColorSpace *srcColorSpace,
                                                                              const KoColorSpace *dstColorSpace,
                                                                              KoColorConversionTransformation::Intent renderingIntent,
-                                                                             KoColorConversionTransformation::ConversionFlags conversionFlags)
+                                                                             KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                                             bool convertImage, bool convertLayers)
     : m_srcColorSpace(srcColorSpace)
     , m_dstColorSpace(dstColorSpace)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
+    , m_convertImage(convertImage)
+    , m_convertLayers (convertLayers)
 
 {
 }
@@ -44,7 +49,7 @@ void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer 
 
 void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
-    if (!node->projectionLeaf()->isLayer()) return;
+    if (!m_convertLayers || !node->projectionLeaf()->isLayer()) return;
     if (*m_dstColorSpace == *node->colorSpace()) return;
 
     bool alphaLock = false;
@@ -92,6 +97,30 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
 
     undoAdapter->addCommand(parentConversionCommand);
     layer->invalidateFrames(KisTimeSpan::infinite(0), layer->extent());
+}
+
+void KisConvertColorSpaceProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
+{
+    using namespace KisDoSomethingCommandOps;
+
+    // Group Layers determine their color space from their paint device, thus before setting
+    // channel flags, it must be reset to the new CS first.
+
+    bool alphaDisabled = layer->alphaChannelDisabled();
+
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, true));
+
+    if (m_convertImage && m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
+        QBitArray channelFlags;
+
+        if (alphaDisabled) {
+            channelFlags = m_dstColorSpace->channelFlags(true, false);
+        }
+
+        undoAdapter->addCommand(new KisChangeChannelFlagsCommand(channelFlags, layer));
+    }
+
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, false));
 }
 
 void KisConvertColorSpaceProcessingVisitor::visit(KisTransformMask *node, KisUndoAdapter *undoAdapter)

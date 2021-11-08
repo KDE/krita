@@ -1201,6 +1201,8 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (!node->projectionLeaf()->isLayer()) return;
+    // must not be an image root, use convertImageColorSpace() for that:
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!node->image() || (node.data() != node->image()->rootLayer().data()));
 
     const KoColorSpace *srcColorSpace = node->colorSpace();
 
@@ -1218,7 +1220,7 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
     applicator.applyVisitor(
         new KisConvertColorSpaceProcessingVisitor(
             srcColorSpace, dstColorSpace,
-            renderingIntent, conversionFlags),
+            renderingIntent, conversionFlags, false, true),
         KisStrokeJobData::CONCURRENT);
 
     applicator.end();
@@ -1275,22 +1277,11 @@ void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *d
                                                           KisCommandUtils::FlipFlopCommand::INITIALIZING),
         KisStrokeJobData::BARRIER);
 
-    if (convertLayers) {
-        applicator.applyVisitor(
-                    new KisConvertColorSpaceProcessingVisitor(
-                        srcColorSpace, dstColorSpace,
-                        renderingIntent, conversionFlags),
-                    KisStrokeJobData::CONCURRENT);
-    } else {
-        applicator.applyCommand(
-            new KisDoSomethingCommand<
-                    KisDoSomethingCommandOps::ResetOp, KisGroupLayerSP>
-                    (this->rootLayer, false));
-        applicator.applyCommand(
-            new KisDoSomethingCommand<
-                    KisDoSomethingCommandOps::ResetOp, KisGroupLayerSP>
-                    (this->rootLayer, true));
-    }
+    applicator.applyVisitor(
+                new KisConvertColorSpaceProcessingVisitor(
+                    srcColorSpace, dstColorSpace,
+                    renderingIntent, conversionFlags, true, convertLayers),
+                KisStrokeJobData::CONCURRENT);
 
     applicator.applyCommand(
         new KisImagePrivate::SetImageProjectionColorSpace(srcColorSpace,

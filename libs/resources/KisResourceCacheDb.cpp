@@ -1006,7 +1006,7 @@ bool KisResourceCacheDb::tagResource(KisResourceStorageSP storage, const QString
     q.bindValue(":resource_id", resourceId);
     q.bindValue(":tag_id", tagId);
     if (!q.exec()) {
-        qWarning() << "Could not execute tagResource stagement" << q.boundValues() << q.lastError();
+        qWarning() << "Could not execute tagResource statement" << q.boundValues() << q.lastError();
         return false;
     }
     return true;

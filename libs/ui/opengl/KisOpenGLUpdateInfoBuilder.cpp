@@ -206,6 +206,8 @@ void KisOpenGLUpdateInfoBuilder::setConversionOptions(const ConversionOptions &o
     QWriteLocker lock(&m_d->lock);
 
     m_d->conversionOptions = options;
+    // the proofing transform becomes invalid when the target colorspace changes
+    m_d->proofingTransform.reset();
 }
 
 void KisOpenGLUpdateInfoBuilder::setChannelFlags(const QBitArray &channelFrags, bool onlyOneChannelSelected, int selectedChannelIndex)

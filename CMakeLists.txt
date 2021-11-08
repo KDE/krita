@@ -1112,6 +1112,7 @@ configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
 if(WIN32)
     include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/installer/ConfigureInstallerNsis.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/msix/ConfigureMsixFiles.cmake)
 endif()
 
 message("\nBroken tests:")

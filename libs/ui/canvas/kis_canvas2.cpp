@@ -712,6 +712,12 @@ void KisCanvas2::slotImageColorSpaceChanged()
     m_d->view->viewManager()->blockUntilOperationsFinishedForced(image);
 
     m_d->displayColorConverter.setImageColorSpace(image->colorSpace());
+    m_d->channelFlags = image->rootLayer()->channelFlags();
+
+    // Not all color spaces are supported by soft-proofing, so update state
+    if (imageView()->softProofing()) {
+        updateProofingState();
+    }
 
     image->barrierLock();
     m_d->canvasWidget->notifyImageColorSpaceChanged(image->colorSpace());

@@ -19,6 +19,8 @@
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
 #include <KisResourceModel.h>
+#include <QFileInfo>
+
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent)
@@ -435,7 +437,14 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
 }
 
 void KisPaletteModel::slotPaletteModified() {
-    m_colorSet->setPaletteType(KoColorSet::KPL);
+    /**
+     * Until we implemement resource->convertToSerializable() we should
+     * explictly convert all the palettes into Krita internal format
+     */
+    if (m_colorSet->paletteType() != KoColorSet::KPL) {
+        m_colorSet->setPaletteType(KoColorSet::KPL);
+        m_colorSet->setFilename(QFileInfo(m_colorSet->filename()).completeBaseName() + ".kpl");
+    }
 }
 
 void KisPaletteModel::slotExternalPaletteModified(QSharedPointer<KoColorSet> resource)

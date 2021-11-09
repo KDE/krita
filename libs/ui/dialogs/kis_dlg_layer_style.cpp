@@ -308,6 +308,8 @@ void KisDlgLayerStyle::slotNewStyle()
     m_stylesSelector->addNewStyle(clone);
     m_stylesSelector->refillCollections();
 
+    // focus on the recently added item
+    wdgLayerStyles.stylesStack->setCurrentWidget(m_stylesSelector);
 }
 
 QString createNewAslPath(QString resourceFolderPath, QString filename)

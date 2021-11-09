@@ -93,10 +93,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setupScratchPad(resourceProvider, Qt::white);
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlayRect(QRect(25, 25, 200, 200));
 
-
-
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setToolTip(i18n("The settings for this preset have changed from their default."));
-
 
     m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setToolTip(i18n("Toggle showing presets"));
 
@@ -376,12 +373,11 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
     QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
 
     // If the id < 0, this is a new preset that hasn't been added to the storage and the database yet.
-    if (!curPreset || currentPresetResourceId < 0) {
+    if (currentPresetResourceId < 0) {
         curPreset->setName(renamedPresetName);
         slotUpdatePresetSettings(); // update visibility of dirty preset and icon
         return;
     }
-
 
     emit reloadPresetClicked();
 
@@ -397,6 +393,7 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
     }
     m_d->favoriteResManager->updateFavoritePresets();
 
+    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(curPreset->name());
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }
 
@@ -534,7 +531,7 @@ void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(formattedBrushName);
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(i18nc("%1 is the name of a brush engine", "%1 Engine", currentBrushEngineName));
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineIcon->setPixmap(currentBrushEngineIcon);
-    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name()); // use file name
+    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name());
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     QSize thumbSize = QSize(55, 55)*devicePixelRatioF();

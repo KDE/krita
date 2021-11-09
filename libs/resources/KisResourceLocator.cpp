@@ -428,12 +428,16 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
                                                 storage->timeStampForResource(resourceType, resource->filename()),
                                                 resource,
                                                 resourceType);
-        if (result) {
-            return resource;
+        if (!result) {
+            return nullptr;
         }
 
+        // resourceCaches use absolute locations
+        const QString absoluteStorageLocation = makeStorageLocationAbsolute(resource->storageLocation());
+        const QPair<QString, QString> key = {absoluteStorageLocation, resourceType + "/" + resource->filename()};
         // Add to the cache
-        d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
+        d->resourceCache[key] = resource;
+        d->thumbnailCache[key] = resource->thumbnail();
 
         return resource;
     }

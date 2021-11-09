@@ -70,13 +70,13 @@ public:
 };
 
 KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * resourceProvider,
-                                               KisFavoriteResourceManager* favoriteResourceManager,
-                                               KisPresetSaveWidget* savePresetWidget,
-                                               QWidget * parent)
+                                                 KisFavoriteResourceManager* favoriteResourceManager,
+                                                 KisPresetSaveWidget* savePresetWidget,
+                                                 QWidget * parent)
     : QWidget(parent)
     , m_d(new Private())
 {
-    setObjectName("KisPaintOpPresetsPopup");
+    setObjectName("KisPaintOpPresetsEditor");
 
     KisConfig cfg(true);
 
@@ -363,7 +363,7 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
     KisPaintOpSettingsSP prevSettings = m_d->resourceProvider->currentPreset()->settings()->clone();
     bool isDirty = m_d->resourceProvider->currentPreset()->isDirty();
 
-     // this returns the UI to its original state after saving
+    // this returns the UI to its original state after saving
     toggleBrushRenameUIActive(false);
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 

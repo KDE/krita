@@ -87,6 +87,11 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
         QImage previewHighDPI = preview.scaled(previewSize*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         previewHighDPI.setDevicePixelRatio(devicePixelRatioF);
 
+        if (option.state & QStyle::State_Selected) {
+            painter->setPen(QPen(option.palette.highlight(), 2.0));
+            painter->fillRect(option.rect, option.palette.highlight());
+            painter->setPen(option.palette.highlightedText().color());
+        }
         painter->drawImage(paintRect.x(), paintRect.y(), previewHighDPI);
 
         int leftMargin = 8;

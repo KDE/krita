@@ -1923,14 +1923,14 @@ void KisConfig::setKineticScrollingHideScrollbars(bool scrollbar)
     m_cfg.writeEntry("KineticScrollingHideScrollbar", scrollbar);
 }
 
-int KisConfig::zoomScaling(bool defaultValue) const
+bool KisConfig::smoothZooming(bool defaultValue) const
 {
-    return (defaultValue ? 5 : m_cfg.readEntry("ZoomScaling", 5));
+    return (defaultValue ? false : m_cfg.readEntry("SmoothZooming", false));
 }
 
-void KisConfig::setZoomScaling(int scale)
+void KisConfig::setSmoothZooming(bool scale)
 {
-    m_cfg.writeEntry("ZoomScaling", scale);
+    m_cfg.writeEntry("SmoothZooming", scale);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const

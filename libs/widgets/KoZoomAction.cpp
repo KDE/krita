@@ -32,6 +32,7 @@
 #include <kis_signal_compressor.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include "krita_container_utils.h"
 
 #include <math.h>
 
@@ -66,57 +67,22 @@ QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
 {
     QList<qreal> zoomLevels;
     KConfigGroup config = KSharedConfig::openConfig()->group("");
-    int zoomScale = config.readEntry("ZoomScaling", 5);
+    bool smoothZooming = config.readEntry("SmoothZooming", false);
     qreal defaultZoomStep = sqrt(2);
 
-    switch (zoomScale) {
-    case 1:
-        defaultZoomStep = sqrt(1.15);
-        zoomLevels << 1.0;
-        break;
-    case 2:
+    if (smoothZooming) {
         defaultZoomStep = sqrt(1.25);
         zoomLevels << 1.0;
-        break;
-    case 3:
-        defaultZoomStep = sqrt(1.5);
-        zoomLevels << 0.25 / 2.0;
-        zoomLevels << 0.25 / 1.75;
-        zoomLevels << 0.25 / 1.5;
-        zoomLevels << 0.25 / 1.25;
-        zoomLevels << 0.25;
-        zoomLevels << 1.0 / 3.0;
-        zoomLevels << 7.0 / 16.0;
-        zoomLevels << 0.5;
-        zoomLevels << 9.0 / 16.0;
-        zoomLevels << 2.0 / 3.0;
-        zoomLevels << 3.0 / 4.0;
-        zoomLevels << 1.0;
-        break;
-    case 4:
-        defaultZoomStep = sqrt(1.75);
-        zoomLevels << 1.0;
-        break;
-    case 5:
-        defaultZoomStep = sqrt(2);
-        zoomLevels << 0.25 / 2.0;
-        zoomLevels << 0.25 / 1.5;
-        zoomLevels << 0.25;
-        zoomLevels << 1.0 / 3.0;
-        zoomLevels << 0.5;
-        zoomLevels << 2.0 / 3.0;
-        zoomLevels << 1.0;
-        break;
-    case 6:
-        defaultZoomStep = sqrt(2.25);
-        zoomLevels << 1.0;
-        break;
-    default:
-        defaultZoomStep = sqrt(2);
-        zoomLevels << 1.0;
-        break;
     }
-
+    else {
+        zoomLevels << 0.25 / 2.0;
+        zoomLevels << 0.25 / 1.5;
+        zoomLevels << 0.25;
+        zoomLevels << 1.0 / 3.0;
+        zoomLevels << 0.5;
+        zoomLevels << 2.0 / 3.0;
+        zoomLevels << 1.0;
+    }
 
     for (qreal zoom = zoomLevels.first() / defaultZoomStep;
          zoom > parent->minimumZoom();
@@ -130,6 +96,18 @@ QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
          zoom *= defaultZoomStep) {
 
         zoomLevels.append(zoom);
+    }
+
+    if (smoothZooming) {
+        zoomLevels << 0.25 / 2.0;
+        zoomLevels << 0.25 / 1.5;
+        zoomLevels << 0.25;
+        zoomLevels << 1.0 / 3.0;
+        zoomLevels << 0.5;
+        zoomLevels << 2.0 / 3.0;
+        zoomLevels << 1.0;
+        std::sort(zoomLevels.begin(), zoomLevels.end());
+        KritaUtils::makeContainerUnique(zoomLevels);
     }
 
     return zoomLevels;
@@ -342,11 +320,14 @@ void KoZoomAction::slotUpdateGuiAfterZoom()
 
 void KoZoomAction::slotUpdateZoomLevels()
 {
+    qreal currentZoom = d->effectiveZoom;
     d->generateSliderZoomLevels();
     d->sliderLookup = d->generateSliderZoomLevels();
-    regenerateItems(d->effectiveZoom);
-    emit sliderZoomLevelsChanged(d->sliderLookup.size() - 1);
+    regenerateItems(currentZoom);
     syncSliderWithZoom();
+
+    emit sliderZoomLevelsChanged(d->sliderLookup.size() - 1);
+
 }
 
 void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)

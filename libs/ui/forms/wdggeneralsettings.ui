@@ -26,8 +26,8 @@
     <height>295</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
+   <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -474,18 +474,14 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayoutZoomScaling">
-         <item>
-          <widget class="QLabel" name="labelZoomScaling">
-           <property name="text">
-            <string>Zoom Interval Size:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KisSliderSpinBox" name="m_zoomScalingSlider" native="true"/>
-         </item>
-        </layout>
+        <widget class="QCheckBox" name="chkEnableSmoothZooming">
+         <property name="text">
+          <string>Enable Smooth Zooming</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">

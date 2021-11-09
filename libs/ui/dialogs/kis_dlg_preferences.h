@@ -76,7 +76,7 @@ public:
     bool trimKra();
     bool useZip64();
     bool toolOptionsInDocker();
-    int zoomScaling();
+    bool smoothZooming();
     bool kineticScrollingEnabled();
     int kineticScrollingGesture();
     int kineticScrollingSensitivity();

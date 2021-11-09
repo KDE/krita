@@ -153,7 +153,7 @@
      <item>
       <widget class="QPushButton" name="btnNewStyle">
        <property name="text">
-        <string comment="New layer style">&amp;New...</string>
+        <string comment="Save as new layer style...">&amp;Save as...</string>
        </property>
       </widget>
      </item>

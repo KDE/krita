@@ -17,7 +17,6 @@
 #include <KoMD5Generator.h>
 #include <KoPattern.h>
 
-#include "KisResourceLoaderRegistry.h"
 #include "DummyResource.h"
 #include "ResourceTestHelper.h"
 #include "KisResourceStorage.h"

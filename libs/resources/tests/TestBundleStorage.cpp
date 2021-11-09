@@ -11,9 +11,7 @@
 #include <KoConfig.h>
 
 #include <KisBundleStorage.h>
-#include <KisResourceLoader.h>
 #include <KoResource.h>
-#include <KisResourceLoaderRegistry.h>
 #include "DummyResource.h"
 #include "ResourceTestHelper.h"
 

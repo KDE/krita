@@ -461,6 +461,9 @@ KoColorSet::PaletteType KoColorSet::Private::detectFormat(const QString &fileNam
     else if (ba.startsWith("JASC-PAL")) {
         return KoColorSet::PSP_PAL;
     }
+    else if (ba.mid(0x1E, sizeof("krita/x-colorset")) == "krita/x-colorset") {
+        return KoColorSet::KPL;
+    }
     else if (fi.suffix().toLower() == "aco") {
         return KoColorSet::ACO;
     }
@@ -469,9 +472,6 @@ KoColorSet::PaletteType KoColorSet::Private::detectFormat(const QString &fileNam
     }
     else if (fi.suffix().toLower() == "xml") {
         return KoColorSet::XML;
-    }
-    else if (fi.suffix().toLower() == "kpl") {
-        return KoColorSet::KPL;
     }
     else if (fi.suffix().toLower() == "sbz") {
         return KoColorSet::SBZ;

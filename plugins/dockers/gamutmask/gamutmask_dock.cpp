@@ -368,25 +368,6 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     QString name = newTitle;
 
     QFileInfo fileInfo(saveLocation + "/" + name + newMask->defaultFileExtension());
-    bool fileOverWriteAccepted = false;
-
-    while(!fileOverWriteAccepted) {
-        name = QInputDialog::getText(this, i18nc("@title:window", "New Gamut Mask..."),
-                                                    i18nc("@label:textbox", "Name:"), QLineEdit::Normal, name);
-        if (name.isNull() || name.isEmpty()) {
-            QMessageBox::warning(this, i18nc("@title:window", "Invalid Name"), i18n("Please enter a name"));
-        } else {
-            fileInfo = QFileInfo(saveLocation + "/" + name.split(" ").join("_") + newMask->defaultFileExtension());
-            if (fileInfo.exists()) {
-                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
-                                                            , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
-                                                            , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                if (res == QMessageBox::Yes) fileOverWriteAccepted = true;
-            } else {
-                fileOverWriteAccepted = true;
-            }
-        }
-    }
 
     newMask->setTitle(name);
     newMask->setFilename(fileInfo.fileName());

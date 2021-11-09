@@ -161,13 +161,15 @@ bool saveResourceToStore(const QString &filename, KoResourceSP resource, KoStore
         return false;
     }
 
-    // TODO: we are exporting the resource with the original filename, so the
-    //       thumbnail path might be incorrect! It affects MyPaint brushes only.
-
     if (!resource->thumbnailPath().isEmpty()) {
         // hack for MyPaint brush presets previews
-        QImage thumbnail = resource->thumbnail();
-        if (!store->open(resType + "/" + resource->thumbnailPath())) {
+        const QImage thumbnail = resource->thumbnail();
+
+        // clone resource to find out the file path for its preview
+        KoResourceSP clonedResource = resource->clone();
+        clonedResource->setFilename(filename);
+
+        if (!store->open(resType + "/" + clonedResource->thumbnailPath())) {
             qWarning() << "Could not open file in store for resource thumbnail";
             return false;
         }

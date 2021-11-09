@@ -107,9 +107,10 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
                               name, Qt::ElideRight, titleRect.width()
                               )
                           );
-/*
- * We currently cannot actually get the mask description, so lets stop this for now.
-        if (!mask->description().isEmpty() && !mask->description().isNull()) {
+        QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
+        QString descriptionKey = "description";
+        QString description = metaData.contains(descriptionKey) ? metaData[descriptionKey].toString() : "";
+        if (!description.isEmpty() && !description.isNull()) {
             font.setPointSize(font.pointSize()-1);
             font.setBold(false);
             font.setStyle(QFont::StyleItalic);
@@ -120,7 +121,7 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
             int numLines = floor(((float)descRect.height() / (float)painter->fontMetrics().lineSpacing()));
             if (numLines > 0) {
                 int elideWidth = 0;
-                QTextLayout textLayout(mask->description());
+                QTextLayout textLayout(description);
                 textLayout.beginLayout();
                 for (int i = 0; i < numLines; i++) {
                     QTextLine line = textLayout.createLine();
@@ -130,10 +131,10 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
                     }
                 }
 
-                QString elidedText = painter->fontMetrics().elidedText(mask->description(), Qt::ElideRight, elideWidth);
+                QString elidedText = painter->fontMetrics().elidedText(description, Qt::ElideRight, elideWidth);
                 painter->drawText(descRect, Qt::AlignLeft|Qt::TextWordWrap, elidedText);
             }
-        }*/
+        }
     }
 
     painter->restore();

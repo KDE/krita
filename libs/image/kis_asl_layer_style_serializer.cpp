@@ -1261,11 +1261,11 @@ bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
         dbgKrita << "Can't open file " << filename;
         return false;
     }
+
     readFromDevice(&file);
-    m_initialized = true;
     file.close();
 
-    return true;
+    return m_initialized;
 }
 
 QVector<KisPSDLayerStyleSP> KisAslLayerStyleSerializer::collectAllLayerStyles(KisNodeSP root)
@@ -1343,7 +1343,12 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     m_catcher.subscribeNewStyleStarted(std::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, false));
 
     KisAslReader reader;
-    QDomDocument doc = reader.readFile(device);
+    const QDomDocument doc = reader.readFile(device);
+
+    if (doc.isNull()) {
+        m_initialized = false;
+        return;
+    }
 
     //dbgKrita << ppVar(doc.toString());
 

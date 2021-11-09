@@ -77,7 +77,6 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
-    setFont(KisUiFont::dockFont());
 
     KisConfig cfg(true);
 

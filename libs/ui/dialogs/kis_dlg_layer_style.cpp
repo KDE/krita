@@ -267,11 +267,17 @@ QString selectAvailableStyleName(const QString &name)
 
 void KisDlgLayerStyle::slotNewStyle()
 {
+    bool success;
     QString styleName =
         QInputDialog::getText(this,
                               i18nc("@title:window", "Enter new style name"),
                               i18nc("@label:textbox", "Name:"),
-                              QLineEdit::Normal, i18nc("Default name for a new style", "New Style"));
+                              QLineEdit::Normal,
+                              i18nc("Default name for a new style", "New Style"),
+                              &success);
+
+    if (!success)
+        return;
 
     KisPSDLayerStyleSP style = this->style();
     KisPSDLayerStyleSP clone = style->clone().dynamicCast<KisPSDLayerStyle>();
@@ -281,7 +287,6 @@ void KisDlgLayerStyle::slotNewStyle()
     clone->setFilename(clone->uuid().toString());
     clone->setValid(true);
 
-    m_stylesSelector->addNewStyle(clone);
     const QString customStylesStorageLocation = "asl/CustomStyles.asl";
     KisConfig cfg(true);
     QString resourceDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
@@ -300,6 +305,7 @@ void KisDlgLayerStyle::slotNewStyle()
         KisResourceLocator::instance()->addStorage(storagePath, storage);
     }
 
+    m_stylesSelector->addNewStyle(clone);
     m_stylesSelector->refillCollections();
 
 }

@@ -6,8 +6,6 @@
 
 #include "KisAslStorage.h"
 #include <KisResourceStorage.h>
-#include <KisResourceLoaderRegistry.h>
-#include <KisResourceLoader.h>
 #include <kis_psd_layer_style.h>
 
 #include <QFileInfo>

@@ -12,7 +12,6 @@
 #include <KisMimeDatabase.h>
 #include <kis_debug.h>
 #include <KisTag.h>
-#include <KisResourceLoaderRegistry.h>
 #include <KisResourceStorage.h>
 #include <QBuffer>
 #include <KisGlobalResourcesInterface.h>

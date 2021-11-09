@@ -20,7 +20,6 @@
 
 #include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
-#include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisStorageModel.h>

@@ -6,8 +6,7 @@
 #include "KisResourceTypeModel.h"
 #include <QtSql>
 
-#include "KisResourceLoader.h"
-#include "KisResourceLoaderRegistry.h"
+#include <KisResourceTypes.h>
 
 struct KisResourceTypeModel::Private {
     int cachedRowCount {-1};

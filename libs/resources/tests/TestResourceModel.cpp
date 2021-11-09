@@ -21,7 +21,6 @@
 
 #include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
-#include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 
 #include <DummyResource.h>

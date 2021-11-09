@@ -25,7 +25,7 @@ struct KisLinkedPatternManager::Private {
 
         QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
         QString md5sum = setting->getString("Texture/Pattern/PatternMD5Sum");
-        QString fileName = setting->getString("Texture/Pattern/PatternFileName");
+        QString fileName = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName();
         QString name = setting->getString("Texture/Pattern/Name");
 
         if (md5sum.isEmpty()) {
@@ -56,14 +56,14 @@ KoResourceLoadResult KisLinkedPatternManager::tryFetchPattern(const KisPropertie
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
     QString md5sum = setting->getString("Texture/Pattern/PatternMD5Sum");
-    QString fileName = setting->getString("Texture/Pattern/PatternFileName");
+    QString fileName = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName();
     QString name = setting->getString("Texture/Pattern/Name");
 
     if (md5sum.isEmpty()) {
         md5sum = md5.toHex();
     }
 
-    return resourceSourceAdapter.bestMatchLoadResult(md5sum, QFileInfo(fileName).fileName(), name);
+    return resourceSourceAdapter.bestMatchLoadResult(md5sum, fileName, name);
 }
 
 KoResourceLoadResult KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)

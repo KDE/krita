@@ -313,7 +313,7 @@ bool KisApplication::registerResources()
 #if defined HAVE_SEEXPR
     reg->add(new KisResourceLoader<KisSeExprScript>(ResourceType::SeExprScripts, ResourceType::SeExprScripts, i18n("SeExpr Scripts"), QStringList() << "application/x-krita-seexpr-script"));
 #endif
-
+    // XXX: this covers only individual styles, not the library itself!
     reg->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
                                                      ResourceType::LayerStyles,
                                                      i18nc("Resource type name", "Layer styles"),

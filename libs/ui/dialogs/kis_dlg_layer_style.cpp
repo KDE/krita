@@ -22,7 +22,10 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoMD5Generator.h>
+#include <KisResourceLoaderRegistry.h>
 
+#include "KisResourceTypes.h"
+#include "kis_asl_layer_style_serializer.h"
 #include "kis_config.h"
 #include "kis_cmb_contour.h"
 #include "kis_cmb_gradient.h"
@@ -308,46 +311,64 @@ QString createNewAslPath(QString resourceFolderPath, QString filename)
 
 void KisDlgLayerStyle::slotLoadStyle()
 {
-    QString filename; // default value?
-
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "layerstyle");
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    dialog.setMimeTypeFilters({"application/x-photoshop-style-library"});
     dialog.setCaption(i18n("Select ASL file"));
-    dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
-    filename = dialog.filename();
 
-    if (filename.isEmpty()) return;
+    const QString filename = dialog.filename();
 
-    QFileInfo oldFileInfo(filename);
+    // XXX: implement a resource loader targeting layer style libraries
+    // const auto resource = KisResourceUserOperations::importResourceFileWithUserInput(this, "", ResourceType::LayerStylesLibrary, filename);
+    // if (resource) {
+    //     m_stylesSelector->refillCollections();
+    // }
 
-    KisConfig cfg(true);
-    QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
-                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    QString newName = oldFileInfo.fileName();
-    QString newLocation = createNewAslPath(newDir, newName);
+    if (!filename.isEmpty()) {
+        const QFileInfo oldFileInfo(filename);
 
-    QFileInfo newFileInfo(newLocation);
-    if (newFileInfo.exists()) {
-        bool done = false;
-        int i = 0;
-        do {
-            // ask for new filename
-            bool ok;
-            newName = QInputDialog::getText(this, i18n("New name for ASL storage"), i18n("The old filename is taken.\nNew name:"),
-                                                    QLineEdit::Normal, newName, &ok);
-            if (!ok) return;
+        // 0. Try reading the layer style
+        KisAslLayerStyleSerializer test;
+        if (!test.readFromFile(oldFileInfo.absoluteFilePath()))
+        {
+            QMessageBox::warning(this,
+                                 i18nc("@title:window", "Failed to import the resource"),
+                                 i18nc("Warning message", "Failed to import the resource."));
+            return;
+        }
 
-            newLocation = createNewAslPath(newDir, newName);
-            newFileInfo.setFile(newLocation);
-            done = !newFileInfo.exists();
-            i++;
-        } while (!done);
+        // 1. Copy the layer style to the resource folder
+        KisConfig cfg(true);
+        const QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                                QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+        const QString newName = oldFileInfo.fileName();
+        const QString newLocation = QStringLiteral("%1/asl/%2").arg(newDir, newName);
+
+        const QFileInfo newFileInfo(newLocation);
+
+        if (newFileInfo.exists()) {
+            if (QMessageBox::warning(this,
+                                     i18nc("@title:window", "Warning"),
+                                     i18n("There is already a layer style library with this name installed. Do you "
+                                          "want to overwrite it?"),
+                                     QMessageBox::Ok | QMessageBox::Cancel)
+                == QMessageBox::Cancel) {
+                return;
+            } else {
+                QFile::remove(newLocation);
+            }
+        }
+
+        QFile::copy(filename, newLocation);
+
+        // 2. Add the layer style as a storage/update database
+        KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+        KIS_ASSERT(!storage.isNull());
+        if (!KisResourceLocator::instance()->addStorage(newLocation, storage)) {
+            qWarning() << "Could not add layer style library to the storages" << newLocation;
+        }
+        m_stylesSelector->refillCollections();
     }
-
-    QFile::copy(filename, newLocation);
-    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
-    KIS_ASSERT(!storage.isNull());
-    KisResourceLocator::instance()->addStorage(newLocation, storage);
-    m_stylesSelector->refillCollections();
 }
 
 void KisDlgLayerStyle::slotSaveStyle()

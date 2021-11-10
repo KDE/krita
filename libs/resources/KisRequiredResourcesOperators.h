@@ -21,6 +21,7 @@ namespace detail {
 bool KRITARESOURCES_EXPORT isLocalResourcesStorage(KisResourcesInterfaceSP resourcesInterface);
 void KRITARESOURCES_EXPORT assertInGuiThread();
 KisResourcesInterfaceSP KRITARESOURCES_EXPORT createLocalResourcesStorage(const QList<KoResourceSP> &resources);
+void KRITARESOURCES_EXPORT addResourceOrWarnIfNotLoaded(KoResourceLoadResult loadedResource, QList<KoResourceSP> *resources);
 }
 
 
@@ -50,26 +51,15 @@ template <typename T>
 void createLocalResourcesSnapshot(T *object, KisResourcesInterfaceSP globalResourcesInterface = nullptr)
 {
     detail::assertInGuiThread();
-    QList<KoResourceLoadResult> loadedResource =
+    QList<KoResourceLoadResult> loadedResources =
         object->requiredResources(globalResourcesInterface ?
                                       globalResourcesInterface :
                                       object->resourcesInterface());
 
-    // TODO: move to .cpp file!
     QList<KoResourceSP> resources;
 
-    Q_FOREACH(const KoResourceLoadResult &res, loadedResource) {
-        switch (res.type()) {
-        case KoResourceLoadResult::ExistingResource:
-            resources << res.resource();
-            break;
-        case KoResourceLoadResult::EmbeddedResource:
-            qWarning() << "createLocalResourcesSnapshot: resource is not present in the server:" << res.signature();
-            break;
-        case KoResourceLoadResult::FailedLink:
-            qWarning() << "createLocalResourcesSnapshot: failed to load a linked resource:" << res.signature();
-            break;
-        }
+    Q_FOREACH(const KoResourceLoadResult &loadedResource, loadedResources) {
+        detail::addResourceOrWarnIfNotLoaded(loadedResource, &resources);
     }
 
     object->setResourcesInterface(detail::createLocalResourcesStorage(resources));

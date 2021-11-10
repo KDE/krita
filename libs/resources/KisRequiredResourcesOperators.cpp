@@ -25,3 +25,18 @@ KisResourcesInterfaceSP KisRequiredResourcesOperators::detail::createLocalResour
 {
     return QSharedPointer<KisLocalStrokeResources>::create(resources);
 }
+
+void KisRequiredResourcesOperators::detail::addResourceOrWarnIfNotLoaded(KoResourceLoadResult loadedResource, QList<KoResourceSP> *resources)
+{
+    switch (loadedResource.type()) {
+    case KoResourceLoadResult::ExistingResource:
+        *resources << loadedResource.resource();
+        break;
+    case KoResourceLoadResult::EmbeddedResource:
+        qWarning() << "createLocalResourcesSnapshot: resource is not present in the server:" << loadedResource.signature();
+        break;
+    case KoResourceLoadResult::FailedLink:
+        qWarning() << "createLocalResourcesSnapshot: failed to load a linked resource:" << loadedResource.signature();
+        break;
+    }
+}

@@ -21,7 +21,7 @@ public:
                                           const KoColorSpace *dstColorSpace,
                                           KoColorConversionTransformation::Intent renderingIntent,
                                           KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                          bool convertImage, bool convertLayers);
+                                          bool convertImage);
 
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) override;
@@ -40,7 +40,6 @@ private:
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
     bool m_convertImage;
-    bool m_convertLayers;
 };
 
 #endif /* __KIS_CONVERT_COLORSPACE_PROCESSING_VISITOR_H */

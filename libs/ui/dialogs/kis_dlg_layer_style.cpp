@@ -293,23 +293,27 @@ void KisDlgLayerStyle::slotNewStyle()
                                             QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
+    bool resourceAdded;
 
     if (KisResourceLocator::instance()->hasStorage(storagePath)) {
         KisResourceModel model(ResourceType::LayerStyles);
-        KisResourceUserOperations::addResourceWithUserInput(this, clone, storagePath);
+        resourceAdded = KisResourceUserOperations::addResourceWithUserInput(this, clone, storagePath);
     } else {
         KisAslLayerStyleSerializer serializer;
         serializer.setStyles(QVector<KisPSDLayerStyleSP>() << clone);
         serializer.saveToFile(storagePath);
         QSharedPointer<KisResourceStorage> storage = QSharedPointer<KisResourceStorage>(new KisResourceStorage(storagePath));
-        KisResourceLocator::instance()->addStorage(storagePath, storage);
+        resourceAdded = KisResourceLocator::instance()->addStorage(storagePath, storage);
     }
 
-    m_stylesSelector->addNewStyle(clone);
-    m_stylesSelector->refillCollections();
+    if (resourceAdded) {
+        m_stylesSelector->addNewStyle(customStylesStorageLocation, clone);
 
-    // focus on the recently added item
-    wdgLayerStyles.stylesStack->setCurrentWidget(m_stylesSelector);
+        setStyle(clone);
+
+        // focus on the recently added item
+        wdgLayerStyles.stylesStack->setCurrentWidget(m_stylesSelector);
+    }
 }
 
 QString createNewAslPath(QString resourceFolderPath, QString filename)
@@ -702,48 +706,18 @@ void StylesSelector::slotResourceModelReset()
     refillCollections();
 }
 
-void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
+void StylesSelector::addNewStyle(const QString &location, KisPSDLayerStyleSP style)
 {
-
-    // TODO: RESOURCES: what about adding only to CustomStyles.asl
-
-
-    /*
-    //server->resourceByName(style->name())
-
-    // NOTE: not translatable, since it is a key!
-    const QString customName = "CustomStyles.asl";
-    const QString saveLocation = server->saveLocation();
-    const QString fullFilename = saveLocation + customName;
-
-    KoResourceSP resource = server->resourceByName(customName);
-    KisPSDLayerStyleSP style;
-
-    if (!resource) {
-        collection = KisPSDLayerStyleSP(new KisPSDLayerStyle());
-        collection->setName(customName);
-        collection->setFilename(fullFilename);
-
-        KisPSDLayerStyleCollectionResource::StylesVector vector;
-        vector << style;
-        collection->setLayerStyles(vector);
-
-        server->addResource(collection);
-    }
-    else {
-        collection = resource.dynamicCast<KisPSDLayerStyleCollectionResource>();
-
-        //KisPSDLayerStyle::StylesVector vector;
-        vector = collection->layerStyles();
-        vector << style;
-        collection->setLayerStyles(vector);
-        collection->save();
-    }
-    */
+    // m_resourceModel = new KisResourceModel(ResourceType::LayerStyles, this);
+    // m_locationsProxyModel->setSourceModel(m_resourceModel);
+    // ui.listStyles->setModel(m_locationsProxyModel);
 
     refillCollections();
-
-    ui.cmbStyleCollections->setCurrentText(style->name());
+    ui.listStyles->reset();
+    ui.cmbStyleCollections->setCurrentText(location);
+    loadStyles(ui.cmbStyleCollections->currentText());
+    KIS_ASSERT(m_resourceModel->resourceForId(style->resourceId()));
+    ui.listStyles->setCurrentIndex(m_resourceModel->indexForResource(style));
 
     notifyExternalStyleChanged(style->name(), style->uuid());
 }

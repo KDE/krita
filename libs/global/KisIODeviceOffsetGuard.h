@@ -11,6 +11,17 @@
 
 class QIODevice;
 
+
+/**
+ * A simple RAII-based class for restoring a position of QIODevice
+ * when the code exits the scope.
+ *
+ * It is used to do multiple passes over a QIODevice. Just wrap each
+ * pass in a namespace scope and add a guard. Please note that the
+ * device must be !isSequential().
+ *
+ * @see KisOffsetOnExitVerifier
+ */
 class KRITAGLOBAL_EXPORT KisIODeviceOffsetGuard
 {
 public:

@@ -69,7 +69,6 @@
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "commands_new/kis_activate_selection_mask_command.h"
-#include "kis_do_something_command.h"
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
@@ -1220,7 +1219,7 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
     applicator.applyVisitor(
         new KisConvertColorSpaceProcessingVisitor(
             srcColorSpace, dstColorSpace,
-            renderingIntent, conversionFlags, false),
+            renderingIntent, conversionFlags),
         KisStrokeJobData::CONCURRENT);
 
     applicator.end();
@@ -1284,7 +1283,7 @@ void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *d
     applicator.applyVisitor(
                 new KisConvertColorSpaceProcessingVisitor(
                     srcColorSpace, dstColorSpace,
-                    renderingIntent, conversionFlags, true),
+                    renderingIntent, conversionFlags),
                 KisStrokeJobData::CONCURRENT);
 
     applicator.applyCommand(

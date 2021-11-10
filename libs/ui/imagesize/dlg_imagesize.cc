@@ -281,6 +281,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->adjustPrintSizeSeparatelyCkb->setChecked(cfg.readEntry<bool>(PARAM_PRINT_SIZE_SEPARATE, false));
 
     setMainWidget(m_page);
+
+    m_page->pixelWidthDouble->setFocus();
 }
 
 DlgImageSize::~DlgImageSize()

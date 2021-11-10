@@ -28,14 +28,12 @@ KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(con
                                                                              const KoColorSpace *dstColorSpace,
                                                                              KoColorConversionTransformation::Intent renderingIntent,
                                                                              KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                                             bool convertImage, bool convertLayers)
+                                                                             bool convertImage)
     : m_srcColorSpace(srcColorSpace)
     , m_dstColorSpace(dstColorSpace)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
     , m_convertImage(convertImage)
-    , m_convertLayers (convertLayers)
-
 {
 }
 
@@ -49,7 +47,7 @@ void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer 
 
 void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
-    if (!m_convertLayers || !node->projectionLeaf()->isLayer()) return;
+    if (!node->projectionLeaf()->isLayer()) return;
     if (*m_dstColorSpace == *node->colorSpace()) return;
 
     bool alphaLock = false;

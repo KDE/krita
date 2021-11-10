@@ -1220,7 +1220,7 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
     applicator.applyVisitor(
         new KisConvertColorSpaceProcessingVisitor(
             srcColorSpace, dstColorSpace,
-            renderingIntent, conversionFlags, false, true),
+            renderingIntent, conversionFlags, false),
         KisStrokeJobData::CONCURRENT);
 
     applicator.end();
@@ -1266,9 +1266,13 @@ void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *d
     KisImageSignalVector emitSignals;
     emitSignals << ColorSpaceChangedSignal;
 
+    KisProcessingApplicator::ProcessingFlags flags = KisProcessingApplicator::NO_UI_UPDATES;
+    if (convertLayers) {
+        flags |= KisProcessingApplicator::RECURSIVE;
+    }
+
     KisProcessingApplicator applicator(q, this->rootLayer,
-                                       KisProcessingApplicator::RECURSIVE |
-                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       flags,
                                        emitSignals, actionName);
 
     applicator.applyCommand(
@@ -1280,7 +1284,7 @@ void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *d
     applicator.applyVisitor(
                 new KisConvertColorSpaceProcessingVisitor(
                     srcColorSpace, dstColorSpace,
-                    renderingIntent, conversionFlags, true, convertLayers),
+                    renderingIntent, conversionFlags, true),
                 KisStrokeJobData::CONCURRENT);
 
     applicator.applyCommand(

@@ -23,17 +23,16 @@
 #include <KoUpdater.h>
 #include <commands_new/KisChangeChannelFlagsCommand.h>
 #include <commands_new/KisChangeChannelLockFlagsCommand.h>
+#include <commands_new/KisResetGroupLayerCacheCommand.h>
 
 KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(const KoColorSpace *srcColorSpace,
                                                                              const KoColorSpace *dstColorSpace,
                                                                              KoColorConversionTransformation::Intent renderingIntent,
-                                                                             KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                                             bool convertImage)
+                                                                             KoColorConversionTransformation::ConversionFlags conversionFlags)
     : m_srcColorSpace(srcColorSpace)
     , m_dstColorSpace(dstColorSpace)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
-    , m_convertImage(convertImage)
 {
 }
 
@@ -99,16 +98,15 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
 
 void KisConvertColorSpaceProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    using namespace KisDoSomethingCommandOps;
-
     // Group Layers determine their color space from their paint device, thus before setting
     // channel flags, it must be reset to the new CS first.
 
     bool alphaDisabled = layer->alphaChannelDisabled();
 
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, true));
+    // the swap of FINALIZING/INITIALIZING is intentional here, see the comment above
+    undoAdapter->addCommand(new KisResetGroupLayerCacheCommand(layer, m_dstColorSpace, KisResetGroupLayerCacheCommand::FINALIZING));
 
-    if (m_convertImage && m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
+    if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
         QBitArray channelFlags;
 
         if (alphaDisabled) {
@@ -118,7 +116,7 @@ void KisConvertColorSpaceProcessingVisitor::visit(KisGroupLayer *layer, KisUndoA
         undoAdapter->addCommand(new KisChangeChannelFlagsCommand(channelFlags, layer));
     }
 
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, false));
+    undoAdapter->addCommand(new KisResetGroupLayerCacheCommand(layer, m_srcColorSpace, KisResetGroupLayerCacheCommand::INITIALIZING));
 }
 
 void KisConvertColorSpaceProcessingVisitor::visit(KisTransformMask *node, KisUndoAdapter *undoAdapter)

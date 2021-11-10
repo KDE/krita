@@ -119,6 +119,7 @@ set(kritaimage_LIB_SRCS
    commands_new/KisSimpleModifyTransformMaskCommand.cpp
    commands_new/KisUpdateCommandEx.cpp
    commands_new/KisDisableDirtyRequestsCommand.cpp
+   commands_new/KisResetGroupLayerCacheCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp

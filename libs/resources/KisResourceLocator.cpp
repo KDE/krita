@@ -190,6 +190,7 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
             KoResourceSignature sig = res.embeddedResource().signature();
             QByteArray data = res.embeddedResource().data();
             QBuffer buffer(&data);
+            buffer.open(QBuffer::ReadOnly);
             importResource(sig.type, sig.filename, &buffer, false, "memory");
             break;
         }
@@ -435,7 +436,7 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
 
 bool KisResourceLocator::exportResource(KoResourceSP resource, QIODevice *device)
 {
-    if (!resource || !resource->valid() || !resource->resourceId()) return false;
+    if (!resource || !resource->valid() || resource->resourceId() < 0) return false;
 
     const QString resourceUrl = resource->resourceType().first + "/" + resource->filename();
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(resource->storageLocation())];

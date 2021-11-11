@@ -23,7 +23,10 @@ class KisMyPaintPaintOpPreset : public QObject, public KisPaintOpPreset
 public:
 
     KisMyPaintPaintOpPreset(const QString &fileName="");
+    KisMyPaintPaintOpPreset(const KisMyPaintPaintOpPreset &rhs);
     virtual ~KisMyPaintPaintOpPreset();
+
+    KoResourceSP clone() const override;
 
     void setColor(const KoColor color, const KoColorSpace *colorSpace);
     void apply(KisPaintOpSettingsSP settings);

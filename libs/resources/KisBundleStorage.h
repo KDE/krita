@@ -40,6 +40,7 @@ public:
     /// put these tags in a place in the file system
     bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;
 
+    bool exportResource(const QString &url, QIODevice *device) override;
 
 private:
     friend class BundleIterator;

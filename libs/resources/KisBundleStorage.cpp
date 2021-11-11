@@ -256,3 +256,37 @@ bool KisBundleStorage::saveAsNewVersion(const QString &resourceType, KoResourceS
 
     return KisStorageVersioningHelper::addVersionedResource(bundleSaveLocation, resource, 1);
 }
+
+bool KisBundleStorage::exportResource(const QString &url, QIODevice *device)
+{
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+
+    const QString resourceType = parts[0];
+    const QString resourceFileName = parts[1];
+
+    bool foundVersionedFile = false;
+
+    const QString bundleSaveLocation = location() + "_modified" + "/" + resourceType;
+
+    if (QDir(bundleSaveLocation).exists()) {
+        const QString fn = bundleSaveLocation  + "/" + resourceFileName;
+        if (QFileInfo(fn).exists()) {
+            foundVersionedFile = true;
+
+            QFile f(fn);
+            if (!f.open(QFile::ReadOnly)) {
+                qWarning() << "Could not open resource file for reading" << fn;
+                return false;
+            }
+
+            device->write(f.readAll());
+        }
+    }
+
+    if (!foundVersionedFile) {
+        d->bundle->exportResource(resourceType, resourceFileName, device);
+    }
+
+    return true;
+}

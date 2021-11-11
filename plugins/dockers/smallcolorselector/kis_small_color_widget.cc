@@ -72,8 +72,11 @@ struct KisSmallColorWidget::Private {
         }
 
         // PQ color space we deliniearize into linear one
-        if (result && result->colorModelId() == RGBAColorModelID &&
-            result->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
+        if (result
+                && result->colorModelId() == RGBAColorModelID
+                && result->profile()
+                && KoColorSpaceRegistry::instance()->p2020PQProfile()
+                && result->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
 
             result = KoColorSpaceRegistry::instance()->
                     colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),

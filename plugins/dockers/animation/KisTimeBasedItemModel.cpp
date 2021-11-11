@@ -143,6 +143,11 @@ void KisTimeBasedItemModel::setFrameCache(KisAnimationFrameCacheSP cache)
     }
 }
 
+bool KisTimeBasedItemModel::isFrameCached(const int frame)
+{
+    return m_d->framesCache && m_d->framesCache->frameStatus(frame) == KisAnimationFrameCache::Cached;
+}
+
 void KisTimeBasedItemModel::setAnimationPlayer(KisAnimationPlayer *player)
 {
     if (m_d->animationPlayer == player) return;
@@ -250,7 +255,16 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
                 int prevFrame = m_d->activeFrameIndex;
                 m_d->activeFrameIndex = section;
 
-                scrubTo(m_d->activeFrameIndex, m_d->scrubInProgress);
+                // BUG:445265
+                // Edgecase occurs where if we move from a cached frame to a non-cached frame,
+                // we never technically "switch" to the cached one during scrubbing, which
+                // will prevent the uncached frame from ever determining it needs to be
+                // regenerated. We will force a frame switch when going from uncached to cached
+                // to work around this issue.
+                bool needsRegeneration = isFrameCached(m_d->activeFrameIndex) && !isFrameCached(prevFrame);
+
+                bool usePreview = m_d->scrubInProgress && !needsRegeneration;
+                scrubTo(m_d->activeFrameIndex, usePreview);
 
                 /**
                  * Optimization Hack Alert:
@@ -487,16 +501,18 @@ void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 
 void KisTimeBasedItemModel::setScrubState(bool active)
 {
-    if (!m_d->scrubInProgress && active) {
-
-        if (m_d->framesCache) {
+    auto prioritizeCache = [this](){
+        if (m_d->image) {
             const int currentFrame = m_d->image->animationInterface()->currentUITime();
-            const bool hasCurrentFrameInCache = m_d->framesCache->frameStatus(currentFrame) == KisAnimationFrameCache::Cached;
-            if(!hasCurrentFrameInCache) {
+            if(!isFrameCached(currentFrame)) {
                 KisPart::instance()->prioritizeFrameForCache(m_d->image, currentFrame);
             }
         }
+    };
 
+    if (!m_d->scrubInProgress && active) {
+
+        prioritizeCache();
         m_d->scrubStartFrame = m_d->activeFrameIndex;
         m_d->scrubInProgress = true;
     }
@@ -504,6 +520,7 @@ void KisTimeBasedItemModel::setScrubState(bool active)
     if (m_d->scrubInProgress && !active) {
 
         m_d->scrubInProgress = false;
+        prioritizeCache();
 
         if (m_d->image) {
             scrubTo(m_d->activeFrameIndex, false);

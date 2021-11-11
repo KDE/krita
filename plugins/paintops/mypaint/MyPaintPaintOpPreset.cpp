@@ -37,10 +37,28 @@ KisMyPaintPaintOpPreset::KisMyPaintPaintOpPreset(const QString &fileName)
     mypaint_brush_from_defaults(d->brush);
 }
 
+KisMyPaintPaintOpPreset::KisMyPaintPaintOpPreset(const KisMyPaintPaintOpPreset &rhs)
+    : KisPaintOpPreset(rhs),
+      d(new Private(*rhs.d))
+{
+    d->brush = mypaint_brush_new();
+
+    if (d->json.isEmpty()) {
+        mypaint_brush_from_defaults(d->brush);
+    } else {
+        mypaint_brush_from_string(d->brush, d->json);
+    }
+}
+
 KisMyPaintPaintOpPreset::~KisMyPaintPaintOpPreset() {
 
     mypaint_brush_unref(d->brush);
     delete d;
+}
+
+KoResourceSP KisMyPaintPaintOpPreset::clone() const
+{
+    return toQShared(new KisMyPaintPaintOpPreset(*this));
 }
 
 void KisMyPaintPaintOpPreset::setColor(const KoColor color, const KoColorSpace *colorSpace) {

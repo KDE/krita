@@ -183,7 +183,6 @@ void KisDlgLayerStyle::notifyGuiConfigChanged()
     if (m_isSwitchingPredefinedStyle) return;
 
     m_configChangedCompressor->start();
-    m_layerStyle->setUuid(QUuid::createUuid());
     m_sanityLayerStyleDirty = true;
 
     m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());

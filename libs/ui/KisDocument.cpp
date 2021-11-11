@@ -41,6 +41,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceCacheDb.h>
+#include <KoEmbeddedResource.h>
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
 #include "kis_scratch_pad.h"
@@ -2064,10 +2065,10 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     }
 }
 
-QList<KoResourceSP> KisDocument::linkedDocumentResources()
+QList<KoResourceLoadResult> KisDocument::linkedDocumentResources()
 {
-    QList<KoResourceSP> resources;
-    if (d->linkedResourceStorage.isNull()) {
+    QList<KoResourceLoadResult> resources;
+    if (!d->linkedResourceStorage) {
         return resources;
     }
 
@@ -2075,38 +2076,30 @@ QList<KoResourceSP> KisDocument::linkedDocumentResources()
         QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->linkedResourceStorage->resources(resourceType);
         while (iter->hasNext()) {
             iter->next();
-            KoResourceSP resource = iter->resource();
 
-            KIS_SAFE_ASSERT_RECOVER(resource->isSerializable()) {continue;}
+            QBuffer buf;
+            buf.open(QBuffer::WriteOnly);
+            bool exportSuccessfull =
+                d->linkedResourceStorage->exportResource(iter->url(), &buf);
 
-            if (resource && resource->valid()) {
-                resources << resource;
+            KoResourceSP resource = d->linkedResourceStorage->resource(iter->url());
+            exportSuccessfull &= bool(resource);
+
+            const QString name = resource ? resource->name() : QString();
+            const QString fileName = QFileInfo(iter->url()).fileName();
+            const KoResourceSignature signature(resourceType,
+                                                KoMD5Generator::generateHash(buf.data()),
+                                                fileName, name);
+
+            if (exportSuccessfull) {
+                resources << KoEmbeddedResource(signature, buf.data());
+            } else {
+                resources << signature;
             }
         }
     }
     return resources;
 
-}
-
-
-QList<KoResourceSP > KisDocument::embeddedDocumentResources()
-{
-    QList<KoResourceSP> resources;
-    if (d->embeddedResourceStorage.isNull()) {
-        return resources;
-    }
-
-    Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->embeddedResourceStorage->resources(resourceType);
-        while (iter->hasNext()) {
-            iter->next();
-            KoResourceSP resource = iter->resource();
-            if (resource && resource->valid()) {
-                resources << resource;
-            }
-        }
-    }
-    return resources;
 }
 
 void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)

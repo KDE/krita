@@ -68,6 +68,7 @@ struct KisKraSaver::Private
     QStringList errorMessages;
     QStringList specialAnnotations;
     bool addMergedImage;
+    QList<KoResourceLoadResult> linkedDocumentResources;
 
     Private() {
         specialAnnotations << "exif" << "icc";
@@ -81,6 +82,7 @@ KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename, bool ad
     m_d->doc = document;
     m_d->filename = filename;
     m_d->addMergedImage = addMergedImage;
+    m_d->linkedDocumentResources = document->linkedDocumentResources();
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
     if (m_d->imageName.isEmpty()) {
@@ -184,57 +186,49 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
-    QList<KoResourceSP> resources = m_d->doc->linkedDocumentResources();
-    bool res = false;
-    if (resources.size() == 0) {
-        return true;
-    }
-
+    bool res = true;
     QStringList brokenResources;
+    QList<KoResourceLoadResult> embeddedResources = m_d->linkedDocumentResources;
 
-    Q_FOREACH (const KoResourceSP resource, resources) {
+    Q_FOREACH (const KoResourceLoadResult &result, embeddedResources) {
+        KIS_SAFE_ASSERT_RECOVER(result.type() != KoResourceLoadResult::ExistingResource) { continue; }
 
-        if (!resource->active()) {
+        if (result.type() == KoResourceLoadResult::FailedLink) {
+            brokenResources << result.signature().filename;
+            res = false;
             continue;
         }
 
+        KoEmbeddedResource resource = result.embeddedResource();
+
         QString path = RESOURCE_PATH;
 
-        if (resource->resourceType().first == ResourceType::Palettes) {
+        if (resource.signature().type == ResourceType::Palettes) {
             path = m_d->imageName + PALETTE_PATH;
         }
 
-        if (!store->open(path  + '/' + resource->filename())) {
+        const QString fileName = resource.signature().filename;
+
+        if (!store->open(path  + '/' + fileName)) {
             m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not open resource for writing.");
-            brokenResources << resource->filename();
+            brokenResources << fileName;
             continue;
         }
 
         // we first read into a buffer to make sure the save operation is transactional,
         // that is, either resource is saves correctly, or the file is left empty.
-        QByteArray ba;
-        QBuffer buf(&ba);
-        buf.open(QBuffer::WriteOnly);
-
-        KisResourceModel model(resource->resourceType().first);
-        bool savingSucceeded = model.exportResource(resource, &buf);
-        buf.close();
-
-        if (!savingSucceeded) {
-            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save resource %1 to the kra file.", resource->name());
-            brokenResources << resource->filename();
-            continue;;
-        }
+        QByteArray ba = resource.data();
 
         qint64 nwritten = 0;
         if (!ba.isEmpty()) {
             nwritten = store->write(ba);
         } else {
-            qWarning() << "This resource is empty, so not saved:" << resource->name();
-            brokenResources << resource->name() + " (empty)";
+            qWarning() << "This resource is empty, so not saved:" << fileName;
+            brokenResources << fileName + " (empty)";
         }
-        res = store->close();
-        res = res && (nwritten == ba.size());
+
+        res &= store->close();
+        res &= (nwritten == ba.size());
     }
 
     if (!res) {
@@ -324,20 +318,19 @@ void KisKraSaver::saveResourcesToXML(QDomDocument &doc, QDomElement &element)
     QDomElement ePalette = doc.createElement(PALETTES);
     QDomElement eResources = doc.createElement(RESOURCES);
 
-    Q_FOREACH (const KoResourceSP resource, m_d->doc->linkedDocumentResources()) {
-        KIS_SAFE_ASSERT_RECOVER(resource->isSerializable()) {continue;}
+    Q_FOREACH (const KoResourceLoadResult resource, m_d->linkedDocumentResources) {
+        // all warnings will be issued in KisKraSaver::saveResources()
+        if (resource.type() != KoResourceLoadResult::EmbeddedResource) continue;
 
-        if (!resource->active()) {
-            continue;
-        }
+        KoResourceSignature sig = resource.signature();
 
         QDomElement eResource = doc.createElement("resource");
-        eResource.setAttribute("type", resource->resourceType().first);
-        eResource.setAttribute("name", resource->name());
-        eResource.setAttribute("filename", resource->filename());
-        eResource.setAttribute("md5sum", resource->md5Sum());
+        eResource.setAttribute("type", sig.type);
+        eResource.setAttribute("name", sig.name);
+        eResource.setAttribute("filename", sig.filename);
+        eResource.setAttribute("md5sum", sig.md5);
 
-        if (resource->resourceType().first == ResourceType::Palettes) {
+        if (sig.type == ResourceType::Palettes) {
             ePalette.appendChild(eResource);
         }
         else {

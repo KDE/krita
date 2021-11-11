@@ -54,7 +54,7 @@ public:
      * Returns a valid object only when `type()` is equal to
      * `EmbeddedResource`
      */
-    KoEmbeddedResource embeddedResource();
+    KoEmbeddedResource embeddedResource() const;
 
     /**
      * Return a signature for the embedded/linked resource. This is

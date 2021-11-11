@@ -20,10 +20,10 @@ KoResourceLoadResult::KoResourceLoadResult(KoResourceSP resource)
     m_d->value = resource;
 }
 
-KoResourceLoadResult::KoResourceLoadResult(KoEmbeddedResource embeddedRresource)
+KoResourceLoadResult::KoResourceLoadResult(KoEmbeddedResource embeddedResource)
     : m_d(new Private)
 {
-    m_d->value = embeddedResource();
+    m_d->value = embeddedResource;
 }
 
 KoResourceLoadResult::KoResourceLoadResult(KoResourceSignature signature)
@@ -52,7 +52,7 @@ KoResourceSP KoResourceLoadResult::resource() const
     return m_d->value.which() == 0 ? boost::get<KoResourceSP>(m_d->value) : KoResourceSP();
 }
 
-KoEmbeddedResource KoResourceLoadResult::embeddedResource()
+KoEmbeddedResource KoResourceLoadResult::embeddedResource() const
 {
     return m_d->value.which() == 1 ? boost::get<KoEmbeddedResource>(m_d->value) : KoEmbeddedResource();
 }

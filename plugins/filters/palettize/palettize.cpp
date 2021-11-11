@@ -62,9 +62,7 @@ public:
         const QString md5sum = this->getString("md5sum");
         const QString name = this->getString("palette");
 
-        KoColorSetSP palette = source.bestMatch(md5sum, "", name) ;
-
-        return palette;
+        return source.bestMatchLoadResult(md5sum, "", name) ;
     }
 
     KoColorSetSP palette() const

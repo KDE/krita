@@ -425,8 +425,8 @@ bool KraConverter::completeLoading(KoStore* store)
         }
     }
 
-    m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadResources(store, m_doc);
+    m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadStoryboards(store, m_doc);
     m_kraLoader->loadAnimationMetadata(store, m_image);
 

@@ -415,8 +415,6 @@ public:
     QString embeddedResourcesStorageID {QUuid::createUuid().toString()};
     KisResourceStorageSP embeddedResourceStorage;
 
-
-
     void syncDecorationsWrapperLayerState();
 
     void setImageAndInitIdleWatcher(KisImageSP _image) {
@@ -427,6 +425,9 @@ public:
 
     void copyFrom(const Private &rhs, KisDocument *q);
     void copyFromImpl(const Private &rhs, KisDocument *q, KisDocument::CopyPolicy policy);
+
+    void uploadLinkedResourcesFromLayersToStorage();
+    KisDocument* lockAndCloneImpl(bool fetchResourcesFromLayers);
 
     /// clones the palette list oldList
     /// the ownership of the returned KoColorSet * belongs to the caller
@@ -929,44 +930,99 @@ void KisDocument::setFileBatchMode(const bool batchMode)
     d->batchMode = batchMode;
 }
 
-KisDocument* KisDocument::lockAndCloneForSaving()
+void KisDocument::Private::uploadLinkedResourcesFromLayersToStorage()
+{
+    /// Fetch resources from KisAdjustmentLayer, KisFilterMask and
+    /// KisGeneratorLayer and put them into the cloned storage. This must be
+    /// done in the context of the GUI thread, otherwise we will not be able to
+    /// access resources database
+
+    KisDocument *doc = q;
+
+    KisLayerUtils::recursiveApplyNodes(doc->image()->root(),
+        [doc] (KisNodeSP node) {
+            if (KisNodeFilterInterface *layer = dynamic_cast<KisNodeFilterInterface*>(node.data())) {
+                KisFilterConfigurationSP filterConfig = layer->filter();
+                if (!filterConfig) return;
+
+                QList<KoResourceLoadResult> linkedResources = filterConfig->linkedResources(KisGlobalResourcesInterface::instance());
+
+                Q_FOREACH (const KoResourceLoadResult &result, linkedResources) {
+                    KIS_SAFE_ASSERT_RECOVER(result.type() != KoResourceLoadResult::EmbeddedResource) { continue; }
+
+                    KoResourceSP resource = result.resource();
+
+                    if (!resource) {
+                        qWarning() << "WARNING: KisDocument::lockAndCloneForSaving failed to fetch a resource" << result.signature();
+                        continue;
+                    }
+
+                    QBuffer buf;
+                    buf.open(QBuffer::WriteOnly);
+
+                    KisResourceModel model(resource->resourceType().first);
+                    bool res = model.exportResource(resource, &buf);
+
+                    buf.close();
+
+                    if (!res) {
+                        qWarning() << "WARNING: KisDocument::lockAndCloneForSaving failed to export resource" << result.signature();
+                        continue;
+                    }
+
+                    buf.open(QBuffer::ReadOnly);
+
+                    res = doc->d->linkedResourceStorage->importResource(resource->resourceType().first + "/" + resource->filename(), &buf);
+
+                    buf.close();
+
+                    if (!res) {
+                        qWarning() << "WARNING: KisDocument::lockAndCloneForSaving failed to import resource" << result.signature();
+                        continue;
+                    }
+                }
+
+            }
+    });
+}
+
+KisDocument *KisDocument::Private::lockAndCloneImpl(bool fetchResourcesFromLayers)
 {
     // force update of all the asynchronous nodes before cloning
     QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-    KisLayerUtils::forceAllDelayedNodesUpdate(d->image->root());
+    KisLayerUtils::forceAllDelayedNodesUpdate(image->root());
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
     if (window) {
         if (window->viewManager()) {
-            if (!window->viewManager()->blockUntilOperationsFinished(d->image)) {
+            if (!window->viewManager()->blockUntilOperationsFinished(image)) {
                 return 0;
             }
         }
     }
 
-    Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
+    Private::StrippedSafeSavingLocker locker(&savingMutex, image);
     if (!locker.successfullyLocked()) {
         return 0;
     }
 
-    return new KisDocument(*this);
+    KisDocument *doc = new KisDocument(*this->q);
+
+    if (fetchResourcesFromLayers) {
+        doc->d->uploadLinkedResourcesFromLayersToStorage();
+    }
+
+    return doc;
+}
+
+KisDocument* KisDocument::lockAndCloneForSaving()
+{
+    return d->lockAndCloneImpl(true);
 }
 
 KisDocument *KisDocument::lockAndCreateSnapshot()
 {
-    KisDocument *doc = lockAndCloneForSaving();
-    if (doc) {
-        if (doc->d->embeddedResourceStorage) {
-            // clone the local resource storage and its contents
-            doc->d->embeddedResourceStorage = d->embeddedResourceStorage->clone();
-        }
-
-        if (doc->d->linkedResourceStorage) {
-            // clone the local resource storage and its contents
-            doc->d->linkedResourceStorage = d->linkedResourceStorage->clone();
-        }
-    }
-    return doc;
+    return d->lockAndCloneImpl(false);
 }
 
 void KisDocument::copyFromDocument(const KisDocument &rhs)
@@ -2055,9 +2111,9 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
 
 QList<KoResourceLoadResult> KisDocument::linkedDocumentResources()
 {
-    QList<KoResourceLoadResult> resources;
+    QList<KoResourceLoadResult> result;
     if (!d->linkedResourceStorage) {
-        return resources;
+        return result;
     }
 
     Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
@@ -2080,14 +2136,14 @@ QList<KoResourceLoadResult> KisDocument::linkedDocumentResources()
                                                 fileName, name);
 
             if (exportSuccessfull) {
-                resources << KoEmbeddedResource(signature, buf.data());
+                result << KoEmbeddedResource(signature, buf.data());
             } else {
-                resources << signature;
+                result << signature;
             }
         }
     }
-    return resources;
 
+    return result;
 }
 
 void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)

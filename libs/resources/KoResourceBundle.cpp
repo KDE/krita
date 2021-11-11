@@ -140,11 +140,11 @@ bool saveResourceToStore(const QString &filename, KoResourceSP resource, KoStore
     }
 
     QBuffer buf;
-    buf.open(QFile::ReadWrite);
+    buf.open(QFile::WriteOnly);
 
     bool response = model.exportResource(resource, &buf);
     if (!response) {
-        ENTER_FUNCTION() << "Cannot save to device";
+        qWarning() << "Cannot save to device";
         return false;
     }
 
@@ -468,6 +468,28 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
 
     KoResourceSP resource = loader->create(parts[1]);
     return loadResource(resource) ? resource : 0;
+}
+
+bool KoResourceBundle::exportResource(const QString &resourceType, const QString &fileName, QIODevice *device)
+{
+    if (m_filename.isEmpty()) return false;
+
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << m_filename;
+        return false;
+    }
+    const QString filePath = QString("%1/%2").arg(resourceType).arg(fileName);
+
+    if (!resourceStore->open(filePath)) {
+        qWarning() << "Could not open file in bundle" << filePath;
+        return false;
+    }
+
+    device->write(resourceStore->device()->readAll());
+
+    return true;
 }
 
 bool KoResourceBundle::loadResource(KoResourceSP resource)

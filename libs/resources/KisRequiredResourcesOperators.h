@@ -21,7 +21,7 @@ namespace detail {
 bool KRITARESOURCES_EXPORT isLocalResourcesStorage(KisResourcesInterfaceSP resourcesInterface);
 void KRITARESOURCES_EXPORT assertInGuiThread();
 KisResourcesInterfaceSP KRITARESOURCES_EXPORT createLocalResourcesStorage(const QList<KoResourceSP> &resources);
-void KRITARESOURCES_EXPORT addResourceOrWarnIfNotLoaded(KoResourceLoadResult loadedResource, QList<KoResourceSP> *resources);
+void KRITARESOURCES_EXPORT addResourceOrWarnIfNotLoaded(KoResourceLoadResult loadedResource, QList<KoResourceSP> *resources, KisResourcesInterfaceSP resourcesInterface);
 }
 
 
@@ -51,15 +51,19 @@ template <typename T>
 void createLocalResourcesSnapshot(T *object, KisResourcesInterfaceSP globalResourcesInterface = nullptr)
 {
     detail::assertInGuiThread();
+
+    KisResourcesInterfaceSP effectiveResourcesInterface =
+        globalResourcesInterface ?
+            globalResourcesInterface :
+            object->resourcesInterface();
+
     QList<KoResourceLoadResult> loadedResources =
-        object->requiredResources(globalResourcesInterface ?
-                                      globalResourcesInterface :
-                                      object->resourcesInterface());
+        object->requiredResources(effectiveResourcesInterface);
 
     QList<KoResourceSP> resources;
 
     Q_FOREACH(const KoResourceLoadResult &loadedResource, loadedResources) {
-        detail::addResourceOrWarnIfNotLoaded(loadedResource, &resources);
+        detail::addResourceOrWarnIfNotLoaded(loadedResource, &resources, effectiveResourcesInterface);
     }
 
     object->setResourcesInterface(detail::createLocalResourcesStorage(resources));

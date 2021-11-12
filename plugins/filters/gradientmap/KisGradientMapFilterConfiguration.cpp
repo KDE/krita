@@ -67,7 +67,9 @@ QList<KoResourceLoadResult> KisGradientMapFilterConfiguration::embeddedResources
 
         // TODO: check if it is okay to resave the gradient on loading
         QBuffer buffer;
+        buffer.open(QBuffer::WriteOnly);
         gradient->saveToDevice(&buffer);
+
         resources << KoEmbeddedResource(KoResourceSignature(ResourceType::Gradients, KoMD5Generator::generateHash(buffer.data()), gradient->filename(), gradient->name()), buffer.data());
     }
 
@@ -105,6 +107,7 @@ KoAbstractGradientSP KisGradientMapFilterConfiguration::gradient(KoAbstractGradi
                 }
                 if (gradient) {
                     gradient->setName(gradientElement.attribute("name", ""));
+                    gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
                     gradient->setValid(true);
                     return gradient;
                 }

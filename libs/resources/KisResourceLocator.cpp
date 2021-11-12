@@ -278,7 +278,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         resource->setMD5Sum(q.value(2).toString());
         Q_ASSERT(!resource->md5Sum().isEmpty());
 
-        resource->setActive(q.value(3).toBool());
+        resource->setActive(q.value(4).toBool());
 
         // To override resources that use the filename for the name, which is versioned, and we don't want the version number in the name
         resource->setName(q.value(3).toString());;

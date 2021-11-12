@@ -624,6 +624,13 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
         qWarning() << d->errorMessages;
         return false;
     }
+
+    if (!KisResourceCacheDb::addStorageTags(storage)) {
+        d->errorMessages.append(QString("Could not add tags for storage %1 to the cache database").arg(storage->location()));
+        qWarning() << d->errorMessages;
+        return false;
+    }
+
     emit storageAdded(makeStorageLocationRelative(storage->location()));
     return true;
 }

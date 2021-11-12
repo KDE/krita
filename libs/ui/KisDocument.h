@@ -78,7 +78,7 @@ protected:
      *        cloning.
      * @param rhs the source document to copy from
      */
-    explicit KisDocument(const KisDocument &rhs);
+    explicit KisDocument(const KisDocument &rhs, bool addStorage);
 
 public:
     enum OpenFlag {
@@ -117,7 +117,7 @@ public:
      * @brief creates a clone of the document and returns it. Please make sure that you
      * hold all the necessary locks on the image before asking for a clone!
      */
-    KisDocument* clone();
+    KisDocument* clone(bool addStorage = false);
 
     /**
      * @brief openPath Open a Path

@@ -132,7 +132,7 @@ void TestResourceStorage::testImportExportResource()
         QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         r = bundleStorage.exportResource("patterns/testpattern.png", &buffer);
-        QVERIFY(!r);
+        QVERIFY(r);
     }
 }
 

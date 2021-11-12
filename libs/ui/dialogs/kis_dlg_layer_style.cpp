@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -593,6 +594,9 @@ StylesSelector::StylesSelector(QWidget *parent)
 
     ui.listStyles->setModel(m_locationsProxyModel);
     ui.listStyles->setModelColumn(KisAbstractResourceModel::Name);
+    // XXX: support editing
+    // KisResourceModel doesn't support data with the EditRole
+    ui.listStyles->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));

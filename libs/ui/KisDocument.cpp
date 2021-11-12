@@ -608,11 +608,16 @@ KisDocument::KisDocument(bool addStorage)
     slotConfigChanged();
 }
 
-KisDocument::KisDocument(const KisDocument &rhs)
+KisDocument::KisDocument(const KisDocument &rhs, bool addStorage)
     : QObject(),
       d(new Private(*rhs.d, this))
 {
     copyFromDocumentImpl(rhs, CONSTRUCT);
+
+    if (addStorage) {
+        KisResourceLocator::instance()->addStorage(d->linkedResourcesStorageID, d->linkedResourceStorage);
+        KisResourceLocator::instance()->addStorage(d->embeddedResourcesStorageID, d->embeddedResourceStorage);
+    }
 }
 
 KisDocument::~KisDocument()
@@ -688,9 +693,9 @@ QString KisDocument::linkedResourcesStorageId() const
     return d->linkedResourcesStorageID;
 }
 
-KisDocument *KisDocument::clone()
+KisDocument *KisDocument::clone(bool addStorage)
 {
-    return new KisDocument(*this);
+    return new KisDocument(*this, addStorage);
 }
 
 bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting)
@@ -1006,7 +1011,7 @@ KisDocument *KisDocument::Private::lockAndCloneImpl(bool fetchResourcesFromLayer
         return 0;
     }
 
-    KisDocument *doc = new KisDocument(*this->q);
+    KisDocument *doc = new KisDocument(*this->q, false);
 
     if (fetchResourcesFromLayers) {
         doc->d->uploadLinkedResourcesFromLayersToStorage();

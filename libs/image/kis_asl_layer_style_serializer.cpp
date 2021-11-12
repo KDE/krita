@@ -771,7 +771,7 @@ QVector<KoResourceSP> KisAslLayerStyleSerializer::fetchEmbeddedResources(const K
 void KisAslLayerStyleSerializer::saveToDevice(QIODevice &device)
 {
     QDomDocument doc = formXmlDocument();
-    if (doc.isNull()) return ;
+    KIS_ASSERT(!doc.isNull());
 
     KisAslWriter writer;
     writer.writeFile(device, doc);
@@ -1372,7 +1372,7 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice &device)
 
         style->setValid(!style->isEmpty());
 
-        style->setFilename(style->psdUuid() + QString("_style"));
+        style->setFilename(style->uuid().toString());
 
         cleanedStyles.insert(style->psdUuid(), style);
     }

@@ -76,6 +76,10 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
         Q_FOREACH (KoResourceSP res, resourcesForMD5(md5)) {
             int penalty = 0;
 
+            if (!res->active()) {
+                penalty += 100;
+            }
+
             if (!filename.isEmpty() && filename != res->filename()) {
                 /// filename is more important than name, so it gives
                 /// higher penalty
@@ -106,6 +110,10 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
             Q_FOREACH (KoResourceSP res, resourcesForFilename(filename)) {
                 int penalty = 0;
 
+                if (!res->active()) {
+                    penalty += 100;
+                }
+
                 if (!name.isEmpty() && name != res->name()) {
                     penalty++;
                 }
@@ -115,6 +123,11 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
         } else if (!name.isEmpty()) {
             Q_FOREACH (KoResourceSP res, resourcesForName(name)) {
                 int penalty = 0;
+
+                if (!res->active()) {
+                    penalty += 100;
+                }
+
                 foundResources.append(qMakePair(res, penalty));
             }
         }

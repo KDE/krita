@@ -338,14 +338,17 @@ void KisDlgLayerStyle::slotLoadStyle()
     if (!filename.isEmpty()) {
         const QFileInfo oldFileInfo(filename);
 
-        // 0. Try reading the layer style
-        KisAslLayerStyleSerializer test;
-        if (!test.readFromFile(oldFileInfo.absoluteFilePath()))
+        // 0. Validate layer style
         {
-            QMessageBox::warning(this,
-                                 i18nc("@title:window", "Failed to import the resource"),
-                                 i18nc("Warning message", "Failed to import the resource."));
-            return;
+            KisAslLayerStyleSerializer test;
+
+            if (!test.readFromFile(oldFileInfo.absoluteFilePath())) {
+                qWarning() << "Attempted to import an invalid layer style library!" << filename;
+                QMessageBox::warning(this,
+                                     i18nc("@title:window", "Krita"),
+                                     i18n("Could not load layer style library %1.", filename));
+                return;
+            }
         }
 
         // 1. Copy the layer style to the resource folder

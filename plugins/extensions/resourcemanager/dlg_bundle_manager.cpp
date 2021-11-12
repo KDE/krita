@@ -204,6 +204,20 @@ void DlgBundleManager::addBundle()
     dlg.setCaption(i18n("Select the bundle"));
     QString filename = dlg.filename();
     if (!filename.isEmpty()) {
+        // 0. Validate bundle
+        {
+            KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
+            KIS_ASSERT(!storage.isNull());
+
+            if (!storage->valid()) {
+                qWarning() << "Attempted to import an invalid bundle!" << filename;
+                QMessageBox::warning(this,
+                                     i18nc("@title:window", "Krita"),
+                                     i18n("Could not load bundle %1.", filename));
+                return;
+            }
+        }
+
         // 1. Copy the bundle to the resource folder
         QFileInfo oldFileInfo(filename);
 
@@ -215,7 +229,7 @@ void DlgBundleManager::addBundle()
 
         QFileInfo newFileInfo(newLocation);
         if (newFileInfo.exists()) {
-            if (QMessageBox::warning(this, i18nc("@ttile:window", "Warning"), i18n("There is already a bundle with this name installed. Do you want to overwrite it?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) {
+            if (QMessageBox::warning(this, i18nc("@title:window", "Warning"), i18n("There is already a bundle with this name installed. Do you want to overwrite it?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) {
                 return;
             }
             else {

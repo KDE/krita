@@ -135,7 +135,9 @@ void ResourceManager::slotCreateBundle()
 
 KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
 {
-    QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
+    const QString bundlePath =
+        QString("%1/%2.bundle").arg(dlgCreateBundle.saveLocation(),
+        dlgCreateBundle.bundleName().replace(" ", "_"));
 
     KoResourceBundleSP newBundle(new KoResourceBundle(bundlePath));
 

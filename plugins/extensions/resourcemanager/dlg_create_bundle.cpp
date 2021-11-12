@@ -195,7 +195,7 @@ DlgCreateBundle::~DlgCreateBundle()
 
 QString DlgCreateBundle::bundleName() const
 {
-    return m_ui->editBundleName->text().replace(" ", "_");
+    return m_ui->editBundleName->text();
 }
 
 QString DlgCreateBundle::authorName() const
@@ -348,7 +348,7 @@ QString DlgCreateBundle::createPrettyFilenameFromName(KoResourceSP resource) con
 void DlgCreateBundle::accept()
 {
     QString name = bundleName();
-    QString filename = m_ui->lblSaveLocation->text() + "/" + name + ".bundle";
+    QString filename = QString("%1/%2.bundle").arg(m_ui->lblSaveLocation->text(), name.replace(" ", "_"));
 
     if (name.isEmpty()) {
         m_ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));

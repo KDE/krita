@@ -16,6 +16,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QItemSelectionModel>
+#include <QStringLiteral>
 
 
 #include <kconfiggroup.h>
@@ -210,7 +211,7 @@ void DlgBundleManager::addBundle()
         QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
                                                 QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
         QString newName = oldFileInfo.fileName();
-        QString newLocation = newDir + '/' + newName;
+        const QString newLocation = QStringLiteral("%1/%2").arg(newDir, newName);
 
         QFileInfo newFileInfo(newLocation);
         if (newFileInfo.exists()) {

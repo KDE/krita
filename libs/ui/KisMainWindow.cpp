@@ -1236,11 +1236,11 @@ bool KisMainWindow::hackIsSaving() const
 bool KisMainWindow::installBundle(const QString &fileName) const
 {
     QFileInfo from(fileName);
-    QFileInfo to(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
+    QFileInfo to(QStringLiteral("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation), from.fileName()));
     if (to.exists()) {
         QFile::remove(to.canonicalFilePath());
     }
-    return QFile::copy(fileName, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
+    return QFile::copy(fileName, to.absoluteFilePath());
 }
 
 QImage KisMainWindow::layoutThumbnail()

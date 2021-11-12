@@ -577,10 +577,19 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
         if (model.resourcesForMD5(resourceItem.md5sum).isEmpty()) {
             store->open(RESOURCE_PATH + '/' + resourceItem.resourceType + '/' + resourceItem.filename);
 
+            if (!store->isOpen()) {
+                m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be read. The filename of the resource: %1", resourceItem.filename));
+                continue;
+            }
+
             /// don't try to load the resource if its file is empty
             /// (which is a sign of a failed save operation)
             if (!store->device()->atEnd()) {
-                model.importResource(resourceItem.filename, store->device(), false, doc->linkedResourcesStorageId());
+                bool result = model.importResource(resourceItem.filename, store->device(), false, doc->linkedResourcesStorageId());
+                if (!result) {
+                    m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be imported. The filename of the resource: %1", resourceItem.filename));
+                    continue;
+                }
             }
 
             store->close();

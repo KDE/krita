@@ -201,7 +201,7 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
 
         KoEmbeddedResource resource = result.embeddedResource();
 
-        QString path = RESOURCE_PATH;
+        QString path = RESOURCE_PATH + "/" + resource.signature().type;
 
         if (resource.signature().type == ResourceType::Palettes) {
             path = m_d->imageName + PALETTE_PATH;

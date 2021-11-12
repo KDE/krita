@@ -1346,6 +1346,43 @@ bool KisResourceCacheDb::deleteStorage(QString location)
 
     {
         QSqlQuery q;
+        if (!q.prepare("DELETE FROM tags \n"
+                       "WHERE id IN (SELECT tags_storages.tag_id \n "
+                       "             FROM tags_storages \n"
+                       "             WHERE tags_storages.storage_id = \n"
+                       "                   (SELECT storages.id\n"
+                       "                    FROM   storages\n"
+                       "                    WHERE  storages.location = :location)\n"
+                       "           );")) {
+            qWarning() << "Could not prepare delete tag query" << q.lastError();
+            return false;
+        }
+        q.bindValue(":location", location);
+        if (!q.exec()) {
+            qWarning() << "Could not execute delete tag query" << q.lastError();
+            return false;
+        }
+    }
+
+    {
+        QSqlQuery q;
+        if (!q.prepare("DELETE FROM tags_storages \n"
+                       "       WHERE tags_storages.storage_id = \n"
+                       "             (SELECT storages.id\n"
+                       "              FROM   storages\n"
+                       "              WHERE  storages.location = :location);")) {
+            qWarning() << "Could not prepare delete tag storage query" << q.lastError();
+            return false;
+        }
+        q.bindValue(":location", location);
+        if (!q.exec()) {
+            qWarning() << "Could not execute delete tag storage query" << q.lastError();
+            return false;
+        }
+    }
+
+    {
+        QSqlQuery q;
         if (!q.prepare("DELETE FROM versioned_resources\n"
                        "WHERE storage_id = (SELECT storages.id\n"
                        "                    FROM   storages\n"

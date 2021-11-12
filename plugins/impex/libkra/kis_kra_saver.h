@@ -40,6 +40,9 @@ public:
     /// @return a list with everything that went wrong while saving
     QStringList errorMessages() const;
 
+    /// @return a list with non-critical issues that happened while saving
+    QStringList warningMessages() const;
+
 private:
     void saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageSP image);
     void saveAssistantsGlobalColor(QDomDocument& doc, QDomElement& element);

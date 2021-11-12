@@ -66,6 +66,7 @@ struct KisKraSaver::Private
     QString imageName;
     QString filename;
     QStringList errorMessages;
+    QStringList warningMessages;
     QStringList specialAnnotations;
     bool addMergedImage;
     QList<KoResourceLoadResult> linkedDocumentResources;
@@ -186,16 +187,13 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
-    bool res = true;
-    QStringList brokenResources;
     QList<KoResourceLoadResult> embeddedResources = m_d->linkedDocumentResources;
 
     Q_FOREACH (const KoResourceLoadResult &result, embeddedResources) {
         KIS_SAFE_ASSERT_RECOVER(result.type() != KoResourceLoadResult::ExistingResource) { continue; }
 
         if (result.type() == KoResourceLoadResult::FailedLink) {
-            brokenResources << result.signature().filename;
-            res = false;
+            m_d->warningMessages << i18nc("Error message when saving a .kra file", "Could not export resource for embedding: %1", result.signature().filename);
             continue;
         }
 
@@ -210,8 +208,7 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
         const QString fileName = resource.signature().filename;
 
         if (!store->open(path  + '/' + fileName)) {
-            m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not open resource for writing.");
-            brokenResources << fileName;
+            m_d->warningMessages << i18nc("Error message when saving a .kra file", "Could not write resource: %1", result.signature().filename);
             continue;
         }
 
@@ -223,19 +220,17 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
         if (!ba.isEmpty()) {
             nwritten = store->write(ba);
         } else {
-            qWarning() << "This resource is empty, so not saved:" << fileName;
-            brokenResources << fileName + " (empty)";
+            m_d->warningMessages << i18nc("Error message when saving a .kra file", "Written resource is empty: %1", result.signature().filename);
         }
 
-        res &= store->close();
-        res &= (nwritten == ba.size());
+        store->close();
+
+        if (nwritten != ba.size()) {
+            m_d->warningMessages << i18nc("Error message when saving a .kra file", "Written resource is incomplete: %1. ", result.signature().filename);
+        }
     }
 
-    if (!res) {
-        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save resources: %1.", brokenResources.join(','));
-    }
-
-    return res;
+    return true;
 }
 
 bool KisKraSaver::saveStoryboard(KoStore *store, KisImageSP image, const QString &uri)
@@ -626,6 +621,11 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
 QStringList KisKraSaver::errorMessages() const
 {
     return m_d->errorMessages;
+}
+
+QStringList KisKraSaver::warningMessages() const
+{
+    return m_d->warningMessages;
 }
 
 void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageSP image)

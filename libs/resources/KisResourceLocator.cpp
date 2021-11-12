@@ -37,7 +37,6 @@
 #include <KisGlobalResourcesInterface.h>
 #include <KisStorageModel.h>
 #include <KoMD5Generator.h>
-#include <KisIODeviceOffsetGuard.h>
 #include <KoResourceLoadResult.h>
 
 #include "ResourceDebug.h"
@@ -329,10 +328,13 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
 {
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
 
-    KisIODeviceOffsetGuard deviceGuard(device);
+    QByteArray resourceData = device->readAll();
     KoResourceSP resource;
 
     {
+        QBuffer buf(&resourceData);
+        buf.open(QBuffer::ReadOnly);
+
         KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fileName));
 
         if (!loader) {
@@ -340,8 +342,7 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
             return nullptr;
         }
 
-        resource = loader->load(QFileInfo(fileName).fileName(), *device, KisGlobalResourcesInterface::instance());
-        deviceGuard.reset();
+        resource = loader->load(QFileInfo(fileName).fileName(), buf, KisGlobalResourcesInterface::instance());
     }
 
     if (!resource || !resource->valid()) {
@@ -349,8 +350,7 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
         return nullptr;
     }
 
-    const QString md5 = KoMD5Generator::generateHash(device);
-    deviceGuard.reset();
+    const QString md5 = KoMD5Generator::generateHash(resourceData);
 
     const QString resourceUrl = resourceType + "/" + resource->filename();
 
@@ -402,7 +402,10 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
         }
     }
 
-    if (storage->importResource(resourceUrl, device)) {
+    QBuffer buf(&resourceData);
+    buf.open(QBuffer::ReadOnly);
+
+    if (storage->importResource(resourceUrl, &buf)) {
         resource = storage->resource(resourceUrl);
 
         if (!resource) {

@@ -264,6 +264,7 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
     }
 
     // note: if there are repetitions, it's fine; the bundle will filter them out
+    qWarning() << resourceTypes << allResourcesIds;
     while(!allResourcesIds.isEmpty()) {
         int id = allResourcesIds.takeFirst();
         KoResourceSP res;
@@ -333,16 +334,16 @@ QString DlgCreateBundle::createPrettyFilenameFromName(KoResourceSP resource) con
         // by filename to another resource
         return resource->filename();
     }
-    QString name = resource->name();
     // to make sure patterns are saved correctly
     // note that for now (TM) there are no double-suffixes in resources (like '.tar.gz')
     // otherwise this code should use completeSuffix() and remove the versioning number
     // (since that's something we want to get rid of)
-    QString suffix = QFileInfo(resource->filename()).suffix();
-
+    const auto fileInfo = QFileInfo(resource->filename());
+    const auto prefix = fileInfo.dir();
     // remove the suffix if the name has a suffix (happens for png patterns)
-    QString nameWithoutSuffix = QFileInfo(resource->name()).baseName();
-    return nameWithoutSuffix + "." + suffix;
+    const auto nameWithoutSuffix = QFileInfo(resource->name()).baseName();
+    const auto suffix = fileInfo.suffix();
+    return QDir::cleanPath(prefix.filePath(nameWithoutSuffix + "." + suffix));
 }
 
 void DlgCreateBundle::accept()

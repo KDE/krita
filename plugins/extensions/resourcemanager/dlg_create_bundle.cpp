@@ -254,6 +254,8 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
         QModelIndex idx = resourceTypesModel.index(i, 0);
         QString resourceType = resourceTypesModel.data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
         QSharedPointer<KisResourceModel> model = QSharedPointer<KisResourceModel>(new KisResourceModel(resourceType));
+        // BUG: 445408 Ensure potentially linked but disabled resources are visible
+        model->setResourceFilter(KisResourceModel::ShowAllResources);
         modelsPerResourceType.insert(resourceType, model);
     }
 

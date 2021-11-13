@@ -226,7 +226,7 @@ bool KisKraSaver::saveResources(KoStore *store, KisImageSP image, const QString 
         store->close();
 
         if (nwritten != ba.size()) {
-            m_d->warningMessages << i18nc("Error message when saving a .kra file", "Written resource is incomplete: %1. ", result.signature().filename);
+            m_d->warningMessages << i18nc("Error message when saving a .kra file", "Written resource is incomplete: %1", result.signature().filename);
         }
     }
 

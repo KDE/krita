@@ -17,7 +17,7 @@
  * This information is needed to somewhat uniquely identify the resource
  * in the world
  */
-class KRITARESOURCES_EXPORT KoResourceSignature : public boost::operators<KoResourceSignature>
+class KRITARESOURCES_EXPORT KoResourceSignature : public boost::equality_comparable<KoResourceSignature>
 {
 public:
     KoResourceSignature();

@@ -118,10 +118,14 @@ KoColorSetSP KisPaletteEditor::addPalette()
     if (chkSaveInDocument->isChecked()) {
         resourceLocation = m_d->view->document()->linkedResourcesStorageId();
     }
-    KisResourceModel resourceModel(ResourceType::Palettes);
-    KisResourceUserOperations::addResourceWithUserInput(m_d->view->mainWindow(), colorSet, resourceLocation);
 
-    return colorSet;
+    if (KisResourceUserOperations::addResourceWithUserInput(m_d->view->mainWindow(), colorSet, resourceLocation)) {
+
+        return colorSet;
+
+    }
+
+    return 0;
 }
 
 KoColorSetSP KisPaletteEditor::importPalette()

@@ -22,7 +22,7 @@
 
 namespace
 {
-const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform" };
+const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform", "KritaShape/KisToolLine" };
 }
 
 class RecorderWriter::Private

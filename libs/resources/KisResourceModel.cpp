@@ -381,7 +381,10 @@ QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const
 
 QModelIndex KisAllResourcesModel::indexForResourceId(int resourceId) const
 {
-    d->resourcesQuery.first();
+    if (!d->resourcesQuery.first()) {
+        return QModelIndex();
+    }
+
     do {
         if (d->resourcesQuery.value("id").toInt() == resourceId) {
             return index(d->resourcesQuery.at(), 0);

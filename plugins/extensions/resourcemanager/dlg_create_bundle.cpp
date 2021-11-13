@@ -245,7 +245,7 @@ QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagS
     return tagsToEmbed;
 }
 
-bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
+bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
 {
     KisResourceModel emptyModel("");
     QMap<QString, QSharedPointer<KisResourceModel>> modelsPerResourceType;
@@ -292,7 +292,7 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
             QMessageBox::warning(
                 this,
                 i18nc("@title:window", "Krita"),
-                i18n("One of more resources share the same file name '%1'. Please export them in separate bundles.").arg(prettyFilename));
+                i18nc("Warning message", "One of more resources share the same file name '%1'. Please export them in separate bundles.").arg(prettyFilename));
             return false;
         }
 

@@ -909,7 +909,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
         if (!fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                                i18n("Could not save %2.\nReason: %1", status.errorMessage(), job.filePath),
+                                i18n("Could not save %1.\nReason: %2", job.filePath, status.errorMessage()),
                                 errorMessage.split("\n") + warningMessage.split("\n"));
             dlg.exec();
         }
@@ -917,7 +917,8 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
     else {
         if (!fileBatchMode() && !warningMessage.isEmpty()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                                i18n("%1 has been saved but is incomplete.\nThe following problems were encountered when saving:", job.filePath),
+                                i18nc("dialog box shown to the user if there were warnings while saving the document, %1 is the file path",
+                                      "%1 has been saved but is incomplete.\nThe following problems were encountered when saving:", job.filePath),
                                 warningMessage.split("\n"));
             dlg.exec();
         }

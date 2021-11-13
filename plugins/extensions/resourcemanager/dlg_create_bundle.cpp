@@ -16,6 +16,7 @@
 #include <QTableWidget>
 #include <QPainter>
 #include <QStack>
+#include <QHash>
 
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
@@ -244,7 +245,7 @@ QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagS
     return tagsToEmbed;
 }
 
-void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
+bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
 {
     KisResourceModel emptyModel("");
     QMap<QString, QSharedPointer<KisResourceModel>> modelsPerResourceType;
@@ -264,17 +265,18 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
     }
 
     // note: if there are repetitions, it's fine; the bundle will filter them out
-    qWarning() << resourceTypes << allResourcesIds;
+    QHash<QPair<QString, QString>, std::size_t> usedFilenames;
+
     while(!allResourcesIds.isEmpty()) {
-        int id = allResourcesIds.takeFirst();
+        const int id = allResourcesIds.takeFirst();
         KoResourceSP res;
         QString resourceTypeHere = "";
         QSharedPointer<KisResourceModel> resModel;
-        for (int i = 0; i < resourceTypes.size(); i++) {
-            res = modelsPerResourceType[resourceTypes[i]]->resourceForId(id);
+        for (const auto &type: resourceTypes) {
+            res = modelsPerResourceType[type]->resourceForId(id);
             if (!res.isNull()) {
-                resModel = modelsPerResourceType[resourceTypes[i]];
-                resourceTypeHere = resourceTypes[i];
+                resModel = modelsPerResourceType[type];
+                resourceTypeHere = type;
                 break;
             }
         }
@@ -282,8 +284,20 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
             warnKrita << "No resource for id " << id;
             continue;
         }
+        const auto prettyFilename = createPrettyFilenameFromName(res);
+
+        if (usedFilenames.value({res->resourceType().first, prettyFilename}, 0) > 0) {
+            QMessageBox::warning(
+                this,
+                i18nc("@title:window", "Krita"),
+                i18n("One of more resources share the same file name '%1'. Please export them in separate bundles.").arg(prettyFilename));
+            return false;
+        }
+
+        usedFilenames[{res->resourceType().first, prettyFilename}]+= 1;
+
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
-        bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), createPrettyFilenameFromName(res));
+        bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), prettyFilename);
 
         QList<KoResourceLoadResult> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
         Q_FOREACH(KoResourceLoadResult linkedResource, linkedResources) {
@@ -378,9 +392,10 @@ void DlgCreateBundle::accept()
 
             m_bundle.reset(new KoResourceBundle(filename));
             putMetaDataInTheBundle(m_bundle);
-            putResourcesInTheBundle(m_bundle);
+            if (!putResourcesInTheBundle(m_bundle)) {
+                return;
+            }
             m_bundle->save();
-
         } else {
             KIS_SAFE_ASSERT_RECOVER(!m_bundle) { warnKrita << "Updating a bundle is not implemented yet"; };
         }

@@ -21,7 +21,6 @@
 
 #include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
-#include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 
 #include <DummyResource.h>
@@ -163,7 +162,7 @@ void TestResourceModel::testImportResourceFile()
     int resourceCount = resourceModel.rowCount();
     bool r = resourceModel.importResourceFile(f.fileName(), false);
     QVERIFY(r);
-    QCOMPARE(resourceCount + 1, resourceModel.rowCount());
+    QCOMPARE(resourceModel.rowCount(), resourceCount + 1);
 }
 
 void TestResourceModel::testAddResource()

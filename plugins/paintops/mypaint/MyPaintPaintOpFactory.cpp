@@ -15,6 +15,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 #include <KisResourceServerProvider.h>
+#include <KoResourceLoadResult.h>
 
 #include "MyPaintPaintOp.h"
 #include "MyPaintPaintOpPreset.h"
@@ -73,7 +74,7 @@ QString KisMyPaintOpFactory::category() const {
     return KisPaintOpFactory::categoryStable();
 }
 
-QList<KoResourceSP> KisMyPaintOpFactory::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisMyPaintOpFactory::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     Q_UNUSED(settings)
     Q_UNUSED(resourcesInterface);
@@ -81,7 +82,7 @@ QList<KoResourceSP> KisMyPaintOpFactory::prepareLinkedResources(const KisPaintOp
     return {};
 }
 
-QList<KoResourceSP> KisMyPaintOpFactory::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisMyPaintOpFactory::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     Q_UNUSED(settings)
     Q_UNUSED(resourcesInterface);

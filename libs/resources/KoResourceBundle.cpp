@@ -123,7 +123,7 @@ bool KoResourceBundle::loadFromDevice(QIODevice *)
     return false;
 }
 
-bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &resType)
+bool saveResourceToStore(const QString &filename, KoResourceSP resource, KoStore *store, const QString &resType, KisResourceModel &model)
 {
     if (!resource) {
         qWarning() << "No Resource";
@@ -139,17 +139,16 @@ bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &r
         return false;
     }
 
-    QByteArray ba;
     QBuffer buf;
-    buf.open(QFile::ReadWrite);
+    buf.open(QFile::WriteOnly);
 
-    bool response = resource->saveToDevice(&buf);
+    bool response = model.exportResource(resource, &buf);
     if (!response) {
-        ENTER_FUNCTION() << "Cannot save to device";
+        qWarning() << "Cannot save to device";
         return false;
     }
 
-    if (!store->open(resType + "/" + resource->filename())) {
+    if (!store->open(resType + "/" + filename)) {
         qWarning() << "Could not open file in store for resource";
         return false;
     }
@@ -164,8 +163,13 @@ bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &r
 
     if (!resource->thumbnailPath().isEmpty()) {
         // hack for MyPaint brush presets previews
-        QImage thumbnail = resource->thumbnail();
-        if (!store->open(resType + "/" + resource->thumbnailPath())) {
+        const QImage thumbnail = resource->thumbnail();
+
+        // clone resource to find out the file path for its preview
+        KoResourceSP clonedResource = resource->clone();
+        clonedResource->setFilename(filename);
+
+        if (!store->open(resType + "/" + clonedResource->thumbnailPath())) {
             qWarning() << "Could not open file in store for resource thumbnail";
             return false;
         }
@@ -213,16 +217,9 @@ bool KoResourceBundle::save()
                 qWarning() << "Could not find resource" << resType << ref.resourceId << ref.md5sum << ref.resourcePath;
                 continue;
             }
-            KoResourceSP resCloned = res->clone();
-            resCloned->setFilename(ref.filenameInBundle); // remove the versioning, name change etc.
 
-            if (!saveResourceToStore(resCloned, store.data(), resType)) {
-                if (resCloned) {
-                    qWarning() << "Could not save resource" << resType << resCloned->name();
-                }
-                else {
-                    qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
-                }
+            if (!saveResourceToStore(ref.filenameInBundle, res, store.data(), resType, model)) {
+                qWarning() << "Could not save resource" << resType << res->name();
             }
         }
     }
@@ -473,6 +470,28 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
     return loadResource(resource) ? resource : 0;
 }
 
+bool KoResourceBundle::exportResource(const QString &resourceType, const QString &fileName, QIODevice *device)
+{
+    if (m_filename.isEmpty()) return false;
+
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << m_filename;
+        return false;
+    }
+    const QString filePath = QString("%1/%2").arg(resourceType).arg(fileName);
+
+    if (!resourceStore->open(filePath)) {
+        qWarning() << "Could not open file in bundle" << filePath;
+        return false;
+    }
+
+    device->write(resourceStore->device()->readAll());
+
+    return true;
+}
+
 bool KoResourceBundle::loadResource(KoResourceSP resource)
 {
     if (m_filename.isEmpty()) return false;
@@ -531,7 +550,7 @@ QString KoResourceBundle::resourceMd5(const QString &url)
         return result;
     }
 
-    result = KoMD5Generator::generateHash(resourceStore->device()->readAll());
+    result = KoMD5Generator::generateHash(resourceStore->device());
     resourceStore->close();
 
     return result;

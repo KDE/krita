@@ -858,7 +858,7 @@ void KisViewManager::slotCreateCopy()
     KisDocument *doc = 0;
     {
         KisImageBarrierLocker l(srcDoc->image());
-        doc = srcDoc->clone();
+        doc = srcDoc->clone(true);
     }
     KIS_SAFE_ASSERT_RECOVER_RETURN(doc);
 

@@ -9,9 +9,7 @@
 #include <QBuffer>
 
 #include <KisTag.h>
-#include <KisResourceLoader.h>
 #include <KoResource.h>
-#include <KisResourceLoaderRegistry.h>
 
 #include <KLocalizedString>
 

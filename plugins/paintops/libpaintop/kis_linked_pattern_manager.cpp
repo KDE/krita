@@ -16,31 +16,29 @@
 
 #include <kis_properties_configuration.h>
 #include <KisResourcesInterface.h>
-
+#include <KoResourceLoadResult.h>
 
 struct KisLinkedPatternManager::Private {
 
     /// For legacy presets: we now load and save all embedded/linked resources in the kpp file.
-    static KoPatternSP tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
-        KoPatternSP pattern;
+    static KoResourceLoadResult tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
+
+        QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
+        QString md5sum = setting->getString("Texture/Pattern/PatternMD5Sum");
+        QString fileName = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName();
         QString name = setting->getString("Texture/Pattern/Name");
-        QString filename = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName(); // For broken embedded patterns like in "i)_Wet_Paint"
+
+        if (md5sum.isEmpty()) {
+            md5sum = md5.toHex();
+        }
 
         if (name.isEmpty() || name != QFileInfo(name).fileName()) {
-            QFileInfo info(filename);
+            QFileInfo info(fileName);
             name = info.completeBaseName();
         }
 
-        QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
-
-        QImage img;
-        img.loadFromData(ba, "PNG");
-
-        if (!img.isNull()) {
-            pattern = KoPatternSP(new KoPattern(img, name, filename));
-        }
-
-        return pattern;
+        const QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
+        return KoEmbeddedResource(KoResourceSignature(ResourceType::Patterns, md5sum, fileName, name), ba);
     }
 };
 
@@ -52,32 +50,29 @@ void KisLinkedPatternManager::saveLinkedPattern(KisPropertiesConfigurationSP set
     setting->setProperty("Texture/Pattern/Name", pattern->name());
 }
 
-KoPatternSP KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+KoResourceLoadResult KisLinkedPatternManager::tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     auto resourceSourceAdapter = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
     QString md5sum = setting->getString("Texture/Pattern/PatternMD5Sum");
-    QString fileName = setting->getString("Texture/Pattern/PatternFileName");
+    QString fileName = QFileInfo(setting->getString("Texture/Pattern/PatternFileName")).fileName();
     QString name = setting->getString("Texture/Pattern/Name");
 
     if (md5sum.isEmpty()) {
         md5sum = md5.toHex();
     }
 
-    return resourceSourceAdapter.bestMatch(md5sum, QFileInfo(fileName).fileName(), name);
+    return resourceSourceAdapter.bestMatchLoadResult(md5sum, fileName, name);
 }
 
-KoPatternSP KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+KoResourceLoadResult KisLinkedPatternManager::loadLinkedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
-    KoPatternSP pattern = tryFetchPattern(setting, resourcesInterface);
-    if (pattern) {
-        return pattern;
+    KoResourceLoadResult result = tryFetchPattern(setting, resourcesInterface);
+
+    if (result.type() == KoResourceLoadResult::FailedLink) {
+        result = Private::tryLoadEmbeddedPattern(setting);
     }
 
-    pattern = Private::tryLoadEmbeddedPattern(setting);
-    // we don't add the resource to the server here, because it
-    // is the responsibility of the higher-level code
-
-    return pattern;
+    return result;
 }

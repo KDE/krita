@@ -30,6 +30,7 @@
 
 #include <kis_debug.h>
 #include <KisResourceModelProvider.h>
+#include <KoMD5Generator.h>
 
 
 #ifndef FILES_DATA_DIR
@@ -313,6 +314,61 @@ void TestResourceLocator::testSyncVersions()
         QVERIFY(res1->filename().startsWith("test6"));
         QCOMPARE(res1->version(), 3);
     }
+}
+
+void TestResourceLocator::testImportExportResource()
+{
+    QTemporaryFile f(QDir::tempPath() + "/testresourcemodel-testimportresourcefile-XXXXXX.kpp");
+    f.open();
+    f.write("mysimpletestresource");
+    f.close();
+
+    const QString dataMd5 = KoMD5Generator::generateHash(f.fileName());
+
+    KoResourceSP resource = KisResourceLocator::instance()->importResourceFromFile(ResourceType::PaintOpPresets, f.fileName(), false);
+    QVERIFY(resource);
+
+    QCOMPARE(resource->md5Sum(false), dataMd5);
+
+    {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        resource->saveToDevice(&buffer);
+        buffer.close();
+
+        QCOMPARE(KoMD5Generator::generateHash(buffer.data()), dataMd5);
+    }
+
+
+    QSharedPointer<DummyResource> dummyResource = resource.dynamicCast<DummyResource>();
+    KIS_ASSERT(dummyResource);
+
+    dummyResource->setSomething("some weird data to change MD5");
+
+    // md5 sum of the resource is updated only after it is serialized
+    // into the storage
+    QCOMPARE(resource->md5Sum(false), dataMd5);
+
+    {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        resource->saveToDevice(&buffer);
+        buffer.close();
+
+        // mere saving the resource will obviously change the resource's MD5
+        QVERIFY(KoMD5Generator::generateHash(buffer.data()) != dataMd5);
+    }
+
+    {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+
+        // but exporting **not**, because it export the latest serialized
+        // version
+        KisResourceLocator::instance()->exportResource(resource, &buffer);
+        QCOMPARE(KoMD5Generator::generateHash(buffer.data()), dataMd5);
+    }
+
 }
 
 void TestResourceLocator::cleanupTestCase()

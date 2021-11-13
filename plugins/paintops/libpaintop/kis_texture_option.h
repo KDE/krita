@@ -97,8 +97,8 @@ public:
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
     void fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
-    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
-    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    QList<KoResourceLoadResult> prepareLinkedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
     bool applyingGradient() const;
 
     static bool applyingGradient(const KisPropertiesConfiguration *settings);

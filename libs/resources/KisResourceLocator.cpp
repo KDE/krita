@@ -36,6 +36,8 @@
 #include "KisResourceModelProvider.h"
 #include <KisGlobalResourcesInterface.h>
 #include <KisStorageModel.h>
+#include <KoMD5Generator.h>
+#include <KoResourceLoadResult.h>
 
 #include "ResourceDebug.h"
 
@@ -169,11 +171,31 @@ QImage KisResourceLocator::thumbnailCached(QString storageLocation, const QStrin
 
 void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 {
-    QList<KoResourceSP> requiredResources = resource->requiredResources(KisGlobalResourcesInterface::instance());
-    Q_FOREACH (KoResourceSP res, requiredResources) {
-        if (res->resourceId() < 0) {
-            // we put all the embedded resources into the global shared "memory" storage
-            this->addResource(res->resourceType().first, res, "memory");
+    QList<KoResourceLoadResult> requiredResources = resource->requiredResources(KisGlobalResourcesInterface::instance());
+
+    Q_FOREACH (KoResourceLoadResult res, requiredResources) {
+        switch (res.type())
+        {
+        case KoResourceLoadResult::ExistingResource:
+            KIS_SAFE_ASSERT_RECOVER_NOOP(res.resource()->resourceId() >= 0);
+            break;
+        case KoResourceLoadResult::EmbeddedResource: {
+            if (!res.embeddedResource().sanityCheckMd5()) {
+                qWarning() << "WARNING: KisResourceLocator::loadRequiredResources failed to sanity check the embedded resource:";
+                qWarning() << "         parent resource:" << resource->signature();
+                qWarning() << "         embedded resource:" << res.signature();
+            }
+
+            KoResourceSignature sig = res.embeddedResource().signature();
+            QByteArray data = res.embeddedResource().data();
+            QBuffer buffer(&data);
+            buffer.open(QBuffer::ReadOnly);
+            importResource(sig.type, sig.filename, &buffer, false, "memory");
+            break;
+        }
+        case KoResourceLoadResult::FailedLink:
+            qWarning() << "Failed to load linked resource:" << res.signature();
+            break;
         }
     }
 }
@@ -256,7 +278,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         resource->setMD5Sum(q.value(2).toString());
         Q_ASSERT(!resource->md5Sum().isEmpty());
 
-        resource->setActive(q.value(3).toBool());
+        resource->setActive(q.value(4).toBool());
 
         // To override resources that use the filename for the name, which is versioned, and we don't want the version number in the name
         resource->setName(q.value(3).toString());;
@@ -293,31 +315,46 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
 
 KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const bool allowOverwrite, const QString &storageLocation)
 {
-    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
-
-    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fileName));
     QFile f(fileName);
     if (!f.open(QFile::ReadOnly)) {
         qWarning() << "Could not open" << fileName << "for loading";
         return nullptr;
     }
 
-    if (!loader) {
-        qWarning() << "Could not import" << fileName << ": resource doesn't load.";
-        return nullptr;
-    }
+    return importResource(resourceType, fileName, &f, allowOverwrite, storageLocation);
+}
 
-    KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f, KisGlobalResourcesInterface::instance());
+KoResourceSP KisResourceLocator::importResource(const QString &resourceType, const QString &fileName, QIODevice *device, const bool allowOverwrite, const QString &storageLocation)
+{
+    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
+
+    QByteArray resourceData = device->readAll();
+    KoResourceSP resource;
+
+    {
+        QBuffer buf(&resourceData);
+        buf.open(QBuffer::ReadOnly);
+
+        KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fileName));
+
+        if (!loader) {
+            qWarning() << "Could not import" << fileName << ": resource doesn't load.";
+            return nullptr;
+        }
+
+        resource = loader->load(QFileInfo(fileName).fileName(), buf, KisGlobalResourcesInterface::instance());
+    }
 
     if (!resource || !resource->valid()) {
         qWarning() << "Could not import" << fileName << ": resource doesn't load.";
         return nullptr;
     }
 
-    const QString md5 = resource->md5Sum();
+    const QString md5 = KoMD5Generator::generateHash(resourceData);
 
-    const KoResourceSP existingResource = storage->resource(resourceType + "/" + resource->filename());
+    const QString resourceUrl = resourceType + "/" + resource->filename();
 
+    const KoResourceSP existingResource = storage->resource(resourceUrl);
     if (existingResource) {
         if (existingResource->md5Sum() == md5) {
             return existingResource;
@@ -365,17 +402,21 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
         }
     }
 
-    if (storage->importResourceFile(resourceType, fileName)) {
+    QBuffer buf(&resourceData);
+    buf.open(QBuffer::ReadOnly);
 
-        resource = storage->resource(resourceType + "/" + resource->filename());
+    if (storage->importResource(resourceUrl, &buf)) {
+        resource = storage->resource(resourceUrl);
 
         if (!resource) {
             qWarning() << "Could not retrieve imported resource from the storage" << resourceType << fileName << storageLocation;
             return nullptr;
         }
 
-        Q_ASSERT(resource->md5Sum() == md5);
+        resource->setStorageLocation(storageLocation);
+        resource->setMD5Sum(storage->resourceMd5(resourceUrl));
         resource->setVersion(0);
+        resource->setDirty(false);
         resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
         // Insert into the database
@@ -392,7 +433,17 @@ KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceT
 
         return resource;
     }
+
     return nullptr;
+}
+
+bool KisResourceLocator::exportResource(KoResourceSP resource, QIODevice *device)
+{
+    if (!resource || !resource->valid() || resource->resourceId() < 0) return false;
+
+    const QString resourceUrl = resource->resourceType().first + "/" + resource->filename();
+    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(resource->storageLocation())];
+    return storage->exportResource(resourceUrl, device);
 }
 
 bool KisResourceLocator::addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation)

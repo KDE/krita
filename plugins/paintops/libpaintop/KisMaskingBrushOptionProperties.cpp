@@ -6,6 +6,7 @@
 
 #include "KisMaskingBrushOptionProperties.h"
 
+#include <KoResourceLoadResult.h>
 #include "kis_brush_option.h"
 #include <brushengine/KisPaintopSettingsIds.h>
 
@@ -50,7 +51,7 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
     }
 }
 
-QList<KoResourceSP> KisMaskingBrushOptionProperties::prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisMaskingBrushOptionProperties::prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushOptionProperties option;
     return option.prepareLinkedResources(settings, resourcesInterface);

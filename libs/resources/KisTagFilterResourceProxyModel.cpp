@@ -114,6 +114,26 @@ KoResourceSP KisTagFilterResourceProxyModel::importResourceFile(const QString &f
     return res;
 }
 
+KoResourceSP KisTagFilterResourceProxyModel::importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    KoResourceSP res;
+    if (source) {
+        res = source->importResource(filename, device, allowOverwrite, storageId);
+    }
+    return res;
+}
+
+bool KisTagFilterResourceProxyModel::exportResource(KoResourceSP resource, QIODevice *device)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    bool res = false;
+    if (source) {
+        res = source->exportResource(resource, device);
+    }
+    return res;
+}
+
 bool KisTagFilterResourceProxyModel::addResource(KoResourceSP resource, const QString &storageId)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());

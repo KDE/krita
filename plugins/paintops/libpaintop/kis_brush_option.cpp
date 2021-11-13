@@ -17,7 +17,7 @@
 #include <KoCanvasResourcesInterface.h>
 #include <KoCanvasResourcesIds.h>
 #include <KoAbstractGradient.h>
-
+#include <KoResourceLoadResult.h>
 
 void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
@@ -57,22 +57,23 @@ void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisProperties
     }
 }
 
-QList<KoResourceSP> KisBrushOptionProperties::prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+QList<KoResourceLoadResult> KisBrushOptionProperties::prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
 {
-    QList<KoResourceSP> resources;
-
+    QList<KoResourceLoadResult> resources;
     QDomElement element = getBrushXMLElement(settings);
     if (element.isNull()) return resources;
 
-    KisBrushSP brush = KisBrush::fromXML(element, resourcesInterface);
-    if (brush && !brush->isEphemeral()) {
-        resources << brush;
+    KoResourceLoadResult result = KisBrush::fromXMLLoadResult(element, resourcesInterface);
+
+    KoResourceSP resource = result.resource();
+    if (!resource || !resource->isEphemeral()) {
+        resources << result;
     }
 
     return resources;
 }
 
-QList<KoResourceSP> KisBrushOptionProperties::prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+QList<KoResourceLoadResult> KisBrushOptionProperties::prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
 {
     Q_UNUSED(settings);
     Q_UNUSED(resourcesInterface);
@@ -88,7 +89,7 @@ enumBrushApplication KisBrushOptionProperties::brushApplication(const KisPropert
 
     KisBrushSP brush = KisBrush::fromXML(element, resourcesInterface);
 
-    return brush->brushApplication();
+    return brush ? brush->brushApplication() : ALPHAMASK;
 }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

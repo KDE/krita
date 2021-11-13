@@ -59,7 +59,8 @@ KisResourcesInterface::ResourceSourceAdapter &KisResourcesInterface::source(cons
     return *source;
 }
 
-KisResourcesInterface::ResourceSourceAdapter::ResourceSourceAdapter()
+KisResourcesInterface::ResourceSourceAdapter::ResourceSourceAdapter(const QString &type)
+    : m_type(type)
 {
 }
 
@@ -74,6 +75,10 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
     if (!md5.isEmpty()) {
         Q_FOREACH (KoResourceSP res, resourcesForMD5(md5)) {
             int penalty = 0;
+
+            if (!res->active()) {
+                penalty += 100;
+            }
 
             if (!filename.isEmpty() && filename != res->filename()) {
                 /// filename is more important than name, so it gives
@@ -105,6 +110,10 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
             Q_FOREACH (KoResourceSP res, resourcesForFilename(filename)) {
                 int penalty = 0;
 
+                if (!res->active()) {
+                    penalty += 100;
+                }
+
                 if (!name.isEmpty() && name != res->name()) {
                     penalty++;
                 }
@@ -114,6 +123,11 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
         } else if (!name.isEmpty()) {
             Q_FOREACH (KoResourceSP res, resourcesForName(name)) {
                 int penalty = 0;
+
+                if (!res->active()) {
+                    penalty += 100;
+                }
+
                 foundResources.append(qMakePair(res, penalty));
             }
         }
@@ -134,4 +148,13 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
 #endif
 
     return result;
+}
+
+KoResourceLoadResult KisResourcesInterface::ResourceSourceAdapter::bestMatchLoadResult(const QString md5, const QString filename, const QString name)
+{
+    KoResourceSP resource = bestMatch(md5, filename, name);
+    return
+        resource ?
+        KoResourceLoadResult(resource) :
+        KoResourceLoadResult(KoResourceSignature(m_type, md5, filename, name));
 }

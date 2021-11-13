@@ -341,12 +341,8 @@ KisPSDLayerStyleSP KisPSDLayerStyle::cloneWithResourcesSnapshot(KisResourcesInte
     return KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisPSDLayerStyleSP>(this, globalResourcesInterface);
 }
 
-QList<KoResourceSP> KisPSDLayerStyle::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisPSDLayerStyle::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     Q_UNUSED(globalResourcesInterface);
-    QList<KoResourceSP> resources;
-
-    resources = QList<KoResourceSP>::fromVector(KisAslLayerStyleSerializer::fetchEmbeddedResources(this));
-
-    return resources;
+    return implicitCastList<KoResourceLoadResult>(QList<KoResourceSP>::fromVector(KisAslLayerStyleSerializer::fetchEmbeddedResources(this)));
 }

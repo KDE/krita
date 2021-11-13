@@ -78,7 +78,7 @@ protected:
      *        cloning.
      * @param rhs the source document to copy from
      */
-    explicit KisDocument(const KisDocument &rhs);
+    explicit KisDocument(const KisDocument &rhs, bool addStorage);
 
 public:
     enum OpenFlag {
@@ -117,7 +117,7 @@ public:
      * @brief creates a clone of the document and returns it. Please make sure that you
      * hold all the necessary locks on the image before asking for a clone!
      */
-    KisDocument* clone();
+    KisDocument* clone(bool addStorage = false);
 
     /**
      * @brief openPath Open a Path
@@ -354,15 +354,25 @@ public:
     /**
      * @brief linkedDocumentResources List returns all the resources
      * linked to the document, such as palettes
+     *
+     * In some cases (e.g. when the document is temporary), the
+     * underlying document storage will not be registered in the
+     * resource system, so we cannot get fully initialized resources
+     * from it (resourceId(), active(), md5() and storageLocation()
+     * fields will be uninitialized). Therefore we just return
+     * KoEmbeddedResource which is suitable for saving this data into
+     * hard drive.
+     *
+     * The returned KoResourceLoadResult object can either be in
+     * EmbeddedResource or FailedLink state. The former means the
+     * resource has been prepared for embedding, the latter means
+     * there was some issue with serializing the resource. In the
+     * latter case the called should check result.signature() to
+     * find out which resource has failed.
+     *
+     * NOTE: the returned result can **NOT** have ExistingResource state!
      */
-    QList<KoResourceSP> linkedDocumentResources();
-
-    /**
-     * @returns a list of resources embedded in the documents' resources
-     * or filter/fill layer configurations
-     */
-    QList<KoResourceSP> embeddedDocumentResources();
-
+    QList<KoResourceLoadResult> linkedDocumentResources();
 
     /**
      * @brief setPaletteList replaces the palettes in the document's local resource storage with the list
@@ -486,9 +496,9 @@ Q_SIGNALS:
 
     void sigGuidesConfigChanged(const KisGuidesConfig &config);
 
-    void sigBackgroundSavingFinished(KisImportExportErrorCode status, const QString &errorMessage);
+    void sigBackgroundSavingFinished(KisImportExportErrorCode status, const QString &errorMessage, const QString &warningMessage);
 
-    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
+    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage, const QString &warningMessage);
 
     void sigReferenceImagesChanged();
 
@@ -512,10 +522,10 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void finishExportInBackground();
-    void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage);
-    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
+    void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage, const QString &warningMessage);
+    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage, const QString &warningMessage);
 
-    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
+    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage, const QString &warningMessage);
 
     void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
 
@@ -697,14 +707,14 @@ private Q_SLOTS:
 
     void slotImageRootChanged();
 
+
+public:
     /**
      * @brief try to clone the image. This method handles all the locking for you. If locking
      *        has failed, no cloning happens
      * @return cloned document on success, null otherwise
      */
     KisDocument *lockAndCloneForSaving();
-
-public:
 
     KisDocument *lockAndCreateSnapshot();
 

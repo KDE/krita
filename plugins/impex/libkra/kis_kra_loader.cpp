@@ -27,10 +27,7 @@
 #include <KoResourceServer.h>
 #include <KisResourceStorage.h>
 #include <KisGlobalResourcesInterface.h>
-#include <KisResourceLocator.h>
-#include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
-
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -579,22 +576,25 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
         KisResourceModel model(resourceItem.resourceType);
         if (model.resourcesForMD5(resourceItem.md5sum).isEmpty()) {
             store->open(RESOURCE_PATH + '/' + resourceItem.resourceType + '/' + resourceItem.filename);
-            QByteArray ba = store->read(store->size());
-            if (ba.size() > 0 ) {
-                QVector<KisResourceLoaderBase*> resourceLoaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceItem.resourceType);
-                Q_FOREACH(KisResourceLoaderBase *loader, resourceLoaders) {
-                    QBuffer buf(&ba);
-                    buf.open(QBuffer::ReadOnly);
-                    KoResourceSP res = loader->load(resourceItem.name, buf, KisGlobalResourcesInterface::instance());
-                    if (res) {
-                        model.addResource(res, doc->linkedResourcesStorageId());
-                    }
+
+            if (!store->isOpen()) {
+                m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be read. The filename of the resource: %1", resourceItem.filename));
+                continue;
+            }
+
+            /// don't try to load the resource if its file is empty
+            /// (which is a sign of a failed save operation)
+            if (!store->device()->atEnd()) {
+                bool result = model.importResource(resourceItem.filename, store->device(), false, doc->linkedResourcesStorageId());
+                if (!result) {
+                    m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be imported. The filename of the resource: %1", resourceItem.filename));
+                    continue;
                 }
             }
 
+            store->close();
         }
     }
-
 }
 
 void KisKraLoader::loadStoryboards(KoStore *store, KisDocument */*doc*/)

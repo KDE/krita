@@ -11,6 +11,8 @@
 
 #include <kritaresources_export.h>
 
+class QIODevice;
+
 class KRITARESOURCES_EXPORT KoMD5Generator
 {
 public:
@@ -28,6 +30,13 @@ public:
      * @return a hex-encoded string representation of the md5sum
      */
     static QString generateHash(const QByteArray &array);
+
+    /**
+     * @brief generateHash calculates the md5sum of the given device
+     * @param QIODevice
+     * @return a hex-encoded string representation of the md5sum
+     */
+    static QString generateHash(QIODevice *device);
 };
 
 #endif

@@ -34,6 +34,9 @@ set(kritaresources_LIB_SRCS
     KoResourceBundleManifest.cpp
     KoMD5Generator.cpp
     KoResourcePaths.cpp
+    KoResourceSignature.cpp
+    KoEmbeddedResource.cpp
+    KoResourceLoadResult.cpp
 
     ResourceDebug.cpp
 

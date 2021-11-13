@@ -8,6 +8,7 @@
 
 #include <generator/kis_generator.h>
 #include <generator/kis_generator_registry.h>
+#include <KoResourceLoadResult.h>
 
 #include "KisHalftoneFilterConfiguration.h"
 
@@ -57,9 +58,9 @@ void KisHalftoneFilterConfiguration::setResourcesInterface(KisResourcesInterface
     }
 }
 
-QList<KoResourceSP> KisHalftoneFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisHalftoneFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    QList<KoResourceSP> resourcesList;
+    QList<KoResourceLoadResult> resourcesList;
 
     if (mode() == HalftoneMode_IndependentChannels) {
         const QString prefix = colorModelId() + "_channel";
@@ -81,9 +82,9 @@ QList<KoResourceSP> KisHalftoneFilterConfiguration::linkedResources(KisResources
     return resourcesList;
 }
 
-QList<KoResourceSP> KisHalftoneFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisHalftoneFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    QList<KoResourceSP> resourcesList;
+    QList<KoResourceLoadResult> resourcesList;
 
     if (mode() == HalftoneMode_IndependentChannels) {
         const QString prefix = colorModelId() + "_channel";

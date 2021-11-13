@@ -99,6 +99,7 @@ public:
     KoResourceBundleManifest &manifest();
 
     KoResourceSP resource(const QString &resourceType, const QString &filepath);
+    bool exportResource(const QString &resourceType, const QString &fileName, QIODevice *device);
     bool loadResource(KoResourceSP resource);
 
     QImage image() const;

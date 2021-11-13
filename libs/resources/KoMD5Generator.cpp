@@ -35,3 +35,14 @@ QString KoMD5Generator::generateHash(const QString &filename)
 
     return result;
 }
+
+QString KoMD5Generator::generateHash(QIODevice *device)
+{
+    QString result;
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(device);
+    result = md5.result().toHex();
+
+    return result;
+}

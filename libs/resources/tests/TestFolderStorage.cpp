@@ -13,9 +13,7 @@
 #include <KritaVersionWrapper.h>
 
 #include <KisFolderStorage.h>
-#include <KisResourceLoader.h>
 #include <KoResource.h>
-#include <KisResourceLoaderRegistry.h>
 #include <KisResourceCacheDb.h>
 
 #include <KisResourceLocator.h>

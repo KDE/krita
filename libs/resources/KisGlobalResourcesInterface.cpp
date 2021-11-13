@@ -18,8 +18,9 @@ namespace {
 class GlobalResourcesSource : public KisResourcesInterface::ResourceSourceAdapter
 {
 public:
-    GlobalResourcesSource(KisAllResourcesModel *model)
-        : m_model(model)
+    GlobalResourcesSource(const QString &resourceType, KisAllResourcesModel *model)
+        : KisResourcesInterface::ResourceSourceAdapter(resourceType)
+        , m_model(model)
     {}
 
     ~GlobalResourcesSource() override
@@ -78,7 +79,7 @@ KisResourcesInterfaceSP KisGlobalResourcesInterface::instance()
 KisResourcesInterface::ResourceSourceAdapter *KisGlobalResourcesInterface::createSourceImpl(const QString &type) const
 {
     KisResourcesInterface::ResourceSourceAdapter *source =
-        new GlobalResourcesSource(KisResourceModelProvider::resourceModel(type));
+        new GlobalResourcesSource(type, KisResourceModelProvider::resourceModel(type));
 
     KIS_ASSERT(source);
     return source;

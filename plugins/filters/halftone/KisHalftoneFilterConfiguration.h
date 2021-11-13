@@ -32,8 +32,8 @@ public:
     KisFilterConfigurationSP clone() const override;
 
     void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface) override;
-    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
-    QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    QList<KoResourceLoadResult> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 
     static constexpr const char *HalftoneMode_Intensity = "intensity";
     static constexpr const char *HalftoneMode_IndependentChannels = "independent_channels";

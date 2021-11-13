@@ -20,7 +20,7 @@ public:
     KisPredefinedBrushFactory(const QString &brushType);
 
     QString id() const override;
-    KisBrushSP createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface) override;
+    KoResourceLoadResult createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface) override;
 
 private:
     const QString m_id;

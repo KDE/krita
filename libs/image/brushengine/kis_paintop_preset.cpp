@@ -26,7 +26,6 @@
 #include <brushengine/kis_paintop_config_widget.h>
 #include <KisRequiredResourcesOperators.h>
 #include <KoLocalStrokeCanvasResources.h>
-#include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include "KisPaintopSettingsIds.h"
 #include <KisResourceTypes.h>
@@ -211,25 +210,21 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
                         if (!existingResource) {
                             QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
-                            QVector<KisResourceLoaderBase*> resourceLoaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceType);
-                            Q_FOREACH(KisResourceLoaderBase *loader, resourceLoaders) {
-                                QBuffer buf(&ba);
-                                buf.open(QBuffer::ReadOnly);
-                                KoResourceSP res = loader->load(name, buf, resourcesInterface);
-                                if (res) {
-                                    /// HACK ALERT: Calling addResource()
-                                    /// here is technically undefined
-                                    /// behavior, because this code is
-                                    /// called from inside the storage's
-                                    /// loadVersionedResource(). Basically
-                                    /// we change underlying storage's
-                                    /// storage while it is reading from
-                                    /// it.
 
-                                    KisResourceModel model(resourceType);
-                                    model.addResource(res, "memory");
-                                }
-                            }
+                            QBuffer buf(&ba);
+                            buf.open(QBuffer::ReadOnly);
+
+                            /// HACK ALERT: Calling importResource()
+                            /// here is technically undefined
+                            /// behavior, because this code is
+                            /// called from inside the storage's
+                            /// loadVersionedResource(). Basically
+                            /// we change underlying storage's
+                            /// storage while it is reading from
+                            /// it.
+
+                            KisResourceModel model(resourceType);
+                            model.importResource(filename, &buf, false, "memory");
                         }
                     }
                     break;
@@ -259,20 +254,32 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("paintopid", paintopid);
     elt.setAttribute("name", name());
 
-    QList<KoResourceSP> resources = linkedResources(resourcesInterface());
 
-    elt.setAttribute("embedded_resources", resources.count());
+    QList<KoResourceLoadResult> linkedResources = this->linkedResources(resourcesInterface());
 
-    if (!resources.isEmpty()) {
+    elt.setAttribute("embedded_resources", linkedResources.count());
+
+    if (!linkedResources.isEmpty()) {
         QDomElement resourcesElement = doc.createElement("resources");
         elt.appendChild(resourcesElement);
-        Q_FOREACH(KoResourceSP resource, resources) {
+        Q_FOREACH(KoResourceLoadResult linkedResource, linkedResources) {
+            // we have requested linked resources, how can it be an embedded one?
+            KIS_SAFE_ASSERT_RECOVER(linkedResource.type() != KoResourceLoadResult::EmbeddedResource) { continue; }
+
+            KoResourceSP resource = linkedResource.resource();
+
+            if (!resource) {
+                qWarning() << "WARNING: KisPaintOpPreset::toXML couldn't fetch a linked resource" << linkedResource.signature();
+                continue;
+            }
+
             KIS_SAFE_ASSERT_RECOVER_NOOP(resource->isSerializable() && "embedding non-serializable resources is not yet implemented");
 
             QByteArray ba;
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
-            bool r = resource->saveToDevice(&buf);
+            KisResourceModel model(resource->resourceType().first);
+            bool r = model.exportResource(resource, &buf);
             buf.close();
             if (r) {
                 QDomText text = doc.createCDATASection(QString::fromLatin1(ba.toBase64()));
@@ -396,14 +403,19 @@ void KisPaintOpPreset::updateLinkedResourcesMetaData(KisResourcesInterfaceSP res
      */
 
     if (d->version == "2.2") {
-        QList<KoResourceSP> dependentResources = this->linkedResources(resourcesInterface);
-        KritaUtils::makeContainerUnique(dependentResources);
+        QList<KoResourceLoadResult> dependentResources = this->linkedResources(resourcesInterface);
 
         QStringList resourceFileNames;
 
-        Q_FOREACH (KoResourceSP resource, dependentResources) {
-            resourceFileNames.append(resource->filename());
+        Q_FOREACH (KoResourceLoadResult resource, dependentResources) {
+            const QString filename = resource.signature().filename;
+
+            if (!filename.isEmpty()) {
+                resourceFileNames.append(filename);
+            }
         }
+
+        KritaUtils::makeContainerUnique(resourceFileNames);
 
         if (!resourceFileNames.isEmpty()) {
             addMetaData("dependent_resources_filenames", resourceFileNames);
@@ -510,9 +522,9 @@ KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInte
     return result;
 }
 
-QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    QList<KoResourceSP> resources;
+    QList<KoResourceLoadResult> resources;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->settings, resources);
 
@@ -533,9 +545,9 @@ QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP gl
     return resources;
 }
 
-QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    QList<KoResourceSP> resources;
+    QList<KoResourceLoadResult> resources;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->settings, resources);
 

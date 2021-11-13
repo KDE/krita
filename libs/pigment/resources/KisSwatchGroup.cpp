@@ -143,7 +143,9 @@ int KisSwatchGroup::columnCount() const {
 
 KisSwatch KisSwatchGroup::getEntry(int column, int row) const
 {
-    Q_ASSERT(checkEntry(column, row));
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(column >= 0 && column < d->colorMatrix.size(), KisSwatch());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(row >= 0 && row < d->rowCount, KisSwatch());
+
     return d->colorMatrix[column][row];
 }
 

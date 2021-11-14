@@ -61,6 +61,7 @@
 #include <KoPluginLoader.h>
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>
+#include <KisResourceLocator.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -1288,8 +1289,7 @@ void KisViewManager::toggleTabletLogger()
 
 void KisViewManager::openResourcesDirectory()
 {
-    QString dir = KoResourcePaths::locateLocal("data", "");
-    QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
+    QDesktopServices::openUrl(QUrl::fromLocalFile(KisResourceLocator::instance()->resourceLocationBase()));
 }
 
 void KisViewManager::updateIcons()

@@ -93,7 +93,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
             QDomDocument d;
             d.setContent(brushDefinition, false);
             QDomElement element = d.firstChildElement("Brush");
-            m_brush = KisBrushRegistry::instance()->createBrush(element, settings->resourcesInterface()).resource().dynamicCast<KisBrush>();
+            m_brush = KisBrushRegistry::instance()->createBrush(element, settings->resourcesInterface()).resource<KisBrush>();
             Q_ASSERT(m_brush);
         }
     }

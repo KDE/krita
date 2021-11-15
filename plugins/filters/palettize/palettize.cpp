@@ -67,7 +67,7 @@ public:
 
     KoColorSetSP palette() const
     {
-        return palette(resourcesInterface()).resource().dynamicCast<KoColorSet>();
+        return palette(resourcesInterface()).resource<KoColorSet>();
     }
 
     QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override

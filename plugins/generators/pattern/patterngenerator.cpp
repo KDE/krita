@@ -78,7 +78,7 @@ public:
     }
 
     KoPatternSP pattern() const {
-        return pattern(resourcesInterface()).resource().dynamicCast<KoPattern>();
+        return pattern(resourcesInterface()).resource<KoPattern>();
     }
 
     QTransform transform() const {

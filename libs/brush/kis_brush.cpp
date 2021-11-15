@@ -414,10 +414,10 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element, KisResourcesInterfaceSP
 {
     KoResourceLoadResult result = fromXMLLoadResult(element, resourcesInterface);
 
-    KisBrushSP brush = result.resource().dynamicCast<KisBrush>();
+    KisBrushSP brush = result.resource<KisBrush>();
     if (!brush) {
         QDomElement el;
-        brush = KisBrushRegistry::instance()->get("auto_brush")->createBrush(el, resourcesInterface).resource().dynamicCast<KisBrush>();
+        brush = KisBrushRegistry::instance()->get("auto_brush")->createBrush(el, resourcesInterface).resource<KisBrush>();
     }
     return brush;
 }
@@ -426,7 +426,7 @@ KoResourceLoadResult KisBrush::fromXMLLoadResult(const QDomElement& element, Kis
 {
     KoResourceLoadResult result = KisBrushRegistry::instance()->createBrush(element, resourcesInterface);
 
-    KisBrushSP brush = result.resource().dynamicCast<KisBrush>();
+    KisBrushSP brush = result.resource<KisBrush>();
     if (brush && element.attribute("BrushVersion", "1") == "1") {
         brush->setScale(brush->scale() * 2.0);
     }

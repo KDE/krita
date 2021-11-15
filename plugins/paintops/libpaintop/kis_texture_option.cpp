@@ -163,7 +163,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     }
 
     KoPatternSP pattern =
-        KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface()).resource().dynamicCast<KoPattern>();
+        KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface()).resource<KoPattern>();
 
     if (!pattern ){
         qWarning() << "Could not get linked pattern";

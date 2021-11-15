@@ -47,7 +47,7 @@ void KisLinkedPatternManagerTest::testRoundTrip()
 
     KisLinkedPatternManager::saveLinkedPattern(config, pattern);
 
-    KoPatternSP newPattern = KisLinkedPatternManager::loadLinkedPattern(config, KisGlobalResourcesInterface::instance()).resource().dynamicCast<KoPattern>();
+    KoPatternSP newPattern = KisLinkedPatternManager::loadLinkedPattern(config, KisGlobalResourcesInterface::instance()).resource<KoPattern>();
 
     QCOMPARE(newPattern->pattern(), pattern->pattern());
     QCOMPARE(newPattern->name(), pattern->name());
@@ -135,7 +135,7 @@ void KisLinkedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool has
     KisPropertiesConfigurationSP setting = createXML(nameStatus, hasMd5);
 
 
-    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, KisGlobalResourcesInterface::instance()).resource().dynamicCast<KoPattern>();
+    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, KisGlobalResourcesInterface::instance()).resource<KoPattern>();
 
     QVERIFY(pattern);
     QCOMPARE(pattern->pattern(), basePattern->pattern());

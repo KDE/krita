@@ -21,13 +21,13 @@ class KRITARESOURCES_EXPORT KoResourceSignature : public boost::equality_compara
 {
 public:
     KoResourceSignature();
-    KoResourceSignature(const QString &type, const QString &md5, const QString &filename, const QString &name);
+    KoResourceSignature(const QString &type, const QString &md5sum, const QString &filename, const QString &name);
 
     KRITARESOURCES_EXPORT
     friend bool operator==(const KoResourceSignature &lhs, const KoResourceSignature &rhs);
 
     QString type;
-    QString md5;
+    QString md5sum;
     QString filename;
     QString name;
 };

@@ -381,7 +381,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             {
                 KoResourceSignature resourceItem;
                 resourceItem.filename = resourceElement.attribute("filename");
-                resourceItem.md5 = resourceElement.attribute("md5sum");
+                resourceItem.md5sum = resourceElement.attribute("md5sum");
                 resourceItem.type = resourceElement.attribute("type");
                 resourceItem.name = resourceElement.attribute("name");
                 m_d->resources.append(resourceItem);
@@ -567,7 +567,7 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
 
     Q_FOREACH(const KoResourceSignature &resourceItem, m_d->resources) {
         KisResourceModel model(resourceItem.type);
-        if (model.resourcesForMD5(resourceItem.md5).isEmpty()) {
+        if (model.resourcesForMD5(resourceItem.md5sum).isEmpty()) {
             store->open(RESOURCE_PATH + '/' + resourceItem.type + '/' + resourceItem.filename);
 
             if (!store->isOpen()) {

@@ -11,9 +11,9 @@ KoResourceSignature::KoResourceSignature()
 {
 }
 
-KoResourceSignature::KoResourceSignature(const QString &_type, const QString &_md5, const QString &_filename, const QString &_name)
+KoResourceSignature::KoResourceSignature(const QString &_type, const QString &_md5sum, const QString &_filename, const QString &_name)
     : type(_type),
-      md5(_md5),
+      md5sum(_md5sum),
       filename(_filename),
       name(_name)
 {
@@ -21,14 +21,14 @@ KoResourceSignature::KoResourceSignature(const QString &_type, const QString &_m
 
 bool operator==(const KoResourceSignature &lhs, const KoResourceSignature &rhs)
 {
-    return lhs.md5 == rhs.md5 && lhs.filename == rhs.filename && lhs.name == rhs.name;
+    return lhs.md5sum == rhs.md5sum && lhs.filename == rhs.filename && lhs.name == rhs.name;
 }
 
 QDebug operator<<(QDebug dbg, const KoResourceSignature &sig)
 {
     dbg.nospace() << "KoResourceSignature("
         << sig.type << ", "
-        << sig.md5 << ", "
+        << sig.md5sum << ", "
         << sig.filename << ", "
         << sig.name << ")";
 

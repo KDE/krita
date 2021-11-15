@@ -30,7 +30,7 @@ QByteArray KoEmbeddedResource::data() const
 
 bool KoEmbeddedResource::sanityCheckMd5() const
 {
-    return m_sig.md5.isEmpty() || KoMD5Generator::generateHash(m_data) == m_sig.md5;
+    return m_sig.md5sum.isEmpty() || KoMD5Generator::generateHash(m_data) == m_sig.md5sum;
 }
 
 bool KoEmbeddedResource::isValid() const

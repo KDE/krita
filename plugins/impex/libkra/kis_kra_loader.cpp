@@ -115,13 +115,6 @@ YCbCrAU16  YCBCRAU16    YCBCRAU16
 
 using namespace KRA;
 
-struct Resource {
-    QString filename;
-    QString md5sum;
-    QString resourceType;
-    QString name;
-};
-
 struct KisKraLoader::Private
 {
 public:
@@ -137,7 +130,7 @@ public:
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QVector<QString> paletteFilenames;
-    QVector<Resource> resources;
+    QVector<KoResourceSignature> resources;
     QStringList errorMessages;
     QStringList warningMessages;
     QList<KisAnnotationSP> annotations;
@@ -386,10 +379,10 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
                  !resourceElement.isNull();
                  resourceElement = resourceElement.previousSiblingElement())
             {
-                Resource resourceItem;
+                KoResourceSignature resourceItem;
                 resourceItem.filename = resourceElement.attribute("filename");
-                resourceItem.md5sum = resourceElement.attribute("md5sum");
-                resourceItem.resourceType = resourceElement.attribute("type");
+                resourceItem.md5 = resourceElement.attribute("md5sum");
+                resourceItem.type = resourceElement.attribute("type");
                 resourceItem.name = resourceElement.attribute("name");
                 m_d->resources.append(resourceItem);
             }
@@ -572,10 +565,10 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
     }
     doc->setPaletteList(list);
 
-    Q_FOREACH(const Resource resourceItem, m_d->resources) {
-        KisResourceModel model(resourceItem.resourceType);
-        if (model.resourcesForMD5(resourceItem.md5sum).isEmpty()) {
-            store->open(RESOURCE_PATH + '/' + resourceItem.resourceType + '/' + resourceItem.filename);
+    Q_FOREACH(const KoResourceSignature &resourceItem, m_d->resources) {
+        KisResourceModel model(resourceItem.type);
+        if (model.resourcesForMD5(resourceItem.md5).isEmpty()) {
+            store->open(RESOURCE_PATH + '/' + resourceItem.type + '/' + resourceItem.filename);
 
             if (!store->isOpen()) {
                 m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be read. The filename of the resource: %1", resourceItem.filename));

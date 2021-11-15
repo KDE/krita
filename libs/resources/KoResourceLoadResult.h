@@ -47,6 +47,15 @@ public:
     KoResourceSP resource() const;
 
     /**
+     * Same as resource(), but returns a resource that is dynamically
+     * cast to the destination type T
+     */
+    template <typename T>
+    QSharedPointer<T> resource() const {
+        return this->resource().dynamicCast<T>();
+    }
+
+    /**
      * Returns the embedded resource, for which there was no instance
      * has been found in the resource database. This resource should
      * be imported into the database manually.

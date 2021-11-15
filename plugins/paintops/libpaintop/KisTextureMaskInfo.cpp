@@ -113,7 +113,7 @@ bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setti
         return false;
     }
 
-    m_pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface).resource().dynamicCast<KoPattern>();
+    m_pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface).resource<KoPattern>();
 
     if (!m_pattern) {
         qWarning() << "WARNING: Couldn't load the pattern for a stroke (KisTextureMaskInfo)";

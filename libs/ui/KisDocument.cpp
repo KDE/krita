@@ -842,8 +842,7 @@ bool KisDocument::save(bool showWarnings, KisPropertiesConfigurationSP exportCon
 
 QByteArray KisDocument::serializeToNativeByteArray()
 {
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
+    QBuffer buffer;
 
     QScopedPointer<KisImportExportFilter> filter(KisImportExportManager::filterForMimeType(nativeFormatMimeType(), KisImportExportManager::Export));
     filter->setBatchMode(true);
@@ -851,7 +850,7 @@ QByteArray KisDocument::serializeToNativeByteArray()
 
     Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
     if (!locker.successfullyLocked()) {
-        return byteArray;
+        return buffer.data();
     }
 
     d->savingImage = d->image;
@@ -860,7 +859,7 @@ QByteArray KisDocument::serializeToNativeByteArray()
         qWarning() << "serializeToByteArray():: Could not export to our native format";
     }
 
-    return byteArray;
+    return buffer.data();
 }
 
 class DlgLoadMessages : public KoDialog {

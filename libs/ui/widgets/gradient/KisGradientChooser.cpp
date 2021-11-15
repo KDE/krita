@@ -557,8 +557,7 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
                     KoResourceSP res;
                     Q_FOREACH(res, resources) {
                         if (res->storageLocation() + ResourceType::Gradients == saveLocation) {
-                            QByteArray ba;
-                            QBuffer buf(&ba);
+                            QBuffer buf;
                             buf.open(QIODevice::WriteOnly);
                             gradient->saveToDevice(&buf);
                             buf.close();

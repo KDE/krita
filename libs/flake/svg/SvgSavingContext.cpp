@@ -178,12 +178,11 @@ QString SvgSavingContext::createFileName(const QString &extension)
 QString SvgSavingContext::saveImage(const QImage &image)
 {
     if (isSavingInlineImages()) {
-        QByteArray ba;
-        QBuffer buffer(&ba);
+        QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         if (image.save(&buffer, "PNG")) {
             const QString header("data:image/x-png;base64,");
-            return header + ba.toBase64();
+            return header + buffer.data().toBase64();
         }
     } else {
         // write to a temp file first
@@ -206,12 +205,11 @@ QString SvgSavingContext::saveImage(const QImage &image)
 QString SvgSavingContext::saveImage(KoImageData *image)
 {
     if (isSavingInlineImages()) {
-        QByteArray ba;
-        QBuffer buffer(&ba);
+        QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         if (image->saveData(buffer)) {
             const QString header("data:" + KisMimeDatabase::mimeTypeForSuffix(image->suffix()) + ";base64,");
-            return header + ba.toBase64();
+            return header + buffer.data().toBase64();
         }
     } else {
         // write to a temp file first

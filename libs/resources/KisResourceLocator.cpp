@@ -741,8 +741,7 @@ void KisResourceLocator::saveTags()
             continue;
         }
 
-        QByteArray ba;
-        QBuffer buf(&ba);
+        QBuffer buf;
         buf.open(QIODevice::WriteOnly);;
 
         if (!tag.save(buf)) {
@@ -752,7 +751,7 @@ void KisResourceLocator::saveTags()
             continue;
         }
 
-        f.write(ba);
+        f.write(buf.data());
         f.flush();
 
         f.close();

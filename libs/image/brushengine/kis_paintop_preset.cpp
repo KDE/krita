@@ -275,14 +275,13 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
 
             KIS_SAFE_ASSERT_RECOVER_NOOP(resource->isSerializable() && "embedding non-serializable resources is not yet implemented");
 
-            QByteArray ba;
-            QBuffer buf(&ba);
+            QBuffer buf;
             buf.open(QBuffer::WriteOnly);
             KisResourceModel model(resource->resourceType().first);
             bool r = model.exportResource(resource, &buf);
             buf.close();
             if (r) {
-                QDomText text = doc.createCDATASection(QString::fromLatin1(ba.toBase64()));
+                QDomText text = doc.createCDATASection(QString::fromLatin1(buf.data().toBase64()));
                 QDomElement e = doc.createElement("resource");
                 e.setAttribute("type", resource->resourceType().first);
                 e.setAttribute("md5sum", resource->md5Sum());

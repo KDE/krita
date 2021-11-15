@@ -51,12 +51,11 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
 
     if (!image().isNull()) {
         QDomElement thumb = doc.createElement("image");
-        QByteArray arr;
-        QBuffer buffer(&arr);
+        QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         image().save(&buffer, "PNG");
         buffer.close();
-        thumb.appendChild(doc.createCDATASection(arr.toBase64()));
+        thumb.appendChild(doc.createCDATASection(buffer.data().toBase64()));
         root.appendChild(thumb);
     }
 

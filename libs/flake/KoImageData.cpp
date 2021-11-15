@@ -199,12 +199,11 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             d->image = image;
             d->dataStoreState = KoImageDataPrivate::StateImageOnly;
 
-            QByteArray ba;
-            QBuffer buffer(&ba);
+            QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
             image.save(&buffer, "PNG"); // use .png for images we get as QImage
             QCryptographicHash md5(QCryptographicHash::Md5);
-            md5.addData(ba);
+            md5.addData(buffer.data());
             d->key = KoImageDataPrivate::generateKey(md5.result());
         }
         if (oldKey != 0 && d->collection) {

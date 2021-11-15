@@ -147,12 +147,11 @@ QString KoResource::md5Sum(bool generateIfEmpty) const
         // non-serializable resources should always have an externally generated md5
         KIS_SAFE_ASSERT_RECOVER_NOOP(isSerializable());
         dbgResources << "No MD5 for" << this << this->name();
-        QByteArray ba;
-        QBuffer buf(&ba);
+        QBuffer buf;
         buf.open(QFile::WriteOnly);
         saveToDevice(&buf);
         buf.close();
-        const_cast<KoResource*>(this)->setMD5Sum(KoMD5Generator::generateHash(ba));
+        const_cast<KoResource*>(this)->setMD5Sum(KoMD5Generator::generateHash(buf.data()));
     }
     return d->md5sum;
 }

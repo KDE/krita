@@ -104,11 +104,10 @@ KisPropertiesConfigurationSP KisLinkedPatternManagerTest::createXML(NameStatus n
             setting->setProperty("Texture/Pattern/PatternMD5", patternMD5);
         }
 
-        QByteArray ba;
-        QBuffer buffer(&ba);
+        QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         pattern->pattern().save(&buffer, "PNG");
-        setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
+        setting->setProperty("Texture/Pattern/Pattern", buffer.data().toBase64());
     }
 
 

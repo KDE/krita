@@ -16,6 +16,10 @@
 #include <QCoreApplication>
 #include <QMutex>
 #include "kis_debug.h"
+#include "ksharedconfig.h"
+#include "kconfiggroup.h"
+#include "KisResourceLocator.h"
+
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance)
 
@@ -528,21 +532,33 @@ QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
 
 QString KoResourcePaths::saveLocationInternal(const QString &type, const QString &suffix, bool create)
 {
-    QStringList aliases = d->aliases(type);
     QString path;
-    if (aliases.size() > 0) {
-        path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + aliases.first();
+
+    bool useStandardLocation = false;
+    const QStringList aliases = d->aliases(type);
+    const QStandardPaths::StandardLocation location = d->mapTypeToQStandardPaths(type);
+
+    if (location == QStandardPaths::AppDataLocation) {
+        KConfigGroup cfg(KSharedConfig::openConfig(), "");
+        path = cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
     }
-    else {
-        path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type));
+
+    if (path.isEmpty()) {
+        path = QStandardPaths::writableLocation(location);
+        useStandardLocation = true;
+    }
 
 #ifndef Q_OS_ANDROID
-        // on Android almost all config locations we save to are app specific,
-        // and don't end with "krita".
-        if (!path.endsWith("krita")) {
-            path += "/krita";
-        }
+    // on Android almost all config locations we save to are app specific,
+    // and don't end with "krita".
+    if (!path.endsWith("krita") && useStandardLocation) {
+        path += "/krita";
+    }
 #endif
+
+    if (!aliases.isEmpty()) {
+        path += '/' + aliases.first();
+    } else {
 
         if (!suffix.isEmpty()) {
             path += "/" + suffix;
@@ -550,7 +566,6 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
     }
 
     QDir d(path);
-
     if (!d.exists() && create) {
         d.mkpath(path);
     }

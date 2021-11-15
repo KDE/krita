@@ -251,15 +251,15 @@ void KisApplication::addResourceTypes()
 #if defined HAVE_SEEXPR
     KoResourcePaths::addResourceType(ResourceType::SeExprScripts, "data", "/seexpr_scripts/", true);
 #endif
+
     // Make directories for all resources we can save, and tags
-    QDir d;
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/asl/");
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/color-schemes/");
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/");
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
+    KoResourcePaths::saveLocation("data", "/asl/", true);
+    KoResourcePaths::saveLocation("data", "/input/", true);
+    KoResourcePaths::saveLocation("data", "/pykrita/", true);
+    KoResourcePaths::saveLocation("data", "/color-schemes/", true);
+    KoResourcePaths::saveLocation("data", "/preset_icons/", true);
+    KoResourcePaths::saveLocation("data", "/preset_icons/tool_icons/", true);
+    KoResourcePaths::saveLocation("data", "/preset_icons/emblem_icons/", true);
 }
 
 
@@ -318,7 +318,14 @@ bool KisApplication::registerResources()
                                                      ResourceType::LayerStyles,
                                                      i18nc("Resource type name", "Layer styles"),
                                                      QStringList() << "application/x-photoshop-style"));
-    if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
+
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    QString databaseLocation = cfg.readEntry(KisResourceCacheDb::dbLocationKey, "");
+    if (databaseLocation.isEmpty()) {
+        databaseLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    }
+
+    if (!KisResourceCacheDb::initialize(databaseLocation)) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.", KisResourceCacheDb::lastError()));
     }
 

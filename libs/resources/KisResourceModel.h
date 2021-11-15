@@ -242,7 +242,7 @@ public:
      * in a resource that's not been loaded yet in the metadata table.
      * @return a resource if one is found, or 0 if none are found
      */
-    QVector<KoResourceSP> resourcesForFilename(QString filename, bool checkDependentResources = false) const;
+    QVector<KoResourceSP> resourcesForFilename(QString filename) const;
 
     /**
      * resourceForName returns the first resource with the given name that

@@ -264,7 +264,7 @@ bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &fil
     return false;
 }
 
-QVector<KoResourceSP> KisAllResourcesModel::resourcesForFilename(QString filename, bool checkDependentResources) const
+QVector<KoResourceSP> KisAllResourcesModel::resourcesForFilename(QString filename) const
 {
     QVector<KoResourceSP> resources;
 
@@ -297,53 +297,6 @@ QVector<KoResourceSP> KisAllResourcesModel::resourcesForFilename(QString filenam
 
     }
 
-    if (resources.isEmpty() && checkDependentResources) {
-        // Check whether the requested resource was embedded in another resource, which has not been loaded so the embedded resource is not available.
-        r = q.prepare("SELECT value"
-                      ",      foreign_id\n"
-                      "FROM   metadata\n"
-                      "WHERE  key = \"dependent_resources_filenames\"\n"
-                      "AND    table_name = \"resources\"\n");
-
-        r = q.exec();
-        if (!r) {
-            qWarning() << "Could not execute metadata query" << q.lastError();
-        }
-
-        while (q.next()) {
-            QByteArray ba = q.value(0).toByteArray();
-            int id = q.value(1).toInt();
-            if (!ba.isEmpty()) {
-                QDataStream ds(QByteArray::fromBase64(ba));
-                QVariant value;
-                ds >> value;
-                QStringList l = value.toStringList();
-                if (l.contains(filename)) {
-                    // This will load the embedded resource and make it available
-                    KoResourceSP res = KisResourceLocator::instance()->resourceForId(id);
-
-                    QList<KoResourceLoadResult> embeddedResources = res->embeddedResources(KisGlobalResourcesInterface::instance());
-                    Q_FOREACH(KoResourceLoadResult embeddedRes, embeddedResources) {
-
-                        /// We have just fetched the resource from the locator, it means
-                        /// that the locator should have uploaded all the embedded resources
-                        /// into the memory storage. Therefore, res->embeddedResources()
-                        /// should return either ExistingResource or FailedLink. Otherwise,
-                        /// there is a bug in KisResourceLocator.
-
-                        KIS_ASSERT_RECOVER(embeddedRes.type() != KoResourceLoadResult::EmbeddedResource) { continue; }
-
-                        KoResourceSP resource = embeddedRes.resource();
-
-                        // This is the best we can do because Krita4 only checked filename and resource type, too.
-                        if (resource && resource->filename() == filename && resource->resourceType().first == d->resourceType) {
-                            resources << resource;
-                        }
-                    }
-                }
-            }
-        }
-    }
     return resources;
 }
 

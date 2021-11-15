@@ -126,7 +126,8 @@ class GameArtTools(DockWidget):
         exportSelectedLayersButton = QPushButton("Selected Layers")
         renameLabel = QLabel("Update Name and Metadata")
         renameLineEdit = QLineEdit()
-        renameButton = QPushButton("Update")
+        renameButton = QPushButton()
+        renameButton.setIcon(KI.icon("view-refresh"))
         statusBar = QStatusBar()
 
         exportLabel.setToolTip("Export individual images")
@@ -150,15 +151,15 @@ class GameArtTools(DockWidget):
 
         vboxlayout = QVBoxLayout()
         vboxlayout.addWidget(exportLabel)
+
         vboxlayout.addWidget(exportAllLayersButton)
         vboxlayout.addWidget(exportSelectedLayersButton)
 
         vboxlayout.addWidget(coaToolsGroupBox)
         vboxlayout.addWidget(renameLabel)
-        vboxlayout.addWidget(renameLineEdit)
 
         hboxlayout = QHBoxLayout()
-        hboxlayout.addStretch()
+        hboxlayout.addWidget(renameLineEdit)
         hboxlayout.addWidget(renameButton)
 
         vboxlayout.addLayout(hboxlayout)

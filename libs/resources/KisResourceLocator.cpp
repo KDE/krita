@@ -78,8 +78,8 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
     InitializationStatus initializationStatus = InitializationStatus::Unknown;
 
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    d->resourceLocation = cfg.readEntry(resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    if (d->resourceLocation == "") {
+    d->resourceLocation = cfg.readEntry(resourceLocationKey, "");
+    if (d->resourceLocation.isEmpty()) {
         d->resourceLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     }
     if (!d->resourceLocation.endsWith('/')) d->resourceLocation += '/';

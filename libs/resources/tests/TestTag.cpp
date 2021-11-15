@@ -65,8 +65,7 @@ void TestTag::testSaveTag()
 
     tag1.setName(QString("Test"));
 
-    QByteArray ba;
-    QBuffer buf(&ba);
+    QBuffer buf;
     buf.open(QBuffer::WriteOnly);
 
     tag1.save(buf);

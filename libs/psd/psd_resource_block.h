@@ -82,8 +82,7 @@ public:
         // HACK ALERT: we are evil! use normal copying instead!
         PSDResourceBlock *copied = new PSDResourceBlock();
 
-        QByteArray ba;
-        QBuffer buffer(&ba);
+        QBuffer buffer;
         buffer.open(QBuffer::WriteOnly);
 
         if (!write(buffer)) {

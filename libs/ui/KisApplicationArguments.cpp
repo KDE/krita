@@ -226,8 +226,7 @@ void KisApplicationArguments::operator=(const KisApplicationArguments &rhs)
 
 QByteArray KisApplicationArguments::serialize()
 {
-    QByteArray ba;
-    QBuffer buf(&ba);
+    QBuffer buf;
     buf.open(QIODevice::WriteOnly);
     QDataStream ds(&buf);
     ds.setVersion(QDataStream::Qt_5_0);
@@ -256,7 +255,7 @@ QByteArray KisApplicationArguments::serialize()
 
     buf.close();
 
-    return ba;
+    return buf.data();
 }
 
 KisApplicationArguments KisApplicationArguments::deserialize(QByteArray &serialized)

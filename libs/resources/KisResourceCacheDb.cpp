@@ -607,12 +607,11 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
     q.bindValue(":md5sum", resource->md5Sum());
 
-    QByteArray ba;
-    QBuffer buf(&ba);
+    QBuffer buf;
     buf.open(QBuffer::WriteOnly);
     resource->thumbnail().save(&buf, "PNG");
     buf.close();
-    q.bindValue(":thumbnail", ba);
+    q.bindValue(":thumbnail", buf.data());
     q.bindValue(":id", resourceId);
 
     r = q.exec();
@@ -854,12 +853,11 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         q.bindValue(":tooltip", translatedName);
     }
 
-    QByteArray ba;
-    QBuffer buf(&ba);
+    QBuffer buf;
     buf.open(QBuffer::WriteOnly);
     resource->image().save(&buf, "PNG");
     buf.close();
-    q.bindValue(":thumbnail", ba);
+    q.bindValue(":thumbnail", buf.data());
 
     q.bindValue(":status", active);
     q.bindValue(":temporary", (temporary ? 1 : 0));
@@ -1260,12 +1258,12 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
         q.bindValue(":timestamp", storage->timestamp().toSecsSinceEpoch());
         q.bindValue(":pre_installed", preinstalled ? 1 : 0);
         q.bindValue(":active", !disabledBundles.contains(storage->name()));
-        QByteArray ba;
-        QBuffer buf(&ba);
+
+        QBuffer buf;
         buf.open(QBuffer::WriteOnly);
         storage->thumbnail().save(&buf, "PNG");
         buf.close();
-        q.bindValue(":thumbnail", ba);
+        q.bindValue(":thumbnail", buf.data());
 
         r = q.exec();
 

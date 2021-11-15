@@ -562,12 +562,11 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     context.styleWriter().addAttribute("width", QString("%1px").arg(KisDomUtils::toString(imageSize.width())));
     context.styleWriter().addAttribute("height", QString("%1px").arg(KisDomUtils::toString(imageSize.height())));
 
-    QByteArray ba;
-    QBuffer buffer(&ba);
+    QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     if (pattern->pattern().save(&buffer, "PNG")) {
         const QString mimeType = KisMimeDatabase::mimeTypeForSuffix("*.png");
-        context.styleWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + ba.toBase64());
+        context.styleWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + buffer.data().toBase64());
     }
 
     context.styleWriter().endElement(); // image

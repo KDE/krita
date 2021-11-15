@@ -360,8 +360,8 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
             return existingResource;
         } else {
             qWarning() << "A resource with the same filename but a different MD5 already exists in the storage" << resourceType << fileName << storageLocation;
-            if (allowOverwrite) {
-
+            if (allowOverwrite && storageLocation == "") {
+                qWarning() << "Proceeding with overwriting the existing resource...";
                 // remove all versions of the resource from the resource folder
                 QStringList versionsLocations;
 
@@ -384,19 +384,23 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
                             }
                         }
                     } else {
+                        qWarning() << "KisResourceLocator::importResourceFromFile: Finding all locations for " << existingResourceId << "was requested, but it failed.";
                         return nullptr;
                     }
                 } else {
+                    qWarning() << "KisResourceLocator::importResourceFromFile: there is no resource file found in the location of " << storageLocation << resource->filename() << resourceType;
                     return nullptr;
                 }
 
                 // remove everything related to this resource from the database (remember about tags and versions!!!)
                 r = KisResourceCacheDb::removeResourceCompletely(existingResourceId);
                 if (!r) {
+                    qWarning() << "KisResourceLocator::importResourceFromFile: Removing resource with id " << existingResourceId << "completely from the database failed.";
                     return nullptr;
                 }
 
             } else {
+                qWarning() << "KisResourceLocator::importResourceFromFile: Overwriting of the resource was denied, aborting import.";
                 return nullptr;
             }
         }

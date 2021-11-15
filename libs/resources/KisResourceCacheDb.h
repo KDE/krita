@@ -62,6 +62,7 @@ private:
     friend class KisResourceLoaderRegistry;
     friend class KisResourceUserOperations;
     friend class KisDocument;
+    friend class KisAllResourcesModel;
 
     explicit KisResourceCacheDb(); // Deleted
     ~KisResourceCacheDb(); // Deleted

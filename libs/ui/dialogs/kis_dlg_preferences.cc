@@ -51,6 +51,7 @@
 #include <KoFileDialog.h>
 #include "KoID.h"
 #include <KoVBox.h>
+#include <KisSpinBoxPluralHelper.h>
 
 #include <KTitleWidget>
 #include <KoResourcePaths.h>
@@ -1308,15 +1309,23 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 #endif
     m_page->chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
 
-    m_page->intMaxAllowedBrushSpeed->setPrefix("Maximum brush speed: ");
-    m_page->intMaxAllowedBrushSpeed->setSuffix(" px/ms");
     m_page->intMaxAllowedBrushSpeed->setRange(1, 100);
     m_page->intMaxAllowedBrushSpeed->setValue(cfg.readEntry("maxAllowedSpeedValue", 30));
+    KisSpinBoxPluralHelper::install(m_page->intMaxAllowedBrushSpeed, [](int value) {
+        // i18n: This is meant to be used in a spinbox so keep the {n} in the text
+        //       and it will be substituted by the number. The text before will be
+        //       used as the prefix and the text after as the suffix
+        return i18np("Maximum brush speed: {n} px/ms", "Maximum brush speed: {n} px/ms", value);
+    });
 
-    m_page->intBrushSpeedSmoothing->setPrefix("Brush speed smoothing: ");
-    m_page->intBrushSpeedSmoothing->setSuffix(" samples");
     m_page->intBrushSpeedSmoothing->setRange(3, 100);
     m_page->intBrushSpeedSmoothing->setValue(cfg.readEntry("speedValueSmoothing", 3));
+    KisSpinBoxPluralHelper::install(m_page->intBrushSpeedSmoothing, [](int value) {
+        // i18n: This is meant to be used in a spinbox so keep the {n} in the text
+        //       and it will be substituted by the number. The text before will be
+        //       used as the prefix and the text after as the suffix
+        return i18np("Brush speed smoothing: {n} sample", "Brush speed smoothing: {n} samples", value);
+    });
 }
 
 void TabletSettingsTab::slotTabletTest()

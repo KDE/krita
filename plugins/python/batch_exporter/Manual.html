@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Manual</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-</head>
-<body>
-<h1 id="gdquest-art-tools-krita-plugin-for-game-developers-and-graphic-designers">Batch Exporter: Krita Plugin for Game Developers and Graphic Designers</h1>
+<h1 id="batch-exporter-krita-plugin-for-game-developers-and-graphic-designers">Batch Exporter: Krita Plugin for Game Developers and Graphic Designers</h1>
 <p>Free Krita plugin for designers, game artists and digital artists to work more productively:</p>
 <ul>
 <li>Batch export assets to multiple sizes, file types, and custom paths. Supports <code>jpg</code> and <code>png</code>.</li>
@@ -26,6 +11,8 @@
 <li><code>[s=20,50,100,150]</code> - size in <code>%</code></li>
 <li><code>[p=path/to/custom/export/directory]</code> - custom output path. Paths can be absolute or relative to the Krita document.</li>
 <li><code>[m=20,30,100]</code> - extra margin in <code>px</code>. The layer is trimmed to the smallest bounding box by default. This option adds extra padding around the layer.</li>
+<li><code>[t=false]</code> or <code>[t=no]</code> - disable trimming the exported layer to the bounding box of the content.</li>
+<li><code>[i=false]</code> or <code>[i=no]</code> - disable parent metadata inheritance for a layer. More info <a href="#layer-inheritance">below</a>.</li>
 </ul>
 <p>A typical layer name with metadata looks like: <code>CharacterTorso e=png m=30 s=50,100</code>. This exports the layer as two images, with an added padding of 30 pixels on each side: <code>CharacterTorso_s100_m030.png</code>, and <code>CharacterTorso_s050_m030.png</code>, a copy of the layer scaled down to half the original size.</p>
 <p>All the metadata tags are optional. Each tag can contain one or multiple options separated by comma <code>,</code>. Write <code>e=jpg</code> to export the layer to <code>jpg</code> only and <code>e=jpg,png</code> to export the layer twice, as a <code>jpg</code> and as a <code>png</code> file. Note that the other tag, <code>p=</code> has been left out. Below we describe how the plugin works.</p>
@@ -53,5 +40,78 @@ Background</code></pre>
 <p>The tool can do more than add and update meta tags. If you want to remove <code>GroupLayer</code> from the name on <code>GodetteGroupLayer</code> and <code>HeadGroupLayer</code>, select them and write <code>GroupLayer=</code> in the text box. Press <kbd>Enter</kbd> and the <code>GroupLayer</code> text will disappear from the selected layers.</p>
 <p>The <code>=</code> tells the tool to search and replace. <code>this=[that]</code> will replace <code>this</code> with <code>[that]</code>. If you don’t write anything after the equal sign, the tool will erase the text you searched for.</p>
 <p>The rename tool is smarter with meta tags. Writing <code>e=</code> will remove the extension tag entirely. For example, <code>Godete e=png s=50,100</code> will become <code>Godette s=50,100</code>.</p>
-</body>
-</html>
+<h2 id="coa-tools-format">COA Tools format</h2>
+<p>The exporter will generate the necessary sprite contents and metadata file for easy import in COA Tools / Blender.</p>
+<p>If you want to export your krita document to COA Tools format, simply click the <code>Document</code> button under COA Tools.</p>
+<p>If you want to export multiple or specific COA Tool documents from one Krita document (if you have e.g. multiple characters in one Krita document), you can do so by selecting a Group Layer to serve as root for each COA Tool export you want done.</p>
+<h3 id="example">Example</h3>
+<p>You want to export two characters from the same Krita document in one go</p>
+<pre><code>Root
+  +-- Robot (Group Layer)       &lt;-- Select this layer
+  |    +-- Head
+  |    +-- Body
+  |    +-- Legs
+  |
+  +-- Sketches
+  |    +-- ...
+  |
+  +-- Minion (Group Layer)      &lt;-- ... and this layer
+  |    +-- Hat
+  |    +-- Head
+  |
+  Background</code></pre>
+<p>Once the Group Layers are selected you push “COA Tools -&gt; Selected Layers”.</p>
+<p>Each export root supports the following metadata:</p>
+<ul>
+<li><code>[p=path/to/custom/export/directory]</code> - custom output path. Paths can be absolute or relative to the Krita document.</li>
+</ul>
+<p>Each child node of an export root supports the following metadata:</p>
+<ul>
+<li><code>[e=jpg,png]</code> - supported export image extensions</li>
+</ul>
+<p>Generating frames to a sprite sheet from a Group Layer is also possible. Simply mark the layer containing each frame you want in the sheet with a <code>c=sheet</code> and each child layer will act as one frame you can switch when Working with COA Tools in Blender.</p>
+<h3 id="example-1">Example</h3>
+<p>You want to export a character from the document, and be able to switch between each state of e.g. the mouth:</p>
+<pre><code>Root
+  +-- Robot (Group Layer)         &lt;-- If this is the export root
+  |    +-- Mouth States c=sheet   &lt;-- ... mark this layer
+  |    |    +-- Open
+  |    |    +-- Half Open
+  |    |    +-- Closed
+  |    |
+  |    +-- Head
+  |    +-- Body
+  |    +-- Legs
+  |
+  Background</code></pre>
+<h2 id="layer-inheritance">Layer Inheritance</h2>
+<p>Batch Exporter now allows child layers to inherit metadata from parent layers without the <code>e=</code> tag. This makes it easier to manage documents with lots of layers and results in cleaner looking layer names.</p>
+<p>Any layers tagged with <code>i=no</code> or <code>i=false</code> will not inherit metadata from their parent layers. Tagged group layers will still share <strong>their own</strong> metadata with their children.</p>
+<h3 id="example-2">Example</h3>
+<p>Consider the following document structure:</p>
+<pre><code>Background e=png m=5 s=50,100 p=assets/images
+
+InterfaceGroupLayer
+  +-- ui_skin e=png m=5 s=50,100 p=assets/images/interface
+  +-- ui_skin_dark e=png m=5 s=50,100 p=assets/images/interface
+
+MapsGroupLayer
+  +-- map01 e=png p=assets/images/interface/maps
+  +-- map02 e=png p=assets/images/interface/maps
+
+MobsGroupLayer
+  +-- mob01 e=png,jpg m=10 s=75 p=assets/images/mobs
+  +-- mob02 e=png,jpg m=10 s=25 p=assets/images/mobs</code></pre>
+<p>Using metadata inheritance, you could achieve the above like so:</p>
+<pre><code>InterfaceGroupLayer m=5 s=50,100 p=assets/images/interface
+  +-- ui_skin e=png
+  +-- ui_skin_dark e=png
+  +-- Background e=png p=assets/images
+
+MapsGroupLayer p=assets/images/interface/maps
+  +-- map01 e=png
+  +-- map02 e=png
+
+MobsGroupLayer p=assets/images/mobs m=10
+  +-- mob01 e=png,jpg s=75
+  +-- mob02 e=png,jpg s=25</code></pre>

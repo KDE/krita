@@ -15,15 +15,18 @@ the layer name. The supported options are:
 - `[e=jpg,png]` - supported export image extensions
 - `[s=20,50,100,150]` - size in `%`
 - `[p=path/to/custom/export/directory]` - custom output path.
-    Paths can be absolute or relative to the Krita document.
+  Paths can be absolute or relative to the Krita document.
 - `[m=20,30,100]` - extra margin in `px`. The layer is trimmed to the
   smallest bounding box by default. This option adds extra padding around the
   layer.
+- `[t=false]` or `[t=no]` - disable trimming the exported layer to the bounding box of
+  the content.
+- `[i=false]` or `[i=no]` - disable parent metadata inheritance for a layer. More info [below](#layer-inheritance).
 
-A typical layer name with metadata looks like: `CharacterTorso e=png m=30
-s=50,100`. This exports the layer as two images, with an added padding of 30 pixels
-on each side: `CharacterTorso_s100_m030.png`, and `CharacterTorso_s050_m030.png`,
-a copy of the layer scaled down to half the original size.
+A typical layer name with metadata looks like: `CharacterTorso e=png m=30 s=50,100`. This exports
+the layer as two images, with an added padding of 30 pixels on each side:
+`CharacterTorso_s100_m030.png`, and `CharacterTorso_s050_m030.png`, a copy of the layer scaled down
+to half the original size.
 
 All the metadata tags are optional. Each tag can contain one or multiple options
 separated by comma `,`. Write `e=jpg` to export the layer to `jpg` only and
@@ -35,10 +38,9 @@ the other tag, `p=` has been left out. Below we describe how the plugin works.
 Batch Exporter gives two options to batch export layers: `Export All Layers`
 or `Export Selected Layers`.
 
-`Export All Layers` only takes layers with the `e=extension[s]` tag into
-account. For example, if the layer name is `LeftArm e=png s=50,100`, `Export All
-Layers` will take it into account. If the layer name is `LeftArm s=50,100`, it
-will not be exported with this option.
+`Export All Layers` only takes layers with the `e=extension[s]` tag into account. For example, if
+the layer name is `LeftArm e=png s=50,100`, `Export All Layers` will take it into account. If the
+layer name is `LeftArm s=50,100`, it will not be exported with this option.
 
 `Export Selected Layers` exports all selected layers regardless of the tags.
 
@@ -101,7 +103,9 @@ you can do so by selecting a Group Layer to serve as root for each COA Tool expo
 you want done.
 
 ### Example
+
 You want to export two characters from the same Krita document in one go
+
 ```
 Root
   +-- Robot (Group Layer)       <-- Select this layer
@@ -118,13 +122,16 @@ Root
   |
   Background
 ```
+
 Once the Group Layers are selected you push "COA Tools -> Selected Layers".
 
 Each export root supports the following metadata:
+
 - `[p=path/to/custom/export/directory]` - custom output path.
-    Paths can be absolute or relative to the Krita document.
+  Paths can be absolute or relative to the Krita document.
 
 Each child node of an export root supports the following metadata:
+
 - `[e=jpg,png]` - supported export image extensions
 
 Generating frames to a sprite sheet from a Group Layer is also possible.
@@ -133,8 +140,10 @@ Simply mark the layer containing each frame you want in the sheet with a
 Working with COA Tools in Blender.
 
 ### Example
+
 You want to export a character from the document, and be
 able to switch between each state of e.g. the mouth:
+
 ```
 Root
   +-- Robot (Group Layer)         <-- If this is the export root
@@ -148,4 +157,50 @@ Root
   |    +-- Legs
   |
   Background
+```
+
+## Layer Inheritance
+
+Batch Exporter now allows child layers to inherit metadata from parent layers
+without the `e=` tag. This makes it easier to manage documents with lots of layers
+and results in cleaner looking layer names.
+
+Any layers tagged with `i=no` or `i=false` will not inherit metadata from their parent
+layers. Tagged group layers will still share **their own** metadata with their children.
+
+### Example
+
+Consider the following document structure:
+
+```
+Background e=png m=5 s=50,100 p=assets/images
+
+InterfaceGroupLayer
+  +-- ui_skin e=png m=5 s=50,100 p=assets/images/interface
+  +-- ui_skin_dark e=png m=5 s=50,100 p=assets/images/interface
+
+MapsGroupLayer
+  +-- map01 e=png p=assets/images/interface/maps
+  +-- map02 e=png p=assets/images/interface/maps
+
+MobsGroupLayer
+  +-- mob01 e=png,jpg m=10 s=75 p=assets/images/mobs
+  +-- mob02 e=png,jpg m=10 s=25 p=assets/images/mobs
+```
+
+Using metadata inheritance, you could achieve the above like so:
+
+```
+InterfaceGroupLayer m=5 s=50,100 p=assets/images/interface
+  +-- ui_skin e=png
+  +-- ui_skin_dark e=png
+  +-- Background e=png p=assets/images
+
+MapsGroupLayer p=assets/images/interface/maps
+  +-- map01 e=png
+  +-- map02 e=png
+
+MobsGroupLayer p=assets/images/mobs m=10
+  +-- mob01 e=png,jpg s=75
+  +-- mob02 e=png,jpg s=25
 ```

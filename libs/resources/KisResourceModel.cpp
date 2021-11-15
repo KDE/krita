@@ -456,15 +456,45 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 
 KoResourceSP KisAllResourcesModel::importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId)
 {
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    qCritical() << "Importing: " << filename << allowOverwrite << storageId;
+    int outExistingResourceId = -1;
+    bool willOverwrite = false;
+    bool result = KisResourceCacheDb::getResourceIdFromVersionedFilename(filename, d->resourceType, storageId, outExistingResourceId);
+    if (result && (outExistingResourceId >= 0)) {
+        willOverwrite = true;
+    }
+
+    if (willOverwrite && !allowOverwrite) {
+        return nullptr;
+    }
+
+    if (!willOverwrite) {
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    } else {
+        QModelIndex idx = indexForResourceId(outExistingResourceId);
+        beginRemoveRows(QModelIndex(), idx.row(), idx.row());
+    }
+
     KoResourceSP res = KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename, allowOverwrite, storageId);
+
     if (!res) {
         qWarning() << "Failed to import resource" << filename;
     }
+
     resetQuery();
-    endInsertRows();
+
+    if (willOverwrite) {
+        //QModelIndex idx = indexForResourceId(outExistingResourceId);
+        //emit dataChanged(idx, idx, {Qt::EditRole});
+        endRemoveRows();
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        endInsertRows();
+    } else {
+        endInsertRows();
+    }
 
     return res;
+
 }
 
 KoResourceSP KisAllResourcesModel::importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId)

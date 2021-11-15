@@ -429,7 +429,7 @@ void KisLayerManager::pasteLayerStyle()
 
     if (serializer.styles().size() != 1) return;
 
-    KisPSDLayerStyleSP newStyle = serializer.styles().first();
+    KisPSDLayerStyleSP newStyle = serializer.styles().first()->cloneWithResourcesSnapshot();
     KUndo2Command *cmd = new KisSetLayerStyleCommand(layer, layer->layerStyle(), newStyle);
 
     KisProcessingApplicator::runSingleCommandStroke(image, cmd);
@@ -991,7 +991,8 @@ void KisLayerManager::layerStyle()
         oldStyle = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
 
     } else {
-        oldStyle = toQShared(new KisPSDLayerStyle("", KisGlobalResourcesInterface::instance()));
+        oldStyle = toQShared(new KisPSDLayerStyle("", KisGlobalResourcesInterface::instance()))
+                ->cloneWithResourcesSnapshot();
     }
 
     KisPSDLayerStyleSP newStyle = oldStyle->clone().dynamicCast<KisPSDLayerStyle>();

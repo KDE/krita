@@ -231,9 +231,15 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             newStretch = it != fontStretches.rend() ? *it : fontStretches.front();
 
         } else {
-            auto it = std::find(fontStretchNames.begin(), fontStretchNames.end(), value);
-            if (it != fontStretchNames.end()) {
-                newStretch = fontStretches[it - fontStretchNames.begin()];
+            // try to read numerical stretch value
+            bool ok = false;
+            newStretch = value.toInt(&ok, 10);
+
+            if (!ok) {
+                auto it = std::find(fontStretchNames.begin(), fontStretchNames.end(), value);
+                if (it != fontStretchNames.end()) {
+                    newStretch = fontStretches[it - fontStretchNames.begin()];
+                }
             }
         }
 
@@ -448,19 +454,20 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
 
 QFont KoSvgTextProperties::generateFont() const
 {
-    QFont font;
+    QString fontFamily;
 
     QStringList familiesList =
         propertyOrDefault(KoSvgTextProperties::FontFamiliesId).toStringList();
-
     if (!familiesList.isEmpty()) {
-        font.setFamily(familiesList.first());
+        fontFamily = familiesList.first();
     }
-
-    font.setPointSizeF(propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
-
     const QFont::Style style =
         QFont::Style(propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+
+    QFont font(fontFamily
+               , propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal()
+               , propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt()
+               , style != QFont::StyleNormal);
     font.setStyle(style);
 
     font.setCapitalization(
@@ -468,8 +475,6 @@ QFont KoSvgTextProperties::generateFont() const
             QFont::SmallCaps : QFont::MixedCase);
 
     font.setStretch(propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
-
-    font.setWeight(propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
 
     using namespace KoSvgText;
 

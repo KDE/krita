@@ -1039,8 +1039,26 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
         }
 
         if (propertyId == QTextCharFormat::FontStretch) {
+            QString valueString = QString::number(format.fontStretch(), 10);
+            if (format.fontStretch() == QFont::ExtraCondensed) {
+                valueString = "extra-condensed";
+            } else if (format.fontStretch() == QFont::SemiCondensed) {
+                valueString = "semi-condensed";
+            } else if (format.fontStretch() == QFont::Condensed) {
+                valueString = "condensed";
+            } else if (format.fontStretch() == QFont::AnyStretch) {
+                valueString = "normal";
+            } else if (format.fontStretch() == QFont::Expanded) {
+                valueString = "expanded";
+            } else if (format.fontStretch() == QFont::SemiExpanded) {
+                valueString = "semi-expanded";
+            }  else if (format.fontStretch() == QFont::ExtraExpanded) {
+                valueString = "extra-expanded";
+            }  else if (format.fontStretch() == QFont::UltraExpanded) {
+                valueString = "ultra-expanded";
+            }
             c.append("font-stretch").append(":")
-                    .append(format.properties()[propertyId].toString());
+                    .append(valueString);
         }
         if (propertyId == QTextCharFormat::FontKerning) {
             QString val;
@@ -1188,7 +1206,25 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "font-stretch") {
-                charFormat.setFontStretch(value.toInt());
+                if (value == "ultra-condensed") {
+                    charFormat.setFontStretch(QFont::UltraCondensed);
+                } else if (value == "condensed") {
+                    charFormat.setFontStretch(QFont::Condensed);
+                } else if (value == "semi-condensed") {
+                    charFormat.setFontStretch(QFont::SemiCondensed);
+                } else if (value == "normal") {
+                    charFormat.setFontStretch(100);
+                } else if (value == "semi-expanded") {
+                    charFormat.setFontStretch(QFont::SemiExpanded);
+                } else if (value == "expanded") {
+                    charFormat.setFontStretch(QFont::Expanded);
+                } else if (value == "extra-expanded") {
+                    charFormat.setFontStretch(QFont::ExtraExpanded);
+                } else if (value == "ultra-expanded") {
+                    charFormat.setFontStretch(QFont::UltraExpanded);
+                } else { // "normal"
+                    charFormat.setFontStretch(value.toInt());
+                }
             }
 
             if (property == "font-weight") {

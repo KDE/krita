@@ -128,7 +128,7 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
 void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
 {
     KisTagSP tag = currentlySelectedTag();
-    bool canRenameCurrentTag = !tag.isNull();
+    bool canRenameCurrentTag = !tag.isNull() && (tagName != tag->name());
 
     if (tagName == KisAllTagsModel::urlAll() || tagName == KisAllTagsModel::urlAllUntagged()) {
         QMessageBox::information(this, i18nc("Dialog title", "Can't rename the tag"), i18nc("Dialog message", "You can't use this name for your custom tags."), QMessageBox::Ok);

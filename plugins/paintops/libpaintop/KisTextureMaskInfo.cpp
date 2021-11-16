@@ -9,6 +9,7 @@
 #include <kis_paintop_settings.h>
 #include <resources/KoPattern.h>
 #include "kis_linked_pattern_manager.h"
+#include <KoResourceLoadResult.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -112,7 +113,7 @@ bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setti
         return false;
     }
 
-    m_pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
+    m_pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface).resource<KoPattern>();
 
     if (!m_pattern) {
         qWarning() << "WARNING: Couldn't load the pattern for a stroke (KisTextureMaskInfo)";

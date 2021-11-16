@@ -18,6 +18,7 @@
 #include <KisResourceServerProvider.h>
 #include <KisGlobalResourcesInterface.h>
 #include <KoResourceServerProvider.h>
+#include <KoResourceLoadResult.h>
 
 #include "sdk/tests/testresources.h"
 
@@ -46,7 +47,7 @@ void KisLinkedPatternManagerTest::testRoundTrip()
 
     KisLinkedPatternManager::saveLinkedPattern(config, pattern);
 
-    KoPatternSP newPattern = KisLinkedPatternManager::loadLinkedPattern(config, KisGlobalResourcesInterface::instance());
+    KoPatternSP newPattern = KisLinkedPatternManager::loadLinkedPattern(config, KisGlobalResourcesInterface::instance()).resource<KoPattern>();
 
     QCOMPARE(newPattern->pattern(), pattern->pattern());
     QCOMPARE(newPattern->name(), pattern->name());
@@ -103,11 +104,10 @@ KisPropertiesConfigurationSP KisLinkedPatternManagerTest::createXML(NameStatus n
             setting->setProperty("Texture/Pattern/PatternMD5", patternMD5);
         }
 
-        QByteArray ba;
-        QBuffer buffer(&ba);
+        QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         pattern->pattern().save(&buffer, "PNG");
-        setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
+        setting->setProperty("Texture/Pattern/Pattern", buffer.data().toBase64());
     }
 
 
@@ -135,7 +135,7 @@ void KisLinkedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool has
     KisPropertiesConfigurationSP setting = createXML(nameStatus, hasMd5);
 
 
-    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, KisGlobalResourcesInterface::instance());
+    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, KisGlobalResourcesInterface::instance()).resource<KoPattern>();
 
     QVERIFY(pattern);
     QCOMPARE(pattern->pattern(), basePattern->pattern());

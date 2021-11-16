@@ -184,18 +184,17 @@ void TestDocument::testAnnotations()
 
     QVERIFY(d.annotationTypes().isEmpty());
 
-    QByteArray ba;
-    QBuffer buf(&ba);
+    QBuffer buf;
     buf.open(QBuffer::WriteOnly);
     QTextStream in(&buf);
     in << "AnnotationTest";
     buf.close();
 
-    d.setAnnotation("test", "description", ba);
+    d.setAnnotation("test", "description", buf.data());
 
     QVERIFY(d.annotationTypes().size() == 1);
     QVERIFY(d.annotationTypes().contains("test"));
-    QVERIFY(d.annotation("test").toHex() == ba.toHex());
+    QVERIFY(d.annotation("test").toHex() == buf.data().toHex());
     QVERIFY(d.annotationDescription("test") == "description");
 
     d.saveAs("roundtriptest.kra");
@@ -210,7 +209,7 @@ void TestDocument::testAnnotations()
 
     QVERIFY(d2->annotationTypes().size() == 1);
     QVERIFY(d2->annotationTypes().contains("test"));
-    QVERIFY(d2->annotation("test").toHex() == ba.toHex());
+    QVERIFY(d2->annotation("test").toHex() == buf.data().toHex());
     QVERIFY(d2->annotationDescription("test") == "description");
 
     d2->close();

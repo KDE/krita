@@ -9,9 +9,7 @@
 #include <QBuffer>
 
 #include <KisTag.h>
-#include <KisResourceLoader.h>
 #include <KoResource.h>
-#include <KisResourceLoaderRegistry.h>
 
 #include <KLocalizedString>
 
@@ -67,8 +65,7 @@ void TestTag::testSaveTag()
 
     tag1.setName(QString("Test"));
 
-    QByteArray ba;
-    QBuffer buf(&ba);
+    QBuffer buf;
     buf.open(QBuffer::WriteOnly);
 
     tag1.save(buf);

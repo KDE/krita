@@ -72,8 +72,15 @@ void KisToolSelectOutline::keyReleaseEvent(QKeyEvent *event)
         !(event->modifiers() & Qt::ControlModifier)) {
 
         m_continuedMode = false;
-        if (mode() != PAINT_MODE && !m_points.isEmpty()) {
-            finishSelectionAction();
+        if (mode() != PAINT_MODE) {
+            // Prevent finishing the selection if there is only one point, since
+            // finishSelectionAction will deselect the current selection. That
+            // is fine if the user just clicks, but not if we are in continued
+            // mode
+            if (m_points.count() > 1) {
+                finishSelectionAction();
+            }
+            m_points.clear(); // ensure points are always cleared
         }
     }
 
@@ -87,8 +94,6 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
     m_lastCursorPos = convertToPixelCoord(event);
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
-    } else {
-        KisToolSelect::mouseMoveEvent(event);
     }
 
     KisToolSelect::mouseMoveEvent(event);
@@ -260,7 +265,7 @@ void KisToolSelectOutline::updateContinuedMode()
     if (!m_points.isEmpty()) {
         qint32 lastPointIndex = m_points.count() - 1;
 
-        QRectF updateRect = QRectF(m_points[lastPointIndex - 1], m_lastCursorPos).normalized();
+        QRectF updateRect = QRectF(m_points[lastPointIndex], m_lastCursorPos).normalized();
         updateRect = kisGrowRect(updateRect, FEEDBACK_LINE_WIDTH);
 
         updateCanvasPixelRect(updateRect);

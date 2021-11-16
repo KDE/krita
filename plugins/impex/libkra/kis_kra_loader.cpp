@@ -27,10 +27,7 @@
 #include <KoResourceServer.h>
 #include <KisResourceStorage.h>
 #include <KisGlobalResourcesInterface.h>
-#include <KisResourceLocator.h>
-#include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
-
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -118,13 +115,6 @@ YCbCrAU16  YCBCRAU16    YCBCRAU16
 
 using namespace KRA;
 
-struct Resource {
-    QString filename;
-    QString md5sum;
-    QString resourceType;
-    QString name;
-};
-
 struct KisKraLoader::Private
 {
 public:
@@ -140,7 +130,7 @@ public:
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QVector<QString> paletteFilenames;
-    QVector<Resource> resources;
+    QVector<KoResourceSignature> resources;
     QStringList errorMessages;
     QStringList warningMessages;
     QList<KisAnnotationSP> annotations;
@@ -389,10 +379,10 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
                  !resourceElement.isNull();
                  resourceElement = resourceElement.previousSiblingElement())
             {
-                Resource resourceItem;
+                KoResourceSignature resourceItem;
                 resourceItem.filename = resourceElement.attribute("filename");
                 resourceItem.md5sum = resourceElement.attribute("md5sum");
-                resourceItem.resourceType = resourceElement.attribute("type");
+                resourceItem.type = resourceElement.attribute("type");
                 resourceItem.name = resourceElement.attribute("name");
                 m_d->resources.append(resourceItem);
             }
@@ -575,26 +565,29 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
     }
     doc->setPaletteList(list);
 
-    Q_FOREACH(const Resource resourceItem, m_d->resources) {
-        KisResourceModel model(resourceItem.resourceType);
+    Q_FOREACH(const KoResourceSignature &resourceItem, m_d->resources) {
+        KisResourceModel model(resourceItem.type);
         if (model.resourcesForMD5(resourceItem.md5sum).isEmpty()) {
-            store->open(RESOURCE_PATH + '/' + resourceItem.resourceType + '/' + resourceItem.filename);
-            QByteArray ba = store->read(store->size());
-            if (ba.size() > 0 ) {
-                QVector<KisResourceLoaderBase*> resourceLoaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(resourceItem.resourceType);
-                Q_FOREACH(KisResourceLoaderBase *loader, resourceLoaders) {
-                    QBuffer buf(&ba);
-                    buf.open(QBuffer::ReadOnly);
-                    KoResourceSP res = loader->load(resourceItem.name, buf, KisGlobalResourcesInterface::instance());
-                    if (res) {
-                        model.addResource(res, doc->linkedResourcesStorageId());
-                    }
+            store->open(RESOURCE_PATH + '/' + resourceItem.type + '/' + resourceItem.filename);
+
+            if (!store->isOpen()) {
+                m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be read. The filename of the resource: %1", resourceItem.filename));
+                continue;
+            }
+
+            /// don't try to load the resource if its file is empty
+            /// (which is a sign of a failed save operation)
+            if (!store->device()->atEnd()) {
+                bool result = model.importResource(resourceItem.filename, store->device(), false, doc->linkedResourcesStorageId());
+                if (!result) {
+                    m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be imported. The filename of the resource: %1", resourceItem.filename));
+                    continue;
                 }
             }
 
+            store->close();
         }
     }
-
 }
 
 void KisKraLoader::loadStoryboards(KoStore *store, KisDocument */*doc*/)

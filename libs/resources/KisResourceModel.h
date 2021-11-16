@@ -89,6 +89,38 @@ public:
     virtual KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) = 0;
 
     /**
+     * @brief importResource imports a resource from a QIODevice
+     *
+     * Importing a resource from a binary blob is the only way to guarantee that its
+     * MD5 checksum is kept persistent. The underlying storage will just copy bytes
+     * into its location.
+     *
+     * @param filename file name of the resource if preset. File name may be used
+     *                 for addressing the resource, so it is usually preferred to
+     *                 preserve it.
+     *
+     * @param device device where the resource should be read from
+     *
+     * @return the loaded resource object
+     */
+    virtual KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString()) = 0;
+
+    /**
+     * @brief exportResource exports a resource into a QIODevice
+     *
+     * Exporting a resource as a binary blob is the only way to guarantee that its
+     * MD5 checksum is kept persistent. The underlying storage will just copy bytes
+     * into the device without doing any conversions
+     *
+     * @param resource the resource to be exported
+     *
+     * @param device device where the resource should be written to
+     *
+     * @return true if export operation has been successful
+     */
+    virtual bool exportResource(KoResourceSP resource, QIODevice *device) = 0;
+
+    /**
      * @brief addResource adds the given resource to the database and storage. If the resource
      * already exists in the given storage with md5, filename or name, the existing resource
      * will be updated instead. If the existing resource was inactive, it will be actived
@@ -176,6 +208,8 @@ public:
     QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) override;
+    KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString()) override;
+    bool exportResource(KoResourceSP resource, QIODevice *device) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
@@ -203,12 +237,12 @@ public:
      * a path to the storage, and if there are resources with the same filename
      * in several active storages, only one resource is returned.
      *
-     * @param fileName the filename we're looking for
+     * @param filename the filename we're looking for
      * @param checkDependentResources: check whether we should try to find a resource embedded
      * in a resource that's not been loaded yet in the metadata table.
      * @return a resource if one is found, or 0 if none are found
      */
-    QVector<KoResourceSP> resourcesForFilename(QString fileName, bool checkDependentResources = false) const;
+    QVector<KoResourceSP> resourcesForFilename(QString filename) const;
 
     /**
      * resourceForName returns the first resource with the given name that
@@ -270,6 +304,8 @@ public:
     QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) override;
+    KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString()) override;
+    bool exportResource(KoResourceSP resource, QIODevice *device) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;

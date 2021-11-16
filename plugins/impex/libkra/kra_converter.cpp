@@ -180,7 +180,7 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
     result = m_kraSaver->saveResources(m_store, m_image, m_doc->path());
     if (!result) {
         success = false;
-        qWarning() << "saving palettes data failed";
+        qWarning() << "saving resources data failed";
     }
 
     result = m_kraSaver->saveStoryboard(m_store, m_image, m_doc->path());
@@ -204,6 +204,8 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
         m_doc->setErrorMessage(m_kraSaver->errorMessages().join(".\n"));
         return ImportExportCodes::Failure;
     }
+
+    m_doc->setWarningMessage(m_kraSaver->warningMessages().join(".\n"));
 
     setProgress(90);
     return ImportExportCodes::OK;
@@ -425,8 +427,8 @@ bool KraConverter::completeLoading(KoStore* store)
         }
     }
 
-    m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadResources(store, m_doc);
+    m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadStoryboards(store, m_doc);
     m_kraLoader->loadAnimationMetadata(store, m_image);
 

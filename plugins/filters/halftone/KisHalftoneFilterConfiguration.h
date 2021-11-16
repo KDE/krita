@@ -31,8 +31,9 @@ public:
 
     KisFilterConfigurationSP clone() const override;
 
-    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
-    QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface) override;
+    QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    QList<KoResourceLoadResult> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 
     static constexpr const char *HalftoneMode_Intensity = "intensity";
     static constexpr const char *HalftoneMode_IndependentChannels = "independent_channels";
@@ -101,6 +102,9 @@ public:
     void setForegroundOpacity(const QString &prefix, int newOpacity);
     void setBackgroundColor(const QString &prefix, const KoColor &newBackgroundColor);
     void setBackgroundOpacity(const QString &prefix, int newBackgroundOpacity);
+
+private:
+    mutable QHash<QString, KisFilterConfigurationSP> m_generatorConfigurationsCache;
 };
 
 #endif

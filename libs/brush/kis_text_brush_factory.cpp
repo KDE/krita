@@ -9,8 +9,10 @@
 #include <QFont>
 #include <kis_dom_utils.h>
 #include "kis_text_brush.h"
+#include <KoResourceLoadResult.h>
 
-KisBrushSP KisTextBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
+
+KoResourceLoadResult KisTextBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
 {
     Q_UNUSED(resourcesInterface);
 

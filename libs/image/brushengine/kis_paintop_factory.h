@@ -28,6 +28,8 @@ using KoResourceSP = QSharedPointer<KoResource>;
 class KisResourcesInterface;
 using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
 
+class KoResourceLoadResult;
+
 /**
  * The paintop factory is responsible for creating paintops of the specified class.
  * If there is an optionWidget, the derived paintop itself must support settings,
@@ -72,13 +74,13 @@ public:
     /**
      * @return all the resources linked to \p settings.
      */
-    virtual QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
+    virtual QList<KoResourceLoadResult> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
 
     /**
      * @return all the resources embedded into \p settings. The resources are first tried to be loaded
      * from \p resourcesInterface, and, if it fails, loaded from the embedded data.
      */
-    virtual QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
+    virtual QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
 
     virtual KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) const;
 

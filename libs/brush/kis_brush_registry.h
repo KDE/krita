@@ -30,7 +30,7 @@ public:
 
     static KisBrushRegistry* instance();
 
-    KisBrushSP createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
+    KoResourceLoadResult createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
 private:
     KisBrushRegistry(const KisBrushRegistry&);

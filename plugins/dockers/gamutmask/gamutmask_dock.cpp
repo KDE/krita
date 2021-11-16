@@ -141,6 +141,7 @@ bool GamutMaskDock::openMaskEditor()
         return false;
     }
 
+    m_dockerUI->maskChooser->setEnabled(false);
     m_dockerUI->maskPropertiesBox->setVisible(true);
     m_dockerUI->maskPropertiesBox->setEnabled(true);
     m_dockerUI->editControlsBox->setEnabled(false);
@@ -195,6 +196,8 @@ bool GamutMaskDock::openMaskEditor()
 
     connect(m_view->viewManager(), SIGNAL(viewChanged()), this, SLOT(slotViewChanged()));
     connect(m_maskDocument, SIGNAL(completed()), this, SLOT(slotDocumentSaved()));
+
+    m_dockerUI->maskChooser->setEnabled(true);
 
     return true;
 }

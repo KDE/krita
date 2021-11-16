@@ -8,6 +8,7 @@
 
 #include <generator/kis_generator.h>
 #include <generator/kis_generator_registry.h>
+#include <KoResourceLoadResult.h>
 
 #include "KisHalftoneFilterConfiguration.h"
 
@@ -19,7 +20,13 @@ KisHalftoneFilterConfiguration::KisHalftoneFilterConfiguration(const QString & n
 
 KisHalftoneFilterConfiguration::KisHalftoneFilterConfiguration(const KisHalftoneFilterConfiguration &rhs)
     : KisFilterConfiguration(rhs)
-{}
+{
+    QHashIterator<QString, KisFilterConfigurationSP> it(rhs.m_generatorConfigurationsCache);
+    while (it.hasNext()) {
+        it.next();
+        m_generatorConfigurationsCache[it.key()] = it.value()->clone();
+    }
+}
 
 KisHalftoneFilterConfiguration::~KisHalftoneFilterConfiguration()
 {}
@@ -29,21 +36,43 @@ KisFilterConfigurationSP KisHalftoneFilterConfiguration::clone() const
     return new KisHalftoneFilterConfiguration(*this);
 }
 
-QList<KoResourceSP> KisHalftoneFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+void KisHalftoneFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
 {
-    QList<KoResourceSP> resourcesList;
+    KisFilterConfiguration::setResourcesInterface(resourcesInterface);
 
     if (mode() == HalftoneMode_IndependentChannels) {
-        QString prefix = colorModelId() + "_channel";
+        const QString prefix = colorModelId() + "_channel";
         for (int i = 0; i < 4; ++i) {
-            QString fullPrefix = prefix + QString::number(i) + "_";
+            const QString fullPrefix = prefix + QString::number(i) + "_";
+            KisFilterConfigurationSP generatorConfig = generatorConfiguration(fullPrefix);
+            if (generatorConfig) {
+                m_generatorConfigurationsCache[fullPrefix]->setResourcesInterface(resourcesInterface);
+            }
+        }
+    } else {
+        const QString prefix = mode() + "_";
+        KisFilterConfigurationSP generatorConfig = generatorConfiguration(prefix);
+        if (generatorConfig) {
+            m_generatorConfigurationsCache[prefix]->setResourcesInterface(resourcesInterface);
+        }
+    }
+}
+
+QList<KoResourceLoadResult> KisHalftoneFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    QList<KoResourceLoadResult> resourcesList;
+
+    if (mode() == HalftoneMode_IndependentChannels) {
+        const QString prefix = colorModelId() + "_channel";
+        for (int i = 0; i < 4; ++i) {
+            const QString fullPrefix = prefix + QString::number(i) + "_";
             KisFilterConfigurationSP generatorConfig = generatorConfiguration(fullPrefix);
             if (generatorConfig) {
                 resourcesList += generatorConfig->linkedResources(globalResourcesInterface);
             }
         }
     } else {
-        QString prefix = mode() + "_";
+        const QString prefix = mode() + "_";
         KisFilterConfigurationSP generatorConfig = generatorConfiguration(prefix);
         if (generatorConfig) {
             resourcesList += generatorConfig->linkedResources(globalResourcesInterface);
@@ -53,21 +82,21 @@ QList<KoResourceSP> KisHalftoneFilterConfiguration::linkedResources(KisResources
     return resourcesList;
 }
 
-QList<KoResourceSP> KisHalftoneFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisHalftoneFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    QList<KoResourceSP> resourcesList;
+    QList<KoResourceLoadResult> resourcesList;
 
     if (mode() == HalftoneMode_IndependentChannels) {
-        QString prefix = colorModelId() + "_channel";
+        const QString prefix = colorModelId() + "_channel";
         for (int i = 0; i < 4; ++i) {
-            QString fullPrefix = prefix + QString::number(i) + "_";
+            const QString fullPrefix = prefix + QString::number(i) + "_";
             KisFilterConfigurationSP generatorConfig = generatorConfiguration(fullPrefix);
             if (generatorConfig) {
                 resourcesList += generatorConfig->embeddedResources(globalResourcesInterface);
             }
         }
     } else {
-        QString prefix = mode() + "_";
+        const QString prefix = mode() + "_";
         KisFilterConfigurationSP generatorConfig = generatorConfiguration(prefix);
         if (generatorConfig) {
             resourcesList += generatorConfig->embeddedResources(globalResourcesInterface);
@@ -94,14 +123,19 @@ QString KisHalftoneFilterConfiguration::generatorId(const QString &prefix) const
 
 KisFilterConfigurationSP KisHalftoneFilterConfiguration::generatorConfiguration(const QString &prefix) const
 {
-    QStringList generatorIds = KisGeneratorRegistry::instance()->keys();
-    QString generatorId = this->generatorId(prefix);
-    if (generatorIds.indexOf(generatorId) != -1) {
-        QString fullGeneratorId = prefix + "generator_" + generatorId;
-        KisGeneratorSP generator = KisGeneratorRegistry::instance()->get(generatorId);
-        KisFilterConfigurationSP generatorConfig = generator->defaultConfiguration(resourcesInterface());
-        getPrefixedProperties(fullGeneratorId + "_", generatorConfig);
-        return generatorConfig;
+    if (m_generatorConfigurationsCache.contains(prefix)) {
+        return m_generatorConfigurationsCache[prefix];
+    } else {
+        QStringList generatorIds = KisGeneratorRegistry::instance()->keys();
+        QString generatorId = this->generatorId(prefix);
+        if (generatorIds.indexOf(generatorId) != -1) {
+            QString fullGeneratorId = prefix + "generator_" + generatorId;
+            KisGeneratorSP generator = KisGeneratorRegistry::instance()->get(generatorId);
+            KisFilterConfigurationSP generatorConfig = generator->defaultConfiguration(resourcesInterface());
+            getPrefixedProperties(fullGeneratorId + "_", generatorConfig);
+            m_generatorConfigurationsCache[prefix] = generatorConfig;
+            return generatorConfig;
+        }
     }
     return nullptr;
 }
@@ -160,6 +194,7 @@ void KisHalftoneFilterConfiguration::setGeneratorConfiguration(const QString &pr
     QString generatorId = this->generatorId(prefix);
     QString fullGeneratorId = prefix + "generator_" + generatorId;
     setPrefixedProperties(fullGeneratorId + "_", config);
+    m_generatorConfigurationsCache[prefix] = config;
 }
 
 void KisHalftoneFilterConfiguration::setHardness(const QString & prefix, qreal newHardness)

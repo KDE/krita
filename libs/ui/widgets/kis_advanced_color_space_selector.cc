@@ -394,7 +394,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                     "Krita, you can mix Grayscale and RGB layers in the same image.")+"</p>");
     } else if (currentModelStr == "LABA") {
         d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is LAB",
-                                                                    "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. <b>L<b> stands for Lightness, "
+                                                                    "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. <b>L</b> stands for Lightness, "
                                                                     "the <b>a</b> and <b>b</b> components represent color channels.<br/>"
                                                                     "L*a*b is a special model for color correction. It is based on human perception, meaning that it "
                                                                     "tries to encode the difference in lightness, red-green balance and yellow-blue balance. "

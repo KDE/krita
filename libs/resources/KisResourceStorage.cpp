@@ -221,9 +221,14 @@ bool KisResourceStorage::addResource(KoResourceSP resource)
     return d->storagePlugin->addResource(resource->resourceType().first, resource);
 }
 
-bool KisResourceStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
+bool KisResourceStorage::importResource(const QString &url, QIODevice *device)
 {
-    return d->storagePlugin->importResourceFile(resourceType, resourceFile);
+    return d->storagePlugin->importResource(url, device);
+}
+
+bool KisResourceStorage::exportResource(const QString &url, QIODevice *device)
+{
+    return d->storagePlugin->exportResource(url, device);
 }
 
 bool KisResourceStorage::supportsVersioning() const

@@ -25,7 +25,7 @@ public:
     void setConfiguration(const KisFilterConfiguration &config, const QString &prefix = "");
     void configuration(KisPropertiesConfiguration &config, const QString &prefix = "") const;
     static void factoryConfiguration(KisPropertiesConfiguration &config, const QString &prefix = "");
-    static QList<KoResourceSP> prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface);
+    static QList<KoResourceLoadResult> prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface);
 
 Q_SIGNALS:
     void sigConfigurationItemChanged();

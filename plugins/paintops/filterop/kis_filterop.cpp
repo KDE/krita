@@ -16,6 +16,7 @@
 #include <KoColorTransformation.h>
 #include <KoColor.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoResourceLoadResult.h>
 
 #include <kis_processing_information.h>
 #include <filter/kis_filter_registry.h>
@@ -137,9 +138,9 @@ KisSpacingInformation KisFilterOp::updateSpacingImpl(const KisPaintInformation &
     return effectiveSpacing(scale, rotation, info);
 }
 
-QList<KoResourceSP> KisFilterOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisFilterOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
-    QList<KoResourceSP> resources = KisBrushBasedPaintOp::prepareLinkedResources(settings, resourcesInterface);
+    QList<KoResourceLoadResult> resources = KisBrushBasedPaintOp::prepareLinkedResources(settings, resourcesInterface);
 
     KisFilterConfigurationSP config = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
     resources << config->linkedResources(resourcesInterface);
@@ -147,9 +148,9 @@ QList<KoResourceSP> KisFilterOp::prepareLinkedResources(const KisPaintOpSettings
     return resources;
 }
 
-QList<KoResourceSP> KisFilterOp::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisFilterOp::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
-    QList<KoResourceSP> resources = KisBrushBasedPaintOp::prepareEmbeddedResources(settings, resourcesInterface);
+    QList<KoResourceLoadResult> resources = KisBrushBasedPaintOp::prepareEmbeddedResources(settings, resourcesInterface);
 
     KisFilterConfigurationSP config = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
     resources << config->embeddedResources(resourcesInterface);

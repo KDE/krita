@@ -501,97 +501,48 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
 {
     if (!gradient) return;
 
-    KoResourceServer<KoAbstractGradient> *rserver = KoResourceServerProvider::instance()->gradientServer();
-
     gradient->updateVariableColors(canvasResourcesInterface);
 
-    KisCustomGradientDialog dialog(gradient, q, "KisCustomGradientDialog", canvasResourcesInterface);
-
-    QString oldname = gradient->name();
-
-    QByteArray oldData;
-    QBuffer buf(&oldData);
-    buf.open(QIODevice::WriteOnly);
-    gradient->saveToDevice(&buf);
-    buf.close();
-
-    bool shouldSaveResource = false;
-    bool fileOverwriteAccepted = false;
+    // so we don't affect the original gradient, if we cancel
+    KoAbstractGradientSP newGradient = gradient->clone().dynamicCast<KoAbstractGradient>();
+    KisCustomGradientDialog dialog(newGradient, q, "KisCustomGradientDialog", canvasResourcesInterface);
 
     if (dialog.exec() == KoDialog::Accepted) {
-
-        if (gradient->name().isEmpty()) {
-            shouldSaveResource = false;
+        if (newGradient->name().isEmpty()) {
+            return;
         }
 
-        if (editGradient && oldname == gradient->name()) {
-            fileOverwriteAccepted = true;
-        }
+        auto copyGradientResource = [&](KoAbstractGradientSP dst, KoAbstractGradientSP src) {
+            QBuffer buf;
+            buf.open(QIODevice::ReadWrite);
+            src->saveToDevice(&buf);
+            buf.seek(0);
+            dst->loadFromDevice(&buf, KisGlobalResourcesInterface::instance());
+            buf.close();
+        };
 
-        QString saveLocation = rserver->saveLocation();
-        const QFileInfo fileInfo(saveLocation + '/' + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
+        // we save the state, in case user cancels overwrite operation
+        KoAbstractGradientSP originalGradient = gradient->clone().dynamicCast<KoAbstractGradient>();
 
-        if (fileInfo.exists()) {
-            int res = QMessageBox::warning(q, i18nc("@title:window", "Krita")
-                                           , i18n("The name '%1' already exists, do you wish to overwrite it?", gradient->name())
-                                           , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-            if (res == QMessageBox::Yes) {
-                fileOverwriteAccepted = true;
-                shouldSaveResource = true;
+        // apply the changes to the "current" gradient -- without this gradient won't update until clicked away
+        copyGradientResource(gradient, newGradient);
+        gradient->setFilename(gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
+        gradient->setValid(true);
+        gradient->updatePreview();
+
+        // if we're editing the gradient we can overwrite it right away
+        if (editGradient) {
+            KisResourceUserOperations::updateResourceWithUserInput(q, gradient);
+        } else {
+            if (!KisResourceUserOperations::addResourceWithUserInput(q, gradient)) {
+                // restore original state
+                copyGradientResource(gradient, originalGradient);
+                return;
             }
         }
-        else {
-            shouldSaveResource = true;
-        }
-
-        if (shouldSaveResource) {
-            gradient->setFilename(gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
-            gradient->setValid(true);
-            gradient->updatePreview();
-
-            KisResourceModel model(ResourceType::Gradients);
-            if (fileOverwriteAccepted) {
-                if (!editGradient) {
-                    // Find the gradient we're overwriting with our new gradient that only matches in name...
-                    QVector<KoResourceSP> resources = model.resourcesForName(gradient->name());
-                    KoResourceSP res;
-                    Q_FOREACH(res, resources) {
-                        if (res->storageLocation() + ResourceType::Gradients == saveLocation) {
-                            QByteArray ba;
-                            QBuffer buf(&ba);
-                            buf.open(QIODevice::WriteOnly);
-                            gradient->saveToDevice(&buf);
-                            buf.close();
-                            buf.open(QIODevice::ReadOnly);
-                            res->loadFromDevice(&buf, KisGlobalResourcesInterface::instance());
-                            break;
-                        }
-                        else {
-
-                            res = nullptr;
-                        }
-                    }
-                    if (res) {
-                        KisResourceUserOperations::updateResourceWithUserInput(q, res);
-                    }
-                }
-                else {
-                    KisResourceUserOperations::updateResourceWithUserInput(q, gradient);
-                }
-            }
-            else {
-                KisResourceUserOperations::addResourceWithUserInput(q, gradient);
-            }
-            itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
-            itemChooser->setCurrentResource(gradient);
-            emit q->gradientEdited(gradient);
-        }
-        else {
-
-            buf.open(QFile::ReadOnly);
-            gradient->loadFromDevice(&buf, KisGlobalResourcesInterface::instance());
-            emit q->gradientEdited(gradient);
-        }
+        itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
+        itemChooser->setCurrentResource(gradient);
+        emit q->gradientEdited(gradient);
     }
 }
 

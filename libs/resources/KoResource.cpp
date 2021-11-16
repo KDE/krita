@@ -17,6 +17,8 @@
 #include "KoMD5Generator.h"
 #include "kis_assert.h"
 
+#include "KoResourceLoadResult.h"
+
 
 struct KoResourceSPStaticRegistrar {
     KoResourceSPStaticRegistrar() {
@@ -145,12 +147,11 @@ QString KoResource::md5Sum(bool generateIfEmpty) const
         // non-serializable resources should always have an externally generated md5
         KIS_SAFE_ASSERT_RECOVER_NOOP(isSerializable());
         dbgResources << "No MD5 for" << this << this->name();
-        QByteArray ba;
-        QBuffer buf(&ba);
+        QBuffer buf;
         buf.open(QFile::WriteOnly);
         saveToDevice(&buf);
         buf.close();
-        const_cast<KoResource*>(this)->setMD5Sum(KoMD5Generator::generateHash(ba));
+        const_cast<KoResource*>(this)->setMD5Sum(KoMD5Generator::generateHash(buf.data()));
     }
     return d->md5sum;
 }
@@ -228,18 +229,21 @@ int KoResource::resourceId() const
     return d->resourceId;
 }
 
-QList<KoResourceSP> KoResource::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KoResource::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     return linkedResources(globalResourcesInterface) + embeddedResources(globalResourcesInterface);
 }
 
-QList<KoResourceSP> KoResource::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KoResource::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
+    QList<KoResourceLoadResult> list;
+    Q_UNUSED(list);
+
     Q_UNUSED(globalResourcesInterface);
     return {};
 }
 
-QList<KoResourceSP> KoResource::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KoResource::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     Q_UNUSED(globalResourcesInterface);
     return {};
@@ -288,6 +292,11 @@ void KoResource::setVersion(int version)
 void KoResource::setResourceId(int id)
 {
     d->resourceId = id;
+}
+
+KoResourceSignature KoResource::signature() const
+{
+    return KoResourceSignature(resourceType().first, md5Sum(false), filename(), name());
 }
 
 bool KoResource::isEphemeral() const

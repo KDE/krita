@@ -92,12 +92,11 @@ bool ImageShape::saveSvg(SvgSavingContext &context)
         context.shapeWriter().addAttribute("preserveAspectRatio", aspectString);
     }
 
-    QByteArray ba;
-    QBuffer buffer(&ba);
+    QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     if (m_d->image.save(&buffer, "PNG")) {
         const QString mimeType = KisMimeDatabase::mimeTypeForSuffix("*.png");
-        context.shapeWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + ba.toBase64());
+        context.shapeWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + buffer.data().toBase64());
     }
 
     context.shapeWriter().endElement(); // image

@@ -25,14 +25,14 @@ QString KisPredefinedBrushFactory::id() const
     return m_id;
 }
 
-KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
+KoResourceLoadResult KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
 {
     auto resourceSourceAdapter = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
     const QString brushFileName = brushDefinition.attribute("filename", "");
     const QString brushMD5Sum = brushDefinition.attribute("md5sum", "");
     KisBrushSP brush = resourceSourceAdapter.bestMatch(brushMD5Sum, brushFileName, "");
     if (!brush) {
-        return nullptr;
+        return KoResourceSignature(ResourceType::Brushes, brushMD5Sum, brushFileName, "");
     }
 
     // we always return a copy of the brush!

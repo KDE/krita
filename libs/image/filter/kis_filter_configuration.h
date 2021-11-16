@@ -20,6 +20,8 @@ typedef QSharedPointer<KoResource> KoResourceSP;
 class KisResourcesInterface;
 typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
 
+class KoResourceLoadResult;
+
 /**
  * KisFilterConfiguration does inherit neither KisShared or QSharedData
  * so sometimes there might be problem with broken QSharedPointer counters.
@@ -128,7 +130,7 @@ public:
      * Set resource interface that will be used by KisFilterConfiguration object for
      * loading linked resources
      */
-    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+    virtual void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
     /**
      * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot
@@ -154,7 +156,7 @@ public:
      *
      * The set of resources returned is basically: linkedResources() + embeddedResources()
      */
-    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+    QList<KoResourceLoadResult> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
     /**
      * @return all the resources that are needed but (*this) filter and
@@ -162,14 +164,14 @@ public:
      * \p globalResourcesInterface. If fetching of some resources is failed,
      * then (*this) filter is invalid.
      */
-    virtual QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+    virtual QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
     /**
      * @return all the resources that were embedded into (*this) filter.
      * If the resources were already added to the global database, then they
      * are fetched from \p globalResourcesInterface to save time/memory.
      */
-    virtual QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+    virtual QList<KoResourceLoadResult> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
     virtual bool compareTo(const KisPropertiesConfiguration *rhs) const override;
 

@@ -24,6 +24,7 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
 #include <kis_spacing_information.h>
+#include <KoResourceLoadResult.h>
 
 
 #include "kis_brush.h"
@@ -66,7 +67,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_sizeOption.resetAllSensors();
 }
 
-QList<KoResourceSP> KisHairyPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisHairyPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushOptionProperties brushOption;
     return brushOption.prepareLinkedResources(settings, resourcesInterface);

@@ -29,6 +29,7 @@ public:
 
     void setImage(KisImageWSP image);
     void setFrameCache(KisAnimationFrameCacheSP cache);
+    bool isFrameCached(const int frame);
     void setAnimationPlayer(KisAnimationPlayer *player);
 
     void setLastVisibleFrame(int time);

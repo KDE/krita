@@ -264,7 +264,7 @@ bool KisAllResourcesModel::resourceExists(const QString &md5, const QString &fil
     return false;
 }
 
-QVector<KoResourceSP> KisAllResourcesModel::resourcesForFilename(QString filename, bool checkDependentResources) const
+QVector<KoResourceSP> KisAllResourcesModel::resourcesForFilename(QString filename) const
 {
     QVector<KoResourceSP> resources;
 
@@ -297,40 +297,6 @@ QVector<KoResourceSP> KisAllResourcesModel::resourcesForFilename(QString filenam
 
     }
 
-    if (resources.isEmpty() && checkDependentResources) {
-        // Check whether the requested resource was embedded in another resource, which has not been loaded so the embedded resource is not available.
-        r = q.prepare("SELECT value"
-                      ",      foreign_id\n"
-                      "FROM   metadata\n"
-                      "WHERE  key = \"dependent_resources_filenames\"\n"
-                      "AND    table_name = \"resources\"\n");
-
-        r = q.exec();
-        if (!r) {
-            qWarning() << "Could not execute metadata query" << q.lastError();
-        }
-
-        while (q.next()) {
-            QByteArray ba = q.value(0).toByteArray();
-            int id = q.value(1).toInt();
-            if (!ba.isEmpty()) {
-                QDataStream ds(QByteArray::fromBase64(ba));
-                QVariant value;
-                ds >> value;
-                QStringList l = value.toStringList();
-                if (l.contains(filename)) {
-                    // This will load the embedded resource and make it available
-                    KoResourceSP res = KisResourceLocator::instance()->resourceForId(id);
-                    Q_FOREACH(KoResourceSP embeddedRes, res->embeddedResources(KisGlobalResourcesInterface::instance())) {
-                        // This is the best we can do because Krita4 only checked filename and resource type, too.
-                        if (embeddedRes->filename() == filename && embeddedRes->resourceType().first == d->resourceType) {
-                            resources << embeddedRes;
-                        }
-                    }
-                }
-            }
-        }
-    }
     return resources;
 }
 
@@ -443,14 +409,66 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 
 KoResourceSP KisAllResourcesModel::importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId)
 {
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    qCritical() << "Importing: " << filename << allowOverwrite << storageId;
+    int outExistingResourceId = -1;
+    bool willOverwrite = false;
+    bool result = KisResourceCacheDb::getResourceIdFromVersionedFilename(filename, d->resourceType, storageId, outExistingResourceId);
+    if (result && (outExistingResourceId >= 0)) {
+        willOverwrite = true;
+    }
+
+    if (willOverwrite && !allowOverwrite) {
+        return nullptr;
+    }
+
+    if (!willOverwrite) {
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    } else {
+        QModelIndex idx = indexForResourceId(outExistingResourceId);
+        beginRemoveRows(QModelIndex(), idx.row(), idx.row());
+    }
+
     KoResourceSP res = KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename, allowOverwrite, storageId);
+
+    if (!res) {
+        qWarning() << "Failed to import resource" << filename;
+    }
+
+    resetQuery();
+
+    if (willOverwrite) {
+        //QModelIndex idx = indexForResourceId(outExistingResourceId);
+        //emit dataChanged(idx, idx, {Qt::EditRole});
+        endRemoveRows();
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        endInsertRows();
+    } else {
+        endInsertRows();
+    }
+
+    return res;
+
+}
+
+KoResourceSP KisAllResourcesModel::importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    KoResourceSP res = KisResourceLocator::instance()->importResource(d->resourceType, filename, device, allowOverwrite, storageId);
     if (!res) {
         qWarning() << "Failed to import resource" << filename;
     }
     resetQuery();
     endInsertRows();
 
+    return res;
+}
+
+bool KisAllResourcesModel::exportResource(KoResourceSP resource, QIODevice *device)
+{
+    bool res = KisResourceLocator::instance()->exportResource(resource, device);
+    if (!res) {
+        qWarning() << "Failed to export resource" << resource->signature();
+    }
     return res;
 }
 
@@ -715,6 +733,27 @@ KoResourceSP KisResourceModel::importResourceFile(const QString &filename, const
         res = source->importResourceFile(filename, allowOverwrite, storageId);
     }
     invalidate();
+    return res;
+}
+
+KoResourceSP KisResourceModel::importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    KoResourceSP res;
+    if (source) {
+        res = source->importResource(filename, device, allowOverwrite, storageId);
+    }
+    invalidate();
+    return res;
+}
+
+bool KisResourceModel::exportResource(KoResourceSP resource, QIODevice *device)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    bool res = false;
+    if (source) {
+        res = source->exportResource(resource, device);
+    }
     return res;
 }
 

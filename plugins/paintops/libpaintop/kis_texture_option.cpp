@@ -48,6 +48,7 @@
 
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
+#include <KoResourceLoadResult.h>
 
 KisTextureOption::KisTextureOption(KisBrushTextureFlags flags)
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
@@ -160,7 +161,9 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     if (!isChecked()) {
         return;
     }
-    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface());
+
+    KoPatternSP pattern =
+        KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface()).resource<KoPattern>();
 
     if (!pattern ){
         qWarning() << "Could not get linked pattern";
@@ -255,45 +258,39 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_strengthOption.resetAllSensors();
 }
 
-QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisTextureProperties::prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     /**
      * We cannot use m_enabled here because it is not initialized at this stage.
      * fillProperties() is not necessary for this call, becasue it is extremely slow.
      */
 
-    QList<KoResourceSP> patterns;
+    QList<KoResourceLoadResult> patterns;
 
     const bool enabled = setting->getBool("Texture/Pattern/Enabled", false);
     const bool hasEmbeddedPattern = setting->hasProperty("Texture/Pattern/Pattern");
 
     if (enabled && hasEmbeddedPattern) {
-        KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
-        if (pattern) {
-            patterns << pattern;
-        }
+        patterns << KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
     }
 
     return patterns;
 }
 
-QList<KoResourceSP> KisTextureProperties::prepareLinkedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceLoadResult> KisTextureProperties::prepareLinkedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     /**
      * We cannot use m_enabled here because it is not initialized at this stage.
      * fillProperties() is not necessary for this call, becasue it is extremely slow.
      */
 
-    QList<KoResourceSP> patterns;
+    QList<KoResourceLoadResult> patterns;
 
     const bool enabled = setting->getBool("Texture/Pattern/Enabled", false);
     const bool hasEmbeddedPattern = setting->hasProperty("Texture/Pattern/Pattern");
 
     if (enabled && !hasEmbeddedPattern) {
-        KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);
-        if (pattern) {
-            patterns << pattern;
-        }
+        patterns << KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface);;
     }
 
     return patterns;

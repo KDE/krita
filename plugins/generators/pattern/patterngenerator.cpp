@@ -31,7 +31,7 @@
 #include <kis_processing_information.h>
 #include <kis_pattern_chooser.h>
 #include <KisResourcesInterface.h>
-
+#include <KoResourceLoadResult.h>
 
 #include "kis_wdg_pattern.h"
 #include "ui_wdgpatternoptions.h"
@@ -69,16 +69,16 @@ public:
         return new PatternGeneratorConfiguration(*this);
     }
 
-    KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const
+    KoResourceLoadResult pattern(KisResourcesInterfaceSP resourcesInterface) const
     {
         const QString patternMD5 = getString("pattern/md5");
         const QString patternName = getString("pattern", "Grid01.pat");
         auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-        return source.bestMatch(patternMD5, "", patternName);
+        return source.bestMatchLoadResult(patternMD5, "", patternName);
     }
 
     KoPatternSP pattern() const {
-        return pattern(resourcesInterface());
+        return pattern(resourcesInterface()).resource<KoPattern>();
     }
 
     QTransform transform() const {
@@ -95,15 +95,9 @@ public:
         return transform;
     }
 
-    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
-        KoPatternSP p = pattern(globalResourcesInterface);
-        QList<KoResourceSP> resources;
-        if (p) {
-            resources << p;
-        }
-
-        return resources;
+        return {pattern(globalResourcesInterface)};
     }
 };
 

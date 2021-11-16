@@ -8,9 +8,7 @@
 #include <simpletest.h>
 
 #include <KisMemoryStorage.h>
-#include <KisResourceLoader.h>
 #include <KoResource.h>
-#include <KisResourceLoaderRegistry.h>
 
 #include "DummyResource.h"
 #include "ResourceTestHelper.h"

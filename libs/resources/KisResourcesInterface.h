@@ -11,6 +11,7 @@
 #include <QScopedPointer>
 #include <KoResource.h>
 #include <QHash>
+#include <KoResourceLoadResult.h>
 
 class QString;
 class QByteArray;
@@ -43,7 +44,7 @@ public:
     class KRITARESOURCES_EXPORT ResourceSourceAdapter
     {
     public:
-        ResourceSourceAdapter();
+        ResourceSourceAdapter(const QString &type);
         virtual ~ResourceSourceAdapter();
 //protected:
         friend class KisResourcesInterface;
@@ -53,8 +54,9 @@ public:
 public:
         /**
          * @brief bestMatch retrieves a resource, prefarably by md5, but with filename and name
-         * as fallback for older files that do not store the md5sum. Note that if the resource is
-         * not found by md5 if the md5 isn't empty, we do NOT then look by filename.
+         * as fallback for older files that do not store the md5sum. If the resource is
+         * not found by md5 and the md5 isn't empty, then it will try to fallback to searching
+         * by filename, but will show a warning in case sanity checks are enabled.
          *
          * If multiple resources with the same md5 exist, then it prefers the one
          * with the same filename and name.
@@ -62,54 +64,21 @@ public:
          * @return a resource, or 0 of the resource doesn't exist.
          */
 
-        KoResourceSP bestMatch(const QString md5, const QString filename, const QString name)
-        {
-            QVector<QPair<KoResourceSP, int>> foundResources;
+        KoResourceSP bestMatch(const QString md5, const QString filename, const QString name);
 
-            if (!md5.isEmpty()) {
-                Q_FOREACH (KoResourceSP res, resourcesForMD5(md5)) {
-                    int penalty = 0;
-
-                    if (!filename.isEmpty() && filename != res->filename()) {
-                        /// filename is more important than name, so it gives
-                        /// higher penalty
-                        penalty += 2;
-                    }
-
-                    if (!name.isEmpty() && name != res->name()) {
-                        penalty++;
-                    }
-
-                    foundResources.append(qMakePair(res, penalty));
-                }
-            } else if (!filename.isEmpty()) {
-                Q_FOREACH (KoResourceSP res, resourcesForFilename(filename)) {
-                    int penalty = 0;
-
-                    if (!name.isEmpty() && name != res->name()) {
-                        penalty++;
-                    }
-
-                    foundResources.append(qMakePair(res, penalty));
-                }
-            } else if (!name.isEmpty()) {
-                Q_FOREACH (KoResourceSP res, resourcesForName(name)) {
-                    int penalty = 0;
-                    foundResources.append(qMakePair(res, penalty));
-                }
-            }
-
-            auto it = std::min_element(foundResources.begin(), foundResources.end(),
-                                       [] (const QPair<KoResourceSP, int> &lhs,
-                                           const QPair<KoResourceSP, int> &rhs) {return lhs.second < rhs.second;});
-
-            return it != foundResources.end() ? it->first : KoResourceSP();
-        }
+        /**
+         * Same as bestMatch(), but returns KoResourceLoadResult. In case the
+         * resource is not found in the backend storage, the load-result
+         * will be set in FailedLink state
+         *
+         */
+        KoResourceLoadResult bestMatchLoadResult(const QString md5, const QString filename, const QString name);
 
         virtual KoResourceSP fallbackResource() const = 0;
 
     private:
         Q_DISABLE_COPY(ResourceSourceAdapter);
+        const QString m_type;
     };
 
     template <typename T>
@@ -161,6 +130,16 @@ public:
 
         QSharedPointer<T>  bestMatch(const QString md5, const QString filename, const QString name) {
             return m_source->bestMatch(md5, filename, name).dynamicCast<T>();
+        }
+
+        /**
+         * Same as bestMatch(), but returns KoResourceLoadResult. In case the
+         * resource is not found in the backend storage, the load-result
+         * will be set in FailedLink state
+         *
+         */
+        KoResourceLoadResult bestMatchLoadResult(const QString md5, const QString filename, const QString name) {
+            return m_source->bestMatchLoadResult(md5, filename, name);
         }
 
         QSharedPointer<T> fallbackResource() const

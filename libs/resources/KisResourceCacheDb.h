@@ -62,6 +62,7 @@ private:
     friend class KisResourceLoaderRegistry;
     friend class KisResourceUserOperations;
     friend class KisDocument;
+    friend class KisAllResourcesModel;
 
     explicit KisResourceCacheDb(); // Deleted
     ~KisResourceCacheDb(); // Deleted
@@ -74,7 +75,7 @@ private:
      */
     static bool registerResourceType(const QString &resourceType);
 
-    static int resourceIdForResource(const QString &resourceName, const QString &resourceFileName, const QString &resourceType, const QString &storageLocation);
+    static int resourceIdForResource(const QString &resourceFileName, const QString &resourceType, const QString &storageLocation);
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);
 
     /**
@@ -106,13 +107,14 @@ private:
     /// Make this resource active or inactive; this does not remove the resource from disk or from the database
     static bool setResourceActive(int resourceId, bool active = false);
 
-    static bool tagResource(KisResourceStorageSP storage, const QString &resourceName, const QString &resourceFileName, KisTagSP tag, const QString &resourceType);
+    static bool tagResource(const QString &resourceFileName, KisTagSP tag, const QString &resourceType);
     static bool hasTag(const QString &url, const QString &resourceType);
     static bool linkTagToStorage(const QString &url, const QString &resourceType, const QString &storageLocation);
     static bool addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment, const QString &filename);
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
+    static bool addStorageTags(KisResourceStorageSP storage);
 
     /// Actually delete the storage and all its resources from the database (i.e., nothing is set to inactive, it's deleted)
     static bool deleteStorage(KisResourceStorageSP storage);

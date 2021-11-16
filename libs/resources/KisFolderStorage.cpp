@@ -188,25 +188,46 @@ QSharedPointer<KisResourceStorage::TagIterator> KisFolderStorage::tags(const QSt
     return QSharedPointer<KisResourceStorage::TagIterator>(new FolderTagIterator(location(), resourceType));
 }
 
-bool KisFolderStorage::importResourceFile(const QString &resourceType, const QString &resourceFile)
+bool KisFolderStorage::importResource(const QString &url, QIODevice *device)
 {
+    bool result = false;
 
-    QFileInfo fi(resourceFile);
-    if (!fi.exists()) {
-        qWarning() << "Cannot import" << resourceFile << ": file does not exist";
-        return false;
+    const QString resourcesLocation = location() + "/" + url;
+
+    QFile f(resourcesLocation);
+
+    if (f.exists()) return result;
+
+    if (f.open(QFile::WriteOnly)) {
+        f.write(device->readAll());
+        f.close();
+        result = true;
+    } else {
+        qWarning() << "Cannot open" << resourcesLocation << "for writing";
     }
 
-    const QString resourcesSaveLocation = location() + "/" + resourceType;
+    return result;
+}
 
-    QFile f(resourceFile);
-    if (!f.copy(resourcesSaveLocation + "/" + fi.fileName())) {
-        qWarning() << "Cannot copy" << resourceFile << "to" << resourcesSaveLocation + "/" + fi.fileName();
-        return false;
+bool KisFolderStorage::exportResource(const QString &url, QIODevice *device)
+{
+    bool result = false;
+
+    const QString resourcesLocation = location() + "/" + url;
+
+    QFile f(resourcesLocation);
+
+    if (!f.exists()) return result;
+
+    if (f.open(QFile::ReadOnly)) {
+        device->write(f.readAll());
+        f.close();
+        result = true;
+    } else {
+        qWarning() << "Cannot open" << resourcesLocation << "for reading";
     }
 
-    return true;
-
+    return result;
 }
 
 bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP resource)

@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
  *  SPDX-FileCopyrightText: 2020 Agata Cacko cacko.azh @gmail.com
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -385,7 +386,8 @@ void DlgCreateBundle::accept()
         if (fileInfo.exists() && !m_bundle) {
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
 
-            QMessageBox msgBox;
+            QMessageBox msgBox(this);
+            msgBox.setIcon(QMessageBox::Question);
             msgBox.setText(i18nc("In a dialog asking whether to overwrite a bundle (resource pack)", "A bundle with this name already exists."));
             msgBox.setInformativeText(i18nc("In a dialog regarding overwriting a bundle (resource pack)", "Do you want to overwrite the existing bundle?"));
             msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);

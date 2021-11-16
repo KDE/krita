@@ -1262,7 +1262,7 @@ bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
         return false;
     }
 
-    readFromDevice(file);
+    readFromDevice(&file);
     file.close();
 
     return m_initialized;

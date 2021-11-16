@@ -705,7 +705,6 @@ bool KisResourceCacheDb::getResourceIdFromVersionedFilename(QString filename, QS
 
     q.bindValue(":filename", filename);
     q.bindValue(":resourceType", resourceType);
-
     q.bindValue(":storageLocation",  storageLocation);
 
     r = q.exec();

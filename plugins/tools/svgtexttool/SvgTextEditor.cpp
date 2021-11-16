@@ -1130,9 +1130,7 @@ void SvgTextEditor::setFont(const QString &fontName)
     const int fontWeight = fontDatabase.weight(font.family(), font.styleName());
     if (isRichTextEditorTabActive()) {
         QTextCharFormat format;
-        format.setFontFamily(font.family());
-        format.setFontItalic(italic);
-        format.setFontWeight(fontWeight);
+        format.setFont(font);
 
         QTextCursor oldCursor = setTextSelection();
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);

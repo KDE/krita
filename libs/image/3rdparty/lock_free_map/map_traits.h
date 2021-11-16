@@ -72,7 +72,7 @@ struct DefaultKeyTraits {
 template <class T>
 struct DefaultValueTraits {
     typedef T Value;
-    typedef quint32 IntType;
+    typedef std::intptr_t IntType;
     static const IntType NullValue = 0;
     static const IntType Redirect = 1;
 };

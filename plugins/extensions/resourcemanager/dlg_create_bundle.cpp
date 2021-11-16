@@ -406,7 +406,14 @@ void DlgCreateBundle::accept()
             if (!putResourcesInTheBundle(m_bundle)) {
                 return;
             }
-            m_bundle->save();
+            if (!m_bundle->save()) {
+                m_ui->lblSaveLocation->setStyleSheet("border: 1px solid red");
+                QMessageBox::critical(this,
+                    i18nc("@title:window", "Krita"),
+                    i18n("Could not open '%1' for saving.", filename));
+                m_bundle.reset();
+                return;
+            }
         } else {
             KIS_SAFE_ASSERT_RECOVER(!m_bundle) { warnKrita << "Updating a bundle is not implemented yet"; };
         }

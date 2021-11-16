@@ -248,7 +248,6 @@ QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagS
 
 bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
 {
-    KisResourceModel emptyModel("");
     QMap<QString, QSharedPointer<KisResourceModel>> modelsPerResourceType;
     KisResourceTypeModel resourceTypesModel;
     for (int i = 0; i < resourceTypesModel.rowCount(); i++) {
@@ -319,6 +318,7 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
             }
         }
     }
+    return true;
 }
 
 void DlgCreateBundle::putMetaDataInTheBundle(KoResourceBundleSP bundle) const

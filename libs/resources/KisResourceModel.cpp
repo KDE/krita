@@ -412,13 +412,10 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 
 KoResourceSP KisAllResourcesModel::importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId)
 {
-    qCritical() << "Importing: " << filename << allowOverwrite << storageId;
     int outExistingResourceId = -1;
-    bool willOverwrite = false;
-    bool result = KisResourceCacheDb::getResourceIdFromVersionedFilename(filename, d->resourceType, storageId, outExistingResourceId);
-    if (result && (outExistingResourceId >= 0)) {
-        willOverwrite = true;
-    }
+    const QString strippedFilename = QFileInfo(filename).fileName();
+    const bool result = KisResourceCacheDb::getResourceIdFromVersionedFilename(strippedFilename, d->resourceType, storageId, outExistingResourceId);
+    const bool willOverwrite = (result && (outExistingResourceId >= 0));
 
     if (willOverwrite && !allowOverwrite) {
         return nullptr;
@@ -427,8 +424,8 @@ KoResourceSP KisAllResourcesModel::importResourceFile(const QString &filename, c
     if (!willOverwrite) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
     } else {
-        QModelIndex idx = indexForResourceId(outExistingResourceId);
-        beginRemoveRows(QModelIndex(), idx.row(), idx.row());
+        QModelIndex RemovedIndex = indexForResourceId(outExistingResourceId);
+        beginRemoveRows(QModelIndex(), RemovedIndex.row(), RemovedIndex.row());
     }
 
     KoResourceSP res = KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename, allowOverwrite, storageId);
@@ -440,10 +437,9 @@ KoResourceSP KisAllResourcesModel::importResourceFile(const QString &filename, c
     resetQuery();
 
     if (willOverwrite) {
-        //QModelIndex idx = indexForResourceId(outExistingResourceId);
-        //emit dataChanged(idx, idx, {Qt::EditRole});
         endRemoveRows();
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        QModelIndex idx = indexForResourceId(res->resourceId());
+        beginInsertRows(QModelIndex(), idx.row(), idx.row());
         endInsertRows();
     } else {
         endInsertRows();

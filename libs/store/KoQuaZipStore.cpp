@@ -61,7 +61,7 @@ KoQuaZipStore::~KoQuaZipStore()
 {
     Q_D(KoStore);
 
-    if (dd->currentFile && dd->currentFile->isOpen()) {
+    if (d->good && dd->currentFile && dd->currentFile->isOpen()) {
         dd->currentFile->close();
     }
 
@@ -157,7 +157,7 @@ bool KoQuaZipStore::doFinalize()
     Q_D(KoStore);
 
     d->stream = 0;
-    if (!dd->usingSaveFile) {
+    if (d->good && !dd->usingSaveFile) {
         dd->archive->close();
     }
     return dd->archive->getZipError() == ZIP_OK;

@@ -207,7 +207,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         const bool smallHeight = healRect.height() < 3;
 
         if (smallWidth || smallHeight) {
-            healRect.adjust(-smallWidth, -smallHeight, smallWidth, smallHeight);
+            healRect.adjust(-1, -1, 1, 1);
         }
 
         const int healSW = healRect.width();

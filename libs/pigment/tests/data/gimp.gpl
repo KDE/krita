@@ -1,0 +1,21 @@
+GIMP Palette
+Name: Colors CSS
+Columns: 8
+# https://github.com/mrmrs/colors#the-css
+  0   31   63  Navy
+  0  116  217  Blue
+127  219  255  Aqua
+ 57  204  204  Teal
+ 61  153  112  Olive
+ 46  204   64  Green
+  1  255  112  Lime
+255  220    0  Yellow
+255  133   27  Orange
+255   65   54  Red
+240   18  190  Fuchsia
+177   13  201  Purple
+133   20   75  Maroon
+255  255  255  White
+221  221  221  Silver
+170  170  170  Gray
+ 17   17   17  Black

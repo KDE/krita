@@ -257,7 +257,7 @@ KisPSDLayerStyleSP KisLayer::layerStyle() const
 void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
 {
     if (layerStyle) {
-        KIS_ASSERT_RECOVER_NOOP(layerStyle->hasLocalResourcesSnapshot());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(layerStyle->hasLocalResourcesSnapshot());
 
         m_d->layerStyle = layerStyle;
 

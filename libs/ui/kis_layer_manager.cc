@@ -922,7 +922,8 @@ void KisLayerManager::layerStyle()
         oldStyle = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
 
     } else {
-        oldStyle = toQShared(new KisPSDLayerStyle("", KisGlobalResourcesInterface::instance()));
+        oldStyle = toQShared(new KisPSDLayerStyle("", KisGlobalResourcesInterface::instance()))
+                ->cloneWithResourcesSnapshot();
     }
 
     KisPSDLayerStyleSP newStyle = oldStyle->clone().dynamicCast<KisPSDLayerStyle>();

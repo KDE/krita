@@ -91,11 +91,11 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
     if (selectionDragInProgress()) return;
 
-    m_lastCursorPos = convertToPixelCoord(event);
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
     }
 
+    m_lastCursorPos = convertToPixelCoord(event);
     KisToolSelect::mouseMoveEvent(event);
 }
 

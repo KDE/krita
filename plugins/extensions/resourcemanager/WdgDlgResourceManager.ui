@@ -173,6 +173,9 @@
            <property name="text">
             <string>Tags:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
           </widget>
          </item>
          <item row="1" column="1">

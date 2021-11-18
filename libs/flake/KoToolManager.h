@@ -21,7 +21,6 @@ class KoCanvasBase;
 class KoToolBase;
 class KActionCollection;
 class KoShape;
-class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
 class QKeySequence;
 

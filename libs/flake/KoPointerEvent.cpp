@@ -8,7 +8,6 @@
 */
 
 #include "KoPointerEvent.h"
-#include "KoInputDeviceHandlerEvent.h"
 #include <QTabletEvent>
 #include <QMouseEvent>
 #include <QWheelEvent>
@@ -21,7 +20,6 @@ public:
         : tabletEvent(0)
         , mouseEvent(0)
         , touchEvent(0)
-        , deviceEvent(0)
         , tabletButton(Qt::NoButton)
         , globalPos(0, 0)
         , pos(0, 0)
@@ -34,7 +32,6 @@ public:
     QTabletEvent *tabletEvent;
     QMouseEvent *mouseEvent;
     QTouchEvent *touchEvent;
-    KoInputDeviceHandlerEvent *deviceEvent;
     Qt::MouseButton tabletButton;
     QPoint globalPos, pos;
     int posZ;
@@ -69,19 +66,6 @@ KoPointerEvent::KoPointerEvent(QTouchEvent* ev, const QPointF &pnt)
     d->pos = ev->touchPoints().at(0).pos().toPoint();
 }
 
-KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int z, int rx, int ry, int rz)
-    : m_event(ev)
-    , d(new Private())
-{
-    Q_ASSERT(m_event);
-    d->deviceEvent = ev;
-    d->pos = QPoint(x, y);
-    d->posZ = z;
-    d->rotationX = rx;
-    d->rotationY = ry;
-    d->rotationZ = rz;
-}
-
 KoPointerEvent::KoPointerEvent(KoPointerEvent *event, const QPointF &point)
     : point(point)
     , touchPoints(event->touchPoints)
@@ -112,8 +96,6 @@ Qt::MouseButton KoPointerEvent::button() const
         return d->tabletButton;
     else if (d->touchEvent)
         return Qt::LeftButton;
-    else if (d->deviceEvent)
-        return d->deviceEvent->button();
     else
         return Qt::NoButton;
 }
@@ -126,8 +108,6 @@ Qt::MouseButtons KoPointerEvent::buttons() const
         return d->tabletButton;
     else if (d->touchEvent)
         return Qt::LeftButton;
-    else if (d->deviceEvent)
-        return d->deviceEvent->buttons();
     return Qt::NoButton;
 }
 
@@ -215,8 +195,6 @@ int KoPointerEvent::z() const
 {
     if (d->tabletEvent)
         return d->tabletEvent->z();
-    else if (d->deviceEvent)
-        return d->posZ;
     else
         return 0;
 }
@@ -259,8 +237,6 @@ Qt::KeyboardModifiers KoPointerEvent::modifiers() const
         return d->mouseEvent->modifiers();
     else if (d->touchEvent)
         return d->touchEvent->modifiers();
-    else if (d->deviceEvent)
-        return d->deviceEvent->modifiers();
     else
         return Qt::NoModifier;
 }

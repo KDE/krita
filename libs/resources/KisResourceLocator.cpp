@@ -125,11 +125,11 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
         }
         initializationStatus = InitializationStatus::Initialized;
     }
-    else {
-        if (!synchronizeDb()) {
-            return LocatorError::CannotSynchronizeDb;
-        }
+
+    if (!synchronizeDb()) {
+        return LocatorError::CannotSynchronizeDb;
     }
+
     return LocatorError::Ok;
 }
 

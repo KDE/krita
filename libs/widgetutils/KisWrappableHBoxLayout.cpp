@@ -1,16 +1,19 @@
 /* This file is part of the KDE project
- * Author: Agata Cacko cacko.azh@gmail.com
+ * SPDX-FileCopyrightText: 2021 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include <QtWidgets>
 #include <KisWrappableHBoxLayout.h>
 
 
 KisWrappableHBoxLayout::KisWrappableHBoxLayout(QWidget *parent)
     : QLayout(parent)
 {
-
+    // Remove extra floating space.
+    setContentsMargins(0, 0, 0, 0);
 }
 
 KisWrappableHBoxLayout::~KisWrappableHBoxLayout()

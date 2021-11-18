@@ -1,5 +1,6 @@
 /*
- *  Author 2021 Agata Cacko cacko.azh@gmail.com
+ * SPDX-FileCopyrightText: 2021 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -44,27 +45,29 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
     , m_tag(tag)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setMargin(1);
+    layout->setContentsMargins(8, 0, 0, 0);
+    layout->setSpacing(2);
 
     m_textLabel = new QLabel(parent);
     m_textLabel->setText(tag.name());
-
-    int minimumSpace = 8;
-    layout->addSpacerItem(new QSpacerItem(minimumSpace, 0));
+    m_textLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addWidget(m_textLabel);
     layout->insertStretch(2, 1);
     if (m_editble) {
-        m_closeIconLabel = new QLabel(parent);
-        QIcon icon = KisIconUtils::loadIcon("docker_close");
-        QSize size = QSize(1, 1)*m_textLabel->height()*0.45;
-        m_closeIconLabel->setPixmap(icon.pixmap(size));
+        m_closeIconLabel = new QPushButton(parent);
+        m_closeIconLabel->setFlat(true);
+        m_closeIconLabel->setIcon(KisIconUtils::loadIcon("docker_close"));
+        m_closeIconLabel->setToolTip(i18n("Remove from tag"));
+        m_closeIconLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        m_closeIconLabel->setEnabled(m_editble);
+        m_closeIconLabel->setMaximumSize(QSize(1, 1) * m_size);
+
+        connect(m_closeIconLabel, &QAbstractButton::clicked, [&]() {
+            emit sigRemoveTagFromSelection(m_tag);
+        });
         layout->addWidget(m_closeIconLabel);
     }
-    layout->addSpacing(minimumSpace);
     setLayout(layout);
-
-
-
 }
 
 WdgCloseableLabel::~WdgCloseableLabel()
@@ -110,33 +113,16 @@ void WdgCloseableLabel::paintEvent(QPaintEvent *event)
 
 }
 
-void WdgCloseableLabel::mousePressEvent(QMouseEvent *event)
-{
-    if (!m_editble) {
-        return;
-    }
-
-    QRect closeRect = kisGrowRect(m_closeIconLabel->rect(), 5);
-
-    m_closeIconLabel->pos();
-    if (closeRect.contains(event->pos() - m_closeIconLabel->pos())) {
-        // working, just add a signal
-        emit sigRemoveTagFromSelection(m_tag);
-    }
-}
-
-
-
-
 WdgAddTagButton::WdgAddTagButton(QWidget *parent)
     : QToolButton(parent)
 {
     setPopupMode(QToolButton::InstantPopup);
+    setIcon(KisIconUtils::loadIcon("list-add"));
+    setToolTip(i18n("Assign to tag"));
     setContentsMargins(0, 0, 0, 0);
     QSize defaultSize = QSize(1, 1)*m_size;
     setMinimumSize(defaultSize);
     setMaximumSize(defaultSize);
-
 
     connect(this, SIGNAL(triggered(QAction*)), SLOT(slotAddNewTag(QAction*)));
 
@@ -227,7 +213,7 @@ void WdgAddTagButton::paintEvent(QPaintEvent *event)
     path.addRoundedRect(this->rect(), 6, 6);
     painter.fillPath(path, qApp->palette().light());
     painter.setPen(QPen(qApp->palette().windowText(), painter.pen().widthF()));
-    QIcon icon = KisIconUtils::loadIcon("list-add");
+    QIcon icon = this->icon();
     QSize size = this->rect().size()*0.6;
 
     QSize iconSize = icon.actualSize(size);

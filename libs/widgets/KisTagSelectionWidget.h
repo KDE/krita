@@ -33,12 +33,12 @@ Q_SIGNALS:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
 
 private:
     QLabel* m_textLabel;
-    QLabel* m_closeIconLabel;
+    QPushButton* m_closeIconLabel;
 
+    int m_size{18};
     bool m_editble;
     bool m_semiSelected;
     KoID m_tag;

@@ -292,7 +292,7 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
             QMessageBox::warning(
                 this,
                 i18nc("@title:window", "Krita"),
-                i18nc("Warning message", "One of more resources share the same file name '%1'. Please export them in separate bundles.").arg(prettyFilename));
+                i18nc("Warning message", "More than one resources share the same file name '%1'. Please export them in separate bundles.", prettyFilename));
             return false;
         }
 

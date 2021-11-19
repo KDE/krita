@@ -17,12 +17,12 @@ inline static void fillGrayBrushWithColorPreserveLightnessRGB(quint8 *pixels, co
         using channels_type = typename CSTraits::channels_type;
         static const quint32 pixelSize = CSTraits::pixelSize;
 
-        const RGBPixel *brushColorRGB = reinterpret_cast<const RGBPixel*>(brushColor);
+        const RGBPixel *srcColorRGB = reinterpret_cast<const RGBPixel*>(brushColor);
 
-        const float brushColorR = KoColorSpaceMaths<channels_type, float>::scaleToA(brushColorRGB->red);
-        const float brushColorG = KoColorSpaceMaths<channels_type, float>::scaleToA(brushColorRGB->green);
-        const float brushColorB = KoColorSpaceMaths<channels_type, float>::scaleToA(brushColorRGB->blue);
-        const float brushColorA = KoColorSpaceMaths<channels_type, float>::scaleToA(brushColorRGB->alpha);
+        const float srcColorR = KoColorSpaceMaths<channels_type, float>::scaleToA(srcColorRGB->red);
+        const float srcColorG = KoColorSpaceMaths<channels_type, float>::scaleToA(srcColorRGB->green);
+        const float srcColorB = KoColorSpaceMaths<channels_type, float>::scaleToA(srcColorRGB->blue);
+        const float srcColorA = KoColorSpaceMaths<channels_type, float>::scaleToA(srcColorRGB->alpha);
 
         /**
          * Lightness mixing algorithm is developed by Peter Schatz <voronwe13@gmail.com>
@@ -41,20 +41,20 @@ inline static void fillGrayBrushWithColorPreserveLightnessRGB(quint8 *pixels, co
          * f(x) = (1 - (4z - 1)) * x^2 + (4z - 1) * x
          */
 
-        const float brushColorL = getLightness<HSLType, float>(brushColorR, brushColorG, brushColorB);
-        const float lightnessB = 4 * brushColorL - 1;
+        const float srcColorL = getLightness<HSLType, float>(srcColorR, srcColorG, srcColorB);
+        const float lightnessB = 4 * srcColorL - 1;
         const float lightnessA = 1 - lightnessB;
 
         for (; nPixels > 0; --nPixels, pixels += pixelSize, ++brush) {
             float brushMaskL = qRed(*brush) / 255.0f;
             brushMaskL = (brushMaskL - 0.5) * strength + 0.5;
-            const float finalAlpha = qMin(qAlpha(*brush) / 255.0f, brushColorA);
+            const float finalAlpha = qMin(qAlpha(*brush) / 255.0f, srcColorA);
             float finalLightness = lightnessA * pow2(brushMaskL) + lightnessB * brushMaskL;
             finalLightness = qBound(0.0f, finalLightness, 1.0f);
 
-            float pixelR = brushColorR;
-            float pixelG = brushColorG;
-            float pixelB = brushColorB;
+            float pixelR = srcColorR;
+            float pixelG = srcColorG;
+            float pixelB = srcColorB;
 
             setLightness<HSLType, float>(pixelR, pixelG, pixelB, finalLightness);
 

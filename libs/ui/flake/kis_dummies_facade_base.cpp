@@ -46,10 +46,7 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         m_d->nodeChangedConnection.disconnectInputSignals();
         m_d->activateNodeConnection.disconnectInputSignals();
 
-        KisNodeDummy *rootDummy = this->rootDummy();
-        if(rootDummy) {
-            slotRemoveNode(rootDummy->node());
-        }
+        slotRemoveNode(m_d->image->root());
     }
 
     m_d->image = image;

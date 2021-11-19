@@ -125,11 +125,16 @@ QVector<QPainterPath> KoShapeMeshGradientHandles::getConnectedPath(const Handle 
 
     QVector<QPainterPath> result;
 
+    // TODO(sh_zam): Handle OBB and user mode in and only in SvgMeshPatch
+    const QTransform t = (gradient()->gradientUnits() == KoFlake::ObjectBoundingBox)
+                           ? KisAlgebra2D::mapToRect(m_shape->outlineRect())
+                           : QTransform();
     const SvgMeshArray *mesharray = gradient()->getMeshArray().data();
     QPainterPath painterPath;
 
     if (handle.type == Handle::BezierHandle) {
         SvgMeshPath path = mesharray->getPath(handle.getPosition());
+        std::transform(path.begin(), path.end(), path.begin(), [&t](QPointF &point) { return t.map(point); });
         painterPath.moveTo(path[0]);
         painterPath.cubicTo(path[1], path[2], path[3]);
         result << painterPath;
@@ -137,6 +142,7 @@ QVector<QPainterPath> KoShapeMeshGradientHandles::getConnectedPath(const Handle 
         QVector<SvgMeshPosition> positions = mesharray->getConnectedPaths(handle.getPosition());
         for (const auto &position: positions) {
             SvgMeshPath path = mesharray->getPath(position);
+            std::transform(path.begin(), path.end(), path.begin(), [&t](QPointF &point) { return t.map(point); });
             painterPath = QPainterPath();
             painterPath.moveTo(path[0]);
             painterPath.cubicTo(path[1], path[2], path[3]);
@@ -153,7 +159,9 @@ QPointF KoShapeMeshGradientHandles::getAttachedCorner(const Handle &bezierHandle
 
     const SvgMeshArray *mesharray = gradient()->getMeshArray().data();
     const SvgMeshPath path = mesharray->getPath(bezierHandle.getPosition());
-    const QTransform t = abosoluteTransformation(gradient()->gradientUnits());
+    const QTransform t = (gradient()->gradientUnits() == KoFlake::ObjectBoundingBox)
+                           ? KisAlgebra2D::mapToRect(m_shape->outlineRect())
+                           : QTransform();
     if (bezierHandle.index == Handle::First) {
         return t.map(path[bezierHandle.index - 1]);
     } else {

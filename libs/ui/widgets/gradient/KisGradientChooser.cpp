@@ -532,10 +532,14 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
 
         // if we're editing the gradient we can overwrite it right away
         if (editGradient) {
-            KisResourceUserOperations::updateResourceWithUserInput(q, gradient);
+            if (!KisResourceUserOperations::updateResourceWithUserInput(q, gradient)) {
+                // restore the original state, if user pressed cancel above
+                copyGradientResource(gradient, originalGradient);
+                return;
+            }
         } else {
             if (!KisResourceUserOperations::addResourceWithUserInput(q, gradient)) {
-                // restore original state
+                // restore the original state, if user pressed cancel above
                 copyGradientResource(gradient, originalGradient);
                 return;
             }

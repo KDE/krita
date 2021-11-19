@@ -545,17 +545,25 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
     // https://phabricator.kde.org/T7411
 
     // HACK: Specifically detect for Intel driver build number
-    //       See https://www.intel.com/content/www/us/en/support/articles/000005654/graphics-drivers.html
+    //       See https://www.intel.com/content/www/us/en/support/articles/000005654/graphics.html
     if (rendererString.startsWith("Intel")) {
         KLocalizedString knownBadIntelWarning = ki18n("The Intel graphics driver in use is known to have issues with OpenGL.");
         KLocalizedString grossIntelWarning = ki18n(
             "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used by default. "
             "You may manually switch to OpenGL but it is not guaranteed to work properly."
         );
-        QRegularExpression regex("\\b\\d{1,2}\\.\\d{2}\\.\\d{1,3}\\.(\\d{4})\\b");
+        QRegularExpression regex("\\b\\d{1,2}\\.\\d{1,2}\\.(\\d{1,3})\\.(\\d{4})\\b");
         QRegularExpressionMatch match = regex.match(driverVersionString);
         if (match.hasMatch()) {
-            int driverBuild = match.captured(1).toInt();
+            const int thirdPart = match.captured(1).toInt();
+            const int fourthPart = match.captured(2).toInt();
+            int driverBuild;
+            if (thirdPart >= 100) {
+                driverBuild = thirdPart * 10000 + fourthPart;
+            } else {
+                driverBuild = fourthPart;
+            }
+            qDebug() << "Detected Intel driver build number as" << driverBuild;
             if (driverBuild > 4636 && driverBuild < 4729) {
                 // Make ANGLE the preferred renderer for Intel driver versions
                 // between build 4636 and 4729 (exclusive) due to an UI offset bug.

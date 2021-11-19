@@ -230,7 +230,7 @@ public:
 
     void notifyExternalStyleChanged(const QString &name, const QUuid &uuid);
 
-    void addNewStyle(KisPSDLayerStyleSP style);
+    void addNewStyle(const QString &location, const KisPSDLayerStyleSP style);
     void loadCollection(const QString &fileName);
 
     void refillCollections();

@@ -6,9 +6,11 @@
 
 #include "kis_pattern_test.h"
 
+
 #include <simpletest.h>
 #include <resources/KoPattern.h>
 
+#include <QStandardPaths>
 #include <QCryptographicHash>
 #include <QByteArray>
 
@@ -24,7 +26,7 @@ void KoPatternTest::testCreation()
 void KoPatternTest::testRoundTripMd5()
 {
     QString filename(QString(FILES_DATA_DIR) + '/' + "test_pattern.png");
-    QString patFilename(QString(FILES_DATA_DIR) + '/' + "test_pattern.pat");
+    QString patFilename("test_pattern.pat");
 
     KoPattern pngPattern(filename);
     QVERIFY(pngPattern.load(KisGlobalResourcesInterface::instance()));
@@ -34,7 +36,7 @@ void KoPatternTest::testRoundTripMd5()
     qDebug() << "PNG Filename:" << pngPattern.filename();
 
     pngPattern.setFilename(patFilename);
-    pngPattern.save();
+    QVERIFY(pngPattern.save());
 
     KoPattern patPattern(patFilename);
     QVERIFY(patPattern.load(KisGlobalResourcesInterface::instance()));

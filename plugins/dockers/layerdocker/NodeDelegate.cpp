@@ -397,8 +397,8 @@ QRect NodeDelegate::textRect(const QStyleOptionViewItem &option, const QModelInd
 
     QRect rc = QRect((option.direction == Qt::RightToLeft) ? iconRect.topRight() : decoRect.topRight(),
                      (option.direction == Qt::RightToLeft) ? decoRect.bottomLeft() : iconRect.bottomLeft());
-    rc.adjust(-(scm.border()+minbearing), 0,
-               (scm.border()+minbearing), 0);
+    rc.adjust(-(scm.border()+(minbearing/2)), 0,
+               (scm.border()+(minbearing/2)), 0);
 
     return rc;
 }

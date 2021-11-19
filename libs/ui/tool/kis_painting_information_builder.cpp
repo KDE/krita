@@ -177,6 +177,11 @@ qreal KisPaintingInformationBuilder::pressureToCurve(qreal pressure)
     return KisCubicCurve::interpolateLinear(pressure, m_pressureSamples);
 }
 
+void KisPaintingInformationBuilder::reset()
+{
+    m_speedSmoother->clear();
+}
+
 /***********************************************************************/
 /*           KisConverterPaintingInformationBuilder                        */
 /***********************************************************************/

@@ -50,8 +50,8 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
       m_helper(new KisToolLineHelper(m_infoBuilder.data(),
                                      canvas->resourceManager(),
                                      kundo2_i18n("Draw Line"))),
-      m_strokeUpdateCompressor(500, KisSignalCompressor::POSTPONE),
-      m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
+      m_strokeUpdateCompressor(200, KisSignalCompressor::POSTPONE),
+      m_longStrokeUpdateCompressor(750, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_line");
 
@@ -241,8 +241,9 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
             m_longStrokeUpdateCompressor.stop();
             m_strokeUpdateCompressor.start();
             m_lastUpdatedPoint = pos;
-        } else if (updateDistance > 1) {
+        } else if (updateDistance > 1 &&  !m_strokeUpdateCompressor.isActive() && !m_longStrokeUpdateCompressor.isActive()) {
             m_longStrokeUpdateCompressor.start();
+            m_lastUpdatedPoint = pos;
         }
     }
 

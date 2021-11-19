@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,7 +23,10 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoMD5Generator.h>
+#include <KisResourceLoaderRegistry.h>
 
+#include "KisResourceTypes.h"
+#include "kis_asl_layer_style_serializer.h"
 #include "kis_config.h"
 #include "kis_cmb_contour.h"
 #include "kis_cmb_gradient.h"
@@ -180,7 +184,6 @@ void KisDlgLayerStyle::notifyGuiConfigChanged()
     if (m_isSwitchingPredefinedStyle) return;
 
     m_configChangedCompressor->start();
-    m_layerStyle->setUuid(QUuid::createUuid());
     m_sanityLayerStyleDirty = true;
 
     m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
@@ -264,11 +267,17 @@ QString selectAvailableStyleName(const QString &name)
 
 void KisDlgLayerStyle::slotNewStyle()
 {
+    bool success;
     QString styleName =
         QInputDialog::getText(this,
                               i18nc("@title:window", "Enter new style name"),
                               i18nc("@label:textbox", "Name:"),
-                              QLineEdit::Normal, i18nc("Default name for a new style", "New Style"));
+                              QLineEdit::Normal,
+                              i18nc("Default name for a new style", "New Style"),
+                              &success);
+
+    if (!success)
+        return;
 
     KisPSDLayerStyleSP style = this->style();
     KisPSDLayerStyleSP clone = style->clone().dynamicCast<KisPSDLayerStyle>();
@@ -278,27 +287,33 @@ void KisDlgLayerStyle::slotNewStyle()
     clone->setFilename(clone->uuid().toString());
     clone->setValid(true);
 
-    m_stylesSelector->addNewStyle(clone);
     const QString customStylesStorageLocation = "asl/CustomStyles.asl";
     KisConfig cfg(true);
     QString resourceDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
                                             QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
+    bool resourceAdded;
 
     if (KisResourceLocator::instance()->hasStorage(storagePath)) {
-        KisResourceModel model(ResourceType::LayerStyles);
-        KisResourceUserOperations::addResourceWithUserInput(this, clone, storagePath);
+        // storage is named by the folder + filename, NOT the full filepath
+        resourceAdded = KisResourceUserOperations::addResourceWithUserInput(this, clone, customStylesStorageLocation);
     } else {
         KisAslLayerStyleSerializer serializer;
         serializer.setStyles(QVector<KisPSDLayerStyleSP>() << clone);
         serializer.saveToFile(storagePath);
         QSharedPointer<KisResourceStorage> storage = QSharedPointer<KisResourceStorage>(new KisResourceStorage(storagePath));
-        KisResourceLocator::instance()->addStorage(storagePath, storage);
+        resourceAdded = KisResourceLocator::instance()->addStorage(storagePath, storage);
     }
 
-    m_stylesSelector->refillCollections();
+    if (resourceAdded) {
+        m_stylesSelector->addNewStyle(customStylesStorageLocation, clone);
 
+        setStyle(clone);
+
+        // focus on the recently added item
+        wdgLayerStyles.stylesStack->setCurrentWidget(m_stylesSelector);
+    }
 }
 
 QString createNewAslPath(QString resourceFolderPath, QString filename)
@@ -308,46 +323,67 @@ QString createNewAslPath(QString resourceFolderPath, QString filename)
 
 void KisDlgLayerStyle::slotLoadStyle()
 {
-    QString filename; // default value?
-
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "layerstyle");
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    dialog.setMimeTypeFilters({"application/x-photoshop-style-library"});
     dialog.setCaption(i18n("Select ASL file"));
-    dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
-    filename = dialog.filename();
 
-    if (filename.isEmpty()) return;
+    const QString filename = dialog.filename();
 
-    QFileInfo oldFileInfo(filename);
+    // XXX: implement a resource loader targeting layer style libraries
+    // const auto resource = KisResourceUserOperations::importResourceFileWithUserInput(this, "", ResourceType::LayerStylesLibrary, filename);
+    // if (resource) {
+    //     m_stylesSelector->refillCollections();
+    // }
 
-    KisConfig cfg(true);
-    QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
-                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    QString newName = oldFileInfo.fileName();
-    QString newLocation = createNewAslPath(newDir, newName);
+    if (!filename.isEmpty()) {
+        const QFileInfo oldFileInfo(filename);
 
-    QFileInfo newFileInfo(newLocation);
-    if (newFileInfo.exists()) {
-        bool done = false;
-        int i = 0;
-        do {
-            // ask for new filename
-            bool ok;
-            newName = QInputDialog::getText(this, i18n("New name for ASL storage"), i18n("The old filename is taken.\nNew name:"),
-                                                    QLineEdit::Normal, newName, &ok);
-            if (!ok) return;
+        // 0. Validate layer style
+        {
+            KisAslLayerStyleSerializer test;
 
-            newLocation = createNewAslPath(newDir, newName);
-            newFileInfo.setFile(newLocation);
-            done = !newFileInfo.exists();
-            i++;
-        } while (!done);
+            if (!test.readFromFile(oldFileInfo.absoluteFilePath())) {
+                qWarning() << "Attempted to import an invalid layer style library!" << filename;
+                QMessageBox::warning(this,
+                                     i18nc("@title:window", "Krita"),
+                                     i18n("Could not load layer style library %1.", filename));
+                return;
+            }
+        }
+
+        // 1. Copy the layer style to the resource folder
+        KisConfig cfg(true);
+        const QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                                QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+        const QString newName = oldFileInfo.fileName();
+        const QString newLocation = QStringLiteral("%1/asl/%2").arg(newDir, newName);
+
+        const QFileInfo newFileInfo(newLocation);
+
+        if (newFileInfo.exists()) {
+            if (QMessageBox::warning(this,
+                                     i18nc("@title:window", "Warning"),
+                                     i18n("There is already a layer style library with this name installed. Do you "
+                                          "want to overwrite it?"),
+                                     QMessageBox::Ok | QMessageBox::Cancel)
+                == QMessageBox::Cancel) {
+                return;
+            } else {
+                QFile::remove(newLocation);
+            }
+        }
+
+        QFile::copy(filename, newLocation);
+
+        // 2. Add the layer style as a storage/update database
+        KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+        KIS_ASSERT(!storage.isNull());
+        if (!KisResourceLocator::instance()->addStorage(newLocation, storage)) {
+            qWarning() << "Could not add layer style library to the storages" << newLocation;
+        }
+        m_stylesSelector->refillCollections();
     }
-
-    QFile::copy(filename, newLocation);
-    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
-    KIS_ASSERT(!storage.isNull());
-    KisResourceLocator::instance()->addStorage(newLocation, storage);
-    m_stylesSelector->refillCollections();
 }
 
 void KisDlgLayerStyle::slotSaveStyle()
@@ -558,6 +594,9 @@ StylesSelector::StylesSelector(QWidget *parent)
 
     ui.listStyles->setModel(m_locationsProxyModel);
     ui.listStyles->setModelColumn(KisAbstractResourceModel::Name);
+    // XXX: support editing
+    // KisResourceModel doesn't support data with the EditRole
+    ui.listStyles->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
@@ -673,48 +712,18 @@ void StylesSelector::slotResourceModelReset()
     refillCollections();
 }
 
-void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
+void StylesSelector::addNewStyle(const QString &location, KisPSDLayerStyleSP style)
 {
-
-    // TODO: RESOURCES: what about adding only to CustomStyles.asl
-
-
-    /*
-    //server->resourceByName(style->name())
-
-    // NOTE: not translatable, since it is a key!
-    const QString customName = "CustomStyles.asl";
-    const QString saveLocation = server->saveLocation();
-    const QString fullFilename = saveLocation + customName;
-
-    KoResourceSP resource = server->resourceByName(customName);
-    KisPSDLayerStyleSP style;
-
-    if (!resource) {
-        collection = KisPSDLayerStyleSP(new KisPSDLayerStyle());
-        collection->setName(customName);
-        collection->setFilename(fullFilename);
-
-        KisPSDLayerStyleCollectionResource::StylesVector vector;
-        vector << style;
-        collection->setLayerStyles(vector);
-
-        server->addResource(collection);
-    }
-    else {
-        collection = resource.dynamicCast<KisPSDLayerStyleCollectionResource>();
-
-        //KisPSDLayerStyle::StylesVector vector;
-        vector = collection->layerStyles();
-        vector << style;
-        collection->setLayerStyles(vector);
-        collection->save();
-    }
-    */
+    // m_resourceModel = new KisResourceModel(ResourceType::LayerStyles, this);
+    // m_locationsProxyModel->setSourceModel(m_resourceModel);
+    // ui.listStyles->setModel(m_locationsProxyModel);
 
     refillCollections();
-
-    ui.cmbStyleCollections->setCurrentText(style->name());
+    ui.listStyles->reset();
+    ui.cmbStyleCollections->setCurrentText(location);
+    loadStyles(ui.cmbStyleCollections->currentText());
+    KIS_ASSERT(m_resourceModel->resourceForId(style->resourceId()));
+    ui.listStyles->setCurrentIndex(m_resourceModel->indexForResource(style));
 
     notifyExternalStyleChanged(style->name(), style->uuid());
 }

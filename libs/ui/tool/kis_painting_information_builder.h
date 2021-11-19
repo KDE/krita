@@ -39,6 +39,8 @@ public:
 
     qreal pressureToCurve(qreal pressure);
 
+    void reset();
+
 protected Q_SLOTS:
     void updateSettings();
 

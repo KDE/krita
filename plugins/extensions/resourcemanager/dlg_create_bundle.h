@@ -50,7 +50,7 @@ private Q_SLOTS:
 
 private:
 
-    void putResourcesInTheBundle(KoResourceBundleSP bundle) const;
+    bool putResourcesInTheBundle(KoResourceBundleSP bundle);
     void putMetaDataInTheBundle(KoResourceBundleSP bundle) const;
     QString createPrettyFilenameFromName(KoResourceSP resource) const;
 

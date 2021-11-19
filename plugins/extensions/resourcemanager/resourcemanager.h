@@ -28,23 +28,10 @@ public:
     KoResourceBundleSP saveBundle(const DlgCreateBundle &dlgCreateBundle);
 
 private Q_SLOTS:
-    void slotCreateBundle();
     void slotManageBundles();
     void slotManageResources();
 
-    void slotImportBrushes();
-    void slotImportGradients();
-    void slotImportPalettes();
-    void slotImportPatterns();
-    void slotImportPresets();
-    void slotImportWorkspaces();
-    void slotImportBundles();
-
-
 private:
-
-    QStringList importResources(const QString &title, const QStringList &mimes) const;
-
     class Private;
     QScopedPointer<Private> d;
 };

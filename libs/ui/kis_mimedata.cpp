@@ -114,7 +114,13 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
     {
         KisImageBarrierLockerWithFeedbackAllowNull locker(srcImage);
         Q_FOREACH (KisNodeSP node, nodes) {
-            image->addNode(safeCopyNode(node));
+            KisNodeSP clonedNode = safeCopyNode(node);
+            /// HACK ALERT: here we just initilize parent image link
+            ///             and skip initilizing shapeController!
+            ///             Ideally, we should call initializeExternalNode()
+            ///             instead.
+            clonedNode->setImage(image);
+            image->addNode(clonedNode);
         }
     }
 
@@ -429,7 +435,8 @@ bool correctNewNodeLocation(KisNodeList nodes,
     KisNodeSP parentNode = parentDummy->node();
     bool result = true;
 
-    if(!nodeAllowsAsChild(parentDummy->node(), nodes)) {
+    if(!nodeAllowsAsChild(parentDummy->node(), nodes) ||
+            (parentDummy->node()->inherits("KisGroupLayer") && parentDummy->node()->collapsed())) {
         aboveThisDummy = parentDummy;
         parentDummy = parentDummy->parent();
 

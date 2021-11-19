@@ -6,8 +6,8 @@
 #ifndef kis_multipliers_double_slider_spinbox_p_h
 #define kis_multipliers_double_slider_spinbox_p_h
 
-
-#include "ui_wdgmultipliersdoublesliderspinbox.h"
+#include <QComboBox>
+#include <kis_slider_spin_box.h>
 
 #include "kis_debug.h"
 
@@ -16,7 +16,8 @@ struct KisMultipliersDoubleSliderSpinBox::Private {
     /// Update the range of the slider depending on the currentMultiplier
     void updateRange();
     
-    Ui::WdgMultipliersDoubleSliderSpinBox form;
+    QComboBox *cmbMultiplier {0};
+    KisDoubleSliderSpinBox *slider{0};
     qreal min, max;
     int decimals;
 };

@@ -93,9 +93,6 @@ set(kritaflake_SRCS
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
     KoViewConverter.cpp
-    KoInputDeviceHandler.cpp
-    KoInputDeviceHandlerEvent.cpp
-    KoInputDeviceHandlerRegistry.cpp
     KoImageData.cpp
     KoImageData_p.cpp
     KoImageCollection.cpp

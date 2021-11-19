@@ -22,8 +22,6 @@
 #include "KoShapeManager.h"
 #include "KoSelectedShapesProxy.h"
 #include "KoCanvasBase.h"
-#include "KoInputDeviceHandlerRegistry.h"
-#include "KoInputDeviceHandlerEvent.h"
 #include "KoPointerEvent.h"
 #include "tools/KoZoomTool.h"
 #include "kis_action_registry.h"
@@ -421,9 +419,6 @@ void KoToolManager::Private::setup()
     Q_FOREACH (const QString & id, registry->keys()) {
         toolActionList.append(new KoToolAction(registry->value(id)));
     }
-
-    // load pluggable input devices
-    KoInputDeviceHandlerRegistry::instance();
 }
 
 void KoToolManager::Private::connectActiveTool()

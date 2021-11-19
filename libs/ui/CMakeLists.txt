@@ -566,7 +566,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgdlgfilelayer.ui
     forms/wdgfilterselector.ui
     forms/wdgfilternodecreation.ui
-    forms/wdgmultipliersdoublesliderspinbox.ui
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgsavebrushpreset.ui

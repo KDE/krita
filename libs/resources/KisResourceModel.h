@@ -86,7 +86,7 @@ public:
      * @param filename
      * @return
      */
-    virtual KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) = 0;
+    virtual KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString("")) = 0;
 
     /**
      * @brief importResource imports a resource from a QIODevice
@@ -103,7 +103,7 @@ public:
      *
      * @return the loaded resource object
      */
-    virtual KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString()) = 0;
+    virtual KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString("")) = 0;
 
     /**
      * @brief exportResource exports a resource into a QIODevice
@@ -132,7 +132,7 @@ public:
      * to the default resources folder
      * @return true if adding the resource succeeded.
      */
-    virtual bool addResource(KoResourceSP resource, const QString &storageId = QString()) = 0;
+    virtual bool addResource(KoResourceSP resource, const QString &storageId = QString("")) = 0;
 
     /**
      * @brief updateResource creates a new version ofthe resource in the storage and
@@ -207,10 +207,10 @@ public:
     QModelIndex indexForResource(KoResourceSP resource) const override;
     QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
-    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) override;
-    KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString()) override;
+    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString("")) override;
+    KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString("")) override;
     bool exportResource(KoResourceSP resource, QIODevice *device) override;
-    bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
+    bool addResource(KoResourceSP resource, const QString &storageId = QString("")) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
@@ -303,10 +303,10 @@ public:
     QModelIndex indexForResource(KoResourceSP resource) const override;
     QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
-    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) override;
-    KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString()) override;
+    KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString("")) override;
+    KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString("")) override;
     bool exportResource(KoResourceSP resource, QIODevice *device) override;
-    bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
+    bool addResource(KoResourceSP resource, const QString &storageId = QString("")) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;

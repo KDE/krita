@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
  *  SPDX-FileCopyrightText: 2020 Agata Cacko cacko.azh @gmail.com
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -16,6 +17,7 @@
 #include <QTableWidget>
 #include <QPainter>
 #include <QStack>
+#include <QHash>
 
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
@@ -195,7 +197,7 @@ DlgCreateBundle::~DlgCreateBundle()
 
 QString DlgCreateBundle::bundleName() const
 {
-    return m_ui->editBundleName->text().replace(" ", "_");
+    return m_ui->editBundleName->text();
 }
 
 QString DlgCreateBundle::authorName() const
@@ -244,15 +246,16 @@ QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagS
     return tagsToEmbed;
 }
 
-void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
+bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
 {
-    KisResourceModel emptyModel("");
     QMap<QString, QSharedPointer<KisResourceModel>> modelsPerResourceType;
     KisResourceTypeModel resourceTypesModel;
     for (int i = 0; i < resourceTypesModel.rowCount(); i++) {
         QModelIndex idx = resourceTypesModel.index(i, 0);
         QString resourceType = resourceTypesModel.data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
         QSharedPointer<KisResourceModel> model = QSharedPointer<KisResourceModel>(new KisResourceModel(resourceType));
+        // BUG: 445408 Ensure potentially linked but disabled resources are visible
+        model->setResourceFilter(KisResourceModel::ShowAllResources);
         modelsPerResourceType.insert(resourceType, model);
     }
 
@@ -264,16 +267,18 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
     }
 
     // note: if there are repetitions, it's fine; the bundle will filter them out
+    QHash<QPair<QString, QString>, std::size_t> usedFilenames;
+
     while(!allResourcesIds.isEmpty()) {
-        int id = allResourcesIds.takeFirst();
+        const int id = allResourcesIds.takeFirst();
         KoResourceSP res;
         QString resourceTypeHere = "";
         QSharedPointer<KisResourceModel> resModel;
-        for (int i = 0; i < resourceTypes.size(); i++) {
-            res = modelsPerResourceType[resourceTypes[i]]->resourceForId(id);
+        for (const auto &type: resourceTypes) {
+            res = modelsPerResourceType[type]->resourceForId(id);
             if (!res.isNull()) {
-                resModel = modelsPerResourceType[resourceTypes[i]];
-                resourceTypeHere = resourceTypes[i];
+                resModel = modelsPerResourceType[type];
+                resourceTypeHere = type;
                 break;
             }
         }
@@ -281,8 +286,20 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
             warnKrita << "No resource for id " << id;
             continue;
         }
+        const auto prettyFilename = createPrettyFilenameFromName(res);
+
+        if (usedFilenames.value({res->resourceType().first, prettyFilename}, 0) > 0) {
+            QMessageBox::warning(
+                this,
+                i18nc("@title:window", "Krita"),
+                i18nc("Warning message", "More than one resources share the same file name '%1'. Please export them in separate bundles.", prettyFilename));
+            return false;
+        }
+
+        usedFilenames[{res->resourceType().first, prettyFilename}]+= 1;
+
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
-        bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), createPrettyFilenameFromName(res));
+        bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), prettyFilename);
 
         QList<KoResourceLoadResult> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
         Q_FOREACH(KoResourceLoadResult linkedResource, linkedResources) {
@@ -301,6 +318,7 @@ void DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle) const
             }
         }
     }
+    return true;
 }
 
 void DlgCreateBundle::putMetaDataInTheBundle(KoResourceBundleSP bundle) const
@@ -333,22 +351,22 @@ QString DlgCreateBundle::createPrettyFilenameFromName(KoResourceSP resource) con
         // by filename to another resource
         return resource->filename();
     }
-    QString name = resource->name();
     // to make sure patterns are saved correctly
     // note that for now (TM) there are no double-suffixes in resources (like '.tar.gz')
     // otherwise this code should use completeSuffix() and remove the versioning number
     // (since that's something we want to get rid of)
-    QString suffix = QFileInfo(resource->filename()).suffix();
-
+    const auto fileInfo = QFileInfo(resource->filename());
+    const auto prefix = fileInfo.dir();
     // remove the suffix if the name has a suffix (happens for png patterns)
-    QString nameWithoutSuffix = QFileInfo(resource->name()).baseName();
-    return nameWithoutSuffix + "." + suffix;
+    const auto nameWithoutSuffix = QFileInfo(resource->name()).baseName();
+    const auto suffix = fileInfo.suffix();
+    return QDir::cleanPath(prefix.filePath(nameWithoutSuffix + "." + suffix));
 }
 
 void DlgCreateBundle::accept()
 {
     QString name = bundleName();
-    QString filename = m_ui->lblSaveLocation->text() + "/" + name + ".bundle";
+    QString filename = QString("%1/%2.bundle").arg(m_ui->lblSaveLocation->text(), name.replace(" ", "_"));
 
     if (name.isEmpty()) {
         m_ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));
@@ -361,7 +379,8 @@ void DlgCreateBundle::accept()
         if (fileInfo.exists() && !m_bundle) {
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
 
-            QMessageBox msgBox;
+            QMessageBox msgBox(this);
+            msgBox.setIcon(QMessageBox::Question);
             msgBox.setText(i18nc("In a dialog asking whether to overwrite a bundle (resource pack)", "A bundle with this name already exists."));
             msgBox.setInformativeText(i18nc("In a dialog regarding overwriting a bundle (resource pack)", "Do you want to overwrite the existing bundle?"));
             msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
@@ -377,9 +396,17 @@ void DlgCreateBundle::accept()
 
             m_bundle.reset(new KoResourceBundle(filename));
             putMetaDataInTheBundle(m_bundle);
-            putResourcesInTheBundle(m_bundle);
-            m_bundle->save();
-
+            if (!putResourcesInTheBundle(m_bundle)) {
+                return;
+            }
+            if (!m_bundle->save()) {
+                m_ui->lblSaveLocation->setStyleSheet("border: 1px solid red");
+                QMessageBox::critical(this,
+                    i18nc("@title:window", "Krita"),
+                    i18n("Could not open '%1' for saving.", filename));
+                m_bundle.reset();
+                return;
+            }
         } else {
             KIS_SAFE_ASSERT_RECOVER(!m_bundle) { warnKrita << "Updating a bundle is not implemented yet"; };
         }

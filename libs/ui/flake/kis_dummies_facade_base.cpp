@@ -8,13 +8,18 @@
 
 #include "kis_image.h"
 #include "kis_node_dummies_graph.h"
-
+#include <KisSynchronizedConnection.h>
 
 struct KisDummiesFacadeBase::Private
 {
 public:
     KisImageWSP image;
     KisNodeSP savedRootNode;
+
+    KisSynchronizedConnection<KisNodeSP> activateNodeConnection;
+    KisSynchronizedConnection<KisNodeSP> nodeChangedConnection;
+    KisSynchronizedConnection<KisNodeSP,KisNodeSP,KisNodeSP> addNodeConnection;
+    KisSynchronizedConnection<KisNodeSP> removeNodeConnection;
 };
 
 
@@ -22,10 +27,10 @@ KisDummiesFacadeBase::KisDummiesFacadeBase(QObject *parent)
     : QObject(parent),
       m_d(new Private())
 {
-    connect(this, SIGNAL(sigContinueAddNode(KisNodeSP,KisNodeSP,KisNodeSP)),
-            SLOT(slotContinueAddNode(KisNodeSP,KisNodeSP,KisNodeSP)));
-    connect(this, SIGNAL(sigContinueRemoveNode(KisNodeSP)),
-            SLOT(slotContinueRemoveNode(KisNodeSP)));
+    m_d->activateNodeConnection.connectOutputSlot(this, &KisDummiesFacadeBase::slotNodeActivationRequested);
+    m_d->nodeChangedConnection.connectOutputSlot(this, &KisDummiesFacadeBase::slotNodeChanged);
+    m_d->addNodeConnection.connectOutputSlot(this, &KisDummiesFacadeBase::slotContinueAddNode);
+    m_d->removeNodeConnection.connectOutputSlot(this, &KisDummiesFacadeBase::slotContinueRemoveNode);
 }
 
 KisDummiesFacadeBase::~KisDummiesFacadeBase()
@@ -38,6 +43,8 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
     if (m_d->image) {
         emit sigActivateNode(0);
         m_d->image->disconnect(this);
+        m_d->nodeChangedConnection.disconnectInputSignals();
+        m_d->activateNodeConnection.disconnectInputSignals();
 
         KisNodeDummy *rootDummy = this->rootDummy();
         if(rootDummy) {
@@ -57,12 +64,10 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         connect(image, SIGNAL(sigLayersChangedAsync()),
                 SLOT(slotLayersChanged()), Qt::DirectConnection);
 
-        connect(image, SIGNAL(sigNodeChanged(KisNodeSP)),
-                SLOT(slotNodeChanged(KisNodeSP)));
+        m_d->nodeChangedConnection.connectInputSignal(image, &KisImage::sigNodeChanged);
+        m_d->activateNodeConnection.connectInputSignal(image, &KisImage::sigNodeAddedAsync);
 
-        connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP)),
-                SLOT(slotNodeActivationRequested(KisNodeSP)), Qt::AutoConnection);
-        emit sigActivateNode(findFirstLayer(image->root()));
+        m_d->activateNodeConnection.start(findFirstLayer(image->root()));
     }
 }
 
@@ -114,7 +119,7 @@ void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
 
 void KisDummiesFacadeBase::slotNodeAdded(KisNodeSP node)
 {
-    emit sigContinueAddNode(node, node->parent(), node->prevSibling());
+    m_d->addNodeConnection.start(node, node->parent(), node->prevSibling());
 
     KisNodeSP childNode = node->firstChild();
     while (childNode) {
@@ -131,7 +136,7 @@ void KisDummiesFacadeBase::slotRemoveNode(KisNodeSP node)
         childNode = childNode->prevSibling();
     }
 
-    emit sigContinueRemoveNode(node);
+    m_d->removeNodeConnection.start(node);
 }
 
 void KisDummiesFacadeBase::slotContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)

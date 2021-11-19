@@ -78,7 +78,6 @@
 #include <kis_signals_blocker.h>
 #include <libs/image/kis_layer_properties_icons.h>
 #include <libs/image/commands/kis_node_property_list_command.h>
-#include <KisSynchronizedConnection.h>
 
 struct KisNodeManager::Private {
 
@@ -119,7 +118,6 @@ struct KisNodeManager::Private {
     KisSignalMapper nodeConversionSignalMapper;
 
     bool lastRequestedIsolatedModeStatus;
-    KisSynchronizedConnection<KisNodeSP, KisNodeList> activateNodeConnection;
 
     void saveDeviceAsImage(KisPaintDeviceSP device,
                            const QString &defaultName,
@@ -190,7 +188,6 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 KisNodeManager::KisNodeManager(KisViewManager *view)
     : m_d(new Private(this, view))
 {
-    m_d->activateNodeConnection.connectOutputSlot(this, &KisNodeManager::slotImageRequestNodeReselection);
 }
 
 KisNodeManager::~KisNodeManager()
@@ -208,7 +205,6 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         Q_ASSERT(shapeController);
         shapeController->disconnect(SIGNAL(sigActivateNode(KisNodeSP)), this);
         m_d->imageView->image()->disconnect(this);
-        m_d->activateNodeConnection.disconnectInputSignals();
     }
 
     m_d->imageView = imageView;
@@ -217,7 +213,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
-        m_d->activateNodeConnection.connectInputSignal(m_d->imageView->image(), &KisImage::sigRequestNodeReselection);
+        connect(m_d->imageView->image(), SIGNAL(sigRequestNodeReselection(KisNodeSP,KisNodeList)),this, SLOT(slotImageRequestNodeReselection(KisNodeSP,KisNodeList)));
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()), this, SLOT(handleExternalIsolationChange()));
     }

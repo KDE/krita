@@ -44,6 +44,10 @@ protected:
     virtual void removeNodeImpl(KisNodeSP node) = 0;
 
 Q_SIGNALS:
+
+    void sigContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void sigContinueRemoveNode(KisNodeSP node);
+
     /**
      * The signals for controlling the node model
      */

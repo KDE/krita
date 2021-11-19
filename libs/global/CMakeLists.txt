@@ -42,7 +42,6 @@ set(kritaglobal_LIB_SRCS
     KisBezierPatch.cpp
     KisBezierMesh.cpp
     KisRectsGrid.cpp
-    KisSynchronizedConnection.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

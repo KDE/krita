@@ -57,11 +57,12 @@ void KisRequiredResourcesOperators::detail::addResourceOrWarnIfNotLoaded(KoResou
         buf.open(QBuffer::ReadOnly);
 
         KoResourceSP resource = loader->load(sig.filename, buf, resourcesInterface);
-        resource->setMD5Sum(sig.md5sum);
-        resource->setVersion(0);
-        resource->setDirty(false);
 
         if (resource) {
+            resource->setMD5Sum(sig.md5sum);
+            resource->setVersion(0);
+            resource->setDirty(false);
+
             *resources << resource;
         } else {
             qWarning() << "createLocalResourcesSnapshot: Could not import embedded resource" << sig;

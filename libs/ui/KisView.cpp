@@ -80,8 +80,6 @@
 #include "kis_processing_applicator.h"
 #include "processing/fill_processing_visitor.h"
 #include "utils/KisClipboardUtil.h"
-#include "KisSynchronizedConnection.h"
-
 
 //static
 QString KisView::newObjectName()
@@ -131,9 +129,6 @@ public:
 
     bool softProofing = false;
     bool gamutCheck = false;
-
-    KisSynchronizedConnection<KisNodeSP> addNodeConnection;
-    KisSynchronizedConnection<KisNodeSP> removeNodeConnection;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -342,16 +337,25 @@ void KisView::setViewManager(KisViewManager *view)
     connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged(QPointF,QPointF)));
     connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
 
+    // executed in a context of an image thread
+    connect(image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)),
+            SLOT(slotImageNodeAdded(KisNodeSP)),
+            Qt::DirectConnection);
 
-    d->addNodeConnection.connectSync(image(), &KisImage::sigNodeAddedAsync,
-                                     this, &KisView::slotContinueAddNode);
+    // executed in a context of the gui thread
+    connect(this, SIGNAL(sigContinueAddNode(KisNodeSP)),
+            SLOT(slotContinueAddNode(KisNodeSP)),
+            Qt::AutoConnection);
 
     // executed in a context of an image thread
     connect(image(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)),
             SLOT(slotImageNodeRemoved(KisNodeSP)),
             Qt::DirectConnection);
 
-    d->removeNodeConnection.connectOutputSlot(this, &KisView::slotContinueRemoveNode);
+    // executed in a context of the gui thread
+    connect(this, SIGNAL(sigContinueRemoveNode(KisNodeSP)),
+            SLOT(slotContinueRemoveNode(KisNodeSP)),
+            Qt::AutoConnection);
 
     d->viewManager->updateGUI();
 
@@ -361,6 +365,11 @@ void KisView::setViewManager(KisViewManager *view)
 KisViewManager* KisView::viewManager() const
 {
     return d->viewManager;
+}
+
+void KisView::slotImageNodeAdded(KisNodeSP node)
+{
+    emit sigContinueAddNode(node);
 }
 
 void KisView::slotContinueAddNode(KisNodeSP newActiveNode)
@@ -383,7 +392,7 @@ void KisView::slotContinueAddNode(KisNodeSP newActiveNode)
 
 void KisView::slotImageNodeRemoved(KisNodeSP node)
 {
-    d->removeNodeConnection.start(KritaUtils::nearestNodeAfterRemoval(node));
+    emit sigContinueRemoveNode(KritaUtils::nearestNodeAfterRemoval(node));
 }
 
 void KisView::slotContinueRemoveNode(KisNodeSP newActiveNode)

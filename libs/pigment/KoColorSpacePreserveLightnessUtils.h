@@ -48,8 +48,9 @@ inline static void fillGrayBrushWithColorPreserveLightnessRGB(quint8 *pixels, co
         for (; nPixels > 0; --nPixels, pixels += pixelSize, ++brush) {
             float brushMaskL = qRed(*brush) / 255.0f;
             brushMaskL = (brushMaskL - 0.5) * strength + 0.5;
-            const float finalLightness = lightnessA * pow2(brushMaskL) + lightnessB * brushMaskL;
             const float finalAlpha = qMin(qAlpha(*brush) / 255.0f, brushColorA);
+            float finalLightness = lightnessA * pow2(brushMaskL) + lightnessB * brushMaskL;
+            finalLightness = qBound(0.0f, finalLightness, 1.0f);
 
             float pixelR = brushColorR;
             float pixelG = brushColorG;

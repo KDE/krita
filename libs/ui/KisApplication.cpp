@@ -105,6 +105,8 @@
 #include "kis_file_layer.h"
 #include "kis_group_layer.h"
 #include "kis_node_commands_adapter.h"
+#include "KisSynchronizedConnection.h"
+#include <QThreadStorage>
 
 #include <kis_psd_layer_style.h>
 
@@ -124,6 +126,33 @@ public:
     bool batchRun {false};
     QVector<QByteArray> earlyRemoteArguments;
     QVector<QString> earlyFileOpenEvents;
+
+    struct RecursionInfo {
+        ~RecursionInfo() {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!eventRecursionCount);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(postponedSynchronizationEvents.empty());
+        }
+
+        int eventRecursionCount {0};
+        std::queue<KisSynchronizedConnectionEvent> postponedSynchronizationEvents;
+    };
+
+    struct RecursionGuard {
+        RecursionGuard(RecursionInfo *info)
+            : m_info(info)
+        {
+            m_info->eventRecursionCount++;
+        }
+
+        ~RecursionGuard()
+        {
+            m_info->eventRecursionCount--;
+        }
+    private:
+        RecursionInfo *m_info {0};
+    };
+
+    QThreadStorage<RecursionInfo> recursionInfo;
 };
 
 class KisApplication::ResetStarting
@@ -691,7 +720,50 @@ void KisApplication::hideSplashScreen()
 bool KisApplication::notify(QObject *receiver, QEvent *event)
 {
     try {
-        return QApplication::notify(receiver, event);
+        bool result = true;
+
+        /**
+         * KisApplication::notify() is called for every event loop processed in
+         * any thread, so we need to make sure our counters and postponed events
+         * queues are stored in a per-thread way.
+         */
+        Private::RecursionInfo &info = d->recursionInfo.localData();
+
+        {
+            // QApplication::notify() can throw, so use RAII for counters
+            Private::RecursionGuard guard(&info);
+
+            if (event->type() == KisSynchronizedConnectionBase::eventType()) {
+
+                if (info.eventRecursionCount > 1) {
+                    KisSynchronizedConnectionEvent *typedEvent = static_cast<KisSynchronizedConnectionEvent*>(event);
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(typedEvent->destination == receiver);
+
+                    info.postponedSynchronizationEvents.emplace(KisSynchronizedConnectionEvent(*typedEvent));
+                } else {
+                    result = QApplication::notify(receiver, event);
+                }
+            } else {
+                result = QApplication::notify(receiver, event);
+            }
+        }
+
+        if (!info.eventRecursionCount) {
+            while (!info.postponedSynchronizationEvents.empty()) {
+                // QApplication::notify() can throw, so use RAII for counters
+                Private::RecursionGuard guard(&info);
+
+                /// We must pop event from the queue **before** we call
+                /// QApplication::notify(), because it can throw!
+                KisSynchronizedConnectionEvent typedEvent = info.postponedSynchronizationEvents.front();
+                info.postponedSynchronizationEvents.pop();
+
+                QApplication::notify(typedEvent.destination, &typedEvent);
+            }
+        }
+
+        return result;
+
     } catch (std::exception &e) {
         qWarning("Error %s sending event %i to object %s",
                  e.what(), event->type(), qPrintable(receiver->objectName()));

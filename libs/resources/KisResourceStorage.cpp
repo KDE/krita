@@ -1,28 +1,31 @@
 /*
  * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisResourceStorage.h"
 
-#include <QFileInfo>
-#include <QDebug>
 #include <QApplication>
+#include <QDebug>
+#include <QFileInfo>
+#include <QUuid>
+#include <QtMath>
+#include <QRegularExpression>
 
+#include <cmath>
 #include <quazip.h>
+#include <boost/optional.hpp>
+
+#include <kis_debug.h>
+#include <kis_pointer_utils.h>
+
 
 #include "KisFolderStorage.h"
 #include "KisBundleStorage.h"
 #include "KisMemoryStorage.h"
 
-#include <cmath>
-#include <QtMath>
-#include "kis_debug.h"
-
-#include <QRegularExpression>
-#include <boost/optional.hpp>
-#include <kis_pointer_utils.h>
 
 const QString KisResourceStorage::s_meta_generator("meta:generator");
 const QString KisResourceStorage::s_meta_author("dc:author");
@@ -98,14 +101,12 @@ KisResourceStorage::KisResourceStorage(const QString &location)
             d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeStyleLibrary]->create(location));
             d->storageType = StorageType::AdobeStyleLibrary;
             d->valid = fi.isReadable();
-    }
-    else if (!d->location.isEmpty()) {
+    } else if (d->location == "memory" || !QUuid::fromString(d->location).isNull()) {
         d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Memory]->create(location));
         d->name = location;
         d->storageType = StorageType::Memory;
         d->valid = true;
-    }
-    else {
+    } else {
         d->valid = false;
     }
 }

@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -197,10 +198,8 @@ void DlgBundleManager::addBundle()
 {
     KoFileDialog dlg(this, KoFileDialog::OpenFile, i18n("Choose the resource library to import"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
-    dlg.setMimeTypeFilters(QStringList() << "application/x-krita-bundle"
-                                         << "application/x-krita-bundle"
-                                         << "image/x-adobe-brushlibrary"
-                                         << "application/x-photoshop-style-library");
+    dlg.setMimeTypeFilters(
+        {"application/x-krita-bundle", "image/x-adobe-brushlibrary", "application/x-photoshop-style-library"});
     dlg.setCaption(i18n("Select the bundle"));
     QString filename = dlg.filename();
     if (!filename.isEmpty()) {

@@ -229,7 +229,6 @@ public Q_SLOTS:
     void slotThemeChanged(QPalette pal);
 
 private Q_SLOTS:
-    void slotImageNodeAdded(KisNodeSP node);
     void slotContinueAddNode(KisNodeSP newActiveNode);
 
     void slotImageNodeRemoved(KisNodeSP node);
@@ -241,9 +240,6 @@ Q_SIGNALS:
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void titleModified(QString,bool);
-
-    void sigContinueAddNode(KisNodeSP newActiveNode);
-    void sigContinueRemoveNode(KisNodeSP newActiveNode);
 
 protected:
 

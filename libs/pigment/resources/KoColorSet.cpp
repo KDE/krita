@@ -807,7 +807,7 @@ bool KoColorSet::Private::loadRiff()
     header.colorcount = qFromBigEndian(header.colorcount);
 
     for (int i = sizeof(RiffHeader);
-         (i < (int)(sizeof(RiffHeader) + header.colorcount) && i < data.size());
+         (i < (int)(sizeof(RiffHeader) + (header.colorcount * 4)) && i < data.size());
          i += 4) {
         quint8 r = data[i];
         quint8 g = data[i+1];

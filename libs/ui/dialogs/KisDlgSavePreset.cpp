@@ -168,9 +168,9 @@ void KisPresetSaveWidget::savePreset()
     presetFileName = presetFileName.replace(' ', '_').replace('.', '_');
     QString extension = curPreset->defaultFileExtension();
 
-    // Make sure of the extension
-    if (!presetFileName.endsWith(".kpp")) {
-        presetFileName += ".kpp";
+    // Ensure the filename has the corresponding extension
+    if (!presetFileName.endsWith(extension)) {
+        presetFileName.append(extension);
     }
 
     bool success = true;
@@ -178,9 +178,6 @@ void KisPresetSaveWidget::savePreset()
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
         newPreset->setResourceId(-1); // so it won't confuse anything into overwriting
-        if (!presetFileName.endsWith(extension)) {
-            presetFileName.append(extension);
-        }
         newPreset->setFilename(presetFileName);
         newPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
@@ -197,6 +194,8 @@ void KisPresetSaveWidget::savePreset()
     else { // saving a preset that is replacing an existing one
         curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
+        // Ensure it has the updated name (for mypaint serialization) -- BUG 445282
+        curPreset->setFilename(presetFileName);
 
         if (!KisResourceUserOperations::updateResourceWithUserInput(this, curPreset)) {
             success = false;

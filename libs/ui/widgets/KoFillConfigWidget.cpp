@@ -468,6 +468,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
                 setNewMeshGradientBackgroundToShape();
             } else {
                 createNewMeshGradientBackground();
+                setNewMeshGradientBackgroundToShape();
             }
             break;
     }

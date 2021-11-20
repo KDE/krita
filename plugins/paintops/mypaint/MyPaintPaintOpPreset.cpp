@@ -36,8 +36,9 @@ public:
 };
 
 KisMyPaintPaintOpPreset::KisMyPaintPaintOpPreset(const QString &fileName)
-    : KisPaintOpPreset (fileName), d(new Private) {
-
+    : KisPaintOpPreset(fileName)
+    , d(new Private)
+{
     d->brush = mypaint_brush_new();
     mypaint_brush_from_defaults(d->brush);
 }
@@ -135,8 +136,9 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
         if (KisPaintOpPreset::loadFromDevice(dev, resourcesInterface)) {
             apply(settings());
             // correct filename
-            if (filename().endsWith(".myb")) {
-                setFilename(name().split(" ").join("_") + KisPaintOpPreset::defaultFileExtension());
+            const QString f = filename();
+            if (f.endsWith(".myb")) {
+                setFilename(QFileInfo(f).completeBaseName().append(KisPaintOpPreset::defaultFileExtension()));
             }
             return true;
         } else {

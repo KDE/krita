@@ -19,6 +19,7 @@ Name[nn]=Skisse
 Name[pl]=Szkic
 Name[pt]=Desenhos
 Name[pt_BR]=Esboço
+Name[sk]=Skica
 Name[sl]=Skica
 Name[sv]=Skissa
 Name[uk]=Ескіз

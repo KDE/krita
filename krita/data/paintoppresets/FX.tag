@@ -19,6 +19,7 @@ Name[nn]=FX
 Name[pl]= Fx
 Name[pt]=FX
 Name[pt_BR]=FX
+Name[sk]=FX
 Name[sl]=Učinki
 Name[sv]=Effekter
 Name[uk]=Ефекти

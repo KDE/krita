@@ -79,6 +79,10 @@ protected:
  * is executed without any recursion. The class tried to resemble new
  * member-function-pointer-based API of QObject::connect.
  *
+ * In case the signal is emitted from the GUI thread, KisSynchronizedConnection
+ * behaves as Qt::AutoConnection, that is, delivers event right away, skipping
+ * the event loop.
+ *
  * Under the hood the class uses a custom event (KisSynchronizedConnectionEvent),
  * which is recognized by KisApplication and postponed until the recursion state
  * is over.

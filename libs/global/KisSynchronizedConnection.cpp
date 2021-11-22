@@ -6,6 +6,7 @@
 
 #include "KisSynchronizedConnection.h"
 
+#include <QThread>
 #include <QCoreApplication>
 #include <kis_assert.h>
 
@@ -70,6 +71,10 @@ bool KisSynchronizedConnectionBase::event(QEvent *event)
 
 void KisSynchronizedConnectionBase::postEvent()
 {
-    qApp->postEvent(this, new KisSynchronizedConnectionEvent(this));
+    if (QThread::currentThread() == this->thread()) {
+        deliverEventToReceiver();
+    } else {
+        qApp->postEvent(this, new KisSynchronizedConnectionEvent(this));
+    }
 }
 

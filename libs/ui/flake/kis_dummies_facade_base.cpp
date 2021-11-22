@@ -44,8 +44,8 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
     if (m_d->image) {
         emit sigActivateNode(0);
         m_d->image->disconnect(this);
-        m_d->nodeChangedConnection.disconnectInputSignals();
-        m_d->activateNodeConnection.disconnectInputSignals();
+        m_d->image->disconnect(&m_d->nodeChangedConnection);
+        m_d->image->disconnect(&m_d->activateNodeConnection);
 
         if (rootDummy()) {
             KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->addNodeConnection.hasPendingSignals());

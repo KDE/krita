@@ -208,7 +208,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         Q_ASSERT(shapeController);
         shapeController->disconnect(SIGNAL(sigActivateNode(KisNodeSP)), this);
         m_d->imageView->image()->disconnect(this);
-        m_d->activateNodeConnection.disconnectInputSignals();
+        m_d->imageView->image()->disconnect(&m_d->activateNodeConnection);
     }
 
     m_d->imageView = imageView;

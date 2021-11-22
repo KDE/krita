@@ -247,7 +247,7 @@ NUBspline_1d_s *
 create_NUBspline_1d_s (NUgrid* x_grid, BCtype_s xBC, float *data)
 {
   // First, create the spline structure
-  NUBspline_1d_s* spline = new NUBspline_1d_s;
+  NUBspline_1d_s* spline = static_cast<NUBspline_1d_s*>(malloc(sizeof(NUBspline_1d_s)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU1D;
@@ -273,7 +273,7 @@ create_NUBspline_2d_s (NUgrid* x_grid, NUgrid* y_grid,
 		       BCtype_s xBC, BCtype_s yBC, float *data)
 {
   // First, create the spline structure
-  NUBspline_2d_s* spline = new NUBspline_2d_s;
+  NUBspline_2d_s* spline = static_cast<NUBspline_2d_s*>(malloc(sizeof(NUBspline_2d_s)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU2D;
@@ -325,7 +325,7 @@ create_NUBspline_3d_s (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 		       BCtype_s xBC, BCtype_s yBC, BCtype_s zBC, float *data)
 {
   // First, create the spline structure
-  NUBspline_3d_s* spline = new NUBspline_3d_s;
+  NUBspline_3d_s* spline = static_cast<NUBspline_3d_s*>(malloc(sizeof(NUBspline_3d_s)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU3D;
@@ -591,7 +591,7 @@ NUBspline_1d_d *
 create_NUBspline_1d_d (NUgrid* x_grid, BCtype_d xBC, double *data)
 {
   // First, create the spline structure
-  NUBspline_1d_d* spline = new NUBspline_1d_d;
+  NUBspline_1d_d* spline = static_cast<NUBspline_1d_d*>(malloc(sizeof(NUBspline_1d_d)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU1D;
@@ -617,7 +617,7 @@ create_NUBspline_2d_d (NUgrid* x_grid, NUgrid* y_grid,
 		       BCtype_d xBC, BCtype_d yBC, double *data)
 {
   // First, create the spline structure
-  NUBspline_2d_d* spline = new NUBspline_2d_d;
+  NUBspline_2d_d* spline = static_cast<NUBspline_2d_d*>(malloc(sizeof(NUBspline_2d_d)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU2D;
@@ -669,7 +669,7 @@ create_NUBspline_3d_d (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 		       BCtype_d xBC, BCtype_d yBC, BCtype_d zBC, double *data)
 {
   // First, create the spline structure
-  NUBspline_3d_d* spline = new NUBspline_3d_d;
+  NUBspline_3d_d* spline = static_cast<NUBspline_3d_d*>(malloc(sizeof(NUBspline_3d_d)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU3D;
@@ -763,7 +763,7 @@ NUBspline_1d_c *
 create_NUBspline_1d_c (NUgrid* x_grid, BCtype_c xBC, complex_float *data)
 {
   // First, create the spline structure
-  NUBspline_1d_c* spline = new NUBspline_1d_c;
+  NUBspline_1d_c* spline = static_cast<NUBspline_1d_c*>(malloc(sizeof(NUBspline_1d_c)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU1D;
@@ -789,7 +789,7 @@ create_NUBspline_2d_c (NUgrid* x_grid, NUgrid* y_grid,
 		       BCtype_c xBC, BCtype_c yBC, complex_float *data)
 {
   // First, create the spline structure
-  NUBspline_2d_c* spline = new NUBspline_2d_c;
+  NUBspline_2d_c* spline = static_cast<NUBspline_2d_c*>(malloc(sizeof(NUBspline_2d_c)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU2D;
@@ -840,7 +840,7 @@ create_NUBspline_3d_c (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 		       BCtype_c xBC, BCtype_c yBC, BCtype_c zBC, complex_float *data)
 {
   // First, create the spline structure
-  NUBspline_3d_c* spline = new NUBspline_3d_c;
+  NUBspline_3d_c* spline = static_cast<NUBspline_3d_c*>(malloc(sizeof(NUBspline_3d_c)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU3D;
@@ -932,7 +932,7 @@ NUBspline_1d_z *
 create_NUBspline_1d_z (NUgrid* x_grid, BCtype_z xBC, complex_double *data)
 {
   // First, create the spline structure
-  NUBspline_1d_z* spline = new NUBspline_1d_z;
+  NUBspline_1d_z* spline = static_cast<NUBspline_1d_z*>(malloc(sizeof(NUBspline_1d_z)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU1D;
@@ -958,7 +958,7 @@ create_NUBspline_2d_z (NUgrid* x_grid, NUgrid* y_grid,
 		       BCtype_z xBC, BCtype_z yBC, complex_double *data)
 {
   // First, create the spline structure
-  NUBspline_2d_z* spline = new NUBspline_2d_z;
+  NUBspline_2d_z* spline = static_cast<NUBspline_2d_z*>(malloc(sizeof(NUBspline_2d_z)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU2D;
@@ -1009,7 +1009,7 @@ create_NUBspline_3d_z (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 		       BCtype_z xBC, BCtype_z yBC, BCtype_z zBC, complex_double *data)
 {
   // First, create the spline structure
-  NUBspline_3d_z* spline = new NUBspline_3d_z;
+  NUBspline_3d_z* spline = static_cast<NUBspline_3d_z*>(malloc(sizeof(NUBspline_3d_z)));
   if (spline == NULL)
     return spline;
   spline->sp_code = NU3D;
@@ -1112,6 +1112,6 @@ destroy_NUBspline(Bspline *spline)
   default:
       ;
   }
-  delete spline;
+  free(spline);
 }
     

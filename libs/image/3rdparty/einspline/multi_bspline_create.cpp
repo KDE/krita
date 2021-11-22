@@ -87,7 +87,7 @@ multi_UBspline_1d_s*
 create_multi_UBspline_1d_s (Ugrid x_grid, BCtype_s xBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_1d_s* restrict spline = new multi_UBspline_1d_s;
+  multi_UBspline_1d_s* restrict spline = static_cast<multi_UBspline_1d_s*>(malloc(sizeof(multi_UBspline_1d_s)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_1d_s.\n");
     abort();
@@ -152,7 +152,7 @@ create_multi_UBspline_2d_s (Ugrid x_grid, Ugrid y_grid,
 			    BCtype_s xBC, BCtype_s yBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_2d_s* restrict spline = new multi_UBspline_2d_s;
+  multi_UBspline_2d_s* restrict spline = static_cast<multi_UBspline_2d_s*>(malloc(sizeof(multi_UBspline_2d_s)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_2d_s.\n");
     abort();
@@ -253,7 +253,7 @@ create_multi_UBspline_3d_s (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 			    int num_splines)
 {
   // Create new spline
-  multi_UBspline_3d_s* restrict spline = new multi_UBspline_3d_s;
+  multi_UBspline_3d_s* restrict spline = static_cast<multi_UBspline_3d_s*>(malloc(sizeof(multi_UBspline_3d_s)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_3d_s.\n");
     abort();
@@ -388,7 +388,7 @@ multi_UBspline_1d_c*
 create_multi_UBspline_1d_c (Ugrid x_grid, BCtype_c xBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_1d_c* restrict spline = new multi_UBspline_1d_c;
+  multi_UBspline_1d_c* restrict spline = static_cast<multi_UBspline_1d_c*>(malloc(sizeof(multi_UBspline_1d_c)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_1d_c.\n");
     abort();
@@ -456,7 +456,7 @@ create_multi_UBspline_2d_c (Ugrid x_grid, Ugrid y_grid,
 			    BCtype_c xBC, BCtype_c yBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_2d_c* restrict spline = new multi_UBspline_2d_c;
+  multi_UBspline_2d_c* restrict spline = static_cast<multi_UBspline_2d_c*>(malloc(sizeof(multi_UBspline_2d_c)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_2d_c.\n");
     abort();
@@ -578,7 +578,7 @@ create_multi_UBspline_3d_c (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      int num_splines)
 {
   // Create new spline
-  multi_UBspline_3d_c* restrict spline = new multi_UBspline_3d_c;
+  multi_UBspline_3d_c* restrict spline = static_cast<multi_UBspline_3d_c*>(malloc(sizeof(multi_UBspline_3d_c)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_3d_c.\n");
     abort();
@@ -766,7 +766,7 @@ multi_UBspline_1d_d*
 create_multi_UBspline_1d_d (Ugrid x_grid, BCtype_d xBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_1d_d* restrict spline = new multi_UBspline_1d_d;
+  multi_UBspline_1d_d* restrict spline = static_cast<multi_UBspline_1d_d*>(malloc(sizeof(multi_UBspline_1d_d)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_1d_d.\n");
     abort();
@@ -840,7 +840,7 @@ create_multi_UBspline_2d_d (Ugrid x_grid, Ugrid y_grid,
 			    BCtype_d xBC, BCtype_d yBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_2d_d* restrict spline = new multi_UBspline_2d_d;
+  multi_UBspline_2d_d* restrict spline = static_cast<multi_UBspline_2d_d*>(malloc(sizeof(multi_UBspline_2d_d)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_2d_d.\n");
     abort();
@@ -947,7 +947,7 @@ create_multi_UBspline_3d_d (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 #ifdef HAVE_POSIX_MEMALIGN
   posix_memalign ((void**)&spline, 64, (size_t)sizeof(multi_UBspline_3d_d));
 #else
-  spline = new multi_UBspline_3d_d;
+  spline = static_cast<multi_UBspline_3d_d*>(malloc(sizeof(multi_UBspline_3d_d)));
 #endif
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_3d_d.\n");
@@ -1090,7 +1090,7 @@ multi_UBspline_1d_z*
 create_multi_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_1d_z* restrict spline = new multi_UBspline_1d_z;
+  multi_UBspline_1d_z* restrict spline = static_cast<multi_UBspline_1d_z*>(malloc(sizeof(multi_UBspline_1d_z)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_1d_z.\n");
     abort();
@@ -1200,7 +1200,7 @@ create_multi_UBspline_2d_z (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_z xBC, BCtype_z yBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_2d_z* restrict spline = new multi_UBspline_2d_z;
+  multi_UBspline_2d_z* restrict spline = static_cast<multi_UBspline_2d_z*>(malloc(sizeof(multi_UBspline_2d_z)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_2d_z.\n");
     abort();
@@ -1320,7 +1320,7 @@ create_multi_UBspline_3d_z (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 			    int num_splines)
 {
   // Create new spline
-  multi_UBspline_3d_z* restrict spline = new multi_UBspline_3d_z;
+  multi_UBspline_3d_z* restrict spline = static_cast<multi_UBspline_3d_z*>(malloc(sizeof(multi_UBspline_3d_z)));
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_3d_z.\n");
     abort();
@@ -1481,5 +1481,5 @@ void
 destroy_multi_UBspline (Bspline *spline)
 {
   free(spline->coefs);
-  delete spline;
+  free(spline);
 }

@@ -8,6 +8,7 @@
 
 #include "kis_image.h"
 #include "kis_node_dummies_graph.h"
+#include "kis_layer_utils.h"
 #include <KisSynchronizedConnection.h>
 
 struct KisDummiesFacadeBase::Private
@@ -46,7 +47,24 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         m_d->nodeChangedConnection.disconnectInputSignals();
         m_d->activateNodeConnection.disconnectInputSignals();
 
-        slotRemoveNode(m_d->image->root());
+        if (rootDummy()) {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->addNodeConnection.hasPendingSignals());
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->removeNodeConnection.hasPendingSignals());
+
+            KisNodeList nodesToRemove;
+
+            KisLayerUtils::recursiveApplyNodes(rootDummy(),
+                [&nodesToRemove] (KisNodeDummy *dummy) {
+                    nodesToRemove << dummy->node();
+                });
+
+            for (auto it = std::make_reverse_iterator(nodesToRemove.end());
+                 it != std::make_reverse_iterator(nodesToRemove.begin());
+                 ++it) {
+
+                m_d->removeNodeConnection.start(*it);
+            }
+        }
     }
 
     m_d->image = image;

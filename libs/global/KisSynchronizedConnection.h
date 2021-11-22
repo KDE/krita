@@ -18,6 +18,8 @@
 #include <boost/bind.hpp>
 #include <kis_assert.h>
 #include <QPointer>
+#include <QMutex>
+#include <QMutexLocker>
 
 /**
  * @brief Event type used for synchronizing connection in KisSynchronizedConnection
@@ -130,6 +132,8 @@ public:
      * Triggers the delivery of the signal to the destination slot manualy
      */
     void start(const Args &...argsTuple) {
+        QMutexLocker l(&m_inputConnectionMutex);
+
         m_queue.emplace(std::make_tuple(argsTuple...));
         this->postEvent();
     }
@@ -154,7 +158,7 @@ public:
         static_assert (std::is_convertible<Dptr, const QObject*>::value, "Source object should be convertible into QObject");
 
         QObject::connect(static_cast<const C*>(object), memfn,
-                         this, &KisSynchronizedConnection::start);
+                         this, &KisSynchronizedConnection::start, Qt::DirectConnection);
     }
 
     /**
@@ -185,14 +189,6 @@ public:
 
         connectInputSignal(object1, memfn1);
         connectOutputSlot(object2, memfn2);
-   }
-
-    void disconnectInputSignals() {
-        this->disconnect();
-    }
-
-    void disconnectOutputSlot() {
-        m_callback = CallbackFunction();
     }
 
     bool hasPendingSignals() const {
@@ -219,6 +215,7 @@ protected:
 private:
     CallbackFunction m_callback;
     std::queue<ArgsTuple> m_queue;
+    QMutex m_inputConnectionMutex;
 };
 
 #endif // KISSYNCHRONIZEDCONNECTION_H

@@ -195,6 +195,10 @@ public:
         m_callback = CallbackFunction();
     }
 
+    bool hasPendingSignals() const {
+        return !m_queue.empty();
+    }
+
 private:
 
     template <typename Dptr, typename C, typename R, typename ...MemFnArgs, std::size_t ...Idx>

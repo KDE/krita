@@ -184,7 +184,7 @@ public:
    }
 
     void disconnectInputSignals() {
-        this->disconnect(0, 0, this, 0);
+        this->disconnect();
     }
 
     void disconnectOutputSlot() {

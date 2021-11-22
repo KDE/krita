@@ -17,6 +17,7 @@
 #include <queue>
 #include <boost/bind.hpp>
 #include <kis_assert.h>
+#include <QPointer>
 
 /**
  * @brief Event type used for synchronizing connection in KisSynchronizedConnection
@@ -28,8 +29,9 @@ struct KRITAGLOBAL_EXPORT KisSynchronizedConnectionEvent : public QEvent
 {
     KisSynchronizedConnectionEvent(QObject *_destination);
     KisSynchronizedConnectionEvent(const KisSynchronizedConnectionEvent &rhs);
+    ~KisSynchronizedConnectionEvent();
 
-    QObject * const destination = nullptr;
+    const QPointer<QObject> destination;
 };
 
 /**

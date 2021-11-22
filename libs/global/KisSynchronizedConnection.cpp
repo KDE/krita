@@ -41,6 +41,10 @@ KisSynchronizedConnectionEvent::KisSynchronizedConnectionEvent(const KisSynchron
 {
 }
 
+KisSynchronizedConnectionEvent::~KisSynchronizedConnectionEvent()
+{
+}
+
 /************************************************************************/
 /*            KisSynchronizedConnectionBase                             */
 /************************************************************************/

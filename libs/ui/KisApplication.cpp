@@ -116,6 +116,42 @@ namespace {
 const QTime appStartTime(QTime::currentTime());
 }
 
+namespace {
+struct AppRecursionInfo {
+    ~AppRecursionInfo() {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!eventRecursionCount);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(postponedSynchronizationEvents.empty());
+    }
+
+    int eventRecursionCount {0};
+    std::queue<KisSynchronizedConnectionEvent> postponedSynchronizationEvents;
+};
+
+struct AppRecursionGuard {
+    AppRecursionGuard(AppRecursionInfo *info)
+        : m_info(info)
+    {
+        m_info->eventRecursionCount++;
+    }
+
+    ~AppRecursionGuard()
+    {
+        m_info->eventRecursionCount--;
+    }
+private:
+    AppRecursionInfo *m_info {0};
+};
+
+}
+
+/**
+ * We cannot make the recursion info be a part of KisApplication,
+ * because KisApplication also owns QQmlThread, which is destroyed
+ * after KisApplication::Private, which makes QThreadStorage spit
+ * a warning about being destroyed too early
+ */
+Q_GLOBAL_STATIC(QThreadStorage<AppRecursionInfo>, s_recursionInfo)
+
 class KisApplication::Private
 {
 public:
@@ -126,33 +162,6 @@ public:
     bool batchRun {false};
     QVector<QByteArray> earlyRemoteArguments;
     QVector<QString> earlyFileOpenEvents;
-
-    struct RecursionInfo {
-        ~RecursionInfo() {
-            KIS_SAFE_ASSERT_RECOVER_NOOP(!eventRecursionCount);
-            KIS_SAFE_ASSERT_RECOVER_NOOP(postponedSynchronizationEvents.empty());
-        }
-
-        int eventRecursionCount {0};
-        std::queue<KisSynchronizedConnectionEvent> postponedSynchronizationEvents;
-    };
-
-    struct RecursionGuard {
-        RecursionGuard(RecursionInfo *info)
-            : m_info(info)
-        {
-            m_info->eventRecursionCount++;
-        }
-
-        ~RecursionGuard()
-        {
-            m_info->eventRecursionCount--;
-        }
-    private:
-        RecursionInfo *m_info {0};
-    };
-
-    QThreadStorage<RecursionInfo> recursionInfo;
 };
 
 class KisApplication::ResetStarting
@@ -727,11 +736,11 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
          * any thread, so we need to make sure our counters and postponed events
          * queues are stored in a per-thread way.
          */
-        Private::RecursionInfo &info = d->recursionInfo.localData();
+        AppRecursionInfo &info = s_recursionInfo->localData();
 
         {
             // QApplication::notify() can throw, so use RAII for counters
-            Private::RecursionGuard guard(&info);
+            AppRecursionGuard guard(&info);
 
             if (event->type() == KisSynchronizedConnectionBase::eventType()) {
 
@@ -751,7 +760,7 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
         if (!info.eventRecursionCount) {
             while (!info.postponedSynchronizationEvents.empty()) {
                 // QApplication::notify() can throw, so use RAII for counters
-                Private::RecursionGuard guard(&info);
+                AppRecursionGuard guard(&info);
 
                 /// We must pop event from the queue **before** we call
                 /// QApplication::notify(), because it can throw!

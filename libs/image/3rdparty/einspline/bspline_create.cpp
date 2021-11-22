@@ -335,7 +335,7 @@ UBspline_1d_s*
 create_UBspline_1d_s (Ugrid x_grid, BCtype_s xBC, float *data)
 {
   // Create new spline
-  UBspline_1d_s* restrict spline = new UBspline_1d_s;
+  UBspline_1d_s* restrict spline = static_cast<UBspline_1d_s*>(malloc(sizeof(UBspline_1d_s)));
   spline->spcode = U1D;
   spline->tcode  = SINGLE_REAL;
   spline->xBC = xBC; spline->x_grid = x_grid;
@@ -377,8 +377,8 @@ UBspline_2d_s*
 create_UBspline_2d_s (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_s xBC, BCtype_s yBC, float *data)
 {
-  // Create new spline
-  UBspline_2d_s* restrict spline = new UBspline_2d_s;
+    // Create new spline
+  UBspline_2d_s* restrict spline = static_cast<UBspline_2d_s*>(malloc(sizeof(UBspline_2d_s)));
   spline->spcode = U2D;
   spline->tcode  = SINGLE_REAL;
   spline->xBC = xBC; 
@@ -461,7 +461,7 @@ create_UBspline_3d_s (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      float *data)
 {
   // Create new spline
-  UBspline_3d_s* restrict spline = new UBspline_3d_s;
+  UBspline_3d_s* restrict spline = static_cast<UBspline_3d_s*>(malloc(sizeof(UBspline_3d_s)));
   spline->spcode = U3D;
   spline->tcode  = SINGLE_REAL;
   spline->xBC = xBC; 
@@ -588,7 +588,7 @@ UBspline_1d_c*
 create_UBspline_1d_c (Ugrid x_grid, BCtype_c xBC, complex_float *data)
 {
   // Create new spline
-  UBspline_1d_c* restrict spline = new UBspline_1d_c;
+  UBspline_1d_c* restrict spline = static_cast<UBspline_1d_c*>(malloc(sizeof(UBspline_1d_c)));
   spline->spcode = U1D;
   spline->tcode  = SINGLE_COMPLEX;
   spline->xBC = xBC; 
@@ -654,7 +654,7 @@ create_UBspline_2d_c (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_c xBC, BCtype_c yBC, complex_float *data)
 {
   // Create new spline
-  UBspline_2d_c* restrict spline = new UBspline_2d_c;
+  UBspline_2d_c* restrict spline = static_cast<UBspline_2d_c*>(malloc(sizeof(UBspline_2d_c)));
   spline->spcode = U2D;
   spline->tcode  = SINGLE_COMPLEX;
   spline->xBC = xBC; 
@@ -779,7 +779,7 @@ create_UBspline_3d_c (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      complex_float *data)
 {
   // Create new spline
-  UBspline_3d_c* restrict spline = new UBspline_3d_c;
+  UBspline_3d_c* restrict spline = static_cast<UBspline_3d_c*>(malloc(sizeof(UBspline_3d_c)));
   spline->spcode = U3D;
   spline->tcode  = SINGLE_COMPLEX;
   spline->xBC = xBC; 
@@ -1210,7 +1210,7 @@ UBspline_1d_d*
 create_UBspline_1d_d (Ugrid x_grid, BCtype_d xBC, double *data)
 {
   // Create new spline
-  UBspline_1d_d* restrict spline = new UBspline_1d_d;
+  UBspline_1d_d* restrict spline = static_cast<UBspline_1d_d*>(malloc(sizeof(UBspline_1d_d)));
   spline->spcode = U1D;
   spline->tcode  = DOUBLE_REAL;
   spline->xBC = xBC; 
@@ -1254,7 +1254,7 @@ create_UBspline_2d_d (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_d xBC, BCtype_d yBC, double *data)
 {
   // Create new spline
-  UBspline_2d_d* restrict spline = new UBspline_2d_d;
+  UBspline_2d_d* restrict spline = static_cast<UBspline_2d_d*>(malloc(sizeof(UBspline_2d_d)));
   spline->spcode = U2D;
   spline->tcode  = DOUBLE_REAL;
   spline->xBC = xBC; 
@@ -1345,7 +1345,7 @@ create_UBspline_3d_d (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      double *data)
 {
   // Create new spline
-  UBspline_3d_d* restrict spline = new UBspline_3d_d;
+  UBspline_3d_d* restrict spline = static_cast<UBspline_3d_d*>(malloc(sizeof(UBspline_3d_d)));
   spline->spcode = U3D;
   spline->tcode  = DOUBLE_REAL;
   spline->xBC = xBC; 
@@ -1482,7 +1482,7 @@ UBspline_1d_z*
 create_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, complex_double *data)
 {
   // Create new spline
-  UBspline_1d_z* restrict spline = new UBspline_1d_z;
+  UBspline_1d_z* restrict spline = static_cast<UBspline_1d_z*>(malloc(sizeof(UBspline_1d_z)));
   spline->spcode = U1D;
   spline->tcode  = DOUBLE_COMPLEX;
   spline->xBC = xBC; 
@@ -1555,7 +1555,7 @@ create_UBspline_2d_z (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_z xBC, BCtype_z yBC, complex_double *data)
 {
   // Create new spline
-  UBspline_2d_z* restrict spline = new UBspline_2d_z;
+  UBspline_2d_z* restrict spline = static_cast<UBspline_2d_z*>(malloc(sizeof(UBspline_2d_z)));
   spline->spcode = U2D;
   spline->tcode  = DOUBLE_COMPLEX;
   spline->xBC = xBC; 
@@ -1686,7 +1686,7 @@ create_UBspline_3d_z (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      complex_double *data)
 {
   // Create new spline
-  UBspline_3d_z* restrict spline = new UBspline_3d_z;
+  UBspline_3d_z* restrict spline = static_cast<UBspline_3d_z*>(malloc(sizeof(UBspline_3d_z)));
   spline->spcode = U3D;
   spline->tcode  = DOUBLE_COMPLEX;
   spline->xBC = xBC; 
@@ -1859,7 +1859,7 @@ void
 destroy_UBspline (Bspline *spline)
 {
   free(spline->coefs);
-  delete spline;
+  free(spline);
 }
 
 void 

@@ -758,6 +758,11 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
                 KisSynchronizedConnectionEvent typedEvent = info.postponedSynchronizationEvents.front();
                 info.postponedSynchronizationEvents.pop();
 
+                if (!typedEvent.destination) {
+                    qWarning() << "WARNING: the destination object of KisSynchronizedConnection has been destroyed during postponed delivery";
+                    continue;
+                }
+
                 QApplication::notify(typedEvent.destination, &typedEvent);
             }
         }

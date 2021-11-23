@@ -273,6 +273,7 @@ bool KisToolFreehand::trySampleByPaintOp(KoPointerEvent *event, AlternateAction 
                              event->tangentialPressure(),
                              perspective, 0, 0);
     info.setRandomSource(new KisRandomSource());
+    info.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
 
     bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->mousePressEvent(info,
                                                                                    event->modifiers(),

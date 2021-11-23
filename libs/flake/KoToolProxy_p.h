@@ -10,6 +10,8 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QPointF>
+#include <KoPointerEvent.h>
+#include <boost/optional.hpp>
 
 class KoPointerEvent;
 class KoToolBase;
@@ -33,7 +35,6 @@ public:
     void setCanvasController(KoCanvasController *controller);
 
     KoToolBase *activeTool {0};
-    bool tabletPressed {false};
     bool hasSelection {false};
     QTimer scrollTimer;
     QPoint widgetScrollPoint;
@@ -52,6 +53,8 @@ public:
     int multiClickCount {0};
     QPointF multiClickGlobalPoint;
     QElapsedTimer multiClickTimeStamp;
+
+    boost::optional<KoPointerEventWrapper> lastPointerEvent;
 };
 
 #endif

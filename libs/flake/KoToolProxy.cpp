@@ -155,21 +155,15 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     KoPointerEvent ev(event, point);
     switch (event->type()) {
     case QEvent::TabletPress:
-        ev.setTabletButton(Qt::LeftButton);
-        if (!d->tabletPressed && d->activeTool)
+        if (d->activeTool)
             d->activeTool->mousePressEvent(&ev);
-        d->tabletPressed = true;
         break;
     case QEvent::TabletRelease:
-        ev.setTabletButton(Qt::LeftButton);
-        d->tabletPressed = false;
         d->scrollTimer.stop();
         if (d->activeTool)
             d->activeTool->mouseReleaseEvent(&ev);
         break;
     case QEvent::TabletMove:
-        if (d->tabletPressed)
-            ev.setTabletButton(Qt::LeftButton);
         if (d->activeTool)
             d->activeTool->mouseMoveEvent(&ev);
         d->checkAutoScroll(ev);
@@ -178,6 +172,7 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     }
 
     d->mouseLeaveWorkaround = true;
+    d->lastPointerEvent = ev.deepCopyEvent();
 }
 
 void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
@@ -192,7 +187,6 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
     // before a release event happens
     if (d->isToolPressed) {
         mouseReleaseEvent(ev);
-        d->tabletPressed = false;
         d->scrollTimer.stop();
 
         if (d->activeTool) {
@@ -247,12 +241,14 @@ void KoToolProxy::mousePressEvent(QMouseEvent *event, const QPointF &point)
 {
     KoPointerEvent ev(event, point);
     mousePressEvent(&ev);
+    d->lastPointerEvent = ev.deepCopyEvent();
 }
 
 void KoToolProxy::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point)
 {
     KoPointerEvent ev(event, point);
     mouseDoubleClickEvent(&ev);
+    d->lastPointerEvent = ev.deepCopyEvent();
 }
 
 void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -265,6 +261,7 @@ void KoToolProxy::mouseMoveEvent(QMouseEvent *event, const QPointF &point)
 {
     KoPointerEvent ev(event, point);
     mouseMoveEvent(&ev);
+    d->lastPointerEvent = ev.deepCopyEvent();
 }
 
 void KoToolProxy::mouseMoveEvent(KoPointerEvent *event)
@@ -289,6 +286,7 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
 {
     KoPointerEvent ev(event, point);
     mouseReleaseEvent(&ev);
+    d->lastPointerEvent = ev.deepCopyEvent();
 }
 
 void KoToolProxy::mouseReleaseEvent(KoPointerEvent* event)
@@ -387,6 +385,13 @@ void KoToolProxy::touchEvent(QTouchEvent* event, const QPointF& point)
     default: // don't care
         ;
     }
+
+    d->lastPointerEvent = ev.deepCopyEvent();
+}
+
+KoPointerEvent *KoToolProxy::lastDeliveredPointerEvent() const
+{
+    return d->lastPointerEvent ? &(d->lastPointerEvent->event) : 0;
 }
 
 void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)

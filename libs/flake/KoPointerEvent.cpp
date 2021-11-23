@@ -3,6 +3,7 @@
    SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
    SPDX-FileCopyrightText: 2006 C. Boemann Rasmussen <cbo@boemann.dk>
    SPDX-FileCopyrightText: 2006-2007 Thomas Zander <zander@kde.org>
+   SPDX-FileCopyrightText: 2021 Dmitry Kazakov <dimula73@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -12,231 +13,377 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <cmath>
+#include <boost/variant2/variant.hpp>
+
+namespace detail {
+
+// Qt's events do not have copy-ctors yet, so we should emulate them
+// See https://bugreports.qt.io/browse/QTBUG-72488
+
+template <class Event> void copyEventHack(const Event *src, QScopedPointer<QEvent> &dst);
+
+template<> void copyEventHack(const QMouseEvent *src, QScopedPointer<QEvent> &dst) {
+    QMouseEvent *tmp = new QMouseEvent(src->type(),
+                                       src->localPos(), src->windowPos(), src->screenPos(),
+                                       src->button(), src->buttons(), src->modifiers(),
+                                       src->source());
+    tmp->setTimestamp(src->timestamp());
+    dst.reset(tmp);
+}
+
+template<> void copyEventHack(const QTabletEvent *src, QScopedPointer<QEvent> &dst) {
+    QTabletEvent *tmp = new QTabletEvent(src->type(),
+                                         src->posF(), src->globalPosF(),
+                                         src->device(), src->pointerType(),
+                                         src->pressure(),
+                                         src->xTilt(), src->yTilt(),
+                                         src->tangentialPressure(),
+                                         src->rotation(),
+                                         src->z(),
+                                         src->modifiers(),
+                                         src->uniqueId(),
+                                         src->button(), src->buttons());
+    tmp->setTimestamp(src->timestamp());
+    dst.reset(tmp);
+}
+
+template<> void copyEventHack(const QTouchEvent *src, QScopedPointer<QEvent> &dst) {
+    QTouchEvent *tmp = new QTouchEvent(src->type(),
+                                       src->device(),
+                                       src->modifiers(),
+                                       src->touchPointStates(),
+                                       src->touchPoints());
+    tmp->setTimestamp(src->timestamp());
+    dst.reset(tmp);
+}
+
+}
 
 class Q_DECL_HIDDEN KoPointerEvent::Private
 {
 public:
-    Private()
-        : tabletEvent(0)
-        , mouseEvent(0)
-        , touchEvent(0)
-        , tabletButton(Qt::NoButton)
-        , globalPos(0, 0)
-        , pos(0, 0)
-        , posZ(0)
-        , rotationX(0)
-        , rotationY(0)
-        , rotationZ(0)
-    {}
+    template <typename Event>
+    Private(Event *event)
+        : eventPtr(event)
+    {
+    }
 
-    QTabletEvent *tabletEvent;
-    QMouseEvent *mouseEvent;
-    QTouchEvent *touchEvent;
-    Qt::MouseButton tabletButton;
-    QPoint globalPos, pos;
-    int posZ;
-    int rotationX, rotationY, rotationZ;
+    boost::variant2::variant<QMouseEvent*, QTabletEvent*, QTouchEvent*> eventPtr;
 };
 
 KoPointerEvent::KoPointerEvent(QMouseEvent *ev, const QPointF &pnt)
     : point(pnt),
-      m_event(ev),
-      d(new Private())
+      d(new Private(ev))
 {
-    Q_ASSERT(m_event);
-    d->mouseEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(QTabletEvent *ev, const QPointF &pnt)
     : point(pnt),
-      m_event(ev),
-      d(new Private())
+      d(new Private(ev))
 {
-    Q_ASSERT(m_event);
-    d->tabletEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(QTouchEvent* ev, const QPointF &pnt)
-    : point(pnt)
-    , m_event(ev)
-    , d(new Private)
+    : point(pnt),
+      d(new Private(ev))
 {
-    Q_ASSERT(m_event);
-    d->touchEvent = ev;
-    d->pos = ev->touchPoints().at(0).pos().toPoint();
 }
 
 KoPointerEvent::KoPointerEvent(KoPointerEvent *event, const QPointF &point)
     : point(point)
-    , touchPoints(event->touchPoints)
-    , m_event(event->m_event)
     , d(new Private(*(event->d)))
 {
-    Q_ASSERT(m_event);
 }
 
 KoPointerEvent::KoPointerEvent(const KoPointerEvent &rhs)
     : point(rhs.point)
-    , touchPoints(rhs.touchPoints)
-    , m_event(rhs.m_event)
-    , d(new Private(*rhs.d))
+    , d(new Private(*(rhs.d)))
 {
+}
+
+KoPointerEvent &KoPointerEvent::operator=(const KoPointerEvent &rhs)
+{
+    if (&rhs != this) {
+        *d = *rhs.d;
+        point = rhs.point;
+    }
+
+    return *this;
 }
 
 KoPointerEvent::~KoPointerEvent()
 {
-    delete d;
+}
+
+template <typename Event>
+KoPointerEventWrapper::KoPointerEventWrapper(Event *_event, const QPointF &point)
+    : event(_event, point),
+      baseQtEvent(QSharedPointer<QEvent>(static_cast<QEvent*>(_event)))
+{
+}
+
+struct DeepCopyVisitor
+{
+    QPointF point;
+
+    template <typename T>
+    KoPointerEventWrapper operator() (const T *event) {
+        QScopedPointer<QEvent> baseEvent;
+        detail::copyEventHack(event, baseEvent);
+        return {static_cast<T*>(baseEvent.take()), point};
+    }
+};
+
+KoPointerEventWrapper KoPointerEvent::deepCopyEvent() const
+{
+    return visit(DeepCopyVisitor{point}, d->eventPtr);
 }
 
 Qt::MouseButton KoPointerEvent::button() const
 {
-    if (d->mouseEvent)
-        return d->mouseEvent->button();
-    else if (d->tabletEvent)
-        return d->tabletButton;
-    else if (d->touchEvent)
-        return Qt::LeftButton;
-    else
-        return Qt::NoButton;
+    struct Visitor {
+        Qt::MouseButton operator() (const QMouseEvent *event) {
+            return event->button();
+        }
+        Qt::MouseButton operator() (const QTabletEvent *event) {
+            return event->button();
+        }
+        Qt::MouseButton operator() (const QTouchEvent *) {
+            return Qt::LeftButton;
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
 }
 
 Qt::MouseButtons KoPointerEvent::buttons() const
 {
-    if (d->mouseEvent)
-        return d->mouseEvent->buttons();
-    else if (d->tabletEvent)
-        return d->tabletButton;
-    else if (d->touchEvent)
-        return Qt::LeftButton;
-    return Qt::NoButton;
+    struct Visitor {
+        Qt::MouseButtons operator() (const QMouseEvent *event) {
+            return event->buttons();
+        }
+        Qt::MouseButtons operator() (const QTabletEvent *event) {
+            return event->buttons();
+        }
+        Qt::MouseButtons operator() (const QTouchEvent *) {
+            return Qt::LeftButton;
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
 }
 
 QPoint KoPointerEvent::globalPos() const
 {
-    if (d->mouseEvent)
-        return d->mouseEvent->globalPos();
-    else if (d->tabletEvent)
-        return d->tabletEvent->globalPos();
-    else
-        return d->globalPos;
+    struct Visitor {
+        QPoint operator() (const QMouseEvent *event) {
+            return event->globalPos();
+        }
+        QPoint operator() (const QTabletEvent *event) {
+            return event->globalPos();
+        }
+        QPoint operator() (const QTouchEvent *) {
+            return QPoint();
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
 }
 
 QPoint KoPointerEvent::pos() const
 {
-    if (d->mouseEvent)
-        return d->mouseEvent->pos();
-    else if (d->tabletEvent)
-        return d->tabletEvent->pos();
-    else
-        return d->pos;
-}
+    struct Visitor {
+        QPoint operator() (const QMouseEvent *event) {
+            return event->pos();
+        }
+        QPoint operator() (const QTabletEvent *event) {
+            return event->pos();
+        }
+        QPoint operator() (const QTouchEvent *event) {
+            return event->touchPoints().at(0).pos().toPoint();
+        }
+    };
 
-qreal KoPointerEvent::pressure() const
-{
-    if (d->tabletEvent)
-        return d->tabletEvent->pressure();
-    else
-        return 1.0;
-}
-
-qreal KoPointerEvent::rotation() const
-{
-    if (d->tabletEvent)
-        return d->tabletEvent->rotation();
-    else
-        return 0.0;
-}
-
-qreal KoPointerEvent::tangentialPressure() const
-{
-    if (d->tabletEvent)
-        return std::fmod((d->tabletEvent->tangentialPressure() - (-1.0)) / (1.0 - (-1.0)), 2.0);
-    else
-        return 0.0;
+    return visit(Visitor(), d->eventPtr);
 }
 
 int KoPointerEvent::x() const
 {
-    if (d->tabletEvent)
-        return d->tabletEvent->x();
-    else if (d->mouseEvent)
-        return d->mouseEvent->x();
-    else
-        return pos().x();
-}
-
-int KoPointerEvent::xTilt() const
-{
-    if (d->tabletEvent)
-        return d->tabletEvent->xTilt();
-    else
-        return 0;
+    return pos().x();
 }
 
 int KoPointerEvent::y() const
 {
-    if (d->tabletEvent)
-        return d->tabletEvent->y();
-    else if (d->mouseEvent)
-        return d->mouseEvent->y();
-    else
-        return pos().y();
+    return pos().y();
 }
+
+qreal KoPointerEvent::pressure() const
+{
+    struct Visitor {
+        qreal operator() (const QTabletEvent *event) {
+            return event->pressure();
+        }
+        qreal operator() (...) {
+            return 1.0;
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
+qreal KoPointerEvent::rotation() const
+{
+    struct Visitor {
+        qreal operator() (const QTabletEvent *event) {
+            return event->rotation();
+        }
+        qreal operator() (...) {
+            return 0.0;
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
+qreal KoPointerEvent::tangentialPressure() const
+{
+    struct Visitor {
+        qreal operator() (const QTabletEvent *event) {
+            return std::fmod((event->tangentialPressure() - (-1.0)) / (1.0 - (-1.0)), 2.0);
+        }
+        qreal operator() (...) {
+            return 0.0;
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
+int KoPointerEvent::xTilt() const
+{
+    struct Visitor {
+        int operator() (const QTabletEvent *event) {
+            return event->xTilt();
+        }
+        int operator() (...) {
+            return 0;
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
 
 int KoPointerEvent::yTilt() const
 {
-    if (d->tabletEvent)
-        return d->tabletEvent->yTilt();
-    else
-        return 0;
+    struct Visitor {
+        int operator() (const QTabletEvent *event) {
+            return event->yTilt();
+        }
+        int operator() (...) {
+            return 0;
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
 }
 
 int KoPointerEvent::z() const
 {
-    if (d->tabletEvent)
-        return d->tabletEvent->z();
-    else
-        return 0;
-}
+    struct Visitor {
+        int operator() (const QTabletEvent *event) {
+            return event->z();
+        }
+        int operator() (...) {
+            return 0;
+        }
+    };
 
-int KoPointerEvent::rotationX() const
-{
-    return d->rotationX;
-}
-
-int KoPointerEvent::rotationY() const
-{
-    return d->rotationY;
-}
-
-int KoPointerEvent::rotationZ() const
-{
-    return d->rotationZ;
+    return visit(Visitor(), d->eventPtr);
 }
 
 ulong KoPointerEvent::time() const
 {
-    return static_cast<QInputEvent*>(m_event)->timestamp();
+    struct Visitor {
+        ulong operator() (const QInputEvent *event) {
+            return event->timestamp();
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
 }
 
 bool KoPointerEvent::isTabletEvent()
 {
-    return dynamic_cast<QTabletEvent*>(m_event) != 0;
-}
-
-void KoPointerEvent::setTabletButton(Qt::MouseButton button)
-{
-    d->tabletButton = button;
+    return d->eventPtr.index() == 1;
 }
 
 Qt::KeyboardModifiers KoPointerEvent::modifiers() const
 {
-    if (d->tabletEvent)
-        return d->tabletEvent->modifiers();
-    else if (d->mouseEvent)
-        return d->mouseEvent->modifiers();
-    else if (d->touchEvent)
-        return d->touchEvent->modifiers();
-    else
-        return Qt::NoModifier;
+    struct Visitor {
+        Qt::KeyboardModifiers operator() (const QInputEvent *event) {
+            return event->modifiers();
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
+void KoPointerEvent::accept()
+{
+    struct Visitor {
+        void operator() (QInputEvent *event) {
+            event->accept();
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
+void KoPointerEvent::ignore()
+{
+    struct Visitor {
+        void operator() (QInputEvent *event) {
+            event->ignore();
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
+bool KoPointerEvent::isAccepted() const
+{
+    struct Visitor {
+        bool operator() (const QInputEvent *event) {
+            return event->isAccepted();
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
+bool KoPointerEvent::spontaneous() const
+{
+    struct Visitor {
+        bool operator() (const QInputEvent *event) {
+            return event->spontaneous();
+        }
+    };
+
+    return visit(Visitor(), d->eventPtr);
+}
+
+void KoPointerEvent::copyQtPointerEvent(const QMouseEvent *event, QScopedPointer<QEvent> &dst)
+{
+    detail::copyEventHack(event, dst);
+}
+
+void KoPointerEvent::copyQtPointerEvent(const QTabletEvent *event, QScopedPointer<QEvent> &dst)
+{
+    detail::copyEventHack(event, dst);
+}
+
+void KoPointerEvent::copyQtPointerEvent(const QTouchEvent *event, QScopedPointer<QEvent> &dst)
+{
+    detail::copyEventHack(event, dst);
 }

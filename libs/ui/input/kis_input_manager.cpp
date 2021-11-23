@@ -17,6 +17,7 @@
 #include <QWidget>
 
 #include <KoToolManager.h>
+#include <KoPointerEvent.h>
 
 #include "kis_tool_proxy.h"
 
@@ -219,47 +220,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     return eventFilterImpl(event);
 }
 
-// Qt's events do not have copy-ctors yet, so we should emulate them
-// See https://bugreports.qt.io/browse/QTBUG-72488
-
-template <class Event> void copyEventHack(Event *src, QScopedPointer<QEvent> &dst);
-
-template<> void copyEventHack(QMouseEvent *src, QScopedPointer<QEvent> &dst) {
-    QMouseEvent *tmp = new QMouseEvent(src->type(),
-                                       src->localPos(), src->windowPos(), src->screenPos(),
-                                       src->button(), src->buttons(), src->modifiers(),
-                                       src->source());
-    tmp->setTimestamp(src->timestamp());
-    dst.reset(tmp);
-}
-
-template<> void copyEventHack(QTabletEvent *src, QScopedPointer<QEvent> &dst) {
-    QTabletEvent *tmp = new QTabletEvent(src->type(),
-                                         src->posF(), src->globalPosF(),
-                                         src->device(), src->pointerType(),
-                                         src->pressure(),
-                                         src->xTilt(), src->yTilt(),
-                                         src->tangentialPressure(),
-                                         src->rotation(),
-                                         src->z(),
-                                         src->modifiers(),
-                                         src->uniqueId(),
-                                         src->button(), src->buttons());
-    tmp->setTimestamp(src->timestamp());
-    dst.reset(tmp);
-}
-
-template<> void copyEventHack(QTouchEvent *src, QScopedPointer<QEvent> &dst) {
-    QTouchEvent *tmp = new QTouchEvent(src->type(),
-                                       src->device(),
-                                       src->modifiers(),
-                                       src->touchPointStates(),
-                                       src->touchPoints());
-    tmp->setTimestamp(src->timestamp());
-    dst.reset(tmp);
-}
-
-
 template <class Event>
 bool KisInputManager::compressMoveEventCommon(Event *event)
 {
@@ -309,7 +269,7 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
             (!d->matcher.supportsHiResInputEvents() ||
              d->testingCompressBrushEvents)) {
 
-        copyEventHack(event, d->compressedMoveEvent);
+        KoPointerEvent::copyQtPointerEvent(event, d->compressedMoveEvent);
         d->moveEventCompressor.start();
 
         /**
@@ -669,7 +629,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             {
                 d->previousPos = touchEvent->touchPoints().at(0).pos();
                 // we don't want to lose this event
-                copyEventHack(touchEvent, d->originatingTouchBeginEvent);
+                KoPointerEvent::copyQtPointerEvent(touchEvent, d->originatingTouchBeginEvent);
                 d->buttonPressed = false;
                 d->resetCompressor();
             }

@@ -21,6 +21,7 @@
 #include "KoShapeControllerBase.h"
 #include "KoToolSelection.h"
 #include "KoCanvasController.h"
+#include "KoToolProxy.h"
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -54,6 +55,16 @@ bool KoToolBase::isActivated() const
 {
     Q_D(const KoToolBase);
     return d->isActivated;
+}
+
+KoPointerEvent *KoToolBase::lastDeliveredPointerEvent() const
+{
+    Q_D(const KoToolBase);
+
+    if (!d->canvas) return 0;
+    if (!d->canvas->toolProxy()) return 0;
+
+    return d->canvas->toolProxy()->lastDeliveredPointerEvent();
 }
 
 void KoToolBase::activate(const QSet<KoShape *> &shapes)

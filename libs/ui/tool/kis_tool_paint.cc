@@ -624,7 +624,7 @@ bool KisToolPaint::isOutlineEnabled() const
 void KisToolPaint::setOutlineEnabled(bool value)
 {
     m_isOutlineEnabled = value;
-    requestUpdateOutline(m_outlineDocPoint, 0);
+    requestUpdateOutline(m_outlineDocPoint, lastDeliveredPointerEvent());
 }
 
 void KisToolPaint::increaseBrushSize()

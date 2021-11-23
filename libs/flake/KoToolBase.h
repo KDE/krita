@@ -488,6 +488,13 @@ protected:
      */
     bool isActivated() const;
 
+    /**
+     * Returns the last pointer event that was delivered to the canvas, the tool
+     * belongs to. This event might be used as an approximation for the event0
+     * handlers not having their own events, like activate()/deactivate().
+     */
+    KoPointerEvent* lastDeliveredPointerEvent() const;
+
 protected:
     KoToolBase(KoToolBasePrivate &dd);
 

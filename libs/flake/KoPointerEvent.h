@@ -12,6 +12,7 @@
 #define KOPOINTEREVENT_H
 
 #include <QTouchEvent>
+#include <QSharedPointer>
 
 class QTabletEvent;
 class QMouseEvent;
@@ -19,14 +20,7 @@ class QWheelEvent;
 
 #include "kritaflake_export.h"
 
-struct KoTouchPoint
-{
-    QTouchEvent::TouchPoint touchPoint;
-    // the point in document coordinates
-    QPointF lastPoint;
-    QPointF point;
-
-};
+struct KoPointerEventWrapper;
 
 /**
  * KoPointerEvent is a synthetic event that can be built from a mouse,
@@ -58,27 +52,48 @@ public:
 
     KoPointerEvent(KoPointerEvent *event, const QPointF& point);
 
+    ~KoPointerEvent();
+
+    /**
+     * Copies the event object
+     *
+     * The newly created object will still point to the original
+     * QMouseEvent, QTabletEvent or QTouchEvent, so it is not
+     * safe to store such object. If you want to store a KoPointerEvent
+     * object, use deepCopyEvent() instead.
+     */
     KoPointerEvent(const KoPointerEvent &rhs);
 
-    ~KoPointerEvent();
+    /**
+     * Copies the event object
+     *
+     * See a comment in copy constructor for the difference between
+     * deep/shallow copies.
+     */
+    KoPointerEvent& operator=(const KoPointerEvent &rhs);
+
+    /**
+     * Copies KoPointerEvent **and** its underlying Qt event.
+     *
+     * Normal copy-constructor keeps the pointers to the original
+     * Qt event intact, therefore you cannot store this event for
+     * any time longer than the lifetime of the handler for this event.
+     */
+    KoPointerEventWrapper deepCopyEvent() const;
 
     /**
      * For classes that are handed this event, you can choose to accept (default) this event.
      * Acceptance signifies that you have handled this event and found it useful, the effect
      * of that will be that the event will not be handled to other event handlers.
      */
-    inline void accept() {
-        m_event->accept();
-    }
+    void accept();
 
     /**
      * For classes that are handed this event, you can choose to ignore this event.
      * Ignoring this event means you have not handled it and want to allow other event
      * handlers to try to handle it.
      */
-    inline void ignore() {
-        m_event->ignore();
-    }
+    void ignore();
 
     /**
      * Returns the keyboard modifier flags that existed immediately before the event occurred.
@@ -87,14 +102,10 @@ public:
     Qt::KeyboardModifiers modifiers() const;
 
     /// return if the event has been accepted.
-    inline bool isAccepted() const {
-        return m_event->isAccepted();
-    }
+    bool isAccepted() const;
 
     /// return if this event was spontaneous (see QMouseEvent::spontaneous())
-    inline bool spontaneous() const {
-        return m_event->spontaneous();
-    }
+    bool spontaneous() const;
 
     /// return button pressed (see QMouseEvent::button());
     Qt::MouseButton button() const;
@@ -161,23 +172,6 @@ public:
      * this value is always zero. This is <em>not</em> the same as pressure.
      */
     int z() const;
-    /**
-     * Returns the rotation around the X-axis. If the device does not support
-     * this, the value is always zero.
-     */
-    int rotationX() const;
-
-    /**
-     * Returns the rotation around the X-axis. If the device does not support
-     * this, the value is always zero.
-     */
-    int rotationY() const;
-
-    /**
-     * Returns the rotation around the Z-axis. If the device does not support
-     * this, the value is always zero.
-     */
-    int rotationZ() const;
 
     /**
      * Returns the time the event was registered.
@@ -186,28 +180,35 @@ public:
 
 
     /// The point in document coordinates.
-    const QPointF point;
+    QPointF point;
 
-    const QList<KoTouchPoint> touchPoints;
     /**
      * Returns if the event comes from a tablet
      */
     bool isTabletEvent();
 
+public:
+    static void copyQtPointerEvent(const QMouseEvent *event, QScopedPointer<QEvent> &dst);
+    static void copyQtPointerEvent(const QTabletEvent *event, QScopedPointer<QEvent> &dst);
+    static void copyQtPointerEvent(const QTouchEvent *event, QScopedPointer<QEvent> &dst);
+
 protected:
     friend class KoToolProxy;
     friend class KisToolProxy;
     friend class KisScratchPadEventFilter;
-    /// called by KoToolProxy to set which button was pressed.
-    void setTabletButton(Qt::MouseButton button);
 private:
-    KoPointerEvent& operator=(const KoPointerEvent &rhs);
-
-    // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
-    QEvent *m_event;
 
     class Private;
-    Private * const d;
+    const QScopedPointer<Private> d;
+};
+
+struct KRITAFLAKE_EXPORT KoPointerEventWrapper
+{
+    template <typename Event>
+    KoPointerEventWrapper(Event *_event, const QPointF &point);
+
+    KoPointerEvent event;
+    QSharedPointer<QEvent> baseQtEvent;
 };
 
 #endif

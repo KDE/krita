@@ -135,6 +135,8 @@ public:
 
     void touchEvent(QTouchEvent* event, const QPointF& point);
 
+    KoPointerEvent* lastDeliveredPointerEvent() const;
+
     /// \internal
     KoToolProxyPrivate *priv();
 

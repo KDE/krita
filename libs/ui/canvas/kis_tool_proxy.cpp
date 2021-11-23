@@ -50,7 +50,6 @@ KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPo
         *result = true;
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
         KoPointerEvent ev(tabletEvent, docPoint);
-        ev.setTabletButton(Qt::LeftButton);
         return ev;
     }
     case QEvent::MouseButtonPress:

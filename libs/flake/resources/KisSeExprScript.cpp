@@ -26,6 +26,11 @@ KisSeExprScript::KisSeExprScript(const QString &filename)
     : KoResource(filename)
     , d(new Private)
 {
+    setName(name().replace("_", " "));
+    if (name().endsWith(defaultFileExtension())) {
+        const QFileInfo f(name());
+        setName(f.completeBaseName());
+    }
 }
 
 KisSeExprScript::KisSeExprScript(const QImage &image, const QString &script, const QString &name, const QString &folderName)
@@ -124,10 +129,6 @@ bool KisSeExprScript::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP res
 
     buf.close();
 
-    QFileInfo fileinfo(filename());
-    // The name of a SeExpr script is its basename
-    // KoResourceServer uses its filename -- amyspark
-    setName(fileinfo.baseName());
     setValid(true);
     setDirty(false);
 
@@ -191,4 +192,9 @@ void KisSeExprScript::setScript(const QString &script)
 KoResourceSP KisSeExprScript::clone() const
 {
     return KoResourceSP(new KisSeExprScript(*this));
+}
+
+QString KisSeExprScript::name() const
+{
+    return KoResource::name().replace("_", " ");
 }

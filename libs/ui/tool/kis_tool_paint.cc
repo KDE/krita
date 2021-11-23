@@ -794,8 +794,15 @@ QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
+    KisPaintInformation info(convertToPixelCoord(documentPos));
+    info.setCanvasMirroredH(canvas2->coordinatesConverter()->xAxisMirrored());
+    info.setCanvasMirroredV(canvas2->coordinatesConverter()->yAxisMirrored());
+    info.setCanvasRotation(canvas2->coordinatesConverter()->rotationAngle());
+    info.setRandomSource(new KisRandomSource());
+    info.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
+
     QPainterPath path = currentPaintOpPreset()->settings()->
-        brushOutline(KisPaintInformation(convertToPixelCoord(documentPos)),
+        brushOutline(info,
                      outlineMode, converter->effectiveZoom());
 
     return path;

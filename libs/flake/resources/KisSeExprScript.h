@@ -74,6 +74,8 @@ public:
      */
     QString script() const;
 
+    QString name() const override;
+
     /**
      * @brief set SeExpr expression script
      */

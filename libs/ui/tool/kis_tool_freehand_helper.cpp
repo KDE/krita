@@ -721,6 +721,10 @@ KisToolFreehandHelper::getStabilizedPaintInfo(const QQueue<KisPaintInformation> 
                                elapsedStrokeTime(),
                                lastPaintInfo.drawingSpeed());
 
+    result.setCanvasRotation(lastPaintInfo.canvasRotation());
+    result.setCanvasMirroredH(lastPaintInfo.canvasMirroredH());
+    result.setCanvasMirroredV(lastPaintInfo.canvasMirroredV());
+
     if (queue.size() > 1) {
         QQueue<KisPaintInformation>::const_iterator it = queue.constBegin();
         QQueue<KisPaintInformation>::const_iterator end = queue.constEnd();

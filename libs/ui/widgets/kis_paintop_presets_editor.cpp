@@ -384,16 +384,18 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
     // create a new brush preset with the name specified and add to resource provider
     KisResourceModel model(ResourceType::PaintOpPresets);
     KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
-    KisResourceUserOperations::renameResourceWithUserInput(this, properCleanResource, renamedPresetName);
+    const bool success = KisResourceUserOperations::renameResourceWithUserInput(this, properCleanResource, renamedPresetName);
 
-    resourceSelected(curPreset); // refresh and select our freshly renamed resource
     if (isDirty) {
-        m_d->resourceProvider->currentPreset()->setSettings(prevSettings);
-        m_d->resourceProvider->currentPreset()->setDirty(isDirty);
+        properCleanResource.dynamicCast<KisPaintOpPreset>()->setSettings(prevSettings);
+        properCleanResource.dynamicCast<KisPaintOpPreset>()->setDirty(isDirty);
     }
+
+    // refresh and select our freshly renamed resource
+    if (success) resourceSelected(properCleanResource);
+
     m_d->favoriteResManager->updateFavoritePresets();
 
-    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(curPreset->name());
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }
 

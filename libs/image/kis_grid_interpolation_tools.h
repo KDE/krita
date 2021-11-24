@@ -180,35 +180,52 @@ struct PaintDevicePolygonOp
 
         KisFourPointInterpolatorBackward interp(srcPolygon, dstPolygon);
 
-        int y = boundRect.top();
-        interp.setY(y);
+        /**
+         * We need to make sure that the destination polygon is not too small,
+         * otherwise even small rounding will send the src-accessor into
+         * infinity
+         */
+        if (interp.isValid(0.1)) {
+            int y = boundRect.top();
+            interp.setY(y);
 
-        while (dstIt.nextPixel()) {
-            int newY = dstIt.y();
+            while (dstIt.nextPixel()) {
+                int newY = dstIt.y();
 
-            if (y != newY) {
-                y = newY;
-                interp.setY(y);
+                if (y != newY) {
+                    y = newY;
+                    interp.setY(y);
+                }
+
+                QPointF srcPoint(dstIt.x(), y);
+
+                if (clipDstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
+
+                    interp.setX(srcPoint.x());
+                    QPointF dstPoint = interp.getValue();
+
+                    // brain-blowing part:
+                    //
+                    // since the interpolator does the inverted
+                    // transformation we read data from "dstPoint"
+                    // (which is non-transformed) and write it into
+                    // "srcPoint" (which is transformed position)
+
+                    srcAcc->moveTo(dstPoint);
+                    srcAcc->sampledOldRawData(dstIt.rawData());
+                }
             }
 
-            QPointF srcPoint(dstIt.x(), y);
+        } else {
+            srcAcc->moveTo(interp.fallbackSourcePoint());
 
-            if (clipDstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
+            while (dstIt.nextPixel()) {
+                QPointF srcPoint(dstIt.x(), dstIt.y());
 
-                interp.setX(srcPoint.x());
-                QPointF dstPoint = interp.getValue();
-
-                // brain-blowing part:
-                //
-                // since the interpolator does the inverted
-                // transformation we read data from "dstPoint"
-                // (which is non-transformed) and write it into
-                // "srcPoint" (which is transformed position)
-
-                srcAcc->moveTo(dstPoint);
-                srcAcc->sampledOldRawData(dstIt.rawData());
+                if (clipDstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
+                    srcAcc->sampledOldRawData(dstIt.rawData());
+                }
             }
-
         }
 
     }

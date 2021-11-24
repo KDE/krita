@@ -69,7 +69,7 @@ elseif(ANDROID)
               COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Support-Android-NDK-r22b.patch
 
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND <SOURCE_DIR>/build-android.sh --prefix=${PREFIX_ext_boost} --with-libraries=system --boost=1.70.0 --arch=${ANDROID_ABI} ${CMAKE_ANDROID_NDK}
+        BUILD_COMMAND <SOURCE_DIR>/build-android.sh --prefix=${PREFIX_ext_boost} --with-libraries=system --boost=1.71.0 --arch=${ANDROID_ABI} ${CMAKE_ANDROID_NDK}
         INSTALL_COMMAND ""
         INSTALL_DIR ${PREFIX_ext_boost}
 

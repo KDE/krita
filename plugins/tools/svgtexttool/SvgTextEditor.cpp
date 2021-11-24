@@ -68,7 +68,12 @@ class SvgTextEditor::Private
 {
 public:
 
-    Private() {}
+    Private()
+    {
+        // some platform plugins may have set a pixelsize which could create a
+        // conflicting property in QTextCharFormat
+        font.setPointSize(fontSize);
+    }
 
     // collection of last-used properties
     QColor fontColor {Qt::black};

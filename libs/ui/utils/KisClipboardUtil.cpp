@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2019 Dmitrii Utkin <loentar@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -35,6 +36,9 @@
 #include <KisDocument.h>
 
 #include <kis_layer_utils.h>
+#include <kis_clipboard.h>
+#include <kis_import_catcher.h>
+#include <kis_paint_layer.h>
 
 namespace KisClipboardUtil {
 
@@ -82,10 +86,10 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data, const QPoin
             popup.addAction(openManyDocuments);
             popup.addAction(insertAsReferenceImages);
 
-            insertAsNewLayer->setEnabled(kisview->image() && urls.count() == 1);
+            insertAsNewLayer->setEnabled(kisview->image() && (data->hasImage() || urls.count() == 1));
             insertAsNewFileLayer->setEnabled(kisview->image() && urls.count() == 1);
             openInNewDocument->setEnabled(urls.count() == 1);
-            insertAsReferenceImage->setEnabled(kisview->image() && urls.count() == 1);
+            insertAsReferenceImage->setEnabled(kisview->image() && (data->hasImage() || urls.count() == 1));
 
             insertManyLayers->setEnabled(kisview->image() && urls.count() > 1);
             insertManyFileLayers->setEnabled(kisview->image() && urls.count() > 1);
@@ -95,10 +99,33 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data, const QPoin
             popup.addSeparator();
             popup.addAction(cancel);
 
-            QAction *action = popup.exec(QCursor::pos());
-            if (action != 0 && action != cancel) {
-                for (QUrl url : urls) {
+            const QAction *action = popup.exec(QCursor::pos());
 
+            if (data->hasImage() && (action == insertAsNewLayer || action == insertAsReferenceImage)) {
+                KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
+                if (clip) {
+                    KisImportCatcher::adaptClipToImageColorSpace(clip, kisview->image());
+
+                    if (action == insertAsNewLayer) {
+                        KisPaintLayerSP layer = new KisPaintLayer(kisview->image(), "", OPACITY_OPAQUE_U8, clip);
+                        KisNodeCommandsAdapter adapter(kisview->mainWindow()->viewManager());
+                        adapter.addNode(layer,
+                                        kisview->mainWindow()->viewManager()->activeNode()->parent(),
+                                        kisview->mainWindow()->viewManager()->activeNode());
+                        kisview->activateWindow();
+                        return;
+                    } else if (action == insertAsReferenceImage) {
+                        KisReferenceImage *reference =
+                            KisReferenceImage::fromClipboard(*kisview->canvasBase()->coordinatesConverter());
+                        reference->setPosition((*kisview->viewConverter()).imageToDocument(QCursor::pos()));
+                        kisview->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
+
+                        KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                        return;
+                    }
+                }
+            } else if (action != nullptr && action != cancel) {
+                for (QUrl url : urls) { // do copy it
                     QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
                     tmp->setAutoRemove(true);
 
@@ -110,7 +137,7 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data, const QPoin
                             qWarning() << "Fetching" << url << "failed";
                             continue;
                         }
-                        url = url.fromLocalFile(tmp->fileName());
+                        url = QUrl::fromLocalFile(tmp->fileName());
                     }
 
                     if (url.isLocalFile()) {

@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -27,6 +28,7 @@
 #include <KisMimeDatabase.h>
 
 #include <KisPart.h>
+#include <kis_assert.h>
 // kritaimage
 #include <kis_types.h>
 #include <kis_paint_device.h>
@@ -265,20 +267,13 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
     }
 
     if (!clip) {
+        if (cbData->hasImage()) {
+            const QImage qimage = KisClipboardUtil::getImageFromClipboard();
 
-        if (cbData->hasUrls()) {
-            clip = KisClipboardUtil::fetchImageByURL(cbData->urls().first());
-        }
-        else {
-
-            QImage qimage = KisClipboardUtil::getImageFromClipboard();
-
-            if (qimage.isNull()) {
-                return KisPaintDeviceSP(0);
-            }
+            KIS_ASSERT(!qimage.isNull());
 
             KisConfig cfg(true);
-            quint32 behaviour = cfg.pasteBehaviour();
+            int behaviour = cfg.pasteBehaviour();
             bool saveColorSetting = false;
 
 
@@ -310,7 +305,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
                 saveColorSetting = dontPrompt.isChecked(); // should we save this option to the config for next time?
             }
 
-            const KoColorSpace * cs;
+            const KoColorSpace *cs = nullptr;
             const KoColorProfile *profile = destProfile;
             if (!profile && behaviour == PASTE_ASSUME_MONITOR)
                 profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
@@ -329,6 +324,10 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
             if (saveColorSetting) {
                 cfg.setPasteBehaviour(behaviour);
             }
+        }
+
+        if (!clip && cbData->hasUrls()) {
+            clip = KisClipboardUtil::fetchImageByURL(cbData->urls().first());
         }
 
         if (clip && !imageBounds.isEmpty()) {

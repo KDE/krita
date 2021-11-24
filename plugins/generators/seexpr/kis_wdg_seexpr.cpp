@@ -235,14 +235,14 @@ void KisWdgSeExpr::slotSaveRenameCurrentPreset()
     KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
     const bool success = KisResourceUserOperations::renameResourceWithUserInput(this, properCleanResource, renamedPresetName);
 
-
     if (isDirty) {
-        m_currentPreset->setScript(prevScript);
-        m_currentPreset->setDirty(isDirty);
+        properCleanResource.dynamicCast<KisSeExprScript>()->setScript(prevScript);
+        properCleanResource.dynamicCast<KisSeExprScript>()->setDirty(isDirty);
     }
 
     // refresh and select our freshly renamed resource
-    if (success) slotResourceSelected(m_currentPreset);
+    if (success) slotResourceSelected(properCleanResource);
+
 
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }

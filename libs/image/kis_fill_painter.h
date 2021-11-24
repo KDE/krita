@@ -202,6 +202,20 @@ public:
         return m_threshold;
     }
 
+    /**
+     * Set the softness for floodfill. The range is 0-100: 0 means the fill will
+     * have aliased edges, 100 means it will have soft edges.
+     */
+    void setSoftness(int softness)
+    {
+        m_softness = softness;
+    }
+
+    /** Returns the fill softness, see setSoftness for details */
+    int softness() const {
+        return m_softness;
+    }
+
     bool useCompositioning() const {
         return m_useCompositioning;
     }
@@ -272,6 +286,7 @@ private:
     int m_feather;
     int m_sizemod;
     int m_threshold;
+    int m_softness;
     int m_width, m_height;
     QRect m_rect;
     bool m_careForSelection;

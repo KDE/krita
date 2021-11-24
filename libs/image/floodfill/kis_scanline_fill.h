@@ -68,6 +68,13 @@ public:
      */
     void setThreshold(int threshold);
 
+    /**
+     * Set the softness of the filling operation
+     *
+     * Used in all functions except clearNonZeroComponent()
+     */
+    void setSoftness(int softness);
+
 private:
     friend class KisScanlineFillTest;
     Q_DISABLE_COPY(KisScanlineFill)

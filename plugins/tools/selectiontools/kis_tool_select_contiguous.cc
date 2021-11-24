@@ -52,6 +52,7 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
                     KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
                     i18n("Contiguous Area Selection")),
     m_fuzziness(20),
+    m_softness(100),
     m_sizemod(0),
     m_feather(0)
 {
@@ -65,6 +66,10 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 void KisToolSelectContiguous::activate(const QSet<KoShape*> &shapes)
 {
     KisToolSelect::activate(shapes);
+    if (selectionOptionWidget()) {
+        // the antialias option is replaced with the softness
+        selectionOptionWidget()->disableAntiAliasSelectionOption();
+    }
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -118,9 +123,8 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(new KisSelectionDefaultBounds(dev)));
 
-    bool antiAlias = antiAliasSelection();
-
     int fuzziness = m_fuzziness;
+    int softness = m_softness;
     int feather = m_feather;
     int sizemod = m_sizemod;
     bool useSelectionAsBoundary = m_useSelectionAsBoundary;
@@ -139,13 +143,14 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     }
 
     KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-                [dev, rc, fuzziness, feather, sizemod, useSelectionAsBoundary,
-                selection, pos, sourceDevice, antiAlias, existingSelection] () mutable -> KUndo2Command* {
+                [dev, rc, fuzziness, softness, feather, sizemod, useSelectionAsBoundary,
+                selection, pos, sourceDevice, existingSelection] () mutable -> KUndo2Command* {
 
                     KisFillPainter fillpainter(dev);
                     fillpainter.setHeight(rc.height());
                     fillpainter.setWidth(rc.width());
                     fillpainter.setFillThreshold(fuzziness);
+                    fillpainter.setSoftness(softness);
                     fillpainter.setFeather(feather);
                     fillpainter.setSizemod(sizemod);
 
@@ -156,17 +161,6 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
                     fillpainter.setUseSelectionAsBoundary(useSelectionAsBoundary);
                     fillpainter.createFloodSelection(selection, pos.x(), pos.y(), sourceDevice, existingSelection);
-
-                    // If we're not antialiasing, threshold the entire selection
-                    if (!antiAlias) {
-                        const QRect r = selection->selectedExactRect();
-                        KisSequentialIterator it (selection, r);
-                        while(it.nextPixel()) {
-                            if (*it.rawData() > 0) {
-                                *it.rawData() = OPACITY_OPAQUE_U8;
-                            }
-                        }
-                    }
 
                     selection->invalidateOutlineCache();
 
@@ -197,6 +191,12 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
     m_configGroup.writeEntry("fuzziness", fuzziness);
 }
 
+void KisToolSelectContiguous::slotSetSoftness(int softness)
+{
+    m_softness = softness;
+    m_configGroup.writeEntry("softness", softness);
+}
+
 void KisToolSelectContiguous::slotSetSizemod(int sizemod)
 {
     m_sizemod = sizemod;
@@ -220,6 +220,8 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
+    selectionWidget->disableAntiAliasSelectionOption();
+
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     if (l) {
@@ -238,34 +240,46 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         input->setExponentRatio(2);
         gridLayout->addWidget(input, 0, 1, 1, 1);
 
-        lbl = new QLabel(i18n("Grow/shrink selection: "), selectionWidget);
+        lbl = new QLabel(i18n("Softness: "), selectionWidget);
         gridLayout->addWidget(lbl, 1, 0, 1, 1);
+
+        KisSliderSpinBox *sliderSoftness = new KisSliderSpinBox(selectionWidget);
+        Q_CHECK_PTR(sliderSoftness);
+        sliderSoftness->setObjectName("softness");
+        sliderSoftness->setRange(0, 100);
+        sliderSoftness->setSingleStep(1);
+        sliderSoftness->setSuffix(i18n("%"));
+        gridLayout->addWidget(sliderSoftness, 1, 1, 1, 1);
+
+        lbl = new QLabel(i18n("Grow/shrink selection: "), selectionWidget);
+        gridLayout->addWidget(lbl, 2, 0, 1, 1);
 
         KisSliderSpinBox *sizemod = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(sizemod);
         sizemod->setObjectName("sizemod"); //grow/shrink selection
         sizemod->setRange(-40, 40);
         sizemod->setSingleStep(1);
-        gridLayout->addWidget(sizemod, 1, 1, 1, 1);
+        gridLayout->addWidget(sizemod, 2, 1, 1, 1);
 
         lbl = new QLabel(i18n("Feathering radius: "), selectionWidget);
-        gridLayout->addWidget(lbl, 2, 0, 1, 1);
+        gridLayout->addWidget(lbl, 3, 0, 1, 1);
 
         KisSliderSpinBox *feather = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(feather);
         feather->setObjectName("feathering");
         feather->setRange(0, 40);
         feather->setSingleStep(1);
-        gridLayout->addWidget(feather, 2, 1, 1, 1);
+        gridLayout->addWidget(feather, 3, 1, 1, 1);
 
         lbl = new QLabel(i18n("Use selection as boundary: "), selectionWidget);
-        gridLayout->addWidget(lbl, 3, 0, 1, 1);
+        gridLayout->addWidget(lbl, 4, 0, 1, 1);
 
         QCheckBox *useSelectionAsBoundary = new QCheckBox(selectionWidget);
         Q_CHECK_PTR(useSelectionAsBoundary);
-        gridLayout->addWidget(useSelectionAsBoundary, 3, 1, 1, 1);
+        gridLayout->addWidget(useSelectionAsBoundary, 4, 1, 1, 1);
 
         connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+        connect (sliderSoftness, SIGNAL(valueChanged(int)), this, SLOT(slotSetSoftness(int)));
         connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
         connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
         connect (useSelectionAsBoundary, SIGNAL(toggled(bool)), this, SLOT(slotSetUseSelectionAsBoundary(bool)));
@@ -276,6 +290,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
         // load configuration settings into tool options
         input->setValue(m_configGroup.readEntry("fuzziness", 8)); // fuzziness
+        sliderSoftness->setValue(m_configGroup.readEntry("softness", 100)); // fuzziness
         sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
         sizemod->setSuffix(i18n(" px"));
 
@@ -284,6 +299,12 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
         useSelectionAsBoundary->setChecked(m_configGroup.readEntry("useSelectionAsBoundary", false));
 
+        // manually set up all variables in case there were no signals when setting value
+        m_fuzziness = input->value();
+        m_softness = sliderSoftness->value();
+        m_sizemod = sizemod->value();
+        m_feather = feather->value();
+        m_useSelectionAsBoundary = useSelectionAsBoundary->isChecked();
     }
     return selectionWidget;
 }

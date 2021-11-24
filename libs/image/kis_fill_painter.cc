@@ -70,6 +70,7 @@ void KisFillPainter::initFillPainter()
     m_feather = 0;
     m_useCompositioning = false;
     m_threshold = 0;
+    m_softness = 100;
     m_useSelectionAsBoundary = false;
 }
 
@@ -346,6 +347,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
+    gc.setSoftness(m_softness);
     if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
         gc.fillSelectionWithBoundary(pixelSelection, existingSelection);
     } else {

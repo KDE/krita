@@ -24,6 +24,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
                                int feather,
                                int sizemod,
                                int fillThreshold,
+                               int softness,
                                bool unmerged,
                                bool useBgColor)
     : m_refPaintDevice(refPaintDevice),
@@ -37,6 +38,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
       m_feather(feather),
       m_sizemod(sizemod),
       m_fillThreshold(fillThreshold),
+      m_softness(softness),
       m_unmerged(unmerged),
       m_useBgColor(useBgColor)
 {
@@ -112,6 +114,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setSizemod(m_sizemod);
         fillPainter.setFeather(m_feather);
         fillPainter.setFillThreshold(m_fillThreshold);
+        fillPainter.setSoftness(m_softness);
         fillPainter.setCareForSelection(true);
         fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
         fillPainter.setWidth(fillRect.width());

@@ -30,6 +30,7 @@ public:
                    int feather,
                    int sizemod,
                    int fillThreshold,
+                   int softness,
                    bool unmerged,
                    bool m_useBgColor);
 
@@ -53,6 +54,7 @@ private:
     int m_feather;
     int m_sizemod;
     int m_fillThreshold;
+    int m_softness;
     bool m_unmerged;
     bool m_useBgColor;
 };

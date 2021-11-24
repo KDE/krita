@@ -67,7 +67,8 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
     setObjectName("tool_fill");
     m_feather = 0;
     m_sizemod = 0;
-    m_threshold = 80;
+    m_threshold = 8;
+    m_softness = 100;
     m_usePattern = false;
     m_fillOnlySelection = false;
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(slotUpdateAvailableColorLabels()));
@@ -202,6 +203,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                   m_feather,
                                   m_sizemod,
                                   m_threshold,
+                                  m_softness,
                                   false, /* use the current device (unmerged) */
                                   false);
 
@@ -218,7 +220,7 @@ QWidget* KisToolFill::createOptionWidget()
     QWidget *widget = KisToolPaint::createOptionWidget();
     widget->setObjectName(toolId() + " option widget");
 
-    QLabel *lbl_fastMode = new QLabel(i18n("Fast mode: "), widget);
+    QLabel *lbl_fastMode = new QLabel(i18n("Fast mode:"), widget);
     m_checkUseFastMode = new QCheckBox(QString(), widget);
     m_checkUseFastMode->setToolTip(
         i18n("Fills area faster, but does not take composition "
@@ -226,21 +228,27 @@ QWidget* KisToolFill::createOptionWidget()
              "features will also be disabled."));
 
 
-    QLabel *lbl_threshold = new QLabel(i18nc("The Threshold label in Fill tool options", "Threshold: "), widget);
+    QLabel *lbl_threshold = new QLabel(i18nc("The Threshold label in Fill tool options", "Threshold:"), widget);
     m_slThreshold = new KisSliderSpinBox(widget);
     m_slThreshold->setObjectName("int_widget");
     m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
 
+    QLabel *lbl_softness = new QLabel(i18nc("The Softness label in Fill tool options", "Softness:"), widget);
+    m_slSoftness = new KisSliderSpinBox(widget);
+    m_slSoftness->setObjectName("softness");
+    m_slSoftness->setSuffix(i18n("%"));
+    m_slSoftness->setRange(0, 100);
+    m_slSoftness->setPageStep(3);
 
-    QLabel *lbl_sizemod = new QLabel(i18n("Grow selection: "), widget);
+    QLabel *lbl_sizemod = new QLabel(i18n("Grow selection:"), widget);
     m_sizemodWidget = new KisSliderSpinBox(widget);
     m_sizemodWidget->setObjectName("sizemod");
     m_sizemodWidget->setRange(-40, 40);
     m_sizemodWidget->setSingleStep(1);
     m_sizemodWidget->setSuffix(i18n(" px"));
 
-    QLabel *lbl_feather = new QLabel(i18n("Feathering radius: "), widget);
+    QLabel *lbl_feather = new QLabel(i18n("Feathering radius:"), widget);
     m_featherWidget = new KisSliderSpinBox(widget);
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
@@ -290,8 +298,9 @@ QWidget* KisToolFill::createOptionWidget()
 
 
 
-    connect (m_checkUseFastMode       , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
+    connect (m_checkUseFastMode  , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
     connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+    connect (m_slSoftness        , SIGNAL(valueChanged(int)), this, SLOT(slotSetSoftness(int)));
     connect (m_sizemodWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
     connect (m_featherWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
     connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
@@ -305,6 +314,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     addOptionWidgetOption(m_checkUseFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
+    addOptionWidgetOption(m_slSoftness, lbl_softness);
     addOptionWidgetOption(m_sizemodWidget      , lbl_sizemod);
     addOptionWidgetOption(m_featherWidget      , lbl_feather);
 
@@ -326,6 +336,7 @@ QWidget* KisToolFill::createOptionWidget()
     // load configuration options
     m_checkUseFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
     m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 8));
+    m_slSoftness->setValue(m_configGroup.readEntry("softness", 100));
     m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
 
     m_featherWidget->setValue(m_configGroup.readEntry("featherAmount", 0));
@@ -348,6 +359,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_feather = m_featherWidget->value();
     m_sizemod = m_sizemodWidget->value();
     m_threshold = m_slThreshold->value();
+    m_softness = m_slSoftness->value();
     m_useFastMode = m_checkUseFastMode->isChecked();
     m_fillOnlySelection = m_checkFillSelection->isChecked();
     m_useSelectionAsBoundary = m_checkUseSelectionAsBoundary->isChecked();
@@ -371,6 +383,7 @@ void KisToolFill::updateGUI()
 
     m_checkUseFastMode->setEnabled(!selectionOnly);
     m_slThreshold->setEnabled(!selectionOnly);
+    m_slSoftness->setEnabled(!selectionOnly);
 
     m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_featherWidget->setEnabled(!selectionOnly && useAdvancedMode);
@@ -450,6 +463,12 @@ void KisToolFill::slotSetThreshold(int threshold)
 {
     m_threshold = threshold;
     m_configGroup.writeEntry("thresholdAmount", threshold);
+}
+
+void KisToolFill::slotSetSoftness(int softness)
+{
+    m_softness = softness;
+    m_configGroup.writeEntry("softness", softness);
 }
 
 void KisToolFill::slotSetUsePattern(bool state)

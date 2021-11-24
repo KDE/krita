@@ -234,6 +234,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                   0, // feathering radius
                                   0, // sizemod
                                   80, // threshold,
+                                  100, // softness
                                   false, // use unmerged
                                   useBgColor);
 

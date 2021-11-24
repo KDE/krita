@@ -66,7 +66,7 @@ public:
                                       usePattern,
                                       selectionOnly,
                                       false,
-                                      10, 10, 10,
+                                      10, 10, 10, 100,
                                       true /* use the current device (unmerged) */,
                                       false);
 

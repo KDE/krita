@@ -558,6 +558,7 @@ void KisView::dropEvent(QDropEvent *event)
         KConfigGroup configGroup = KSharedConfig::openConfig()->group("KritaFill/KisToolFill");
         const bool useFastMode = configGroup.readEntry("useFastMode", false);
         const int thresholdAmount = configGroup.readEntry("thresholdAmount", 8);
+        const int softness = configGroup.readEntry("softness", 100);
         const int growSelection = configGroup.readEntry("growSelection", 0);
         const int featherAmount = configGroup.readEntry("featherAmount", 0);
         const bool fillSelectionOnly = configGroup.readEntry("fillSelection", false)
@@ -589,22 +590,24 @@ void KisView::dropEvent(QDropEvent *event)
             referencePaintDevice = d->viewManager->activeNode()->paintDevice();
         }
         KIS_ASSERT(referencePaintDevice);
-
-        KisProcessingVisitorSP visitor = new FillProcessingVisitor(referencePaintDevice,
-                                                                   imgCursorPos, // start position
-                                                                   selection(),
-                                                                   resources,
-                                                                   useFastMode, // fast mode
-                                                                   false,
-                                                                   fillSelectionOnly, // fill only selection,
-                                                                   useSelectionAsBoundary,
-                                                                   featherAmount, // feathering radius
-                                                                   growSelection, // sizemod
-                                                                   thresholdAmount, // threshold,
-                                                                   false, // use unmerged
-                                                                   false // use bg
-        );
-
+        
+        KisProcessingVisitorSP visitor = new FillProcessingVisitor(
+                                             referencePaintDevice,
+                                             imgCursorPos, // start position
+                                             selection(),
+                                             resources,
+                                             useFastMode, // fast mode
+                                             false,
+                                             fillSelectionOnly, // fill only selection,
+                                             useSelectionAsBoundary,
+                                             featherAmount, // feathering radius
+                                             growSelection, // sizemod
+                                             thresholdAmount, // threshold,
+                                             softness, // softness
+                                             false, // use unmerged
+                                             false // use bg
+                                         );
+        
         applicator.applyVisitor(visitor,
                                 KisStrokeJobData::SEQUENTIAL,
                                 KisStrokeJobData::EXCLUSIVE);

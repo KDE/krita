@@ -11,6 +11,7 @@
 #include <QPointF>
 
 #include "kis_global.h"
+#include "kis_algebra_2d.h"
 
 
 /**
@@ -42,6 +43,25 @@ public:
 
         //m_qB_varX = 0.0;
         //m_qB_varY = 0.0;
+    }
+
+    /**
+     * Checks if linear dimensions of the destination polygon are
+     * bigger than \p tolerance.
+     */
+    inline bool isValid(const qreal tolerance = 0.1) const {
+        const qreal toleranceSq = pow2(tolerance);
+
+        using KisAlgebra2D::dotProduct;
+
+        return dotProduct(m_a, m_a) > toleranceSq &&
+            dotProduct(m_b, m_b) > toleranceSq &&
+            dotProduct(m_c, m_c) > toleranceSq &&
+            qAbs(m_qB_const) > toleranceSq;
+    }
+
+    inline QPointF fallbackSourcePoint() const {
+        return m_srcBase + QPointF(0.5 * m_xCoeff, 0.5 * m_yCoeff);
     }
 
     inline QPointF map(const QPointF &pt) {

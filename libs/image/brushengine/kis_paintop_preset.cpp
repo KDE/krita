@@ -273,7 +273,9 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
                 continue;
             }
 
-            KIS_SAFE_ASSERT_RECOVER_NOOP(resource->isSerializable() && "embedding non-serializable resources is not yet implemented");
+            //KIS_SAFE_ASSERT_RECOVER_NOOP(resource->isSerializable() && "embedding non-serializable resources is not yet implemented");
+            qWarning() << "embedding non-serializable resources is not yet implemented. Resource: " << filename() << name()
+                       << "cannot embed" << resource->filename() << resource->name() << resource->resourceType().first << resource->resourceType().second;
 
             QBuffer buf;
             buf.open(QBuffer::WriteOnly);

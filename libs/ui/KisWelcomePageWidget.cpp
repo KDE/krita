@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2018 Scott Petrovic <scottpetrovic@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -13,10 +14,11 @@
 #include <QImage>
 #include <QMessageBox>
 
-#include <KisMimeDatabase.h>
-#include "kis_action_manager.h"
+#include "KisRemoteFileFetcher.h"
 #include "kactioncollection.h"
 #include "kis_action.h"
+#include "kis_action_manager.h"
+#include <KisMimeDatabase.h>
 
 #include "KConfigGroup"
 #include "KSharedConfig"
@@ -428,24 +430,37 @@ void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
     if (event->mimeData()->hasUrls() ||
         event->mimeData()->hasFormat("application/x-krita-node") ||
         event->mimeData()->hasFormat("application/x-qt-image")) {
-
-        event->accept();
+        return event->accept();
     }
+
+    return event->ignore();
 }
 
 void KisWelcomePageWidget::dropEvent(QDropEvent *event)
 {
     showDropAreaIndicator(false);
 
-    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
+    if (event->mimeData()->hasUrls() && !event->mimeData()->urls().empty()) {
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
             if (url.toLocalFile().endsWith(".bundle")) {
                 bool r = m_mainWindow->installBundle(url.toLocalFile());
                 if (!r) {
                     qWarning() << "Could not install bundle" << url.toLocalFile();
                 }
-            }
-            else {
+            } else if (!url.isLocalFile()) {
+                QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
+                tmp->setAutoRemove(true);
+
+                KisRemoteFileFetcher fetcher;
+
+                if (!fetcher.fetchFile(url, tmp.data())) {
+                    qWarning() << "Fetching" << url << "failed";
+                    continue;
+                }
+                const auto localUrl = QUrl::fromLocalFile(tmp->fileName());
+
+                m_mainWindow->openDocument(localUrl.toLocalFile(), KisMainWindow::None);
+            } else {
                 m_mainWindow->openDocument(url.toLocalFile(), KisMainWindow::None);
             }
         }

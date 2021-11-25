@@ -306,6 +306,12 @@ void ResourceImporter::prepareTypesMaps()
     QStringList mimetypes;
     for (int i = 0; i < resourceTypes.count(); i++) {
         QStringList mime = KisResourceLoaderRegistry::instance()->mimeTypes(resourceTypes[i]);
+
+        // remove mypaint brushes for now, because we'd need to figure out an UX for them
+        // probably 1) remove all the _prev.png files from a list to import as patterns or brush tips
+        // and 2) when importing a .myb file, find a proper .png file alongside it to import together
+        mime.removeAll("application/x-mypaint-brush");
+
         m_mimetypeForResourceType.insert(resourceTypes[i], mime);
         mimetypes << mime;
         for (int j = 0; j < mime.count(); j++) {

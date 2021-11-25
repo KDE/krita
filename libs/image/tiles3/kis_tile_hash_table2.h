@@ -123,18 +123,33 @@ private:
         TileType *d;
     };
 
-    inline quint32 calculateHash(qint32 col, qint32 row)
+    inline quint32 calculateHashImpl(qint32 col, qint32 row)
     {
-#ifdef SANITY_CHECK
-        KIS_ASSERT_RECOVER_NOOP(row < 0x7FFF && col < 0x7FFF);
-#endif // SANITY_CHECK
-
         if (col == 0 && row == 0) {
             col = 0x7FFF;
             row = 0x7FFF;
         }
 
         return ((static_cast<quint32>(row) << 16) | (static_cast<quint32>(col) & 0xFFFF));
+    }
+
+    inline quint32 calculateHash(qint32 col, qint32 row)
+    {
+#ifdef SANITY_CHECK
+        KIS_ASSERT_RECOVER_NOOP(qAbs(row) < 0x7FFF && qAbs(col) < 0x7FFF);
+#endif // SANITY_CHECK
+
+        return calculateHashImpl(col, row);
+    }
+
+    /**
+     * A version of the hash function that returns an invalid hash in
+     * case the requested tile is out of range
+     */
+    inline quint32 calculateHashSafe(qint32 col, qint32 row)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(qAbs(row) < 0x7FFF && qAbs(col) < 0x7FFF, 0);
+        return calculateHashImpl(col, row);
     }
 
     inline void insert(quint32 idx, TileTypeSP item)
@@ -291,7 +306,11 @@ bool KisTileHashTableTraits2<T>::tileExists(qint32 col, qint32 row)
 template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getExistingTile(qint32 col, qint32 row)
 {
-    quint32 idx = calculateHash(col, row);
+    const quint32 idx = calculateHashSafe(col, row);
+    if (!idx) {
+        /// a tile with invalid index obviously doesn't exist
+        return TileTypeSP();
+    }
 
     m_map.getGC().lockRawPointerAccess();
     TileTypeSP tile = m_map.get(idx);
@@ -305,7 +324,19 @@ template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getTileLazy(qint32 col, qint32 row, bool &newTile)
 {
     newTile = false;
-    quint32 idx = calculateHash(col, row);
+    const quint32 idx = calculateHashSafe(col, row);
+    if (!idx) {
+        /// when invalid tile index is requested, just return a
+        /// detached tile with the default data
+
+        /// we pretent as if this tile has already existed, it will
+        /// allow the calling code to avoid modifying the extent
+        /// manager
+        newTile = false;
+
+        QReadLocker locker(&m_defaultPixelDataLock);
+        return new TileType(col, row, m_defaultTileData, 0);
+    }
 
     // we are going to assign a raw-pointer tile from the table
     // to a shared pointer...
@@ -372,7 +403,20 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
 template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getReadOnlyTileLazy(qint32 col, qint32 row, bool &existingTile)
 {
-    quint32 idx = calculateHash(col, row);
+    const quint32 idx = calculateHashSafe(col, row);
+    if (!idx) {
+        /// when invalid tile index is requested, just return a
+        /// detached tile with the default data
+
+        /// we pretent as if this tile hasn't existed, it will
+        /// allow the calling code to avoid modifying the extent
+        /// manager (note, that is opposite to what happens in
+        /// getTileLazy())
+        existingTile = false;
+
+        QReadLocker locker(&m_defaultPixelDataLock);
+        return new TileType(col, row, m_defaultTileData, 0);
+    }
 
     m_map.getGC().lockRawPointerAccess();
     TileTypeSP tile = m_map.get(idx);
@@ -405,7 +449,12 @@ bool KisTileHashTableTraits2<T>::deleteTile(TileTypeSP tile)
 template <class T>
 bool KisTileHashTableTraits2<T>::deleteTile(qint32 col, qint32 row)
 {
-    quint32 idx = calculateHash(col, row);
+    const quint32 idx = calculateHashSafe(col, row);
+    if (!idx) {
+        /// when invalid tile index is requested, just do nothing
+        return false;
+    }
+
     return erase(idx);
 }
 

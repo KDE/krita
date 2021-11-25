@@ -32,8 +32,8 @@
 #include "kis_selection_mask.h"
 #include <KisPart.h>
 
-static const unsigned int ANT_LENGTH = 4;
-static const unsigned int ANT_SPACE = 4;
+static const unsigned int ANT_LENGTH = 8;
+static const unsigned int ANT_SPACE = 8;
 static const unsigned int ANT_ADVANCE_WIDTH = ANT_LENGTH + ANT_SPACE;
 
 KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)

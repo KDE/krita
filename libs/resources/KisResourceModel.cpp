@@ -61,6 +61,9 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
                                        "WHERE  resources.resource_type_id = resource_types.id\n"
                                        "AND    resources.storage_id = storages.id\n"
                                        "AND    resource_types.name = :resource_type\n"
+                                       "GROUP BY resources.name\n"
+                                       ", resources.filename\n"
+                                       ", resources.md5sum\n"
                                        "ORDER BY resources.id");
     if (!r) {
         qWarning() << "Could not prepare KisAllResourcesModel query" << d->resourcesQuery.lastError();

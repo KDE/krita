@@ -383,7 +383,7 @@ else( APPLE )
         # Fix Xcode xcrun related issue.
         # NOTE: This should be fixed by Qt 5.7.1 see here: http://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=77a71c32c9d19b87f79b208929e71282e8d8b5d9
         # NOTE: but no one's holding their breath.
-        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND}} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
+        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
                 COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
@@ -448,6 +448,7 @@ else( APPLE )
       ExternalProject_Add(
         ext_qt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 
         LOG_DOWNLOAD        ON
         LOG_UPDATE          ON

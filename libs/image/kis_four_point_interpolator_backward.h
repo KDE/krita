@@ -52,12 +52,10 @@ public:
     inline bool isValid(const qreal tolerance = 0.1) const {
         const qreal toleranceSq = pow2(tolerance);
 
-        using KisAlgebra2D::dotProduct;
+        const qreal sq1 = qAbs(m_qB_const);
+        const qreal sq2 = qAbs(KisAlgebra2D::crossProduct(m_b, m_c - m_b + m_a));
 
-        return dotProduct(m_a, m_a) > toleranceSq &&
-            dotProduct(m_b, m_b) > toleranceSq &&
-            dotProduct(m_c, m_c) > toleranceSq &&
-            qAbs(m_qB_const) > toleranceSq;
+        return sq1 + sq2 > 2 * toleranceSq;
     }
 
     inline QPointF fallbackSourcePoint() const {

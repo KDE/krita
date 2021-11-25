@@ -517,6 +517,8 @@ bool KoResourceBundle::loadResource(KoResourceSP resource)
         return false;
     }
 
+    resourceStore->close();
+
     if ((resource->image().isNull() || resource->thumbnail().isNull()) && !resource->thumbnailPath().isNull()) {
 
         if (!resourceStore->open(resourceType + '/' + resource->thumbnailPath())) {
@@ -529,6 +531,7 @@ bool KoResourceBundle::loadResource(KoResourceSP resource)
         resource->setImage(img);
         resource->updateThumbnail();
     }
+    resourceStore->close();
 
     return true;
 }

@@ -123,6 +123,7 @@ void TestStorageModel::testMetaData()
     KisResourceLocator::instance()->addStorage("My Named Memory Storage", storage);
     storage->setMetaData(KisResourceStorage::s_meta_name, "My Named Memory Storage");
 
+    QVERIFY(storage->valid());
     QVERIFY(storageModel.rowCount() > rowCount);
 
     QModelIndex idx;

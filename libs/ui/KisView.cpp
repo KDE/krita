@@ -619,10 +619,10 @@ void KisView::dragMoveEvent(QDragMoveEvent *event)
     if (event->mimeData()->hasUrls() ||
         event->mimeData()->hasFormat("application/x-krita-node") ||
         event->mimeData()->hasFormat("application/x-qt-image")) {
-
-        event->accept();
+        return event->accept();
     }
 
+    return event->ignore();
 }
 
 KisDocument *KisView::document() const

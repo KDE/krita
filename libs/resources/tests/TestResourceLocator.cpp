@@ -145,6 +145,7 @@ void TestResourceLocator::testDocumentStorage()
     int rowcount = model.rowCount();
 
     KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
+    QVERIFY(documentStorage->valid());
     KoResourceSP resource(new DummyResource("test.kpp", ResourceType::PaintOpPresets));
     documentStorage->saveAsNewVersion(resource);
 

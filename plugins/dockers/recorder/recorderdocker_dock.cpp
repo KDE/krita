@@ -285,11 +285,11 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
         return;
 
     KisDocument *document = d->canvas->imageView()->document();
+    d->validateColorSpace(document->image()->projection()->colorSpace());
     if (d->recordAutomatically && !d->enabledIds.contains(document->linkedResourcesStorageId()))
         onRecordButtonToggled(true);
 
     d->updateComboResolution(document->image()->width(), document->image()->height());
-    d->validateColorSpace(document->image()->projection()->colorSpace());
 
     d->prefix = d->getPrefix();
     d->updateWriterSettings();
@@ -320,6 +320,7 @@ void RecorderDockerDock::onMainWindowIsBeingCreated(KisMainWindow *window)
 
 void RecorderDockerDock::onRecordButtonToggled(bool checked)
 {
+    QSignalBlocker blocker(d->ui->buttonRecordToggle);
     d->recordToggleAction->setChecked(checked);
 
     if (!d->canvas)
@@ -343,7 +344,7 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
 
     d->ui->buttonRecordToggle->setEnabled(false);
 
-    if (checked) {
+    if (checked && d->isColorSpaceSupported) {
         d->updateWriterSettings();
         d->updateUiFormat();
         d->writer.start();

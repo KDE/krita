@@ -150,7 +150,7 @@ void WGActionManager::modifyHSX(int channel, float amount)
 void WGActionManager::slotConfigChanged()
 {
     WGConfig::Accessor cfg;
-    int popupSize = cfg.popupSize();
+    int popupSize = cfg.get(WGConfig::popupSize);
 
     if (m_colorSelector) {
         loadColorSelectorSettings(cfg);
@@ -195,7 +195,7 @@ void WGActionManager::slotShowColorSelectorPopup()
         WGConfig::Accessor cfg;
         m_colorSelectorPopup = new WGSelectorPopup();
         m_colorSelector = new KisVisualColorSelector(m_colorSelectorPopup, m_colorModel);
-        updateWidgetSize(m_colorSelector, cfg.popupSize());
+        updateWidgetSize(m_colorSelector, cfg.get(WGConfig::popupSize));
         m_colorSelectorPopup->setSelectorWidget(m_colorSelector);
         connect(m_colorSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
                 SLOT(slotPopupClosed(WGSelectorPopup*)));
@@ -224,7 +224,7 @@ void WGActionManager::slotShowShadeSelectorPopup()
     if (!m_shadeSelectorPopup) {
         m_shadeSelectorPopup = new WGSelectorPopup();
         m_shadeSelector = new WGShadeSelector(m_colorModel, m_shadeSelectorPopup);
-        updateWidgetSize(m_shadeSelector, WGConfig::Accessor().popupSize());
+        updateWidgetSize(m_shadeSelector, WGConfig::Accessor().get(WGConfig::popupSize));
         m_shadeSelector->setDisplayConverter(m_docker->displayColorConverter(true));
         m_shadeSelectorPopup->setSelectorWidget(m_shadeSelector);
         connect(m_shadeSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
@@ -240,7 +240,7 @@ void WGActionManager::slotShowMyPaintSelectorPopup()
     if (!m_myPaintSelectorPopup) {
         m_myPaintSelectorPopup = new WGSelectorPopup();
         m_myPaintSelector = new WGMyPaintShadeSelector(m_myPaintSelectorPopup, WGSelectorWidgetBase::PopupMode);
-        updateWidgetSize(m_myPaintSelector, WGConfig::Accessor().popupSize());
+        updateWidgetSize(m_myPaintSelector, WGConfig::Accessor().get(WGConfig::popupSize));
         m_myPaintSelector->setModel(m_colorModel);
         m_myPaintSelector->setDisplayConverter(m_docker->displayColorConverter(true));
         m_myPaintSelectorPopup->setSelectorWidget(m_myPaintSelector);
@@ -260,7 +260,7 @@ void WGActionManager::slotShowColorHistoryPopup()
         history->setUiMode(WGSelectorWidgetBase::PopupMode);
         history->setConfigSource(&WGConfig::popupPatches);
         history->updateSettings();
-        updateWidgetSize(history, WGConfig::Accessor().popupSize());
+        updateWidgetSize(history, WGConfig::Accessor().get(WGConfig::popupSize));
         history->setDisplayConverter(m_docker->displayColorConverter());
         m_colorHistoryPopup->setSelectorWidget(history);
         connect(m_colorHistoryPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),

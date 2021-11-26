@@ -44,7 +44,7 @@ void WGShadeSelector::setModel(KisVisualColorModelSP colorModel)
 void WGShadeSelector::updateSettings()
 {
     WGConfig::Accessor cfg;
-    m_lineHeight = cfg.shadeSelectorLineHeight();
+    m_lineHeight = cfg.get(WGConfig::shadeSelectorLineHeight);
     QVector<WGConfig::ShadeLine> config = cfg.shadeSelectorLines();
 
     while (config.size() > m_sliders.size()) {
@@ -64,9 +64,9 @@ void WGShadeSelector::updateSettings()
         m_sliders[i]->setDisplayMode(config[i].patchCount < 0, config[i].patchCount);
         m_sliders[i]->setFixedHeight(m_lineHeight);
     }
-    m_resetOnExternalUpdate = cfg.shadeSelectorUpdateOnExternalChanges();
-    m_resetOnInteractions = cfg.shadeSelectorUpdateOnInteractionEnd();
-    m_resetOnRightClick = cfg.shadeSelectorUpdateOnRightClick();
+    m_resetOnExternalUpdate = cfg.get(WGConfig::shadeSelectorUpdateOnExternalChanges);
+    m_resetOnInteractions = cfg.get(WGConfig::shadeSelectorUpdateOnInteractionEnd);
+    m_resetOnRightClick = cfg.get(WGConfig::shadeSelectorUpdateOnRightClick);
 
     if (m_model->colorModel() != KisVisualColorModel::None) {
         slotReset();

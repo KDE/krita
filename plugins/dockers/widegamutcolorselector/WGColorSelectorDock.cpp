@@ -215,7 +215,7 @@ void WGColorSelectorDock::slotConfigurationChanged()
     m_selector->setConfiguration(&selectorCfg);
     m_shadeSelector->updateSettings();
     // Quick settings menu
-    if (cfg.quickSettingsEnabled()) {
+    if (cfg.get(WGConfig::quickSettingsEnabled)) {
         if (!m_configButton->menu()) {
             m_configButton->disconnect(this);
             QMenu *configureMenu = new QMenu(this);

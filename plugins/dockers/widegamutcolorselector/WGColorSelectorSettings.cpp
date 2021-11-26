@@ -88,21 +88,21 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.writeEntry("renderMode", m_ui->cmbSelectorRenderingMode->currentIndex());
     cfg.writeEntry("rgbColorModel", m_ui->cmbColorModel->currentIndex() +  KisVisualColorModel::HSV);
     cfg.setColorSelectorConfiguration(m_selectorConfigGrid->currentConfiguration());
-    cfg.setQuickSettingsEnabled(m_ui->grpQuickSettingsMenu->isChecked());
+    cfg.set(WGConfig::quickSettingsEnabled, m_ui->grpQuickSettingsMenu->isChecked());
     cfg.setFavoriteConfigurations(m_favoriteConfigGrid->selectedConfigurations());
     // Pop-ups
-    cfg.setPopupSize(m_ui->sbPopupSize->value());
-    cfg.setPopupColorPatchOrientation(m_ui->rbPopupHorizontal->isChecked() ? Qt::Horizontal : Qt::Vertical);
-    cfg.setPopupColorPatchSize(QSize(m_ui->sbPatchWidth->value(), m_ui->sbPatchHeight->value()));
+    cfg.set(WGConfig::popupSize, m_ui->sbPopupSize->value());
+    cfg.set(WGConfig::popupPatches.orientation, m_ui->rbPopupHorizontal->isChecked() ? Qt::Horizontal : Qt::Vertical);
+    cfg.set(WGConfig::popupPatches.patchSize, QSize(m_ui->sbPatchWidth->value(), m_ui->sbPatchHeight->value()));
     // Shade Selector
-    cfg.setShadeSelectorUpdateOnExternalChanges(m_ui->chkShadeSelUpdateExternal->isChecked());
-    cfg.setShadeSelectorUpdateOnInteractionEnd(m_ui->chkShadeSelUpdateInteraction->isChecked());
-    cfg.setShadeSelectorUpdateOnRightClick(m_ui->chkShadeSelUpdateOnRightClick->isChecked());
+    cfg.set(WGConfig::shadeSelectorUpdateOnExternalChanges, m_ui->chkShadeSelUpdateExternal->isChecked());
+    cfg.set(WGConfig::shadeSelectorUpdateOnInteractionEnd, m_ui->chkShadeSelUpdateInteraction->isChecked());
+    cfg.set(WGConfig::shadeSelectorUpdateOnRightClick, m_ui->chkShadeSelUpdateOnRightClick->isChecked());
     // we don't discard shade line configurations right away so we need to trim here
     QVector<WGConfig::ShadeLine> lineConfig = m_shadeLineConfig;
     lineConfig.resize(m_ui->sbShadeLineCount->value());
     cfg.setShadeSelectorLines(lineConfig);
-    cfg.setShadeSelectorLineHeight(m_ui->sbShadeLineHeight->value());
+    cfg.set(WGConfig::shadeSelectorLineHeight, m_ui->sbShadeLineHeight->value());
 
     WGConfig::notifier()->notifyConfigChanged();
     WGConfig::notifier()->notifySelectorConfigChanged();
@@ -116,29 +116,29 @@ void WGColorSelectorSettings::loadPreferences()
     KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();
     m_selectorConfigGrid->setChecked(selectorCfg);
     m_ui->btnSelectorShape->setIcon(m_selectorConfigGrid->generateIcon(selectorCfg, devicePixelRatioF()));
-    m_ui->grpQuickSettingsMenu->setChecked(cfg.quickSettingsEnabled());
+    m_ui->grpQuickSettingsMenu->setChecked(cfg.get(WGConfig::quickSettingsEnabled));
     QVector<KisColorSelectorConfiguration> favoriteConfigs = cfg.favoriteConfigurations();
     for (const KisColorSelectorConfiguration &fav: favoriteConfigs) {
         m_favoriteConfigGrid->setChecked(fav);
     }
     // Pop-ups
-    m_ui->sbPopupSize->setValue(cfg.popupSize());
-    Qt::Orientation patchOrientation = cfg.popupColorPatchOrientation();
+    m_ui->sbPopupSize->setValue(cfg.get(WGConfig::popupSize));
+    Qt::Orientation patchOrientation = cfg.get(WGConfig::popupPatches.orientation);
     if (patchOrientation == Qt::Horizontal) {
         m_ui->rbPopupHorizontal->setChecked(true);
     } else {
         m_ui->rbPopupVertical->setChecked(true);
     }
-    QSize colorPatchSize = cfg.popupColorPatchSize();
+    QSize colorPatchSize = cfg.get(WGConfig::popupPatches.patchSize);
     m_ui->sbPatchWidth->setValue(colorPatchSize.width());
     m_ui->sbPatchHeight->setValue(colorPatchSize.height());
     // Shade Selector
-    m_ui->chkShadeSelUpdateExternal->setChecked(cfg.shadeSelectorUpdateOnExternalChanges());
-    m_ui->chkShadeSelUpdateInteraction->setChecked(cfg.shadeSelectorUpdateOnInteractionEnd());
-    m_ui->chkShadeSelUpdateOnRightClick->setChecked(cfg.shadeSelectorUpdateOnRightClick());
+    m_ui->chkShadeSelUpdateExternal->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnExternalChanges));
+    m_ui->chkShadeSelUpdateInteraction->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnInteractionEnd));
+    m_ui->chkShadeSelUpdateOnRightClick->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnRightClick));
     m_shadeLineConfig = cfg.shadeSelectorLines();
     m_ui->sbShadeLineCount->setValue(m_shadeLineConfig.size());
-    m_ui->sbShadeLineHeight->setValue(cfg.shadeSelectorLineHeight());
+    m_ui->sbShadeLineHeight->setValue(cfg.get(WGConfig::shadeSelectorLineHeight));
 }
 
 void WGColorSelectorSettings::loadDefaultPreferences()

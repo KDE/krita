@@ -45,16 +45,6 @@ QString WGConfig::configGroupName()
     return QStringLiteral("WideGamutColorSelector");
 }
 
-bool WGConfig::quickSettingsEnabled() const
-{
-    return m_cfg.readEntry("quickSettingsMenuEnabled", defaultQuickSettingsEnabled);
-}
-
-void WGConfig::setQuickSettingsEnabled(bool enabled)
-{
-    m_cfg.writeEntry("quickSettingsMenuEnabled", enabled);
-}
-
 KisColorSelectorConfiguration WGConfig::colorSelectorConfiguration() const
 {
     QString config = m_cfg.readEntry("colorSelectorConfiguration", QString());
@@ -97,36 +87,6 @@ void WGConfig::setFavoriteConfigurations(const QVector<KisColorSelectorConfigura
         favoriteList.append(fav.toString());
     }
     m_cfg.writeEntry("favoriteSelectorConfigurations", favoriteList.join(';'));
-}
-
-int WGConfig::popupSize() const
-{
-    return m_cfg.readEntry("popupSize", 300);
-}
-
-void WGConfig::setPopupSize(int size)
-{
-    m_cfg.writeEntry("popupSize", size);
-}
-
-Qt::Orientation WGConfig::popupColorPatchOrientation() const
-{
-    return m_cfg.readEntry("popupColorPatchOrientation", 0) == Qt::Vertical ? Qt::Vertical : Qt::Horizontal;
-}
-
-void WGConfig::setPopupColorPatchOrientation(Qt::Orientation orientation)
-{
-    m_cfg.writeEntry("popupColorPatchOrientation", static_cast<int>(orientation));
-}
-
-QSize WGConfig::popupColorPatchSize() const
-{
-    return m_cfg.readEntry("popupColorPatchSize", QSize(24, 24));
-}
-
-void WGConfig::setPopupColorPatchSize(QSize size)
-{
-    m_cfg.writeEntry("popupColorPatchSize", size);
 }
 
 QVector<ShadeLine> WGConfig::defaultShadeSelectorLines()
@@ -187,46 +147,6 @@ void WGConfig::setShadeSelectorLines(const QVector<ShadeLine> &shadeLines)
     m_cfg.writeEntry("minimalShadeSelectorLines", shadeLineList.join('|'));
 }
 
-int WGConfig::shadeSelectorLineHeight() const
-{
-    return m_cfg.readEntry("shadeSelectorLineHeight", defaultShadeSelectorLineHeight);
-}
-
-void WGConfig::setShadeSelectorLineHeight(int height)
-{
-    m_cfg.writeEntry("shadeSelectorLineHeight", height);
-}
-
-bool WGConfig::shadeSelectorUpdateOnExternalChanges() const
-{
-    return m_cfg.readEntry("shadeSelectorUpdateOnExternalChanges", defaultShadeSelectorUpdateOnExternalChanges);
-}
-
-void WGConfig::setShadeSelectorUpdateOnExternalChanges(bool enabled)
-{
-    m_cfg.writeEntry("shadeSelectorUpdateOnExternalChanges", enabled);
-}
-
-bool WGConfig::shadeSelectorUpdateOnInteractionEnd() const
-{
-    return m_cfg.readEntry("shadeSelectorUpdateOnInteractionEnd", defaultShadeSelectorUpdateOnInteractionEnd);
-}
-
-void WGConfig::setShadeSelectorUpdateOnInteractionEnd(bool enabled)
-{
-    m_cfg.writeEntry("shadeSelectorUpdateOnInteractionEnd", enabled);
-}
-
-bool WGConfig::shadeSelectorUpdateOnRightClick() const
-{
-    return m_cfg.readEntry("shadeSelectorUpdateOnRightClick", defaultShadeSelectorUpdateOnRightClick);
-}
-
-void WGConfig::setShadeSelectorUpdateOnRightClick(bool enabled)
-{
-    m_cfg.writeEntry("shadeSelectorUpdateOnRightClick", enabled);
-}
-
 WGConfigNotifier *notifier()
 {
     return s_notifier_instance;
@@ -237,11 +157,6 @@ const KisColorSelectorConfiguration WGConfig::defaultColorSelectorConfiguration 
                                       KisColorSelectorConfiguration::Ring,
                                       KisColorSelectorConfiguration::SV,
                                       KisColorSelectorConfiguration::H);
-const bool WGConfig::defaultQuickSettingsEnabled = true;
-const int WGConfig::defaultShadeSelectorLineHeight = 10;
-const bool WGConfig::defaultShadeSelectorUpdateOnExternalChanges = true;
-const bool WGConfig::defaultShadeSelectorUpdateOnInteractionEnd = false;
-const bool WGConfig::defaultShadeSelectorUpdateOnRightClick = true;
 
 void WGConfigNotifier::notifyConfigChanged()
 {
@@ -270,5 +185,13 @@ const ColorPatches popupPatches {
     { "popupPatches.rows", 1, 1, 20, true },
     { "popupPatches.scrolling", ScrollLongitudinal, ScrollNone, ScrollLaterally, true }
 };
+
+const GenericSetting<bool> quickSettingsEnabled { "quickSettingsMenuEnabled", true };
+const NumericSetting<int> popupSize { "popupSize", 300, 100, 500, true };
+
+const NumericSetting<int> shadeSelectorLineHeight { "shadeSelectorLineHeight", 10, 8, 99 };
+const GenericSetting<bool> shadeSelectorUpdateOnExternalChanges { "shadeSelectorUpdateOnExternalChanges", true };
+const GenericSetting<bool> shadeSelectorUpdateOnInteractionEnd { "shadeSelectorUpdateOnInteractionEnd", false };
+const GenericSetting<bool> shadeSelectorUpdateOnRightClick { "shadeSelectorUpdateOnRightClick", true };
 
 } // namespace WGConfig

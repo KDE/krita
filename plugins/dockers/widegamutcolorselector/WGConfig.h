@@ -102,9 +102,6 @@ public:
 
     static QString configGroupName();
 
-    bool quickSettingsEnabled() const;
-    void setQuickSettingsEnabled(bool enabled);
-
     KisColorSelectorConfiguration colorSelectorConfiguration() const;
     void setColorSelectorConfiguration(const KisColorSelectorConfiguration &config);
 
@@ -112,32 +109,10 @@ public:
     static QVector<KisColorSelectorConfiguration> defaultFavoriteConfigurations();
     void setFavoriteConfigurations(const QVector<KisColorSelectorConfiguration> &favoriteConfigs);
 
-    // popups
-    int popupSize() const;
-    void setPopupSize(int size);
-
-    Qt::Orientation popupColorPatchOrientation() const;
-    void setPopupColorPatchOrientation(Qt::Orientation orientation);
-
-    QSize popupColorPatchSize() const;
-    void setPopupColorPatchSize(QSize size);
-
     // shade selector
     static QVector<ShadeLine> defaultShadeSelectorLines();
     QVector<ShadeLine> shadeSelectorLines() const;
     void setShadeSelectorLines(const QVector<ShadeLine> &shadeLines);
-
-    int shadeSelectorLineHeight() const;
-    void setShadeSelectorLineHeight(int height);
-
-    bool shadeSelectorUpdateOnExternalChanges() const;
-    void setShadeSelectorUpdateOnExternalChanges(bool enabled);
-
-    bool shadeSelectorUpdateOnInteractionEnd() const;
-    void setShadeSelectorUpdateOnInteractionEnd(bool enabled);
-
-    bool shadeSelectorUpdateOnRightClick() const;
-    void setShadeSelectorUpdateOnRightClick(bool enabled);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {
@@ -152,11 +127,7 @@ public:
 
 
     static const KisColorSelectorConfiguration defaultColorSelectorConfiguration;
-    static const bool defaultQuickSettingsEnabled;
-    static const int defaultShadeSelectorLineHeight;
-    static const bool defaultShadeSelectorUpdateOnExternalChanges;
-    static const bool defaultShadeSelectorUpdateOnInteractionEnd;
-    static const bool defaultShadeSelectorUpdateOnRightClick;
+
 private:
     /*mutable*/ KConfigGroup m_cfg;
     bool m_readOnly;
@@ -220,6 +191,15 @@ struct ColorPatches
 
 extern const ColorPatches colorHistory;
 extern const ColorPatches popupPatches;
+
+extern const GenericSetting<bool> quickSettingsEnabled;
+extern const NumericSetting<int> popupSize;
+
+// Shade Selector
+extern const NumericSetting<int> shadeSelectorLineHeight;
+extern const GenericSetting<bool> shadeSelectorUpdateOnExternalChanges;
+extern const GenericSetting<bool> shadeSelectorUpdateOnInteractionEnd;
+extern const GenericSetting<bool> shadeSelectorUpdateOnRightClick;
 
 } // namespace WGConfig
 

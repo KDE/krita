@@ -79,7 +79,7 @@ elseif(ANDROID)
     ExternalProject_Add_Step(
        ext_boost
        post_install
-       COMMAND sh -c "cp ${PREFIX_ext_boost}/${ANDROID_ABI}/lib/libboost_system-*-1_70.a ${PREFIX_ext_boost}/${ANDROID_ABI}/lib/libboost_system.a"
+       COMMAND sh -c "cp ${PREFIX_ext_boost}/${ANDROID_ABI}/lib/libboost_system-*-1_71.a ${PREFIX_ext_boost}/${ANDROID_ABI}/lib/libboost_system.a"
        DEPENDEES install
    )
 else()

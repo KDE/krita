@@ -292,13 +292,22 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
     int rotQuadrant = int(rotation / (M_PI / 2) + 0.5) & 3;
     rotation -= rotQuadrant * M_PI / 2;
 
-    bool simpleTranslation =
+
+    /**
+     * We don't check for xtranslate and ytranslate to be integers here, because
+     * people expect the translation to be lossless, that is, not doing any resampling.
+     *
+     * Theoretically, we could implement a seperate option to allow translations with
+     * resampling in the transform tool, but I don't know how useful it would be.
+     * People who wo pixel art can set scale to something like 99.99% and it should
+     * do the trick.
+     *
+     * See: https://bugs.kde.org/show_bug.cgi?id=445714
+     */
+    const bool simpleTranslation =
         qFuzzyCompare(rotation, 0.0) &&
         qFuzzyCompare(xscale, 1.0) &&
-        qFuzzyCompare(yscale, 1.0) &&
-        qAbs(xtranslate - std::round(xtranslate)) < 0.01 &&
-        qAbs(ytranslate - std::round(ytranslate)) < 0.01;
-
+        qFuzzyCompare(yscale, 1.0);
 
     int progressTotalSteps = qMax(1, 2 * (!simpleTranslation) + (rotQuadrant != 0));
     int progressPortion = 100 / progressTotalSteps;

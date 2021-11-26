@@ -206,7 +206,7 @@ void WGColorSelectorDock::disconnectFromCanvas()
 
 void WGColorSelectorDock::slotConfigurationChanged()
 {
-    WGConfig cfg;
+    WGConfig::Accessor cfg;
     int renderMode = qBound(int(KisVisualColorSelector::StaticBackground), cfg.readEntry("renderMode", 1),
                             int(KisVisualColorSelector::CompositeBackground));
     m_selector->setRenderMode(static_cast<KisVisualColorSelector::RenderMode>(renderMode));

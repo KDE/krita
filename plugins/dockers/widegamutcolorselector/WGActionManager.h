@@ -18,10 +18,12 @@ class KisVisualColorSelector;
 
 class WGColorPreviewToolTip;
 class WGColorSelectorDock;
-class WGConfig;
 class WGMyPaintShadeSelector;
 class WGSelectorPopup;
 class WGShadeSelector;
+namespace WGConfig {
+typedef class WGConfig Accessor;
+}
 
 class WGActionManager : public QObject
 {
@@ -36,7 +38,7 @@ public:
 private:
     void updateWidgetSize(QWidget *widget, int size);
     void showPopup(WGSelectorPopup *popup);
-    void loadColorSelectorSettings(WGConfig &cfg);
+    void loadColorSelectorSettings(WGConfig::Accessor &cfg);
     void modifyHSX(int channel, float amount);
 private Q_SLOTS:
     void slotConfigChanged();

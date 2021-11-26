@@ -14,22 +14,91 @@
 
 #include <QVector4D>
 
-class WGConfigNotifier;
+#include <type_traits>
+
+namespace WGConfig {
+
+template<class T> struct GenericSetting
+{
+    typedef T ValueType;
+
+    T readValue(const KConfigGroup &group) const
+    {
+        return group.readEntry(name, defaultValue);
+    }
+
+    void writeValue(KConfigGroup &group, const T &value) const
+    {
+        group.writeEntry(name, value);
+    }
+
+    QString name;
+    T defaultValue;
+};
+
+template<class T> struct NumericSetting
+{
+    typedef T ValueType;
+    // the storage type, for enums it's the underlying integral type, otherwise T
+    // NOTE: The use of std::remove_cv is because std::type_identity is C++20
+    using ST = typename std::conditional_t<std::is_enum<T>::value, std::underlying_type<T>, std::remove_cv<T>>::type;
+
+    T readValue(const KConfigGroup &group) const
+    {
+        T value = static_cast<T>(group.readEntry(name, static_cast<ST>(defaultValue)));
+        return applyLimits(value);
+    }
+
+    void writeValue(KConfigGroup &group, const T &value) const
+    {
+        group.writeEntry(name, static_cast<ST>(value));
+    }
+
+    T boundFunc(const T &min, const T &val, const T &max) const
+    {
+        return qBound(min, val, max);
+    }
+
+    T applyLimits(T value) const {
+        if (enforceLimits) {
+            return boundFunc(minValue, value, maxValue);
+        }
+        return value;
+    }
+    QString name;
+    T defaultValue;
+    T minValue;
+    T maxValue;
+    bool enforceLimits {false};
+};
+
+template<>
+inline QSize NumericSetting<QSize>::boundFunc(const QSize &min, const QSize &val, const QSize &max) const
+{
+    return val.expandedTo(min).boundedTo(max);
+}
+
+struct ShadeLine {
+    ShadeLine() = default;
+    ShadeLine(QVector4D grad, QVector4D offs=QVector4D(), int patchC=-1)
+        : gradient(grad), offset(offs), patchCount(patchC) {}
+    QVector4D gradient;
+    QVector4D offset;
+    int patchCount {-1}; // negative value means slider mode
+};
 
 class WGConfig
 {
 public:
-    struct ShadeLine {
-        ShadeLine() = default;
-        ShadeLine(QVector4D grad, QVector4D offs=QVector4D(), int patchC=-1)
-            : gradient(grad), offset(offs), patchCount(patchC) {}
-        QVector4D gradient;
-        QVector4D offset;
-        int patchCount {-1}; // negative value means slider mode
-    };
 
     WGConfig(bool readOnly = true);
     ~WGConfig();
+
+    template<class T>
+    typename T::ValueType get(const T &setting) const { return setting.readValue(m_cfg); }
+
+    template<class T>
+    void set(const T &setting, const typename T::ValueType &value) { setting.writeValue(m_cfg, value); }
 
     static QString configGroupName();
 
@@ -80,10 +149,7 @@ public:
         return m_cfg.readEntry(name, defaultValue);
     }
 
-    /**
-     * @return the WGConfigNotifier singleton
-     */
-    static WGConfigNotifier* notifier();
+
 
     static const KisColorSelectorConfiguration defaultColorSelectorConfiguration;
     static const bool defaultQuickSettingsEnabled;
@@ -95,6 +161,8 @@ private:
     /*mutable*/ KConfigGroup m_cfg;
     bool m_readOnly;
 };
+
+typedef WGConfig Accessor;
 
 class WGConfigNotifier : public QObject
 {
@@ -124,5 +192,35 @@ Q_SIGNALS:
     void configChanged();
     void selectorConfigChanged();
 };
+
+/**
+ * @return the WGConfigNotifier singleton
+ */
+WGConfigNotifier* notifier();
+
+/* ======== Configuration object definitions ========
+/  TODO: Think about splitting this off into individual headers
+/  to prevent full recompile on every change.
+*/
+
+enum Scrolling {
+    ScrollNone,
+    ScrollLongitudinal,
+    ScrollLaterally
+};
+
+struct ColorPatches
+{
+    NumericSetting<Qt::Orientation> orientation;
+    NumericSetting<QSize> patchSize;
+    NumericSetting<int> maxCount;
+    NumericSetting<int> rows;
+    NumericSetting<Scrolling> scrolling;
+};
+
+extern const ColorPatches colorHistory;
+extern const ColorPatches popupPatches;
+
+} // namespace WGConfig
 
 #endif // WGCONFIG_H

@@ -43,7 +43,7 @@ void WGShadeSelector::setModel(KisVisualColorModelSP colorModel)
 
 void WGShadeSelector::updateSettings()
 {
-    WGConfig cfg;
+    WGConfig::Accessor cfg;
     m_lineHeight = cfg.shadeSelectorLineHeight();
     QVector<WGConfig::ShadeLine> config = cfg.shadeSelectorLines();
 

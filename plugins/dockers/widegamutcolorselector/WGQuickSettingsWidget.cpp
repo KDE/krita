@@ -46,7 +46,7 @@ WGQuickSettingsWidget::~WGQuickSettingsWidget()
 
 void WGQuickSettingsWidget::loadConfiguration()
 {
-    WGConfig cfg;
+    WGConfig::Accessor cfg;
     m_selectorConf->setConfigurations(cfg.favoriteConfigurations());
 }
 
@@ -74,7 +74,7 @@ void WGQuickSettingsWidget::slotColorGroupToggled(int id, bool checked)
     m_selector->selectorModel()->setRGBColorModel(model);
     m_selectorConf->setColorModel(model);
 
-    WGConfig cfg(false);
+    WGConfig::Accessor cfg(false);
     cfg.writeEntry("rgbColorModel", id);
 }
 
@@ -83,7 +83,7 @@ void WGQuickSettingsWidget::slotConfigSelected(const KisColorSelectorConfigurati
     if (m_selector) {
         m_selector->setConfiguration(&config);
     }
-    WGConfig cfg(false);
+    WGConfig::Accessor cfg(false);
     cfg.setColorSelectorConfiguration(config);
-    cfg.notifier()->notifySelectorConfigChanged();
+    WGConfig::notifier()->notifySelectorConfigChanged();
 }

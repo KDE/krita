@@ -84,7 +84,7 @@ QString WGColorSelectorSettings::stringID()
 
 void WGColorSelectorSettings::savePreferences() const
 {
-    WGConfig cfg(false);
+    WGConfig::Accessor cfg(false);
     cfg.writeEntry("renderMode", m_ui->cmbSelectorRenderingMode->currentIndex());
     cfg.writeEntry("rgbColorModel", m_ui->cmbColorModel->currentIndex() +  KisVisualColorModel::HSV);
     cfg.setColorSelectorConfiguration(m_selectorConfigGrid->currentConfiguration());
@@ -110,7 +110,7 @@ void WGColorSelectorSettings::savePreferences() const
 
 void WGColorSelectorSettings::loadPreferences()
 {
-    WGConfig cfg;
+    WGConfig::Accessor cfg;
     m_ui->cmbSelectorRenderingMode->setCurrentIndex(cfg.readEntry("renderMode", 1));
     m_ui->cmbColorModel->setCurrentIndex(cfg.readEntry("rgbColorModel", 2) - KisVisualColorModel::HSV);
     KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();

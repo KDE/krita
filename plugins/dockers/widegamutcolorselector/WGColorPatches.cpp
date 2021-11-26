@@ -36,13 +36,17 @@ KisUniqueColorSet *WGColorPatches::colorHistory() const
 
 void WGColorPatches::updateSettings()
 {
-    WGConfig cfg;
+    if (!m_configSource) {
+        return;
+    }
+
+    WGConfig::Accessor cfg;
     m_orientation = Qt::Horizontal;
     if (uiMode() == PopupMode) {
-        QSize patchSize = cfg.popupColorPatchSize();
+        QSize patchSize = cfg.get(m_configSource->patchSize);
         m_patchWidth = patchSize.width();
         m_patchHeight = patchSize.height();
-        m_orientation = cfg.popupColorPatchOrientation();
+        m_orientation = cfg.get(m_configSource->orientation);
     }
 
     if (m_orientation == Qt::Vertical) {
@@ -52,6 +56,11 @@ void WGColorPatches::updateSettings()
     }
 
     updateGeometry();
+}
+
+void WGColorPatches::setConfigSource(const WGConfig::ColorPatches *source)
+{
+    m_configSource = source;
 }
 
 QPoint WGColorPatches::popupOffset() const

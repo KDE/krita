@@ -15,6 +15,8 @@
 #include <QTextStream>
 #include <QThread>
 
+namespace WGConfig {
+
 Q_GLOBAL_STATIC(WGConfigNotifier, s_notifier_instance)
 
 WGConfig::WGConfig(bool readOnly)
@@ -40,7 +42,7 @@ WGConfig::~WGConfig()
 
 QString WGConfig::configGroupName()
 {
-    return QString("WideGamutColorSelector");
+    return QStringLiteral("WideGamutColorSelector");
 }
 
 bool WGConfig::quickSettingsEnabled() const
@@ -127,7 +129,7 @@ void WGConfig::setPopupColorPatchSize(QSize size)
     m_cfg.writeEntry("popupColorPatchSize", size);
 }
 
-QVector<WGConfig::ShadeLine> WGConfig::defaultShadeSelectorLines()
+QVector<ShadeLine> WGConfig::defaultShadeSelectorLines()
 {
     QVector<ShadeLine> defaultLines;
     defaultLines.append(ShadeLine(QVector4D(0.3, 0, 0, 0)));
@@ -137,7 +139,7 @@ QVector<WGConfig::ShadeLine> WGConfig::defaultShadeSelectorLines()
     return defaultLines;
 }
 
-QVector<WGConfig::ShadeLine> WGConfig::shadeSelectorLines() const
+QVector<ShadeLine> WGConfig::shadeSelectorLines() const
 {
     QString configString = m_cfg.readEntry("minimalShadeSelectorLines", QString());
     if (configString.isEmpty()) {
@@ -167,7 +169,7 @@ QVector<WGConfig::ShadeLine> WGConfig::shadeSelectorLines() const
     return shadeLines;
 }
 
-void WGConfig::setShadeSelectorLines(const QVector<WGConfig::ShadeLine> &shadeLines)
+void WGConfig::setShadeSelectorLines(const QVector<ShadeLine> &shadeLines)
 {
     QStringList shadeLineList;
     for (const ShadeLine &line: shadeLines) {
@@ -225,7 +227,7 @@ void WGConfig::setShadeSelectorUpdateOnRightClick(bool enabled)
     m_cfg.writeEntry("shadeSelectorUpdateOnRightClick", enabled);
 }
 
-WGConfigNotifier *WGConfig::notifier()
+WGConfigNotifier *notifier()
 {
     return s_notifier_instance;
 }
@@ -250,3 +252,23 @@ void WGConfigNotifier::notifySelectorConfigChanged()
 {
     emit selectorConfigChanged();
 }
+
+// ======== Static Configuration Object Instantiation ========
+
+const ColorPatches colorHistory {
+    { "colorHistory.orientation", Qt::Horizontal, Qt::Horizontal, Qt::Vertical, true },
+    { "colorHistory.patchSize", QSize(16,16), QSize(10,10), QSize(99,99), true },
+    { "colorHistory.maxCount", 30, 2, 200, true },
+    { "colorHistory.rows", 1, 1, 20, true },
+    { "colorHistory.scrolling", ScrollLongitudinal, ScrollNone, ScrollLaterally, true }
+};
+
+const ColorPatches popupPatches {
+    { "popupColorPatchOrientation", Qt::Horizontal, Qt::Horizontal, Qt::Vertical, true },
+    { "popupColorPatchSize", QSize(32,32), QSize(10,10), QSize(99,99), true },
+    { "popupPatches.maxCount", 30, 2, 200, true },
+    { "popupPatches.rows", 1, 1, 20, true },
+    { "popupPatches.scrolling", ScrollLongitudinal, ScrollNone, ScrollLaterally, true }
+};
+
+} // namespace WGConfig

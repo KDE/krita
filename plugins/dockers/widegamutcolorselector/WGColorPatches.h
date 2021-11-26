@@ -14,6 +14,10 @@
 class KisUniqueColorSet;
 class KoColorDisplayRendererInterface;
 
+namespace WGConfig {
+struct ColorPatches;
+}
+
 class WGColorPatches : public WGSelectorWidgetBase
 {
     Q_OBJECT
@@ -22,6 +26,7 @@ public:
 
     KisUniqueColorSet* colorHistory() const;
     void updateSettings() override;
+    void setConfigSource(const WGConfig::ColorPatches *source);
     QPoint popupOffset() const override;
     /*! set buttons, that should be drawn additionally to the patches
      * this class takes ownership of them and will delete them
@@ -46,10 +51,11 @@ private:
     QPointer<KisUniqueColorSet> m_colors;
     QList<QWidget*> m_buttonList;
     Qt::Orientation m_orientation {Qt::Horizontal};
+    const WGConfig::ColorPatches *m_configSource {0};
     int m_numLines {1};
     int m_patchWidth {16};
     int m_patchHeight {16};
-    int m_patchCount {20};
+    int m_patchCount {30};
     int m_scrollValue {0};
     int m_mouseIndex {-1};
     bool m_allowScrolling {true};

@@ -381,7 +381,7 @@ qreal KisAutoBrush::randomness() const
 
 QPainterPath KisAutoBrush::outline() const
 {
-    const bool complexOutline = (d->density < 1.0);
+    const bool complexOutline = d->density < 1.0 || d->shape->spikes() > 2;
     if (!complexOutline) {
         QPainterPath path;
         QRectF brushBoundingbox(0, 0, width(), height());

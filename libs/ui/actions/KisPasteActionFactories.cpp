@@ -200,6 +200,9 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     KisImageSP image = view->image();
     if (!image) return;
 
+    const QPointF docPos = view->canvasBase()->canvasController()->currentCursorPosition();
+    const QPointF cursorPos = view->canvasBase()->coordinatesConverter()->documentToWidget(docPos);
+
     if (tryPasteShapes(pasteAtCursorPosition, view)) {
         return;
     }
@@ -210,7 +213,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     }
 
     if (KisClipboardUtil::clipboardHasUrls()) {
-        KisClipboardUtil::clipboardHasUrlsAction(view->canvasBase()->imageView(), QApplication::clipboard()->mimeData());
+        KisClipboardUtil::clipboardHasUrlsAction(view->canvasBase()->imageView(), QApplication::clipboard()->mimeData(), cursorPos.toPoint());
         return;
     }
 
@@ -220,7 +223,6 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
 
     if (clip) {
         if (pasteAtCursorPosition) {
-            const QPointF docPos = view->canvasBase()->canvasController()->currentCursorPosition();
             const QPointF imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos);
 
             const QPointF offset = (imagePos - QRectF(clip->exactBounds()).center()).toPoint();

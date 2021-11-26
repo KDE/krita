@@ -462,15 +462,13 @@ void KisView::dropEvent(QDropEvent *event)
     KisImageWSP kisimage = image();
     Q_ASSERT(kisimage);
 
-    QPoint cursorPos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos()).toPoint();
+    QPoint imgCursorPos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos()).toPoint();
     QRect imageBounds = kisimage->bounds();
     QPoint pasteCenter;
     bool forceRecenter;
 
-    if (event->keyboardModifiers() & Qt::ShiftModifier &&
-            imageBounds.contains(cursorPos)) {
-
-        pasteCenter = cursorPos;
+    if (event->keyboardModifiers() & Qt::ShiftModifier && imageBounds.contains(imgCursorPos)) {
+        pasteCenter = imgCursorPos;
         forceRecenter = true;
     } else {
         pasteCenter = imageBounds.center();
@@ -504,9 +502,7 @@ void KisView::dropEvent(QDropEvent *event)
         }
     }
     else if (event->mimeData()->hasUrls()) {
-
-        KisClipboardUtil::clipboardHasUrlsAction(this, event->mimeData());
-
+        KisClipboardUtil::clipboardHasUrlsAction(this, event->mimeData(), event->pos());
     }
     else if (event->mimeData()->hasColor() || event->mimeData()->hasFormat("krita/x-colorsetentry")) {
 
@@ -538,7 +534,7 @@ void KisView::dropEvent(QDropEvent *event)
         }
 
         // The cursor is outside the image
-        if (!image()->wrapAroundModePermitted() && !image()->bounds().contains(cursorPos)) {
+        if (!image()->wrapAroundModePermitted() && !image()->bounds().contains(imgCursorPos)) {
             return;
         }
 
@@ -593,23 +589,21 @@ void KisView::dropEvent(QDropEvent *event)
             referencePaintDevice = d->viewManager->activeNode()->paintDevice();
         }
         KIS_ASSERT(referencePaintDevice);
-                                            
-        KisProcessingVisitorSP visitor =
-            new FillProcessingVisitor(
-                referencePaintDevice,
-                cursorPos, // start position
-                selection(),
-                resources,
-                useFastMode, // fast mode
-                false,
-                fillSelectionOnly, // fill only selection,
-                useSelectionAsBoundary,
-                featherAmount, // feathering radius
-                growSelection, // sizemod
-                thresholdAmount, // threshold,
-                false, // use unmerged
-                false // use bg
-            );
+
+        KisProcessingVisitorSP visitor = new FillProcessingVisitor(referencePaintDevice,
+                                                                   imgCursorPos, // start position
+                                                                   selection(),
+                                                                   resources,
+                                                                   useFastMode, // fast mode
+                                                                   false,
+                                                                   fillSelectionOnly, // fill only selection,
+                                                                   useSelectionAsBoundary,
+                                                                   featherAmount, // feathering radius
+                                                                   growSelection, // sizemod
+                                                                   thresholdAmount, // threshold,
+                                                                   false, // use unmerged
+                                                                   false // use bg
+        );
 
         applicator.applyVisitor(visitor,
                                 KisStrokeJobData::SEQUENTIAL,

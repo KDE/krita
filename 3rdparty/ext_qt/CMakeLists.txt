@@ -155,8 +155,8 @@ if (WIN32)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL http://download.qt.io/archive/qt/5.12/5.12.11/single/qt-everywhere-src-5.12.11.zip
-      URL_MD5 f2ed158383a434951f3f8fdf05f8c38c
+      URL http://download.qt.io/archive/qt/5.12/5.12.12/single/qt-everywhere-src-5.12.12.zip
+      URL_MD5 5317551ce668830bfa2404346aec2f16
 
       PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 
@@ -176,8 +176,8 @@ elseif (ANDROID)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL http://download.qt.io/archive/qt/5.12/5.12.11/single/qt-everywhere-src-5.12.11.tar.xz
-      URL_MD5 be919c12eee0800a2da8602f6ea5a0ef
+      URL http://download.qt.io/archive/qt/5.12/5.12.12/single/qt-everywhere-src-5.12.12.tar.xz
+      URL_MD5 88e7a1c9952bf5732751c794716c6a55
 
       PATCH_COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Update-clang-mkspecs.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0093-Fix-QLocale-system-and-uiLanguages-for-the-mobile-pl.patch
@@ -254,8 +254,8 @@ elseif (NOT APPLE)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL http://download.qt.io/archive/qt/5.12/5.12.11/single/qt-everywhere-src-5.12.11.tar.xz
-      URL_MD5 be919c12eee0800a2da8602f6ea5a0ef
+      URL http://download.qt.io/archive/qt/5.12/5.12.12/single/qt-everywhere-src-5.12.12.tar.xz
+      URL_MD5 88e7a1c9952bf5732751c794716c6a55
 
       PATCH_COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
@@ -460,8 +460,8 @@ else( APPLE )
         LOG_INSTALL         ON
         BUILD_IN_SOURCE     ON
 
-        URL http://download.qt.io/official_releases/qt/5.12/5.12.11/single/qt-everywhere-src-5.12.11.tar.xz
-        URL_MD5 be919c12eee0800a2da8602f6ea5a0ef
+        URL http://download.qt.io/official_releases/qt/5.12/5.12.12/single/qt-everywhere-src-5.12.12.tar.xz
+        URL_MD5 88e7a1c9952bf5732751c794716c6a55
 
         CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 

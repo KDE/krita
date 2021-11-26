@@ -47,7 +47,7 @@ bool clipboardHasUrls()
     return QApplication::clipboard()->mimeData()->hasUrls();
 }
 
-void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data)
+void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data, const QPoint eventPos)
 {
     if (data->hasUrls()) {
         QList<QUrl> urls = data->urls();
@@ -146,7 +146,8 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data)
                             auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), *kisview->viewConverter(), kisview);
 
                             if (reference) {
-                                reference->setPosition((*kisview->viewConverter()).imageToDocument(QCursor::pos()));
+                                const auto pos = kisview->canvasBase()->coordinatesConverter()->widgetToImage(eventPos);
+                                reference->setPosition((*kisview->viewConverter()).imageToDocument(pos));
                                 kisview->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
 
                                 KoToolManager::instance()->switchToolRequested("ToolReferenceImages");

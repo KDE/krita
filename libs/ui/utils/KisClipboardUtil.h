@@ -30,7 +30,7 @@ namespace KisClipboardUtil {
      * False if clipboard contents are not urls
      * @return void
      */
-    KRITAUI_EXPORT void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data);
+    KRITAUI_EXPORT void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data, QPoint eventPos);
 
     KRITAUI_EXPORT KisPaintDeviceSP fetchImageByURL(const QUrl &url);
 

@@ -79,7 +79,7 @@ private:
     QPointF m_lastCursorPos, m_cursorOnPress;
     QPoint m_lastAnchor;
     bool m_complete, m_selected, m_finished;
-    KisMagneticWorker m_worker;
+    QScopedPointer<KisMagneticWorker> m_worker;
     int m_threshold, m_searchRadius, m_selectedAnchor, m_anchorGap;
     qreal m_filterRadius;
     QRectF m_snapBound;

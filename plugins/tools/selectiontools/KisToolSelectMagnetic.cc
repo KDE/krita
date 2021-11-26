@@ -48,7 +48,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
     m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false),
-    m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_anchorGap(30),
+    m_worker(nullptr), m_threshold(70), m_searchRadius(30), m_anchorGap(30),
     m_filterRadius(3.0), m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 
 { }
@@ -97,7 +97,7 @@ void KisToolSelectMagnetic::calculateCheckPoints(vQPointF points)
         bool foundSomething = false;
 
         for (int i = midPoint; i < finalPoint; i++) {
-            if (m_worker.intensity(points.at(i).toPoint()) >= m_threshold) {
+            if (m_worker->intensity(points.at(i).toPoint()) >= m_threshold) {
                 m_lastAnchor = points.at(i).toPoint();
                 m_anchorPoints.push_back(m_lastAnchor);
 
@@ -115,7 +115,7 @@ void KisToolSelectMagnetic::calculateCheckPoints(vQPointF points)
 
         if (!foundSomething) {
             for (int i = midPoint - 1; i >= minPoint; i--) {
-                if (m_worker.intensity(points.at(i).toPoint()) >= m_threshold) {
+                if (m_worker->intensity(points.at(i).toPoint()) >= m_threshold) {
                     m_lastAnchor = points.at(i).toPoint();
                     m_anchorPoints.push_back(m_lastAnchor);
                     vQPointF temp;
@@ -175,7 +175,7 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
 
 vQPointF KisToolSelectMagnetic::computeEdgeWrapper(QPoint a, QPoint b)
 {
-    return m_worker.computeEdge(m_searchRadius, a, b, m_filterRadius);
+    return m_worker->computeEdge(m_searchRadius, a, b, m_filterRadius);
 }
 
 // the cursor is still tracked even when no mousebutton is pressed
@@ -601,7 +601,7 @@ void KisToolSelectMagnetic::updateContinuedMode()
 
 void KisToolSelectMagnetic::activate(const QSet<KoShape *> &shapes)
 {
-    m_worker      = KisMagneticWorker(image()->projection());
+    m_worker.reset(new KisMagneticWorker(image()->projection()));
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
     connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoPoints()), Qt::UniqueConnection);
     connect(&m_mouseHoverCompressor, SIGNAL(timeout()), this, SLOT(slotCalculateEdge()));

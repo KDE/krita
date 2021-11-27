@@ -306,12 +306,12 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
     Q_D(KRecentFilesAction);
     clearEntries();
 
-    QString     key;
-    QString     value;
-    QString     nameKey;
-    QString     nameValue;
-    QString      title;
-    QUrl        url;
+    QString key;
+    QString value;
+    QString nameKey;
+    QString nameValue;
+    QString title;
+    QUrl    url;
 
     KConfigGroup cg = _config;
     if (cg.name().isEmpty()) {
@@ -322,8 +322,8 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
 
     bool thereAreEntries = false;
     // read file list
-    for (int i = 1; i <= d->m_maxItems; i++) {
-        key = QString("File%1").arg(i);
+    for (int i = 0; i < d->m_maxItems; ++i) {
+        key = QString("File%1").arg(i+1);
 #ifdef Q_OS_ANDROID
         value = cg.readEntry(key, QString());
 #else
@@ -352,7 +352,7 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
         }
 #endif
 
-        nameKey = QString("Name%1").arg(i);
+        nameKey = QString("Name%1").arg(i+1);
         nameValue = cg.readPathEntry(nameKey, url.fileName());
         title = titleWithSensibleWidth(nameValue, value);
         if (!value.isNull()) {
@@ -385,18 +385,17 @@ void KRecentFilesAction::saveEntries(const KConfigGroup &_cg)
     cg.writeEntry("maxRecentFileItems", d->m_maxItems);
 
     // write file list
-    for (int i = 1; i <= selectableActionGroup()->actions().count(); i++) {
-        key = QString("File%1").arg(i);
-        // i - 1 because we started from 1
+    for (int i = 0; i < selectableActionGroup()->actions().count(); ++i) {
+        key = QString("File%1").arg(i+1);
 #ifdef Q_OS_ANDROID
-        value = d->m_urls[ selectableActionGroup()->actions()[ i - 1 ] ].toDisplayString();
+        value = d->m_urls[selectableActionGroup()->actions()[i]].toDisplayString();
         cg.writeEntry(key, value);
 #else
-        value = d->m_urls[ selectableActionGroup()->actions()[ i - 1 ] ].toDisplayString(QUrl::PreferLocalFile);
+        value = d->m_urls[selectableActionGroup()->actions()[i]].toDisplayString(QUrl::PreferLocalFile);
         cg.writePathEntry(key, value);
 #endif
-        key = QString("Name%1").arg(i);
-        value = d->m_shortNames[ selectableActionGroup()->actions()[ i - 1 ] ];
+        key = QString("Name%1").arg(i+1);
+        value = d->m_shortNames[selectableActionGroup()->actions()[i]];
 #ifdef Q_OS_ANDROID
         cg.writeEntry(key, value);
 #else

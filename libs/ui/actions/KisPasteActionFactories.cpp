@@ -211,12 +211,6 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         view->nodeManager()->pasteLayersFromClipboard();
         return;
     }
-
-    if (KisClipboardUtil::clipboardHasUrls()) {
-        KisClipboardUtil::clipboardHasUrlsAction(view->canvasBase()->imageView(), QApplication::clipboard()->mimeData(), cursorPos.toPoint());
-        return;
-    }
-
     KisTimeSpan range;
     const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, &range);

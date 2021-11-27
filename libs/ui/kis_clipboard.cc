@@ -324,15 +324,17 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
             Q_CHECK_PTR(clip);
             clip->convertFromQImage(qimage, profile);
 
-            QRect clipBounds = clip->exactBounds();
-            QPoint diff = imageBounds.center() - clipBounds.center();
-            clip->setX(diff.x());
-            clip->setY(diff.y());
-
             // save the persion's selection to the configuration if the option is checked
             if (saveColorSetting) {
                 cfg.setPasteBehaviour(behaviour);
             }
+        }
+
+        if (clip && !imageBounds.isEmpty()) {
+            QRect clipBounds = clip->exactBounds();
+            QPoint diff = imageBounds.center() - clipBounds.center();
+            clip->setX(diff.x());
+            clip->setY(diff.y());
         }
     }
 

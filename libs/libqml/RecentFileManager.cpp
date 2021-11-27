@@ -83,6 +83,8 @@ public:
         }
         cg.deleteGroup();
 
+        cg.writeEntry("maxRecentFileItems", maxItems);
+
         // write file list
         for (int i = 1; i <= recentFilesIndex.size(); ++i) {
             // i - 1 because we started from 1
@@ -107,11 +109,8 @@ RecentFileManager::RecentFileManager(QObject *parent)
 
 RecentFileManager::~RecentFileManager()
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group("RecentFiles");
-    grp.writeEntry("maxRecentFileItems", d->maxItems);
     delete d;
 }
-
 
 QStringList RecentFileManager::recentFileNames() const
 {
@@ -125,6 +124,10 @@ QStringList RecentFileManager::recentFiles() const
 
 void RecentFileManager::addRecent(const QString &_url)
 {
+    if (d->maxItems <= 0) {
+        return;
+    }
+
     if (d->recentFiles.size() > d->maxItems) {
         d->recentFiles.removeLast();
         d->recentFilesIndex.removeLast();

@@ -170,6 +170,11 @@ static QString titleWithSensibleWidth(const QString &nameValue, const QString &v
 void KRecentFilesAction::addUrl(const QUrl &_url, const QString &name)
 {
     Q_D(KRecentFilesAction);
+
+    if (d->m_maxItems <= 0) {
+        return;
+    }
+
     /**
      * Create a deep copy here, because if _url is the parameter from
      * urlSelected() signal, we will delete it in the removeAction() call below.
@@ -203,8 +208,9 @@ void KRecentFilesAction::addUrl(const QUrl &_url, const QString &name)
             break;
         }
     }
+
     // remove oldest item if already maxitems in list
-    if (d->m_maxItems && selectableActionGroup()->actions().count() == d->m_maxItems) {
+    if (selectableActionGroup()->actions().count() > d->m_maxItems) {
         // remove oldest added item
         delete removeAction(selectableActionGroup()->actions().first());
     }
@@ -312,6 +318,8 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
         cg = KConfigGroup(cg.config(), "RecentFiles");
     }
 
+    d->m_maxItems = cg.readEntry("maxRecentFileItems", 100);
+
     bool thereAreEntries = false;
     // read file list
     for (int i = 1; i <= d->m_maxItems; i++) {
@@ -373,6 +381,8 @@ void KRecentFilesAction::saveEntries(const KConfigGroup &_cg)
     }
 
     cg.deleteGroup();
+
+    cg.writeEntry("maxRecentFileItems", d->m_maxItems);
 
     // write file list
     for (int i = 1; i <= selectableActionGroup()->actions().count(); i++) {

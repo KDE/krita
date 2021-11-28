@@ -92,6 +92,7 @@ public:
 Q_SIGNALS:
     void sigIndexSelected(const QModelIndex &index);
     void sigColorSelected(const KoColor &);
+    void sigPaletteUpdatedFromModel();
 
 public Q_SLOTS:
     /**

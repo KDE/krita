@@ -45,7 +45,6 @@ struct KisPaletteEditor::Private
 {
     bool isNameModified {false};
     bool isColumnCountModified {false};
-    bool isModified {false};
     QSet<QString> modifiedGroupNames; // key is original group name
     QSet<QString> newGroupNames;
     QSet<QString> keepColorGroups;
@@ -331,7 +330,7 @@ void KisPaletteEditor::slotSetDocumentModified()
         KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), m_d->model->colorSet());
         m_d->view->document()->setModified(true);
     }
-    m_d->isModified = true;
+    m_d->model->colorSet()->setDirty(true);
 }
 
 void KisPaletteEditor::removeEntry(const QModelIndex &index)
@@ -441,7 +440,11 @@ void KisPaletteEditor::addEntry(const KoColor &color)
 
 bool KisPaletteEditor::isModified() const
 {
-    return m_d->isModified;
+    if (m_d->model->colorSet()) {
+        return m_d->model->colorSet()->isDirty();
+    } else {
+        return false;
+    }
 }
 
 void KisPaletteEditor::updatePalette()
@@ -513,14 +516,14 @@ void KisPaletteEditor::saveNewPaletteVersion()
             dbgResources << Q_FUNC_INFO << "-- Updating resource without user input: " << m_d->model->colorSet()->name() << "Result:" << res;
         }
     }
-    m_d->isModified = !res;
+    m_d->model->colorSet()->setDirty(!res);;
 }
 
 void KisPaletteEditor::slotPaletteChanged()
 {
     Q_ASSERT(m_d->model);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->isModified);
     if (!m_d->model->colorSet()) { return; }
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->model->colorSet()->isDirty());
     KoColorSetSP palette = m_d->model->colorSet();
     m_d->modified.groups.clear();
     m_d->keepColorGroups.clear();

@@ -16,6 +16,7 @@
 #include <QCheckBox>
 #include <QBuffer>
 #include <QGlobalStatic>
+#include <QPushButton>
 
 #include <klocalizedstring.h>
 
@@ -292,21 +293,22 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
                 mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
                 mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
 
-                // the order of how you add these buttons matters as it determines the index.
-                mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
-                mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
-                mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
+                const QAbstractButton *btnAsWeb = mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
+                const QAbstractButton *btnAsMonitor = mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
+                mb.addButton(QMessageBox::Cancel);
                 mb.addButton(&dontPrompt, QMessageBox::ActionRole);
 
-                behaviour = mb.exec();
+                mb.exec();
 
-                if (behaviour > 1) {
-                    return 0;
+                if (mb.clickedButton() == btnAsWeb) {
+                    behaviour = PASTE_ASSUME_WEB;
+                } else if (mb.clickedButton() == btnAsMonitor) {
+                    behaviour = PASTE_ASSUME_MONITOR;
+                } else {
+                    return nullptr;
                 }
 
                 saveColorSetting = dontPrompt.isChecked(); // should we save this option to the config for next time?
-
-
             }
 
             const KoColorSpace * cs;

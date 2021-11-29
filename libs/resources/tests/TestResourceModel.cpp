@@ -183,12 +183,19 @@ void TestResourceModel::testAddTemporaryResource()
     KisResourceModel resourceModel(m_resourceType);
     resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
 
-    int resourceCount = resourceModel.rowCount();
-    KoResourceSP resource(new DummyResource("dummy.kpp"));
+    int startResourceCount = resourceModel.rowCount();
+    KoResourceSP resource(new DummyResource("temporaryResource.kpp"));
     resource->setValid(true);
     bool r = resourceModel.addResource(resource, "memory");
     QVERIFY(r);
-    QCOMPARE(resourceCount + 1, resourceModel.rowCount());
+    QCOMPARE(startResourceCount + 1, resourceModel.rowCount());
+
+    // Matching MD5 resources should be hidden -- BUG:445367
+    resource.reset(new DummyResource("dummy.kpp"));
+    resource->setValid(true);
+    r = resourceModel.addResource(resource, "memory");
+    QVERIFY(r);
+    QCOMPARE(startResourceCount + 1, resourceModel.rowCount());
 }
 
 void TestResourceModel::testResourceForId()

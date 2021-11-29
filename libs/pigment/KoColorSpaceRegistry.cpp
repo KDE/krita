@@ -423,6 +423,10 @@ const KoColorSpace *KoColorSpaceRegistry::Private::lazyCreateColorSpaceImpl(cons
     cs = getCachedColorSpaceImpl(csID, profile->name());
     if (!cs) {
         KoColorSpaceFactory *csf = colorSpaceFactoryRegistry.value(csID);
+        if (!csf) {
+            qWarning() << "Unable to create color space factory for" << csID;
+            return 0;
+        }
         cs = csf->grabColorSpace(profile);
         if (!cs) {
             dbgPigmentCSRegistry << "Unable to create color space";

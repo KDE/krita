@@ -164,7 +164,7 @@ public:
         const double scaledRectWidth = scaledRectRight - scaledRectLeft;
         const double posX = static_cast<double>(p.x()) - scaledRectLeft;
         // Normalize
-        const double normalizedPosX = posX / scaledRectWidth;
+        const double normalizedPosX = qBound(0.0, posX / scaledRectWidth, 1.0);
         // Final value
         const double normalizedValue = std::pow(normalizedPosX, m_exponentRatio);
         double value = normalizedValue * rangeSize + minimum;
@@ -174,9 +174,9 @@ public:
         }
         //Return the value
         if (std::is_same<ValueType, double>::value) {
-            return qBound(minimum, value, maximum);
+            return value;
         } else {
-            return static_cast<ValueType>(qBound(minimum, std::round(value), maximum));
+            return static_cast<ValueType>(std::round(value));
         }
     }
 
